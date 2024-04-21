@@ -1,9 +1,9 @@
-.publisher-component-buttons {
+.blockera-component-buttons {
 	display: flex;
 	gap: 10px;
 }
 
-.components-button.publisher-component-button {
+.components-button.blockera-component-button {
 	font-size: 13px;
 	font-weight: 400;
 	display: flex;
@@ -50,7 +50,7 @@
 	}
 
 	&.is-primary {
-		background: var(--publisher-controls-primary-color);
+		background: var(--blockera-controls-primary-color);
 		color: #ffffff;
 		outline: 1px solid transparent;
 
@@ -63,19 +63,19 @@
 		}
 
 		&:hover:not(:disabled) {
-			background: var(--publisher-controls-primary-color-darker-20);
+			background: var(--blockera-controls-primary-color-darker-20);
 			color: #ffffff;
 		}
 
 		&:active:not(:disabled) {
-			background: var(--publisher-controls-primary-color-darker-20);
-			border-color: var(--publisher-controls-primary-color-darker-20);
+			background: var(--blockera-controls-primary-color-darker-20);
+			border-color: var(--blockera-controls-primary-color-darker-20);
 			color: #ffffff;
 		}
 
 		&.is-focus:not(:disabled),
 		&:focus:not(:disabled) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-primary-color) !important;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff), 0 0 0 1px var(--blockera-controls-background-color), 0 0 0 2.5px var(--blockera-controls-primary-color) !important;
 		}
 
 		&:disabled,
@@ -83,8 +83,8 @@
 		&[aria-disabled="true"],
 		&[aria-disabled="true"]:active:enabled,
 		&[aria-disabled="true"]:enabled {
-			background: var(--publisher-controls-primary-color);
-			border-color: var(--publisher-controls-primary-color);
+			background: var(--blockera-controls-primary-color);
+			border-color: var(--blockera-controls-primary-color);
 			color: hsla(0, 0%, 100%, 0.4);
 			opacity: 1;
 			outline: none;
@@ -95,22 +95,22 @@
 		&[aria-disabled="true"]:active:enabled:focus:enabled,
 		&[aria-disabled="true"]:enabled:focus:enabled,
 		&[aria-disabled="true"]:focus:enabled {
-			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color), 0 0 0 3px var(--publisher-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 3px var(--blockera-controls-primary-color);
 		}
 	}
 
 	&.is-secondary {
 		outline: 3px solid transparent;
-		box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color);
-		color: var(--publisher-controls-primary-color);
+		box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
+		color: var(--blockera-controls-primary-color);
 
 		&:hover:not(:disabled, .no-border) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color, #ffffff);
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff);
 		}
 
 		&.is-focus:not(:disabled),
 		&:focus:not(:disabled, .no-border) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color, #ffffff), 0 0 0 1px var(--publisher-controls-background-color), 0 0 0 2.5px var(--publisher-controls-primary-color) !important;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff), 0 0 0 1px var(--blockera-controls-background-color), 0 0 0 2.5px var(--blockera-controls-primary-color) !important;
 		}
 
 		&:disabled,
@@ -119,38 +119,38 @@
 			opacity: 0.5;
 			outline: none;
 			transform: none;
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color);
-			color: var(--publisher-controls-primary-color);
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
+			color: var(--blockera-controls-primary-color);
 		}
 	}
 
 	&.is-tertiary {
-		color: var(--publisher-controls-color);
-		--wp-components-color-accent: var(--publisher-controls-border-color);
+		color: var(--blockera-controls-color);
+		--wp-components-color-accent: var(--blockera-controls-border-color);
 		background: transparent;
 
 		&:not(.no-border) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color);
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color);
 			outline: 1px solid transparent;
 		}
 
 		&.no-border:hover {
-			background: var(--publisher-controls-background-color);
+			background: var(--blockera-controls-background-color);
 		}
 
 		&:hover:not(:disabled, [aria-disabled="true"], .no-border) {
-			background: var(--publisher-controls-background-color);
-			color: var(--publisher-controls-color);
-			--publisher-controls-border-color: var(--publisher-controls-border-color-hover);
+			background: var(--blockera-controls-background-color);
+			color: var(--blockera-controls-color);
+			--blockera-controls-border-color: var(--blockera-controls-border-color-hover);
 		}
 
 		&.is-focus:not(.no-border) {
-			background: var(--publisher-controls-background-color);
+			background: var(--blockera-controls-background-color);
 		}
 
 		&.is-focus:not(:disabled),
 		&:focus:not(:disabled, .no-border, .toggle-focus) {
-			box-shadow: inset 0 0 0 1px var(--publisher-controls-primary-color), 0 0 0 1px var(--publisher-controls-primary-color) !important;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 1px var(--blockera-controls-primary-color) !important;
 			outline: 2px solid transparent !important;
 		}
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Tests;
+namespace Blockera\Framework\Tests;
 
 abstract class AppTestCase extends \WP_UnitTestCase {
 
@@ -10,6 +10,6 @@ abstract class AppTestCase extends \WP_UnitTestCase {
 
 		parent::set_up();
 
-		self::$is_dev_mode = 'development' === pb_core_env( 'APP_MODE' );
+		self::$is_dev_mode = 'development' === blockera_core_env( 'APP_MODE' );
 	}
 }

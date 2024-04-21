@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -18,19 +18,19 @@ import {
 	InnerBlockParagraphIcon,
 	InnerBlockButtonIcon,
 	InnerBlockInputIcon,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 const attributes = {
 	...IconExtensionAttributes,
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	label: {
 		name: 'core/title',
 		type: 'title',
-		label: __('Form Label', 'publisher-core'),
+		label: __('Form Label', 'blockera-core'),
 		icon: <InnerBlockParagraphIcon />,
 		selectors: {
 			root: '.wp-block-search__label',
@@ -43,7 +43,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	input: {
 		name: 'input',
 		type: 'input',
-		label: __('Form Input', 'publisher-core'),
+		label: __('Form Input', 'blockera-core'),
 		icon: <InnerBlockInputIcon />,
 		selectors: {
 			root: '.wp-block-search__input',
@@ -56,7 +56,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	button: {
 		name: 'core/button',
 		type: 'button',
-		label: __('Form Button', 'publisher-core'),
+		label: __('Form Button', 'blockera-core'),
 		icon: <InnerBlockButtonIcon />,
 		selectors: {
 			root: '.wp-block-search__button',
@@ -69,14 +69,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const Search = {
-	name: 'publisherSearch',
+	name: 'blockeraSearch',
 	targetBlock: 'core/search',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

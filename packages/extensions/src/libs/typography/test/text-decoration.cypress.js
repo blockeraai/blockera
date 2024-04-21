@@ -12,7 +12,7 @@ describe('Text Decoration → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -34,7 +34,7 @@ describe('Text Decoration → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('overline').to.be.equal(
-				getSelectedBlock(data, 'publisherTextDecoration')
+				getSelectedBlock(data, 'blockeraTextDecoration')
 			);
 		});
 
@@ -43,8 +43,9 @@ describe('Text Decoration → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
+		cy.get('.blockera-core-block')
 			.should('have.css', 'text-decoration')
 			.should('include', 'overline');
 	});
 });
+

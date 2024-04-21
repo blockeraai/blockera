@@ -11,7 +11,7 @@ describe('Backdrop Filters → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', { delay: 0 });
 
@@ -74,7 +74,7 @@ describe('Backdrop Filters → Functionality', () => {
 					order: 0,
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherBackdropFilter')
+				getSelectedBlock(data, 'blockeraBackdropFilter')
 			);
 		});
 
@@ -83,7 +83,7 @@ describe('Backdrop Filters → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#publisher-core-inline-css-inline-css')
+		cy.get('style#blockera-core-inline-css-inline-css')
 			.invoke('text')
 			.should(
 				'include',
@@ -146,7 +146,7 @@ describe('Backdrop Filters → Functionality', () => {
 					order: 1,
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherBackdropFilter')
+				getSelectedBlock(data, 'blockeraBackdropFilter')
 			);
 		});
 
@@ -155,7 +155,7 @@ describe('Backdrop Filters → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#publisher-core-inline-css-inline-css')
+		cy.get('style#blockera-core-inline-css-inline-css')
 			.invoke('text')
 			.should(
 				'include',
@@ -163,3 +163,4 @@ describe('Backdrop Filters → Functionality', () => {
 			);
 	});
 });
+

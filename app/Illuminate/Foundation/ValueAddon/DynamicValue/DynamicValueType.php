@@ -1,13 +1,13 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
 
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonType;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\ValueAddonType;
 
 /**
  * The DynamicValueBase class.
  *
- * @package Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType
+ * @package Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType
  */
 class DynamicValueType extends ValueAddonType {
 
@@ -30,7 +30,7 @@ class DynamicValueType extends ValueAddonType {
 	 */
 	public function getHandler( string $name ): ?BaseField {
 
-		$fields = pb_load( 'fields', [], __DIR__ );
+		$fields = blockera_load( 'fields', [], __DIR__ );
 
 		if ( ! class_exists( $fields[ $name ] ) ) {
 

@@ -4,7 +4,7 @@ return [
 	[
 		'type' => 'extra-large',
 		'force' => false,
-		'label' => __('Extra Large Screen', 'publisher-core'),
+		'label' => __('Extra Large Screen', 'blockera-core'),
 		'settings' => [
 			'min' => '2561px',
 			'max' => '',
@@ -14,7 +14,7 @@ return [
 	[
 		'type' => 'large',
 		'force' => false,
-		'label' => __('Large Screen', 'publisher-core'),
+		'label' => __('Large Screen', 'blockera-core'),
 		'settings' => [
 			'min' => '1921px',
 			'max' => '2560px',
@@ -24,7 +24,7 @@ return [
 	[
 		'type' => 'desktop',
 		'force' => false,
-		'label' => __('Desktop', 'publisher-core'),
+		'label' => __('Desktop', 'blockera-core'),
 		'settings' => [
 			'min' => '1441px',
 			'max' => '1920px',
@@ -34,7 +34,7 @@ return [
 	[
 		'type' => 'laptop',
 		'force' => true,
-		'label' => __('Laptop', 'publisher-core'),
+		'label' => __('Laptop', 'blockera-core'),
 		'settings' => [
 			'min' => '1025px',
 			'max' => '1440px',
@@ -44,7 +44,7 @@ return [
 	[
 		'type' => 'tablet',
 		'force' => false,
-		'label' => __('Tablet', 'publisher-core'),
+		'label' => __('Tablet', 'blockera-core'),
 		'settings' => [
 			'min' => '768px',
 			'max' => '1024px',
@@ -54,7 +54,7 @@ return [
 	[
 		'type' => 'mobile-landscape',
 		'force' => false,
-		'label' => __('Mobile Landscape', 'publisher-core'),
+		'label' => __('Mobile Landscape', 'blockera-core'),
 		'settings' => [
 			'min' => '481px',
 			'max' => '767px',
@@ -64,7 +64,7 @@ return [
 	[
 		'type' => 'mobile',
 		'force' => false,
-		'label' => __('Mobile', 'publisher-core'),
+		'label' => __('Mobile', 'blockera-core'),
 		'settings' => [
 			'min' => '',
 			'max' => '480px',

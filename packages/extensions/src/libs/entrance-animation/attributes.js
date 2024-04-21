@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherEntranceAnimation: {
+	blockeraEntranceAnimation: {
 		type: 'object',
 		default: {},
 	},

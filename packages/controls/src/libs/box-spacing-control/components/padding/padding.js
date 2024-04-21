@@ -6,9 +6,9 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -45,7 +45,7 @@ export function Padding({
 				>
 					<LabelControl
 						ariaLabel={__('Padding Spacing')}
-						label={__('Padding', 'publisher-core')}
+						label={__('Padding', 'blockera-core')}
 					/>
 				</span>
 			) : (
@@ -58,13 +58,13 @@ export function Padding({
 					<LabelControl
 						mode={'advanced'}
 						ariaLabel={__('Padding Spacing')}
-						label={__('Padding', 'publisher-core')}
+						label={__('Padding', 'blockera-core')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										"Define the spacing between the block's content and its border, ensuring control over layout and aesthetics.",
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

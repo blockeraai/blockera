@@ -7,13 +7,13 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	componentClassNames,
 	componentInnerClassNames,
-} from '@publisher/classnames';
-import { Button } from '@publisher/components';
+} from '@blockera/classnames';
+import { Button } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -24,8 +24,8 @@ import CaretIcon from './icons/caret';
 export default function MoreFeatures({
 	isOpen: _isOpen = false,
 	isChanged = false,
-	label = __('More features', 'publisher'),
-	ariaLabel = __('More features', 'publisher'),
+	label = __('More features', 'blockera'),
+	ariaLabel = __('More features', 'blockera'),
 	className,
 	children,
 	...props

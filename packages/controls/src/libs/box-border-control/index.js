@@ -6,15 +6,15 @@ import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { Button } from '@publisher/components';
-import { isValid } from '@publisher/hooks';
-import { isEquals } from '@publisher/utils';
+} from '@blockera/classnames';
+import { Button } from '@blockera/components';
+import { isValid } from '@blockera/hooks';
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -203,13 +203,13 @@ export default function BoxBorderControl({
 					<Button
 						showTooltip={true}
 						tooltipPosition="top"
-						label={__('Custom Box Border', 'publisher-core')}
+						label={__('Custom Box Border', 'blockera-core')}
 						size="extra-small"
 						style={{
 							color:
 								value.type === 'custom'
-									? 'var(--publisher-controls-primary-color)'
-									: 'var(--publisher-controls-color)',
+									? 'var(--blockera-controls-primary-color)'
+									: 'var(--blockera-controls-color)',
 							padding: '5px',
 							width: '30px',
 							height: '30px',

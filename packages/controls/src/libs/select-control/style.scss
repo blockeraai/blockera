@@ -1,14 +1,14 @@
-.publisher-control-select.native {
+.blockera-control-select.native {
 
 	.components-input-control__backdrop {
-		border-color: var(--publisher-controls-border-color) !important;
+		border-color: var(--blockera-controls-border-color) !important;
 	}
 
 	&:not(.no-border).is-hovered,
 	&:not(.no-border):hover {
 
 		.components-input-control__backdrop {
-			border-color: var(--publisher-controls-border-color-hover) !important;
+			border-color: var(--blockera-controls-border-color-hover) !important;
 		}
 	}
 
@@ -19,8 +19,8 @@
 	&:not(.no-border):focus-within {
 
 		.components-input-control__backdrop {
-			border-color: var(--publisher-controls-primary-color) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color, transparent) !important;
+			border-color: var(--blockera-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color, transparent) !important;
 		}
 	}
 
@@ -30,8 +30,8 @@
 	}
 }
 
-.publisher-control-select.custom {
-	--publisher-border-color: transparent;
+.blockera-control-select.custom {
+	--blockera-border-color: transparent;
 
 	.components-custom-select-control__label:empty {
 		display: none;
@@ -87,8 +87,8 @@
 	.components-input-control__backdrop {
 		border-style: solid;
 		border-width: 1px;
-		border-color: var(--publisher-controls-border-color) !important;
-		box-shadow: 0 0 0 1px var(--publisher-border-color, transparent) !important;
+		border-color: var(--blockera-controls-border-color) !important;
+		box-shadow: 0 0 0 1px var(--blockera-border-color, transparent) !important;
 	}
 
 	&.no-border {
@@ -106,18 +106,18 @@
 
 	&:not(.no-border).is-hovered .components-input-control__backdrop,
 	&:not(.no-border, .is-focused):hover .components-input-control__backdrop {
-		border: 1px solid var(--publisher-controls-border-color-hover) !important;
+		border: 1px solid var(--blockera-controls-border-color-hover) !important;
 	}
 
 	&.is-hovered:hover .components-input-control__backdrop,
 	&.is-focused .components-input-control__backdrop,
 	.components-custom-select-control__button[aria-expanded="true"] + .components-input-control__suffix + .components-input-control__backdrop {
-		border: 1px solid var(--publisher-controls-primary-color) !important;
-		--publisher-border-color: var(--publisher-controls-primary-color);
+		border: 1px solid var(--blockera-controls-primary-color) !important;
+		--blockera-border-color: var(--blockera-controls-primary-color);
 	}
 
 	.components-custom-select-control__menu {
-		border: 2px solid var(--publisher-controls-primary-color);
+		border: 2px solid var(--blockera-controls-primary-color);
 		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1882352941);
 		border-radius: 3px;
 		padding: 3px;
@@ -142,7 +142,7 @@
 			&.option-group {
 				pointer-events: none;
 				cursor: auto !important;
-				color: var(--publisher-controls-primary-color);
+				color: var(--blockera-controls-primary-color);
 				font-weight: 600;
 
 				&.is-highlighted {

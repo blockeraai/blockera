@@ -45,14 +45,14 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
 						type: 'all',
 						all: '10px',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorderRadius')
+						getSelectedBlock(data, 'blockeraBorderRadius')
 					);
 
 					expect({
@@ -87,14 +87,14 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
 						type: 'all',
 						all: '20px',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorderRadius')
+						getSelectedBlock(data, 'blockeraBorderRadius')
 					);
 
 					expect({
@@ -134,7 +134,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 
 				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -202,7 +202,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -213,7 +213,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 						type: 'custom',
 						all: '',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorderRadius')
+						getSelectedBlock(data, 'blockeraBorderRadius')
 					);
 
 					expect({
@@ -325,7 +325,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -336,7 +336,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 						bottomLeft: '70px',
 						bottomRight: '80px',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorderRadius')
+						getSelectedBlock(data, 'blockeraBorderRadius')
 					);
 
 					expect({
@@ -419,7 +419,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({

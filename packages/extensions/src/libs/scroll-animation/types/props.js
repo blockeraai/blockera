@@ -12,7 +12,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 export type ScrollExtensionProps = {
 	block: TBlockProps,
 	extensionConfig: {
-		publisherScrollAnimation: Object,
+		blockeraScrollAnimation: Object,
 	},
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,

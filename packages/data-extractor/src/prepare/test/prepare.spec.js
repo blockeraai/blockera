@@ -55,7 +55,7 @@ describe('API Preparing data property value testing...', () => {
 						isVisible: true,
 					},
 				],
-				publisherPropsId: 20230401,
+				blockeraPropsId: 20230401,
 			},
 		};
 
@@ -111,3 +111,4 @@ describe('API Preparing data property value testing...', () => {
 		expect(prepare(query, data)).toEqual(undefined);
 	});
 });
+

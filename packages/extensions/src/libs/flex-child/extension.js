@@ -7,17 +7,17 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	PanelBodyControl,
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
-} from '@publisher/controls';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
-import { FeatureWrapper } from '@publisher/components';
+} from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
+import { FeatureWrapper } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -50,19 +50,19 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 		attributes,
 	}: TFlexChildProps): MixedElement => {
 		const isShowFlexChildSizing = isShowField(
-			extensionConfig.publisherFlexChildSizing,
-			values?.publisherFlexChildSizing,
-			attributes.publisherFlexChildSizing.default
+			extensionConfig.blockeraFlexChildSizing,
+			values?.blockeraFlexChildSizing,
+			attributes.blockeraFlexChildSizing.default
 		);
 		const isShowFlexChildAlign = isShowField(
-			extensionConfig.publisherFlexChildAlign,
-			values?.publisherFlexChildAlign,
-			attributes.publisherFlexChildAlign.default
+			extensionConfig.blockeraFlexChildAlign,
+			values?.blockeraFlexChildAlign,
+			attributes.blockeraFlexChildAlign.default
 		);
 		const isShowFlexChildOrder = isShowField(
-			extensionConfig.publisherFlexChildOrder,
-			values?.publisherFlexChildOrder,
-			attributes.publisherFlexChildOrder.default
+			extensionConfig.blockeraFlexChildOrder,
+			values?.blockeraFlexChildOrder,
+			attributes.blockeraFlexChildOrder.default
 		);
 
 		if (
@@ -75,7 +75,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Flex Child', 'publisher-core')}
+				title={__('Flex Child', 'blockera-core')}
 				initialOpen={true}
 				icon={<FlexChildExtensionIcon />}
 				className={extensionClassNames('flex-child')}
@@ -89,63 +89,63 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFlexChildSizing}
-					config={extensionConfig.publisherFlexChildSizing}
+					config={extensionConfig.blockeraFlexChildSizing}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'sizing'),
-							value: values.publisherFlexChildSizing,
-							attribute: 'publisherFlexChildSizing',
+							value: values.blockeraFlexChildSizing,
+							attribute: 'blockeraFlexChildSizing',
 							blockName: block.blockName,
 						}}
 					>
 						<ToggleSelectControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Self Size', 'publisher-core')}
+							label={__('Self Size', 'blockera-core')}
 							className={
 								'items-flex-direction-' +
-								values.publisherFlexDirection
+								values.blockeraFlexDirection
 							}
 							options={[
 								{
-									label: __('Shrink', 'publisher-core'),
+									label: __('Shrink', 'blockera-core'),
 									value: 'shrink',
 									icon: <SizingShrinkIcon />,
 								},
 								{
-									label: __('Grow', 'publisher-core'),
+									label: __('Grow', 'blockera-core'),
 									value: 'grow',
 									icon: <SizingGrowIcon />,
 								},
 								{
 									label: __(
 										'No Grow or Shrink',
-										'publisher-core'
+										'blockera-core'
 									),
 									value: 'no',
 									icon: <SizingNotIcon />,
 								},
 								{
-									label: __('Custom', 'publisher-core'),
+									label: __('Custom', 'blockera-core'),
 									value: 'custom',
 									icon: <GearIcon />,
 								},
 							]}
 							isDeselectable={true}
 							defaultValue={
-								attributes.publisherFlexChildSizing.default
+								attributes.blockeraFlexChildSizing.default
 							}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherFlexChildSizing',
+									'blockeraFlexChildSizing',
 									newValue,
 									{ ref }
 								)
 							}
-							{...extensionProps.publisherFlexChildSizing}
+							{...extensionProps.blockeraFlexChildSizing}
 						>
-							{values.publisherFlexChildSizing === 'custom' && (
+							{values.blockeraFlexChildSizing === 'custom' && (
 								<>
 									<ControlContextProvider
 										value={{
@@ -153,17 +153,17 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 												block,
 												'grow'
 											),
-											value: values.publisherFlexChildGrow,
-											attribute: 'publisherFlexChildGrow',
+											value: values.blockeraFlexChildGrow,
+											attribute: 'blockeraFlexChildGrow',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
 											controlName="input"
-											label={__('Grow', 'publisher-core')}
+											label={__('Grow', 'blockera-core')}
 											aria-label={__(
 												'Custom Grow',
-												'publisher-core'
+												'blockera-core'
 											)}
 											columns="columns-2"
 											unitType="flex-grow"
@@ -173,16 +173,16 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 											min={0}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherFlexChildGrow',
+													'blockeraFlexChildGrow',
 													newValue,
 													{ ref }
 												)
 											}
 											size="small"
 											defaultValue={
-												attributes.publisherFlexChildGrow
+												attributes.blockeraFlexChildGrow
 											}
-											{...extensionProps.publisherFlexChildGrow}
+											{...extensionProps.blockeraFlexChildGrow}
 										/>
 									</ControlContextProvider>
 
@@ -192,9 +192,9 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 												block,
 												'shrink'
 											),
-											value: values.publisherFlexChildShrink,
+											value: values.blockeraFlexChildShrink,
 											attribute:
-												'publisherFlexChildShrink',
+												'blockeraFlexChildShrink',
 											blockName: block.blockName,
 										}}
 									>
@@ -202,11 +202,11 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 											controlName="input"
 											label={__(
 												'Shrink',
-												'publisher-core'
+												'blockera-core'
 											)}
 											aria-label={__(
 												'Custom Shrink',
-												'publisher-core'
+												'blockera-core'
 											)}
 											columns="columns-2"
 											unitType="flex-shrink"
@@ -216,16 +216,16 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 											min={0}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherFlexChildShrink',
+													'blockeraFlexChildShrink',
 													newValue,
 													{ ref }
 												)
 											}
 											size="small"
 											defaultValue={
-												attributes.publisherFlexChildShrink
+												attributes.blockeraFlexChildShrink
 											}
-											{...extensionProps.publisherFlexChildShrink}
+											{...extensionProps.blockeraFlexChildShrink}
 										/>
 									</ControlContextProvider>
 
@@ -235,38 +235,34 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 												block,
 												'basis'
 											),
-											value: values.publisherFlexChildBasis,
-											attribute:
-												'publisherFlexChildBasis',
+											value: values.blockeraFlexChildBasis,
+											attribute: 'blockeraFlexChildBasis',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
 											controlName="input"
-											label={__(
-												'Basis',
-												'publisher-core'
-											)}
+											label={__('Basis', 'blockera-core')}
 											aria-label={__(
 												'Custom Basis',
-												'publisher-core'
+												'blockera-core'
 											)}
 											columns="columns-2"
 											arrows={true}
 											unitType="flex-basis"
 											min={0}
 											defaultValue={
-												attributes.publisherFlexChildBasis
+												attributes.blockeraFlexChildBasis
 											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherFlexChildBasis',
+													'blockeraFlexChildBasis',
 													newValue,
 													{ ref }
 												)
 											}
 											size="small"
-											{...extensionProps.publisherFlexChildBasis}
+											{...extensionProps.blockeraFlexChildBasis}
 										/>
 									</ControlContextProvider>
 								</>
@@ -277,47 +273,47 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFlexChildAlign}
-					config={extensionConfig.publisherFlexChildAlign}
+					config={extensionConfig.blockeraFlexChildAlign}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'align'),
-							value: values.publisherFlexChildAlign,
-							attribute: 'publisherFlexChildAlign',
+							value: values.blockeraFlexChildAlign,
+							attribute: 'blockeraFlexChildAlign',
 							blockName: block.blockName,
 						}}
 					>
 						<ToggleSelectControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Self Align', 'publisher-core')}
+							label={__('Self Align', 'blockera-core')}
 							className={
 								'items-flex-direction-' +
-								values.publisherFlexDirection
+								values.blockeraFlexDirection
 							}
 							options={[
 								{
-									label: __('Flex Start', 'publisher-core'),
+									label: __('Flex Start', 'blockera-core'),
 									value: 'flex-start',
 									icon: <AlignFlexStartIcon />,
 								},
 								{
-									label: __('Center', 'publisher-core'),
+									label: __('Center', 'blockera-core'),
 									value: 'center',
 									icon: <AlignFlexCenterIcon />,
 								},
 								{
-									label: __('Flex End', 'publisher-core'),
+									label: __('Flex End', 'blockera-core'),
 									value: 'flex-end',
 									icon: <AlignFlexEndIcon />,
 								},
 								{
-									label: __('Stretch', 'publisher-core'),
+									label: __('Stretch', 'blockera-core'),
 									value: 'stretch',
 									icon: <AlignStretchIcon />,
 								},
 								{
-									label: __('Baseline', 'publisher-core'),
+									label: __('Baseline', 'blockera-core'),
 									value: 'baseline',
 									icon: <AlignBaselineIcon />,
 								},
@@ -325,52 +321,52 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 							isDeselectable={true}
 							//
 							defaultValue={
-								attributes.publisherFlexChildAlign.default
+								attributes.blockeraFlexChildAlign.default
 							}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherFlexChildAlign',
+									'blockeraFlexChildAlign',
 									newValue,
 									{ ref }
 								)
 							}
-							{...extensionProps.publisherFlexChildAlign}
+							{...extensionProps.blockeraFlexChildAlign}
 						/>
 					</ControlContextProvider>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowFlexChildOrder}
-					config={extensionConfig.publisherFlexChildOrder}
+					config={extensionConfig.blockeraFlexChildOrder}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'order'),
-							value: values.publisherFlexChildOrder,
-							attribute: 'publisherFlexChildOrder',
+							value: values.blockeraFlexChildOrder,
+							attribute: 'blockeraFlexChildOrder',
 							blockName: block.blockName,
 						}}
 					>
 						<ToggleSelectControl
 							columns="1fr 2.65fr"
-							label={__('Self Order', 'publisher-core')}
+							label={__('Self Order', 'blockera-core')}
 							className={
 								'items-flex-direction-' +
-								values.publisherFlexDirection
+								values.blockeraFlexDirection
 							}
 							options={[
 								{
-									label: __('First', 'publisher-core'),
+									label: __('First', 'blockera-core'),
 									value: 'first',
 									icon: <OrderFirst />,
 								},
 								{
-									label: __('Last', 'publisher-core'),
+									label: __('Last', 'blockera-core'),
 									value: 'last',
 									icon: <OrderLast />,
 								},
 								{
-									label: __('Custom Order', 'publisher-core'),
+									label: __('Custom Order', 'blockera-core'),
 									value: 'custom',
 									icon: <GearIcon />,
 								},
@@ -378,49 +374,49 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 							isDeselectable={true}
 							//
 							defaultValue={
-								attributes.publisherFlexChildOrder.default
+								attributes.blockeraFlexChildOrder.default
 							}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherFlexChildOrder',
+									'blockeraFlexChildOrder',
 									newValue,
 									{ ref }
 								)
 							}
-							{...extensionProps.publisherFlexChildOrder}
+							{...extensionProps.blockeraFlexChildOrder}
 						>
-							{values.publisherFlexChildOrder === 'custom' && (
+							{values.blockeraFlexChildOrder === 'custom' && (
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
 											block,
 											'order-custom'
 										),
-										value: values.publisherFlexChildOrderCustom,
+										value: values.blockeraFlexChildOrderCustom,
 										attribute:
-											'publisherFlexChildOrderCustom',
+											'blockeraFlexChildOrderCustom',
 										blockName: block.blockName,
 									}}
 								>
 									<InputControl
 										controlName="input"
-										label={__('Custom', 'publisher-core')}
+										label={__('Custom', 'blockera-core')}
 										columns="2fr 3fr"
 										unitType="order"
 										arrows={true}
 										min={-1}
 										onChange={(newValue, ref) =>
 											handleOnChangeAttributes(
-												'publisherFlexChildOrderCustom',
+												'blockeraFlexChildOrderCustom',
 												newValue,
 												{ ref }
 											)
 										}
 										size="small"
 										defaultValue={
-											attributes.publisherFlexChildOrderCustom
+											attributes.blockeraFlexChildOrderCustom
 										}
-										{...extensionProps.publisherFlexChildOrderCustom}
+										{...extensionProps.blockeraFlexChildOrderCustom}
 									/>
 								</ControlContextProvider>
 							)}

@@ -18,9 +18,9 @@ import type { THeaderItem } from '../types';
 import { selectedShape } from '../utils';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 	({
@@ -39,7 +39,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'publisher-core'),
+					__('Item %d', 'blockera-core'),
 					itemId + 1
 				)}
 			>

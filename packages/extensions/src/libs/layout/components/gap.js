@@ -6,14 +6,14 @@ import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button, Grid } from '@publisher/components';
+import { Button, Grid } from '@blockera/components';
 import {
 	BaseControl,
 	InputControl,
 	useControlContext,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -61,19 +61,19 @@ export default function ({
 
 	return (
 		<BaseControl
-			label={__('Gap', 'publisher-core')}
+			label={__('Gap', 'blockera-core')}
 			labelDescription={
 				<>
 					<p>
 						{__(
 							'The Gap property in Flexbox sets the spacing between flex items, both rows and columns, simplifying layout spacing.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<p>
 						{__(
 							'You can also unlock the gap to use different gap for rows and columns.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 				</>
@@ -87,7 +87,7 @@ export default function ({
 					isActiveField(field) && (
 						<InputControl
 							className="control-first label-center small-gap"
-							aria-label={__('Gap', 'publisher-core')}
+							aria-label={__('Gap', 'blockera-core')}
 							unitType="essential"
 							min={0}
 							max={200}
@@ -114,14 +114,14 @@ export default function ({
 							controlName="input"
 							columns="columns-1"
 							className="control-first label-center small-gap"
-							label={__('Rows', 'publisher-core')}
-							labelPopoverTitle={__('Rows Gap', 'publisher-core')}
+							label={__('Rows', 'blockera-core')}
+							labelPopoverTitle={__('Rows Gap', 'blockera-core')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											"Rows gap in Flexbox specifically sets the vertical spacing between rows of flex items, allowing precise control over the layout's vertical separation.",
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 								</>
@@ -152,17 +152,17 @@ export default function ({
 							controlName="input"
 							columns="columns-1"
 							className="control-first label-center small-gap"
-							label={__('Columns', 'publisher-core')}
+							label={__('Columns', 'blockera-core')}
 							labelPopoverTitle={__(
 								'Columns Gap',
-								'publisher-core'
+								'blockera-core'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											"Columns gap in Flexbox specifically sets the horizontal spacing between columns of flex items, allowing precise control over the layout's horizontal separation.",
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 								</>
@@ -193,7 +193,7 @@ export default function ({
 				<Button
 					showTooltip={true}
 					tooltipPosition="top"
-					label={__('Custom Row & Column Gap', 'publisher-core')}
+					label={__('Custom Row & Column Gap', 'blockera-core')}
 					size="small"
 					onClick={() => {
 						if (gap?.lock) {
@@ -214,8 +214,8 @@ export default function ({
 					}}
 					style={{
 						color: gap?.lock
-							? 'var(--publisher-controls-color)'
-							: 'var(--publisher-controls-primary-color)',
+							? 'var(--blockera-controls-color)'
+							: 'var(--blockera-controls-primary-color)',
 						padding: '6px 3px',
 					}}
 				>

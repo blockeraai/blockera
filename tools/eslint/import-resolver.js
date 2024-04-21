@@ -15,8 +15,8 @@ exports.resolve = function (source, file, config) {
 			extensions: ['.tsx', '.ts', '.mjs', '.js', '.json', '.node'],
 		});
 
-	if (source.startsWith('@publisher/')) {
-		const packageName = source.slice('@publisher/'.length);
+	if (source.startsWith('@blockera/')) {
+		const packageName = source.slice('@blockera/'.length);
 
 		const result = resolve(path.join(PACKAGES_DIR, packageName));
 

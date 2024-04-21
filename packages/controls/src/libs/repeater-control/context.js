@@ -4,9 +4,9 @@
 import { createContext } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isFunction, isUndefined } from '@publisher/utils';
+import { isFunction, isUndefined } from '@blockera/utils';
 
 const RepeaterContext = createContext({
 	design: 'minimal',

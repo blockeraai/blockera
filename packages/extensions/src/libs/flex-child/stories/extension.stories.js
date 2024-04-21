@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import FlexChildExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherFlexChildExtension',
+	name: 'blockeraFlexChildExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -51,25 +51,25 @@ blocksInitializer({
 						initialOpen={true}
 						values={{
 							flexChildGrow:
-								attributes?.publisherFlexChildGrow || '',
+								attributes?.blockeraFlexChildGrow || '',
 							flexChildAlign:
-								attributes?.publisherFlexChildAlign || '',
+								attributes?.blockeraFlexChildAlign || '',
 							flexChildBasis:
-								attributes?.publisherFlexChildBasis || '',
+								attributes?.blockeraFlexChildBasis || '',
 							flexChildOrder:
-								attributes?.publisherFlexChildOrder || '',
+								attributes?.blockeraFlexChildOrder || '',
 							flexChildSizing:
-								attributes?.publisherFlexChildSizing || '',
+								attributes?.blockeraFlexChildSizing || '',
 							flexChildShrink:
-								attributes?.publisherFlexChildShrink || '',
+								attributes?.blockeraFlexChildShrink || '',
 							flexChildOrderCustom:
-								attributes?.publisherFlexChildOrderCustom || '',
+								attributes?.blockeraFlexChildOrderCustom || '',
 						}}
 						extensionId={'FlexChild'}
 						icon={<FlexChildExtensionIcon />}
-						storeName={'publisher-core/controls'}
+						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('FlexChild', 'publisher-core')}
+						title={__('FlexChild', 'blockera-core')}
 					/>
 				</InspectorControls>
 

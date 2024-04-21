@@ -5,11 +5,11 @@ import { memo, useContext } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { getIconLibrary } from '@publisher/components';
-import { isEmpty, isUndefined } from '@publisher/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { getIconLibrary } from '@blockera/components';
+import { isEmpty, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -26,7 +26,7 @@ const IconLibraries = ({
 		wp: {
 			lazyLoad: false,
 		},
-		publisher: {
+		blockera: {
 			lazyLoad: true,
 		},
 		far: {
@@ -50,14 +50,14 @@ const IconLibraries = ({
 		let title, icon;
 
 		if (library === 'suggestions') {
-			title = __('AI Suggestions', 'publisher-cre');
+			title = __('AI Suggestions', 'blockera-cre');
 			icon = <SuggestionsIcon />;
 		} else {
 			const iconLibraryInfo = getIconLibrary(library);
 
 			title = sprintf(
 				// translators: %s: Icon Library Name
-				__('%s Icons', 'publisher-core'),
+				__('%s Icons', 'blockera-core'),
 				iconLibraryInfo[library].name
 			);
 

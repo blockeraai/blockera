@@ -5,10 +5,10 @@
 import type { Element } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { Flex } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Flex } from '@blockera/components';
 
 export default function ({
 	children,

@@ -5,9 +5,9 @@
 import { ColorPicker as WPColorPicker } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 export const ColorPallet = ({ className, ...props }) => {
 	return (

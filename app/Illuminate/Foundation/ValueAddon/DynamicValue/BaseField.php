@@ -1,12 +1,12 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
 
 /**
  * Class BaseField
  *
  * @since   1.0.0
- * @package Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\BaseField
+ * @package Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\BaseField
  */
 abstract class BaseField {
 

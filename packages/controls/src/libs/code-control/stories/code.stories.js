@@ -4,10 +4,10 @@
 import { nanoid } from 'nanoid';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
-import { Flex } from '@publisher/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
+import { Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -54,7 +54,7 @@ export const All = {
   /* Your CSS here */
 }
 
-.publisher-control.publisher-control-checkbox {
+.blockera-control.blockera-control-checkbox {
   margin: 0 !important;
   font-size: 12px;
   display: flex;
@@ -63,11 +63,11 @@ export const All = {
 }
 
 .components-checkbox-control__input[type="checkbox"] {
-  border-color: var(--publisher-controls-border-color);
+  border-color: var(--blockera-controls-border-color);
 }
 
 .components-checkbox-control__input[type="checkbox"] {
-  border-color: var(--publisher-controls-border-color);
+  border-color: var(--blockera-controls-border-color);
 }
 
 `,

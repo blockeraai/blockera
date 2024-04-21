@@ -1,6 +1,6 @@
 import { SVG, Path } from '@wordpress/primitives';
 
-const publisherCircle = (
+const BlockeraCircle = (
 	<SVG
 		width="22"
 		height="22"
@@ -15,4 +15,4 @@ const publisherCircle = (
 	</SVG>
 );
 
-export default publisherCircle;
+export default BlockeraCircle;

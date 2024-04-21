@@ -1,29 +1,29 @@
 export const attributes = {
-	publisherFlexChildSizing: {
+	blockeraFlexChildSizing: {
 		type: 'string',
 		default: '',
 	},
-	publisherFlexChildGrow: {
+	blockeraFlexChildGrow: {
 		type: 'string',
 		default: '',
 	},
-	publisherFlexChildShrink: {
+	blockeraFlexChildShrink: {
 		type: 'string',
 		default: '',
 	},
-	publisherFlexChildBasis: {
+	blockeraFlexChildBasis: {
 		type: 'string',
 		default: '',
 	},
-	publisherFlexChildAlign: {
+	blockeraFlexChildAlign: {
 		type: 'string',
 		default: '',
 	},
-	publisherFlexChildOrder: {
+	blockeraFlexChildOrder: {
 		type: 'string',
 		default: '',
 	},
-	publisherFlexChildOrderCustom: {
+	blockeraFlexChildOrderCustom: {
 		type: 'string',
 		default: '',
 	},

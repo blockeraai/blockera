@@ -4,9 +4,9 @@
 import { addFilter } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { reregistrationBlocks } from '@publisher/blocks';
+import { reregistrationBlocks } from '@blockera/blocks';
 
 /**
  * Internal dependencies
@@ -24,7 +24,7 @@ export default function applyHooks() {
 
 	addFilter(
 		'blocks.registerBlockType',
-		'publisher/core/extensions/withAdvancedControlsAttributes',
+		'blockera/core/extensions/withAdvancedControlsAttributes',
 		withBlockSettings
 	);
 }

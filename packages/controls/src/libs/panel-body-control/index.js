@@ -6,9 +6,9 @@ import { PanelBody as WPPanelBody } from '@wordpress/components';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal Dependencies

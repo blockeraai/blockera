@@ -1,13 +1,13 @@
 export const attributes = {
-	publisherCursor: {
+	blockeraCursor: {
 		type: 'string',
 		default: 'default',
 	},
-	publisherUserSelect: {
+	blockeraUserSelect: {
 		type: 'string',
 		default: 'auto',
 	},
-	publisherPointerEvents: {
+	blockeraPointerEvents: {
 		type: 'string',
 		default: 'auto',
 	},

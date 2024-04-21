@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { ControlContextRef } from '@publisher/controls/src/context/types';
+import type { ControlContextRef } from '@blockera/controls/src/context/types';
 
 export type THandleOnChangeAttributes = (
 	attributeId: string,

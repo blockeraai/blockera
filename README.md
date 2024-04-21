@@ -1,18 +1,17 @@
-# Publisher Core
-The Publisher Core is library ro use in all publisher products.
-This is core api for Publisher Plugin Factory.
+# Blockera Core
 
+The Blockera Core is library ro use in all blockera products.
+This is core api for Plugin Factory.
 
 ## Installation
 
-at the root of `publisher-core` please run:
+at the root of `blockera-core` please run:
 
->npm install
+> npm install
 
->git submodule init && git submodule update
+> git submodule init && git submodule update
 
->composer install
+> composer install
 
-> npm run build 
-
+> npm run build
 

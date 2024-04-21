@@ -21,7 +21,7 @@ describe('Post Author Block → Inner Blocks', () => {
 		// open inner block settings
 		openInnerBlocksExtension();
 
-		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
 				cy.getByAriaLabel('Avatar Customize').should('exist');
 				cy.getByAriaLabel('Byline Customize').should('exist');
@@ -34,3 +34,4 @@ describe('Post Author Block → Inner Blocks', () => {
 		);
 	});
 });
+

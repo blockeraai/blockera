@@ -1,10 +1,10 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { BreakpointTypes } from '@publisher/extensions/src/libs/block-states/types';
-import breakpoints from '@publisher/extensions/src/libs/block-states/default-breakpoints';
+import type { BreakpointTypes } from '@blockera/extensions/src/libs/block-states/types';
+import breakpoints from '@blockera/extensions/src/libs/block-states/default-breakpoints';
 
 export const useMedia = (): { [key: string]: string } => {
 	const medias: { [key: string]: string } = {};

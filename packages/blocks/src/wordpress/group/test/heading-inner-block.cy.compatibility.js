@@ -43,9 +43,9 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect({
-					publisherFontColor: '#ff6868',
+					blockeraFontColor: '#ff6868',
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+					getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 						?.attributes
 				);
 			});
@@ -72,9 +72,9 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 			getWPDataObject().then((data) => {
 				expect({
-					publisherFontColor: '#666666',
+					blockeraFontColor: '#666666',
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+					getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 						?.attributes
 				);
 			});
@@ -96,7 +96,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 			getWPDataObject().then((data) => {
 				expect({}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+					getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 						?.attributes
 				);
 			});
@@ -135,7 +135,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect({
-					publisherFontColor: {
+					blockeraFontColor: {
 						settings: {
 							name: 'Accent / Three',
 							id: 'accent-3',
@@ -152,7 +152,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						valueType: 'variable',
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+					getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 						?.attributes
 				);
 			});
@@ -171,7 +171,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 			getWPDataObject().then((data) => {
 				expect({
-					publisherFontColor: {
+					blockeraFontColor: {
 						settings: {
 							name: 'Contrast / Two',
 							id: 'contrast-2',
@@ -188,7 +188,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						valueType: 'variable',
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+					getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 						?.attributes
 				);
 			});
@@ -210,7 +210,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 			getWPDataObject().then((data) => {
 				expect({}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+					getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 						?.attributes
 				);
 			});
@@ -252,9 +252,9 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				// WP data should come to Blockera
 				getWPDataObject().then((data) => {
 					expect({
-						publisherBackgroundColor: '#ffcaca',
+						blockeraBackgroundColor: '#ffcaca',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -281,9 +281,9 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 				getWPDataObject().then((data) => {
 					expect({
-						publisherBackgroundColor: '#666666',
+						blockeraBackgroundColor: '#666666',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -305,7 +305,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 				getWPDataObject().then((data) => {
 					expect({}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -344,7 +344,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				// WP data should come to Blockera
 				getWPDataObject().then((data) => {
 					expect({
-						publisherBackgroundColor: {
+						blockeraBackgroundColor: {
 							settings: {
 								name: 'Accent / Three',
 								id: 'accent-3',
@@ -361,7 +361,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							valueType: 'variable',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -380,7 +380,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 				getWPDataObject().then((data) => {
 					expect({
-						publisherBackgroundColor: {
+						blockeraBackgroundColor: {
 							settings: {
 								name: 'Contrast / Two',
 								id: 'contrast-2',
@@ -397,7 +397,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							valueType: 'variable',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -419,7 +419,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 				getWPDataObject().then((data) => {
 					expect({}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -464,7 +464,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					// WP data should come to Blockera
 					getWPDataObject().then((data) => {
 						expect({
-							publisherBackground: {
+							blockeraBackground: {
 								'linear-gradient-0': {
 									isVisible: true,
 									type: 'linear-gradient',
@@ -477,7 +477,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								},
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -508,7 +508,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					// Blockera value should be moved to WP data
 					getWPDataObject().then((data) => {
 						expect({
-							publisherBackground: {
+							blockeraBackground: {
 								'linear-gradient-0': {
 									isVisible: true,
 									type: 'linear-gradient',
@@ -521,7 +521,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								},
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -556,7 +556,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -591,7 +591,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					// WP data should come to Blockera
 					getWPDataObject().then((data) => {
 						expect({
-							publisherBackground: {
+							blockeraBackground: {
 								'linear-gradient-0': {
 									isVisible: true,
 									type: 'linear-gradient',
@@ -618,7 +618,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								},
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -639,7 +639,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 					// Open variables popover
 					cy.get(
-						'.components-popover.publisher-control-background-popover'
+						'.components-popover.blockera-control-background-popover'
 					).within(() => {
 						cy.clickValueAddonButton();
 					});
@@ -648,7 +648,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 					// change variable
 					cy.get(
-						'.components-popover.publisher-control-popover-variables'
+						'.components-popover.blockera-control-popover-variables'
 					).within(() => {
 						cy.selectValueAddonItem('gradient-2');
 					});
@@ -663,7 +663,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 					getWPDataObject().then((data) => {
 						expect({
-							publisherBackground: {
+							blockeraBackground: {
 								'linear-gradient-0': {
 									isVisible: true,
 									type: 'linear-gradient',
@@ -690,7 +690,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								},
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -716,7 +716,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -753,7 +753,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					// WP data should come to Blockera
 					getWPDataObject().then((data) => {
 						expect({
-							publisherBackground: {
+							blockeraBackground: {
 								'radial-gradient-0': {
 									isVisible: true,
 									type: 'radial-gradient',
@@ -769,7 +769,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								},
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -801,7 +801,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					// Blockera value should be moved to WP data
 					getWPDataObject().then((data) => {
 						expect({
-							publisherBackground: {
+							blockeraBackground: {
 								'radial-gradient-0': {
 									isVisible: true,
 									type: 'radial-gradient',
@@ -818,7 +818,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								},
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -853,7 +853,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherInnerBlocks')
+							getSelectedBlock(data, 'blockeraInnerBlocks')
 								?.heading?.attributes
 						);
 					});
@@ -891,9 +891,9 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 				getWPDataObject().then((data) => {
 					expect({
-						publisherBackgroundColor: '#ffcaca',
+						blockeraBackgroundColor: '#ffcaca',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -926,8 +926,8 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
 					expect({
-						publisherBackgroundColor: '#ffcaca',
-						publisherBackground: {
+						blockeraBackgroundColor: '#ffcaca',
+						blockeraBackground: {
 							'radial-gradient-0': {
 								isVisible: true,
 								type: 'radial-gradient',
@@ -944,7 +944,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							},
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -981,8 +981,8 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 				getWPDataObject().then((data) => {
 					expect({
-						publisherBackgroundColor: '#666666',
-						publisherBackground: {
+						blockeraBackgroundColor: '#666666',
+						blockeraBackground: {
 							'radial-gradient-0': {
 								isVisible: true,
 								type: 'radial-gradient',
@@ -999,7 +999,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							},
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -1030,7 +1030,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 
 				getWPDataObject().then((data) => {
 					expect({
-						publisherBackground: {
+						blockeraBackground: {
 							'radial-gradient-0': {
 								isVisible: true,
 								type: 'radial-gradient',
@@ -1047,7 +1047,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							},
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 				});
@@ -1080,7 +1080,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
 					expect({}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherInnerBlocks')?.heading
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.heading
 							?.attributes
 					);
 
@@ -1098,3 +1098,4 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 		});
 	});
 });
+

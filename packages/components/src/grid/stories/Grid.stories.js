@@ -1,7 +1,7 @@
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies

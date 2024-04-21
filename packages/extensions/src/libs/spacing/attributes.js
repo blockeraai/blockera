@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherSpacing: {
+	blockeraSpacing: {
 		type: 'object',
 		default: {
 			margin: {

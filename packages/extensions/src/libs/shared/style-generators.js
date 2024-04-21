@@ -15,41 +15,41 @@ import { BackgroundStyles } from '../background';
 import { BorderAndShadowStyles } from '../border-and-shadow';
 
 export default {
-	publisherSize: {
+	blockeraSize: {
 		callback: SizeStyles,
 	},
-	publisherIcon: {
+	blockeraIcon: {
 		callback: IconStyles,
 	},
-	publisherMouse: {
+	blockeraMouse: {
 		callback: MouseStyles,
 	},
-	publisherLayout: {
+	blockeraLayout: {
 		callback: LayoutStyles,
 	},
-	publisherFlexChild: {
+	blockeraFlexChild: {
 		callback: FlexChildStyles,
 	},
-	publisherSpacing: {
+	blockeraSpacing: {
 		callback: SpacingStyles,
 		fallbackSupportId: 'spacing',
 	},
-	publisherEffects: {
+	blockeraEffects: {
 		callback: EffectsStyles,
 	},
-	publisherPosition: {
+	blockeraPosition: {
 		callback: PositionStyles,
 	},
-	publisherCustomStyle: {
+	blockeraCustomStyle: {
 		callback: CustomStyleStyles,
 	},
-	publisherTypography: {
+	blockeraTypography: {
 		callback: TypographyStyles,
 	},
-	publisherBackground: {
+	blockeraBackground: {
 		callback: BackgroundStyles,
 	},
-	publisherBorderAndShadow: {
+	blockeraBorderAndShadow: {
 		callback: BorderAndShadowStyles,
 	},
 };

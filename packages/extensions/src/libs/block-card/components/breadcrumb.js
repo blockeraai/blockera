@@ -7,9 +7,9 @@ import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { extensionInnerClassNames } from '@publisher/classnames';
+import { extensionInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -71,7 +71,7 @@ export function Breadcrumb({
 	};
 
 	const { getActiveInnerState, getActiveMasterState } = select(
-		'publisher-core/extensions'
+		'blockera-core/extensions'
 	);
 	const masterActiveState = getActiveMasterState(clientId, blockName);
 	const activeInnerBlockState = getActiveInnerState(clientId, activeBlock);
@@ -97,9 +97,9 @@ export function Breadcrumb({
 					{0 !==
 						Object.keys(
 							currentInnerBlock?.attributes
-								?.publisherBlockStates || {}
+								?.blockeraBlockStates || {}
 						).length &&
-						currentInnerBlock?.attributes?.publisherBlockStates[
+						currentInnerBlock?.attributes?.blockeraBlockStates[
 							activeInnerBlockState
 						] &&
 						'normal' !== activeInnerBlockState && (

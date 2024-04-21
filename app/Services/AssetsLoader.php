@@ -1,11 +1,11 @@
 <?php
 
-namespace Publisher\Framework\Services;
+namespace Blockera\Framework\Services;
 
-use Publisher\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Foundation\Application;
 
 /**
- * Class AssetsLoader registering all publisher core assets into WordPress CMS.
+ * Class AssetsLoader registering all blockera core assets into WordPress CMS.
  *
  * @package AssetsLoader
  */
@@ -36,8 +36,8 @@ class AssetsLoader {
 	 */
 	protected static array $packages_deps = [
 		'extensions' => [
-			'@publisher/controls',
-			'@publisher/components',
+			'@blockera/controls',
+			'@blockera/components',
 		],
 	];
 
@@ -86,7 +86,7 @@ class AssetsLoader {
 		}
 
 		wp_enqueue_style(
-			'@publisher/editor-styles',
+			'@blockera/editor-styles',
 			$asset['style'],
 			[],
 			$asset['version'],
@@ -112,7 +112,7 @@ class AssetsLoader {
 			if ( $asset['style'] ) {
 
 				wp_enqueue_style(
-					'@publisher/' . $asset['name'],
+					'@blockera/' . $asset['name'],
 					str_replace( '\\', '/', $asset['style'] ),
 					self::$packages_deps[ $asset['name'] ] ?? [],
 					$asset['version']
@@ -127,7 +127,7 @@ class AssetsLoader {
 			$deps = $this->exclude_dependencies( $asset['deps'] );
 
 			wp_enqueue_script(
-				'@publisher/' . $asset['name'],
+				'@blockera/' . $asset['name'],
 				str_replace( '\\', '/', $asset['script'] ),
 				$deps,
 				$asset['version'],
@@ -174,13 +174,13 @@ class AssetsLoader {
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file = pb_core_config( 'app.root_path' ) . "assets/style-engine-styles.css";
+		$file = blockera_core_config( 'app.root_path' ) . "assets/style-engine-styles.css";
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
 			wp_enqueue_style(
-				$handle = 'publisher-core-inline-css',
-				pb_core_config( 'app.root_url' ) . "assets/style-engine-styles.css",
+				$handle = 'blockera-core-inline-css',
+				blockera_core_config( 'app.root_url' ) . "assets/style-engine-styles.css",
 				[],
 				filemtime( $file )
 			);
@@ -192,15 +192,15 @@ class AssetsLoader {
 				 * @since 1.0.0
 				 */
 				apply_filters(
-					'publisher-core/services/register-block-editor-assets/add-inline-css-styles',
+					'blockera-core/services/register-block-editor-assets/add-inline-css-styles',
 					''
 				)
 			);
 		}
 
 		// FIXME: remove temp font-awesome icon library!
-		wp_enqueue_style( 'fs', pb_core_config( 'app.root_url' ) . '/assets/all.min.css' );
-		wp_enqueue_script( 'fs', pb_core_config( 'app.root_url' ) . '/assets/all.min.js' );
+		wp_enqueue_style( 'fs', blockera_core_config( 'app.root_url' ) . '/assets/all.min.css' );
+		wp_enqueue_script( 'fs', blockera_core_config( 'app.root_url' ) . '/assets/all.min.js' );
 
 		// Registering assets ...
 		foreach ( $this->prepare_assets() as $asset ) {
@@ -208,7 +208,7 @@ class AssetsLoader {
 			if ( $asset['style'] ) {
 
 				wp_register_style(
-					'@publisher/' . $asset['name'],
+					'@blockera/' . $asset['name'],
 					str_replace( '\\', '/', $asset['style'] ),
 					self::$packages_deps[ $asset['name'] ] ?? [],
 					$asset['version']
@@ -223,7 +223,7 @@ class AssetsLoader {
 			$deps = $this->exclude_dependencies( $asset['deps'] );
 
 			wp_register_script(
-				'@publisher/' . $asset['name'],
+				'@blockera/' . $asset['name'],
 				str_replace( '\\', '/', $asset['script'] ),
 				$deps,
 				$asset['version'],
@@ -236,14 +236,14 @@ class AssetsLoader {
 			return;
 		}
 
-		// publisher-core server side dynamic value definitions.
+		// blockera-core server side dynamic value definitions.
 		wp_add_inline_script(
-			'@publisher/extensions',
+			'@blockera/extensions',
 			'
 			window.onload = () => {
-				publisher.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->application->getEntities() ) . ');
-				publisher.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');
-				publisher.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'variable', false ) ) . ');
+				blockera.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->application->getEntities() ) . ');
+				blockera.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');
+				blockera.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'variable', false ) ) . ');
 			};
 			',
 			'after'
@@ -260,7 +260,7 @@ class AssetsLoader {
 	 */
 	private function exclude_dependencies( array $dependencies ): array {
 
-		$excludes = array( '@publisher/storybook' );
+		$excludes = array( '@blockera/storybook' );
 
 		foreach ( $excludes as $item ) {
 
@@ -284,11 +284,11 @@ class AssetsLoader {
 	 */
 	public function assetInfo( string $name ): array {
 
-		$isDevelopment = pb_core_config( 'app.debug' );
+		$isDevelopment = blockera_core_config( 'app.debug' );
 
 		$assetInfoFile = sprintf(
 			'%s%s/index%s.asset.php',
-			pb_core_config( 'app.dist_path' ),
+			blockera_core_config( 'app.dist_path' ),
 			$name,
 			$isDevelopment ? '' : '.min'
 		);
@@ -305,7 +305,7 @@ class AssetsLoader {
 
 		$js_file = sprintf(
 			'%s%s/index%s.js',
-			pb_core_config( 'app.dist_path' ),
+			blockera_core_config( 'app.dist_path' ),
 			$name,
 			$isDevelopment ? '' : '.min'
 		);
@@ -314,7 +314,7 @@ class AssetsLoader {
 
 			$script = sprintf(
 				'%s%s/index%s.js',
-				pb_core_config( 'app.dist_url' ),
+				blockera_core_config( 'app.dist_url' ),
 				$name,
 				$isDevelopment ? '' : '.min'
 			);
@@ -325,7 +325,7 @@ class AssetsLoader {
 
 		$css_file = sprintf(
 			'%s%s/style%s.css',
-			pb_core_config( 'app.dist_path' ),
+			blockera_core_config( 'app.dist_path' ),
 			$_name = str_contains( $name, '-styles' ) ? $name : "{$name}-styles",
 			$isDevelopment ? '' : '.min'
 		);
@@ -334,7 +334,7 @@ class AssetsLoader {
 
 			$style = sprintf(
 				'%s%s/style%s.css',
-				pb_core_config( 'app.dist_url' ),
+				blockera_core_config( 'app.dist_url' ),
 				$_name,
 				$isDevelopment ? '' : '.min'
 			);

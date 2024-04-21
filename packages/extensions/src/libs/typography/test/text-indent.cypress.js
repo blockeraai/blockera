@@ -12,7 +12,7 @@ describe('Text Indent → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -34,7 +34,7 @@ describe('Text Indent → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('5px').to.be.equal(
-				getSelectedBlock(data, 'publisherTextIndent')
+				getSelectedBlock(data, 'blockeraTextIndent')
 			);
 		});
 
@@ -43,10 +43,7 @@ describe('Text Indent → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
-			'have.css',
-			'text-indent',
-			'5px'
-		);
+		cy.get('.blockera-core-block').should('have.css', 'text-indent', '5px');
 	});
 });
+

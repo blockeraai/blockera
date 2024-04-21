@@ -6,10 +6,10 @@
 import { addFilter } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { ControlContextRef } from '@publisher/controls/src/context/types';
-import { mergeObject } from '@publisher/utils';
+import type { ControlContextRef } from '@blockera/controls/src/context/types';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -38,8 +38,8 @@ import type { BlockDetail } from '../block-states/types';
 
 export const bootstrap = (): void => {
 	addFilter(
-		'publisherCore.blockEdit.attributes',
-		'publisherCore.blockEdit.sizeExtension.bootstrap',
+		'blockeraCore.blockEdit.attributes',
+		'blockeraCore.blockEdit.sizeExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
 				blockDetail;
@@ -78,15 +78,15 @@ export const bootstrap = (): void => {
 	);
 
 	addFilter(
-		'publisherCore.blockEdit.setAttributes',
-		'publisherCore.blockEdit.sizeExtension.bootstrap.setAttributes',
+		'blockeraCore.blockEdit.setAttributes',
+		'blockeraCore.blockEdit.sizeExtension.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *
 		 * @callback getAttributes
 		 *
-		 * @param {Object} nextState The block attributes changed with publisher feature newValue and latest version of block state.
-		 * @param {string} featureId The publisher feature identifier.
+		 * @param {Object} nextState The block attributes changed with blockera feature newValue and latest version of block state.
+		 * @param {string} featureId The blockera feature identifier.
 		 * @param {*} newValue The newValue sets to feature.
 		 * @param {ControlContextRef} ref The reference of control context action occurred.
 		 * @param {getAttributes} getAttributes The getter block attributes.
@@ -110,7 +110,7 @@ export const bootstrap = (): void => {
 			}
 
 			switch (featureId) {
-				case 'publisherWidth':
+				case 'blockeraWidth':
 					return mergeObject(
 						nextState,
 						widthToWPCompatibility({
@@ -120,7 +120,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherHeight':
+				case 'blockeraHeight':
 					return mergeObject(
 						nextState,
 						heightToWPCompatibility({
@@ -130,7 +130,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherMinHeight':
+				case 'blockeraMinHeight':
 					return mergeObject(
 						nextState,
 						minHeightToWPCompatibility({
@@ -140,7 +140,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherRatio':
+				case 'blockeraRatio':
 					return mergeObject(
 						nextState,
 						ratioToWPCompatibility({
@@ -150,7 +150,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherFit':
+				case 'blockeraFit':
 					return mergeObject(
 						nextState,
 						fitToWPCompatibility({

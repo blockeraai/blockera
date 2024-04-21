@@ -1,14 +1,14 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getCssSelector,
 	computedCssDeclarations,
-} from '@publisher/style-engine';
-import { isUndefined, isEmpty } from '@publisher/utils';
-import { getValueAddonRealValue } from '@publisher/hooks';
+} from '@blockera/style-engine';
+import { isUndefined, isEmpty } from '@blockera/utils';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -18,7 +18,7 @@ import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { CssRule } from '@publisher/style-engine/src/types';
+import type { CssRule } from '@blockera/style-engine/src/types';
 
 export const SizeStyles = ({
 	state,
@@ -32,15 +32,15 @@ export const SizeStyles = ({
 	...props
 }: StylesProps): Array<CssRule> => {
 	const {
-		publisherWidth,
-		publisherHeight,
-		publisherMinWidth,
-		publisherMinHeight,
-		publisherMaxWidth,
-		publisherMaxHeight,
-		publisherOverflow,
-		publisherRatio,
-		publisherFit,
+		blockeraWidth,
+		blockeraHeight,
+		blockeraMinWidth,
+		blockeraMinHeight,
+		blockeraMaxWidth,
+		blockeraMaxHeight,
+		blockeraOverflow,
+		blockeraRatio,
+		blockeraFit,
 	} = config.sizeConfig;
 	const blockProps = {
 		clientId,
@@ -63,16 +63,13 @@ export const SizeStyles = ({
 	};
 	const styleGroup: Array<CssRule> = [];
 
-	if (
-		isActiveField(publisherWidth) &&
-		currentBlockAttributes?.publisherWidth
-	) {
+	if (isActiveField(blockeraWidth) && currentBlockAttributes?.blockeraWidth) {
 		const width = getValueAddonRealValue(
-			currentBlockAttributes.publisherWidth
+			currentBlockAttributes.blockeraWidth
 		);
 		let value = '';
 
-		if (width !== attributes.publisherWidth.default) {
+		if (width !== attributes.blockeraWidth.default) {
 			value = width;
 		} else if (
 			!isUndefined(currentBlockAttributes.width) &&
@@ -83,8 +80,8 @@ export const SizeStyles = ({
 
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherWidth',
-			support: 'publisherWidth',
+			query: 'blockeraWidth',
+			support: 'blockeraWidth',
 			fallbackSupportId: 'width',
 		});
 
@@ -92,7 +89,7 @@ export const SizeStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherWidth: [
+					blockeraWidth: [
 						{
 							...staticDefinitionParams,
 							properties: {
@@ -107,18 +104,18 @@ export const SizeStyles = ({
 	}
 
 	if (
-		isActiveField(publisherMinWidth) &&
-		currentBlockAttributes?.publisherMinWidth
+		isActiveField(blockeraMinWidth) &&
+		currentBlockAttributes?.blockeraMinWidth
 	) {
 		const minWidth = getValueAddonRealValue(
-			currentBlockAttributes.publisherMinWidth
+			currentBlockAttributes.blockeraMinWidth
 		);
 
-		if (minWidth !== attributes.publisherMinWidth.default) {
+		if (minWidth !== attributes.blockeraMinWidth.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherMinWidth',
-				support: 'publisherMinWidth',
+				query: 'blockeraMinWidth',
+				support: 'blockeraMinWidth',
 				fallbackSupportId: 'minWidth',
 			});
 
@@ -126,7 +123,7 @@ export const SizeStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherMinWidth: [
+						blockeraMinWidth: [
 							{
 								properties: {
 									'min-width': minWidth,
@@ -142,18 +139,18 @@ export const SizeStyles = ({
 	}
 
 	if (
-		isActiveField(publisherMaxWidth) &&
-		currentBlockAttributes?.publisherMaxWidth
+		isActiveField(blockeraMaxWidth) &&
+		currentBlockAttributes?.blockeraMaxWidth
 	) {
 		const maxWidth = getValueAddonRealValue(
-			currentBlockAttributes.publisherMaxWidth
+			currentBlockAttributes.blockeraMaxWidth
 		);
 
-		if (maxWidth !== attributes.publisherMaxWidth.default) {
+		if (maxWidth !== attributes.blockeraMaxWidth.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherMaxWidth',
-				support: 'publisherMaxWidth',
+				query: 'blockeraMaxWidth',
+				support: 'blockeraMaxWidth',
 				fallbackSupportId: 'maxWidth',
 			});
 
@@ -161,7 +158,7 @@ export const SizeStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherMaxWidth: [
+						blockeraMaxWidth: [
 							{
 								properties: {
 									'max-width': maxWidth,
@@ -177,16 +174,16 @@ export const SizeStyles = ({
 	}
 
 	if (
-		isActiveField(publisherHeight) &&
-		currentBlockAttributes?.publisherHeight
+		isActiveField(blockeraHeight) &&
+		currentBlockAttributes?.blockeraHeight
 	) {
 		const height = getValueAddonRealValue(
-			currentBlockAttributes.publisherHeight
+			currentBlockAttributes.blockeraHeight
 		);
 
 		let value = '';
 
-		if (height !== attributes.publisherHeight.default) {
+		if (height !== attributes.blockeraHeight.default) {
 			value = height;
 		} else if (
 			!isUndefined(currentBlockAttributes.height) &&
@@ -198,8 +195,8 @@ export const SizeStyles = ({
 		if (value.trim()) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherHeight',
-				support: 'publisherHeight',
+				query: 'blockeraHeight',
+				support: 'blockeraHeight',
 				fallbackSupportId: 'height',
 			});
 
@@ -207,7 +204,7 @@ export const SizeStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherHeight: [
+						blockeraHeight: [
 							{
 								properties: {
 									height: value,
@@ -223,18 +220,18 @@ export const SizeStyles = ({
 	}
 
 	if (
-		isActiveField(publisherMinHeight) &&
-		currentBlockAttributes?.publisherMinHeight
+		isActiveField(blockeraMinHeight) &&
+		currentBlockAttributes?.blockeraMinHeight
 	) {
 		const minHeight = getValueAddonRealValue(
-			currentBlockAttributes.publisherMinHeight
+			currentBlockAttributes.blockeraMinHeight
 		);
 
-		if (minHeight !== attributes.publisherMinHeight.default) {
+		if (minHeight !== attributes.blockeraMinHeight.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherMinHeight',
-				support: 'publisherMinHeight',
+				query: 'blockeraMinHeight',
+				support: 'blockeraMinHeight',
 				fallbackSupportId: 'minHeight',
 			});
 
@@ -242,7 +239,7 @@ export const SizeStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherHeight: [
+						blockeraHeight: [
 							{
 								properties: {
 									'min-height': minHeight,
@@ -258,18 +255,18 @@ export const SizeStyles = ({
 	}
 
 	if (
-		isActiveField(publisherMaxHeight) &&
-		currentBlockAttributes?.publisherMaxHeight
+		isActiveField(blockeraMaxHeight) &&
+		currentBlockAttributes?.blockeraMaxHeight
 	) {
 		const maxHeight = getValueAddonRealValue(
-			currentBlockAttributes.publisherMaxHeight
+			currentBlockAttributes.blockeraMaxHeight
 		);
 
-		if (maxHeight !== attributes.publisherMaxHeight.default) {
+		if (maxHeight !== attributes.blockeraMaxHeight.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherMaxHeight',
-				support: 'publisherMaxHeight',
+				query: 'blockeraMaxHeight',
+				support: 'blockeraMaxHeight',
 				fallbackSupportId: 'maxHeight',
 			});
 
@@ -277,7 +274,7 @@ export const SizeStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherMaxHeight: [
+						blockeraMaxHeight: [
 							{
 								properties: {
 									'max-height': maxHeight,
@@ -293,17 +290,17 @@ export const SizeStyles = ({
 	}
 
 	if (
-		isActiveField(publisherOverflow) &&
-		currentBlockAttributes?.publisherOverflow
+		isActiveField(blockeraOverflow) &&
+		currentBlockAttributes?.blockeraOverflow
 	) {
 		if (
-			currentBlockAttributes.publisherOverflow !==
-			attributes.publisherOverflow.default
+			currentBlockAttributes.blockeraOverflow !==
+			attributes.blockeraOverflow.default
 		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherOverflow',
-				support: 'publisherOverflow',
+				query: 'blockeraOverflow',
+				support: 'blockeraOverflow',
 				fallbackSupportId: 'overflow',
 			});
 
@@ -311,11 +308,11 @@ export const SizeStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherOverflow: [
+						blockeraOverflow: [
 							{
 								properties: {
 									overflow:
-										currentBlockAttributes.publisherOverflow,
+										currentBlockAttributes.blockeraOverflow,
 								},
 								...staticDefinitionParams,
 							},
@@ -327,23 +324,20 @@ export const SizeStyles = ({
 		}
 	}
 
-	if (
-		isActiveField(publisherRatio) &&
-		currentBlockAttributes?.publisherRatio
-	) {
-		const ratio = currentBlockAttributes.publisherRatio.value;
+	if (isActiveField(blockeraRatio) && currentBlockAttributes?.blockeraRatio) {
+		const ratio = currentBlockAttributes.blockeraRatio.value;
 
-		if (ratio !== attributes.publisherRatio.default.value) {
+		if (ratio !== attributes.blockeraRatio.default.value) {
 			let value = '';
 
 			switch (ratio) {
 				case 'custom':
 					{
 						const width = getValueAddonRealValue(
-							currentBlockAttributes.publisherRatio.width
+							currentBlockAttributes.blockeraRatio.width
 						);
 						const height = getValueAddonRealValue(
-							currentBlockAttributes.publisherRatio.height
+							currentBlockAttributes.blockeraRatio.height
 						);
 
 						value = `${width} ${
@@ -357,8 +351,8 @@ export const SizeStyles = ({
 
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherRatio',
-				support: 'publisherRatio',
+				query: 'blockeraRatio',
+				support: 'blockeraRatio',
 				fallbackSupportId: 'aspectRatio',
 			});
 
@@ -366,7 +360,7 @@ export const SizeStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherRatio: [
+						blockeraRatio: [
 							{
 								properties: {
 									'aspect-ratio': value,
@@ -382,14 +376,14 @@ export const SizeStyles = ({
 	}
 
 	if (
-		isActiveField(publisherFit) &&
-		currentBlockAttributes?.publisherFit &&
-		currentBlockAttributes.publisherFit !== attributes.publisherFit.default
+		isActiveField(blockeraFit) &&
+		currentBlockAttributes?.blockeraFit &&
+		currentBlockAttributes.blockeraFit !== attributes.blockeraFit.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherFit',
-			support: 'publisherFit',
+			query: 'blockeraFit',
+			support: 'blockeraFit',
 			fallbackSupportId: 'fit',
 		});
 
@@ -397,11 +391,11 @@ export const SizeStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherFit: [
+					blockeraFit: [
 						{
 							properties: {
 								'object-fit':
-									currentBlockAttributes.publisherFit,
+									currentBlockAttributes.blockeraFit,
 							},
 							...staticDefinitionParams,
 						},
@@ -413,16 +407,16 @@ export const SizeStyles = ({
 	}
 
 	if (
-		currentBlockAttributes?.publisherFitPosition &&
+		currentBlockAttributes?.blockeraFitPosition &&
 		!arrayEquals(
-			currentBlockAttributes.publisherFitPosition,
-			attributes.publisherFitPosition.default
+			currentBlockAttributes.blockeraFitPosition,
+			attributes.blockeraFitPosition.default
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherFitPosition',
-			support: 'publisherFitPosition',
+			query: 'blockeraFitPosition',
+			support: 'blockeraFitPosition',
 			fallbackSupportId: 'fitPosition',
 		});
 
@@ -430,14 +424,14 @@ export const SizeStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherFitPosition: [
+					blockeraFitPosition: [
 						{
 							properties: {
 								'object-position': `${getValueAddonRealValue(
-									currentBlockAttributes.publisherFitPosition
+									currentBlockAttributes.blockeraFitPosition
 										.top
 								)} ${getValueAddonRealValue(
-									currentBlockAttributes.publisherFitPosition
+									currentBlockAttributes.blockeraFitPosition
 										.left
 								)}`,
 							},

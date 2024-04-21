@@ -7,9 +7,9 @@ import type { Element } from 'react';
 import { useRef } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useBlockContext } from '@publisher/extensions/src/hooks/context';
+import { useBlockContext } from '@blockera/extensions/src/hooks/context';
 
 /**
  * Internal dependencies
@@ -38,7 +38,7 @@ export function Tabs(props: TTabsProps): Element<any> {
 	} = useRef(tabs);
 	const ref = useRef();
 	const { setCurrentTab } = useBlockContext();
-	const classes = classnames('publisher-tab-panel');
+	const classes = classnames('blockera-tab-panel');
 
 	return (
 		<div ref={ref}>

@@ -6,10 +6,10 @@ import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isObject } from '@publisher/utils';
-import { controlClassNames } from '@publisher/classnames';
+import { isObject } from '@blockera/utils';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -90,7 +90,7 @@ export default function BackgroundControl({
 		'mesh-gradient-attachment': 'scroll',
 		isVisible: true,
 	}),
-	popoverTitle = __('Background', 'publisher-core'),
+	popoverTitle = __('Background', 'blockera-core'),
 	label,
 	labelPopoverTitle,
 	labelDescription,
@@ -161,10 +161,10 @@ export default function BackgroundControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			popoverClassName={controlClassNames('background-popover')}
-			addNewButtonLabel={__('Add New Background', 'publisher-core')}
-			label={label || __('Background', 'publisher-core')}
+			addNewButtonLabel={__('Add New Background', 'blockera-core')}
+			label={label || __('Background', 'blockera-core')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Block Background', 'publisher-core')
+				labelPopoverTitle || __('Block Background', 'blockera-core')
 			}
 			labelDescription={labelDescription || <LabelDescription />}
 			{...props}

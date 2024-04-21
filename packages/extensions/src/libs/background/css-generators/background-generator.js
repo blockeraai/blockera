@@ -1,14 +1,14 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { createCssDeclarations } from '@publisher/style-engine';
-import { getBackgroundItemBGProperty } from '@publisher/controls';
-import { getValueAddonRealValue } from '@publisher/hooks';
+import { createCssDeclarations } from '@blockera/style-engine';
+import { getBackgroundItemBGProperty } from '@blockera/controls';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 export function backgroundGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!Object.values(attributes?.publisherBackground)?.length) {
+	if (!Object.values(attributes?.blockeraBackground)?.length) {
 		return '';
 	}
 
@@ -22,7 +22,7 @@ export function backgroundGenerator(id, props) {
 	};
 
 	// Collect all properties
-	Object.entries(attributes?.publisherBackground)?.map(([, item]) => {
+	Object.entries(attributes?.blockeraBackground)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return undefined;
 		}

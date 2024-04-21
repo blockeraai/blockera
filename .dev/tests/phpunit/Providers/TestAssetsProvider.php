@@ -1,10 +1,10 @@
 <?php
 
-namespace Publisher\Framework\Tests\Providers;
+namespace Blockera\Framework\Tests\Providers;
 
-use Publisher\Framework\Tests\AppTestCase;
-use Publisher\Framework\Providers\AssetsProvider;
-use Publisher\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Tests\AppTestCase;
+use Blockera\Framework\Providers\AssetsProvider;
+use Blockera\Framework\Illuminate\Foundation\Application;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class TestAssetsProvider extends AppTestCase {
@@ -55,13 +55,13 @@ class TestAssetsProvider extends AppTestCase {
 
 		do_action( 'wp_enqueue_scripts' );
 
-		$this->assertTrue( wp_script_is( '@publisher/utils', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@publisher/controls', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@publisher/components', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@publisher/extensions', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@publisher/classnames', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@publisher/style-engine', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@publisher/data-extractor', 'registered' ) );
+		$this->assertTrue( wp_script_is( '@blockera/utils', 'registered' ) );
+		$this->assertTrue( wp_script_is( '@blockera/controls', 'registered' ) );
+		$this->assertTrue( wp_script_is( '@blockera/components', 'registered' ) );
+		$this->assertTrue( wp_script_is( '@blockera/extensions', 'registered' ) );
+		$this->assertTrue( wp_script_is( '@blockera/classnames', 'registered' ) );
+		$this->assertTrue( wp_script_is( '@blockera/style-engine', 'registered' ) );
+		$this->assertTrue( wp_script_is( '@blockera/data-extractor', 'registered' ) );
 	}
 
 	public function dataProvider(): array {
@@ -70,71 +70,71 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'controls',
-					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/controls-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/controls/index',
+					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/controls-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/controls/index',
 				],
 			],
 			[
 				[
 					'name'   => 'hooks',
-					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/hooks-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/hooks/index',
+					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/hooks-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/hooks/index',
 				],
 			],
 			[
 				[
 					'name'   => 'editor-styles',
-					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/editor-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/editor-styles/index',
+					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/editor-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/editor-styles/index',
 				],
 			],
 			[
 				[
 					'name'   => 'core-data',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/core-data/index',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/core-data/index',
 				],
 			],
 			[
 				[
 					'name'   => 'components',
-					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/components-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/components/index',
+					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/components-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/components/index',
 				],
 			],
 			[
 				[
 					'name'   => 'extensions',
-					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/extensions-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/extensions/index',
+					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/extensions-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/extensions/index',
 				],
 			],
 			[
 				[
 					'name'   => 'classnames',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/classnames/index',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/classnames/index',
 				],
 			],
 			[
 				[
 					'name'   => 'data-extractor',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/data-extractor/index',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/data-extractor/index',
 				],
 			],
 			[
 				[
 					'name'   => 'style-engine',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/style-engine/index',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/style-engine/index',
 				],
 			],
 			[
 				[
 					'name'   => 'utils',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/utils/index',
+					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/utils/index',
 				],
 			],
 		];

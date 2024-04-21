@@ -7,20 +7,20 @@ import { memo, useState } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	TransformControl,
 	PanelBodyControl,
 	ControlContextProvider,
-} from '@publisher/controls';
-import { isInteger, hasSameProps } from '@publisher/utils';
-import { Button, FeatureWrapper } from '@publisher/components';
+} from '@blockera/controls';
+import { isInteger, hasSameProps } from '@blockera/utils';
+import { Button, FeatureWrapper } from '@blockera/components';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
-} from '@publisher/classnames';
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -54,44 +54,44 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			useState(false);
 
 		const isShowOpacity = isShowField(
-			extensionConfig.publisherOpacity,
-			values?.publisherOpacity,
-			attributes.publisherOpacity.default
+			extensionConfig.blockeraOpacity,
+			values?.blockeraOpacity,
+			attributes.blockeraOpacity.default
 		);
 		const isShowTransform = isShowField(
-			extensionConfig.publisherTransform,
-			values?.publisherTransform,
-			attributes.publisherTransform.default
+			extensionConfig.blockeraTransform,
+			values?.blockeraTransform,
+			attributes.blockeraTransform.default
 		);
 		const isShowTransition = isShowField(
-			extensionConfig.publisherTransition,
-			values?.publisherTransition,
-			attributes.publisherTransition.default
+			extensionConfig.blockeraTransition,
+			values?.blockeraTransition,
+			attributes.blockeraTransition.default
 		);
 		const isShowFilter = isShowField(
-			extensionConfig.publisherFilter,
-			values?.publisherFilter,
-			attributes.publisherFilter.default
+			extensionConfig.blockeraFilter,
+			values?.blockeraFilter,
+			attributes.blockeraFilter.default
 		);
 		const isShowBackdropFilter = isShowField(
-			extensionConfig.publisherBackdropFilter,
-			values?.publisherBackdropFilter,
-			attributes.publisherBackdropFilter.default
+			extensionConfig.blockeraBackdropFilter,
+			values?.blockeraBackdropFilter,
+			attributes.blockeraBackdropFilter.default
 		);
 		const isShowDivider = isShowField(
-			extensionConfig.publisherDivider,
-			values?.publisherDivider,
-			attributes.publisherDivider.default
+			extensionConfig.blockeraDivider,
+			values?.blockeraDivider,
+			attributes.blockeraDivider.default
 		);
 		const isShowMask = isShowField(
-			extensionConfig.publisherMask,
-			values?.publisherMask,
-			attributes.publisherMask.default
+			extensionConfig.blockeraMask,
+			values?.blockeraMask,
+			attributes.blockeraMask.default
 		);
 		const isShowBlendMode = isShowField(
-			extensionConfig.publisherBlendMode,
-			values?.publisherBlendMode,
-			attributes.publisherBlendMode.default
+			extensionConfig.blockeraBlendMode,
+			values?.blockeraBlendMode,
+			attributes.blockeraBlendMode.default
 		);
 
 		// Extension is not active
@@ -110,13 +110,13 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Effects', 'publisher-core')}
+				title={__('Effects', 'blockera-core')}
 				initialOpen={true}
 				icon={<EffectsExtensionIcon />}
 				className={extensionClassNames('effects')}
 			>
 				<ExtensionSettings
-					buttonLabel={__('More Effect Settings', 'publisher-core')}
+					buttonLabel={__('More Effect Settings', 'blockera-core')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'effectsConfig');
@@ -125,29 +125,29 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowOpacity}
-					config={extensionConfig.publisherOpacity}
+					config={extensionConfig.blockeraOpacity}
 				>
 					<Opacity
 						block={block}
-						opacity={values.publisherOpacity}
+						opacity={values.blockeraOpacity}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.publisherOpacity.default}
-						{...extensionProps.publisherOpacity}
+						defaultValue={attributes.blockeraOpacity.default}
+						{...extensionProps.blockeraOpacity}
 					/>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowTransform}
-					config={extensionConfig.publisherTransform}
+					config={extensionConfig.blockeraTransform}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'transform-2d-3d'),
-							value: values.publisherTransform,
-							attribute: 'publisherTransform',
+							value: values.blockeraTransform,
+							attribute: 'blockeraTransform',
 							blockName: block.blockName,
 						}}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 					>
 						<BaseControl
 							columns="columns-1"
@@ -156,7 +156,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 							<TransformControl
 								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
-										'publisherTransform',
+										'blockeraTransform',
 										isInteger(newValue)
 											? `${newValue}%`
 											: newValue,
@@ -170,7 +170,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 											tooltipPosition="top"
 											label={__(
 												'Transformation Settings',
-												'publisher-core'
+												'blockera-core'
 											)}
 											size="extra-small"
 											className={controlInnerClassNames(
@@ -188,9 +188,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 									</>
 								}
 								defaultValue={
-									attributes.publisherTransform.default
+									attributes.blockeraTransform.default
 								}
-								{...extensionProps.publisherTransform}
+								{...extensionProps.blockeraTransform}
 							/>
 
 							{isTransformSettingsVisible && (
@@ -212,81 +212,79 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowTransition}
-					config={extensionConfig.publisherTransition}
+					config={extensionConfig.blockeraTransition}
 				>
 					<Transition
-						transition={values.publisherTransition}
+						transition={values.blockeraTransition}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.publisherTransition.default}
-						{...extensionProps.publisherTransition}
+						defaultValue={attributes.blockeraTransition.default}
+						{...extensionProps.blockeraTransition}
 					/>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowFilter}
-					config={extensionConfig.publisherFilter}
+					config={extensionConfig.blockeraFilter}
 				>
 					<Filter
-						filter={values.publisherFilter}
+						filter={values.blockeraFilter}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.publisherFilter.default}
-						{...extensionProps.publisherFilter}
+						defaultValue={attributes.blockeraFilter.default}
+						{...extensionProps.blockeraFilter}
 					/>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowBackdropFilter}
-					config={extensionConfig.publisherBackdropFilter}
+					config={extensionConfig.blockeraBackdropFilter}
 				>
 					<BackdropFilter
-						backdropFilter={values.publisherBackdropFilter}
+						backdropFilter={values.blockeraBackdropFilter}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={
-							attributes.publisherBackdropFilter.default
-						}
-						{...extensionProps.publisherBackdropFilter}
+						defaultValue={attributes.blockeraBackdropFilter.default}
+						{...extensionProps.blockeraBackdropFilter}
 					/>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowDivider}
-					config={extensionConfig.publisherDivider}
+					config={extensionConfig.blockeraDivider}
 				>
 					<Divider
-						divider={values.publisherDivider}
+						divider={values.blockeraDivider}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.publisherDivider.default}
-						{...extensionProps.publisherDivider}
+						defaultValue={attributes.blockeraDivider.default}
+						{...extensionProps.blockeraDivider}
 					/>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowMask}
-					config={extensionConfig.publisherMask}
+					config={extensionConfig.blockeraMask}
 				>
 					<Mask
-						mask={values.publisherMask}
+						mask={values.blockeraMask}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.publisherMask.default}
-						{...extensionProps.publisherMask}
+						defaultValue={attributes.blockeraMask.default}
+						{...extensionProps.blockeraMask}
 					/>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowBlendMode}
-					config={extensionConfig.publisherBlendMode}
+					config={extensionConfig.blockeraBlendMode}
 				>
 					<Blending
-						blendMode={values.publisherBlendMode}
+						blendMode={values.blockeraBlendMode}
 						block={block}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.publisherBlendMode.default}
-						{...extensionProps.publisherBlendMode}
+						defaultValue={attributes.blockeraBlendMode.default}
+						{...extensionProps.blockeraBlendMode}
 					/>
 				</FeatureWrapper>
 			</PanelBodyControl>

@@ -7,9 +7,9 @@ import type { MixedElement } from 'react';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isObject, isFunction, mergeObject } from '@publisher/utils';
+import { isObject, isFunction, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -67,13 +67,13 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 	);
 
 	const defaultAttributes = mergeObject(overrideAttributes, {
-		publisherInnerBlocks:
-			innerBlocksExtensionsAttributes.publisherInnerBlocks,
-		publisherPropsId: {
+		blockeraInnerBlocks:
+			innerBlocksExtensionsAttributes.blockeraInnerBlocks,
+		blockeraPropsId: {
 			type: 'string',
 			default: '',
 		},
-		publisherCompatId: {
+		blockeraCompatId: {
 			type: 'string',
 			default: '',
 		},
@@ -104,11 +104,11 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 							}}
 						>
 							<SlotFillProvider>
-								<Slot name={'publisher-core-block-before'} />
+								<Slot name={'blockera-core-block-before'} />
 
 								<BlockPortals
 									blockId={`#block-${props.clientId}`}
-									mainSlot={'publisher-core-block-slot'}
+									mainSlot={'blockera-core-block-slot'}
 									slots={
 										// slot selectors is feature on configuration block to create custom slots for anywhere.
 										// we can add slotSelectors property on block configuration to handle custom preview of block.
@@ -116,7 +116,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 									}
 								/>
 
-								<Slot name={'publisher-core-block-after'} />
+								<Slot name={'blockera-core-block-after'} />
 							</SlotFillProvider>
 						</BlockBase>
 						{settings.edit(props)}

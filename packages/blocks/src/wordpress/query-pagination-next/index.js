@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -16,8 +16,8 @@ import {
 	IconExtensionSupports,
 	IconExtensionAttributes,
 	InnerBlockLinkIcon,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -29,11 +29,11 @@ const attributes = {
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	arrow: {
 		name: 'core/arrow',
 		type: 'arrow',
-		label: __('Arrow', 'publisher-core'),
+		label: __('Arrow', 'blockera-core'),
 		icon: <InnerBlockArrowIcon />,
 		selectors: {
 			root: '.wp-block-query-pagination-next-arrow',
@@ -46,14 +46,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const QueryPaginationNext = {
-	name: 'publisherQueryPaginationNext',
+	name: 'blockeraQueryPaginationNext',
 	targetBlock: 'core/query-pagination-next',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

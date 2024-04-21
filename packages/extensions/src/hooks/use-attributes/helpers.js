@@ -6,10 +6,10 @@
 import memoize from 'fast-memoize';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { update } from '@publisher/data-extractor';
-import { isEquals, isObject, mergeObject } from '@publisher/utils';
+import { update } from '@blockera/data-extractor';
+import { isEquals, isObject, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -61,12 +61,12 @@ export const memoizedRootBreakpoints: (
 	) => {
 		if (isInnerBlock(currentBlock) && insideInnerBlock) {
 			if (!isNormalState(currentInnerBlockState)) {
-				if ('publisherBlockStates' === attributeId) {
+				if ('blockeraBlockStates' === attributeId) {
 					return mergeObject(
 						breakpoint,
 						{
 							attributes: {
-								publisherInnerBlocks: {
+								blockeraInnerBlocks: {
 									[currentBlock]: {
 										attributes: {
 											...effectiveItems,
@@ -91,10 +91,10 @@ export const memoizedRootBreakpoints: (
 					breakpoint,
 					{
 						attributes: {
-							publisherInnerBlocks: {
+							blockeraInnerBlocks: {
 								[currentBlock]: {
 									attributes: {
-										publisherBlockStates: {
+										blockeraBlockStates: {
 											[currentInnerBlockState]: {
 												breakpoints: {
 													[currentBreakpoint]: {
@@ -126,7 +126,7 @@ export const memoizedRootBreakpoints: (
 
 			return mergeObject(breakpoint, {
 				attributes: {
-					publisherInnerBlocks: {
+					blockeraInnerBlocks: {
 						[currentBlock]: {
 							attributes: {
 								...effectiveItems,
@@ -178,12 +178,12 @@ export const memoizedBlockStates: (
 		const { currentState: recievedState, insideInnerBlock } = args;
 		const { currentState, currentBreakpoint } = action;
 		const breakpoints =
-			currentBlockAttributes?.publisherBlockStates[
+			currentBlockAttributes?.blockeraBlockStates[
 				recievedState || currentState
 			]?.breakpoints;
 
 		return mergeObject(
-			currentBlockAttributes?.publisherBlockStates,
+			currentBlockAttributes?.blockeraBlockStates,
 			{
 				[recievedState || currentState]: {
 					breakpoints: {
@@ -210,19 +210,19 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 	if (isInnerBlock(currentBlock)) {
 		const newState = update(
 			state,
-			`publisherInnerBlocks.${currentBlock}.attributes.${attributeId}`,
+			`blockeraInnerBlocks.${currentBlock}.attributes.${attributeId}`,
 			newValue,
 			true
 		);
 
 		return mergeObject(newState, {
-			publisherInnerBlocks: mergeObject(newState.publisherInnerBlocks, {
+			blockeraInnerBlocks: mergeObject(newState.blockeraInnerBlocks, {
 				[currentBlock]: {
 					attributes: {
-						publisherBlockStates: Object.fromEntries(
+						blockeraBlockStates: Object.fromEntries(
 							Object.entries(
-								newState.publisherInnerBlocks[currentBlock]
-									.attributes?.publisherBlockStates || {}
+								newState.blockeraInnerBlocks[currentBlock]
+									.attributes?.blockeraBlockStates || {}
 							).map(
 								([stateType, _state]: [string, Object]): [
 									string,
@@ -267,8 +267,8 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 
 	return mergeObject(update(state, attributeId, newValue, true), {
 		[attributeId]: newValue,
-		publisherBlockStates: Object.fromEntries(
-			Object.entries(state.publisherBlockStates).map(
+		blockeraBlockStates: Object.fromEntries(
+			Object.entries(state.blockeraBlockStates).map(
 				([stateType, _state]: [string, Object]): [string, Object] => {
 					return [
 						stateType,

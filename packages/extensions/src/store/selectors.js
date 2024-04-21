@@ -6,9 +6,9 @@
 import createSelector from 'rememo';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { get, isString } from '@publisher/utils';
+import { get, isString } from '@blockera/utils';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 import type { TBreakpoint, TStates } from '../libs/block-states/types';
 
@@ -20,12 +20,12 @@ import type { TBreakpoint, TStates } from '../libs/block-states/types';
  *
  * @example
  * ```js
- * import { store as blockExtensionsStore } from '@publisher/extensions';
+ * import { store as blockExtensionsStore } from '@blockera/extensions';
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
  *     const buttonBlockExtension = useSelect( ( select ) =>
- *         ( select ) => select( blockExtensionsStore ).getBlockExtension( 'publisherButton' ),
+ *         ( select ) => select( blockExtensionsStore ).getBlockExtension( 'blockeraButton' ),
  *         []
  *     );
  *
@@ -62,7 +62,7 @@ export function getBlockExtension(state: Object, name: string): Object {
  *
  * @example
  * ```js
- * import { store as blockExtensionsStore } from '@publisher/extensions';
+ * import { store as blockExtensionsStore } from '@blockera/extensions';
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
@@ -108,7 +108,7 @@ export function getBlockExtensionBy(
  *
  * @example
  * ```js
- * import { store as blockExtensionsStore } from '@publisher/extensions';
+ * import { store as blockExtensionsStore } from '@blockera/extensions';
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
@@ -146,7 +146,7 @@ export const getBlockExtensions = (createSelector(
  * @example
  * ```js
  * import { __, sprintf } from '@wordpress/i18n';
- * import { store as extensionsStore } from '@publisher/extensions';
+ * import { store as extensionsStore } from '@blockera/extensions';
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {
@@ -211,7 +211,7 @@ const getNormalizedBlockExtension = (
  * @example
  * ```js
  * import { __, sprintf } from '@wordpress/i18n';
- * import { store as extensionsStore } from '@publisher/extensions';
+ * import { store as extensionsStore } from '@blockera/extensions';
  * import { useSelect } from '@wordpress/data';
  *
  * const ExampleComponent = () => {

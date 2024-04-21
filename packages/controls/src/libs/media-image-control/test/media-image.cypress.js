@@ -19,7 +19,7 @@ describe('media-image', () => {
 
 	context('Functional', () => {
 		beforeEach(() => {
-			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+			addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
@@ -51,7 +51,7 @@ describe('media-image', () => {
 			getWPDataObject().then((data) => {
 				const uploadedImageFileName = getSelectedBlock(
 					data,
-					'publisherBackground'
+					'blockeraBackground'
 				)[0]
 					.image.split('/')
 					.slice(-1);
@@ -71,7 +71,7 @@ describe('media-image', () => {
 			getWPDataObject().then((data) => {
 				const uploadedImageName = getSelectedBlock(
 					data,
-					'publisherBackground'
+					'blockeraBackground'
 				)[0].image;
 				expect(uploadedImageName).to.be.equal('');
 			});
@@ -118,7 +118,7 @@ describe('media-image', () => {
 
 	context('Initial Value', () => {
 		it('should get data from context on reload', () => {
-			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+			addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
@@ -172,3 +172,4 @@ describe('media-image', () => {
 		});
 	});
 });
+

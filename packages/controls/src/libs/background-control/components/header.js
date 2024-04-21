@@ -7,10 +7,10 @@ import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { ColorIndicator, ColorIndicatorStack } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { ColorIndicator, ColorIndicatorStack } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -37,7 +37,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 
 		switch (item.type) {
 			case 'image':
-				label = __('Image', 'publisher-core');
+				label = __('Image', 'blockera-core');
 				preview = (
 					<ColorIndicator type="image" value={itemBGProperty} />
 				);
@@ -45,7 +45,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				break;
 
 			case 'linear-gradient':
-				label = __('Linear Gradient', 'publisher-core');
+				label = __('Linear Gradient', 'blockera-core');
 				preview = (
 					<ColorIndicator type="gradient" value={itemBGProperty} />
 				);
@@ -53,7 +53,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				break;
 
 			case 'radial-gradient':
-				label = __('Radial Gradient', 'publisher-core');
+				label = __('Radial Gradient', 'blockera-core');
 				preview = (
 					<ColorIndicator type="gradient" value={itemBGProperty} />
 				);
@@ -61,7 +61,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				break;
 
 			case 'mesh-gradient':
-				label = __('Mesh Gradient', 'publisher-core');
+				label = __('Mesh Gradient', 'blockera-core');
 				preview = (
 					<ColorIndicatorStack
 						value={Object.values(item['mesh-gradient-colors']).map(
@@ -83,7 +83,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'publisher-core'),
+					__('Item %d', 'blockera-core'),
 					itemId + 1
 				)}
 			>

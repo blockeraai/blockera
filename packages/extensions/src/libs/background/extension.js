@@ -7,7 +7,7 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -17,10 +17,10 @@ import {
 	BackgroundControl,
 	ControlContextProvider,
 	NoticeControl,
-} from '@publisher/controls';
-import { checkVisibleItemLength, hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
-import { FeatureWrapper } from '@publisher/components';
+} from '@blockera/controls';
+import { checkVisibleItemLength, hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
+import { FeatureWrapper } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -47,25 +47,25 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 		setSettings,
 	}: TBackgroundProps): MixedElement => {
 		const {
-			publisherBackground,
-			publisherBackgroundColor,
-			publisherBackgroundClip,
+			blockeraBackground,
+			blockeraBackgroundColor,
+			blockeraBackgroundClip,
 		} = extensionConfig;
 
 		const isShowBackground = isShowField(
-			extensionConfig.publisherBackground,
-			values.publisherBackground,
-			attributes.publisherBackground.default
+			extensionConfig.blockeraBackground,
+			values.blockeraBackground,
+			attributes.blockeraBackground.default
 		);
 		const isShowBackgroundColor = isShowField(
-			extensionConfig.publisherBackgroundColor,
-			values.publisherBackgroundColor,
-			attributes.publisherBackgroundColor.default
+			extensionConfig.blockeraBackgroundColor,
+			values.blockeraBackgroundColor,
+			attributes.blockeraBackgroundColor.default
 		);
 		const isShowBackgroundClip = isShowField(
-			extensionConfig.publisherBackgroundClip,
-			values.publisherBackgroundClip,
-			attributes.publisherBackgroundClip.default
+			extensionConfig.blockeraBackgroundClip,
+			values.blockeraBackgroundClip,
+			attributes.blockeraBackgroundClip.default
 		);
 
 		if (
@@ -78,7 +78,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Background', 'publisher-core')}
+				title={__('Background', 'blockera-core')}
 				initialOpen={true}
 				icon={<BackgroundExtensionIcon />}
 				className={extensionClassNames('background')}
@@ -86,7 +86,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 				<ExtensionSettings
 					buttonLabel={__(
 						'More Background Settings',
-						'publisher-core'
+						'blockera-core'
 					)}
 					features={extensionConfig}
 					update={(newSettings) => {
@@ -96,34 +96,34 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowBackground}
-					config={publisherBackground}
+					config={blockeraBackground}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'background'),
-							value: values.publisherBackground,
-							attribute: 'publisherBackground',
+							value: values.blockeraBackground,
+							attribute: 'blockeraBackground',
 							blockName: block.blockName,
 						}}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 					>
 						<BaseControl
 							controlName="background"
 							columns="columns-1"
 						>
 							<BackgroundControl
-								label={__('Image & Gradient', 'publisher-core')}
+								label={__('Image & Gradient', 'blockera-core')}
 								onChange={(newValue, ref) => {
 									handleOnChangeAttributes(
-										'publisherBackground',
+										'blockeraBackground',
 										newValue,
 										{ ref }
 									);
 								}}
 								defaultValue={
-									attributes.publisherBackground.default
+									attributes.blockeraBackground.default
 								}
-								{...extensionProps.publisherBackground}
+								{...extensionProps.blockeraBackground}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
@@ -131,7 +131,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowBackgroundColor}
-					config={publisherBackgroundColor}
+					config={blockeraBackgroundColor}
 				>
 					<ControlContextProvider
 						value={{
@@ -139,29 +139,29 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								block,
 								'background-color'
 							),
-							value: values.publisherBackgroundColor,
-							attribute: 'publisherBackgroundColor',
+							value: values.blockeraBackgroundColor,
+							attribute: 'blockeraBackgroundColor',
 							blockName: block.blockName,
 						}}
 					>
 						<ColorControl
-							label={__('BG Color', 'publisher-core')}
+							label={__('BG Color', 'blockera-core')}
 							labelPopoverTitle={__(
 								'Background Color',
-								'publisher-core'
+								'blockera-core'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It sets the color of the block’s background, providing a simple yet powerful way to apply solid color.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<p>
 										{__(
 											'You can use variables to use color from your site design system.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 								</>
@@ -169,103 +169,97 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 							columns="columns-2"
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherBackgroundColor',
+									'blockeraBackgroundColor',
 									newValue,
 									{ ref }
 								)
 							}
 							defaultValue={
-								attributes.publisherBackgroundColor.default
+								attributes.blockeraBackgroundColor.default
 							}
 							controlAddonTypes={['variable']}
 							variableTypes={['color']}
-							{...extensionProps.publisherBackgroundColor}
+							{...extensionProps.blockeraBackgroundColor}
 						/>
 					</ControlContextProvider>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowBackgroundClip}
-					config={publisherBackgroundClip}
+					config={blockeraBackgroundClip}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'background-clip'),
-							value: values.publisherBackgroundClip,
-							attribute: 'publisherBackgroundClip',
+							value: values.blockeraBackgroundClip,
+							attribute: 'blockeraBackgroundClip',
 							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
-							label={__('Clipping', 'publisher-core')}
+							label={__('Clipping', 'blockera-core')}
 							labelPopoverTitle={__(
 								'Background Clipping',
-								'publisher-core'
+								'blockera-core'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It defines how far the background (color or image) extends within the block.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<p>
 										{__(
 											'It is useful for creating special effects with backgrounds, such as having a background only within the content area or under the borders.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<h3>
 										<ClipPaddingIcon />
-										{__(
-											'Clip to Padding',
-											'publisher-core'
-										)}
+										{__('Clip to Padding', 'blockera-core')}
 									</h3>
 									<p>
 										{__(
 											'The background stops at the padding edge, not extending behind the border.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<h3>
 										<ClipContentIcon />
-										{__(
-											'Clip to Content',
-											'publisher-core'
-										)}
+										{__('Clip to Content', 'blockera-core')}
 									</h3>
 									<p>
 										{__(
 											'The background is applied only to the content area.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<h3>
 										<ClipTextIcon />
-										{__('Clip to Text', 'publisher-core')}
+										{__('Clip to Text', 'blockera-core')}
 									</h3>
 									<p>
 										{__(
 											'Advanced feature that allows the background to only be visible through the text of block.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<p>
 										{__(
 											'This creates an eye-catching effect where the text acts as a mask for the background image or video.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<h3>
 										<InheritIcon />
-										{__('Inherit', 'publisher-core')}
+										{__('Inherit', 'blockera-core')}
 									</h3>
 									<p>
 										{__(
 											'Clipping inherit from the parent block.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 								</>
@@ -273,14 +267,14 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 							columns="columns-2"
 							options={[
 								{
-									label: __('None', 'publisher-core'),
+									label: __('None', 'blockera-core'),
 									value: 'none',
 									icon: <ClipNoneIcon />,
 								},
 								{
 									label: __(
 										'Clip to Padding',
-										'publisher-core'
+										'blockera-core'
 									),
 									value: 'padding-box',
 									icon: <ClipPaddingIcon />,
@@ -288,18 +282,18 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								{
 									label: __(
 										'Clip to Content',
-										'publisher-core'
+										'blockera-core'
 									),
 									value: 'content-box',
 									icon: <ClipContentIcon />,
 								},
 								{
-									label: __('Clip to Text', 'publisher-core'),
+									label: __('Clip to Text', 'blockera-core'),
 									value: 'text',
 									icon: <ClipTextIcon />,
 								},
 								{
-									label: __('Inherit', 'publisher-core'),
+									label: __('Inherit', 'blockera-core'),
 									value: 'inherit',
 									icon: <InheritIcon />,
 								},
@@ -307,27 +301,27 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 							type="custom"
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherBackgroundClip',
+									'blockeraBackgroundClip',
 									newValue,
 									{ ref }
 								)
 							}
 							defaultValue={
-								attributes.publisherBackgroundClip.default
+								attributes.blockeraBackgroundClip.default
 							}
-							{...extensionProps.publisherBackgroundClip}
+							{...extensionProps.blockeraBackgroundClip}
 						/>
 
-						{!checkVisibleItemLength(values.publisherBackground) &&
-							!values.publisherBackgroundColor &&
-							values.publisherBackgroundClip === 'text' && (
+						{!checkVisibleItemLength(values.blockeraBackground) &&
+							!values.blockeraBackgroundColor &&
+							values.blockeraBackgroundClip === 'text' && (
 								<NoticeControl
 									type="error"
 									style={{ marginTop: '10px' }}
 								>
 									{__(
 										`You've applied text clipping without setting a background color or image. Make sure to add a background to the block.`,
-										'publisher-core'
+										'blockera-core'
 									)}
 								</NoticeControl>
 							)}

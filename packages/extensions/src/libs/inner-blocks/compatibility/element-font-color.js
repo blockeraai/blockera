@@ -1,11 +1,11 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isUndefined } from '@publisher/utils';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-import { getColorVAFromVarString } from '@publisher/core-data';
+import { isEmpty, isUndefined } from '@blockera/utils';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
+import { getColorVAFromVarString } from '@blockera/core-data';
 
 export function elementNormalFontColorFromWPCompatibility({
 	element,
@@ -21,10 +21,10 @@ export function elementNormalFontColorFromWPCompatibility({
 
 		if (color) {
 			return {
-				publisherInnerBlocks: {
+				blockeraInnerBlocks: {
 					[element]: {
 						attributes: {
-							publisherFontColor: color,
+							blockeraFontColor: color,
 						},
 					},
 				},
@@ -49,10 +49,10 @@ export function elementHoverFontColorFromWPCompatibility({
 
 		if (color) {
 			return {
-				publisherInnerBlocks: {
+				blockeraInnerBlocks: {
 					[element]: {
 						attributes: {
-							publisherBlockStates: {
+							blockeraBlockStates: {
 								normal: {
 									breakpoints: { laptop: {} },
 									isVisible: true,
@@ -62,7 +62,7 @@ export function elementHoverFontColorFromWPCompatibility({
 									breakpoints: {
 										laptop: {
 											attributes: {
-												publisherFontColor: color,
+												blockeraFontColor: color,
 											},
 										},
 									},

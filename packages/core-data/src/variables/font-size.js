@@ -6,9 +6,9 @@ import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isBlockTheme } from '@publisher/utils';
+import { isBlockTheme } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -23,7 +23,7 @@ export const getFontSizes: () => Array<VariableItem> = memoize(
 		};
 
 		if (isBlockTheme()) {
-			const { getCurrentTheme } = select('publisher-core/data');
+			const { getCurrentTheme } = select('blockera-core/data');
 
 			const {
 				name: { rendered: themeName },

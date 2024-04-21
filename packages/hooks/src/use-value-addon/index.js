@@ -6,15 +6,15 @@ import { select } from '@wordpress/data';
 import { useState, useMemo } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isObject, isUndefined } from '@publisher/utils';
+import { isObject, isUndefined } from '@blockera/utils';
 import {
 	getVariable,
 	type VariableItem,
 	type DynamicValueItem,
 	STORE_NAME,
-} from '@publisher/core-data';
+} from '@blockera/core-data';
 
 /**
  * Internal dependencies
@@ -94,7 +94,7 @@ export const useValueAddon = ({
 	}
 
 	const valueAddonClassNames = types
-		.map((type) => `publisher-value-addon-support-${type}`)
+		.map((type) => `blockera-value-addon-support-${type}`)
 		.join(' ');
 
 	const handleOnClickVar = (data: VariableItem): void => {

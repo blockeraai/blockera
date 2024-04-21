@@ -1,21 +1,21 @@
 export const attributes = {
-	publisherDisplay: {
+	blockeraDisplay: {
 		type: 'string',
 		default: '',
 	},
-	publisherFlexLayout: {
+	blockeraFlexLayout: {
 		type: 'object',
 		default: { direction: 'row', alignItems: '', justifyContent: '' },
 	},
-	publisherGap: {
+	blockeraGap: {
 		type: 'object',
 		default: { lock: true, gap: '', columns: '', rows: '' },
 	},
-	publisherFlexWrap: {
+	blockeraFlexWrap: {
 		type: 'object',
 		default: { value: '', reverse: false },
 	},
-	publisherAlignContent: {
+	blockeraAlignContent: {
 		type: 'string',
 		default: '',
 	},

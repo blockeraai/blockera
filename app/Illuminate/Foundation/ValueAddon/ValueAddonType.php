@@ -1,13 +1,13 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon;
 
-use Publisher\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Foundation\Application;
 
 /**
  * Class ValueAddonType
  *
- * @package Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonType
+ * @package Blockera\Framework\Illuminate\Foundation\ValueAddon\ValueAddonType
  */
 abstract class ValueAddonType {
 

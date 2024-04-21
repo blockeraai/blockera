@@ -6,14 +6,14 @@
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isEquals, isNull, isUndefined } from '@publisher/utils';
+import { isEmpty, isEquals, isNull, isUndefined } from '@blockera/utils';
 import {
 	getStatesGraphNodes,
 	type StateGraph,
 	type StateGraphItem,
-} from '@publisher/extensions/src/libs/block-states/store/selector';
+} from '@blockera/extensions/src/libs/block-states/store/selector';
 /**
  * Internal dependencies
  */

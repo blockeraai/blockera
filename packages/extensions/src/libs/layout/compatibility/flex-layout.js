@@ -6,7 +6,7 @@ export function alignItemsFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.publisherFlexLayout?.alignItems !== '' ||
+		attributes?.blockeraFlexLayout?.alignItems !== '' ||
 		attributes?.layout?.verticalAlignment === undefined
 	) {
 		return false;
@@ -21,7 +21,7 @@ export function alignItemsFromWPCompatibility({
 	};
 
 	return {
-		publisherFlexLayout: {
+		blockeraFlexLayout: {
 			alignItems: values[attributes?.layout?.verticalAlignment] ?? '',
 		},
 	};
@@ -33,7 +33,7 @@ export function justifyContentFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.publisherFlexLayout?.justifyContent !== '' ||
+		attributes?.blockeraFlexLayout?.justifyContent !== '' ||
 		attributes?.layout?.justifyContent === undefined
 	) {
 		return false;
@@ -48,7 +48,7 @@ export function justifyContentFromWPCompatibility({
 	};
 
 	return {
-		publisherFlexLayout: {
+		blockeraFlexLayout: {
 			justifyContent: values[attributes?.layout?.justifyContent] ?? '',
 		},
 	};
@@ -70,7 +70,7 @@ export function directionFromWPCompatibility({
 	};
 
 	return {
-		publisherFlexLayout: {
+		blockeraFlexLayout: {
 			direction: values[attributes?.layout?.orientation] ?? '',
 		},
 	};

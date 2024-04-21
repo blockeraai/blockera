@@ -1,4 +1,4 @@
-.publisher-control-color-pallet {
+.blockera-control-color-pallet {
 
 	&.hidden {
 		display: hidden;
@@ -61,7 +61,7 @@
 				margin-left: 0;
 
 				select:not(:focus) {
-					border: 1px solid var(--publisher-controls-border-color);
+					border: 1px solid var(--blockera-controls-border-color);
 					border-radius: 2px;
 				}
 
@@ -69,8 +69,8 @@
 				&:focus-within {
 
 					.components-input-control__backdrop {
-						border-color: var(--publisher-controls-primary-color) !important;
-						box-shadow: 0 0 0 1px var(--publisher-controls-primary-color) !important;
+						border-color: var(--blockera-controls-primary-color) !important;
+						box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
 					}
 				}
 			}
@@ -78,15 +78,15 @@
 			.components-button {
 				width: 30px !important;
 				height: 30px !important;
-				border: 1px solid var(--publisher-controls-border-color);
+				border: 1px solid var(--blockera-controls-border-color);
 				padding: 5px !important;
 
 				&:hover {
-					color: var(--publisher-controls-primary-color);
+					color: var(--blockera-controls-primary-color);
 				}
 
 				&:focus {
-					border-color: var(--publisher-controls-primary-color);
+					border-color: var(--blockera-controls-primary-color);
 				}
 			}
 
@@ -98,18 +98,18 @@
 				}
 
 				input:not(:focus) + .components-input-control__backdrop {
-					border-color: var(--publisher-controls-border-color);
+					border-color: var(--blockera-controls-border-color);
 				}
 
 				input:focus + .components-input-control__backdrop {
-					border-color: var(--publisher-controls-primary-color) !important;
-					box-shadow: 0 0 0 1px var(--publisher-controls-primary-color) !important;
+					border-color: var(--blockera-controls-primary-color) !important;
+					box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
 				}
 
 				.components-input-control__prefix {
 
 					.components-truncate {
-						color: var(--publisher-controls-primary-color) !important;
+						color: var(--blockera-controls-primary-color) !important;
 					}
 				}
 			}

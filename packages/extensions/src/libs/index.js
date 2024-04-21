@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { registerThirdPartyExtensionDefinitions } from '@publisher/blocks';
+import { registerThirdPartyExtensionDefinitions } from '@blockera/blocks';
 
 /**
  * Internal dependencies

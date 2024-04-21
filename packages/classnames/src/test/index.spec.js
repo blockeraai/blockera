@@ -43,7 +43,7 @@ describe('Classnames testing ...', () => {
 		test('section as invalid (not string or valid object)', () => {
 			const generatedClassnames = getClassnames(false, false, 'value');
 
-			expect(generatedClassnames).toBe('publisher-value');
+			expect(generatedClassnames).toBe('blockera-value');
 		});
 
 		test('not passing names', () => {
@@ -64,7 +64,7 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = extensionClassNames('class');
 
 			expect(generatedClassnames).toBe(
-				'publisher-extension publisher-extension-class'
+				'blockera-extension blockera-extension-class'
 			);
 		});
 
@@ -74,7 +74,7 @@ describe('Classnames testing ...', () => {
 			);
 
 			expect(generatedClassnames).toBe(
-				'publisher-extension publisher-extension-class another-class'
+				'blockera-extension blockera-extension-class another-class'
 			);
 		});
 
@@ -86,7 +86,7 @@ describe('Classnames testing ...', () => {
 			});
 
 			expect(generatedClassnames).toBe(
-				'publisher-extension publisher-extension-class another-class'
+				'blockera-extension blockera-extension-class another-class'
 			);
 		});
 
@@ -97,14 +97,14 @@ describe('Classnames testing ...', () => {
 			]);
 
 			expect(generatedClassnames).toBe(
-				'publisher-extension publisher-extension-class another-class'
+				'blockera-extension blockera-extension-class another-class'
 			);
 		});
 
 		test('testing inner items', () => {
 			const generatedClassnames = extensionInnerClassNames('class');
 
-			expect(generatedClassnames).toBe('publisher-extension-class');
+			expect(generatedClassnames).toBe('blockera-extension-class');
 		});
 
 		test('testing inner items -> multiple', () => {
@@ -113,7 +113,7 @@ describe('Classnames testing ...', () => {
 			);
 
 			expect(generatedClassnames).toBe(
-				'publisher-extension-class another-class'
+				'blockera-extension-class another-class'
 			);
 		});
 	});
@@ -123,7 +123,7 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = controlClassNames('class');
 
 			expect(generatedClassnames).toBe(
-				'publisher-control publisher-control-class'
+				'blockera-control blockera-control-class'
 			);
 		});
 
@@ -135,7 +135,7 @@ describe('Classnames testing ...', () => {
 			});
 
 			expect(generatedClassnames).toBe(
-				'publisher-control publisher-control-class another-class'
+				'blockera-control blockera-control-class another-class'
 			);
 		});
 
@@ -143,14 +143,14 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = controlClassNames(['class']);
 
 			expect(generatedClassnames).toBe(
-				'publisher-control publisher-control-class'
+				'blockera-control blockera-control-class'
 			);
 		});
 
 		test('testing Inner classes', () => {
 			const generatedClassnames = controlInnerClassNames('id');
 
-			expect(generatedClassnames).toBe('publisher-control-id');
+			expect(generatedClassnames).toBe('blockera-control-id');
 		});
 
 		test('testing Inner classes -> multiple', () => {
@@ -159,7 +159,7 @@ describe('Classnames testing ...', () => {
 			);
 
 			expect(generatedClassnames).toBe(
-				'publisher-control-class another-class'
+				'blockera-control-class another-class'
 			);
 		});
 	});
@@ -169,7 +169,7 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = componentClassNames('class');
 
 			expect(generatedClassnames).toBe(
-				'publisher-component publisher-component-class'
+				'blockera-component blockera-component-class'
 			);
 		});
 
@@ -181,7 +181,7 @@ describe('Classnames testing ...', () => {
 			});
 
 			expect(generatedClassnames).toBe(
-				'publisher-component publisher-component-class another-class'
+				'blockera-component blockera-component-class another-class'
 			);
 		});
 
@@ -189,14 +189,14 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = componentClassNames(['class']);
 
 			expect(generatedClassnames).toBe(
-				'publisher-component publisher-component-class'
+				'blockera-component blockera-component-class'
 			);
 		});
 
 		test('testing Inner class', () => {
 			const generatedClassnames = componentInnerClassNames('class');
 
-			expect(generatedClassnames).toBe('publisher-component-class');
+			expect(generatedClassnames).toBe('blockera-component-class');
 		});
 	});
 
@@ -205,7 +205,7 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = fieldsClassNames('class');
 
 			expect(generatedClassnames).toBe(
-				'publisher-field publisher-field-class'
+				'blockera-field blockera-field-class'
 			);
 		});
 
@@ -217,7 +217,7 @@ describe('Classnames testing ...', () => {
 			});
 
 			expect(generatedClassnames).toBe(
-				'publisher-field publisher-field-class another-class'
+				'blockera-field blockera-field-class another-class'
 			);
 		});
 
@@ -225,14 +225,14 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = fieldsClassNames(['class']);
 
 			expect(generatedClassnames).toBe(
-				'publisher-field publisher-field-class'
+				'blockera-field blockera-field-class'
 			);
 		});
 
 		test('testing Inner class', () => {
 			const generatedClassnames = fieldsInnerClassNames('class');
 
-			expect(generatedClassnames).toBe('publisher-field-class');
+			expect(generatedClassnames).toBe('blockera-field-class');
 		});
 	});
 
@@ -241,7 +241,7 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = getClassNames('class');
 
 			expect(generatedClassnames).toBe(
-				'publisher-core publisher-core-class'
+				'blockera-core blockera-core-class'
 			);
 		});
 
@@ -253,7 +253,7 @@ describe('Classnames testing ...', () => {
 			});
 
 			expect(generatedClassnames).toBe(
-				'publisher-core publisher-core-class another-class'
+				'blockera-core blockera-core-class another-class'
 			);
 		});
 
@@ -261,14 +261,14 @@ describe('Classnames testing ...', () => {
 			const generatedClassnames = getClassNames(['class']);
 
 			expect(generatedClassnames).toBe(
-				'publisher-core publisher-core-class'
+				'blockera-core blockera-core-class'
 			);
 		});
 
 		test('testing Inner class', () => {
 			const generatedClassnames = getInnerClassNames('class');
 
-			expect(generatedClassnames).toBe('publisher-core-class');
+			expect(generatedClassnames).toBe('blockera-core-class');
 		});
 
 		test('testing Inner class -> multiple', () => {
@@ -277,8 +277,9 @@ describe('Classnames testing ...', () => {
 			);
 
 			expect(generatedClassnames).toBe(
-				'publisher-core-class another-class'
+				'blockera-core-class another-class'
 			);
 		});
 	});
 });
+

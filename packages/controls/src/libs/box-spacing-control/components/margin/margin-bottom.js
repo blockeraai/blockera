@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { useDragValue } from '@publisher/utils';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { useDragValue } from '@blockera/utils';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -213,7 +213,7 @@ export function MarginBottom({
 					data-cy="box-spacing-margin-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('Bottom Margin', 'publisher-core')}
+						ariaLabel={__('Bottom Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.bottom)
@@ -246,18 +246,18 @@ export function MarginBottom({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Bottom Margin Space', 'publisher-core')}
-						inputLabel={__('Bottom Margin', 'publisher-core')}
+						title={__('Bottom Margin Space', 'blockera-core')}
+						inputLabel={__('Bottom Margin', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Bottom Margin Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies only to the bottom edge of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

@@ -1,16 +1,16 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { createCssDeclarations } from '@publisher/style-engine';
+import { createCssDeclarations } from '@blockera/style-engine';
 
 export function MaskGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!Object.keys(attributes?.publisherMask)?.length) {
+	if (!Object.keys(attributes?.blockeraMask)?.length) {
 		return '';
 	}
 
-	const item = attributes?.publisherMask[0];
+	const item = attributes?.blockeraMask[0];
 	const properties = {};
 
 	if (!item.isVisible) {

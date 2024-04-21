@@ -6,14 +6,14 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { isFunction } from '@publisher/utils';
-import { Button, Grid } from '@publisher/components';
+} from '@blockera/classnames';
+import { isFunction } from '@blockera/utils';
+import { Button, Grid } from '@blockera/components';
 
 /**
  * Internal dependencies.
@@ -250,7 +250,7 @@ export default function RepeaterControl({
 					'design-' + design,
 					className
 				)}
-				data-cy="publisher-repeater-control"
+				data-cy="blockera-repeater-control"
 			>
 				{design === 'large' && (
 					<>
@@ -319,7 +319,7 @@ export default function RepeaterControl({
 									>
 										<PlusIcon />
 										{addNewButtonLabel ||
-											__('Add New', 'publisher-core')}
+											__('Add New', 'blockera-core')}
 									</Button>
 								)}
 
@@ -383,7 +383,7 @@ export default function RepeaterControl({
 										tooltipPosition="top"
 										label={
 											addNewButtonLabel ||
-											__('Add New', 'publisher-core')
+											__('Add New', 'blockera-core')
 										}
 										onClick={addNewButtonOnClick}
 									>

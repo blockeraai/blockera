@@ -24,7 +24,7 @@ describe('Loginout Block → Inner Blocks', () => {
 		// open inner block settings
 		openInnerBlocksExtension();
 
-		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
 				cy.getByAriaLabel('Form Container Customize').should('exist');
 				cy.getByAriaLabel('Input Labels Customize').should('exist');
@@ -37,3 +37,4 @@ describe('Loginout Block → Inner Blocks', () => {
 		);
 	});
 });
+

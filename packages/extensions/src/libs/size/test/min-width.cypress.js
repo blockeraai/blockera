@@ -14,7 +14,7 @@ describe('Min Width → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.', {
 			delay: 0,
@@ -37,7 +37,7 @@ describe('Min Width → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('10px').to.be.equal(
-				getSelectedBlock(data, 'publisherMinWidth')
+				getSelectedBlock(data, 'blockeraMinWidth')
 			);
 		});
 
@@ -46,7 +46,7 @@ describe('Min Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'min-width', '10px');
+		cy.get('.blockera-core-block').should('have.css', 'min-width', '10px');
 	});
 
 	it('variable value', () => {
@@ -80,7 +80,7 @@ describe('Min Width → Functionality', () => {
 				name: 'Content Width',
 				isValueAddon: true,
 				valueType: 'variable',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherMinWidth'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraMinWidth'));
 		});
 
 		// Check frontend
@@ -88,12 +88,8 @@ describe('Min Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
-			'have.css',
-			'min-width',
-			'620px'
-		);
-		cy.get('.publisher-core-block').hasCssVar(
+		cy.get('.blockera-core-block').should('have.css', 'min-width', '620px');
+		cy.get('.blockera-core-block').hasCssVar(
 			'min-width',
 			'--wp--style--global--content-size'
 		);

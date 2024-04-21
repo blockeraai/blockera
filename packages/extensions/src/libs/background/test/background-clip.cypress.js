@@ -11,7 +11,7 @@ describe('Background Clip → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').click();
 		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
@@ -34,7 +34,7 @@ describe('Background Clip → Functionality', () => {
 		//assert data
 		getWPDataObject().then((data) => {
 			expect(
-				getSelectedBlock(data, 'publisherBackgroundClip')
+				getSelectedBlock(data, 'blockeraBackgroundClip')
 			).to.be.equal('padding-box');
 		});
 
@@ -49,7 +49,7 @@ describe('Background Clip → Functionality', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'background-clip',
 			'padding-box'
@@ -95,7 +95,7 @@ describe('Background Clip → Functionality', () => {
 		getWPDataObject().then((data) => {
 			const bgClipState = getSelectedBlock(
 				data,
-				'publisherBackgroundClip'
+				'blockeraBackgroundClip'
 			);
 			expect(bgClipState).to.be.equal('text');
 		});
@@ -109,7 +109,7 @@ describe('Background Clip → Functionality', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'background-clip',
 			'text'

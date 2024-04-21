@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Support\Adapters;
+namespace Blockera\Framework\Illuminate\Support\Adapters;
 
 use voku\helper\HtmlDomParser;
 

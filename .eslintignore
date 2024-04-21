@@ -1,20 +1,13 @@
-build
-dist
-node_modules
-vendor
-assets
-wordpress*
-**/test/*
-
-#  allow lint for tests
-*.spec.js.snap
-!**.spec.js
-!save.spec.js
-!*.cypress.js
-!*.cy.js
-
 # lint top level dot files
 !.*
-/node_modules/.*
-
-/cypress/.*
+/node_modules/*
+/cypress/*
+/.storybook/*
+build/*
+dist/*
+node_modules/*
+vendor/*
+assets/*
+wordpress*
+**/test/*
+**/stories/*

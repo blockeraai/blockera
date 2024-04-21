@@ -50,7 +50,7 @@ describe('box-border-control component testing', () => {
 
 		cy.getByAriaLabel('Custom Box Border')
 			.should('have.attr', 'style')
-			.should('include', 'var(--publisher-controls-color)');
+			.should('include', 'var(--blockera-controls-color)');
 	});
 
 	it('should render correctly with no value and default value', () => {
@@ -64,7 +64,7 @@ describe('box-border-control component testing', () => {
 
 		cy.getByAriaLabel('Custom Box Border')
 			.should('have.attr', 'style')
-			.should('include', 'var(--publisher-controls-color)');
+			.should('include', 'var(--blockera-controls-color)');
 	});
 
 	describe('interaction test (type : all)', () => {
@@ -114,7 +114,7 @@ describe('box-border-control component testing', () => {
 			cy.getByAriaLabel('Custom Box Border').click();
 			cy.getByAriaLabel('Custom Box Border')
 				.should('have.attr', 'style')
-				.should('include', 'var(--publisher-controls-primary-color)');
+				.should('include', 'var(--blockera-controls-primary-color)');
 
 			//Check data provider
 			cy.get('body').then(() => {
@@ -419,7 +419,7 @@ describe('box-border-control component testing', () => {
 		const defaultProps = {
 			onChange: (value) => {
 				controlReducer(
-					select('publisher-core/controls').getControl(name),
+					select('blockera-core/controls').getControl(name),
 					modifyControlValue({
 						value,
 						controlId: name,
@@ -446,3 +446,4 @@ describe('box-border-control component testing', () => {
 		cy.get('@onChange').should('have.been.called');
 	});
 });
+

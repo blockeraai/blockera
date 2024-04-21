@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation;
+namespace Blockera\Framework\Illuminate\Foundation;
 
 /**
  * External
@@ -12,7 +12,7 @@ use Illuminate\Container\Container;
  * Internal
  */
 
-use Publisher\Framework\Illuminate\Support\ServiceProvider;
+use Blockera\Framework\Illuminate\Support\ServiceProvider;
 
 class Application extends Container {
 
@@ -29,7 +29,7 @@ class Application extends Container {
 	protected array $registeredValueAddons = [];
 
 	/**
-	 * Store all entities of WordPress core and Publisher core api.
+	 * Store all entities of WordPress core and  core api.
 	 *
 	 * @var array $entities the entities list
 	 */
@@ -66,7 +66,7 @@ class Application extends Container {
 
 	public function registerConfiguredProviders() {
 
-		$this->serviceProviders = pb_core_config( 'app.providers' );
+		$this->serviceProviders = blockera_core_config( 'app.providers' );
 
 		$this->registerProviders();
 	}
@@ -154,7 +154,7 @@ class Application extends Container {
 	 */
 	protected function registerConfiguredEntities(): void {
 
-		$this->setEntities( pb_core_config( 'entities' ) );
+		$this->setEntities( blockera_core_config( 'entities' ) );
 	}
 
 }

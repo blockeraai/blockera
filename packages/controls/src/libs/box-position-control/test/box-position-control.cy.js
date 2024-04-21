@@ -47,7 +47,7 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-select').click();
+			cy.get('.blockera-control-select').click();
 			cy.get('ul > li').contains('Relative').click();
 
 			// Check data provider value!
@@ -69,7 +69,7 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-select').click();
+			cy.get('.blockera-control-select').click();
 			cy.get('ul > li').contains('Relative').click();
 			cy.get('@onChangeMock').should('have.been.called');
 
@@ -102,7 +102,7 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-select').click();
+			cy.get('.blockera-control-select').click();
 			cy.get('ul > li').contains('Relative').click();
 
 			// Check data provider value!
@@ -140,7 +140,7 @@ describe('box position control component testing', () => {
 				),
 				name,
 			});
-			cy.get('.publisher-control-select').click();
+			cy.get('.blockera-control-select').click();
 			cy.get('ul > li').contains('Relative').click();
 
 			cy.get(
@@ -231,7 +231,7 @@ describe('box position control component testing', () => {
 				),
 				name,
 			});
-			cy.get('.publisher-control-select').click();
+			cy.get('.blockera-control-select').click();
 			cy.get('ul > li').contains('Relative').click();
 
 			const positions = [
@@ -285,7 +285,7 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-select').click();
+			cy.get('.blockera-control-select').click();
 			cy.get('ul > li').contains('Relative').click();
 
 			// add top position
@@ -337,7 +337,7 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-select').click();
+			cy.get('.blockera-control-select').click();
 			cy.get('ul > li').contains('Absolute').click();
 
 			// check absolute top left
@@ -440,7 +440,7 @@ describe('box position control component testing', () => {
 				name,
 			});
 
-			cy.get('.publisher-control-select').click();
+			cy.get('.blockera-control-select').click();
 			cy.get('ul > li').contains('Sticky').click();
 
 			// check sticky to top
@@ -473,3 +473,4 @@ describe('box position control component testing', () => {
 		});
 	});
 });
+

@@ -1,11 +1,11 @@
-.publisher-object-fit {
+.blockera-object-fit {
 
-	& > .publisher-field.publisher-field-control {
+	& > .blockera-field.blockera-field-control {
 
 		flex-direction: row;
 	}
 
-	.publisher-control.publisher-control-input.input-range {
+	.blockera-control.blockera-control-input.input-range {
 
 		gap: 10px;
 
@@ -17,9 +17,9 @@
 
 }
 
-.publisher-colon {
+.blockera-colon {
 	font-size: 12px;
 	font-weight: 400;
 	line-height: 30px;
-	color: var(--publisher-controls-border-color);
+	color: var(--blockera-controls-border-color);
 }

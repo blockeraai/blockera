@@ -1,9 +1,9 @@
-.publisher-control-input {
+.blockera-control-input {
 	position: relative;
 	display: block;
 	width: 100%;
 
-	.publisher-control-input-tag,
+	.blockera-control-input-tag,
 	input {
 
 		outline: none;
@@ -17,14 +17,14 @@
 
 		&::placeholder {
 
-			color: var(--publisher-controls-placeholder-color);
+			color: var(--blockera-controls-placeholder-color);
 			opacity: 1;
 
 		}
 
 		&::-ms-input-placeholder {
 
-			color: var(--publisher-controls-placeholder-color);
+			color: var(--blockera-controls-placeholder-color);
 
 		}
 
@@ -49,29 +49,29 @@
 
 	}
 
-	.publisher-control-input-tag {
+	.blockera-control-input-tag {
 
 		width: 100%;
-		border: 1px solid var(--publisher-controls-border-color);
+		border: 1px solid var(--blockera-controls-border-color);
 		border-radius: 2px;
 
 		&:hover:not(:disabled):not(.no-border):not(.invalid) {
 
-			border-color: var(--publisher-controls-border-color-hover);
+			border-color: var(--blockera-controls-border-color-hover);
 
 		}
 
 		&:focus {
 
-			border-color: var(--publisher-controls-primary-color);
-			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+			border-color: var(--blockera-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 
 		}
 
 		&.invalid {
 
-			--publisher-controls-primary-color: var(--publisher-controls-invalid-input-border-color);
-			--publisher-controls-border-color: var(--publisher-controls-invalid-input-border-color);
+			--blockera-controls-primary-color: var(--blockera-controls-invalid-input-border-color);
+			--blockera-controls-border-color: var(--blockera-controls-invalid-input-border-color);
 
 		}
 
@@ -86,9 +86,9 @@
 
 	&:hover {
 
-		.publisher-control-input-tag:not(:disabled):not(.no-border) {
+		.blockera-control-input-tag:not(:disabled):not(.no-border) {
 
-			border-color: var(--publisher-controls-border-color-hover);
+			border-color: var(--blockera-controls-border-color-hover);
 
 		}
 
@@ -96,9 +96,9 @@
 
 	&.is-hovered:not(:hover, :focus, .is-focused) {
 
-		.publisher-control-input-tag {
+		.blockera-control-input-tag {
 
-			border-color: var(--publisher-controls-border-color-hover);
+			border-color: var(--blockera-controls-border-color-hover);
 
 		}
 
@@ -106,16 +106,16 @@
 
 	&.is-focused {
 
-		.publisher-control-input-tag {
+		.blockera-control-input-tag {
 
-			border-color: var(--publisher-controls-primary-color) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color) !important;
+			border-color: var(--blockera-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
 
 		}
 
 	}
 
-	.publisher-control-input-tag.no-border {
+	.blockera-control-input-tag.no-border {
 
 		border: 1px solid transparent;
 		border-radius: 2px;
@@ -125,26 +125,26 @@
 		&:focus {
 
 			border-radius: 2px;
-			border: 1px solid var(--publisher-controls-primary-color);
-			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+			border: 1px solid var(--blockera-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 
 		}
 
 		&.is-focused {
 
-			border: 1px solid var(--publisher-controls-primary-color);
-			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+			border: 1px solid var(--blockera-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 
 		}
 
 	}
 
-	.publisher-control-input-arrows {
+	.blockera-control-input-arrows {
 
 		display: flex;
 		flex-direction: column;
 		gap: 0;
-		color: var(--publisher-controls-placeholder-color);
+		color: var(--blockera-controls-placeholder-color);
 
 		&.is-disabled {
 
@@ -158,7 +158,7 @@
 			margin-right: 3px;
 		}
 
-		.publisher-control-input-arrow {
+		.blockera-control-input-arrow {
 
 			border-radius: 2px;
 			height: 11px;
@@ -188,15 +188,15 @@
 
 	&:hover:not(.is-disabled) {
 
-		.publisher-control-input-arrows {
+		.blockera-control-input-arrows {
 
-			color: var(--publisher-controls-color);
+			color: var(--blockera-controls-color);
 
-			.publisher-control-input-arrow:not(.is-disabled) {
+			.blockera-control-input-arrow:not(.is-disabled) {
 
 				&:hover {
 
-					background-color: var(--publisher-controls-primary-color);
+					background-color: var(--blockera-controls-primary-color);
 					color: #ffffff;
 
 				}
@@ -207,7 +207,7 @@
 
 	}
 
-	.publisher-control-input-actions {
+	.blockera-control-input-actions {
 		position: absolute;
 		right: 0;
 		top: 0;
@@ -220,13 +220,13 @@
 
 }
 
-.publisher-control-input.is-range-active {
+.blockera-control-input.is-range-active {
 
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	column-gap: 15px;
 
-	.publisher-control-range {
+	.blockera-control-range {
 
 		margin: 0;
 		min-width: 60px;

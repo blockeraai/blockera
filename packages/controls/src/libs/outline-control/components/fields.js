@@ -6,9 +6,9 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isInteger } from '@publisher/utils';
+import { isInteger } from '@blockera/utils';
 
 /**
  * External dependencies
@@ -38,20 +38,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				<BorderControl
 					singularId={'border'}
 					repeaterItem={itemId}
-					label={__('Border', 'publisher-core')}
-					labelPopoverTitle={__('Outline Border', 'publisher-core')}
+					label={__('Border', 'blockera-core')}
+					labelPopoverTitle={__('Outline Border', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Add distinct borders to elements without affecting layout, enhancing visual hierarchy and focus.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 							<p>
 								{__(
 									'Useful for highlighting elements without space adjustments, unlike borders. Perfect for focus states and accessibility.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -82,14 +82,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					singularId={'offset'}
 					repeaterItem={itemId}
 					controlName="input"
-					label={__('Offset', 'publisher-core')}
-					labelPopoverTitle={__('Outline Offset', 'publisher-core')}
+					label={__('Offset', 'blockera-core')}
+					labelPopoverTitle={__('Outline Offset', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Control the distance between a block and its outline, offering precision in visual design.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>

@@ -5,9 +5,9 @@
 import type { Node } from 'react';
 
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
-import { isUndefined, isFunction } from '@publisher/utils';
+import { isUndefined, isFunction } from '@blockera/utils';
 
 /**
  * Internal Dependencies

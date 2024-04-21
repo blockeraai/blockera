@@ -10,77 +10,77 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherWidth: FeatureConfig = {
+const blockeraWidth: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Width', 'publisher-core'),
+	label: __('Width', 'blockera-core'),
 };
 
-const publisherMinWidth: FeatureConfig = {
+const blockeraMinWidth: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Min Width', 'publisher-core'),
+	label: __('Min Width', 'blockera-core'),
 };
 
-const publisherMaxWidth: FeatureConfig = {
+const blockeraMaxWidth: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Max Width', 'publisher-core'),
+	label: __('Max Width', 'blockera-core'),
 };
 
-const publisherHeight: FeatureConfig = {
+const blockeraHeight: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Height', 'publisher-core'),
+	label: __('Height', 'blockera-core'),
 };
 
-const publisherMinHeight: FeatureConfig = {
+const blockeraMinHeight: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Min Height', 'publisher-core'),
+	label: __('Min Height', 'blockera-core'),
 };
 
-const publisherMaxHeight: FeatureConfig = {
+const blockeraMaxHeight: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Max Height', 'publisher-core'),
+	label: __('Max Height', 'blockera-core'),
 };
 
-const publisherOverflow: FeatureConfig = {
+const blockeraOverflow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Overflow', 'publisher-core'),
+	label: __('Overflow', 'blockera-core'),
 };
 
-const publisherRatio: FeatureConfig = {
+const blockeraRatio: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Aspect Ratio', 'publisher-core'),
+	label: __('Aspect Ratio', 'blockera-core'),
 };
 
-const publisherFit: FeatureConfig = {
+const blockeraFit: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Media Fit', 'publisher-core'),
+	label: __('Media Fit', 'blockera-core'),
 };
 
 export const sizeConfig = {
-	publisherWidth,
-	publisherMinWidth,
-	publisherMaxWidth,
-	publisherHeight,
-	publisherMinHeight,
-	publisherMaxHeight,
-	publisherOverflow,
-	publisherRatio,
-	publisherFit,
+	blockeraWidth,
+	blockeraMinWidth,
+	blockeraMaxWidth,
+	blockeraHeight,
+	blockeraMinHeight,
+	blockeraMaxHeight,
+	blockeraOverflow,
+	blockeraRatio,
+	blockeraFit,
 };

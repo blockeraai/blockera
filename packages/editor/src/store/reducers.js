@@ -6,9 +6,9 @@
 import { combineReducers } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { BreakpointTypes } from '@publisher/extensions/src/libs/block-states/types';
+import type { BreakpointTypes } from '@blockera/extensions/src/libs/block-states/types';
 
 export const breakpoints = (state: Object = [], action: Object): Object => {
 	switch (action?.type) {

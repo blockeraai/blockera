@@ -1,13 +1,13 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getCssSelector,
 	computedCssDeclarations,
-} from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+} from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -16,7 +16,7 @@ import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { CssRule } from '@publisher/style-engine/src/types';
+import type { CssRule } from '@blockera/style-engine/src/types';
 
 export const LayoutStyles = ({
 	state,
@@ -30,10 +30,10 @@ export const LayoutStyles = ({
 	...props
 }: StylesProps): Array<CssRule> => {
 	const {
-		publisherDisplay,
-		publisherGap,
-		publisherFlexWrap,
-		publisherAlignContent,
+		blockeraDisplay,
+		blockeraGap,
+		blockeraFlexWrap,
+		blockeraAlignContent,
 	} = config.layoutConfig;
 	const blockProps = {
 		clientId,
@@ -58,13 +58,13 @@ export const LayoutStyles = ({
 	const styleGroup: Array<CssRule> = [];
 
 	if (
-		isActiveField(publisherDisplay) &&
-		_attributes.publisherDisplay !== attributes.publisherDisplay.default
+		isActiveField(blockeraDisplay) &&
+		_attributes.blockeraDisplay !== attributes.blockeraDisplay.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherDisplay',
-			support: 'publisherDisplay',
+			query: 'blockeraDisplay',
+			support: 'blockeraDisplay',
 			fallbackSupportId: 'display',
 		});
 
@@ -72,11 +72,11 @@ export const LayoutStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherDisplay: [
+					blockeraDisplay: [
 						{
 							...staticDefinitionParams,
 							properties: {
-								display: _attributes.publisherDisplay,
+								display: _attributes.blockeraDisplay,
 							},
 						},
 					],
@@ -86,12 +86,12 @@ export const LayoutStyles = ({
 		});
 	}
 
-	if (_attributes.publisherDisplay === 'flex') {
-		if (_attributes?.publisherFlexLayout !== undefined) {
-			if (_attributes?.publisherFlexLayout?.direction) {
+	if (_attributes.blockeraDisplay === 'flex') {
+		if (_attributes?.blockeraFlexLayout !== undefined) {
+			if (_attributes?.blockeraFlexLayout?.direction) {
 				const pickedSelector = getCssSelector({
 					...sharedParams,
-					query: 'publisherFlexLayout.direction',
+					query: 'blockeraFlexLayout.direction',
 					fallbackSupportId: 'flexDirection',
 				});
 
@@ -99,12 +99,12 @@ export const LayoutStyles = ({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
 						{
-							publisherFlexLayout: [
+							blockeraFlexLayout: [
 								{
 									...staticDefinitionParams,
 									properties: {
 										'flex-direction':
-											_attributes.publisherFlexLayout
+											_attributes.blockeraFlexLayout
 												.direction,
 									},
 								},
@@ -115,10 +115,10 @@ export const LayoutStyles = ({
 				});
 			}
 
-			if (_attributes?.publisherFlexLayout?.alignItems) {
+			if (_attributes?.blockeraFlexLayout?.alignItems) {
 				const pickedSelector = getCssSelector({
 					...sharedParams,
-					query: 'publisherFlexLayout.alignItems',
+					query: 'blockeraFlexLayout.alignItems',
 					fallbackSupportId: 'alignItems',
 				});
 
@@ -126,12 +126,12 @@ export const LayoutStyles = ({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
 						{
-							publisherFlexLayout: [
+							blockeraFlexLayout: [
 								{
 									...staticDefinitionParams,
 									properties: {
 										'align-items':
-											_attributes.publisherFlexLayout
+											_attributes.blockeraFlexLayout
 												.alignItems,
 									},
 								},
@@ -142,10 +142,10 @@ export const LayoutStyles = ({
 				});
 			}
 
-			if (_attributes?.publisherFlexLayout?.justifyContent) {
+			if (_attributes?.blockeraFlexLayout?.justifyContent) {
 				const pickedSelector = getCssSelector({
 					...sharedParams,
-					query: 'publisherFlexLayout.justifyContent',
+					query: 'blockeraFlexLayout.justifyContent',
 					fallbackSupportId: 'justifyContent',
 				});
 
@@ -153,12 +153,12 @@ export const LayoutStyles = ({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
 						{
-							publisherFlexLayout: [
+							blockeraFlexLayout: [
 								{
 									...staticDefinitionParams,
 									properties: {
 										'justify-content':
-											_attributes.publisherFlexLayout
+											_attributes.blockeraFlexLayout
 												.justifyContent,
 									},
 								},
@@ -171,18 +171,18 @@ export const LayoutStyles = ({
 		}
 
 		if (
-			isActiveField(publisherGap) &&
-			_attributes.publisherGap !== attributes.publisherGap.default
+			isActiveField(blockeraGap) &&
+			_attributes.blockeraGap !== attributes.blockeraGap.default
 		) {
-			if (_attributes.publisherGap?.lock) {
+			if (_attributes.blockeraGap?.lock) {
 				const gap = getValueAddonRealValue(
-					_attributes.publisherGap?.gap
+					_attributes.blockeraGap?.gap
 				);
 				if (gap) {
 					const pickedSelector = getCssSelector({
 						...sharedParams,
-						query: 'publisherGap',
-						support: 'publisherGap',
+						query: 'blockeraGap',
+						support: 'blockeraGap',
 						fallbackSupportId: 'gap',
 					});
 
@@ -190,11 +190,11 @@ export const LayoutStyles = ({
 						selector: pickedSelector,
 						declarations: computedCssDeclarations(
 							{
-								publisherGap: [
+								blockeraGap: [
 									{
 										...staticDefinitionParams,
 										properties: {
-											gap: _attributes.publisherGap.gap,
+											gap: _attributes.blockeraGap.gap,
 										},
 									},
 								],
@@ -205,12 +205,12 @@ export const LayoutStyles = ({
 				}
 			} else {
 				const rows = getValueAddonRealValue(
-					_attributes.publisherGap?.rows
+					_attributes.blockeraGap?.rows
 				);
 				if (rows) {
 					const pickedSelector = getCssSelector({
 						...sharedParams,
-						query: 'publisherGap.rows',
+						query: 'blockeraGap.rows',
 						fallbackSupportId: 'rowGap',
 					});
 
@@ -218,7 +218,7 @@ export const LayoutStyles = ({
 						selector: pickedSelector,
 						declarations: computedCssDeclarations(
 							{
-								publisherGap: [
+								blockeraGap: [
 									{
 										...staticDefinitionParams,
 										properties: {
@@ -233,12 +233,12 @@ export const LayoutStyles = ({
 				}
 
 				const columns = getValueAddonRealValue(
-					_attributes.publisherGap?.columns
+					_attributes.blockeraGap?.columns
 				);
 				if (columns) {
 					const pickedSelector = getCssSelector({
 						...sharedParams,
-						query: 'publisherGap.columns',
+						query: 'blockeraGap.columns',
 						fallbackSupportId: 'columnGap',
 					});
 
@@ -246,7 +246,7 @@ export const LayoutStyles = ({
 						selector: pickedSelector,
 						declarations: computedCssDeclarations(
 							{
-								publisherGap: [
+								blockeraGap: [
 									{
 										...staticDefinitionParams,
 										properties: {
@@ -263,23 +263,22 @@ export const LayoutStyles = ({
 		}
 
 		if (
-			isActiveField(publisherFlexWrap) &&
-			_attributes.publisherFlexWrap !==
-				attributes.publisherFlexWrap.default
+			isActiveField(blockeraFlexWrap) &&
+			_attributes.blockeraFlexWrap !== attributes.blockeraFlexWrap.default
 		) {
-			let value = _attributes.publisherFlexWrap?.value;
+			let value = _attributes.blockeraFlexWrap?.value;
 
 			if (
-				_attributes.publisherFlexWrap?.value === 'wrap' &&
-				_attributes.publisherFlexWrap?.reverse
+				_attributes.blockeraFlexWrap?.value === 'wrap' &&
+				_attributes.blockeraFlexWrap?.reverse
 			) {
 				value += '-reverse';
 			}
 
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherFlexWrap',
-				support: 'publisherFlexWrap',
+				query: 'blockeraFlexWrap',
+				support: 'blockeraFlexWrap',
 				fallbackSupportId: 'flexWrap',
 			});
 
@@ -287,7 +286,7 @@ export const LayoutStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherFlexWrap: [
+						blockeraFlexWrap: [
 							{
 								...staticDefinitionParams,
 								properties: {
@@ -302,14 +301,14 @@ export const LayoutStyles = ({
 		}
 
 		if (
-			isActiveField(publisherAlignContent) &&
-			_attributes.publisherAlignContent !==
-				attributes.publisherAlignContent.default
+			isActiveField(blockeraAlignContent) &&
+			_attributes.blockeraAlignContent !==
+				attributes.blockeraAlignContent.default
 		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherAlignContent',
-				support: 'publisherAlignContent',
+				query: 'blockeraAlignContent',
+				support: 'blockeraAlignContent',
 				fallbackSupportId: 'alignContent',
 			});
 
@@ -317,12 +316,12 @@ export const LayoutStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherAlignContent: [
+						blockeraAlignContent: [
 							{
 								...staticDefinitionParams,
 								properties: {
 									'align-content':
-										_attributes.publisherAlignContent,
+										_attributes.blockeraAlignContent,
 								},
 							},
 						],

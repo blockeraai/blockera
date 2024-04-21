@@ -10,46 +10,46 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherDisplay: FeatureConfig = {
+const blockeraDisplay: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Display', 'publisher-core'),
+	label: __('Display', 'blockera-core'),
 };
 
-const publisherFlexLayout: FeatureConfig = {
+const blockeraFlexLayout: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Flex Layout', 'publisher-core'),
+	label: __('Flex Layout', 'blockera-core'),
 };
 
-const publisherGap: FeatureConfig = {
+const blockeraGap: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Gap', 'publisher-core'),
+	label: __('Gap', 'blockera-core'),
 };
 
-const publisherFlexWrap: FeatureConfig = {
+const blockeraFlexWrap: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Flex Children Wrap', 'publisher-core'),
+	label: __('Flex Children Wrap', 'blockera-core'),
 };
 
-const publisherAlignContent: FeatureConfig = {
+const blockeraAlignContent: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
 	showInSettings: false,
-	label: __('Children Align Content', 'publisher-core'),
+	label: __('Children Align Content', 'blockera-core'),
 };
 
 export const layoutConfig = {
-	publisherDisplay,
-	publisherFlexLayout,
-	publisherGap,
-	publisherFlexWrap,
-	publisherAlignContent,
+	blockeraDisplay,
+	blockeraFlexLayout,
+	blockeraGap,
+	blockeraFlexWrap,
+	blockeraAlignContent,
 };

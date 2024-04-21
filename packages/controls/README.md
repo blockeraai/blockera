@@ -7,20 +7,20 @@ This package includes a library of generic WordPress components to be used for c
 Install the module
 
 ```bash
-npm install @publisher/controls --save
+npm install @blockera/controls --save
 ```
 
 _This package assumes that your code will run in an **ES2015+** environment. If you're using an environment that has limited or no support for such language features and APIs, you should include [the polyfill shipped in `@wordpress/babel-preset-default`](https://github.com/WordPress/gutenberg/tree/HEAD/packages/babel-preset-default#polyfill) in your code._
 
 ## Usage
 
-Within Publisher, these controls can be accessed by importing from the `controls` root directory:
+Within , these controls can be accessed by importing from the `controls` root directory:
 
 ```jsx
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { IconControl } from '@publisher/controls';
+import { IconControl } from '@blockera/controls';
 
 export default function MyIconControl() {
 	return <IconControl />;
@@ -82,3 +82,4 @@ To find out more about contributing to this package or Gutenberg as a whole, ple
 This package also has its own [contributing information](https://github.com/WordPress/gutenberg/tree/HEAD/packages/components/CONTRIBUTING.md) where you can find additional details.
 
 <br /><br /><p align="center"><img src="https://s.w.org/style/images/codeispoetry.png?1" alt="Code is Poetry." /></p>
+

@@ -1,6 +1,6 @@
-.publisher-control-divider {
+.blockera-control-divider {
 
-	.publisher-control-group-header {
+	.blockera-control-group-header {
 		padding: 0 10px !important;
 
 		.shape-icon {
@@ -9,15 +9,15 @@
 	}
 }
 
-.publisher-control-divider-popover,
-.publisher-control-divider-shape-popover {
+.blockera-control-divider-popover,
+.blockera-control-divider-shape-popover {
 
 	.disabled-element-wrapper {
        width: 100% !important;
 	}
 
-	.publisher-control-shape-button,
-	.publisher-control-shape {
+	.blockera-control-shape-button,
+	.blockera-control-shape {
 
 	   .search-icon,
 	   .shape-icon {
@@ -40,7 +40,7 @@
 	   }
 	}
 
-	.publisher-control-shape-button {
+	.blockera-control-shape-button {
 
         .shape-icon {
 
@@ -59,15 +59,15 @@
 
 	.shapes {
 
-		.publisher-control-label {
+		.blockera-control-label {
 			min-height: 21px;
 		}
 
-        .publisher-field-control {
+        .blockera-field-control {
 			gap: 6px;
 		}
 
-		.publisher-control-shape {
+		.blockera-control-shape {
 				padding: 10px;
 				height: 36px;
 
@@ -81,12 +81,12 @@
 	}
 
 
-	.publisher-control-toggle-field {
+	.blockera-control-toggle-field {
 		align-items: baseline;
 	}
 }
 
-.publisher-control-repeater-group-header {
+.blockera-control-repeater-group-header {
 
 	.shape-icon {
 

@@ -1,8 +1,8 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Flex } from '@publisher/components';
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { Flex } from '@blockera/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -49,7 +49,7 @@ export const Filled = {
 					<LinkControl
 						{...args}
 						value={{
-							link: 'https://publisherwp.com/',
+							link: 'https://blockeraai.com/',
 							target: false,
 							nofollow: false,
 							label: '',
@@ -65,7 +65,7 @@ export const Filled = {
 					<LinkControl
 						{...args}
 						value={{
-							link: 'https://publisherwp.com/',
+							link: 'https://blockeraai.com/',
 							target: true,
 							nofollow: false,
 							label: '',
@@ -81,7 +81,7 @@ export const Filled = {
 					<LinkControl
 						{...args}
 						value={{
-							link: 'https://publisherwp.com/',
+							link: 'https://blockeraai.com/',
 							target: false,
 							nofollow: true,
 							label: '',
@@ -97,7 +97,7 @@ export const Filled = {
 					<LinkControl
 						{...args}
 						value={{
-							link: 'https://publisherwp.com/',
+							link: 'https://blockeraai.com/',
 							target: false,
 							nofollow: false,
 							label: 'Custom Label',
@@ -113,7 +113,7 @@ export const Filled = {
 					<LinkControl
 						{...args}
 						value={{
-							link: 'https://publisherwp.com/',
+							link: 'https://blockeraai.com/',
 							target: false,
 							nofollow: false,
 							label: '',
@@ -135,7 +135,7 @@ export const Filled = {
 						{...args}
 						advancedOpen={false}
 						value={{
-							link: 'https://publisherwp.com/',
+							link: 'https://blockeraai.com/',
 							target: false,
 							nofollow: false,
 							label: '',

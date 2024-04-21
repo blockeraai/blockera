@@ -10,7 +10,7 @@ import {
 describe('Children Wrap and Align Content → Functionality', () => {
 	beforeEach(() => {
 		createPost();
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -40,10 +40,10 @@ describe('Children Wrap and Align Content → Functionality', () => {
 			expect({
 				value: 'wrap',
 				reverse: false,
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexWrap'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 
 			expect('center').to.be.equal(
-				getSelectedBlock(data, 'publisherAlignContent')
+				getSelectedBlock(data, 'blockeraAlignContent')
 			);
 		});
 
@@ -60,7 +60,7 @@ describe('Children Wrap and Align Content → Functionality', () => {
 			expect({
 				value: 'wrap',
 				reverse: true,
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexWrap'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
 
 		//Check frontend
@@ -68,7 +68,7 @@ describe('Children Wrap and Align Content → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
+		cy.get('.blockera-core-block')
 			.should('have.css', 'flex-wrap', 'wrap-reverse')
 			.should('have.css', 'align-content', 'center');
 	});

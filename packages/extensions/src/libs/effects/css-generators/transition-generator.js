@@ -1,19 +1,19 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { getSortedRepeater } from '@publisher/controls';
-import { isUndefined } from '@publisher/utils';
-import { createCssDeclarations } from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+import { getSortedRepeater } from '@blockera/controls';
+import { isUndefined } from '@blockera/utils';
+import { createCssDeclarations } from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 export function TransitionGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!Object.keys(attributes?.publisherTransition)?.length) {
+	if (!Object.keys(attributes?.blockeraTransition)?.length) {
 		return '';
 	}
 
-	const value = getSortedRepeater(attributes?.publisherTransition)
+	const value = getSortedRepeater(attributes?.blockeraTransition)
 		?.map(([, item]) => {
 			if (!item.isVisible) {
 				return null;

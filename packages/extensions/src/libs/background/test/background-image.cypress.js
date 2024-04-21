@@ -13,7 +13,7 @@ describe('Background Image → Functionality', () => {
 		createPost();
 
 		// add block, select it, open style tab
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type("life is too short. isn't it?", {
 			delay: 0,
@@ -58,7 +58,7 @@ describe('Background Image → Functionality', () => {
 			getWPDataObject().then((data) => {
 				const backgroundImageState = getSelectedBlock(
 					data,
-					'publisherBackground'
+					'blockeraBackground'
 				)['image-0'].image;
 
 				expect(backgroundImageState).to.match(/bg-extension-test/);
@@ -72,13 +72,13 @@ describe('Background Image → Functionality', () => {
 			//assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.publisher-core-block')
+			cy.get('.blockera-core-block')
 				.should('have.css', 'background-image')
 				.and('match', /bg-extension-test/);
 		});
 
 		it('should be able to set background size to contain', () => {
-			cy.get('.publisher-component-popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				cy.getParentContainer('Size').within(() => {
 					cy.get('button[data-value="contain"]').click();
 				});
@@ -86,7 +86,7 @@ describe('Background Image → Functionality', () => {
 				getWPDataObject().then((data) => {
 					const backgroundImgSizeState = getSelectedBlock(
 						data,
-						'publisherBackground'
+						'blockeraBackground'
 					)['image-0']['image-size'];
 
 					expect(backgroundImgSizeState).to.be.equal('contain');
@@ -103,7 +103,7 @@ describe('Background Image → Functionality', () => {
 			//assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.publisher-core-block').should(
+			cy.get('.blockera-core-block').should(
 				'have.css',
 				'background-size',
 				'contain'
@@ -111,7 +111,7 @@ describe('Background Image → Functionality', () => {
 		});
 
 		it("should apply 'auto auto' by default for bg-size on custom ", () => {
-			cy.get('.publisher-component-popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				cy.getParentContainer('Size').within(() => {
 					cy.get('button[data-value="custom"]').click();
 				});
@@ -120,7 +120,7 @@ describe('Background Image → Functionality', () => {
 				getWPDataObject().then((data) => {
 					const backgroundState = getSelectedBlock(
 						data,
-						'publisherBackground'
+						'blockeraBackground'
 					)['image-0'];
 
 					expect(backgroundState['image-size']).to.be.equal('custom');
@@ -145,7 +145,7 @@ describe('Background Image → Functionality', () => {
 			//assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.publisher-core-block').should(
+			cy.get('.blockera-core-block').should(
 				'have.css',
 				'background-size',
 				'auto'
@@ -153,7 +153,7 @@ describe('Background Image → Functionality', () => {
 		});
 
 		it('should be able to set background position, Repeat, Effect', () => {
-			cy.get('.publisher-component-popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				cy.getParentContainer('Position').within(() => {
 					cy.get('input').each(($input) => {
 						cy.wrap($input).clear();
@@ -176,7 +176,7 @@ describe('Background Image → Functionality', () => {
 			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
 					data,
-					'publisherBackground'
+					'blockeraBackground'
 				)['image-0'];
 
 				// assert position data
@@ -207,7 +207,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.publisher-core-block')
+			cy.get('.blockera-core-block')
 				.should('have.css', 'background-position', '20% 20%')
 				.and('have.css', 'background-repeat', 'no-repeat')
 				.and('have.css', 'background-attachment', 'fixed');
@@ -230,7 +230,7 @@ describe('Background Image → Functionality', () => {
 		});
 
 		it('simple value linear gradient', () => {
-			cy.get('.publisher-component-popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				// set angle
 				cy.getParentContainer('Angel').within(() => {
 					cy.get('input').clear();
@@ -254,7 +254,7 @@ describe('Background Image → Functionality', () => {
 			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
 					data,
-					'publisherBackground'
+					'blockeraBackground'
 				)['linear-gradient-0'];
 
 				// assert gradient
@@ -294,7 +294,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.publisher-core-block').should(($block) => {
+			cy.get('.blockera-core-block').should(($block) => {
 				// angle + also gradient
 				expect($block.css('background-image')).to.match(/7deg,/i);
 
@@ -310,7 +310,7 @@ describe('Background Image → Functionality', () => {
 		});
 
 		it('variable linear gradient', () => {
-			cy.get('.publisher-component-popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				cy.getParentContainer('Linear Gradient')
 					.last()
 					.within(() => {
@@ -339,7 +339,7 @@ describe('Background Image → Functionality', () => {
 					isValueAddon: true,
 					valueType: 'variable',
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherBackground')[
+					getSelectedBlock(data, 'blockeraBackground')[
 						'linear-gradient-0'
 					]['linear-gradient']
 				);
@@ -355,7 +355,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.publisher-core-block').should(($block) => {
+			cy.get('.blockera-core-block').should(($block) => {
 				expect($block.css('background-image')).to.be.equal(
 					'linear-gradient(rgb(216, 97, 60) 0%, rgb(249, 249, 249) 100%)'
 				);
@@ -378,7 +378,7 @@ describe('Background Image → Functionality', () => {
 		});
 
 		it('simple value radial gradient', () => {
-			cy.get('.publisher-component-popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				// set position
 				cy.getParentContainer('Position').within(() => {
 					cy.get('input').each(($input) => {
@@ -409,7 +409,7 @@ describe('Background Image → Functionality', () => {
 			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
 					data,
-					'publisherBackground'
+					'blockeraBackground'
 				)['radial-gradient-0'];
 
 				// assert gradient
@@ -459,7 +459,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.publisher-core-block').should(($block) => {
+			cy.get('.blockera-core-block').should(($block) => {
 				// position + also gradient
 				expect($block.css('background-image')).to.match(/at 20% 20%,/i);
 
@@ -495,9 +495,9 @@ describe('Background Image → Functionality', () => {
 		it('assert by default value', () => {
 			let colorsInUi = [];
 
-			cy.get('.publisher-component-popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				// get UI colors
-				cy.get('.publisher-control-header-label').should(($spans) => {
+				cy.get('.blockera-control-header-label').should(($spans) => {
 					colorsInUi = $spans.get().map((span) => ({
 						color: span.innerText,
 					}));
@@ -515,7 +515,7 @@ describe('Background Image → Functionality', () => {
 			getWPDataObject().then((data) => {
 				const backgroundState = getSelectedBlock(
 					data,
-					'publisherBackground'
+					'blockeraBackground'
 				)['mesh-gradient-0'];
 
 				// colors
@@ -555,7 +555,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.publisher-core-block').then(($block) => {
+			cy.get('.blockera-core-block').then(($block) => {
 				// colors + gradient
 				colorsInUi.forEach((colorInUi) => {
 					const rgbColorInUi = hexToRGB(colorInUi.color);

@@ -4,10 +4,10 @@
 import { createRoot, useEffect, useRef } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Icon } from '@publisher/components';
-import { isEmpty, isUndefined } from '@publisher/utils';
+import { Icon } from '@blockera/components';
+import { isEmpty, isUndefined } from '@blockera/utils';
 
 const IconComponent = ({ el, iconNode, position }) => {
 	const refId = useRef(null);
@@ -19,13 +19,12 @@ const IconComponent = ({ el, iconNode, position }) => {
 
 		if (contentEditable) {
 			if ('right' === position) {
-				contentEditable.innerHTML += `<span class="publisher-icon">${iconNode.innerHTML}</span>`;
+				contentEditable.innerHTML += `<span class="blockera-icon">${iconNode.innerHTML}</span>`;
 			} else {
-				contentEditable.innerHTML = `<span class="publisher-icon">${iconNode.innerHTML}</span>${contentEditable.innerHTML}`;
+				contentEditable.innerHTML = `<span class="blockera-icon">${iconNode.innerHTML}</span>${contentEditable.innerHTML}`;
 			}
 
-			const iconElement =
-				contentEditable.querySelector('.publisher-icon');
+			const iconElement = contentEditable.querySelector('.blockera-icon');
 
 			const handleKeyDownEvent = (e) => {
 				if (e.keyCode === 8 || e.keyCode === 46) {
@@ -63,11 +62,11 @@ const IconComponent = ({ el, iconNode, position }) => {
 
 	return (
 		<span
-			className={'publisher-icon-element'}
+			className={'blockera-icon-element'}
 			dangerouslySetInnerHTML={{
 				__html: el.innerHTML
-					.replace(/<span\sclass="publisher-icon-element".*?>/is, '')
-					.replace(/<span\sclass="publisher-icon".*?>/is, '')
+					.replace(/<span\sclass="blockera-icon-element".*?>/is, '')
+					.replace(/<span\sclass="blockera-icon".*?>/is, '')
 					//FIXME: to switch safe replace with any condition needed to check!
 					.replace(/<\/span>/gis, '')
 					.replace(/<svg.*?>.*?<\/svg>/is, ''),
@@ -84,11 +83,11 @@ export const useIconEffect = (
 		name,
 		clientId,
 		blockRefId,
-		publisherIcon,
-		publisherIconGap = '5px',
-		publisherIconSize = 25,
-		publisherIconColor = '',
-		publisherIconPosition = 'left',
+		blockeraIcon,
+		blockeraIconGap = '5px',
+		blockeraIconSize = 25,
+		blockeraIconColor = '',
+		blockeraIconPosition = 'left',
 	},
 	dependencies
 ) => {
@@ -102,24 +101,24 @@ export const useIconEffect = (
 			`#block-${clientId}`
 		);
 
-		if (isUndefined(publisherIcon) || isEmpty(publisherIcon) || !el) {
+		if (isUndefined(blockeraIcon) || isEmpty(blockeraIcon) || !el) {
 			return;
 		}
 
 		const root = createRoot(el);
 		const iconNode = document.createElement('span');
 		const icon = createRoot(iconNode);
-		const iconSize = publisherIconSize.replace(/[a-z]+/g, '');
+		const iconSize = blockeraIconSize.replace(/[a-z]+/g, '');
 
 		icon.render(
 			<Icon
 				style={{
-					fill: publisherIconColor,
-					color: publisherIconColor,
-					marginLeft: publisherIconGap,
-					marginRight: publisherIconGap,
+					fill: blockeraIconColor,
+					color: blockeraIconColor,
+					marginLeft: blockeraIconGap,
+					marginRight: blockeraIconGap,
 				}}
-				{...(publisherIcon ?? {})}
+				{...(blockeraIcon ?? {})}
 				size={iconSize}
 			/>
 		);
@@ -128,7 +127,7 @@ export const useIconEffect = (
 			<IconComponent
 				el={el}
 				iconNode={iconNode}
-				position={publisherIconPosition}
+				position={blockeraIconPosition}
 			/>
 		);
 		// eslint-disable-next-line

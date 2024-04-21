@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -16,8 +16,8 @@ import {
 	IconExtensionSupports,
 	IconExtensionAttributes,
 	InnerBlockLinkIcon,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -31,11 +31,11 @@ const attributes = {
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	item_containers: {
 		name: 'core/item_containers',
 		type: 'item_containers',
-		label: __('Buttons', 'publisher-core'),
+		label: __('Buttons', 'blockera-core'),
 		icon: <InnerBlockItemContainerIcon />,
 		selectors: {
 			root: '.wp-block-social-link',
@@ -48,7 +48,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	item_icons: {
 		name: 'core/item_icons',
 		type: 'item_icons',
-		label: __('Buttons Icons', 'publisher-core'),
+		label: __('Buttons Icons', 'blockera-core'),
 		icon: <InnerBlockItemIconIcon />,
 		selectors: {
 			root: '.wp-block-social-link svg',
@@ -61,7 +61,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	item_names: {
 		name: 'core/item_names',
 		type: 'item_names',
-		label: __('Buttons Names', 'publisher-core'),
+		label: __('Buttons Names', 'blockera-core'),
 		icon: <InnerBlockItemNameIcon />,
 		selectors: {
 			root: '.wp-block-social-link .wp-block-social-link-label',
@@ -74,14 +74,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const SocialLinks = {
-	name: 'publisherSocialLinks',
+	name: 'blockeraSocialLinks',
 	targetBlock: 'core/social-links',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

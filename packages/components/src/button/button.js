@@ -9,9 +9,9 @@ import PropTypes from 'prop-types';
 import { Button as WPButton } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { componentClassNames } from '@publisher/classnames';
+import { componentClassNames } from '@blockera/classnames';
 
 export default function Button({
 	variant,

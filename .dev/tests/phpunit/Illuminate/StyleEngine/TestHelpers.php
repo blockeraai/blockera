@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Tests\Illuminate\StyleEngine;
+namespace Blockera\Framework\Tests\Illuminate\StyleEngine;
 
 class TestHelpers extends \WP_UnitTestCase {
 
@@ -12,14 +12,14 @@ class TestHelpers extends \WP_UnitTestCase {
 		];
 
 		$expects = [
-			'publisher'
+			'blockera'
 		];
 
 		$classnames = [];
 
 		foreach ( $blocks as $block ) {
 
-			$classnames[] = pb_get_unique_classname( $block );
+			$classnames[] = blockera_get_unique_classname( $block );
 		}
 
 		$this->assertFalse( in_array( 2, array_values( array_count_values( $classnames ) ) ) );
@@ -28,7 +28,7 @@ class TestHelpers extends \WP_UnitTestCase {
 	public function testItShouldRetrieveCssMediaQueriesEqualsWithExpects(): void {
 
 		$this->assertEquals(
-			pb_get_css_media_queries(),
+			blockera_get_css_media_queries(),
 			[
 				"extra-large"      => "@media screen and (min-width: 2561px)",
 				"large"            => "@media screen and (max-width: 2560px) and (min-width: 1921px)",
@@ -49,7 +49,7 @@ class TestHelpers extends \WP_UnitTestCase {
 	public function testItShouldValidateBlockState(): void {
 
 		$this->assertEquals(
-			pb_block_state_validate(
+			blockera_block_state_validate(
 				[
 					'normal' => [
 						'type'        => 'normal',
@@ -75,7 +75,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		);
 
 		$this->assertEquals(
-			pb_block_state_validate(
+			blockera_block_state_validate(
 				[
 					'normal' => [
 						'type'        => 'normal',
@@ -103,12 +103,12 @@ class TestHelpers extends \WP_UnitTestCase {
 	 */
 	public function testItShouldRetrieveBlockTypeCssSelectorsExpectedList( string $blockType = '', array $expectedSelectors = [] ): void {
 
-		$this->assertSame( $expectedSelectors, pb_get_block_type_selectors( $blockType ) );
+		$this->assertSame( $expectedSelectors, blockera_get_block_type_selectors( $blockType ) );
 	}
 
 	public function getBlocksWithSelectors(): array {
 
-		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/blocks-with-selectors.php';
+		return require __BLOCKERA_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/blocks-with-selectors.php';
 	}
 
 	/**
@@ -125,13 +125,13 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$this->assertEquals(
 			$expected,
-			pb_calculate_feature_css_selector( $selectors, $featureId, $fallbackId )
+			blockera_calculate_feature_css_selector( $selectors, $featureId, $fallbackId )
 		);
 	}
 
 	public function getDataProviderForCalculationCssSelector(): array {
 
-		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/calculation-css-selector.php';
+		return require __BLOCKERA_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/calculation-css-selector.php';
 	}
 
 	/**
@@ -146,13 +146,13 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$this->assertSame(
 			$expectedCss,
-			pb_get_shorthand_css( $longCss )
+			blockera_get_shorthand_css( $longCss )
 		);
 	}
 
 	public function getDataProviderForShorthandCss(): array {
 
-		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/helpers/long-css.php';
+		return require __BLOCKERA_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/helpers/long-css.php';
 	}
 
 	/**
@@ -169,13 +169,13 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$this->assertSame(
 			$blockStateSelectors,
-			pb_get_block_state_selectors( $selectors, $args )
+			blockera_get_block_state_selectors( $selectors, $args )
 		);
 	}
 
 	public function getBlockStateSelectorsDataProvider(): array {
 
-		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/block-state-selectors.php';
+		return require __BLOCKERA_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/block-state-selectors.php';
 	}
 
 	/**
@@ -192,13 +192,13 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			pb_combine_css( $separatelyCss )
+			blockera_combine_css( $separatelyCss )
 		);
 	}
 
 	public function getCombineCssDataProvider(): array {
 
-		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/combine-css.php';
+		return require __BLOCKERA_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/combine-css.php';
 	}
 
 	/**
@@ -215,13 +215,13 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			pb_convert_css_declarations_to_css_valid_rules( $css )
+			blockera_convert_css_declarations_to_css_valid_rules( $css )
 		);
 	}
 
 	public function getValidCssRulesDataProvider(): array {
 
-		return require __PB_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/valid-css-rules.php';
+		return require __BLOCKERA_TEST_DIR__ . '/Fixtures/Illuminate/StyleEngine/valid-css-rules.php';
 	}
 
 	/**
@@ -233,18 +233,18 @@ class TestHelpers extends \WP_UnitTestCase {
 	public function testItShouldRetrieveNormalizedCssSelectors(): void {
 
 		$this->assertSame(
-			'.test.publisher.block',
-			pb_get_normalized_selector( 'test publisher block' )
+			'.test.blockera.block',
+			blockera_get_normalized_selector( 'test blockera block' )
 		);
 
 		$this->assertSame(
-			'.test.publisher.block',
-			pb_get_normalized_selector( '.test publisher block' )
+			'.test.blockera.block',
+			blockera_get_normalized_selector( '.test blockera block' )
 		);
 
 		$this->assertSame(
-			'.test.publisher.block',
-			pb_get_normalized_selector( '.test .publisher .block' )
+			'.test.blockera.block',
+			blockera_get_normalized_selector( '.test .blockera .block' )
 		);
 	}
 

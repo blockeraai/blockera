@@ -1,8 +1,8 @@
-.publisher-component-more-features {
+.blockera-component-more-features {
 	position: relative;
 	margin-top: 14px;
 
-	.publisher-component-more-features__button {
+	.blockera-component-more-features__button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -11,7 +11,7 @@
 		border-radius: 2px;
 		font-size: 12px;
 		font-weight: 500;
-		transition: var(--publisher-controls-transition);
+		transition: var(--blockera-controls-transition);
 		cursor: pointer;
 		-webkit-user-select: none;
 		user-select: none;
@@ -21,44 +21,44 @@
 			fill: currentColor;
 		}
 
-		.publisher-component-more-features__button__changed {
+		.blockera-component-more-features__button__changed {
 			display: none;
 			width: 6px;
 			height: 6px;
-			background-color: var(--publisher-controls-primary-color);
+			background-color: var(--blockera-controls-primary-color);
 			border-radius: 50%;
 		}
 
 		&:hover {
-			color: var(--publisher-controls-primary-color) !important;
+			color: var(--blockera-controls-primary-color) !important;
 		}
 
 		&:focus {
-			border: 1px solid var(--publisher-controls-primary-color);
-			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+			border: 1px solid var(--blockera-controls-primary-color);
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 		}
 	}
 
-	.publisher-component-more-features__body {
+	.blockera-component-more-features__body {
 		height: 0;
 		overflow: hidden;
 		visibility: hidden;
-		transition: var(--publisher-controls-transition);
+		transition: var(--blockera-controls-transition);
 		width: 100%;
 	}
 
 	&.is-open {
 
-		.publisher-component-more-features__button {
-			color: var(--publisher-controls-primary-color) !important;
+		.blockera-component-more-features__button {
+			color: var(--blockera-controls-primary-color) !important;
 			margin-bottom: 10px;
 
-			.publisher-component-more-features__button__changed {
+			.blockera-component-more-features__button__changed {
 				display: inline-block;
 			}
 		}
 
-		.publisher-component-more-features__body {
+		.blockera-component-more-features__body {
 			margin-top: 10px;
 			display: inline-block;
 			visibility: visible;
@@ -69,9 +69,9 @@
 
 	&.is-changed {
 
-		.publisher-component-more-features__button {
+		.blockera-component-more-features__button {
 
-			.publisher-component-more-features__button__changed {
+			.blockera-component-more-features__button__changed {
 				display: inline-block;
 			}
 		}

@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -14,7 +14,7 @@ import {
 	PositionButtonControl,
 	SelectControl,
 	useControlContext,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -46,13 +46,13 @@ export default function ObjectFit({
 }): MixedElement {
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
 		onChange: (newValue, ref) =>
-			handleOnChangeAttributes('publisherFit', newValue, { ref }),
+			handleOnChangeAttributes('blockeraFit', newValue, { ref }),
 		defaultValue,
 	});
 
 	const labelProps = {
 		value,
-		attribute: 'publisherRatio',
+		attribute: 'blockeraRatio',
 		blockName,
 		defaultValue,
 		resetToDefault,
@@ -62,75 +62,75 @@ export default function ObjectFit({
 
 	return (
 		<BaseControl
-			label={__('Media Fit', 'publisher-core')}
+			label={__('Media Fit', 'blockera-core')}
 			labelDescription={
 				<>
 					<p>
 						{__(
 							'Media Fit (object-Fit) controls how an image or video fits into its container for ensuring optimal media display.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<p>
 						{__(
 							'It is essential for responsive design, ensuring media maintain their aspect ratio while adapting to different container sizes, enhancing visual appeal without distortion.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<h3>
 						<FitFillIcon />
-						{__('Fill', 'publisher-core')}
+						{__('Fill', 'blockera-core')}
 					</h3>
 					<p>
 						{__(
 							'The image or video is stretched to fill the container, which may lead to distortion.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<h3>
 						<FitContainIcon />
-						{__('Contain', 'publisher-core')}
+						{__('Contain', 'blockera-core')}
 					</h3>
 					<p>
 						{__(
 							'The entire image or video is scaled to fit inside the container, maintaining its aspect ratio but might leave empty space.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<h3>
 						<FitCoverIcon />
-						{__('Cover', 'publisher-core')}
+						{__('Cover', 'blockera-core')}
 					</h3>
 					<p>
 						{__(
 							'The content is resized to cover the entire container, maintaining its aspect ratio and may be clipped.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<h3>
 						<FitNoneIcon />
-						{__('None', 'publisher-core')}
+						{__('None', 'blockera-core')}
 					</h3>
 					<p>
 						{__(
 							'The image or video is displayed at its true size, ignoring the container size.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<h3>
 						<FitScaleDownIcon />
-						{__('Scale Down', 'publisher-core')}
+						{__('Scale Down', 'blockera-core')}
 					</h3>
 					<p>
 						{__(
 							'Behaves like "none" or "contain", whichever results in a smaller image or video.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 				</>
 			}
 			columns="columns-2"
-			className={'publisher-object-fit'}
+			className={'blockera-object-fit'}
 			{...labelProps}
 		>
 			<SelectControl
@@ -138,32 +138,32 @@ export default function ObjectFit({
 				columns="columns-1"
 				options={[
 					{
-						label: __('Default', 'publisher-core'),
+						label: __('Default', 'blockera-core'),
 						value: '',
 						icon: <FitNormalIcon />,
 					},
 					{
-						label: __('Fill', 'publisher-core'),
+						label: __('Fill', 'blockera-core'),
 						value: 'fill',
 						icon: <FitFillIcon />,
 					},
 					{
-						label: __('Contain', 'publisher-core'),
+						label: __('Contain', 'blockera-core'),
 						value: 'contain',
 						icon: <FitContainIcon />,
 					},
 					{
-						label: __('Cover', 'publisher-core'),
+						label: __('Cover', 'blockera-core'),
 						value: 'cover',
 						icon: <FitCoverIcon />,
 					},
 					{
-						label: __('None', 'publisher-core'),
+						label: __('None', 'blockera-core'),
 						value: 'none',
 						icon: <FitNormalIcon />,
 					},
 					{
-						label: __('Scale Down', 'publisher-core'),
+						label: __('Scale Down', 'blockera-core'),
 						value: 'scale-down',
 						icon: <FitScaleDownIcon />,
 					},
@@ -171,7 +171,7 @@ export default function ObjectFit({
 				type="custom"
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					handleOnChangeAttributes('publisherFit', newValue, { ref })
+					handleOnChangeAttributes('blockeraFit', newValue, { ref })
 				}
 				{...props}
 			/>
@@ -180,18 +180,18 @@ export default function ObjectFit({
 				value={{
 					name: generateExtensionId(block, 'fit-position'),
 					value: fitPosition,
-					attribute: 'publisherFitPosition',
+					attribute: 'blockeraFitPosition',
 					blockName: block.blockName,
 				}}
 			>
 				<PositionButtonControl
-					buttonLabel={__('Fit Position', 'publisher-core')}
-					alignmentMatrixLabel={__('Position', 'publisher-core')}
+					buttonLabel={__('Fit Position', 'blockera-core')}
+					alignmentMatrixLabel={__('Position', 'blockera-core')}
 					size="small"
 					defaultValue={fitPositionDefaultValue}
 					onChange={({ top, left }, ref) => {
 						handleOnChangeAttributes(
-							'publisherFitPosition',
+							'blockeraFitPosition',
 							{
 								...fitPosition,
 								top,

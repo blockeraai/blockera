@@ -261,7 +261,7 @@ describe('group control component testing', () => {
 
 			cy.getByDataCy('control-group').and('have.class', 'is-open');
 			cy.getByDataCy('control-group').should('contain', 'Header Text');
-			cy.get('.publisher-control-group-popover')
+			cy.get('.blockera-control-group-popover')
 				.should('contain', 'Label Text')
 				.should('contain', 'Body Text');
 		});
@@ -375,7 +375,7 @@ describe('group control component testing', () => {
 			cy.get('[data-cy="plus-svg"]').should('be.visible');
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
 			cy.get('[aria-label="Close"]').should('be.visible');
-			cy.get('.publisher-component-popover-header').should(
+			cy.get('.blockera-component-popover-header').should(
 				'contain',
 				'👋 Popover Title'
 			);

@@ -1,14 +1,14 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\Http;
+namespace Blockera\Framework\Illuminate\Foundation\Http;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Publisher\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Foundation\Application;
 
 /**
  * The Routes Class.
  *
- * @package Publisher\Framework\Illuminate\Foundation\Http
+ * @package Blockera\Framework\Illuminate\Foundation\Http
  */
 class Routes {
 
@@ -166,7 +166,7 @@ class Routes {
 
 			[ $controller, $callback ] = explode( '@', $controller );
 
-			$controller = sprintf( '%s%s', pb_core_config( 'app.namespaces.controllers' ), $controller ?? '' );
+			$controller = sprintf( '%s%s', blockera_core_config( 'app.namespaces.controllers' ), $controller ?? '' );
 
 			if ( ! class_exists( $controller ) || ! $callback ) {
 

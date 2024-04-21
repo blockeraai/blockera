@@ -1,14 +1,14 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\Variable;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\Variable;
 
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\HasGroupTypes;
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonType;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\HasGroupTypes;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\ValueAddonType;
 
 /**
  * Class VariableType.
  *
- * @package Publisher\Framework\Services\Variable\VariableType
+ * @package Blockera\Framework\Services\Variable\VariableType
  */
 class VariableType extends ValueAddonType implements HasGroupTypes {
 

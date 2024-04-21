@@ -15,8 +15,8 @@ describe('useAttributes Hook Testing ...', () => {
 	describe('handleOnChangeAttributes callback', () => {
 		it('should sets value when state is paragraph -> normal -> laptop', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","publisherBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"publisherPropsId":"21616724999","publisherCompatId":"216167250"} -->\n' +
-					'<p class="publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -28,14 +28,14 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherFontSize')
+					getSelectedBlock(data, 'blockeraFontSize')
 				);
 			});
 		});
 		it('should sets value when state is paragraph -> normal -> tablet', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","publisherBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"publisherPropsId":"21616724999","publisherCompatId":"216167250"} -->\n' +
-					'<p class="publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -49,8 +49,8 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherBlockStates').normal
-						.breakpoints.tablet.attributes.publisherFontSize
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes.blockeraFontSize
 				);
 			});
 		});
@@ -75,17 +75,17 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks').link
-						.attributes.publisherBlockStates.hover.breakpoints
-						.tablet.attributes.publisherFontSize
+					getSelectedBlock(data, 'blockeraInnerBlocks').link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.tablet.attributes.blockeraFontSize
 				);
 			});
 		});
 
 		it('should sets value when state is paragraph -> hover -> laptop', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","publisherBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"publisherPropsId":"21616724999","publisherCompatId":"216167250"} -->\n' +
-					'<p class="publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -100,15 +100,15 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
-						.breakpoints.laptop.attributes.publisherFontSize
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes.blockeraFontSize
 				);
 			});
 		});
 		it('should sets value when state is paragraph -> hover -> tablet', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","publisherBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"publisherPropsId":"21616724999","publisherCompatId":"216167250"} -->\n' +
-					'<p class="publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -125,16 +125,16 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
-						.breakpoints.tablet.attributes.publisherFontSize
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes.blockeraFontSize
 				);
 			});
 		});
 
 		it('should sets value when state is paragraph -> hover -> laptop -> link -> normal -> laptop', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","publisherBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"publisherPropsId":"21616724999","publisherCompatId":"216167250"} -->\n' +
-					'<p class="publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -151,16 +151,16 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
-						.breakpoints.laptop.attributes.publisherInnerBlocks.link
-						.attributes.publisherFontSize
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraFontSize
 				);
 			});
 		});
 		it('should sets value when state is paragraph -> hover -> tablet -> link -> normal -> laptop', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","publisherBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"publisherPropsId":"21616724999","publisherCompatId":"216167250"} -->\n' +
-					'<p class="publisher-core-block publisher-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -178,11 +178,11 @@ describe('useAttributes Hook Testing ...', () => {
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				console.log(getSelectedBlock(data, 'publisherBlockStates'));
+				console.log(getSelectedBlock(data, 'blockeraBlockStates'));
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
-						.breakpoints.tablet.attributes.publisherInnerBlocks.link
-						.attributes.publisherFontSize
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraFontSize
 				);
 			});
 		});
@@ -208,10 +208,10 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
-						.breakpoints.laptop.attributes.publisherInnerBlocks.link
-						.attributes.publisherBlockStates.hover.breakpoints
-						.laptop.attributes.publisherFontSize
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.laptop.attributes.blockeraFontSize
 				);
 			});
 		});
@@ -237,15 +237,15 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
-						.breakpoints.mobile.attributes.publisherInnerBlocks.link
-						.attributes.publisherBlockStates.hover.breakpoints
-						.mobile.attributes.publisherFontSize
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.mobile.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.mobile.attributes.blockeraFontSize
 				);
 			});
 		});
 
-		describe('in paragraph -> normal -> laptop state has publisherFontSize with 27px value', () => {
+		describe('in paragraph -> normal -> laptop state has blockeraFontSize with 27px value', () => {
 			beforeEach(() => {
 				appendBlocks(
 					'<!-- wp:paragraph -->\n' +
@@ -300,13 +300,13 @@ describe('useAttributes Hook Testing ...', () => {
 								isSelected: true,
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherBlockStates')
+							getSelectedBlock(data, 'blockeraBlockStates')
 						);
 					});
 				});
 			});
 		});
-		describe('in paragraph -> normal -> laptop state has publisherTextShadow with one default item value', () => {
+		describe('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
 			beforeEach(() => {
 				appendBlocks(
 					'<!-- wp:paragraph -->\n' +
@@ -362,13 +362,13 @@ describe('useAttributes Hook Testing ...', () => {
 								isSelected: true,
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherBlockStates')
+							getSelectedBlock(data, 'blockeraBlockStates')
 						);
 					});
 				});
 			});
 		});
-		describe('in paragraph -> normal -> laptop state has publisherTextShadow with one default item value', () => {
+		describe('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
 			beforeEach(() => {
 				appendBlocks(
 					'<!-- wp:paragraph -->\n' +
@@ -392,7 +392,7 @@ describe('useAttributes Hook Testing ...', () => {
 					cy.getByAriaLabel('Add New Text Shadow').click();
 				});
 
-				it('should add "active" block-state into block with publisherTextShadow attribute with empty attributes', () => {
+				it('should add "active" block-state into block with blockeraTextShadow attribute with empty attributes', () => {
 					// Add active state with empty attributes.
 					cy.getByAriaLabel('Add New State').click();
 
@@ -412,7 +412,7 @@ describe('useAttributes Hook Testing ...', () => {
 								breakpoints: {
 									laptop: {
 										attributes: {
-											publisherTextShadow: {
+											blockeraTextShadow: {
 												0: {
 													isVisible: true,
 													x: '1px',
@@ -446,7 +446,7 @@ describe('useAttributes Hook Testing ...', () => {
 								isSelected: true,
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'publisherBlockStates')
+							getSelectedBlock(data, 'blockeraBlockStates')
 						);
 					});
 				});
@@ -454,3 +454,4 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 	});
 });
+

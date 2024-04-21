@@ -7,9 +7,9 @@ import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEquals, mergeObject } from '@publisher/utils';
+import { isEquals, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -56,7 +56,7 @@ export function BreakpointIcon({
 		case 'laptop':
 			return (
 				<LaptopIcon
-					aria-label={__('Laptop', 'publisher-core')}
+					aria-label={__('Laptop', 'blockera-core')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -65,7 +65,7 @@ export function BreakpointIcon({
 		case 'desktop':
 			return (
 				<DesktopIcon
-					aria-label={__('Desktop', 'publisher-core')}
+					aria-label={__('Desktop', 'blockera-core')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -74,7 +74,7 @@ export function BreakpointIcon({
 		case 'tablet':
 			return (
 				<TabletIcon
-					aria-label={__('Tablet', 'publisher-core')}
+					aria-label={__('Tablet', 'blockera-core')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -83,7 +83,7 @@ export function BreakpointIcon({
 		case 'mobile':
 			return (
 				<MobileIcon
-					aria-label={__('Mobile', 'publisher-core')}
+					aria-label={__('Mobile', 'blockera-core')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -92,7 +92,7 @@ export function BreakpointIcon({
 		case 'mobile-landscape':
 			return (
 				<MobileLandscapeIcon
-					aria-label={__('Mobile Landscape', 'publisher-core')}
+					aria-label={__('Mobile Landscape', 'blockera-core')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -101,7 +101,7 @@ export function BreakpointIcon({
 		case 'large':
 			return (
 				<LargeIcon
-					aria-label={__('Large Screen', 'publisher-core')}
+					aria-label={__('Large Screen', 'blockera-core')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -110,7 +110,7 @@ export function BreakpointIcon({
 		case 'extra-large':
 			return (
 				<ExtraLargeIcon
-					aria-label={__('Extra Large Screen', 'publisher-core')}
+					aria-label={__('Extra Large Screen', 'blockera-core')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -133,7 +133,7 @@ export function onChangeBlockStates(
 		setBlockClientMasterState,
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
-	} = dispatch('publisher-core/extensions') || {};
+	} = dispatch('blockera-core/extensions') || {};
 
 	Object.entries(newValue).forEach(
 		([id, state]: [
@@ -175,7 +175,7 @@ export function onChangeBlockStates(
 	});
 
 	onChange(
-		'publisherBlockStates',
+		'blockeraBlockStates',
 		mergeObject(valueCleanup(_states), valueCleanup(newValue), {
 			deletedProps,
 		})
@@ -201,7 +201,7 @@ export const blockStatesValueCleanup = (value: {
 		},
 	} = {};
 	const currentBreakpoint = select(
-		'publisher-core/extensions'
+		'blockera-core/extensions'
 	).getExtensionCurrentBlockStateBreakpoint();
 
 	Object.entries(value).forEach(

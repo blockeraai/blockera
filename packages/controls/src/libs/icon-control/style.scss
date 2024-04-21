@@ -1,4 +1,4 @@
-.publisher-control-icon {
+.blockera-control-icon {
 	background: repeating-conic-gradient(#eaeaea 0%, #eaeaea 25%, transparent 0%, transparent 50%) 50% center/10px 10px;
 	border-color: #cccccc;
 	border-style: solid;
@@ -11,7 +11,7 @@
 	justify-content: center;
 	flex-direction: column;
 
-	.publisher-control-icon-preview {
+	.blockera-control-icon-preview {
 		height: 140px;
 		display: flex;
 		justify-content: center;
@@ -35,31 +35,31 @@
 			max-height: 100px;
 		}
 
-		.publisher-control-action-btns {
+		.blockera-control-action-btns {
 			position: absolute;
 			left: 0;
 			right: 0;
 			bottom: 0;
 			opacity: 0;
-			border-top: 1px solid var(--publisher-controls-border-color) !important;
+			border-top: 1px solid var(--blockera-controls-border-color) !important;
 			grid-template-columns: 1fr 1fr;
 			background: #ffffff;
 			transition: all 0.15s ease;
 			visibility: hidden;
 			display: grid;
 
-			.publisher-component-button {
+			.blockera-component-button {
 				height: 32px;
 				border-radius: 0;
 
 				&.btn-icon-library {
-					border-right: 1px solid var(--publisher-controls-border-color) !important;
+					border-right: 1px solid var(--blockera-controls-border-color) !important;
 				}
 			}
 		}
 
 
-		.publisher-component-button.btn-delete {
+		.blockera-component-button.btn-delete {
 			position: absolute;
 			right: 0;
 			top: 0;
@@ -67,8 +67,8 @@
 			padding: 0;
 			min-width: 24px;
 			height: 24px;
-			border-left: 1px solid var(--publisher-controls-border-color) !important;
-			border-bottom: 1px solid var(--publisher-controls-border-color) !important;
+			border-left: 1px solid var(--blockera-controls-border-color) !important;
+			border-bottom: 1px solid var(--blockera-controls-border-color) !important;
 			background: #ffffff;
 			border-radius: 0 0 0 2px;
 			visibility: hidden;
@@ -78,12 +78,12 @@
 
 		&:hover {
 
-			.publisher-control-action-btns {
+			.blockera-control-action-btns {
 				opacity: 1;
 				visibility: visible;
 			}
 
-			.publisher-component-button.btn-delete {
+			.blockera-component-button.btn-delete {
 				visibility: visible;
 				opacity: 1;
 			}
@@ -92,7 +92,7 @@
 
 	&.icon-custom {
 
-		.publisher-control-icon-preview {
+		.blockera-control-icon-preview {
 
 			&::before {
 				content: "";
@@ -120,28 +120,28 @@
 	}
 
 	&:hover {
-		border-color: var(--publisher-controls-border-color-hover);
+		border-color: var(--blockera-controls-border-color-hover);
 	}
 
 	&.is-open-icon-picker {
-		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
-		border-color: var(--publisher-controls-primary-color);
+		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+		border-color: var(--blockera-controls-primary-color);
 	}
 
-	.publisher-control-icon-suggestions + .publisher-control-icon-preview {
+	.blockera-control-icon-suggestions + .blockera-control-icon-preview {
 		height: 130px;
 	}
 
-	.publisher-component-button.btn-choose-icon {
+	.blockera-component-button.btn-choose-icon {
 		background: #ffffff !important;
-		box-shadow: inset 0 0 0 1px var(--publisher-controls-border-color), 0 4px 7px var(--publisher-controls-border-color-hover);
+		box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color), 0 4px 7px var(--blockera-controls-border-color-hover);
 		border-radius: 3px;
 		font-size: 12px;
 		padding: 4px 10px;
 		height: 30px;
 	}
 
-	.publisher-control-icon-suggestions {
+	.blockera-control-icon-suggestions {
 		display: flex;
 		gap: 4px;
 		right: 0;
@@ -149,7 +149,7 @@
 		align-content: center;
 		justify-content: center;
 		background: #ffffff;
-		border-top: 1px solid var(--publisher-controls-border-color);
+		border-top: 1px solid var(--blockera-controls-border-color);
 		flex-wrap: wrap;
 		width: 100%;
 		align-items: center;
@@ -158,7 +158,7 @@
 	}
 }
 
-.publisher-control-icon-control-icon {
+.blockera-control-icon-control-icon {
 	--icon-size: 24px;
 	width: 30px;
 	height: 30px;
@@ -172,7 +172,7 @@
 	text-align: center;
 
 	&:hover {
-		color: var(--publisher-controls-primary-color);
+		color: var(--blockera-controls-primary-color);
 
 		svg {
 			transform: scale(1.4);
@@ -191,7 +191,7 @@
 		--icon-size: 24px;
 	}
 
-	&.library-publisher {
+	&.library-blockera {
 		--icon-size: 24px;
 	}
 

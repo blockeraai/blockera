@@ -5,6 +5,7 @@
 <PROJECT_ROOT>/node_modules/module-deps/.*
 <PROJECT_ROOT>/node_modules/resolve/.*
 <PROJECT_ROOT>/cypress/.*
+<PROJECT_ROOT>/.storybook/.*
 [include]
 
 [libs]

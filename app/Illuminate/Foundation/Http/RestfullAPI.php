@@ -1,11 +1,11 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\Http;
+namespace Blockera\Framework\Illuminate\Foundation\Http;
 
 /**
  * The RestfullAPI Interface.
  *
- * @package Publisher\Framework\Illuminate\Foundation\Http\RestfullAPI
+ * @package Blockera\Framework\Illuminate\Foundation\Http\RestfullAPI
  */
 interface RestfullAPI {
 

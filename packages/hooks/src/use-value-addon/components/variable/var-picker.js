@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	Button,
@@ -15,10 +15,10 @@ import {
 	Grid,
 	Popover,
 	ConditionalWrapper,
-} from '@publisher/components';
-import { STORE_NAME, generateVariableString } from '@publisher/core-data';
-import { controlInnerClassNames } from '@publisher/classnames';
-import type { DynamicVariableGroup } from '@publisher/core-data/src/variables/store/types';
+} from '@blockera/components';
+import { STORE_NAME, generateVariableString } from '@blockera/core-data';
+import { controlInnerClassNames } from '@blockera/classnames';
+import type { DynamicVariableGroup } from '@blockera/core-data/src/variables/store/types';
 
 /**
  * Internal dependencies
@@ -49,7 +49,7 @@ export default function ({
 				key={`type-custom-variabes`}
 				title={
 					<>
-						{__('Custom Variables', 'publisher-core')}
+						{__('Custom Variables', 'blockera-core')}
 
 						<Button
 							size="extra-small"
@@ -58,7 +58,7 @@ export default function ({
 							showTooltip={true}
 							label={__(
 								'Add New Variable (Coming soon…)',
-								'publisher-core'
+								'blockera-core'
 							)}
 						>
 							<PlusIcon />
@@ -67,7 +67,7 @@ export default function ({
 				}
 			>
 				<span style={{ opacity: '0.5', fontSize: '12px' }}>
-					{__('Coming soon…', 'publisher-core')}
+					{__('Coming soon…', 'blockera-core')}
 				</span>
 			</PickerCategory>
 		);
@@ -103,7 +103,7 @@ export default function ({
 						title={data.label}
 					>
 						<span style={{ opacity: '0.5', fontSize: '12px' }}>
-							{__('No variable!', 'publisher-core')}
+							{__('No variable!', 'blockera-core')}
 						</span>
 					</PickerCategory>
 				);
@@ -189,7 +189,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Choose Variable', 'publisher-core')}
+			title={__('Choose Variable', 'blockera-core')}
 			offset={125}
 			placement="left-start"
 			onClose={() => {
@@ -205,10 +205,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnUnlinkVar}
 							style={{ padding: '5px' }}
-							label={__(
-								'Unlink Variable Value',
-								'publisher-core'
-							)}
+							label={__('Unlink Variable Value', 'blockera-core')}
 						>
 							<UnlinkIcon />
 						</Button>
@@ -220,7 +217,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
-							label={__('Remove', 'publisher-core')}
+							label={__('Remove', 'blockera-core')}
 						>
 							<TrashIcon />
 						</Button>

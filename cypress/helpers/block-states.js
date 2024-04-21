@@ -1,5 +1,5 @@
 export function addBlockState(state) {
-	cy.getByAriaLabel('Publisher Block State Container').first().as('states');
+	cy.getByAriaLabel(' Block State Container').first().as('states');
 
 	cy.get('@states').within(() => {
 		cy.getByAriaLabel('Add New State').click();
@@ -15,7 +15,7 @@ export function addBlockState(state) {
 }
 
 export function setBlockState(state) {
-	cy.getByAriaLabel('Publisher Block State Container')
+	cy.getByAriaLabel(' Block State Container')
 		.first()
 		.within(() => {
 			cy.getByDataCy('group-control-header')
@@ -23,3 +23,4 @@ export function setBlockState(state) {
 				.click({ force: true });
 		});
 }
+

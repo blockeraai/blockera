@@ -1,10 +1,10 @@
 <?php
 
-namespace Publisher\Framework\Services\Block;
+namespace Blockera\Framework\Services\Block;
 
-use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\Support\Adapters\DomParser;
+use Blockera\Framework\Exceptions\BaseException;
+use Blockera\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Support\Adapters\DomParser;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -90,8 +90,8 @@ class Render {
 	 */
 	public function render( string $html, array $block, int $postId = -1 ): string {
 
-		//Just running for publisher extensions settings!
-		if ( empty( $block['attrs']['publisherPropsId'] ) || is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		//Just running for blockera extensions settings!
+		if ( empty( $block['attrs']['blockeraPropsId'] ) || is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 
 			return $html;
 		}
@@ -106,11 +106,11 @@ class Render {
 
 		if ( ! empty( $attributes['className'] ) ) {
 			// Usage of saved class names for block element.
-			$uniqueClassname = pb_get_normalized_selector( $attributes['className'] );
+			$uniqueClassname = blockera_get_normalized_selector( $attributes['className'] );
 
 		} else {
 			// Fallback way to providing unique css selector for block element.
-			$uniqueClassname = pb_get_unique_classname( 'publisher-' . $block['blockName'] );
+			$uniqueClassname = blockera_get_unique_classname( 'blockera-' . $block['blockName'] );
 		}
 
 		$selector = $this->getSelector( $block, $uniqueClassname );
@@ -134,7 +134,7 @@ class Render {
 			$postId = $post->ID;
 		}
 
-		$cacheKey = 'publisher-inline-css-post-' . $postId;
+		$cacheKey = 'blockera-inline-css-post-' . $postId;
 
 		// Get cache data.
 		if ( is_single() ) {
@@ -203,7 +203,7 @@ class Render {
 		$computedCssRules = ! empty( $css ) ? $css : $this->getComputedCssRules();
 
 		add_filter(
-			'publisher-core/services/register-block-editor-assets/add-inline-css-styles',
+			'blockera-core/services/register-block-editor-assets/add-inline-css-styles',
 			function () use ( $computedCssRules ): string {
 
 				return $computedCssRules;

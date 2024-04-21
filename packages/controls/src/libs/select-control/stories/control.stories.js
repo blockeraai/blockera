@@ -10,10 +10,10 @@ import type { MixedElement } from 'react';
  */
 import type { TSelectControlProps } from '../types';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
-import { Flex } from '@publisher/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
+import { Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -36,46 +36,46 @@ export default {
 
 const selectOptions = [
 	{
-		label: __('All Properties', 'publisher-core'),
+		label: __('All Properties', 'blockera-core'),
 		value: 'all',
 		icon: <InheritIcon />,
 	},
 	{
 		type: 'optgroup',
-		label: __('Common Transitions', 'publisher-core'),
+		label: __('Common Transitions', 'blockera-core'),
 		options: [
 			{
-				label: __('Opacity', 'publisher-core'),
+				label: __('Opacity', 'blockera-core'),
 				value: 'opacity',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Margin', 'publisher-core'),
+				label: __('Margin', 'blockera-core'),
 				value: 'margin',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Padding', 'publisher-core'),
+				label: __('Padding', 'blockera-core'),
 				value: 'padding',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Border', 'publisher-core'),
+				label: __('Border', 'blockera-core'),
 				value: 'border',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Transform', 'publisher-core'),
+				label: __('Transform', 'blockera-core'),
 				value: 'transform',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Flex', 'publisher-core'),
+				label: __('Flex', 'blockera-core'),
 				value: 'flex',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Filter (Disabled)', 'publisher-core'),
+				label: __('Filter (Disabled)', 'blockera-core'),
 				value: 'filter',
 				icon: <InheritIcon />,
 				disabled: true,
@@ -83,7 +83,7 @@ const selectOptions = [
 		],
 	},
 	{
-		label: __('Other', 'publisher-core'),
+		label: __('Other', 'blockera-core'),
 		value: 'other',
 		icon: <InheritIcon />,
 	},

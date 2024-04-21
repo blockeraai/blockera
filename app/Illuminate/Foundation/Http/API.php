@@ -1,11 +1,11 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\Http;
+namespace Blockera\Framework\Illuminate\Foundation\Http;
 
 /**
  * The API Interface.
  *
- * @package Publisher\Framework\Illuminate\Foundation\Http\API
+ * @package Blockera\Framework\Illuminate\Foundation\Http\API
  */
 interface API {
 

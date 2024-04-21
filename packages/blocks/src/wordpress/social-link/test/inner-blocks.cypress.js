@@ -26,7 +26,7 @@ describe('Social Link Block → Inner Blocks', () => {
 		// open inner block settings
 		openInnerBlocksExtension();
 
-		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
 				cy.getByAriaLabel('Button Icon Customize').should('exist');
 				cy.getByAriaLabel('Button Name Customize').should('exist');
@@ -37,3 +37,4 @@ describe('Social Link Block → Inner Blocks', () => {
 		);
 	});
 });
+

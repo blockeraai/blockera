@@ -10,71 +10,71 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherOpacity: FeatureConfig = {
+const blockeraOpacity: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Opacity', 'publisher-core'),
+	label: __('Opacity', 'blockera-core'),
 };
 
-const publisherTransform: FeatureConfig = {
+const blockeraTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('2D & 3D Transforms', 'publisher-core'),
+	label: __('2D & 3D Transforms', 'blockera-core'),
 };
 
-const publisherTransition: FeatureConfig = {
+const blockeraTransition: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Transitions', 'publisher-core'),
+	label: __('Transitions', 'blockera-core'),
 };
 
-const publisherFilter: FeatureConfig = {
+const blockeraFilter: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Filters', 'publisher-core'),
+	label: __('Filters', 'blockera-core'),
 };
 
-const publisherBackdropFilter: FeatureConfig = {
+const blockeraBackdropFilter: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Backdrop Filters', 'publisher-core'),
+	label: __('Backdrop Filters', 'blockera-core'),
 };
 
-const publisherDivider: FeatureConfig = {
+const blockeraDivider: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Shape Dividers', 'publisher-core'),
+	label: __('Shape Dividers', 'blockera-core'),
 	isActiveOnStates: ['normal'],
 };
 
-const publisherMask: FeatureConfig = {
+const blockeraMask: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Image Mask', 'publisher-core'),
+	label: __('Image Mask', 'blockera-core'),
 	isActiveOnStates: ['normal'],
 };
 
-const publisherBlendMode: FeatureConfig = {
+const blockeraBlendMode: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Blending Mode', 'publisher-core'),
+	label: __('Blending Mode', 'blockera-core'),
 };
 
 export const effectsConfig = {
-	publisherOpacity,
-	publisherTransform,
-	publisherTransition,
-	publisherFilter,
-	publisherBackdropFilter,
-	publisherDivider,
-	publisherMask,
-	publisherBlendMode,
+	blockeraOpacity,
+	blockeraTransform,
+	blockeraTransition,
+	blockeraFilter,
+	blockeraBackdropFilter,
+	blockeraDivider,
+	blockeraMask,
+	blockeraBlendMode,
 };

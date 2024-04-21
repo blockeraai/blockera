@@ -1,12 +1,12 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Support;
+namespace Blockera\Framework\Illuminate\Support;
 
 use Illuminate\Container\Container;
 
 /**
- * Service providers are the central place of all publisher application bootstrapping.
- * Your own application, as well as all of publisher's core services, are bootstrapped via service providers.
+ * Service providers are the central place of all blockera application bootstrapping.
+ * Your own application, as well as all of blockera's core services, are bootstrapped via service providers.
  */
 class ServiceProvider {
 

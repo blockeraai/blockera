@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 /**
  * Class Divider definition to generate css rules.
@@ -12,7 +12,7 @@ class Divider extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherDivider' => '',
+			'blockeraDivider' => '',
 		];
 	}
 

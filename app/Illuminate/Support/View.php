@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Support;
+namespace Blockera\Framework\Illuminate\Support;
 
 class View {
 
@@ -18,7 +18,7 @@ class View {
 
 		$template = str_replace( '.', DIRECTORY_SEPARATOR, $template );
 
-		$templateFile = pb_core_config( 'app.path' ) . $template . '.php';
+		$templateFile = blockera_core_config( 'app.path' ) . $template . '.php';
 
 		if ( ! file_exists( $templateFile ) ) {
 

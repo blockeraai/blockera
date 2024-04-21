@@ -1,13 +1,13 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { createCssDeclarations } from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+import { createCssDeclarations } from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 export function OutlineGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!Object.values(attributes?.publisherOutline)?.length) {
+	if (!Object.values(attributes?.blockeraOutline)?.length) {
 		return '';
 	}
 
@@ -16,7 +16,7 @@ export function OutlineGenerator(id, props) {
 		offset: [],
 	};
 
-	Object.entries(attributes?.publisherOutline)?.map(([, item]) => {
+	Object.entries(attributes?.blockeraOutline)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return null;
 		}

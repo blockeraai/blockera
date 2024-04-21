@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import TypographyExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherTypographyExtension',
+	name: 'blockeraTypographyExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -52,36 +52,36 @@ blocksInitializer({
 						defaultValue={{
 							fontSize:
 								attributes.fontSize ||
-								attributes.publisherFontSize,
+								attributes.blockeraFontSize,
 							typography: attributes.style?.typography || {},
 						}}
 						values={{
-							fontSize: attributes?.publisherFontSize || '',
-							textAlign: attributes?.publisherTextAlign || '',
-							fontStyle: attributes?.publisherFontStyle || '',
-							direction: attributes?.publisherDirection || '',
-							fontColor: attributes?.publisherFontColor || '',
-							wordBreak: attributes?.publisherWordBreak || '',
-							textIndent: attributes?.publisherTextIndent || '',
-							textShadow: attributes?.publisherTextShadow || '',
-							lineHeight: attributes?.publisherLineHeight || '',
-							wordSpacing: attributes?.publisherWordSpacing || '',
-							textColumns: attributes?.publisherTextColumns || '',
+							fontSize: attributes?.blockeraFontSize || '',
+							textAlign: attributes?.blockeraTextAlign || '',
+							fontStyle: attributes?.blockeraFontStyle || '',
+							direction: attributes?.blockeraDirection || '',
+							fontColor: attributes?.blockeraFontColor || '',
+							wordBreak: attributes?.blockeraWordBreak || '',
+							textIndent: attributes?.blockeraTextIndent || '',
+							textShadow: attributes?.blockeraTextShadow || '',
+							lineHeight: attributes?.blockeraLineHeight || '',
+							wordSpacing: attributes?.blockeraWordSpacing || '',
+							textColumns: attributes?.blockeraTextColumns || '',
 							textTransform:
-								attributes?.publisherTextTransform || '',
+								attributes?.blockeraTextTransform || '',
 							letterSpacing:
-								attributes?.publisherLetterSpacing || '',
+								attributes?.blockeraLetterSpacing || '',
 							textDecoration:
-								attributes?.publisherTextDecoration || '',
+								attributes?.blockeraTextDecoration || '',
 							textOrientation:
-								attributes?.publisherTextOrientation || '',
-							textStroke: attributes?.publisherTextStroke || '',
+								attributes?.blockeraTextOrientation || '',
+							textStroke: attributes?.blockeraTextStroke || '',
 						}}
 						extensionId={'Typography'}
 						icon={<TypographyExtensionIcon />}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Typography', 'publisher-core')}
+						title={__('Typography', 'blockera-core')}
 					/>
 				</InspectorControls>
 

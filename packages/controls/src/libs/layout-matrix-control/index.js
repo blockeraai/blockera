@@ -7,13 +7,13 @@ import type { MixedElement } from 'react';
 import { useRef } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { Flex, Tooltip } from '@publisher/components';
+} from '@blockera/classnames';
+import { Flex, Tooltip } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -967,12 +967,12 @@ export default function LayoutMatrixControl({
 								label=""
 								options={[
 									{
-										label: __('Row', 'publisher-core'),
+										label: __('Row', 'blockera-core'),
 										value: 'row',
 										icon: <DirectionRowIcon />,
 									},
 									{
-										label: __('Column', 'publisher-core'),
+										label: __('Column', 'blockera-core'),
 										value: 'column',
 										icon: <DirectionColumnIcon />,
 									},
@@ -994,27 +994,27 @@ export default function LayoutMatrixControl({
 								label=""
 								options={[
 									{
-										label: __('Empty', 'publisher-core'),
+										label: __('Empty', 'blockera-core'),
 										value: '',
 										icon: <AlignItemsEmptyBlockIcon />,
 									},
 									{
-										label: __('Start', 'publisher-core'),
+										label: __('Start', 'blockera-core'),
 										value: 'flex-start',
 										icon: <AlignItemsFlexStartBlockIcon />,
 									},
 									{
-										label: __('Center', 'publisher-core'),
+										label: __('Center', 'blockera-core'),
 										value: 'center',
 										icon: <AlignItemsCenterBlockIcon />,
 									},
 									{
-										label: __('End', 'publisher-core'),
+										label: __('End', 'blockera-core'),
 										value: 'flex-end',
 										icon: <AlignItemsFlexEndBlockIcon />,
 									},
 									{
-										label: __('Stretch', 'publisher-core'),
+										label: __('Stretch', 'blockera-core'),
 										value: 'stretch',
 										icon: <AlignItemsStretchBlockIcon />,
 									},
@@ -1036,29 +1036,29 @@ export default function LayoutMatrixControl({
 								label=""
 								options={[
 									{
-										label: __('Empty', 'publisher-core'),
+										label: __('Empty', 'blockera-core'),
 										value: '',
 										icon: <JustifyEmptyIcon />,
 									},
 									{
-										label: __('Start', 'publisher-core'),
+										label: __('Start', 'blockera-core'),
 										value: 'flex-start',
 										icon: <JustifyFlexStartIcon />,
 									},
 									{
-										label: __('Center', 'publisher-core'),
+										label: __('Center', 'blockera-core'),
 										value: 'center',
 										icon: <JustifyCenterIcon />,
 									},
 									{
-										label: __('End', 'publisher-core'),
+										label: __('End', 'blockera-core'),
 										value: 'flex-end',
 										icon: <JustifyFlexEndIcon />,
 									},
 									{
 										label: __(
 											'Space Around',
-											'publisher-core'
+											'blockera-core'
 										),
 										value: 'space-around',
 										icon: <JustifySpaceAroundIcon />,
@@ -1066,7 +1066,7 @@ export default function LayoutMatrixControl({
 									{
 										label: __(
 											'Space Between',
-											'publisher-core'
+											'blockera-core'
 										),
 										value: 'space-between',
 										icon: <JustifySpaceBetweenIcon />,
@@ -1091,7 +1091,7 @@ export default function LayoutMatrixControl({
 						id="dense"
 						checkboxLabel={
 							<>
-								{__('Dense', 'publisher-core')}
+								{__('Dense', 'blockera-core')}
 								<Tooltip
 									text={
 										<span
@@ -1105,12 +1105,12 @@ export default function LayoutMatrixControl({
 											<b>
 												{__(
 													'Dense mode:',
-													'publisher-core'
+													'blockera-core'
 												)}{' '}
 											</b>
 											{__(
 												'fills empty spaces with items that fit, potentially changing their visual order.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</span>
 									}

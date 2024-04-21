@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useDragValue } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { useDragValue } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -228,7 +228,7 @@ export function MarginHorizontal({
 					data-cy="box-spacing-margin-right"
 				>
 					<LabelControl
-						ariaLabel={__('Left & Right Margin', 'publisher-core')}
+						ariaLabel={__('Left & Right Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.right)
@@ -263,7 +263,7 @@ export function MarginHorizontal({
 					data-cy="box-spacing-margin-left"
 				>
 					<LabelControl
-						ariaLabel={__('Left & Right Margin', 'publisher-core')}
+						ariaLabel={__('Left & Right Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.right)
@@ -295,21 +295,18 @@ export function MarginHorizontal({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__(
-							'Left & Right Margin Space',
-							'publisher-core'
-						)}
-						inputLabel={__('Horizontal Margin', 'publisher-core')}
+						title={__('Left & Right Margin Space', 'blockera-core')}
+						inputLabel={__('Horizontal Margin', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Horizontal Margin Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies to both the left and right edges of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

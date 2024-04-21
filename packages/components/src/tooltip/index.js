@@ -4,7 +4,7 @@
  */
 import type { Node } from 'react';
 import { Tooltip as WPTooltip } from '@wordpress/components';
-import { componentClassNames } from '@publisher/classnames';
+import { componentClassNames } from '@blockera/classnames';
 import PropTypes from 'prop-types';
 
 /**

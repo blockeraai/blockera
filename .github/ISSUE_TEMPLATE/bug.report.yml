@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a bug with the Publisher Core application.
+description: Report a bug with the Blockera Core application.
 body:
     - type: textarea
       attributes:
@@ -36,9 +36,9 @@ body:
       attributes:
           label: Environment info
           description: |
-              Please list what Publisher Core version you are using. If you aren't using Publisher Core, please note that it's not installed.
+              Please list what Blockera Core version you are using. If you aren't using Blockera Core, please note that it's not installed.
           placeholder: |
-              - Publisher Core version, and active Theme you are using.
+              - Blockera Core version, and active Theme you are using.
               - Browser(s) are you seeing the problem on.
               - Device you are using and operating system (e.g. "Desktop with Windows 10", "macOS Big Sur version 11.7.8", etc.).
       validations:
@@ -48,7 +48,7 @@ body:
       id: existing
       attributes:
           label: Please confirm that you have searched existing issues in the repo.
-          description: You can do this by searching https://github.com/publisherwp/publisher-core/issues and making sure the bug is not related to another plugin.
+          description: You can do this by searching https://github.com/blockeraai/blockera-core/issues and making sure the bug is not related to another plugin.
           multiple: true
           options:
               - 'Yes'
@@ -59,7 +59,7 @@ body:
     - type: dropdown
       id: plugins
       attributes:
-          label: Please confirm that you have tested with all plugins deactivated except plugin cosumer of publisher-core library!
+          label: Please confirm that you have tested with all plugins deactivated except plugin cosumer of blockera-core library!
           multiple: true
           options:
               - 'Yes'

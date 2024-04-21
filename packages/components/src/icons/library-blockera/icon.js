@@ -4,16 +4,16 @@
 import { Icon as WordPressIconComponent } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString, isUndefined } from '@publisher/utils';
+import { isString, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { getIcon } from '../index';
 
-export function PublisherIcon({
+export function Icon({
 	fixedSizing = false,
 	style = {},
 	size,
@@ -21,7 +21,7 @@ export function PublisherIcon({
 	...props
 }) {
 	if (isString(icon)) {
-		icon = getIcon(icon, 'publisher');
+		icon = getIcon(icon, 'blockera');
 	}
 
 	if (isUndefined(icon.icon)) {

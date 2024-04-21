@@ -8,9 +8,9 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { createContext, useEffect } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEquals } from '@publisher/utils';
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies

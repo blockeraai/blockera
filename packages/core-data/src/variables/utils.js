@@ -34,7 +34,7 @@ export function generateVariableString({
 
 	switch (_reference) {
 		case 'custom':
-			_reference = 'publisher';
+			_reference = 'blockera';
 			break;
 
 		case 'theme':

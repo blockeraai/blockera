@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 class Typography extends BaseStyleDefinition {
 
@@ -57,7 +57,7 @@ class Typography extends BaseStyleDefinition {
 				break;
 
 			case '-webkit-text-stroke-color':
-				$color = pb_get_value_addon_real_value( $propertyValue['color'] );
+				$color = blockera_get_value_addon_real_value( $propertyValue['color'] );
 
 				if ( ! empty( $color ) ) {
 
@@ -82,7 +82,7 @@ class Typography extends BaseStyleDefinition {
 
 						if ( ! empty( $propertyValue['divider']['width'] ) ) {
 
-							$color = pb_get_value_addon_real_value( $propertyValue['divider']['color'] );
+							$color = blockera_get_value_addon_real_value( $propertyValue['divider']['color'] );
 
 							if ( $color ) {
 								$declaration['column-rule-color'] = $color;
@@ -108,7 +108,7 @@ class Typography extends BaseStyleDefinition {
 			case 'line-height':
 			case 'text-indent':
 			case 'font-size':
-				$declaration[ $cssProperty ] = $propertyValue ? pb_get_value_addon_real_value( $propertyValue ) : '';
+				$declaration[ $cssProperty ] = $propertyValue ? blockera_get_value_addon_real_value( $propertyValue ) : '';
 				break;
 
 		}
@@ -126,21 +126,21 @@ class Typography extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherFontColor'       => 'color',
-			'publisherFontSize'        => 'font-size',
-			'publisherDirection'       => 'direction',
-			'publisherTextAlign'       => 'text-align',
-			'publisherFontStyle'       => 'font-style',
-			'publisherWordBreak'       => 'word-break',
-			'publisherTextIndent'      => 'text-indent',
-			'publisherLineHeight'      => 'line-height',
-			'publisherWordSpacing'     => 'word-spacing',
-			'publisherTextColumns'     => 'column-count',
-			'publisherTextTransform'   => 'text-transform',
-			'publisherLetterSpacing'   => 'letter-spacing',
-			'publisherTextDecoration'  => 'text-decoration',
-			'publisherTextOrientation' => 'text-orientation',
-			'publisherTextStroke'      => '-webkit-text-stroke-color',
+			'blockeraFontColor'       => 'color',
+			'blockeraFontSize'        => 'font-size',
+			'blockeraDirection'       => 'direction',
+			'blockeraTextAlign'       => 'text-align',
+			'blockeraFontStyle'       => 'font-style',
+			'blockeraWordBreak'       => 'word-break',
+			'blockeraTextIndent'      => 'text-indent',
+			'blockeraLineHeight'      => 'line-height',
+			'blockeraWordSpacing'     => 'word-spacing',
+			'blockeraTextColumns'     => 'column-count',
+			'blockeraTextTransform'   => 'text-transform',
+			'blockeraLetterSpacing'   => 'letter-spacing',
+			'blockeraTextDecoration'  => 'text-decoration',
+			'blockeraTextOrientation' => 'text-orientation',
+			'blockeraTextStroke'      => '-webkit-text-stroke-color',
 		];
 	}
 

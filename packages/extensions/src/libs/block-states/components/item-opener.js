@@ -6,9 +6,9 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Icon } from '@publisher/components';
+import { Icon } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -25,7 +25,7 @@ const ItemOpener = ({
 		return false;
 	}
 
-	return <Icon library={'publisher'} icon={'publisherSettings'} />;
+	return <Icon library={'blockera'} icon={'blockeraSettings'} />;
 };
 
 ItemOpener.hasButton = (item: StateTypes, itemId: TStates): boolean =>

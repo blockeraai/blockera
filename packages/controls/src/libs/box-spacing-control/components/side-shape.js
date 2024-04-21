@@ -6,9 +6,9 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 import type { SideShapeProps } from '../types';
 
 export function SideShape({

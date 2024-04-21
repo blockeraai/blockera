@@ -1,4 +1,4 @@
-.publisher-component-color-indicator {
+.blockera-component-color-indicator {
 	border-radius: 50%;
 	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
 	display: inline-block;
@@ -49,15 +49,15 @@
 
 }
 
-.publisher-component-color-indicator-stack {
+.blockera-component-color-indicator-stack {
 	display: flex;
 	--stack-space: -5px;
 
-	.publisher-component-color-indicator:not(:first-child) {
+	.blockera-component-color-indicator:not(:first-child) {
 		margin-left: var(--stack-space);
 	}
 
-	.publisher-component-color-indicator {
+	.blockera-component-color-indicator {
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 0 2px #ffffff;
 	}
 }

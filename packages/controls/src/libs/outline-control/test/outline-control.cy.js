@@ -25,7 +25,7 @@ describe('outline control component testing', () => {
 				},
 			});
 
-			cy.getByDataCy('publisher-repeater-control').should('exist');
+			cy.getByDataCy('blockera-repeater-control').should('exist');
 		});
 
 		it('should render correctly with label', () => {
@@ -184,7 +184,7 @@ describe('outline control component testing', () => {
 			const defaultProps = {
 				onChange: (value) => {
 					controlReducer(
-						select('publisher-core/controls').getControl(name),
+						select('blockera-core/controls').getControl(name),
 						modifyControlValue({
 							value,
 							controlId: name,
@@ -303,3 +303,4 @@ describe('outline control component testing', () => {
 		});
 	});
 });
+

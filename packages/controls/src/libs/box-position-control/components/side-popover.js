@@ -5,10 +5,10 @@ import { __, sprintf } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button, Flex, Grid, Popover } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { Button, Flex, Grid, Popover } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -74,7 +74,7 @@ export function SidePopover({
 						label={sideLabel}
 						labelPopoverTitle={sprintf(
 							// Translators: %s is the position name (top, right, bottom, left)
-							__('%s Position', 'publisher-core'),
+							__('%s Position', 'blockera-core'),
 							sideLabel
 						)}
 						labelDescription={
@@ -83,7 +83,7 @@ export function SidePopover({
 									// Translators: %1$s and %2$s both are edge in the position (top, right, left, bottom)
 									__(
 										'It sets the distance from the %1$s edge of the block to the %1$s edge of its nearest positioned ancestor or containing block.',
-										'publisher-core'
+										'blockera-core'
 									),
 									sideId,
 									sideId
@@ -121,7 +121,7 @@ export function SidePopover({
 						label={
 							<Flex gap="4px" alignItems="center">
 								<ShortcutIcon />
-								{__('Shortcuts', 'publisher-core')}
+								{__('Shortcuts', 'blockera-core')}
 							</Flex>
 						}
 						columns="columns-1"
@@ -131,7 +131,7 @@ export function SidePopover({
 					>
 						<Grid gap="10px" gridTemplateColumns="repeat(4, 1fr)">
 							<Button
-								aria-label={__('Set 0px', 'publisher-core')}
+								aria-label={__('Set 0px', 'blockera-core')}
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
@@ -146,7 +146,7 @@ export function SidePopover({
 							</Button>
 
 							<Button
-								aria-label={__('Set 10px', 'publisher-core')}
+								aria-label={__('Set 10px', 'blockera-core')}
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
@@ -161,7 +161,7 @@ export function SidePopover({
 							</Button>
 
 							<Button
-								aria-label={__('Set 20px', 'publisher-core')}
+								aria-label={__('Set 20px', 'blockera-core')}
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
@@ -176,7 +176,7 @@ export function SidePopover({
 							</Button>
 
 							<Button
-								aria-label={__('Set 30px', 'publisher-core')}
+								aria-label={__('Set 30px', 'blockera-core')}
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
@@ -191,7 +191,7 @@ export function SidePopover({
 							</Button>
 
 							<Button
-								aria-label={__('Set 60px', 'publisher-core')}
+								aria-label={__('Set 60px', 'blockera-core')}
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
@@ -206,7 +206,7 @@ export function SidePopover({
 							</Button>
 
 							<Button
-								aria-label={__('Set 80px', 'publisher-core')}
+								aria-label={__('Set 80px', 'blockera-core')}
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
@@ -221,7 +221,7 @@ export function SidePopover({
 							</Button>
 
 							<Button
-								aria-label={__('Set 100px', 'publisher-core')}
+								aria-label={__('Set 100px', 'blockera-core')}
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
@@ -236,7 +236,7 @@ export function SidePopover({
 							</Button>
 
 							<Button
-								aria-label={__('Set 120px', 'publisher-core')}
+								aria-label={__('Set 120px', 'blockera-core')}
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {

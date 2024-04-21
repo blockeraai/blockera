@@ -12,7 +12,7 @@ describe('Word Break → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -40,7 +40,7 @@ describe('Word Break → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('keep-all').to.be.equal(
-				getSelectedBlock(data, 'publisherWordBreak')
+				getSelectedBlock(data, 'blockeraWordBreak')
 			);
 		});
 
@@ -49,7 +49,7 @@ describe('Word Break → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'word-break',
 			'keep-all'

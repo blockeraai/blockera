@@ -23,7 +23,7 @@ module.exports = defineConfig({
 	},
 	fixturesFolder: 'cypress/fixtures',
 	pageLoadTimeout: 120000,
-	projectId: 'publisher-core',
+	projectId: 'blockera-core',
 	retries: {
 		openMode: 0,
 		runMode: 0,

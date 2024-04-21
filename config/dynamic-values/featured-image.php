@@ -2,7 +2,7 @@
 
 return [
 	[
-		'label'     => __( 'Image URL', 'publisher-core' ),
+		'label'     => __( 'Image URL', 'blockera-core' ),
 		'name'      => 'featured-image-url',
 		'type'      => 'image',
 		'status'    => 'core',
@@ -12,7 +12,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Image ID', 'publisher-core' ),
+		'label'     => __( 'Image ID', 'blockera-core' ),
 		'name'      => 'featured-image-id',
 		'type'      => 'id',
 		'status'    => 'soon',
@@ -22,7 +22,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Image Title', 'publisher-core' ),
+		'label'     => __( 'Image Title', 'blockera-core' ),
 		'name'      => 'featured-image-title',
 		'type'      => 'text',
 		'status'    => 'soon',
@@ -32,7 +32,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Image Alt', 'publisher-core' ),
+		'label'     => __( 'Image Alt', 'blockera-core' ),
 		'name'      => 'featured-image-alt',
 		'type'      => 'text',
 		'status'    => 'soon',
@@ -42,7 +42,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Image Caption', 'publisher-core' ),
+		'label'     => __( 'Image Caption', 'blockera-core' ),
 		'name'      => 'featured-image-caption',
 		'type'      => 'text',
 		'status'    => 'soon',
@@ -52,7 +52,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Image Desc', 'publisher-core' ),
+		'label'     => __( 'Image Desc', 'blockera-core' ),
 		'name'      => 'featured-image-desc',
 		'type'      => 'text',
 		'status'    => 'soon',

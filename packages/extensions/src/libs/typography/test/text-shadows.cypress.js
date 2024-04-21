@@ -11,7 +11,7 @@ describe('Text Shadows → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -76,7 +76,7 @@ describe('Text Shadows → Functionality', () => {
 					color: '#70ca9e',
 					order: 0,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTextShadow'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextShadow'));
 		});
 
 		/* Multiple Text Shadow */
@@ -143,7 +143,7 @@ describe('Text Shadows → Functionality', () => {
 					color: '#70ca9e',
 					order: 1,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTextShadow'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextShadow'));
 		});
 
 		//Check frontend
@@ -151,7 +151,7 @@ describe('Text Shadows → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'text-shadow',
 			'rgb(112, 202, 158) 2px 3px 4px, rgb(112, 202, 158) 5px 6px 7px'

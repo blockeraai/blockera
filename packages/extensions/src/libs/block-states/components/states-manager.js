@@ -10,13 +10,13 @@ import type { Element, ComponentType } from 'react';
 import { memo, useMemo, useCallback } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEquals, omit } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { ControlContextProvider, RepeaterControl } from '@publisher/controls';
-import { STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
-import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
+import { isEquals, omit } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { ControlContextProvider, RepeaterControl } from '@blockera/controls';
+import { STORE_NAME } from '@blockera/controls/src/libs/repeater-control/store';
+import { defaultItemValue } from '@blockera/controls/src/libs/repeater-control';
 
 /**
  * Internal dependencies
@@ -57,9 +57,9 @@ const StatesManager: ComponentType<any> = memo(
 		const {
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
-		} = dispatch('publisher-core/extensions') || {};
+		} = dispatch('blockera-core/extensions') || {};
 		const { getActiveMasterState, getActiveInnerState } = select(
-			'publisher-core/extensions'
+			'blockera-core/extensions'
 		);
 
 		const calculatedValue = useMemo(() => {
@@ -138,7 +138,7 @@ const StatesManager: ComponentType<any> = memo(
 					isSelected: true,
 					visibilitySupport: false,
 					breakpoints:
-						StateSettings.publisherBlockStates.default.normal
+						StateSettings.blockeraBlockStates.default.normal
 							.breakpoints,
 				},
 			};
@@ -201,7 +201,7 @@ const StatesManager: ComponentType<any> = memo(
 			block,
 			value: calculatedValue,
 			blockName: block.blockName,
-			attribute: 'publisherBlockStates',
+			attribute: 'blockeraBlockStates',
 			name: generateExtensionId(block, 'block-states', false),
 		};
 
@@ -247,8 +247,7 @@ const StatesManager: ComponentType<any> = memo(
 								return defaultItem;
 							},
 							defaultRepeaterItemValue: {
-								...StateSettings.publisherBlockStates
-									.default[0],
+								...StateSettings.blockeraBlockStates.default[0],
 								deletable: true,
 								selectable: true,
 								visibilitySupport: true,
@@ -292,18 +291,15 @@ const StatesManager: ComponentType<any> = memo(
 							repeaterItemChildren: ItemBody,
 						}}
 						defaultValue={states}
-						addNewButtonLabel={__(
-							'Add New State',
-							'publisher-core'
-						)}
+						addNewButtonLabel={__('Add New State', 'blockera-core')}
 						label={
 							'undefined' !== typeof currentBlock &&
 							isInnerBlock(currentBlock)
-								? __('Inner Block States', 'publisher-core')
-								: __('Block States', 'publisher-core')
+								? __('Inner Block States', 'blockera-core')
+								: __('Block States', 'blockera-core')
 						}
 						labelDescription={<LabelDescription />}
-						popoverTitle={__('Block State', 'publisher-core')}
+						popoverTitle={__('Block State', 'blockera-core')}
 						className={controlInnerClassNames(
 							'block-states-repeater'
 						)}

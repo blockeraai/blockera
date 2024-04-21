@@ -22,7 +22,7 @@ Cypress.Commands.add('uploadFile', (fileName, fileType, selector) => {
 
 /**
  * Starting in Cypress 13.3.0 Unhandled Exceptions now cause tests to fail.
- * Sometimes unhandled exceptions occur in Core that do not affect the UX created by publisher-core.
+ * Sometimes unhandled exceptions occur in Core that do not affect the UX created by blockera-core.
  * We discard unhandled exceptions and pass the test as long as assertions continue expectedly.
  */
 Cypress.on('uncaught:exception', () => {

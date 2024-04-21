@@ -11,9 +11,9 @@ import { __, sprintf } from '@wordpress/i18n';
 import type { Element } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -44,13 +44,13 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 
 		switch (item.type) {
 			case 'blur':
-				label = __('Blur', 'publisher-core');
+				label = __('Blur', 'blockera-core');
 				value = prepValueForHeader(item.blur);
 				icon = <BlurIcon />;
 				break;
 
 			case 'drop-shadow':
-				label = __('Drop Shadow', 'publisher-core');
+				label = __('Drop Shadow', 'blockera-core');
 				value = (
 					<>
 						{prepValueForHeader(item['drop-shadow-x'])}
@@ -62,43 +62,43 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				break;
 
 			case 'brightness':
-				label = __('Brightness', 'publisher-core');
+				label = __('Brightness', 'blockera-core');
 				value = prepValueForHeader(item.brightness);
 				icon = <BrightnessIcon />;
 				break;
 
 			case 'contrast':
-				label = __('Contrast', 'publisher-core');
+				label = __('Contrast', 'blockera-core');
 				value = prepValueForHeader(item.contrast);
 				icon = <ContrastIcon />;
 				break;
 
 			case 'hue-rotate':
-				label = __('Hue Rotate', 'publisher-core');
+				label = __('Hue Rotate', 'blockera-core');
 				value = prepValueForHeader(item['hue-rotate']);
 				icon = <HueRotateIcon />;
 				break;
 
 			case 'saturate':
-				label = __('Saturation', 'publisher-core');
+				label = __('Saturation', 'blockera-core');
 				value = prepValueForHeader(item.saturate);
 				icon = <SaturationIcon />;
 				break;
 
 			case 'grayscale':
-				label = __('Grayscale', 'publisher-core');
+				label = __('Grayscale', 'blockera-core');
 				value = prepValueForHeader(item.grayscale);
 				icon = <GrayscaleIcon />;
 				break;
 
 			case 'invert':
-				label = __('Invert', 'publisher-core');
+				label = __('Invert', 'blockera-core');
 				value = prepValueForHeader(item.invert);
 				icon = <InvertIcon />;
 				break;
 
 			case 'sepia':
-				label = __('Sepia', 'publisher-core');
+				label = __('Sepia', 'blockera-core');
 				value = prepValueForHeader(item.sepia);
 				icon = <SepiaIcon />;
 				break;
@@ -112,7 +112,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'publisher-core'),
+					__('Item %d', 'blockera-core'),
 					itemId + 1
 				)}
 			>

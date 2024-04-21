@@ -1,8 +1,8 @@
-.publisher-flex-direction,
-.publisher-flex-align-content,
-.publisher-flex-wrap {
+.blockera-flex-direction,
+.blockera-flex-align-content,
+.blockera-flex-wrap {
 
-	.publisher-field-control {
+	.blockera-field-control {
 
 		svg {
 			transition: all 0.45s cubic-bezier(0, 0, 0.2, 1);
@@ -10,7 +10,7 @@
 	}
 }
 
-.publisher-flex-align-content.reverse {
+.blockera-flex-align-content.reverse {
 
 	svg.align-content-flex-end,
 	svg.align-content-flex-start {

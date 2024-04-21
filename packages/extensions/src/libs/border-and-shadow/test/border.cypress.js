@@ -11,7 +11,7 @@ describe('Border → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', {
 			delay: 0,
@@ -58,7 +58,7 @@ describe('Border → Functionality', () => {
 					style: 'dashed',
 					color: '#37e6d4',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherBorder'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
 		});
 
 		//Check frontend
@@ -66,7 +66,7 @@ describe('Border → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border',
 			'5px dashed rgb(55, 230, 212)'
@@ -104,7 +104,7 @@ describe('Border → Functionality', () => {
 					style: 'solid',
 					color: '#37e6d4',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherBorder'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
 		});
 
 		//Check frontend
@@ -112,7 +112,7 @@ describe('Border → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border',
 			'5px solid rgb(55, 230, 212)'
@@ -166,7 +166,7 @@ describe('Border → Functionality', () => {
 					style: 'solid',
 					width: '1px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherBorder'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
 		});
 
 		//
@@ -220,7 +220,7 @@ describe('Border → Functionality', () => {
 					style: 'solid',
 					width: '1px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherBorder'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
 		});
 
 		//
@@ -278,7 +278,7 @@ describe('Border → Functionality', () => {
 					style: 'solid',
 					width: '1px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherBorder'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
 		});
 
 		//
@@ -340,7 +340,7 @@ describe('Border → Functionality', () => {
 					style: 'solid',
 					width: '1px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherBorder'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
 		});
 
 		// 	Check frontend
@@ -348,25 +348,25 @@ describe('Border → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-top',
 			'1px solid rgb(115, 221, 171)'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-right',
 			'2px dashed rgb(153, 88, 227)'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-bottom',
 			'3px dotted rgb(235, 164, 146)'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-left',
 			'4px double rgb(24, 147, 218)'

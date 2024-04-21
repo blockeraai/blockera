@@ -11,7 +11,7 @@ describe('z-index → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -39,7 +39,7 @@ describe('z-index → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('100').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherZIndex')
+				getSelectedBlock(data, 'blockeraZIndex')
 			);
 		});
 
@@ -48,7 +48,7 @@ describe('z-index → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
+		cy.get('.blockera-core-block')
 			.then(($el) => {
 				return window.getComputedStyle($el[0]);
 			})
@@ -56,3 +56,4 @@ describe('z-index → Functionality', () => {
 			.should('eq', '100');
 	});
 });
+

@@ -1,18 +1,18 @@
-.publisher-control-link {
+.blockera-control-link {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
 
-	.publisher-control-link-row-link {
+	.blockera-control-link-row-link {
 		display: flex;
 		flex-direction: row;
 		gap: 0;
 		position: relative;
 
-		.publisher-control-input {
+		.blockera-control-input {
 			width: 100%;
 
-			.publisher-control-text {
+			.blockera-control-text {
 
 				.components-text-control__input {
 					font-size: 12px;
@@ -20,7 +20,7 @@
 			}
 		}
 
-		.components-button.publisher-component-button {
+		.components-button.blockera-component-button {
 			border-radius: 0 2px 2px 0;
 			position: absolute;
 			padding: 2px 8px;
@@ -35,7 +35,7 @@
 		}
 	}
 
-	.publisher-control-link-advanced-settings {
+	.blockera-control-link-advanced-settings {
 		display: flex;
 		flex-direction: column;
 		gap: 15px;

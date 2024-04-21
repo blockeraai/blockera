@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
 
 
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
 
 
 class PostDate extends Field {
@@ -25,7 +25,7 @@ class PostDate extends Field {
 			case 'human':
 
 				/* translators: %s: Human readable date/time. */
-				$value = sprintf( __( '%s ago', 'publisher-core' ), human_time_diff( strtotime( get_post()->{$date_type} ) ) );
+				$value = sprintf( __( '%s ago', 'blockera-core' ), human_time_diff( strtotime( get_post()->{$date_type} ) ) );
 
 				break;
 

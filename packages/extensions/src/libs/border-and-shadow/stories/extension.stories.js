@@ -4,33 +4,33 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import BorderAndShadowExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';
-import { include } from '@publisher/utils';
+import { include } from '@blockera/utils';
 
 const { SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherBorderAndShadow',
+	name: 'blockeraBorderAndShadow',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -54,19 +54,19 @@ blocksInitializer({
 						values={include(
 							attributes,
 							[
-								'publisherBorder',
-								'publisherOutline',
-								'publisherBoxShadow',
-								'publisherBorderRadius',
+								'blockeraBorder',
+								'blockeraOutline',
+								'blockeraBoxShadow',
+								'blockeraBorderRadius',
 							],
-							'publisher'
+							'blockera'
 						)}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						defaultValue={{
 							borderColor: attributes?.borderColor || '',
 							border: attributes.style?.border || {},
 						}}
-						title={__('Border And Shadow', 'publisher-core')}
+						title={__('Border And Shadow', 'blockera-core')}
 						icon={<BorderAndShadowExtensionIcon />}
 					/>
 				</InspectorControls>
@@ -104,10 +104,10 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherBorder: {},
-					publisherOutline: [],
-					publisherBoxShadow: [],
-					publisherBorderRadius: {},
+					blockeraBorder: {},
+					blockeraOutline: [],
+					blockeraBoxShadow: [],
+					blockeraBorderRadius: {},
 				},
 			},
 		],

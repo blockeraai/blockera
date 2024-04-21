@@ -1,4 +1,4 @@
-.publisher-control-value-addon {
+.blockera-control-value-addon {
 	height: 30px;
 	display: grid;
 	gap: 6px;
@@ -25,45 +25,45 @@
 	}
 
 	&.type-variable {
-		--va-color: var(--publisher-value-addon-var-color);
-		--va-border-color: var(--publisher-value-addon-var-border-color);
-		--va-bg-color: var(--publisher-value-addon-var-bg-color);
+		--va-color: var(--blockera-value-addon-var-color);
+		--va-border-color: var(--blockera-value-addon-var-border-color);
+		--va-bg-color: var(--blockera-value-addon-var-bg-color);
 
 		&.open-value-addon {
-			--va-border-color: var(--publisher-value-addon-var-color);
+			--va-border-color: var(--blockera-value-addon-var-color);
 			box-shadow: 0 0 0 1px var(--va-color);
 		}
 	}
 
 	&.type-dynamic-value {
-		--va-color: var(--publisher-value-addon-dv-color);
-		--va-border-color: var(--publisher-value-addon-dv-border-color);
-		--va-bg-color: var(--publisher-value-addon-dv-bg-color);
+		--va-color: var(--blockera-value-addon-dv-color);
+		--va-border-color: var(--blockera-value-addon-dv-border-color);
+		--va-bg-color: var(--blockera-value-addon-dv-bg-color);
 
 		&.open-value-addon {
-			--va-border-color: var(--publisher-value-addon-dv-color);
+			--va-border-color: var(--blockera-value-addon-dv-color);
 			box-shadow: 0 0 0 1px var(--va-color);
 		}
 	}
 
 	&.type-deleted {
-		--va-color: var(--publisher-value-addon-deleted-color);
-		--va-border-color: var(--publisher-value-addon-deleted-border-color);
-		--va-bg-color: var(--publisher-value-addon-deleted-bg-color);
+		--va-color: var(--blockera-value-addon-deleted-color);
+		--va-border-color: var(--blockera-value-addon-deleted-border-color);
+		--va-bg-color: var(--blockera-value-addon-deleted-bg-color);
 
 		&.open-value-addon {
-			--va-border-color: var(--publisher-value-addon-deleted-color);
+			--va-border-color: var(--blockera-value-addon-deleted-color);
 			box-shadow: 0 0 0 1px var(--va-color);
 		}
 	}
 
-	.publisher-control-item-name {
+	.blockera-control-item-name {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
-	.publisher-control-item-icon {
+	.blockera-control-item-icon {
 		pointer-events: none;
 		display: flex;
 		align-items: center;

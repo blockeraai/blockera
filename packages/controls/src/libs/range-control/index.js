@@ -7,10 +7,10 @@ import { RangeControl as WordPressRangeControl } from '@wordpress/components';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString } from '@publisher/utils';
-import { controlClassNames } from '@publisher/classnames';
+import { isString } from '@blockera/utils';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies

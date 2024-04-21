@@ -11,7 +11,7 @@ describe('Font Size → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -34,7 +34,7 @@ describe('Font Size → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('10px').to.be.equal(
-				getSelectedBlock(data, 'publisherFontSize')
+				getSelectedBlock(data, 'blockeraFontSize')
 			);
 		});
 
@@ -43,7 +43,7 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'font-size', '10px');
+		cy.get('.blockera-core-block').should('have.css', 'font-size', '10px');
 	});
 
 	it('Variable value', () => {
@@ -77,7 +77,7 @@ describe('Font Size → Functionality', () => {
 				name: 'Small',
 				isValueAddon: true,
 				valueType: 'variable',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFontSize'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFontSize'));
 		});
 
 		//Check frontend
@@ -85,7 +85,7 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').hasCssVar(
+		cy.get('.blockera-core-block').hasCssVar(
 			'font-size',
 			'--wp--preset--font-size--small'
 		);

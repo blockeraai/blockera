@@ -23,7 +23,7 @@ const BlockEditContextProvider = ({
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setCurrentInnerBlockState,
-	} = dispatch('publisher-core/extensions') || {};
+	} = dispatch('blockera-core/extensions') || {};
 
 	const memoizedValue: {
 		currentTab: string,
@@ -55,7 +55,7 @@ const BlockEditContextProvider = ({
 			isOpenGridBuilder,
 			setOpenGridBuilder,
 			masterIsNormalState,
-			publisherInnerBlocks,
+			blockeraInnerBlocks,
 			handleOnChangeAttributes,
 		} = props;
 
@@ -67,7 +67,7 @@ const BlockEditContextProvider = ({
 			getAttributes,
 			isNormalState,
 			masterIsNormalState,
-			publisherInnerBlocks,
+			blockeraInnerBlocks,
 			handleOnChangeAttributes,
 			switchBlockState: (state: TStates): void => {
 				if (isInnerBlock(currentBlock)) {
@@ -84,7 +84,7 @@ const BlockEditContextProvider = ({
 				setCurrentTab(tabName);
 			},
 			getBreakpoint(): BreakpointTypes {
-				return getAttributes()?.publisherBlockStates[blockStateId]
+				return getAttributes()?.blockeraBlockStates[blockStateId]
 					?.breakpoints[breakpointId];
 			},
 			getCurrentState(): TStates {

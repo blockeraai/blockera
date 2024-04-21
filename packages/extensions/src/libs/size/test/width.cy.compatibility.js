@@ -32,7 +32,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('500px').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -91,7 +91,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('500px').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -154,7 +154,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('100px').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -207,7 +207,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('100px').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -267,7 +267,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('25%').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -324,7 +324,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('25%').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -383,7 +383,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('500px').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -446,7 +446,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('300px').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -514,7 +514,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('200px').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -578,7 +578,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('20%').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -617,7 +617,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('200px').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 
@@ -670,7 +670,7 @@ describe('Width → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('30%').to.be.equal(
-					getSelectedBlock(data, 'publisherWidth')
+					getSelectedBlock(data, 'blockeraWidth')
 				);
 			});
 

@@ -4,10 +4,10 @@
 import { nanoid } from 'nanoid';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Flex } from '@publisher/components';
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { Flex } from '@blockera/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -71,8 +71,8 @@ export const CustomURLIcon = {
 				icon: 'home',
 				library: 'custom',
 				uploadSVG: {
-					url: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
-					title: 'Publisher logo',
+					url: 'https://betterstudio.com/wp-content/uploads/2022/09/blockera-theme.svg',
+					title: ' logo',
 				},
 			},
 		},

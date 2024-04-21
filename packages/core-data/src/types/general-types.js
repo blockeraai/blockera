@@ -3,10 +3,10 @@
 /**
  * Reference type of item
  *
- * core → PublisherBlocks
- * core-pro → PublisherBlocks Pro
+ * core → Blocks
+ * core-pro → Blocks Pro
  * custom → custom item added by code from our developers API
- * plugin → PublisherBlocks items that rely on a third party plugin to work like Woo
+ * plugin → Blocks items that rely on a third party plugin to work like Woo
  * theme → variables that come from a theme
  * preset → variables that come from editor (custom or editor variables)
  */

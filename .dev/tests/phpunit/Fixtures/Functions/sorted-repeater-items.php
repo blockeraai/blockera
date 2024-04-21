@@ -25,7 +25,7 @@ return [
 			[
 				'isVisible'         => true,
 				'type'              => 'image',
-				'image'             => 'http://publisher.test/wp-content/uploads/2023/12/bg-extension-test-3.jpeg',
+				'image'             => 'http://blockera.test/wp-content/uploads/2023/12/bg-extension-test-3.jpeg',
 				'image-size'        => 'custom',
 				'image-size-width'  => 'auto',
 				'image-size-height' => 'auto',
@@ -58,7 +58,7 @@ return [
 			[
 				'isVisible'         => true,
 				'type'              => 'image',
-				'image'             => 'http://publisher.test/wp-content/uploads/2023/12/bg-extension-test-3.jpeg',
+				'image'             => 'http://blockera.test/wp-content/uploads/2023/12/bg-extension-test-3.jpeg',
 				'image-size'        => 'custom',
 				'image-size-width'  => 'auto',
 				'image-size-height' => 'auto',
@@ -93,7 +93,7 @@ return [
 			[
 				'isVisible'         => true,
 				'type'              => 'image',
-				'image'             => 'http://publisher.test/wp-content/uploads/2023/12/bg-extension-test-3.jpeg',
+				'image'             => 'http://blockera.test/wp-content/uploads/2023/12/bg-extension-test-3.jpeg',
 				'image-size'        => 'custom',
 				'image-size-width'  => 'auto',
 				'image-size-height' => 'auto',
@@ -107,7 +107,7 @@ return [
 			[
 				'isVisible'         => true,
 				'type'              => 'image',
-				'image'             => 'http://publisher.test/wp-content/uploads/2023/12/bg-extension-test-3.jpeg',
+				'image'             => 'http://blockera.test/wp-content/uploads/2023/12/bg-extension-test-3.jpeg',
 				'image-size'        => 'custom',
 				'image-size-width'  => 'auto',
 				'image-size-height' => 'auto',

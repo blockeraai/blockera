@@ -49,9 +49,7 @@ describe('Box Position → WP Compatibility', () => {
 						bottom: '',
 						left: '',
 					},
-				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherPosition')
-				);
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 			});
 
 			//

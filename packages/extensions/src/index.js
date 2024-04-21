@@ -5,19 +5,19 @@ import { select } from '@wordpress/data';
 import domReady from '@wordpress/dom-ready';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	store,
 	unstableBootstrapServerSideEntities,
 	unstableBootstrapServerSideVariableDefinitions,
 	unstableBootstrapServerSideDynamicValueDefinitions,
-} from '@publisher/core-data';
+} from '@blockera/core-data';
 import {
 	store as editorStore,
 	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
-} from '@publisher/editor';
+} from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -39,14 +39,14 @@ export {
 
 domReady(() => {
 	if (window?.wp) {
-		window.publisher.coreData = {
+		window.blockera.coreData = {
 			select: select(store?.name),
 			unstableBootstrapServerSideEntities,
 			unstableBootstrapServerSideVariableDefinitions,
 			unstableBootstrapServerSideDynamicValueDefinitions,
 		};
 
-		window.publisher.editor = {
+		window.blockera.editor = {
 			select: select(editorStore?.name),
 			unstableBootstrapServerSideBreakpointDefinitions,
 		};

@@ -6,9 +6,9 @@ import { __ } from '@wordpress/i18n';
 import { default as memoize } from 'fast-memoize';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -31,7 +31,7 @@ export const getWidthSizes: () => Array<VariableItem> | [] = memoize(
 
 		if (!isUndefined(layout?.contentSize)) {
 			items.push({
-				name: __('Content Width', 'publisher-core'),
+				name: __('Content Width', 'blockera-core'),
 				id: 'contentSize',
 				value: layout?.contentSize,
 				reference,
@@ -40,7 +40,7 @@ export const getWidthSizes: () => Array<VariableItem> | [] = memoize(
 
 		if (!isUndefined(layout?.wideSize)) {
 			items.push({
-				name: __('Site Wide Width', 'publisher-core'),
+				name: __('Site Wide Width', 'blockera-core'),
 				id: 'wideSize',
 				value: layout?.wideSize,
 				reference,

@@ -7,10 +7,10 @@ import type { MixedElement } from 'react';
 import { useSelect } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isFunction } from '@publisher/utils';
-import { useBlocksStore } from '@publisher/extensions/src/hooks';
+import { isFunction } from '@blockera/utils';
+import { useBlocksStore } from '@blockera/extensions/src/hooks';
 
 /**
  * Internal dependencies
@@ -33,7 +33,7 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 			getExtensionInnerBlockState,
 			getExtensionCurrentBlockState,
 			getExtensionCurrentBlockStateBreakpoint,
-		} = select('publisher-core/extensions');
+		} = select('blockera-core/extensions');
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),

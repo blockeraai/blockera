@@ -14,7 +14,7 @@ describe('Flex Child', () => {
 
 	describe('', () => {
 		beforeEach(() => {
-			const code = `<!-- wp:paragraph {"publisherPropsId":"1025142054679"} -->
+			const code = `<!-- wp:paragraph {"blockeraPropsId":"1025142054679"} -->
 <p>This is a test text.</p>
 <!-- /wp:paragraph -->`;
 
@@ -31,9 +31,9 @@ describe('Flex Child', () => {
 
 	describe('Self Size', () => {
 		beforeEach(() => {
-			const code = `<!-- wp:group {"className":"publisher-group","layout":{"type":"constrained"},"publisherDisplay":"flex","publisherPropsId":"1025111558103"} -->
-<div class="wp-block-group publisher-group"><!-- wp:paragraph {"className":"publisher-paragraph","publisherAttributes":[],"publisherPropsId":"102511163356"} -->
-<p class="publisher-paragraph">This is a test text.</p>
+			const code = `<!-- wp:group {"className":"blockera-group","layout":{"type":"constrained"},"blockeraDisplay":"flex","blockeraPropsId":"1025111558103"} -->
+<div class="wp-block-group blockera-group"><!-- wp:paragraph {"className":"blockera-paragraph","blockeraAttributes":[],"blockeraPropsId":"102511163356"} -->
+<p class="blockera-paragraph">This is a test text.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->`;
 			appendBlocks(code);
@@ -65,7 +65,7 @@ describe('Flex Child', () => {
 				//Check store
 				getWPDataObject().then((data) => {
 					expect('shrink').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildSizing')
+						getSelectedBlock(data, 'blockeraFlexChildSizing')
 					);
 				});
 
@@ -88,7 +88,7 @@ describe('Flex Child', () => {
 				//Check store
 				getWPDataObject().then((data) => {
 					expect('grow').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildSizing')
+						getSelectedBlock(data, 'blockeraFlexChildSizing')
 					);
 				});
 
@@ -111,7 +111,7 @@ describe('Flex Child', () => {
 				//Check store
 				getWPDataObject().then((data) => {
 					expect('no').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildSizing')
+						getSelectedBlock(data, 'blockeraFlexChildSizing')
 					);
 				});
 
@@ -120,7 +120,7 @@ describe('Flex Child', () => {
 
 				redirectToFrontPage();
 
-				cy.get('.publisher-paragraph').should(
+				cy.get('.blockera-paragraph').should(
 					'have.css',
 					'flex',
 					'0 0 auto'
@@ -154,16 +154,16 @@ describe('Flex Child', () => {
 				//Check store
 				getWPDataObject().then((data) => {
 					expect('custom').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildSizing')
+						getSelectedBlock(data, 'blockeraFlexChildSizing')
 					);
 					expect('1').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildGrow')
+						getSelectedBlock(data, 'blockeraFlexChildGrow')
 					);
 					expect('2').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildShrink')
+						getSelectedBlock(data, 'blockeraFlexChildShrink')
 					);
 					expect('10%').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildBasis')
+						getSelectedBlock(data, 'blockeraFlexChildBasis')
 					);
 				});
 
@@ -172,7 +172,7 @@ describe('Flex Child', () => {
 
 				redirectToFrontPage();
 
-				cy.get('.publisher-paragraph').should(
+				cy.get('.blockera-paragraph').should(
 					'have.css',
 					'flex',
 					'1 2 10%'
@@ -189,9 +189,9 @@ describe('Flex Child', () => {
 		//describe('WordPress Compatibility', () => {...});
 
 		it('Functionality', () => {
-			const code = `<!-- wp:group {"className":"publisher-group","layout":{"type":"constrained"},"publisherDisplay":"flex","publisherPropsId":"1025111558103"} -->
-<div class="wp-block-group publisher-group"><!-- wp:paragraph {"className":"publisher-paragraph","publisherAttributes":[],"publisherPropsId":"102511163356"} -->
-<p class="publisher-paragraph">This is a test text.</p>
+			const code = `<!-- wp:group {"className":"blockera-group","layout":{"type":"constrained"},"blockeraDisplay":"flex","blockeraPropsId":"1025111558103"} -->
+<div class="wp-block-group blockera-group"><!-- wp:paragraph {"className":"blockera-paragraph","blockeraAttributes":[],"blockeraPropsId":"102511163356"} -->
+<p class="blockera-paragraph">This is a test text.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->`;
 			appendBlocks(code);
@@ -216,7 +216,7 @@ describe('Flex Child', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect('flex-start').to.be.equal(
-					getSelectedBlock(data, 'publisherFlexChildAlign')
+					getSelectedBlock(data, 'blockeraFlexChildAlign')
 				);
 			});
 
@@ -237,7 +237,7 @@ describe('Flex Child', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect('center').to.be.equal(
-					getSelectedBlock(data, 'publisherFlexChildAlign')
+					getSelectedBlock(data, 'blockeraFlexChildAlign')
 				);
 			});
 
@@ -258,7 +258,7 @@ describe('Flex Child', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect('flex-end').to.be.equal(
-					getSelectedBlock(data, 'publisherFlexChildAlign')
+					getSelectedBlock(data, 'blockeraFlexChildAlign')
 				);
 			});
 
@@ -279,7 +279,7 @@ describe('Flex Child', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect('stretch').to.be.equal(
-					getSelectedBlock(data, 'publisherFlexChildAlign')
+					getSelectedBlock(data, 'blockeraFlexChildAlign')
 				);
 			});
 
@@ -300,7 +300,7 @@ describe('Flex Child', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect('baseline').to.be.equal(
-					getSelectedBlock(data, 'publisherFlexChildAlign')
+					getSelectedBlock(data, 'blockeraFlexChildAlign')
 				);
 			});
 
@@ -309,7 +309,7 @@ describe('Flex Child', () => {
 
 			redirectToFrontPage();
 
-			cy.get('.publisher-paragraph').should(
+			cy.get('.blockera-paragraph').should(
 				'have.css',
 				'align-self',
 				'baseline'
@@ -320,9 +320,9 @@ describe('Flex Child', () => {
 	describe('Order', () => {
 		describe('Functionality', () => {
 			beforeEach(() => {
-				const code = `<!-- wp:group {"className":"publisher-group","layout":{"type":"constrained"},"publisherDisplay":"flex","publisherPropsId":"1025111558103"} -->
-<div class="wp-block-group publisher-group"><!-- wp:paragraph {"className":"publisher-paragraph","publisherAttributes":[],"publisherPropsId":"102511163356"} -->
-<p class="publisher-paragraph">This is a test text.</p>
+				const code = `<!-- wp:group {"className":"blockera-group","layout":{"type":"constrained"},"blockeraDisplay":"flex","blockeraPropsId":"1025111558103"} -->
+<div class="wp-block-group blockera-group"><!-- wp:paragraph {"className":"blockera-paragraph","blockeraAttributes":[],"blockeraPropsId":"102511163356"} -->
+<p class="blockera-paragraph">This is a test text.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->`;
 				appendBlocks(code);
@@ -347,7 +347,7 @@ describe('Flex Child', () => {
 				//Check store
 				getWPDataObject().then((data) => {
 					expect('first').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildOrder')
+						getSelectedBlock(data, 'blockeraFlexChildOrder')
 					);
 				});
 
@@ -370,7 +370,7 @@ describe('Flex Child', () => {
 				//Check store
 				getWPDataObject().then((data) => {
 					expect('last').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildOrder')
+						getSelectedBlock(data, 'blockeraFlexChildOrder')
 					);
 				});
 
@@ -379,7 +379,7 @@ describe('Flex Child', () => {
 
 				redirectToFrontPage();
 
-				cy.get('.publisher-paragraph').should(
+				cy.get('.blockera-paragraph').should(
 					'have.css',
 					'order',
 					'100'
@@ -400,7 +400,7 @@ describe('Flex Child', () => {
 				//Check store
 				getWPDataObject().then((data) => {
 					expect('10').to.be.equal(
-						getSelectedBlock(data, 'publisherFlexChildOrderCustom')
+						getSelectedBlock(data, 'blockeraFlexChildOrderCustom')
 					);
 				});
 
@@ -409,11 +409,7 @@ describe('Flex Child', () => {
 
 				redirectToFrontPage();
 
-				cy.get('.publisher-paragraph').should(
-					'have.css',
-					'order',
-					'10'
-				);
+				cy.get('.blockera-paragraph').should('have.css', 'order', '10');
 			});
 		});
 	});

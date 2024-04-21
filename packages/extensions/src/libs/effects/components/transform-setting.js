@@ -6,14 +6,14 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	ToggleSelectControl,
 	ControlContextProvider,
-} from '@publisher/controls';
-import { Popover } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+} from '@blockera/controls';
+import { Popover } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -33,25 +33,25 @@ export const TransformSettings = ({
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	values: {
-		publisherOpacity: string,
-		publisherTransform: Array<Object>,
-		publisherTransition: Array<Object>,
-		publisherFilter: Array<Object>,
-		publisherBlendMode: string,
-		publisherBackdropFilter: Array<Object>,
-		publisherTransformSelfPerspective: string,
-		publisherTransformSelfOrigin: {
+		blockeraOpacity: string,
+		blockeraTransform: Array<Object>,
+		blockeraTransition: Array<Object>,
+		blockeraFilter: Array<Object>,
+		blockeraBlendMode: string,
+		blockeraBackdropFilter: Array<Object>,
+		blockeraTransformSelfPerspective: string,
+		blockeraTransformSelfOrigin: {
 			top: string,
 			left: string,
 		},
-		publisherBackfaceVisibility: string,
-		publisherTransformChildPerspective: string,
-		publisherTransformChildOrigin: {
+		blockeraBackfaceVisibility: string,
+		blockeraTransformChildPerspective: string,
+		blockeraTransformChildOrigin: {
 			top: string,
 			left: string,
 		},
-		publisherDivider: Array<Object>,
-		publisherMask: Array<Object>,
+		blockeraDivider: Array<Object>,
+		blockeraMask: Array<Object>,
 	},
 	attributes: {
 		[key: string]: {
@@ -63,7 +63,7 @@ export const TransformSettings = ({
 }): MixedElement => {
 	return (
 		<Popover
-			title={__('Transform Settings', 'publisher-core')}
+			title={__('Transform Settings', 'blockera-core')}
 			offset={35}
 			placement="left-start"
 			className={controlInnerClassNames('transform-settings-popover')}
@@ -75,21 +75,21 @@ export const TransformSettings = ({
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'self-perspective'),
-					value: values.publisherTransformSelfPerspective,
-					attribute: 'publisherTransformSelfPerspective',
+					value: values.blockeraTransformSelfPerspective,
+					attribute: 'blockeraTransformSelfPerspective',
 					blockName: block.blockName,
 				}}
 			>
 				<SelfPerspective
 					block={block}
 					handleOnChangeAttributes={handleOnChangeAttributes}
-					transform={values.publisherTransform}
-					transformSelfOrigin={values.publisherTransformSelfOrigin}
+					transform={values.blockeraTransform}
+					transformSelfOrigin={values.blockeraTransformSelfOrigin}
 					transformSelfPerspectiveDefaultValue={
-						attributes.publisherTransformSelfPerspective.default
+						attributes.blockeraTransformSelfPerspective.default
 					}
 					transformSelfOriginDefaultValue={
-						attributes.publisherTransformSelfOrigin.default
+						attributes.blockeraTransformSelfOrigin.default
 					}
 				/>
 			</ControlContextProvider>
@@ -97,26 +97,26 @@ export const TransformSettings = ({
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'backface-visibility'),
-					value: values.publisherBackfaceVisibility,
-					attribute: 'publisherBackfaceVisibility',
+					value: values.blockeraBackfaceVisibility,
+					attribute: 'blockeraBackfaceVisibility',
 					blockName: block.blockName,
 				}}
 			>
 				<ToggleSelectControl
 					controlName="toggle-select"
-					label={__('Backface Visibility', 'publisher-core')}
+					label={__('Backface Visibility', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It sets whether the backside of a transformed block is visible when turned towards the viewer.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 							<p>
 								{__(
 									"It controls the visibility of the element's reverse side during 3D transformations.",
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -124,20 +124,18 @@ export const TransformSettings = ({
 					columns="1fr 130px"
 					options={[
 						{
-							label: __('Visible', 'publisher-core'),
+							label: __('Visible', 'blockera-core'),
 							value: 'visible',
 						},
 						{
-							label: __('Hidden', 'publisher-core'),
+							label: __('Hidden', 'blockera-core'),
 							value: 'hidden',
 						},
 					]}
-					defaultValue={
-						attributes.publisherBackfaceVisibility.default
-					}
+					defaultValue={attributes.blockeraBackfaceVisibility.default}
 					onChange={(newValue, ref) =>
 						handleOnChangeAttributes(
-							'publisherBackfaceVisibility',
+							'blockeraBackfaceVisibility',
 							newValue,
 							{ ref }
 						)
@@ -148,8 +146,8 @@ export const TransformSettings = ({
 			<ControlContextProvider
 				value={{
 					name: generateExtensionId(block, 'child-perspective'),
-					value: values.publisherTransformChildPerspective,
-					attribute: 'publisherTransformChildPerspective',
+					value: values.blockeraTransformChildPerspective,
+					attribute: 'blockeraTransformChildPerspective',
 					blockName: block.blockName,
 				}}
 			>
@@ -157,11 +155,11 @@ export const TransformSettings = ({
 					block={block}
 					handleOnChangeAttributes={handleOnChangeAttributes}
 					transformChildPerspectiveDefaultValue={
-						attributes.publisherTransformChildPerspective.default
+						attributes.blockeraTransformChildPerspective.default
 					}
-					transformChildOrigin={values.publisherTransformChildOrigin}
+					transformChildOrigin={values.blockeraTransformChildOrigin}
 					transformChildOriginDefaultValue={
-						attributes.publisherTransformChildOrigin.default
+						attributes.blockeraTransformChildOrigin.default
 					}
 				/>
 			</ControlContextProvider>

@@ -5,9 +5,9 @@ import { Slot } from '@wordpress/components';
 import { useEffect, memo, useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { prependPortal } from '@publisher/utils';
+import { prependPortal } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -67,8 +67,8 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 			{!isPortalVisible &&
 				prependPortal(
 					<>
-						<div className="publisher-block-card-wrapper">
-							<div className={'publisher-dropdown-menu'}>
+						<div className="blockera-block-card-wrapper">
+							<div className={'blockera-dropdown-menu'}>
 								<BlockDropdownAllMenu
 									{...{
 										isActive,
@@ -78,12 +78,12 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 							</div>
 
 							<Slot
-								name={`publisher-block-card-content-${clientId}`}
+								name={`blockera-block-card-content-${clientId}`}
 							/>
 						</div>
-						<div className="publisher-block-edit-wrapper">
+						<div className="blockera-block-edit-wrapper">
 							<Slot
-								name={`publisher-block-edit-content-${clientId}`}
+								name={`blockera-block-edit-content-${clientId}`}
 							/>
 						</div>
 					</>,
@@ -94,8 +94,8 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 				<Delayed>
 					{prependPortal(
 						<>
-							<div className="publisher-block-card-wrapper">
-								<div className={'publisher-dropdown-menu'}>
+							<div className="blockera-block-card-wrapper">
+								<div className={'blockera-dropdown-menu'}>
 									<BlockDropdownAllMenu
 										{...{
 											isActive,
@@ -105,12 +105,12 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 								</div>
 
 								<Slot
-									name={`publisher-block-card-content-${clientId}`}
+									name={`blockera-block-card-content-${clientId}`}
 								/>
 							</div>
-							<div className="publisher-block-edit-wrapper">
+							<div className="blockera-block-edit-wrapper">
 								<Slot
-									name={`publisher-block-edit-content-${clientId}`}
+									name={`blockera-block-edit-content-${clientId}`}
 								/>
 							</div>
 						</>,

@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts;
 
 interface HaveCustomSettings {
 

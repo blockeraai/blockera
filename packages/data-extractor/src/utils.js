@@ -1,8 +1,10 @@
+// @flow
+
 export function regexMatch(
-	regexp: string,
+	regexp: Object,
 	subject: string,
 	callback: Function
-): null {
+): void {
 	let m;
 
 	while ((m = regexp.exec(subject)) !== null) {

@@ -9,13 +9,13 @@ import type { MixedElement } from 'react';
 import { AnglePickerControl as WordPressAnglePickerControl } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { Button, Flex } from '@publisher/components';
+} from '@blockera/classnames';
+import { Button, Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -101,7 +101,7 @@ export default function AnglePickerControl({
 								'btn-rotate-left'
 							)}
 							showTooltip={true}
-							label={__('Rotate Left', 'publisher')}
+							label={__('Rotate Left', 'blockera')}
 							icon={<RotateLeftIcon />}
 							onClick={() => {
 								setValue(subtractAngle(value, 45));
@@ -112,7 +112,7 @@ export default function AnglePickerControl({
 								'btn-rotate-right'
 							)}
 							showTooltip={true}
-							label={__('Rotate Right', 'publisher')}
+							label={__('Rotate Right', 'blockera')}
 							icon={<RotateRightIcon />}
 							onClick={() => {
 								setValue(addAngle(value, 45));

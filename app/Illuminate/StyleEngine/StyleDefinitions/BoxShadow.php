@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 /**
  * Class BoxShadow definition to generate css rule.
@@ -38,13 +38,13 @@ class BoxShadow extends BaseStyleDefinition {
 			return sprintf(
 				'%s %s %s %s %s %s',
 				$prop['type'] === 'inner' ? 'inset' : '',
-				! empty( $prop['x'] ) ? pb_get_value_addon_real_value( $prop['x'] ) : '',
-				! empty( $prop['y'] ) ? pb_get_value_addon_real_value( $prop['y'] ) : '',
-				! empty( $prop['blur'] ) ? pb_get_value_addon_real_value( $prop['blur'] ) : '',
-				! empty( $prop['spread'] ) ? pb_get_value_addon_real_value( $prop['spread'] ) : '',
-				! empty( $prop['color'] ) ? pb_get_value_addon_real_value( $prop['color'] ) : ''
+				! empty( $prop['x'] ) ? blockera_get_value_addon_real_value( $prop['x'] ) : '',
+				! empty( $prop['y'] ) ? blockera_get_value_addon_real_value( $prop['y'] ) : '',
+				! empty( $prop['blur'] ) ? blockera_get_value_addon_real_value( $prop['blur'] ) : '',
+				! empty( $prop['spread'] ) ? blockera_get_value_addon_real_value( $prop['spread'] ) : '',
+				! empty( $prop['color'] ) ? blockera_get_value_addon_real_value( $prop['color'] ) : ''
 			);
-		}, pb_get_sorted_repeater( $setting[ $cssProperty ] ) );
+		}, blockera_get_sorted_repeater( $setting[ $cssProperty ] ) );
 
 		$this->setCss( [ $cssProperty => implode( ',', $boxShadows ) ] );
 
@@ -59,7 +59,7 @@ class BoxShadow extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherBoxShadow' => 'box-shadow',
+			'blockeraBoxShadow' => 'box-shadow',
 		];
 	}
 

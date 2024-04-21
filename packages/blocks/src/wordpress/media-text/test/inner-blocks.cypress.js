@@ -30,7 +30,7 @@ describe('Media Text Block → Inner Blocks', () => {
 		// open inner block settings
 		openInnerBlocksExtension();
 
-		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
 				cy.getByAriaLabel('Links Customize').should('exist');
 				cy.getByAriaLabel('Paragraphs Customize').should('exist');
@@ -56,3 +56,4 @@ describe('Media Text Block → Inner Blocks', () => {
 		);
 	});
 });
+

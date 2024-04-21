@@ -3,14 +3,15 @@ import {
 	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
-	redirectToFrontPage, createPost,
+	redirectToFrontPage,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Box Position → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -56,7 +57,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '30px',
 					left: '80px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//Check frontend
@@ -64,7 +65,7 @@ describe('Box Position → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').as('element-style');
+		cy.get('.blockera-core-block').as('element-style');
 
 		cy.get('@element-style').should('have.css', 'position', 'relative');
 
@@ -103,7 +104,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '',
 					right: '',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -127,7 +128,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '',
 					left: '',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -151,7 +152,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '0px',
 					left: '0px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -175,7 +176,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '0px',
 					left: '',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -200,7 +201,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '',
 					left: '0px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -225,7 +226,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '0px',
 					left: '0px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -250,7 +251,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '0px',
 					left: '',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -275,7 +276,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '0px',
 					left: '0px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -301,7 +302,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '0px',
 					left: '0px',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//
@@ -322,7 +323,7 @@ describe('Box Position → Functionality', () => {
 					bottom: '20%',
 					left: '20%',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherPosition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraPosition'));
 		});
 
 		//Check frontend
@@ -330,7 +331,7 @@ describe('Box Position → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
+		cy.get('.blockera-core-block')
 			.then(($el) => {
 				return window.getComputedStyle($el[0]);
 			})

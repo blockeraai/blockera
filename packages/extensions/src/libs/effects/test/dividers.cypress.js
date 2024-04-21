@@ -9,7 +9,7 @@ describe('Dividers → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', { delay: 0 });
 
@@ -182,7 +182,7 @@ describe('Dividers → Functionality', () => {
 					onFront: true,
 					order: 0,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherDivider'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraDivider'));
 		});
 
 		// Check frontend
@@ -386,7 +386,7 @@ describe('Dividers → Functionality', () => {
 					onFront: true,
 					order: 1,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherDivider'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraDivider'));
 		});
 
 		//Check frontend

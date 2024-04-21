@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -15,8 +15,8 @@ import {
 	sharedBlockExtensionAttributes,
 	IconExtensionSupports,
 	IconExtensionAttributes,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -29,11 +29,11 @@ const attributes = {
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	item_icon: {
 		name: 'core/item_icon',
 		type: 'item_icon',
-		label: __('Button Icon', 'publisher-core'),
+		label: __('Button Icon', 'blockera-core'),
 		icon: <InnerBlockItemIconIcon />,
 		selectors: {
 			root: 'svg',
@@ -46,7 +46,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	item_name: {
 		name: 'core/item_name',
 		type: 'item_name',
-		label: __('Button Name', 'publisher-core'),
+		label: __('Button Name', 'blockera-core'),
 		icon: <InnerBlockItemNameIcon />,
 		selectors: {
 			root: '.wp-block-social-link-label',
@@ -59,14 +59,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const SocialLink = {
-	name: 'publisherSocialLink',
+	name: 'blockeraSocialLink',
 	targetBlock: 'core/social-link',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

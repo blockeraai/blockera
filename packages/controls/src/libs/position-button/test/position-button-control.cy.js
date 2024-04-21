@@ -34,7 +34,7 @@ describe('position-button-control component testing', () => {
 			//Check color
 			cy.getByDataTest('position-button')
 				.invoke('attr', 'style')
-				.should('include', '--publisher-controls-color');
+				.should('include', '--blockera-controls-color');
 		});
 
 		it('should render correctly, when passing label', () => {
@@ -232,7 +232,7 @@ describe('position-button-control component testing', () => {
 			//Check color
 			cy.getByDataTest('position-button')
 				.invoke('attr', 'style')
-				.should('include', 'var(--publisher-controls-primary-color)');
+				.should('include', 'var(--blockera-controls-primary-color)');
 		});
 
 		it('should onChange be called, when interacting', () => {
@@ -240,7 +240,7 @@ describe('position-button-control component testing', () => {
 			const defaultProps = {
 				onChange: (value) => {
 					controlReducer(
-						select('publisher-core/controls').getControl(name),
+						select('blockera-core/controls').getControl(name),
 						modifyControlValue({
 							value,
 							controlId: name,
@@ -264,3 +264,4 @@ describe('position-button-control component testing', () => {
 		});
 	});
 });
+

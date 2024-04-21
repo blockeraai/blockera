@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Exceptions;
+namespace Blockera\Framework\Exceptions;
 
 class BaseException extends \Exception {
 

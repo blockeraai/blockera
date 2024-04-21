@@ -6,13 +6,13 @@ import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	InputControl,
 	SelectControl,
 	useControlContext,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -45,8 +45,8 @@ const ItemBody = ({
 			<SelectControl
 				id={`[${itemId}].type`}
 				defaultValue={item.type}
-				label={__('State', 'publisher-core')}
-				labelPopoverTitle={__('Block States', 'publisher-core')}
+				label={__('State', 'blockera-core')}
+				labelPopoverTitle={__('Block States', 'blockera-core')}
 				labelDescription={<LabelDescription />}
 				columns="columns-2"
 				options={Object.values(states)
@@ -99,7 +99,7 @@ const ItemBody = ({
 							},
 						})
 					}
-					label={__('CSS Class', 'publisher-core')}
+					label={__('CSS Class', 'blockera-core')}
 				/>
 			)}
 		</>

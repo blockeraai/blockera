@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { useDragValue } from '@publisher/utils';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { useDragValue } from '@blockera/utils';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -213,7 +213,7 @@ export function MarginTop({
 					data-cy="box-spacing-margin-top"
 				>
 					<LabelControl
-						ariaLabel={__('Top Margin', 'publisher-core')}
+						ariaLabel={__('Top Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -246,18 +246,18 @@ export function MarginTop({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top Margin Space', 'publisher-core')}
-						inputLabel={__('Top Margin', 'publisher-core')}
+						title={__('Top Margin Space', 'blockera-core')}
+						inputLabel={__('Top Margin', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Top Margin Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies only to the top edge of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

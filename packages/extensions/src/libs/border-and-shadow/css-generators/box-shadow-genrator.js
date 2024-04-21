@@ -1,13 +1,13 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { getValueAddonRealValue } from '@publisher/hooks';
-import { createCssDeclarations } from '@publisher/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
+import { createCssDeclarations } from '@blockera/style-engine';
 
 export function BoxShadowGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!Object.values(attributes?.publisherBoxShadow)?.length) {
+	if (!Object.values(attributes?.blockeraBoxShadow)?.length) {
 		return '';
 	}
 
@@ -16,7 +16,7 @@ export function BoxShadowGenerator(id, props) {
 	};
 
 	// Collect all properties
-	Object.entries(attributes?.publisherBoxShadow)?.map(([, item]) => {
+	Object.entries(attributes?.blockeraBoxShadow)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return undefined;
 		}

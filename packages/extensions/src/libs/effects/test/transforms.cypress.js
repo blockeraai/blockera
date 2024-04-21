@@ -11,7 +11,7 @@ describe('Transforms → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', { delay: 0 });
 
@@ -19,7 +19,7 @@ describe('Transforms → Functionality', () => {
 
 		cy.getParentContainer(
 			'2D & 3D Transforms',
-			'publisher-repeater-control'
+			'blockera-repeater-control'
 		).as('transform');
 	});
 
@@ -65,7 +65,7 @@ describe('Transforms → Functionality', () => {
 						order: 0,
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherTransform')
+					getSelectedBlock(data, 'blockeraTransform')
 				);
 			});
 
@@ -74,7 +74,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -121,7 +121,7 @@ describe('Transforms → Functionality', () => {
 						order: 0,
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherTransform')
+					getSelectedBlock(data, 'blockeraTransform')
 				);
 			});
 
@@ -130,7 +130,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'transform: scale3d(130%, 130%, 50%);');
 		});
@@ -173,7 +173,7 @@ describe('Transforms → Functionality', () => {
 						order: 0,
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherTransform')
+					getSelectedBlock(data, 'blockeraTransform')
 				);
 			});
 
@@ -182,7 +182,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -224,7 +224,7 @@ describe('Transforms → Functionality', () => {
 						order: 0,
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherTransform')
+					getSelectedBlock(data, 'blockeraTransform')
 				);
 			});
 
@@ -233,7 +233,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'transform: skew(10deg, 20deg);');
 		});
@@ -296,7 +296,7 @@ describe('Transforms → Functionality', () => {
 						order: 1,
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherTransform')
+					getSelectedBlock(data, 'blockeraTransform')
 				);
 			});
 
@@ -305,7 +305,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -342,7 +342,7 @@ describe('Transforms → Functionality', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect('150px').to.be.equal(
-					getSelectedBlock(data, 'publisherTransformSelfPerspective')
+					getSelectedBlock(data, 'blockeraTransformSelfPerspective')
 				);
 			});
 
@@ -351,7 +351,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -385,7 +385,7 @@ describe('Transforms → Functionality', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({ top: '50%', left: '50%' }).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherTransformSelfOrigin')
+					getSelectedBlock(data, 'blockeraTransformSelfOrigin')
 				);
 			});
 
@@ -394,7 +394,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'transform-origin: 50% 50%;');
 		});
@@ -419,7 +419,7 @@ describe('Transforms → Functionality', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect('hidden').to.be.equal(
-					getSelectedBlock(data, 'publisherBackfaceVisibility')
+					getSelectedBlock(data, 'blockeraBackfaceVisibility')
 				);
 			});
 
@@ -428,7 +428,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'backface-visibility: hidden;');
 		});
@@ -455,7 +455,7 @@ describe('Transforms → Functionality', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect('150px').to.be.equal(
-					getSelectedBlock(data, 'publisherTransformChildPerspective')
+					getSelectedBlock(data, 'blockeraTransformChildPerspective')
 				);
 			});
 
@@ -464,7 +464,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('.publisher-core-block').should(
+			cy.get('.blockera-core-block').should(
 				'have.css',
 				'perspective',
 				'150px'
@@ -497,7 +497,7 @@ describe('Transforms → Functionality', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({ top: '50%', left: '50%' }).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherTransformChildOrigin')
+					getSelectedBlock(data, 'blockeraTransformChildOrigin')
 				);
 			});
 
@@ -506,9 +506,10 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#publisher-core-inline-css-inline-css')
+			cy.get('style#blockera-core-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'perspective-origin: 50% 50%;');
 		});
 	});
 });
+

@@ -7,10 +7,10 @@ import { select } from '@wordpress/data';
 import { addFilter } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { mergeObjects } from '@publisher/utils';
-import { registerBlockExtension } from '@publisher/extensions';
+import { mergeObjects } from '@blockera/utils';
+import { registerBlockExtension } from '@blockera/extensions';
 
 /**
  * Internal dependencies
@@ -33,7 +33,7 @@ export const reregistrationBlocks = (): void => {
 
 		if (!currentBlock?.name && 'Shared' !== key) {
 			console.warn(
-				'Publisher Core Block validation: Block must contain name param!'
+				'Blockera Core Block validation: Block must contain name param!'
 			);
 			continue;
 		}
@@ -44,18 +44,16 @@ export const reregistrationBlocks = (): void => {
 
 export const registerThirdPartyExtensionDefinitions = (): void => {
 	addFilter(
-		'publisherCore.extensions.innerBlocks.definitionTypes',
-		'publisherCore.extensions.innerBlocks.definitionTypes.mergeBlockSettings',
+		'blockeraCore.extensions.innerBlocks.definitionTypes',
+		'blockeraCore.extensions.innerBlocks.definitionTypes.mergeBlockSettings',
 		(definitionTypes: Object): Object => {
 			const newDefinitionTypes = {};
 			let additionalDefinitionTypes = {};
 
-			const { getExtensions } = select(
-				'publisher-core/extensions/config'
-			);
+			const { getExtensions } = select('blockera-core/extensions/config');
 
 			Object.values(blocks).forEach((block: Object): Object => {
-				additionalDefinitionTypes = block?.publisherInnerBlocks || {};
+				additionalDefinitionTypes = block?.blockeraInnerBlocks || {};
 
 				Object.values(additionalDefinitionTypes).forEach(
 					(additionalDefinitionType: Object): Object => {

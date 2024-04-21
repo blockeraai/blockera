@@ -6,7 +6,7 @@ export default function TransitionIcon({}) {
 			viewBox="0 0 18 18"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
-			className="publisher-custom-icon"
+			className="blockera-custom-icon"
 		>
 			<path
 				opacity="0.4"

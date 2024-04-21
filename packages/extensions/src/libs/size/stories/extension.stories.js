@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import SizeExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherSizeExtension',
+	name: 'blockeraSizeExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -50,31 +50,31 @@ blocksInitializer({
 						{...{ ...props, attributes, setAttributes }}
 						initialOpen={true}
 						defaultValue={{
-							width: attributes?.publisherWidth || '',
-							height: attributes?.publisherHeight || '',
-							overflow: attributes?.publisherOverflow || '',
+							width: attributes?.blockeraWidth || '',
+							height: attributes?.blockeraHeight || '',
+							overflow: attributes?.blockeraOverflow || '',
 						}}
 						{...{
-							minWidth: attributes?.publisherMinWidth || '',
-							maxWidth: attributes?.publisherMaxWidth || '',
-							minHeight: attributes?.publisherMinHeight || '',
-							maxHeight: attributes?.publisherMaxHeight || '',
-							ratio: attributes?.publisherRatio || {
+							minWidth: attributes?.blockeraMinWidth || '',
+							maxWidth: attributes?.blockeraMaxWidth || '',
+							minHeight: attributes?.blockeraMinHeight || '',
+							maxHeight: attributes?.blockeraMaxHeight || '',
+							ratio: attributes?.blockeraRatio || {
 								value: '',
 								width: '',
 								height: '',
 							},
-							fit: attributes?.publisherFit || '',
-							fitPosition: attributes?.publisherFitPosition || {
+							fit: attributes?.blockeraFit || '',
+							fitPosition: attributes?.blockeraFitPosition || {
 								top: '',
 								left: '',
 							},
 						}}
 						extensionId={'Size'}
 						icon={<SizeExtensionIcon />}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Size', 'publisher-core')}
+						title={__('Size', 'blockera-core')}
 					/>
 				</InspectorControls>
 
@@ -111,20 +111,20 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherWidth: '',
-					publisherMinWidth: '',
-					publisherMaxWidth: '',
-					publisherMinHeight: '',
-					publisherMaxHeight: '',
-					publisherHeight: '',
-					publisherOverflow: '',
-					publisherRatio: {
+					blockeraWidth: '',
+					blockeraMinWidth: '',
+					blockeraMaxWidth: '',
+					blockeraMinHeight: '',
+					blockeraMaxHeight: '',
+					blockeraHeight: '',
+					blockeraOverflow: '',
+					blockeraRatio: {
 						value: '',
 						width: '',
 						height: '',
 					},
-					publisherFit: '',
-					publisherFitPosition: {
+					blockeraFit: '',
+					blockeraFitPosition: {
 						top: '',
 						left: '',
 					},

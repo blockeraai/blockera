@@ -5,7 +5,7 @@ export default function GearIcon({}) {
 			height="18"
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
-			className="publisher-custom-order"
+			className="blockera-custom-order"
 		>
 			<path d="M5 9C5 9.82843 4.32843 10.5 3.5 10.5C2.67157 10.5 2 9.82843 2 9C2 8.17157 2.67157 7.5 3.5 7.5C4.32843 7.5 5 8.17157 5 9Z" />
 			<path d="M10.5 9C10.5 9.82843 9.82843 10.5 9 10.5C8.17157 10.5 7.5 9.82843 7.5 9C7.5 8.17157 8.17157 7.5 9 7.5C9.82843 7.5 10.5 8.17157 10.5 9Z" />

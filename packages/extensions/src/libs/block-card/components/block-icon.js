@@ -8,9 +8,9 @@ import { memo } from '@wordpress/element';
 import { blockDefault } from '@wordpress/icons';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { componentClassNames } from '@publisher/classnames';
+import { componentClassNames } from '@blockera/classnames';
 
 function BlockIcon({
 	icon,

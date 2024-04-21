@@ -1,16 +1,16 @@
-.publisher-control-group {
+.blockera-control-group {
 	z-index: 999999;
-	border: 1px solid var(--publisher-controls-border-color);
+	border: 1px solid var(--blockera-controls-border-color);
 	border-radius: 2px;
 	transition: box-shadow 0.1s linear;
-	background: var(--publisher-controls-background-color);
+	background: var(--blockera-controls-background-color);
 
 	&.is-hovered,
 	&:hover {
-		border-color: var(--publisher-controls-border-color-hover);
+		border-color: var(--blockera-controls-border-color-hover);
 	}
 
-	.publisher-control-group-header {
+	.blockera-control-group-header {
 		display: flex;
 		align-items: center;
 		flex-wrap: nowrap;
@@ -22,14 +22,14 @@
 		position: relative;
 		font-size: 12px;
 
-		.publisher-control-action-buttons {
+		.blockera-control-action-buttons {
 			display: flex;
 			align-items: center;
 			background: #ffffff;
 			gap: -1px;
 			padding-left: 3px;
 
-			.publisher-component-button {
+			.blockera-component-button {
 				height: 28px;
 				width: 28px;
 				min-width: 28px;
@@ -38,35 +38,35 @@
 				padding: 0;
 
 				&:hover {
-					color: var(--publisher-controls-primary-color);
+					color: var(--blockera-controls-primary-color);
 				}
 			}
 		}
 	}
 
-	.publisher-control-group-content {
+	.blockera-control-group-content {
 		font-size: 12px;
 	}
 }
 
-.publisher-control-group.mode-accordion {
+.blockera-control-group.mode-accordion {
 
 	&.is-open.toggle-open-border {
-		border-color: var(--publisher-controls-primary-color);
-		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+		border-color: var(--blockera-controls-primary-color);
+		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 	}
 
-	.publisher-control-group-content {
-		border-top: 1px solid var(--publisher-controls-sep-color);
+	.blockera-control-group-content {
+		border-top: 1px solid var(--blockera-controls-sep-color);
 		padding: 12px 0;
 		margin: 0 12px;
 	}
 }
 
-.publisher-control-group.mode-popover {
+.blockera-control-group.mode-popover {
 
 	&.is-open {
-		border-color: var(--publisher-controls-primary-color);
-		box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+		border-color: var(--blockera-controls-primary-color);
+		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 	}
 }

@@ -1,14 +1,14 @@
-.publisher-extension.publisher-extension-block-card {
+.blockera-extension.blockera-extension-block-card {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
 
-	.publisher-extension-block-card__inner {
+	.blockera-extension-block-card__inner {
 		align-items: flex-start;
 		display: flex;
 	}
 
-	.publisher-component-block-icon {
+	.blockera-component-block-icon {
 		flex: 0 0 24px;
 		height: 24px;
 		margin-left: 0;
@@ -16,13 +16,13 @@
 		width: 24px;
 	}
 
-	.publisher-extension-block-card__content {
+	.blockera-extension-block-card__content {
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
 		gap: 5px;
 
-		.publisher-extension-block-card__title {
+		.blockera-extension-block-card__title {
 			line-height: 16px;
 			margin: 0 0;
 			color: #1e1e1e;
@@ -39,12 +39,12 @@
 				opacity: 0.3;
 			}
 
-			.publisher-extension-block-card__title__block:not(:last-child) {
+			.blockera-extension-block-card__title__block:not(:last-child) {
 				cursor: pointer;
 			}
 
-			.publisher-extension-block-card__title__item {
-				background-color: var(--publisher-controls-primary-color);
+			.blockera-extension-block-card__title__item {
+				background-color: var(--blockera-controls-primary-color);
 				color: #ffffff;
 				border-radius: 2px;
 				padding: 2px 5px;
@@ -55,16 +55,16 @@
 				}
 			}
 
-			.publisher-extension-block-card__title__item.item-state:not(.item-state-normal) {
-				--publisher-controls-primary-color: #d47c14;
+			.blockera-extension-block-card__title__item.item-state:not(.item-state-normal) {
+				--blockera-controls-primary-color: #d47c14;
 			}
 
-			.publisher-extension-block-card__title__item.inner-block {
-				--publisher-controls-primary-color: #cc0000;
+			.blockera-extension-block-card__title__item.inner-block {
+				--blockera-controls-primary-color: #cc0000;
 			}
 		}
 
-		.publisher-extension-block-card__description {
+		.blockera-extension-block-card__description {
 			display: block;
 			margin: 0;
 			line-height: 20px;

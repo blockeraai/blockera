@@ -1,15 +1,15 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon;
 
-use Publisher\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Foundation\Application;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class ValueAddonRegistry
  *
- * @package Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\ValueAddonRegistry
+ * @package Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\ValueAddonRegistry
  */
 class ValueAddonRegistry {
 
@@ -87,17 +87,17 @@ class ValueAddonRegistry {
 
 		$configKey = sprintf( 'valueAddon.%s', $instance->getConfigKey() );
 
-		$groups = pb_core_config( $configKey );
+		$groups = blockera_core_config( $configKey );
 
 		$groupsHook = sprintf(
-			'publisher-core/%1$s/groups/registry',
+			'blockera-core/%1$s/groups/registry',
 			$instance->valueAddonType()
 		);
 
 		/**
 		 * Filterable groups of current value addon type.
 		 *
-		 * @hook 'publisher-core/variable/groups/registry'
+		 * @hook 'blockera-core/variable/groups/registry'
 		 */
 		$filteredGroups = apply_filters( $groupsHook, $groups );
 
@@ -131,7 +131,7 @@ class ValueAddonRegistry {
 			}
 
 			$hookName = sprintf(
-				'publisher-core/%1$s/groups/%2$s/items/registry',
+				'blockera-core/%1$s/groups/%2$s/items/registry',
 				$instance->valueAddonType(),
 				$group
 			);
@@ -142,7 +142,7 @@ class ValueAddonRegistry {
 					/**
 					 * Filterable items of group registered.
 					 *
-					 * @hook `publisher-core/{$valueAddonType}/groups/{$valueAddonGroup}/items/registry`
+					 * @hook `blockera-core/{$valueAddonType}/groups/{$valueAddonGroup}/items/registry`
 					 */
 					'items' => $this->registerItems( $group, apply_filters( $hookName, $item['items'] ?? [] ) ),
 				]

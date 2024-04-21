@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -16,8 +16,8 @@ import {
 	IconExtensionSupports,
 	IconExtensionAttributes,
 	InnerBlockLinkIcon,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -31,11 +31,11 @@ const attributes = {
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	numbers: {
 		name: 'core/numbers',
 		type: 'numbers',
-		label: __('Numbers', 'publisher-core'),
+		label: __('Numbers', 'blockera-core'),
 		icon: <InnerBlockNumbersIcon />,
 		selectors: {
 			root: '.page-numbers:not(.dots)',
@@ -48,7 +48,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	current: {
 		name: 'core/current',
 		type: 'current',
-		label: __('Current Page', 'publisher-core'),
+		label: __('Current Page', 'blockera-core'),
 		icon: <InnerBlockCurrentIcon />,
 		selectors: {
 			root: '.page-numbers.current',
@@ -61,7 +61,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	dots: {
 		name: 'core/dots',
 		type: 'dots',
-		label: __('Dots', 'publisher-core'),
+		label: __('Dots', 'blockera-core'),
 		icon: <InnerBlockDotsIcon />,
 		selectors: {
 			root: '.page-numbers.dots',
@@ -74,14 +74,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const CommentsPaginationNumbers = {
-	name: 'publisherCommentsPaginationNumbers',
+	name: 'blockeraCommentsPaginationNumbers',
 	targetBlock: 'core/comments-pagination-numbers',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

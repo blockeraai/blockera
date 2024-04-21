@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import SpacingExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherSpacingExtension',
+	name: 'blockeraSpacingExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -51,11 +51,11 @@ blocksInitializer({
 						initialOpen={true}
 						extensionId={'Spacing'}
 						icon={<SpacingExtensionIcon />}
-						storeName={'publisher-core/controls'}
+						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Spacing', 'publisher-core')}
+						title={__('Spacing', 'blockera-core')}
 						defaultValue={attributes.style?.spacing || {}}
-						spacingValue={attributes.publisherSpacing}
+						spacingValue={attributes.blockeraSpacing}
 					/>
 				</InspectorControls>
 
@@ -92,7 +92,7 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherSpacing: {},
+					blockeraSpacing: {},
 				},
 			},
 		],

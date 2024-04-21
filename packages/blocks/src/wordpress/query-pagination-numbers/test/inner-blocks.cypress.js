@@ -26,7 +26,7 @@ describe('Query Pagination Numbers Block → Inner Blocks', () => {
 		// open inner block settings
 		openInnerBlocksExtension();
 
-		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
 				cy.getByAriaLabel('Numbers Customize').should('exist');
 				cy.getByAriaLabel('Current Page Customize').should('exist');
@@ -38,3 +38,4 @@ describe('Query Pagination Numbers Block → Inner Blocks', () => {
 		);
 	});
 });
+

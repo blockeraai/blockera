@@ -7,11 +7,11 @@ import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
-import { ColorIndicator, Button } from '@publisher/components';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlClassNames } from '@blockera/classnames';
+import { ColorIndicator, Button } from '@blockera/components';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -123,7 +123,7 @@ export default function ColorControl({
 			</span>
 		) : (
 			<span className="color-label" data-cy="color-label">
-				{__('None', 'publisher-core')}
+				{__('None', 'blockera-core')}
 			</span>
 		);
 	}
@@ -151,7 +151,7 @@ export default function ColorControl({
 				onClick={() => setOpen(!isOpen)}
 				style={{
 					...style,
-					'--publisher-controls-primary-color': value,
+					'--blockera-controls-primary-color': value,
 				}}
 				data-cy="color-btn"
 				{...props}

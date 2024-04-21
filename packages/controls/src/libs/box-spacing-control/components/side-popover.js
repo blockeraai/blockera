@@ -7,10 +7,10 @@ import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { Button, Flex, Grid, Popover } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Button, Flex, Grid, Popover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -33,7 +33,7 @@ export function SidePopover({
 		return newValue;
 	},
 	defaultValue = '0px',
-	inputLabel = __('Space', 'publisher-blocks'),
+	inputLabel = __('Space', 'blockera-core'),
 	inputLabelDescription = '',
 	inputLabelPopoverTitle = '',
 }: SidePopoverProps): MixedElement {
@@ -260,7 +260,7 @@ export function SidePopover({
 						label={
 							<Flex gap="4px" alignItems="center">
 								<ShortcutIcon />
-								{__('Shortcuts', 'publisher-core')}
+								{__('Shortcuts', 'blockera-core')}
 							</Flex>
 						}
 						columns="columns-1"
@@ -285,7 +285,7 @@ export function SidePopover({
 											}}
 											data-cy="box-spacing-set-auto"
 										>
-											{__('Auto', 'publisher-core')}
+											{__('Auto', 'blockera-core')}
 										</Button>
 									</Flex>
 									{getAllActionButtons()}

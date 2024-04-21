@@ -107,7 +107,7 @@ describe('link control component testing', () => {
 			cy.get('[data-cy="repeater-item"]').first().click();
 			cy.get('.components-select-control__input').select('target');
 
-			cy.getByDataCy('publisher-repeater-control').clickOutside();
+			cy.getByDataCy('blockera-repeater-control').clickOutside();
 
 			// Check data provider value!
 			cy.then(() => {

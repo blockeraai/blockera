@@ -13,10 +13,10 @@ import {
 import type { Element } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isBoolean, isFunction } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { isBoolean, isFunction } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -186,13 +186,13 @@ const RepeaterItem = ({
 							}}
 							aria-label={sprintf(
 								// translators: %s is the repeater item id. It's the aria label for repeater item
-								__('Item %s', 'publisher-core'),
+								__('Item %s', 'blockera-core'),
 								getArialLabelSuffix(itemId)
 							)}
 						>
 							{sprintf(
 								// translators: %s is the repeater item id. It's the repeater item name
-								__('Item %s', 'publisher-core'),
+								__('Item %s', 'blockera-core'),
 								getArialLabelSuffix(itemId)
 							)}
 						</div>

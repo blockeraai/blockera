@@ -7,10 +7,10 @@ import { useContext } from '@wordpress/element';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Flex } from '@publisher/components';
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { Flex } from '@blockera/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -73,7 +73,7 @@ export const Filled = {
 							value: [
 								{
 									type: 'image',
-									image: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+									image: 'https://betterstudio.com/wp-content/uploads/2022/09/blockera-theme.svg',
 									isVisible: true,
 								},
 								{
@@ -82,7 +82,7 @@ export const Filled = {
 								},
 								{
 									type: 'image',
-									image: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+									image: 'https://betterstudio.com/wp-content/uploads/2022/09/blockera-theme.svg',
 									isVisible: true,
 									isOpen: true,
 								},

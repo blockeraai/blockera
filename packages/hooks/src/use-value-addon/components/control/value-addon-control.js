@@ -7,15 +7,15 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { isUndefined } from '@publisher/utils';
-import { getVariable, STORE_NAME } from '@publisher/core-data';
-import { Tooltip } from '@publisher/components';
+} from '@blockera/classnames';
+import { isUndefined } from '@blockera/utils';
+import { getVariable, STORE_NAME } from '@blockera/core-data';
+import { Tooltip } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -44,7 +44,7 @@ export default function ({
 		if (controlProps.value.valueType === 'variable') {
 			if (controlProps.isDeletedVar) {
 				isDeleted = true;
-				label = __('Missing Variable', 'publisher-core');
+				label = __('Missing Variable', 'blockera-core');
 				icon = <DeletedIcon />;
 			} else {
 				const item = getVariable(
@@ -63,7 +63,7 @@ export default function ({
 		} else if (controlProps.value.valueType === 'dynamic-value') {
 			if (controlProps.isDeletedDV) {
 				isDeleted = true;
-				label = __('Missing Item', 'publisher-core');
+				label = __('Missing Item', 'blockera-core');
 				icon = <DeletedIcon />;
 			} else {
 				const item = getDynamicValue(
@@ -89,8 +89,8 @@ export default function ({
 			<Tooltip
 				text={
 					controlProps.value?.valueType === 'variable'
-						? __('Change Variable', 'publisher-core')
-						: __('Change Dynamic Value', 'publisher-core')
+						? __('Change Variable', 'blockera-core')
+						: __('Change Dynamic Value', 'blockera-core')
 				}
 			>
 				<button

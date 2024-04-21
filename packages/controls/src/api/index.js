@@ -6,9 +6,9 @@
 import { dispatch, select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString } from '@publisher/utils';
+import { isString } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -30,7 +30,7 @@ export function registerControl({
 		return;
 	}
 
-	//get `publisher-core/controls` store or details of that
+	//get `blockera-core/controls` store or details of that
 	const { getControl } =
 		repeaterControlStoreName === STORE_NAME
 			? select(repeaterStore)
@@ -50,7 +50,7 @@ export function registerControl({
 		...control,
 	};
 
-	//get `addControl` of `publisher-core/controls` || `publisher-core/controls/repeater` store dispatchers
+	//get `addControl` of `blockera-core/controls` || `blockera-core/controls/repeater` store dispatchers
 	const { addControl } =
 		repeaterControlStoreName === STORE_NAME
 			? dispatch(repeaterStore)
@@ -64,7 +64,7 @@ export function registerControl({
 }
 
 export function unregisterControl(names: Array<string>, store: string): void {
-	//get `addControl` of `publisher-core/controls` || `publisher-core/controls/repeater` store dispatchers
+	//get `addControl` of `blockera-core/controls` || `blockera-core/controls/repeater` store dispatchers
 	const { removeControl } =
 		repeaterControlStoreName === store
 			? dispatch(repeaterStore)

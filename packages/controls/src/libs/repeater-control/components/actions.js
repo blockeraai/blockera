@@ -7,10 +7,10 @@ import { useContext } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { Button } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -87,19 +87,19 @@ export default function RepeaterItemActions({
 					}}
 					label={
 						isVisible
-							? __('Disable', 'publisher')
-							: __('Enable', 'publisher')
+							? __('Disable', 'blockera')
+							: __('Enable', 'blockera')
 					}
 					aria-label={
 						isVisible
 							? sprintf(
 									// translators: %s is the repeater item id. It's aria label for disabling repeater item
-									__('Disable %s', 'publisher'),
+									__('Disable %s', 'blockera'),
 									getArialLabelSuffix(itemId)
 							  )
 							: sprintf(
 									// translators: %s is the repeater item id. It's aria label for enabling repeater item
-									__('Enable %s', 'publisher'),
+									__('Enable %s', 'blockera'),
 									getArialLabelSuffix(itemId)
 							  )
 					}
@@ -115,7 +115,7 @@ export default function RepeaterItemActions({
 						icon={CloneIcon}
 						showTooltip={true}
 						tooltipPosition="top"
-						label={__('Clone', 'publisher')}
+						label={__('Clone', 'blockera')}
 						onClick={(event) => {
 							event.stopPropagation();
 
@@ -130,7 +130,7 @@ export default function RepeaterItemActions({
 						}}
 						aria-label={sprintf(
 							// translators: %s is the repeater item id. It's aria label for cloning repeater item
-							__('Clone %s', 'publisher'),
+							__('Clone %s', 'blockera'),
 							getArialLabelSuffix(itemId)
 						)}
 					/>
@@ -167,10 +167,10 @@ export default function RepeaterItemActions({
 								value: onDelete(itemId, repeaterItems),
 							});
 						}}
-						label={__('Delete', 'publisher')}
+						label={__('Delete', 'blockera')}
 						aria-label={sprintf(
 							// translators: %s is the repeater item id. It's aria label for deleting repeater item
-							__('Delete %s', 'publisher'),
+							__('Delete %s', 'blockera'),
 							getArialLabelSuffix(itemId)
 						)}
 					/>

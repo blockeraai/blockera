@@ -6,13 +6,13 @@ import { useEffect, useState } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { isFunction } from '@publisher/utils';
+} from '@blockera/classnames';
+import { isFunction } from '@blockera/utils';
 
 /**
  * Internal dependencies

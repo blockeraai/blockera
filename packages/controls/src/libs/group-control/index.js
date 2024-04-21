@@ -9,14 +9,14 @@ import type { ComponentType, MixedElement } from 'react';
 import { memo, useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { Button, Popover } from '@publisher/components';
-import { useOutsideClick, isFunction } from '@publisher/utils';
+} from '@blockera/classnames';
+import { Button, Popover } from '@blockera/components';
+import { useOutsideClick, isFunction } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -153,8 +153,8 @@ const GroupControl: ComponentType<any> = memo(
 								}
 								label={
 									isOpen
-										? __('Close Settings', 'publisher')
-										: __('Open Settings', 'publisher')
+										? __('Close Settings', 'blockera')
+										: __('Open Settings', 'blockera')
 								}
 								onClick={onClickCallback}
 								noBorder={true}

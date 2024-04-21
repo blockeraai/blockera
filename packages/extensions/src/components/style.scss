@@ -1,4 +1,4 @@
-.publisher-block-inspector.loading {
+.blockera-block-inspector.loading {
 	position: absolute;
 	z-index: 999999999;
 	background: #ffffff;
@@ -10,9 +10,9 @@
 	}
 }
 
-.publisher-block-card-wrapper {
+.blockera-block-card-wrapper {
 
-	.publisher-dropdown-menu {
+	.blockera-dropdown-menu {
 		position: relative;
 
 		.components-dropdown-menu {
@@ -24,14 +24,14 @@
 	}
 }
 
-.publisher-block-menu-item {
+.blockera-block-menu-item {
 
 	span.components-menu-item__item {
 		display: block;
 	}
 }
 
-.publisher-block-menu-item-selected {
+.blockera-block-menu-item-selected {
 	opacity: 0.5;
 	cursor: none;
 	pointer-events: none;

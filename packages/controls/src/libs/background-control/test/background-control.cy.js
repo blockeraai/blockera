@@ -446,9 +446,9 @@ describe('background control', () => {
 						'mesh-gradient-0'
 					]['mesh-gradient'];
 
-					cy.get('.publisher-control-mesh-generator-preview').click();
+					cy.get('.blockera-control-mesh-generator-preview').click();
 
-					cy.get('.publisher-control-mesh-generator-preview').then(
+					cy.get('.blockera-control-mesh-generator-preview').then(
 						() => {
 							const newColors = getControlValue(name, STORE_NAME)[
 								'mesh-gradient-0'
@@ -505,7 +505,7 @@ describe('background control', () => {
 					);
 
 					// gradient assertion
-					cy.get('.publisher-control-mesh-generator-preview').then(
+					cy.get('.blockera-control-mesh-generator-preview').then(
 						($el) => {
 							const elementStyles = window.getComputedStyle(
 								$el[0]
@@ -714,3 +714,4 @@ describe('background control', () => {
 		});
 	});
 });
+

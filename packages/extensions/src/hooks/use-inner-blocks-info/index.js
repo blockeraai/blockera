@@ -30,32 +30,32 @@ export const useInnerBlocksInfo = ({
 		blocks: { getBlockType },
 	} = useStoreSelectors();
 
-	const publisherInnerBlocks: InnerBlocks = prepareInnerBlockTypes(
-		additional?.publisherInnerBlocks || {},
+	const blockeraInnerBlocks: InnerBlocks = prepareInnerBlockTypes(
+		additional?.blockeraInnerBlocks || {},
 		getBlockType(name)?.attributes || {}
 	);
 
-	let savedInnerBlocks: InnerBlocks = attributes.publisherInnerBlocks;
+	let savedInnerBlocks: InnerBlocks = attributes.blockeraInnerBlocks;
 
 	if (!Object.values(savedInnerBlocks).length) {
 		if (isInnerBlock(currentBlock)) {
 			if (
 				!Object.keys(
 					(
-						attributes.publisherBlockStates[currentState]
+						attributes.blockeraBlockStates[currentState]
 							?.breakpoints[currentBreakpoint] || {}
 					)?.attributes || {}
 				).length
 			) {
-				savedInnerBlocks = publisherInnerBlocks;
+				savedInnerBlocks = blockeraInnerBlocks;
 			} else {
 				savedInnerBlocks =
-					attributes.publisherBlockStates[currentState].breakpoints[
+					attributes.blockeraBlockStates[currentState].breakpoints[
 						currentBreakpoint
-					].attributes.publisherInnerBlocks;
+					].attributes.blockeraInnerBlocks;
 			}
 		} else {
-			savedInnerBlocks = publisherInnerBlocks;
+			savedInnerBlocks = blockeraInnerBlocks;
 		}
 	}
 
@@ -76,7 +76,7 @@ export const useInnerBlocksInfo = ({
 				(innerBlock: InnerBlockType | string): InnerBlockModel => {
 					return {
 						...innerBlock,
-						...(additional.publisherInnerBlocks[innerBlock] ?? {}),
+						...(additional.blockeraInnerBlocks[innerBlock] ?? {}),
 						attributes: {
 							...attributes,
 							...innerBlocks[innerBlock].attributes,
@@ -91,7 +91,6 @@ export const useInnerBlocksInfo = ({
 
 	return {
 		currentInnerBlock: getCurrentInnerBlock(),
-		publisherInnerBlocks:
-			memoizedOverridingInnerBlocks(publisherInnerBlocks),
+		blockeraInnerBlocks: memoizedOverridingInnerBlocks(blockeraInnerBlocks),
 	};
 };

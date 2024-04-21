@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
 
 /**
  * Class UserProfilePicture
  *
  * @since   1.0.0
- * @package Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields
+ * @package Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields
  */
 class UserProfilePicture extends AuthorProfileImage {
 

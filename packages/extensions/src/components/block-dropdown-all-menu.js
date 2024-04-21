@@ -13,7 +13,7 @@ import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
  * Internal dependencies
  */
 import { More } from '../libs/settings/icons';
-import { NoticeControl } from '@publisher/controls';
+import { NoticeControl } from '@blockera/controls';
 import classNames from 'classnames';
 
 export const BlockDropdownAllMenu = ({
@@ -23,12 +23,12 @@ export const BlockDropdownAllMenu = ({
 	isActive: boolean,
 	setActive: (isActive: boolean) => void,
 }): MixedElement => {
-	const { setBlockExtensionsStatus } = dispatch('publisher-core/extensions');
+	const { setBlockExtensionsStatus } = dispatch('blockera-core/extensions');
 
 	return (
 		<DropdownMenu
-			icon={() => <More className={'publisher-disable'} />}
-			label="Publisher Block Settings"
+			icon={() => <More className={'blockera-disable'} />}
+			label=" Block Settings"
 			popoverProps={{
 				offset: 20,
 				focusOnMount: true,
@@ -37,7 +37,7 @@ export const BlockDropdownAllMenu = ({
 		>
 			{({ onClose }) => {
 				return (
-					<MenuGroup label={__('Block Settings', 'publisher-core')}>
+					<MenuGroup label={__('Block Settings', 'blockera-core')}>
 						<MenuItem
 							icon={isActive ? '' : check}
 							onClick={() => {
@@ -46,15 +46,15 @@ export const BlockDropdownAllMenu = ({
 								onClose();
 							}}
 							className={classNames({
-								'publisher-block-menu-item': isActive,
-								'publisher-block-menu-item-selected': !isActive,
+								'blockera-block-menu-item': isActive,
+								'blockera-block-menu-item-selected': !isActive,
 							})}
 						>
 							<span>
 								{(!isActive
-									? __('Disabled', 'publisher-core')
-									: __('Disable', 'publisher-core')) +
-									__(' Publisher', 'publisher-core')}
+									? __('Disabled', 'blockera-core')
+									: __('Disable', 'blockera-core')) +
+									__(' ', 'blockera-core')}
 							</span>
 							{isActive && (
 								<NoticeControl
@@ -62,8 +62,8 @@ export const BlockDropdownAllMenu = ({
 									style={{ marginTop: '20px' }}
 								>
 									{__(
-										'If you click on "Disable Publisher", cleaning all Publisher attributes from current block. Double-check and ensure this is intentional.',
-										'publisher-core'
+										'If you click on "Disable ", cleaning all  attributes from current block. Double-check and ensure this is intentional.',
+										'blockera-core'
 									)}
 								</NoticeControl>
 							)}
@@ -76,14 +76,14 @@ export const BlockDropdownAllMenu = ({
 								onClose();
 							}}
 							className={classNames({
-								'publisher-block-menu-item-selected': isActive,
+								'blockera-block-menu-item-selected': isActive,
 							})}
 						>
 							<span>
 								{(isActive
-									? __('Enabled', 'publisher-core')
-									: __('Enable', 'publisher-core')) +
-									__(' Publisher', 'publisher-core')}
+									? __('Enabled', 'blockera-core')
+									: __('Enable', 'blockera-core')) +
+									__(' ', 'blockera-core')}
 							</span>
 						</MenuItem>
 					</MenuGroup>

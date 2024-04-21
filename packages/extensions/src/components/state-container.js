@@ -7,9 +7,9 @@ import type { Element } from 'react';
 import { useSelect } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { getClassNames } from '@publisher/classnames';
+import { getClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -27,7 +27,7 @@ export default function StateContainer({ children }: Object): Element<any> {
 			getExtensionCurrentBlock,
 			getExtensionInnerBlockState,
 			getExtensionCurrentBlockState,
-		} = select('publisher-core/extensions');
+		} = select('blockera-core/extensions');
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),
@@ -47,11 +47,11 @@ export default function StateContainer({ children }: Object): Element<any> {
 	return (
 		<div
 			className={getClassNames('state-container')}
-			aria-label={__('Publisher Block State Container', 'publisher-core')}
+			aria-label={__(' Block State Container', 'blockera-core')}
 			style={{
 				color: 'inherit',
-				'--publisher-controls-primary-color': activeColor,
-				'--publisher-tab-panel-active-color': activeColor,
+				'--blockera-controls-primary-color': activeColor,
+				'--blockera-tab-panel-active-color': activeColor,
 			}}
 		>
 			{children}

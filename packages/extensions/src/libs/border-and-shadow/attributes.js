@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherBorder: {
+	blockeraBorder: {
 		type: 'object',
 		default: {
 			type: 'all',
@@ -10,18 +10,18 @@ export const attributes = {
 			},
 		},
 	},
-	publisherBorderRadius: {
+	blockeraBorderRadius: {
 		type: 'object',
 		default: {
 			type: 'all',
 			all: '',
 		},
 	},
-	publisherBoxShadow: {
+	blockeraBoxShadow: {
 		type: 'object',
 		default: {},
 	},
-	publisherOutline: {
+	blockeraOutline: {
 		type: 'object',
 		default: {},
 	},

@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import LayoutExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherLayoutExtension',
+	name: 'blockeraLayoutExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -50,20 +50,20 @@ blocksInitializer({
 						{...{ ...props, attributes, setAttributes }}
 						initialOpen={true}
 						values={{
-							gap: attributes?.publisherGap || '',
-							display: attributes?.publisherDisplay || '',
-							flexWrap: attributes?.publisherFlexWrap || {},
-							alignItems: attributes?.publisherAlignItems || '',
+							gap: attributes?.blockeraGap || '',
+							display: attributes?.blockeraDisplay || '',
+							flexWrap: attributes?.blockeraFlexWrap || {},
+							alignItems: attributes?.blockeraAlignItems || '',
 							flexDirection:
-								attributes?.publisherFlexDirection || {},
+								attributes?.blockeraFlexDirection || {},
 							justifyContent:
-								attributes?.publisherJustifyContent || '',
+								attributes?.blockeraJustifyContent || '',
 						}}
 						extensionId={'Layout'}
 						icon={<LayoutExtensionIcon />}
-						storeName={'publisher-core/controls'}
+						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Layout', 'publisher-core')}
+						title={__('Layout', 'blockera-core')}
 					/>
 				</InspectorControls>
 
@@ -100,13 +100,13 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherGap: '',
-					publisherDisplay: '',
-					publisherFlexWrap: { value: 'nowrap', reverse: false },
-					publisherAlignItems: '',
-					publisherAlignContent: '',
-					publisherFlexDirection: { value: 'row', reverse: false },
-					publisherJustifyContent: '',
+					blockeraGap: '',
+					blockeraDisplay: '',
+					blockeraFlexWrap: { value: 'nowrap', reverse: false },
+					blockeraAlignItems: '',
+					blockeraAlignContent: '',
+					blockeraFlexDirection: { value: 'row', reverse: false },
+					blockeraJustifyContent: '',
 				},
 			},
 		],

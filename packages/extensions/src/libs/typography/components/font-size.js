@@ -5,9 +5,9 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { ControlContextProvider, InputControl } from '@publisher/controls';
+import { ControlContextProvider, InputControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -32,24 +32,24 @@ export const FontSize = ({
 			value={{
 				name: generateExtensionId(block, 'font-size'),
 				value,
-				attribute: 'publisherFontSize',
+				attribute: 'blockeraFontSize',
 				blockName: block.blockName,
 			}}
 		>
 			<InputControl
-				label={__('Font Size', 'publisher-core')}
+				label={__('Font Size', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets the size of the font for text content, allowing customization of text appearance for readability and aesthetic appeal in various contexts.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'Relative units like "em" and "rem" are recommended for responsive designs as they adjust based on parent font size or root font size, respectively.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -59,7 +59,7 @@ export const FontSize = ({
 				min={0}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					onChange('publisherFontSize', newValue, { ref })
+					onChange('blockeraFontSize', newValue, { ref })
 				}
 				controlAddonTypes={['variable']}
 				variableTypes={['font-size']}

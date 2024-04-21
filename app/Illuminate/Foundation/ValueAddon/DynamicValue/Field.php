@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
 
 /**
  * Class Field
@@ -8,7 +8,7 @@ namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
  * An abstract class to register new field in DynamicValue Module.
  *
  * @since   1.0.0
- * @package Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field
+ * @package Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field
  */
 abstract class Field extends BaseField {
 

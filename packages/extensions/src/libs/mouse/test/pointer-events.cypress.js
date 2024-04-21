@@ -11,7 +11,7 @@ describe('Pointer Events → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', {
 			delay: 0,
@@ -37,7 +37,7 @@ describe('Pointer Events → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect('all').to.be.equal(
-				getSelectedBlock(data, 'publisherPointerEvents')
+				getSelectedBlock(data, 'blockeraPointerEvents')
 			);
 		});
 
@@ -46,10 +46,11 @@ describe('Pointer Events → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'pointer-events',
 			'all'
 		);
 	});
 });
+

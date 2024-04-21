@@ -7,16 +7,16 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	PanelBodyControl,
 	BoxSpacingControl,
 	ControlContextProvider,
-} from '@publisher/controls';
-import { isUndefined, hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
+} from '@blockera/controls';
+import { isUndefined, hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -37,7 +37,7 @@ const fallbackValue = {
 export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 	({
 		block,
-		spacingConfig: { publisherSpacing },
+		spacingConfig: { blockeraSpacing },
 		defaultValue,
 		spacingValue,
 		handleOnChangeAttributes,
@@ -45,17 +45,17 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 	}: TSpacingProps): MixedElement => {
 		return (
 			<PanelBodyControl
-				title={__('Spacing', 'publisher-core')}
+				title={__('Spacing', 'blockera-core')}
 				initialOpen={true}
 				icon={<SpacingExtensionIcon />}
 				className={extensionClassNames('spacing')}
 			>
-				{isActiveField(publisherSpacing) && (
+				{isActiveField(blockeraSpacing) && (
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'spacing'),
 							value: spacingValue,
-							attribute: 'publisherSpacing',
+							attribute: 'blockeraSpacing',
 							blockName: block.blockName,
 						}}
 					>
@@ -75,7 +75,7 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 											: {};
 
 									handleOnChangeAttributes(
-										'publisherSpacing',
+										'blockeraSpacing',
 										newValue,
 										{
 											addOrModifyRootItems:
@@ -112,7 +112,7 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 													'vertical-horizontal',
 										  }
 								}
-								{...extensionProps.publisherSpacing}
+								{...extensionProps.blockeraSpacing}
 							/>
 						</BaseControl>
 					</ControlContextProvider>

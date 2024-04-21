@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { useDragValue } from '@publisher/utils';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { useDragValue } from '@blockera/utils';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -214,7 +214,7 @@ export function PaddingRight({
 					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
-						ariaLabel={__('Right Padding', 'publisher-core')}
+						ariaLabel={__('Right Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.right)
@@ -249,18 +249,18 @@ export function PaddingRight({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Right Padding Space', 'publisher-core')}
-						inputLabel={__('Right Padding', 'publisher-core')}
+						title={__('Right Padding Space', 'blockera-core')}
+						inputLabel={__('Right Padding', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Right Padding Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies only to the right edge of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

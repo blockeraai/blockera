@@ -5,9 +5,9 @@
 import type { Node } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useBlockContext } from '@publisher/extensions/src/hooks/context';
+import { useBlockContext } from '@blockera/extensions/src/hooks/context';
 
 /**
  * Internal dependencies

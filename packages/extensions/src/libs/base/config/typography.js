@@ -10,133 +10,133 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherFontSize: FeatureConfig = {
+const blockeraFontSize: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Font Size', 'publisher-core'),
+	label: __('Font Size', 'blockera-core'),
 };
 
-const publisherLineHeight: FeatureConfig = {
+const blockeraLineHeight: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Line Height', 'publisher-core'),
+	label: __('Line Height', 'blockera-core'),
 };
 
-const publisherFontColor: FeatureConfig = {
+const blockeraFontColor: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Font Color', 'publisher-core'),
+	label: __('Font Color', 'blockera-core'),
 };
 
-const publisherTextShadow: FeatureConfig = {
+const blockeraTextShadow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Shadow', 'publisher-core'),
+	label: __('Text Shadow', 'blockera-core'),
 };
 
-const publisherTextAlign: FeatureConfig = {
+const blockeraTextAlign: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Align', 'publisher-core'),
+	label: __('Text Align', 'blockera-core'),
 };
 
-const publisherTextDecoration: FeatureConfig = {
+const blockeraTextDecoration: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Decoration', 'publisher-core'),
+	label: __('Text Decoration', 'blockera-core'),
 };
 
-const publisherFontStyle: FeatureConfig = {
+const blockeraFontStyle: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Font Style', 'publisher-core'),
+	label: __('Font Style', 'blockera-core'),
 };
 
-const publisherTextTransform: FeatureConfig = {
+const blockeraTextTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Transform', 'publisher-core'),
+	label: __('Text Transform', 'blockera-core'),
 };
 
-const publisherDirection: FeatureConfig = {
+const blockeraDirection: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Direction', 'publisher-core'),
+	label: __('Direction', 'blockera-core'),
 };
 
-const publisherLetterSpacing: FeatureConfig = {
+const blockeraLetterSpacing: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Letter Spacing', 'publisher-core'),
+	label: __('Letter Spacing', 'blockera-core'),
 };
 
-const publisherWordSpacing: FeatureConfig = {
+const blockeraWordSpacing: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Word Spacing', 'publisher-core'),
+	label: __('Word Spacing', 'blockera-core'),
 };
 
-const publisherTextIndent: FeatureConfig = {
+const blockeraTextIndent: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Indent', 'publisher-core'),
+	label: __('Text Indent', 'blockera-core'),
 };
 
-const publisherTextOrientation: FeatureConfig = {
+const blockeraTextOrientation: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Orientation', 'publisher-core'),
+	label: __('Text Orientation', 'blockera-core'),
 };
 
-const publisherTextColumns: FeatureConfig = {
+const blockeraTextColumns: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Columns', 'publisher-core'),
+	label: __('Text Columns', 'blockera-core'),
 };
 
-const publisherTextStroke: FeatureConfig = {
+const blockeraTextStroke: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Stroke', 'publisher-core'),
+	label: __('Text Stroke', 'blockera-core'),
 };
 
-const publisherWordBreak: FeatureConfig = {
+const blockeraWordBreak: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Word Break', 'publisher-core'),
+	label: __('Word Break', 'blockera-core'),
 };
 
 export const typographyConfig = {
-	publisherFontSize,
-	publisherLineHeight,
-	publisherFontColor,
-	publisherTextShadow,
-	publisherTextAlign,
-	publisherTextDecoration,
-	publisherFontStyle,
-	publisherTextTransform,
-	publisherDirection,
-	publisherLetterSpacing,
-	publisherWordSpacing,
-	publisherTextIndent,
-	publisherTextOrientation,
-	publisherTextColumns,
-	publisherTextStroke,
-	publisherWordBreak,
+	blockeraFontSize,
+	blockeraLineHeight,
+	blockeraFontColor,
+	blockeraTextShadow,
+	blockeraTextAlign,
+	blockeraTextDecoration,
+	blockeraFontStyle,
+	blockeraTextTransform,
+	blockeraDirection,
+	blockeraLetterSpacing,
+	blockeraWordSpacing,
+	blockeraTextIndent,
+	blockeraTextOrientation,
+	blockeraTextColumns,
+	blockeraTextStroke,
+	blockeraWordBreak,
 };

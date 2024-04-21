@@ -69,7 +69,7 @@ export default function TabPanel({
 				>
 					<Button
 						className={classnames(
-							'components-tab-panel__tabs-item publisher-tab-button',
+							'components-tab-panel__tabs-item blockera-tab-button',
 							tab.className,
 							{
 								[activeClass]: tab.name === selected,
@@ -87,7 +87,7 @@ export default function TabPanel({
 							alignItems={'center'}
 							gap={'5px'}
 						>
-							<div data-test={'publisher-tab-icon'}>
+							<div data-test={'blockera-tab-icon'}>
 								{tab.icon}
 							</div>
 							{tab.title}

@@ -8,9 +8,9 @@ import 'eyedropper-polyfill';
 import { useCallback, useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button, Popover } from '@publisher/components';
+import { Button, Popover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -23,7 +23,7 @@ import { ColorPallet } from './components';
 import PickerIcon from './icons/picker';
 
 export default function ColorPickerControl({
-	popoverTitle = __('Color Picker', 'publisher-core'),
+	popoverTitle = __('Color Picker', 'blockera-core'),
 	isOpen = false,
 	onClose = () => {},
 	placement = 'left-start',
@@ -106,7 +106,7 @@ export default function ColorPickerControl({
 									style={{ padding: '5px' }}
 									aria-label={__(
 										'Pick Color',
-										'publisher-core'
+										'blockera-core'
 									)}
 								>
 									<PickerIcon />
@@ -122,7 +122,7 @@ export default function ColorPickerControl({
 										style={{ padding: '5px' }}
 										aria-label={__(
 											'Reset Color (Clear)',
-											'publisher-core'
+											'blockera-core'
 										)}
 									>
 										<TrashIcon />
@@ -160,9 +160,9 @@ export default function ColorPickerControl({
 			{hasClearBtn && (
 				<Button
 					onClick={() => setValue('')}
-					aria-label={__('Reset Color (Clear)', 'publisher-core')}
+					aria-label={__('Reset Color (Clear)', 'blockera-core')}
 				>
-					{__('Clear', 'publisher-core')}
+					{__('Clear', 'blockera-core')}
 				</Button>
 			)}
 		</BaseControl>

@@ -1,22 +1,22 @@
-#publisher-core-canvas-editor {
+#blockera-core-canvas-editor {
 	display: flex;
 	justify-content: space-between;
 
-	.publisher-canvas-preview-link {
+	.blockera-canvas-preview-link {
 		position: absolute;
 		top: 18px;
 		margin-left: 15px;
 	}
 }
 
-.publisher-core-canvas-breakpoints {
+.blockera-core-canvas-breakpoints {
 	width: 450px;
 	height: 36px;
 	background: #f0f0f0;
 	border-radius: 3px;
 	padding: 0 10px;
 
-	.publisher-control-publisher-core-breakpoints {
+	.blockera-control-blockera-core-breakpoints {
 		line-height: 36px;
 
 		svg {
@@ -27,13 +27,13 @@
 		}
 
 		svg:hover {
-			fill: var(--publisher-controls-primary-color);
-			color: var(--publisher-controls-primary-color);
+			fill: var(--blockera-controls-primary-color);
+			color: var(--blockera-controls-primary-color);
 		}
 	}
 }
 
-.publisher-core-canvas {
+.blockera-core-canvas {
 	border: 1px solid rgb(221, 221, 221);
 
 	&.is-tablet-preview,
@@ -54,3 +54,4 @@
 		margin: 72px auto;
 	}
 }
+

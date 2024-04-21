@@ -1,17 +1,17 @@
 :root {
-	--publisher-tab-panel-active-color: var(--publisher-controls-primary-color);
-	--publisher-tab-panel-context-color: #e0e0e0;
+	--blockera-tab-panel-active-color: var(--blockera-controls-primary-color);
+	--blockera-tab-panel-context-color: #e0e0e0;
 }
 
-.publisher-tab-panel .components-tab-panel__tabs {
+.blockera-tab-panel .components-tab-panel__tabs {
 	background-color: #f8f9fc;
 	justify-content: space-between;
 }
 
-.publisher-tab-panel .components-tab-panel__tabs-item {
+.blockera-tab-panel .components-tab-panel__tabs-item {
 	background-color: #f6f6f6;
-	border-right: solid 1px var(--publisher-tab-panel-context-color);
-	border-top: solid 1px var(--publisher-tab-panel-context-color);
+	border-right: solid 1px var(--blockera-tab-panel-context-color);
+	border-top: solid 1px var(--blockera-tab-panel-context-color);
 	flex: 1;
 	position: relative;
 	z-index: 1;
@@ -27,13 +27,13 @@
 		left: -1px;
 		right: -1px;
 		height: 2px;
-		background-color: var(--publisher-tab-panel-active-color);
+		background-color: var(--blockera-tab-panel-active-color);
 	}
 }
 
-.publisher-tab-panel .components-tab-panel__tabs-item.active-tab {
+.blockera-tab-panel .components-tab-panel__tabs-item.active-tab {
 	background-color: #ffffff;
-	color: var(--publisher-tab-panel-active-color);
+	color: var(--blockera-tab-panel-active-color);
 	border-bottom-color: transparent;
 
 	&::before {
@@ -41,19 +41,19 @@
 	}
 }
 
-.publisher-tab-panel .publisher-tab-button span {
+.blockera-tab-panel .blockera-tab-button span {
 	display: block !important;
 	margin: 0 auto 6px auto !important;
 }
 
-.publisher-tab-button {
+.blockera-tab-button {
 	display: block !important;
 	width: 95px;
 	height: 64px;
-	border-bottom: solid 1px var(--publisher-tab-panel-context-color);
+	border-bottom: solid 1px var(--blockera-tab-panel-context-color);
 	font-size: 12px;
 
 	&:hover:not(.active-tab) {
-		color: var(--publisher-tab-panel-active-color);
+		color: var(--blockera-tab-panel-active-color);
 	}
 }

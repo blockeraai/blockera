@@ -6,15 +6,15 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	InputControl,
 	SelectControl,
 	useControlContext,
-} from '@publisher/controls';
-import { Flex } from '@publisher/components';
+} from '@blockera/controls';
+import { Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -39,7 +39,7 @@ export default function AspectRatio({
 }): MixedElement {
 	const { value, attribute, blockName, resetToDefault } = useControlContext({
 		onChange: (newValue, ref) =>
-			handleOnChangeAttributes('publisherRatio', newValue, { ref }),
+			handleOnChangeAttributes('blockeraRatio', newValue, { ref }),
 		defaultValue,
 		mergeInitialAndDefault: true,
 		valueCleanup: (newValue) => {
@@ -53,7 +53,7 @@ export default function AspectRatio({
 
 	const labelProps = {
 		value,
-		attribute: 'publisherRatio',
+		attribute: 'blockeraRatio',
 		blockName,
 		defaultValue,
 		resetToDefault,
@@ -65,25 +65,25 @@ export default function AspectRatio({
 		<BaseControl
 			columns="columns-2"
 			controlName="toggle-select"
-			label={__('Aspect Ratio', 'publisher-core')}
+			label={__('Aspect Ratio', 'blockera-core')}
 			labelDescription={
 				<>
 					<p>
 						{__(
 							'Aspect Ratio Control allows for maintaining a specific width-to-height ratio for blocks, ensuring consistent and responsive sizing across devices.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<p>
 						{__(
 							'Crucial for media blocks like images and videos, this feature preserves the original proportions, enhancing visual appeal and preventing distortion.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<p>
 						{__(
 							'The aspect ratio is calculated in this format:',
-							'publisher-core'
+							'blockera-core'
 						)}{' '}
 						<>
 							<code>width</code>
@@ -98,42 +98,42 @@ export default function AspectRatio({
 			<SelectControl
 				id="value"
 				singularId={'value'}
-				aria-label={__('Ratio', 'publisher-core')}
+				aria-label={__('Ratio', 'blockera-core')}
 				options={[
 					{
-						label: __('Original', 'publisher-core'),
+						label: __('Original', 'blockera-core'),
 						value: '',
 					},
 					{
-						label: __('Square 1:1', 'publisher-core'),
+						label: __('Square 1:1', 'blockera-core'),
 						value: '1',
 					},
 					{
-						label: __('Standard 4:3', 'publisher-core'),
+						label: __('Standard 4:3', 'blockera-core'),
 						value: '4/3',
 					},
 					{
-						label: __('Portrait 3:4', 'publisher-core'),
+						label: __('Portrait 3:4', 'blockera-core'),
 						value: '3/4',
 					},
 					{
-						label: __('Landscape 3:2', 'publisher-core'),
+						label: __('Landscape 3:2', 'blockera-core'),
 						value: '3/2',
 					},
 					{
-						label: __('Classic Portrait 2:3', 'publisher-core'),
+						label: __('Classic Portrait 2:3', 'blockera-core'),
 						value: '2/3',
 					},
 					{
-						label: __('Widescreen 16:9', 'publisher-core'),
+						label: __('Widescreen 16:9', 'blockera-core'),
 						value: '16/9',
 					},
 					{
-						label: __('Tall 9:16', 'publisher-core'),
+						label: __('Tall 9:16', 'blockera-core'),
 						value: '9/16',
 					},
 					{
-						label: __('Custom', 'publisher-core'),
+						label: __('Custom', 'blockera-core'),
 						value: 'custom',
 					},
 				]}
@@ -142,7 +142,7 @@ export default function AspectRatio({
 				onChange={(newValue, ref) => {
 					if (newValue === '') {
 						handleOnChangeAttributes(
-							'publisherRatio',
+							'blockeraRatio',
 							defaultValue,
 							{
 								ref,
@@ -150,7 +150,7 @@ export default function AspectRatio({
 						);
 					} else {
 						handleOnChangeAttributes(
-							'publisherRatio',
+							'blockeraRatio',
 							{
 								...ratio,
 								value: newValue,
@@ -169,19 +169,19 @@ export default function AspectRatio({
 						singularId={'width'}
 						columns="columns-1"
 						className="control-first label-center small-gap"
-						label={__('Width', 'publisher-core')}
+						label={__('Width', 'blockera-core')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Represents the width part of the ratio.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 								<p>
 									{__(
 										'In the "16 / 9" example, 16 is the width.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>
@@ -192,7 +192,7 @@ export default function AspectRatio({
 						defaultValue={defaultValue.width}
 						onChange={(newValue, ref) => {
 							handleOnChangeAttributes(
-								'publisherRatio',
+								'blockeraRatio',
 								{
 									...ratio,
 									width:
@@ -203,26 +203,26 @@ export default function AspectRatio({
 						}}
 					/>
 
-					<p className="publisher-colon">/</p>
+					<p className="blockera-colon">/</p>
 
 					<InputControl
 						id="height"
 						singularId={'height'}
 						columns="columns-1"
 						className="control-first label-center small-gap"
-						label={__('Height', 'publisher-core')}
+						label={__('Height', 'blockera-core')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Represents the height part of the ratio.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 								<p>
 									{__(
 										'In the "16 / 9" example, 9 is the height.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>
@@ -233,7 +233,7 @@ export default function AspectRatio({
 						defaultValue={defaultValue.height}
 						onChange={(newValue, ref) =>
 							handleOnChangeAttributes(
-								'publisherRatio',
+								'blockeraRatio',
 								{
 									...ratio,
 									height: newValue,

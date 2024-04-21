@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useDragValue } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { useDragValue } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -222,7 +222,7 @@ export function PaddingVertical({
 					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
-						ariaLabel={__('Top & Bottom Padding', 'publisher-core')}
+						ariaLabel={__('Top & Bottom Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -257,7 +257,7 @@ export function PaddingVertical({
 					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('Top & Bottom Padding', 'publisher-core')}
+						ariaLabel={__('Top & Bottom Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -291,19 +291,19 @@ export function PaddingVertical({
 						}}
 						title={__(
 							'Top & Bottom Padding Space',
-							'publisher-core'
+							'blockera-core'
 						)}
-						inputLabel={__('Vertical Padding', 'publisher-core')}
+						inputLabel={__('Vertical Padding', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Vertical Padding Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies to both the top and bottom edges of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

@@ -19,7 +19,7 @@ export default function (parentState: TStates = 'normal'): {
 		'extra-large': {
 			type: 'extra-large',
 			force: false,
-			label: __('Extra Large Screen', 'publisher-core'),
+			label: __('Extra Large Screen', 'blockera-core'),
 			settings: {
 				min: '2561px',
 				max: '',
@@ -29,7 +29,7 @@ export default function (parentState: TStates = 'normal'): {
 		large: {
 			type: 'large',
 			force: false,
-			label: __('Large Screen', 'publisher-core'),
+			label: __('Large Screen', 'blockera-core'),
 			settings: {
 				min: '1921px',
 				max: '2560px',
@@ -39,7 +39,7 @@ export default function (parentState: TStates = 'normal'): {
 		desktop: {
 			type: 'desktop',
 			force: false,
-			label: __('Desktop', 'publisher-core'),
+			label: __('Desktop', 'blockera-core'),
 			settings: {
 				min: '1441px',
 				max: '1920px',
@@ -49,7 +49,7 @@ export default function (parentState: TStates = 'normal'): {
 		laptop: {
 			type: 'laptop',
 			force: true,
-			label: __('Laptop', 'publisher-core'),
+			label: __('Laptop', 'blockera-core'),
 			settings: {
 				min: '1025px',
 				max: '1440px',
@@ -59,7 +59,7 @@ export default function (parentState: TStates = 'normal'): {
 		tablet: {
 			type: 'tablet',
 			force: false,
-			label: __('Tablet', 'publisher-core'),
+			label: __('Tablet', 'blockera-core'),
 			settings: {
 				min: '768px',
 				max: '1024px',
@@ -69,7 +69,7 @@ export default function (parentState: TStates = 'normal'): {
 		'mobile-landscape': {
 			type: 'mobile-landscape',
 			force: false,
-			label: __('Mobile Landscape', 'publisher-core'),
+			label: __('Mobile Landscape', 'blockera-core'),
 			settings: {
 				min: '481px',
 				max: '767px',
@@ -79,7 +79,7 @@ export default function (parentState: TStates = 'normal'): {
 		mobile: {
 			type: 'mobile',
 			force: false,
-			label: __('Mobile', 'publisher-core'),
+			label: __('Mobile', 'blockera-core'),
 			settings: {
 				min: '',
 				max: '480px',

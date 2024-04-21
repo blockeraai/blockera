@@ -44,7 +44,7 @@ describe('ext shadow control component testing', () => {
 				name,
 			});
 
-			cy.getByDataCy('publisher-repeater-control')
+			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 2);
 
@@ -122,7 +122,7 @@ describe('ext shadow control component testing', () => {
 			});
 
 			cy.get('[aria-label="Add New Text Shadow"]').click();
-			cy.get('.publisher-control-text-shadow').should(
+			cy.get('.blockera-control-text-shadow').should(
 				'have.class',
 				'custom-class'
 			);
@@ -163,7 +163,7 @@ describe('ext shadow control component testing', () => {
 				.type(50)
 				.should('have.value', '50');
 
-			cy.get('.publisher-control-color').click();
+			cy.get('.blockera-control-color').click();
 			cy.getByDataCy('repeater-item').clickOutside();
 
 			// Check data provider value!

@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import BackgroundExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherBackgroundExtension',
+	name: 'blockeraBackgroundExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -51,17 +51,17 @@ blocksInitializer({
 						initialOpen={true}
 						values={{
 							background:
-								attributes?.publisherBackground || undefined,
+								attributes?.blockeraBackground || undefined,
 							backgroundColor:
-								attributes?.publisherBackgroundColor || '',
+								attributes?.blockeraBackgroundColor || '',
 							backgroundClip:
-								attributes?.publisherBackgroundClip || 'none',
+								attributes?.blockeraBackgroundClip || 'none',
 						}}
 						extensionId={'Background'}
 						icon={<BackgroundExtensionIcon />}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Background', 'publisher-core')}
+						title={__('Background', 'blockera-core')}
 					/>
 				</InspectorControls>
 
@@ -98,9 +98,9 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherBackground: [],
-					publisherBackgroundColor: '',
-					publisherBackgroundClip: '',
+					blockeraBackground: [],
+					blockeraBackgroundColor: '',
+					blockeraBackgroundClip: '',
 				},
 			},
 		],

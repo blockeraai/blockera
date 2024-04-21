@@ -6,7 +6,7 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	type DynamicValueCategory,
@@ -25,10 +25,10 @@ import {
 	getVariable,
 	getWidthSizes,
 	type VariableCategory,
-} from '@publisher/core-data';
-import { ColorIndicator } from '@publisher/components';
-import { isBlockTheme, isObject, isUndefined } from '@publisher/utils';
-import { NoticeControl } from '@publisher/controls';
+} from '@blockera/core-data';
+import { ColorIndicator } from '@blockera/components';
+import { isBlockTheme, isObject, isUndefined } from '@blockera/utils';
+import { NoticeControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -167,48 +167,48 @@ export function getVariableCategory(
 		case 'font-size':
 			return {
 				label: isBlockTheme()
-					? __('Theme Font Sizes', 'publisher-core')
-					: __('Editor Font Sizes', 'publisher-core'),
+					? __('Theme Font Sizes', 'blockera-core')
+					: __('Editor Font Sizes', 'blockera-core'),
 				items: getFontSizes(),
 			};
 
 		case 'linear-gradient':
 			return {
 				label: isBlockTheme()
-					? __('Theme Linear Gradients', 'publisher-core')
-					: __('Editor Linear Gradients', 'publisher-core'),
+					? __('Theme Linear Gradients', 'blockera-core')
+					: __('Editor Linear Gradients', 'blockera-core'),
 				items: getLinearGradients(),
 			};
 
 		case 'radial-gradient':
 			return {
 				label: isBlockTheme()
-					? __('Theme Radial Gradients', 'publisher-core')
-					: __('Editor Radial Gradients', 'publisher-core'),
+					? __('Theme Radial Gradients', 'blockera-core')
+					: __('Editor Radial Gradients', 'blockera-core'),
 				items: getRadialGradients(),
 			};
 
 		case 'width-size':
 			return {
 				label: isBlockTheme()
-					? __('Theme Width & Height Sizes', 'publisher-core')
-					: __('Width & Height Sizes', 'publisher-core'),
+					? __('Theme Width & Height Sizes', 'blockera-core')
+					: __('Width & Height Sizes', 'blockera-core'),
 				items: getWidthSizes(),
 			};
 
 		case 'spacing':
 			return {
 				label: isBlockTheme()
-					? __('Theme Spacing Sizes', 'publisher-core')
-					: __('Editor Spacing Sizes', 'publisher-core'),
+					? __('Theme Spacing Sizes', 'blockera-core')
+					: __('Editor Spacing Sizes', 'blockera-core'),
 				items: getSpacings(),
 			};
 
 		case 'color':
 			return {
 				label: isBlockTheme()
-					? __('Theme Colors', 'publisher-core')
-					: __('Editor Colors', 'publisher-core'),
+					? __('Theme Colors', 'blockera-core')
+					: __('Editor Colors', 'blockera-core'),
 				items: getColors(),
 			};
 	}
@@ -272,37 +272,37 @@ export function getDynamicValueCategory(
 	switch (category) {
 		case 'post':
 			return {
-				label: __('Posts and Pages', 'publisher-core'),
+				label: __('Posts and Pages', 'blockera-core'),
 				items: getPostDynamicValueItemsBy('type', types),
 			};
 
 		case 'featured-image':
 			return {
-				label: __('Post Featured Image', 'publisher-core'),
+				label: __('Post Featured Image', 'blockera-core'),
 				items: getFeaturedImageDynamicValueItemsBy('type', types),
 			};
 
 		case 'archive':
 			return {
-				label: __('Archive', 'publisher-core'),
+				label: __('Archive', 'blockera-core'),
 				items: getArchiveDynamicValueItemsBy('type', types),
 			};
 
 		case 'site':
 			return {
-				label: __('Site Information', 'publisher-core'),
+				label: __('Site Information', 'blockera-core'),
 				items: getSiteDynamicValueItemsBy('type', types),
 			};
 
 		case 'user':
 			return {
-				label: __('User & Authors', 'publisher-core'),
+				label: __('User & Authors', 'blockera-core'),
 				items: getUserDynamicValueItemsBy('type', types),
 			};
 
 		case 'other':
 			return {
-				label: __('Utilities', 'publisher-core'),
+				label: __('Utilities', 'blockera-core'),
 				items: getOtherDynamicValueItemsBy('type', types),
 			};
 	}
@@ -363,7 +363,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 			case 'variable':
 				result.after = __(
 					'You have the option to either switch it with another variable or unlink it to use the value directly.',
-					'publisher-core'
+					'blockera-core'
 				);
 				break;
 		}
@@ -383,26 +383,23 @@ export function getDeletedItemInfo(item: ValueAddon): {
 
 		switch (result.referenceType) {
 			case 'preset':
-				result.referenceName = __('Block Editor', 'publisher-core');
+				result.referenceName = __('Block Editor', 'blockera-core');
 				break;
 
 			case 'core':
-				result.referenceName = __('Publisher Blocks', 'publisher-core');
+				result.referenceName = __(' Blocks', 'blockera-core');
 				break;
 
 			case 'core-pro':
-				result.referenceName = __(
-					'Publisher Blocks Pro',
-					'publisher-core'
-				);
+				result.referenceName = __(' Blocks Pro', 'blockera-core');
 
 				switch (item.valueType) {
 					case 'variable':
 						result.after2 = (
 							<NoticeControl type="success">
 								{__(
-									'Activating Publisher Blocks Pro plugin may potentially restore this variable.',
-									'publisher-blocks'
+									'Activating  Blocks Pro plugin may potentially restore this variable.',
+									'blockera-core'
 								)}
 							</NoticeControl>
 						);
@@ -412,8 +409,8 @@ export function getDeletedItemInfo(item: ValueAddon): {
 						result.after2 = (
 							<NoticeControl type="success">
 								{__(
-									'Activating Publisher Blocks Pro plugin restores functionality for this dynamic value item.',
-									'publisher-blocks'
+									'Activating  Blocks Pro plugin restores functionality for this dynamic value item.',
+									'blockera-core'
 								)}
 							</NoticeControl>
 						);
@@ -425,12 +422,12 @@ export function getDeletedItemInfo(item: ValueAddon): {
 			case 'custom':
 				switch (item.valueType) {
 					case 'variable':
-						result.referenceName = __('Custom', 'publisher-core');
+						result.referenceName = __('Custom', 'blockera-core');
 						result.after2 = (
 							<NoticeControl type="information">
 								{__(
 									'You can create a custom variable with the exact same name to restore this variable across all its usages.',
-									'publisher-blocks'
+									'blockera-core'
 								)}
 							</NoticeControl>
 						);
@@ -439,13 +436,13 @@ export function getDeletedItemInfo(item: ValueAddon): {
 					case 'dynamic-value':
 						result.referenceName = __(
 							'Custom Code',
-							'publisher-core'
+							'blockera-core'
 						);
 						result.after2 = (
 							<NoticeControl type="information">
 								{__(
 									'Find and restore the custom code to return back functionality for this dynamic value item.',
-									'publisher-blocks'
+									'blockera-core'
 								)}
 							</NoticeControl>
 						);
@@ -464,14 +461,14 @@ export function getDeletedItemInfo(item: ValueAddon): {
 					pluginName = item?.settings?.reference?.plugin;
 					result.referenceName = sprintf(
 						// Translators: %s is plugin name
-						__('%s plugin', 'publisher-core'),
+						__('%s plugin', 'blockera-core'),
 						pluginName
 					);
 				} else {
 					pluginName = 'unknown';
 					result.referenceName = __(
 						'unknown plugin',
-						'publisher-core'
+						'blockera-core'
 					);
 				}
 
@@ -483,7 +480,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 									// Translators: %s is plugin name
 									__(
 										'Activating %s plugin may potentially restore this variable.',
-										'publisher-blocks'
+										'blockera-core'
 									),
 									pluginName
 								)}
@@ -498,7 +495,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 									// Translators: %s is plugin name
 									__(
 										'Activating %s plugin restores functionality for this dynamic value item.',
-										'publisher-blocks'
+										'blockera-core'
 									),
 									pluginName
 								)}
@@ -520,15 +517,12 @@ export function getDeletedItemInfo(item: ValueAddon): {
 					themeName = item?.settings?.reference?.theme;
 					result.referenceName = sprintf(
 						// Translators: %s is plugin name
-						__('%s theme', 'publisher-core'),
+						__('%s theme', 'blockera-core'),
 						themeName
 					);
 				} else {
 					themeName = 'unknown';
-					result.referenceName = __(
-						'unknown theme',
-						'publisher-core'
-					);
+					result.referenceName = __('unknown theme', 'blockera-core');
 				}
 
 				switch (item.valueType) {
@@ -539,7 +533,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 									// Translators: %s is plugin name
 									__(
 										'Activating %s theme may potentially restore this variable.',
-										'publisher-blocks'
+										'blockera-core'
 									),
 									themeName
 								)}
@@ -554,7 +548,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 									// Translators: %s is plugin name
 									__(
 										'Activating %s theme restores functionality for this dynamic value item.',
-										'publisher-blocks'
+										'blockera-core'
 									),
 									themeName
 								)}
@@ -572,22 +566,22 @@ export function getDeletedItemInfo(item: ValueAddon): {
 		case 'variable':
 			if (result.tooltip === '') {
 				result.tooltip = __(
-					'This is the latest value identified by Publisher Blocks, which may differ from the final value of this variable.',
-					'publisher-blocks'
+					'This is the latest value identified by  Blocks, which may differ from the final value of this variable.',
+					'blockera-core'
 				);
 			}
 
 			if (result.before === '') {
 				result.before = __(
 					"There was a deletion or disappearance of this variable, however it's value is still used here.",
-					'publisher-core'
+					'blockera-core'
 				);
 			}
 
 			if (result.after === '') {
 				result.after = __(
 					'You have the option to either switch it with another variable or remove it.',
-					'publisher-core'
+					'blockera-core'
 				);
 			}
 
@@ -597,14 +591,14 @@ export function getDeletedItemInfo(item: ValueAddon): {
 			if (result.before === '') {
 				result.before = __(
 					'The dynamic value item is inactive or has been removed.',
-					'publisher-core'
+					'blockera-core'
 				);
 			}
 
 			if (result.after === '') {
 				result.after = __(
 					'You have the option to either switch this item or remove its usage.',
-					'publisher-core'
+					'blockera-core'
 				);
 			}
 			break;

@@ -1,41 +1,41 @@
 export const attributes = {
-	publisherWidth: {
+	blockeraWidth: {
 		type: 'string',
 		default: '',
 	},
-	publisherMinWidth: {
+	blockeraMinWidth: {
 		type: 'string',
 		default: '',
 	},
-	publisherMaxWidth: {
+	blockeraMaxWidth: {
 		type: 'string',
 		default: '',
 	},
-	publisherHeight: {
+	blockeraHeight: {
 		type: 'string',
 		default: '',
 	},
-	publisherMinHeight: {
+	blockeraMinHeight: {
 		type: 'string',
 		default: '',
 	},
-	publisherMaxHeight: {
+	blockeraMaxHeight: {
 		type: 'string',
 		default: '',
 	},
-	publisherOverflow: {
+	blockeraOverflow: {
 		type: 'string',
 		default: '',
 	},
-	publisherRatio: {
+	blockeraRatio: {
 		type: 'object',
 		default: { value: '', width: '', height: '' },
 	},
-	publisherFit: {
+	blockeraFit: {
 		type: 'string',
 		default: '',
 	},
-	publisherFitPosition: {
+	blockeraFitPosition: {
 		type: 'object',
 		default: { top: '', left: '' },
 	},

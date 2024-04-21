@@ -5,9 +5,9 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -41,11 +41,11 @@ export default function MaskControl({
 		<RepeaterControl
 			className={controlClassNames('mask', className)}
 			popoverTitle={
-				popoverTitle || __('Block Image Mask', 'publisher-core')
+				popoverTitle || __('Block Image Mask', 'blockera-core')
 			}
-			label={label || __('Image Mask', 'publisher-core')}
+			label={label || __('Image Mask', 'blockera-core')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Block Image Mask', 'publisher-core')
+				labelPopoverTitle || __('Block Image Mask', 'blockera-core')
 			}
 			labelDescription={
 				labelDescription || (
@@ -53,13 +53,13 @@ export default function MaskControl({
 						<p>
 							{__(
 								'It allows you to apply a mask over the block content using an image.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'The mask can be chosen from a pre-existing library or uploaded as a custom image.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>

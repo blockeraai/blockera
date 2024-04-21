@@ -10,13 +10,13 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherStyleVariation: FeatureConfig = {
+const blockeraStyleVariation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Style Variation', 'publisher-core'),
+	label: __('Style Variation', 'blockera-core'),
 };
 
 export const styleVariationsConfig = {
-	publisherStyleVariation,
+	blockeraStyleVariation,
 };

@@ -10,7 +10,7 @@ import {
 describe('Display → Functionality', () => {
 	beforeEach(() => {
 		createPost();
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -28,7 +28,7 @@ describe('Display → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('block').to.be.equal(
-				getSelectedBlock(data, 'publisherDisplay')
+				getSelectedBlock(data, 'blockeraDisplay')
 			);
 		});
 
@@ -40,7 +40,7 @@ describe('Display → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('flex').to.be.equal(
-				getSelectedBlock(data, 'publisherDisplay')
+				getSelectedBlock(data, 'blockeraDisplay')
 			);
 		});
 
@@ -56,7 +56,7 @@ describe('Display → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('inline-block').to.be.equal(
-				getSelectedBlock(data, 'publisherDisplay')
+				getSelectedBlock(data, 'blockeraDisplay')
 			);
 		});
 
@@ -68,7 +68,7 @@ describe('Display → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('inline').to.be.equal(
-				getSelectedBlock(data, 'publisherDisplay')
+				getSelectedBlock(data, 'blockeraDisplay')
 			);
 		});
 
@@ -80,7 +80,7 @@ describe('Display → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('none').to.be.equal(
-				getSelectedBlock(data, 'publisherDisplay')
+				getSelectedBlock(data, 'blockeraDisplay')
 			);
 		});
 
@@ -89,6 +89,6 @@ describe('Display → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'display', 'none');
+		cy.get('.blockera-core-block').should('have.css', 'display', 'none');
 	});
 });

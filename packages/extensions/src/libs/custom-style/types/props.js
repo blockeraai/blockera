@@ -8,10 +8,10 @@ import type { BaseExtensionProps } from '../../types';
 export type CustomStyleExtensionProps = {
 	...BaseExtensionProps,
 	values: {
-		publisherCustomCSS: string,
+		blockeraCustomCSS: string,
 	},
 	extensionConfig: Object,
 	extensionProps: {
-		publisherCustomCSS: Object,
+		blockeraCustomCSS: Object,
 	},
 };

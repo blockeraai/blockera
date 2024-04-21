@@ -3,9 +3,9 @@
 import { applyFilters } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { omitWithPattern, hasSameProps } from '@publisher/utils';
+import { omitWithPattern, hasSameProps } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -22,7 +22,7 @@ export const propsAreEqual = (
 	const normalizedBlockName = prev.name.replace('/', '.');
 
 	const excludedAttributeKeys = applyFilters(
-		`publisherCore.blockEdit.${normalizedBlockName}.memoization.excludedAttributeKeys`,
+		`blockeraCore.blockEdit.${normalizedBlockName}.memoization.excludedAttributeKeys`,
 		['content']
 	).map((attributeId: string): string => `\b${attributeId}\b`);
 

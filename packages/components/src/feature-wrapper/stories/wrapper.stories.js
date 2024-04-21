@@ -1,8 +1,8 @@
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
-import { InputControl } from '@publisher/controls';
+import { default as Decorators } from '@blockera/storybook/decorators';
+import { InputControl } from '@blockera/controls';
 
 /**
  * Internal dependencies

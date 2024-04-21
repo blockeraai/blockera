@@ -11,7 +11,7 @@ describe('Blend Mode → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', {
 			delay: 0,
@@ -39,7 +39,7 @@ describe('Blend Mode → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect('multiply').to.be.equal(
-				getSelectedBlock(data, 'publisherBlendMode')
+				getSelectedBlock(data, 'blockeraBlendMode')
 			);
 		});
 
@@ -48,7 +48,7 @@ describe('Blend Mode → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'mix-blend-mode',
 			'multiply'

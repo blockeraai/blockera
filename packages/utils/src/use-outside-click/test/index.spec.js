@@ -1,5 +1,5 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import { renderHook } from '@testing-library/react';
 

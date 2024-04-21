@@ -12,7 +12,7 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionAttributes,
 	sharedBlockExtensionSupports,
-} from '@publisher/extensions';
+} from '@blockera/extensions';
 
 const Shared = {
 	name: 'Shared',
@@ -54,7 +54,7 @@ class Setup {
 	}
 
 	addBlocks() {
-		//TODO: implements registration publisher custom blocks into WordPress Block Editor (Gutenberg).
+		//TODO: implements registration blockera custom blocks into WordPress Block Editor (Gutenberg).
 
 		return this;
 	}

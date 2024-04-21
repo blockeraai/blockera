@@ -1,22 +1,22 @@
 {
-	"name": "@publisher/components",
+	"name": "@blockera/components",
 	"version": "1.0.0",
-	"description": "UI components for Publisher Core.",
-	"author": "The Publisher Contributors",
+	"description": "UI components for Blockera Core.",
+	"author": "The  Contributors",
 	"license": "ISC",
 	"keywords": [
-		"publisher",
+		"blockera",
 		"gutenberg",
 		"components"
 	],
-	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core/packages/components/-/blob/main/README.md",
+	"homepage": "https://gitlab.com/better-projects/blockera-fse/blockera-core/packages/components/-/blob/main/README.md",
 	"repository": {
 		"type": "git",
-		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core",
+		"url": "https://gitlab.com/better-projects/blockera-fse/blockera-core",
 		"directory": "packages/components"
 	},
 	"bugs": {
-		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+		"url": "https://gitlab.com/better-projects/blockera-fse/blockera-core/-/issues"
 	},
 	"engines": {
 		"node": ">=12"

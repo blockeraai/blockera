@@ -7,24 +7,24 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
+} from '@blockera/classnames';
 import {
 	isEquals,
 	isFunction,
 	isUndefined,
 	useLateEffect,
-} from '@publisher/utils';
+} from '@blockera/utils';
 import {
 	Popover,
 	Button,
 	Tooltip,
 	ConditionalWrapper,
-} from '@publisher/components';
+} from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -230,7 +230,7 @@ export function UnitInput({
 				<ConditionalWrapper
 					condition={!disabled}
 					wrapper={(children) => (
-						<Tooltip text={__('Select Unit', 'publisher-core')}>
+						<Tooltip text={__('Select Unit', 'blockera-core')}>
 							{children}
 						</Tooltip>
 					)}
@@ -245,7 +245,7 @@ export function UnitInput({
 							'unit-length-' + unitValue.value.length,
 							'unit-' + unitValue.value
 						)}
-						aria-label={__('Select Unit', 'publisher-blocks')}
+						aria-label={__('Select Unit', 'blockera-core')}
 					>
 						{units.map((unit, key) => (
 							<>
@@ -294,7 +294,7 @@ export function UnitInput({
 								)}
 								noBorder={true}
 								showTooltip={!disabled}
-								label={__('Open Editor', 'publisher-core')}
+								label={__('Open Editor', 'blockera-core')}
 								disabled={disabled}
 							>
 								<MaximizeIcon />
@@ -305,7 +305,7 @@ export function UnitInput({
 							<Popover
 								title={__(
 									'CSS Functions and Vars',
-									'publisher-core'
+									'blockera-core'
 								)}
 								offset={125}
 								placement="left-start"
@@ -338,7 +338,7 @@ export function UnitInput({
 								>
 									{__(
 										'You can use CSS functions like calc, min, max, etc., and also CSS variables.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</NoticeControl>
 							</Popover>
@@ -355,8 +355,8 @@ export function UnitInput({
 				'input',
 				'input-unit',
 				isSpecialUnit(unitValue?.value) &&
-					'publisher-control-unit-special',
-				'publisher-control-unit-' + unitValue.value,
+					'blockera-control-unit-special',
+				'blockera-control-unit-' + unitValue.value,
 				isActiveRange && 'is-range-active',
 				isMaximizeVisible && 'is-focused',
 				className
@@ -374,12 +374,12 @@ export function UnitInput({
 									noBorder && 'no-border',
 									className
 								)}
-								aria-label={__('Open Editor', 'publisher-core')}
+								aria-label={__('Open Editor', 'blockera-core')}
 								onClick={() => {
 									toggleIsMaximizeVisible();
 								}}
 							>
-								{__('Edit', 'publisher-core')}
+								{__('Edit', 'blockera-core')}
 							</span>
 
 							<div

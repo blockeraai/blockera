@@ -1,12 +1,12 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue;
 
 /**
  * Class Utility
  *
  * @since   1.0.0
- * @package Publisher\Framework\Illuminate\Foundation\Utility
+ * @package Blockera\Framework\Illuminate\Foundation\Utility
  */
 class Utility {
 
@@ -54,12 +54,12 @@ class Utility {
 			case is_search():
 
 				/* translators: %s: Search term. */
-				$title = sprintf( __( 'Search Results for: %s', 'publisher-core' ), get_search_query() );
+				$title = sprintf( __( 'Search Results for: %s', 'blockera-core' ), get_search_query() );
 
 				if ( get_query_var( 'paged' ) ) {
 
 					/* translators: %s is the page number. */
-					$title .= sprintf( __( '&nbsp;&ndash; Page %s', 'publisher-core' ), get_query_var( 'paged' ) );
+					$title .= sprintf( __( '&nbsp;&ndash; Page %s', 'blockera-core' ), get_query_var( 'paged' ) );
 				}
 
 				break;
@@ -88,13 +88,13 @@ class Utility {
 
 				$formats = [
 					'yearly'  => [
-						_x( 'Y', 'yearly archives date format', 'publisher-core' ),
+						_x( 'Y', 'yearly archives date format', 'blockera-core' ),
 					],
 					'monthly' => [
-						_x( 'F Y', 'monthly archives date format', 'publisher-core' ),
+						_x( 'F Y', 'monthly archives date format', 'blockera-core' ),
 					],
 					'daily'   => [
-						_x( 'F j, Y', 'daily archives date format', 'publisher-core' ),
+						_x( 'F j, Y', 'daily archives date format', 'blockera-core' ),
 					],
 				];
 
@@ -128,7 +128,7 @@ class Utility {
 
 					$term = self::pluralSuffix( $term );
 
-					$title = sprintf( _x( '%s', 'post format archive title', 'publisher-core' ), ucfirst( $term ) );
+					$title = sprintf( _x( '%s', 'post format archive title', 'blockera-core' ), ucfirst( $term ) );
 				}
 
 				break;
@@ -151,13 +151,13 @@ class Utility {
 
 			case is_archive():
 
-				$title = __( 'Archives', 'publisher-core' );
+				$title = __( 'Archives', 'blockera-core' );
 
 				break;
 
 			case is_404():
 
-				$title = __( 'Page Not Found', 'publisher-core' );
+				$title = __( 'Page Not Found', 'blockera-core' );
 
 				break;
 		}
@@ -173,7 +173,7 @@ class Utility {
 		 * @since 1.0.0
 		 *
 		 */
-		return apply_filters( 'publisher-core/dynamic-value/utility/the_archive_title', $title, $page_type );
+		return apply_filters( 'blockera-core/dynamic-value/utility/the_archive_title', $title, $page_type );
 	}
 
 	/**
@@ -200,17 +200,17 @@ class Utility {
 
 				$post_type_object = get_post_type_object( get_post_type() );
 
-				$original_title = sprintf( __( '%1$s: %2$s', 'publisher-core' ), $post_type_object->labels->singular_name, $original_title );
+				$original_title = sprintf( __( '%1$s: %2$s', 'blockera-core' ), $post_type_object->labels->singular_name, $original_title );
 
 				break;
 
 			case 'cat':
 			case 'tag':
 
-				$page = 'cat' === $page_type ? __( 'Category:', 'publisher-core' ) : __( 'Tag:', 'publisher-core' );
+				$page = 'cat' === $page_type ? __( 'Category:', 'blockera-core' ) : __( 'Tag:', 'blockera-core' );
 
 				/* translators: $page archive title. 1: $page name   ==>  $page = 'Category' OR 'Tag' */
-				$original_title = sprintf( __( '%1$s %2$s', 'publisher-core' ), $page, $original_title );
+				$original_title = sprintf( __( '%1$s %2$s', 'blockera-core' ), $page, $original_title );
 
 				break;
 
@@ -221,13 +221,13 @@ class Utility {
 				$page_type = str_replace( [ 'ly', 'i' ], [ '', 'y' ], $page_type );
 
 				/* translators: (Yearly , Monthly , Daily) archive title. 1: (Year , Month , Day) */
-				$original_title = sprintf( __( '%1$s: %2$s', 'publisher-core' ), ucfirst( $page_type ), $original_title );
+				$original_title = sprintf( __( '%1$s: %2$s', 'blockera-core' ), ucfirst( $page_type ), $original_title );
 
 				break;
 
 			case 'post_type_archive':
 
-				$original_title = sprintf( __( 'Archives: %1$s', 'publisher-core' ), $original_title );
+				$original_title = sprintf( __( 'Archives: %1$s', 'blockera-core' ), $original_title );
 
 				break;
 
@@ -236,7 +236,7 @@ class Utility {
 				$tax = get_taxonomy( get_queried_object()->taxonomy );
 
 				/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-				$original_title = sprintf( __( '%1$s: %2$s', 'publisher-core' ), $tax->labels->singular_name, $original_title );
+				$original_title = sprintf( __( '%1$s: %2$s', 'blockera-core' ), $tax->labels->singular_name, $original_title );
 
 				break;
 		}
@@ -397,7 +397,7 @@ class Utility {
 	 */
 	public static function getPlaceholderImage(): string {
 
-		$placeholder_image = pb_core_config( 'app.root_path' ) . 'images/placeholder.png';
+		$placeholder_image = blockera_core_config( 'app.root_path' ) . 'images/placeholder.png';
 
 		/**
 		 * Get placeholder image source.
@@ -409,7 +409,7 @@ class Utility {
 		 * @since 1.0.0
 		 *
 		 */
-		return apply_filters( 'publisher-core/dynamic-value/utility/placeholder_image_logo', $placeholder_image );
+		return apply_filters( 'blockera-core/dynamic-value/utility/placeholder_image_logo', $placeholder_image );
 	}
 
 }

@@ -1,8 +1,8 @@
 <?php
 
-use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
+use Blockera\Framework\Illuminate\StyleEngine\StyleEngine;
 
-if ( ! function_exists( 'pb_get_unique_classname' ) ) {
+if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	/**
 	 * Retrieve css classname with suffix string.
 	 *
@@ -10,7 +10,7 @@ if ( ! function_exists( 'pb_get_unique_classname' ) ) {
 	 *
 	 * @return string the unique css classname
 	 */
-	function pb_get_unique_classname( string $suffix ): string {
+	function blockera_get_unique_classname( string $suffix ): string {
 
 		$suffix = str_replace( '/', '-', $suffix );
 
@@ -18,18 +18,18 @@ if ( ! function_exists( 'pb_get_unique_classname' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_css_media_queries' ) ) {
+if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 
 	/**
 	 * Get css media queries from configured breakpoints.
 	 *
 	 * @return array
 	 */
-	function pb_get_css_media_queries(): array {
+	function blockera_get_css_media_queries(): array {
 
 		$queries = [];
 
-		foreach ( pb_core_config( 'breakpoints' ) as $breakpoint ) {
+		foreach ( blockera_core_config( 'breakpoints' ) as $breakpoint ) {
 
 			// skip invalid breakpoint.
 			if ( empty( $breakpoint['type'] ) ) {
@@ -61,7 +61,7 @@ if ( ! function_exists( 'pb_get_css_media_queries' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_block_state_validate' ) ) {
+if ( ! function_exists( 'blockera_block_state_validate' ) ) {
 
 	/**
 	 * Is block state validate?
@@ -71,7 +71,7 @@ if ( ! function_exists( 'pb_block_state_validate' ) ) {
 	 *
 	 * @return array The block state.
 	 */
-	function pb_block_state_validate( array $states, string $state ): array {
+	function blockera_block_state_validate( array $states, string $state ): array {
 
 		if ( ! $state ) {
 
@@ -93,7 +93,7 @@ if ( ! function_exists( 'pb_block_state_validate' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_block_type_selectors' ) ) {
+if ( ! function_exists( 'blockera_get_block_type_selectors' ) ) {
 
 	/**
 	 * Retrieve block type mapped selectors array.
@@ -102,7 +102,7 @@ if ( ! function_exists( 'pb_get_block_type_selectors' ) ) {
 	 *
 	 * @return array the css mapped to array css selectors.
 	 */
-	function pb_get_block_type_selectors( string $name ): array {
+	function blockera_get_block_type_selectors( string $name ): array {
 
 		$registered = WP_Block_Type_Registry::get_instance()->get_registered( $name );
 
@@ -115,7 +115,7 @@ if ( ! function_exists( 'pb_get_block_type_selectors' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_block_state_selectors' ) ) {
+if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 	/**
 	 * Retrieve block state selectors.
 	 *
@@ -124,7 +124,7 @@ if ( ! function_exists( 'pb_get_block_state_selectors' ) ) {
 	 *
 	 * @return array the unique selectors list.
 	 */
-	function pb_get_block_state_selectors( array $selectors, array $args = [] ): array {
+	function blockera_get_block_state_selectors( array $selectors, array $args = [] ): array {
 
 		[
 			'block-type'         => $blockType,
@@ -159,7 +159,7 @@ if ( ! function_exists( 'pb_get_block_state_selectors' ) ) {
 				$selectors['innerBlocks'][ $blockType ],
 			);
 
-			$selectors['innerBlocks'][ $blockType ] = pb_get_inner_block_state_selectors( $innerBlockSelectors, $args );
+			$selectors['innerBlocks'][ $blockType ] = blockera_get_inner_block_state_selectors( $innerBlockSelectors, $args );
 
 			// Delete custom fallback and parentRoot selector of inner block list.
 			unset(
@@ -170,7 +170,7 @@ if ( ! function_exists( 'pb_get_block_state_selectors' ) ) {
 			return $selectors;
 		}
 
-		$customClassname = $blockSettings['publisherBlockStates'][ $pseudoClass ]['css-class'] ?? null;
+		$customClassname = $blockSettings['blockeraBlockStates'][ $pseudoClass ]['css-class'] ?? null;
 
 		foreach ( $selectors as $key => $value ) {
 
@@ -187,7 +187,7 @@ if ( ! function_exists( 'pb_get_block_state_selectors' ) ) {
 					'parent-class'
 				], true ) && ! empty( $customClassname ) && is_string( $value ) ) {
 
-				$normalizedParent = pb_get_normalized_selector( $customClassname );
+				$normalizedParent = blockera_get_normalized_selector( $customClassname );
 				$normalizedParent = str_ends_with( $normalizedParent, ' ' ) ? $normalizedParent : $normalizedParent . ' ';
 
 				// Add pseudo custom css class as suffix into selectors value for current key.
@@ -223,7 +223,7 @@ if ( ! function_exists( 'pb_get_block_state_selectors' ) ) {
 
 				if ( is_array( $value ) ) {
 
-					$selectors[ $key ] = pb_get_block_state_selectors( $value, $args );
+					$selectors[ $key ] = blockera_get_block_state_selectors( $value, $args );
 				}
 			}
 		}
@@ -232,7 +232,7 @@ if ( ! function_exists( 'pb_get_block_state_selectors' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_inner_block_state_selectors' ) ) {
+if ( ! function_exists( 'blockera_get_inner_block_state_selectors' ) ) {
 
 	/**
 	 * Retrieve inner block state selectors.
@@ -242,7 +242,7 @@ if ( ! function_exists( 'pb_get_inner_block_state_selectors' ) ) {
 	 *
 	 * @return array the unique selectors list.
 	 */
-	function pb_get_inner_block_state_selectors( array $selectors, array $args ): array {
+	function blockera_get_inner_block_state_selectors( array $selectors, array $args ): array {
 
 		[
 			'pseudo-class'       => $pseudoClass,
@@ -250,7 +250,7 @@ if ( ! function_exists( 'pb_get_inner_block_state_selectors' ) ) {
 			'master-block-state' => $masterBlockState,
 		] = $args;
 
-		$customClassname = $blockSettings['publisherBlockStates'][ $pseudoClass ]['css-class'] ?? null;
+		$customClassname = $blockSettings['blockeraBlockStates'][ $pseudoClass ]['css-class'] ?? null;
 
 		foreach ( $selectors as $key => $value ) {
 
@@ -265,7 +265,7 @@ if ( ! function_exists( 'pb_get_inner_block_state_selectors' ) ) {
 
 				if ( is_array( $value ) ) {
 
-					$selectors[ $key ] = pb_get_inner_block_state_selectors( array_merge(
+					$selectors[ $key ] = blockera_get_inner_block_state_selectors( array_merge(
 						[
 							'fallback'   => $selectors['fallback'] ?? '',
 							'parentRoot' => $selectors['parentRoot'] ?? $selectors['fallback'] ?? '',
@@ -355,7 +355,7 @@ if ( ! function_exists( 'pb_get_inner_block_state_selectors' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_calculate_feature_css_selector' ) ) {
+if ( ! function_exists( 'blockera_calculate_feature_css_selector' ) ) {
 
 	/**
 	 * Calculation suitable css selector for related property.
@@ -366,7 +366,7 @@ if ( ! function_exists( 'pb_calculate_feature_css_selector' ) ) {
 	 *
 	 * @return string the css selector.
 	 */
-	function pb_calculate_feature_css_selector( array $selectors, string $featureId, string $fallbackId = null ): string {
+	function blockera_calculate_feature_css_selector( array $selectors, string $featureId, string $fallbackId = null ): string {
 
 		// 1- TODO: Handle custom-class state
 
@@ -395,7 +395,7 @@ if ( ! function_exists( 'pb_calculate_feature_css_selector' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_shorthand_css' ) ) {
+if ( ! function_exists( 'blockera_get_shorthand_css' ) ) {
 
 	/**
 	 * Retrieve the converted long css to shorthand css string.
@@ -404,7 +404,7 @@ if ( ! function_exists( 'pb_get_shorthand_css' ) ) {
 	 *
 	 * @return string The shorthanded css.
 	 */
-	function pb_get_shorthand_css( string $longCss = '' ): string {
+	function blockera_get_shorthand_css( string $longCss = '' ): string {
 
 		$supportedProperty = [ 'margin', 'padding' ];
 		$properties        = [];
@@ -482,7 +482,7 @@ if ( ! function_exists( 'pb_get_shorthand_css' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_combine_css' ) ) {
+if ( ! function_exists( 'blockera_combine_css' ) ) {
 
 	/**
 	 * Get combined css with receive complex css.
@@ -491,7 +491,7 @@ if ( ! function_exists( 'pb_combine_css' ) ) {
 	 *
 	 * @return array the flat css array to combined of css selectors and declarations.
 	 */
-	function pb_combine_css( array $css ): array {
+	function blockera_combine_css( array $css ): array {
 
 		$combinedCss = [];
 
@@ -519,7 +519,7 @@ if ( ! function_exists( 'pb_combine_css' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_convert_css_declarations_to_css_valid_rules' ) ) {
+if ( ! function_exists( 'blockera_convert_css_declarations_to_css_valid_rules' ) ) {
 
 	/**
 	 * Convert array css rules to valid css rules list.
@@ -528,7 +528,7 @@ if ( ! function_exists( 'pb_convert_css_declarations_to_css_valid_rules' ) ) {
 	 *
 	 * @return array the converted css rules.
 	 */
-	function pb_convert_css_declarations_to_css_valid_rules( array $css ): array {
+	function blockera_convert_css_declarations_to_css_valid_rules( array $css ): array {
 
 		$validCssRules = [];
 
@@ -568,7 +568,7 @@ if ( ! function_exists( 'pb_convert_css_declarations_to_css_valid_rules' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_normalized_selector' ) ) {
+if ( ! function_exists( 'blockera_get_normalized_selector' ) ) {
 
 	/**
 	 * Get normalized selector.
@@ -577,7 +577,7 @@ if ( ! function_exists( 'pb_get_normalized_selector' ) ) {
 	 *
 	 * @return string the normalized css selector.
 	 */
-	function pb_get_normalized_selector( string $selector ): string {
+	function blockera_get_normalized_selector( string $selector ): string {
 
 		$selectors = explode( ' ', $selector );
 

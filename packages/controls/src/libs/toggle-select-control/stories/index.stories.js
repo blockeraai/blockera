@@ -5,10 +5,10 @@ import { nanoid } from 'nanoid';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Flex } from '@publisher/components';
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { Flex } from '@blockera/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -25,32 +25,32 @@ SharedDecorators.push(WithControlDataProvider);
 
 const options = [
 	{
-		label: __('Left', 'publisher-core'),
+		label: __('Left', 'blockera-core'),
 		value: 'left',
 	},
 	{
-		label: __('Center', 'publisher-core'),
+		label: __('Center', 'blockera-core'),
 		value: 'center',
 	},
 	{
-		label: __('Right', 'publisher-core'),
+		label: __('Right', 'blockera-core'),
 		value: 'right',
 	},
 ];
 
 const optionsWithIcon = [
 	{
-		label: __('Left', 'publisher-core'),
+		label: __('Left', 'blockera-core'),
 		value: 'left',
 		icon: <InheritIcon />,
 	},
 	{
-		label: __('Center', 'publisher-core'),
+		label: __('Center', 'blockera-core'),
 		value: 'center',
 		icon: <InheritIcon />,
 	},
 	{
-		label: __('Right', 'publisher-core'),
+		label: __('Right', 'blockera-core'),
 		value: 'right',
 		icon: <InheritIcon />,
 	},

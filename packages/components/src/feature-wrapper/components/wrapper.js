@@ -6,13 +6,13 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	componentClassNames,
 	componentInnerClassNames,
-} from '@publisher/classnames';
-import WarningIcon from '@publisher/controls/src/libs/notice-control/icons/warning-icon';
+} from '@blockera/classnames';
+import WarningIcon from '@blockera/controls/src/libs/notice-control/icons/warning-icon';
 
 /**
  * Internal dependencies
@@ -38,17 +38,17 @@ export function Wrapper({
 	if (!text) {
 		switch (type) {
 			case 'free':
-				text = __('Upgrade to PRO', 'publisher-core');
+				text = __('Upgrade to PRO', 'blockera-core');
 				icon = <ProIcon />;
 				break;
 			case 'state':
 				text = typeName
 					? sprintf(
 							/* translators: %s is a state name. */
-							__('Only available in %s state', 'publisher-core'),
+							__('Only available in %s state', 'blockera-core'),
 							typeName
 					  )
-					: __('Not available in current state', 'publisher-core');
+					: __('Not available in current state', 'blockera-core');
 				break;
 			case 'breakpoint':
 				text = typeName
@@ -56,13 +56,13 @@ export function Wrapper({
 							/* translators: %s is a breakpoint name. */
 							__(
 								'Only available in %s breakpoint',
-								'publisher-core'
+								'blockera-core'
 							),
 							typeName
 					  )
 					: __(
 							'Not available in current breakpoint.',
-							'publisher-core'
+							'blockera-core'
 					  );
 				break;
 		}

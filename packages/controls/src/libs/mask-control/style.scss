@@ -1,7 +1,7 @@
-.publisher-control-mask,
-.publisher-control-mask-popover {
+.blockera-control-mask,
+.blockera-control-mask-popover {
 
-	.publisher-control-header-icon {
+	.blockera-control-header-icon {
 
 		svg {
 			width: 18px;
@@ -21,16 +21,16 @@
 		}
 	}
 
-	.publisher-control-shape-button {
+	.blockera-control-shape-button {
 
-		.publisher-control-search-icon {
+		.blockera-control-search-icon {
 			width: 100%;
 			justify-content: flex-end;
 			display: flex;
 			align-items: center;
 		}
 
-		.publisher-control-shape-icon {
+		.blockera-control-shape-icon {
 			display: flex;
 			align-items: center;
 			width: 100%;
@@ -53,15 +53,15 @@
 	    }
     }
 
-	.publisher-field-toggle.flip-toggle {
+	.blockera-field-toggle.flip-toggle {
 
-		.publisher-control.publisher-control-toggle {
+		.blockera-control.blockera-control-toggle {
 			margin-left: auto !important;
 		}
 	}
 }
 
-.publisher-control-mask-shape-popover {
+.blockera-control-mask-shape-popover {
 
 	.disabled-element-wrapper {
 		width: 100% !important;
@@ -73,7 +73,7 @@
 	 	gap: 10px;
 		row-gap: 10px;
 
-		.publisher-control-shape {
+		.blockera-control-shape {
 			display: flex;
 			width: auto;
 		    height: 50px;

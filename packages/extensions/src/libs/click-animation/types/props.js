@@ -12,7 +12,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 export type ClickAnimationExtensionProps = {
 	block: TBlockProps,
 	extensionConfig: {
-		publisherClickAnimation: Object,
+		blockeraClickAnimation: Object,
 	},
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,

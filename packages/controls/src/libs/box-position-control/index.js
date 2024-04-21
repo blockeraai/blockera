@@ -7,14 +7,14 @@ import { useState, memo } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { hasSameProps } from '@publisher/utils';
-import { Button, Flex, Grid } from '@publisher/components';
+} from '@blockera/classnames';
+import { hasSameProps } from '@blockera/utils';
+import { Button, Flex, Grid } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -45,7 +45,7 @@ const Component = ({
 	openSide = '',
 	//
 	id,
-	label = __('Position', 'publisher-core'),
+	label = __('Position', 'blockera-core'),
 	labelPopoverTitle,
 	labelDescription,
 	repeaterItem,
@@ -101,47 +101,47 @@ const Component = ({
 				<p>
 					{__(
 						'Easily manipulate the placement of block with using CSS positioning.',
-						'publisher-core'
+						'blockera-core'
 					)}
 				</p>
 				<h3>
 					<RelativeIcon />
-					{__('Relative', 'publisher-core')}
+					{__('Relative', 'blockera-core')}
 				</h3>
 				<p>
 					{__(
 						'Positions the block relative to its normal position, allowing adjustments.',
-						'publisher-core'
+						'blockera-core'
 					)}
 				</p>
 				<h3>
 					<AbsoluteIcon />
-					{__('Absolute', 'publisher-core')}
+					{__('Absolute', 'blockera-core')}
 				</h3>
 				<p>
 					{__(
 						'Removes the block from the document flow. Positioned relative to its nearest positioned ancestor.',
-						'publisher-core'
+						'blockera-core'
 					)}
 				</p>
 				<h3>
 					<FixedIcon />
-					{__('Fixed', 'publisher-core')}
+					{__('Fixed', 'blockera-core')}
 				</h3>
 				<p>
 					{__(
 						'Positions the block relative to the browser window, remaining fixed during scrolling.',
-						'publisher-core'
+						'blockera-core'
 					)}
 				</p>
 				<h3>
 					<StickyIcon />
-					{__('Sticky', 'publisher-core')}
+					{__('Sticky', 'blockera-core')}
 				</h3>
 				<p>
 					{__(
 						'A hybrid of relative and fixed. The block is treated as relative until it crosses a specified threshold, then it becomes fixed.',
-						'publisher-core'
+						'blockera-core'
 					)}
 				</p>
 			</>
@@ -175,16 +175,16 @@ const Component = ({
 
 	switch (value.type) {
 		case 'absolute':
-			labelText = __('Absolute', 'publisher-core');
+			labelText = __('Absolute', 'blockera-core');
 			break;
 		case 'fixed':
-			labelText = __('Fixed', 'publisher-core');
+			labelText = __('Fixed', 'blockera-core');
 			break;
 		case 'sticky':
-			labelText = __('Sticky', 'publisher-core');
+			labelText = __('Sticky', 'blockera-core');
 			break;
 		default:
-			labelText = __('Relative', 'publisher-core');
+			labelText = __('Relative', 'blockera-core');
 			break;
 	}
 
@@ -208,33 +208,33 @@ const Component = ({
 					id={getId(id, 'type')}
 					options={[
 						{
-							label: __('Default', 'publisher-core'),
+							label: __('Default', 'blockera-core'),
 							value: 'static',
 							icon: <StaticIcon />,
 						},
 						{
-							label: __('Relative', 'publisher-core'),
+							label: __('Relative', 'blockera-core'),
 							value: 'relative',
 							icon: <RelativeIcon />,
 						},
 						{
-							label: __('Absolute', 'publisher-core'),
+							label: __('Absolute', 'blockera-core'),
 							value: 'absolute',
 							icon: <AbsoluteIcon />,
 						},
 						{
-							label: __('Fixed', 'publisher-core'),
+							label: __('Fixed', 'blockera-core'),
 							value: 'fixed',
 							icon: <FixedIcon />,
 						},
 						{
-							label: __('Sticky', 'publisher-core'),
+							label: __('Sticky', 'blockera-core'),
 							value: 'sticky',
 							icon: <StickyIcon />,
 						},
 					]}
 					type="custom"
-					aria-label={__('Choose Position', 'publisher-core')}
+					aria-label={__('Choose Position', 'blockera-core')}
 					//
 					defaultValue="static"
 					onChange={(newValue) => {
@@ -285,13 +285,13 @@ const Component = ({
 											<p>
 												{__(
 													"Position Relative sets a block's position in relation to its normal position, allowing for fine-tuning without affecting the document flow.",
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'This feature is crucial for subtle adjustments or for setting a positioning context for absolutely positioned child blocks.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
@@ -301,13 +301,13 @@ const Component = ({
 											<p>
 												{__(
 													'Position Absolute allows for precise block placement relative to the nearest positioned ancestor, enabling pixel-perfect layout control.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'Ideal for creating fixed blocks in dynamic layouts, this feature offers unparalleled control for overlaying and aligning content accurately.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
@@ -317,13 +317,13 @@ const Component = ({
 											<p>
 												{__(
 													'Position Fixed anchors block to a specific spot on the page, regardless of scrolling, ensuring constant visibility and placement.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'Ideal for persistent navigation menus, back to top buttons or call-to-action buttons, it enhances user experience by keeping important blocks accessible.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
@@ -333,13 +333,13 @@ const Component = ({
 											<p>
 												{__(
 													'Position Sticky offers a hybrid approach, keeping blocks static until a specified point, then fixing them as the page scrolls.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'This feature is great for headers or important information, as it ensures visibility without disrupting the natural flow of the page.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
@@ -366,7 +366,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Fix At Top Left Corner',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -390,7 +390,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Fix At Top Right Corner',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -414,7 +414,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Fix At Bottom Left Corner',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -439,7 +439,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Fix At Bottom Right Corner',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -469,7 +469,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Position As Full-Width At Top Side',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -493,7 +493,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Position As Full-Height At Right Side',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -517,7 +517,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Position As Full-Width At Bottom Side',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -541,7 +541,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Position As Full-Height At Left Side',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -568,7 +568,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Position As Full-Width and Full-Height',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -592,7 +592,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Position Centrally With Equal Margins (20%) From All Edges',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -632,7 +632,7 @@ const Component = ({
 								gap="10px"
 							>
 								<Button
-									label={__('Stick To Top', 'publisher-core')}
+									label={__('Stick To Top', 'blockera-core')}
 									showTooltip={true}
 									className="position-quick-btn"
 									size="small"
@@ -655,7 +655,7 @@ const Component = ({
 								<Button
 									label={__(
 										'Stick To Bottom',
-										'publisher-core'
+										'blockera-core'
 									)}
 									showTooltip={true}
 									className="position-quick-btn"
@@ -689,7 +689,7 @@ const Component = ({
 						<p>
 							{__(
 								'Selecting both "Top" and "Bottom" for sticky positioning can lead to issues. Set value only for "Top" or "Bottom" to ensure smooth functionality.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 
@@ -699,7 +699,7 @@ const Component = ({
 							alignItems="flex-start"
 						>
 							<Button
-								label={__('Stick To Top', 'publisher-core')}
+								label={__('Stick To Top', 'blockera-core')}
 								showTooltip={true}
 								className="position-quick-btn"
 								size="small"
@@ -718,10 +718,10 @@ const Component = ({
 								}}
 							>
 								<AbsoluteTopIcon />
-								{__('Stick To Top', 'publisher-core')}
+								{__('Stick To Top', 'blockera-core')}
 							</Button>
 							<Button
-								label={__('Stick To Bottom', 'publisher-core')}
+								label={__('Stick To Bottom', 'blockera-core')}
 								showTooltip={true}
 								className="position-quick-btn"
 								size="small"
@@ -740,7 +740,7 @@ const Component = ({
 								}}
 							>
 								<AbsoluteBottomIcon />
-								{__('Stick To Bottom', 'publisher-core')}
+								{__('Stick To Bottom', 'blockera-core')}
 							</Button>
 						</Flex>
 					</NoticeControl>

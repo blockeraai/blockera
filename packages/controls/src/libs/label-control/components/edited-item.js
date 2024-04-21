@@ -6,11 +6,11 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { Tooltip } from '@publisher/components';
+import type { TStates } from '@blockera/extensions/src/libs/block-states/types';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Tooltip } from '@blockera/components';
 
 export default function EditedItem({
 	state,
@@ -30,7 +30,7 @@ export default function EditedItem({
 		<Tooltip
 			text={sprintf(
 				/* translators: %1$s: Breakpoint name, %2$s: Block state name */
-				__('Switch To: %1$s → %2$s', 'publisher-core'),
+				__('Switch To: %1$s → %2$s', 'blockera-core'),
 				breakpoint,
 				label
 			)}
@@ -51,7 +51,7 @@ export default function EditedItem({
 							'states-changes-item-current'
 						)}
 					>
-						{__('Current', 'publisher-core')}
+						{__('Current', 'blockera-core')}
 					</span>
 				)}
 			</div>

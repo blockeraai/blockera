@@ -6,10 +6,10 @@ import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { Button, Flex, Popover } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Button, Flex, Popover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -27,7 +27,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Missing Dynamic Value Item', 'publisher-core')}
+			title={__('Missing Dynamic Value Item', 'blockera-core')}
 			offset={125}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
@@ -48,11 +48,11 @@ export default function ({
 						style={{ fontSize: '12px', margin: 0 }}
 					>
 						{deletedItem.name !== ''
-							? __('Item:', 'publisher-core')
-							: __('Item ID:', 'publisher-core')}
+							? __('Item:', 'blockera-core')
+							: __('Item ID:', 'blockera-core')}
 						<b
 							style={{
-								color: 'var(--publisher-value-addon-deleted-color)',
+								color: 'var(--blockera-value-addon-deleted-color)',
 							}}
 						>
 							{deletedItem.name !== ''
@@ -68,10 +68,10 @@ export default function ({
 							gap={4}
 							style={{ fontSize: '12px', margin: 0 }}
 						>
-							{__('Reference:', 'publisher-core')}
+							{__('Reference:', 'blockera-core')}
 							<b
 								style={{
-									color: 'var(--publisher-value-addon-deleted-color)',
+									color: 'var(--blockera-value-addon-deleted-color)',
 									textTransform: 'capitalize',
 								}}
 							>
@@ -111,12 +111,12 @@ export default function ({
 						onClick={controlProps.handleOnClickRemove}
 						label={__(
 							'Remove Dynamic Value Usage',
-							'publisher-core'
+							'blockera-core'
 						)}
 						style={{ padding: '2px 8px' }}
 					>
 						<TrashIcon />
-						{__('Remove', 'publisher-core')}
+						{__('Remove', 'blockera-core')}
 					</Button>
 					<Button
 						variant="tertiary"
@@ -127,14 +127,14 @@ export default function ({
 						}}
 						label={__(
 							'Switch To Another Dynamic Value',
-							'publisher-core'
+							'blockera-core'
 						)}
 						style={{
 							padding: '2px 8px',
 							marginRight: 'auto',
 						}}
 					>
-						{__('Switch Item', 'publisher-core')}
+						{__('Switch Item', 'blockera-core')}
 					</Button>
 				</Flex>
 			</Flex>

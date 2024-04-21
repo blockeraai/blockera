@@ -35,7 +35,7 @@ describe('Media Fit → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('cover').to.be.equal(
-					getSelectedBlock(data, 'publisherFit')
+					getSelectedBlock(data, 'blockeraFit')
 				);
 			});
 
@@ -89,7 +89,7 @@ describe('Media Fit → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('contain').to.be.equal(
-					getSelectedBlock(data, 'publisherFit')
+					getSelectedBlock(data, 'blockeraFit')
 				);
 			});
 

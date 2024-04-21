@@ -1,11 +1,11 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { getColorVAFromIdString } from '@publisher/core-data';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-import { isUndefined } from '@publisher/utils';
+import { getColorVAFromIdString } from '@blockera/core-data';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
+import { isUndefined } from '@blockera/utils';
 
 function isColorsEqual(
 	fontColor: void | string,
@@ -29,7 +29,7 @@ export function fontColorFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (attributes?.publisherFontColor === '') {
+	if (attributes?.blockeraFontColor === '') {
 		// textColor attribute in root always is variable
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.textColor !== undefined) {
@@ -37,7 +37,7 @@ export function fontColorFromWPCompatibility({
 
 			if (color) {
 				return {
-					publisherFontColor: color,
+					blockeraFontColor: color,
 				};
 			}
 		}
@@ -45,7 +45,7 @@ export function fontColorFromWPCompatibility({
 		// font size is not variable
 		if (attributes?.style?.color?.text !== undefined) {
 			return {
-				publisherFontColor: attributes?.style?.color?.text,
+				blockeraFontColor: attributes?.style?.color?.text,
 			};
 		}
 	}

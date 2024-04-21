@@ -4,11 +4,11 @@
 import { nanoid } from 'nanoid';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Flex } from '@publisher/components';
-import { InputControl, ControlContextProvider } from '@publisher/controls';
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { Flex } from '@blockera/components';
+import { InputControl, ControlContextProvider } from '@blockera/controls';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -268,7 +268,7 @@ export const Variable = {
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">
-					Deleted Variables<span>Publisher Blocks</span>
+					Deleted Variables<span> Blocks</span>
 				</h2>
 
 				<ControlContextProvider
@@ -364,7 +364,7 @@ export const Variable = {
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">
-					Deleted Variables<span>Publisher Blocks Pro</span>
+					Deleted Variables<span> Blocks Pro</span>
 				</h2>
 
 				<ControlContextProvider
@@ -569,7 +569,7 @@ export const Variable = {
 								id: 'not-found',
 								reference: {
 									type: 'theme',
-									theme: 'Publisher SE',
+									theme: ' SE',
 								},
 								var: '--wp--preset--font-size--medium',
 								type: 'font-size',
@@ -600,7 +600,7 @@ export const Variable = {
 								id: 'not-found',
 								reference: {
 									type: 'theme',
-									theme: 'Publisher SE',
+									theme: ' SE',
 								},
 								var: '--wp--preset--font-size--medium',
 								type: 'font-size',
@@ -630,7 +630,7 @@ export const Variable = {
 								id: 'not-found',
 								reference: {
 									type: 'theme',
-									theme: 'Publisher SE',
+									theme: ' SE',
 								},
 								var: '--wp--preset--font-size--medium',
 								type: 'font-size',
@@ -1374,7 +1374,7 @@ export const DynamicValue = {
 								id: 'not-found',
 								reference: {
 									type: 'theme',
-									theme: 'Publisher SE',
+									theme: ' SE',
 								},
 								category: 'post',
 								type: 'text',

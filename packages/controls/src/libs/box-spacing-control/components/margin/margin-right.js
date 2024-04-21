@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { useDragValue } from '@publisher/utils';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { useDragValue } from '@blockera/utils';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -211,7 +211,7 @@ export function MarginRight({
 						data-cy="box-spacing-margin-right"
 					>
 						<LabelControl
-							ariaLabel={__('Right Margin', 'publisher-core')}
+							ariaLabel={__('Right Margin', 'blockera-core')}
 							label={
 								_isSetValueAddon
 									? fixLabelText(value.margin.right)
@@ -246,22 +246,19 @@ export function MarginRight({
 								}}
 								title={__(
 									'Right Margin Space',
-									'publisher-core'
+									'blockera-core'
 								)}
-								inputLabel={__(
-									'Right Margin',
-									'publisher-core'
-								)}
+								inputLabel={__('Right Margin', 'blockera-core')}
 								inputLabelPopoverTitle={__(
 									'Right Margin Space',
-									'publisher-core'
+									'blockera-core'
 								)}
 								inputLabelDescription={
 									<>
 										<p>
 											{__(
 												'It enables you to set a margin space that applies only to the right edge of the block.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 									</>

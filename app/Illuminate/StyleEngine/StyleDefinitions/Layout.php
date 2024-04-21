@@ -1,8 +1,8 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
-use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
+use Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
 
 class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 
@@ -14,14 +14,14 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherGap'                  => 'gap',
-			'publisherFlexChildSizing'      => 'flex',
-			'publisherFlexChildOrder'       => 'order',
-			'publisherDisplay'              => 'display',
-			'publisherFlexWrap'             => 'flex-wrap',
-			'publisherFlexChildAlign'       => 'align-self',
-			'publisherAlignContent'         => 'align-content',
-			'publisherFlexLayout'           => 'flex-direction',
+			'blockeraGap'             => 'gap',
+			'blockeraFlexChildSizing' => 'flex',
+			'blockeraFlexChildOrder'  => 'order',
+			'blockeraDisplay'         => 'display',
+			'blockeraFlexWrap'        => 'flex-wrap',
+			'blockeraFlexChildAlign'  => 'align-self',
+			'blockeraAlignContent'    => 'align-content',
+			'blockeraFlexLayout'      => 'flex-direction',
 		];
 	}
 
@@ -61,9 +61,9 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 					case 'custom':
 						$declaration['flex'] = sprintf(
 							'%s %s %s',
-							$setting['custom']['publisherFlexChildGrow'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildGrow'] ) : 0,
-							$setting['custom']['publisherFlexChildShrink'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildShrink'] ) : 0,
-							$setting['custom']['publisherFlexChildBasis'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildBasis'] ) : 'auto'
+							$setting['custom']['blockeraFlexChildGrow'] ? blockera_get_value_addon_real_value( $setting['custom']['blockeraFlexChildGrow'] ) : 0,
+							$setting['custom']['blockeraFlexChildShrink'] ? blockera_get_value_addon_real_value( $setting['custom']['blockeraFlexChildShrink'] ) : 0,
+							$setting['custom']['blockeraFlexChildBasis'] ? blockera_get_value_addon_real_value( $setting['custom']['blockeraFlexChildBasis'] ) : 'auto'
 						);
 						break;
 				}
@@ -81,7 +81,7 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 						$declaration['order'] = '100';
 						break;
 					case 'custom':
-						$declaration['order'] = $setting['custom'] ? pb_get_value_addon_real_value( $setting['custom'] ) : '100';
+						$declaration['order'] = $setting['custom'] ? blockera_get_value_addon_real_value( $setting['custom'] ) : '100';
 						break;
 				}
 
@@ -108,7 +108,10 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 			case 'flex-wrap':
 				$flexDirection = $setting['flex-wrap'];
 
-				$declaration['flex-wrap'] = $flexDirection['value'] . ( $flexDirection['reverse'] && $flexDirection['value'] === 'wrap' ? '-reverse' : '' );
+				if ( ! empty( $flexDirection['value'] ) ) {
+
+					$declaration['flex-wrap'] = $flexDirection['value'] . ( $flexDirection['reverse'] && $flexDirection['value'] === 'wrap' ? '-reverse' : '' );
+				}
 
 				break;
 
@@ -119,16 +122,16 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 				if ( $gap['lock'] ) {
 
 					if ( $gap['gap'] ) {
-						$declaration['gap'] = pb_get_value_addon_real_value( $gap['gap'] );
+						$declaration['gap'] = blockera_get_value_addon_real_value( $gap['gap'] );
 					}
 				} else {
 
 					if ( $gap['rows'] ) {
-						$declaration['row-gap'] = pb_get_value_addon_real_value( $gap['rows'] );
+						$declaration['row-gap'] = blockera_get_value_addon_real_value( $gap['rows'] );
 					}
 
 					if ( $gap['columns'] ) {
-						$declaration['column-gap'] = pb_get_value_addon_real_value( $gap['columns'] );
+						$declaration['column-gap'] = blockera_get_value_addon_real_value( $gap['columns'] );
 					}
 				}
 
@@ -160,11 +163,11 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 				[
 					'isVisible'  => true,
 					'type'       => $cssProperty,
-					$cssProperty => $settings['publisherFlexChildSizing'] ?? 'custom',
+					$cssProperty => $settings['blockeraFlexChildSizing'] ?? 'custom',
 					'custom'     => [
-						'publisherFlexChildGrow'   => $settings['publisherFlexChildGrow'] ?? 0,
-						'publisherFlexChildShrink' => $settings['publisherFlexChildShrink'] ?? 0,
-						'publisherFlexChildBasis'  => $settings['publisherFlexChildBasis'] ?? 'auto',
+						'blockeraFlexChildGrow'   => $settings['blockeraFlexChildGrow'] ?? 0,
+						'blockeraFlexChildShrink' => $settings['blockeraFlexChildShrink'] ?? 0,
+						'blockeraFlexChildBasis'  => $settings['blockeraFlexChildBasis'] ?? 'auto',
 					],
 				]
 			];
@@ -175,8 +178,8 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 				[
 					'isVisible'  => true,
 					'type'       => $cssProperty,
-					$cssProperty => $settings['publisherFlexChildOrder'] ?? 'custom',
-					'custom'     => $settings['publisherFlexChildOrderCustom'] ?? '',
+					$cssProperty => $settings['blockeraFlexChildOrder'] ?? 'custom',
+					'custom'     => $settings['blockeraFlexChildOrderCustom'] ?? '',
 				]
 			];
 

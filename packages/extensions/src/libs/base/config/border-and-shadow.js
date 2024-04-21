@@ -10,41 +10,41 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherBoxShadow: FeatureConfig = {
+const blockeraBoxShadow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
 	cssGenerators: {},
-	label: __('Box Shadow', 'publisher-core'),
+	label: __('Box Shadow', 'blockera-core'),
 };
 
-const publisherOutline: FeatureConfig = {
+const blockeraOutline: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
 	cssGenerators: {},
-	label: __('Outline', 'publisher-core'),
+	label: __('Outline', 'blockera-core'),
 };
 
-const publisherBorder: FeatureConfig = {
+const blockeraBorder: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
 	cssGenerators: {},
-	label: __('Border', 'publisher-core'),
+	label: __('Border', 'blockera-core'),
 };
 
-const publisherBorderRadius: FeatureConfig = {
+const blockeraBorderRadius: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
 	cssGenerators: {},
-	label: __('Border Radius', 'publisher-core'),
+	label: __('Border Radius', 'blockera-core'),
 };
 
 export const borderAndShadowConfig = {
-	publisherBorder,
-	publisherBorderRadius,
-	publisherBoxShadow,
-	publisherOutline,
+	blockeraBorder,
+	blockeraBorderRadius,
+	blockeraBoxShadow,
+	blockeraOutline,
 };

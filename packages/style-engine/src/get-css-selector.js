@@ -6,20 +6,20 @@
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { prepare } from '@publisher/data-extractor';
-import { isString, isUndefined } from '@publisher/utils';
-import { isInnerBlock } from '@publisher/extensions/src/components/utils';
-import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
-import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks/types';
+import { prepare } from '@blockera/data-extractor';
+import { isString, isUndefined } from '@blockera/utils';
+import { isInnerBlock } from '@blockera/extensions/src/components/utils';
+import type { TStates } from '@blockera/extensions/src/libs/block-states/types';
+import type { InnerBlockType } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
  */
 import { getSelector } from './utils';
 import type { NormalizedSelectorProps } from './types';
-import { isNormalState } from '@publisher/extensions/src/components';
+import { isNormalState } from '@blockera/extensions/src/components';
 
 export const getCssSelector = ({
 	state,
@@ -32,7 +32,7 @@ export const getCssSelector = ({
 	suffixClass = '',
 	fallbackSupportId,
 }: NormalizedSelectorProps): string => {
-	const { getDeviceType } = select('publisher-core/editor');
+	const { getDeviceType } = select('blockera-core/editor');
 	const deviceType = getDeviceType();
 	const rootSelector =
 		'laptop' === deviceType
@@ -55,7 +55,7 @@ export const getCssSelector = ({
 		getExtensionCurrentBlock,
 		getExtensionInnerBlockState,
 		getExtensionCurrentBlockState,
-	} = select('publisher-core/extensions');
+	} = select('blockera-core/extensions');
 
 	// primitive block value.
 	let block: Object = {};
@@ -68,14 +68,14 @@ export const getCssSelector = ({
 		const registerSelector = (generatedSelector: string) => {
 			switch (state) {
 				case 'parent-class':
-					if (block?.attributes?.publisherBlockStates[state]) {
-						generatedSelector = `${block?.attributes?.publisherBlockStates[state]['css-class']} ${generatedSelector}`;
+					if (block?.attributes?.blockeraBlockStates[state]) {
+						generatedSelector = `${block?.attributes?.blockeraBlockStates[state]['css-class']} ${generatedSelector}`;
 					}
 					break;
 				case 'custom-class':
-					if (block?.attributes?.publisherBlockStates[state]) {
+					if (block?.attributes?.blockeraBlockStates[state]) {
 						generatedSelector =
-							block?.attributes?.publisherBlockStates[state][
+							block?.attributes?.blockeraBlockStates[state][
 								'css-class'
 							] +
 							suffixClass +
@@ -183,10 +183,10 @@ export const getCssSelector = ({
 			// we try to use parent or custom css class if exists!
 			if (
 				['parent-class', 'custom-class'].includes(state) &&
-				block?.attributes?.publisherBlockStates[state]
+				block?.attributes?.blockeraBlockStates[state]
 			) {
 				_selector =
-					block?.attributes?.publisherBlockStates[state]['css-class'];
+					block?.attributes?.blockeraBlockStates[state]['css-class'];
 
 				if (_selector.trim()) {
 					if ('parent-class' === state) {

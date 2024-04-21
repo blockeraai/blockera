@@ -1,12 +1,15 @@
+// @flow
+
 /**
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { componentClassNames } from '@publisher/classnames';
+import { componentClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -19,7 +22,7 @@ export default function ColorIndicatorStack({
 	size,
 	maxItems,
 	...props
-}) {
+}: Object): MixedElement {
 	if (!value?.length) {
 		return <></>;
 	}

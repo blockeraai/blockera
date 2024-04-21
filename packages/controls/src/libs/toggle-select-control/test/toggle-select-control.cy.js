@@ -13,15 +13,15 @@ describe('toggle-select-control', () => {
 	context('Functionality test → Initialise', () => {
 		const options = [
 			{
-				label: __('Left', 'publisher-core'),
+				label: __('Left', 'blockera-core'),
 				value: 'left',
 			},
 			{
-				label: __('Center', 'publisher-core'),
+				label: __('Center', 'blockera-core'),
 				value: 'center',
 			},
 			{
-				label: __('Right', 'publisher-core'),
+				label: __('Right', 'blockera-core'),
 				value: 'right',
 			},
 		];
@@ -60,17 +60,17 @@ describe('toggle-select-control', () => {
 		context('Icon Toggle', () => {
 			const optionsWithIcon = [
 				{
-					label: __('Left', 'publisher-core'),
+					label: __('Left', 'blockera-core'),
 					value: 'left',
 					icon: <InheritIcon />,
 				},
 				{
-					label: __('Center', 'publisher-core'),
+					label: __('Center', 'blockera-core'),
 					value: 'center',
 					icon: <InheritIcon />,
 				},
 				{
-					label: __('Right', 'publisher-core'),
+					label: __('Right', 'blockera-core'),
 					value: 'right',
 					icon: <InheritIcon />,
 				},
@@ -120,15 +120,15 @@ describe('toggle-select-control', () => {
 	context('Functionality Tests', () => {
 		const options = [
 			{
-				label: __('Left', 'publisher-core'),
+				label: __('Left', 'blockera-core'),
 				value: 'left',
 			},
 			{
-				label: __('Center', 'publisher-core'),
+				label: __('Center', 'blockera-core'),
 				value: 'center',
 			},
 			{
-				label: __('Right', 'publisher-core'),
+				label: __('Right', 'blockera-core'),
 				value: 'right',
 			},
 		];
@@ -208,15 +208,15 @@ describe('toggle-select-control', () => {
 	context("Control's initial value", () => {
 		const options = [
 			{
-				label: __('Left', 'publisher-core'),
+				label: __('Left', 'blockera-core'),
 				value: 'left',
 			},
 			{
-				label: __('Center', 'publisher-core'),
+				label: __('Center', 'blockera-core'),
 				value: 'center',
 			},
 			{
-				label: __('Right', 'publisher-core'),
+				label: __('Right', 'blockera-core'),
 				value: 'right',
 			},
 		];

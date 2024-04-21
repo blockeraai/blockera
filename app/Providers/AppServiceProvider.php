@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Providers;
+namespace Blockera\Framework\Providers;
 
 /**
  * External
@@ -12,8 +12,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * Internal
  */
 
-use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Illuminate\{EntityRegistry,
+use Blockera\Framework\Exceptions\BaseException;
+use Blockera\Framework\Illuminate\{EntityRegistry,
 	Foundation\Application,
 	StyleEngine\StyleDefinitions\Size,
 	StyleEngine\StyleDefinitions\Mouse,
@@ -32,9 +32,9 @@ use Publisher\Framework\Illuminate\{EntityRegistry,
 	Support\Adapters\DomParser,
 	Foundation\ValueAddon\Variable\VariableType
 };
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonRegistry;
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
-use Publisher\Framework\Services\Block\{Render, Parser, SavePost, Setup};
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\ValueAddonRegistry;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
+use Blockera\Framework\Services\Block\{Render, Parser, SavePost, Setup};
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -143,7 +143,7 @@ class AppServiceProvider extends ServiceProvider {
 		$this->app->make( SavePost::class );
 		$this->app->make( EntityRegistry::class );
 
-		foreach ( pb_core_config( 'app.blocks' ) as $block ) {
+		foreach ( blockera_core_config( 'app.blocks' ) as $block ) {
 
 			if ( empty( $block ) ) {
 

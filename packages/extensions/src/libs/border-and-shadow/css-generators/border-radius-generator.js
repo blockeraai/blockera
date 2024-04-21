@@ -1,34 +1,34 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { createCssDeclarations } from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+import { createCssDeclarations } from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 export function BorderRadiusGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherBorderRadius) {
+	if (!attributes?.blockeraBorderRadius) {
 		return '';
 	}
 
 	const properties = {};
 
-	if (attributes?.publisherBorderRadius?.type === 'all') {
+	if (attributes?.blockeraBorderRadius?.type === 'all') {
 		properties['border-radius'] = getValueAddonRealValue(
-			attributes.publisherBorderRadius.all
+			attributes.blockeraBorderRadius.all
 		);
 	} else {
 		properties['border-top-left-radius'] = getValueAddonRealValue(
-			attributes.publisherBorderRadius.topLeft
+			attributes.blockeraBorderRadius.topLeft
 		);
 		properties['border-top-right-radius'] = getValueAddonRealValue(
-			attributes.publisherBorderRadius.topRight
+			attributes.blockeraBorderRadius.topRight
 		);
 		properties['border-bottom-left-radius'] = getValueAddonRealValue(
-			attributes.publisherBorderRadius.bottomLeft
+			attributes.blockeraBorderRadius.bottomLeft
 		);
 		properties['border-bottom-right-radius'] = getValueAddonRealValue(
-			attributes.publisherBorderRadius.bottomRight
+			attributes.blockeraBorderRadius.bottomRight
 		);
 	}
 

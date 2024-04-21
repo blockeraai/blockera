@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Services\Block;
+namespace Blockera\Framework\Services\Block;
 
 /**
  * Class Setup to sets block arguments and any other configuration related with gutenberg blocks.
@@ -27,7 +27,7 @@ class Setup {
 		$relativePathDir = $this->getBlockDirectoryPath( $block_type );
 		$blockFile       = sprintf(
 			'%1$sblocks/src/%2$s/block.php',
-			pb_core_config( 'app.packages_path' ),
+			blockera_core_config( 'app.packages_path' ),
 			$relativePathDir
 		);
 

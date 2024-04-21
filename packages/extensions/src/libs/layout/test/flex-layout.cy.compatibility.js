@@ -54,7 +54,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 				direction: 'column',
 				alignItems: 'flex-start',
 				justifyContent: 'flex-end',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexLayout'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexLayout'));
 		});
 
 		//
@@ -82,7 +82,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 				direction: 'row',
 				alignItems: 'flex-start',
 				justifyContent: 'flex-end',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexLayout'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexLayout'));
 		});
 
 		//
@@ -110,7 +110,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 				direction: 'row',
 				alignItems: 'center',
 				justifyContent: 'flex-start',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexLayout'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexLayout'));
 		});
 
 		//
@@ -138,7 +138,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 				direction: 'row',
 				alignItems: '',
 				justifyContent: '',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexLayout'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexLayout'));
 		});
 	});
 });

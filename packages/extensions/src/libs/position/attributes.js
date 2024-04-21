@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherPosition: {
+	blockeraPosition: {
 		type: 'object',
 		default: {
 			type: 'static',
@@ -11,7 +11,7 @@ export const attributes = {
 			},
 		},
 	},
-	publisherZIndex: {
+	blockeraZIndex: {
 		type: 'string',
 		default: '',
 	},

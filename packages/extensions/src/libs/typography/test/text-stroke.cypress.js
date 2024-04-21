@@ -12,7 +12,7 @@ describe('Text Stroke → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -46,7 +46,7 @@ describe('Text Stroke → Functionality', () => {
 			expect({
 				color: '#5a22a4',
 				width: '1px',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTextStroke'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextStroke'));
 		});
 
 		/* Width */
@@ -67,7 +67,7 @@ describe('Text Stroke → Functionality', () => {
 			expect({
 				color: '#5a22a4',
 				width: '10px',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTextStroke'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextStroke'));
 		});
 
 		//Check frontend
@@ -75,7 +75,7 @@ describe('Text Stroke → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
+		cy.get('.blockera-core-block')
 			.should('have.css', '-webkit-text-stroke-color', 'rgb(90, 34, 164)')
 			.and('have.css', '-webkit-text-stroke-width', '10px');
 	});

@@ -37,7 +37,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('4/3').to.be.equal(
-					getSelectedBlock(data, 'publisherRatio')?.value
+					getSelectedBlock(data, 'blockeraRatio')?.value
 				);
 			});
 

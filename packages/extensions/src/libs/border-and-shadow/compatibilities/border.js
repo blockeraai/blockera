@@ -1,28 +1,28 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getColorVAFromIdString,
 	getColorVAFromVarString,
-} from '@publisher/core-data';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-import { isBorderEmpty } from '@publisher/controls';
+} from '@blockera/core-data';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
+import { isBorderEmpty } from '@blockera/controls';
 
 export function borderFromWPCompatibility({
 	attributes,
 }: {
 	attributes: Object,
 }): Object {
-	if (isBorderEmpty(attributes?.publisherBorder)) {
+	if (isBorderEmpty(attributes?.blockeraBorder)) {
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor !== undefined) {
 			const colorVar = getColorVAFromIdString(attributes?.borderColor);
 
 			if (colorVar) {
-				attributes.publisherBorder = {
+				attributes.blockeraBorder = {
 					type: 'all',
 					all: {
 						width: attributes?.style?.border?.width ?? '',
@@ -69,7 +69,7 @@ export function borderFromWPCompatibility({
 			border.bottom.color = getColorVAFromVarString(border.bottom.color);
 			border.left.color = getColorVAFromVarString(border.left.color);
 
-			attributes.publisherBorder = border;
+			attributes.blockeraBorder = border;
 		}
 		// is all and does not use var color
 		else if (
@@ -77,7 +77,7 @@ export function borderFromWPCompatibility({
 			attributes?.style?.border?.style !== undefined ||
 			attributes?.style?.border?.color !== undefined
 		) {
-			attributes.publisherBorder = {
+			attributes.blockeraBorder = {
 				type: 'all',
 				all: {
 					width: attributes?.style?.border?.width ?? '',

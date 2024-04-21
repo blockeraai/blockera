@@ -4,11 +4,11 @@
 import { useEffect, useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ *  dependencies
  */
-import { Flex } from '@publisher/components';
-import { useValue, varExport } from '@publisher/utils';
-import { useControlContext } from '@publisher/controls';
+import { Flex } from '@blockera/components';
+import { useValue, varExport } from '@blockera/utils';
+import { useControlContext } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -91,3 +91,4 @@ export const WithControlDataProvider = ({ children, contextValue }) => {
 		</ControlDataContext.Provider>
 	);
 };
+

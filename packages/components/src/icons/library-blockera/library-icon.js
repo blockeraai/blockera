@@ -1,4 +1,4 @@
-export default function PublisherLibraryIcon({}) {
+export default function LibraryIcon({}) {
 	return (
 		<svg
 			width="18"

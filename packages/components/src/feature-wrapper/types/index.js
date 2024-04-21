@@ -1,8 +1,8 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { FeatureConfig } from '@publisher/extensions/src/libs/base';
+import type { FeatureConfig } from '@blockera/extensions/src/libs/base';
 
 export type FeatureWrapperProps = {
 	/**

@@ -42,8 +42,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		// WP data should come to Blockera
 		getWPDataObject().then((data) => {
 			expect({
-				publisherFontColor: '#ffbaba',
-				publisherBlockStates: {
+				blockeraFontColor: '#ffbaba',
+				blockeraBlockStates: {
 					normal: {
 						breakpoints: {
 							laptop: {},
@@ -55,14 +55,14 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 						breakpoints: {
 							laptop: {
 								attributes: {
-									publisherFontColor: '#ff1d1d',
+									blockeraFontColor: '#ff1d1d',
 								},
 							},
 						},
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -105,8 +105,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			expect({
-				publisherFontColor: '#666666',
-				publisherBlockStates: {
+				blockeraFontColor: '#666666',
+				blockeraBlockStates: {
 					normal: {
 						isVisible: true,
 						breakpoints: {
@@ -120,14 +120,14 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 						breakpoints: {
 							laptop: {
 								attributes: {
-									publisherFontColor: '#888888',
+									blockeraFontColor: '#888888',
 								},
 							},
 						},
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -178,7 +178,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			expect({
-				publisherBlockStates: {
+				blockeraBlockStates: {
 					normal: {
 						isVisible: true,
 						breakpoints: {
@@ -197,7 +197,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -241,7 +241,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		// WP data should come to Blockera
 		getWPDataObject().then((data) => {
 			expect({
-				publisherFontColor: {
+				blockeraFontColor: {
 					settings: {
 						name: 'Accent / Three',
 						id: 'accent-3',
@@ -257,7 +257,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					isValueAddon: true,
 					valueType: 'variable',
 				},
-				publisherBlockStates: {
+				blockeraBlockStates: {
 					normal: {
 						breakpoints: {
 							laptop: {},
@@ -269,7 +269,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 						breakpoints: {
 							laptop: {
 								attributes: {
-									publisherFontColor: {
+									blockeraFontColor: {
 										settings: {
 											name: 'Accent / Four',
 											id: 'accent-4',
@@ -291,7 +291,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -326,7 +326,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			expect({
-				publisherFontColor: {
+				blockeraFontColor: {
 					settings: {
 						name: 'Contrast / Two',
 						id: 'contrast-2',
@@ -342,7 +342,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					isValueAddon: true,
 					valueType: 'variable',
 				},
-				publisherBlockStates: {
+				blockeraBlockStates: {
 					normal: {
 						breakpoints: {
 							laptop: {
@@ -356,7 +356,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 						breakpoints: {
 							laptop: {
 								attributes: {
-									publisherFontColor: {
+									blockeraFontColor: {
 										settings: {
 											name: 'Accent',
 											id: 'accent',
@@ -378,7 +378,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
 			);
 		});
 
@@ -421,7 +421,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			expect({
-				publisherBlockStates: {
+				blockeraBlockStates: {
 					normal: {
 						isVisible: true,
 						breakpoints: {
@@ -440,7 +440,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
 			);
 		});
 

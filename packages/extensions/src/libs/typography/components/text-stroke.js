@@ -6,14 +6,14 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	ColorControl,
 	InputControl,
 	useControlContext,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -41,11 +41,11 @@ export const TextStroke = ({
 	} = useControlContext({
 		onChange: (newValue, ref) => {
 			if ('reset' === ref?.current?.action) {
-				handleOnChangeAttributes('publisherTextStroke', defaultValue, {
+				handleOnChangeAttributes('blockeraTextStroke', defaultValue, {
 					ref,
 				});
 			} else {
-				handleOnChangeAttributes('publisherTextStroke', newValue, {
+				handleOnChangeAttributes('blockeraTextStroke', newValue, {
 					ref,
 				});
 			}
@@ -65,20 +65,20 @@ export const TextStroke = ({
 
 	return (
 		<BaseControl
-			label={__('Text Stroke', 'publisher-core')}
-			labelPopoverTitle={__('Text Stroke', 'publisher-core')}
+			label={__('Text Stroke', 'blockera-core')}
+			labelPopoverTitle={__('Text Stroke', 'blockera-core')}
 			labelDescription={
 				<>
 					<p>
 						{__(
 							'It sets outline stroke to text characters, allowing customization of text appearance with a stroke color and width, enhancing visual impact and readability.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 					<p>
 						{__(
 							'This property is particularly useful for stylistic text effects, such as creating contrast against backgrounds or emphasizing headings, adding a creative touch to web typography.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</p>
 				</>
@@ -89,14 +89,14 @@ export const TextStroke = ({
 			<ColorControl
 				id={'color'}
 				singularId={'color'}
-				label={__('Color', 'publisher-core')}
-				labelPopoverTitle={__('Text Stroke Color', 'publisher-core')}
+				label={__('Color', 'blockera-core')}
+				labelPopoverTitle={__('Text Stroke Color', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets sets the color of the stroke around text characters to enhance text visibility and aesthetic appeal.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -106,13 +106,13 @@ export const TextStroke = ({
 				onChange={(newValue, ref) => {
 					if ('reset' === ref?.current?.action || newValue === '') {
 						handleOnChangeAttributes(
-							'publisherTextStroke',
+							'blockeraTextStroke',
 							defaultValue,
 							{ ref }
 						);
 					} else {
 						handleOnChangeAttributes(
-							'publisherTextStroke',
+							'blockeraTextStroke',
 							{
 								...value,
 								color: newValue,
@@ -128,17 +128,14 @@ export const TextStroke = ({
 				<InputControl
 					id={'width'}
 					singularId={'width'}
-					label={__('Width', 'publisher-core')}
-					labelPopoverTitle={__(
-						'Text Stroke Width',
-						'publisher-core'
-					)}
+					label={__('Width', 'blockera-core')}
+					labelPopoverTitle={__('Text Stroke Width', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It sets sets the the thickness of the stroke around text characters.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -149,7 +146,7 @@ export const TextStroke = ({
 					onChange={(newValue, ref) => {
 						if ('reset' === ref?.current?.action) {
 							handleOnChangeAttributes(
-								'publisherTextStroke',
+								'blockeraTextStroke',
 								{
 									...value,
 									width: defaultValue.width,
@@ -158,7 +155,7 @@ export const TextStroke = ({
 							);
 						} else {
 							handleOnChangeAttributes(
-								'publisherTextStroke',
+								'blockeraTextStroke',
 								{
 									...value,
 									width: newValue,

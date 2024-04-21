@@ -11,7 +11,7 @@ describe('Font Color → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -40,7 +40,7 @@ describe('Font Color → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('#70ca9e').to.be.equal(
-				getSelectedBlock(data, 'publisherFontColor')
+				getSelectedBlock(data, 'blockeraFontColor')
 			);
 		});
 
@@ -49,7 +49,7 @@ describe('Font Color → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'color',
 			'rgb(112, 202, 158)'
@@ -86,7 +86,7 @@ describe('Font Color → Functionality', () => {
 				name: 'Contrast',
 				isValueAddon: true,
 				valueType: 'variable',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFontColor'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFontColor'));
 		});
 
 		//Check frontend
@@ -94,9 +94,10 @@ describe('Font Color → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').hasCssVar(
+		cy.get('.blockera-core-block').hasCssVar(
 			'color',
 			'--wp--preset--color--contrast'
 		);
 	});
 });
+

@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -15,8 +15,8 @@ import {
 	sharedBlockExtensionAttributes,
 	IconExtensionSupports,
 	IconExtensionAttributes,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -31,11 +31,11 @@ const attributes = {
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	link: {
 		name: 'core/term-item',
 		type: 'link',
-		label: __('Term Items', 'publisher-core'),
+		label: __('Term Items', 'blockera-core'),
 		icon: <InnerBlockTermIcon />,
 		selectors: {
 			root: 'a:not(.wp-element-button)',
@@ -48,7 +48,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	separator: {
 		name: 'core/separator',
 		type: 'separator',
-		label: __('Separator', 'publisher-core'),
+		label: __('Separator', 'blockera-core'),
 		icon: <InnerBlockSeparatorIcon />,
 		selectors: {
 			root: '.wp-block-post-terms__separator',
@@ -61,7 +61,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	prefix: {
 		name: 'core/prefix',
 		type: 'prefix',
-		label: __('Prefix Text', 'publisher-core'),
+		label: __('Prefix Text', 'blockera-core'),
 		icon: <InnerBlockPrefixIcon />,
 		selectors: {
 			root: '.wp-block-post-terms__prefix',
@@ -74,7 +74,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	suffix: {
 		name: 'core/suffix',
 		type: 'suffix',
-		label: __('Suffix Text', 'publisher-core'),
+		label: __('Suffix Text', 'blockera-core'),
 		icon: <InnerBlockSuffixIcon />,
 		selectors: {
 			root: '.wp-block-post-terms__suffix',
@@ -87,14 +87,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const PostTerms = {
-	name: 'publisherPostTerms',
+	name: 'blockeraPostTerms',
 	targetBlock: 'core/post-terms',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

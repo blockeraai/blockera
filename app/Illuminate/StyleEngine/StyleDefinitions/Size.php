@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 /**
  * Class Size definition to generate size css rule.
@@ -63,7 +63,7 @@ class Size extends BaseStyleDefinition {
 
 			default:
 
-				$declaration[ $cssProperty ] = pb_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant();
+				$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant();
 
 				$this->setCss( $declaration );
 				break;
@@ -80,16 +80,16 @@ class Size extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherWidth'       => 'width',
-			'publisherMinWidth'    => 'min-width',
-			'publisherMaxWidth'    => 'max-width',
-			'publisherHeight'      => 'height',
-			'publisherMinHeight'   => 'min-height',
-			'publisherMaxHeight'   => 'max-height',
-			'publisherOverflow'    => 'overflow',
-			'publisherFit'         => 'object-fit',
-			'publisherRatio'       => 'aspect-ratio',
-			'publisherFitPosition' => 'object-position',
+			'blockeraWidth'       => 'width',
+			'blockeraMinWidth'    => 'min-width',
+			'blockeraMaxWidth'    => 'max-width',
+			'blockeraHeight'      => 'height',
+			'blockeraMinHeight'   => 'min-height',
+			'blockeraMaxHeight'   => 'max-height',
+			'blockeraOverflow'    => 'overflow',
+			'blockeraFit'         => 'object-fit',
+			'blockeraRatio'       => 'aspect-ratio',
+			'blockeraFitPosition' => 'object-position',
 		];
 	}
 

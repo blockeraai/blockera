@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherInnerBlocks: {
+	blockeraInnerBlocks: {
 		type: 'object',
 		default: {},
 	},

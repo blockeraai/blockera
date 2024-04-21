@@ -26,7 +26,7 @@ describe('Post Template Block → Inner Blocks', () => {
 		// open inner block settings
 		openInnerBlocksExtension();
 
-		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
 				cy.getByAriaLabel('Link Customize').should('exist');
 
@@ -36,3 +36,4 @@ describe('Post Template Block → Inner Blocks', () => {
 		);
 	});
 });
+

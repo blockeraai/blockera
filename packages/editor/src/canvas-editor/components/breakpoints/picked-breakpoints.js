@@ -7,11 +7,11 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Flex } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
+import { Flex } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { BreakpointIcon } from '@blockera/extensions/src/libs/block-states/helpers';
 
 /**
  * Internal dependencies
@@ -23,9 +23,9 @@ export default function ({
 }: PickedBreakpointsComponentProps): MixedElement {
 	return (
 		<Flex
-			className={controlInnerClassNames('publisher-core-breakpoints')}
+			className={controlInnerClassNames('blockera-core-breakpoints')}
 			justifyContent={'space-between'}
-			aria-label={__('Breakpoints', 'publisher-core')}
+			aria-label={__('Breakpoints', 'blockera-core')}
 		>
 			<BreakpointIcon
 				name={'laptop'}

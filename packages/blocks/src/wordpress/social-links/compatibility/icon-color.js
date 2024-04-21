@@ -1,13 +1,13 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isUndefined } from '@publisher/utils';
-import { getColor, generateVariableString } from '@publisher/core-data';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-import { getColorVAFromIdString } from '@publisher/core-data';
-import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
+import { isEmpty, isUndefined } from '@blockera/utils';
+import { getColor, generateVariableString } from '@blockera/core-data';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
+import { getColorVAFromIdString } from '@blockera/core-data';
+import type { ValueAddon } from '@blockera/hooks/src/use-value-addon/types';
 
 export function normalIconColorFromWPCompatibility({
 	attributes,
@@ -26,15 +26,15 @@ export function normalIconColorFromWPCompatibility({
 
 	if (color) {
 		return {
-			publisherInnerBlocks: {
+			blockeraInnerBlocks: {
 				item_icons: {
 					attributes: {
-						publisherFontColor: color,
+						blockeraFontColor: color,
 					},
 				},
 				item_names: {
 					attributes: {
-						publisherFontColor: color,
+						blockeraFontColor: color,
 					},
 				},
 			},

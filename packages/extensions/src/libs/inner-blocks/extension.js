@@ -9,19 +9,19 @@ import { useSelect } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button, MoreFeatures } from '@publisher/components';
+import { Button, MoreFeatures } from '@blockera/components';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
-} from '@publisher/classnames';
-import { BaseControl, PanelBodyControl } from '@publisher/controls';
+} from '@blockera/classnames';
+import { BaseControl, PanelBodyControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
-import { hasSameProps } from '@publisher/utils';
+import { hasSameProps } from '@blockera/utils';
 import { ArrowIcon } from './icons/arrow';
 import { useBlockContext } from '../../hooks';
 import { isInnerBlock } from '../../components';
@@ -38,7 +38,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 		const { currentBlock = 'master' } = useSelect((select) => {
 			const { getExtensionCurrentBlock } = select(
-				'publisher-core/extensions'
+				'blockera-core/extensions'
 			);
 
 			return {
@@ -83,12 +83,12 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 								'extension-inner-blocks'
 							)}
 							aria-label={
-								label + __(' Customize', 'publisher-core')
+								label + __(' Customize', 'blockera-core')
 							}
 						>
 							{icon}
 
-							{__('Customize', 'publisher-core')}
+							{__('Customize', 'blockera-core')}
 
 							<ArrowIcon />
 						</Button>
@@ -105,7 +105,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Inner Blocks', 'publisher-core')}
+				title={__('Inner Blocks', 'blockera-core')}
 				initialOpen={false}
 				icon={<InnerBlocksExtensionIcon />}
 				className={extensionClassNames('inner-blocks')}
@@ -114,8 +114,8 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 				{moreInnerBlocks.length > 0 && (
 					<MoreFeatures
-						label={__('More Inner Blocks', 'publisher-core')}
-						ariaLabel={__('More Inner Blocks', 'publisher-core')}
+						label={__('More Inner Blocks', 'blockera-core')}
+						ariaLabel={__('More Inner Blocks', 'blockera-core')}
 						isOpen={false}
 						isChanged={moreInnerBlocksChanged}
 					>

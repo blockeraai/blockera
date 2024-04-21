@@ -1,11 +1,11 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon;
 
 /**
  * Interface HasGroupTypes
  *
- * @package Publisher\Framework\Illuminate\Foundation\ValueAddon\HasGroupTypes
+ * @package Blockera\Framework\Illuminate\Foundation\ValueAddon\HasGroupTypes
  */
 interface HasGroupTypes {
 

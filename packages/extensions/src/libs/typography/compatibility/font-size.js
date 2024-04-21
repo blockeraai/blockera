@@ -1,17 +1,17 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { getFontSizeBy, generateVariableString } from '@publisher/core-data';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
+import { getFontSizeBy, generateVariableString } from '@blockera/core-data';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
 
 export function fontSizeFromWPCompatibility({
 	attributes,
 }: {
 	attributes: Object,
 }): Object {
-	if (attributes?.publisherFontSize === '') {
+	if (attributes?.blockeraFontSize === '') {
 		// fontSize attribute in root always is variable
 		// medium → var(--wp--preset--font-size--medium)
 		// it should be changed to a Value Addon (variable)
@@ -20,7 +20,7 @@ export function fontSizeFromWPCompatibility({
 
 			if (fontSizeVar) {
 				return {
-					publisherFontSize: {
+					blockeraFontSize: {
 						settings: {
 							...fontSizeVar,
 							type: 'font-size',
@@ -43,7 +43,7 @@ export function fontSizeFromWPCompatibility({
 		// font size is not variable
 		if (attributes?.style?.typography?.fontSize !== undefined) {
 			return {
-				publisherFontSize: attributes?.style?.typography?.fontSize,
+				blockeraFontSize: attributes?.style?.typography?.fontSize,
 			};
 		}
 	}

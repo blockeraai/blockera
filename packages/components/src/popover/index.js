@@ -8,14 +8,14 @@ import { Popover as WPPopover } from '@wordpress/components';
 import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	componentClassNames,
 	componentInnerClassNames,
-} from '@publisher/classnames';
-import { isFunction, isUndefined } from '@publisher/utils';
-import { PopoverContextData } from '@publisher/storybook/decorators/with-popover-data/context';
+} from '@blockera/classnames';
+import { isFunction, isUndefined } from '@blockera/utils';
+import { PopoverContextData } from '@blockera/storybook/decorators/with-popover-data/context';
 
 /**
  * Internal dependencies
@@ -138,10 +138,10 @@ export default function Popover({
 												onClose();
 											}}
 											tabIndex="-1"
-											label={__('Close', 'publisher')}
+											label={__('Close', 'blockera')}
 											aria-label={__(
 												'Close',
-												'publisher-core'
+												'blockera-core'
 											)}
 											tooltipPosition="top"
 											showTooltip={true}

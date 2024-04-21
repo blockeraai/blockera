@@ -35,7 +35,7 @@ describe('Font Color → WP Compatibility', () => {
 				// WP data should come to Blockera
 				getWPDataObject().then((data) => {
 					expect('#98cc08').to.be.equal(
-						getSelectedBlock(data, 'publisherFontColor')
+						getSelectedBlock(data, 'blockeraFontColor')
 					);
 					expect('#98cc08').to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
@@ -119,7 +119,7 @@ describe('Font Color → WP Compatibility', () => {
 				// WP data should come to Blockera
 				getWPDataObject().then((data) => {
 					expect('#df4414').to.be.equal(
-						getSelectedBlock(data, 'publisherFontColor')
+						getSelectedBlock(data, 'blockeraFontColor')
 					);
 					expect('#df4414').to.be.equal(
 						getSelectedBlock(data, 'style')?.color?.text
@@ -219,7 +219,7 @@ describe('Font Color → WP Compatibility', () => {
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherFontColor')
+						getSelectedBlock(data, 'blockeraFontColor')
 					);
 					expect('accent-3').to.be.equal(
 						getSelectedBlock(data, 'textColor')
@@ -263,7 +263,7 @@ describe('Font Color → WP Compatibility', () => {
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherFontColor')
+						getSelectedBlock(data, 'blockeraFontColor')
 					);
 					expect('contrast').to.be.equal(
 						getSelectedBlock(data, 'textColor')
@@ -290,7 +290,7 @@ describe('Font Color → WP Compatibility', () => {
 				getWPDataObject().then((data) => {
 					// default value is empty
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherFontColor')
+						getSelectedBlock(data, 'blockeraFontColor')
 					);
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'textColor')
@@ -340,7 +340,7 @@ describe('Font Color → WP Compatibility', () => {
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherFontColor')
+						getSelectedBlock(data, 'blockeraFontColor')
 					);
 					expect('accent-3').to.be.equal(
 						getSelectedBlock(data, 'textColor')
@@ -386,7 +386,7 @@ describe('Font Color → WP Compatibility', () => {
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherFontColor')
+						getSelectedBlock(data, 'blockeraFontColor')
 					);
 					expect('contrast').to.be.equal(
 						getSelectedBlock(data, 'textColor')
@@ -413,7 +413,7 @@ describe('Font Color → WP Compatibility', () => {
 				getWPDataObject().then((data) => {
 					// default value is empty
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherFontColor')
+						getSelectedBlock(data, 'blockeraFontColor')
 					);
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'textColor')

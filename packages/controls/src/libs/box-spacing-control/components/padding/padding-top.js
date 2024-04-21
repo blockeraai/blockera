@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { useDragValue } from '@publisher/utils';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { useDragValue } from '@blockera/utils';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -214,7 +214,7 @@ export function PaddingTop({
 					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
-						ariaLabel={__('Top Padding', 'publisher-core')}
+						ariaLabel={__('Top Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -248,18 +248,18 @@ export function PaddingTop({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top Padding Space', 'publisher-core')}
-						inputLabel={__('Top Padding', 'publisher-core')}
+						title={__('Top Padding Space', 'blockera-core')}
+						inputLabel={__('Top Padding', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Top Padding Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies only to the top edge of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

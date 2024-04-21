@@ -12,7 +12,7 @@ describe('Letter Spacing → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -38,7 +38,7 @@ describe('Letter Spacing → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('5px').to.be.equal(
-				getSelectedBlock(data, 'publisherLetterSpacing')
+				getSelectedBlock(data, 'blockeraLetterSpacing')
 			);
 		});
 
@@ -47,7 +47,7 @@ describe('Letter Spacing → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'letter-spacing',
 			'5px'

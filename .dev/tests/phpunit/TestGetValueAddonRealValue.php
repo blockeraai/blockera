@@ -1,8 +1,8 @@
 <?php
 
-namespace Publisher\Framework\Tests\Providers;
+namespace Blockera\Framework\Tests\Providers;
 
-use Publisher\Framework\Tests\AppTestCase;
+use Blockera\Framework\Tests\AppTestCase;
 
 class TestGetValueAddonRealValueFunction extends AppTestCase {
 
@@ -13,9 +13,9 @@ class TestGetValueAddonRealValueFunction extends AppTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_pb_get_value_addon_real_value( array $asset ): void {
+	public function test_blockera_get_value_addon_real_value( array $asset ): void {
 
-		$actual = pb_get_value_addon_real_value( $asset['input'] );
+		$actual = blockera_get_value_addon_real_value( $asset['input'] );
 
 		$this->assertEquals(
 			$asset['output'],

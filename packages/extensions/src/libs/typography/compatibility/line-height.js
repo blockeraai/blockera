@@ -6,11 +6,11 @@ export function lineHeightFromWPCompatibility({
 	attributes: Object,
 }): Object | false {
 	if (
-		attributes?.publisherLineHeight === '' &&
+		attributes?.blockeraLineHeight === '' &&
 		attributes?.style?.typography?.lineHeight !== undefined
 	) {
 		return {
-			publisherLineHeight: attributes?.style?.typography?.lineHeight,
+			blockeraLineHeight: attributes?.style?.typography?.lineHeight,
 		};
 	}
 

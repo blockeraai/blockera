@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherScrollAnimation: {
+	blockeraScrollAnimation: {
 		type: 'object',
 		default: {},
 	},

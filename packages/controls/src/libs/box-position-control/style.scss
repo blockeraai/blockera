@@ -1,15 +1,15 @@
-.publisher-control-box-position {
+.blockera-control-box-position {
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
 
-	.publisher-control-position-header {
+	.blockera-control-position-header {
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 		gap: var(--gap);
 	}
 
-	.publisher-control-position-body {
+	.blockera-control-position-body {
 		position: relative;
 		height: 84px;
 		width: 250px;
@@ -34,17 +34,17 @@
 		overflow: visible;
 	}
 
-	.publisher-control-shape-side {
+	.blockera-control-shape-side {
 		transition: all 0.2s ease;
-		fill: var(--publisher-controls-fill-color);
-		stroke: var(--publisher-controls-border-color);
+		fill: var(--blockera-controls-fill-color);
+		stroke: var(--blockera-controls-border-color);
 		user-select: none;
 		stroke-linejoin: round;
 
 		&.selected-side,
 		&:hover {
 			fill: #ffffff;
-			stroke: var(--publisher-controls-primary-color);
+			stroke: var(--blockera-controls-primary-color);
 			stroke-width: 2px;
 		}
 
@@ -69,44 +69,44 @@
 		}
 
 		&.is-value-addon-side {
-			--publisher-controls-primary-color: var(--publisher-value-addon-var-color);
-			stroke: var(--publisher-value-addon-var-border-color);
+			--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
+			stroke: var(--blockera-value-addon-var-border-color);
 			stroke-width: 1px;
-			fill: var(--publisher-value-addon-var-bg-color);
+			fill: var(--blockera-value-addon-var-bg-color);
 		}
 
 		&.selected-side.is-value-addon-side,
 		&.selected-side-value-addon {
-			--publisher-controls-primary-color: var(--publisher-value-addon-var-color);
-			stroke: var(--publisher-controls-primary-color) !important;
+			--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
+			stroke: var(--blockera-controls-primary-color) !important;
 			stroke-width: 2px !important;
-			fill: var(--publisher-value-addon-var-bg-color) !important;
+			fill: var(--blockera-value-addon-var-bg-color) !important;
 		}
 
 		&.is-value-addon-deleted {
-			--publisher-controls-primary-color: var(--publisher-value-addon-deleted-color);
-			stroke: var(--publisher-value-addon-deleted-border-color);
+			--blockera-controls-primary-color: var(--blockera-value-addon-deleted-color);
+			stroke: var(--blockera-value-addon-deleted-border-color);
 			stroke-width: 1px;
-			fill: var(--publisher-value-addon-deleted-bg-color);
+			fill: var(--blockera-value-addon-deleted-bg-color);
 
 			&.selected-side.is-value-addon-side,
 			&.selected-side-value-addon {
-				--publisher-controls-primary-color: var(--publisher-value-addon-deleted-color);
-				stroke: var(--publisher-controls-primary-color) !important;
+				--blockera-controls-primary-color: var(--blockera-value-addon-deleted-color);
+				stroke: var(--blockera-controls-primary-color) !important;
 				stroke-width: 2px !important;
-				fill: var(--publisher-value-addon-deleted-bg-color) !important;
+				fill: var(--blockera-value-addon-deleted-bg-color) !important;
 			}
 		}
 	}
 
-	.publisher-control-label-side {
+	.blockera-control-label-side {
 		position: absolute;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		pointer-events: none;
 
-		.publisher-control-label {
+		.blockera-control-label {
 			pointer-events: all;
 			cursor: pointer;
 			font-size: 10px;
@@ -121,7 +121,7 @@
 
 			&:hover:not(.changed-in-other-state):not(.changed-in-normal-state):not(.changed-in-secondary-state) {
 				background: #ffffff;
-				border: 1px solid var(--publisher-controls-border-color);
+				border: 1px solid var(--blockera-controls-border-color);
 				cursor: pointer !important;
 			}
 
@@ -139,9 +139,9 @@
 			}
 		}
 
-		.publisher-control-value-addon-pointers {
+		.blockera-control-value-addon-pointers {
 
-			.publisher-control-value-addon-pointer {
+			.blockera-control-value-addon-pointer {
 				transform: scale(0);
 				transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
 			}
@@ -149,13 +149,13 @@
 
 		&.label-hover {
 
-			.publisher-control.publisher-control-value-addon-pointers {
+			.blockera-control.blockera-control-value-addon-pointers {
 
 				svg {
 					fill: #ffffff;
 				}
 
-				.publisher-control-value-addon-pointer {
+				.blockera-control-value-addon-pointer {
 					transform: scale3d(1, 1, 1);
 					transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
 				}
@@ -168,7 +168,7 @@
 			left: 0;
 			height: 30px;
 
-			.publisher-control-value-addon-pointers {
+			.blockera-control-value-addon-pointers {
 				top: -10.5px;
 				right: 15px;
 			}
@@ -180,7 +180,7 @@
 			bottom: 0;
 			width: 30px;
 
-			.publisher-control-value-addon-pointers {
+			.blockera-control-value-addon-pointers {
 				right: -10.5px;
 				top: 15px;
 			}
@@ -192,7 +192,7 @@
 			left: 0;
 			height: 30px;
 
-			.publisher-control-value-addon-pointers {
+			.blockera-control-value-addon-pointers {
 				right: initial;
 				top: initial;
 				bottom: -11.5px;
@@ -207,7 +207,7 @@
 			left: 0;
 			width: 30px;
 
-			.publisher-control-value-addon-pointers {
+			.blockera-control-value-addon-pointers {
 				text-align: left;
 				top: initial;
 				right: initial;
@@ -235,7 +235,7 @@
 		}
 	}
 
-	.publisher-control-box-model-label {
+	.blockera-control-box-model-label {
 		color: #d6d6d6;
 		text-transform: uppercase;
 		width: auto;
@@ -248,7 +248,7 @@
 		justify-content: center;
 		position: absolute;
 
-		.publisher-control-label {
+		.blockera-control-label {
 			font-size: 11px;
 			min-height: 12px;
 			line-height: 12px;
@@ -258,18 +258,18 @@
 	}
 }
 
-.publisher-control-side-popover-action-buttons {
+.blockera-control-side-popover-action-buttons {
 
-	.publisher-component-button {
+	.blockera-component-button {
 		width: 100%;
 	}
 
-	.publisher-component-button.auto-btn {
+	.blockera-component-button.auto-btn {
 		height: 68px;
 	}
 }
 
-.publisher-control-select .components-custom-select-control__button .publisher-box-position-default {
-	color: var(--publisher-controls-border-color);
+.blockera-control-select .components-custom-select-control__button .blockera-box-position-default {
+	color: var(--blockera-controls-border-color);
 	fill: currentColor;
 }

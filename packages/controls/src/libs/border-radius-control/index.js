@@ -5,14 +5,14 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { getValueAddonRealValue } from '@publisher/hooks';
-import { Button } from '@publisher/components';
+} from '@blockera/classnames';
+import { getValueAddonRealValue } from '@blockera/hooks';
+import { Button } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -91,7 +91,7 @@ export default function BorderRadiusControl({
 		blockName,
 		label,
 		labelPopoverTitle:
-			labelPopoverTitle || __('Border Radius', 'publisher-core'),
+			labelPopoverTitle || __('Border Radius', 'blockera-core'),
 		labelDescription,
 		repeaterItem,
 		defaultValue,
@@ -142,13 +142,13 @@ export default function BorderRadiusControl({
 				<Button
 					showTooltip={true}
 					tooltipPosition="top"
-					label={__('Custom Border Radius', 'publisher-core')}
+					label={__('Custom Border Radius', 'blockera-core')}
 					size="extra-small"
 					style={{
 						color:
 							value.type === 'custom'
-								? 'var(--publisher-controls-primary-color)'
-								: 'var(--publisher-controls-color)',
+								? 'var(--blockera-controls-primary-color)'
+								: 'var(--blockera-controls-color)',
 						padding: '5px',
 						width: '30px',
 						height: '30px',

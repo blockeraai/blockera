@@ -4,9 +4,9 @@
 import { nanoid } from 'nanoid';
 
 /**
- * Publisher dependencies
+ *  dependencies
  */
-import { ControlContextProvider } from '@publisher/controls';
+import { ControlContextProvider } from '@blockera/controls';
 
 export const WithControlDataProvider = (Story, context) => {
 	const controlInfo = context.allArgs.controlInfo ?? {
@@ -16,10 +16,11 @@ export const WithControlDataProvider = (Story, context) => {
 
 	return (
 		<ControlContextProvider
-			storeName={context?.allArgs?.storeName ?? 'publisher-core/controls'}
+			storeName={context?.allArgs?.storeName ?? 'blockera-core/controls'}
 			value={controlInfo}
 		>
 			<Story />
 		</ControlContextProvider>
 	);
 };
+

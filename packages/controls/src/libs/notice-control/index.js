@@ -7,11 +7,11 @@ import PropTypes from 'prop-types';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Flex } from '@publisher/components';
-import { isFunction } from '@publisher/utils';
-import { controlClassNames } from '@publisher/classnames';
+import { Flex } from '@blockera/components';
+import { isFunction } from '@blockera/utils';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -63,7 +63,7 @@ export default function NoticeControl({
 					gap="8px"
 					className={`${controlClassNames(
 						'notice'
-					)} publisher-${type}`}
+					)} blockera-${type}`}
 					data-test="notice-control"
 					style={style}
 					{...props}

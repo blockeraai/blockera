@@ -31,22 +31,19 @@ const Fields = ({ itemId, item }) => {
 				defaultValue={defaultRepeaterItemValue.x}
 				controlName="input"
 				label={<XCoordinateIcon />}
-				labelPopoverTitle={__(
-					'Horizontal Offset (X)',
-					'publisher-core'
-				)}
+				labelPopoverTitle={__('Horizontal Offset (X)', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'The horizontal (X) offset adds a shadow to text with a specified distance to the right or left.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'Use it for creating a horizontal depth effect that enhances text visibility and style.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -64,7 +61,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, x },
 					})
 				}
-				aria-label={__('Vertical Distance', 'publisher-core')}
+				aria-label={__('Vertical Distance', 'blockera-core')}
 			/>
 
 			<InputControl
@@ -74,19 +71,19 @@ const Fields = ({ itemId, item }) => {
 				defaultValue={defaultRepeaterItemValue.y}
 				controlName="input"
 				label={<YCoordinateIcon />}
-				labelPopoverTitle={__('Vertical Offset (Y)', 'publisher-core')}
+				labelPopoverTitle={__('Vertical Offset (Y)', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'The vertical (X) offset adds a shadow to text with a specified distance to the top or bottom.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'Use it for creating a horizontal depth effect that enhances text visibility and style.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -104,7 +101,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, y },
 					})
 				}
-				aria-label={__('Horizontal Distance', 'publisher-core')}
+				aria-label={__('Horizontal Distance', 'blockera-core')}
 			/>
 
 			<InputControl
@@ -113,20 +110,20 @@ const Fields = ({ itemId, item }) => {
 				id={getControlId(itemId, 'blur')}
 				defaultValue={defaultRepeaterItemValue.blur}
 				controlName="input"
-				label={__('Blur', 'publisher-core')}
-				labelPopoverTitle={__('Blur Effect', 'publisher-core')}
+				label={__('Blur', 'blockera-core')}
+				labelPopoverTitle={__('Blur Effect', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'The blur radius adds a soft, diffused shadow to text, enhancing its visual appeal.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'A blurred shadow effect is crucial for adding depth and emphasis to text while maintaining readability, ideal for titles, banners, and other key text blocks in web design.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -144,7 +141,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, blur },
 					})
 				}
-				aria-label={__('Blur Effect', 'publisher-core')}
+				aria-label={__('Blur Effect', 'blockera-core')}
 			/>
 
 			<ColorControl
@@ -152,14 +149,14 @@ const Fields = ({ itemId, item }) => {
 				singularId={'color'}
 				id={getControlId(itemId, 'color')}
 				defaultValue={defaultRepeaterItemValue.color}
-				label={__('Color', 'publisher-core')}
-				labelPopoverTitle={__('Shadow Color', 'publisher-core')}
+				label={__('Color', 'blockera-core')}
+				labelPopoverTitle={__('Shadow Color', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It adds a colored shadow to text, enhancing visual interest and emphasis.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -173,7 +170,7 @@ const Fields = ({ itemId, item }) => {
 						value: { ...item, color },
 					})
 				}
-				aria-label={__('Shadow Color', 'publisher-core')}
+				aria-label={__('Shadow Color', 'blockera-core')}
 				controlAddonTypes={['variable']}
 				variableTypes={['color']}
 			/>

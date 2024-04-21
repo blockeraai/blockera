@@ -10,10 +10,10 @@ import {
 } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { useIsVisible } from '@publisher/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { useIsVisible } from '@blockera/utils';
 
 /**
  * Internal dependencies

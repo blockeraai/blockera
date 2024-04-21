@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherAttributes: {
+	blockeraAttributes: {
 		type: 'object',
 		default: {},
 	},

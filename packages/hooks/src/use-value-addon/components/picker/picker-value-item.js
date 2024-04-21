@@ -6,19 +6,19 @@ import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { isUndefined, isNumber } from '@publisher/utils';
-import { Tooltip, ConditionalWrapper } from '@publisher/components';
+} from '@blockera/classnames';
+import { isUndefined, isNumber } from '@blockera/utils';
+import { Tooltip, ConditionalWrapper } from '@blockera/components';
 import type {
 	VariableItem,
 	DynamicValueItem,
 	ValueAddonItemStatus,
-} from '@publisher/core-data';
+} from '@blockera/core-data';
 
 /**
  * Internal dependencies
@@ -93,8 +93,8 @@ export default function ({
 				<Tooltip
 					text={
 						status === 'soon'
-							? __('Coming soon…', 'publisher-core')
-							: __('Pro Feature', 'publisher-core')
+							? __('Coming soon…', 'blockera-core')
+							: __('Pro Feature', 'blockera-core')
 					}
 					{...props}
 				>

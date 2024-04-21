@@ -34,7 +34,7 @@ describe('Font Size → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('20px').to.be.equal(
-					getSelectedBlock(data, 'publisherFontSize')
+					getSelectedBlock(data, 'blockeraFontSize')
 				);
 
 				expect('20px').to.be.equal(
@@ -56,7 +56,7 @@ describe('Font Size → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('15px').to.be.equal(
-					getSelectedBlock(data, 'publisherFontSize')
+					getSelectedBlock(data, 'blockeraFontSize')
 				);
 
 				expect('15px').to.be.equal(
@@ -76,7 +76,7 @@ describe('Font Size → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherFontSize')
+					getSelectedBlock(data, 'blockeraFontSize')
 				);
 
 				expect(undefined).to.be.equal(
@@ -121,7 +121,7 @@ describe('Font Size → WP Compatibility', () => {
 					isValueAddon: true,
 					valueType: 'variable',
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherFontSize')
+					getSelectedBlock(data, 'blockeraFontSize')
 				);
 
 				expect('small').to.be.equal(getSelectedBlock(data, 'fontSize'));
@@ -165,7 +165,7 @@ describe('Font Size → WP Compatibility', () => {
 					isValueAddon: true,
 					valueType: 'variable',
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherFontSize')
+					getSelectedBlock(data, 'blockeraFontSize')
 				);
 
 				expect('large').to.be.equal(getSelectedBlock(data, 'fontSize'));
@@ -188,7 +188,7 @@ describe('Font Size → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				// default value is empty
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherFontSize')
+					getSelectedBlock(data, 'blockeraFontSize')
 				);
 
 				expect(undefined).to.be.equal(

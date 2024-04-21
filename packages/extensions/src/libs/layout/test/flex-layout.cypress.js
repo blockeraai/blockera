@@ -11,7 +11,7 @@ describe('Flex Layout → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -40,7 +40,7 @@ describe('Flex Layout → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('row').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherFlexLayout')?.direction
+				getSelectedBlock(data, 'blockeraFlexLayout')?.direction
 			);
 		});
 
@@ -58,7 +58,7 @@ describe('Flex Layout → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('column').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherFlexLayout')?.direction
+				getSelectedBlock(data, 'blockeraFlexLayout')?.direction
 			);
 		});
 
@@ -67,7 +67,7 @@ describe('Flex Layout → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'flex-direction',
 			'column'
@@ -94,11 +94,11 @@ describe('Flex Layout → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('flex-start').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherFlexLayout')?.alignItems
+				getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 			);
 
 			expect('flex-start').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherFlexLayout')?.justifyContent
+				getSelectedBlock(data, 'blockeraFlexLayout')?.justifyContent
 			);
 		});
 
@@ -121,11 +121,11 @@ describe('Flex Layout → Functionality', () => {
 
 		getWPDataObject().then((data) => {
 			expect('flex-start').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherFlexLayout')?.alignItems
+				getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 			);
 
 			expect('center').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherFlexLayout')?.justifyContent
+				getSelectedBlock(data, 'blockeraFlexLayout')?.justifyContent
 			);
 		});
 
@@ -136,16 +136,17 @@ describe('Flex Layout → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'align-items',
 			'flex-start'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'justify-content',
 			'center'
 		);
 	});
 });
+

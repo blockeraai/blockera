@@ -37,7 +37,7 @@ describe('Text Align → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('center').to.be.equal(
-					getSelectedBlock(data, 'publisherTextAlign')
+					getSelectedBlock(data, 'blockeraTextAlign')
 				);
 
 				expect('center').to.be.equal(getSelectedBlock(data, 'align'));
@@ -54,7 +54,7 @@ describe('Text Align → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('right').to.be.equal(
-					getSelectedBlock(data, 'publisherTextAlign')
+					getSelectedBlock(data, 'blockeraTextAlign')
 				);
 
 				expect('right').to.be.equal(getSelectedBlock(data, 'align'));
@@ -68,7 +68,7 @@ describe('Text Align → WP Compatibility', () => {
 			// Blockera value should NOT moved to WP data
 			getWPDataObject().then((data) => {
 				expect('justify').to.be.equal(
-					getSelectedBlock(data, 'publisherTextAlign')
+					getSelectedBlock(data, 'blockeraTextAlign')
 				);
 
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'align'));
@@ -85,7 +85,7 @@ describe('Text Align → WP Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherTextAlign')
+					getSelectedBlock(data, 'blockeraTextAlign')
 				);
 
 				expect(undefined).to.be.equal(getSelectedBlock(data, 'align'));

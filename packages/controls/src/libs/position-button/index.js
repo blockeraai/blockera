@@ -8,11 +8,11 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { AlignmentMatrixControl, BaseControl } from '@publisher/controls';
-import { Popover, Button } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { AlignmentMatrixControl, BaseControl } from '@blockera/controls';
+import { Popover, Button } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -28,8 +28,8 @@ export default function PositionButtonControl({
 	repeaterItem,
 	singularId,
 	buttonLabel,
-	popoverTitle = __('Setting', 'publisher-core'),
-	alignmentMatrixLabel = __('Position', 'publisher-core'),
+	popoverTitle = __('Setting', 'blockera-core'),
+	alignmentMatrixLabel = __('Position', 'blockera-core'),
 	id,
 	onChange,
 	defaultValue = {
@@ -94,8 +94,8 @@ export default function PositionButtonControl({
 						!value?.left ||
 						(defaultValue?.top === value?.top &&
 							defaultValue?.left === value?.left)
-							? 'var(--publisher-controls-color)'
-							: 'var(--publisher-controls-primary-color)',
+							? 'var(--blockera-controls-color)'
+							: 'var(--blockera-controls-primary-color)',
 				}}
 				className={isPopoverActive && 'is-focus'}
 				{...props}

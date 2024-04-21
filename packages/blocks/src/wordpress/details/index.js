@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -17,19 +17,19 @@ import {
 	IconExtensionAttributes,
 	InnerBlockParagraphIcon,
 	InnerBlockLinkIcon,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 const attributes = {
 	...IconExtensionAttributes,
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	paragraph: {
 		name: 'core/paragraph',
 		type: 'paragraph',
-		label: __('Paragraphs', 'publisher-core'),
+		label: __('Paragraphs', 'blockera-core'),
 		icon: <InnerBlockParagraphIcon />,
 		selectors: {
 			root: 'p',
@@ -42,7 +42,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	link: {
 		name: 'core/link',
 		type: 'link',
-		label: __('Links', 'publisher-core'),
+		label: __('Links', 'blockera-core'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
 			root: 'a:not(.wp-element-button)',
@@ -56,14 +56,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const Details = {
-	name: 'publisherDetails',
+	name: 'blockeraDetails',
 	targetBlock: 'core/details',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

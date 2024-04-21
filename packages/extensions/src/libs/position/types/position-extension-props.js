@@ -9,11 +9,11 @@ import type { FeatureConfig } from '../../base';
 export type TPositionExtensionProps = {
 	...BaseExtensionProps,
 	extensionConfig: {
-		publisherPosition: FeatureConfig,
-		publisherZIndex: FeatureConfig,
+		blockeraPosition: FeatureConfig,
+		blockeraZIndex: FeatureConfig,
 	},
 	values: {
-		publisherPosition?: {
+		blockeraPosition?: {
 			type: string,
 			position: {
 				top: string,
@@ -22,10 +22,10 @@ export type TPositionExtensionProps = {
 				left: string,
 			},
 		},
-		publisherZIndex: string,
+		blockeraZIndex: string,
 	},
 	extensionProps: {
-		publisherPosition: Object,
-		publisherZIndex: Object,
+		blockeraPosition: Object,
+		blockeraZIndex: Object,
 	},
 };

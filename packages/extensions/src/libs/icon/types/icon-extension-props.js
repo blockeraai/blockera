@@ -22,11 +22,11 @@ export type TIconProps = {
 	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
-		publisherIcon: Object,
-		publisherIconPosition: Object,
-		publisherIconGap: Object,
-		publisherIconSize: Object,
-		publisherIconColor: Object,
-		publisherIconLink: Object,
+		blockeraIcon: Object,
+		blockeraIconPosition: Object,
+		blockeraIconGap: Object,
+		blockeraIconSize: Object,
+		blockeraIconColor: Object,
+		blockeraIconLink: Object,
 	},
 };

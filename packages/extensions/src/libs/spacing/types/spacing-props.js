@@ -52,6 +52,6 @@ export type TSpacingProps = {
 	defaultValue: TSpacingDefaultProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
-		publisherSpacing: Object,
+		blockeraSpacing: Object,
 	},
 };

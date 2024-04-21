@@ -6,11 +6,11 @@ import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button, Flex, Popover, Grid } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { STORE_NAME } from '@publisher/core-data';
+import { Button, Flex, Popover, Grid } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { STORE_NAME } from '@blockera/core-data';
 
 /**
  * Internal dependencies
@@ -74,7 +74,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Choose Dynamic Value', 'publisher-core')}
+			title={__('Choose Dynamic Value', 'blockera-core')}
 			offset={125}
 			placement="left-start"
 			onClose={() => {
@@ -90,7 +90,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
-							label={__('Remove', 'publisher-core')}
+							label={__('Remove', 'blockera-core')}
 						>
 							<TrashIcon />
 						</Button>

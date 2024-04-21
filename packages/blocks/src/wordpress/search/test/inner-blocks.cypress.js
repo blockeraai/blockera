@@ -23,7 +23,7 @@ describe('Search Block → Inner Blocks', () => {
 		// open inner block settings
 		openInnerBlocksExtension();
 
-		cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
 				cy.getByAriaLabel('Form Label Customize').should('exist');
 				cy.getByAriaLabel('Form Input Customize').should('exist');
@@ -34,3 +34,4 @@ describe('Search Block → Inner Blocks', () => {
 		);
 	});
 });
+

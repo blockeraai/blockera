@@ -6,11 +6,11 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isUndefined } from '@publisher/utils';
-import { controlClassNames } from '@publisher/classnames';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { isEmpty, isUndefined } from '@blockera/utils';
+import { controlClassNames } from '@blockera/classnames';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies

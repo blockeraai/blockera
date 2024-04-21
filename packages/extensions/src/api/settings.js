@@ -1,16 +1,16 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmptyObject } from '@publisher/utils';
+import { isEmptyObject } from '@blockera/utils';
 
 /**
  * Merge registered block supports, extending attributes to include
- * `__experimentalPublisherDefaultControls` with all properties if needed
+ * `__experimentalDefaultControls` with all properties if needed
  *
  * @param {Object} supports The WordPress default block supports
- * @param {Object} properties The additional publisher supports properties
- * @return {Object} The block support includes publisher extensions supports.
+ * @param {Object} properties The additional blockera supports properties
+ * @return {Object} The block support includes blockera extensions supports.
  */
 function addSupports(supports: Object, properties: Object): Object {
 	if (isEmptyObject(supports) || isEmptyObject(properties)) {
@@ -19,8 +19,8 @@ function addSupports(supports: Object, properties: Object): Object {
 
 	return {
 		...supports,
-		__experimentalPublisherDefaultControls: {
-			...(supports.__experimentalPublisherDefaultControls || {}),
+		__experimentalDefaultControls: {
+			...(supports.__experimentalDefaultControls || {}),
 			...properties,
 		},
 	};

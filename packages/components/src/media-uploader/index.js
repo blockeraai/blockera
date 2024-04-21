@@ -7,9 +7,9 @@ import {
 } from '@wordpress/block-editor';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { componentClassNames } from '@publisher/classnames';
+import { componentClassNames } from '@blockera/classnames';
 
 export default function MediaUploader({
 	className,

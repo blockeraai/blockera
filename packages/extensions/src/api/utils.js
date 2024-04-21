@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isObject } from '@publisher/utils';
+import { isObject } from '@blockera/utils';
 
 /**
  * is block extension?

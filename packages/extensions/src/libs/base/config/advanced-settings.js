@@ -10,15 +10,15 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherAttributes: FeatureConfig = {
+const blockeraAttributes: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Custom HTML Attributes', 'publisher-core'),
+	label: __('Custom HTML Attributes', 'blockera-core'),
 	isActiveOnStates: ['normal'],
 	isActiveOnBreakpoints: ['laptop'],
 };
 
 export const advancedSettingsConfig = {
-	publisherAttributes,
+	blockeraAttributes,
 };

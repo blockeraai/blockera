@@ -37,7 +37,7 @@ jobs:
         needs: compute-previous-wordpress-version
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera-core' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: true
             matrix:
@@ -71,7 +71,7 @@ jobs:
             - name: Clone Submodule
               run: |
                   cd libs
-                  git clone git@github.com:publisherwp/storybook.git
+                  git clone git@github.com:blockeraai/storybook.git
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node

@@ -15,14 +15,14 @@ export type TCssProps = {
 export type TMouseProps = {
 	...BaseExtensionProps,
 	mouseConfig: {
-		publisherCursor: FeatureConfig,
-		publisherUserSelect: FeatureConfig,
-		publisherPointerEvents: FeatureConfig,
+		blockeraCursor: FeatureConfig,
+		blockeraUserSelect: FeatureConfig,
+		blockeraPointerEvents: FeatureConfig,
 	},
 	values: { cursor: string, userSelect: string, pointerEvents: string },
 	extensionProps: {
-		publisherCursor: Object,
-		publisherUserSelect: Object,
-		publisherPointerEvents: Object,
+		blockeraCursor: Object,
+		blockeraUserSelect: Object,
+		blockeraPointerEvents: Object,
 	},
 };

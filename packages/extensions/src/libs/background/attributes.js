@@ -1,13 +1,13 @@
 export const attributes = {
-	publisherBackground: {
+	blockeraBackground: {
 		type: 'object',
 		default: {},
 	},
-	publisherBackgroundColor: {
+	blockeraBackgroundColor: {
 		type: 'string',
 		default: '',
 	},
-	publisherBackgroundClip: {
+	blockeraBackgroundClip: {
 		type: 'string',
 		default: 'none',
 	},

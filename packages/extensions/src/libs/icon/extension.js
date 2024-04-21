@@ -7,7 +7,7 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -18,9 +18,9 @@ import {
 	PanelBodyControl,
 	ToggleSelectControl,
 	ControlContextProvider,
-} from '@publisher/controls';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
+} from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -36,13 +36,13 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 	({
 		block,
 		iconConfig: {
-			publisherIcon,
-			publisherIconGap,
-			publisherIconSize,
-			publisherIconLink,
-			publisherIconColor,
-			publisherIconOptions,
-			publisherIconPosition,
+			blockeraIcon,
+			blockeraIconGap,
+			blockeraIconSize,
+			blockeraIconLink,
+			blockeraIconColor,
+			blockeraIconOptions,
+			blockeraIconPosition,
 		},
 		values: { icon, iconGap, iconSize, iconLink, iconColor, iconPosition },
 		handleOnChangeAttributes,
@@ -50,17 +50,17 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 	}: TIconProps): MixedElement => {
 		return (
 			<PanelBodyControl
-				title={__('Icon', 'publisher-core')}
+				title={__('Icon', 'blockera-core')}
 				initialOpen={true}
 				icon={<IconExtensionIcon />}
 				className={extensionClassNames('icon')}
 			>
-				{isActiveField(publisherIcon) && (
+				{isActiveField(blockeraIcon) && (
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'icon'),
 							value: icon,
-							attribute: 'publisherIcon',
+							attribute: 'blockeraIcon',
 							blockName: block.blockName,
 						}}
 					>
@@ -71,22 +71,22 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 							}}
 							onChange={(newValue) =>
 								handleOnChangeAttributes(
-									'publisherIcon',
+									'blockeraIcon',
 									newValue
 								)
 							}
-							{...extensionProps.publisherIcon}
+							{...extensionProps.blockeraIcon}
 						/>
 					</ControlContextProvider>
 				)}
 
-				{isActiveField(publisherIconOptions) && (
+				{isActiveField(blockeraIconOptions) && (
 					<>
 						<BaseControl
-							label={__('Style', 'publisher-core')}
+							label={__('Style', 'blockera-core')}
 							columns="1fr 3fr"
 						>
-							{isActiveField(publisherIconPosition) && (
+							{isActiveField(blockeraIconPosition) && (
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
@@ -94,19 +94,19 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 											'icon-position'
 										),
 										value: iconPosition,
-										attribute: 'publisherIconPosition',
+										attribute: 'blockeraIconPosition',
 										blockName: block.blockName,
 									}}
 								>
 									<ToggleSelectControl
 										controlName="toggle-select"
-										label={__('Position', 'publisher-core')}
+										label={__('Position', 'blockera-core')}
 										columns="columns-2"
 										options={[
 											{
 												label: __(
 													'Left',
-													'publisher-core'
+													'blockera-core'
 												),
 												value: 'left',
 												icon: <PositionLeftIcon />,
@@ -114,7 +114,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 											{
 												label: __(
 													'Right',
-													'publisher-core'
+													'blockera-core'
 												),
 												value: 'right',
 												icon: <PositionRightIcon />,
@@ -125,16 +125,16 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 										defaultValue=""
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
-												'publisherIconPosition',
+												'blockeraIconPosition',
 												newValue
 											)
 										}
-										{...extensionProps.publisherIconPosition}
+										{...extensionProps.blockeraIconPosition}
 									/>
 								</ControlContextProvider>
 							)}
 
-							{isActiveField(publisherIconGap) && (
+							{isActiveField(blockeraIconGap) && (
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
@@ -142,29 +142,29 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 											'icon-gap'
 										),
 										value: iconGap,
-										attribute: 'publisherIconGap',
+										attribute: 'blockeraIconGap',
 										blockName: block.blockName,
 									}}
 								>
 									<InputControl
 										controlName="input"
-										label={__('Gap', 'publisher-core')}
+										label={__('Gap', 'blockera-core')}
 										columns="columns-2"
 										unitType="essential"
 										defaultValue=""
 										min={0}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
-												'publisherIconGap',
+												'blockeraIconGap',
 												newValue
 											)
 										}
-										{...extensionProps.publisherIconGap}
+										{...extensionProps.blockeraIconGap}
 									/>
 								</ControlContextProvider>
 							)}
 
-							{isActiveField(publisherIconSize) && (
+							{isActiveField(blockeraIconSize) && (
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
@@ -172,29 +172,29 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 											'icon-size'
 										),
 										value: iconSize,
-										attribute: 'publisherIconSize',
+										attribute: 'blockeraIconSize',
 										blockName: block.blockName,
 									}}
 								>
 									<InputControl
 										controlName="input"
-										label={__('Size', 'publisher-core')}
+										label={__('Size', 'blockera-core')}
 										columns="columns-2"
 										unitType="essential"
 										defaultValue=""
 										min={8}
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
-												'publisherIconSize',
+												'blockeraIconSize',
 												newValue
 											)
 										}
-										{...extensionProps.publisherIconSize}
+										{...extensionProps.blockeraIconSize}
 									/>
 								</ControlContextProvider>
 							)}
 
-							{isActiveField(publisherIconColor) && (
+							{isActiveField(blockeraIconColor) && (
 								<ControlContextProvider
 									value={{
 										name: generateExtensionId(
@@ -202,29 +202,29 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 											'icon-color'
 										),
 										value: iconColor,
-										attribute: 'publisherIconColor',
+										attribute: 'blockeraIconColor',
 										blockName: block.blockName,
 									}}
 								>
 									<ColorControl
 										controlName="color"
-										label={__('Color', 'publisher-core')}
+										label={__('Color', 'blockera-core')}
 										columns="columns-2"
 										//
 										defaultValue=""
 										onChange={(newValue) =>
 											handleOnChangeAttributes(
-												'publisherIconColor',
+												'blockeraIconColor',
 												newValue
 											)
 										}
-										{...extensionProps.publisherIconColor}
+										{...extensionProps.blockeraIconColor}
 									/>
 								</ControlContextProvider>
 							)}
 						</BaseControl>
 
-						{isActiveField(publisherIconLink) && (
+						{isActiveField(blockeraIconLink) && (
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(
@@ -232,23 +232,23 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 										'icon-link'
 									),
 									value: iconLink,
-									attribute: 'publisherIconLink',
+									attribute: 'blockeraIconLink',
 									blockName: block.blockName,
 								}}
 							>
 								<LinkControl
 									controlName="link"
 									columns="1fr 3fr"
-									label={__('Link', 'publisher-core')}
+									label={__('Link', 'blockera-core')}
 									id={generateExtensionId(block, 'icon-link')}
 									//
 									onChange={(newValue) =>
 										handleOnChangeAttributes(
-											'publisherIconLink',
+											'blockeraIconLink',
 											newValue
 										)
 									}
-									{...extensionProps.publisherIconLink}
+									{...extensionProps.blockeraIconLink}
 								/>
 							</ControlContextProvider>
 						)}

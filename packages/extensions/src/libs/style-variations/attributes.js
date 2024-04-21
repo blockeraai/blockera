@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherStyleVariation: {
+	blockeraStyleVariation: {
 		type: 'object',
 		default: {},
 	},

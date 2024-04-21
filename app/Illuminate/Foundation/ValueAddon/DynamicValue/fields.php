@@ -1,6 +1,6 @@
 <?php
 
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
 
 return [
 	'post-id'              => Fields\PostID::class,

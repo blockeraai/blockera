@@ -7,9 +7,9 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -44,12 +44,12 @@ export default function AttributesControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			popoverTitle={
-				popoverTitle || __('HTML Attributes', 'publisher-core')
+				popoverTitle || __('HTML Attributes', 'blockera-core')
 			}
-			label={label || __('HTML Attributes', 'publisher-core')}
+			label={label || __('HTML Attributes', 'blockera-core')}
 			labelPopoverTitle={
 				labelPopoverTitle ||
-				__('Custom HTML Attributes', 'publisher-core')
+				__('Custom HTML Attributes', 'blockera-core')
 			}
 			labelDescription={
 				labelDescription || (
@@ -57,19 +57,19 @@ export default function AttributesControl({
 						<p>
 							{__(
 								'It enables you to add custom HTML attributes to the block.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'You can define key-value pairs as attributes, which are then added to the HTML markup of the block, allowing for enhanced customization and functionality.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
 				)
 			}
-			addNewButtonLabel={__('Add New HTML Attribute', 'publisher-core')}
+			addNewButtonLabel={__('Add New HTML Attribute', 'blockera-core')}
 			// custom prop for this control
 			className={controlClassNames('attributes', className)}
 			attributeElement={attributeElement}

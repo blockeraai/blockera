@@ -1,16 +1,16 @@
-.publisher-component-popover {
+.blockera-component-popover {
 
-	&.publisher-control-popover-dynamic-values {
-		--publisher-controls-primary-color: var(--publisher-value-addon-dv-color);
-		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-dv-color-darker-20);
-		--va-color: var(--publisher-value-addon-dv-color);
-		--va-border-color: var(--publisher-value-addon-dv-border-color);
-		--va-bg-color: var(--publisher-value-addon-dv-bg-color);
+	&.blockera-control-popover-dynamic-values {
+		--blockera-controls-primary-color: var(--blockera-value-addon-dv-color);
+		--blockera-controls-primary-color-darker-20: var(--blockera-value-addon-dv-color-darker-20);
+		--va-color: var(--blockera-value-addon-dv-color);
+		--va-border-color: var(--blockera-value-addon-dv-border-color);
+		--va-bg-color: var(--blockera-value-addon-dv-bg-color);
 
-		.publisher-control-picker-category {
+		.blockera-control-picker-category {
 
-			.publisher-control-picker-category-header {
-				color: var(--publisher-controls-primary-color);
+			.blockera-control-picker-category-header {
+				color: var(--blockera-controls-primary-color);
 			}
 		}
 	}

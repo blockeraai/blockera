@@ -1,15 +1,15 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	computedCssDeclarations,
 	getCssSelector,
-} from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
-import type { CssRule } from '@publisher/style-engine/src/types';
-import { isEmptyObject } from '@publisher/utils';
+} from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
+import type { CssRule } from '@blockera/style-engine/src/types';
+import { isEmptyObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -31,22 +31,22 @@ export function TypographyStyles({
 	...props
 }: StylesProps): Array<CssRule> {
 	const {
-		publisherFontSize,
-		publisherLineHeight,
-		publisherTextAlign,
-		publisherFontColor,
-		publisherTextDecoration,
-		publisherTextShadow,
-		publisherFontStyle,
-		publisherTextTransform,
-		publisherDirection,
-		publisherLetterSpacing,
-		publisherWordSpacing,
-		publisherTextIndent,
-		publisherTextOrientation,
-		publisherTextColumns,
-		publisherTextStroke,
-		publisherWordBreak,
+		blockeraFontSize,
+		blockeraLineHeight,
+		blockeraTextAlign,
+		blockeraFontColor,
+		blockeraTextDecoration,
+		blockeraTextShadow,
+		blockeraFontStyle,
+		blockeraTextTransform,
+		blockeraDirection,
+		blockeraLetterSpacing,
+		blockeraWordSpacing,
+		blockeraTextIndent,
+		blockeraTextOrientation,
+		blockeraTextColumns,
+		blockeraTextStroke,
+		blockeraWordBreak,
 	} = config.typographyConfig;
 
 	const blockProps = {
@@ -66,16 +66,16 @@ export function TypographyStyles({
 
 	const styleGroup: Array<CssRule> = [];
 
-	if (isActiveField(publisherFontSize)) {
-		const publisherFontSize = getValueAddonRealValue(
-			blockProps.attributes.publisherFontSize
+	if (isActiveField(blockeraFontSize)) {
+		const blockeraFontSize = getValueAddonRealValue(
+			blockProps.attributes.blockeraFontSize
 		);
 
-		if (publisherFontSize !== attributes.publisherFontSize.default) {
+		if (blockeraFontSize !== attributes.blockeraFontSize.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherFontSize',
-				support: 'publisherFontSize',
+				query: 'blockeraFontSize',
+				support: 'blockeraFontSize',
 				fallbackSupportId: 'font-size',
 			});
 
@@ -83,12 +83,12 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherFontSize: [
+						blockeraFontSize: [
 							{
 								type: 'static',
 								properties: {
 									'font-size':
-										publisherFontSize + ' !important',
+										blockeraFontSize + ' !important',
 								},
 							},
 						],
@@ -99,16 +99,16 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherLineHeight)) {
-		const publisherLineHeight = getValueAddonRealValue(
-			blockProps.attributes.publisherLineHeight
+	if (isActiveField(blockeraLineHeight)) {
+		const blockeraLineHeight = getValueAddonRealValue(
+			blockProps.attributes.blockeraLineHeight
 		);
 
-		if (publisherLineHeight !== attributes.publisherLineHeight.default) {
+		if (blockeraLineHeight !== attributes.blockeraLineHeight.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherLineHeight',
-				support: 'publisherLineHeight',
+				query: 'blockeraLineHeight',
+				support: 'blockeraLineHeight',
 				fallbackSupportId: 'line-height',
 			});
 
@@ -116,12 +116,12 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherLineHeight: [
+						blockeraLineHeight: [
 							{
 								type: 'static',
 								properties: {
 									'line-height':
-										publisherLineHeight + ' !important',
+										blockeraLineHeight + ' !important',
 								},
 							},
 						],
@@ -132,16 +132,16 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherFontColor)) {
-		const publisherFontColor = getValueAddonRealValue(
-			blockProps.attributes.publisherFontColor
+	if (isActiveField(blockeraFontColor)) {
+		const blockeraFontColor = getValueAddonRealValue(
+			blockProps.attributes.blockeraFontColor
 		);
 
-		if (publisherFontColor !== attributes.publisherFontColor.default) {
+		if (blockeraFontColor !== attributes.blockeraFontColor.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherFontColor',
-				support: 'publisherFontColor',
+				query: 'blockeraFontColor',
+				support: 'blockeraFontColor',
 				fallbackSupportId: 'color',
 			});
 
@@ -149,11 +149,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherBackgroundColor: [
+						blockeraBackgroundColor: [
 							{
 								type: 'static',
 								properties: {
-									color: publisherFontColor,
+									color: blockeraFontColor,
 								},
 							},
 						],
@@ -164,14 +164,14 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherTextAlign)) {
-		const publisherTextAlign = blockProps.attributes.publisherTextAlign;
+	if (isActiveField(blockeraTextAlign)) {
+		const blockeraTextAlign = blockProps.attributes.blockeraTextAlign;
 
-		if (publisherTextAlign !== attributes.publisherTextAlign.default) {
+		if (blockeraTextAlign !== attributes.blockeraTextAlign.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherTextAlign',
-				support: 'publisherTextAlign',
+				query: 'blockeraTextAlign',
+				support: 'blockeraTextAlign',
 				fallbackSupportId: 'text-align;',
 			});
 
@@ -179,11 +179,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherTextAlign: [
+						blockeraTextAlign: [
 							{
 								type: 'static',
 								properties: {
-									'text-align': publisherTextAlign,
+									'text-align': blockeraTextAlign,
 								},
 							},
 						],
@@ -194,18 +194,17 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherTextDecoration)) {
-		const publisherTextDecoration =
-			blockProps.attributes.publisherTextDecoration;
+	if (isActiveField(blockeraTextDecoration)) {
+		const blockeraTextDecoration =
+			blockProps.attributes.blockeraTextDecoration;
 
 		if (
-			publisherTextDecoration !==
-			attributes.publisherTextDecoration.default
+			blockeraTextDecoration !== attributes.blockeraTextDecoration.default
 		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherTextDecoration',
-				support: 'publisherTextDecoration',
+				query: 'blockeraTextDecoration',
+				support: 'blockeraTextDecoration',
 				fallbackSupportId: 'text-decoration',
 			});
 
@@ -213,11 +212,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherTextDecoration: [
+						blockeraTextDecoration: [
 							{
 								type: 'static',
 								properties: {
-									'text-decoration': publisherTextDecoration,
+									'text-decoration': blockeraTextDecoration,
 								},
 							},
 						],
@@ -228,14 +227,14 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherFontStyle)) {
-		const publisherFontStyle = blockProps.attributes.publisherFontStyle;
+	if (isActiveField(blockeraFontStyle)) {
+		const blockeraFontStyle = blockProps.attributes.blockeraFontStyle;
 
-		if (publisherFontStyle !== attributes.publisherFontStyle.default) {
+		if (blockeraFontStyle !== attributes.blockeraFontStyle.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherFontStyle',
-				support: 'publisherFontStyle',
+				query: 'blockeraFontStyle',
+				support: 'blockeraFontStyle',
 				fallbackSupportId: 'font-style',
 			});
 
@@ -243,11 +242,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherFontStyle: [
+						blockeraFontStyle: [
 							{
 								type: 'static',
 								properties: {
-									'font-style': publisherFontStyle,
+									'font-style': blockeraFontStyle,
 								},
 							},
 						],
@@ -258,17 +257,17 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherTextTransform)) {
-		const publisherTextTransform =
-			blockProps.attributes.publisherTextTransform;
+	if (isActiveField(blockeraTextTransform)) {
+		const blockeraTextTransform =
+			blockProps.attributes.blockeraTextTransform;
 
 		if (
-			publisherTextTransform !== attributes.publisherTextTransform.default
+			blockeraTextTransform !== attributes.blockeraTextTransform.default
 		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherTextTransform',
-				support: 'publisherTextTransform',
+				query: 'blockeraTextTransform',
+				support: 'blockeraTextTransform',
 				fallbackSupportId: 'text-transform',
 			});
 
@@ -276,11 +275,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherTextTransform: [
+						blockeraTextTransform: [
 							{
 								type: 'static',
 								properties: {
-									'text-transform': publisherTextTransform,
+									'text-transform': blockeraTextTransform,
 								},
 							},
 						],
@@ -291,14 +290,14 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherDirection)) {
-		const publisherDirection = blockProps.attributes.publisherDirection;
+	if (isActiveField(blockeraDirection)) {
+		const blockeraDirection = blockProps.attributes.blockeraDirection;
 
-		if (publisherDirection !== attributes.publisherDirection.default) {
+		if (blockeraDirection !== attributes.blockeraDirection.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherDirection',
-				support: 'publisherDirection',
+				query: 'blockeraDirection',
+				support: 'blockeraDirection',
 				fallbackSupportId: 'direction',
 			});
 
@@ -306,11 +305,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherDirection: [
+						blockeraDirection: [
 							{
 								type: 'static',
 								properties: {
-									direction: publisherDirection,
+									direction: blockeraDirection,
 								},
 							},
 						],
@@ -321,17 +320,17 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherLetterSpacing)) {
-		const publisherLetterSpacing =
-			blockProps.attributes.publisherLetterSpacing;
+	if (isActiveField(blockeraLetterSpacing)) {
+		const blockeraLetterSpacing =
+			blockProps.attributes.blockeraLetterSpacing;
 
 		if (
-			publisherLetterSpacing !== attributes.publisherLetterSpacing.default
+			blockeraLetterSpacing !== attributes.blockeraLetterSpacing.default
 		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherLetterSpacing',
-				support: 'publisherLetterSpacing',
+				query: 'blockeraLetterSpacing',
+				support: 'blockeraLetterSpacing',
 				fallbackSupportId: 'letter-spacing',
 			});
 
@@ -339,11 +338,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherLetterSpacing: [
+						blockeraLetterSpacing: [
 							{
 								type: 'static',
 								properties: {
-									'letter-spacing': publisherLetterSpacing,
+									'letter-spacing': blockeraLetterSpacing,
 								},
 							},
 						],
@@ -354,14 +353,14 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherWordSpacing)) {
-		const publisherWordSpacing = blockProps.attributes.publisherWordSpacing;
+	if (isActiveField(blockeraWordSpacing)) {
+		const blockeraWordSpacing = blockProps.attributes.blockeraWordSpacing;
 
-		if (publisherWordSpacing !== attributes.publisherWordSpacing.default) {
+		if (blockeraWordSpacing !== attributes.blockeraWordSpacing.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherWordSpacing',
-				support: 'publisherWordSpacing',
+				query: 'blockeraWordSpacing',
+				support: 'blockeraWordSpacing',
 				fallbackSupportId: 'word-spacing',
 			});
 
@@ -369,11 +368,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherWordSpacing: [
+						blockeraWordSpacing: [
 							{
 								type: 'static',
 								properties: {
-									'word-spacing': publisherWordSpacing,
+									'word-spacing': blockeraWordSpacing,
 								},
 							},
 						],
@@ -384,14 +383,14 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherTextIndent)) {
-		const publisherTextIndent = blockProps.attributes.publisherTextIndent;
+	if (isActiveField(blockeraTextIndent)) {
+		const blockeraTextIndent = blockProps.attributes.blockeraTextIndent;
 
-		if (publisherTextIndent !== attributes.publisherTextIndent.default) {
+		if (blockeraTextIndent !== attributes.blockeraTextIndent.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherTextIndent',
-				support: 'publisherTextIndent',
+				query: 'blockeraTextIndent',
+				support: 'blockeraTextIndent',
 				fallbackSupportId: 'text-indent',
 			});
 
@@ -399,11 +398,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherTextIndent: [
+						blockeraTextIndent: [
 							{
 								type: 'static',
 								properties: {
-									'text-indent': publisherTextIndent,
+									'text-indent': blockeraTextIndent,
 								},
 							},
 						],
@@ -414,18 +413,18 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherTextOrientation)) {
-		const publisherTextOrientation =
-			blockProps.attributes.publisherTextOrientation;
+	if (isActiveField(blockeraTextOrientation)) {
+		const blockeraTextOrientation =
+			blockProps.attributes.blockeraTextOrientation;
 
 		if (
-			publisherTextOrientation !==
-			attributes.publisherTextOrientation.default
+			blockeraTextOrientation !==
+			attributes.blockeraTextOrientation.default
 		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherTextOrientation',
-				support: 'publisherTextOrientation',
+				query: 'blockeraTextOrientation',
+				support: 'blockeraTextOrientation',
 				fallbackSupportId: 'text-orientation',
 			});
 
@@ -434,7 +433,7 @@ export function TypographyStyles({
 				'text-orientation'?: string,
 			} = {};
 
-			switch (publisherTextOrientation) {
+			switch (blockeraTextOrientation) {
 				case 'style-1':
 					properties['writing-mode'] = 'vertical-lr' + ' !important';
 					properties['text-orientation'] = 'mixed' + ' !important';
@@ -462,7 +461,7 @@ export function TypographyStyles({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
 						{
-							publisherTextOrientation: [
+							blockeraTextOrientation: [
 								{
 									type: 'static',
 									properties,
@@ -475,14 +474,14 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherTextColumns)) {
-		const publisherTextColumns = blockProps.attributes.publisherTextColumns;
+	if (isActiveField(blockeraTextColumns)) {
+		const blockeraTextColumns = blockProps.attributes.blockeraTextColumns;
 
-		if (publisherTextColumns !== attributes.publisherTextColumns.default) {
+		if (blockeraTextColumns !== attributes.blockeraTextColumns.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherTextColumns',
-				support: 'publisherTextColumns',
+				query: 'blockeraTextColumns',
+				support: 'blockeraTextColumns',
 				fallbackSupportId: 'text-columns',
 			});
 
@@ -494,23 +493,23 @@ export function TypographyStyles({
 				'column-rule-style'?: string,
 			} = {};
 
-			properties['column-count'] = publisherTextColumns.columns
+			properties['column-count'] = blockeraTextColumns.columns
 				.replace('-columns', '')
 				.replace('none', 'initial');
 
 			if (properties['column-count'] !== 'initial') {
-				const gap = getValueAddonRealValue(publisherTextColumns.gap);
+				const gap = getValueAddonRealValue(blockeraTextColumns.gap);
 
 				if (gap !== '') {
 					properties['column-gap'] = gap;
 				}
 
 				if (
-					publisherTextColumns?.divider?.width !== undefined &&
-					publisherTextColumns?.divider?.width !== ''
+					blockeraTextColumns?.divider?.width !== undefined &&
+					blockeraTextColumns?.divider?.width !== ''
 				) {
 					const color = getValueAddonRealValue(
-						publisherTextColumns?.divider?.color
+						blockeraTextColumns?.divider?.color
 					);
 
 					if (color !== '') {
@@ -518,10 +517,10 @@ export function TypographyStyles({
 					}
 
 					properties['column-rule-width'] =
-						publisherTextColumns.divider.width;
+						blockeraTextColumns.divider.width;
 
 					properties['column-rule-style'] =
-						publisherTextColumns.divider.style || 'solid';
+						blockeraTextColumns.divider.style || 'solid';
 				}
 			}
 
@@ -530,7 +529,7 @@ export function TypographyStyles({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
 						{
-							publisherTextColumns: [
+							blockeraTextColumns: [
 								{
 									type: 'static',
 									properties,
@@ -543,19 +542,19 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherTextStroke)) {
-		const publisherTextStroke = blockProps.attributes.publisherTextStroke;
+	if (isActiveField(blockeraTextStroke)) {
+		const blockeraTextStroke = blockProps.attributes.blockeraTextStroke;
 
-		if (publisherTextStroke !== attributes.publisherTextStroke.default) {
+		if (blockeraTextStroke !== attributes.blockeraTextStroke.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherTextStroke',
-				support: 'publisherTextStroke',
+				query: 'blockeraTextStroke',
+				support: 'blockeraTextStroke',
 				fallbackSupportId: 'text-stroke',
 			});
 
 			const textStrokeColor = getValueAddonRealValue(
-				publisherTextStroke?.color
+				blockeraTextStroke?.color
 			);
 
 			if (textStrokeColor !== '') {
@@ -563,12 +562,12 @@ export function TypographyStyles({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
 						{
-							publisherTextStroke: [
+							blockeraTextStroke: [
 								{
 									type: 'static',
 									properties: {
 										'-webkit-text-stroke':
-											publisherTextStroke?.width +
+											blockeraTextStroke?.width +
 											' ' +
 											textStrokeColor,
 									},
@@ -582,17 +581,17 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(publisherWordBreak)) {
-		const publisherWordBreak = blockProps.attributes.publisherWordBreak;
+	if (isActiveField(blockeraWordBreak)) {
+		const blockeraWordBreak = blockProps.attributes.blockeraWordBreak;
 
 		if (
-			publisherWordBreak !== attributes.publisherWordBreak.default &&
-			publisherWordBreak !== 'normal'
+			blockeraWordBreak !== attributes.blockeraWordBreak.default &&
+			blockeraWordBreak !== 'normal'
 		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherWordBreak',
-				support: 'publisherWordBreak',
+				query: 'blockeraWordBreak',
+				support: 'blockeraWordBreak',
 				fallbackSupportId: 'word-break',
 			});
 
@@ -600,11 +599,11 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherWordBreak: [
+						blockeraWordBreak: [
 							{
 								type: 'static',
 								properties: {
-									'word-break': publisherWordBreak,
+									'word-break': blockeraWordBreak,
 								},
 							},
 						],
@@ -616,16 +615,16 @@ export function TypographyStyles({
 	}
 
 	if (
-		isActiveField(publisherTextShadow) &&
+		isActiveField(blockeraTextShadow) &&
 		!arrayEquals(
-			attributes.publisherTextShadow.default,
-			blockProps.attributes.publisherTextShadow
+			attributes.blockeraTextShadow.default,
+			blockProps.attributes.blockeraTextShadow
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherTextShadow',
-			support: 'publisherTextShadow',
+			query: 'blockeraTextShadow',
+			support: 'blockeraTextShadow',
 			fallbackSupportId: 'text-shadow',
 		});
 
@@ -633,7 +632,7 @@ export function TypographyStyles({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherTextShadow: [
+					blockeraTextShadow: [
 						{
 							type: 'function',
 							function: TextShadowGenerator,

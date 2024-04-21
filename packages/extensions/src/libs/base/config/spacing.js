@@ -10,13 +10,13 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherSpacing: FeatureConfig = {
+const blockeraSpacing: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Spacing', 'publisher-core'),
+	label: __('Spacing', 'blockera-core'),
 };
 
 export const spacingConfig = {
-	publisherSpacing,
+	blockeraSpacing,
 };

@@ -5,12 +5,12 @@
 import type { Element } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies

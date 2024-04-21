@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import EffectsExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherEffectsExtension',
+	name: 'blockeraEffectsExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -50,24 +50,24 @@ blocksInitializer({
 						{...{ ...props, attributes, setAttributes }}
 						initialOpen={true}
 						values={{
-							publisherFilter: [],
-							publisherOpacity: '',
-							publisherTransform: [],
-							publisherBlendMode: '',
-							publisherTransition: [],
-							publisherBackdropFilter: [],
-							publisherBackfaceVisibility: '',
-							publisherTransformSelfOrigin: {},
-							publisherTransformChildOrigin: {},
-							publisherTransformSelfPerspective: '',
-							publisherTransformChildPerspective: '',
+							blockeraFilter: [],
+							blockeraOpacity: '',
+							blockeraTransform: [],
+							blockeraBlendMode: '',
+							blockeraTransition: [],
+							blockeraBackdropFilter: [],
+							blockeraBackfaceVisibility: '',
+							blockeraTransformSelfOrigin: {},
+							blockeraTransformChildOrigin: {},
+							blockeraTransformSelfPerspective: '',
+							blockeraTransformChildPerspective: '',
 							divider: [],
 						}}
 						extensionId={'Effects'}
 						icon={<EffectsExtensionIcon />}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Effects', 'publisher-core')}
+						title={__('Effects', 'blockera-core')}
 					/>
 				</InspectorControls>
 
@@ -104,18 +104,18 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherFilter: [],
-					publisherOpacity: '',
-					publisherTransform: [],
-					publisherBlendMode: '',
-					publisherTransition: [],
-					publisherBackdropFilter: [],
-					publisherDivider: [],
-					publisherBackfaceVisibility: '',
-					publisherTransformSelfOrigin: {},
-					publisherTransformChildOrigin: {},
-					publisherTransformSelfPerspective: '',
-					publisherTransformChildPerspective: '',
+					blockeraFilter: [],
+					blockeraOpacity: '',
+					blockeraTransform: [],
+					blockeraBlendMode: '',
+					blockeraTransition: [],
+					blockeraBackdropFilter: [],
+					blockeraDivider: [],
+					blockeraBackfaceVisibility: '',
+					blockeraTransformSelfOrigin: {},
+					blockeraTransformChildOrigin: {},
+					blockeraTransformSelfPerspective: '',
+					blockeraTransformChildPerspective: '',
 				},
 			},
 		],

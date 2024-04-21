@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import MouseExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherMouseExtension',
+	name: 'blockeraMouseExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -50,16 +50,16 @@ blocksInitializer({
 						{...{ ...props, attributes, setAttributes }}
 						initialOpen={true}
 						values={{
-							cursor: attributes?.publisherCursor || '',
-							userSelect: attributes?.publisherUserSelect || '',
+							cursor: attributes?.blockeraCursor || '',
+							userSelect: attributes?.blockeraUserSelect || '',
 							pointerEvents:
-								attributes?.publisherPointerEvents || '',
+								attributes?.blockeraPointerEvents || '',
 						}}
 						extensionId={'Mouse'}
 						icon={<MouseExtensionIcon />}
-						storeName={'publisher-core/controls'}
+						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Mouse', 'publisher-core')}
+						title={__('Mouse', 'blockera-core')}
 					/>
 				</InspectorControls>
 
@@ -96,9 +96,9 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherCursor: '',
-					publisherUserSelect: '',
-					publisherPointerEvents: '',
+					blockeraCursor: '',
+					blockeraUserSelect: '',
+					blockeraPointerEvents: '',
 				},
 			},
 		],

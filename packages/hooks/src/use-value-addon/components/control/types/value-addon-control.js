@@ -1,14 +1,14 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import type {
 	VariableCategory,
 	DynamicValueTypes,
 	VariableItem,
 	DynamicValueItem,
-} from '@publisher/core-data';
-import type { ControlSize } from '@publisher/controls';
+} from '@blockera/core-data';
+import type { ControlSize } from '@blockera/controls';
 
 /**
  * Internal dependencies

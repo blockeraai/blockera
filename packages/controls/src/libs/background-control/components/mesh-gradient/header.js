@@ -7,10 +7,10 @@ import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { ColorIndicator } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { ColorIndicator } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -38,11 +38,11 @@ const RepeaterItemHeader: MeshGradientHeaderItem = memo<MeshGradientHeaderItem>(
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>
-					{item.color ? item.color : __('None', 'publisher-core')}
+					{item.color ? item.color : __('None', 'blockera-core')}
 				</span>
 
 				<span className={controlInnerClassNames('header-values')}>
-					{itemId === 0 ? __('Primary Color', 'publisher-core') : ''}
+					{itemId === 0 ? __('Primary Color', 'blockera-core') : ''}
 				</span>
 
 				{children}

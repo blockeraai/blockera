@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { useDragValue } from '@publisher/utils';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { useDragValue } from '@blockera/utils';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -214,7 +214,7 @@ export function PaddingBottom({
 					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('Bottom Padding', 'publisher-core')}
+						ariaLabel={__('Bottom Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.bottom)
@@ -248,18 +248,18 @@ export function PaddingBottom({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Bottom Padding Space', 'publisher-core')}
-						inputLabel={__('Bottom Padding', 'publisher-core')}
+						title={__('Bottom Padding Space', 'blockera-core')}
+						inputLabel={__('Bottom Padding', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Bottom Padding Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies only to the bottom edge of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

@@ -6,13 +6,13 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	MaskControl,
 	ControlContextProvider,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -37,19 +37,19 @@ export const Mask = ({
 			value={{
 				name: generateExtensionId(block, 'mask'),
 				value: mask,
-				attribute: 'publisherMask',
+				attribute: 'blockeraMask',
 				blockName: block.blockName,
 			}}
-			storeName={'publisher-core/controls/repeater'}
+			storeName={'blockera-core/controls/repeater'}
 		>
 			<BaseControl controlName="Mask" columns="columns-1">
 				<MaskControl
 					onChange={(newValue, ref) =>
-						handleOnChangeAttributes('publisherMask', newValue, {
+						handleOnChangeAttributes('blockeraMask', newValue, {
 							ref,
 						})
 					}
-					addNewButtonLabel={__('Add New Mask', 'publisher-core')}
+					addNewButtonLabel={__('Add New Mask', 'blockera-core')}
 					defaultValue={defaultValue}
 					{...props}
 				/>

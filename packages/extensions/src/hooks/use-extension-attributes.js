@@ -1,22 +1,22 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { isUndefined } from '@blockera/utils';
 
 /**
- * Add custom Publisher props identifier to selected blocks
+ * Add custom  props identifier to selected blocks
  *
  * @param {Object} props Block props
- * @return {{}|Object} Block props extended with Publisher Extensions.
+ * @return {{}|Object} Block props extended with  Extensions.
  */
 export const useAttributes = (props: Object): Object => {
 	const extendedProps = { ...props };
 
-	if (isUndefined(extendedProps.attributes.publisherPropsId)) {
+	if (isUndefined(extendedProps.attributes.blockeraPropsId)) {
 		const d = new Date();
-		extendedProps.attributes.publisherPropsId =
+		extendedProps.attributes.blockeraPropsId =
 			'' +
 			d.getMonth() +
 			d.getDate() +

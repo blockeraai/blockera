@@ -7,16 +7,16 @@ import { select } from '@wordpress/data';
 import { useContext, useCallback, useRef } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { prepare, update } from '@publisher/data-extractor';
+import { prepare, update } from '@blockera/data-extractor';
 import {
 	isNull,
 	isEmpty,
 	isObject,
 	isBoolean,
 	isUndefined,
-} from '@publisher/utils';
+} from '@blockera/utils';
 
 /**
  * Internal dependencies

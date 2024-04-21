@@ -5,7 +5,7 @@ export default function JustifyFlexStartIcon({}) {
 			height="18"
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
-			className="publisher-flex-justify-content-flex-start"
+			className="blockera-flex-justify-content-flex-start"
 			data-test="layout-matrix-justify-start"
 		>
 			<path d="M5 5.8C5 5.35817 5.35817 5 5.8 5L7.2 5C7.64183 5 8 5.35817 8 5.8L8 12.2C8 12.6418 7.64183 13 7.2 13H5.8C5.35817 13 5 12.6418 5 12.2L5 5.8Z" />

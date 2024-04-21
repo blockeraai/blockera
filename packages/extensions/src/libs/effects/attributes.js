@@ -1,53 +1,53 @@
 export const attributes = {
-	publisherOpacity: {
+	blockeraOpacity: {
 		type: 'string',
 		default: '100%',
 	},
-	publisherTransform: {
+	blockeraTransform: {
 		type: 'object',
 		default: {},
 	},
-	publisherTransformSelfPerspective: {
+	blockeraTransformSelfPerspective: {
 		type: 'string',
 		default: '',
 	},
-	publisherTransformSelfOrigin: {
+	blockeraTransformSelfOrigin: {
 		type: 'object',
 		default: { top: '', left: '' },
 	},
-	publisherBackfaceVisibility: {
+	blockeraBackfaceVisibility: {
 		type: 'string',
 		default: 'visible',
 	},
-	publisherTransformChildPerspective: {
+	blockeraTransformChildPerspective: {
 		type: 'string',
 		default: '',
 	},
-	publisherTransformChildOrigin: {
+	blockeraTransformChildOrigin: {
 		type: 'object',
 		default: { top: '', left: '' },
 	},
-	publisherTransition: {
+	blockeraTransition: {
 		type: 'object',
 		default: {},
 	},
-	publisherFilter: {
+	blockeraFilter: {
 		type: 'object',
 		default: {},
 	},
-	publisherBackdropFilter: {
+	blockeraBackdropFilter: {
 		type: 'object',
 		default: {},
 	},
-	publisherDivider: {
+	blockeraDivider: {
 		type: 'object',
 		default: {},
 	},
-	publisherMask: {
+	blockeraMask: {
 		type: 'object',
 		default: {},
 	},
-	publisherBlendMode: {
+	blockeraBlendMode: {
 		type: 'string',
 		default: 'normal',
 	},

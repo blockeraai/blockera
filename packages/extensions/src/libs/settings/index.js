@@ -8,9 +8,9 @@ import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Popover } from '@publisher/components';
+import { Popover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -19,8 +19,8 @@ import { More } from './icons';
 import { Supports } from './components';
 
 export const ExtensionSettings = ({
-	buttonLabel = __('More Settings', 'publisher-core'),
-	title = __('Settings', 'publisher-core'),
+	buttonLabel = __('More Settings', 'blockera-core'),
+	title = __('Settings', 'blockera-core'),
 	features,
 	update = () => {},
 }: {
@@ -75,7 +75,7 @@ export const ExtensionSettings = ({
 					{hasItems(defaults) && (
 						<div className={'settings-category'}>
 							<span className={'settings-category__title'}>
-								{__('Essential Features', 'publisher-core')}
+								{__('Essential Features', 'blockera-core')}
 							</span>
 
 							<Supports
@@ -90,11 +90,8 @@ export const ExtensionSettings = ({
 						<div className={'settings-category'}>
 							<span className={'settings-category__title'}>
 								{hasItems(defaults)
-									? __(
-											'Additional Features',
-											'publisher-core'
-									  )
-									: __('Features', 'publisher-core')}
+									? __('Additional Features', 'blockera-core')
+									: __('Features', 'blockera-core')}
 							</span>
 
 							<Supports

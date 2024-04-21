@@ -7,21 +7,21 @@ export function displayFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (attributes?.publisherDisplay !== '') {
+	if (attributes?.blockeraDisplay !== '') {
 		return attributes;
 	}
 
 	switch (blockId) {
 		case 'core/group':
 			if (attributes?.layout?.type !== 'constrained') {
-				return { publisherDisplay: attributes?.layout?.type };
+				return { blockeraDisplay: attributes?.layout?.type };
 			}
 
 			return false;
 
 		case 'core/buttons':
 			if (attributes?.layout?.type !== 'constrained') {
-				return { publisherDisplay: attributes?.layout?.type };
+				return { blockeraDisplay: attributes?.layout?.type };
 			}
 
 			return false;

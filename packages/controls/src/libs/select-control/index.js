@@ -11,9 +11,9 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 import type { TSelectControlProps } from './types';
 
 /**

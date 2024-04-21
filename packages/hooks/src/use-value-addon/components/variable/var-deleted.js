@@ -6,10 +6,10 @@ import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { Button, Flex, Popover, Tooltip } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Button, Flex, Popover, Tooltip } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -29,7 +29,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Missing Variable', 'publisher-core')}
+			title={__('Missing Variable', 'blockera-core')}
 			offset={125}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
@@ -50,11 +50,11 @@ export default function ({
 						style={{ fontSize: '12px', margin: 0 }}
 					>
 						{deletedItem.name !== ''
-							? __('Name:', 'publisher-core')
-							: __('Variable ID:', 'publisher-core')}
+							? __('Name:', 'blockera-core')
+							: __('Variable ID:', 'blockera-core')}
 						<b
 							style={{
-								color: 'var(--publisher-value-addon-deleted-color)',
+								color: 'var(--blockera-value-addon-deleted-color)',
 							}}
 						>
 							{deletedItem.name !== ''
@@ -70,10 +70,10 @@ export default function ({
 							gap={4}
 							style={{ fontSize: '12px', margin: 0 }}
 						>
-							{__('Value:', 'publisher-core')}
+							{__('Value:', 'blockera-core')}
 							<b
 								style={{
-									color: 'var(--publisher-value-addon-deleted-color)',
+									color: 'var(--blockera-value-addon-deleted-color)',
 								}}
 							>
 								<Flex
@@ -97,7 +97,7 @@ export default function ({
 											>
 												<InfoIcon
 													style={{
-														fill: 'var(--publisher-controls-border-color-soft)',
+														fill: 'var(--blockera-controls-border-color-soft)',
 													}}
 												/>
 											</span>
@@ -115,10 +115,10 @@ export default function ({
 							gap={4}
 							style={{ fontSize: '12px', margin: 0 }}
 						>
-							{__('Reference:', 'publisher-core')}
+							{__('Reference:', 'blockera-core')}
 							<b
 								style={{
-									color: 'var(--publisher-value-addon-deleted-color)',
+									color: 'var(--blockera-value-addon-deleted-color)',
 									textTransform: 'capitalize',
 								}}
 							>
@@ -160,12 +160,12 @@ export default function ({
 								onClick={controlProps.handleOnUnlinkVar}
 								label={__(
 									'Unlink Variable Value',
-									'publisher-core'
+									'blockera-core'
 								)}
 								style={{ padding: '2px 8px' }}
 							>
 								<UnlinkIcon />
-								{__('Unlink Variable', 'publisher-core')}
+								{__('Unlink Variable', 'blockera-core')}
 							</Button>
 							<Button
 								variant="tertiary"
@@ -176,14 +176,14 @@ export default function ({
 								}}
 								label={__(
 									'Switch To Another Variable',
-									'publisher-core'
+									'blockera-core'
 								)}
 								style={{
 									padding: '2px 8px',
 									marginRight: 'auto',
 								}}
 							>
-								{__('Switch Variable', 'publisher-core')}
+								{__('Switch Variable', 'blockera-core')}
 							</Button>
 						</>
 					) : (
@@ -195,12 +195,12 @@ export default function ({
 								onClick={controlProps.handleOnClickRemove}
 								label={__(
 									'Remove Variable Usage',
-									'publisher-core'
+									'blockera-core'
 								)}
 								style={{ padding: '2px 8px' }}
 							>
 								<TrashIcon />
-								{__('Remove', 'publisher-core')}
+								{__('Remove', 'blockera-core')}
 							</Button>
 							<Button
 								variant="tertiary"
@@ -211,14 +211,14 @@ export default function ({
 								}}
 								label={__(
 									'Switch To Another Variable',
-									'publisher-core'
+									'blockera-core'
 								)}
 								style={{
 									padding: '2px 8px',
 									marginRight: 'auto',
 								}}
 							>
-								{__('Switch Variable', 'publisher-core')}
+								{__('Switch Variable', 'blockera-core')}
 							</Button>
 						</>
 					)}

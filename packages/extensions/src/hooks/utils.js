@@ -6,9 +6,9 @@ import { compose } from '@wordpress/compose';
 import { withSelect } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { omit, omitWithPattern } from '@publisher/utils';
+import { omit, omitWithPattern } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -72,7 +72,7 @@ export const sanitizedBlockAttributes = (attributes: Object): Object => {
 	attributeValues.forEach((attributeValue: Object, index: number): void => {
 		const attributeKey = attributeKeys[index];
 
-		if ('publisherIconLink' === attributeKey) {
+		if ('blockeraIconLink' === attributeKey) {
 			cleanupKeys.push(attributeKeys[index]);
 			return;
 		}

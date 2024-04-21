@@ -8,13 +8,13 @@ import { memo, useState, useReducer, useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { Button, Icon, MediaUploader } from '@publisher/components';
+} from '@blockera/classnames';
+import { Button, Icon, MediaUploader } from '@blockera/components';
 import {
 	isEmpty,
 	isObject,
@@ -22,7 +22,7 @@ import {
 	isUndefined,
 	hasSameProps,
 	useLateEffect,
-} from '@publisher/utils';
+} from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -43,9 +43,9 @@ function IconControl({
 	columns,
 	field = 'icon',
 	//
-	labelChoose = __('Choose Icon…', 'publisher-blocks'),
-	labelIconLibrary = __('Icon Library', 'publisher-blocks'),
-	labelUploadSvg = __('Upload SVG', 'publisher-blocks'),
+	labelChoose = __('Choose Icon…', 'blockera-core'),
+	labelIconLibrary = __('Icon Library', 'blockera-core'),
+	labelUploadSvg = __('Upload SVG', 'blockera-core'),
 	//
 	defaultValue,
 	onChange,
@@ -145,7 +145,7 @@ function IconControl({
 			target = target.closest('svg');
 		}
 
-		if (target?.classList?.contains('publisher-core-is-pro-icon')) {
+		if (target?.classList?.contains('blockera-core-is-pro-icon')) {
 			return;
 		}
 
@@ -185,7 +185,7 @@ function IconControl({
 							onClick={openModal}
 						>
 							<Button
-								aria-label={__('Remove Icon', 'publisher-core')}
+								aria-label={__('Remove Icon', 'blockera-core')}
 								className="btn-delete"
 								noBorder={true}
 								isFocus={isOpenModal}
@@ -213,10 +213,7 @@ function IconControl({
 								)}
 							>
 								<Button
-									label={__(
-										'Icon Library',
-										'publisher-blocks'
-									)}
+									label={__('Icon Library', 'blockera-core')}
 									onClick={openModal}
 									className="btn-icon-library"
 									noBorder={true}

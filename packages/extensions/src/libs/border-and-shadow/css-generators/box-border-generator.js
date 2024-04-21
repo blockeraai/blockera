@@ -1,56 +1,54 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { createCssDeclarations } from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+import { createCssDeclarations } from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 export function BoxBorderGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherBorder) {
+	if (!attributes?.blockeraBorder) {
 		return '';
 	}
 
 	const properties = {};
 
-	if (attributes?.publisherBorder?.type === 'all') {
-		const borderAllWidth = attributes.publisherBorder?.all?.width;
+	if (attributes?.blockeraBorder?.type === 'all') {
+		const borderAllWidth = attributes.blockeraBorder?.all?.width;
 		if (borderAllWidth) {
 			properties.border = `${borderAllWidth} ${
-				attributes.publisherBorder.all.style || 'solid'
-			} ${getValueAddonRealValue(attributes.publisherBorder.all.color)}`;
+				attributes.blockeraBorder.all.style || 'solid'
+			} ${getValueAddonRealValue(attributes.blockeraBorder.all.color)}`;
 		}
 	} else {
-		const borderTopWidth = attributes.publisherBorder?.top?.width;
+		const borderTopWidth = attributes.blockeraBorder?.top?.width;
 		if (borderTopWidth) {
 			properties['border-top'] = `${borderTopWidth} ${
-				attributes.publisherBorder.top.style || 'solid'
-			} ${getValueAddonRealValue(attributes.publisherBorder.top.color)}`;
+				attributes.blockeraBorder.top.style || 'solid'
+			} ${getValueAddonRealValue(attributes.blockeraBorder.top.color)}`;
 		}
 
-		const borderRightWidth = attributes.publisherBorder?.right?.width;
+		const borderRightWidth = attributes.blockeraBorder?.right?.width;
 		if (borderRightWidth) {
 			properties['border-right'] = `${borderRightWidth} ${
-				attributes.publisherBorder.right.style || 'solid'
-			} ${getValueAddonRealValue(
-				attributes.publisherBorder.right.color
-			)}`;
+				attributes.blockeraBorder.right.style || 'solid'
+			} ${getValueAddonRealValue(attributes.blockeraBorder.right.color)}`;
 		}
 
-		const borderBottomWidth = attributes.publisherBorder?.bottom?.width;
+		const borderBottomWidth = attributes.blockeraBorder?.bottom?.width;
 		if (borderBottomWidth) {
 			properties['border-bottom'] = `${borderBottomWidth} ${
-				attributes.publisherBorder.bottom.style || 'solid'
+				attributes.blockeraBorder.bottom.style || 'solid'
 			} ${getValueAddonRealValue(
-				attributes.publisherBorder.bottom.color
+				attributes.blockeraBorder.bottom.color
 			)}`;
 		}
 
-		const borderLeftWidth = attributes.publisherBorder?.left?.width;
+		const borderLeftWidth = attributes.blockeraBorder?.left?.width;
 		if (borderLeftWidth) {
 			properties['border-left'] = `${borderLeftWidth} ${
-				attributes.publisherBorder.left.style || 'solid'
-			} ${getValueAddonRealValue(attributes.publisherBorder.left.color)}`;
+				attributes.blockeraBorder.left.style || 'solid'
+			} ${getValueAddonRealValue(attributes.blockeraBorder.left.color)}`;
 		}
 	}
 

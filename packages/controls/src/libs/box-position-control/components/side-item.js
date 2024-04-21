@@ -7,11 +7,11 @@ import { useState } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { useDragValue } from '@publisher/utils';
-import { isValid, setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { useDragValue } from '@blockera/utils';
+import { isValid, setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -165,13 +165,13 @@ export function SideItem({
 	function getSideLabel(side: Side): string {
 		switch (side) {
 			case 'top':
-				return __('Top', 'publisher-core');
+				return __('Top', 'blockera-core');
 			case 'bottom':
-				return __('Bottom', 'publisher-core');
+				return __('Bottom', 'blockera-core');
 			case 'left':
-				return __('Left', 'publisher-core');
+				return __('Left', 'blockera-core');
 			case 'right':
-				return __('Right', 'publisher-core');
+				return __('Right', 'blockera-core');
 		}
 
 		return '';
@@ -268,7 +268,7 @@ export function SideItem({
 					<LabelControl
 						ariaLabel={sprintf(
 							// Translators: %s is the position name (top, right, bottom, left)
-							__('%s Position', 'publisher-core'),
+							__('%s Position', 'blockera-core'),
 							getSideLabel(side)
 						)}
 						label={
@@ -302,7 +302,7 @@ export function SideItem({
 					property={'position.' + side}
 					title={sprintf(
 						// Translators: %s is the position name (top, right, bottom, left)
-						__('%s Position', 'publisher-core'),
+						__('%s Position', 'blockera-core'),
 						getSideLabel(side)
 					)}
 					sideLabel={getSideLabel(side)}

@@ -1,10 +1,10 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString, isUndefined } from '@publisher/utils';
-import { extractNumberAndUnit, isSpecialUnit } from '@publisher/controls';
+import { isString, isUndefined } from '@blockera/utils';
+import { extractNumberAndUnit, isSpecialUnit } from '@blockera/controls';
 
 export function minHeightFromWPCompatibility({
 	attributes,
@@ -14,7 +14,7 @@ export function minHeightFromWPCompatibility({
 	blockId?: string,
 }): Object {
 	if (
-		attributes?.publisherMinHeight !== '' ||
+		attributes?.blockeraMinHeight !== '' ||
 		attributes?.minHeight === undefined ||
 		attributes?.minHeightUnit === undefined
 	) {
@@ -22,7 +22,7 @@ export function minHeightFromWPCompatibility({
 	}
 
 	if (blockId === 'core/cover') {
-		attributes.publisherMinHeight =
+		attributes.blockeraMinHeight =
 			attributes?.minHeight + attributes.minHeightUnit;
 	}
 

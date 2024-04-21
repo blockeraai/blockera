@@ -1,19 +1,19 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { createCssDeclarations } from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+import { createCssDeclarations } from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 export function TextShadowGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!Object.values(attributes?.publisherTextShadow)?.length) {
+	if (!Object.values(attributes?.blockeraTextShadow)?.length) {
 		return '';
 	}
 
 	const shadows = [];
 
-	Object.entries(attributes?.publisherTextShadow)?.map(([, item]) => {
+	Object.entries(attributes?.blockeraTextShadow)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return null;
 		}

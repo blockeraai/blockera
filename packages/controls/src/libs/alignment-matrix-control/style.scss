@@ -1,7 +1,7 @@
-.publisher-control-alignment-matrix {
+.blockera-control-alignment-matrix {
 
-	.publisher-control-alignment-matrix-box {
-		border: 1px solid var(--publisher-controls-border-color);
+	.blockera-control-alignment-matrix-box {
+		border: 1px solid var(--blockera-controls-border-color);
 		border-radius: 2px;
 		margin: 0;
 		height: 70px;
@@ -15,7 +15,7 @@
 		align-content: center;
 		justify-items: center;
 
-	    	.publisher-control-matrix-item {
+	    	.blockera-control-matrix-item {
 				width: 22px;
 				height: 22px;
 				cursor: pointer;
@@ -27,20 +27,20 @@
 				&.selected {
 
 					svg {
-					   fill: var(--publisher-controls-primary-color);
+					   fill: var(--blockera-controls-primary-color);
 					   }
 
 		     	}
 				}
 	}
 
-	.publisher-field.publisher-field-input + .publisher-field.publisher-field-input {
+	.blockera-field.blockera-field-input + .blockera-field.blockera-field-input {
 		border-top: none;
 		padding-top: 0;
 		margin-top: 0;
 	}
 
-	.publisher-field.publisher-field-input {
+	.blockera-field.blockera-field-input {
 
 		input {
 			font-size: 12px;

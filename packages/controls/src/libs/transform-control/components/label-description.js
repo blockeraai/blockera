@@ -15,55 +15,55 @@ export function LabelDescription(): MixedElement {
 			<p>
 				{__(
 					'The transform applies a variety of visual manipulations to a block without altering the document flow.',
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 			<p>
 				{__(
 					"it's used for animations, responsive layouts, and enhancing user interaction with creative visual elements.",
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 			<h3>
 				<MoveIcon />
-				{__('Move (Translate)', 'publisher-core')}
+				{__('Move (Translate)', 'blockera-core')}
 			</h3>
 			<p>
 				{__(
 					'Repositions an element from its original place. Ideal for creating movement and transition effects.',
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 			<h3>
 				<ScaleIcon />
-				{__('Scale', 'publisher-core')}
+				{__('Scale', 'blockera-core')}
 			</h3>
 			<p>
 				{__(
 					'Changes the size of an element. Essential for zoom effects and emphasizing elements.',
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 
 			<h3>
 				<RotateIcon />
-				{__('Rotate', 'publisher-core')}
+				{__('Rotate', 'blockera-core')}
 			</h3>
 			<p>
 				{__(
 					'Rotates an element around its center point. Useful for creating dynamic interactions like hover effects.',
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 
 			<h3>
 				<SkewIcon />
-				{__('Skew', 'publisher-core')}
+				{__('Skew', 'blockera-core')}
 			</h3>
 			<p>
 				{__(
 					'Distorts elements along the X and Y axes.',
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 		</>

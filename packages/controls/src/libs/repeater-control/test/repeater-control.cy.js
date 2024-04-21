@@ -32,7 +32,7 @@ function RepeaterFilledItemChildren({ itemId, item }) {
 			<InputControl
 				id={getControlId(itemId, 'name')}
 				type="text"
-				label={__('Name', 'publisher-core')}
+				label={__('Name', 'blockera-core')}
 				onChange={(value) =>
 					changeRepeaterItem({
 						controlId,
@@ -71,7 +71,7 @@ describe('repeater control component testing', () => {
 			});
 			cy.multiClick(`[aria-label="Add New Items"]`, 7);
 
-			cy.getByDataCy('publisher-repeater-control')
+			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 7);
 
@@ -102,7 +102,7 @@ describe('repeater control component testing', () => {
 			});
 			cy.multiClick(`[aria-label="Add New Items"]`, 7);
 
-			cy.getByDataCy('publisher-repeater-control')
+			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 7);
 
@@ -158,7 +158,7 @@ describe('repeater control component testing', () => {
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.get('[aria-label~="Delete"]').first().click();
 
-			cy.getByDataCy('publisher-repeater-control')
+			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 1);
 
@@ -190,7 +190,7 @@ describe('repeater control component testing', () => {
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.get('[aria-label~="Clone"]').first().click();
 
-			cy.getByDataCy('publisher-repeater-control')
+			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 5);
 
@@ -281,7 +281,7 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 			});
 			cy.multiClick(`[aria-label="Add New Items"]`, 5);
-			cy.getByDataCy('publisher-repeater-control')
+			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 4);
 		});
@@ -299,7 +299,7 @@ describe('repeater control component testing', () => {
 			});
 			cy.multiClick('[aria-label="Add New Items"]', 4);
 
-			cy.getByDataCy('publisher-repeater-control')
+			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 4);
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
@@ -329,7 +329,7 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
-			cy.get('.publisher-control-group-popover').should('exist');
+			cy.get('.blockera-control-group-popover').should('exist');
 
 			// Check data provider value!
 			cy.then(() => {
@@ -358,7 +358,7 @@ describe('repeater control component testing', () => {
 			});
 			cy.getByDataCy('repeater-item').click();
 
-			cy.get('.publisher-control-group-popover').should(
+			cy.get('.blockera-control-group-popover').should(
 				'have.class',
 				'custom-class'
 			);
@@ -405,7 +405,7 @@ describe('repeater control component testing', () => {
 				},
 				store: STORE_NAME,
 			});
-			cy.getByDataCy('publisher-repeater-control').should(
+			cy.getByDataCy('blockera-repeater-control').should(
 				'have.class',
 				'custom-class'
 			);
@@ -478,7 +478,7 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
-			cy.getByDataCy('publisher-repeater-control')
+			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 2);
 

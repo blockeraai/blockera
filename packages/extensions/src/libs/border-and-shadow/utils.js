@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * Internal dependencies
  */

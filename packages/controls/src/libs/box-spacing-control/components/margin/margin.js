@@ -6,9 +6,9 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -45,7 +45,7 @@ export function Margin({
 				>
 					<LabelControl
 						ariaLabel={__('Margin Spacing')}
-						label={__('Margin', 'publisher-core')}
+						label={__('Margin', 'blockera-core')}
 					/>
 				</span>
 			) : (
@@ -63,18 +63,18 @@ export function Margin({
 								<p>
 									{__(
 										'Use margin to create separation between blocks, optimizing layout and enhancing visual balance.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 								<p>
 									{__(
 										"It's beneficial for improving layout and boosting visual harmony, especially in adaptive, responsive designs.",
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>
 						}
-						label={__('Margin', 'publisher-core')}
+						label={__('Margin', 'blockera-core')}
 						{...{
 							value,
 							attribute,

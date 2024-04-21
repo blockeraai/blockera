@@ -1,4 +1,4 @@
-.publisher-extension-settings-button {
+.blockera-extension-settings-button {
 	padding: 0;
 	line-height: 24px;
 	height: 24px;
@@ -10,7 +10,7 @@
 
 	&.is-focus,
 	&:hover {
-		color: var(--publisher-controls-primary-color);
+		color: var(--blockera-controls-primary-color);
 	}
 
 	&.is-focus {
@@ -18,10 +18,10 @@
 	}
 }
 
-.publisher-component-popover.extension-settings {
+.blockera-component-popover.extension-settings {
 	--popover-width: 270px;
 
-	.publisher-component-popover-body {
+	.blockera-component-popover-body {
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
@@ -38,16 +38,16 @@
 
 		.settings-category__title {
 			display: block;
-			color: var(--publisher-controls-primary-color);
+			color: var(--blockera-controls-primary-color);
 			font-size: 12px;
 			font-weight: 600;
 		}
 
 		& + & {
-			border-top: solid 1px var(--publisher-controls-border-color);
+			border-top: solid 1px var(--blockera-controls-border-color);
 		}
 
-		.publisher-component-support-item {
+		.blockera-component-support-item {
 			display: flex;
 			justify-content: space-between !important;
 			cursor: pointer;
@@ -56,7 +56,7 @@
 			align-items: center;
 			font-size: 12px;
 			height: 30px;
-			transition: var(--publisher-controls-transition);
+			transition: var(--blockera-controls-transition);
 			user-select: none;
 
 			svg {
@@ -64,12 +64,12 @@
 			}
 
 			&:hover:not(.force-item):not(:focus) {
-				border-color: var(--publisher-controls-border-color);
+				border-color: var(--blockera-controls-border-color);
 			}
 
 			&:focus:not(.force-item) {
-				border-color: var(--publisher-controls-primary-color);
-				box-shadow: 0 0 0 1px var(--publisher-controls-primary-color);
+				border-color: var(--blockera-controls-primary-color);
+				box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 			}
 
 			&.force-item {

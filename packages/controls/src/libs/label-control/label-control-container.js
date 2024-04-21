@@ -5,9 +5,9 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 export default function LabelControlContainer({
 	height = '30px',

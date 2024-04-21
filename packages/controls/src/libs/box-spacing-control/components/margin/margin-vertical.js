@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useDragValue } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { useDragValue } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -221,7 +221,7 @@ export function MarginVertical({
 					data-cy="box-spacing-margin-top"
 				>
 					<LabelControl
-						ariaLabel={__('Top & Bottom Margin', 'publisher-core')}
+						ariaLabel={__('Top & Bottom Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -256,7 +256,7 @@ export function MarginVertical({
 					data-cy="box-spacing-margin-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('Top & Bottom Margin', 'publisher-core')}
+						ariaLabel={__('Top & Bottom Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -287,21 +287,18 @@ export function MarginVertical({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__(
-							'Top & Bottom Margin Space',
-							'publisher-core'
-						)}
-						inputLabel={__('Vertical Margin', 'publisher-core')}
+						title={__('Top & Bottom Margin Space', 'blockera-core')}
+						inputLabel={__('Vertical Margin', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Vertical Margin Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies to both the top and bottom edges of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

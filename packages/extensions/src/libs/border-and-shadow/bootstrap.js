@@ -6,10 +6,10 @@
 import { addFilter } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { ControlContextRef } from '@publisher/controls/src/context/types';
-import { mergeObject } from '@publisher/utils';
+import type { ControlContextRef } from '@blockera/controls/src/context/types';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -26,8 +26,8 @@ import type { BlockDetail } from '../block-states/types';
 
 export const bootstrap = (): void => {
 	addFilter(
-		'publisherCore.blockEdit.attributes',
-		'publisherCore.blockEdit.typographyExtension.bootstrap',
+		'blockeraCore.blockEdit.attributes',
+		'blockeraCore.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { isNormalState, isBaseBreakpoint, isMasterBlock } =
 				blockDetail;
@@ -49,15 +49,15 @@ export const bootstrap = (): void => {
 	);
 
 	addFilter(
-		'publisherCore.blockEdit.setAttributes',
-		'publisherCore.blockEdit.typographyExtension.bootstrap.setAttributes',
+		'blockeraCore.blockEdit.setAttributes',
+		'blockeraCore.blockEdit.typographyExtension.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *
 		 * @callback getAttributes
 		 *
-		 * @param {Object} nextState The block attributes changed with publisher feature newValue and latest version of block state.
-		 * @param {string} featureId The publisher feature identifier.
+		 * @param {Object} nextState The block attributes changed with blockera feature newValue and latest version of block state.
+		 * @param {string} featureId The blockera feature identifier.
 		 * @param {*} newValue The newValue sets to feature.
 		 * @param {ControlContextRef} ref The reference of control context action occurred.
 		 * @param {getAttributes} getAttributes The getter block attributes.
@@ -81,7 +81,7 @@ export const bootstrap = (): void => {
 			}
 
 			switch (featureId) {
-				case 'publisherBorder':
+				case 'blockeraBorder':
 					return mergeObject(
 						nextState,
 						borderToWPCompatibility({
@@ -90,7 +90,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherBorderRadius':
+				case 'blockeraBorderRadius':
 					return mergeObject(
 						nextState,
 						borderRadiusToWPCompatibility({

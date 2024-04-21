@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -24,19 +24,19 @@ import {
 	InnerBlockHeading5Icon,
 	InnerBlockHeading6Icon,
 	InnerBlockButtonIcon,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 const attributes = {
 	...IconExtensionAttributes,
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	paragraph: {
 		name: 'core/paragraph',
 		type: 'paragraph',
-		label: __('Paragraphs', 'publisher-core'),
+		label: __('Paragraphs', 'blockera-core'),
 		icon: <InnerBlockParagraphIcon />,
 		selectors: {
 			root: 'p',
@@ -49,7 +49,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	button: {
 		name: 'core/button',
 		type: 'button',
-		label: __('Buttons', 'publisher-core'),
+		label: __('Buttons', 'blockera-core'),
 		icon: <InnerBlockButtonIcon />,
 		selectors: {
 			root: '.wp-block-button > .wp-element-button',
@@ -62,7 +62,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading: {
 		name: 'core/heading',
 		type: 'heading',
-		label: __('Headings', 'publisher-core'),
+		label: __('Headings', 'blockera-core'),
 		icon: <InnerBlockHeadingsIcon />,
 		selectors: {
 			root: 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
@@ -80,7 +80,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading1: {
 		name: 'core/h1',
 		type: 'h1',
-		label: __('H1s', 'publisher-core'),
+		label: __('H1s', 'blockera-core'),
 		icon: <InnerBlockHeading1Icon />,
 		selectors: {
 			root: 'h1.wp-block-heading',
@@ -98,7 +98,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading2: {
 		name: 'core/h2',
 		type: 'h2',
-		label: __('H2s', 'publisher-core'),
+		label: __('H2s', 'blockera-core'),
 		icon: <InnerBlockHeading2Icon />,
 		selectors: {
 			root: 'h2.wp-block-heading',
@@ -116,7 +116,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading3: {
 		name: 'core/h3',
 		type: 'h3',
-		label: __('H3s', 'publisher-core'),
+		label: __('H3s', 'blockera-core'),
 		icon: <InnerBlockHeading3Icon />,
 		selectors: {
 			root: 'h3.wp-block-heading',
@@ -134,7 +134,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading4: {
 		name: 'core/h4',
 		type: 'h4',
-		label: __('H4s', 'publisher-core'),
+		label: __('H4s', 'blockera-core'),
 		icon: <InnerBlockHeading4Icon />,
 		selectors: {
 			root: 'h4.wp-block-heading',
@@ -152,7 +152,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading5: {
 		name: 'core/h5',
 		type: 'h5',
-		label: __('H5s', 'publisher-core'),
+		label: __('H5s', 'blockera-core'),
 		icon: <InnerBlockHeading5Icon />,
 		selectors: {
 			root: 'h5.wp-block-heading',
@@ -170,7 +170,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	heading6: {
 		name: 'core/h6',
 		type: 'h6',
-		label: __('H6s', 'publisher-core'),
+		label: __('H6s', 'blockera-core'),
 		icon: <InnerBlockHeading6Icon />,
 		selectors: {
 			root: 'h6.wp-block-heading',
@@ -188,14 +188,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const Cover = {
-	name: 'publisherCover',
+	name: 'blockeraCover',
 	targetBlock: 'core/cover',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

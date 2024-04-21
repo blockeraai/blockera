@@ -7,18 +7,18 @@ import type { ComponentType, MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { extensionClassNames } from '@publisher/classnames';
-import { FeatureWrapper } from '@publisher/components';
+import { extensionClassNames } from '@blockera/classnames';
+import { FeatureWrapper } from '@blockera/components';
 import { useSelect } from '@wordpress/data';
-import { PanelBodyControl } from '@publisher/controls';
+import { PanelBodyControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
-import { hasSameProps } from '@publisher/utils';
+import { hasSameProps } from '@blockera/utils';
 import type { StyleVariationsExtensionProps } from './types';
 import BlockStyles from './components/block-styles';
 import { useStylesForBlocks } from './utils';
@@ -33,7 +33,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 		}: StyleVariationsExtensionProps): MixedElement => {
 			const { currentBlock = 'master' } = useSelect((select) => {
 				const { getExtensionCurrentBlock } = select(
-					'publisher-core/extensions'
+					'blockera-core/extensions'
 				);
 
 				return {
@@ -61,7 +61,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 			}
 
 			const isActiveStyleVariation = isActiveField(
-				extensionConfig.publisherStyleVariation
+				extensionConfig.blockeraStyleVariation
 			);
 
 			if (!isActiveStyleVariation) {
@@ -70,14 +70,14 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 
 			return (
 				<PanelBodyControl
-					title={__('Style Variations', 'publisher-core')}
+					title={__('Style Variations', 'blockera-core')}
 					initialOpen={true}
 					icon={<StyleVariationsExtensionIcon />}
 					className={extensionClassNames('style-variations')}
 				>
 					<FeatureWrapper
 						isActive={isActiveStyleVariation}
-						config={extensionConfig.publisherStyleVariation}
+						config={extensionConfig.blockeraStyleVariation}
 					>
 						<BlockStyles
 							styles={{

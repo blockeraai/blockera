@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
-use Publisher\Framework\Illuminate\Support\Env;
+use Blockera\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\StyleEngine\StyleEngine;
+use Blockera\Framework\Illuminate\Support\Env;
 
-if ( ! function_exists( 'pb_core_config' ) ) {
+if ( ! function_exists( 'blockera_core_config' ) ) {
 
 	/**
 	 * Retrieve the config with key param or return all config as array
@@ -14,7 +14,7 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 	 *
 	 * @return mixed config value.
 	 */
-	function pb_core_config( string $key ) {
+	function blockera_core_config( string $key ) {
 
 		if ( ! $key ) {
 
@@ -24,10 +24,10 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 		$keyNodes = explode( '.', $key );
 
 		$configIncludes = array(
-			'app'         => PB_CORE_PATH . '/config/app.php',
-			'entities'    => PB_CORE_PATH . '/config/entities.php',
-			'breakpoints' => PB_CORE_PATH . '/config/breakpoints.php',
-			'valueAddon'  => PB_CORE_PATH . '/config/value-addon.php',
+			'app'         => BLOCKERA_CORE_PATH . '/config/app.php',
+			'entities'    => BLOCKERA_CORE_PATH . '/config/entities.php',
+			'breakpoints' => BLOCKERA_CORE_PATH . '/config/breakpoints.php',
+			'valueAddon'  => BLOCKERA_CORE_PATH . '/config/value-addon.php',
 		);
 
 		$firstNode = array_shift( $keyNodes );
@@ -53,7 +53,7 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_core_env' ) ) {
+if ( ! function_exists( 'blockera_core_env' ) ) {
 
 	/**
 	 * Gets the value of an environment variable.
@@ -63,13 +63,13 @@ if ( ! function_exists( 'pb_core_env' ) ) {
 	 *
 	 * @return mixed
 	 */
-	function pb_core_env( string $key, $default = null ) {
+	function blockera_core_env( string $key, $default = null ) {
 
 		return Env::get( $key, $default );
 	}
 }
 
-if ( ! function_exists( 'pb_load' ) ) {
+if ( ! function_exists( 'blockera_load' ) ) {
 
 	/**
 	 * Loading file by path and params.
@@ -80,7 +80,7 @@ if ( ! function_exists( 'pb_load' ) ) {
 	 *
 	 * @return mixed file data on success, false on otherwise!
 	 */
-	function pb_load( string $path, array $params = [], string $baseDir = '' ) {
+	function blockera_load( string $path, array $params = [], string $baseDir = '' ) {
 
 		$file = str_replace( '.', DIRECTORY_SEPARATOR, $path ) . '.php';
 
@@ -97,7 +97,7 @@ if ( ! function_exists( 'pb_load' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
+if ( ! function_exists( 'blockera_get_value_addon_real_value' ) ) {
 	/**
 	 * Gets the real value that can be used (Final Value)
 	 *
@@ -105,9 +105,9 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 	 *
 	 * @return mixed
 	 */
-	function pb_get_value_addon_real_value( $value ) {
+	function blockera_get_value_addon_real_value( $value ) {
 
-		global $publisherApp;
+		global $blockeraApp;
 
 		if ( is_numeric( $value ) ) {
 			return $value;
@@ -121,7 +121,7 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 
 			if ( 'dynamic-value' === $value['valueType'] ) {
 
-				$valueAddons = $publisherApp->getRegisteredValueAddons( $value['valueType'] );
+				$valueAddons = $blockeraApp->getRegisteredValueAddons( $value['valueType'] );
 
 				if ( empty( $valueAddons ) ) {
 
@@ -158,7 +158,7 @@ if ( ! function_exists( 'pb_get_value_addon_real_value' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_get_filter_empty_array_item' ) ) {
+if ( ! function_exists( 'blockera_get_filter_empty_array_item' ) ) {
 
 	/**
 	 * Get filter empty array item.
@@ -167,7 +167,7 @@ if ( ! function_exists( 'pb_get_filter_empty_array_item' ) ) {
 	 *
 	 * @return bool true on success, false otherwise.
 	 */
-	function pb_get_filter_empty_array_item( $item ): bool {
+	function blockera_get_filter_empty_array_item( $item ): bool {
 
 		if ( is_string( $item ) ) {
 
@@ -178,7 +178,7 @@ if ( ! function_exists( 'pb_get_filter_empty_array_item' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_array_flat' ) ) {
+if ( ! function_exists( 'blockera_array_flat' ) ) {
 
 	/**
 	 * Convert nested array (in two-level dimensions) to flat array.
@@ -187,13 +187,13 @@ if ( ! function_exists( 'pb_array_flat' ) ) {
 	 *
 	 * @return array
 	 */
-	function pb_array_flat( array $nestedArray ): array {
+	function blockera_array_flat( array $nestedArray ): array {
 
 		return array_merge( ...$nestedArray );
 	}
 }
 
-if ( ! function_exists( 'pb_get_sorted_repeater' ) ) {
+if ( ! function_exists( 'blockera_get_sorted_repeater' ) ) {
 
 	/**
 	 * Sorting repeater items.
@@ -202,7 +202,7 @@ if ( ! function_exists( 'pb_get_sorted_repeater' ) ) {
 	 *
 	 * @return array
 	 */
-	function pb_get_sorted_repeater( array $items ): array {
+	function blockera_get_sorted_repeater( array $items ): array {
 
 		$dataArray = [];
 
@@ -219,7 +219,7 @@ if ( ! function_exists( 'pb_get_sorted_repeater' ) ) {
 	}
 }
 
-if ( ! function_exists( 'pb_camel_case_join' ) ) {
+if ( ! function_exists( 'blockera_camel_case_join' ) ) {
 
 	/**
 	 * Joining text items in camelCase format.
@@ -228,7 +228,7 @@ if ( ! function_exists( 'pb_camel_case_join' ) ) {
 	 *
 	 * @return string The camelCase string.
 	 */
-	function pb_camel_case_join( string $string ): string {
+	function blockera_camel_case_join( string $string ): string {
 
 		$items = explode( '-', $string );
 

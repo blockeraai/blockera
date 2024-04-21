@@ -35,22 +35,22 @@
 
 
 :root {
-	--publisher-controls-primary-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
-	--publisher-controls-primary-color-darker-20: var(--wp-components-color-accent-darker-20, var(--wp-admin-theme-color-darker-20, #183ad6));
-	--publisher-controls-background-color: #ffffff;
-	--publisher-controls-color: #1e1e1e;
-	--publisher-controls-fill-color: #f6f6f6;
-	--publisher-controls-border-color: #bdbdbd;
-	--publisher-controls-border-color-soft: #cccccc;
-	--publisher-controls-border-color-hover: #959595;
-	--publisher-controls-invalid-input-border-color: #ff0000;
-	--publisher-controls-border-color-focus: var(--publisher-controls-primary-color);
-	--publisher-controls-sep-color: #f5f5f5;
-	--publisher-controls-placeholder-color: #9a9a9a;
-	--publisher-controls-transition: all 0.1s linear 0s;
+	--blockera-controls-primary-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
+	--blockera-controls-primary-color-darker-20: var(--wp-components-color-accent-darker-20, var(--wp-admin-theme-color-darker-20, #183ad6));
+	--blockera-controls-background-color: #ffffff;
+	--blockera-controls-color: #1e1e1e;
+	--blockera-controls-fill-color: #f6f6f6;
+	--blockera-controls-border-color: #bdbdbd;
+	--blockera-controls-border-color-soft: #cccccc;
+	--blockera-controls-border-color-hover: #959595;
+	--blockera-controls-invalid-input-border-color: #ff0000;
+	--blockera-controls-border-color-focus: var(--blockera-controls-primary-color);
+	--blockera-controls-sep-color: #f5f5f5;
+	--blockera-controls-placeholder-color: #9a9a9a;
+	--blockera-controls-transition: all 0.1s linear 0s;
 }
 
-.publisher-control {
+.blockera-control {
 
 	.components-base-control:last-child .components-base-control__field,
 	.components-base-control:last-child {
@@ -62,7 +62,7 @@
 	}
 }
 
-.publisher-control-is-not-active {
+.blockera-control-is-not-active {
 	opacity: 0.5;
 	pointer-events: none;
 	user-select: none;

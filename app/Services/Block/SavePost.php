@@ -1,8 +1,8 @@
 <?php
 
-namespace Publisher\Framework\Services\Block;
+namespace Blockera\Framework\Services\Block;
 
-use Publisher\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Foundation\Application;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class SavePost {
@@ -78,7 +78,7 @@ class SavePost {
 	 */
 	protected function parser( array $block ): void {
 
-		if ( ! isset( $block['blockName'], $block['attrs']['publisherPropsId'] ) ) {
+		if ( ! isset( $block['blockName'], $block['attrs']['blockeraPropsId'] ) ) {
 
 			return;
 		}
@@ -87,11 +87,11 @@ class SavePost {
 
 		if ( $attributes['className'] ) {
 			// Usage of saved class names for block element.
-			$selector = pb_get_normalized_selector( $attributes['className'] );
+			$selector = blockera_get_normalized_selector( $attributes['className'] );
 
 		} else {
 			// Fallback way to providing unique css selector for block element.
-			$selector = $this->render->getSelector( $block, pb_get_unique_classname( $block['blockName'] ) );
+			$selector = $this->render->getSelector( $block, blockera_get_unique_classname( $block['blockName'] ) );
 		}
 
 		/**
@@ -99,7 +99,7 @@ class SavePost {
 		 */
 		$parser = $this->app->make( Parser::class );
 
-		$postCacheKey = 'publisher-inline-css-post-' . $this->post->ID;
+		$postCacheKey = 'blockera-inline-css-post-' . $this->post->ID;
 
 		// Get cache data.
 		$cache = get_post_meta( $this->post->ID, $postCacheKey, true );

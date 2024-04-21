@@ -37,7 +37,7 @@ describe('Text Transform → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('uppercase').to.be.equal(
-					getSelectedBlock(data, 'publisherTextTransform')
+					getSelectedBlock(data, 'blockeraTextTransform')
 				);
 
 				expect('uppercase').to.be.equal(
@@ -59,7 +59,7 @@ describe('Text Transform → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('capitalize').to.be.equal(
-					getSelectedBlock(data, 'publisherTextTransform')
+					getSelectedBlock(data, 'blockeraTextTransform')
 				);
 
 				expect('capitalize').to.be.equal(
@@ -77,7 +77,7 @@ describe('Text Transform → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('lowercase').to.be.equal(
-					getSelectedBlock(data, 'publisherTextTransform')
+					getSelectedBlock(data, 'blockeraTextTransform')
 				);
 
 				expect('lowercase').to.be.equal(
@@ -95,7 +95,7 @@ describe('Text Transform → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('initial').to.be.equal(
-					getSelectedBlock(data, 'publisherTextTransform')
+					getSelectedBlock(data, 'blockeraTextTransform')
 				);
 
 				expect('initial').to.be.equal(
@@ -114,7 +114,7 @@ describe('Text Transform → WP Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherTextTransform')
+					getSelectedBlock(data, 'blockeraTextTransform')
 				);
 
 				expect(undefined).to.be.equal(

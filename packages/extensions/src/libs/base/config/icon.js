@@ -10,61 +10,61 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherIcon: FeatureConfig = {
+const blockeraIcon: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon', 'publisher-core'),
+	label: __('Icon', 'blockera-core'),
 };
 
-const publisherIconOptions: FeatureConfig = {
+const blockeraIconOptions: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Options', 'publisher-core'),
+	label: __('Icon Options', 'blockera-core'),
 };
 
-const publisherIconPosition: FeatureConfig = {
+const blockeraIconPosition: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Position', 'publisher-core'),
+	label: __('Icon Position', 'blockera-core'),
 };
 
-const publisherIconGap: FeatureConfig = {
+const blockeraIconGap: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Gap', 'publisher-core'),
+	label: __('Icon Gap', 'blockera-core'),
 };
 
-const publisherIconSize: FeatureConfig = {
+const blockeraIconSize: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Size', 'publisher-core'),
+	label: __('Icon Size', 'blockera-core'),
 };
 
-const publisherIconColor: FeatureConfig = {
+const blockeraIconColor: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Color', 'publisher-core'),
+	label: __('Icon Color', 'blockera-core'),
 };
 
-const publisherIconLink: FeatureConfig = {
+const blockeraIconLink: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Link', 'publisher-core'),
+	label: __('Icon Link', 'blockera-core'),
 };
 
 export const iconConfig = {
-	publisherIcon,
-	publisherIconOptions,
-	publisherIconPosition,
-	publisherIconGap,
-	publisherIconSize,
-	publisherIconColor,
-	publisherIconLink,
+	blockeraIcon,
+	blockeraIconOptions,
+	blockeraIconPosition,
+	blockeraIconGap,
+	blockeraIconSize,
+	blockeraIconColor,
+	blockeraIconLink,
 };

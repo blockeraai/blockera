@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isObject, truthy } from '@publisher/utils';
+import { isEmpty, isObject, truthy } from '@blockera/utils';
 
 /**
  * Retrieve normalized select control options.

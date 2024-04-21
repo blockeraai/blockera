@@ -37,7 +37,7 @@ describe('Text Decoration → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('underline').to.be.equal(
-					getSelectedBlock(data, 'publisherTextDecoration')
+					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
 
 				expect('underline').to.be.equal(
@@ -56,7 +56,7 @@ describe('Text Decoration → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('line-through').to.be.equal(
-					getSelectedBlock(data, 'publisherTextDecoration')
+					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
 
 				expect('line-through').to.be.equal(
@@ -71,7 +71,7 @@ describe('Text Decoration → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('overline').to.be.equal(
-					getSelectedBlock(data, 'publisherTextDecoration')
+					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
 
 				expect('overline').to.be.equal(
@@ -86,7 +86,7 @@ describe('Text Decoration → WP Compatibility', () => {
 			// Blockera value should NOT moved to WP data
 			getWPDataObject().then((data) => {
 				expect('initial').to.be.equal(
-					getSelectedBlock(data, 'publisherTextDecoration')
+					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
 
 				expect(undefined).to.be.equal(
@@ -105,7 +105,7 @@ describe('Text Decoration → WP Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherTextDecoration')
+					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
 
 				expect(undefined).to.be.equal(

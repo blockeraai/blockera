@@ -9,11 +9,11 @@ import type { MixedElement, ComponentType } from 'react';
 import { Fill } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { include } from '@publisher/utils';
-import { Tabs } from '@publisher/components';
-// import { useTraceUpdate } from '@publisher/hooks';
+import { include } from '@blockera/utils';
+import { Tabs } from '@blockera/components';
+// import { useTraceUpdate } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -97,7 +97,7 @@ import { isInnerBlock, propsAreEqual } from '../../components/utils';
 import extensions from './extensions.json';
 import { useDisplayBlockControls } from '../../hooks';
 import StateContainer from '../../components/state-container';
-import type { TTabProps } from '@publisher/components/src/tabs/types';
+import type { TTabProps } from '@blockera/components/src/tabs/types';
 import { InnerBlocksExtension } from '../inner-blocks';
 import { SettingsIcon } from './icons/settings';
 import { StylesIcon } from './icons/styles';
@@ -150,7 +150,7 @@ type Props = {
 	controllerProps: {
 		currentTab: string,
 		currentState: TStates,
-		publisherInnerBlocks: Object,
+		blockeraInnerBlocks: Object,
 		currentBreakpoint: TBreakpoint,
 		currentInnerBlockState: TStates,
 		currentBlock: 'master' | InnerBlockType,
@@ -158,7 +158,7 @@ type Props = {
 	},
 	children?: ComponentType<any>,
 	currentStateAttributes: Object,
-	publisherInnerBlocks: InnerBlocks,
+	blockeraInnerBlocks: InnerBlocks,
 	setAttributes: (attributes: Object) => void,
 };
 
@@ -173,7 +173,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			currentBlock,
 			currentState,
 			currentBreakpoint,
-			publisherInnerBlocks,
+			blockeraInnerBlocks,
 			currentInnerBlockState,
 			handleOnChangeAttributes,
 		},
@@ -274,11 +274,11 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
 			const activePanel = [
 				<Fill
-					key={`'publisher-core-block-${currentBlock}-card-children'`}
-					name={'publisher-core-block-card-children'}
+					key={`'blockera-core-block-${currentBlock}-card-children'`}
+					name={'blockera-core-block-card-children'}
 				>
 					<StatesManager
-						states={currentStateAttributes.publisherBlockStates}
+						states={currentStateAttributes.blockeraBlockStates}
 						onChange={handleOnChangeAttributes}
 						block={{
 							clientId: props.clientId,
@@ -307,15 +307,15 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									values: include(
 										currentStateAttributes,
 										icon,
-										'publisher'
+										'blockera'
 									),
 									extensionProps: {
-										publisherIcon: {},
-										publisherIconPosition: {},
-										publisherIconGap: {},
-										publisherIconSize: {},
-										publisherIconColor: {},
-										publisherIconLink: {},
+										blockeraIcon: {},
+										blockeraIconPosition: {},
+										blockeraIconGap: {},
+										blockeraIconSize: {},
+										blockeraIconColor: {},
+										blockeraIconLink: {},
 									},
 									handleOnChangeAttributes,
 								}}
@@ -335,15 +335,15 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								extensionConfig={advancedSettingsConfig}
 								values={{
-									publisherAttributes:
-										currentStateAttributes.publisherAttributes,
+									blockeraAttributes:
+										currentStateAttributes.blockeraAttributes,
 								}}
 								attributes={{
-									publisherAttributes:
-										attributes.publisherAttributes,
+									blockeraAttributes:
+										attributes.blockeraAttributes,
 								}}
 								extensionProps={{
-									publisherAttributes: {
+									blockeraAttributes: {
 										attributeElement: '',
 									},
 								}}
@@ -365,7 +365,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							/>
 
 							<InnerBlocksExtension
-								innerBlocks={publisherInnerBlocks}
+								innerBlocks={blockeraInnerBlocks}
 							/>
 
 							<SpacingExtension
@@ -373,11 +373,11 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									block,
 									spacingConfig,
 									extensionProps: {
-										publisherSpacing: {},
+										blockeraSpacing: {},
 									},
 									handleOnChangeAttributes,
 									spacingValue:
-										currentStateAttributes.publisherSpacing,
+										currentStateAttributes.blockeraSpacing,
 									defaultValue:
 										currentStateAttributes.style?.spacing ||
 										{},
@@ -388,19 +388,19 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								extensionConfig={positionConfig}
 								values={{
-									publisherPosition:
-										currentStateAttributes.publisherPosition,
-									publisherZIndex:
-										currentStateAttributes.publisherZIndex,
+									blockeraPosition:
+										currentStateAttributes.blockeraPosition,
+									blockeraZIndex:
+										currentStateAttributes.blockeraZIndex,
 								}}
 								attributes={{
-									publisherPosition:
-										attributes.publisherPosition,
-									publisherZIndex: attributes.publisherZIndex,
+									blockeraPosition:
+										attributes.blockeraPosition,
+									blockeraZIndex: attributes.blockeraZIndex,
 								}}
 								extensionProps={{
-									publisherPosition: {},
-									publisherZIndex: {},
+									blockeraPosition: {},
+									blockeraZIndex: {},
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -411,56 +411,56 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								extensionConfig={sizeConfig}
 								values={{
-									publisherWidth:
-										currentStateAttributes.publisherWidth,
-									publisherMinWidth:
-										currentStateAttributes.publisherMinWidth,
-									publisherMaxWidth:
-										currentStateAttributes.publisherMaxWidth,
-									publisherHeight:
-										currentStateAttributes.publisherHeight,
-									publisherMinHeight:
-										currentStateAttributes.publisherMinHeight,
-									publisherMaxHeight:
-										currentStateAttributes.publisherMaxHeight,
-									publisherOverflow:
-										currentStateAttributes.publisherOverflow,
-									publisherRatio:
-										currentStateAttributes.publisherRatio,
-									publisherFit:
-										currentStateAttributes.publisherFit,
-									publisherFitPosition:
-										currentStateAttributes.publisherFitPosition,
+									blockeraWidth:
+										currentStateAttributes.blockeraWidth,
+									blockeraMinWidth:
+										currentStateAttributes.blockeraMinWidth,
+									blockeraMaxWidth:
+										currentStateAttributes.blockeraMaxWidth,
+									blockeraHeight:
+										currentStateAttributes.blockeraHeight,
+									blockeraMinHeight:
+										currentStateAttributes.blockeraMinHeight,
+									blockeraMaxHeight:
+										currentStateAttributes.blockeraMaxHeight,
+									blockeraOverflow:
+										currentStateAttributes.blockeraOverflow,
+									blockeraRatio:
+										currentStateAttributes.blockeraRatio,
+									blockeraFit:
+										currentStateAttributes.blockeraFit,
+									blockeraFitPosition:
+										currentStateAttributes.blockeraFitPosition,
 								}}
 								attributes={{
-									publisherWidth: attributes.publisherWidth,
-									publisherMinWidth:
-										attributes.publisherMinWidth,
-									publisherMaxWidth:
-										attributes.publisherMaxWidth,
-									publisherHeight: attributes.publisherHeight,
-									publisherMinHeight:
-										attributes.publisherMinHeight,
-									publisherMaxHeight:
-										attributes.publisherMaxHeight,
-									publisherOverflow:
-										attributes.publisherOverflow,
-									publisherRatio: attributes.publisherRatio,
-									publisherFit: attributes.publisherFit,
-									publisherFitPosition:
-										attributes.publisherFitPosition,
+									blockeraWidth: attributes.blockeraWidth,
+									blockeraMinWidth:
+										attributes.blockeraMinWidth,
+									blockeraMaxWidth:
+										attributes.blockeraMaxWidth,
+									blockeraHeight: attributes.blockeraHeight,
+									blockeraMinHeight:
+										attributes.blockeraMinHeight,
+									blockeraMaxHeight:
+										attributes.blockeraMaxHeight,
+									blockeraOverflow:
+										attributes.blockeraOverflow,
+									blockeraRatio: attributes.blockeraRatio,
+									blockeraFit: attributes.blockeraFit,
+									blockeraFitPosition:
+										attributes.blockeraFitPosition,
 								}}
 								extensionProps={{
-									publisherWidth: {},
-									publisherHeight: {},
-									publisherMinWidth: {},
-									publisherMinHeight: {},
-									publisherMaxWidth: {},
-									publisherMaxHeight: {},
-									publisherOverflow: {},
-									publisherRatio: {},
-									publisherFit: {},
-									publisherFitPosition: {},
+									blockeraWidth: {},
+									blockeraHeight: {},
+									blockeraMinWidth: {},
+									blockeraMinHeight: {},
+									blockeraMaxWidth: {},
+									blockeraMaxHeight: {},
+									blockeraOverflow: {},
+									blockeraRatio: {},
+									blockeraFit: {},
+									blockeraFitPosition: {},
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -472,34 +472,33 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								extensionConfig={layoutConfig}
 								extensionProps={{
-									publisherDisplay: {},
-									publisherFlexLayout: {},
-									publisherGap: {},
-									publisherFlexWrap: {},
-									publisherAlignContent: {},
+									blockeraDisplay: {},
+									blockeraFlexLayout: {},
+									blockeraGap: {},
+									blockeraFlexWrap: {},
+									blockeraAlignContent: {},
 								}}
 								values={{
-									publisherDisplay:
-										currentStateAttributes.publisherDisplay,
-									publisherFlexLayout:
-										currentStateAttributes.publisherFlexLayout,
-									publisherGap:
-										currentStateAttributes.publisherGap,
-									publisherFlexWrap:
-										currentStateAttributes.publisherFlexWrap,
-									publisherAlignContent:
-										currentStateAttributes.publisherAlignContent,
+									blockeraDisplay:
+										currentStateAttributes.blockeraDisplay,
+									blockeraFlexLayout:
+										currentStateAttributes.blockeraFlexLayout,
+									blockeraGap:
+										currentStateAttributes.blockeraGap,
+									blockeraFlexWrap:
+										currentStateAttributes.blockeraFlexWrap,
+									blockeraAlignContent:
+										currentStateAttributes.blockeraAlignContent,
 								}}
 								attributes={{
-									publisherDisplay:
-										attributes.publisherDisplay,
-									publisherFlexLayout:
-										attributes.publisherFlexLayout,
-									publisherGap: attributes.publisherGap,
-									publisherFlexWrap:
-										attributes.publisherFlexWrap,
-									publisherAlignContent:
-										attributes.publisherAlignContent,
+									blockeraDisplay: attributes.blockeraDisplay,
+									blockeraFlexLayout:
+										attributes.blockeraFlexLayout,
+									blockeraGap: attributes.blockeraGap,
+									blockeraFlexWrap:
+										attributes.blockeraFlexWrap,
+									blockeraAlignContent:
+										attributes.blockeraAlignContent,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -509,52 +508,52 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							{directParentBlock?.innerBlocks.length &&
 								directParentBlock?.attributes
-									.publisherDisplay === 'flex' && (
+									.blockeraDisplay === 'flex' && (
 									<FlexChildExtension
 										block={block}
 										extensionConfig={flexChildConfig}
 										values={{
-											publisherFlexChildSizing:
-												currentStateAttributes.publisherFlexChildSizing,
-											publisherFlexChildGrow:
-												currentStateAttributes.publisherFlexChildGrow,
-											publisherFlexChildShrink:
-												currentStateAttributes.publisherFlexChildShrink,
-											publisherFlexChildBasis:
-												currentStateAttributes.publisherFlexChildBasis,
-											publisherFlexChildOrder:
-												currentStateAttributes.publisherFlexChildOrder,
-											publisherFlexChildOrderCustom:
-												currentStateAttributes.publisherFlexChildOrderCustom,
-											publisherFlexDirection:
+											blockeraFlexChildSizing:
+												currentStateAttributes.blockeraFlexChildSizing,
+											blockeraFlexChildGrow:
+												currentStateAttributes.blockeraFlexChildGrow,
+											blockeraFlexChildShrink:
+												currentStateAttributes.blockeraFlexChildShrink,
+											blockeraFlexChildBasis:
+												currentStateAttributes.blockeraFlexChildBasis,
+											blockeraFlexChildOrder:
+												currentStateAttributes.blockeraFlexChildOrder,
+											blockeraFlexChildOrderCustom:
+												currentStateAttributes.blockeraFlexChildOrderCustom,
+											blockeraFlexDirection:
 												directParentBlock?.attributes
-													?.publisherFlexLayout
+													?.blockeraFlexLayout
 													?.direction,
 										}}
 										attributes={{
-											publisherFlexChildSizing:
-												attributes.publisherFlexChildSizing,
-											publisherFlexChildGrow:
-												attributes.publisherFlexChildGrow,
-											publisherFlexChildShrink:
-												attributes.publisherFlexChildShrink,
-											publisherFlexChildBasis:
-												attributes.publisherFlexChildBasis,
-											publisherFlexChildAlign:
-												attributes.publisherFlexChildAlign,
-											publisherFlexChildOrder:
-												attributes.publisherFlexChildOrder,
-											publisherFlexChildOrderCustom:
-												attributes.publisherFlexChildOrderCustom,
+											blockeraFlexChildSizing:
+												attributes.blockeraFlexChildSizing,
+											blockeraFlexChildGrow:
+												attributes.blockeraFlexChildGrow,
+											blockeraFlexChildShrink:
+												attributes.blockeraFlexChildShrink,
+											blockeraFlexChildBasis:
+												attributes.blockeraFlexChildBasis,
+											blockeraFlexChildAlign:
+												attributes.blockeraFlexChildAlign,
+											blockeraFlexChildOrder:
+												attributes.blockeraFlexChildOrder,
+											blockeraFlexChildOrderCustom:
+												attributes.blockeraFlexChildOrderCustom,
 										}}
 										extensionProps={{
-											publisherFlexChildSizing: {},
-											publisherFlexChildGrow: {},
-											publisherFlexChildShrink: {},
-											publisherFlexChildBasis: {},
-											publisherFlexChildAlign: {},
-											publisherFlexChildOrder: {},
-											publisherFlexChildOrderCustom: {},
+											blockeraFlexChildSizing: {},
+											blockeraFlexChildGrow: {},
+											blockeraFlexChildShrink: {},
+											blockeraFlexChildBasis: {},
+											blockeraFlexChildAlign: {},
+											blockeraFlexChildOrder: {},
+											blockeraFlexChildOrderCustom: {},
 										}}
 										handleOnChangeAttributes={
 											handleOnChangeAttributes
@@ -567,96 +566,96 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								extensionConfig={typographyConfig}
 								extensionProps={{
-									publisherFontColor: {},
-									publisherFontSize: {},
-									publisherLineHeight: {},
-									publisherTextAlign: {},
-									publisherTextDecoration: {},
-									publisherFontStyle: {},
-									publisherTextTransform: {},
-									publisherDirection: {},
-									publisherTextShadow: {},
-									publisherLetterSpacing: {},
-									publisherWordSpacing: {},
-									publisherTextIndent: {},
-									publisherTextOrientation: {},
-									publisherTextColumns: {},
-									publisherTextStroke: {},
-									publisherWordBreak: {},
+									blockeraFontColor: {},
+									blockeraFontSize: {},
+									blockeraLineHeight: {},
+									blockeraTextAlign: {},
+									blockeraTextDecoration: {},
+									blockeraFontStyle: {},
+									blockeraTextTransform: {},
+									blockeraDirection: {},
+									blockeraTextShadow: {},
+									blockeraLetterSpacing: {},
+									blockeraWordSpacing: {},
+									blockeraTextIndent: {},
+									blockeraTextOrientation: {},
+									blockeraTextColumns: {},
+									blockeraTextStroke: {},
+									blockeraWordBreak: {},
 								}}
 								values={{
-									publisherFontColor:
-										currentStateAttributes?.publisherFontColor,
-									publisherFontSize:
-										currentStateAttributes?.publisherFontSize,
-									publisherLineHeight:
-										currentStateAttributes?.publisherLineHeight,
-									publisherTextAlign:
-										currentStateAttributes?.publisherTextAlign,
-									publisherTextDecoration:
-										currentStateAttributes?.publisherTextDecoration,
-									publisherFontStyle:
-										currentStateAttributes?.publisherFontStyle,
-									publisherTextTransform:
-										currentStateAttributes?.publisherTextTransform,
-									publisherDirection:
-										currentStateAttributes?.publisherDirection,
-									publisherTextShadow:
-										currentStateAttributes?.publisherTextShadow,
-									publisherLetterSpacing:
-										currentStateAttributes?.publisherLetterSpacing,
-									publisherWordSpacing:
-										currentStateAttributes?.publisherWordSpacing,
-									publisherTextIndent:
-										currentStateAttributes?.publisherTextIndent,
-									publisherTextOrientation:
-										currentStateAttributes?.publisherTextOrientation,
-									publisherTextColumns:
-										currentStateAttributes?.publisherTextColumns,
-									publisherTextStroke:
-										currentStateAttributes?.publisherTextStroke,
-									publisherWordBreak:
-										currentStateAttributes?.publisherWordBreak,
+									blockeraFontColor:
+										currentStateAttributes?.blockeraFontColor,
+									blockeraFontSize:
+										currentStateAttributes?.blockeraFontSize,
+									blockeraLineHeight:
+										currentStateAttributes?.blockeraLineHeight,
+									blockeraTextAlign:
+										currentStateAttributes?.blockeraTextAlign,
+									blockeraTextDecoration:
+										currentStateAttributes?.blockeraTextDecoration,
+									blockeraFontStyle:
+										currentStateAttributes?.blockeraFontStyle,
+									blockeraTextTransform:
+										currentStateAttributes?.blockeraTextTransform,
+									blockeraDirection:
+										currentStateAttributes?.blockeraDirection,
+									blockeraTextShadow:
+										currentStateAttributes?.blockeraTextShadow,
+									blockeraLetterSpacing:
+										currentStateAttributes?.blockeraLetterSpacing,
+									blockeraWordSpacing:
+										currentStateAttributes?.blockeraWordSpacing,
+									blockeraTextIndent:
+										currentStateAttributes?.blockeraTextIndent,
+									blockeraTextOrientation:
+										currentStateAttributes?.blockeraTextOrientation,
+									blockeraTextColumns:
+										currentStateAttributes?.blockeraTextColumns,
+									blockeraTextStroke:
+										currentStateAttributes?.blockeraTextStroke,
+									blockeraWordBreak:
+										currentStateAttributes?.blockeraWordBreak,
 								}}
 								attributes={{
-									publisherFontColor:
-										attributes?.publisherFontColor,
-									publisherFontSize:
-										attributes?.publisherFontSize,
-									publisherLineHeight:
-										attributes?.publisherLineHeight,
-									publisherTextAlign:
-										attributes?.publisherTextAlign,
-									publisherTextDecoration:
-										attributes?.publisherTextDecoration,
-									publisherFontStyle:
-										attributes?.publisherFontStyle,
-									publisherTextTransform:
-										attributes?.publisherTextTransform,
-									publisherDirection:
-										attributes?.publisherDirection,
-									publisherTextShadow:
-										attributes?.publisherTextShadow,
-									publisherLetterSpacing:
-										attributes?.publisherLetterSpacing,
-									publisherWordSpacing:
-										attributes?.publisherWordSpacing,
-									publisherTextIndent:
-										attributes?.publisherTextIndent,
-									publisherTextOrientation:
-										attributes?.publisherTextOrientation,
-									publisherTextColumns:
-										attributes?.publisherTextColumns,
-									publisherTextStroke:
-										attributes?.publisherTextStroke,
-									publisherWordBreak:
-										attributes?.publisherWordBreak,
+									blockeraFontColor:
+										attributes?.blockeraFontColor,
+									blockeraFontSize:
+										attributes?.blockeraFontSize,
+									blockeraLineHeight:
+										attributes?.blockeraLineHeight,
+									blockeraTextAlign:
+										attributes?.blockeraTextAlign,
+									blockeraTextDecoration:
+										attributes?.blockeraTextDecoration,
+									blockeraFontStyle:
+										attributes?.blockeraFontStyle,
+									blockeraTextTransform:
+										attributes?.blockeraTextTransform,
+									blockeraDirection:
+										attributes?.blockeraDirection,
+									blockeraTextShadow:
+										attributes?.blockeraTextShadow,
+									blockeraLetterSpacing:
+										attributes?.blockeraLetterSpacing,
+									blockeraWordSpacing:
+										attributes?.blockeraWordSpacing,
+									blockeraTextIndent:
+										attributes?.blockeraTextIndent,
+									blockeraTextOrientation:
+										attributes?.blockeraTextOrientation,
+									blockeraTextColumns:
+										attributes?.blockeraTextColumns,
+									blockeraTextStroke:
+										attributes?.blockeraTextStroke,
+									blockeraWordBreak:
+										attributes?.blockeraWordBreak,
 								}}
 								display={
-									currentStateAttributes?.publisherDisplay
+									currentStateAttributes?.blockeraDisplay
 								}
 								backgroundClip={
-									currentStateAttributes?.publisherBackgroundClip
+									currentStateAttributes?.blockeraBackgroundClip
 								}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -669,28 +668,28 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								setSettings={handleOnChangeSettings}
 								extensionConfig={backgroundConfig}
 								extensionProps={{
-									publisherBackground: {},
-									publisherBackgroundColor: {},
-									publisherBackgroundClip: {},
+									blockeraBackground: {},
+									blockeraBackgroundColor: {},
+									blockeraBackgroundClip: {},
 								}}
 								values={{
-									publisherBackground:
-										currentStateAttributes?.publisherBackground,
-									publisherBackgroundColor:
-										currentStateAttributes?.publisherBackgroundColor,
-									publisherBackgroundClip:
-										currentStateAttributes?.publisherBackgroundClip,
+									blockeraBackground:
+										currentStateAttributes?.blockeraBackground,
+									blockeraBackgroundColor:
+										currentStateAttributes?.blockeraBackgroundColor,
+									blockeraBackgroundClip:
+										currentStateAttributes?.blockeraBackgroundClip,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
 								}
 								attributes={{
-									publisherBackground:
-										attributes.publisherBackground,
-									publisherBackgroundColor:
-										attributes.publisherBackgroundColor,
-									publisherBackgroundClip:
-										attributes.publisherBackgroundClip,
+									blockeraBackground:
+										attributes.blockeraBackground,
+									blockeraBackgroundColor:
+										attributes.blockeraBackgroundColor,
+									blockeraBackgroundClip:
+										attributes.blockeraBackgroundClip,
 								}}
 							/>
 
@@ -698,29 +697,28 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								extensionConfig={borderAndShadowConfig}
 								extensionProps={{
-									publisherBorder: {},
-									publisherBorderRadius: {},
-									publisherBoxShadow: {},
-									publisherOutline: {},
+									blockeraBorder: {},
+									blockeraBorderRadius: {},
+									blockeraBoxShadow: {},
+									blockeraOutline: {},
 								}}
 								values={{
-									publisherBorder:
-										currentStateAttributes.publisherBorder,
-									publisherBorderRadius:
-										currentStateAttributes.publisherBorderRadius,
-									publisherOutline:
-										currentStateAttributes.publisherOutline,
-									publisherBoxShadow:
-										currentStateAttributes.publisherBoxShadow,
+									blockeraBorder:
+										currentStateAttributes.blockeraBorder,
+									blockeraBorderRadius:
+										currentStateAttributes.blockeraBorderRadius,
+									blockeraOutline:
+										currentStateAttributes.blockeraOutline,
+									blockeraBoxShadow:
+										currentStateAttributes.blockeraBoxShadow,
 								}}
 								attributes={{
-									publisherBorder: attributes.publisherBorder,
-									publisherBorderRadius:
-										attributes.publisherBorderRadius,
-									publisherOutline:
-										attributes.publisherOutline,
-									publisherBoxShadow:
-										attributes.publisherBoxShadow,
+									blockeraBorder: attributes.blockeraBorder,
+									blockeraBorderRadius:
+										attributes.blockeraBorderRadius,
+									blockeraOutline: attributes.blockeraOutline,
+									blockeraBoxShadow:
+										attributes.blockeraBoxShadow,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -732,73 +730,71 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								extensionConfig={effectsConfig}
 								extensionProps={{
-									publisherOpacity: {},
-									publisherTransform: {},
-									publisherTransformSelfPerspective: {},
-									publisherTransformSelfOrigin: {},
-									publisherBackfaceVisibility: {},
-									publisherTransformChildPerspective: {},
-									publisherTransformChildOrigin: {},
-									publisherTransition: {},
-									publisherFilter: {},
-									publisherBackdropFilter: {},
-									publisherDivider: {},
-									publisherBlendMode: {},
-									publisherMask: {},
+									blockeraOpacity: {},
+									blockeraTransform: {},
+									blockeraTransformSelfPerspective: {},
+									blockeraTransformSelfOrigin: {},
+									blockeraBackfaceVisibility: {},
+									blockeraTransformChildPerspective: {},
+									blockeraTransformChildOrigin: {},
+									blockeraTransition: {},
+									blockeraFilter: {},
+									blockeraBackdropFilter: {},
+									blockeraDivider: {},
+									blockeraBlendMode: {},
+									blockeraMask: {},
 								}}
 								values={{
-									publisherOpacity:
-										currentStateAttributes.publisherOpacity,
-									publisherTransform:
-										currentStateAttributes.publisherTransform,
-									publisherBackfaceVisibility:
-										currentStateAttributes.publisherBackfaceVisibility,
-									publisherTransformSelfPerspective:
-										currentStateAttributes.publisherTransformSelfPerspective,
-									publisherTransformSelfOrigin:
-										currentStateAttributes.publisherTransformSelfOrigin,
-									publisherTransformChildOrigin:
-										currentStateAttributes.publisherTransformChildOrigin,
-									publisherTransformChildPerspective:
-										currentStateAttributes.publisherTransformChildPerspective,
-									publisherTransition:
-										currentStateAttributes.publisherTransition,
-									publisherFilter:
-										currentStateAttributes.publisherFilter,
-									publisherBackdropFilter:
-										currentStateAttributes.publisherBackdropFilter,
-									publisherDivider:
-										currentStateAttributes.publisherDivider,
-									publisherMask:
-										currentStateAttributes.publisherMask,
-									publisherBlendMode:
-										currentStateAttributes.publisherBlendMode,
+									blockeraOpacity:
+										currentStateAttributes.blockeraOpacity,
+									blockeraTransform:
+										currentStateAttributes.blockeraTransform,
+									blockeraBackfaceVisibility:
+										currentStateAttributes.blockeraBackfaceVisibility,
+									blockeraTransformSelfPerspective:
+										currentStateAttributes.blockeraTransformSelfPerspective,
+									blockeraTransformSelfOrigin:
+										currentStateAttributes.blockeraTransformSelfOrigin,
+									blockeraTransformChildOrigin:
+										currentStateAttributes.blockeraTransformChildOrigin,
+									blockeraTransformChildPerspective:
+										currentStateAttributes.blockeraTransformChildPerspective,
+									blockeraTransition:
+										currentStateAttributes.blockeraTransition,
+									blockeraFilter:
+										currentStateAttributes.blockeraFilter,
+									blockeraBackdropFilter:
+										currentStateAttributes.blockeraBackdropFilter,
+									blockeraDivider:
+										currentStateAttributes.blockeraDivider,
+									blockeraMask:
+										currentStateAttributes.blockeraMask,
+									blockeraBlendMode:
+										currentStateAttributes.blockeraBlendMode,
 								}}
 								attributes={{
-									publisherOpacity:
-										attributes.publisherOpacity,
-									publisherTransform:
-										attributes.publisherTransform,
-									publisherBackfaceVisibility:
-										attributes.publisherBackfaceVisibility,
-									publisherTransformSelfPerspective:
-										attributes.publisherTransformSelfPerspective,
-									publisherTransformSelfOrigin:
-										attributes.publisherTransformSelfOrigin,
-									publisherTransformChildOrigin:
-										attributes.publisherTransformChildOrigin,
-									publisherTransformChildPerspective:
-										attributes.publisherTransformChildPerspective,
-									publisherTransition:
-										attributes.publisherTransition,
-									publisherFilter: attributes.publisherFilter,
-									publisherBackdropFilter:
-										attributes.publisherBackdropFilter,
-									publisherDivider:
-										attributes.publisherDivider,
-									publisherMask: attributes.publisherMask,
-									publisherBlendMode:
-										attributes.publisherBlendMode,
+									blockeraOpacity: attributes.blockeraOpacity,
+									blockeraTransform:
+										attributes.blockeraTransform,
+									blockeraBackfaceVisibility:
+										attributes.blockeraBackfaceVisibility,
+									blockeraTransformSelfPerspective:
+										attributes.blockeraTransformSelfPerspective,
+									blockeraTransformSelfOrigin:
+										attributes.blockeraTransformSelfOrigin,
+									blockeraTransformChildOrigin:
+										attributes.blockeraTransformChildOrigin,
+									blockeraTransformChildPerspective:
+										attributes.blockeraTransformChildPerspective,
+									blockeraTransition:
+										attributes.blockeraTransition,
+									blockeraFilter: attributes.blockeraFilter,
+									blockeraBackdropFilter:
+										attributes.blockeraBackdropFilter,
+									blockeraDivider: attributes.blockeraDivider,
+									blockeraMask: attributes.blockeraMask,
+									blockeraBlendMode:
+										attributes.blockeraBlendMode,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -810,15 +806,15 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								extensionConfig={customStyleConfig}
 								extensionProps={{
-									publisherCustomCSS: {},
+									blockeraCustomCSS: {},
 								}}
 								values={{
-									publisherCustomCSS:
-										currentStateAttributes.publisherCustomCSS,
+									blockeraCustomCSS:
+										currentStateAttributes.blockeraCustomCSS,
 								}}
 								attributes={{
-									publisherCustomCSS:
-										attributes.publisherCustomCSS,
+									blockeraCustomCSS:
+										attributes.blockeraCustomCSS,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -865,23 +861,23 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								block={block}
 								mouseConfig={mouseConfig}
 								extensionProps={{
-									publisherCursor: {},
-									publisherUserSelect: {},
-									publisherPointerEvents: {},
+									blockeraCursor: {},
+									blockeraUserSelect: {},
+									blockeraPointerEvents: {},
 								}}
 								values={{
-									cursor: currentStateAttributes.publisherCursor,
+									cursor: currentStateAttributes.blockeraCursor,
 									userSelect:
-										currentStateAttributes.publisherUserSelect,
+										currentStateAttributes.blockeraUserSelect,
 									pointerEvents:
-										currentStateAttributes.publisherPointerEvents,
+										currentStateAttributes.blockeraPointerEvents,
 								}}
 								attributes={{
-									publisherCursor: attributes.publisherCursor,
-									publisherUserSelect:
-										attributes.publisherUserSelect,
-									publisherPointerEvents:
-										attributes.publisherPointerEvents,
+									blockeraCursor: attributes.blockeraCursor,
+									blockeraUserSelect:
+										attributes.blockeraUserSelect,
+									blockeraPointerEvents:
+										attributes.blockeraPointerEvents,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -899,24 +895,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const tabs = [
 			{
 				name: 'settings',
-				title: __('Settings', 'publisher-core'),
-				tooltip: __('Block Settings', 'publisher-core'),
+				title: __('Settings', 'blockera-core'),
+				tooltip: __('Block Settings', 'blockera-core'),
 				className: 'settings-tab',
 				icon: <SettingsIcon />,
 			},
 			{
 				name: 'style',
-				title: __('Styles', 'publisher-core'),
-				tooltip: __('Block Design & Style Settings', 'publisher-core'),
+				title: __('Styles', 'blockera-core'),
+				tooltip: __('Block Design & Style Settings', 'blockera-core'),
 				className: 'style-tab',
 				icon: <StylesIcon />,
 			},
 			{
 				name: 'interactions',
-				title: __('Animations', 'publisher-core'),
+				title: __('Animations', 'blockera-core'),
 				tooltip: __(
 					'Block Interactions and Animations',
-					'publisher-core'
+					'blockera-core'
 				),
 				className: 'interactions-tab',
 				icon: <AnimationsIcon />,

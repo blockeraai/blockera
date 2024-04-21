@@ -2,16 +2,16 @@ import { deletePropertyByPath, include } from '../index';
 
 describe('Testing Object utilities', function () {
 	const attributes = {
-		publisherIcon: {},
-		publisherIconPosition: '',
-		publisherIconGap: '',
-		publisherIconSize: '',
-		publisherIconColor: '',
-		publisherIconLink: {},
+		blockeraIcon: {},
+		blockeraIconPosition: '',
+		blockeraIconGap: '',
+		blockeraIconSize: '',
+		blockeraIconColor: '',
+		blockeraIconLink: {},
 	};
 
-	it('should include keys without "publisher" prefix', function () {
-		expect(include(attributes, ['publisherIcon'], 'publisher')).toEqual({
+	it('should include keys without "blockera" prefix', function () {
+		expect(include(attributes, ['blockeraIcon'], 'blockera')).toEqual({
 			icon: {},
 		});
 	});
@@ -74,23 +74,23 @@ describe('Testing Object utilities', function () {
 			const object = {
 				content: '',
 				dropCap: false,
-				publisherFontColor: '',
-				publisherFontSize: '',
-				publisherLineHeight: '',
-				publisherTextAlign: '',
-				publisherTextDecoration: '',
-				publisherFontStyle: '',
-				publisherTextTransform: '',
-				publisherDirection: '',
-				publisherTextShadow: [],
-				publisherLetterSpacing: '',
-				publisherWordSpacing: '',
-				publisherTextIndent: '',
-				publisherTextOrientation: {
+				blockeraFontColor: '',
+				blockeraFontSize: '',
+				blockeraLineHeight: '',
+				blockeraTextAlign: '',
+				blockeraTextDecoration: '',
+				blockeraFontStyle: '',
+				blockeraTextTransform: '',
+				blockeraDirection: '',
+				blockeraTextShadow: [],
+				blockeraLetterSpacing: '',
+				blockeraWordSpacing: '',
+				blockeraTextIndent: '',
+				blockeraTextOrientation: {
 					'writing-mode': '',
 					'text-orientation': '',
 				},
-				publisherTextColumns: {
+				blockeraTextColumns: {
 					columns: '',
 					gap: '',
 					divider: {
@@ -99,15 +99,15 @@ describe('Testing Object utilities', function () {
 						style: 'solid',
 					},
 				},
-				publisherTextStroke: {
+				blockeraTextStroke: {
 					color: '',
 					width: '',
 				},
-				publisherWordBreak: 'normal',
-				publisherBackground: [],
-				publisherBackgroundColor: '',
-				publisherBackgroundClip: 'none',
-				publisherBoxShadow: [
+				blockeraWordBreak: 'normal',
+				blockeraBackground: [],
+				blockeraBackgroundColor: '',
+				blockeraBackgroundClip: 'none',
+				blockeraBoxShadow: [
 					{
 						isOpen: false,
 						display: true,
@@ -124,28 +124,28 @@ describe('Testing Object utilities', function () {
 						color: '#000000ab',
 					},
 				],
-				publisherOutline: [],
-				publisherBorder: {},
-				publisherBorderRadius: {},
-				publisherOpacity: '100%',
-				publisherTransform: [],
-				publisherTransformSelfPerspective: '',
-				publisherTransformSelfOrigin: {
+				blockeraOutline: [],
+				blockeraBorder: {},
+				blockeraBorderRadius: {},
+				blockeraOpacity: '100%',
+				blockeraTransform: [],
+				blockeraTransformSelfPerspective: '',
+				blockeraTransformSelfOrigin: {
 					top: '',
 					left: '',
 				},
-				publisherBackfaceVisibility: '',
-				publisherTransformChildPerspective: '',
-				publisherTransformChildOrigin: {
+				blockeraBackfaceVisibility: '',
+				blockeraTransformChildPerspective: '',
+				blockeraTransformChildOrigin: {
 					top: '',
 					left: '',
 				},
-				publisherTransition: [],
-				publisherFilter: [],
-				publisherBackdropFilter: [],
-				publisherCursor: 'default',
-				publisherBlendMode: 'normal',
-				publisherSpacing: {
+				blockeraTransition: [],
+				blockeraFilter: [],
+				blockeraBackdropFilter: [],
+				blockeraCursor: 'default',
+				blockeraBlendMode: 'normal',
+				blockeraSpacing: {
 					margin: {
 						top: '',
 						right: '',
@@ -159,63 +159,63 @@ describe('Testing Object utilities', function () {
 						left: '',
 					},
 				},
-				publisherPosition: {},
-				publisherZIndex: '',
-				publisherWidth: '',
-				publisherHeight: '',
-				publisherMinWidth: '',
-				publisherMinHeight: '',
-				publisherMaxWidth: '',
-				publisherMaxHeight: '',
-				publisherOverflow: '',
-				publisherRatio: {
+				blockeraPosition: {},
+				blockeraZIndex: '',
+				blockeraWidth: '',
+				blockeraHeight: '',
+				blockeraMinWidth: '',
+				blockeraMinHeight: '',
+				blockeraMaxWidth: '',
+				blockeraMaxHeight: '',
+				blockeraOverflow: '',
+				blockeraRatio: {
 					value: '',
 					width: '',
 					height: '',
 				},
-				publisherFit: '',
-				publisherFitPosition: {
+				blockeraFit: '',
+				blockeraFitPosition: {
 					top: '',
 					left: '',
 				},
-				publisherDisplay: '',
-				publisherFlexDirection: {
+				blockeraDisplay: '',
+				blockeraFlexDirection: {
 					value: 'row',
 					reverse: false,
 				},
-				publisherAlignItems: '',
-				publisherJustifyContent: '',
-				publisherGap: {
+				blockeraAlignItems: '',
+				blockeraJustifyContent: '',
+				blockeraGap: {
 					lock: true,
 					gap: '',
 					columns: '',
 					rows: '',
 				},
-				publisherFlexWrap: {
+				blockeraFlexWrap: {
 					value: 'nowrap',
 					reverse: false,
 				},
-				publisherAlignContent: '',
-				publisherFlexChildSizing: '',
-				publisherFlexChildGrow: '',
-				publisherFlexChildShrink: '',
-				publisherFlexChildBasis: '',
-				publisherFlexChildAlign: '',
-				publisherFlexChildOrder: '',
-				publisherFlexChildOrderCustom: '',
-				publisherIcon: {
+				blockeraAlignContent: '',
+				blockeraFlexChildSizing: '',
+				blockeraFlexChildGrow: '',
+				blockeraFlexChildShrink: '',
+				blockeraFlexChildBasis: '',
+				blockeraFlexChildAlign: '',
+				blockeraFlexChildOrder: '',
+				blockeraFlexChildOrderCustom: '',
+				blockeraIcon: {
 					icon: '',
 					library: '',
 					uploadSVG: '',
 				},
-				publisherIconPosition: '',
-				publisherIconGap: '',
-				publisherIconSize: '',
-				publisherIconColor: '',
-				publisherIconLink: {},
-				publisherAttributes: [],
-				publisherCSSProperties: [],
-				publisherBlockStates: [
+				blockeraIconPosition: '',
+				blockeraIconGap: '',
+				blockeraIconSize: '',
+				blockeraIconColor: '',
+				blockeraIconLink: {},
+				blockeraAttributes: [],
+				blockeraCSSProperties: [],
+				blockeraBlockStates: [
 					{
 						isOpen: true,
 						display: true,
@@ -259,8 +259,8 @@ describe('Testing Object utilities', function () {
 								type: 'desktop',
 								label: 'Desktop',
 								attributes: {
-									publisherOutline: [],
-									publisherBoxShadow: [
+									blockeraOutline: [],
+									blockeraBoxShadow: [
 										{
 											isOpen: false,
 											display: true,
@@ -293,18 +293,18 @@ describe('Testing Object utilities', function () {
 						isSelected: true,
 					},
 				],
-				publisherCurrentState: 'hover',
-				publisherPropsId: '111921473052',
+				blockeraCurrentState: 'hover',
+				blockeraPropsId: '111921473052',
 			};
 
 			const expected = { ...object };
 
-			delete expected.publisherBlockStates[1].breakpoints[0].attributes
-				.publisherBoxShadow;
+			delete expected.blockeraBlockStates[1].breakpoints[0].attributes
+				.blockeraBoxShadow;
 
 			const actual = deletePropertyByPath(
 				object,
-				'publisherBlockStates.1.breakpoints.0.attributes.publisherBoxShadow'
+				'blockeraBlockStates.1.breakpoints.0.attributes.blockeraBoxShadow'
 			);
 
 			expect(actual).toEqual(expected);

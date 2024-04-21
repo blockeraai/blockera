@@ -43,7 +43,7 @@ describe('notice-control component testing', () => {
 				cy.getByDataTest('notice-control').should('exist');
 				cy.getByDataTest('notice-control')
 					.invoke('attr', 'class')
-					.should('include', 'publisher-information');
+					.should('include', 'blockera-information');
 
 				//Check icon
 				cy.getByDataTest('notice-control-icon-info').should('exist');
@@ -60,7 +60,7 @@ describe('notice-control component testing', () => {
 				cy.getByDataTest('notice-control').should('exist');
 				cy.getByDataTest('notice-control')
 					.invoke('attr', 'class')
-					.should('include', 'publisher-warning');
+					.should('include', 'blockera-warning');
 
 				//Check icon
 				cy.getByDataTest('notice-control-icon-warning').should('exist');
@@ -77,7 +77,7 @@ describe('notice-control component testing', () => {
 				cy.getByDataTest('notice-control').should('exist');
 				cy.getByDataTest('notice-control')
 					.invoke('attr', 'class')
-					.should('include', 'publisher-success');
+					.should('include', 'blockera-success');
 
 				//Check icon
 				cy.getByDataTest('notice-control-icon-success').should('exist');
@@ -92,7 +92,7 @@ describe('notice-control component testing', () => {
 				cy.getByDataTest('notice-control').should('exist');
 				cy.getByDataTest('notice-control')
 					.invoke('attr', 'class')
-					.should('include', 'publisher-error');
+					.should('include', 'blockera-error');
 
 				//Check icon
 				cy.getByDataTest('notice-control-icon-error').should('exist');
@@ -215,7 +215,7 @@ describe('notice-control component testing', () => {
 			const defaultProps = {
 				onDismiss: (value) => {
 					controlReducer(
-						select('publisher-core/controls').getControl(name),
+						select('blockera-core/controls').getControl(name),
 						modifyControlValue({
 							value,
 							controlId: name,
@@ -255,3 +255,4 @@ describe('notice-control component testing', () => {
 		});
 	});
 });
+

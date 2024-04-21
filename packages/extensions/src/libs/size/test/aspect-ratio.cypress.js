@@ -14,7 +14,7 @@ describe('Aspect Ratio → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.');
 
@@ -43,7 +43,7 @@ describe('Aspect Ratio → Functionality', () => {
 				value: '1',
 				width: '',
 				height: '',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherRatio'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
 		});
 
 		// Custom
@@ -66,16 +66,17 @@ describe('Aspect Ratio → Functionality', () => {
 				value: 'custom',
 				width: 2,
 				height: 5,
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherRatio'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
 		});
 
 		// Check frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'aspect-ratio',
 			'2 / 5'
 		);
 	});
 });
+

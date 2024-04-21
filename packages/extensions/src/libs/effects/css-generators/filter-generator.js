@@ -1,16 +1,16 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { getSortedRepeater } from '@publisher/controls';
-import { isUndefined } from '@publisher/utils';
-import { createCssDeclarations } from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+import { getSortedRepeater } from '@blockera/controls';
+import { isUndefined } from '@blockera/utils';
+import { createCssDeclarations } from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 export function FilterGenerator(id, props) {
-	const isBackdrop = 'publisherBackdropFilter' === id;
+	const isBackdrop = 'blockeraBackdropFilter' === id;
 	const property = isBackdrop ? 'backdrop-filter' : 'filter';
 	const { attributes } = props;
-	const _id = isBackdrop ? id : 'publisherFilter';
+	const _id = isBackdrop ? id : 'blockeraFilter';
 
 	if (
 		isUndefined(attributes[_id]) ||

@@ -6,18 +6,18 @@ import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { Popover } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Popover } from '@blockera/components';
 import {
 	ControlContextProvider,
 	InputControl,
 	LinkControl,
 	SearchReplaceControl,
 	BaseControl,
-} from '@publisher/controls';
-import { isUndefined } from '@publisher/utils';
+} from '@blockera/controls';
+import { isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -31,7 +31,7 @@ export default function ({
 }): Element<any> {
 	return (
 		<Popover
-			title={__('Advanced Setting', 'publisher-core')}
+			title={__('Advanced Setting', 'blockera-core')}
 			offset={25}
 			placement="left-start"
 			onClose={() => {
@@ -48,7 +48,7 @@ export default function ({
 				}}
 			>
 				<InputControl
-					label={__('Prepend', 'publisher-core')}
+					label={__('Prepend', 'blockera-core')}
 					type="text"
 					columns="columns-2"
 					defaultValue={''}
@@ -75,7 +75,7 @@ export default function ({
 				}}
 			>
 				<InputControl
-					label={__('Append', 'publisher-core')}
+					label={__('Append', 'blockera-core')}
 					type="text"
 					columns="columns-2"
 					defaultValue={''}
@@ -102,7 +102,7 @@ export default function ({
 				}}
 			>
 				<InputControl
-					label={__('Fallback', 'publisher-core')}
+					label={__('Fallback', 'blockera-core')}
 					type="text"
 					columns="columns-2"
 					defaultValue={''}
@@ -129,7 +129,7 @@ export default function ({
 				}}
 			>
 				<InputControl
-					label={__('Limit', 'publisher-core')}
+					label={__('Limit', 'blockera-core')}
 					unitType="text-length"
 					columns="columns-2"
 					defaultValue={''}
@@ -158,7 +158,7 @@ export default function ({
 			>
 				<LinkControl
 					columns="columns-2"
-					label={__('Link', 'publisher-core')}
+					label={__('Link', 'blockera-core')}
 					//
 					onChange={(link) => {
 						const newValue = {
@@ -181,7 +181,7 @@ export default function ({
 						? controlProps.value?.settings?.search
 						: [],
 				}}
-				storeName={'publisher-core/controls/repeater'}
+				storeName={'blockera-core/controls/repeater'}
 			>
 				<BaseControl controlName="dv-search" columns="columns-1">
 					<SearchReplaceControl

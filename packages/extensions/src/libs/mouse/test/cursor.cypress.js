@@ -11,7 +11,7 @@ describe('Cursor → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', {
 			delay: 0,
@@ -33,7 +33,7 @@ describe('Cursor → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect('wait').to.be.equal(
-				getSelectedBlock(data, 'publisherCursor')
+				getSelectedBlock(data, 'blockeraCursor')
 			);
 		});
 
@@ -42,6 +42,6 @@ describe('Cursor → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'cursor', 'wait');
+		cy.get('.blockera-core-block').should('have.css', 'cursor', 'wait');
 	});
 });

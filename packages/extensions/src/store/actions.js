@@ -1,7 +1,7 @@
 // @flow
 
 // eslint-disable-next-line jsdoc/valid-types
-/** @typedef {import('../api/registration').publisherBlockExtensionType} publisherBlockExtensionType */
+/** @typedef {import('../api/registration').blockeraBlockExtensionType} blockeraBlockExtensionType */
 
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 import type { TBreakpoint, TStates } from '../libs/block-states/types';
@@ -12,7 +12,7 @@ import type { TBreakpoint, TStates } from '../libs/block-states/types';
  *
  * @ignore
  *
- * @param {publisherBlockExtensionType|publisherBlockExtensionType[]} blockExtension Object or array of objects representing blocks to added.
+ * @param {blockeraBlockExtensionType|blockeraBlockExtensionType[]} blockExtension Object or array of objects representing blocks to added.
  *
  *
  * @return {Object} Action object.
@@ -31,7 +31,7 @@ export function addBlockExtensions(
 /**
  * Signals that the passed block extension's settings should be stored in the state.
  *
- * @param {publisherBlockExtensionType} blockExtension Unprocessed block extension settings.
+ * @param {blockeraBlockExtensionType} blockExtension Unprocessed block extension settings.
  */
 export const __experimentalRegisterBlockExtension =
 	(blockExtension: Array<Object>): Object =>
@@ -50,7 +50,7 @@ export const __experimentalRegisterBlockExtension =
 
 /**
  * Returns an action object used to remove a registered block extension.
- * Ignored from documentation as the recommended usage for this action through unregisterBlockExtension from @publisher/extensions.
+ * Ignored from documentation as the recommended usage for this action through unregisterBlockExtension from @blockera/extensions.
  *
  * @ignore
  *

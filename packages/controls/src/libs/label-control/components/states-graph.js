@@ -5,12 +5,12 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
-import { isEmpty } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
-import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
-import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
+import { isEmpty } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import type { TStates } from '@blockera/extensions/src/libs/block-states/types';
+import { BreakpointIcon } from '@blockera/extensions/src/libs/block-states/helpers';
 
 /**
  * Internal Dependencies

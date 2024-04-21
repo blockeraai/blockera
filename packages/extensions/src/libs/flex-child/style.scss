@@ -1,4 +1,4 @@
-.publisher-field-toggle-select {
+.blockera-field-toggle-select {
 
 	&.items-flex-direction-row,
 	&.items-flex-direction-column {
@@ -16,8 +16,8 @@
 			transform: rotate(-90deg);
 		}
 
-		svg.publisher-custom-order,
-		svg.publisher-align-baseline {
+		svg.blockera-custom-order,
+		svg.blockera-align-baseline {
 			transform: rotate(0deg);
 		}
 	}

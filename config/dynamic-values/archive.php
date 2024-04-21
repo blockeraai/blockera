@@ -4,7 +4,7 @@ return [
 	[
 		'type'      => 'text',
 		'status'    => 'core',
-		'label'     => __( 'Archive Title', 'publisher-core' ),
+		'label'     => __( 'Archive Title', 'blockera-core' ),
 		'reference' => [
 			'type' => 'core',
 		],
@@ -15,7 +15,7 @@ return [
 		//		'settings'  => [
 		//			[
 		//				'type'         => 'select',
-		//				'label'        => __( 'Types', 'publisher-core' ),
+		//				'label'        => __( 'Types', 'blockera-core' ),
 		//				'id'           => 'type',
 		//				'defaultValue' => '',
 		//				'options'      => [
@@ -26,31 +26,31 @@ return [
 		//			],
 		//			[
 		//				'type'         => 'text',
-		//				'label'        => __( 'User Name', 'publisher-core' ),
+		//				'label'        => __( 'User Name', 'blockera-core' ),
 		//				'id'           => 'user',
 		//				'defaultValue' => 'User',
 		//				'conditions'   => ['type=user']
 		//			],
 		//			[
 		//				'type'         => 'text',
-		//				'label'        => __( 'Post', 'publisher-core' ),
+		//				'label'        => __( 'Post', 'blockera-core' ),
 		//				'id'           => 'post',
 		//				'defaultValue' => 'Post',
 		//				'conditions'   => ['type=post']
 		//			],
 		//			[
 		//				'type'         => 'text',
-		//				'label'        => __( 'Category Name', 'publisher-core' ),
+		//				'label'        => __( 'Category Name', 'blockera-core' ),
 		//				'id'           => 'category',
 		//				'defaultValue' => 'Category',
 		//				'conditions'   => ['type=category']
 		//			],
 		//		],
-		'callback'  => static function ( \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
+		'callback'  => static function ( \Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
 
 			$handler = $instance->getHandler( 'archive-title' );
 
-			if ( ! $handler instanceof \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveTitle ) {
+			if ( ! $handler instanceof \Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveTitle ) {
 
 				return '';
 			}
@@ -59,7 +59,7 @@ return [
 		},
 	],
 	[
-		'label'     => __( 'Archive Desc', 'publisher-core' ),
+		'label'     => __( 'Archive Desc', 'blockera-core' ),
 		'name'      => 'archive-desc',
 		'type'      => 'text',
 		'status'    => 'soon',
@@ -67,11 +67,11 @@ return [
 		'reference' => [
 			'type' => 'core-pro',
 		],
-		'callback'  => static function ( \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
+		'callback'  => static function ( \Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
 
 			$handler = $instance->getHandler( 'archive-desc' );
 
-			if ( ! $handler instanceof \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveDescription ) {
+			if ( ! $handler instanceof \Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveDescription ) {
 
 				return '';
 			}
@@ -80,7 +80,7 @@ return [
 		},
 	],
 	[
-		'label'     => __( 'Archive Link', 'publisher-core' ),
+		'label'     => __( 'Archive Link', 'blockera-core' ),
 		'name'      => 'archive-link',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -88,11 +88,11 @@ return [
 		'reference' => [
 			'type' => 'core-pro',
 		],
-		'callback'  => static function ( \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
+		'callback'  => static function ( \Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType $instance ) {
 
 			$handler = $instance->getHandler( 'archive-link' );
 
-			if ( ! $handler instanceof \Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveLink ) {
+			if ( ! $handler instanceof \Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields\ArchiveLink ) {
 
 				return '';
 			}
@@ -101,7 +101,7 @@ return [
 		},
 	],
 	[
-		'label'     => __( 'Archive ID', 'publisher-core' ),
+		'label'     => __( 'Archive ID', 'blockera-core' ),
 		'name'      => 'archive-id',
 		'type'      => 'id',
 		'status'    => 'soon',
@@ -111,7 +111,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Archive Meta', 'publisher-core' ),
+		'label'     => __( 'Archive Meta', 'blockera-core' ),
 		'name'      => 'archive-meta',
 		'type'      => 'meta',
 		'status'    => 'soon',

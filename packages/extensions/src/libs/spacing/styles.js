@@ -1,14 +1,14 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getCssSelector,
 	computedCssDeclarations,
-} from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
-import type { CssRule } from '@publisher/style-engine/src/types';
+} from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
+import type { CssRule } from '@blockera/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -17,7 +17,7 @@ import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { useBlocksStore } from '../../hooks';
-import { isUndefined } from '@publisher/utils';
+import { isUndefined } from '@blockera/utils';
 import { isActiveField } from '../../api/utils';
 import type { TSpacingDefaultProps, TCssProps } from './types/spacing-props';
 
@@ -88,7 +88,7 @@ export const SpacingStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	const { publisherSpacing } = config.spacingConfig;
+	const { blockeraSpacing } = config.spacingConfig;
 	const blockProps = {
 		clientId,
 		blockName,
@@ -116,15 +116,15 @@ export const SpacingStyles = ({
 		? {}
 		: updateCssProps(_attributes?.style?.spacing);
 	const properties: TCssProps =
-		isActiveField(publisherSpacing) &&
-		_attributes.publisherSpacing !== attributes.publisherSpacing.default
-			? updateCssProps(_attributes.publisherSpacing)
+		isActiveField(blockeraSpacing) &&
+		_attributes.blockeraSpacing !== attributes.blockeraSpacing.default
+			? updateCssProps(_attributes.blockeraSpacing)
 			: fallbackProps;
 
 	const pickedSelector = getCssSelector({
 		...sharedParams,
-		query: 'publisherSpacing',
-		support: 'publisherSpacing',
+		query: 'blockeraSpacing',
+		support: 'blockeraSpacing',
 		fallbackSupportId: 'spacing',
 	});
 
@@ -133,7 +133,7 @@ export const SpacingStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherSpacing: [
+					blockeraSpacing: [
 						{
 							...staticDefinitionParams,
 							properties,

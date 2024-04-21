@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isArray, isEmpty } from '@publisher/utils';
+import { isArray, isEmpty } from '@blockera/utils';
 
 /**
  * Internal dependencies

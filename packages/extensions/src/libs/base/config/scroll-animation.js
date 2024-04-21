@@ -10,13 +10,13 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherScrollAnimation: FeatureConfig = {
+const blockeraScrollAnimation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('On Scroll Animation', 'publisher-core'),
+	label: __('On Scroll Animation', 'blockera-core'),
 };
 
 export const scrollAnimationConfig = {
-	publisherScrollAnimation,
+	blockeraScrollAnimation,
 };

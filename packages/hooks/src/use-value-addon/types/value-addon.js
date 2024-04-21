@@ -1,7 +1,7 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import type {
 	VariableItem,
@@ -9,7 +9,7 @@ import type {
 	DynamicValueItem,
 	DynamicValueCategory,
 	ValueAddonReferenceType,
-} from '@publisher/core-data';
+} from '@blockera/core-data';
 
 /**
  * Internal dependencies

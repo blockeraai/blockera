@@ -6,9 +6,9 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { convertDegToCharacter } from '@publisher/utils';
+import { convertDegToCharacter } from '@blockera/utils';
 
 /**
  * Internal dependencies

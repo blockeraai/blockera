@@ -12,7 +12,7 @@ describe('Text Columns → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -47,7 +47,7 @@ describe('Text Columns → Functionality', () => {
 					color: '',
 					style: 'solid',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTextColumns'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextColumns'));
 		});
 
 		//Check rendering
@@ -58,7 +58,7 @@ describe('Text Columns → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'column-count',
 			'auto' // todo: it should be initial but it fails! but it is there!
@@ -89,7 +89,7 @@ describe('Text Columns → Functionality', () => {
 					color: '',
 					style: 'solid',
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTextColumns'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextColumns'));
 		});
 
 		//Check frontend
@@ -97,7 +97,7 @@ describe('Text Columns → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'column-gap', '5px');
+		cy.get('.blockera-core-block').should('have.css', 'column-gap', '5px');
 	});
 
 	it('should update column-count & column-rule, when add column2 + rule', () => {
@@ -150,7 +150,7 @@ describe('Text Columns → Functionality', () => {
 				'divider.width': '1px',
 				'divider.style': 'dotted',
 				'divider.color': '#000000',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTextColumns'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextColumns'));
 		});
 
 		//Check frontend
@@ -158,9 +158,10 @@ describe('Text Columns → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
+		cy.get('.blockera-core-block')
 			.should('have.css', 'column-rule-width', '1px')
 			.and('have.css', 'column-rule-style', 'dotted')
 			.and('have.css', 'column-rule-color', 'rgb(54, 234, 222)');
 	});
 });
+

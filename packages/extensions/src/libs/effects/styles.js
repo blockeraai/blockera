@@ -1,14 +1,14 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getCssSelector,
 	computedCssDeclarations,
-} from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
-import type { CssRule } from '@publisher/style-engine/src/types';
-import { getSortedRepeater } from '@publisher/controls';
+} from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
+import type { CssRule } from '@blockera/style-engine/src/types';
+import { getSortedRepeater } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -41,14 +41,14 @@ export const EffectsStyles = ({
 	...props
 }: StylesProps): Array<CssRule> => {
 	const {
-		publisherFilter,
-		publisherOpacity,
-		publisherTransform,
-		publisherBlendMode,
-		publisherTransition,
-		publisherBackdropFilter,
-		publisherDivider,
-		publisherMask,
+		blockeraFilter,
+		blockeraOpacity,
+		blockeraTransform,
+		blockeraBlendMode,
+		blockeraTransition,
+		blockeraBackdropFilter,
+		blockeraDivider,
+		blockeraMask,
 	} = config.effectsConfig;
 
 	const blockProps = {
@@ -69,14 +69,14 @@ export const EffectsStyles = ({
 	const styleGroup: Array<CssRule> = [];
 
 	if (
-		isActiveField(publisherOpacity) &&
-		blockProps.attributes.publisherOpacity !==
-			attributes.publisherOpacity.default
+		isActiveField(blockeraOpacity) &&
+		blockProps.attributes.blockeraOpacity !==
+			attributes.blockeraOpacity.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherOpacity',
-			support: 'publisherOpacity',
+			query: 'blockeraOpacity',
+			support: 'blockeraOpacity',
 			fallbackSupportId: 'opacity',
 		});
 
@@ -84,11 +84,11 @@ export const EffectsStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherOpacity: [
+					blockeraOpacity: [
 						{
 							type: 'static',
 							properties: {
-								opacity: blockProps.attributes.publisherOpacity,
+								opacity: blockProps.attributes.blockeraOpacity,
 							},
 						},
 					],
@@ -98,13 +98,13 @@ export const EffectsStyles = ({
 		});
 	}
 
-	if (isActiveField(publisherTransform)) {
+	if (isActiveField(blockeraTransform)) {
 		const transformProperties: TTransformCssProps = {};
 
 		if (
 			!arrayEquals(
-				attributes.publisherTransform.default,
-				blockProps.attributes.publisherTransform
+				attributes.blockeraTransform.default,
+				blockProps.attributes.blockeraTransform
 			)
 		) {
 			const properties: {
@@ -115,7 +115,7 @@ export const EffectsStyles = ({
 				transformSelfPerspective: '',
 			};
 
-			getSortedRepeater(blockProps.attributes.publisherTransform)?.map(
+			getSortedRepeater(blockProps.attributes.blockeraTransform)?.map(
 				([, item]) => {
 					if (!item.isVisible) {
 						return null;
@@ -165,9 +165,9 @@ export const EffectsStyles = ({
 				}
 			);
 
-			if (blockProps.attributes.publisherTransformSelfPerspective) {
+			if (blockProps.attributes.blockeraTransformSelfPerspective) {
 				properties.transformSelfPerspective = `perspective(${getValueAddonRealValue(
-					blockProps.attributes.publisherTransformSelfPerspective
+					blockProps.attributes.blockeraTransformSelfPerspective
 				)}) `;
 			}
 
@@ -180,25 +180,25 @@ export const EffectsStyles = ({
 
 		if (
 			!arrayEquals(
-				attributes.publisherTransformSelfOrigin.default,
-				blockProps.attributes.publisherTransformSelfOrigin
+				attributes.blockeraTransformSelfOrigin.default,
+				blockProps.attributes.blockeraTransformSelfOrigin
 			)
 		) {
 			transformProperties['transform-origin'] = `${getValueAddonRealValue(
-				blockProps.attributes.publisherTransformSelfOrigin?.top
+				blockProps.attributes.blockeraTransformSelfOrigin?.top
 			)} ${getValueAddonRealValue(
-				blockProps.attributes.publisherTransformSelfOrigin?.left
+				blockProps.attributes.blockeraTransformSelfOrigin?.left
 			)}`;
 		}
 
-		if (blockProps.attributes.publisherBackfaceVisibility) {
+		if (blockProps.attributes.blockeraBackfaceVisibility) {
 			transformProperties['backface-visibility'] =
-				blockProps.attributes.publisherBackfaceVisibility;
+				blockProps.attributes.blockeraBackfaceVisibility;
 		}
 
-		if (blockProps.attributes.publisherTransformChildPerspective) {
+		if (blockProps.attributes.blockeraTransformChildPerspective) {
 			const childTransformChildPers = getValueAddonRealValue(
-				blockProps.attributes.publisherTransformChildPerspective
+				blockProps.attributes.blockeraTransformChildPerspective
 			);
 
 			transformProperties.perspective =
@@ -209,31 +209,31 @@ export const EffectsStyles = ({
 
 		if (
 			!arrayEquals(
-				attributes.publisherTransformChildOrigin.default,
-				blockProps.attributes.publisherTransformChildOrigin
+				attributes.blockeraTransformChildOrigin.default,
+				blockProps.attributes.blockeraTransformChildOrigin
 			)
 		) {
 			transformProperties[
 				'perspective-origin'
 			] = `${getValueAddonRealValue(
-				blockProps.attributes.publisherTransformChildOrigin?.top
+				blockProps.attributes.blockeraTransformChildOrigin?.top
 			)} ${getValueAddonRealValue(
-				blockProps.attributes.publisherTransformChildOrigin?.left
+				blockProps.attributes.blockeraTransformChildOrigin?.left
 			)}`;
 		}
 
 		if (transformProperties) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherTransform',
-				support: 'publisherTransform',
+				query: 'blockeraTransform',
+				support: 'blockeraTransform',
 			});
 
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherTransform: [
+						blockeraTransform: [
 							{
 								type: 'static',
 								properties: { ...transformProperties },
@@ -247,23 +247,23 @@ export const EffectsStyles = ({
 	}
 
 	if (
-		isActiveField(publisherTransition) &&
+		isActiveField(blockeraTransition) &&
 		!arrayEquals(
-			attributes.publisherTransition.default,
-			blockProps.attributes.publisherTransition
+			attributes.blockeraTransition.default,
+			blockProps.attributes.blockeraTransition
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherTransition',
-			support: 'publisherTransition',
+			query: 'blockeraTransition',
+			support: 'blockeraTransition',
 		});
 
 		styleGroup.push({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherTransition: [
+					blockeraTransition: [
 						{
 							type: 'function',
 							function: TransitionGenerator,
@@ -276,23 +276,23 @@ export const EffectsStyles = ({
 	}
 
 	if (
-		isActiveField(publisherFilter) &&
+		isActiveField(blockeraFilter) &&
 		!arrayEquals(
-			attributes.publisherFilter.default,
-			blockProps.attributes.publisherFilter
+			attributes.blockeraFilter.default,
+			blockProps.attributes.blockeraFilter
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherFilter',
-			support: 'publisherFilter',
+			query: 'blockeraFilter',
+			support: 'blockeraFilter',
 		});
 
 		styleGroup.push({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherFilter: [
+					blockeraFilter: [
 						{
 							type: 'function',
 							function: FilterGenerator,
@@ -305,23 +305,23 @@ export const EffectsStyles = ({
 	}
 
 	if (
-		isActiveField(publisherBackdropFilter) &&
+		isActiveField(blockeraBackdropFilter) &&
 		!arrayEquals(
-			attributes.publisherBackdropFilter.default,
-			blockProps.attributes.publisherBackdropFilter
+			attributes.blockeraBackdropFilter.default,
+			blockProps.attributes.blockeraBackdropFilter
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherBackdropFilter',
-			support: 'publisherBackdropFilter',
+			query: 'blockeraBackdropFilter',
+			support: 'blockeraBackdropFilter',
 		});
 
 		styleGroup.push({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherBackdropFilter: [
+					blockeraBackdropFilter: [
 						{
 							type: 'function',
 							function: FilterGenerator,
@@ -334,23 +334,23 @@ export const EffectsStyles = ({
 	}
 
 	if (
-		isActiveField(publisherDivider) &&
+		isActiveField(blockeraDivider) &&
 		!arrayEquals(
-			attributes.publisherDivider.default,
-			blockProps.attributes.publisherDivider
+			attributes.blockeraDivider.default,
+			blockProps.attributes.blockeraDivider
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherDivider',
-			support: 'publisherDivider',
+			query: 'blockeraDivider',
+			support: 'blockeraDivider',
 		});
 
 		styleGroup.push({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherDivider: [
+					blockeraDivider: [
 						{
 							type: 'static',
 							properties: {
@@ -367,13 +367,13 @@ export const EffectsStyles = ({
 		styleGroup.push({
 			selector: getCssSelector({
 				...sharedParams,
-				query: 'publisherDivider',
-				support: 'publisherDivider',
+				query: 'blockeraDivider',
+				support: 'blockeraDivider',
 				suffixClass: ':before',
 			}),
 			declarations: computedCssDeclarations(
 				{
-					publisherDivider: [
+					blockeraDivider: [
 						{
 							type: 'function',
 							function: BeforeDividerGenerator,
@@ -385,19 +385,18 @@ export const EffectsStyles = ({
 		});
 
 		if (
-			Object.entries(blockProps.attributes?.publisherDivider)?.length ===
-			2
+			Object.entries(blockProps.attributes?.blockeraDivider)?.length === 2
 		) {
 			styleGroup.push({
 				selector: getCssSelector({
 					...sharedParams,
-					query: 'publisherDivider',
-					support: 'publisherDivider',
+					query: 'blockeraDivider',
+					support: 'blockeraDivider',
 					suffixClass: ':after',
 				}),
 				declarations: computedCssDeclarations(
 					{
-						publisherDivider: [
+						blockeraDivider: [
 							{
 								type: 'function',
 								function: AfterDividerGenerator,
@@ -411,23 +410,23 @@ export const EffectsStyles = ({
 	}
 
 	if (
-		isActiveField(publisherMask) &&
+		isActiveField(blockeraMask) &&
 		!arrayEquals(
-			attributes.publisherMask.default,
-			blockProps.attributes.publisherMask
+			attributes.blockeraMask.default,
+			blockProps.attributes.blockeraMask
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherMask',
-			support: 'publisherMask',
+			query: 'blockeraMask',
+			support: 'blockeraMask',
 		});
 
 		styleGroup.push({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherMask: [
+					blockeraMask: [
 						{
 							type: 'function',
 							function: MaskGenerator,
@@ -440,26 +439,26 @@ export const EffectsStyles = ({
 	}
 
 	if (
-		isActiveField(publisherBlendMode) &&
-		blockProps.attributes.publisherBlendMode !==
-			attributes.publisherBlendMode.default
+		isActiveField(blockeraBlendMode) &&
+		blockProps.attributes.blockeraBlendMode !==
+			attributes.blockeraBlendMode.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherBlendMode',
-			support: 'publisherBlendMode',
+			query: 'blockeraBlendMode',
+			support: 'blockeraBlendMode',
 		});
 
 		styleGroup.push({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherBlendMode: [
+					blockeraBlendMode: [
 						{
 							type: 'static',
 							properties: {
 								'mix-blend-mode':
-									blockProps.attributes.publisherBlendMode,
+									blockProps.attributes.blockeraBlendMode,
 							},
 						},
 					],

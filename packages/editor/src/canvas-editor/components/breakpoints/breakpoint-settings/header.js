@@ -7,10 +7,10 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { BreakpointIcon } from '@publisher/extensions/src/libs/block-states/helpers';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { BreakpointIcon } from '@blockera/extensions/src/libs/block-states/helpers';
 
 export default function ({
 	item,
@@ -26,7 +26,7 @@ export default function ({
 			className={controlInnerClassNames('repeater-group-header')}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'publisher-core'),
+				__('Item %d', 'blockera-core'),
 				itemId + 1
 			)}
 		>

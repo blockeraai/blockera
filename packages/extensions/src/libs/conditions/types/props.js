@@ -12,7 +12,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 export type ConditionsExtensionProps = {
 	block: TBlockProps,
 	extensionConfig: {
-		publisherConditions: Object,
+		blockeraConditions: Object,
 	},
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,

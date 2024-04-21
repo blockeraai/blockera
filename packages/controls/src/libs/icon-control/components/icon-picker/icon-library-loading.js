@@ -1,4 +1,4 @@
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 export default function IconLibraryLoading({}) {
 	return (

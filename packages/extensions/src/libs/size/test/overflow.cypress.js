@@ -14,7 +14,7 @@ describe('Overflow → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.', {
 			delay: 0,
@@ -37,7 +37,7 @@ describe('Overflow → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect('visible').to.be.equal(
-				getSelectedBlock(data, 'publisherOverflow')
+				getSelectedBlock(data, 'blockeraOverflow')
 			);
 		});
 
@@ -54,7 +54,7 @@ describe('Overflow → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect('hidden').to.be.equal(
-				getSelectedBlock(data, 'publisherOverflow')
+				getSelectedBlock(data, 'blockeraOverflow')
 			);
 		});
 
@@ -71,7 +71,7 @@ describe('Overflow → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect('scroll').to.be.equal(
-				getSelectedBlock(data, 'publisherOverflow')
+				getSelectedBlock(data, 'blockeraOverflow')
 			);
 		});
 
@@ -80,10 +80,7 @@ describe('Overflow → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
-			'have.css',
-			'overflow',
-			'scroll'
-		);
+		cy.get('.blockera-core-block').should('have.css', 'overflow', 'scroll');
 	});
 });
+

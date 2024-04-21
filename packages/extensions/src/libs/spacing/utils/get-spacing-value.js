@@ -1,7 +1,7 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { isUndefined } from '@blockera/utils';
 
 export function getSpacingValue({ propId, spacing, defaultValue }) {
 	function extractNumbers(str) {

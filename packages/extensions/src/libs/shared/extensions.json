@@ -1,10 +1,10 @@
 {
 	"icon": [
-		"publisherIcon",
-		"publisherIconGap",
-		"publisherIconSize",
-		"publisherIconLink",
-		"publisherIconColor",
-		"publisherIconPosition"
+		"blockeraIcon",
+		"blockeraIconGap",
+		"blockeraIconSize",
+		"blockeraIconLink",
+		"blockeraIconColor",
+		"blockeraIconPosition"
 	]
 }

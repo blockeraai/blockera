@@ -1,10 +1,10 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString, isUndefined } from '@publisher/utils';
-import { isSpecialUnit } from '@publisher/controls';
+import { isString, isUndefined } from '@blockera/utils';
+import { isSpecialUnit } from '@blockera/controls';
 
 export function heightFromWPCompatibility({
 	attributes,
@@ -13,7 +13,7 @@ export function heightFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (attributes?.publisherHeight !== '') {
+	if (attributes?.blockeraHeight !== '') {
 		return attributes;
 	}
 
@@ -21,7 +21,7 @@ export function heightFromWPCompatibility({
 		case 'core/image':
 		case 'core/post-featured-image':
 			if (attributes?.height !== undefined) {
-				attributes.publisherHeight = attributes?.height;
+				attributes.blockeraHeight = attributes?.height;
 			}
 	}
 

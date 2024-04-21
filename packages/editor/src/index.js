@@ -6,12 +6,12 @@
 import { dispatch } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import type {
 	TBreakpoint,
 	BreakpointTypes,
-} from '@publisher/extensions/src/libs/block-states/types';
+} from '@blockera/extensions/src/libs/block-states/types';
 
 /**
  * Internal dependencies

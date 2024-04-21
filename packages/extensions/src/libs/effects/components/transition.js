@@ -5,13 +5,13 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	TransitionControl,
 	ControlContextProvider,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -36,16 +36,16 @@ export const Transition = ({
 			value={{
 				name: generateExtensionId(block, 'transition'),
 				value: transition,
-				attribute: 'publisherTransition',
+				attribute: 'blockeraTransition',
 				blockName: block.blockName,
 			}}
-			storeName={'publisher-core/controls/repeater'}
+			storeName={'blockera-core/controls/repeater'}
 		>
 			<BaseControl controlName="transition" columns="columns-1">
 				<TransitionControl
 					onChange={(newValue, ref) =>
 						handleOnChangeAttributes(
-							'publisherTransition',
+							'blockeraTransition',
 							newValue,
 							{ ref }
 						)

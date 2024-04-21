@@ -6,10 +6,10 @@ export function textAlignFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.publisherTextAlign === '' &&
+		attributes?.blockeraTextAlign === '' &&
 		attributes?.align !== undefined
 	) {
-		return { publisherTextAlign: attributes?.align };
+		return { blockeraTextAlign: attributes?.align };
 	}
 
 	return false;

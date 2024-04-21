@@ -5,9 +5,9 @@
 import { select, useSelect } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isEquals, omit } from '@publisher/utils';
+import { isEmpty, isEquals, omit } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -59,9 +59,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const { currentBlock } = useSelect((select) => {
-		const { getExtensionCurrentBlock } = select(
-			'publisher-core/extensions'
-		);
+		const { getExtensionCurrentBlock } = select('blockera-core/extensions');
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),
@@ -69,28 +67,28 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 	});
 
 	const { getExtensionCurrentBlockStateBreakpoint } = select(
-		'publisher-core/extensions'
+		'blockera-core/extensions'
 	);
 	const breakpoints = getBreakpoints();
 
 	const normals = [];
 	let blockAttributes = block.attributes;
-	let publisherBlockStates: { [key: TStates]: StateTypes } =
-		blockAttributes.publisherBlockStates;
+	let blockeraBlockStates: { [key: TStates]: StateTypes } =
+		blockAttributes.blockeraBlockStates;
 
 	if (isInnerBlock(currentBlock)) {
 		blockAttributes =
-			blockAttributes.publisherInnerBlocks[currentBlock].attributes;
-		publisherBlockStates =
-			blockAttributes.publisherBlockStates ||
-			block.attributes.publisherBlockStates;
+			blockAttributes.blockeraInnerBlocks[currentBlock].attributes;
+		blockeraBlockStates =
+			blockAttributes.blockeraBlockStates ||
+			block.attributes.blockeraBlockStates;
 	}
 
 	return Object.values(breakpoints)
 		.map((breakpoint: BreakpointTypes): StateGraph => {
 			let states: StateGraphStates = [];
 
-			states = Object.entries(publisherBlockStates)
+			states = Object.entries(blockeraBlockStates)
 				.map(([stateType, state]: [TStates, StateTypes]): State => {
 					if (
 						'normal' === stateType &&
@@ -101,7 +99,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 							type: stateType,
 							label: staticStates[stateType].label,
 							attributes: omit(blockAttributes, [
-								'publisherBlockStates',
+								'blockeraBlockStates',
 							]),
 						};
 					}

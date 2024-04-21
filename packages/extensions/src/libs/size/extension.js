@@ -7,7 +7,7 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	PanelBodyControl,
@@ -15,14 +15,10 @@ import {
 	InputControl,
 	ToggleSelectControl,
 	BaseControl,
-} from '@publisher/controls';
-import {
-	ConditionalWrapper,
-	FeatureWrapper,
-	Flex,
-} from '@publisher/components';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
+} from '@blockera/controls';
+import { ConditionalWrapper, FeatureWrapper, Flex } from '@blockera/components';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -49,49 +45,49 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 		setSettings,
 	}: TSizeProps): MixedElement => {
 		const isShowWidth = isShowField(
-			extensionConfig.publisherWidth,
-			values?.publisherWidth,
-			attributes.publisherWidth.default
+			extensionConfig.blockeraWidth,
+			values?.blockeraWidth,
+			attributes.blockeraWidth.default
 		);
 		const isShowMinWidth = isShowField(
-			extensionConfig.publisherMinWidth,
-			values?.publisherMinWidth,
-			attributes?.publisherMinWidth?.default
+			extensionConfig.blockeraMinWidth,
+			values?.blockeraMinWidth,
+			attributes?.blockeraMinWidth?.default
 		);
 		const isShowMaxWidth = isShowField(
-			extensionConfig.publisherMaxWidth,
-			values?.publisherMaxWidth,
-			attributes?.publisherMaxWidth?.default
+			extensionConfig.blockeraMaxWidth,
+			values?.blockeraMaxWidth,
+			attributes?.blockeraMaxWidth?.default
 		);
 		const isShowHeight = isShowField(
-			extensionConfig.publisherHeight,
-			values?.publisherHeight,
-			attributes?.publisherHeight?.default
+			extensionConfig.blockeraHeight,
+			values?.blockeraHeight,
+			attributes?.blockeraHeight?.default
 		);
 		const isShowMinHeight = isShowField(
-			extensionConfig.publisherMinHeight,
-			values?.publisherMinHeight,
-			attributes?.publisherMinHeight?.default
+			extensionConfig.blockeraMinHeight,
+			values?.blockeraMinHeight,
+			attributes?.blockeraMinHeight?.default
 		);
 		const isShowMaxHeight = isShowField(
-			extensionConfig.publisherMaxHeight,
-			values?.publisherMaxHeight,
-			attributes?.publisherMaxHeight?.default
+			extensionConfig.blockeraMaxHeight,
+			values?.blockeraMaxHeight,
+			attributes?.blockeraMaxHeight?.default
 		);
 		const isShowOverflow = isShowField(
-			extensionConfig.publisherOverflow,
-			values?.publisherOverflow,
-			attributes?.publisherOverflow?.default
+			extensionConfig.blockeraOverflow,
+			values?.blockeraOverflow,
+			attributes?.blockeraOverflow?.default
 		);
 		const isShowRatio = isShowField(
-			extensionConfig.publisherRatio,
-			values?.publisherRatio,
-			attributes?.publisherRatio?.default
+			extensionConfig.blockeraRatio,
+			values?.blockeraRatio,
+			attributes?.blockeraRatio?.default
 		);
 		const isShowFit = isShowField(
-			extensionConfig.publisherFit,
-			values?.publisherFit,
-			attributes?.publisherFit?.default
+			extensionConfig.blockeraFit,
+			values?.blockeraFit,
+			attributes?.blockeraFit?.default
 		);
 
 		// Extension is not active
@@ -111,13 +107,13 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Size', 'publisher-core')}
+				title={__('Size', 'blockera-core')}
 				initialOpen={true}
 				icon={<SizeExtensionIcon />}
 				className={extensionClassNames('size')}
 			>
 				<ExtensionSettings
-					buttonLabel={__('More Size Settings', 'publisher-core')}
+					buttonLabel={__('More Size Settings', 'blockera-core')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'sizeConfig');
@@ -128,55 +124,55 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					<BaseControl columns="columns-1">
 						<FeatureWrapper
 							isActive={isShowWidth}
-							config={extensionConfig.publisherWidth}
+							config={extensionConfig.blockeraWidth}
 						>
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(block, 'width'),
-									value: values?.publisherWidth,
-									attribute: 'publisherWidth',
+									value: values?.blockeraWidth,
+									attribute: 'blockeraWidth',
 									blockName: block.blockName,
 								}}
 							>
 								<InputControl
-									label={__('Width', 'publisher-core')}
+									label={__('Width', 'blockera-core')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Provides the ability to define the horizontal space of the block, crucial for layout precision and design consistency.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'Ideal for responsive design, it ensures block adapt smoothly to different screen sizes, enhancing user experience and interface scalability.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
 									}
 									aria-label={__(
 										'Input Width',
-										'publisher-core'
+										'blockera-core'
 									)}
 									columns="columns-2"
 									placeholder="Auto"
 									unitType="width"
 									min={0}
 									defaultValue={
-										attributes.publisherWidth.default
+										attributes.blockeraWidth.default
 									}
 									onChange={(newValue, ref) => {
 										handleOnChangeAttributes(
-											'publisherWidth',
+											'blockeraWidth',
 											newValue,
 											{ ref }
 										);
 									}}
 									controlAddonTypes={['variable']}
 									variableTypes={['width-size']}
-									{...extensionProps.publisherWidth}
+									{...extensionProps.blockeraWidth}
 								/>
 							</ControlContextProvider>
 						</FeatureWrapper>
@@ -196,7 +192,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								elseWrapper={(children) => (
 									<BaseControl
 										columns="columns-2"
-										label={__('Width', 'publisher-core')}
+										label={__('Width', 'blockera-core')}
 									>
 										<Flex
 											style={{
@@ -212,7 +208,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							>
 								<FeatureWrapper
 									isActive={isShowMinWidth}
-									config={extensionConfig.publisherMinWidth}
+									config={extensionConfig.blockeraMinWidth}
 								>
 									<ControlContextProvider
 										value={{
@@ -220,36 +216,36 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'minWidth'
 											),
-											value: values.publisherMinWidth,
-											attribute: 'publisherMinWidth',
+											value: values.blockeraMinWidth,
+											attribute: 'blockeraMinWidth',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
-											label={__('Min', 'publisher-core')}
+											label={__('Min', 'blockera-core')}
 											labelPopoverTitle={__(
 												'Min Width',
-												'publisher-core'
+												'blockera-core'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															"Min-Width ensures block don't shrink below a set value, crucial for maintaining content integrity and layout consistency on smaller screens.",
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 													<p>
 														{__(
 															'Ideal for preventing layout breakage on mobile devices, this feature helps in creating responsive designs that adapt while retaining legibility and structure.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 												</>
 											}
 											aria-label={__(
 												'Min Width',
-												'publisher-core'
+												'blockera-core'
 											)}
 											columns={
 												isShowMaxWidth
@@ -265,26 +261,26 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											min={0}
 											size="small"
 											defaultValue={
-												attributes.publisherMinWidth
+												attributes.blockeraMinWidth
 													.default
 											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherMinWidth',
+													'blockeraMinWidth',
 													newValue,
 													{ ref }
 												)
 											}
 											controlAddonTypes={['variable']}
 											variableTypes={['width-size']}
-											{...extensionProps.publisherMinWidth}
+											{...extensionProps.blockeraMinWidth}
 										/>
 									</ControlContextProvider>
 								</FeatureWrapper>
 
 								<FeatureWrapper
 									isActive={isShowMaxWidth}
-									config={extensionConfig.publisherMaxWidth}
+									config={extensionConfig.blockeraMaxWidth}
 								>
 									<ControlContextProvider
 										value={{
@@ -292,36 +288,36 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'maxWidth'
 											),
-											value: values.publisherMaxWidth,
-											attribute: 'publisherMaxWidth',
+											value: values.blockeraMaxWidth,
+											attribute: 'blockeraMaxWidth',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
-											label={__('Max', 'publisher-core')}
+											label={__('Max', 'blockera-core')}
 											labelPopoverTitle={__(
 												'Max Width',
-												'publisher-core'
+												'blockera-core'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'Max-Width restricts the maximum width of block, ensuring it doesn’t exceed a specified width, crucial for maintaining design coherence.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 													<p>
 														{__(
 															'This feature is essential in responsive design, preventing block from stretching too wide on larger screens, thus preserving readability and layout aesthetics.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 												</>
 											}
 											aria-label={__(
 												'Max Width',
-												'publisher-core'
+												'blockera-core'
 											)}
 											columns={
 												isShowMinWidth
@@ -337,19 +333,19 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											min={0}
 											size="small"
 											defaultValue={
-												attributes.publisherMaxWidth
+												attributes.blockeraMaxWidth
 													.default
 											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherMaxWidth',
+													'blockeraMaxWidth',
 													newValue,
 													{ ref }
 												)
 											}
 											controlAddonTypes={['variable']}
 											variableTypes={['width-size']}
-											{...extensionProps.publisherMaxWidth}
+											{...extensionProps.blockeraMaxWidth}
 										/>
 									</ControlContextProvider>
 								</FeatureWrapper>
@@ -362,30 +358,30 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 					<BaseControl columns="columns-1">
 						<FeatureWrapper
 							isActive={isShowHeight}
-							config={extensionConfig.publisherHeight}
+							config={extensionConfig.blockeraHeight}
 						>
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(block, 'height'),
-									value: values.publisherHeight,
-									attribute: 'publisherHeight',
+									value: values.blockeraHeight,
+									attribute: 'blockeraHeight',
 									blockName: block.blockName,
 								}}
 							>
 								<InputControl
-									label={__('Height', 'publisher-core')}
+									label={__('Height', 'blockera-core')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Provides the ability to define the vertical space of the block, crucial for layout precision and design consistency.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'This feature is key for achieving uniformity and balance in your layout, especially useful for aligning blocks vertically and creating cohesive visual structures.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
@@ -395,18 +391,18 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									unitType="height"
 									min={0}
 									defaultValue={
-										attributes.publisherHeight.default
+										attributes.blockeraHeight.default
 									}
 									onChange={(newValue, ref) => {
 										handleOnChangeAttributes(
-											'publisherHeight',
+											'blockeraHeight',
 											newValue,
 											{ ref }
 										);
 									}}
 									controlAddonTypes={['variable']}
 									variableTypes={['width-size']}
-									{...extensionProps.publisherHeight}
+									{...extensionProps.blockeraHeight}
 								/>
 							</ControlContextProvider>
 						</FeatureWrapper>
@@ -426,7 +422,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								elseWrapper={(children) => (
 									<BaseControl
 										columns="columns-2"
-										label={__('Height', 'publisher-core')}
+										label={__('Height', 'blockera-core')}
 									>
 										<Flex
 											style={{
@@ -442,7 +438,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							>
 								<FeatureWrapper
 									isActive={isShowMinHeight}
-									config={extensionConfig.publisherMinHeight}
+									config={extensionConfig.blockeraMinHeight}
 								>
 									<ControlContextProvider
 										value={{
@@ -450,40 +446,40 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'minHeight'
 											),
-											value: values.publisherMinHeight,
-											attribute: 'publisherMinHeight',
+											value: values.blockeraMinHeight,
+											attribute: 'blockeraMinHeight',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
 											defaultValue={
-												attributes.publisherMinHeight
+												attributes.blockeraMinHeight
 													.default
 											}
-											label={__('Min', 'publisher-core')}
+											label={__('Min', 'blockera-core')}
 											labelPopoverTitle={__(
 												'Min Height',
-												'publisher-core'
+												'blockera-core'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															"Min-Height ensures block don't shrink below a set value, crucial for maintaining content integrity and layout consistency on smaller screens.",
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 													<p>
 														{__(
 															'Ideal for preventing layout breakage on mobile devices, this feature helps in creating responsive designs that adapt while retaining legibility and structure.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 												</>
 											}
 											aria-label={__(
 												'Min Height',
-												'publisher-core'
+												'blockera-core'
 											)}
 											columns={
 												isShowMaxHeight
@@ -500,21 +496,21 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											size="small"
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherMinHeight',
+													'blockeraMinHeight',
 													newValue,
 													{ ref }
 												)
 											}
 											controlAddonTypes={['variable']}
 											variableTypes={['width-size']}
-											{...extensionProps.publisherMinHeight}
+											{...extensionProps.blockeraMinHeight}
 										/>
 									</ControlContextProvider>
 								</FeatureWrapper>
 
 								<FeatureWrapper
 									isActive={isShowMaxHeight}
-									config={extensionConfig.publisherMaxHeight}
+									config={extensionConfig.blockeraMaxHeight}
 								>
 									<ControlContextProvider
 										value={{
@@ -522,36 +518,36 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												block,
 												'maxHeight'
 											),
-											value: values.publisherMaxHeight,
-											attribute: 'publisherMaxHeight',
+											value: values.blockeraMaxHeight,
+											attribute: 'blockeraMaxHeight',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
-											label={__('Max', 'publisher-core')}
+											label={__('Max', 'blockera-core')}
 											labelPopoverTitle={__(
 												'Max Height',
-												'publisher-core'
+												'blockera-core'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'Max-height restricts the maximum height of block, ensuring it doesn’t exceed a specified height, crucial for maintaining design coherence.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 													<p>
 														{__(
 															'This feature is essential in responsive design, preventing block from stretching too taller on larger screens, thus preserving readability and layout aesthetics.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 												</>
 											}
 											aria-label={__(
 												'Max Height',
-												'publisher-core'
+												'blockera-core'
 											)}
 											columns={
 												isShowMinHeight
@@ -567,19 +563,19 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											min={0}
 											size="small"
 											defaultValue={
-												attributes.publisherMaxHeight
+												attributes.blockeraMaxHeight
 													.default
 											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherMaxHeight',
+													'blockeraMaxHeight',
 													newValue,
 													{ ref }
 												)
 											}
 											controlAddonTypes={['variable']}
 											variableTypes={['width-size']}
-											{...extensionProps.publisherMaxHeight}
+											{...extensionProps.blockeraMaxHeight}
 										/>
 									</ControlContextProvider>
 								</FeatureWrapper>
@@ -590,54 +586,54 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowOverflow}
-					config={extensionConfig.publisherOverflow}
+					config={extensionConfig.blockeraOverflow}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'overflow'),
-							value: values.publisherOverflow,
-							attribute: 'publisherOverflow',
+							value: values.blockeraOverflow,
+							attribute: 'blockeraOverflow',
 							blockName: block.blockName,
 						}}
 					>
 						<ToggleSelectControl
-							label={__('Overflow', 'publisher-core')}
+							label={__('Overflow', 'blockera-core')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											"Overflow manages how content is displayed when it exceeds its block's boundaries, offering options like scroll or hidden to maintain layout integrity.",
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<h3>
 										<OverflowVisibleIcon />
-										{__('Visible', 'publisher-core')}
+										{__('Visible', 'blockera-core')}
 									</h3>
 									<p>
 										{__(
 											'Visible ensures that any content exceeding the boundaries of its container is still visible, extending beyond the set dimensions.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<h3>
 										<OverflowHiddenIcon />
-										{__('Hidden', 'publisher-core')}
+										{__('Hidden', 'blockera-core')}
 									</h3>
 									<p>
 										{__(
 											'Hidden effectively clips any content that exceeds the boundaries of its container, ensuring a clean, uncluttered appearance for your layout.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<h3>
 										<OverflowScrollIcon />
-										{__('Scroll', 'publisher-core')}
+										{__('Scroll', 'blockera-core')}
 									</h3>
 									<p>
 										{__(
 											'Scroll ensures that any excess content within the block is accessible via scrollbars, ideal for maintaining a fixed size for content areas.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 								</>
@@ -648,7 +644,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								{
 									label: __(
 										'Visible Overflow',
-										'publisher-core'
+										'blockera-core'
 									),
 									value: 'visible',
 									icon: <OverflowVisibleIcon />,
@@ -656,7 +652,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								{
 									label: __(
 										'Hidden Overflow',
-										'publisher-core'
+										'blockera-core'
 									),
 									value: 'hidden',
 									icon: <OverflowHiddenIcon />,
@@ -664,72 +660,72 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								{
 									label: __(
 										'Scroll Overflow',
-										'publisher-core'
+										'blockera-core'
 									),
 									value: 'scroll',
 									icon: <OverflowScrollIcon />,
 								},
 							]}
-							defaultValue={attributes.publisherOverflow.default}
+							defaultValue={attributes.blockeraOverflow.default}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherOverflow',
+									'blockeraOverflow',
 									newValue,
 									{ ref }
 								)
 							}
-							{...extensionProps.publisherOverflow}
+							{...extensionProps.blockeraOverflow}
 						/>
 					</ControlContextProvider>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowRatio}
-					config={extensionConfig.publisherRatio}
+					config={extensionConfig.blockeraRatio}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'ratio'),
-							value: values.publisherRatio,
+							value: values.blockeraRatio,
 							type: 'nested',
-							attribute: 'publisherRatio',
+							attribute: 'blockeraRatio',
 							blockName: block.blockName,
 						}}
 					>
 						<AspectRatio
 							block={block}
-							ratio={values.publisherRatio}
-							defaultValue={attributes.publisherRatio.default}
+							ratio={values.blockeraRatio}
+							defaultValue={attributes.blockeraRatio.default}
 							handleOnChangeAttributes={handleOnChangeAttributes}
-							{...extensionProps.publisherRatio}
+							{...extensionProps.blockeraRatio}
 						/>
 					</ControlContextProvider>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowFit}
-					config={extensionConfig.publisherFit}
+					config={extensionConfig.blockeraFit}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'fit'),
-							value: values.publisherFit,
-							attribute: 'publisherFit',
+							value: values.blockeraFit,
+							attribute: 'blockeraFit',
 							blockName: block.blockName,
 						}}
 					>
 						<ObjectFit
 							block={block}
-							defaultValue={attributes.publisherFit.default}
-							fitPosition={values.publisherFitPosition}
+							defaultValue={attributes.blockeraFit.default}
+							fitPosition={values.blockeraFitPosition}
 							fitPositionDefaultValue={
-								attributes.publisherFitPosition.default
+								attributes.blockeraFitPosition.default
 							}
 							fitPositionProps={
-								extensionProps.publisherFitPosition
+								extensionProps.blockeraFitPosition
 							}
 							handleOnChangeAttributes={handleOnChangeAttributes}
-							{...extensionProps.publisherFit}
+							{...extensionProps.blockeraFit}
 						/>
 					</ControlContextProvider>
 				</FeatureWrapper>

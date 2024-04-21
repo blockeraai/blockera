@@ -1,4 +1,4 @@
-.publisher-control.publisher-control-code {
+.blockera-control.blockera-control-code {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
@@ -9,17 +9,17 @@
 		border-radius: 2px;
 	}
 
-	.publisher-control-code-control__description {
+	.blockera-control-code-control__description {
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
 		font-size: 13px;
 		line-height: 1.4;
 		color: #929292;
-		transition: var(--publisher-controls-transition);
+		transition: var(--blockera-controls-transition);
 
 		&:hover {
-			color: var(--publisher-controls-color);
+			color: var(--blockera-controls-color);
 		}
 
 		p {
@@ -30,7 +30,7 @@
 		}
 	}
 
-	.publisher-control-code-control__placeholder {
+	.blockera-control-code-control__placeholder {
 		position: absolute;
 		top: 0;
 		left: 28px;
@@ -50,7 +50,7 @@
 
 .block-editor-block-inspector {
 
-	.publisher-control.publisher-control-code {
+	.blockera-control.blockera-control-code {
 
 		.monaco-editor .suggest-widget {
 			width: 248px !important;

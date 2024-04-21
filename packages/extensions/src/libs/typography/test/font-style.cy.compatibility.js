@@ -35,7 +35,7 @@ describe('Font Style → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('italic').to.be.equal(
-					getSelectedBlock(data, 'publisherFontStyle')
+					getSelectedBlock(data, 'blockeraFontStyle')
 				);
 
 				expect('italic').to.be.equal(
@@ -52,7 +52,7 @@ describe('Font Style → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('normal').to.be.equal(
-					getSelectedBlock(data, 'publisherFontStyle')
+					getSelectedBlock(data, 'blockeraFontStyle')
 				);
 
 				expect('normal').to.be.equal(
@@ -70,7 +70,7 @@ describe('Font Style → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherFontStyle')
+					getSelectedBlock(data, 'blockeraFontStyle')
 				);
 
 				expect(undefined).to.be.equal(

@@ -1,6 +1,6 @@
 <?php
 
-use Publisher\Framework\Providers\Assets\AssetsProvider;
+use Blockera\Framework\Providers\Assets\AssetsProvider;
 
 $version = '1.0.0';
 
@@ -8,23 +8,23 @@ require __DIR__ . '/bootstrap/loader-library.php';
 
 require __DIR__ . '/bootstrap/loader-composer.php';
 
-if ( ! function_exists( 'publisherCoreLoader' ) ) {
+if ( ! function_exists( 'blockeraCoreLoader' ) ) {
 
 	/**
 	 * @param array $framework
 	 */
-	function publisherCoreLoader( array $framework ) {
+	function blockeraCoreLoader( array $framework ) {
 
-		define( 'PB_CORE_URI', trailingslashit( $framework['uri'] ) );
-		define( 'PB_CORE_PATH', trailingslashit( $framework['path'] ) );
-		define( 'PB_CORE_VERSION', $framework['version'] );
+		define( 'BLOCKERA_CORE_URI', trailingslashit( $framework['uri'] ) );
+		define( 'BLOCKERA_CORE_PATH', trailingslashit( $framework['path'] ) );
+		define( 'BLOCKERA_CORE_VERSION', $framework['version'] );
 
 		require $framework['path'] . '/bootstrap/app.php';
 
 		/**
-		 * Fires after PublisherCore fully loaded.
+		 * Fires after Core fully loaded.
 		 */
-		do_action( 'publisher-core/after_setup' );
+		do_action( 'blockera-core/after_setup' );
 	}
 }
 
@@ -54,12 +54,12 @@ return static function ( array $params ) use ( $version ) {
 	}
 
 	$params['version'] = $version;
-	// PublisherComposerLoader::init(__DIR__ . '/vendor/');
+	// ComposerLoader::init(__DIR__ . '/vendor/');
 
 	require __DIR__ . '/vendor/autoload.php';
 
-	$instance = PublisherLibraryLoader::instance( 'publisher-core', [ 'priority' => 90 ] );
-	$instance->introduce( $version, 'publisherCoreLoader', $params );
+	$instance = LibraryLoader::instance( 'blockera-core', [ 'priority' => 90 ] );
+	$instance->introduce( $version, 'blockeraCoreLoader', $params );
 
 	return $instance;
 };

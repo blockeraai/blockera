@@ -1,4 +1,6 @@
-import { prepare } from '@publisher/data-extractor';
+// @flow
+
+import { prepare } from '@blockera/data-extractor';
 
 /**
  * It splits the path into an array of keys and iterates over them to traverse the object and retrieve the value at the specified path.
@@ -9,6 +11,6 @@ import { prepare } from '@publisher/data-extractor';
  * @param {*} defaultValue the default value when was not found path of object!
  * @return {*} the path value or default value!
  */
-export const get = (object, path, defaultValue) => {
+export const get = (object: Object, path: string, defaultValue: any): any => {
 	return prepare(path, object) ?? defaultValue;
 };

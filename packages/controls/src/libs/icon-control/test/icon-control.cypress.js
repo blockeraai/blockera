@@ -15,7 +15,7 @@ describe('icon-control', () => {
 
 	context('Functional', () => {
 		beforeEach(() => {
-			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+			addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 			cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
 		});
@@ -40,7 +40,7 @@ describe('icon-control', () => {
 				getWPDataObject().then((data) => {
 					const uploadedFileName = getSelectedBlock(
 						data,
-						'publisherIcon'
+						'blockeraIcon'
 					).uploadSVG.filename;
 					expect(uploadedFileName).to.match(/home(-\d+)?.svg/);
 				});
@@ -52,15 +52,15 @@ describe('icon-control', () => {
 			cy.get('[aria-label="Choose Icon…"]').click();
 
 			cy.get('input[type="search"]').eq(1).type('pub');
-			cy.get('span[aria-label="publisher Icon"]').click();
+			cy.get('span[aria-label="blockera Icon"]').click();
 
 			// data assertion
 			getWPDataObject().then((data) => {
 				const selectedIconName = getSelectedBlock(
 					data,
-					'publisherIcon'
+					'blockeraIcon'
 				).icon;
-				expect(selectedIconName).to.be.equal('publisher');
+				expect(selectedIconName).to.be.equal('blockera');
 			});
 		});
 
@@ -73,10 +73,11 @@ describe('icon-control', () => {
 			getWPDataObject().then((data) => {
 				const selectedIconName = getSelectedBlock(
 					data,
-					'publisherIcon'
+					'blockeraIcon'
 				).icon;
 				expect(selectedIconName).to.be.equal('');
 			});
 		});
 	});
 });
+

@@ -1,11 +1,11 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString } from '@publisher/utils';
-import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
-import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks/types';
+import { isString } from '@blockera/utils';
+import type { TStates } from '@blockera/extensions/src/libs/block-states/types';
+import type { InnerBlockType } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies

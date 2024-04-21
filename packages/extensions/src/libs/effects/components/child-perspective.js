@@ -6,7 +6,7 @@ import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -14,7 +14,7 @@ import {
 	InputControl,
 	PositionButtonControl,
 	useControlContext,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -39,7 +39,7 @@ export function ChildPerspective({
 		defaultValue: transformChildPerspectiveDefaultValue,
 		onChange: (newValue, ref) =>
 			handleOnChangeAttributes(
-				'publisherTransformChildPerspective',
+				'blockeraTransformChildPerspective',
 				newValue,
 				{ ref }
 			),
@@ -58,34 +58,34 @@ export function ChildPerspective({
 	return (
 		<>
 			<BaseControl
-				label={__('Child Perspective', 'publisher-core')}
+				label={__('Child Perspective', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It adds 3D effect by adding depth and distance for children blocks transformations, making elements appear to recede or come forward in 3D space.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'It enhances the realism of 3D transformations, making blocks like images, cards, and interactive graphics more dynamic and engaging.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							<b style={{ color: '#fff' }}>
-								{__('Note:', 'publisher-core')}{' '}
+								{__('Note:', 'blockera-core')}{' '}
 							</b>
 							{__(
 								'This only applies to children blocks and does not affect this block. For applying to current block, use the "Self Perspective" setting.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
 				}
 				columns="1fr 130px"
-				className={'publisher-transform-child-perspective'}
+				className={'blockera-transform-child-perspective'}
 				{...labelProps}
 			>
 				<InputControl
@@ -96,7 +96,7 @@ export function ChildPerspective({
 					defaultValue={transformChildPerspectiveDefaultValue}
 					onChange={(newValue, ref) =>
 						handleOnChangeAttributes(
-							'publisherTransformChildPerspective',
+							'blockeraTransformChildPerspective',
 							newValue,
 							{ ref }
 						)
@@ -108,28 +108,28 @@ export function ChildPerspective({
 					value={{
 						name: generateExtensionId(block, 'child-origin'),
 						value: transformChildOrigin,
-						attribute: 'publisherTransformChildOrigin',
+						attribute: 'blockeraTransformChildOrigin',
 						blockName: block.blockName,
 					}}
 				>
 					<PositionButtonControl
 						buttonLabel={__(
 							'Child Perspective Origin',
-							'publisher-core'
+							'blockera-core'
 						)}
 						popoverTitle={__(
 							'Child Perspective Position',
-							'publisher-core'
+							'blockera-core'
 						)}
 						alignmentMatrixLabel={__(
 							'Child Origin',
-							'publisher-core'
+							'blockera-core'
 						)}
 						size="small"
 						defaultValue={transformChildOriginDefaultValue}
 						onChange={({ top, left }, ref) => {
 							handleOnChangeAttributes(
-								'publisherTransformChildOrigin',
+								'blockeraTransformChildOrigin',
 								{
 									top,
 									left,

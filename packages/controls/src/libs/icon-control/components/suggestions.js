@@ -7,10 +7,10 @@ import { memo, useContext } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { hasSameProps, isEmpty, isUndefined } from '@publisher/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { hasSameProps, isEmpty, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies

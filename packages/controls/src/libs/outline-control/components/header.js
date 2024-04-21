@@ -7,10 +7,10 @@ import { __, sprintf } from '@wordpress/i18n';
 import type { Element } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { ColorIndicator } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { ColorIndicator } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -54,7 +54,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'publisher-core'),
+					__('Item %d', 'blockera-core'),
 					itemId + 1
 				)}
 			>
@@ -63,7 +63,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>
-					{__('Outline', 'publisher-core')}
+					{__('Outline', 'blockera-core')}
 				</span>
 
 				<span

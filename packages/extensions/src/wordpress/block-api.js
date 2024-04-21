@@ -1,9 +1,9 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import { useBlocksStore } from '../hooks';
-import { isFunction } from '@publisher/utils';
+import { isFunction } from '@blockera/utils';
 
 /**
  * Check is support border feature with WordPress?

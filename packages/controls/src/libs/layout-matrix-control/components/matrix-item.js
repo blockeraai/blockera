@@ -6,9 +6,9 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 export function MatrixItem({
 	id,

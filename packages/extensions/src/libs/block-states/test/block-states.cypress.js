@@ -7,7 +7,7 @@ describe('Border and Shadow extension', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getIframeBody()
 			.find(`[data-type="core/paragraph"]`)
@@ -17,16 +17,16 @@ describe('Border and Shadow extension', () => {
 	describe('state-container', () => {
 		it('Set the "Normal" state color on the root of the container using CSS variables.', () => {
 			cy.cssVar(
-				'--publisher-tab-panel-active-color',
-				'[aria-label="Publisher Block State Container"]:first-child'
+				'--blockera-tab-panel-active-color',
+				'[aria-label=" Block State Container"]:first-child'
 			).should('eq', '#147EB8');
 		});
 		it('Set the "third-party" state (Like: hover, active, etc) color on the root of the container using CSS variables.', () => {
 			cy.getByAriaLabel('Add New Block States').click();
 
 			cy.cssVar(
-				'--publisher-tab-panel-active-color',
-				'[aria-label="Publisher Block State Container"]:first-child'
+				'--blockera-tab-panel-active-color',
+				'[aria-label=" Block State Container"]:first-child'
 			).should('eq', '#D47C14');
 		});
 	});
@@ -40,7 +40,7 @@ describe('Border and Shadow extension', () => {
 				.contains('Advanced')
 				.parent()
 				.parent()
-				.should('have.class', 'publisher-not-allowed');
+				.should('have.class', 'blockera-not-allowed');
 		});
 
 		it('Set the current state when add new block states', () => {
@@ -60,3 +60,4 @@ describe('Border and Shadow extension', () => {
 		});
 	});
 });
+

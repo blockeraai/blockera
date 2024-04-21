@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Support;
+namespace Blockera\Framework\Illuminate\Support;
 
 /**
  * Env class to handle access .env file of project variables

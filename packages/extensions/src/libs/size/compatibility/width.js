@@ -1,7 +1,7 @@
 // @flow
 
-import { isString, isUndefined } from '@publisher/utils';
-import { extractNumberAndUnit, isSpecialUnit } from '@publisher/controls';
+import { isString, isUndefined } from '@blockera/utils';
+import { extractNumberAndUnit, isSpecialUnit } from '@blockera/controls';
 
 export function widthFromWPCompatibility({
 	attributes,
@@ -10,7 +10,7 @@ export function widthFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (attributes?.publisherWidth !== '') {
+	if (attributes?.blockeraWidth !== '') {
 		return attributes;
 	}
 
@@ -21,7 +21,7 @@ export function widthFromWPCompatibility({
 				attributes?.width !== undefined &&
 				attributes?.widthUnit !== undefined
 			) {
-				attributes.publisherWidth =
+				attributes.blockeraWidth =
 					attributes?.width + attributes?.widthUnit;
 			}
 
@@ -31,7 +31,7 @@ export function widthFromWPCompatibility({
 		// unit is %
 		case 'core/button':
 			if (attributes?.width !== undefined) {
-				attributes.publisherWidth = attributes?.width + '%';
+				attributes.blockeraWidth = attributes?.width + '%';
 			}
 
 			return attributes;
@@ -41,9 +41,9 @@ export function widthFromWPCompatibility({
 		case 'core/site-logo':
 			if (
 				attributes?.width !== undefined &&
-				attributes?.publisherWidth !== attributes?.width + 'px'
+				attributes?.blockeraWidth !== attributes?.width + 'px'
 			) {
-				attributes.publisherWidth = attributes?.width + 'px';
+				attributes.blockeraWidth = attributes?.width + 'px';
 			}
 
 			return attributes;
@@ -52,7 +52,7 @@ export function widthFromWPCompatibility({
 		case 'core/column':
 		case 'core/image':
 			if (attributes?.width !== undefined) {
-				attributes.publisherWidth = attributes?.width;
+				attributes.blockeraWidth = attributes?.width;
 			}
 
 			return attributes;

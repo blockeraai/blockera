@@ -10,15 +10,15 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherCustomCSS: FeatureConfig = {
+const blockeraCustomCSS: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Custom CSS Code', 'publisher-core'),
+	label: __('Custom CSS Code', 'blockera-core'),
 	isActiveOnStates: ['normal'],
 	isActiveOnBreakpoints: ['laptop'],
 };
 
 export const customStyleConfig = {
-	publisherCustomCSS,
+	blockeraCustomCSS,
 };

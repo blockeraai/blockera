@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { controlClassNames } from '@blockera/classnames';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies

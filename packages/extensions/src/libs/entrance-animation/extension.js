@@ -7,15 +7,15 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	ControlContextProvider,
 	PanelBodyControl,
 	RepeaterControl,
-} from '@publisher/controls';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
+} from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -33,13 +33,13 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 			block,
 			extensionConfig,
 		}: EntranceExtensionProps): MixedElement => {
-			if (!isActiveField(extensionConfig.publisherEntranceAnimation)) {
+			if (!isActiveField(extensionConfig.blockeraEntranceAnimation)) {
 				return <></>;
 			}
 
 			return (
 				<PanelBodyControl
-					title={__('On Entrance', 'publisher-core')}
+					title={__('On Entrance', 'blockera-core')}
 					initialOpen={true}
 					icon={<EntranceAnimationExtensionIcon />}
 					className={extensionClassNames('entrance-animation')}
@@ -51,10 +51,10 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 								'entranceAnimation'
 							),
 							value: {},
-							attribute: 'publisherEntranceAnimation',
+							attribute: 'blockeraEntranceAnimation',
 							blockName: block.blockName,
 						}}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 					>
 						<RepeaterControl
 							label=""
@@ -63,17 +63,17 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 							icon={<AnimationIcon />}
 							description={__(
 								'Block will animate when it enters into view.',
-								'publisher-core'
+								'blockera-core'
 							)}
 							actionButtonAdd={false}
 							injectHeaderButtonsStart={
 								<span
 									style={{
-										color: 'var(--publisher-controls-primary-color)',
+										color: 'var(--blockera-controls-primary-color)',
 										fontStyle: 'italic',
 									}}
 								>
-									{__('Coming soon…', 'publisher-core')}
+									{__('Coming soon…', 'blockera-core')}
 								</span>
 							}
 						/>

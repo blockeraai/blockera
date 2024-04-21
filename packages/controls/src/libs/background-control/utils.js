@@ -1,11 +1,11 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getValueAddonRealValue,
 	isValid as isValidVariable,
-} from '@publisher/hooks';
+} from '@blockera/hooks';
 
 /**
  * Internal dependencies

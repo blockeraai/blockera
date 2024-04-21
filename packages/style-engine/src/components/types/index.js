@@ -6,8 +6,8 @@
 import type {
 	TBreakpoint,
 	TStates,
-} from '@publisher/extensions/src/libs/block-states/types';
-import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions/src/libs/block-states/types';
+import type { InnerBlockType } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 export type MediaQueryProps = {
 	breakpoint: TBreakpoint,

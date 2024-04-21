@@ -8,13 +8,13 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { Button } from '@publisher/components';
+} from '@blockera/classnames';
+import { Button } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -121,7 +121,7 @@ export default function LinkControl({
 						noBorder={true}
 						aria-label={__(
 							'Open Advanced Settings',
-							'publisher-core'
+							'blockera-core'
 						)}
 					>
 						<AdvancedIcon />
@@ -138,7 +138,7 @@ export default function LinkControl({
 							id={'target'}
 							checkboxLabel={__(
 								'Open in New Window',
-								'publisher-core'
+								'blockera-core'
 							)}
 							label=""
 							columns=""
@@ -155,7 +155,7 @@ export default function LinkControl({
 							id={'nofollow'}
 							label=""
 							columns=""
-							checkboxLabel={__('Add Nofollow', 'publisher-core')}
+							checkboxLabel={__('Add Nofollow', 'blockera-core')}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -167,7 +167,7 @@ export default function LinkControl({
 
 						<InputControl
 							controlName="input"
-							label={__('Label', 'publisher-core')}
+							label={__('Label', 'blockera-core')}
 							columns="columns-2"
 							id={'label'}
 							onChange={(newValue) => {
@@ -176,7 +176,7 @@ export default function LinkControl({
 									label: newValue,
 								});
 							}}
-							aria-label={__('Link Label', 'publisher-core')}
+							aria-label={__('Link Label', 'blockera-core')}
 							defaultValue={defaultValue.label}
 						/>
 
@@ -195,7 +195,7 @@ export default function LinkControl({
 									});
 								}}
 								attributeElement="a"
-								label={__('Attributes', 'publisher-core')}
+								label={__('Attributes', 'blockera-core')}
 							/>
 						</ControlContextProvider>
 					</div>

@@ -10,21 +10,21 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherPosition: FeatureConfig = {
+const blockeraPosition: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Position', 'publisher-core'),
+	label: __('Position', 'blockera-core'),
 };
 
-const publisherZIndex: FeatureConfig = {
+const blockeraZIndex: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Z-Index', 'publisher-core'),
+	label: __('Z-Index', 'blockera-core'),
 };
 
 export const positionConfig = {
-	publisherPosition,
-	publisherZIndex,
+	blockeraPosition,
+	blockeraZIndex,
 };

@@ -5,9 +5,9 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
-import type { VariableCategory, DynamicValueTypes } from '@publisher/core-data';
+import type { VariableCategory, DynamicValueTypes } from '@blockera/core-data';
 
 export type ControlSize = 'normal' | 'input' | 'small' | 'extra-small';
 

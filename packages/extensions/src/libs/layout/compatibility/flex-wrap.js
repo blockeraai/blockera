@@ -6,14 +6,14 @@ export function flexWrapFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.publisherFlexWrap?.value !== '' ||
+		attributes?.blockeraFlexWrap?.value !== '' ||
 		attributes?.layout?.flexWrap === ''
 	) {
 		return false;
 	}
 
 	return {
-		publisherFlexWrap: {
+		blockeraFlexWrap: {
 			value: attributes?.layout?.flexWrap,
 			reverse: false,
 		},

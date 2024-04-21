@@ -1,11 +1,11 @@
 <?php
 
-namespace Publisher\Framework\Services\Block;
+namespace Blockera\Framework\Services\Block;
 
-use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Services\Block\HTML\Icon;
-use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\StyleEngine\StyleEngine;
+use Blockera\Framework\Exceptions\BaseException;
+use Blockera\Framework\Services\Block\HTML\Icon;
+use Blockera\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\StyleEngine\StyleEngine;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**

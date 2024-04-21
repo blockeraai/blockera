@@ -6,12 +6,12 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	ControlContextProvider,
 	ToggleSelectControl,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -40,58 +40,58 @@ export const TextTransform = ({
 			value={{
 				name: generateExtensionId(block, 'text-transform'),
 				value,
-				attribute: 'publisherTextTransform',
+				attribute: 'blockeraTextTransform',
 				blockName: block.blockName,
 			}}
 		>
 			<ToggleSelectControl
-				label={__('Capitalize', 'publisher-core')}
+				label={__('Capitalize', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets the capitalization of text for adding stylistic and readability enhancements in text presentation.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<TextTransformCapitalizeIcon />
-							{__('Capitalize', 'publisher-core')}
+							{__('Capitalize', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Capitalizes the first letter of each word.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<TextTransformLowercaseIcon />
-							{__('Lowercase', 'publisher-core')}
+							{__('Lowercase', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Converts all characters to lowercase.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<TextTransformUppercaseIcon />
-							{__('Uppercase', 'publisher-core')}
+							{__('Uppercase', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Converts all characters of the text to uppercase.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<NoneIcon />
-							{__('None', 'publisher-core')}
+							{__('None', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Maintains the original text as it is, without transformation.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -100,22 +100,22 @@ export const TextTransform = ({
 				className="control-first label-center small-gap"
 				options={[
 					{
-						label: __('Capitalize', 'publisher-core'),
+						label: __('Capitalize', 'blockera-core'),
 						value: 'capitalize',
 						icon: <TextTransformCapitalizeIcon />,
 					},
 					{
-						label: __('Lowercase', 'publisher-core'),
+						label: __('Lowercase', 'blockera-core'),
 						value: 'lowercase',
 						icon: <TextTransformLowercaseIcon />,
 					},
 					{
-						label: __('Uppercase', 'publisher-core'),
+						label: __('Uppercase', 'blockera-core'),
 						value: 'uppercase',
 						icon: <TextTransformUppercaseIcon />,
 					},
 					{
-						label: __('None', 'publisher-core'),
+						label: __('None', 'blockera-core'),
 						value: 'initial',
 						icon: <NoneIcon />,
 					},
@@ -123,7 +123,7 @@ export const TextTransform = ({
 				isDeselectable={true}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					onChange('publisherTextTransform', newValue, {
+					onChange('blockeraTextTransform', newValue, {
 						ref,
 					})
 				}

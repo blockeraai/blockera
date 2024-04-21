@@ -1,10 +1,10 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isFunction } from '@publisher/utils';
-import { update } from '@publisher/data-extractor';
+import { isFunction } from '@blockera/utils';
+import { update } from '@blockera/data-extractor';
 
 /**
  * Internal dependencies

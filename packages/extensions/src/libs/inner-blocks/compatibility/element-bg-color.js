@@ -1,11 +1,11 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isUndefined, mergeObject } from '@publisher/utils';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-import { getColorVAFromVarString } from '@publisher/core-data';
+import { isEmpty, isUndefined, mergeObject } from '@blockera/utils';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
+import { getColorVAFromVarString } from '@blockera/core-data';
 
 /**
  * Internal dependencies
@@ -26,10 +26,10 @@ export function elementNormalBackgroundColorFromWPCompatibility({
 
 		if (color) {
 			return {
-				publisherInnerBlocks: {
+				blockeraInnerBlocks: {
 					[element]: {
 						attributes: {
-							publisherBackgroundColor: color,
+							blockeraBackgroundColor: color,
 						},
 					},
 				},
@@ -60,8 +60,8 @@ export function elementNormalBackgroundColorToWPCompatibility({
 
 		// after removing bg color, the gradient should moved to WP data
 		if (
-			attributes?.publisherInnerBlocks[element]?.attributes
-				?.publisherBackground
+			attributes?.blockeraInnerBlocks[element]?.attributes
+				?.blockeraBackground
 		) {
 			return mergeObject(
 				{
@@ -78,8 +78,8 @@ export function elementNormalBackgroundColorToWPCompatibility({
 				elementNormalBackgroundToWPCompatibility({
 					element,
 					newValue:
-						attributes?.publisherInnerBlocks[element]?.attributes
-							?.publisherBackground,
+						attributes?.blockeraInnerBlocks[element]?.attributes
+							?.blockeraBackground,
 					ref: {},
 				})
 			);

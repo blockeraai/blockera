@@ -1,7 +1,7 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BackgroundStyles,
@@ -14,13 +14,13 @@ import {
 	SpacingStyles,
 	TypographyStyles,
 	EffectsStyles,
-} from '@publisher/extensions';
+} from '@blockera/extensions';
 import {
 	isNormalState,
 	prepareAttributesDefaultValues,
-} from '@publisher/extensions/src/components';
-import { useBlockContext } from '@publisher/extensions/src/hooks';
-import { useStoreSelectors } from '@publisher/extensions/src/hooks/use-store-selectors';
+} from '@blockera/extensions/src/components';
+import { useBlockContext } from '@blockera/extensions/src/hooks';
+import { useStoreSelectors } from '@blockera/extensions/src/hooks/use-store-selectors';
 
 /**
  * Internal dependencies
@@ -39,7 +39,7 @@ export const useComputedCssProps = ({
 	const {
 		blocks: { getBlockType },
 	} = useStoreSelectors();
-	const { publisherInnerBlocks } = useBlockContext();
+	const { blockeraInnerBlocks } = useBlockContext();
 	const calculatedProps = {
 		...params,
 		state,
@@ -88,7 +88,7 @@ export const useComputedCssProps = ({
 		);
 
 		// Calculation inner blocks styles for normal state ...
-		Object.entries(params?.attributes?.publisherInnerBlocks).forEach(
+		Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
 			([blockType, { attributes }]: [string, Object]): void => {
 				// Assume attributes hasn't any values.
 				if (!Object.keys(attributes)) {
@@ -99,7 +99,7 @@ export const useComputedCssProps = ({
 					appendStyles({
 						...calculatedProps,
 						selectors:
-							publisherInnerBlocks[blockType]?.selectors || {},
+							blockeraInnerBlocks[blockType]?.selectors || {},
 						attributes: {
 							...defaultAttributes,
 							...attributes,
@@ -125,15 +125,15 @@ export const useComputedCssProps = ({
 					{ attributes },
 				]: [string, Object]): void => {
 					// Assume attributes hasn't any values.
-					if (!attributes?.publisherBlockStates) {
+					if (!attributes?.blockeraBlockStates) {
 						return;
 					}
 
-					if (!validateState(attributes?.publisherBlockStates)) {
+					if (!validateState(attributes?.blockeraBlockStates)) {
 						return;
 					}
 
-					const settings = attributes.publisherBlockStates[state];
+					const settings = attributes.blockeraBlockStates[state];
 
 					// Calculation inner block styles for pseudo-classes ...
 					Object.entries(settings?.breakpoints).forEach(
@@ -149,7 +149,7 @@ export const useComputedCssProps = ({
 								appendStyles({
 									...calculatedProps,
 									selectors:
-										publisherInnerBlocks[blockType]
+										blockeraInnerBlocks[blockType]
 											?.selectors,
 									attributes: {
 										...defaultAttributes,
@@ -163,16 +163,16 @@ export const useComputedCssProps = ({
 				};
 
 				// Calculation inner blocks styles for normal state ...
-				Object.entries(
-					params?.attributes?.publisherInnerBlocks
-				).forEach(generateCssForInnersInsidePseudoState);
+				Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
+					generateCssForInnersInsidePseudoState
+				);
 
 				// Assume recieved state is invalid.
-				if (!validateState(params?.attributes?.publisherBlockStates)) {
+				if (!validateState(params?.attributes?.blockeraBlockStates)) {
 					return stylesStack.flat();
 				}
 
-				const states = params?.attributes?.publisherBlockStates;
+				const states = params?.attributes?.blockeraBlockStates;
 				const settings = states[state];
 
 				// Calculation styles for recieved state ...
@@ -195,7 +195,7 @@ export const useComputedCssProps = ({
 
 						// Calculation inner blocks styles for recieved state ...
 						Object.entries(
-							setting?.attributes?.publisherInnerBlocks || {}
+							setting?.attributes?.blockeraInnerBlocks || {}
 						).forEach(generateCssForInnersInsidePseudoState);
 					}
 				);

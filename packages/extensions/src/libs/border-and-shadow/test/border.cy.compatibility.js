@@ -44,7 +44,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({ color: '#ffb2b2', width: '1px' }).to.be.deep.equal(
@@ -70,7 +70,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -105,7 +105,7 @@ describe('Border → WP Compatibility', () => {
 							color: '#ffb2b2',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -136,7 +136,7 @@ describe('Border → WP Compatibility', () => {
 
 				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -202,7 +202,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -282,7 +282,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -345,7 +345,7 @@ describe('Border → WP Compatibility', () => {
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -411,7 +411,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -460,7 +460,7 @@ describe('Border → WP Compatibility', () => {
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -524,7 +524,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect('accent-3').to.be.equal(
@@ -569,7 +569,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect('accent-3').to.be.equal(
@@ -608,7 +608,7 @@ describe('Border → WP Compatibility', () => {
 
 				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect(undefined).to.be.equal(
@@ -739,7 +739,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -879,7 +879,7 @@ describe('Border → WP Compatibility', () => {
 							style: 'solid',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({
@@ -942,7 +942,7 @@ describe('Border → WP Compatibility', () => {
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
 					expect('').to.be.equal(
-						getSelectedBlock(data, 'publisherBorder')
+						getSelectedBlock(data, 'blockeraBorder')
 					);
 
 					expect({

@@ -14,7 +14,7 @@ const path = require('path');
 /**
  * Constants
  */
-const PUBLISHER_NAMESPACE = '@publisher/';
+const BLOCKERA_NAMESPACE = '@blockera/';
 
 module.exports = (env, options) => {
 	const isDevMode = options?.mode === 'development';
@@ -22,7 +22,7 @@ module.exports = (env, options) => {
 		...defaultConfig,
 		entry: {
 			...defaultConfig.entry,
-			'publisher-core-app': path.resolve(
+			'blockera-core-app': path.resolve(
 				process.cwd(),
 				'tools/wp-env-app/index.js'
 			),
@@ -41,11 +41,11 @@ module.exports = (env, options) => {
 			new DependencyExtractionWebpackPlugin({
 				injectPolyfill: true,
 				requestToExternal(request) {
-					if (request.startsWith(PUBLISHER_NAMESPACE)) {
+					if (request.startsWith(BLOCKERA_NAMESPACE)) {
 						return [
-							'publisher',
+							'blockera',
 							camelCaseDash(
-								request.substring(PUBLISHER_NAMESPACE.length)
+								request.substring(BLOCKERA_NAMESPACE.length)
 							),
 						];
 					}
@@ -100,3 +100,4 @@ module.exports = (env, options) => {
 if (process.env.CI) {
 	module.exports.parallelism = 1;
 }
+

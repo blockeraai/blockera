@@ -4,7 +4,7 @@
  * Internal dependencies
  */
 import type { BaseExtensionProps } from '../../types';
-import type { BorderRadiusValue } from '@publisher/controls';
+import type { BorderRadiusValue } from '@blockera/controls';
 import type { FeatureConfig } from '../../base';
 
 export type TBorderAndShadowDefaultProp = {
@@ -24,13 +24,13 @@ export type TBorderAndShadowDefaultProp = {
 export type TBorderAndShadowProps = {
 	...BaseExtensionProps,
 	extensionConfig: {
-		publisherBorder: FeatureConfig,
-		publisherBorderRadius: FeatureConfig,
-		publisherBoxShadow: FeatureConfig,
-		publisherOutline: FeatureConfig,
+		blockeraBorder: FeatureConfig,
+		blockeraBorderRadius: FeatureConfig,
+		blockeraBoxShadow: FeatureConfig,
+		blockeraOutline: FeatureConfig,
 	},
 	values: {
-		publisherBorder: {
+		blockeraBorder: {
 			color?: string,
 			style?: string,
 			width?: string,
@@ -40,14 +40,14 @@ export type TBorderAndShadowProps = {
 			bottom?: Object,
 			radius?: BorderRadiusValue,
 		},
-		publisherBorderRadius: Object,
-		publisherBoxShadow: Array<Object>,
-		publisherOutline: Array<Object>,
+		blockeraBorderRadius: Object,
+		blockeraBoxShadow: Array<Object>,
+		blockeraOutline: Array<Object>,
 	},
 	extensionProps: {
-		publisherBoxShadow: Object,
-		publisherOutline: Object,
-		publisherBorder: Object,
-		publisherBorderRadius: Object,
+		blockeraBoxShadow: Object,
+		blockeraOutline: Object,
+		blockeraBorder: Object,
+		blockeraBorderRadius: Object,
 	},
 };

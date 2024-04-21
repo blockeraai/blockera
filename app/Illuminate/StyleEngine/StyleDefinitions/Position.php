@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 class Position extends BaseStyleDefinition {
 
@@ -39,7 +39,7 @@ class Position extends BaseStyleDefinition {
 						...array_map(
 							static function ( string $item, string $property ): array {
 
-								return [ $property => pb_get_value_addon_real_value( $item ) ];
+								return [ $property => blockera_get_value_addon_real_value( $item ) ];
 							},
 							$filteredValues,
 							array_keys( $filteredValues )
@@ -49,7 +49,7 @@ class Position extends BaseStyleDefinition {
 
 				break;
 			case 'z-index':
-				$declaration[$cssProperty] = pb_get_value_addon_real_value( $setting['z-index'] );
+				$declaration[$cssProperty] = blockera_get_value_addon_real_value( $setting['z-index'] );
 				break;
 		}
 
@@ -66,8 +66,8 @@ class Position extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherPosition' => 'position',
-			'publisherZIndex'   => 'z-index',
+			'blockeraPosition' => 'position',
+			'blockeraZIndex'   => 'z-index',
 		];
 	}
 

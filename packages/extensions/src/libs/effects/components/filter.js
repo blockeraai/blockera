@@ -6,13 +6,13 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	FilterControl,
 	ControlContextProvider,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -37,22 +37,22 @@ export const Filter = ({
 			value={{
 				name: generateExtensionId(block, 'filters'),
 				value: filter,
-				attribute: 'publisherFilter',
+				attribute: 'blockeraFilter',
 				blockName: block.blockName,
 			}}
-			storeName={'publisher-core/controls/repeater'}
+			storeName={'blockera-core/controls/repeater'}
 		>
 			<BaseControl controlName="filter" columns="columns-1">
 				<FilterControl
-					label={__('Filters', 'publisher-core')}
+					label={__('Filters', 'blockera-core')}
 					onChange={(newValue, ref) =>
-						handleOnChangeAttributes('publisherFilter', newValue, {
+						handleOnChangeAttributes('blockeraFilter', newValue, {
 							ref,
 						})
 					}
 					addNewButtonLabel={__(
 						'Add New Filter Effect',
-						'publisher-core'
+						'blockera-core'
 					)}
 					defaultValue={defaultValue}
 					{...props}

@@ -6,9 +6,9 @@
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { hasSameProps } from '@publisher/utils';
+import { hasSameProps } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -50,7 +50,7 @@ export function generateExtensionId(
 		getExtensionInnerBlockState = () => 'normal',
 		getExtensionCurrentBlockState = () => 'normal',
 		getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
-	} = select('publisher-core/extensions') || {};
+	} = select('blockera-core/extensions') || {};
 
 	const currentBlock = getExtensionCurrentBlock();
 
@@ -79,5 +79,5 @@ export function generateExtensionId(
  * @return {Object} The regex pattern.
  */
 export function ignoreDefaultBlockAttributeKeysRegExp(): Object {
-	return /^(?!publisher\w+).*/i;
+	return /^(?!blockera\w+).*/i;
 }

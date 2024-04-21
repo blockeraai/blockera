@@ -9,7 +9,7 @@ export function fitFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (attributes?.publisherFit !== '') {
+	if (attributes?.blockeraFit !== '') {
 		return attributes;
 	}
 
@@ -20,7 +20,7 @@ export function fitFromWPCompatibility({
 				attributes?.scale !== undefined &&
 				coreWPFitValues.includes(attributes.scale)
 			) {
-				attributes.publisherFit = attributes.scale;
+				attributes.blockeraFit = attributes.scale;
 			}
 
 			return attributes;

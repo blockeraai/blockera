@@ -6,7 +6,7 @@ import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -15,8 +15,8 @@ import {
 	NoticeControl,
 	PositionButtonControl,
 	useControlContext,
-} from '@publisher/controls';
-import { checkVisibleItemLength } from '@publisher/utils';
+} from '@blockera/controls';
+import { checkVisibleItemLength } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -45,7 +45,7 @@ export function SelfPerspective({
 		defaultValue: transformSelfPerspectiveDefaultValue,
 		onChange: (newValue, ref) =>
 			handleOnChangeAttributes(
-				'publisherTransformSelfPerspective',
+				'blockeraTransformSelfPerspective',
 				newValue,
 				{ ref }
 			),
@@ -65,36 +65,36 @@ export function SelfPerspective({
 		<>
 			<BaseControl columns="column-1">
 				<BaseControl
-					label={__('Self Perspective', 'publisher-core')}
+					label={__('Self Perspective', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It adds 3D effect by adding depth and distance for current block transformations, making elements appear to recede or come forward in 3D space.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 							<p>
 								{__(
 									'It enhances the realism of 3D transformations, making blocks like images, cards, and interactive graphics more dynamic and engaging.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 							<p>
 								<b style={{ color: '#fff' }}>
-									{__('Note:', 'publisher-core')}{' '}
+									{__('Note:', 'blockera-core')}{' '}
 								</b>
 								{__(
 									'This only applies to current block and does not affect child blocks. For applying to child blocks, use the "Child Perspective" setting.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
 					}
 					columns="1fr 130px"
-					className={`publisher-transform-self-perspective ${
+					className={`blockera-transform-self-perspective ${
 						!visibleTransformLength
-							? 'publisher-control-is-not-active'
+							? 'blockera-control-is-not-active'
 							: ''
 					}`}
 					{...labelProps}
@@ -107,7 +107,7 @@ export function SelfPerspective({
 						defaultValue={transformSelfPerspectiveDefaultValue}
 						onChange={(newValue, ref) =>
 							handleOnChangeAttributes(
-								'publisherTransformSelfPerspective',
+								'blockeraTransformSelfPerspective',
 								newValue,
 								{ ref }
 							)
@@ -119,28 +119,28 @@ export function SelfPerspective({
 						value={{
 							name: generateExtensionId(block, 'self-origin'),
 							value: transformSelfOrigin,
-							attribute: 'publisherTransformSelfOrigin',
+							attribute: 'blockeraTransformSelfOrigin',
 							blockName: block.blockName,
 						}}
 					>
 						<PositionButtonControl
 							buttonLabel={__(
 								'Self Perspective Origin',
-								'publisher-core'
+								'blockera-core'
 							)}
 							popoverTitle={__(
 								'Self Perspective Position',
-								'publisher-core'
+								'blockera-core'
 							)}
 							alignmentMatrixLabel={__(
 								'Self Origin',
-								'publisher-core'
+								'blockera-core'
 							)}
 							size="small"
 							defaultValue={transformSelfOriginDefaultValue}
 							onChange={({ top, left }, ref) => {
 								handleOnChangeAttributes(
-									'publisherTransformSelfOrigin',
+									'blockeraTransformSelfOrigin',
 									{
 										top,
 										left,
@@ -156,7 +156,7 @@ export function SelfPerspective({
 					<NoticeControl type="warning">
 						{__(
 							`For using Self Perspective the block should have at least one transformation.`,
-							'publisher-core'
+							'blockera-core'
 						)}
 					</NoticeControl>
 				)}

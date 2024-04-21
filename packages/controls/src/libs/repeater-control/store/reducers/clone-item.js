@@ -1,8 +1,8 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isFunction } from '@publisher/utils';
-import { prepare, update } from '@publisher/data-extractor';
+import { isFunction } from '@blockera/utils';
+import { prepare, update } from '@blockera/data-extractor';
 
 /**
  * Internal dependencies

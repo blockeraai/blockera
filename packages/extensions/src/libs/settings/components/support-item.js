@@ -7,10 +7,10 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Icon, Button } from '@publisher/components';
-import { componentClassNames } from '@publisher/classnames';
+import { Icon, Button } from '@blockera/components';
+import { componentClassNames } from '@blockera/classnames';
 
 export const SupportItem = ({
 	name,
@@ -47,13 +47,13 @@ export const SupportItem = ({
 
 	if (force) {
 		ariaLabel = // translators: %s is the feature name in advanced settings panel in extensions
-			sprintf(__('%s is a required feature', 'publisher-core'), label);
+			sprintf(__('%s is a required feature', 'blockera-core'), label);
 	} else {
 		ariaLabel = show
 			? // translators: %s is the feature name in advanced settings panel in extensions
-			  sprintf(__('Deactivate %s', 'publisher-core'), label)
+			  sprintf(__('Deactivate %s', 'blockera-core'), label)
 			: // translators: %s is the feature name in advanced settings panel in extensions
-			  sprintf(__('Activate %s', 'publisher-core'), label);
+			  sprintf(__('Activate %s', 'blockera-core'), label);
 	}
 
 	return (

@@ -1,25 +1,25 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isBorderRadiusEmpty } from '@publisher/controls';
-import { isObject, isString } from '@publisher/utils';
+import { isBorderRadiusEmpty } from '@blockera/controls';
+import { isObject, isString } from '@blockera/utils';
 
 export function borderRadiusFromWPCompatibility({
 	attributes,
 }: {
 	attributes: Object,
 }): Object {
-	if (isBorderRadiusEmpty(attributes?.publisherBorderRadius)) {
+	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius)) {
 		if (attributes?.style?.border?.radius !== undefined) {
 			if (isString(attributes?.style?.border?.radius)) {
-				attributes.publisherBorderRadius = {
+				attributes.blockeraBorderRadius = {
 					type: 'all',
 					all: attributes?.style?.border?.radius,
 				};
 			} else if (isObject(attributes?.style?.border?.radius)) {
-				attributes.publisherBorderRadius = {
+				attributes.blockeraBorderRadius = {
 					topLeft: '',
 					topRight: '',
 					bottomLeft: '',

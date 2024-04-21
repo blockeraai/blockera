@@ -5,7 +5,7 @@ export default function AlignItemsBaselineBlockIcon({}) {
 			height="18"
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
-			className="publisher-align-items-baseline"
+			className="blockera-align-items-baseline"
 		>
 			<path d="M9.21506 5.0625L7.32519 11H6L8.47732 4H9.32435L9.21506 5.0625ZM10.7953 11L8.89628 5.0625L8.78243 4H9.63401L12.125 11H10.7953ZM10.7087 8.39904V9.44231H7.15214V8.39904H10.7087Z" />
 			<path

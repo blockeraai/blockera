@@ -1,4 +1,4 @@
-.publisher-component-popover {
+.blockera-component-popover {
 	position: relative;
 	--popover-overflow: visible;
 	--popover-min-height: auto;
@@ -7,12 +7,12 @@
 	--popover-header-height: 42px;
 	--popover-color: #1e1e1e;
 	--popover-bg-color: #ffffff;
-	--popover-border-color: var(--publisher-controls-primary-color);
+	--popover-border-color: var(--blockera-controls-primary-color);
 	--popover-header-color: var(--popover-color);
 	--popover-header-bg-color: #ffffff;
 	--popover-header-shadow-color: #00000029;
 	--popover-header-btn-color: #1e1e1e;
-	--popover-header-btn-border-color: var(--publisher-controls-border-color-soft);
+	--popover-header-btn-border-color: var(--blockera-controls-border-color-soft);
 	overflow: var(--popover-overflow) !important;
 	background-color: var(--popover-bg-color);
 	color: var(--popover-color);
@@ -38,7 +38,7 @@
 		}
 	}
 
-	.publisher-component-popover-header {
+	.blockera-component-popover-header {
 		padding: 0 18px;
 		box-shadow: 0 2px 6px 0 var(--popover-header-shadow-color);
 		position: fixed;
@@ -61,14 +61,14 @@
 			fill: currentColor;
 		}
 
-		.publisher-component-button {
+		.blockera-component-button {
 			padding: 0 !important;
 			min-width: 24px;
 			height: 24px;
-			--publisher-controls-border-color: var(--publisher-controls-border-color-soft);
+			--blockera-controls-border-color: var(--blockera-controls-border-color-soft);
 		}
 
-		.publisher-component-popover-title-buttons {
+		.blockera-component-popover-title-buttons {
 			display: flex;
 			gap: 6px;
 			flex-direction: row;
@@ -79,7 +79,7 @@
 		}
 	}
 
-	.publisher-component-popover-body {
+	.blockera-component-popover-body {
 		padding: 25px 18px 0 18px;
 		min-height: calc(var(--popover-min-height) - var(--popover-header-height));
 		max-height: calc(var(--popover-height) - var(--popover-header-height));

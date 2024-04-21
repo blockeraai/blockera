@@ -1,7 +1,7 @@
-.publisher-control-media-image {
+.blockera-control-media-image {
 	height: 140px;
 	background: repeating-conic-gradient(#eaeaea 0%, #eaeaea 25%, transparent 0%, transparent 50%) 50% center/10px 10px;
-	border-color: var(--publisher-controls-border-color);
+	border-color: var(--blockera-controls-border-color);
 	border-style: solid;
 	border-width: 1px;
 	border-radius: 2px;
@@ -30,17 +30,17 @@
 		}
 	}
 
-	.publisher-component-button.btn-choose-image {
+	.blockera-component-button.btn-choose-image {
 		background: #ffffff !important;
-		border-color: var(--publisher-controls-border-color-hover);
-		box-shadow: 0 4px 7px var(--publisher-controls-border-color-hover);
+		border-color: var(--blockera-controls-border-color-hover);
+		box-shadow: 0 4px 7px var(--blockera-controls-border-color-hover);
 		border-radius: 3px;
 		font-size: 12px;
 		padding: 4px 10px;
 		height: 30px;
 	}
 
-	.publisher-component-button.btn-delete {
+	.blockera-component-button.btn-delete {
 		position: absolute;
 		right: 0;
 		top: 0;
@@ -48,24 +48,24 @@
 		padding: 0;
 		min-width: 24px;
 		height: 24px;
-		border-left: 1px solid var(--publisher-controls-border-color-hover) !important;
-		border-bottom: 1px solid var(--publisher-controls-border-color-hover) !important;
+		border-left: 1px solid var(--blockera-controls-border-color-hover) !important;
+		border-bottom: 1px solid var(--blockera-controls-border-color-hover) !important;
 		background: #ffffff !important;
 		border-radius: 0 0 0 2px;
 		display: none;
 	}
 
-	.publisher-control-action-btns {
+	.blockera-control-action-btns {
 		position: absolute;
 		bottom: 0;
 		left: 0;
 		right: 0;
 		height: 30px;
-		border-top: 1px solid var(--publisher-controls-border-color);
+		border-top: 1px solid var(--blockera-controls-border-color);
 		background: #ffffff;
 		display: none;
 
-		.publisher-component-button {
+		.blockera-component-button {
 			height: 30px;
 			border-radius: 0;
 
@@ -76,20 +76,20 @@
 	}
 
 	&:hover {
-		border-color: var(--publisher-controls-border-color-hover);
+		border-color: var(--blockera-controls-border-color-hover);
 
-		.publisher-component-button.btn-delete {
+		.blockera-component-button.btn-delete {
 			display: block;
 		}
 
-		.publisher-control-action-btns {
+		.blockera-control-action-btns {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
 
 		}
 	}
 
-	.publisher-control-image-preview {
+	.blockera-control-image-preview {
 		max-width: 100%;
 		max-height: 100%;
 		height: auto;

@@ -6,11 +6,11 @@
 import { default as memoize } from 'fast-memoize';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-import { isString, isObject } from '@publisher/utils';
+import type { ValueAddon } from '@blockera/hooks/src/use-value-addon/types';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
+import { isString, isObject } from '@blockera/utils';
 
 /**
  * Internal dependencies

@@ -1,1 +1,1 @@
-export const STORE_NAME = 'publisher-core/controls';
+export const STORE_NAME = 'blockera-core/controls';

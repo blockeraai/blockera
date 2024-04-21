@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Tests;
+namespace Blockera\Framework\Tests;
 
 class TestFunctions extends AppTestCase {
 
@@ -18,7 +18,7 @@ class TestFunctions extends AppTestCase {
 					5,
 					[],
 					''
-				], 'pb_get_filter_empty_array_item' )
+				], 'blockera_get_filter_empty_array_item' )
 			)
 		);
 	}
@@ -38,7 +38,7 @@ class TestFunctions extends AppTestCase {
 				'dd' => 4,
 				'ee' => 5,
 			],
-			pb_array_flat(
+			blockera_array_flat(
 				[
 					[
 						'a' => 1,
@@ -71,13 +71,13 @@ class TestFunctions extends AppTestCase {
 
 		$this->assertEquals(
 			$expected,
-			pb_camel_case_join( $string )
+			blockera_camel_case_join( $string )
 		);
 	}
 
 	public function getCamelCaseJoinDataProvider(): array {
 
-		return require __PB_TEST_DIR__ . '/Fixtures/Functions/camel-case-join.php';
+		return require __BLOCKERA_TEST_DIR__ . '/Fixtures/Functions/camel-case-join.php';
 	}
 
 	/**
@@ -90,12 +90,12 @@ class TestFunctions extends AppTestCase {
 	 */
 	public function testItShouldRetrieveConfigValueWithName( string $path, $expected ): void {
 
-		$this->assertSame( $expected, pb_core_config( $path ) );
+		$this->assertSame( $expected, blockera_core_config( $path ) );
 	}
 
 	public function coreConfigDataProvider(): array {
 
-		$rootDir           = dirname( __PB_TEST_DIR__, 3 );
+		$rootDir           = dirname( __BLOCKERA_TEST_DIR__, 3 );
 		$blocks            = ( require $rootDir . '/config/app.php' )['blocks'];
 		$postDynamicValues = require $rootDir . '/config/dynamic-values/post.php';
 		$theme             = wp_get_theme();
@@ -103,7 +103,7 @@ class TestFunctions extends AppTestCase {
 		return [
 			[
 				'path'     => 'app.root_url',
-				'expected' => 'http://example.org/wp-content/plugins/publisher-core',
+				'expected' => 'http://example.org/wp-content/plugins/blockera-core',
 			],
 			[
 				'path'     => 'app.root_path',
@@ -111,23 +111,23 @@ class TestFunctions extends AppTestCase {
 			],
 			[
 				'path'     => 'app.url',
-				'expected' => 'http://example.org/wp-content/plugins/publisher-core/app/',
+				'expected' => 'http://example.org/wp-content/plugins/blockera-core/app/',
 			],
 			[
 				'path'     => 'app.version',
-				'expected' => PB_CORE_VERSION,
+				'expected' => BLOCKERA_CORE_VERSION,
 			],
 			[
 				'path'     => 'app.namespaces.controllers',
-				'expected' => '\Publisher\Framework\Http\Controllers\\',
+				'expected' => '\Blockera\Framework\Http\Controllers\\',
 			],
 			[
 				'path'     => 'app.providers',
 				'expected' => [
-					\Publisher\Framework\Providers\StyleProviders::class,
-					\Publisher\Framework\Providers\AssetsProvider::class,
-					\Publisher\Framework\Providers\RestAPIProvider::class,
-					\Publisher\Framework\Providers\AppServiceProvider::class,
+					\Blockera\Framework\Providers\StyleProviders::class,
+					\Blockera\Framework\Providers\AssetsProvider::class,
+					\Blockera\Framework\Providers\RestAPIProvider::class,
+					\Blockera\Framework\Providers\AppServiceProvider::class,
 				],
 			],
 			[
@@ -143,7 +143,7 @@ class TestFunctions extends AppTestCase {
 				'expected' => [
 					'type'       => 'extra-large',
 					'force'      => false,
-					'label'      => __( 'Extra Large Screen', 'publisher-core' ),
+					'label'      => __( 'Extra Large Screen', 'blockera-core' ),
 					'settings'   => [
 						'min' => '2561px',
 						'max' => '',
@@ -174,7 +174,7 @@ class TestFunctions extends AppTestCase {
 				'path'     => 'entities.site.url',
 				'expected' => home_url(),
 			],
-			// Integration tests for pb_core_config() and pb_load() functions.
+			// Integration tests for blockera_core_config() and blockera_load() functions.
 			[
 				'path'     => 'valueAddon.dynamic-value-groups.post.items',
 				'expected' => $postDynamicValues,
@@ -188,14 +188,14 @@ class TestFunctions extends AppTestCase {
 			[
 				'version'    => '1.0-alpha',
 				'mode'       => 'development',
-				'dir'        => 'publisher-core',
-				'everything' => 'publisher-core',
+				'dir'        => 'blockera-core',
+				'everything' => 'blockera-core',
 			],
 			[
-				'version'    => pb_core_env( 'PB_CORE_VERSION' ),
-				'mode'       => pb_core_env( 'APP_MODE' ),
-				'dir'        => pb_core_env( 'PUBLISHER_DIR' ),
-				'everything' => pb_core_env( 'EVERYTHING', 'publisher-core' ),
+				'version'    => blockera_core_env( 'BLOCKERA_CORE_VERSION' ),
+				'mode'       => blockera_core_env( 'APP_MODE' ),
+				'dir'        => blockera_core_env( 'BLOCKERA_DIR' ),
+				'everything' => blockera_core_env( 'EVERYTHING', 'blockera-core' ),
 			]
 		);
 	}
@@ -206,7 +206,7 @@ class TestFunctions extends AppTestCase {
 
 		$this->assertSame(
 			'var(--wp--preset--color--contrast-2)',
-			pb_get_value_addon_real_value(
+			blockera_get_value_addon_real_value(
 				[
 					'settings'     => [
 						'name'      => 'Contrast / Two',
@@ -236,13 +236,13 @@ class TestFunctions extends AppTestCase {
 
 		$this->assertSame(
 			$expected,
-			pb_get_sorted_repeater( $items ),
+			blockera_get_sorted_repeater( $items ),
 		);
 	}
 
 	public function sortingRepeaterDataProviders() {
 
-		return require __PB_TEST_DIR__ . '/Fixtures/Functions/sorted-repeater-items.php';
+		return require __BLOCKERA_TEST_DIR__ . '/Fixtures/Functions/sorted-repeater-items.php';
 	}
 
 }

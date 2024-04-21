@@ -35,7 +35,7 @@ describe('Background Color → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('#ffdfdf').to.be.equal(
-					getSelectedBlock(data, 'publisherBackgroundColor')
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 			});
 
@@ -81,7 +81,7 @@ describe('Background Color → WP Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherBackgroundColor')
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 			});
 		});
@@ -121,7 +121,7 @@ describe('Background Color → WP Compatibility', () => {
 					isValueAddon: true,
 					valueType: 'variable',
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherBackgroundColor')
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 			});
 
@@ -162,7 +162,7 @@ describe('Background Color → WP Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherBackgroundColor')
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 			});
 		});

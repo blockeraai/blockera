@@ -5,9 +5,9 @@
 import { useEffect } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isFunction, isEquals } from '@publisher/utils';
+import { isFunction, isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies

@@ -6,10 +6,10 @@ import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isBlockTheme, isString, isUndefined } from '@publisher/utils';
-import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
+import { isBlockTheme, isString, isUndefined } from '@blockera/utils';
+import type { ValueAddon } from '@blockera/hooks/src/use-value-addon/types';
 
 /**
  * Internal dependencies
@@ -24,7 +24,7 @@ export const getColors: () => Array<VariableItem> = memoize(
 		};
 
 		if (isBlockTheme()) {
-			const { getCurrentTheme } = select('publisher-core/data');
+			const { getCurrentTheme } = select('blockera-core/data');
 
 			const {
 				name: { rendered: themeName },

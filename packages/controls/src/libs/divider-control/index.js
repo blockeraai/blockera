@@ -8,9 +8,9 @@ import type { MixedElement } from 'react';
 import { useEffect, useContext } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -75,12 +75,11 @@ export default function DividerControl({
 			id={id}
 			className={controlClassNames('divider', className)}
 			popoverTitle={
-				popoverTitle || __('Block Shape Divider', 'publisher-core')
+				popoverTitle || __('Block Shape Divider', 'blockera-core')
 			}
-			label={label || __('Shape Dividers', 'publisher-core')}
+			label={label || __('Shape Dividers', 'blockera-core')}
 			labelPopoverTitle={
-				labelPopoverTitle ||
-				__('Block Shape Dividers', 'publisher-core')
+				labelPopoverTitle || __('Block Shape Dividers', 'blockera-core')
 			}
 			labelDescription={
 				labelDescription || (
@@ -88,19 +87,19 @@ export default function DividerControl({
 						<p>
 							{__(
 								'Block Shape Dividers are design elements used to visually separate different sections or blocks of content on a webpage.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'Dividers are essential for breaking up long stretches of content, making web pages easier to navigate and read.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								"They help in guiding the user's eye through the content and can be used to highlight key sections or create a rhythm in the page layout.",
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>

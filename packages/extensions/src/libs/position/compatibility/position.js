@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isUndefined } from '@publisher/utils';
+import { isEmpty, isUndefined } from '@blockera/utils';
 
 export function positionFromWPCompatibility({
 	attributes,
@@ -12,11 +12,11 @@ export function positionFromWPCompatibility({
 }): Object {
 	if (
 		// Blockera don't have position
-		attributes?.publisherPosition?.type === 'static' &&
+		attributes?.blockeraPosition?.type === 'static' &&
 		// WP  do have position
 		attributes?.style?.position?.type !== undefined
 	) {
-		attributes.publisherPosition = {
+		attributes.blockeraPosition = {
 			type: attributes?.style?.position?.type || '',
 			position: {
 				top: attributes?.style?.position?.top || '',

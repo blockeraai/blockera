@@ -7,13 +7,13 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button, MediaUploader } from '@publisher/components';
+import { Button, MediaUploader } from '@blockera/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -24,9 +24,9 @@ import { default as DeleteIcon } from './icons/delete';
 import type { MediaImageControlProps } from './types';
 
 export default function MediaImageControl({
-	labelChoose = __('Choose Image…', 'publisher-core'),
-	labelMediaLibrary = __('Media Library', 'publisher-core'),
-	labelUploadImage = __('Upload Image', 'publisher-core'),
+	labelChoose = __('Choose Image…', 'blockera-core'),
+	labelMediaLibrary = __('Media Library', 'blockera-core'),
+	labelUploadImage = __('Upload Image', 'blockera-core'),
 	//
 	id,
 	label = '',

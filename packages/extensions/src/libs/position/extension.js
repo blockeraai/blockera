@@ -7,7 +7,7 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -15,10 +15,10 @@ import {
 	BoxPositionControl,
 	ControlContextProvider,
 	InputControl,
-} from '@publisher/controls';
-import { extensionClassNames } from '@publisher/classnames';
-import { FeatureWrapper } from '@publisher/components';
-import { hasSameProps } from '@publisher/utils';
+} from '@blockera/controls';
+import { extensionClassNames } from '@blockera/classnames';
+import { FeatureWrapper } from '@blockera/components';
+import { hasSameProps } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -38,9 +38,9 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
 		const isShownPosition = isShowField(
-			extensionConfig.publisherPosition,
-			values?.publisherPosition,
-			attributes.publisherPosition.default
+			extensionConfig.blockeraPosition,
+			values?.blockeraPosition,
+			attributes.blockeraPosition.default
 		);
 
 		if (!isShownPosition) {
@@ -48,27 +48,27 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 		}
 
 		const isShownZIndex = isShowField(
-			extensionConfig.publisherZIndex,
-			values?.publisherZIndex,
-			attributes.publisherZIndex.default
+			extensionConfig.blockeraZIndex,
+			values?.blockeraZIndex,
+			attributes.blockeraZIndex.default
 		);
 
 		return (
 			<PanelBodyControl
-				title={__('Position', 'publisher-core')}
+				title={__('Position', 'blockera-core')}
 				initialOpen={true}
 				icon={<PositionExtensionIcon />}
 				className={extensionClassNames('position')}
 			>
 				<FeatureWrapper
 					isActive={isShownPosition}
-					config={extensionConfig.publisherPosition}
+					config={extensionConfig.blockeraPosition}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'position'),
-							value: values?.publisherPosition,
-							attribute: 'publisherPosition',
+							value: values?.blockeraPosition,
+							attribute: 'blockeraPosition',
 							blockName: block.blockName,
 						}}
 					>
@@ -83,50 +83,50 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 									ref?: Object
 								): void =>
 									handleOnChangeAttributes(
-										'publisherPosition',
+										'blockeraPosition',
 										newValue,
 										{ ref }
 									)
 								}
 								defaultValue={
-									attributes.publisherPosition.default
+									attributes.blockeraPosition.default
 								}
-								{...extensionProps.publisherPosition}
+								{...extensionProps.blockeraPosition}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
 				</FeatureWrapper>
 
-				{values?.publisherPosition?.type !== '' &&
-					values?.publisherPosition?.type !== undefined &&
-					values?.publisherPosition?.type !== 'static' && (
+				{values?.blockeraPosition?.type !== '' &&
+					values?.blockeraPosition?.type !== undefined &&
+					values?.blockeraPosition?.type !== 'static' && (
 						<FeatureWrapper
 							isActive={isShownZIndex}
-							config={extensionConfig.publisherZIndex}
+							config={extensionConfig.blockeraZIndex}
 						>
 							<ControlContextProvider
 								value={{
 									name: generateExtensionId(block, 'z-index'),
-									value: values.publisherZIndex,
-									attribute: 'publisherZIndex',
+									value: values.blockeraZIndex,
+									attribute: 'blockeraZIndex',
 									blockName: block.blockName,
 								}}
 							>
 								<InputControl
 									columns="columns-2"
-									label={__('z-index', 'publisher-core')}
+									label={__('z-index', 'blockera-core')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Control the stacking order of blocks with z-index, a CSS property that manages the layering and overlap of components on your website.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'z-index is crucial for creating visually appealing layouts, especially in complex designs, allowing you to prioritize content visibility and interaction.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
@@ -135,16 +135,16 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 									unitType="z-index"
 									arrows={true}
 									defaultValue={
-										attributes.publisherZIndex.default
+										attributes.blockeraZIndex.default
 									}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
-											'publisherZIndex',
+											'blockeraZIndex',
 											newValue,
 											{ ref }
 										)
 									}
-									{...extensionProps.publisherZIndex}
+									{...extensionProps.blockeraZIndex}
 								/>
 							</ControlContextProvider>
 						</FeatureWrapper>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Services\Block\HTML;
+namespace Blockera\Framework\Services\Block\HTML;
 
 class Icon extends BlockHTML {
 
@@ -19,22 +19,22 @@ class Icon extends BlockHTML {
 			);
 		}
 
-		if ( ! empty( $block['attrs']['publisherIcon'] ) ) {
+		if ( ! empty( $block['attrs']['blockeraIcon'] ) ) {
 
 			[
 				'icon'    => $icon,
 				'library' => $library,
-			] = $block['attrs']['publisherIcon'];
+			] = $block['attrs']['blockeraIcon'];
 
-			$gap = $block['attrs']['publisherIconGap'] ?? '5px';
+			$gap = $block['attrs']['blockeraIconGap'] ?? '5px';
 
 			//FIXME: how to add styles into icon element.
 			$iconHTML = sprintf(
 				'<i class="%1$s %2$s"></i>',//style="font-size: %3$s;width: %3$s;height: %3$s;fill:%4$s;color:%4$s;margin-left: %5$s;margin-right: %5$s;"
 				$library,
 				$this->getIcon( $icon ),
-//				$block['attrs']['publisherIconSize'] ?? '',
-//				$block['attrs']['publisherIconColor'] ?? '',
+//				$block['attrs']['blockeraIconSize'] ?? '',
+//				$block['attrs']['blockeraIconColor'] ?? '',
 //				$gap
 			);
 
@@ -43,7 +43,7 @@ class Icon extends BlockHTML {
 			}
 
 			//Handle icon link
-			if ( ! empty( $block['attrs']['publisherIconLink'] ) ) {
+			if ( ! empty( $block['attrs']['blockeraIconLink'] ) ) {
 
 				[
 					'link'       => $link,
@@ -51,7 +51,7 @@ class Icon extends BlockHTML {
 					"nofollow"   => $isNofollow,
 					"label"      => $label,
 					"attributes" => $attributes,
-				] = $block['attrs']['publisherIconLink'];
+				] = $block['attrs']['blockeraIconLink'];
 
 				if ( $link ) {
 
@@ -85,7 +85,7 @@ class Icon extends BlockHTML {
 			}
 
 			//When icon position was not set default append left side
-			if ( empty( $block['attrs']['publisherIconPosition'] ) || 'left' === $block['attrs']['publisherIconPosition'] ) {
+			if ( empty( $block['attrs']['blockeraIconPosition'] ) || 'left' === $block['attrs']['blockeraIconPosition'] ) {
 
 				$blockElement->innerhtml = sprintf(
 					'%1$s %2$s %3$s %4$s',
@@ -94,7 +94,7 @@ class Icon extends BlockHTML {
 					$blockElement->innerhtml,
 					'</div>'
 				);
-			} elseif ( 'right' === $block['attrs']['publisherIconPosition'] ) {
+			} elseif ( 'right' === $block['attrs']['blockeraIconPosition'] ) {
 
 				$blockElement->innerhtml = sprintf(
 					'%1$s %2$s %3$s %4$s',

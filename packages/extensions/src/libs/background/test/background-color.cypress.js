@@ -11,7 +11,7 @@ describe('Background Color → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').click();
 
@@ -40,7 +40,7 @@ describe('Background Color → Functionality', () => {
 		//assert data
 		getWPDataObject().then((data) => {
 			expect(
-				getSelectedBlock(data, 'publisherBackgroundColor')
+				getSelectedBlock(data, 'blockeraBackgroundColor')
 			).to.be.equal('#666666');
 		});
 
@@ -54,7 +54,7 @@ describe('Background Color → Functionality', () => {
 		//assert frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'background-color',
 			'rgb(102, 102, 102)'
@@ -88,7 +88,7 @@ describe('Background Color → Functionality', () => {
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherBackgroundColor')
+				getSelectedBlock(data, 'blockeraBackgroundColor')
 			);
 		});
 
@@ -101,9 +101,10 @@ describe('Background Color → Functionality', () => {
 		//assert frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.publisher-core-block').hasCssVar(
+		cy.get('.blockera-core-block').hasCssVar(
 			'background-color',
 			'--wp--preset--color--accent-4'
 		);
 	});
 });
+

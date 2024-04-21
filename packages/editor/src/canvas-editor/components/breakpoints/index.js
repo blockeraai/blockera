@@ -9,16 +9,16 @@ import { select, dispatch, useDispatch } from '@wordpress/data';
 import { useEffect, useState, createPortal } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	useStoreDispatchers,
 	useStoreSelectors,
-} from '@publisher/extensions/src/hooks';
-import { isEquals } from '@publisher/utils';
-import { Flex, Popover } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { ControlContextProvider, InputControl } from '@publisher/controls';
+} from '@blockera/extensions/src/hooks';
+import { isEquals } from '@blockera/utils';
+import { Flex, Popover } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { ControlContextProvider, InputControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -34,12 +34,12 @@ export const Breakpoints = ({
 	className,
 }: BreakpointsComponentProps): MixedElement => {
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
-		select('publisher-core/editor');
+		select('blockera-core/editor');
 	const { setDeviceType, setCanvasSettings, updateBreakpoints } = useDispatch(
-		'publisher-core/editor'
+		'blockera-core/editor'
 	);
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
-		'publisher-core/extensions'
+		'blockera-core/extensions'
 	);
 	const [canvasSettings, updateCanvasSettings] = useState(
 		getCanvasSettings()
@@ -79,7 +79,7 @@ export const Breakpoints = ({
 			}
 
 			if (classes.length - 1 === index) {
-				editorWrapper.classList.add('publisher-core-canvas');
+				editorWrapper.classList.add('blockera-core-canvas');
 				editorWrapper.classList.add('preview-margin');
 				editorWrapper.classList.add(`is-${deviceType}-preview`);
 
@@ -119,7 +119,7 @@ export const Breakpoints = ({
 			if (selectedBlock) {
 				// Update the block attributes
 				const updatedAttributes = {
-					publisherCurrentDevice: device,
+					blockeraCurrentDevice: device,
 				};
 
 				// Dispatch an action to update the selected block
@@ -170,7 +170,7 @@ export const Breakpoints = ({
 				<Flex className={className} justifyContent={'space-between'}>
 					<div
 						className={controlInnerClassNames(
-							'publisher-core-breakpoints'
+							'blockera-core-breakpoints'
 						)}
 					>
 						<Circles
@@ -190,7 +190,7 @@ export const Breakpoints = ({
 							cursor: 'pointer',
 							lineHeight: '36px',
 						}}
-						aria-label={__('Canvas Zoom', 'publisher-core')}
+						aria-label={__('Canvas Zoom', 'blockera-core')}
 						onClick={() =>
 							handleOnChange(
 								'isOpenSettings',
@@ -206,7 +206,7 @@ export const Breakpoints = ({
 					<Popover
 						offset={20}
 						placement={'left-end'}
-						title={__('Breakpoint Settings', 'publisher-core')}
+						title={__('Breakpoint Settings', 'blockera-core')}
 						onClose={() => handleOnChange('isOpenSettings', false)}
 					>
 						<BreakpointSettings
@@ -221,7 +221,7 @@ export const Breakpoints = ({
 					<Popover
 						offset={20}
 						placement={'bottom-end'}
-						title={__('Canvas Settings', 'publisher-core')}
+						title={__('Canvas Settings', 'blockera-core')}
 						onClose={() => handleOnChange('isOpenSettings', false)}
 					>
 						<InputControl
@@ -233,7 +233,7 @@ export const Breakpoints = ({
 							onChange={(newValue) =>
 								handleOnChange('width', newValue)
 							}
-							label={__('Width', 'publisher-core')}
+							label={__('Width', 'blockera-core')}
 						/>
 						<InputControl
 							id={'height'}
@@ -244,7 +244,7 @@ export const Breakpoints = ({
 							onChange={(newValue) =>
 								handleOnChange('height', newValue)
 							}
-							label={__('Height', 'publisher-core')}
+							label={__('Height', 'blockera-core')}
 						/>
 						<InputControl
 							id={'zoom'}
@@ -255,7 +255,7 @@ export const Breakpoints = ({
 							onChange={(newValue) =>
 								handleOnChange('zoom', newValue)
 							}
-							label={__('Zoom', 'publisher-core')}
+							label={__('Zoom', 'blockera-core')}
 						/>
 					</Popover>
 				)}

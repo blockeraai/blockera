@@ -1,12 +1,12 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	computedCssDeclarations,
 	getCssSelector,
-} from '@publisher/style-engine';
-import type { CssRule } from '@publisher/style-engine/src/types';
+} from '@blockera/style-engine';
+import type { CssRule } from '@blockera/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -35,10 +35,10 @@ export const BorderAndShadowStyles = ({
 	...props
 }: StylesProps): Array<CssRule> => {
 	const {
-		publisherBorder,
-		publisherOutline,
-		publisherBoxShadow,
-		publisherBorderRadius,
+		blockeraBorder,
+		blockeraOutline,
+		blockeraBoxShadow,
+		blockeraBorderRadius,
 	} = config.borderAndShadowConfig;
 
 	const blockProps = {
@@ -59,16 +59,16 @@ export const BorderAndShadowStyles = ({
 	const styleGroup: Array<CssRule> = [];
 
 	if (
-		isActiveField(publisherBoxShadow) &&
+		isActiveField(blockeraBoxShadow) &&
 		!arrayEquals(
-			attributes.publisherBoxShadow.default,
-			blockProps.attributes.publisherBoxShadow
+			attributes.blockeraBoxShadow.default,
+			blockProps.attributes.blockeraBoxShadow
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherBoxShadow',
-			support: 'publisherBoxShadow',
+			query: 'blockeraBoxShadow',
+			support: 'blockeraBoxShadow',
 			fallbackSupportId: 'box-shadow',
 		});
 
@@ -76,7 +76,7 @@ export const BorderAndShadowStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherBoxShadow: [
+					blockeraBoxShadow: [
 						{
 							type: 'function',
 							function: BoxShadowGenerator,
@@ -88,14 +88,14 @@ export const BorderAndShadowStyles = ({
 		});
 	}
 
-	if (isActiveField(publisherOutline)) {
-		const publisherOutline = blockProps.attributes.publisherOutline;
+	if (isActiveField(blockeraOutline)) {
+		const blockeraOutline = blockProps.attributes.blockeraOutline;
 
-		if (publisherOutline !== attributes.publisherOutline.default) {
+		if (blockeraOutline !== attributes.blockeraOutline.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherOutline',
-				support: 'publisherOutline',
+				query: 'blockeraOutline',
+				support: 'blockeraOutline',
 				fallbackSupportId: 'outline',
 			});
 
@@ -103,7 +103,7 @@ export const BorderAndShadowStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherOutline: [
+						blockeraOutline: [
 							{
 								type: 'function',
 								function: OutlineGenerator,
@@ -116,14 +116,14 @@ export const BorderAndShadowStyles = ({
 		}
 	}
 
-	if (isActiveField(publisherBorder)) {
-		const publisherBorder = blockProps.attributes.publisherBorder;
+	if (isActiveField(blockeraBorder)) {
+		const blockeraBorder = blockProps.attributes.blockeraBorder;
 
-		if (publisherBorder !== attributes.publisherBorder.default) {
+		if (blockeraBorder !== attributes.blockeraBorder.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherBorder',
-				support: 'publisherBorder',
+				query: 'blockeraBorder',
+				support: 'blockeraBorder',
 				fallbackSupportId: 'border',
 			});
 
@@ -131,7 +131,7 @@ export const BorderAndShadowStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherBorder: [
+						blockeraBorder: [
 							{
 								type: 'function',
 								function: BoxBorderGenerator,
@@ -144,17 +144,14 @@ export const BorderAndShadowStyles = ({
 		}
 	}
 
-	if (isActiveField(publisherBorderRadius)) {
-		const publisherBorderRadius =
-			blockProps.attributes.publisherBorderRadius;
+	if (isActiveField(blockeraBorderRadius)) {
+		const blockeraBorderRadius = blockProps.attributes.blockeraBorderRadius;
 
-		if (
-			publisherBorderRadius !== attributes.publisherBorderRadius.default
-		) {
+		if (blockeraBorderRadius !== attributes.blockeraBorderRadius.default) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherBorderRadius',
-				support: 'publisherBorderRadius',
+				query: 'blockeraBorderRadius',
+				support: 'blockeraBorderRadius',
 				fallbackSupportId: 'border-radius',
 			});
 
@@ -162,7 +159,7 @@ export const BorderAndShadowStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherBorderRadius: [
+						blockeraBorderRadius: [
 							{
 								type: 'function',
 								function: BorderRadiusGenerator,

@@ -11,7 +11,7 @@ describe('Outline → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', {
 			delay: 0,
@@ -81,7 +81,7 @@ describe('Outline → Functionality', () => {
 					offset: '10px',
 					order: 0,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherOutline'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraOutline'));
 		});
 
 		//Check frontend
@@ -89,16 +89,17 @@ describe('Outline → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'outline',
 			'rgba(197, 238, 240, 0.67) dashed 3px'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'outline-offset',
 			'10px'
 		);
 	});
 });
+

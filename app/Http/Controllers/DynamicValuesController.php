@@ -1,8 +1,8 @@
 <?php
 
-namespace Publisher\Framework\Http\Controllers;
+namespace Blockera\Framework\Http\Controllers;
 
-use Publisher\Framework\Illuminate\Foundation\Http\RestController;
+use Blockera\Framework\Illuminate\Foundation\Http\RestController;
 
 class DynamicValuesController extends RestController {
 

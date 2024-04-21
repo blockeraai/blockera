@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -15,9 +15,9 @@ import {
 	NoticeControl,
 	ToggleSelectControl,
 	useControlContext,
-} from '@publisher/controls';
-import { isEmpty, isUndefined } from '@publisher/utils';
-import type { BorderControlBorderStyle } from '@publisher/controls/src/libs/border-control/types';
+} from '@blockera/controls';
+import { isEmpty, isUndefined } from '@blockera/utils';
+import type { BorderControlBorderStyle } from '@blockera/controls/src/libs/border-control/types';
 
 /**
  * Internal dependencies
@@ -65,11 +65,11 @@ export const TextColumns = ({
 	} = useControlContext({
 		onChange: (newValue, ref) => {
 			if ('reset' === ref?.current?.action) {
-				handleOnChangeAttributes('publisherTextColumns', defaultValue, {
+				handleOnChangeAttributes('blockeraTextColumns', defaultValue, {
 					ref,
 				});
 			} else {
-				handleOnChangeAttributes('publisherTextColumns', newValue, {
+				handleOnChangeAttributes('blockeraTextColumns', newValue, {
 					ref,
 				});
 			}
@@ -92,20 +92,20 @@ export const TextColumns = ({
 		<BaseControl columns="columns-1">
 			<BaseControl
 				controlName="toggle-select"
-				label={__('Text Columns', 'publisher-core')}
+				label={__('Text Columns', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It divides text into multiple columns, creating a newspaper-like layout, ideal for enhancing readability and aesthetic appeal in large blocks of text.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
 				}
 				columns="columns-2"
 				className={
-					display === 'flex' ? 'publisher-control-is-not-active' : ''
+					display === 'flex' ? 'blockera-control-is-not-active' : ''
 				}
 				{...labelProps}
 			>
@@ -114,27 +114,27 @@ export const TextColumns = ({
 					singularId={'columns'}
 					options={[
 						{
-							label: __('2 Columns Text', 'publisher-core'),
+							label: __('2 Columns Text', 'blockera-core'),
 							value: '2-columns',
 							icon: <Columns2Icon />,
 						},
 						{
-							label: __('3 Columns Text', 'publisher-core'),
+							label: __('3 Columns Text', 'blockera-core'),
 							value: '3-columns',
 							icon: <Columns3Icon />,
 						},
 						{
-							label: __('4 Columns Text', 'publisher-core'),
+							label: __('4 Columns Text', 'blockera-core'),
 							value: '4-columns',
 							icon: <Columns4Icon />,
 						},
 						{
-							label: __('5 Columns Text', 'publisher-core'),
+							label: __('5 Columns Text', 'blockera-core'),
 							value: '5-columns',
 							icon: <Columns5Icon />,
 						},
 						{
-							label: __('None', 'publisher-core'),
+							label: __('None', 'blockera-core'),
 							value: 'none',
 							icon: <NoneIcon />,
 						},
@@ -147,13 +147,13 @@ export const TextColumns = ({
 							newValue === ''
 						) {
 							handleOnChangeAttributes(
-								'publisherTextColumns',
+								'blockeraTextColumns',
 								defaultValue,
 								{ ref }
 							);
 						} else {
 							handleOnChangeAttributes(
-								'publisherTextColumns',
+								'blockeraTextColumns',
 								{
 									...value,
 									columns: newValue,
@@ -172,17 +172,17 @@ export const TextColumns = ({
 							<InputControl
 								id={'gap'}
 								singularId={'gap'}
-								label={__('Gap', 'publisher-core')}
+								label={__('Gap', 'blockera-core')}
 								labelPopoverTitle={__(
 									'Text Columns Gap',
-									'publisher-core'
+									'blockera-core'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It sets the gap between text columns essential for ensuring clear separation and enhancing the overall readability of the text.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 									</>
@@ -197,7 +197,7 @@ export const TextColumns = ({
 								onChange={(newValue, ref) => {
 									if ('reset' === ref?.current?.action) {
 										handleOnChangeAttributes(
-											'publisherTextColumns',
+											'blockeraTextColumns',
 											{
 												..._value,
 												gap: defaultValue.gap,
@@ -206,7 +206,7 @@ export const TextColumns = ({
 										);
 									} else {
 										handleOnChangeAttributes(
-											'publisherTextColumns',
+											'blockeraTextColumns',
 											{
 												..._value,
 												gap: newValue,
@@ -220,17 +220,17 @@ export const TextColumns = ({
 							<BorderControl
 								id={'divider'}
 								singularId={'divider'}
-								label={__('Divider', 'publisher-core')}
+								label={__('Divider', 'blockera-core')}
 								labelPopoverTitle={__(
 									'Text Columns Divider',
-									'publisher-core'
+									'blockera-core'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It creates a rule (line) between columns in a multi-column layout, similar to border, but specifically for separating columns, enhancing their distinction and readability.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 									</>
@@ -243,7 +243,7 @@ export const TextColumns = ({
 								onChange={(newValue, ref) => {
 									if ('reset' === ref?.current?.action) {
 										handleOnChangeAttributes(
-											'publisherTextColumns',
+											'blockeraTextColumns',
 											{
 												..._value,
 												divider: defaultValue.divider,
@@ -252,7 +252,7 @@ export const TextColumns = ({
 										);
 									} else {
 										handleOnChangeAttributes(
-											'publisherTextColumns',
+											'blockeraTextColumns',
 											{
 												..._value,
 												divider: newValue,
@@ -270,7 +270,7 @@ export const TextColumns = ({
 				<NoticeControl type="information">
 					{__(
 						"Text columns can't be applied for flex blocks. Disable the flex on this block or wrap it in another container and apply the flex to the container.",
-						'publisher-core'
+						'blockera-core'
 					)}
 				</NoticeControl>
 			)}

@@ -1,19 +1,19 @@
 # Extensions
 
-Publisher data-extractor package.
+data-extractor package.
 
 ## Installation
 
 Install the module:
 
 ```bash
-npm install @publisher/data-extractor --save
+npm install @blockera/data-extractor --save
 ```
 
 ## Usage
 
 ```js
-// import { registerBlockExtension } from '@publisher/data-extractor';
+// import { registerBlockExtension } from '@blockera/data-extractor';
 
 // registerBlockExtension(extensionName, extensionData);
 ```
@@ -25,3 +25,4 @@ npm install @publisher/data-extractor --save
 -   src/block.json5
 -   src/states.json5
 -   src/breakpoints.json5
+

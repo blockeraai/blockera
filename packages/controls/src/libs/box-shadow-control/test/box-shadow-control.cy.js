@@ -95,7 +95,7 @@ describe('box-shadow-control component testing', () => {
 			const defaultProps = {
 				onChange: (value) => {
 					controlReducer(
-						select('publisher-core/controls').getControl(name),
+						select('blockera-core/controls').getControl(name),
 						modifyControlValue({
 							value,
 							controlId: name,
@@ -442,3 +442,4 @@ describe('box-shadow-control component testing', () => {
 		});
 	});
 });
+

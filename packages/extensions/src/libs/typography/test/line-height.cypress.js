@@ -11,7 +11,7 @@ describe('Line Height → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -37,7 +37,7 @@ describe('Line Height → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('10').to.be.equal(
-				getSelectedBlock(data, 'publisherLineHeight')
+				getSelectedBlock(data, 'blockeraLineHeight')
 			);
 		});
 
@@ -46,7 +46,7 @@ describe('Line Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'line-height');
+		cy.get('.blockera-core-block').should('have.css', 'line-height');
 	});
 
 	it('change line height to px', () => {
@@ -67,7 +67,7 @@ describe('Line Height → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('10px').to.be.equal(
-				getSelectedBlock(data, 'publisherLineHeight')
+				getSelectedBlock(data, 'blockeraLineHeight')
 			);
 		});
 
@@ -76,7 +76,7 @@ describe('Line Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'line-height',
 			'10px'

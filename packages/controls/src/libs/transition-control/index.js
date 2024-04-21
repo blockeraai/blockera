@@ -5,9 +5,9 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -35,10 +35,10 @@ export default function TransitionControl({
 	return (
 		<RepeaterControl
 			className={controlClassNames('transition', className)}
-			popoverTitle={popoverTitle || __('Transitions', 'publisher-core')}
-			label={label || __('Transitions', 'publisher-core')}
+			popoverTitle={popoverTitle || __('Transitions', 'blockera-core')}
+			label={label || __('Transitions', 'blockera-core')}
 			labelDescription={labelDescription || <LabelDescription />}
-			addNewButtonLabel={__('Add New Transition', 'publisher-core')}
+			addNewButtonLabel={__('Add New Transition', 'blockera-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

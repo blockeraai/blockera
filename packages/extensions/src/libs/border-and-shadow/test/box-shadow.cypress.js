@@ -11,7 +11,7 @@ describe('Box Shadow → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', {
 			delay: 0,
@@ -76,7 +76,7 @@ describe('Box Shadow → Functionality', () => {
 					color: '#c5eef0ab',
 					order: 0,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherBoxShadow'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBoxShadow'));
 		});
 
 		//Check frontend
@@ -84,7 +84,7 @@ describe('Box Shadow → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'box-shadow',
 			'rgba(197, 238, 240, 0.67) 10px 50px 30px 40px'
@@ -201,7 +201,7 @@ describe('Box Shadow → Functionality', () => {
 					color: '#6a6969e6',
 					order: 1,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherBoxShadow'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBoxShadow'));
 		});
 
 		//Check frontend
@@ -209,7 +209,7 @@ describe('Box Shadow → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'box-shadow',
 			'rgba(197, 238, 240, 0.67) 10px 50px 30px 40px, rgba(106, 105, 105, 0.9) 20px 0px 50px 5px inset'

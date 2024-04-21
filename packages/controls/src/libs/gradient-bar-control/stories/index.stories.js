@@ -1,9 +1,9 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import { nanoid } from 'nanoid';
-import { Flex } from '@publisher/components';
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { Flex } from '@blockera/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies

@@ -1,11 +1,11 @@
 {
-	"name": "publisher/core",
-	"description": "A New Publisher Editor experience base on Gutenberg core modules.",
+	"name": "blockera/core",
+	"description": "A New  Editor experience base on Gutenberg core modules.",
 	"type": "library",
 	"license": "ISC",
 	"autoload": {
 		"psr-4": {
-			"Publisher\\Framework\\": "app/"
+			"Blockera\\Framework\\": "app/"
 		},
 		"files": [
 			"app/functions.php",
@@ -15,12 +15,12 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Publisher\\Framework\\Tests\\": ".dev/tests/phpunit"
+			"Blockera\\Framework\\Tests\\": ".dev/tests/phpunit"
 		}
 	},
 	"authors": [
 		{
-			"name": "The Publisher Contributors"
+			"name": "The  Contributors"
 		}
 	],
 	"minimum-stability": "dev",

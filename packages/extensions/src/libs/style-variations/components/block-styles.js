@@ -12,13 +12,13 @@ import {
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button } from '@publisher/components';
+import { Button } from '@blockera/components';
 import {
 	componentClassNames,
 	componentInnerClassNames,
-} from '@publisher/classnames';
+} from '@blockera/classnames';
 import type { MixedElement } from 'react';
 
 /**
@@ -94,7 +94,7 @@ function BlockStyles({
 		<div
 			className={componentClassNames(
 				'block-styles',
-				!isNormalState() ? 'publisher-control-is-not-active' : ''
+				!isNormalState() ? 'blockera-control-is-not-active' : ''
 			)}
 		>
 			<div className={componentInnerClassNames('block-styles__variants')}>

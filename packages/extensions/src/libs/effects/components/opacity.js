@@ -6,14 +6,14 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	InputControl,
 	ControlContextProvider,
 	NoticeControl,
 	BaseControl,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -39,26 +39,26 @@ export const Opacity = ({
 			value={{
 				name: generateExtensionId(block, 'opacity'),
 				value: opacity,
-				attribute: 'publisherOpacity',
+				attribute: 'blockeraOpacity',
 				blockName: block.blockName,
 			}}
 		>
 			<BaseControl columns="columns-1">
 				<InputControl
 					controlName="input"
-					label={__('Opacity', 'publisher-core')}
+					label={__('Opacity', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Opacity controls the transparency level of block, ranging from 0 (completely transparent) to 1 (fully opaque).',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 							<p>
 								{__(
 									"It's widely used in animations, UI interactions, and to draw attention or de-emphasize blocks.",
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -72,7 +72,7 @@ export const Opacity = ({
 					initialPosition={100}
 					defaultValue={defaultValue}
 					onChange={(newValue, ref) =>
-						handleOnChangeAttributes('publisherOpacity', newValue, {
+						handleOnChangeAttributes('blockeraOpacity', newValue, {
 							ref,
 						})
 					}
@@ -82,7 +82,7 @@ export const Opacity = ({
 					<NoticeControl type="warning">
 						{__(
 							'Your block’s opacity is set to "0", making it invisible. If you\'re wondering why it\'s not showing.',
-							'publisher-core'
+							'blockera-core'
 						)}
 					</NoticeControl>
 				)}

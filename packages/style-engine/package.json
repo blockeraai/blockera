@@ -1,25 +1,25 @@
 {
-	"name": "@publisher/style-engine",
+	"name": "@blockera/style-engine",
 	"version": "1.0.0",
-	"description": "Publisher Style Engine package to compile CSS.",
-	"author": "The Publisher Contributors",
+	"description": " Style Engine package to compile CSS.",
+	"author": "The  Contributors",
 	"license": "ISC",
 	"keywords": [
-		"publisher",
+		"blockera",
 		"wordpress",
 		"gutenberg",
 		"style generator",
 		"css generator"
 	],
-	"homepage": "https://gitlab.com/better-projects/publisher-fse/publisher-core/packages/style-engine/-/blob/main/README.md",
+	"homepage": "https://gitlab.com/better-projects/blockera-fse/blockera-core/packages/style-engine/-/blob/main/README.md",
 	"repository": {
 		"type": "git",
-		"url": "git+https://gitlab.com/better-projects/publisher-fse/publisher-core.git",
+		"url": "git+https://gitlab.com/better-projects/blockera-fse/blockera-core.git",
 		"directory": "packages/style-engine"
 	},
 	"sideEffects": false,
 	"bugs": {
-		"url": "https://gitlab.com/better-projects/publisher-fse/publisher-core/-/issues"
+		"url": "https://gitlab.com/better-projects/blockera-fse/blockera-core/-/issues"
 	},
 	"engines": {
 		"node": ">=12"

@@ -1,13 +1,13 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { createCssDeclarations } from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+import { createCssDeclarations } from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 export function BeforeDividerGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!Object.keys(attributes?.publisherDivider)?.length) {
+	if (!Object.keys(attributes?.blockeraDivider)?.length) {
 		return '';
 	}
 
@@ -21,7 +21,7 @@ export function BeforeDividerGenerator(id, props) {
 export function AfterDividerGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!Object.keys(attributes?.publisherDivider)?.length) {
+	if (!Object.keys(attributes?.blockeraDivider)?.length) {
 		return '';
 	}
 
@@ -33,7 +33,7 @@ export function AfterDividerGenerator(id, props) {
 }
 
 function DividerGenerator(attributes) {
-	return Object.entries(attributes?.publisherDivider)?.map(([, item]) => {
+	return Object.entries(attributes?.blockeraDivider)?.map(([, item]) => {
 		const properties = {};
 		if (!item.isVisible) {
 			return {};

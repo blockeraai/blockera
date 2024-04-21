@@ -6,9 +6,9 @@ import { CheckboxControl as WPCheckboxControl } from '@wordpress/components';
 import PropTypes from 'prop-types';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies

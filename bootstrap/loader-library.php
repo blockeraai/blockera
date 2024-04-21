@@ -1,8 +1,8 @@
 <?php
 
-if ( ! class_exists( 'PublisherLibraryLoader' ) ) {
+if ( ! class_exists( 'LibraryLoader' ) ) {
 
-	class PublisherLibraryLoader {
+	class LibraryLoader {
 
 		/**
 		 * @var string
@@ -131,7 +131,7 @@ if ( ! class_exists( 'PublisherLibraryLoader' ) ) {
 
 			$result = $callback( ...$arguments );
 
-			do_action( 'publisher-core/loader/loaded', $version, $this, $result );
+			do_action( 'blockera-core/loader/loaded', $version, $this, $result );
 
 			return true;
 		}

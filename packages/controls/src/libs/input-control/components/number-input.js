@@ -5,19 +5,19 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
+} from '@blockera/classnames';
 import {
 	isFunction,
 	isNumber,
 	isString,
 	isUndefined,
 	useDragValue,
-} from '@publisher/utils';
+} from '@blockera/utils';
 
 /**
  * Internal dependencies

@@ -6,9 +6,9 @@ import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -40,7 +40,7 @@ const RepeaterItemHeader = ({
 
 	switch (item.type) {
 		case 'move':
-			label = __('Move', 'publisher-core');
+			label = __('Move', 'blockera-core');
 			value = (
 				<>
 					{prepValueForHeader(item['move-x'])}
@@ -52,13 +52,13 @@ const RepeaterItemHeader = ({
 			break;
 
 		case 'scale':
-			label = __('Scale', 'publisher-core');
+			label = __('Scale', 'blockera-core');
 			value = prepValueForHeader(item.scale);
 			icon = <ScaleIcon />;
 			break;
 
 		case 'rotate':
-			label = __('Rotate', 'publisher-core');
+			label = __('Rotate', 'blockera-core');
 			value = (
 				<>
 					{prepValueForHeader(item['rotate-x'])}
@@ -70,7 +70,7 @@ const RepeaterItemHeader = ({
 			break;
 
 		case 'skew':
-			label = __('Skew', 'publisher-core');
+			label = __('Skew', 'blockera-core');
 			value = (
 				<>
 					{prepValueForHeader(item['skew-x'])}
@@ -87,7 +87,7 @@ const RepeaterItemHeader = ({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'publisher-core'),
+				__('Item %d', 'blockera-core'),
 				itemId + 1
 			)}
 		>

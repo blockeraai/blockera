@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherCustomCSS: {
+	blockeraCustomCSS: {
 		type: 'string',
 		default: '.block {\n    \n}\n',
 	},

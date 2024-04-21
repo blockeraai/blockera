@@ -4,24 +4,24 @@ return [
 	[
 		'separatelyCss' => [
 			[
-				'.publisher-core-test:hover' => [
+				'.blockera-core-test:hover' => [
 					'transition' => 'all 2000ms ease 0ms',
 				],
-				'.publisher-core-test'       => [
+				'.blockera-core-test'       => [
 					'opacity' => '50%',
 				],
 			],
 			[
-				'.publisher-core-test' => [
+				'.blockera-core-test' => [
 					'background-color' => '#ed9537 !important',
 				],
 			],
 		],
 		'expected'      => [
-			'.publisher-core-test:hover' => [
+			'.blockera-core-test:hover' => [
 				'transition' => 'all 2000ms ease 0ms',
 			],
-			'.publisher-core-test'       => [
+			'.blockera-core-test'       => [
 				'opacity'          => '50%',
 				'background-color' => '#ed9537 !important',
 			],
@@ -30,34 +30,34 @@ return [
 	[
 		'separatelyCss' => [
 			[
-				'.publisher-core-test:hover a'       => [
+				'.blockera-core-test:hover a'       => [
 					'transition' => 'all 2000ms ease 0ms',
 				],
-				'.publisher-core-test:hover a:hover' => [
+				'.blockera-core-test:hover a:hover' => [
 					'color' => 'red',
 				],
-				'.publisher-core-test'               => [
+				'.blockera-core-test'               => [
 					'opacity' => '50%',
 				],
 			],
 			[
-				'.publisher-core-test:hover a' => [
+				'.blockera-core-test:hover a' => [
 					'background-color' => 'transparent',
 				],
-				'.publisher-core-test'         => [
+				'.blockera-core-test'         => [
 					'background-color' => '#ed9537 !important',
 				],
 			],
 		],
 		'expected'      => [
-			'.publisher-core-test:hover a'       => [
+			'.blockera-core-test:hover a'       => [
 				'transition'       => 'all 2000ms ease 0ms',
 				'background-color' => 'transparent',
 			],
-			'.publisher-core-test:hover a:hover' => [
+			'.blockera-core-test:hover a:hover' => [
 				'color' => 'red',
 			],
-			'.publisher-core-test'               => [
+			'.blockera-core-test'               => [
 				'opacity'          => '50%',
 				'background-color' => '#ed9537 !important',
 			],

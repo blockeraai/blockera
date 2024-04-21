@@ -7,10 +7,10 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { Button } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -34,7 +34,7 @@ export const Shape = ({
 			onClick={() => onClick(id)}
 			aria-label={sprintf(
 				// translators: %s is a shape name.
-				__('Icon %s', 'publisher-core'),
+				__('Icon %s', 'blockera-core'),
 				id
 			)}
 		>

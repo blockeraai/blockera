@@ -11,10 +11,10 @@ import { memo, useContext, useState } from '@wordpress/element';
 import type { Element } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Popover, Flex, Button } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { Popover, Flex, Button } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -60,20 +60,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			>
 				<BaseControl
 					columns="columns-2"
-					label={__('Shape', 'publisher-core')}
-					labelPopoverTitle={__('Mask Shape', 'publisher-core')}
+					label={__('Shape', 'blockera-core')}
+					labelPopoverTitle={__('Mask Shape', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It allows you to apply a mask over the block content using an image.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 							<p>
 								{__(
 									'The mask can be chosen from a pre-existing library or uploaded as a custom image.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -130,7 +130,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							{item.shape.type === 'shape' && (
 								<BaseControl
 									columns={'columns-1'}
-									label={__('Shapes', 'publisher-core')}
+									label={__('Shapes', 'blockera-core')}
 									className="shapes"
 								>
 									<div className="shapes-field">
@@ -170,20 +170,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'size')}
 					singularId={'size'}
-					label={__('Size', 'publisher-core')}
-					labelPopoverTitle={__('Mask Size', 'publisher-core')}
+					label={__('Size', 'blockera-core')}
+					labelPopoverTitle={__('Mask Size', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It specifies the size of a mask image applied to block.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 							<p>
 								{__(
 									'Ensure that the mask size works well on different screen sizes and does not distort the mask image or the content.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -191,17 +191,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					columns="columns-2"
 					options={[
 						{
-							label: __('Custom', 'publisher-core'),
+							label: __('Custom', 'blockera-core'),
 							value: 'custom',
 							icon: <FitNormalIcon />,
 						},
 						{
-							label: __('Cover', 'publisher-core'),
+							label: __('Cover', 'blockera-core'),
 							value: 'cover',
 							icon: <FitCoverIcon />,
 						},
 						{
-							label: __('Contain', 'publisher-core'),
+							label: __('Contain', 'blockera-core'),
 							value: 'contain',
 							icon: <FitContainIcon />,
 						},
@@ -229,17 +229,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								repeaterItem={itemId}
 								id={getControlId(itemId, 'size-width')}
 								singularId={'size-width'}
-								label={__('Width', 'publisher-core')}
+								label={__('Width', 'blockera-core')}
 								labelPopoverTitle={__(
 									'Mask Width',
-									'publisher-core'
+									'blockera-core'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It specifies the horizontal size of a mask image applied to block.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 									</>
@@ -247,7 +247,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								columns="columns-1"
 								className="control-first label-center small-gap"
 								unitType="width"
-								placeholder={__('Auto', 'publisher-core')}
+								placeholder={__('Auto', 'blockera-core')}
 								defaultValue={
 									defaultRepeaterItemValue['size-width']
 								}
@@ -271,17 +271,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								repeaterItem={itemId}
 								id={getControlId(itemId, 'size-height')}
 								singularId={'size-height'}
-								label={__('Height', 'publisher-core')}
+								label={__('Height', 'blockera-core')}
 								labelPopoverTitle={__(
 									'Mask Height',
-									'publisher-core'
+									'blockera-core'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It specifies the vertical size of a mask image applied to block.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 									</>
@@ -289,7 +289,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								columns="columns-1"
 								className="control-first label-center small-gap"
 								unitType="height"
-								placeholder={__('Auto', 'publisher-core')}
+								placeholder={__('Auto', 'blockera-core')}
 								defaultValue={
 									defaultRepeaterItemValue['size-height']
 								}
@@ -316,14 +316,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'repeat')}
 					singularId={'repeat'}
-					label={__('Repeat', 'publisher-core')}
-					labelPopoverTitle={__('Mask Repeat', 'publisher-core')}
+					label={__('Repeat', 'blockera-core')}
+					labelPopoverTitle={__('Mask Repeat', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It specifies how a mask image is repeated over block.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -333,23 +333,23 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						{
 							label: __(
 								'Horizontally and Vertically',
-								'publisher-core'
+								'blockera-core'
 							),
 							value: 'repeat',
 							icon: <RepeatIcon />,
 						},
 						{
-							label: __('Horizontally', 'publisher-core'),
+							label: __('Horizontally', 'blockera-core'),
 							value: 'repeat-x',
 							icon: <RepeatXIcon />,
 						},
 						{
-							label: __('Vertically', 'publisher-core'),
+							label: __('Vertically', 'blockera-core'),
 							value: 'repeat-y',
 							icon: <RepeatYIcon />,
 						},
 						{
-							label: __("Don't Tile", 'publisher-core'),
+							label: __("Don't Tile", 'blockera-core'),
 							value: 'no-repeat',
 							icon: <RepeatNoIcon />,
 						},
@@ -369,18 +369,18 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'position')}
 					singularId={'position'}
-					label={__('Position', 'publisher-core')}
-					alignmentMatrixLabel={__('Mask Position', 'publisher-core')}
+					label={__('Position', 'blockera-core')}
+					alignmentMatrixLabel={__('Mask Position', 'blockera-core')}
 					labelPopoverTitle={__(
 						'Mask Repeat Position',
-						'publisher-core'
+						'blockera-core'
 					)}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It sets where the mask image is placed, allowing for precise alignment of the mask in relation to the content it overlays.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -398,7 +398,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				/>
 
 				<BaseControl
-					label={__('Flip', 'publisher-core')}
+					label={__('Flip', 'blockera-core')}
 					columns="columns-2"
 					className="mask-control-flip"
 				>
@@ -408,17 +408,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						singularId={'horizontally-flip'}
 						className="flip-toggle"
 						columns="columns-2"
-						label={__('Horizontally', 'publisher-core')}
+						label={__('Horizontally', 'blockera-core')}
 						labelPopoverTitle={__(
 							'Flip Horizontally',
-							'publisher-core'
+							'blockera-core'
 						)}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It allows the horizontal mirroring of the mask image.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>
@@ -444,17 +444,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						id={getControlId(itemId, 'vertically-flip')}
 						singularId={'vertically-flip'}
 						className="flip-toggle"
-						label={__('Vertically', 'publisher-core')}
+						label={__('Vertically', 'blockera-core')}
 						labelPopoverTitle={__(
 							'Flip Vertically',
-							'publisher-core'
+							'blockera-core'
 						)}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It allows the vertical mirroring of the mask image.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

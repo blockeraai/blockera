@@ -8,7 +8,7 @@ import {
 	isObject,
 	isString,
 	isUndefined,
-} from '@publisher/utils';
+} from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -59,7 +59,7 @@ export function getClassnames(
 	}
 
 	if (!isString(section)) {
-		section = 'publisher';
+		section = 'blockera';
 	}
 
 	// return only section

@@ -7,15 +7,15 @@ import { useSelect } from '@wordpress/data';
 import { useState, useEffect, useMemo } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEquals, isObject, isEmpty, isUndefined } from '@publisher/utils';
-import { prepare } from '@publisher/data-extractor';
+import { isEquals, isObject, isEmpty, isUndefined } from '@blockera/utils';
+import { prepare } from '@blockera/data-extractor';
 import {
 	isInnerBlock,
 	isNormalState as _isNormalBlockState,
-} from '@publisher/extensions/src/components/utils';
-import { useBlockContext } from '@publisher/extensions/src/hooks/context';
+} from '@blockera/extensions/src/components/utils';
+import { useBlockContext } from '@blockera/extensions/src/hooks/context';
 
 /**
  * Internal dependencies
@@ -25,7 +25,7 @@ import type {
 	AdvancedLabelHookProps,
 } from './types';
 import { blockHasStates } from './helpers';
-import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
+import type { TStates } from '@blockera/extensions/src/libs/block-states/types';
 
 export const useAdvancedLabelProps = (
 	{
@@ -59,7 +59,7 @@ export const useAdvancedLabelProps = (
 			getExtensionInnerBlockState = () => 'normal',
 			getExtensionCurrentBlockState = () => 'normal',
 			getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
-		} = select('publisher-core/extensions') || {};
+		} = select('blockera-core/extensions') || {};
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),
@@ -68,8 +68,8 @@ export const useAdvancedLabelProps = (
 			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 		};
 	});
-	// Get static publisherInnerBlocks value to use as fallback.
-	const { publisherInnerBlocks } = useBlockContext();
+	// Get static blockeraInnerBlocks value to use as fallback.
+	const { blockeraInnerBlocks } = useBlockContext();
 	const currentBlockAttributes = useMemo(() => {
 		let calculatedAttributes = blockAttributes;
 
@@ -77,29 +77,29 @@ export const useAdvancedLabelProps = (
 			// Assume current inner block inside master secondary state!
 			if (!_isNormalBlockState(currentState)) {
 				if (
-					!blockAttributes.publisherBlockStates[currentState]
+					!blockAttributes.blockeraBlockStates[currentState]
 						?.breakpoints[currentBreakpoint]?.attributes
-						?.publisherInnerBlocks ||
-					!blockAttributes.publisherBlockStates[currentState]
+						?.blockeraInnerBlocks ||
+					!blockAttributes.blockeraBlockStates[currentState]
 						?.breakpoints[currentBreakpoint]?.attributes
-						?.publisherInnerBlocks[currentBlock]
+						?.blockeraInnerBlocks[currentBlock]
 				) {
 					calculatedAttributes =
-						publisherInnerBlocks[currentBlock].attributes || {};
+						blockeraInnerBlocks[currentBlock].attributes || {};
 				} else {
 					calculatedAttributes =
-						blockAttributes.publisherBlockStates[currentState]
+						blockAttributes.blockeraBlockStates[currentState]
 							.breakpoints[currentBreakpoint].attributes
-							?.publisherInnerBlocks[currentBlock].attributes ||
-						publisherInnerBlocks[currentBlock].attributes ||
+							?.blockeraInnerBlocks[currentBlock].attributes ||
+						blockeraInnerBlocks[currentBlock].attributes ||
 						{};
 				}
 			} else {
 				calculatedAttributes =
-					(blockAttributes.publisherInnerBlocks[currentBlock] &&
-						blockAttributes.publisherInnerBlocks[currentBlock]
+					(blockAttributes.blockeraInnerBlocks[currentBlock] &&
+						blockAttributes.blockeraInnerBlocks[currentBlock]
 							.attributes) ||
-					publisherInnerBlocks[currentBlock].attributes ||
+					blockeraInnerBlocks[currentBlock].attributes ||
 					{};
 			}
 		}
@@ -113,9 +113,9 @@ export const useAdvancedLabelProps = (
 			// Excluding advanced label for specified rule.
 			// Rule:
 			// - If current block not has any changed attributes!
-			// - Recieved attribute is equals with "publisherBlockStates".
+			// - Recieved attribute is equals with "blockeraBlockStates".
 			if (
-				['', 'publisherBlockStates'].includes(attribute) ||
+				['', 'blockeraBlockStates'].includes(attribute) ||
 				!currentBlockAttributes ||
 				!Object.values(currentBlockAttributes).length
 			) {
@@ -141,7 +141,7 @@ export const useAdvancedLabelProps = (
 				});
 			}
 			const currentBlockState =
-				currentBlockAttributes?.publisherBlockStates[
+				currentBlockAttributes?.blockeraBlockStates[
 					!isInnerBlock(currentBlock)
 						? currentState
 						: currentInnerBlockState
@@ -175,7 +175,7 @@ export const useAdvancedLabelProps = (
 			const isChangedOnOtherStates = Object.fromEntries(
 				// $FlowFixMe
 				Object.entries(
-					currentBlockAttributes?.publisherBlockStates
+					currentBlockAttributes?.blockeraBlockStates
 				)?.filter(
 					([stateType, state]: [
 						TStates | string,

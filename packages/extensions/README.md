@@ -1,19 +1,19 @@
 # Extensions
 
-Publisher extensions package.
+extensions package.
 
 ## Installation
 
 Install the module:
 
 ```bash
-npm install @publisher/extensions --save
+npm install @blockera/extensions --save
 ```
 
 ## Usage
 
 ```js
-import { registerBlockExtension } from '@publisher/extensions';
+import { registerBlockExtension } from '@blockera/extensions';
 
 registerBlockExtension(extensionName, extensionData);
 ```
@@ -25,3 +25,4 @@ registerBlockExtension(extensionName, extensionData);
 -   src/block.json5
 -   src/states.json5
 -   src/breakpoints.json5
+

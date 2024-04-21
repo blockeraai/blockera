@@ -5,10 +5,10 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { LabelControl } from '@publisher/controls';
-import { fieldsClassNames, fieldsInnerClassNames } from '@publisher/classnames';
+import { LabelControl } from '@blockera/controls';
+import { fieldsClassNames, fieldsInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies

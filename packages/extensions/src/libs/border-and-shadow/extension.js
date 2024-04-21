@@ -7,7 +7,7 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -15,10 +15,10 @@ import {
 	PanelBodyControl,
 	BoxShadowControl,
 	ControlContextProvider,
-} from '@publisher/controls';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
-import { FeatureWrapper } from '@publisher/components';
+} from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
+import { FeatureWrapper } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -42,24 +42,24 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 			setSettings,
 		}: TBorderAndShadowProps): MixedElement => {
 			const isShownBorder = isShowField(
-				extensionConfig.publisherBorder,
-				values?.publisherBorder,
-				attributes.publisherBorder.default
+				extensionConfig.blockeraBorder,
+				values?.blockeraBorder,
+				attributes.blockeraBorder.default
 			);
 			const isShownBorderRadius = isShowField(
-				extensionConfig.publisherBorderRadius,
-				values?.publisherBorderRadius,
-				attributes.publisherBorderRadius.default
+				extensionConfig.blockeraBorderRadius,
+				values?.blockeraBorderRadius,
+				attributes.blockeraBorderRadius.default
 			);
 			const isShownBoxShadow = isShowField(
-				extensionConfig.publisherBoxShadow,
-				values?.publisherBoxShadow,
-				attributes.publisherBoxShadow.default
+				extensionConfig.blockeraBoxShadow,
+				values?.blockeraBoxShadow,
+				attributes.blockeraBoxShadow.default
 			);
 			const isShownOutline = isShowField(
-				extensionConfig.publisherOutline,
-				values?.publisherOutline,
-				attributes.publisherOutline.default
+				extensionConfig.blockeraOutline,
+				values?.blockeraOutline,
+				attributes.blockeraOutline.default
 			);
 
 			// extension is not active
@@ -74,7 +74,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('Border And Shadow', 'publisher-core')}
+					title={__('Border And Shadow', 'blockera-core')}
 					initialOpen={true}
 					icon={<BorderAndShadowExtensionIcon />}
 					className={extensionClassNames('border-and-shadow')}
@@ -82,7 +82,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 					<ExtensionSettings
 						buttonLabel={__(
 							'More Border Settings',
-							'publisher-core'
+							'blockera-core'
 						)}
 						features={extensionConfig}
 						update={(newSettings) => {
@@ -92,63 +92,63 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 					<FeatureWrapper
 						isActive={isShownBorder}
-						config={extensionConfig.publisherBorder}
+						config={extensionConfig.blockeraBorder}
 					>
 						<Border
 							block={block}
-							border={values.publisherBorder}
-							defaultValue={attributes.publisherBorder.default}
+							border={values.blockeraBorder}
+							defaultValue={attributes.blockeraBorder.default}
 							onChange={handleOnChangeAttributes}
-							{...extensionProps.publisherBorder}
+							{...extensionProps.blockeraBorder}
 						/>
 					</FeatureWrapper>
 
 					<FeatureWrapper
 						isActive={isShownBorderRadius}
-						config={extensionConfig.publisherBorderRadius}
+						config={extensionConfig.blockeraBorderRadius}
 					>
 						<BorderRadius
 							block={block}
-							borderRadius={values.publisherBorderRadius}
+							borderRadius={values.blockeraBorderRadius}
 							defaultValue={
-								attributes.publisherBorderRadius.default
+								attributes.blockeraBorderRadius.default
 							}
 							onChange={handleOnChangeAttributes}
-							{...extensionProps.publisherBorderRadius}
+							{...extensionProps.blockeraBorderRadius}
 						/>
 					</FeatureWrapper>
 
 					<FeatureWrapper
 						isActive={isShownBoxShadow}
-						config={extensionConfig.publisherBoxShadow}
+						config={extensionConfig.blockeraBoxShadow}
 					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'box-shadow'),
-								value: values.publisherBoxShadow,
-								attribute: 'publisherBoxShadow',
+								value: values.blockeraBoxShadow,
+								attribute: 'blockeraBoxShadow',
 								blockName: block.blockName,
 							}}
-							storeName={'publisher-core/controls/repeater'}
+							storeName={'blockera-core/controls/repeater'}
 						>
 							<BaseControl
 								controlName="box-shadow"
 								columns="columns-1"
 							>
 								<BoxShadowControl
-									label={__('Box Shadows', 'publisher-core')}
+									label={__('Box Shadows', 'blockera-core')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Creates a shadow effect around block for depth and focus.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'Soft shadows create a subtle effect, while bold shadows make the block more noticeable.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
@@ -158,15 +158,15 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 										ref?: Object
 									): void =>
 										handleOnChangeAttributes(
-											'publisherBoxShadow',
+											'blockeraBoxShadow',
 											newValue,
 											{ ref }
 										)
 									}
 									defaultValue={
-										attributes.publisherBoxShadow.default
+										attributes.blockeraBoxShadow.default
 									}
-									{...extensionProps.publisherBoxShadow}
+									{...extensionProps.blockeraBoxShadow}
 								/>
 							</BaseControl>
 						</ControlContextProvider>
@@ -174,50 +174,50 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 					<FeatureWrapper
 						isActive={isShownOutline}
-						config={extensionConfig.publisherOutline}
+						config={extensionConfig.blockeraOutline}
 					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'outline'),
-								value: values.publisherOutline,
-								attribute: 'publisherOutline',
+								value: values.blockeraOutline,
+								attribute: 'blockeraOutline',
 								blockName: block.blockName,
 							}}
-							storeName={'publisher-core/controls/repeater'}
+							storeName={'blockera-core/controls/repeater'}
 						>
 							<BaseControl
 								controlName="outline"
 								columns="columns-1"
 							>
 								<OutlineControl
-									label={__('Outline', 'publisher-core')}
+									label={__('Outline', 'blockera-core')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Add distinct borders to blocks without affecting layout, enhancing visual hierarchy and focus.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'Useful for highlighting blocks without space adjustments, unlike borders. Perfect for focus states and accessibility.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
 									}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
-											'publisherOutline',
+											'blockeraOutline',
 											newValue,
 											{ ref }
 										)
 									}
 									defaultValue={
-										attributes.publisherOutline.default
+										attributes.blockeraOutline.default
 									}
-									{...extensionProps.publisherOutline}
+									{...extensionProps.blockeraOutline}
 								/>
 							</BaseControl>
 						</ControlContextProvider>

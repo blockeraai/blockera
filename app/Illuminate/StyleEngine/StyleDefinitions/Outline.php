@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 class Outline extends BaseStyleDefinition {
 
@@ -34,10 +34,10 @@ class Outline extends BaseStyleDefinition {
 				'%s %s %s',
 				$item['border']['width'],
 				$item['border']['style'],
-				! empty( $item['border']['color'] ) ? pb_get_value_addon_real_value( $item['border']['color'] ) : '',
+				! empty( $item['border']['color'] ) ? blockera_get_value_addon_real_value( $item['border']['color'] ) : '',
 			);
 
-			$declaration['outline-offset'] = ! empty( $item['offset'] ) ? pb_get_value_addon_real_value( $item['offset'] ) : '';
+			$declaration['outline-offset'] = ! empty( $item['offset'] ) ? blockera_get_value_addon_real_value( $item['offset'] ) : '';
 		}
 
 		$this->setCss( $declaration );
@@ -48,8 +48,8 @@ class Outline extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherOutline' => 'outline',
-			'publisherOffset'  => 'outline-offset',
+			'blockeraOutline' => 'outline',
+			'blockeraOffset'  => 'outline-offset',
 		];
 	}
 

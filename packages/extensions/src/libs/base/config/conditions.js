@@ -10,13 +10,13 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherConditions: FeatureConfig = {
+const blockeraConditions: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Conditions', 'publisher-core'),
+	label: __('Conditions', 'blockera-core'),
 };
 
 export const conditionsConfig = {
-	publisherConditions,
+	blockeraConditions,
 };

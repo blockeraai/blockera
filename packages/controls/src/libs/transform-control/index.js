@@ -6,10 +6,10 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
-import { isObject } from '@publisher/utils';
+import { controlClassNames } from '@blockera/classnames';
+import { isObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -82,11 +82,11 @@ export default function TransformControl({
 		<RepeaterControl
 			className={controlClassNames('transform', className)}
 			popoverTitle={
-				popoverTitle || __('2D & 3D Transforms', 'publisher-core')
+				popoverTitle || __('2D & 3D Transforms', 'blockera-core')
 			}
-			label={label || __('2D & 3D Transforms', 'publisher-core')}
+			label={label || __('2D & 3D Transforms', 'blockera-core')}
 			labelDescription={labelDescription || <LabelDescription />}
-			addNewButtonLabel={__('Add New Transform', 'publisher-core')}
+			addNewButtonLabel={__('Add New Transform', 'blockera-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 /**
  * Class Border definition to generate css rules.
@@ -40,7 +40,7 @@ class Border extends BaseStyleDefinition {
 								'%s %s %s',
 								$value['all']['width'],
 								! empty( $value['all']['style'] ) ? $value['all']['style'] : 'solid',
-								! empty( $value['all']['color'] ) ? pb_get_value_addon_real_value( $value['all']['color'] ) : '',
+								! empty( $value['all']['color'] ) ? blockera_get_value_addon_real_value( $value['all']['color'] ) : '',
 							)
 						);
 					}
@@ -53,7 +53,7 @@ class Border extends BaseStyleDefinition {
 								'%s %s %s',
 								$value['top']['width'],
 								! empty( $value['top']['style'] ) ? $value['top']['style'] : 'solid',
-								! empty( $value['top']['color'] ) ? pb_get_value_addon_real_value( $value['top']['color'] ) : '',
+								! empty( $value['top']['color'] ) ? blockera_get_value_addon_real_value( $value['top']['color'] ) : '',
 							)
 						);
 					}
@@ -64,7 +64,7 @@ class Border extends BaseStyleDefinition {
 								'%s %s %s',
 								$value['right']['width'],
 								! empty( $value['right']['style'] ) ? $value['right']['style'] : 'solid',
-								! empty( $value['right']['color'] ) ? pb_get_value_addon_real_value( $value['right']['color'] ) : '',
+								! empty( $value['right']['color'] ) ? blockera_get_value_addon_real_value( $value['right']['color'] ) : '',
 							)
 						);
 					}
@@ -75,7 +75,7 @@ class Border extends BaseStyleDefinition {
 								'%s %s %s',
 								$value['bottom']['width'],
 								! empty( $value['bottom']['style'] ) ? $value['bottom']['style'] : 'solid',
-								! empty( $value['bottom']['color'] ) ? pb_get_value_addon_real_value( $value['bottom']['color'] ) : '',
+								! empty( $value['bottom']['color'] ) ? blockera_get_value_addon_real_value( $value['bottom']['color'] ) : '',
 							)
 						);
 					}
@@ -86,7 +86,7 @@ class Border extends BaseStyleDefinition {
 								'%s %s %s',
 								$value['left']['width'],
 								! empty( $value['left']['style'] ) ? $value['left']['style'] : 'solid',
-								! empty( $value['left']['color'] ) ? pb_get_value_addon_real_value( $value['left']['color'] ) : '',
+								! empty( $value['left']['color'] ) ? blockera_get_value_addon_real_value( $value['left']['color'] ) : '',
 							)
 						);
 					}
@@ -97,14 +97,14 @@ class Border extends BaseStyleDefinition {
 
 				if ( ! empty( $value['type'] ) && 'all' === $value['type'] ) {
 
-					$declaration['border-radius'] = ! empty( $value['all'] ) ? pb_get_value_addon_real_value( $value['all'] ) : '';
+					$declaration['border-radius'] = ! empty( $value['all'] ) ? blockera_get_value_addon_real_value( $value['all'] ) : '';
 
 				} else {
 
-					$declaration['border-top-left-radius']     = ! empty( $value['topLeft'] ) ? pb_get_value_addon_real_value( $value['topLeft'] ) : '';
-					$declaration['border-top-right-radius']    = ! empty( $value['topRight'] ) ? pb_get_value_addon_real_value( $value['topRight'] ) : '';
-					$declaration['border-bottom-right-radius'] = ! empty( $value['bottomRight'] ) ? pb_get_value_addon_real_value( $value['bottomRight'] ) : '';
-					$declaration['border-bottom-left-radius']  = ! empty( $value['bottomLeft'] ) ? pb_get_value_addon_real_value( $value['bottomLeft'] ) : '';
+					$declaration['border-top-left-radius']     = ! empty( $value['topLeft'] ) ? blockera_get_value_addon_real_value( $value['topLeft'] ) : '';
+					$declaration['border-top-right-radius']    = ! empty( $value['topRight'] ) ? blockera_get_value_addon_real_value( $value['topRight'] ) : '';
+					$declaration['border-bottom-right-radius'] = ! empty( $value['bottomRight'] ) ? blockera_get_value_addon_real_value( $value['bottomRight'] ) : '';
+					$declaration['border-bottom-left-radius']  = ! empty( $value['bottomLeft'] ) ? blockera_get_value_addon_real_value( $value['bottomLeft'] ) : '';
 				}
 				break;
 		}
@@ -122,8 +122,8 @@ class Border extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherBorder'       => 'border',
-			'publisherBorderRadius' => 'border-radius',
+			'blockeraBorder'       => 'border',
+			'blockeraBorderRadius' => 'border-radius',
 		];
 	}
 
@@ -134,7 +134,7 @@ class Border extends BaseStyleDefinition {
 	 */
 	protected function calculateFallbackFeatureId( string $cssProperty ): string {
 
-		return pb_camel_case_join( $cssProperty );
+		return blockera_camel_case_join( $cssProperty );
 	}
 
 }

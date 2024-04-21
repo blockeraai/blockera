@@ -1,13 +1,13 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getCssSelector,
 	computedCssDeclarations,
-} from '@publisher/style-engine';
-import type { CssRule } from '@publisher/style-engine/src/types';
+} from '@blockera/style-engine';
+import type { CssRule } from '@blockera/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -28,7 +28,7 @@ export const MouseStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	const { publisherCursor, publisherUserSelect, publisherPointerEvents } =
+	const { blockeraCursor, blockeraUserSelect, blockeraPointerEvents } =
 		config.mouseConfig;
 	const blockProps = {
 		attributes: currentBlockAttributes,
@@ -53,14 +53,13 @@ export const MouseStyles = ({
 	const styleGroup: Array<CssRule> = [];
 
 	if (
-		isActiveField(publisherCursor) &&
-		currBlockAttributes.publisherCursor !==
-			attributes.publisherCursor.default
+		isActiveField(blockeraCursor) &&
+		currBlockAttributes.blockeraCursor !== attributes.blockeraCursor.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherCursor',
-			support: 'publisherCursor',
+			query: 'blockeraCursor',
+			support: 'blockeraCursor',
 			fallbackSupportId: 'cursor',
 		});
 
@@ -68,11 +67,11 @@ export const MouseStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherCursor: [
+					blockeraCursor: [
 						{
 							...staticDefinitionParams,
 							properties: {
-								cursor: currBlockAttributes.publisherCursor,
+								cursor: currBlockAttributes.blockeraCursor,
 							},
 						},
 					],
@@ -83,14 +82,14 @@ export const MouseStyles = ({
 	}
 
 	if (
-		isActiveField(publisherUserSelect) &&
-		currBlockAttributes.publisherUserSelect !==
-			attributes.publisherUserSelect.default
+		isActiveField(blockeraUserSelect) &&
+		currBlockAttributes.blockeraUserSelect !==
+			attributes.blockeraUserSelect.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherUserSelect',
-			support: 'publisherUserSelect',
+			query: 'blockeraUserSelect',
+			support: 'blockeraUserSelect',
 			fallbackSupportId: 'userSelect',
 		});
 
@@ -98,12 +97,12 @@ export const MouseStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherUserSelect: [
+					blockeraUserSelect: [
 						{
 							...staticDefinitionParams,
 							properties: {
 								'user-select':
-									currBlockAttributes.publisherUserSelect,
+									currBlockAttributes.blockeraUserSelect,
 							},
 						},
 					],
@@ -114,14 +113,14 @@ export const MouseStyles = ({
 	}
 
 	if (
-		isActiveField(publisherPointerEvents) &&
-		currBlockAttributes.publisherPointerEvents !==
-			attributes.publisherPointerEvents.default
+		isActiveField(blockeraPointerEvents) &&
+		currBlockAttributes.blockeraPointerEvents !==
+			attributes.blockeraPointerEvents.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherPointerEvents',
-			support: 'publisherPointerEvents',
+			query: 'blockeraPointerEvents',
+			support: 'blockeraPointerEvents',
 			fallbackSupportId: 'pointerEvent',
 		});
 
@@ -129,12 +128,12 @@ export const MouseStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherPointerEvents: [
+					blockeraPointerEvents: [
 						{
 							...staticDefinitionParams,
 							properties: {
 								'pointer-events':
-									currBlockAttributes.publisherPointerEvents,
+									currBlockAttributes.blockeraPointerEvents,
 							},
 						},
 					],

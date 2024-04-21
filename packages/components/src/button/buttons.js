@@ -4,9 +4,9 @@
 import { PropTypes } from 'prop-types';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { componentClassNames } from '@publisher/classnames';
+import { componentClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies

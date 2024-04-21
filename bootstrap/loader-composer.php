@@ -2,9 +2,9 @@
 
 use Composer\Autoload\ClassLoader;
 
-if ( ! class_exists( 'PublisherComposerLoader' ) ) {
+if ( ! class_exists( 'ComposerLoader' ) ) {
 
-	class PublisherComposerLoader {
+	class ComposerLoader {
 		/**
 		 * @var string
 		 */
@@ -13,7 +13,7 @@ if ( ! class_exists( 'PublisherComposerLoader' ) ) {
 		/**
 		 * @var self|null
 		 */
-		protected static ?PublisherComposerLoader $instance = null;
+		protected static ?ComposerLoader $instance = null;
 
 		/**
 		 * @var ClassLoader|null

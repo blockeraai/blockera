@@ -25,7 +25,7 @@ export const useDragValue = ({
 	const createVirtualCursorBox = (cursor) => {
 		// Create a new div element
 		const newElement = document.createElement('div');
-		newElement.className = `publisher-virtual-cursor-box`; // Set a class name
+		newElement.className = `blockera-virtual-cursor-box`; // Set a class name
 		// Set some properties for the new element (e.g., text content and style)
 		// newElement.style.setProperty('cursor', cursor, 'important');
 
@@ -45,7 +45,7 @@ export const useDragValue = ({
 	// Function to delete the created element by class name
 	const deleteVisualDivCursor = () => {
 		const elements = document.getElementsByClassName(
-			'publisher-virtual-cursor-box'
+			'blockera-virtual-cursor-box'
 		);
 
 		if (elements.length > 0) {

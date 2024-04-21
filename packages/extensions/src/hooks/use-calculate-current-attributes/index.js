@@ -6,10 +6,10 @@
 import { useSelect } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { mergeObject } from '@publisher/utils';
-import { prepare } from '@publisher/data-extractor';
+import { mergeObject } from '@blockera/utils';
+import { prepare } from '@blockera/data-extractor';
 
 /**
  * Internal dependencies
@@ -25,7 +25,7 @@ export const useCalculateCurrentAttributes = ({
 	attributes,
 	blockAttributes,
 	currentInnerBlock,
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 }: CalculateCurrentAttributesProps): Object => {
 	let currentAttributes: Object = {};
 	const {
@@ -39,7 +39,7 @@ export const useCalculateCurrentAttributes = ({
 			getExtensionInnerBlockState = () => 'normal',
 			getExtensionCurrentBlockState = () => 'normal',
 			getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
-		} = select('publisher-core/extensions') || {};
+		} = select('blockera-core/extensions') || {};
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),
@@ -62,8 +62,8 @@ export const useCalculateCurrentAttributes = ({
 			) {
 				currentAttributes = {
 					...blockAttributesDefaults,
-					...((publisherInnerBlocks[currentBlock] || {})
-						?.attributes || {}),
+					...((blockeraInnerBlocks[currentBlock] || {})?.attributes ||
+						{}),
 					...currentInnerBlock?.attributes,
 				};
 			}
@@ -74,10 +74,10 @@ export const useCalculateCurrentAttributes = ({
 			) {
 				currentAttributes = {
 					...blockAttributesDefaults,
-					...((publisherInnerBlocks[currentBlock] || {})
-						?.attributes || {}),
+					...((blockeraInnerBlocks[currentBlock] || {})?.attributes ||
+						{}),
 					...currentInnerBlock?.attributes,
-					...currentInnerBlock?.attributes?.publisherBlockStates[
+					...currentInnerBlock?.attributes?.blockeraBlockStates[
 						currentInnerBlockState
 					]?.breakpoints[currentBreakpoint]?.attributes,
 				};
@@ -95,12 +95,12 @@ export const useCalculateCurrentAttributes = ({
 			) {
 				currentAttributes = {
 					...blockAttributesDefaults,
-					...((publisherInnerBlocks[currentBlock] || {})
-						?.attributes || {}),
+					...((blockeraInnerBlocks[currentBlock] || {})?.attributes ||
+						{}),
 					...mergeObject(
 						currentInnerBlock?.attributes,
 						prepare(
-							`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.publisherInnerBlocks[${currentBlock}].attributes`,
+							`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
 							attributes
 						) || {}
 					),
@@ -113,11 +113,11 @@ export const useCalculateCurrentAttributes = ({
 			) {
 				currentAttributes = {
 					...blockAttributesDefaults,
-					...((publisherInnerBlocks[currentBlock] || {})
-						?.attributes || {}),
+					...((blockeraInnerBlocks[currentBlock] || {})?.attributes ||
+						{}),
 					...currentInnerBlock?.attributes,
 					...(prepare(
-						`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.publisherInnerBlocks[${currentBlock}].attributes.publisherBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
+						`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes.blockeraBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
 						attributes
 					) || {}),
 				};
@@ -137,14 +137,14 @@ export const useCalculateCurrentAttributes = ({
 			...blockAttributesDefaults,
 			...attributes,
 			...(prepare(
-				`publisherBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes`,
+				`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes`,
 				attributes
 			) || {}),
 		};
 	}
 
-	if (!Object(currentAttributes?.publisherInnerBlocks).length) {
-		currentAttributes.publisherInnerBlocks = { ...publisherInnerBlocks };
+	if (!Object(currentAttributes?.blockeraInnerBlocks).length) {
+		currentAttributes.blockeraInnerBlocks = { ...blockeraInnerBlocks };
 	}
 
 	return currentAttributes;

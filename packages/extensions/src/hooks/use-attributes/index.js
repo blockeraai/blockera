@@ -22,12 +22,12 @@ export const useAttributes = (
 		getAttributes,
 		innerBlocks,
 		masterIsNormalState,
-		publisherInnerBlocks,
+		blockeraInnerBlocks,
 	}: {
 		blockId: string,
 		innerBlocks: Object,
 		isNormalState: () => boolean,
-		publisherInnerBlocks: Object,
+		blockeraInnerBlocks: Object,
 		masterIsNormalState: () => boolean,
 		getAttributes: (key?: string) => any,
 	}
@@ -70,23 +70,22 @@ export const useAttributes = (
 			getExtensionInnerBlockState,
 			getExtensionCurrentBlockState,
 			getExtensionCurrentBlockStateBreakpoint,
-		} = select('publisher-core/extensions');
+		} = select('blockera-core/extensions');
 
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!
 		let _attributes = { ...attributes };
 
-		if (!_attributes?.publisherPropsId) {
-			_attributes = getAttributesWithIds(_attributes, 'publisherPropsId');
+		if (!_attributes?.blockeraPropsId) {
+			_attributes = getAttributesWithIds(_attributes, 'blockeraPropsId');
 		}
 
 		const currentBlock = getExtensionCurrentBlock();
 
-		const attributeIsPublisherBlockStates =
-			'publisherBlockStates' === attributeId;
+		const attributeIsBlockStates = 'blockeraBlockStates' === attributeId;
 		let hasRootAttributes =
-			_attributes.publisherInnerBlocks &&
-			_attributes.publisherInnerBlocks[currentBlock];
+			_attributes.blockeraInnerBlocks &&
+			_attributes.blockeraInnerBlocks[currentBlock];
 
 		// check - is really changed attribute of any block type (master or one of inner blocks)?
 		if (isNormalState()) {
@@ -97,7 +96,7 @@ export const useAttributes = (
 				!isChanged(
 					{
 						..._attributes,
-						..._attributes.publisherInnerBlocks[currentBlock]
+						..._attributes.blockeraInnerBlocks[currentBlock]
 							.attributes,
 					},
 					attributeId,
@@ -138,9 +137,9 @@ export const useAttributes = (
 			getAttributes,
 			isNormalState,
 			currentBreakpoint,
-			publisherInnerBlocks,
+			blockeraInnerBlocks,
 			currentInnerBlockState,
-			attributeIsPublisherBlockStates,
+			attributeIsBlockStates,
 		});
 
 		// Assume reference current action is 'reset_all_states'
@@ -150,7 +149,7 @@ export const useAttributes = (
 
 		// Current block (maybe 'master' or any inner blocks) in normal state!
 		// or
-		// attribute is "publisherBlockStates"
+		// attribute is "blockeraBlockStates"
 		// action = UPDATE_NORMAL_STATE
 		if (masterIsNormalState() && isNormalState()) {
 			return setAttributes(reducer(_attributes, updateNormalState()));
@@ -164,18 +163,18 @@ export const useAttributes = (
 				let currentBlockAttributes: Object = {};
 
 				if (
-					_attributes.publisherBlockStates[currentState].breakpoints[
+					_attributes.blockeraBlockStates[currentState].breakpoints[
 						currentBreakpoint
 					]
 				) {
 					currentBlockAttributes =
-						_attributes.publisherBlockStates[currentState]
+						_attributes.blockeraBlockStates[currentState]
 							.breakpoints[currentBreakpoint].attributes;
 				}
 
 				if (
-					!currentBlockAttributes?.publisherInnerBlocks ||
-					!currentBlockAttributes?.publisherInnerBlocks[currentBlock]
+					!currentBlockAttributes?.blockeraInnerBlocks ||
+					!currentBlockAttributes?.blockeraInnerBlocks[currentBlock]
 				) {
 					hasRootAttributes = false;
 				}
@@ -185,10 +184,10 @@ export const useAttributes = (
 					!isChanged(
 						{
 							..._attributes,
-							..._attributes.publisherBlockStates[currentState]
+							..._attributes.blockeraBlockStates[currentState]
 								.breakpoints[currentBreakpoint]?.attributes,
 							...(hasRootAttributes
-								? currentBlockAttributes?.publisherInnerBlocks[
+								? currentBlockAttributes?.blockeraInnerBlocks[
 										currentBlock
 								  ]?.attributes
 								: {}),
@@ -204,26 +203,25 @@ export const useAttributes = (
 					reducer(attributes, updateInnerBlockInsideParentState())
 				);
 			}
-			// Assume current block isn't in normal state and attributeId isn't "publisherBlockStates" for prevent cyclic object error!
+			// Assume current block isn't in normal state and attributeId isn't "blockeraBlockStates" for prevent cyclic object error!
 			// action = UPDATE_INNER_BLOCK_STATES
-			if (!isNormalState() && !attributeIsPublisherBlockStates) {
+			if (!isNormalState() && !attributeIsBlockStates) {
 				let currentBlockAttributes: Object = {};
 
 				if (
-					_attributes.publisherInnerBlocks[currentBlock].attributes
-						.publisherBlockStates[currentInnerBlockState]
+					_attributes.blockeraInnerBlocks[currentBlock].attributes
+						.blockeraBlockStates[currentInnerBlockState]
 						.breakpoints[currentBreakpoint]
 				) {
 					currentBlockAttributes =
-						_attributes.publisherInnerBlocks[currentBlock]
-							.attributes.publisherBlockStates[
-							currentInnerBlockState
-						].breakpoints[currentBreakpoint].attributes;
+						_attributes.blockeraInnerBlocks[currentBlock].attributes
+							.blockeraBlockStates[currentInnerBlockState]
+							.breakpoints[currentBreakpoint].attributes;
 				}
 
 				if (
-					!currentBlockAttributes?.publisherInnerBlocks ||
-					!currentBlockAttributes?.publisherInnerBlocks[currentBlock]
+					!currentBlockAttributes?.blockeraInnerBlocks ||
+					!currentBlockAttributes?.blockeraInnerBlocks[currentBlock]
 				) {
 					hasRootAttributes = false;
 				}
@@ -232,12 +230,12 @@ export const useAttributes = (
 						{
 							..._attributes,
 							...(hasRootAttributes
-								? _attributes.publisherInnerBlocks[currentBlock]
+								? _attributes.blockeraInnerBlocks[currentBlock]
 										.attributes
 								: {}),
 							...(hasRootAttributes
-								? _attributes.publisherInnerBlocks[currentBlock]
-										.attributes.publisherBlockStates[
+								? _attributes.blockeraInnerBlocks[currentBlock]
+										.attributes.blockeraBlockStates[
 										currentInnerBlockState
 								  ].breakpoints[currentBreakpoint].attributes
 								: {}),
@@ -255,20 +253,20 @@ export const useAttributes = (
 			}
 		}
 
-		// Assume block state is normal and attributeId is equals with "publisherBlockStates".
+		// Assume block state is normal and attributeId is equals with "blockeraBlockStates".
 		// action = UPDATE_NORMAL_STATE
-		if (attributeIsPublisherBlockStates || isNormalState()) {
+		if (attributeIsBlockStates || isNormalState()) {
 			return setAttributes(reducer(_attributes, updateNormalState()));
 		}
 
 		if (
-			_attributes.publisherBlockStates[currentState].breakpoints[
+			_attributes.blockeraBlockStates[currentState].breakpoints[
 				currentBreakpoint
 			] &&
 			!isChanged(
 				{
 					..._attributes,
-					..._attributes.publisherBlockStates[currentState]
+					..._attributes.blockeraBlockStates[currentState]
 						.breakpoints[currentBreakpoint].attributes,
 				},
 				attributeId,

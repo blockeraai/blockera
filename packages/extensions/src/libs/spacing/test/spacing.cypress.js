@@ -13,7 +13,7 @@ describe('Spacing Extension', () => {
 
 	describe('Margin', () => {
 		beforeEach(() => {
-			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+			addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
@@ -68,7 +68,7 @@ describe('Spacing Extension', () => {
 							left: '30px',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherSpacing')
+						getSelectedBlock(data, 'blockeraSpacing')
 					);
 				});
 
@@ -77,7 +77,7 @@ describe('Spacing Extension', () => {
 
 				redirectToFrontPage();
 
-				cy.get('.publisher-paragraph')
+				cy.get('.blockera-paragraph')
 					.should('have.css', 'margin-top', '10px')
 					.and('have.css', 'margin-right', '20px')
 					.and('have.css', 'margin-bottom', '10px')
@@ -88,7 +88,7 @@ describe('Spacing Extension', () => {
 
 	describe('Padding', () => {
 		beforeEach(() => {
-			addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+			addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
@@ -148,7 +148,7 @@ describe('Spacing Extension', () => {
 							left: '',
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherSpacing')
+						getSelectedBlock(data, 'blockeraSpacing')
 					);
 				});
 
@@ -157,7 +157,7 @@ describe('Spacing Extension', () => {
 
 				redirectToFrontPage();
 
-				cy.get('.publisher-paragraph')
+				cy.get('.blockera-paragraph')
 					.should('have.css', 'padding-top', '10px')
 					.and('have.css', 'padding-right', '20px')
 					.and('have.css', 'padding-bottom', '10px')
@@ -166,3 +166,4 @@ describe('Spacing Extension', () => {
 		});
 	});
 });
+

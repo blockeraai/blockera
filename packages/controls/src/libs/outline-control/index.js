@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -22,7 +22,7 @@ import type { TOutlineControlProps } from './types';
 export default function OutlineControl({
 	id,
 	className,
-	popoverTitle = __('Outline', 'publisher-core'),
+	popoverTitle = __('Outline', 'blockera-core'),
 	defaultRepeaterItemValue = {
 		border: {
 			width: '2px',
@@ -39,7 +39,7 @@ export default function OutlineControl({
 			id={id}
 			className={controlClassNames('outline', className)}
 			popoverTitle={popoverTitle}
-			addNewButtonLabel={__('Add New Outline', 'publisher-core')}
+			addNewButtonLabel={__('Add New Outline', 'blockera-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

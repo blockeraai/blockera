@@ -1,11 +1,11 @@
 @import "./picker-category";
 @import "./picker-value-item";
 
-.publisher-component-popover {
+.blockera-component-popover {
 
-	&.publisher-control-popover-value-addon-deleted {
-		--publisher-controls-primary-color: var(--publisher-value-addon-deleted-color);
-		--publisher-controls-primary-color-darker-20: var(--publisher-value-addon-deleted-color-darker-20);
+	&.blockera-control-popover-value-addon-deleted {
+		--blockera-controls-primary-color: var(--blockera-value-addon-deleted-color);
+		--blockera-controls-primary-color-darker-20: var(--blockera-value-addon-deleted-color-darker-20);
 	}
 }
 

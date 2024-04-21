@@ -6,10 +6,10 @@
 import { addFilter } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { ControlContextRef } from '@publisher/controls/src/context/types';
-import { mergeObject } from '@publisher/utils';
+import type { ControlContextRef } from '@blockera/controls/src/context/types';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -32,8 +32,8 @@ import {
 
 export const bootstrap = (): void => {
 	addFilter(
-		'publisherCore.blockEdit.attributes',
-		'publisherCore.blockEdit.sizeExtension.bootstrap',
+		'blockeraCore.blockEdit.attributes',
+		'blockeraCore.blockEdit.sizeExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const {
 				isNormalState,
@@ -72,8 +72,8 @@ export const bootstrap = (): void => {
 					)
 				) {
 					if (
-						!attributes?.publisherInnerBlocks?.link?.attributes
-							?.publisherFontColor
+						!attributes?.blockeraInnerBlocks?.link?.attributes
+							?.blockeraFontColor
 					) {
 						const newAttributes =
 							elementNormalFontColorFromWPCompatibility({
@@ -98,9 +98,9 @@ export const bootstrap = (): void => {
 					)
 				) {
 					if (
-						!attributes?.publisherInnerBlocks?.link?.attributes
-							?.publisherBlockStates?.breakpoints?.laptop
-							?.attributes?.publisherFontColor
+						!attributes?.blockeraInnerBlocks?.link?.attributes
+							?.blockeraBlockStates?.breakpoints?.laptop
+							?.attributes?.blockeraFontColor
 					) {
 						const newAttributes =
 							elementHoverFontColorFromWPCompatibility({
@@ -130,9 +130,9 @@ export const bootstrap = (): void => {
 					)
 				) {
 					if (
-						!attributes.publisherInnerBlocks[element] ||
-						!attributes.publisherInnerBlocks[element]?.attributes
-							?.publisherBackgroundColor
+						!attributes.blockeraInnerBlocks[element] ||
+						!attributes.blockeraInnerBlocks[element]?.attributes
+							?.blockeraBackgroundColor
 					) {
 						bgAttributes =
 							elementNormalBackgroundColorFromWPCompatibility({
@@ -158,9 +158,9 @@ export const bootstrap = (): void => {
 					)
 				) {
 					if (
-						!attributes.publisherInnerBlocks[element] ||
-						!attributes.publisherInnerBlocks[element]?.attributes
-							?.publisherBackground
+						!attributes.blockeraInnerBlocks[element] ||
+						!attributes.blockeraInnerBlocks[element]?.attributes
+							?.blockeraBackground
 					) {
 						bgAttributes =
 							elementNormalBackgroundFromWPCompatibility({
@@ -180,15 +180,15 @@ export const bootstrap = (): void => {
 	);
 
 	addFilter(
-		'publisherCore.blockEdit.setAttributes',
-		'publisherCore.blockEdit.sizeExtension.bootstrap.setAttributes',
+		'blockeraCore.blockEdit.setAttributes',
+		'blockeraCore.blockEdit.sizeExtension.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *
 		 * @callback getAttributes
 		 *
-		 * @param {Object} nextState The block attributes changed with publisher feature newValue and latest version of block state.
-		 * @param {string} featureId The publisher feature identifier.
+		 * @param {Object} nextState The block attributes changed with blockera feature newValue and latest version of block state.
+		 * @param {string} featureId The blockera feature identifier.
 		 * @param {*} newValue The newValue sets to feature.
 		 * @param {ControlContextRef} ref The reference of control context action occurred.
 		 * @param {getAttributes} getAttributes The getter block attributes.
@@ -231,7 +231,7 @@ export const bootstrap = (): void => {
 			//
 			if (
 				currentState === 'normal' &&
-				featureId === 'publisherFontColor' &&
+				featureId === 'blockeraFontColor' &&
 				innerBlocks[
 					currentBlock
 				]?.innerBlockSettings?.dataCompatibility.includes('font-color')
@@ -251,7 +251,7 @@ export const bootstrap = (): void => {
 			//
 			if (
 				currentState === 'hover' &&
-				featureId === 'publisherFontColor' &&
+				featureId === 'blockeraFontColor' &&
 				innerBlocks[
 					currentBlock
 				]?.innerBlockSettings?.dataCompatibility.includes(
@@ -273,7 +273,7 @@ export const bootstrap = (): void => {
 			//
 			if (
 				currentState === 'normal' &&
-				featureId === 'publisherBackgroundColor' &&
+				featureId === 'blockeraBackgroundColor' &&
 				innerBlocks[
 					currentBlock
 				]?.innerBlockSettings?.dataCompatibility.includes(
@@ -295,7 +295,7 @@ export const bootstrap = (): void => {
 			//
 			else if (
 				currentState === 'normal' &&
-				featureId === 'publisherBackground' &&
+				featureId === 'blockeraBackground' &&
 				innerBlocks[
 					currentBlock
 				]?.innerBlockSettings?.dataCompatibility.includes(
@@ -306,9 +306,9 @@ export const bootstrap = (): void => {
 
 				// Item has BG color
 				if (
-					attrs.publisherInnerBlocks[currentBlock] !== undefined &&
-					attrs.publisherInnerBlocks[currentBlock]?.attributes
-						?.publisherBackgroundColor
+					attrs.blockeraInnerBlocks[currentBlock] !== undefined &&
+					attrs.blockeraInnerBlocks[currentBlock]?.attributes
+						?.blockeraBackgroundColor
 				) {
 					return nextState;
 				}

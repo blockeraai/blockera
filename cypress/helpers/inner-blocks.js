@@ -6,16 +6,14 @@ export function openInnerBlocksExtension() {
 
 export function setParentBlock() {
 	cy.get(
-		'.publisher-extension.publisher-extension-block-card .publisher-extension-block-card__title .publisher-extension-block-card__title__block'
+		'.blockera-extension.blockera-extension-block-card .blockera-extension-block-card__title .blockera-extension-block-card__title__block'
 	).click();
 }
 
 export function setInnerBlock(blockType, suffix = ' Customize') {
 	openInnerBlocksExtension();
 
-	cy.get('.publisher-extension.publisher-extension-inner-blocks').within(
-		() => {
-			cy.get(`[aria-label="${blockType}${suffix}"]`).click();
-		}
-	);
+	cy.get('.blockera-extension.blockera-extension-inner-blocks').within(() => {
+		cy.get(`[aria-label="${blockType}${suffix}"]`).click();
+	});
 }

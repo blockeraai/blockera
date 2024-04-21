@@ -6,10 +6,10 @@ export function fontStyleFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.publisherFontStyle === '' &&
+		attributes?.blockeraFontStyle === '' &&
 		attributes?.style?.typography?.fontStyle !== undefined
 	) {
-		return { publisherFontStyle: attributes?.style?.typography?.fontStyle };
+		return { blockeraFontStyle: attributes?.style?.typography?.fontStyle };
 	}
 
 	return false;

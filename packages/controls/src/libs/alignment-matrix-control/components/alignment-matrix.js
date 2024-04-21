@@ -6,9 +6,9 @@ import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -39,7 +39,7 @@ export default function AlignmentMatrixBox({
 		<div
 			className={className}
 			style={{ width }}
-			aria-label={__('Alignment Matrix Control', 'publisher-core')}
+			aria-label={__('Alignment Matrix Control', 'blockera-core')}
 		>
 			{matrixValidValues.map((_value) => (
 				<span
@@ -50,7 +50,7 @@ export default function AlignmentMatrixBox({
 					onClick={() => onChange(_value)}
 					aria-label={sprintf(
 						// translators: it's the aria label for matrix item
-						__(' %s', 'publisher-core'),
+						__(' %s', 'blockera-core'),
 						_value
 					)}
 					data-test="matrix-item"

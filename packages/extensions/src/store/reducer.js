@@ -6,9 +6,9 @@
 import { combineReducers } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { omit, mergeObject } from '@publisher/utils';
+import { omit, mergeObject } from '@blockera/utils';
 
 /**
  * Key block types by their name.

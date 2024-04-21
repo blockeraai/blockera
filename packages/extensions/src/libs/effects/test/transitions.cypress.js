@@ -11,7 +11,7 @@ describe('Transitions → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', { delay: 0 });
 
@@ -59,7 +59,7 @@ describe('Transitions → Functionality', () => {
 					delay: '2000ms',
 					order: 0,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTransition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTransition'));
 		});
 
 		//Check frontend
@@ -67,7 +67,7 @@ describe('Transitions → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'transition',
 			'margin 0.2s ease-in-out 2s'
@@ -141,7 +141,7 @@ describe('Transitions → Functionality', () => {
 					delay: '3000ms',
 					order: 1,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherTransition'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTransition'));
 		});
 
 		//Check frontend
@@ -149,7 +149,7 @@ describe('Transitions → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'transition',
 			'margin 0.2s ease-in-out 2s, border 0.3s ease-in 3s'

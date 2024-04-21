@@ -11,7 +11,7 @@ describe('Border Radius → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', {
 			delay: 0,
@@ -46,7 +46,7 @@ describe('Border Radius → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect({ type: 'all', all: '25px' }).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherBorderRadius')
+				getSelectedBlock(data, 'blockeraBorderRadius')
 			);
 		});
 
@@ -55,7 +55,7 @@ describe('Border Radius → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-radius',
 			'25px'
@@ -104,9 +104,7 @@ describe('Border Radius → Functionality', () => {
 				topRight: '25px',
 				bottomLeft: '25px',
 				bottomRight: '25px',
-			}).to.be.deep.equal(
-				getSelectedBlock(data, 'publisherBorderRadius')
-			);
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorderRadius'));
 		});
 
 		//Check frontend
@@ -114,25 +112,25 @@ describe('Border Radius → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-top-left-radius',
 			'25px'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-top-right-radius',
 			'25px'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-bottom-left-radius',
 			'25px'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-bottom-left-radius',
 			'25px'
@@ -160,11 +158,11 @@ describe('Border Radius → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('custom').to.be.equal(
-				getSelectedBlock(data, 'publisherBorderRadius').type
+				getSelectedBlock(data, 'blockeraBorderRadius').type
 			);
 
 			expect('25px').to.be.equal(
-				getSelectedBlock(data, 'publisherBorderRadius').topLeft
+				getSelectedBlock(data, 'blockeraBorderRadius').topLeft
 			);
 		});
 
@@ -189,11 +187,11 @@ describe('Border Radius → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('custom').to.be.equal(
-				getSelectedBlock(data, 'publisherBorderRadius').type
+				getSelectedBlock(data, 'blockeraBorderRadius').type
 			);
 
 			expect('35px').to.be.equal(
-				getSelectedBlock(data, 'publisherBorderRadius').topRight
+				getSelectedBlock(data, 'blockeraBorderRadius').topRight
 			);
 		});
 
@@ -217,11 +215,11 @@ describe('Border Radius → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('custom').to.be.equal(
-				getSelectedBlock(data, 'publisherBorderRadius').type
+				getSelectedBlock(data, 'blockeraBorderRadius').type
 			);
 
 			expect('45px').to.be.equal(
-				getSelectedBlock(data, 'publisherBorderRadius').bottomLeft
+				getSelectedBlock(data, 'blockeraBorderRadius').bottomLeft
 			);
 		});
 
@@ -245,11 +243,11 @@ describe('Border Radius → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('custom').to.be.equal(
-				getSelectedBlock(data, 'publisherBorderRadius').type
+				getSelectedBlock(data, 'blockeraBorderRadius').type
 			);
 
 			expect('55px').to.be.equal(
-				getSelectedBlock(data, 'publisherBorderRadius').bottomRight
+				getSelectedBlock(data, 'blockeraBorderRadius').bottomRight
 			);
 		});
 
@@ -258,25 +256,25 @@ describe('Border Radius → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-top-left-radius',
 			'25px'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-top-right-radius',
 			'35px'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-bottom-left-radius',
 			'45px'
 		);
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'border-bottom-right-radius',
 			'55px'

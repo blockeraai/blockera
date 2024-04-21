@@ -1,4 +1,4 @@
-import { defaultConfig } from '@publisher/storybook';
+import { defaultConfig } from '@blockera/storybook';
 
 process.env.NODE_ENV = 'DEVELOPMENT';
 

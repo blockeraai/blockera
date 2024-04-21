@@ -7,9 +7,9 @@ import { memo, useContext } from '@wordpress/element';
 import type { Element } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -37,7 +37,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'publisher-core'),
+					__('Item %d', 'blockera-core'),
 					itemId + 1
 				)}
 			>
@@ -54,7 +54,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				>
 					{key
 						? key.replace(/^data-/, '').replace(/^aria-/, '')
-						: __('None', 'publisher-core')}
+						: __('None', 'blockera-core')}
 				</span>
 
 				<span

@@ -11,7 +11,7 @@ describe('Filters → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', { delay: 0 });
 
@@ -73,7 +73,7 @@ describe('Filters → Functionality', () => {
 					'drop-shadow-color': '#cccccc',
 					order: 0,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFilter'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFilter'));
 		});
 
 		//Check frontend
@@ -81,7 +81,7 @@ describe('Filters → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#publisher-core-inline-css-inline-css')
+		cy.get('style#blockera-core-inline-css-inline-css')
 			.invoke('text')
 			.should('include', 'filter: drop-shadow(50px 30px 40px #cccccc);');
 	});
@@ -137,7 +137,7 @@ describe('Filters → Functionality', () => {
 					invert: '50%',
 					order: 1,
 				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFilter'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFilter'));
 		});
 
 		//Check frontend
@@ -145,8 +145,9 @@ describe('Filters → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#publisher-core-inline-css-inline-css')
+		cy.get('style#blockera-core-inline-css-inline-css')
 			.invoke('text')
 			.should('include', 'filter: brightness(100%) invert(50%);');
 	});
 });
+

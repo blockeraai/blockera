@@ -1,4 +1,4 @@
-.publisher-control-angle {
+.blockera-control-angle {
 
 	.components-flex-item {
 		margin: 0 !important;
@@ -7,7 +7,7 @@
 	.components-angle-picker-control__angle-circle {
 		height: 30px;
 		width: 30px;
-		border: 1px solid var(--publisher-controls-border-color);
+		border: 1px solid var(--blockera-controls-border-color);
 	}
 
 	.components-angle-picker-control {
@@ -22,13 +22,13 @@
 		}
 
 		.components-input-control__backdrop {
-			border: 1px solid var(--publisher-controls-border-color);
+			border: 1px solid var(--blockera-controls-border-color);
 			border-radius: 2px;
 		}
 
 		.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {
-			border-color: var(--publisher-controls-primary-color) !important;
-			box-shadow: 0 0 0 1px var(--publisher-controls-primary-color) !important;
+			border-color: var(--blockera-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
 		}
 
 		.components-input-control__suffix {
@@ -43,7 +43,7 @@
 		}
 	}
 
-	.publisher-component-button {
+	.blockera-component-button {
 		font-size: 13px;
 		font-weight: 400;
 		height: 30px;

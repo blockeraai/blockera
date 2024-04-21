@@ -1,3 +1,3 @@
 // @flow
 
-export const STORE_NAME: string = 'publisher-core/editor';
+export const STORE_NAME: string = 'blockera-core/editor';

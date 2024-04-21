@@ -1,7 +1,7 @@
-.publisher-control-color {
+.blockera-control-color {
 	transition: all 0.1s linear 0s;
 
-	&.components-button.publisher-component-button {
+	&.components-button.blockera-component-button {
 		display: grid;
 		grid-template-columns: 20px auto;
 		align-items: center;
@@ -11,11 +11,11 @@
 		gap: 10px;
 	}
 
-	&.components-button.publisher-component-button.is-empty {
+	&.components-button.blockera-component-button.is-empty {
 		padding: 2px 10px !important;
 	}
 
-	&.components-button.publisher-component-button.color-type-minimal {
+	&.components-button.blockera-component-button.color-type-minimal {
 		padding: 2px 3px !important;
 		display: flex;
 		align-items: center;

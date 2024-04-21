@@ -6,11 +6,11 @@
 import { dispatch } from '@wordpress/data';
 
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
-import { isValid } from '@publisher/hooks';
-import { isSpecialUnit } from '@publisher/controls';
-import { isObject, isString, isUndefined } from '@publisher/utils';
+import { isValid } from '@blockera/hooks';
+import { isSpecialUnit } from '@blockera/controls';
+import { isObject, isString, isUndefined } from '@blockera/utils';
 
 export function toSimpleStyleWPCompatible({
 	wpAttribute,
@@ -144,7 +144,7 @@ export const resetExtensionSettings = () => {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 		// changeExtensionCurrentBlockStateBreakpoint: setCurrentBreakpoint,
-	} = dispatch('publisher-core/extensions') || {};
+	} = dispatch('blockera-core/extensions') || {};
 
 	setCurrentBlock('master');
 	setCurrentState('normal');

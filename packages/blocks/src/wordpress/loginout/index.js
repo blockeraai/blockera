@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
@@ -26,8 +26,8 @@ import {
 	InnerBlockHeading4Icon,
 	InnerBlockHeading5Icon,
 	InnerBlockHeading6Icon,
-} from '@publisher/extensions';
-import type { InnerBlocks } from '@publisher/extensions/src/libs/inner-blocks/types';
+} from '@blockera/extensions';
+import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -43,11 +43,11 @@ const attributes = {
 	...sharedBlockExtensionAttributes,
 };
 
-const publisherInnerBlocks: InnerBlocks = {
+const blockeraInnerBlocks: InnerBlocks = {
 	form: {
 		name: 'core/form',
 		type: 'form',
-		label: __('Form Container', 'publisher-core'),
+		label: __('Form Container', 'blockera-core'),
 		icon: <InnerBlockFormContainerIcon />,
 		selectors: {
 			root: 'form',
@@ -60,7 +60,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	input_label: {
 		name: 'input_label',
 		type: 'input_label',
-		label: __('Input Labels', 'publisher-core'),
+		label: __('Input Labels', 'blockera-core'),
 		icon: <InnerBlockFormInputLabelIcon />,
 		selectors: {
 			root: '.login-password label, .login-username label',
@@ -73,7 +73,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	input: {
 		name: 'input',
 		type: 'input',
-		label: __('Inputs', 'publisher-core'),
+		label: __('Inputs', 'blockera-core'),
 		icon: <InnerBlockFormInputFieldsIcon />,
 		selectors: {
 			root: '.login-password input, .login-username input',
@@ -86,7 +86,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	remember: {
 		name: 'remember',
 		type: 'remember',
-		label: __('Remember Me', 'publisher-core'),
+		label: __('Remember Me', 'blockera-core'),
 		icon: <InnerBlockFormRememberIcon />,
 		selectors: {
 			root: '.login-remember label',
@@ -99,7 +99,7 @@ const publisherInnerBlocks: InnerBlocks = {
 	button: {
 		name: 'core/button',
 		type: 'button',
-		label: __('Submit Button', 'publisher-core'),
+		label: __('Submit Button', 'blockera-core'),
 		icon: <InnerBlockFormButtonIcon />,
 		selectors: {
 			root: '.button.button-primary',
@@ -112,14 +112,14 @@ const publisherInnerBlocks: InnerBlocks = {
 };
 
 export const Loginout = {
-	name: 'publisherLoginout',
+	name: 'blockeraLoginout',
 	targetBlock: 'core/loginout',
 	attributes,
 	supports: {
 		...IconExtensionSupports,
 		...sharedBlockExtensionSupports,
 	},
-	publisherInnerBlocks,
+	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

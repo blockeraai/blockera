@@ -6,9 +6,9 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Button } from '@publisher/components';
+import { Button } from '@blockera/components';
 
 export const More = ({
 	label,
@@ -25,7 +25,7 @@ export const More = ({
 		<Button
 			label={label}
 			showTooltip={true}
-			className={className || 'publisher-extension-settings-button'}
+			className={className || 'blockera-extension-settings-button'}
 			isFocus={isOpen || false}
 			noBorder={true}
 			{...{

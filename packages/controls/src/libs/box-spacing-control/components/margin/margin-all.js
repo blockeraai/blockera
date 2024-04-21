@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useDragValue } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { useDragValue } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 /**
  * Internal dependencies
  */
@@ -196,7 +196,7 @@ export function MarginAll({
 					data-cy="box-spacing-margin-top"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Margin', 'publisher-core')}
+						ariaLabel={__('All Sides Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -230,7 +230,7 @@ export function MarginAll({
 					data-cy="box-spacing-margin-right"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Margin', 'publisher-core')}
+						ariaLabel={__('All Sides Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -263,7 +263,7 @@ export function MarginAll({
 					data-cy="box-spacing-margin-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Margin', 'publisher-core')}
+						ariaLabel={__('All Sides Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -296,7 +296,7 @@ export function MarginAll({
 					data-cy="box-spacing-margin-left"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Margin', 'publisher-core')}
+						ariaLabel={__('All Sides Margin', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -328,7 +328,7 @@ export function MarginAll({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('All Sides Margin', 'publisher-core')}
+						title={__('All Sides Margin', 'blockera-core')}
 						isOpen={true}
 						unit={sideSpace?.unit}
 						onChange={(newValue) => {
@@ -342,17 +342,17 @@ export function MarginAll({
 								},
 							});
 						}}
-						inputLabel={__('Margin', 'publisher-core')}
+						inputLabel={__('Margin', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'All Sides Margin',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a single margin space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

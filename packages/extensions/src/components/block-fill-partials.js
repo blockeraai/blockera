@@ -10,9 +10,9 @@ import { Fill } from '@wordpress/components';
 import { useEffect, memo } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { unregisterControl } from '@publisher/controls';
+import { unregisterControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -28,16 +28,16 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		currentBlock,
 		currentInnerBlock,
 		BlockEditComponent,
-		publisherInnerBlocks,
+		blockeraInnerBlocks,
 		updateBlockEditorSettings,
 	}): Element<any> => {
-		const { isActiveBlockExtensions } = select('publisher-core/extensions');
+		const { isActiveBlockExtensions } = select('blockera-core/extensions');
 
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
-			const others = select('publisher-core/controls').getControls();
+			const others = select('blockera-core/controls').getControls();
 			const repeaters = select(
-				'publisher-core/controls/repeater'
+				'blockera-core/controls/repeater'
 			).getControls();
 
 			const getMemoizedControlNames = memoize((controls) =>
@@ -46,29 +46,29 @@ export const BlockFillPartials: ComponentType<any> = memo(
 
 			unregisterControl(
 				getMemoizedControlNames(others),
-				'publisher-core/controls'
+				'blockera-core/controls'
 			);
 			unregisterControl(
 				getMemoizedControlNames(repeaters),
-				'publisher-core/controls/repeater'
+				'blockera-core/controls/repeater'
 			);
 		}, [isActive]);
 
 		return (
 			<>
-				<Fill name={`publisher-block-card-content-${clientId}`}>
+				<Fill name={`blockera-block-card-content-${clientId}`}>
 					<BlockCard
 						states={states}
 						clientId={clientId}
 						activeBlock={currentBlock}
 						blockName={blockProps.name}
-						innerBlocks={publisherInnerBlocks}
+						innerBlocks={blockeraInnerBlocks}
 						currentInnerBlock={currentInnerBlock}
 						handleOnClick={updateBlockEditorSettings}
 					/>
 				</Fill>
 				{isActiveBlockExtensions() && (
-					<Fill name={`publisher-block-edit-content-${clientId}`}>
+					<Fill name={`blockera-block-edit-content-${clientId}`}>
 						<BlockEditComponent {...blockProps} />
 					</Fill>
 				)}

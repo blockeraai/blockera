@@ -1,8 +1,8 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEquals } from '@publisher/utils';
-import { update, prepare } from '@publisher/data-extractor';
+import { isEquals } from '@blockera/utils';
+import { update, prepare } from '@blockera/data-extractor';
 
 /**
  * Internal dependencies

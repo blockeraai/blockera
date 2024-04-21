@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
 
 
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
 
 
 class PostExcerpt extends Field {

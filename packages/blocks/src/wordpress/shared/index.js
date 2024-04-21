@@ -6,13 +6,13 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SharedBlockExtension,
 	sharedBlockExtensionAttributes as attributes,
 	sharedBlockExtensionSupports as supports,
-} from '@publisher/extensions';
+} from '@blockera/extensions';
 
 export const Shared = {
 	name: 'Shared',

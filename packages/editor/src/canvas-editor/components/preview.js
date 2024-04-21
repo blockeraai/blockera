@@ -7,15 +7,15 @@ import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Icon } from '@publisher/components';
+import { Icon } from '@blockera/components';
 
 export const Preview = (): MixedElement => {
 	const previewElement: HTMLElement | null = document.querySelector(
 		'a[aria-label="View Post"]'
 	);
-	const { getEntity } = select('publisher-core/data');
+	const { getEntity } = select('blockera-core/data');
 	const { url: siteURL } = getEntity('site');
 
 	return (
@@ -28,7 +28,7 @@ export const Preview = (): MixedElement => {
 			rel="noreferrer"
 		>
 			<Icon
-				className={'publisher-canvas-preview-link'}
+				className={'blockera-canvas-preview-link'}
 				library={'wp'}
 				icon={'external'}
 			/>

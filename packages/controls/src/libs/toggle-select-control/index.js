@@ -10,10 +10,10 @@ import {
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isUndefined } from '@publisher/utils';
-import { controlClassNames } from '@publisher/classnames';
+import { isUndefined } from '@blockera/utils';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies

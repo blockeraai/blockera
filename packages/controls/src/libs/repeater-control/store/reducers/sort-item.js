@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { update } from '@publisher/data-extractor';
+import { update } from '@blockera/data-extractor';
 
 /**
  * Internal dependencies

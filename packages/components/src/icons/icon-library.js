@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -5,9 +7,9 @@ import Fuse from 'fuse.js';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -15,16 +17,16 @@ import { isUndefined } from '@publisher/utils';
 import { FontAwesomeFarIcons } from './library-far';
 import { FontAwesomeFasIcons } from './library-fas';
 import { WPIcons } from './library-wp';
-import { PublisherIcons } from './library-publisher';
+import * as Icons  from './library-blockera';
 
 import WPIconsSearchData from './library-wp/search-data.json';
 import FarIconsSearchData from './library-far/search-data.json';
 import FasIconsSearchData from './library-fas/search-data.json';
-import PublisherIconsSearchData from './library-publisher/search-data.json';
+import IconsSearchData from './library-blockera/search-data.json';
 import searchIndex from './search-index.json';
 
 import { default as WPLibraryIcon } from './library-wp/library-icon';
-import { default as PublisherLibraryIcon } from './library-publisher/library-icon';
+import { default as LibraryIcon } from './library-blockera/library-icon';
 import { default as FarLibraryIcon } from './library-far/library-icon';
 import { default as FasLibraryIcon } from './library-fas/library-icon';
 
@@ -32,35 +34,35 @@ const IconLibraries = {
 	wp: {
 		id: 'wp',
 		// translators: Icon library name
-		name: __('WordPress', 'publisher-core'),
+		name: __('WordPress', 'blockera-core'),
 		icon: <WPLibraryIcon />,
 	},
-	publisher: {
-		id: 'publisher',
+	blockera: {
+		id: 'blockera',
 		// translators: Icon library name
-		name: __('Publisher', 'publisher-core'),
-		icon: <PublisherLibraryIcon />,
+		name: __('', 'blockera-core'),
+		icon: <LibraryIcon />,
 	},
 	far: {
 		id: 'far',
 		// translators: Icon library name
-		name: __('FontAwesome Regular', 'publisher-core'),
+		name: __('FontAwesome Regular', 'blockera-core'),
 		icon: <FarLibraryIcon />,
 	},
 	fas: {
 		id: 'fas',
 		// translators: WordPress icon library name
-		name: __('FontAwesome Solid', 'publisher-core'),
+		name: __('FontAwesome Solid', 'blockera-core'),
 		icon: <FasLibraryIcon />,
 	},
 };
 
-export function isValidIconLibrary(library) {
+export function isValidIconLibrary(library: string): boolean {
 	return !isUndefined(IconLibraries[library]);
 }
 
-export function getIconLibrary(library: string): Array {
-	const libs = {};
+export function getIconLibrary(library: string): Object {
+	const libs: { [key: string]: any } = {};
 
 	if (library === 'all') {
 		for (const key in IconLibraries) {
@@ -73,14 +75,14 @@ export function getIconLibrary(library: string): Array {
 	return libs;
 }
 
-export function getIconLibraryIcons(iconLibrary: String): Array {
+export function getIconLibraryIcons(iconLibrary: string): Object {
 	if (!isValidIconLibrary(iconLibrary)) {
 		return {};
 	}
 
 	switch (iconLibrary) {
-		case 'publisher':
-			return PublisherIcons;
+		case 'blockera':
+			return Icons;
 
 		case 'wp':
 			return WPIcons;
@@ -95,37 +97,40 @@ export function getIconLibraryIcons(iconLibrary: String): Array {
 	return {};
 }
 
-export function getIconLibrarySearchData(library: string): Array {
-	const searchData = [];
+export function getIconLibrarySearchData(library: string): Array<any> {
+	const searchData: Array<any> = [];
 
 	if (library === 'all' || isValidIconLibrary(library))
 		switch (library) {
 			case 'all':
+				// $FlowFixMe
 				Array.prototype.push.apply(searchData, WPIconsSearchData);
-				Array.prototype.push.apply(
-					searchData,
-					PublisherIconsSearchData
-				);
+				// $FlowFixMe
+				Array.prototype.push.apply(searchData, IconsSearchData);
+				// $FlowFixMe
 				Array.prototype.push.apply(searchData, FarIconsSearchData);
+				// $FlowFixMe
 				Array.prototype.push.apply(searchData, FasIconsSearchData);
+				// $FlowFixMe
 				break;
 
 			case 'wp':
+				// $FlowFixMe
 				Array.prototype.push.apply(searchData, WPIconsSearchData);
 				break;
 
-			case 'publisher':
-				Array.prototype.push.apply(
-					searchData,
-					PublisherIconsSearchData
-				);
+			case 'blockera':
+				// $FlowFixMe
+				Array.prototype.push.apply(searchData, IconsSearchData);
 				break;
 
 			case 'far':
+				// $FlowFixMe
 				Array.prototype.push.apply(searchData, FasIconsSearchData);
 				break;
 
 			case 'fas':
+				// $FlowFixMe
 				Array.prototype.push.apply(searchData, FasIconsSearchData);
 				break;
 		}
@@ -133,6 +138,6 @@ export function getIconLibrarySearchData(library: string): Array {
 	return searchData;
 }
 
-export function getIconLibrariesSearchIndex(): Array {
+export function getIconLibrariesSearchIndex(): Object {
 	return Fuse.parseIndex(searchIndex);
 }

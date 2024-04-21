@@ -39,20 +39,20 @@ export const cursorFieldOptions = function () {
 	return [
 		{
 			type: 'optgroup',
-			label: __('General', 'publisher-core'),
+			label: __('General', 'blockera-core'),
 			options: [
 				{
-					label: __('Auto', 'publisher-core'),
+					label: __('Auto', 'blockera-core'),
 					value: 'auto',
 					icon: <CursorPointerIcon />,
 				},
 				{
-					label: __('Default', 'publisher-core'),
+					label: __('Default', 'blockera-core'),
 					value: 'default',
 					icon: <CursorPointerIcon />,
 				},
 				{
-					label: __('none', 'publisher-core'),
+					label: __('none', 'blockera-core'),
 					value: 'none',
 					icon: <CursorNoneIcon />,
 				},
@@ -60,35 +60,35 @@ export const cursorFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Links & Status', 'publisher-core'),
+			label: __('Links & Status', 'blockera-core'),
 			options: [
 				{
-					label: __('pointer', 'publisher-core'),
+					label: __('pointer', 'blockera-core'),
 					value: 'pointer',
 					icon: <CursorPointerIcon />,
 				},
 				{
-					label: __('not-allowed', 'publisher-core'),
+					label: __('not-allowed', 'blockera-core'),
 					value: 'not-allowed',
 					icon: <CursorNotAllowedIcon />,
 				},
 				{
-					label: __('wait', 'publisher-core'),
+					label: __('wait', 'blockera-core'),
 					value: 'wait',
 					icon: <CursorWaitIcon />,
 				},
 				{
-					label: __('progress', 'publisher-core'),
+					label: __('progress', 'blockera-core'),
 					value: 'progress',
 					icon: <CursorWaitIcon />,
 				},
 				{
-					label: __('help', 'publisher-core'),
+					label: __('help', 'blockera-core'),
 					value: 'help',
 					icon: <CursorHelpIcon />,
 				},
 				{
-					label: __('context-menu', 'publisher-core'),
+					label: __('context-menu', 'blockera-core'),
 					value: 'context-menu',
 					icon: <CursorContextMenuIcon />,
 				},
@@ -96,25 +96,25 @@ export const cursorFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Selection', 'publisher-core'),
+			label: __('Selection', 'blockera-core'),
 			options: [
 				{
-					label: __('cell', 'publisher-core'),
+					label: __('cell', 'blockera-core'),
 					value: 'cell',
 					icon: <CursorCellIcon />,
 				},
 				{
-					label: __('crosshair', 'publisher-core'),
+					label: __('crosshair', 'blockera-core'),
 					value: 'crosshair',
 					icon: <CursorCrosshairIcon />,
 				},
 				{
-					label: __('text', 'publisher-core'),
+					label: __('text', 'blockera-core'),
 					value: 'text',
 					icon: <CursorTextIcon />,
 				},
 				{
-					label: __('vertical-text', 'publisher-core'),
+					label: __('vertical-text', 'blockera-core'),
 					value: 'vertical-text',
 					icon: <CursorVerticalTextIcon />,
 				},
@@ -122,25 +122,25 @@ export const cursorFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Drag & Drop', 'publisher-core'),
+			label: __('Drag & Drop', 'blockera-core'),
 			options: [
 				{
-					label: __('grab', 'publisher-core'),
+					label: __('grab', 'blockera-core'),
 					value: 'grab',
 					icon: <CursorGrabIcon />,
 				},
 				{
-					label: __('grabbing', 'publisher-core'),
+					label: __('grabbing', 'blockera-core'),
 					value: 'grabbing',
 					icon: <CursorGrabbingIcon />,
 				},
 				{
-					label: __('alias', 'publisher-core'),
+					label: __('alias', 'blockera-core'),
 					value: 'alias',
 					icon: <CursorAliasIcon />,
 				},
 				{
-					label: __('copy', 'publisher-core'),
+					label: __('copy', 'blockera-core'),
 					value: 'move',
 					icon: <CursorMoveIcon />,
 				},
@@ -148,15 +148,15 @@ export const cursorFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Zoom', 'publisher-core'),
+			label: __('Zoom', 'blockera-core'),
 			options: [
 				{
-					label: __('zoom-in', 'publisher-core'),
+					label: __('zoom-in', 'blockera-core'),
 					value: 'zoom-in',
 					icon: <CursorZoomInIcon />,
 				},
 				{
-					label: __('zoom-out', 'publisher-core'),
+					label: __('zoom-out', 'blockera-core'),
 					value: 'zoom-out',
 					icon: <CursorZoomOutIcon />,
 				},
@@ -164,76 +164,76 @@ export const cursorFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Resize', 'publisher-core'),
+			label: __('Resize', 'blockera-core'),
 			options: [
 				{
-					label: __('col-resize', 'publisher-core'),
+					label: __('col-resize', 'blockera-core'),
 					value: 'col-resize',
 					icon: <CursorColResizeIcon />,
 				},
 				{
-					label: __('row-resize', 'publisher-core'),
+					label: __('row-resize', 'blockera-core'),
 					value: 'row-resize',
 					icon: <CursorRowResizeIcon />,
 				},
 
 				{
-					label: __('nesw-resize', 'publisher-core'),
+					label: __('nesw-resize', 'blockera-core'),
 					value: 'nesw-resize',
 					icon: <CursorNeswResizeIcon />,
 				},
 				{
-					label: __('nwse-resize', 'publisher-core'),
+					label: __('nwse-resize', 'blockera-core'),
 					value: 'nwse-resize',
 					icon: <CursorNwseResizeIcon />,
 				},
 				{
-					label: __('ew-resize', 'publisher-core'),
+					label: __('ew-resize', 'blockera-core'),
 					value: 'ew-resize',
 					icon: <CursorEwResizeIcon />,
 				},
 				{
-					label: __('ns-resize', 'publisher-core'),
+					label: __('ns-resize', 'blockera-core'),
 					value: 'ns-resize',
 					icon: <CursorNsResizeIcon />,
 				},
 				{
-					label: __('n-resize', 'publisher-core'),
+					label: __('n-resize', 'blockera-core'),
 					value: 'n-resize',
 					icon: <CursorNResizeIcon />,
 				},
 				{
-					label: __('w-resize', 'publisher-core'),
+					label: __('w-resize', 'blockera-core'),
 					value: 'w-resize',
 					icon: <CursorWResizeIcon />,
 				},
 				{
-					label: __('s-resize', 'publisher-core'),
+					label: __('s-resize', 'blockera-core'),
 					value: 's-resize',
 					icon: <CursorSResizeIcon />,
 				},
 				{
-					label: __('e-resize', 'publisher-core'),
+					label: __('e-resize', 'blockera-core'),
 					value: 'e-resize',
 					icon: <CursorEResizeIcon />,
 				},
 				{
-					label: __('nw-resize', 'publisher-core'),
+					label: __('nw-resize', 'blockera-core'),
 					value: 'nw-resize',
 					icon: <CursorNwResizeIcon />,
 				},
 				{
-					label: __('ne-resize', 'publisher-core'),
+					label: __('ne-resize', 'blockera-core'),
 					value: 'ne-resize',
 					icon: <CursorNeResizeIcon />,
 				},
 				{
-					label: __('sw-resize', 'publisher-core'),
+					label: __('sw-resize', 'blockera-core'),
 					value: 'sw-resize',
 					icon: <CursorSwResizeIcon />,
 				},
 				{
-					label: __('se-resize', 'publisher-core'),
+					label: __('se-resize', 'blockera-core'),
 					value: 'se-resize',
 					icon: <CursorSeResizeIcon />,
 				},
@@ -246,23 +246,23 @@ export const cursorFieldOptions = function () {
 export const userSelectOptions = function () {
 	return [
 		{
-			label: __('None', 'publisher-core'),
+			label: __('None', 'blockera-core'),
 			value: 'none',
 		},
 		{
-			label: __('Auto', 'publisher-core'),
+			label: __('Auto', 'blockera-core'),
 			value: 'auto',
 		},
 		{
-			label: __('Text', 'publisher-core'),
+			label: __('Text', 'blockera-core'),
 			value: 'text',
 		},
 		{
-			label: __('Contain', 'publisher-core'),
+			label: __('Contain', 'blockera-core'),
 			value: 'contain',
 		},
 		{
-			label: __('All', 'publisher-core'),
+			label: __('All', 'blockera-core'),
 			value: 'all',
 		},
 	];
@@ -273,44 +273,44 @@ export const pointerEventsOptions = function () {
 	return [
 		{
 			type: 'optgroup',
-			label: __('Common', 'publisher-core'),
+			label: __('Common', 'blockera-core'),
 			options: [
 				{
-					label: __('Auto', 'publisher-core'),
+					label: __('Auto', 'blockera-core'),
 					value: 'auto',
 				},
 				{
-					label: __('All', 'publisher-core'),
+					label: __('All', 'blockera-core'),
 					value: 'all',
 				},
 				{
-					label: __('none', 'publisher-core'),
+					label: __('none', 'blockera-core'),
 					value: 'none',
 				},
 			],
 		},
 		{
 			type: 'optgroup',
-			label: __('Other', 'publisher-core'),
+			label: __('Other', 'blockera-core'),
 			options: [
 				{
-					label: __('Inherit', 'publisher-core'),
+					label: __('Inherit', 'blockera-core'),
 					value: 'inherit',
 				},
 				{
-					label: __('Initial', 'publisher-core'),
+					label: __('Initial', 'blockera-core'),
 					value: 'initial',
 				},
 				{
-					label: __('Revert', 'publisher-core'),
+					label: __('Revert', 'blockera-core'),
 					value: 'revert',
 				},
 				{
-					label: __('Revert Layer', 'publisher-core'),
+					label: __('Revert Layer', 'blockera-core'),
 					value: 'revert-layer',
 				},
 				{
-					label: __('Unset', 'publisher-core'),
+					label: __('Unset', 'blockera-core'),
 					value: 'unset',
 				},
 			],

@@ -1,10 +1,10 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { prepare } from '@publisher/data-extractor';
-import { isObject, isInteger, isString } from '@publisher/utils';
+import { prepare } from '@blockera/data-extractor';
+import { isObject, isInteger, isString } from '@blockera/utils';
 
 /**
  * has limitation in action?

@@ -7,19 +7,19 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { Button, Popover } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Button, Popover } from '@blockera/components';
 import {
 	BaseControl,
 	ControlContextProvider,
 	RendererControl,
-} from '@publisher/controls';
-import { generateExtensionId } from '@publisher/extensions/src/libs/utils';
-import { useBlockContext } from '@publisher/extensions/src/hooks/context';
-import { STORE_NAME } from '@publisher/core-data';
-import { isUndefined } from '@publisher/utils';
+} from '@blockera/controls';
+import { generateExtensionId } from '@blockera/extensions/src/libs/utils';
+import { useBlockContext } from '@blockera/extensions/src/hooks/context';
+import { STORE_NAME } from '@blockera/core-data';
+import { isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -70,7 +70,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Dynamic Value Setting', 'publisher-core')}
+			title={__('Dynamic Value Setting', 'blockera-core')}
 			offset={125}
 			placement="left-start"
 			onClose={() => {
@@ -85,7 +85,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
-							label={__('Remove', 'publisher-core')}
+							label={__('Remove', 'blockera-core')}
 						>
 							<TrashIcon />
 						</Button>
@@ -94,7 +94,7 @@ export default function ({
 			}
 		>
 			<BaseControl
-				label={__('Type', 'publisher-core')}
+				label={__('Type', 'blockera-core')}
 				columns="columns-2"
 			>
 				<Button
@@ -103,7 +103,7 @@ export default function ({
 					onClick={() => {
 						controlProps.setOpen('dv-picker');
 					}}
-					label={__('Change Dynamic Value', 'publisher-core')}
+					label={__('Change Dynamic Value', 'blockera-core')}
 					showTooltip={true}
 				>
 					{getDynamicValueIcon(controlProps.value?.settings?.type)}
@@ -123,7 +123,7 @@ export default function ({
 			</ControlContextProvider>
 
 			<BaseControl
-				label={__('Advanced', 'publisher-core')}
+				label={__('Advanced', 'blockera-core')}
 				columns="columns-2"
 			>
 				<Button
@@ -134,12 +134,12 @@ export default function ({
 					}}
 					label={__(
 						'Advanced Customization Options',
-						'publisher-core'
+						'blockera-core'
 					)}
 					showTooltip={true}
 				>
 					<GearIcon />
-					{__('Customize', 'publisher-core')}
+					{__('Customize', 'blockera-core')}
 					<CaretRightIcon style={{ marginLeft: 'auto' }} />
 				</Button>
 			</BaseControl>

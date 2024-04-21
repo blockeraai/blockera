@@ -12,7 +12,7 @@ describe('Direction → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -32,7 +32,7 @@ describe('Direction → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('rtl').to.be.equal(
-				getSelectedBlock(data, 'publisherDirection')
+				getSelectedBlock(data, 'blockeraDirection')
 			);
 		});
 
@@ -41,6 +41,7 @@ describe('Direction → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'direction', 'rtl');
+		cy.get('.blockera-core-block').should('have.css', 'direction', 'rtl');
 	});
 });
+

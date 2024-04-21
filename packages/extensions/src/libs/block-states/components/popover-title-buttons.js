@@ -7,16 +7,16 @@ import { useContext } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { RepeaterContext } from '@publisher/controls/src/libs/repeater-control/context';
-import { useControlContext } from '@publisher/controls';
-import { Button } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
-import EnableIcon from '@publisher/controls/src/libs/repeater-control/icons/enable';
-import DisableIcon from '@publisher/controls/src/libs/repeater-control/icons/disable';
-import CloneIcon from '@publisher/controls/src/libs/repeater-control/icons/clone';
-import type { RepeaterItemActionsProps } from '@publisher/controls/src/libs/repeater-control/types';
+import { RepeaterContext } from '@blockera/controls/src/libs/repeater-control/context';
+import { useControlContext } from '@blockera/controls';
+import { Button } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import EnableIcon from '@blockera/controls/src/libs/repeater-control/icons/enable';
+import DisableIcon from '@blockera/controls/src/libs/repeater-control/icons/disable';
+import CloneIcon from '@blockera/controls/src/libs/repeater-control/icons/clone';
+import type { RepeaterItemActionsProps } from '@blockera/controls/src/libs/repeater-control/types';
 
 export function PopoverTitleButtons({
 	item,
@@ -61,8 +61,8 @@ export function PopoverTitleButtons({
 					}}
 					label={
 						isVisible
-							? __('Disable State', 'publisher')
-							: __('Enable State', 'publisher')
+							? __('Disable State', 'blockera')
+							: __('Enable State', 'blockera')
 					}
 					tabIndex={-1}
 				/>
@@ -74,7 +74,7 @@ export function PopoverTitleButtons({
 						className={controlInnerClassNames('btn-clone')}
 						icon={CloneIcon}
 						showTooltip={true}
-						label={__('Clone State', 'publisher')}
+						label={__('Clone State', 'blockera')}
 						onClick={(event) => {
 							event.stopPropagation();
 

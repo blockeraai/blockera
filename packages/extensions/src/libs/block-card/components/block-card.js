@@ -12,12 +12,12 @@ import {
 import { Slot } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	extensionClassNames,
 	extensionInnerClassNames,
-} from '@publisher/classnames';
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -69,7 +69,7 @@ export function BlockCard({
 							onClick={() =>
 								handleOnClick('current-block', 'master')
 							}
-							aria-label={__('Selected Block', 'publisher-core')}
+							aria-label={__('Selected Block', 'blockera-core')}
 						>
 							{blockInformation.title}
 						</span>
@@ -98,7 +98,7 @@ export function BlockCard({
 				</div>
 			</div>
 
-			<Slot name={'publisher-core-block-card-children'} />
+			<Slot name={'blockera-core-block-card-children'} />
 			{children}
 		</div>
 	);

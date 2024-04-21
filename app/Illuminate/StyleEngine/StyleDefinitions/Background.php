@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 /**
  * Class Background definition to generate css rules.
@@ -35,9 +35,9 @@ class Background extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherBackgroundClip'  => 'background-clip',
-			'publisherBackgroundColor' => 'background-color',
-			'publisherBackground'      => 'background-image',
+			'blockeraBackgroundClip'  => 'background-clip',
+			'blockeraBackgroundColor' => 'background-color',
+			'blockeraBackground'      => 'background-image',
 		];
 	}
 
@@ -114,7 +114,7 @@ class Background extends BaseStyleDefinition {
 			case 'background-color':
 
 				$declaration = [
-					$cssProperty => pb_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant(),
+					$cssProperty => blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant(),
 				];
 				break;
 
@@ -122,7 +122,7 @@ class Background extends BaseStyleDefinition {
 			case 'linear-gradient':
 			case 'radial-gradient':
 			case 'mesh-gradient':
-				array_map( [ $this, 'setActiveBackgroundType' ], array_filter( pb_get_sorted_repeater( $setting[ $cssProperty ] ), [
+				array_map( [ $this, 'setActiveBackgroundType' ], array_filter( blockera_get_sorted_repeater( $setting[ $cssProperty ] ), [
 					$this,
 					'isValidSetting'
 				] ) );
@@ -175,15 +175,15 @@ class Background extends BaseStyleDefinition {
 		if ( $setting['image-size'] === 'custom' ) {
 			$size = sprintf(
 				'%s %s',
-				! empty( $setting['image-size-width'] ) ? pb_get_value_addon_real_value( $setting['image-size-width'] ) : '',
-				! empty( $setting['image-size-height'] ) ? pb_get_value_addon_real_value( $setting['image-size-height'] ) : ''
+				! empty( $setting['image-size-width'] ) ? blockera_get_value_addon_real_value( $setting['image-size-width'] ) : '',
+				! empty( $setting['image-size-height'] ) ? blockera_get_value_addon_real_value( $setting['image-size-height'] ) : ''
 			);
 		} else {
 			$size = $setting['image-size'];
 		}
 
-		$left = ! empty( $setting['image-position']['left'] ) ? pb_get_value_addon_real_value( $setting['image-position']['left'] ) : '';
-		$top  = ! empty( $setting['image-position']['top'] ) ? pb_get_value_addon_real_value( $setting['image-position']['top'] ) : '';
+		$left = ! empty( $setting['image-position']['left'] ) ? blockera_get_value_addon_real_value( $setting['image-position']['left'] ) : '';
+		$top  = ! empty( $setting['image-position']['top'] ) ? blockera_get_value_addon_real_value( $setting['image-position']['top'] ) : '';
 
 		$props = [
 			//Background Image
@@ -214,7 +214,7 @@ class Background extends BaseStyleDefinition {
 		$isValueAddon = is_array( $gradient ) && isset( $gradient['isValueAddon'] ) && $gradient['isValueAddon'];
 
 		if ( $isValueAddon ) {
-			$gradient = pb_get_value_addon_real_value( $gradient );
+			$gradient = blockera_get_value_addon_real_value( $gradient );
 		} else {
 
 			$gradient = preg_replace(
@@ -259,7 +259,7 @@ class Background extends BaseStyleDefinition {
 
 
 		if ( $isValueAddon ) {
-			$gradient = pb_get_value_addon_real_value( $gradient );
+			$gradient = blockera_get_value_addon_real_value( $gradient );
 
 			$props = array_merge(
 				$this->defaultProps,
@@ -280,8 +280,8 @@ class Background extends BaseStyleDefinition {
 				);
 			}
 
-			$left = ! empty( $setting['radial-gradient-position']['left'] ) ? pb_get_value_addon_real_value( $setting['radial-gradient-position']['left'] ) : '';
-			$top  = ! empty( $setting['radial-gradient-position']['top'] ) ? pb_get_value_addon_real_value( $setting['radial-gradient-position']['top'] ) : '';
+			$left = ! empty( $setting['radial-gradient-position']['left'] ) ? blockera_get_value_addon_real_value( $setting['radial-gradient-position']['left'] ) : '';
+			$top  = ! empty( $setting['radial-gradient-position']['top'] ) ? blockera_get_value_addon_real_value( $setting['radial-gradient-position']['top'] ) : '';
 
 			// Gradient Position
 			if (
@@ -351,7 +351,7 @@ class Background extends BaseStyleDefinition {
 
 			$gradient = str_replace(
 				"var(--c{$index})",
-				pb_get_value_addon_real_value( $color['color'] ),
+				blockera_get_value_addon_real_value( $color['color'] ),
 				$gradient
 			);
 		}
@@ -360,7 +360,7 @@ class Background extends BaseStyleDefinition {
 			$this->defaultProps,
 			[
 				// override bg color
-				'background-color'      => ( array_values( $colors )[0]['color'] ? pb_get_value_addon_real_value( array_values( $colors )[0]['color'] ) : '' ) . $this->getImportant(),
+				'background-color'      => ( array_values( $colors )[0]['color'] ? blockera_get_value_addon_real_value( array_values( $colors )[0]['color'] ) : '' ) . $this->getImportant(),
 				// Image
 				'background-image'      => $gradient . $this->getImportant(),
 				// Background Attachment

@@ -35,7 +35,7 @@ describe('All Features Together → WP Compatibility', () => {
 				// text transform
 				//
 				expect('uppercase').to.be.equal(
-					getSelectedBlock(data, 'publisherTextTransform')
+					getSelectedBlock(data, 'blockeraTextTransform')
 				);
 
 				expect('uppercase').to.be.equal(
@@ -46,7 +46,7 @@ describe('All Features Together → WP Compatibility', () => {
 				// Font Size
 				//
 				expect('20px').to.be.equal(
-					getSelectedBlock(data, 'publisherFontSize')
+					getSelectedBlock(data, 'blockeraFontSize')
 				);
 
 				expect('20px').to.be.equal(
@@ -57,7 +57,7 @@ describe('All Features Together → WP Compatibility', () => {
 				// Font Style
 				//
 				expect('italic').to.be.equal(
-					getSelectedBlock(data, 'publisherFontStyle')
+					getSelectedBlock(data, 'blockeraFontStyle')
 				);
 
 				expect('italic').to.be.equal(
@@ -68,7 +68,7 @@ describe('All Features Together → WP Compatibility', () => {
 				// Line Height
 				//
 				expect('2').to.be.equal(
-					getSelectedBlock(data, 'publisherLineHeight')
+					getSelectedBlock(data, 'blockeraLineHeight')
 				);
 
 				expect('2').to.be.equal(
@@ -79,7 +79,7 @@ describe('All Features Together → WP Compatibility', () => {
 				// Text Decoration
 				//
 				expect('underline').to.be.equal(
-					getSelectedBlock(data, 'publisherTextDecoration')
+					getSelectedBlock(data, 'blockeraTextDecoration')
 				);
 
 				expect('underline').to.be.equal(
@@ -90,7 +90,7 @@ describe('All Features Together → WP Compatibility', () => {
 				// Letter Spacing
 				//
 				expect('2px').to.be.equal(
-					getSelectedBlock(data, 'publisherLetterSpacing')
+					getSelectedBlock(data, 'blockeraLetterSpacing')
 				);
 
 				expect('2px').to.be.equal(
@@ -101,7 +101,7 @@ describe('All Features Together → WP Compatibility', () => {
 				// Text Orientation
 				//
 				expect('style-1').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect('vertical-rl').to.be.equal(

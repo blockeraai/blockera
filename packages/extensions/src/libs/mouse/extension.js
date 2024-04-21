@@ -7,16 +7,16 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	SelectControl,
 	PanelBodyControl,
 	ControlContextProvider,
-} from '@publisher/controls';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
-import { FeatureWrapper } from '@publisher/components';
+} from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
+import { FeatureWrapper } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -43,19 +43,19 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 		setSettings,
 	}: TMouseProps): MixedElement => {
 		const isShowCursor = isShowField(
-			mouseConfig.publisherCursor,
+			mouseConfig.blockeraCursor,
 			values?.cursor,
-			attributes.publisherCursor.default
+			attributes.blockeraCursor.default
 		);
 		const isShowUserSelect = isShowField(
-			mouseConfig.publisherUserSelect,
+			mouseConfig.blockeraUserSelect,
 			values?.userSelect,
-			attributes.publisherUserSelect.default
+			attributes.blockeraUserSelect.default
 		);
 		const isShowPointerEvents = isShowField(
-			mouseConfig.publisherPointerEvents,
+			mouseConfig.blockeraPointerEvents,
 			values?.pointerEvents,
-			attributes.publisherPointerEvents.default
+			attributes.blockeraPointerEvents.default
 		);
 
 		// If none of the fields are shown, then don't render extension
@@ -65,13 +65,13 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Mouse', 'publisher-core')}
+				title={__('Mouse', 'blockera-core')}
 				initialOpen={true}
 				icon={<MouseExtensionIcon />}
 				className={extensionClassNames('mouse')}
 			>
 				<ExtensionSettings
-					buttonLabel={__('More Mouse Settings', 'publisher-core')}
+					buttonLabel={__('More Mouse Settings', 'blockera-core')}
 					features={mouseConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'mouseConfig');
@@ -80,30 +80,30 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowCursor}
-					config={mouseConfig.publisherCursor}
+					config={mouseConfig.blockeraCursor}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'cursor'),
 							value: values.cursor,
-							attribute: 'publisherCursor',
+							attribute: 'blockeraCursor',
 							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
-							label={__('Cursor', 'publisher-core')}
+							label={__('Cursor', 'blockera-core')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											"It allows to change the mouse cursor when it's over block.",
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<p>
 										{__(
 											"It provides visual feedback to the user about the nature of the block they're interacting with – whether it's clickable, text-selectable, disabled, or used for resizing.",
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 								</>
@@ -112,51 +112,51 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							options={cursorFieldOptions()}
 							type="custom"
 							customMenuPosition="top"
-							defaultValue={attributes.publisherCursor.default}
+							defaultValue={attributes.blockeraCursor.default}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherCursor',
+									'blockeraCursor',
 									newValue,
 									{ ref }
 								)
 							}
-							{...extensionProps.publisherCursor}
+							{...extensionProps.blockeraCursor}
 						/>
 					</ControlContextProvider>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowUserSelect}
-					config={mouseConfig.publisherUserSelect}
+					config={mouseConfig.blockeraUserSelect}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'user-select'),
 							value: values.userSelect,
-							attribute: 'publisherUserSelect',
+							attribute: 'blockeraUserSelect',
 							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
-							label={__('User Select', 'publisher-core')}
+							label={__('User Select', 'blockera-core')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It controls how text can be selected by the user.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<p>
 										{__(
 											"It's useful for improving user experience.",
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<p>
 										{__(
 											'For instance, disabling text selection on buttons or icons can prevent confusion, while enabling it on textual content improves usability.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 								</>
@@ -164,53 +164,51 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							columns="columns-2"
 							options={userSelectOptions()}
 							type="native"
-							defaultValue={
-								attributes.publisherUserSelect.default
-							}
+							defaultValue={attributes.blockeraUserSelect.default}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherUserSelect',
+									'blockeraUserSelect',
 									newValue,
 									{ ref }
 								)
 							}
-							{...extensionProps.publisherUserSelect}
+							{...extensionProps.blockeraUserSelect}
 						/>
 					</ControlContextProvider>
 				</FeatureWrapper>
 
 				<FeatureWrapper
 					isActive={isShowPointerEvents}
-					config={mouseConfig.publisherPointerEvents}
+					config={mouseConfig.blockeraPointerEvents}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'pointer-events'),
 							value: values.pointerEvents,
-							attribute: 'publisherPointerEvents',
+							attribute: 'blockeraPointerEvents',
 							blockName: block.blockName,
 						}}
 					>
 						<SelectControl
-							label={__('Pointer Events', 'publisher-core')}
+							label={__('Pointer Events', 'blockera-core')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It specifies how a block reacts to pointer interactions, such as mouse clicks or touch.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<p>
 										{__(
 											'It allows you to create blocks that are either interactive or completely non-interactive with pointer actions.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 									<p>
 										{__(
 											'For example, disabling pointer events on an overlay of block can allow users to interact with underlying block.',
-											'publisher-core'
+											'blockera-core'
 										)}
 									</p>
 								</>
@@ -219,16 +217,16 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							options={pointerEventsOptions()}
 							type="native"
 							defaultValue={
-								attributes.publisherPointerEvents.default
+								attributes.blockeraPointerEvents.default
 							}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
-									'publisherPointerEvents',
+									'blockeraPointerEvents',
 									newValue,
 									{ ref }
 								)
 							}
-							{...extensionProps.publisherPointerEvents}
+							{...extensionProps.blockeraPointerEvents}
 						/>
 					</ControlContextProvider>
 				</FeatureWrapper>

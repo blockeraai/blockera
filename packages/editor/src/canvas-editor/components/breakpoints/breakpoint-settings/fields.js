@@ -7,15 +7,15 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	InputControl,
 	useControlContext,
-} from '@publisher/controls';
-import { Flex } from '@publisher/components';
-import { controlClassNames } from '@publisher/classnames';
+} from '@blockera/controls';
+import { Flex } from '@blockera/components';
+import { controlClassNames } from '@blockera/classnames';
 
 export default function ({
 	item,
@@ -46,11 +46,11 @@ export default function ({
 						},
 					})
 				}
-				label={__('Name', 'publisher-core')}
+				label={__('Name', 'blockera-core')}
 			/>
 			<BaseControl
 				columns="columns-1"
-				label={__('Size', 'publisher-core')}
+				label={__('Size', 'blockera-core')}
 			>
 				<Flex
 					style={{
@@ -82,8 +82,8 @@ export default function ({
 						className={controlClassNames(
 							'control-first label-center small-gap'
 						)}
-						label={__('Min', 'publisher-core')}
-						aria-label={__('Min Width', 'publisher-core')}
+						label={__('Min', 'blockera-core')}
+						aria-label={__('Min Width', 'blockera-core')}
 					/>
 					<InputControl
 						id={'settings.max'}
@@ -109,8 +109,8 @@ export default function ({
 						className={controlClassNames(
 							'control-first label-center small-gap'
 						)}
-						label={__('Max', 'publisher-core')}
-						aria-label={__('Max Width', 'publisher-core')}
+						label={__('Max', 'blockera-core')}
+						aria-label={__('Max Width', 'blockera-core')}
 					/>
 				</Flex>
 			</BaseControl>

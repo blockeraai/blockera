@@ -1,17 +1,12 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import {
-	isEmpty,
-	isString,
-	isEmptyObject,
-	mergeObject,
-} from '@publisher/utils';
-import { getGradientType } from '@publisher/core-data';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
-import { getGradientVAFromIdString } from '@publisher/core-data/src/variables/gradient';
+import { isEmpty, isString, isEmptyObject, mergeObject } from '@blockera/utils';
+import { getGradientType } from '@blockera/core-data';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
+import type { ValueAddon } from '@blockera/hooks/src/use-value-addon/types';
+import { getGradientVAFromIdString } from '@blockera/core-data/src/variables/gradient';
 
 export function backgroundFromWPCompatibility({
 	attributes,
@@ -19,7 +14,7 @@ export function backgroundFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (!isEmptyObject(attributes?.publisherBackground)) {
+	if (!isEmptyObject(attributes?.blockeraBackground)) {
 		return attributes;
 	}
 
@@ -27,8 +22,8 @@ export function backgroundFromWPCompatibility({
 	// Background Image
 	//
 	if (attributes?.style?.background?.backgroundImage?.url !== undefined) {
-		attributes.publisherBackground = {
-			...attributes.publisherBackground,
+		attributes.blockeraBackground = {
+			...attributes.blockeraBackground,
 			'image-0': {
 				type: 'image',
 				image: attributes?.style?.background?.backgroundImage?.url,
@@ -83,8 +78,8 @@ export function backgroundFromWPCompatibility({
 				}
 			}
 
-			attributes.publisherBackground = {
-				...attributes.publisherBackground,
+			attributes.blockeraBackground = {
+				...attributes.blockeraBackground,
 				'linear-gradient-0': {
 					type: gradientType,
 					'linear-gradient': gradient,
@@ -96,8 +91,8 @@ export function backgroundFromWPCompatibility({
 				},
 			};
 		} else {
-			attributes.publisherBackground = {
-				...attributes.publisherBackground,
+			attributes.blockeraBackground = {
+				...attributes.blockeraBackground,
 				'radial-gradient-0': {
 					type: gradientType,
 					'radial-gradient': gradient,

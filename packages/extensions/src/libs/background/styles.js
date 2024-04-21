@@ -1,9 +1,9 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { getValueAddonRealValue } from '@publisher/hooks';
-import type { CssRule } from '@publisher/style-engine/src/types';
+import { getValueAddonRealValue } from '@blockera/hooks';
+import type { CssRule } from '@blockera/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -17,7 +17,7 @@ import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
 import {
 	computedCssDeclarations,
 	getCssSelector,
-} from '@publisher/style-engine';
+} from '@blockera/style-engine';
 
 export const BackgroundStyles = ({
 	state,
@@ -30,9 +30,9 @@ export const BackgroundStyles = ({
 	attributes: currentBlockAttributes,
 }: StylesProps): Array<CssRule> => {
 	const {
-		publisherBackground,
-		publisherBackgroundColor,
-		publisherBackgroundClip,
+		blockeraBackground,
+		blockeraBackgroundColor,
+		blockeraBackgroundClip,
 	} = config.backgroundConfig;
 	const blockProps = {
 		clientId,
@@ -49,16 +49,16 @@ export const BackgroundStyles = ({
 	const styleGroup: Array<CssRule> = [];
 
 	if (
-		isActiveField(publisherBackground) &&
+		isActiveField(blockeraBackground) &&
 		!arrayEquals(
-			attributes.publisherBackground.default,
-			blockProps.attributes.publisherBackground
+			attributes.blockeraBackground.default,
+			blockProps.attributes.blockeraBackground
 		)
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherBackground',
-			support: 'publisherBackground',
+			query: 'blockeraBackground',
+			support: 'blockeraBackground',
 			fallbackSupportId: 'background',
 		});
 
@@ -66,7 +66,7 @@ export const BackgroundStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherBackground: [
+					blockeraBackground: [
 						{
 							type: 'function',
 							function: backgroundGenerator,
@@ -78,19 +78,19 @@ export const BackgroundStyles = ({
 		});
 	}
 
-	if (isActiveField(publisherBackgroundColor)) {
-		const publisherBackgroundColor = getValueAddonRealValue(
-			blockProps.attributes.publisherBackgroundColor
+	if (isActiveField(blockeraBackgroundColor)) {
+		const blockeraBackgroundColor = getValueAddonRealValue(
+			blockProps.attributes.blockeraBackgroundColor
 		);
 
 		if (
-			publisherBackgroundColor !==
-			attributes.publisherBackgroundColor.default
+			blockeraBackgroundColor !==
+			attributes.blockeraBackgroundColor.default
 		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherBackgroundColor',
-				support: 'publisherBackgroundColor',
+				query: 'blockeraBackgroundColor',
+				support: 'blockeraBackgroundColor',
 				fallbackSupportId: 'backgroundColor',
 			});
 
@@ -98,12 +98,11 @@ export const BackgroundStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherBackgroundColor: [
+						blockeraBackgroundColor: [
 							{
 								type: 'static',
 								properties: {
-									'background-color':
-										publisherBackgroundColor,
+									'background-color': blockeraBackgroundColor,
 								},
 							},
 						],
@@ -115,14 +114,14 @@ export const BackgroundStyles = ({
 	}
 
 	if (
-		isActiveField(publisherBackgroundClip) &&
-		blockProps.attributes.publisherBackgroundClip !==
-			attributes.publisherBackgroundClip.default
+		isActiveField(blockeraBackgroundClip) &&
+		blockProps.attributes.blockeraBackgroundClip !==
+			attributes.blockeraBackgroundClip.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherBackgroundClip',
-			support: 'publisherBackgroundClip',
+			query: 'blockeraBackgroundClip',
+			support: 'blockeraBackgroundClip',
 			fallbackSupportId: 'backgroundClip',
 		});
 
@@ -130,7 +129,7 @@ export const BackgroundStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherBackgroundClip: [
+					blockeraBackgroundClip: [
 						{
 							type: 'function',
 							function: backgroundClipGenerator,

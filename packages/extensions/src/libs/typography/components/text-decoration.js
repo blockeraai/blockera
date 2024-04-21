@@ -6,12 +6,12 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	ControlContextProvider,
 	ToggleSelectControl,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -40,83 +40,83 @@ export const TextDecoration = ({
 			value={{
 				name: generateExtensionId(block, 'text-decoration'),
 				value,
-				attribute: 'publisherTextDecoration',
+				attribute: 'blockeraTextDecoration',
 				blockName: block.blockName,
 			}}
 		>
 			<ToggleSelectControl
 				columns="columns-1"
 				className="control-first label-center small-gap"
-				label={__('Decoration', 'publisher-core')}
-				labelPopoverTitle={__('Text Decoration', 'publisher-core')}
+				label={__('Decoration', 'blockera-core')}
+				labelPopoverTitle={__('Text Decoration', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It applies various decorative changes to text for enhancing the visual emphasis and style of text content.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<TextDecorationUnderlineIcon />
-							{__('Underline', 'publisher-core')}
+							{__('Underline', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Adds a line below the text, commonly used for hyperlinks.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<TextDecorationLineThroughIcon />
-							{__('Line Through', 'publisher-core')}
+							{__('Line Through', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Strikes through the text, useful for showing deletion or changes.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<TextDecorationOverlineIcon />
-							{__('Overline', 'publisher-core')}
+							{__('Overline', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Places a line above the text.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<NoneIcon />
-							{__('None', 'publisher-core')}
+							{__('None', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Removes any decorations, often used to remove underlines from links. Its useful to remove underlines from links.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
 				}
 				options={[
 					{
-						label: __('Underline', 'publisher-core'),
+						label: __('Underline', 'blockera-core'),
 						value: 'underline',
 						icon: <TextDecorationUnderlineIcon />,
 					},
 					{
-						label: __('Line Through', 'publisher-core'),
+						label: __('Line Through', 'blockera-core'),
 						value: 'line-through',
 						icon: <TextDecorationLineThroughIcon />,
 					},
 					{
-						label: __('Overline', 'publisher-core'),
+						label: __('Overline', 'blockera-core'),
 						value: 'overline',
 						icon: <TextDecorationOverlineIcon />,
 					},
 					{
-						label: __('None', 'publisher-core'),
+						label: __('None', 'blockera-core'),
 						value: 'initial',
 						icon: <NoneIcon />,
 					},
@@ -124,7 +124,7 @@ export const TextDecoration = ({
 				isDeselectable={true}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					onChange('publisherTextDecoration', newValue, { ref })
+					onChange('blockeraTextDecoration', newValue, { ref })
 				}
 				{...props}
 			/>

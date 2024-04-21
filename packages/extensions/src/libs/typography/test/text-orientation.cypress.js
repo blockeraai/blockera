@@ -12,7 +12,7 @@ describe('Text Orientation → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -39,7 +39,7 @@ describe('Text Orientation → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('style-1').to.be.equal(
-				getSelectedBlock(data, 'publisherTextOrientation')
+				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
 		});
 
@@ -58,7 +58,7 @@ describe('Text Orientation → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('style-2').to.be.equal(
-				getSelectedBlock(data, 'publisherTextOrientation')
+				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
 		});
 
@@ -77,7 +77,7 @@ describe('Text Orientation → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('style-3').to.be.equal(
-				getSelectedBlock(data, 'publisherTextOrientation')
+				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
 		});
 
@@ -96,7 +96,7 @@ describe('Text Orientation → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('style-4').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherTextOrientation')
+				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
 		});
 
@@ -113,7 +113,7 @@ describe('Text Orientation → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('initial').to.be.equal(
-				getSelectedBlock(data, 'publisherTextOrientation')
+				getSelectedBlock(data, 'blockeraTextOrientation')
 			);
 		});
 
@@ -127,7 +127,7 @@ describe('Text Orientation → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
+		cy.get('.blockera-core-block')
 			.should('have.css', 'writing-mode', 'vertical-lr')
 			.and('have.css', 'text-orientation', 'mixed');
 	});

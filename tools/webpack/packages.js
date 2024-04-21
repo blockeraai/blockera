@@ -22,17 +22,17 @@ const { dependencies } = require('../../package');
 const styleDependencies = require('./packages-styles');
 
 const exportDefaultPackages = [];
-const PUBLISHER_NAMESPACE = '@publisher/';
-const publisherPackages = Object.keys(dependencies)
-	.filter((packageName) => packageName.startsWith(PUBLISHER_NAMESPACE))
-	.map((packageName) => packageName.replace(PUBLISHER_NAMESPACE, ''));
-const publisherEntries = publisherPackages.reduce((memo, packageName) => {
+const BLOCKERA_NAMESPACE = '@blockera/';
+const blockeraPackages = Object.keys(dependencies)
+	.filter((packageName) => packageName.startsWith(BLOCKERA_NAMESPACE))
+	.map((packageName) => packageName.replace(BLOCKERA_NAMESPACE, ''));
+const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
 	return {
 		...memo,
 		[packageName]: {
 			import: `./packages/${packageName}`,
 			library: {
-				name: ['publisher', camelCaseDash(packageName)],
+				name: ['blockera', camelCaseDash(packageName)],
 				type: 'var',
 				export: exportDefaultPackages.includes(packageName)
 					? 'default'
@@ -67,11 +67,11 @@ module.exports = (env, argv) => {
 		mode: argv.mode,
 		name: 'packages',
 		entry: {
-			...publisherEntries,
+			...blockeraEntries,
 			...styleDependencies.entry,
 		},
 		output: {
-			devtoolNamespace: 'publisher',
+			devtoolNamespace: 'blockera',
 			filename: isProduction
 				? './dist/[name]/index.min.js'
 				: './dist/[name]/index.js',
@@ -106,3 +106,4 @@ module.exports = (env, argv) => {
 		devtool: 'inline-source-map',
 	};
 };
+

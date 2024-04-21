@@ -92,7 +92,7 @@ export function createIconsBaseSearchData({
 
 	if (library === 'far' || library === 'fas') {
 		_charsToRemoveFromTagBeginning = 3;
-	} else if (library === 'publisher') {
+	} else if (library === 'blockera') {
 		_charsToRemoveFromTagBeginning = 9;
 	}
 

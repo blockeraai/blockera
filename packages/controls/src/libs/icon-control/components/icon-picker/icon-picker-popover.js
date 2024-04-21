@@ -4,10 +4,10 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Popover } from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+import { Popover } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -25,7 +25,7 @@ export default function IconPickerPopover({
 		<>
 			{isOpen && (
 				<Popover
-					title={__('Icon Picker', 'publisher-core')}
+					title={__('Icon Picker', 'blockera-core')}
 					offset={35}
 					placement="left-start"
 					className={controlInnerClassNames('icon-popover')}

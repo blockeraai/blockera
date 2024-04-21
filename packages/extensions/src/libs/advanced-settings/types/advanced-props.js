@@ -12,12 +12,12 @@ import type { BaseExtensionProps } from '../../types';
 export type TAdvancedSettingsProps = {
 	...BaseExtensionProps,
 	values: {
-		publisherAttributes: Array<Object>,
+		blockeraAttributes: Array<Object>,
 	},
 	extensionConfig: {
-		publisherAttributes: FeatureConfig,
+		blockeraAttributes: FeatureConfig,
 	},
 	extensionProps: {
-		publisherAttributes: Object,
+		blockeraAttributes: Object,
 	},
 };

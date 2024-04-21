@@ -11,16 +11,16 @@ export const blendModeFieldOptions = function () {
 	return [
 		{
 			type: 'optgroup',
-			label: __('General', 'publisher-core'),
+			label: __('General', 'blockera-core'),
 			options: [
 				{
-					label: __('Normal', 'publisher-core'),
+					label: __('Normal', 'blockera-core'),
 					value: 'normal',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Inherit', 'publisher-core'),
+					label: __('Inherit', 'blockera-core'),
 					value: 'inherit',
 					className: 'hide-icon',
 					icon: <InheritIcon />,
@@ -29,16 +29,16 @@ export const blendModeFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Darken', 'publisher-core'),
+			label: __('Darken', 'blockera-core'),
 			options: [
 				{
-					label: __('Darken', 'publisher-core'),
+					label: __('Darken', 'blockera-core'),
 					value: 'darken',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Multiply', 'publisher-core'),
+					label: __('Multiply', 'blockera-core'),
 					value: 'multiply',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
@@ -48,16 +48,16 @@ export const blendModeFieldOptions = function () {
 
 		{
 			type: 'optgroup',
-			label: __('Lighten', 'publisher-core'),
+			label: __('Lighten', 'blockera-core'),
 			options: [
 				{
-					label: __('Lighten', 'publisher-core'),
+					label: __('Lighten', 'blockera-core'),
 					value: 'lighten',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Screen', 'publisher-core'),
+					label: __('Screen', 'blockera-core'),
 					value: 'screen',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
@@ -66,22 +66,22 @@ export const blendModeFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Contrast', 'publisher-core'),
+			label: __('Contrast', 'blockera-core'),
 			options: [
 				{
-					label: __('Overlay', 'publisher-core'),
+					label: __('Overlay', 'blockera-core'),
 					value: 'overlay',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Soft Light', 'publisher-core'),
+					label: __('Soft Light', 'blockera-core'),
 					value: 'soft-light',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Hard Light', 'publisher-core'),
+					label: __('Hard Light', 'blockera-core'),
 					value: 'hard-light',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
@@ -90,16 +90,16 @@ export const blendModeFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Difference', 'publisher-core'),
+			label: __('Difference', 'blockera-core'),
 			options: [
 				{
-					label: __('Difference', 'publisher-core'),
+					label: __('Difference', 'blockera-core'),
 					value: 'difference',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Exclusion', 'publisher-core'),
+					label: __('Exclusion', 'blockera-core'),
 					value: 'exclusion',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
@@ -108,16 +108,16 @@ export const blendModeFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Hue', 'publisher-core'),
+			label: __('Hue', 'blockera-core'),
 			options: [
 				{
-					label: __('Hue', 'publisher-core'),
+					label: __('Hue', 'blockera-core'),
 					value: 'hue',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Color', 'publisher-core'),
+					label: __('Color', 'blockera-core'),
 					value: 'color',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
@@ -126,28 +126,28 @@ export const blendModeFieldOptions = function () {
 		},
 		{
 			type: 'optgroup',
-			label: __('Saturation', 'publisher-core'),
+			label: __('Saturation', 'blockera-core'),
 			options: [
 				{
-					label: __('Saturation', 'publisher-core'),
+					label: __('Saturation', 'blockera-core'),
 					value: 'saturation',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Color Dodge', 'publisher-core'),
+					label: __('Color Dodge', 'blockera-core'),
 					value: 'color-dodge',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Color Burn', 'publisher-core'),
+					label: __('Color Burn', 'blockera-core'),
 					value: 'color-burn',
 					className: 'hide-icon',
 					icon: <BlendIcon />,
 				},
 				{
-					label: __('Luminosity', 'publisher-core'),
+					label: __('Luminosity', 'blockera-core'),
 					value: 'luminosity',
 					className: 'hide-icon',
 					icon: <BlendIcon />,

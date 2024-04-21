@@ -1,14 +1,14 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getCssSelector,
 	computedCssDeclarations,
-} from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
-import type { CssRule } from '@publisher/style-engine/src/types';
+} from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
+import type { CssRule } from '@blockera/style-engine/src/types';
 
 /**
  * Internal dependencies
@@ -29,7 +29,7 @@ export const PositionStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	const { publisherPosition, publisherZIndex } = config.positionConfig;
+	const { blockeraPosition, blockeraZIndex } = config.positionConfig;
 	const blockProps = {
 		clientId,
 		blockName,
@@ -53,15 +53,14 @@ export const PositionStyles = ({
 	const styleGroup: Array<CssRule> = [];
 
 	if (
-		isActiveField(publisherPosition) &&
-		_attributes?.publisherPosition &&
-		_attributes.publisherPosition !==
-			attributes.publisherPosition.default &&
-		_attributes.publisherPosition.type !== 'static'
+		isActiveField(blockeraPosition) &&
+		_attributes?.blockeraPosition &&
+		_attributes.blockeraPosition !== attributes.blockeraPosition.default &&
+		_attributes.blockeraPosition.type !== 'static'
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherPosition.type',
+			query: 'blockeraPosition.type',
 			fallbackSupportId: 'position',
 		});
 
@@ -69,11 +68,11 @@ export const PositionStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherPosition: [
+					blockeraPosition: [
 						{
 							...staticDefinitionParams,
 							properties: {
-								position: _attributes.publisherPosition.type,
+								position: _attributes.blockeraPosition.type,
 							},
 						},
 					],
@@ -83,12 +82,12 @@ export const PositionStyles = ({
 		});
 
 		const positionTop = getValueAddonRealValue(
-			_attributes.publisherPosition.position?.top
+			_attributes.blockeraPosition.position?.top
 		);
 		if (positionTop !== '') {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherPosition.position.top',
+				query: 'blockeraPosition.position.top',
 				fallbackSupportId: 'positionTop',
 			});
 
@@ -96,7 +95,7 @@ export const PositionStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherPositionTop: [
+						blockeraPositionTop: [
 							{
 								...staticDefinitionParams,
 								properties: {
@@ -111,12 +110,12 @@ export const PositionStyles = ({
 		}
 
 		const positionRight = getValueAddonRealValue(
-			_attributes.publisherPosition.position?.right
+			_attributes.blockeraPosition.position?.right
 		);
 		if (positionRight !== '') {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherPosition.position.right',
+				query: 'blockeraPosition.position.right',
 				fallbackSupportId: 'positionRight',
 			});
 
@@ -124,7 +123,7 @@ export const PositionStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherPositionRight: [
+						blockeraPositionRight: [
 							{
 								...staticDefinitionParams,
 								properties: {
@@ -139,12 +138,12 @@ export const PositionStyles = ({
 		}
 
 		const positionBottom = getValueAddonRealValue(
-			_attributes.publisherPosition.position?.bottom
+			_attributes.blockeraPosition.position?.bottom
 		);
 		if (positionBottom !== '') {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherPosition.position.bottom',
+				query: 'blockeraPosition.position.bottom',
 				fallbackSupportId: 'positionBottom',
 			});
 
@@ -152,7 +151,7 @@ export const PositionStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherPositionBottom: [
+						blockeraPositionBottom: [
 							{
 								...staticDefinitionParams,
 								properties: {
@@ -167,12 +166,12 @@ export const PositionStyles = ({
 		}
 
 		const positionLeft = getValueAddonRealValue(
-			_attributes.publisherPosition.position?.left
+			_attributes.blockeraPosition.position?.left
 		);
 		if (positionLeft !== '') {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
-				query: 'publisherPosition.position.left',
+				query: 'blockeraPosition.position.left',
 				fallbackSupportId: 'positionLeft',
 			});
 
@@ -180,7 +179,7 @@ export const PositionStyles = ({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						publisherPositionLeft: [
+						blockeraPositionLeft: [
 							{
 								...staticDefinitionParams,
 								properties: {
@@ -194,14 +193,14 @@ export const PositionStyles = ({
 			});
 		}
 
-		if (isActiveField(publisherZIndex)) {
-			const zIndex = getValueAddonRealValue(_attributes.publisherZIndex);
+		if (isActiveField(blockeraZIndex)) {
+			const zIndex = getValueAddonRealValue(_attributes.blockeraZIndex);
 
-			if (zIndex !== attributes.publisherZIndex.default) {
+			if (zIndex !== attributes.blockeraZIndex.default) {
 				const pickedSelector = getCssSelector({
 					...sharedParams,
-					query: 'publisherZIndex',
-					support: 'publisherZIndex',
+					query: 'blockeraZIndex',
+					support: 'blockeraZIndex',
 					fallbackSupportId: 'zIndex',
 				});
 
@@ -209,7 +208,7 @@ export const PositionStyles = ({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
 						{
-							publisherZIndex: [
+							blockeraZIndex: [
 								{
 									...staticDefinitionParams,
 									properties: {

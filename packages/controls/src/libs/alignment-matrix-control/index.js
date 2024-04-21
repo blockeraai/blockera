@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
-import { Flex } from '@publisher/components';
+import { controlClassNames } from '@blockera/classnames';
+import { Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -137,7 +137,7 @@ export default function AlignmentMatrixControl({
 						<InputControl
 							columns="columns-2"
 							id={id === undefined ? 'top' : `${id}.top`}
-							label={__('Top', 'publisher-core')}
+							label={__('Top', 'blockera-core')}
 							min={0}
 							max={100}
 							unitType="background-position"
@@ -156,7 +156,7 @@ export default function AlignmentMatrixControl({
 						<InputControl
 							columns="columns-2"
 							id={id === undefined ? 'left' : `${id}.left`}
-							label={__('Left', 'publisher-core')}
+							label={__('Left', 'blockera-core')}
 							min={0}
 							max={100}
 							unitType="background-position"

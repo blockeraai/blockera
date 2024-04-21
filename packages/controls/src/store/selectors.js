@@ -5,9 +5,9 @@ import createSelector from 'rememo';
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isUndefined } from '@publisher/utils';
+import { isEmpty, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies

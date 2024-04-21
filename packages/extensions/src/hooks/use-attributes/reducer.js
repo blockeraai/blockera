@@ -6,9 +6,9 @@
 import { applyFilters } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEquals, isObject, mergeObject } from '@publisher/utils';
+import { isEquals, isObject, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -67,16 +67,16 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				 * Filterable attributes before set next state.
 				 * usefully in add WordPress compatibility and any other filters.
 				 *
-				 * hook: 'publisherCore.blockEdit.setAttributes'
+				 * hook: 'blockeraCore.blockEdit.setAttributes'
 				 *
 				 * @since 1.0.0
 				 */
 				return applyFilters(
-					'publisherCore.blockEdit.setAttributes',
+					'blockeraCore.blockEdit.setAttributes',
 					mergeObject(
 						state,
 						{
-							publisherInnerBlocks: {
+							blockeraInnerBlocks: {
 								[currentBlock]: {
 									attributes: {
 										...effectiveItems,
@@ -103,12 +103,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'publisherCore.blockEdit.setAttributes'
+			 * hook: 'blockeraCore.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'publisherCore.blockEdit.setAttributes',
+				'blockeraCore.blockEdit.setAttributes',
 				{ ...state, ...effectiveItems, [attributeId]: newValue },
 				...hookParams
 			);
@@ -119,15 +119,15 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'publisherCore.blockEdit.setAttributes'
+			 * hook: 'blockeraCore.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'publisherCore.blockEdit.setAttributes',
+				'blockeraCore.blockEdit.setAttributes',
 				{
 					...state,
-					publisherBlockStates: memoizedBlockStates(state, action, {
+					blockeraBlockStates: memoizedBlockStates(state, action, {
 						currentState,
 						insideInnerBlock:
 							'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' === type,
@@ -141,20 +141,20 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'publisherCore.blockEdit.setAttributes'
+			 * hook: 'blockeraCore.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'publisherCore.blockEdit.setAttributes',
+				'blockeraCore.blockEdit.setAttributes',
 				mergeObject(
 					state,
 					{
-						publisherInnerBlocks: {
+						blockeraInnerBlocks: {
 							[currentBlock]: {
 								attributes: {
-									publisherBlockStates: memoizedBlockStates(
-										state.publisherInnerBlocks[currentBlock]
+									blockeraBlockStates: memoizedBlockStates(
+										state.blockeraInnerBlocks[currentBlock]
 											.attributes,
 										action,
 										{
@@ -179,12 +179,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'publisherCore.blockEdit.setAttributes'
+			 * hook: 'blockeraCore.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'publisherCore.blockEdit.setAttributes',
+				'blockeraCore.blockEdit.setAttributes',
 				resetAllStates(state, action),
 				...hookParams
 			);
@@ -194,12 +194,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 	 * Filterable attributes before set next state.
 	 * usefully in add WordPress compatibility and any other filters.
 	 *
-	 * hook: 'publisherCore.blockEdit.setAttributes'
+	 * hook: 'blockeraCore.blockEdit.setAttributes'
 	 *
 	 * @since 1.0.0
 	 */
 	return applyFilters(
-		'publisherCore.blockEdit.setAttributes',
+		'blockeraCore.blockEdit.setAttributes',
 		state,
 		...hookParams
 	);

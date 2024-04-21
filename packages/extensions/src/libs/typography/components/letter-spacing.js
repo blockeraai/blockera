@@ -6,9 +6,9 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { ControlContextProvider, InputControl } from '@publisher/controls';
+import { ControlContextProvider, InputControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -33,26 +33,26 @@ export const LetterSpacing = ({
 			value={{
 				name: generateExtensionId(block, 'letter-spacing'),
 				value,
-				attribute: 'publisherLetterSpacing',
+				attribute: 'blockeraLetterSpacing',
 				blockName: block.blockName,
 			}}
 		>
 			<InputControl
 				columns="2fr 2.6fr"
-				label={__('Letters', 'publisher-core')}
-				labelPopoverTitle={__('Letters Spacing', 'publisher-core')}
+				label={__('Letters', 'blockera-core')}
+				labelPopoverTitle={__('Letters Spacing', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It adjusts the space between characters in text, enhancing readability and visual appeal, especially useful in headings, logos, and graphic text.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'It is vital for typographic refinement, allowing control over text density and improving legibility, particularly in creative and web design contexts.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -61,7 +61,7 @@ export const LetterSpacing = ({
 				arrows={true}
 				unitType="letter-spacing"
 				onChange={(newValue: Object, ref?: Object): void =>
-					onChange('publisherLetterSpacing', newValue, { ref })
+					onChange('blockeraLetterSpacing', newValue, { ref })
 				}
 				{...props}
 			/>

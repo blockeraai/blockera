@@ -12,7 +12,7 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 export type EntranceExtensionProps = {
 	block: TBlockProps,
 	extensionConfig: {
-		publisherEntranceAnimation: Object,
+		blockeraEntranceAnimation: Object,
 	},
 	children?: MixedElement,
 	handleOnChangeAttributes: THandleOnChangeAttributes,

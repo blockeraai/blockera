@@ -1,36 +1,36 @@
 
-.publisher-control-box-border {
+.blockera-control-box-border {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
 
-	.publisher-control-border-header {
+	.blockera-control-border-header {
 		display: flex;
 		gap: 8px;
 		align-items: center;
 		justify-content: flex-end;
 
-		.publisher-control-border {
+		.blockera-control-border {
 			width: 121px !important;
 			max-width: 121px !important;
 		}
 	}
 
-	.publisher-control-border {
+	.blockera-control-border {
 		width: 91px;
 		max-width: 91px;
 		min-width: 91px;
 		outline: 2px solid #ffffff;
 	}
 
-	.publisher-control-border-corners {
+	.blockera-control-border-corners {
 		height: 140px;
 		position: relative;
 		padding-top: 10px;
 		padding-bottom: 10px;
 	}
 
-	.publisher-control-border-corners-preview {
+	.blockera-control-border-corners-preview {
 		height: 90px;
 		position: relative;
 		width: 158px;
@@ -54,7 +54,7 @@
 		}
 	}
 
-	.publisher-control-border-corner-top {
+	.blockera-control-border-corner-top {
 		position: absolute;
 		top: 0;
 		transform: translate(-50%, -50%);
@@ -64,7 +64,7 @@
 		z-index: 11;
 	}
 
-	.publisher-control-border-corner-right {
+	.blockera-control-border-corner-right {
 		position: absolute;
 		right: 0;
 		top: 50%;
@@ -74,7 +74,7 @@
 		z-index: 10;
 	}
 
-	.publisher-control-border-corner-bottom {
+	.blockera-control-border-corner-bottom {
 		position: absolute;
 		bottom: 0;
 		left: 50%;
@@ -84,7 +84,7 @@
 		z-index: 10;
 	}
 
-	.publisher-control-border-corner-left {
+	.blockera-control-border-corner-left {
 		position: absolute;
 		left: 0;
 		top: 50%;

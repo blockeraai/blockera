@@ -1,12 +1,12 @@
 <?php
 
-namespace Publisher\Framework\Providers;
+namespace Blockera\Framework\Providers;
 
-use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\Foundation\Http\Routes;
-use Publisher\Framework\Illuminate\Support\ServiceProvider;
+use Blockera\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Foundation\Http\Routes;
+use Blockera\Framework\Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Publisher\Framework\Http\Controllers\DynamicValuesController;
+use Blockera\Framework\Http\Controllers\DynamicValuesController;
 
 class RestAPIProvider extends ServiceProvider {
 
@@ -49,7 +49,7 @@ class RestAPIProvider extends ServiceProvider {
 
 		$routes = $this->app->make( Routes::class );
 
-		pb_load( 'Routes.api', compact( 'routes' ) );
+		blockera_load( 'Routes.api', compact( 'routes' ) );
 
 		return $routes::getRoutes();
 	}

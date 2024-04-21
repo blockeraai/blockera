@@ -11,7 +11,7 @@ describe('Opacity → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', { delay: 0 });
 
@@ -33,7 +33,7 @@ describe('Opacity → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('50%').to.be.equal(
-				getSelectedBlock(data, 'publisherOpacity')
+				getSelectedBlock(data, 'blockeraOpacity')
 			);
 		});
 
@@ -42,7 +42,7 @@ describe('Opacity → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'opacity',
 			`${50 / 100}`

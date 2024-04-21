@@ -6,9 +6,9 @@ import type { MixedElement } from 'react';
 import { useContext, useCallback, useMemo } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isUndefined } from '@publisher/utils';
+import { isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies

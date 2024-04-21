@@ -37,7 +37,7 @@ describe('Letter Spacing → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('2px').to.be.equal(
-					getSelectedBlock(data, 'publisherLetterSpacing')
+					getSelectedBlock(data, 'blockeraLetterSpacing')
 				);
 
 				expect('2px').to.be.equal(
@@ -57,7 +57,7 @@ describe('Letter Spacing → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('3px').to.be.equal(
-					getSelectedBlock(data, 'publisherLetterSpacing')
+					getSelectedBlock(data, 'blockeraLetterSpacing')
 				);
 
 				expect('3px').to.be.equal(
@@ -76,7 +76,7 @@ describe('Letter Spacing → WP Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherLetterSpacing')
+					getSelectedBlock(data, 'blockeraLetterSpacing')
 				);
 
 				expect(undefined).to.be.equal(

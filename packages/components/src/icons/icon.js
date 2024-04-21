@@ -1,7 +1,14 @@
+// @flow
+
 /**
- * Publisher dependencies
+ * External dependencies
  */
-import { isFunction, isUndefined } from '@publisher/utils';
+import type { MixedElement } from 'react';
+
+/**
+ * Blockera dependencies
+ */
+import { isFunction, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -9,10 +16,10 @@ import { isFunction, isUndefined } from '@publisher/utils';
 import { WPIcon } from './library-wp/index';
 import { FontAwesomeIconFas } from './library-fas/index';
 import { FontAwesomeIconFar } from './library-far/index';
-import { PublisherIcon } from './library-publisher/index';
+import { BlockeraIcon } from './library-blockera/index';
 import { isValidIconLibrary, getIconLibraryIcons } from './icon-library';
 
-export function Icon({ library, uploadSVG, ...props }) {
+export function Icon({ library, uploadSVG, ...props }: Object): MixedElement {
 	if (uploadSVG) {
 		return <img alt={uploadSVG.title} src={uploadSVG.url} />;
 	}
@@ -28,8 +35,8 @@ export function Icon({ library, uploadSVG, ...props }) {
 		case 'fas':
 			return <FontAwesomeIconFas {...props} />;
 
-		case 'publisher':
-			return <PublisherIcon {...props} />;
+		case 'blockera':
+			return <BlockeraIcon {...props} />;
 
 		default:
 			return <WPIcon {...props} />;
@@ -39,8 +46,8 @@ export function Icon({ library, uploadSVG, ...props }) {
 export function getIcon(
 	iconName: string,
 	libraryName: string,
-	standardize = true
-) {
+	standardize: boolean = true
+): null | Object {
 	if (!isValidIconLibrary(libraryName)) {
 		return null;
 	}
@@ -62,7 +69,7 @@ export function getIcon(
 	return null;
 }
 
-export function isValidIcon(icon, key) {
+export function isValidIcon(icon: any, key: void | string): boolean {
 	const excluded = ['Icon'];
 
 	if (null === icon) {
@@ -76,7 +83,11 @@ export function isValidIcon(icon, key) {
 	return !isFunction(icon);
 }
 
-export function createStandardIconObject(iconName, library, icon) {
+export function createStandardIconObject(
+	iconName: string,
+	library: string,
+	icon: Object
+): Object {
 	// use getIcon if the icon shape did not provide
 	if (icon === null) {
 		return getIcon(iconName, library, false);
@@ -95,7 +106,7 @@ export function createStandardIconObject(iconName, library, icon) {
 		icon = getIcon(iconName, library, false);
 
 		return {
-			icon: icon.icon,
+			icon: icon?.icon,
 			iconName,
 			library,
 		};
@@ -121,7 +132,7 @@ export function createStandardIconObject(iconName, library, icon) {
 		};
 	}
 
-	if (library === 'publisher') {
+	if (library === 'blockera') {
 		if (isFunction(icon)) {
 			return {
 				icon,

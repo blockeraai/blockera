@@ -4,9 +4,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString } from '@publisher/utils';
+import { isString } from '@blockera/utils';
 
 /**
  * Internal dependencies

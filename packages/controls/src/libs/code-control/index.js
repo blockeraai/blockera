@@ -9,14 +9,14 @@ import { useState, useRef } from '@wordpress/element';
 import Editor from '@monaco-editor/react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { DynamicHtmlFormatter } from '@publisher/components';
-import { useLateEffect } from '@publisher/utils';
+} from '@blockera/classnames';
+import { DynamicHtmlFormatter } from '@blockera/components';
+import { useLateEffect } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -97,7 +97,7 @@ const CodeControl = ({
 									/* translators: $1%s is a CSS selector, $2%s is ID. */
 									__(
 										'Use %1$s or %2$s to target current block.',
-										'publisher-core'
+										'blockera-core'
 									),
 									'{.block}',
 									'{#block}'
@@ -139,7 +139,7 @@ const CodeControl = ({
 						setShowPlaceholder(newValue === '');
 						setValue(newValue);
 					}}
-					theme={'publisher'}
+					theme={'blockera'}
 					options={{
 						glyphMargin: false,
 						folding: false,
@@ -151,8 +151,8 @@ const CodeControl = ({
 						allowEditorOverflow: false,
 					}}
 					beforeMount={(monaco: any) => {
-						if (monaco?.publisherInitialised === undefined) {
-							monaco.editor.defineTheme('publisher', {
+						if (monaco?.blockeraInitialised === undefined) {
+							monaco.editor.defineTheme('blockera', {
 								base: 'vs',
 								inherit: true,
 								rules: [],
@@ -166,7 +166,7 @@ const CodeControl = ({
 								},
 							});
 							setShowPlaceholder(value === '');
-							monaco.publisherInitialised = true;
+							monaco.blockeraInitialised = true;
 						}
 					}}
 					onMount={(editor: any) => {

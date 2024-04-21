@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
 
 
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
 
 
 class Shortcode extends Field {
@@ -37,7 +37,7 @@ class Shortcode extends Field {
 		 * @since 2.2.1
 		 *
 		 */
-		$should_escape = apply_filters( 'publisher-core/dynamic-value/fields/shortcode/should_escape', true );
+		$should_escape = apply_filters( 'blockera-core/dynamic-value/fields/shortcode/should_escape', true );
 
 		if ( $should_escape ) {
 

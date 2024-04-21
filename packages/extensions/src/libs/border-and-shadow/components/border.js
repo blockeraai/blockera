@@ -6,13 +6,13 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BoxBorderControl,
 	ControlContextProvider,
 	type BorderRadiusValue,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -62,31 +62,31 @@ export const Border = ({
 			value={{
 				name: generateExtensionId(block, 'border'),
 				value: border,
-				attribute: 'publisherBorder',
+				attribute: 'blockeraBorder',
 				blockName: block.blockName,
 			}}
 		>
 			<BoxBorderControl
 				columns="columns-1"
-				label={__('Border Line', 'publisher-core')}
+				label={__('Border Line', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'Define clear boundaries for blocks with customizable lines, enhancing structure and design.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'Solid borders offer a classic, defined look, while dotted or dashed styles can create a more playful visual effect.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
 				}
 				onChange={(newValue: Object, ref?: Object): void => {
-					onChange('publisherBorder', newValue, { ref });
+					onChange('blockeraBorder', newValue, { ref });
 				}}
 				defaultValue={defaultValue}
 				{...props}

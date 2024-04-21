@@ -7,17 +7,17 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	AttributesControl,
 	BaseControl,
 	PanelBodyControl,
 	ControlContextProvider,
-} from '@publisher/controls';
-import { extensionClassNames } from '@publisher/classnames';
-import { FeatureWrapper } from '@publisher/components';
-import { hasSameProps } from '@publisher/utils';
+} from '@blockera/controls';
+import { extensionClassNames } from '@blockera/classnames';
+import { FeatureWrapper } from '@blockera/components';
+import { hasSameProps } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -40,9 +40,9 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 			setSettings,
 		}: TAdvancedSettingsProps): MixedElement => {
 			const isShowAttributes = isShowField(
-				extensionConfig.publisherAttributes,
-				values?.publisherAttributes,
-				attributes.publisherAttributes.default
+				extensionConfig.blockeraAttributes,
+				values?.blockeraAttributes,
+				attributes.blockeraAttributes.default
 			);
 
 			if (!isShowAttributes) {
@@ -51,7 +51,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('Advanced', 'publisher-core')}
+					title={__('Advanced', 'blockera-core')}
 					initialOpen={true}
 					icon={<AdvancedSettingsExtensionIcon />}
 					className={extensionClassNames('advanced-settings')}
@@ -59,7 +59,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 					<ExtensionSettings
 						buttonLabel={__(
 							'More Advanced Settings',
-							'publisher-core'
+							'blockera-core'
 						)}
 						features={extensionConfig}
 						update={(newSettings) => {
@@ -69,16 +69,16 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 
 					<FeatureWrapper
 						isActive={isShowAttributes}
-						config={extensionConfig.publisherAttributes}
+						config={extensionConfig.blockeraAttributes}
 					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'attributes'),
-								value: values.publisherAttributes,
-								attribute: 'publisherAttributes',
+								value: values.blockeraAttributes,
+								attribute: 'blockeraAttributes',
 								blockName: block.blockName,
 							}}
-							storeName={'publisher-core/controls/repeater'}
+							storeName={'blockera-core/controls/repeater'}
 						>
 							<BaseControl
 								controlName="attributes"
@@ -87,19 +87,19 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 								<AttributesControl
 									label={__(
 										'Custom HTML Attributes',
-										'publisher-core'
+										'blockera-core'
 									)}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
-											'publisherAttributes',
+											'blockeraAttributes',
 											newValue,
 											{ ref }
 										)
 									}
 									defaultValue={
-										attributes.publisherAttributes.default
+										attributes.blockeraAttributes.default
 									}
-									{...extensionProps.publisherAttributes}
+									{...extensionProps.blockeraAttributes}
 								/>
 							</BaseControl>
 						</ControlContextProvider>

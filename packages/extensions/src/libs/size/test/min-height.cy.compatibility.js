@@ -41,7 +41,7 @@ describe('Min Height → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('300px').to.be.equal(
-					getSelectedBlock(data, 'publisherMinHeight')
+					getSelectedBlock(data, 'blockeraMinHeight')
 				);
 			});
 
@@ -122,7 +122,7 @@ describe('Min Height → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('300px').to.be.equal(
-					getSelectedBlock(data, 'publisherMinHeight')
+					getSelectedBlock(data, 'blockeraMinHeight')
 				);
 
 				expect(300).to.be.equal(getSelectedBlock(data, 'minHeight'));

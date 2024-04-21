@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useDragValue } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { useDragValue } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -222,7 +222,7 @@ export function PaddingHorizontal({
 					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
-						ariaLabel={__('left & Right Padding', 'publisher-core')}
+						ariaLabel={__('left & Right Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.right)
@@ -257,7 +257,7 @@ export function PaddingHorizontal({
 					data-cy="box-spacing-padding-left"
 				>
 					<LabelControl
-						ariaLabel={__('left & Right Padding', 'publisher-core')}
+						ariaLabel={__('left & Right Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.right)
@@ -291,19 +291,19 @@ export function PaddingHorizontal({
 						}}
 						title={__(
 							'Left & Right Padding Space',
-							'publisher-core'
+							'blockera-core'
 						)}
-						inputLabel={__('Horizontal Padding', 'publisher-core')}
+						inputLabel={__('Horizontal Padding', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'Horizontal Padding Space',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies to both the left and right edges of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

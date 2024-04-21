@@ -34,7 +34,7 @@ describe('Height → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('500px').to.be.equal(
-					getSelectedBlock(data, 'publisherHeight')
+					getSelectedBlock(data, 'blockeraHeight')
 				);
 			});
 
@@ -96,7 +96,7 @@ describe('Height → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('300px').to.be.equal(
-					getSelectedBlock(data, 'publisherHeight')
+					getSelectedBlock(data, 'blockeraHeight')
 				);
 			});
 
@@ -153,7 +153,7 @@ describe('Height → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('200px').to.be.equal(
-					getSelectedBlock(data, 'publisherHeight')
+					getSelectedBlock(data, 'blockeraHeight')
 				);
 			});
 
@@ -206,7 +206,7 @@ describe('Height → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('30%').to.be.equal(
-					getSelectedBlock(data, 'publisherHeight')
+					getSelectedBlock(data, 'blockeraHeight')
 				);
 			});
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
-use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
+use Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
 
 abstract class BaseStyleDefinition {
 
@@ -78,7 +78,7 @@ abstract class BaseStyleDefinition {
 		$selectors  = $this->getSelectors();
 		$fallbackId = $this->calculateFallbackFeatureId( $featureId );
 
-		$this->selector = pb_calculate_feature_css_selector( $selectors, $featureId, $fallbackId );
+		$this->selector = blockera_calculate_feature_css_selector( $selectors, $featureId, $fallbackId );
 	}
 
 	/**
@@ -108,7 +108,7 @@ abstract class BaseStyleDefinition {
 
 		array_map( [ $this, 'generateCssRules' ], $this->settings, array_keys( $this->settings ) );
 
-		return array_filter( $this->css, 'pb_get_filter_empty_array_item' );
+		return array_filter( $this->css, 'blockera_get_filter_empty_array_item' );
 	}
 
 	/**

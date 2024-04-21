@@ -5,9 +5,9 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -19,7 +19,7 @@ import type { BoxShadowControlProps } from './types';
 
 export default function BoxShadowControl({
 	id,
-	popoverTitle = __('Box Shadow', 'publisher-core'),
+	popoverTitle = __('Box Shadow', 'blockera-core'),
 	className,
 	defaultValue = [],
 	defaultRepeaterItemValue = {
@@ -38,7 +38,7 @@ export default function BoxShadowControl({
 			id={id}
 			className={controlClassNames('box-shadow', className)}
 			popoverTitle={popoverTitle}
-			addNewButtonLabel={__('Add New Box Shadow', 'publisher-core')}
+			addNewButtonLabel={__('Add New Box Shadow', 'blockera-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

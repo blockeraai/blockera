@@ -1,21 +1,21 @@
 {
-	"name": "@publisher/core",
+	"name": "@blockera/core",
 	"version": "1.0.0",
 	"private": true,
-	"description": "A new Publisher editor experience base on Gutenberg.",
-	"author": "The Publisher Contributors",
+	"description": "A new  editor experience base on Gutenberg.",
+	"author": "The  Contributors",
 	"license": "ISC",
 	"keywords": [
-		"Publisher",
+		"",
 		"Gutenberg",
 		"Full Site Editor",
 		"WordPress",
 		"editor"
 	],
-	"homepage": "https://github.com/publisherwp/publisher-core.git",
-	"repository": "https://github.com/publisherwp/publisher-core.git",
+	"homepage": "https://github.com/blockeraai/blockera-core.git",
+	"repository": "https://github.com/blockeraai/blockera-core.git",
 	"bugs": {
-		"url": "https://github.com/publisherwp/publisher-core/issues"
+		"url": "https://github.com/blockeraai/blockera-core/issues"
 	},
 	"engines": {
 		"node": ">=14.0.0",
@@ -27,17 +27,17 @@
 	},
 	"dependencies": {
 		"@monaco-editor/react": "^4.6.0",
-		"@publisher/blocks": "file:packages/blocks",
-		"@publisher/classnames": "file:packages/classnames",
-		"@publisher/components": "file:packages/components",
-		"@publisher/controls": "file:packages/controls",
-		"@publisher/core-data": "file:packages/core-data",
-		"@publisher/data-extractor": "file:packages/data-extractor",
-		"@publisher/editor": "file:packages/editor",
-		"@publisher/extensions": "file:packages/extensions",
-		"@publisher/hooks": "file:packages/hooks",
-		"@publisher/style-engine": "file:packages/style-engine",
-		"@publisher/utils": "file:packages/utils",
+		"@blockera/blocks": "file:packages/blocks",
+		"@blockera/classnames": "file:packages/classnames",
+		"@blockera/components": "file:packages/components",
+		"@blockera/controls": "file:packages/controls",
+		"@blockera/core-data": "file:packages/core-data",
+		"@blockera/data-extractor": "file:packages/data-extractor",
+		"@blockera/editor": "file:packages/editor",
+		"@blockera/extensions": "file:packages/extensions",
+		"@blockera/hooks": "file:packages/hooks",
+		"@blockera/style-engine": "file:packages/style-engine",
+		"@blockera/utils": "file:packages/utils",
 		"fast-memoize": "^2.5.2"
 	},
 	"devDependencies": {
@@ -56,7 +56,7 @@
 		"@fortawesome/free-solid-svg-icons": "^6.4.0",
 		"@fortawesome/react-fontawesome": "^0.2.0",
 		"@jest/core": "^27.4.5",
-		"@publisher/storybook": "file:libs/storybook",
+		"@blockera/storybook": "file:libs/storybook",
 		"@storybook/addon-a11y": "^7.4.6",
 		"@storybook/addon-actions": "^7.4.6",
 		"@storybook/addon-controls": "^7.4.6",
@@ -221,7 +221,7 @@
 		"test:generate-output": "jest --json --outputFile=.jest-test-results.json",
 		"test:generate-output:dev": "jest --json --outputFile=.jest-test-results.json -- --watch",
 		"test:unit:php:setup": "npm run env:start",
-		"test:unit:php:base": "wp-env run --env-cwd='wp-content/plugins/publisher-core' tests-wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose",
+		"test:unit:php:base": "wp-env run --env-cwd='wp-content/plugins/blockera-core' tests-wordpress vendor/bin/phpunit -c phpunit.xml.dist --verbose",
 		"test:unit:php": "npm-run-all test:unit:php:setup test:unit:php:base",
 		"test:unit:php:composer": "composer run-script test",
 		"version": "grunt version && grunt update-pot",
@@ -237,8 +237,8 @@
 		"env:reset": "npm run env:start --update --xdebug",
 		"env:tests-cli:bash": "npm run env run tests-cli bash",
 		"packages:update": "wp-scripts packages-update",
-		"plugin:activate": "wp-env run tests-cli wp plugin activate publisher-core",
-		"plugin:deactivate": "wp-env run tests-cli wp plugin deactivate publisher-core"
+		"plugin:activate": "wp-env run tests-cli wp plugin activate blockera-core",
+		"plugin:deactivate": "wp-env run tests-cli wp plugin deactivate blockera-core"
 	},
 	"lint-staged": {
 		"*.{js,json,ts,tsx,yml,yaml}": [
@@ -255,8 +255,8 @@
 		]
 	},
 	"wp-env": {
-		"plugin-dir": "publisher-core",
-		"plugin-name": "Publisher Core",
+		"plugin-dir": "blockera-core",
+		"plugin-name": "Blockera Core",
 		"welcome-build-command": "npm run dev"
 	}
 }

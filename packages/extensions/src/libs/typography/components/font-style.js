@@ -6,12 +6,12 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	ToggleSelectControl,
 	ControlContextProvider,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -38,39 +38,39 @@ export const FontStyle = ({
 			value={{
 				name: generateExtensionId(block, 'font-style'),
 				value,
-				attribute: 'publisherFontStyle',
+				attribute: 'blockeraFontStyle',
 				blockName: block.blockName,
 			}}
 		>
 			<ToggleSelectControl
-				label={__('Font Style', 'publisher-core')}
-				labelPopoverTitle={__('Font Style', 'publisher-core')}
+				label={__('Font Style', 'blockera-core')}
+				labelPopoverTitle={__('Font Style', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets the style of font for adding an artistic or emphatic touch to text content in web design.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<FontStyleNormalIcon />
-							{__('Normal', 'publisher-core')}
+							{__('Normal', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Displays the text in a standard, upright font style.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<h3>
 							<FontStyleItalicIcon />
-							{__('Italic', 'publisher-core')}
+							{__('Italic', 'blockera-core')}
 						</h3>
 						<p>
 							{__(
 								'Displays the text in italic, with a slight right tilt, commonly used for emphasis.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -79,12 +79,12 @@ export const FontStyle = ({
 				className="control-first label-center small-gap"
 				options={[
 					{
-						label: __('Normal style', 'publisher-core'),
+						label: __('Normal style', 'blockera-core'),
 						value: 'normal',
 						icon: <FontStyleNormalIcon />,
 					},
 					{
-						label: __('Italic style', 'publisher-core'),
+						label: __('Italic style', 'blockera-core'),
 						value: 'italic',
 						icon: <FontStyleItalicIcon />,
 					},
@@ -92,7 +92,7 @@ export const FontStyle = ({
 				isDeselectable={true}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					onChange('publisherFontStyle', newValue, { ref })
+					onChange('blockeraFontStyle', newValue, { ref })
 				}
 				{...props}
 			/>

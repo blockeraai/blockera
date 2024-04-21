@@ -11,6 +11,6 @@ import type {
 export type CalculateCurrentAttributesProps = {
 	attributes: Object,
 	blockAttributes: Object,
-	publisherInnerBlocks: InnerBlocks,
+	blockeraInnerBlocks: InnerBlocks,
 	currentInnerBlock: InnerBlockModel,
 };

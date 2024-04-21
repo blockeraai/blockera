@@ -1,14 +1,14 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import type {
 	StateTypes,
 	TBreakpoint,
 	TStates,
-} from '@publisher/extensions/src/libs/block-states/types';
-import type { AdvancedLabelControlProps } from '@publisher/controls/src/libs/label-control/types';
+} from '@blockera/extensions/src/libs/block-states/types';
+import type { AdvancedLabelControlProps } from '@blockera/controls/src/libs/label-control/types';
 
 export type CalculatedAdvancedLabelProps = {
 	isChanged: boolean,

@@ -1,14 +1,14 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEmpty, isString, mergeObject } from '@publisher/utils';
+import { isEmpty, isString, mergeObject } from '@blockera/utils';
 import {
 	getGradientVAFromVarString,
 	getGradientType,
-} from '@publisher/core-data';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
-import type { ValueAddon } from '@publisher/hooks/src/use-value-addon/types';
+} from '@blockera/core-data';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
+import type { ValueAddon } from '@blockera/hooks/src/use-value-addon/types';
 
 export function elementNormalBackgroundFromWPCompatibility({
 	element,
@@ -60,10 +60,10 @@ export function elementNormalBackgroundFromWPCompatibility({
 			}
 
 			return {
-				publisherInnerBlocks: {
+				blockeraInnerBlocks: {
 					[element]: {
 						attributes: {
-							publisherBackground: {
+							blockeraBackground: {
 								'linear-gradient-0': {
 									isVisible: true,
 									type: gradientType,
@@ -81,10 +81,10 @@ export function elementNormalBackgroundFromWPCompatibility({
 		}
 
 		return {
-			publisherInnerBlocks: {
+			blockeraInnerBlocks: {
 				[element]: {
 					attributes: {
-						publisherBackground: {
+						blockeraBackground: {
 							'radial-gradient-0': {
 								isVisible: true,
 								type: gradientType,

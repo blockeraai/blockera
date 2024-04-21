@@ -6,13 +6,13 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
 	BorderRadiusControl,
 	ControlContextProvider,
-} from '@publisher/controls';
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -37,31 +37,31 @@ export const BorderRadius = ({
 			value={{
 				name: generateExtensionId(block, 'border-radius'),
 				value: borderRadius,
-				attribute: 'publisherBorderRadius',
+				attribute: 'blockeraBorderRadius',
 				blockName: block.blockName,
 			}}
 		>
 			<BaseControl columns="columns-1" controlName="border-radius">
 				<BorderRadiusControl
-					label={__('Radius', 'publisher-core')}
+					label={__('Radius', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Softens the edges of block by rounding corners.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 							<p>
 								{__(
 									'Sharp borders offer a modern, structured look, while soft, rounded corners create a friendly and inviting feel',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
 					}
 					onChange={(newValue: Object, ref?: Object): void =>
-						onChange('publisherBorderRadius', newValue, { ref })
+						onChange('blockeraBorderRadius', newValue, { ref })
 					}
 					defaultValue={defaultValue}
 					{...props}

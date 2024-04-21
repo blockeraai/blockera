@@ -2,7 +2,7 @@
 
 return [
 	[
-		'label'     => __( 'Site Title', 'publisher-core' ),
+		'label'     => __( 'Site Title', 'blockera-core' ),
 		'name'      => 'site-title',
 		'type'      => 'text',
 		'status'    => 'core',
@@ -12,7 +12,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Site Tagline', 'publisher-core' ),
+		'label'     => __( 'Site Tagline', 'blockera-core' ),
 		'name'      => 'site-desc',
 		'type'      => 'text',
 		'status'    => 'core',
@@ -22,7 +22,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Home URL', 'publisher-core' ),
+		'label'     => __( 'Home URL', 'blockera-core' ),
 		'name'      => 'home-url',
 		'type'      => 'link',
 		'status'    => 'core',
@@ -32,7 +32,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Site URL', 'publisher-core' ),
+		'label'     => __( 'Site URL', 'blockera-core' ),
 		'name'      => 'site-url',
 		'type'      => 'link',
 		'status'    => 'core',
@@ -42,7 +42,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Site Logo URL', 'publisher-core' ),
+		'label'     => __( 'Site Logo URL', 'blockera-core' ),
 		'name'      => 'site-logo',
 		'type'      => 'image',
 		'status'    => 'soon',
@@ -52,7 +52,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Admin Email', 'publisher-core' ),
+		'label'     => __( 'Admin Email', 'blockera-core' ),
 		'name'      => 'site-admin-email',
 		'type'      => 'email',
 		'status'    => 'soon',
@@ -62,7 +62,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'RSS URL', 'publisher-core' ),
+		'label'     => __( 'RSS URL', 'blockera-core' ),
 		'name'      => 'site-rss',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -72,7 +72,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Login URL', 'publisher-core' ),
+		'label'     => __( 'Login URL', 'blockera-core' ),
 		'name'      => 'site-login',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -82,7 +82,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Logout URL', 'publisher-core' ),
+		'label'     => __( 'Logout URL', 'blockera-core' ),
 		'name'      => 'site-logout',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -92,7 +92,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Site Meta', 'publisher-core' ),
+		'label'     => __( 'Site Meta', 'blockera-core' ),
 		'name'      => 'site-meta',
 		'type'      => 'meta',
 		'status'    => 'soon',

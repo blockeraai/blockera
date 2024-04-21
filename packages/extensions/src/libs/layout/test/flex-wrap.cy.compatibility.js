@@ -41,7 +41,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			expect({
 				value: 'nowrap',
 				reverse: false,
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexWrap'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
 
 		//
@@ -60,7 +60,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			expect({
 				value: 'wrap',
 				reverse: false,
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexWrap'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
 
 		//
@@ -80,7 +80,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			expect({
 				value: '',
 				reverse: false,
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherFlexWrap'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
 	});
 });

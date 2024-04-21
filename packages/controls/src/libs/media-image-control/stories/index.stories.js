@@ -4,10 +4,10 @@
 import { nanoid } from 'nanoid';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Flex } from '@publisher/components';
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { Flex } from '@blockera/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -66,7 +66,7 @@ export const Filled = {
 					<ControlContextProvider
 						value={{
 							name: nanoid(),
-							value: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+							value: 'https://betterstudio.com/wp-content/uploads/2022/09/blockera-theme.svg',
 						}}
 					>
 						<ControlWithHooks
@@ -108,7 +108,7 @@ export const Field = {
 			<ControlContextProvider
 				value={{
 					name: nanoid(),
-					value: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+					value: 'https://betterstudio.com/wp-content/uploads/2022/09/blockera-theme.svg',
 				}}
 			>
 				<ControlWithHooks Control={MediaImageControl} {...args} />

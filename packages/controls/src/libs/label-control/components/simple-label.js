@@ -5,12 +5,12 @@
 import type { MixedElement } from 'react';
 
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
+} from '@blockera/classnames';
 
 /**
  * Internal Dependencies

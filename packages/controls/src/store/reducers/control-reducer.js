@@ -1,8 +1,8 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEquals, isUndefined, omit } from '@publisher/utils';
+import { isEquals, isUndefined, omit } from '@blockera/utils';
 
 /**
  * The global state management control context provider!

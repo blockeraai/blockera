@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -27,26 +27,26 @@ export default function TextShadowControl({
 		color: '#000000ab',
 		isVisible: true,
 	},
-	popoverTitle = __('Text Shadow', 'publisher-core'),
-	label = __('Text Shadow', 'publisher-core'),
+	popoverTitle = __('Text Shadow', 'blockera-core'),
+	label = __('Text Shadow', 'blockera-core'),
 	labelDescription = (
 		<>
 			<p>
 				{__(
 					'It adds shadow effect to text, enhancing its visual depth and emphasis.',
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 			<p>
 				{__(
 					'It is ideal for creating visually striking text effects, improving legibility over contrasting backgrounds, and adding a layer of sophistication to web typography.',
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 			<p>
 				{__(
 					'You can add multiple shadows for advanced effects.',
-					'publisher-core'
+					'blockera-core'
 				)}
 			</p>
 		</>
@@ -58,7 +58,7 @@ export default function TextShadowControl({
 		<RepeaterControl
 			className={controlClassNames('text-shadow', className)}
 			popoverTitle={popoverTitle}
-			addNewButtonLabel={__('Add New Text Shadow', 'publisher-core')}
+			addNewButtonLabel={__('Add New Text Shadow', 'blockera-core')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

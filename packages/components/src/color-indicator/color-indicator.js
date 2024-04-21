@@ -4,14 +4,14 @@
 import PropTypes from 'prop-types';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { componentClassNames } from '@publisher/classnames';
-import { isObject } from '@publisher/utils';
+import { componentClassNames } from '@blockera/classnames';
+import { isObject } from '@blockera/utils';
 import {
 	getValueAddonRealValue,
 	isValid as isValidVariable,
-} from '@publisher/hooks';
+} from '@blockera/hooks';
 
 export default function ColorIndicator({
 	className,

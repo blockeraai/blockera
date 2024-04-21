@@ -1,7 +1,7 @@
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -71,7 +71,7 @@ export const Color = {
 export const Image = {
 	args: {
 		type: 'image',
-		value: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+		value: 'https://betterstudio.com/wp-content/uploads/2022/09/blockera-theme.svg',
 	},
 	argTypes: {
 		...Default.argTypes,
@@ -175,7 +175,7 @@ export const Stack = {
 						},
 						{
 							type: 'image',
-							value: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+							value: 'https://betterstudio.com/wp-content/uploads/2022/09/blockera-theme.svg',
 						},
 						{
 							type: 'gradient',
@@ -197,7 +197,7 @@ export const Stack = {
 						},
 						{
 							type: 'image',
-							value: 'https://betterstudio.com/wp-content/uploads/2022/09/publisher-theme.svg',
+							value: 'https://betterstudio.com/wp-content/uploads/2022/09/blockera-theme.svg',
 						},
 						{
 							type: 'gradient',

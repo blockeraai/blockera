@@ -1,15 +1,15 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\Foundation\Http;
+namespace Blockera\Framework\Illuminate\Foundation\Http;
 
-use Publisher\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Foundation\Application;
 
 abstract class RestController {
 
 	/**
 	 * Holds Rest API namespace.
 	 */
-	protected const NAMESPACE = 'publisher-core';
+	protected const NAMESPACE = 'blockera-core';
 
 	/**
 	 * @var Application $app the instance of app container object.

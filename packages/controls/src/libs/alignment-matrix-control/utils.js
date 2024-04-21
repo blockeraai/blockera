@@ -1,8 +1,8 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isObject, isString } from '@publisher/utils';
+import { isObject, isString } from '@blockera/utils';
 import type { Location, Coordinates } from './types/index';
 export function convertAlignmentMatrixCoordinates(
 	value: { top: string, left: string } | string

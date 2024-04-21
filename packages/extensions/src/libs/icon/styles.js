@@ -1,9 +1,9 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { computedCssRules } from '@publisher/style-engine';
-import type { GeneratorReturnType } from '@publisher/style-engine/src/types';
+import { computedCssRules } from '@blockera/style-engine';
+import type { GeneratorReturnType } from '@blockera/style-engine/src/types';
 
 /**
  * Internal dependencies

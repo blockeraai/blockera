@@ -1,10 +1,10 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { getColor, generateVariableString } from '@publisher/core-data';
-import { isValid } from '@publisher/hooks/src/use-value-addon/helpers';
+import { getColor, generateVariableString } from '@blockera/core-data';
+import { isValid } from '@blockera/hooks/src/use-value-addon/helpers';
 
 export function backgroundColorFromWPCompatibility({
 	attributes,
@@ -14,8 +14,8 @@ export function backgroundColorFromWPCompatibility({
 	blockAttributes: Object,
 }): Object {
 	if (
-		attributes?.publisherBackgroundColor !==
-		blockAttributes.publisherBackgroundColor.default
+		attributes?.blockeraBackgroundColor !==
+		blockAttributes.blockeraBackgroundColor.default
 	) {
 		return attributes;
 	}
@@ -26,7 +26,7 @@ export function backgroundColorFromWPCompatibility({
 		const colorVar = getColor(attributes?.backgroundColor);
 
 		if (colorVar) {
-			attributes.publisherBackgroundColor = {
+			attributes.blockeraBackgroundColor = {
 				settings: {
 					...colorVar,
 					type: 'color',
@@ -44,7 +44,7 @@ export function backgroundColorFromWPCompatibility({
 	}
 	// style.color.background is not variable
 	else if (attributes?.style?.color?.background !== undefined) {
-		attributes.publisherBackgroundColor =
+		attributes.blockeraBackgroundColor =
 			attributes?.style?.color?.background;
 	}
 

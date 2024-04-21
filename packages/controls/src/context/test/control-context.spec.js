@@ -278,7 +278,7 @@ describe('testing control context provider and related hooks', () => {
 		const defaultRepeaterItemValue = {
 			y: 30,
 		};
-		const storeName = 'publisher-core/controls/repeater';
+		const storeName = 'blockera-core/controls/repeater';
 
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
@@ -339,7 +339,7 @@ describe('testing control context provider and related hooks', () => {
 		const defaultRepeaterItemValue = {
 			y: 20,
 		};
-		const storeName = 'publisher-core/controls/repeater';
+		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
@@ -383,7 +383,7 @@ describe('testing control context provider and related hooks', () => {
 		const defaultRepeaterItemValue = {
 			y: 20,
 		};
-		const storeName = 'publisher-core/controls/repeater';
+		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
@@ -428,7 +428,7 @@ describe('testing control context provider and related hooks', () => {
 		const defaultRepeaterItemValue = {
 			y: 20,
 		};
-		const storeName = 'publisher-core/controls/repeater';
+		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
@@ -472,7 +472,7 @@ describe('testing control context provider and related hooks', () => {
 		const defaultRepeaterItemValue = {
 			y: 20,
 		};
-		const storeName = 'publisher-core/controls/repeater';
+		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
@@ -519,7 +519,7 @@ describe('testing control context provider and related hooks', () => {
 		const defaultRepeaterItemValue = {
 			y: 20,
 		};
-		const storeName = 'publisher-core/controls/repeater';
+		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
@@ -567,7 +567,7 @@ describe('testing control context provider and related hooks', () => {
 		const defaultRepeaterItemValue = {
 			y: 20,
 		};
-		const storeName = 'publisher-core/controls/repeater';
+		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
@@ -606,7 +606,7 @@ describe('testing control context provider and related hooks', () => {
 	});
 
 	it('should testing resetToDefault of retrieved control context api in simple control', () => {
-		const storeName = 'publisher-core/controls';
+		const storeName = 'blockera-core/controls';
 		const name = getControlId();
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
@@ -706,3 +706,4 @@ describe('testing control context provider and related hooks', () => {
 		expect(current).toBe(false);
 	});
 });
+

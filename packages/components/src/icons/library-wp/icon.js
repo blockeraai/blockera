@@ -4,9 +4,9 @@
 import { Icon as WordPressIconComponent } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString, isUndefined } from '@publisher/utils';
+import { isString, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies

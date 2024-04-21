@@ -1,88 +1,88 @@
 {
-	"publisherTextColor": "black",//#block-id, .a{color: "black"
-	"publisherBlockStates": [
+	blockeraTextColor: 'black', //#block-id, .a{color: "black"
+	blockeraBlockStates: [
 		{
-			"type": "normal",
-			"force": true,
-			"status": "enable",
-			"settings": {},
-			"breakpoints": [
+			type: 'normal',
+			force: true,
+			status: 'enable',
+			settings: {},
+			breakpoints: [
 				{
-					"type": "desktop",
-					"force": "true",
+					type: 'desktop',
+					force: 'true',
 				},
 				{
-					"type": "tablet",
-					"force": "true",
-					"settings": {
-						"publisherTextColor": "blue"
+					type: 'tablet',
+					force: 'true',
+					settings: {
+						blockeraTextColor: 'blue',
 					},
 				},
 			],
 		},
 		{
-			"type": "hover",
-			"status": "disable",
-			"force" : false,
-			"settings": {},
-			"breakpoints": [
+			type: 'hover',
+			status: 'disable',
+			force: false,
+			settings: {},
+			breakpoints: [
 				{
-					"type": "desktop",
-					"force": "true",
-					"settings": {
-						"publisherTextColor": "red",//#block-id, .a:hover{color: "black"
-					}
+					type: 'desktop',
+					force: 'true',
+					settings: {
+						blockeraTextColor: 'red', //#block-id, .a:hover{color: "black"
+					},
 				},
 				{
-					"type": "tablet",
-					"force": "true",
-					"settings": {
-						"publisherTextColor": "green",//media(){#block-id, .a{color: "black"}
+					type: 'tablet',
+					force: 'true',
+					settings: {
+						blockeraTextColor: 'green', //media(){#block-id, .a{color: "black"}
 					},
-				}
+				},
 			],
 		},
 		{
-			"type": "custom-class",
-			"force": false,
-			"status": "enable",
-			"settings": {
-				"className": ".akbar",
+			type: 'custom-class',
+			force: false,
+			status: 'enable',
+			settings: {
+				className: '.akbar',
 			},
-			"breakpoints": [
+			breakpoints: [
 				{
-					"type": "desktop",
-					"force": "true",
+					type: 'desktop',
+					force: 'true',
 				},
 				{
-					"type": "tablet",
-					"force": "true",
-					"settings": {
-						"publisherTextColor": "blue"
+					type: 'tablet',
+					force: 'true',
+					settings: {
+						blockeraTextColor: 'blue',
 					},
 				},
 			],
 		},
 		{
-			"type": "parent-hover",
-			"force": false,
-			"status": "enable",
-			"settings": {
-				"parentClientId": "sdfsdfsdf85465456sdf",
+			type: 'parent-hover',
+			force: false,
+			status: 'enable',
+			settings: {
+				parentClientId: 'sdfsdfsdf85465456sdf',
 			},
-			"breakpoints": [
+			breakpoints: [
 				{
-					"type": "desktop",
-					"force": "true",
+					type: 'desktop',
+					force: 'true',
 				},
 				{
-					"type": "tablet",
-					"force": "true",
-					"settings": {
-						"publisherTextColor": "blue"
+					type: 'tablet',
+					force: 'true',
+					settings: {
+						blockeraTextColor: 'blue',
 					},
 				},
 			],
-		}
-	]
+		},
+	],
 }

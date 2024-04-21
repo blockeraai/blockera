@@ -18,11 +18,11 @@ import {
 } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isEquals, omitWithPattern } from '@publisher/utils';
-import { BlockStyle } from '@publisher/style-engine';
-import { isLaptopBreakpoint } from '@publisher/editor';
+import { isEquals, omitWithPattern } from '@blockera/utils';
+import { BlockStyle } from '@blockera/style-engine';
+import { isLaptopBreakpoint } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -92,7 +92,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				getExtensionInnerBlockState,
 				getExtensionCurrentBlockState,
 				getExtensionCurrentBlockStateBreakpoint,
-			} = select('publisher-core/extensions');
+			} = select('blockera-core/extensions');
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),
@@ -111,11 +111,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
 			setExtensionsActiveBlockVariation: setActiveBlockVariation,
-		} = dispatch('publisher-core/extensions') || {};
+		} = dispatch('blockera-core/extensions') || {};
 
-		const { getDeviceType } = select('publisher-core/editor');
+		const { getDeviceType } = select('blockera-core/editor');
 
-		const { currentInnerBlock, publisherInnerBlocks } = useInnerBlocksInfo({
+		const { currentInnerBlock, blockeraInnerBlocks } = useInnerBlocksInfo({
 			name,
 			additional,
 			attributes,
@@ -152,8 +152,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				getAttributes,
 				blockId: name,
 				masterIsNormalState,
-				publisherInnerBlocks,
-				innerBlocks: additional?.publisherInnerBlocks,
+				blockeraInnerBlocks,
+				innerBlocks: additional?.blockeraInnerBlocks,
 			});
 
 		const updateBlockEditorSettings: UpdateBlockEditorSettings = (
@@ -184,7 +184,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const currentAttributes = useCalculateCurrentAttributes({
 			attributes,
 			currentInnerBlock,
-			publisherInnerBlocks,
+			blockeraInnerBlocks,
 			blockAttributes: sharedBlockExtensionAttributes,
 		});
 
@@ -193,11 +193,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				name,
 				clientId,
 				blockRefId: blockEditRef,
-				publisherIcon: currentAttributes?.publisherIcon,
-				publisherIconGap: currentAttributes?.publisherIconGap,
-				publisherIconSize: currentAttributes?.publisherIconSize,
-				publisherIconColor: currentAttributes?.publisherIconColor,
-				publisherIconPosition: currentAttributes?.publisherIconPosition,
+				blockeraIcon: currentAttributes?.blockeraIcon,
+				blockeraIconGap: currentAttributes?.blockeraIconGap,
+				blockeraIconSize: currentAttributes?.blockeraIconSize,
+				blockeraIconColor: currentAttributes?.blockeraIconColor,
+				blockeraIconPosition: currentAttributes?.blockeraIconPosition,
 			},
 			[currentAttributes]
 		);
@@ -232,14 +232,14 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					: currentState,
 				variations,
 				activeBlockVariation,
-				innerBlocks: additional?.publisherInnerBlocks,
+				innerBlocks: additional?.blockeraInnerBlocks,
 				blockAttributes: sharedBlockExtensionAttributes,
 			};
 
 			/**
 			 * Filterable attributes before initializing block edit component.
 			 *
-			 * hook: 'publisherCore.blockEdit.attributes'
+			 * hook: 'blockeraCore.blockEdit.attributes'
 			 *
 			 * @since 1.0.0
 			 */
@@ -249,36 +249,36 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					let filteredAttributes = { ...attributes };
 
 					/**
-					 * Filtering block attributes based on "publisherPropsId" attribute.
+					 * Filtering block attributes based on "blockeraPropsId" attribute.
 					 *
-					 * hook: 'publisherCore.blockEdit.attributes'
+					 * hook: 'blockeraCore.blockEdit.attributes'
 					 *
 					 * @since 1.0.0
 					 */
-					if (!attributes?.publisherPropsId) {
+					if (!attributes?.blockeraPropsId) {
 						filteredAttributes = applyFilters(
-							'publisherCore.blockEdit.attributes',
+							'blockeraCore.blockEdit.attributes',
 							getAttributesWithIds(
 								filteredAttributes,
-								'publisherPropsId'
+								'blockeraPropsId'
 							),
 							args
 						);
 					}
 
 					/**
-					 * Filtering block attributes based on "publisherCompatId" attribute value to running WordPress compatibilities.
+					 * Filtering block attributes based on "blockeraCompatId" attribute value to running WordPress compatibilities.
 					 *
-					 * hook: 'publisherCore.blockEdit.compatibility.attributes'
+					 * hook: 'blockeraCore.blockEdit.compatibility.attributes'
 					 *
 					 * @since 1.0.0
 					 */
-					if (!attributes?.publisherCompatId) {
+					if (!attributes?.blockeraCompatId) {
 						filteredAttributes = applyFilters(
-							'publisherCore.blockEdit.compatibility.attributes',
+							'blockeraCore.blockEdit.compatibility.attributes',
 							getAttributesWithIds(
 								filteredAttributes,
-								'publisherCompatId'
+								'blockeraCompatId'
 							),
 							args
 						);
@@ -290,8 +290,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							...filteredAttributes,
 							className: classnames(
 								{
-									'publisher-core-block': true,
-									[`publisher-core-block-${clientId}`]: true,
+									'blockera-core-block': true,
+									[`blockera-core-block-${clientId}`]: true,
 								},
 								additional.editorProps.className || ''
 							),
@@ -301,15 +301,15 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							...filteredAttributes,
 							className: classnames(
 								{
-									'publisher-core-block': true,
-									[`publisher-core-block-${clientId}`]: true,
+									'blockera-core-block': true,
+									[`blockera-core-block-${clientId}`]: true,
 								},
 								additional.editorProps.className || ''
 							),
 						};
 					}
 
-					// Assume disabled publisher panel, so filtering attributes to clean up all publisher attributes.
+					// Assume disabled blockera panel, so filtering attributes to clean up all blockera attributes.
 					if (!isActive) {
 						filteredAttributes = {
 							...attributes,
@@ -342,7 +342,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 					filteredAttributes = {
 						...attributes,
-						publisherCompatId: '',
+						blockeraCompatId: '',
 					};
 
 					// Prevent redundant set state!
@@ -365,7 +365,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						clientId,
 						handleOnChangeAttributes,
 						attributes: currentAttributes,
-						storeName: 'publisher-core/controls',
+						storeName: 'blockera-core/controls',
 					},
 					attributes,
 					currentTab,
@@ -380,7 +380,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					isOpenGridBuilder,
 					setOpenGridBuilder,
 					masterIsNormalState,
-					publisherInnerBlocks,
+					blockeraInnerBlocks,
 					handleOnChangeAttributes,
 					updateBlockEditorSettings,
 					BlockComponent: () => children,
@@ -416,13 +416,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								currentInnerBlock,
 								BlockEditComponent,
 								currentBreakpoint,
-								publisherInnerBlocks,
+								blockeraInnerBlocks,
 								currentInnerBlockState,
 								updateBlockEditorSettings,
-								states: attributes.publisherBlockStates,
+								states: attributes.blockeraBlockStates,
 								blockProps: {
 									// Sending props like exactly "edit" function props of WordPress Block.
-									// Because needs total block props in outside overriding component like "publisher-blocks" in overriding process.
+									// Because needs total block props in outside overriding component like "blockera-core" in overriding process.
 									name,
 									clientId,
 									supports,
@@ -434,7 +434,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 										currentBlock,
 										currentState,
 										currentBreakpoint,
-										publisherInnerBlocks,
+										blockeraInnerBlocks,
 										currentInnerBlockState,
 										handleOnChangeAttributes,
 									},

@@ -3,7 +3,7 @@
  * External dependencies
  */
 import type { Element } from 'react';
-import type { VariableItem, DynamicValueItem } from '@publisher/core-data';
+import type { VariableItem, DynamicValueItem } from '@blockera/core-data';
 
 /**
  * Internal dependencies

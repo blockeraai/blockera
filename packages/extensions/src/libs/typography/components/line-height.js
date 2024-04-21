@@ -6,9 +6,9 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { ControlContextProvider, InputControl } from '@publisher/controls';
+import { ControlContextProvider, InputControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -33,24 +33,24 @@ export const LineHeight = ({
 			value={{
 				name: generateExtensionId(block, 'line-height'),
 				value,
-				attribute: 'publisherLineHeight',
+				attribute: 'blockeraLineHeight',
 				blockName: block.blockName,
 			}}
 		>
 			<InputControl
-				label={__('Line Height', 'publisher-core')}
+				label={__('Line Height', 'blockera-core')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets the height of a line box, crucial for determining the vertical spacing within text content, enhancing readability and text flow.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								'Line height can be specified without a unit, as a multiplier of the font size (1.5), or with length units like pixels (px), ems (em).',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>
@@ -60,7 +60,7 @@ export const LineHeight = ({
 				min={0}
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					onChange('publisherLineHeight', newValue, { ref })
+					onChange('blockeraLineHeight', newValue, { ref })
 				}
 				{...props}
 			/>

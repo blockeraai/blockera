@@ -43,7 +43,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 
@@ -61,7 +61,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('flex').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 
@@ -81,7 +81,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 		});
@@ -112,7 +112,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('flex').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 
@@ -131,7 +131,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 
@@ -150,7 +150,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('flex').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 		});
@@ -182,7 +182,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('flex').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 
@@ -201,7 +201,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 
@@ -219,7 +219,7 @@ describe('Display → WP Data Compatibility', () => {
 				);
 
 				expect('flex').to.be.equal(
-					getSelectedBlock(data, 'publisherDisplay')
+					getSelectedBlock(data, 'blockeraDisplay')
 				);
 			});
 		});

@@ -1,13 +1,13 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	getCssSelector,
 	computedCssDeclarations,
-} from '@publisher/style-engine';
-import { getValueAddonRealValue } from '@publisher/hooks';
+} from '@blockera/style-engine';
+import { getValueAddonRealValue } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -16,7 +16,7 @@ import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { CssRule } from '@publisher/style-engine/src/types';
+import type { CssRule } from '@blockera/style-engine/src/types';
 
 export const FlexChildStyles = ({
 	state,
@@ -30,9 +30,9 @@ export const FlexChildStyles = ({
 	...props
 }: StylesProps): Array<CssRule> => {
 	const {
-		publisherFlexChildSizing,
-		publisherFlexChildAlign,
-		publisherFlexChildOrder,
+		blockeraFlexChildSizing,
+		blockeraFlexChildAlign,
+		blockeraFlexChildOrder,
 	} = config.flexChildConfig;
 	const blockProps = {
 		clientId,
@@ -57,13 +57,13 @@ export const FlexChildStyles = ({
 	const styleGroup: Array<CssRule> = [];
 
 	if (
-		isActiveField(publisherFlexChildSizing) &&
-		_attributes.publisherFlexChildSizing !==
-			attributes.publisherFlexChildSizing.default
+		isActiveField(blockeraFlexChildSizing) &&
+		_attributes.blockeraFlexChildSizing !==
+			attributes.blockeraFlexChildSizing.default
 	) {
 		const properties: { [key: string]: string } = {};
 
-		switch (_attributes.publisherFlexChildSizing) {
+		switch (_attributes.blockeraFlexChildSizing) {
 			case 'shrink':
 				properties.flex = '0 1 auto';
 				break;
@@ -78,15 +78,15 @@ export const FlexChildStyles = ({
 
 			case 'custom':
 				const grow = getValueAddonRealValue(
-					_attributes.publisherFlexChildGrow
+					_attributes.blockeraFlexChildGrow
 				);
 
 				const shrink = getValueAddonRealValue(
-					_attributes.publisherFlexChildShrink
+					_attributes.blockeraFlexChildShrink
 				);
 
 				const basis = getValueAddonRealValue(
-					_attributes.publisherFlexChildBasis
+					_attributes.blockeraFlexChildBasis
 				);
 
 				properties.flex = `${grow ? grow : 0} ${shrink ? shrink : 0} ${
@@ -97,8 +97,8 @@ export const FlexChildStyles = ({
 
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherFlexChildSizing',
-			support: 'publisherFlexChildSizing',
+			query: 'blockeraFlexChildSizing',
+			support: 'blockeraFlexChildSizing',
 			fallbackSupportId: undefined,
 		});
 
@@ -106,7 +106,7 @@ export const FlexChildStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherFlexChildSizing: [
+					blockeraFlexChildSizing: [
 						{
 							...staticDefinitionParams,
 							properties,
@@ -119,14 +119,14 @@ export const FlexChildStyles = ({
 	}
 
 	if (
-		isActiveField(publisherFlexChildAlign) &&
-		_attributes.publisherFlexChildAlign !==
-			attributes.publisherFlexChildAlign.default
+		isActiveField(blockeraFlexChildAlign) &&
+		_attributes.blockeraFlexChildAlign !==
+			attributes.blockeraFlexChildAlign.default
 	) {
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherFlexChildAlign',
-			support: 'publisherFlexChildAlign',
+			query: 'blockeraFlexChildAlign',
+			support: 'blockeraFlexChildAlign',
 			fallbackSupportId: undefined,
 		});
 
@@ -134,12 +134,12 @@ export const FlexChildStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherFlexChildAlign: [
+					blockeraFlexChildAlign: [
 						{
 							...staticDefinitionParams,
 							properties: {
 								'align-self':
-									_attributes.publisherFlexChildAlign,
+									_attributes.blockeraFlexChildAlign,
 							},
 						},
 					],
@@ -150,13 +150,13 @@ export const FlexChildStyles = ({
 	}
 
 	if (
-		isActiveField(publisherFlexChildOrder) &&
-		_attributes.publisherFlexChildOrder !==
-			attributes.publisherFlexChildOrder.default
+		isActiveField(blockeraFlexChildOrder) &&
+		_attributes.blockeraFlexChildOrder !==
+			attributes.blockeraFlexChildOrder.default
 	) {
 		const properties: { [key: string]: string } = {};
 
-		switch (_attributes.publisherFlexChildOrder) {
+		switch (_attributes.blockeraFlexChildOrder) {
 			case 'first':
 				properties.order = '-1';
 				break;
@@ -167,7 +167,7 @@ export const FlexChildStyles = ({
 
 			case 'custom':
 				const order = getValueAddonRealValue(
-					_attributes.publisherFlexChildOrderCustom
+					_attributes.blockeraFlexChildOrderCustom
 				);
 
 				if (order) properties.order = order;
@@ -177,8 +177,8 @@ export const FlexChildStyles = ({
 
 		const pickedSelector = getCssSelector({
 			...sharedParams,
-			query: 'publisherFlexChildOrder',
-			support: 'publisherFlexChildOrder',
+			query: 'blockeraFlexChildOrder',
+			support: 'blockeraFlexChildOrder',
 			fallbackSupportId: undefined,
 		});
 
@@ -186,7 +186,7 @@ export const FlexChildStyles = ({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
 				{
-					publisherFlexChildOrder: [
+					blockeraFlexChildOrder: [
 						{
 							...staticDefinitionParams,
 							properties,

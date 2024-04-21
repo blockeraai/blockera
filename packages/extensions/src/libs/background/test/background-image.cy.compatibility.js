@@ -46,7 +46,7 @@ describe('Background → WP Compatibility', () => {
 							order: 1,
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBackground')
+						getSelectedBlock(data, 'blockeraBackground')
 					);
 				});
 
@@ -142,7 +142,7 @@ describe('Background → WP Compatibility', () => {
 							order: 1,
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBackground')
+						getSelectedBlock(data, 'blockeraBackground')
 					);
 				});
 
@@ -158,7 +158,7 @@ describe('Background → WP Compatibility', () => {
 
 				// Open variables popover
 				cy.get(
-					'.components-popover.publisher-control-background-popover'
+					'.components-popover.blockera-control-background-popover'
 				).within(() => {
 					cy.clickValueAddonButton();
 				});
@@ -167,7 +167,7 @@ describe('Background → WP Compatibility', () => {
 
 				// change variable
 				cy.get(
-					'.components-popover.publisher-control-popover-variables'
+					'.components-popover.blockera-control-popover-variables'
 				).within(() => {
 					cy.selectValueAddonItem('gradient-2');
 				});
@@ -235,7 +235,7 @@ describe('Background → WP Compatibility', () => {
 							order: 1,
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBackground')
+						getSelectedBlock(data, 'blockeraBackground')
 					);
 				});
 
@@ -329,7 +329,7 @@ describe('Background → WP Compatibility', () => {
 							order: 0,
 						},
 					}).to.be.deep.equal(
-						getSelectedBlock(data, 'publisherBackground')
+						getSelectedBlock(data, 'blockeraBackground')
 					);
 				});
 

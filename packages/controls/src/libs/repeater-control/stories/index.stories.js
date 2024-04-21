@@ -6,11 +6,11 @@ import { __, sprintf } from '@wordpress/i18n';
 import { nanoid } from 'nanoid';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { Flex } from '@publisher/components';
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Flex } from '@blockera/components';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -175,7 +175,7 @@ function CustomRepeaterItemChildren({ itemId, item }) {
 			<InputControl
 				id={getControlId(itemId, 'name')}
 				type="text"
-				label={__('Name', 'publisher-core')}
+				label={__('Name', 'blockera-core')}
 				onChange={(value) =>
 					changeRepeaterItem({
 						controlId,
@@ -203,7 +203,7 @@ function CustomRepeaterItemHeader({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'publisher-core'),
+				__('Item %d', 'blockera-core'),
 				itemId + 1
 			)}
 		>

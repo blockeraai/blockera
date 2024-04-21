@@ -1,5 +1,5 @@
 export const attributes = {
-	publisherIcon: {
+	blockeraIcon: {
 		type: 'object',
 		default: {
 			icon: '',
@@ -7,23 +7,23 @@ export const attributes = {
 			uploadSVG: '',
 		},
 	},
-	publisherIconPosition: {
+	blockeraIconPosition: {
 		type: 'string',
 		default: '',
 	},
-	publisherIconGap: {
+	blockeraIconGap: {
 		type: 'string',
 		default: '',
 	},
-	publisherIconSize: {
+	blockeraIconSize: {
 		type: 'string',
 		default: '',
 	},
-	publisherIconColor: {
+	blockeraIconColor: {
 		type: 'string',
 		default: '',
 	},
-	publisherIconLink: {
+	blockeraIconLink: {
 		type: 'object',
 		default: {},
 	},

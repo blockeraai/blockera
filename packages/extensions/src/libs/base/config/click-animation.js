@@ -10,13 +10,13 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherClickAnimation: FeatureConfig = {
+const blockeraClickAnimation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('On Click Animation', 'publisher-core'),
+	label: __('On Click Animation', 'blockera-core'),
 };
 
 export const clickAnimationConfig = {
-	publisherClickAnimation,
+	blockeraClickAnimation,
 };

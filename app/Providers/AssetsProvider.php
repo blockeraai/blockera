@@ -1,10 +1,10 @@
 <?php
 
-namespace Publisher\Framework\Providers;
+namespace Blockera\Framework\Providers;
 
-use Publisher\Framework\Services\AssetsLoader;
-use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\Support\ServiceProvider;
+use Blockera\Framework\Services\AssetsLoader;
+use Blockera\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -15,7 +15,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 class AssetsProvider extends ServiceProvider {
 
 	/**
-	 * Hold instance of PublisherAssets object
+	 * Hold instance of Assets object
 	 *
 	 * @var null|AssetsLoader
 	 */
@@ -48,7 +48,7 @@ class AssetsProvider extends ServiceProvider {
 		$this->handler = $this->app->make( AssetsLoader::class );
 
 		// Handle loading assets in wp-env to use in CI.
-		if ( defined( 'PB_ENV' ) && 'wp-env' === PB_ENV ) {
+		if ( defined( 'BLOCKERA_ENV' ) && 'wp-env' === BLOCKERA_ENV ) {
 
 			$this->handler->enqueue();
 		}

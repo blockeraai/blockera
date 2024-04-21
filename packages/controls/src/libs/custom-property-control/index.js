@@ -8,9 +8,9 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -40,18 +40,18 @@ export default function CustomPropertyControl({
 	return (
 		<RepeaterControl
 			id={id}
-			addNewButtonLabel={__('Add New CSS Property', 'publisher-core')}
+			addNewButtonLabel={__('Add New CSS Property', 'blockera-core')}
 			popoverTitle={
 				popoverTitle || (
 					<>
 						<PropertyIcon />
-						{__('CSS Property', 'publisher-core')}
+						{__('CSS Property', 'blockera-core')}
 					</>
 				)
 			}
-			label={label || __('CSS Properties', 'publisher-core')}
+			label={label || __('CSS Properties', 'blockera-core')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('CSS Properties', 'publisher-core')
+				labelPopoverTitle || __('CSS Properties', 'blockera-core')
 			}
 			labelDescription={
 				labelDescription || (
@@ -59,13 +59,13 @@ export default function CustomPropertyControl({
 						<p>
 							{__(
 								'It enables you to directly apply custom CSS properties to block by defining key-value pairs.',
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 						<p>
 							{__(
 								"It's ideal for implementing unique styling that goes beyond the standard options offered and its easy to use for responsive customization and block states.",
-								'publisher-core'
+								'blockera-core'
 							)}
 						</p>
 					</>

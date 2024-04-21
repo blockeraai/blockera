@@ -14,7 +14,7 @@ describe('Max Width → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.', {
 			delay: 0,
@@ -37,7 +37,7 @@ describe('Max Width → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('200px').to.be.equal(
-				getSelectedBlock(data, 'publisherMaxWidth')
+				getSelectedBlock(data, 'blockeraMaxWidth')
 			);
 		});
 
@@ -46,11 +46,7 @@ describe('Max Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
-			'have.css',
-			'max-width',
-			'200px'
-		);
+		cy.get('.blockera-core-block').should('have.css', 'max-width', '200px');
 	});
 
 	it('variable value', () => {
@@ -84,7 +80,7 @@ describe('Max Width → Functionality', () => {
 				name: 'Content Width',
 				isValueAddon: true,
 				valueType: 'variable',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherMaxWidth'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraMaxWidth'));
 		});
 
 		// Check frontend
@@ -92,14 +88,11 @@ describe('Max Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
-			'have.css',
-			'max-width',
-			'620px'
-		);
-		cy.get('.publisher-core-block').hasCssVar(
+		cy.get('.blockera-core-block').should('have.css', 'max-width', '620px');
+		cy.get('.blockera-core-block').hasCssVar(
 			'max-width',
 			'--wp--style--global--content-size'
 		);
 	});
 });
+

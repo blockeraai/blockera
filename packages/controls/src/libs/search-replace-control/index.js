@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -30,7 +30,7 @@ export default function SearchReplaceControl({
 	popoverTitle = (
 		<>
 			<SearchReplaceIcon />
-			{__('Search and Replace', 'publisher-core')}
+			{__('Search and Replace', 'blockera-core')}
 		</>
 	),
 	//
@@ -45,7 +45,7 @@ export default function SearchReplaceControl({
 			defaultValue={defaultValue}
 			addNewButtonLabel={__(
 				'Add New Search and Replace',
-				'publisher-core'
+				'blockera-core'
 			)}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}

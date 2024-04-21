@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Modal as WPModal } from '@wordpress/components';
-import { componentClassNames } from '@publisher/classnames';
+import { componentClassNames } from '@blockera/classnames';
 
 export default function Modal({
 	children,
@@ -18,8 +18,7 @@ export default function Modal({
 			title={
 				<>
 					{headerIcon && headerIcon}
-					{headerTitle ||
-						__('Publisher Modal Component', 'publisher-core')}
+					{headerTitle || __(' Modal Component', 'blockera-core')}
 				</>
 			}
 			{...props}

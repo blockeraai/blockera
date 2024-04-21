@@ -6,10 +6,10 @@
 import { addFilter } from '@wordpress/hooks';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { ControlContextRef } from '@publisher/controls/src/context/types';
-import { mergeObject } from '@publisher/utils';
+import type { ControlContextRef } from '@blockera/controls/src/context/types';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -54,8 +54,8 @@ import type { BlockDetail } from '../block-states/types';
 
 export const bootstrap = (): void => {
 	addFilter(
-		'publisherCore.blockEdit.attributes',
-		'publisherCore.blockEdit.typographyExtension.bootstrap',
+		'blockeraCore.blockEdit.attributes',
+		'blockeraCore.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { isNormalState, isBaseBreakpoint, isMasterBlock } =
 				blockDetail;
@@ -168,15 +168,15 @@ export const bootstrap = (): void => {
 	);
 
 	addFilter(
-		'publisherCore.blockEdit.setAttributes',
-		'publisherCore.blockEdit.typographyExtension.bootstrap.setAttributes',
+		'blockeraCore.blockEdit.setAttributes',
+		'blockeraCore.blockEdit.typographyExtension.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *
 		 * @callback getAttributes
 		 *
-		 * @param {Object} nextState The block attributes changed with publisher feature newValue and latest version of block state.
-		 * @param {string} featureId The publisher feature identifier.
+		 * @param {Object} nextState The block attributes changed with blockera feature newValue and latest version of block state.
+		 * @param {string} featureId The blockera feature identifier.
 		 * @param {*} newValue The newValue sets to feature.
 		 * @param {ControlContextRef} ref The reference of control context action occurred.
 		 * @param {blockDetail} blockDetail detail of current block
@@ -199,7 +199,7 @@ export const bootstrap = (): void => {
 			}
 
 			switch (featureId) {
-				case 'publisherFontSize':
+				case 'blockeraFontSize':
 					return mergeObject(
 						nextState,
 						fontSizeToWPCompatibility({
@@ -208,7 +208,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherLineHeight':
+				case 'blockeraLineHeight':
 					return mergeObject(
 						nextState,
 						lineHeightToWPCompatibility({
@@ -217,7 +217,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherTextAlign':
+				case 'blockeraTextAlign':
 					return mergeObject(
 						nextState,
 						textAlignToWPCompatibility({
@@ -226,7 +226,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherTextDecoration':
+				case 'blockeraTextDecoration':
 					return mergeObject(
 						nextState,
 						textDecorationToWPCompatibility({
@@ -235,7 +235,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherFontStyle':
+				case 'blockeraFontStyle':
 					return mergeObject(
 						nextState,
 						fontStyleToWPCompatibility({
@@ -244,7 +244,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherTextTransform':
+				case 'blockeraTextTransform':
 					return mergeObject(
 						nextState,
 						textTransformToWPCompatibility({
@@ -253,7 +253,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherLetterSpacing':
+				case 'blockeraLetterSpacing':
 					return mergeObject(
 						nextState,
 						letterSpacingToWPCompatibility({
@@ -262,7 +262,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherTextOrientation':
+				case 'blockeraTextOrientation':
 					return mergeObject(
 						nextState,
 						textOrientationToWPCompatibility({
@@ -271,7 +271,7 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'publisherFontColor':
+				case 'blockeraFontColor':
 					return mergeObject(
 						nextState,
 						fontColorToWPCompatibility({

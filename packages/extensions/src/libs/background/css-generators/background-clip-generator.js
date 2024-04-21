@@ -1,12 +1,12 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { createCssDeclarations } from '@publisher/style-engine';
+import { createCssDeclarations } from '@blockera/style-engine';
 
 export function backgroundClipGenerator(id, props) {
 	const { attributes } = props;
 
-	const value = attributes.publisherBackgroundClip;
+	const value = attributes.blockeraBackgroundClip;
 
 	if (value === 'none') {
 		return '';

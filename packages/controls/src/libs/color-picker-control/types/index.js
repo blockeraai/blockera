@@ -1,8 +1,8 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { PopoverPlacement } from '@publisher/components';
+import type { PopoverPlacement } from '@blockera/components';
 
 /**
  * Internal dependencies

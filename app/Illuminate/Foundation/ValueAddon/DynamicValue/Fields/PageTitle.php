@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
 
 
 use BetterStudio\Tools\DynamicValues\Core\Utility;
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
 
 
 class PageTitle extends Field {

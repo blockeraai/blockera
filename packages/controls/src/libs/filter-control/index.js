@@ -6,9 +6,9 @@ import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -96,12 +96,10 @@ export default function FilterControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('filter', className)}
-			popoverTitle={
-				popoverTitle || __('Filter Effects', 'publisher-core')
-			}
-			label={label || __('Filters', 'publisher-core')}
+			popoverTitle={popoverTitle || __('Filter Effects', 'blockera-core')}
+			label={label || __('Filters', 'blockera-core')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Filter Effects', 'publisher-core')
+				labelPopoverTitle || __('Filter Effects', 'blockera-core')
 			}
 			labelDescription={
 				labelDescription || (
@@ -111,13 +109,13 @@ export default function FilterControl({
 								<p>
 									{__(
 										'The Filter applies on-the-fly image adjustments and graphical effects to block and its content.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 								<p>
 									{__(
 										'It is widely used for image manipulation, creating hover effects, or enhancing the aesthetics of web elements.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

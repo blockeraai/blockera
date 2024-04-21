@@ -7,15 +7,15 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	ControlContextProvider,
 	PanelBodyControl,
 	RepeaterControl,
-} from '@publisher/controls';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
+} from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -33,13 +33,13 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 			block,
 			extensionConfig,
 		}: ClickAnimationExtensionProps): MixedElement => {
-			if (!isActiveField(extensionConfig.publisherClickAnimation)) {
+			if (!isActiveField(extensionConfig.blockeraClickAnimation)) {
 				return <></>;
 			}
 
 			return (
 				<PanelBodyControl
-					title={__('On Click', 'publisher-core')}
+					title={__('On Click', 'blockera-core')}
 					initialOpen={true}
 					icon={<ClickAnimationExtensionIcon />}
 					className={extensionClassNames('click-animation')}
@@ -48,10 +48,10 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 						value={{
 							name: generateExtensionId(block, 'clickAnimation'),
 							value: {},
-							attribute: 'publisherClickAnimation',
+							attribute: 'blockeraClickAnimation',
 							blockName: block.blockName,
 						}}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 					>
 						<RepeaterControl
 							label=""
@@ -60,17 +60,17 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 							icon={<AnimationIcon />}
 							description={__(
 								'Clicking on the block will trigger the animation.',
-								'publisher-core'
+								'blockera-core'
 							)}
 							actionButtonAdd={false}
 							injectHeaderButtonsStart={
 								<span
 									style={{
-										color: 'var(--publisher-controls-primary-color)',
+										color: 'var(--blockera-controls-primary-color)',
 										fontStyle: 'italic',
 									}}
 								>
-									{__('Coming soon…', 'publisher-core')}
+									{__('Coming soon…', 'blockera-core')}
 								</span>
 							}
 						/>

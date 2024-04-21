@@ -1,8 +1,8 @@
 // @flow
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString, isArray, isObject, isUndefined } from '@publisher/utils';
+import { isString, isArray, isObject, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies

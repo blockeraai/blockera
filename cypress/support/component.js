@@ -9,9 +9,9 @@ import '@cypress/code-coverage/support';
 import { PanelBody, Popover, SlotFillProvider } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ *  dependencies
  */
-import { ControlContextProvider, STORE_NAME } from '@publisher/controls';
+import { ControlContextProvider, STORE_NAME } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -25,8 +25,8 @@ import '../../packages/controls/src/style.scss';
 import '../../.storybook/styles/style.lazy.scss';
 import '../../packages/components/src/style.scss';
 import { WithControlDataProvider } from './components/providers/control-provider/with-control-data-provider';
-import { controlReducer } from '@publisher/controls/src/store/reducers/control-reducer';
-import { modifyControlValue } from '@publisher/controls/src/store/actions';
+import { controlReducer } from '@blockera/controls/src/store/reducers/control-reducer';
+import { modifyControlValue } from '@blockera/controls/src/store/actions';
 
 Cypress.Commands.add('mount', mount);
 
@@ -94,3 +94,4 @@ Cypress.Commands.add(
 		);
 	}
 );
+

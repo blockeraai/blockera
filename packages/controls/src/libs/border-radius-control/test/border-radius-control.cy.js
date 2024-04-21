@@ -101,7 +101,7 @@ describe('border-radius-control component testing', () => {
 					.should('have.attr', 'style')
 					.should(
 						'include',
-						'var(--publisher-controls-primary-color)'
+						'var(--blockera-controls-primary-color)'
 					);
 
 				//Check data provider value
@@ -403,7 +403,7 @@ describe('border-radius-control component testing', () => {
 		const defaultValue = {
 			onChange: (value) => {
 				controlReducer(
-					select('publisher-core/controls').getControl(name),
+					select('blockera-core/controls').getControl(name),
 					modifyControlValue({
 						value,
 						controlId: name,
@@ -428,3 +428,4 @@ describe('border-radius-control component testing', () => {
 		cy.get('@onChange').should('have.been.called');
 	});
 });
+

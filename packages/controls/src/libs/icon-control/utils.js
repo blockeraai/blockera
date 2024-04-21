@@ -4,7 +4,7 @@
 import { sprintf, __ } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	createStandardIconObject,
@@ -12,8 +12,8 @@ import {
 	iconSearch,
 	Icon,
 	isValidIcon,
-} from '@publisher/components';
-import { controlInnerClassNames } from '@publisher/classnames';
+} from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 export function getLibraryIcons({
 	library,
@@ -74,7 +74,7 @@ export function getLibraryIcons({
 					)}
 					aria-label={sprintf(
 						// translators: %s is icon ID in icon libraries for example arrow-left
-						__('%s Icon', 'publisher-core'),
+						__('%s Icon', 'blockera-core'),
 						icon.iconName
 					)}
 					onClick={(event) =>

@@ -13,10 +13,10 @@ import type { THeaderItem } from '../types';
 import { prepValueForHeader } from '../../repeater-control/utils';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { ColorIndicator } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { ColorIndicator } from '@blockera/components';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 	({
@@ -35,7 +35,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'publisher-core'),
+					__('Item %d', 'blockera-core'),
 					itemId + 1
 				)}
 			>
@@ -45,8 +45,8 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 
 				<span className={controlInnerClassNames('header-label')}>
 					{type === 'inner'
-						? __('Inner', 'publisher-core')
-						: __('Outer', 'publisher-core')}
+						? __('Inner', 'blockera-core')
+						: __('Outer', 'blockera-core')}
 				</span>
 
 				<span className={controlInnerClassNames('header-values')}>

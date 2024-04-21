@@ -7,13 +7,13 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { RepeaterControl, ControlContextProvider } from '@publisher/controls';
-import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
-import { STORE_NAME as REPEATER_STORE_NAME } from '@publisher/controls/src/libs/repeater-control/store';
-import { controlInnerClassNames } from '@publisher/classnames';
-import defaultBreakpoints from '@publisher/extensions/src/libs/block-states/default-breakpoints';
+import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
+import { defaultItemValue } from '@blockera/controls/src/libs/repeater-control';
+import { STORE_NAME as REPEATER_STORE_NAME } from '@blockera/controls/src/libs/repeater-control/store';
+import { controlInnerClassNames } from '@blockera/classnames';
+import defaultBreakpoints from '@blockera/extensions/src/libs/block-states/default-breakpoints';
 
 /**
  * Internal dependencies
@@ -36,7 +36,7 @@ export default function ({
 			storeName={REPEATER_STORE_NAME}
 		>
 			<RepeaterControl
-				popoverTitle={__('Breakpoint Settings', 'publisher-core')}
+				popoverTitle={__('Breakpoint Settings', 'blockera-core')}
 				className={controlInnerClassNames('breakpoints-repeater')}
 				defaultRepeaterItemValue={{
 					...defaultItemValue,

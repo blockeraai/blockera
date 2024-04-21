@@ -5,10 +5,10 @@ import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
-import { ColorIndicator } from '@publisher/components';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { ColorIndicator } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -29,7 +29,7 @@ const RepeaterItemHeader = ({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'publisher-core'),
+				__('Item %d', 'blockera-core'),
 				itemId + 1
 			)}
 			data-cy="text-shadow-repeater-item-header"
@@ -45,7 +45,7 @@ const RepeaterItemHeader = ({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{__('Text Shadow', 'publisher-core')}
+				{__('Text Shadow', 'blockera-core')}
 			</span>
 
 			<span

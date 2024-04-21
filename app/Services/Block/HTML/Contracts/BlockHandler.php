@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Services\Block\HTML\Contracts;
+namespace Blockera\Framework\Services\Block\HTML\Contracts;
 
 /**
  * The Styler interface declares a method for building the chain of Customize HTML with BlockHandler to use Parser class.

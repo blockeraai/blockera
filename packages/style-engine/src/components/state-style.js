@@ -7,10 +7,10 @@ import type { MixedElement } from 'react';
 import { useId } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
-import { default as blockStates } from '@publisher/extensions/src/libs/block-states/states';
+import type { TStates } from '@blockera/extensions/src/libs/block-states/types';
+import { default as blockStates } from '@blockera/extensions/src/libs/block-states/states';
 
 /**
  * Internal dependencies

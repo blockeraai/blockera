@@ -30,18 +30,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<InputControl
-					label={__('Name', 'publisher-core')}
-					aria-label={__('CSS Property Name', 'publisher-core')}
-					labelPopoverTitle={__(
-						'CSS Property Name',
-						'publisher-core'
-					)}
+					label={__('Name', 'blockera-core')}
+					aria-label={__('CSS Property Name', 'blockera-core')}
+					labelPopoverTitle={__('CSS Property Name', 'blockera-core')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'The name of the CSS property.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -50,7 +47,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					type="text"
 					id={getControlId(itemId, 'name')}
 					defaultValue={item?.name || ''}
-					placeholder={__('Enter property name…', 'publisher-core')}
+					placeholder={__('Enter property name…', 'blockera-core')}
 					onChange={(newValue) => {
 						changeRepeaterItem({
 							controlId,
@@ -68,24 +65,24 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							type="error"
 							style={{ marginTop: '10px' }}
 						>
-							{__('Name is required.', 'publisher-core')}
+							{__('Name is required.', 'blockera-core')}
 						</NoticeControl>
 					)}
 				</InputControl>
 
 				<InputControl
-					label={__('Value', 'publisher-core')}
-					aria-label={__('CSS Property Value', 'publisher-core')}
+					label={__('Value', 'blockera-core')}
+					aria-label={__('CSS Property Value', 'blockera-core')}
 					labelPopoverTitle={__(
 						'CSS Property Value',
-						'publisher-core'
+						'blockera-core'
 					)}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'The value of the CSS property.',
-									'publisher-core'
+									'blockera-core'
 								)}
 							</p>
 						</>
@@ -94,7 +91,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'value')}
 					type="text"
 					defaultValue={item?.value || ''}
-					placeholder={__('Enter property value…', 'publisher-core')}
+					placeholder={__('Enter property value…', 'blockera-core')}
 					onChange={(newValue) => {
 						changeRepeaterItem({
 							controlId,
@@ -112,7 +109,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							type="error"
 							style={{ marginTop: '10px' }}
 						>
-							{__('Value is required.', 'publisher-core')}
+							{__('Value is required.', 'blockera-core')}
 						</NoticeControl>
 					)}
 				</InputControl>

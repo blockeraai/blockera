@@ -1,20 +1,20 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { hasInvolvesSomeItems } from '@publisher/utils';
+import { hasInvolvesSomeItems } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
-import staticStates from '@publisher/extensions/src/libs/block-states/states';
+import staticStates from '@blockera/extensions/src/libs/block-states/states';
 
 export const blockHasStates = (attributes: Object): boolean => {
 	const stateTypes = Object.keys(staticStates);
 
 	return hasInvolvesSomeItems(
-		attributes?.publisherBlockStates || {},
+		attributes?.blockeraBlockStates || {},
 		stateTypes
 	);
 };

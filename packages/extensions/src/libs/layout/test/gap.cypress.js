@@ -11,7 +11,7 @@ describe('Gap → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -37,7 +37,7 @@ describe('Gap → Functionality', () => {
 				gap: '10px',
 				rows: '',
 				columns: '',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherGap'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
 		});
 
 		//Check frontend
@@ -45,7 +45,7 @@ describe('Gap → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'gap', '10px');
+		cy.get('.blockera-core-block').should('have.css', 'gap', '10px');
 	});
 
 	it('should update row-gap & column-gap correctly, when add data', () => {
@@ -60,7 +60,7 @@ describe('Gap → Functionality', () => {
 				gap: '8px',
 				rows: '8px',
 				columns: '8px',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherGap'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
 		});
 
 		cy.getParentContainer('Gap').within(() => {
@@ -85,7 +85,7 @@ describe('Gap → Functionality', () => {
 				gap: '8px',
 				rows: '10px',
 				columns: '15px',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherGap'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
 		});
 
 		//Check frontend
@@ -93,8 +93,9 @@ describe('Gap → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block')
+		cy.get('.blockera-core-block')
 			.should('have.css', 'column-gap', '15px')
 			.and('have.css', 'row-gap', '10px');
 	});
 });
+

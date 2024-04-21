@@ -9,18 +9,18 @@ import type { FeatureConfig } from '../../base';
 export type TBackgroundProps = {
 	...BaseExtensionProps,
 	extensionConfig: {
-		publisherBackground: FeatureConfig,
-		publisherBackgroundColor: FeatureConfig,
-		publisherBackgroundClip: FeatureConfig,
+		blockeraBackground: FeatureConfig,
+		blockeraBackgroundColor: FeatureConfig,
+		blockeraBackgroundClip: FeatureConfig,
 	},
 	values: {
-		publisherBackground: Object,
-		publisherBackgroundColor: string,
-		publisherBackgroundClip: string,
+		blockeraBackground: Object,
+		blockeraBackgroundColor: string,
+		blockeraBackgroundClip: string,
 	},
 	extensionProps: {
-		publisherBackground: Object,
-		publisherBackgroundColor: Object,
-		publisherBackgroundClip: Object,
+		blockeraBackground: Object,
+		blockeraBackgroundColor: Object,
+		blockeraBackgroundClip: Object,
 	},
 };

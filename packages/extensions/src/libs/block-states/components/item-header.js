@@ -6,9 +6,9 @@ import type { Element } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlInnerClassNames } from '@publisher/classnames';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 export default function ItemHeader({
 	item,
@@ -63,7 +63,7 @@ export default function ItemHeader({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'publisher-core'),
+				__('Item %d', 'blockera-core'),
 				itemId + 1
 			)}
 		>

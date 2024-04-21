@@ -10,13 +10,13 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherEntranceAnimation: FeatureConfig = {
+const blockeraEntranceAnimation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('On Entrance', 'publisher-core'),
+	label: __('On Entrance', 'blockera-core'),
 };
 
 export const entranceAnimationConfig = {
-	publisherEntranceAnimation,
+	blockeraEntranceAnimation,
 };

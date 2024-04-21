@@ -14,7 +14,7 @@ describe('Media Fit → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.', {
 			delay: 0,
@@ -44,7 +44,7 @@ describe('Media Fit → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('contain').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherFit')
+				getSelectedBlock(data, 'blockeraFit')
 			);
 		});
 
@@ -64,7 +64,7 @@ describe('Media Fit → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('scale-down').to.be.deep.equal(
-				getSelectedBlock(data, 'publisherFit')
+				getSelectedBlock(data, 'blockeraFit')
 			);
 		});
 
@@ -73,10 +73,11 @@ describe('Media Fit → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'object-fit',
 			'scale-down'
 		);
 	});
 });
+

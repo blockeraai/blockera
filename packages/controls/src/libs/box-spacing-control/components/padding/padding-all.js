@@ -6,11 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useDragValue } from '@publisher/utils';
-import { controlInnerClassNames } from '@publisher/classnames';
-import { setValueAddon, useValueAddon } from '@publisher/hooks';
+import { useDragValue } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { setValueAddon, useValueAddon } from '@blockera/hooks';
 
 /**
  * Internal dependencies
@@ -198,7 +198,7 @@ export function PaddingAll({
 					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Padding', 'publisher-core')}
+						ariaLabel={__('All Sides Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -233,7 +233,7 @@ export function PaddingAll({
 					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Padding', 'publisher-core')}
+						ariaLabel={__('All Sides Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -266,7 +266,7 @@ export function PaddingAll({
 					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Padding', 'publisher-core')}
+						ariaLabel={__('All Sides Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -299,7 +299,7 @@ export function PaddingAll({
 					data-cy="box-spacing-padding-left"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Padding', 'publisher-core')}
+						ariaLabel={__('All Sides Padding', 'blockera-core')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -331,18 +331,18 @@ export function PaddingAll({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('All Sides Padding', 'publisher-core')}
-						inputLabel={__('Padding', 'publisher-core')}
+						title={__('All Sides Padding', 'blockera-core')}
+						inputLabel={__('Padding', 'blockera-core')}
 						inputLabelPopoverTitle={__(
 							'All Sides Padding',
-							'publisher-core'
+							'blockera-core'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a single padding space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
-										'publisher-core'
+										'blockera-core'
 									)}
 								</p>
 							</>

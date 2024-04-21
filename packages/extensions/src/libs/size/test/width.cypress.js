@@ -14,7 +14,7 @@ describe('Width → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.', {
 			delay: 0,
@@ -34,7 +34,7 @@ describe('Width → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect('100px').to.be.equal(
-				getSelectedBlock(data, 'publisherWidth')
+				getSelectedBlock(data, 'blockeraWidth')
 			);
 		});
 
@@ -43,7 +43,7 @@ describe('Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'width', '100px');
+		cy.get('.blockera-core-block').should('have.css', 'width', '100px');
 	});
 
 	it('variable value', () => {
@@ -74,7 +74,7 @@ describe('Width → Functionality', () => {
 				name: 'Content Width',
 				isValueAddon: true,
 				valueType: 'variable',
-			}).to.be.deep.equal(getSelectedBlock(data, 'publisherWidth'));
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraWidth'));
 		});
 
 		// Check frontend
@@ -82,8 +82,8 @@ describe('Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'width', '620px');
-		cy.get('.publisher-core-block').hasCssVar(
+		cy.get('.blockera-core-block').should('have.css', 'width', '620px');
+		cy.get('.blockera-core-block').hasCssVar(
 			'width',
 			'--wp--style--global--content-size'
 		);

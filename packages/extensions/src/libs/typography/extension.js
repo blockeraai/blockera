@@ -7,7 +7,7 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	BaseControl,
@@ -19,15 +19,10 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 	NoticeControl,
-} from '@publisher/controls';
-import {
-	FeatureWrapper,
-	Flex,
-	Grid,
-	MoreFeatures,
-} from '@publisher/components';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
+} from '@blockera/controls';
+import { FeatureWrapper, Flex, Grid, MoreFeatures } from '@blockera/components';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -77,84 +72,84 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		attributes,
 	}: TTypographyProps): MixedElement => {
 		const isShowFontSize = isShowField(
-			extensionConfig.publisherFontSize,
-			values?.publisherFontSize,
-			attributes.publisherFontSize.default
+			extensionConfig.blockeraFontSize,
+			values?.blockeraFontSize,
+			attributes.blockeraFontSize.default
 		);
 		const isShowLineHeight = isShowField(
-			extensionConfig.publisherLineHeight,
-			values?.publisherLineHeight,
-			attributes.publisherLineHeight.default
+			extensionConfig.blockeraLineHeight,
+			values?.blockeraLineHeight,
+			attributes.blockeraLineHeight.default
 		);
 		const isShowTextAlign = isShowField(
-			extensionConfig.publisherTextAlign,
-			values?.publisherTextAlign,
-			attributes.publisherTextAlign.default
+			extensionConfig.blockeraTextAlign,
+			values?.blockeraTextAlign,
+			attributes.blockeraTextAlign.default
 		);
 		const isShowTextDecoration = isShowField(
-			extensionConfig.publisherTextDecoration,
-			values?.publisherTextDecoration,
-			attributes.publisherTextDecoration.default
+			extensionConfig.blockeraTextDecoration,
+			values?.blockeraTextDecoration,
+			attributes.blockeraTextDecoration.default
 		);
 		const isShowFontStyle = isShowField(
-			extensionConfig.publisherFontStyle,
-			values?.publisherFontStyle,
-			attributes.publisherFontStyle.default
+			extensionConfig.blockeraFontStyle,
+			values?.blockeraFontStyle,
+			attributes.blockeraFontStyle.default
 		);
 		const isShowTextTransform = isShowField(
-			extensionConfig.publisherTextTransform,
-			values?.publisherTextTransform,
-			attributes.publisherTextTransform.default
+			extensionConfig.blockeraTextTransform,
+			values?.blockeraTextTransform,
+			attributes.blockeraTextTransform.default
 		);
 		const isShowDirection = isShowField(
-			extensionConfig.publisherDirection,
-			values?.publisherDirection,
-			attributes.publisherDirection.default
+			extensionConfig.blockeraDirection,
+			values?.blockeraDirection,
+			attributes.blockeraDirection.default
 		);
 		const isShowLetterSpacing = isShowField(
-			extensionConfig.publisherLetterSpacing,
-			values?.publisherLetterSpacing,
-			attributes.publisherLetterSpacing.default
+			extensionConfig.blockeraLetterSpacing,
+			values?.blockeraLetterSpacing,
+			attributes.blockeraLetterSpacing.default
 		);
 		const isShowWordSpacing = isShowField(
-			extensionConfig.publisherWordSpacing,
-			values?.publisherWordSpacing,
-			attributes.publisherWordSpacing.default
+			extensionConfig.blockeraWordSpacing,
+			values?.blockeraWordSpacing,
+			attributes.blockeraWordSpacing.default
 		);
 		const isShowTextIndent = isShowField(
-			extensionConfig.publisherTextIndent,
-			values?.publisherTextIndent,
-			attributes.publisherTextIndent.default
+			extensionConfig.blockeraTextIndent,
+			values?.blockeraTextIndent,
+			attributes.blockeraTextIndent.default
 		);
 		const isShowTextOrientation = isShowField(
-			extensionConfig.publisherTextOrientation,
-			values?.publisherTextOrientation,
-			attributes.publisherTextOrientation.default
+			extensionConfig.blockeraTextOrientation,
+			values?.blockeraTextOrientation,
+			attributes.blockeraTextOrientation.default
 		);
 		const isShowTextStroke = isShowField(
-			extensionConfig.publisherTextStroke,
-			values?.publisherTextStroke,
-			attributes.publisherTextStroke.default
+			extensionConfig.blockeraTextStroke,
+			values?.blockeraTextStroke,
+			attributes.blockeraTextStroke.default
 		);
 		const isShowTextColumns = isShowField(
-			extensionConfig.publisherTextColumns,
-			values?.publisherTextColumns,
-			attributes.publisherTextColumns.default
+			extensionConfig.blockeraTextColumns,
+			values?.blockeraTextColumns,
+			attributes.blockeraTextColumns.default
 		);
 		const isShowWordBreak = isShowField(
-			extensionConfig.publisherWordBreak,
-			values?.publisherWordBreak,
-			attributes.publisherWordBreak.default
+			extensionConfig.blockeraWordBreak,
+			values?.blockeraWordBreak,
+			attributes.blockeraWordBreak.default
 		);
 		const isShowFontColor = isShowField(
-			extensionConfig.publisherFontColor,
-			values?.publisherFontColor,
-			attributes.publisherFontColor.default
+			extensionConfig.blockeraFontColor,
+			values?.blockeraFontColor,
+			attributes.blockeraFontColor.default
 		);
 		const isShowTextShadow = isShowField(
-			extensionConfig.publisherTextShadow,
-			values?.publisherTextShadow,
-			attributes.publisherTextShadow.default
+			extensionConfig.blockeraTextShadow,
+			values?.blockeraTextShadow,
+			attributes.blockeraTextShadow.default
 		);
 
 		if (
@@ -195,33 +190,33 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		let isAdvancedEdited = false;
 		if (isShowAdvanced) {
 			isAdvancedEdited =
-				values?.publisherTextAlign !==
-					attributes.publisherTextAlign.default ||
-				values?.publisherTextDecoration !==
-					attributes.publisherTextDecoration.default ||
-				values?.publisherFontStyle !==
-					attributes.publisherFontStyle.default ||
-				values?.publisherTextTransform !==
-					attributes.publisherTextTransform.default ||
-				values?.publisherDirection !==
-					attributes.publisherDirection.default ||
-				values?.publisherLetterSpacing !==
-					attributes.publisherLetterSpacing.default ||
-				values?.publisherWordSpacing !==
-					attributes.publisherWordSpacing.default ||
-				values?.publisherTextIndent !==
-					attributes.publisherTextIndent.default ||
-				values?.publisherTextColumns !==
-					attributes.publisherTextColumns.default ||
-				values?.publisherTextStroke !==
-					attributes.publisherTextStroke.default ||
-				values?.publisherWordBreak !==
-					attributes.publisherWordBreak.default;
+				values?.blockeraTextAlign !==
+					attributes.blockeraTextAlign.default ||
+				values?.blockeraTextDecoration !==
+					attributes.blockeraTextDecoration.default ||
+				values?.blockeraFontStyle !==
+					attributes.blockeraFontStyle.default ||
+				values?.blockeraTextTransform !==
+					attributes.blockeraTextTransform.default ||
+				values?.blockeraDirection !==
+					attributes.blockeraDirection.default ||
+				values?.blockeraLetterSpacing !==
+					attributes.blockeraLetterSpacing.default ||
+				values?.blockeraWordSpacing !==
+					attributes.blockeraWordSpacing.default ||
+				values?.blockeraTextIndent !==
+					attributes.blockeraTextIndent.default ||
+				values?.blockeraTextColumns !==
+					attributes.blockeraTextColumns.default ||
+				values?.blockeraTextStroke !==
+					attributes.blockeraTextStroke.default ||
+				values?.blockeraWordBreak !==
+					attributes.blockeraWordBreak.default;
 		}
 
 		return (
 			<PanelBodyControl
-				title={__('Typography', 'publisher-core')}
+				title={__('Typography', 'blockera-core')}
 				initialOpen={true}
 				icon={<TypographyExtensionIcon />}
 				className={extensionClassNames('typography')}
@@ -229,7 +224,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				<ExtensionSettings
 					buttonLabel={__(
 						'More Typography Settings',
-						'publisher-core'
+						'blockera-core'
 					)}
 					features={extensionConfig}
 					update={(newSettings) => {
@@ -240,42 +235,42 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				{isShowFontSize && isShowLineHeight ? (
 					<BaseControl
 						columns="columns-2"
-						label={__('Size', 'publisher-core')}
+						label={__('Size', 'blockera-core')}
 					>
 						<Flex alignItems="flex-start">
 							<FeatureWrapper
 								isActive={isShowFontSize}
-								config={extensionConfig.publisherFontSize}
+								config={extensionConfig.blockeraFontSize}
 							>
 								<FontSize
 									block={block}
 									onChange={handleOnChangeAttributes}
-									value={values.publisherFontSize}
+									value={values.blockeraFontSize}
 									defaultValue={
-										attributes.publisherFontSize.default
+										attributes.blockeraFontSize.default
 									}
 									columns="columns-1"
 									className="control-first label-center small-gap"
 									style={{ margin: '0px' }}
-									{...extensionProps.publisherFontSize}
+									{...extensionProps.blockeraFontSize}
 								/>
 							</FeatureWrapper>
 
 							<FeatureWrapper
 								isActive={isShowLineHeight}
-								config={extensionConfig.publisherLineHeight}
+								config={extensionConfig.blockeraLineHeight}
 							>
 								<LineHeight
 									block={block}
-									value={values.publisherLineHeight}
+									value={values.blockeraLineHeight}
 									onChange={handleOnChangeAttributes}
 									defaultValue={
-										attributes.publisherLineHeight.default
+										attributes.blockeraLineHeight.default
 									}
 									columns="columns-1"
 									className="control-first label-center small-gap"
 									style={{ margin: '0px' }}
-									{...extensionProps.publisherLineHeight}
+									{...extensionProps.blockeraLineHeight}
 								/>
 							</FeatureWrapper>
 						</Flex>
@@ -284,31 +279,31 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					<>
 						<FeatureWrapper
 							isActive={isShowFontSize}
-							config={extensionConfig.publisherFontSize}
+							config={extensionConfig.blockeraFontSize}
 						>
 							<FontSize
 								block={block}
 								onChange={handleOnChangeAttributes}
-								value={values.publisherFontSize}
+								value={values.blockeraFontSize}
 								defaultValue={
-									attributes.publisherFontSize.default
+									attributes.blockeraFontSize.default
 								}
-								{...extensionProps.publisherFontSize}
+								{...extensionProps.blockeraFontSize}
 							/>
 						</FeatureWrapper>
 
 						<FeatureWrapper
 							isActive={isShowLineHeight}
-							config={extensionConfig.publisherLineHeight}
+							config={extensionConfig.blockeraLineHeight}
 						>
 							<LineHeight
 								block={block}
-								value={values.publisherLineHeight}
+								value={values.blockeraLineHeight}
 								onChange={handleOnChangeAttributes}
 								defaultValue={
-									attributes.publisherLineHeight.default
+									attributes.blockeraLineHeight.default
 								}
-								{...extensionProps.publisherLineHeight}
+								{...extensionProps.blockeraLineHeight}
 							/>
 						</FeatureWrapper>
 					</>
@@ -316,36 +311,36 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowFontColor}
-					config={extensionConfig.publisherFontColor}
+					config={extensionConfig.blockeraFontColor}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'font-color'),
-							value: values.publisherFontColor,
-							attribute: 'publisherFontColor',
+							value: values.blockeraFontColor,
+							attribute: 'blockeraFontColor',
 							blockName: block.blockName,
 						}}
 					>
 						<BaseControl columns="columns-1">
 							<ColorControl
-								label={__('Text Color', 'publisher-core')}
+								label={__('Text Color', 'blockera-core')}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It sets the color of the text within the block, playing a crucial role in enhancing readability, attracting attention, and maintaining consistent branding.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 									</>
 								}
 								columns="columns-2"
 								defaultValue={
-									attributes.publisherFontColor.default
+									attributes.blockeraFontColor.default
 								}
 								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
-										'publisherFontColor',
+										'blockeraFontColor',
 										newValue,
 										{ ref }
 									)
@@ -354,16 +349,16 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								variableTypes={['color']}
 								className={
 									backgroundClip === 'text' &&
-									'publisher-control-is-not-active'
+									'blockera-control-is-not-active'
 								}
-								{...extensionProps.publisherFontColor}
+								{...extensionProps.blockeraFontColor}
 							/>
 
 							{backgroundClip === 'text' && (
 								<NoticeControl type="information">
 									{__(
 										`Text clipping was applied; the current text color won't display. You have to disable clipping settings to use Text Color.`,
-										'publisher-core'
+										'blockera-core'
 									)}
 								</NoticeControl>
 							)}
@@ -373,34 +368,34 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 
 				<FeatureWrapper
 					isActive={isShowTextShadow}
-					config={extensionConfig.publisherTextShadow}
+					config={extensionConfig.blockeraTextShadow}
 				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'text-shadow'),
-							value: values.publisherTextShadow,
-							attribute: 'publisherTextShadow',
+							value: values.blockeraTextShadow,
+							attribute: 'blockeraTextShadow',
 							blockName: block.blockName,
 						}}
-						storeName={'publisher-core/controls/repeater'}
+						storeName={'blockera-core/controls/repeater'}
 					>
 						<BaseControl
 							controlName="text-shadow"
 							columns="columns-1"
 						>
 							<TextShadowControl
-								label={__('Text Shadows', 'publisher-core')}
+								label={__('Text Shadows', 'blockera-core')}
 								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
-										'publisherTextShadow',
+										'blockeraTextShadow',
 										newValue,
 										{ ref }
 									)
 								}
 								defaultValue={
-									attributes.publisherTextShadow.default
+									attributes.blockeraTextShadow.default
 								}
-								{...extensionProps.publisherTextShadow}
+								{...extensionProps.blockeraTextShadow}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
@@ -410,7 +405,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					<MoreFeatures
 						ariaLabel={__(
 							'More typography settings',
-							'publisher-core'
+							'blockera-core'
 						)}
 						isOpen={false}
 						isChanged={isAdvancedEdited}
@@ -426,7 +421,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							>
 								<FeatureWrapper
 									isActive={isShowTextAlign}
-									config={extensionConfig.publisherTextAlign}
+									config={extensionConfig.blockeraTextAlign}
 								>
 									<ControlContextProvider
 										value={{
@@ -434,8 +429,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'text-align'
 											),
-											value: values.publisherTextAlign,
-											attribute: 'publisherTextAlign',
+											value: values.blockeraTextAlign,
+											attribute: 'blockeraTextAlign',
 											blockName: block.blockName,
 										}}
 									>
@@ -444,14 +439,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											className="control-first label-center small-gap"
 											label={__(
 												'Text Align',
-												'publisher-core'
+												'blockera-core'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'It sets the horizontal alignment of text within the block, offering alignment options like left, right, center, and justify.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 												</>
@@ -460,7 +455,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'Left',
-														'publisher-core'
+														'blockera-core'
 													),
 													value: 'left',
 													icon: <TextAlignLeftIcon />,
@@ -468,7 +463,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'Center',
-														'publisher-core'
+														'blockera-core'
 													),
 													value: 'center',
 													icon: (
@@ -478,7 +473,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'Right',
-														'publisher-core'
+														'blockera-core'
 													),
 													value: 'right',
 													icon: (
@@ -488,7 +483,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'Justify',
-														'publisher-core'
+														'blockera-core'
 													),
 													value: 'justify',
 													icon: (
@@ -498,7 +493,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'None',
-														'publisher-core'
+														'blockera-core'
 													),
 													value: 'initial',
 													icon: <NoneIcon />,
@@ -506,17 +501,17 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											]}
 											isDeselectable={true}
 											defaultValue={
-												attributes.publisherTextAlign
+												attributes.blockeraTextAlign
 													.default
 											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherTextAlign',
+													'blockeraTextAlign',
 													newValue,
 													{ ref }
 												)
 											}
-											{...extensionProps.publisherTextAlign}
+											{...extensionProps.blockeraTextAlign}
 										/>
 									</ControlContextProvider>
 								</FeatureWrapper>
@@ -527,23 +522,23 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<FeatureWrapper
 												isActive={isShowTextDecoration}
 												config={
-													extensionConfig.publisherTextDecoration
+													extensionConfig.blockeraTextDecoration
 												}
 											>
 												<TextDecoration
 													block={block}
 													value={
-														values.publisherTextDecoration
+														values.blockeraTextDecoration
 													}
 													defaultValue={
 														attributes
-															.publisherTextDecoration
+															.blockeraTextDecoration
 															.default
 													}
 													onChange={
 														handleOnChangeAttributes
 													}
-													{...extensionProps.publisherTextDecoration}
+													{...extensionProps.blockeraTextDecoration}
 												/>
 											</FeatureWrapper>
 										</div>
@@ -552,23 +547,23 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<FeatureWrapper
 												isActive={isShowFontStyle}
 												config={
-													extensionConfig.publisherFontStyle
+													extensionConfig.blockeraFontStyle
 												}
 											>
 												<FontStyle
 													block={block}
 													value={
-														values.publisherFontStyle
+														values.blockeraFontStyle
 													}
 													onChange={
 														handleOnChangeAttributes
 													}
 													defaultValue={
 														attributes
-															.publisherFontStyle
+															.blockeraFontStyle
 															.default
 													}
-													{...extensionProps.publisherFontStyle}
+													{...extensionProps.blockeraFontStyle}
 												/>
 											</FeatureWrapper>
 										</div>
@@ -581,23 +576,23 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<FeatureWrapper
 												isActive={isShowTextTransform}
 												config={
-													extensionConfig.publisherTextTransform
+													extensionConfig.blockeraTextTransform
 												}
 											>
 												<TextTransform
 													block={block}
 													value={
-														values.publisherTextTransform
+														values.blockeraTextTransform
 													}
 													defaultValue={
 														attributes
-															.publisherTextTransform
+															.blockeraTextTransform
 															.default
 													}
 													onChange={
 														handleOnChangeAttributes
 													}
-													{...extensionProps.publisherTextTransform}
+													{...extensionProps.blockeraTextTransform}
 												/>
 											</FeatureWrapper>
 										</div>
@@ -606,7 +601,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<FeatureWrapper
 												isActive={isShowDirection}
 												config={
-													extensionConfig.publisherDirection
+													extensionConfig.blockeraDirection
 												}
 											>
 												<ControlContextProvider
@@ -615,9 +610,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 															block,
 															'direction'
 														),
-														value: values.publisherDirection,
+														value: values.blockeraDirection,
 														attribute:
-															'publisherDirection',
+															'blockeraDirection',
 														blockName:
 															block.blockName,
 													}}
@@ -625,44 +620,44 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													<ToggleSelectControl
 														label={__(
 															'Direction',
-															'publisher-core'
+															'blockera-core'
 														)}
 														labelPopoverTitle={__(
 															'Text Direction',
-															'publisher-core'
+															'blockera-core'
 														)}
 														labelDescription={
 															<>
 																<p>
 																	{__(
 																		'It sets the text direction and layout directionality of block.',
-																		'publisher-core'
+																		'blockera-core'
 																	)}
 																</p>
 																<h3>
 																	<DirectionLtrIcon />
 																	{__(
 																		'LTR',
-																		'publisher-core'
+																		'blockera-core'
 																	)}
 																</h3>
 																<p>
 																	{__(
 																		'Sets the direction of text from left to right, used for languages written in this manner.',
-																		'publisher-core'
+																		'blockera-core'
 																	)}
 																</p>
 																<h3>
 																	<DirectionRtlIcon />
 																	{__(
 																		'RTL',
-																		'publisher-core'
+																		'blockera-core'
 																	)}
 																</h3>
 																<p>
 																	{__(
 																		' Sets the direction from right to left, essential for languages such as Arabic, Farsi and Hebrew.',
-																		'publisher-core'
+																		'blockera-core'
 																	)}
 																</p>
 															</>
@@ -673,7 +668,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 															{
 																label: __(
 																	'Left to Right',
-																	'publisher-core'
+																	'blockera-core'
 																),
 																value: 'ltr',
 																icon: (
@@ -683,7 +678,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 															{
 																label: __(
 																	'Right to Left',
-																	'publisher-core'
+																	'blockera-core'
 																),
 																value: 'rtl',
 																icon: (
@@ -694,7 +689,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														isDeselectable={true}
 														defaultValue={
 															attributes
-																.publisherDirection
+																.blockeraDirection
 																.default
 														}
 														onChange={(
@@ -702,12 +697,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 															ref
 														) =>
 															handleOnChangeAttributes(
-																'publisherDirection',
+																'blockeraDirection',
 																newValue,
 																{ ref }
 															)
 														}
-														{...extensionProps.publisherDirection}
+														{...extensionProps.blockeraDirection}
 													/>
 												</ControlContextProvider>
 											</FeatureWrapper>
@@ -722,32 +717,30 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							isShowTextIndent) && (
 							<BaseControl
 								controlName="spacing"
-								label={__('Spacing', 'publisher-core')}
+								label={__('Spacing', 'blockera-core')}
 								columns="columns-2"
 							>
 								<FeatureWrapper
 									isActive={isShowLetterSpacing}
 									config={
-										extensionConfig.publisherLetterSpacing
+										extensionConfig.blockeraLetterSpacing
 									}
 								>
 									<LetterSpacing
 										block={block}
-										value={values.publisherLetterSpacing}
+										value={values.blockeraLetterSpacing}
 										onChange={handleOnChangeAttributes}
 										defaultValue={
-											attributes.publisherLetterSpacing
+											attributes.blockeraLetterSpacing
 												.default
 										}
-										{...extensionProps.publisherLetterSpacing}
+										{...extensionProps.blockeraLetterSpacing}
 									/>
 								</FeatureWrapper>
 
 								<FeatureWrapper
 									isActive={isShowWordSpacing}
-									config={
-										extensionConfig.publisherWordSpacing
-									}
+									config={extensionConfig.blockeraWordSpacing}
 								>
 									<ControlContextProvider
 										value={{
@@ -755,27 +748,24 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'word-spacing'
 											),
-											value: values.publisherWordSpacing,
-											attribute: 'publisherWordSpacing',
+											value: values.blockeraWordSpacing,
+											attribute: 'blockeraWordSpacing',
 											blockName: block.blockName,
 										}}
 									>
 										<InputControl
 											columns="2fr 2.6fr"
-											label={__(
-												'Words',
-												'publisher-core'
-											)}
+											label={__('Words', 'blockera-core')}
 											labelPopoverTitle={__(
 												'Words Spacing',
-												'publisher-core'
+												'blockera-core'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'It sets the space between words in text content, an essential tool for enhancing readability and typographic aesthetics, particularly in text-heavy layouts.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 												</>
@@ -783,24 +773,24 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											arrows={true}
 											unitType="letter-spacing"
 											defaultValue={
-												attributes.publisherWordSpacing
+												attributes.blockeraWordSpacing
 													.default
 											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherWordSpacing',
+													'blockeraWordSpacing',
 													newValue,
 													{ ref }
 												)
 											}
-											{...extensionProps.publisherWordSpacing}
+											{...extensionProps.blockeraWordSpacing}
 										/>
 									</ControlContextProvider>
 								</FeatureWrapper>
 
 								<FeatureWrapper
 									isActive={isShowTextIndent}
-									config={extensionConfig.publisherTextIndent}
+									config={extensionConfig.blockeraTextIndent}
 								>
 									<ControlContextProvider
 										value={{
@@ -808,8 +798,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												block,
 												'text-indent'
 											),
-											value: values.publisherTextIndent,
-											attribute: 'publisherTextIndent',
+											value: values.blockeraTextIndent,
+											attribute: 'blockeraTextIndent',
 											blockName: block.blockName,
 										}}
 									>
@@ -817,14 +807,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											columns="2fr 2.6fr"
 											label={__(
 												'Text Indent',
-												'publisher-core'
+												'blockera-core'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'It sets the indentation of the first line in a text block, offering a stylistic tool for enhancing text layout and readability, especially in paragraphs and articles.',
-															'publisher-core'
+															'blockera-core'
 														)}
 													</p>
 												</>
@@ -832,17 +822,17 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											arrows={true}
 											unitType="text-indent"
 											defaultValue={
-												attributes.publisherTextIndent
+												attributes.blockeraTextIndent
 													.default
 											}
 											onChange={(newValue, ref) =>
 												handleOnChangeAttributes(
-													'publisherTextIndent',
+													'blockeraTextIndent',
 													newValue,
 													{ ref }
 												)
 											}
-											{...extensionProps.publisherTextIndent}
+											{...extensionProps.blockeraTextIndent}
 										/>
 									</ControlContextProvider>
 								</FeatureWrapper>
@@ -851,7 +841,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 
 						<FeatureWrapper
 							isActive={isShowTextOrientation}
-							config={extensionConfig.publisherTextOrientation}
+							config={extensionConfig.blockeraTextOrientation}
 						>
 							<ControlContextProvider
 								value={{
@@ -859,19 +849,19 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										block,
 										'text-orientation'
 									),
-									value: values.publisherTextOrientation,
-									attribute: 'publisherTextOrientation',
+									value: values.blockeraTextOrientation,
+									attribute: 'blockeraTextOrientation',
 									blockName: block.blockName,
 								}}
 							>
 								<ToggleSelectControl
-									label={__('Orientation', 'publisher-core')}
+									label={__('Orientation', 'blockera-core')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'It sets the orientation of characters in vertical text layouts, pivotal for typesetting in languages that use vertical writing modes.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<Grid
@@ -888,7 +878,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'Text will display vertically from left to right with a mixed orientation.',
-														'publisher-core'
+														'blockera-core'
 													)}
 												</p>
 											</Grid>
@@ -907,7 +897,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'Text will display vertically from right to left with a mixed orientation.',
-														'publisher-core'
+														'blockera-core'
 													)}
 												</p>
 											</Grid>
@@ -926,7 +916,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'Text will appear vertically from left to right with an upright orientation.',
-														'publisher-core'
+														'blockera-core'
 													)}
 												</p>
 											</Grid>
@@ -945,7 +935,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'Text will appear vertically from right to left with an upright orientation.',
-														'publisher-core'
+														'blockera-core'
 													)}
 												</p>
 											</Grid>
@@ -964,7 +954,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'No text orientation',
-														'publisher-core'
+														'blockera-core'
 													)}
 												</p>
 											</Grid>
@@ -975,7 +965,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Text will display vertically from left to right with a mixed orientation',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'style-1',
 											icon: <TextOrientationStyle1Icon />,
@@ -983,7 +973,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Text will display vertically from right to left with a mixed orientation',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'style-2',
 											icon: <TextOrientationStyle2Icon />,
@@ -991,7 +981,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Text will appear vertically from left to right with an upright orientation',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'style-3',
 											icon: <TextOrientationStyle3Icon />,
@@ -999,7 +989,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Text will appear vertically from right to left with an upright orientation',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'style-4',
 											icon: <TextOrientationStyle4Icon />,
@@ -1007,7 +997,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'No text orientation',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'initial',
 											icon: <NoneIcon />,
@@ -1015,24 +1005,24 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									]}
 									isDeselectable={true}
 									defaultValue={
-										attributes.publisherTextOrientation
+										attributes.blockeraTextOrientation
 											.default
 									}
 									onChange={(newValue, ref) => {
 										handleOnChangeAttributes(
-											'publisherTextOrientation',
+											'blockeraTextOrientation',
 											newValue,
 											{ ref }
 										);
 									}}
-									{...extensionProps.publisherTextOrientation}
+									{...extensionProps.blockeraTextOrientation}
 								/>
 							</ControlContextProvider>
 						</FeatureWrapper>
 
 						<FeatureWrapper
 							isActive={isShowTextColumns}
-							config={extensionConfig.publisherTextColumns}
+							config={extensionConfig.blockeraTextColumns}
 						>
 							<ControlContextProvider
 								value={{
@@ -1040,29 +1030,29 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										block,
 										'text-columns'
 									),
-									value: values.publisherTextColumns,
+									value: values.blockeraTextColumns,
 									type: 'nested',
-									attribute: 'publisherTextColumns',
+									attribute: 'blockeraTextColumns',
 									blockName: block.blockName,
 								}}
 							>
 								<TextColumns
-									value={values.publisherTextColumns}
+									value={values.blockeraTextColumns}
 									display={display}
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}
 									defaultValue={
-										attributes.publisherTextColumns.default
+										attributes.blockeraTextColumns.default
 									}
-									{...extensionProps.publisherTextColumns}
+									{...extensionProps.blockeraTextColumns}
 								/>
 							</ControlContextProvider>
 						</FeatureWrapper>
 
 						<FeatureWrapper
 							isActive={isShowTextStroke}
-							config={extensionConfig.publisherTextStroke}
+							config={extensionConfig.blockeraTextStroke}
 						>
 							<ControlContextProvider
 								value={{
@@ -1070,28 +1060,28 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										block,
 										'text-stroke'
 									),
-									value: values.publisherTextStroke,
+									value: values.blockeraTextStroke,
 									type: 'nested',
-									attribute: 'publisherTextStroke',
+									attribute: 'blockeraTextStroke',
 									blockName: block.blockName,
 								}}
 							>
 								<TextStroke
-									value={values.publisherTextStroke}
+									value={values.blockeraTextStroke}
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
 									}
 									defaultValue={
-										attributes.publisherTextStroke.default
+										attributes.blockeraTextStroke.default
 									}
-									{...extensionProps.publisherTextStroke}
+									{...extensionProps.blockeraTextStroke}
 								/>
 							</ControlContextProvider>
 						</FeatureWrapper>
 
 						<FeatureWrapper
 							isActive={isShowWordBreak}
-							config={extensionConfig.publisherWordBreak}
+							config={extensionConfig.blockeraWordBreak}
 						>
 							<ControlContextProvider
 								value={{
@@ -1099,91 +1089,88 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										block,
 										'word-break'
 									),
-									value: values.publisherWordBreak,
-									attribute: 'publisherWordBreak',
+									value: values.blockeraWordBreak,
+									attribute: 'blockeraWordBreak',
 									blockName: block.blockName,
 								}}
 							>
 								<SelectControl
-									label={__('Breaking', 'publisher-core')}
+									label={__('Breaking', 'blockera-core')}
 									labelPopoverTitle={__(
 										'Word Breaking',
-										'publisher-core'
+										'blockera-core'
 									)}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Word-Break controls how words are broken at the end of a line for influencing text wrapping and layout within containers.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<p>
 												{__(
 													'It is essential for managing text flow, especially in narrow containers or with long words/URLs, ensuring readability and a clean layout in multilingual contexts.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<h3>
 												<BreakingNormalIcon />
-												{__('Normal', 'publisher-core')}
+												{__('Normal', 'blockera-core')}
 											</h3>
 											<p>
 												{__(
 													'Follows default line-breaking rules.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<h3>
 												<BreakingBreakAllIcon />
 												{__(
 													'Break All Words',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</h3>
 											<p>
 												{__(
 													'Allows words to be broken at any character, useful in narrow containers.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<h3>
 												<BreakingNormalIcon />
 												{__(
 													'Keep All Words',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</h3>
 											<p>
 												{__(
 													'Avoids breaking words, particularly for East Asian scripts.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<h3>
 												<BreakingBreakAllIcon />
 												{__(
 													'Break Word',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</h3>
 											<p>
 												{__(
 													'Breaks words at appropriate break points, maintaining layout integrity by preventing overflow.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 											<h3>
 												<InheritIcon />
-												{__(
-													'Inherit',
-													'publisher-core'
-												)}
+												{__('Inherit', 'blockera-core')}
 											</h3>
 											<p>
 												{__(
 													'Follows containers line-breaking rules.',
-													'publisher-core'
+													'blockera-core'
 												)}
 											</p>
 										</>
@@ -1193,7 +1180,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Normal',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'normal',
 											icon: <BreakingNormalIcon />,
@@ -1201,7 +1188,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Break All Words',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'break-all',
 											icon: <BreakingBreakAllIcon />,
@@ -1209,7 +1196,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Keep All Words',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'keep-all',
 											icon: <BreakingNormalIcon />,
@@ -1217,7 +1204,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Break Word',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'break-word',
 											icon: <BreakingBreakAllIcon />,
@@ -1225,7 +1212,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Inherit',
-												'publisher-core'
+												'blockera-core'
 											),
 											value: 'inherit',
 											icon: <InheritIcon />,
@@ -1235,16 +1222,16 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									customMenuPosition="top"
 									//
 									defaultValue={
-										attributes.publisherWordBreak.default
+										attributes.blockeraWordBreak.default
 									}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
-											'publisherWordBreak',
+											'blockeraWordBreak',
 											newValue,
 											{ ref }
 										)
 									}
-									{...extensionProps.publisherWordBreak}
+									{...extensionProps.blockeraWordBreak}
 								/>
 							</ControlContextProvider>
 						</FeatureWrapper>

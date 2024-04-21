@@ -1,9 +1,9 @@
 <?php
 
-namespace Publisher\Framework\Providers;
+namespace Blockera\Framework\Providers;
 
-use Publisher\Framework\Services\Block\Blocks\Icon;
-use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\{
+use Blockera\Framework\Services\Block\Blocks\Icon;
+use Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions\{
 	Size,
 	Mouse,
 	Border,
@@ -18,13 +18,13 @@ use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\{
 	TextShadow,
 	Typography
 };
-use Publisher\Framework\Illuminate\Foundation\Application;
-use Publisher\Framework\Illuminate\Support\ServiceProvider;
+use Blockera\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Support\ServiceProvider;
 
 /**
  * The StyleProviders class.
  *
- * @package Publisher\Framework\Providers\StyleProviders
+ * @package Blockera\Framework\Providers\StyleProviders
  */
 class StyleProviders extends ServiceProvider {
 

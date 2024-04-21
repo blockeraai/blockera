@@ -1,19 +1,19 @@
 # Extensions
 
-Publisher style-engine package.
+style-engine package.
 
 ## Installation
 
 Install the module:
 
 ```bash
-npm install @publisher/style-engine --save
+npm install @blockera/style-engine --save
 ```
 
 ## Usage
 
 ```js
-// import { registerBlockExtension } from '@publisher/style-engine';
+// import { registerBlockExtension } from '@blockera/style-engine';
 
 // registerBlockExtension(extensionName, extensionData);
 ```
@@ -25,3 +25,4 @@ npm install @publisher/style-engine --save
 -   src/block.json5
 -   src/states.json5
 -   src/breakpoints.json5
+

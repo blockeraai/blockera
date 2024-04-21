@@ -12,8 +12,8 @@ describe('Tabs Component testing', () => {
 					title: 'General',
 					className: 'general-tab',
 					icon: {
-						library: 'publisher',
-						name: 'publisherSettings',
+						library: 'blockera',
+						name: 'blockeraSettings',
 					},
 				},
 				{

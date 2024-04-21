@@ -12,6 +12,7 @@ module.exports = {
 				endOfLine: 'auto',
 			},
 		],
+		'@wordpress/i18n-no-collapsible-whitespace': 'off',
 		'import/no-extraneous-dependencies': 'off',
 		'@wordpress/no-unsafe-wp-apis': 'off',
 		'@wordpress/no-base-control-with-label-without-id': 'off',

@@ -7,9 +7,9 @@ import { SearchControl as WPSearchControl } from '@wordpress/components';
 import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -29,7 +29,7 @@ export default function SearchControl({
 	defaultValue = '',
 	onChange,
 	field = 'search',
-	placeholder = __('Search…', 'publisher-core'),
+	placeholder = __('Search…', 'blockera-core'),
 	//
 	className,
 	...props

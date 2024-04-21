@@ -6,9 +6,9 @@ import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isBlockTheme, isUndefined } from '@publisher/utils';
+import { isBlockTheme, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -24,7 +24,7 @@ export const getRadialGradients: () => Array<VariableItem> = memoize(
 		};
 
 		if (isBlockTheme()) {
-			const { getCurrentTheme } = select('publisher-core/data');
+			const { getCurrentTheme } = select('blockera-core/data');
 
 			const {
 				name: { rendered: themeName },

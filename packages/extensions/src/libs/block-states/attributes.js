@@ -1,7 +1,7 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { defaultItemValue } from '@publisher/controls/src/libs/repeater-control';
+import { defaultItemValue } from '@blockera/controls/src/libs/repeater-control';
 
 /**
  * Internal dependencies
@@ -11,7 +11,7 @@ import getBreakpoints from './default-breakpoints';
 import { blockStatesValueCleanup } from './helpers';
 
 export const attributes = {
-	publisherBlockStates: {
+	blockeraBlockStates: {
 		type: 'object',
 		default: blockStatesValueCleanup({
 			normal: {

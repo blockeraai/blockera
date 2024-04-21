@@ -10,27 +10,27 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../../base';
 
-const publisherBackground: FeatureConfig = {
+const blockeraBackground: FeatureConfig = {
 	show: true,
 	force: false,
 	status: false,
-	label: __('Background', 'publisher-core'),
+	label: __('Background', 'blockera-core'),
 };
-const publisherBackgroundClip: FeatureConfig = {
+const blockeraBackgroundClip: FeatureConfig = {
 	show: true,
 	force: false,
 	status: false,
-	label: __('Background Clip', 'publisher-core'),
+	label: __('Background Clip', 'blockera-core'),
 };
-const publisherBackgroundColor: FeatureConfig = {
+const blockeraBackgroundColor: FeatureConfig = {
 	show: true,
 	force: false,
 	status: false,
-	label: __('Background Color', 'publisher-core'),
+	label: __('Background Color', 'blockera-core'),
 };
 
 export const heading = {
-	publisherBackground,
-	publisherBackgroundClip,
-	publisherBackgroundColor,
+	blockeraBackground,
+	blockeraBackgroundClip,
+	blockeraBackgroundColor,
 };

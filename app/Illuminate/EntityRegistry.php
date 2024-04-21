@@ -1,8 +1,8 @@
 <?php
 
-namespace Publisher\Framework\Illuminate;
+namespace Blockera\Framework\Illuminate;
 
-use Publisher\Framework\Illuminate\Foundation\Application;
+use Blockera\Framework\Illuminate\Foundation\Application;
 
 class EntityRegistry {
 
@@ -27,7 +27,7 @@ class EntityRegistry {
 	 */
 	protected function register(): void {
 
-		$entities = apply_filters( 'publisher-core/entities/registry', $this->app->getEntities() );
+		$entities = apply_filters( 'blockera-core/entities/registry', $this->app->getEntities() );
 
 		foreach ( $entities as $entity => $instance ) {
 

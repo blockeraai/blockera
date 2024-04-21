@@ -1,8 +1,8 @@
 // @flow
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
-import { isValid } from '@publisher/hooks';
+import { isValid } from '@blockera/hooks';
 
 /**
  * Internal Dependencies

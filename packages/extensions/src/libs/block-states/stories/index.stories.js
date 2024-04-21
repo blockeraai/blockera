@@ -4,9 +4,9 @@
 import { InspectorControls } from '@wordpress/block-editor';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -14,13 +14,13 @@ import { default as Decorators } from '@publisher/storybook/decorators';
 import {
 	SharedBlockExtension,
 	sharedBlockExtensionAttributes,
-} from '@publisher/extensions';
+} from '@blockera/extensions';
 import BlockStates from '../';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
 
 const { SharedDecorators } = Decorators;
@@ -28,7 +28,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherBlockStateExtension',
+	name: 'blockeraBlockStateExtension',
 	targetBlock: 'core/paragraph',
 	attributes: {
 		...sharedBlockExtensionAttributes,
@@ -72,9 +72,9 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherBackground: [],
-					publisherBackgroundColor: '',
-					publisherBackgroundClip: '',
+					blockeraBackground: [],
+					blockeraBackgroundColor: '',
+					blockeraBackgroundClip: '',
 				},
 			},
 		],

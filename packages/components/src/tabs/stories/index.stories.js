@@ -1,7 +1,7 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
@@ -28,8 +28,8 @@ export const OneTabs = {
 				title: 'General',
 				className: 'general-tab',
 				icon: {
-					library: 'publisher',
-					name: 'publisherSettings',
+					library: 'blockera',
+					name: 'blockeraSettings',
 				},
 			},
 		],
@@ -46,8 +46,8 @@ export const TwoTabs = {
 				title: 'General',
 				className: 'general-tab',
 				icon: {
-					library: 'publisher',
-					name: 'publisherSettings',
+					library: 'blockera',
+					name: 'blockeraSettings',
 				},
 			},
 			{
@@ -73,8 +73,8 @@ export const ThreeTabs = {
 				title: 'General',
 				className: 'general-tab',
 				icon: {
-					library: 'publisher',
-					name: 'publisherSettings',
+					library: 'blockera',
+					name: 'blockeraSettings',
 				},
 			},
 			{
@@ -109,8 +109,8 @@ export const FourTabs = {
 				title: 'General',
 				className: 'general-tab',
 				icon: {
-					library: 'publisher',
-					name: 'publisherSettings',
+					library: 'blockera',
+					name: 'blockeraSettings',
 				},
 			},
 			{
@@ -152,8 +152,8 @@ const tabs = [
 		title: 'General',
 		className: 'general-tab',
 		icon: {
-			library: 'publisher',
-			name: 'publisherSettings',
+			library: 'blockera',
+			name: 'blockeraSettings',
 		},
 	},
 	{
@@ -232,8 +232,8 @@ export const WithoutTabTitle = {
 				name: 'general',
 				className: 'general-tab',
 				icon: {
-					library: 'publisher',
-					name: 'publisherSettings',
+					library: 'blockera',
+					name: 'blockeraSettings',
 				},
 			},
 			{

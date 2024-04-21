@@ -1,57 +1,57 @@
 export const attributes = {
-	publisherFontColor: {
+	blockeraFontColor: {
 		type: 'string',
 		default: '',
 	},
-	publisherFontSize: {
+	blockeraFontSize: {
 		type: 'string',
 		default: '',
 	},
-	publisherLineHeight: {
+	blockeraLineHeight: {
 		type: 'string',
 		default: '',
 	},
-	publisherTextAlign: {
+	blockeraTextAlign: {
 		type: 'string',
 		default: '',
 	},
-	publisherTextDecoration: {
+	blockeraTextDecoration: {
 		type: 'string',
 		default: '',
 	},
-	publisherFontStyle: {
+	blockeraFontStyle: {
 		type: 'string',
 		default: '',
 	},
-	publisherTextTransform: {
+	blockeraTextTransform: {
 		type: 'string',
 		default: '',
 	},
-	publisherDirection: {
+	blockeraDirection: {
 		type: 'string',
 		default: '',
 	},
-	publisherTextShadow: {
+	blockeraTextShadow: {
 		type: 'object',
 		default: {},
 	},
-	publisherLetterSpacing: {
+	blockeraLetterSpacing: {
 		type: 'string',
 		default: '',
 	},
-	publisherWordSpacing: {
+	blockeraWordSpacing: {
 		type: 'string',
 		default: '',
 	},
-	publisherTextIndent: {
+	blockeraTextIndent: {
 		type: 'string',
 		default: '',
 	},
-	publisherTextOrientation: {
+	blockeraTextOrientation: {
 		type: 'string',
 		default: '',
 	},
-	publisherTextColumns: {
+	blockeraTextColumns: {
 		type: 'object',
 		default: {
 			columns: '',
@@ -63,14 +63,14 @@ export const attributes = {
 			},
 		},
 	},
-	publisherTextStroke: {
+	blockeraTextStroke: {
 		type: 'object',
 		default: {
 			color: '',
 			width: '1px',
 		},
 	},
-	publisherWordBreak: {
+	blockeraWordBreak: {
 		type: 'string',
 		default: 'normal',
 	},

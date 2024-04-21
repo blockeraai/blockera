@@ -6,9 +6,9 @@ import type { MixedElement } from 'react';
 import { ToggleControl as WPToggleControl } from '@wordpress/components';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { controlClassNames } from '@publisher/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies

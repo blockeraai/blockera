@@ -7,16 +7,16 @@ import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import {
 	PanelBodyControl,
 	ControlContextProvider,
 	CodeControl,
-} from '@publisher/controls';
-import { hasSameProps } from '@publisher/utils';
-import { extensionClassNames } from '@publisher/classnames';
-import { FeatureWrapper } from '@publisher/components';
+} from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
+import { extensionClassNames } from '@blockera/classnames';
+import { FeatureWrapper } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -40,9 +40,9 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 			const { getCurrentState, getBreakpoint } = useBlockContext();
 
 			const isShowCustomCSS = isShowField(
-				extensionConfig.publisherCustomCSS,
-				values.publisherCustomCSS,
-				attributes.publisherCustomCSS.default
+				extensionConfig.blockeraCustomCSS,
+				values.blockeraCustomCSS,
+				attributes.blockeraCustomCSS.default
 			);
 
 			if (!isShowCustomCSS) {
@@ -50,9 +50,9 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 			}
 
 			const isActiveOnStates =
-				extensionConfig.publisherCustomCSS.isActiveOnStates;
+				extensionConfig.blockeraCustomCSS.isActiveOnStates;
 			const isActiveOnBreakpoints =
-				extensionConfig.publisherCustomCSS.isActiveOnBreakpoints;
+				extensionConfig.blockeraCustomCSS.isActiveOnBreakpoints;
 
 			const isEditable =
 				(isActiveOnStates !== 'all' &&
@@ -62,63 +62,63 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('Custom CSS', 'publisher-core')}
+					title={__('Custom CSS', 'blockera-core')}
 					initialOpen={false}
 					icon={<CustomStyleExtensionIcon />}
 					className={extensionClassNames('custom-style')}
 					isEdited={
-						values.publisherCustomCSS !==
-						attributes.publisherCustomCSS.default
+						values.blockeraCustomCSS !==
+						attributes.blockeraCustomCSS.default
 					}
 				>
 					<FeatureWrapper
 						isActive={isShowCustomCSS}
-						config={extensionConfig.publisherCustomCSS}
+						config={extensionConfig.blockeraCustomCSS}
 					>
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'custom-css'),
-								value: values.publisherCustomCSS,
-								attribute: 'publisherCustomCSS',
+								value: values.blockeraCustomCSS,
+								attribute: 'blockeraCustomCSS',
 								blockName: block.blockName,
 							}}
 						>
 							<CodeControl
-								label={__('Custom CSS Code', 'publisher-core')}
+								label={__('Custom CSS Code', 'blockera-core')}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'With this feature, you have the capability to apply custom CSS codes directly to this block, enabling you to tailor its style effortlessly.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 										<p>
 											{__(
 												'Once you input your CSS, the customization is automatically applied to the block.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 										<p>
 											{__(
 												'Simply use ".block" to target this specific block, and it will seamlessly convert to the correct selector for precise styling.',
-												'publisher-core'
+												'blockera-core'
 											)}
 										</p>
 									</>
 								}
 								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
-										'publisherCustomCSS',
+										'blockeraCustomCSS',
 										newValue,
 										{ ref }
 									)
 								}
 								editable={!isEditable}
 								defaultValue={
-									attributes.publisherCustomCSS.default
+									attributes.blockeraCustomCSS.default
 								}
-								{...extensionProps.publisherCustomCSS}
+								{...extensionProps.blockeraCustomCSS}
 							/>
 						</ControlContextProvider>
 					</FeatureWrapper>

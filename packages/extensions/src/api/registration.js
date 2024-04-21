@@ -7,9 +7,9 @@ import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isString } from '@publisher/utils';
+import { isString } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -19,7 +19,7 @@ import { store as extensionStore } from '../store';
 /**
  * Defined behavior of a block extension type.
  *
- * @typedef {Object} publisherBlockExtensionType
+ * @typedef {Object} blockeraBlockExtensionType
  *
  * @property {string}             name          Block extension type's namespaced name.
  * @property {Object}             [attributes]  Block extension attributes.
@@ -34,7 +34,7 @@ import { store as extensionStore } from '../store';
  *                                              then no preview is shown.
  */
 
-export type publisherBlockExtensionType = {
+export type blockeraBlockExtensionType = {
 	name: string,
 	example: Object,
 	selectors: Object,
@@ -58,14 +58,14 @@ export type publisherBlockExtensionType = {
  * * @example
  * ```js
  * import { __ } from '@wordpress/i18n';
- * import { registerBlockExtension } from '@publisher/extensions'
+ * import { registerBlockExtension } from '@blockera/extensions'
  *
  * registerBlockExtension( 'namespace/extension-name', {
  *     title: __( 'My First Block Extension' ),
  * } );
  * ```
  *
- * @return {publisherBlockExtensionType|undefined} The block extension, if it has been successfully registered;
+ * @return {blockeraBlockExtensionType|undefined} The block extension, if it has been successfully registered;
  *                    otherwise `undefined`.
  */
 
@@ -78,9 +78,9 @@ export function registerBlockExtension(
 		return;
 	}
 
-	if (!/^(publisher|[A-Z][a-z0-9-]).*(?:[A-Z][a-z0-9-])*$/.test(name)) {
+	if (!/^(blockera|[A-Z][a-z0-9-]).*(?:[A-Z][a-z0-9-])*$/.test(name)) {
 		console.error(
-			'Block extension names must contain a namespace prefix, include only lowercase alphanumeric characters or dashes, and start with a letter. Example: "publisherMyCustomBlockExtension" or "MyCustomBlockExtension"'
+			'Block extension names must contain a namespace prefix, include only lowercase alphanumeric characters or dashes, and start with a letter. Example: "blockeraMyCustomBlockExtension" or "MyCustomBlockExtension"'
 		);
 		return;
 	}
@@ -128,7 +128,7 @@ export function registerBlockExtension(
  * @example
  * ```js
  * import { __ } from '@wordpress/i18n';
- * import { unregisterBlockExtension } from '@publisher/extensions';
+ * import { unregisterBlockExtension } from '@blockera/extensions';
  *
  * const ExampleComponent = () => {
  *     return (

@@ -11,7 +11,7 @@ describe('User Select → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('this is test text.', {
 			delay: 0,
@@ -33,7 +33,7 @@ describe('User Select → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('text').to.be.equal(
-				getSelectedBlock(data, 'publisherUserSelect')
+				getSelectedBlock(data, 'blockeraUserSelect')
 			);
 		});
 
@@ -42,7 +42,7 @@ describe('User Select → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'user-select',
 			'text'

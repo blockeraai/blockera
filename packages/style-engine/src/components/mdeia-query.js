@@ -6,9 +6,9 @@
 import type { Element } from 'react';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useMedia } from '@publisher/style-engine';
+import { useMedia } from '@blockera/style-engine';
 
 /**
  * Internal dependencies

@@ -8,16 +8,16 @@ import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 
 /**
- * Publisher Dependencies
+ *  Dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
-} from '@publisher/classnames';
-import { useAdvancedLabelProps } from '@publisher/hooks';
-import { Button, Flex, Popover } from '@publisher/components';
-import { useBlockContext } from '@publisher/extensions/src/hooks/context';
-import { isEmpty, isFunction, isNull, isUndefined } from '@publisher/utils';
+} from '@blockera/classnames';
+import { useAdvancedLabelProps } from '@blockera/hooks';
+import { Button, Flex, Popover } from '@blockera/components';
+import { useBlockContext } from '@blockera/extensions/src/hooks/context';
+import { isEmpty, isFunction, isNull, isUndefined } from '@blockera/utils';
 
 /**
  * Internal Dependencies
@@ -166,7 +166,7 @@ export const AdvancedLabelControl = ({
 								)}
 							>
 								<EditsIcon />
-								{__('Customization', 'publisher-core')}
+								{__('Customization', 'blockera-core')}
 							</h3>
 
 							<StatesGraph
@@ -190,11 +190,11 @@ export const AdvancedLabelControl = ({
 											size="input"
 											text={__(
 												'Reset All',
-												'publisher-core'
+												'blockera-core'
 											)}
 											label={__(
 												'Reset All Changes in All States',
-												'publisher-core'
+												'blockera-core'
 											)}
 											onClick={() => {
 												if (
@@ -237,14 +237,14 @@ export const AdvancedLabelControl = ({
 													<>
 														{__(
 															'Reset',
-															'publisher-core'
+															'blockera-core'
 														)}
 														<RevertIcon />
 													</>
 												}
 												label={__(
 													'Reset To Default Setting',
-													'publisher-core'
+													'blockera-core'
 												)}
 												onClick={() => {
 													if (
@@ -288,14 +288,14 @@ export const AdvancedLabelControl = ({
 												<>
 													{__(
 														'Reset',
-														'publisher-core'
+														'blockera-core'
 													)}
 													<RevertIcon />
 												</>
 											}
 											label={__(
 												'Reset To Normal Setting',
-												'publisher-core'
+												'blockera-core'
 											)}
 											onClick={() => {
 												if (
@@ -352,7 +352,7 @@ export const AdvancedLabelControl = ({
 									)}
 								>
 									<HelpIcon />
-									{__('Overview', 'publisher-core')}
+									{__('Overview', 'blockera-core')}
 								</h3>
 							)}
 

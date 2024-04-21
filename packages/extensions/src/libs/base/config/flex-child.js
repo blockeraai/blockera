@@ -10,29 +10,29 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherFlexChildSizing: FeatureConfig = {
+const blockeraFlexChildSizing: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Sizing', 'publisher-core'),
+	label: __('Sizing', 'blockera-core'),
 };
 
-const publisherFlexChildAlign: FeatureConfig = {
+const blockeraFlexChildAlign: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Align', 'publisher-core'),
+	label: __('Align', 'blockera-core'),
 };
 
-const publisherFlexChildOrder: FeatureConfig = {
+const blockeraFlexChildOrder: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Order', 'publisher-core'),
+	label: __('Order', 'blockera-core'),
 };
 
 export const flexChildConfig = {
-	publisherFlexChildSizing,
-	publisherFlexChildAlign,
-	publisherFlexChildOrder,
+	blockeraFlexChildSizing,
+	blockeraFlexChildAlign,
+	blockeraFlexChildOrder,
 };

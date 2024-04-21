@@ -1,20 +1,20 @@
 
 :root {
-	--publisher-value-addon-var-color: #009e10;
-	--publisher-value-addon-var-border-color: #75bf7c;
-	--publisher-value-addon-var-color-darker-20: #00800d;
-	--publisher-value-addon-var-bg-color: #f3faf4;
-	--publisher-value-addon-deleted-color: #ff5454;
-	--publisher-value-addon-deleted-border-color: #ff9b9b;
-	--publisher-value-addon-deleted-color-darker-20: #dc4444;
-	--publisher-value-addon-deleted-bg-color: #fff6f6;
-	--publisher-value-addon-dv-color: #7405ff;
-	--publisher-value-addon-dv-border-color: #a761ff;
-	--publisher-value-addon-dv-color-darker-20: #5f00da;
-	--publisher-value-addon-dv-bg-color: #f1e7ff;
+	--blockera-value-addon-var-color: #009e10;
+	--blockera-value-addon-var-border-color: #75bf7c;
+	--blockera-value-addon-var-color-darker-20: #00800d;
+	--blockera-value-addon-var-bg-color: #f3faf4;
+	--blockera-value-addon-deleted-color: #ff5454;
+	--blockera-value-addon-deleted-border-color: #ff9b9b;
+	--blockera-value-addon-deleted-color-darker-20: #dc4444;
+	--blockera-value-addon-deleted-bg-color: #fff6f6;
+	--blockera-value-addon-dv-color: #7405ff;
+	--blockera-value-addon-dv-border-color: #a761ff;
+	--blockera-value-addon-dv-color-darker-20: #5f00da;
+	--blockera-value-addon-dv-bg-color: #f1e7ff;
 }
 
-.publisher-control.publisher-control-value-addon-pointers {
+.blockera-control.blockera-control-value-addon-pointers {
 	position: absolute;
 	top: -11px;
 	right: -11px;
@@ -26,7 +26,7 @@
 
 	&.active-addon-pointers {
 
-		.publisher-control-value-addon-pointer:not(.open-value-addon):not(.active-value-addon) {
+		.blockera-control-value-addon-pointer:not(.open-value-addon):not(.active-value-addon) {
 			width: 0;
 			height: 0;
 			visibility: hidden;
@@ -34,7 +34,7 @@
  		}
 	}
 
-	.publisher-control-value-addon-pointer {
+	.blockera-control-value-addon-pointer {
 		width: 22px;
 		height: 22px;
 		border-radius: 50%;
@@ -58,7 +58,7 @@
 			transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
 		}
 
-		.publisher-control-remove-icon {
+		.blockera-control-remove-icon {
 			display: none;
 		}
 
@@ -73,12 +73,12 @@
 
 			&:hover {
 
-				.publisher-control-dv-pointer-icon,
-				.publisher-control-var-pointer-icon {
+				.blockera-control-dv-pointer-icon,
+				.blockera-control-var-pointer-icon {
 					display: none;
 				}
 
-				.publisher-control-remove-icon {
+				.blockera-control-remove-icon {
 					display: block;
 				}
 			}
@@ -91,7 +91,7 @@
 		&.var-pointer {
 
 			svg {
-				background-color: var(--publisher-value-addon-var-color);
+				background-color: var(--blockera-value-addon-var-color);
 			}
 
 			&:hover {
@@ -105,7 +105,7 @@
 			&:hover,
 			&.open-value-addon {
 
-				.publisher-control-var-pointer-icon {
+				.blockera-control-var-pointer-icon {
 					animation: variable-pointer-rotate 2s linear infinite normal forwards;
 				}
 			}
@@ -114,7 +114,7 @@
 		&.dv-pointer {
 
 			svg {
-				background-color: var(--publisher-value-addon-dv-color);
+				background-color: var(--blockera-value-addon-dv-color);
 			}
 
 			&:hover {
@@ -137,8 +137,8 @@
 		}
 
 		&.is-value-addon-deleted {
-			--publisher-value-addon-dv-color: var(--publisher-value-addon-deleted-color);
-			--publisher-value-addon-var-color: var(--publisher-value-addon-deleted-color);
+			--blockera-value-addon-dv-color: var(--blockera-value-addon-deleted-color);
+			--blockera-value-addon-var-color: var(--blockera-value-addon-deleted-color);
 		}
 	}
 }
@@ -188,21 +188,21 @@
 	}
 }
 
-.publisher-field {
+.blockera-field {
 
-	& > .publisher-field.publisher-field-control {
+	& > .blockera-field.blockera-field-control {
 		position: relative;
 	}
 
-	&.publisher-value-addon-support-dynamic-value,
-	&.publisher-value-addon-support-variable {
+	&.blockera-value-addon-support-dynamic-value,
+	&.blockera-value-addon-support-variable {
 		position: relative;
 
 		&:hover {
 
-			& > .publisher-field.publisher-field-control {
+			& > .blockera-field.blockera-field-control {
 
-				.publisher-control-value-addon-pointer {
+				.blockera-control-value-addon-pointer {
 					transform: scale(1);
 
 					svg {
@@ -222,15 +222,15 @@
 	}
 }
 
-.publisher-control {
+.blockera-control {
 
-	&.publisher-value-addon-support-dynamic-value,
-	&.publisher-value-addon-support-variable {
+	&.blockera-value-addon-support-dynamic-value,
+	&.blockera-value-addon-support-variable {
 		position: relative;
 
 		&:hover {
 
-			& > .publisher-control.publisher-control-value-addon-pointers .publisher-control-value-addon-pointer {
+			& > .blockera-control.blockera-control-value-addon-pointers .blockera-control-value-addon-pointer {
 				transform: scale(1);
 
 				&:nth-child(1) {

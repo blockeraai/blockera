@@ -4,19 +4,19 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { default as Decorators } from '@publisher/storybook/decorators';
+import { default as Decorators } from '@blockera/storybook/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@publisher/extensions';
+import { BaseExtension, ExtensionStyle } from '@blockera/extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@publisher/storybook/block-api';
-import { Playground } from '@publisher/storybook/components';
+} from '@blockera/storybook/block-api';
+import { Playground } from '@blockera/storybook/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import AdvancedExtensionIcon from '../icons/extension-icon';
@@ -29,7 +29,7 @@ const { SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);
 
 blocksInitializer({
-	name: 'publisherAdvancedExtension',
+	name: 'blockeraAdvancedExtension',
 	targetBlock: 'core/paragraph',
 	attributes,
 	supports,
@@ -49,11 +49,11 @@ blocksInitializer({
 					<BaseExtension
 						initialOpen={true}
 						extensionId={'Advanced'}
-						attributes={attributes?.publisherAttributes || []}
-						properties={attributes?.publisherCSSProperties || []}
+						attributes={attributes?.blockeraAttributes || []}
+						properties={attributes?.blockeraCSSProperties || []}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Advanced', 'publisher-core')}
-						storeName={'publisher-core/controls/repeater'}
+						title={__('Advanced', 'blockera-core')}
+						storeName={'blockera-core/controls/repeater'}
 						icon={<AdvancedExtensionIcon />}
 					/>
 				</InspectorControls>
@@ -91,8 +91,8 @@ export const Default = {
 				...wrapperBlock,
 				attributes: {
 					...(wrapperBlock?.attributes || {}),
-					publisherAttributes: [],
-					publisherCSSProperties: [],
+					blockeraAttributes: [],
+					blockeraCSSProperties: [],
 				},
 			},
 		],

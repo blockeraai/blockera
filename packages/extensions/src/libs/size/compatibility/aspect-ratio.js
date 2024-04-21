@@ -18,7 +18,7 @@ export function ratioFromWPCompatibility({
 	blockId?: string,
 }): Object {
 	if (
-		attributes?.publisherRatio?.value !== '' ||
+		attributes?.blockeraRatio?.value !== '' ||
 		attributes?.aspectRatio === undefined
 	) {
 		return attributes;
@@ -28,7 +28,7 @@ export function ratioFromWPCompatibility({
 		case 'core/post-featured-image':
 		case 'core/image':
 			if (coreWPAspectRatioValues.includes(attributes.aspectRatio)) {
-				attributes.publisherRatio = {
+				attributes.blockeraRatio = {
 					value: attributes.aspectRatio,
 					width: '',
 					height: '',

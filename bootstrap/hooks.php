@@ -2,7 +2,7 @@
 
 //FIXME: Please remove this add_filter after finalize variable registration codes.
 //TODO: This is just an example of registration variable groups.
-add_filter( 'publisher-core/variable/groups/registry', static function ( array $groups ): array {
+add_filter( 'blockera-core/variable/groups/registry', static function ( array $groups ): array {
 
 	return array_merge(
 		$groups,
@@ -21,7 +21,7 @@ add_filter( 'publisher-core/variable/groups/registry', static function ( array $
 
 //FIXME: Please remove this add_filter after finalize variable registration codes.
 //TODO: This is just an example of registration items into variable group.
-add_filter( 'publisher-core/variable/groups/astra-spacing/items/registry', static function ( array $values ): array {
+add_filter( 'blockera-core/variable/groups/astra-spacing/items/registry', static function ( array $values ): array {
 
 	return
 		array_merge(
@@ -34,7 +34,7 @@ add_filter( 'publisher-core/variable/groups/astra-spacing/items/registry', stati
 					'type'  => 'spacing',
 					'group' => 'astra-spacing',
 					'var'   => '--astra-spacing-preset-60',
-					'label' => __( '60', 'publisher-core' ),
+					'label' => __( '60', 'blockera-core' ),
 					'reference' => [
 						'type' => 'core',
 					]

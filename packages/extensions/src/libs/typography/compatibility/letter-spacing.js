@@ -6,12 +6,11 @@ export function letterSpacingFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.publisherLetterSpacing === '' &&
+		attributes?.blockeraLetterSpacing === '' &&
 		attributes?.style?.typography?.letterSpacing !== undefined
 	) {
 		return {
-			publisherLetterSpacing:
-				attributes?.style?.typography?.letterSpacing,
+			blockeraLetterSpacing: attributes?.style?.typography?.letterSpacing,
 		};
 	}
 

@@ -64,7 +64,7 @@ export function disableGutenbergFeatures() {
 }
 
 /**
- * From inside the WordPress editor open the publisher-core Gutenberg editor panel
+ * From inside the WordPress editor open the blockera-core Gutenberg editor panel
  *
  * @param {string}  blockName   The name to find in the block inserter
  *                              e.g 'core/image'.
@@ -179,7 +179,7 @@ export function addNewGroupToPost() {
 }
 
 /**
- * From inside the WordPress editor open the publisher-core Gutenberg editor panel
+ * From inside the WordPress editor open the blockera-core Gutenberg editor panel
  */
 export function savePage() {
 	cy.get('.edit-post-header__settings button.is-primary').click();
@@ -403,12 +403,12 @@ export function openHeadingToolbarAndSelect(headingLevel) {
 
 // Open More Settings Panel and Activate Item
 export function openMoreFeaturesControl(label) {
-	cy.get(`.publisher-component-more-features > button[aria-label="${label}"]`)
+	cy.get(`.blockera-component-more-features > button[aria-label="${label}"]`)
 		.parent()
 		.then((element) => {
 			if (!element.hasClass('is-open')) {
 				cy.get(
-					`.publisher-component-more-features > button[aria-label="${label}"]`
+					`.blockera-component-more-features > button[aria-label="${label}"]`
 				).click();
 			}
 		});

@@ -1,13 +1,13 @@
 # Component Reference
 
-This package includes a library of generic Publisher Core components to be used for creating common UI elements shared between screens and features of the Publisher Dashboard on WordPress.
+This package includes a library of generic Blockera Core components to be used for creating common UI elements shared between screens and features of the Dashboard on WordPress.
 
 ## Installation
 
 Install the module
 
 ```bash
-npm install @publisher/components --save
+npm install @blockera/components --save
 ```
 
 _This package assumes that your code will run in an **ES2015+** environment. If you're using an environment that has limited or no support for such language features and APIs, you should include [the polyfill shipped in `@wordpress/babel-preset-default`](https://github.com/WordPress/gutenberg/tree/HEAD/packages/babel-preset-default#polyfill) in your code._
@@ -18,12 +18,12 @@ Within Gutenberg, these components can be accessed by importing from the `compon
 
 ```jsx
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
 import { Icon } from '@wordpress/components';
 
 export default function MyIcon() {
-	return <Icon icon="publisher-blue" />;
+	return <Icon icon="blockera-blue" />;
 }
 ```
 
@@ -82,3 +82,4 @@ To find out more about contributing to this package or Gutenberg as a whole, ple
 This package also has its own [contributing information](https://github.com/WordPress/gutenberg/tree/HEAD/packages/components/CONTRIBUTING.md) where you can find additional details.
 
 <br /><br /><p align="center"><img src="https://s.w.org/style/images/codeispoetry.png?1" alt="Code is Poetry." /></p>
+

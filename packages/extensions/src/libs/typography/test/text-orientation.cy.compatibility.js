@@ -37,7 +37,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('initial').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect('horizontal-tb').to.be.equal(
@@ -59,7 +59,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('style-1').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect('vertical-rl').to.be.equal(
@@ -77,7 +77,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('style-2').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect(undefined).to.be.equal(
@@ -95,7 +95,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('style-3').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect(undefined).to.be.equal(
@@ -113,7 +113,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('style-4').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect(undefined).to.be.equal(
@@ -131,7 +131,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('initial').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect('horizontal-tb').to.be.equal(
@@ -150,7 +150,7 @@ describe('Text Orientation → WP Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect(undefined).to.be.equal(
@@ -181,7 +181,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
 				expect('style-1').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect('vertical-rl').to.be.equal(
@@ -200,7 +200,7 @@ describe('Text Orientation → WP Compatibility', () => {
 
 			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
-					getSelectedBlock(data, 'publisherTextOrientation')
+					getSelectedBlock(data, 'blockeraTextOrientation')
 				);
 
 				expect(undefined).to.be.equal(

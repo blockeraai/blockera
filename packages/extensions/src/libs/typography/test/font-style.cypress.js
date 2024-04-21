@@ -12,7 +12,7 @@ describe('Font Style → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -36,7 +36,7 @@ describe('Font Style → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('italic').to.be.equal(
-				getSelectedBlock(data, 'publisherFontStyle')
+				getSelectedBlock(data, 'blockeraFontStyle')
 			);
 		});
 
@@ -45,10 +45,11 @@ describe('Font Style → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'font-style',
 			'italic'
 		);
 	});
 });
+

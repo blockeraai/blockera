@@ -12,9 +12,9 @@ import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { isBlockTheme, isUndefined } from '@publisher/utils';
+import { isBlockTheme, isUndefined } from '@blockera/utils';
 
 export const getSpacings: () => Array<VariableItem> = memoize(
 	function (): Array<VariableItem> {
@@ -23,7 +23,7 @@ export const getSpacings: () => Array<VariableItem> = memoize(
 		};
 
 		if (isBlockTheme()) {
-			const { getCurrentTheme } = select('publisher-core/data');
+			const { getCurrentTheme } = select('blockera-core/data');
 
 			const {
 				name: { rendered: themeName },

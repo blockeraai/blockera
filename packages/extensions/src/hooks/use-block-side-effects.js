@@ -14,9 +14,9 @@ export const useBlockSideEffects = ({ currentTab, currentState, isActive }) => {
 		}
 
 		if ('normal' === currentState) {
-			inspectorTabs.classList.remove('publisher-not-allowed');
+			inspectorTabs.classList.remove('blockera-not-allowed');
 		} else {
-			inspectorTabs.classList.add('publisher-not-allowed');
+			inspectorTabs.classList.add('blockera-not-allowed');
 		}
 
 		if ('settings' === currentTab) {

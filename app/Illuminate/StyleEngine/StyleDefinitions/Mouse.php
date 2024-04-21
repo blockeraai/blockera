@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 class Mouse extends BaseStyleDefinition {
 
@@ -39,9 +39,9 @@ class Mouse extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherCursor'        => 'cursor',
-			'publisherUserSelect'    => 'user-select',
-			'publisherPointerEvents' => 'pointer-events',
+			'blockeraCursor'        => 'cursor',
+			'blockeraUserSelect'    => 'user-select',
+			'blockeraPointerEvents' => 'pointer-events',
 		];
 	}
 

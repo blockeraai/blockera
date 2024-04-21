@@ -1,6 +1,6 @@
 <?php
 
-namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
+namespace Blockera\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 /**
  * Class Effects definition to generate css rules.
@@ -54,7 +54,7 @@ class Effects extends BaseStyleDefinition {
 				break;
 
 			case 'opacity':
-				$this->setDeclaration( 'opacity', pb_get_value_addon_real_value( $setting[ $cssProperty ] ) );
+				$this->setDeclaration( 'opacity', blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) );
 				break;
 
 			case 'mix-blend-mode':
@@ -105,12 +105,12 @@ class Effects extends BaseStyleDefinition {
 		// add all transform items
 		if ( 'transform' === $cssProperty && ! empty( $settings[ $cssProperty ] ) ) {
 
-			array_map( [ $this, 'setTransformItem' ], array_filter( pb_get_sorted_repeater( $settings[ $cssProperty ] ), [ $this, 'isVisibleSetting' ] ) );
+			array_map( [ $this, 'setTransformItem' ], array_filter( blockera_get_sorted_repeater( $settings[ $cssProperty ] ), [ $this, 'isVisibleSetting' ] ) );
 		}
 
 		if ( 'self-perspective' === $cssProperty && ! empty( $this->declarations['transform'] ) && ! empty( $settings[ $cssProperty ] ) ) {
 
-			$perspective = pb_get_value_addon_real_value( $settings[ $cssProperty ] );
+			$perspective = blockera_get_value_addon_real_value( $settings[ $cssProperty ] );
 
 			if ( ! empty( $perspective ) ) {
 				$this->setDeclaration(
@@ -126,8 +126,8 @@ class Effects extends BaseStyleDefinition {
 
 		if ( 'self-origin' === $cssProperty && ! empty( $settings[ $cssProperty ] ) ) {
 
-			$top  = isset( $settings[ $cssProperty ]['top'] ) ? pb_get_value_addon_real_value( $settings[ $cssProperty ]['top'] ) : '';
-			$left = isset( $settings[ $cssProperty ]['left'] ) ? pb_get_value_addon_real_value( $settings[ $cssProperty ]['left'] ) : '';
+			$top  = isset( $settings[ $cssProperty ]['top'] ) ? blockera_get_value_addon_real_value( $settings[ $cssProperty ]['top'] ) : '';
+			$left = isset( $settings[ $cssProperty ]['left'] ) ? blockera_get_value_addon_real_value( $settings[ $cssProperty ]['left'] ) : '';
 
 			if ( ! empty( $top ) && ! empty( $left ) ) {
 
@@ -142,7 +142,7 @@ class Effects extends BaseStyleDefinition {
 
 		if ( 'child-perspective' === $cssProperty && ! empty( $settings[ $cssProperty ] ) ) {
 
-			$childPerspective = pb_get_value_addon_real_value( $settings[ $cssProperty ] );
+			$childPerspective = blockera_get_value_addon_real_value( $settings[ $cssProperty ] );
 
 			if ( ! empty( $childPerspective ) ) {
 				$this->setDeclaration(
@@ -184,14 +184,14 @@ class Effects extends BaseStyleDefinition {
 			case 'move':
 				$transform = sprintf(
 					'translate3d(%s, %s, %s)',
-					pb_get_value_addon_real_value( $setting['move-x'] ),
-					pb_get_value_addon_real_value( $setting['move-y'] ),
-					pb_get_value_addon_real_value( $setting['move-z'] ),
+					blockera_get_value_addon_real_value( $setting['move-x'] ),
+					blockera_get_value_addon_real_value( $setting['move-y'] ),
+					blockera_get_value_addon_real_value( $setting['move-z'] ),
 				);
 				break;
 
 			case 'scale':
-				$scale = pb_get_value_addon_real_value( $setting['scale'] );
+				$scale = blockera_get_value_addon_real_value( $setting['scale'] );
 
 				$transform = sprintf(
 					'scale3d(%s, %s, 50%%)',
@@ -203,17 +203,17 @@ class Effects extends BaseStyleDefinition {
 			case 'rotate':
 				$transform = sprintf(
 					'rotateX(%s) rotateY(%s) rotateZ(%s)',
-					pb_get_value_addon_real_value( $setting['rotate-x'] ),
-					pb_get_value_addon_real_value( $setting['rotate-y'] ),
-					pb_get_value_addon_real_value( $setting['rotate-z'] ),
+					blockera_get_value_addon_real_value( $setting['rotate-x'] ),
+					blockera_get_value_addon_real_value( $setting['rotate-y'] ),
+					blockera_get_value_addon_real_value( $setting['rotate-z'] ),
 				);
 				break;
 
 			case 'skew':
 				$transform = sprintf(
 					'skew(%s, %s)',
-					pb_get_value_addon_real_value( $setting['skew-x'] ),
-					pb_get_value_addon_real_value( $setting['skew-y'] ),
+					blockera_get_value_addon_real_value( $setting['skew-x'] ),
+					blockera_get_value_addon_real_value( $setting['skew-y'] ),
 				);
 				break;
 		}
@@ -284,9 +284,9 @@ class Effects extends BaseStyleDefinition {
 		$transition = sprintf(
 			"%s %s %s %s",
 			$setting['type'],
-			pb_get_value_addon_real_value( $setting['duration'] ),
+			blockera_get_value_addon_real_value( $setting['duration'] ),
 			$allTimings[ $setting['timing'] ],
-			pb_get_value_addon_real_value( $setting['delay'] )
+			blockera_get_value_addon_real_value( $setting['delay'] )
 		);
 
 		if ( $transition ) {
@@ -323,17 +323,17 @@ class Effects extends BaseStyleDefinition {
 			$filter =
 				sprintf(
 					'drop-shadow(%s %s %s %s)',
-					pb_get_value_addon_real_value( $setting['drop-shadow-x'] ),
-					pb_get_value_addon_real_value( $setting['drop-shadow-y'] ),
-					pb_get_value_addon_real_value( $setting['drop-shadow-blur'] ),
-					pb_get_value_addon_real_value( $setting['drop-shadow-color'] )
+					blockera_get_value_addon_real_value( $setting['drop-shadow-x'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-y'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-blur'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-color'] )
 				);
 		} else {
 			$filter =
 				sprintf(
 					'%s(%s)',
 					$setting['type'],
-					pb_get_value_addon_real_value( $setting[ $setting['type'] ] ),
+					blockera_get_value_addon_real_value( $setting[ $setting['type'] ] ),
 				);
 		}
 
@@ -373,17 +373,17 @@ class Effects extends BaseStyleDefinition {
 			$filter =
 				sprintf(
 					'drop-shadow(%s %s %s %s)',
-					pb_get_value_addon_real_value( $setting['drop-shadow-x'] ),
-					pb_get_value_addon_real_value( $setting['drop-shadow-y'] ),
-					pb_get_value_addon_real_value( $setting['drop-shadow-blur'] ),
-					pb_get_value_addon_real_value( $setting['drop-shadow-color'] )
+					blockera_get_value_addon_real_value( $setting['drop-shadow-x'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-y'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-blur'] ),
+					blockera_get_value_addon_real_value( $setting['drop-shadow-color'] )
 				);
 		} else {
 			$filter =
 				sprintf(
 					'%s(%s)',
 					$setting['type'],
-					pb_get_value_addon_real_value( $setting[ $setting['type'] ] ),
+					blockera_get_value_addon_real_value( $setting[ $setting['type'] ] ),
 				);
 		}
 
@@ -591,19 +591,19 @@ class Effects extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherMask'                      => 'mask',
-			'publisherFilter'                    => 'filter',
-			'publisherOpacity'                   => 'opacity',
-			'publisherDivider'                   => 'divider',
-			'publisherTransform'                 => 'transform',
-			'publisherTransition'                => 'transition',
-			'publisherBlendMode'                 => 'mix-blend-mode',
-			'publisherBackdropFilter'            => 'backdrop-filter',
-			'publisherTransformSelfOrigin'       => 'self-origin',// transform-origin
-			'publisherTransformChildOrigin'      => 'child-origin',// perspective-origin
-			'publisherBackfaceVisibility'        => 'backface-visibility',
-			'publisherTransformSelfPerspective'  => 'self-perspective', // perspective
-			'publisherTransformChildPerspective' => 'child-perspective',// perspective
+			'blockeraMask'                      => 'mask',
+			'blockeraFilter'                    => 'filter',
+			'blockeraOpacity'                   => 'opacity',
+			'blockeraDivider'                   => 'divider',
+			'blockeraTransform'                 => 'transform',
+			'blockeraTransition'                => 'transition',
+			'blockeraBlendMode'                 => 'mix-blend-mode',
+			'blockeraBackdropFilter'            => 'backdrop-filter',
+			'blockeraTransformSelfOrigin'       => 'self-origin',// transform-origin
+			'blockeraTransformChildOrigin'      => 'child-origin',// perspective-origin
+			'blockeraBackfaceVisibility'        => 'backface-visibility',
+			'blockeraTransformSelfPerspective'  => 'self-perspective', // perspective
+			'blockeraTransformChildPerspective' => 'child-perspective',// perspective
 		];
 	}
 

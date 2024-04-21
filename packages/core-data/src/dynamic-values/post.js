@@ -14,7 +14,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 	function (): Array<DynamicValueItem> {
 		return [
 			{
-				name: __('Post Title', 'publisher-core'),
+				name: __('Post Title', 'blockera-core'),
 				id: 'post-title',
 				type: 'text',
 				status: 'core',
@@ -24,7 +24,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Excerpt', 'publisher-core'),
+				name: __('Post Excerpt', 'blockera-core'),
 				id: 'post-excerpt',
 				type: 'text',
 				status: 'core',
@@ -34,7 +34,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Content', 'publisher-core'),
+				name: __('Post Content', 'blockera-core'),
 				id: 'post-content',
 				type: 'text',
 				status: 'soon',
@@ -44,7 +44,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post ID', 'publisher-core'),
+				name: __('Post ID', 'blockera-core'),
 				id: 'post-id',
 				type: 'id',
 				status: 'core',
@@ -54,7 +54,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Link', 'publisher-core'),
+				name: __('Post Link', 'blockera-core'),
 				id: 'post-link',
 				type: 'link',
 				status: 'soon',
@@ -64,7 +64,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Date', 'publisher-core'),
+				name: __('Post Date', 'blockera-core'),
 				id: 'post-date',
 				type: 'date',
 				status: 'soon',
@@ -74,7 +74,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Time', 'publisher-core'),
+				name: __('Post Time', 'blockera-core'),
 				id: 'post-time',
 				type: 'time',
 				status: 'soon',
@@ -84,7 +84,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Reading Time', 'publisher-core'),
+				name: __('Reading Time', 'blockera-core'),
 				id: 'post-reading-time',
 				type: 'time',
 				status: 'soon',
@@ -94,7 +94,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Categories', 'publisher-core'),
+				name: __('Post Categories', 'blockera-core'),
 				id: 'post-cats',
 				type: 'category',
 				status: 'soon',
@@ -104,7 +104,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Tags', 'publisher-core'),
+				name: __('Post Tags', 'blockera-core'),
 				id: 'post-tags',
 				type: 'tag',
 				status: 'soon',
@@ -114,7 +114,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Terms', 'publisher-core'),
+				name: __('Post Terms', 'blockera-core'),
 				id: 'post-terms',
 				type: 'term',
 				status: 'soon',
@@ -124,7 +124,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Comments', 'publisher-core'),
+				name: __('Post Comments', 'blockera-core'),
 				id: 'post-comments',
 				type: 'comment',
 				status: 'soon',
@@ -134,7 +134,7 @@ export const getPostDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Post Meta', 'publisher-core'),
+				name: __('Post Meta', 'blockera-core'),
 				id: 'post-meta',
 				type: 'meta',
 				status: 'soon',

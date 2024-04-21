@@ -10,29 +10,29 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
-const publisherCursor: FeatureConfig = {
+const blockeraCursor: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Cursor', 'publisher-core'),
+	label: __('Cursor', 'blockera-core'),
 };
 
-const publisherUserSelect: FeatureConfig = {
+const blockeraUserSelect: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('User Select', 'publisher-core'),
+	label: __('User Select', 'blockera-core'),
 };
 
-const publisherPointerEvents: FeatureConfig = {
+const blockeraPointerEvents: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Pointer Events', 'publisher-core'),
+	label: __('Pointer Events', 'blockera-core'),
 };
 
 export const mouseConfig = {
-	publisherCursor,
-	publisherUserSelect,
-	publisherPointerEvents,
+	blockeraCursor,
+	blockeraUserSelect,
+	blockeraPointerEvents,
 };

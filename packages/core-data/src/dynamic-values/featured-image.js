@@ -14,7 +14,7 @@ export const getFeaturedImageDynamicValueItems: () => Array<DynamicValueItem> =
 	memoize(function (): Array<DynamicValueItem> {
 		return [
 			{
-				name: __('Image URL', 'publisher-core'),
+				name: __('Image URL', 'blockera-core'),
 				id: 'featured-image-url',
 				type: 'image',
 				status: 'core',
@@ -24,7 +24,7 @@ export const getFeaturedImageDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Image ID', 'publisher-core'),
+				name: __('Image ID', 'blockera-core'),
 				id: 'featured-image-id',
 				type: 'id',
 				status: 'soon',
@@ -34,7 +34,7 @@ export const getFeaturedImageDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Image Title', 'publisher-core'),
+				name: __('Image Title', 'blockera-core'),
 				id: 'featured-image-title',
 				type: 'text',
 				status: 'soon',
@@ -44,7 +44,7 @@ export const getFeaturedImageDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Image Alt', 'publisher-core'),
+				name: __('Image Alt', 'blockera-core'),
 				id: 'featured-image-alt',
 				type: 'text',
 				status: 'soon',
@@ -54,7 +54,7 @@ export const getFeaturedImageDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Image Caption', 'publisher-core'),
+				name: __('Image Caption', 'blockera-core'),
 				id: 'featured-image-caption',
 				type: 'text',
 				status: 'soon',
@@ -64,7 +64,7 @@ export const getFeaturedImageDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Image Desc', 'publisher-core'),
+				name: __('Image Desc', 'blockera-core'),
 				id: 'featured-image-desc',
 				type: 'text',
 				status: 'soon',

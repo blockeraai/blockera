@@ -1,10 +1,10 @@
 // @flow
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
-import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks/types';
+import type { TStates } from '@blockera/extensions/src/libs/block-states/types';
+import type { InnerBlockType } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 export type NormalizedSelectorProps = {
 	query?: string,

@@ -12,7 +12,7 @@ describe('Text Align → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
+		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
 			delay: 0,
@@ -37,7 +37,7 @@ describe('Text Align → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('center').to.be.equal(
-				getSelectedBlock(data, 'publisherTextAlign')
+				getSelectedBlock(data, 'blockeraTextAlign')
 			);
 		});
 
@@ -46,10 +46,11 @@ describe('Text Align → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should(
+		cy.get('.blockera-core-block').should(
 			'have.css',
 			'text-align',
 			'center'
 		);
 	});
 });
+

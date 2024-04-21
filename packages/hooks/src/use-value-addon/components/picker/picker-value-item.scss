@@ -1,29 +1,29 @@
-.publisher-control-value-addon-popover-item {
+.blockera-control-value-addon-popover-item {
 	display: flex;
 	height: 30px;
 	flex-direction: row;
 	gap: 8px;
 	padding: 0 12px;
-	border: 1px solid var(--publisher-controls-border-color-soft);
+	border: 1px solid var(--blockera-controls-border-color-soft);
 	border-radius: 2px;
 	align-items: center;
 	cursor: pointer;
-	transition: var(--publisher-controls-transition);
-	color: var(--publisher-controls-color);
+	transition: var(--blockera-controls-transition);
+	color: var(--blockera-controls-color);
 	font-size: 12px;
 	letter-spacing: -0.2px;
 	background: #ffffff;
 
 	&:hover {
-		border-color: var(--publisher-controls-border-color-hover);
+		border-color: var(--blockera-controls-border-color-hover);
 	}
 
 	&.is-active-item {
-		color: var(--publisher-controls-primary-color);
-		border-color: var(--va-border-color, var(--publisher-controls-primary-color));
+		color: var(--blockera-controls-primary-color);
+		border-color: var(--va-border-color, var(--blockera-controls-primary-color));
 
-		.publisher-control-item-value,
-		.publisher-control-item-icon {
+		.blockera-control-item-value,
+		.blockera-control-item-icon {
 			opacity: 1;
 		}
 	}
@@ -38,7 +38,7 @@
 		}
 	}
 
-	.publisher-control-item-icon {
+	.blockera-control-item-icon {
 		pointer-events: none;
 		display: flex;
 		align-items: center;
@@ -52,20 +52,20 @@
 	&.item-value-type-dynamic-value {
 		padding: 0 5px 0 8px;
 
-		.publisher-control-item-icon {
+		.blockera-control-item-icon {
 			order: 100;
 			margin-left: auto;
 		}
 	}
 
-	.publisher-control-item-name {
+	.blockera-control-item-name {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		pointer-events: none;
 	}
 
-	.publisher-control-item-value {
+	.blockera-control-item-value {
 		margin-left: auto;
 		opacity: 0.5;
 		font-size: 10px;

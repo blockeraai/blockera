@@ -3,10 +3,10 @@
 import { select } from '@wordpress/data';
 
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { Observer, CanvasEditor } from '@publisher/editor';
-import { blockeraBootstrapBlocks } from '@publisher/blocks';
+import { Observer, CanvasEditor } from '@blockera/editor';
+import { blockeraBootstrapBlocks } from '@blockera/blocks';
 
 /**
  * Internal dependencies
@@ -17,7 +17,7 @@ export default function (wp: Object) {
 	const registerPlugin = wp.plugins.registerPlugin;
 	const getPlugin = wp.plugins.getPlugin;
 
-	registerPlugin('publisher-core-editor-observer', {
+	registerPlugin('blockera-core-editor-observer', {
 		render() {
 			return (
 				<Observer
@@ -39,7 +39,7 @@ export default function (wp: Object) {
 								}
 
 								const plugin =
-									'publisher-core-post-editor-top-bar';
+									'blockera-core-post-editor-top-bar';
 
 								if (getPlugin(plugin)) {
 									return;
@@ -70,7 +70,7 @@ export default function (wp: Object) {
 								}
 
 								const plugin =
-									'publisher-core-site-editor-top-bar';
+									'blockera-core-site-editor-top-bar';
 
 								if (getPlugin(plugin)) {
 									return;

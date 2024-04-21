@@ -5,7 +5,7 @@ export default function WrapWrapIcon({}) {
 			height="18"
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
-			className="publisher-wrap-wrap"
+			className="blockera-wrap-wrap"
 		>
 			<g opacity="0.4">
 				<path d="M9.79351 2C10.3348 2 10.7735 2.43876 10.7735 2.98L10.7735 6.99C10.7735 7.53124 10.3348 7.97 9.79351 7.97L8.45351 7.97C7.91227 7.97 7.47351 7.53124 7.47351 6.99L7.47351 2.98C7.47351 2.43876 7.91227 2 8.45351 2H9.79351Z" />

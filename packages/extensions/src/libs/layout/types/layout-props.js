@@ -29,33 +29,33 @@ export type DisplayType =
 export type TLayoutProps = {
 	...BaseExtensionProps,
 	values: {
-		publisherDisplay: DisplayType,
-		publisherFlexLayout: {
+		blockeraDisplay: DisplayType,
+		blockeraFlexLayout: {
 			direction: 'row' | 'column',
 			alignItems: string,
 			justifyContent: string,
 		},
-		publisherGap: {
+		blockeraGap: {
 			lock: boolean,
 			gap: string,
 			columns: string,
 			rows: string,
 		},
-		publisherFlexWrap: { value: string, reverse: boolean },
-		publisherAlignContent: string,
+		blockeraFlexWrap: { value: string, reverse: boolean },
+		blockeraAlignContent: string,
 	},
 	extensionConfig: {
-		publisherDisplay: FeatureConfig,
-		publisherFlexLayout: FeatureConfig,
-		publisherGap: FeatureConfig,
-		publisherFlexWrap: FeatureConfig,
-		publisherAlignContent: FeatureConfig,
+		blockeraDisplay: FeatureConfig,
+		blockeraFlexLayout: FeatureConfig,
+		blockeraGap: FeatureConfig,
+		blockeraFlexWrap: FeatureConfig,
+		blockeraAlignContent: FeatureConfig,
 	},
 	extensionProps: {
-		publisherDisplay: Object,
-		publisherFlexLayout: Object,
-		publisherGap: Object,
-		publisherFlexWrap: Object,
-		publisherAlignContent: Object,
+		blockeraDisplay: Object,
+		blockeraFlexLayout: Object,
+		blockeraGap: Object,
+		blockeraFlexWrap: Object,
+		blockeraAlignContent: Object,
 	},
 };

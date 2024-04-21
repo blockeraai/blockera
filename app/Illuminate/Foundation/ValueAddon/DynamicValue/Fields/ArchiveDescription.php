@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
+namespace Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields;
 
-use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
+use Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Field;
 
 /**
  * Class ArchiveDescription
  *
  * @since   1.0.0
- * @package Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields
+ * @package Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\Fields
  */
 class ArchiveDescription extends Field {
 
