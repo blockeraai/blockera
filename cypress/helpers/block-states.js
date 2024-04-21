@@ -18,6 +18,8 @@ export function setBlockState(state) {
 	cy.getByAriaLabel('Publisher Block State Container')
 		.first()
 		.within(() => {
-			cy.getByDataCy('group-control-header').contains(state).click();
+			cy.getByDataCy('group-control-header')
+				.contains(state)
+				.click({ force: true });
 		});
 }
