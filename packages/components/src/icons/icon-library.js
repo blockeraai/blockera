@@ -14,10 +14,10 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { WPIcons } from './library-wp';
+import { BlockeraIcons } from './library-blockera';
 import { FontAwesomeFarIcons } from './library-far';
 import { FontAwesomeFasIcons } from './library-fas';
-import { WPIcons } from './library-wp';
-import * as Icons  from './library-blockera';
 
 import WPIconsSearchData from './library-wp/search-data.json';
 import FarIconsSearchData from './library-far/search-data.json';
@@ -82,7 +82,7 @@ export function getIconLibraryIcons(iconLibrary: string): Object {
 
 	switch (iconLibrary) {
 		case 'blockera':
-			return Icons;
+			return BlockeraIcons;
 
 		case 'wp':
 			return WPIcons;

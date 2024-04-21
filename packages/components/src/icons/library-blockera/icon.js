@@ -13,7 +13,7 @@ import { isString, isUndefined } from '@blockera/utils';
  */
 import { getIcon } from '../index';
 
-export function Icon({
+export function BlockeraIcon({
 	fixedSizing = false,
 	style = {},
 	size,
@@ -24,7 +24,7 @@ export function Icon({
 		icon = getIcon(icon, 'blockera');
 	}
 
-	if (isUndefined(icon.icon)) {
+	if (isUndefined(icon?.icon)) {
 		return <></>;
 	}
 

@@ -3,9 +3,16 @@
 /**
  * Internal dependencies
  */
-import { default as BlockeraIcon } from './icons/blockera';
-import { default as BlockeraCircle } from './icons/blockera-cricle';
-import { default as BlockeraInteraction } from './icons/blockera-interaction';
-import { default as BlockeraSettings } from './icons/blockera-settings';
+import { default as blockera } from './icons/blockera';
+import { default as blockeraCircle } from './icons/blockera-cricle';
+import { default as blockeraInteraction } from './icons/blockera-interaction';
+import { default as blockeraSettings } from './icons/blockera-settings';
 
-export { BlockeraIcon, BlockeraCircle, BlockeraSettings, BlockeraInteraction };
+const BlockeraIcons = {
+	blockera,
+	blockeraCircle,
+	blockeraSettings,
+	blockeraInteraction,
+};
+
+export { BlockeraIcons };
