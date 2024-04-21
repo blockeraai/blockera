@@ -311,3 +311,52 @@ export function isActiveBlockExtensions({ blockExtensions }: Object): boolean {
 		? true
 		: blockExtensions?.isActiveExtensions;
 }
+
+/**
+ * Get active block variation in extensions.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ *
+ * @return {Object | void} Object on success,false on otherwise!
+ */
+export function getActiveBlockVariation({
+	blockExtensions,
+}: Object): Object | void {
+	return blockExtensions?.activeBlockVariation;
+}
+
+/**
+ * Get master block state with client identifier.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ * @param {string} clientId the block client identifier.
+ * @param {string} name the block name.
+ * @return {*|string} the one of block state available types. by default return value is 'normal'.
+ */
+export function getActiveMasterState(
+	{ blockExtensions }: Object,
+	clientId: string,
+	name: string
+): TStates {
+	return blockExtensions[clientId]
+		? blockExtensions[clientId][name + '-active-state'] || 'normal'
+		: 'normal';
+}
+
+/**
+ * Get inner block state with client identifier and block type params.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ * @param {string} clientId the block client identifier.
+ * @param {InnerBlockType} blockType the one of available inner block types.
+ * @return {*|string} the one of block state available types. by default return value is 'normal'.
+ */
+export function getActiveInnerState(
+	{ blockExtensions }: Object,
+	clientId: string,
+	blockType: InnerBlockType
+): TStates {
+	return blockExtensions[clientId]
+		? blockExtensions[clientId][blockType + '-active-state'] || 'normal'
+		: 'normal';
+}

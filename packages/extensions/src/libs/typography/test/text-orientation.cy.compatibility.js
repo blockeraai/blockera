@@ -5,9 +5,15 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Orientation → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Paragraph Block', () => {
 		it('Horizontal value + all Blockera values', () => {
 			appendBlocks(
@@ -20,7 +26,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Open more settings
-			cy.openMoreFeatures('More typography settings');
+			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Orientation').as('container');
 
@@ -164,7 +170,7 @@ describe('Text Orientation → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Open more settings
-			cy.openMoreFeatures('More typography settings');
+			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Orientation').as('container');
 

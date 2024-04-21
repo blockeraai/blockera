@@ -18,6 +18,8 @@ import { Tabs } from '@publisher/components';
 /**
  * Internal dependencies
  */
+import { attributes as blockStatesAttributes } from '../block-states/attributes';
+import { attributes as innerBlockAttributes } from '../inner-blocks/attributes';
 import {
 	attributes as backgroundAttributes,
 	supports as backgroundSupports,
@@ -108,6 +110,8 @@ import { resetExtensionSettings } from '../../utils';
 import type { TBreakpoint, TStates } from '../block-states/types';
 
 export const attributes = {
+	...blockStatesAttributes,
+	...innerBlockAttributes,
 	...typographyAttributes,
 	...backgroundAttributes,
 	...borderAndShadowAttributes,
@@ -914,7 +918,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					'Block Interactions and Animations',
 					'publisher-core'
 				),
-				className: 'style-tab',
+				className: 'interactions-tab',
 				icon: <AnimationsIcon />,
 			},
 		];

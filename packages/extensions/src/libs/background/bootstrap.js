@@ -29,8 +29,13 @@ export const bootstrap = (): void => {
 		'publisherCore.blockEdit.attributes',
 		'publisherCore.blockEdit.backgroundExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
-				blockDetail;
+			const {
+				blockId,
+				isNormalState,
+				isMasterBlock,
+				blockAttributes,
+				isBaseBreakpoint,
+			} = blockDetail;
 
 			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
 				return attributes;
@@ -43,6 +48,7 @@ export const bootstrap = (): void => {
 
 			attributes = backgroundColorFromWPCompatibility({
 				attributes,
+				blockAttributes,
 			});
 
 			return attributes;

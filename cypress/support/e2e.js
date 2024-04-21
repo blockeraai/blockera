@@ -2,11 +2,12 @@
  * Internal dependencies
  */
 import './commands';
-import { disableGutenbergFeatures, goTo, loginToSite } from '../helpers';
+import { loginToSite } from '../helpers';
 
 /**
  * External dependencies
  */
+import 'cypress-real-events';
 import '@cypress/code-coverage/support';
 
 beforeEach(function () {
@@ -15,12 +16,6 @@ beforeEach(function () {
 	cy.viewport(1280, 720);
 
 	cy.login();
-
-	goTo('/wp-admin/post-new.php?post_type=post').then(() => {
-		// eslint-disable-next-line
-		cy.wait(2000);
-		disableGutenbergFeatures();
-	});
 });
 
 Cypress.Commands.add('login', () => {

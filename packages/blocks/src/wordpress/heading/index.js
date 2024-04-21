@@ -28,14 +28,15 @@ const publisherInnerBlocks: InnerBlocks = {
 	link: {
 		name: 'core/link',
 		type: 'link',
-		label: __('Link', 'publisher-core'),
+		label: __('Links', 'publisher-core'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
-			root: 'a',
+			root: 'a:not(.wp-element-button)',
 		},
 		attributes,
 		innerBlockSettings: {
 			force: true,
+			dataCompatibility: ['font-color', 'font-color-hover'],
 		},
 	},
 };

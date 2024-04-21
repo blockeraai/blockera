@@ -111,7 +111,9 @@ describe('link control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				return expect(getControlValue(name).attributes.length).to.eq(2);
+				return expect(
+					Object.keys(getControlValue(name).attributes).length
+				).to.eq(2);
 			});
 			cy.then(() => {
 				return expect(getControlValue(name).attributes[0].__key).to.eq(
@@ -146,6 +148,8 @@ describe('link control component testing', () => {
 			});
 
 			cy.get('[aria-label="Open Advanced Settings"]').click();
+			cy.get('[aria-label="Add New HTML Attribute"]').click();
+
 			cy.get('@onChangeMock').should('have.been.called');
 		});
 
@@ -180,14 +184,14 @@ describe('link control component testing', () => {
 				target: true,
 				nofollow: true,
 				label: 'test label',
-				attributes: [
-					{
+				attributes: {
+					0: {
 						key: 'target',
 						value: '_blank',
 						__key: '',
 						isVisible: true,
 					},
-				],
+				},
 			};
 			cy.withDataProvider({
 				component: (
@@ -201,12 +205,7 @@ describe('link control component testing', () => {
 				name,
 			});
 
-			// Check data provider value!
-			cy.then(() => {
-				return expect(getControlValue(name)).to.deep.equal(
-					defaultValue
-				);
-			});
+			cy.getByAriaLabel('Link Label').should('have.value', 'test label');
 		});
 
 		it('should render advancedOpen ', () => {

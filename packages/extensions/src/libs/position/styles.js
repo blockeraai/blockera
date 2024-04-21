@@ -27,6 +27,7 @@ export const PositionStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const { publisherPosition, publisherZIndex } = config.positionConfig;
 	const blockProps = {
@@ -36,6 +37,7 @@ export const PositionStyles = ({
 	};
 	const { attributes: _attributes } = blockProps;
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,

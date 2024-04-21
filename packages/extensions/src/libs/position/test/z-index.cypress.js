@@ -1,5 +1,6 @@
 import {
 	addBlockToPost,
+	createPost,
 	getSelectedBlock,
 	getWPDataObject,
 	redirectToFrontPage,
@@ -8,6 +9,8 @@ import {
 
 describe('z-index → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
@@ -19,12 +22,7 @@ describe('z-index → Functionality', () => {
 
 	it('z-index rendering + css generators', () => {
 		cy.getParentContainer('Position').within(() => {
-			cy.get('button[aria-haspopup="listbox"]').click();
-
-			// select relative to activate z-index
-			cy.get('ul').within(() => {
-				cy.contains('Relative').trigger('click');
-			});
+			cy.customSelect('Relative');
 		});
 
 		// check z-index and position render

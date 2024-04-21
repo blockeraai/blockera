@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 
 /**
@@ -21,15 +22,15 @@ import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 export function Breadcrumb({
 	states,
 	children,
-	activeState,
+	clientId,
+	blockName,
 	activeBlock,
 	innerBlocks,
 	currentInnerBlock,
-	activeInnerBlockState,
 }: {
-	activeState: TStates,
+	clientId: string,
+	blockName: string,
 	children?: MixedElement,
-	activeInnerBlockState: TStates,
 	activeBlock: 'master' | InnerBlockType,
 	currentInnerBlock: InnerBlockModel | null,
 	states: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
@@ -49,7 +50,7 @@ export function Breadcrumb({
 	}): MixedElement => {
 		const { label, type } = definition;
 
-		if (!current || !current?.isSelected || 'normal' === type) {
+		if (!current || 'normal' === type) {
 			return <></>;
 		}
 
@@ -69,11 +70,17 @@ export function Breadcrumb({
 		);
 	};
 
+	const { getActiveInnerState, getActiveMasterState } = select(
+		'publisher-core/extensions'
+	);
+	const masterActiveState = getActiveMasterState(clientId, blockName);
+	const activeInnerBlockState = getActiveInnerState(clientId, activeBlock);
+
 	return (
 		<>
 			<CurrentState
-				current={states[activeState]}
-				definition={statesDefinition[activeState]}
+				current={masterActiveState}
+				definition={statesDefinition[masterActiveState]}
 			/>
 
 			{null !== currentInnerBlock && (
@@ -97,12 +104,7 @@ export function Breadcrumb({
 						] &&
 						'normal' !== activeInnerBlockState && (
 							<CurrentState
-								current={
-									currentInnerBlock?.attributes
-										?.publisherBlockStates[
-										activeInnerBlockState
-									]
-								}
+								current={activeInnerBlockState}
 								definition={
 									statesDefinition[activeInnerBlockState]
 								}

@@ -3,11 +3,13 @@ import {
 	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
-	redirectToFrontPage,
+	redirectToFrontPage, createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Box Position → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
@@ -15,16 +17,13 @@ describe('Box Position → Functionality', () => {
 		});
 
 		cy.getByDataTest('style-tab').click();
+
+		cy.getParentContainer('Position').as('container');
 	});
 
 	it('relative position - using shortcuts in popover', () => {
-		cy.getParentContainer('Position').within(() => {
-			cy.get('button[aria-haspopup="listbox"]').click();
-
-			// select relative
-			cy.get('ul').within(() => {
-				cy.contains('Relative').trigger('click');
-			});
+		cy.get('@container').within(() => {
+			cy.customSelect('Relative');
 		});
 
 		cy.getByAriaLabel('Top Position').click();
@@ -79,13 +78,8 @@ describe('Box Position → Functionality', () => {
 	});
 
 	it('Absolute position - using shortcuts after control', () => {
-		cy.getParentContainer('Position').within(() => {
-			cy.get('button[aria-haspopup="listbox"]').click();
-
-			// select relative
-			cy.get('ul').within(() => {
-				cy.contains('Absolute').trigger('click');
-			});
+		cy.get('@container').within(() => {
+			cy.customSelect('Absolute');
 		});
 
 		//

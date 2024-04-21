@@ -23,14 +23,12 @@ export const BlockFillPartials: ComponentType<any> = memo(
 	({
 		states,
 		clientId,
+		isActive,
 		blockProps,
-		currentState,
 		currentBlock,
-		currentBreakpoint,
 		currentInnerBlock,
 		BlockEditComponent,
 		publisherInnerBlocks,
-		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
 		const { isActiveBlockExtensions } = select('publisher-core/extensions');
@@ -54,12 +52,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 				getMemoizedControlNames(repeaters),
 				'publisher-core/controls/repeater'
 			);
-		}, [
-			currentBlock,
-			currentState,
-			currentBreakpoint,
-			currentInnerBlockState,
-		]);
+		}, [isActive]);
 
 		return (
 			<>
@@ -67,12 +60,11 @@ export const BlockFillPartials: ComponentType<any> = memo(
 					<BlockCard
 						states={states}
 						clientId={clientId}
-						activeState={currentState}
 						activeBlock={currentBlock}
+						blockName={blockProps.name}
 						innerBlocks={publisherInnerBlocks}
 						currentInnerBlock={currentInnerBlock}
 						handleOnClick={updateBlockEditorSettings}
-						activeInnerBlockState={currentInnerBlockState}
 					/>
 				</Fill>
 				{isActiveBlockExtensions() && (

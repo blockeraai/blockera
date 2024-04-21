@@ -17,6 +17,8 @@ import { registerBlockExtension } from '@publisher/extensions';
  */
 import * as wordpress from './wordpress';
 
+export { blockeraBootstrapBlocks } from './bootstrap';
+
 const blocks = {
 	...wordpress,
 };

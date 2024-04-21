@@ -38,7 +38,7 @@ const publisherInnerBlocks: InnerBlocks = {
 		label: __('Term Items', 'publisher-core'),
 		icon: <InnerBlockTermIcon />,
 		selectors: {
-			root: 'a',
+			root: 'a:not(.wp-element-button)',
 		},
 		attributes,
 		innerBlockSettings: {

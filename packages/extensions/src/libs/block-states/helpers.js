@@ -4,12 +4,12 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 
 /**
  * Publisher dependencies
  */
-import { isEquals, mergeObject, arrayDiff } from '@publisher/utils';
+import { isEquals, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
@@ -126,8 +126,11 @@ export function onChangeBlockStates(
 	params: Object
 ): void {
 	const { states: _states, onChange, currentBlock, valueCleanup } = params;
+	const { getSelectedBlock } = select('core/block-editor');
 
 	const {
+		setBlockClientInnerState,
+		setBlockClientMasterState,
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('publisher-core/extensions') || {};
@@ -139,42 +142,140 @@ export function onChangeBlockStates(
 		]): void => {
 			if (isInnerBlock(currentBlock) && state?.isSelected) {
 				setInnerBlockState(id);
+				setBlockClientInnerState({
+					currentState: id,
+					innerBlockType: currentBlock,
+					clientId: getSelectedBlock()?.clientId,
+				});
 			} else if (state?.isSelected) {
 				setCurrentState(id);
+				setBlockClientMasterState({
+					currentState: id,
+					name: getSelectedBlock()?.name,
+					clientId: getSelectedBlock()?.clientId,
+				});
 			}
 		}
 	);
 
-	if (isEquals(_states, newValue)) {
+	if (isEquals(valueCleanup(_states), valueCleanup(newValue))) {
 		return;
 	}
 
-	if (Object.keys(newValue).length < Object.keys(_states).length) {
-		const newStates: { [key: TStates | string]: StateTypes } = {};
+	const deletedProps = [];
 
-		Object.entries(_states).forEach(
-			([stateType, state]: [TStates | string, StateTypes]): void => {
-				if (
-					arrayDiff(
-						Object.keys(_states),
-						Object.keys(newValue)
-					).includes(stateType)
-				) {
-					return;
-				}
-
-				newStates[stateType] = state;
-			}
-		);
-
-		return onChange(
-			'publisherBlockStates',
-			mergeObject(valueCleanup(newStates))
-		);
-	}
+	Object.entries(_states).forEach(([name]: [string, any]): void => {
+		if (!newValue.hasOwnProperty(name)) {
+			deletedProps.push(name);
+			newValue = {
+				...newValue,
+				[name]: undefined,
+			};
+		}
+	});
 
 	onChange(
 		'publisherBlockStates',
-		mergeObject(valueCleanup(_states), newValue)
+		mergeObject(valueCleanup(_states), valueCleanup(newValue), {
+			deletedProps,
+		})
 	);
 }
+
+export const blockStatesValueCleanup = (value: {
+	[key: TStates]: {
+		...StateTypes,
+		isVisible: boolean,
+		'css-class'?: string,
+	},
+}): Object => {
+	const clonedValue: {
+		[key: TStates]: {
+			breakpoints: {
+				[key: TBreakpoint]: {
+					attributes: Object,
+				},
+			},
+			isVisible: boolean,
+			'css-class'?: string,
+		},
+	} = {};
+	const currentBreakpoint = select(
+		'publisher-core/extensions'
+	).getExtensionCurrentBlockStateBreakpoint();
+
+	Object.entries(value).forEach(
+		([itemId, item]: [
+			TStates,
+			{
+				...StateTypes,
+				isVisible: boolean,
+				'css-class'?: string,
+			}
+		]): void => {
+			/**
+			 * To compatible with deleted props of mergeObject api.
+			 *
+			 * @see ../helpers.js on line 179
+			 */
+			if (undefined === item) {
+				clonedValue[itemId] = item;
+
+				return;
+			}
+
+			const breakpoints: {
+				[key: TBreakpoint]: {
+					attributes: Object,
+				},
+			} = {};
+
+			Object.entries(item?.breakpoints)?.forEach(
+				([breakpointType, breakpoint]: [TBreakpoint, Object]) => {
+					if (
+						!Object.keys(breakpoint?.attributes || {}).length &&
+						'laptop' !== breakpointType
+					) {
+						return;
+					}
+
+					const { attributes = {} } = breakpoint;
+
+					if (
+						!Object.keys(attributes).length &&
+						'normal' !== itemId
+					) {
+						return;
+					}
+
+					breakpoints[breakpointType] = {
+						attributes,
+					};
+				}
+			);
+
+			if (!Object.values(breakpoints).length && 'normal' !== itemId) {
+				breakpoints[currentBreakpoint] = {
+					attributes: {},
+				};
+			}
+
+			if (['custom-class', 'parent-class'].includes(itemId)) {
+				clonedValue[itemId] = {
+					breakpoints,
+					isVisible: item?.isVisible,
+					'css-class': item['css-class'] || '',
+				};
+
+				return;
+			}
+
+			clonedValue[itemId] = {
+				breakpoints,
+				isVisible: item?.isVisible,
+			};
+		}
+	);
+
+	return clonedValue;
+};

@@ -29,6 +29,7 @@ export const SizeStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const {
 		publisherWidth,
@@ -47,6 +48,7 @@ export const SizeStyles = ({
 		attributes: currentBlockAttributes,
 	};
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,

@@ -6,6 +6,7 @@ export default function MatrixNormalTopCenterIcon({ direction = 'row' }) {
 				height="20"
 				viewBox="0 0 20 20"
 				xmlns="http://www.w3.org/2000/svg"
+				data-test="matrix-normal-top-center-row"
 			>
 				<path d="M9 18C8.44771 18 8 17.5523 8 17L8 3C8 2.44772 8.44772 2 9 2L11 2C11.5523 2 12 2.44772 12 3L12 17C12 17.5523 11.5523 18 11 18H9Z" />
 				<path d="M3 10C2.44772 10 2 9.55228 2 9L2 3C2 2.44772 2.44772 2 3 2L5 2C5.55228 2 6 2.44772 6 3L6 9C6 9.55229 5.55228 10 5 10H3Z" />
@@ -20,6 +21,7 @@ export default function MatrixNormalTopCenterIcon({ direction = 'row' }) {
 			height="20"
 			viewBox="0 0 20 20"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="matrix-normal-top-center-column"
 		>
 			<path d="M18 11C18 11.5523 17.5523 12 17 12L3 12C2.44772 12 2 11.5523 2 11L2 9C2 8.44771 2.44772 8 3 8L17 8C17.5523 8 18 8.44772 18 9V11Z" />
 			<path d="M14 17C14 17.5523 13.5523 18 13 18L7 18C6.44772 18 6 17.5523 6 17V15C6 14.4477 6.44772 14 7 14L13 14C13.5523 14 14 14.4477 14 15V17Z" />

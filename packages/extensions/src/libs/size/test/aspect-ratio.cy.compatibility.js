@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Aspect Ratio → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	// The "core/post-featured-image" is the same as "core/image"
 	describe('core/image Block', () => {
 		it('Simple Value', () => {

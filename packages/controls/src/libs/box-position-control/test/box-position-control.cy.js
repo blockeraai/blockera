@@ -264,8 +264,9 @@ describe('box position control component testing', () => {
 				//
 				// Change to CSS Func
 				//
-				cy.get('[aria-label="Select Unit"]').select('func');
-				cy.get('input[type=text]').clear();
+				cy.get('[aria-label="Select Unit"]').select('func', {
+					force: true,
+				});
 				cy.get('input[type=text]').type('calc(10px + 10px)');
 				cy.get('@Position')
 					.invoke('text')

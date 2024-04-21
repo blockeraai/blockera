@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Font Color → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Paragraph Block', () => {
 		describe('Simple Value', () => {
 			it('Same font color and link color', () => {
@@ -234,14 +239,11 @@ describe('Font Color → WP Compatibility', () => {
 
 				// open color popover
 				cy.get('@container').within(() => {
-					cy.get('button').as('value-addon-btn');
-					cy.get('@value-addon-btn').click();
+					cy.clickValueAddonButton();
 				});
 
 				// change variable
-				cy.get('.components-popover').within(() => {
-					cy.get('[data-cy="va-item-contrast"]').click();
-				});
+				cy.selectValueAddonItem('contrast');
 
 				// Check WP data
 				getWPDataObject().then((data) => {
@@ -281,9 +283,7 @@ describe('Font Color → WP Compatibility', () => {
 
 				// open color popover
 				cy.get('@container').within(() => {
-					cy.get('[data-cy="value-addon-btn-remove"]').click({
-						force: true,
-					});
+					cy.removeValueAddon();
 				});
 
 				// Check WP data
@@ -360,13 +360,12 @@ describe('Font Color → WP Compatibility', () => {
 
 				// open color popover
 				cy.get('@container').within(() => {
-					cy.get('button').as('value-addon-btn');
-					cy.get('@value-addon-btn').click();
+					cy.clickValueAddonButton();
 				});
 
 				// change variable
 				cy.get('.components-popover').within(() => {
-					cy.get('[data-cy="va-item-contrast"]').click();
+					cy.selectValueAddonItem('contrast');
 				});
 
 				// Check WP data
@@ -407,9 +406,7 @@ describe('Font Color → WP Compatibility', () => {
 
 				// open color popover
 				cy.get('@container').within(() => {
-					cy.get('[data-cy="value-addon-btn-remove"]').click({
-						force: true,
-					});
+					cy.removeValueAddon();
 				});
 
 				// Check WP data

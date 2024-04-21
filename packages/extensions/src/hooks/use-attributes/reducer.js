@@ -8,13 +8,14 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Publisher dependencies
  */
-import { mergeObject } from '@publisher/utils';
+import { isEquals, isObject, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
 import { memoizedBlockStates, resetAllStates } from './helpers';
 import { isBaseBreakpoint, isInnerBlock } from '../../components';
+import { sharedBlockExtensionAttributes as defaultAttributes } from '../../libs';
 
 const reducer = (state: Object = {}, action: Object): Object => {
 	const {
@@ -23,6 +24,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		blockId,
 		newValue,
 		attributeId,
+		innerBlocks,
 		currentBlock,
 		currentState,
 		isNormalState,
@@ -39,8 +41,11 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		getAttributes,
 		{
 			blockId,
+			innerBlocks,
 			currentBlock,
-			currentState,
+			currentState: isInnerBlock(currentBlock)
+				? currentInnerBlockState
+				: currentState,
 			currentBreakpoint,
 			currentInnerBlockState,
 			isNormalState: isNormalState(),
@@ -53,6 +58,11 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		case 'UPDATE_NORMAL_STATE':
 			// Handle inner block changes.
 			if (isInnerBlock(currentBlock)) {
+				const isEqualsWithDefault = isEquals(
+					defaultAttributes[attributeId]?.default,
+					newValue
+				);
+
 				/**
 				 * Filterable attributes before set next state.
 				 * usefully in add WordPress compatibility and any other filters.
@@ -63,16 +73,28 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				 */
 				return applyFilters(
 					'publisherCore.blockEdit.setAttributes',
-					mergeObject(state, {
-						publisherInnerBlocks: {
-							[currentBlock]: {
-								attributes: {
-									...effectiveItems,
-									[attributeId]: newValue,
+					mergeObject(
+						state,
+						{
+							publisherInnerBlocks: {
+								[currentBlock]: {
+									attributes: {
+										...effectiveItems,
+										[attributeId]: isEqualsWithDefault
+											? undefined
+											: newValue,
+									},
 								},
 							},
 						},
-					}),
+						{
+							deletedProps: [attributeId],
+							forceUpdated:
+								!isEqualsWithDefault && isObject(newValue)
+									? [attributeId]
+									: [],
+						}
+					),
 					...hookParams
 				);
 			}
@@ -125,23 +147,30 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 */
 			return applyFilters(
 				'publisherCore.blockEdit.setAttributes',
-				mergeObject(state, {
-					publisherInnerBlocks: {
-						[currentBlock]: {
-							attributes: {
-								publisherBlockStates: memoizedBlockStates(
-									state.publisherInnerBlocks[currentBlock]
-										.attributes,
-									action,
-									{
-										currentState: currentInnerBlockState,
-										insideInnerBlock: false,
-									}
-								),
+				mergeObject(
+					state,
+					{
+						publisherInnerBlocks: {
+							[currentBlock]: {
+								attributes: {
+									publisherBlockStates: memoizedBlockStates(
+										state.publisherInnerBlocks[currentBlock]
+											.attributes,
+										action,
+										{
+											currentState:
+												currentInnerBlockState,
+											insideInnerBlock: false,
+										}
+									),
+								},
 							},
 						},
 					},
-				}),
+					{
+						forceUpdated: isObject(newValue) ? [attributeId] : [],
+					}
+				),
 				...hookParams
 			);
 

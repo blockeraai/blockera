@@ -9,8 +9,8 @@ import { select } from '@wordpress/data';
  * Publisher dependencies
  */
 import { prepare } from '@publisher/data-extractor';
-import { isInnerBlock } from '@publisher/extensions';
 import { isString, isUndefined } from '@publisher/utils';
+import { isInnerBlock } from '@publisher/extensions/src/components/utils';
 import type { TStates } from '@publisher/extensions/src/libs/block-states/types';
 import type { InnerBlockType } from '@publisher/extensions/src/libs/inner-blocks/types';
 
@@ -21,7 +21,7 @@ import { getSelector } from './utils';
 import type { NormalizedSelectorProps } from './types';
 import { isNormalState } from '@publisher/extensions/src/components';
 
-export function getCssSelector({
+export const getCssSelector = ({
 	state,
 	query,
 	support,
@@ -31,7 +31,7 @@ export function getCssSelector({
 	className = '',
 	suffixClass = '',
 	fallbackSupportId,
-}: NormalizedSelectorProps): string {
+}: NormalizedSelectorProps): string => {
 	const { getDeviceType } = select('publisher-core/editor');
 	const deviceType = getDeviceType();
 	const rootSelector =
@@ -44,15 +44,18 @@ export function getCssSelector({
 			[key: 'master' | InnerBlockType | string]: string,
 		},
 	} = {};
-	const excludedPseudoClasses = [
+	const customizedPseudoClasses = [
 		'normal',
 		'parent-class',
 		'custom-class',
 		'parent-hover',
 	];
 	const { getSelectedBlock } = select('core/block-editor');
-	const { getExtensionInnerBlockState, getExtensionCurrentBlockState } =
-		select('publisher-core/extensions');
+	const {
+		getExtensionCurrentBlock,
+		getExtensionInnerBlockState,
+		getExtensionCurrentBlockState,
+	} = select('publisher-core/extensions');
 
 	// primitive block value.
 	let block: Object = {};
@@ -62,7 +65,118 @@ export function getCssSelector({
 	}
 
 	const register = (_selector: string): void => {
-		_selector = _selector.trim();
+		const registerSelector = (generatedSelector: string) => {
+			switch (state) {
+				case 'parent-class':
+					if (block?.attributes?.publisherBlockStates[state]) {
+						generatedSelector = `${block?.attributes?.publisherBlockStates[state]['css-class']} ${generatedSelector}`;
+					}
+					break;
+				case 'custom-class':
+					if (block?.attributes?.publisherBlockStates[state]) {
+						generatedSelector =
+							block?.attributes?.publisherBlockStates[state][
+								'css-class'
+							] +
+							suffixClass +
+							',' +
+							generatedSelector;
+					}
+					break;
+
+				case 'parent-hover':
+					// FIXME: implements parent-hover pseudo-class for parent selector.
+					break;
+			}
+
+			selectors[state] = {
+				// $FlowFixMe
+				[currentBlock]: generatedSelector,
+			};
+		};
+
+		const normalizedSelector = (
+			fromInnerBlock: boolean = false
+		): string => {
+			const parsedSelectors = _selector.split(',');
+			const generateSelector = (selector: string): string => {
+				// Current Block is inner block.
+				if (fromInnerBlock) {
+					// Recieved state is not normal and recieved state is not one of customizedPseudoClasses.
+					// because customizedPseudoClasses by default not supported in css.
+					if (
+						!isNormalState(state) &&
+						!customizedPseudoClasses.includes(state)
+					) {
+						// Master block is not normal.
+						if (!isNormalState(getExtensionCurrentBlockState())) {
+							// Assume recieved state equals with master block real state.
+							if (
+								state === getExtensionCurrentBlockState() &&
+								isInnerBlock(getExtensionCurrentBlock())
+							) {
+								return `${rootSelector}:${state} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+							}
+
+							// Assume real current block is master.
+							if (!isInnerBlock(getExtensionCurrentBlock())) {
+								return `${rootSelector} ${selector}${suffixClass}:${state}`;
+							}
+
+							return `${rootSelector}:${state} ${selector}${suffixClass}:${state}`;
+						}
+
+						// Assume recieved state equals with inner block real state.
+						if (
+							state === getExtensionInnerBlockState() &&
+							isInnerBlock(getExtensionCurrentBlock())
+						) {
+							return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+						}
+
+						return `${rootSelector} ${selector}${suffixClass}:${state}`;
+					}
+
+					// Assume active master block state is not normal and recieved state is not one of customizedPseudoClasses.
+					// because customizedPseudoClasses by default not supported in css.
+					if (
+						!isNormalState(getExtensionCurrentBlockState()) &&
+						!customizedPseudoClasses.includes(state)
+					) {
+						return `${rootSelector}:${state} ${selector}${suffixClass}, ${rootSelector} ${selector}${suffixClass}`;
+					}
+
+					return `${rootSelector} ${selector}${suffixClass}`;
+				}
+
+				// Recieved state is not normal and recieved state is not one of customizedPseudoClasses.
+				// because customizedPseudoClasses by default not supported in css.
+				if (
+					!isNormalState(state) &&
+					!customizedPseudoClasses.includes(state)
+				) {
+					// Assume active master block state is not normal.
+					if (
+						!isNormalState(getExtensionCurrentBlockState()) &&
+						state === getExtensionCurrentBlockState()
+					) {
+						return `${selector}${suffixClass}:${state}, ${selector}${suffixClass}`;
+					}
+
+					return `${selector}${suffixClass}:${state}`;
+				}
+
+				return `${selector}${suffixClass}`;
+			};
+
+			if (1 === parsedSelectors.length) {
+				return generateSelector(_selector);
+			}
+
+			return parsedSelectors
+				.map((selector: string): string => generateSelector(selector))
+				.join(', ');
+		};
 
 		// Assume selector is invalid.
 		if (!_selector) {
@@ -96,57 +210,40 @@ export function getCssSelector({
 			return;
 		}
 
-		_selector = rootSelector === _selector ? rootSelector : _selector;
-
+		// Assume current block is one of inners type.
 		if (isInnerBlock(currentBlock)) {
-			_selector = `${rootSelector} ${_selector}`;
-		}
-
-		// if state not equals with any one of excluded pseudo-class
-		if (!excludedPseudoClasses.includes(state)) {
-			if (
-				(isInnerBlock(currentBlock) &&
-					!isNormalState(getExtensionInnerBlockState())) ||
-				!isNormalState(getExtensionCurrentBlockState())
-			) {
-				_selector = `${_selector}:${state}${suffixClass}, ${_selector}${suffixClass}`;
-			} else {
-				_selector = `${_selector}:${state}${suffixClass}`;
+			switch (state) {
+				case 'custom-class':
+				case 'parent-class':
+					// TODO:
+					break;
+				case 'parent-hover':
+					// TODO:
+					break;
+				default:
+					registerSelector(normalizedSelector(true));
+					break;
 			}
 		}
-
-		switch (state) {
-			case 'parent-class':
-				if (block?.attributes?.publisherBlockStates[state]) {
-					_selector = `${block?.attributes?.publisherBlockStates[state]['css-class']} ${_selector}`;
-				}
-				break;
-			case 'custom-class':
-				if (block?.attributes?.publisherBlockStates[state]) {
-					_selector =
-						block?.attributes?.publisherBlockStates[state][
-							'css-class'
-						] +
-						suffixClass +
-						',' +
-						_selector;
-				}
-				break;
-
-			case 'parent-hover':
-				// FIXME: implements parent-hover pseudo-class for parent selector.
-				break;
+		// Current block is master.
+		else {
+			switch (state) {
+				case 'custom-class':
+				case 'parent-class':
+					// TODO:
+					break;
+				case 'parent-hover':
+					// TODO:
+					break;
+				default:
+					registerSelector(normalizedSelector());
+					break;
+			}
 		}
-
-		selectors[state] = {
-			// $FlowFixMe
-			[currentBlock]:
-				-1 !== _selector.indexOf(suffixClass)
-					? _selector
-					: `${_selector}${suffixClass}`,
-		};
 	};
 
+	// preparing css selector from support path as key in block selectors map as object.
+	// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 	const selector = prepareCssSelector({
 		query,
 		support,
@@ -155,31 +252,16 @@ export function getCssSelector({
 	});
 
 	// FIXME: after implements parent-hover infrastructure please remove exclude this pseudo-class!
-	if (!selector || ['parent-hover'].includes(state)) {
+	if (['parent-hover'].includes(state)) {
+		// TODO: implements ...
+		return '';
+	}
+
+	if (selector && selector.trim()) {
+		register(selector);
+	} else {
 		register(rootSelector);
-
-		return getSelector({
-			state,
-			clientId,
-			selectors,
-			className,
-			currentBlock,
-		});
 	}
-
-	const explodedSelectors = selector.split(',');
-
-	if (!explodedSelectors.length) {
-		return getSelector({
-			state,
-			clientId,
-			selectors,
-			className,
-			currentBlock,
-		});
-	}
-
-	explodedSelectors.forEach(register);
 
 	return getSelector({
 		state,
@@ -188,7 +270,7 @@ export function getCssSelector({
 		className,
 		currentBlock,
 	});
-}
+};
 
 /**
  * Retrieve css selector with selectors dataset , support id and query string.

@@ -5,6 +5,7 @@ export default function WarningIcon() {
 			height="18"
 			viewBox="0 0 18 18"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="notice-control-icon-warning"
 		>
 			<path
 				fillRule="evenodd"

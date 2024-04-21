@@ -13,7 +13,7 @@ export const attributes = {
 	},
 	publisherFlexWrap: {
 		type: 'object',
-		default: { value: 'nowrap', reverse: false },
+		default: { value: '', reverse: false },
 	},
 	publisherAlignContent: {
 		type: 'string',

@@ -15,20 +15,23 @@ class Spacing extends BaseStyleDefinition {
 	 *
 	 * @return string[]
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
-		if ( empty( $setting['type'] ) ) {
+		$declaration = [];
+		$cssProperty = $setting['type'];
 
-			return $this->properties;
+		if ( empty( $cssProperty ) ) {
+
+			return $declaration;
 		}
 
-		$type = $setting['type'];
+		$this->setSelector( $cssProperty );
 
-		[ 'padding' => $padding, 'margin' => $margin ] = $setting[ $type ];
+		[ 'padding' => $padding, 'margin' => $margin ] = $setting[ $cssProperty ];
 
 		if ( empty( $padding ) && empty( $margin ) ) {
 
-			return $this->properties;
+			return $declaration;
 		}
 
 		$padding = is_array( $padding ) ? array_filter(
@@ -43,33 +46,28 @@ class Spacing extends BaseStyleDefinition {
 
 		$isImportant = $this->getImportant();
 
-		$this->setProperties(
-			array_merge(
-				...array_map(
-				static function ( string $item, string $property ) use ( $isImportant ): array {
+		$declaration = array_merge(
+			...array_map(
+			static function ( string $item, string $property ) use ( $isImportant ): array {
 
-					return [ "padding-{$property}" => pb_get_value_addon_real_value( $item ) . $isImportant ];
-				},
-				$padding,
-				array_keys( $padding )
-			),
-				...array_map(
-				static function ( string $item, string $property ) use ( $isImportant ): array {
+				return [ "padding-{$property}" => pb_get_value_addon_real_value( $item ) . $isImportant ];
+			},
+			$padding,
+			array_keys( $padding )
+		),
+			...array_map(
+			static function ( string $item, string $property ) use ( $isImportant ): array {
 
-					return [ "margin-{$property}" => pb_get_value_addon_real_value( $item ) . $isImportant ];
-				},
-				$margin,
-				array_keys( $margin )
-			),
-			),
+				return [ "margin-{$property}" => pb_get_value_addon_real_value( $item ) . $isImportant ];
+			},
+			$margin,
+			array_keys( $margin )
+		),
 		);
 
-		return $this->properties;
-	}
+		$this->setCss( $declaration );
 
-	protected function getCacheKey( string $suffix = '' ): string {
-
-		return pb_get_classname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
+		return $this->css;
 	}
 
 	private function filteredItems( string $item ): bool {

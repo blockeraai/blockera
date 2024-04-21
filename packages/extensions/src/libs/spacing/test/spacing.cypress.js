@@ -7,7 +7,9 @@ import {
 } from '../../../../../../cypress/helpers';
 
 describe('Spacing Extension', () => {
-	//describe('Extension Initializing', () => {...});
+	beforeEach(() => {
+		createPost();
+	});
 
 	describe('Margin', () => {
 		beforeEach(() => {

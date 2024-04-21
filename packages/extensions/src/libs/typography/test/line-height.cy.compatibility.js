@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Line Height → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Paragraph Block', () => {
 		it('Simple value', () => {
 			appendBlocks(

@@ -21,7 +21,7 @@ export function BeforeDividerGenerator(id, props) {
 export function AfterDividerGenerator(id, props) {
 	const { attributes } = props;
 
-	if (!attributes?.publisherDivider?.length) {
+	if (!Object.keys(attributes?.publisherDivider)?.length) {
 		return '';
 	}
 

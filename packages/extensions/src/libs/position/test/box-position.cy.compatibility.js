@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Box Position → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Group Block', () => {
 		it('Simple Position', () => {
 			appendBlocks(
@@ -22,7 +27,10 @@ describe('Box Position → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Switch to parent group block
-			cy.get('[aria-label="Select Group"]').click();
+			cy.getByAriaLabel(
+				'Select Group',
+				'Select parent block: Group'
+			).click();
 
 			// add alias to the feature container
 			cy.getParentContainer('Position').as('container');
@@ -52,10 +60,7 @@ describe('Box Position → WP Compatibility', () => {
 
 			// change position
 			cy.get('@container').within(() => {
-				cy.get('button[aria-haspopup="listbox"]').click();
-				cy.get('ul').within(() => {
-					cy.contains('Absolute').trigger('click');
-				});
+				cy.customSelect('Absolute');
 			});
 
 			// Blockera value should be moved to WP data
@@ -75,10 +80,7 @@ describe('Box Position → WP Compatibility', () => {
 
 			// change position
 			cy.get('@container').within(() => {
-				cy.get('button[aria-haspopup="listbox"]').click();
-				cy.get('ul').within(() => {
-					cy.contains('Default').trigger('click');
-				});
+				cy.customSelect('Default');
 			});
 
 			// WP data should be removed too

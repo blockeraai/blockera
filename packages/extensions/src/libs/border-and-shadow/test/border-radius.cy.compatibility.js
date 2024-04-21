@@ -3,11 +3,16 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Border Radius → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
 	describe('Button Block', () => {
 		it('Compacted corners border radius', () => {
 			appendBlocks(

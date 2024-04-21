@@ -5,9 +5,14 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Media Fit → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	// core/post-featured-image Block is the same as core/image
 	describe('core/image Block', () => {
 		it('Simple Value', () => {

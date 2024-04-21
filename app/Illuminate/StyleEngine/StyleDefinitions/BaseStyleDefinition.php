@@ -2,10 +2,9 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
-use Publisher\Framework\Exceptions\BaseException;
-use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\Style;
+use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
 
-abstract class BaseStyleDefinition implements Style {
+abstract class BaseStyleDefinition {
 
 	/**
 	 * hold style definition settings from consumer request.
@@ -19,7 +18,29 @@ abstract class BaseStyleDefinition implements Style {
 	 *
 	 * @var array
 	 */
-	protected array $properties = [];
+	protected array $declarations = [];
+
+	/**
+	 * store all css selectors.
+	 *
+	 * @var array
+	 */
+	protected array $selectors = [];
+
+	/**
+	 * store css selector.
+	 *
+	 * @var string
+	 */
+	protected string $selector = '';
+
+	/**
+	 * Store final generated css,
+	 * involves collection of css selector related to generated css declaration.
+	 *
+	 * @var array
+	 */
+	protected array $css = [];
 
 	/**
 	 * hold collection of options to generate style
@@ -36,6 +57,110 @@ abstract class BaseStyleDefinition implements Style {
 			$this->options,
 			$options
 		);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSelector(): string {
+
+		return $this->selector;
+	}
+
+	/**
+	 * Sets suitable css selector for related property.
+	 *
+	 * @param string $featureId The feature identifier.
+	 *
+	 */
+	public function setSelector( string $featureId ): void {
+
+		$selectors  = $this->getSelectors();
+		$fallbackId = $this->calculateFallbackFeatureId( $featureId );
+
+		$this->selector = pb_calculate_feature_css_selector( $selectors, $featureId, $fallbackId );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSelectors(): array {
+
+		return $this->selectors;
+	}
+
+	/**
+	 * Sets selectors into stack.
+	 *
+	 * @param array $selectors the recieved selectors property.
+	 */
+	public function setSelectors( array $selectors ): void {
+
+		$this->selectors = $selectors;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCssRules(): array {
+
+//		$this->filterSettings();
+
+		array_map( [ $this, 'generateCssRules' ], $this->settings, array_keys( $this->settings ) );
+
+		return array_filter( $this->css, 'pb_get_filter_empty_array_item' );
+	}
+
+	/**
+	 * Generating css rules.
+	 *
+	 * @param mixed  $value the prepared setting from context.
+	 * @param string $name  the name of setting.
+	 *
+	 * @return void
+	 */
+	protected function generateCssRules( $value, string $name ): void {
+
+		$cssProperty = $this->getValidCssProp( $name );
+
+		if ( ! $cssProperty ) {
+
+			return;
+		}
+
+		if ( $this instanceof HaveCustomSettings ) {
+
+			$setting = $this->getCustomSettings( $this->settings, $name, $cssProperty );
+
+		} else {
+
+			$setting = [
+				[
+					'isVisible' => true,
+					'type'      => $cssProperty,
+					$cssProperty       => $value,
+				]
+			];
+		}
+
+		array_map( [ $this, 'css' ], $setting );
+	}
+
+	/**
+	 * Sets css declaration into current selector.
+	 *
+	 * @param array $declaration the generated css declarations array.
+	 */
+	public function setCss( array $declaration ): void {
+
+		if ( isset( $this->css[ $this->getSelector() ] ) ) {
+
+			$this->css[ $this->getSelector() ] = array_merge( $this->css[ $this->getSelector() ], $declaration );
+
+			return;
+		}
+
+		$this->css[ $this->getSelector() ] = $declaration;
 	}
 
 	/**
@@ -63,9 +188,9 @@ abstract class BaseStyleDefinition implements Style {
 	 *
 	 * @return void
 	 */
-	protected function setProperties( array $props ): void {
+	protected function setDeclarations( array $props ): void {
 
-		$this->properties = $props;
+		$this->declarations = $props;
 	}
 
 	/**
@@ -75,12 +200,14 @@ abstract class BaseStyleDefinition implements Style {
 	 *
 	 * @return void
 	 */
-	protected function setProperty( string $id, $value ): void {
+	protected function setDeclaration( string $id, $value ): void {
 
-		$this->properties[ $id ] = $value;
+		$this->declarations[ $id ] = $value;
 	}
 
 	/**
+	 * Sets settings for generating css process.
+	 *
 	 * @param array $settings
 	 *
 	 * @return void
@@ -88,55 +215,6 @@ abstract class BaseStyleDefinition implements Style {
 	public function setSettings( array $settings ): void {
 
 		$this->settings = $settings;
-	}
-
-	/**
-	 * Setup css cache.
-	 *
-	 * @param mixed|array $cacheValue the cache value as array {$css}
-	 * @param string      $cacheKey   the cache key to read and write in database.
-	 *
-	 * @throws BaseException
-	 * @return bool true on success updated cache value in database, false when otherwise!
-	 */
-	protected function setCache( $cacheValue, string $cacheKey = '' ): bool {
-
-		if ( empty( $cacheKey ) ) {
-
-			$cacheKey = $this->getCacheKey();
-		}
-
-		$updated = update_option( $cacheKey, $cacheValue );
-
-		if ( ! $updated ) {
-
-			throw new BaseException( __( "Please check invalid css property name in " . __CLASS__ . ", There was an in StyleEngine::filter_safe_style_css() , Error!", 'publisher-core' ) );
-		}
-
-		return $updated;
-	}
-
-	/**
-	 * Setup css cache.
-	 *
-	 * @param string $cacheKey the cache key to read and write in database.
-	 *
-	 * @return mixed|false css older generated if is exists in database!
-	 *                     when return false means {$cacheKey} was not exists!
-	 */
-	protected function getCache( string $cacheKey = '' ) {
-
-		if ( empty( $cacheKey ) ) {
-
-			$cacheKey = $this->getCacheKey();
-		}
-
-		return get_option( $cacheKey );
-	}
-
-	protected function getCacheKey( string $suffix = '' ): string {
-
-		return 'CssData' . $suffix;
 	}
 
 	/**
@@ -166,87 +244,70 @@ abstract class BaseStyleDefinition implements Style {
 	}
 
 	/**
-	 * Retrieve css properties.
-	 *
-	 * @return array the css properties.
+	 * @return array the css declarations.
 	 */
-	public function getProperties(): array {
+	public function getDeclarations(): array {
 
-		foreach ( $this->getPrepareSettings() as $name => $setting ) {
-
-			$type = $this->getValidCssProp( $name );
-
-			if ( ! $type ) {
-
-				continue;
-			}
-
-			$setting = [
-				[
-					'isVisible' => true,
-					'type'      => $type,
-					$type       => $setting,
-				]
-			];
-
-			array_map( [ $this, 'collectProps' ], $setting );
-		}
-
-		return array_filter( $this->properties, 'pb_get_filter_empty_array_item' );
+		return $this->declarations;
 	}
 
 	/**
-	 * Get settings.
-	 *
-	 * @return array The prepared needs settings.
+	 * Filtering settings property.
 	 */
-	protected function getPrepareSettings(): array {
+	protected function filterSettings(): void {
 
-		$preparedSettings = [];
+		$definition = $this;
 
-		foreach ( $this->settings as $name => $setting ) {
-
-			// Not available number properties!
-			if ( ! is_string( $name ) ) {
-
-				continue;
-			}
-
-			// Assume current setting not allowed to handle on this definition.
-			if ( ! array_key_exists( $name, $this->getAllowedProperties() ) ) {
-
-				continue;
-			}
-
-			// Check is registered setting?
-			if ( ! empty( $preparedSettings[ $name ] ) ) {
-
-				continue;
-			}
-
-			$preparedSettings[ $name ] = $setting;
-		}
-
-		return $preparedSettings;
+		array_map( [ $this, 'removeInvalidSettings' ], $this->settings, array_keys( $this->settings ) );
 	}
 
 	/**
-	 * collect all css props.
+	 * Remove invalid setting from stack.
 	 *
-	 * @param array $setting the background settings.
-	 *
-	 * @return array
-	 */
-	abstract protected function collectProps( array $setting ): array;
-
-	/**
-	 * Flush all properties.
+	 * @param mixed        $setting the setting.
+	 * @param string | int $name    the name of setting.
 	 *
 	 * @return void
 	 */
-	public function flushProperties(): void {
+	protected function removeInvalidSettings( $setting, $name ): void {
 
-		$this->properties = [];
+		// Assume current setting not allowed to handle on this definition.
+		if ( null === $setting || ! array_key_exists( $name, $this->getAllowedProperties() ) || ! is_string( $name ) ) {
+
+			unset( $this->settings[ $name ] );
+		}
+	}
+
+	/**
+	 * collect all css selectors and declarations.
+	 *
+	 * @param array $setting the block setting.
+	 *
+	 * @return array Retrieve array of collection of css selectors and css declarations.
+	 */
+	abstract protected function css( array $setting ): array;
+
+	/**
+	 * Calculation fallback feature id.
+	 * To be compatible with WordPress block selectors.
+	 *
+	 * @param string $cssProperty The css property key.
+	 *
+	 * @return string The path to fallback feature id.
+	 */
+	protected function calculateFallbackFeatureId( string $cssProperty ): string {
+
+		return '';
+	}
+
+	/**
+	 * Flush all declarations.
+	 *
+	 * @return void
+	 */
+	public function flushDeclarations(): void {
+
+		$this->declarations = [];
 	}
 
 }

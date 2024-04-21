@@ -21,27 +21,35 @@ if ( ! function_exists( 'pb_core_config' ) ) {
 			return false;
 		}
 
-		$key_parts       = explode( '.', $key );
-		$config_includes = array(
+		$keyNodes = explode( '.', $key );
+
+		$configIncludes = array(
 			'app'         => PB_CORE_PATH . '/config/app.php',
 			'entities'    => PB_CORE_PATH . '/config/entities.php',
 			'breakpoints' => PB_CORE_PATH . '/config/breakpoints.php',
 			'valueAddon'  => PB_CORE_PATH . '/config/value-addon.php',
 		);
 
-		if ( ! $config_includes[ $key_parts[0] ] ) {
+		$firstNode = array_shift( $keyNodes );
+
+		if ( ! $configIncludes[ $firstNode ] ) {
 
 			return false;
 		}
 
-		$app_config = require $config_includes[ $key_parts[0] ];
+		$config = require $configIncludes[ $firstNode ];
 
-		if ( empty( $key_parts[1] ) ) {
+		foreach ( $keyNodes as $node ) {
 
-			return $app_config;
+			if ( ! isset( $config[ $node ] ) ) {
+
+				return $config;
+			}
+
+			$config = $config[$node];
 		}
 
-		return $app_config[ $key_parts[1] ];
+		return $config;
 	}
 }
 
@@ -182,5 +190,61 @@ if ( ! function_exists( 'pb_array_flat' ) ) {
 	function pb_array_flat( array $nestedArray ): array {
 
 		return array_merge( ...$nestedArray );
+	}
+}
+
+if ( ! function_exists( 'pb_get_sorted_repeater' ) ) {
+
+	/**
+	 * Sorting repeater items.
+	 *
+	 * @param array $items the repeater items.
+	 *
+	 * @return array
+	 */
+	function pb_get_sorted_repeater( array $items ): array {
+
+		$dataArray = [];
+
+		foreach ( $items as $key => $value ) {
+			$dataArray[] = $value;
+		}
+
+		usort( $dataArray, function ( $a, $b ) {
+
+			return ( $a['order'] ?? 0 ) - ( $b['order'] ?? 0 );
+		} );
+
+		return $dataArray;
+	}
+}
+
+if ( ! function_exists( 'pb_camel_case_join' ) ) {
+
+	/**
+	 * Joining text items in camelCase format.
+	 *
+	 * @param string $string the target string.
+	 *
+	 * @return string The camelCase string.
+	 */
+	function pb_camel_case_join( string $string ): string {
+
+		$items = explode( '-', $string );
+
+		if ( 1 === count( $items ) ) {
+
+			return strtolower( $items[0] );
+		}
+
+		$firstPart     = strtolower( array_shift( $items ) );
+		$secondaryPart = '';
+
+		foreach ( $items as $item ) {
+
+			$secondaryPart .= ucfirst( $item );
+		}
+
+		return $firstPart . $secondaryPart;
 	}
 }

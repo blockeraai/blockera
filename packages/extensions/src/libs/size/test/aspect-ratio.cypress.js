@@ -7,10 +7,13 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Aspect Ratio → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.');
@@ -20,7 +23,6 @@ describe('Aspect Ratio → Functionality', () => {
 
 	it('should update aspect-ratio correctly, when add value', () => {
 		// activate ratio
-		// cy.openMoreFeatures('More Size Settings');
 		cy.activateMoreSettingsItem('More Size Settings', 'Aspect Ratio');
 
 		// Standard 1:1

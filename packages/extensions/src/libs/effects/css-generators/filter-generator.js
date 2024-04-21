@@ -1,6 +1,7 @@
 /**
  * Publisher dependencies
  */
+import { getSortedRepeater } from '@publisher/controls';
 import { isUndefined } from '@publisher/utils';
 import { createCssDeclarations } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
@@ -18,7 +19,7 @@ export function FilterGenerator(id, props) {
 		return '';
 	}
 
-	const value = Object.entries(attributes[_id])
+	const value = getSortedRepeater(attributes[_id])
 		?.map(([, item]) => {
 			if (!item.isVisible) {
 				return null;

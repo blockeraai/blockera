@@ -4,10 +4,14 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Decoration → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
@@ -18,7 +22,7 @@ describe('Text Decoration → Functionality', () => {
 	});
 
 	it('simple value', () => {
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 
 		cy.getByAriaLabel('Overline').click();
 

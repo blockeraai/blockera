@@ -143,11 +143,11 @@ export const resetExtensionSettings = () => {
 		changeExtensionCurrentBlock: setCurrentBlock,
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
-		changeExtensionCurrentBlockStateBreakpoint: setCurrentBreakpoint,
+		// changeExtensionCurrentBlockStateBreakpoint: setCurrentBreakpoint,
 	} = dispatch('publisher-core/extensions') || {};
 
 	setCurrentBlock('master');
 	setCurrentState('normal');
 	setInnerBlockState('normal');
-	setCurrentBreakpoint('laptop');
+	// setCurrentBreakpoint('laptop');
 };

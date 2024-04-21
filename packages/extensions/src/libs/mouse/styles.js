@@ -26,6 +26,7 @@ export const MouseStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const { publisherCursor, publisherUserSelect, publisherPointerEvents } =
 		config.mouseConfig;
@@ -36,6 +37,7 @@ export const MouseStyles = ({
 	};
 	const { attributes: currBlockAttributes } = blockProps;
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,

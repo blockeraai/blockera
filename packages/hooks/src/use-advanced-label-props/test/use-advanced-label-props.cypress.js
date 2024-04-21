@@ -1,6 +1,7 @@
 import {
 	appendBlocks,
-	// setBlockType,
+	createPost,
+	// setInnerBlock,
 	// setDeviceType,
 } from '../../../../../cypress/helpers';
 
@@ -30,6 +31,10 @@ function getFontSizeLabelStyle(cssClass) {
 }
 
 describe('useAdvancedLabelProps Hook Testing ...', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	it('should display changed value on Paragraph -> Normal -> Laptop', () => {
 		appendBlocks(
 			'<!-- wp:paragraph -->\n' +

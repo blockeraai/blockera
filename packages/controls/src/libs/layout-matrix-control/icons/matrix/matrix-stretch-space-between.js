@@ -6,6 +6,7 @@ export default function MatrixStretchSpaceBetweenIcon({ direction = 'row' }) {
 				height="66"
 				viewBox="0 0 66 66"
 				xmlns="http://www.w3.org/2000/svg"
+				data-test="matrix-stretch-space-between-row"
 			>
 				<path d="M32 64C31.4477 64 31 63.5523 31 63L31 3C31 2.44771 31.4477 2 32 2L34 2C34.5523 2 35 2.44772 35 3L35 63C35 63.5523 34.5523 64 34 64H32Z" />
 				<path d="M3 64C2.44772 64 2 63.5523 2 63L2.00001 3C2.00001 2.44771 2.44772 2 3.00001 2L5 2C5.55229 2 6 2.44772 6 3L5.99999 63C5.99999 63.5523 5.55228 64 4.99999 64H3Z" />
@@ -20,6 +21,7 @@ export default function MatrixStretchSpaceBetweenIcon({ direction = 'row' }) {
 			height="66"
 			viewBox="0 0 66 66"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="matrix-stretch-space-between-column"
 		>
 			<path d="M2 32C2 31.4477 2.44772 31 3 31L63 31C63.5523 31 64 31.4477 64 32V34C64 34.5523 63.5523 35 63 35L3 35C2.44772 35 2 34.5523 2 34L2 32Z" />
 			<path d="M2 3C2 2.44772 2.44772 2 3 2L63 2.00001C63.5523 2.00001 64 2.44773 64 3.00001V5C64 5.55229 63.5523 6.00001 63 6.00001L3 5.99999C2.44772 5.99999 2 5.55228 2 4.99999L2 3Z" />

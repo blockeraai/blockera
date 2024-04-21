@@ -5,9 +5,15 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Align → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Paragraph Block', () => {
 		it('Simple value', () => {
 			appendBlocks(
@@ -20,7 +26,7 @@ describe('Text Align → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Open more settings
-			cy.openMoreFeatures('More typography settings');
+			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Text Align').as('container');
 

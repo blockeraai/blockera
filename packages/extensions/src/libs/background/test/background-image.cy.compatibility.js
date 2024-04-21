@@ -3,11 +3,16 @@
  */
 import {
 	appendBlocks,
+	createPost,
 	getSelectedBlock,
 	getWPDataObject,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Background → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
 	describe('Paragraph Block', () => {
 		describe('Linear Gradient Background', () => {
 			it('Simple Value', () => {
@@ -155,9 +160,7 @@ describe('Background → WP Compatibility', () => {
 				cy.get(
 					'.components-popover.publisher-control-background-popover'
 				).within(() => {
-					cy.get('[data-cy="value-addon-btn"]').click({
-						force: true,
-					});
+					cy.clickValueAddonButton();
 				});
 
 				cy.wait(500);
@@ -295,7 +298,10 @@ describe('Background → WP Compatibility', () => {
 				cy.getBlock('core/paragraph').click();
 
 				// Switch to parent block
-				cy.getByAriaLabel('Select Group').click();
+				cy.getByAriaLabel(
+					'Select Group',
+					'Select parent block: Group'
+				).click();
 
 				// add alias to the feature container
 				cy.getParentContainer('Image & Gradient').as('bgContainer');

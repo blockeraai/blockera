@@ -74,6 +74,7 @@ export function elementHoverFontColorFromWPCompatibility({
 			};
 		}
 	}
+
 	return false;
 }
 

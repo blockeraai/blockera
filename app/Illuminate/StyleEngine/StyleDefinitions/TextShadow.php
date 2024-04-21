@@ -11,9 +11,16 @@ class TextShadow extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
 		$cssProperty = $setting['type'];
+
+		if ( empty( $cssProperty ) ) {
+
+			return [];
+		}
+
+		$this->setSelector( $cssProperty );
 
 		$textShadows = array_map( static function ( array $prop ) {
 
@@ -28,16 +35,11 @@ class TextShadow extends BaseStyleDefinition {
 				! empty( $prop['blur'] ) ? pb_get_value_addon_real_value( $prop['blur'] ) : '',
 				! empty( $prop['color'] ) ? pb_get_value_addon_real_value( $prop['color'] ) : '',
 			);
-		}, $setting[ $cssProperty ] );
+		}, pb_get_sorted_repeater( $setting[ $cssProperty ] ) );
 
-		$this->setProperties( array_merge( $this->properties, [ $cssProperty => implode( ', ', $textShadows ) ] ) );
+		$this->setCss( [ $cssProperty => implode( ', ', $textShadows ) ] );
 
-		return $this->properties;
-	}
-
-	protected function getCacheKey( string $suffix = '' ): string {
-
-		return pb_get_classname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
+		return $this->css;
 	}
 
 	/**

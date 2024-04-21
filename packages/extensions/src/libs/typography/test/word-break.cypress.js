@@ -4,10 +4,14 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Word Break → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
@@ -16,7 +20,7 @@ describe('Word Break → Functionality', () => {
 
 		cy.getByDataTest('style-tab').click();
 
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 	});
 
 	it('should update word-break, when add data', () => {

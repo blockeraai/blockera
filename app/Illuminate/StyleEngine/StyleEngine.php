@@ -2,10 +2,15 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
+use JetBrains\PhpStorm\Pure;
 use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\BaseStyleDefinition;
-use Publisher\Framework\Services\Render\Parser;
+use Symfony\Component\VarDumper\VarDumper;
 
+/**
+ * Class StyleEngine generating css style for any state of breakpoints with any properties.
+ *
+ * @package StyleEngine
+ */
 final class StyleEngine {
 
 	/**
@@ -31,6 +36,13 @@ final class StyleEngine {
 	];
 
 	/**
+	 * Store block array.
+	 *
+	 * @var array
+	 */
+	protected array $block = [];
+
+	/**
 	 * Store array of settings.
 	 *
 	 * @var array $settings The settings array for generating css rules.
@@ -38,29 +50,57 @@ final class StyleEngine {
 	protected array $settings = [];
 
 	/**
-	 * Store css selector.
+	 * Store fallback css selector.
 	 *
 	 * @var string $selector The css selector for target element.
 	 */
 	protected string $selector = '';
 
 	/**
-	 * @var array
+	 * Store the definitions instances stack.
+	 *
+	 * @var array $definitions
 	 */
-	protected array $dependencies = [];
+	protected array $definitions = [];
+
+	/**
+	 * Store instance of current style definition class.
+	 *
+	 * @var BaseStyleDefinition $definition
+	 */
+	protected BaseStyleDefinition $definition;
+
+	/**
+	 * Store current pseudo state name.
+	 *
+	 * @var string $pseudoState
+	 */
+	protected string $pseudoState = 'normal';
+
+	/**
+	 * Store current device type.
+	 *
+	 * @var string $breakpoint
+	 */
+	protected string $breakpoint = 'laptop';
 
 	/**
 	 * Constructor.
 	 *
-	 * @param array  $settings     The request settings to generate css rules.
-	 * @param string $selector     The css selector for target element.
-	 * @param array  $dependencies The dependencies array to generating css properties from settings array.
+	 * @param array  $block            The current block.
+	 * @param string $fallbackSelector The css selector for target element.
+	 * @param array  $styleDefinitions The style definitions array to generating css properties from requested settings array.
 	 */
-	public function __construct( array $settings, string $selector, array $dependencies ) {
+	public function __construct( array $block, string $fallbackSelector, array $styleDefinitions ) {
 
-		$this->selector     = $selector;
-		$this->settings     = $settings;
-		$this->dependencies = $dependencies;
+		[
+			'attrs' => $settings,
+		] = $block;
+
+		$this->block       = $block;
+		$this->settings    = $settings;
+		$this->definitions = $styleDefinitions;
+		$this->selector    = $fallbackSelector;
 	}
 
 	/**
@@ -87,24 +127,38 @@ final class StyleEngine {
 	 */
 	protected function prepareBreakpointStyles( array $breakpoint ): string {
 
+		// Get css media queries.
 		$mediaQueries = pb_get_css_media_queries();
 
+		// Validate breakpoint type.
 		if ( ! isset( $breakpoint['type'], $mediaQueries[ $breakpoint['type'] ] ) ) {
 
 			return '';
 		}
 
+		// Set current breakpoint for generating styles process.
+		$this->breakpoint = $breakpoint['type'];
+
+		// Get state css rules with breakpoint type.
 		$stateCssRules = $this->getStateCssRules( $breakpoint['type'] );
 
+		// Exclude empty css rules.
 		if ( empty( $stateCssRules ) ) {
 
 			return '';
 		}
 
+		// Concatenate generated css media query includes all css rules for current recieved breakpoint type.
 		return sprintf(
 			'%1$s{%2$s}',
 			$mediaQueries[ $breakpoint['type'] ],
-			implode( PHP_EOL, pb_array_flat( $stateCssRules ) ),
+			implode( PHP_EOL, array_unique(
+					array_filter(
+						pb_array_flat( $stateCssRules ),
+						'pb_get_filter_empty_array_item'
+					)
+				)
+			),
 		);
 	}
 
@@ -116,8 +170,6 @@ final class StyleEngine {
 	 * @return array The css rules for current pseudo class.
 	 */
 	protected function getStateCssRules( string $breakpoint ): array {
-
-		$states = $this->settings['publisherBlockStates'] ?? [];
 
 		return array_filter(
 			array_map( function ( string $state ) use ( $breakpoint ): array {
@@ -138,156 +190,172 @@ final class StyleEngine {
 	 */
 	protected function prepareStateStyles( string $pseudoClass, string $breakpoint ): array {
 
-		$cssRules = [];
-		$format   = '%1$s%2$s{%3$s}';
-		$settings = $this->getRequestSettings( $pseudoClass, $breakpoint );
-		$cssRule  = implode( PHP_EOL, $this->convertToValidCssRules( $this->getProperties( $settings ) ) );
+		$this->pseudoState = $pseudoClass;
 
-		// no settings found.
+		$blockCss = array_map( [ $this, 'generateBlockCss' ], $this->definitions );
+
+		return $this->normalizeCssRules(
+			pb_convert_css_declarations_to_css_valid_rules(
+				pb_combine_css(
+					array_values( array_filter( $blockCss, 'pb_get_filter_empty_array_item' ) )
+				)
+			)
+		);
+	}
+
+	/**
+	 * Generating current block css styles.
+	 *
+	 * @param BaseStyleDefinition $definition the style definition instance.
+	 *
+	 * @return array The array of collection of selector and declaration.
+	 */
+	protected function generateBlockCss( BaseStyleDefinition $definition ): array {
+
+		$this->definition = $definition;
+		// get current block settings.
+		$settings = $this->getSettings();
+
 		if ( empty( $settings ) ) {
 
 			return [];
 		}
 
-		// override normal state format and remove normal from pseudo class.
-		if ( 'normal' === $pseudoClass ) {
+		$selectors = pb_get_block_state_selectors( pb_get_block_type_selectors( $this->block['blockName'] ), [
+			'is-inner-block'     => false,
+			'block-type'         => 'master',
+			'block-settings'     => $settings,
+			'fallback'           => $this->selector,
+			'master-block-state' => $this->pseudoState,
+			'pseudo-class'       => $this->pseudoState,
+		] );
 
-			$format = '%1$s{%2$s}';
+		$this->definition->flushDeclarations();
+		$this->definition->setSettings( $settings );
+		$this->definition->setSelectors( $selectors );
 
-			$values = [ $this->selector ];
+		$cssRules = $this->definition->getCssRules();
 
-		} else {
-			// normalize pseudo class.
-			$values = [ $this->selector, ":$pseudoClass" ];
+		if ( ! empty( $settings['publisherInnerBlocks'] ) ) {
+
+			$cssRules = array_merge(
+				$cssRules,
+				pb_array_flat(
+					array_map( [
+						$this,
+						'generateInnerBlockCss'
+					], $settings['publisherInnerBlocks'], array_keys( $settings['publisherInnerBlocks'] ) )
+				)
+			);
 		}
-
-		// break if not exists any other states or only exists normal state.
-		if ( ( empty( $states ) || 1 === count( $states ) ) && 1 === count( $cssRules ) ) {
-
-			return [];
-		}
-
-		if ( in_array( $pseudoClass, [ 'custom-class', 'parent-class' ], true ) ) {
-
-			$state = pb_get_block_state( $this->settings, $pseudoClass );
-
-			// no state found.
-			if ( ! $state || ! isset( $state['values']['class'] ) ) {
-
-				return [];
-			}
-
-			$values = [ $this->selector, "{$state['values']['class']}" ];
-		}
-
-		// TODO: implements parent-hover state ...
-
-		$innerBlocks = $settings['publisherInnerBlocks'] ?? [];
-
-		if ( ! empty( $innerBlocks ) ) {
-
-			$args                = [
-				'pseudo-class'    => $pseudoClass,
-				'breakpoint'      => $breakpoint,
-				'parent-selector' => $values[0],
-			];
-			$innerBlocksSettings = pb_get_inner_blocks_css( $innerBlocks, $this, $args );
-
-			$engine = $this;
-
-			$cssRules = array_merge( $cssRules, array_map( function ( array $setting ) use ( $breakpoint, $engine ): string {
-
-				return implode( PHP_EOL, pb_array_flat( $engine->getStateCssRules( $breakpoint ) ) );
-			}, $innerBlocksSettings ) );
-		}
-
-		if ( empty( $cssRule ) ) {
-
-			return [];
-		}
-
-		$cssRules[] = sprintf(
-			$format,
-			...array_merge( $values, [ $cssRule ] )
-		);
 
 		return $cssRules;
 	}
 
 	/**
-	 * Get css properties.
+	 * Preparing css styles of inner blocks for current recieved state.
 	 *
-	 * @param array $settings The request settings to generate css rules.
+	 * @param array  $settings    the inner block settings of current recieved state.
+	 * @param string $blockType   the block type of available inner block.
+	 * @param string $pseudoState the pseudo state of inner block type.
 	 *
-	 * @return array The css properties order by received settings in request.
+	 * @return array the generated css rules for inner blocks in current state.
 	 */
-	protected function getProperties( array $settings ): array {
+	protected function generateInnerBlockCss( array $settings, string $blockType, string $pseudoState = '' ): array {
 
-		$cssProperties = [];
+		if ( empty( $settings['attributes'] ) ) {
 
-		/**
-		 * @var BaseStyleDefinition $dependency
-		 */
-		foreach ( $this->dependencies as $dependency ) {
-
-			if ( empty( $settings ) ) {
-
-				continue;
-			}
-
-			$dependency->flushProperties();
-			$dependency->setSettings( $settings );
-
-			$cssProperties[] = $dependency->getProperties();
+			return [];
 		}
 
-		return array_merge( ...$cssProperties );
+		// Inner block status set TRUE.
+		$selectors = pb_get_block_state_selectors( pb_get_block_type_selectors( $this->block['blockName'] ), [
+			'is-inner-block'     => true,
+			'block-type'         => $blockType,
+			'fallback'           => $this->selector,
+			'master-block-state' => $this->pseudoState,
+			'block-settings'     => $settings['attributes'],
+			'pseudo-class'       => $pseudoState ?? $this->pseudoState,
+		] );
+
+		// Exclude inner blocks styles when hasn't any selectors for this context.
+		if ( empty( $selectors['innerBlocks'][ $blockType ] ) ) {
+
+			return [];
+		}
+
+		$this->definition->flushDeclarations();
+		$this->definition->setSettings( $settings['attributes'] );
+		$this->definition->setSelectors( $selectors['innerBlocks'][ $blockType ] );
+
+		$cssRules = $this->definition->getCssRules();
+
+		if ( ! empty( $settings['attributes']['publisherBlockStates'] ) ) {
+
+			$engine           = $this;
+			$innerBlockStates = $settings['attributes']['publisherBlockStates'];
+
+			$cssRules = array_merge(
+				$cssRules,
+				pb_array_flat(
+					array_map( static function ( array $state, string $_pseudoState ) use ( $engine, $blockType ): array {
+
+						if ( empty( $state['breakpoints'] ) || ( 'normal' === $_pseudoState && 'laptop' === $engine->breakpoint ) ) {
+
+							return [];
+						}
+
+						return pb_array_flat(
+							array_map( static function ( array $breakpointSettings ) use ( $engine, $blockType, $_pseudoState ): array {
+
+								return $engine->generateInnerBlockCss( $breakpointSettings, $blockType, $_pseudoState );
+							}, $state['breakpoints'], array_keys( $state['breakpoints'] ) )
+						);
+					}, $innerBlockStates, array_keys( $innerBlockStates ) )
+				)
+			);
+		}
+
+		return $cssRules;
 	}
 
 	/**
-	 * Convert css properties to valid css rules.
+	 * Normalizing recieved css rules ...
 	 *
-	 * @param array $cssProperties
+	 * @param array $cssRules the valid css rules stack.
 	 *
-	 * @return array the converted array css properties to valid css rules.
+	 * @return array the normalized css rules
 	 */
-	protected function convertToValidCssRules( array $cssProperties ): array {
+	protected function normalizeCssRules( array $cssRules ): array {
 
-		$validCssRules = [];
+		return array_filter(
+			array_map( static function ( string $props, string $selector ): string {
 
-		foreach ( $cssProperties as $property => $value ) {
+				if ( empty( $selector ) || empty( $props ) ) {
 
-			if ( is_array( $value ) && empty( $value ) ) {
+					return '';
+				}
 
-				continue;
-			}
+				return sprintf( '%1$s {%3$s %2$s %3$s}%3$s', $selector, $props, PHP_EOL );
 
-			$validCssRules[] = sprintf( '%s:%s;', $property, $value );
-		}
-
-		return $validCssRules;
+			}, $cssRules, array_keys( $cssRules ) )
+		);
 	}
 
 	/**
-	 * Get request settings.
+	 * Get current block state in breakpoint settings.
 	 *
-	 * @param string $pseudoClass The block state name. by default normal.
-	 *                            Like: normal, hover, active, etc.
-	 * @param string $breakpoint  The breakpoint( or device type) name.
-	 *
-	 * @return array
+	 * @return array the block settings.
 	 */
-	public function getRequestSettings( string $pseudoClass, string $breakpoint ): array {
+	#[Pure] public function getSettings(): array {
 
-		//FIXME: normal state breakpoint as laptop!
-		if ( 'normal' === $pseudoClass && in_array( $breakpoint, [ 'laptop', 'desktop' ], true ) ) {
+		if ( 'normal' === $this->pseudoState && 'laptop' === $this->breakpoint ) {
 
 			return $this->settings;
 		}
 
 		$states = $this->settings['publisherBlockStates'] ?? [];
-
-		$state = pb_get_block_state( $states, $pseudoClass );
+		$state  = pb_block_state_validate( $states, $this->pseudoState );
 
 		// no state found or not exists any breakpoint.
 		if ( empty( $state ) || empty( $state['breakpoints'] ) ) {
@@ -295,31 +363,21 @@ final class StyleEngine {
 			return [];
 		}
 
-		$breakpoint = pb_get_state_breakpoint( $state['breakpoints'], $breakpoint );
-
-		// invalid breakpoint founded.
-		if ( empty( $breakpoint ) ) {
+		// no breakpoint found.
+		if ( empty( $state['breakpoints'][ $this->breakpoint ] ) ) {
 
 			return [];
 		}
 
-		return $breakpoint['attributes'] ?? [];
-	}
+		$breakpointSettings = $state['breakpoints'][ $this->breakpoint ];
 
-	/**
-	 * @param array $settings
-	 */
-	public function setSettings( array $settings ): void {
+		// invalid breakpoint founded.
+		if ( empty( $breakpointSettings ) ) {
 
-		$this->settings = $settings;
-	}
+			return [];
+		}
 
-	/**
-	 * @param string $selector
-	 */
-	public function setSelector( string $selector ): void {
-
-		$this->selector = $selector;
+		return $breakpointSettings['attributes'] ?? [];
 	}
 
 }

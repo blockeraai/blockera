@@ -7,10 +7,13 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Height → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.', {
@@ -51,7 +54,7 @@ describe('Height → Functionality', () => {
 		cy.selectValueAddonItem('contentSize');
 
 		// Check block
-		cy.getBlock('core/paragraph').should('have.css', 'height', '800px');
+		cy.getBlock('core/paragraph').should('have.css', 'height', '620px');
 
 		// Check store
 		getWPDataObject().then((data) => {
@@ -59,7 +62,7 @@ describe('Height → Functionality', () => {
 				settings: {
 					name: 'Content Width',
 					id: 'contentSize',
-					value: '800px',
+					value: '620px',
 					reference: {
 						type: 'preset',
 					},
@@ -77,7 +80,7 @@ describe('Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.publisher-core-block').should('have.css', 'height', '800px');
+		cy.get('.publisher-core-block').should('have.css', 'height', '620px');
 		cy.get('.publisher-core-block').hasCssVar(
 			'height',
 			'--wp--style--global--content-size'

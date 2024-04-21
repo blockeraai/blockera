@@ -6,6 +6,7 @@ export default function MatrixNormalTopLeftIcon({ direction = 'row' }) {
 				height="20"
 				viewBox="0 0 20 20"
 				xmlns="http://www.w3.org/2000/svg"
+				data-test="matrix-normal-top-left-row"
 			>
 				<path d="M8.99976 16C8.44747 16 7.99976 15.5523 7.99976 15L7.99976 3C7.99976 2.44772 8.44747 2 8.99976 2L10.9998 2C11.552 2 11.9998 2.44772 11.9998 3L11.9998 15C11.9998 15.5523 11.552 16 10.9998 16H8.99976Z" />
 				<path d="M2.99976 14C2.44747 14 1.99976 13.5523 1.99976 13L1.99976 3C1.99976 2.44771 2.44747 2 2.99976 2L4.99976 2C5.55204 2 5.99976 2.44772 5.99976 3L5.99975 13C5.99975 13.5523 5.55204 14 4.99975 14H2.99976Z" />
@@ -20,6 +21,7 @@ export default function MatrixNormalTopLeftIcon({ direction = 'row' }) {
 			height="20"
 			viewBox="0 0 20 20"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="matrix-normal-top-left-column"
 		>
 			<path d="M18 11C18 11.5523 17.5523 12 17 12L3 12C2.44772 12 2 11.5523 2 11L2 9C2 8.44771 2.44772 8 3 8L17 8C17.5523 8 18 8.44772 18 9V11Z" />
 			<path d="M10 17C10 17.5523 9.55228 18 9 18L3 18C2.44772 18 2 17.5523 2 17L2 15C2 14.4477 2.44772 14 3 14L9 14C9.55229 14 10 14.4477 10 15V17Z" />

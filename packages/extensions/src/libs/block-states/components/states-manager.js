@@ -5,7 +5,7 @@
  */
 import memoize from 'fast-memoize';
 import { __ } from '@wordpress/i18n';
-import { dispatch } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 import type { Element, ComponentType } from 'react';
 import { memo, useMemo, useCallback } from '@wordpress/element';
 
@@ -25,7 +25,11 @@ import ItemBody from './item-body';
 import defaultStates from '../states';
 import ItemHeader from './item-header';
 import ItemOpener from './item-opener';
-import { getStateInfo, onChangeBlockStates } from '../helpers';
+import {
+	getStateInfo,
+	onChangeBlockStates,
+	blockStatesValueCleanup,
+} from '../helpers';
 import { generateExtensionId } from '../../utils';
 import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
@@ -34,7 +38,6 @@ import type {
 	StatesManagerProps,
 	StateTypes,
 	TStates,
-	TBreakpoint,
 } from '../types';
 import { isInnerBlock } from '../../../components';
 import { LabelDescription } from './label-description';
@@ -55,6 +58,9 @@ const StatesManager: ComponentType<any> = memo(
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
 		} = dispatch('publisher-core/extensions') || {};
+		const { getActiveMasterState, getActiveInnerState } = select(
+			'publisher-core/extensions'
+		);
 
 		const calculatedValue = useMemo(() => {
 			const itemsCount = Object.values(states).length;
@@ -67,12 +73,28 @@ const StatesManager: ComponentType<any> = memo(
 						TStates,
 						{ ...StateTypes, isSelected: boolean }
 					]): void => {
-						if (state?.isSelected) {
-							if (isInnerBlock(currentBlock)) {
-								setInnerBlockState(itemId);
-							} else {
-								setCurrentState(itemId);
-							}
+						const activeInnerBlockState = getActiveInnerState(
+							block.clientId,
+							currentBlock
+						);
+						const activeMasterBlockState = getActiveMasterState(
+							block.clientId,
+							block.blockName
+						);
+						const isSelected = isInnerBlock(currentBlock)
+							? itemId === activeInnerBlockState
+							: itemId === activeMasterBlockState;
+
+						// Assume block-state for inner blocks and itemId equals with store active state.
+						if (
+							isInnerBlock(currentBlock) &&
+							itemId === activeInnerBlockState
+						) {
+							setInnerBlockState(itemId);
+						}
+						// Assume block-state for master block and itemId equals with store active state.
+						else if (itemId === activeMasterBlockState) {
+							setCurrentState(itemId);
 						}
 
 						initialValue[itemId] = {
@@ -83,10 +105,7 @@ const StatesManager: ComponentType<any> = memo(
 							selectable: true,
 							display: itemsCount > 1,
 							visibilitySupport: false,
-							isSelected:
-								'undefined' !== typeof state?.isSelected
-									? state?.isSelected
-									: 'normal' === itemId,
+							isSelected,
 							deletable: 'normal' !== itemId,
 							breakpoints: state?.breakpoints ?? {
 								laptop: {
@@ -118,108 +137,16 @@ const StatesManager: ComponentType<any> = memo(
 					selectable: true,
 					isSelected: true,
 					visibilitySupport: false,
-					breakpoints: states.normal.breakpoints,
+					breakpoints:
+						StateSettings.publisherBlockStates.default.normal
+							.breakpoints,
 				},
 			};
 			// eslint-disable-next-line
 		}, [currentBlock, states, currentBreakpoint]);
 
 		const valueCleanup = useCallback(
-			(value: {
-				[key: TStates]: {
-					...StateTypes,
-					isVisible: boolean,
-					'css-class'?: string,
-					isSelected: boolean,
-				},
-			}): Object => {
-				const clonedValue: {
-					[key: TStates]: {
-						breakpoints: {
-							[key: TBreakpoint]: {
-								attributes: Object,
-							},
-						},
-						isVisible: boolean,
-						isSelected: boolean,
-						'css-class'?: string,
-					},
-				} = {};
-
-				Object.entries(value).forEach(
-					([itemId, item]: [
-						TStates,
-						{
-							...StateTypes,
-							isSelected: boolean,
-							isVisible: boolean,
-							'css-class'?: string,
-						}
-					]): void => {
-						const breakpoints: {
-							[key: TBreakpoint]: {
-								attributes: Object,
-							},
-						} = {};
-
-						Object.entries(item?.breakpoints)?.forEach(
-							([breakpointType, breakpoint]: [
-								TBreakpoint,
-								Object
-							]) => {
-								if (
-									!Object.keys(breakpoint?.attributes || {})
-										.length &&
-									'laptop' !== breakpointType
-								) {
-									return;
-								}
-
-								const { attributes = {} } = breakpoint;
-
-								if (
-									!Object.keys(attributes).length &&
-									'normal' !== itemId
-								) {
-									return;
-								}
-
-								breakpoints[breakpointType] = {
-									attributes,
-								};
-							}
-						);
-
-						if (
-							!Object.values(breakpoints).length &&
-							'normal' !== itemId
-						) {
-							breakpoints[currentBreakpoint] = {
-								attributes: {},
-							};
-						}
-
-						if (['custom-class', 'parent-class'].includes(itemId)) {
-							clonedValue[itemId] = {
-								breakpoints,
-								isVisible: item?.isVisible,
-								isSelected: item?.isSelected,
-								'css-class': item['css-class'] || '',
-							};
-
-							return;
-						}
-
-						clonedValue[itemId] = {
-							breakpoints,
-							isVisible: item?.isVisible,
-							isSelected: item?.isSelected,
-						};
-					}
-				);
-
-				return clonedValue;
-			},
+			blockStatesValueCleanup,
 			// eslint-disable-next-line
 			[]
 		);
@@ -285,7 +212,7 @@ const StatesManager: ComponentType<any> = memo(
 						{...{
 							onDelete,
 							maxItems: 10,
-							valueCleanup,
+							valueCleanup: (value) => value,
 							selectable: true,
 							/**
 							 * Retrieve dynamic default value for repeater items.
@@ -320,8 +247,6 @@ const StatesManager: ComponentType<any> = memo(
 								return defaultItem;
 							},
 							defaultRepeaterItemValue: {
-								getBreakpoints,
-								callback: getStateInfo,
 								...StateSettings.publisherBlockStates
 									.default[0],
 								deletable: true,

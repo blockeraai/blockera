@@ -494,6 +494,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													);
 												}
 											}}
+											isDeselectable={true}
 											{...extensionProps.publisherFlexWrap}
 										/>
 

@@ -15,41 +15,44 @@ class Typography extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
-		if ( empty( $setting['type'] ) ) {
+		$declaration = [];
+		$cssProperty = $setting['type'];
 
-			return $this->properties;
+		if ( empty( $cssProperty ) ) {
+
+			return $declaration;
 		}
 
-		$props         = [];
-		$cssProperty   = $setting['type'];
 		$propertyValue = $setting[ $cssProperty ];
+
+		$this->setSelector( $cssProperty );
 
 		switch ( $cssProperty ) {
 
 			case 'text-orientation':
 				switch ($propertyValue) {
 					case 'style-1':
-						$props['writing-mode'] = 'vertical-lr' . $this->getImportant();
-						$props['text-orientation'] = 'mixed' . $this->getImportant();
+						$declaration['writing-mode'] = 'vertical-lr' . $this->getImportant();
+						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
 						break;
 					case 'style-2':
-						$props['writing-mode'] = 'vertical-rl' . $this->getImportant();
-						$props['text-orientation'] = 'mixed' . $this->getImportant();
+						$declaration['writing-mode'] = 'vertical-rl' . $this->getImportant();
+						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
 						break;
 					case 'style-3':
-						$props['writing-mode'] = 'vertical-lr' . $this->getImportant();
-						$props['text-orientation'] = 'upright' . $this->getImportant();
+						$declaration['writing-mode'] = 'vertical-lr' . $this->getImportant();
+						$declaration['text-orientation'] = 'upright' . $this->getImportant();
 						break;
 					case 'style-4':
-						$props['writing-mode'] = 'vertical-rl' . $this->getImportant();
-						$props['text-orientation'] = 'upright' . $this->getImportant();
+						$declaration['writing-mode'] = 'vertical-rl' . $this->getImportant();
+						$declaration['text-orientation'] = 'upright' . $this->getImportant();
 						break;
 					case 'initial':
-						$props['writing-mode'] =
+						$declaration['writing-mode'] =
 							'horizontal-tb' . $this->getImportant();
-						$props['text-orientation'] = 'mixed' . $this->getImportant();
+						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
 				}
 				break;
 
@@ -58,10 +61,10 @@ class Typography extends BaseStyleDefinition {
 
 				if ( ! empty( $color ) ) {
 
-					$props['-webkit-text-stroke-color'] = $color;
+					$declaration['-webkit-text-stroke-color'] = $color;
 
 					if ( ! empty( $propertyValue['width'] ) ) {
-						$props['-webkit-text-stroke-width'] = $propertyValue['width'];
+						$declaration['-webkit-text-stroke-width'] = $propertyValue['width'];
 					}
 				}
 				
@@ -70,11 +73,11 @@ class Typography extends BaseStyleDefinition {
 			case 'column-count':
 
 				if ( ! empty( $propertyValue['columns'] ) ) {
-					$props['column-count'] = 'none' === $propertyValue['columns'] ? 'initial' : preg_replace( '/\b-columns\b/i', '', $propertyValue['columns'] );
+					$declaration['column-count'] = 'none' === $propertyValue['columns'] ? 'initial' : preg_replace( '/\b-columns\b/i', '', $propertyValue['columns'] );
 
-					if ( $props['column-count'] !== 'initial' ) {
+					if ( $declaration['column-count'] !== 'initial' ) {
 						if ( ! empty( $propertyValue['gap'] ) ) {
-							$props['column-gap'] = $propertyValue['gap'];
+							$declaration['column-gap'] = $propertyValue['gap'];
 						}
 
 						if ( ! empty( $propertyValue['divider']['width'] ) ) {
@@ -82,11 +85,11 @@ class Typography extends BaseStyleDefinition {
 							$color = pb_get_value_addon_real_value( $propertyValue['divider']['color'] );
 
 							if ( $color ) {
-								$props['column-rule-color'] = $color;
+								$declaration['column-rule-color'] = $color;
 							}
 
-							$props['column-rule-style'] = $propertyValue['divider']['style'] ?? 'solid';
-							$props['column-rule-width'] = $propertyValue['divider']['width'];
+							$declaration['column-rule-style'] = $propertyValue['divider']['style'] ?? 'solid';
+							$declaration['column-rule-width'] = $propertyValue['divider']['width'];
 						}
 					}
 				}
@@ -105,14 +108,14 @@ class Typography extends BaseStyleDefinition {
 			case 'line-height':
 			case 'text-indent':
 			case 'font-size':
-				$props[ $cssProperty ] = $propertyValue ? pb_get_value_addon_real_value( $propertyValue ) : '';
+				$declaration[ $cssProperty ] = $propertyValue ? pb_get_value_addon_real_value( $propertyValue ) : '';
 				break;
 
 		}
 
-		$this->setProperties( array_merge( $this->properties, $props ) );
+		$this->setCss( $declaration );
 
-		return $this->properties;
+		return $this->css;
 	}
 
 	/**

@@ -7,10 +7,13 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Max Height → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is a test text.', {
@@ -63,7 +66,7 @@ describe('Max Height → Functionality', () => {
 		cy.selectValueAddonItem('contentSize');
 
 		// Check block
-		cy.getBlock('core/paragraph').should('have.css', 'max-height', '800px');
+		cy.getBlock('core/paragraph').should('have.css', 'max-height', '620px');
 
 		// Check store
 		getWPDataObject().then((data) => {
@@ -71,7 +74,7 @@ describe('Max Height → Functionality', () => {
 				settings: {
 					name: 'Content Width',
 					id: 'contentSize',
-					value: '800px',
+					value: '620px',
 					reference: {
 						type: 'preset',
 					},
@@ -92,7 +95,7 @@ describe('Max Height → Functionality', () => {
 		cy.get('.publisher-core-block').should(
 			'have.css',
 			'max-height',
-			'800px'
+			'620px'
 		);
 		cy.get('.publisher-core-block').hasCssVar(
 			'max-height',

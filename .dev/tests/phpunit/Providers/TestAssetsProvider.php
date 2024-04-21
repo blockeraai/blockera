@@ -5,6 +5,7 @@ namespace Publisher\Framework\Tests\Providers;
 use Publisher\Framework\Tests\AppTestCase;
 use Publisher\Framework\Providers\AssetsProvider;
 use Publisher\Framework\Illuminate\Foundation\Application;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class TestAssetsProvider extends AppTestCase {
 
@@ -22,6 +23,7 @@ class TestAssetsProvider extends AppTestCase {
 	 *
 	 * @param array $asset
 	 *
+	 * @throws BindingResolutionException
 	 * @return void
 	 */
 	public function testShouldReturnAssetInformationWithGivenAssetName( array $asset ): void {
@@ -68,50 +70,71 @@ class TestAssetsProvider extends AppTestCase {
 			[
 				[
 					'name'   => 'controls',
-					'style'  => '/dist/controls-styles/style',
-					'script' => '/dist/controls/index',
+					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/controls-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/controls/index',
+				],
+			],
+			[
+				[
+					'name'   => 'hooks',
+					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/hooks-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/hooks/index',
+				],
+			],
+			[
+				[
+					'name'   => 'editor-styles',
+					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/editor-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/editor-styles/index',
+				],
+			],
+			[
+				[
+					'name'   => 'core-data',
+					'style'  => '',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/core-data/index',
 				],
 			],
 			[
 				[
 					'name'   => 'components',
-					'style'  => '/dist/components-styles/style',
-					'script' => '/dist/components/index',
+					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/components-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/components/index',
 				],
 			],
 			[
 				[
 					'name'   => 'extensions',
-					'style'  => '/dist/extensions-styles/style',
-					'script' => '/dist/extensions/index',
+					'style'  => 'http://example.org/wp-content/plugins/publisher-core/dist/extensions-styles/style',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/extensions/index',
 				],
 			],
 			[
 				[
 					'name'   => 'classnames',
 					'style'  => '',
-					'script' => '/dist/classnames/index',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/classnames/index',
 				],
 			],
 			[
 				[
 					'name'   => 'data-extractor',
 					'style'  => '',
-					'script' => '/dist/data-extractor/index',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/data-extractor/index',
 				],
 			],
 			[
 				[
 					'name'   => 'style-engine',
 					'style'  => '',
-					'script' => '/dist/style-engine/index',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/style-engine/index',
 				],
 			],
 			[
 				[
 					'name'   => 'utils',
 					'style'  => '',
-					'script' => '/dist/utils/index',
+					'script' => 'http://example.org/wp-content/plugins/publisher-core/dist/utils/index',
 				],
 			],
 		];

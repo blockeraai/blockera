@@ -2,8 +2,11 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
-use Publisher\Framework\Exceptions\BaseException;
-
+/**
+ * Class BoxShadow definition to generate css rule.
+ *
+ * @package BoxShadow
+ */
 class BoxShadow extends BaseStyleDefinition {
 
 	/**
@@ -13,13 +16,22 @@ class BoxShadow extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
+		$declaration = [];
 		$cssProperty = $setting['type'];
+
+		if ( empty( $cssProperty ) ) {
+
+			return $declaration;
+		}
+
+		$this->setSelector( $cssProperty );
 
 		$boxShadows = array_map( static function ( array $prop ) {
 
 			if ( ! isset( $prop['isVisible'] ) || ! $prop['isVisible'] ) {
+
 				return null;
 			}
 
@@ -32,16 +44,11 @@ class BoxShadow extends BaseStyleDefinition {
 				! empty( $prop['spread'] ) ? pb_get_value_addon_real_value( $prop['spread'] ) : '',
 				! empty( $prop['color'] ) ? pb_get_value_addon_real_value( $prop['color'] ) : ''
 			);
-		}, $setting[ $cssProperty ] );
+		}, pb_get_sorted_repeater( $setting[ $cssProperty ] ) );
 
-		$this->setProperties( array_merge( $this->properties, [ $cssProperty => implode( ',', $boxShadows ) ] ) );
+		$this->setCss( [ $cssProperty => implode( ',', $boxShadows ) ] );
 
-		return $this->properties;
-	}
-
-	protected function getCacheKey( string $suffix = '' ): string {
-
-		return pb_get_classname( __NAMESPACE__, __CLASS__ ) . parent::getCacheKey( $suffix );
+		return $this->css;
 	}
 
 	/**
@@ -54,6 +61,16 @@ class BoxShadow extends BaseStyleDefinition {
 		return [
 			'publisherBoxShadow' => 'box-shadow',
 		];
+	}
+
+	/**
+	 * Compatibility
+	 *
+	 * @inheritDoc
+	 */
+	protected function calculateFallbackFeatureId( string $cssProperty ): string {
+
+		return 'shadow';
 	}
 
 }

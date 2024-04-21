@@ -4,10 +4,14 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Align → Functionality', () => {
 	beforeEach(() => {
+		createPost();
+
 		addBlockToPost('core/paragraph', true, 'publisher-paragraph');
 
 		cy.getBlock('core/paragraph').type('This is test text.', {
@@ -18,7 +22,7 @@ describe('Text Align → Functionality', () => {
 	});
 
 	it('simple value', () => {
-		cy.openMoreFeatures('More typography settings');
+		openMoreFeaturesControl('More typography settings');
 
 		// center align
 		cy.getByAriaLabel('Center').click();

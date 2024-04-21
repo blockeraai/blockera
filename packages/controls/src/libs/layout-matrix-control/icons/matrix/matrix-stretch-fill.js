@@ -6,6 +6,7 @@ export default function MatrixStretchFillIcon({ direction = 'row' }) {
 				height="66"
 				viewBox="0 0 20 66"
 				xmlns="http://www.w3.org/2000/svg"
+				data-test="matrix-stretch-row"
 			>
 				<path d="M9 64C8.44772 64 8 63.5523 8 63L8.00001 3C8.00001 2.44771 8.44772 2 9.00001 2L11 2C11.5523 2 12 2.44772 12 3L12 63C12 63.5523 11.5523 64 11 64H9Z" />
 				<path d="M3 64C2.44772 64 2 63.5523 2 63L2.00001 3C2.00001 2.44771 2.44772 2 3.00001 2L5 2C5.55229 2 6 2.44772 6 3L5.99999 63C5.99999 63.5523 5.55228 64 4.99999 64H3Z" />
@@ -20,6 +21,7 @@ export default function MatrixStretchFillIcon({ direction = 'row' }) {
 			height="20"
 			viewBox="0 0 66 20"
 			xmlns="http://www.w3.org/2000/svg"
+			data-test="matrix-stretch-column"
 		>
 			<path d="M64 11C64 11.5523 63.5523 12 63 12L3 12C2.44771 12 2 11.5523 2 11L2 9C2 8.44772 2.44772 8 3 8L63 8C63.5523 8 64 8.44772 64 9V11Z" />
 			<path d="M64 17C64 17.5523 63.5523 18 63 18L3 18C2.44771 18 2 17.5523 2 17L2 15C2 14.4477 2.44772 14 3 14L63 14C63.5523 14 64 14.4477 64 15V17Z" />

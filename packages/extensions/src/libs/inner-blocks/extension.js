@@ -115,6 +115,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				{moreInnerBlocks.length > 0 && (
 					<MoreFeatures
 						label={__('More Inner Blocks', 'publisher-core')}
+						ariaLabel={__('More Inner Blocks', 'publisher-core')}
 						isOpen={false}
 						isChanged={moreInnerBlocksChanged}
 					>

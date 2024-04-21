@@ -86,6 +86,7 @@ export const SpacingStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const { publisherSpacing } = config.spacingConfig;
 	const blockProps = {
@@ -95,6 +96,7 @@ export const SpacingStyles = ({
 	};
 	const { attributes: _attributes } = blockProps;
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,

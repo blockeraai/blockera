@@ -5,32 +5,30 @@ namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 class Mouse extends BaseStyleDefinition {
 
 	/**
-	 * collect all css properties.
+	 * collect all css selectors and declarations.
 	 *
-	 * @param array $setting the background settings.
+	 * @param array $setting
 	 *
 	 * @return array
 	 */
-	public function collectProps( array $setting ): array {
+	public function css( array $setting ): array {
 
-		if ( empty( $setting['type'] ) ) {
+		$cssProperty = $setting['type'];
 
-			return $this->properties;
+		if ( empty( $cssProperty ) ) {
+
+			return [];
 		}
 
-		$cssProperty   = $setting['type'];
-		$propertyValue = $setting[ $cssProperty ];
+		$this->setSelector( $cssProperty );
 
-		$this->setProperties(
-			array_merge(
-				$this->properties,
-				[
-					$cssProperty => $propertyValue . $this->getImportant(),
-				]
-			)
+		$this->setCss(
+			[
+				$cssProperty => $setting[ $cssProperty ] . $this->getImportant(),
+			]
 		);
 
-		return $this->properties;
+		return $this->css;
 	}
 
 	/**

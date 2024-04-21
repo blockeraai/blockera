@@ -6,18 +6,12 @@ import { select } from '@wordpress/data';
  * Publisher dependencies
  */
 import { Observer, CanvasEditor } from '@publisher/editor';
+import { blockeraBootstrapBlocks } from '@publisher/blocks';
 
 /**
  * Internal dependencies
  */
-import {
-	bootstrapSizeExtension,
-	bootstrapTypographyExtension,
-	bootstrapPositionExtension,
-	bootstrapBackgroundExtension,
-	bootstrapBorderAndShadowExtension,
-	bootstrapInnerBlocksExtension,
-} from '../libs';
+import { blockeraExtensionsBootstrap } from '../libs/bootstrap';
 
 export default function (wp: Object) {
 	const registerPlugin = wp.plugins.registerPlugin;
@@ -98,12 +92,9 @@ export default function (wp: Object) {
 		},
 	});
 
-	bootstrapInnerBlocksExtension();
-	bootstrapPositionExtension();
-	bootstrapSizeExtension();
-	bootstrapTypographyExtension();
-	bootstrapBackgroundExtension();
-	bootstrapBorderAndShadowExtension();
+	// Bootstrap functions for extensions
+	blockeraExtensionsBootstrap();
 
-	// TODO: implements other bootstrap functionalities here ...
+	// Bootstrap functions for blocks
+	blockeraBootstrapBlocks();
 }

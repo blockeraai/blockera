@@ -10,10 +10,7 @@ import { select } from '@wordpress/data';
  */
 import reducer from './reducer';
 import { isChanged } from './helpers';
-import {
-	isInnerBlock,
-	isNormalState as _isNormalBlockState,
-} from '../../components/utils';
+import { isInnerBlock } from '../../components/utils';
 import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../libs/types';
 
@@ -23,10 +20,12 @@ export const useAttributes = (
 		blockId,
 		isNormalState,
 		getAttributes,
+		innerBlocks,
 		masterIsNormalState,
 		publisherInnerBlocks,
 	}: {
 		blockId: string,
+		innerBlocks: Object,
 		isNormalState: () => boolean,
 		publisherInnerBlocks: Object,
 		masterIsNormalState: () => boolean,
@@ -91,15 +90,15 @@ export const useAttributes = (
 
 		// check - is really changed attribute of any block type (master or one of inner blocks)?
 		if (isNormalState()) {
+			// Assume block is inner block and has attributes in normal state.
 			if (
 				isInnerBlock(currentBlock) &&
+				hasRootAttributes &&
 				!isChanged(
 					{
 						..._attributes,
-						...(hasRootAttributes
-							? _attributes.publisherInnerBlocks[currentBlock]
-									.attributes
-							: {}),
+						..._attributes.publisherInnerBlocks[currentBlock]
+							.attributes,
 					},
 					attributeId,
 					newValue
@@ -108,7 +107,11 @@ export const useAttributes = (
 				return;
 			}
 
-			if (!isChanged(attributes, attributeId, newValue)) {
+			// Assume block is master.
+			if (
+				!isInnerBlock(currentBlock) &&
+				!isChanged(attributes, attributeId, newValue)
+			) {
 				return;
 			}
 		}
@@ -128,6 +131,7 @@ export const useAttributes = (
 			blockId,
 			newValue,
 			attributeId,
+			innerBlocks,
 			currentState,
 			currentBlock,
 			effectiveItems,
@@ -156,7 +160,7 @@ export const useAttributes = (
 		if (isInnerBlock(currentBlock)) {
 			// Assume master block isn't in normal state!
 			// action = UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE
-			if (!_isNormalBlockState(getExtensionCurrentBlockState())) {
+			if (!masterIsNormalState()) {
 				let currentBlockAttributes: Object = {};
 
 				if (

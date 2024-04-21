@@ -178,10 +178,7 @@ export default function RepeaterControl({
 				controlId,
 				value: {
 					...clonedRepeaterItems,
-					[newItemId]: value || {
-						...defaultRepeaterItemValue,
-						isSelected: true,
-					},
+					[newItemId]: value,
 				},
 			});
 		};

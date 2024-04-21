@@ -69,6 +69,11 @@ export function addItem(state: Object = {}, action: Object): Object {
 		return state;
 	}
 
+	const itemId: string =
+		'function' === typeof action.itemIdGenerator
+			? action.itemIdGenerator(itemsCount)
+			: uniqueId;
+
 	//by default behavior of "addRepeaterItem" action
 	return {
 		...state,
@@ -76,7 +81,7 @@ export function addItem(state: Object = {}, action: Object): Object {
 			...controlInfo,
 			value: {
 				...controlInfo.value,
-				[uniqueId]: {
+				[itemId]: {
 					...action.value,
 					order: Object.keys(controlInfo.value).length,
 				},

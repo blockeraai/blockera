@@ -32,6 +32,7 @@ export const BorderAndShadowStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const {
 		publisherBorder,
@@ -47,6 +48,7 @@ export const BorderAndShadowStyles = ({
 	};
 
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,

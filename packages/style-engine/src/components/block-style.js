@@ -18,16 +18,15 @@ import { useBlocksStore } from '@publisher/extensions/src/hooks';
 import type { BlockStyleProps } from './types';
 import {
 	// MediaQuery,
-	InnerBlockStyle,
 	StateStyle,
 } from '../';
 
 export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 	const {
-		// currentBlock,
+		currentBlock,
 		currentState,
-		// currentInnerBlockState,
 		currentBreakpoint,
+		currentInnerBlockState,
 	} = useSelect((select) => {
 		const {
 			getExtensionCurrentBlock,
@@ -60,15 +59,9 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 					...props,
 					selectors,
 					currentState,
+					currentBlock,
 					currentBreakpoint,
-					currentBlock: 'master',
-				}}
-			/>
-			<InnerBlockStyle
-				{...{
-					...props,
-					currentState,
-					currentBreakpoint,
+					currentInnerBlockState,
 				}}
 			/>
 			{/*</MediaQuery>*/}

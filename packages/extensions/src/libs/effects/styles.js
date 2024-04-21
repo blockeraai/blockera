@@ -8,6 +8,7 @@ import {
 } from '@publisher/style-engine';
 import { getValueAddonRealValue } from '@publisher/hooks';
 import type { CssRule } from '@publisher/style-engine/src/types';
+import { getSortedRepeater } from '@publisher/controls';
 
 /**
  * Internal dependencies
@@ -37,6 +38,7 @@ export const EffectsStyles = ({
 	// activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const {
 		publisherFilter,
@@ -48,18 +50,22 @@ export const EffectsStyles = ({
 		publisherDivider,
 		publisherMask,
 	} = config.effectsConfig;
+
 	const blockProps = {
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,
 	};
+
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
 		currentBlock,
 		blockSelectors,
 		className: currentBlockAttributes?.className,
 	};
+
 	const styleGroup: Array<CssRule> = [];
 
 	if (
@@ -82,9 +88,7 @@ export const EffectsStyles = ({
 						{
 							type: 'static',
 							properties: {
-								opacity: getValueAddonRealValue(
-									blockProps.attributes.publisherOpacity
-								),
+								opacity: blockProps.attributes.publisherOpacity,
 							},
 						},
 					],
@@ -103,53 +107,74 @@ export const EffectsStyles = ({
 				blockProps.attributes.publisherTransform
 			)
 		) {
-			let transformProperty = blockProps.attributes.publisherTransform
-				?.map((item) => {
+			const properties: {
+				transform: Array<string>,
+				transformSelfPerspective: string,
+			} = {
+				transform: [],
+				transformSelfPerspective: '',
+			};
+
+			getSortedRepeater(blockProps.attributes.publisherTransform)?.map(
+				([, item]) => {
 					if (!item.isVisible) {
 						return null;
 					}
 
 					switch (item.type) {
 						case 'move':
-							return `translate3d(${getValueAddonRealValue(
-								item['move-x']
-							)}, ${getValueAddonRealValue(
-								item['move-y']
-							)}, ${getValueAddonRealValue(item['move-z'])})`;
+							properties.transform.push(
+								`translate3d(${getValueAddonRealValue(
+									item['move-x']
+								)}, ${getValueAddonRealValue(
+									item['move-y']
+								)}, ${getValueAddonRealValue(item['move-z'])})`
+							);
+							break;
 
 						case 'scale':
-							return `scale3d(${getValueAddonRealValue(
-								item.scale
-							)}, ${getValueAddonRealValue(item.scale)}, 50%)`;
+							properties.transform.push(
+								`scale3d(${getValueAddonRealValue(
+									item.scale
+								)}, ${getValueAddonRealValue(item.scale)}, 50%)`
+							);
+							break;
 
 						case 'rotate':
-							return `rotateX(${getValueAddonRealValue(
-								item['rotate-x']
-							)}) rotateY(${getValueAddonRealValue(
-								item['rotate-y']
-							)}) rotateZ(${getValueAddonRealValue(
-								item['rotate-z']
-							)})`;
+							properties.transform.push(
+								`rotateX(${getValueAddonRealValue(
+									item['rotate-x']
+								)}) rotateY(${getValueAddonRealValue(
+									item['rotate-y']
+								)}) rotateZ(${getValueAddonRealValue(
+									item['rotate-z']
+								)})`
+							);
+							break;
 
 						case 'skew':
-							return `skew(${getValueAddonRealValue(
-								item['skew-x']
-							)}, ${getValueAddonRealValue(item['skew-y'])})`;
+							properties.transform.push(
+								`skew(${getValueAddonRealValue(
+									item['skew-x']
+								)}, ${getValueAddonRealValue(item['skew-y'])})`
+							);
+							break;
 					}
 
 					return null;
-				})
-				?.filter((item) => null !== item)
-				.join(' ');
+				}
+			);
 
 			if (blockProps.attributes.publisherTransformSelfPerspective) {
-				transformProperty = `perspective(${getValueAddonRealValue(
+				properties.transformSelfPerspective = `perspective(${getValueAddonRealValue(
 					blockProps.attributes.publisherTransformSelfPerspective
-				)}) ${transformProperty}`;
+				)}) `;
 			}
 
-			if (transformProperty) {
-				transformProperties.transform = transformProperty;
+			if (properties.transform.length > 0) {
+				transformProperties.transform =
+					properties.transformSelfPerspective +
+					properties.transform.join(' ');
 			}
 		}
 
@@ -359,7 +384,10 @@ export const EffectsStyles = ({
 			),
 		});
 
-		if (blockProps.attributes?.publisherDivider?.length === 2) {
+		if (
+			Object.entries(blockProps.attributes?.publisherDivider)?.length ===
+			2
+		) {
 			styleGroup.push({
 				selector: getCssSelector({
 					...sharedParams,
@@ -430,7 +458,8 @@ export const EffectsStyles = ({
 						{
 							type: 'static',
 							properties: {
-								'mix-blend-mode': '{{publisherBlendMode}}',
+								'mix-blend-mode':
+									blockProps.attributes.publisherBlendMode,
 							},
 						},
 					],

@@ -180,10 +180,10 @@ describe('angle-picker-control', () => {
 				cy.get('@indicator').trigger('mouseup');
 				// visual assertion
 				cy.get('input[type="number"]')
-					.should('have.value', 270)
+					.should('have.value', 278)
 					.then(() => {
 						// data assertion
-						expect(getControlValue(name)).to.be.equal(270);
+						expect(getControlValue(name)).to.be.equal(278);
 					});
 			});
 		});

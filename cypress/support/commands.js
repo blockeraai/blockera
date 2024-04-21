@@ -42,6 +42,17 @@ Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 });
 
 Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
+	const fallbackLabel = args[0];
+
+	if (fallbackLabel) {
+		delete args[0];
+
+		return cy.get(
+			`[aria-label="${selector}"], [aria-label="${fallbackLabel}"]`,
+			...args
+		);
+	}
+
 	return cy.get(`[aria-label="${selector}"]`, ...args);
 });
 
@@ -194,11 +205,6 @@ Cypress.Commands.add('activateMoreSettingsItem', (settingsLabel, itemName) => {
 		});
 });
 
-// Open More Settings Panel and Activate Item
-Cypress.Commands.add('openMoreFeatures', (label) => {
-	cy.get(`[aria-label="${label}"]`).click();
-});
-
 Cypress.Commands.add('setInputFieldValue', (fieldLabel, groupLabel, value) => {
 	// Alias
 	cy.get('h2').contains(groupLabel).parent().parent().as('groupId');
@@ -211,5 +217,76 @@ Cypress.Commands.add('setInputFieldValue', (fieldLabel, groupLabel, value) => {
 			.within(() => {
 				cy.get('input').type(value);
 			});
+	});
+});
+
+// select custom select item
+Cypress.Commands.add('customSelect', (item) => {
+	cy.get('button[aria-haspopup="listbox"]').click();
+
+	cy.get('ul').within(() => {
+		cy.contains(item).click();
+	});
+});
+
+Cypress.Commands.add('openAccordion', (accordionHeading) =>
+	cy.get('h2').contains(accordionHeading).parent().parent().click()
+);
+
+Cypress.Commands.add('addRepeaterItem', (ariaLabel, clickCount) => {
+	cy.multiClick(`[aria-label="${ariaLabel}"]`, clickCount);
+});
+
+Cypress.Commands.add('checkLabelStyle', (content, label, cssClass) => {
+	cy.get('h2')
+		.contains(content)
+		.parent()
+		.parent()
+		.within(() => {
+			cy.get(`[aria-label="${label}"]`).should('have.class', cssClass);
+		});
+});
+
+Cypress.Commands.add('checkStateGraph', (label, updatedStates, index = 0) => {
+	const states = [
+		'Normal',
+		'Hover',
+		'Active',
+		'Focus',
+		'Visited',
+		'Before',
+		'After',
+		'Custom Class',
+		'Parent Class',
+		'Parent Hover',
+	];
+
+	cy.getByAriaLabel(label).eq(index).click();
+
+	cy.getByDataTest('popover-body')
+		.last()
+		.within(() => {
+			updatedStates.forEach((state) => {
+				cy.contains(state).should('exist');
+			});
+
+			//
+			states
+				.filter((state) => !updatedStates.includes(state))
+				.forEach((state) => {
+					cy.contains(state).should('not.exist');
+				});
+		});
+});
+
+Cypress.Commands.add('setColorControlValue', (label, value) => {
+	cy.getParentContainer(label)
+		.last()
+		.within(() => {
+			cy.getByDataCy('color-btn').click();
+		});
+	cy.getByDataTest('popover-body').within(() => {
+		cy.get('input[maxlength="9"]').clear();
+		cy.get('input[maxlength="9"]').type(value);
 	});
 });

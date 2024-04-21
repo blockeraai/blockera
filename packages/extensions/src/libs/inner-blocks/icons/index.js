@@ -12,3 +12,5 @@ export { InnerBlockHeading5Icon } from './inner-block-heading5';
 export { InnerBlockHeading6Icon } from './inner-block-heading6';
 export { InnerBlockButtonIcon } from './inner-block-button';
 export { InnerBlockLinkIcon } from './inner-block-link';
+export { InnerBlockImageIcon } from './inner-block-image';
+export { InnerBlockInputIcon } from './inner-block-input';

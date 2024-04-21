@@ -9,11 +9,12 @@ import memoize from 'fast-memoize';
  * Publisher dependencies
  */
 import { update } from '@publisher/data-extractor';
-import { isEquals, mergeObject } from '@publisher/utils';
+import { isEquals, isObject, mergeObject } from '@publisher/utils';
 
 /**
  * Internal dependencies
  */
+import { sharedBlockExtensionAttributes as defaultAttributes } from '../../libs';
 import { isInnerBlock, isNormalState } from '../../components';
 import type {
 	StateTypes,
@@ -61,32 +62,49 @@ export const memoizedRootBreakpoints: (
 		if (isInnerBlock(currentBlock) && insideInnerBlock) {
 			if (!isNormalState(currentInnerBlockState)) {
 				if ('publisherBlockStates' === attributeId) {
-					return mergeObject(breakpoint, {
-						attributes: {
-							publisherInnerBlocks: {
-								[currentBlock]: {
-									attributes: {
-										...effectiveItems,
-										[attributeId]: newValue,
+					return mergeObject(
+						breakpoint,
+						{
+							attributes: {
+								publisherInnerBlocks: {
+									[currentBlock]: {
+										attributes: {
+											...effectiveItems,
+											[attributeId]: newValue,
+										},
 									},
 								},
 							},
 						},
-					});
+						{
+							forceUpdated: [attributeId],
+						}
+					);
 				}
 
-				return mergeObject(breakpoint, {
-					attributes: {
-						publisherInnerBlocks: {
-							[currentBlock]: {
-								attributes: {
-									publisherBlockStates: {
-										[currentInnerBlockState]: {
-											breakpoints: {
-												[currentBreakpoint]: {
-													attributes: {
-														...effectiveItems,
-														[attributeId]: newValue,
+				const isEqualsWithDefault = isEquals(
+					defaultAttributes[attributeId]?.default,
+					newValue
+				);
+
+				return mergeObject(
+					breakpoint,
+					{
+						attributes: {
+							publisherInnerBlocks: {
+								[currentBlock]: {
+									attributes: {
+										publisherBlockStates: {
+											[currentInnerBlockState]: {
+												breakpoints: {
+													[currentBreakpoint]: {
+														attributes: {
+															...effectiveItems,
+															[attributeId]:
+																isEqualsWithDefault
+																	? undefined
+																	: newValue,
+														},
 													},
 												},
 											},
@@ -96,7 +114,14 @@ export const memoizedRootBreakpoints: (
 							},
 						},
 					},
-				});
+					{
+						deletedProps: [attributeId],
+						forceUpdated:
+							!isEqualsWithDefault && isObject(newValue)
+								? [attributeId]
+								: [],
+					}
+				);
 			}
 
 			return mergeObject(breakpoint, {
@@ -113,12 +138,27 @@ export const memoizedRootBreakpoints: (
 			});
 		}
 
-		return mergeObject(breakpoint, {
-			attributes: {
-				...effectiveItems,
-				[attributeId]: newValue,
+		const isEqualsWithDefault = isEquals(
+			defaultAttributes[attributeId]?.default,
+			newValue
+		);
+
+		return mergeObject(
+			breakpoint,
+			{
+				attributes: {
+					...effectiveItems,
+					[attributeId]: isEqualsWithDefault ? undefined : newValue,
+				},
 			},
-		});
+			{
+				deletedProps: [attributeId],
+				forceUpdated:
+					!isEqualsWithDefault && isObject(newValue)
+						? [attributeId]
+						: [],
+			}
+		);
 	}
 );
 
@@ -142,17 +182,25 @@ export const memoizedBlockStates: (
 				recievedState || currentState
 			]?.breakpoints;
 
-		return mergeObject(currentBlockAttributes?.publisherBlockStates, {
-			[recievedState || currentState]: {
-				breakpoints: {
-					[currentBreakpoint]: memoizedRootBreakpoints(
-						breakpoints[currentBreakpoint],
-						action,
-						insideInnerBlock
-					),
+		return mergeObject(
+			currentBlockAttributes?.publisherBlockStates,
+			{
+				[recievedState || currentState]: {
+					breakpoints: {
+						[currentBreakpoint]: memoizedRootBreakpoints(
+							breakpoints[currentBreakpoint],
+							action,
+							insideInnerBlock
+						),
+					},
 				},
 			},
-		});
+			{
+				forceUpdated: isObject(action.newValue)
+					? [action.attributeId]
+					: [],
+			}
+		);
 	}
 );
 

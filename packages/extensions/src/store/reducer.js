@@ -8,7 +8,7 @@ import { combineReducers } from '@wordpress/data';
 /**
  * Publisher dependencies
  */
-import { omit } from '@publisher/utils';
+import { omit, mergeObject } from '@publisher/utils';
 
 /**
  * Key block types by their name.
@@ -95,6 +95,26 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 			return {
 				...state,
 				isActiveExtensions: action.isActive,
+			};
+		case 'SET_EXTENSIONS_ACTIVE_VARIATION':
+			return {
+				...state,
+				activeBlockVariation: action.variation,
+			};
+		case 'SET_BLOCK_CLIENT_MASTER_STATE':
+			return {
+				...state,
+				[action.clientId]: mergeObject(state[action.clientId] || {}, {
+					[action.name + '-active-state']: action.currentState,
+				}),
+			};
+		case 'SET_BLOCK_CLIENT_INNER_STATE':
+			return {
+				...state,
+				[action.clientId]: mergeObject(state[action.clientId] || {}, {
+					[action.innerBlockType + '-active-state']:
+						action.currentState,
+				}),
 			};
 	}
 

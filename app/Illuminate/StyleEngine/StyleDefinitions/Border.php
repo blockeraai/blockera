@@ -3,9 +3,9 @@
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
 /**
- * Border style definition
+ * Class Border definition to generate css rules.
  *
- * @package Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Border
+ * @package Border
  */
 class Border extends BaseStyleDefinition {
 
@@ -16,15 +16,17 @@ class Border extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
-		if ( empty( $setting['type'] ) ) {
+		$declaration = [];
+		$cssProperty = $setting['type'];
 
-			return $this->properties;
+		if ( empty( $cssProperty ) ) {
+
+			return $declaration;
 		}
 
-		$props       = [];
-		$cssProperty = $setting['type'];
+		$this->setSelector( $cssProperty );
 
 		switch ( $cssProperty ) {
 			case 'border':
@@ -33,7 +35,7 @@ class Border extends BaseStyleDefinition {
 				if ( count( $value ) < 3 ) {
 
 					if ( $value['all']['width'] !== '' ) {
-						$props['border'] = trim(
+						$declaration['border'] = trim(
 							sprintf(
 								'%s %s %s',
 								$value['all']['width'],
@@ -46,7 +48,7 @@ class Border extends BaseStyleDefinition {
 				} else {
 
 					if ( $value['top']['width'] !== '' ) {
-						$props['border-top'] = trim(
+						$declaration['border-top'] = trim(
 							sprintf(
 								'%s %s %s',
 								$value['top']['width'],
@@ -57,7 +59,7 @@ class Border extends BaseStyleDefinition {
 					}
 
 					if ( $value['right']['width'] !== '' ) {
-						$props['border-right'] = trim(
+						$declaration['border-right'] = trim(
 							sprintf(
 								'%s %s %s',
 								$value['right']['width'],
@@ -68,7 +70,7 @@ class Border extends BaseStyleDefinition {
 					}
 
 					if ( $value['bottom']['width'] !== '' ) {
-						$props['border-bottom'] = trim(
+						$declaration['border-bottom'] = trim(
 							sprintf(
 								'%s %s %s',
 								$value['bottom']['width'],
@@ -79,7 +81,7 @@ class Border extends BaseStyleDefinition {
 					}
 
 					if ( $value['left']['width'] !== '' ) {
-						$props['border-left'] = trim(
+						$declaration['border-left'] = trim(
 							sprintf(
 								'%s %s %s',
 								$value['left']['width'],
@@ -95,21 +97,21 @@ class Border extends BaseStyleDefinition {
 
 				if ( ! empty( $value['type'] ) && 'all' === $value['type'] ) {
 
-					$props['border-radius'] = ! empty( $value['all'] ) ? pb_get_value_addon_real_value( $value['all'] ) : '';
+					$declaration['border-radius'] = ! empty( $value['all'] ) ? pb_get_value_addon_real_value( $value['all'] ) : '';
 
 				} else {
 
-					$props['border-top-left-radius']     = ! empty( $value['topLeft'] ) ? pb_get_value_addon_real_value( $value['topLeft'] ) : '';
-					$props['border-top-right-radius']    = ! empty( $value['topRight'] ) ? pb_get_value_addon_real_value( $value['topRight'] ) : '';
-					$props['border-bottom-right-radius'] = ! empty( $value['bottomRight'] ) ? pb_get_value_addon_real_value( $value['bottomRight'] ) : '';
-					$props['border-bottom-left-radius']  = ! empty( $value['bottomLeft'] ) ? pb_get_value_addon_real_value( $value['bottomLeft'] ) : '';
+					$declaration['border-top-left-radius']     = ! empty( $value['topLeft'] ) ? pb_get_value_addon_real_value( $value['topLeft'] ) : '';
+					$declaration['border-top-right-radius']    = ! empty( $value['topRight'] ) ? pb_get_value_addon_real_value( $value['topRight'] ) : '';
+					$declaration['border-bottom-right-radius'] = ! empty( $value['bottomRight'] ) ? pb_get_value_addon_real_value( $value['bottomRight'] ) : '';
+					$declaration['border-bottom-left-radius']  = ! empty( $value['bottomLeft'] ) ? pb_get_value_addon_real_value( $value['bottomLeft'] ) : '';
 				}
 				break;
 		}
 
-		$this->setProperties( array_merge( $this->properties, $props ) );
+		$this->setCss( $declaration );
 
-		return $this->properties;
+		return $this->css;
 	}
 
 	/**
@@ -123,6 +125,16 @@ class Border extends BaseStyleDefinition {
 			'publisherBorder'       => 'border',
 			'publisherBorderRadius' => 'border-radius',
 		];
+	}
+
+	/**
+	 * Compatibility
+	 *
+	 * @inheritDoc
+	 */
+	protected function calculateFallbackFeatureId( string $cssProperty ): string {
+
+		return pb_camel_case_join( $cssProperty );
 	}
 
 }

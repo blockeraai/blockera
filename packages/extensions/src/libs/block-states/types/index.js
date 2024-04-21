@@ -17,8 +17,12 @@ export type BlockDetail = {
 	isBaseBreakpoint: boolean,
 	currentBlock: 'master' | string,
 	currentState: TStates,
+	blockAttributes: Object,
+	variations: Array<Object>,
+	activeBlockVariation: Object,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
+	innerBlocks: Object,
 };
 
 export type StatesManagerProps = {

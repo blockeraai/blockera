@@ -2,7 +2,9 @@
 
 namespace Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions;
 
-class Layout extends BaseStyleDefinition {
+use Publisher\Framework\Illuminate\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
+
+class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 
 	/**
 	 * @inheritdoc
@@ -12,14 +14,14 @@ class Layout extends BaseStyleDefinition {
 	public function getAllowedProperties(): array {
 
 		return [
-			'publisherGap'             => 'gap',
-			'publisherFlexChildSizing' => 'flex',
-			'publisherFlexChildOrder'  => 'order',
-			'publisherDisplay'         => 'display',
-			'publisherFlexWrap'        => 'flex-wrap',
-			'publisherFlexChildAlign'  => 'align-self',
-			'publisherAlignContent'    => 'align-content',
-			'publisherFlexLayout'      => 'flex-direction',
+			'publisherGap'                  => 'gap',
+			'publisherFlexChildSizing'      => 'flex',
+			'publisherFlexChildOrder'       => 'order',
+			'publisherDisplay'              => 'display',
+			'publisherFlexWrap'             => 'flex-wrap',
+			'publisherFlexChildAlign'       => 'align-self',
+			'publisherAlignContent'         => 'align-content',
+			'publisherFlexLayout'           => 'flex-direction',
 		];
 	}
 
@@ -30,20 +32,17 @@ class Layout extends BaseStyleDefinition {
 	 *
 	 * @return array
 	 */
-	protected function collectProps( array $setting ): array {
+	protected function css( array $setting ): array {
 
-		if ( empty( $setting['type'] ) ) {
-
-			return $this->properties;
-		}
-
-		$props       = [];
+		$declaration = [];
 		$cssProperty = $setting['type'];
 
-		if ( empty( $setting[ $cssProperty ] ) ) {
+		if ( empty( $cssProperty ) ) {
 
-			return $this->properties;
+			return $declaration;
 		}
+
+		$this->setSelector( $cssProperty );
 
 		switch ( $cssProperty ) {
 			case 'flex':
@@ -51,20 +50,20 @@ class Layout extends BaseStyleDefinition {
 
 				switch ( $flexType ) {
 					case 'shrink':
-						$props['flex'] = '0 1 auto';
+						$declaration['flex'] = '0 1 auto';
 						break;
 					case 'grow':
-						$props['flex'] = '1 1 0%';
+						$declaration['flex'] = '1 1 0%';
 						break;
 					case 'no':
-						$props['flex'] = '0 0 auto';
+						$declaration['flex'] = '0 0 auto';
 						break;
 					case 'custom':
-						$props['flex'] = sprintf(
+						$declaration['flex'] = sprintf(
 							'%s %s %s',
-							$setting['flex-child']['publisherFlexChildGrow'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildGrow'] ) : 0,
-							$setting['flex-child']['publisherFlexChildShrink'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildShrink'] ) : 0,
-							$setting['flex-child']['publisherFlexChildBasis'] ? pb_get_value_addon_real_value( $setting['flex-child']['publisherFlexChildBasis'] ) : 'auto'
+							$setting['custom']['publisherFlexChildGrow'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildGrow'] ) : 0,
+							$setting['custom']['publisherFlexChildShrink'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildShrink'] ) : 0,
+							$setting['custom']['publisherFlexChildBasis'] ? pb_get_value_addon_real_value( $setting['custom']['publisherFlexChildBasis'] ) : 'auto'
 						);
 						break;
 				}
@@ -76,13 +75,13 @@ class Layout extends BaseStyleDefinition {
 
 				switch ( $orderType ) {
 					case 'first':
-						$props['order'] = '-1';
+						$declaration['order'] = '-1';
 						break;
 					case 'last':
-						$props['order'] = '100';
+						$declaration['order'] = '100';
 						break;
 					case 'custom':
-						$props['order'] = $setting['custom'] ? pb_get_value_addon_real_value( $setting['custom'] ) : '100';
+						$declaration['order'] = $setting['custom'] ? pb_get_value_addon_real_value( $setting['custom'] ) : '100';
 						break;
 				}
 
@@ -93,15 +92,15 @@ class Layout extends BaseStyleDefinition {
 				$item = $setting['flex-direction'];
 
 				if ( $item['direction'] ) {
-					$props['flex-direction'] = $item['direction'];
+					$declaration['flex-direction'] = $item['direction'];
 				}
 
 				if ( $item['alignItems'] ) {
-					$props['align-items'] = $item['alignItems'];
+					$declaration['align-items'] = $item['alignItems'];
 				}
 
 				if ( $item['justifyContent'] ) {
-					$props['justify-content'] = $item['justifyContent'];
+					$declaration['justify-content'] = $item['justifyContent'];
 				}
 
 				break;
@@ -109,7 +108,7 @@ class Layout extends BaseStyleDefinition {
 			case 'flex-wrap':
 				$flexDirection = $setting['flex-wrap'];
 
-				$props['flex-wrap'] = $flexDirection['value'] . ( $flexDirection['reverse'] && $flexDirection['value'] === 'wrap' ? '-reverse' : '' );
+				$declaration['flex-wrap'] = $flexDirection['value'] . ( $flexDirection['reverse'] && $flexDirection['value'] === 'wrap' ? '-reverse' : '' );
 
 				break;
 
@@ -120,29 +119,79 @@ class Layout extends BaseStyleDefinition {
 				if ( $gap['lock'] ) {
 
 					if ( $gap['gap'] ) {
-						$props['gap'] = pb_get_value_addon_real_value( $gap['gap'] );
+						$declaration['gap'] = pb_get_value_addon_real_value( $gap['gap'] );
 					}
 				} else {
 
 					if ( $gap['rows'] ) {
-						$props['row-gap'] = pb_get_value_addon_real_value( $gap['rows'] );
+						$declaration['row-gap'] = pb_get_value_addon_real_value( $gap['rows'] );
 					}
 
 					if ( $gap['columns'] ) {
-						$props['column-gap'] = pb_get_value_addon_real_value( $gap['columns'] );
+						$declaration['column-gap'] = pb_get_value_addon_real_value( $gap['columns'] );
 					}
 				}
 
 				break;
 			default:
-				$props[ $cssProperty ] = $setting[ $cssProperty ];
+				$declaration[ $cssProperty ] = $setting[ $cssProperty ];
 				break;
 		}
 
+		$this->setCss( $declaration );
 
-		$this->setProperties( array_merge( $this->properties, $props ) );
+		return $this->css;
+	}
 
-		return $this->properties;
+	/**
+	 * @inheritDoc
+	 *
+	 * @param array  $settings
+	 * @param string $settingName
+	 * @param string $cssProperty
+	 *
+	 * @return array
+	 */
+	public function getCustomSettings( array $settings, string $settingName, string $cssProperty ): array {
+
+		if ( 'custom' === $settings[ $settingName ] && 'flex' === $cssProperty ) {
+
+			$setting = [
+				[
+					'isVisible'  => true,
+					'type'       => $cssProperty,
+					$cssProperty => $settings['publisherFlexChildSizing'] ?? 'custom',
+					'custom'     => [
+						'publisherFlexChildGrow'   => $settings['publisherFlexChildGrow'] ?? 0,
+						'publisherFlexChildShrink' => $settings['publisherFlexChildShrink'] ?? 0,
+						'publisherFlexChildBasis'  => $settings['publisherFlexChildBasis'] ?? 'auto',
+					],
+				]
+			];
+
+		} elseif ( 'custom' === $settings[ $settingName ] && 'order' === $cssProperty ) {
+
+			$setting = [
+				[
+					'isVisible'  => true,
+					'type'       => $cssProperty,
+					$cssProperty => $settings['publisherFlexChildOrder'] ?? 'custom',
+					'custom'     => $settings['publisherFlexChildOrderCustom'] ?? '',
+				]
+			];
+
+		} else {
+
+			$setting = [
+				[
+					'isVisible'  => true,
+					'type'       => $cssProperty,
+					$cssProperty => $settings[ $settingName ],
+				]
+			];
+		}
+
+		return $setting;
 	}
 
 }

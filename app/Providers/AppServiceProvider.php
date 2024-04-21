@@ -34,7 +34,7 @@ use Publisher\Framework\Illuminate\{EntityRegistry,
 };
 use Publisher\Framework\Illuminate\Foundation\ValueAddon\ValueAddonRegistry;
 use Publisher\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
-use Publisher\Framework\Services\Render\{Render, Parser, SavePost};
+use Publisher\Framework\Services\Block\{Render, Parser, SavePost, Setup};
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -46,6 +46,8 @@ class AppServiceProvider extends ServiceProvider {
 		parent::register();
 
 		try {
+
+			$this->app->singleton( Setup::class );
 
 			$this->app->singleton( SavePost::class, function ( Application $app ) {
 
@@ -74,7 +76,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->bind( StyleEngine::class, static function ( Application $app, array $params ) {
 
-				$dependencies = [
+				$styleDefinitions = [
 					$app->make( Size::class ),
 					$app->make( Mouse::class ),
 					$app->make( Layout::class ),
@@ -89,7 +91,7 @@ class AppServiceProvider extends ServiceProvider {
 					$app->make( Typography::class ),
 				];
 
-				$params = array_merge( $params, compact( 'dependencies' ) );
+				$params = array_merge( $params, compact( 'styleDefinitions' ) );
 
 				return new StyleEngine( ...$params );
 			} );
@@ -137,6 +139,7 @@ class AppServiceProvider extends ServiceProvider {
 			'dynamic-value' => $dynamicValueRegistry->getRegistered(),
 		] );
 
+		$this->app->make( Setup::class );
 		$this->app->make( SavePost::class );
 		$this->app->make( EntityRegistry::class );
 

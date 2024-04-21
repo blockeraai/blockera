@@ -5,9 +5,15 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
+	openMoreFeaturesControl,
+	createPost,
 } from '../../../../../../cypress/helpers';
 
 describe('Text Transform → WP Compatibility', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
 	describe('Paragraph Block', () => {
 		it('Simple value', () => {
 			appendBlocks(
@@ -20,7 +26,7 @@ describe('Text Transform → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// Open more settings
-			cy.openMoreFeatures('More typography settings');
+			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Capitalize').as('container');
 
