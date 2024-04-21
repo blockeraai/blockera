@@ -23,6 +23,12 @@ import {
 	flexWrapFromWPCompatibility,
 	flexWrapToWPCompatibility,
 } from './compatibility/flex-wrap';
+import {
+	flexLayoutToWPCompatibility,
+	alignItemsFromWPCompatibility,
+	justifyContentFromWPCompatibility,
+	directionFromWPCompatibility,
+} from './compatibility/flex-layout';
 
 import type { BlockDetail } from '../block-states/types';
 
@@ -64,6 +70,39 @@ export const bootstrap = (): void => {
 
 			if (flexWrapAttrs) {
 				attributes = mergeObject(attributes, flexWrapAttrs);
+			}
+
+			//
+			// direction compatibility
+			//
+			const directionAttrs = directionFromWPCompatibility({
+				attributes,
+			});
+
+			if (directionAttrs) {
+				attributes = mergeObject(attributes, directionAttrs);
+			}
+
+			//
+			// Align items compatibility
+			//
+			const alignItemsAttrs = alignItemsFromWPCompatibility({
+				attributes,
+			});
+
+			if (alignItemsAttrs) {
+				attributes = mergeObject(attributes, alignItemsAttrs);
+			}
+
+			//
+			// Justify content compatibility
+			//
+			const justifyContentAttrs = justifyContentFromWPCompatibility({
+				attributes,
+			});
+
+			if (justifyContentAttrs) {
+				attributes = mergeObject(attributes, justifyContentAttrs);
 			}
 
 			return attributes;
@@ -117,6 +156,15 @@ export const bootstrap = (): void => {
 					return mergeObject(
 						nextState,
 						flexWrapToWPCompatibility({
+							newValue,
+							ref,
+						})
+					);
+
+				case 'publisherFlexLayout':
+					return mergeObject(
+						nextState,
+						flexLayoutToWPCompatibility({
 							newValue,
 							ref,
 						})
