@@ -232,3 +232,61 @@ Cypress.Commands.add('customSelect', (item) => {
 Cypress.Commands.add('openAccordion', (accordionHeading) =>
 	cy.get('h2').contains(accordionHeading).parent().parent().click()
 );
+
+Cypress.Commands.add('addRepeaterItem', (ariaLabel, clickCount) => {
+	cy.multiClick(`[aria-label="${ariaLabel}"]`, clickCount);
+});
+
+Cypress.Commands.add('checkLabelStyle', (content, label, cssClass) => {
+	cy.get('h2')
+		.contains(content)
+		.parent()
+		.parent()
+		.within(() => {
+			cy.get(`[aria-label="${label}"]`).should('have.class', cssClass);
+		});
+});
+
+Cypress.Commands.add('checkStateGraph', (label, updatedStates, index = 0) => {
+	const states = [
+		'Normal',
+		'Hover',
+		'Active',
+		'Focus',
+		'Visited',
+		'Before',
+		'After',
+		'Custom Class',
+		'Parent Class',
+		'Parent Hover',
+	];
+
+	cy.getByAriaLabel(label).eq(index).click();
+
+	cy.getByDataTest('popover-body')
+		.last()
+		.within(() => {
+			updatedStates.forEach((state) => {
+				cy.contains(state).should('exist');
+			});
+
+			//
+			states
+				.filter((state) => !updatedStates.includes(state))
+				.forEach((state) => {
+					cy.contains(state).should('not.exist');
+				});
+		});
+});
+
+Cypress.Commands.add('setColorControlValue', (label, value) => {
+	cy.getParentContainer(label)
+		.last()
+		.within(() => {
+			cy.getByDataCy('color-btn').click();
+		});
+	cy.getByDataTest('popover-body').within(() => {
+		cy.get('input[maxlength="9"]').clear();
+		cy.get('input[maxlength="9"]').type(value);
+	});
+});
