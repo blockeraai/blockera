@@ -47,7 +47,7 @@ export default function StateContainer({ children }: Object): Element<any> {
 	return (
 		<div
 			className={getClassNames('state-container')}
-			aria-label={__(' Block State Container', 'blockera-core')}
+			aria-label={__('Blockera Block State Container', 'blockera-core')}
 			style={{
 				color: 'inherit',
 				'--blockera-controls-primary-color': activeColor,

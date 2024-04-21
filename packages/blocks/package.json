@@ -2,7 +2,7 @@
 	"name": "@blockera/blocks",
 	"version": "1.0.0",
 	"description": "A blocks package to includes all core blocks and third-party blocks to compatible with blockera-core extensions.",
-	"author": "The  Contributors",
+	"author": "The Blockera Contributors",
 	"license": "ISC",
 	"keywords": [
 		"blockera"

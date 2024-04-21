@@ -268,7 +268,7 @@ export const Variable = {
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">
-					Deleted Variables<span> Blocks</span>
+					Deleted Variables<span>Blockera Blocks</span>
 				</h2>
 
 				<ControlContextProvider
@@ -364,7 +364,7 @@ export const Variable = {
 
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">
-					Deleted Variables<span> Blocks Pro</span>
+					Deleted Variables<span>Blockera Blocks Pro</span>
 				</h2>
 
 				<ControlContextProvider
@@ -569,7 +569,7 @@ export const Variable = {
 								id: 'not-found',
 								reference: {
 									type: 'theme',
-									theme: ' SE',
+									theme: 'Blockera SE',
 								},
 								var: '--wp--preset--font-size--medium',
 								type: 'font-size',
@@ -600,7 +600,7 @@ export const Variable = {
 								id: 'not-found',
 								reference: {
 									type: 'theme',
-									theme: ' SE',
+									theme: 'Blockera SE',
 								},
 								var: '--wp--preset--font-size--medium',
 								type: 'font-size',
@@ -630,7 +630,7 @@ export const Variable = {
 								id: 'not-found',
 								reference: {
 									type: 'theme',
-									theme: ' SE',
+									theme: 'Blockera SE',
 								},
 								var: '--wp--preset--font-size--medium',
 								type: 'font-size',
@@ -1374,7 +1374,7 @@ export const DynamicValue = {
 								id: 'not-found',
 								reference: {
 									type: 'theme',
-									theme: ' SE',
+									theme: 'Blockera SE',
 								},
 								category: 'post',
 								type: 'text',

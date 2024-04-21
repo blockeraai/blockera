@@ -2,7 +2,7 @@
 	"name": "@blockera/extensions",
 	"version": "1.0.0",
 	"description": " Extensions package to customize WordPress Gutenberg Block and Site Editors.",
-	"author": "The  Contributors",
+	"author": "The Blockera Contributors",
 	"license": "ISC",
 	"keywords": [
 		"blockera",

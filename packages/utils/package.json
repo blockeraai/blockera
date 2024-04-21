@@ -2,7 +2,7 @@
 	"name": "@blockera/utils",
 	"version": "1.0.0",
 	"description": "General utilities we use over our projects",
-	"author": "The  Contributors",
+	"author": "The Blockera Contributors",
 	"license": "ISC",
 	"keywords": [
 		"blockera"

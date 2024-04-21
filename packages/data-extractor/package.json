@@ -2,7 +2,7 @@
 	"name": "@blockera/data-extractor",
 	"version": "1.0.0",
 	"description": " Data Extractor package to access all property value with tokenized string.",
-	"author": "The  Contributors",
+	"author": "The Blockera Contributors",
 	"license": "ISC",
 	"keywords": [
 		"blockera",

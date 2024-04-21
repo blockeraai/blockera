@@ -455,7 +455,7 @@ describe('Helper Functions', () => {
 				generateVariableString({
 					reference: {
 						type: 'theme',
-						theme: ' SE',
+						theme: 'Blockera SE',
 					},
 					type: 'color',
 					id: 'base-1',
@@ -561,4 +561,3 @@ describe('Helper Functions', () => {
 		});
 	});
 });
-

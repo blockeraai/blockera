@@ -387,18 +387,21 @@ export function getDeletedItemInfo(item: ValueAddon): {
 				break;
 
 			case 'core':
-				result.referenceName = __(' Blocks', 'blockera-core');
+				result.referenceName = __('Blockera Blocks', 'blockera-core');
 				break;
 
 			case 'core-pro':
-				result.referenceName = __(' Blocks Pro', 'blockera-core');
+				result.referenceName = __(
+					'Blockera Blocks Pro',
+					'blockera-core'
+				);
 
 				switch (item.valueType) {
 					case 'variable':
 						result.after2 = (
 							<NoticeControl type="success">
 								{__(
-									'Activating  Blocks Pro plugin may potentially restore this variable.',
+									'Activating Blockera Blocks Pro plugin may potentially restore this variable.',
 									'blockera-core'
 								)}
 							</NoticeControl>
@@ -409,7 +412,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 						result.after2 = (
 							<NoticeControl type="success">
 								{__(
-									'Activating  Blocks Pro plugin restores functionality for this dynamic value item.',
+									'Activating Blockera Blocks Pro plugin restores functionality for this dynamic value item.',
 									'blockera-core'
 								)}
 							</NoticeControl>
