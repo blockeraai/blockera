@@ -56,7 +56,7 @@ dist
 # php code sniffer report
 .cache/phpcs-report.xml
 
-.cache/phpcs.json
+.cache/**
 
 # Storybook Build directory
 storybook-static
