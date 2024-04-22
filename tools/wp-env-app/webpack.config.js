@@ -100,4 +100,3 @@ module.exports = (env, options) => {
 if (process.env.CI) {
 	module.exports.parallelism = 1;
 }
-

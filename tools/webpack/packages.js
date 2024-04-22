@@ -106,4 +106,3 @@ module.exports = (env, argv) => {
 		devtool: 'inline-source-map',
 	};
 };
-
