@@ -220,6 +220,24 @@ Cypress.Commands.add('setInputFieldValue', (fieldLabel, groupLabel, value) => {
 	});
 });
 
+Cypress.Commands.add(
+	'checkInputFieldValue',
+	(fieldLabel, groupLabel, value) => {
+		// Alias
+		cy.get('h2').contains(groupLabel).parent().parent().as('groupId');
+
+		// Assertion for master block attributes.
+		cy.get('@groupId').within(() => {
+			cy.get(`[aria-label="${fieldLabel}"]`)
+				.parent()
+				.next()
+				.within(() => {
+					cy.get('input').should('have.value', value);
+				});
+		});
+	}
+);
+
 // select custom select item
 Cypress.Commands.add('customSelect', (item) => {
 	cy.get('button[aria-haspopup="listbox"]').click();
@@ -237,17 +255,29 @@ Cypress.Commands.add('addRepeaterItem', (ariaLabel, clickCount) => {
 	cy.multiClick(`[aria-label="${ariaLabel}"]`, clickCount);
 });
 
-Cypress.Commands.add('checkLabelStyle', (content, label, cssClass) => {
-	cy.get('h2')
-		.contains(content)
-		.parent()
-		.parent()
-		.within(() => {
-			cy.get(`[aria-label="${label}"]`).should('have.class', cssClass);
-		});
-});
+Cypress.Commands.add(
+	'checkLabelClassName',
+	(content, label, cssClass, type = 'have') => {
+		cy.get('h2')
+			.contains(content)
+			.parent()
+			.parent()
+			.within(() => {
+				if (type === 'not-have') {
+					cy.get(`[aria-label="${label}"]`).should(
+						'not.have.class',
+						cssClass
+					);
+				} else
+					cy.get(`[aria-label="${label}"]`).should(
+						'have.class',
+						cssClass
+					);
+			});
+	}
+);
 
-Cypress.Commands.add('checkStateGraph', (label, updatedStates, index = 0) => {
+Cypress.Commands.add('checkStateGraph', (content, label, updatedStates) => {
 	const states = [
 		'Normal',
 		'Hover',
@@ -261,7 +291,13 @@ Cypress.Commands.add('checkStateGraph', (label, updatedStates, index = 0) => {
 		'Parent Hover',
 	];
 
-	cy.getByAriaLabel(label).eq(index).click();
+	cy.get('h2')
+		.contains(content)
+		.parent()
+		.parent()
+		.within(() => {
+			cy.getByAriaLabel(label).click();
+		});
 
 	cy.getByDataTest('popover-body')
 		.last()
