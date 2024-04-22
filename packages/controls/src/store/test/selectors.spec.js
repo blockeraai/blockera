@@ -48,6 +48,6 @@ describe('Selectors Testing ...', () => {
 		const name = generateControlId();
 		registerControl({ name });
 
-		expect(getControlValue(name)).toEqual(undefined);
+		expect(getControlValue(name)).toEqual(null);
 	});
 });

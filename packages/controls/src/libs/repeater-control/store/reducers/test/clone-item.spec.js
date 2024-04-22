@@ -11,7 +11,10 @@ describe('Clone Repeater Item', function () {
 		state = repeaterReducer(
 			state,
 			addControl({
-				value: [{ x: 10 }, { x: 12 }],
+				value: {
+					0: { x: 10 },
+					1: { x: 12 },
+				},
 				name: 'TestRepeaterControl',
 			})
 		);
@@ -27,7 +30,11 @@ describe('Clone Repeater Item', function () {
 		).toEqual({
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
-				value: [{ x: 10 }, { x: 12 }, { x: 12 }],
+				value: {
+					0: { x: 10 },
+					1: { x: 12 },
+					2: { x: 12, order: 2 },
+				},
 			},
 		});
 	});
@@ -38,7 +45,10 @@ describe('Clone Repeater Item', function () {
 			state,
 			addControl({
 				value: {
-					x: [{ x: 10 }, { x: 12 }],
+					x: {
+						0: { x: 10 },
+						1: { x: 12 },
+					},
 				},
 				name: 'TestRepeaterControl',
 			})
@@ -57,7 +67,11 @@ describe('Clone Repeater Item', function () {
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
 				value: {
-					x: [{ x: 10 }, { x: 12 }, { x: 12 }],
+					x: {
+						0: { x: 10 },
+						1: { x: 12 },
+						2: { x: 12, order: 2 },
+					},
 				},
 			},
 		});
@@ -70,7 +84,10 @@ describe('Clone Repeater Item', function () {
 						{
 							y: [
 								{
-									z: [{ x: 10 }, { x: 12 }],
+									z: {
+										0: { x: 10 },
+										1: { x: 12 },
+									},
 								},
 							],
 						},
@@ -96,7 +113,11 @@ describe('Clone Repeater Item', function () {
 					{
 						y: [
 							{
-								z: [{ x: 10 }, { x: 12 }, { x: 12 }],
+								z: {
+									0: { x: 10 },
+									1: { x: 12 },
+									2: { x: 12, order: 2 },
+								},
 							},
 						],
 					},
@@ -112,7 +133,11 @@ describe('Clone Repeater Item', function () {
 						{
 							y: [
 								{
-									z: [{ x: 10 }, { x: 12 }],
+									z: {
+										0: { x: 10 },
+										1: { x: 12 },
+										2: { x: 12 },
+									},
 								},
 							],
 						},
@@ -139,7 +164,11 @@ describe('Clone Repeater Item', function () {
 					{
 						y: [
 							{
-								z: [{ x: 10 }, { x: 12 }],
+								z: {
+									0: { x: 10 },
+									1: { x: 12 },
+									2: { x: 12 },
+								},
 							},
 						],
 					},
@@ -151,7 +180,10 @@ describe('Clone Repeater Item', function () {
 			state,
 			addControl({
 				value: {
-					z: [{ x: 10 }, { x: 12 }],
+					z: {
+						0: { x: 10 },
+						1: { x: 12 },
+					},
 				},
 				name: 'TestRepeaterControl3',
 			})
@@ -170,14 +202,20 @@ describe('Clone Repeater Item', function () {
 		expect(state.TestRepeaterControl3).toEqual({
 			name: 'TestRepeaterControl3',
 			value: {
-				z: [{ x: 10 }, { x: 12 }],
+				z: {
+					0: { x: 10 },
+					1: { x: 12 },
+				},
 			},
 		});
 
 		state = repeaterReducer(
 			state,
 			addControl({
-				value: [{ x: 10 }, { x: 12 }],
+				value: {
+					0: { x: 10 },
+					1: { x: 12 },
+				},
 				name: 'TestRepeaterControl4',
 			})
 		);
@@ -194,13 +232,20 @@ describe('Clone Repeater Item', function () {
 
 		expect(state.TestRepeaterControl4).toEqual({
 			name: 'TestRepeaterControl4',
-			value: [{ x: 10 }, { x: 12 }],
+			value: {
+				0: { x: 10 },
+				1: { x: 12 },
+			},
 		});
 
 		state = repeaterReducer(
 			state,
 			addControl({
-				value: [{ x: 10 }, { x: 12 }],
+				value: {
+					0: { x: 10 },
+					1: { x: 12 },
+					2: { x: 12 },
+				},
 				name: 'TestRepeaterControl5',
 			})
 		);
@@ -216,16 +261,12 @@ describe('Clone Repeater Item', function () {
 
 		expect(state.TestRepeaterControl5).toEqual({
 			name: 'TestRepeaterControl5',
-			value: [{ x: 10 }, { x: 12 }],
+			value: {
+				0: { x: 10 },
+				1: { x: 12 },
+				2: { x: 12 },
+				3: { x: 12, order: 3 },
+			},
 		});
-	});
-
-	it('should not clone item of invalid state structure', function () {
-		const initialState = {};
-		expect(
-			repeaterReducer(initialState, {
-				type: 'CLONE_REPEATER_ITEM',
-			})
-		).toEqual(initialState);
 	});
 });

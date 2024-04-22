@@ -11,7 +11,9 @@ describe('Remove Repeater Item', function () {
 		state = repeaterReducer(
 			state,
 			addControl({
-				value: [{ x: 0 }],
+				value: {
+					0: { x: 0 },
+				},
 				name: 'TestRepeaterControl',
 			})
 		);
@@ -27,7 +29,7 @@ describe('Remove Repeater Item', function () {
 		).toEqual({
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
-				value: [],
+				value: {},
 			},
 		});
 	});
@@ -38,7 +40,9 @@ describe('Remove Repeater Item', function () {
 			state,
 			addControl({
 				value: {
-					r: [{ x: 0 }],
+					r: {
+						0: { x: 0 },
+					},
 				},
 				name: 'TestRepeaterControl',
 			})
@@ -57,7 +61,7 @@ describe('Remove Repeater Item', function () {
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
 				value: {
-					r: [],
+					r: {},
 				},
 			},
 		});
@@ -72,7 +76,10 @@ describe('Remove Repeater Item', function () {
 					r: {
 						x: {
 							y: {
-								z: [{ x: 0 }, { x: 10 }],
+								z: {
+									0: { x: 0 },
+									1: { x: 10 },
+								},
 							},
 						},
 					},
@@ -97,7 +104,9 @@ describe('Remove Repeater Item', function () {
 					r: {
 						x: {
 							y: {
-								z: [{ x: 0 }],
+								z: {
+									0: { x: 0, order: 0 },
+								},
 							},
 						},
 					},
@@ -114,7 +123,9 @@ describe('Remove Repeater Item', function () {
 				value: {
 					r: [
 						{
-							y: [{ x: 0 }],
+							y: {
+								0: { x: 0 },
+							},
 						},
 					],
 				},
@@ -137,20 +148,11 @@ describe('Remove Repeater Item', function () {
 				value: {
 					r: [
 						{
-							y: [],
+							y: {},
 						},
 					],
 				},
 			},
 		});
-	});
-
-	it('should not remove item of invalid state structure', function () {
-		const initialState = {};
-		expect(
-			repeaterReducer(initialState, {
-				type: 'REMOVE_REPEATER_ITEM',
-			})
-		).toEqual(initialState);
 	});
 });

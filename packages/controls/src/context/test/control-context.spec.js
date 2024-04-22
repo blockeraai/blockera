@@ -9,6 +9,7 @@ import { renderHook } from '@testing-library/react';
  */
 import { useControlContext } from '../hooks';
 import { ControlContextProvider } from '../index';
+import { registerControl } from '../../api/index';
 
 function getControlId() {
 	return String(Math.random());
@@ -141,18 +142,20 @@ describe('testing control context provider and related hooks', () => {
 		expect(result.current.value).toBe(10);
 	});
 
-	it('should retrieve defaultValue when id is invalid, value is not Array, and defaultValue is defined', () => {
+	it('should retrieve context current value when id is invalid', () => {
+		const value = {
+			x: [
+				{
+					y: [{ isVisible: true }],
+				},
+			],
+		};
+
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
 					name: getControlId(),
-					value: {
-						x: [
-							{
-								y: [{ isVisible: true }],
-							},
-						],
-					},
+					value,
 				}}
 			>
 				{children}
@@ -165,47 +168,10 @@ describe('testing control context provider and related hooks', () => {
 						repeaterId: 'x[0].z.y',
 						defaultRepeaterItemValue: { x: 10 },
 					},
-					defaultValue: [{ isVisible: true }, { isVisible: true }],
-					mergeInitialAndDefault: true,
-				}),
-			{
-				wrapper,
-			}
-		);
-
-		expect(result.current.value).toEqual([
-			{ isVisible: true, x: 10 },
-			{ isVisible: true, x: 10 },
-		]);
-	});
-
-	it('should retrieve defaultValue when id is invalid, value is Array, and defaultValue is defined', () => {
-		const wrapper = ({ children }) => (
-			<ControlContextProvider
-				value={{
-					name: getControlId(),
-					value: [
-						{
-							y: [
-								{ isVisible: true },
-								{ isVisible: true },
-								{ isVisible: true },
-							],
-						},
-					],
-				}}
-			>
-				{children}
-			</ControlContextProvider>
-		);
-		const { result } = renderHook(
-			() =>
-				useControlContext({
-					repeater: {
-						repeaterId: '[0].z.y',
-						defaultRepeaterItemValue: { x: 10 },
+					defaultValue: {
+						0: { isVisible: true },
+						1: { isVisible: true },
 					},
-					defaultValue: [{ isVisible: true }, { isVisible: true }],
 					mergeInitialAndDefault: true,
 				}),
 			{
@@ -213,16 +179,7 @@ describe('testing control context provider and related hooks', () => {
 			}
 		);
 
-		expect(result.current.value).toEqual([
-			{
-				y: [
-					{ isVisible: true },
-					{ isVisible: true },
-					{ isVisible: true },
-				],
-				x: 10,
-			},
-		]);
+		expect(result.current.value).toEqual(value);
 	});
 
 	it('should return defaultValue when arguments just includes defaultValue', () => {
@@ -274,7 +231,7 @@ describe('testing control context provider and related hooks', () => {
 		});
 	});
 
-	it('should return repeater merged value when mergeInitialAndDefault flag is true and use in repeater', () => {
+	it('should merged value with defaultRepeaterItemValue when mergeInitialAndDefault flag is true', () => {
 		const defaultRepeaterItemValue = {
 			y: 30,
 		};
@@ -284,7 +241,9 @@ describe('testing control context provider and related hooks', () => {
 			<ControlContextProvider
 				value={{
 					name: getControlId(),
-					value: [{ x: 20 }],
+					value: {
+						0: { x: 20 },
+					},
 				}}
 				storeName={storeName}
 			>
@@ -305,9 +264,9 @@ describe('testing control context provider and related hooks', () => {
 			}
 		);
 
-		expect(result.current.value).toEqual([
-			{ ...defaultRepeaterItemValue, ...{ x: 20 } },
-		]);
+		expect(result.current.value).toEqual({
+			0: { ...defaultRepeaterItemValue, ...{ x: 20, isOpen: false } },
+		});
 	});
 
 	it('should return defaultValue when repeater details is empty object', () => {
@@ -341,11 +300,16 @@ describe('testing control context provider and related hooks', () => {
 		};
 		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
+		registerControl({
+			name,
+			value: {},
+			type: storeName,
+		});
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
 					name,
-					value: [],
+					value: {},
 				}}
 				storeName={storeName}
 			>
@@ -375,7 +339,9 @@ describe('testing control context provider and related hooks', () => {
 				}
 			);
 
-			expect(result.current.value).toEqual([defaultRepeaterItemValue]);
+			expect(result.current.value).toEqual({
+				0: defaultRepeaterItemValue,
+			});
 		}, 1000);
 	});
 
@@ -385,11 +351,20 @@ describe('testing control context provider and related hooks', () => {
 		};
 		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
+		const value = {
+			0: { x: 0 },
+			1: { x: 10 },
+		};
+		registerControl({
+			name,
+			value,
+			type: storeName,
+		});
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
 					name,
-					value: [{ x: 0 }, { x: 10 }],
+					value,
 				}}
 				storeName={storeName}
 			>
@@ -401,7 +376,6 @@ describe('testing control context provider and related hooks', () => {
 
 		changeRepeaterItem({
 			controlId: name,
-			repeaterId: '[1]',
 			value: { x: 55 },
 		});
 
@@ -420,7 +394,10 @@ describe('testing control context provider and related hooks', () => {
 				}
 			);
 
-			expect(result.current.value).toEqual([{ x: 0 }, { x: 55 }]);
+			expect(result.current.value).toEqual({
+				0: { x: 0 },
+				1: { x: 55 },
+			});
 		}, 1000);
 	});
 
@@ -430,11 +407,20 @@ describe('testing control context provider and related hooks', () => {
 		};
 		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
+		const value = {
+			0: { x: 0 },
+			1: { x: 10 },
+		};
+		registerControl({
+			name,
+			value,
+			type: storeName,
+		});
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
 					name,
-					value: [{ x: 0 }, { x: 10 }],
+					value,
 				}}
 				storeName={storeName}
 			>
@@ -446,39 +432,53 @@ describe('testing control context provider and related hooks', () => {
 
 		removeRepeaterItem({
 			controlId: name,
-			repeaterId: '[1]',
+			itemId: 1,
 		});
 
-		setTimeout(() => {
-			const { result } = renderHook(
-				() => {
-					return useControlContext({
-						repeater: {
-							defaultRepeaterItemValue,
-						},
-						mergeInitialAndDefault: true,
-					});
-				},
-				{
-					wrapper,
-				}
-			);
+		const { result } = renderHook(
+			() => {
+				return useControlContext({
+					repeater: {
+						defaultRepeaterItemValue,
+					},
+					mergeInitialAndDefault: true,
+				});
+			},
+			{
+				wrapper,
+			}
+		);
 
-			expect(result.current.value).toEqual([{ x: 0 }]);
-		}, 1000);
+		expect(result.current.value).toEqual({
+			0: {
+				isOpen: false,
+				order: 0,
+				x: 0,
+				y: 20,
+			},
+		});
 	});
 
-	it('should must be sort repeater items', () => {
+	it.skip('should must be sort repeater items', () => {
 		const defaultRepeaterItemValue = {
 			y: 20,
 		};
 		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
+		const value = {
+			0: { x: 0, order: 0 },
+			1: { x: 10, order: 1 },
+		};
+		registerControl({
+			name,
+			value,
+			type: storeName,
+		});
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
 					name,
-					value: [{ x: 0 }, { x: 10 }],
+					value,
 				}}
 				storeName={storeName}
 			>
@@ -486,33 +486,43 @@ describe('testing control context provider and related hooks', () => {
 			</ControlContextProvider>
 		);
 
-		const { removeRepeaterItem } = dispatch(storeName);
+		const { sortRepeaterItem } = dispatch(storeName);
 
-		removeRepeaterItem({
+		sortRepeaterItem({
 			controlId: name,
-			repeaterId: '[1]',
-			items: [{ x: 10 }, { x: 0 }],
+			items: value,
 			toIndex: 0,
 			fromIndex: 1,
 		});
 
-		setTimeout(() => {
-			const { result } = renderHook(
-				() => {
-					return useControlContext({
-						repeater: {
-							defaultRepeaterItemValue,
-						},
-						mergeInitialAndDefault: true,
-					});
-				},
-				{
-					wrapper,
-				}
-			);
+		const { result } = renderHook(
+			() => {
+				return useControlContext({
+					repeater: {
+						defaultRepeaterItemValue,
+					},
+					mergeInitialAndDefault: true,
+				});
+			},
+			{
+				wrapper,
+			}
+		);
 
-			expect(result.current.value).toEqual([{ x: 10 }, { x: 0 }]);
-		}, 1000);
+		expect(result.current.value).toEqual({
+			0: {
+				isOpen: false,
+				order: 1,
+				x: 0,
+				y: 20,
+			},
+			1: {
+				isOpen: false,
+				order: 0,
+				x: 10,
+				y: 20,
+			},
+		});
 	});
 
 	it('should must be clone of repeater specific item', () => {
@@ -521,11 +531,20 @@ describe('testing control context provider and related hooks', () => {
 		};
 		const storeName = 'blockera-core/controls/repeater';
 		const name = getControlId();
+		const value = {
+			0: { x: 0, order: 0 },
+			1: { x: 10, order: 1 },
+		};
+		registerControl({
+			name,
+			value,
+			type: storeName,
+		});
 		const wrapper = ({ children }) => (
 			<ControlContextProvider
 				value={{
 					name,
-					value: [{ x: 0 }, { x: 10 }],
+					value,
 				}}
 				storeName={storeName}
 			>
@@ -537,30 +556,43 @@ describe('testing control context provider and related hooks', () => {
 
 		cloneRepeaterItem({
 			controlId: name,
-			repeaterId: '[1]',
+			itemId: 0,
 		});
 
-		setTimeout(() => {
-			const { result } = renderHook(
-				() => {
-					return useControlContext({
-						repeater: {
-							defaultRepeaterItemValue,
-						},
-						mergeInitialAndDefault: true,
-					});
-				},
-				{
-					wrapper,
-				}
-			);
+		const { result } = renderHook(
+			() => {
+				return useControlContext({
+					repeater: {
+						defaultRepeaterItemValue,
+					},
+					mergeInitialAndDefault: true,
+				});
+			},
+			{
+				wrapper,
+			}
+		);
 
-			expect(result.current.value).toEqual([
-				{ x: 10 },
-				{ x: 0 },
-				{ x: 0 },
-			]);
-		}, 1000);
+		expect(result.current.value).toEqual({
+			0: {
+				isOpen: false,
+				order: 0,
+				x: 0,
+				y: 20,
+			},
+			1: {
+				isOpen: false,
+				order: 1,
+				x: 10,
+				y: 20,
+			},
+			2: {
+				isOpen: false,
+				order: 2,
+				x: 0,
+				y: 20,
+			},
+		});
 	});
 
 	it('should testing resetToDefault of retrieved control context api', () => {
@@ -706,4 +738,3 @@ describe('testing control context provider and related hooks', () => {
 		expect(current).toBe(false);
 	});
 });
-

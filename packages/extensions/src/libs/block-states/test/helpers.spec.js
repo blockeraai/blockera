@@ -10,7 +10,7 @@ describe('Block States Helpers', () => {
 		expect(getStateInfo(pickedState)).toEqual({
 			type: 'normal',
 			label: 'Normal',
-			breakpoints: [],
+			breakpoints: {},
 		});
 	});
 
@@ -20,7 +20,7 @@ describe('Block States Helpers', () => {
 		expect(getStateInfo(pickedState)).toEqual({
 			type: 'hover',
 			label: 'Hover',
-			breakpoints: [],
+			breakpoints: {},
 		});
 	});
 
@@ -32,8 +32,8 @@ describe('Block States Helpers', () => {
 			force: false,
 			label: 'Mobile',
 			settings: {
-				min: '412px',
-				max: '915px',
+				min: '',
+				max: '480px',
 			},
 			attributes: {},
 		});
@@ -47,8 +47,8 @@ describe('Block States Helpers', () => {
 			force: false,
 			label: 'Tablet',
 			settings: {
-				min: '810px',
-				max: '1080px',
+				min: '768px',
+				max: '1024px',
 			},
 			attributes: {},
 		});

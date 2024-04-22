@@ -55,23 +55,23 @@ describe('update api testing', function () {
 		]);
 	});
 
-	// it('should replace value of object by complex query', function () {
-	// 	const data = {
-	// 		x: [
-	// 			{
-	// 				y: { 'prop-id': [10] },
-	// 			},
-	// 		],
-	// 	};
-	//
-	// 	expect(update(data, 'x[0].y', { 'prop-id': [10, 12] })).toEqual({
-	// 		x: [
-	// 			{
-	// 				y: { 'prop-id': [10, 12] },
-	// 			},
-	// 		],
-	// 	});
-	// });
+	it('should replace value of object by complex query', function () {
+		const data = {
+			x: [
+				{
+					y: { 'prop-id': [10] },
+				},
+			],
+		};
+
+		expect(update(data, 'x[0].y', { 'prop-id': [10, 12] }, true)).toEqual({
+			x: [
+				{
+					y: { 'prop-id': [10, 12] },
+				},
+			],
+		});
+	});
 
 	it('should replace value of array by complex query', function () {
 		const data = [
@@ -84,7 +84,7 @@ describe('update api testing', function () {
 			},
 		];
 
-		expect(update(data, '[0].x[0].y', [10, 12])).toEqual([
+		expect(update(data, '[0].x[0].y', [10, 12], true)).toEqual([
 			{
 				x: [
 					{

@@ -34,7 +34,7 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 		targetRepeater[action.itemId].isSelected = false;
 	}
 
-	let itemId = itemsCount + '-clone';
+	let itemId = itemsCount;
 
 	if ('function' === typeof action.itemIdGenerator) {
 		itemId = action.itemIdGenerator(itemsCount);

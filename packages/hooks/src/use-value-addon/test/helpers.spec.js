@@ -1,6 +1,5 @@
 import {
 	canUnlinkVariable,
-	generateVariableString,
 	getDynamicValueCategory,
 	getDynamicValueIcon,
 	getValueAddonRealValue,
@@ -8,6 +7,7 @@ import {
 	getVariableIcon,
 	isValid,
 } from '../helpers';
+import { generateVariableString } from '@blockera/core-data';
 import { __ } from '@wordpress/i18n';
 
 describe('Helper Functions', () => {
@@ -250,7 +250,7 @@ describe('Helper Functions', () => {
 	describe('getVariableCategory', () => {
 		test('invalid item', () => {
 			expect(getVariableCategory('invalid')).toStrictEqual({
-				name: '',
+				label: '',
 				items: [],
 				notFound: true,
 			});
@@ -259,7 +259,7 @@ describe('Helper Functions', () => {
 		test('font size', () => {
 			const category = getVariableCategory('font-size');
 
-			expect(category.name).toBe(
+			expect(category.label).toBe(
 				__('Editor Font Sizes', 'blockera-core')
 			);
 		});
@@ -267,7 +267,7 @@ describe('Helper Functions', () => {
 		test('linear gradients', () => {
 			const category = getVariableCategory('linear-gradient');
 
-			expect(category.name).toBe(
+			expect(category.label).toBe(
 				__('Editor Linear Gradients', 'blockera-core')
 			);
 		});
@@ -275,7 +275,7 @@ describe('Helper Functions', () => {
 		test('radial-gradient', () => {
 			const category = getVariableCategory('radial-gradient');
 
-			expect(category.name).toBe(
+			expect(category.label).toBe(
 				__('Editor Radial Gradients', 'blockera-core')
 			);
 		});
@@ -283,7 +283,7 @@ describe('Helper Functions', () => {
 		test('width-size', () => {
 			const category = getVariableCategory('width-size');
 
-			expect(category.name).toBe(
+			expect(category.label).toBe(
 				__('Width & Height Sizes', 'blockera-core')
 			);
 		});
@@ -291,7 +291,7 @@ describe('Helper Functions', () => {
 		test('spacing', () => {
 			const category = getVariableCategory('spacing');
 
-			expect(category.name).toBe(
+			expect(category.label).toBe(
 				__('Editor Spacing Sizes', 'blockera-core')
 			);
 		});
@@ -299,7 +299,7 @@ describe('Helper Functions', () => {
 		test('color', () => {
 			const category = getVariableCategory('color');
 
-			expect(category.name).toBe(__('Editor Colors', 'blockera-core'));
+			expect(category.label).toBe(__('Editor Colors', 'blockera-core'));
 		});
 	});
 
@@ -366,7 +366,7 @@ describe('Helper Functions', () => {
 		test('invalid item', () => {
 			expect(getDynamicValueCategory('invalid', 'invalid')).toStrictEqual(
 				{
-					name: '',
+					label: '',
 					items: [],
 					notFound: true,
 				}
@@ -376,13 +376,13 @@ describe('Helper Functions', () => {
 		test('post', () => {
 			const category = getDynamicValueCategory('post', ['all']);
 
-			expect(category.name).toBe(__('Posts and Pages', 'blockera-core'));
+			expect(category.label).toBe(__('Posts and Pages', 'blockera-core'));
 		});
 
 		test('featured-image', () => {
 			const category = getDynamicValueCategory('featured-image', ['all']);
 
-			expect(category.name).toBe(
+			expect(category.label).toBe(
 				__('Post Featured Image', 'blockera-core')
 			);
 		});
@@ -390,25 +390,27 @@ describe('Helper Functions', () => {
 		test('archive', () => {
 			const category = getDynamicValueCategory('archive', ['all']);
 
-			expect(category.name).toBe(__('Archive', 'blockera-core'));
+			expect(category.label).toBe(__('Archive', 'blockera-core'));
 		});
 
 		test('site', () => {
 			const category = getDynamicValueCategory('site', ['all']);
 
-			expect(category.name).toBe(__('Site Information', 'blockera-core'));
+			expect(category.label).toBe(
+				__('Site Information', 'blockera-core')
+			);
 		});
 
 		test('user', () => {
 			const category = getDynamicValueCategory('user', ['all']);
 
-			expect(category.name).toBe(__('User & Authors', 'blockera-core'));
+			expect(category.label).toBe(__('User & Authors', 'blockera-core'));
 		});
 
 		test('other', () => {
 			const category = getDynamicValueCategory('other', ['all']);
 
-			expect(category.name).toBe(__('Utilities', 'blockera-core'));
+			expect(category.label).toBe(__('Utilities', 'blockera-core'));
 		});
 	});
 

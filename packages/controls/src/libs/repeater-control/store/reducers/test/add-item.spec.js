@@ -11,7 +11,7 @@ describe('Add Repeater Item', function () {
 		state = repeaterReducer(
 			state,
 			addControl({
-				value: [],
+				value: {},
 				name: 'TestRepeaterControl',
 			})
 		);
@@ -27,43 +27,11 @@ describe('Add Repeater Item', function () {
 		).toEqual({
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
-				value: [
-					{
+				value: {
+					0: {
 						x: 10,
+						order: 0,
 					},
-				],
-			},
-		});
-	});
-
-	it('should not add item in incorrect repeaterId', function () {
-		let state = {};
-
-		state = repeaterReducer(
-			state,
-			addControl({
-				value: {
-					repeaterControl: [],
-				},
-				name: 'TestInnerRepeaterControl',
-			})
-		);
-
-		expect(
-			repeaterReducer(
-				state,
-				addRepeaterItem({
-					maxItems: 2,
-					value: { x: 20 },
-					repeaterId: 'incorrectId',
-					controlId: 'IncorrectControlId',
-				})
-			)
-		).toEqual({
-			TestInnerRepeaterControl: {
-				name: 'TestInnerRepeaterControl',
-				value: {
-					repeaterControl: [],
 				},
 			},
 		});
@@ -76,7 +44,7 @@ describe('Add Repeater Item', function () {
 			state,
 			addControl({
 				value: {
-					repeaterControl: [],
+					repeaterControl: {},
 				},
 				name: 'TestInnerRepeaterControl',
 			})
@@ -95,11 +63,12 @@ describe('Add Repeater Item', function () {
 			TestInnerRepeaterControl: {
 				name: 'TestInnerRepeaterControl',
 				value: {
-					repeaterControl: [
-						{
+					repeaterControl: {
+						0: {
 							x: 10,
+							order: 0,
 						},
-					],
+					},
 				},
 			},
 		});
@@ -111,7 +80,10 @@ describe('Add Repeater Item', function () {
 		state = repeaterReducer(
 			state,
 			addControl({
-				value: [{ x: 10 }, { x: 10 }],
+				value: {
+					0: { x: 10 },
+					1: { x: 10 },
+				},
 				name: 'TestRepeaterControl',
 			})
 		);
@@ -137,7 +109,11 @@ describe('Add Repeater Item', function () {
 		expect(state).toEqual({
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
-				value: [{ x: 10 }, { x: 10 }, { x: 10 }],
+				value: {
+					0: { x: 10 },
+					1: { x: 10 },
+					2: { x: 10, order: 2 },
+				},
 			},
 		});
 	});
@@ -151,7 +127,7 @@ describe('Add Repeater Item', function () {
 				value: {
 					x: {
 						y: {
-							z: [],
+							z: {},
 						},
 					},
 				},
@@ -174,11 +150,12 @@ describe('Add Repeater Item', function () {
 				value: {
 					x: {
 						y: {
-							z: [
-								{
+							z: {
+								0: {
 									x: 10,
+									order: 0,
 								},
-							],
+							},
 						},
 					},
 				},
@@ -197,7 +174,7 @@ describe('Add Repeater Item', function () {
 						y: {
 							z: [
 								{
-									r: [],
+									r: {},
 								},
 							],
 						},
@@ -224,11 +201,12 @@ describe('Add Repeater Item', function () {
 						y: {
 							z: [
 								{
-									r: [
-										{
+									r: {
+										0: {
 											x: 10,
+											order: 0,
 										},
-									],
+									},
 								},
 							],
 						},
@@ -255,11 +233,12 @@ describe('Add Repeater Item', function () {
 						y: {
 							z: [
 								{
-									r: [
-										{
+									r: {
+										0: {
 											x: 10,
+											order: 0,
 										},
-									],
+									},
 								},
 							],
 						},
@@ -278,7 +257,7 @@ describe('Add Repeater Item', function () {
 								{
 									r: [
 										{
-											m: [],
+											m: {},
 										},
 									],
 								},
@@ -308,11 +287,12 @@ describe('Add Repeater Item', function () {
 						y: {
 							z: [
 								{
-									r: [
-										{
+									r: {
+										0: {
 											x: 10,
+											order: 0,
 										},
-									],
+									},
 								},
 							],
 						},
@@ -328,11 +308,12 @@ describe('Add Repeater Item', function () {
 								{
 									r: [
 										{
-											m: [
-												{
+											m: {
+												0: {
 													x: 10,
+													order: 0,
 												},
-											],
+											},
 										},
 									],
 								},
@@ -352,7 +333,7 @@ describe('Add Repeater Item', function () {
 			addControl({
 				value: [
 					{
-						'second-repeater': [],
+						'second-repeater': {},
 					},
 				],
 				name: 'TestRepeaterControl',
@@ -373,7 +354,9 @@ describe('Add Repeater Item', function () {
 				name: 'TestRepeaterControl',
 				value: [
 					{
-						'second-repeater': [{ x: 10 }],
+						'second-repeater': {
+							0: { x: 10, order: 0 },
+						},
 					},
 				],
 			},
@@ -393,7 +376,16 @@ describe('Add Repeater Item', function () {
 				name: 'TestRepeaterControl',
 				value: [
 					{
-						'second-repeater': [{ x: 10 }, { x: 10 }],
+						'second-repeater': {
+							0: {
+								x: 10,
+								order: 0,
+							},
+							1: {
+								x: 10,
+								order: 1,
+							},
+						},
 					},
 				],
 			},

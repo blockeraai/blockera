@@ -80,7 +80,7 @@ export function setValueAddon(
 
 export function isValid(value: ValueAddon | string): boolean {
 	//$FlowFixMe
-	return value?.isValueAddon;
+	return !!value?.isValueAddon;
 }
 
 export function getValueAddonRealValue(value: ValueAddon | string): string {

@@ -206,7 +206,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		}
 
 		if (mergeInitialAndDefault) {
-			if (isObject(currentValue) && isObject(defaultValue)) {
+			if (isObject(currentValue)) {
 				// merge default value to object elements inside initialValue
 				// used for repeaters
 				if (isRepeaterControl()) {
@@ -221,11 +221,16 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 						: normalizeRepeaterItems(repeaterValue);
 				}
 
-				if (!isUndefined(id)) {
-					return { ...defaultValue, ...prepare(id, currentValue) };
-				}
+				if (isObject(defaultValue)) {
+					if (!isUndefined(id)) {
+						return {
+							...defaultValue,
+							...prepare(id, currentValue),
+						};
+					}
 
-				return { ...defaultValue, ...currentValue };
+					return { ...defaultValue, ...currentValue };
+				}
 			}
 		}
 

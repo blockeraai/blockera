@@ -11,7 +11,10 @@ describe('Change Repeater Item', function () {
 		state = repeaterReducer(
 			state,
 			addControl({
-				value: [{ x: 10 }, { x: 12 }],
+				value: {
+					0: { x: 10 },
+					1: { x: 12 },
+				},
 				name: 'TestRepeaterControl',
 			})
 		);
@@ -28,7 +31,10 @@ describe('Change Repeater Item', function () {
 		).toEqual({
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
-				value: [{ x: 10 }, { x: 20 }],
+				value: {
+					0: { x: 10 },
+					1: { x: 20 },
+				},
 			},
 		});
 	});
@@ -41,7 +47,10 @@ describe('Change Repeater Item', function () {
 				value: {
 					x: {
 						y: {
-							z: [{ x: 10 }, { x: 12 }],
+							z: {
+								0: { x: 10 },
+								1: { x: 12 },
+							},
 						},
 					},
 				},
@@ -54,7 +63,8 @@ describe('Change Repeater Item', function () {
 				state,
 				changeRepeaterItem({
 					value: { x: 20 },
-					repeaterId: 'x.y.z[1]',
+					itemId: 1,
+					repeaterId: 'x.y.z',
 					controlId: 'TestRepeaterControl',
 				})
 			)
@@ -64,7 +74,10 @@ describe('Change Repeater Item', function () {
 				value: {
 					x: {
 						y: {
-							z: [{ x: 10 }, { x: 20 }],
+							z: {
+								0: { x: 10 },
+								1: { x: 20 },
+							},
 						},
 					},
 				},
@@ -79,7 +92,9 @@ describe('Change Repeater Item', function () {
 						y: {
 							z: [
 								{
-									x: [{ value: 10 }],
+									x: {
+										0: { value: 10 },
+									},
 								},
 							],
 						},
@@ -94,7 +109,8 @@ describe('Change Repeater Item', function () {
 				state,
 				changeRepeaterItem({
 					value: { value: 20 },
-					repeaterId: 'x.y.z[0].x[0]',
+					itemId: 0,
+					repeaterId: 'x.y.z[0].x',
 					controlId: 'TestRepeaterControl1',
 				})
 			)
@@ -104,7 +120,14 @@ describe('Change Repeater Item', function () {
 				value: {
 					x: {
 						y: {
-							z: [{ x: 10 }, { x: 20 }],
+							z: {
+								0: {
+									x: 10,
+								},
+								1: {
+									x: 20,
+								},
+							},
 						},
 					},
 				},
@@ -116,7 +139,11 @@ describe('Change Repeater Item', function () {
 						y: {
 							z: [
 								{
-									x: [{ value: 20 }],
+									x: {
+										0: {
+											value: 20,
+										},
+									},
 								},
 							],
 						},
@@ -132,72 +159,10 @@ describe('Change Repeater Item', function () {
 			state,
 			addControl({
 				value: {
-					x: [{ x: 10 }, { x: 12 }],
-				},
-				name: 'TestRepeaterControl',
-			})
-		);
-
-		expect(
-			repeaterReducer(
-				state,
-				changeRepeaterItem({
-					value: { x: 20 },
-					repeaterId: 'x[1]',
-					controlId: 'TestRepeaterControl',
-				})
-			)
-		).toEqual({
-			TestRepeaterControl: {
-				name: 'TestRepeaterControl',
-				value: {
-					x: [{ x: 10 }, { x: 20 }],
-				},
-			},
-		});
-	});
-
-	it('should testing valueCleanUp()', function () {
-		let state = {};
-
-		state = repeaterReducer(
-			state,
-			addControl({
-				value: {
-					x: [{ x: 10 }, { x: 12 }],
-				},
-				name: 'TestRepeaterControl',
-			})
-		);
-
-		expect(
-			repeaterReducer(
-				state,
-				changeRepeaterItem({
-					value: { x: 20 },
-					repeaterId: 'x[1]',
-					controlId: 'TestRepeaterControl',
-					valueCleanup: (value) => value,
-				})
-			)
-		).toEqual({
-			TestRepeaterControl: {
-				name: 'TestRepeaterControl',
-				value: {
-					x: [{ x: 10 }, { x: 20 }],
-				},
-			},
-		});
-	});
-
-	it('should testing change item of repeater with simple repeaterId', function () {
-		let state = {};
-
-		state = repeaterReducer(
-			state,
-			addControl({
-				value: {
-					x: [{ x: 10 }, { x: 12 }],
+					x: {
+						0: { x: 10 },
+						1: { x: 12 },
+					},
 				},
 				name: 'TestRepeaterControl',
 			})
@@ -211,25 +176,57 @@ describe('Change Repeater Item', function () {
 					itemId: 1,
 					repeaterId: 'x',
 					controlId: 'TestRepeaterControl',
-					valueCleanup: (value) => value,
 				})
 			)
 		).toEqual({
 			TestRepeaterControl: {
 				name: 'TestRepeaterControl',
 				value: {
-					x: [{ x: 10 }, { x: 20 }],
+					x: {
+						0: { x: 10 },
+						1: { x: 20 },
+					},
 				},
 			},
 		});
 	});
 
-	it('should not change item of invalid state structure', function () {
-		const initialState = {};
-		expect(
-			repeaterReducer(initialState, {
-				type: 'CHANGE_REPEATER_ITEM',
+	it('should testing change item of repeater with simple repeaterId', function () {
+		let state = {};
+
+		state = repeaterReducer(
+			state,
+			addControl({
+				value: {
+					x: {
+						0: { x: 10 },
+						1: { x: 12 },
+					},
+				},
+				name: 'TestRepeaterControl',
 			})
-		).toEqual(initialState);
+		);
+
+		expect(
+			repeaterReducer(
+				state,
+				changeRepeaterItem({
+					value: { x: 20 },
+					itemId: 1,
+					repeaterId: 'x',
+					controlId: 'TestRepeaterControl',
+				})
+			)
+		).toEqual({
+			TestRepeaterControl: {
+				name: 'TestRepeaterControl',
+				value: {
+					x: {
+						0: { x: 10 },
+						1: { x: 20 },
+					},
+				},
+			},
+		});
 	});
 });
