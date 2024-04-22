@@ -50,7 +50,7 @@ export default function AlignmentMatrixBox({
 					onClick={() => onChange(_value)}
 					aria-label={sprintf(
 						// translators: it's the aria label for matrix item
-						__(' %s', 'blockera-core'),
+						__('%s item', 'blockera-core'),
 						_value
 					)}
 					data-test="matrix-item"

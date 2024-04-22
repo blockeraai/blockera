@@ -61,7 +61,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('top left').click({ force: true });
+				cy.getByAriaLabel('top left item').click({ force: true });
 			});
 
 			//Check icon
@@ -75,7 +75,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('top center').click({ force: true });
+				cy.getByAriaLabel('top center item').click({ force: true });
 			});
 
 			//Check icon
@@ -89,7 +89,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('top right').click({ force: true });
+				cy.getByAriaLabel('top right item').click({ force: true });
 			});
 
 			//Check icon
@@ -103,7 +103,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('center left').click({ force: true });
+				cy.getByAriaLabel('center left item').click({ force: true });
 			});
 
 			//Check icon
@@ -117,7 +117,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('center center').click({ force: true });
+				cy.getByAriaLabel('center center item').click({ force: true });
 			});
 
 			//Check icon
@@ -131,7 +131,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('center right').click({ force: true });
+				cy.getByAriaLabel('center right item').click({ force: true });
 			});
 
 			//Check icon
@@ -145,7 +145,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('bottom left').click({ force: true });
+				cy.getByAriaLabel('bottom left item').click({ force: true });
 			});
 
 			//Check icon
@@ -159,7 +159,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('bottom center').click({ force: true });
+				cy.getByAriaLabel('bottom center item').click({ force: true });
 			});
 
 			//Check icon
@@ -173,7 +173,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('bottom right').click({ force: true });
+				cy.getByAriaLabel('bottom right item').click({ force: true });
 			});
 
 			//Check icon
@@ -206,7 +206,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('center center').click({ force: true });
+				cy.getByAriaLabel('center center item').click({ force: true });
 			});
 
 			//Check data provider value
@@ -226,7 +226,7 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('center center').click({ force: true });
+				cy.getByAriaLabel('center center item').click({ force: true });
 			});
 
 			//Check color
@@ -257,11 +257,10 @@ describe('position-button-control component testing', () => {
 
 			cy.getByDataTest('position-button').click();
 			cy.getByDataTest('popover-body').within(() => {
-				cy.contains('top left').click({ force: true });
+				cy.getByAriaLabel('top left item').click({ force: true });
 			});
 
 			cy.get('@onChange').should('have.been.called');
 		});
 	});
 });
-
