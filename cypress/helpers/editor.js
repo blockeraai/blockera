@@ -123,11 +123,7 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 	cy.get('.interface-pinned-items [aria-label="Settings"]').click();
 
 	// Click on added new block item.
-	if (Cypress.$('iframe[name="editor-canvas"]')) {
-		cy.getIframeBody().find(`[data-type="${blockName}"]`).click();
-	} else {
-		cy.getBlock(blockName).click();
-	}
+	cy.getBlock(blockName).click();
 
 	cy.window()
 		.its('wp.hooks')
