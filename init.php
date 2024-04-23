@@ -1,19 +1,19 @@
 <?php
 
-use Blockera\Framework\Providers\Assets\AssetsProvider;
-
 $version = '1.0.0';
 
 require __DIR__ . '/bootstrap/loader-library.php';
 
 require __DIR__ . '/bootstrap/loader-composer.php';
 
-if ( ! function_exists( 'blockeraCoreLoader' ) ) {
+if ( ! function_exists( 'blockera_core_loader' ) ) {
 
 	/**
-	 * @param array $framework
+	 * Loading blockera core functionalities.
+	 *
+	 * @param array $framework the framework name.
 	 */
-	function blockeraCoreLoader( array $framework ) {
+	function blockera_core_loader( array $framework ) {
 
 		define( 'BLOCKERA_CORE_URI', trailingslashit( $framework['uri'] ) );
 		define( 'BLOCKERA_CORE_PATH', trailingslashit( $framework['path'] ) );
@@ -24,11 +24,14 @@ if ( ! function_exists( 'blockeraCoreLoader' ) ) {
 		/**
 		 * Fires after Core fully loaded.
 		 */
-		do_action( 'blockera-core/after_setup' );
+		// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		do_action( 'blockera/core/after_setup' );
 	}
 }
 
 /**
+ * Library loading.
+ *
  * @param array $params {
  *
  * @type string $uri
@@ -54,12 +57,11 @@ return static function ( array $params ) use ( $version ) {
 	}
 
 	$params['version'] = $version;
-	// ComposerLoader::init(__DIR__ . '/vendor/');
 
 	require __DIR__ . '/vendor/autoload.php';
 
 	$instance = LibraryLoader::instance( 'blockera-core', [ 'priority' => 90 ] );
-	$instance->introduce( $version, 'blockeraCoreLoader', $params );
+	$instance->introduce( $version, 'blockera_core_loader', $params );
 
 	return $instance;
 };
