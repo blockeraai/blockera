@@ -1,27 +1,27 @@
 <?php
 
 return [
-	'root_url'   => BLOCKERA_CORE_URI,
-	'root_path'  => BLOCKERA_CORE_PATH,
-	'url'       => BLOCKERA_CORE_URI . '/app/',
-	'path'      => BLOCKERA_CORE_PATH . '/app/',
-	'name'      => 'blockera-core',
-	'version'   => BLOCKERA_CORE_VERSION,
-	'dist_url'  => BLOCKERA_CORE_URI . '/dist/',
-	'dist_path' => BLOCKERA_CORE_PATH . '/dist/',
-	'packages_url' => BLOCKERA_CORE_URI . '/packages/',
-	'packages_path' => BLOCKERA_CORE_PATH . '/packages/',
+	'root_url'      => BLOCKERA_CORE_URI,
+	'root_path'     => BLOCKERA_CORE_PATH,
+	'url'           => BLOCKERA_CORE_URI . '/app/',
+	'path'          => BLOCKERA_CORE_PATH . '/app/',
+	'name'          => 'blockera-core',
+	'version'       => BLOCKERA_CORE_VERSION,
+	'dist_url'      => BLOCKERA_CORE_URI . 'dist/',
+	'dist_path'     => BLOCKERA_CORE_PATH . 'dist/',
+	'packages_url'  => BLOCKERA_CORE_URI . 'packages/',
+	'packages_path' => BLOCKERA_CORE_PATH . 'packages/',
 	'namespaces'    => [
 		'controllers' => '\Blockera\Framework\Http\Controllers\\',
 	],
-	'debug'     => blockera_core_env( 'APP_MODE' ) && 'development' === blockera_core_env( 'APP_MODE' ) || ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ),
-	'providers' => [
+	'debug'         => blockera_core_env( 'APP_MODE' ) && 'development' === blockera_core_env( 'APP_MODE' ) || ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ),
+	'providers'     => [
 		\Blockera\Framework\Providers\StyleProviders::class,
 		\Blockera\Framework\Providers\AssetsProvider::class,
 		\Blockera\Framework\Providers\RestAPIProvider::class,
 		\Blockera\Framework\Providers\AppServiceProvider::class,
 	],
-	'blocks'    => [
+	'blocks'        => [
 		'core/paragraph',
 		'core/image',
 		'core/heading',

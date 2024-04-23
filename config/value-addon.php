@@ -1,9 +1,8 @@
 <?php
 
 return [
-	'variable-groups' => [],
-	//
-	'dynamic-value-groups'   => [
+	'variable-groups'      => [],
+	'dynamic-value-groups' => [
 		'post'           => [
 			'label' => __( 'Posts and Pages', 'blockera-core' ),
 			'items' => blockera_load( 'dynamic-values.post', [], __DIR__ ),
