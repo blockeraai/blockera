@@ -19,6 +19,8 @@ class AssetsLoader {
 	protected static array $assets = [
 		'utils',
 		'hooks',
+		'blocks',
+		'editor',
 		'controls',
 		'core-data',
 		'components',
@@ -41,12 +43,19 @@ class AssetsLoader {
 		],
 	];
 
+	/**
+	 * Store instance of Application container.
+	 *
+	 * @var Application the application instance.
+	 */
 	protected Application $application;
 
 	/**
 	 * AssetsProvider constructor method,
 	 * when create new instance of current class,
 	 * fire `wp_enqueue_scripts` and `enqueue_block_editor_assets`
+	 *
+	 * @param Application $app the application container instance.
 	 *
 	 * @since 1.0.0
 	 */
@@ -60,6 +69,11 @@ class AssetsLoader {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_assets' ), 10 );
 	}
 
+	/**
+	 * Enqueueing assets.
+	 *
+	 * @return void
+	 */
 	public function enqueue() {
 
 		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_inspector_assets' ], 9e2 );
@@ -174,33 +188,34 @@ class AssetsLoader {
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file = blockera_core_config( 'app.root_path' ) . "assets/style-engine-styles.css";
+		$file = blockera_core_config( 'app.root_path' ) . 'assets/style-engine-styles.css';
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
+			$handle = 'blockera-core-inline-css';
+
 			wp_enqueue_style(
-				$handle = 'blockera-core-inline-css',
-				blockera_core_config( 'app.root_url' ) . "assets/style-engine-styles.css",
+				$handle,
+				blockera_core_config( 'app.root_url' ) . 'assets/style-engine-styles.css',
 				[],
 				filemtime( $file )
 			);
 
-			wp_add_inline_style( $handle,
+			wp_add_inline_style(
+				$handle,
 				/**
 				 * Apply filter for add inline css into empty file.
 				 *
 				 * @since 1.0.0
 				 */
+				// phpcs:disable
 				apply_filters(
 					'blockera-core/services/register-block-editor-assets/add-inline-css-styles',
 					''
 				)
 			);
+			// phpcs:enable
 		}
-
-		// FIXME: remove temp font-awesome icon library!
-		wp_enqueue_style( 'fs', blockera_core_config( 'app.root_url' ) . '/assets/all.min.css' );
-		wp_enqueue_script( 'fs', blockera_core_config( 'app.root_url' ) . '/assets/all.min.js' );
 
 		// Registering assets ...
 		foreach ( $this->prepare_assets() as $asset ) {
@@ -323,10 +338,12 @@ class AssetsLoader {
 			$script = '';
 		}
 
+		$_name = str_contains( $name, '-styles' ) ? $name : "{$name}-styles";
+
 		$css_file = sprintf(
 			'%s%s/style%s.css',
 			blockera_core_config( 'app.dist_path' ),
-			$_name = str_contains( $name, '-styles' ) ? $name : "{$name}-styles",
+			$_name,
 			$isDevelopment ? '' : '.min'
 		);
 
