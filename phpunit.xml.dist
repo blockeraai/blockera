@@ -25,7 +25,7 @@
 
     <php>
         <const name="PHPUNIT_PLUGIN_TEST" value="true"/>
-        <env name="BLOCKERA_CORE_VERSION" value="1.0-alpha" />
+        <env name="VERSION" value="1.0-alpha" />
         <env name="__BLOCKERA_DIR__" value="blockera-core" />
         <env name="WP_PHPUNIT__TESTS_CONFIG" value="./.dev/tests/phpunit/config.php" />
         <env name="WP_TESTS_CONFIG_FILE_PATH" value="./.dev/tests/phpunit/config.php" />

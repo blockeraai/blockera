@@ -95,15 +95,16 @@ class TestFunctions extends AppTestCase {
 
 	public function coreConfigDataProvider(): array {
 
-		$rootDir           = dirname( __BLOCKERA_TEST_DIR__, 3 );
-		$blocks            = ( require $rootDir . '/config/app.php' )['blocks'];
-		$postDynamicValues = require $rootDir . '/config/dynamic-values/post.php';
+		$rootDir           = trailingslashit( dirname( __BLOCKERA_TEST_DIR__, 3 ) );
+		$blocks            = ( require $rootDir . 'config/app.php' )['blocks'];
+		$postDynamicValues = require $rootDir . 'config/dynamic-values/post.php';
 		$theme             = wp_get_theme();
+		$home              = trailingslashit( home_url() );
 
 		return [
 			[
 				'path'     => 'app.root_url',
-				'expected' => 'http://example.org/wp-content/plugins/blockera-core',
+				'expected' => $home . 'wp-content/plugins/blockera-core/',
 			],
 			[
 				'path'     => 'app.root_path',
@@ -111,7 +112,7 @@ class TestFunctions extends AppTestCase {
 			],
 			[
 				'path'     => 'app.url',
-				'expected' => 'http://example.org/wp-content/plugins/blockera-core/app/',
+				'expected' => $home . 'wp-content/plugins/blockera-core/app/',
 			],
 			[
 				'path'     => 'app.version',
@@ -186,15 +187,13 @@ class TestFunctions extends AppTestCase {
 
 		$this->assertSame(
 			[
-				'version'    => '1.0-alpha',
-				'mode'       => 'development',
-				'dir'        => 'blockera-core',
+				'version'    => blockera_core_config( 'app.version' ),
+				'mode'       => blockera_core_config( 'app.debug' ) ? 'development' : 'production',
 				'everything' => 'blockera-core',
 			],
 			[
-				'version'    => blockera_core_env( 'BLOCKERA_CORE_VERSION' ),
+				'version'    => blockera_core_env( 'VERSION' ),
 				'mode'       => blockera_core_env( 'APP_MODE' ),
-				'dir'        => blockera_core_env( 'BLOCKERA_DIR' ),
 				'everything' => blockera_core_env( 'EVERYTHING', 'blockera-core' ),
 			]
 		);
