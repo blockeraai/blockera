@@ -106,7 +106,7 @@ Cypress.Commands.add('getBlock', (blockName) => {
 			.eq(0)
 			.click();
 	} else {
-		return cy.getBlock(blockName).click();
+		return cy.get(`[data-type="${blockName}"]`);
 	}
 });
 
