@@ -6,7 +6,10 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { reregistrationBlocks } from '@blockera/blocks';
+import {
+	reregistrationBlocks,
+	registerThirdPartyExtensionDefinitions,
+} from '@blockera/blocks';
 
 /**
  * Internal dependencies
@@ -21,6 +24,7 @@ export {
 
 export default function applyHooks() {
 	reregistrationBlocks();
+	registerThirdPartyExtensionDefinitions();
 
 	addFilter(
 		'blocks.registerBlockType',
