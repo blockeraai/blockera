@@ -4,8 +4,9 @@
  * Internal dependencies
  */
 import type {
-	InnerBlockModel,
+	InnerBlocks,
 	InnerBlockType,
+	InnerBlockModel,
 } from '../../libs/inner-blocks/types';
 import type { TBreakpoint, TStates } from '../../libs/block-states/types';
 
@@ -20,5 +21,5 @@ export type InnerBlocksInfoProps = {
 
 export type InnerBlocksInfo = {
 	currentInnerBlock: InnerBlockModel | null,
-	blockeraInnerBlocks: Array<InnerBlockModel>,
+	blockeraInnerBlocks: InnerBlocks,
 };
