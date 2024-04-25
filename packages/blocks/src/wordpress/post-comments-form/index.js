@@ -26,7 +26,7 @@ import {
 	InnerBlockHeading4Icon,
 	InnerBlockHeading5Icon,
 	InnerBlockHeading6Icon,
-} from '@blockera/extensions';
+} from '@blockera/extensions/src/libs';
 import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 /**

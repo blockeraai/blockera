@@ -18,7 +18,7 @@ import {
 	InnerBlockParagraphIcon,
 	InnerBlockCitationIcon,
 	InnerBlockLinkIcon,
-} from '@blockera/extensions';
+} from '@blockera/extensions/src/libs';
 import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 const attributes = {

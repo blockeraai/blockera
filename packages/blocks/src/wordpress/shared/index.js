@@ -12,7 +12,7 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionAttributes as attributes,
 	sharedBlockExtensionSupports as supports,
-} from '@blockera/extensions';
+} from '@blockera/extensions/src/libs';
 
 export const Shared = {
 	name: 'Shared',
