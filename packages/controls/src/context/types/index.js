@@ -27,6 +27,7 @@ export type ControlContextProviderProps = {
 	value: ControlInfo,
 	storeName?: string,
 	children: MixedElement | any,
+	type?: 'nested',
 };
 
 export type ControlContextHookProps = {
