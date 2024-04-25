@@ -381,6 +381,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					setOpenGridBuilder,
 					masterIsNormalState,
 					blockeraInnerBlocks,
+					currentInnerBlockState,
 					handleOnChangeAttributes,
 					updateBlockEditorSettings,
 					BlockComponent: () => children,
