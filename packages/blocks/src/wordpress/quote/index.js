@@ -25,7 +25,7 @@ import {
 	InnerBlockHeading5Icon,
 	InnerBlockHeading6Icon,
 	InnerBlockLinkIcon,
-} from '@blockera/extensions';
+} from '@blockera/extensions/src/libs';
 import type { InnerBlocks } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 const attributes = {

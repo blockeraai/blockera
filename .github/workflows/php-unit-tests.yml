@@ -127,6 +127,14 @@ jobs:
             - name: Start WordPress Environment
               run: npm run env:start
 
+            - name: 'Create env file'
+              run: |
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  echo VERSION=1.0-alpha >> .env
+                  cat .env
+
             - name: Running single site unit tests
               if: ${{ ! matrix.multisite }}
               run: |

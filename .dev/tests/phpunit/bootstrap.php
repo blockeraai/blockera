@@ -41,11 +41,13 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 require_once $_tests_dir . '/includes/functions.php';
 
 tests_add_filter( 'muplugins_loaded', function () use ( $root_dir ) {
-	
-	define( 'BLOCKERA_CORE_PATH', $root_dir );
+
+	define( 'BLOCKERA_CORE_PATH', trailingslashit( $root_dir ) );
 	define( '__BLOCKERA_TEST_DIR__', __DIR__ );
-	define( 'BLOCKERA_CORE_VERSION', blockera_core_env( 'BLOCKERA_CORE_VERSION' ) ?? getenv( 'BLOCKERA_CORE_VERSION' ) );
-	define( 'BLOCKERA_CORE_URI', plugins_url( blockera_core_env( 'BLOCKERA_DIR' ) ?? getenv( '__BLOCKERA_DIR__' ) ) );
+	define( 'BLOCKERA_CORE_VERSION', blockera_core_env( 'VERSION' ) ?? getenv( 'VERSION' ) );
+	define( 'BLOCKERA_CORE_URI', trailingslashit(
+		plugins_url( blockera_core_env( 'BLOCKERA_DIR' ) ?? getenv( '__BLOCKERA_DIR__' ) )
+	) );
 } );
 
 // Start up the WP testing environment.

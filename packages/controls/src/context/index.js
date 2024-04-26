@@ -29,6 +29,7 @@ export const ControlContext: Object = createContext({
 	},
 	value: null,
 	dispatch: null,
+	type: 'simple',
 });
 
 export const ControlContextProvider = ({

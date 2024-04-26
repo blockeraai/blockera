@@ -1,3 +1,4 @@
+export const noop = () => {};
 export * from './is';
 export * from './get';
 export * from './array';

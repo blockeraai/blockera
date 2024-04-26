@@ -53,6 +53,19 @@ Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
 		);
 	}
 
+	const regexp = /\bSelect\b\s\w+/i;
+
+	if (
+		regexp.exec(selector) &&
+		!Cypress.$(`[aria-label="${selector}"]`).length
+	) {
+		const parsedSelector = selector.split(' ');
+
+		return cy.get(
+			`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"]`
+		);
+	}
+
 	return cy.get(`[aria-label="${selector}"]`, ...args);
 });
 
@@ -86,7 +99,15 @@ Cypress.Commands.add(
 
 // get block by name for testing
 Cypress.Commands.add('getBlock', (blockName) => {
-	return cy.get(`[data-type="${blockName}"]`);
+	if (Cypress.$('iframe[name="editor-canvas"]').length) {
+		return cy
+			.getIframeBody()
+			.find(`[data-type="${blockName}"]`)
+			.eq(0)
+			.click();
+	} else {
+		return cy.get(`[data-type="${blockName}"]`);
+	}
 });
 
 // Click Value Addon Button to Open Popover

@@ -3,8 +3,8 @@
 return [
 	'root_url'      => BLOCKERA_CORE_URI,
 	'root_path'     => BLOCKERA_CORE_PATH,
-	'url'           => BLOCKERA_CORE_URI . '/app/',
-	'path'          => BLOCKERA_CORE_PATH . '/app/',
+	'url'           => BLOCKERA_CORE_URI . 'app/',
+	'path'          => BLOCKERA_CORE_PATH . 'app/',
 	'name'          => 'blockera-core',
 	'version'       => BLOCKERA_CORE_VERSION,
 	'dist_url'      => BLOCKERA_CORE_URI . 'dist/',

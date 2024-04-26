@@ -11,14 +11,17 @@ import { useState, useEffect } from '@wordpress/element';
 import { NavigableMenu, Button } from '@wordpress/components';
 
 /**
+ * Blockera dependencies
+ */
+import { noop } from '@blockera/utils';
+
+/**
  * Internal dependencies
  */
 import Flex from '../flex';
+import { Tooltip } from '../tooltip';
 import type { TTabPanelProps } from './types';
 import { ConditionalWrapper } from '../index';
-import { Tooltip } from '../tooltip';
-
-const noop = () => {};
 
 export default function TabPanel({
 	tabs,

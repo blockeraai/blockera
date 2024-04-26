@@ -25,10 +25,6 @@ const blocks = {
 
 export const reregistrationBlocks = (): void => {
 	for (const key in blocks) {
-		if (!Object.hasOwnProperty.call(blocks, key)) {
-			continue;
-		}
-
 		const currentBlock = blocks[key];
 
 		if (!currentBlock?.name && 'Shared' !== key) {

@@ -23,8 +23,6 @@ import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 
-const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME) || {};
-
 /**
  * Filters registered WordPress block type settings, extending block settings with settings and block name.
  *
@@ -36,6 +34,8 @@ export default function withBlockSettings(
 	settings: Object,
 	name: Object
 ): Object {
+	const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME) || {};
+
 	const sharedExtension = getBlockExtension('Shared');
 	const blockExtension = getBlockExtensionBy('targetBlock', name);
 

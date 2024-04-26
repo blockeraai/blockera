@@ -5,25 +5,24 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
+import { dispatch, useSelect } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Blockera dependencies
  */
-import { Button, MoreFeatures } from '@blockera/components';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
 } from '@blockera/classnames';
+import { hasSameProps } from '@blockera/utils';
+import { Button, MoreFeatures } from '@blockera/components';
 import { BaseControl, PanelBodyControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
-import { hasSameProps } from '@blockera/utils';
 import { ArrowIcon } from './icons/arrow';
-import { useBlockContext } from '../../hooks';
 import { isInnerBlock } from '../../components';
 import { InnerBlocksExtensionIcon } from './icons';
 import type {
@@ -34,8 +33,8 @@ import type {
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({ innerBlocks }: InnerBlocksProps): MixedElement => {
-		const { updateBlockEditorSettings } = useBlockContext();
-
+		const { changeExtensionCurrentBlock: setCurrentBlock } =
+			dispatch('blockera-core/extensions') || {};
 		const { currentBlock = 'master' } = useSelect((select) => {
 			const { getExtensionCurrentBlock } = select(
 				'blockera-core/extensions'
@@ -72,12 +71,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 						<Button
 							size="input"
 							contentAlign="left"
-							onClick={() =>
-								updateBlockEditorSettings(
-									'current-block',
-									innerBlockType
-								)
-							}
+							onClick={() => setCurrentBlock(innerBlockType)}
 							className={controlInnerClassNames(
 								'inner-block__button',
 								'extension-inner-blocks'

@@ -3,10 +3,10 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select, useDispatch } from '@wordpress/data';
-import { memo, useEffect, useState } from '@wordpress/element';
-import type { MixedElement, ComponentType } from 'react';
 import { Fill } from '@wordpress/components';
+import { select, useDispatch } from '@wordpress/data';
+import type { MixedElement, ComponentType } from 'react';
+import { memo, useEffect, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -18,83 +18,27 @@ import { Tabs } from '@blockera/components';
 /**
  * Internal dependencies
  */
-import { attributes as blockStatesAttributes } from '../block-states/attributes';
-import { attributes as innerBlockAttributes } from '../inner-blocks/attributes';
-import {
-	attributes as backgroundAttributes,
-	supports as backgroundSupports,
-	BackgroundExtension,
-} from '../background';
-import {
-	attributes as iconAttributes,
-	supports as iconSupports,
-	IconExtension,
-} from '../icon';
-import {
-	attributes as borderAndShadowAttributes,
-	supports as borderAndShadowSupports,
-	BorderAndShadowExtension,
-} from '../border-and-shadow';
-import {
-	attributes as effectsAttributes,
-	supports as effectsSupports,
-	EffectsExtension,
-} from '../effects';
-import {
-	attributes as typographyAttributes,
-	supports as typographySupports,
-	TypographyExtension,
-} from '../typography';
-import {
-	attributes as spacingAttributes,
-	supports as spacingSupports,
-	SpacingExtension,
-} from '../spacing';
-import {
-	attributes as positionAttributes,
-	supports as positionSupports,
-	PositionExtension,
-} from '../position';
-import {
-	attributes as sizeAttributes,
-	supports as sizeSupports,
-	SizeExtension,
-} from '../size';
-import {
-	attributes as layoutAttributes,
-	supports as layoutSupports,
-	LayoutExtension,
-} from '../layout';
-import {
-	attributes as flexChildAttributes,
-	supports as flexChildSupports,
-	FlexChildExtension,
-} from '../flex-child';
-import {
-	CustomStyleExtension,
-	attributes as customStyleAttributes,
-	supports as customStyleSupports,
-} from '../custom-style';
-import {
-	attributes as mouseAttributes,
-	supports as mouseSupports,
-	MouseExtension,
-} from '../mouse';
-import {
-	attributes as styleVariationsAttributes,
-	StyleVariationsExtension,
-} from '../style-variations';
+import { BackgroundExtension } from '../background';
+import { IconExtension } from '../icon';
+import { BorderAndShadowExtension } from '../border-and-shadow';
+import { EffectsExtension } from '../effects';
+import { TypographyExtension } from '../typography';
+import { SpacingExtension } from '../spacing';
+import { PositionExtension } from '../position';
+import { SizeExtension } from '../size';
+import { LayoutExtension } from '../layout';
+import { FlexChildExtension } from '../flex-child';
+import { CustomStyleExtension } from '../custom-style';
+import { MouseExtension } from '../mouse';
+import { StyleVariationsExtension } from '../style-variations';
 import { EntranceAnimationExtension } from '../entrance-animation';
 import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
 import { ConditionsExtension } from '../conditions';
-import {
-	attributes as advancedSettingsAttributes,
-	AdvancedSettingsExtension,
-} from '../advanced-settings';
-
+import { AdvancedSettingsExtension } from '../advanced-settings';
 import { isInnerBlock, propsAreEqual } from '../../components/utils';
 import extensions from './extensions.json';
+import { attributes } from './attributes';
 import { useDisplayBlockControls } from '../../hooks';
 import StateContainer from '../../components/state-container';
 import type { TTabProps } from '@blockera/components/src/tabs/types';
@@ -108,39 +52,6 @@ import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
 import type { TBreakpoint, TStates } from '../block-states/types';
-
-export const attributes = {
-	...blockStatesAttributes,
-	...innerBlockAttributes,
-	...typographyAttributes,
-	...backgroundAttributes,
-	...borderAndShadowAttributes,
-	...effectsAttributes,
-	...spacingAttributes,
-	...positionAttributes,
-	...sizeAttributes,
-	...layoutAttributes,
-	...flexChildAttributes,
-	...iconAttributes,
-	...customStyleAttributes,
-	...advancedSettingsAttributes,
-	...mouseAttributes,
-	...styleVariationsAttributes,
-};
-export const supports = {
-	...typographySupports,
-	...backgroundSupports,
-	...borderAndShadowSupports,
-	...effectsSupports,
-	...spacingSupports,
-	...positionSupports,
-	...sizeSupports,
-	...layoutSupports,
-	...flexChildSupports,
-	...iconSupports,
-	...customStyleSupports,
-	...mouseSupports,
-};
 
 type Props = {
 	name: string,
@@ -934,3 +845,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 	},
 	propsAreEqual
 );
+
+export { supports } from './supports';
+export { attributes } from './attributes';

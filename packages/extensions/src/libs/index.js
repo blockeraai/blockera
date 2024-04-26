@@ -1,17 +1,10 @@
 // @flow
 
 /**
- * Blockera dependencies
- */
-import { registerThirdPartyExtensionDefinitions } from '@blockera/blocks';
-
-/**
  * Internal dependencies
  */
 import { __experimentalExtensionsSupportRegistration } from './base';
 import { __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition } from './inner-blocks';
-
-registerThirdPartyExtensionDefinitions();
 
 __experimentalExtensionsSupportRegistration();
 __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition();

@@ -66,75 +66,77 @@ class TestAssetsProvider extends AppTestCase {
 
 	public function dataProvider(): array {
 
+		$home = trailingslashit( home_url() );
+
 		return [
 			[
 				[
 					'name'   => 'controls',
-					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/controls-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/controls/index',
+					'style'  => $home . 'wp-content/plugins/blockera-core/dist/controls-styles/style',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/controls/index',
 				],
 			],
 			[
 				[
 					'name'   => 'hooks',
-					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/hooks-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/hooks/index',
+					'style'  => $home . 'wp-content/plugins/blockera-core/dist/hooks-styles/style',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/hooks/index',
 				],
 			],
 			[
 				[
 					'name'   => 'editor-styles',
-					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/editor-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/editor-styles/index',
+					'style'  => $home . 'wp-content/plugins/blockera-core/dist/editor-styles/style',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/editor-styles/index',
 				],
 			],
 			[
 				[
 					'name'   => 'core-data',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/core-data/index',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/core-data/index',
 				],
 			],
 			[
 				[
 					'name'   => 'components',
-					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/components-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/components/index',
+					'style'  => $home . 'wp-content/plugins/blockera-core/dist/components-styles/style',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/components/index',
 				],
 			],
 			[
 				[
 					'name'   => 'extensions',
-					'style'  => 'http://example.org/wp-content/plugins/blockera-core/dist/extensions-styles/style',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/extensions/index',
+					'style'  => $home . 'wp-content/plugins/blockera-core/dist/extensions-styles/style',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/extensions/index',
 				],
 			],
 			[
 				[
 					'name'   => 'classnames',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/classnames/index',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/classnames/index',
 				],
 			],
 			[
 				[
 					'name'   => 'data-extractor',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/data-extractor/index',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/data-extractor/index',
 				],
 			],
 			[
 				[
 					'name'   => 'style-engine',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/style-engine/index',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/style-engine/index',
 				],
 			],
 			[
 				[
 					'name'   => 'utils',
 					'style'  => '',
-					'script' => 'http://example.org/wp-content/plugins/blockera-core/dist/utils/index',
+					'script' => $home . 'wp-content/plugins/blockera-core/dist/utils/index',
 				],
 			],
 		];
