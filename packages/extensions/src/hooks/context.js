@@ -30,7 +30,6 @@ const BlockEditContextProvider = ({
 		getBlockType: string,
 		blockStateId: number,
 		breakpointId: number,
-		isOpenGridBuilder: boolean,
 		getAttributes: () => Object,
 		isNormalState: () => boolean,
 		getCurrentState: () => TStates,
@@ -38,7 +37,6 @@ const BlockEditContextProvider = ({
 		getBreakpoint: () => BreakpointTypes,
 		setCurrentTab: (tabName: string) => void,
 		switchBlockState: (state: string) => void,
-		setOpenGridBuilder: (isOpen: boolean) => void,
 		handleOnChangeAttributes: THandleOnChangeAttributes,
 	} = useMemo(() => {
 		const {
@@ -52,8 +50,6 @@ const BlockEditContextProvider = ({
 			currentBlock,
 			currentState,
 			currentInnerBlockState,
-			isOpenGridBuilder,
-			setOpenGridBuilder,
 			masterIsNormalState,
 			blockeraInnerBlocks,
 			handleOnChangeAttributes,
@@ -94,8 +90,6 @@ const BlockEditContextProvider = ({
 
 				return currentState;
 			},
-			isOpenGridBuilder,
-			setOpenGridBuilder,
 			...props,
 		};
 		// eslint-disable-next-line

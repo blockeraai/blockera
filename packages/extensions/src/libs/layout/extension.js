@@ -5,6 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import { memo, useEffect } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
+import { dispatch } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -84,7 +85,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 			attributes.blockeraAlignContent.default
 		);
 
-		const { setOpenGridBuilder, BlockComponent } = useBlockContext();
+		const { setOpenGridBuilder } =
+			dispatch('blockera-core/extensions') || {};
+
+		const { BlockComponent } = useBlockContext();
 
 		useEffect(() => {
 			//FIXME: please implements handler for "setOpenGridBuilder"!

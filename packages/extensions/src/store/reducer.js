@@ -116,6 +116,11 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 						action.currentState,
 				}),
 			};
+		case 'SET_OPEN_GRID_BUILDER':
+			return {
+				...state,
+				isOpenGridBuilder: action.isOpenGridBuilder,
+			};
 	}
 
 	return state;

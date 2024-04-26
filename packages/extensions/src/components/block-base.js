@@ -75,7 +75,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const [currentTab, setCurrentTab] = useState(
 			additional?.activeTab || 'style'
 		);
-		const [isOpenGridBuilder, setOpenGridBuilder] = useState(false);
 
 		const {
 			currentBlock,
@@ -377,8 +376,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					getAttributes,
 					currentBreakpoint,
 					currentInnerBlock,
-					isOpenGridBuilder,
-					setOpenGridBuilder,
 					masterIsNormalState,
 					blockeraInnerBlocks,
 					currentInnerBlockState,

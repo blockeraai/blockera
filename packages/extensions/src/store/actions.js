@@ -141,3 +141,10 @@ export function setBlockClientInnerState({
 		type: 'SET_BLOCK_CLIENT_INNER_STATE',
 	};
 }
+
+export function setOpenGridBuilder(isOpenGridBuilder: Boolean): Object {
+	return {
+		isOpenGridBuilder,
+		type: 'SET_OPEN_GRID_BUILDER',
+	};
+}
