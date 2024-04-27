@@ -63,3 +63,9 @@ storybook-static
 
 # nyc plugin of cypress
 .nyc_output
+
+# Cypress screenshots
+cypress/screenshots
+
+# Cypress downloads
+cypress/downloads
