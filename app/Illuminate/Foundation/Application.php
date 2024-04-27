@@ -2,36 +2,34 @@
 
 namespace Blockera\Framework\Illuminate\Foundation;
 
-/**
- * External
- */
-
 use Illuminate\Container\Container;
-
-/**
- * Internal
- */
-
 use Blockera\Framework\Illuminate\Support\ServiceProvider;
 
+/**
+ * Class Application to contain all services and entities around of php application.
+ *
+ * @package Application
+ */
 class Application extends Container {
 
 	/**
-	 * @var ServiceProvider[]
+	 * Store service providers stack.
+	 *
+	 * @var ServiceProvider[] the service providers stack
 	 */
-	protected array $serviceProviders = [];
+	protected array $service_providers = [];
 
 	/**
 	 * Holds the registered values.
 	 *
-	 * @var array $registeredValueAddons the registered values.
+	 * @var array $registered_value_addons the registered values.
 	 */
-	protected array $registeredValueAddons = [];
+	protected array $registered_value_addons = [];
 
 	/**
 	 * Store all entities of WordPress core and  core api.
 	 *
-	 * @var array $entities the entities list
+	 * @var array $entities the entities list.
 	 */
 	protected array $entities = [];
 
@@ -47,33 +45,48 @@ class Application extends Container {
 		$this->registerConfiguredProviders();
 	}
 
-	public function registerProviders(): void {
+	/**
+	 * Register recieved service provider.
+	 *
+	 * @param string $serviceProvider the service provider class.
+	 * @param string $name            the service provider name.
+	 *
+	 * @return void
+	 */
+	public function registerProviders( string $serviceProvider, string $name ): void {
 
-		foreach ( $this->serviceProviders as $key => $serviceProvider ) {
+		$provider = new $serviceProvider( $this );
 
-			$provider = new $serviceProvider( $this );
+		$this->service_providers[ $name ] = $provider;
 
-			$this->serviceProviders[ $key ] = $provider;
+		if ( ! $provider instanceof ServiceProvider ) {
 
-			if ( ! $provider instanceof ServiceProvider ) {
-
-				continue;
-			}
-
-			$provider->register();
+			return;
 		}
+
+		$provider->register();
 	}
 
+	/**
+	 * Registration configured service providers.
+	 *
+	 * @return void
+	 */
 	public function registerConfiguredProviders() {
 
-		$this->serviceProviders = blockera_core_config( 'app.providers' );
+		$this->service_providers = blockera_core_config( 'app.providers' );
 
-		$this->registerProviders();
+		array_map( [ $this, 'registerProviders' ], $this->service_providers, array_keys( $this->service_providers ) );
 	}
 
+	/**
+	 * Bootstrap application.
+	 *
+	 * @return void
+	 */
 	public function bootstrap() {
 
-		foreach ( $this->serviceProviders as $serviceProvider ) {
+		foreach ( $this->service_providers as $serviceProvider ) {
 
 			if ( ! $serviceProvider instanceof ServiceProvider ) {
 
@@ -94,14 +107,14 @@ class Application extends Container {
 	 */
 	public function getRegisteredValueAddons( string $key = '', bool $includeContext = true ): array {
 
-		if ( empty( $key ) || empty( $this->registeredValueAddons[ $key ] ) ) {
+		if ( empty( $key ) || empty( $this->registered_value_addons[ $key ] ) ) {
 
-			return $this->registeredValueAddons;
+			return $this->registered_value_addons;
 		}
 
 		if ( $includeContext ) {
 
-			return $this->registeredValueAddons[ $key ] ?? [];
+			return $this->registered_value_addons[ $key ] ?? [];
 		}
 
 		return array_map(
@@ -119,20 +132,25 @@ class Application extends Container {
 						),
 					]
 				);
-			}, $this->registeredValueAddons[ $key ]
+			},
+			$this->registered_value_addons[ $key ]
 		);
 	}
 
 	/**
-	 * @param array $registeredValueAddons
+	 * Set registered value addons.
+	 *
+	 * @param array $registered_value_addons the recieved value addons stack to register.
 	 */
-	public function setRegisteredValueAddons( array $registeredValueAddons ): void {
+	public function setRegisteredValueAddons( array $registered_value_addons ): void {
 
-		$this->registeredValueAddons = $registeredValueAddons;
+		$this->registered_value_addons = $registered_value_addons;
 	}
 
 	/**
-	 * @return array
+	 * Get all entities.
+	 *
+	 * @return array the entities.
 	 */
 	public function getEntities(): array {
 
@@ -140,7 +158,21 @@ class Application extends Container {
 	}
 
 	/**
-	 * @param array $entities
+	 * Get specific entity with key.
+	 *
+	 * @param string $key the entity key.
+	 *
+	 * @return array the entity stack.
+	 */
+	public function getEntity( string $key ): array {
+
+		return $this->entities[ $key ] ?? [];
+	}
+
+	/**
+	 * Set entities.
+	 *
+	 * @param array $entities the entities list stack.
 	 */
 	public function setEntities( array $entities ): void {
 
@@ -154,7 +186,14 @@ class Application extends Container {
 	 */
 	protected function registerConfiguredEntities(): void {
 
-		$this->setEntities( blockera_core_config( 'entities' ) );
+		$this->setEntities(
+			array_merge(
+				blockera_core_config( 'entities' ),
+				[
+					'breakpoints' => blockera_core_config( 'breakpoints' ),
+				]
+			)
+		);
 	}
 
 }
