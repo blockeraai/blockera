@@ -9,6 +9,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
+import { ucFirstWord } from '@blockera/utils';
 import { extensionInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -63,6 +64,7 @@ export function Breadcrumb({
 						'item-state',
 						'item-state-' + type
 					)}
+					aria-label={`${ucFirstWord(type)} State`}
 				>
 					{label}
 				</span>
@@ -91,6 +93,7 @@ export function Breadcrumb({
 							'block-card__title__item',
 							'inner-block'
 						)}
+						aria-label={`${innerBlocks[activeBlock].label} Inner Block`}
 					>
 						{innerBlocks[activeBlock].label}
 					</span>
