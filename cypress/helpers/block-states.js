@@ -23,3 +23,27 @@ export function setBlockState(state) {
 				.click({ force: true });
 		});
 }
+
+export const checkCurrentState = (id) => {
+	cy.getByAriaLabel('Blockera Block State Container')
+		.first()
+		.within(() => {
+			// selected repeater item
+			cy.get(`[data-id="${id}"]`).within(() => {
+				cy.getByDataCy('control-group').should(
+					'have.class',
+					'is-selected-item'
+				);
+			});
+		});
+};
+
+export const checkBlockCard = (labels) => {
+	labels.forEach((label) => {
+		// should exist and have correct order
+		cy.getByAriaLabel(`${label.label} ${label.type}`).should(
+			'have.text',
+			label.label
+		);
+	});
+};
