@@ -100,11 +100,7 @@ Cypress.Commands.add(
 // get block by name for testing
 Cypress.Commands.add('getBlock', (blockName) => {
 	if (Cypress.$('iframe[name="editor-canvas"]').length) {
-		return cy
-			.getIframeBody()
-			.find(`[data-type="${blockName}"]`)
-			.eq(0)
-			.click();
+		return cy.getIframeBody().find(`[data-type="${blockName}"]`).eq(0);
 	} else {
 		return cy.get(`[data-type="${blockName}"]`);
 	}
