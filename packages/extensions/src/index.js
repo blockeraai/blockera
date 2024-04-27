@@ -22,12 +22,6 @@ import {
 /**
  * Internal dependencies
  */
-import bootstrapScripts from './scripts';
-//TODO: replace with unstable server side breakpoints.
-import defaultBreakpoints from './libs/block-states/default-breakpoints';
-
-export { isInnerBlock } from './components';
-export { store } from './store';
 export * from './api';
 export * from './libs';
 export {
@@ -36,6 +30,9 @@ export {
 	BlockEditContext,
 	BlockEditContextProvider,
 } from './hooks';
+export { store } from './store';
+import bootstrapScripts from './scripts';
+export { isInnerBlock } from './components';
 
 domReady(() => {
 	if (window?.wp) {
@@ -50,9 +47,6 @@ domReady(() => {
 			select: select(editorStore?.name),
 			unstableBootstrapServerSideBreakpointDefinitions,
 		};
-
-		//TODO: after server side breakpoints please remove this statement.
-		unstableBootstrapServerSideBreakpointDefinitions(defaultBreakpoints());
 
 		registerCanvasEditorSettings({
 			zoom: '100%',
