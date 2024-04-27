@@ -5,36 +5,27 @@
  */
 import { combineReducers } from '@wordpress/data';
 
-/**
- * Blockera dependencies
- */
-import type { BreakpointTypes } from '@blockera/extensions/src/libs/block-states/types';
-
 export const breakpoints = (state: Object = [], action: Object): Object => {
 	switch (action?.type) {
-		case 'ADD_BREAKPOINT':
-			return [...state, action.breakpoint];
+		case 'SET_BREAKPOINTS':
+			return action.breakpoints;
 
 		case 'EDIT_BREAKPOINT':
-			return state.map((breakpoint: BreakpointTypes): BreakpointTypes => {
-				if (breakpoint.type !== action.breakpointType) {
-					return breakpoint;
-				}
-
-				return {
-					...breakpoint,
+			return {
+				...state,
+				[action.breakpointType]: {
+					...state[action.id],
 					...action.editedBreakpoint,
-				};
-			});
+				},
+			};
 
 		case 'DELETE_BREAKPOINT':
-			return state.filter(
-				(breakpoint: BreakpointTypes): boolean =>
-					breakpoint.type === action.breakpointType
-			);
+			delete state[action.breakpointType];
+
+			return state;
 
 		case 'UPDATE_BREAKPOINTS':
-			return action.breakpointTypes;
+			return action.breakpoints;
 	}
 
 	return state;

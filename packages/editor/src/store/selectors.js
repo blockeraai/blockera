@@ -8,21 +8,21 @@ import type {
 /**
  * Get breakpoints.
  *
- * @param {{breakpoints: Array<BreakpointTypes>}} state the breakpoints
+ * @param {{breakpoints: Object}} state the breakpoints.
  * @return {BreakpointTypes} the breakpoints stored in redux.
  */
 export const getBreakpoints = ({
 	breakpoints,
 }: {
-	breakpoints: Array<BreakpointTypes>,
-}): Array<BreakpointTypes> => {
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
+}): { [key: TBreakpoint]: BreakpointTypes } => {
 	return breakpoints;
 };
 
 /**
  * Get breakpoints.
  *
- * @param {{breakpoints: Array<BreakpointTypes>}} state the breakpoints
+ * @param {{breakpoints: Object}} state the breakpoints.
  * @param {TBreakpoint} name the breakpoint name (type column).
  * @return {BreakpointTypes} the breakpoints stored in redux.
  */
@@ -30,13 +30,11 @@ export const getBreakpoint = (
 	{
 		breakpoints,
 	}: {
-		breakpoints: Array<BreakpointTypes>,
+		breakpoints: { [key: TBreakpoint]: BreakpointTypes },
 	},
 	name: TBreakpoint
 ): BreakpointTypes | void => {
-	return breakpoints.find(
-		(breakpoint: BreakpointTypes): boolean => breakpoint.type === name
-	);
+	return breakpoints[name];
 };
 
 /**

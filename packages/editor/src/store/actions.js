@@ -8,10 +8,12 @@ import type {
 	BreakpointTypes,
 } from '@blockera/extensions/src/libs/block-states/types';
 
-export const addBreakpoint = (breakpoint: BreakpointTypes): Object => {
+export const setBreakpoints = (breakpoints: {
+	[key: number]: BreakpointTypes,
+}): Object => {
 	return {
-		breakpoint,
-		type: 'ADD_BREAKPOINT',
+		breakpoints,
+		type: 'SET_BREAKPOINTS',
 	};
 };
 
@@ -33,9 +35,9 @@ export const deleteBreakpoint = (breakpointType: TBreakpoint): Object => {
 	};
 };
 
-export const updateBreakpoints = (breakpointTypes: TBreakpoint): Object => {
+export const updateBreakpoints = (breakpoints: TBreakpoint): Object => {
 	return {
-		breakpointTypes,
+		breakpoints,
 		type: 'UPDATE_BREAKPOINTS',
 	};
 };

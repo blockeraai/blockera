@@ -8,23 +8,27 @@ import { dispatch } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import type {
-	TBreakpoint,
-	BreakpointTypes,
-} from '@blockera/extensions/src/libs/block-states/types';
+import type { BreakpointTypes } from '@blockera/extensions/src/libs/block-states/types';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from './store';
 
-export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
-	[key: TBreakpoint]: BreakpointTypes,
-}) {
-	const { addBreakpoint } = dispatch(STORE_NAME);
+export function unstableBootstrapServerSideBreakpointDefinitions(
+	definitions: Array<BreakpointTypes>
+) {
+	const { setBreakpoints } = dispatch(STORE_NAME);
 
-	Object.values(definitions).forEach((definition: BreakpointTypes): void =>
-		addBreakpoint(definition)
+	setBreakpoints(
+		Object.fromEntries(
+			definitions.map(
+				(breakpoint: BreakpointTypes): [string, BreakpointTypes] => [
+					breakpoint.type,
+					breakpoint,
+				]
+			)
+		)
 	);
 }
 

@@ -15,7 +15,7 @@ import {
 	useStoreDispatchers,
 	useStoreSelectors,
 } from '@blockera/extensions/src/hooks';
-import { isEquals } from '@blockera/utils';
+import { getIframeTag, isEquals } from '@blockera/utils';
 import { Flex, Popover } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { ControlContextProvider, InputControl } from '@blockera/controls';
@@ -55,7 +55,9 @@ export const Breakpoints = ({
 	const breakpoints = getBreakpoints();
 
 	useEffect(() => {
-		const editorWrapper = document.querySelector('.editor-styles-wrapper');
+		const editorWrapper =
+			document.querySelector('.editor-styles-wrapper') ||
+			getIframeTag('.editor-styles-wrapper');
 
 		if (!editorWrapper) {
 			return;
@@ -66,16 +68,16 @@ export const Breakpoints = ({
 
 		// remove all active preview related css class.
 		classes?.forEach((className: string, index: number) => {
+			if (-1 !== className.indexOf('-preview')) {
+				editorWrapper.classList.remove(className);
+			}
+
 			if (isLaptopBreakpoint(deviceType)) {
 				editorWrapper.style.minWidth = '100%';
 				editorWrapper.style.maxWidth = '100%';
 				editorWrapper.classList.remove('preview-margin');
 
 				return;
-			}
-
-			if (-1 !== className.indexOf('-preview')) {
-				editorWrapper.classList.remove(className);
 			}
 
 			if (classes.length - 1 === index) {
