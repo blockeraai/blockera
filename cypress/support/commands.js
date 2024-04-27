@@ -34,11 +34,11 @@ Cypress.on('uncaught:exception', () => {
  * useful custom commands for selecting elements for testing
  */
 Cypress.Commands.add('getByDataCy', (selector, ...args) => {
-	return cy.get(`[data-cy=${selector}]`, ...args);
+	return cy.get(`[data-cy="${selector}"]`, ...args);
 });
 
 Cypress.Commands.add('getByDataTest', (selector, ...args) => {
-	return cy.get(`[data-test=${selector}]`, ...args);
+	return cy.get(`[data-test="${selector}"]`, ...args);
 });
 
 Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
