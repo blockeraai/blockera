@@ -22,7 +22,7 @@ class Render {
 	protected string $name;
 
 	/**
-	 * Hold application instance
+	 * Hold application instance.
 	 *
 	 * @var Application
 	 */
@@ -31,12 +31,14 @@ class Render {
 	/**
 	 * Store generated stylesheet for rendered blocks.
 	 *
-	 * @var string $computedCssRules
+	 * @var string $computed_css_rules
 	 */
-	protected string $computedCssRules = '';
+	protected string $computed_css_rules = '';
 
 	/**
-	 * @param Application $app the app instance
+	 * Render constructor.
+	 *
+	 * @param Application $app the app instance.
 	 */
 	public function __construct( Application $app ) {
 
@@ -44,7 +46,9 @@ class Render {
 	}
 
 	/**
-	 * @param string $name
+	 * Sets name property.
+	 *
+	 * @param string $name the block name.
 	 */
 	public function setName( string $name ): void {
 
@@ -52,7 +56,7 @@ class Render {
 	}
 
 	/**
-	 * Fire WordPress actions or filters Hooks
+	 * Fire WordPress actions or filters Hooks.
 	 * Like: "render_block_core/{$blockName}"
 	 *
 	 * @return void
@@ -61,70 +65,78 @@ class Render {
 
 		add_filter( 'render_block_' . $this->name, [ $this, 'render' ], 10, 2 );
 
-//		add_action( 'after_setup_theme', function () {
-//
-//			add_theme_support( 'disable-layout-styles' );
-//		} );
+		// phpcs:disable
+		// remove_filter( 'render_block', 'gutenberg_render_layout_support_flag', 10, 2 );
+		// add_action( 'after_setup_theme', [$this, 'after_theme_setup'] );
+		// remove_filter( 'render_block', 'wp_render_elements_support', 10, 2 );
+		// remove_filter( 'render_block', 'wp_render_elements_support_styles', 10, 2 );
+		// remove_filter( 'render_block', 'wp_render_layout_support_flag', 10, 2 );
+		// phpcs:enable
+	}
 
+	/**
+	 * After theme setup executing to customize theme supports.
+	 *
+	 * @return void
+	 */
+	public function afterThemeSetup(): void {
 
-//		add_action( 'wp_enqueue_scripts', function () {
-//			wp_dequeue_style( 'global-styles' );
-//		}, 100 );
-
-		remove_filter( 'render_block', 'gutenberg_render_layout_support_flag', 10, 2 );
-
-//		remove_filter( 'render_block', 'wp_render_elements_support', 10, 2 );
-//		remove_filter( 'render_block', 'wp_render_elements_support_styles', 10, 2 );
-//
-//		remove_filter( 'render_block', 'wp_render_layout_support_flag', 10, 2 );
+		add_theme_support( 'disable-layout-styles' );
 	}
 
 	/**
 	 * Block parser to customize HTML template!
 	 *
-	 * @param string $html  WordPress block rendered HTML
-	 * @param array  $block WordPress block details
+	 * @param string $html   WordPress block rendered HTML.
+	 * @param array  $block  WordPress block details.
+	 * @param int    $postId the current post id. default is "-1".
 	 *
-	 * @throws BindingResolutionException|BaseException
-	 * @return string block HTML
+	 * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
+	 * @return string block HTML.
 	 */
 	public function render( string $html, array $block, int $postId = -1 ): string {
 
-		//Just running for blockera extensions settings!
+		// Just running for blockera extensions settings!
 		if ( empty( $block['attrs']['blockeraPropsId'] ) || is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 
 			return $html;
 		}
 
-		//create dom adapter
+		// phpcs:disable
+		// create dom adapter.
 		/**
 		 * @var DomParser $dom
 		 */
-//		$dom = $this->app->make( DomParser::class )::str_get_html( $html );
+		// $dom = $this->app->make( DomParser::class )::str_get_html( $html );
+		// phpcs:enable
 
 		$attributes = $block['attrs'];
 
 		if ( ! empty( $attributes['className'] ) ) {
 			// Usage of saved class names for block element.
-			$uniqueClassname = blockera_get_normalized_selector( $attributes['className'] );
+			$unique_class_name = blockera_get_normalized_selector( $attributes['className'] );
 
 		} else {
 			// Fallback way to providing unique css selector for block element.
-			$uniqueClassname = blockera_get_unique_classname( 'blockera-' . $block['blockName'] );
+			$unique_class_name = blockera_get_unique_classname( 'blockera-' . $block['blockName'] );
 		}
 
-		$selector = $this->getSelector( $block, $uniqueClassname );
+		$selector = $this->getSelector( $block, $unique_class_name );
 
 		/**
-		 * @var Parser $parser
+		 * Get parser object.
+		 *
+		 * @var Parser $parser the instance of Parser class.
 		 */
 		$parser = $this->app->make( Parser::class );
 
+		// phpcs:disable
 		// TODO: add into cache mechanism.
 		//manipulation HTML of block content
-//		$parser->htmlManipulate( compact( 'dom', 'block', 'uniqueClassname' ) );
+		// $parser->htmlManipulate( compact( 'dom', 'block', 'uniqueClassname' ) );
 		//retrieve final html of block content
-//		$html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
+		// $html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
+		// phpcs:enable
 
 		// Assume miss post id.
 		if ( -1 === $postId ) {
@@ -147,7 +159,8 @@ class Render {
 		}
 
 		// Adding inline generated css rules with server side StyleEngine instance.
-		if ( ! empty( $cache ) && array_intersect( [ 'css' ], array_keys( $cache ) ) ) {
+		// Skip cache mechanism when application debug mode is on.
+		if ( ! empty( $cache ) && array_intersect( [ 'css' ], array_keys( $cache ) ) && ! blockera_core_config( 'app.debug' ) ) {
 
 			// Print css into inline style of document.
 			$this->addInlineCss( $cache['css'] );
@@ -155,34 +168,42 @@ class Render {
 			return $html;
 		}
 
-		$this->computedCssRules = $parser->getCss( compact( 'block', 'selector' ) );
+		$this->computed_css_rules = $parser->getCss( compact( 'block', 'selector' ) );
 
 		// Print css into inline style of document.
 		$this->addInlineCss();
 
 		// set cache data with merge exists data.
-		if ( is_single() ) {
+		// Skip cache mechanism when application debug mode is on.
+		if ( is_single() && ! blockera_core_config( 'app.debug' ) ) {
 
-			update_post_meta( $postId, $cacheKey,
+			update_post_meta(
+				$postId,
+				$cacheKey,
 				array_merge(
-					$cache ? : [],
+					$cache ?? [],
 					[
-						'css' => $this->computedCssRules,
+						'css' => $this->computed_css_rules,
 						// TODO: implements cache mechanism for html manipulating process.
-						//'html' => '',
+						// phpcs:disable
+						// 'html' => '',
+						// phpcs:enable
 					]
 				)
 			);
 
-		} else {
+		} elseif ( ! blockera_core_config( 'app.debug' ) ) {
 
-			set_transient( $cacheKey,
+			set_transient(
+				$cacheKey,
 				array_merge(
-					$cache ? : [],
+					$cache ?? [],
 					[
-						'css' => $this->computedCssRules,
+						'css' => $this->computed_css_rules,
 						// TODO: implements cache mechanism for html manipulating process.
-						//'html' => '',
+						// phpcs:disable
+						// 'html' => '',
+						// phpcs:enable
 					]
 				)
 			);
@@ -200,13 +221,13 @@ class Render {
 	 */
 	protected function addInlineCss( string $css = '' ): void {
 
-		$computedCssRules = ! empty( $css ) ? $css : $this->getComputedCssRules();
+		$computed_css_rules = ! empty( $css ) ? $css : $this->getComputedCssRules();
 
 		add_filter(
 			'blockera-core/services/register-block-editor-assets/add-inline-css-styles',
-			function () use ( $computedCssRules ): string {
+			function () use ( $computed_css_rules ): string {
 
-				return $computedCssRules;
+				return $computed_css_rules;
 			}
 		);
 	}
@@ -216,27 +237,29 @@ class Render {
 	 * in this method, we can customize selector of block element based on block name.
 	 *
 	 * @param array  $block           the WordPress block details as array.
-	 * @param string $uniqueClassname the block unique css classname.
+	 * @param string $unique_class_name the block unique css classname.
 	 *
 	 * @return string the block css selector with unique classname.
 	 */
-	public function getSelector( array $block, string $uniqueClassname = '' ): string {
+	public function getSelector( array $block, string $unique_class_name = '' ): string {
 
-		return ! empty( $uniqueClassname ) ? ( '.' !== $uniqueClassname[0] ? ".{$uniqueClassname}" : $uniqueClassname ) : '';
+		return ! empty( $unique_class_name ) ? ( '.' !== $unique_class_name[0] ? ".{$unique_class_name}" : $unique_class_name ) : '';
+		// phpcs:disable
 		// TODO: normalizing css classnames based on block type.
-//		switch ( $block['blockName'] ) {
-//			case 'core/button':
-//			case 'core/buttons':
-//				return ".wp-block-button .wp-block-button__link{$selector}";
-//
-//			case 'core/site-title':
-//				return ".wp-block-site-title a{$selector}";
-//
-//			case 'core/paragraph':
-//				return "p{$selector}";
-//		}
-//
-//		return $selector;
+		//		switch ( $block['blockName'] ) {
+		//			case 'core/button':
+		//			case 'core/buttons':
+		//				return ".wp-block-button .wp-block-button__link{$selector}";
+		//
+		//			case 'core/site-title':
+		//				return ".wp-block-site-title a{$selector}";
+		//
+		//			case 'core/paragraph':
+		//				return "p{$selector}";
+		//		}
+		//
+		//		return $selector;
+		// phpcs:enable
 	}
 
 	/**
@@ -246,7 +269,7 @@ class Render {
 	 */
 	public function getComputedCssRules(): string {
 
-		return $this->computedCssRules;
+		return $this->computed_css_rules;
 	}
 
 }

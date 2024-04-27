@@ -5,6 +5,11 @@ namespace Blockera\Framework\Services\Block;
 use Blockera\Framework\Illuminate\Foundation\Application;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
+/**
+ * Class SavePost to cache styles for current post published.
+ *
+ * @package SavePost
+ */
 class SavePost {
 
 	/**
@@ -31,12 +36,19 @@ class SavePost {
 	/**
 	 * Constructor of SavePost class.
 	 *
-	 * @param Render $render The instance of Render class to manage dependency injection fany phrase.
+	 * @param Application $app    the instance of Application container.
+	 * @param Render      $render The instance of Render class to manage dependency injection fany phrase.
 	 */
 	public function __construct( Application $app, Render $render ) {
 
 		$this->app    = $app;
 		$this->render = $render;
+
+		// Skip cache mechanism when application debug mode is on.
+		if ( blockera_core_config( 'app.debug' ) ) {
+
+			return;
+		}
 
 		add_action( 'save_post', [ $this, 'save' ], 9e8, 3 );
 	}
@@ -64,15 +76,15 @@ class SavePost {
 
 		array_map( [ $this, 'parser' ], parse_blocks( $post->post_content ) );
 
-		//TODO: clear redundant cache data.
+		// TODO: clear redundant cache data.
 	}
 
 	/**
 	 * Parsing block data to cache css and html manipulated results.
 	 *
-	 * @param array $block
+	 * @param array $block the block array.
 	 *
-	 * @throws BindingResolutionException
+	 * @throws BindingResolutionException Exception for binding Parser class into app container problems.
 	 *
 	 * @return void
 	 */
@@ -95,7 +107,9 @@ class SavePost {
 		}
 
 		/**
-		 * @var Parser $parser
+		 * Get parser instance.
+		 *
+		 * @var Parser $parser the parser object.
 		 */
 		$parser = $this->app->make( Parser::class );
 
@@ -113,13 +127,17 @@ class SavePost {
 		$css = $parser->getCss( compact( 'block', 'selector' ) );
 
 		// set cache data with merge exists data.
-		update_post_meta( $this->post->ID, $postCacheKey,
+		update_post_meta(
+			$this->post->ID,
+			$postCacheKey,
 			array_merge(
 				$cache,
 				[
 					'css' => $css,
 					// TODO: implements cache mechanism for html manipulating process.
+					// phpcs:disable
 					//'html' => '',
+					// phpcs:enable
 				]
 			)
 		);
