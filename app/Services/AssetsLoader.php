@@ -188,7 +188,8 @@ class AssetsLoader {
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file = blockera_core_config( 'app.root_path' ) . 'assets/style-engine-styles.css';
+		$file    = blockera_core_config( 'app.root_path' ) . 'assets/dynamic-styles.css';
+		$fileURL = blockera_core_config( 'app.root_url' ) . 'assets/dynamic-styles.css';
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
@@ -196,7 +197,7 @@ class AssetsLoader {
 
 			wp_enqueue_style(
 				$handle,
-				blockera_core_config( 'app.root_url' ) . 'assets/style-engine-styles.css',
+				$fileURL,
 				[],
 				filemtime( $file )
 			);
