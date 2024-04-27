@@ -3,7 +3,10 @@
 /**
  * Blockera dependencies
  */
-import type { TStates } from '@blockera/extensions/src/libs/block-states/types';
+import type {
+	TStates,
+	TBreakpoint,
+} from '@blockera/extensions/src/libs/block-states/types';
 import type { InnerBlockType } from '@blockera/extensions/src/libs/inner-blocks/types';
 
 export type NormalizedSelectorProps = {
@@ -12,6 +15,7 @@ export type NormalizedSelectorProps = {
 	clientId: string,
 	support?: string,
 	className?: string,
+	device: TBreakpoint,
 	suffixClass?: string,
 	blockSelectors: Object,
 	fallbackSupportId?: string,

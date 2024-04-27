@@ -24,6 +24,7 @@ import { isNormalState } from '@blockera/extensions/src/components';
 export const getCssSelector = ({
 	state,
 	query,
+	device,
 	support,
 	clientId,
 	currentBlock,
@@ -32,12 +33,10 @@ export const getCssSelector = ({
 	suffixClass = '',
 	fallbackSupportId,
 }: NormalizedSelectorProps): string => {
-	const { getDeviceType } = select('blockera-core/editor');
-	const deviceType = getDeviceType();
 	const rootSelector =
-		'laptop' === deviceType
+		'laptop' === device
 			? '{{BLOCK_ID}}'
-			: `.is-${deviceType}-preview {{BLOCK_ID}}`;
+			: `.is-${device}-preview {{BLOCK_ID}}`;
 
 	const selectors: {
 		[key: TStates]: {
