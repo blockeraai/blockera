@@ -14,3 +14,19 @@ import { prepare } from '@blockera/data-extractor';
 export const get = (object: Object, path: string, defaultValue: any): any => {
 	return prepare(path, object) ?? defaultValue;
 };
+
+/**
+ * Retrieve iframe content tag element with css selector.
+ *
+ * @param {string} selector the css selector.
+ *
+ * @return {HTMLElement|void} the iframe content document body element.
+ */
+export const getIframeTag = (selector: string): HTMLElement | void => {
+	return (
+		document
+			.querySelector('iframe[name="editor-canvas"]')
+			// $FlowFixMe
+			?.contentDocument?.querySelector(selector)
+	);
+};
