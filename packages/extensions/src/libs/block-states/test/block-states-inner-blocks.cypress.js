@@ -88,22 +88,54 @@ describe('Inner Blocks E2E Test', () => {
 		it('Set the current state when add new block states', () => {
 			initialSetting();
 			setInnerBlock('Link');
-			checkBlockCard(['Link']);
+			checkBlockCard([
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+			]);
 
 			cy.getByAriaLabel('Add New State').click();
 
 			checkCurrentState('hover');
-			checkBlockCard(['Link', 'Hover']);
+			checkBlockCard([
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+			]);
 
 			cy.getByAriaLabel('Add New State').click();
 
 			checkCurrentState('active');
-			checkBlockCard(['Link', 'Active']);
+			checkBlockCard([
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+				{
+					label: 'active',
+					type: 'State',
+				},
+			]);
 
 			cy.getByAriaLabel('Add New State').click();
 
 			checkCurrentState('focus');
-			checkBlockCard(['Link', 'Focus']);
+			checkBlockCard([
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+				{
+					label: 'Hover',
+					type: 'Focus',
+				},
+			]);
 		});
 	});
 
@@ -215,7 +247,12 @@ describe('Inner Blocks E2E Test', () => {
 			initialSetting();
 			setInnerBlock('Link');
 			//
-			checkBlockCard(['Link']);
+			checkBlockCard([
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+			]);
 			// Set overflow
 			cy.getByAriaLabel('Hidden Overflow').click();
 
@@ -274,7 +311,12 @@ describe('Inner Blocks E2E Test', () => {
 			setInnerBlock('Link');
 			setDeviceType('Tablet');
 			//
-			checkBlockCard(['Link']);
+			checkBlockCard([
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+			]);
 			// Set overflow
 			cy.getByAriaLabel('Hidden Overflow').click();
 
@@ -362,7 +404,16 @@ describe('Inner Blocks E2E Test', () => {
 			setInnerBlock('Link');
 			addBlockState('hover');
 			//
-			checkBlockCard(['Link', 'Hover']);
+			checkBlockCard([
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+			]);
 
 			// Set overflow
 			cy.getByAriaLabel('Hidden Overflow').click();
@@ -458,7 +509,16 @@ describe('Inner Blocks E2E Test', () => {
 			addBlockState('hover');
 			setDeviceType('Tablet');
 			//
-			checkBlockCard(['Link', 'Hover']);
+			checkBlockCard([
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+			]);
 
 			// Set overflow
 			cy.getByAriaLabel('Hidden Overflow').click();
@@ -2120,7 +2180,16 @@ describe('Inner Blocks E2E Test', () => {
 		});
 		it('Normal -> default breakpoint(laptop)', () => {
 			//
-			checkBlockCard(['Hover', 'Link']);
+			checkBlockCard([
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+			]);
 
 			// Set font-size
 			cy.setInputFieldValue('Font Size', 'Typography', 25);
@@ -2184,7 +2253,16 @@ describe('Inner Blocks E2E Test', () => {
 
 		it('Normal -> mobile breakpoint', () => {
 			//
-			checkBlockCard(['Hover', 'Link']);
+			checkBlockCard([
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+			]);
 
 			setDeviceType('Mobile');
 			// Set font-size
@@ -2250,7 +2328,20 @@ describe('Inner Blocks E2E Test', () => {
 			addBlockState('hover');
 
 			//
-			checkBlockCard(['Hover', 'Link', 'Hover']);
+			checkBlockCard([
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+			]);
 
 			// Set font-size
 			cy.setInputFieldValue('Font Size', 'Typography', 25);
@@ -2354,7 +2445,20 @@ describe('Inner Blocks E2E Test', () => {
 			setDeviceType('Mobile');
 
 			//
-			checkBlockCard(['Hover', 'Link', 'Hover']);
+			checkBlockCard([
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+				{
+					label: 'Link',
+					type: 'Inner Block',
+				},
+				{
+					label: 'Hover',
+					type: 'State',
+				},
+			]);
 
 			// Set font-size
 			cy.setInputFieldValue('Font Size', 'Typography', 25);
@@ -2469,7 +2573,20 @@ describe('Inner Blocks E2E Test', () => {
 					beforeEach(() => {
 						addBlockState('hover');
 						//
-						checkBlockCard(['Hover', 'Link', 'Hover']);
+						checkBlockCard([
+							{
+								label: 'Hover',
+								type: 'State',
+							},
+							{
+								label: 'Link',
+								type: 'Inner Block',
+							},
+							{
+								label: 'Hover',
+								type: 'State',
+							},
+						]);
 
 						// Normal state updates should display
 						cy.checkInputFieldValue(
@@ -2515,7 +2632,20 @@ describe('Inner Blocks E2E Test', () => {
 						beforeEach(() => {
 							addBlockState('Focus');
 							//
-							checkBlockCard(['Hover', 'Link', 'Focus']);
+							checkBlockCard([
+								{
+									label: 'Hover',
+									type: 'State',
+								},
+								{
+									label: 'Link',
+									type: 'Inner Block',
+								},
+								{
+									label: 'Focus',
+									type: 'State',
+								},
+							]);
 
 							// Normal state updates should display
 							cy.checkInputFieldValue(
@@ -2562,7 +2692,20 @@ describe('Inner Blocks E2E Test', () => {
 									// TODO : remove next line after fix related bug: master -> hover -> inner -> hover -> change device -> current state ?????
 									setBlockState('Hover');
 									//
-									checkBlockCard(['Hover', 'Link', 'Hover']);
+									checkBlockCard([
+										{
+											label: 'Hover',
+											type: 'State',
+										},
+										{
+											label: 'Link',
+											type: 'Inner Block',
+										},
+										{
+											label: 'Hover',
+											type: 'State',
+										},
+									]);
 
 									// should not display any value
 									cy.checkInputFieldValue(
@@ -2605,7 +2748,16 @@ describe('Inner Blocks E2E Test', () => {
 										beforeEach(() => {
 											setBlockState('Normal');
 											//
-											checkBlockCard(['Hover', 'Link']);
+											checkBlockCard([
+												{
+													label: 'Hover',
+													type: 'State',
+												},
+												{
+													label: 'Link',
+													type: 'Inner Block',
+												},
+											]);
 
 											// Should not display any value
 											cy.checkInputFieldValue(
@@ -3288,7 +3440,16 @@ describe('Inner Blocks E2E Test', () => {
 				() => {
 					beforeEach(() => {
 						//
-						checkBlockCard(['Hover', 'Link']);
+						checkBlockCard([
+							{
+								label: 'Hover',
+								type: 'State',
+							},
+							{
+								label: 'Link',
+								type: 'Inner Block',
+							},
+						]);
 
 						// Add item
 						cy.getByAriaLabel('Add New Filter Effect').click();
@@ -3335,7 +3496,20 @@ describe('Inner Blocks E2E Test', () => {
 						beforeEach(() => {
 							addBlockState('after');
 							//
-							checkBlockCard(['Hover', 'Link', 'After']);
+							checkBlockCard([
+								{
+									label: 'Hover',
+									type: 'State',
+								},
+								{
+									label: 'Link',
+									type: 'Inner Block',
+								},
+								{
+									label: 'After',
+									type: 'State',
+								},
+							]);
 
 							// Normal state updates should display
 							cy.get('@filter-items').should('have.length', '1');
@@ -3372,7 +3546,20 @@ describe('Inner Blocks E2E Test', () => {
 							beforeEach(() => {
 								addBlockState('focus');
 								//
-								checkBlockCard(['Hover', 'Link', 'Focus']);
+								checkBlockCard([
+									{
+										label: 'Hover',
+										type: 'State',
+									},
+									{
+										label: 'Link',
+										type: 'Inner Block',
+									},
+									{
+										label: 'Focus',
+										type: 'State',
+									},
+								]);
 
 								// Normal state updates should display
 								cy.get('@filter-items').should(
@@ -3425,7 +3612,16 @@ describe('Inner Blocks E2E Test', () => {
 										setBlockState('Normal');
 										setDeviceType('Mobile');
 										//
-										checkBlockCard(['Hover', 'Link']);
+										checkBlockCard([
+											{
+												label: 'Hover',
+												type: 'State',
+											},
+											{
+												label: 'Link',
+												type: 'Inner Block',
+											},
+										]);
 
 										// laptop/normal updates should display
 										cy.get('@filter-items').should(
@@ -3487,9 +3683,18 @@ describe('Inner Blocks E2E Test', () => {
 												setBlockState('Focus');
 												//
 												checkBlockCard([
-													'Hover',
-													'Link',
-													'Focus',
+													{
+														label: 'Hover',
+														type: 'State',
+													},
+													{
+														label: 'Link',
+														type: 'Inner Block',
+													},
+													{
+														label: 'Focus',
+														type: 'State',
+													},
 												]);
 
 												// mobile/normal updates should display
