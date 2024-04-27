@@ -14,13 +14,19 @@ import {
 	useRef,
 	useState,
 	useEffect,
+	createPortal,
 	// StrictMode,
 } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { isEquals, omitWithPattern } from '@blockera/utils';
+import {
+	isEquals,
+	getIframeTag,
+	// prependPortal,
+	omitWithPattern,
+} from '@blockera/utils';
 import { BlockStyle } from '@blockera/style-engine';
 import { isLaptopBreakpoint } from '@blockera/editor';
 
@@ -356,6 +362,24 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return <></>;
 		};
 
+		const stylesWrapperId = 'blockera-styles-wrapper';
+		const iframeBodyElement = getIframeTag('body');
+		const stylesWrapperElement = getIframeTag(`body #${stylesWrapperId}`);
+
+		// WordPress block editor sometimes wrapped body into iframe, so we should append generated styles into iframe to apply user styles.
+		useEffect(() => {
+			const div = document.createElement('div');
+			div.id = stylesWrapperId;
+
+			if (!iframeBodyElement) {
+				return;
+			}
+
+			if (!iframeBodyElement?.querySelector(`#${stylesWrapperId}`)) {
+				iframeBodyElement.append(div);
+			}
+		}, [iframeBodyElement]);
+
 		return (
 			<BlockEditContextProvider
 				{...{
@@ -445,16 +469,33 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				</InspectorControls>
 				<div ref={blockEditRef} />
 
-				<BlockStyle
-					{...{
-						clientId,
-						supports,
-						blockName: name,
-						attributes,
-						currentAttributes,
-						activeDeviceType: getDeviceType(),
-					}}
-				/>
+				{stylesWrapperElement &&
+					createPortal(
+						<BlockStyle
+							{...{
+								clientId,
+								supports,
+								blockName: name,
+								attributes,
+								currentAttributes,
+								activeDeviceType: getDeviceType(),
+							}}
+						/>,
+						stylesWrapperElement
+					)}
+
+				{!iframeBodyElement && (
+					<BlockStyle
+						{...{
+							clientId,
+							supports,
+							blockName: name,
+							attributes,
+							currentAttributes,
+							activeDeviceType: getDeviceType(),
+						}}
+					/>
+				)}
 				{/*</StrictMode>*/}
 
 				{children}
