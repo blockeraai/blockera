@@ -258,8 +258,9 @@ class AssetsLoader {
 			'
 			window.onload = () => {
 				blockera.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->application->getEntities() ) . ');
-				blockera.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');
+				blockera.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->application->getEntity( 'breakpoints' ) ) . ');
 				blockera.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'variable', false ) ) . ');
+				blockera.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');
 			};
 			',
 			'after'
