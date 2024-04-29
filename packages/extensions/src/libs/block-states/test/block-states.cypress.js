@@ -2,25 +2,28 @@
  * Internal dependencies
  */
 import {
-	getWPDataObject,
-	getSelectedBlock,
+	savePage,
+	createPost,
 	appendBlocks,
 	setDeviceType,
 	addBlockState,
-	setBlockState,
-	savePage,
-	redirectToFrontPage,
 	reSelectBlock,
-	checkCurrentState,
-	createPost,
+	setBlockState,
+	setInnerBlock,
 	checkBlockCard,
+	getWPDataObject,
+	getSelectedBlock,
 	getBlockClientId,
+	checkCurrentState,
+	redirectToFrontPage,
 } from '../../../../../../cypress/helpers';
 import 'cypress-real-events';
 
 describe('Block State E2E Test', () => {
 	beforeEach(() => {
 		cy.viewport(1440, 1025);
+
+		createPost();
 	});
 
 	const initialSetting = () => {
@@ -70,7 +73,7 @@ describe('Block State E2E Test', () => {
 				.parent()
 				.parent()
 				.parent()
-				.should('have.class', 'publisher-not-allowed');
+				.should('have.class', 'blockera-not-allowed');
 		});
 
 		it('set the current state when add new block states', () => {
@@ -183,11 +186,6 @@ describe('Block State E2E Test', () => {
 		});
 	});
 
-	// FIXME:
-	// describe('add new state', () => {
-	//
-	// });
-
 	describe('block states visibility testing ...', () => {
 		it('should not generate style for disable states', () => {
 			initialSetting();
@@ -241,6 +239,88 @@ describe('Block State E2E Test', () => {
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)}:hover`)
 					.should('not.have.css', 'width', '50px');
+			});
+		});
+	});
+
+	describe('block states value cleanup testing ...', () => {
+		it('should "blockeraBlockStates" attribute is clean for master block', () => {
+			initialSetting();
+
+			addBlockState('hover');
+
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			//Check store
+			getWPDataObject().then((data) => {
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet
+				);
+
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover.isOpen
+				);
+
+				expect({
+					normal: {
+						breakpoints: {
+							laptop: { attributes: {} },
+						},
+						isVisible: true,
+					},
+					hover: {
+						breakpoints: {
+							laptop: { attributes: { blockeraWidth: '100px' } },
+						},
+						isVisible: true,
+					},
+				}).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraBlockStates')
+				);
+			});
+
+			setInnerBlock('Link');
+
+			addBlockState('hover');
+
+			//Check store
+			getWPDataObject().then((data) => {
+				console.log(getSelectedBlock(data, 'blockeraBlockStates'));
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints.tablet
+				);
+
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.isOpen
+				);
+
+				expect({
+					normal: {
+						breakpoints: {
+							laptop: {
+								attributes: {},
+							},
+						},
+						isVisible: true,
+					},
+					hover: {
+						breakpoints: {
+							laptop: {
+								attributes: {},
+							},
+						},
+						isVisible: true,
+					},
+				}).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates
+				);
 			});
 		});
 	});
@@ -384,8 +464,8 @@ describe('Block State E2E Test', () => {
 		});
 	});
 
-	describe('Hover', () => {
-		it('should set attribute correctly when : Normal -> Hover (default breakPoint)', () => {
+	describe('hover state testing ...', () => {
+		it('should correctly set attribute and generate styles when state is: Hover (on laptop)', () => {
 			initialSetting();
 
 			addBlockState('hover');
@@ -398,12 +478,114 @@ describe('Block State E2E Test', () => {
 			]);
 
 			// Assert control value to testing useCalculateCurrentAttributes Hook.
-			cy.getByAriaLabel('Input Width').type(100, { force: true });
+			cy.getByAriaLabel('Input Width').type(150, { force: true });
 
 			// Reselect
 			reSelectBlock();
 
 			// Assert control value.
+			cy.getByAriaLabel('Input Width').should('have.value', '150');
+
+			// Assert block css.
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('have.css', 'width', '150px');
+
+				// Real hover.
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realHover();
+
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}:hover`)
+					.should('have.css', 'width', '150px');
+
+				// to stop hover.
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realMouseMove(50, 50);
+			});
+
+			// Change state to normal.
+			setBlockState('Normal');
+
+			// Assert control value to testing useCalculateCurrentAttributes Hook.
+			cy.getByAriaLabel('Input Width').should('not.have.value', '150');
+
+			// Assert block css.
+			getWPDataObject().then((data) => {
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.should('not.have.css', 'width', '150px');
+
+				// Real hover.
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}`)
+					.realHover();
+
+				cy.getIframeBody()
+					.find(`#block-${getBlockClientId(data)}:hover`)
+					.should('have.css', 'width', '150px');
+			});
+
+			// Assert store data.
+			getWPDataObject().then((data) => {
+				expect({
+					laptop: { attributes: { blockeraWidth: '150px' } },
+				}).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints
+				);
+			});
+
+			savePage();
+
+			redirectToFrontPage();
+
+			// FIXME: needs to fix responsive media queries config.
+			// Set Desktop viewport
+			cy.viewport(1025, 1200);
+			cy.get('.blockera-core-block').should(
+				'not.have.css',
+				'width',
+				'150px'
+			);
+			cy.get('.blockera-core-block').realHover();
+			cy.get('.blockera-core-block').should('have.css', 'width', '150px');
+
+			// //.get('.blockera-core-block').realHover();
+			// cy.get('.blockera-core-block').should(
+			// 	'have.css',
+			// 	'width',
+			// 	'100px'
+			// );
+
+			// FIXME: needs to fix responsive media queries config.
+			// Set Tablet viewport
+			// cy.viewport(768, 1024);
+
+			// cy.get('.blockera-core-block').realHover();
+			// cy.get('.blockera-core-block').should(
+			// 	'have.css',
+			// 	'width',
+			// 	'100px'
+			// );
+		});
+
+		it('should correctly set attribute and generate styles when state is: Hover (on tablet)', () => {
+			initialSetting();
+
+			addBlockState('hover');
+
+			setDeviceType('Tablet');
+
+			// Set Width.
+			cy.getByAriaLabel('Input Width').type(100, { force: true });
+
+			reSelectBlock();
+
+			// Assert control value to testing useCalculateCurrentAttributes Hook.
 			cy.getByAriaLabel('Input Width').should('have.value', '100');
 
 			// Assert block css.
@@ -427,35 +609,33 @@ describe('Block State E2E Test', () => {
 					.realMouseMove(50, 50);
 			});
 
-			// Change state to normal
-			setBlockState('Normal');
+			// Change device to laptop.
+			setDeviceType('Laptop');
 
-			// Assert control value to testing useCalculateCurrentAttributes Hook.
-			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
-
-			// Assert block css
+			// Assert block css.
 			getWPDataObject().then((data) => {
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)}`)
 					.should('not.have.css', 'width', '100px');
 
-				// Real hover
+				// Real hover.
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)}`)
 					.realHover();
 
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)}:hover`)
-					.should('have.css', 'width', '100px');
+					.should('not.have.css', 'width', '100px');
 			});
+
+			// Assert control value to testing useCalculateCurrentAttributes Hook.
+			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect({
-					laptop: { attributes: { blockeraWidth: '100px' } },
-				}).to.be.deep.equal(
+				expect({ blockeraWidth: '100px' }).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints
+						.breakpoints.tablet.attributes
 				);
 			});
 
@@ -463,233 +643,27 @@ describe('Block State E2E Test', () => {
 			savePage();
 
 			redirectToFrontPage();
-
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should('have.css', 'width', '100px');
 
 			// FIXME: needs to fix responsive media queries config.
 			// Set Desktop viewport
-			cy.viewport(1441, 1920);
-
-			// //.get('.blockera-core-block').realHover();
-			// cy.get('.blockera-core-block').should(
-			// 	'have.css',
-			// 	'width',
-			// 	'100px'
-			// );
+			cy.viewport(1025, 1200);
+			cy.get('.blockera-core-block').realHover();
+			cy.get('.blockera-core-block').should(
+				'not.have.css',
+				'width',
+				'100px'
+			);
 
 			// FIXME: needs to fix responsive media queries config.
 			// Set Tablet viewport
-			// cy.viewport(768, 1024);
-
-			// cy.get('.blockera-core-block').realHover();
-			// cy.get('.blockera-core-block').should(
-			// 	'have.css',
-			// 	'width',
-			// 	'100px'
-			// );
-		});
-
-		it('should set attribute correctly when : Normal -> Hover -> Tablet', () => {
-			initialSetting();
-			addBlockState('hover');
-			setDeviceType('Tablet');
-
-			// Set Width
-			cy.getByAriaLabel('Input Width').type(100, { force: true });
-
-			reSelectBlock();
-
-			// Assert control value
-			cy.getByAriaLabel('Input Width').should('have.value', '100');
-
-			// Assert block css
-			getWPDataObject().then((data) => {
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}`)
-					.should('have.css', 'width', '100px');
-
-				// Real hover
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}`)
-					.realHover();
-
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}:hover`)
-					.should('have.css', 'width', '100px');
-
-				// to stop hover
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}`)
-					.realMouseMove(50, 50);
-			});
-
-			// Change device to laptop
-			setDeviceType('Laptop');
-
-			// Assert block css
-			//TODO
-			// getWPDataObject().then((data) => {
-			// 	cy.getIframeBody()
-			// 		.find(`#block-${getBlockClientId(data)}`)
-			// 		.should('not.have.css', 'width', '100px');
-
-			// 	// Real hover
-			// 	cy.getIframeBody()
-			// 		.find(`#block-${getBlockClientId(data)}`)
-			// 		.realHover();
-
-			// 	cy.getIframeBody()
-			// 		.find(`#block-${getBlockClientId(data)}:hover`)
-			// 		.should('not.have.css', 'width', '100px');
-			// });
-
-			// Assert control value
-			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
-
-			// Assert store data
-			getWPDataObject().then((data) => {
-				expect({ blockeraWidth: '100px' }).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet.attributes
-				);
-			});
-
-			// frontend
-			savePage();
-
-			redirectToFrontPage();
-
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should(
-				'not.have.css',
-				'width',
-				'100px'
-			);
-
-			// Set desktop viewport
-			cy.viewport(1441, 1920);
-
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should(
-				'not.have.css',
-				'width',
-				'100px'
-			);
-
-			// set tablet viewport
 			cy.viewport(768, 1024);
 
 			cy.get('.blockera-core-block').realHover();
 			cy.get('.blockera-core-block').should('have.css', 'width', '100px');
 
-			//TODO
-			// // set mobile viewport
+			// FIXME: needs to fix responsive media queries config.
+			// Set Mobile viewport
 			// cy.viewport(320, 480);
-
-			// cy.get('.blockera-core-block').realHover();
-			// cy.get('.blockera-core-block').should(
-			// 	'have.css',
-			// 	'width',
-			// 	'100px'
-			// );
-		});
-
-		it('should set attribute correctly when : Normal -> Tablet -> Hover', () => {
-			initialSetting();
-			setDeviceType('Tablet');
-			addBlockState('hover');
-			// Set width
-			cy.getByAriaLabel('Input Width').type(100, { force: true });
-
-			reSelectBlock();
-
-			// Assert control value
-			cy.getByAriaLabel('Input Width').should('have.value', '100');
-
-			// Assert block css
-			getWPDataObject().then((data) => {
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}`)
-					.should('have.css', 'width', '100px');
-
-				// Real hover
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}`)
-					.realHover();
-
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}:hover`)
-					.should('have.css', 'width', '100px');
-
-				// to stop hover
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}`)
-					.realMouseMove(50, 50);
-			});
-
-			// Change device to laptop
-			setDeviceType('Laptop');
-
-			// Assert block css
-			//TODO
-			// getWPDataObject().then((data) => {
-			// 	cy.getIframeBody()
-			// 		.find(`#block-${getBlockClientId(data)}`)
-			// 		.should('not.have.css', 'width', '100px');
-
-			// 	// Real hover
-			// 	cy.getIframeBody()
-			// 		.find(`#block-${getBlockClientId(data)}`)
-			// 		.realHover();
-
-			// 	cy.getIframeBody()
-			// 		.find(`#block-${getBlockClientId(data)}:hover`)
-			// 		.should('not.have.css', 'width', '100px');
-			// });
-
-			// Assert control value
-			cy.getByAriaLabel('Input Width').should('not.have.value', '100');
-
-			// Assert store data
-			getWPDataObject().then((data) => {
-				expect({ blockeraWidth: '100px' }).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet.attributes
-				);
-			});
-
-			// frontend
-			savePage();
-
-			redirectToFrontPage();
-
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should(
-				'not.have.css',
-				'width',
-				'100px'
-			);
-			// Set desktop viewport
-			cy.viewport(1441, 1920);
-
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should(
-				'not.have.css',
-				'width',
-				'100px'
-			);
-
-			// set Tablet viewport
-			cy.viewport(768, 1024);
-
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should('have.css', 'width', '100px');
-
-			// TODO:
-			// // set mobile viewport
-			// cy.viewport(320, 480);
-
 			// cy.get('.blockera-core-block').realHover();
 			// cy.get('.blockera-core-block').should(
 			// 	'have.css',
@@ -699,6 +673,7 @@ describe('Block State E2E Test', () => {
 		});
 	});
 
+	// FIXME: remove skip flag to execute below tests for custom-class and parent-class states.
 	describe.skip('Custom Class & Parent Class', () => {
 		it('should set attribute correctly when : Normal -> Custom Class / Parent Class', () => {
 			initialSetting();
@@ -939,63 +914,22 @@ describe('Block State E2E Test', () => {
 		});
 	});
 
-	describe('ValueCleanup', () => {
-		it('should not have extra breakpoints and attributes in saved data', () => {
+	describe.only('multiple states testing ...', () => {
+		beforeEach(() => {
 			initialSetting();
-			addBlockState('hover');
-			cy.getByAriaLabel('Input Width').type(100, { force: true });
-
-			//Check store
-			getWPDataObject().then((data) => {
-				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet
-				);
-
-				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraHeight
-				);
-
-				expect({
-					normal: {
-						breakpoints: {
-							laptop: { attributes: {} },
-						},
-						isVisible: true,
-					},
-					hover: {
-						breakpoints: {
-							laptop: { attributes: { blockeraWidth: '100px' } },
-						},
-						isVisible: true,
-					},
-				}).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraBlockStates')
-				);
-			});
 		});
-	});
 
-	describe('update attributes in multiple states and devices', () => {
-		context('Normal -> set border-width', () => {
-			beforeEach(() => {
-				initialSetting();
+		it('can manipulate settings', () => {
+			cy.getByDataTest('border-control-width').type(5);
 
-				cy.getByDataTest('border-control-width').type(5);
+			reSelectBlock();
 
-				// Reselect
-				reSelectBlock();
+			// Assert control value
+			cy.getByDataTest('border-control-width').should('have.value', '5');
 
-				// Assert control value
-				cy.getByDataTest('border-control-width').should(
-					'have.value',
-					'5'
-				);
-			});
-
-			context('Hover -> set border-color', () => {
-				beforeEach(() => {
+			context(
+				'can manipulate settings on hover state with inherit other settings of normal state',
+				() => {
 					addBlockState('hover');
 
 					cy.getByDataTest('border-control-color').click();
@@ -1006,497 +940,455 @@ describe('Block State E2E Test', () => {
 							cy.get('input[maxlength="9"]').type('ccc');
 						});
 
-					// normal state updates should display
+					// inherit of normal.
 					cy.getByDataTest('border-control-width').should(
 						'have.value',
 						'5'
 					);
 
-					// Reselect
 					reSelectBlock();
 
-					// Assert control value
+					// inherit of normal.
+					cy.getByDataTest('border-control-width').should(
+						'have.value',
+						'5'
+					);
+
+					// hover settings data.
+					cy.getByDataTest('border-control-color').should(
+						'have.class',
+						'is-not-empty'
+					);
+
+					checkCurrentState('hover');
+				}
+			);
+
+			context(
+				'can manipulate settings on focus state with inherit other settings of normal state',
+				() => {
+					addBlockState('focus');
+
+					// Set border color.
+					cy.getByDataTest('border-control-component').within(() => {
+						cy.getByDataTest('border-control-color').next().click();
+
+						// dotted border style.
+						cy.get('ul').within(() =>
+							cy.get('li').eq(2).click({ force: true })
+						);
+					});
+
+					reSelectBlock();
+
+					cy.getByDataTest('border-control-component').within(() => {
+						cy.getByDataTest('border-control-color').next().click();
+
+						// dotted border style.
+						cy.get('ul').within(() =>
+							cy
+								.get('li')
+								.eq(2)
+								.should('have.attr', 'aria-selected', 'true')
+						);
+					});
+
+					checkCurrentState('focus');
+				}
+			);
+
+			context(
+				'can inherit data of normal on focus on laptop breakpoint',
+				() => {
 					cy.getByDataTest('border-control-width').should(
 						'have.value',
 						'5'
 					);
 					cy.getByDataTest('border-control-color').should(
 						'have.class',
-						'is-not-empty'
+						'is-empty'
 					);
-					checkCurrentState('hover');
-				});
 
-				context('Active -> set border-style', () => {
-					beforeEach(() => {
-						addBlockState('active');
+					reSelectBlock();
 
-						cy.getByDataTest('border-control-component').within(
-							() => {
-								cy.getByDataTest('border-control-color')
-									.next()
-									.click();
+					cy.getByDataTest('border-control-width').should(
+						'have.value',
+						'5'
+					);
+					cy.getByDataTest('border-control-color').should(
+						'have.class',
+						'is-empty'
+					);
+				}
+			);
 
-								// dotted
-								cy.get('ul').within(() =>
-									cy.get('li').eq(2).click({ force: true })
-								);
-							}
-						);
+			context(
+				'can inherit data of normal on focus on mobile breakpoint',
+				() => {
+					setDeviceType('Mobile');
 
-						// normal state updates should display
-						cy.getByDataTest('border-control-width').should(
-							'have.value',
-							'5'
-						);
+					cy.getByAriaLabel('Custom Box Border').click();
 
-						// hover state updates should not display
-						cy.getByDataTest('border-control-color').should(
-							'have.class',
-							'is-empty'
-						);
+					// top border.
+					cy.getByDataTest('border-control-width').eq(0).clear();
+					cy.getByDataTest('border-control-width').eq(0).type(3);
 
-						// Reselect
-						reSelectBlock();
+					// Reselect.
+					reSelectBlock();
 
-						// Assert control value
-						cy.getByDataTest('border-control-width').should(
-							'have.value',
-							'5'
-						);
-						cy.getByDataTest('border-control-color').should(
-							'have.class',
-							'is-empty'
-						);
-						cy.getByDataTest('border-control-component').within(
-							() => {
-								cy.getByDataTest('border-control-color')
-									.next()
-									.click();
+					// Assert control value.
+					cy.getByDataTest('border-control-width')
+						.eq(0)
+						.should('have.value', '3');
+					cy.getByDataTest('border-control-width')
+						.eq(1)
+						.should('have.value', '5');
+					cy.getByDataTest('border-control-color').should(
+						'have.class',
+						'is-empty'
+					);
+				}
+			);
 
-								// dotted
-								cy.get('ul').within(() =>
-									cy
-										.get('li')
-										.eq(2)
-										.should(
-											'have.attr',
-											'aria-selected',
-											'true'
-										)
-								);
-							}
-						);
-						checkCurrentState('active');
+			context(
+				'should correctly set attribute and generate styles for focus',
+				() => {
+					setDeviceType('Laptop');
+
+					getWPDataObject().then((data) => {
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.should(
+								'have.css',
+								'border-top',
+								'5px dotted rgb(17, 17, 17)'
+							);
+
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.focus();
+
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}:focus`)
+							.should(
+								'have.css',
+								'border-top',
+								'5px dotted rgb(17, 17, 17)'
+							);
+					});
+				}
+			);
+
+			context(
+				'should correctly set attribute and generate styles in all existed state',
+				() => {
+					setBlockState('Normal');
+
+					// Assert block css when state is "Normal" and breakpoint is "Laptop".
+					getWPDataObject().then((data) => {
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.should(
+								'have.css',
+								'border',
+								'5px solid rgb(17, 17, 17)'
+							);
+
+						// Hover
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.realHover();
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}:hover`)
+							.should(
+								'have.css',
+								'border',
+								'5px solid rgb(204, 204, 204)'
+							);
+
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.realMouseMove(50, 50);
+
+						// Focus
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.focus();
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}:focus`)
+							.should(
+								'have.css',
+								'border',
+								'5px dotted rgb(17, 17, 17)'
+							);
 					});
 
-					context(
-						'Active -> Mobile -> set custom border-width',
-						() => {
-							beforeEach(() => {
-								setDeviceType('Mobile');
-								cy.getByAriaLabel('Custom Box Border').click();
+					setBlockState('Focus');
 
-								// top border
-								cy.getByDataTest('border-control-width')
-									.eq(0)
-									.clear();
-								cy.getByDataTest('border-control-width')
-									.eq(0)
-									.type(3);
+					// Assert block css when state is "Focus" and breakpoint is "Laptop".
+					getWPDataObject().then((data) => {
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.should(
+								'have.css',
+								'border',
+								'5px dotted rgb(17, 17, 17)'
+							);
 
-								// Reselect
-								reSelectBlock();
-								// Assert control value
-								cy.getByDataTest('border-control-width')
-									.eq(0)
-									.should('have.value', '3');
-								cy.getByDataTest('border-control-width')
-									.eq(1)
-									.should('have.value', '5');
-								cy.getByDataTest('border-control-color').should(
-									'have.class',
-									'is-empty'
-								);
-								checkCurrentState('active');
-							});
+						// Hover
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.realHover();
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}:hover`)
+							.should(
+								'have.css',
+								'border',
+								'5px solid rgb(204, 204, 204)'
+							);
 
-							it('should control value and attributes be correct, when navigate between states and devices', () => {
-								// Active / Mobile
-								// Assert block css
-								//TODO
-								//getWPDataObject().then((data) => {
-								// cy.getIframeBody()
-								// 	.find(
-								// 		`#block-${getBlockClientId(data)}`
-								// 	)
-								// 	.should(
-								// 		'have.css',
-								// 		'border-top',
-								// 		'3px solid rgb(0, 0, 0)'
-								// 	);
-								// // Active
-								// cy.getIframeBody()
-								// 	.find(
-								// 		`#block-${getBlockClientId(data)}`
-								// 	)
-								// 	.realMouseDown();
-								// cy.getIframeBody()
-								// 	.find(
-								// 		`#block-${getBlockClientId(
-								// 			data
-								// 		)}:active`
-								// 	)
-								// 	.should(
-								// 		'have.css',
-								// 		'border-top',
-								// 		'3px solid rgb(0, 0, 0)'
-								// 	)
-								// 	.realMouseUp();
-								//});
+						// Focus
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.focus();
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}:focus`)
+							.should(
+								'have.css',
+								'border',
+								'5px dotted rgb(17, 17, 17)'
+							);
+					});
 
-								// Normal / Laptop
-								// Assert block css
-								setDeviceType('Laptop');
-								setBlockState('Normal');
-								getWPDataObject().then((data) => {
-									cy.getIframeBody()
-										.find(
-											`#block-${getBlockClientId(data)}`
-										)
-										.should(
-											'have.css',
-											'border',
-											'5px solid rgb(0, 0, 0)'
-										);
+					setBlockState('Hover');
 
-									// Hover
-									cy.getIframeBody()
-										.find(
-											`#block-${getBlockClientId(data)}`
-										)
-										.realHover();
-									cy.getIframeBody()
-										.find(
-											`#block-${getBlockClientId(
-												data
-											)}:hover`
-										)
-										.should(
-											'have.css',
-											'border',
-											'5px solid rgb(204, 204, 204)'
-										);
+					// Assert block css when state is "Hover" and breakpoint is "Laptop".
+					getWPDataObject().then((data) => {
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.should(
+								'have.css',
+								'border',
+								'5px solid rgb(204, 204, 204)'
+							);
 
-									cy.getIframeBody()
-										.find(
-											`#block-${getBlockClientId(data)}`
-										)
-										.realMouseMove(50, 50);
+						// Real hover
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.realHover();
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}:hover`)
+							.should(
+								'have.css',
+								'border',
+								'5px solid rgb(204, 204, 204)'
+							)
+							.realMouseUp();
 
-									// Active
-									//TODO: active style does not have important / and how to active element?
-									// cy.getIframeBody()
-									// 	.find(
-									// 		`#block-${getBlockClientId(data)}`
-									// 	)
-									// 	.realMouseDown();
-									// cy.getIframeBody()
-									// 	.find(
-									// 		`#block-${getBlockClientId(
-									// 			data
-									// 		)}:active`
-									// 	)
-									// 	.should(
-									// 		'have.css',
-									// 		'border',
-									// 		'5px dotted rgb(0, 0, 0)'
-									// 	)
-									// 	.realMouseUp();
-								});
+						// Focus
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.focus();
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}:focus`)
+							.should(
+								'have.css',
+								'border',
+								'5px dotted rgb(17, 17, 17)'
+							);
+					});
 
-								// Assert control
-								cy.getByDataTest('border-control-width').should(
-									'have.value',
-									'5'
-								);
+					setBlockState('Focus');
 
-								// Active / Laptop
-								setBlockState('Active');
-								// Assert block css
-								//TODO:
-								// getWPDataObject().then((data) => {
-								// 	cy.getIframeBody()
-								// 		.find(
-								// 			`#block-${getBlockClientId(data)}`
-								// 		)
-								// 		.should(
-								// 			'have.css',
-								// 			'border',
-								// 			'5px dotted rgb(0, 0, 0)'
-								// 		);
+					setDeviceType('Mobile');
 
-								// 	// Active
-								// 	cy.getIframeBody()
-								// 		.find(
-								// 			`#block-${getBlockClientId(data)}`
-								// 		)
-								// 		.realMouseDown();
-								// 	cy.getIframeBody()
-								// 		.find(
-								// 			`#block-${getBlockClientId(
-								// 				data
-								// 			)}:active`
-								// 		)
-								// 		.should(
-								// 			'have.css',
-								// 			'border',
-								// 			'5px dotted rgb(0, 0, 0)'
-								// 		)
-								// 		.realMouseUp();
-								// });
+					// Assert block css when state is "Focus" and breakpoint is "Laptop".
+					getWPDataObject().then((data) => {
+						// Focus
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}`)
+							.focus();
+						cy.getIframeBody()
+							.find(`#block-${getBlockClientId(data)}:focus`)
+							.should(
+								'have.css',
+								'border',
+								'3px 5px 5px 5px dotted rgb(17, 17, 17)'
+							);
+					});
 
-								// Assert control
-								cy.getByDataTest(
-									'border-control-component'
-								).within(() => {
-									cy.getByDataTest('border-control-color')
-										.next()
-										.click();
+					// Asset store data
+					getWPDataObject().then((data) => {
+						expect({
+							type: 'all',
+							all: {
+								width: '5px',
+								style: 'solid',
+								color: '',
+							},
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'blockeraBorder')
+						);
 
-									// dotted
-									cy.get('ul').within(() =>
-										cy
-											.get('li')
-											.eq(2)
-											.should(
-												'have.attr',
-												'aria-selected',
-												'true'
-											)
-									);
-								});
-
-								// Hover / Laptop
-								setBlockState('Hover');
-								// Assert block css
-								getWPDataObject().then((data) => {
-									cy.getIframeBody()
-										.find(
-											`#block-${getBlockClientId(data)}`
-										)
-										.should(
-											'have.css',
-											'border',
-											'5px solid rgb(204, 204, 204)'
-										);
-
-									// Real hover
-									cy.getIframeBody()
-										.find(
-											`#block-${getBlockClientId(data)}`
-										)
-										.realHover();
-									cy.getIframeBody()
-										.find(
-											`#block-${getBlockClientId(
-												data
-											)}:hover`
-										)
-										.should(
-											'have.css',
-											'border',
-											'5px solid rgb(204, 204, 204)'
-										)
-										.realMouseUp();
-								});
-
-								// Assert control
-								cy.getByDataTest('border-control-color').should(
-									'have.class',
-									'is-not-empty'
-								);
-
-								// Asset store data
-								getWPDataObject().then((data) => {
-									expect({
-										type: 'all',
-										all: {
-											width: '5px',
-											style: 'solid',
-											color: '',
-										},
-									}).to.be.deep.equal(
-										getSelectedBlock(data, 'blockeraBorder')
-									);
-
-									expect({
-										normal: {
-											breakpoints: {
-												laptop: { attributes: {} },
-											},
-											isVisible: true,
-										},
-										hover: {
-											breakpoints: {
-												laptop: {
-													attributes: {
-														blockeraBorder: {
-															type: 'all',
-															all: {
-																width: '5px',
-																style: 'solid',
-																color: '#cccccc',
-															},
-														},
-													},
+						expect({
+							normal: {
+								breakpoints: {
+									laptop: { attributes: {} },
+								},
+								isVisible: true,
+							},
+							hover: {
+								breakpoints: {
+									laptop: {
+										attributes: {
+											blockeraBorder: {
+												type: 'all',
+												all: {
+													width: '5px',
+													style: 'solid',
+													color: '#cccccc',
 												},
 											},
-											isVisible: true,
 										},
-										active: {
-											breakpoints: {
-												laptop: {
-													attributes: {
-														blockeraBorder: {
-															type: 'all',
-															all: {
-																width: '5px',
-																style: 'dotted',
-																color: '',
-															},
-														},
-													},
-												},
-												mobile: {
-													attributes: {
-														blockeraBorder: {
-															type: 'custom',
-															all: {
-																width: '5px',
-																style: 'solid',
-																color: '',
-															},
-															right: {
-																width: '5px',
-																style: 'solid',
-																color: '',
-															},
-															bottom: {
-																width: '5px',
-																style: 'solid',
-																color: '',
-															},
-															left: {
-																width: '5px',
-																style: 'solid',
-																color: '',
-															},
-															top: {
-																width: '3px',
-																style: '',
-																color: '',
-															},
-														},
-													},
+									},
+								},
+								isVisible: true,
+							},
+							focus: {
+								breakpoints: {
+									laptop: {
+										attributes: {
+											blockeraBorder: {
+												type: 'all',
+												all: {
+													width: '5px',
+													style: 'dotted',
+													color: '',
 												},
 											},
-											isVisible: true,
 										},
-									}).to.be.deep.equal(
-										getSelectedBlock(
-											data,
-											'blockeraBlockStates'
-										)
-									);
-								});
+									},
+									mobile: {
+										attributes: {
+											blockeraBorder: {
+												type: 'custom',
+												all: {
+													width: '5px',
+													style: 'solid',
+													color: '',
+												},
+												right: {
+													width: '5px',
+													style: 'solid',
+													color: '',
+												},
+												bottom: {
+													width: '5px',
+													style: 'solid',
+													color: '',
+												},
+												left: {
+													width: '5px',
+													style: 'solid',
+													color: '',
+												},
+												top: {
+													width: '3px',
+													style: '',
+													color: '',
+												},
+											},
+										},
+									},
+								},
+								isVisible: true,
+							},
+						}).to.be.deep.equal(
+							getSelectedBlock(data, 'blockeraBlockStates')
+						);
+					});
 
-								// frontend
-								savePage();
+					// frontend
+					savePage();
 
-								redirectToFrontPage();
+					redirectToFrontPage();
 
-								// Assert in default viewport
-								cy.viewport(1025, 1440);
-								cy.get('.blockera-core-block').should(
-									'have.css',
-									'border',
-									'5px solid rgb(0, 0, 0)'
-								);
-
-								// Hover
-								cy.get('.blockera-core-block').realHover();
-								cy.get('.blockera-core-block')
-									.should(
-										'have.css',
-										'border',
-										'5px solid rgb(204, 204, 204)'
-									)
-									.realMouseUp();
-
-								//TODO:
-								// // Active
-								// cy.get('.blockera-core-block').realMouseDown();
-								// cy.get('.blockera-core-block')
-								// 	.should(
-								// 		'have.css',
-								// 		'border',
-								// 		'5px dotted rgb(0, 0, 0)'
-								// 	)
-								// 	.realMouseUp();
-
-								// Set desktop viewport
-								cy.viewport(1441, 1920);
-
-								cy.get('.blockera-core-block').should(
-									'have.css',
-									'border',
-									'5px solid rgb(0, 0, 0)'
-								);
-
-								// Hover
-								// TODO:
-								//cy.get('.blockera-core-block').realHover();
-								// cy.get('.blockera-core-block')
-								// 	.should(
-								// 		'have.css',
-								// 		'border',
-								// 		'5px solid rgb(204, 204, 204)'
-								// 	)
-								// 	.realMouseUp();
-
-								// Active
-								// TODO:
-								// cy.get('.blockera-core-block').realMouseDown();
-								// cy.get('.blockera-core-block')
-								// 	.should(
-								// 		'have.css',
-								// 		'border',
-								// 		'5px dotted rgb(0, 0, 0)'
-								// 	)
-								// 	.realMouseUp();
-
-								// set mobile viewport
-								cy.viewport(320, 480);
-								//TODO:
-								// Active
-								// cy.get('.blockera-core-block').realMouseDown();
-								// cy.get('.blockera-core-block')
-								// 	.should(
-								// 		'have.css',
-								// 		'border-top',
-								// 		'3px solid rgb(0, 0, 0)'
-								// 	)
-								// 	.and(
-								// 		'have.css',
-								// 		'border-right',
-								// 		'5px solid rgb(0, 0, 0)'
-								// 	);
-							});
-						}
+					// FIXME: needs to fix responsive media queries config.
+					// Set Desktop viewport
+					cy.viewport(1025, 1200);
+					cy.get('.blockera-core-block').should(
+						'have.css',
+						'border',
+						'5px solid rgb(17, 17, 17)'
 					);
-				});
-			});
+
+					// Hover
+					cy.get('.blockera-core-block').realHover();
+					cy.get('.blockera-core-block')
+						.should(
+							'have.css',
+							'border',
+							'5px solid rgb(204, 204, 204)'
+						)
+						.realMouseUp();
+
+					// Focus
+					cy.get('.blockera-core-block').focus();
+					cy.get('.blockera-core-block').should(
+						'have.css',
+						'border',
+						'5px dotted rgb(17, 17, 17)'
+					);
+
+					// Set desktop viewport
+					cy.viewport(1441, 1920);
+
+					cy.get('.blockera-core-block').should(
+						'have.css',
+						'border',
+						'5px solid rgb(17, 17, 17)'
+					);
+
+					// Hover
+					// TODO:
+					//cy.get('.blockera-core-block').realHover();
+					// cy.get('.blockera-core-block')
+					// 	.should(
+					// 		'have.css',
+					// 		'border',
+					// 		'5px solid rgb(204, 204, 204)'
+					// 	)
+					// 	.realMouseUp();
+
+					// Active
+					// TODO:
+					// cy.get('.blockera-core-block').realMouseDown();
+					// cy.get('.blockera-core-block')
+					// 	.should(
+					// 		'have.css',
+					// 		'border',
+					// 		'5px dotted rgb(17, 17, 17)'
+					// 	)
+					// 	.realMouseUp();
+
+					// set mobile viewport
+					cy.viewport(320, 480);
+					//TODO:
+					// Active
+					// cy.get('.blockera-core-block').realMouseDown();
+					// cy.get('.blockera-core-block')
+					// 	.should(
+					// 		'have.css',
+					// 		'border-top',
+					// 		'3px solid rgb(17, 17, 17)'
+					// 	)
+					// 	.and(
+					// 		'have.css',
+					// 		'border-right',
+					// 		'5px solid rgb(17, 17, 17)'
+					// 	);
+				}
+			);
 		});
 	});
 
