@@ -24,13 +24,13 @@ import { isNormalState } from '@blockera/extensions/src/components';
 export const getCssSelector = ({
 	state,
 	query,
-	device,
 	support,
 	clientId,
 	currentBlock,
 	blockSelectors,
 	className = '',
 	suffixClass = '',
+	device = 'laptop',
 	fallbackSupportId,
 }: NormalizedSelectorProps): string => {
 	const rootSelector =
