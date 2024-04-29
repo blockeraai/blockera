@@ -58,5 +58,8 @@ export function BoxBorderGenerator(id, props) {
 
 	return createCssDeclarations({
 		properties,
+		options: {
+			important: true,
+		},
 	});
 }
