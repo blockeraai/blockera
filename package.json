@@ -194,8 +194,6 @@
 		"stylelint": "^14.2"
 	},
 	"scripts": {
-		"build:wp-env-app": "wp-scripts build --progress --mode none",
-		"start:wp-env-app": "wp-scripts start --progress --mode none",
 		"build": "wp-scripts build --progress --mode production",
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js",

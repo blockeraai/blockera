@@ -45,13 +45,7 @@ class AssetsProvider extends ServiceProvider {
 	 */
 	public function boot(): void {
 
-		$this->handler = $this->app->make( AssetsLoader::class );
-
-		// Handle loading assets in wp-env to use in CI.
-		if ( defined( 'BLOCKERA_ENV' ) && 'wp-env' === BLOCKERA_ENV ) {
-
-			$this->handler->enqueue();
-		}
+		$this->app->make( AssetsLoader::class );
 	}
 
 	/**

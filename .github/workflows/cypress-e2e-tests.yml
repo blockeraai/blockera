@@ -37,9 +37,7 @@ jobs:
               run: npm run env:start
 
             - name: Build wp-env app
-              run: |
-                  npm run build
-                  npm run build:wp-env-app
+              run: npm run build
 
             - name: Run Cypress E2E Tests
               run: npm run test:e2e

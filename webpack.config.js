@@ -16,12 +16,5 @@ module.exports = (on, config) => {
 		));
 	}
 
-	if ('none' === config?.mode) {
-		return require(path.resolve(
-			process.cwd(),
-			'tools/wp-env-app/webpack.config.js'
-		))(on, config);
-	}
-
 	return packagesConfig({}, { mode: config?.mode || 'production' });
 };
