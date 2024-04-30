@@ -22,6 +22,7 @@ class AssetsLoader {
 		'blocks',
 		'editor',
 		'controls',
+		'bootstrap',
 		'core-data',
 		'components',
 		'classnames',
@@ -40,6 +41,9 @@ class AssetsLoader {
 		'extensions' => [
 			'@blockera/controls',
 			'@blockera/components',
+		],
+		'bootstrap'  => [
+			'@blockera/extensions',
 		],
 	];
 
@@ -63,21 +67,10 @@ class AssetsLoader {
 
 		$this->application = $app;
 
+		add_action( 'wp_enqueue_scripts', array( $this, 'registerAssets' ), 10 );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'registerAssets' ), 10 );
+
 		add_action( 'enqueue_block_assets', [ $this, 'enqueue_editor_assets' ] );
-
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ), 10 );
-		add_action( 'enqueue_block_editor_assets', array( $this, 'register_assets' ), 10 );
-	}
-
-	/**
-	 * Enqueueing assets.
-	 *
-	 * @return void
-	 */
-	public function enqueue() {
-
-		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_inspector_assets' ], 9e2 );
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_editor_inspector_assets' ], 9e2 );
 	}
 
 	/**
@@ -94,41 +87,24 @@ class AssetsLoader {
 
 		$asset = $this->assetInfo( 'editor-styles' );
 
-		if ( empty( $asset['style'] ) ) {
+		if ( ! empty( $asset['style'] ) ) {
 
-			return;
+			wp_enqueue_style(
+				'@blockera/editor-styles',
+				$asset['style'],
+				[],
+				$asset['version'],
+			);
 		}
 
-		wp_enqueue_style(
-			'@blockera/editor-styles',
-			$asset['style'],
-			[],
-			$asset['version'],
-		);
-	}
-
-	/**
-	 * Enqueueing block editor or site editor assets.
-	 *
-	 * @hook `enqueue_block_editor_assets`
-	 *
-	 * @return void
-	 */
-	public function enqueue_editor_inspector_assets(): void {
-
-		if ( ! is_admin() ) {
-
-			return;
-		}
-
-		foreach ( $this->prepare_assets() as $asset ) {
+		foreach ( $this->prepareAssets() as $asset ) {
 
 			if ( $asset['style'] ) {
 
 				wp_enqueue_style(
 					'@blockera/' . $asset['name'],
 					str_replace( '\\', '/', $asset['style'] ),
-					self::$packages_deps[ $asset['name'] ] ?? [],
+					[],
 					$asset['version']
 				);
 			}
@@ -138,12 +114,15 @@ class AssetsLoader {
 				continue;
 			}
 
-			$deps = $this->exclude_dependencies( $asset['deps'] );
+			$deps = $this->excludeDependencies( $asset['deps'] );
 
 			wp_enqueue_script(
 				'@blockera/' . $asset['name'],
 				str_replace( '\\', '/', $asset['script'] ),
-				$deps,
+				array_merge(
+					$deps,
+					self::$packages_deps[ $asset['name'] ] ?? []
+				),
 				$asset['version'],
 				true
 			);
@@ -155,7 +134,7 @@ class AssetsLoader {
 	 *
 	 * @return array
 	 */
-	protected function prepare_assets(): array {
+	protected function prepareAssets(): array {
 
 		$provider = $this;
 
@@ -183,7 +162,7 @@ class AssetsLoader {
 	 *
 	 * @return void
 	 */
-	public function register_assets() {
+	public function registerAssets() {
 
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
@@ -219,7 +198,7 @@ class AssetsLoader {
 		}
 
 		// Registering assets ...
-		foreach ( $this->prepare_assets() as $asset ) {
+		foreach ( $this->prepareAssets() as $asset ) {
 
 			if ( $asset['style'] ) {
 
@@ -236,7 +215,7 @@ class AssetsLoader {
 				continue;
 			}
 
-			$deps = $this->exclude_dependencies( $asset['deps'] );
+			$deps = $this->excludeDependencies( $asset['deps'] );
 
 			wp_register_script(
 				'@blockera/' . $asset['name'],
@@ -275,7 +254,7 @@ class AssetsLoader {
 	 * @since 1.0.0
 	 * @return array the list of filtered dependencies
 	 */
-	private function exclude_dependencies( array $dependencies ): array {
+	private function excludeDependencies( array $dependencies ): array {
 
 		$excludes = array( '@blockera/storybook' );
 
