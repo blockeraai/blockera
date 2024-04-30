@@ -79,20 +79,21 @@ class Parser {
 		$selector     = $render->getSelector( $block );
 		$blockElement = $dom->findOne( $selector );
 
-		//add unique classname into block element
+		// add unique classname into block element
 		$blockElement->classList->add( $uniqueClassname );
 
-		//Block Instances
+		// Block Instances
 		{
 			$iconCustomizer = $this->app->make( Icon::class );
 		}
 
 		/**
 		 * TODO: Create Chain of HTML Customizers 💡
+		 *
 		 * @var Icon $iconCustomizer
 		 */
 
-		//Usage
+		// Usage
 		{
 			$iconCustomizer->manipulate( compact( 'block', 'blockElement' ) );
 		}

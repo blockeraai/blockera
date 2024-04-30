@@ -216,16 +216,13 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Typography', 'blockera-core')}
+				title={__('Typography', 'blockera')}
 				initialOpen={true}
 				icon={<TypographyExtensionIcon />}
 				className={extensionClassNames('typography')}
 			>
 				<ExtensionSettings
-					buttonLabel={__(
-						'More Typography Settings',
-						'blockera-core'
-					)}
+					buttonLabel={__('More Typography Settings', 'blockera')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'typographyConfig');
@@ -235,7 +232,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				{isShowFontSize && isShowLineHeight ? (
 					<BaseControl
 						columns="columns-2"
-						label={__('Size', 'blockera-core')}
+						label={__('Size', 'blockera')}
 					>
 						<Flex alignItems="flex-start">
 							<FeatureWrapper
@@ -323,13 +320,13 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					>
 						<BaseControl columns="columns-1">
 							<ColorControl
-								label={__('Text Color', 'blockera-core')}
+								label={__('Text Color', 'blockera')}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It sets the color of the text within the block, playing a crucial role in enhancing readability, attracting attention, and maintaining consistent branding.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -358,7 +355,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								<NoticeControl type="information">
 									{__(
 										`Text clipping was applied; the current text color won't display. You have to disable clipping settings to use Text Color.`,
-										'blockera-core'
+										'blockera'
 									)}
 								</NoticeControl>
 							)}
@@ -384,7 +381,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							columns="columns-1"
 						>
 							<TextShadowControl
-								label={__('Text Shadows', 'blockera-core')}
+								label={__('Text Shadows', 'blockera')}
 								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
 										'blockeraTextShadow',
@@ -403,10 +400,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 
 				{isShowAdvanced && (
 					<MoreFeatures
-						ariaLabel={__(
-							'More typography settings',
-							'blockera-core'
-						)}
+						ariaLabel={__('More typography settings', 'blockera')}
 						isOpen={false}
 						isChanged={isAdvancedEdited}
 					>
@@ -437,16 +431,13 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										<ToggleSelectControl
 											columns="columns-1"
 											className="control-first label-center small-gap"
-											label={__(
-												'Text Align',
-												'blockera-core'
-											)}
+											label={__('Text Align', 'blockera')}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'It sets the horizontal alignment of text within the block, offering alignment options like left, right, center, and justify.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
@@ -455,7 +446,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'Left',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'left',
 													icon: <TextAlignLeftIcon />,
@@ -463,7 +454,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'Center',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'center',
 													icon: (
@@ -473,7 +464,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'Right',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'right',
 													icon: (
@@ -483,7 +474,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'Justify',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'justify',
 													icon: (
@@ -493,7 +484,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												{
 													label: __(
 														'None',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'initial',
 													icon: <NoneIcon />,
@@ -620,44 +611,44 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													<ToggleSelectControl
 														label={__(
 															'Direction',
-															'blockera-core'
+															'blockera'
 														)}
 														labelPopoverTitle={__(
 															'Text Direction',
-															'blockera-core'
+															'blockera'
 														)}
 														labelDescription={
 															<>
 																<p>
 																	{__(
 																		'It sets the text direction and layout directionality of block.',
-																		'blockera-core'
+																		'blockera'
 																	)}
 																</p>
 																<h3>
 																	<DirectionLtrIcon />
 																	{__(
 																		'LTR',
-																		'blockera-core'
+																		'blockera'
 																	)}
 																</h3>
 																<p>
 																	{__(
 																		'Sets the direction of text from left to right, used for languages written in this manner.',
-																		'blockera-core'
+																		'blockera'
 																	)}
 																</p>
 																<h3>
 																	<DirectionRtlIcon />
 																	{__(
 																		'RTL',
-																		'blockera-core'
+																		'blockera'
 																	)}
 																</h3>
 																<p>
 																	{__(
 																		' Sets the direction from right to left, essential for languages such as Arabic, Farsi and Hebrew.',
-																		'blockera-core'
+																		'blockera'
 																	)}
 																</p>
 															</>
@@ -668,7 +659,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 															{
 																label: __(
 																	'Left to Right',
-																	'blockera-core'
+																	'blockera'
 																),
 																value: 'ltr',
 																icon: (
@@ -678,7 +669,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 															{
 																label: __(
 																	'Right to Left',
-																	'blockera-core'
+																	'blockera'
 																),
 																value: 'rtl',
 																icon: (
@@ -717,7 +708,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							isShowTextIndent) && (
 							<BaseControl
 								controlName="spacing"
-								label={__('Spacing', 'blockera-core')}
+								label={__('Spacing', 'blockera')}
 								columns="columns-2"
 							>
 								<FeatureWrapper
@@ -755,17 +746,17 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									>
 										<InputControl
 											columns="2fr 2.6fr"
-											label={__('Words', 'blockera-core')}
+											label={__('Words', 'blockera')}
 											labelPopoverTitle={__(
 												'Words Spacing',
-												'blockera-core'
+												'blockera'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'It sets the space between words in text content, an essential tool for enhancing readability and typographic aesthetics, particularly in text-heavy layouts.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
@@ -807,14 +798,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											columns="2fr 2.6fr"
 											label={__(
 												'Text Indent',
-												'blockera-core'
+												'blockera'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'It sets the indentation of the first line in a text block, offering a stylistic tool for enhancing text layout and readability, especially in paragraphs and articles.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
@@ -855,13 +846,13 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								}}
 							>
 								<ToggleSelectControl
-									label={__('Orientation', 'blockera-core')}
+									label={__('Orientation', 'blockera')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'It sets the orientation of characters in vertical text layouts, pivotal for typesetting in languages that use vertical writing modes.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<Grid
@@ -878,7 +869,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'Text will display vertically from left to right with a mixed orientation.',
-														'blockera-core'
+														'blockera'
 													)}
 												</p>
 											</Grid>
@@ -897,7 +888,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'Text will display vertically from right to left with a mixed orientation.',
-														'blockera-core'
+														'blockera'
 													)}
 												</p>
 											</Grid>
@@ -916,7 +907,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'Text will appear vertically from left to right with an upright orientation.',
-														'blockera-core'
+														'blockera'
 													)}
 												</p>
 											</Grid>
@@ -935,7 +926,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'Text will appear vertically from right to left with an upright orientation.',
-														'blockera-core'
+														'blockera'
 													)}
 												</p>
 											</Grid>
@@ -954,7 +945,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												<p>
 													{__(
 														'No text orientation',
-														'blockera-core'
+														'blockera'
 													)}
 												</p>
 											</Grid>
@@ -965,7 +956,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Text will display vertically from left to right with a mixed orientation',
-												'blockera-core'
+												'blockera'
 											),
 											value: 'style-1',
 											icon: <TextOrientationStyle1Icon />,
@@ -973,7 +964,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Text will display vertically from right to left with a mixed orientation',
-												'blockera-core'
+												'blockera'
 											),
 											value: 'style-2',
 											icon: <TextOrientationStyle2Icon />,
@@ -981,7 +972,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Text will appear vertically from left to right with an upright orientation',
-												'blockera-core'
+												'blockera'
 											),
 											value: 'style-3',
 											icon: <TextOrientationStyle3Icon />,
@@ -989,7 +980,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Text will appear vertically from right to left with an upright orientation',
-												'blockera-core'
+												'blockera'
 											),
 											value: 'style-4',
 											icon: <TextOrientationStyle4Icon />,
@@ -997,7 +988,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'No text orientation',
-												'blockera-core'
+												'blockera'
 											),
 											value: 'initial',
 											icon: <NoneIcon />,
@@ -1095,82 +1086,79 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								}}
 							>
 								<SelectControl
-									label={__('Breaking', 'blockera-core')}
+									label={__('Breaking', 'blockera')}
 									labelPopoverTitle={__(
 										'Word Breaking',
-										'blockera-core'
+										'blockera'
 									)}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Word-Break controls how words are broken at the end of a line for influencing text wrapping and layout within containers.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<p>
 												{__(
 													'It is essential for managing text flow, especially in narrow containers or with long words/URLs, ensuring readability and a clean layout in multilingual contexts.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<h3>
 												<BreakingNormalIcon />
-												{__('Normal', 'blockera-core')}
+												{__('Normal', 'blockera')}
 											</h3>
 											<p>
 												{__(
 													'Follows default line-breaking rules.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<h3>
 												<BreakingBreakAllIcon />
 												{__(
 													'Break All Words',
-													'blockera-core'
+													'blockera'
 												)}
 											</h3>
 											<p>
 												{__(
 													'Allows words to be broken at any character, useful in narrow containers.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<h3>
 												<BreakingNormalIcon />
 												{__(
 													'Keep All Words',
-													'blockera-core'
+													'blockera'
 												)}
 											</h3>
 											<p>
 												{__(
 													'Avoids breaking words, particularly for East Asian scripts.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<h3>
 												<BreakingBreakAllIcon />
-												{__(
-													'Break Word',
-													'blockera-core'
-												)}
+												{__('Break Word', 'blockera')}
 											</h3>
 											<p>
 												{__(
 													'Breaks words at appropriate break points, maintaining layout integrity by preventing overflow.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<h3>
 												<InheritIcon />
-												{__('Inherit', 'blockera-core')}
+												{__('Inherit', 'blockera')}
 											</h3>
 											<p>
 												{__(
 													'Follows containers line-breaking rules.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 										</>
@@ -1178,17 +1166,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									columns="columns-2"
 									options={[
 										{
-											label: __(
-												'Normal',
-												'blockera-core'
-											),
+											label: __('Normal', 'blockera'),
 											value: 'normal',
 											icon: <BreakingNormalIcon />,
 										},
 										{
 											label: __(
 												'Break All Words',
-												'blockera-core'
+												'blockera'
 											),
 											value: 'break-all',
 											icon: <BreakingBreakAllIcon />,
@@ -1196,24 +1181,18 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __(
 												'Keep All Words',
-												'blockera-core'
+												'blockera'
 											),
 											value: 'keep-all',
 											icon: <BreakingNormalIcon />,
 										},
 										{
-											label: __(
-												'Break Word',
-												'blockera-core'
-											),
+											label: __('Break Word', 'blockera'),
 											value: 'break-word',
 											icon: <BreakingBreakAllIcon />,
 										},
 										{
-											label: __(
-												'Inherit',
-												'blockera-core'
-											),
+											label: __('Inherit', 'blockera'),
 											value: 'inherit',
 											icon: <InheritIcon />,
 										},

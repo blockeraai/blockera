@@ -320,15 +320,15 @@ const StatesManager: ComponentType<any> = memo(
 							repeaterItemChildren: ItemBody,
 						}}
 						defaultValue={states}
-						addNewButtonLabel={__('Add New State', 'blockera-core')}
+						addNewButtonLabel={__('Add New State', 'blockera')}
 						label={
 							'undefined' !== typeof currentBlock &&
 							isInnerBlock(currentBlock)
-								? __('Inner Block States', 'blockera-core')
-								: __('Block States', 'blockera-core')
+								? __('Inner Block States', 'blockera')
+								: __('Block States', 'blockera')
 						}
 						labelDescription={<LabelDescription />}
-						popoverTitle={__('Block State', 'blockera-core')}
+						popoverTitle={__('Block State', 'blockera')}
 						className={controlInnerClassNames(
 							'block-states-repeater'
 						)}

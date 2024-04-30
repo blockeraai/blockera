@@ -68,19 +68,19 @@ export const Border = ({
 		>
 			<BoxBorderControl
 				columns="columns-1"
-				label={__('Border Line', 'blockera-core')}
+				label={__('Border Line', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'Define clear boundaries for blocks with customizable lines, enhancing structure and design.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								'Solid borders offer a classic, defined look, while dotted or dashed styles can create a more playful visual effect.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>

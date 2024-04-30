@@ -14,7 +14,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 	function (): Array<DynamicValueItem> {
 		return [
 			{
-				name: __('Site Title', 'blockera-core'),
+				name: __('Site Title', 'blockera'),
 				id: 'site-title',
 				type: 'text',
 				status: 'core',
@@ -24,7 +24,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Site Tagline', 'blockera-core'),
+				name: __('Site Tagline', 'blockera'),
 				id: 'site-desc',
 				type: 'text',
 				status: 'core',
@@ -34,7 +34,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Home URL', 'blockera-core'),
+				name: __('Home URL', 'blockera'),
 				id: 'home-url',
 				type: 'link',
 				status: 'core',
@@ -44,7 +44,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Site URL', 'blockera-core'),
+				name: __('Site URL', 'blockera'),
 				id: 'site-url',
 				type: 'link',
 				status: 'core',
@@ -54,7 +54,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Site Logo URL', 'blockera-core'),
+				name: __('Site Logo URL', 'blockera'),
 				id: 'site-logo',
 				type: 'image',
 				status: 'soon',
@@ -64,7 +64,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Admin Email', 'blockera-core'),
+				name: __('Admin Email', 'blockera'),
 				id: 'site-admin-email',
 				type: 'email',
 				status: 'soon',
@@ -74,7 +74,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('RSS URL', 'blockera-core'),
+				name: __('RSS URL', 'blockera'),
 				id: 'site-rss',
 				type: 'link',
 				status: 'soon',
@@ -84,7 +84,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Login URL', 'blockera-core'),
+				name: __('Login URL', 'blockera'),
 				id: 'site-login',
 				type: 'link',
 				status: 'soon',
@@ -94,7 +94,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Logout URL', 'blockera-core'),
+				name: __('Logout URL', 'blockera'),
 				id: 'site-logout',
 				type: 'link',
 				status: 'soon',
@@ -104,7 +104,7 @@ export const getSiteDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Site Meta', 'blockera-core'),
+				name: __('Site Meta', 'blockera'),
 				id: 'site-meta',
 				type: 'meta',
 				status: 'soon',

@@ -60,7 +60,7 @@ return static function ( array $params ) use ( $version ) {
 
 	require __DIR__ . '/vendor/autoload.php';
 
-	$instance = LibraryLoader::instance( 'blockera-core', [ 'priority' => 90 ] );
+	$instance = LibraryLoader::instance( 'blockera', [ 'priority' => 90 ] );
 	$instance->introduce( $version, 'blockera_core_loader', $params );
 
 	return $instance;

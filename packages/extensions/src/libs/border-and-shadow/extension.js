@@ -74,16 +74,13 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('Border And Shadow', 'blockera-core')}
+					title={__('Border And Shadow', 'blockera')}
 					initialOpen={true}
 					icon={<BorderAndShadowExtensionIcon />}
 					className={extensionClassNames('border-and-shadow')}
 				>
 					<ExtensionSettings
-						buttonLabel={__(
-							'More Border Settings',
-							'blockera-core'
-						)}
+						buttonLabel={__('More Border Settings', 'blockera')}
 						features={extensionConfig}
 						update={(newSettings) => {
 							setSettings(newSettings, 'borderAndShadowConfig');
@@ -136,19 +133,19 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 								columns="columns-1"
 							>
 								<BoxShadowControl
-									label={__('Box Shadows', 'blockera-core')}
+									label={__('Box Shadows', 'blockera')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Creates a shadow effect around block for depth and focus.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<p>
 												{__(
 													'Soft shadows create a subtle effect, while bold shadows make the block more noticeable.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 										</>
@@ -190,19 +187,19 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 								columns="columns-1"
 							>
 								<OutlineControl
-									label={__('Outline', 'blockera-core')}
+									label={__('Outline', 'blockera')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Add distinct borders to blocks without affecting layout, enhancing visual hierarchy and focus.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<p>
 												{__(
 													'Useful for highlighting blocks without space adjustments, unlike borders. Perfect for focus states and accessibility.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 										</>

@@ -65,20 +65,20 @@ export const TextStroke = ({
 
 	return (
 		<BaseControl
-			label={__('Text Stroke', 'blockera-core')}
-			labelPopoverTitle={__('Text Stroke', 'blockera-core')}
+			label={__('Text Stroke', 'blockera')}
+			labelPopoverTitle={__('Text Stroke', 'blockera')}
 			labelDescription={
 				<>
 					<p>
 						{__(
 							'It sets outline stroke to text characters, allowing customization of text appearance with a stroke color and width, enhancing visual impact and readability.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<p>
 						{__(
 							'This property is particularly useful for stylistic text effects, such as creating contrast against backgrounds or emphasizing headings, adding a creative touch to web typography.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 				</>
@@ -89,14 +89,14 @@ export const TextStroke = ({
 			<ColorControl
 				id={'color'}
 				singularId={'color'}
-				label={__('Color', 'blockera-core')}
-				labelPopoverTitle={__('Text Stroke Color', 'blockera-core')}
+				label={__('Color', 'blockera')}
+				labelPopoverTitle={__('Text Stroke Color', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets sets the color of the stroke around text characters to enhance text visibility and aesthetic appeal.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>
@@ -128,14 +128,14 @@ export const TextStroke = ({
 				<InputControl
 					id={'width'}
 					singularId={'width'}
-					label={__('Width', 'blockera-core')}
-					labelPopoverTitle={__('Text Stroke Width', 'blockera-core')}
+					label={__('Width', 'blockera')}
+					labelPopoverTitle={__('Text Stroke Width', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It sets sets the the thickness of the stroke around text characters.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>

@@ -38,32 +38,26 @@ export function Wrapper({
 	if (!text) {
 		switch (type) {
 			case 'free':
-				text = __('Upgrade to PRO', 'blockera-core');
+				text = __('Upgrade to PRO', 'blockera');
 				icon = <ProIcon />;
 				break;
 			case 'state':
 				text = typeName
 					? sprintf(
 							/* translators: %s is a state name. */
-							__('Only available in %s state', 'blockera-core'),
+							__('Only available in %s state', 'blockera'),
 							typeName
 					  )
-					: __('Not available in current state', 'blockera-core');
+					: __('Not available in current state', 'blockera');
 				break;
 			case 'breakpoint':
 				text = typeName
 					? sprintf(
 							/* translators: %s is a breakpoint name. */
-							__(
-								'Only available in %s breakpoint',
-								'blockera-core'
-							),
+							__('Only available in %s breakpoint', 'blockera'),
 							typeName
 					  )
-					: __(
-							'Not available in current breakpoint.',
-							'blockera-core'
-					  );
+					: __('Not available in current breakpoint.', 'blockera');
 				break;
 		}
 	}

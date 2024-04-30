@@ -90,8 +90,7 @@ export default function BorderRadiusControl({
 		attribute,
 		blockName,
 		label,
-		labelPopoverTitle:
-			labelPopoverTitle || __('Border Radius', 'blockera-core'),
+		labelPopoverTitle: labelPopoverTitle || __('Border Radius', 'blockera'),
 		labelDescription,
 		repeaterItem,
 		defaultValue,
@@ -142,7 +141,7 @@ export default function BorderRadiusControl({
 				<Button
 					showTooltip={true}
 					tooltipPosition="top"
-					label={__('Custom Border Radius', 'blockera-core')}
+					label={__('Custom Border Radius', 'blockera')}
 					size="extra-small"
 					style={{
 						color:

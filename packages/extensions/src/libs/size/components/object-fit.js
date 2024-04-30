@@ -62,69 +62,69 @@ export default function ObjectFit({
 
 	return (
 		<BaseControl
-			label={__('Media Fit', 'blockera-core')}
+			label={__('Media Fit', 'blockera')}
 			labelDescription={
 				<>
 					<p>
 						{__(
 							'Media Fit (object-Fit) controls how an image or video fits into its container for ensuring optimal media display.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<p>
 						{__(
 							'It is essential for responsive design, ensuring media maintain their aspect ratio while adapting to different container sizes, enhancing visual appeal without distortion.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<h3>
 						<FitFillIcon />
-						{__('Fill', 'blockera-core')}
+						{__('Fill', 'blockera')}
 					</h3>
 					<p>
 						{__(
 							'The image or video is stretched to fill the container, which may lead to distortion.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<h3>
 						<FitContainIcon />
-						{__('Contain', 'blockera-core')}
+						{__('Contain', 'blockera')}
 					</h3>
 					<p>
 						{__(
 							'The entire image or video is scaled to fit inside the container, maintaining its aspect ratio but might leave empty space.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<h3>
 						<FitCoverIcon />
-						{__('Cover', 'blockera-core')}
+						{__('Cover', 'blockera')}
 					</h3>
 					<p>
 						{__(
 							'The content is resized to cover the entire container, maintaining its aspect ratio and may be clipped.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<h3>
 						<FitNoneIcon />
-						{__('None', 'blockera-core')}
+						{__('None', 'blockera')}
 					</h3>
 					<p>
 						{__(
 							'The image or video is displayed at its true size, ignoring the container size.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<h3>
 						<FitScaleDownIcon />
-						{__('Scale Down', 'blockera-core')}
+						{__('Scale Down', 'blockera')}
 					</h3>
 					<p>
 						{__(
 							'Behaves like "none" or "contain", whichever results in a smaller image or video.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 				</>
@@ -138,32 +138,32 @@ export default function ObjectFit({
 				columns="columns-1"
 				options={[
 					{
-						label: __('Default', 'blockera-core'),
+						label: __('Default', 'blockera'),
 						value: '',
 						icon: <FitNormalIcon />,
 					},
 					{
-						label: __('Fill', 'blockera-core'),
+						label: __('Fill', 'blockera'),
 						value: 'fill',
 						icon: <FitFillIcon />,
 					},
 					{
-						label: __('Contain', 'blockera-core'),
+						label: __('Contain', 'blockera'),
 						value: 'contain',
 						icon: <FitContainIcon />,
 					},
 					{
-						label: __('Cover', 'blockera-core'),
+						label: __('Cover', 'blockera'),
 						value: 'cover',
 						icon: <FitCoverIcon />,
 					},
 					{
-						label: __('None', 'blockera-core'),
+						label: __('None', 'blockera'),
 						value: 'none',
 						icon: <FitNormalIcon />,
 					},
 					{
-						label: __('Scale Down', 'blockera-core'),
+						label: __('Scale Down', 'blockera'),
 						value: 'scale-down',
 						icon: <FitScaleDownIcon />,
 					},
@@ -185,8 +185,8 @@ export default function ObjectFit({
 				}}
 			>
 				<PositionButtonControl
-					buttonLabel={__('Fit Position', 'blockera-core')}
-					alignmentMatrixLabel={__('Position', 'blockera-core')}
+					buttonLabel={__('Fit Position', 'blockera')}
+					alignmentMatrixLabel={__('Position', 'blockera')}
 					size="small"
 					defaultValue={fitPositionDefaultValue}
 					onChange={({ top, left }, ref) => {

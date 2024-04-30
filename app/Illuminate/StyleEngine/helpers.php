@@ -83,7 +83,7 @@ if ( ! function_exists( 'blockera_block_state_validate' ) ) {
 			return [];
 		}
 
-//		no state found.
+		// no state found.
 		if ( empty( $states[ $state ] ) ) {
 
 			return [];
@@ -182,10 +182,14 @@ if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 
 			// Overriding master block selectors with provided custom-class.
 			// Included all selectors without inner blocks selectors.
-			if ( in_array( $pseudoClass, [
+			if ( in_array(
+				$pseudoClass,
+				[
 					'custom-class',
-					'parent-class'
-				], true ) && ! empty( $customClassname ) && is_string( $value ) ) {
+					'parent-class',
+				],
+				true
+			) && ! empty( $customClassname ) && is_string( $value ) ) {
 
 				$normalizedParent = blockera_get_normalized_selector( $customClassname );
 				$normalizedParent = str_ends_with( $normalizedParent, ' ' ) ? $normalizedParent : $normalizedParent . ' ';
@@ -207,10 +211,16 @@ if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 					if ( count( $parsed ) > 1 ) {
 
 						// Add pseudo custom css class as suffix into selectors value for current key.
-						$selectors[ $key ] = implode( ', ', array_map( static function ( string $item ) use ( $pseudoClass ): string {
+						$selectors[ $key ] = implode(
+							', ',
+							array_map(
+								static function ( string $item ) use ( $pseudoClass ): string {
 
-							return sprintf( '%s:%s', trim( $item ), $pseudoClass );
-						}, $parsed ) );
+									return sprintf( '%s:%s', trim( $item ), $pseudoClass );
+								},
+								$parsed
+							)
+						);
 
 					} else {
 
@@ -265,24 +275,31 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selectors' ) ) {
 
 				if ( is_array( $value ) ) {
 
-					$selectors[ $key ] = blockera_get_inner_block_state_selectors( array_merge(
-						[
-							'fallback'   => $selectors['fallback'] ?? '',
-							'parentRoot' => $selectors['parentRoot'] ?? $selectors['fallback'] ?? '',
-						],
-						$value,
-					), $args );
+					$selectors[ $key ] = blockera_get_inner_block_state_selectors(
+						array_merge(
+							[
+								'fallback'   => $selectors['fallback'] ?? '',
+								'parentRoot' => $selectors['parentRoot'] ?? $selectors['fallback'] ?? '',
+							],
+							$value,
+						),
+						$args
+					);
 
 					unset( $selectors[ $key ]['fallback'], $selectors[ $key ]['parentRoot'] );
 
 					continue;
 				}
 
-				$parentPseudoClass = in_array( $masterBlockState, [
-					'normal',
-					'parent-class',
-					'custom-class'
-				], true ) ? '' : $masterBlockState;
+				$parentPseudoClass = in_array(
+					$masterBlockState,
+					[
+						'normal',
+						'parent-class',
+						'custom-class',
+					],
+					true
+				) ? '' : $masterBlockState;
 
 				$parsedValue = explode( ',', trim( $value ) );
 
@@ -301,8 +318,8 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selectors' ) ) {
 									trim( $item ),
 									$pseudoClass
 								);
-							}
-							, $parsedValue
+							},
+							$parsedValue
 						)
 					);
 
@@ -328,11 +345,15 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selectors' ) ) {
 
 				if ( $masterBlockState ) {
 
-					$parentPseudoClass = in_array( $masterBlockState, [
-						'normal',
-						'parent-class',
-						'custom-class'
-					], true ) ? '' : $masterBlockState;
+					$parentPseudoClass = in_array(
+						$masterBlockState,
+						[
+							'normal',
+							'parent-class',
+							'custom-class',
+						],
+						true
+					) ? '' : $masterBlockState;
 
 					// Add pseudo custom css class as suffix into selectors value for current key.
 					$selectors[ $key ] = sprintf(
@@ -584,17 +605,20 @@ if ( ! function_exists( 'blockera_get_normalized_selector' ) ) {
 		return trim(
 			implode(
 				'',
-				array_map( function ( string $_selector ): string {
+				array_map(
+					function ( string $_selector ): string {
 
-					$_selector = trim( $_selector );
+						$_selector = trim( $_selector );
 
-					if ( ! empty( $_selector ) && '.' === $_selector[0] ) {
+						if ( ! empty( $_selector ) && '.' === $_selector[0] ) {
 
-						return $_selector;
-					}
+							  return $_selector;
+						}
 
-					return '.' . $_selector;
-				}, $selectors )
+						return '.' . $_selector;
+					},
+					$selectors
+				)
 			)
 		);
 	}

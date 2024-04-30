@@ -37,7 +37,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	avatar: {
 		name: 'core/avatar',
 		type: 'avatar',
-		label: __('Avatar', 'blockera-core'),
+		label: __('Avatar', 'blockera'),
 		icon: <InnerBlockAvatarIcon />,
 		selectors: {
 			root: '.wp-block-post-author__avatar > img',
@@ -50,7 +50,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	byline: {
 		name: 'core/byline',
 		type: 'byline',
-		label: __('Byline', 'blockera-core'),
+		label: __('Byline', 'blockera'),
 		icon: <InnerBlockBylineIcon />,
 		selectors: {
 			root: '.wp-block-post-author__byline',
@@ -63,7 +63,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	author: {
 		name: 'core/author',
 		type: 'author',
-		label: __('Name', 'blockera-core'),
+		label: __('Name', 'blockera'),
 		icon: <InnerBlockNameIcon />,
 		selectors: {
 			root: '.wp-block-post-author__name',
@@ -76,7 +76,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	link: {
 		name: 'core/link',
 		type: 'link',
-		label: __('Link', 'blockera-core'),
+		label: __('Link', 'blockera'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
 			root: 'a:not(.wp-element-button)',

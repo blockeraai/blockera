@@ -14,7 +14,7 @@ const blockeraConditions: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Conditions', 'blockera-core'),
+	label: __('Conditions', 'blockera'),
 };
 
 export const conditionsConfig = {

@@ -28,8 +28,8 @@ export default function PositionButtonControl({
 	repeaterItem,
 	singularId,
 	buttonLabel,
-	popoverTitle = __('Setting', 'blockera-core'),
-	alignmentMatrixLabel = __('Position', 'blockera-core'),
+	popoverTitle = __('Setting', 'blockera'),
+	alignmentMatrixLabel = __('Position', 'blockera'),
 	id,
 	onChange,
 	defaultValue = {

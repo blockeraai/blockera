@@ -34,7 +34,7 @@ export const Shape = ({
 			onClick={() => onClick(id)}
 			aria-label={sprintf(
 				// translators: %s is a shape name.
-				__('Icon %s', 'blockera-core'),
+				__('Icon %s', 'blockera'),
 				id
 			)}
 		>

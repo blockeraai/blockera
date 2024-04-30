@@ -69,7 +69,7 @@ blocksInitializer({
 						icon={<FlexChildExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('FlexChild', 'blockera-core')}
+						title={__('FlexChild', 'blockera')}
 					/>
 				</InspectorControls>
 

@@ -32,7 +32,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	arrow: {
 		name: 'core/arrow',
 		type: 'arrow',
-		label: __('Arrow', 'blockera-core'),
+		label: __('Arrow', 'blockera'),
 		icon: <InnerBlockArrowIcon />,
 		selectors: {
 			root: '.wp-block-query-pagination-previous-arrow',

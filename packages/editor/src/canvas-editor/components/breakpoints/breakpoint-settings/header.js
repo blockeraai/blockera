@@ -26,7 +26,7 @@ export default function ({
 			className={controlInnerClassNames('repeater-group-header')}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'blockera-core'),
+				__('Item %d', 'blockera'),
 				itemId + 1
 			)}
 		>

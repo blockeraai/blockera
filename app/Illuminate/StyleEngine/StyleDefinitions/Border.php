@@ -44,7 +44,6 @@ class Border extends BaseStyleDefinition {
 							)
 						);
 					}
-
 				} else {
 
 					if ( $value['top']['width'] !== '' ) {

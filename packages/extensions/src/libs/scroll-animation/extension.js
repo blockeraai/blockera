@@ -39,7 +39,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('On Scroll', 'blockera-core')}
+					title={__('On Scroll', 'blockera')}
 					initialOpen={true}
 					icon={<ScrollAnimationExtensionIcon />}
 					className={extensionClassNames('scroll-animation')}
@@ -60,7 +60,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 							icon={<AnimationIcon />}
 							description={__(
 								'Scrolling will trigger the animation.',
-								'blockera-core'
+								'blockera'
 							)}
 							actionButtonAdd={false}
 							injectHeaderButtonsStart={
@@ -70,7 +70,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 										fontStyle: 'italic',
 									}}
 								>
-									{__('Coming soon…', 'blockera-core')}
+									{__('Coming soon…', 'blockera')}
 								</span>
 							}
 						/>

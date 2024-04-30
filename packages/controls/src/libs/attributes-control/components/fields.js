@@ -149,19 +149,19 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				{keyFieldOptions.length > 0 && (
 					<>
 						<SelectControl
-							label={__('Attribute', 'blockera-core')}
+							label={__('Attribute', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'HTML Attribute provides additional information about the block and the code.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'You can select an attribute from the list for current block or use Custom Attribute.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -181,17 +181,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							<>
 								{item.key !== '' && valueFieldOptions.length ? (
 									<SelectControl
-										label={__('Value', 'blockera-core')}
+										label={__('Value', 'blockera')}
 										labelPopoverTitle={__(
 											'Attribute Value',
-											'blockera-core'
+											'blockera'
 										)}
 										labelDescription={
 											<>
 												<p>
 													{__(
 														'Value for HTML Attribute.',
-														'blockera-core'
+														'blockera'
 													)}
 												</p>
 											</>
@@ -218,20 +218,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									<>
 										{item.key !== '' && (
 											<InputControl
-												label={__(
-													'Value',
-													'blockera-core'
-												)}
+												label={__('Value', 'blockera')}
 												labelPopoverTitle={__(
 													'Attribute Value',
-													'blockera-core'
+													'blockera'
 												)}
 												labelDescription={
 													<>
 														<p>
 															{__(
 																'Value for HTML Attribute.',
-																'blockera-core'
+																'blockera'
 															)}
 														</p>
 													</>
@@ -268,17 +265,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				{customMode && (
 					<>
 						<InputControl
-							label={__('Key', 'blockera-core')}
-							labelPopoverTitle={__(
-								'Attribute Key',
-								'blockera-core'
-							)}
+							label={__('Key', 'blockera')}
+							labelPopoverTitle={__('Attribute Key', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'Key for HTML Attribute.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -306,23 +300,23 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									type="error"
 									style={{ marginTop: '10px' }}
 								>
-									{__('Key is required.', 'blockera-core')}
+									{__('Key is required.', 'blockera')}
 								</NoticeControl>
 							)}
 						</InputControl>
 
 						<InputControl
-							label={__('Value', 'blockera-core')}
+							label={__('Value', 'blockera')}
 							labelPopoverTitle={__(
 								'Attribute Value',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'Value for HTML Attribute.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -350,7 +344,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 									type="error"
 									style={{ marginTop: '10px' }}
 								>
-									{__('Value is required.', 'blockera-core')}
+									{__('Value is required.', 'blockera')}
 								</NoticeControl>
 							)}
 						</InputControl>

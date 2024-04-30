@@ -152,7 +152,9 @@ final class StyleEngine {
 		return sprintf(
 			'%1$s{%2$s}',
 			$mediaQueries[ $breakpoint['type'] ],
-			implode( PHP_EOL, array_unique(
+			implode(
+				PHP_EOL,
+				array_unique(
 					array_filter(
 						blockera_array_flat( $stateCssRules ),
 						'blockera_get_filter_empty_array_item'
@@ -172,10 +174,13 @@ final class StyleEngine {
 	protected function getStateCssRules( string $breakpoint ): array {
 
 		return array_filter(
-			array_map( function ( string $state ) use ( $breakpoint ): array {
+			array_map(
+				function ( string $state ) use ( $breakpoint ): array {
 
-				return $this->prepareStateStyles( $state, $breakpoint );
-			}, $this->pseudoClasses ),
+					return $this->prepareStateStyles( $state, $breakpoint );
+				},
+				$this->pseudoClasses
+			),
 			'blockera_get_filter_empty_array_item'
 		);
 	}
@@ -221,14 +226,17 @@ final class StyleEngine {
 			return [];
 		}
 
-		$selectors = blockera_get_block_state_selectors( blockera_get_block_type_selectors( $this->block['blockName'] ), [
-			'is-inner-block'     => false,
-			'block-type'         => 'master',
-			'block-settings'     => $settings,
-			'fallback'           => $this->selector,
-			'master-block-state' => $this->pseudoState,
-			'pseudo-class'       => $this->pseudoState,
-		] );
+		$selectors = blockera_get_block_state_selectors(
+			blockera_get_block_type_selectors( $this->block['blockName'] ),
+			[
+				'is-inner-block'     => false,
+				'block-type'         => 'master',
+				'block-settings'     => $settings,
+				'fallback'           => $this->selector,
+				'master-block-state' => $this->pseudoState,
+				'pseudo-class'       => $this->pseudoState,
+			]
+		);
 
 		$this->definition->flushDeclarations();
 		$this->definition->setSettings( $settings );
@@ -241,10 +249,14 @@ final class StyleEngine {
 			$cssRules = array_merge(
 				$cssRules,
 				blockera_array_flat(
-					array_map( [
-						$this,
-						'generateInnerBlockCss'
-					], $settings['blockeraInnerBlocks'], array_keys( $settings['blockeraInnerBlocks'] ) )
+					array_map(
+						[
+							$this,
+							'generateInnerBlockCss',
+						],
+						$settings['blockeraInnerBlocks'],
+						array_keys( $settings['blockeraInnerBlocks'] )
+					)
 				)
 			);
 		}
@@ -269,14 +281,17 @@ final class StyleEngine {
 		}
 
 		// Inner block status set TRUE.
-		$selectors = blockera_get_block_state_selectors( blockera_get_block_type_selectors( $this->block['blockName'] ), [
-			'is-inner-block'     => true,
-			'block-type'         => $blockType,
-			'fallback'           => $this->selector,
-			'master-block-state' => $this->pseudoState,
-			'block-settings'     => $settings['attributes'],
-			'pseudo-class'       => $pseudoState ?? $this->pseudoState,
-		] );
+		$selectors = blockera_get_block_state_selectors(
+			blockera_get_block_type_selectors( $this->block['blockName'] ),
+			[
+				'is-inner-block'     => true,
+				'block-type'         => $blockType,
+				'fallback'           => $this->selector,
+				'master-block-state' => $this->pseudoState,
+				'block-settings'     => $settings['attributes'],
+				'pseudo-class'       => $pseudoState ?? $this->pseudoState,
+			]
+		);
 
 		// Exclude inner blocks styles when hasn't any selectors for this context.
 		if ( empty( $selectors['innerBlocks'][ $blockType ] ) ) {
@@ -298,20 +313,28 @@ final class StyleEngine {
 			$cssRules = array_merge(
 				$cssRules,
 				blockera_array_flat(
-					array_map( static function ( array $state, string $_pseudoState ) use ( $engine, $blockType ): array {
+					array_map(
+						static function ( array $state, string $_pseudoState ) use ( $engine, $blockType ): array {
 
-						if ( empty( $state['breakpoints'] ) || ( 'normal' === $_pseudoState && 'laptop' === $engine->breakpoint ) ) {
+							if ( empty( $state['breakpoints'] ) || ( 'normal' === $_pseudoState && 'laptop' === $engine->breakpoint ) ) {
 
-							return [];
-						}
+								return [];
+							}
 
-						return blockera_array_flat(
-							array_map( static function ( array $breakpointSettings ) use ( $engine, $blockType, $_pseudoState ): array {
+							return blockera_array_flat(
+								array_map(
+									static function ( array $breakpointSettings ) use ( $engine, $blockType, $_pseudoState ): array {
 
-								return $engine->generateInnerBlockCss( $breakpointSettings, $blockType, $_pseudoState );
-							}, $state['breakpoints'], array_keys( $state['breakpoints'] ) )
-						);
-					}, $innerBlockStates, array_keys( $innerBlockStates ) )
+										return $engine->generateInnerBlockCss( $breakpointSettings, $blockType, $_pseudoState );
+									},
+									$state['breakpoints'],
+									array_keys( $state['breakpoints'] )
+								)
+							);
+						},
+						$innerBlockStates,
+						array_keys( $innerBlockStates )
+					)
 				)
 			);
 		}
@@ -329,16 +352,20 @@ final class StyleEngine {
 	protected function normalizeCssRules( array $cssRules ): array {
 
 		return array_filter(
-			array_map( static function ( string $props, string $selector ): string {
+			array_map(
+				static function ( string $props, string $selector ): string {
 
-				if ( empty( $selector ) || empty( $props ) ) {
+					if ( empty( $selector ) || empty( $props ) ) {
 
-					return '';
-				}
+						return '';
+					}
 
-				return sprintf( '%1$s {%3$s %2$s %3$s}%3$s', $selector, $props, PHP_EOL );
+					return sprintf( '%1$s {%3$s %2$s %3$s}%3$s', $selector, $props, PHP_EOL );
 
-			}, $cssRules, array_keys( $cssRules ) )
+				},
+				$cssRules,
+				array_keys( $cssRules )
+			)
 		);
 	}
 

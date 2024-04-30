@@ -44,7 +44,7 @@ export default function ({
 		if (controlProps.value.valueType === 'variable') {
 			if (controlProps.isDeletedVar) {
 				isDeleted = true;
-				label = __('Missing Variable', 'blockera-core');
+				label = __('Missing Variable', 'blockera');
 				icon = <DeletedIcon />;
 			} else {
 				const item = getVariable(
@@ -63,7 +63,7 @@ export default function ({
 		} else if (controlProps.value.valueType === 'dynamic-value') {
 			if (controlProps.isDeletedDV) {
 				isDeleted = true;
-				label = __('Missing Item', 'blockera-core');
+				label = __('Missing Item', 'blockera');
 				icon = <DeletedIcon />;
 			} else {
 				const item = getDynamicValue(
@@ -89,8 +89,8 @@ export default function ({
 			<Tooltip
 				text={
 					controlProps.value?.valueType === 'variable'
-						? __('Change Variable', 'blockera-core')
-						: __('Change Dynamic Value', 'blockera-core')
+						? __('Change Variable', 'blockera')
+						: __('Change Dynamic Value', 'blockera')
 				}
 			>
 				<button

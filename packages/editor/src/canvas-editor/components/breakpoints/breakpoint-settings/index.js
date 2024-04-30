@@ -36,7 +36,7 @@ export default function ({
 			storeName={REPEATER_STORE_NAME}
 		>
 			<RepeaterControl
-				popoverTitle={__('Breakpoint Settings', 'blockera-core')}
+				popoverTitle={__('Breakpoint Settings', 'blockera')}
 				className={controlInnerClassNames('breakpoints-repeater')}
 				defaultRepeaterItemValue={{
 					...defaultItemValue,

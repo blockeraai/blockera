@@ -44,16 +44,13 @@ export const Filter = ({
 		>
 			<BaseControl controlName="filter" columns="columns-1">
 				<FilterControl
-					label={__('Filters', 'blockera-core')}
+					label={__('Filters', 'blockera')}
 					onChange={(newValue, ref) =>
 						handleOnChangeAttributes('blockeraFilter', newValue, {
 							ref,
 						})
 					}
-					addNewButtonLabel={__(
-						'Add New Filter Effect',
-						'blockera-core'
-					)}
+					addNewButtonLabel={__('Add New Filter Effect', 'blockera')}
 					defaultValue={defaultValue}
 					{...props}
 				/>

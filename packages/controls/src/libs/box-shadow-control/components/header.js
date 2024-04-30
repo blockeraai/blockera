@@ -35,7 +35,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'blockera-core'),
+					__('Item %d', 'blockera'),
 					itemId + 1
 				)}
 			>
@@ -45,8 +45,8 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 
 				<span className={controlInnerClassNames('header-label')}>
 					{type === 'inner'
-						? __('Inner', 'blockera-core')
-						: __('Outer', 'blockera-core')}
+						? __('Inner', 'blockera')
+						: __('Outer', 'blockera')}
 				</span>
 
 				<span className={controlInnerClassNames('header-values')}>

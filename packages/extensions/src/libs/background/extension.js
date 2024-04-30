@@ -78,16 +78,13 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Background', 'blockera-core')}
+				title={__('Background', 'blockera')}
 				initialOpen={true}
 				icon={<BackgroundExtensionIcon />}
 				className={extensionClassNames('background')}
 			>
 				<ExtensionSettings
-					buttonLabel={__(
-						'More Background Settings',
-						'blockera-core'
-					)}
+					buttonLabel={__('More Background Settings', 'blockera')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'backgroundConfig');
@@ -112,7 +109,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 							columns="columns-1"
 						>
 							<BackgroundControl
-								label={__('Image & Gradient', 'blockera-core')}
+								label={__('Image & Gradient', 'blockera')}
 								onChange={(newValue, ref) => {
 									handleOnChangeAttributes(
 										'blockeraBackground',
@@ -145,23 +142,23 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 						}}
 					>
 						<ColorControl
-							label={__('BG Color', 'blockera-core')}
+							label={__('BG Color', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Color',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It sets the color of the block’s background, providing a simple yet powerful way to apply solid color.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'You can use variables to use color from your site design system.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -197,69 +194,69 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 						}}
 					>
 						<SelectControl
-							label={__('Clipping', 'blockera-core')}
+							label={__('Clipping', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Clipping',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It defines how far the background (color or image) extends within the block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'It is useful for creating special effects with backgrounds, such as having a background only within the content area or under the borders.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<ClipPaddingIcon />
-										{__('Clip to Padding', 'blockera-core')}
+										{__('Clip to Padding', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'The background stops at the padding edge, not extending behind the border.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<ClipContentIcon />
-										{__('Clip to Content', 'blockera-core')}
+										{__('Clip to Content', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'The background is applied only to the content area.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<ClipTextIcon />
-										{__('Clip to Text', 'blockera-core')}
+										{__('Clip to Text', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Advanced feature that allows the background to only be visible through the text of block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'This creates an eye-catching effect where the text acts as a mask for the background image or video.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<InheritIcon />
-										{__('Inherit', 'blockera-core')}
+										{__('Inherit', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Clipping inherit from the parent block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -267,33 +264,27 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 							columns="columns-2"
 							options={[
 								{
-									label: __('None', 'blockera-core'),
+									label: __('None', 'blockera'),
 									value: 'none',
 									icon: <ClipNoneIcon />,
 								},
 								{
-									label: __(
-										'Clip to Padding',
-										'blockera-core'
-									),
+									label: __('Clip to Padding', 'blockera'),
 									value: 'padding-box',
 									icon: <ClipPaddingIcon />,
 								},
 								{
-									label: __(
-										'Clip to Content',
-										'blockera-core'
-									),
+									label: __('Clip to Content', 'blockera'),
 									value: 'content-box',
 									icon: <ClipContentIcon />,
 								},
 								{
-									label: __('Clip to Text', 'blockera-core'),
+									label: __('Clip to Text', 'blockera'),
 									value: 'text',
 									icon: <ClipTextIcon />,
 								},
 								{
-									label: __('Inherit', 'blockera-core'),
+									label: __('Inherit', 'blockera'),
 									value: 'inherit',
 									icon: <InheritIcon />,
 								},
@@ -321,7 +312,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								>
 									{__(
 										`You've applied text clipping without setting a background color or image. Make sure to add a background to the block.`,
-										'blockera-core'
+										'blockera'
 									)}
 								</NoticeControl>
 							)}

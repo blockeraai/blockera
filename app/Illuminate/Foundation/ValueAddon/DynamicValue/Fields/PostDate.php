@@ -25,7 +25,7 @@ class PostDate extends Field {
 			case 'human':
 
 				/* translators: %s: Human readable date/time. */
-				$value = sprintf( __( '%s ago', 'blockera-core' ), human_time_diff( strtotime( get_post()->{$date_type} ) ) );
+				$value = sprintf( __( '%s ago', 'blockera' ), human_time_diff( strtotime( get_post()->{$date_type} ) ) );
 
 				break;
 

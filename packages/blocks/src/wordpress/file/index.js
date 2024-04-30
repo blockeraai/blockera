@@ -29,7 +29,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	link: {
 		name: 'core/link',
 		type: 'link',
-		label: __('Link', 'blockera-core'),
+		label: __('Link', 'blockera'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
 			root: 'a:not(.wp-element-button)',
@@ -43,7 +43,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	button: {
 		name: 'core/button',
 		type: 'button',
-		label: __('Button', 'blockera-core'),
+		label: __('Button', 'blockera'),
 		icon: <InnerBlockButtonIcon />,
 		selectors: {
 			root: '.wp-block-button > .wp-element-button',

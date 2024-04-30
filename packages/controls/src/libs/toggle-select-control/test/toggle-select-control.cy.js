@@ -13,15 +13,15 @@ describe('toggle-select-control', () => {
 	context('Functionality test → Initialise', () => {
 		const options = [
 			{
-				label: __('Left', 'blockera-core'),
+				label: __('Left', 'blockera'),
 				value: 'left',
 			},
 			{
-				label: __('Center', 'blockera-core'),
+				label: __('Center', 'blockera'),
 				value: 'center',
 			},
 			{
-				label: __('Right', 'blockera-core'),
+				label: __('Right', 'blockera'),
 				value: 'right',
 			},
 		];
@@ -60,17 +60,17 @@ describe('toggle-select-control', () => {
 		context('Icon Toggle', () => {
 			const optionsWithIcon = [
 				{
-					label: __('Left', 'blockera-core'),
+					label: __('Left', 'blockera'),
 					value: 'left',
 					icon: <InheritIcon />,
 				},
 				{
-					label: __('Center', 'blockera-core'),
+					label: __('Center', 'blockera'),
 					value: 'center',
 					icon: <InheritIcon />,
 				},
 				{
-					label: __('Right', 'blockera-core'),
+					label: __('Right', 'blockera'),
 					value: 'right',
 					icon: <InheritIcon />,
 				},
@@ -120,15 +120,15 @@ describe('toggle-select-control', () => {
 	context('Functionality Tests', () => {
 		const options = [
 			{
-				label: __('Left', 'blockera-core'),
+				label: __('Left', 'blockera'),
 				value: 'left',
 			},
 			{
-				label: __('Center', 'blockera-core'),
+				label: __('Center', 'blockera'),
 				value: 'center',
 			},
 			{
-				label: __('Right', 'blockera-core'),
+				label: __('Right', 'blockera'),
 				value: 'right',
 			},
 		];
@@ -208,15 +208,15 @@ describe('toggle-select-control', () => {
 	context("Control's initial value", () => {
 		const options = [
 			{
-				label: __('Left', 'blockera-core'),
+				label: __('Left', 'blockera'),
 				value: 'left',
 			},
 			{
-				label: __('Center', 'blockera-core'),
+				label: __('Center', 'blockera'),
 				value: 'center',
 			},
 			{
-				label: __('Right', 'blockera-core'),
+				label: __('Right', 'blockera'),
 				value: 'right',
 			},
 		];

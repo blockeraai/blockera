@@ -76,13 +76,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 								'inner-block__button',
 								'extension-inner-blocks'
 							)}
-							aria-label={
-								label + __(' Customize', 'blockera-core')
-							}
+							aria-label={label + __(' Customize', 'blockera')}
 						>
 							{icon}
 
-							{__('Customize', 'blockera-core')}
+							{__('Customize', 'blockera')}
 
 							<ArrowIcon />
 						</Button>
@@ -99,7 +97,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Inner Blocks', 'blockera-core')}
+				title={__('Inner Blocks', 'blockera')}
 				initialOpen={false}
 				icon={<InnerBlocksExtensionIcon />}
 				className={extensionClassNames('inner-blocks')}
@@ -108,8 +106,8 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 				{moreInnerBlocks.length > 0 && (
 					<MoreFeatures
-						label={__('More Inner Blocks', 'blockera-core')}
-						ariaLabel={__('More Inner Blocks', 'blockera-core')}
+						label={__('More Inner Blocks', 'blockera')}
+						ariaLabel={__('More Inner Blocks', 'blockera')}
 						isOpen={false}
 						isChanged={moreInnerBlocksChanged}
 					>

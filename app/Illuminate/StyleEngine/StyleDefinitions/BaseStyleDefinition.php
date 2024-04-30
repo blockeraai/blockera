@@ -71,7 +71,6 @@ abstract class BaseStyleDefinition {
 	 * Sets suitable css selector for related property.
 	 *
 	 * @param string $featureId The feature identifier.
-	 *
 	 */
 	public function setSelector( string $featureId ): void {
 
@@ -104,7 +103,7 @@ abstract class BaseStyleDefinition {
 	 */
 	public function getCssRules(): array {
 
-//		$this->filterSettings();
+		// $this->filterSettings();
 
 		array_map( [ $this, 'generateCssRules' ], $this->settings, array_keys( $this->settings ) );
 
@@ -136,10 +135,10 @@ abstract class BaseStyleDefinition {
 
 			$setting = [
 				[
-					'isVisible' => true,
-					'type'      => $cssProperty,
-					$cssProperty       => $value,
-				]
+					'isVisible'  => true,
+					'type'       => $cssProperty,
+					$cssProperty => $value,
+				],
 			];
 		}
 
@@ -196,7 +195,6 @@ abstract class BaseStyleDefinition {
 	/**
 	 * @param string $id
 	 * @param        $value
-	 *
 	 *
 	 * @return void
 	 */

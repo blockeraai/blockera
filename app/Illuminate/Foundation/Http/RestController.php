@@ -9,7 +9,7 @@ abstract class RestController {
 	/**
 	 * Holds Rest API namespace.
 	 */
-	protected const NAMESPACE = 'blockera-core';
+	protected const NAMESPACE = 'blockera';
 
 	/**
 	 * @var Application $app the instance of app container object.

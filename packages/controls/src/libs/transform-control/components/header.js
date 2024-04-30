@@ -40,7 +40,7 @@ const RepeaterItemHeader = ({
 
 	switch (item.type) {
 		case 'move':
-			label = __('Move', 'blockera-core');
+			label = __('Move', 'blockera');
 			value = (
 				<>
 					{prepValueForHeader(item['move-x'])}
@@ -52,13 +52,13 @@ const RepeaterItemHeader = ({
 			break;
 
 		case 'scale':
-			label = __('Scale', 'blockera-core');
+			label = __('Scale', 'blockera');
 			value = prepValueForHeader(item.scale);
 			icon = <ScaleIcon />;
 			break;
 
 		case 'rotate':
-			label = __('Rotate', 'blockera-core');
+			label = __('Rotate', 'blockera');
 			value = (
 				<>
 					{prepValueForHeader(item['rotate-x'])}
@@ -70,7 +70,7 @@ const RepeaterItemHeader = ({
 			break;
 
 		case 'skew':
-			label = __('Skew', 'blockera-core');
+			label = __('Skew', 'blockera');
 			value = (
 				<>
 					{prepValueForHeader(item['skew-x'])}
@@ -87,7 +87,7 @@ const RepeaterItemHeader = ({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'blockera-core'),
+				__('Item %d', 'blockera'),
 				itemId + 1
 			)}
 		>

@@ -196,7 +196,7 @@ export function MarginAll({
 					data-cy="box-spacing-margin-top"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Margin', 'blockera-core')}
+						ariaLabel={__('All Sides Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -230,7 +230,7 @@ export function MarginAll({
 					data-cy="box-spacing-margin-right"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Margin', 'blockera-core')}
+						ariaLabel={__('All Sides Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -263,7 +263,7 @@ export function MarginAll({
 					data-cy="box-spacing-margin-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Margin', 'blockera-core')}
+						ariaLabel={__('All Sides Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -296,7 +296,7 @@ export function MarginAll({
 					data-cy="box-spacing-margin-left"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Margin', 'blockera-core')}
+						ariaLabel={__('All Sides Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -328,7 +328,7 @@ export function MarginAll({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('All Sides Margin', 'blockera-core')}
+						title={__('All Sides Margin', 'blockera')}
 						isOpen={true}
 						unit={sideSpace?.unit}
 						onChange={(newValue) => {
@@ -342,17 +342,17 @@ export function MarginAll({
 								},
 							});
 						}}
-						inputLabel={__('Margin', 'blockera-core')}
+						inputLabel={__('Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'All Sides Margin',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a single margin space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

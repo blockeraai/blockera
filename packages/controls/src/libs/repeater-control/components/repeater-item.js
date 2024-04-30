@@ -186,13 +186,13 @@ const RepeaterItem = ({
 							}}
 							aria-label={sprintf(
 								// translators: %s is the repeater item id. It's the aria label for repeater item
-								__('Item %s', 'blockera-core'),
+								__('Item %s', 'blockera'),
 								getArialLabelSuffix(itemId)
 							)}
 						>
 							{sprintf(
 								// translators: %s is the repeater item id. It's the repeater item name
-								__('Item %s', 'blockera-core'),
+								__('Item %s', 'blockera'),
 								getArialLabelSuffix(itemId)
 							)}
 						</div>

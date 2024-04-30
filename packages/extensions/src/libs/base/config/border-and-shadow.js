@@ -15,7 +15,7 @@ const blockeraBoxShadow: FeatureConfig = {
 	force: false,
 	status: true,
 	cssGenerators: {},
-	label: __('Box Shadow', 'blockera-core'),
+	label: __('Box Shadow', 'blockera'),
 };
 
 const blockeraOutline: FeatureConfig = {
@@ -23,7 +23,7 @@ const blockeraOutline: FeatureConfig = {
 	force: false,
 	status: true,
 	cssGenerators: {},
-	label: __('Outline', 'blockera-core'),
+	label: __('Outline', 'blockera'),
 };
 
 const blockeraBorder: FeatureConfig = {
@@ -31,7 +31,7 @@ const blockeraBorder: FeatureConfig = {
 	force: true,
 	status: true,
 	cssGenerators: {},
-	label: __('Border', 'blockera-core'),
+	label: __('Border', 'blockera'),
 };
 
 const blockeraBorderRadius: FeatureConfig = {
@@ -39,7 +39,7 @@ const blockeraBorderRadius: FeatureConfig = {
 	force: false,
 	status: true,
 	cssGenerators: {},
-	label: __('Border Radius', 'blockera-core'),
+	label: __('Border Radius', 'blockera'),
 };
 
 export const borderAndShadowConfig = {

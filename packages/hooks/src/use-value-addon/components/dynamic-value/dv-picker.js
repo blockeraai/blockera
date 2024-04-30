@@ -74,7 +74,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Choose Dynamic Value', 'blockera-core')}
+			title={__('Choose Dynamic Value', 'blockera')}
 			offset={125}
 			placement="left-start"
 			onClose={() => {
@@ -90,7 +90,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
-							label={__('Remove', 'blockera-core')}
+							label={__('Remove', 'blockera')}
 						>
 							<TrashIcon />
 						</Button>

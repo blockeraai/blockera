@@ -55,7 +55,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Position', 'blockera-core')}
+				title={__('Position', 'blockera')}
 				initialOpen={true}
 				icon={<PositionExtensionIcon />}
 				className={extensionClassNames('position')}
@@ -114,19 +114,19 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 							>
 								<InputControl
 									columns="columns-2"
-									label={__('z-index', 'blockera-core')}
+									label={__('z-index', 'blockera')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Control the stacking order of blocks with z-index, a CSS property that manages the layering and overlap of components on your website.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<p>
 												{__(
 													'z-index is crucial for creating visually appealing layouts, especially in complex designs, allowing you to prioritize content visibility and interaction.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 										</>

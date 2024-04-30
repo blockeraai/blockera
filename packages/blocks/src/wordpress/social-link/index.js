@@ -33,7 +33,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	item_icon: {
 		name: 'core/item_icon',
 		type: 'item_icon',
-		label: __('Button Icon', 'blockera-core'),
+		label: __('Button Icon', 'blockera'),
 		icon: <InnerBlockItemIconIcon />,
 		selectors: {
 			root: 'svg',
@@ -46,7 +46,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	item_name: {
 		name: 'core/item_name',
 		type: 'item_name',
-		label: __('Button Name', 'blockera-core'),
+		label: __('Button Name', 'blockera'),
 		icon: <InnerBlockItemNameIcon />,
 		selectors: {
 			root: '.wp-block-social-link-label',

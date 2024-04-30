@@ -31,10 +31,10 @@ class Size extends BaseStyleDefinition {
 		switch ( $cssProperty ) {
 
 			case 'aspect-ratio':
-
 				if ( 'custom' === $setting[ $cssProperty ]['value'] ) {
 
-					$declaration[ $cssProperty ] = sprintf( '%1$s%2$s%3$s%4$s',
+					$declaration[ $cssProperty ] = sprintf(
+						'%1$s%2$s%3$s%4$s',
 						$setting[ $cssProperty ]['width'],
 						! empty( $setting[ $cssProperty ]['width'] ) && ! empty( $setting[ $cssProperty ]['height'] ) ? ' / ' : '',
 						$setting[ $cssProperty ]['height'],
@@ -51,8 +51,8 @@ class Size extends BaseStyleDefinition {
 				break;
 
 			case 'object-position':
-
-				$declaration[ $cssProperty ] = sprintf( '%1$s %2$s%3$s',
+				$declaration[ $cssProperty ] = sprintf(
+					'%1$s %2$s%3$s',
 					$setting[ $cssProperty ]['top'],
 					$setting[ $cssProperty ]['left'],
 					$this->getImportant()
@@ -62,7 +62,6 @@ class Size extends BaseStyleDefinition {
 				break;
 
 			default:
-
 				$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant();
 
 				$this->setCss( $declaration );

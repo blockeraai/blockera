@@ -214,7 +214,7 @@ export function PaddingRight({
 					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
-						ariaLabel={__('Right Padding', 'blockera-core')}
+						ariaLabel={__('Right Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.right)
@@ -249,18 +249,18 @@ export function PaddingRight({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Right Padding Space', 'blockera-core')}
-						inputLabel={__('Right Padding', 'blockera-core')}
+						title={__('Right Padding Space', 'blockera')}
+						inputLabel={__('Right Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Right Padding Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies only to the right edge of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

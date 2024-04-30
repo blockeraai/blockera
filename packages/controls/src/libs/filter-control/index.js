@@ -96,10 +96,10 @@ export default function FilterControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('filter', className)}
-			popoverTitle={popoverTitle || __('Filter Effects', 'blockera-core')}
-			label={label || __('Filters', 'blockera-core')}
+			popoverTitle={popoverTitle || __('Filter Effects', 'blockera')}
+			label={label || __('Filters', 'blockera')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Filter Effects', 'blockera-core')
+				labelPopoverTitle || __('Filter Effects', 'blockera')
 			}
 			labelDescription={
 				labelDescription || (
@@ -109,13 +109,13 @@ export default function FilterControl({
 								<p>
 									{__(
 										'The Filter applies on-the-fly image adjustments and graphical effects to block and its content.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'It is widely used for image manipulation, creating hover effects, or enhancing the aesthetics of web elements.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

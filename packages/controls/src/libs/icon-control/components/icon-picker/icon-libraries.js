@@ -57,7 +57,7 @@ const IconLibraries = ({
 
 			title = sprintf(
 				// translators: %s: Icon Library Name
-				__('%s Icons', 'blockera-core'),
+				__('%s Icons', 'blockera'),
 				iconLibraryInfo[library].name
 			);
 

@@ -210,7 +210,7 @@ export function MarginLeft({
 					data-cy="box-spacing-margin-left"
 				>
 					<LabelControl
-						ariaLabel={__('Left Margin', 'blockera-core')}
+						ariaLabel={__('Left Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.left)
@@ -243,18 +243,18 @@ export function MarginLeft({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left Margin Space', 'blockera-core')}
-						inputLabel={__('Left Margin', 'blockera-core')}
+						title={__('Left Margin Space', 'blockera')}
+						inputLabel={__('Left Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Left Margin Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies only to the left edge of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

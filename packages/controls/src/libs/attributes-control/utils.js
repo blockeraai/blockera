@@ -37,16 +37,16 @@ export function getAttributeFieldKeyOptions({
 		case 'a':
 			return [
 				{
-					label: __('None', 'blockera-core'),
+					label: __('None', 'blockera'),
 					value: '',
 				},
 				{
-					label: __('Custom Attribute', 'blockera-core'),
+					label: __('Custom Attribute', 'blockera'),
 					value: 'custom',
 				},
 				{
 					type: 'optgroup',
-					label: __('Link Attributes', 'blockera-core'),
+					label: __('Link Attributes', 'blockera'),
 					options: [
 						{
 							label: 'rel',
@@ -71,16 +71,16 @@ export function getAttributeFieldKeyOptions({
 		case 'button':
 			return [
 				{
-					label: __('None', 'blockera-core'),
+					label: __('None', 'blockera'),
 					value: '',
 				},
 				{
-					label: __('Custom Attribute', 'blockera-core'),
+					label: __('Custom Attribute', 'blockera'),
 					value: 'custom',
 				},
 				{
 					type: 'optgroup',
-					label: __('Button Attributes', 'blockera-core'),
+					label: __('Button Attributes', 'blockera'),
 					options: [
 						{
 							label: 'type',
@@ -93,16 +93,16 @@ export function getAttributeFieldKeyOptions({
 		case 'ol':
 			return [
 				{
-					label: __('None', 'blockera-core'),
+					label: __('None', 'blockera'),
 					value: '',
 				},
 				{
-					label: __('Custom Attribute', 'blockera-core'),
+					label: __('Custom Attribute', 'blockera'),
 					value: 'custom',
 				},
 				{
 					type: 'optgroup',
-					label: __('List Attributes', 'blockera-core'),
+					label: __('List Attributes', 'blockera'),
 					options: [
 						{
 							label: 'reversed',
@@ -139,7 +139,7 @@ export function getAttributeFieldValueOptions({
 						},
 						{
 							type: 'optgroup',
-							label: __('Common Values', 'blockera-core'),
+							label: __('Common Values', 'blockera'),
 							options: [
 								{
 									label: 'nofollow',
@@ -169,7 +169,7 @@ export function getAttributeFieldValueOptions({
 						},
 						{
 							type: 'optgroup',
-							label: __('Other', 'blockera-core'),
+							label: __('Other', 'blockera'),
 							options: [
 								{
 									label: 'alternate',
@@ -216,7 +216,7 @@ export function getAttributeFieldValueOptions({
 						},
 						{
 							type: 'optgroup',
-							label: __('Common Value', 'blockera-core'),
+							label: __('Common Value', 'blockera'),
 							options: [
 								{
 									label: '_blank',
@@ -226,7 +226,7 @@ export function getAttributeFieldValueOptions({
 						},
 						{
 							type: 'optgroup',
-							label: __('Other', 'blockera-core'),
+							label: __('Other', 'blockera'),
 							options: [
 								{
 									label: '_self',
@@ -252,7 +252,7 @@ export function getAttributeFieldValueOptions({
 						},
 						{
 							type: 'optgroup',
-							label: __('Common Value', 'blockera-core'),
+							label: __('Common Value', 'blockera'),
 							options: [
 								{
 									label: 'no-referrer',
@@ -262,7 +262,7 @@ export function getAttributeFieldValueOptions({
 						},
 						{
 							type: 'optgroup',
-							label: __('Other', 'blockera-core'),
+							label: __('Other', 'blockera'),
 							options: [
 								{
 									label: 'no-referrer-when-downgrade',

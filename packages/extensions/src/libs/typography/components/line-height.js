@@ -38,19 +38,19 @@ export const LineHeight = ({
 			}}
 		>
 			<InputControl
-				label={__('Line Height', 'blockera-core')}
+				label={__('Line Height', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets the height of a line box, crucial for determining the vertical spacing within text content, enhancing readability and text flow.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								'Line height can be specified without a unit, as a multiplier of the font size (1.5), or with length units like pixels (px), ems (em).',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>

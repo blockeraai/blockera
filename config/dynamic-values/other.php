@@ -3,7 +3,7 @@
 return [
 	[
 		'name'      => 'date',
-		'label'     => __( 'Current Date', 'blockera-core' ),
+		'label'     => __( 'Current Date', 'blockera' ),
 		'type'      => 'date',
 		'status'    => 'core',
 		'group'     => 'other',
@@ -13,7 +13,7 @@ return [
 	],
 	[
 		'name'      => 'shortcode',
-		'label'     => __( 'Shortcode', 'blockera-core' ),
+		'label'     => __( 'Shortcode', 'blockera' ),
 		'type'      => 'shortcode',
 		'status'    => 'soon',
 		'group'     => 'other',
@@ -23,7 +23,7 @@ return [
 	],
 	[
 		'name'      => 'request',
-		'label'     => __( 'Request Parameter', 'blockera-core' ),
+		'label'     => __( 'Request Parameter', 'blockera' ),
 		'type'      => 'text',
 		'status'    => 'soon',
 		'group'     => 'other',

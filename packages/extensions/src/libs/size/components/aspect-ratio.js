@@ -65,25 +65,25 @@ export default function AspectRatio({
 		<BaseControl
 			columns="columns-2"
 			controlName="toggle-select"
-			label={__('Aspect Ratio', 'blockera-core')}
+			label={__('Aspect Ratio', 'blockera')}
 			labelDescription={
 				<>
 					<p>
 						{__(
 							'Aspect Ratio Control allows for maintaining a specific width-to-height ratio for blocks, ensuring consistent and responsive sizing across devices.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<p>
 						{__(
 							'Crucial for media blocks like images and videos, this feature preserves the original proportions, enhancing visual appeal and preventing distortion.',
-							'blockera-core'
+							'blockera'
 						)}
 					</p>
 					<p>
 						{__(
 							'The aspect ratio is calculated in this format:',
-							'blockera-core'
+							'blockera'
 						)}{' '}
 						<>
 							<code>width</code>
@@ -98,42 +98,42 @@ export default function AspectRatio({
 			<SelectControl
 				id="value"
 				singularId={'value'}
-				aria-label={__('Ratio', 'blockera-core')}
+				aria-label={__('Ratio', 'blockera')}
 				options={[
 					{
-						label: __('Original', 'blockera-core'),
+						label: __('Original', 'blockera'),
 						value: '',
 					},
 					{
-						label: __('Square 1:1', 'blockera-core'),
+						label: __('Square 1:1', 'blockera'),
 						value: '1',
 					},
 					{
-						label: __('Standard 4:3', 'blockera-core'),
+						label: __('Standard 4:3', 'blockera'),
 						value: '4/3',
 					},
 					{
-						label: __('Portrait 3:4', 'blockera-core'),
+						label: __('Portrait 3:4', 'blockera'),
 						value: '3/4',
 					},
 					{
-						label: __('Landscape 3:2', 'blockera-core'),
+						label: __('Landscape 3:2', 'blockera'),
 						value: '3/2',
 					},
 					{
-						label: __('Classic Portrait 2:3', 'blockera-core'),
+						label: __('Classic Portrait 2:3', 'blockera'),
 						value: '2/3',
 					},
 					{
-						label: __('Widescreen 16:9', 'blockera-core'),
+						label: __('Widescreen 16:9', 'blockera'),
 						value: '16/9',
 					},
 					{
-						label: __('Tall 9:16', 'blockera-core'),
+						label: __('Tall 9:16', 'blockera'),
 						value: '9/16',
 					},
 					{
-						label: __('Custom', 'blockera-core'),
+						label: __('Custom', 'blockera'),
 						value: 'custom',
 					},
 				]}
@@ -169,19 +169,19 @@ export default function AspectRatio({
 						singularId={'width'}
 						columns="columns-1"
 						className="control-first label-center small-gap"
-						label={__('Width', 'blockera-core')}
+						label={__('Width', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Represents the width part of the ratio.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'In the "16 / 9" example, 16 is the width.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -210,19 +210,19 @@ export default function AspectRatio({
 						singularId={'height'}
 						columns="columns-1"
 						className="control-first label-center small-gap"
-						label={__('Height', 'blockera-core')}
+						label={__('Height', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Represents the height part of the ratio.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'In the "16 / 9" example, 9 is the height.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

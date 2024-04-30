@@ -62,7 +62,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('Custom CSS', 'blockera-core')}
+					title={__('Custom CSS', 'blockera')}
 					initialOpen={false}
 					icon={<CustomStyleExtensionIcon />}
 					className={extensionClassNames('custom-style')}
@@ -84,25 +84,25 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 							}}
 						>
 							<CodeControl
-								label={__('Custom CSS Code', 'blockera-core')}
+								label={__('Custom CSS Code', 'blockera')}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'With this feature, you have the capability to apply custom CSS codes directly to this block, enabling you to tailor its style effortlessly.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 										<p>
 											{__(
 												'Once you input your CSS, the customization is automatically applied to the block.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 										<p>
 											{__(
 												'Simply use ".block" to target this specific block, and it will seamlessly convert to the correct selector for precise styling.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>

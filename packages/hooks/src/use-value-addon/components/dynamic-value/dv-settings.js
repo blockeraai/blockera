@@ -70,7 +70,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Dynamic Value Setting', 'blockera-core')}
+			title={__('Dynamic Value Setting', 'blockera')}
 			offset={125}
 			placement="left-start"
 			onClose={() => {
@@ -85,7 +85,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
-							label={__('Remove', 'blockera-core')}
+							label={__('Remove', 'blockera')}
 						>
 							<TrashIcon />
 						</Button>
@@ -93,17 +93,14 @@ export default function ({
 				</>
 			}
 		>
-			<BaseControl
-				label={__('Type', 'blockera-core')}
-				columns="columns-2"
-			>
+			<BaseControl label={__('Type', 'blockera')} columns="columns-2">
 				<Button
 					size="input"
 					contentAlign="left"
 					onClick={() => {
 						controlProps.setOpen('dv-picker');
 					}}
-					label={__('Change Dynamic Value', 'blockera-core')}
+					label={__('Change Dynamic Value', 'blockera')}
 					showTooltip={true}
 				>
 					{getDynamicValueIcon(controlProps.value?.settings?.type)}
@@ -122,24 +119,18 @@ export default function ({
 				<MappedSettings />
 			</ControlContextProvider>
 
-			<BaseControl
-				label={__('Advanced', 'blockera-core')}
-				columns="columns-2"
-			>
+			<BaseControl label={__('Advanced', 'blockera')} columns="columns-2">
 				<Button
 					size="input"
 					contentAlign="left"
 					onClick={() => {
 						controlProps.setOpen('dv-settings-advanced');
 					}}
-					label={__(
-						'Advanced Customization Options',
-						'blockera-core'
-					)}
+					label={__('Advanced Customization Options', 'blockera')}
 					showTooltip={true}
 				>
 					<GearIcon />
-					{__('Customize', 'blockera-core')}
+					{__('Customize', 'blockera')}
 					<CaretRightIcon style={{ marginLeft: 'auto' }} />
 				</Button>
 			</BaseControl>

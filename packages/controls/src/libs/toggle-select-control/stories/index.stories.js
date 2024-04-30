@@ -25,32 +25,32 @@ SharedDecorators.push(WithControlDataProvider);
 
 const options = [
 	{
-		label: __('Left', 'blockera-core'),
+		label: __('Left', 'blockera'),
 		value: 'left',
 	},
 	{
-		label: __('Center', 'blockera-core'),
+		label: __('Center', 'blockera'),
 		value: 'center',
 	},
 	{
-		label: __('Right', 'blockera-core'),
+		label: __('Right', 'blockera'),
 		value: 'right',
 	},
 ];
 
 const optionsWithIcon = [
 	{
-		label: __('Left', 'blockera-core'),
+		label: __('Left', 'blockera'),
 		value: 'left',
 		icon: <InheritIcon />,
 	},
 	{
-		label: __('Center', 'blockera-core'),
+		label: __('Center', 'blockera'),
 		value: 'center',
 		icon: <InheritIcon />,
 	},
 	{
-		label: __('Right', 'blockera-core'),
+		label: __('Right', 'blockera'),
 		value: 'right',
 		icon: <InheritIcon />,
 	},

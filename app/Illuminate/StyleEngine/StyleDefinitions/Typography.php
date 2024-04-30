@@ -32,25 +32,25 @@ class Typography extends BaseStyleDefinition {
 		switch ( $cssProperty ) {
 
 			case 'text-orientation':
-				switch ($propertyValue) {
+				switch ( $propertyValue ) {
 					case 'style-1':
-						$declaration['writing-mode'] = 'vertical-lr' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-lr' . $this->getImportant();
 						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
 						break;
 					case 'style-2':
-						$declaration['writing-mode'] = 'vertical-rl' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-rl' . $this->getImportant();
 						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
 						break;
 					case 'style-3':
-						$declaration['writing-mode'] = 'vertical-lr' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-lr' . $this->getImportant();
 						$declaration['text-orientation'] = 'upright' . $this->getImportant();
 						break;
 					case 'style-4':
-						$declaration['writing-mode'] = 'vertical-rl' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-rl' . $this->getImportant();
 						$declaration['text-orientation'] = 'upright' . $this->getImportant();
 						break;
 					case 'initial':
-						$declaration['writing-mode'] =
+						$declaration['writing-mode']     =
 							'horizontal-tb' . $this->getImportant();
 						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
 				}
@@ -67,11 +67,10 @@ class Typography extends BaseStyleDefinition {
 						$declaration['-webkit-text-stroke-width'] = $propertyValue['width'];
 					}
 				}
-				
+
 				break;
 
 			case 'column-count':
-
 				if ( ! empty( $propertyValue['columns'] ) ) {
 					$declaration['column-count'] = 'none' === $propertyValue['columns'] ? 'initial' : preg_replace( '/\b-columns\b/i', '', $propertyValue['columns'] );
 

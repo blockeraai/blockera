@@ -37,19 +37,19 @@ export const FontSize = ({
 			}}
 		>
 			<InputControl
-				label={__('Font Size', 'blockera-core')}
+				label={__('Font Size', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets the size of the font for text content, allowing customization of text appearance for readability and aesthetic appeal in various contexts.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								'Relative units like "em" and "rem" are recommended for responsive designs as they adjust based on parent font size or root font size, respectively.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>

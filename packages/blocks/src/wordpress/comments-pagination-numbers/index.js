@@ -35,7 +35,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	numbers: {
 		name: 'core/numbers',
 		type: 'numbers',
-		label: __('Numbers', 'blockera-core'),
+		label: __('Numbers', 'blockera'),
 		icon: <InnerBlockNumbersIcon />,
 		selectors: {
 			root: '.page-numbers:not(.dots)',
@@ -48,7 +48,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	current: {
 		name: 'core/current',
 		type: 'current',
-		label: __('Current Page', 'blockera-core'),
+		label: __('Current Page', 'blockera'),
 		icon: <InnerBlockCurrentIcon />,
 		selectors: {
 			root: '.page-numbers.current',
@@ -61,7 +61,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	dots: {
 		name: 'core/dots',
 		type: 'dots',
-		label: __('Dots', 'blockera-core'),
+		label: __('Dots', 'blockera'),
 		icon: <InnerBlockDotsIcon />,
 		selectors: {
 			root: '.page-numbers.dots',

@@ -15,57 +15,52 @@ export function LabelDescription(): MixedElement {
 			<p>
 				{__(
 					'The transform applies a variety of visual manipulations to a block without altering the document flow.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<p>
 				{__(
 					"it's used for animations, responsive layouts, and enhancing user interaction with creative visual elements.",
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<h3>
 				<MoveIcon />
-				{__('Move (Translate)', 'blockera-core')}
+				{__('Move (Translate)', 'blockera')}
 			</h3>
 			<p>
 				{__(
 					'Repositions an element from its original place. Ideal for creating movement and transition effects.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<h3>
 				<ScaleIcon />
-				{__('Scale', 'blockera-core')}
+				{__('Scale', 'blockera')}
 			</h3>
 			<p>
 				{__(
 					'Changes the size of an element. Essential for zoom effects and emphasizing elements.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 
 			<h3>
 				<RotateIcon />
-				{__('Rotate', 'blockera-core')}
+				{__('Rotate', 'blockera')}
 			</h3>
 			<p>
 				{__(
 					'Rotates an element around its center point. Useful for creating dynamic interactions like hover effects.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 
 			<h3>
 				<SkewIcon />
-				{__('Skew', 'blockera-core')}
+				{__('Skew', 'blockera')}
 			</h3>
-			<p>
-				{__(
-					'Distorts elements along the X and Y axes.',
-					'blockera-core'
-				)}
-			</p>
+			<p>{__('Distorts elements along the X and Y axes.', 'blockera')}</p>
 		</>
 	);
 }

@@ -59,7 +59,7 @@ blocksInitializer({
 						icon={<MouseExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Mouse', 'blockera-core')}
+						title={__('Mouse', 'blockera')}
 					/>
 				</InspectorControls>
 

@@ -52,7 +52,7 @@ blocksInitializer({
 						attributes={attributes?.blockeraAttributes || []}
 						properties={attributes?.blockeraCSSProperties || []}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Advanced', 'blockera-core')}
+						title={__('Advanced', 'blockera')}
 						storeName={'blockera-core/controls/repeater'}
 						icon={<AdvancedExtensionIcon />}
 					/>

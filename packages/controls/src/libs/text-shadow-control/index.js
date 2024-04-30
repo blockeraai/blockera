@@ -27,26 +27,26 @@ export default function TextShadowControl({
 		color: '#000000ab',
 		isVisible: true,
 	},
-	popoverTitle = __('Text Shadow', 'blockera-core'),
-	label = __('Text Shadow', 'blockera-core'),
+	popoverTitle = __('Text Shadow', 'blockera'),
+	label = __('Text Shadow', 'blockera'),
 	labelDescription = (
 		<>
 			<p>
 				{__(
 					'It adds shadow effect to text, enhancing its visual depth and emphasis.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<p>
 				{__(
 					'It is ideal for creating visually striking text effects, improving legibility over contrasting backgrounds, and adding a layer of sophistication to web typography.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<p>
 				{__(
 					'You can add multiple shadows for advanced effects.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 		</>
@@ -58,7 +58,7 @@ export default function TextShadowControl({
 		<RepeaterControl
 			className={controlClassNames('text-shadow', className)}
 			popoverTitle={popoverTitle}
-			addNewButtonLabel={__('Add New Text Shadow', 'blockera-core')}
+			addNewButtonLabel={__('Add New Text Shadow', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

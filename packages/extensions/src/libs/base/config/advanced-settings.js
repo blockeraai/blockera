@@ -14,7 +14,7 @@ const blockeraAttributes: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Custom HTML Attributes', 'blockera-core'),
+	label: __('Custom HTML Attributes', 'blockera'),
 	isActiveOnStates: ['normal'],
 	isActiveOnBreakpoints: ['laptop'],
 };

@@ -22,7 +22,7 @@ import type { TOutlineControlProps } from './types';
 export default function OutlineControl({
 	id,
 	className,
-	popoverTitle = __('Outline', 'blockera-core'),
+	popoverTitle = __('Outline', 'blockera'),
 	defaultRepeaterItemValue = {
 		border: {
 			width: '2px',
@@ -39,7 +39,7 @@ export default function OutlineControl({
 			id={id}
 			className={controlClassNames('outline', className)}
 			popoverTitle={popoverTitle}
-			addNewButtonLabel={__('Add New Outline', 'blockera-core')}
+			addNewButtonLabel={__('Add New Outline', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

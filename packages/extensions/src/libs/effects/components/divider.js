@@ -51,7 +51,7 @@ export const Divider = ({
 					}
 					value={divider}
 					maxItems={2}
-					addNewButtonLabel={__('Add New Divider', 'blockera-core')}
+					addNewButtonLabel={__('Add New Divider', 'blockera')}
 					defaultValue={defaultValue}
 					{...props}
 				/>

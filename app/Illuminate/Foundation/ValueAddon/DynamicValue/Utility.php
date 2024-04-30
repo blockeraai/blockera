@@ -43,7 +43,6 @@ class Utility {
 		switch ( true ) {
 
 			case is_singular():
-
 				$page_type = 'singular';
 				$title     = get_the_title();
 
@@ -52,21 +51,19 @@ class Utility {
 				break;
 
 			case is_search():
-
 				/* translators: %s: Search term. */
-				$title = sprintf( __( 'Search Results for: %s', 'blockera-core' ), get_search_query() );
+				$title = sprintf( __( 'Search Results for: %s', 'blockera' ), get_search_query() );
 
 				if ( get_query_var( 'paged' ) ) {
 
 					/* translators: %s is the page number. */
-					$title .= sprintf( __( '&nbsp;&ndash; Page %s', 'blockera-core' ), get_query_var( 'paged' ) );
+					$title .= sprintf( __( '&nbsp;&ndash; Page %s', 'blockera' ), get_query_var( 'paged' ) );
 				}
 
 				break;
 
-			case  is_category():
-			case  is_tag():
-
+			case is_category():
+			case is_tag():
 				$page_type = is_category() ? 'cat' : 'tag';
 				$title     = call_user_func_array( sprintf( 'single_%s_title', $page_type ), [ '', false ] );
 
@@ -75,7 +72,6 @@ class Utility {
 				break;
 
 			case is_author():
-
 				$page_type = 'author';
 				$title     = '<span class="in-card">' . get_the_author() . '</span>';
 				$title     = self::getTitleWithTheContext( $title, $page_type, $include_context );
@@ -85,16 +81,15 @@ class Utility {
 			case is_year() && $context = is_year() ? 'yearly' : false:
 			case is_month() && $context = is_year() ? 'monthly' : false:
 			case is_day() && $context = is_year() ? 'daily' : false:
-
 				$formats = [
 					'yearly'  => [
-						_x( 'Y', 'yearly archives date format', 'blockera-core' ),
+						_x( 'Y', 'yearly archives date format', 'blockera' ),
 					],
 					'monthly' => [
-						_x( 'F Y', 'monthly archives date format', 'blockera-core' ),
+						_x( 'F Y', 'monthly archives date format', 'blockera' ),
 					],
 					'daily'   => [
-						_x( 'F j, Y', 'daily archives date format', 'blockera-core' ),
+						_x( 'F j, Y', 'daily archives date format', 'blockera' ),
 					],
 				];
 
@@ -106,7 +101,6 @@ class Utility {
 				break;
 
 			case is_tax( 'post_format' ):
-
 				$terms = [
 					'chat',
 					'link',
@@ -128,13 +122,12 @@ class Utility {
 
 					$term = self::pluralSuffix( $term );
 
-					$title = sprintf( _x( '%s', 'post format archive title', 'blockera-core' ), ucfirst( $term ) );
+					$title = sprintf( _x( '%s', 'post format archive title', 'blockera' ), ucfirst( $term ) );
 				}
 
 				break;
 
 			case is_post_type_archive():
-
 				$title = post_type_archive_title( '', false );
 
 				$title = self::getTitleWithTheContext( $title, $page_type = 'post_type_archive', $include_context );
@@ -142,7 +135,6 @@ class Utility {
 				break;
 
 			case is_tax():
-
 				$title = single_term_title( '', false );
 
 				$title = self::getTitleWithTheContext( $title, $page_type = 'tax', $include_context );
@@ -150,14 +142,12 @@ class Utility {
 				break;
 
 			case is_archive():
-
-				$title = __( 'Archives', 'blockera-core' );
+				$title = __( 'Archives', 'blockera' );
 
 				break;
 
 			case is_404():
-
-				$title = __( 'Page Not Found', 'blockera-core' );
+				$title = __( 'Page Not Found', 'blockera' );
 
 				break;
 		}
@@ -166,12 +156,12 @@ class Utility {
 		 * The archive title.
 		 *
 		 * Filters the archive title.
+		 *
 		 * @hook  ''
 		 *
 		 * @param string $title Archive title to be displayed.
 		 *
 		 * @since 1.0.0
-		 *
 		 */
 		return apply_filters( 'blockera-core/dynamic-value/utility/the_archive_title', $title, $page_type );
 	}
@@ -182,7 +172,6 @@ class Utility {
 	 * @param string $original_title  the original title.
 	 * @param string $page_type       the page type.
 	 * @param bool   $include_context to include context value.
-	 *
 	 *
 	 * @since 1.0.0
 	 * @return string|null string on success, null on otherwise!
@@ -197,46 +186,41 @@ class Utility {
 		switch ( $page_type ) {
 
 			case 'singular':
-
 				$post_type_object = get_post_type_object( get_post_type() );
 
-				$original_title = sprintf( __( '%1$s: %2$s', 'blockera-core' ), $post_type_object->labels->singular_name, $original_title );
+				$original_title = sprintf( __( '%1$s: %2$s', 'blockera' ), $post_type_object->labels->singular_name, $original_title );
 
 				break;
 
 			case 'cat':
 			case 'tag':
-
-				$page = 'cat' === $page_type ? __( 'Category:', 'blockera-core' ) : __( 'Tag:', 'blockera-core' );
+				$page = 'cat' === $page_type ? __( 'Category:', 'blockera' ) : __( 'Tag:', 'blockera' );
 
 				/* translators: $page archive title. 1: $page name   ==>  $page = 'Category' OR 'Tag' */
-				$original_title = sprintf( __( '%1$s %2$s', 'blockera-core' ), $page, $original_title );
+				$original_title = sprintf( __( '%1$s %2$s', 'blockera' ), $page, $original_title );
 
 				break;
 
 			case 'yearly':
 			case 'monthly':
 			case 'daily':
-
 				$page_type = str_replace( [ 'ly', 'i' ], [ '', 'y' ], $page_type );
 
 				/* translators: (Yearly , Monthly , Daily) archive title. 1: (Year , Month , Day) */
-				$original_title = sprintf( __( '%1$s: %2$s', 'blockera-core' ), ucfirst( $page_type ), $original_title );
+				$original_title = sprintf( __( '%1$s: %2$s', 'blockera' ), ucfirst( $page_type ), $original_title );
 
 				break;
 
 			case 'post_type_archive':
-
-				$original_title = sprintf( __( 'Archives: %1$s', 'blockera-core' ), $original_title );
+				$original_title = sprintf( __( 'Archives: %1$s', 'blockera' ), $original_title );
 
 				break;
 
-			case 'tax' :
-
+			case 'tax':
 				$tax = get_taxonomy( get_queried_object()->taxonomy );
 
 				/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-				$original_title = sprintf( __( '%1$s: %2$s', 'blockera-core' ), $tax->labels->singular_name, $original_title );
+				$original_title = sprintf( __( '%1$s: %2$s', 'blockera' ), $tax->labels->singular_name, $original_title );
 
 				break;
 		}
@@ -257,19 +241,16 @@ class Utility {
 		switch ( substr( $string, -1 ) ) {
 
 			case 's':
-
 				$string .= 'es';
 
 				break;
 
 			case 'y':
-
 				$string = substr_replace( $string, 'ies', -1 );
 
 				break;
 
 			default:
-
 				$string .= 's';
 
 				break;
@@ -285,37 +266,31 @@ class Utility {
 		switch ( true ) {
 
 			case is_category() || is_tag() || is_tax():
-
 				$url = get_term_link( get_queried_object() );
 
 				break;
 
 			case is_author():
-
 				$url = get_author_posts_url( get_queried_object_id() );
 
 				break;
 
 			case is_year():
-
 				$url = get_year_link( get_query_var( 'year' ) );
 
 				break;
 
 			case is_month():
-
 				$url = get_month_link( get_query_var( 'year' ), get_query_var( 'monthnum' ) );
 
 				break;
 
 			case is_day():
-
 				$url = get_day_link( get_query_var( 'year' ), get_query_var( 'monthnum' ), get_query_var( 'day' ) );
 
 				break;
 
 			case is_post_type_archive():
-
 				$url = get_post_type_archive_link( get_post_type() );
 
 				break;
@@ -344,7 +319,6 @@ class Utility {
 	 * @see   https://core.trac.wordpress.org/ticket/27918
 	 *
 	 * @global array $wp_taxonomies The registered taxonomies.
-	 *
 	 *
 	 * @param array  $args
 	 * @param string $output
@@ -407,7 +381,6 @@ class Utility {
 		 * @param string $placeholder_image The source of the default placeholder image.
 		 *
 		 * @since 1.0.0
-		 *
 		 */
 		return apply_filters( 'blockera-core/dynamic-value/utility/placeholder_image_logo', $placeholder_image );
 	}

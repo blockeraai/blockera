@@ -50,7 +50,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 	}: TIconProps): MixedElement => {
 		return (
 			<PanelBodyControl
-				title={__('Icon', 'blockera-core')}
+				title={__('Icon', 'blockera')}
 				initialOpen={true}
 				icon={<IconExtensionIcon />}
 				className={extensionClassNames('icon')}
@@ -83,7 +83,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 				{isActiveField(blockeraIconOptions) && (
 					<>
 						<BaseControl
-							label={__('Style', 'blockera-core')}
+							label={__('Style', 'blockera')}
 							columns="1fr 3fr"
 						>
 							{isActiveField(blockeraIconPosition) && (
@@ -100,22 +100,16 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 								>
 									<ToggleSelectControl
 										controlName="toggle-select"
-										label={__('Position', 'blockera-core')}
+										label={__('Position', 'blockera')}
 										columns="columns-2"
 										options={[
 											{
-												label: __(
-													'Left',
-													'blockera-core'
-												),
+												label: __('Left', 'blockera'),
 												value: 'left',
 												icon: <PositionLeftIcon />,
 											},
 											{
-												label: __(
-													'Right',
-													'blockera-core'
-												),
+												label: __('Right', 'blockera'),
 												value: 'right',
 												icon: <PositionRightIcon />,
 											},
@@ -148,7 +142,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 								>
 									<InputControl
 										controlName="input"
-										label={__('Gap', 'blockera-core')}
+										label={__('Gap', 'blockera')}
 										columns="columns-2"
 										unitType="essential"
 										defaultValue=""
@@ -178,7 +172,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 								>
 									<InputControl
 										controlName="input"
-										label={__('Size', 'blockera-core')}
+										label={__('Size', 'blockera')}
 										columns="columns-2"
 										unitType="essential"
 										defaultValue=""
@@ -208,7 +202,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 								>
 									<ColorControl
 										controlName="color"
-										label={__('Color', 'blockera-core')}
+										label={__('Color', 'blockera')}
 										columns="columns-2"
 										//
 										defaultValue=""
@@ -239,7 +233,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 								<LinkControl
 									controlName="link"
 									columns="1fr 3fr"
-									label={__('Link', 'blockera-core')}
+									label={__('Link', 'blockera')}
 									id={generateExtensionId(block, 'icon-link')}
 									//
 									onChange={(newValue) =>

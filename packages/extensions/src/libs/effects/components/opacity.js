@@ -46,19 +46,19 @@ export const Opacity = ({
 			<BaseControl columns="columns-1">
 				<InputControl
 					controlName="input"
-					label={__('Opacity', 'blockera-core')}
+					label={__('Opacity', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Opacity controls the transparency level of block, ranging from 0 (completely transparent) to 1 (fully opaque).',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									"It's widely used in animations, UI interactions, and to draw attention or de-emphasize blocks.",
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -82,7 +82,7 @@ export const Opacity = ({
 					<NoticeControl type="warning">
 						{__(
 							'Your block’s opacity is set to "0", making it invisible. If you\'re wondering why it\'s not showing.',
-							'blockera-core'
+							'blockera'
 						)}
 					</NoticeControl>
 				)}

@@ -33,7 +33,7 @@ export function SidePopover({
 		return newValue;
 	},
 	defaultValue = '0px',
-	inputLabel = __('Space', 'blockera-core'),
+	inputLabel = __('Space', 'blockera'),
 	inputLabelDescription = '',
 	inputLabelPopoverTitle = '',
 }: SidePopoverProps): MixedElement {
@@ -260,7 +260,7 @@ export function SidePopover({
 						label={
 							<Flex gap="4px" alignItems="center">
 								<ShortcutIcon />
-								{__('Shortcuts', 'blockera-core')}
+								{__('Shortcuts', 'blockera')}
 							</Flex>
 						}
 						columns="columns-1"
@@ -285,7 +285,7 @@ export function SidePopover({
 											}}
 											data-cy="box-spacing-set-auto"
 										>
-											{__('Auto', 'blockera-core')}
+											{__('Auto', 'blockera')}
 										</Button>
 									</Flex>
 									{getAllActionButtons()}

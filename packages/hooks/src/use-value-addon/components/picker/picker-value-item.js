@@ -93,8 +93,8 @@ export default function ({
 				<Tooltip
 					text={
 						status === 'soon'
-							? __('Coming soon…', 'blockera-core')
-							: __('Pro Feature', 'blockera-core')
+							? __('Coming soon…', 'blockera')
+							: __('Pro Feature', 'blockera')
 					}
 					{...props}
 				>

@@ -967,12 +967,12 @@ export default function LayoutMatrixControl({
 								label=""
 								options={[
 									{
-										label: __('Row', 'blockera-core'),
+										label: __('Row', 'blockera'),
 										value: 'row',
 										icon: <DirectionRowIcon />,
 									},
 									{
-										label: __('Column', 'blockera-core'),
+										label: __('Column', 'blockera'),
 										value: 'column',
 										icon: <DirectionColumnIcon />,
 									},
@@ -994,27 +994,27 @@ export default function LayoutMatrixControl({
 								label=""
 								options={[
 									{
-										label: __('Empty', 'blockera-core'),
+										label: __('Empty', 'blockera'),
 										value: '',
 										icon: <AlignItemsEmptyBlockIcon />,
 									},
 									{
-										label: __('Start', 'blockera-core'),
+										label: __('Start', 'blockera'),
 										value: 'flex-start',
 										icon: <AlignItemsFlexStartBlockIcon />,
 									},
 									{
-										label: __('Center', 'blockera-core'),
+										label: __('Center', 'blockera'),
 										value: 'center',
 										icon: <AlignItemsCenterBlockIcon />,
 									},
 									{
-										label: __('End', 'blockera-core'),
+										label: __('End', 'blockera'),
 										value: 'flex-end',
 										icon: <AlignItemsFlexEndBlockIcon />,
 									},
 									{
-										label: __('Stretch', 'blockera-core'),
+										label: __('Stretch', 'blockera'),
 										value: 'stretch',
 										icon: <AlignItemsStretchBlockIcon />,
 									},
@@ -1036,38 +1036,32 @@ export default function LayoutMatrixControl({
 								label=""
 								options={[
 									{
-										label: __('Empty', 'blockera-core'),
+										label: __('Empty', 'blockera'),
 										value: '',
 										icon: <JustifyEmptyIcon />,
 									},
 									{
-										label: __('Start', 'blockera-core'),
+										label: __('Start', 'blockera'),
 										value: 'flex-start',
 										icon: <JustifyFlexStartIcon />,
 									},
 									{
-										label: __('Center', 'blockera-core'),
+										label: __('Center', 'blockera'),
 										value: 'center',
 										icon: <JustifyCenterIcon />,
 									},
 									{
-										label: __('End', 'blockera-core'),
+										label: __('End', 'blockera'),
 										value: 'flex-end',
 										icon: <JustifyFlexEndIcon />,
 									},
 									{
-										label: __(
-											'Space Around',
-											'blockera-core'
-										),
+										label: __('Space Around', 'blockera'),
 										value: 'space-around',
 										icon: <JustifySpaceAroundIcon />,
 									},
 									{
-										label: __(
-											'Space Between',
-											'blockera-core'
-										),
+										label: __('Space Between', 'blockera'),
 										value: 'space-between',
 										icon: <JustifySpaceBetweenIcon />,
 									},
@@ -1091,7 +1085,7 @@ export default function LayoutMatrixControl({
 						id="dense"
 						checkboxLabel={
 							<>
-								{__('Dense', 'blockera-core')}
+								{__('Dense', 'blockera')}
 								<Tooltip
 									text={
 										<span
@@ -1103,14 +1097,11 @@ export default function LayoutMatrixControl({
 											}}
 										>
 											<b>
-												{__(
-													'Dense mode:',
-													'blockera-core'
-												)}{' '}
+												{__('Dense mode:', 'blockera')}{' '}
 											</b>
 											{__(
 												'fills empty spaces with items that fit, potentially changing their visual order.',
-												'blockera-core'
+												'blockera'
 											)}
 										</span>
 									}

@@ -123,7 +123,7 @@ export default function ColorControl({
 			</span>
 		) : (
 			<span className="color-label" data-cy="color-label">
-				{__('None', 'blockera-core')}
+				{__('None', 'blockera')}
 			</span>
 		);
 	}

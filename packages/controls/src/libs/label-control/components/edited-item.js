@@ -30,7 +30,7 @@ export default function EditedItem({
 		<Tooltip
 			text={sprintf(
 				/* translators: %1$s: Breakpoint name, %2$s: Block state name */
-				__('Switch To: %1$s → %2$s', 'blockera-core'),
+				__('Switch To: %1$s → %2$s', 'blockera'),
 				breakpoint,
 				label
 			)}
@@ -51,7 +51,7 @@ export default function EditedItem({
 							'states-changes-item-current'
 						)}
 					>
-						{__('Current', 'blockera-core')}
+						{__('Current', 'blockera')}
 					</span>
 				)}
 			</div>

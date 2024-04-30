@@ -43,9 +43,9 @@ function IconControl({
 	columns,
 	field = 'icon',
 	//
-	labelChoose = __('Choose Icon…', 'blockera-core'),
-	labelIconLibrary = __('Icon Library', 'blockera-core'),
-	labelUploadSvg = __('Upload SVG', 'blockera-core'),
+	labelChoose = __('Choose Icon…', 'blockera'),
+	labelIconLibrary = __('Icon Library', 'blockera'),
+	labelUploadSvg = __('Upload SVG', 'blockera'),
 	//
 	defaultValue,
 	onChange,
@@ -185,7 +185,7 @@ function IconControl({
 							onClick={openModal}
 						>
 							<Button
-								aria-label={__('Remove Icon', 'blockera-core')}
+								aria-label={__('Remove Icon', 'blockera')}
 								className="btn-delete"
 								noBorder={true}
 								isFocus={isOpenModal}
@@ -213,7 +213,7 @@ function IconControl({
 								)}
 							>
 								<Button
-									label={__('Icon Library', 'blockera-core')}
+									label={__('Icon Library', 'blockera')}
 									onClick={openModal}
 									className="btn-icon-library"
 									noBorder={true}

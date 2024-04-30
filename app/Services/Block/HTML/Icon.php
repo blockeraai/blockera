@@ -28,29 +28,29 @@ class Icon extends BlockHTML {
 
 			$gap = $block['attrs']['blockeraIconGap'] ?? '5px';
 
-			//FIXME: how to add styles into icon element.
+			// FIXME: how to add styles into icon element.
 			$iconHTML = sprintf(
-				'<i class="%1$s %2$s"></i>',//style="font-size: %3$s;width: %3$s;height: %3$s;fill:%4$s;color:%4$s;margin-left: %5$s;margin-right: %5$s;"
+				'<i class="%1$s %2$s"></i>', // style="font-size: %3$s;width: %3$s;height: %3$s;fill:%4$s;color:%4$s;margin-left: %5$s;margin-right: %5$s;"
 				$library,
 				$this->getIcon( $icon ),
-//				$block['attrs']['blockeraIconSize'] ?? '',
-//				$block['attrs']['blockeraIconColor'] ?? '',
-//				$gap
+				// $block['attrs']['blockeraIconSize'] ?? '',
+				// $block['attrs']['blockeraIconColor'] ?? '',
+				// $gap
 			);
 
-			if (strpos($blockElement->innerHTML , $iconHTML) !== false){
+			if ( strpos( $blockElement->innerHTML, $iconHTML ) !== false ) {
 				return;
 			}
 
-			//Handle icon link
+			// Handle icon link
 			if ( ! empty( $block['attrs']['blockeraIconLink'] ) ) {
 
 				[
 					'link'       => $link,
-					"target"     => $target,
-					"nofollow"   => $isNofollow,
-					"label"      => $label,
-					"attributes" => $attributes,
+					'target'     => $target,
+					'nofollow'   => $isNofollow,
+					'label'      => $label,
+					'attributes' => $attributes,
 				] = $block['attrs']['blockeraIconLink'];
 
 				if ( $link ) {
@@ -84,7 +84,7 @@ class Icon extends BlockHTML {
 				}
 			}
 
-			//When icon position was not set default append left side
+			// When icon position was not set default append left side
 			if ( empty( $block['attrs']['blockeraIconPosition'] ) || 'left' === $block['attrs']['blockeraIconPosition'] ) {
 
 				$blockElement->innerhtml = sprintf(
@@ -104,8 +104,6 @@ class Icon extends BlockHTML {
 					'</div>'
 				);
 			}
-
-
 		}
 
 		parent::manipulate( $request );

@@ -113,7 +113,7 @@ class ValueAddonRegistry {
 				$this->registered[ $group ] = array_merge(
 					$item,
 					[
-						'items' => $this->registerItems( $group, $item['items'] )
+						'items' => $this->registerItems( $group, $item['items'] ),
 					]
 				);
 

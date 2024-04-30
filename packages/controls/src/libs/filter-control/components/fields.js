@@ -42,7 +42,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'type')}
 					singularId={'type'}
-					label={__('Type', 'blockera-core')}
+					label={__('Type', 'blockera')}
 					labelPopoverTitle={labelPopoverTitle}
 					labelDescription={labelDescription}
 					columns="columns-2"
@@ -63,20 +63,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'blur')}
 						singularId={'blur'}
-						label={__('Blur', 'blockera-core')}
-						labelPopoverTitle={__('Blur Filter', 'blockera-core')}
+						label={__('Blur', 'blockera')}
+						labelPopoverTitle={__('Blur Filter', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'The Blur filter applies a Gaussian blur for softening the details and creating a hazy effect.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'Please note heavy use of blur, especially with large radii, can impact performance, particularly on less powerful devices or browsers.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -108,14 +108,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							label={<XCoordinateIcon />}
 							labelPopoverTitle={__(
 								'Shadow Horizontal Offset',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It sets the horizontal offset of the drop shadow.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -149,14 +149,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							label={<YCoordinateIcon />}
 							labelPopoverTitle={__(
 								'Shadow Vertical Offset',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It sets the vertical offset of the drop shadow.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -187,17 +187,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							repeaterItem={itemId}
 							id={getControlId(itemId, 'drop-shadow-blur')}
 							singularId={'drop-shadow-blur'}
-							label={__('Blur', 'blockera-core')}
-							labelPopoverTitle={__(
-								'Shadow Blur',
-								'blockera-core'
-							)}
+							label={__('Blur', 'blockera')}
+							labelPopoverTitle={__('Shadow Blur', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It sets the blur amount of the drop shadow.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -228,17 +225,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							repeaterItem={itemId}
 							id={getControlId(itemId, 'drop-shadow-color')}
 							singularId={'drop-shadow-color'}
-							label={__('Color', 'blockera-core')}
-							labelPopoverTitle={__(
-								'Shadow Color',
-								'blockera-core'
-							)}
+							label={__('Color', 'blockera')}
+							labelPopoverTitle={__('Shadow Color', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It sets the color of the drop shadow.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -268,29 +262,26 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'brightness')}
 						singularId={'brightness'}
-						label={__('Brightness', 'blockera-core')}
-						labelPopoverTitle={__(
-							'Brightness Filter',
-							'blockera-core'
-						)}
+						label={__('Brightness', 'blockera')}
+						labelPopoverTitle={__('Brightness Filter', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It adjusts the brightness of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'It can lighten or darken block by applying a percentage value, where 100% is the original brightness.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'It is very useful to changes the color of buttons or links on hover or focus dynamically without setting exact color.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -321,23 +312,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'contrast')}
 						singularId={'contrast'}
-						label={__('Contrast', 'blockera-core')}
-						labelPopoverTitle={__(
-							'Contrast Filter',
-							'blockera-core'
-						)}
+						label={__('Contrast', 'blockera')}
+						labelPopoverTitle={__('Contrast Filter', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It adjusts the contrast of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'It alters the difference in color and brightness between different parts of the block, making the dark parts darker and the light parts lighter.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -368,23 +356,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'hue-rotate')}
 						singularId={'hue-rotate'}
-						label={__('Hue Rotate', 'blockera-core')}
-						labelPopoverTitle={__(
-							'Contrast Filter',
-							'blockera-core'
-						)}
+						label={__('Hue Rotate', 'blockera')}
+						labelPopoverTitle={__('Contrast Filter', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It applies a hue shift to the colors of block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'It can drastically or subtly change the color scheme of block without affecting the luminance or saturation.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -415,23 +400,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'saturate')}
 						singularId={'saturate'}
-						label={__('Saturation', 'blockera-core')}
-						labelPopoverTitle={__(
-							'Saturation Filter',
-							'blockera-core'
-						)}
+						label={__('Saturation', 'blockera')}
+						labelPopoverTitle={__('Saturation Filter', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It adjusts the saturation level of block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'It controls the intensity of the colors, either enhancing them for a more vivid appearance or diminishing them for a more muted look.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -462,23 +444,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'grayscale')}
 						singularId={'grayscale'}
-						label={__('Grayscale', 'blockera-core')}
-						labelPopoverTitle={__(
-							'Grayscale Filter',
-							'blockera-core'
-						)}
+						label={__('Grayscale', 'blockera')}
+						labelPopoverTitle={__('Grayscale Filter', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It converts the colors of a block to shades of gray.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'It is often used for creating a muted or classic look, for emphasizing or de-emphasizing blocks, and for interactive effects like hover states.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -509,20 +488,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'invert')}
 						singularId={'invert'}
-						label={__('Invert', 'blockera-core')}
-						labelPopoverTitle={__('Invert Filter', 'blockera-core')}
+						label={__('Invert', 'blockera')}
+						labelPopoverTitle={__('Invert Filter', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It inverts the colors of a block by swapping each color with its opposite on the color wheel, creating a negative effect.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										"Invert is used to create striking visual effects, draw attention, or for accessibility purposes (like a 'dark mode' effect).",
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -553,14 +532,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'sepia')}
 						singularId={'sepia'}
-						label={__('Sepia', 'blockera-core')}
-						labelPopoverTitle={__('Sepia Filter', 'blockera-core')}
+						label={__('Sepia', 'blockera')}
+						labelPopoverTitle={__('Sepia Filter', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It applies a warm, brownish tone to block, mimicking the look of sepia-toned photographs.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

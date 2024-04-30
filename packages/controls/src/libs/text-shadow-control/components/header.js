@@ -29,7 +29,7 @@ const RepeaterItemHeader = ({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'blockera-core'),
+				__('Item %d', 'blockera'),
 				itemId + 1
 			)}
 			data-cy="text-shadow-repeater-item-header"
@@ -45,7 +45,7 @@ const RepeaterItemHeader = ({
 				className={controlInnerClassNames('header-label')}
 				data-cy="header-label"
 			>
-				{__('Text Shadow', 'blockera-core')}
+				{__('Text Shadow', 'blockera')}
 			</span>
 
 			<span

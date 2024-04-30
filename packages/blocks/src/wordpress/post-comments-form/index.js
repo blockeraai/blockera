@@ -50,7 +50,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	title: {
 		name: 'core/title',
 		type: 'title',
-		label: __('Title', 'blockera-core'),
+		label: __('Title', 'blockera'),
 		icon: <InnerBlockFormReplyTitleIcon />,
 		selectors: {
 			root: '.comment-reply-title',
@@ -63,7 +63,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	form: {
 		name: 'core/form',
 		type: 'form',
-		label: __('Form Container', 'blockera-core'),
+		label: __('Form Container', 'blockera'),
 		icon: <InnerBlockFormContainerIcon />,
 		selectors: {
 			root: '.comment-form',
@@ -76,7 +76,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	notes: {
 		name: 'core/notes',
 		type: 'notes',
-		label: __('Notes', 'blockera-core'),
+		label: __('Notes', 'blockera'),
 		icon: <InnerBlockFormNotesIcon />,
 		selectors: {
 			root: '.comment-notes',
@@ -89,7 +89,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	input_label: {
 		name: 'input_label',
 		type: 'input_label',
-		label: __('Input Labels', 'blockera-core'),
+		label: __('Input Labels', 'blockera'),
 		icon: <InnerBlockFormInputLabelIcon />,
 		selectors: {
 			root: 'label',
@@ -102,7 +102,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	input: {
 		name: 'input',
 		type: 'input',
-		label: __('Input Fields', 'blockera-core'),
+		label: __('Input Fields', 'blockera'),
 		icon: <InnerBlockFormInputFieldsIcon />,
 		selectors: {
 			root: '.wp-block-search__input',
@@ -115,7 +115,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	textarea: {
 		name: 'textarea',
 		type: 'textarea',
-		label: __('Textarea Field', 'blockera-core'),
+		label: __('Textarea Field', 'blockera'),
 		icon: <InnerBlockFormTextareaIcon />,
 		selectors: {
 			root: 'textarea',
@@ -128,7 +128,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	cookie_consent: {
 		name: 'cookie_consent',
 		type: 'cookie_consent',
-		label: __('Cookie Consent', 'blockera-core'),
+		label: __('Cookie Consent', 'blockera'),
 		icon: <InnerBlockFormCookieConsentIcon />,
 		selectors: {
 			root: '.comment-form-cookies-consent',
@@ -141,7 +141,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	button: {
 		name: 'core/button',
 		type: 'button',
-		label: __('Submit Button', 'blockera-core'),
+		label: __('Submit Button', 'blockera'),
 		icon: <InnerBlockFormButtonIcon />,
 		selectors: {
 			root: 'input[type=submit]',
@@ -154,7 +154,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	link: {
 		name: 'core/link',
 		type: 'link',
-		label: __('Links', 'blockera-core'),
+		label: __('Links', 'blockera'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
 			root: 'a:not(.wp-element-button)',
@@ -168,7 +168,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	heading: {
 		name: 'core/heading',
 		type: 'heading',
-		label: __('Headings', 'blockera-core'),
+		label: __('Headings', 'blockera'),
 		icon: <InnerBlockHeadingsIcon />,
 		selectors: {
 			root: 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
@@ -186,7 +186,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	heading1: {
 		name: 'core/h1',
 		type: 'h1',
-		label: __('H1s', 'blockera-core'),
+		label: __('H1s', 'blockera'),
 		icon: <InnerBlockHeading1Icon />,
 		selectors: {
 			root: 'h1.wp-block-heading',
@@ -204,7 +204,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	heading2: {
 		name: 'core/h2',
 		type: 'h2',
-		label: __('H2s', 'blockera-core'),
+		label: __('H2s', 'blockera'),
 		icon: <InnerBlockHeading2Icon />,
 		selectors: {
 			root: 'h2.wp-block-heading',
@@ -222,7 +222,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	heading3: {
 		name: 'core/h3',
 		type: 'h3',
-		label: __('H3s', 'blockera-core'),
+		label: __('H3s', 'blockera'),
 		icon: <InnerBlockHeading3Icon />,
 		selectors: {
 			root: 'h3.wp-block-heading',
@@ -240,7 +240,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	heading4: {
 		name: 'core/h4',
 		type: 'h4',
-		label: __('H4s', 'blockera-core'),
+		label: __('H4s', 'blockera'),
 		icon: <InnerBlockHeading4Icon />,
 		selectors: {
 			root: 'h4.wp-block-heading',
@@ -258,7 +258,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	heading5: {
 		name: 'core/h5',
 		type: 'h5',
-		label: __('H5s', 'blockera-core'),
+		label: __('H5s', 'blockera'),
 		icon: <InnerBlockHeading5Icon />,
 		selectors: {
 			root: 'h5.wp-block-heading',
@@ -276,7 +276,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	heading6: {
 		name: 'core/h6',
 		type: 'h6',
-		label: __('H6s', 'blockera-core'),
+		label: __('H6s', 'blockera'),
 		icon: <InnerBlockHeading6Icon />,
 		selectors: {
 			root: 'h6.wp-block-heading',

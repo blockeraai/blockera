@@ -34,25 +34,25 @@ const IconLibraries = {
 	wp: {
 		id: 'wp',
 		// translators: Icon library name
-		name: __('WordPress', 'blockera-core'),
+		name: __('WordPress', 'blockera'),
 		icon: <WPLibraryIcon />,
 	},
 	blockera: {
 		id: 'blockera',
 		// translators: Icon library name
-		name: __('', 'blockera-core'),
+		name: __('', 'blockera'),
 		icon: <LibraryIcon />,
 	},
 	far: {
 		id: 'far',
 		// translators: Icon library name
-		name: __('FontAwesome Regular', 'blockera-core'),
+		name: __('FontAwesome Regular', 'blockera'),
 		icon: <FarLibraryIcon />,
 	},
 	fas: {
 		id: 'fas',
 		// translators: WordPress icon library name
-		name: __('FontAwesome Solid', 'blockera-core'),
+		name: __('FontAwesome Solid', 'blockera'),
 		icon: <FasLibraryIcon />,
 	},
 };

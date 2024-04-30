@@ -43,19 +43,19 @@ export const BorderRadius = ({
 		>
 			<BaseControl columns="columns-1" controlName="border-radius">
 				<BorderRadiusControl
-					label={__('Radius', 'blockera-core')}
+					label={__('Radius', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Softens the edges of block by rounding corners.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'Sharp borders offer a modern, structured look, while soft, rounded corners create a friendly and inviting feel',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>

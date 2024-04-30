@@ -213,7 +213,7 @@ export function MarginTop({
 					data-cy="box-spacing-margin-top"
 				>
 					<LabelControl
-						ariaLabel={__('Top Margin', 'blockera-core')}
+						ariaLabel={__('Top Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -246,18 +246,18 @@ export function MarginTop({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top Margin Space', 'blockera-core')}
-						inputLabel={__('Top Margin', 'blockera-core')}
+						title={__('Top Margin Space', 'blockera')}
+						inputLabel={__('Top Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Top Margin Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies only to the top edge of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

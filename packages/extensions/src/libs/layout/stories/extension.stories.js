@@ -63,7 +63,7 @@ blocksInitializer({
 						icon={<LayoutExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Layout', 'blockera-core')}
+						title={__('Layout', 'blockera')}
 					/>
 				</InspectorControls>
 

@@ -221,7 +221,7 @@ export function MarginVertical({
 					data-cy="box-spacing-margin-top"
 				>
 					<LabelControl
-						ariaLabel={__('Top & Bottom Margin', 'blockera-core')}
+						ariaLabel={__('Top & Bottom Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -256,7 +256,7 @@ export function MarginVertical({
 					data-cy="box-spacing-margin-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('Top & Bottom Margin', 'blockera-core')}
+						ariaLabel={__('Top & Bottom Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.top)
@@ -287,18 +287,18 @@ export function MarginVertical({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top & Bottom Margin Space', 'blockera-core')}
-						inputLabel={__('Vertical Margin', 'blockera-core')}
+						title={__('Top & Bottom Margin Space', 'blockera')}
+						inputLabel={__('Vertical Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Vertical Margin Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies to both the top and bottom edges of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

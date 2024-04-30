@@ -119,10 +119,7 @@ export default function LinkControl({
 							isAdvancedMode ? 'is-active' : ''
 						)}
 						noBorder={true}
-						aria-label={__(
-							'Open Advanced Settings',
-							'blockera-core'
-						)}
+						aria-label={__('Open Advanced Settings', 'blockera')}
 					>
 						<AdvancedIcon />
 					</Button>
@@ -136,10 +133,7 @@ export default function LinkControl({
 					>
 						<CheckboxControl
 							id={'target'}
-							checkboxLabel={__(
-								'Open in New Window',
-								'blockera-core'
-							)}
+							checkboxLabel={__('Open in New Window', 'blockera')}
 							label=""
 							columns=""
 							onChange={(newValue) => {
@@ -155,7 +149,7 @@ export default function LinkControl({
 							id={'nofollow'}
 							label=""
 							columns=""
-							checkboxLabel={__('Add Nofollow', 'blockera-core')}
+							checkboxLabel={__('Add Nofollow', 'blockera')}
 							onChange={(newValue) => {
 								setValue({
 									...value,
@@ -167,7 +161,7 @@ export default function LinkControl({
 
 						<InputControl
 							controlName="input"
-							label={__('Label', 'blockera-core')}
+							label={__('Label', 'blockera')}
 							columns="columns-2"
 							id={'label'}
 							onChange={(newValue) => {
@@ -176,7 +170,7 @@ export default function LinkControl({
 									label: newValue,
 								});
 							}}
-							aria-label={__('Link Label', 'blockera-core')}
+							aria-label={__('Link Label', 'blockera')}
 							defaultValue={defaultValue.label}
 						/>
 
@@ -195,7 +189,7 @@ export default function LinkControl({
 									});
 								}}
 								attributeElement="a"
-								label={__('Attributes', 'blockera-core')}
+								label={__('Attributes', 'blockera')}
 							/>
 						</ControlContextProvider>
 					</div>

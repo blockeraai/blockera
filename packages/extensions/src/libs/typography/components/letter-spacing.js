@@ -39,20 +39,20 @@ export const LetterSpacing = ({
 		>
 			<InputControl
 				columns="2fr 2.6fr"
-				label={__('Letters', 'blockera-core')}
-				labelPopoverTitle={__('Letters Spacing', 'blockera-core')}
+				label={__('Letters', 'blockera')}
+				labelPopoverTitle={__('Letters Spacing', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It adjusts the space between characters in text, enhancing readability and visual appeal, especially useful in headings, logos, and graphic text.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								'It is vital for typographic refinement, allowing control over text density and improving legibility, particularly in creative and web design contexts.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>

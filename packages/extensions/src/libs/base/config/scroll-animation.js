@@ -14,7 +14,7 @@ const blockeraScrollAnimation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('On Scroll Animation', 'blockera-core'),
+	label: __('On Scroll Animation', 'blockera'),
 };
 
 export const scrollAnimationConfig = {

@@ -259,16 +259,14 @@ describe('Helper Functions', () => {
 		test('font size', () => {
 			const category = getVariableCategory('font-size');
 
-			expect(category.label).toBe(
-				__('Editor Font Sizes', 'blockera-core')
-			);
+			expect(category.label).toBe(__('Editor Font Sizes', 'blockera'));
 		});
 
 		test('linear gradients', () => {
 			const category = getVariableCategory('linear-gradient');
 
 			expect(category.label).toBe(
-				__('Editor Linear Gradients', 'blockera-core')
+				__('Editor Linear Gradients', 'blockera')
 			);
 		});
 
@@ -276,30 +274,26 @@ describe('Helper Functions', () => {
 			const category = getVariableCategory('radial-gradient');
 
 			expect(category.label).toBe(
-				__('Editor Radial Gradients', 'blockera-core')
+				__('Editor Radial Gradients', 'blockera')
 			);
 		});
 
 		test('width-size', () => {
 			const category = getVariableCategory('width-size');
 
-			expect(category.label).toBe(
-				__('Width & Height Sizes', 'blockera-core')
-			);
+			expect(category.label).toBe(__('Width & Height Sizes', 'blockera'));
 		});
 
 		test('spacing', () => {
 			const category = getVariableCategory('spacing');
 
-			expect(category.label).toBe(
-				__('Editor Spacing Sizes', 'blockera-core')
-			);
+			expect(category.label).toBe(__('Editor Spacing Sizes', 'blockera'));
 		});
 
 		test('color', () => {
 			const category = getVariableCategory('color');
 
-			expect(category.label).toBe(__('Editor Colors', 'blockera-core'));
+			expect(category.label).toBe(__('Editor Colors', 'blockera'));
 		});
 	});
 
@@ -376,41 +370,37 @@ describe('Helper Functions', () => {
 		test('post', () => {
 			const category = getDynamicValueCategory('post', ['all']);
 
-			expect(category.label).toBe(__('Posts and Pages', 'blockera-core'));
+			expect(category.label).toBe(__('Posts and Pages', 'blockera'));
 		});
 
 		test('featured-image', () => {
 			const category = getDynamicValueCategory('featured-image', ['all']);
 
-			expect(category.label).toBe(
-				__('Post Featured Image', 'blockera-core')
-			);
+			expect(category.label).toBe(__('Post Featured Image', 'blockera'));
 		});
 
 		test('archive', () => {
 			const category = getDynamicValueCategory('archive', ['all']);
 
-			expect(category.label).toBe(__('Archive', 'blockera-core'));
+			expect(category.label).toBe(__('Archive', 'blockera'));
 		});
 
 		test('site', () => {
 			const category = getDynamicValueCategory('site', ['all']);
 
-			expect(category.label).toBe(
-				__('Site Information', 'blockera-core')
-			);
+			expect(category.label).toBe(__('Site Information', 'blockera'));
 		});
 
 		test('user', () => {
 			const category = getDynamicValueCategory('user', ['all']);
 
-			expect(category.label).toBe(__('User & Authors', 'blockera-core'));
+			expect(category.label).toBe(__('User & Authors', 'blockera'));
 		});
 
 		test('other', () => {
 			const category = getDynamicValueCategory('other', ['all']);
 
-			expect(category.label).toBe(__('Utilities', 'blockera-core'));
+			expect(category.label).toBe(__('Utilities', 'blockera'));
 		});
 	});
 

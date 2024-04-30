@@ -19,7 +19,7 @@ import type { BoxShadowControlProps } from './types';
 
 export default function BoxShadowControl({
 	id,
-	popoverTitle = __('Box Shadow', 'blockera-core'),
+	popoverTitle = __('Box Shadow', 'blockera'),
 	className,
 	defaultValue = [],
 	defaultRepeaterItemValue = {
@@ -38,7 +38,7 @@ export default function BoxShadowControl({
 			id={id}
 			className={controlClassNames('box-shadow', className)}
 			popoverTitle={popoverTitle}
-			addNewButtonLabel={__('Add New Box Shadow', 'blockera-core')}
+			addNewButtonLabel={__('Add New Box Shadow', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

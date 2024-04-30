@@ -14,7 +14,7 @@ const blockeraSpacing: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Spacing', 'blockera-core'),
+	label: __('Spacing', 'blockera'),
 };
 
 export const spacingConfig = {

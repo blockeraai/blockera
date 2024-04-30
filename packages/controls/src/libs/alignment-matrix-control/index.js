@@ -137,7 +137,7 @@ export default function AlignmentMatrixControl({
 						<InputControl
 							columns="columns-2"
 							id={id === undefined ? 'top' : `${id}.top`}
-							label={__('Top', 'blockera-core')}
+							label={__('Top', 'blockera')}
 							min={0}
 							max={100}
 							unitType="background-position"
@@ -156,7 +156,7 @@ export default function AlignmentMatrixControl({
 						<InputControl
 							columns="columns-2"
 							id={id === undefined ? 'left' : `${id}.left`}
-							label={__('Left', 'blockera-core')}
+							label={__('Left', 'blockera')}
 							min={0}
 							max={100}
 							unitType="background-position"

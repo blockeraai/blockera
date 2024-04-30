@@ -165,13 +165,13 @@ export function SideItem({
 	function getSideLabel(side: Side): string {
 		switch (side) {
 			case 'top':
-				return __('Top', 'blockera-core');
+				return __('Top', 'blockera');
 			case 'bottom':
-				return __('Bottom', 'blockera-core');
+				return __('Bottom', 'blockera');
 			case 'left':
-				return __('Left', 'blockera-core');
+				return __('Left', 'blockera');
 			case 'right':
-				return __('Right', 'blockera-core');
+				return __('Right', 'blockera');
 		}
 
 		return '';
@@ -268,7 +268,7 @@ export function SideItem({
 					<LabelControl
 						ariaLabel={sprintf(
 							// Translators: %s is the position name (top, right, bottom, left)
-							__('%s Position', 'blockera-core'),
+							__('%s Position', 'blockera'),
 							getSideLabel(side)
 						)}
 						label={
@@ -302,7 +302,7 @@ export function SideItem({
 					property={'position.' + side}
 					title={sprintf(
 						// Translators: %s is the position name (top, right, bottom, left)
-						__('%s Position', 'blockera-core'),
+						__('%s Position', 'blockera'),
 						getSideLabel(side)
 					)}
 					sideLabel={getSideLabel(side)}

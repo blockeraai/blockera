@@ -31,7 +31,7 @@ export const getWidthSizes: () => Array<VariableItem> | [] = memoize(
 
 		if (!isUndefined(layout?.contentSize)) {
 			items.push({
-				name: __('Content Width', 'blockera-core'),
+				name: __('Content Width', 'blockera'),
 				id: 'contentSize',
 				value: layout?.contentSize,
 				reference,
@@ -40,7 +40,7 @@ export const getWidthSizes: () => Array<VariableItem> | [] = memoize(
 
 		if (!isUndefined(layout?.wideSize)) {
 			items.push({
-				name: __('Site Wide Width', 'blockera-core'),
+				name: __('Site Wide Width', 'blockera'),
 				id: 'wideSize',
 				value: layout?.wideSize,
 				reference,

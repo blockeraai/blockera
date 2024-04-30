@@ -33,7 +33,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	term: {
 		name: 'core/term-item',
 		type: 'term',
-		label: __('Link', 'blockera-core'),
+		label: __('Link', 'blockera'),
 		icon: <InnerBlockLinkIcon />,
 		selectors: {
 			root: 'li.cat-item > a',
@@ -46,7 +46,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	item: {
 		name: 'core/list-item',
 		type: 'list-item',
-		label: __('Link Parent', 'blockera-core'),
+		label: __('Link Parent', 'blockera'),
 		icon: <InnerBlockListItemIcon />,
 		selectors: {
 			root: 'li.cat-item',

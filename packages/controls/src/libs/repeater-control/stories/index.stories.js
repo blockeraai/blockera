@@ -175,7 +175,7 @@ function CustomRepeaterItemChildren({ itemId, item }) {
 			<InputControl
 				id={getControlId(itemId, 'name')}
 				type="text"
-				label={__('Name', 'blockera-core')}
+				label={__('Name', 'blockera')}
 				onChange={(value) =>
 					changeRepeaterItem({
 						controlId,
@@ -203,7 +203,7 @@ function CustomRepeaterItemHeader({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'blockera-core'),
+				__('Item %d', 'blockera'),
 				itemId + 1
 			)}
 		>

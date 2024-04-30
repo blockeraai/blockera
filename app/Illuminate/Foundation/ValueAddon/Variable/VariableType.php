@@ -51,7 +51,7 @@ class VariableType extends ValueAddonType implements HasGroupTypes {
 	 *
 	 * @return string
 	 */
-	public function getHandler(string $name): string {
+	public function getHandler( string $name ): string {
 		// TODO: Implement getValue() method.
 
 		return '';

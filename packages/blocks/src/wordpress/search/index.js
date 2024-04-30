@@ -30,7 +30,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	label: {
 		name: 'core/title',
 		type: 'title',
-		label: __('Form Label', 'blockera-core'),
+		label: __('Form Label', 'blockera'),
 		icon: <InnerBlockParagraphIcon />,
 		selectors: {
 			root: '.wp-block-search__label',
@@ -43,7 +43,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	input: {
 		name: 'input',
 		type: 'input',
-		label: __('Form Input', 'blockera-core'),
+		label: __('Form Input', 'blockera'),
 		icon: <InnerBlockInputIcon />,
 		selectors: {
 			root: '.wp-block-search__input',
@@ -56,7 +56,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	button: {
 		name: 'core/button',
 		type: 'button',
-		label: __('Form Button', 'blockera-core'),
+		label: __('Form Button', 'blockera'),
 		icon: <InnerBlockButtonIcon />,
 		selectors: {
 			root: '.wp-block-search__button',

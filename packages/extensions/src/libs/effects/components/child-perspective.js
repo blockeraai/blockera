@@ -58,28 +58,28 @@ export function ChildPerspective({
 	return (
 		<>
 			<BaseControl
-				label={__('Child Perspective', 'blockera-core')}
+				label={__('Child Perspective', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It adds 3D effect by adding depth and distance for children blocks transformations, making elements appear to recede or come forward in 3D space.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								'It enhances the realism of 3D transformations, making blocks like images, cards, and interactive graphics more dynamic and engaging.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							<b style={{ color: '#fff' }}>
-								{__('Note:', 'blockera-core')}{' '}
+								{__('Note:', 'blockera')}{' '}
 							</b>
 							{__(
 								'This only applies to children blocks and does not affect this block. For applying to current block, use the "Self Perspective" setting.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>
@@ -113,18 +113,12 @@ export function ChildPerspective({
 					}}
 				>
 					<PositionButtonControl
-						buttonLabel={__(
-							'Child Perspective Origin',
-							'blockera-core'
-						)}
+						buttonLabel={__('Child Perspective Origin', 'blockera')}
 						popoverTitle={__(
 							'Child Perspective Position',
-							'blockera-core'
+							'blockera'
 						)}
-						alignmentMatrixLabel={__(
-							'Child Origin',
-							'blockera-core'
-						)}
+						alignmentMatrixLabel={__('Child Origin', 'blockera')}
 						size="small"
 						defaultValue={transformChildOriginDefaultValue}
 						onChange={({ top, left }, ref) => {

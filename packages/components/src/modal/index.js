@@ -18,8 +18,7 @@ export default function Modal({
 			title={
 				<>
 					{headerIcon && headerIcon}
-					{headerTitle ||
-						__('Blockera Modal Component', 'blockera-core')}
+					{headerTitle || __('Blockera Modal Component', 'blockera')}
 				</>
 			}
 			{...props}

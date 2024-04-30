@@ -38,20 +38,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				<BorderControl
 					singularId={'border'}
 					repeaterItem={itemId}
-					label={__('Border', 'blockera-core')}
-					labelPopoverTitle={__('Outline Border', 'blockera-core')}
+					label={__('Border', 'blockera')}
+					labelPopoverTitle={__('Outline Border', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Add distinct borders to elements without affecting layout, enhancing visual hierarchy and focus.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'Useful for highlighting elements without space adjustments, unlike borders. Perfect for focus states and accessibility.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -82,14 +82,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					singularId={'offset'}
 					repeaterItem={itemId}
 					controlName="input"
-					label={__('Offset', 'blockera-core')}
-					labelPopoverTitle={__('Outline Offset', 'blockera-core')}
+					label={__('Offset', 'blockera')}
+					labelPopoverTitle={__('Outline Offset', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Control the distance between a block and its outline, offering precision in visual design.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>

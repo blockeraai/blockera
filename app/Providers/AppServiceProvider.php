@@ -49,67 +49,94 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton( Setup::class );
 
-			$this->app->singleton( SavePost::class, function ( Application $app ) {
+			$this->app->singleton(
+				SavePost::class,
+				function ( Application $app ) {
 
-				return new SavePost( $app, new Render( $app ) );
-			} );
+					return new SavePost( $app, new Render( $app ) );
+				}
+			);
 
-			$this->app->singleton( VariableType::class, static function ( Application $app ): VariableType {
+			$this->app->singleton(
+				VariableType::class,
+				static function ( Application $app ): VariableType {
 
-				return new VariableType( $app );
-			} );
+					return new VariableType( $app );
+				}
+			);
 
-			$this->app->singleton( DynamicValueType::class, static function ( Application $app ): DynamicValueType {
+			$this->app->singleton(
+				DynamicValueType::class,
+				static function ( Application $app ): DynamicValueType {
 
-				return new DynamicValueType( $app );
-			} );
+					return new DynamicValueType( $app );
+				}
+			);
 
-			$this->app->singleton( ValueAddonRegistry::class, static function ( Application $app, array $params = [] ): ValueAddonRegistry {
+			$this->app->singleton(
+				ValueAddonRegistry::class,
+				static function ( Application $app, array $params = [] ): ValueAddonRegistry {
 
-				return new ValueAddonRegistry( $app, ...$params );
-			} );
+					return new ValueAddonRegistry( $app, ...$params );
+				}
+			);
 
-			$this->app->singleton( EntityRegistry::class, static function ( Application $app ) {
+			$this->app->singleton(
+				EntityRegistry::class,
+				static function ( Application $app ) {
 
-				return new EntityRegistry( $app );
-			} );
+					return new EntityRegistry( $app );
+				}
+			);
 
-			$this->app->bind( StyleEngine::class, static function ( Application $app, array $params ) {
+			$this->app->bind(
+				StyleEngine::class,
+				static function ( Application $app, array $params ) {
 
-				$styleDefinitions = [
-					$app->make( Size::class ),
-					$app->make( Mouse::class ),
-					$app->make( Layout::class ),
-					$app->make( Border::class ),
-					$app->make( Effects::class ),
-					$app->make( Outline::class ),
-					$app->make( Spacing::class ),
-					$app->make( Position::class ),
-					$app->make( BoxShadow::class ),
-					$app->make( TextShadow::class ),
-					$app->make( Background::class ),
-					$app->make( Typography::class ),
-				];
+					$styleDefinitions = [
+						$app->make( Size::class ),
+						$app->make( Mouse::class ),
+						$app->make( Layout::class ),
+						$app->make( Border::class ),
+						$app->make( Effects::class ),
+						$app->make( Outline::class ),
+						$app->make( Spacing::class ),
+						$app->make( Position::class ),
+						$app->make( BoxShadow::class ),
+						$app->make( TextShadow::class ),
+						$app->make( Background::class ),
+						$app->make( Typography::class ),
+					];
 
-				$params = array_merge( $params, compact( 'styleDefinitions' ) );
+					$params = array_merge( $params, compact( 'styleDefinitions' ) );
 
-				return new StyleEngine( ...$params );
-			} );
+					return new StyleEngine( ...$params );
+				}
+			);
 
-			$this->app->singleton( DomParser::class, static function () {
+			$this->app->singleton(
+				DomParser::class,
+				static function () {
 
-				return new DomParser();
-			} );
+					return new DomParser();
+				}
+			);
 
-			$this->app->singleton( Parser::class, static function ( Application $app ) {
+			$this->app->singleton(
+				Parser::class,
+				static function ( Application $app ) {
 
-				return new Parser( $app );
-			} );
+					return new Parser( $app );
+				}
+			);
 
-			$this->app->bind( Render::class, static function ( Application $app ): Render {
+			$this->app->bind(
+				Render::class,
+				static function ( Application $app ): Render {
 
-				return new Render( $app );
-			} );
+					return new Render( $app );
+				}
+			);
 
 		} catch ( BaseException $handler ) {
 
@@ -134,10 +161,12 @@ class AppServiceProvider extends ServiceProvider {
 		 */
 		$variableRegistry = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
 
-		$this->app->setRegisteredValueAddons( [
-			'variable'      => $variableRegistry->getRegistered(),
-			'dynamic-value' => $dynamicValueRegistry->getRegistered(),
-		] );
+		$this->app->setRegisteredValueAddons(
+			[
+				'variable'      => $variableRegistry->getRegistered(),
+				'dynamic-value' => $dynamicValueRegistry->getRegistered(),
+			]
+		);
 
 		$this->app->make( Setup::class );
 		$this->app->make( SavePost::class );

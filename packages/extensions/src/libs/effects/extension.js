@@ -110,13 +110,13 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Effects', 'blockera-core')}
+				title={__('Effects', 'blockera')}
 				initialOpen={true}
 				icon={<EffectsExtensionIcon />}
 				className={extensionClassNames('effects')}
 			>
 				<ExtensionSettings
-					buttonLabel={__('More Effect Settings', 'blockera-core')}
+					buttonLabel={__('More Effect Settings', 'blockera')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'effectsConfig');
@@ -170,7 +170,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 											tooltipPosition="top"
 											label={__(
 												'Transformation Settings',
-												'blockera-core'
+												'blockera'
 											)}
 											size="extra-small"
 											className={controlInnerClassNames(

@@ -198,7 +198,7 @@ export function PaddingAll({
 					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Padding', 'blockera-core')}
+						ariaLabel={__('All Sides Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -233,7 +233,7 @@ export function PaddingAll({
 					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Padding', 'blockera-core')}
+						ariaLabel={__('All Sides Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -266,7 +266,7 @@ export function PaddingAll({
 					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Padding', 'blockera-core')}
+						ariaLabel={__('All Sides Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -299,7 +299,7 @@ export function PaddingAll({
 					data-cy="box-spacing-padding-left"
 				>
 					<LabelControl
-						ariaLabel={__('All Sides Padding', 'blockera-core')}
+						ariaLabel={__('All Sides Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -331,18 +331,18 @@ export function PaddingAll({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('All Sides Padding', 'blockera-core')}
-						inputLabel={__('Padding', 'blockera-core')}
+						title={__('All Sides Padding', 'blockera')}
+						inputLabel={__('Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'All Sides Padding',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a single padding space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

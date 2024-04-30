@@ -45,8 +45,8 @@ const ItemBody = ({
 			<SelectControl
 				id={`[${itemId}].type`}
 				defaultValue={item.type}
-				label={__('State', 'blockera-core')}
-				labelPopoverTitle={__('Block States', 'blockera-core')}
+				label={__('State', 'blockera')}
+				labelPopoverTitle={__('Block States', 'blockera')}
 				labelDescription={<LabelDescription />}
 				columns="columns-2"
 				options={Object.values(states)
@@ -99,7 +99,7 @@ const ItemBody = ({
 							},
 						})
 					}
-					label={__('CSS Class', 'blockera-core')}
+					label={__('CSS Class', 'blockera')}
 				/>
 			)}
 		</>

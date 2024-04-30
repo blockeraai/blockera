@@ -214,7 +214,7 @@ export function PaddingLeft({
 					data-cy="box-spacing-padding-left"
 				>
 					<LabelControl
-						ariaLabel={__('Left Padding', 'blockera-core')}
+						ariaLabel={__('Left Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.left)
@@ -249,18 +249,18 @@ export function PaddingLeft({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left Padding Space', 'blockera-core')}
-						inputLabel={__('Left Padding', 'blockera-core')}
+						title={__('Left Padding Space', 'blockera')}
+						inputLabel={__('Left Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Left Padding Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies only to the left edge of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

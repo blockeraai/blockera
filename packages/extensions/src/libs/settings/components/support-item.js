@@ -47,13 +47,13 @@ export const SupportItem = ({
 
 	if (force) {
 		ariaLabel = // translators: %s is the feature name in advanced settings panel in extensions
-			sprintf(__('%s is a required feature', 'blockera-core'), label);
+			sprintf(__('%s is a required feature', 'blockera'), label);
 	} else {
 		ariaLabel = show
 			? // translators: %s is the feature name in advanced settings panel in extensions
-			  sprintf(__('Deactivate %s', 'blockera-core'), label)
+			  sprintf(__('Deactivate %s', 'blockera'), label)
 			: // translators: %s is the feature name in advanced settings panel in extensions
-			  sprintf(__('Activate %s', 'blockera-core'), label);
+			  sprintf(__('Activate %s', 'blockera'), label);
 	}
 
 	return (

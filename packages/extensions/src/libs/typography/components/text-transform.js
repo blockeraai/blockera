@@ -45,53 +45,53 @@ export const TextTransform = ({
 			}}
 		>
 			<ToggleSelectControl
-				label={__('Capitalize', 'blockera-core')}
+				label={__('Capitalize', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets the capitalization of text for adding stylistic and readability enhancements in text presentation.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<TextTransformCapitalizeIcon />
-							{__('Capitalize', 'blockera-core')}
+							{__('Capitalize', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Capitalizes the first letter of each word.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<TextTransformLowercaseIcon />
-							{__('Lowercase', 'blockera-core')}
+							{__('Lowercase', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Converts all characters to lowercase.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<TextTransformUppercaseIcon />
-							{__('Uppercase', 'blockera-core')}
+							{__('Uppercase', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Converts all characters of the text to uppercase.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<NoneIcon />
-							{__('None', 'blockera-core')}
+							{__('None', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Maintains the original text as it is, without transformation.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>
@@ -100,22 +100,22 @@ export const TextTransform = ({
 				className="control-first label-center small-gap"
 				options={[
 					{
-						label: __('Capitalize', 'blockera-core'),
+						label: __('Capitalize', 'blockera'),
 						value: 'capitalize',
 						icon: <TextTransformCapitalizeIcon />,
 					},
 					{
-						label: __('Lowercase', 'blockera-core'),
+						label: __('Lowercase', 'blockera'),
 						value: 'lowercase',
 						icon: <TextTransformLowercaseIcon />,
 					},
 					{
-						label: __('Uppercase', 'blockera-core'),
+						label: __('Uppercase', 'blockera'),
 						value: 'uppercase',
 						icon: <TextTransformUppercaseIcon />,
 					},
 					{
-						label: __('None', 'blockera-core'),
+						label: __('None', 'blockera'),
 						value: 'initial',
 						icon: <NoneIcon />,
 					},

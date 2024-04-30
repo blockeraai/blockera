@@ -14,21 +14,21 @@ const blockeraFlexChildSizing: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Sizing', 'blockera-core'),
+	label: __('Sizing', 'blockera'),
 };
 
 const blockeraFlexChildAlign: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Align', 'blockera-core'),
+	label: __('Align', 'blockera'),
 };
 
 const blockeraFlexChildOrder: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Order', 'blockera-core'),
+	label: __('Order', 'blockera'),
 };
 
 export const flexChildConfig = {

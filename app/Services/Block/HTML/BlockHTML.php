@@ -18,9 +18,9 @@ abstract class BlockHTML implements BlockHandler {
 	/**
 	 * @param Application $app
 	 */
-	public function __construct( Application $app) {
+	public function __construct( Application $app ) {
 
-		$this->app       = $app;
+		$this->app = $app;
 	}
 
 	/**
@@ -41,8 +41,6 @@ abstract class BlockHTML implements BlockHandler {
 
 			return;
 		}
-
-		//
 
 		$this->nextHandler->manipulate( $request );
 	}

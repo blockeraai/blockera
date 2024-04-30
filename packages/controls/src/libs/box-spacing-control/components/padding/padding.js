@@ -45,7 +45,7 @@ export function Padding({
 				>
 					<LabelControl
 						ariaLabel={__('Padding Spacing')}
-						label={__('Padding', 'blockera-core')}
+						label={__('Padding', 'blockera')}
 					/>
 				</span>
 			) : (
@@ -58,13 +58,13 @@ export function Padding({
 					<LabelControl
 						mode={'advanced'}
 						ariaLabel={__('Padding Spacing')}
-						label={__('Padding', 'blockera-core')}
+						label={__('Padding', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										"Define the spacing between the block's content and its border, ensuring control over layout and aesthetics.",
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

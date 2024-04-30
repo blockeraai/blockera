@@ -192,7 +192,7 @@ export const Breakpoints = ({
 							cursor: 'pointer',
 							lineHeight: '36px',
 						}}
-						aria-label={__('Canvas Zoom', 'blockera-core')}
+						aria-label={__('Canvas Zoom', 'blockera')}
 						onClick={() =>
 							handleOnChange(
 								'isOpenSettings',
@@ -208,7 +208,7 @@ export const Breakpoints = ({
 					<Popover
 						offset={20}
 						placement={'left-end'}
-						title={__('Breakpoint Settings', 'blockera-core')}
+						title={__('Breakpoint Settings', 'blockera')}
 						onClose={() => handleOnChange('isOpenSettings', false)}
 					>
 						<BreakpointSettings
@@ -223,7 +223,7 @@ export const Breakpoints = ({
 					<Popover
 						offset={20}
 						placement={'bottom-end'}
-						title={__('Canvas Settings', 'blockera-core')}
+						title={__('Canvas Settings', 'blockera')}
 						onClose={() => handleOnChange('isOpenSettings', false)}
 					>
 						<InputControl
@@ -235,7 +235,7 @@ export const Breakpoints = ({
 							onChange={(newValue) =>
 								handleOnChange('width', newValue)
 							}
-							label={__('Width', 'blockera-core')}
+							label={__('Width', 'blockera')}
 						/>
 						<InputControl
 							id={'height'}
@@ -246,7 +246,7 @@ export const Breakpoints = ({
 							onChange={(newValue) =>
 								handleOnChange('height', newValue)
 							}
-							label={__('Height', 'blockera-core')}
+							label={__('Height', 'blockera')}
 						/>
 						<InputControl
 							id={'zoom'}
@@ -257,7 +257,7 @@ export const Breakpoints = ({
 							onChange={(newValue) =>
 								handleOnChange('zoom', newValue)
 							}
-							label={__('Zoom', 'blockera-core')}
+							label={__('Zoom', 'blockera')}
 						/>
 					</Popover>
 				)}

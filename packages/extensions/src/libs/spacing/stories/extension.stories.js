@@ -53,7 +53,7 @@ blocksInitializer({
 						icon={<SpacingExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Spacing', 'blockera-core')}
+						title={__('Spacing', 'blockera')}
 						defaultValue={attributes.style?.spacing || {}}
 						spacingValue={attributes.blockeraSpacing}
 					/>

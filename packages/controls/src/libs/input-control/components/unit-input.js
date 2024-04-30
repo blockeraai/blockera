@@ -230,7 +230,7 @@ export function UnitInput({
 				<ConditionalWrapper
 					condition={!disabled}
 					wrapper={(children) => (
-						<Tooltip text={__('Select Unit', 'blockera-core')}>
+						<Tooltip text={__('Select Unit', 'blockera')}>
 							{children}
 						</Tooltip>
 					)}
@@ -245,7 +245,7 @@ export function UnitInput({
 							'unit-length-' + unitValue.value.length,
 							'unit-' + unitValue.value
 						)}
-						aria-label={__('Select Unit', 'blockera-core')}
+						aria-label={__('Select Unit', 'blockera')}
 					>
 						{units.map((unit, key) => (
 							<>
@@ -294,7 +294,7 @@ export function UnitInput({
 								)}
 								noBorder={true}
 								showTooltip={!disabled}
-								label={__('Open Editor', 'blockera-core')}
+								label={__('Open Editor', 'blockera')}
 								disabled={disabled}
 							>
 								<MaximizeIcon />
@@ -303,10 +303,7 @@ export function UnitInput({
 
 						{isMaximizeVisible && (
 							<Popover
-								title={__(
-									'CSS Functions and Vars',
-									'blockera-core'
-								)}
+								title={__('CSS Functions and Vars', 'blockera')}
 								offset={125}
 								placement="left-start"
 								className={controlInnerClassNames(
@@ -338,7 +335,7 @@ export function UnitInput({
 								>
 									{__(
 										'You can use CSS functions like calc, min, max, etc., and also CSS variables.',
-										'blockera-core'
+										'blockera'
 									)}
 								</NoticeControl>
 							</Popover>
@@ -374,12 +371,12 @@ export function UnitInput({
 									noBorder && 'no-border',
 									className
 								)}
-								aria-label={__('Open Editor', 'blockera-core')}
+								aria-label={__('Open Editor', 'blockera')}
 								onClick={() => {
 									toggleIsMaximizeVisible();
 								}}
 							>
-								{__('Edit', 'blockera-core')}
+								{__('Edit', 'blockera')}
 							</span>
 
 							<div

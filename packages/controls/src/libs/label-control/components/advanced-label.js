@@ -166,7 +166,7 @@ export const AdvancedLabelControl = ({
 								)}
 							>
 								<EditsIcon />
-								{__('Customization', 'blockera-core')}
+								{__('Customization', 'blockera')}
 							</h3>
 
 							<StatesGraph
@@ -188,13 +188,10 @@ export const AdvancedLabelControl = ({
 										<Button
 											variant={'tertiary'}
 											size="input"
-											text={__(
-												'Reset All',
-												'blockera-core'
-											)}
+											text={__('Reset All', 'blockera')}
 											label={__(
 												'Reset All Changes in All States',
-												'blockera-core'
+												'blockera'
 											)}
 											onClick={() => {
 												if (
@@ -237,14 +234,14 @@ export const AdvancedLabelControl = ({
 													<>
 														{__(
 															'Reset',
-															'blockera-core'
+															'blockera'
 														)}
 														<RevertIcon />
 													</>
 												}
 												label={__(
 													'Reset To Default Setting',
-													'blockera-core'
+													'blockera'
 												)}
 												onClick={() => {
 													if (
@@ -286,16 +283,13 @@ export const AdvancedLabelControl = ({
 											size="input"
 											text={
 												<>
-													{__(
-														'Reset',
-														'blockera-core'
-													)}
+													{__('Reset', 'blockera')}
 													<RevertIcon />
 												</>
 											}
 											label={__(
 												'Reset To Normal Setting',
-												'blockera-core'
+												'blockera'
 											)}
 											onClick={() => {
 												if (
@@ -352,7 +346,7 @@ export const AdvancedLabelControl = ({
 									)}
 								>
 									<HelpIcon />
-									{__('Overview', 'blockera-core')}
+									{__('Overview', 'blockera')}
 								</h3>
 							)}
 

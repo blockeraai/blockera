@@ -24,9 +24,9 @@ import { default as DeleteIcon } from './icons/delete';
 import type { MediaImageControlProps } from './types';
 
 export default function MediaImageControl({
-	labelChoose = __('Choose Image…', 'blockera-core'),
-	labelMediaLibrary = __('Media Library', 'blockera-core'),
-	labelUploadImage = __('Upload Image', 'blockera-core'),
+	labelChoose = __('Choose Image…', 'blockera'),
+	labelMediaLibrary = __('Media Library', 'blockera'),
+	labelUploadImage = __('Upload Image', 'blockera'),
 	//
 	id,
 	label = '',

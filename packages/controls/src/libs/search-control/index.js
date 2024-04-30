@@ -29,7 +29,7 @@ export default function SearchControl({
 	defaultValue = '',
 	onChange,
 	field = 'search',
-	placeholder = __('Search…', 'blockera-core'),
+	placeholder = __('Search…', 'blockera'),
 	//
 	className,
 	...props

@@ -47,7 +47,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	form: {
 		name: 'core/form',
 		type: 'form',
-		label: __('Form Container', 'blockera-core'),
+		label: __('Form Container', 'blockera'),
 		icon: <InnerBlockFormContainerIcon />,
 		selectors: {
 			root: 'form',
@@ -60,7 +60,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	input_label: {
 		name: 'input_label',
 		type: 'input_label',
-		label: __('Input Labels', 'blockera-core'),
+		label: __('Input Labels', 'blockera'),
 		icon: <InnerBlockFormInputLabelIcon />,
 		selectors: {
 			root: '.login-password label, .login-username label',
@@ -73,7 +73,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	input: {
 		name: 'input',
 		type: 'input',
-		label: __('Inputs', 'blockera-core'),
+		label: __('Inputs', 'blockera'),
 		icon: <InnerBlockFormInputFieldsIcon />,
 		selectors: {
 			root: '.login-password input, .login-username input',
@@ -86,7 +86,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	remember: {
 		name: 'remember',
 		type: 'remember',
-		label: __('Remember Me', 'blockera-core'),
+		label: __('Remember Me', 'blockera'),
 		icon: <InnerBlockFormRememberIcon />,
 		selectors: {
 			root: '.login-remember label',
@@ -99,7 +99,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	button: {
 		name: 'core/button',
 		type: 'button',
-		label: __('Submit Button', 'blockera-core'),
+		label: __('Submit Button', 'blockera'),
 		icon: <InnerBlockFormButtonIcon />,
 		selectors: {
 			root: '.button.button-primary',

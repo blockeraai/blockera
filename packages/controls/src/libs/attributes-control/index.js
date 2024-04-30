@@ -43,13 +43,10 @@ export default function AttributesControl({
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
-			popoverTitle={
-				popoverTitle || __('HTML Attributes', 'blockera-core')
-			}
-			label={label || __('HTML Attributes', 'blockera-core')}
+			popoverTitle={popoverTitle || __('HTML Attributes', 'blockera')}
+			label={label || __('HTML Attributes', 'blockera')}
 			labelPopoverTitle={
-				labelPopoverTitle ||
-				__('Custom HTML Attributes', 'blockera-core')
+				labelPopoverTitle || __('Custom HTML Attributes', 'blockera')
 			}
 			labelDescription={
 				labelDescription || (
@@ -57,19 +54,19 @@ export default function AttributesControl({
 						<p>
 							{__(
 								'It enables you to add custom HTML attributes to the block.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								'You can define key-value pairs as attributes, which are then added to the HTML markup of the block, allowing for enhanced customization and functionality.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>
 				)
 			}
-			addNewButtonLabel={__('Add New HTML Attribute', 'blockera-core')}
+			addNewButtonLabel={__('Add New HTML Attribute', 'blockera')}
 			// custom prop for this control
 			className={controlClassNames('attributes', className)}
 			attributeElement={attributeElement}

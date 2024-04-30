@@ -56,7 +56,7 @@ export function BreakpointIcon({
 		case 'laptop':
 			return (
 				<LaptopIcon
-					aria-label={__('Laptop', 'blockera-core')}
+					aria-label={__('Laptop', 'blockera')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -65,7 +65,7 @@ export function BreakpointIcon({
 		case 'desktop':
 			return (
 				<DesktopIcon
-					aria-label={__('Desktop', 'blockera-core')}
+					aria-label={__('Desktop', 'blockera')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -74,7 +74,7 @@ export function BreakpointIcon({
 		case 'tablet':
 			return (
 				<TabletIcon
-					aria-label={__('Tablet', 'blockera-core')}
+					aria-label={__('Tablet', 'blockera')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -83,7 +83,7 @@ export function BreakpointIcon({
 		case 'mobile':
 			return (
 				<MobileIcon
-					aria-label={__('Mobile', 'blockera-core')}
+					aria-label={__('Mobile', 'blockera')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -92,7 +92,7 @@ export function BreakpointIcon({
 		case 'mobile-landscape':
 			return (
 				<MobileLandscapeIcon
-					aria-label={__('Mobile Landscape', 'blockera-core')}
+					aria-label={__('Mobile Landscape', 'blockera')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -101,7 +101,7 @@ export function BreakpointIcon({
 		case 'large':
 			return (
 				<LargeIcon
-					aria-label={__('Large Screen', 'blockera-core')}
+					aria-label={__('Large Screen', 'blockera')}
 					onClick={onClick}
 					{...props}
 				/>
@@ -110,7 +110,7 @@ export function BreakpointIcon({
 		case 'extra-large':
 			return (
 				<ExtraLargeIcon
-					aria-label={__('Extra Large Screen', 'blockera-core')}
+					aria-label={__('Extra Large Screen', 'blockera')}
 					onClick={onClick}
 					{...props}
 				/>

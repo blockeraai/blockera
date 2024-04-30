@@ -73,14 +73,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'position')}
 					singularId={'position'}
-					label={__('Position', 'blockera-core')}
-					labelPopoverTitle={__('Divider Position', 'blockera-core')}
+					label={__('Position', 'blockera')}
+					labelPopoverTitle={__('Divider Position', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Block Divider Positions refer to placing decorative dividers at the top or bottom of content sections on a webpage.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -88,7 +88,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					columns="columns-2"
 					options={[
 						{
-							label: __('Top', 'blockera-core'),
+							label: __('Top', 'blockera'),
 							value: 'top',
 							disabled: isPositionDisabled(itemId, items, 'top'),
 							showTooltip: true,
@@ -99,12 +99,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							)
 								? __(
 										'You can only add one top divider',
-										'blockera-core'
+										'blockera'
 								  )
-								: __('Top', 'blockera-core'),
+								: __('Top', 'blockera'),
 						},
 						{
-							label: __('Bottom', 'blockera-core'),
+							label: __('Bottom', 'blockera'),
 							value: 'bottom',
 							disabled: isPositionDisabled(
 								itemId,
@@ -119,9 +119,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							)
 								? __(
 										'You can only add one bottom divider',
-										'blockera-core'
+										'blockera'
 								  )
-								: __('Bottom', 'blockera-core'),
+								: __('Bottom', 'blockera'),
 						},
 					]}
 					onChange={(position) =>
@@ -140,20 +140,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'shape')}
 					singularId={'shape'}
 					columns="columns-2"
-					label={__('Shape', 'blockera-core')}
-					labelPopoverTitle={__('Divider Shape', 'blockera-core')}
+					label={__('Shape', 'blockera')}
+					labelPopoverTitle={__('Divider Shape', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									"It's collection of pre-designed divider shapes that can be easily inserted into web pages.",
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'Additionally, an option to upload custom divider shapes allows for personalized and brand-specific designs.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -204,7 +204,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						>
 							<BaseControl
 								columns={'columns-1'}
-								label={__('Shapes', 'blockera-core')}
+								label={__('Shapes', 'blockera')}
 								className="shapes"
 							>
 								<Flex direction={'column'} gap={'12px'}>
@@ -247,14 +247,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'color')}
 					singularId={'color'}
 					columns="columns-2"
-					label={__('Color', 'blockera-core')}
-					labelPopoverTitle={__('Divider Color', 'blockera-core')}
+					label={__('Color', 'blockera')}
+					labelPopoverTitle={__('Divider Color', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It the color of shape used as divider between content blocks.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -273,7 +273,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				<BaseControl columns="columns-1">
 					<BaseControl
 						columns="columns-2"
-						label={__('Size', 'blockera-core')}
+						label={__('Size', 'blockera')}
 					>
 						<Flex alignItems="flex-start">
 							<InputControl
@@ -281,23 +281,23 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								id={getControlId(itemId, 'size.width')}
 								singularId={'size.width'}
 								columns="columns-1"
-								label={__('Width', 'blockera-core')}
+								label={__('Width', 'blockera')}
 								labelPopoverTitle={__(
 									'Divider Width',
-									'blockera-core'
+									'blockera'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It refers to the horizontal thickness of divider used to separate content sections.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 										<p>
 											{__(
 												'Typically, a full-width (100%) divider is recommended for clear and consistent separation.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -331,23 +331,23 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								id={getControlId(itemId, 'size.height')}
 								singularId={'size.height'}
 								columns="columns-1"
-								label={__('Height', 'blockera-core')}
+								label={__('Height', 'blockera')}
 								labelPopoverTitle={__(
 									'Divider Height',
-									'blockera-core'
+									'blockera'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It refers to the vertical thickness of divider used to separate content sections.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 										<p>
 											{__(
 												'A thinner height is often used for a minimalistic look, while a greater height can serve as a bold statement piece or even a functional space for additional content or design elements.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -384,19 +384,19 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								!item.size.width &&
 								__(
 									'Width is required; please provide a value. 100% is recommended.',
-									'blockera-core'
+									'blockera'
 								)}
 							{item.size.width &&
 								!item.size.height &&
 								__(
 									'Width is required; please provide a value.',
-									'blockera-core'
+									'blockera'
 								)}
 							{!item.size.width &&
 								!item.size.height &&
 								__(
 									'Width and height are required; please provide values.',
-									'blockera-core'
+									'blockera'
 								)}
 						</NoticeControl>
 					)}
@@ -407,14 +407,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'animate')}
 					singularId={'animate'}
 					columns="columns-2"
-					label={__('Animation', 'blockera-core')}
-					labelPopoverTitle={__('Divider Animation', 'blockera-core')}
+					label={__('Animation', 'blockera')}
+					labelPopoverTitle={__('Divider Animation', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It adds dynamic visual effects to divider to draw attention to specific sections.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -438,29 +438,29 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							repeaterItem={itemId}
 							id={getControlId(itemId, 'duration')}
 							singularId={'duration'}
-							label={__('Duration', 'blockera-core')}
+							label={__('Duration', 'blockera')}
 							labelPopoverTitle={__(
 								'Divider Animation Duration',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It sets the length of time it takes for an animation to complete on a divider.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'A faster animation can create a snappy, responsive feel, while a slower animation can impart a sense of elegance and smoothness.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
 							}
 							columns="1fr 1.4fr"
-							placeholder={__('Auto', 'blockera-core')}
+							placeholder={__('Auto', 'blockera')}
 							type="number"
 							min={0}
 							unitType="duration"
@@ -487,20 +487,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'flip')}
 					singularId={'flip'}
 					columns="columns-2"
-					label={__('Flip', 'blockera-core')}
-					labelPopoverTitle={__('Horizontal Flip', 'blockera-core')}
+					label={__('Flip', 'blockera')}
+					labelPopoverTitle={__('Horizontal Flip', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It allows a horizontal inversion or mirroring of divider.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'A faster animation can create a snappy, responsive feel, while a slower animation can impart a sense of elegance and smoothness.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -525,14 +525,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'onFront')}
 					singularId={'onFront'}
 					columns="columns-2"
-					label={__('On Front', 'blockera-core')}
-					labelPopoverTitle={__('Bring On Front', 'blockera-core')}
+					label={__('On Front', 'blockera')}
+					labelPopoverTitle={__('Bring On Front', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It sets a high z-index value on the block divider, which brings it to the forefront, layered above all other block contents.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>

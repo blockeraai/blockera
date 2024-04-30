@@ -60,20 +60,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			>
 				<BaseControl
 					columns="columns-2"
-					label={__('Shape', 'blockera-core')}
-					labelPopoverTitle={__('Mask Shape', 'blockera-core')}
+					label={__('Shape', 'blockera')}
+					labelPopoverTitle={__('Mask Shape', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It allows you to apply a mask over the block content using an image.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'The mask can be chosen from a pre-existing library or uploaded as a custom image.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -130,7 +130,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							{item.shape.type === 'shape' && (
 								<BaseControl
 									columns={'columns-1'}
-									label={__('Shapes', 'blockera-core')}
+									label={__('Shapes', 'blockera')}
 									className="shapes"
 								>
 									<div className="shapes-field">
@@ -170,20 +170,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'size')}
 					singularId={'size'}
-					label={__('Size', 'blockera-core')}
-					labelPopoverTitle={__('Mask Size', 'blockera-core')}
+					label={__('Size', 'blockera')}
+					labelPopoverTitle={__('Mask Size', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It specifies the size of a mask image applied to block.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'Ensure that the mask size works well on different screen sizes and does not distort the mask image or the content.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -191,17 +191,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					columns="columns-2"
 					options={[
 						{
-							label: __('Custom', 'blockera-core'),
+							label: __('Custom', 'blockera'),
 							value: 'custom',
 							icon: <FitNormalIcon />,
 						},
 						{
-							label: __('Cover', 'blockera-core'),
+							label: __('Cover', 'blockera'),
 							value: 'cover',
 							icon: <FitCoverIcon />,
 						},
 						{
-							label: __('Contain', 'blockera-core'),
+							label: __('Contain', 'blockera'),
 							value: 'contain',
 							icon: <FitContainIcon />,
 						},
@@ -229,17 +229,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								repeaterItem={itemId}
 								id={getControlId(itemId, 'size-width')}
 								singularId={'size-width'}
-								label={__('Width', 'blockera-core')}
-								labelPopoverTitle={__(
-									'Mask Width',
-									'blockera-core'
-								)}
+								label={__('Width', 'blockera')}
+								labelPopoverTitle={__('Mask Width', 'blockera')}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It specifies the horizontal size of a mask image applied to block.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -247,7 +244,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								columns="columns-1"
 								className="control-first label-center small-gap"
 								unitType="width"
-								placeholder={__('Auto', 'blockera-core')}
+								placeholder={__('Auto', 'blockera')}
 								defaultValue={
 									defaultRepeaterItemValue['size-width']
 								}
@@ -271,17 +268,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								repeaterItem={itemId}
 								id={getControlId(itemId, 'size-height')}
 								singularId={'size-height'}
-								label={__('Height', 'blockera-core')}
+								label={__('Height', 'blockera')}
 								labelPopoverTitle={__(
 									'Mask Height',
-									'blockera-core'
+									'blockera'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It specifies the vertical size of a mask image applied to block.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -289,7 +286,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								columns="columns-1"
 								className="control-first label-center small-gap"
 								unitType="height"
-								placeholder={__('Auto', 'blockera-core')}
+								placeholder={__('Auto', 'blockera')}
 								defaultValue={
 									defaultRepeaterItemValue['size-height']
 								}
@@ -316,14 +313,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'repeat')}
 					singularId={'repeat'}
-					label={__('Repeat', 'blockera-core')}
-					labelPopoverTitle={__('Mask Repeat', 'blockera-core')}
+					label={__('Repeat', 'blockera')}
+					labelPopoverTitle={__('Mask Repeat', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It specifies how a mask image is repeated over block.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -333,23 +330,23 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						{
 							label: __(
 								'Horizontally and Vertically',
-								'blockera-core'
+								'blockera'
 							),
 							value: 'repeat',
 							icon: <RepeatIcon />,
 						},
 						{
-							label: __('Horizontally', 'blockera-core'),
+							label: __('Horizontally', 'blockera'),
 							value: 'repeat-x',
 							icon: <RepeatXIcon />,
 						},
 						{
-							label: __('Vertically', 'blockera-core'),
+							label: __('Vertically', 'blockera'),
 							value: 'repeat-y',
 							icon: <RepeatYIcon />,
 						},
 						{
-							label: __("Don't Tile", 'blockera-core'),
+							label: __("Don't Tile", 'blockera'),
 							value: 'no-repeat',
 							icon: <RepeatNoIcon />,
 						},
@@ -369,18 +366,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'position')}
 					singularId={'position'}
-					label={__('Position', 'blockera-core')}
-					alignmentMatrixLabel={__('Mask Position', 'blockera-core')}
-					labelPopoverTitle={__(
-						'Mask Repeat Position',
-						'blockera-core'
-					)}
+					label={__('Position', 'blockera')}
+					alignmentMatrixLabel={__('Mask Position', 'blockera')}
+					labelPopoverTitle={__('Mask Repeat Position', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It sets where the mask image is placed, allowing for precise alignment of the mask in relation to the content it overlays.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -398,7 +392,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 				/>
 
 				<BaseControl
-					label={__('Flip', 'blockera-core')}
+					label={__('Flip', 'blockera')}
 					columns="columns-2"
 					className="mask-control-flip"
 				>
@@ -408,17 +402,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						singularId={'horizontally-flip'}
 						className="flip-toggle"
 						columns="columns-2"
-						label={__('Horizontally', 'blockera-core')}
-						labelPopoverTitle={__(
-							'Flip Horizontally',
-							'blockera-core'
-						)}
+						label={__('Horizontally', 'blockera')}
+						labelPopoverTitle={__('Flip Horizontally', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It allows the horizontal mirroring of the mask image.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -444,17 +435,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						id={getControlId(itemId, 'vertically-flip')}
 						singularId={'vertically-flip'}
 						className="flip-toggle"
-						label={__('Vertically', 'blockera-core')}
-						labelPopoverTitle={__(
-							'Flip Vertically',
-							'blockera-core'
-						)}
+						label={__('Vertically', 'blockera')}
+						labelPopoverTitle={__('Flip Vertically', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It allows the vertical mirroring of the mask image.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

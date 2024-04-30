@@ -50,7 +50,7 @@ if ( ! class_exists( 'ComposerLoader' ) ) {
 
 				self::$instance = new self( $vendor_dir );
 
-				//add_action( 'plugins_loaded', [ self::$instance, 'load' ], 999 );
+				// add_action( 'plugins_loaded', [ self::$instance, 'load' ], 999 );
 				add_action( 'after_setup_theme', [ self::$instance, 'load' ], 9 );
 			}
 
@@ -124,10 +124,13 @@ if ( ! class_exists( 'ComposerLoader' ) ) {
 				return $paths[0];
 			}
 
-			uksort( $files_version, static function ( $a, $b ) {
+			uksort(
+				$files_version,
+				static function ( $a, $b ) {
 
-				return version_compare( $b, $a );
-			} );
+					return version_compare( $b, $a );
+				}
+			);
 
 			return array_shift( $files_version );
 		}

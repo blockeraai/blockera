@@ -211,7 +211,7 @@ export function MarginRight({
 						data-cy="box-spacing-margin-right"
 					>
 						<LabelControl
-							ariaLabel={__('Right Margin', 'blockera-core')}
+							ariaLabel={__('Right Margin', 'blockera')}
 							label={
 								_isSetValueAddon
 									? fixLabelText(value.margin.right)
@@ -244,21 +244,18 @@ export function MarginRight({
 									setFocusSide('');
 									setOpenPopover('');
 								}}
-								title={__(
-									'Right Margin Space',
-									'blockera-core'
-								)}
-								inputLabel={__('Right Margin', 'blockera-core')}
+								title={__('Right Margin Space', 'blockera')}
+								inputLabel={__('Right Margin', 'blockera')}
 								inputLabelPopoverTitle={__(
 									'Right Margin Space',
-									'blockera-core'
+									'blockera'
 								)}
 								inputLabelDescription={
 									<>
 										<p>
 											{__(
 												'It enables you to set a margin space that applies only to the right edge of the block.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>

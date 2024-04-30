@@ -115,13 +115,13 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Layout', 'blockera-core')}
+				title={__('Layout', 'blockera')}
 				initialOpen={true}
 				icon={<LayoutExtensionIcon />}
 				className={extensionClassNames('layout')}
 			>
 				<ExtensionSettings
-					buttonLabel={__('More Layout Settings', 'blockera-core')}
+					buttonLabel={__('More Layout Settings', 'blockera')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'layoutConfig');
@@ -141,79 +141,76 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 						}}
 					>
 						<ToggleSelectControl
-							label={__('Display', 'blockera-core')}
+							label={__('Display', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'The Display is essential to defining how blocks are formatted and arranged on the page.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<DisplayBlockIcon />
-										{__('Block', 'blockera-core')}
+										{__('Block', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Block take up the full width available, starting on a new line.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<DisplayFlexIcon />
-										{__('Flex', 'blockera-core')}
+										{__('Flex', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Implements a flexible box layout, making it easier to design responsive layouts.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<DisplayGridIcon />
-										{__('Grid', 'blockera-core')}
+										{__('Grid', 'blockera')}
 										<span>
-											{__(
-												'Coming soon…',
-												'blockera-core'
-											)}
+											{__('Coming soon…', 'blockera')}
 										</span>
 									</h3>
 									<p>
 										{__(
 											'Creates a grid-based layout, providing precise control over rows and columns.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<DisplayInlineBlockIcon />
-										{__('Inline Block', 'blockera-core')}
+										{__('Inline Block', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Behaves like "inline" but respects width and height values.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<DisplayInlineIcon />
-										{__('Inline', 'blockera-core')}
+										{__('Inline', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Elements do not start on a new line and only occupy as much width as necessary.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<DisplayNoneIcon />
-										{__('None', 'blockera-core')}
+										{__('None', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Completely hides the block from the layout, but note that the block remains in the HTML document.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -221,32 +218,32 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							columns="1fr 160px"
 							options={[
 								{
-									label: __('Block', 'blockera-core'),
+									label: __('Block', 'blockera'),
 									value: 'block',
 									icon: <DisplayBlockIcon />,
 								},
 								{
-									label: __('Flex', 'blockera-core'),
+									label: __('Flex', 'blockera'),
 									value: 'flex',
 									icon: <DisplayFlexIcon />,
 								},
 								// {
-								// 	label: __('Grid', 'blockera-core'),
+								// 	label: __('Grid', 'blockera'),
 								// 	value: 'grid',
 								// 	icon: <DisplayGridIcon />,
 								// },
 								{
-									label: __('Inline Block', 'blockera-core'),
+									label: __('Inline Block', 'blockera'),
 									value: 'inline-block',
 									icon: <DisplayInlineBlockIcon />,
 								},
 								{
-									label: __('Inline', 'blockera-core'),
+									label: __('Inline', 'blockera'),
 									value: 'inline',
 									icon: <DisplayInlineIcon />,
 								},
 								{
-									label: __('None', 'blockera-core'),
+									label: __('None', 'blockera'),
 									value: 'none',
 									icon: <DisplayNoneIcon />,
 								},
@@ -271,7 +268,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							>
 								{__(
 									'Your block is set to "display: none", which hides it from view on page. Double-check and ensure this is intentional.',
-									'blockera-core'
+									'blockera'
 								)}
 							</NoticeControl>
 						)}
@@ -297,19 +294,19 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							>
 								<LayoutMatrixControl
 									columns="80px 160px"
-									label={__('Flex Layout', 'blockera-core')}
+									label={__('Flex Layout', 'blockera')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'This is an intuitive interface for you to effortlessly configure Flexbox properties easily.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<p>
 												{__(
 													'You have the ability to configure the flex direction as either horizontal or vertical, and you can also select how items are aligned along these axes.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 										</>
@@ -381,20 +378,20 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 											columns="80px 120px"
 											label={__(
 												'Children Wrap',
-												'blockera-core'
+												'blockera'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'It controls whether flex items are forced into a single line or can be wrapped onto multiple lines, adjusting layout flexibility and responsiveness.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<p>
 														{__(
 															'It is crucial for managing the layout of flex items, especially when the container cannot accommodate all items in one row, ensuring content adaptability and orderliness.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 
@@ -402,26 +399,23 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														<WrapNoWrapIcon />
 														{__(
 															'No Wrap',
-															'blockera-core'
+															'blockera'
 														)}
 													</h3>
 													<p>
 														{__(
 															'All flex items will be on one line regardless of their size.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<h3>
 														<WrapWrapIcon />
-														{__(
-															'Wrap',
-															'blockera-core'
-														)}
+														{__('Wrap', 'blockera')}
 													</h3>
 													<p>
 														{__(
 															'Flex items will wrap onto multiple lines, from top to bottom.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<p>
@@ -434,12 +428,12 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														>
 															{__(
 																'Note:',
-																'blockera-core'
+																'blockera'
 															)}
 														</span>{' '}
 														{__(
 															'Using the reverse function flex items will wrap onto multiple lines in reverse order.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
@@ -448,7 +442,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												{
 													label: __(
 														'No Wrap',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'nowrap',
 													icon: <WrapNoWrapIcon />,
@@ -456,7 +450,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												{
 													label: __(
 														'Wrap',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'wrap',
 													icon: <WrapWrapIcon />,
@@ -507,7 +501,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 											tooltipPosition="top"
 											label={__(
 												'Reverse Children Wrapping',
-												'blockera-core'
+												'blockera'
 											)}
 											size="small"
 											style={{
@@ -561,98 +555,98 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										<ToggleSelectControl
 											label={__(
 												'Align Content',
-												'blockera-core'
+												'blockera'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'Align-Content controls the alignment and distribution of lines within a flex container when there is extra space along the cross-axis, offering various alignment options.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<p>
 														{__(
 															'This property is vital in multi-line flex containers, especially when the height of the container is greater than that of the flex items, ensuring a balanced, visually appealing layout.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<h3>
 														<AlignContentFlexStartIcon />
 														{__(
 															'Flex Start',
-															'blockera-core'
+															'blockera'
 														)}
 													</h3>
 													<p>
 														{__(
 															'Packs lines toward the start of the container.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<h3>
 														<AlignContentCenterIcon />
 														{__(
 															'Center',
-															'blockera-core'
+															'blockera'
 														)}
 													</h3>
 													<p>
 														{__(
 															'Centers lines within the container.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<h3>
 														<AlignContentFlexEndIcon />
 														{__(
 															'Flex End',
-															'blockera-core'
+															'blockera'
 														)}
 													</h3>
 													<p>
 														{__(
 															'Packs lines toward the end of the container.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<h3>
 														<AlignContentSpaceAroundIcon />
 														{__(
 															'Space Around',
-															'blockera-core'
+															'blockera'
 														)}
 													</h3>
 													<p>
 														{__(
 															'Distributes lines evenly, with equal space around each line.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<h3>
 														<AlignContentSpaceBetweenIcon />
 														{__(
 															'Space Between',
-															'blockera-core'
+															'blockera'
 														)}
 													</h3>
 													<p>
 														{__(
 															'Distributes lines evenly, with the first line at the start and the last at the end.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<h3>
 														<AlignContentStretchIcon />
 														{__(
 															'Stretch',
-															'blockera-core'
+															'blockera'
 														)}
 													</h3>
 													<p>
 														{__(
 															'Stretches lines to fill the container (default behavior).',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
@@ -662,7 +656,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												{
 													label: __(
 														'Flex Start',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'flex-start',
 													icon: (
@@ -672,7 +666,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												{
 													label: __(
 														'Center',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'center',
 													icon: (
@@ -682,7 +676,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												{
 													label: __(
 														'Flex End',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'flex-end',
 													icon: (
@@ -692,7 +686,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												{
 													label: __(
 														'Space Around',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'space-around',
 													icon: (
@@ -702,7 +696,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												{
 													label: __(
 														'Space Between',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'space-between',
 													icon: (
@@ -712,7 +706,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												{
 													label: __(
 														'Stretch',
-														'blockera-core'
+														'blockera'
 													),
 													value: 'stretch',
 													icon: (

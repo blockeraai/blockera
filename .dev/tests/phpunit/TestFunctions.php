@@ -144,7 +144,7 @@ class TestFunctions extends AppTestCase {
 				'expected' => [
 					'type'       => 'extra-large',
 					'force'      => false,
-					'label'      => __( 'Extra Large Screen', 'blockera-core' ),
+					'label'      => __( 'Extra Large Screen', 'blockera' ),
 					'settings'   => [
 						'min' => '2561px',
 						'max' => '',
@@ -189,12 +189,12 @@ class TestFunctions extends AppTestCase {
 			[
 				'version'    => blockera_core_config( 'app.version' ),
 				'mode'       => blockera_core_config( 'app.debug' ) ? 'development' : 'production',
-				'everything' => 'blockera-core',
+				'everything' => 'blockera',
 			],
 			[
 				'version'    => blockera_core_env( 'VERSION' ),
 				'mode'       => blockera_core_env( 'APP_MODE' ),
-				'everything' => blockera_core_env( 'EVERYTHING', 'blockera-core' ),
+				'everything' => blockera_core_env( 'EVERYTHING', 'blockera' ),
 			]
 		);
 	}

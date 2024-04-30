@@ -40,12 +40,10 @@ export default function MaskControl({
 	return (
 		<RepeaterControl
 			className={controlClassNames('mask', className)}
-			popoverTitle={
-				popoverTitle || __('Block Image Mask', 'blockera-core')
-			}
-			label={label || __('Image Mask', 'blockera-core')}
+			popoverTitle={popoverTitle || __('Block Image Mask', 'blockera')}
+			label={label || __('Image Mask', 'blockera')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Block Image Mask', 'blockera-core')
+				labelPopoverTitle || __('Block Image Mask', 'blockera')
 			}
 			labelDescription={
 				labelDescription || (
@@ -53,13 +51,13 @@ export default function MaskControl({
 						<p>
 							{__(
 								'It allows you to apply a mask over the block content using an image.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								'The mask can be chosen from a pre-existing library or uploaded as a custom image.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>

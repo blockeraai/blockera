@@ -47,76 +47,71 @@ export const TextDecoration = ({
 			<ToggleSelectControl
 				columns="columns-1"
 				className="control-first label-center small-gap"
-				label={__('Decoration', 'blockera-core')}
-				labelPopoverTitle={__('Text Decoration', 'blockera-core')}
+				label={__('Decoration', 'blockera')}
+				labelPopoverTitle={__('Text Decoration', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It applies various decorative changes to text for enhancing the visual emphasis and style of text content.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<TextDecorationUnderlineIcon />
-							{__('Underline', 'blockera-core')}
+							{__('Underline', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Adds a line below the text, commonly used for hyperlinks.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<TextDecorationLineThroughIcon />
-							{__('Line Through', 'blockera-core')}
+							{__('Line Through', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Strikes through the text, useful for showing deletion or changes.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<TextDecorationOverlineIcon />
-							{__('Overline', 'blockera-core')}
+							{__('Overline', 'blockera')}
 						</h3>
-						<p>
-							{__(
-								'Places a line above the text.',
-								'blockera-core'
-							)}
-						</p>
+						<p>{__('Places a line above the text.', 'blockera')}</p>
 						<h3>
 							<NoneIcon />
-							{__('None', 'blockera-core')}
+							{__('None', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Removes any decorations, often used to remove underlines from links. Its useful to remove underlines from links.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>
 				}
 				options={[
 					{
-						label: __('Underline', 'blockera-core'),
+						label: __('Underline', 'blockera'),
 						value: 'underline',
 						icon: <TextDecorationUnderlineIcon />,
 					},
 					{
-						label: __('Line Through', 'blockera-core'),
+						label: __('Line Through', 'blockera'),
 						value: 'line-through',
 						icon: <TextDecorationLineThroughIcon />,
 					},
 					{
-						label: __('Overline', 'blockera-core'),
+						label: __('Overline', 'blockera'),
 						value: 'overline',
 						icon: <TextDecorationOverlineIcon />,
 					},
 					{
-						label: __('None', 'blockera-core'),
+						label: __('None', 'blockera'),
 						value: 'initial',
 						icon: <NoneIcon />,
 					},

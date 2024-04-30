@@ -37,7 +37,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'blockera-core'),
+					__('Item %d', 'blockera'),
 					itemId + 1
 				)}
 			>
@@ -54,7 +54,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				>
 					{key
 						? key.replace(/^data-/, '').replace(/^aria-/, '')
-						: __('None', 'blockera-core')}
+						: __('None', 'blockera')}
 				</span>
 
 				<span

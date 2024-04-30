@@ -48,21 +48,21 @@ class Spacing extends BaseStyleDefinition {
 
 		$declaration = array_merge(
 			...array_map(
-			static function ( string $item, string $property ) use ( $isImportant ): array {
+				static function ( string $item, string $property ) use ( $isImportant ): array {
 
-				return [ "padding-{$property}" => blockera_get_value_addon_real_value( $item ) . $isImportant ];
-			},
-			$padding,
-			array_keys( $padding )
-		),
+					return [ "padding-{$property}" => blockera_get_value_addon_real_value( $item ) . $isImportant ];
+				},
+				$padding,
+				array_keys( $padding )
+			),
 			...array_map(
-			static function ( string $item, string $property ) use ( $isImportant ): array {
+				static function ( string $item, string $property ) use ( $isImportant ): array {
 
-				return [ "margin-{$property}" => blockera_get_value_addon_real_value( $item ) . $isImportant ];
-			},
-			$margin,
-			array_keys( $margin )
-		),
+					return [ "margin-{$property}" => blockera_get_value_addon_real_value( $item ) . $isImportant ];
+				},
+				$margin,
+				array_keys( $margin )
+			),
 		);
 
 		$this->setCss( $declaration );

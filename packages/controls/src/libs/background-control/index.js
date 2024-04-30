@@ -90,7 +90,7 @@ export default function BackgroundControl({
 		'mesh-gradient-attachment': 'scroll',
 		isVisible: true,
 	}),
-	popoverTitle = __('Background', 'blockera-core'),
+	popoverTitle = __('Background', 'blockera'),
 	label,
 	labelPopoverTitle,
 	labelDescription,
@@ -161,10 +161,10 @@ export default function BackgroundControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			popoverClassName={controlClassNames('background-popover')}
-			addNewButtonLabel={__('Add New Background', 'blockera-core')}
-			label={label || __('Background', 'blockera-core')}
+			addNewButtonLabel={__('Add New Background', 'blockera')}
+			label={label || __('Background', 'blockera')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Block Background', 'blockera-core')
+				labelPopoverTitle || __('Block Background', 'blockera')
 			}
 			labelDescription={labelDescription || <LabelDescription />}
 			{...props}

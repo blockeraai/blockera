@@ -46,7 +46,7 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 				return $config;
 			}
 
-			$config = $config[$node];
+			$config = $config[ $node ];
 		}
 
 		return $config;
@@ -150,7 +150,7 @@ if ( ! function_exists( 'blockera_get_value_addon_real_value' ) ) {
 
 			// todo validate that variable is currently available or not
 			if ( 'variable' === $value['valueType'] && isset( $value['settings']['var'] ) ) {
-				return "var(" . $value['settings']['var'] . ")";
+				return 'var(' . $value['settings']['var'] . ')';
 			}
 		}
 
@@ -210,10 +210,13 @@ if ( ! function_exists( 'blockera_get_sorted_repeater' ) ) {
 			$dataArray[] = $value;
 		}
 
-		usort( $dataArray, function ( $a, $b ) {
+		usort(
+			$dataArray,
+			function ( $a, $b ) {
 
-			return ( $a['order'] ?? 0 ) - ( $b['order'] ?? 0 );
-		} );
+				return ( $a['order'] ?? 0 ) - ( $b['order'] ?? 0 );
+			}
+		);
 
 		return $dataArray;
 	}

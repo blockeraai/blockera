@@ -222,7 +222,7 @@ export function PaddingHorizontal({
 					data-cy="box-spacing-padding-right"
 				>
 					<LabelControl
-						ariaLabel={__('left & Right Padding', 'blockera-core')}
+						ariaLabel={__('left & Right Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.right)
@@ -257,7 +257,7 @@ export function PaddingHorizontal({
 					data-cy="box-spacing-padding-left"
 				>
 					<LabelControl
-						ariaLabel={__('left & Right Padding', 'blockera-core')}
+						ariaLabel={__('left & Right Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.right)
@@ -289,21 +289,18 @@ export function PaddingHorizontal({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__(
-							'Left & Right Padding Space',
-							'blockera-core'
-						)}
-						inputLabel={__('Horizontal Padding', 'blockera-core')}
+						title={__('Left & Right Padding Space', 'blockera')}
+						inputLabel={__('Horizontal Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Horizontal Padding Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies to both the left and right edges of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

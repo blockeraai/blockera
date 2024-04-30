@@ -228,7 +228,7 @@ export function MarginHorizontal({
 					data-cy="box-spacing-margin-right"
 				>
 					<LabelControl
-						ariaLabel={__('Left & Right Margin', 'blockera-core')}
+						ariaLabel={__('Left & Right Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.right)
@@ -263,7 +263,7 @@ export function MarginHorizontal({
 					data-cy="box-spacing-margin-left"
 				>
 					<LabelControl
-						ariaLabel={__('Left & Right Margin', 'blockera-core')}
+						ariaLabel={__('Left & Right Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.right)
@@ -295,18 +295,18 @@ export function MarginHorizontal({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left & Right Margin Space', 'blockera-core')}
-						inputLabel={__('Horizontal Margin', 'blockera-core')}
+						title={__('Left & Right Margin Space', 'blockera')}
+						inputLabel={__('Horizontal Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Horizontal Margin Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies to both the left and right edges of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

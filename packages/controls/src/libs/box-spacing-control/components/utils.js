@@ -18,7 +18,7 @@ import LockAllIcon from '../icons/lock-all';
 export function getSideSelectOptions(disable: string): Array<TNativeOption> {
 	const options = [
 		{
-			label: __('No Lock', 'blockera-core'),
+			label: __('No Lock', 'blockera'),
 			value: 'none',
 			icon: <LockNoneIcon />,
 		},
@@ -26,26 +26,26 @@ export function getSideSelectOptions(disable: string): Array<TNativeOption> {
 
 	if (disable !== 'horizontal' && disable !== 'all')
 		options.push({
-			label: __('Lock Horizontally', 'blockera-core'),
+			label: __('Lock Horizontally', 'blockera'),
 			value: 'horizontal',
 			icon: <LockHorizontalIcon />,
 		});
 
 	if (disable !== 'vertical' && disable !== 'all')
 		options.push({
-			label: __('Lock Vertically', 'blockera-core'),
+			label: __('Lock Vertically', 'blockera'),
 			value: 'vertical',
 			icon: <LockVerticalIcon />,
 		});
 
 	if (disable === 'none') {
 		options.push({
-			label: __('Lock Vertically & Horizontally', 'blockera-core'),
+			label: __('Lock Vertically & Horizontally', 'blockera'),
 			value: 'vertical-horizontal',
 			icon: <LockVerticalHorizontalIcon />,
 		});
 		options.push({
-			label: __('Lock All', 'blockera-core'),
+			label: __('Lock All', 'blockera'),
 			value: 'all',
 			icon: <LockAllIcon />,
 		});

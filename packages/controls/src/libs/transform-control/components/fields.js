@@ -45,28 +45,28 @@ const Fields = ({
 				repeaterItem={itemId}
 				id={getControlId(itemId, 'type')}
 				singularId={'type'}
-				label={__('Type', 'blockera-core')}
-				labelPopoverTitle={__('Transform Type', 'blockera-core')}
+				label={__('Type', 'blockera')}
+				labelPopoverTitle={__('Transform Type', 'blockera')}
 				labelDescription={<LabelDescription />}
 				columns="columns-2"
 				options={[
 					{
-						label: __('Move', 'blockera-core'),
+						label: __('Move', 'blockera'),
 						value: 'move',
 						icon: <MoveIcon />,
 					},
 					{
-						label: __('Scale', 'blockera-core'),
+						label: __('Scale', 'blockera'),
 						value: 'scale',
 						icon: <ScaleIcon />,
 					},
 					{
-						label: __('Rotate', 'blockera-core'),
+						label: __('Rotate', 'blockera'),
 						value: 'rotate',
 						icon: <RotateIcon />,
 					},
 					{
-						label: __('Skew', 'blockera-core'),
+						label: __('Skew', 'blockera'),
 						value: 'skew',
 						icon: <SkewIcon />,
 					},
@@ -89,21 +89,18 @@ const Fields = ({
 						id={getControlId(itemId, 'move-x')}
 						singularId={'move-x'}
 						label={<XCoordinateIcon />}
-						labelPopoverTitle={__(
-							'Move Horizontally',
-							'blockera-core'
-						)}
+						labelPopoverTitle={__('Move Horizontally', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It moves the block horizontally (right/left).',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						aria-label={__('Move-X', 'blockera-core')}
+						aria-label={__('Move-X', 'blockera')}
 						columns="columns-2"
 						unitType="essential"
 						range={true}
@@ -125,21 +122,18 @@ const Fields = ({
 						id={getControlId(itemId, 'move-y')}
 						singularId={'move-y'}
 						label={<YCoordinateIcon />}
-						labelPopoverTitle={__(
-							'Move Vertically',
-							'blockera-core'
-						)}
+						labelPopoverTitle={__('Move Vertically', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It moves the block horizontally (up/down).',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						aria-label={__('Move-Y', 'blockera-core')}
+						aria-label={__('Move-Y', 'blockera')}
 						columns="columns-2"
 						unitType="essential"
 						range={true}
@@ -161,33 +155,30 @@ const Fields = ({
 						id={getControlId(itemId, 'move-z')}
 						singularId={'move-z'}
 						label={<ZCoordinateIcon />}
-						labelPopoverTitle={__(
-							'Move Depth Axis',
-							'blockera-core'
-						)}
+						labelPopoverTitle={__('Move Depth Axis', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It moves it along the depth axis (towards/away from the viewer).',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'Ideal for creating depth effects like parallax scrolling, pop-out animations, and 3D transformations.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'Requires setting the perspective property on the block or parent to enable 3D space.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						aria-label={__('Move-Z', 'blockera-core')}
+						aria-label={__('Move-Z', 'blockera')}
 						columns="columns-2"
 						unitType="essential"
 						range={true}
@@ -212,19 +203,19 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'scale')}
 						singularId={'scale'}
-						label={__('Scale', 'blockera-core')}
+						label={__('Scale', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'It changes the size of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										"It's used in animations for emphasis, hover effects, and creating visual interest.",
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
@@ -256,19 +247,19 @@ const Fields = ({
 						label={<RotateXCoordinateIcon />}
 						labelPopoverTitle={__(
 							'Rotate Horizontally',
-							'blockera-core'
+							'blockera'
 						)}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Rotates the block around its X-axis.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						aria-label={__('Rotate-X', 'blockera-core')}
+						aria-label={__('Rotate-X', 'blockera')}
 						columns="columns-2"
 						unitType="angle"
 						range={true}
@@ -291,21 +282,18 @@ const Fields = ({
 						singularId={'rotate-y'}
 						controlName="input"
 						label={<RotateYCoordinateIcon />}
-						labelPopoverTitle={__(
-							'Rotate Vertically',
-							'blockera-core'
-						)}
+						labelPopoverTitle={__('Rotate Vertically', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Rotates around the Y-axis.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						aria-label={__('Rotate-Y', 'blockera-core')}
+						aria-label={__('Rotate-Y', 'blockera')}
 						columns="columns-2"
 						unitType="angle"
 						range={true}
@@ -327,33 +315,30 @@ const Fields = ({
 						id={getControlId(itemId, 'rotate-z')}
 						singularId={'rotate-z'}
 						label={<RotateZCoordinateIcon />}
-						labelPopoverTitle={__(
-							'Rotate Depth Axis',
-							'blockera-core'
-						)}
+						labelPopoverTitle={__('Rotate Depth Axis', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Rotates around the Z-axis.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'Ideal for creating 3D effect and transformations.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'Requires setting the perspective property on the block or parent to enable 3D space.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						aria-label={__('Rotate-Z', 'blockera-core')}
+						aria-label={__('Rotate-Z', 'blockera')}
 						columns="columns-2"
 						unitType="angle"
 						range={true}
@@ -379,27 +364,24 @@ const Fields = ({
 						id={getControlId(itemId, 'skew-x')}
 						singularId={'skew-x'}
 						label={<XCoordinateIcon />}
-						labelPopoverTitle={__(
-							'Skew Horizontally',
-							'blockera-core'
-						)}
+						labelPopoverTitle={__('Skew Horizontally', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Skews the block horizontally.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'Positive values skew to the right, while negative values skew to the left.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						aria-label={__('Skew-X', 'blockera-core')}
+						aria-label={__('Skew-X', 'blockera')}
 						columns="columns-2"
 						unitType="angle"
 						range={true}
@@ -421,27 +403,24 @@ const Fields = ({
 						id={getControlId(itemId, 'skew-y')}
 						singularId={'skew-y'}
 						label={<YCoordinateIcon />}
-						labelPopoverTitle={__(
-							'Skew Vertically',
-							'blockera-core'
-						)}
+						labelPopoverTitle={__('Skew Vertically', 'blockera')}
 						labelDescription={
 							<>
 								<p>
 									{__(
 										'Skews the block vertically.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										'Positive values skew downwards, and negative values skew upwards.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						aria-label={__('Skew-Y', 'blockera-core')}
+						aria-label={__('Skew-Y', 'blockera')}
 						columns="columns-2"
 						unitType="angle"
 						range={true}

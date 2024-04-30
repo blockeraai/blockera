@@ -101,7 +101,6 @@ class Background extends BaseStyleDefinition {
 		switch ( $cssProperty ) {
 
 			case 'background-clip':
-
 				$declaration = array_merge(
 					[
 						$cssProperty              => $setting[ $cssProperty ],
@@ -112,7 +111,6 @@ class Background extends BaseStyleDefinition {
 				break;
 
 			case 'background-color':
-
 				$declaration = [
 					$cssProperty => blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant(),
 				];
@@ -122,10 +120,16 @@ class Background extends BaseStyleDefinition {
 			case 'linear-gradient':
 			case 'radial-gradient':
 			case 'mesh-gradient':
-				array_map( [ $this, 'setActiveBackgroundType' ], array_filter( blockera_get_sorted_repeater( $setting[ $cssProperty ] ), [
-					$this,
-					'isValidSetting'
-				] ) );
+				array_map(
+					[ $this, 'setActiveBackgroundType' ],
+					array_filter(
+						blockera_get_sorted_repeater( $setting[ $cssProperty ] ),
+						[
+							$this,
+							'isValidSetting',
+						]
+					)
+				);
 				break;
 		}
 
@@ -186,7 +190,7 @@ class Background extends BaseStyleDefinition {
 		$top  = ! empty( $setting['image-position']['top'] ) ? blockera_get_value_addon_real_value( $setting['image-position']['top'] ) : '';
 
 		$props = [
-			//Background Image
+			// Background Image
 			'background-image'      => "url('{$setting['image']}'){$this->getImportant()}",
 			// Background Size
 			'background-size'       => $size . $this->getImportant(),
@@ -235,7 +239,7 @@ class Background extends BaseStyleDefinition {
 		$props = array_merge(
 			$this->defaultProps,
 			[
-				//Background Image
+				// Background Image
 				'background-image'      => $gradient . $this->getImportant(),
 				// Background Attachment
 				'background-attachment' => ( $setting['linear-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
@@ -257,14 +261,13 @@ class Background extends BaseStyleDefinition {
 		$gradient     = $setting['radial-gradient'];
 		$isValueAddon = is_array( $gradient ) && isset( $gradient['isValueAddon'] ) && $gradient['isValueAddon'];
 
-
 		if ( $isValueAddon ) {
 			$gradient = blockera_get_value_addon_real_value( $gradient );
 
 			$props = array_merge(
 				$this->defaultProps,
 				[
-					//Background Image
+					// Background Image
 					'background-image'      => $gradient . $this->getImportant(),
 					// Background Attachment
 					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
@@ -307,9 +310,9 @@ class Background extends BaseStyleDefinition {
 			$props = array_merge(
 				$this->defaultProps,
 				[
-					//Background Image
+					// Background Image
 					'background-image'      => $gradient . $this->getImportant(),
-					//Background Repeat
+					// Background Repeat
 					'background-repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->defaultProps['repeat'] ) . $this->getImportant(),
 					// Background Attachment
 					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
@@ -338,10 +341,13 @@ class Background extends BaseStyleDefinition {
 
 		$colors = $setting['mesh-gradient-colors'];
 
-		usort( $colors, function ( $a, $b ) {
+		usort(
+			$colors,
+			function ( $a, $b ) {
 
-			return $a['order'] - $b['order'];
-		} );
+				return $a['order'] - $b['order'];
+			}
+		);
 
 		foreach ( $colors as $index => $color ) {
 

@@ -282,7 +282,7 @@ class Effects extends BaseStyleDefinition {
 		];
 
 		$transition = sprintf(
-			"%s %s %s %s",
+			'%s %s %s %s',
 			$setting['type'],
 			blockera_get_value_addon_real_value( $setting['duration'] ),
 			$allTimings[ $setting['timing'] ],
@@ -337,7 +337,6 @@ class Effects extends BaseStyleDefinition {
 				);
 		}
 
-
 		if ( $filter ) {
 			if ( ! empty( $this->declarations['filter'] ) ) {
 				$this->setDeclaration(
@@ -368,7 +367,6 @@ class Effects extends BaseStyleDefinition {
 			return;
 		}
 
-
 		if ( 'drop-shadow' === $setting['type'] ) {
 			$filter =
 				sprintf(
@@ -386,7 +384,6 @@ class Effects extends BaseStyleDefinition {
 					blockera_get_value_addon_real_value( $setting[ $setting['type'] ] ),
 				);
 		}
-
 
 		if ( $filter ) {
 			if ( ! empty( $this->declarations['backdrop-filter'] ) ) {
@@ -418,7 +415,6 @@ class Effects extends BaseStyleDefinition {
 
 			return;
 		}
-
 
 		$maskShapes = [
 			[
@@ -568,7 +564,6 @@ class Effects extends BaseStyleDefinition {
 			],
 		];
 
-
 		foreach ( $maskShapes as $key => $val ) {
 			if ( $val['id'] === $setting['shape']['id'] ) {
 				$selectedShape = $val['formattedSvg'];
@@ -578,7 +573,7 @@ class Effects extends BaseStyleDefinition {
 		$widthSize  = $setting['size-width'] ? $setting['size-width'] : 'auto';
 		$heightSize = $setting['size-height'] ? $setting['size-height'] : 'auto';
 
-		$size = "custom" === $setting['size'] ? $widthSize . ' ' . $heightSize : $setting['size'];
+		$size = 'custom' === $setting['size'] ? $widthSize . ' ' . $heightSize : $setting['size'];
 
 		$this->setDeclaration( 'mask', $selectedShape . ' ' . $setting['position']['left'] . ' ' . $setting['position']['top'] . '/' . $size . ' ' . $setting['repeat'] );
 	}
@@ -599,11 +594,11 @@ class Effects extends BaseStyleDefinition {
 			'blockeraTransition'                => 'transition',
 			'blockeraBlendMode'                 => 'mix-blend-mode',
 			'blockeraBackdropFilter'            => 'backdrop-filter',
-			'blockeraTransformSelfOrigin'       => 'self-origin',// transform-origin
-			'blockeraTransformChildOrigin'      => 'child-origin',// perspective-origin
+			'blockeraTransformSelfOrigin'       => 'self-origin', // transform-origin
+			'blockeraTransformChildOrigin'      => 'child-origin', // perspective-origin
 			'blockeraBackfaceVisibility'        => 'backface-visibility',
 			'blockeraTransformSelfPerspective'  => 'self-perspective', // perspective
-			'blockeraTransformChildPerspective' => 'child-perspective',// perspective
+			'blockeraTransformChildPerspective' => 'child-perspective', // perspective
 		];
 	}
 

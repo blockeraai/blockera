@@ -39,7 +39,7 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('On Entrance', 'blockera-core')}
+					title={__('On Entrance', 'blockera')}
 					initialOpen={true}
 					icon={<EntranceAnimationExtensionIcon />}
 					className={extensionClassNames('entrance-animation')}
@@ -63,7 +63,7 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 							icon={<AnimationIcon />}
 							description={__(
 								'Block will animate when it enters into view.',
-								'blockera-core'
+								'blockera'
 							)}
 							actionButtonAdd={false}
 							injectHeaderButtonsStart={
@@ -73,7 +73,7 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 										fontStyle: 'italic',
 									}}
 								>
-									{__('Coming soon…', 'blockera-core')}
+									{__('Coming soon…', 'blockera')}
 								</span>
 							}
 						/>

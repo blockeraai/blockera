@@ -69,7 +69,7 @@ export function BlockCard({
 							onClick={() =>
 								handleOnClick('current-block', 'master')
 							}
-							aria-label={__('Selected Block', 'blockera-core')}
+							aria-label={__('Selected Block', 'blockera')}
 						>
 							{blockInformation.title}
 						</span>

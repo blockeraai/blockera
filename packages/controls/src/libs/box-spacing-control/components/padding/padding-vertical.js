@@ -222,7 +222,7 @@ export function PaddingVertical({
 					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
-						ariaLabel={__('Top & Bottom Padding', 'blockera-core')}
+						ariaLabel={__('Top & Bottom Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -257,7 +257,7 @@ export function PaddingVertical({
 					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('Top & Bottom Padding', 'blockera-core')}
+						ariaLabel={__('Top & Bottom Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -289,21 +289,18 @@ export function PaddingVertical({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__(
-							'Top & Bottom Padding Space',
-							'blockera-core'
-						)}
-						inputLabel={__('Vertical Padding', 'blockera-core')}
+						title={__('Top & Bottom Padding Space', 'blockera')}
+						inputLabel={__('Vertical Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Vertical Padding Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies to both the top and bottom edges of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

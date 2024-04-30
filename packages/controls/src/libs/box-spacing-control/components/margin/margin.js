@@ -45,7 +45,7 @@ export function Margin({
 				>
 					<LabelControl
 						ariaLabel={__('Margin Spacing')}
-						label={__('Margin', 'blockera-core')}
+						label={__('Margin', 'blockera')}
 					/>
 				</span>
 			) : (
@@ -63,18 +63,18 @@ export function Margin({
 								<p>
 									{__(
 										'Use margin to create separation between blocks, optimizing layout and enhancing visual balance.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 								<p>
 									{__(
 										"It's beneficial for improving layout and boosting visual harmony, especially in adaptive, responsive designs.",
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>
 						}
-						label={__('Margin', 'blockera-core')}
+						label={__('Margin', 'blockera')}
 						{...{
 							value,
 							attribute,

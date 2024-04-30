@@ -167,48 +167,48 @@ export function getVariableCategory(
 		case 'font-size':
 			return {
 				label: isBlockTheme()
-					? __('Theme Font Sizes', 'blockera-core')
-					: __('Editor Font Sizes', 'blockera-core'),
+					? __('Theme Font Sizes', 'blockera')
+					: __('Editor Font Sizes', 'blockera'),
 				items: getFontSizes(),
 			};
 
 		case 'linear-gradient':
 			return {
 				label: isBlockTheme()
-					? __('Theme Linear Gradients', 'blockera-core')
-					: __('Editor Linear Gradients', 'blockera-core'),
+					? __('Theme Linear Gradients', 'blockera')
+					: __('Editor Linear Gradients', 'blockera'),
 				items: getLinearGradients(),
 			};
 
 		case 'radial-gradient':
 			return {
 				label: isBlockTheme()
-					? __('Theme Radial Gradients', 'blockera-core')
-					: __('Editor Radial Gradients', 'blockera-core'),
+					? __('Theme Radial Gradients', 'blockera')
+					: __('Editor Radial Gradients', 'blockera'),
 				items: getRadialGradients(),
 			};
 
 		case 'width-size':
 			return {
 				label: isBlockTheme()
-					? __('Theme Width & Height Sizes', 'blockera-core')
-					: __('Width & Height Sizes', 'blockera-core'),
+					? __('Theme Width & Height Sizes', 'blockera')
+					: __('Width & Height Sizes', 'blockera'),
 				items: getWidthSizes(),
 			};
 
 		case 'spacing':
 			return {
 				label: isBlockTheme()
-					? __('Theme Spacing Sizes', 'blockera-core')
-					: __('Editor Spacing Sizes', 'blockera-core'),
+					? __('Theme Spacing Sizes', 'blockera')
+					: __('Editor Spacing Sizes', 'blockera'),
 				items: getSpacings(),
 			};
 
 		case 'color':
 			return {
 				label: isBlockTheme()
-					? __('Theme Colors', 'blockera-core')
-					: __('Editor Colors', 'blockera-core'),
+					? __('Theme Colors', 'blockera')
+					: __('Editor Colors', 'blockera'),
 				items: getColors(),
 			};
 	}
@@ -272,37 +272,37 @@ export function getDynamicValueCategory(
 	switch (category) {
 		case 'post':
 			return {
-				label: __('Posts and Pages', 'blockera-core'),
+				label: __('Posts and Pages', 'blockera'),
 				items: getPostDynamicValueItemsBy('type', types),
 			};
 
 		case 'featured-image':
 			return {
-				label: __('Post Featured Image', 'blockera-core'),
+				label: __('Post Featured Image', 'blockera'),
 				items: getFeaturedImageDynamicValueItemsBy('type', types),
 			};
 
 		case 'archive':
 			return {
-				label: __('Archive', 'blockera-core'),
+				label: __('Archive', 'blockera'),
 				items: getArchiveDynamicValueItemsBy('type', types),
 			};
 
 		case 'site':
 			return {
-				label: __('Site Information', 'blockera-core'),
+				label: __('Site Information', 'blockera'),
 				items: getSiteDynamicValueItemsBy('type', types),
 			};
 
 		case 'user':
 			return {
-				label: __('User & Authors', 'blockera-core'),
+				label: __('User & Authors', 'blockera'),
 				items: getUserDynamicValueItemsBy('type', types),
 			};
 
 		case 'other':
 			return {
-				label: __('Utilities', 'blockera-core'),
+				label: __('Utilities', 'blockera'),
 				items: getOtherDynamicValueItemsBy('type', types),
 			};
 	}
@@ -363,7 +363,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 			case 'variable':
 				result.after = __(
 					'You have the option to either switch it with another variable or unlink it to use the value directly.',
-					'blockera-core'
+					'blockera'
 				);
 				break;
 		}
@@ -383,18 +383,15 @@ export function getDeletedItemInfo(item: ValueAddon): {
 
 		switch (result.referenceType) {
 			case 'preset':
-				result.referenceName = __('Block Editor', 'blockera-core');
+				result.referenceName = __('Block Editor', 'blockera');
 				break;
 
 			case 'core':
-				result.referenceName = __('Blockera Blocks', 'blockera-core');
+				result.referenceName = __('Blockera Blocks', 'blockera');
 				break;
 
 			case 'core-pro':
-				result.referenceName = __(
-					'Blockera Blocks Pro',
-					'blockera-core'
-				);
+				result.referenceName = __('Blockera Blocks Pro', 'blockera');
 
 				switch (item.valueType) {
 					case 'variable':
@@ -402,7 +399,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 							<NoticeControl type="success">
 								{__(
 									'Activating Blockera Blocks Pro plugin may potentially restore this variable.',
-									'blockera-core'
+									'blockera'
 								)}
 							</NoticeControl>
 						);
@@ -413,7 +410,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 							<NoticeControl type="success">
 								{__(
 									'Activating Blockera Blocks Pro plugin restores functionality for this dynamic value item.',
-									'blockera-core'
+									'blockera'
 								)}
 							</NoticeControl>
 						);
@@ -425,27 +422,24 @@ export function getDeletedItemInfo(item: ValueAddon): {
 			case 'custom':
 				switch (item.valueType) {
 					case 'variable':
-						result.referenceName = __('Custom', 'blockera-core');
+						result.referenceName = __('Custom', 'blockera');
 						result.after2 = (
 							<NoticeControl type="information">
 								{__(
 									'You can create a custom variable with the exact same name to restore this variable across all its usages.',
-									'blockera-core'
+									'blockera'
 								)}
 							</NoticeControl>
 						);
 						break;
 
 					case 'dynamic-value':
-						result.referenceName = __(
-							'Custom Code',
-							'blockera-core'
-						);
+						result.referenceName = __('Custom Code', 'blockera');
 						result.after2 = (
 							<NoticeControl type="information">
 								{__(
 									'Find and restore the custom code to return back functionality for this dynamic value item.',
-									'blockera-core'
+									'blockera'
 								)}
 							</NoticeControl>
 						);
@@ -464,15 +458,12 @@ export function getDeletedItemInfo(item: ValueAddon): {
 					pluginName = item?.settings?.reference?.plugin;
 					result.referenceName = sprintf(
 						// Translators: %s is plugin name
-						__('%s plugin', 'blockera-core'),
+						__('%s plugin', 'blockera'),
 						pluginName
 					);
 				} else {
 					pluginName = 'unknown';
-					result.referenceName = __(
-						'unknown plugin',
-						'blockera-core'
-					);
+					result.referenceName = __('unknown plugin', 'blockera');
 				}
 
 				switch (item.valueType) {
@@ -483,7 +474,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 									// Translators: %s is plugin name
 									__(
 										'Activating %s plugin may potentially restore this variable.',
-										'blockera-core'
+										'blockera'
 									),
 									pluginName
 								)}
@@ -498,7 +489,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 									// Translators: %s is plugin name
 									__(
 										'Activating %s plugin restores functionality for this dynamic value item.',
-										'blockera-core'
+										'blockera'
 									),
 									pluginName
 								)}
@@ -520,12 +511,12 @@ export function getDeletedItemInfo(item: ValueAddon): {
 					themeName = item?.settings?.reference?.theme;
 					result.referenceName = sprintf(
 						// Translators: %s is plugin name
-						__('%s theme', 'blockera-core'),
+						__('%s theme', 'blockera'),
 						themeName
 					);
 				} else {
 					themeName = 'unknown';
-					result.referenceName = __('unknown theme', 'blockera-core');
+					result.referenceName = __('unknown theme', 'blockera');
 				}
 
 				switch (item.valueType) {
@@ -536,7 +527,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 									// Translators: %s is plugin name
 									__(
 										'Activating %s theme may potentially restore this variable.',
-										'blockera-core'
+										'blockera'
 									),
 									themeName
 								)}
@@ -551,7 +542,7 @@ export function getDeletedItemInfo(item: ValueAddon): {
 									// Translators: %s is plugin name
 									__(
 										'Activating %s theme restores functionality for this dynamic value item.',
-										'blockera-core'
+										'blockera'
 									),
 									themeName
 								)}
@@ -570,21 +561,21 @@ export function getDeletedItemInfo(item: ValueAddon): {
 			if (result.tooltip === '') {
 				result.tooltip = __(
 					'This is the latest value identified by  Blocks, which may differ from the final value of this variable.',
-					'blockera-core'
+					'blockera'
 				);
 			}
 
 			if (result.before === '') {
 				result.before = __(
 					"There was a deletion or disappearance of this variable, however it's value is still used here.",
-					'blockera-core'
+					'blockera'
 				);
 			}
 
 			if (result.after === '') {
 				result.after = __(
 					'You have the option to either switch it with another variable or remove it.',
-					'blockera-core'
+					'blockera'
 				);
 			}
 
@@ -594,14 +585,14 @@ export function getDeletedItemInfo(item: ValueAddon): {
 			if (result.before === '') {
 				result.before = __(
 					'The dynamic value item is inactive or has been removed.',
-					'blockera-core'
+					'blockera'
 				);
 			}
 
 			if (result.after === '') {
 				result.after = __(
 					'You have the option to either switch this item or remove its usage.',
-					'blockera-core'
+					'blockera'
 				);
 			}
 			break;

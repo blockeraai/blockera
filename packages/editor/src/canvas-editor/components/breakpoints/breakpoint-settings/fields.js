@@ -46,12 +46,9 @@ export default function ({
 						},
 					})
 				}
-				label={__('Name', 'blockera-core')}
+				label={__('Name', 'blockera')}
 			/>
-			<BaseControl
-				columns="columns-1"
-				label={__('Size', 'blockera-core')}
-			>
+			<BaseControl columns="columns-1" label={__('Size', 'blockera')}>
 				<Flex
 					style={{
 						width: '173px',
@@ -82,8 +79,8 @@ export default function ({
 						className={controlClassNames(
 							'control-first label-center small-gap'
 						)}
-						label={__('Min', 'blockera-core')}
-						aria-label={__('Min Width', 'blockera-core')}
+						label={__('Min', 'blockera')}
+						aria-label={__('Min Width', 'blockera')}
 					/>
 					<InputControl
 						id={'settings.max'}
@@ -109,8 +106,8 @@ export default function ({
 						className={controlClassNames(
 							'control-first label-center small-gap'
 						)}
-						label={__('Max', 'blockera-core')}
-						aria-label={__('Max Width', 'blockera-core')}
+						label={__('Max', 'blockera')}
+						aria-label={__('Max Width', 'blockera')}
 					/>
 				</Flex>
 			</BaseControl>

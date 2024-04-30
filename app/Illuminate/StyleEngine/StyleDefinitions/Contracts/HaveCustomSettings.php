@@ -7,7 +7,7 @@ interface HaveCustomSettings {
 	/**
 	 * Retrieve css props.
 	 *
-	 * @param array $settings The settings block.
+	 * @param array  $settings The settings block.
 	 * @param string $settingName The key for setting value.
 	 * @param string $cssProperty The related css property name.
 	 *

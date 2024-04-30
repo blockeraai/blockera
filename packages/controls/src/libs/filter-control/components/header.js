@@ -44,13 +44,13 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 
 		switch (item.type) {
 			case 'blur':
-				label = __('Blur', 'blockera-core');
+				label = __('Blur', 'blockera');
 				value = prepValueForHeader(item.blur);
 				icon = <BlurIcon />;
 				break;
 
 			case 'drop-shadow':
-				label = __('Drop Shadow', 'blockera-core');
+				label = __('Drop Shadow', 'blockera');
 				value = (
 					<>
 						{prepValueForHeader(item['drop-shadow-x'])}
@@ -62,43 +62,43 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				break;
 
 			case 'brightness':
-				label = __('Brightness', 'blockera-core');
+				label = __('Brightness', 'blockera');
 				value = prepValueForHeader(item.brightness);
 				icon = <BrightnessIcon />;
 				break;
 
 			case 'contrast':
-				label = __('Contrast', 'blockera-core');
+				label = __('Contrast', 'blockera');
 				value = prepValueForHeader(item.contrast);
 				icon = <ContrastIcon />;
 				break;
 
 			case 'hue-rotate':
-				label = __('Hue Rotate', 'blockera-core');
+				label = __('Hue Rotate', 'blockera');
 				value = prepValueForHeader(item['hue-rotate']);
 				icon = <HueRotateIcon />;
 				break;
 
 			case 'saturate':
-				label = __('Saturation', 'blockera-core');
+				label = __('Saturation', 'blockera');
 				value = prepValueForHeader(item.saturate);
 				icon = <SaturationIcon />;
 				break;
 
 			case 'grayscale':
-				label = __('Grayscale', 'blockera-core');
+				label = __('Grayscale', 'blockera');
 				value = prepValueForHeader(item.grayscale);
 				icon = <GrayscaleIcon />;
 				break;
 
 			case 'invert':
-				label = __('Invert', 'blockera-core');
+				label = __('Invert', 'blockera');
 				value = prepValueForHeader(item.invert);
 				icon = <InvertIcon />;
 				break;
 
 			case 'sepia':
-				label = __('Sepia', 'blockera-core');
+				label = __('Sepia', 'blockera');
 				value = prepValueForHeader(item.sepia);
 				icon = <SepiaIcon />;
 				break;
@@ -112,7 +112,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'blockera-core'),
+					__('Item %d', 'blockera'),
 					itemId + 1
 				)}
 			>

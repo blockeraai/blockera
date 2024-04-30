@@ -35,10 +35,10 @@ export default function TransitionControl({
 	return (
 		<RepeaterControl
 			className={controlClassNames('transition', className)}
-			popoverTitle={popoverTitle || __('Transitions', 'blockera-core')}
-			label={label || __('Transitions', 'blockera-core')}
+			popoverTitle={popoverTitle || __('Transitions', 'blockera')}
+			label={label || __('Transitions', 'blockera')}
 			labelDescription={labelDescription || <LabelDescription />}
-			addNewButtonLabel={__('Add New Transition', 'blockera-core')}
+			addNewButtonLabel={__('Add New Transition', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

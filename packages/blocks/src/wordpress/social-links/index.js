@@ -35,7 +35,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	item_containers: {
 		name: 'core/item_containers',
 		type: 'item_containers',
-		label: __('Buttons', 'blockera-core'),
+		label: __('Buttons', 'blockera'),
 		icon: <InnerBlockItemContainerIcon />,
 		selectors: {
 			root: '.wp-block-social-link',
@@ -48,7 +48,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	item_icons: {
 		name: 'core/item_icons',
 		type: 'item_icons',
-		label: __('Buttons Icons', 'blockera-core'),
+		label: __('Buttons Icons', 'blockera'),
 		icon: <InnerBlockItemIconIcon />,
 		selectors: {
 			root: '.wp-block-social-link svg',
@@ -61,7 +61,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	item_names: {
 		name: 'core/item_names',
 		type: 'item_names',
-		label: __('Buttons Names', 'blockera-core'),
+		label: __('Buttons Names', 'blockera'),
 		icon: <InnerBlockItemNameIcon />,
 		selectors: {
 			root: '.wp-block-social-link .wp-block-social-link-label',

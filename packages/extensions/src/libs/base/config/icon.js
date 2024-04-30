@@ -14,49 +14,49 @@ const blockeraIcon: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon', 'blockera-core'),
+	label: __('Icon', 'blockera'),
 };
 
 const blockeraIconOptions: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Options', 'blockera-core'),
+	label: __('Icon Options', 'blockera'),
 };
 
 const blockeraIconPosition: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Position', 'blockera-core'),
+	label: __('Icon Position', 'blockera'),
 };
 
 const blockeraIconGap: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Gap', 'blockera-core'),
+	label: __('Icon Gap', 'blockera'),
 };
 
 const blockeraIconSize: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Size', 'blockera-core'),
+	label: __('Icon Size', 'blockera'),
 };
 
 const blockeraIconColor: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Color', 'blockera-core'),
+	label: __('Icon Color', 'blockera'),
 };
 
 const blockeraIconLink: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Icon Link', 'blockera-core'),
+	label: __('Icon Link', 'blockera'),
 };
 
 export const iconConfig = {

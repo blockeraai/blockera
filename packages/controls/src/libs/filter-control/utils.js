@@ -7,55 +7,55 @@ export const getTypeOptions = function () {
 	return [
 		{
 			type: 'optgroup',
-			label: __('General', 'blockera-core'),
+			label: __('General', 'blockera'),
 			options: [
 				{
-					label: __('Blur', 'blockera-core'),
+					label: __('Blur', 'blockera'),
 					value: 'blur',
 				},
 				{
-					label: __('Drop Shadow', 'blockera-core'),
+					label: __('Drop Shadow', 'blockera'),
 					value: 'drop-shadow',
 				},
 			],
 		},
 		{
 			type: 'optgroup',
-			label: __('Color Adjustments', 'blockera-core'),
+			label: __('Color Adjustments', 'blockera'),
 			options: [
 				{
-					label: __('Brightness', 'blockera-core'),
+					label: __('Brightness', 'blockera'),
 					value: 'brightness',
 				},
 				{
-					label: __('Contrast', 'blockera-core'),
+					label: __('Contrast', 'blockera'),
 					value: 'contrast',
 				},
 				{
-					label: __('Hue Rotate', 'blockera-core'),
+					label: __('Hue Rotate', 'blockera'),
 					value: 'hue-rotate',
 				},
 				{
-					label: __('Saturation', 'blockera-core'),
+					label: __('Saturation', 'blockera'),
 					value: 'saturate',
 				},
 			],
 		},
 		{
 			type: 'optgroup',
-			label: __('Color Effects', 'blockera-core'),
+			label: __('Color Effects', 'blockera'),
 			options: [
 				{
-					label: __('Grayscale', 'blockera-core'),
+					label: __('Grayscale', 'blockera'),
 					value: 'grayscale',
 				},
 
 				{
-					label: __('Invert', 'blockera-core'),
+					label: __('Invert', 'blockera'),
 					value: 'invert',
 				},
 				{
-					label: __('Sepia', 'blockera-core'),
+					label: __('Sepia', 'blockera'),
 					value: 'sepia',
 				},
 			],

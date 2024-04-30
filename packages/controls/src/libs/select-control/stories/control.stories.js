@@ -36,46 +36,46 @@ export default {
 
 const selectOptions = [
 	{
-		label: __('All Properties', 'blockera-core'),
+		label: __('All Properties', 'blockera'),
 		value: 'all',
 		icon: <InheritIcon />,
 	},
 	{
 		type: 'optgroup',
-		label: __('Common Transitions', 'blockera-core'),
+		label: __('Common Transitions', 'blockera'),
 		options: [
 			{
-				label: __('Opacity', 'blockera-core'),
+				label: __('Opacity', 'blockera'),
 				value: 'opacity',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Margin', 'blockera-core'),
+				label: __('Margin', 'blockera'),
 				value: 'margin',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Padding', 'blockera-core'),
+				label: __('Padding', 'blockera'),
 				value: 'padding',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Border', 'blockera-core'),
+				label: __('Border', 'blockera'),
 				value: 'border',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Transform', 'blockera-core'),
+				label: __('Transform', 'blockera'),
 				value: 'transform',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Flex', 'blockera-core'),
+				label: __('Flex', 'blockera'),
 				value: 'flex',
 				icon: <InheritIcon />,
 			},
 			{
-				label: __('Filter (Disabled)', 'blockera-core'),
+				label: __('Filter (Disabled)', 'blockera'),
 				value: 'filter',
 				icon: <InheritIcon />,
 				disabled: true,
@@ -83,7 +83,7 @@ const selectOptions = [
 		],
 	},
 	{
-		label: __('Other', 'blockera-core'),
+		label: __('Other', 'blockera'),
 		value: 'other',
 		icon: <InheritIcon />,
 	},

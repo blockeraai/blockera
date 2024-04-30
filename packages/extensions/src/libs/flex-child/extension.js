@@ -75,7 +75,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Flex Child', 'blockera-core')}
+				title={__('Flex Child', 'blockera')}
 				initialOpen={true}
 				icon={<FlexChildExtensionIcon />}
 				className={extensionClassNames('flex-child')}
@@ -102,32 +102,29 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 						<ToggleSelectControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Self Size', 'blockera-core')}
+							label={__('Self Size', 'blockera')}
 							className={
 								'items-flex-direction-' +
 								values.blockeraFlexDirection
 							}
 							options={[
 								{
-									label: __('Shrink', 'blockera-core'),
+									label: __('Shrink', 'blockera'),
 									value: 'shrink',
 									icon: <SizingShrinkIcon />,
 								},
 								{
-									label: __('Grow', 'blockera-core'),
+									label: __('Grow', 'blockera'),
 									value: 'grow',
 									icon: <SizingGrowIcon />,
 								},
 								{
-									label: __(
-										'No Grow or Shrink',
-										'blockera-core'
-									),
+									label: __('No Grow or Shrink', 'blockera'),
 									value: 'no',
 									icon: <SizingNotIcon />,
 								},
 								{
-									label: __('Custom', 'blockera-core'),
+									label: __('Custom', 'blockera'),
 									value: 'custom',
 									icon: <GearIcon />,
 								},
@@ -160,10 +157,10 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									>
 										<InputControl
 											controlName="input"
-											label={__('Grow', 'blockera-core')}
+											label={__('Grow', 'blockera')}
 											aria-label={__(
 												'Custom Grow',
-												'blockera-core'
+												'blockera'
 											)}
 											columns="columns-2"
 											unitType="flex-grow"
@@ -200,13 +197,10 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									>
 										<InputControl
 											controlName="input"
-											label={__(
-												'Shrink',
-												'blockera-core'
-											)}
+											label={__('Shrink', 'blockera')}
 											aria-label={__(
 												'Custom Shrink',
-												'blockera-core'
+												'blockera'
 											)}
 											columns="columns-2"
 											unitType="flex-shrink"
@@ -242,10 +236,10 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									>
 										<InputControl
 											controlName="input"
-											label={__('Basis', 'blockera-core')}
+											label={__('Basis', 'blockera')}
 											aria-label={__(
 												'Custom Basis',
-												'blockera-core'
+												'blockera'
 											)}
 											columns="columns-2"
 											arrows={true}
@@ -286,34 +280,34 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 						<ToggleSelectControl
 							columns="1fr 2.65fr"
 							controlName="toggle-select"
-							label={__('Self Align', 'blockera-core')}
+							label={__('Self Align', 'blockera')}
 							className={
 								'items-flex-direction-' +
 								values.blockeraFlexDirection
 							}
 							options={[
 								{
-									label: __('Flex Start', 'blockera-core'),
+									label: __('Flex Start', 'blockera'),
 									value: 'flex-start',
 									icon: <AlignFlexStartIcon />,
 								},
 								{
-									label: __('Center', 'blockera-core'),
+									label: __('Center', 'blockera'),
 									value: 'center',
 									icon: <AlignFlexCenterIcon />,
 								},
 								{
-									label: __('Flex End', 'blockera-core'),
+									label: __('Flex End', 'blockera'),
 									value: 'flex-end',
 									icon: <AlignFlexEndIcon />,
 								},
 								{
-									label: __('Stretch', 'blockera-core'),
+									label: __('Stretch', 'blockera'),
 									value: 'stretch',
 									icon: <AlignStretchIcon />,
 								},
 								{
-									label: __('Baseline', 'blockera-core'),
+									label: __('Baseline', 'blockera'),
 									value: 'baseline',
 									icon: <AlignBaselineIcon />,
 								},
@@ -349,24 +343,24 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 					>
 						<ToggleSelectControl
 							columns="1fr 2.65fr"
-							label={__('Self Order', 'blockera-core')}
+							label={__('Self Order', 'blockera')}
 							className={
 								'items-flex-direction-' +
 								values.blockeraFlexDirection
 							}
 							options={[
 								{
-									label: __('First', 'blockera-core'),
+									label: __('First', 'blockera'),
 									value: 'first',
 									icon: <OrderFirst />,
 								},
 								{
-									label: __('Last', 'blockera-core'),
+									label: __('Last', 'blockera'),
 									value: 'last',
 									icon: <OrderLast />,
 								},
 								{
-									label: __('Custom Order', 'blockera-core'),
+									label: __('Custom Order', 'blockera'),
 									value: 'custom',
 									icon: <GearIcon />,
 								},
@@ -400,7 +394,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 								>
 									<InputControl
 										controlName="input"
-										label={__('Custom', 'blockera-core')}
+										label={__('Custom', 'blockera')}
 										columns="2fr 3fr"
 										unitType="order"
 										arrows={true}

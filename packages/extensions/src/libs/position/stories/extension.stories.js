@@ -55,7 +55,7 @@ blocksInitializer({
 						icon={<PositionExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Position', 'blockera-core')}
+						title={__('Position', 'blockera')}
 					/>
 				</InspectorControls>
 

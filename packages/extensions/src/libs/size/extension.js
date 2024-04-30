@@ -107,13 +107,13 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Size', 'blockera-core')}
+				title={__('Size', 'blockera')}
 				initialOpen={true}
 				icon={<SizeExtensionIcon />}
 				className={extensionClassNames('size')}
 			>
 				<ExtensionSettings
-					buttonLabel={__('More Size Settings', 'blockera-core')}
+					buttonLabel={__('More Size Settings', 'blockera')}
 					features={extensionConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'sizeConfig');
@@ -135,27 +135,24 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								}}
 							>
 								<InputControl
-									label={__('Width', 'blockera-core')}
+									label={__('Width', 'blockera')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Provides the ability to define the horizontal space of the block, crucial for layout precision and design consistency.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<p>
 												{__(
 													'Ideal for responsive design, it ensures block adapt smoothly to different screen sizes, enhancing user experience and interface scalability.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 										</>
 									}
-									aria-label={__(
-										'Input Width',
-										'blockera-core'
-									)}
+									aria-label={__('Input Width', 'blockera')}
 									columns="columns-2"
 									placeholder="Auto"
 									unitType="width"
@@ -192,7 +189,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								elseWrapper={(children) => (
 									<BaseControl
 										columns="columns-2"
-										label={__('Width', 'blockera-core')}
+										label={__('Width', 'blockera')}
 									>
 										<Flex
 											style={{
@@ -222,30 +219,30 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 										}}
 									>
 										<InputControl
-											label={__('Min', 'blockera-core')}
+											label={__('Min', 'blockera')}
 											labelPopoverTitle={__(
 												'Min Width',
-												'blockera-core'
+												'blockera'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															"Min-Width ensures block don't shrink below a set value, crucial for maintaining content integrity and layout consistency on smaller screens.",
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<p>
 														{__(
 															'Ideal for preventing layout breakage on mobile devices, this feature helps in creating responsive designs that adapt while retaining legibility and structure.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
 											}
 											aria-label={__(
 												'Min Width',
-												'blockera-core'
+												'blockera'
 											)}
 											columns={
 												isShowMaxWidth
@@ -294,30 +291,30 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 										}}
 									>
 										<InputControl
-											label={__('Max', 'blockera-core')}
+											label={__('Max', 'blockera')}
 											labelPopoverTitle={__(
 												'Max Width',
-												'blockera-core'
+												'blockera'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'Max-Width restricts the maximum width of block, ensuring it doesn’t exceed a specified width, crucial for maintaining design coherence.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<p>
 														{__(
 															'This feature is essential in responsive design, preventing block from stretching too wide on larger screens, thus preserving readability and layout aesthetics.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
 											}
 											aria-label={__(
 												'Max Width',
-												'blockera-core'
+												'blockera'
 											)}
 											columns={
 												isShowMinWidth
@@ -369,19 +366,19 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								}}
 							>
 								<InputControl
-									label={__('Height', 'blockera-core')}
+									label={__('Height', 'blockera')}
 									labelDescription={
 										<>
 											<p>
 												{__(
 													'Provides the ability to define the vertical space of the block, crucial for layout precision and design consistency.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 											<p>
 												{__(
 													'This feature is key for achieving uniformity and balance in your layout, especially useful for aligning blocks vertically and creating cohesive visual structures.',
-													'blockera-core'
+													'blockera'
 												)}
 											</p>
 										</>
@@ -422,7 +419,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								elseWrapper={(children) => (
 									<BaseControl
 										columns="columns-2"
-										label={__('Height', 'blockera-core')}
+										label={__('Height', 'blockera')}
 									>
 										<Flex
 											style={{
@@ -456,30 +453,30 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 												attributes.blockeraMinHeight
 													.default
 											}
-											label={__('Min', 'blockera-core')}
+											label={__('Min', 'blockera')}
 											labelPopoverTitle={__(
 												'Min Height',
-												'blockera-core'
+												'blockera'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															"Min-Height ensures block don't shrink below a set value, crucial for maintaining content integrity and layout consistency on smaller screens.",
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<p>
 														{__(
 															'Ideal for preventing layout breakage on mobile devices, this feature helps in creating responsive designs that adapt while retaining legibility and structure.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
 											}
 											aria-label={__(
 												'Min Height',
-												'blockera-core'
+												'blockera'
 											)}
 											columns={
 												isShowMaxHeight
@@ -524,30 +521,30 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 										}}
 									>
 										<InputControl
-											label={__('Max', 'blockera-core')}
+											label={__('Max', 'blockera')}
 											labelPopoverTitle={__(
 												'Max Height',
-												'blockera-core'
+												'blockera'
 											)}
 											labelDescription={
 												<>
 													<p>
 														{__(
 															'Max-height restricts the maximum height of block, ensuring it doesn’t exceed a specified height, crucial for maintaining design coherence.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 													<p>
 														{__(
 															'This feature is essential in responsive design, preventing block from stretching too taller on larger screens, thus preserving readability and layout aesthetics.',
-															'blockera-core'
+															'blockera'
 														)}
 													</p>
 												</>
 											}
 											aria-label={__(
 												'Max Height',
-												'blockera-core'
+												'blockera'
 											)}
 											columns={
 												isShowMinHeight
@@ -597,43 +594,43 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 						}}
 					>
 						<ToggleSelectControl
-							label={__('Overflow', 'blockera-core')}
+							label={__('Overflow', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											"Overflow manages how content is displayed when it exceeds its block's boundaries, offering options like scroll or hidden to maintain layout integrity.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<OverflowVisibleIcon />
-										{__('Visible', 'blockera-core')}
+										{__('Visible', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Visible ensures that any content exceeding the boundaries of its container is still visible, extending beyond the set dimensions.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<OverflowHiddenIcon />
-										{__('Hidden', 'blockera-core')}
+										{__('Hidden', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Hidden effectively clips any content that exceeds the boundaries of its container, ensuring a clean, uncluttered appearance for your layout.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<OverflowScrollIcon />
-										{__('Scroll', 'blockera-core')}
+										{__('Scroll', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'Scroll ensures that any excess content within the block is accessible via scrollbars, ideal for maintaining a fixed size for content areas.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -642,26 +639,17 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							isDeselectable={true}
 							options={[
 								{
-									label: __(
-										'Visible Overflow',
-										'blockera-core'
-									),
+									label: __('Visible Overflow', 'blockera'),
 									value: 'visible',
 									icon: <OverflowVisibleIcon />,
 								},
 								{
-									label: __(
-										'Hidden Overflow',
-										'blockera-core'
-									),
+									label: __('Hidden Overflow', 'blockera'),
 									value: 'hidden',
 									icon: <OverflowHiddenIcon />,
 								},
 								{
-									label: __(
-										'Scroll Overflow',
-										'blockera-core'
-									),
+									label: __('Scroll Overflow', 'blockera'),
 									value: 'scroll',
 									icon: <OverflowScrollIcon />,
 								},

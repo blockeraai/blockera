@@ -74,7 +74,7 @@ export function getLibraryIcons({
 					)}
 					aria-label={sprintf(
 						// translators: %s is icon ID in icon libraries for example arrow-left
-						__('%s Icon', 'blockera-core'),
+						__('%s Icon', 'blockera'),
 						icon.iconName
 					)}
 					onClick={(event) =>

@@ -214,7 +214,7 @@ export function PaddingTop({
 					data-cy="box-spacing-padding-top"
 				>
 					<LabelControl
-						ariaLabel={__('Top Padding', 'blockera-core')}
+						ariaLabel={__('Top Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.top)
@@ -248,18 +248,18 @@ export function PaddingTop({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top Padding Space', 'blockera-core')}
-						inputLabel={__('Top Padding', 'blockera-core')}
+						title={__('Top Padding Space', 'blockera')}
+						inputLabel={__('Top Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Top Padding Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies only to the top edge of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

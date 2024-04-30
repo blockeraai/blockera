@@ -23,81 +23,81 @@ export function LabelDescription(): MixedElement {
 			<p>
 				{__(
 					"It is a versatile feature that sets the visual appearance of block's background from a wide range of advanced options.",
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<h3>
 				<TypeImageIcon />
-				{__('Image', 'blockera-core')}
+				{__('Image', 'blockera')}
 			</h3>
 			<p>
 				{__(
 					'Sets an image as the background of an element, ideal for adding visual interest or branding elements.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<h3>
 				<TypePatternIcon />
-				{__('Image Pattern', 'blockera-core')}
-				<span>{__('Coming soon…', 'blockera-core')}</span>
+				{__('Image Pattern', 'blockera')}
+				<span>{__('Coming soon…', 'blockera')}</span>
 			</h3>
 			<p>
 				{__(
 					'Repeats a small image to form a continuous pattern across the background.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 
 			<h3>
 				<TypeSlideshowIcon />
-				{__('Image Slideshow', 'blockera-core')}
-				<span>{__('Coming soon…', 'blockera-core')}</span>
+				{__('Image Slideshow', 'blockera')}
+				<span>{__('Coming soon…', 'blockera')}</span>
 			</h3>
 			<p>
 				{__(
 					'Rotates multiple images in the background, creating a slideshow effect.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<h3>
 				<TypeVideoIcon />
-				{__('Video', 'blockera-core')}
-				<span>{__('Coming soon…', 'blockera-core')}</span>
+				{__('Video', 'blockera')}
+				<span>{__('Coming soon…', 'blockera')}</span>
 			</h3>
 			<p>
 				{__(
 					'Embeds a video as the background of an element, creating an immersive and dynamic visual experience.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<h3>
 				<TypeLinearGradientIcon />
-				{__('Linear Gradient', 'blockera-core')}
+				{__('Linear Gradient', 'blockera')}
 			</h3>
 			<p>
 				{__(
 					'Creates a linear gradient as the background, transitioning smoothly between multiple colors.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<h3>
 				<TypeRadialGradientIcon />
-				{__('Radial Gradient', 'blockera-core')}
+				{__('Radial Gradient', 'blockera')}
 			</h3>
 			<p>
 				{__(
 					'Generates a radial gradient as the background, emanating from a central point.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 			<h3>
 				<TypeMeshGradientIcon />
-				{__('Mesh Gradient', 'blockera-core')}
+				{__('Mesh Gradient', 'blockera')}
 			</h3>
 			<p>
 				{__(
 					'Mesh gradients are complex, multi-color gradients offering rich, realistic shading.',
-					'blockera-core'
+					'blockera'
 				)}
 			</p>
 		</>

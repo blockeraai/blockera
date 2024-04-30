@@ -27,7 +27,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Missing Dynamic Value Item', 'blockera-core')}
+			title={__('Missing Dynamic Value Item', 'blockera')}
 			offset={125}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
@@ -48,8 +48,8 @@ export default function ({
 						style={{ fontSize: '12px', margin: 0 }}
 					>
 						{deletedItem.name !== ''
-							? __('Item:', 'blockera-core')
-							: __('Item ID:', 'blockera-core')}
+							? __('Item:', 'blockera')
+							: __('Item ID:', 'blockera')}
 						<b
 							style={{
 								color: 'var(--blockera-value-addon-deleted-color)',
@@ -68,7 +68,7 @@ export default function ({
 							gap={4}
 							style={{ fontSize: '12px', margin: 0 }}
 						>
-							{__('Reference:', 'blockera-core')}
+							{__('Reference:', 'blockera')}
 							<b
 								style={{
 									color: 'var(--blockera-value-addon-deleted-color)',
@@ -109,14 +109,11 @@ export default function ({
 						tabIndex="-1"
 						size={'small'}
 						onClick={controlProps.handleOnClickRemove}
-						label={__(
-							'Remove Dynamic Value Usage',
-							'blockera-core'
-						)}
+						label={__('Remove Dynamic Value Usage', 'blockera')}
 						style={{ padding: '2px 8px' }}
 					>
 						<TrashIcon />
-						{__('Remove', 'blockera-core')}
+						{__('Remove', 'blockera')}
 					</Button>
 					<Button
 						variant="tertiary"
@@ -127,14 +124,14 @@ export default function ({
 						}}
 						label={__(
 							'Switch To Another Dynamic Value',
-							'blockera-core'
+							'blockera'
 						)}
 						style={{
 							padding: '2px 8px',
 							marginRight: 'auto',
 						}}
 					>
-						{__('Switch Item', 'blockera-core')}
+						{__('Switch Item', 'blockera')}
 					</Button>
 				</Flex>
 			</Flex>

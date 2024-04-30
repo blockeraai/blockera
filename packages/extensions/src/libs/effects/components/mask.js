@@ -49,7 +49,7 @@ export const Mask = ({
 							ref,
 						})
 					}
-					addNewButtonLabel={__('Add New Mask', 'blockera-core')}
+					addNewButtonLabel={__('Add New Mask', 'blockera')}
 					defaultValue={defaultValue}
 					{...props}
 				/>

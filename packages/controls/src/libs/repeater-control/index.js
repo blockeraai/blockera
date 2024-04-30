@@ -319,7 +319,7 @@ export default function RepeaterControl({
 									>
 										<PlusIcon />
 										{addNewButtonLabel ||
-											__('Add New', 'blockera-core')}
+											__('Add New', 'blockera')}
 									</Button>
 								)}
 
@@ -383,7 +383,7 @@ export default function RepeaterControl({
 										tooltipPosition="top"
 										label={
 											addNewButtonLabel ||
-											__('Add New', 'blockera-core')
+											__('Add New', 'blockera')
 										}
 										onClick={addNewButtonOnClick}
 									>

@@ -14,7 +14,7 @@ const blockeraEntranceAnimation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('On Entrance', 'blockera-core'),
+	label: __('On Entrance', 'blockera'),
 };
 
 export const entranceAnimationConfig = {

@@ -32,7 +32,7 @@ function RepeaterFilledItemChildren({ itemId, item }) {
 			<InputControl
 				id={getControlId(itemId, 'name')}
 				type="text"
-				label={__('Name', 'blockera-core')}
+				label={__('Name', 'blockera')}
 				onChange={(value) =>
 					changeRepeaterItem({
 						controlId,

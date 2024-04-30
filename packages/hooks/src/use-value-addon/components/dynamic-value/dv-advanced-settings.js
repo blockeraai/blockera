@@ -31,7 +31,7 @@ export default function ({
 }): Element<any> {
 	return (
 		<Popover
-			title={__('Advanced Setting', 'blockera-core')}
+			title={__('Advanced Setting', 'blockera')}
 			offset={25}
 			placement="left-start"
 			onClose={() => {
@@ -48,7 +48,7 @@ export default function ({
 				}}
 			>
 				<InputControl
-					label={__('Prepend', 'blockera-core')}
+					label={__('Prepend', 'blockera')}
 					type="text"
 					columns="columns-2"
 					defaultValue={''}
@@ -75,7 +75,7 @@ export default function ({
 				}}
 			>
 				<InputControl
-					label={__('Append', 'blockera-core')}
+					label={__('Append', 'blockera')}
 					type="text"
 					columns="columns-2"
 					defaultValue={''}
@@ -102,7 +102,7 @@ export default function ({
 				}}
 			>
 				<InputControl
-					label={__('Fallback', 'blockera-core')}
+					label={__('Fallback', 'blockera')}
 					type="text"
 					columns="columns-2"
 					defaultValue={''}
@@ -129,7 +129,7 @@ export default function ({
 				}}
 			>
 				<InputControl
-					label={__('Limit', 'blockera-core')}
+					label={__('Limit', 'blockera')}
 					unitType="text-length"
 					columns="columns-2"
 					defaultValue={''}
@@ -158,7 +158,7 @@ export default function ({
 			>
 				<LinkControl
 					columns="columns-2"
-					label={__('Link', 'blockera-core')}
+					label={__('Link', 'blockera')}
 					//
 					onChange={(link) => {
 						const newValue = {

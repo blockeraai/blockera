@@ -81,7 +81,7 @@ blocksInitializer({
 						icon={<TypographyExtensionIcon />}
 						storeName={'blockera-core/controls/repeater'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Typography', 'blockera-core')}
+						title={__('Typography', 'blockera')}
 					/>
 				</InspectorControls>
 

@@ -30,7 +30,7 @@ export default function SearchReplaceControl({
 	popoverTitle = (
 		<>
 			<SearchReplaceIcon />
-			{__('Search and Replace', 'blockera-core')}
+			{__('Search and Replace', 'blockera')}
 		</>
 	),
 	//
@@ -43,10 +43,7 @@ export default function SearchReplaceControl({
 			id={id}
 			popoverTitle={popoverTitle}
 			defaultValue={defaultValue}
-			addNewButtonLabel={__(
-				'Add New Search and Replace',
-				'blockera-core'
-			)}
+			addNewButtonLabel={__('Add New Search and Replace', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

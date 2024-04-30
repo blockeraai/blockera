@@ -49,7 +49,7 @@ export default function ({
 				key={`type-custom-variabes`}
 				title={
 					<>
-						{__('Custom Variables', 'blockera-core')}
+						{__('Custom Variables', 'blockera')}
 
 						<Button
 							size="extra-small"
@@ -58,7 +58,7 @@ export default function ({
 							showTooltip={true}
 							label={__(
 								'Add New Variable (Coming soon…)',
-								'blockera-core'
+								'blockera'
 							)}
 						>
 							<PlusIcon />
@@ -67,7 +67,7 @@ export default function ({
 				}
 			>
 				<span style={{ opacity: '0.5', fontSize: '12px' }}>
-					{__('Coming soon…', 'blockera-core')}
+					{__('Coming soon…', 'blockera')}
 				</span>
 			</PickerCategory>
 		);
@@ -103,7 +103,7 @@ export default function ({
 						title={data.label}
 					>
 						<span style={{ opacity: '0.5', fontSize: '12px' }}>
-							{__('No variable!', 'blockera-core')}
+							{__('No variable!', 'blockera')}
 						</span>
 					</PickerCategory>
 				);
@@ -189,7 +189,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Choose Variable', 'blockera-core')}
+			title={__('Choose Variable', 'blockera')}
 			offset={125}
 			placement="left-start"
 			onClose={() => {
@@ -205,7 +205,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnUnlinkVar}
 							style={{ padding: '5px' }}
-							label={__('Unlink Variable Value', 'blockera-core')}
+							label={__('Unlink Variable Value', 'blockera')}
 						>
 							<UnlinkIcon />
 						</Button>
@@ -217,7 +217,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
-							label={__('Remove', 'blockera-core')}
+							label={__('Remove', 'blockera')}
 						>
 							<TrashIcon />
 						</Button>

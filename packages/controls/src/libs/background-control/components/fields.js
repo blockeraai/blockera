@@ -107,28 +107,28 @@ const Fields: FieldItem = memo<FieldItem>(
 					singularId={'type'}
 					id={getControlId(itemId, 'type')}
 					defaultValue={defaultRepeaterItemValue.type}
-					label={__('Type', 'blockera-core')}
-					labelPopoverTitle={__('Background Type', 'blockera-core')}
+					label={__('Type', 'blockera')}
+					labelPopoverTitle={__('Background Type', 'blockera')}
 					labelDescription={<LabelDescription />}
 					columns="columns-2"
 					options={[
 						{
-							label: __('Image', 'blockera-core'),
+							label: __('Image', 'blockera'),
 							value: 'image',
 							icon: <TypeImageIcon />,
 						},
 						{
-							label: __('Linear Gradient', 'blockera-core'),
+							label: __('Linear Gradient', 'blockera'),
 							value: 'linear-gradient',
 							icon: <TypeLinearGradientIcon />,
 						},
 						{
-							label: __('Radial Gradient', 'blockera-core'),
+							label: __('Radial Gradient', 'blockera'),
 							value: 'radial-gradient',
 							icon: <TypeRadialGradientIcon />,
 						},
 						{
-							label: __('Mesh Gradient', 'blockera-core'),
+							label: __('Mesh Gradient', 'blockera'),
 							value: 'mesh-gradient',
 							icon: <TypeMeshGradientIcon />,
 						},
@@ -153,17 +153,17 @@ const Fields: FieldItem = memo<FieldItem>(
 							singularId={'image'}
 							id={getControlId(itemId, 'image')}
 							defaultValue={defaultRepeaterItemValue.image}
-							label={__('Image', 'blockera-core')}
+							label={__('Image', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Image',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It sets an image as the background of block, offering a significant enhancement in visual design and allowing for creative expression in web layouts.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -190,29 +190,29 @@ const Fields: FieldItem = memo<FieldItem>(
 							defaultValue={
 								defaultRepeaterItemValue['image-size']
 							}
-							label={__('Size', 'blockera-core')}
+							label={__('Size', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Size',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It controls the scaling of background images, determining how an image covers or fits within the block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'It offers settings like cover, contain, or custom specific dimensions.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'This feature is essential for responsive design, ensuring background images adapt seamlessly across different devices and screen sizes, enhancing the visual impact and consistency.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -220,17 +220,17 @@ const Fields: FieldItem = memo<FieldItem>(
 							columns="columns-2"
 							options={[
 								{
-									label: __('Custom', 'blockera-core'),
+									label: __('Custom', 'blockera'),
 									value: 'custom',
 									icon: <FitNormalIcon />,
 								},
 								{
-									label: __('Cover', 'blockera-core'),
+									label: __('Cover', 'blockera'),
 									value: 'cover',
 									icon: <FitCoverIcon />,
 								},
 								{
-									label: __('Contain', 'blockera-core'),
+									label: __('Contain', 'blockera'),
 									value: 'contain',
 									icon: <FitContainIcon />,
 								},
@@ -265,17 +265,17 @@ const Fields: FieldItem = memo<FieldItem>(
 												'image-size-width'
 											]
 										}
-										label={__('Width', 'blockera-core')}
+										label={__('Width', 'blockera')}
 										labelPopoverTitle={__(
 											'Background Width Size',
-											'blockera-core'
+											'blockera'
 										)}
 										labelDescription={
 											<>
 												<p>
 													{__(
 														'Specifies the exact width size for background image.',
-														'blockera-core'
+														'blockera'
 													)}
 												</p>
 											</>
@@ -311,17 +311,17 @@ const Fields: FieldItem = memo<FieldItem>(
 												'image-size-height'
 											]
 										}
-										label={__('Height', 'blockera-core')}
+										label={__('Height', 'blockera')}
 										labelPopoverTitle={__(
 											'Background Height Size',
-											'blockera-core'
+											'blockera'
 										)}
 										labelDescription={
 											<>
 												<p>
 													{__(
 														'Specifies the exact height size for background image.',
-														'blockera-core'
+														'blockera'
 													)}
 												</p>
 											</>
@@ -356,23 +356,23 @@ const Fields: FieldItem = memo<FieldItem>(
 								defaultRepeaterItemValue['image-position']
 							}
 							inputFields={true}
-							label={__('Position', 'blockera-core')}
+							label={__('Position', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Position',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'Adjusts the positioning of a background image within a block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'Useful for aligning images to specific areas.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -398,23 +398,23 @@ const Fields: FieldItem = memo<FieldItem>(
 							defaultValue={
 								defaultRepeaterItemValue['image-repeat']
 							}
-							label={__('Repeat', 'blockera-core')}
+							label={__('Repeat', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Repeat',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It defines how a background image is repeated within the block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'It controls whether the image repeats along the x-axis, y-axis, both, or not at all.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -424,25 +424,25 @@ const Fields: FieldItem = memo<FieldItem>(
 								{
 									label: __(
 										'Horizontally and Vertically',
-										'blockera-core'
+										'blockera'
 									),
 									value: 'repeat',
 									icon: <RepeatIcon />,
 								},
 								{
-									label: __('Horizontally', 'blockera-core'),
+									label: __('Horizontally', 'blockera'),
 									value: 'repeat-x',
 									icon: <RepeatXIcon />,
 								},
 								{
-									label: __('Vertically', 'blockera-core'),
+									label: __('Vertically', 'blockera'),
 									value: 'repeat-y',
 									icon: <RepeatYIcon />,
 								},
 								{
 									label: __(
 										"Don't Tile Background",
-										'blockera-core'
+										'blockera'
 									),
 									value: 'no-repeat',
 									icon: <RepeatNoIcon />,
@@ -469,31 +469,31 @@ const Fields: FieldItem = memo<FieldItem>(
 							defaultValue={
 								defaultRepeaterItemValue['image-attachment']
 							}
-							label={__('Effect', 'blockera-core')}
+							label={__('Effect', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Effect',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It specifies how the background behaves when the user scrolls.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
-									<h3>{__('Fix', 'blockera-core')}</h3>
+									<h3>{__('Fix', 'blockera')}</h3>
 									<p>
 										{__(
 											'The background scrolls with the content of the block. (The default setting)',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
-									<h3>{__('Parallax', 'blockera-core')}</h3>
+									<h3>{__('Parallax', 'blockera')}</h3>
 									<p>
 										{__(
 											'The background is fixed with respect to the viewport, creating a parallax scrolling effect.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -501,11 +501,11 @@ const Fields: FieldItem = memo<FieldItem>(
 							columns="columns-2"
 							options={[
 								{
-									label: __('Fix', 'blockera-core'),
+									label: __('Fix', 'blockera'),
 									value: 'scroll',
 								},
 								{
-									label: __('Parallax', 'blockera-core'),
+									label: __('Parallax', 'blockera'),
 									value: 'fixed',
 								},
 							]}
@@ -533,19 +533,19 @@ const Fields: FieldItem = memo<FieldItem>(
 							defaultValue={
 								defaultRepeaterItemValue['linear-gradient']
 							}
-							label={__('Linear Gradient', 'blockera-core')}
+							label={__('Linear Gradient', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'Linear Gradient creates a smooth transition between multiple colors in a straight line. ',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'Linear gradients are ideal for creating vibrant backgrounds, adding dimension, or emphasizing branding blocks.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -576,23 +576,23 @@ const Fields: FieldItem = memo<FieldItem>(
 									'linear-gradient-angel'
 								]
 							}
-							label={__('Angel', 'blockera-core')}
+							label={__('Angel', 'blockera')}
 							labelPopoverTitle={__(
 								'Linear Gradient Angel',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It specifies the gradient line angle.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											"It can be used to direct the viewer's attention or to create a sense of movement and depth.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -629,23 +629,23 @@ const Fields: FieldItem = memo<FieldItem>(
 										'linear-gradient-repeat'
 									]
 								}
-								label={__('Repeat', 'blockera-core')}
+								label={__('Repeat', 'blockera')}
 								labelPopoverTitle={__(
 									'Repeating Linear Gradient',
-									'blockera-core'
+									'blockera'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It creates a background pattern with a linear gradient that repeats at regular intervals.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 										<p>
 											{__(
 												'This is ideal for creating textured gradient backgrounds or complex patterns.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -653,15 +653,12 @@ const Fields: FieldItem = memo<FieldItem>(
 								columns="columns-2"
 								options={[
 									{
-										label: __(
-											"Don't Repeat",
-											'blockera-core'
-										),
+										label: __("Don't Repeat", 'blockera'),
 										value: 'no-repeat',
 										icon: <LinearGradientNoRepeatIcon />,
 									},
 									{
-										label: __('Repeat', 'blockera-core'),
+										label: __('Repeat', 'blockera'),
 										value: 'repeat',
 										icon: <LinearGradientRepeatIcon />,
 									},
@@ -687,7 +684,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								<NoticeControl type="information">
 									{__(
 										"These options can't work for variables. Use custom gradient or unlink current variable.",
-										'blockera-core'
+										'blockera'
 									)}
 								</NoticeControl>
 							)}
@@ -705,31 +702,31 @@ const Fields: FieldItem = memo<FieldItem>(
 									'linear-gradient-attachment'
 								]
 							}
-							label={__('Effect', 'blockera-core')}
+							label={__('Effect', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Effect',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It specifies how the background behaves when the user scrolls.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
-									<h3>{__('Fix', 'blockera-core')}</h3>
+									<h3>{__('Fix', 'blockera')}</h3>
 									<p>
 										{__(
 											'The background scrolls with the content of the block. (The default setting)',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
-									<h3>{__('Parallax', 'blockera-core')}</h3>
+									<h3>{__('Parallax', 'blockera')}</h3>
 									<p>
 										{__(
 											'The background is fixed with respect to the viewport, creating a parallax scrolling effect.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -737,11 +734,11 @@ const Fields: FieldItem = memo<FieldItem>(
 							columns="columns-2"
 							options={[
 								{
-									label: __('Fix', 'blockera-core'),
+									label: __('Fix', 'blockera'),
 									value: 'scroll',
 								},
 								{
-									label: __('Parallax', 'blockera-core'),
+									label: __('Parallax', 'blockera'),
 									value: 'fixed',
 								},
 							]}
@@ -769,19 +766,19 @@ const Fields: FieldItem = memo<FieldItem>(
 							defaultValue={
 								defaultRepeaterItemValue['radial-gradient']
 							}
-							label={__('Radial Gradient', 'blockera-core')}
+							label={__('Radial Gradient', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'A radial gradient background creates a circular or elliptical color transition, emanating from a single point and radiating outward, offering a unique and visually dynamic background option.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'This type of background gradient is perfect for creating focal points, adding depth, or crafting visually intriguing backgrounds.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -816,23 +813,23 @@ const Fields: FieldItem = memo<FieldItem>(
 								]
 							}
 							inputFields={true}
-							label={__('Position', 'blockera-core')}
+							label={__('Position', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Position',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'Adjusts the positioning of a radial gradient background within a block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'Useful for aligning gradient to specific areas.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -862,63 +859,63 @@ const Fields: FieldItem = memo<FieldItem>(
 							defaultValue={
 								defaultRepeaterItemValue['radial-gradient-size']
 							}
-							label={__('Size', 'blockera-core')}
+							label={__('Size', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Position',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											"In a radial gradient background, the size determines the extent of the gradient's shape, which can be circular or elliptical.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'It controls how the gradient spreads within the block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<RadialGradientFarthestCornerIcon />
-										{__('Farthest Corner', 'blockera-core')}
+										{__('Farthest Corner', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											"The gradient's final color reaches the farthest corner of the box containing the gradient.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<RadialGradientFarthestSideIcon />
-										{__('Farthest Side', 'blockera-core')}
+										{__('Farthest Side', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											"The gradient extends to the farthest side of the container, creating a gradient that is visually aligned with the container's widest point.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<RadialGradientClosestCornerIcon />
-										{__('Closest Corner', 'blockera-core')}
+										{__('Closest Corner', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											"The gradient's radius extends to the closest corner of the container, resulting in a more focused and concentrated radial effect.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<h3>
 										<RadialGradientClosestSideIcon />
-										{__('Closest Side', 'blockera-core')}
+										{__('Closest Side', 'blockera')}
 									</h3>
 									<p>
 										{__(
 											'The gradient extends to the side of the container that is closest to its center, creating a gradient that closely follows the shape of the container.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -928,7 +925,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								{
 									label: __(
 										'Farthest corner of the box from its center',
-										'blockera-core'
+										'blockera'
 									),
 									value: 'farthest-corner',
 									icon: <RadialGradientFarthestCornerIcon />,
@@ -936,7 +933,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								{
 									label: __(
 										'Similar to closest-side, except the ending shape is sized to meet the side of the box farthest from its center',
-										'blockera-core'
+										'blockera'
 									),
 									value: 'farthest-side',
 									icon: <RadialGradientFarthestSideIcon />,
@@ -944,7 +941,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								{
 									label: __(
 										"The gradient's ending shape is sized so that it exactly meets the closest corner of the box from its center",
-										'blockera-core'
+										'blockera'
 									),
 									value: 'closest-corner',
 									icon: <RadialGradientClosestCornerIcon />,
@@ -952,7 +949,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								{
 									label: __(
 										"The gradient's ending shape meets the side of the box closest to its center",
-										'blockera-core'
+										'blockera'
 									),
 									value: 'closest-side',
 									icon: <RadialGradientClosestSideIcon />,
@@ -988,23 +985,23 @@ const Fields: FieldItem = memo<FieldItem>(
 										'radial-gradient-repeat'
 									]
 								}
-								label={__('Repeat', 'blockera-core')}
+								label={__('Repeat', 'blockera')}
 								labelPopoverTitle={__(
 									'Repeating Radial Gradient',
-									'blockera-core'
+									'blockera'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It creates a background pattern with a radial gradient that repeats at regular intervals.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 										<p>
 											{__(
 												'This is ideal for creating textured gradient backgrounds or complex patterns.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -1012,15 +1009,12 @@ const Fields: FieldItem = memo<FieldItem>(
 								columns="columns-2"
 								options={[
 									{
-										label: __(
-											"Don't Repeat",
-											'blockera-core'
-										),
+										label: __("Don't Repeat", 'blockera'),
 										value: 'no-repeat',
 										icon: <RadialGradientNoRepeatIcon />,
 									},
 									{
-										label: __('Repeat', 'blockera-core'),
+										label: __('Repeat', 'blockera'),
 										value: 'repeat',
 										icon: <RadialGradientRepeatIcon />,
 									},
@@ -1046,7 +1040,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								<NoticeControl type="information">
 									{__(
 										"These options can't work for variables. Use custom gradient or unlink current variable.",
-										'blockera-core'
+										'blockera'
 									)}
 								</NoticeControl>
 							)}
@@ -1064,31 +1058,31 @@ const Fields: FieldItem = memo<FieldItem>(
 									'radial-gradient-attachment'
 								]
 							}
-							label={__('Effect', 'blockera-core')}
+							label={__('Effect', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Effect',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It specifies how the background behaves when the user scrolls.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
-									<h3>{__('Fix', 'blockera-core')}</h3>
+									<h3>{__('Fix', 'blockera')}</h3>
 									<p>
 										{__(
 											'The background scrolls with the content of the block. (The default setting)',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
-									<h3>{__('Parallax', 'blockera-core')}</h3>
+									<h3>{__('Parallax', 'blockera')}</h3>
 									<p>
 										{__(
 											'The background is fixed with respect to the viewport, creating a parallax scrolling effect.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -1096,11 +1090,11 @@ const Fields: FieldItem = memo<FieldItem>(
 							columns="columns-2"
 							options={[
 								{
-									label: __('Fix', 'blockera-core'),
+									label: __('Fix', 'blockera'),
 									value: 'scroll',
 								},
 								{
-									label: __('Parallax', 'blockera-core'),
+									label: __('Parallax', 'blockera'),
 									value: 'fixed',
 								},
 							]}
@@ -1187,23 +1181,23 @@ const Fields: FieldItem = memo<FieldItem>(
 										'mesh-gradient-colors'
 									]
 								}
-								label={__('Colors', 'blockera-core')}
+								label={__('Colors', 'blockera')}
 								labelPopoverTitle={__(
 									'Mesh Gradient Colors',
-									'blockera-core'
+									'blockera'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It specifies the colors of the mesh gradient points.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 										<p>
 											{__(
 												'You can add as many colors as you like. The fist color will be the base background color.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -1242,31 +1236,31 @@ const Fields: FieldItem = memo<FieldItem>(
 									'mesh-gradient-attachment'
 								]
 							}
-							label={__('Effect', 'blockera-core')}
+							label={__('Effect', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Effect',
-								'blockera-core'
+								'blockera'
 							)}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It specifies how the background behaves when the user scrolls.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
-									<h3>{__('Fix', 'blockera-core')}</h3>
+									<h3>{__('Fix', 'blockera')}</h3>
 									<p>
 										{__(
 											'The background scrolls with the content of the block. (The default setting)',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
-									<h3>{__('Parallax', 'blockera-core')}</h3>
+									<h3>{__('Parallax', 'blockera')}</h3>
 									<p>
 										{__(
 											'The background is fixed with respect to the viewport, creating a parallax scrolling effect.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -1274,11 +1268,11 @@ const Fields: FieldItem = memo<FieldItem>(
 							columns="columns-2"
 							options={[
 								{
-									label: __('Fix', 'blockera-core'),
+									label: __('Fix', 'blockera'),
 									value: 'scroll',
 								},
 								{
-									label: __('Parallax', 'blockera-core'),
+									label: __('Parallax', 'blockera'),
 									value: 'fixed',
 								},
 							]}

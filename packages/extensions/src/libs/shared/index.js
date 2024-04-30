@@ -806,25 +806,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const tabs = [
 			{
 				name: 'settings',
-				title: __('Settings', 'blockera-core'),
-				tooltip: __('Block Settings', 'blockera-core'),
+				title: __('Settings', 'blockera'),
+				tooltip: __('Block Settings', 'blockera'),
 				className: 'settings-tab',
 				icon: <SettingsIcon />,
 			},
 			{
 				name: 'style',
-				title: __('Styles', 'blockera-core'),
-				tooltip: __('Block Design & Style Settings', 'blockera-core'),
+				title: __('Styles', 'blockera'),
+				tooltip: __('Block Design & Style Settings', 'blockera'),
 				className: 'style-tab',
 				icon: <StylesIcon />,
 			},
 			{
 				name: 'interactions',
-				title: __('Animations', 'blockera-core'),
-				tooltip: __(
-					'Block Interactions and Animations',
-					'blockera-core'
-				),
+				title: __('Animations', 'blockera'),
+				tooltip: __('Block Interactions and Animations', 'blockera'),
 				className: 'interactions-tab',
 				icon: <AnimationsIcon />,
 			},

@@ -14,21 +14,21 @@ const blockeraCursor: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Cursor', 'blockera-core'),
+	label: __('Cursor', 'blockera'),
 };
 
 const blockeraUserSelect: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('User Select', 'blockera-core'),
+	label: __('User Select', 'blockera'),
 };
 
 const blockeraPointerEvents: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Pointer Events', 'blockera-core'),
+	label: __('Pointer Events', 'blockera'),
 };
 
 export const mouseConfig = {

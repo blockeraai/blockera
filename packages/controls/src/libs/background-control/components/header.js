@@ -37,7 +37,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 
 		switch (item.type) {
 			case 'image':
-				label = __('Image', 'blockera-core');
+				label = __('Image', 'blockera');
 				preview = (
 					<ColorIndicator type="image" value={itemBGProperty} />
 				);
@@ -45,7 +45,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				break;
 
 			case 'linear-gradient':
-				label = __('Linear Gradient', 'blockera-core');
+				label = __('Linear Gradient', 'blockera');
 				preview = (
 					<ColorIndicator type="gradient" value={itemBGProperty} />
 				);
@@ -53,7 +53,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				break;
 
 			case 'radial-gradient':
-				label = __('Radial Gradient', 'blockera-core');
+				label = __('Radial Gradient', 'blockera');
 				preview = (
 					<ColorIndicator type="gradient" value={itemBGProperty} />
 				);
@@ -61,7 +61,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				break;
 
 			case 'mesh-gradient':
-				label = __('Mesh Gradient', 'blockera-core');
+				label = __('Mesh Gradient', 'blockera');
 				preview = (
 					<ColorIndicatorStack
 						value={Object.values(item['mesh-gradient-colors']).map(
@@ -83,7 +83,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'blockera-core'),
+					__('Item %d', 'blockera'),
 					itemId + 1
 				)}
 			>

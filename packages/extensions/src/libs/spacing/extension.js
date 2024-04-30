@@ -45,7 +45,7 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 	}: TSpacingProps): MixedElement => {
 		return (
 			<PanelBodyControl
-				title={__('Spacing', 'blockera-core')}
+				title={__('Spacing', 'blockera')}
 				initialOpen={true}
 				icon={<SpacingExtensionIcon />}
 				className={extensionClassNames('spacing')}

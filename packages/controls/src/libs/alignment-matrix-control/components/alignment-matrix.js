@@ -39,7 +39,7 @@ export default function AlignmentMatrixBox({
 		<div
 			className={className}
 			style={{ width }}
-			aria-label={__('Alignment Matrix Control', 'blockera-core')}
+			aria-label={__('Alignment Matrix Control', 'blockera')}
 		>
 			{matrixValidValues.map((_value) => (
 				<span
@@ -50,7 +50,7 @@ export default function AlignmentMatrixBox({
 					onClick={() => onChange(_value)}
 					aria-label={sprintf(
 						// translators: it's the aria label for matrix item
-						__('%s item', 'blockera-core'),
+						__('%s item', 'blockera'),
 						_value
 					)}
 					data-test="matrix-item"

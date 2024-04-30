@@ -40,18 +40,18 @@ export default function CustomPropertyControl({
 	return (
 		<RepeaterControl
 			id={id}
-			addNewButtonLabel={__('Add New CSS Property', 'blockera-core')}
+			addNewButtonLabel={__('Add New CSS Property', 'blockera')}
 			popoverTitle={
 				popoverTitle || (
 					<>
 						<PropertyIcon />
-						{__('CSS Property', 'blockera-core')}
+						{__('CSS Property', 'blockera')}
 					</>
 				)
 			}
-			label={label || __('CSS Properties', 'blockera-core')}
+			label={label || __('CSS Properties', 'blockera')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('CSS Properties', 'blockera-core')
+				labelPopoverTitle || __('CSS Properties', 'blockera')
 			}
 			labelDescription={
 				labelDescription || (
@@ -59,13 +59,13 @@ export default function CustomPropertyControl({
 						<p>
 							{__(
 								'It enables you to directly apply custom CSS properties to block by defining key-value pairs.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								"It's ideal for implementing unique styling that goes beyond the standard options offered and its easy to use for responsive customization and block states.",
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>

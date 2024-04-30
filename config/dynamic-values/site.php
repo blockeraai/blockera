@@ -2,7 +2,7 @@
 
 return [
 	[
-		'label'     => __( 'Site Title', 'blockera-core' ),
+		'label'     => __( 'Site Title', 'blockera' ),
 		'name'      => 'site-title',
 		'type'      => 'text',
 		'status'    => 'core',
@@ -12,7 +12,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Site Tagline', 'blockera-core' ),
+		'label'     => __( 'Site Tagline', 'blockera' ),
 		'name'      => 'site-desc',
 		'type'      => 'text',
 		'status'    => 'core',
@@ -22,7 +22,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Home URL', 'blockera-core' ),
+		'label'     => __( 'Home URL', 'blockera' ),
 		'name'      => 'home-url',
 		'type'      => 'link',
 		'status'    => 'core',
@@ -32,7 +32,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Site URL', 'blockera-core' ),
+		'label'     => __( 'Site URL', 'blockera' ),
 		'name'      => 'site-url',
 		'type'      => 'link',
 		'status'    => 'core',
@@ -42,7 +42,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Site Logo URL', 'blockera-core' ),
+		'label'     => __( 'Site Logo URL', 'blockera' ),
 		'name'      => 'site-logo',
 		'type'      => 'image',
 		'status'    => 'soon',
@@ -52,7 +52,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Admin Email', 'blockera-core' ),
+		'label'     => __( 'Admin Email', 'blockera' ),
 		'name'      => 'site-admin-email',
 		'type'      => 'email',
 		'status'    => 'soon',
@@ -62,7 +62,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'RSS URL', 'blockera-core' ),
+		'label'     => __( 'RSS URL', 'blockera' ),
 		'name'      => 'site-rss',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -72,7 +72,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Login URL', 'blockera-core' ),
+		'label'     => __( 'Login URL', 'blockera' ),
 		'name'      => 'site-login',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -82,7 +82,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Logout URL', 'blockera-core' ),
+		'label'     => __( 'Logout URL', 'blockera' ),
 		'name'      => 'site-logout',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -92,7 +92,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Site Meta', 'blockera-core' ),
+		'label'     => __( 'Site Meta', 'blockera' ),
 		'name'      => 'site-meta',
 		'type'      => 'meta',
 		'status'    => 'soon',

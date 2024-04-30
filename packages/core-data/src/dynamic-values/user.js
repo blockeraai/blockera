@@ -14,7 +14,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 	function (): Array<DynamicValueItem> {
 		return [
 			{
-				name: __('User Display Name', 'blockera-core'),
+				name: __('User Display Name', 'blockera'),
 				id: 'user-display-name',
 				type: 'text',
 				status: 'core',
@@ -24,7 +24,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User First Name', 'blockera-core'),
+				name: __('User First Name', 'blockera'),
 				id: 'user-first-name',
 				type: 'text',
 				status: 'soon',
@@ -34,7 +34,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User Last Name', 'blockera-core'),
+				name: __('User Last Name', 'blockera'),
 				id: 'user-last-name',
 				type: 'text',
 				status: 'soon',
@@ -44,7 +44,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User Username', 'blockera-core'),
+				name: __('User Username', 'blockera'),
 				id: 'user-username',
 				type: 'text',
 				status: 'soon',
@@ -54,7 +54,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User Biography', 'blockera-core'),
+				name: __('User Biography', 'blockera'),
 				id: 'user-biography',
 				type: 'text',
 				status: 'soon',
@@ -64,7 +64,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User Email', 'blockera-core'),
+				name: __('User Email', 'blockera'),
 				id: 'user-email',
 				type: 'email',
 				status: 'soon',
@@ -74,7 +74,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User Website', 'blockera-core'),
+				name: __('User Website', 'blockera'),
 				id: 'user-website',
 				type: 'link',
 				status: 'soon',
@@ -84,7 +84,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User ID', 'blockera-core'),
+				name: __('User ID', 'blockera'),
 				id: 'user-id',
 				type: 'id',
 				status: 'soon',
@@ -94,7 +94,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User Avatar URL', 'blockera-core'),
+				name: __('User Avatar URL', 'blockera'),
 				id: 'user-avatar-url',
 				type: 'image',
 				status: 'soon',
@@ -104,7 +104,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User Profile URL', 'blockera-core'),
+				name: __('User Profile URL', 'blockera'),
 				id: 'user-profile-url',
 				type: 'link',
 				status: 'soon',
@@ -114,7 +114,7 @@ export const getUserDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('User Meta', 'blockera-core'),
+				name: __('User Meta', 'blockera'),
 				id: 'user-meta',
 				type: 'meta',
 				status: 'soon',

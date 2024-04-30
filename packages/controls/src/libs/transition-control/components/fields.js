@@ -35,11 +35,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'type')}
 					singularId={'type'}
-					label={__('Type', 'blockera-core')}
-					labelPopoverTitle={__(
-						'Transition Property',
-						'blockera-core'
-					)}
+					label={__('Type', 'blockera')}
+					labelPopoverTitle={__('Transition Property', 'blockera')}
 					labelDescription={<LabelDescription />}
 					columns="columns-2"
 					options={getTypeOptions()}
@@ -58,23 +55,20 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'duration')}
 					singularId={'duration'}
-					label={__('Duration', 'blockera-core')}
-					labelPopoverTitle={__(
-						'Transition Duration',
-						'blockera-core'
-					)}
+					label={__('Duration', 'blockera')}
+					labelPopoverTitle={__('Transition Duration', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Transition duration specifies the length of time a transition effect takes to complete.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'It defines how long a block takes to transition from one state to another, such as changing size, color, or position.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -100,23 +94,23 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'timing')}
 					singularId={'timing'}
-					label={__('Timing', 'blockera-core')}
+					label={__('Timing', 'blockera')}
 					labelPopoverTitle={__(
 						'Transition Timing Function',
-						'blockera-core'
+						'blockera'
 					)}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'The Transition timing Function in CSS specifies the speed curve of the transition effect.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'It defines how the speed of the transition changes over its duration, allowing for the creation of more natural and dynamic movements.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -138,26 +132,26 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'delay')}
 					singularId={'delay'}
-					label={__('Delay', 'blockera-core')}
-					labelPopoverTitle={__('Transition Delay', 'blockera-core')}
+					label={__('Delay', 'blockera')}
+					labelPopoverTitle={__('Transition Delay', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'Transition delay specifies the duration before the start of a transition effect.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'It is essential for sequencing transitions, especially when coordinating multiple blocks or creating complex interactive experiences.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'It allows for fine-tuning and synchronization of visual effects.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>

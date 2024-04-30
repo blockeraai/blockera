@@ -14,7 +14,7 @@ export const getArchiveDynamicValueItems: () => Array<DynamicValueItem> =
 	memoize(function (): Array<DynamicValueItem> {
 		return [
 			{
-				name: __('Archive Title', 'blockera-core'),
+				name: __('Archive Title', 'blockera'),
 				id: 'archive-title',
 				type: 'text',
 				status: 'core',
@@ -24,7 +24,7 @@ export const getArchiveDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Archive Desc', 'blockera-core'),
+				name: __('Archive Desc', 'blockera'),
 				id: 'archive-desc',
 				type: 'text',
 				status: 'soon',
@@ -34,7 +34,7 @@ export const getArchiveDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Archive Link', 'blockera-core'),
+				name: __('Archive Link', 'blockera'),
 				id: 'archive-link',
 				type: 'link',
 				status: 'soon',
@@ -44,7 +44,7 @@ export const getArchiveDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Archive ID', 'blockera-core'),
+				name: __('Archive ID', 'blockera'),
 				id: 'archive-id',
 				type: 'id',
 				status: 'soon',
@@ -54,7 +54,7 @@ export const getArchiveDynamicValueItems: () => Array<DynamicValueItem> =
 				},
 			},
 			{
-				name: __('Archive Meta', 'blockera-core'),
+				name: __('Archive Meta', 'blockera'),
 				id: 'archive-meta',
 				type: 'meta',
 				status: 'soon',

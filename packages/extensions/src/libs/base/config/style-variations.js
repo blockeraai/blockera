@@ -14,7 +14,7 @@ const blockeraStyleVariation: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Style Variation', 'blockera-core'),
+	label: __('Style Variation', 'blockera'),
 };
 
 export const styleVariationsConfig = {

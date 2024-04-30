@@ -63,7 +63,7 @@ export const TransformSettings = ({
 }): MixedElement => {
 	return (
 		<Popover
-			title={__('Transform Settings', 'blockera-core')}
+			title={__('Transform Settings', 'blockera')}
 			offset={35}
 			placement="left-start"
 			className={controlInnerClassNames('transform-settings-popover')}
@@ -104,19 +104,19 @@ export const TransformSettings = ({
 			>
 				<ToggleSelectControl
 					controlName="toggle-select"
-					label={__('Backface Visibility', 'blockera-core')}
+					label={__('Backface Visibility', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It sets whether the backside of a transformed block is visible when turned towards the viewer.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									"It controls the visibility of the element's reverse side during 3D transformations.",
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -124,11 +124,11 @@ export const TransformSettings = ({
 					columns="1fr 130px"
 					options={[
 						{
-							label: __('Visible', 'blockera-core'),
+							label: __('Visible', 'blockera'),
 							value: 'visible',
 						},
 						{
-							label: __('Hidden', 'blockera-core'),
+							label: __('Hidden', 'blockera'),
 							value: 'hidden',
 						},
 					]}

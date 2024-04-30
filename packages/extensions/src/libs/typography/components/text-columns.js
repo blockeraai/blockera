@@ -92,13 +92,13 @@ export const TextColumns = ({
 		<BaseControl columns="columns-1">
 			<BaseControl
 				controlName="toggle-select"
-				label={__('Text Columns', 'blockera-core')}
+				label={__('Text Columns', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It divides text into multiple columns, creating a newspaper-like layout, ideal for enhancing readability and aesthetic appeal in large blocks of text.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>
@@ -114,27 +114,27 @@ export const TextColumns = ({
 					singularId={'columns'}
 					options={[
 						{
-							label: __('2 Columns Text', 'blockera-core'),
+							label: __('2 Columns Text', 'blockera'),
 							value: '2-columns',
 							icon: <Columns2Icon />,
 						},
 						{
-							label: __('3 Columns Text', 'blockera-core'),
+							label: __('3 Columns Text', 'blockera'),
 							value: '3-columns',
 							icon: <Columns3Icon />,
 						},
 						{
-							label: __('4 Columns Text', 'blockera-core'),
+							label: __('4 Columns Text', 'blockera'),
 							value: '4-columns',
 							icon: <Columns4Icon />,
 						},
 						{
-							label: __('5 Columns Text', 'blockera-core'),
+							label: __('5 Columns Text', 'blockera'),
 							value: '5-columns',
 							icon: <Columns5Icon />,
 						},
 						{
-							label: __('None', 'blockera-core'),
+							label: __('None', 'blockera'),
 							value: 'none',
 							icon: <NoneIcon />,
 						},
@@ -172,17 +172,17 @@ export const TextColumns = ({
 							<InputControl
 								id={'gap'}
 								singularId={'gap'}
-								label={__('Gap', 'blockera-core')}
+								label={__('Gap', 'blockera')}
 								labelPopoverTitle={__(
 									'Text Columns Gap',
-									'blockera-core'
+									'blockera'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It sets the gap between text columns essential for ensuring clear separation and enhancing the overall readability of the text.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -220,17 +220,17 @@ export const TextColumns = ({
 							<BorderControl
 								id={'divider'}
 								singularId={'divider'}
-								label={__('Divider', 'blockera-core')}
+								label={__('Divider', 'blockera')}
 								labelPopoverTitle={__(
 									'Text Columns Divider',
-									'blockera-core'
+									'blockera'
 								)}
 								labelDescription={
 									<>
 										<p>
 											{__(
 												'It creates a rule (line) between columns in a multi-column layout, similar to border, but specifically for separating columns, enhancing their distinction and readability.',
-												'blockera-core'
+												'blockera'
 											)}
 										</p>
 									</>
@@ -270,7 +270,7 @@ export const TextColumns = ({
 				<NoticeControl type="information">
 					{__(
 						"Text columns can't be applied for flex blocks. Disable the flex on this block or wrap it in another container and apply the flex to the container.",
-						'blockera-core'
+						'blockera'
 					)}
 				</NoticeControl>
 			)}

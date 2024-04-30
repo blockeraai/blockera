@@ -29,7 +29,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Missing Variable', 'blockera-core')}
+			title={__('Missing Variable', 'blockera')}
 			offset={125}
 			placement="left-start"
 			onClose={() => controlProps.setOpen('')}
@@ -50,8 +50,8 @@ export default function ({
 						style={{ fontSize: '12px', margin: 0 }}
 					>
 						{deletedItem.name !== ''
-							? __('Name:', 'blockera-core')
-							: __('Variable ID:', 'blockera-core')}
+							? __('Name:', 'blockera')
+							: __('Variable ID:', 'blockera')}
 						<b
 							style={{
 								color: 'var(--blockera-value-addon-deleted-color)',
@@ -70,7 +70,7 @@ export default function ({
 							gap={4}
 							style={{ fontSize: '12px', margin: 0 }}
 						>
-							{__('Value:', 'blockera-core')}
+							{__('Value:', 'blockera')}
 							<b
 								style={{
 									color: 'var(--blockera-value-addon-deleted-color)',
@@ -115,7 +115,7 @@ export default function ({
 							gap={4}
 							style={{ fontSize: '12px', margin: 0 }}
 						>
-							{__('Reference:', 'blockera-core')}
+							{__('Reference:', 'blockera')}
 							<b
 								style={{
 									color: 'var(--blockera-value-addon-deleted-color)',
@@ -158,14 +158,11 @@ export default function ({
 								tabIndex="-1"
 								size={'small'}
 								onClick={controlProps.handleOnUnlinkVar}
-								label={__(
-									'Unlink Variable Value',
-									'blockera-core'
-								)}
+								label={__('Unlink Variable Value', 'blockera')}
 								style={{ padding: '2px 8px' }}
 							>
 								<UnlinkIcon />
-								{__('Unlink Variable', 'blockera-core')}
+								{__('Unlink Variable', 'blockera')}
 							</Button>
 							<Button
 								variant="tertiary"
@@ -176,14 +173,14 @@ export default function ({
 								}}
 								label={__(
 									'Switch To Another Variable',
-									'blockera-core'
+									'blockera'
 								)}
 								style={{
 									padding: '2px 8px',
 									marginRight: 'auto',
 								}}
 							>
-								{__('Switch Variable', 'blockera-core')}
+								{__('Switch Variable', 'blockera')}
 							</Button>
 						</>
 					) : (
@@ -193,14 +190,11 @@ export default function ({
 								tabIndex="-1"
 								size={'small'}
 								onClick={controlProps.handleOnClickRemove}
-								label={__(
-									'Remove Variable Usage',
-									'blockera-core'
-								)}
+								label={__('Remove Variable Usage', 'blockera')}
 								style={{ padding: '2px 8px' }}
 							>
 								<TrashIcon />
-								{__('Remove', 'blockera-core')}
+								{__('Remove', 'blockera')}
 							</Button>
 							<Button
 								variant="tertiary"
@@ -211,14 +205,14 @@ export default function ({
 								}}
 								label={__(
 									'Switch To Another Variable',
-									'blockera-core'
+									'blockera'
 								)}
 								style={{
 									padding: '2px 8px',
 									marginRight: 'auto',
 								}}
 							>
-								{__('Switch Variable', 'blockera-core')}
+								{__('Switch Variable', 'blockera')}
 							</Button>
 						</>
 					)}

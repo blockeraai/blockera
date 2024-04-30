@@ -45,9 +45,9 @@ export const BackdropFilter = ({
 		>
 			<BaseControl columns="columns-1" controlName="filter">
 				<FilterControl
-					label={__('Backdrop Filters', 'blockera-core')}
-					popoverTitle={__('Backdrop Filter', 'blockera-core')}
-					labelPopoverTitle={__('Backdrop Filter', 'blockera-core')}
+					label={__('Backdrop Filters', 'blockera')}
+					popoverTitle={__('Backdrop Filter', 'blockera')}
+					labelPopoverTitle={__('Backdrop Filter', 'blockera')}
 					labelDescription={
 						<FilterLabelDescription
 							labelDescription={
@@ -55,19 +55,19 @@ export const BackdropFilter = ({
 									<p>
 										{__(
 											'The Backdrop filter applies a filter effect to the area behind an element.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'Unlike the "Filter", which affects the block itself, "Backdrop Filter" impacts the space beneath the block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'It is essential for creating frosted glass effects, blurring background content behind modal windows, tooltips, or navigation bars.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -83,7 +83,7 @@ export const BackdropFilter = ({
 					}
 					addNewButtonLabel={__(
 						'Add New Backdrop Filter',
-						'blockera-core'
+						'blockera'
 					)}
 					defaultValue={defaultValue}
 					{...props}

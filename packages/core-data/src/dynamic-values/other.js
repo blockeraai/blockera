@@ -14,7 +14,7 @@ export const getOtherDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 	function (): Array<DynamicValueItem> {
 		return [
 			{
-				name: __('Current Date', 'blockera-core'),
+				name: __('Current Date', 'blockera'),
 				id: 'date',
 				type: 'date',
 				status: 'core',
@@ -24,7 +24,7 @@ export const getOtherDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Shortcode', 'blockera-core'),
+				name: __('Shortcode', 'blockera'),
 				id: 'shortcode',
 				type: 'shortcode',
 				status: 'soon',
@@ -34,7 +34,7 @@ export const getOtherDynamicValueItems: () => Array<DynamicValueItem> = memoize(
 				},
 			},
 			{
-				name: __('Request Parameter', 'blockera-core'),
+				name: __('Request Parameter', 'blockera'),
 				id: 'request',
 				type: 'text',
 				status: 'soon',

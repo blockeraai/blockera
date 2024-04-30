@@ -65,28 +65,28 @@ export function SelfPerspective({
 		<>
 			<BaseControl columns="column-1">
 				<BaseControl
-					label={__('Self Perspective', 'blockera-core')}
+					label={__('Self Perspective', 'blockera')}
 					labelDescription={
 						<>
 							<p>
 								{__(
 									'It adds 3D effect by adding depth and distance for current block transformations, making elements appear to recede or come forward in 3D space.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								{__(
 									'It enhances the realism of 3D transformations, making blocks like images, cards, and interactive graphics more dynamic and engaging.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 							<p>
 								<b style={{ color: '#fff' }}>
-									{__('Note:', 'blockera-core')}{' '}
+									{__('Note:', 'blockera')}{' '}
 								</b>
 								{__(
 									'This only applies to current block and does not affect child blocks. For applying to child blocks, use the "Child Perspective" setting.',
-									'blockera-core'
+									'blockera'
 								)}
 							</p>
 						</>
@@ -126,16 +126,13 @@ export function SelfPerspective({
 						<PositionButtonControl
 							buttonLabel={__(
 								'Self Perspective Origin',
-								'blockera-core'
+								'blockera'
 							)}
 							popoverTitle={__(
 								'Self Perspective Position',
-								'blockera-core'
+								'blockera'
 							)}
-							alignmentMatrixLabel={__(
-								'Self Origin',
-								'blockera-core'
-							)}
+							alignmentMatrixLabel={__('Self Origin', 'blockera')}
 							size="small"
 							defaultValue={transformSelfOriginDefaultValue}
 							onChange={({ top, left }, ref) => {
@@ -156,7 +153,7 @@ export function SelfPerspective({
 					<NoticeControl type="warning">
 						{__(
 							`For using Self Perspective the block should have at least one transformation.`,
-							'blockera-core'
+							'blockera'
 						)}
 					</NoticeControl>
 				)}

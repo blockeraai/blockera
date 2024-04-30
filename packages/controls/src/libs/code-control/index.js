@@ -97,7 +97,7 @@ const CodeControl = ({
 									/* translators: $1%s is a CSS selector, $2%s is ID. */
 									__(
 										'Use %1$s or %2$s to target current block.',
-										'blockera-core'
+										'blockera'
 									),
 									'{.block}',
 									'{#block}'

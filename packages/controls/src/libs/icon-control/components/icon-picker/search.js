@@ -43,7 +43,7 @@ export default function Search({}) {
 						})
 					);
 				}}
-				placeholder={__('Search icons…', 'blockera-core')}
+				placeholder={__('Search icons…', 'blockera')}
 			/>
 
 			{searchInput && (
@@ -56,7 +56,7 @@ export default function Search({}) {
 					)}
 				>
 					<div className={controlInnerClassNames('library-header')}>
-						<SearchIcon /> {__('Search Result', 'blockera-core')}
+						<SearchIcon /> {__('Search Result', 'blockera')}
 					</div>
 
 					{searchInput.length < 3 ? (
@@ -71,7 +71,7 @@ export default function Search({}) {
 									'Please enter at least %d more characters for icon search.',
 									'Please enter at least %d more character for icon search.',
 									searchInput.length,
-									'blockera-core'
+									'blockera'
 								),
 								3 - searchInput.length
 							)}
@@ -86,7 +86,7 @@ export default function Search({}) {
 								>
 									{__(
 										'Sorry, no icons found. Please try a different keyword.',
-										'blockera-core'
+										'blockera'
 									)}
 								</span>
 							) : (

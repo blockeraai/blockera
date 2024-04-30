@@ -213,7 +213,7 @@ export function MarginBottom({
 					data-cy="box-spacing-margin-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('Bottom Margin', 'blockera-core')}
+						ariaLabel={__('Bottom Margin', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.margin.bottom)
@@ -246,18 +246,18 @@ export function MarginBottom({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Bottom Margin Space', 'blockera-core')}
-						inputLabel={__('Bottom Margin', 'blockera-core')}
+						title={__('Bottom Margin Space', 'blockera')}
+						inputLabel={__('Bottom Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Bottom Margin Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a margin space that applies only to the bottom edge of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

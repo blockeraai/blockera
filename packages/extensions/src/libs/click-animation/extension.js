@@ -39,7 +39,7 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 
 			return (
 				<PanelBodyControl
-					title={__('On Click', 'blockera-core')}
+					title={__('On Click', 'blockera')}
 					initialOpen={true}
 					icon={<ClickAnimationExtensionIcon />}
 					className={extensionClassNames('click-animation')}
@@ -60,7 +60,7 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 							icon={<AnimationIcon />}
 							description={__(
 								'Clicking on the block will trigger the animation.',
-								'blockera-core'
+								'blockera'
 							)}
 							actionButtonAdd={false}
 							injectHeaderButtonsStart={
@@ -70,7 +70,7 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 										fontStyle: 'italic',
 									}}
 								>
-									{__('Coming soon…', 'blockera-core')}
+									{__('Coming soon…', 'blockera')}
 								</span>
 							}
 						/>

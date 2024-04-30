@@ -23,7 +23,7 @@ import { ColorPallet } from './components';
 import PickerIcon from './icons/picker';
 
 export default function ColorPickerControl({
-	popoverTitle = __('Color Picker', 'blockera-core'),
+	popoverTitle = __('Color Picker', 'blockera'),
 	isOpen = false,
 	onClose = () => {},
 	placement = 'left-start',
@@ -104,10 +104,7 @@ export default function ColorPickerControl({
 										pickColor();
 									}}
 									style={{ padding: '5px' }}
-									aria-label={__(
-										'Pick Color',
-										'blockera-core'
-									)}
+									aria-label={__('Pick Color', 'blockera')}
 								>
 									<PickerIcon />
 								</Button>
@@ -122,7 +119,7 @@ export default function ColorPickerControl({
 										style={{ padding: '5px' }}
 										aria-label={__(
 											'Reset Color (Clear)',
-											'blockera-core'
+											'blockera'
 										)}
 									>
 										<TrashIcon />
@@ -160,9 +157,9 @@ export default function ColorPickerControl({
 			{hasClearBtn && (
 				<Button
 					onClick={() => setValue('')}
-					aria-label={__('Reset Color (Clear)', 'blockera-core')}
+					aria-label={__('Reset Color (Clear)', 'blockera')}
 				>
-					{__('Clear', 'blockera-core')}
+					{__('Clear', 'blockera')}
 				</Button>
 			)}
 		</BaseControl>

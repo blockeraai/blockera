@@ -65,13 +65,13 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 
 		return (
 			<PanelBodyControl
-				title={__('Mouse', 'blockera-core')}
+				title={__('Mouse', 'blockera')}
 				initialOpen={true}
 				icon={<MouseExtensionIcon />}
 				className={extensionClassNames('mouse')}
 			>
 				<ExtensionSettings
-					buttonLabel={__('More Mouse Settings', 'blockera-core')}
+					buttonLabel={__('More Mouse Settings', 'blockera')}
 					features={mouseConfig}
 					update={(newSettings) => {
 						setSettings(newSettings, 'mouseConfig');
@@ -91,19 +91,19 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 						}}
 					>
 						<SelectControl
-							label={__('Cursor', 'blockera-core')}
+							label={__('Cursor', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											"It allows to change the mouse cursor when it's over block.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											"It provides visual feedback to the user about the nature of the block they're interacting with – whether it's clickable, text-selectable, disabled, or used for resizing.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -138,25 +138,25 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 						}}
 					>
 						<SelectControl
-							label={__('User Select', 'blockera-core')}
+							label={__('User Select', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It controls how text can be selected by the user.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											"It's useful for improving user experience.",
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'For instance, disabling text selection on buttons or icons can prevent confusion, while enabling it on textual content improves usability.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>
@@ -190,25 +190,25 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 						}}
 					>
 						<SelectControl
-							label={__('Pointer Events', 'blockera-core')}
+							label={__('Pointer Events', 'blockera')}
 							labelDescription={
 								<>
 									<p>
 										{__(
 											'It specifies how a block reacts to pointer interactions, such as mouse clicks or touch.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'It allows you to create blocks that are either interactive or completely non-interactive with pointer actions.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 									<p>
 										{__(
 											'For example, disabling pointer events on an overlay of block can allow users to interact with underlying block.',
-											'blockera-core'
+											'blockera'
 										)}
 									</p>
 								</>

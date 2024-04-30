@@ -74,12 +74,10 @@ export default function DividerControl({
 		<RepeaterControl
 			id={id}
 			className={controlClassNames('divider', className)}
-			popoverTitle={
-				popoverTitle || __('Block Shape Divider', 'blockera-core')
-			}
-			label={label || __('Shape Dividers', 'blockera-core')}
+			popoverTitle={popoverTitle || __('Block Shape Divider', 'blockera')}
+			label={label || __('Shape Dividers', 'blockera')}
 			labelPopoverTitle={
-				labelPopoverTitle || __('Block Shape Dividers', 'blockera-core')
+				labelPopoverTitle || __('Block Shape Dividers', 'blockera')
 			}
 			labelDescription={
 				labelDescription || (
@@ -87,19 +85,19 @@ export default function DividerControl({
 						<p>
 							{__(
 								'Block Shape Dividers are design elements used to visually separate different sections or blocks of content on a webpage.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								'Dividers are essential for breaking up long stretches of content, making web pages easier to navigate and read.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
 								"They help in guiding the user's eye through the content and can be used to highlight key sections or create a rhythm in the page layout.",
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>

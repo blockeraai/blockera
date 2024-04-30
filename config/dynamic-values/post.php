@@ -2,7 +2,7 @@
 
 return [
 	[
-		'label'     => __( 'Post Title', 'blockera-core' ),
+		'label'     => __( 'Post Title', 'blockera' ),
 		'name'      => 'post-title',
 		'type'      => 'text',
 		'status'    => 'core',
@@ -12,7 +12,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Excerpt', 'blockera-core' ),
+		'label'     => __( 'Post Excerpt', 'blockera' ),
 		'name'      => 'post-excerpt',
 		'type'      => 'text',
 		'status'    => 'core',
@@ -22,7 +22,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Content', 'blockera-core' ),
+		'label'     => __( 'Post Content', 'blockera' ),
 		'name'      => 'post-content',
 		'type'      => 'text',
 		'status'    => 'soon',
@@ -32,7 +32,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post ID', 'blockera-core' ),
+		'label'     => __( 'Post ID', 'blockera' ),
 		'name'      => 'post-id',
 		'type'      => 'id',
 		'status'    => 'core',
@@ -42,7 +42,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Link', 'blockera-core' ),
+		'label'     => __( 'Post Link', 'blockera' ),
 		'name'      => 'post-link',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -52,7 +52,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Date', 'blockera-core' ),
+		'label'     => __( 'Post Date', 'blockera' ),
 		'name'      => 'post-date',
 		'type'      => 'date',
 		'status'    => 'soon',
@@ -62,7 +62,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Time', 'blockera-core' ),
+		'label'     => __( 'Post Time', 'blockera' ),
 		'name'      => 'post-time',
 		'type'      => 'time',
 		'status'    => 'soon',
@@ -72,7 +72,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Reading Time', 'blockera-core' ),
+		'label'     => __( 'Reading Time', 'blockera' ),
 		'name'      => 'post-reading-time',
 		'type'      => 'time',
 		'status'    => 'soon',
@@ -82,7 +82,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Categories', 'blockera-core' ),
+		'label'     => __( 'Post Categories', 'blockera' ),
 		'name'      => 'post-cats',
 		'type'      => 'category',
 		'status'    => 'soon',
@@ -92,7 +92,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Tags', 'blockera-core' ),
+		'label'     => __( 'Post Tags', 'blockera' ),
 		'name'      => 'post-tags',
 		'type'      => 'tag',
 		'status'    => 'soon',
@@ -102,7 +102,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Terms', 'blockera-core' ),
+		'label'     => __( 'Post Terms', 'blockera' ),
 		'name'      => 'post-terms',
 		'type'      => 'term',
 		'status'    => 'soon',
@@ -112,7 +112,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Comments', 'blockera-core' ),
+		'label'     => __( 'Post Comments', 'blockera' ),
 		'name'      => 'post-comments',
 		'type'      => 'comment',
 		'status'    => 'soon',
@@ -122,7 +122,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Post Meta', 'blockera-core' ),
+		'label'     => __( 'Post Meta', 'blockera' ),
 		'name'      => 'post-meta',
 		'type'      => 'meta',
 		'status'    => 'soon',

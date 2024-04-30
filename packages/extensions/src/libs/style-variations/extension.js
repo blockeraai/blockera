@@ -70,7 +70,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 
 			return (
 				<PanelBodyControl
-					title={__('Style Variations', 'blockera-core')}
+					title={__('Style Variations', 'blockera')}
 					initialOpen={true}
 					icon={<StyleVariationsExtensionIcon />}
 					className={extensionClassNames('style-variations')}

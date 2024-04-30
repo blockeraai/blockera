@@ -203,7 +203,7 @@ export default function BoxBorderControl({
 					<Button
 						showTooltip={true}
 						tooltipPosition="top"
-						label={__('Custom Box Border', 'blockera-core')}
+						label={__('Custom Box Border', 'blockera')}
 						size="extra-small"
 						style={{
 							color:

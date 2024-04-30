@@ -38,11 +38,11 @@ const RepeaterItemHeader: MeshGradientHeaderItem = memo<MeshGradientHeaderItem>(
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>
-					{item.color ? item.color : __('None', 'blockera-core')}
+					{item.color ? item.color : __('None', 'blockera')}
 				</span>
 
 				<span className={controlInnerClassNames('header-values')}>
-					{itemId === 0 ? __('Primary Color', 'blockera-core') : ''}
+					{itemId === 0 ? __('Primary Color', 'blockera') : ''}
 				</span>
 
 				{children}

@@ -19,8 +19,8 @@ import { More } from './icons';
 import { Supports } from './components';
 
 export const ExtensionSettings = ({
-	buttonLabel = __('More Settings', 'blockera-core'),
-	title = __('Settings', 'blockera-core'),
+	buttonLabel = __('More Settings', 'blockera'),
+	title = __('Settings', 'blockera'),
 	features,
 	update = () => {},
 }: {
@@ -75,7 +75,7 @@ export const ExtensionSettings = ({
 					{hasItems(defaults) && (
 						<div className={'settings-category'}>
 							<span className={'settings-category__title'}>
-								{__('Essential Features', 'blockera-core')}
+								{__('Essential Features', 'blockera')}
 							</span>
 
 							<Supports
@@ -90,8 +90,8 @@ export const ExtensionSettings = ({
 						<div className={'settings-category'}>
 							<span className={'settings-category__title'}>
 								{hasItems(defaults)
-									? __('Additional Features', 'blockera-core')
-									: __('Features', 'blockera-core')}
+									? __('Additional Features', 'blockera')
+									: __('Features', 'blockera')}
 							</span>
 
 							<Supports

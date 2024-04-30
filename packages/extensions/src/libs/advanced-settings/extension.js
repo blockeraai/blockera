@@ -51,16 +51,13 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('Advanced', 'blockera-core')}
+					title={__('Advanced', 'blockera')}
 					initialOpen={true}
 					icon={<AdvancedSettingsExtensionIcon />}
 					className={extensionClassNames('advanced-settings')}
 				>
 					<ExtensionSettings
-						buttonLabel={__(
-							'More Advanced Settings',
-							'blockera-core'
-						)}
+						buttonLabel={__('More Advanced Settings', 'blockera')}
 						features={extensionConfig}
 						update={(newSettings) => {
 							setSettings(newSettings, 'advancedSettingsConfig');
@@ -87,7 +84,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 								<AttributesControl
 									label={__(
 										'Custom HTML Attributes',
-										'blockera-core'
+										'blockera'
 									)}
 									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(

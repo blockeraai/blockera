@@ -43,34 +43,34 @@ export const FontStyle = ({
 			}}
 		>
 			<ToggleSelectControl
-				label={__('Font Style', 'blockera-core')}
-				labelPopoverTitle={__('Font Style', 'blockera-core')}
+				label={__('Font Style', 'blockera')}
+				labelPopoverTitle={__('Font Style', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
 								'It sets the style of font for adding an artistic or emphatic touch to text content in web design.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<FontStyleNormalIcon />
-							{__('Normal', 'blockera-core')}
+							{__('Normal', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Displays the text in a standard, upright font style.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 						<h3>
 							<FontStyleItalicIcon />
-							{__('Italic', 'blockera-core')}
+							{__('Italic', 'blockera')}
 						</h3>
 						<p>
 							{__(
 								'Displays the text in italic, with a slight right tilt, commonly used for emphasis.',
-								'blockera-core'
+								'blockera'
 							)}
 						</p>
 					</>
@@ -79,12 +79,12 @@ export const FontStyle = ({
 				className="control-first label-center small-gap"
 				options={[
 					{
-						label: __('Normal style', 'blockera-core'),
+						label: __('Normal style', 'blockera'),
 						value: 'normal',
 						icon: <FontStyleNormalIcon />,
 					},
 					{
-						label: __('Italic style', 'blockera-core'),
+						label: __('Italic style', 'blockera'),
 						value: 'italic',
 						icon: <FontStyleItalicIcon />,
 					},

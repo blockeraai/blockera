@@ -214,7 +214,7 @@ export function PaddingBottom({
 					data-cy="box-spacing-padding-bottom"
 				>
 					<LabelControl
-						ariaLabel={__('Bottom Padding', 'blockera-core')}
+						ariaLabel={__('Bottom Padding', 'blockera')}
 						label={
 							_isSetValueAddon
 								? fixLabelText(value.padding.bottom)
@@ -248,18 +248,18 @@ export function PaddingBottom({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Bottom Padding Space', 'blockera-core')}
-						inputLabel={__('Bottom Padding', 'blockera-core')}
+						title={__('Bottom Padding Space', 'blockera')}
+						inputLabel={__('Bottom Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Bottom Padding Space',
-							'blockera-core'
+							'blockera'
 						)}
 						inputLabelDescription={
 							<>
 								<p>
 									{__(
 										'It enables you to set a padding space that applies only to the bottom edge of the block.',
-										'blockera-core'
+										'blockera'
 									)}
 								</p>
 							</>

@@ -4,7 +4,7 @@ return [
 	[
 		'type'      => 'text',
 		'status'    => 'core',
-		'label'     => __( 'Archive Title', 'blockera-core' ),
+		'label'     => __( 'Archive Title', 'blockera' ),
 		'reference' => [
 			'type' => 'core',
 		],
@@ -15,7 +15,7 @@ return [
 		//		'settings'  => [
 		//			[
 		//				'type'         => 'select',
-		//				'label'        => __( 'Types', 'blockera-core' ),
+		//				'label'        => __( 'Types', 'blockera' ),
 		//				'id'           => 'type',
 		//				'defaultValue' => '',
 		//				'options'      => [
@@ -26,21 +26,21 @@ return [
 		//			],
 		//			[
 		//				'type'         => 'text',
-		//				'label'        => __( 'User Name', 'blockera-core' ),
+		//				'label'        => __( 'User Name', 'blockera' ),
 		//				'id'           => 'user',
 		//				'defaultValue' => 'User',
 		//				'conditions'   => ['type=user']
 		//			],
 		//			[
 		//				'type'         => 'text',
-		//				'label'        => __( 'Post', 'blockera-core' ),
+		//				'label'        => __( 'Post', 'blockera' ),
 		//				'id'           => 'post',
 		//				'defaultValue' => 'Post',
 		//				'conditions'   => ['type=post']
 		//			],
 		//			[
 		//				'type'         => 'text',
-		//				'label'        => __( 'Category Name', 'blockera-core' ),
+		//				'label'        => __( 'Category Name', 'blockera' ),
 		//				'id'           => 'category',
 		//				'defaultValue' => 'Category',
 		//				'conditions'   => ['type=category']
@@ -59,7 +59,7 @@ return [
 		},
 	],
 	[
-		'label'     => __( 'Archive Desc', 'blockera-core' ),
+		'label'     => __( 'Archive Desc', 'blockera' ),
 		'name'      => 'archive-desc',
 		'type'      => 'text',
 		'status'    => 'soon',
@@ -80,7 +80,7 @@ return [
 		},
 	],
 	[
-		'label'     => __( 'Archive Link', 'blockera-core' ),
+		'label'     => __( 'Archive Link', 'blockera' ),
 		'name'      => 'archive-link',
 		'type'      => 'link',
 		'status'    => 'soon',
@@ -101,7 +101,7 @@ return [
 		},
 	],
 	[
-		'label'     => __( 'Archive ID', 'blockera-core' ),
+		'label'     => __( 'Archive ID', 'blockera' ),
 		'name'      => 'archive-id',
 		'type'      => 'id',
 		'status'    => 'soon',
@@ -111,7 +111,7 @@ return [
 		],
 	],
 	[
-		'label'     => __( 'Archive Meta', 'blockera-core' ),
+		'label'     => __( 'Archive Meta', 'blockera' ),
 		'name'      => 'archive-meta',
 		'type'      => 'meta',
 		'status'    => 'soon',

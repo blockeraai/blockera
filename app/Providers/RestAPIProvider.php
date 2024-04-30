@@ -19,10 +19,13 @@ class RestAPIProvider extends ServiceProvider {
 
 		try {
 
-			$this->app->singleton( Routes::class, function ( Application $app ) {
+			$this->app->singleton(
+				Routes::class,
+				function ( Application $app ) {
 
-				return new Routes( $app );
-			} );
+					return new Routes( $app );
+				}
+			);
 
 			$this->app->singleton( DynamicValuesController::class );
 

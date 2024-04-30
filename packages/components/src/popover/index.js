@@ -139,10 +139,7 @@ export default function Popover({
 											}}
 											tabIndex="-1"
 											label={__('Close', 'blockera')}
-											aria-label={__(
-												'Close',
-												'blockera-core'
-											)}
+											aria-label={__('Close', 'blockera')}
 											tooltipPosition="top"
 											showTooltip={true}
 										>

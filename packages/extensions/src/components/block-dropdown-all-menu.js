@@ -37,7 +37,7 @@ export const BlockDropdownAllMenu = ({
 		>
 			{({ onClose }) => {
 				return (
-					<MenuGroup label={__('Block Settings', 'blockera-core')}>
+					<MenuGroup label={__('Block Settings', 'blockera')}>
 						<MenuItem
 							icon={isActive ? '' : check}
 							onClick={() => {
@@ -52,9 +52,9 @@ export const BlockDropdownAllMenu = ({
 						>
 							<span>
 								{(!isActive
-									? __('Disabled', 'blockera-core')
-									: __('Disable', 'blockera-core')) +
-									__(' ', 'blockera-core')}
+									? __('Disabled', 'blockera')
+									: __('Disable', 'blockera')) +
+									__(' ', 'blockera')}
 							</span>
 							{isActive && (
 								<NoticeControl
@@ -63,7 +63,7 @@ export const BlockDropdownAllMenu = ({
 								>
 									{__(
 										'If you click on "Disable ", cleaning all  attributes from current block. Double-check and ensure this is intentional.',
-										'blockera-core'
+										'blockera'
 									)}
 								</NoticeControl>
 							)}
@@ -81,9 +81,9 @@ export const BlockDropdownAllMenu = ({
 						>
 							<span>
 								{(isActive
-									? __('Enabled', 'blockera-core')
-									: __('Enable', 'blockera-core')) +
-									__(' ', 'blockera-core')}
+									? __('Enabled', 'blockera')
+									: __('Enable', 'blockera')) +
+									__(' ', 'blockera')}
 							</span>
 						</MenuItem>
 					</MenuGroup>

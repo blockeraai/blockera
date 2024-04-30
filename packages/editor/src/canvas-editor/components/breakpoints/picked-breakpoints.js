@@ -25,7 +25,7 @@ export default function ({
 		<Flex
 			className={controlInnerClassNames('blockera-core-breakpoints')}
 			justifyContent={'space-between'}
-			aria-label={__('Breakpoints', 'blockera-core')}
+			aria-label={__('Breakpoints', 'blockera')}
 		>
 			<BreakpointIcon
 				name={'laptop'}

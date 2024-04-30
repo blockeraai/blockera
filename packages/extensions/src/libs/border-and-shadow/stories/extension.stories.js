@@ -66,7 +66,7 @@ blocksInitializer({
 							borderColor: attributes?.borderColor || '',
 							border: attributes.style?.border || {},
 						}}
-						title={__('Border And Shadow', 'blockera-core')}
+						title={__('Border And Shadow', 'blockera')}
 						icon={<BorderAndShadowExtensionIcon />}
 					/>
 				</InspectorControls>

@@ -14,112 +14,112 @@ const blockeraFontSize: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Font Size', 'blockera-core'),
+	label: __('Font Size', 'blockera'),
 };
 
 const blockeraLineHeight: FeatureConfig = {
 	show: false,
 	force: false,
 	status: true,
-	label: __('Line Height', 'blockera-core'),
+	label: __('Line Height', 'blockera'),
 };
 
 const blockeraFontColor: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Font Color', 'blockera-core'),
+	label: __('Font Color', 'blockera'),
 };
 
 const blockeraTextShadow: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Shadow', 'blockera-core'),
+	label: __('Text Shadow', 'blockera'),
 };
 
 const blockeraTextAlign: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Align', 'blockera-core'),
+	label: __('Text Align', 'blockera'),
 };
 
 const blockeraTextDecoration: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Decoration', 'blockera-core'),
+	label: __('Text Decoration', 'blockera'),
 };
 
 const blockeraFontStyle: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Font Style', 'blockera-core'),
+	label: __('Font Style', 'blockera'),
 };
 
 const blockeraTextTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Transform', 'blockera-core'),
+	label: __('Text Transform', 'blockera'),
 };
 
 const blockeraDirection: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Direction', 'blockera-core'),
+	label: __('Direction', 'blockera'),
 };
 
 const blockeraLetterSpacing: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Letter Spacing', 'blockera-core'),
+	label: __('Letter Spacing', 'blockera'),
 };
 
 const blockeraWordSpacing: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Word Spacing', 'blockera-core'),
+	label: __('Word Spacing', 'blockera'),
 };
 
 const blockeraTextIndent: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Indent', 'blockera-core'),
+	label: __('Text Indent', 'blockera'),
 };
 
 const blockeraTextOrientation: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Orientation', 'blockera-core'),
+	label: __('Text Orientation', 'blockera'),
 };
 
 const blockeraTextColumns: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Columns', 'blockera-core'),
+	label: __('Text Columns', 'blockera'),
 };
 
 const blockeraTextStroke: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Text Stroke', 'blockera-core'),
+	label: __('Text Stroke', 'blockera'),
 };
 
 const blockeraWordBreak: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Word Break', 'blockera-core'),
+	label: __('Word Break', 'blockera'),
 };
 
 export const typographyConfig = {

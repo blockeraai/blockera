@@ -30,8 +30,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		return (
 			<div id={`repeater-item-${itemId}`}>
 				<InputControl
-					label={__('Search', 'blockera-core')}
-					aria-label={__('Text To Search', 'blockera-core')}
+					label={__('Search', 'blockera')}
+					aria-label={__('Text To Search', 'blockera')}
 					columns="columns-2"
 					type="text"
 					id={getControlId(itemId, 'search')}
@@ -50,8 +50,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					}}
 				/>
 				<InputControl
-					label={__('Replace', 'blockera-core')}
-					aria-label={__('Replacement Text', 'blockera-core')}
+					label={__('Replace', 'blockera')}
+					aria-label={__('Replacement Text', 'blockera')}
 					columns="columns-2"
 					id={getControlId(itemId, 'value')}
 					type="text"

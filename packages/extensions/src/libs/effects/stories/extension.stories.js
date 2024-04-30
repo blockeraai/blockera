@@ -67,7 +67,7 @@ blocksInitializer({
 						icon={<EffectsExtensionIcon />}
 						storeName={'blockera-core/controls/repeater'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Effects', 'blockera-core')}
+						title={__('Effects', 'blockera')}
 					/>
 				</InspectorControls>
 

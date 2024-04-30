@@ -88,7 +88,6 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 				break;
 
 			case 'flex-direction':
-
 				$item = $setting['flex-direction'];
 
 				if ( $item['direction'] ) {
@@ -116,7 +115,6 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 				break;
 
 			case 'gap':
-
 				$gap = $setting['gap'];
 
 				if ( $gap['lock'] ) {
@@ -169,7 +167,7 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 						'blockeraFlexChildShrink' => $settings['blockeraFlexChildShrink'] ?? 0,
 						'blockeraFlexChildBasis'  => $settings['blockeraFlexChildBasis'] ?? 'auto',
 					],
-				]
+				],
 			];
 
 		} elseif ( 'custom' === $settings[ $settingName ] && 'order' === $cssProperty ) {
@@ -180,7 +178,7 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 					'type'       => $cssProperty,
 					$cssProperty => $settings['blockeraFlexChildOrder'] ?? 'custom',
 					'custom'     => $settings['blockeraFlexChildOrderCustom'] ?? '',
-				]
+				],
 			];
 
 		} else {
@@ -190,7 +188,7 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 					'isVisible'  => true,
 					'type'       => $cssProperty,
 					$cssProperty => $settings[ $settingName ],
-				]
+				],
 			];
 		}
 

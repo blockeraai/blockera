@@ -39,7 +39,7 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 
 			return (
 				<PanelBodyControl
-					title={__('Conditions', 'blockera-core')}
+					title={__('Conditions', 'blockera')}
 					initialOpen={true}
 					icon={<ConditionsExtensionIcon />}
 					className={extensionClassNames('conditions')}
@@ -60,7 +60,7 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 							icon={<ConditionIcon />}
 							description={__(
 								'Set conditions for displaying the block on page.',
-								'blockera-core'
+								'blockera'
 							)}
 							actionButtonAdd={false}
 							injectHeaderButtonsStart={
@@ -70,7 +70,7 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 										fontStyle: 'italic',
 									}}
 								>
-									{__('Coming soon…', 'blockera-core')}
+									{__('Coming soon…', 'blockera')}
 								</span>
 							}
 						/>

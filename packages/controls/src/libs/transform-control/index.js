@@ -81,12 +81,10 @@ export default function TransformControl({
 	return (
 		<RepeaterControl
 			className={controlClassNames('transform', className)}
-			popoverTitle={
-				popoverTitle || __('2D & 3D Transforms', 'blockera-core')
-			}
-			label={label || __('2D & 3D Transforms', 'blockera-core')}
+			popoverTitle={popoverTitle || __('2D & 3D Transforms', 'blockera')}
+			label={label || __('2D & 3D Transforms', 'blockera')}
 			labelDescription={labelDescription || <LabelDescription />}
-			addNewButtonLabel={__('Add New Transform', 'blockera-core')}
+			addNewButtonLabel={__('Add New Transform', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
