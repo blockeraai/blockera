@@ -2,19 +2,13 @@
 
 namespace Blockera\Framework\Providers;
 
-/**
- * External
- */
-
-use Illuminate\Contracts\Container\BindingResolutionException;
-
-/**
- * Internal
- */
-
-use Blockera\Framework\Exceptions\BaseException;
-use Blockera\Framework\Illuminate\{EntityRegistry,
+use Blockera\Framework\Illuminate\{
+	EntityRegistry,
 	Foundation\Application,
+	Foundation\ContainerInterface,
+	Support\ServiceProvider,
+	StyleEngine\StyleEngine,
+	Support\Adapters\DomParser,
 	StyleEngine\StyleDefinitions\Size,
 	StyleEngine\StyleDefinitions\Mouse,
 	StyleEngine\StyleDefinitions\Layout,
@@ -27,19 +21,25 @@ use Blockera\Framework\Illuminate\{EntityRegistry,
 	StyleEngine\StyleDefinitions\TextShadow,
 	StyleEngine\StyleDefinitions\Background,
 	StyleEngine\StyleDefinitions\Typography,
-	Support\ServiceProvider,
-	StyleEngine\StyleEngine,
-	Support\Adapters\DomParser,
 	Foundation\ValueAddon\Variable\VariableType
 };
+use Blockera\Framework\Exceptions\BaseException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Blockera\Framework\Illuminate\Foundation\ValueAddon\ValueAddonRegistry;
 use Blockera\Framework\Illuminate\Foundation\ValueAddon\DynamicValue\DynamicValueType;
 use Blockera\Framework\Services\Block\{Render, Parser, SavePost, Setup};
 
+/**
+ * Class AppServiceProvider for providing all application services.
+ */
 class AppServiceProvider extends ServiceProvider {
 
 	/**
-	 * @throws BaseException
+	 * Registering services classes.
+	 *
+	 * @throws BaseException Exception for any occurred errors.
+	 *
+	 * @return void
 	 */
 	public function register(): void {
 
@@ -145,28 +145,29 @@ class AppServiceProvider extends ServiceProvider {
 	}
 
 	/**
-	 * @throws BindingResolutionException
+	 * Bootstrap services.
+	 *
+	 * @throws BindingResolutionException Exception for missed bounded services.
+	 * @return void
 	 */
 	public function boot(): void {
 
 		parent::boot();
 
-		/**
-		 * @var ValueAddonRegistry $dynamicValueRegistry
-		 */
+		add_action( 'init', [ $this, 'blockera_load_textdomain' ] );
+
 		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
+		$variableRegistry     = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
 
-		/**
-		 * @var ValueAddonRegistry $dynamicValueRegistry
-		 */
-		$variableRegistry = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
+		if ( $this->app instanceof ContainerInterface ) {
 
-		$this->app->setRegisteredValueAddons(
-			[
-				'variable'      => $variableRegistry->getRegistered(),
-				'dynamic-value' => $dynamicValueRegistry->getRegistered(),
-			]
-		);
+			$this->app->setRegisteredValueAddons(
+				[
+					'variable'      => $variableRegistry->getRegistered(),
+					'dynamic-value' => $dynamicValueRegistry->getRegistered(),
+				]
+			);
+		}
 
 		$this->app->make( Setup::class );
 		$this->app->make( SavePost::class );
@@ -184,6 +185,18 @@ class AppServiceProvider extends ServiceProvider {
 			$render->setName( $block );
 			$render->applyHooks();
 		}
+	}
+
+	/**
+	 * Loading text domain.
+	 *
+	 * @hooked `init`
+	 *
+	 * @return void
+	 */
+	public function blockera_load_textdomain(): void {
+
+		load_plugin_textdomain( 'blockera', false, dirname( plugin_basename( BLOCKERA_CORE_FILE ) ) . '/languages' );
 	}
 
 }

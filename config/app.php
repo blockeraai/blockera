@@ -6,11 +6,11 @@ return [
 	'url'           => BLOCKERA_CORE_URI . 'app/',
 	'path'          => BLOCKERA_CORE_PATH . 'app/',
 	'name'          => 'blockera',
-	'version'       => BLOCKERA_CORE_VERSION,
 	'dist_url'      => BLOCKERA_CORE_URI . 'dist/',
 	'dist_path'     => BLOCKERA_CORE_PATH . 'dist/',
 	'packages_url'  => BLOCKERA_CORE_URI . 'packages/',
 	'packages_path' => BLOCKERA_CORE_PATH . 'packages/',
+	'version'       => blockera_core_env( 'VERSION' ),
 	'namespaces'    => [
 		'controllers' => '\Blockera\Framework\Http\Controllers\\',
 	],

@@ -138,4 +138,7 @@
     <rule ref="PEAR.NamingConventions.ValidClassName.Invalid">
         <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
     </rule>
+    <rule ref="Squiz.Commenting.ClosingDeclarationComment.Missing">
+        <exclude-pattern>/*</exclude-pattern>
+    </rule>
 </ruleset>

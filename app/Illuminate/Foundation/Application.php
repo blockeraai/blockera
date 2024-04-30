@@ -10,7 +10,7 @@ use Blockera\Framework\Illuminate\Support\ServiceProvider;
  *
  * @package Application
  */
-class Application extends Container {
+class Application extends Container implements ContainerInterface{
 
 	/**
 	 * Store service providers stack.
@@ -140,11 +140,11 @@ class Application extends Container {
 	/**
 	 * Set registered value addons.
 	 *
-	 * @param array $registered_value_addons the recieved value addons stack to register.
+	 * @param array $value_addons the recieved value addons stack to register.
 	 */
-	public function setRegisteredValueAddons( array $registered_value_addons ): void {
+	public function setRegisteredValueAddons( array $value_addons = [] ): void {
 
-		$this->registered_value_addons = $registered_value_addons;
+		$this->registered_value_addons = $value_addons;
 	}
 
 	/**

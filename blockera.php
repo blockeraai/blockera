@@ -2,9 +2,9 @@
 /**
  * Plugin Name:       Blockera
  * Description:       provided all feature for creating application user interface into WordPress gutenberg editor or other 🔥.
- * Requires at least: 6.2
+ * Requires at least: 6.5.2
  * Requires PHP:      7.4
- * Version:           0.1.0
+ * Version:           1.0-beta
  * Author:            blockeraai.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,13 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Access Denied!' );
 }
 
-define( 'BLOCKERA_CORE_URI', plugin_dir_url( __FILE__ ) );
-define( 'BLOCKERA_CORE_PATH', plugin_dir_path( __FILE__ ) );
-define( 'BLOCKERA_CORE_VERSION', '1.0.0' );
-define( 'BLOCKERA_ENV', 'wp-env' );
-
 // loading autoloader.
 require __DIR__ . '/vendor/autoload.php';
+
+// Env Loading ...
+$dotenv = Dotenv\Dotenv::createImmutable( dirname( __DIR__ ) );
+$dotenv->safeLoad();
+
+define( 'BLOCKERA_CORE_FILE', __FILE__ );
+define( 'BLOCKERA_CORE_URI', plugin_dir_url( __FILE__ ) );
+define( 'BLOCKERA_CORE_PATH', plugin_dir_path( __FILE__ ) );
+define( 'BLOCKERA_CORE_VERSION', blockera_core_config( 'app.version' ) );
 
 // loading front controller.
 require BLOCKERA_CORE_PATH . 'packages/bootstrap/app.php';
