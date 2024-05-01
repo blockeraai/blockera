@@ -27,6 +27,11 @@ const blockeraPackages = Object.keys(dependencies)
 	.filter((packageName) => packageName.startsWith(BLOCKERA_NAMESPACE))
 	.map((packageName) => packageName.replace(BLOCKERA_NAMESPACE, ''));
 const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
+	// Exclude dev packages.
+	if (-1 !== packageName.indexOf('dev-')) {
+		return memo;
+	}
+
 	return {
 		...memo,
 		[packageName]: {

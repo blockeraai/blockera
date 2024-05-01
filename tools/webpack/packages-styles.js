@@ -16,6 +16,11 @@ function getPackage(name) {
 			return;
 		}
 
+		// Exclude dev packages.
+		if (-1 !== file.indexOf('dev-')) {
+			return;
+		}
+
 		packageFiles.push(file);
 	});
 
@@ -62,7 +67,9 @@ styleFiles.map((currentEntry) => {
 
 module.exports = {
 	entry: {
-		...styleEntries,
+		...Object.fromEntries(
+			Object.entries(styleEntries).filter(([, entry]) => entry.length)
+		),
 		...editorIframeStyles,
 	},
 	optimization: {
