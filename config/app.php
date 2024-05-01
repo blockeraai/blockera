@@ -12,7 +12,7 @@ return [
 	'packages_path' => BLOCKERA_CORE_PATH . 'packages/',
 	'version'       => blockera_core_env( 'VERSION' ),
 	'namespaces'    => [
-		'controllers' => '\Blockera\Framework\Http\Controllers\\',
+		'controllers' => '\Blockera\Setup\Http\Controllers\\',
 	],
 	'debug'         => blockera_core_env( 'APP_MODE' ) && 'development' === blockera_core_env( 'APP_MODE' ) || ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ),
 	'providers'     => [
