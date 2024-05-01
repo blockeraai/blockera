@@ -23,7 +23,10 @@ function getPackage(name) {
 }
 
 styleFiles.map((currentEntry) => {
-	if (/editor-\w+.scss/.test(currentEntry)) {
+	if (
+		/editor-\w+.scss/.test(currentEntry) &&
+		-1 !== currentEntry.indexOf('packages/editor/')
+	) {
 		Object.assign(editorIframeStyles, {
 			'editor-styles': [
 				...(editorIframeStyles['editor-styles'] || []),
