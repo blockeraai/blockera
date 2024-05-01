@@ -28,7 +28,7 @@
 	"dependencies": {
 		"@monaco-editor/react": "^4.6.0",
 		"@blockera/blocks": "file:packages/blocks",
-	  	"@blockera/bootstrap": "file:packages/bootstrap",
+		"@blockera/bootstrap": "file:packages/bootstrap",
 		"@blockera/classnames": "file:packages/classnames",
 		"@blockera/components": "file:packages/components",
 		"@blockera/controls": "file:packages/controls",
@@ -47,7 +47,7 @@
 		"@babel/plugin-proposal-export-default-from": "^7.18.10",
 		"@babel/preset-flow": "^7.21.4",
 		"@babel/preset-react": "^7.22.5",
-		"@blockera/storybook": "file:libs/storybook",
+		"@blockera/dev-storybook": "file:packages/dev-storybook",
 		"@cypress/browserify-preprocessor": "^3.0.2",
 		"@cypress/code-coverage": "^3.12.1",
 		"@cypress/webpack-dev-server": "^3.6.1",

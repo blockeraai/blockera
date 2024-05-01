@@ -6,7 +6,7 @@ import { withTests } from '@storybook/addon-jest';
 /**
  *  Storybook dependencies
  */
-import { defaultPreviewConfig } from '@blockera/storybook';
+import { defaultPreviewConfig } from '@blockera/dev-storybook';
 
 /**
  * Internal dependencies
@@ -26,4 +26,3 @@ export default {
 
 export const WithJestTests = withTests({ results });
 export { WithPlaygroundStyles } from './decorators/with-playground-styles';
-

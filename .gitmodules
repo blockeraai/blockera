@@ -1,3 +1,0 @@
-[submodule "libs/storybook"]
-	path = libs/storybook
-	url = git@github.com:blockeraai/storybook.git

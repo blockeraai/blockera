@@ -15,7 +15,7 @@
 	},
 	"ignoreFiles": [
 		"coverage/**/*.css",
-		"libs/storybook/**/*.css",
-		"libs/storybook/**/*.scss"
+		"packages/dev-storybook/**/*.css",
+		"packages/dev-storybook/**/*.scss"
 	]
 }

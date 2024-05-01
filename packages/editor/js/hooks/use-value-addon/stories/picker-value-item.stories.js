@@ -2,12 +2,12 @@
  * Blockera dependencies
  */
 import { Flex } from '@blockera/components';
-import { default as Decorators } from '@blockera/storybook/decorators';
+import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { WithPlaygroundStyles } from '../../../../../.storybook/preview';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 import { PickerValueItem } from '../components';
 import { getDynamicValueIcon, getVariableIcon } from '../helpers';

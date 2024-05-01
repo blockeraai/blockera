@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 /**
  *  Storybook dependencies
  */
-import { default as Decorators } from '@blockera/storybook/decorators';
+import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
@@ -15,8 +15,8 @@ import { BaseExtension, ExtensionStyle } from '@blockera/editor-extensions';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@blockera/storybook/block-api';
-import { Playground } from '@blockera/storybook/components';
+} from '@blockera/dev-storybook/js/block-api';
+import { Playground } from '@blockera/dev-storybook/js/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import BorderAndShadowExtensionIcon from '../icons/extension-icon';

@@ -6,7 +6,7 @@ import { InspectorControls } from '@wordpress/block-editor';
 /**
  *  Storybook dependencies
  */
-import { default as Decorators } from '@blockera/storybook/decorators';
+import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
@@ -19,8 +19,8 @@ import BlockStates from '../';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
-} from '@blockera/storybook/block-api';
-import { Playground } from '@blockera/storybook/components';
+} from '@blockera/dev-storybook/js/block-api';
+import { Playground } from '@blockera/dev-storybook/js/components';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
 
 const { SharedDecorators } = Decorators;

@@ -15,7 +15,7 @@ import {
 	componentInnerClassNames,
 } from '@blockera/classnames';
 import { isFunction, isUndefined } from '@blockera/utils';
-import { PopoverContextData } from '@blockera/storybook/decorators/with-popover-data/context';
+import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-popover-data/context';
 
 /**
  * Internal dependencies

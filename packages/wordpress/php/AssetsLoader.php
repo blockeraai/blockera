@@ -39,7 +39,9 @@ class AssetsLoader {
 	 * when create new instance of current class,
 	 * fire `wp_enqueue_scripts` and `enqueue_block_editor_assets`
 	 *
-	 * @param Application $app the application container instance.
+	 * @param Application $app           the application container instance.
+	 * @param array       $assets        the assets stack.
+	 * @param array       $packages_deps the packages with dependencies.
 	 *
 	 * @since 1.0.0
 	 */
@@ -226,7 +228,7 @@ class AssetsLoader {
 	 */
 	private function excludeDependencies( array $dependencies ): array {
 
-		$excludes = array( '@blockera/storybook' );
+		$excludes = array( '@blockera/dev-storybook' );
 
 		foreach ( $excludes as $item ) {
 

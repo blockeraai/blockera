@@ -12,7 +12,7 @@ import type { TSelectControlProps } from '../types';
 /**
  * Blockera dependencies
  */
-import { default as Decorators } from '@blockera/storybook/decorators';
+import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 import { Flex } from '@blockera/components';
 
 /**
