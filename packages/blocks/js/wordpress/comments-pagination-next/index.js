@@ -1,0 +1,60 @@
+// @flow
+
+/**
+ * External dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
+
+/**
+ * Blockera dependencies
+ */
+import {
+	SharedBlockExtension,
+	sharedBlockExtensionSupports,
+	sharedBlockExtensionAttributes,
+	IconExtensionSupports,
+	IconExtensionAttributes,
+	InnerBlockLinkIcon,
+} from '@blockera/editor-extensions/js/libs';
+import type { InnerBlocks } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
+
+/**
+ * Internal dependencies
+ */
+import { InnerBlockArrowIcon } from './icons/inner-block-arrow';
+
+const attributes = {
+	...IconExtensionAttributes,
+	...sharedBlockExtensionAttributes,
+};
+
+const blockeraInnerBlocks: InnerBlocks = {
+	arrow: {
+		name: 'core/arrow',
+		type: 'arrow',
+		label: __('Arrow', 'blockera'),
+		icon: <InnerBlockArrowIcon />,
+		selectors: {
+			root: '.wp-block-query-pagination-next-arrow',
+		},
+		attributes,
+		innerBlockSettings: {
+			force: true,
+		},
+	},
+};
+
+export const CommentsPaginationNext = {
+	name: 'blockeraCommentsPaginationNext',
+	targetBlock: 'core/comments-pagination-next',
+	attributes,
+	supports: {
+		...IconExtensionSupports,
+		...sharedBlockExtensionSupports,
+	},
+	blockeraInnerBlocks,
+	edit: (props: Object): MixedElement => {
+		return <SharedBlockExtension {...props} />;
+	},
+};

@@ -16,10 +16,10 @@ return [
 	],
 	'debug'         => blockera_core_env( 'APP_MODE' ) && 'development' === blockera_core_env( 'APP_MODE' ) || ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ),
 	'providers'     => [
-		\Blockera\Framework\Providers\StyleProviders::class,
-		\Blockera\Framework\Providers\AssetsProvider::class,
-		\Blockera\Framework\Providers\RestAPIProvider::class,
-		\Blockera\Framework\Providers\AppServiceProvider::class,
+		\Blockera\Setup\Providers\AssetsProvider::class,
+		\Blockera\Setup\Providers\RestAPIProvider::class,
+		\Blockera\Setup\Providers\AppServiceProvider::class,
+		\Blockera\StyleEngine\Providers\StyleProviders::class,
 	],
 	'blocks'        => [
 		'core/paragraph',

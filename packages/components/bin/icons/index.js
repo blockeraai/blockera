@@ -6,7 +6,7 @@ const glob = require('glob');
 const path = require('path');
 const Fuse = require('fuse.js');
 
-const jsonFiles = glob.sync('./packages/components/src/icons/**/*.json');
+const jsonFiles = glob.sync('./packages/components/js/icons/**/*.json');
 
 //Start Script
 const icons = [];
@@ -28,6 +28,6 @@ jsonFiles.forEach((file) => {
 
 const index = Fuse.createIndex(['title', 'tags'], icons);
 const destinationFile =
-	path.resolve(__dirname, '../..') + '/src/icons/' + process.argv[2];
+	path.resolve(__dirname, '../..') + '/js/icons/' + process.argv[2];
 
 fs.writeFileSync(destinationFile, JSON.stringify(index.toJSON()));

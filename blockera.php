@@ -23,16 +23,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 require __DIR__ . '/vendor/autoload.php';
 
 // Env Loading ...
-$dotenv = Dotenv\Dotenv::createImmutable( dirname( __DIR__ ) );
+$dotenv = Dotenv\Dotenv::createImmutable( __DIR__ );
 $dotenv->safeLoad();
 
 define( 'BLOCKERA_CORE_FILE', __FILE__ );
 define( 'BLOCKERA_CORE_URI', plugin_dir_url( __FILE__ ) );
 define( 'BLOCKERA_CORE_PATH', plugin_dir_path( __FILE__ ) );
-define( 'BLOCKERA_CORE_VERSION', blockera_core_config( 'app.version' ) );
 
 // loading front controller.
-require BLOCKERA_CORE_PATH . 'packages/bootstrap/app.php';
+require BLOCKERA_CORE_PATH . 'packages/blockera-setup/php/app.php';
 
 /**
  * For developers: Blockera debugging mode.

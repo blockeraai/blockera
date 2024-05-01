@@ -9,17 +9,17 @@
 		"gutenberg",
 		"components"
 	],
-	"homepage": "https://gitlab.com/better-projects/blockera-fse/blockera-core/packages/components/-/blob/main/README.md",
+	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/components/README.md",
 	"repository": {
 		"type": "git",
-		"url": "https://gitlab.com/better-projects/blockera-fse/blockera-core",
+		"url": "https://github.com/blockeraai/blockera",
 		"directory": "packages/components"
 	},
 	"bugs": {
-		"url": "https://gitlab.com/better-projects/blockera-fse/blockera-core/-/issues"
+	  	"url": "https://github.com/blockeraai/blockera/issues"
 	},
 	"engines": {
 		"node": ">=12"
 	},
-	"main": "src/index.js"
+	"main": "js/index.js"
 }

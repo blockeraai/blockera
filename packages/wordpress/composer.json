@@ -1,0 +1,9 @@
+{
+	"name": "blockera/wordpress",
+	"description": "The utilities for blockera on WordPress CMS.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\WordPress\\": "php/"
+		}
+	}
+}
