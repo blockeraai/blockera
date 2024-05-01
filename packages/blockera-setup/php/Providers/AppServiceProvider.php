@@ -158,7 +158,7 @@ class AppServiceProvider extends ServiceProvider {
 
 		parent::boot();
 
-		add_action( 'init', [ $this, 'blockera_load_textdomain' ] );
+		add_action( 'init', [ $this, 'loadTextDomain' ] );
 
 		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
 		$variableRegistry     = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
@@ -183,12 +183,12 @@ class AppServiceProvider extends ServiceProvider {
 	/**
 	 * Rendering block type.
 	 *
-	 * @param string $block the block name.
+	 * @param string $block The block name.
 	 *
-	 * @throws BindingResolutionException
+	 * @throws BindingResolutionException Exception for not found bounded module.
 	 * @return void
 	 */
-	protected function renderBlocks( string $block): void{
+	protected function renderBlocks( string $block ): void {
 
 		if ( empty( $block ) ) {
 
@@ -208,7 +208,7 @@ class AppServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function blockera_load_textdomain(): void {
+	public function loadTextDomain(): void {
 
 		load_plugin_textdomain( 'blockera', false, dirname( plugin_basename( BLOCKERA_CORE_FILE ) ) . '/languages' );
 	}
