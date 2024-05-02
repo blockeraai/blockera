@@ -2,6 +2,7 @@
 
 namespace Blockera\Setup\Providers;
 
+use Blockera\Setup\Blockera;
 use Blockera\Bootstrap\Application;
 use Blockera\WordPress\AssetsLoader;
 use Blockera\Bootstrap\ServiceProvider;
@@ -15,11 +16,11 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 class AssetsProvider extends ServiceProvider {
 
 	/**
-	 * Hold instance of Assets object
+	 * Hold handler name.
 	 *
-	 * @var null|AssetsLoader
+	 * @var string $handler the handler name.
 	 */
-	protected $handler = null;
+	protected string $handler = '@blockera/editor-extensions';
 
 	/**
 	 * Register any application services.
@@ -46,14 +47,45 @@ class AssetsProvider extends ServiceProvider {
 	public function boot(): void {
 
 		$this->app->make( AssetsLoader::class );
+
+		add_filter( 'blockera/wordpress/assets-loader/inline-script', [ $this, 'createInlineScript' ] );
+		add_filter( 'blockera/wordpress/assets-loader/handle/inline-script', [ $this, 'getHandler' ] );
 	}
 
 	/**
-	 * Retrieve handler object.
+	 * Create inline script.
 	 *
-	 * @return AssetsLoader|null
+	 * @param string $inline_script the previous inline script.
+	 *
+	 * @hooked 'blockera/wordpress/assets-loader/inline-script'
+	 *
+	 * @return string the inline script for initialize blockera some package's configuration.
 	 */
-	public function getHandler(): ?AssetsLoader {
+	public function createInlineScript( string $inline_script ): string {
+
+		if ( ! $this->app instanceof Blockera ) {
+
+			return $inline_script;
+		}
+
+		return sprintf(
+			'%s%s',
+			$inline_script . PHP_EOL,
+			'window.onload = () => {
+				blockera.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
+				blockera.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->app->getEntity( 'breakpoints' ) ) . ');
+				blockera.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
+				blockera.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');
+			};'
+		);
+	}
+
+	/**
+	 * Retrieve handler name.
+	 *
+	 * @return string
+	 */
+	public function getHandler(): string {
 
 		return $this->handler;
 	}

@@ -224,7 +224,7 @@ class Render {
 		$computed_css_rules = ! empty( $css ) ? $css : $this->getComputedCssRules();
 
 		add_filter(
-			'blockera-core/services/register-block-editor-assets/add-inline-css-styles',
+			'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
 			function () use ( $computed_css_rules ): string {
 
 				return $computed_css_rules;
