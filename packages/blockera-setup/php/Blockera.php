@@ -1,13 +1,15 @@
 <?php
+/**
+ * Class Blockera to contains all services and entities.
+ *
+ * @package Blockera
+ */
 
 namespace Blockera\Setup;
 
 use Blockera\Bootstrap\Application;
 use Blockera\Setup\Contracts\ContainerInterface;
 
-/**
- * Class Blockera to contains all services and entities.
- */
 class Blockera extends Application implements ContainerInterface {
 
 	/**
@@ -21,6 +23,14 @@ class Blockera extends Application implements ContainerInterface {
 	 * Blockera constructor.
 	 */
 	public function __construct() {
+
+		/**
+		 * This filter for extendable setup process from internal or third-party developers.
+		 *
+		 * @hook  'blockera/before/setup'
+		 * @since 1.0.0
+		 */
+		apply_filters( 'blockera/before/setup', $this );
 
 		$this->service_providers = blockera_core_config( 'app.providers' );
 
@@ -37,6 +47,14 @@ class Blockera extends Application implements ContainerInterface {
 		);
 
 		$this->setRegisteredValueAddons();
+
+		/**
+		 * This filter for extendable setup process from internal or third-party developers.
+		 *
+		 * @hook  'blockera/after/setup'
+		 * @since 1.0.0
+		 */
+		apply_filters( 'blockera/after/setup', $this );
 	}
 
 	/**
