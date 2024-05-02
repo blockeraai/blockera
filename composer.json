@@ -3,47 +3,48 @@
 	"description": "A Blockera Site Editor experience base on Gutenberg core modules.",
 	"type": "library",
 	"license": "ISC",
-  	"repositories": [
+	"repositories": [
 		{
 			"type": "path",
 			"url": "packages/blockera-setup"
 		},
 		{
-		  "type": "path",
-		  "url": "packages/bootstrap"
+			"type": "path",
+			"url": "packages/bootstrap"
 		},
 		{
-		  "type": "path",
-		  "url": "packages/utils"
+			"type": "path",
+			"url": "packages/utils"
 		},
 		{
-		  "type": "path",
-		  "url": "packages/wordpress"
+			"type": "path",
+			"url": "packages/wordpress"
 		},
 		{
-		  "type": "path",
-		  "url": "packages/style-engine"
+			"type": "path",
+			"url": "packages/style-engine"
 		},
 		{
-		  "type": "path",
-		  "url": "packages/exceptions"
+			"type": "path",
+			"url": "packages/exceptions"
 		},
 		{
-		  "type": "path",
-		  "url": "packages/data"
+			"type": "path",
+			"url": "packages/data"
 		},
 		{
-		  "type": "path",
-		  "url": "packages/data-editor"
+			"type": "path",
+			"url": "packages/data-editor"
 		},
 		{
-		  "type": "path",
-		  "url": "packages/http"
+			"type": "path",
+			"url": "packages/http"
 		}
 	],
-  	"autoload": {
+	"autoload": {
 		"files": [
-		  "packages/blockera-setup/php/functions.php"
+			"packages/style-engine/php/helpers.php",
+			"packages/blockera-setup/php/functions.php"
 		]
 	},
 	"autoload-dev": {
@@ -59,15 +60,15 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.4",
-	  	"blockera/setup": "*",
-	  	"blockera/bootstrap": "*",
-	  	"blockera/utils": "*",
-	  	"blockera/wordpress": "*",
-	  	"blockera/style-engine": "*",
-	  	"blockera/exceptions": "*",
-	  	"blockera/data": "*",
-	  	"blockera/data-editor": "*",
-	  	"blockera/http": "*",
+		"blockera/setup": "*",
+		"blockera/bootstrap": "*",
+		"blockera/utils": "*",
+		"blockera/wordpress": "*",
+		"blockera/style-engine": "*",
+		"blockera/exceptions": "*",
+		"blockera/data": "*",
+		"blockera/data-editor": "*",
+		"blockera/http": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
 		"symfony/dom-crawler": "5.4.x-dev",
 		"symfony/css-selector": "5.4.x-dev",
