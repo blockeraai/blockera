@@ -8,8 +8,6 @@ use Blockera\Bootstrap\Application;
  * Class AssetsLoader registering all blockera core assets into WordPress CMS.
  *
  * @package AssetsLoader
- *
- * TODO: please convert to abstract class.
  */
 class AssetsLoader {
 
@@ -144,7 +142,7 @@ class AssetsLoader {
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
-			$handle = 'blockera-core-inline-css';
+			$handle = 'blockera-inline-css';
 
 			wp_enqueue_style(
 				$handle,
@@ -162,7 +160,7 @@ class AssetsLoader {
 				 */
 				// phpcs:disable
 				apply_filters(
-					'blockera-core/services/register-block-editor-assets/add-inline-css-styles',
+					'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
 					''
 				)
 			);
@@ -203,17 +201,31 @@ class AssetsLoader {
 			return;
 		}
 
+		/**
+		 * This filter for extendable inline script from internal or third-party developers.
+		 *
+		 * @hook  'blockera/wordpress/assets-loader/inline-script'
+		 * @since 1.0.0
+		 */
+		$inline_script = apply_filters( 'blockera/wordpress/assets-loader/inline-script', '' );
+
+		/**
+		 * This filter for change handle name for inline script from internal or third-party developers.
+		 *
+		 * @hook  'blockera/wordpress/assets-loader/handle/inline-script
+		 * @since 1.0.0
+		 */
+		$handle_inline_script = apply_filters( 'blockera/wordpress/assets-loader/handle/inline-script', '' );
+
+		if ( empty( $inline_script ) || empty( $handle_inline_script ) ) {
+
+			return;
+		}
+
 		// blockera-core server side dynamic value definitions.
 		wp_add_inline_script(
-			'@blockera/editor-extensions',
-			'
-			window.onload = () => {
-				blockera.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->application->getEntities() ) . ');
-				blockera.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->application->getEntity( 'breakpoints' ) ) . ');
-				blockera.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'variable', false ) ) . ');
-				blockera.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->application->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');
-			};
-			',
+			$handle_inline_script,
+			$inline_script,
 			'after'
 		);
 	}
@@ -224,23 +236,17 @@ class AssetsLoader {
 	 * @param array $dependencies the dependencies of current asset.
 	 *
 	 * @since 1.0.0
-	 * @return array the list of filtered dependencies
+	 * @return array the list of filtered dependencies.
 	 */
 	private function excludeDependencies( array $dependencies ): array {
 
-		$excludes = array( '@blockera/dev-storybook' );
+		return array_filter(
+			$dependencies,
+			static function ( string $item ): bool {
 
-		foreach ( $excludes as $item ) {
-
-			if ( ! in_array( $item, $dependencies, true ) ) {
-
-				continue;
+				return false !== strpos( $item, 'dev-' );
 			}
-
-			unset( $dependencies[ array_search( $item, $dependencies, true ) ] );
-		}
-
-		return $dependencies;
+		);
 	}
 
 	/**
@@ -248,7 +254,7 @@ class AssetsLoader {
 	 *
 	 * @param string $name the name of current asset.
 	 *
-	 * @return array the asset data
+	 * @return array the asset data.
 	 */
 	public function assetInfo( string $name ): array {
 
