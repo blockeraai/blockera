@@ -2,13 +2,8 @@
 
 namespace Blockera\Setup\Providers;
 
-use Blockera\Bootstrap\ServiceProvider;
-use Blockera\Exceptions\BaseException;
 use Blockera\Setup\Blockera;
-use Blockera\Data\ValueAddon\Variable\VariableType;
-use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
-use Blockera\Data\ValueAddon\ValueAddonRegistry;
-use Blockera\Utils\Adapters\DomParser;
+use Blockera\Bootstrap\Application;
 use Blockera\WordPress\RenderBlock\{
 	Parser,
 	Render,
@@ -31,6 +26,12 @@ use Blockera\StyleEngine\{
 	StyleEngine,
 };
 use Blockera\Bootstrap\EntityRegistry;
+use Blockera\Utils\Adapters\DomParser;
+use Blockera\Exceptions\BaseException;
+use Blockera\Bootstrap\ServiceProvider;
+use Blockera\Data\ValueAddon\ValueAddonRegistry;
+use Blockera\Data\ValueAddon\Variable\VariableType;
+use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -55,7 +56,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(
 				SavePost::class,
-				function ( Blockera $app ) {
+				function ( Application $app ) {
 
 					return new SavePost( $app, new Render( $app ) );
 				}
@@ -63,7 +64,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(
 				VariableType::class,
-				static function ( Blockera $app ): VariableType {
+				static function ( Application $app ): VariableType {
 
 					return new VariableType( $app );
 				}
@@ -71,7 +72,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(
 				DynamicValueType::class,
-				static function ( Blockera $app ): DynamicValueType {
+				static function ( Application $app ): DynamicValueType {
 
 					return new DynamicValueType( $app );
 				}
@@ -79,7 +80,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(
 				ValueAddonRegistry::class,
-				static function ( Blockera $app, array $params = [] ): ValueAddonRegistry {
+				static function ( Application $app, array $params = [] ): ValueAddonRegistry {
 
 					return new ValueAddonRegistry( $app, ...$params );
 				}
@@ -87,7 +88,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(
 				EntityRegistry::class,
-				static function ( Blockera $app ) {
+				static function ( Application $app ) {
 
 					return new EntityRegistry( $app );
 				}
@@ -95,7 +96,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->bind(
 				StyleEngine::class,
-				static function ( Blockera $app, array $params ) {
+				static function ( Application $app, array $params ) {
 
 					$styleDefinitions = [
 						$app->make( Size::class ),
@@ -128,7 +129,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(
 				Parser::class,
-				static function ( Blockera $app ) {
+				static function ( Application $app ) {
 
 					return new Parser( $app );
 				}
@@ -136,7 +137,7 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->bind(
 				Render::class,
-				static function ( Blockera $app ): Render {
+				static function ( Application $app ): Render {
 
 					return new Render( $app );
 				}
