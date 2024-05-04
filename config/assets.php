@@ -19,15 +19,13 @@ return [
 	],
 	'with-deps' => [
 		'blockera-setup'    => [
-			'dependencies' => [
-				'@blockera/editor-extensions',
-			],
+			'@blockera/editor-extensions',
 		],
 		'editor-extensions' => [
 			'@blockera/controls',
 			'@blockera/editor',
 		],
-		'editor-styles' => [
+		'editor-styles'     => [
 			'@blockera/components-styles',
 		]
 	],
