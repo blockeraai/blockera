@@ -8,13 +8,13 @@ const path = require('path');
  */
 const packagesConfig = require('./packages/dev-tools/js/webpack/packages');
 
-module.exports = (on, config) => {
-	if (!config) {
+module.exports = (env, argv) => {
+	if (!argv) {
 		return require(path.resolve(
 			process.cwd(),
 			'packages/dev-tools/js/cypress/webpack.config.js'
 		));
 	}
 
-	return packagesConfig({}, { mode: config?.mode || 'production' });
+	return packagesConfig(env, { ...argv, mode: argv?.mode || 'production' });
 };

@@ -46,7 +46,6 @@ const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
 		},
 	};
 }, {});
-
 const scssLoaders = ({ isLazy }) => [
 	{
 		loader: 'style-loader',
@@ -80,7 +79,7 @@ module.exports = (env, argv) => {
 			filename: isProduction
 				? './dist/[name]/index.min.js'
 				: './dist/[name]/index.js',
-			path: join(__dirname, '..', '..'),
+			path: join(__dirname, '..', '..', '..', '..'),
 		},
 		module: {
 			rules: [
