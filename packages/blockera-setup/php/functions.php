@@ -12,11 +12,12 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 	/**
 	 * Retrieve the config with key param or return all config as array
 	 *
-	 * @param string $key the key of config.
+	 * @param string $key  the key of config.
+	 * @param array  $args the extra arguments.
 	 *
 	 * @return mixed config value.
 	 */
-	function blockera_core_config( string $key ) {
+	function blockera_core_config( string $key, array $args = [] ) {
 
 		if ( ! $key ) {
 
@@ -25,12 +26,14 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 
 		$keyNodes = explode( '.', $key );
 
+		$config_dir = ! empty( $args['root'] ) && file_exists( $args['root'] ) ? $args['root'] : BLOCKERA_CORE_PATH;
+
 		$configIncludes = array(
-			'app'         => BLOCKERA_CORE_PATH . '/config/app.php',
-			'assets'      => BLOCKERA_CORE_PATH . '/config/assets.php',
-			'entities'    => BLOCKERA_CORE_PATH . '/config/entities.php',
-			'breakpoints' => BLOCKERA_CORE_PATH . '/config/breakpoints.php',
-			'valueAddon'  => BLOCKERA_CORE_PATH . '/config/value-addon.php',
+			'app'         => $config_dir . '/config/app.php',
+			'assets'      => $config_dir . '/config/assets.php',
+			'entities'    => $config_dir . '/config/entities.php',
+			'breakpoints' => $config_dir . '/config/breakpoints.php',
+			'valueAddon'  => $config_dir . '/config/value-addon.php',
 		);
 
 		$firstNode = array_shift( $keyNodes );
