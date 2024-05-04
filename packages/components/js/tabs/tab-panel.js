@@ -5,7 +5,6 @@
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import type { Element } from 'react';
-import { partial, find } from 'lodash';
 import { useInstanceId } from '@wordpress/compose';
 import { useState, useEffect } from '@wordpress/element';
 import { NavigableMenu, Button } from '@wordpress/components';
@@ -41,11 +40,12 @@ export default function TabPanel({
 	const onNavigate = (childIndex: number, child: Object): void => {
 		child.click();
 	};
-	const selectedTab = find(tabs, { name: selected });
+
+	const selectedTab = tabs.find((tab) => tab.name === selected);
 	const selectedId = `${instanceId}-${selectedTab?.name ?? 'none'}`;
 
 	useEffect(() => {
-		const newSelectedTab = find(tabs, { name: selected });
+		const newSelectedTab = tabs.find((tab) => tab.name === selected);
 		if (!newSelectedTab) {
 			setSelected(
 				initialTabName || (tabs.length > 0 ? tabs[0].name : null)
@@ -82,7 +82,7 @@ export default function TabPanel({
 						aria-controls={`${instanceId}-${tab.name}-view`}
 						selected={tab.name === selected}
 						key={tab.name}
-						onClick={partial(handleClick, tab.name)}
+						onClick={() => handleClick(tab.name)}
 						data-test={`${tab.name}-tab`}
 					>
 						<Flex
