@@ -1,0 +1,25 @@
+{
+	"name": "@blockera/dev-tools",
+	"version": "1.0.0",
+	"description": "Blockera DevTools for developers",
+	"main": "js/index.js",
+	"keywords": [
+		"Blockera",
+		"Storybook"
+	],
+	"author": "The Blockera Contributers",
+	"license": "ISC",
+	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/dev-tools/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/blockeraai/blockera",
+		"directory": "packages/dev-tools"
+	},
+	"sideEffects": false,
+	"bugs": {
+		"url": "https://github.com/blockeraai/blockera/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	}
+}

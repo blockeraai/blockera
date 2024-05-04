@@ -18,7 +18,7 @@ const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 /**
  * Internal dependencies
  */
-const { dependencies } = require('../../package');
+const { dependencies } = require('../../../../package');
 const styleDependencies = require('./packages-styles');
 
 const exportDefaultPackages = [];

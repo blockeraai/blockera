@@ -6,13 +6,13 @@ const path = require('path');
 /**
  * Internal dependencies
  */
-const packagesConfig = require('./tools/webpack/packages');
+const packagesConfig = require('./packages/dev-tools/js/webpack/packages');
 
 module.exports = (on, config) => {
 	if (!config) {
 		return require(path.resolve(
 			process.cwd(),
-			'tools/cypress/webpack.config.js'
+			'packages/dev-tools/js/cypress/webpack.config.js'
 		));
 	}
 
