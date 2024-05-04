@@ -16,14 +16,31 @@ class AssetsLoader {
 	 *
 	 * @var array
 	 */
-	protected static array $assets = [];
+	protected array $assets = [];
 
 	/**
 	 * Holds packages dependencies array.
 	 *
 	 * @var string[]
 	 */
-	protected static array $packages_deps = [];
+	protected array $packages_deps = [];
+
+	/**
+	 * Store root directory info.
+	 *
+	 * @var array $root_info the root directory info.
+	 */
+	protected array $root_info = [
+		'path' => '',
+		'url'  => '',
+	];
+
+	/**
+	 * Store is development flag.
+	 *
+	 * @var bool $is_development the flag to specific debug mode is on?
+	 */
+	protected bool $is_development = false;
 
 	/**
 	 * Store instance of Application container.
@@ -37,17 +54,19 @@ class AssetsLoader {
 	 * when create new instance of current class,
 	 * fire `wp_enqueue_scripts` and `enqueue_block_editor_assets`
 	 *
-	 * @param Application $app           the application container instance.
-	 * @param array       $assets        the assets stack.
-	 * @param array       $packages_deps the packages with dependencies.
+	 * @param Application $app    the application container instance.
+	 * @param array       $assets the assets stack.
+	 * @param array       $args   the extra arguments.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct( Application $app, array $assets = [], array $packages_deps = [] ) {
+	public function __construct( Application $app, array $assets = [], array $args = [] ) {
 
-		$this->application   = $app;
-		self::$assets        = $assets;
-		self::$packages_deps = $packages_deps;
+		$this->application    = $app;
+		$this->assets         = $assets;
+		$this->is_development = $args['debug-mode'] ?? false;
+		$this->packages_deps  = $args['packages-deps'] ?? [];
+		$this->root_info      = $args['root'] ?? [ 'path' => '', 'url' => '' ];
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'registerAssets' ), 10 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'registerAssets' ), 10 );
@@ -91,7 +110,7 @@ class AssetsLoader {
 				str_replace( '\\', '/', $asset['script'] ),
 				array_merge(
 					$deps,
-					self::$packages_deps[ $asset['name'] ] ?? []
+					$this->packages_deps[ $asset['name'] ] ?? []
 				),
 				$asset['version'],
 				true
@@ -122,7 +141,7 @@ class AssetsLoader {
 					return $assetInfo;
 
 				},
-				self::$assets
+				$this->assets
 			)
 		);
 	}
@@ -137,8 +156,8 @@ class AssetsLoader {
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file    = blockera_core_config( 'app.root_path' ) . 'assets/dynamic-styles.css';
-		$fileURL = blockera_core_config( 'app.root_url' ) . 'assets/dynamic-styles.css';
+		$file    = $this->root_info['path'] . 'assets/dynamic-styles.css';
+		$fileURL = $this->root_info['url'] . 'assets/dynamic-styles.css';
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
@@ -175,7 +194,7 @@ class AssetsLoader {
 				wp_register_style(
 					'@blockera/' . $asset['name'],
 					str_replace( '\\', '/', $asset['style'] ),
-					self::$packages_deps[ $asset['name'] ] ?? [],
+					$this->packages_deps[ $asset['name'] ] ?? [],
 					$asset['version']
 				);
 			}
@@ -258,13 +277,11 @@ class AssetsLoader {
 	 */
 	public function assetInfo( string $name ): array {
 
-		$isDevelopment = blockera_core_config( 'app.debug' );
-
 		$assetInfoFile = sprintf(
-			'%s%s/index%s.asset.php',
-			blockera_core_config( 'app.dist_path' ),
+			'%sdist/%s/index%s.asset.php',
+			$this->root_info['path'],
 			$name,
-			$isDevelopment ? '' : '.min'
+			$this->is_development ? '' : '.min'
 		);
 
 		if ( ! file_exists( $assetInfoFile ) ) {
@@ -278,19 +295,19 @@ class AssetsLoader {
 		$version = $assetInfo['version'] ?? filemtime( $assetInfoFile );
 
 		$js_file = sprintf(
-			'%s%s/index%s.js',
-			blockera_core_config( 'app.dist_path' ),
+			'%sdist/%s/index%s.js',
+			$this->root_info['path'],
 			$name,
-			$isDevelopment ? '' : '.min'
+			$this->is_development ? '' : '.min'
 		);
 
 		if ( file_exists( $js_file ) ) {
 
 			$script = sprintf(
-				'%s%s/index%s.js',
-				blockera_core_config( 'app.dist_url' ),
+				'%sdist/%s/index%s.js',
+				$this->root_info['url'],
 				$name,
-				$isDevelopment ? '' : '.min'
+				$this->is_development ? '' : '.min'
 			);
 		} else {
 
@@ -300,19 +317,19 @@ class AssetsLoader {
 		$_name = str_contains( $name, '-styles' ) ? $name : "{$name}-styles";
 
 		$css_file = sprintf(
-			'%s%s/style%s.css',
-			blockera_core_config( 'app.dist_path' ),
+			'%sdist/%s/style%s.css',
+			$this->root_info['path'],
 			$_name,
-			$isDevelopment ? '' : '.min'
+			$this->is_development ? '' : '.min'
 		);
 
 		if ( file_exists( $css_file ) ) {
 
 			$style = sprintf(
-				'%s%s/style%s.css',
-				blockera_core_config( 'app.dist_url' ),
+				'%sdist/%s/style%s.css',
+				$this->root_info['url'],
 				$_name,
-				$isDevelopment ? '' : '.min'
+				$this->is_development ? '' : '.min'
 			);
 		} else {
 

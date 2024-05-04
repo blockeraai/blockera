@@ -29,11 +29,22 @@ class AssetsProvider extends ServiceProvider {
 	 */
 	public function register(): void {
 
-		$this->app->singleton(
+		$this->app->bind(
 			AssetsLoader::class,
 			function ( Application $app ) {
 
-				return new AssetsLoader( $app, blockera_core_config( 'assets.list' ), blockera_core_config( 'assets.with-deps' ) );
+				return new AssetsLoader(
+					$app,
+					blockera_core_config( 'assets.list' ),
+					[
+						'root'          => [
+							'url'  => blockera_core_config( 'app.root_url' ),
+							'path' => blockera_core_config( 'app.root_path' ),
+						],
+						'debug-mode'    => blockera_core_config( 'app.debug' ),
+						'packages-deps' => blockera_core_config( 'assets.with-deps' ),
+					]
+				);
 			}
 		);
 	}
