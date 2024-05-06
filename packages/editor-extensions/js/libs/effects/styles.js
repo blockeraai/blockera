@@ -13,7 +13,11 @@ import { getSortedRepeater } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { FilterGenerator, TransitionGenerator } from './css-generators';
+import {
+	FilterGenerator,
+	TransitionGenerator,
+	MaskGenerator,
+} from './css-generators';
 import { arrayEquals } from '../utils';
 import * as config from '../base/config';
 import { attributes } from './attributes';
@@ -39,6 +43,7 @@ export const EffectsStyles = ({
 		blockeraBlendMode,
 		blockeraTransition,
 		blockeraBackdropFilter,
+		blockeraMask,
 	} = config.effectsConfig;
 
 	const blockProps = {
@@ -345,6 +350,35 @@ export const EffectsStyles = ({
 								'mix-blend-mode':
 									blockProps.attributes.blockeraBlendMode,
 							},
+						},
+					],
+				},
+				blockProps
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraMask) &&
+		!arrayEquals(
+			attributes.blockeraMask.default,
+			blockProps.attributes.blockeraMask
+		)
+	) {
+		const pickedSelector = getCssSelector({
+			...sharedParams,
+			query: 'blockeraMask',
+			support: 'blockeraMask',
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraMask: [
+						{
+							type: 'function',
+							function: MaskGenerator,
 						},
 					],
 				},

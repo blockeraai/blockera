@@ -39,6 +39,10 @@ export const attributes = {
 		type: 'object',
 		default: {},
 	},
+	blockeraMask: {
+		type: 'object',
+		default: {},
+	},
 	blockeraBlendMode: {
 		type: 'string',
 		default: 'normal',

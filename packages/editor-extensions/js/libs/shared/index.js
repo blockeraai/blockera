@@ -677,6 +677,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									blockeraFilter: {},
 									blockeraBackdropFilter: {},
 									blockeraBlendMode: {},
+									blockeraMask: {},
 								}}
 								values={{
 									blockeraOpacity:
@@ -701,6 +702,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										currentStateAttributes.blockeraBackdropFilter,
 									blockeraBlendMode:
 										currentStateAttributes.blockeraBlendMode,
+									blockeraMask:
+										currentStateAttributes.blockeraMask,
 								}}
 								attributes={{
 									blockeraOpacity: attributes.blockeraOpacity,
@@ -723,6 +726,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										attributes.blockeraBackdropFilter,
 									blockeraBlendMode:
 										attributes.blockeraBlendMode,
+									blockeraMask: attributes.blockeraMask,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes

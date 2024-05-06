@@ -52,11 +52,20 @@ const blockeraBlendMode: FeatureConfig = {
 	label: __('Blending Mode', 'blockera'),
 };
 
+const blockeraMask: FeatureConfig = {
+	show: true,
+	force: false,
+	status: true,
+	label: __('Image Mask', 'blockera'),
+	isActiveOnStates: false,
+};
+
 export const effectsConfig = {
 	blockeraOpacity,
 	blockeraTransform,
 	blockeraTransition,
 	blockeraFilter,
 	blockeraBackdropFilter,
+	blockeraMask,
 	blockeraBlendMode,
 };

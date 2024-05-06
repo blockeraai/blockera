@@ -37,6 +37,7 @@ import { BackdropFilter } from './components/backdrop-filter';
 import { Blending } from './components/blending';
 import { EffectsExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
+import { Mask } from './components/mask';
 
 export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 	({
@@ -81,6 +82,11 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			values?.blockeraBlendMode,
 			attributes.blockeraBlendMode.default
 		);
+		const isShowMask = isShowField(
+			extensionConfig.blockeraMask,
+			values?.blockeraMask,
+			attributes.blockeraMask.default
+		);
 
 		// Extension is not active
 		if (
@@ -88,6 +94,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			!isShowTransform &&
 			!isShowTransition &&
 			!isShowFilter &&
+			!isShowMask &&
 			!isShowBackdropFilter &&
 			!isShowBlendMode
 		) {
@@ -232,6 +239,19 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						defaultValue={attributes.blockeraBackdropFilter.default}
 						{...extensionProps.blockeraBackdropFilter}
+					/>
+				</FeatureWrapper>
+
+				<FeatureWrapper
+					isActive={isShowMask}
+					config={extensionConfig.blockeraMask}
+				>
+					<Mask
+						mask={values.blockeraMask}
+						block={block}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.blockeraMask.default}
+						{...extensionProps.blockeraMask}
 					/>
 				</FeatureWrapper>
 

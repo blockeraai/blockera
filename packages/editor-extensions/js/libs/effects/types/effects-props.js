@@ -34,6 +34,7 @@ export type TEffectsProps = {
 			top: string,
 			left: string,
 		},
+		blockeraMask: Array<Object>,
 	},
 	extensionConfig: {
 		blockeraOpacity: FeatureConfig,
@@ -47,6 +48,7 @@ export type TEffectsProps = {
 		blockeraFilter: FeatureConfig,
 		blockeraBackdropFilter: FeatureConfig,
 		blockeraBlendMode: FeatureConfig,
+		blockeraMask: FeatureConfig,
 	},
 	extensionProps: {
 		blockeraOpacity: Object,
@@ -60,5 +62,6 @@ export type TEffectsProps = {
 		blockeraFilter: Object,
 		blockeraBackdropFilter: Object,
 		blockeraBlendMode: Object,
+		blockeraMask: Object,
 	},
 };
