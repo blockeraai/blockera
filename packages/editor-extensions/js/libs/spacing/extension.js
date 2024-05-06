@@ -9,40 +9,43 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Blockera dependencies
  */
+import { FeatureWrapper } from '@blockera/components';
 import {
 	BaseControl,
 	PanelBodyControl,
 	BoxSpacingControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { isUndefined, hasSameProps } from '@blockera/utils';
+import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
 import { SpacingExtensionIcon } from './index';
-import { isActiveField } from '../../api/utils';
-import { getSpacingValue } from './utils/get-spacing-value';
+import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import type { TSpacingProps } from './types/spacing-props';
-
-const fallbackValue = {
-	top: '',
-	right: '',
-	bottom: '',
-	left: '',
-};
 
 export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 	({
 		block,
-		spacingConfig: { blockeraSpacing },
-		defaultValue,
-		spacingValue,
+		values,
+		extensionConfig,
 		handleOnChangeAttributes,
 		extensionProps,
+		attributes,
 	}: TSpacingProps): MixedElement => {
+		const isShowSpacing = isShowField(
+			extensionConfig.blockeraSpacing,
+			values.blockeraSpacing,
+			attributes.blockeraSpacing.default
+		);
+
+		if (!isShowSpacing) {
+			return <></>;
+		}
+
 		return (
 			<PanelBodyControl
 				title={__('Spacing', 'blockera')}
@@ -50,73 +53,35 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 				icon={<SpacingExtensionIcon />}
 				className={extensionClassNames('spacing')}
 			>
-				{isActiveField(blockeraSpacing) && (
+				<FeatureWrapper
+					isActive={isShowSpacing}
+					config={extensionConfig.blockeraSpacing}
+				>
 					<ControlContextProvider
 						value={{
 							name: generateExtensionId(block, 'spacing'),
-							value: spacingValue,
+							value: values.blockeraSpacing,
 							attribute: 'blockeraSpacing',
 							blockName: block.blockName,
 						}}
 					>
 						<BaseControl controlName="box-spacing">
 							<BoxSpacingControl
-								onChange={(newValue) => {
-									const toWPCompatible =
-										!defaultValue.padding &&
-										!defaultValue.margin
-											? {
-													style: {
-														...(block?.attributes
-															?.style ?? {}),
-														spacing: newValue,
-													},
-											  }
-											: {};
-
+								onChange={(newValue, ref) => {
 									handleOnChangeAttributes(
 										'blockeraSpacing',
 										newValue,
-										{
-											addOrModifyRootItems:
-												toWPCompatible,
-										}
+										{ ref }
 									);
 								}}
 								defaultValue={
-									isUndefined(defaultValue)
-										? {
-												margin: fallbackValue,
-												marginLock:
-													'vertical-horizontal',
-												padding: fallbackValue,
-												paddingLock:
-													'vertical-horizontal',
-										  }
-										: {
-												padding: getSpacingValue({
-													spacing: defaultValue,
-													propId: 'padding',
-													defaultValue: fallbackValue,
-												}),
-												paddingLock:
-													defaultValue.paddingLock ??
-													'vertical-horizontal',
-												margin: getSpacingValue({
-													spacing: defaultValue,
-													propId: 'margin',
-													defaultValue: fallbackValue,
-												}),
-												marginLock:
-													defaultValue.marginLock ??
-													'vertical-horizontal',
-										  }
+									attributes.blockeraSpacing.default
 								}
 								{...extensionProps.blockeraSpacing}
 							/>
 						</BaseControl>
 					</ControlContextProvider>
-				)}
+				</FeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

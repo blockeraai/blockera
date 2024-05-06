@@ -1,13 +1,10 @@
 // @flow
-/**
- * External dependencies
- */
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { BaseExtensionProps } from '../../types';
+import type { FeatureConfig } from '../../base';
 
 type BoxSpacingLock =
 	| 'none'
@@ -45,12 +42,13 @@ export type TCssProps = {
 };
 
 export type TSpacingProps = {
-	block: TBlockProps,
-	spacingConfig: Object,
-	children?: MixedElement,
-	spacingValue: {},
-	defaultValue: TSpacingDefaultProps,
-	handleOnChangeAttributes: THandleOnChangeAttributes,
+	...BaseExtensionProps,
+	extensionConfig: {
+		blockeraSpacing: FeatureConfig,
+	},
+	values: {
+		blockeraSpacing: Object,
+	},
 	extensionProps: {
 		blockeraSpacing: Object,
 	},

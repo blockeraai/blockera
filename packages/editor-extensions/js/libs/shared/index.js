@@ -303,19 +303,21 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							/>
 
 							<SpacingExtension
-								{...{
-									block,
-									spacingConfig,
-									extensionProps: {
-										blockeraSpacing: {},
-									},
-									handleOnChangeAttributes,
-									spacingValue:
+								block={block}
+								extensionConfig={spacingConfig}
+								values={{
+									blockeraSpacing:
 										currentStateAttributes.blockeraSpacing,
-									defaultValue:
-										currentStateAttributes.style?.spacing ||
-										{},
 								}}
+								attributes={{
+									blockeraSpacing: attributes.blockeraSpacing,
+								}}
+								extensionProps={{
+									blockeraSpacing: {},
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
 							/>
 
 							<PositionExtension
