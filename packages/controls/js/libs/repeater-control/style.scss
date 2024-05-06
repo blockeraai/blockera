@@ -6,6 +6,8 @@
 	& > .blockera-control-header {
 		display: flex;
 		align-items: center;
+		min-height: 30px;
+		justify-content: center;
 	}
 
 	.blockera-control-repeater-item {
