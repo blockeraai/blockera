@@ -14,6 +14,7 @@ const blockeraSpacing: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
+	isActiveOnInnerBlocksOnFree: true,
 	label: __('Spacing', 'blockera'),
 };
 
