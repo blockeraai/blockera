@@ -6,6 +6,7 @@ return [
 		'hooks',
 		'blocks',
 		'editor',
+		'blockera',
 		'controls',
 		'bootstrap',
 		'core-data',
@@ -13,12 +14,11 @@ return [
 		'data-editor',
 		'style-engine',
 		'editor-styles',
-		'blockera-setup',
 		'components-styles',
 		'editor-extensions',
 	],
 	'with-deps' => [
-		'blockera-setup'    => [
+		'blockera'          => [
 			'@blockera/editor-extensions',
 		],
 		'editor-extensions' => [
