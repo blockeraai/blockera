@@ -13,7 +13,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { noop } from '@blockera/utils';
 
 export const initializer = (): void => {
-	const bootstrap = applyFilters('blockera.core.bootstrap', noop);
+	const bootstrap = applyFilters('blockera.bootstrapper', noop);
 
 	if ('function' !== typeof bootstrap) {
 		console.warn(
@@ -28,5 +28,5 @@ export const initializer = (): void => {
 
 	bootstrap();
 
-	return domReady(applyFilters('blockera.core.bootstrap.domReady', noop));
+	return domReady(applyFilters('blockera.bootstrapper.domReady', noop));
 };
