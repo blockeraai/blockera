@@ -407,6 +407,7 @@ class Effects extends BaseStyleDefinition {
 		return [
 			'blockeraFilter'                    => 'filter',
 			'blockeraOpacity'                   => 'opacity',
+			'blockeraDivider'                   => 'divider',
 			'blockeraTransform'                 => 'transform',
 			'blockeraTransition'                => 'transition',
 			'blockeraBlendMode'                 => 'mix-blend-mode',
