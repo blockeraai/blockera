@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import type { TStates, TBreakpoint } from '../../block-states/types';
+import type { InnerBlockType } from '../../inner-blocks/types';
 
 export type FeatureConfig = {
 	/**
@@ -23,6 +23,10 @@ export type FeatureConfig = {
 	 */
 	force: boolean,
 	/**
+	 * Configs for sub features.
+	 */
+	config?: Object,
+	/**
 	 * Show item in settings popover. Can be used to hide items from settings.
 	 */
 	showInSettings?: boolean,
@@ -35,19 +39,27 @@ export type FeatureConfig = {
 	 */
 	isActiveOnFree?: boolean,
 	/**
-	 * Is active on block states? by default all or array of state types.
+	 * Is active on block states? by default undefined.
 	 */
-	isActiveOnStates?: 'all' | Array<TStates>,
+	isActiveOnStates?: boolean,
 	/**
-	 * Is active on breakpoints? by default all or array of breakpoint types.
+	 * Is active on free plugin states? by default undefined.
 	 */
-	isActiveOnBreakpoints?: 'all' | Array<TBreakpoint>,
+	isActiveOnStatesOnFree?: boolean,
+	/**
+	 * Is active on breakpoints? by default undefined.
+	 */
+	isActiveOnBreakpoints?: boolean,
+	/**
+	 * Is active on free plugin breakpoints? by default undefined.
+	 */
+	isActiveOnBreakpointsOnFree?: boolean,
 	/**
 	 * Is active on inner blocks?
 	 */
-	isActiveOnInnerBlocks?: boolean,
+	isActiveOnInnerBlocks?: 'all' | Array<InnerBlockType>,
 	/**
-	 * Is active on inner block in free?
+	 * Is active on free plugin inner blocks? by default undefined.
 	 */
-	isActiveOnInnerBlockOnFree?: boolean,
+	isActiveOnInnerBlocksOnFree?: boolean,
 };

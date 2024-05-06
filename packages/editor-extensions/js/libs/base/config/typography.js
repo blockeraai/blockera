@@ -28,6 +28,9 @@ const blockeraFontColor: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	isActiveOnStatesOnFree: true,
+	isActiveOnBreakpointsOnFree: true,
+	isActiveOnInnerBlocksOnFree: true,
 	label: __('Font Color', 'blockera'),
 };
 

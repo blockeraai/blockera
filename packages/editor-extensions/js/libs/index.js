@@ -115,5 +115,7 @@ export {
 	supports as sharedBlockExtensionSupports,
 } from './shared';
 export * as extensionConfig from './base/config';
+export { __experimentalExtensionsSupportRegistration } from './base';
+export { __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition } from './inner-blocks';
 
 export { attributes as blockStatesAttributes } from './block-states';

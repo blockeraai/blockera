@@ -11,8 +11,8 @@ import { memo, useEffect, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { include } from '@blockera/utils';
 import { Tabs } from '@blockera/components';
+import { include, isEquals } from '@blockera/utils';
 // import { useTraceUpdate } from '@blockera/editor';
 
 /**
@@ -120,8 +120,31 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			useDispatch(STORE_NAME);
 		const { getExtensions, getDefinition } = select(STORE_NAME);
 
-		const supports = getDefinition(currentBlock) || getExtensions();
+		const supports = getExtensions();
 		const [settings, setSettings] = useState(supports);
+
+		// Get next settings after switch between blocks.
+		useEffect(() => {
+			if (isInnerBlock(currentBlock)) {
+				const innerBlockDefinition = getDefinition(currentBlock);
+
+				if (
+					innerBlockDefinition &&
+					!isEquals(innerBlockDefinition, settings)
+				) {
+					setSettings(innerBlockDefinition);
+
+					return;
+				}
+			}
+
+			if (isEquals(supports, settings)) {
+				return;
+			}
+
+			setSettings(supports);
+			// eslint-disable-next-line
+		}, [currentBlock]);
 
 		const handleOnChangeSettings = (
 			newSettings: Object,
