@@ -52,11 +52,20 @@ const blockeraBlendMode: FeatureConfig = {
 	label: __('Blending Mode', 'blockera'),
 };
 
+const blockeraDivider: FeatureConfig = {
+	show: true,
+	force: false,
+	status: true,
+	label: __('Shape Dividers', 'blockera'),
+	isActiveOnStates: false,
+};
+
 export const effectsConfig = {
 	blockeraOpacity,
 	blockeraTransform,
 	blockeraTransition,
 	blockeraFilter,
 	blockeraBackdropFilter,
+	blockeraDivider,
 	blockeraBlendMode,
 };

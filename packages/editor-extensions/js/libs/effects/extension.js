@@ -37,6 +37,7 @@ import { BackdropFilter } from './components/backdrop-filter';
 import { Blending } from './components/blending';
 import { EffectsExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
+import { Divider } from './components/divider';
 
 export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 	({
@@ -76,6 +77,11 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			values?.blockeraBackdropFilter,
 			attributes.blockeraBackdropFilter.default
 		);
+		const isShowDivider = isShowField(
+			extensionConfig.blockeraDivider,
+			values?.blockeraDivider,
+			attributes.blockeraDivider.default
+		);
 		const isShowBlendMode = isShowField(
 			extensionConfig.blockeraBlendMode,
 			values?.blockeraBlendMode,
@@ -89,6 +95,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			!isShowTransition &&
 			!isShowFilter &&
 			!isShowBackdropFilter &&
+			!isShowDivider &&
 			!isShowBlendMode
 		) {
 			return <></>;
@@ -232,6 +239,19 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						defaultValue={attributes.blockeraBackdropFilter.default}
 						{...extensionProps.blockeraBackdropFilter}
+					/>
+				</FeatureWrapper>
+
+				<FeatureWrapper
+					isActive={isShowDivider}
+					config={extensionConfig.blockeraDivider}
+				>
+					<Divider
+						divider={values.blockeraDivider}
+						block={block}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						defaultValue={attributes.blockeraDivider.default}
+						{...extensionProps.blockeraDivider}
 					/>
 				</FeatureWrapper>
 

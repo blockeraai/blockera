@@ -43,4 +43,8 @@ export const attributes = {
 		type: 'string',
 		default: 'normal',
 	},
+	blockeraDivider: {
+		type: 'object',
+		default: {},
+	},
 };
