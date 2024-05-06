@@ -39,6 +39,10 @@
 		{
 			"type": "path",
 			"url": "packages/http"
+		},
+		{
+			"type" : "path",
+			"url" : "packages/blocks"
 		}
 	],
 	"autoload": {
@@ -61,6 +65,7 @@
 	"require": {
 		"php": ">=8.1",
 		"blockera/blockera": "*",
+		"blockera/blocks": "*",
 		"blockera/bootstrap": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
@@ -89,7 +94,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "7.4"
+			"php": "8.1"
 		},
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,

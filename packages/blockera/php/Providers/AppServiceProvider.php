@@ -178,7 +178,7 @@ class AppServiceProvider extends ServiceProvider {
 		$this->app->make( SavePost::class );
 		$this->app->make( EntityRegistry::class );
 
-		array_map( [ $this, 'renderBlocks' ], blockera_core_config( 'app.blocks' ) );
+		array_map( [ $this, 'renderBlocks' ], blockera_get_available_blocks() );
 	}
 
 	/**
