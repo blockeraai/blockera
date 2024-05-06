@@ -13,8 +13,6 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	IconExtensionSupports,
-	IconExtensionAttributes,
 	InnerBlockParagraphIcon,
 	InnerBlockButtonIcon,
 	InnerBlockInputIcon,
@@ -38,10 +36,9 @@ import { InnerBlockFormInputFieldsIcon } from './icons/inner-block-form-input-fi
 import { InnerBlockFormButtonIcon } from './icons/inner-block-form-button';
 import { InnerBlockFormRememberIcon } from './icons/inner-block-form-remember';
 
-const attributes = {
-	...IconExtensionAttributes,
-	...sharedBlockExtensionAttributes,
-};
+const attributes = sharedBlockExtensionAttributes;
+
+const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	form: {
@@ -115,10 +112,7 @@ export const Loginout = {
 	name: 'blockeraLoginout',
 	targetBlock: 'core/loginout',
 	attributes,
-	supports: {
-		...IconExtensionSupports,
-		...sharedBlockExtensionSupports,
-	},
+	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

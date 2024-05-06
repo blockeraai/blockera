@@ -13,8 +13,6 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	IconExtensionSupports,
-	IconExtensionAttributes,
 	InnerBlockParagraphIcon,
 	InnerBlockCitationIcon,
 	InnerBlockHeadingsIcon,
@@ -28,10 +26,9 @@ import {
 } from '@blockera/editor-extensions/js/libs';
 import type { InnerBlocks } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
 
-const attributes = {
-	...IconExtensionAttributes,
-	...sharedBlockExtensionAttributes,
-};
+const attributes = sharedBlockExtensionAttributes;
+
+const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	citation: {
@@ -206,10 +203,7 @@ export const Quote = {
 	name: 'blockeraQuote',
 	targetBlock: 'core/quote',
 	attributes,
-	supports: {
-		...IconExtensionSupports,
-		...sharedBlockExtensionSupports,
-	},
+	supports,
 	blockeraInnerBlocks,
 	blockeraStatesConfig: {
 		disabledSelectors: ['.a', '.b'],

@@ -13,8 +13,6 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	IconExtensionSupports,
-	IconExtensionAttributes,
 	InnerBlockParagraphIcon,
 	InnerBlockButtonIcon,
 	InnerBlockInputIcon,
@@ -41,10 +39,9 @@ import { InnerBlockFormTextareaIcon } from './icons/inner-block-form-textarea';
 import { InnerBlockFormCookieConsentIcon } from './icons/inner-block-form-cookie-consent';
 import { InnerBlockFormButtonIcon } from './icons/inner-block-form-button';
 
-const attributes = {
-	...IconExtensionAttributes,
-	...sharedBlockExtensionAttributes,
-};
+const attributes = sharedBlockExtensionAttributes;
+
+const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	title: {
@@ -297,10 +294,7 @@ export const PostCommentsFrom = {
 	name: 'blockeraPostCommentsForm',
 	targetBlock: 'core/post-comments-form',
 	attributes,
-	supports: {
-		...IconExtensionSupports,
-		...sharedBlockExtensionSupports,
-	},
+	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

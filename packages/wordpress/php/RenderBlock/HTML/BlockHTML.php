@@ -45,39 +45,4 @@ abstract class BlockHTML implements BlockHandler {
 		$this->nextHandler->manipulate( $request );
 	}
 
-	/**
-	 * Retrieve normal icon name.
-	 *
-	 * @param string $icon
-	 *
-	 * @return string
-	 */
-	protected function getIcon( string $icon ): string {
-
-		$isNormalIcon = preg_match( '/^([a-z]*)([A-Z][a-z]*)([A-Z][a-z]*)/', $icon, $matches );
-
-		if ( ! $isNormalIcon ) {
-
-			return $icon;
-		}
-
-		$iconName = '';
-
-		foreach ( $matches as $key => $match ) {
-
-			if ( ! $key ) {
-				continue;
-			}
-
-			if ( count( $matches ) - 1 === $key ) {
-				$iconName .= strtolower( $match );
-
-				continue;
-			}
-
-			$iconName .= strtolower( $match ) . '-';
-		}
-
-		return $iconName;
-	}
 }

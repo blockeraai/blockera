@@ -13,8 +13,6 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	IconExtensionSupports,
-	IconExtensionAttributes,
 	InnerBlockLinkIcon,
 	InnerBlockImageIcon,
 	InnerBlockParagraphIcon,
@@ -28,10 +26,9 @@ import { InnerBlockAvatarIcon } from './icons/inner-block-avatar';
 import { InnerBlockBylineIcon } from './icons/inner-block-byline';
 import { InnerBlockNameIcon } from './icons/inner-block-name';
 
-const attributes = {
-	...IconExtensionAttributes,
-	...sharedBlockExtensionAttributes,
-};
+const attributes = sharedBlockExtensionAttributes;
+
+const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	avatar: {
@@ -93,10 +90,7 @@ export const PostAuthor = {
 	name: 'blockeraPostAuthor',
 	targetBlock: 'core/post-author',
 	attributes,
-	supports: {
-		...IconExtensionSupports,
-		...sharedBlockExtensionSupports,
-	},
+	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

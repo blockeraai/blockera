@@ -92,12 +92,6 @@ export {
 	attributes as typographyExtensionAttributes,
 } from './typography';
 export {
-	IconStyles,
-	IconExtension,
-	attributes as IconExtensionAttributes,
-	supports as IconExtensionSupports,
-} from './icon';
-export {
 	definitionTypes,
 	InnerBlocksExtension,
 	attributes as innerBlocksExtensionsAttributes,

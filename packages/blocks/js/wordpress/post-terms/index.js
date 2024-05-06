@@ -13,8 +13,6 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	IconExtensionSupports,
-	IconExtensionAttributes,
 } from '@blockera/editor-extensions/js/libs';
 import type { InnerBlocks } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
 
@@ -26,10 +24,9 @@ import { InnerBlockPrefixIcon } from './icons/inner-block-prefix';
 import { InnerBlockSuffixIcon } from './icons/inner-block-suffix';
 import { InnerBlockTermIcon } from './icons/inner-block-term';
 
-const attributes = {
-	...IconExtensionAttributes,
-	...sharedBlockExtensionAttributes,
-};
+const attributes = sharedBlockExtensionAttributes;
+
+const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	link: {
@@ -90,10 +87,7 @@ export const PostTerms = {
 	name: 'blockeraPostTerms',
 	targetBlock: 'core/post-terms',
 	attributes,
-	supports: {
-		...IconExtensionSupports,
-		...sharedBlockExtensionSupports,
-	},
+	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

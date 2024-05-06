@@ -14,12 +14,12 @@ import { memo, useEffect, useState } from '@wordpress/element';
 import { Tabs } from '@blockera/components';
 import { include, isEquals } from '@blockera/utils';
 // import { useTraceUpdate } from '@blockera/editor';
+import type { TTabProps } from '@blockera/components/js/tabs/types';
 
 /**
  * Internal dependencies
  */
 import { BackgroundExtension } from '../background';
-import { IconExtension } from '../icon';
 import { BorderAndShadowExtension } from '../border-and-shadow';
 import { EffectsExtension } from '../effects';
 import { TypographyExtension } from '../typography';
@@ -37,11 +37,9 @@ import { ClickAnimationExtension } from '../click-animation';
 import { ConditionsExtension } from '../conditions';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import { isInnerBlock, propsAreEqual } from '../../components/utils';
-import extensions from './extensions.json';
 import { attributes } from './attributes';
 import { useDisplayBlockControls } from '../../hooks';
 import StateContainer from '../../components/state-container';
-import type { TTabProps } from '@blockera/components/js/tabs/types';
 import { InnerBlocksExtension } from '../inner-blocks';
 import { SettingsIcon } from './icons/settings';
 import { StylesIcon } from './icons/styles';
@@ -97,8 +95,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			};
 			// eslint-disable-next-line
 		}, []);
-
-		const { icon } = extensions;
 
 		props = {
 			...props,
@@ -172,7 +168,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const {
-			iconConfig,
 			mouseConfig,
 			sizeConfig,
 			layoutConfig,
@@ -234,27 +229,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'settings':
 					activePanel.push(
 						<>
-							<IconExtension
-								{...{
-									iconConfig,
-									block,
-									values: include(
-										currentStateAttributes,
-										icon,
-										'blockera'
-									),
-									extensionProps: {
-										blockeraIcon: {},
-										blockeraIconPosition: {},
-										blockeraIconGap: {},
-										blockeraIconSize: {},
-										blockeraIconColor: {},
-										blockeraIconLink: {},
-									},
-									handleOnChangeAttributes,
-								}}
-							/>
-
 							<ConditionsExtension
 								block={block}
 								extensionConfig={conditionsConfig}

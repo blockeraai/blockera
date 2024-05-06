@@ -72,11 +72,6 @@ export const sanitizedBlockAttributes = (attributes: Object): Object => {
 	attributeValues.forEach((attributeValue: Object, index: number): void => {
 		const attributeKey = attributeKeys[index];
 
-		if ('blockeraIconLink' === attributeKey) {
-			cleanupKeys.push(attributeKeys[index]);
-			return;
-		}
-
 		if (attributeValue !== availableAttributes[attributeKey]?.default) {
 			return;
 		}

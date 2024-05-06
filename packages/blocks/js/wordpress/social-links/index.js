@@ -13,8 +13,6 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	IconExtensionSupports,
-	IconExtensionAttributes,
 	InnerBlockLinkIcon,
 } from '@blockera/editor-extensions/js/libs';
 import type { InnerBlocks } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
@@ -26,10 +24,9 @@ import { InnerBlockItemContainerIcon } from './icons/inner-block-item-container'
 import { InnerBlockItemNameIcon } from './icons/inner-block-item-name';
 import { InnerBlockItemIconIcon } from './icons/inner-block-item-icon';
 
-const attributes = {
-	...IconExtensionAttributes,
-	...sharedBlockExtensionAttributes,
-};
+const attributes = sharedBlockExtensionAttributes;
+
+const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	item_containers: {
@@ -77,10 +74,7 @@ export const SocialLinks = {
 	name: 'blockeraSocialLinks',
 	targetBlock: 'core/social-links',
 	attributes,
-	supports: {
-		...IconExtensionSupports,
-		...sharedBlockExtensionSupports,
-	},
+	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

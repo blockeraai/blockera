@@ -4,7 +4,6 @@
  * Internal dependencies
  */
 import { attributes as sizeAttributes } from '../size';
-import { attributes as iconAttributes } from '../icon';
 import { attributes as mouseAttributes } from '../mouse';
 import { attributes as layoutAttributes } from '../layout';
 import { attributes as spacingAttributes } from '../spacing';
@@ -22,7 +21,6 @@ import { attributes as advancedSettingsAttributes } from '../advanced-settings';
 
 export const attributes = {
 	...sizeAttributes,
-	...iconAttributes,
 	...mouseAttributes,
 	...layoutAttributes,
 	...effectsAttributes,
