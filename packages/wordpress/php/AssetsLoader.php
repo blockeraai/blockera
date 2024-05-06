@@ -263,7 +263,7 @@ class AssetsLoader {
 			$dependencies,
 			static function ( string $item ): bool {
 
-				return false !== strpos( $item, 'dev-' );
+				return false === strpos( $item, 'dev-' );
 			}
 		);
 	}
