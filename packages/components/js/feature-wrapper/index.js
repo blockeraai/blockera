@@ -3,17 +3,22 @@
  * External dependencies
  */
 import type { Node } from 'react';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Blockera dependencies
  */
-import { useBlockContext } from '@blockera/editor-extensions/js/hooks/context';
+import { isLaptopBreakpoint } from '@blockera/editor';
+import {
+	isInnerBlock,
+	isNormalState,
+} from '@blockera/editor-extensions/js/components/utils';
 
 /**
  * Internal dependencies
  */
-import type { FeatureWrapperProps } from './types';
 import { Wrapper } from './components/wrapper';
+import type { FeatureWrapperProps } from './types';
 
 export default function FeatureWrapper({
 	config,
@@ -21,14 +26,35 @@ export default function FeatureWrapper({
 	children,
 	...props
 }: FeatureWrapperProps): Node {
-	const { getCurrentState, getBreakpoint } = useBlockContext();
+	const { blockera, currentBlock, getCurrentState, currentBreakpoint } =
+		useSelect((select) => {
+			const {
+				getExtensionCurrentBlock,
+				getExtensionInnerBlockState,
+				getExtensionCurrentBlockState,
+				getExtensionCurrentBlockStateBreakpoint,
+			} = select('blockera-core/extensions');
+			const { getEntity } = select('blockera-core/data');
+
+			return {
+				blockera: getEntity('blockera'),
+				getCurrentState: () =>
+					isInnerBlock(getExtensionCurrentBlock())
+						? getExtensionInnerBlockState()
+						: getExtensionCurrentBlockState(),
+				currentBlock: getExtensionCurrentBlock(),
+				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+			};
+		});
 
 	const feature = {
 		isActiveOnFree: true,
-		isActiveOnStates: 'all',
-		isActiveOnBreakpoints: 'all',
+		isActiveOnStates: true,
+		isActiveOnStatesOnFree: false,
+		isActiveOnBreakpoints: true,
+		isActiveOnBreakpointsOnFree: false,
 		isActiveOnInnerBlocks: true,
-		isActiveOnInnerBlockOnFree: true,
+		isActiveOnInnerBlocksOnFree: false,
 		...config,
 	};
 
@@ -36,10 +62,9 @@ export default function FeatureWrapper({
 		return <></>;
 	}
 
-	// todo add free version detection
-	const isFree = true;
+	const isLocked = /\w+-[orp]+/i.exec(blockera?.locked || '');
 
-	if (isFree && !feature.isActiveOnFree) {
+	if (!isLocked && !feature.isActiveOnFree) {
 		return (
 			<Wrapper type="free" {...props}>
 				{children}
@@ -48,38 +73,36 @@ export default function FeatureWrapper({
 	}
 
 	if (
-		feature.isActiveOnStates !== 'all' &&
-		!feature.isActiveOnStates.includes(getCurrentState())
+		isInnerBlock(currentBlock) &&
+		feature.isActiveOnInnerBlocks &&
+		!feature.isActiveOnInnerBlocksOnFree
 	) {
 		return (
-			<Wrapper
-				type="state"
-				typeName={
-					feature.isActiveOnStates.length === 1
-						? feature.isActiveOnStates[0]
-						: ''
-				}
-				{...props}
-			>
+			<Wrapper type="inner-block" typeName={'Parent!'} {...props}>
 				{children}
 			</Wrapper>
 		);
 	}
 
 	if (
-		feature.isActiveOnBreakpoints !== 'all' &&
-		!feature.isActiveOnBreakpoints.includes(getBreakpoint()?.type)
+		!isNormalState(getCurrentState()) &&
+		feature.isActiveOnStates &&
+		!feature.isActiveOnStatesOnFree
 	) {
 		return (
-			<Wrapper
-				type="breakpoint"
-				typeName={
-					feature.isActiveOnBreakpoints.length === 1
-						? feature.isActiveOnBreakpoints[0]
-						: ''
-				}
-				{...props}
-			>
+			<Wrapper type="state" typeName={'Normal!'} {...props}>
+				{children}
+			</Wrapper>
+		);
+	}
+
+	if (
+		!isLaptopBreakpoint(currentBreakpoint) &&
+		feature.isActiveOnBreakpoints &&
+		!feature.isActiveOnBreakpointsOnFree
+	) {
+		return (
+			<Wrapper type="breakpoint" typeName={'Laptop!'} {...props}>
 				{children}
 			</Wrapper>
 		);

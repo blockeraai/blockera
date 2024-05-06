@@ -27,7 +27,7 @@ export function Wrapper({
 	className = '',
 	...props
 }: {
-	type: 'free' | 'state' | 'breakpoint',
+	type: 'free' | 'state' | 'breakpoint' | 'inner-block',
 	typeName?: string,
 	text?: string | MixedElement,
 	className?: string,
@@ -45,7 +45,7 @@ export function Wrapper({
 				text = typeName
 					? sprintf(
 							/* translators: %s is a state name. */
-							__('Only available in %s state', 'blockera'),
+							__('Only available in %s', 'blockera'),
 							typeName
 					  )
 					: __('Not available in current state', 'blockera');
@@ -54,10 +54,19 @@ export function Wrapper({
 				text = typeName
 					? sprintf(
 							/* translators: %s is a breakpoint name. */
-							__('Only available in %s breakpoint', 'blockera'),
+							__('Only available in %s', 'blockera'),
 							typeName
 					  )
 					: __('Not available in current breakpoint.', 'blockera');
+				break;
+			case 'inner-block':
+				text = typeName
+					? sprintf(
+							/* translators: %s is a breakpoint name. */
+							__('Only available in %s', 'blockera'),
+							typeName
+					  )
+					: __('Not available in current inner block.', 'blockera');
 				break;
 		}
 	}
