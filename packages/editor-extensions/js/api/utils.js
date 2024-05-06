@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import { isObject } from '@blockera/utils';
+import { isObject, isEquals } from '@blockera/utils';
 
 /**
  * is block extension?
@@ -40,7 +40,7 @@ export const isShowField = (
 		fieldConfig?.status &&
 		value !== undefined &&
 		defaultValue !== undefined &&
-		value !== defaultValue
+		!isEquals(value, defaultValue)
 	) {
 		return true;
 	}
@@ -57,3 +57,15 @@ export const isShowField = (
  */
 export const isEnabledExtension = (extension: Object): boolean =>
 	true === extension?.status;
+
+/**
+ * is active on context?
+ *
+ * @param {Array<string>} contextConfig the list of active on context configuration.
+ * @param {string} currentContext the current active context.
+ * @return {boolean} true on success, false on otherwise
+ */
+export const isActiveOnContext = (
+	contextConfig: Array<string>,
+	currentContext: string
+): boolean => contextConfig.includes(currentContext);
