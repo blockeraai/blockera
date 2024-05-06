@@ -50,9 +50,9 @@ export default function FeatureWrapper({
 	const feature = {
 		isActiveOnFree: true,
 		isActiveOnStates: true,
-		isActiveOnStatesOnFree: false,
+		isActiveOnStatesOnFree: true,
 		isActiveOnBreakpoints: true,
-		isActiveOnBreakpointsOnFree: false,
+		isActiveOnBreakpointsOnFree: true,
 		isActiveOnInnerBlocks: true,
 		isActiveOnInnerBlocksOnFree: false,
 		...config,
