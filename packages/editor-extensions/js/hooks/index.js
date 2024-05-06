@@ -1,3 +1,4 @@
+// @flow
 /**
  * WordPress dependencies
  */
