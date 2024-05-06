@@ -51,6 +51,9 @@
 			opacity: 0;
 			border-radius: 2px;
 			text-shadow: 1.41px 1.41px #ffffff, 2px 0 #ffffff, 1.41px -1.41px #ffffff, 0 -2px #ffffff, -1.41px -1.41px #ffffff, -2px 0 #ffffff, -1.41px 1.41px #ffffff, 0 2px #ffffff;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
 
