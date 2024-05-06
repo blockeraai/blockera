@@ -20,6 +20,7 @@ import type { TTabProps } from '@blockera/components/js/tabs/types';
  * Internal dependencies
  */
 import { BackgroundExtension } from '../background';
+import { IconExtension } from '../icon';
 import { BorderAndShadowExtension } from '../border-and-shadow';
 import { EffectsExtension } from '../effects';
 import { TypographyExtension } from '../typography';
@@ -168,6 +169,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const {
+			iconConfig,
 			mouseConfig,
 			sizeConfig,
 			layoutConfig,
@@ -229,6 +231,36 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'settings':
 					activePanel.push(
 						<>
+							<IconExtension
+								{...{
+									iconConfig,
+									block,
+									values: {
+										blockeraIcon:
+											currentStateAttributes.blockeraIcon,
+										blockeraIconGap:
+											currentStateAttributes.blockeraIconGap,
+										blockeraIconSize:
+											currentStateAttributes.blockeraIconSize,
+										blockeraIconLink:
+											currentStateAttributes.blockeraIconLink,
+										blockeraIconColor:
+											currentStateAttributes.blockeraIconColor,
+										blockeraIconPosition:
+											currentStateAttributes.blockeraIconPosition,
+									},
+									extensionProps: {
+										blockeraIcon: {},
+										blockeraIconPosition: {},
+										blockeraIconGap: {},
+										blockeraIconSize: {},
+										blockeraIconColor: {},
+										blockeraIconLink: {},
+									},
+									handleOnChangeAttributes,
+								}}
+							/>
+
 							<ConditionsExtension
 								block={block}
 								extensionConfig={conditionsConfig}

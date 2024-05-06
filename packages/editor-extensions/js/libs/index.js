@@ -104,6 +104,12 @@ export {
 	supports as entranceAnimationExtensionSupports,
 } from './entrance-animation';
 export {
+	IconStyles,
+	IconExtension,
+	attributes as IconExtensionAttributes,
+	supports as IconExtensionSupports,
+} from './icon';
+export {
 	SharedBlockExtension,
 	attributes as sharedBlockExtensionAttributes,
 	supports as sharedBlockExtensionSupports,

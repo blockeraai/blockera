@@ -34,6 +34,7 @@ import { isLaptopBreakpoint } from '@blockera/editor';
  * Internal dependencies
  */
 import {
+	useIconEffect,
 	useAttributes,
 	useInnerBlocksInfo,
 	BlockEditContextProvider,
@@ -191,6 +192,20 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			blockeraInnerBlocks,
 			blockAttributes: sharedBlockExtensionAttributes,
 		});
+
+		useIconEffect(
+			{
+				name,
+				clientId,
+				blockRefId: blockEditRef,
+				blockeraIcon: currentAttributes?.blockeraIcon,
+				blockeraIconGap: currentAttributes?.blockeraIconGap,
+				blockeraIconSize: currentAttributes?.blockeraIconSize,
+				blockeraIconColor: currentAttributes?.blockeraIconColor,
+				blockeraIconPosition: currentAttributes?.blockeraIconPosition,
+			},
+			[currentAttributes]
+		);
 
 		const { edit: BlockEditComponent } = additional;
 

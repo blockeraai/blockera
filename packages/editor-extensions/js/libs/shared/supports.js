@@ -1,6 +1,7 @@
 // @flow
 
 import { supports as sizeSupports } from '../size';
+import { supports as iconSupports } from '../icon';
 import { supports as mouseSupports } from '../mouse';
 import { supports as layoutSupports } from '../layout';
 import { supports as effectsSupports } from '../effects';
@@ -14,6 +15,7 @@ import { supports as borderAndShadowSupports } from '../border-and-shadow';
 
 export const supports = {
 	...sizeSupports,
+	...iconSupports,
 	...mouseSupports,
 	...layoutSupports,
 	...effectsSupports,

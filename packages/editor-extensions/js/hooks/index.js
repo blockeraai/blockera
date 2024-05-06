@@ -35,6 +35,7 @@ export default function applyHooks() {
 export { default as withBlockSettings } from './block-settings';
 
 export { useAttributes } from './use-attributes';
+export { useIconEffect } from './use-icon-effect';
 export { useBlocksStore } from './use-blocks-store';
 export { useStoreSelectors } from './use-store-selectors';
 export { useBlockExtensions } from './use-block-extensions';

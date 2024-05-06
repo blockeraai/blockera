@@ -2,6 +2,7 @@
 
 namespace Blockera\StyleEngine\Providers;
 
+use Blockera\WordPress\RenderBlock\HTML\Icon;
 use Blockera\StyleEngine\StyleDefinitions\{
 	Size,
 	Mouse,
@@ -32,6 +33,14 @@ class StyleProviders extends ServiceProvider {
 	 * @return void
 	 */
 	public function register(): void {
+
+		$this->app->singleton(
+			Icon::class,
+			static function ( Application $app ) {
+
+				return new Icon( $app );
+			}
+		);
 
 		$this->app->singleton( Size::class );
 		$this->app->singleton( Mouse::class );

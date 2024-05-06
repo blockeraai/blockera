@@ -14,12 +14,20 @@ import {
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
 	InnerBlockLinkIcon,
+	IconExtensionSupports,
+	IconExtensionAttributes,
 } from '@blockera/editor-extensions/js/libs';
 import type { InnerBlocks } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
 
-const attributes = sharedBlockExtensionAttributes;
+const attributes = {
+	...IconExtensionAttributes,
+	...sharedBlockExtensionAttributes,
+};
 
-const supports = sharedBlockExtensionSupports;
+const supports = {
+	...IconExtensionSupports,
+	...sharedBlockExtensionSupports,
+};
 
 const blockeraInnerBlocks: InnerBlocks = {
 	link: {

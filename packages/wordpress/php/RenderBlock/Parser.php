@@ -5,6 +5,7 @@ namespace Blockera\WordPress\RenderBlock;
 use Blockera\Bootstrap\Application;
 use Blockera\StyleEngine\StyleEngine;
 use Blockera\Exceptions\BaseException;
+use Blockera\WordPress\RenderBlock\HTML\Icon;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -81,6 +82,21 @@ class Parser {
 		// add unique classname into block element
 		$blockElement->classList->add( $uniqueClassname );
 
+		// Block Instances
+		{
+			$iconCustomizer = $this->app->make( Icon::class );
+		}
+
+		/**
+		 * TODO: Create Chain of HTML Customizers 💡
+		 *
+		 * @var Icon $iconCustomizer
+		 */
+
+		// Usage
+		{
+			$iconCustomizer->manipulate( compact( 'block', 'blockElement' ) );
+		}
 	}
 
 }
