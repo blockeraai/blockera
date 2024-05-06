@@ -31,7 +31,7 @@ class RestAPIProvider extends ServiceProvider {
 
 		} catch ( \Exception $handler ) {
 
-			throw new \Exception( 'Binding Service Failure! \n' . $handler->getMessage() );
+			throw new \Exception( esc_html( 'Binding Service Failure! \n' . $handler->getMessage() ) );
 		}
 	}
 

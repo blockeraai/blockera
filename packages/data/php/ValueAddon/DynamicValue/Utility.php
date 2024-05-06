@@ -121,8 +121,7 @@ class Utility {
 					}
 
 					$term = self::pluralSuffix( $term );
-
-					$title = sprintf( _x( '%s', 'post format archive title', 'blockera' ), ucfirst( $term ) );
+					$title = ucfirst( $term );
 				}
 
 				break;
@@ -188,6 +187,7 @@ class Utility {
 			case 'singular':
 				$post_type_object = get_post_type_object( get_post_type() );
 
+				// translators: "%1$s" is singular name of post type, "%2$s" is the original title.
 				$original_title = sprintf( __( '%1$s: %2$s', 'blockera' ), $post_type_object->labels->singular_name, $original_title );
 
 				break;
@@ -212,6 +212,7 @@ class Utility {
 				break;
 
 			case 'post_type_archive':
+				// translators: "%1$s" placeholder is original title.
 				$original_title = sprintf( __( 'Archives: %1$s', 'blockera' ), $original_title );
 
 				break;

@@ -15,10 +15,12 @@ abstract class Field extends BaseField {
 	const COMPLEX_FIELD = false;
 
 	/**
-	 * @param array $options
+	 * Retrieve current field content.
+	 *
+	 * @param array $options the extra option to use prepare content.
 	 *
 	 * @since  1.0.0
-	 * @return string
+	 * @return string the prepared value.
 	 */
 	public function theContent( array $options = [] ): string {
 
@@ -34,7 +36,7 @@ abstract class Field extends BaseField {
 
 		} else {
 
-			echo $render;
+			echo esc_html( $render );
 		}
 
 		$value = ob_get_clean();
@@ -53,13 +55,15 @@ abstract class Field extends BaseField {
 	}
 
 	/**
-	 * @param $settings
-	 * @param $value
+	 * Rendering empty value with concatenated before and after value for all fields.
+	 *
+	 * @param array  $settings the settings for rendering process.
+	 * @param string $value    the value.
 	 *
 	 * @since 1.0.0
-	 * @return string
+	 * @return string the concatenated value with before and after settings.
 	 */
-	private function renderEmptyValue( $settings, $value ): string {
+	private function renderEmptyValue( array $settings, string $value ): string {
 
 		if ( ! Utility::isEmpty( $settings, 'before' ) ) {
 
@@ -79,6 +83,11 @@ abstract class Field extends BaseField {
 		return $value;
 	}
 
+	/**
+	 * Get unique id for current field.
+	 *
+	 * @return string the unique identifier.
+	 */
 	protected function getId(): string {
 
 		// FIXME: requirement create unique id from ControlStack or Something like that!
@@ -90,9 +99,9 @@ abstract class Field extends BaseField {
 	/**
 	 * Retrieve the value of dynamic value.
 	 *
-	 * @param array $options
+	 * @param array $options the extra option to use prepare value.
 	 *
-	 * @return mixed
+	 * @return mixed everything's.
 	 */
 	abstract public function theValue( array $options = [] ): mixed;
 

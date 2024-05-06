@@ -145,7 +145,7 @@ class AppServiceProvider extends ServiceProvider {
 
 		} catch ( BaseException $handler ) {
 
-			throw new BaseException( 'Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage() );
+			throw new BaseException( esc_html( 'Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage() ) );
 		}
 	}
 
