@@ -61,7 +61,6 @@ blocksInitializer({
 							blockeraTransformChildOrigin: {},
 							blockeraTransformSelfPerspective: '',
 							blockeraTransformChildPerspective: '',
-							divider: [],
 						}}
 						extensionId={'Effects'}
 						icon={<EffectsExtensionIcon />}
@@ -110,7 +109,6 @@ export const Default = {
 					blockeraBlendMode: '',
 					blockeraTransition: [],
 					blockeraBackdropFilter: [],
-					blockeraDivider: [],
 					blockeraBackfaceVisibility: '',
 					blockeraTransformSelfOrigin: {},
 					blockeraTransformChildOrigin: {},

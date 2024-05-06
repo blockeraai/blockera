@@ -13,21 +13,13 @@ import { getSortedRepeater } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import {
-	FilterGenerator,
-	TransitionGenerator,
-	MaskGenerator,
-} from './css-generators';
+import { FilterGenerator, TransitionGenerator } from './css-generators';
 import { arrayEquals } from '../utils';
 import * as config from '../base/config';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
 import type { StylesProps } from '../types';
 import type { TTransformCssProps } from './types/effects-props';
-import {
-	AfterDividerGenerator,
-	BeforeDividerGenerator,
-} from './css-generators/divider-generator';
 
 export const EffectsStyles = ({
 	state,
@@ -47,8 +39,6 @@ export const EffectsStyles = ({
 		blockeraBlendMode,
 		blockeraTransition,
 		blockeraBackdropFilter,
-		blockeraDivider,
-		blockeraMask,
 	} = config.effectsConfig;
 
 	const blockProps = {
@@ -325,111 +315,6 @@ export const EffectsStyles = ({
 						{
 							type: 'function',
 							function: FilterGenerator,
-						},
-					],
-				},
-				blockProps
-			),
-		});
-	}
-
-	if (
-		isActiveField(blockeraDivider) &&
-		!arrayEquals(
-			attributes.blockeraDivider.default,
-			blockProps.attributes.blockeraDivider
-		)
-	) {
-		const pickedSelector = getCssSelector({
-			...sharedParams,
-			query: 'blockeraDivider',
-			support: 'blockeraDivider',
-		});
-
-		styleGroup.push({
-			selector: pickedSelector,
-			declarations: computedCssDeclarations(
-				{
-					blockeraDivider: [
-						{
-							type: 'static',
-							properties: {
-								position: 'relative',
-								overflow: 'hidden',
-							},
-						},
-					],
-				},
-				blockProps
-			),
-		});
-
-		styleGroup.push({
-			selector: getCssSelector({
-				...sharedParams,
-				query: 'blockeraDivider',
-				support: 'blockeraDivider',
-				suffixClass: ':before',
-			}),
-			declarations: computedCssDeclarations(
-				{
-					blockeraDivider: [
-						{
-							type: 'function',
-							function: BeforeDividerGenerator,
-						},
-					],
-				},
-				blockProps
-			),
-		});
-
-		if (
-			Object.entries(blockProps.attributes?.blockeraDivider)?.length === 2
-		) {
-			styleGroup.push({
-				selector: getCssSelector({
-					...sharedParams,
-					query: 'blockeraDivider',
-					support: 'blockeraDivider',
-					suffixClass: ':after',
-				}),
-				declarations: computedCssDeclarations(
-					{
-						blockeraDivider: [
-							{
-								type: 'function',
-								function: AfterDividerGenerator,
-							},
-						],
-					},
-					blockProps
-				),
-			});
-		}
-	}
-
-	if (
-		isActiveField(blockeraMask) &&
-		!arrayEquals(
-			attributes.blockeraMask.default,
-			blockProps.attributes.blockeraMask
-		)
-	) {
-		const pickedSelector = getCssSelector({
-			...sharedParams,
-			query: 'blockeraMask',
-			support: 'blockeraMask',
-		});
-
-		styleGroup.push({
-			selector: pickedSelector,
-			declarations: computedCssDeclarations(
-				{
-					blockeraMask: [
-						{
-							type: 'function',
-							function: MaskGenerator,
 						},
 					],
 				},

@@ -35,8 +35,6 @@ import { Transition } from './components/transition';
 import { Filter } from './components/filter';
 import { BackdropFilter } from './components/backdrop-filter';
 import { Blending } from './components/blending';
-import { Divider } from './components/divider';
-import { Mask } from './components/mask';
 import { EffectsExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
 
@@ -78,16 +76,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			values?.blockeraBackdropFilter,
 			attributes.blockeraBackdropFilter.default
 		);
-		const isShowDivider = isShowField(
-			extensionConfig.blockeraDivider,
-			values?.blockeraDivider,
-			attributes.blockeraDivider.default
-		);
-		const isShowMask = isShowField(
-			extensionConfig.blockeraMask,
-			values?.blockeraMask,
-			attributes.blockeraMask.default
-		);
 		const isShowBlendMode = isShowField(
 			extensionConfig.blockeraBlendMode,
 			values?.blockeraBlendMode,
@@ -101,8 +89,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			!isShowTransition &&
 			!isShowFilter &&
 			!isShowBackdropFilter &&
-			!isShowDivider &&
-			!isShowMask &&
 			!isShowBlendMode
 		) {
 			return <></>;
@@ -246,32 +232,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						defaultValue={attributes.blockeraBackdropFilter.default}
 						{...extensionProps.blockeraBackdropFilter}
-					/>
-				</FeatureWrapper>
-
-				<FeatureWrapper
-					isActive={isShowDivider}
-					config={extensionConfig.blockeraDivider}
-				>
-					<Divider
-						divider={values.blockeraDivider}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraDivider.default}
-						{...extensionProps.blockeraDivider}
-					/>
-				</FeatureWrapper>
-
-				<FeatureWrapper
-					isActive={isShowMask}
-					config={extensionConfig.blockeraMask}
-				>
-					<Mask
-						mask={values.blockeraMask}
-						block={block}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={attributes.blockeraMask.default}
-						{...extensionProps.blockeraMask}
 					/>
 				</FeatureWrapper>
 

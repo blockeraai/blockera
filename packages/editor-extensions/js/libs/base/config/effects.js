@@ -45,22 +45,6 @@ const blockeraBackdropFilter: FeatureConfig = {
 	label: __('Backdrop Filters', 'blockera'),
 };
 
-const blockeraDivider: FeatureConfig = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Shape Dividers', 'blockera'),
-	isActiveOnStates: ['normal'],
-};
-
-const blockeraMask: FeatureConfig = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Image Mask', 'blockera'),
-	isActiveOnStates: ['normal'],
-};
-
 const blockeraBlendMode: FeatureConfig = {
 	show: false,
 	force: false,
@@ -74,7 +58,5 @@ export const effectsConfig = {
 	blockeraTransition,
 	blockeraFilter,
 	blockeraBackdropFilter,
-	blockeraDivider,
-	blockeraMask,
 	blockeraBlendMode,
 };
