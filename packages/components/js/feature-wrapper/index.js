@@ -78,7 +78,7 @@ export default function FeatureWrapper({
 		!feature.isActiveOnInnerBlocksOnFree
 	) {
 		return (
-			<Wrapper type="inner-block" typeName={'Parent!'} {...props}>
+			<Wrapper type="free" {...props}>
 				{children}
 			</Wrapper>
 		);
