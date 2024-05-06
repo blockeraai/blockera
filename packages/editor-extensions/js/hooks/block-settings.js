@@ -4,6 +4,7 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { useEffect } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
@@ -23,6 +24,37 @@ import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 
+const EdiBlockWithoutExtensions = ({
+	settings,
+	...props
+}: Object): MixedElement => {
+	useEffect(() => {
+		const blockCard = document.querySelector('.block-editor-block-card');
+
+		if (blockCard) {
+			blockCard.style.display = 'flex';
+		}
+
+		const blockVariations = document.querySelector(
+			'.block-editor-block-inspector > .block-editor-block-variation-transforms'
+		);
+
+		if (blockVariations) {
+			blockVariations.style.display = 'block';
+		}
+
+		const tabs = document.querySelector(
+			'.block-editor-block-inspector .block-editor-block-inspector__tabs'
+		);
+
+		if (tabs) {
+			tabs.style.display = 'block';
+		}
+	}, []);
+
+	return settings.edit(props);
+};
+
 /**
  * Filters registered WordPress block type settings, extending block settings with settings and block name.
  *
@@ -34,19 +66,27 @@ export default function withBlockSettings(
 	settings: Object,
 	name: Object
 ): Object {
-	const { getBlockExtension, getBlockExtensionBy } = select(STORE_NAME) || {};
+	const {
+		// getBlockExtension,
+		getBlockExtensionBy,
+	} = select(STORE_NAME) || {};
 
-	const sharedExtension = getBlockExtension('Shared');
+	// const sharedExtension = getBlockExtension('Shared');
 	const blockExtension = getBlockExtensionBy('targetBlock', name);
 
 	if (blockExtension && isBlockTypeExtension(blockExtension)) {
-		return mergeBlockSettings(
-			settings,
-			mergeObject(sharedExtension, blockExtension)
-		);
+		// mergeObject(sharedExtension, blockExtension)
+		return mergeBlockSettings(settings, blockExtension);
 	}
 
-	return mergeBlockSettings(settings, sharedExtension);
+	// return mergeBlockSettings(settings, sharedExtension);
+
+	return {
+		...settings,
+		edit: (props) => (
+			<EdiBlockWithoutExtensions {...{ ...props, settings }} />
+		),
+	};
 }
 
 /**
