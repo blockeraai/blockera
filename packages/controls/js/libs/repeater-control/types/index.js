@@ -23,6 +23,18 @@ export type RepeaterControlProps = {
 	...Object,
 	...ControlGeneralTypes,
 	/**
+	 * Repeater identifier.
+	 */
+	id: string,
+	/**
+	 * Repeater value exists on root?
+	 */
+	onRoot: boolean,
+	/**
+	 * Promotion component for repeater.
+	 */
+	promoComponent?: Object,
+	/**
 	 * It specifies the design of repeater control.
 	 */
 	design?: 'minimal' | 'large',

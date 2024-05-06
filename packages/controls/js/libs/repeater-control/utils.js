@@ -4,6 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { Children } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -94,4 +95,28 @@ export function cleanupRepeater(
 	);
 
 	return clonedItems;
+}
+
+export function isEnabledPromote(
+	Promotion?: (items: Object) => MixedElement,
+	items: Object
+): boolean {
+	return (
+		'function' === typeof Promotion &&
+		0 !== Children.count(Promotion({ items }))
+	);
+}
+
+export function getRepeaterActiveItemsCount(items: Object): number {
+	let activeItemsCount = 0;
+
+	Object.entries(items).forEach(([, item]) => {
+		if (!item.isVisible) {
+			return;
+		}
+
+		++activeItemsCount;
+	});
+
+	return activeItemsCount;
 }

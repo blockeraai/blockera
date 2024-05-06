@@ -4,6 +4,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { useState } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -19,11 +21,11 @@ import { Button, Grid } from '@blockera/components';
  * Internal dependencies.
  */
 import PlusIcon from './icons/plus';
-import { cleanupRepeater } from './utils';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
+import { cleanupRepeater, isEnabledPromote } from './utils';
 
 /**
  * Types
@@ -42,47 +44,56 @@ export const defaultItemValue = {
 	visibilitySupport: true,
 };
 
-export default function RepeaterControl({
-	icon,
-	description = '',
-	design = 'minimal',
-	mode = 'popover',
-	popoverTitle,
-	popoverTitleButtonsRight,
-	addNewButtonLabel,
-	popoverClassName,
-	maxItems = -1,
-	minItems = 0,
-	selectable = false,
-	actionButtonAdd = true,
-	actionButtonVisibility = true,
-	actionButtonDelete = true,
-	actionButtonClone = true,
-	injectHeaderButtonsStart = '',
-	injectHeaderButtonsEnd = '',
-	withoutAdvancedLabel = false,
-	//
-	label,
-	labelPopoverTitle,
-	labelDescription,
-	id: repeaterId,
-	repeaterItemOpener,
-	repeaterItemHeader,
-	repeaterItemChildren,
-	getDynamicDefaultRepeaterItem,
-	itemColumns = 1,
-	//
-	defaultValue = {},
-	defaultRepeaterItemValue = { isVisible: true },
-	onChange,
-	onDelete,
-	overrideItem,
-	valueCleanup = cleanupRepeater,
-	itemIdGenerator,
-	//
-	className,
-	...props
-}: RepeaterControlProps): MixedElement {
+export default function RepeaterControl(
+	props: RepeaterControlProps
+): MixedElement {
+	let {
+		icon,
+		description = '',
+		design = 'minimal',
+		mode = 'popover',
+		popoverTitle,
+		popoverTitleButtonsRight,
+		addNewButtonLabel,
+		popoverClassName,
+		maxItems = -1,
+		minItems = 0,
+		selectable = false,
+		actionButtonAdd = true,
+		actionButtonVisibility = true,
+		actionButtonDelete = true,
+		actionButtonClone = true,
+		injectHeaderButtonsStart = '',
+		injectHeaderButtonsEnd = '',
+		withoutAdvancedLabel = false,
+		//
+		label,
+		onRoot = true,
+		labelPopoverTitle,
+		labelDescription,
+		id: repeaterId,
+		repeaterItemOpener,
+		repeaterItemHeader,
+		repeaterItemChildren,
+		getDynamicDefaultRepeaterItem,
+		itemColumns = 1,
+		//
+		defaultValue = {},
+		defaultRepeaterItemValue = { isVisible: true },
+		onChange,
+		onDelete,
+		overrideItem,
+		valueCleanup = cleanupRepeater,
+		itemIdGenerator,
+		PromoComponent,
+		//
+		className,
+	} = applyFilters(`blockera.controls.${props.id}.props`, props);
+
+	if (onRoot) {
+		repeaterId = undefined;
+	}
+
 	defaultRepeaterItemValue = {
 		...defaultItemValue,
 		...defaultRepeaterItemValue,
@@ -99,8 +110,8 @@ export default function RepeaterControl({
 		defaultValue,
 		sideEffect: true,
 		repeater: {
-			repeaterId,
 			defaultRepeaterItemValue,
+			repeaterId: onRoot ? undefined : repeaterId,
 		},
 		onChange,
 		valueCleanup,
@@ -131,6 +142,7 @@ export default function RepeaterControl({
 		repeaterId,
 		overrideItem,
 		getControlPath,
+		PromoComponent,
 		itemIdGenerator,
 		repeaterItemOpener,
 		repeaterItemHeader,
@@ -141,8 +153,15 @@ export default function RepeaterControl({
 		//
 		customProps: { ...props },
 	};
+	const [count, setCount] = useState(0);
 
 	const addNewButtonOnClick = () => {
+		if (isEnabledPromote(PromoComponent, repeaterItems)) {
+			setCount(count + 1);
+
+			return;
+		}
+
 		const itemsCount = Object.keys(repeaterItems || {}).length;
 
 		const callback = (value?: Object): void => {
@@ -399,6 +418,13 @@ export default function RepeaterControl({
 					</>
 				)}
 			</div>
+			{count >= 1 &&
+				isEnabledPromote(PromoComponent, repeaterItems) &&
+				PromoComponent({
+					isOpen: count >= 1,
+					items: repeaterItems,
+					onClose: () => setCount(0),
+				})}
 		</RepeaterContextProvider>
 	);
 }

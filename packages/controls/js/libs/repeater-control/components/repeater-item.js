@@ -23,7 +23,11 @@ import { controlInnerClassNames } from '@blockera/classnames';
  */
 import RepeaterItemActions from './actions';
 import { RepeaterContext } from '../context';
-import { getArialLabelSuffix, isOpenPopoverEvent } from '../utils';
+import {
+	getArialLabelSuffix,
+	isEnabledPromote,
+	isOpenPopoverEvent,
+} from '../utils';
 import GroupControl from '../../group-control';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemProps } from '../types';
@@ -50,12 +54,13 @@ const RepeaterItem = ({
 		onChange,
 		repeaterId,
 		popoverTitle,
+		PromoComponent,
 		popoverClassName,
-		popoverTitleButtonsRight: PopoverTitleButtonsRight,
 		repeaterItems: items,
 		repeaterItemOpener: RepeaterItemOpener,
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
+		popoverTitleButtonsRight: PopoverTitleButtonsRight,
 	} = useContext(RepeaterContext);
 
 	const repeaterItemActionsProps = {
@@ -222,6 +227,11 @@ const RepeaterItem = ({
 				isOpen={isOpen}
 				onClose={() => {
 					setOpen(false);
+
+					if (isEnabledPromote(PromoComponent, items)) {
+						return;
+					}
+
 					changeRepeaterItem({
 						itemId,
 						value: {
