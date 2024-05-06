@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { isObject } from '@blockera/utils';
+import { Promotion } from '@blockera/components';
 import { controlClassNames } from '@blockera/classnames';
 
 /**
@@ -21,7 +22,10 @@ import type {
 	TBackgroundControlProps,
 	TDefaultRepeaterItemValue,
 } from './types';
-import { cleanupRepeaterItem } from '../repeater-control/utils';
+import {
+	cleanupRepeaterItem,
+	getRepeaterActiveItemsCount,
+} from '../repeater-control/utils';
 import { LabelDescription } from './components/label-description';
 import { default as generateMeshGradient } from './components/mesh-gradient/mesh-generator';
 
@@ -154,6 +158,28 @@ export default function BackgroundControl({
 
 	return (
 		<RepeaterControl
+			id={'background'}
+			PromoComponent={({
+				items,
+				onClose = () => {},
+				isOpen = false,
+			}): MixedElement | null => {
+				if (getRepeaterActiveItemsCount(items) < 1) {
+					return null;
+				}
+
+				return (
+					<Promotion
+						type={'popup'}
+						isOpen={isOpen}
+						onClose={onClose}
+						buttonText="Shop Now"
+						title="Special Offer!"
+						shopPage={'https://blockeraai.com/shop'}
+						description="Get 50% off on all products. Limited time offer."
+					/>
+				);
+			}}
 			defaultValue={defaultValue}
 			className={controlClassNames('background', className)}
 			popoverTitle={popoverTitle}

@@ -5,12 +5,13 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { Element } from 'react';
+import { select } from '@wordpress/data';
 import { memo, useEffect, useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
+import { Flex, FeatureWrapper } from '@blockera/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
@@ -40,17 +41,13 @@ import type { FieldItem } from '../types';
 import RepeatXIcon from '../icons/repeat-x';
 import RepeatYIcon from '../icons/repeat-y';
 import RepeatNoIcon from '../icons/repeat-no';
-import TypeImageIcon from '../icons/type-image';
 import { default as RegenerateIcon } from '../icons/regenerate';
-import TypeLinearGradientIcon from '../icons/type-linear-gradient';
-import TypeRadialGradientIcon from '../icons/type-radial-gradient';
 import { default as MeshGradientFields } from './mesh-gradient/fields';
 import { default as MeshGradientHeader } from './mesh-gradient/header';
 import LinearGradientRepeatIcon from '../icons/linear-gradient-repeat';
 import RadialGradientRepeatIcon from '../icons/radial-gradient-repeat';
 import LinearGradientNoRepeatIcon from '../icons/linear-gradient-no-repeat';
 import RadialGradientNoRepeatIcon from '../icons/radial-gradient-no-repeat';
-import { default as TypeMeshGradientIcon } from '../icons/type-mesh-gradient';
 import {
 	generateGradient,
 	getRandomHexColor,
@@ -71,6 +68,10 @@ const Fields: FieldItem = memo<FieldItem>(
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
+		const { getExtension } =
+			select('blockera-core/extensions/config') || {};
+		const blockeraBackground =
+			getExtension('backgroundConfig')?.blockeraBackground;
 
 		const { repeaterId, getControlId, defaultRepeaterItemValue } =
 			useContext(RepeaterContext);
@@ -111,28 +112,7 @@ const Fields: FieldItem = memo<FieldItem>(
 					labelPopoverTitle={__('Background Type', 'blockera')}
 					labelDescription={<LabelDescription />}
 					columns="columns-2"
-					options={[
-						{
-							label: __('Image', 'blockera'),
-							value: 'image',
-							icon: <TypeImageIcon />,
-						},
-						{
-							label: __('Linear Gradient', 'blockera'),
-							value: 'linear-gradient',
-							icon: <TypeLinearGradientIcon />,
-						},
-						{
-							label: __('Radial Gradient', 'blockera'),
-							value: 'radial-gradient',
-							icon: <TypeRadialGradientIcon />,
-						},
-						{
-							label: __('Mesh Gradient', 'blockera'),
-							value: 'mesh-gradient',
-							icon: <TypeMeshGradientIcon />,
-						},
-					]}
+					options={blockeraBackground?.config?.types}
 					onChange={(type) =>
 						changeRepeaterItem({
 							controlId,
@@ -1159,70 +1139,78 @@ const Fields: FieldItem = memo<FieldItem>(
 							</div>
 						</BaseControl>
 
-						<BaseControl
-							label=""
-							columns="columns-1"
-							controlName="empty"
+						<FeatureWrapper
+							isActive={true}
+							config={
+								blockeraBackground?.config?.meshGradientColors
+							}
 						>
-							<RepeaterControl
-								repeaterItem={itemId}
-								singularId={'mesh-gradient-colors'}
-								id={getControlId(
-									itemId,
-									'[mesh-gradient-colors]'
-								)}
-								itemIdGenerator={(
-									itemsCount: number
-								): string => {
-									return '--c' + itemsCount;
-								}}
-								defaultValue={
-									defaultRepeaterItemValue[
-										'mesh-gradient-colors'
-									]
-								}
-								label={__('Colors', 'blockera')}
-								labelPopoverTitle={__(
-									'Mesh Gradient Colors',
-									'blockera'
-								)}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'It specifies the colors of the mesh gradient points.',
-												'blockera'
-											)}
-										</p>
-										<p>
-											{__(
-												'You can add as many colors as you like. The fist color will be the base background color.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								className={controlClassNames(
-									'mesh-gradient-background'
-								)}
-								popoverTitle={__(
-									'Mesh Gradient Color',
-									'blockera-color'
-								)}
-								addNewButtonLabel={__(
-									'Add New Mesh Gradient Color',
-									'blockera-color'
-								)}
-								repeaterItemHeader={MeshGradientHeader}
-								repeaterItemChildren={MeshGradientFields}
-								minItems={3}
-								actionButtonVisibility={false}
-								defaultRepeaterItemValue={{
-									color: getRandomHexColor(),
-									isOpen: false,
-								}}
-							/>
-						</BaseControl>
+							<BaseControl
+								label=""
+								columns="columns-1"
+								controlName="empty"
+							>
+								<RepeaterControl
+									repeaterItem={itemId}
+									singularId={'mesh-gradient-colors'}
+									id={getControlId(
+										itemId,
+										'[mesh-gradient-colors]'
+									)}
+									onRoot={false}
+									itemIdGenerator={(
+										itemsCount: number
+									): string => {
+										return '--c' + itemsCount;
+									}}
+									defaultValue={
+										defaultRepeaterItemValue[
+											'mesh-gradient-colors'
+										]
+									}
+									label={__('Colors', 'blockera')}
+									labelPopoverTitle={__(
+										'Mesh Gradient Colors',
+										'blockera'
+									)}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'It specifies the colors of the mesh gradient points.',
+													'blockera'
+												)}
+											</p>
+											<p>
+												{__(
+													'You can add as many colors as you like. The fist color will be the base background color.',
+													'blockera'
+												)}
+											</p>
+										</>
+									}
+									className={controlClassNames(
+										'mesh-gradient-background'
+									)}
+									popoverTitle={__(
+										'Mesh Gradient Color',
+										'blockera-color'
+									)}
+									addNewButtonLabel={__(
+										'Add New Mesh Gradient Color',
+										'blockera-color'
+									)}
+									repeaterItemHeader={MeshGradientHeader}
+									repeaterItemChildren={MeshGradientFields}
+									minItems={3}
+									actionButtonVisibility={false}
+									defaultRepeaterItemValue={{
+										color: getRandomHexColor(),
+										isOpen: false,
+									}}
+								/>
+							</BaseControl>
+						</FeatureWrapper>
 
 						<ToggleSelectControl
 							repeaterItem={itemId}

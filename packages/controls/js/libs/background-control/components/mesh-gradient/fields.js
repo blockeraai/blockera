@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 import { memo, useContext } from '@wordpress/element';
 
 /**
@@ -35,17 +36,19 @@ const Fields: TFieldsProps = memo<TFieldsProps>(
 					isPopover={false}
 					hasClearBtn={false}
 					id={getControlId(itemId, 'color')}
-					onChange={(newValue) => {
-						changeRepeaterItem({
-							controlId,
-							value: {
-								...item,
-								color: newValue,
-							},
-							repeaterId,
-							itemId,
-						});
-					}}
+					onChange={(newValue) =>
+						applyFilters(
+							'blockera.controls.background.meshGradientColors.OnChange',
+							() => {},
+							{
+								item,
+								newValue,
+								controlId,
+								repeaterId,
+								changeRepeaterItem,
+							}
+						)(newValue)
+					}
 				/>
 			</div>
 		);
