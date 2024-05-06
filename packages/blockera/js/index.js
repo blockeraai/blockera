@@ -14,6 +14,6 @@ import { initializer } from '@blockera/bootstrap';
 /**
  * Initialize blockera react application.
  */
-addFilter('blockera.core.bootstrap', 'blockera.bootstrap', () => applyHooks);
+addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => applyHooks);
 
 initializer();

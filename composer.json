@@ -1,12 +1,12 @@
 {
-	"name": "blockera/blockera",
+	"name": "blockera/plugin",
 	"description": "A Blockera Site Editor experience base on Gutenberg core modules.",
 	"type": "library",
 	"license": "ISC",
 	"repositories": [
 		{
 			"type": "path",
-			"url": "packages/blockera-setup"
+			"url": "packages/blockera"
 		},
 		{
 			"type": "path",
@@ -44,7 +44,7 @@
 	"autoload": {
 		"files": [
 			"packages/style-engine/php/helpers.php",
-			"packages/blockera-setup/php/functions.php"
+			"packages/blockera/php/functions.php"
 		]
 	},
 	"autoload-dev": {
@@ -60,7 +60,7 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.4",
-		"blockera/setup": "*",
+		"blockera/blockera": "*",
 		"blockera/bootstrap": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",

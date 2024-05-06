@@ -1,5 +1,5 @@
 {
-	"name": "@blockera/core",
+	"name": "@blockera/plugin",
 	"version": "1.0.0",
 	"private": true,
 	"description": "A new  editor experience base on Gutenberg.",
@@ -36,7 +36,7 @@
 		"@blockera/data-editor": "file:packages/data-editor",
 		"@blockera/editor": "file:packages/editor",
 		"@blockera/editor-extensions": "file:packages/editor-extensions",
-		"@blockera/blockera-setup": "file:packages/blockera-setup",
+		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/style-engine": "file:packages/style-engine",
 		"@blockera/utils": "file:packages/utils",
 		"fast-memoize": "^2.5.2"

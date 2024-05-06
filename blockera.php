@@ -30,8 +30,24 @@ define( 'BLOCKERA_CORE_FILE', __FILE__ );
 define( 'BLOCKERA_CORE_URI', plugin_dir_url( __FILE__ ) );
 define( 'BLOCKERA_CORE_PATH', plugin_dir_path( __FILE__ ) );
 
+/**
+ * This hook for extendable setup process from internal or third-party developers.
+ *
+ * @hook  'blockera/before/setup'
+ * @since 1.0.0
+ */
+do_action( 'blockera/before/setup' );
+
 // loading front controller.
-require BLOCKERA_CORE_PATH . 'packages/blockera-setup/php/app.php';
+require BLOCKERA_CORE_PATH . 'packages/blockera/php/app.php';
+
+/**
+ * This hook for extendable setup process from internal or third-party developers.
+ *
+ * @hook  'blockera/after/setup'
+ * @since 1.0.0
+ */
+do_action( 'blockera/after/setup' );
 
 /**
  * For developers: Blockera debugging mode.

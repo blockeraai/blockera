@@ -1,20 +1,20 @@
 {
-	"name": "@blockera/setup",
+	"name": "@blockera/blockera",
 	"version": "1.0.0",
-	"description": "The setup blockera react application for WordPress site and block editors.",
+	"description": "The bootstrapper for blockera react application for WordPress site and block editors.",
 	"author": "The Blockera Core Contributors",
 	"license": "ISC",
 	"keywords": [
 		"blockera",
 		"bootstrap",
 	  	"initliazer",
-		"blockera-setup"
+		"blockera"
 	],
-	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/blockera-setup/README.md",
+	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/blockera/README.md",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/blockeraai/blockera",
-		"directory": "packages/blockera-setup"
+		"directory": "packages/blockera"
 	},
 	"bugs": {
 		"url": "https://github.com/blockeraai/blockera/issues"

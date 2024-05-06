@@ -25,14 +25,12 @@ class Blockera extends Application implements ContainerInterface {
 	public function __construct() {
 
 		/**
-		 * This hook for extendable setup process from internal or third-party developers.
+		 * This hook for extendable service providers list from internal or third-party developers.
 		 *
-		 * @hook  'blockera/before/setup'
+		 * @hook  'blockera/service/providers'
 		 * @since 1.0.0
 		 */
-		do_action( 'blockera/before/setup', $this );
-
-		$this->service_providers = blockera_core_config( 'app.providers' );
+		$this->service_providers = apply_filters( 'blockera/service/providers', blockera_core_config( 'app.providers' ) );
 
 		// Keep parent functionalities.
 		parent::__construct();
@@ -47,14 +45,6 @@ class Blockera extends Application implements ContainerInterface {
 		);
 
 		$this->setRegisteredValueAddons();
-
-		/**
-		 * This hook for extendable setup process from internal or third-party developers.
-		 *
-		 * @hook  'blockera/after/setup'
-		 * @since 1.0.0
-		 */
-		do_action( 'blockera/after/setup', $this );
 	}
 
 	/**
