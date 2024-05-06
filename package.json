@@ -26,7 +26,7 @@
 		"ALLOW_EXPERIMENT_REREGISTRATION": true
 	},
 	"dependencies": {
-		"@monaco-editor/react": "^4.6.0",
+		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/blocks": "file:packages/blocks",
 		"@blockera/bootstrap": "file:packages/bootstrap",
 		"@blockera/classnames": "file:packages/classnames",
@@ -36,9 +36,9 @@
 		"@blockera/data-editor": "file:packages/data-editor",
 		"@blockera/editor": "file:packages/editor",
 		"@blockera/editor-extensions": "file:packages/editor-extensions",
-		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/style-engine": "file:packages/style-engine",
 		"@blockera/utils": "file:packages/utils",
+		"@monaco-editor/react": "^4.6.0",
 		"fast-memoize": "^2.5.2"
 	},
 	"devDependencies": {
@@ -93,6 +93,7 @@
 		"@wordpress/env": "^8.4.0",
 		"@wordpress/eslint-plugin": "^14.4.0",
 		"@wordpress/format-library": "^4.12.0",
+		"@wordpress/hooks": "^3.57.0",
 		"@wordpress/i18n": "^4.35.0",
 		"@wordpress/icons": "^9.21.0",
 		"@wordpress/interface": "^5.12.0",
