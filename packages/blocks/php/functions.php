@@ -94,7 +94,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-no-results',
 			'core/read-more',
 			'core/post-comments-form',
-			'core/home-link',
 			'core/loginout',
 			'core/term-description',
 			'core/query-title',
