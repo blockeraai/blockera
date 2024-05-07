@@ -5,7 +5,6 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
 describe('Buttons Block → Inner Blocks', () => {

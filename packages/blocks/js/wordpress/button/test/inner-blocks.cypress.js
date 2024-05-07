@@ -1,12 +1,7 @@
 /**
  * Cypress dependencies
  */
-import {
-	appendBlocks,
-	createPost,
-	openInnerBlocksExtension,
-	openMoreFeaturesControl,
-} from '../../../../../../cypress/helpers';
+import { appendBlocks, createPost } from '../../../../../../cypress/helpers';
 
 describe('Button Block → Inner Blocks', () => {
 	beforeEach(() => {
