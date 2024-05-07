@@ -25,7 +25,7 @@ describe('Social Links Block → Inner Blocks', () => {
 		cy.getBlock('core/social-links').click();
 
 		// Switch to parent block
-		cy.getByAriaLabel('Select Social Icons').click();
+		cy.getByAriaLabel('Select parent block: Social Icons').click();
 
 		// open inner block settings
 		openInnerBlocksExtension();
@@ -42,4 +42,3 @@ describe('Social Links Block → Inner Blocks', () => {
 		);
 	});
 });
-

@@ -31,7 +31,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		cy.getBlock('core/social-links').click();
 
 		// Switch to parent block
-		cy.getByAriaLabel('Select Social Icons').click();
+		cy.getByAriaLabel('Select parent block: Social Icons').click();
 
 		//
 		// Test 1: WP data to Blockera
@@ -254,7 +254,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		cy.getBlock('core/social-links').click();
 
 		// Switch to parent block
-		cy.getByAriaLabel('Select Social Icons').click();
+		cy.getByAriaLabel('Select parent block: Social Icons').click();
 
 		//
 		// Test 1: WP data to Blockera
