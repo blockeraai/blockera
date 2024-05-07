@@ -10,6 +10,8 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 
 		return [
 			'core/categories',
+			'core/column',
+			'core/columns',
 			'core/paragraph',
 			'core/image',
 			'core/heading',
@@ -23,8 +25,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/buttons',
 			'core/calendar',
 			'core/code',
-			'core/column',
-			'core/columns',
 			'core/cover',
 			'core/details',
 			'core/embed',
