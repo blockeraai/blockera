@@ -27,6 +27,7 @@ export * from './image';
 export * from './latest-posts';
 export * from './list';
 export * from './list-item';
+export * from './loginout';
 
 export * from './quote';
 export * from './paragraph';
@@ -50,7 +51,6 @@ export * from './query-pagination-next';
 export * from './query-pagination-previous';
 export * from './query-no-results';
 export * from './post-comments-form';
-export * from './loginout';
 export * from './term-description';
 export * from './query-title';
 export * from './social-link';

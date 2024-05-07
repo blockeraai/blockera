@@ -37,4 +37,3 @@ describe('Loginout Block → Inner Blocks', () => {
 		);
 	});
 });
-

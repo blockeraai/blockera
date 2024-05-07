@@ -36,6 +36,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/latest-posts',
 			'core/list',
 			'core/list-item',
+			'core/loginout',
 			
 			'core/paragraph',
 			'core/quote',
@@ -94,7 +95,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-no-results',
 			'core/read-more',
 			'core/post-comments-form',
-			'core/loginout',
 			'core/term-description',
 			'core/query-title',
 			'core/post-author-biography',
