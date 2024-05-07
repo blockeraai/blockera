@@ -44,7 +44,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/buttons',
 			'core/calendar',
 			'core/embed',
-			'core/html',
 			'core/latest-comments',
 			'core/latest-posts',
 			'core/media-text',
