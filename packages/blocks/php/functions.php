@@ -91,7 +91,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/navigation',
 			'core/navigation-link',
 			'core/navigation-submenu',
-			'core/query',
 			'core/template-part',
 			'core/legacy-widget',
 			'core/widget-group',
