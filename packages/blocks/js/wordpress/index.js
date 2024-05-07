@@ -52,9 +52,9 @@ export * from './query-pagination-previous';
 export * from './query-title';
 export * from './quote';
 export * from './search';
+export * from './site-title';
 
 export * from './verse';
-export * from './site-title';
 export * from './term-description';
 export * from './social-link';
 export * from './social-links';

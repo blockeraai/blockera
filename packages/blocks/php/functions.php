@@ -61,6 +61,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-title',
 			'core/quote',
 			'core/search',
+			'core/site-title',
 			
 			'core/archives',
 			'core/audio',
@@ -87,7 +88,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/navigation-link',
 			'core/navigation-submenu',
 			'core/site-logo',
-			'core/site-title',
 			'core/site-tagline',
 			'core/query',
 			'core/template-part',

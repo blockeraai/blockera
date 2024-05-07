@@ -31,4 +31,3 @@ describe('Site Title Block → Inner Blocks', () => {
 		);
 	});
 });
-
