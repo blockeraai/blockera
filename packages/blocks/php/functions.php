@@ -47,6 +47,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-content',
 			'core/post-date',
 			'core/post-excerpt',
+			'core/post-featured-image',
 			'core/post-template',
 			'core/post-terms',
 			'core/post-title',
