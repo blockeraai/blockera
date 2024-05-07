@@ -36,4 +36,3 @@ describe('Query Pagination Next Block → Inner Blocks', () => {
 		);
 	});
 });
-
