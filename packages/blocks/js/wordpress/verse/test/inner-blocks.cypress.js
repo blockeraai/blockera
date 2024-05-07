@@ -35,4 +35,3 @@ describe('Verse Block → Inner Blocks', () => {
 		);
 	});
 });
-
