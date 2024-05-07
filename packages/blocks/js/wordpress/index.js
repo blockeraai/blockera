@@ -17,6 +17,7 @@ export * from './comments-pagination-numbers';
 export * from './comments-pagination-previous';
 export * from './comments-title';
 export * from './cover';
+export * from './details';
 
 export * from './group';
 export * from './quote';
@@ -25,7 +26,6 @@ export * from './heading';
 export * from './image';
 export * from './list';
 export * from './post-terms';
-export * from './details';
 export * from './file';
 export * from './latest-posts';
 export * from './media-text';

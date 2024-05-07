@@ -38,4 +38,3 @@ describe('Details Block → Inner Blocks', () => {
 		);
 	});
 });
-
