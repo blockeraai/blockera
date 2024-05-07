@@ -67,4 +67,5 @@ export * from './social-links';
 export * from './table';
 export * from './term-description';
 export * from './verse';
+export * from './video';
 export * from './shared';

@@ -76,6 +76,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/table',
 			'core/term-description',
 			'core/verse',
+			'core/video',
 			
 			'core/calendar',
 			'core/latest-comments',
@@ -86,7 +87,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/spacer',
 			'core/tag-cloud',
 			'core/text-columns',
-			'core/video',
 			'core/navigation',
 			'core/navigation-link',
 			'core/navigation-submenu',
