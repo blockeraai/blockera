@@ -22,10 +22,10 @@ export * from './file';
 export * from './footnotes';
 export * from './gallery';
 export * from './group';
+export * from './heading';
 
 export * from './quote';
 export * from './paragraph';
-export * from './heading';
 export * from './image';
 export * from './list';
 export * from './post-terms';
@@ -55,3 +55,4 @@ export * from './query-title';
 export * from './social-link';
 export * from './social-links';
 export * from './shared';
+

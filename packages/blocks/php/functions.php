@@ -31,10 +31,10 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/footnotes',
 			'core/gallery',
 			'core/group',
+			'core/heading',
 			
 			'core/paragraph',
 			'core/image',
-			'core/heading',
 			'core/list',
 			'core/list-item',
 			'core/quote',
