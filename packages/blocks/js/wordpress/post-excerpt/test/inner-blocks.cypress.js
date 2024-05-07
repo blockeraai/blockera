@@ -31,4 +31,3 @@ describe('Post Excerpt Block → Inner Blocks', () => {
 		);
 	});
 });
-

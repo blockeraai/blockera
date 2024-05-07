@@ -36,6 +36,7 @@ export * from './post-author-name';
 export * from './post-comments-form';
 export * from './post-content';
 export * from './post-date';
+export * from './post-excerpt';
 
 export * from './quote';
 export * from './post-terms';
@@ -45,7 +46,6 @@ export * from './verse';
 export * from './site-title';
 export * from './post-template';
 export * from './post-title';
-export * from './post-excerpt';
 export * from './query-pagination';
 export * from './query-pagination-numbers';
 export * from './query-pagination-next';
@@ -56,5 +56,3 @@ export * from './query-title';
 export * from './social-link';
 export * from './social-links';
 export * from './shared';
-
-
