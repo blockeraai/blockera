@@ -29,6 +29,7 @@ export * from './list';
 export * from './list-item';
 export * from './loginout';
 export * from './media-text';
+export * from './page-list';
 export * from './paragraph';
 export * from './post-author';
 export * from './post-author-biography';

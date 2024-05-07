@@ -38,6 +38,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/list-item',
 			'core/loginout',
 			'core/media-text',
+			'core/page-list',
 			'core/paragraph',
 			'core/post-author',
 			'core/post-author-biography',
