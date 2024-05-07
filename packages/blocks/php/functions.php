@@ -43,6 +43,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-author-biography',
 			'core/post-author-name',
 			'core/post-comments-form',
+			'core/post-content',
 			
 			'core/quote',
 			'core/archives',
@@ -83,7 +84,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-title',
 			'core/post-excerpt',
 			'core/post-featured-image',
-			'core/post-content',
+
 			'core/post-date',
 			'core/post-terms',
 			'core/post-navigation-link',

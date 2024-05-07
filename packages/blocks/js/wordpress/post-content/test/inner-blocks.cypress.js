@@ -31,4 +31,3 @@ describe('Post Content Block → Inner Blocks', () => {
 		);
 	});
 });
-
