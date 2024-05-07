@@ -38,4 +38,3 @@ describe('Comment Edit Link Block → Inner Blocks', () => {
 		);
 	});
 });
-
