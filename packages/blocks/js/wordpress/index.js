@@ -22,6 +22,7 @@ export * from './comments-pagination-previous';
 export * from './comments-title';
 export * from './cover';
 export * from './details';
+export * from './embed';
 export * from './file';
 export * from './footnotes';
 export * from './gallery';

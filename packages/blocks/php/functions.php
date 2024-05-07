@@ -31,6 +31,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/comments-title',
 			'core/cover',
 			'core/details',
+			'core/embed',
 			'core/file',
 			'core/footnotes',
 			'core/gallery',
@@ -73,7 +74,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/social-links',
 			
 			'core/calendar',
-			'core/embed',
 			'core/latest-comments',
 			'core/nextpage',
 			'core/preformatted',
