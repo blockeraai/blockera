@@ -66,6 +66,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-pagination-previous',
 			'core/query-title',
 			'core/quote',
+			'core/read-more',
 			'core/search',
 			'core/separator',
 			'core/site-logo',
@@ -92,7 +93,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/navigation-submenu',
 			'core/query',
 			'core/template-part',
-			'core/read-more',
 			'core/legacy-widget',
 			'core/widget-group',
 		];

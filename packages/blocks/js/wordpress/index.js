@@ -57,6 +57,7 @@ export * from './query-pagination-numbers';
 export * from './query-pagination-previous';
 export * from './query-title';
 export * from './quote';
+export * from './read-more';
 export * from './search';
 export * from './separator';
 export * from './site-logo';
