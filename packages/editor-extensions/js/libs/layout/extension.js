@@ -85,24 +85,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 			attributes.blockeraAlignContent.default
 		);
 
-		const { setOpenGridBuilder } =
-			dispatch('blockera-core/extensions') || {};
-
-		const { BlockComponent } = useBlockContext();
-
-		useEffect(() => {
-			//FIXME: please implements handler for "setOpenGridBuilder"!
-			// that handler must be order by display grid value and should have flag for open or not open grid builder!
-			if ('grid' === values.blockeraDisplay) {
-				// FIXME: replace "true" with implemented internal flag to open Grid Builder.
-				setOpenGridBuilder(true);
-			} else {
-				// FIXME: replace "false" with implemented internal flag to close Grid Builder.
-				setOpenGridBuilder(false);
-			}
-			// eslint-disable-next-line
-		}, [values.blockeraDisplay]);
-
 		if (
 			!isShowDisplay ||
 			(!isShowFlexLayout &&
@@ -734,17 +716,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							)}
 						</FeatureWrapper>
 					</>
-				)}
-
-				{'grid' === values.blockeraDisplay && (
-					<GridBuilder
-						type={block.blockName}
-						id={block.clientId}
-						position={{ top: 0, left: 0 }}
-						dimension={{ width: 320, height: 200 }}
-					>
-						<BlockComponent />
-					</GridBuilder>
 				)}
 			</PanelBodyControl>
 		);
