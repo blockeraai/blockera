@@ -36,4 +36,3 @@ describe('Pullquote Block → Inner Blocks', () => {
 		);
 	});
 });
-

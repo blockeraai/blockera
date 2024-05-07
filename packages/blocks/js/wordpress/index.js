@@ -40,9 +40,9 @@ export * from './post-excerpt';
 export * from './post-template';
 export * from './post-terms';
 export * from './post-title';
+export * from './pullquote';
 
 export * from './quote';
-export * from './pullquote';
 export * from './search';
 export * from './verse';
 export * from './site-title';

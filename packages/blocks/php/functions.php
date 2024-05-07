@@ -49,6 +49,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-template',
 			'core/post-terms',
 			'core/post-title',
+			'core/pullquote',
 			
 			'core/quote',
 			'core/archives',
@@ -63,7 +64,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/page-list-item',
 			'core/pattern',
 			'core/preformatted',
-			'core/pullquote',
 			'core/block',
 			'core/rss',
 			'core/search',
