@@ -39,13 +39,13 @@ export * from './post-date';
 export * from './post-excerpt';
 export * from './post-template';
 export * from './post-terms';
+export * from './post-title';
 
 export * from './quote';
 export * from './pullquote';
 export * from './search';
 export * from './verse';
 export * from './site-title';
-export * from './post-title';
 export * from './query-pagination';
 export * from './query-pagination-numbers';
 export * from './query-pagination-next';

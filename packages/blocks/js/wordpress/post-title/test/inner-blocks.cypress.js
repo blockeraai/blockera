@@ -31,4 +31,3 @@ describe('Post Title Block → Inner Blocks', () => {
 		);
 	});
 });
-
