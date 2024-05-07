@@ -53,6 +53,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-title',
 			'core/preformatted',
 			'core/pullquote',
+			'core/query-no-results',
 			
 			'core/quote',
 			'core/archives',
@@ -92,7 +93,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-pagination-next',
 			'core/query-pagination-numbers',
 			'core/query-pagination-previous',
-			'core/query-no-results',
 			'core/read-more',
 			'core/term-description',
 			'core/query-title',

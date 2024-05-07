@@ -12,7 +12,7 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Query Pagination Block → Inner Blocks', () => {
+describe('Query No Results Block → Inner Blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -37,4 +37,3 @@ describe('Query Pagination Block → Inner Blocks', () => {
 		);
 	});
 });
-

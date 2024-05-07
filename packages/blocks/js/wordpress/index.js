@@ -44,6 +44,7 @@ export * from './post-terms';
 export * from './post-title';
 export * from './preformatted';
 export * from './pullquote';
+export * from './query-no-results';
 
 export * from './quote';
 export * from './search';
@@ -53,7 +54,6 @@ export * from './query-pagination';
 export * from './query-pagination-numbers';
 export * from './query-pagination-next';
 export * from './query-pagination-previous';
-export * from './query-no-results';
 export * from './term-description';
 export * from './query-title';
 export * from './social-link';
