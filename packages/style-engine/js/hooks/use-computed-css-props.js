@@ -14,6 +14,7 @@ import {
 	SpacingStyles,
 	TypographyStyles,
 	EffectsStyles,
+	GridChildStyles,
 } from '@blockera/editor-extensions';
 import {
 	isNormalState,
@@ -63,6 +64,7 @@ export const useComputedCssProps = ({
 				...EffectsStyles(settings),
 				...PositionStyles(settings),
 				...FlexChildStyles(settings),
+				...GridChildStyles(settings),
 				...TypographyStyles(settings),
 				...BackgroundStyles(settings),
 				// ...CustomStyleStyles(settings),

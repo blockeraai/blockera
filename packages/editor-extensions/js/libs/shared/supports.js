@@ -11,6 +11,7 @@ import { supports as typographySupports } from '../typography';
 import { supports as backgroundSupports } from '../background';
 import { supports as customStyleSupports } from '../custom-style';
 import { supports as borderAndShadowSupports } from '../border-and-shadow';
+import { supports as gridChildSupport } from '../grid-child';
 
 export const supports = {
 	...sizeSupports,
@@ -24,4 +25,5 @@ export const supports = {
 	...backgroundSupports,
 	...customStyleSupports,
 	...borderAndShadowSupports,
+	...gridChildSupport,
 };

@@ -50,6 +50,7 @@ import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
 import type { TBreakpoint, TStates } from '../block-states/types';
+import { GridChildExtension } from '../grid-child';
 
 type Props = {
 	name: string,
@@ -185,6 +186,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			conditionsConfig,
 			advancedSettingsConfig,
 			styleVariationsConfig,
+			gridChildConfig,
 		} = settings;
 
 		const block = {
@@ -459,6 +461,38 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								}
 								setSettings={handleOnChangeSettings}
 							/>
+
+							{directParentBlock?.innerBlocks.length &&
+								directParentBlock?.attributes
+									.blockeraDisplay === 'grid' && (
+									<GridChildExtension
+										block={block}
+										extensionConfig={gridChildConfig}
+										extensionProps={{
+											blockeraGridChildLayout: {},
+											blockeraGridChildOrder: {},
+										}}
+										values={{
+											blockeraGridChildLayout:
+												currentStateAttributes.blockeraGridChildLayout,
+											blockeraGridChildOrder:
+												currentStateAttributes.blockeraGridChildOrder,
+											gridAreas:
+												directParentBlock?.attributes
+													.blockeraGridAreas,
+										}}
+										attributes={{
+											blockeraGridChildLayout:
+												attributes.blockeraGridChildLayout,
+											blockeraGridChildOrder:
+												attributes.blockeraGridChildOrder,
+										}}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										setSettings={handleOnChangeSettings}
+									/>
+								)}
 
 							{directParentBlock?.innerBlocks.length &&
 								directParentBlock?.attributes

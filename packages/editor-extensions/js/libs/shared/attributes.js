@@ -18,6 +18,7 @@ import { attributes as blockStatesAttributes } from '../block-states';
 import { attributes as styleVariationsAttributes } from '../style-variations';
 import { attributes as borderAndShadowAttributes } from '../border-and-shadow';
 import { attributes as advancedSettingsAttributes } from '../advanced-settings';
+import { attributes as gridChildAttributes } from '../grid-child';
 
 export const attributes = {
 	...sizeAttributes,
@@ -35,4 +36,5 @@ export const attributes = {
 	...styleVariationsAttributes,
 	...borderAndShadowAttributes,
 	...advancedSettingsAttributes,
+	...gridChildAttributes,
 };

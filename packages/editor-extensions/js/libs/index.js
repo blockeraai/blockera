@@ -104,6 +104,13 @@ export {
 	supports as entranceAnimationExtensionSupports,
 } from './entrance-animation';
 export {
+	GridChildExtensionIcon,
+	GridChildStyles,
+	GridChildExtension,
+	attributes as GridChildAttributes,
+	supports as GridChildSupports,
+} from './grid-child';
+export {
 	SharedBlockExtension,
 	attributes as sharedBlockExtensionAttributes,
 	supports as sharedBlockExtensionSupports,

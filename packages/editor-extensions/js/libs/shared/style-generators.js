@@ -13,6 +13,7 @@ import { CustomStyleStyles } from '../custom-style';
 import { TypographyStyles } from '../typography';
 import { BackgroundStyles } from '../background';
 import { BorderAndShadowStyles } from '../border-and-shadow';
+import { GridChildStyles } from '../grid-child';
 
 export default {
 	blockeraSize: {
@@ -51,5 +52,8 @@ export default {
 	},
 	blockeraBorderAndShadow: {
 		callback: BorderAndShadowStyles,
+	},
+	blockeraGridChild: {
+		callback: GridChildStyles,
 	},
 };
