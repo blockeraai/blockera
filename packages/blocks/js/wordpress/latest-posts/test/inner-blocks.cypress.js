@@ -31,4 +31,3 @@ describe('Latest Posts Block → Inner Blocks', () => {
 		);
 	});
 });
-
