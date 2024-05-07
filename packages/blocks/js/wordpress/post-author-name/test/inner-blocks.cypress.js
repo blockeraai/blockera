@@ -31,4 +31,3 @@ describe('Post Author Name Block → Inner Blocks', () => {
 		);
 	});
 });
-
