@@ -12,6 +12,7 @@ export * from './comment-template';
 export * from './comments';
 export * from './comments-pagination';
 export * from './comments-pagination-next';
+export * from './comments-pagination-numbers';
 export * from './comments-title';
 
 export * from './group';
@@ -44,7 +45,6 @@ export * from './query-pagination-numbers';
 export * from './query-pagination-next';
 export * from './query-pagination-previous';
 export * from './query-no-results';
-export * from './comments-pagination-numbers';
 export * from './comments-pagination-previous';
 export * from './post-comments-form';
 export * from './loginout';
@@ -53,3 +53,4 @@ export * from './query-title';
 export * from './social-link';
 export * from './social-links';
 export * from './shared';
+
