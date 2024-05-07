@@ -40,6 +40,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/media-text',
 			'core/paragraph',
 			'core/post-author',
+			'core/post-author-biography',
 			
 			'core/quote',
 			'core/archives',
@@ -95,7 +96,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-comments-form',
 			'core/term-description',
 			'core/query-title',
-			'core/post-author-biography',
 			'core/legacy-widget',
 			'core/widget-group',
 		];

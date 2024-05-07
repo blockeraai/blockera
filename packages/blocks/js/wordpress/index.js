@@ -31,6 +31,7 @@ export * from './loginout';
 export * from './media-text';
 export * from './paragraph';
 export * from './post-author';
+export * from './post-author-biography';
 
 export * from './quote';
 export * from './post-terms';
@@ -43,7 +44,6 @@ export * from './post-title';
 export * from './post-excerpt';
 export * from './post-content';
 export * from './post-author-name';
-export * from './post-author-biography';
 export * from './post-date';
 export * from './query-pagination';
 export * from './query-pagination-numbers';

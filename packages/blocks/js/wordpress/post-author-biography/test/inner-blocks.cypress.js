@@ -31,4 +31,3 @@ describe('Post Author Biography Block → Inner Blocks', () => {
 		);
 	});
 });
-
