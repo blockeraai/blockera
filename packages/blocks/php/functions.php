@@ -74,6 +74,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/social-link',
 			'core/social-links',
 			'core/table',
+			'core/term-description',
 			
 			'core/calendar',
 			'core/latest-comments',
@@ -92,7 +93,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query',
 			'core/template-part',
 			'core/read-more',
-			'core/term-description',
 			'core/legacy-widget',
 			'core/widget-group',
 		];

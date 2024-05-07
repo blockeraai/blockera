@@ -32,4 +32,3 @@ describe('Term Description Block → Inner Blocks', () => {
 		);
 	});
 });
-
