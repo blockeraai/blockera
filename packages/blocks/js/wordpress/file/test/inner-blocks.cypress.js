@@ -7,7 +7,7 @@ import {
 	openInnerBlocksExtension,
 } from '../../../../../../cypress/helpers';
 
-describe('Columns Block → Inner Blocks', () => {
+describe('File Block → Inner Blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -36,4 +36,3 @@ describe('Columns Block → Inner Blocks', () => {
 		);
 	});
 });
-
