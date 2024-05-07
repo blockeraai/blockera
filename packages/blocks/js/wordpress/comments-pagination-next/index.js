@@ -13,7 +13,6 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	InnerBlockLinkIcon,
 } from '@blockera/editor-extensions/js/libs';
 import type { InnerBlocks } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
 
