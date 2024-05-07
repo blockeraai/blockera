@@ -10,6 +10,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 
 		return [
 			'core/audio',
+			'core/avatar',
 			'core/categories',
 			'core/code',
 			'core/column',
@@ -90,7 +91,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/navigation-submenu',
 			'core/query',
 			'core/template-part',
-			'core/avatar',
 			'core/post-featured-image',
 			'core/post-navigation-link',
 			'core/read-more',
