@@ -58,4 +58,3 @@ describe('Post Comments Form Block → Inner Blocks', () => {
 		);
 	});
 });
-
