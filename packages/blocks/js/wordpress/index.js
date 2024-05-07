@@ -64,6 +64,7 @@ export * from './site-tagline';
 export * from './site-title';
 export * from './social-link';
 export * from './social-links';
+export * from './table';
 
 export * from './verse';
 export * from './term-description';

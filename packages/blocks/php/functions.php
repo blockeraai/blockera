@@ -73,6 +73,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/site-title',
 			'core/social-link',
 			'core/social-links',
+			'core/table',
 			
 			'core/calendar',
 			'core/latest-comments',
@@ -81,7 +82,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/block',
 			'core/shortcode',
 			'core/spacer',
-			'core/table',
 			'core/tag-cloud',
 			'core/text-columns',
 			'core/verse',
