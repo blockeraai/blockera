@@ -1,6 +1,7 @@
 // @flow
 
 export * from './categories';
+export * from './code';
 export * from './columns';
 export * from './column';
 export * from './comment-author-name';

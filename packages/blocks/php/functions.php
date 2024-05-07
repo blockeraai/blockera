@@ -10,6 +10,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 
 		return [
 			'core/categories',
+			'core/code',
 			'core/column',
 			'core/columns',
 			'core/comment-author-name',
@@ -38,7 +39,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/button',
 			'core/buttons',
 			'core/calendar',
-			'core/code',
 			'core/details',
 			'core/embed',
 			'core/file',
