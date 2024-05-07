@@ -60,6 +60,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-pagination-previous',
 			'core/query-title',
 			'core/quote',
+			'core/search',
 			
 			'core/archives',
 			'core/audio',
@@ -72,7 +73,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/preformatted',
 			'core/block',
 			'core/rss',
-			'core/search',
 			'core/separator',
 			'core/shortcode',
 			'core/social-link',

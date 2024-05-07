@@ -34,4 +34,3 @@ describe('Search Block → Inner Blocks', () => {
 		);
 	});
 });
-
