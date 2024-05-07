@@ -29,12 +29,12 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/details',
 			'core/file',
 			'core/footnotes',
+			'core/gallery',
 			'core/group',
 			
 			'core/paragraph',
 			'core/image',
 			'core/heading',
-			'core/gallery',
 			'core/list',
 			'core/list-item',
 			'core/quote',

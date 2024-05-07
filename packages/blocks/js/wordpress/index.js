@@ -20,6 +20,7 @@ export * from './cover';
 export * from './details';
 export * from './file';
 export * from './footnotes';
+export * from './gallery';
 export * from './group';
 
 export * from './quote';
