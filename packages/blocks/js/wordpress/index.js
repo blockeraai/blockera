@@ -41,6 +41,7 @@ export * from './post-excerpt';
 export * from './post-template';
 export * from './post-terms';
 export * from './post-title';
+export * from './preformatted';
 export * from './pullquote';
 
 export * from './quote';

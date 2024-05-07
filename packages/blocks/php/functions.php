@@ -50,6 +50,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-template',
 			'core/post-terms',
 			'core/post-title',
+			'core/preformatted',
 			'core/pullquote',
 			
 			'core/quote',
