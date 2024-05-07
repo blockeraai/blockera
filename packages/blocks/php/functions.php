@@ -39,6 +39,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/loginout',
 			'core/media-text',
 			'core/paragraph',
+			'core/post-author',
 			
 			'core/quote',
 			'core/archives',
@@ -80,7 +81,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-excerpt',
 			'core/post-featured-image',
 			'core/post-content',
-			'core/post-author',
 			'core/post-author-name',
 			'core/post-date',
 			'core/post-terms',
