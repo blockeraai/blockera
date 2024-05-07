@@ -34,4 +34,3 @@ describe('Post Terms → Inner Blocks', () => {
 		);
 	});
 });
-
