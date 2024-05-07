@@ -59,8 +59,8 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-pagination-numbers',
 			'core/query-pagination-previous',
 			'core/query-title',
-			
 			'core/quote',
+			
 			'core/archives',
 			'core/audio',
 			'core/button',

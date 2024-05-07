@@ -50,8 +50,8 @@ export * from './query-pagination-next';
 export * from './query-pagination-numbers';
 export * from './query-pagination-previous';
 export * from './query-title';
-
 export * from './quote';
+
 export * from './search';
 export * from './verse';
 export * from './site-title';

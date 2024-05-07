@@ -57,4 +57,3 @@ describe('Quote Block → Inner Blocks', () => {
 		);
 	});
 });
-

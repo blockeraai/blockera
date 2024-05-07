@@ -205,13 +205,6 @@ export const Quote = {
 	attributes,
 	supports,
 	blockeraInnerBlocks,
-	blockeraStatesConfig: {
-		disabledSelectors: ['.a', '.b'],
-	},
-	blockeraBreakpointsConfig: {
-		// $FlowFixMe
-		disabledSelectors: [],
-	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},
