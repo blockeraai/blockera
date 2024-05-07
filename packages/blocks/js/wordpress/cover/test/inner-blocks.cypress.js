@@ -8,7 +8,7 @@ import {
 	openMoreFeaturesControl,
 } from '../../../../../../cypress/helpers';
 
-describe('Column Block → Inner Blocks', () => {
+describe('Cover Block → Inner Blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -57,4 +57,3 @@ describe('Column Block → Inner Blocks', () => {
 		);
 	});
 });
-

@@ -24,6 +24,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/comments-pagination-numbers',
 			'core/comments-pagination-previous',
 			'core/comments-title',
+			'core/cover',
 			
 			'core/paragraph',
 			'core/image',
@@ -38,7 +39,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/buttons',
 			'core/calendar',
 			'core/code',
-			'core/cover',
 			'core/details',
 			'core/embed',
 			'core/file',
