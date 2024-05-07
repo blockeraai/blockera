@@ -49,13 +49,13 @@ export * from './query-pagination';
 export * from './query-pagination-next';
 export * from './query-pagination-numbers';
 export * from './query-pagination-previous';
+export * from './query-title';
 
 export * from './quote';
 export * from './search';
 export * from './verse';
 export * from './site-title';
 export * from './term-description';
-export * from './query-title';
 export * from './social-link';
 export * from './social-links';
 export * from './shared';

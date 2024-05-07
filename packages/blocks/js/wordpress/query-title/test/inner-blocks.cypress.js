@@ -31,4 +31,3 @@ describe('Query Title Block → Inner Blocks', () => {
 		);
 	});
 });
-
