@@ -68,7 +68,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/social-link',
 			'core/social-links',
 			
-			'core/archives',
 			'core/audio',
 			'core/button',
 			'core/buttons',
