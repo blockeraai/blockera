@@ -79,7 +79,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/nextpage',
 			'core/preformatted',
 			'core/block',
-			'core/rss',
 			'core/shortcode',
 			'core/spacer',
 			'core/table',
