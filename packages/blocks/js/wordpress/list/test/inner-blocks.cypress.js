@@ -48,4 +48,3 @@ describe('List Block → Inner Blocks', () => {
 		);
 	});
 });
-

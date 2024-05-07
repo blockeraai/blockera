@@ -34,9 +34,9 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/heading',
 			'core/image',
 			'core/latest-posts',
+			'core/list',
 			
 			'core/paragraph',
-			'core/list',
 			'core/list-item',
 			'core/quote',
 			'core/archives',
