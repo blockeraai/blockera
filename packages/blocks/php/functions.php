@@ -78,22 +78,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/term-description',
 			'core/verse',
 			'core/video',
-			
-			'core/calendar',
-			'core/latest-comments',
-			'core/nextpage',
-			'core/preformatted',
-			'core/block',
-			'core/shortcode',
-			'core/spacer',
-			'core/tag-cloud',
-			'core/text-columns',
-			'core/navigation',
-			'core/navigation-link',
-			'core/navigation-submenu',
-			'core/template-part',
-			'core/legacy-widget',
-			'core/widget-group',
 		];
 	}
 }
