@@ -63,6 +63,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/search',
 			'core/separator',
 			'core/site-logo',
+			'core/site-tagline',
 			'core/site-title',
 			'core/social-link',
 			'core/social-links',
