@@ -22,6 +22,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/comments-pagination',
 			'core/comments-pagination-next',
 			'core/comments-pagination-numbers',
+			'core/comments-pagination-previous',
 			'core/comments-title',
 			
 			'core/paragraph',
@@ -93,7 +94,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-pagination-previous',
 			'core/query-no-results',
 			'core/read-more',
-			'core/comments-pagination-previous',
 			'core/post-comments-form',
 			'core/home-link',
 			'core/loginout',

@@ -36,4 +36,3 @@ describe('Comments Pagination Previous Block → Inner Blocks', () => {
 		);
 	});
 });
-
