@@ -4,7 +4,7 @@
  *
  * @var array $args the block arguments!
  *
- * @package blockera-core/packages/blocks/js/wordpress/paragraph
+ * @package blockera-core/packages/blocks/js/wordpress/image
  */
 
 return array_merge(
