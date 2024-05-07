@@ -31,4 +31,3 @@ describe('Post Date Block → Inner Blocks', () => {
 		);
 	});
 });
-

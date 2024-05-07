@@ -84,8 +84,8 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-title',
 			'core/post-excerpt',
 			'core/post-featured-image',
-
 			'core/post-date',
+			
 			'core/post-terms',
 			'core/post-navigation-link',
 			'core/post-template',
