@@ -38,4 +38,3 @@ describe('Comment Content Block → Inner Blocks', () => {
 		);
 	});
 });
-
