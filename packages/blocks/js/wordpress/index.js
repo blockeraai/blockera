@@ -26,6 +26,7 @@ export * from './heading';
 export * from './image';
 export * from './latest-posts';
 export * from './list';
+export * from './list-item';
 
 export * from './quote';
 export * from './paragraph';
