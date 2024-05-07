@@ -61,7 +61,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/embed',
 			'core/latest-comments',
 			'core/nextpage',
-			'core/pattern',
 			'core/preformatted',
 			'core/block',
 			'core/rss',
