@@ -1,9 +1,7 @@
 .blockera-flex-direction,
 .blockera-flex-align-content,
 .blockera-flex-wrap {
-
 	.blockera-field-control {
-
 		svg {
 			transition: all 0.45s cubic-bezier(0, 0, 0.2, 1);
 		}
@@ -11,9 +9,12 @@
 }
 
 .blockera-flex-align-content.reverse {
-
 	svg.align-content-flex-end,
 	svg.align-content-flex-start {
-        transform: rotate(180deg) scaleX(-1);
+		transform: rotate(180deg) scaleX(-1);
 	}
+}
+
+.blockera-grid-auto-fit {
+	align-items: center !important;
 }

@@ -12,11 +12,17 @@ import { getValueAddonRealValue } from '@blockera/editor';
 /**
  * Internal dependencies
  */
+import { arrayEquals } from '../utils';
 import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '@blockera/style-engine/js/types';
+import {
+	GridColumnGenerator,
+	GridRowGenerator,
+	GridAreaGenerator,
+} from './css-generators';
 
 export const LayoutStyles = ({
 	state,
@@ -34,6 +40,13 @@ export const LayoutStyles = ({
 		blockeraGap,
 		blockeraFlexWrap,
 		blockeraAlignContent,
+		blockeraGridColumns,
+		blockeraGridRows,
+		blockeraGridAreas,
+		blockeraGridGap,
+		blockeraGridAlignItems,
+		blockeraGridJustifyItems,
+		blockeraGridDirection,
 	} = config.layoutConfig;
 	const blockProps = {
 		clientId,
@@ -322,6 +335,276 @@ export const LayoutStyles = ({
 								properties: {
 									'align-content':
 										_attributes.blockeraAlignContent,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (_attributes.blockeraDisplay === 'grid') {
+		if (
+			isActiveField(blockeraGridGap) &&
+			_attributes.blockeraGridGap !== attributes.blockeraGridGap.default
+		) {
+			if (_attributes.blockeraGridGap?.lock) {
+				const gap = getValueAddonRealValue(
+					_attributes.blockeraGridGap?.gap
+				);
+				if (gap) {
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'blockeraGridGap',
+						support: 'blockeraGridGap',
+						fallbackSupportId: 'gap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								blockeraGridGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											gap: _attributes.blockeraGridGap
+												.gap,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
+				}
+			} else {
+				const rows = getValueAddonRealValue(
+					_attributes.blockeraGridGap?.rows
+				);
+				if (rows) {
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'blockeraGridGap.rows',
+						fallbackSupportId: 'rowGap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								blockeraGridGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											'row-gap': rows,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
+				}
+
+				const columns = getValueAddonRealValue(
+					_attributes.blockeraGridGap?.columns
+				);
+				if (columns) {
+					const pickedSelector = getCssSelector({
+						...sharedParams,
+						query: 'blockeraGridGap.columns',
+						fallbackSupportId: 'columnGap',
+					});
+
+					styleGroup.push({
+						selector: pickedSelector,
+						declarations: computedCssDeclarations(
+							{
+								blockeraGridGap: [
+									{
+										...staticDefinitionParams,
+										properties: {
+											'column-gap': columns,
+										},
+									},
+								],
+							},
+							blockProps
+						),
+					});
+				}
+			}
+		}
+
+		if (isActiveField(blockeraGridColumns)) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'blockeraGridColumns',
+				support: 'blockeraGridColumns',
+				fallbackSupportId: 'gridColumns',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraGridColumns: [
+							{
+								type: 'function',
+								function: GridColumnGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (isActiveField(blockeraGridRows)) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'blockeraGridRows',
+				support: 'blockeraGridRows',
+				fallbackSupportId: 'gridRows',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraGridRows: [
+							{
+								type: 'function',
+								function: GridRowGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (
+			isActiveField(blockeraGridAreas) &&
+			!arrayEquals(
+				attributes.blockeraGridAreas.default,
+				_attributes.blockeraGridAreas
+			)
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'blockeraGridAreas',
+				support: 'blockeraGridAreas',
+				fallbackSupportId: 'gridAreas',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraGridAreas: [
+							{
+								type: 'function',
+								function: GridAreaGenerator,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (
+			isActiveField(blockeraGridAlignItems) &&
+			_attributes.blockeraGridAlignItems !==
+				attributes.blockeraGridAlignItems.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'blockeraGridAlignItems',
+				fallbackSupportId: 'gridAlignItems',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraGridAlignItems: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'align-items':
+										_attributes.blockeraGridAlignItems,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (
+			isActiveField(blockeraGridJustifyItems) &&
+			_attributes.blockeraGridJustifyItems !==
+				attributes.blockeraGridJustifyItems.default
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'blockeraGridJustifyItems',
+				fallbackSupportId: 'gridJustifyItems',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraGridJustifyItems: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'justify-items':
+										_attributes.blockeraGridJustifyItems,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+
+		if (
+			isActiveField(blockeraGridDirection) &&
+			!arrayEquals(
+				_attributes.blockeraGridDirection,
+				attributes.blockeraGridDirection.default
+			)
+		) {
+			const pickedSelector = getCssSelector({
+				...sharedParams,
+				query: 'blockeraGridDirection',
+				fallbackSupportId: 'gridDirection',
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraGridDirection: [
+							{
+								...staticDefinitionParams,
+								properties: {
+									'grid-auto-flow': `${
+										_attributes.blockeraGridDirection.value
+									} ${
+										_attributes.blockeraGridDirection.dense
+											? 'dense'
+											: ''
+									}`,
 								},
 							},
 						],

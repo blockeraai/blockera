@@ -25,8 +25,7 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { Gap } from './components';
-import { useBlockContext } from '../../hooks';
+import { Gap, GridLayout } from './components';
 import { isShowField } from '../../api/utils';
 import DisplayGridIcon from './icons/display-grid';
 import { default as ReverseIcon } from './icons/reverse';
@@ -84,6 +83,22 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 			values?.blockeraAlignContent,
 			attributes.blockeraAlignContent.default
 		);
+
+		const { setOpenGridBuilder } =
+			dispatch('blockera-core/extensions') || {};
+
+		useEffect(() => {
+			//FIXME: please implements handler for "setOpenGridBuilder"!
+			// that handler must be order by display grid value and should have flag for open or not open grid builder!
+			if ('grid' === values.blockeraDisplay) {
+				// FIXME: replace "true" with implemented internal flag to open Grid Builder.
+				setOpenGridBuilder(true);
+			} else {
+				// FIXME: replace "false" with implemented internal flag to close Grid Builder.
+				setOpenGridBuilder(false);
+			}
+			// eslint-disable-next-line
+		}, [values.blockeraDisplay]);
 
 		if (
 			!isShowDisplay ||
@@ -209,11 +224,11 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									value: 'flex',
 									icon: <DisplayFlexIcon />,
 								},
-								// {
-								// 	label: __('Grid', 'blockera'),
-								// 	value: 'grid',
-								// 	icon: <DisplayGridIcon />,
-								// },
+								{
+									label: __('Grid', 'blockera'),
+									value: 'grid',
+									icon: <DisplayGridIcon />,
+								},
 								{
 									label: __('Inline Block', 'blockera'),
 									value: 'inline-block',
@@ -716,6 +731,24 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							)}
 						</FeatureWrapper>
 					</>
+				)}
+
+				{'grid' === values.blockeraDisplay && (
+					<GridBuilder
+						block={block}
+						extensionProps={extensionProps}
+					/>
+				)}
+
+				{'grid' === values.blockeraDisplay && (
+					<GridLayout
+						extensionConfig={extensionConfig}
+						block={block}
+						values={values}
+						attributes={attributes}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						extensionProps={extensionProps}
+					/>
 				)}
 			</PanelBodyControl>
 		);

@@ -387,6 +387,15 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									blockeraGap: {},
 									blockeraFlexWrap: {},
 									blockeraAlignContent: {},
+									blockeraGridAlignItems: {},
+									blockeraGridJustifyItems: {},
+									//blockeraGridAlignContent: {},
+									//blockeraGridJustifyContent: {},
+									blockeraGridGap: {},
+									blockeraGridDirection: {},
+									blockeraGridColumns: {},
+									blockeraGridRows: {},
+									blockeraGridAreas: {},
 								}}
 								values={{
 									blockeraDisplay:
@@ -399,6 +408,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										currentStateAttributes.blockeraFlexWrap,
 									blockeraAlignContent:
 										currentStateAttributes.blockeraAlignContent,
+									blockeraGridAlignItems:
+										currentStateAttributes.blockeraGridAlignItems,
+									blockeraGridJustifyItems:
+										currentStateAttributes.blockeraGridJustifyItems,
+									// blockeraGridAlignContent:
+									// 	currentStateAttributes.blockeraGridAlignContent,
+									// blockeraGridJustifyContent:
+									// 	currentStateAttributes.blockeraGridJustifyContent,
+									blockeraGridGap:
+										currentStateAttributes.blockeraGridGap,
+									blockeraGridDirection:
+										currentStateAttributes.blockeraGridDirection,
+									blockeraGridColumns:
+										currentStateAttributes.blockeraGridColumns,
+									blockeraGridRows:
+										currentStateAttributes.blockeraGridRows,
+									blockeraGridAreas:
+										currentStateAttributes.blockeraGridAreas,
 								}}
 								attributes={{
 									blockeraDisplay: attributes.blockeraDisplay,
@@ -409,6 +436,23 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										attributes.blockeraFlexWrap,
 									blockeraAlignContent:
 										attributes.blockeraAlignContent,
+									blockeraGridAlignItems:
+										attributes.blockeraGridAlignItems,
+									blockeraGridJustifyItems:
+										attributes.blockeraGridJustifyItems,
+									// blockeraGridAlignContent:
+									// 	attributes.blockeraGridAlignContent,
+									// blockeraGridJustifyContent:
+									// 	attributes.blockeraGridJustifyContent,
+									blockeraGridGap: attributes.blockeraGridGap,
+									blockeraGridDirection:
+										attributes.blockeraGridDirection,
+									blockeraGridColumns:
+										attributes.blockeraGridColumns,
+									blockeraGridRows:
+										attributes.blockeraGridRows,
+									blockeraGridAreas:
+										attributes.blockeraGridAreas,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
