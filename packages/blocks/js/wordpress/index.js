@@ -11,6 +11,7 @@ export * from './comment-reply-link';
 export * from './comment-template';
 export * from './comments';
 export * from './comments-pagination';
+export * from './comments-title';
 
 export * from './group';
 export * from './quote';
