@@ -1,5 +1,6 @@
 // @flow
 
+export * from './audio';
 export * from './categories';
 export * from './code';
 export * from './columns';

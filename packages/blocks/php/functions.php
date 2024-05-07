@@ -9,6 +9,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 	function blockera_get_available_blocks(): array {
 
 		return [
+			'core/audio',
 			'core/categories',
 			'core/code',
 			'core/column',
@@ -68,7 +69,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/social-link',
 			'core/social-links',
 			
-			'core/audio',
 			'core/button',
 			'core/buttons',
 			'core/calendar',
