@@ -8,6 +8,7 @@ export * from './comment-content';
 export * from './comment-date';
 export * from './comment-edit-link';
 export * from './comment-reply-link';
+export * from './comment-template';
 export * from './comments';
 export * from './comments-pagination';
 
