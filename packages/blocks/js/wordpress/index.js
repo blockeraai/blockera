@@ -37,6 +37,7 @@ export * from './post-comments-form';
 export * from './post-content';
 export * from './post-date';
 export * from './post-excerpt';
+export * from './post-template';
 
 export * from './quote';
 export * from './post-terms';
@@ -44,7 +45,6 @@ export * from './pullquote';
 export * from './search';
 export * from './verse';
 export * from './site-title';
-export * from './post-template';
 export * from './post-title';
 export * from './query-pagination';
 export * from './query-pagination-numbers';

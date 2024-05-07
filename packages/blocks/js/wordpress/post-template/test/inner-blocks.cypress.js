@@ -36,4 +36,3 @@ describe('Post Template Block → Inner Blocks', () => {
 		);
 	});
 });
-

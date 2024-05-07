@@ -45,6 +45,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/post-comments-form',
 			'core/post-content',
 			'core/post-excerpt',
+			'core/post-template',
 			
 			'core/quote',
 			'core/archives',
@@ -88,7 +89,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			
 			'core/post-terms',
 			'core/post-navigation-link',
-			'core/post-template',
 			'core/query-pagination',
 			'core/query-pagination-next',
 			'core/query-pagination-numbers',
