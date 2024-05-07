@@ -11,6 +11,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 		return [
 			'core/audio',
 			'core/avatar',
+			'core/button',
 			'core/categories',
 			'core/code',
 			'core/column',
@@ -70,7 +71,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/social-link',
 			'core/social-links',
 			
-			'core/button',
 			'core/buttons',
 			'core/calendar',
 			'core/embed',

@@ -2,6 +2,7 @@
 
 export * from './audio';
 export * from './avatar';
+export * from './button';
 export * from './categories';
 export * from './code';
 export * from './columns';
