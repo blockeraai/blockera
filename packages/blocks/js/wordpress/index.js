@@ -44,6 +44,7 @@ export * from './post-content';
 export * from './post-date';
 export * from './post-excerpt';
 export * from './post-featured-image';
+export * from './post-navigation-link';
 export * from './post-template';
 export * from './post-terms';
 export * from './post-title';
