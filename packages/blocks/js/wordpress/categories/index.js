@@ -40,9 +40,9 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	item: {
+	list_item: {
 		name: 'core/list-item',
-		type: 'list-item',
+		type: 'list_item',
 		label: __('Link Parent', 'blockera'),
 		icon: <InnerBlockListItemIcon />,
 		selectors: {

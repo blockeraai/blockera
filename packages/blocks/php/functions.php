@@ -9,6 +9,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 	function blockera_get_available_blocks(): array {
 
 		return [
+			'core/categories',
 			'core/paragraph',
 			'core/image',
 			'core/heading',
@@ -21,7 +22,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/button',
 			'core/buttons',
 			'core/calendar',
-			'core/categories',
 			'core/code',
 			'core/column',
 			'core/columns',
