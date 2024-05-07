@@ -53,6 +53,7 @@ export * from './query-title';
 export * from './quote';
 export * from './search';
 export * from './separator';
+export * from './site-logo';
 export * from './site-title';
 export * from './social-link';
 export * from './social-links';
