@@ -38,8 +38,8 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/list-item',
 			'core/loginout',
 			'core/media-text',
-			
 			'core/paragraph',
+			
 			'core/quote',
 			'core/archives',
 			'core/audio',

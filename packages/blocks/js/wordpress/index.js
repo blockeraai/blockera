@@ -29,9 +29,9 @@ export * from './list';
 export * from './list-item';
 export * from './loginout';
 export * from './media-text';
+export * from './paragraph';
 
 export * from './quote';
-export * from './paragraph';
 export * from './post-terms';
 export * from './pullquote';
 export * from './search';
