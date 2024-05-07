@@ -19,6 +19,7 @@ export * from './comments-title';
 export * from './cover';
 export * from './details';
 export * from './file';
+export * from './footnotes';
 
 export * from './group';
 export * from './quote';
@@ -32,7 +33,6 @@ export * from './media-text';
 export * from './pullquote';
 export * from './search';
 export * from './verse';
-export * from './footnotes';
 export * from './site-title';
 export * from './post-template';
 export * from './post-title';
@@ -54,3 +54,4 @@ export * from './query-title';
 export * from './social-link';
 export * from './social-links';
 export * from './shared';
+

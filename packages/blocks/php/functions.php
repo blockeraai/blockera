@@ -28,6 +28,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/cover',
 			'core/details',
 			'core/file',
+			'core/footnotes',
 			
 			'core/paragraph',
 			'core/image',
@@ -68,7 +69,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/text-columns',
 			'core/verse',
 			'core/video',
-			'core/footnotes',
 			'core/navigation',
 			'core/navigation-link',
 			'core/navigation-submenu',
