@@ -57,6 +57,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/query-pagination',
 			'core/query-pagination-next',
 			'core/query-pagination-numbers',
+			'core/query-pagination-previous',
 			
 			'core/quote',
 			'core/archives',
@@ -92,7 +93,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/avatar',
 			'core/post-featured-image',
 			'core/post-navigation-link',
-			'core/query-pagination-previous',
 			'core/read-more',
 			'core/term-description',
 			'core/query-title',

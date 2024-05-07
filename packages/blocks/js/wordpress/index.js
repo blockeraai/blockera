@@ -48,12 +48,12 @@ export * from './query-no-results';
 export * from './query-pagination';
 export * from './query-pagination-next';
 export * from './query-pagination-numbers';
+export * from './query-pagination-previous';
 
 export * from './quote';
 export * from './search';
 export * from './verse';
 export * from './site-title';
-export * from './query-pagination-previous';
 export * from './term-description';
 export * from './query-title';
 export * from './social-link';
