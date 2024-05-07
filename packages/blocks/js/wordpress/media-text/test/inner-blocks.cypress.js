@@ -15,8 +15,8 @@ describe('Media Text Block → Inner Blocks', () => {
 
 	it('Should add all inner blocks to block settings', () => {
 		appendBlocks(
-			'<!-- wp:media-text {"mediaId":60,"mediaLink":"https://site-themes-clean.test/?attachment_id=60","mediaType":"image","mediaWidth":38} -->\n' +
-				'<div class="wp-block-media-text is-stacked-on-mobile" style="grid-template-columns:38% auto"><figure class="wp-block-media-text__media"><img src="https://site-themes-clean.test/wp-content/uploads/2024/01/How-To-Protect-Website-Images-From-Being-Copied.png" alt="" class="wp-image-60 size-full"/></figure><div class="wp-block-media-text__content"><!-- wp:paragraph {"placeholder":"Content…"} -->\n' +
+			'<!-- wp:media-text {"mediaId":60,"mediaLink":"https://placehold.co/600x400","mediaType":"image","mediaWidth":38} -->\n' +
+				'<div class="wp-block-media-text is-stacked-on-mobile" style="grid-template-columns:38% auto"><figure class="wp-block-media-text__media"><img src="https://placehold.co/600x400" alt="" class="wp-image-60 size-full"/></figure><div class="wp-block-media-text__content"><!-- wp:paragraph {"placeholder":"Content…"} -->\n' +
 				'<p>Paragraph text</p>\n' +
 				'<!-- /wp:paragraph --></div></div>\n' +
 				'<!-- /wp:media-text --> '
@@ -25,7 +25,7 @@ describe('Media Text Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/media-text').click();
 
-		cy.getByAriaLabel('Select Media & Text').click();
+		cy.getByAriaLabel('Select parent block: Media & Text').click();
 
 		// open inner block settings
 		openInnerBlocksExtension();
@@ -56,4 +56,3 @@ describe('Media Text Block → Inner Blocks', () => {
 		);
 	});
 });
-
