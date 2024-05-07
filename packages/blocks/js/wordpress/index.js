@@ -20,8 +20,8 @@ export * from './cover';
 export * from './details';
 export * from './file';
 export * from './footnotes';
-
 export * from './group';
+
 export * from './quote';
 export * from './paragraph';
 export * from './heading';
@@ -54,4 +54,3 @@ export * from './query-title';
 export * from './social-link';
 export * from './social-links';
 export * from './shared';
-

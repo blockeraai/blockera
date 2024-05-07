@@ -29,6 +29,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/details',
 			'core/file',
 			'core/footnotes',
+			'core/group',
 			
 			'core/paragraph',
 			'core/image',
@@ -43,7 +44,6 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/buttons',
 			'core/calendar',
 			'core/embed',
-			'core/group',
 			'core/html',
 			'core/latest-comments',
 			'core/latest-posts',

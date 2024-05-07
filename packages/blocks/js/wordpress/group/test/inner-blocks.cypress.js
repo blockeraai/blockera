@@ -57,4 +57,3 @@ describe('Group Block → Inner Blocks', () => {
 		);
 	});
 });
-
