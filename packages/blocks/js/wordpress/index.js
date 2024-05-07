@@ -28,11 +28,11 @@ export * from './latest-posts';
 export * from './list';
 export * from './list-item';
 export * from './loginout';
+export * from './media-text';
 
 export * from './quote';
 export * from './paragraph';
 export * from './post-terms';
-export * from './media-text';
 export * from './pullquote';
 export * from './search';
 export * from './verse';
