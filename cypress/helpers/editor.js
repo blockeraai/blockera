@@ -296,7 +296,7 @@ export function getBlockSlug() {
  */
 export function openBlockNavigator() {
 	cy.get(
-		'.block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle,.edit-post-header-toolbar__document-overview-toggle'
+		'.block-editor-block-navigation,.edit-post-header-toolbar__list-view-toggle,.edit-post-header-toolbar__document-overview-toggle,[aria-label="Document Overview"]'
 	).then((element) => {
 		if (!element.hasClass('is-pressed')) {
 			element.click();
