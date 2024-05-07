@@ -38,4 +38,3 @@ describe('Comment Date Block → Inner Blocks', () => {
 		);
 	});
 });
-
