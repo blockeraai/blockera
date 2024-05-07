@@ -9,6 +9,7 @@ export * from './comment-date';
 export * from './comment-edit-link';
 export * from './comment-reply-link';
 export * from './comments';
+export * from './comments-pagination';
 
 export * from './group';
 export * from './quote';
@@ -40,7 +41,6 @@ export * from './query-pagination-numbers';
 export * from './query-pagination-next';
 export * from './query-pagination-previous';
 export * from './query-no-results';
-export * from './comments-pagination';
 export * from './comments-pagination-numbers';
 export * from './comments-pagination-next';
 export * from './comments-pagination-previous';
