@@ -37,4 +37,3 @@ describe('Social Link Block → Inner Blocks', () => {
 		);
 	});
 });
-

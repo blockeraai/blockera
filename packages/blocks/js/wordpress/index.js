@@ -53,9 +53,9 @@ export * from './query-title';
 export * from './quote';
 export * from './search';
 export * from './site-title';
+export * from './social-link';
 
 export * from './verse';
 export * from './term-description';
-export * from './social-link';
 export * from './social-links';
 export * from './shared';
