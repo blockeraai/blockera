@@ -38,4 +38,3 @@ describe('Query Pagination Numbers Block → Inner Blocks', () => {
 		);
 	});
 });
-
