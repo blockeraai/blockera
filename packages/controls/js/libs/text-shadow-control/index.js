@@ -9,6 +9,7 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
+import { PromotionPopover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -17,6 +18,7 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { TTextShadowControlProps } from './types';
+import { getRepeaterActiveItemsCount } from '../repeater-control/utils';
 
 export default function TextShadowControl({
 	defaultRepeaterItemValue = {
@@ -55,6 +57,7 @@ export default function TextShadowControl({
 }: TTextShadowControlProps): MixedElement {
 	return (
 		<RepeaterControl
+			id={'text-shadow'}
 			className={controlClassNames('text-shadow', className)}
 			popoverTitle={popoverTitle}
 			addNewButtonLabel={__('Add New Text Shadow', 'blockera')}
@@ -63,6 +66,29 @@ export default function TextShadowControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			label={label}
 			labelDescription={labelDescription}
+			PromoComponent={({
+				items,
+				onClose = () => {},
+				isOpen = false,
+			}): MixedElement | null => {
+				if (getRepeaterActiveItemsCount(items) < 1) {
+					return null;
+				}
+
+				return (
+					<PromotionPopover
+						heading={__('Multiple Text Shadows', 'blockera')}
+						featuresList={[
+							__('Multiple text shadows', 'blockera'),
+							__('Advanced text shadow effects', 'blockera'),
+							__('Advanced features', 'blockera'),
+							__('Premium blocks', 'blockera'),
+						]}
+						isOpen={isOpen}
+						onClose={onClose}
+					/>
+				);
+			}}
 			{...props}
 		/>
 	);
