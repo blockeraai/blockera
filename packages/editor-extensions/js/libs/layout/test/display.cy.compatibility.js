@@ -9,7 +9,7 @@ import {
 	setBlockState,
 	addBlockState,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Display → WP Data Compatibility', () => {
 	beforeEach(() => {

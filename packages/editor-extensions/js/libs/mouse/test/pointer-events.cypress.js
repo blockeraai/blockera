@@ -5,7 +5,7 @@ import {
 	savePage,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Pointer Events → Functionality', () => {
 	beforeEach(() => {
@@ -53,4 +53,3 @@ describe('Pointer Events → Functionality', () => {
 		);
 	});
 });
-

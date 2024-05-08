@@ -6,7 +6,7 @@ import {
 	getSelectedBlock,
 	getWPDataObject,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Media Fit → WP Compatibility', () => {
 	beforeEach(() => {

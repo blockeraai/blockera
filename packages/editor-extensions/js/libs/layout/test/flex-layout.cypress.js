@@ -5,7 +5,7 @@ import {
 	redirectToFrontPage,
 	addBlockToPost,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Flex Layout → Functionality', () => {
 	beforeEach(() => {
@@ -149,4 +149,3 @@ describe('Flex Layout → Functionality', () => {
 		);
 	});
 });
-

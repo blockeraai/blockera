@@ -5,7 +5,7 @@ import {
 	redirectToFrontPage,
 	addBlockToPost,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Gap → Functionality', () => {
 	beforeEach(() => {
@@ -98,4 +98,3 @@ describe('Gap → Functionality', () => {
 			.and('have.css', 'row-gap', '10px');
 	});
 });
-

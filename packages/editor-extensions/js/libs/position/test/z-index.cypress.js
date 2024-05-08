@@ -5,7 +5,7 @@ import {
 	getWPDataObject,
 	redirectToFrontPage,
 	savePage,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('z-index → Functionality', () => {
 	beforeEach(() => {
@@ -56,4 +56,3 @@ describe('z-index → Functionality', () => {
 			.should('eq', '100');
 	});
 });
-

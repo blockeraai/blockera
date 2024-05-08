@@ -5,7 +5,7 @@ import {
 	redirectToFrontPage,
 	addBlockToPost,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Children Wrap and Align Content → Functionality', () => {
 	beforeEach(() => {

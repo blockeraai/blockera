@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	hexToRGB,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Background Image → Functionality', () => {
 	beforeEach(() => {

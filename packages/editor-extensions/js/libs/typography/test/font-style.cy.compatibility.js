@@ -7,7 +7,7 @@ import {
 	getWPDataObject,
 	openMoreFeaturesControl,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Font Style → WP Compatibility', () => {
 	beforeEach(() => {

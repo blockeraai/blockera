@@ -8,7 +8,7 @@ import {
 	createPost,
 	setInnerBlock,
 	setParentBlock,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Social Links Block → WP Compatibility', () => {
 	beforeEach(() => {

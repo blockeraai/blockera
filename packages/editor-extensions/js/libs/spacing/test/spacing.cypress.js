@@ -4,7 +4,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Spacing Extension', () => {
 	beforeEach(() => {
@@ -166,4 +166,3 @@ describe('Spacing Extension', () => {
 		});
 	});
 });
-

@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	openMoreFeaturesControl,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Decoration → Functionality', () => {
 	beforeEach(() => {
@@ -48,4 +48,3 @@ describe('Text Decoration → Functionality', () => {
 			.should('include', 'overline');
 	});
 });
-

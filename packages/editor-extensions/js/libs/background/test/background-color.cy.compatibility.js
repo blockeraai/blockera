@@ -7,7 +7,7 @@ import {
 	getSelectedBlock,
 	getWPDataObject,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Background Color → WP Compatibility', () => {
 	beforeEach(() => {

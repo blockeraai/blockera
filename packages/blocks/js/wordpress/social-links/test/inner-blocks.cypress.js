@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Social Links Block → Inner Blocks', () => {
 	beforeEach(() => {

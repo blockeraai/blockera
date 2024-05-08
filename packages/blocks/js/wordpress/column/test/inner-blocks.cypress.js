@@ -6,7 +6,7 @@ import {
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Column Block → Inner Blocks', () => {
 	beforeEach(() => {

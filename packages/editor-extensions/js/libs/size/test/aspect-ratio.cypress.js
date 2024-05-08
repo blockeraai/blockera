@@ -8,7 +8,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Aspect Ratio → Functionality', () => {
 	beforeEach(() => {
@@ -79,4 +79,3 @@ describe('Aspect Ratio → Functionality', () => {
 		);
 	});
 });
-

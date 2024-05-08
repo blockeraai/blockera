@@ -6,7 +6,7 @@ import {
 	getSelectedBlock,
 	getWPDataObject,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Font Size → WP Compatibility', () => {
 	beforeEach(() => {
@@ -120,9 +120,7 @@ describe('Font Size → WP Compatibility', () => {
 					name: 'Small',
 					isValueAddon: true,
 					valueType: 'variable',
-				}).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraFontSize')
-				);
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFontSize'));
 
 				expect('small').to.be.equal(getSelectedBlock(data, 'fontSize'));
 
@@ -164,9 +162,7 @@ describe('Font Size → WP Compatibility', () => {
 					name: 'Large',
 					isValueAddon: true,
 					valueType: 'variable',
-				}).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraFontSize')
-				);
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFontSize'));
 
 				expect('large').to.be.equal(getSelectedBlock(data, 'fontSize'));
 

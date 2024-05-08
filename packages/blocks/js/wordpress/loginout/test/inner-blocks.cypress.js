@@ -6,7 +6,7 @@ import {
 	createPost,
 	openInnerBlocksExtension,
 	openBlockNavigator,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Loginout Block → Inner Blocks', () => {
 	beforeEach(() => {

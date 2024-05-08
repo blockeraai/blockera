@@ -3,7 +3,7 @@ import {
 	setInnerBlock,
 	setDeviceType,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 function assertFontSize(expected) {
 	// Alias
@@ -187,4 +187,3 @@ describe('Should calculate current attributes correctly:', () => {
 		assertFontSize(27);
 	});
 });
-

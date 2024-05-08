@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	openMoreFeaturesControl,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Align → Functionality', () => {
 	beforeEach(() => {
@@ -53,4 +53,3 @@ describe('Text Align → Functionality', () => {
 		);
 	});
 });
-

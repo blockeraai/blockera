@@ -8,7 +8,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Overflow → Functionality', () => {
 	beforeEach(() => {
@@ -83,4 +83,3 @@ describe('Overflow → Functionality', () => {
 		cy.get('.blockera-core-block').should('have.css', 'overflow', 'scroll');
 	});
 });
-

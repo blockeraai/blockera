@@ -16,7 +16,7 @@ import {
 	createPost,
 	getBlockClientId,
 	checkBlockCard,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 import 'cypress-real-events';
 
 describe('Inner Blocks E2E Test', () => {

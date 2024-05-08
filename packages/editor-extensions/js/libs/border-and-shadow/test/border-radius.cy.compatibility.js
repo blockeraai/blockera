@@ -7,7 +7,7 @@ import {
 	getSelectedBlock,
 	getWPDataObject,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Border Radius → WP Compatibility', () => {
 	beforeEach(() => {
@@ -318,4 +318,3 @@ describe('Border Radius → WP Compatibility', () => {
 		});
 	});
 });
-

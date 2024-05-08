@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Latest Posts Block → Inner Blocks', () => {
 	beforeEach(() => {

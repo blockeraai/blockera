@@ -16,7 +16,7 @@ import {
 	getBlockClientId,
 	checkCurrentState,
 	redirectToFrontPage,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 import 'cypress-real-events';
 
 describe('Block State E2E Test', () => {

@@ -1,7 +1,7 @@
 /**
  * Cypress dependencies
  */
-import { appendBlocks, createPost } from '../../../../../../cypress/helpers';
+import { appendBlocks, createPost } from '@blockera/dev-cypress/js/helpers';
 
 describe('Embed Block → Inner Blocks', () => {
 	beforeEach(() => {

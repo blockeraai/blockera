@@ -8,7 +8,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Max Height → Functionality', () => {
 	beforeEach(() => {
@@ -103,4 +103,3 @@ describe('Max Height → Functionality', () => {
 		);
 	});
 });
-

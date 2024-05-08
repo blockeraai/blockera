@@ -8,7 +8,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Media Fit → Functionality', () => {
 	beforeEach(() => {
@@ -80,4 +80,3 @@ describe('Media Fit → Functionality', () => {
 		);
 	});
 });
-

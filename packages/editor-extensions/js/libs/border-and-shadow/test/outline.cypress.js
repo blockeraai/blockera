@@ -5,7 +5,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Outline → Functionality', () => {
 	beforeEach(() => {
@@ -102,4 +102,3 @@ describe('Outline → Functionality', () => {
 		);
 	});
 });
-

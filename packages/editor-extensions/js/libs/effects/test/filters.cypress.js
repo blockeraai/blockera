@@ -5,7 +5,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Filters → Functionality', () => {
 	beforeEach(() => {
@@ -150,4 +150,3 @@ describe('Filters → Functionality', () => {
 			.should('include', 'filter: brightness(100%) invert(50%);');
 	});
 });
-

@@ -5,7 +5,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Font Color → Functionality', () => {
 	beforeEach(() => {
@@ -100,4 +100,3 @@ describe('Font Color → Functionality', () => {
 		);
 	});
 });
-

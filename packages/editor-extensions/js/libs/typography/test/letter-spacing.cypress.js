@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	openMoreFeaturesControl,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Letter Spacing → Functionality', () => {
 	beforeEach(() => {

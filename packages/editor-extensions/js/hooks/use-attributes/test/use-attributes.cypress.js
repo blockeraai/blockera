@@ -5,7 +5,7 @@ import {
 	setInnerBlock,
 	setDeviceType,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('useAttributes Hook Testing ...', () => {
 	beforeEach(() => {
@@ -76,8 +76,8 @@ describe('useAttributes Hook Testing ...', () => {
 			getWPDataObject().then((data) => {
 				expect('27px').to.be.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.tablet.attributes.blockeraFontSize
+						.attributes.blockeraBlockStates.hover.breakpoints.tablet
+						.attributes.blockeraFontSize
 				);
 			});
 		});
@@ -210,8 +210,8 @@ describe('useAttributes Hook Testing ...', () => {
 				expect('27px').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.laptop.attributes.blockeraFontSize
+						.attributes.blockeraBlockStates.hover.breakpoints.laptop
+						.attributes.blockeraFontSize
 				);
 			});
 		});
@@ -239,8 +239,8 @@ describe('useAttributes Hook Testing ...', () => {
 				expect('27px').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.mobile.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.mobile.attributes.blockeraFontSize
+						.attributes.blockeraBlockStates.hover.breakpoints.mobile
+						.attributes.blockeraFontSize
 				);
 			});
 		});
@@ -454,4 +454,3 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 	});
 });
-

@@ -5,7 +5,7 @@ import {
 	savePage,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('User Select → Functionality', () => {
 	beforeEach(() => {

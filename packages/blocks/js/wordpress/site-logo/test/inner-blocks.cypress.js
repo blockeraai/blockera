@@ -6,7 +6,7 @@ import {
 	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Site Logo Block → Inner Blocks', () => {
 	beforeEach(() => {

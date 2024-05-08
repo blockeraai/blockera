@@ -7,7 +7,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('media-image', () => {
 	beforeEach(() => {
@@ -172,4 +172,3 @@ describe('media-image', () => {
 		});
 	});
 });
-

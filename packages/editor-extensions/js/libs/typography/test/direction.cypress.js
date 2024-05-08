@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	openMoreFeaturesControl,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Direction → Functionality', () => {
 	beforeEach(() => {
@@ -44,4 +44,3 @@ describe('Direction → Functionality', () => {
 		cy.get('.blockera-core-block').should('have.css', 'direction', 'rtl');
 	});
 });
-

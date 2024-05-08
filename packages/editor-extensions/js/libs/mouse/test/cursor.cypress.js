@@ -5,7 +5,7 @@ import {
 	savePage,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Cursor → Functionality', () => {
 	beforeEach(() => {

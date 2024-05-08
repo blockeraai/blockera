@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 	openMoreFeaturesControl,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Transform → Functionality', () => {
 	beforeEach(() => {
@@ -52,4 +52,3 @@ describe('Text Transform → Functionality', () => {
 		);
 	});
 });
-

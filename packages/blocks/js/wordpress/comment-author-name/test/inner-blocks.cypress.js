@@ -7,7 +7,7 @@ import {
 	editPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies

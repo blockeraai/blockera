@@ -6,7 +6,7 @@ import {
 	getSelectedBlock,
 	getWPDataObject,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 // This test makes sure us that if multiple typography features are used in one block, the data correctly comes to Blockera
 describe('All Features Together → WP Compatibility', () => {

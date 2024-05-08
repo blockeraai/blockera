@@ -5,7 +5,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Backdrop Filters → Functionality', () => {
 	beforeEach(() => {
@@ -163,4 +163,3 @@ describe('Backdrop Filters → Functionality', () => {
 			);
 	});
 });
-

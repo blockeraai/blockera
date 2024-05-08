@@ -5,7 +5,7 @@ import {
 	redirectToFrontPage,
 	appendBlocks,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Flex Child', () => {
 	beforeEach(() => {
