@@ -12,7 +12,7 @@ export {
 } from './icons';
 export { ColorIndicator, ColorIndicatorStack } from './color-indicator';
 export { default as Flex } from './flex';
-export { Promotion } from './promotion';
+export { PromotionPopover } from './promotion-popover';
 export { default as Tabs } from './tabs';
 export { default as Grid } from './grid';
 export { Button, Buttons } from './button';
