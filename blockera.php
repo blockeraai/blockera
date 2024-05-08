@@ -30,6 +30,10 @@ define( 'BLOCKERA_CORE_FILE', __FILE__ );
 define( 'BLOCKERA_CORE_URI', plugin_dir_url( __FILE__ ) );
 define( 'BLOCKERA_CORE_PATH', plugin_dir_path( __FILE__ ) );
 
+### BEGIN AUTO-GENERATED DEFINES
+define( 'BLOCKERA_APP_MODE', 'development' );
+### END AUTO-GENERATED DEFINES
+
 /**
  * This hook for extendable setup process from internal or third-party developers.
  *

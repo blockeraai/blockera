@@ -10,7 +10,7 @@
  * TODO: This is just an example of registration variable groups.
  */
 add_filter(
-	'blockera-core/variable/groups/registry',
+	'blockera/variable/groups/registry',
 	static function ( array $groups ): array {
 
 		return array_merge(
@@ -34,7 +34,7 @@ add_filter(
  * TODO: This is just an example of registration variable groups.
  */
 add_filter(
-	'blockera-core/variable/groups/astra-spacing/items/registry',
+	'blockera/variable/groups/astra-spacing/items/registry',
 	static function ( array $values ): array {
 
 		return array_merge(

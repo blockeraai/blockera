@@ -27,7 +27,7 @@ class EntityRegistry {
 
 		$this->app = $app;
 
-		$entities = apply_filters( 'blockera-core/entities/registry', $this->app->getEntities() );
+		$entities = apply_filters( 'blockera/entities/registry', $this->app->getEntities() );
 
 		array_map( [ $this, 'register' ], $entities, array_keys( $entities ) );
 	}

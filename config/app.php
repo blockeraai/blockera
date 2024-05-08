@@ -1,5 +1,8 @@
 <?php
 
+$wp_debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
+$env_mode = 'development' === blockera_core_env( 'APP_MODE' );
+
 return [
 	'root_url'      => BLOCKERA_CORE_URI,
 	'root_path'     => BLOCKERA_CORE_PATH,
@@ -10,11 +13,11 @@ return [
 	'dist_path'     => BLOCKERA_CORE_PATH . 'dist/',
 	'packages_url'  => BLOCKERA_CORE_URI . 'packages/',
 	'packages_path' => BLOCKERA_CORE_PATH . 'packages/',
-	'version'       => blockera_core_env( 'VERSION' ),
+	'version'       => defined( 'BLOCKERA_VERSION' ) ? BLOCKERA_VERSION : blockera_core_env( 'VERSION' ),
 	'namespaces'    => [
 		'controllers' => '\Blockera\Setup\Http\Controllers\\',
 	],
-	'debug'         => blockera_core_env( 'APP_MODE' ) && 'development' === blockera_core_env( 'APP_MODE' ) || ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ),
+	'debug'         => defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ? BLOCKERA_APP_MODE : ( $env_mode || $wp_debug ),
 	'providers'     => [
 		\Blockera\Setup\Providers\AssetsProvider::class,
 		\Blockera\Setup\Providers\RestAPIProvider::class,

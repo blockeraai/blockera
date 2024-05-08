@@ -97,7 +97,6 @@ class TestFunctions extends AppTestCase {
 
 		$rootDir           = trailingslashit( dirname( __BLOCKERA_TEST_DIR__, 3 ) );
 		$blocks            = ( require $rootDir . 'config/app.php' )['blocks'];
-		$postDynamicValues = require $rootDir . 'config/dynamic-values/post.php';
 		$theme             = wp_get_theme();
 		$home              = trailingslashit( home_url() );
 
@@ -175,11 +174,6 @@ class TestFunctions extends AppTestCase {
 				'path'     => 'entities.site.url',
 				'expected' => home_url(),
 			],
-			// Integration tests for blockera_core_config() and blockera_load() functions.
-			[
-				'path'     => 'valueAddon.dynamic-value-groups.post.items',
-				'expected' => $postDynamicValues,
-			],
 		];
 	}
 
@@ -200,8 +194,6 @@ class TestFunctions extends AppTestCase {
 	}
 
 	public function testItShouldRetrieveRealValueOfRecievedValueAddon(): void {
-
-		// TODO: add tests for dynamic value try to access real dynamic value.
 
 		$this->assertSame(
 			'var(--wp--preset--color--contrast-2)',
