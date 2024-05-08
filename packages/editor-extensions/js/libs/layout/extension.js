@@ -3,9 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useEffect } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
-import { dispatch } from '@wordpress/data';
 
 /**
  * Blockera dependencies
