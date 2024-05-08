@@ -9,19 +9,11 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import {
-	type DynamicValueCategory,
-	type DynamicValueTypes,
-	getArchiveDynamicValueItemsBy,
 	getColors,
-	getFeaturedImageDynamicValueItemsBy,
 	getFontSizes,
 	getLinearGradients,
-	getOtherDynamicValueItemsBy,
-	getPostDynamicValueItemsBy,
 	getRadialGradients,
-	getSiteDynamicValueItemsBy,
 	getSpacings,
-	getUserDynamicValueItemsBy,
 	getVariable,
 	getWidthSizes,
 	type VariableCategory,
@@ -37,24 +29,10 @@ import type {
 	ValueAddon,
 	ValueAddonProps,
 	VariableCategoryDetail,
-	DynamicValueCategoryDetail,
 } from './types';
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
 import VarTypeWidthSizeIcon from './icons/var-width-size';
-import DVTypeTextIcon from './icons/dv-text';
-import DVTypeLinkIcon from './icons/dv-link';
-import DVTypeIDIcon from './icons/dv-id';
-import DVTypeDateIcon from './icons/dv-date';
-import DVTypeTimeIcon from './icons/dv-time';
-import DVTypeMetaIcon from './icons/dv-meta';
-import DVTypeImageIcon from './icons/dv-image';
-import DVTypeCategoryIcon from './icons/dv-category';
-import DVTypeTagIcon from './icons/dv-tag';
-import DVTypeTermIcon from './icons/dv-terms';
-import DVTypeShortcodeIcon from './icons/dv-shortcode';
-import DVTypeEmailIcon from './icons/dv-email';
-import DVTypeCommentIcon from './icons/dv-comment';
 
 /**
  * Sets value addon.
@@ -220,100 +198,6 @@ export function getVariableCategory(
 	};
 }
 
-export function getDynamicValueIcon(type: DynamicValueTypes): MixedElement {
-	switch (type) {
-		case 'text':
-			return <DVTypeTextIcon />;
-
-		case 'link':
-			return <DVTypeLinkIcon />;
-
-		case 'image':
-			return <DVTypeImageIcon />;
-
-		case 'id':
-			return <DVTypeIDIcon />;
-
-		case 'date':
-			return <DVTypeDateIcon />;
-
-		case 'time':
-			return <DVTypeTimeIcon />;
-
-		case 'category':
-			return <DVTypeCategoryIcon />;
-
-		case 'tag':
-			return <DVTypeTagIcon />;
-
-		case 'term':
-			return <DVTypeTermIcon />;
-
-		case 'shortcode':
-			return <DVTypeShortcodeIcon />;
-
-		case 'email':
-			return <DVTypeEmailIcon />;
-
-		case 'comment':
-			return <DVTypeCommentIcon />;
-
-		case 'meta':
-			return <DVTypeMetaIcon />;
-	}
-
-	return <></>;
-}
-
-export function getDynamicValueCategory(
-	category: DynamicValueCategory,
-	types: Array<DynamicValueTypes>
-): DynamicValueCategoryDetail {
-	switch (category) {
-		case 'post':
-			return {
-				label: __('Posts and Pages', 'blockera'),
-				items: getPostDynamicValueItemsBy('type', types),
-			};
-
-		case 'featured-image':
-			return {
-				label: __('Post Featured Image', 'blockera'),
-				items: getFeaturedImageDynamicValueItemsBy('type', types),
-			};
-
-		case 'archive':
-			return {
-				label: __('Archive', 'blockera'),
-				items: getArchiveDynamicValueItemsBy('type', types),
-			};
-
-		case 'site':
-			return {
-				label: __('Site Information', 'blockera'),
-				items: getSiteDynamicValueItemsBy('type', types),
-			};
-
-		case 'user':
-			return {
-				label: __('User & Authors', 'blockera'),
-				items: getUserDynamicValueItemsBy('type', types),
-			};
-
-		case 'other':
-			return {
-				label: __('Utilities', 'blockera'),
-				items: getOtherDynamicValueItemsBy('type', types),
-			};
-	}
-
-	return {
-		label: '',
-		items: [],
-		notFound: true,
-	};
-}
-
 export function canUnlinkVariable(value: ValueAddon): boolean {
 	if (isValid(value)) {
 		if (
@@ -404,18 +288,6 @@ export function getDeletedItemInfo(item: ValueAddon): {
 							</NoticeControl>
 						);
 						break;
-
-					case 'dynamic-value':
-						result.after2 = (
-							<NoticeControl type="success">
-								{__(
-									'Activating Blockera Blocks Pro plugin restores functionality for this dynamic value item.',
-									'blockera'
-								)}
-							</NoticeControl>
-						);
-
-						break;
 				}
 				break;
 
@@ -431,19 +303,6 @@ export function getDeletedItemInfo(item: ValueAddon): {
 								)}
 							</NoticeControl>
 						);
-						break;
-
-					case 'dynamic-value':
-						result.referenceName = __('Custom Code', 'blockera');
-						result.after2 = (
-							<NoticeControl type="information">
-								{__(
-									'Find and restore the custom code to return back functionality for this dynamic value item.',
-									'blockera'
-								)}
-							</NoticeControl>
-						);
-
 						break;
 				}
 				break;
@@ -480,22 +339,6 @@ export function getDeletedItemInfo(item: ValueAddon): {
 								)}
 							</NoticeControl>
 						);
-						break;
-
-					case 'dynamic-value':
-						result.after2 = (
-							<NoticeControl type="success">
-								{sprintf(
-									// Translators: %s is plugin name
-									__(
-										'Activating %s plugin restores functionality for this dynamic value item.',
-										'blockera'
-									),
-									pluginName
-								)}
-							</NoticeControl>
-						);
-
 						break;
 				}
 
@@ -534,22 +377,6 @@ export function getDeletedItemInfo(item: ValueAddon): {
 							</NoticeControl>
 						);
 						break;
-
-					case 'dynamic-value':
-						result.after2 = (
-							<NoticeControl type="success">
-								{sprintf(
-									// Translators: %s is plugin name
-									__(
-										'Activating %s theme restores functionality for this dynamic value item.',
-										'blockera'
-									),
-									themeName
-								)}
-							</NoticeControl>
-						);
-
-						break;
 				}
 
 				break;
@@ -579,22 +406,6 @@ export function getDeletedItemInfo(item: ValueAddon): {
 				);
 			}
 
-			break;
-
-		case 'dynamic-value':
-			if (result.before === '') {
-				result.before = __(
-					'The dynamic value item is inactive or has been removed.',
-					'blockera'
-				);
-			}
-
-			if (result.after === '') {
-				result.after = __(
-					'You have the option to either switch this item or remove its usage.',
-					'blockera'
-				);
-			}
 			break;
 	}
 

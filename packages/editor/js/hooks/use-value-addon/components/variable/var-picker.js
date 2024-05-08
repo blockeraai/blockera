@@ -16,9 +16,12 @@ import {
 	Popover,
 	ConditionalWrapper,
 } from '@blockera/components';
-import { STORE_NAME, generateVariableString } from '@blockera/data';
+import {
+	STORE_NAME,
+	type VariableCategory,
+	generateVariableString,
+} from '@blockera/data';
 import { controlInnerClassNames } from '@blockera/classnames';
-import type { DynamicVariableGroup } from '@blockera/data/js/variables/store/types';
 
 /**
  * Internal dependencies
@@ -46,7 +49,7 @@ export default function ({
 	const CustomVariables = (): Element<any> => {
 		return (
 			<PickerCategory
-				key={`type-custom-variabes`}
+				key={`type-custom-variables`}
 				title={
 					<>
 						{__('Custom Variables', 'blockera')}
@@ -79,9 +82,8 @@ export default function ({
 		return [
 			...controlProps.variableTypes,
 			...Object.keys(getVariableGroups()),
-		].map((type, index) => {
-			let data: DynamicVariableGroup | VariableCategoryDetail =
-				getVariableCategory(type);
+		].map((type: VariableCategory | string, index) => {
+			let data: VariableCategoryDetail = getVariableCategory(type);
 
 			if (data?.label === '') {
 				const { getVariableGroup } = select(STORE_NAME);
@@ -134,7 +136,7 @@ export default function ({
 							</Flex>
 						)}
 					>
-						{Object.values(data.items).map((variable, _index) => {
+						{data.items.map((variable, _index) => {
 							const itemData = {
 								...variable,
 								type,
@@ -156,7 +158,7 @@ export default function ({
 									onClick={controlProps.handleOnClickVar}
 									key={`${type}-${_index}-value-type`}
 									name={variable.name}
-									type={data.type || type}
+									type={type}
 									valueType="variable"
 									isCurrent={
 										isValid(controlProps.value) &&
@@ -166,7 +168,7 @@ export default function ({
 											itemData.id
 									}
 									icon={getVariableIcon({
-										type: data.type || type,
+										type,
 										value: variable.value,
 									})}
 									status="active"

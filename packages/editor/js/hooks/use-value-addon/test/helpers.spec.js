@@ -1,7 +1,5 @@
 import {
 	canUnlinkVariable,
-	getDynamicValueCategory,
-	getDynamicValueIcon,
 	getValueAddonRealValue,
 	getVariableCategory,
 	getVariableIcon,
@@ -294,113 +292,6 @@ describe('Helper Functions', () => {
 			const category = getVariableCategory('color');
 
 			expect(category.label).toBe(__('Editor Colors', 'blockera'));
-		});
-	});
-
-	describe('getDynamicValueIcon', () => {
-		test('invalid item', () => {
-			expect(getDynamicValueIcon('invalid')).toStrictEqual(<></>);
-			expect(getDynamicValueIcon(undefined)).toStrictEqual(<></>);
-		});
-
-		test('text', () => {
-			expect(getDynamicValueIcon('text')).not.toBe(<></>);
-		});
-
-		test('link', () => {
-			expect(getDynamicValueIcon('link')).not.toBe(<></>);
-		});
-
-		test('image', () => {
-			expect(getDynamicValueIcon('image')).not.toBe(<></>);
-		});
-
-		test('id', () => {
-			expect(getDynamicValueIcon('id')).not.toBe(<></>);
-		});
-
-		test('date', () => {
-			expect(getDynamicValueIcon('date')).not.toBe(<></>);
-		});
-
-		test('time', () => {
-			expect(getDynamicValueIcon('time')).not.toBe(<></>);
-		});
-
-		test('category', () => {
-			expect(getDynamicValueIcon('category')).not.toBe(<></>);
-		});
-
-		test('tag', () => {
-			expect(getDynamicValueIcon('tag')).not.toBe(<></>);
-		});
-
-		test('term', () => {
-			expect(getDynamicValueIcon('term')).not.toBe(<></>);
-		});
-
-		test('shortcode', () => {
-			expect(getDynamicValueIcon('shortcode')).not.toBe(<></>);
-		});
-
-		test('email', () => {
-			expect(getDynamicValueIcon('email')).not.toBe(<></>);
-		});
-
-		test('comment', () => {
-			expect(getDynamicValueIcon('comment')).not.toBe(<></>);
-		});
-
-		test('meta', () => {
-			expect(getDynamicValueIcon('meta')).not.toBe(<></>);
-		});
-	});
-
-	describe('getDynamicValueCategory', () => {
-		test('invalid item', () => {
-			expect(getDynamicValueCategory('invalid', 'invalid')).toStrictEqual(
-				{
-					label: '',
-					items: [],
-					notFound: true,
-				}
-			);
-		});
-
-		test('post', () => {
-			const category = getDynamicValueCategory('post', ['all']);
-
-			expect(category.label).toBe(__('Posts and Pages', 'blockera'));
-		});
-
-		test('featured-image', () => {
-			const category = getDynamicValueCategory('featured-image', ['all']);
-
-			expect(category.label).toBe(__('Post Featured Image', 'blockera'));
-		});
-
-		test('archive', () => {
-			const category = getDynamicValueCategory('archive', ['all']);
-
-			expect(category.label).toBe(__('Archive', 'blockera'));
-		});
-
-		test('site', () => {
-			const category = getDynamicValueCategory('site', ['all']);
-
-			expect(category.label).toBe(__('Site Information', 'blockera'));
-		});
-
-		test('user', () => {
-			const category = getDynamicValueCategory('user', ['all']);
-
-			expect(category.label).toBe(__('User & Authors', 'blockera'));
-		});
-
-		test('other', () => {
-			const category = getDynamicValueCategory('other', ['all']);
-
-			expect(category.label).toBe(__('Utilities', 'blockera'));
 		});
 	});
 

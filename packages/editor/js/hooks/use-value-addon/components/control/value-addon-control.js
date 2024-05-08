@@ -4,7 +4,6 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -14,7 +13,7 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { isUndefined } from '@blockera/utils';
-import { getVariable, STORE_NAME } from '@blockera/data';
+import { getVariable } from '@blockera/data';
 import { Tooltip } from '@blockera/components';
 
 /**
@@ -22,7 +21,7 @@ import { Tooltip } from '@blockera/components';
  */
 import type { ValueAddonControlProps } from './types';
 import { ValueAddonPointer } from './index';
-import { getDynamicValueIcon, getVariableIcon, isValid } from '../../helpers';
+import { getVariableIcon, isValid } from '../../helpers';
 import EmptyIcon from '../../icons/empty';
 import DeletedIcon from '../../icons/deleted';
 
@@ -37,8 +36,6 @@ export default function ({
 	let icon: Element<any> = <EmptyIcon />;
 	let label = '';
 	let isDeleted = false;
-
-	const { getDynamicValue } = select(STORE_NAME);
 
 	if (isValid(controlProps.value)) {
 		if (controlProps.value.valueType === 'variable') {
@@ -60,22 +57,6 @@ export default function ({
 					value: controlProps.value?.settings?.value,
 				});
 			}
-		} else if (controlProps.value.valueType === 'dynamic-value') {
-			if (controlProps.isDeletedDV) {
-				isDeleted = true;
-				label = __('Missing Item', 'blockera');
-				icon = <DeletedIcon />;
-			} else {
-				const item = getDynamicValue(
-					controlProps.value.settings.group,
-					controlProps.value.name
-				);
-
-				label = !isUndefined(item?.name)
-					? item?.name
-					: controlProps.value?.settings?.name;
-				icon = getDynamicValueIcon(controlProps.value?.settings?.type);
-			}
 		}
 	}
 
@@ -86,13 +67,7 @@ export default function ({
 
 	return (
 		<>
-			<Tooltip
-				text={
-					controlProps.value?.valueType === 'variable'
-						? __('Change Variable', 'blockera')
-						: __('Change Dynamic Value', 'blockera')
-				}
-			>
+			<Tooltip text={__('Change Variable', 'blockera')}>
 				<button
 					className={controlClassNames(
 						'value-addon',
@@ -102,8 +77,6 @@ export default function ({
 						isDeleted && 'type-deleted',
 						controlProps.isOpen.startsWith('var-') &&
 							'open-value-addon type-variable',
-						controlProps.isOpen.startsWith('dv-') &&
-							'open-value-addon type-dynamic-value',
 						classNames
 					)}
 					onClick={(event) => {
@@ -111,12 +84,6 @@ export default function ({
 							case 'variable':
 								controlProps.setOpen(
 									isDeleted ? 'var-deleted' : 'var-picker'
-								);
-								event.preventDefault();
-								break;
-							case 'dynamic-value':
-								controlProps.setOpen(
-									isDeleted ? 'dv-deleted' : 'dv-settings'
 								);
 								event.preventDefault();
 								break;
