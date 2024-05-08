@@ -1,7 +1,7 @@
 // @flow
 
 import type { TBreakpoint } from './breakpoint-types';
-import type { BlockStates, TStates } from './state-types';
+import type { BlockStates, StateTypes, TStates } from './state-types';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import type { InnerBlockType } from '../../inner-blocks/types';
 
@@ -34,6 +34,7 @@ export type StatesManagerProps = {
 	onChange: THandleOnChangeAttributes,
 	currentBlock: 'master' | InnerBlockType,
 	currentState: TStates,
+	availableStates: { [key: TStates | string]: StateTypes },
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
 };

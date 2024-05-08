@@ -51,6 +51,7 @@ const StatesManager: ComponentType<any> = memo(
 		onChange,
 		currentBlock,
 		currentState,
+		availableStates,
 		currentBreakpoint,
 		currentInnerBlockState,
 	}: StatesManagerProps): Element<any> => {
@@ -61,6 +62,10 @@ const StatesManager: ComponentType<any> = memo(
 		const { getActiveMasterState, getActiveInnerState } = select(
 			'blockera-core/extensions'
 		);
+
+		const preparedStates = !availableStates
+			? defaultStates
+			: availableStates;
 
 		const calculatedValue = useMemo(() => {
 			const itemsCount = Object.values(states).length;
@@ -99,7 +104,7 @@ const StatesManager: ComponentType<any> = memo(
 
 						initialValue[itemId] = {
 							...state,
-							...defaultStates[itemId],
+							...preparedStates[itemId],
 							...defaultItemValue,
 							isOpen: false,
 							selectable: true,
@@ -129,7 +134,7 @@ const StatesManager: ComponentType<any> = memo(
 
 			return {
 				normal: {
-					...defaultStates.normal,
+					...preparedStates.normal,
 					...defaultItemValue,
 					isOpen: false,
 					display: false,
@@ -219,7 +224,7 @@ const StatesManager: ComponentType<any> = memo(
 					<RepeaterControl
 						{...{
 							onDelete,
-							maxItems: 10,
+							maxItems: Object.keys(preparedStates).length,
 							valueCleanup: (value) => value,
 							selectable: true,
 							/**
@@ -247,7 +252,7 @@ const StatesManager: ComponentType<any> = memo(
 									) !== -1
 								) {
 									const newStatesCount = Object.values(
-										defaultStates
+										preparedStates
 									).findIndex(
 										(item) =>
 											!Object.keys(
