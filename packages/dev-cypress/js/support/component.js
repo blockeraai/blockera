@@ -21,12 +21,12 @@ import './commands';
 /**
  * Style dependencies
  */
-import '../../packages/controls/src/style.scss';
-import '../../.storybook/styles/style.lazy.scss';
-import '../../packages/components/src/style.scss';
+import '../../../controls/js/style.scss';
+import '../../../../.storybook/styles/style.lazy.scss';
+import '../../../components/js/style.scss';
 import { WithControlDataProvider } from './components/providers/control-provider/with-control-data-provider';
-import { controlReducer } from '@blockera/controls/src/store/reducers/control-reducer';
-import { modifyControlValue } from '@blockera/controls/src/store/actions';
+import { controlReducer } from '@blockera/controls/js/store/reducers/control-reducer';
+import { modifyControlValue } from '@blockera/controls/js/store/actions';
 
 Cypress.Commands.add('mount', mount);
 
@@ -94,4 +94,3 @@ Cypress.Commands.add(
 		);
 	}
 );
-

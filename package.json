@@ -47,6 +47,7 @@
 		"@babel/plugin-proposal-export-default-from": "^7.18.10",
 		"@babel/preset-flow": "^7.21.4",
 		"@babel/preset-react": "^7.22.5",
+		"@blockera/dev-cypress": "file:packages/dev-cypress",
 		"@blockera/dev-storybook": "file:packages/dev-storybook",
 		"@cypress/browserify-preprocessor": "^3.0.2",
 		"@cypress/code-coverage": "^3.12.1",

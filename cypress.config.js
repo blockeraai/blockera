@@ -14,14 +14,14 @@ module.exports = defineConfig({
 			'packages/**/*.cypress.js',
 			'packages/**/*.cy.compatibility.js',
 		],
-		supportFile: 'cypress/support/e2e.js',
+		supportFile: 'packages/dev-cypress/js/support/e2e.js',
 	},
 	env: {
 		wpUsername: 'admin',
 		wpPassword: 'password',
 		testURL: 'http://localhost:8888',
 	},
-	fixturesFolder: 'cypress/fixtures',
+	fixturesFolder: 'packages/dev-cypress/js/fixtures',
 	pageLoadTimeout: 120000,
 	projectId: 'blockera',
 	retries: {
@@ -29,13 +29,13 @@ module.exports = defineConfig({
 		runMode: 0,
 	},
 	coverage: true,
-	screenshotsFolder: 'cypress/screenshots',
-	videosFolder: 'cypress/videos',
+	screenshotsFolder: 'packages/dev-cypress/js/screenshots',
+	videosFolder: 'packages/dev-cypress/js/videos',
 	viewportHeight: 1440,
 	viewportWidth: 2560,
 	component: {
 		setupNodeEvents(on, config) {
-			require('./cypress/plugins/index.js')(on, config);
+			require('./packages/dev-cypress/js/plugins/index.js')(on, config);
 			require('@cypress/code-coverage/task')(on, config);
 
 			return config;
@@ -45,6 +45,6 @@ module.exports = defineConfig({
 			bundler: 'webpack',
 		},
 		specPattern: 'packages/**/*.cy.js',
-		supportFile: 'cypress/support/component.js',
+		supportFile: 'packages/dev-cypress/js/support/component.js',
 	},
 });
