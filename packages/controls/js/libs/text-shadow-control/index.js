@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
@@ -68,33 +67,3 @@ export default function TextShadowControl({
 		/>
 	);
 }
-
-TextShadowControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Default value of each repeater item
-	 */
-	// $FlowFixMe
-	defaultRepeaterItemValue: PropTypes.shape({
-		x: PropTypes.string,
-		y: PropTypes.string,
-		blur: PropTypes.string,
-		color: PropTypes.string,
-		isVisible: PropTypes.bool,
-	}),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-};
