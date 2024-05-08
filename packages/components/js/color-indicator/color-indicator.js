@@ -1,7 +1,9 @@
+//@flow
+
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
+import type { Node } from 'react';
 
 /**
  * Blockera dependencies
@@ -13,19 +15,32 @@ import {
 	isValid as isValidVariable,
 } from '@blockera/editor';
 
+/**
+ * Internal dependencies
+ */
+import type { ColorIndicatorProps } from './types';
+
 export default function ColorIndicator({
 	className,
 	value = '',
 	type = 'color',
-	size,
+	size = 16,
 	style,
 	...props
-}) {
+}: ColorIndicatorProps): Node {
 	if (isObject(value) && isValidVariable(value)) {
 		value = getValueAddonRealValue(value);
 	}
 
-	const customStyle = {};
+	const customStyle: {
+		width?: string,
+		height?: string,
+		background?: string,
+		backgroundImage?: string,
+		backgroundPosition?: string,
+		backgroundSize?: string,
+	} = {};
+
 	let styleClassName = '';
 
 	if (size !== 16) {
@@ -83,28 +98,3 @@ export default function ColorIndicator({
 		/>
 	);
 }
-
-ColorIndicator.propTypes = {
-	/**
-	 * Specifies the value type. It creates custom indicator for types and return empty tag for invalid types. Empty type will be treated as color.
-	 *
-	 * @default color
-	 */
-	type: PropTypes.oneOf(['color', 'image', 'gradient']),
-	/**
-	 * Specifies the value of indicator. It's always string but the content of value can be differed by the `type` for example gradient or image url.
-	 */
-	value: PropTypes.string,
-	/**
-	 * Specifies the size of indicator.
-	 *
-	 * @default 18
-	 */
-	size: PropTypes.number,
-};
-
-ColorIndicator.defaultProps = {
-	type: 'color',
-	value: '',
-	size: 16,
-};

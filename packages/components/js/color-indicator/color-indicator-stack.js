@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
@@ -15,14 +14,15 @@ import { componentClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { default as ColorIndicator } from './color-indicator';
+import type { ColorIndicatorStackProps } from './types';
 
 export default function ColorIndicatorStack({
 	className,
-	value,
-	size,
-	maxItems,
+	value = [],
+	size = 16,
+	maxItems = 8,
 	...props
-}: Object): MixedElement {
+}: ColorIndicatorStackProps): MixedElement {
 	if (!value?.length) {
 		return <></>;
 	}
@@ -36,7 +36,9 @@ export default function ColorIndicatorStack({
 			colorsStack.push(
 				<ColorIndicator
 					key={index}
+					//$FlowFixMe
 					value={value?.value ? value?.value : value}
+					//$FlowFixMe
 					type={value?.type ? value.type : 'color'}
 					size={size}
 					{...props}
@@ -71,32 +73,3 @@ export default function ColorIndicatorStack({
 		</div>
 	);
 }
-
-ColorIndicatorStack.propTypes = {
-	/**
-	 * Array of color stacks. You can pass a flat array of colors or an array of objects containing `value` and `type`.
-	 */
-	value: PropTypes.arrayOf(
-		PropTypes.oneOfType([
-			PropTypes.string,
-			PropTypes.shape({
-				value: PropTypes.string,
-				type: PropTypes.string,
-			}),
-		])
-	),
-	/**
-	 * Sets the size of indicator
-	 */
-	size: PropTypes.number,
-	/**
-	 * Specifies the max count of value items to be shown
-	 */
-	maxItems: PropTypes.number,
-};
-
-ColorIndicatorStack.defaultProps = {
-	value: [],
-	size: 18,
-	maxItems: 8,
-};
