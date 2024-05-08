@@ -9,11 +9,7 @@ use Blockera\Http\RestfullAPI;
 
 try {
 
-	{ // Dynamic Values
-
-		// TODO: fire up rest api controllers
-//		$routes->get( 'dynamic/values/', [ \Blockera\Setup\Http\Controllers\DynamicValuesController::class, 'response' ] );
-	}
+	// TODO: fire up rest api controllers
 
 } catch ( Exception $exception ) {
 
