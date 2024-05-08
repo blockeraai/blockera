@@ -7,10 +7,11 @@
 	top: 11px;
 	right: 45px;
 	background-color: transparent !important;
+	z-index: 1;
 
 	&.is-focus,
 	&:hover {
-		color: var(--blockera-controls-primary-color);
+		color: var(--blockera-controls-primary-color) !important;
 	}
 
 	&.is-focus {
