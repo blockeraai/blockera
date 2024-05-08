@@ -3,9 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useEffect } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
-import { dispatch } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -26,12 +25,10 @@ import { extensionClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { Gap } from './components';
-import { useBlockContext } from '../../hooks';
 import { isShowField } from '../../api/utils';
 import DisplayGridIcon from './icons/display-grid';
 import { default as ReverseIcon } from './icons/reverse';
 import type { TLayoutProps } from './types/layout-props';
-import { GridBuilder } from '../../components/grid-builder';
 import { default as WrapWrapIcon } from './icons/wrap-wrap';
 import { generateExtensionId } from '../utils';
 import { default as WrapNoWrapIcon } from './icons/wrap-nowrap';
