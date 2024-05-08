@@ -22,7 +22,7 @@ describe('Line Height → Functionality', () => {
 
 	it('simple value', () => {
 		// activate line height
-		cy.activateMoreSettingsItem('More Typography Settings', 'Line Height');
+		// cy.activateMoreSettingsItem('More Typography Settings', 'Line Height');
 
 		cy.getParentContainer('Line Height').within(() => {
 			cy.get('input[type="number"]').focus();
@@ -51,7 +51,7 @@ describe('Line Height → Functionality', () => {
 
 	it('change line height to px', () => {
 		// activate line height
-		cy.activateMoreSettingsItem('More Typography Settings', 'Line Height');
+		// cy.activateMoreSettingsItem('More Typography Settings', 'Line Height');
 
 		cy.getParentContainer('Line Height').within(() => {
 			cy.get('input[type="number"]').focus();

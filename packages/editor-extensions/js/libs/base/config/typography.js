@@ -18,7 +18,7 @@ const blockeraFontSize: FeatureConfig = {
 };
 
 const blockeraLineHeight: FeatureConfig = {
-	show: false,
+	show: true,
 	force: false,
 	status: true,
 	label: __('Line Height', 'blockera'),
