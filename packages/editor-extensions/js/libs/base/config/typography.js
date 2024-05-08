@@ -87,6 +87,7 @@ const blockeraWordSpacing: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	isActiveOnFree: false,
 	label: __('Word Spacing', 'blockera'),
 };
 
@@ -94,6 +95,7 @@ const blockeraTextIndent: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	isActiveOnFree: false,
 	label: __('Text Indent', 'blockera'),
 };
 
@@ -108,6 +110,7 @@ const blockeraTextColumns: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	isActiveOnFree: false,
 	label: __('Text Columns', 'blockera'),
 };
 
@@ -115,6 +118,7 @@ const blockeraTextStroke: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	isActiveOnFree: false,
 	label: __('Text Stroke', 'blockera'),
 };
 
