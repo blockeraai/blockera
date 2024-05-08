@@ -241,7 +241,7 @@ class AssetsLoader {
 			return;
 		}
 
-		// blockera-core server side dynamic value definitions.
+		// blockera server side definitions.
 		wp_add_inline_script(
 			$handle_inline_script,
 			$inline_script,
