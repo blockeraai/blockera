@@ -26,7 +26,7 @@ class Setup {
 
 		$relativePathDir = $this->getBlockDirectoryPath( $block_type );
 		$blockFile       = sprintf(
-			'%1$sblocks/js/%2$s/block.php',
+			'%1$sblocks/php/%2$s/block.php',
 			blockera_core_config( 'app.packages_path' ),
 			$relativePathDir
 		);
