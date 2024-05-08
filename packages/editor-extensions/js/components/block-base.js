@@ -445,6 +445,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 										currentInnerBlockState,
 										handleOnChangeAttributes,
 									},
+									availableBlockStates:
+										additional.availableBlockStates,
 									currentStateAttributes: currentAttributes,
 									...props,
 								},

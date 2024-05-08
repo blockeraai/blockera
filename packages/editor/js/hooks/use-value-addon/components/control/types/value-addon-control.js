@@ -2,13 +2,8 @@
 /**
  * Blockera dependencies
  */
-import type {
-	VariableCategory,
-	DynamicValueTypes,
-	VariableItem,
-	DynamicValueItem,
-} from '@blockera/data';
 import type { ControlSize } from '@blockera/controls';
+import type { VariableCategory, VariableItem } from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -19,10 +14,8 @@ export type ValueAddonControlProps = {
 	value: ValueAddon,
 	setValue: (value: Object | string) => void,
 	onChange: (value: Object | string) => void,
-	types: Array<'variable' | 'dynamic-value'>,
+	types: Array<'variable'>,
 	variableTypes: Array<VariableCategory>,
-	dynamicValueTypes: Array<DynamicValueTypes>,
-	handleOnClickDV: (data: DynamicValueItem) => void,
 	handleOnClickVar: (data: VariableItem) => void,
 	handleOnUnlinkVar: (event: SyntheticMouseEvent<EventTarget>) => void,
 	handleOnClickRemove: (event: SyntheticMouseEvent<EventTarget>) => void,
@@ -35,8 +28,4 @@ export type ValueAddonControlProps = {
 	 * Variable is deleted or not
 	 */
 	isDeletedVar: boolean,
-	/**
-	 * Dynamic value is deleted or not
-	 */
-	isDeletedDV: boolean,
 };

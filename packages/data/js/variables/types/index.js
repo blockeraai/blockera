@@ -10,7 +10,8 @@ export type VariableCategory =
 	| 'radial-gradient'
 	| 'spacing'
 	| 'width-size'
-	| 'color';
+	| 'color'
+	| string;
 
 export type VariableItem = {
 	name: string,

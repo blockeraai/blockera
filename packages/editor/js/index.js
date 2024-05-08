@@ -39,6 +39,13 @@ export function registerCanvasEditorSettings(settings: Object) {
 }
 
 export * from './store';
-export * from './hooks';
+export {
+	isValid,
+	useValueAddon,
+	setValueAddon,
+	useTraceUpdate,
+	useAdvancedLabelProps,
+	getValueAddonRealValue,
+} from './hooks';
 export { Observer } from './observer';
 export { CanvasEditor, isLaptopBreakpoint } from './canvas-editor';

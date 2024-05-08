@@ -11,8 +11,8 @@ import { memo, useEffect, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
+import { isEquals } from '@blockera/utils';
 import { Tabs } from '@blockera/components';
-import { include, isEquals } from '@blockera/utils';
 // import { useTraceUpdate } from '@blockera/editor';
 import type { TTabProps } from '@blockera/components/js/tabs/types';
 
@@ -49,7 +49,7 @@ import StatesManager from '../block-states/components/states-manager';
 import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
-import type { TBreakpoint, TStates } from '../block-states/types';
+import type { StateTypes, TBreakpoint, TStates } from '../block-states/types';
 
 type Props = {
 	name: string,
@@ -69,6 +69,7 @@ type Props = {
 	currentStateAttributes: Object,
 	blockeraInnerBlocks: InnerBlocks,
 	setAttributes: (attributes: Object) => void,
+	availableBlockStates: { [key: TStates | string]: StateTypes },
 };
 
 export const SharedBlockExtension: ComponentType<Props> = memo(
@@ -76,6 +77,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		children,
 		attributes: currentBlockAttributes,
 		setAttributes,
+		availableBlockStates,
 		currentStateAttributes,
 		controllerProps: {
 			currentTab,
@@ -208,6 +210,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				>
 					<StatesManager
 						states={currentStateAttributes.blockeraBlockStates}
+						availableStates={availableBlockStates}
 						onChange={handleOnChangeAttributes}
 						block={{
 							clientId: props.clientId,

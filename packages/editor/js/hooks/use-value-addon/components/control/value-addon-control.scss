@@ -35,17 +35,6 @@
 		}
 	}
 
-	&.type-dynamic-value {
-		--va-color: var(--blockera-value-addon-dv-color);
-		--va-border-color: var(--blockera-value-addon-dv-border-color);
-		--va-bg-color: var(--blockera-value-addon-dv-bg-color);
-
-		&.open-value-addon {
-			--va-border-color: var(--blockera-value-addon-dv-color);
-			box-shadow: 0 0 0 1px var(--va-color);
-		}
-	}
-
 	&.type-deleted {
 		--va-color: var(--blockera-value-addon-deleted-color);
 		--va-border-color: var(--blockera-value-addon-deleted-border-color);

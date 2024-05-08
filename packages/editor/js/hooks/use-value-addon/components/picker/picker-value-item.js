@@ -14,11 +14,7 @@ import {
 } from '@blockera/classnames';
 import { isUndefined, isNumber } from '@blockera/utils';
 import { Tooltip, ConditionalWrapper } from '@blockera/components';
-import type {
-	VariableItem,
-	DynamicValueItem,
-	ValueAddonItemStatus,
-} from '@blockera/data';
+import type { VariableItem, ValueAddonItemStatus } from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -44,8 +40,8 @@ export default function ({
 	type: string,
 	status: ValueAddonItemStatus,
 	valueType: AddonTypesItem,
-	data: VariableItem | DynamicValueItem,
-	onClick: (data: VariableItem | DynamicValueItem) => void,
+	data: VariableItem,
+	onClick: (data: VariableItem) => void,
 	isCurrent: boolean,
 	showValue: boolean,
 }): MixedElement {
