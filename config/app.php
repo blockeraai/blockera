@@ -13,6 +13,7 @@ return [
 	'dist_path'     => BLOCKERA_CORE_PATH . 'dist/',
 	'packages_url'  => BLOCKERA_CORE_URI . 'packages/',
 	'packages_path' => BLOCKERA_CORE_PATH . 'packages/',
+	'vendor_path'   => BLOCKERA_CORE_PATH . 'vendor/',
 	'version'       => defined( 'BLOCKERA_VERSION' ) ? BLOCKERA_VERSION : blockera_core_env( 'VERSION' ),
 	'namespaces'    => [
 		'controllers' => '\Blockera\Setup\Http\Controllers\\',
