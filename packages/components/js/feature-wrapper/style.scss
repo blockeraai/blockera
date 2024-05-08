@@ -2,10 +2,6 @@
 	position: relative;
 	user-select: none;
 
-	&:not(:last-child) {
-		margin-bottom: 15px;
-	}
-
 	&::after {
 		content: "";
 		display: block;

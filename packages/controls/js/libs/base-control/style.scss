@@ -72,12 +72,6 @@
 		grid-template-columns: 2fr 5fr;
 	}
 
-	& + .blockera-component-feature-wrapper + .blockera-component-feature-wrapper,
-	& + .blockera-component-feature-wrapper,
-	& + & {
-		margin-top: 15px;
-	}
-
 	// remove for stacked
 
 	& & + & {
@@ -97,4 +91,11 @@
 		border-radius: 2px;
 		font-size: 90%;
 	}
+}
+
+*:not(.blockera-field):not(.blockera-component-flex) > .blockera-field + .blockera-component-feature-wrapper,
+*:not(.blockera-field):not(.blockera-component-flex) > .blockera-component-feature-wrapper + .blockera-component-feature-wrapper,
+*:not(.blockera-field):not(.blockera-component-flex) > .blockera-component-feature-wrapper + .blockera-field,
+*:not(.blockera-field):not(.blockera-component-flex) > .blockera-field + .blockera-field {
+	margin-top: 15px;
 }
