@@ -20,7 +20,7 @@ describe('Text Shadows → Functionality', () => {
 		cy.getByDataTest('style-tab').click();
 	});
 
-	it('should update text-shadow, when add data', () => {
+	it('single text shadow + promotion popover', () => {
 		/* One Text Shadow */
 		cy.getParentContainer('Text Shadows').within(() => {
 			cy.getByAriaLabel('Add New Text Shadow').click();
@@ -84,67 +84,8 @@ describe('Text Shadows → Functionality', () => {
 			cy.getByAriaLabel('Add New Text Shadow').click();
 		});
 
-		cy.getByDataTest('popover-body')
-			.last()
-			.within(() => {
-				/* eslint-disable cypress/unsafe-to-chain-command */
-				cy.getByAriaLabel('Vertical Distance')
-					.clear()
-					.type(5)
-					.should('have.value', '5');
-
-				/* eslint-disable cypress/unsafe-to-chain-command */
-				cy.getByAriaLabel('Horizontal Distance')
-					.clear()
-					.type(6)
-					.should('have.value', '6');
-
-				/* eslint-disable cypress/unsafe-to-chain-command */
-				cy.getByAriaLabel('Blur Effect')
-					.clear()
-					.type(7)
-					.should('have.value', '7');
-
-				cy.getByDataCy('color-btn').click();
-			});
-
-		cy.getByDataTest('popover-body')
-			.last()
-			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('70ca9e', {
-					force: true,
-				});
-			});
-
-		//Check block
-		cy.getBlock('core/paragraph').should(
-			'have.css',
-			'text-shadow',
-			'rgb(112, 202, 158) 2px 3px 4px, rgb(112, 202, 158) 5px 6px 7px'
-		);
-
-		//Check store
-		getWPDataObject().then((data) => {
-			expect({
-				0: {
-					isVisible: true,
-					x: '2px',
-					y: '3px',
-					blur: '4px',
-					color: '#70ca9e',
-					order: 0,
-				},
-				1: {
-					isVisible: true,
-					x: '5px',
-					y: '6px',
-					blur: '7px',
-					color: '#70ca9e',
-					order: 1,
-				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextShadow'));
-		});
+		// promotion popover should appear
+		cy.get('.blockera-component-promotion-popover').should('exist');
 
 		//Check frontend
 		savePage();
@@ -154,7 +95,7 @@ describe('Text Shadows → Functionality', () => {
 		cy.get('.blockera-core-block').should(
 			'have.css',
 			'text-shadow',
-			'rgb(112, 202, 158) 2px 3px 4px, rgb(112, 202, 158) 5px 6px 7px'
+			'rgb(112, 202, 158) 2px 3px 4px'
 		);
 	});
 });
