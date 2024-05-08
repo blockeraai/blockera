@@ -67,10 +67,10 @@ fi
 
 # Run the build.
 status "Installing dependencies... 📦"
-#npm cache verify
-#npm i
+npm cache verify
+npm ci
 status "Generating build... 👷‍♀️"
-# npm run build
+npm run build
 
 # Temporarily modify `blockera.php` with production constants defined. Use a
 # temp file because `bin/generate-blockera-php.php` reads from `blockera.php`
