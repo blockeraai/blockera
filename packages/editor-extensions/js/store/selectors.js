@@ -360,13 +360,3 @@ export function getActiveInnerState(
 		? blockExtensions[clientId][blockType + '-active-state'] || 'normal'
 		: 'normal';
 }
-
-/**
- * Get gridBuilder status
- *
- * @param {Object} blockExtensions the block extension details.
- * @return {boolean} gridBuilder status
- */
-export function getIsOpenGridBuilder({ blockExtensions }: Object): boolean {
-	return blockExtensions.isOpenGridBuilder;
-}
