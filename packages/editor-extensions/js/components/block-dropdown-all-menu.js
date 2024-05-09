@@ -8,13 +8,12 @@ import { check } from '@wordpress/icons';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies
  */
 import { More } from '../libs/settings/icons';
-import { NoticeControl } from '@blockera/controls';
-import classNames from 'classnames';
 
 export const BlockDropdownAllMenu = ({
 	isActive,
@@ -25,6 +24,7 @@ export const BlockDropdownAllMenu = ({
 }): MixedElement => {
 	const { setBlockExtensionsStatus } = dispatch('blockera-core/extensions');
 
+	console.log('isActive', isActive);
 	return (
 		<DropdownMenu
 			icon={() => <More className={'blockera-disable'} />}
@@ -39,36 +39,6 @@ export const BlockDropdownAllMenu = ({
 				return (
 					<MenuGroup label={__('Block Settings', 'blockera')}>
 						<MenuItem
-							icon={isActive ? '' : check}
-							onClick={() => {
-								setBlockExtensionsStatus(!isActive);
-								setActive(!isActive);
-								onClose();
-							}}
-							className={classNames({
-								'blockera-block-menu-item': isActive,
-								'blockera-block-menu-item-selected': !isActive,
-							})}
-						>
-							<span>
-								{(!isActive
-									? __('Disabled', 'blockera')
-									: __('Disable', 'blockera')) +
-									__(' ', 'blockera')}
-							</span>
-							{isActive && (
-								<NoticeControl
-									type={'warning'}
-									style={{ marginTop: '20px' }}
-								>
-									{__(
-										'If you click on "Disable ", cleaning all  attributes from current block. Double-check and ensure this is intentional.',
-										'blockera'
-									)}
-								</NoticeControl>
-							)}
-						</MenuItem>
-						<MenuItem
 							icon={isActive ? check : ''}
 							onClick={() => {
 								setBlockExtensionsStatus(!isActive);
@@ -76,15 +46,26 @@ export const BlockDropdownAllMenu = ({
 								onClose();
 							}}
 							className={classNames({
+								'blockera-block-menu-item': true,
 								'blockera-block-menu-item-selected': isActive,
 							})}
 						>
-							<span>
-								{(isActive
-									? __('Enabled', 'blockera')
-									: __('Enable', 'blockera')) +
-									__(' ', 'blockera')}
-							</span>
+							{__('Blockera Block', 'blockera')}
+						</MenuItem>
+
+						<MenuItem
+							icon={isActive ? '' : check}
+							onClick={() => {
+								setBlockExtensionsStatus(!isActive);
+								setActive(!isActive);
+								onClose();
+							}}
+							className={classNames({
+								'blockera-block-menu-item': true,
+								'blockera-block-menu-item-selected': !isActive,
+							})}
+						>
+							{__('Gutenberg Block', 'blockera')}
 						</MenuItem>
 					</MenuGroup>
 				);

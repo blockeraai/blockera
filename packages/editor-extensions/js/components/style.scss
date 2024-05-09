@@ -17,9 +17,10 @@
 
 		.components-dropdown-menu {
 			position: absolute;
-			right: 0;
+			right: -12px;
 			padding: 0;
 			margin: 0;
+			top: -6px;
 		}
 	}
 }
@@ -32,9 +33,9 @@
 }
 
 .blockera-block-menu-item-selected {
-	opacity: 0.5;
 	cursor: none;
 	pointer-events: none;
+	color: var(--blockera-controls-primary-color);
 
 	&:hover {
 		color: inherit !important;
