@@ -17,12 +17,14 @@ $inside_defines = false;
  * (the plugin entry point).
  */
 function print_production_defines() {
+
 	global $plugin_version;
 
 	echo "define( 'BLOCKERA_VERSION', '$plugin_version' );\n";
 
 	$git_commit = trim( shell_exec( 'git rev-parse HEAD' ) );
 
+	echo "define( 'BLOCKERA_APP_MODE', 'production' );\n";
 	echo "define( 'BLOCKERA_GIT_COMMIT', '$git_commit' );\n";
 }
 
@@ -47,8 +49,15 @@ while ( true ) {
 			break;
 
 		case '### END AUTO-GENERATED DEFINES':
+		case '### END AUTO-GENERATED FRONT CONTROLLERS':
 			$inside_defines = false;
 			echo $line;
+			break;
+
+		case '### BEGIN AUTO-GENERATED FRONT CONTROLLERS':
+			$inside_defines = true;
+			echo $line;
+			echo 'require BLOCKERA_CORE_PATH . ' . "'inc/app.php';\n";
 			break;
 
 		default:

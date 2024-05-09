@@ -78,6 +78,10 @@ npm run build
 php bin/generate-blockera-php.php > blockera.tmp.php
 mv blockera.tmp.php blockera.php
 
+# Temporary copy some PHP files into "inc" directory.
+mkdir -p "inc"
+cp packages/blockera/php/app.php inc/app.php
+
 build_files=$(
 	ls dist/*/*.{min.js,min.css,asset.php} \
 )
@@ -89,6 +93,7 @@ vendor_without_blockera=$(
 # Generate the plugin zip file.
 status "Creating archive... 🎁"
 zip -r blockera.zip \
+  inc \
 	config \
 	assets \
 	README.md \
@@ -96,10 +101,6 @@ zip -r blockera.zip \
 	$build_files \
 	blockera.php \
 	changelog.txt \
-	packages/style-engine/php/helpers.php \
-	packages/blockera/php/functions.php \
-	packages/blockera/php/hooks.php \
-	packages/blockera/php/app.php \
 	$vendor_without_blockera \
 	$(find ./vendor/blockera/blockera/ -type f \( -name "*.php" -o -name "*.json" \)) \
 	$(find ./vendor/blockera/blocks/ -type f \( -name "*.php" -o -name "*.json" \)) \
