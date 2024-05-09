@@ -151,7 +151,7 @@ export const getTypeLabel = function (type: TGetTypeLabelProps): string {
 	}
 };
 
-export const getTypeOptions = function (): Array<Object> {
+export const getTransitionTypeOptions = function (): Array<Object> {
 	return [
 		{
 			type: 'optgroup',
@@ -166,28 +166,52 @@ export const getTypeOptions = function (): Array<Object> {
 					value: 'opacity',
 				},
 				{
-					label: __('Margin', 'blockera'),
+					label:
+						__('Margin', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'margin',
+					disabled: true,
 				},
 				{
-					label: __('Padding', 'blockera'),
+					label:
+						__('Padding', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'padding',
+					disabled: true,
 				},
 				{
-					label: __('Border', 'blockera'),
+					label:
+						__('Border', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'border',
+					disabled: true,
 				},
 				{
-					label: __('Transform', 'blockera'),
+					label:
+						__('Transform', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'transform',
+					disabled: true,
 				},
 				{
-					label: __('Filter', 'blockera'),
+					label:
+						__('Filter', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'filter',
+					disabled: true,
 				},
 				{
-					label: __('Flex', 'blockera'),
+					label:
+						__('Flex', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'flex',
+					disabled: true,
 				},
 			],
 		},
@@ -196,20 +220,36 @@ export const getTypeOptions = function (): Array<Object> {
 			label: __('Background Transitions', 'blockera'),
 			options: [
 				{
-					label: __('Background Color', 'blockera'),
+					label:
+						__('Background Color', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'background-color',
+					disabled: true,
 				},
 				{
-					label: __('Background Position', 'blockera'),
+					label:
+						__('Background Position', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'background-position',
+					disabled: true,
 				},
 				{
-					label: __('Text Shadow', 'blockera'),
+					label:
+						__('Text Shadow', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'text-shadow',
+					disabled: true,
 				},
 				{
-					label: __('Box Shadow', 'blockera'),
+					label:
+						__('Box Shadow', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'box-shadow',
+					disabled: true,
 				},
 			],
 		},
@@ -218,28 +258,52 @@ export const getTypeOptions = function (): Array<Object> {
 			label: __('Size Transitions', 'blockera'),
 			options: [
 				{
-					label: __('Width', 'blockera'),
+					label:
+						__('Width', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'width',
+					disabled: true,
 				},
 				{
-					label: __('Height', 'blockera'),
+					label:
+						__('Height', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'height',
+					disabled: true,
 				},
 				{
-					label: __('Max Height', 'blockera'),
+					label:
+						__('Max Height', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'max-height',
+					disabled: true,
 				},
 				{
-					label: __('Max Width', 'blockera'),
+					label:
+						__('Max Width', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'max-width',
+					disabled: true,
 				},
 				{
-					label: __('Min Height', 'blockera'),
+					label:
+						__('Min Height', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'min-height',
+					disabled: true,
 				},
 				{
-					label: __('Min Width', 'blockera'),
+					label:
+						__('Min Width', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'min-width',
+					disabled: true,
 				},
 			],
 		},
@@ -248,16 +312,28 @@ export const getTypeOptions = function (): Array<Object> {
 			label: __('Borders Transitions', 'blockera'),
 			options: [
 				{
-					label: __('Border Radius', 'blockera'),
+					label:
+						__('Border Radius', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'border-radius',
+					disabled: true,
 				},
 				{
-					label: __('Border Color', 'blockera'),
+					label:
+						__('Border Color', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'border-color',
+					disabled: true,
 				},
 				{
-					label: __('Border Width', 'blockera'),
+					label:
+						__('Border Width', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'border-width',
+					disabled: true,
 				},
 			],
 		},
@@ -266,36 +342,68 @@ export const getTypeOptions = function (): Array<Object> {
 			label: __('Typography Transitions', 'blockera'),
 			options: [
 				{
-					label: __('Font Color', 'blockera'),
+					label:
+						__('Font Color', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'color',
+					disabled: true,
 				},
 				{
-					label: __('Font Size', 'blockera'),
+					label:
+						__('Font Size', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'font-size',
+					disabled: true,
 				},
 				{
-					label: __('Line Height', 'blockera'),
+					label:
+						__('Line Height', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'line-height',
+					disabled: true,
 				},
 				{
-					label: __('Letter Spacing', 'blockera'),
+					label:
+						__('Letter Spacing', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'letter-spacing',
+					disabled: true,
 				},
 				{
-					label: __('Text Indent', 'blockera'),
+					label:
+						__('Text Indent', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'text-indent',
+					disabled: true,
 				},
 				{
-					label: __('Word Spacing', 'blockera'),
+					label:
+						__('Word Spacing', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'word-spacing',
+					disabled: true,
 				},
 				{
-					label: __('Font Variation', 'blockera'),
+					label:
+						__('Font Variation', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'font-variation-settings',
+					disabled: true,
 				},
 				{
-					label: __('Text Stroke Color', 'blockera'),
+					label:
+						__('Text Stroke Color', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: '-webkit-text-stroke-color',
+					disabled: true,
 				},
 			],
 		},
@@ -304,24 +412,44 @@ export const getTypeOptions = function (): Array<Object> {
 			label: __('Position Transitions', 'blockera'),
 			options: [
 				{
-					label: __('Top', 'blockera'),
+					label:
+						__('Top', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'top',
+					disabled: true,
 				},
 				{
-					label: __('Right', 'blockera'),
+					label:
+						__('Right', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'right',
+					disabled: true,
 				},
 				{
-					label: __('Bottom', 'blockera'),
+					label:
+						__('Bottom', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'bottom',
+					disabled: true,
 				},
 				{
-					label: __('Left', 'blockera'),
+					label:
+						__('Left', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'left',
+					disabled: true,
 				},
 				{
-					label: __('Z-Index', 'blockera'),
+					label:
+						__('Z-Index', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'z-index',
+					disabled: true,
 				},
 			],
 		},
@@ -330,20 +458,36 @@ export const getTypeOptions = function (): Array<Object> {
 			label: __('Margin Transitions', 'blockera'),
 			options: [
 				{
-					label: __('Margin Top', 'blockera'),
+					label:
+						__('Margin Top', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'margin-top',
+					disabled: true,
 				},
 				{
-					label: __('Margin Right', 'blockera'),
+					label:
+						__('Margin Right', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'margin-right',
+					disabled: true,
 				},
 				{
-					label: __('Margin Bottom', 'blockera'),
+					label:
+						__('Margin Bottom', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'margin-bottom',
+					disabled: true,
 				},
 				{
-					label: __('Margin Left', 'blockera'),
+					label:
+						__('Margin Left', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'margin-left',
+					disabled: true,
 				},
 			],
 		},
@@ -352,20 +496,36 @@ export const getTypeOptions = function (): Array<Object> {
 			label: __('Padding Transitions', 'blockera'),
 			options: [
 				{
-					label: __('Padding Top', 'blockera'),
+					label:
+						__('Padding Top', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'padding-top',
+					disabled: true,
 				},
 				{
-					label: __('Padding Right', 'blockera'),
+					label:
+						__('Padding Right', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'padding-right',
+					disabled: true,
 				},
 				{
-					label: __('Padding Bottom', 'blockera'),
+					label:
+						__('Padding Bottom', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'padding-bottom',
+					disabled: true,
 				},
 				{
-					label: __('Padding Left', 'blockera'),
+					label:
+						__('Padding Left', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'padding-left',
+					disabled: true,
 				},
 			],
 		},
@@ -374,23 +534,35 @@ export const getTypeOptions = function (): Array<Object> {
 			label: __('Flex Transitions', 'blockera'),
 			options: [
 				{
-					label: __('Flex Grow', 'blockera'),
+					label:
+						__('Flex Grow', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'flex-grow',
+					disabled: true,
 				},
 				{
-					label: __('Flex Shrink', 'blockera'),
+					label:
+						__('Flex Shrink', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'flex-shrink',
+					disabled: true,
 				},
 				{
-					label: __('Flex Basis', 'blockera'),
+					label:
+						__('Flex Basis', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'flex-basis',
+					disabled: true,
 				},
 			],
 		},
 	];
 };
 
-export const getTimingOptions = function (): Array<Object> {
+export const getTransitionTimingOptions = function (): Array<Object> {
 	return [
 		{
 			type: 'optgroup',
@@ -423,36 +595,68 @@ export const getTimingOptions = function (): Array<Object> {
 			label: __('Ease In Timings', 'blockera'),
 			options: [
 				{
-					label: __('Ease In Quad', 'blockera'),
+					label:
+						__('Ease In Quad', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-quad',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Cubic', 'blockera'),
+					label:
+						__('Ease In Cubic', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-cubic',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Quart', 'blockera'),
+					label:
+						__('Ease In Quart', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-cubic',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Quint', 'blockera'),
+					label:
+						__('Ease In Quint', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-quint',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Sine', 'blockera'),
+					label:
+						__('Ease In Sine', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-sine',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Expo', 'blockera'),
+					label:
+						__('Ease In Expo', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-expo',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Circ', 'blockera'),
+					label:
+						__('Ease In Circ', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-circ',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Back', 'blockera'),
+					label:
+						__('Ease In Back', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-back',
+					disabled: true,
 				},
 			],
 		},
@@ -461,36 +665,68 @@ export const getTimingOptions = function (): Array<Object> {
 			label: __('Ease Out Timings', 'blockera'),
 			options: [
 				{
-					label: __('Ease Out Quad', 'blockera'),
+					label:
+						__('Ease Out Quad', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-out-quad',
+					disabled: true,
 				},
 				{
-					label: __('Ease Out Cubic', 'blockera'),
+					label:
+						__('Ease Out Cubic', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-out-cubic',
+					disabled: true,
 				},
 				{
-					label: __('Ease Out Quart', 'blockera'),
+					label:
+						__('Ease Out Quart', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-out-quart',
+					disabled: true,
 				},
 				{
-					label: __('Ease Out Quint', 'blockera'),
+					label:
+						__('Ease Out Quint', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-out-quint',
+					disabled: true,
 				},
 				{
-					label: __('Ease Out Sine', 'blockera'),
+					label:
+						__('Ease Out Sine', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-out-sine',
+					disabled: true,
 				},
 				{
-					label: __('Ease Out Expo', 'blockera'),
+					label:
+						__('Ease Out Expo', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-out-expo',
+					disabled: true,
 				},
 				{
-					label: __('Ease Out Circ', 'blockera'),
+					label:
+						__('Ease Out Circ', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-out-circ',
+					disabled: true,
 				},
 				{
-					label: __('Ease Out Back', 'blockera'),
+					label:
+						__('Ease Out Back', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-out-back',
+					disabled: true,
 				},
 			],
 		},
@@ -499,36 +735,68 @@ export const getTimingOptions = function (): Array<Object> {
 			label: __('Ease In Out Timings', 'blockera'),
 			options: [
 				{
-					label: __('Ease In Out Quad', 'blockera'),
+					label:
+						__('Ease In Out Quad', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-out-quad',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Out Cubic', 'blockera'),
+					label:
+						__('Ease In Out Cubic', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-out-cubic',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Out Quart', 'blockera'),
+					label:
+						__('Ease In Out Quart', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-out-quart',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Out Quint', 'blockera'),
+					label:
+						__('Ease In Out Quint', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-out-quint',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Out Sine', 'blockera'),
+					label:
+						__('Ease In Out Sine', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-out-sine',
+					disabled: true,
 				},
 				{
-					label: __('easeInOutExpo', 'blockera'),
+					label:
+						__('easeInOutExpo', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-out-expo',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Out Circ', 'blockera'),
+					label:
+						__('Ease In Out Circ', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-out-circ',
+					disabled: true,
 				},
 				{
-					label: __('Ease In Out Back', 'blockera'),
+					label:
+						__('Ease In Out Back', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'ease-in-out-back',
+					disabled: true,
 				},
 			],
 		},

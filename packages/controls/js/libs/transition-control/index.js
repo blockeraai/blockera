@@ -20,6 +20,7 @@ import Fields from './components/fields';
 import type { TTransitionControlProps } from './types';
 import { LabelDescription } from './components/label-description';
 import { getRepeaterActiveItemsCount } from '../repeater-control/utils';
+import { getTransitionTypeOptions, getTransitionTimingOptions } from './utils';
 
 export default function TransitionControl({
 	defaultRepeaterItemValue = {
@@ -46,6 +47,8 @@ export default function TransitionControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			id={'transition'}
+			getTransitionTypeOptions={getTransitionTypeOptions}
+			getTransitionTimingOptions={getTransitionTimingOptions}
 			PromoComponent={({
 				items,
 				onClose = () => {},

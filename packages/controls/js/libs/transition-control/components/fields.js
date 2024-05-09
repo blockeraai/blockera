@@ -10,7 +10,6 @@ import type { Element } from 'react';
  * Internal dependencies
  */
 import { useControlContext } from '../../../context';
-import { getTypeOptions, getTimingOptions } from '../utils';
 import { RepeaterContext } from '../../repeater-control/context';
 import { InputControl, SelectControl } from '../../index';
 import type { TFieldItem } from '../types';
@@ -23,8 +22,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+			customProps: {
+				getTransitionTypeOptions,
+				getTransitionTimingOptions,
+			},
+		} = useContext(RepeaterContext);
 
 		return (
 			<div
@@ -39,7 +45,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					labelPopoverTitle={__('Transition Property', 'blockera')}
 					labelDescription={<LabelDescription />}
 					columns="columns-2"
-					options={getTypeOptions()}
+					options={getTransitionTypeOptions()}
 					onChange={(type) =>
 						changeRepeaterItem({
 							controlId,
@@ -116,7 +122,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					columns="columns-2"
-					options={getTimingOptions()}
+					options={getTransitionTimingOptions()}
 					onChange={(timing) =>
 						changeRepeaterItem({
 							controlId,
