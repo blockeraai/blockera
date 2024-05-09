@@ -96,7 +96,7 @@ zip -r blockera.zip \
   inc \
 	config \
 	assets \
-	README.md \
+	readme.txt \
 	languages \
 	$build_files \
 	blockera.php \
