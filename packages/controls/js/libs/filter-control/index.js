@@ -9,6 +9,7 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
+import { PromotionPopover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -17,11 +18,14 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { FilterControlProps } from './types';
-import { cleanupRepeater } from '../repeater-control/utils';
+import {
+	cleanupRepeater,
+	getRepeaterActiveItemsCount,
+} from '../repeater-control/utils';
 import { FilterLabelDescription } from './components/filter-label-description';
 
 export default function FilterControl({
-	id,
+	id = 'filter',
 	defaultRepeaterItemValue = {
 		type: 'blur',
 		blur: '3px',
@@ -44,6 +48,29 @@ export default function FilterControl({
 	labelDescription,
 	className,
 	defaultValue = [],
+	PromoComponent = ({
+		items,
+		onClose = () => {},
+		isOpen = false,
+	}): MixedElement | null => {
+		if (getRepeaterActiveItemsCount(items) < 1) {
+			return null;
+		}
+
+		return (
+			<PromotionPopover
+				heading={__('Multiple Filters', 'blockera')}
+				featuresList={[
+					__('Multiple filters', 'blockera'),
+					__('Advanced filter effects', 'blockera'),
+					__('Advanced features', 'blockera'),
+					__('Premium blocks', 'blockera'),
+				]}
+				isOpen={isOpen}
+				onClose={onClose}
+			/>
+		);
+	},
 	...props
 }: FilterControlProps): MixedElement {
 	function valueCleanup(item: Object) {
@@ -127,6 +154,7 @@ export default function FilterControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			defaultValue={defaultValue}
+			PromoComponent={PromoComponent}
 			{...props}
 			valueCleanup={(value: Object): Object =>
 				cleanupRepeater(value, { callback: valueCleanup })
