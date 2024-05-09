@@ -76,6 +76,16 @@ describe('Filters → Functionality', () => {
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFilter'));
 		});
 
+		/* try to add another filter */
+		cy.get('@filters').within(() => {
+			cy.get('[aria-label="Add New Filter Effect"]').click({
+				force: true,
+			});
+		});
+
+		// promotion popover should appear
+		cy.get('.blockera-component-promotion-popover').should('exist');
+
 		//Check frontend
 		savePage();
 
@@ -84,69 +94,5 @@ describe('Filters → Functionality', () => {
 		cy.get('style#blockera-core-inline-css-inline-css')
 			.invoke('text')
 			.should('include', 'filter: drop-shadow(50px 30px 40px #cccccc);');
-	});
-
-	it('Should update filter correctly, when add multiple filter', () => {
-		cy.get('@filters').within(() => {
-			cy.getByAriaLabel('Add New Filter Effect').click();
-		});
-
-		cy.get('.components-popover').within(() => {
-			cy.getParentContainer('Type').within(() => {
-				cy.get('select').select('brightness');
-			});
-
-			cy.getByDataTest('filter-brightness-input').clear();
-			cy.getByDataTest('filter-brightness-input').type(100);
-		});
-
-		cy.get('@filters').within(() => {
-			cy.getByAriaLabel('Add New Filter Effect').click();
-		});
-
-		cy.getByDataTest('popover-body').within(() => {
-			cy.getParentContainer('Type', 'base-control').within(() => {
-				cy.get('select').select('invert');
-			});
-
-			cy.getByDataTest('filter-invert-input').clear();
-			cy.getByDataTest('filter-invert-input').type(50);
-		});
-
-		//Check block
-		cy.getBlock('core/paragraph')
-			.parent()
-			.within(() => {
-				cy.get('style')
-					.invoke('text')
-					.should('include', 'filter: brightness(100%) invert(50%);');
-			});
-
-		//Check store
-		getWPDataObject().then((data) => {
-			expect({
-				'brightness-0': {
-					isVisible: true,
-					type: 'brightness',
-					brightness: '100%',
-					order: 0,
-				},
-				'invert-0': {
-					isVisible: true,
-					type: 'invert',
-					invert: '50%',
-					order: 1,
-				},
-			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFilter'));
-		});
-
-		//Check frontend
-		savePage();
-
-		redirectToFrontPage();
-
-		cy.get('style#blockera-core-inline-css-inline-css')
-			.invoke('text')
-			.should('include', 'filter: brightness(100%) invert(50%);');
 	});
 });
