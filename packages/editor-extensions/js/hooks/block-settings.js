@@ -22,12 +22,18 @@ import {
 } from '../index';
 import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
+import { useStoreSelectors } from './use-store-selectors';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 
 const EdiBlockWithoutExtensions = ({
 	settings,
 	...props
 }: Object): MixedElement => {
+	const {
+		blockEditor: { getSelectedBlock },
+	} = useStoreSelectors();
+	const selectedBlock = getSelectedBlock();
+
 	useEffect(() => {
 		const blockCard = document.querySelector('.block-editor-block-card');
 
@@ -50,7 +56,7 @@ const EdiBlockWithoutExtensions = ({
 		if (tabs) {
 			tabs.style.display = 'block';
 		}
-	}, []);
+	}, [selectedBlock]);
 
 	return settings.edit(props);
 };
