@@ -12,13 +12,16 @@
             "dist": {
                 "type": "path",
                 "url": "packages/blockera",
-                "reference": "c4f2d30c71585a9b8b7009406a02a410b91c7b8d"
+                "reference": "dd75fd26785b5a3070e0496ae344d1d0fbb752ec"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Blockera\\Setup\\": "php/"
-                }
+                },
+                "files": [
+                    "php/functions.php"
+                ]
             },
             "description": "The bootstrapper for blockera php application for WordPress in admin and front-end sides.",
             "transport-options": {
@@ -148,13 +151,16 @@
             "dist": {
                 "type": "path",
                 "url": "packages/style-engine",
-                "reference": "a28c6932456cefaf731e76c6ee3adec20aab2779"
+                "reference": "5002e1163600310a7fc1cfb2bc1c14d2f0084990"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Blockera\\StyleEngine\\": "php/"
-                }
+                },
+                "files": [
+                    "php/helpers.php"
+                ]
             },
             "description": "Blockera Style Engine package to compile css on server side.",
             "transport-options": {
@@ -1313,12 +1319,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "2fe3244ddb68aa5260844a57c18ff027e279b83d"
+                "reference": "829e0e767ffc4533904612668ea9479dba8f3997"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/2fe3244ddb68aa5260844a57c18ff027e279b83d",
-                "reference": "2fe3244ddb68aa5260844a57c18ff027e279b83d",
+                "url": "https://api.github.com/repos/composer/composer/zipball/829e0e767ffc4533904612668ea9479dba8f3997",
+                "reference": "829e0e767ffc4533904612668ea9479dba8f3997",
                 "shasum": ""
             },
             "require": {
@@ -1420,7 +1426,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-04T21:03:15+00:00"
+            "time": "2024-05-08T12:27:20+00:00"
         },
         {
             "name": "composer/metadata-minifier",

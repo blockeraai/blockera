@@ -4,6 +4,9 @@
 	"autoload": {
 		"psr-4": {
 		 	"Blockera\\StyleEngine\\": "php/"
-		}
+		},
+		"files": [
+			"php/helpers.php"
+		]
 	}
 }

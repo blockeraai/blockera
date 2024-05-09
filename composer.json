@@ -45,12 +45,6 @@
 			"url" : "packages/blocks"
 		}
 	],
-	"autoload": {
-		"files": [
-			"packages/style-engine/php/helpers.php",
-			"packages/blockera/php/functions.php"
-		]
-	},
 	"autoload-dev": {
 		"psr-4": {
 			"Blockera\\Framework\\Tests\\": ".dev/tests/phpunit"
