@@ -6,7 +6,7 @@
 import memoize from 'fast-memoize';
 import { __ } from '@wordpress/i18n';
 import { select, dispatch } from '@wordpress/data';
-import type { Element, ComponentType } from 'react';
+import type { Element, ComponentType, MixedElement } from 'react';
 import { memo, useMemo, useCallback } from '@wordpress/element';
 
 /**
@@ -17,6 +17,8 @@ import { controlInnerClassNames } from '@blockera/classnames';
 import { ControlContextProvider, RepeaterControl } from '@blockera/controls';
 import { STORE_NAME } from '@blockera/controls/js/libs/repeater-control/store';
 import { defaultItemValue } from '@blockera/controls/js/libs/repeater-control';
+import { getRepeaterActiveItemsCount } from '@blockera/controls/js/libs/repeater-control/utils';
+import { PromotionPopover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -341,6 +343,32 @@ const StatesManager: ComponentType<any> = memo(
 						actionButtonClone={false}
 						actionButtonVisibility={false}
 						popoverTitleButtonsRight={PopoverTitleButtons}
+						PromoComponent={({
+							items,
+							onClose = () => {},
+							isOpen = false,
+						}): MixedElement | null => {
+							if (getRepeaterActiveItemsCount(items) < 2) {
+								return null;
+							}
+
+							return (
+								<PromotionPopover
+									heading={__(
+										'Advanced Block States',
+										'blockera'
+									)}
+									featuresList={[
+										__('Multiple states', 'blockera'),
+										__('All block states', 'blockera'),
+										__('Advanced features', 'blockera'),
+										__('Premium blocks', 'blockera'),
+									]}
+									isOpen={isOpen}
+									onClose={onClose}
+								/>
+							);
+						}}
 					/>
 				</StateContainer>
 			</ControlContextProvider>

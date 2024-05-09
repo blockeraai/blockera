@@ -40,6 +40,10 @@ const ItemBody = ({
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 	} = useControlContext();
 
+	// clone options
+	const options = { ...states };
+	delete options.normal;
+
 	return (
 		<>
 			<SelectControl
@@ -49,9 +53,10 @@ const ItemBody = ({
 				labelPopoverTitle={__('Block States', 'blockera')}
 				labelDescription={<LabelDescription />}
 				columns="columns-2"
-				options={Object.values(states)
+				options={Object.values(options)
 					.filter((state: Object): boolean => 'normal' !== state.type)
 					.map((state: Object): Object => ({
+						...state,
 						value: state.type,
 						label: state.label,
 					}))}
@@ -83,6 +88,7 @@ const ItemBody = ({
 					});
 				}}
 			/>
+
 			{['custom-class', 'parent-class'].includes(item.type) && (
 				<InputControl
 					id={`[${itemId}].css-class`}

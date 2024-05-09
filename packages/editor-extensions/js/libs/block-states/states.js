@@ -1,3 +1,8 @@
+/**
+ * External dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
 export default {
 	normal: {
 		type: 'normal',
@@ -11,42 +16,66 @@ export default {
 	},
 	active: {
 		type: 'active',
-		label: 'Active',
+		label:
+			__('Active', 'blockera') + ' - ' + __('Upgrade to RPO', 'blockera'),
 		breakpoints: {},
+		disabled: true,
 	},
 	focus: {
 		type: 'focus',
-		label: 'Focus',
+		label:
+			__('Focus', 'blockera') + ' - ' + __('Upgrade to RPO', 'blockera'),
 		breakpoints: {},
+		disabled: true,
 	},
 	visited: {
 		type: 'visited',
-		label: 'Visited',
+		label:
+			__('Visited', 'blockera') +
+			' - ' +
+			__('Upgrade to RPO', 'blockera'),
 		breakpoints: {},
+		disabled: true,
 	},
 	before: {
 		type: 'before',
-		label: 'Before',
+		label:
+			__('Before', 'blockera') + ' - ' + __('Upgrade to RPO', 'blockera'),
 		breakpoints: {},
+		disabled: true,
 	},
 	after: {
 		type: 'after',
-		label: 'After',
+		label:
+			__('After', 'blockera') + ' - ' + __('Upgrade to RPO', 'blockera'),
 		breakpoints: {},
+		disabled: true,
 	},
 	'custom-class': {
 		type: 'custom-class',
-		label: 'Custom Class',
+		label:
+			__('Custom Class', 'blockera') +
+			' - ' +
+			__('Upgrade to RPO', 'blockera'),
 		breakpoints: {},
+		disabled: true,
 	},
 	'parent-class': {
 		type: 'parent-class',
-		label: 'Parent Class',
+		label:
+			__('Parent Class', 'blockera') +
+			' - ' +
+			__('Upgrade to RPO', 'blockera'),
 		breakpoints: {},
+		disabled: true,
 	},
 	'parent-hover': {
 		type: 'parent-hover',
-		label: 'Parent Hover',
+		label:
+			__('Parent Hover', 'blockera') +
+			' - ' +
+			__('Upgrade to RPO', 'blockera'),
 		breakpoints: {},
+		disabled: true,
 	},
 };
