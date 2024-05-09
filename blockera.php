@@ -44,17 +44,6 @@ define( 'BLOCKERA_APP_MODE', 'development' );
 do_action( 'blockera/before/setup' );
 
 ### BEGIN AUTO-GENERATED FRONT CONTROLLERS
-require BLOCKERA_CORE_PATH . 'packages/blockera/php/app.php';
-### END AUTO-GENERATED FRONT CONTROLLERS
-
-/**
- * This hook for extendable setup process from internal or third-party developers.
- *
- * @hook  'blockera/after/setup'
- * @since 1.0.0
- */
-do_action( 'blockera/after/setup' );
-
 /**
  * For developers: Blockera debugging mode.
  *
@@ -73,3 +62,13 @@ if ( blockera_core_config( 'app.mode' ) ) {
 	$whoops->pushHandler( new \Whoops\Handler\PrettyPageHandler() );
 	$whoops->register();
 }
+require BLOCKERA_CORE_PATH . 'packages/blockera/php/app.php';
+### END AUTO-GENERATED FRONT CONTROLLERS
+
+/**
+ * This hook for extendable setup process from internal or third-party developers.
+ *
+ * @hook  'blockera/after/setup'
+ * @since 1.0.0
+ */
+do_action( 'blockera/after/setup' );
