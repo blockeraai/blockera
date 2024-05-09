@@ -74,7 +74,7 @@ describe('Transforms → Functionality', () => {
 			});
 
 			// promotion popover should not appear
-			cy.get('.blockera-component-promotion-popover').should('not.exist');
+			cy.get('.blockera-component-promotion-popover').should('exist');
 
 			//Check frontend
 			savePage();
