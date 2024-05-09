@@ -27,13 +27,25 @@ describe('Transitions → Functionality', () => {
 
 		cy.get('.components-popover').within(() => {
 			cy.getParentContainer('Type').within(() => {
-				cy.get('select').select('margin');
+				// check disabled options
+				cy.get('select').within(() => {
+					cy.get('[value="margin"]').should('be.disabled');
+					cy.get('[value="padding"]').should('be.disabled');
+				});
+
+				cy.get('select').select('opacity');
 			});
 
 			cy.getByDataTest('transition-input-duration').clear();
 			cy.getByDataTest('transition-input-duration').type(200);
 
 			cy.getParentContainer('Timing').within(() => {
+				// check disabled options
+				cy.get('select').within(() => {
+					cy.get('[value="ease-in-quad"]').should('be.disabled');
+					cy.get('[value="ease-in-cubic"]').should('be.disabled');
+				});
+
 				cy.get('select').select('ease-in-out');
 			});
 
@@ -45,15 +57,15 @@ describe('Transitions → Functionality', () => {
 		cy.getBlock('core/paragraph').should(
 			'have.css',
 			'transition',
-			'margin 0.2s ease-in-out 2s'
+			'opacity 0.2s ease-in-out 2s'
 		);
 
 		//Check store
 		getWPDataObject().then((data) => {
 			expect({
-				'margin-0': {
+				'opacity-0': {
 					isVisible: true,
-					type: 'margin',
+					type: 'opacity',
 					duration: '200ms',
 					timing: 'ease-in-out',
 					delay: '2000ms',
@@ -80,7 +92,7 @@ describe('Transitions → Functionality', () => {
 		cy.get('.blockera-core-block').should(
 			'have.css',
 			'transition',
-			'margin 0.2s ease-in-out 2s'
+			'opacity 0.2s ease-in-out 2s'
 		);
 	});
 });
