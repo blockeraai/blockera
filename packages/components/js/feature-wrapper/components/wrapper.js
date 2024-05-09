@@ -45,28 +45,28 @@ export function Wrapper({
 				text = typeName
 					? sprintf(
 							/* translators: %s is a state name. */
-							__('Only available in %s', 'blockera'),
+							__('Only available in %s state!', 'blockera'),
 							typeName
 					  )
-					: __('Not available in current state', 'blockera');
+					: __('Not available in current state!', 'blockera');
 				break;
 			case 'breakpoint':
 				text = typeName
 					? sprintf(
 							/* translators: %s is a breakpoint name. */
-							__('Only available in %s', 'blockera'),
+							__('Only available in %s breakpoint!', 'blockera'),
 							typeName
 					  )
-					: __('Not available in current breakpoint.', 'blockera');
+					: __('Not available in current breakpoint!', 'blockera');
 				break;
 			case 'inner-block':
 				text = typeName
 					? sprintf(
 							/* translators: %s is a breakpoint name. */
-							__('Only available in %s', 'blockera'),
+							__('Only available in %s inner block!', 'blockera'),
 							typeName
 					  )
-					: __('Not available in current inner block.', 'blockera');
+					: __('Not available in current inner block!', 'blockera');
 				break;
 		}
 	}
