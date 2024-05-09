@@ -11,7 +11,6 @@ import {
 	store,
 	unstableBootstrapServerSideEntities,
 	unstableBootstrapServerSideVariableDefinitions,
-	unstableBootstrapServerSideDynamicValueDefinitions,
 } from '@blockera/data';
 import {
 	store as editorStore,
@@ -40,7 +39,6 @@ domReady(() => {
 			select: select(store?.name),
 			unstableBootstrapServerSideEntities,
 			unstableBootstrapServerSideVariableDefinitions,
-			unstableBootstrapServerSideDynamicValueDefinitions,
 		};
 
 		window.blockera.editor = {
