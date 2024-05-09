@@ -14,6 +14,8 @@ import {
 	ControlContextProvider,
 	FilterLabelDescription,
 } from '@blockera/controls';
+import { PromotionPopover } from '@blockera/components';
+import { getRepeaterActiveItemsCount } from '@blockera/controls/js/libs/repeater-control/utils';
 
 /**
  * Internal dependencies
@@ -45,6 +47,7 @@ export const BackdropFilter = ({
 		>
 			<BaseControl columns="columns-1" controlName="filter">
 				<FilterControl
+					id="backdrop-filter"
 					label={__('Backdrop Filters', 'blockera')}
 					popoverTitle={__('Backdrop Filter', 'blockera')}
 					labelPopoverTitle={__('Backdrop Filter', 'blockera')}
@@ -86,6 +89,35 @@ export const BackdropFilter = ({
 						'blockera'
 					)}
 					defaultValue={defaultValue}
+					PromoComponent={({
+						items,
+						onClose = () => {},
+						isOpen = false,
+					}): MixedElement | null => {
+						if (getRepeaterActiveItemsCount(items) < 1) {
+							return null;
+						}
+
+						return (
+							<PromotionPopover
+								heading={__(
+									'Multiple Backdrop Filters',
+									'blockera'
+								)}
+								featuresList={[
+									__('Multiple backdrop filters', 'blockera'),
+									__(
+										'Advanced backdrop filter effects',
+										'blockera'
+									),
+									__('Advanced features', 'blockera'),
+									__('Premium blocks', 'blockera'),
+								]}
+								isOpen={isOpen}
+								onClose={onClose}
+							/>
+						);
+					}}
 					{...props}
 				/>
 			</BaseControl>
