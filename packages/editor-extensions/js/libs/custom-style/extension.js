@@ -49,16 +49,9 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 				return <></>;
 			}
 
-			const isActiveOnStates =
-				extensionConfig.blockeraCustomCSS.isActiveOnStates;
-			const isActiveOnBreakpoints =
-				extensionConfig.blockeraCustomCSS.isActiveOnBreakpoints;
-
 			const isEditable =
-				(isActiveOnStates !== 'all' &&
-					!isActiveOnStates.includes(getCurrentState())) ||
-				(isActiveOnBreakpoints !== 'all' &&
-					!isActiveOnBreakpoints.includes(getBreakpoint()?.type));
+				getCurrentState() === 'normal' ||
+				getBreakpoint()?.type === 'laptop';
 
 			return (
 				<PanelBodyControl
