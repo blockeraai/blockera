@@ -42,8 +42,9 @@ define( 'BLOCKERA_APP_MODE', 'development' );
  */
 do_action( 'blockera/before/setup' );
 
-// loading front controller.
+### BEGIN AUTO-GENERATED FRONT CONTROLLERS
 require BLOCKERA_CORE_PATH . 'packages/blockera/php/app.php';
+### END AUTO-GENERATED FRONT CONTROLLERS
 
 /**
  * This hook for extendable setup process from internal or third-party developers.
