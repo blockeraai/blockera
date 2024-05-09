@@ -72,40 +72,58 @@ export default function FeatureWrapper({
 		);
 	}
 
-	if (
-		isInnerBlock(currentBlock) &&
-		feature.isActiveOnInnerBlocks &&
-		!feature.isActiveOnInnerBlocksOnFree
-	) {
-		return (
-			<Wrapper type="free" {...props}>
-				{children}
-			</Wrapper>
-		);
+	if (isInnerBlock(currentBlock)) {
+		if (!feature.isActiveOnInnerBlocks) {
+			return (
+				<Wrapper type="inner-block" {...props}>
+					{children}
+				</Wrapper>
+			);
+		}
+
+		if (!isLocked && !feature.isActiveOnInnerBlocksOnFree) {
+			return (
+				<Wrapper type="free" {...props}>
+					{children}
+				</Wrapper>
+			);
+		}
 	}
 
-	if (
-		!isNormalState(getCurrentState()) &&
-		feature.isActiveOnStates &&
-		!feature.isActiveOnStatesOnFree
-	) {
-		return (
-			<Wrapper type="state" typeName={'Normal!'} {...props}>
-				{children}
-			</Wrapper>
-		);
+	if (!isNormalState(getCurrentState())) {
+		if (!feature.isActiveOnStates) {
+			return (
+				<Wrapper type="state" typeName={'normal'} {...props}>
+					{children}
+				</Wrapper>
+			);
+		}
+
+		if (!isLocked && !feature.isActiveOnStatesOnFree) {
+			return (
+				<Wrapper type="free" {...props}>
+					{children}
+				</Wrapper>
+			);
+		}
 	}
 
-	if (
-		!isLaptopBreakpoint(currentBreakpoint) &&
-		feature.isActiveOnBreakpoints &&
-		!feature.isActiveOnBreakpointsOnFree
-	) {
-		return (
-			<Wrapper type="breakpoint" typeName={'Laptop!'} {...props}>
-				{children}
-			</Wrapper>
-		);
+	if (!isLaptopBreakpoint(currentBreakpoint)) {
+		if (!feature.isActiveOnBreakpoints) {
+			return (
+				<Wrapper type="breakpoint" typeName={'laptop'} {...props}>
+					{children}
+				</Wrapper>
+			);
+		}
+
+		if (!isLocked && !feature.isActiveOnBreakpointsOnFree) {
+			return (
+				<Wrapper type="free" {...props}>
+					{children}
+				</Wrapper>
+			);
+		}
 	}
 
 	return <>{children}</>;
