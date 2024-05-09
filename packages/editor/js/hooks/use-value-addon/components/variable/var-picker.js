@@ -136,7 +136,10 @@ export default function ({
 							</Flex>
 						)}
 					>
-						{data.items.map((variable, _index) => {
+						{(!Array.isArray(data.items)
+							? Object.values(data.items)
+							: data.items
+						).map((variable, _index) => {
 							const itemData = {
 								...variable,
 								type,
