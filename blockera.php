@@ -1,16 +1,17 @@
 <?php
 /**
- * Plugin Name:       Blockera
- * Description:       provided all feature for creating application user interface into WordPress gutenberg editor or other 🔥.
+ * Plugin Name: Blockera
+ * Plugin URI: https://blockera.ai
+ * Description: Make Gutenberg a Real Page Builder!
  * Requires at least: 6.5.2
  * Requires PHP:      7.4
- * Version:           1.0-beta
- * Author:            blockeraai.com
- * License:           GPL-2.0-or-later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       blockera
+ * Author: Blockera AI
+ * Author URI: https://blockera.ai
+ * Version: 1.0
+ * Text Domain: blockera
+ * License: GPLv3 or later
  *
- * @package Core
+ * @package Blockera
  */
 
 // security code.
