@@ -33,6 +33,9 @@ import { isLaptopBreakpoint } from './helpers';
 export const Breakpoints = ({
 	className,
 }: BreakpointsComponentProps): MixedElement => {
+	// todo remove this after finishing development
+	const disabledSettings = true;
+
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
 		select('blockera-core/editor');
 	const { setDeviceType, setCanvasSettings, updateBreakpoints } = useDispatch(
@@ -169,39 +172,48 @@ export const Breakpoints = ({
 					type: 'nested',
 				}}
 			>
-				<Flex className={className} justifyContent={'space-between'}>
-					<div
-						className={controlInnerClassNames(
-							'blockera-core-breakpoints'
-						)}
-					>
-						<Circles
-							onClick={() =>
-								handleOnChange(
-									'isOpenOtherBreakpoints',
-									!canvasSettings.isOpenOtherBreakpoints
-								)
-							}
-						/>
-					</div>
+				<Flex
+					className={className}
+					justifyContent={
+						!disabledSettings ? 'space-between' : 'center'
+					}
+				>
+					{!disabledSettings && (
+						<div
+							className={controlInnerClassNames(
+								'blockera-core-breakpoints'
+							)}
+						>
+							<Circles
+								onClick={() =>
+									handleOnChange(
+										'isOpenOtherBreakpoints',
+										!canvasSettings.isOpenOtherBreakpoints
+									)
+								}
+							/>
+						</div>
+					)}
 
 					<PickedBreakpoints onClick={handleOnClick} />
 
-					<div
-						style={{
-							cursor: 'pointer',
-							lineHeight: '36px',
-						}}
-						aria-label={__('Canvas Zoom', 'blockera')}
-						onClick={() =>
-							handleOnChange(
-								'isOpenSettings',
-								!canvasSettings.isOpenSettings
-							)
-						}
-					>
-						{canvasSettings.zoom}
-					</div>
+					{!disabledSettings && (
+						<div
+							style={{
+								cursor: 'pointer',
+								lineHeight: '36px',
+							}}
+							aria-label={__('Canvas Zoom', 'blockera')}
+							onClick={() =>
+								handleOnChange(
+									'isOpenSettings',
+									!canvasSettings.isOpenSettings
+								)
+							}
+						>
+							{canvasSettings.zoom}
+						</div>
+					)}
 				</Flex>
 
 				{canvasSettings.isOpenOtherBreakpoints && (
