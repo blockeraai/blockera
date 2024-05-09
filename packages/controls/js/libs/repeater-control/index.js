@@ -88,6 +88,7 @@ export default function RepeaterControl(
 		PromoComponent,
 		//
 		className,
+		...customProps
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
 	if (onRoot) {
@@ -151,7 +152,7 @@ export default function RepeaterControl(
 		defaultRepeaterItemValue,
 		repeaterItems, // value
 		//
-		customProps: { ...props },
+		customProps,
 	};
 	const [count, setCount] = useState(0);
 
