@@ -73,3 +73,6 @@ packages/dev-cypress/js/downloads
 
 # Cypress videos
 packages/dev-cypress/js/videos
+
+# includes directory
+inc
