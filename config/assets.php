@@ -2,15 +2,15 @@
 
 return [
 	'list'      => [
+		'data',
 		'utils',
-		'hooks',
 		'blocks',
 		'editor',
 		'blockera',
 		'controls',
 		'bootstrap',
-		'core-data',
 		'classnames',
+		'components',
 		'data-editor',
 		'style-engine',
 		'editor-styles',
@@ -19,14 +19,16 @@ return [
 	],
 	'with-deps' => [
 		'blockera'          => [
+			'@blockera/bootstrap',
 			'@blockera/editor-extensions',
 		],
 		'editor-extensions' => [
-			'@blockera/controls',
+			'@blockera/data',
 			'@blockera/editor',
+			'@blockera/controls',
 		],
 		'editor-styles'     => [
 			'@blockera/components-styles',
-		]
+		],
 	],
 ];
