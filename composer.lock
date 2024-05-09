@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/blockera",
-                "reference": "dd75fd26785b5a3070e0496ae344d1d0fbb752ec"
+                "reference": "9926939c0dcd53472a51e8c91f09fb990d86bba6"
             },
             "type": "library",
             "autoload": {
@@ -6292,7 +6292,7 @@
             "homepage": "https://github.com/wp-cli/entity-command",
             "support": {
                 "issues": "https://github.com/wp-cli/entity-command/issues",
-                "source": "https://github.com/wp-cli/entity-command/tree/main"
+                "source": "https://github.com/wp-cli/entity-command/tree/v2.8.0"
             },
             "time": "2024-05-04T10:49:23+00:00"
         },
@@ -7616,12 +7616,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli-bundle.git",
-                "reference": "6f84de4eb059eafe4d195df6922bbd510a4b9d6d"
+                "reference": "1b3a27a6b2b7d15a44e3c52b8a80a1008a9b5918"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/6f84de4eb059eafe4d195df6922bbd510a4b9d6d",
-                "reference": "6f84de4eb059eafe4d195df6922bbd510a4b9d6d",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/1b3a27a6b2b7d15a44e3c52b8a80a1008a9b5918",
+                "reference": "1b3a27a6b2b7d15a44e3c52b8a80a1008a9b5918",
                 "shasum": ""
             },
             "require": {
@@ -7682,7 +7682,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli-bundle/issues",
                 "source": "https://github.com/wp-cli/wp-cli-bundle"
             },
-            "time": "2024-05-07T14:42:33+00:00"
+            "time": "2024-05-09T11:08:46+00:00"
         },
         {
             "name": "wp-cli/wp-config-transformer",
