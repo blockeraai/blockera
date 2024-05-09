@@ -69,6 +69,7 @@ fi
 status "Installing dependencies... 📦"
 npm cache verify
 npm ci
+composer install --no-dev
 status "Generating build... 👷‍♀️"
 npm run build
 
