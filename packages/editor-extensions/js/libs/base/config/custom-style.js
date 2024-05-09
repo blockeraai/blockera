@@ -15,8 +15,10 @@ const blockeraCustomCSS: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Custom CSS Code', 'blockera'),
-	isActiveOnStates: ['normal'],
-	isActiveOnBreakpoints: ['laptop'],
+	isActiveOnFree: false,
+	isActiveOnStates: false,
+	isActiveOnInnerBlocks: false,
+	isActiveOnBreakpoints: false,
 };
 
 export const customStyleConfig = {
