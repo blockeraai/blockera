@@ -44,6 +44,12 @@ Blockera comes in both free and premium versions. The [premium version](https://
 
 == Changelog ==
 
+= 1.0.1 - 2024-5-11 =
+
+-   Tweak: assets and packages size.
+-   Tweak: Block inspector control compatibility.
+
+
 = 1.0.0 - 2024-5-9 =
 
 -   Initial version for WP.org review
