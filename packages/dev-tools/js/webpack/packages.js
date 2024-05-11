@@ -107,6 +107,10 @@ module.exports = (env, argv) => {
 				...styleDependencies.optimization.minimizer,
 			],
 		},
-		devtool: 'inline-source-map',
+		...(isProduction
+			? {}
+			: {
+					devtool: 'source-map',
+			  }),
 	};
 };
