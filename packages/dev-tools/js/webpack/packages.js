@@ -9,9 +9,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
  * WordPress dependencies
  */
 const postcssPlugins = require('@wordpress/postcss-plugins-preset');
-const {
-	camelCaseDash,
-} = require('@wordpress/dependency-extraction-webpack-plugin/lib/util');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 
