@@ -20,7 +20,7 @@ class AssetsProvider extends ServiceProvider {
 	 *
 	 * @var string $handler the handler name.
 	 */
-	protected string $handler = '@blockera/editor-extensions';
+	protected string $handler = '@blockera/blockera';
 
 	/**
 	 * Register any application services.
