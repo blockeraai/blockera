@@ -107,18 +107,6 @@ module.exports = (env, argv) => {
 				...styleDependencies.optimization.minimizer,
 			],
 		},
-		externals: {
-			'@blockera/blocks': 'blockera?.blocks',
-			'@blockera/utils': 'blockera?.utils',
-			'@blockera/bootstrap': 'blockera?.bootstrap',
-			'@blockera/data': 'blockera?.data',
-			'@blockera/data-editor': 'blockera?.dataEditor',
-			'@blockera/style-engine': 'blockera?.styleEngine',
-			'@blockera/classnames': 'blockera?.classnames',
-			'@blockera/editor': 'blockera?.editor',
-			'@blockera/components': 'blockera?.components',
-			'@blockera/controls': 'blockera?.controls',
-			'@blockera/editor-extensions': 'blockera?.editorExtensions',
-		},
+		devtool: 'inline-source-map',
 	};
 };
