@@ -41,3 +41,13 @@
 		color: inherit !important;
 	}
 }
+
+.blockera-not-allowed {
+	opacity: 0.5;
+	user-select: none;
+	cursor: not-allowed;
+
+	* {
+		pointer-events: none;
+	}
+}

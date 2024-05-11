@@ -16,17 +16,15 @@ import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
 
 export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 	const stylesTab = document.querySelector('[aria-label="Styles"]');
+	const blockCard = document.querySelector('.block-editor-block-card');
+	const blockVariations = document.querySelector(
+		'.block-editor-block-inspector > .block-editor-block-variation-transforms'
+	);
 
 	useEffect(() => {
-		const blockCard = document.querySelector('.block-editor-block-card');
-
 		if (blockCard) {
 			blockCard.style.display = 'none';
 		}
-
-		const blockVariations = document.querySelector(
-			'.block-editor-block-inspector > .block-editor-block-variation-transforms'
-		);
 
 		if (blockVariations) {
 			blockVariations.style.display = 'none';
@@ -39,7 +37,6 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 			return;
 		}
 
-		const blockCard = document.querySelector('.block-editor-block-card');
 		const listener = () => {
 			if (blockCard) {
 				blockCard.style.display = 'flex';
