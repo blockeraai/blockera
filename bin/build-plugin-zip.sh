@@ -67,11 +67,15 @@ fi
 
 # Run the build.
 status "Installing dependencies... 📦"
-npm cache verify
-npm ci
 composer install --no-dev
+if [ -z "$NO_INSTALL_NPM" ]; then
+  npm cache verify
+  npm ci
+fi
+
 status "Generating build... 👷‍♀️"
 npm run build
+
 
 # Temporarily modify `blockera.php` with production constants defined. Use a
 # temp file because `bin/generate-blockera-php.php` reads from `blockera.php`
