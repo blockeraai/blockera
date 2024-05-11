@@ -24,7 +24,6 @@ export const BlockDropdownAllMenu = ({
 }): MixedElement => {
 	const { setBlockExtensionsStatus } = dispatch('blockera-core/extensions');
 
-	console.log('isActive', isActive);
 	return (
 		<DropdownMenu
 			icon={() => <More className={'blockera-disable'} />}
