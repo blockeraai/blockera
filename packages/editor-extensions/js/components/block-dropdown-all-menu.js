@@ -27,7 +27,7 @@ export const BlockDropdownAllMenu = ({
 	return (
 		<DropdownMenu
 			icon={() => <More className={'blockera-disable'} />}
-			label=" Block Settings"
+			label="Block Settings"
 			popoverProps={{
 				offset: 20,
 				focusOnMount: true,
@@ -38,6 +38,7 @@ export const BlockDropdownAllMenu = ({
 				return (
 					<MenuGroup label={__('Block Settings', 'blockera')}>
 						<MenuItem
+							data-test={__('Blockera Block', 'blockera')}
 							icon={isActive ? check : ''}
 							onClick={() => {
 								setBlockExtensionsStatus(!isActive);
@@ -53,6 +54,7 @@ export const BlockDropdownAllMenu = ({
 						</MenuItem>
 
 						<MenuItem
+							data-test={__('Gutenberg Block', 'blockera')}
 							icon={isActive ? '' : check}
 							onClick={() => {
 								setBlockExtensionsStatus(!isActive);

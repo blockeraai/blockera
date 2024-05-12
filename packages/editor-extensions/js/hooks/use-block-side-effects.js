@@ -15,6 +15,8 @@ export const useBlockSideEffects = ({ currentTab, currentState, isActive }) => {
 		);
 		const notAllowedClass = 'blockera-not-allowed';
 		const setClassList = (settingElement) => {
+			settingElement.setAttribute('data-test', 'blockera-availability');
+
 			if ('normal' === currentState) {
 				settingElement.classList.remove(notAllowedClass);
 			} else {

@@ -49,7 +49,10 @@ export function BlockCard({
 	const blockInformation = useBlockDisplayInformation(clientId);
 
 	return (
-		<div className={extensionClassNames('block-card')}>
+		<div
+			className={extensionClassNames('block-card')}
+			data-test={'blockera-block-card'}
+		>
 			<div className={extensionInnerClassNames('block-card__inner')}>
 				<BlockIcon icon={blockInformation.icon} />
 
