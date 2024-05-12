@@ -38,7 +38,7 @@ export const BlockDropdownAllMenu = ({
 				return (
 					<MenuGroup label={__('Block Settings', 'blockera')}>
 						<MenuItem
-							data-test={__('Blockera Block', 'blockera')}
+							data-test={'Blockera Block'}
 							icon={isActive ? check : ''}
 							onClick={() => {
 								setBlockExtensionsStatus(!isActive);
@@ -54,7 +54,7 @@ export const BlockDropdownAllMenu = ({
 						</MenuItem>
 
 						<MenuItem
-							data-test={__('Gutenberg Block', 'blockera')}
+							data-test={'Gutenberg Block'}
 							icon={isActive ? '' : check}
 							onClick={() => {
 								setBlockExtensionsStatus(!isActive);
