@@ -22,10 +22,18 @@ import {
  * Internal dependencies
  */
 import { ControlContext } from '../index';
-import { STORE_NAME as CONTROL_STORE_NAME } from '../../store';
-import { STORE_NAME as REPEATER_STORE_NAME } from '../../libs/repeater-control/store/constants';
+import {
+	store as controlStore,
+	STORE_NAME as CONTROL_STORE_NAME,
+} from '../../store';
+import {
+	STORE_NAME as repeaterControlStoreName,
+	STORE_NAME as REPEATER_STORE_NAME,
+} from '../../libs/repeater-control/store/constants';
 import useControlEffect from './use-control-effect';
 import type { ControlContextHookProps, ControlContextRef } from '../types';
+import { store as repeaterStore } from '../../libs/repeater-control/store';
+import { isInnerBlock } from '@blockera/editor-extensions/js/components/utils';
 
 //eslint-disable-next-line
 /**
@@ -39,6 +47,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		controlInfo,
 		value: savedValue,
 		dispatch,
+		STORE_NAME,
 	} = useContext(ControlContext);
 
 	const getControlPath = function (
@@ -67,6 +76,15 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			getControlPath,
 		};
 	}
+
+	const {
+		getExtensionCurrentBlock,
+		getExtensionInnerBlockState,
+		getExtensionCurrentBlockState,
+		getExtensionCurrentBlockStateBreakpoint,
+	} = select('blockera-core/extensions');
+	const { getSelectedBlock } = select('core/block-editor');
+	const { getBreakpoints } = select('blockera-core/editor');
 
 	const initialRef = {
 		path: '',
@@ -137,20 +155,66 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	const { modifyControlValue } = dispatch;
 
 	const modifyValue = (value: any): void => {
-		// extends setValue default operation to modify flatten control value!
-		if (isUndefined(id)) {
-			modifyControlValue({
-				value,
-				controlId: controlInfo.name,
-			});
+		const modify = (controlId: string) => {
+			// extends setValue default operation to modify flatten control value!
+			if (isUndefined(id)) {
+				modifyControlValue({
+					value,
+					controlId,
+				});
+			}
 			// extends setValue default operation to modify nested control value!
-		} else if ('nested' === controlInfo?.type) {
-			modifyControlValue({
-				value,
-				propId: id,
-				controlId: controlInfo.name,
+			else if ('nested' === controlInfo?.type) {
+				modifyControlValue({
+					value,
+					propId: id,
+					controlId,
+				});
+			}
+		};
+
+		if ('reset_all_states' === ref.current.action) {
+			const {
+				attributes: { blockeraBlockStates },
+			} = getSelectedBlock();
+			const states = Object.keys(blockeraBlockStates);
+			const breakpoints = Object.keys(getBreakpoints());
+			//get `blockera-core/controls` store or details of that
+			const { getControl } =
+				repeaterControlStoreName === STORE_NAME
+					? select(repeaterStore)
+					: select(controlStore);
+
+			states.forEach((state) => {
+				const currentState = isInnerBlock(getExtensionCurrentBlock())
+					? getExtensionInnerBlockState()
+					: getExtensionCurrentBlockState();
+				const controlName = controlInfo.name.replace(
+					currentState,
+					state
+				);
+
+				breakpoints.forEach((breakpoint) => {
+					const name = controlName.replace(
+						getExtensionCurrentBlockStateBreakpoint(),
+						breakpoint
+					);
+
+					if (!getControl(name)) {
+						return;
+					}
+
+					modify(name);
+				});
 			});
+
+			resetRef();
+
+			return value;
 		}
+
+		// modify current control
+		modify(controlInfo.name);
 
 		return value;
 	};

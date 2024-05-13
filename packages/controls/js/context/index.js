@@ -76,7 +76,7 @@ export const ControlContextProvider = ({
 	return (
 		<ControlContext.Provider
 			{...props}
-			value={{ controlInfo, value, dispatch }}
+			value={{ controlInfo, value, dispatch, STORE_NAME }}
 		>
 			{children}
 		</ControlContext.Provider>
