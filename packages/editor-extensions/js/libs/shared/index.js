@@ -36,7 +36,11 @@ import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
 import { ConditionsExtension } from '../conditions';
 import { AdvancedSettingsExtension } from '../advanced-settings';
-import { isInnerBlock, propsAreEqual } from '../../components/utils';
+import {
+	isInnerBlock,
+	// FIXME: we are double check this to fix re-rendering problems.
+	// propsAreEqual
+} from '../../components/utils';
 import { attributes } from './attributes';
 import { useDisplayBlockControls } from '../../hooks';
 import StateContainer from '../../components/state-container';
@@ -833,8 +837,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				{children}
 			</StateContainer>
 		);
-	},
-	propsAreEqual
+	}
+	// FIXME: we are double check this to fix re-rendering problems.
+	// propsAreEqual
 );
 
 export { supports } from './supports';
