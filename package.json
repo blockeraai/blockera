@@ -2,7 +2,7 @@
 	"name": "@blockera/plugin",
 	"version": "1.0.0",
 	"private": true,
-	"description": "A new  editor experience base on Gutenberg.",
+	"description": "Make Gutenberg a Real Page Builder!",
 	"author": "The  Contributors",
 	"license": "ISC",
 	"keywords": [
@@ -12,10 +12,10 @@
 		"WordPress",
 		"editor"
 	],
-	"homepage": "https://github.com/blockeraai/blockera-core.git",
-	"repository": "https://github.com/blockeraai/blockera-core.git",
+	"homepage": "https://github.com/blockeraai/blockera.git",
+	"repository": "https://github.com/blockeraai/blockera.git",
 	"bugs": {
-		"url": "https://github.com/blockeraai/blockera-core/issues"
+		"url": "https://github.com/blockeraai/blockera/issues"
 	},
 	"engines": {
 		"node": ">=14.0.0",
