@@ -35,7 +35,7 @@ changelog:
         merge: Merges
         breakingChange: BREAKING CHANGES
         submodule: Commits that update pointer for submodules
-    commitUrl: https://github.com/publisherwp/publisher-core/commit/%commit%
-    commitRangeUrl: https://github.com/publisherwp/publisher-core/compare/%from%...%to%?diff=split
+    commitUrl: https://github.com/blockeraai/blockera/commit/%commit%
+    commitRangeUrl: https://github.com/blockeraai/blockera/compare/%from%...%to%?diff=split
     issueRegexPattern: '#[0-9]+'
-    issueUrl: https://github.com/publisherwp/publisher-core/issues/%issue%
+    issueUrl: https://github.com/blockeraai/blockera/issues/%issue%
