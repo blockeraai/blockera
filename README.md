@@ -1,11 +1,9 @@
-# Publisher Core
-The Publisher Core is library ro use in all publisher products.
-This is core api for Publisher Plugin Factory.
-
+# Blockera
+Make Gutenberg a Real Page Builder!
 
 ## Installation
 
-at the root of `publisher-core` please run:
+at the root of `blockera` please run:
 
 >npm install
 
