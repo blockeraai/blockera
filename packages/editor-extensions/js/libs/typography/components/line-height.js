@@ -9,6 +9,7 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { ControlContextProvider, InputControl } from '@blockera/controls';
+import type { ControlSize } from '@blockera/controls/js/types/general-control-types';
 
 /**
  * Internal dependencies
@@ -21,12 +22,14 @@ export const LineHeight = ({
 	value,
 	onChange,
 	defaultValue,
+	size,
 	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
 	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
+	size?: ControlSize,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -62,6 +65,7 @@ export const LineHeight = ({
 				onChange={(newValue, ref) =>
 					onChange('blockeraLineHeight', newValue, { ref })
 				}
+				size={size}
 				{...props}
 			/>
 		</ControlContextProvider>

@@ -5,7 +5,7 @@
 import type { MixedElement } from 'react';
 
 /**
- *  Dependencies
+ * Blockera Dependencies
  */
 import type { VariableCategory, DynamicValueTypes } from '@blockera/data';
 

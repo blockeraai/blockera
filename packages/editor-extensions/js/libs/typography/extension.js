@@ -249,6 +249,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									columns="columns-1"
 									className="control-first label-center small-gap"
 									style={{ margin: '0px' }}
+									size="small"
 									{...extensionProps.blockeraFontSize}
 								/>
 							</FeatureWrapper>
@@ -267,6 +268,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									columns="columns-1"
 									className="control-first label-center small-gap"
 									style={{ margin: '0px' }}
+									size="small"
 									{...extensionProps.blockeraLineHeight}
 								/>
 							</FeatureWrapper>

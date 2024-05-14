@@ -4,10 +4,12 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+
 /**
  * Blockera dependencies
  */
 import { ControlContextProvider, InputControl } from '@blockera/controls';
+import type { ControlSize } from '@blockera/controls/js/types/general-control-types';
 
 /**
  * Internal dependencies
@@ -20,11 +22,13 @@ export const FontSize = ({
 	value,
 	onChange,
 	defaultValue,
+	size,
 	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
 	defaultValue?: string,
+	size?: ControlSize,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	return (
@@ -63,6 +67,7 @@ export const FontSize = ({
 				}
 				controlAddonTypes={['variable']}
 				variableTypes={['font-size']}
+				size={size}
 				{...props}
 			/>
 		</ControlContextProvider>
