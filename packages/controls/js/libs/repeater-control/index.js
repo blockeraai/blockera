@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
@@ -91,6 +92,17 @@ export default function RepeaterControl(
 		...customProps
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
+	const { getEntity } = select('blockera-core/data');
+	const {
+		settings: {
+			general: { disableAds },
+		},
+	} = getEntity('blockera') || {
+		settings: {
+			general: { disableAds: false },
+		},
+	};
+
 	if (onRoot) {
 		repeaterId = undefined;
 	}
@@ -156,9 +168,12 @@ export default function RepeaterControl(
 	};
 	const [count, setCount] = useState(0);
 
+	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
+
 	const addNewButtonOnClick = () => {
 		if (isEnabledPromote(PromoComponent, repeaterItems)) {
 			setCount(count + 1);
+			setDisableAddNewItem(true);
 
 			return;
 		}
@@ -328,7 +343,11 @@ export default function RepeaterControl(
 									<Button
 										size="extra-small"
 										className={controlInnerClassNames(
-											'btn-add'
+											'btn-add',
+											{
+												'is-deactivate':
+													disableAddNewItem,
+											}
 										)}
 										{...(maxItems !== -1 &&
 										Object.values(repeaterItems)?.length >=
@@ -393,7 +412,11 @@ export default function RepeaterControl(
 									<Button
 										size="extra-small"
 										className={controlInnerClassNames(
-											'btn-add'
+											'btn-add',
+											{
+												'is-deactivate':
+													disableAddNewItem,
+											}
 										)}
 										{...(maxItems !== -1 &&
 										repeaterItems?.length >= maxItems
@@ -419,7 +442,8 @@ export default function RepeaterControl(
 					</>
 				)}
 			</div>
-			{count >= 1 &&
+			{!disableAds &&
+				count >= 1 &&
 				isEnabledPromote(PromoComponent, repeaterItems) &&
 				PromoComponent({
 					isOpen: count >= 1,
