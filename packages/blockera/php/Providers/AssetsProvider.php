@@ -31,19 +31,22 @@ class AssetsProvider extends ServiceProvider {
 
 		$this->app->bind(
 			AssetsLoader::class,
-			function ( Application $app ) {
+			function ( Application $app, array $args = [] ) {
 
 				return new AssetsLoader(
 					$app,
-					blockera_core_config( 'assets.list' ),
-					[
-						'root'          => [
-							'url'  => blockera_core_config( 'app.root_url' ),
-							'path' => blockera_core_config( 'app.root_path' ),
+					$args['assets'],
+					array_merge(
+						[
+							'root'          => [
+								'url'  => blockera_core_config( 'app.root_url' ),
+								'path' => blockera_core_config( 'app.root_path' ),
+							],
+							'debug-mode'    => blockera_core_config( 'app.debug' ),
+							'packages-deps' => blockera_core_config( 'assets.with-deps' ),
 						],
-						'debug-mode'    => blockera_core_config( 'app.debug' ),
-						'packages-deps' => blockera_core_config( 'assets.with-deps' ),
-					]
+						$args['extra-args']
+					)
 				);
 			}
 		);
@@ -57,14 +60,25 @@ class AssetsProvider extends ServiceProvider {
 	 */
 	public function boot(): void {
 
-		$this->app->make( AssetsLoader::class );
+		$this->app->make(
+			AssetsLoader::class,
+			[
+				'assets'        => blockera_core_config( 'assets.editor.list' ),
+				'extra-args'    => [
+					'enqueue-block-assets' => true,
+				],
+				'packages-deps' => blockera_core_config( 'assets.editor.with-deps' ),
+			]
+		);
 
 		add_filter( 'blockera/wordpress/assets-loader/inline-script', [ $this, 'createInlineScript' ] );
 		add_filter( 'blockera/wordpress/assets-loader/handle/inline-script', [ $this, 'getHandler' ] );
+
+		add_action('admin_enqueue_scripts' , [$this, 'l10n']);
 	}
 
 	/**
-	 * Create inline script.
+	 * Create inline script for blockera editor handler.
 	 *
 	 * @param string $inline_script the previous inline script.
 	 *
@@ -100,4 +114,19 @@ class AssetsProvider extends ServiceProvider {
 		return $this->handler;
 	}
 
+	public function l10n(): void {
+
+		wp_add_inline_script(
+			'wp-blocks',
+			'if(window?.wp){
+					wp.hooks.addFilter(
+						"blockera.editor-extensions.hooks.withBlockSettings.disabledBlocks",
+						"blockera.unstableBootstrapServerSideApplyHooks",
+						() => {
+							return ' . wp_json_encode( get_option( 'blockera_settings' )['disabledBlocks'] ) . ';
+						}
+					); 
+				}'
+		);
+	}
 }
