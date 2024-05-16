@@ -20,7 +20,7 @@ import {
 } from '@blockera/controls';
 import { checkVisibleItemLength, hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/components';
+import { FeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies

@@ -12,7 +12,8 @@ import type { TTabProps } from './tabs-props';
 export type TTabPanelProps = {
 	tabs: Array<{
 		...TTabProps,
-		icon: Element<any>,
+		icon?: Element<any>,
+		settingSlug?: string,
 	}>,
 	children: (props: Object) => Element<any>,
 	className: string,

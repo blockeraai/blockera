@@ -9,7 +9,7 @@ import type { Element } from 'react';
 /**
  * Blockera dependencies
  */
-import { ColorIndicator } from '@blockera/components';
+import { ColorIndicator } from '@blockera/editor';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**

@@ -18,7 +18,8 @@ import {
 	LayoutMatrixControl,
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
-import { Flex, Button, FeatureWrapper } from '@blockera/components';
+import { Flex, Button } from '@blockera/components';
+import { FeatureWrapper } from '@blockera/editor';
 import { extensionClassNames } from '@blockera/classnames';
 
 /**
@@ -503,6 +504,9 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 															!values
 																.blockeraFlexWrap
 																.reverse,
+													},
+													{
+														ref: undefined,
 													}
 												);
 											}}

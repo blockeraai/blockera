@@ -16,7 +16,8 @@ import {
 	ToggleSelectControl,
 	BaseControl,
 } from '@blockera/controls';
-import { ConditionalWrapper, FeatureWrapper, Flex } from '@blockera/components';
+import { ConditionalWrapper, Flex } from '@blockera/components';
+import { FeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 

@@ -8,8 +8,8 @@ import { InputControl } from '@blockera/controls';
  * Internal dependencies
  */
 import { Wrapper } from '../components/wrapper';
-import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
-import Flex from '../../flex';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
+import { Flex } from '@blockera/components';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 

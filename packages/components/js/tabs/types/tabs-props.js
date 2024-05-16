@@ -5,8 +5,9 @@ export type TTabProps = {
 	name: string,
 	title: string,
 	tooltip?: string,
-	icon: MixedElement,
 	className: string,
+	icon?: MixedElement,
+	settingSlug?: string,
 };
 
 export type TTabsProps = {

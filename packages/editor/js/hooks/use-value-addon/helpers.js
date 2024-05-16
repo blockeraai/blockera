@@ -18,7 +18,6 @@ import {
 	getWidthSizes,
 	type VariableCategory,
 } from '@blockera/data';
-import { ColorIndicator } from '@blockera/components';
 import { isBlockTheme, isObject, isUndefined } from '@blockera/utils';
 import { NoticeControl } from '@blockera/controls';
 
@@ -33,6 +32,7 @@ import type {
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
 import VarTypeWidthSizeIcon from './icons/var-width-size';
+import { ColorIndicator } from '../../components/color-indicator';
 
 /**
  * Sets value addon.

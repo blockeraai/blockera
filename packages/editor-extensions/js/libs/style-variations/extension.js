@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/components';
+import { FeatureWrapper } from '@blockera/editor';
 import { useSelect } from '@wordpress/data';
 import { PanelBodyControl } from '@blockera/controls';
 

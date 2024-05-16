@@ -17,7 +17,7 @@ import {
 	InputControl,
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/components';
+import { FeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 
 /**

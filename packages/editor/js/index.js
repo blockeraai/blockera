@@ -15,6 +15,8 @@ import type { BreakpointTypes } from '@blockera/editor-extensions/js/libs/block-
  */
 import { STORE_NAME } from './store';
 
+export * from './components';
+
 export function unstableBootstrapServerSideBreakpointDefinitions(
 	definitions: Array<BreakpointTypes>
 ) {

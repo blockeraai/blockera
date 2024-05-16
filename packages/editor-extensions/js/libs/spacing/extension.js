@@ -9,7 +9,7 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Blockera dependencies
  */
-import { FeatureWrapper } from '@blockera/components';
+import { FeatureWrapper } from '@blockera/editor';
 import {
 	BaseControl,
 	PanelBodyControl,

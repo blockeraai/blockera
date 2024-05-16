@@ -11,12 +11,12 @@ import { memo, useEffect, useContext } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex, FeatureWrapper } from '@blockera/components';
+import { Flex } from '@blockera/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isValid as isValidVariable } from '@blockera/editor';
+import { isValid as isValidVariable, FeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -99,6 +99,7 @@ const Fields: FieldItem = memo<FieldItem>(
 					'mesh-gradient': generateGradient(length),
 				},
 			});
+			// eslint-disable-next-line
 		}, [item['mesh-gradient-colors']]);
 
 		return (

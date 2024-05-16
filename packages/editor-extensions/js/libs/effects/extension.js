@@ -16,7 +16,8 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { isInteger, hasSameProps } from '@blockera/utils';
-import { Button, FeatureWrapper } from '@blockera/components';
+import { Button } from '@blockera/components';
+import { FeatureWrapper } from '@blockera/editor';
 import {
 	controlInnerClassNames,
 	extensionClassNames,

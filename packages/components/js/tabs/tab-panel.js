@@ -90,9 +90,11 @@ export default function TabPanel({
 							alignItems={'center'}
 							gap={'5px'}
 						>
-							<div data-test={'blockera-tab-icon'}>
-								{tab.icon}
-							</div>
+							{tab?.icon && (
+								<div data-test={'blockera-tab-icon'}>
+									{tab.icon}
+								</div>
+							)}
 							{tab.title}
 						</Flex>
 					</Button>

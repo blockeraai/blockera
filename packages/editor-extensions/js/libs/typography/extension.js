@@ -20,7 +20,8 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 } from '@blockera/controls';
-import { FeatureWrapper, Flex, Grid, MoreFeatures } from '@blockera/components';
+import { Flex, Grid, MoreFeatures } from '@blockera/components';
+import { FeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 
