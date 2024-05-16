@@ -30,6 +30,8 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 
 		$configIncludes = array(
 			'app'         => $config_dir . '/config/app.php',
+			'menu'        => $config_dir . '/config/menu.php',
+			'panel'        => $config_dir . '/config/panel.php',
 			'assets'      => $config_dir . '/config/assets.php',
 			'entities'    => $config_dir . '/config/entities.php',
 			'breakpoints' => $config_dir . '/config/breakpoints.php',
