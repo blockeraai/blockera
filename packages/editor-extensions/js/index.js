@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -33,27 +35,29 @@ export { store } from './store';
 import bootstrapScripts from './scripts';
 export { isInnerBlock } from './components';
 
-domReady(() => {
-	if (window?.wp) {
-		window.blockera.coreData = {
-			select: select(store?.name),
-			unstableBootstrapServerSideEntities,
-			unstableBootstrapServerSideVariableDefinitions,
-		};
+export const defineGlobalProps = (): void => {
+	domReady(() => {
+		if (window?.wp) {
+			window.blockera.coreData = {
+				select: select(store?.name),
+				unstableBootstrapServerSideEntities,
+				unstableBootstrapServerSideVariableDefinitions,
+			};
 
-		window.blockera.editor = {
-			select: select(editorStore?.name),
-			unstableBootstrapServerSideBreakpointDefinitions,
-		};
+			window.blockera.editor = {
+				select: select(editorStore?.name),
+				unstableBootstrapServerSideBreakpointDefinitions,
+			};
 
-		registerCanvasEditorSettings({
-			zoom: '100%',
-			width: '100%',
-			height: '100%',
-			isOpenSettings: false,
-			isOpenOtherBreakpoints: false,
-		});
+			registerCanvasEditorSettings({
+				zoom: '100%',
+				width: '100%',
+				height: '100%',
+				isOpenSettings: false,
+				isOpenOtherBreakpoints: false,
+			});
 
-		bootstrapScripts(window.wp, window.React);
-	}
-});
+			bootstrapScripts(window.wp, window.React);
+		}
+	});
+};
