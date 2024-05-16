@@ -19,7 +19,9 @@ return apply_filters(
 			'url' => home_url(),
 		],
 		'blockera' => [
-			'name' => blockera_core_config( 'app.name' )
+			'settings' => get_option( 'blockera_settings' ),
+			'name'     => blockera_core_config( 'app.name' ),
+			'version'  => blockera_core_config( 'app.version' ),
 		],
 	]
 );

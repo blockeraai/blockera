@@ -20,9 +20,11 @@ return [
 	],
 	'debug'         => defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ? BLOCKERA_APP_MODE : ( $env_mode || $wp_debug ),
 	'providers'     => [
+		\Blockera\Admin\Providers\AdminProvider::class,
 		\Blockera\Setup\Providers\AssetsProvider::class,
 		\Blockera\Setup\Providers\RestAPIProvider::class,
 		\Blockera\Setup\Providers\AppServiceProvider::class,
+		\Blockera\Admin\Providers\AdminAssetsProvider::class,
 		\Blockera\StyleEngine\Providers\StyleProviders::class,
 	],
 ];
