@@ -10,6 +10,7 @@ export {
 	getIconLibrarySearchData,
 	iconSearch,
 } from './icons';
+export { Switch } from './switch';
 export { default as Flex } from './flex';
 export { PromotionPopover } from './promotion-popover';
 export { default as Tabs } from './tabs';
