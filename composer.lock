@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f2e160d4d8d3d135e3b92476e923f52",
+    "content-hash": "72961aa2db21529f8459fe36863a5c87",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -24,6 +24,28 @@
                 ]
             },
             "description": "The bootstrapper for blockera php application for WordPress in admin and front-end sides.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/blockera-admin",
+            "version": "dev-feat/control/input-control",
+            "dist": {
+                "type": "path",
+                "url": "packages/blockera-admin",
+                "reference": "38d3cdd6861ad765c61bed4eb752de2419f859c6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Admin\\": "php/"
+                },
+                "files": [
+                    "./php/functions.php"
+                ]
+            },
+            "description": "The blockera admin menus on WordPress admin dashboard.",
             "transport-options": {
                 "relative": true
             }
@@ -543,215 +565,6 @@
             "time": "2017-10-23T01:57:42+00:00"
         },
         {
-            "name": "symfony/css-selector",
-            "version": "5.4.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/css-selector.git",
-                "reference": "0934c9f1d433776f25c629bdc93f3e157d139e08"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/0934c9f1d433776f25c629bdc93f3e157d139e08",
-                "reference": "0934c9f1d433776f25c629bdc93f3e157d139e08",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "symfony/polyfill-php80": "^1.16"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\CssSelector\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Jean-François Simon",
-                    "email": "jeanfrancois.simon@sensiolabs.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Converts CSS selectors to XPath expressions",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/css-selector/tree/5.4"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-04-18T08:26:06+00:00"
-        },
-        {
-            "name": "symfony/deprecation-contracts",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1",
-                "reference": "0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "function.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "A generic function and convention to trigger deprecation notices",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-04-18T09:32:20+00:00"
-        },
-        {
-            "name": "symfony/dom-crawler",
-            "version": "5.4.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "1dffb111b038412b028caba029240e379fda85b2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/1dffb111b038412b028caba029240e379fda85b2",
-                "reference": "1dffb111b038412b028caba029240e379fda85b2",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "symfony/deprecation-contracts": "^2.1|^3",
-                "symfony/polyfill-ctype": "~1.8",
-                "symfony/polyfill-mbstring": "~1.0",
-                "symfony/polyfill-php80": "^1.16"
-            },
-            "conflict": {
-                "masterminds/html5": "<2.6"
-            },
-            "require-dev": {
-                "masterminds/html5": "^2.6",
-                "symfony/css-selector": "^4.4|^5.0|^6.0"
-            },
-            "suggest": {
-                "symfony/css-selector": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\DomCrawler\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Eases DOM navigation for HTML and XML documents",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/dom-crawler/tree/5.4"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-04-18T08:26:06+00:00"
-        },
-        {
             "name": "symfony/polyfill-ctype",
             "version": "1.x-dev",
             "source": {
@@ -1077,88 +890,6 @@
                 }
             ],
             "time": "2023-11-12T22:52:03+00:00"
-        },
-        {
-            "name": "voku/simple_html_dom",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/voku/simple_html_dom.git",
-                "reference": "e2ced0848fd3268465a924a3aa26a69bc1cf2ef1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/voku/simple_html_dom/zipball/e2ced0848fd3268465a924a3aa26a69bc1cf2ef1",
-                "reference": "e2ced0848fd3268465a924a3aa26a69bc1cf2ef1",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-libxml": "*",
-                "ext-simplexml": "*",
-                "php": ">=7.0.0",
-                "symfony/css-selector": "~3.0 || ~4.0 || ~5.0 || ~6.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0"
-            },
-            "suggest": {
-                "voku/portable-utf8": "If you need e.g. UTF-8 fixed output."
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "voku\\helper\\": "src/voku/helper/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "dimabdc",
-                    "email": "support@titor.ru",
-                    "homepage": "https://github.com/dimabdc",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Lars Moelleken",
-                    "homepage": "https://www.moelleken.org/",
-                    "role": "Fork-Maintainer"
-                }
-            ],
-            "description": "Simple HTML DOM package.",
-            "homepage": "https://github.com/voku/simple_html_dom",
-            "keywords": [
-                "HTML Parser",
-                "dom",
-                "php dom"
-            ],
-            "support": {
-                "issues": "https://github.com/voku/simple_html_dom/issues",
-                "source": "https://github.com/voku/simple_html_dom/tree/master"
-            },
-            "funding": [
-                {
-                    "url": "https://www.paypal.me/moelleken",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/voku",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/voku",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/voku/simple_html_dom",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-09-04T15:55:24+00:00"
         }
     ],
     "packages-dev": [
@@ -1319,12 +1050,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "829e0e767ffc4533904612668ea9479dba8f3997"
+                "reference": "ede152bd65a7425774306b4fff058030427f5b73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/829e0e767ffc4533904612668ea9479dba8f3997",
-                "reference": "829e0e767ffc4533904612668ea9479dba8f3997",
+                "url": "https://api.github.com/repos/composer/composer/zipball/ede152bd65a7425774306b4fff058030427f5b73",
+                "reference": "ede152bd65a7425774306b4fff058030427f5b73",
                 "shasum": ""
             },
             "require": {
@@ -1426,7 +1157,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-08T12:27:20+00:00"
+            "time": "2024-05-12T20:55:40+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -3212,12 +2943,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "bbcbb0823b0e06be56e6b180faa0df1f3b3e2733"
+                "reference": "2a9828526fa4a3631e5a99012ef78f32a21804c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/bbcbb0823b0e06be56e6b180faa0df1f3b3e2733",
-                "reference": "bbcbb0823b0e06be56e6b180faa0df1f3b3e2733",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2a9828526fa4a3631e5a99012ef78f32a21804c8",
+                "reference": "2a9828526fa4a3631e5a99012ef78f32a21804c8",
                 "shasum": ""
             },
             "require": {
@@ -3307,7 +3038,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-30T05:22:06+00:00"
+            "time": "2024-05-11T05:25:28+00:00"
         },
         {
             "name": "psr/log",
@@ -3366,12 +3097,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "e563d55d1641de1dea9f5e84f3cccc66d2bfe02c"
+                "reference": "9dcf6c6c2d9058a14ea9a95a024576ddb1545757"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/e563d55d1641de1dea9f5e84f3cccc66d2bfe02c",
-                "reference": "e563d55d1641de1dea9f5e84f3cccc66d2bfe02c",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/9dcf6c6c2d9058a14ea9a95a024576ddb1545757",
+                "reference": "9dcf6c6c2d9058a14ea9a95a024576ddb1545757",
                 "shasum": ""
             },
             "require": {
@@ -3424,7 +3155,7 @@
             ],
             "support": {
                 "issues": "https://github.com/reactphp/promise/issues",
-                "source": "https://github.com/reactphp/promise/tree/v3.1.0"
+                "source": "https://github.com/reactphp/promise/tree/3.x"
             },
             "funding": [
                 {
@@ -3432,7 +3163,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-11-16T16:21:57+00:00"
+            "time": "2024-05-15T05:35:15+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -4578,12 +4309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "4fd52f75c8f29114423e9a379bf86fa894750bc3"
+                "reference": "746ce571971c232917fabb3ed5597b4d440a543f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/4fd52f75c8f29114423e9a379bf86fa894750bc3",
-                "reference": "4fd52f75c8f29114423e9a379bf86fa894750bc3",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/746ce571971c232917fabb3ed5597b4d440a543f",
+                "reference": "746ce571971c232917fabb3ed5597b4d440a543f",
                 "shasum": ""
             },
             "require": {
@@ -4651,7 +4382,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-05-06T04:13:19+00:00"
+            "time": "2024-05-15T10:47:43+00:00"
         },
         {
             "name": "symfony/console",
@@ -4746,6 +4477,215 @@
                 }
             ],
             "time": "2024-04-18T09:22:46+00:00"
+        },
+        {
+            "name": "symfony/css-selector",
+            "version": "5.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/css-selector.git",
+                "reference": "0934c9f1d433776f25c629bdc93f3e157d139e08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/0934c9f1d433776f25c629bdc93f3e157d139e08",
+                "reference": "0934c9f1d433776f25c629bdc93f3e157d139e08",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/polyfill-php80": "^1.16"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\CssSelector\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Jean-François Simon",
+                    "email": "jeanfrancois.simon@sensiolabs.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Converts CSS selectors to XPath expressions",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/css-selector/tree/5.4"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-04-18T08:26:06+00:00"
+        },
+        {
+            "name": "symfony/deprecation-contracts",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/deprecation-contracts.git",
+                "reference": "0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1",
+                "reference": "0e0d29ce1f20deffb4ab1b016a7257c4f1e789a1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.5-dev"
+                },
+                "thanks": {
+                    "name": "symfony/contracts",
+                    "url": "https://github.com/symfony/contracts"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "function.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "A generic function and convention to trigger deprecation notices",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-04-18T09:32:20+00:00"
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "5.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "1dffb111b038412b028caba029240e379fda85b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/1dffb111b038412b028caba029240e379fda85b2",
+                "reference": "1dffb111b038412b028caba029240e379fda85b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/deprecation-contracts": "^2.1|^3",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.0",
+                "symfony/polyfill-php80": "^1.16"
+            },
+            "conflict": {
+                "masterminds/html5": "<2.6"
+            },
+            "require-dev": {
+                "masterminds/html5": "^2.6",
+                "symfony/css-selector": "^4.4|^5.0|^6.0"
+            },
+            "suggest": {
+                "symfony/css-selector": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Eases DOM navigation for HTML and XML documents",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/dom-crawler/tree/5.4"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-04-18T08:26:06+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -5198,12 +5138,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "cdb1c81c145fd5aa9b0038bab694035020943381"
+                "reference": "1393de6f0688c254d8e3bc4933670a6700c2c64b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/cdb1c81c145fd5aa9b0038bab694035020943381",
-                "reference": "cdb1c81c145fd5aa9b0038bab694035020943381",
+                "url": "https://api.github.com/repos/symfony/process/zipball/1393de6f0688c254d8e3bc4933670a6700c2c64b",
+                "reference": "1393de6f0688c254d8e3bc4933670a6700c2c64b",
                 "shasum": ""
             },
             "require": {
@@ -5251,7 +5191,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-18T09:22:46+00:00"
+            "time": "2024-05-07T17:49:07+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -5429,12 +5369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "1987f86ad7f339fe3d3e8e6cf3b7ce4d4b8e547e"
+                "reference": "b4d9d298f0f19a7fb75f3cc3031423f88114d597"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/1987f86ad7f339fe3d3e8e6cf3b7ce4d4b8e547e",
-                "reference": "1987f86ad7f339fe3d3e8e6cf3b7ce4d4b8e547e",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/b4d9d298f0f19a7fb75f3cc3031423f88114d597",
+                "reference": "b4d9d298f0f19a7fb75f3cc3031423f88114d597",
                 "shasum": ""
             },
             "require": {
@@ -5510,7 +5450,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-18T08:26:06+00:00"
+            "time": "2024-05-06T08:57:45+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -5561,6 +5501,88 @@
                 }
             ],
             "time": "2024-03-03T12:36:25+00:00"
+        },
+        {
+            "name": "voku/simple_html_dom",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voku/simple_html_dom.git",
+                "reference": "e2ced0848fd3268465a924a3aa26a69bc1cf2ef1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voku/simple_html_dom/zipball/e2ced0848fd3268465a924a3aa26a69bc1cf2ef1",
+                "reference": "e2ced0848fd3268465a924a3aa26a69bc1cf2ef1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "php": ">=7.0.0",
+                "symfony/css-selector": "~3.0 || ~4.0 || ~5.0 || ~6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0"
+            },
+            "suggest": {
+                "voku/portable-utf8": "If you need e.g. UTF-8 fixed output."
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "voku\\helper\\": "src/voku/helper/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "dimabdc",
+                    "email": "support@titor.ru",
+                    "homepage": "https://github.com/dimabdc",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Lars Moelleken",
+                    "homepage": "https://www.moelleken.org/",
+                    "role": "Fork-Maintainer"
+                }
+            ],
+            "description": "Simple HTML DOM package.",
+            "homepage": "https://github.com/voku/simple_html_dom",
+            "keywords": [
+                "HTML Parser",
+                "dom",
+                "php dom"
+            ],
+            "support": {
+                "issues": "https://github.com/voku/simple_html_dom/issues",
+                "source": "https://github.com/voku/simple_html_dom/tree/master"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/moelleken",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/voku",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/voku",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/voku/simple_html_dom",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-09-04T15:55:24+00:00"
         },
         {
             "name": "wp-cli/cache-command",
@@ -6524,12 +6546,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/i18n-command.git",
-                "reference": "aa8338b1a4e25fb43fb7affbc4d413d5ed77393f"
+                "reference": "6d58aa50259d29d1b13c64a7dd86c2a13c866853"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/aa8338b1a4e25fb43fb7affbc4d413d5ed77393f",
-                "reference": "aa8338b1a4e25fb43fb7affbc4d413d5ed77393f",
+                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/6d58aa50259d29d1b13c64a7dd86c2a13c866853",
+                "reference": "6d58aa50259d29d1b13c64a7dd86c2a13c866853",
                 "shasum": ""
             },
             "require": {
@@ -6586,7 +6608,7 @@
                 "issues": "https://github.com/wp-cli/i18n-command/issues",
                 "source": "https://github.com/wp-cli/i18n-command/tree/main"
             },
-            "time": "2024-04-26T11:34:29+00:00"
+            "time": "2024-05-14T10:32:01+00:00"
         },
         {
             "name": "wp-cli/import-command",
@@ -7893,10 +7915,10 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "vlucas/phpdotenv": 20,
+        "illuminate/container": 20,
         "symfony/dom-crawler": 20,
         "symfony/css-selector": 20,
         "voku/simple_html_dom": 20,
-        "illuminate/container": 20,
         "wp-phpunit/wp-phpunit": 20,
         "yoast/phpunit-polyfills": 20,
         "symfony/var-dumper": 20

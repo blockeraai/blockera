@@ -27,6 +27,7 @@
 	},
 	"dependencies": {
 		"@blockera/blockera": "file:packages/blockera",
+		"@blockera/blockera-admin": "file:packages/blockera-admin",
 		"@blockera/blocks": "file:packages/blocks",
 		"@blockera/bootstrap": "file:packages/bootstrap",
 		"@blockera/classnames": "file:packages/classnames",
@@ -38,8 +39,10 @@
 		"@blockera/editor-extensions": "file:packages/editor-extensions",
 		"@blockera/style-engine": "file:packages/style-engine",
 		"@blockera/utils": "file:packages/utils",
+		"@blockera/wordpress": "file:packages/wordpress",
 		"@monaco-editor/react": "^4.6.0",
-		"fast-memoize": "^2.5.2"
+		"fast-memoize": "^2.5.2",
+		"react-toastify": "^10.0.5"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.9",

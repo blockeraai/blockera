@@ -10,6 +10,10 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/blockera-admin"
+		},
+		{
+			"type": "path",
 			"url": "packages/bootstrap"
 		},
 		{
@@ -41,8 +45,8 @@
 			"url": "packages/http"
 		},
 		{
-			"type" : "path",
-			"url" : "packages/blocks"
+			"type": "path",
+			"url": "packages/blocks"
 		}
 	],
 	"autoload-dev": {
@@ -59,6 +63,7 @@
 	"require": {
 		"php": ">=8.1",
 		"blockera/blockera": "*",
+		"blockera/blockera-admin": "*",
 		"blockera/blocks": "*",
 		"blockera/bootstrap": "*",
 		"blockera/utils": "*",
