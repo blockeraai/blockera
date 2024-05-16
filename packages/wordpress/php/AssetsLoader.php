@@ -66,12 +66,22 @@ class AssetsLoader {
 		$this->assets         = $assets;
 		$this->is_development = $args['debug-mode'] ?? false;
 		$this->packages_deps  = $args['packages-deps'] ?? [];
-		$this->root_info      = $args['root'] ?? [ 'path' => '', 'url' => '' ];
+		$this->root_info      = $args['root'] ?? [
+			'path' => '',
+			'url'  => '',
+		];
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'registerAssets' ), 10 );
-		add_action( 'enqueue_block_editor_assets', array( $this, 'registerAssets' ), 10 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'registerAssets' ), 10 );
 
-		add_action( 'enqueue_block_assets', [ $this, 'enqueue_editor_assets' ] );
+		if ( ! empty( $args['enqueue-block-assets'] ) ) {
+
+			add_action( 'enqueue_block_assets', [ $this, 'enqueue' ] );
+		}
+
+		if ( ! empty( $args['enqueue-admin-assets'] ) ) {
+
+			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
+		}
 	}
 
 	/**
@@ -79,7 +89,7 @@ class AssetsLoader {
 	 *
 	 * @return void
 	 */
-	public function enqueue_editor_assets(): void {
+	public function enqueue(): void {
 
 		if ( ! is_admin() ) {
 
