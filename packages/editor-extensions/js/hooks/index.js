@@ -2,7 +2,7 @@
 /**
  * WordPress dependencies
  */
-import { addFilter } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -27,10 +27,16 @@ export default function applyHooks() {
 	reregistrationBlocks();
 	registerThirdPartyExtensionDefinitions();
 
+	const unsupportedBlocks = applyFilters(
+		'blockera.editor-extensions.hooks.withBlockSettings.disabledBlocks',
+		[]
+	);
+
 	addFilter(
 		'blocks.registerBlockType',
 		'blockera/core/extensions/withAdvancedControlsAttributes',
-		withBlockSettings
+		(settings: Object, name: Object): Object =>
+			withBlockSettings(settings, name, unsupportedBlocks)
 	);
 }
 export { default as withBlockSettings } from './block-settings';

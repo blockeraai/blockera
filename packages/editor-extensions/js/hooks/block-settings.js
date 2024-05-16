@@ -66,11 +66,13 @@ const EdiBlockWithoutExtensions = ({
  *
  * @param {Object} settings Original block settings.
  * @param {string} name block id or name.
+ * @param {Array<string>} unsupportedBlocks the list of disabled blocks on blockera block-manager panel.
  * @return {Object} Filtered block settings.
  */
 export default function withBlockSettings(
 	settings: Object,
-	name: Object
+	name: Object,
+	unsupportedBlocks: Array<string>
 ): Object {
 	const {
 		// getBlockExtension,
@@ -80,7 +82,11 @@ export default function withBlockSettings(
 	// const sharedExtension = getBlockExtension('Shared');
 	const blockExtension = getBlockExtensionBy('targetBlock', name);
 
-	if (blockExtension && isBlockTypeExtension(blockExtension)) {
+	if (
+		blockExtension &&
+		isBlockTypeExtension(blockExtension) &&
+		!unsupportedBlocks.includes(name)
+	) {
 		// mergeObject(sharedExtension, blockExtension)
 		return mergeBlockSettings(settings, blockExtension);
 	}
