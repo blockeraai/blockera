@@ -22,7 +22,7 @@ use Blockera\Bootstrap\ServiceProvider;
 /**
  * The StyleProviders class.
  *
- * @package Blockera\Framework\Providers\StyleProviders
+ * @package Blockera\StyleEngine\Providers\StyleProviders
  */
 class StyleProviders extends ServiceProvider {
 
