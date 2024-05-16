@@ -49,6 +49,22 @@ module.exports = (env, argv) => {
 					export: undefined,
 				},
 			},
+			wordpress: {
+				import: './packages/wordpress',
+				library: {
+					name: 'blockeraWP',
+					type: 'var',
+					export: undefined,
+				},
+			},
+			'blockera-admin': {
+				import: './packages/blockera-admin',
+				library: {
+					name: 'blockeraAdmin',
+					type: 'var',
+					export: undefined,
+				},
+			},
 			...styleDependencies.entry,
 		},
 		output: {
