@@ -78,7 +78,7 @@ const memoizedIsEquals: (a: any, b: any) => boolean = memoize(
 
 				if (
 					(areObjects && !isEquals(val1, val2)) ||
-					(!areObjects && val1 !== val2)
+					(!areObjects && !isEquals(val1, val2))
 				) {
 					return false;
 				}
@@ -103,4 +103,51 @@ export const indexOf = (arr: Array<any>, q: string): number => {
 
 export const arrayDiff = (arr1: Array<any>, arr2: Array<any>): Array<any> => {
 	return arr1.filter((element) => !arr2.includes(element));
+};
+
+/**
+ * Get differences between recieved array.
+ *
+ * @param {Array<any>} array the target array.
+ * @param {Array<Array<any>>} values the other arrays.
+ * @return {*[]} the difference array.
+ */
+export const difference = (
+	array: Array<any>,
+	...values: Array<Array<any>>
+): Array<any> => {
+	const set = new Set(values.flat());
+
+	return array.filter((item) => !set.has(item));
+};
+
+/**
+ * Get array unique items.
+ *
+ * @param {Array<any>} array the target array.
+ * @param {Array<Array<any>>} values the other arrays.
+ *
+ * @return {*[]} the array with unique items.
+ */
+export const union = (
+	array: Array<any>,
+	...values: Array<Array<any>>
+): Array<any> => {
+	const set = new Set(values.flat());
+
+	return [...new Set([...array, ...set])];
+};
+
+/**
+ * Get result array without recieved values to remove of target.
+ *
+ * @param {Array<any>} array the target array.
+ * @param {Array<Array<any>>} valuesToRemove the values arrays to remove.
+ * @return {Array<any>} the array without valuesToRemove.
+ */
+export const without = (
+	array: Array<any>,
+	...valuesToRemove: Array<Array<any>>
+): Array<any> => {
+	return array.filter((item) => !valuesToRemove.flat().includes(item));
 };

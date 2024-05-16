@@ -55,4 +55,17 @@ describe('Array Utils', function () {
 	it('should retrieve differences between two recieved array', () => {
 		expect(arrayDiff(['normal', 'hover'], ['normal'])).toEqual(['hover']);
 	});
+
+	it.only('should equals same object', () => {
+		expect(
+			isEquals(
+				{
+					disabledBlocks: [],
+				},
+				{
+					disabledBlocks: [],
+				}
+			)
+		).toBeTruthy();
+	});
 });
