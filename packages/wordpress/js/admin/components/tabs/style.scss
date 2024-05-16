@@ -1,0 +1,52 @@
+.blockera-settings-tabs {
+	margin-bottom: 30px;
+
+	.blockera-settings-panel {
+		resize: horizontal;
+		gap: 50px;
+	}
+
+	> div[role="tablist"] {
+		background-color: #ffffff;
+		margin: 10px 0 30px 0;
+		padding: 0 20px;
+		border-radius: 5px;
+
+		> button {
+			width: auto;
+			border: none;
+			height: 55px;
+			cursor: pointer;
+			font-weight: 600;
+			line-height: 55px;
+			margin-right: 20px;
+			transition: all 0.1s;
+			background-color: transparent;
+			display: inline-block !important;
+		}
+
+		> button.is-active {
+			color: var(--blockera-settings-primary-color);
+			border-bottom: solid 2px var(--blockera-settings-primary-color);
+		}
+
+		> button:hover {
+			color: var(--blockera-settings-primary-color);
+			border-bottom: solid 2px var(--blockera-settings-primary-color);
+		}
+	}
+
+	.blockera-settings-sidebar-wrapper {
+		flex: auto;
+		width: 20%;
+		min-width: 0;
+		align-self: flex-start;
+	}
+
+	.blockera-settings-panel-desc {
+		font-size: 15px;
+		line-height: 2;
+		font-weight: 400;
+		color: #626262;
+	}
+}

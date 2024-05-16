@@ -1,0 +1,40 @@
+@import "./components/style.scss";
+
+:root {
+	--blockera-settings-primary-color: #2271b1;
+	--blockera-settings-secondary-color: #ffffff;
+	--blockera-settings-border-color-parimary: #e0e0e0;
+}
+
+.blockera-settings-button {
+	border: none;
+	padding: 10px;
+	cursor: pointer;
+	border-radius: 5px;
+	transition: all 0.1s;
+}
+
+.blockera-settings-secondary-button {
+	border: solid 1px var(--blockera-settings-primary-color);
+	color: var(--blockera-settings-primary-color);
+	background-color: var(--blockera-settings-secondary-color);
+}
+
+.blockera-settings-secondary-button:hover {
+	border: solid 1px var(--blockera-settings-secondary-color);
+	color: var(--blockera-settings-secondary-color);
+	background-color: var(--blockera-settings-primary-color);
+}
+
+.blockera-settings-primary-button {
+	color: #ffffff;
+	background-color: var(--blockera-settings-primary-color);
+}
+
+.blockera-settings-primary-button:hover {
+	background-color: rgba(34, 113, 177, 0.82);
+}
+
+.blockera-disable-first-item .wp-first-item{
+	display: none;
+}

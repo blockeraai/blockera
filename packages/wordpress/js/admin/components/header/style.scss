@@ -1,0 +1,21 @@
+.blockera-settings-header {
+	height: 150px;
+	padding: 0 40px;
+	margin-top: 20px;
+	line-height: 120px;
+	border-radius: 10px;
+	box-sizing: border-box;
+	background-color: #ffffff;
+	border-top: 3px solid var(--blockera-settings-primary-color);
+
+	.blockera-settings-heading {
+		font-size: 18px;
+		font-weight: 600;
+		
+		.blockera-settings-header-version {
+			font-size: 12px;
+			margin-left: 10px;
+			color: rgba(0, 0, 0, 0.15);
+		}
+	}
+}
