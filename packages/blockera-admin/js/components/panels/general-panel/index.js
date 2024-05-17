@@ -76,7 +76,7 @@ export const GeneralPanel = ({
 							value={generalSettings.disableAds}
 							onChange={(checked: boolean) => {
 								setHasUpdates(
-									generalSettings.disableAds !== checked
+									defaultValue.disableAds !== checked
 								);
 
 								setGeneralSettings({

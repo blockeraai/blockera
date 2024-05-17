@@ -140,7 +140,9 @@ export const Update = ({
 			{!isEquals(defaultSettings, settings) && (
 				<Reset
 					slug={slug}
-					hasUpdate={hasUpdate}
+					hasUpdate={
+						!isEquals(slugSettings, defaultValue) && hasUpdate
+					}
 					defaultValue={defaultValue}
 					onReset={(_hasUpdate: boolean): void => {
 						outSideOnUpdate(!_hasUpdate);
@@ -163,7 +165,8 @@ export const Update = ({
 				className={classnames(
 					'blockera-settings-button blockera-settings-primary-button',
 					{
-						'blockera-settings-has-update': hasUpdate,
+						'blockera-settings-has-update':
+							!isEquals(slugSettings, defaultValue) && hasUpdate,
 					}
 				)}
 				text={updateButtonStatus.label}
