@@ -23,6 +23,7 @@ import {
  * Internal dependencies
  */
 import { Panel } from './panel';
+import { PanelLogoIcon } from './icons/panel-logo-icon';
 
 const getCurrentPage = (): string => {
 	const location = window.location;
@@ -54,31 +55,25 @@ export const Dashboard = (): MixedElement => {
 				}}
 			>
 				<Promote
-					url={'https://blockera.ai/shop'}
+					url={'https://blockera.ai/upgrade-to-pro/'}
 					description={__(
-						"You're using Blockera Free. to unlock more features, consider ",
+						"You're using Blockera Free. To unlock more features, consider ",
 						'blockera'
 					)}
 				/>
 
 				<Header
-					icon={'blockera'}
+					icon={<PanelLogoIcon />}
 					version={`v${blockeraVersion}`}
 					name={__('Blockera', 'blockera')}
 				>
 					<div className={'blockera-settings-header-links'}>
 						<Button
 							className={
-								'blockera-settings-button blockera-settings-knowledge-button'
-							}
-							text={__('Knowledge Base', 'blockera')}
-							icon={'home'}
-						/>
-						<Button
-							className={
 								'blockera-settings-button blockera-settings-primary-button'
 							}
 							text={__('Upgrade to PRO', 'blockera')}
+							href={'https://blockera.ai/upgrade-to-pro/'}
 						/>
 					</div>
 				</Header>

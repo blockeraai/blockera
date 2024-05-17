@@ -3,15 +3,12 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { __experimentalHStack as Hstack } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
-import Button from '@blockera/components/js/button/button';
-import { BlockeraIcon } from '@blockera/components/js/icons/library-blockera/icon';
 
 import type { HeaderProps } from '../';
 
@@ -27,15 +24,10 @@ export const Header = ({
 			justifyContent={'space-between'}
 		>
 			<h1 className={'blockera-settings-heading'}>
-				<BlockeraIcon
-					icon={icon}
-					style={{
-						top: '5px',
-						position: 'relative',
-						marginRight: '20px',
-					}}
-				/>
+				{icon}
+
 				{name}
+
 				<span className={'blockera-settings-header-version'}>
 					{version}
 				</span>
