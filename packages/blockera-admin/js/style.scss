@@ -12,7 +12,6 @@
 
 			.blockera-settings-knowledge-button {
 				margin-right: 10px;
-				border-radius: 5px;
 				background-color: #ffffff;
 				border: solid 1px var(--blockera-settings-border-color-parimary);
 			}
@@ -36,6 +35,10 @@
 					.section-title {
 						margin: 0 0 20px 0;
 						padding: 0;
+					}
+
+					.section-desc {
+						margin: -10px 0 20px 0;
 					}
 				}
 
@@ -78,18 +81,19 @@
 
 					.blockera-block-category-item {
 						flex: auto;
-						width: 46%;
+						width: 40%;
 						min-width: 0;
-						padding: 12px 8px;
-						border-radius: 5px;
+						padding: 12px 13px;
 						background-color: #ffffff;
 
 						.blockera-block {
 							display: flex;
-							gap: 5px;
+							gap: 10px;
+							align-items: center;
+							justify-content: center;
 
 							.blockera-block-icon {
-								align-self: flex-start;
+								display: flex;
 
 								svg {
 									width: 22px;
@@ -99,8 +103,12 @@
 
 							.blockera-block-type {
 								margin: 0;
-								align-self: flex-start;
+								display: flex;
 							}
+						}
+
+						.blockera-block-control {
+							display: flex;
 						}
 					}
 				}

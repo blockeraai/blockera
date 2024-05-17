@@ -10,7 +10,6 @@
 	border: none;
 	padding: 10px;
 	cursor: pointer;
-	border-radius: 5px;
 	transition: all 0.1s;
 }
 
@@ -32,6 +31,7 @@
 }
 
 .blockera-settings-primary-button:hover {
+	color: #ffffff !important;
 	background-color: rgba(34, 113, 177, 0.82);
 }
 
