@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Blockera
- * Plugin URI: https://blockera.ai
+ * Plugin URI: https://blockera.ai/blockera-page-builder/
  * Description: Make Gutenberg a Real Page Builder!
  * Requires at least: 6.5.2
- * Requires PHP:      7.4
+ * Requires PHP: 7.4
  * Author: Blockera AI
- * Author URI: https://blockera.ai
  * Version: 1.0.1
+ * Author URI: https://blockera.ai/about-us/
  * Text Domain: blockera
  * License: GPLv3 or later
  *
