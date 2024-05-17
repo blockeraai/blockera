@@ -37,6 +37,10 @@ export const PromotionPopover = ({
 		__('Advanced features', 'blockera'),
 		__('Premium blocks', 'blockera'),
 	],
+	disableHintsText = __(
+		'You can disable Pro hints in settings panel.',
+		'blockera'
+	),
 	onClose,
 	buttonURL = 'https://blockera.ai/upgrade-to-pro/',
 	buttonText = __('Upgrade to PRO', 'blockera'),
@@ -49,6 +53,7 @@ export const PromotionPopover = ({
 	icon?: string | MixedElement,
 	heading?: string,
 	description?: string | MixedElement,
+	disableHintsText?: string | MixedElement,
 	featuresList?: Array<string>,
 	onClose: () => void,
 	buttonURL?: string,
@@ -142,6 +147,16 @@ export const PromotionPopover = ({
 					>
 						{buttonText}
 					</a>
+				)}
+
+				{disableHintsText && (
+					<div
+						className={componentInnerClassNames(
+							'promotion-popover__description disable-pro-hints'
+						)}
+					>
+						{disableHintsText}
+					</div>
 				)}
 			</Flex>
 		</Popover>
