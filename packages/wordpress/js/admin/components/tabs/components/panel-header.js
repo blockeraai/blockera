@@ -36,6 +36,7 @@ export const PanelHeader = ({
 				<h3 className={'blockera-settings-panel panel-title'}>
 					{tab.title}
 				</h3>
+
 				<Update
 					onUpdate={onUpdate}
 					hasUpdate={hasUpdate}
@@ -44,7 +45,7 @@ export const PanelHeader = ({
 					defaultValue={defaultValue}
 				/>
 			</HStack>
-			<p className={'blockera-settings-panel-desc'}>{description}</p>
+			<div className={'blockera-settings-panel-desc'}>{description}</div>
 		</VStack>
 	);
 };

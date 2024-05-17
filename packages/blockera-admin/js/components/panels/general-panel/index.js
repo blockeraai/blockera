@@ -28,8 +28,10 @@ export const GeneralPanel = ({
 	setSettings,
 }: TabsComponentsProps): MixedElement => {
 	const savedGeneralSettings = settings?.general || defaultValue;
+
 	const [generalSettings, setGeneralSettings] =
 		useState(savedGeneralSettings);
+
 	const [hasUpdate, setHasUpdates] = useState(false);
 
 	useEffect(() => {
@@ -58,17 +60,20 @@ export const GeneralPanel = ({
 				}}
 				description={description}
 			/>
+
 			<VStack className={'blockera-settings-panel-container'}>
 				<VStack className={'blockera-settings-general section'}>
 					<h3 className={'blockera-settings-general section-title'}>
-						{__('Other Settings', 'blockera')}
+						⚙️ {__('Other Settings', 'blockera')}
 					</h3>
+
 					<p className={'blockera-settings-general section-desc'}>
 						{__(
-							'Discover advanced settings for fine-tuning website with ease.',
+							'Discover advanced settings for fine-tuning your website with ease.',
 							'blockera'
 						)}
 					</p>
+
 					<div
 						className={'blockera-settings-general control-wrapper'}
 					>
@@ -86,13 +91,14 @@ export const GeneralPanel = ({
 								});
 							}}
 						/>
+
 						<strong
 							className={
 								'blockera-settings-general control-label'
 							}
 						>
 							{__(
-								'Opt out of PRO version hints and promotions',
+								'Opt out of Pro version hints and promotions',
 								'blockera'
 							)}
 						</strong>
