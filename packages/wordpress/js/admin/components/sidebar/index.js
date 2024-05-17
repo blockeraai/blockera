@@ -13,7 +13,8 @@ import type { SidebarProps } from './types';
 export const Sidebar = ({ title, children }: SidebarProps): MixedElement => {
 	return (
 		<div className={'blockera-settings-sidebar'}>
-			{title}
+			<h4>{title}</h4>
+
 			{children}
 		</div>
 	);
