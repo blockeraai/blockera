@@ -5,37 +5,25 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { memo, useState, useEffect } from '@wordpress/element';
+import { memo, useContext } from '@wordpress/element';
 import { __experimentalVStack as VStack } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
+import { SettingsContext, TabsContext } from '@blockera/wordpress';
 import { difference, union, without, isEquals } from '@blockera/utils';
-import { type TabsComponentsProps, PanelHeader } from '@blockera/wordpress';
 
 /**
  * Internal dependencies
  */
 import BlockCategory from './block-category';
 
-export const BlockManagerPanel = ({
-	tab,
-	settings,
-	description,
-	setSettings,
-}: TabsComponentsProps): MixedElement => {
-	const savedDisabledBlocks = settings?.disabledBlocks || [];
-	const [disabledBlocks, setDisabledBlocks] = useState(savedDisabledBlocks);
-
-	useEffect(() => {
-		if (isEquals(savedDisabledBlocks, disabledBlocks)) {
-			return;
-		}
-
-		setDisabledBlocks(savedDisabledBlocks);
-		// eslint-disable-next-line
-	}, [savedDisabledBlocks]);
+export const BlockManagerPanel = (): MixedElement => {
+	const { defaultSettings } = useContext(SettingsContext);
+	const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
+	const disabledBlocks =
+		settings?.disabledBlocks || defaultSettings?.disabledBlocks || [];
 
 	const { getCategories, getBlockTypes, hasBlockSupport } =
 		select('core/blocks');
@@ -72,11 +60,6 @@ export const BlockManagerPanel = ({
 		(blockType) => !incompatibleBlockTypes.includes(blockType.name)
 	);
 
-	const [hasUpdate, setHasUpdates] = useState(false);
-	const updateDisabledBlocks = (_disabledBlocks: Array<string>): void => {
-		setDisabledBlocks(_disabledBlocks);
-		setHasUpdates(true);
-	};
 	const handleBlockCategoryChange = (
 		checked: boolean,
 		blockTypeNames: Array<string>
@@ -95,8 +78,12 @@ export const BlockManagerPanel = ({
 			);
 		}
 
-		updateDisabledBlocks(currentDisabledBlocks);
-		setHasUpdates(!isEquals(currentDisabledBlocks, savedDisabledBlocks));
+		setSettings({
+			...settings,
+			disabledBlocks: currentDisabledBlocks,
+		});
+
+		setHasUpdates(!isEquals(currentDisabledBlocks, disabledBlocks));
 	};
 	const handleBlockTypeChange = (
 		checked: boolean,
@@ -113,8 +100,12 @@ export const BlockManagerPanel = ({
 			);
 		}
 
-		updateDisabledBlocks(currentDisabledBlocks);
-		setHasUpdates(!isEquals(currentDisabledBlocks, savedDisabledBlocks));
+		setSettings({
+			...settings,
+			disabledBlocks: currentDisabledBlocks,
+		});
+
+		setHasUpdates(!isEquals(currentDisabledBlocks, disabledBlocks));
 	};
 
 	const Categories = memo(() =>
@@ -141,25 +132,8 @@ export const BlockManagerPanel = ({
 	);
 
 	return (
-		<>
-			<PanelHeader
-				tab={tab}
-				defaultValue={[]}
-				hasUpdate={hasUpdate}
-				tabSettings={disabledBlocks}
-				onUpdate={(_hasUpdate: boolean): void => {
-					setHasUpdates(_hasUpdate);
-
-					setSettings({
-						...settings,
-						disabledBlocks,
-					});
-				}}
-				description={description}
-			/>
-			<VStack className={'blockera-settings-panel-container'}>
-				<Categories />
-			</VStack>
-		</>
+		<VStack className={'blockera-settings-panel-container'}>
+			<Categories />
+		</VStack>
 	);
 };

@@ -5,107 +5,72 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useEffect, useState } from '@wordpress/element';
+import { useContext } from '@wordpress/element';
 import { __experimentalVStack as VStack } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
-import { isEquals } from '@blockera/utils';
-import { type TabsComponentsProps, PanelHeader } from '@blockera/wordpress';
+import { SettingsContext, TabsContext } from '@blockera/wordpress';
 import { Switch } from '@blockera/components';
 
-// here store default values for tab general settings.
-// todo update this code to get value from config
-const defaultValue = {
+// here store fallback default values for tab general settings.
+const fallbackDefaultValue = {
 	disableProHints: false,
 };
 
-export const GeneralPanel = ({
-	tab,
-	settings,
-	description,
-	setSettings,
-}: TabsComponentsProps): MixedElement => {
-	const savedGeneralSettings = settings?.general || defaultValue;
-
-	const [generalSettings, setGeneralSettings] =
-		useState(savedGeneralSettings);
-
-	const [hasUpdate, setHasUpdates] = useState(false);
-
-	useEffect(() => {
-		if (isEquals(savedGeneralSettings, generalSettings)) {
-			return;
-		}
-
-		setGeneralSettings(savedGeneralSettings);
-		// eslint-disable-next-line
-	}, [savedGeneralSettings]);
+export const GeneralPanel = (): MixedElement => {
+	const { defaultSettings } = useContext(SettingsContext);
+	const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
+	const generalSettings =
+		settings?.general || defaultSettings?.general || fallbackDefaultValue;
 
 	return (
-		<>
-			<PanelHeader
-				tab={tab}
-				defaultValue={defaultValue}
-				hasUpdate={hasUpdate}
-				tabSettings={generalSettings}
-				onUpdate={(_hasUpdate: boolean): void => {
-					setHasUpdates(_hasUpdate);
+		<VStack className={'blockera-settings-panel-container'}>
+			<VStack className={'blockera-settings-general section'}>
+				<h3 className={'blockera-settings-general section-title'}>
+					⚙️ {__('Other Settings', 'blockera')}
+				</h3>
 
-					setSettings({
-						...settings,
-						general: generalSettings,
-					});
-				}}
-				description={description}
-			/>
+				<p className={'blockera-settings-general section-desc'}>
+					{__(
+						'Discover advanced settings for fine-tuning your website with ease.',
+						'blockera'
+					)}
+				</p>
 
-			<VStack className={'blockera-settings-panel-container'}>
-				<VStack className={'blockera-settings-general section'}>
-					<h3 className={'blockera-settings-general section-title'}>
-						⚙️ {__('Other Settings', 'blockera')}
-					</h3>
+				<div className={'blockera-settings-general control-wrapper'}>
+					<Switch
+						id={'toggleProHints'}
+						className={'blockera-settings-general control'}
+						value={generalSettings.disableProHints}
+						onChange={(checked: boolean) => {
+							setHasUpdates(
+								!generalSettings.disableProHints
+									? checked
+									: !checked
+							);
 
-					<p className={'blockera-settings-general section-desc'}>
-						{__(
-							'Discover advanced settings for fine-tuning your website with ease.',
-							'blockera'
-						)}
-					</p>
-
-					<div
-						className={'blockera-settings-general control-wrapper'}
-					>
-						<Switch
-							className={'blockera-settings-general control'}
-							value={generalSettings.disableProHints}
-							onChange={(checked: boolean) => {
-								setHasUpdates(
-									savedGeneralSettings.disableProHints !==
-										checked
-								);
-
-								setGeneralSettings({
+							setSettings({
+								...settings,
+								general: {
 									...generalSettings,
 									disableProHints: checked,
-								});
-							}}
-						/>
+								},
+							});
+						}}
+					/>
 
-						<strong
-							className={
-								'blockera-settings-general control-label'
-							}
-						>
-							{__(
-								'Opt out of Pro version hints and promotions',
-								'blockera'
-							)}
-						</strong>
-					</div>
-				</VStack>
+					<strong
+						className={'blockera-settings-general control-label'}
+					>
+						{__(
+							'Opt out of Pro version hints and promotions',
+							'blockera'
+						)}
+					</strong>
+				</div>
 			</VStack>
-		</>
+		</VStack>
 	);
 };

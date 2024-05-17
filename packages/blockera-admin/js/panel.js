@@ -11,8 +11,8 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { TabsContext, Sidebar } from '@blockera/wordpress';
 import type { TTabProps } from '@blockera/components/js/tabs/types';
+import { TabsContext, Sidebar, PanelHeader } from '@blockera/wordpress';
 
 import {
 	GeneralPanel,
@@ -21,60 +21,43 @@ import {
 } from './components';
 
 export const Panel = (tab: TTabProps): MixedElement => {
+	let description = '';
 	let activePanel: any = <></>;
-	const { settings, setSettings } = useContext(TabsContext);
+	const { settings, hasUpdate, setHasUpdates } = useContext(TabsContext);
 
 	switch (tab.name) {
 		case 'general-settings':
-			activePanel = (
-				<GeneralPanel
-					tab={tab}
-					settings={settings}
-					setSettings={setSettings}
-					description={
-						<>
-							<p>
-								{__(
-									'In the General Settings Panel, you can customize your Blockera settings. These settings are used to customize the design and functionality of Blockera.',
-									'blockera'
-								)}
-							</p>
-						</>
-					}
-				/>
+			activePanel = <GeneralPanel />;
+			description = () => (
+				<>
+					<p>
+						{__(
+							'In the General Settings Panel, you can customize your Blockera settings. These settings are used to customize the design and functionality of Blockera.',
+							'blockera'
+						)}
+					</p>
+				</>
 			);
 			break;
 		case 'block-manager':
-			activePanel = (
-				<BlockManagerPanel
-					tab={tab}
-					settings={settings}
-					setSettings={setSettings}
-					description={
-						<>
-							<p>
-								{__(
-									"In the Block Manager Panel, you have full control over both supported  and custom blocks offered by Blockera. If a block isn't listed, it's  because it's not currently supported.",
-									'blockera'
-								)}
-							</p>
-						</>
-					}
-				/>
+			activePanel = <BlockManagerPanel />;
+			description = () => (
+				<>
+					<p>
+						{__(
+							"In the Block Manager Panel, you have full control over both supported  and custom blocks offered by Blockera. If a block isn't listed, it's  because it's not currently supported.",
+							'blockera'
+						)}
+					</p>
+				</>
 			);
 			break;
 		case 'license-manager':
-			activePanel = (
-				<LicenseManagerPanel
-					tab={tab}
-					settings={settings}
-					setSettings={setSettings}
-					description={
-						<>
-							<p>{__('License activation panel…', 'blockera')}</p>
-						</>
-					}
-				/>
+			activePanel = <LicenseManagerPanel />;
+			description = () => (
+				<>
+					<p>{__('License activation panel…', 'blockera')}</p>
+				</>
 			);
 			break;
 	}
@@ -85,6 +68,16 @@ export const Panel = (tab: TTabProps): MixedElement => {
 			className={'blockera-settings-panel'}
 		>
 			<div className={'blockera-settings-active-panel'}>
+				<PanelHeader
+					tab={tab}
+					hasUpdate={hasUpdate}
+					tabSettings={settings[tab.settingSlug]}
+					onUpdate={(_hasUpdate: boolean): void =>
+						setHasUpdates(_hasUpdate)
+					}
+					description={description}
+				/>
+
 				{activePanel}
 			</div>
 

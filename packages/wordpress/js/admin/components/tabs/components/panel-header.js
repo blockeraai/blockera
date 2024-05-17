@@ -21,11 +21,9 @@ export const PanelHeader = ({
 	hasUpdate,
 	tabSettings,
 	description,
-	defaultValue,
 }: {
 	tab: TTabProps,
 	tabSettings: any,
-	defaultValue: any,
 	hasUpdate: boolean,
 	description: string,
 	onUpdate: (hasUpdate: boolean) => void,
@@ -38,11 +36,10 @@ export const PanelHeader = ({
 				</h3>
 
 				<Update
+					tab={tab}
 					onUpdate={onUpdate}
 					hasUpdate={hasUpdate}
-					slug={tab?.settingSlug}
 					slugSettings={tabSettings}
-					defaultValue={defaultValue}
 				/>
 			</HStack>
 			<div className={'blockera-settings-panel-desc'}>{description}</div>

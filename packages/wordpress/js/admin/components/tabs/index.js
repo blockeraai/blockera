@@ -4,7 +4,6 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useEntityRecord } from '@wordpress/core-data';
 import { useState, createContext } from '@wordpress/element';
 
 /**
@@ -22,6 +21,8 @@ export const TabsContext: {
 } = createContext({
 	settings: {},
 	setSettings: (): void => {},
+	hasUpdate: false,
+	setHasUpdates: (): void => {},
 });
 
 export const Tabs = ({
@@ -39,8 +40,12 @@ export const Tabs = ({
 	getPanel: (tab: TTabProps) => MixedElement,
 	setSettings: (newSettings: Object) => void,
 }): MixedElement => {
+	const [hasUpdate, setHasUpdates] = useState(false);
+
 	return (
-		<TabsContext.Provider value={{ settings, setSettings }}>
+		<TabsContext.Provider
+			value={{ settings, setSettings, hasUpdate, setHasUpdates }}
+		>
 			<TabPanel
 				tabs={items}
 				className={'blockera-settings-tabs'}

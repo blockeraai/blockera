@@ -8,11 +8,13 @@ import { useState, useEffect } from '@wordpress/element';
 import { componentClassNames } from '@blockera/classnames';
 
 export const Switch = ({
+	id,
 	label,
 	value,
 	onChange,
 	className,
 }: {
+	id: string,
 	label?: string,
 	value: boolean,
 	className?: string,
@@ -44,18 +46,20 @@ export const Switch = ({
 			<span>
 				<input
 					type="checkbox"
-					id="toggleInput"
+					id={id}
 					checked={isChecked}
 					onChange={handleChange}
 				/>
 				<button
+					data-test={id}
+					data-cy={`${isChecked}`}
 					className="slider"
 					type="button"
 					onClick={toggleChecked}
 				></button>
 			</span>
 			{/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-			<label htmlFor="toggleInput" onClick={toggleChecked}>
+			<label htmlFor={id} onClick={toggleChecked}>
 				{label}
 			</label>
 		</div>

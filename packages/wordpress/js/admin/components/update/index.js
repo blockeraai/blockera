@@ -14,8 +14,9 @@ import { useContext, useState, useEffect } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEquals } from '@blockera/utils';
+import { isEquals, ucFirstWord } from '@blockera/utils';
 import Button from '@blockera/components/js/button/button';
+import type { TTabProps } from '@blockera/components/js/tabs/types';
 
 /**
  * Internal dependencies
@@ -51,18 +52,18 @@ const toastOptions = {
 };
 
 export const Update = ({
-	slug,
+	tab,
 	hasUpdate,
 	onUpdate: outSideOnUpdate,
 	slugSettings,
-	defaultValue,
 }: {
-	slug?: string,
+	tab: TTabProps,
 	slugSettings: any,
 	hasUpdate: boolean,
-	defaultValue: any,
 	onUpdate: (hasUpdate: boolean) => void,
 }): MixedElement | null => {
+	const slug = tab?.settingSlug;
+
 	if ('undefined' === typeof slug) {
 		return null;
 	}
@@ -84,12 +85,6 @@ export const Update = ({
 	const { settings, setSettings } = useContext(TabsContext);
 	const { defaultSettings } = useContext(SettingsContext);
 	const { saveEntityRecord } = dispatch(coreStore);
-	const updateSettings = (value: any): void => {
-		setSettings({
-			...settings,
-			[slug]: value,
-		});
-	};
 	const onUpdate = async (): Promise<string> => {
 		const record = {
 			...settings,
@@ -98,7 +93,7 @@ export const Update = ({
 
 		setUpdateButtonStatus(statuses.updating);
 
-		updateSettings(slugSettings);
+		setSettings(record);
 
 		const response = await saveEntityRecord(
 			'blockera/v1',
@@ -110,12 +105,12 @@ export const Update = ({
 			outSideOnUpdate(!hasUpdate);
 			setUpdateButtonStatus(statuses.updated);
 
-			toast.success('Blockera Updated Settings.', toastOptions);
+			toast.success(`Blockera Updated ${tab.title}`, toastOptions);
 		} else {
 			setUpdateButtonStatus(statuses.update);
 
 			toast.error(
-				'Failed Blockera settings updating process.',
+				`Failed Blockera ${tab.title} updating process.`,
 				toastOptions
 			);
 		}
@@ -137,21 +132,31 @@ export const Update = ({
 				pauseOnHover
 				theme="dark"
 			/>
-			{!isEquals(defaultSettings, settings) && (
+			{!isEquals(defaultSettings[slug], settings[slug]) && (
 				<Reset
 					slug={slug}
 					hasUpdate={
-						!isEquals(slugSettings, defaultValue) && hasUpdate
+						!isEquals(slugSettings, defaultSettings[slug]) &&
+						hasUpdate
 					}
-					defaultValue={defaultValue}
+					defaultValue={defaultSettings[slug]}
 					onReset={(_hasUpdate: boolean): void => {
 						outSideOnUpdate(!_hasUpdate);
-						updateSettings(defaultValue);
+						setSettings({
+							...settings,
+							[slug]: defaultSettings[slug],
+						});
+
+						toast.success(
+							`Blockera Reset ${tab.title}`,
+							toastOptions
+						);
 					}}
 					save={saveEntityRecord}
 				/>
 			)}
 			<Button
+				data-test={'update-settings'}
 				style={{
 					opacity: 'updated' === updateButtonStatus.status ? 0.5 : 1,
 					cursor:
@@ -166,7 +171,8 @@ export const Update = ({
 					'blockera-settings-button blockera-settings-primary-button',
 					{
 						'blockera-settings-has-update':
-							!isEquals(slugSettings, defaultValue) && hasUpdate,
+							!isEquals(slugSettings, defaultSettings[slug]) &&
+							hasUpdate,
 					}
 				)}
 				text={updateButtonStatus.label}

@@ -21,7 +21,7 @@ import BlockType from './block-type';
 
 /**
  * Renders the list of BlockType controls for a given block category on the
- * Block Manager tab of the Block Visibility settings page.
+ * Block Manager tab of the Blockera settings page.
  *
  * @since 1.0.0
  * @param {Object} props All the props passed to this function
@@ -86,6 +86,7 @@ export default function BlockCategory(props: {
 								'is-active': isAllChecked,
 							}
 						)}
+						data-test={`${category.slug}-category=disable`}
 						text={__('Disable All', 'blockera')}
 						onClick={() => onBlockCategoryChange(false)}
 					/>
@@ -96,6 +97,7 @@ export default function BlockCategory(props: {
 								'is-active': !isAllChecked,
 							}
 						)}
+						data-test={`${category.slug}-category=enable`}
 						text={__('Enable All', 'blockera')}
 						onClick={() => onBlockCategoryChange(true)}
 					/>
