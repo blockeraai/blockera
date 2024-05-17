@@ -41,6 +41,16 @@ export function getSelectedBlock(data, field) {
 	];
 }
 
+/**
+ *
+ * @param {Object} data the Blockera data.
+ * @param {string} field the field of attributes of blockera entity.
+ * @return {*} retrieved th field value of blockera entity.
+ */
+export function getBlockeraEntity(data, field) {
+	return data.select('blockera-core/data').getEntity('blockera')[field];
+}
+
 export function getBlockClientId(data) {
 	return data.select('core/block-editor').getSelectedBlock().clientId;
 }
