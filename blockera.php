@@ -6,8 +6,8 @@
  * Requires at least: 6.5.2
  * Requires PHP: 7.4
  * Author: Blockera AI
- * Version: 1.0.1
  * Author URI: https://blockera.ai/about-us/
+ * Version: 1.1.0
  * Text Domain: blockera
  * License: GPLv3 or later
  *

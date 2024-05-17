@@ -44,9 +44,18 @@ Blockera comes in both free and premium versions. The [premium version](https://
 
 == Changelog ==
 
+= 1.1.0 - 2024-5-17 =
+
+-   New: Settings panel to change Blockera behaviors. 
+-   New: Block Manager panel to enable/disable Blockera blocks power up on blocks.
+-   New: Setting for disabling Pro version hints in setting panel.
+
+-   Fix: Minor bugs and errors.
+
+
 = 1.0.1 - 2024-5-11 =
 
--   Tweak: assets and packages size.
+-   Tweak: Smaller build version size (Assets and packages size).
 -   Tweak: Block inspector control compatibility.
 
 
