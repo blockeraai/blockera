@@ -123,7 +123,7 @@ class AssetsProvider extends ServiceProvider {
 						"blockera.editor-extensions.hooks.withBlockSettings.disabledBlocks",
 						"blockera.unstableBootstrapServerSideApplyHooks",
 						() => {
-							return ' . wp_json_encode( get_option( 'blockera_settings' )['disabledBlocks'] ) . ';
+							return ' . wp_json_encode( get_option( 'blockera_settings', blockera_core_config( 'panel.std' ) )['disabledBlocks'] ) . ';
 						}
 					); 
 				}'

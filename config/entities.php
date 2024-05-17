@@ -19,7 +19,7 @@ return apply_filters(
 			'url' => home_url(),
 		],
 		'blockera' => [
-			'settings' => get_option( 'blockera_settings' ),
+			'settings' => get_option( 'blockera_settings', blockera_core_config( 'panel.std' )),
 			'name'     => blockera_core_config( 'app.name' ),
 			'version'  => blockera_core_config( 'app.version' ),
 		],
