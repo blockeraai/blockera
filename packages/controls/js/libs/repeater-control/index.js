@@ -346,6 +346,7 @@ export default function RepeaterControl(
 											'btn-add',
 											{
 												'is-deactivate':
+													disableProHints &&
 													disableAddNewItem,
 											}
 										)}
@@ -415,6 +416,7 @@ export default function RepeaterControl(
 											'btn-add',
 											{
 												'is-deactivate':
+													disableProHints &&
 													disableAddNewItem,
 											}
 										)}
