@@ -4,7 +4,7 @@ return [
 	'std' => [
 		'disabledBlocks' => [],
 		'general'        => [
-			'disableAds' => true,
+			'disableAds' => false,
 		],
 	],
 ];

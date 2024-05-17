@@ -16,8 +16,9 @@ import { type TabsComponentsProps, PanelHeader } from '@blockera/wordpress';
 import { Switch } from '@blockera/components';
 
 // here store default values for tab general settings.
+// todo update this code to get value from config
 const defaultValue = {
-	disableAds: true,
+	disableAds: false,
 };
 
 export const GeneralPanel = ({
