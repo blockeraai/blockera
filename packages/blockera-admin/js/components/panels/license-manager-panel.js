@@ -4,6 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -23,5 +24,5 @@ export const LicenseManagerPanel = (
 		setSettings,
 	}: TabsComponentsProps
 ): MixedElement => {
-	return <></>;
+	return <>{__('Coming soon…', 'blockera')}</>;
 };
