@@ -95,11 +95,11 @@ export default function RepeaterControl(
 	const { getEntity } = select('blockera-core/data');
 	const {
 		settings: {
-			general: { disableAds },
+			general: { disableProHints },
 		},
 	} = getEntity('blockera') || {
 		settings: {
-			general: { disableAds: false },
+			general: { disableProHints: false },
 		},
 	};
 
@@ -442,7 +442,7 @@ export default function RepeaterControl(
 					</>
 				)}
 			</div>
-			{!disableAds &&
+			{!disableProHints &&
 				count >= 1 &&
 				isEnabledPromote(PromoComponent, repeaterItems) &&
 				PromoComponent({

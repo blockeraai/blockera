@@ -18,7 +18,7 @@ import { Switch } from '@blockera/components';
 // here store default values for tab general settings.
 // todo update this code to get value from config
 const defaultValue = {
-	disableAds: false,
+	disableProHints: false,
 };
 
 export const GeneralPanel = ({
@@ -79,15 +79,16 @@ export const GeneralPanel = ({
 					>
 						<Switch
 							className={'blockera-settings-general control'}
-							value={generalSettings.disableAds}
+							value={generalSettings.disableProHints}
 							onChange={(checked: boolean) => {
 								setHasUpdates(
-									savedGeneralSettings.disableAds !== checked
+									savedGeneralSettings.disableProHints !==
+										checked
 								);
 
 								setGeneralSettings({
 									...generalSettings,
-									disableAds: checked,
+									disableProHints: checked,
 								});
 							}}
 						/>
