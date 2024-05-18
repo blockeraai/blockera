@@ -10,7 +10,7 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { ColorIndicator, ColorIndicatorStack } from '@blockera/editor';
+import { ColorIndicator, ColorIndicatorStack } from '@blockera/components';
 
 /**
  * Internal dependencies

@@ -21,6 +21,10 @@ export type ColorIndicatorProps = {
 	 * Specifies the style of indicator
 	 */
 	style?: Object,
+	/**
+	 * Check recieved value is value addon?
+	 */
+	checkIsValueAddon?: boolean,
 };
 
 export type ColorIndicatorStackProps = {

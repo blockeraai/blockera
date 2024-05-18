@@ -9,9 +9,9 @@ import { useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Button } from '@blockera/components';
 import { controlClassNames } from '@blockera/classnames';
-import { ColorIndicator, setValueAddon, useValueAddon } from '@blockera/editor';
+import { Button, ColorIndicator } from '@blockera/components';
+import { setValueAddon, useValueAddon } from '@blockera/editor';
 
 /**
  * Internal dependencies

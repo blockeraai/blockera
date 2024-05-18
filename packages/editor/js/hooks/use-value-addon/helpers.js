@@ -18,8 +18,9 @@ import {
 	getWidthSizes,
 	type VariableCategory,
 } from '@blockera/data';
-import { isBlockTheme, isObject, isUndefined } from '@blockera/utils';
 import { NoticeControl } from '@blockera/controls';
+import { ColorIndicator } from '@blockera/components';
+import { isBlockTheme, isObject, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -32,7 +33,6 @@ import type {
 import VarTypeFontSizeIcon from './icons/var-font-size';
 import VarTypeSpacingIcon from './icons/var-spacing';
 import VarTypeWidthSizeIcon from './icons/var-width-size';
-import { ColorIndicator } from '../../components/color-indicator';
 
 /**
  * Sets value addon.
@@ -61,7 +61,7 @@ export function isValid(value: ValueAddon | string): boolean {
 	return !!value?.isValueAddon;
 }
 
-export function getValueAddonRealValue(value: ValueAddon | string): string {
+export function getValueAddonRealValue(value: ValueAddon | string): any {
 	if (typeof value === 'number') {
 		return value;
 	}

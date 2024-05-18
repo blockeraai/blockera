@@ -26,4 +26,5 @@ export { default as MediaUploader } from './media-uploader';
 export { Tooltip } from './tooltip';
 export { default as ConditionalWrapper } from './conditional-wrapper';
 export { default as MoreFeatures } from './more-features';
+export { ColorIndicator, ColorIndicatorStack } from './color-indicator';
 export { default as DynamicHtmlFormatter } from './dynamic-html-formatter';

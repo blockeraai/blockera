@@ -9,7 +9,7 @@ import { memo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { ColorIndicator } from '@blockera/editor';
+import { ColorIndicator } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
