@@ -17,7 +17,7 @@ import {
 	InputControl,
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 
 /**
@@ -60,7 +60,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 				icon={<PositionExtensionIcon />}
 				className={extensionClassNames('position')}
 			>
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShownPosition}
 					config={extensionConfig.blockeraPosition}
 				>
@@ -95,12 +95,12 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 							/>
 						</BaseControl>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
 				{values?.blockeraPosition?.type !== '' &&
 					values?.blockeraPosition?.type !== undefined &&
 					values?.blockeraPosition?.type !== 'static' && (
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShownZIndex}
 							config={extensionConfig.blockeraZIndex}
 						>
@@ -147,7 +147,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 									{...extensionProps.blockeraZIndex}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 					)}
 			</PanelBodyControl>
 		);

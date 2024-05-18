@@ -4,7 +4,7 @@
  */
 import type { FeatureConfig } from '@blockera/editor-extensions/js/libs/base';
 
-export type FeatureWrapperProps = {
+export type EditorFeatureWrapperProps = {
 	/**
 	 * CSS classes to apply to the tooltip.
 	 */

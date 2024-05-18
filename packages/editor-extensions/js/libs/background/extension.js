@@ -20,7 +20,7 @@ import {
 } from '@blockera/controls';
 import { checkVisibleItemLength, hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -91,7 +91,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 					}}
 				/>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowBackground}
 					config={blockeraBackground}
 				>
@@ -124,9 +124,9 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 							/>
 						</BaseControl>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowBackgroundColor}
 					config={blockeraBackgroundColor}
 				>
@@ -179,9 +179,9 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 							{...extensionProps.blockeraBackgroundColor}
 						/>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowBackgroundClip}
 					config={blockeraBackgroundClip}
 				>
@@ -317,7 +317,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								</NoticeControl>
 							)}
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

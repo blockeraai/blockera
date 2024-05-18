@@ -16,7 +16,10 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isValid as isValidVariable, FeatureWrapper } from '@blockera/editor';
+import {
+	EditorFeatureWrapper,
+	isValid as isValidVariable,
+} from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -1140,7 +1143,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							</div>
 						</BaseControl>
 
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={true}
 							config={
 								blockeraBackground?.config?.meshGradientColors
@@ -1211,7 +1214,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									}}
 								/>
 							</BaseControl>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
 						<ToggleSelectControl
 							repeaterItem={itemId}

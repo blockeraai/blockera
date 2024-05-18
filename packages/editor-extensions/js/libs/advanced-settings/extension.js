@@ -16,7 +16,7 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 
 /**
@@ -64,7 +64,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 						}}
 					/>
 
-					<FeatureWrapper
+					<EditorFeatureWrapper
 						isActive={isShowAttributes}
 						config={extensionConfig.blockeraAttributes}
 					>
@@ -100,7 +100,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 								/>
 							</BaseControl>
 						</ControlContextProvider>
-					</FeatureWrapper>
+					</EditorFeatureWrapper>
 				</PanelBodyControl>
 			);
 		},

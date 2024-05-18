@@ -17,7 +17,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -87,7 +87,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 					}}
 				/>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowFlexChildSizing}
 					config={extensionConfig.blockeraFlexChildSizing}
 				>
@@ -263,9 +263,9 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 							)}
 						</ToggleSelectControl>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowFlexChildAlign}
 					config={extensionConfig.blockeraFlexChildAlign}
 				>
@@ -327,9 +327,9 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 							{...extensionProps.blockeraFlexChildAlign}
 						/>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowFlexChildOrder}
 					config={extensionConfig.blockeraFlexChildOrder}
 				>
@@ -416,7 +416,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 							)}
 						</ToggleSelectControl>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

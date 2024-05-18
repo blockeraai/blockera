@@ -17,9 +17,9 @@ import WarningIcon from '@blockera/controls/js/libs/notice-control/icons/warning
 /**
  * Internal dependencies
  */
-import { ProIcon } from '../icons/pro-icon';
+import { ProIcon } from './icons/pro-icon';
 
-export function Wrapper({
+export function FeatureWrapper({
 	type,
 	typeName = '',
 	text = '',

@@ -17,7 +17,7 @@ import {
 } from '@blockera/controls';
 import { isInteger, hasSameProps } from '@blockera/utils';
 import { Button } from '@blockera/components';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
@@ -110,7 +110,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 					}}
 				/>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowOpacity}
 					config={extensionConfig.blockeraOpacity}
 				>
@@ -121,9 +121,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						defaultValue={attributes.blockeraOpacity.default}
 						{...extensionProps.blockeraOpacity}
 					/>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowTransform}
 					config={extensionConfig.blockeraTransform}
 				>
@@ -195,9 +195,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 							)}
 						</BaseControl>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowTransition}
 					config={extensionConfig.blockeraTransition}
 				>
@@ -208,9 +208,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						defaultValue={attributes.blockeraTransition.default}
 						{...extensionProps.blockeraTransition}
 					/>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowFilter}
 					config={extensionConfig.blockeraFilter}
 				>
@@ -221,9 +221,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						defaultValue={attributes.blockeraFilter.default}
 						{...extensionProps.blockeraFilter}
 					/>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowBackdropFilter}
 					config={extensionConfig.blockeraBackdropFilter}
 				>
@@ -234,9 +234,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						defaultValue={attributes.blockeraBackdropFilter.default}
 						{...extensionProps.blockeraBackdropFilter}
 					/>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowBlendMode}
 					config={extensionConfig.blockeraBlendMode}
 				>
@@ -247,7 +247,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 						defaultValue={attributes.blockeraBlendMode.default}
 						{...extensionProps.blockeraBlendMode}
 					/>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

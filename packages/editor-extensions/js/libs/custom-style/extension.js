@@ -16,7 +16,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -64,7 +64,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 						attributes.blockeraCustomCSS.default
 					}
 				>
-					<FeatureWrapper
+					<EditorFeatureWrapper
 						isActive={isShowCustomCSS}
 						config={extensionConfig.blockeraCustomCSS}
 					>
@@ -114,7 +114,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 								{...extensionProps.blockeraCustomCSS}
 							/>
 						</ControlContextProvider>
-					</FeatureWrapper>
+					</EditorFeatureWrapper>
 				</PanelBodyControl>
 			);
 		},

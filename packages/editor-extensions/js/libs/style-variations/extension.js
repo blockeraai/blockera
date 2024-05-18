@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 import { useSelect } from '@wordpress/data';
 import { PanelBodyControl } from '@blockera/controls';
 
@@ -75,7 +75,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 					icon={<StyleVariationsExtensionIcon />}
 					className={extensionClassNames('style-variations')}
 				>
-					<FeatureWrapper
+					<EditorFeatureWrapper
 						isActive={isActiveStyleVariation}
 						config={extensionConfig.blockeraStyleVariation}
 					>
@@ -88,7 +88,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 								previewClassName,
 							}}
 						/>
-					</FeatureWrapper>
+					</EditorFeatureWrapper>
 				</PanelBodyControl>
 			);
 		},

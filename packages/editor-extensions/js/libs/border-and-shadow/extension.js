@@ -18,7 +18,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -87,7 +87,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 						}}
 					/>
 
-					<FeatureWrapper
+					<EditorFeatureWrapper
 						isActive={isShownBorder}
 						config={extensionConfig.blockeraBorder}
 					>
@@ -98,9 +98,9 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 							onChange={handleOnChangeAttributes}
 							{...extensionProps.blockeraBorder}
 						/>
-					</FeatureWrapper>
+					</EditorFeatureWrapper>
 
-					<FeatureWrapper
+					<EditorFeatureWrapper
 						isActive={isShownBorderRadius}
 						config={extensionConfig.blockeraBorderRadius}
 					>
@@ -113,9 +113,9 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 							onChange={handleOnChangeAttributes}
 							{...extensionProps.blockeraBorderRadius}
 						/>
-					</FeatureWrapper>
+					</EditorFeatureWrapper>
 
-					<FeatureWrapper
+					<EditorFeatureWrapper
 						isActive={isShownBoxShadow}
 						config={extensionConfig.blockeraBoxShadow}
 					>
@@ -167,9 +167,9 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 								/>
 							</BaseControl>
 						</ControlContextProvider>
-					</FeatureWrapper>
+					</EditorFeatureWrapper>
 
-					<FeatureWrapper
+					<EditorFeatureWrapper
 						isActive={isShownOutline}
 						config={extensionConfig.blockeraOutline}
 					>
@@ -218,7 +218,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 								/>
 							</BaseControl>
 						</ControlContextProvider>
-					</FeatureWrapper>
+					</EditorFeatureWrapper>
 				</PanelBodyControl>
 			);
 		},

@@ -57,7 +57,7 @@ export const defineGlobalProps = (): void => {
 				isOpenOtherBreakpoints: false,
 			});
 
-			bootstrapScripts(window.wp, window.React);
+			bootstrapScripts(window.wp);
 		}
 	});
 };

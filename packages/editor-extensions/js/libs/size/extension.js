@@ -17,7 +17,7 @@ import {
 	BaseControl,
 } from '@blockera/controls';
 import { ConditionalWrapper, Flex } from '@blockera/components';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 
@@ -123,7 +123,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 				{(isShowWidth || isShowMinWidth || isShowMaxWidth) && (
 					<BaseControl columns="columns-1">
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowWidth}
 							config={extensionConfig.blockeraWidth}
 						>
@@ -173,7 +173,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									{...extensionProps.blockeraWidth}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
 						{(isShowMinWidth || isShowMaxWidth) && (
 							<ConditionalWrapper
@@ -204,7 +204,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								)}
 								condition={isShowWidth}
 							>
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowMinWidth}
 									config={extensionConfig.blockeraMinWidth}
 								>
@@ -274,9 +274,9 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{...extensionProps.blockeraMinWidth}
 										/>
 									</ControlContextProvider>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowMaxWidth}
 									config={extensionConfig.blockeraMaxWidth}
 								>
@@ -346,7 +346,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{...extensionProps.blockeraMaxWidth}
 										/>
 									</ControlContextProvider>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 							</ConditionalWrapper>
 						)}
 					</BaseControl>
@@ -354,7 +354,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 				{(isShowHeight || isShowMinHeight || isShowMaxHeight) && (
 					<BaseControl columns="columns-1">
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowHeight}
 							config={extensionConfig.blockeraHeight}
 						>
@@ -403,7 +403,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									{...extensionProps.blockeraHeight}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
 						{(isShowMinHeight || isShowMaxHeight) && (
 							<ConditionalWrapper
@@ -434,7 +434,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								)}
 								condition={isShowHeight}
 							>
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowMinHeight}
 									config={extensionConfig.blockeraMinHeight}
 								>
@@ -504,9 +504,9 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{...extensionProps.blockeraMinHeight}
 										/>
 									</ControlContextProvider>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowMaxHeight}
 									config={extensionConfig.blockeraMaxHeight}
 								>
@@ -576,13 +576,13 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{...extensionProps.blockeraMaxHeight}
 										/>
 									</ControlContextProvider>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 							</ConditionalWrapper>
 						)}
 					</BaseControl>
 				)}
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowOverflow}
 					config={extensionConfig.blockeraOverflow}
 				>
@@ -666,9 +666,9 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							{...extensionProps.blockeraOverflow}
 						/>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowRatio}
 					config={extensionConfig.blockeraRatio}
 				>
@@ -689,9 +689,9 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							{...extensionProps.blockeraRatio}
 						/>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowFit}
 					config={extensionConfig.blockeraFit}
 				>
@@ -717,7 +717,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							{...extensionProps.blockeraFit}
 						/>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
 	},

@@ -8,6 +8,7 @@ import { useSelect } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
+import { FeatureWrapper } from '@blockera/components';
 import { isLaptopBreakpoint } from '@blockera/editor';
 import {
 	isInnerBlock,
@@ -17,15 +18,14 @@ import {
 /**
  * Internal dependencies
  */
-import { Wrapper } from './components/wrapper';
-import type { FeatureWrapperProps } from './types';
+import type { EditorFeatureWrapperProps } from './types';
 
-export default function FeatureWrapper({
+export default function EditorFeatureWrapper({
 	config,
 	isActive = true,
 	children,
 	...props
-}: FeatureWrapperProps): Node {
+}: EditorFeatureWrapperProps): Node {
 	const { blockera, currentBlock, getCurrentState, currentBreakpoint } =
 		useSelect((select) => {
 			const {
@@ -66,26 +66,26 @@ export default function FeatureWrapper({
 
 	if (!isLocked && !feature.isActiveOnFree) {
 		return (
-			<Wrapper type="free" {...props}>
+			<FeatureWrapper type="free" {...props}>
 				{children}
-			</Wrapper>
+			</FeatureWrapper>
 		);
 	}
 
 	if (isInnerBlock(currentBlock)) {
 		if (!feature.isActiveOnInnerBlocks) {
 			return (
-				<Wrapper type="inner-block" {...props}>
+				<FeatureWrapper type="inner-block" {...props}>
 					{children}
-				</Wrapper>
+				</FeatureWrapper>
 			);
 		}
 
 		if (!isLocked && !feature.isActiveOnInnerBlocksOnFree) {
 			return (
-				<Wrapper type="free" {...props}>
+				<FeatureWrapper type="free" {...props}>
 					{children}
-				</Wrapper>
+				</FeatureWrapper>
 			);
 		}
 	}
@@ -93,17 +93,17 @@ export default function FeatureWrapper({
 	if (!isNormalState(getCurrentState())) {
 		if (!feature.isActiveOnStates) {
 			return (
-				<Wrapper type="state" typeName={'normal'} {...props}>
+				<FeatureWrapper type="state" typeName={'normal'} {...props}>
 					{children}
-				</Wrapper>
+				</FeatureWrapper>
 			);
 		}
 
 		if (!isLocked && !feature.isActiveOnStatesOnFree) {
 			return (
-				<Wrapper type="free" {...props}>
+				<FeatureWrapper type="free" {...props}>
 					{children}
-				</Wrapper>
+				</FeatureWrapper>
 			);
 		}
 	}
@@ -111,17 +111,21 @@ export default function FeatureWrapper({
 	if (!isLaptopBreakpoint(currentBreakpoint)) {
 		if (!feature.isActiveOnBreakpoints) {
 			return (
-				<Wrapper type="breakpoint" typeName={'laptop'} {...props}>
+				<FeatureWrapper
+					type="breakpoint"
+					typeName={'laptop'}
+					{...props}
+				>
 					{children}
-				</Wrapper>
+				</FeatureWrapper>
 			);
 		}
 
 		if (!isLocked && !feature.isActiveOnBreakpointsOnFree) {
 			return (
-				<Wrapper type="free" {...props}>
+				<FeatureWrapper type="free" {...props}>
 					{children}
-				</Wrapper>
+				</FeatureWrapper>
 			);
 		}
 	}

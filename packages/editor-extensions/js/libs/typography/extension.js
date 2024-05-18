@@ -21,7 +21,7 @@ import {
 	NoticeControl,
 } from '@blockera/controls';
 import { Flex, Grid, MoreFeatures } from '@blockera/components';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 
@@ -236,7 +236,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						label={__('Size', 'blockera')}
 					>
 						<Flex alignItems="flex-start">
-							<FeatureWrapper
+							<EditorFeatureWrapper
 								isActive={isShowFontSize}
 								config={extensionConfig.blockeraFontSize}
 							>
@@ -253,9 +253,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									size="small"
 									{...extensionProps.blockeraFontSize}
 								/>
-							</FeatureWrapper>
+							</EditorFeatureWrapper>
 
-							<FeatureWrapper
+							<EditorFeatureWrapper
 								isActive={isShowLineHeight}
 								config={extensionConfig.blockeraLineHeight}
 							>
@@ -272,12 +272,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									size="small"
 									{...extensionProps.blockeraLineHeight}
 								/>
-							</FeatureWrapper>
+							</EditorFeatureWrapper>
 						</Flex>
 					</BaseControl>
 				) : (
 					<>
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowFontSize}
 							config={extensionConfig.blockeraFontSize}
 						>
@@ -290,9 +290,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								}
 								{...extensionProps.blockeraFontSize}
 							/>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowLineHeight}
 							config={extensionConfig.blockeraLineHeight}
 						>
@@ -305,11 +305,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								}
 								{...extensionProps.blockeraLineHeight}
 							/>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 					</>
 				)}
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowFontColor}
 					config={extensionConfig.blockeraFontColor}
 				>
@@ -364,9 +364,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							)}
 						</BaseControl>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowTextShadow}
 					config={extensionConfig.blockeraTextShadow}
 				>
@@ -399,7 +399,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							/>
 						</BaseControl>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
 				{isShowAdvanced && (
 					<MoreFeatures
@@ -416,7 +416,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								controlName="style"
 								columns="columns-1"
 							>
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowTextAlign}
 									config={extensionConfig.blockeraTextAlign}
 								>
@@ -508,12 +508,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											{...extensionProps.blockeraTextAlign}
 										/>
 									</ControlContextProvider>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 
 								{(isShowTextDecoration || isShowDirection) && (
 									<Flex direction="row" gap="10px">
 										<div style={{ width: '70%' }}>
-											<FeatureWrapper
+											<EditorFeatureWrapper
 												isActive={isShowTextDecoration}
 												config={
 													extensionConfig.blockeraTextDecoration
@@ -534,11 +534,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													}
 													{...extensionProps.blockeraTextDecoration}
 												/>
-											</FeatureWrapper>
+											</EditorFeatureWrapper>
 										</div>
 
 										<div style={{ width: '40%' }}>
-											<FeatureWrapper
+											<EditorFeatureWrapper
 												isActive={isShowFontStyle}
 												config={
 													extensionConfig.blockeraFontStyle
@@ -559,7 +559,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													}
 													{...extensionProps.blockeraFontStyle}
 												/>
-											</FeatureWrapper>
+											</EditorFeatureWrapper>
 										</div>
 									</Flex>
 								)}
@@ -567,7 +567,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								{(isShowTextTransform || isShowDirection) && (
 									<Flex direction="row" gap="10px">
 										<div style={{ width: '70%' }}>
-											<FeatureWrapper
+											<EditorFeatureWrapper
 												isActive={isShowTextTransform}
 												config={
 													extensionConfig.blockeraTextTransform
@@ -588,11 +588,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													}
 													{...extensionProps.blockeraTextTransform}
 												/>
-											</FeatureWrapper>
+											</EditorFeatureWrapper>
 										</div>
 
 										<div style={{ width: '40%' }}>
-											<FeatureWrapper
+											<EditorFeatureWrapper
 												isActive={isShowDirection}
 												config={
 													extensionConfig.blockeraDirection
@@ -699,7 +699,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														{...extensionProps.blockeraDirection}
 													/>
 												</ControlContextProvider>
-											</FeatureWrapper>
+											</EditorFeatureWrapper>
 										</div>
 									</Flex>
 								)}
@@ -714,7 +714,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								label={__('Spacing', 'blockera')}
 								columns="columns-2"
 							>
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowLetterSpacing}
 									config={
 										extensionConfig.blockeraLetterSpacing
@@ -730,9 +730,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										}
 										{...extensionProps.blockeraLetterSpacing}
 									/>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowWordSpacing}
 									config={extensionConfig.blockeraWordSpacing}
 								>
@@ -780,9 +780,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											{...extensionProps.blockeraWordSpacing}
 										/>
 									</ControlContextProvider>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowTextIndent}
 									config={extensionConfig.blockeraTextIndent}
 								>
@@ -829,11 +829,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											{...extensionProps.blockeraTextIndent}
 										/>
 									</ControlContextProvider>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 							</BaseControl>
 						)}
 
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowTextOrientation}
 							config={extensionConfig.blockeraTextOrientation}
 						>
@@ -1012,9 +1012,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									{...extensionProps.blockeraTextOrientation}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowTextColumns}
 							config={extensionConfig.blockeraTextColumns}
 						>
@@ -1042,9 +1042,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									{...extensionProps.blockeraTextColumns}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowTextStroke}
 							config={extensionConfig.blockeraTextStroke}
 						>
@@ -1071,9 +1071,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									{...extensionProps.blockeraTextStroke}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowWordBreak}
 							config={extensionConfig.blockeraWordBreak}
 						>
@@ -1216,7 +1216,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									{...extensionProps.blockeraWordBreak}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 					</MoreFeatures>
 				)}
 			</PanelBodyControl>

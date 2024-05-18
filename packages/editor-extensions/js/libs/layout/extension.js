@@ -19,7 +19,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { Flex, Button } from '@blockera/components';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 import { extensionClassNames } from '@blockera/classnames';
 
 /**
@@ -108,7 +108,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 					}}
 				/>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowDisplay}
 					config={extensionConfig.blockeraDisplay}
 				>
@@ -253,11 +253,11 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							</NoticeControl>
 						)}
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
 				{values.blockeraDisplay === 'flex' && (
 					<>
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowFlexLayout}
 							config={extensionConfig.blockeraFlexLayout}
 						>
@@ -304,9 +304,9 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									{...extensionProps.blockeraFlexLayout}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowGap}
 							config={extensionConfig.blockeraGap}
 						>
@@ -333,9 +333,9 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									{...extensionProps.blockeraGap}
 								/>
 							</ControlContextProvider>
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 
-						<FeatureWrapper
+						<EditorFeatureWrapper
 							isActive={isShowFlexWrap}
 							config={extensionConfig.blockeraFlexWrap}
 						>
@@ -518,7 +518,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							</ControlContextProvider>
 
 							{values.blockeraFlexWrap?.value === 'wrap' && (
-								<FeatureWrapper
+								<EditorFeatureWrapper
 									isActive={isShowAlignContent}
 									config={
 										extensionConfig.blockeraAlignContent
@@ -713,9 +713,9 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 											{...extensionProps.blockeraAlignContent}
 										/>
 									</ControlContextProvider>
-								</FeatureWrapper>
+								</EditorFeatureWrapper>
 							)}
-						</FeatureWrapper>
+						</EditorFeatureWrapper>
 					</>
 				)}
 			</PanelBodyControl>

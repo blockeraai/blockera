@@ -16,7 +16,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { FeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -78,7 +78,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 					}}
 				/>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowCursor}
 					config={mouseConfig.blockeraCursor}
 				>
@@ -123,9 +123,9 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							{...extensionProps.blockeraCursor}
 						/>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowUserSelect}
 					config={mouseConfig.blockeraUserSelect}
 				>
@@ -175,9 +175,9 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							{...extensionProps.blockeraUserSelect}
 						/>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 
-				<FeatureWrapper
+				<EditorFeatureWrapper
 					isActive={isShowPointerEvents}
 					config={mouseConfig.blockeraPointerEvents}
 				>
@@ -229,7 +229,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 							{...extensionProps.blockeraPointerEvents}
 						/>
 					</ControlContextProvider>
-				</FeatureWrapper>
+				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
 	},
