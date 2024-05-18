@@ -11,7 +11,7 @@ import type { MixedElement } from 'react';
  */
 import { Flex } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { BreakpointIcon } from '@blockera/editor-extensions/js/libs/block-states/helpers';
+import { BreakpointIcon } from '@blockera/editor/js/extensions/libs/block-states/helpers';
 
 /**
  * Internal dependencies

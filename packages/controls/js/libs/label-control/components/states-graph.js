@@ -9,8 +9,8 @@ import type { MixedElement } from 'react';
  */
 import { isEmpty } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import type { TStates } from '@blockera/editor-extensions/js/libs/block-states/types';
-import { BreakpointIcon } from '@blockera/editor-extensions/js/libs/block-states/helpers';
+import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
+import { BreakpointIcon } from '@blockera/editor/js/extensions/libs/block-states/helpers';
 
 /**
  * Internal Dependencies

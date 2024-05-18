@@ -16,7 +16,7 @@ import {
 } from '@blockera/classnames';
 import { useAdvancedLabelProps } from '@blockera/editor';
 import { Button, Flex, Popover } from '@blockera/components';
-import { useBlockContext } from '@blockera/editor-extensions/js/hooks/context';
+import { useBlockContext } from '@blockera/editor/js/extensions/hooks/context';
 import { isEmpty, isFunction, isNull, isUndefined } from '@blockera/utils';
 
 /**

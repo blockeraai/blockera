@@ -7,7 +7,6 @@ return [
 			'editor-styles',
 			'controls-styles',
 			'components-styles',
-			'editor-extensions-styles',
 		],
 		'with-deps' => [],
 	],

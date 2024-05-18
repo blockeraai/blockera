@@ -33,7 +33,7 @@ import {
 import useControlEffect from './use-control-effect';
 import type { ControlContextHookProps, ControlContextRef } from '../types';
 import { store as repeaterStore } from '../../libs/repeater-control/store';
-import { isInnerBlock } from '@blockera/editor-extensions/js/components/utils';
+import { isInnerBlock } from '@blockera/editor/js/extensions/components/utils';
 
 //eslint-disable-next-line
 /**

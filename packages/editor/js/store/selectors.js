@@ -3,7 +3,7 @@
 import type {
 	BreakpointTypes,
 	TBreakpoint,
-} from '@blockera/editor-extensions/js/libs/block-states/types';
+} from '@blockera/editor/js/extensions/libs/block-states/types';
 
 /**
  * Get breakpoints.

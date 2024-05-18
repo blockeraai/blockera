@@ -14,8 +14,8 @@ import { prepare } from '@blockera/data-editor';
 import {
 	isInnerBlock,
 	isNormalState as _isNormalBlockState,
-} from '@blockera/editor-extensions/js/components/utils';
-import { useBlockContext } from '@blockera/editor-extensions/js/hooks/context';
+} from '../../extensions/components/utils';
+import { useBlockContext } from '@blockera/editor/js/extensions/hooks/context';
 
 /**
  * Internal dependencies
@@ -25,7 +25,7 @@ import type {
 	AdvancedLabelHookProps,
 } from './types';
 import { blockHasStates } from './helpers';
-import type { TStates } from '@blockera/editor-extensions/js/libs/block-states/types';
+import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
 
 export const useAdvancedLabelProps = (
 	{

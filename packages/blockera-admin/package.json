@@ -1,5 +1,5 @@
 {
-	"name": "blockera/blockera-admin",
+	"name": "@blockera/blockera-admin",
 	"version": "1.0.0",
 	"description": "The blockera admin menus on WordPress admin dashboard.",
 	"author": "The Blockera Contributors",
@@ -8,11 +8,11 @@
 		"blockera",
 		"setings"
 	],
-	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/blockera-settings/README.md",
+	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/blockera-admin/README.md",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/blockeraai/blockera",
-		"directory": "packages/blockera-settings"
+		"directory": "packages/blockera-admin"
 	},
 	"bugs": {
 		"url": "https://github.com/blockeraai/blockera/issues"

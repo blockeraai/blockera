@@ -6,8 +6,8 @@
 import type {
 	TStates,
 	TBreakpoint,
-} from '@blockera/editor-extensions/js/libs/block-states/types';
-import type { InnerBlockType } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
+} from '@blockera/editor/js/extensions/libs/block-states/types';
+import type { InnerBlockType } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 export type NormalizedSelectorProps = {
 	query?: string,

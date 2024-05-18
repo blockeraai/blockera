@@ -10,7 +10,7 @@ import { useSelect } from '@wordpress/data';
  * Blockera dependencies
  */
 import { isFunction } from '@blockera/utils';
-import { useBlocksStore } from '@blockera/editor-extensions/js/hooks';
+import { useBlocksStore } from '@blockera/editor';
 
 /**
  * Internal dependencies

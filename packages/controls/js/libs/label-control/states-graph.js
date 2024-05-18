@@ -13,7 +13,7 @@ import {
 	getStatesGraphNodes,
 	type StateGraph,
 	type StateGraphItem,
-} from '@blockera/editor-extensions/js/libs/block-states/store/selector';
+} from '@blockera/editor/js/extensions/libs/block-states/store/selector';
 /**
  * Internal dependencies
  */

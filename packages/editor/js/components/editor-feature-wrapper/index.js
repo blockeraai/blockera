@@ -10,10 +10,7 @@ import { useSelect } from '@wordpress/data';
  */
 import { FeatureWrapper } from '@blockera/components';
 import { isLaptopBreakpoint } from '@blockera/editor';
-import {
-	isInnerBlock,
-	isNormalState,
-} from '@blockera/editor-extensions/js/components/utils';
+import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 
 /**
  * Internal dependencies

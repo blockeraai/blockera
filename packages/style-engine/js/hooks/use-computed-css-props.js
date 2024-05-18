@@ -4,30 +4,30 @@
  * Blockera dependencies
  */
 import {
-	BackgroundStyles,
-	BorderAndShadowStyles,
-	FlexChildStyles,
-	LayoutStyles,
-	MouseStyles,
-	PositionStyles,
 	SizeStyles,
+	MouseStyles,
+	LayoutStyles,
 	SpacingStyles,
-	TypographyStyles,
 	EffectsStyles,
-} from '@blockera/editor-extensions';
+	PositionStyles,
+	FlexChildStyles,
+	useBlockContext,
+	BackgroundStyles,
+	TypographyStyles,
+	useStoreSelectors,
+	BorderAndShadowStyles,
+} from '@blockera/editor';
 import {
 	isNormalState,
 	prepareAttributesDefaultValues,
-} from '@blockera/editor-extensions/js/components';
-import { useBlockContext } from '@blockera/editor-extensions/js/hooks';
-import { useStoreSelectors } from '@blockera/editor-extensions/js/hooks/use-store-selectors';
+} from '@blockera/editor/js/extensions/components';
 
 /**
  * Internal dependencies
  */
 import type { CssRule } from '../types';
-import type { TBreakpoint } from '@blockera/editor-extensions/js/libs/block-states/types';
-import type { InnerBlockType } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
+import type { TBreakpoint } from '@blockera/editor/js/extensions/libs/block-states/types';
+import type { InnerBlockType } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 export const useComputedCssProps = ({
 	state,

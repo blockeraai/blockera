@@ -13,7 +13,7 @@ import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
 import { defaultItemValue } from '@blockera/controls/js/libs/repeater-control';
 import { STORE_NAME as REPEATER_STORE_NAME } from '@blockera/controls/js/libs/repeater-control/store';
 import { controlInnerClassNames } from '@blockera/classnames';
-import defaultBreakpoints from '@blockera/editor-extensions/js/libs/block-states/default-breakpoints';
+import defaultBreakpoints from '@blockera/editor/js/extensions/libs/block-states/default-breakpoints';
 
 /**
  * Internal dependencies

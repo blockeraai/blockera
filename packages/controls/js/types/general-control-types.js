@@ -7,7 +7,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera Dependencies
  */
-import type { VariableCategory, DynamicValueTypes } from '@blockera/data';
+import type { VariableCategory } from '@blockera/data';
 
 export type ControlSize = 'normal' | 'input' | 'small' | 'extra-small';
 
@@ -42,5 +42,4 @@ export type ControlGeneralTypes = {
 export type ControlValueAddonTypes = {
 	controlAddonTypes?: Array<string>,
 	variableTypes?: Array<VariableCategory>,
-	dynamicValueTypes?: Array<DynamicValueTypes>,
 };

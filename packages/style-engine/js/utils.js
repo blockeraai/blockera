@@ -4,8 +4,8 @@
  * Blockera dependencies
  */
 import { isString } from '@blockera/utils';
-import type { TStates } from '@blockera/editor-extensions/js/libs/block-states/types';
-import type { InnerBlockType } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
+import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
+import type { InnerBlockType } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 /**
  * Internal dependencies

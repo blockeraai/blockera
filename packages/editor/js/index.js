@@ -8,14 +8,12 @@ import { dispatch } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import type { BreakpointTypes } from '@blockera/editor-extensions/js/libs/block-states/types';
+import type { BreakpointTypes } from './extensions/libs/block-states/types';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from './store';
-
-export * from './components';
 
 export function unstableBootstrapServerSideBreakpointDefinitions(
 	definitions: Array<BreakpointTypes>
@@ -41,13 +39,8 @@ export function registerCanvasEditorSettings(settings: Object) {
 }
 
 export * from './store';
-export {
-	isValid,
-	useValueAddon,
-	setValueAddon,
-	useTraceUpdate,
-	useAdvancedLabelProps,
-	getValueAddonRealValue,
-} from './hooks';
+export * from './hooks';
+export * from './components';
+export * from './extensions';
 export { Observer } from './observer';
 export { CanvasEditor, isLaptopBreakpoint } from './canvas-editor';

@@ -3,8 +3,8 @@
 /**
  * Blockera dependencies
  */
-import type { BreakpointTypes } from '@blockera/editor-extensions/js/libs/block-states/types';
-import breakpoints from '@blockera/editor-extensions/js/libs/block-states/default-breakpoints';
+import type { BreakpointTypes } from '@blockera/editor/js/extensions/libs/block-states/types';
+import breakpoints from '@blockera/editor/js/extensions/libs/block-states/default-breakpoints';
 
 export const useMedia = (): { [key: string]: string } => {
 	const medias: { [key: string]: string } = {};

@@ -11,12 +11,8 @@ import { useEffect, useState, createPortal } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import {
-	useStoreDispatchers,
-	useStoreSelectors,
-} from '@blockera/editor-extensions/js/hooks';
-import { getIframeTag, isEquals } from '@blockera/utils';
 import { Flex, Popover } from '@blockera/components';
+import { getIframeTag, isEquals } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { ControlContextProvider, InputControl } from '@blockera/controls';
 
@@ -25,10 +21,11 @@ import { ControlContextProvider, InputControl } from '@blockera/controls';
  */
 import { Preview } from '../preview';
 import Circles from '../../icons/circles';
+import { isLaptopBreakpoint } from './helpers';
 import PickedBreakpoints from './picked-breakpoints';
 import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
-import { isLaptopBreakpoint } from './helpers';
+import { useStoreSelectors, useStoreDispatchers } from '../../../hooks';
 
 export const Breakpoints = ({
 	className,

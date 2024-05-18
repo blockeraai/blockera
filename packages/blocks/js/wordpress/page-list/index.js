@@ -12,7 +12,7 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-} from '@blockera/editor-extensions/js/libs';
+} from '@blockera/editor/js/extensions/libs';
 
 const attributes = sharedBlockExtensionAttributes;
 

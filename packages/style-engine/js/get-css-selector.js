@@ -10,16 +10,16 @@ import { select } from '@wordpress/data';
  */
 import { prepare } from '@blockera/data-editor';
 import { isString, isUndefined } from '@blockera/utils';
-import { isInnerBlock } from '@blockera/editor-extensions/js/components/utils';
-import type { TStates } from '@blockera/editor-extensions/js/libs/block-states/types';
-import type { InnerBlockType } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
+import { isInnerBlock } from '@blockera/editor/js/extensions/components/utils';
+import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
+import type { InnerBlockType } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
  */
 import { getSelector } from './utils';
 import type { NormalizedSelectorProps } from './types';
-import { isNormalState } from '@blockera/editor-extensions/js/components';
+import { isNormalState } from '@blockera/editor/js/extensions/components';
 
 export const getCssSelector = ({
 	state,

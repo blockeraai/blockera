@@ -1811,12 +1811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-gettext/Gettext.git",
-                "reference": "b632aaf5e4579d0b2ae8bc61785e238bff4c5156"
+                "reference": "11af89ee6c087db3cf09ce2111a150bca5c46e12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-gettext/Gettext/zipball/b632aaf5e4579d0b2ae8bc61785e238bff4c5156",
-                "reference": "b632aaf5e4579d0b2ae8bc61785e238bff4c5156",
+                "url": "https://api.github.com/repos/php-gettext/Gettext/zipball/11af89ee6c087db3cf09ce2111a150bca5c46e12",
+                "reference": "11af89ee6c087db3cf09ce2111a150bca5c46e12",
                 "shasum": ""
             },
             "require": {
@@ -1884,7 +1884,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-08-14T15:15:05+00:00"
+            "time": "2024-05-18T10:25:07+00:00"
         },
         {
             "name": "gettext/languages",
@@ -4309,12 +4309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "72b50b9aa22b65fd41be21a5de272d53a327d125"
+                "reference": "b7c2356e085cceac815d79b19846d2f873989bbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/72b50b9aa22b65fd41be21a5de272d53a327d125",
-                "reference": "72b50b9aa22b65fd41be21a5de272d53a327d125",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/b7c2356e085cceac815d79b19846d2f873989bbc",
+                "reference": "b7c2356e085cceac815d79b19846d2f873989bbc",
                 "shasum": ""
             },
             "require": {
@@ -4382,7 +4382,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-05-16T06:02:46+00:00"
+            "time": "2024-05-18T10:31:46+00:00"
         },
         {
             "name": "symfony/console",
@@ -7932,5 +7932,5 @@
     "platform-overrides": {
         "php": "8.1"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

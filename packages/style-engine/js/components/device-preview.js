@@ -8,7 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import type { TBreakpoint } from '@blockera/editor-extensions/js/libs/block-states/types';
+import type { TBreakpoint } from '@blockera/editor/js/extensions/libs/block-states/types';
 
 export const DevicePreview = ({
 	breakpoint,

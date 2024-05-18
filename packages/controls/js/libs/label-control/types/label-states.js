@@ -6,7 +6,7 @@
 import type {
 	StateGraph,
 	StateGraphItem,
-} from '@blockera/editor-extensions/js/libs/block-states/store/selector';
+} from '@blockera/editor/js/extensions/libs/block-states/store/selector';
 
 export type LabelChangedStates = Array<{
 	id: number,

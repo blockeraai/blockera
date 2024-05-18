@@ -8,7 +8,7 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import type { TStates } from '@blockera/editor-extensions/js/libs/block-states/types';
+import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { Tooltip } from '@blockera/components';
 

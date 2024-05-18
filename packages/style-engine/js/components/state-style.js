@@ -9,8 +9,8 @@ import { useId } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import type { TStates } from '@blockera/editor-extensions/js/libs/block-states/types';
-import { default as blockStates } from '@blockera/editor-extensions/js/libs/block-states/states';
+import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
+import { default as blockStates } from '@blockera/editor/js/extensions/libs/block-states/states';
 
 /**
  * Internal dependencies

@@ -10,7 +10,7 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObjects } from '@blockera/utils';
-import { registerBlockExtension } from '@blockera/editor-extensions';
+import { registerBlockExtension } from '@blockera/editor';
 
 /**
  * Internal dependencies

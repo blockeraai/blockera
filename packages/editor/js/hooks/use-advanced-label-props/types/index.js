@@ -7,7 +7,7 @@ import type {
 	StateTypes,
 	TBreakpoint,
 	TStates,
-} from '@blockera/editor-extensions/js/libs/block-states/types';
+} from '@blockera/editor/js/extensions/libs/block-states/types';
 import type { AdvancedLabelControlProps } from '@blockera/controls/js/libs/label-control/types';
 
 export type CalculatedAdvancedLabelProps = {

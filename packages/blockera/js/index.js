@@ -8,8 +8,12 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { applyHooks, defineGlobalProps } from '@blockera/editor-extensions';
+import {
+	reregistrationBlocks,
+	registerThirdPartyExtensionDefinitions,
+} from '@blockera/blocks';
 import { initializer } from '@blockera/bootstrap';
+import { applyHooks, defineGlobalProps } from '@blockera/editor';
 
 /**
  * Initialize blockera react application.
@@ -17,7 +21,10 @@ import { initializer } from '@blockera/bootstrap';
 addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 	defineGlobalProps();
 
-	applyHooks();
+	applyHooks(() => {
+		reregistrationBlocks();
+		registerThirdPartyExtensionDefinitions();
+	});
 });
 
 initializer();

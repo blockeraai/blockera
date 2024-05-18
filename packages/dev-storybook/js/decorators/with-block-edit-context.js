@@ -1,5 +1,5 @@
 import { useState } from '@wordpress/element';
-import { BlockEditContext } from '@blockera/editor-extensions';
+import { BlockEditContext } from '@blockera/editor/js/extensions/hooks';
 
 export const WithBlockEditContextProvider = (story, context) => {
 	const [value, setValue] = useState(
