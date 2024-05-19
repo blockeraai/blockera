@@ -36,7 +36,6 @@
 		"@blockera/data": "file:packages/data",
 		"@blockera/data-editor": "file:packages/data-editor",
 		"@blockera/editor": "file:packages/editor",
-		"@blockera/style-engine": "file:packages/style-engine",
 		"@blockera/utils": "file:packages/utils",
 		"@blockera/wordpress": "file:packages/wordpress",
 		"@monaco-editor/react": "^4.6.0",

@@ -18,15 +18,15 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/editor"
+		},
+		{
+			"type": "path",
 			"url": "packages/utils"
 		},
 		{
 			"type": "path",
 			"url": "packages/wordpress"
-		},
-		{
-			"type": "path",
-			"url": "packages/style-engine"
 		},
 		{
 			"type": "path",
@@ -66,9 +66,9 @@
 		"blockera/blockera-admin": "*",
 		"blockera/blocks": "*",
 		"blockera/bootstrap": "*",
+		"blockera/editor": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
-		"blockera/style-engine": "*",
 		"blockera/exceptions": "*",
 		"blockera/data": "*",
 		"blockera/data-editor": "*",

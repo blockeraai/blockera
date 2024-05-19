@@ -3,13 +3,8 @@
 /**
  * Blockera dependencies
  */
-import {
-	getCssSelector,
-	computedCssDeclarations,
-} from '@blockera/style-engine';
 import { isUndefined } from '@blockera/utils';
 import { getValueAddonRealValue } from '@blockera/editor';
-import type { CssRule } from '@blockera/style-engine/js/types';
 
 /**
  * Internal dependencies
@@ -19,7 +14,9 @@ import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { useBlocksStore } from '../../../hooks';
 import { isActiveField } from '../../api/utils';
+import type { CssRule } from '../../../style-engine/types';
 import type { TSpacingDefaultProps, TCssProps } from './types/spacing-props';
+import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
 
 function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 	const properties: TCssProps = {};

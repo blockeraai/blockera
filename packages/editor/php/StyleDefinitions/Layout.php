@@ -1,8 +1,8 @@
 <?php
 
-namespace Blockera\StyleEngine\StyleDefinitions;
+namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\StyleEngine\StyleDefinitions\Contracts\HaveCustomSettings;
+use Blockera\Editor\StyleDefinitions\Contracts\HaveCustomSettings;
 
 class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 

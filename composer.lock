@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72961aa2db21529f8459fe36863a5c87",
+    "content-hash": "2c223b602afafc24c8e9fb1d79a7440e",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -130,6 +130,28 @@
             }
         },
         {
+            "name": "blockera/editor",
+            "version": "dev-feat/control/input-control",
+            "dist": {
+                "type": "path",
+                "url": "packages/editor",
+                "reference": "d25740540519bca8e76fc0b160348fe8aa7e30c2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Editor\\": "php/"
+                },
+                "files": [
+                    "php/helpers.php"
+                ]
+            },
+            "description": "Blockera Editor php package to implements WordPress block and site editor functionalities on admin and front-end.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "blockera/exceptions",
             "version": "dev-feat/control/input-control",
             "dist": {
@@ -163,28 +185,6 @@
                 }
             },
             "description": "The blockera http abstraction package.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "blockera/style-engine",
-            "version": "dev-feat/control/input-control",
-            "dist": {
-                "type": "path",
-                "url": "packages/style-engine",
-                "reference": "5002e1163600310a7fc1cfb2bc1c14d2f0084990"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\StyleEngine\\": "php/"
-                },
-                "files": [
-                    "php/helpers.php"
-                ]
-            },
-            "description": "Blockera Style Engine package to compile css on server side.",
             "transport-options": {
                 "relative": true
             }

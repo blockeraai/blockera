@@ -3,10 +3,6 @@
 /**
  * Blockera dependencies
  */
-import {
-	getCssSelector,
-	computedCssDeclarations,
-} from '@blockera/style-engine';
 import { isUndefined, isEmpty } from '@blockera/utils';
 import { getValueAddonRealValue } from '@blockera/editor';
 
@@ -18,7 +14,8 @@ import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
-import type { CssRule } from '@blockera/style-engine/js/types';
+import type { CssRule } from '../../../style-engine/types';
+import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
 
 export const SizeStyles = ({
 	state,

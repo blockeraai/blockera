@@ -2,7 +2,7 @@
  * Blockera dependencies
  */
 import { getValueAddonRealValue } from '@blockera/editor';
-import { createCssDeclarations } from '@blockera/style-engine';
+import { createCssDeclarations } from '../../../../style-engine';
 
 export function BoxShadowGenerator(id, props) {
 	const { attributes } = props;

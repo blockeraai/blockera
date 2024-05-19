@@ -1,6 +1,6 @@
 <?php
 
-use Blockera\StyleEngine;
+use Blockera\Editor\StyleEngine;
 
 if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	/**

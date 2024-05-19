@@ -1,8 +1,8 @@
 // @flow
 /**
- * Blockera dependencies
+ * Internal dependencies
  */
-import type { CssRule } from '@blockera/style-engine/js/types';
+import type { CssRule } from '../../../style-engine/types';
 
 //FIXME: implements with use below props
 

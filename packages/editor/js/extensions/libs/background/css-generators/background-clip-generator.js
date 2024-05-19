@@ -1,7 +1,7 @@
 /**
  * Blockera dependencies
  */
-import { createCssDeclarations } from '@blockera/style-engine';
+import { createCssDeclarations } from '../../../../style-engine';
 
 export function backgroundClipGenerator(id, props) {
 	const { attributes } = props;

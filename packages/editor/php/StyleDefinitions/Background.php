@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\StyleEngine\StyleDefinitions;
+namespace Blockera\Editor\StyleDefinitions;
 
 /**
  * Class Background definition to generate css rules.

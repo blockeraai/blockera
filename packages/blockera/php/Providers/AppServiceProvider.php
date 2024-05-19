@@ -10,7 +10,7 @@ use Blockera\WordPress\RenderBlock\{
 	SavePost,
 	Setup,
 };
-use Blockera\StyleEngine\{
+use Blockera\Editor\{
 	StyleDefinitions\Background,
 	StyleDefinitions\Border,
 	StyleDefinitions\BoxShadow,

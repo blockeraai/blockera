@@ -2,8 +2,8 @@
 
 namespace Blockera\WordPress\RenderBlock;
 
+use Blockera\Editor\StyleEngine;
 use Blockera\Bootstrap\Application;
-use Blockera\StyleEngine\StyleEngine;
 use Blockera\Exceptions\BaseException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 

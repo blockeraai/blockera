@@ -1,12 +1,4 @@
 // @flow
-/**
- * Blockera dependencies
- */
-import {
-	computedCssDeclarations,
-	getCssSelector,
-} from '@blockera/style-engine';
-import type { CssRule } from '@blockera/style-engine/js/types';
 
 /**
  * Internal dependencies
@@ -22,6 +14,8 @@ import {
 	BorderRadiusGenerator,
 } from './css-generators';
 import type { StylesProps } from '../types';
+import type { CssRule } from '../../../style-engine/types';
+import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
 
 export const BorderAndShadowStyles = ({
 	state,

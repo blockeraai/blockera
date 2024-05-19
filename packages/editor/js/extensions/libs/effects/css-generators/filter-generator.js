@@ -3,7 +3,7 @@
  */
 import { getSortedRepeater } from '@blockera/controls';
 import { isUndefined } from '@blockera/utils';
-import { createCssDeclarations } from '@blockera/style-engine';
+import { createCssDeclarations } from '../../../../style-engine';
 import { getValueAddonRealValue } from '@blockera/editor';
 
 export function FilterGenerator(id, props) {

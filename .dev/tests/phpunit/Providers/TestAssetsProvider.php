@@ -58,9 +58,7 @@ class TestAssetsProvider extends AppTestCase {
 		$this->assertTrue( wp_script_is( '@blockera/utils', 'registered' ) );
 		$this->assertTrue( wp_script_is( '@blockera/controls', 'registered' ) );
 		$this->assertTrue( wp_script_is( '@blockera/components', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@blockera/editor-extensions', 'registered' ) );
 		$this->assertTrue( wp_script_is( '@blockera/classnames', 'registered' ) );
-		$this->assertTrue( wp_script_is( '@blockera/style-engine', 'registered' ) );
 		$this->assertTrue( wp_script_is( '@blockera/data-extractor', 'registered' ) );
 	}
 

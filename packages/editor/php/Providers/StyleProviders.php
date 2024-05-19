@@ -1,8 +1,8 @@
 <?php
 
-namespace Blockera\StyleEngine\Providers;
+namespace Blockera\Editor\Providers;
 
-use Blockera\StyleEngine\StyleDefinitions\{
+use Blockera\Editor\StyleDefinitions\{
 	Size,
 	Mouse,
 	Border,
@@ -16,13 +16,12 @@ use Blockera\StyleEngine\StyleDefinitions\{
 	TextShadow,
 	Typography
 };
-use Blockera\Bootstrap\Application;
 use Blockera\Bootstrap\ServiceProvider;
 
 /**
  * The StyleProviders class.
  *
- * @package Blockera\StyleEngine\Providers\StyleProviders
+ * @package Blockera\Editor\StyleEngine\Providers\StyleProviders
  */
 class StyleProviders extends ServiceProvider {
 

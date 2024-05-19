@@ -1,8 +1,8 @@
 <?php
 
-namespace Blockera\StyleEngine;
+namespace Blockera\Editor;
 
-use Blockera\StyleEngine\StyleDefinitions\BaseStyleDefinition;
+use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 
 /**
  * Class StyleEngine generating css style for any state of breakpoints with any properties.

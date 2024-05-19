@@ -27,12 +27,12 @@ import {
 	// prependPortal,
 	omitWithPattern,
 } from '@blockera/utils';
-import { BlockStyle } from '@blockera/style-engine';
 import { isLaptopBreakpoint } from '@blockera/editor';
 
 /**
  * Internal dependencies
  */
+import { BlockStyle } from '../../style-engine';
 import { BlockEditContextProvider } from '../hooks';
 import {
 	useAttributes,

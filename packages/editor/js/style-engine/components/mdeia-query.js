@@ -8,7 +8,7 @@ import type { Element } from 'react';
 /**
  * Blockera dependencies
  */
-import { useMedia } from '@blockera/style-engine';
+import { useMedia } from '../';
 
 /**
  * Internal dependencies

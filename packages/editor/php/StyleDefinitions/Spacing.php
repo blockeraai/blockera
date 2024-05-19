@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\StyleEngine\StyleDefinitions;
+namespace Blockera\Editor\StyleDefinitions;
 
 class Spacing extends BaseStyleDefinition {
 
@@ -34,15 +34,21 @@ class Spacing extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$padding = is_array( $padding ) ? array_filter(
-			$padding,
-			[ $this, 'filteredItems' ]
-		) : $padding;
+		if (is_array( $padding )){
 
-		$margin = is_array( $margin ) ? array_filter(
-			$margin,
-			[ $this, 'filteredItems' ]
-		) : $margin;
+			$padding = array_filter(
+				array_map('blockera_get_value_addon_real_value', $padding),
+				[$this , 'filteredItems']
+			);
+		}
+
+		if (is_array( $margin )){
+
+			$margin = array_filter(
+				array_map('blockera_get_value_addon_real_value', $margin),
+				[$this , 'filteredItems']
+			);
+		}
 
 		$isImportant = $this->getImportant();
 

@@ -3,23 +3,20 @@
 /**
  * Blockera dependencies
  */
-import {
-	computedCssDeclarations,
-	getCssSelector,
-} from '@blockera/style-engine';
-import { getValueAddonRealValue } from '@blockera/editor';
-import type { CssRule } from '@blockera/style-engine/js/types';
 import { isEmptyObject } from '@blockera/utils';
+import { getValueAddonRealValue } from '@blockera/editor';
 
 /**
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
+import * as config from '../base/config';
 import { attributes } from './attributes';
+import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import { TextShadowGenerator } from './css-generators';
-import * as config from '../base/config';
-import type { StylesProps } from '../types';
+import type { CssRule } from '../../../style-engine/types';
+import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
 
 export function TypographyStyles({
 	state,

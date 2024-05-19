@@ -1,21 +1,14 @@
 // @flow
 
 /**
- * Blockera dependencies
- */
-import {
-	getCssSelector,
-	computedCssDeclarations,
-} from '@blockera/style-engine';
-import type { CssRule } from '@blockera/style-engine/js/types';
-
-/**
  * Internal dependencies
  */
 import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
+import type { CssRule } from '../../../style-engine/types';
+import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
 
 export const MouseStyles = ({
 	state,

@@ -2,24 +2,21 @@
 /**
  * Blockera dependencies
  */
-import {
-	getCssSelector,
-	computedCssDeclarations,
-} from '@blockera/style-engine';
 import { getValueAddonRealValue } from '@blockera/editor';
-import type { CssRule } from '@blockera/style-engine/js/types';
 import { getSortedRepeater } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
-import { FilterGenerator, TransitionGenerator } from './css-generators';
 import { arrayEquals } from '../utils';
 import * as config from '../base/config';
 import { attributes } from './attributes';
-import { isActiveField } from '../../api/utils';
 import type { StylesProps } from '../types';
+import { isActiveField } from '../../api/utils';
+import type { CssRule } from '../../../style-engine/types';
 import type { TTransformCssProps } from './types/effects-props';
+import { FilterGenerator, TransitionGenerator } from './css-generators';
+import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
 
 export const EffectsStyles = ({
 	state,

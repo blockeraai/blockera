@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\StyleEngine\StyleDefinitions;
+namespace Blockera\Editor\StyleDefinitions;
 
 class Typography extends BaseStyleDefinition {
 

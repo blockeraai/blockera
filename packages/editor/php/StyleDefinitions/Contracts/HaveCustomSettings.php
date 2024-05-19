@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\StyleEngine\StyleDefinitions\Contracts;
+namespace Blockera\Editor\StyleDefinitions\Contracts;
 
 interface HaveCustomSettings {
 

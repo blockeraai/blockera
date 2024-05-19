@@ -3,7 +3,6 @@
  * Blockera dependencies
  */
 import { getValueAddonRealValue } from '@blockera/editor';
-import type { CssRule } from '@blockera/style-engine/js/types';
 
 /**
  * Internal dependencies
@@ -13,11 +12,9 @@ import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
+import type { CssRule } from '../../../style-engine/types';
+import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
 import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
-import {
-	computedCssDeclarations,
-	getCssSelector,
-} from '@blockera/style-engine';
 
 export const BackgroundStyles = ({
 	state,

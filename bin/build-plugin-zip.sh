@@ -115,7 +115,7 @@ zip -r blockera.zip \
   $(find ./vendor/blockera/data-editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/exceptions/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/http/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/style-engine/ -type f \( -name "*.php" -o -name "*.json" \)) \
+  $(find ./vendor/blockera/editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/utils/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/wordpress/ -type f \( -name "*.php" -o -name "*.json" \))
 

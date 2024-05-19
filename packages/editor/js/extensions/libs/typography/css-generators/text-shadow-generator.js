@@ -1,7 +1,7 @@
 /**
  * Blockera dependencies
  */
-import { createCssDeclarations } from '@blockera/style-engine';
+import { createCssDeclarations } from '../../../../style-engine';
 import { getValueAddonRealValue } from '@blockera/editor';
 
 export function TextShadowGenerator(id, props) {

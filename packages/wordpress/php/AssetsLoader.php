@@ -71,7 +71,7 @@ class AssetsLoader {
 			'url'  => '',
 		];
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'registerAssets' ), 10 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'registerAssets' ), 10 );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
@@ -161,7 +161,7 @@ class AssetsLoader {
 	 *
 	 * @return void
 	 */
-	public function registerAssets() {
+	public function registerAssets(): void {
 
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
