@@ -71,7 +71,8 @@ class AssetsLoader {
 			'url'  => '',
 		];
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'registerAssets' ), 10 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueDynamicStyles' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'registerAssets' ], 10 );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
@@ -129,39 +130,11 @@ class AssetsLoader {
 	}
 
 	/**
-	 * Preparing current assets with info!
-	 *
-	 * @return array
-	 */
-	protected function prepareAssets(): array {
-
-		$provider = $this;
-
-		return array_filter(
-			array_map(
-				static function ( string $asset ) use ( $provider ) {
-
-					$assetInfo = $provider->assetInfo( $asset );
-
-					if ( ! $assetInfo ) {
-
-						return null;
-					}
-
-					return $assetInfo;
-
-				},
-				$this->assets
-			)
-		);
-	}
-
-	/**
-	 * Register all assets in WordPress.
+	 * Enqueuing dynamic-assets
 	 *
 	 * @return void
 	 */
-	public function registerAssets(): void {
+	public function enqueueDynamicStyles():void {
 
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
@@ -195,6 +168,42 @@ class AssetsLoader {
 			);
 			// phpcs:enable
 		}
+	}
+
+	/**
+	 * Preparing current assets with info!
+	 *
+	 * @return array
+	 */
+	protected function prepareAssets(): array {
+
+		$provider = $this;
+
+		return array_filter(
+			array_map(
+				static function ( string $asset ) use ( $provider ) {
+
+					$assetInfo = $provider->assetInfo( $asset );
+
+					if ( ! $assetInfo ) {
+
+						return null;
+					}
+
+					return $assetInfo;
+
+				},
+				$this->assets
+			)
+		);
+	}
+
+	/**
+	 * Register all assets in WordPress.
+	 *
+	 * @return void
+	 */
+	public function registerAssets(): void {
 
 		// Registering assets ...
 		foreach ( $this->prepareAssets() as $asset ) {
