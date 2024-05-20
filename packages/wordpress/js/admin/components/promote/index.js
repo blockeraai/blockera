@@ -5,6 +5,15 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+
+/**
+ * Blockera dependencies
+ */
+import { Button } from '@blockera/components';
+
+/**
+ * Internal dependencies
+ */
 import type { PromoteProps } from './types';
 
 export const Promote = ({
@@ -14,7 +23,12 @@ export const Promote = ({
 	return (
 		<div className={'blockera-settings-promote'}>
 			{description}
-			<a href={url}>{__('upgrading to Pro', 'blockera')}</a>
+			<Button
+				href={url}
+				variant={'link'}
+				className={'blockera-promote-link'}
+				text={__('upgrading to Pro', 'blockera')}
+			/>
 		</div>
 	);
 };

@@ -164,6 +164,7 @@ export const Update = ({
 							? 'not-allowed'
 							: 'pointer',
 				}}
+				noBorder={true}
 				disabled={'updated' === updateButtonStatus.status}
 				isPressed={'updating' === updateButtonStatus.status}
 				variant={'primary'}

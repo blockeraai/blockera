@@ -8,14 +8,14 @@
 
 .blockera-settings-button {
 	border: none;
-	padding: 10px;
+	padding: 10px !important;
 	cursor: pointer;
 	transition: all 0.1s;
 }
 
 .blockera-settings-secondary-button {
-	border: solid 1px var(--blockera-settings-primary-color);
 	color: var(--blockera-settings-primary-color);
+	border: solid 1px var(--blockera-settings-primary-color);
 	background-color: var(--blockera-settings-secondary-color);
 }
 
@@ -26,8 +26,8 @@
 }
 
 .blockera-settings-primary-button {
-	color: #ffffff;
-	background-color: var(--blockera-settings-primary-color);
+	color: #ffffff !important;
+	background-color: var(--blockera-settings-primary-color) !important;
 }
 
 .blockera-settings-primary-button:hover {

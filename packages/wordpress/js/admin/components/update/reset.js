@@ -47,6 +47,7 @@ export const Reset = ({
 
 	return (
 		<Button
+			noBorder={true}
 			data-test={'reset-settings'}
 			className={classnames(
 				'blockera-settings-button blockera-settings-secondary-button'

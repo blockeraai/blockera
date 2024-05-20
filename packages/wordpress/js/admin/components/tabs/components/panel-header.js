@@ -24,8 +24,8 @@ export const PanelHeader = ({
 }: {
 	tab: TTabProps,
 	tabSettings: any,
+	description: any,
 	hasUpdate: boolean,
-	description: string,
 	onUpdate: (hasUpdate: boolean) => void,
 }): MixedElement => {
 	return (
