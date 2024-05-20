@@ -23,7 +23,7 @@ import {
 export const Panel = (tab: TTabProps): MixedElement => {
 	let description: Element<any> = <></>;
 	let activePanel: any = <></>;
-	const { settings, hasUpdate, setHasUpdates } = useContext(TabsContext);
+	const { settings } = useContext(TabsContext);
 
 	switch (tab.name) {
 		case 'general-settings':
@@ -62,12 +62,10 @@ export const Panel = (tab: TTabProps): MixedElement => {
 			<div className={'blockera-settings-active-panel'}>
 				<PanelHeader
 					tab={tab}
-					hasUpdate={hasUpdate}
-					tabSettings={settings[tab.settingSlug]}
-					onUpdate={(_hasUpdate: boolean): void =>
-						setHasUpdates(_hasUpdate)
-					}
+					name={'settings'}
+					kind={'blockera/v1'}
 					description={description}
+					tabSettings={settings[tab.settingSlug]}
 				/>
 
 				{activePanel}

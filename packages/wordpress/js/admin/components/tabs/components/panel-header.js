@@ -9,12 +9,12 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { Flex } from '@blockera/components';
-import type { TTabProps } from '@blockera/components/js/tabs/types';
 
 /**
  * Internal dependencies
  */
 import { Update } from '../../';
+import type { TabsProps } from '../types';
 
 export const PanelHeader = ({
 	tab,
@@ -25,7 +25,7 @@ export const PanelHeader = ({
 }: {
 	kind: string,
 	name: string,
-	tab: TTabProps,
+	tab: TabsProps,
 	tabSettings: any,
 	description: any,
 }): MixedElement => {

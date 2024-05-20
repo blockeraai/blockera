@@ -27,8 +27,6 @@ class SettingsController extends RestController {
 	 */
 	public function permission( \WP_REST_Request $request ): bool {
 
-		return true;
-
 		return current_user_can( 'activate_plugins' );
 	}
 
@@ -82,9 +80,9 @@ class SettingsController extends RestController {
 		// The locale is often appended to the request. We don't need this.
 		unset( $settings['_locale'] );
 
-		if ( 'reset' === $request->get_param( 'action' ) ) {
+		if ( in_array( $request->get_param( 'action' ), [ 'reset-all', 'reset' ], true ) ) {
 
-			$reset   = $request->get_param( 'reset' );
+			$reset   = $request->get_param( 'reset' ) ?? $request->get_param( 'action' );
 			$default = $request->get_param( 'default' );
 
 			return $this->reset( $default, $reset );
@@ -101,7 +99,7 @@ class SettingsController extends RestController {
 					'code'    => 500,
 					'success' => false,
 					'data'    => [
-						'message' => __( 'Failed update process.', 'blockera' )
+						'message' => __( 'Failed update process.', 'blockera' ),
 					],
 				],
 				500
@@ -114,7 +112,7 @@ class SettingsController extends RestController {
 				'success' => true,
 				'data'    => [
 					'settings' => $settings,
-					'message'  => __( 'Updated settings ✅', 'blockera' )
+					'message'  => __( 'Updated settings ✅', 'blockera' ),
 				],
 			],
 			200
@@ -138,12 +136,28 @@ class SettingsController extends RestController {
 					'code'    => 400,
 					'success' => false,
 					'data'    => [
-						'message' => __( 'Can not reset. Bad request.', 'blockera' )
+						'message' => __( 'Can not reset. Bad request.', 'blockera' ),
 					],
 				],
 				400
 			);
 		}
+
+		if ( 'reset-all' === $resetType ) {
+
+			delete_option( $this->option_key );
+
+			return new \WP_REST_Response(
+				[
+					'code'    => 200,
+					'success' => true,
+					'data'    => [
+						'message' => __( 'Reset All Done', 'blockera' ),
+					],
+				]
+			);
+		}
+
 		// Get older saved settings.
 		$saved_settings = get_option( $this->option_key );
 		$new_settings   = array_merge(
@@ -163,7 +177,7 @@ class SettingsController extends RestController {
 					'code'    => 500,
 					'success' => false,
 					'data'    => [
-						'message' => __( 'Failed reset process.', 'blockera' )
+						'message' => __( 'Failed reset process.', 'blockera' ),
 					],
 				],
 				500
@@ -176,7 +190,7 @@ class SettingsController extends RestController {
 				'success' => true,
 				'data'    => [
 					'settings' => $new_settings,
-					'message'  => __( 'Reset settings ✅', 'blockera' )
+					'message'  => __( 'Reset settings ✅', 'blockera' ),
 				],
 			],
 			200
