@@ -14,7 +14,9 @@ return [
 	'admin'  => [
 		'list'      => [
 			'blockera-admin',
+			'controls-styles',
 			'wordpress-styles',
+			'components-styles',
 			'blockera-admin-styles',
 		],
 		'with-deps' => [
