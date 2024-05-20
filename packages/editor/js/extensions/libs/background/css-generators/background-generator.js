@@ -1,9 +1,13 @@
 /**
  * Blockera dependencies
  */
-import { createCssDeclarations } from '../../../../style-engine';
+import { getValueAddonRealValue } from '@blockera/value-addons';
 import { getBackgroundItemBGProperty } from '@blockera/controls';
-import { getValueAddonRealValue } from '@blockera/editor';
+
+/**
+ * Internal dependencies
+ */
+import { createCssDeclarations } from '../../../../style-engine';
 
 export function backgroundGenerator(id, props) {
 	const { attributes } = props;

@@ -2,10 +2,10 @@
 /**
  * Blockera dependencies
  */
+import { isValid } from '@blockera/value-addons';
 import { isEmpty, isString, mergeObject } from '@blockera/utils';
+import type { ValueAddon } from '@blockera/value-addons/js/types';
 import { getGradientVAFromVarString, getGradientType } from '@blockera/data';
-import { isValid } from '@blockera/editor/js/hooks/use-value-addon/helpers';
-import type { ValueAddon } from '@blockera/editor/js/hooks/use-value-addon/types';
 
 export function elementNormalBackgroundFromWPCompatibility({
 	element,

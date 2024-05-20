@@ -4,10 +4,10 @@
  * Blockera dependencies
  */
 import { isEmpty, isUndefined } from '@blockera/utils';
-import { getColor, generateVariableString } from '@blockera/data';
-import { isValid } from '@blockera/editor/js/hooks/use-value-addon/helpers';
+import { isValid } from '@blockera/value-addons';
 import { getColorVAFromIdString } from '@blockera/data';
-import type { ValueAddon } from '@blockera/editor/js/hooks/use-value-addon/types';
+import type { ValueAddon } from '@blockera/value-addons/js/types';
+// import { getColor, generateVariableString } from '@blockera/data';
 
 export function normalIconBackgroundColorFromWPCompatibility({
 	attributes,

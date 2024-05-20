@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import type { Element } from 'react';
+import type { ComponentType } from 'react';
 import type { VariableItem } from '@blockera/data';
 
 /**
@@ -22,7 +22,7 @@ export type ValueAddonProps = {
 	/**
 	 * The value pointer as react element.
 	 */
-	ValueAddonPointer: () => Element<any>,
+	ValueAddonPointer: ComponentType<any>,
 	/**
 	 * Has set control value?
 	 */
@@ -30,7 +30,7 @@ export type ValueAddonProps = {
 	/**
 	 * The control addon user interface to show addon value like: css variables or any other core entity value of WordPress as react component.
 	 */
-	ValueAddonControl: () => Element<any>,
+	ValueAddonControl: ComponentType<any>,
 	/**
 	 * The control addon user interface to show addon value like: css variables or any other core entity value of WordPress as react component.
 	 */

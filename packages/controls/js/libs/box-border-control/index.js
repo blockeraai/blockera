@@ -12,9 +12,9 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button } from '@blockera/components';
-import { isValid } from '@blockera/editor';
 import { isEquals } from '@blockera/utils';
+import { Button } from '@blockera/components';
+import { isValid } from '@blockera/value-addons';
 
 /**
  * Internal dependencies

@@ -15,9 +15,9 @@ import { BreakpointIcon } from '@blockera/editor/js/extensions/libs/block-states
 /**
  * Internal Dependencies
  */
-import type { LabelStates } from '../types';
-import { getStatesGraph } from '../states-graph';
 import EditedItem from './edited-item';
+import type { LabelStates } from './types';
+import { getStatesGraph } from './helpers';
 
 export const StatesGraph = ({
 	onClick,

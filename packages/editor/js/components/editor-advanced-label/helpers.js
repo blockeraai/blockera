@@ -8,12 +8,12 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isEquals, isNull, isUndefined } from '@blockera/utils';
 import {
 	getStatesGraphNodes,
 	type StateGraph,
 	type StateGraphItem,
 } from '@blockera/editor/js/extensions/libs/block-states/store/selector';
+import { isEmpty, isEquals, isNull, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */

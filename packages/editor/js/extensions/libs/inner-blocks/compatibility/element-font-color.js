@@ -3,8 +3,8 @@
 /**
  * Blockera dependencies
  */
+import { isValid } from '@blockera/value-addons';
 import { isEmpty, isUndefined } from '@blockera/utils';
-import { isValid } from '@blockera/editor/js/hooks/use-value-addon/helpers';
 import { getColorVAFromVarString } from '@blockera/data';
 
 export function elementNormalFontColorFromWPCompatibility({

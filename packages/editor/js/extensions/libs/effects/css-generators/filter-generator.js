@@ -1,10 +1,14 @@
 /**
  * Blockera dependencies
  */
-import { getSortedRepeater } from '@blockera/controls';
 import { isUndefined } from '@blockera/utils';
+import { getSortedRepeater } from '@blockera/controls';
+import { getValueAddonRealValue } from '@blockera/value-addons';
+
+/**
+ * Internal dependencies
+ */
 import { createCssDeclarations } from '../../../../style-engine';
-import { getValueAddonRealValue } from '@blockera/editor';
 
 export function FilterGenerator(id, props) {
 	const isBackdrop = 'blockeraBackdropFilter' === id;

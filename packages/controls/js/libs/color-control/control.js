@@ -11,14 +11,14 @@ import { useState } from '@wordpress/element';
  */
 import { controlClassNames } from '@blockera/classnames';
 import { Button, ColorIndicator } from '@blockera/components';
-import { setValueAddon, useValueAddon } from '@blockera/editor';
+import { setValueAddon, useValueAddon } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
-import { BaseControl, ColorPickerControl } from '../index';
-import { useControlContext } from '../../context';
 import type { ColorControlProps } from './types';
+import { useControlContext } from '../../context';
+import { BaseControl, ColorPickerControl } from '../index';
 
 export default function ColorControl({
 	type = 'normal',
@@ -41,7 +41,6 @@ export default function ColorControl({
 	//
 	controlAddonTypes,
 	variableTypes,
-	dynamicValueTypes,
 	size = 'normal',
 	//
 	...props
@@ -72,7 +71,6 @@ export default function ColorControl({
 		setValue: (newValue: any): void =>
 			setValueAddon(newValue, setValue, defaultValue),
 		variableTypes,
-		dynamicValueTypes,
 		onChange: setValue,
 		size,
 	});

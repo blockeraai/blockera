@@ -1,4 +1,5 @@
 // @flow
+
 /**
  * External dependencies
  */
@@ -22,15 +23,15 @@ import type { ValueAddonControlProps } from './components/control/types';
 export type { ValueAddonControlProps } from './components/control/types';
 
 export const useValueAddon = ({
-	types,
 	value,
 	setValue,
-	variableTypes,
 	onChange,
+	types = [],
 	size = 'normal',
-	pointerProps = {},
 	pickerProps = {},
-}: UseValueAddonProps): {} | ValueAddonProps => {
+	pointerProps = {},
+	variableTypes = [],
+}: UseValueAddonProps): ValueAddonProps => {
 	const [isOpen, setOpen] = useState('');
 	value = useMemo(() => {
 		return isObject(value)

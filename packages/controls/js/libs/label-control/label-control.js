@@ -5,10 +5,15 @@
 import type { MixedElement } from 'react';
 
 /**
+ * Blockera dependencies
+ */
+import { useControlContext } from '../../context';
+
+/**
  * Internal dependencies
  */
 import type { LabelControlProps } from './types';
-import { AdvancedLabelControl, SimpleLabelControl } from './components';
+import { SimpleLabelControl } from './components';
 
 const LabelControl = ({
 	mode = 'simple',
@@ -26,9 +31,13 @@ const LabelControl = ({
 	resetToDefault,
 	...props
 }: LabelControlProps): MixedElement => {
-	if ('advanced' === mode) {
+	const {
+		components: { EditorAdvancedLabelControl },
+	} = useControlContext();
+
+	if ('advanced' === mode && EditorAdvancedLabelControl) {
 		return (
-			<AdvancedLabelControl
+			<EditorAdvancedLabelControl
 				{...{
 					label,
 					singularId,

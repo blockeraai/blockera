@@ -10,7 +10,7 @@ import type { MixedElement } from 'react';
  */
 import { isEmpty, isUndefined } from '@blockera/utils';
 import { controlClassNames } from '@blockera/classnames';
-import { setValueAddon, useValueAddon } from '@blockera/editor';
+import { setValueAddon, useValueAddon } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
@@ -51,7 +51,6 @@ export default function InputControl({
 	repeaterItem,
 	controlAddonTypes,
 	variableTypes,
-	dynamicValueTypes,
 	//
 	children,
 	...props
@@ -80,7 +79,6 @@ export default function InputControl({
 		setValue: (newValue: any): void =>
 			setValueAddon(newValue, setValue, defaultValue),
 		variableTypes,
-		dynamicValueTypes,
 		onChange: setValue,
 		size,
 	});

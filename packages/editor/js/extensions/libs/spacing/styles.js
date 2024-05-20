@@ -4,7 +4,7 @@
  * Blockera dependencies
  */
 import { isUndefined } from '@blockera/utils';
-import { getValueAddonRealValue } from '@blockera/editor';
+import { getValueAddonRealValue } from '@blockera/value-addons';
 
 /**
  * Internal dependencies

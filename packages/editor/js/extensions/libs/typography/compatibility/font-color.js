@@ -3,9 +3,9 @@
 /**
  * Blockera dependencies
  */
-import { getColorVAFromIdString } from '@blockera/data';
-import { isValid } from '@blockera/editor/js/hooks/use-value-addon/helpers';
 import { isUndefined } from '@blockera/utils';
+import { isValid } from '@blockera/value-addons';
+import { getColorVAFromIdString } from '@blockera/data';
 
 function isColorsEqual(
 	fontColor: void | string,

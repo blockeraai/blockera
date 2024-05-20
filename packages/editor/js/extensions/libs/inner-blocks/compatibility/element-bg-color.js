@@ -3,9 +3,9 @@
 /**
  * Blockera dependencies
  */
-import { isEmpty, isUndefined, mergeObject } from '@blockera/utils';
-import { isValid } from '@blockera/editor/js/hooks/use-value-addon/helpers';
+import { isValid } from '@blockera/value-addons';
 import { getColorVAFromVarString } from '@blockera/data';
+import { isEmpty, isUndefined, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies

@@ -3,7 +3,7 @@
 /**
  *  Dependencies
  */
-import { isValid } from '@blockera/editor';
+import { isValid } from '@blockera/value-addons';
 
 /**
  * Internal Dependencies

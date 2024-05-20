@@ -15,12 +15,12 @@ export type AddonTypesItem = 'variable';
 export type AddonTypes = Array<AddonTypesItem>;
 
 export type UseValueAddonProps = {
-	types: AddonTypes,
 	value: any,
+	types?: AddonTypes,
+	size?: ControlSize,
+	pickerProps?: Object,
+	pointerProps?: Object,
 	setValue: (newValue: any) => void,
+	variableTypes?: Array<VariableCategory>,
 	onChange: (value: string | ValueAddon) => void,
-	variableTypes: Array<VariableCategory>,
-	size: ControlSize,
-	pointerProps: Object,
-	pickerProps: Object,
 };

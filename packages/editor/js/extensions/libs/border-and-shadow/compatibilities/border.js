@@ -7,7 +7,7 @@ import {
 	getColorVAFromIdString,
 	getColorVAFromVarString,
 } from '@blockera/data';
-import { isValid } from '@blockera/editor/js/hooks/use-value-addon/helpers';
+import { isValid } from '@blockera/value-addons';
 import { isBorderEmpty } from '@blockera/controls';
 
 export function borderFromWPCompatibility({

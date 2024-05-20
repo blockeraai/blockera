@@ -1,8 +1,12 @@
 /**
  * Blockera dependencies
  */
+import { getValueAddonRealValue } from '@blockera/value-addons';
+
+/**
+ * Internal dependencies
+ */
 import { createCssDeclarations } from '../../../../style-engine';
-import { getValueAddonRealValue } from '@blockera/editor';
 
 export function BoxBorderGenerator(id, props) {
 	const { attributes } = props;

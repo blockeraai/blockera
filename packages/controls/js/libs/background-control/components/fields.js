@@ -16,10 +16,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import {
-	EditorFeatureWrapper,
-	isValid as isValidVariable,
-} from '@blockera/editor';
+import { isValid as isValidVariable } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
@@ -68,6 +65,7 @@ import { meshGradientProvider } from '../';
 const Fields: FieldItem = memo<FieldItem>(
 	({ itemId, item }: FieldItem): Element<any> => {
 		const {
+			components: { EditorFeatureWrapper },
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
@@ -583,8 +581,9 @@ const Fields: FieldItem = memo<FieldItem>(
 							}
 							columns="columns-2"
 							className={
-								isValidVariable(item['linear-gradient']) &&
-								'blockera-control-is-not-active'
+								isValidVariable(item['linear-gradient'])
+									? 'blockera-control-is-not-active'
+									: ''
 							}
 							onChange={(newValue: string) => {
 								// update linear gradient value
@@ -659,8 +658,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									})
 								}
 								className={
-									isValidVariable(item['linear-gradient']) &&
-									'blockera-control-is-not-active'
+									isValidVariable(item['linear-gradient'])
+										? 'blockera-control-is-not-active'
+										: ''
 								}
 							/>
 
@@ -831,8 +831,9 @@ const Fields: FieldItem = memo<FieldItem>(
 								});
 							}}
 							className={
-								isValidVariable(item['radial-gradient']) &&
-								'blockera-control-is-not-active'
+								isValidVariable(item['radial-gradient'])
+									? 'blockera-control-is-not-active'
+									: ''
 							}
 						/>
 
@@ -951,8 +952,9 @@ const Fields: FieldItem = memo<FieldItem>(
 								})
 							}
 							className={
-								isValidVariable(item['radial-gradient']) &&
-								'blockera-control-is-not-active'
+								isValidVariable(item['radial-gradient'])
+									? 'blockera-control-is-not-active'
+									: ''
 							}
 						/>
 
@@ -1015,8 +1017,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									})
 								}
 								className={
-									isValidVariable(item['radial-gradient']) &&
-									'blockera-control-is-not-active'
+									isValidVariable(item['radial-gradient'])
+										? 'blockera-control-is-not-active'
+										: ''
 								}
 							/>
 

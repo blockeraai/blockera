@@ -3,8 +3,8 @@
 /**
  * Blockera dependencies
  */
+import { isValid } from '@blockera/value-addons';
 import { getFontSizeBy, generateVariableString } from '@blockera/data';
-import { isValid } from '@blockera/editor/js/hooks/use-value-addon/helpers';
 
 export function fontSizeFromWPCompatibility({
 	attributes,

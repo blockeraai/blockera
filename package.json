@@ -37,6 +37,7 @@
 		"@blockera/data-editor": "file:packages/data-editor",
 		"@blockera/editor": "file:packages/editor",
 		"@blockera/utils": "file:packages/utils",
+		"@blockera/value-addons": "file:packages/value-addons",
 		"@blockera/wordpress": "file:packages/wordpress",
 		"@monaco-editor/react": "^4.6.0",
 		"fast-memoize": "^2.5.2",

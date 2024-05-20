@@ -10,16 +10,21 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
+import { BaseControlContext } from '@blockera/controls';
 import { isObject, isFunction, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../store/constants';
 import {
 	blockStatesAttributes,
 	innerBlocksExtensionsAttributes,
 } from '../index';
+import {
+	EditorFeatureWrapper,
+	EditorAdvancedLabelControl,
+} from '../../components';
+import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors } from '../../hooks';
 import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals } from '../components';
@@ -146,8 +151,15 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 		],
 		edit(props: Object): MixedElement {
 			if (isFunction(additional?.edit)) {
+				const baseContextValue = {
+					components: {
+						EditorFeatureWrapper,
+						EditorAdvancedLabelControl,
+					},
+				};
+
 				return (
-					<>
+					<BaseControlContext.Provider value={baseContextValue}>
 						<BlockBase
 							{...{
 								...props,
@@ -172,7 +184,7 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 							</SlotFillProvider>
 						</BlockBase>
 						{settings.edit(props)}
-					</>
+					</BaseControlContext.Provider>
 				);
 			}
 

@@ -14,6 +14,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import { SimpleLabelControl } from '@blockera/controls';
 import { useAdvancedLabelProps } from '@blockera/editor';
 import { Button, Flex, Popover } from '@blockera/components';
 import { useBlockContext } from '@blockera/editor/js/extensions/hooks/context';
@@ -22,14 +23,13 @@ import { isEmpty, isFunction, isNull, isUndefined } from '@blockera/utils';
 /**
  * Internal Dependencies
  */
-import type { AdvancedLabelControlProps } from '../types';
-import { SimpleLabelControl } from './simple-label';
+import type { AdvancedLabelControlProps } from './types';
 import { StatesGraph } from './states-graph';
-import HelpIcon from '../icons/help';
-import EditsIcon from '../icons/edits';
-import RevertIcon from '../icons/revert';
+import HelpIcon from './icons/help';
+import EditsIcon from './icons/edits';
+import RevertIcon from './icons/revert';
 
-export const AdvancedLabelControl = ({
+export const EditorAdvancedLabelControl = ({
 	path = null,
 	label,
 	value,
