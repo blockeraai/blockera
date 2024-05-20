@@ -8,5 +8,5 @@ import type { ControlGeneralTypes } from '../../../types';
 export type TToggleControlProps = {
 	...ControlGeneralTypes,
 	defaultValue?: boolean,
-	labelType?: 'advanced' | 'simple',
+	labelType?: 'advanced' | 'simple' | 'self',
 };

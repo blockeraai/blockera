@@ -57,8 +57,8 @@ export default function ToggleControl({
 		repeaterItem,
 		defaultValue,
 		resetToDefault,
-		mode: labelType,
 		path: getControlPath(attribute, id),
+		mode: 'self' === labelType ? 'none' : labelType,
 	};
 
 	return (
