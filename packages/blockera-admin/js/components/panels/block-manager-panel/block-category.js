@@ -80,6 +80,7 @@ export default function BlockCategory(props: {
 				</div>
 				<div className={'blockera-block-category-buttons'}>
 					<Button
+						noBorder={true}
 						className={classnames(
 							'blockera-block-category-button',
 							{
@@ -91,6 +92,7 @@ export default function BlockCategory(props: {
 						onClick={() => onBlockCategoryChange(false)}
 					/>
 					<Button
+						noBorder={true}
 						className={classnames(
 							'blockera-block-category-button',
 							{

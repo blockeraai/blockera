@@ -9,7 +9,7 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { Switch } from '@blockera/components';
+import { ControlContextProvider, ToggleControl } from '@blockera/controls';
 
 /**
  * Renders an individual list item and checkbox control for a given block type
@@ -39,11 +39,20 @@ export default function BlockType(props: Object): MixedElement {
 					<h4 className={'blockera-block-type'}>{blockType.title}</h4>
 				</div>
 				<div className={'blockera-block-control'}>
-					<Switch
-						value={isChecked}
-						onChange={onBlockTypeChange}
-						id={`toggle${blockType.name.replace('/', '_')}`}
-					/>
+					<ControlContextProvider
+						value={{
+							name: `toggle${blockType.name.replace('/', '_')}`,
+							value: isChecked,
+						}}
+					>
+						<ToggleControl
+							// TODO: Convert to advanced labelType. to display for user is changed value or not!
+							labelType={'self'}
+							id={`toggle${blockType.name.replace('/', '_')}`}
+							defaultValue={isChecked}
+							onChange={onBlockTypeChange}
+						/>
+					</ControlContextProvider>
 				</div>
 			</HStack>
 		</div>

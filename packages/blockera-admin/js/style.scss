@@ -1,4 +1,13 @@
+@use "sass:math";
+@import "~@wordpress/base-styles/colors";
+@import "~@wordpress/base-styles/variables";
+@import "~@wordpress/base-styles/mixins";
+@import "~@wordpress/base-styles/breakpoints";
+@import "~@wordpress/base-styles/animations";
+@import "~@wordpress/base-styles/z-index";
+@import "~@wordpress/components/src/style";
 @import "@blockera/components/js/switch/style.scss";
+
 
 #blockera-admin-settings-container {
 	font-size: 14px;
@@ -58,6 +67,7 @@
 				.blockera-block-category {
 
 					.blockera-block-category-buttons {
+						display: flex;
 
 						.blockera-block-category-button {
 							border: none;

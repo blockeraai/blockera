@@ -18,6 +18,7 @@
 		"packages/dev-cypress/**/*.css",
 		"packages/dev-cypress/**/*.scss",
 		"packages/dev-storybook/**/*.css",
-		"packages/dev-storybook/**/*.scss"
+		"packages/dev-storybook/**/*.scss",
+		"packages/blockera-admin/js/style.scss"
 	]
 }

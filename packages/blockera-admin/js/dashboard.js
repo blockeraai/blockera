@@ -69,6 +69,7 @@ export const Dashboard = (): MixedElement => {
 				>
 					<div className={'blockera-settings-header-links'}>
 						<Button
+							variant={'link'}
 							className={
 								'blockera-settings-button blockera-settings-primary-button'
 							}

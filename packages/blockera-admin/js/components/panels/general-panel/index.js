@@ -12,7 +12,7 @@ import { __experimentalVStack as VStack } from '@wordpress/components';
  * Blockera dependencies
  */
 import { SettingsContext, TabsContext } from '@blockera/wordpress';
-import { Switch } from '@blockera/components';
+import { ControlContextProvider, ToggleControl } from '@blockera/controls';
 
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
@@ -40,35 +40,47 @@ export const GeneralPanel = (): MixedElement => {
 				</p>
 
 				<div className={'blockera-settings-general control-wrapper'}>
-					<Switch
-						id={'toggleProHints'}
-						className={'blockera-settings-general control'}
-						value={generalSettings.disableProHints}
-						onChange={(checked: boolean) => {
-							setHasUpdates(
-								!generalSettings.disableProHints
-									? checked
-									: !checked
-							);
-
-							setSettings({
-								...settings,
-								general: {
-									...generalSettings,
-									disableProHints: checked,
-								},
-							});
+					<ControlContextProvider
+						value={{
+							name: 'toggleProHints',
+							value: generalSettings.disableProHints,
 						}}
-					/>
-
-					<strong
-						className={'blockera-settings-general control-label'}
 					>
-						{__(
-							'Opt out of Pro version hints and promotions',
-							'blockera'
-						)}
-					</strong>
+						<ToggleControl
+							// TODO: Convert to advanced labelType. to display for user is changed value or not!
+							labelType={'self'}
+							id={'toggleProHints'}
+							className={'blockera-settings-general control'}
+							defaultValue={generalSettings.disableProHints}
+							onChange={(checked: boolean) => {
+								setHasUpdates(
+									!generalSettings.disableProHints
+										? checked
+										: !checked
+								);
+
+								setSettings({
+									...settings,
+									general: {
+										...generalSettings,
+										disableProHints: checked,
+									},
+								});
+							}}
+							label={
+								<strong
+									className={
+										'blockera-settings-general control-label'
+									}
+								>
+									{__(
+										'Opt out of Pro version hints and promotions',
+										'blockera'
+									)}
+								</strong>
+							}
+						/>
+					</ControlContextProvider>
 				</div>
 			</VStack>
 		</VStack>

@@ -4,8 +4,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 import { useContext } from '@wordpress/element';
+import type { MixedElement, Element } from 'react';
 import { __experimentalHStack as HStack } from '@wordpress/components';
 
 /**
@@ -21,44 +21,36 @@ import {
 } from './components';
 
 export const Panel = (tab: TTabProps): MixedElement => {
-	let description = '';
+	let description: Element<any> = <></>;
 	let activePanel: any = <></>;
 	const { settings, hasUpdate, setHasUpdates } = useContext(TabsContext);
 
 	switch (tab.name) {
 		case 'general-settings':
 			activePanel = <GeneralPanel />;
-			description = () => (
-				<>
-					<p>
-						{__(
-							'In the General Settings Panel, you can customize your Blockera settings. These settings are used to customize the design and functionality of Blockera.',
-							'blockera'
-						)}
-					</p>
-				</>
+			description = (
+				<p>
+					{__(
+						'In the General Settings Panel, you can customize your Blockera settings. These settings are used to customize the design and functionality of Blockera.',
+						'blockera'
+					)}
+				</p>
 			);
 			break;
 		case 'block-manager':
 			activePanel = <BlockManagerPanel />;
-			description = () => (
-				<>
-					<p>
-						{__(
-							"In the Block Manager Panel, you have full control over both supported  and custom blocks offered by Blockera. If a block isn't listed, it's  because it's not currently supported.",
-							'blockera'
-						)}
-					</p>
-				</>
+			description = (
+				<p>
+					{__(
+						"In the Block Manager Panel, you have full control over both supported  and custom blocks offered by Blockera. If a block isn't listed, it's  because it's not currently supported.",
+						'blockera'
+					)}
+				</p>
 			);
 			break;
 		case 'license-manager':
 			activePanel = <LicenseManagerPanel />;
-			description = () => (
-				<>
-					<p>{__('License activation panel…', 'blockera')}</p>
-				</>
-			);
+			description = <p>{__('License activation panel…', 'blockera')}</p>;
 			break;
 	}
 
