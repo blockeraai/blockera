@@ -21,7 +21,6 @@ import {
 /**
  * Internal dependencies
  */
-import { ControlContext } from '../index';
 import {
 	store as controlStore,
 	STORE_NAME as CONTROL_STORE_NAME,
@@ -31,6 +30,7 @@ import {
 	STORE_NAME as REPEATER_STORE_NAME,
 } from '../../libs/repeater-control/store/constants';
 import useControlEffect from './use-control-effect';
+import { BaseControlContext, ControlContext } from '../index';
 import type { ControlContextHookProps, ControlContextRef } from '../types';
 import { store as repeaterStore } from '../../libs/repeater-control/store';
 import { isInnerBlock } from '@blockera/editor/js/extensions/components/utils';
@@ -43,6 +43,7 @@ import { isInnerBlock } from '@blockera/editor/js/extensions/components/utils';
  * @return {Object} retrieved object of helpers to work with control!
  */
 export const useControlContext = (args?: ControlContextHookProps): Object => {
+	const { components } = useContext(BaseControlContext) || {};
 	const {
 		controlInfo,
 		value: savedValue,
@@ -69,11 +70,12 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 	if ('undefined' === typeof args) {
 		return {
-			value: savedValue,
 			dispatch,
+			components,
 			controlInfo,
-			blockName: controlInfo.blockName,
 			getControlPath,
+			value: savedValue,
+			blockName: controlInfo.blockName,
 		};
 	}
 
@@ -431,6 +433,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 	return {
 		dispatch,
+		components,
 		setValue: (value, _ref = undefined) => {
 			setValue(value, _ref || ref);
 
