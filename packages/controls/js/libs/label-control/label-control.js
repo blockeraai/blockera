@@ -31,8 +31,13 @@ const LabelControl = ({
 	resetToDefault,
 	...props
 }: LabelControlProps): MixedElement => {
+	if ('none' === mode) {
+		return <></>;
+	}
+
 	const {
 		components: { EditorAdvancedLabelControl },
+		// eslint-disable-next-line react-hooks/rules-of-hooks
 	} = useControlContext();
 
 	if ('advanced' === mode && EditorAdvancedLabelControl) {
