@@ -3,46 +3,49 @@
 /**
  * External dependencies
  */
-import {
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-} from '@wordpress/components';
 import type { MixedElement } from 'react';
+
+/**
+ * Blockera dependencies
+ */
+import { Flex } from '@blockera/components';
+import type { TTabProps } from '@blockera/components/js/tabs/types';
 
 /**
  * Internal dependencies
  */
 import { Update } from '../../';
-import type { TTabProps } from '@blockera/components/js/tabs/types';
 
 export const PanelHeader = ({
 	tab,
-	onUpdate,
-	hasUpdate,
+	kind,
+	name,
 	tabSettings,
 	description,
 }: {
+	kind: string,
+	name: string,
 	tab: TTabProps,
 	tabSettings: any,
 	description: any,
-	hasUpdate: boolean,
-	onUpdate: (hasUpdate: boolean) => void,
 }): MixedElement => {
 	return (
-		<VStack>
-			<HStack justifyContent={'space-between'}>
+		<Flex direction={'column'}>
+			<Flex direction={'row'} justifyContent={'space-between'}>
 				<h3 className={'blockera-settings-panel panel-title'}>
 					{tab.title}
 				</h3>
 
-				<Update
-					tab={tab}
-					onUpdate={onUpdate}
-					hasUpdate={hasUpdate}
-					slugSettings={tabSettings}
-				/>
-			</HStack>
+				<Flex direction={'row'} justifyContent={'space-between'}>
+					<Update
+						tab={tab}
+						kind={kind}
+						name={name}
+						slugSettings={tabSettings}
+					/>
+				</Flex>
+			</Flex>
 			<div className={'blockera-settings-panel-desc'}>{description}</div>
-		</VStack>
+		</Flex>
 	);
 };

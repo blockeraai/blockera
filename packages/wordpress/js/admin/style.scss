@@ -11,18 +11,7 @@
 	padding: 10px !important;
 	cursor: pointer;
 	transition: all 0.1s;
-}
-
-.blockera-settings-secondary-button {
-	color: var(--blockera-settings-primary-color);
-	border: solid 1px var(--blockera-settings-primary-color);
-	background-color: var(--blockera-settings-secondary-color);
-}
-
-.blockera-settings-secondary-button:hover {
-	border: solid 1px var(--blockera-settings-secondary-color);
-	color: var(--blockera-settings-secondary-color);
-	background-color: var(--blockera-settings-primary-color);
+	height: 40px !important;
 }
 
 .blockera-settings-primary-button {

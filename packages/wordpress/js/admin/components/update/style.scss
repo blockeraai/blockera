@@ -1,26 +1,18 @@
 @import 'react-toastify/dist/ReactToastify.css';
 
-.blockera-settings-actions-wrapper {
-	align-self: flex-start;
+.blockera-settings-has-update {
+	position: relative;
+	width: 110px;
+	transition: all 0.25s;
 	
-	.blockera-settings-button {
-		margin-left: 10px;
-	}
 	
-	.blockera-settings-has-update {
-		position: relative;
-		width: 110px;
-		transition: all 0.25s;
-		
-		
-		&:before {
-			content: '';
-			background: #ffffff;
-			width: 5px;
-			height: 5px;
-			position: absolute;
-			top: 45%;
-			left: 10%;
-		}
+	&:before {
+		content: '';
+		background: #ffffff;
+		width: 5px;
+		height: 5px;
+		position: absolute;
+		top: 45%;
+		left: 10%;
 	}
 }

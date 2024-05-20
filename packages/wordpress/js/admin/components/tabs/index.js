@@ -10,7 +10,11 @@ import { useState, createContext } from '@wordpress/element';
  * Blockera dependencies
  */
 import TabPanel from '@blockera/components/js/tabs/tab-panel';
-import type { TTabProps } from '@blockera/components/js/tabs/types';
+
+/**
+ * Internal dependencies
+ */
+import type { TabsProps } from './types';
 
 export * from './components';
 
@@ -35,9 +39,9 @@ export const Tabs = ({
 }: {
 	settings: Object,
 	activeTab: string,
-	items: Array<TTabProps>,
+	items: Array<TabsProps>,
 	onSelect: (tabKey: string) => void,
-	getPanel: (tab: TTabProps) => MixedElement,
+	getPanel: (tab: TabsProps) => MixedElement,
 	setSettings: (newSettings: Object) => void,
 }): MixedElement => {
 	const [hasUpdate, setHasUpdates] = useState(false);

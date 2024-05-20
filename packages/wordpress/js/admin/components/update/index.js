@@ -7,36 +7,47 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
+import { cloud, Icon } from '@wordpress/icons';
 import { ToastContainer, toast } from 'react-toastify';
+import { Animate, Spinner } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
-import { useContext, useState, useEffect } from '@wordpress/element';
+import { useContext, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { isEquals, ucFirstWord } from '@blockera/utils';
-import Button from '@blockera/components/js/button/button';
-import type { TTabProps } from '@blockera/components/js/tabs/types';
+import { Modal, Button, Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
-import { Reset } from './reset';
 import { TabsContext } from '../';
+import { type TabsProps } from '../tabs/types';
 import { SettingsContext } from '../../context';
 
 const statuses = {
-	update: {
-		status: 'update',
-		label: __('Update', 'blockera'),
+	saved: {
+		name: 'saved',
+		label: __('Saved', 'blockera'),
 	},
-	updated: {
-		status: 'updated',
-		label: __('Updated', 'blockera'),
+	saving: {
+		name: 'saving',
+		label: __('Saving', 'blockera'),
 	},
-	updating: {
-		status: 'updating',
-		label: __('Updating ...', 'blockera'),
+	error: {
+		name: 'error',
+		label: __(
+			'Update failed. Try again or get in touch with support.',
+			'blockera'
+		),
+	},
+	reset: {
+		name: 'reset',
+		label: __('Reset', 'blockera'),
+	},
+	resetting: {
+		name: 'resetting',
+		label: __('Resetting', 'blockera'),
 	},
 };
 
@@ -53,61 +64,85 @@ const toastOptions = {
 
 export const Update = ({
 	tab,
-	hasUpdate,
-	onUpdate: outSideOnUpdate,
+	kind,
+	name,
 	slugSettings,
 }: {
-	tab: TTabProps,
+	kind: string,
+	name: string,
+	tab: TabsProps,
 	slugSettings: any,
-	hasUpdate: boolean,
-	onUpdate: (hasUpdate: boolean) => void,
 }): MixedElement | null => {
-	const slug = tab?.settingSlug;
-
-	if ('undefined' === typeof slug) {
-		return null;
-	}
-
-	const [updateButtonStatus, setUpdateButtonStatus] = useState(
-		statuses.update
-	);
-
-	useEffect(() => {
-		if (!hasUpdate) {
-			setUpdateButtonStatus(statuses.updated);
-
-			return;
-		}
-
-		setUpdateButtonStatus(statuses.update);
-	}, [hasUpdate]);
-
-	const { settings, setSettings } = useContext(TabsContext);
+	const slug = tab.settingSlug;
+	const { settings, setSettings, hasUpdate, setHasUpdates } =
+		useContext(TabsContext);
+	const [status, setStatus] = useState(statuses.saved);
+	const [resetModalOpen, setResetModalOpen] = useState(false);
 	const { defaultSettings } = useContext(SettingsContext);
 	const { saveEntityRecord } = dispatch(coreStore);
-	const onUpdate = async (): Promise<string> => {
-		const record = {
-			...settings,
-			[slug]: slugSettings,
-		};
+	const updateButton =
+		'saving' === status.name
+			? __('Updating…', 'blockera')
+			: __('Update', 'blockera');
 
-		setUpdateButtonStatus(statuses.updating);
+	const onUpdate = async (type: string = ''): Promise<string> => {
+		let record = {};
 
-		setSettings(record);
+		switch (type) {
+			case 'reset':
+				setStatus(statuses.resetting);
+				record = {
+					action: 'reset',
+					reset: slug,
+					default: defaultSettings[slug],
+				};
+				break;
+			case 'reset-all':
+				setStatus(statuses.resetting);
+				record = {
+					action: 'reset-all',
+				};
+				break;
+			default:
+				setStatus(statuses.saving);
+				record = {
+					...settings,
+					[slug]: slugSettings,
+				};
+				break;
+		}
 
-		const response = await saveEntityRecord(
-			'blockera/v1',
-			'settings',
-			record
-		);
+		const response = await saveEntityRecord(kind, name, record);
 
 		if (response) {
-			outSideOnUpdate(!hasUpdate);
-			setUpdateButtonStatus(statuses.updated);
+			if (['reset', 'reset-all'].includes(type)) {
+				setStatus(statuses.reset);
+				setResetModalOpen(false);
 
-			toast.success(`Blockera Updated ${tab.title}`, toastOptions);
+				if ('reset-all' === type) {
+					setSettings(defaultSettings);
+
+					toast.success(`Blockera Reset All Done!`, toastOptions);
+				} else {
+					setSettings({
+						...settings,
+						[slug]: defaultSettings[slug],
+					});
+
+					toast.success(
+						`Blockera Reset ${tab.title} Done!`,
+						toastOptions
+					);
+				}
+			} else {
+				setSettings(record);
+				setStatus(statuses.saved);
+				toast.success(`Blockera ${tab.title} Updated!`, toastOptions);
+			}
+
+			setHasUpdates(!hasUpdate);
 		} else {
-			setUpdateButtonStatus(statuses.update);
+			setStatus(statuses.error);
 
 			toast.error(
 				`Failed Blockera ${tab.title} updating process.`,
@@ -119,7 +154,7 @@ export const Update = ({
 	};
 
 	return (
-		<div className={'blockera-settings-actions-wrapper'}>
+		<>
 			<ToastContainer
 				position="bottom-right"
 				autoClose={5000}
@@ -132,53 +167,108 @@ export const Update = ({
 				pauseOnHover
 				theme="dark"
 			/>
-			{!isEquals(defaultSettings[slug], settings[slug]) && (
-				<Reset
-					slug={slug}
-					hasUpdate={
-						!isEquals(slugSettings, defaultSettings[slug]) &&
-						hasUpdate
-					}
-					defaultValue={defaultSettings[slug]}
-					onReset={(_hasUpdate: boolean): void => {
-						outSideOnUpdate(!_hasUpdate);
-						setSettings({
-							...settings,
-							[slug]: defaultSettings[slug],
-						});
-
-						toast.success(
-							`Blockera Reset ${tab.title}`,
-							toastOptions
-						);
-					}}
-					save={saveEntityRecord}
-				/>
+			{[
+				'saving' === status.name && (
+					<Animate type="loading">
+						{({ className: animateClassName }) => (
+							<span
+								className={classnames(
+									'message',
+									animateClassName
+								)}
+							>
+								<Icon icon={cloud} />
+								{status.label}
+							</span>
+						)}
+					</Animate>
+				),
+				'error' === status.name && (
+					<span className="message update-failed">
+						{status.label}
+					</span>
+				),
+			]}
+			{'saving' !== status.name && (
+				<Button
+					className="reset-settings__save-button"
+					onClick={() => setResetModalOpen(true)}
+					isTertiary
+				>
+					{__('Reset Settings', 'blockera')}
+				</Button>
 			)}
 			<Button
-				data-test={'update-settings'}
-				style={{
-					opacity: 'updated' === updateButtonStatus.status ? 0.5 : 1,
-					cursor:
-						'updated' === updateButtonStatus.status
-							? 'not-allowed'
-							: 'pointer',
-				}}
-				noBorder={true}
-				disabled={'updated' === updateButtonStatus.status}
-				isPressed={'updating' === updateButtonStatus.status}
 				variant={'primary'}
-				className={classnames(
-					'blockera-settings-button blockera-settings-primary-button',
-					{
-						'blockera-settings-has-update':
-							!isEquals(slugSettings, defaultSettings[slug]) &&
-							hasUpdate,
-					}
-				)}
-				text={updateButtonStatus.label}
-				onClick={onUpdate}
-			/>
-		</div>
+				className={classnames('save-settings__save-button', {
+					'is-busy': 'saving' === status.name,
+					'blockera-settings-has-update': hasUpdate,
+				})}
+				onClick={() => onUpdate()}
+				disabled={!hasUpdate && status !== 'error'}
+				isPrimary
+			>
+				{updateButton}
+			</Button>
+			{resetModalOpen && (
+				<Modal
+					className="blockera-settings-reset-modal"
+					title={__('Reset Settings', 'blockera')}
+					onRequestClose={() => setResetModalOpen(false)}
+				>
+					<p>
+						{__(
+							'Resetting will restore all configured settings on the current tab to their default values.',
+							'blockera'
+						)}
+						<strong>
+							{__(
+								'To restore all plugin settings, choose Reset All.',
+								'blockera'
+							)}
+						</strong>
+					</p>
+					<Flex direction={'row'} justifyContent={'space-between'}>
+						<Flex
+							direction={'row'}
+							justifyContent={'space-between'}
+						>
+							<Button
+								isPrimary
+								variant={'primary'}
+								onClick={() => onUpdate('reset')}
+							>
+								{__('Reset', 'blockera')}
+							</Button>
+							<Button
+								isSecondary
+								variant={'secondary'}
+								onClick={() => onUpdate('reset-all')}
+							>
+								{__('Reset All', 'blockera')}
+							</Button>
+							{'resetting' === status.name && <Spinner />}
+						</Flex>
+						<Flex
+							direction={'row'}
+							justifyContent={'space-between'}
+						>
+							<Button
+								isTertiary
+								variant={'tertiary'}
+								onClick={() => setResetModalOpen(false)}
+							>
+								{__('Cancel', 'blockera')}
+							</Button>
+						</Flex>
+					</Flex>
+					{'error' === status.name && (
+						<div className="message update-failed">
+							{status.label}
+						</div>
+					)}
+				</Modal>
+			)}
+		</>
 	);
 };
