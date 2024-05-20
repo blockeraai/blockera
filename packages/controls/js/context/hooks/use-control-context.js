@@ -43,7 +43,7 @@ import { isInnerBlock } from '@blockera/editor/js/extensions/components/utils';
  * @return {Object} retrieved object of helpers to work with control!
  */
 export const useControlContext = (args?: ControlContextHookProps): Object => {
-	const { components } = useContext(BaseControlContext) || {};
+	const { components } = useContext(BaseControlContext);
 	const {
 		controlInfo,
 		value: savedValue,
@@ -84,9 +84,9 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		getExtensionInnerBlockState,
 		getExtensionCurrentBlockState,
 		getExtensionCurrentBlockStateBreakpoint,
-	} = select('blockera-core/extensions');
-	const { getSelectedBlock } = select('core/block-editor');
-	const { getBreakpoints } = select('blockera-core/editor');
+	} = select('blockera-core/extensions') || {};
+	const { getSelectedBlock } = select('core/block-editor') || {};
+	const { getBreakpoints } = select('blockera-core/editor') || {};
 
 	const initialRef = {
 		path: '',
