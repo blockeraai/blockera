@@ -30,6 +30,7 @@ export default function ToggleControl({
 	onChange,
 	className,
 	children,
+	labelType = 'advanced',
 	...props
 }: TToggleControlProps): MixedElement {
 	const {
@@ -56,7 +57,7 @@ export default function ToggleControl({
 		repeaterItem,
 		defaultValue,
 		resetToDefault,
-		mode: 'advanced',
+		mode: labelType,
 		path: getControlPath(attribute, id),
 	};
 
