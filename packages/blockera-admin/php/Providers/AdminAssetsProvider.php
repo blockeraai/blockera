@@ -68,11 +68,16 @@ class AdminAssetsProvider extends AssetsProvider {
 			$block_categories = get_block_categories( get_post() );
 		}
 
-		return 'wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
+		$default_settings  = blockera_core_config( 'panel.std' );
+		$blockera_settings = blockera_get_array_deep_merge( $default_settings, get_option( 'blockera_settings', $default_settings ) );
+
+		return 'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
+				wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
 				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( blockera_get_available_blocks() ) . ';
-				window.blockeraDefaultSettings = ' . wp_json_encode( blockera_core_config( 'panel.std' ) ) . ';
-				window.blockeraSettings = ' . wp_json_encode( get_option( 'blockera_settings', blockera_core_config( 'panel.std' ) ) ) . ';
+				window.blockeraDefaultSettings = ' . wp_json_encode( $default_settings ) . ';
+				window.blockeraSettings = ' . wp_json_encode( $blockera_settings ) . ';
 				window.blockeraVersion = "' . blockera_core_config( 'app.version' ) . '";
+				window.blockeraUserRoles = ' . wp_json_encode( blockera_normalized_user_roles() ) . '
 		';
 	}
 
