@@ -6,6 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -23,6 +24,7 @@ import {
  * Internal dependencies
  */
 import { Panel } from './panel';
+import { config as optionsConfig } from './config';
 import { PanelLogoIcon } from './icons/panel-logo-icon';
 
 const getCurrentPage = (): string => {
@@ -45,11 +47,16 @@ export const Dashboard = (): MixedElement => {
 		window;
 	const [settings, setSettings] = useState(blockeraSettings);
 	const currentPage = getCurrentPage();
+	const config = applyFilters(
+		'blockera.admin.panel.settings.config',
+		optionsConfig
+	);
 
 	return (
 		<div className={'blockera-settings-dashboard'}>
 			<SettingsContext.Provider
 				value={{
+					config,
 					settings,
 					defaultSettings: blockeraDefaultSettings,
 				}}
