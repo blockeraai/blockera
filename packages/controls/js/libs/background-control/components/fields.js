@@ -65,7 +65,7 @@ import { meshGradientProvider } from '../';
 const Fields: FieldItem = memo<FieldItem>(
 	({ itemId, item }: FieldItem): Element<any> => {
 		const {
-			components: { EditorFeatureWrapper },
+			components: { FeatureWrapper },
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
@@ -1146,7 +1146,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							</div>
 						</BaseControl>
 
-						<EditorFeatureWrapper
+						<FeatureWrapper
 							isActive={true}
 							config={
 								blockeraBackground?.config?.meshGradientColors
@@ -1217,7 +1217,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									}}
 								/>
 							</BaseControl>
-						</EditorFeatureWrapper>
+						</FeatureWrapper>
 
 						<ToggleSelectControl
 							repeaterItem={itemId}

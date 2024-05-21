@@ -36,13 +36,13 @@ const LabelControl = ({
 	}
 
 	const {
-		components: { EditorAdvancedLabelControl },
+		components: { AdvancedLabelControl },
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 	} = useControlContext();
 
-	if ('advanced' === mode && EditorAdvancedLabelControl) {
+	if ('advanced' === mode && AdvancedLabelControl) {
 		return (
-			<EditorAdvancedLabelControl
+			<AdvancedLabelControl
 				{...{
 					label,
 					singularId,
