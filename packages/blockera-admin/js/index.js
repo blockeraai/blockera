@@ -11,6 +11,11 @@ import { store as coreDataStore } from '@wordpress/core-data';
 import { registerCoreBlocks } from '@wordpress/block-library';
 
 /**
+ * Blockera dependencies
+ */
+import { unstableBootstrapServerSideEntities } from '@blockera/data';
+
+/**
  * Internal dependencies
  */
 import { Dashboard } from './dashboard';
@@ -18,6 +23,11 @@ import { Dashboard } from './dashboard';
 domReady(() => {
 	registerCoreBlocks();
 	const { addEntities } = dispatch(coreDataStore);
+	const { unstableBlockeraBootstrapServerSideEntities } = window;
+
+	unstableBootstrapServerSideEntities(
+		unstableBlockeraBootstrapServerSideEntities
+	);
 
 	// Adding entities into WordPress core data.
 	addEntities([
