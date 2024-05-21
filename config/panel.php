@@ -4,7 +4,9 @@ return [
 	'std' => [
 		'disabledBlocks' => [],
 		'general'        => [
-			'disableProHints' => false,
+			'disableProHints'                => false,
+			'disableRestrictBlockVisibility' => false,
+			'allowedUserRoles'               => blockera_normalized_user_roles(),
 		],
 	],
 ];
