@@ -31,7 +31,7 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 		$configIncludes = array(
 			'app'         => $config_dir . '/config/app.php',
 			'menu'        => $config_dir . '/config/menu.php',
-			'panel'        => $config_dir . '/config/panel.php',
+			'panel'       => $config_dir . '/config/panel.php',
 			'assets'      => $config_dir . '/config/assets.php',
 			'entities'    => $config_dir . '/config/entities.php',
 			'breakpoints' => $config_dir . '/config/breakpoints.php',
@@ -228,5 +228,35 @@ if ( ! function_exists( 'blockera_camel_case_join' ) ) {
 		}
 
 		return $firstPart . $secondaryPart;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_array_deep_merge' ) ) {
+
+	/**
+	 * Get resulting of array deeply merge.
+	 *
+	 * @param array $array1 the source array
+	 * @param array $array2 the array to merge with source array.
+	 *
+	 * @return array the merged array.
+	 */
+	function blockera_get_array_deep_merge( array $array1, array $array2 ): array {
+
+		$merged = $array1;
+
+		foreach ( $array2 as $key => $value ) {
+
+			if ( is_array( $value ) && isset( $merged[ $key ] ) && is_array( $merged[ $key ] ) ) {
+
+				$merged[ $key ] = blockera_get_array_deep_merge( $merged[ $key ], $value );
+
+			} else {
+
+				$merged[ $key ] = $value;
+			}
+		}
+
+		return $merged;
 	}
 }
