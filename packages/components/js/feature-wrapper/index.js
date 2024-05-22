@@ -27,7 +27,7 @@ export function FeatureWrapper({
 	className = '',
 	...props
 }: {
-	type: 'free' | 'state' | 'breakpoint' | 'inner-block',
+	type: 'free' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
 	typeName?: string,
 	text?: string | MixedElement,
 	className?: string,
@@ -67,6 +67,23 @@ export function FeatureWrapper({
 							typeName
 					  )
 					: __('Not available in current inner block!', 'blockera');
+				break;
+
+			case 'parent-inactive':
+				text = typeName
+					? sprintf(
+							/* translators: %s is a breakpoint name. */
+							__('Only available when %s is active.', 'blockera'),
+							typeName
+					  )
+					: sprintf(
+							/* translators: %s is a breakpoint name. */
+							__(
+								'Not available when %s is inactive!',
+								'blockera'
+							),
+							typeName
+					  );
 				break;
 		}
 	}
