@@ -191,6 +191,7 @@ export const Update = ({
 			]}
 			{'saving' !== status.name && (
 				<Button
+					data-test={'reset-settings'}
 					className="reset-settings__save-button"
 					onClick={() => setResetModalOpen(true)}
 					isTertiary
@@ -204,6 +205,7 @@ export const Update = ({
 					'is-busy': 'saving' === status.name,
 					'blockera-settings-has-update': hasUpdate,
 				})}
+				data-test={'update-settings'}
 				onClick={() => onUpdate()}
 				disabled={!hasUpdate && status !== 'error'}
 				isPrimary
@@ -234,6 +236,7 @@ export const Update = ({
 							justifyContent={'space-between'}
 						>
 							<Button
+								data-test={'reset-current-tab-settings'}
 								isPrimary
 								variant={'primary'}
 								onClick={() => onUpdate('reset')}
@@ -241,6 +244,7 @@ export const Update = ({
 								{__('Reset', 'blockera')}
 							</Button>
 							<Button
+								data-test={'reset-all-settings'}
 								isSecondary
 								variant={'secondary'}
 								onClick={() => onUpdate('reset-all')}
@@ -254,6 +258,7 @@ export const Update = ({
 							justifyContent={'space-between'}
 						>
 							<Button
+								data-test={'cancel-reset-action'}
 								isTertiary
 								variant={'tertiary'}
 								onClick={() => setResetModalOpen(false)}
