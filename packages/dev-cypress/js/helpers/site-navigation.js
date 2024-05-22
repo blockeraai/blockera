@@ -3,13 +3,13 @@ import { getWPDataObject, disableGutenbergFeatures } from './editor';
 /**
  * Login to our test WordPress site
  */
-export function loginToSite() {
+export function loginToSite(user = '', pass = '') {
 	return goTo('/wp-login.php', true).then(() => {
 		// eslint-disable-next-line
 		cy.wait(250);
 
-		cy.get('#user_login').type(Cypress.env('wpUsername'));
-		cy.get('#user_pass').type(Cypress.env('wpPassword'));
+		cy.get('#user_login').type(user || Cypress.env('wpUsername'));
+		cy.get('#user_pass').type(pass || Cypress.env('wpPassword'));
 		cy.get('#wp-submit').click();
 	});
 }
