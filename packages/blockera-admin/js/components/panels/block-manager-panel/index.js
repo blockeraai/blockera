@@ -30,6 +30,7 @@ export const BlockManagerPanel = (): MixedElement => {
 	const categories = getCategories();
 	const blockTypes = getBlockTypes();
 	const {
+		blockeraSettings: { disabledBlocks: savedDisabledBlocks },
 		unstableBootstrapServerSideBlockTypes: blockeraSupportedBlockTypes,
 	} = window;
 
@@ -83,7 +84,7 @@ export const BlockManagerPanel = (): MixedElement => {
 			disabledBlocks: currentDisabledBlocks,
 		});
 
-		setHasUpdates(!isEquals(currentDisabledBlocks, disabledBlocks));
+		setHasUpdates(!isEquals(currentDisabledBlocks, savedDisabledBlocks));
 	};
 	const handleBlockTypeChange = (
 		checked: boolean,
@@ -105,7 +106,7 @@ export const BlockManagerPanel = (): MixedElement => {
 			disabledBlocks: currentDisabledBlocks,
 		});
 
-		setHasUpdates(!isEquals(currentDisabledBlocks, disabledBlocks));
+		setHasUpdates(!isEquals(currentDisabledBlocks, savedDisabledBlocks));
 	};
 
 	const Categories = memo(() =>
