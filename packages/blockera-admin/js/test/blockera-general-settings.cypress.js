@@ -2,11 +2,7 @@ import {
 	createPost,
 	goTo,
 } from '@blockera/dev-cypress/js/helpers/site-navigation';
-import {
-	appendBlocks,
-	getBlockeraEntity,
-	getWPDataObject,
-} from '@blockera/dev-cypress/js/helpers/editor';
+import { appendBlocks, resetAll } from '@blockera/dev-cypress/js/helpers';
 
 describe('General Settings Testing ...', () => {
 	beforeEach(() => {
@@ -14,7 +10,11 @@ describe('General Settings Testing ...', () => {
 	});
 
 	it('should display/hidden PRO hints and promotion when add secondary background', () => {
-		cy.getByDataTest('toggleProHints').click();
+		resetAll();
+
+		cy.get(
+			'div[aria-label="Opt out of PRO hints and promotions"] input'
+		).click();
 
 		cy.getByDataTest('update-settings').as('update');
 		cy.get('@update').then(() => {
@@ -30,18 +30,30 @@ describe('General Settings Testing ...', () => {
 			cy.getByAriaLabel('Add New Background').click();
 			cy.getByAriaLabel('Add New Background').click();
 
-			//assert data
-			getWPDataObject().then((data) => {
-				const {
-					general: { disableProHints },
-				} = getBlockeraEntity(data, 'settings');
+			cy.getByDataTest('popover-body').should('not.exist');
+		});
+	});
 
-				if (disableProHints) {
-					cy.getByDataTest('popover-body').should('not.exist');
-				} else {
-					cy.getByDataTest('popover-body').contains('Upgrade to PRO');
-				}
-			});
+	it('should display/hidden PRO hints and promotion when add secondary background', () => {
+		cy.get(
+			'div[aria-label="Opt out of PRO hints and promotions"] input'
+		).click();
+
+		cy.getByDataTest('update-settings').as('update');
+		cy.get('@update').then(() => {
+			cy.get('@update').click();
+			cy.wait(2000);
+
+			createPost();
+
+			appendBlocks(`<!-- wp:paragraph /-->`);
+
+			cy.getBlock('core/paragraph').click();
+
+			cy.getByAriaLabel('Add New Background').click();
+			cy.getByAriaLabel('Add New Background').click();
+
+			cy.getByDataTest('popover-body').contains('Upgrade to PRO');
 		});
 	});
 });

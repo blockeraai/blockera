@@ -16,6 +16,7 @@ import {
 	SettingsContext,
 	AdminFeatureWrapper,
 } from '@blockera/wordpress';
+import { noop } from '@blockera/utils';
 import {
 	ToggleControl,
 	CheckboxControl,
@@ -33,8 +34,11 @@ export const GeneralPanel = (): MixedElement => {
 	const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
 	const generalSettings =
 		settings?.general || defaultSettings?.general || fallbackDefaultValue;
+	const {
+		blockeraSettings: { general: savedGeneralSettings },
+	} = window;
 
-	const BlockVisibility = (): MixedElement => (
+	const BlockVisibility = ({ isChecked }: Object): MixedElement => (
 		<Flex
 			direction={'column'}
 			className={'blockera-settings-general section'}
@@ -49,7 +53,10 @@ export const GeneralPanel = (): MixedElement => {
 					'blockera'
 				)}
 			</p>
-			<div className={'blockera-settings-general control-wrapper'}>
+			<div
+				className={'blockera-settings-general control-wrapper'}
+				aria-label={'Restrict block visibility'}
+			>
 				<Flex direction={'column'}>
 					<AdminFeatureWrapper
 						config={config.general.restrictBlockVisibility}
@@ -57,7 +64,7 @@ export const GeneralPanel = (): MixedElement => {
 						<ControlContextProvider
 							value={{
 								name: 'toggleRestrictBlockVisibility',
-								value: generalSettings.disableRestrictBlockVisibility,
+								value: isChecked,
 							}}
 						>
 							<ToggleControl
@@ -69,20 +76,17 @@ export const GeneralPanel = (): MixedElement => {
 									generalSettings.disableRestrictBlockVisibility
 								}
 								onChange={(checked: boolean) => {
-									setHasUpdates(
-										!generalSettings.disableRestrictBlockVisibility
-											? checked
-											: !checked
-									);
-
-									setSettings({
-										...settings,
-										general: {
-											...generalSettings,
-											disableRestrictBlockVisibility:
-												checked,
-										},
-									});
+									applyFilters(
+										'blockera.admin.general.panel.disableRestrictBlockVisibility.onChange',
+										noop,
+										{
+											settings,
+											setSettings,
+											setHasUpdates,
+											generalSettings,
+											savedGeneralSettings,
+										}
+									)(checked);
 								}}
 								label={
 									<strong
@@ -103,64 +107,83 @@ export const GeneralPanel = (): MixedElement => {
 								'blockera-settings-block-visibility user-roles'
 							}
 						>
-							<ControlContextProvider
-								value={{
-									type: 'nested',
-									name: 'userRoles',
-									value: Object.fromEntries(
-										Object.entries(
-											generalSettings.allowedUserRoles
-										).map(
-											([id, userRole]: [
+							<AdminFeatureWrapper
+								config={{
+									...config.general.restrictBlockVisibility
+										.config.userRole,
+									isParentActive: !!isChecked,
+								}}
+							>
+								<ControlContextProvider
+									value={{
+										type: 'nested',
+										name: 'userRoles',
+										hasSideEffect: true,
+										value: Object.fromEntries(
+											Object.entries(
+												generalSettings.allowedUserRoles
+											).map(
+												([id, userRole]: [
+													string,
+													{
+														name: string,
+														checked: boolean,
+													}
+												]): [string, boolean] => {
+													return [
+														id,
+														userRole.checked,
+													];
+												}
+											)
+										),
+									}}
+								>
+									{Object.entries(
+										generalSettings.allowedUserRoles
+									).map(
+										(
+											[id, userRole]: [
 												string,
 												{
 													name: string,
 													checked: boolean,
 												}
-											]): [string, boolean] => {
-												return [id, userRole.checked];
-											}
-										)
-									),
-								}}
-							>
-								{Object.entries(
-									generalSettings.allowedUserRoles
-								).map(
-									(
-										[id, userRole]: [
-											string,
-											{
-												name: string,
-												checked: boolean,
-											}
-										],
-										index: number
-									): MixedElement => {
-										return (
-											<CheckboxControl
-												id={id}
-												key={userRole.name + index}
-												checkboxLabel={userRole.name}
-												defaultValue={userRole.checked}
-												onChange={(
-													checked: boolean
-												): void => {
-													applyFilters(
-														'blockera.admin.general.panel.restrictBlockVisibility.userRole.onChange',
-														() => {},
-														checked,
-														id,
-														settings,
-														setSettings,
-														generalSettings
-													)(checked);
-												}}
-											/>
-										);
-									}
-								)}
-							</ControlContextProvider>
+											],
+											index: number
+										): MixedElement => {
+											return (
+												<CheckboxControl
+													id={id}
+													key={userRole.name + index}
+													checkboxLabel={
+														userRole.name
+													}
+													defaultValue={
+														userRole.checked
+													}
+													onChange={(
+														checked: boolean
+													): void =>
+														applyFilters(
+															'blockera.admin.general.panel.restrictBlockVisibility.userRole.onChange',
+															noop,
+															{
+																id,
+																settings,
+																setSettings,
+																setHasUpdates,
+																generalSettings,
+																savedGeneralSettings,
+															}
+														)(checked)
+													}
+												/>
+											);
+										}
+									)}
+								</ControlContextProvider>
+							</AdminFeatureWrapper>
 						</div>
 					</AdminFeatureWrapper>
 				</Flex>
@@ -173,7 +196,9 @@ export const GeneralPanel = (): MixedElement => {
 			direction={'column'}
 			className={'blockera-settings-panel-container'}
 		>
-			<BlockVisibility />
+			<BlockVisibility
+				isChecked={generalSettings.disableRestrictBlockVisibility}
+			/>
 			<Flex
 				direction={'column'}
 				className={'blockera-settings-general section'}
@@ -189,7 +214,10 @@ export const GeneralPanel = (): MixedElement => {
 					)}
 				</p>
 
-				<div className={'blockera-settings-general control-wrapper'}>
+				<div
+					className={'blockera-settings-general control-wrapper'}
+					aria-label={'Opt out of PRO hints and promotions'}
+				>
 					<ControlContextProvider
 						value={{
 							name: 'toggleProHints',
@@ -204,9 +232,8 @@ export const GeneralPanel = (): MixedElement => {
 							defaultValue={generalSettings.disableProHints}
 							onChange={(checked: boolean) => {
 								setHasUpdates(
-									!generalSettings.disableProHints
-										? checked
-										: !checked
+									checked !==
+										savedGeneralSettings.disableProHints
 								);
 
 								setSettings({

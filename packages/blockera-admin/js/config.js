@@ -14,6 +14,15 @@ export const config: Object = {
 				'blockera'
 			),
 			isActiveOnFree: false,
+			config: {
+				userRole: {
+					label: '',
+					status: true,
+					isActiveOnFree: false,
+					isParentActive: false,
+					parent: 'Restrict Block Visibility',
+				},
+			},
 		},
 	},
 };
