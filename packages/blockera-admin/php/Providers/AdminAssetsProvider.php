@@ -2,8 +2,9 @@
 
 namespace Blockera\Admin\Providers;
 
+use Blockera\Bootstrap\Application;
 use Blockera\WordPress\AssetsLoader;
-use Blockera\Setup\Providers\AssetsProvider;
+use Blockera\Bootstrap\ServiceProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -11,7 +12,14 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  *
  * @package Blockera\Admin\Providers\AdminAssetsProvider
  */
-class AdminAssetsProvider extends AssetsProvider {
+class AdminAssetsProvider extends ServiceProvider {
+
+	/**
+	 * Store loader identifier.
+	 *
+	 * @var string $id the loader identifier.
+	 */
+	protected string $id = 'blockera-admin-assets-loader';
 
 	/**
 	 * Hold handler name.
@@ -19,6 +27,36 @@ class AdminAssetsProvider extends AssetsProvider {
 	 * @var string $handler the handler name.
 	 */
 	protected string $handler = '@blockera/blockera-admin';
+
+	/**
+	 * Register any application services.
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+
+		$this->app->bind(
+			$this->id,
+			function ( Application $app, array $args = [] ) {
+
+				return new AssetsLoader(
+					$app,
+					$args['assets'],
+					array_merge(
+						[
+							'id'         => $this->id,
+							'root'       => [
+								'url'  => blockera_core_config( 'app.root_url' ),
+								'path' => blockera_core_config( 'app.root_path' ),
+							],
+							'debug-mode' => blockera_core_config( 'app.debug' ),
+						],
+						$args['extra-args']
+					)
+				);
+			}
+		);
+	}
 
 	/**
 	 * Bootstrap any application services.
@@ -30,19 +68,20 @@ class AdminAssetsProvider extends AssetsProvider {
 
 		if ( ! empty( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'blockera-settings' ) ) {
 
+			add_filter( 'blockera/wordpress/' . $this->id . '/inline-script', [ $this, 'createInlineScript' ] );
+			add_filter( 'blockera/wordpress/' . $this->id . '/handle/inline-script', [ $this, 'getHandler' ] );
+
 			$this->app->make(
-				AssetsLoader::class,
+				$this->id,
 				[
-					'assets'        => blockera_core_config( 'assets.admin.list' ),
-					'extra-args'    => [
+					'assets'     => blockera_core_config( 'assets.admin.list' ),
+					'extra-args' => [
 						'enqueue-admin-assets' => true,
+						'id'                   => 'blockera-admin-assets-loader',
+						'packages-deps'        => blockera_core_config( 'assets.admin.with-deps' ),
 					],
-					'packages-deps' => blockera_core_config( 'assets.admin.with-deps' ),
 				]
 			);
-
-			add_filter( 'blockera/wordpress/assets-loader/inline-script', [ $this, 'createInlineScript' ] );
-			add_filter( 'blockera/wordpress/assets-loader/handle/inline-script', [ $this, 'getHandler' ] );
 		}
 	}
 
@@ -51,7 +90,7 @@ class AdminAssetsProvider extends AssetsProvider {
 	 *
 	 * @param string $inline_script the previous inline script.
 	 *
-	 * @hooked 'blockera/wordpress/assets-loader/inline-script'
+	 * @hooked 'blockera/wordpress/{$this->id}/inline-script'
 	 *
 	 * @return string the inline script for initialize blockera some package's configuration.
 	 */
@@ -68,14 +107,11 @@ class AdminAssetsProvider extends AssetsProvider {
 			$block_categories = get_block_categories( get_post() );
 		}
 
-		$default_settings  = blockera_core_config( 'panel.std' );
-		$blockera_settings = blockera_get_array_deep_merge( $default_settings, get_option( 'blockera_settings', $default_settings ) );
-
 		return 'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
 				wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
 				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( blockera_get_available_blocks() ) . ';
-				window.blockeraDefaultSettings = ' . wp_json_encode( $default_settings ) . ';
-				window.blockeraSettings = ' . wp_json_encode( $blockera_settings ) . ';
+				window.blockeraDefaultSettings = ' . wp_json_encode( blockera_core_config( 'panel.std' ) ) . ';
+				window.blockeraSettings = ' . wp_json_encode( blockera_get_admin_options() ) . ';
 				window.blockeraVersion = "' . blockera_core_config( 'app.version' ) . '";
 				window.blockeraUserRoles = ' . wp_json_encode( blockera_normalized_user_roles() ) . '
 		';

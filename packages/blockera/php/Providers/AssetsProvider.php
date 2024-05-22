@@ -16,6 +16,13 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 class AssetsProvider extends ServiceProvider {
 
 	/**
+	 * Store loader identifier.
+	 *
+	 * @var string $id the loader identifier.
+	 */
+	protected string $id = 'blockera-assets-loader';
+
+	/**
 	 * Hold handler name.
 	 *
 	 * @var string $handler the handler name.
@@ -30,7 +37,7 @@ class AssetsProvider extends ServiceProvider {
 	public function register(): void {
 
 		$this->app->bind(
-			AssetsLoader::class,
+			$this->id,
 			function ( Application $app, array $args = [] ) {
 
 				return new AssetsLoader(
@@ -38,12 +45,12 @@ class AssetsProvider extends ServiceProvider {
 					$args['assets'],
 					array_merge(
 						[
-							'root'          => [
+							'id'         => $this->id,
+							'root'       => [
 								'url'  => blockera_core_config( 'app.root_url' ),
 								'path' => blockera_core_config( 'app.root_path' ),
 							],
-							'debug-mode'    => blockera_core_config( 'app.debug' ),
-							'packages-deps' => blockera_core_config( 'assets.with-deps' ),
+							'debug-mode' => blockera_core_config( 'app.debug' ),
 						],
 						$args['extra-args']
 					)
@@ -60,21 +67,21 @@ class AssetsProvider extends ServiceProvider {
 	 */
 	public function boot(): void {
 
+		add_filter( 'blockera/wordpress/' . $this->id . '/inline-script', [ $this, 'createInlineScript' ] );
+		add_filter( 'blockera/wordpress/' . $this->id . '/handle/inline-script', [ $this, 'getHandler' ] );
+
 		$this->app->make(
-			AssetsLoader::class,
+			$this->id,
 			[
-				'assets'        => blockera_core_config( 'assets.editor.list' ),
-				'extra-args'    => [
+				'assets'     => blockera_core_config( 'assets.editor.list' ),
+				'extra-args' => [
 					'enqueue-block-assets' => true,
+					'packages-deps'        => blockera_core_config( 'assets.editor.with-deps' ),
 				],
-				'packages-deps' => blockera_core_config( 'assets.editor.with-deps' ),
 			]
 		);
 
-		add_filter( 'blockera/wordpress/assets-loader/inline-script', [ $this, 'createInlineScript' ] );
-		add_filter( 'blockera/wordpress/assets-loader/handle/inline-script', [ $this, 'getHandler' ] );
-
-		add_action('admin_enqueue_scripts' , [$this, 'l10n']);
+		add_action( 'admin_enqueue_scripts', [ $this, 'l10n' ] );
 	}
 
 	/**
@@ -82,7 +89,7 @@ class AssetsProvider extends ServiceProvider {
 	 *
 	 * @param string $inline_script the previous inline script.
 	 *
-	 * @hooked 'blockera/wordpress/assets-loader/inline-script'
+	 * @hooked 'blockera/wordpress/{$this->id}/inline-script'
 	 *
 	 * @return string the inline script for initialize blockera some package's configuration.
 	 */
@@ -93,15 +100,18 @@ class AssetsProvider extends ServiceProvider {
 			return $inline_script;
 		}
 
-		return sprintf(
-			'%s%s',
-			$inline_script . PHP_EOL,
-			'window.onload = () => {
+		$script = 'window.onload = () => {
 				blockera.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
 				blockera.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->app->getEntity( 'breakpoints' ) ) . ');
 				blockera.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
-			};'
-		);
+			};';
+
+		if ( false !== strpos( $inline_script, $script ) ) {
+
+			return $inline_script;
+		}
+
+		return sprintf( '%s%s', $inline_script . PHP_EOL, $script );
 	}
 
 	/**
@@ -118,15 +128,17 @@ class AssetsProvider extends ServiceProvider {
 
 		wp_add_inline_script(
 			'wp-blocks',
-			'if(window?.wp){
+			'var blockeraSettings = ' . wp_json_encode( blockera_get_admin_options() ) . ';
+				if(window?.wp){
 					wp.hooks.addFilter(
-						"blockera.editor-extensions.hooks.withBlockSettings.disabledBlocks",
-						"blockera.unstableBootstrapServerSideApplyHooks",
+						"blockera.editor.extensions.hooks.withBlockSettings.disabledBlocks",
+						"blockera.unstableBootstrapServerSideUnsupportedBlocks",
 						() => {
-							return ' . wp_json_encode( get_option( 'blockera_settings', blockera_core_config( 'panel.std' ) )['disabledBlocks'] ) . ';
+							return blockeraSettings?.disabledBlocks || [];
 						}
 					); 
 				}'
 		);
 	}
+
 }

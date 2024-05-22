@@ -42,3 +42,18 @@ if ( ! function_exists( 'blockera_normalized_user_roles' ) ) {
 		return $user_roles;
 	}
 }
+
+if ( ! function_exists( 'blockera_get_admin_options' ) ) {
+
+	/**
+	 * Get blockera admin options value.
+	 *
+	 * @return array the options value.
+	 */
+	function blockera_get_admin_options(): array {
+
+		$default_settings = blockera_core_config( 'panel.std' );
+
+		return blockera_get_array_deep_merge( $default_settings, get_option( 'blockera_settings', $default_settings ) );
+	}
+}
