@@ -1,6 +1,6 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { addFilter, applyFilters } from '@wordpress/hooks';
 
@@ -20,16 +20,26 @@ export default function applyHooks(beforeApplyHooks: () => void) {
 		beforeApplyHooks();
 	}
 
-	const unsupportedBlocks = applyFilters(
-		'blockera.editor-extensions.hooks.withBlockSettings.disabledBlocks',
-		[]
-	);
-
 	addFilter(
 		'blocks.registerBlockType',
-		'blockera/core/extensions/withAdvancedControlsAttributes',
+		'blockera.editor.extensions.withAdvancedControlsAttributes',
 		(settings: Object, name: Object): Object =>
-			withBlockSettings(settings, name, unsupportedBlocks)
+			withBlockSettings(settings, name, {
+				currentUser: applyFilters(
+					'blockera.editor.extensions.currentUser',
+					{
+						roles: [],
+					}
+				),
+				notAllowedUsers: applyFilters(
+					'blockera.editor.extensions.hooks.withBlockSettings.notAllowedUsers',
+					[]
+				),
+				unsupportedBlocks: applyFilters(
+					'blockera.editor.extensions.hooks.withBlockSettings.disabledBlocks',
+					[]
+				),
+			})
 	);
 }
 export { default as withBlockSettings } from './block-settings';

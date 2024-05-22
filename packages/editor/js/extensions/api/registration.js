@@ -85,7 +85,6 @@ export function registerBlockExtension(
 		return;
 	}
 	if (select(extensionStore).getBlockExtension(name)) {
-		console.error('Block extension "' + name + '" is already registered.');
 		return;
 	}
 

@@ -66,19 +66,29 @@ const EdiBlockWithoutExtensions = ({
 	return settings.edit(props);
 };
 
+type extraArguments = {
+	currentUser: Object,
+	notAllowedUsers: Array<string>,
+	unsupportedBlocks: Array<string>,
+};
+
 /**
  * Filters registered WordPress block type settings, extending block settings with settings and block name.
  *
  * @param {Object} settings Original block settings.
  * @param {string} name block id or name.
- * @param {Array<string>} unsupportedBlocks the list of disabled blocks on blockera block-manager panel.
+ * @param {extraArguments} args the extra arguments includes unsupportedBlocks, notAllowedUsers, and currentUser properties.
  * @return {Object} Filtered block settings.
  */
 export default function withBlockSettings(
 	settings: Object,
 	name: Object,
-	unsupportedBlocks: Array<string> = []
+	args: extraArguments
 ): Object {
+	if (settings.attributes.hasOwnProperty('blockeraPropsId')) {
+		return settings;
+	}
+
 	const {
 		// getBlockExtension,
 		getBlockExtensionBy,
@@ -87,13 +97,9 @@ export default function withBlockSettings(
 	// const sharedExtension = getBlockExtension('Shared');
 	const blockExtension = getBlockExtensionBy('targetBlock', name);
 
-	if (
-		blockExtension &&
-		isBlockTypeExtension(blockExtension) &&
-		!unsupportedBlocks.includes(name)
-	) {
+	if (blockExtension && isBlockTypeExtension(blockExtension)) {
 		// mergeObject(sharedExtension, blockExtension)
-		return mergeBlockSettings(settings, blockExtension);
+		return mergeBlockSettings(settings, blockExtension, args);
 	}
 
 	// return mergeBlockSettings(settings, sharedExtension);
@@ -111,9 +117,18 @@ export default function withBlockSettings(
  *
  * @param {Object} settings The default WordPress block type settings
  * @param {Object} additional The additional settings of extension
+ * @param {extraArguments} args the extra arguments includes unsupportedBlocks, notAllowedUsers, and currentUser properties.
  * @return {Object} merged settings!
  */
-function mergeBlockSettings(settings: Object, additional: Object): Object {
+function mergeBlockSettings(
+	settings: Object,
+	additional: Object,
+	{
+		unsupportedBlocks = [],
+		notAllowedUsers = [],
+		currentUser,
+	}: extraArguments
+): Object {
 	if (!isEnabledExtension(additional)) {
 		return settings;
 	}
@@ -150,7 +165,13 @@ function mergeBlockSettings(settings: Object, additional: Object): Object {
 			...(additional.variations || []),
 		],
 		edit(props: Object): MixedElement {
-			if (isFunction(additional?.edit)) {
+			if (
+				isFunction(additional?.edit) &&
+				!unsupportedBlocks.includes(settings.name) &&
+				!notAllowedUsers.filter((role) =>
+					currentUser.roles.includes(role)
+				).length
+			) {
 				const baseContextValue = {
 					components: {
 						FeaturesWrapper: EditorFeatureWrapper,

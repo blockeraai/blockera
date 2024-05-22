@@ -27,7 +27,10 @@ export default function (wp: Object) {
 				},
 		  };
 
-	if ('function' === typeof registerPlugin) {
+	if (
+		'function' === typeof registerPlugin &&
+		!getPlugin('blockera-core-editor-observer')
+	) {
 		registerPlugin('blockera-core-editor-observer', {
 			render() {
 				return (
