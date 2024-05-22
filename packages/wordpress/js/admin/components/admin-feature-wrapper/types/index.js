@@ -10,7 +10,15 @@ export type FeatureConfig = {
 	 */
 	config?: Object,
 	/**
+	 * the parent feature.
+	 */
+	parent?: string,
+	/**
 	 * Is active on free settings.
 	 */
 	isActiveOnFree?: boolean,
+	/**
+	 * Is active on parent dependency settings.
+	 */
+	isParentActive?: boolean,
 };
