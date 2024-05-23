@@ -106,7 +106,7 @@ export const arrayDiff = (arr1: Array<any>, arr2: Array<any>): Array<any> => {
 };
 
 /**
- * Get differences between recieved array.
+ * Get differences between recieved arrays.
  *
  * @param {Array<any>} array the target array.
  * @param {Array<Array<any>>} values the other arrays.

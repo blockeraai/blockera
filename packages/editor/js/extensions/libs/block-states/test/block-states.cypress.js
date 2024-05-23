@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import 'cypress-real-events';
+
+/**
  * Internal dependencies
  */
 import {
@@ -17,7 +22,6 @@ import {
 	checkCurrentState,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
-import 'cypress-real-events';
 
 describe('Block State E2E Test', () => {
 	beforeEach(() => {
