@@ -1,3 +1,17 @@
+= 1.1.1 - 2024-5-24 =
+
+-   New: Option to disable Blockera power up for user roles (Pro Version).
+-   New: Advanced option panel reset functionality.
+
+-   Tweak: Improve admin panel design.
+-   Tweak: E2E tests for admin panel.
+-   Tweak: A lot of codes refactor and bug fixes.
+
+-   Fix: Losing Blockera attributes on disabled blocks.
+-   Fix: Disable repeater add button if "Pro hints" is disabled. 
+-   Fix: Storybook styles loading.
+
+
 = 1.1.0 - 2024-5-17 =
 
 -   New: Settings panel to change Blockera behaviors. 
