@@ -67,6 +67,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 					<EditorFeatureWrapper
 						isActive={isShowCustomCSS}
 						config={extensionConfig.blockeraCustomCSS}
+						showText="always"
 					>
 						<ControlContextProvider
 							value={{
