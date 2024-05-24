@@ -12,7 +12,8 @@
 #blockera-admin-settings-container {
 	font-size: 14px;
 	margin: 10px auto;
-	width: 85%;
+	width: 100%;
+	max-width: 1140px;
 
 	.blockera-settings-header {
 
@@ -52,19 +53,12 @@
 				}
 
 				.blockera-settings-general.control-wrapper {
-					display: flex;
 
-					.blockera-settings-general.control {
-						align-self: flex-start;
-					}
-
-					.blockera-settings-general.control-label {
-						margin-left: 20px;
-						align-self: flex-start;
-					}
-					
 					.blockera-settings-block-visibility.user-roles {
-						padding-left: 68px;
+						display: flex;
+						flex-direction: column;
+						gap: 8px;
+						padding-left: 47px;
 					}
 				}
 
