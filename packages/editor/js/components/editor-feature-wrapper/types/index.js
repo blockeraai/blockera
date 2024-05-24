@@ -21,4 +21,8 @@ export type EditorFeatureWrapperProps = {
 	 * The feature is active.
 	 */
 	isActive?: boolean,
+	/**
+	 * The method of notice displaying
+	 */
+	showText?: 'on-hover' | 'always',
 };

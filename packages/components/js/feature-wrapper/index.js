@@ -25,12 +25,14 @@ export function FeatureWrapper({
 	text = '',
 	children,
 	className = '',
+	showText = 'on-hover',
 	...props
 }: {
 	type: 'free' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
 	typeName?: string,
 	text?: string | MixedElement,
 	className?: string,
+	showText?: 'on-hover' | 'always',
 	children: MixedElement,
 }): MixedElement {
 	let icon = <WarningIcon />;
@@ -93,6 +95,7 @@ export function FeatureWrapper({
 			className={componentClassNames(
 				'feature-wrapper',
 				'type-' + type,
+				'show-text-' + showText,
 				className
 			)}
 			{...props}

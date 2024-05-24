@@ -83,7 +83,8 @@
 		}
 	}
 
-	&:hover {
+	&.show-text-always,
+	&.show-text-on-hover:hover {
 
 		.blockera-component-feature-wrapper__notice {
 

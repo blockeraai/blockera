@@ -19,9 +19,14 @@ import type { FeatureConfig } from './types';
 export const AdminFeatureWrapper = ({
 	config: { status, parent, isActiveOnFree, isParentActive = true },
 	children,
+	...props
 }: {
 	children: any,
 	config: FeatureConfig,
+	/**
+	 * The method of notice displaying
+	 */
+	showText?: 'on-hover' | 'always',
 }): MixedElement => {
 	if (!status) {
 		return <></>;
@@ -33,12 +38,21 @@ export const AdminFeatureWrapper = ({
 	const isLocked = /\w+-[orp]+/i.exec(blockera?.locked || '');
 
 	if (!Array.isArray(isLocked) && !isActiveOnFree) {
-		return <FeatureWrapper type="free">{children}</FeatureWrapper>;
+		return (
+			<FeatureWrapper type="free" showText="always" {...props}>
+				{children}
+			</FeatureWrapper>
+		);
 	}
 
 	if (!isParentActive) {
 		return (
-			<FeatureWrapper typeName={parent} type="parent-inactive">
+			<FeatureWrapper
+				typeName={parent}
+				type="parent-inactive"
+				showText="always"
+				{...props}
+			>
 				{children}
 			</FeatureWrapper>
 		);
