@@ -96,7 +96,7 @@ export const GeneralPanel = (): MixedElement => {
 										}
 									>
 										{__(
-											'Restrict block visibility controls to selected user roles.',
+											'Restrict Blockera blocks to selected user roles.',
 											'blockera'
 										)}
 									</strong>
