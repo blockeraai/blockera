@@ -17,6 +17,10 @@
 		height: 30px;
 		position: relative;
 		z-index: 10;
+
+		&:empty {
+			display: none;
+		}
 	}
 
 	&.small-gap .blockera-field-label .blockera-control-label {
