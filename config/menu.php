@@ -6,6 +6,7 @@ return [
 	'capability' => 'manage_options',
 	'menu_slug'  => 'blockera-settings',
 	'callback'   => 'blockera_settings_page_template',
+	'icon_url'   => 'data:image/svg+xml;base64,' . base64_encode( file_get_contents( BLOCKERA_CORE_PATH . 'config/menu-logo.svg' ) ),
 	'submenus'   => [
 		'general-settings' => [
 			'page_title' => __( 'Blockera General Settings', 'blockera' ),
