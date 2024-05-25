@@ -11,9 +11,16 @@ import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
 import classNames from 'classnames';
 
 /**
+ * Blockera dependencies
+ */
+import { Flex } from '@blockera/components';
+
+/**
  * Internal dependencies
  */
 import { More } from '../libs/settings/icons';
+import { BlockeraIcon } from '../icons/blockera';
+import { WordPressIcon } from '../icons/wordpress';
 
 export const BlockDropdownAllMenu = ({
 	isActive,
@@ -50,7 +57,10 @@ export const BlockDropdownAllMenu = ({
 								'blockera-block-menu-item-selected': isActive,
 							})}
 						>
-							{__('Blockera Block', 'blockera')}
+							<Flex alignItems="center" gap="10px">
+								<BlockeraIcon />
+								{'Blockera ' + __('Block', 'blockera')}
+							</Flex>
 						</MenuItem>
 
 						<MenuItem
@@ -66,7 +76,10 @@ export const BlockDropdownAllMenu = ({
 								'blockera-block-menu-item-selected': !isActive,
 							})}
 						>
-							{__('Gutenberg Block', 'blockera')}
+							<Flex alignItems="center" gap="10px">
+								<WordPressIcon />
+								{__('WordPress Core Block', 'blockera')}
+							</Flex>
 						</MenuItem>
 					</MenuGroup>
 				);
