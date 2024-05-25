@@ -55,4 +55,45 @@
 	&.is-opened > .components-panel__body-title {
 		margin-bottom: 5px;
 	}
+
+	.blockera-control.blockera-control-extensions-powered-by {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: right;
+		font-size: 10px;
+		text-transform: uppercase;
+		font-weight: 500;
+		color: #c2c2c2;
+		gap: 13px;
+		padding-top: 20px;
+		margin-bottom: -5px;
+
+		a {
+			text-decoration: none;
+			color: #c2c2c2;
+			font-weight: 500;
+			display: flex;
+			flex-direction: row;
+			gap: 5px;
+			transition: var(--blockera-controls-transition);
+
+			&:hover {
+				color: var(--blockera-controls-primary-color);
+
+				span {
+					opacity: 1;
+				}
+			}
+
+			span {
+				opacity: 0.6;
+				transition: var(--blockera-controls-transition);
+			}
+
+			svg {
+				fill: currentColor;
+			}
+		}
+	}
 }
