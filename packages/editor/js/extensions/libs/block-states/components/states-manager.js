@@ -226,6 +226,7 @@ const StatesManager: ComponentType<any> = memo(
 					<RepeaterControl
 						{...{
 							onDelete,
+							id: 'block-states',
 							maxItems: Object.keys(preparedStates).length,
 							valueCleanup: (value) => value,
 							selectable: true,
