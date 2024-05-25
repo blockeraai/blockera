@@ -71,8 +71,8 @@
 
 		a {
 			text-decoration: none;
-			color: #c2c2c2;
-			font-weight: 500;
+			color: #c9c5c5;
+			font-weight: 600;
 			display: flex;
 			flex-direction: row;
 			gap: 5px;
@@ -87,8 +87,9 @@
 			}
 
 			span {
-				opacity: 0.6;
+				opacity: 0.5;
 				transition: var(--blockera-controls-transition);
+				font-weight: 500;
 			}
 
 			svg {
