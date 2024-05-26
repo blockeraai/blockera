@@ -53,38 +53,63 @@
 }
 
 .blockera-block-icon {
-	top: 2px;
-	right: 2px;
+	--icon-size: 16px;
 	position: absolute;
-	min-width: 13px !important;
-	min-height: 13px !important;
-	max-width: 13px !important;
-	max-height: 13px !important;
-	fill: var(--blockera-controls-primary-color);
-}
-
-.block-editor-block-switcher__toggle .blockera-block-icon {
+	top: 0;
+	right: 0;
+	min-width: var(--icon-size) !important;
+	min-height: var(--icon-size) !important;
+	max-width: var(--icon-size) !important;
+	max-height: var(--icon-size) !important;
+	color: #cad0d3;
+	fill: currentColor;
+	transition: all 0.15s ease-out;
 	display: none;
 }
 
-.blockera-component-block-icon {
-	position: relative;
+// Block inserter
+
+.block-editor-inserter__block-list {
 
 	.blockera-block-icon {
-		top: -10px;
-		right: -10px;
+		display: block;
+		top: 15px;
+		right: 20px;
+		margin-right: -7px;
 	}
 }
 
-.block-editor-block-types-list__list-item {
-	position: relative;
-}
+// Block preview popover
 
 .components-popover__content .block-editor-block-card .block-editor-block-icon {
 	position: relative;
 
 	.blockera-block-icon {
+		color: #1e1e1e;
+		display: block;
 		top: -10px;
 		right: -10px;
+		background: #ffffff;
+		--icon-size: 20px;
+		border-radius: 50%;
+		border: 2px solid #ffffff;
+	}
+}
+
+// Editor block manager
+
+.editor-block-manager__checklist .block-editor-block-icon {
+	position: relative;
+
+	.blockera-block-icon {
+		display: block;
+		--icon-size: 20px;
+		top: 50%;
+		margin-top: -10px;
+		right: 40px;
+		background: #ffffff;
+		border-radius: 50%;
+		border: 2px solid #ffffff;
+		color: #1e1e1e;
 	}
 }
