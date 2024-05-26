@@ -40,9 +40,22 @@ To download and install the Blockera plugin, make sure you follow the steps belo
 
 = Is Blockera free? =
 
-Blockera comes in both free and premium versions. The [premium version](https://blockera.ai/) offers a wider variety of blocks and multiple options to customise them, [compared to the free version](https://blockera.ai/).
+Blockera comes in both free and premium versions. The [premium version](https://blockera.ai/) offers a wider variety of blocks and multiple options to customize them, [compared to the free version](https://blockera.ai/).
 
 == Changelog ==
+
+= 1.1.2 - 2024-5-26 =
+-   New: Indicator for current responsive breakpoint.
+
+-   Tweak: Blocks and admin panel design improvement.
+-   Tweak: Various bug fixes.
+-   Tweak: A lot code refactor and improvement.
+-   Tweak: More E2E tests.
+-   Tweak: Blockera logos.
+
+-   Fix: Various bugs in block states.
+-   Fix: Typos.
+
 
 = 1.1.1 - 2024-5-24 =
 
@@ -51,7 +64,8 @@ Blockera comes in both free and premium versions. The [premium version](https://
 
 -   Tweak: Improve admin panel design.
 -   Tweak: E2E tests for admin panel.
--   Tweak: A lot of codes refactor and bug fixes.
+-   Tweak: Various bug fixes.
+-   Tweak: A lot code refactor and improvement.
 
 -   Fix: Losing Blockera attributes on disabled blocks.
 -   Fix: Disable repeater add button if "Pro hints" is disabled. 
