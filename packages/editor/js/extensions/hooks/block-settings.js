@@ -30,10 +30,7 @@ import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals, BlockIcon } from '../components';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 
-const EdiBlockWithoutExtensions = ({
-	settings,
-	...props
-}: Object): MixedElement => {
+const useSharedBlockSideEffect = (): void => {
 	const {
 		blockEditor: { getSelectedBlock },
 	} = useStoreSelectors();
@@ -62,6 +59,13 @@ const EdiBlockWithoutExtensions = ({
 			tabs.style.display = 'block';
 		}
 	}, [selectedBlock]);
+};
+
+const EdiBlockWithoutExtensions = ({
+	settings,
+	...props
+}: Object): MixedElement => {
+	useSharedBlockSideEffect();
 
 	return settings.edit(props);
 };
@@ -230,6 +234,9 @@ function mergeBlockSettings(
 					</BaseControlContext.Provider>
 				);
 			}
+
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			useSharedBlockSideEffect();
 
 			return settings.edit(props);
 		},
