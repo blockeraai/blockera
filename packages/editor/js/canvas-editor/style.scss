@@ -28,7 +28,8 @@
 			transition: all 0.3s;
 		}
 
-		svg:hover {
+		svg:hover,
+ svg.is-active-breakpoint {
 			fill: var(--blockera-controls-primary-color);
 			color: var(--blockera-controls-primary-color);
 		}
