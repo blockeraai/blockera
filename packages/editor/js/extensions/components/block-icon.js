@@ -5,6 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { BlockeraIcon } from '../icons/blockera';
+import { BlockIcon as WPBlockIcon } from '@wordpress/block-editor';
 
 /**
  * Blockera dependencies
@@ -16,7 +17,7 @@ export const BlockIcon = ({
 	defaultIcon,
 }: {
 	name: string,
-	defaultIcon: MixedElement,
+	defaultIcon: Object,
 }): MixedElement => {
 	const normalizedName = name.replace('core/', '').replace('-', ' ');
 	const capitalizedName = getPascalCase(normalizedName);
@@ -30,7 +31,7 @@ export const BlockIcon = ({
 				aria-label={ariaLabel}
 			/>
 
-			{defaultIcon}
+			<WPBlockIcon icon={defaultIcon} />
 		</>
 	);
 };

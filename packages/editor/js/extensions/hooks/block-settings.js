@@ -94,8 +94,6 @@ export default function withBlockSettings(
 	const blockExtension = getBlockExtensionBy('targetBlock', name);
 
 	if (blockExtension && isBlockTypeExtension(blockExtension)) {
-		settings.icon = <BlockIcon defaultIcon={settings.icon} name={name} />;
-
 		return mergeBlockSettings(settings, blockExtension, args);
 	}
 
@@ -158,7 +156,29 @@ function mergeBlockSettings(
 		variations: [
 			...(settings?.variations || []),
 			...(additional.variations || []),
-		],
+		].map((variation: Object): Object => {
+			if (!variation?.icon) {
+				return {
+					...variation,
+					icon: (
+						<BlockIcon
+							defaultIcon={settings.icon}
+							name={settings.name}
+						/>
+					),
+				};
+			}
+
+			return {
+				...variation,
+				icon: (
+					<BlockIcon
+						defaultIcon={variation.icon}
+						name={settings.name}
+					/>
+				),
+			};
+		}),
 		edit(props: Object): MixedElement {
 			if (
 				isFunction(additional?.edit) &&
@@ -230,5 +250,6 @@ function mergeBlockSettings(
 			},
 			...(settings?.deprecated || []),
 		].filter(isObject),
+		icon: <BlockIcon defaultIcon={settings.icon} name={settings.name} />,
 	};
 }
