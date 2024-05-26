@@ -1,7 +1,7 @@
 .blockera-extension.blockera-extension-block-card {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 10px;
 
 	.blockera-extension-block-card__inner {
 		align-items: flex-start;
@@ -79,7 +79,16 @@
 			flex-direction: row;
 			gap: 8px;
 
-			.components-button {
+			> .components-base-control {
+				margin: 0 !important;
+			}
+
+			.components-toggle-group-control {
+				min-height: 34px;
+				height: 26px;
+			}
+
+			.components-toggle-group-control-option-base {
 				min-width: 26px;
 				min-height: 26px;
 				height: 26px;
