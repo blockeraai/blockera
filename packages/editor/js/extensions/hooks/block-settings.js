@@ -144,16 +144,17 @@ function mergeBlockSettings(
 		},
 	});
 
-	return {
-		...settings,
-		attributes: defaultAttributes,
-		supports: mergeObject(settings.supports, additional.supports),
-		selectors: mergeObject(settings.selectors, additional.selectors),
-		transforms: {
-			...(settings?.transforms || {}),
-			...(additional?.transforms || {}),
-		},
-		variations: [
+	const isAvailableBlock = () =>
+		!unsupportedBlocks.includes(settings.name) &&
+		!notAllowedUsers.filter((role) => currentUser.roles.includes(role))
+			.length;
+
+	const getVariations = (): Array<Object> => {
+		if (!isAvailableBlock()) {
+			return settings?.variations;
+		}
+
+		return [
 			...(settings?.variations || []),
 			...(additional.variations || []),
 		].map((variation: Object): Object => {
@@ -178,15 +179,21 @@ function mergeBlockSettings(
 					/>
 				),
 			};
-		}),
+		});
+	};
+
+	return {
+		...settings,
+		attributes: defaultAttributes,
+		supports: mergeObject(settings.supports, additional.supports),
+		selectors: mergeObject(settings.selectors, additional.selectors),
+		transforms: {
+			...(settings?.transforms || {}),
+			...(additional?.transforms || {}),
+		},
+		variations: getVariations(),
 		edit(props: Object): MixedElement {
-			if (
-				isFunction(additional?.edit) &&
-				!unsupportedBlocks.includes(settings.name) &&
-				!notAllowedUsers.filter((role) =>
-					currentUser.roles.includes(role)
-				).length
-			) {
+			if (isFunction(additional?.edit) && isAvailableBlock()) {
 				const baseContextValue = {
 					components: {
 						FeaturesWrapper: EditorFeatureWrapper,
@@ -227,6 +234,10 @@ function mergeBlockSettings(
 			return settings.edit(props);
 		},
 		save(props: Object): MixedElement {
+			if (!isAvailableBlock()) {
+				return settings?.save(props);
+			}
+
 			props = {
 				...props,
 				attributes: sanitizedBlockAttributes(props.attributes),
@@ -234,22 +245,28 @@ function mergeBlockSettings(
 
 			return settings.save(props);
 		},
-		deprecated: [
-			{
-				attributes: settings.attributes,
-				supports: settings.supports,
-				migrate(attributes: Object): Object {
-					return additional.migrate(attributes);
-				},
-				edit(blockProps: Object): MixedElement {
-					return settings.edit(blockProps);
-				},
-				save(blockProps: Object): MixedElement {
-					return settings.save(blockProps);
-				},
-			},
-			...(settings?.deprecated || []),
-		].filter(isObject),
-		icon: <BlockIcon defaultIcon={settings.icon} name={settings.name} />,
+		deprecated: !isAvailableBlock()
+			? settings?.deprecated
+			: [
+					{
+						attributes: settings.attributes,
+						supports: settings.supports,
+						migrate(attributes: Object): Object {
+							return additional.migrate(attributes);
+						},
+						edit(blockProps: Object): MixedElement {
+							return settings.edit(blockProps);
+						},
+						save(blockProps: Object): MixedElement {
+							return settings.save(blockProps);
+						},
+					},
+					...(settings?.deprecated || []),
+			  ].filter(isObject),
+		icon: !isAvailableBlock() ? (
+			settings?.icon
+		) : (
+			<BlockIcon defaultIcon={settings.icon} name={settings.name} />
+		),
 	};
 }
