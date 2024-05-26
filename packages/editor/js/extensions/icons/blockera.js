@@ -1,6 +1,14 @@
-export function BlockeraIcon({}) {
+// @flow
+
+/**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+export function BlockeraIcon(props: Object): MixedElement {
 	return (
 		<svg
+			{...props}
 			width="18"
 			height="18"
 			viewBox="0 0 18 18"

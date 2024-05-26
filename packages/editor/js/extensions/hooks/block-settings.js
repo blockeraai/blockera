@@ -27,7 +27,7 @@ import {
 import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors } from '../../hooks';
 import { sanitizedBlockAttributes } from './utils';
-import { BlockBase, BlockPortals } from '../components';
+import { BlockBase, BlockPortals, BlockIcon } from '../components';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 
 const EdiBlockWithoutExtensions = ({
@@ -89,20 +89,15 @@ export default function withBlockSettings(
 		return settings;
 	}
 
-	const {
-		// getBlockExtension,
-		getBlockExtensionBy,
-	} = select(STORE_NAME) || {};
+	const { getBlockExtensionBy } = select(STORE_NAME) || {};
 
-	// const sharedExtension = getBlockExtension('Shared');
 	const blockExtension = getBlockExtensionBy('targetBlock', name);
 
 	if (blockExtension && isBlockTypeExtension(blockExtension)) {
-		// mergeObject(sharedExtension, blockExtension)
+		settings.icon = <BlockIcon defaultIcon={settings.icon} name={name} />;
+
 		return mergeBlockSettings(settings, blockExtension, args);
 	}
-
-	// return mergeBlockSettings(settings, sharedExtension);
 
 	return {
 		...settings,

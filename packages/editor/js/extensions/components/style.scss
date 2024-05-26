@@ -51,3 +51,40 @@
 		pointer-events: none;
 	}
 }
+
+.blockera-block-icon {
+	top: 2px;
+	right: 2px;
+	position: absolute;
+	min-width: 13px !important;
+	min-height: 13px !important;
+	max-width: 13px !important;
+	max-height: 13px !important;
+	fill: var(--blockera-controls-primary-color);
+}
+
+.block-editor-block-switcher__toggle .blockera-block-icon {
+	display: none;
+}
+
+.blockera-component-block-icon {
+	position: relative;
+
+	.blockera-block-icon {
+		top: -10px;
+		right: -10px;
+	}
+}
+
+.block-editor-block-types-list__list-item {
+	position: relative;
+}
+
+.components-popover__content .block-editor-block-card .block-editor-block-icon {
+	position: relative;
+
+	.blockera-block-icon {
+		top: -10px;
+		right: -10px;
+	}
+}
