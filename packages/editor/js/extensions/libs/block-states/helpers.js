@@ -50,6 +50,7 @@ export function BreakpointIcon({
 	...props
 }: {
 	name: TBreakpoint,
+	classNames?: string,
 	onClick?: (event: MouseEvent) => void,
 }): MixedElement {
 	switch (name) {
