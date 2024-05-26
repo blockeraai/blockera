@@ -73,6 +73,12 @@ export function disableGutenbergFeatures() {
 	});
 }
 
+export function getBlockInserter() {
+	return cy.get(
+		'.edit-post-header [aria-label="Toggle block inserter"], .edit-site-header [aria-label="Toggle block inserter"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"], .editor-document-tools__inserter-toggle is-primary[aria-pressed="false"]'
+	);
+}
+
 /**
  * From inside the WordPress editor open the blockera-core Gutenberg editor panel
  *
@@ -93,9 +99,7 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 		clearBlocks();
 	}
 
-	cy.get(
-		'.edit-post-header [aria-label="Toggle block inserter"], .edit-site-header [aria-label="Toggle block inserter"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"], .editor-document-tools__inserter-toggle is-primary[aria-pressed="false"]'
-	).click();
+	getBlockInserter().click();
 
 	// eslint-disable-next-line
 	cy.get(
