@@ -24,11 +24,15 @@ export const StatesGraph = ({
 	controlId,
 	blockName,
 	defaultValue,
+	path,
+	isRepeaterItem,
 }: {
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
 	onClick: (state: TStates) => void,
+	path: null | string,
+	isRepeaterItem: Boolean,
 }): null | MixedElement => {
 	if (!controlId) {
 		return null;
@@ -36,7 +40,13 @@ export const StatesGraph = ({
 
 	const renderedBreakpoints: Array<string> = [];
 
-	const statesGraph = getStatesGraph({ controlId, blockName, defaultValue });
+	const statesGraph = getStatesGraph({
+		controlId,
+		blockName,
+		defaultValue,
+		path,
+		isRepeaterItem,
+	});
 
 	if (statesGraph.length === 0) {
 		return <></>;

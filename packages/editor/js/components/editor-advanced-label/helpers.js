@@ -9,11 +9,20 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import {
+	isEmpty,
+	isEquals,
+	isNull,
+	isUndefined,
+	isObject,
+} from '@blockera/utils';
+import { prepare } from '@blockera/data-editor';
+import {
 	getStatesGraphNodes,
 	type StateGraph,
 	type StateGraphItem,
-} from '@blockera/editor/js/extensions/libs/block-states/store/selector';
-import { isEmpty, isEquals, isNull, isUndefined } from '@blockera/utils';
+} from '../../extensions/libs/block-states';
+import { useBlockContext } from '../../extensions';
+
 /**
  * Internal dependencies
  */
@@ -23,12 +32,19 @@ export const getStatesGraph = ({
 	controlId,
 	blockName,
 	defaultValue,
+	path,
+	isRepeaterItem,
 }: {
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
+	path: null | string,
+	isRepeaterItem: Boolean,
 }): Array<LabelStates> => {
 	const blockStates = controlId ? getStatesGraphNodes() : [];
+
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const { getAttributes = () => {} } = useBlockContext();
 
 	const { getBlockType } = select('core/blocks');
 
@@ -66,13 +82,60 @@ export const getStatesGraph = ({
 									return null;
 								}
 
-								const value = state.attributes[controlId];
+								let value;
 
-								if (!defaultValue) {
+								if (path) {
+									value =
+										prepare(path, state.attributes) ??
+										prepare(
+											path,
+											state.attributes[controlId]
+										);
+								} else {
+									value = state.attributes[controlId];
+								}
+
+								if (isUndefined(value) && isRepeaterItem) {
+									return null;
+								}
+
+								if (isUndefined(defaultValue)) {
 									defaultValue =
 										getBlockType(blockName)?.attributes[
 											controlId
 										]?.default;
+								}
+
+								if (isObject(defaultValue)) {
+									if (path.includes('blockera')) {
+										const preparedPath = path.substring(
+											path.indexOf('.') + 1
+										);
+
+										defaultValue =
+											prepare(
+												preparedPath,
+												defaultValue
+											) ?? defaultValue;
+									}
+
+									defaultValue =
+										prepare(path, defaultValue) ??
+										defaultValue;
+								}
+
+								const attributes = getAttributes();
+
+								const rootValue =
+									prepare(path, attributes) ??
+									prepare(path, attributes[controlId]);
+
+								if (
+									(state.type !== 'normal' ||
+										stateGraph.type !== 'laptop') &&
+									isEquals(value, rootValue)
+								) {
+									return null;
 								}
 
 								if (isEquals(value, defaultValue)) {

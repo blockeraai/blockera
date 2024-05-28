@@ -53,14 +53,17 @@ export const EditorAdvancedLabelControl = ({
 		getAttributes = () => {},
 		isNormalState = () => true,
 		switchBlockState,
+		currentState,
+		currentInnerBlockState,
 	} = useBlockContext();
 
 	const {
 		isChanged,
-		isChangedOnNormal,
+		isChangedOnLaptopNormal,
 		isChangedOnOtherStates,
 		isChangedOnCurrentState,
 		isInnerBlock,
+		isChangedOnCurrentBreakpointNormal,
 	} = useAdvancedLabelProps(
 		{
 			path,
@@ -84,7 +87,7 @@ export const EditorAdvancedLabelControl = ({
 
 	const isChangedValue =
 		(isChanged && isChangedOnCurrentState) ||
-		isChangedOnNormal ||
+		isChangedOnLaptopNormal ||
 		isChangedOnOtherStates;
 
 	return (
@@ -98,26 +101,34 @@ export const EditorAdvancedLabelControl = ({
 					className={controlClassNames('label', className, {
 						'changed-in-inner-normal-state':
 							(isInnerBlock &&
-								isNormalState() &&
+								(isNormalState() ||
+									'normal' === currentInnerBlockState) &&
 								isChanged &&
 								isChangedOnCurrentState) ||
 							(isInnerBlock &&
-								!isNormalState() &&
-								isChangedOnNormal &&
+								(!isNormalState() ||
+									'normal' !== currentInnerBlockState) &&
+								isChangedOnLaptopNormal &&
 								!isChangedOnCurrentState),
 						'changed-in-other-state':
 							!isChangedOnCurrentState && isChangedOnOtherStates,
 						'changed-in-normal-state':
-							(isNormalState() &&
+							((isNormalState() || 'normal' === currentState) &&
 								isChanged &&
 								isChangedOnCurrentState) ||
 							(!isNormalState() &&
-								isChangedOnNormal &&
+								(isChangedOnLaptopNormal ||
+									isChangedOnCurrentBreakpointNormal) &&
 								!isChangedOnCurrentState),
 						'changed-in-secondary-state':
-							!isNormalState() &&
-							isChanged &&
-							isChangedOnCurrentState,
+							(isInnerBlock &&
+								'normal' !== currentInnerBlockState &&
+								isChanged &&
+								isChangedOnCurrentState) ||
+							(!isNormalState() &&
+								'normal' !== currentState &&
+								isChanged &&
+								isChangedOnCurrentState),
 						'is-open': isOpenModal,
 					})}
 					{...props}
@@ -174,6 +185,8 @@ export const EditorAdvancedLabelControl = ({
 								blockName={blockName}
 								onClick={switchBlockState}
 								defaultValue={defaultValue}
+								path={path}
+								isRepeaterItem={!isUndefined(repeaterItem)}
 							/>
 
 							{isFunction(resetToDefault) && (
@@ -222,6 +235,7 @@ export const EditorAdvancedLabelControl = ({
 													action: 'RESET_ALL',
 												});
 											}}
+											data-test="reset-all-button"
 										/>
 									)}
 
@@ -274,6 +288,7 @@ export const EditorAdvancedLabelControl = ({
 														action: 'RESET_TO_DEFAULT',
 													});
 												}}
+												data-test="reset-button"
 											/>
 										)}
 
@@ -325,6 +340,7 @@ export const EditorAdvancedLabelControl = ({
 													attributes: getAttributes(),
 												});
 											}}
+											data-test="reset-button"
 										/>
 									)}
 								</Flex>

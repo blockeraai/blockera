@@ -43,10 +43,11 @@ export const useAdvancedLabelProps = (
 ): CalculatedAdvancedLabelProps => {
 	const [labelStatus, setLabelStatus] = useState({
 		isChanged: false,
-		isChangedOnNormal: false,
+		isChangedOnLaptopNormal: false,
 		isChangedOnOtherStates: false,
 		isChangedOnCurrentState: false,
 		isInnerBlock: false,
+		isChangedOnCurrentBreakpointNormal: false,
 	});
 	const {
 		currentBlock,
@@ -74,7 +75,7 @@ export const useAdvancedLabelProps = (
 		let calculatedAttributes = blockAttributes;
 
 		if (isInnerBlock(currentBlock)) {
-			// Assume current inner block inside master secondary state!
+			// Assume current inner block inside master pseudo state!
 			if (!_isNormalBlockState(currentState)) {
 				if (
 					!blockAttributes.blockeraBlockStates[currentState]
@@ -94,6 +95,11 @@ export const useAdvancedLabelProps = (
 						blockeraInnerBlocks[currentBlock].attributes ||
 						{};
 				}
+			} else if ('laptop' !== currentBreakpoint) {
+				calculatedAttributes =
+					blockAttributes.blockeraBlockStates[currentState]
+						.breakpoints[currentBreakpoint]?.attributes
+						?.blockeraInnerBlocks[currentBlock].attributes || {};
 			} else {
 				calculatedAttributes =
 					(blockAttributes.blockeraInnerBlocks[currentBlock] &&
@@ -121,10 +127,11 @@ export const useAdvancedLabelProps = (
 			) {
 				return setLabelStatus({
 					isChanged: false,
-					isChangedOnNormal: false,
+					isChangedOnLaptopNormal: false,
 					isChangedOnOtherStates: false,
 					isChangedOnCurrentState: false,
 					isInnerBlock: isInnerBlock(currentBlock),
+					isChangedOnCurrentBreakpointNormal: false,
 				});
 			}
 
@@ -134,10 +141,11 @@ export const useAdvancedLabelProps = (
 
 				return setLabelStatus({
 					isChanged,
-					isChangedOnNormal: isChanged,
+					isChangedOnLaptopNormal: isChanged,
 					isChangedOnOtherStates: false,
 					isChangedOnCurrentState: isChanged,
 					isInnerBlock: isInnerBlock(currentBlock),
+					isChangedOnCurrentBreakpointNormal: isChanged,
 				});
 			}
 			const currentBlockState =
@@ -153,6 +161,7 @@ export const useAdvancedLabelProps = (
 			let stateValue = stateAttributes ? stateAttributes[attribute] : {};
 			let clonedValue = value;
 			let clonedDefaultValue = defaultValue;
+			const rootValue = prepare(path, currentBlockAttributes);
 
 			if (path && !isRepeater) {
 				const _value = prepare(path, clonedValue);
@@ -171,6 +180,114 @@ export const useAdvancedLabelProps = (
 					stateValue = prepare(path, stateValue);
 				}
 			}
+
+			const isChangedOnSpecificStateAndBreakpoint = (
+				stateValue: Object | void,
+				stateType: string,
+				compareWithRootValue?: Boolean = true
+			) => {
+				if (isEmpty(stateValue) || isUndefined(stateValue)) {
+					return false;
+				}
+
+				if (isRepeater) {
+					// Assume control is repeater.
+					if (!isNormalState && 'normal' === stateType) {
+						return (
+							!isEmpty(stateValue[attribute]) &&
+							!isUndefined(stateValue[attribute]) &&
+							!isEquals(stateValue[attribute], clonedDefaultValue)
+						);
+					}
+
+					return (
+						!isEmpty(stateValue[attribute]) &&
+						!isUndefined(stateValue[attribute]) &&
+						!isEquals(stateValue[attribute], clonedDefaultValue)
+					);
+				}
+
+				// To handle repeater nested labels
+				if (
+					isObject(stateValue[attribute]) &&
+					!isObject(clonedDefaultValue) &&
+					path
+				) {
+					const _stateValue = prepare(path, stateValue);
+
+					// Compare with rootValue
+					if (
+						!isNormalState &&
+						stateType !== 'normal' &&
+						!isUndefined(rootValue) &&
+						!isEquals(rootValue, clonedDefaultValue) &&
+						compareWithRootValue
+					) {
+						return (
+							!isEmpty(stateValue[attribute]) &&
+							!isUndefined(_stateValue) &&
+							!isEquals(_stateValue, rootValue)
+						);
+					}
+
+					return (
+						!isEmpty(stateValue[attribute]) &&
+						!isUndefined(_stateValue) &&
+						!isEquals(_stateValue, clonedDefaultValue)
+					);
+				}
+
+				// Assume clonedDefaultValue is object
+				if (
+					isObject(stateValue[attribute]) &&
+					isObject(clonedDefaultValue) &&
+					path &&
+					path.includes('blockera')
+				) {
+					const _stateValue = prepare(path, stateValue);
+
+					// * to remove blocheraAttribute from path
+					const preparedPath = path.substring(path.indexOf('.') + 1);
+
+					const _clonedDefaultValue =
+						prepare(preparedPath, clonedDefaultValue) ??
+						clonedDefaultValue;
+
+					// Compare with rootValue
+					if (
+						!isNormalState &&
+						stateType !== 'normal' &&
+						!isEquals(rootValue, _clonedDefaultValue) &&
+						compareWithRootValue
+					) {
+						return (
+							!isEmpty(stateValue[attribute]) &&
+							!isUndefined(_stateValue) &&
+							!isEquals(_stateValue, rootValue)
+						);
+					}
+
+					return (
+						!isEmpty(stateValue[attribute]) &&
+						!isUndefined(_stateValue) &&
+						!isEquals(_stateValue, _clonedDefaultValue)
+					);
+				}
+
+				if (!isNormalState && 'normal' === stateType) {
+					return (
+						!isEmpty(stateValue) &&
+						!isUndefined(stateValue[attribute]) &&
+						!isEquals(stateValue[attribute], clonedDefaultValue)
+					);
+				}
+
+				return (
+					!isEmpty(stateValue) &&
+					!isUndefined(stateValue[attribute]) &&
+					!isEquals(stateValue[attribute], clonedDefaultValue)
+				);
+			};
 
 			const isChangedOnOtherStates = Object.fromEntries(
 				// $FlowFixMe
@@ -196,86 +313,9 @@ export const useAdvancedLabelProps = (
 											? currentBlockAttributes
 											: breakpoint?.attributes;
 
-									if (isEmpty(stateValue)) {
-										return false;
-									}
-
-									// Assume control is repeater.
-									if (isRepeater) {
-										if (
-											!isNormalState &&
-											'normal' === stateType
-										) {
-											return (
-												!isEmpty(
-													stateValue[attribute]
-												) &&
-												!isUndefined(
-													stateValue[attribute]
-												) &&
-												!isEquals(
-													stateValue[attribute],
-													clonedDefaultValue
-												)
-											);
-										}
-
-										return (
-											!isEmpty(stateValue[attribute]) &&
-											!isUndefined(
-												stateValue[attribute]
-											) &&
-											!isEquals(
-												stateValue[attribute],
-												clonedDefaultValue
-											)
-										);
-									}
-
-									// to handle repeater properties
-									if (
-										isObject(stateValue[attribute]) &&
-										!isObject(clonedDefaultValue) &&
-										path
-									) {
-										const _stateValue = prepare(
-											path,
-											stateValue
-										);
-
-										return (
-											!isEmpty(stateValue[attribute]) &&
-											!isUndefined(_stateValue) &&
-											!isEquals(
-												_stateValue,
-												clonedDefaultValue
-											)
-										);
-									}
-
-									if (
-										!isNormalState &&
-										'normal' === stateType
-									) {
-										return (
-											!isEmpty(stateValue) &&
-											!isUndefined(
-												stateValue[attribute]
-											) &&
-											!isEquals(
-												stateValue[attribute],
-												clonedDefaultValue
-											)
-										);
-									}
-
-									return (
-										!isEmpty(stateValue) &&
-										!isUndefined(stateValue[attribute]) &&
-										!isEquals(
-											stateValue[attribute],
-											clonedDefaultValue
-										)
+									return isChangedOnSpecificStateAndBreakpoint(
+										stateValue,
+										stateType
 									);
 								}
 							).length > 0
@@ -296,30 +336,63 @@ export const useAdvancedLabelProps = (
 				}
 			}
 
-			let isChangedOnNormal = !!isChangedOnOtherStates?.normal;
+			const isChangedOnLaptopNormal =
+				isChangedOnSpecificStateAndBreakpoint(
+					currentBlockAttributes,
+					currentState,
+					false
+				);
 
-			if (isObject(isChangedOnNormal)) {
-				isChangedOnNormal = true;
-			}
+			const isChangedOnCurrentBreakpointAndState = (
+				breakpoint,
+				stateType
+			) => {
+				if (isUndefined(breakpoint)) return false;
+
+				const stateValue =
+					currentBreakpoint === 'laptop' && isNormalState
+						? currentBlockAttributes
+						: breakpoint?.attributes;
+
+				return isChangedOnSpecificStateAndBreakpoint(
+					stateValue,
+					stateType
+				);
+			};
 
 			const isChangedOnCurrentState =
-				!!isChangedOnOtherStates[
-					isInnerBlock(currentBlock)
-						? currentInnerBlockState
-						: currentState
-				];
+				isChangedOnCurrentBreakpointAndState(
+					isChangedOnOtherStates[
+						isInnerBlock(currentBlock)
+							? currentInnerBlockState
+							: currentState
+					]?.breakpoints[currentBreakpoint],
+					currentState
+				);
+
+			const isChangedOnCurrentBreakpointNormal =
+				isChangedOnSpecificStateAndBreakpoint(
+					currentBreakpoint === 'laptop'
+						? currentBlockAttributes
+						: currentBlockAttributes.blockeraBlockStates.normal
+								?.breakpoints[currentBreakpoint]?.attributes,
+					currentState,
+					false
+				);
 
 			setLabelStatus({
 				isChanged,
-				isChangedOnNormal,
+				isChangedOnLaptopNormal,
 				isChangedOnCurrentState,
 				isChangedOnOtherStates:
 					Object.keys(isChangedOnOtherStates).length > 0,
 				isInnerBlock: isInnerBlock(currentBlock),
+				isChangedOnCurrentBreakpointNormal,
 			});
 		}, delay);
 
 		return () => clearTimeout(timeoutId);
+		// eslint-disable-next-line
 	}, [
 		value,
 		attribute,
@@ -327,6 +400,7 @@ export const useAdvancedLabelProps = (
 		currentState,
 		currentBreakpoint,
 		currentInnerBlockState,
+		currentBlockAttributes,
 	]);
 
 	return labelStatus;

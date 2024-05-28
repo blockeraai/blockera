@@ -22,7 +22,10 @@ import type {
 } from '../types';
 import staticStates from '../states';
 import getBreakpoints from '../default-breakpoints';
-import { isInnerBlock } from '../../../components/utils';
+import {
+	isInnerBlock,
+	isNormalState as _isNormalState,
+} from '../../../components/utils';
 
 export type State = {
 	type: TStates,
@@ -58,17 +61,22 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 	}
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const { currentBlock } = useSelect((select) => {
-		const { getExtensionCurrentBlock } = select('blockera-core/extensions');
+	const { currentBlock, currentState, currentBreakpoint } = useSelect(
+		(select) => {
+			const {
+				getExtensionCurrentBlock,
+				getExtensionCurrentBlockState,
+				getExtensionCurrentBlockStateBreakpoint,
+			} = select('blockera-core/extensions');
 
-		return {
-			currentBlock: getExtensionCurrentBlock(),
-		};
-	});
-
-	const { getExtensionCurrentBlockStateBreakpoint } = select(
-		'blockera-core/extensions'
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+				currentState: getExtensionCurrentBlockState(),
+				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+			};
+		}
 	);
+
 	const breakpoints = getBreakpoints();
 
 	const normals = [];
@@ -77,8 +85,15 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 		blockAttributes.blockeraBlockStates;
 
 	if (isInnerBlock(currentBlock)) {
-		blockAttributes =
-			blockAttributes.blockeraInnerBlocks[currentBlock].attributes;
+		if (!_isNormalState(currentState) || 'laptop' !== currentBreakpoint) {
+			blockAttributes =
+				blockAttributes.blockeraBlockStates[currentState].breakpoints[
+					currentBreakpoint
+				].attributes?.blockeraInnerBlocks[currentBlock].attributes;
+		} else
+			blockAttributes =
+				blockAttributes.blockeraInnerBlocks[currentBlock].attributes;
+
 		blockeraBlockStates =
 			blockAttributes.blockeraBlockStates ||
 			block.attributes.blockeraBlockStates;
@@ -92,8 +107,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 				.map(([stateType, state]: [TStates, StateTypes]): State => {
 					if (
 						'normal' === stateType &&
-						breakpoint.type ===
-							getExtensionCurrentBlockStateBreakpoint()
+						breakpoint.type === 'laptop'
 					) {
 						return {
 							type: stateType,
