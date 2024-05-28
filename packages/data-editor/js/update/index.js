@@ -31,6 +31,10 @@ export function update(
 	const lastKey = keys.pop();
 
 	for (const key of keys) {
+		if (!currentObj[key]) {
+			continue;
+		}
+
 		currentObj = currentObj[key];
 	}
 
