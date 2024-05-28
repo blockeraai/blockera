@@ -1,20 +1,22 @@
 // @flow
 
 /**
- * Blockera dependencies
+ * Internal dependencies
  */
 import type {
 	StateTypes,
 	TBreakpoint,
 	TStates,
-} from '@blockera/editor/js/extensions/libs/block-states/types';
-import type { AdvancedLabelControlProps } from '@blockera/controls/js/libs/label-control/types';
+} from '../../../extensions/libs/block-states/types';
+import type { AdvancedLabelControlProps } from '../../../components/editor-advanced-label/types';
 
 export type CalculatedAdvancedLabelProps = {
 	isChanged: boolean,
-	isChangedOnNormal: boolean,
+	isInnerBlock: boolean,
 	isChangedOnOtherStates: boolean,
+	isChangedOnLaptopNormal: boolean,
 	isChangedOnCurrentState: boolean,
+	isChangedOnCurrentBreakpointNormal: boolean,
 };
 
 export type AdvancedLabelHookProps = {
