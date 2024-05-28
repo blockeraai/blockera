@@ -1,9 +1,9 @@
 // @flow
 
 export type UseAttributesActions = {
-	resetAll: () => Object,
 	updateNormalState: () => Object,
 	updateBlockStates: () => Object,
+	reset: (resetAll?: boolean) => Object,
 	updateInnerBlockInsideParentState: () => Object,
 	updateInnerBlockStates: (params: Object) => Object,
 };
@@ -35,9 +35,9 @@ const actions = (params: Object): UseAttributesActions => {
 				...params,
 			};
 		},
-		resetAll(): Object {
+		reset(resetAll: boolean = false): Object {
 			return {
-				type: 'RESET_ALL',
+				type: resetAll ? 'RESET_ALL' : 'RESET',
 				...params,
 			};
 		},

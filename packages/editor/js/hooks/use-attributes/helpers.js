@@ -347,3 +347,58 @@ export const prepCustomCssClasses = (
 
 	return _classNames.trim();
 };
+
+export const resetCurrentState = (_state: Object, action: Object): Object => {
+	const {
+		newValue,
+		attributeId,
+		currentState,
+		currentBlock,
+		currentBreakpoint,
+		currentInnerBlockState,
+	} = action;
+
+	const state = { ..._state };
+
+	if (isInnerBlock(currentBlock)) {
+		if (!isNormalState(currentState) || 'laptop' !== currentBreakpoint) {
+			if (!isNormalState(currentInnerBlockState)) {
+				delete state.blockeraBlockStates[currentState].breakpoints[
+					currentBreakpoint
+				].attributes.blockeraInnerBlocks[currentBlock].attributes
+					.blockeraBlockStates[currentInnerBlockState].breakpoints[
+					currentBreakpoint
+				].attributes[attributeId];
+			} else {
+				delete state.blockeraBlockStates[currentState].breakpoints[
+					currentBreakpoint
+				].attributes.blockeraInnerBlocks[currentBlock].attributes[
+					attributeId
+				];
+			}
+		} else if (!isNormalState(currentInnerBlockState)) {
+			delete state.blockeraInnerBlocks[currentBlock].attributes
+				.blockeraBlockStates[currentInnerBlockState].breakpoints[
+				currentBreakpoint
+			].attributes[attributeId];
+		} else {
+			delete state.blockeraInnerBlocks[currentBlock].attributes[
+				attributeId
+			];
+		}
+
+		return mergeObject(state, _state);
+	}
+
+	if (isNormalState(currentState) && 'laptop' === currentBreakpoint) {
+		return mergeObject(state, {
+			[attributeId]: newValue,
+		});
+	}
+
+	delete state.blockeraBlockStates[currentState].breakpoints[
+		currentBreakpoint
+	].attributes[attributeId];
+
+	return mergeObject(state, _state);
+};

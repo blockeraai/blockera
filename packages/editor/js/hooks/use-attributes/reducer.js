@@ -17,6 +17,7 @@ import {
 	resetAllStates,
 	memoizedBlockStates,
 	prepCustomCssClasses,
+	resetCurrentState,
 } from './helpers';
 import { isBaseBreakpoint, isInnerBlock } from '../../extensions/components';
 import { sharedBlockExtensionAttributes as defaultAttributes } from '../../extensions/libs';
@@ -220,6 +221,21 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			return applyFilters(
 				'blockeraCore.blockEdit.setAttributes',
 				resetAllStates(state, action),
+				...hookParams
+			);
+
+		case 'RESET':
+			/**
+			 * Filterable attributes before set next state.
+			 * usefully in add WordPress compatibility and any other filters.
+			 *
+			 * hook: 'blockeraCore.blockEdit.setAttributes'
+			 *
+			 * @since 1.0.0
+			 */
+			return applyFilters(
+				'blockeraCore.blockEdit.setAttributes',
+				resetCurrentState(state, action),
 				...hookParams
 			);
 	}
