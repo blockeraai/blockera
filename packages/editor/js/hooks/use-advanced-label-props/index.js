@@ -25,7 +25,10 @@ import type {
 	AdvancedLabelHookProps,
 } from './types';
 import { blockHasStates } from './helpers';
-import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
+import type {
+	TStates,
+	BreakpointTypes,
+} from '../../extensions/libs/block-states/types';
 
 export const useAdvancedLabelProps = (
 	{
@@ -182,9 +185,9 @@ export const useAdvancedLabelProps = (
 			}
 
 			const isChangedOnSpecificStateAndBreakpoint = (
-				stateValue: Object | void,
+				stateValue: Object,
 				stateType: string,
-				compareWithRootValue?: Boolean = true
+				compareWithRootValue?: boolean = true
 			) => {
 				if (isEmpty(stateValue) || isUndefined(stateValue)) {
 					return false;
@@ -344,8 +347,8 @@ export const useAdvancedLabelProps = (
 				);
 
 			const isChangedOnCurrentBreakpointAndState = (
-				breakpoint,
-				stateType
+				breakpoint: BreakpointTypes,
+				stateType: TStates
 			) => {
 				if (isUndefined(breakpoint)) return false;
 

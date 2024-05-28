@@ -107,7 +107,7 @@ export const getStatesGraph = ({
 								}
 
 								if (isObject(defaultValue)) {
-									if (path.includes('blockera')) {
+									if (path && path.includes('blockera')) {
 										const preparedPath = path.substring(
 											path.indexOf('.') + 1
 										);
