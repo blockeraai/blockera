@@ -215,6 +215,10 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			return value;
 		}
 
+		if ('reset' === ref.current.action) {
+			resetRef();
+		}
+
 		// modify current control
 		modify(controlInfo.name);
 
