@@ -16,16 +16,16 @@ import {
 	isObject,
 } from '@blockera/utils';
 import { prepare } from '@blockera/data-editor';
+
+/**
+ * Internal dependencies
+ */
 import {
 	getStatesGraphNodes,
 	type StateGraph,
 	type StateGraphItem,
 } from '../../extensions/libs/block-states';
 import { useBlockContext } from '../../extensions';
-
-/**
- * Internal dependencies
- */
 import type { LabelStates, LabelChangedStates } from './types';
 
 export const getStatesGraph = ({
