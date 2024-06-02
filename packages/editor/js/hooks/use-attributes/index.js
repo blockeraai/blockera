@@ -143,13 +143,13 @@ export const useAttributes = (
 		});
 
 		// Assume reference current action is 'reset_all_states'
-		if ('reset_all_states' === ref?.current?.action) {
-			return setAttributes(reducer(_attributes, reset(true)));
-		}
-
-		// Assume reference current action is 'reset'
-		if ('reset' === ref?.current?.action) {
-			return setAttributes(reducer(_attributes, reset()));
+		if (ref?.current?.reset) {
+			return setAttributes(
+				reducer(
+					_attributes,
+					reset('reset_all_states' === ref.current.action)
+				)
+			);
 		}
 
 		// Current block (maybe 'master' or any inner blocks) in normal state!

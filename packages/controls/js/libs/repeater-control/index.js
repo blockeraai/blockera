@@ -26,6 +26,7 @@ import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
+import { repeaterOnChange } from './store/reducers/utils';
 import { cleanupRepeater, isEnabledPromote } from './utils';
 
 /**
@@ -154,6 +155,7 @@ export default function RepeaterControl(
 		controlId,
 		repeaterId,
 		overrideItem,
+		valueCleanup,
 		getControlPath,
 		PromoComponent,
 		itemIdGenerator,
@@ -209,12 +211,19 @@ export default function RepeaterControl(
 				defaultRepeaterItemValue?.type ||
 				itemsCount + '';
 
+			const newValue = {
+				...clonedRepeaterItems,
+				[newItemId]: value,
+			};
+
 			modifyControlValue({
 				controlId,
-				value: {
-					...clonedRepeaterItems,
-					[newItemId]: value,
-				},
+				value: newValue,
+			});
+
+			repeaterOnChange(newValue, {
+				onChange,
+				valueCleanup,
 			});
 		};
 
@@ -236,8 +245,10 @@ export default function RepeaterControl(
 			}
 
 			addRepeaterItem({
+				onChange,
 				controlId,
 				repeaterId,
+				valueCleanup,
 				value: getDynamicDefaultRepeaterItem(
 					repeaterItems?.length,
 					defaultRepeaterItemValue
@@ -252,8 +263,10 @@ export default function RepeaterControl(
 		}
 
 		addRepeaterItem({
+			onChange,
 			controlId,
 			repeaterId,
+			valueCleanup,
 			itemIdGenerator,
 			value: defaultRepeaterItemValue,
 		});

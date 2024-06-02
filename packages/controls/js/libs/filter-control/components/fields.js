@@ -29,6 +29,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 		} = useControlContext();
 
 		const {
+			onChange,
+			valueCleanup,
 			repeaterId,
 			getControlId,
 			labelPopoverTitle,
@@ -47,11 +49,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					labelDescription={labelDescription}
 					columns="columns-2"
 					options={getTypeOptions()}
-					onChange={(type) =>
+					onChange={(type, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, type },
 						})
 					}
@@ -86,11 +91,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						range={true}
 						min={0}
 						max={50}
-						onChange={(blur) =>
+						onChange={(blur, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, blur },
 							})
 						}
@@ -125,11 +133,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							range={true}
 							min={-100}
 							max={100}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
 									controlId,
 									repeaterId,
 									itemId,
+									onChange,
+									valueCleanup,
 									value: {
 										...item,
 										'drop-shadow-x': newValue,
@@ -166,11 +177,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							range={true}
 							min={-100}
 							max={100}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
 									controlId,
 									repeaterId,
 									itemId,
+									onChange,
+									valueCleanup,
 									value: {
 										...item,
 										'drop-shadow-y': newValue,
@@ -204,11 +218,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							range={true}
 							min={0}
 							max={100}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
 									controlId,
 									repeaterId,
 									itemId,
+									onChange,
+									valueCleanup,
 									value: {
 										...item,
 										'drop-shadow-blur': newValue,
@@ -238,11 +255,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								</>
 							}
 							columns="columns-2"
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
 									controlId,
 									repeaterId,
 									itemId,
+									onChange,
+									valueCleanup,
 									value: {
 										...item,
 										'drop-shadow-color': newValue,
@@ -291,11 +311,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						range={true}
 						min={0}
 						max={200}
-						onChange={(brightness) =>
+						onChange={(brightness, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									brightness,
@@ -335,11 +358,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						range={true}
 						min={0}
 						max={200}
-						onChange={(contrast) =>
+						onChange={(contrast, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									contrast,
@@ -379,11 +405,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						range={true}
 						min={-365}
 						max={365}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									'hue-rotate': newValue,
@@ -423,11 +452,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						range={true}
 						min={0}
 						max={200}
-						onChange={(saturate) =>
+						onChange={(saturate, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									saturate,
@@ -467,11 +499,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						range={true}
 						min={0}
 						max={100}
-						onChange={(grayscale) =>
+						onChange={(grayscale, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									grayscale,
@@ -511,11 +546,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						range={true}
 						min={0}
 						max={100}
-						onChange={(invert) =>
+						onChange={(invert, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									invert,
@@ -549,11 +587,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						range={true}
 						min={0}
 						max={100}
-						onChange={(sepia) =>
+						onChange={(sepia, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									sepia,

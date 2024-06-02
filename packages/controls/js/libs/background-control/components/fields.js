@@ -74,8 +74,13 @@ const Fields: FieldItem = memo<FieldItem>(
 		const blockeraBackground =
 			getExtension('backgroundConfig')?.blockeraBackground;
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			onChange,
+			valueCleanup,
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+		} = useContext(RepeaterContext);
 
 		useEffect(() => {
 			if (undefined === item['mesh-gradient-colors']) {
@@ -92,6 +97,8 @@ const Fields: FieldItem = memo<FieldItem>(
 			}
 
 			changeRepeaterItem({
+				onChange,
+				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
@@ -115,8 +122,11 @@ const Fields: FieldItem = memo<FieldItem>(
 					labelDescription={<LabelDescription />}
 					columns="columns-2"
 					options={blockeraBackground?.config?.types}
-					onChange={(type) =>
+					onChange={(type, ref) =>
 						changeRepeaterItem({
+							ref,
+							onChange,
+							valueCleanup,
 							controlId,
 							repeaterId,
 							itemId,
@@ -152,8 +162,11 @@ const Fields: FieldItem = memo<FieldItem>(
 							}
 							field="empty"
 							columns="columns-1"
-							onChange={(image) => {
+							onChange={(image, ref) => {
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -217,8 +230,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									icon: <FitContainIcon />,
 								},
 							]}
-							onChange={(size) =>
+							onChange={(size, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -265,8 +281,11 @@ const Fields: FieldItem = memo<FieldItem>(
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										unitType="background-size"
-										onChange={(width) =>
+										onChange={(width, ref) =>
 											changeRepeaterItem({
+												ref,
+												onChange,
+												valueCleanup,
 												controlId,
 												repeaterId,
 												itemId,
@@ -311,8 +330,11 @@ const Fields: FieldItem = memo<FieldItem>(
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										unitType="background-size"
-										onChange={(height) =>
+										onChange={(height, ref) =>
 											changeRepeaterItem({
+												ref,
+												onChange,
+												valueCleanup,
 												controlId,
 												repeaterId,
 												itemId,
@@ -360,8 +382,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
-							onChange={(newValue) => {
+							onChange={(newValue, ref) => {
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -431,8 +456,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								},
 							]}
 							//
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -491,8 +519,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -533,8 +564,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							field="empty"
-							onChange={(newValue: string) => {
+							onChange={(newValue: string, ref) => {
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -585,9 +619,12 @@ const Fields: FieldItem = memo<FieldItem>(
 									? 'blockera-control-is-not-active'
 									: ''
 							}
-							onChange={(newValue: string) => {
+							onChange={(newValue: string, ref) => {
 								// update linear gradient value
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -646,8 +683,11 @@ const Fields: FieldItem = memo<FieldItem>(
 										icon: <LinearGradientRepeatIcon />,
 									},
 								]}
-								onChange={(newValue) =>
+								onChange={(newValue, ref) =>
 									changeRepeaterItem({
+										ref,
+										onChange,
+										valueCleanup,
 										controlId,
 										repeaterId,
 										itemId,
@@ -726,8 +766,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -768,8 +811,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							field="empty"
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -819,8 +865,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
-							onChange={(newValue) => {
+							onChange={(newValue, ref) => {
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -940,8 +989,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									icon: <RadialGradientClosestSideIcon />,
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -1005,8 +1057,11 @@ const Fields: FieldItem = memo<FieldItem>(
 										icon: <RadialGradientRepeatIcon />,
 									},
 								]}
-								onChange={(newValue) =>
+								onChange={(newValue, ref) =>
 									changeRepeaterItem({
+										ref,
+										onChange,
+										valueCleanup,
 										controlId,
 										repeaterId,
 										itemId,
@@ -1085,8 +1140,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -1129,6 +1187,8 @@ const Fields: FieldItem = memo<FieldItem>(
 								})()}
 								onClick={() => {
 									changeRepeaterItem({
+										onChange,
+										valueCleanup,
 										controlId,
 										repeaterId,
 										itemId,
@@ -1271,8 +1331,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,

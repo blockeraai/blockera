@@ -1,4 +1,4 @@
-import { deletePropertyByPath, include } from '../index';
+import { deletePropertyByPath, include, mergeObject } from '../index';
 
 describe('Testing Object utilities', function () {
 	const attributes = {
@@ -308,6 +308,127 @@ describe('Testing Object utilities', function () {
 			);
 
 			expect(actual).toEqual(expected);
+		});
+	});
+
+	it('should merge objects with recieved deletedProps argument', () => {
+		expect(
+			mergeObject(
+				{
+					blockeraTextShadow: {
+						0: {
+							isVisible: true,
+							x: '100px',
+							y: '1px',
+							blur: '1px',
+							color: '#000000ab',
+							order: 0,
+						},
+					},
+					blockeraBlockStates: {
+						normal: {
+							breakpoints: {
+								laptop: {
+									attributes: {},
+								},
+							},
+							isVisible: true,
+						},
+						hover: {
+							breakpoints: {
+								laptop: {
+									attributes: {
+										blockeraTextShadow: {
+											0: {
+												isVisible: true,
+												x: '55px',
+												y: '1px',
+												blur: '1px',
+												color: '#000000ab',
+												order: 0,
+											},
+										},
+									},
+								},
+								tablet: {
+									attributes: {
+										blockeraTextShadow: {
+											0: {
+												isVisible: true,
+												x: '-63px',
+												y: '1px',
+												blur: '1px',
+												color: '#000000ab',
+												order: 0,
+											},
+										},
+									},
+								},
+							},
+							isVisible: true,
+						},
+					},
+				},
+				{
+					blockeraBlockStates: {
+						hover: {
+							breakpoints: {
+								tablet: {
+									attributes: {
+										blockeraTextShadow: undefined,
+									},
+								},
+							},
+						},
+					},
+				},
+				{
+					deletedProps: ['blockeraTextShadow'],
+				}
+			)
+		).toBeD({
+			blockeraTextShadow: {
+				0: {
+					isVisible: true,
+					x: '100px',
+					y: '1px',
+					blur: '1px',
+					color: '#000000ab',
+					order: 0,
+				},
+			},
+			blockeraBlockStates: {
+				normal: {
+					breakpoints: {
+						laptop: {
+							attributes: {},
+						},
+					},
+					isVisible: true,
+				},
+				hover: {
+					breakpoints: {
+						laptop: {
+							attributes: {
+								blockeraTextShadow: {
+									0: {
+										isVisible: true,
+										x: '55px',
+										y: '1px',
+										blur: '1px',
+										color: '#000000ab',
+										order: 0,
+									},
+								},
+							},
+						},
+						tablet: {
+							attributes: {},
+						},
+					},
+					isVisible: true,
+				},
+			},
 		});
 	});
 });

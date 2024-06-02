@@ -4,8 +4,9 @@
  * External Dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
+import { useState, useContext } from '@wordpress/element';
 
 /**
  *  Dependencies
@@ -28,6 +29,7 @@ import { StatesGraph } from './states-graph';
 import HelpIcon from './icons/help';
 import EditsIcon from './icons/edits';
 import RevertIcon from './icons/revert';
+import { RepeaterContext } from '@blockera/controls/js/libs/repeater-control/context';
 
 export const EditorAdvancedLabelControl = ({
 	path = null,
@@ -56,13 +58,17 @@ export const EditorAdvancedLabelControl = ({
 		currentState,
 		currentInnerBlockState,
 	} = useBlockContext();
+	const { getSelectedBlock } = select('core/block-editor') || {};
+	const { attributes } = getSelectedBlock() || {};
+
+	const { onChange, valueCleanup } = useContext(RepeaterContext) || {};
 
 	const {
 		isChanged,
-		isChangedOnLaptopNormal,
-		isChangedOnOtherStates,
-		isChangedOnCurrentState,
 		isInnerBlock,
+		isChangedOnOtherStates,
+		isChangedOnLaptopNormal,
+		isChangedOnCurrentState,
 		isChangedOnCurrentBreakpointNormal,
 	} = useAdvancedLabelProps(
 		{
@@ -228,8 +234,11 @@ export const EditorAdvancedLabelControl = ({
 												//FIXME: please implements reset_all action!
 												resetToDefault({
 													path,
+													onChange,
 													attribute,
 													isRepeater,
+													attributes,
+													valueCleanup,
 													repeaterItem,
 													propId: singularId,
 													action: 'RESET_ALL',
@@ -282,8 +291,11 @@ export const EditorAdvancedLabelControl = ({
 
 													resetToDefault({
 														path,
+														onChange,
 														isRepeater,
+														attributes,
 														repeaterItem,
+														valueCleanup,
 														propId: singularId,
 														action: 'RESET_TO_DEFAULT',
 													});
@@ -333,11 +345,13 @@ export const EditorAdvancedLabelControl = ({
 
 												resetToDefault({
 													path,
+													onChange,
 													isRepeater,
+													attributes,
 													repeaterItem,
+													valueCleanup,
 													propId: singularId,
 													action: 'RESET_TO_NORMAL',
-													attributes: getAttributes(),
 												});
 											}}
 											data-test="reset-button"

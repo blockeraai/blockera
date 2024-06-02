@@ -19,8 +19,13 @@ const Fields = ({ itemId, item }) => {
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 
-	const { repeaterId, getControlId, defaultRepeaterItemValue } =
-		useContext(RepeaterContext);
+	const {
+		onChange,
+		valueCleanup,
+		repeaterId,
+		getControlId,
+		defaultRepeaterItemValue,
+	} = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
@@ -53,11 +58,14 @@ const Fields = ({ itemId, item }) => {
 				range={true}
 				min={-100}
 				max={100}
-				onChange={(x) =>
+				onChange={(x, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, x },
 					})
 				}
@@ -93,11 +101,14 @@ const Fields = ({ itemId, item }) => {
 				range={true}
 				min={-100}
 				max={100}
-				onChange={(y) =>
+				onChange={(y, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, y },
 					})
 				}
@@ -133,11 +144,14 @@ const Fields = ({ itemId, item }) => {
 				range={true}
 				min={0}
 				max={100}
-				onChange={(blur) =>
+				onChange={(blur, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, blur },
 					})
 				}
@@ -162,11 +176,14 @@ const Fields = ({ itemId, item }) => {
 					</>
 				}
 				columns="columns-2"
-				onChange={(color) =>
+				onChange={(color, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, color },
 					})
 				}

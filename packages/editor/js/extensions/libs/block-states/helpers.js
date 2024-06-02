@@ -126,7 +126,18 @@ export function onChangeBlockStates(
 	newValue: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
 	params: Object
 ): void {
-	const { states: _states, onChange, currentBlock, valueCleanup } = params;
+	const onChangeValue: Object = { ...newValue };
+	if (newValue.hasOwnProperty('modifyControlValue')) {
+		newValue = onChangeValue?.value;
+	}
+
+	const {
+		states: _states,
+		onChange,
+		currentBlock,
+		valueCleanup,
+		getStateInfo,
+	} = params;
 	const { getSelectedBlock } = select('core/block-editor');
 
 	const {
@@ -136,12 +147,15 @@ export function onChangeBlockStates(
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('blockera-core/extensions') || {};
 
+	let selectedState = null;
+
 	Object.entries(newValue).forEach(
 		([id, state]: [
 			TStates,
 			{ ...StateTypes, isSelected: boolean }
 		]): void => {
 			if (isInnerBlock(currentBlock) && state?.isSelected) {
+				selectedState = id;
 				setInnerBlockState(id);
 				setBlockClientInnerState({
 					currentState: id,
@@ -149,6 +163,7 @@ export function onChangeBlockStates(
 					clientId: getSelectedBlock()?.clientId,
 				});
 			} else if (state?.isSelected) {
+				selectedState = id;
 				setCurrentState(id);
 				setBlockClientMasterState({
 					currentState: id,
@@ -158,6 +173,36 @@ export function onChangeBlockStates(
 			}
 		}
 	);
+
+	if (onChangeValue.hasOwnProperty('modifyControlValue')) {
+		const { modifyControlValue, controlId } = onChangeValue;
+
+		modifyControlValue({
+			controlId,
+			value: Object.fromEntries(
+				Object.entries(
+					getSelectedBlock()?.attributes.blockeraBlockStates
+				).map(([stateType, stateItem], index) => {
+					const info = getStateInfo(index);
+
+					if ('normal' === stateType) {
+						info.deletable = false;
+					}
+
+					return [
+						stateType,
+						{
+							...info,
+							...stateItem,
+							isSelected: stateType === selectedState,
+						},
+					];
+				})
+			),
+		});
+
+		return;
+	}
 
 	if (isEquals(valueCleanup(_states), valueCleanup(newValue))) {
 		return;

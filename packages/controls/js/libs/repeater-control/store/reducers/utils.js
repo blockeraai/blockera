@@ -102,3 +102,26 @@ export const generatedDetailsId = (
 		uniqueId: `${action.id || actionValue.type}-${itemsCount}`,
 	};
 };
+
+export const repeaterOnChange = (
+	value: Object,
+	{
+		ref,
+		onChange,
+		valueCleanup,
+	}: {
+		ref?: Object,
+		valueCleanup: ((newValue: Object) => Object) | void,
+		onChange: (newValue: any, ref: Object | void) => void,
+	}
+): void => {
+	if ('function' !== typeof onChange) {
+		return;
+	}
+
+	if ('function' === typeof valueCleanup) {
+		return onChange(valueCleanup(value), ref);
+	}
+
+	onChange(value, ref);
+};

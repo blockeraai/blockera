@@ -25,15 +25,13 @@ import {
 	store as controlStore,
 	STORE_NAME as CONTROL_STORE_NAME,
 } from '../../store';
-import {
-	STORE_NAME as repeaterControlStoreName,
-	STORE_NAME as REPEATER_STORE_NAME,
-} from '../../libs/repeater-control/store/constants';
+import { STORE_NAME as REPEATER_STORE_NAME } from '../../libs/repeater-control/store/constants';
 import useControlEffect from './use-control-effect';
 import { BaseControlContext, ControlContext } from '../index';
 import type { ControlContextHookProps, ControlContextRef } from '../types';
 import { store as repeaterStore } from '../../libs/repeater-control/store';
 import { isInnerBlock } from '@blockera/editor/js/extensions/components/utils';
+import { repeaterOnChange } from '../../libs/repeater-control/store/reducers/utils';
 
 //eslint-disable-next-line
 /**
@@ -48,7 +46,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		controlInfo,
 		value: savedValue,
 		dispatch,
-		STORE_NAME,
 	} = useContext(ControlContext);
 
 	const getControlPath = function (
@@ -103,6 +100,27 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		}
 	};
 
+	/**
+	 * is repeater control?
+	 *
+	 * @return {boolean} true on success, false when otherwise!
+	 */
+	const isRepeaterControl = (): boolean => {
+		let isRepeater = false;
+		const { getControl } = select(CONTROL_STORE_NAME);
+		let control = getControl(controlInfo.name);
+
+		if (!control) {
+			control = select(REPEATER_STORE_NAME).getControl(controlInfo.name);
+
+			if (control) {
+				isRepeater = true;
+			}
+		}
+
+		return isRepeater;
+	};
+
 	const { getControl } = isRepeaterControl()
 		? select(REPEATER_STORE_NAME)
 		: select(CONTROL_STORE_NAME);
@@ -117,7 +135,6 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		onChange,
 		valueCleanup,
 		defaultValue,
-		sideEffect = false,
 		mergeInitialAndDefault,
 	} = args;
 
@@ -158,21 +175,11 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 	const modifyValue = (value: any): void => {
 		const modify = (controlId: string) => {
-			// extends setValue default operation to modify flatten control value!
-			if (isUndefined(id)) {
-				modifyControlValue({
-					value,
-					controlId,
-				});
-			}
-			// extends setValue default operation to modify nested control value!
-			else if ('nested' === controlInfo?.type) {
-				modifyControlValue({
-					value,
-					propId: id,
-					controlId,
-				});
-			}
+			modifyControlValue({
+				value,
+				controlId,
+				propId: id,
+			});
 		};
 
 		if ('reset_all_states' === ref.current.action) {
@@ -182,10 +189,9 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			const states = Object.keys(blockeraBlockStates);
 			const breakpoints = Object.keys(getBreakpoints());
 			//get `blockera-core/controls` store or details of that
-			const { getControl } =
-				repeaterControlStoreName === STORE_NAME
-					? select(repeaterStore)
-					: select(controlStore);
+			const { getControl } = isRepeaterControl()
+				? select(repeaterStore)
+				: select(controlStore);
 
 			states.forEach((state) => {
 				const currentState = isInnerBlock(getExtensionCurrentBlock())
@@ -227,32 +233,11 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 	//Call onChange function if is set valueCleanup as function to clean value else set all value details into parent state!
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const setValue = useControlEffect(
-		{
-			onChange,
-			resetRef,
-			sideEffect,
-			modifyValue,
-			controlInfo,
-			valueCleanup,
-			value: calculatedValue,
-			actionRefId: { ...ref },
-			resetToNormal: controlInfo.resetToNormal,
-		},
-		[savedValue]
-	);
-
-	/**
-	 * is repeater control?
-	 *
-	 * @return {boolean} true on success, false when otherwise!
-	 */
-	function isRepeaterControl(): boolean {
-		return (
-			!isUndefined(args?.repeater) &&
-			isObject(args.repeater?.defaultRepeaterItemValue)
-		);
-	}
+	const setValue = useControlEffect({
+		onChange,
+		valueCleanup,
+		actionRefId: { ...ref },
+	});
 
 	/**
 	 * Retrieved control value
@@ -337,10 +322,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		args: Object
 	): any => {
 		if (isObject(savedValue) && args?.propId) {
-			if (args?.singularId) {
-				// Like inside control parent repeater item.
-				value = resetRepeaterItemField(value || defaultValue, args);
-			} else if (isUndefined(value)) {
+			if (isUndefined(value)) {
 				value = {
 					...savedValue,
 					[args?.propId]: defaultValue[args?.propId],
@@ -381,7 +363,21 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		const value = prepare(args?.path, dataset);
 
 		if (isUndefined(args?.path) || isUndefined(value)) {
+			if (args?.onChange) {
+				repeaterOnChange(defaultValue, {
+					...args,
+					ref,
+				});
+			}
+
 			return modifyValue(defaultValue);
+		}
+
+		if (args?.onChange) {
+			repeaterOnChange(value, {
+				...args,
+				ref,
+			});
 		}
 
 		return modifyValue(value);
@@ -396,13 +392,19 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	const resetRepeaterItemField = (value: any, args: Object): Object => {
 		return Object.fromEntries(
 			Object.entries(savedValue).map(
-				([itemId, item]: [string, Object]): [string, Object] => [
-					itemId,
-					{
-						...item,
-						[args.singularId]: value,
-					},
-				]
+				([itemId, item]: [string, Object]): [string, Object] => {
+					if (itemId !== args?.repeaterItem) {
+						return [itemId, item];
+					}
+
+					return [
+						itemId,
+						{
+							...item,
+							[args.propId]: value,
+						},
+					];
+				}
 			)
 		);
 	};
@@ -454,19 +456,39 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		 * Reset control value to default value.
 		 */
 		resetToDefault: (args: Object): any => {
-			const dataset = args?.attributes || defaultValue;
-
 			// Reference updating ...
 			updateRef(args);
 
-			// Assume resetting repeater ...
-			if (args?.isRepeater) {
+			let dataset = args?.attributes;
+
+			switch (args?.action) {
+				case 'RESET_ALL':
+				case 'RESET_TO_DEFAULT':
+					dataset = defaultValue;
+					break;
+				case 'RESET_TO_NORMAL':
+					if (isRepeaterControl()) {
+						dataset = prepare(args?.path, dataset);
+					}
+					break;
+			}
+
+			if (isRepeaterControl()) {
+				if (!args?.isRepeater) {
+					return reset(
+						prepare(
+							args?.repeaterItem + '.' + args?.propId,
+							resetRepeaterItemField(dataset, args)
+						)
+					);
+				}
+
 				return resetRepeaterControl(args, dataset);
 			}
 
 			// Assume not sets path argument, then resetting to defaultValue ...
 			if (isUndefined(args?.path)) {
-				return reset(defaultValue);
+				return reset(dataset);
 			}
 
 			return reset(

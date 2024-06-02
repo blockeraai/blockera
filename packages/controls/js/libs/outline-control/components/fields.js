@@ -30,8 +30,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			onChange,
+			valueCleanup,
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+		} = useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -59,11 +64,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					columns="columns-2"
 					id={getControlId(itemId, 'border')}
 					linesDirection="horizontal"
-					onChange={(newValue) =>
+					onChange={(newValue, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: {
 								...item,
 								border: {
@@ -99,11 +107,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					max={40}
 					range={true}
 					unitType="outline"
-					onChange={(offset) =>
+					onChange={(offset, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: {
 								...item,
 								offset: !isInteger(offset)

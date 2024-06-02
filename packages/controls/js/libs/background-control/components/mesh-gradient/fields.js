@@ -26,7 +26,8 @@ const Fields: TFieldsProps = memo<TFieldsProps>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId } = useContext(RepeaterContext);
+		const { repeaterId, getControlId, onChange, valueCleanup } =
+			useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -43,8 +44,10 @@ const Fields: TFieldsProps = memo<TFieldsProps>(
 							{
 								item,
 								newValue,
+								onChange,
 								controlId,
 								repeaterId,
+								valueCleanup,
 								changeRepeaterItem,
 							}
 						)(newValue)

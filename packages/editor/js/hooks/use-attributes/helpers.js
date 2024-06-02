@@ -277,38 +277,66 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 		});
 	}
 
-	return mergeObject(update(state, attributeId, newValue, true), {
+	const blockeraBlockStates = Object.fromEntries(
+		Object.entries(state.blockeraBlockStates).map(
+			([stateType, _state]: [string, Object]): [string, Object] => {
+				const breakpoints = Object.fromEntries(
+					Object.entries(_state.breakpoints).map(
+						([breakpointType, breakpoint]: [string, Object]): [
+							string,
+							Object
+						] => {
+							if (
+								'normal' === stateType &&
+								'laptop' === breakpointType
+							) {
+								return [breakpointType, breakpoint];
+							}
+
+							// TODO: uncomment after fixed cleanup breakpoint.
+							// if (Object.keys(breakpoint.attributes).length < 2) {
+							// 	return [breakpointType, undefined];
+							// }
+
+							return [
+								breakpointType,
+								{
+									...breakpoint,
+									attributes: {
+										...breakpoint.attributes,
+										[attributeId]: undefined,
+									},
+								},
+							];
+						}
+					)
+				);
+
+				return [
+					stateType,
+					mergeObject(
+						_state,
+						{
+							breakpoints,
+						},
+						{
+							deletedProps: [
+								attributeId,
+								// TODO: uncomment after fixed cleanup breakpoint.
+								// ...Object.keys(_state.breakpoints),
+							],
+						}
+					),
+				];
+			}
+		)
+	);
+
+	return {
+		...state,
 		[attributeId]: newValue,
-		blockeraBlockStates: Object.fromEntries(
-			Object.entries(state.blockeraBlockStates).map(
-				([stateType, _state]: [string, Object]): [string, Object] => {
-					return [
-						stateType,
-						mergeObject(_state, {
-							breakpoints: Object.fromEntries(
-								Object.entries(_state.breakpoints).map(
-									([breakpointType, breakpoint]: [
-										string,
-										Object
-									]): [string, Object] => {
-										return [
-											breakpointType,
-											update(
-												breakpoint,
-												`attributes.${attributeId}`,
-												newValue,
-												true
-											),
-										];
-									}
-								)
-							),
-						}),
-					];
-				}
-			)
-		),
-	});
+		blockeraBlockStates,
+	};
 };
 
 export const prepCustomCssClasses = (
@@ -359,46 +387,136 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 	} = action;
 
 	const state = { ..._state };
+	const args = { deletedProps: [attributeId] };
 
 	if (isInnerBlock(currentBlock)) {
 		if (!isNormalState(currentState) || 'laptop' !== currentBreakpoint) {
 			if (!isNormalState(currentInnerBlockState)) {
-				delete state.blockeraBlockStates[currentState].breakpoints[
-					currentBreakpoint
-				].attributes.blockeraInnerBlocks[currentBlock].attributes
-					.blockeraBlockStates[currentInnerBlockState].breakpoints[
-					currentBreakpoint
-				].attributes[attributeId];
-			} else {
-				delete state.blockeraBlockStates[currentState].breakpoints[
-					currentBreakpoint
-				].attributes.blockeraInnerBlocks[currentBlock].attributes[
-					attributeId
-				];
+				return mergeObject(
+					state,
+					{
+						blockeraBlockStates: {
+							[currentState]: {
+								breakpoints: {
+									attributes: {
+										blockeraInnerBlocks: {
+											[currentBlock]: {
+												attributes: {
+													blockeraBlockStates: {
+														[currentInnerBlockState]:
+															{
+																breakpoints: {
+																	[currentBreakpoint]:
+																		{
+																			attributes:
+																				{
+																					[attributeId]:
+																						undefined,
+																				},
+																		},
+																},
+															},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					args
+				);
 			}
+			return mergeObject(
+				state,
+				{
+					blockeraBlockStates: {
+						[currentState]: {
+							breakpoints: {
+								[currentBreakpoint]: {
+									attributes: {
+										blockeraInnerBlocks: {
+											[currentBlock]: {
+												attributes: {
+													[attributeId]: undefined,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				args
+			);
 		} else if (!isNormalState(currentInnerBlockState)) {
-			delete state.blockeraInnerBlocks[currentBlock].attributes
-				.blockeraBlockStates[currentInnerBlockState].breakpoints[
-				currentBreakpoint
-			].attributes[attributeId];
-		} else {
-			delete state.blockeraInnerBlocks[currentBlock].attributes[
-				attributeId
-			];
+			return mergeObject(
+				state,
+				{
+					blockeraInnerBlocks: {
+						[currentBlock]: {
+							attributes: {
+								blockeraBlockStates: {
+									[currentInnerBlockState]: {
+										breakpoints: {
+											[currentBreakpoint]: {
+												attributes: {
+													[attributeId]: undefined,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				args
+			);
 		}
 
-		return mergeObject(state, _state);
+		return mergeObject(
+			state,
+			{
+				blockeraInnerBlocks: {
+					[currentBlock]: {
+						attributes: {
+							[attributeId]: undefined,
+						},
+					},
+				},
+			},
+			args
+		);
 	}
 
 	if (isNormalState(currentState) && 'laptop' === currentBreakpoint) {
-		return mergeObject(state, {
-			[attributeId]: newValue,
-		});
+		return mergeObject(
+			state,
+			{
+				[attributeId]: newValue,
+			},
+			{ forceUpdated: [attributeId] }
+		);
 	}
 
-	delete state.blockeraBlockStates[currentState].breakpoints[
-		currentBreakpoint
-	].attributes[attributeId];
-
-	return mergeObject(state, _state);
+	return mergeObject(
+		state,
+		{
+			blockeraBlockStates: {
+				[currentState]: {
+					breakpoints: {
+						[currentBreakpoint]: {
+							attributes: {
+								[attributeId]: undefined,
+							},
+						},
+					},
+				},
+			},
+		},
+		args
+	);
 };
