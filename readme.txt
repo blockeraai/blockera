@@ -1,10 +1,10 @@
 === Blockera - Make Gutenberg a Real Page Builder! ===
 Contributors: blockeraai
 Tags: block, blocks, gutenberg, gutenberg blocks, wordPress blocks, editor, block Editor, page Builder, post blocks, post grids
-Requires at least: 6.5.2
-Tested up to: 6.5.2
-Requires PHP: 7.4
-Stable tag: trunk
+Requires at least: ### AUTO-GENERATED
+Tested up to: ### AUTO-GENERATED
+Requires PHP: ### AUTO-GENERATED
+Stable tag: ### AUTO-GENERATED
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -44,49 +44,4 @@ Blockera comes in both free and premium versions. The [premium version](https://
 
 == Changelog ==
 
-= 1.1.2 - 2024-5-26 =
--   New: Indicator for current responsive breakpoint.
-
--   Tweak: Blocks and admin panel design improvement.
--   Tweak: Various bug fixes.
--   Tweak: A lot code refactor and improvement.
--   Tweak: More E2E tests.
--   Tweak: Blockera logos.
-
--   Fix: Various bugs in block states.
--   Fix: Typos.
-
-
-= 1.1.1 - 2024-5-24 =
-
--   New: Option to disable Blockera power up for user roles (Pro Version).
--   New: Advanced option panel reset functionality.
-
--   Tweak: Improve admin panel design.
--   Tweak: E2E tests for admin panel.
--   Tweak: Various bug fixes.
--   Tweak: A lot code refactor and improvement.
-
--   Fix: Losing Blockera attributes on disabled blocks.
--   Fix: Disable repeater add button if "Pro hints" is disabled. 
--   Fix: Storybook styles loading.
-
-
-= 1.1.0 - 2024-5-17 =
-
--   New: Settings panel to change Blockera behaviors. 
--   New: Block Manager panel to enable/disable Blockera blocks power up on blocks.
--   New: Setting for disabling Pro version hints in setting panel.
-
--   Fix: Minor bugs and errors.
-
-
-= 1.0.1 - 2024-5-11 =
-
--   Tweak: Smaller build version size (Assets and packages size).
--   Tweak: Block inspector control compatibility.
-
-
-= 1.0.0 - 2024-5-9 =
-
--   Initial version for WP.org review
+### AUTO-GENERATED CHANGELOG

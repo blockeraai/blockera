@@ -1,5 +1,6 @@
 
 = 1.1.2 - 2024-5-26 =
+
 -   New: Indicator for current responsive breakpoint.
 
 -   Tweak: Blocks and admin panel design improvement.
