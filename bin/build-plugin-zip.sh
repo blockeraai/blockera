@@ -73,13 +73,14 @@ if [ -z "$NO_INSTALL_NPM" ]; then
   npm ci
 fi
 
-status "Generating build... 👷‍♀️"
+status "Generating build... 🗂"
 npm run build
 
 
-# Temporarily modify `blockera.php` with production constants defined. Use a
-# temp file because `bin/generate-blockera-php.php` reads from `blockera.php`
+# Temporarily modify `blockera.php` with production constants defined.
+# Use a temp file because `bin/generate-blockera-php.php` reads from `blockera.php`
 # so we need to avoid writing to that file at the same time.
+status "Generating blockera.php 📝"
 php bin/generate-blockera-php.php > blockera.tmp.php
 mv blockera.tmp.php blockera.php
 
@@ -93,6 +94,7 @@ mv readme.tmp.txt readme.txt
 
 
 # Temporary copy some PHP files into "inc" directory.
+status "Generating inc/app.php 📝"
 mkdir -p "inc"
 cp packages/blockera/php/app.php inc/app.php
 
@@ -106,7 +108,7 @@ vendor_without_blockera=$(
 
 # Generate the plugin zip file.
 status "Creating archive... 🎁"
-zip -r blockera.zip \
+zip -r -q blockera.zip \
   inc \
 	config \
 	assets \
@@ -126,9 +128,15 @@ zip -r blockera.zip \
   $(find ./vendor/blockera/http/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/utils/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/wordpress/ -type f \( -name "*.php" -o -name "*.json" \))
+  $(find ./vendor/blockera/wordpress/ -type f \( -name "*.php" -o -name "*.json" \)) \
+  && echo "blockera.zip created successfully ✅" || echo "blockera.zip creation failed ❌"
+
+status "Cleaning up... 🧹"
 
 # Reset `blockera.php`.
 git checkout blockera.php
 
-success "Done. You've built Blockera! 🎉 "
+# Reset `readme.txt`.
+git checkout readme.txt
+
+success "Done ✅ You've built Blockera! 🎉 "
