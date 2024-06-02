@@ -41,6 +41,7 @@
 		"@blockera/wordpress": "file:packages/wordpress",
 		"@monaco-editor/react": "^4.6.0",
 		"fast-memoize": "^2.5.2",
+		"monaco-editor": "^0.49.0",
 		"react-toastify": "^10.0.5"
 	},
 	"devDependencies": {

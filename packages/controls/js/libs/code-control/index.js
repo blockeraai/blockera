@@ -6,7 +6,11 @@
 import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState, useRef } from '@wordpress/element';
-import Editor from '@monaco-editor/react';
+import * as monaco from 'monaco-editor';
+import { Editor, loader } from '@monaco-editor/react';
+
+// load from node_modules
+loader.config({ monaco });
 
 /**
  * Blockera dependencies
