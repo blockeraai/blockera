@@ -117,6 +117,7 @@ zip -r -q blockera.zip \
 	$build_files \
 	blockera.php \
 	changelog.txt \
+	composer.json \
 	$vendor_without_blockera \
 	$(find ./vendor/blockera/blockera/ -type f \( -name "*.php" -o -name "*.json" \)) \
 	$(find ./vendor/blockera/blockera-admin/ -type f \( -name "*.php" -o -name "*.json" \)) \
