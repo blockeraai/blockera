@@ -15,11 +15,8 @@
  * @package Blockera
  */
 
-// security code.
-if ( ! defined( 'ABSPATH' ) ) {
-
-	die( 'Access Denied!' );
-}
+// direct access is not allowed.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 // loading autoloader.
 require __DIR__ . '/vendor/autoload.php';

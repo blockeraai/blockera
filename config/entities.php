@@ -1,5 +1,7 @@
 <?php
 
+// direct access is not allowed.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 $theme = wp_get_theme();
 

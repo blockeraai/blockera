@@ -4,6 +4,8 @@
  *
  * @package bootstrpa/app.php
  */
+// direct access is not allowed.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 global $blockera;
 

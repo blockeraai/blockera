@@ -1,5 +1,8 @@
 <?php
 
+// direct access is not allowed.
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 $wp_debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
 $env_mode = 'development' === blockera_core_env( 'APP_MODE', 'production' );
 

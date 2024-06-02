@@ -1,5 +1,8 @@
 <?php
 
+// direct access is not allowed.
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 return [
 	'page_title' => __( 'Blockera Settings', 'blockera' ),
 	'menu_title' => __( 'Blockera', 'blockera' ),
