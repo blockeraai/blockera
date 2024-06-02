@@ -1,3 +1,18 @@
+= 1.1.3 - 2024-6-3
+
+-   New: add Github repository link to readme.txt
+-   New: add composer.json to build zip because the WP.org review team asked
+
+-   Tweak: More E2E tests.
+
+-   Fix: Various bugs in block states and block responsive settings.
+-   Fix: readme.txt file header. 
+-   Fix: Direct access to php files that has return or execution
+-   Fix: monaco-editor to load from local package and not CDN
+-   Fix: Reset and reset all for features.
+-   Fix: Various bugs in controls label.
+-   Fix: Border feature.
+
 
 = 1.1.2 - 2024-5-26 =
 
