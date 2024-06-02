@@ -8,11 +8,8 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	BoxBorderControl,
-	ControlContextProvider,
-	type BorderRadiusValue,
-} from '@blockera/controls';
+import { BoxBorderControl, ControlContextProvider } from '@blockera/controls';
+import type { TValueTypes } from '@blockera/controls/js/libs/box-border-control/types';
 
 /**
  * Internal dependencies
@@ -30,32 +27,7 @@ export const Border = ({
 	block: Object,
 	border?: Object,
 	onChange: THandleOnChangeAttributes,
-	defaultValue: {
-		color?: string,
-		style?: string,
-		width?: string,
-		top?: {
-			width: string,
-			style: string,
-			color: string,
-		},
-		left?: {
-			width: string,
-			style: string,
-			color: string,
-		},
-		right?: {
-			width: string,
-			style: string,
-			color: string,
-		},
-		bottom?: {
-			width: string,
-			style: string,
-			color: string,
-		},
-		radius?: BorderRadiusValue,
-	},
+	defaultValue: TValueTypes,
 }): MixedElement => {
 	return (
 		<ControlContextProvider

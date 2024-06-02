@@ -1,4 +1,5 @@
 // @flow
+
 /**
  * External dependencies
  */
@@ -90,6 +91,10 @@ export default function BoxBorderControl({
 
 	// value clean up for removing extra values to prevent saving extra data!
 	function valueCleanup(value: TValueTypes) {
+		if (isEquals(value, defaultValue)) {
+			return value;
+		}
+
 		if (value.type === 'all') {
 			delete value?.top;
 			delete value?.right;
