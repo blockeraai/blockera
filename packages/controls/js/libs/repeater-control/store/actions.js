@@ -1,6 +1,8 @@
 export function addRepeaterItem({
 	value,
+	onChange,
 	controlId,
+	valueCleanup,
 	itemIdGenerator,
 	maxItems = -1,
 	repeaterId = null,
@@ -8,29 +10,37 @@ export function addRepeaterItem({
 	return {
 		value,
 		maxItems,
+		onChange,
 		controlId,
 		repeaterId,
+		valueCleanup,
 		itemIdGenerator,
 		type: 'ADD_REPEATER_ITEM',
 	};
 }
 
 export function changeRepeaterItem({
+	ref,
 	value,
 	getId,
 	itemId,
 	controlId,
-	defaultItemValue,
+	onChange,
+	valueCleanup,
 	maxItems = -1,
+	defaultItemValue,
 	repeaterId = null,
 }) {
 	return {
+		ref,
 		value,
 		getId,
 		itemId,
-		controlId,
 		maxItems,
+		onChange,
+		controlId,
 		repeaterId,
+		valueCleanup,
 		type: 'CHANGE_REPEATER_ITEM',
 		defaultItemValue: defaultItemValue ?? {},
 	};
@@ -38,14 +48,18 @@ export function changeRepeaterItem({
 
 export function removeRepeaterItem({
 	itemId,
+	onChange,
 	controlId,
+	valueCleanup,
 	itemIdGenerator,
 	repeaterId = null,
 }) {
 	return {
 		itemId,
+		onChange,
 		controlId,
 		repeaterId,
+		valueCleanup,
 		itemIdGenerator,
 		type: 'REMOVE_REPEATER_ITEM',
 	};
@@ -54,16 +68,20 @@ export function removeRepeaterItem({
 export function sortRepeaterItem({
 	items,
 	toIndex,
+	onChange,
 	controlId,
 	fromIndex,
+	valueCleanup,
 	repeaterId = null,
 }) {
 	return {
 		items,
 		toIndex,
+		onChange,
 		fromIndex,
 		controlId,
 		repeaterId,
+		valueCleanup,
 		type: 'SORT_REPEATER_ITEM',
 	};
 }
@@ -71,7 +89,9 @@ export function sortRepeaterItem({
 export function cloneRepeaterItem({
 	item,
 	itemId,
+	onChange,
 	controlId,
+	valueCleanup,
 	itemIdGenerator,
 	maxItems = -1,
 	repeaterId = null,
@@ -80,9 +100,11 @@ export function cloneRepeaterItem({
 	return {
 		item,
 		itemId,
-		controlId,
+		onChange,
 		maxItems,
+		controlId,
 		repeaterId,
+		valueCleanup,
 		overrideItem,
 		itemIdGenerator,
 		type: 'CLONE_REPEATER_ITEM',

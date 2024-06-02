@@ -116,43 +116,6 @@ describe('Border Control label testing (Border Line)', () => {
 			'rgb(204, 204, 204)'
 		);
 
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-		// Assert label
-		cy.checkLabelClassName(
-			'Border And Shadow',
-			'Border Line',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@border-color').should(
-			'not.have.css',
-			'background-color',
-			'rgb(204, 204, 204)'
-		);
-
-		/**
-		 * Tablet device
-		 */
-		setDeviceType('Tablet');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Border And Shadow',
-			'Border Line',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@border-color').should(
-			'not.have.css',
-			'background-color',
-			'rgb(204, 204, 204)'
-		);
-
 		// Assert state graph
 		cy.checkStateGraph('Border And Shadow', 'Border Line', {
 			laptop: ['Hover'],
@@ -206,44 +169,6 @@ describe('Border Control label testing (Border Line)', () => {
 
 		// Assert control
 		cy.get('@border-width').should('have.value', 10);
-		cy.get('@border-color').should(
-			'have.css',
-			'background-color',
-			'rgb(204, 204, 204)'
-		);
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Border And Shadow',
-			'Border Line',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		cy.get('@border-color').should(
-			'have.css',
-			'background-color',
-			'rgb(204, 204, 204)'
-		);
-
-		/**
-		 * Tablet device
-		 */
-		setDeviceType('Tablet');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Border And Shadow',
-			'Border Line',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
 		cy.get('@border-color').should(
 			'have.css',
 			'background-color',
@@ -342,36 +267,6 @@ describe('Border Control label testing (Border Line)', () => {
 		cy.get('@border-width').type('have.value', '');
 
 		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Border And Shadow',
-			'Border Line',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@border-width').type('have.value', '');
-
-		/**
-		 * Laptop device (Active)
-		 */
-		setDeviceType('Laptop');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Border And Shadow',
-			'Border Line',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@border-width').type('have.value', '');
-
-		/**
 		 * Normal (Laptop device)
 		 */
 		setBlockState('Normal');
@@ -408,166 +303,15 @@ describe('Border Control label testing (Border Line)', () => {
 			// Set value in normal/tablet
 			setBlockState('Normal');
 			cy.get('@border-width').type('{selectall}2');
-
-			context(
-				'should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in normal/tablet',
-				() => {
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Border And Shadow',
-						'Border Line',
-						'reset'
-					);
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Border And Shadow',
-						'Border Line',
-						'changed-in-normal-state'
-					);
-
-					// Assert control
-					cy.get('@border-width').should('have.value', 5);
-
-					// Assert state graph
-					cy.checkStateGraph('Border And Shadow', 'Border Line', {
-						tablet: ['Hover'],
-						laptop: ['Hover', 'Normal'],
-					});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').normal
-								.breakpoints.tablet.attributes
-						);
-					});
-				}
-			);
-
-			context(
-				'should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in hover/tablet',
-				() => {
-					setBlockState('Hover');
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Border And Shadow',
-						'Border Line',
-						'reset'
-					);
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Border And Shadow',
-						'Border Line',
-						'changed-in-normal-state'
-					);
-
-					// Assert control
-					cy.get('@border-width').should('have.value', 5);
-
-					// Assert state graph
-					cy.checkStateGraph('Border And Shadow', 'Border Line', {
-						laptop: ['Hover', 'Normal'],
-					});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.tablet.attributes
-						);
-					});
-				}
-			);
-
-			context(
-				'should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in normal/laptop',
-				() => {
-					setDeviceType('Laptop');
-					setBlockState('Normal');
-					// Reset to default
-					cy.resetBlockeraAttribute(
-						'Border And Shadow',
-						'Border Line',
-						'reset'
-					);
-
-					// Assert label
-					// TODO
-					// cy.checkLabelClassName(
-					// 	'Border And Shadow',
-					// 	'Border Line',
-					// 	'changed-in-other-state'
-					// );
-
-					// Assert control
-					cy.get('@border-width').should('have.value', '');
-
-					// Assert state graph
-					//TODO
-					// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-					// 	laptop: ['Hover'],
-					// });
-
-					// Assert store data
-					// TODO: ?????
-					// getWPDataObject().then((data) => {
-					// 	expect({
-					// 		type: 'all',
-					// 		all: { width: '', style: 'solid', color: '' },
-					// 	}).to.be.deep.eq(
-					// 		getSelectedBlock(data, 'blockeraBorder')
-					// 	);
-					// });
-				}
-			);
-
-			context(
-				'should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in hover/laptop',
-				() => {
-					setBlockState('Hover');
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Border And Shadow',
-						'Border Line',
-						'reset'
-					);
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Border And Shadow',
-						'Border Line',
-						'changed-in-secondary-state',
-						'not-have'
-					);
-
-					// Assert control
-					cy.get('@border-width').should('have.value', '');
-
-					// Assert state graph
-					// TODO
-					// cy.checkStateGraph(
-					// 	'Border And Shadow',
-					// 	'Border Line',
-					// 	{}
-					// );
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
-						);
-					});
-				}
-			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
-			setBlockState('Normal');
-
-			cy.get('@border-width').type(10);
+		it('should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in normal/tablet', () => {
+			// Reset to normal
+			cy.resetBlockeraAttribute(
+				'Border And Shadow',
+				'Border Line',
+				'reset'
+			);
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -575,89 +319,52 @@ describe('Border Control label testing (Border Line)', () => {
 				'Border Line',
 				'changed-in-normal-state'
 			);
+
 			// Assert control
-			cy.get('@border-width').should('have.value', '10');
+			cy.get('@border-width').should('have.value', 5);
 
 			// Assert state graph
 			cy.checkStateGraph('Border And Shadow', 'Border Line', {
-				laptop: ['Normal'],
+				tablet: ['Hover'],
+				laptop: ['Hover', 'Normal'],
 			});
-
-			// Navigate between states and devices
-			// Hover/Laptop
-			setBlockState('Hover');
-			// Assert label
-			cy.checkLabelClassName(
-				'Border And Shadow',
-				'Border Line',
-				'changed-in-normal-state'
-			);
-
-			// // Assert control
-			// TODO
-			// cy.get('@border-width').should('have.value', '10');
-
-			// Assert state graph
-			cy.checkStateGraph('Border And Shadow', 'Border Line', {
-				laptop: ['Normal'],
-			});
-
-			// Hover/Tablet
-			setDeviceType('Tablet');
-			// Assert label
-			cy.checkLabelClassName(
-				'Border And Shadow',
-				'Border Line',
-				'changed-in-normal-state'
-			);
-
-			// Assert control
-			// TODO
-			//cy.get('@border-width').should('have.value', '10');
-
-			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Normal'],
-			// });
-
-			// Normal/Tablet
-			setBlockState('Normal');
-			// Assert label
-			cy.checkLabelClassName(
-				'Border And Shadow',
-				'Border Line',
-				'changed-in-normal-state'
-			);
-			// Assert control
-			//TODO
-			//cy.get('@border-width').should('have.value', '10');
-
-			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Normal'],
-			// });
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect({
-					type: 'all',
-					all: { width: '10px', style: 'solid', color: '' },
-				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraBorder'));
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
+			});
+		});
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+		it('should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in hover/tablet', () => {
+			setBlockState('Hover');
+			// Reset to normal
+			cy.resetBlockeraAttribute(
+				'Border And Shadow',
+				'Border Line',
+				'reset'
+			);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.laptop.attributes
-				// );
+			// Assert label
+			cy.checkLabelClassName(
+				'Border And Shadow',
+				'Border Line',
+				'changed-in-normal-state'
+			);
 
+			// Assert control
+			cy.get('@border-width').should('have.value', 5);
+
+			// Assert state graph
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
+				tablet: ['Normal'],
+				laptop: ['Hover', 'Normal'],
+			});
+
+			// Assert store data
+			getWPDataObject().then((data) => {
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes
@@ -665,101 +372,76 @@ describe('Border Control label testing (Border Line)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
-			cy.get('@border-width').type(8);
+		it('should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in normal/laptop', () => {
+			setDeviceType('Laptop');
+			// Reset to default
+			cy.resetBlockeraAttribute(
+				'Border And Shadow',
+				'Border Line',
+				'reset'
+			);
+
 			// Assert label
 			cy.checkLabelClassName(
 				'Border And Shadow',
 				'Border Line',
-				'changed-in-secondary-state'
+				'changed-in-other-state'
 			);
-
-			// Assert control
-			cy.get('@border-width').should('have.value', '8');
-
-			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Hover'],
-			// });
-
-			// Navigate between states and devices:
-			// Normal/Laptop
-			setBlockState('Normal');
-			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Border And Shadow',
-			// 	'Border Line',
-			// 	'changed-in-other-state'
-			// );
 
 			// Assert control
 			cy.get('@border-width').should('have.value', '');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Hover'],
-			// });
-
-			// Normal/Tablet
-			setDeviceType('Tablet');
-			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Border And Shadow',
-			// 	'Border Line',
-			// 	'changed-in-other-state'
-			// );
-
-			// Assert control
-			// TODO
-			//	cy.get('@border-width').should('have.value', '');
-
-			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Hover'],
-			// });
-
-			// Hover/Tablet
-			setBlockState('Hover');
-			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Border And Shadow',
-			// 	'Border Line',
-			// 	'changed-in-other-state'
-			// );
-
-			// Assert control
-			// TODO
-			//cy.get('@border-width').should('have.value', '');
-
-			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
+				tablet: ['Normal', 'Hover'],
+				laptop: ['Hover'],
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				// TODO : ?????????????????
-				// expect({
-				// 	type: 'all',
-				// 	all: { style: 'solid', width: '', color: '' },
-				// }).to.be.eq(getSelectedBlock(data, 'blockeraBorder'));
+				expect({
+					type: 'all',
+					all: { width: '', style: 'solid', color: '' },
+				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraBorder'));
+			});
+		});
 
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+		it('should correctly reset blockeraBorder, and display effected fields(label, control, stateGraph) in hover/laptop', () => {
+			setBlockState('Hover');
+			// Reset to normal
+			cy.resetBlockeraAttribute(
+				'Border And Shadow',
+				'Border Line',
+				'reset'
+			);
 
+			// Assert label
+			cy.checkLabelClassName(
+				'Border And Shadow',
+				'Border Line',
+				'changed-in-secondary-state',
+				'not-have'
+			);
+
+			// Assert control
+			cy.get('@border-width').should('have.value', '5');
+
+			// Assert state graph
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
+				tablet: ['Normal'],
+				laptop: ['Normal', 'Hover'],
+			});
+
+			// Assert store data
+			getWPDataObject().then((data) => {
 				expect({
 					blockeraBorder: {
 						type: 'all',
-						all: { style: 'solid', width: '8px', color: '' },
+						all: {
+							width: '4px',
+							style: 'solid',
+							color: '',
+						},
 					},
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
@@ -803,24 +485,18 @@ describe('Border Control label testing (Border Line)', () => {
 				() => {
 					// Normal/Tablet
 					// Assert label
-					// TODO
-					// cy.checkLabelClassName(
-					// 	'Border And Shadow',
-					// 	'Border Line',
-					// 	'changed-in-normal-state',
-					// 	'not-have'
-					// );
+					cy.checkLabelClassName(
+						'Border And Shadow',
+						'Border Line',
+						'changed-in-normal-state',
+						'not-have'
+					);
 
 					// Assert control
 					cy.get('@border-width').should('have.value', '');
 
 					// Assert state graph
-					// TODO
-					// cy.checkStateGraph(
-					// 	'Border And Shadow',
-					// 	'Border Line',
-					// 	{}
-					// );
+					cy.checkStateGraph('Border And Shadow', 'Border Line', {});
 
 					// Hover/Tablet
 					setBlockState('Hover');
@@ -836,12 +512,7 @@ describe('Border Control label testing (Border Line)', () => {
 					cy.get('@border-width').should('have.value', '');
 
 					// Assert state graph
-					// TODO
-					// cy.checkStateGraph(
-					// 	'Border And Shadow',
-					// 	'Border Line',
-					// 	{}
-					// );
+					cy.checkStateGraph('Border And Shadow', 'Border Line', {});
 
 					// Hover/Laptop
 					setDeviceType('Laptop');
@@ -857,12 +528,7 @@ describe('Border Control label testing (Border Line)', () => {
 					cy.get('@border-width').should('have.value', '');
 
 					// Assert state graph
-					// TODO
-					// cy.checkStateGraph(
-					// 	'Border And Shadow',
-					// 	'Border Line',
-					// 	{}
-					// );
+					cy.checkStateGraph('Border And Shadow', 'Border Line', {});
 
 					// Normal/Laptop
 					setBlockState('Normal');
@@ -878,26 +544,20 @@ describe('Border Control label testing (Border Line)', () => {
 					cy.get('@border-width').should('have.value', '');
 
 					// Assert state graph
-					// TODO
-					// cy.checkStateGraph(
-					// 	'Border And Shadow',
-					// 	'Border Line',
-					// 	{}
-					// );
+					cy.checkStateGraph('Border And Shadow', 'Border Line', {});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
-						// TODO
-						// expect({
-						// 	type: 'all',
-						// 	all: {
-						// 		width: '',
-						// 		style: 'solid',
-						// 		color: '',
-						// 	},
-						// }).to.be.deep.eq(
-						// 	getSelectedBlock(data, 'blockeraBorder')
-						// );
+						expect({
+							type: 'all',
+							all: {
+								width: '',
+								style: 'solid',
+								color: '',
+							},
+						}).to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraBorder')
+						);
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').normal
@@ -947,8 +607,7 @@ describe('Border Control label testing (Border Line)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//cy.get('@border-width').should('have.value', '12');
+			cy.get('@border-width').should('have.value', '12');
 
 			// Assert state graph
 			cy.checkStateGraph('Border And Shadow', 'Border Line', {
@@ -965,8 +624,7 @@ describe('Border Control label testing (Border Line)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//cy.get('@border-width').should('have.value', '12');
+			cy.get('@border-width').should('have.value', '12');
 
 			// Assert state graph
 			cy.checkStateGraph('Border And Shadow', 'Border Line', {
@@ -983,8 +641,7 @@ describe('Border Control label testing (Border Line)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//cy.get('@border-width').should('have.value', '12');
+			cy.get('@border-width').should('have.value', '12');
 
 			// Assert state graph
 			cy.checkStateGraph('Border And Shadow', 'Border Line', {
@@ -1031,82 +688,73 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').should('have.value', '15');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
+				laptop: ['Hover'],
+			});
 
 			// Navigate between states and devices
 			// Normal/Laptop
 			setBlockState('Normal');
 			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Border And Shadow',
-			// 	'Border Line',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName(
+				'Border And Shadow',
+				'Border Line',
+				'changed-in-other-state'
+			);
 
 			// Assert control
 			cy.get('@border-width').should('have.value', '');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
+				laptop: ['Hover'],
+			});
 
 			// Normal/Tablet
 			setDeviceType('Tablet');
 			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Border And Shadow',
-			// 	'Border Line',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName(
+				'Border And Shadow',
+				'Border Line',
+				'changed-in-other-state'
+			);
 
 			// Assert control
 			cy.get('@border-width').should('have.value', '');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
+				laptop: ['Hover'],
+			});
 
 			// Hover/Tablet
 			setBlockState('Hover');
 			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Border And Shadow',
-			// 	'Border Line',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName(
+				'Border And Shadow',
+				'Border Line',
+				'changed-in-other-state'
+			);
 
 			// Assert control
 			cy.get('@border-width').should('have.value', '');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Border And Shadow', 'Border Line', {
-			// 	laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Border And Shadow', 'Border Line', {
+				laptop: ['Hover'],
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				// TODO
-				// expect({
-				// 	type: 'all',
-				// 	all: { style: 'solid', width: '', color: '' },
-				// }).to.be.deep.eq(getSelectedBlock(data, 'blockeraBorder'));
+				expect({
+					type: 'all',
+					all: { style: 'solid', width: '', color: '' },
+				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraBorder'));
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect({
 					blockeraBorder: {

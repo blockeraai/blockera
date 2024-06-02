@@ -8,7 +8,12 @@ import { prepare, update } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { hasLimitation, hasRepeaterId, generatedDetailsId } from './utils';
+import {
+	hasLimitation,
+	hasRepeaterId,
+	repeaterOnChange,
+	generatedDetailsId,
+} from './utils';
 
 /**
  * Handle action with has repeaterId prop.
@@ -53,6 +58,11 @@ export function addItem(state: Object = {}, action: Object): Object {
 
 	// Assume action includes repeaterId prop.
 	if (hasRepeaterId(controlInfo.value, action)) {
+		repeaterOnChange(
+			handleActionIncludeRepeaterId(controlInfo.value, action),
+			action
+		);
+
 		return {
 			...state,
 			[action.controlId]: {
@@ -73,6 +83,17 @@ export function addItem(state: Object = {}, action: Object): Object {
 		'function' === typeof action.itemIdGenerator
 			? action.itemIdGenerator(itemsCount)
 			: uniqueId;
+
+	repeaterOnChange(
+		{
+			...controlInfo.value,
+			[itemId]: {
+				...action.value,
+				order: Object.keys(controlInfo.value).length,
+			},
+		},
+		action
+	);
 
 	//by default behavior of "addRepeaterItem" action
 	return {

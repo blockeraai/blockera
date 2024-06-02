@@ -25,7 +25,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId } = useContext(RepeaterContext);
+		const { onChange, valueCleanup, repeaterId, getControlId } =
+			useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -37,11 +38,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'search')}
 					defaultValue={item?.search || ''}
 					placeholder="Enter search text..."
-					onChange={(newValue) => {
+					onChange={(newValue, ref) => {
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: {
 								...item,
 								search: newValue,
@@ -57,12 +61,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					type="text"
 					defaultValue={item?.replace || ''}
 					placeholder="Enter replace text..."
-					onChange={(newValue) => {
+					onChange={(newValue, ref) => {
 						//setCurrentValue(newValue);
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: {
 								...item,
 								replace: newValue,

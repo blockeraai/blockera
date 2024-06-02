@@ -12,13 +12,13 @@ import { memo, useMemo, useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
+import { PromotionPopover } from '@blockera/components';
 import { isEquals, omit } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { ControlContextProvider, RepeaterControl } from '@blockera/controls';
 import { STORE_NAME } from '@blockera/controls/js/libs/repeater-control/store';
 import { defaultItemValue } from '@blockera/controls/js/libs/repeater-control';
 import { getRepeaterActiveItemsCount } from '@blockera/controls/js/libs/repeater-control/utils';
-import { PromotionPopover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -212,6 +212,13 @@ const StatesManager: ComponentType<any> = memo(
 			return filteredStates;
 		};
 
+		const defaultRepeaterItemValue = {
+			...StateSettings.blockeraBlockStates.default[0],
+			deletable: true,
+			selectable: true,
+			visibilitySupport: true,
+		};
+
 		const contextValue = {
 			block,
 			value: calculatedValue,
@@ -283,12 +290,7 @@ const StatesManager: ComponentType<any> = memo(
 
 								return defaultItem;
 							},
-							defaultRepeaterItemValue: {
-								...StateSettings.blockeraBlockStates.default[0],
-								deletable: true,
-								selectable: true,
-								visibilitySupport: true,
-							},
+							defaultRepeaterItemValue,
 							onChange: (newValue: Object) =>
 								onChangeBlockStates(newValue, {
 									states,
@@ -296,6 +298,7 @@ const StatesManager: ComponentType<any> = memo(
 									currentState,
 									currentBlock,
 									valueCleanup,
+									getStateInfo,
 									currentInnerBlockState,
 								}),
 							//Override item when occurred clone action!

@@ -27,8 +27,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			onChange,
+			valueCleanup,
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+		} = useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -65,11 +70,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: 'inner',
 						},
 					]}
-					onChange={(type) =>
+					onChange={(type, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, type },
 						})
 					}
@@ -104,11 +112,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={-100}
 					max={100}
-					onChange={(x) =>
+					onChange={(x, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, x },
 						})
 					}
@@ -143,11 +154,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={-100}
 					max={100}
-					onChange={(y) =>
+					onChange={(y, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, y },
 						})
 					}
@@ -181,11 +195,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={0}
 					max={100}
-					onChange={(blur) =>
+					onChange={(blur, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, blur },
 						})
 					}
@@ -219,11 +236,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={-100}
 					max={100}
-					onChange={(spread) =>
+					onChange={(spread, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, spread },
 						})
 					}
@@ -254,11 +274,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					columns="columns-2"
-					onChange={(color) =>
+					onChange={(color, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, color },
 						})
 					}

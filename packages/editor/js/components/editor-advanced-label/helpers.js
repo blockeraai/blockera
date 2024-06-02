@@ -117,11 +117,11 @@ export const getStatesGraph = ({
 												preparedPath,
 												defaultValue
 											) ?? defaultValue;
+									} else {
+										defaultValue =
+											prepare(path, defaultValue) ??
+											defaultValue;
 									}
-
-									defaultValue =
-										prepare(path, defaultValue) ??
-										defaultValue;
 								}
 
 								const attributes = getAttributes();

@@ -78,6 +78,7 @@ export const StatesGraph = ({
 								'states-changes-breakpoint'
 							)}
 							key={`${state.graph.type}-${index}`}
+							data-test={`state-graph-${state.graph.type}`}
 						>
 							{!isRenderedBreakpoint && (
 								<div

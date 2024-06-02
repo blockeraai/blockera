@@ -300,43 +300,81 @@ Cypress.Commands.add(
 	}
 );
 
-Cypress.Commands.add('checkStateGraph', (content, label, updatedStates) => {
-	const states = [
-		'Normal',
-		'Hover',
-		'Active',
-		'Focus',
-		'Visited',
-		'Before',
-		'After',
-		'Custom Class',
-		'Parent Class',
-		'Parent Hover',
-	];
+Cypress.Commands.add(
+	'checkStateGraph',
+	(content, label, changes, repeaterItem = false) => {
+		const states = [
+			'Normal',
+			'Hover',
+			'Active',
+			'Focus',
+			'Visited',
+			'Before',
+			'After',
+			'Custom Class',
+			'Parent Class',
+			'Parent Hover',
+		];
+		const devices = [
+			'laptop',
+			'extra-large',
+			'large',
+			'desktop',
+			'tablet',
+			'mobile-landscape',
+			'mobile',
+		];
 
-	cy.get('h2')
-		.contains(content)
-		.parent()
-		.parent()
-		.within(() => {
-			cy.getByAriaLabel(label).click();
-		});
+		// Open label state graph
+		if (repeaterItem) {
+			// for repeater inner labels
+			cy.getByDataTest('popover-body').within(() => {
+				cy.getByAriaLabel(label).click();
+			});
+		} else
+			cy.get('h2')
+				.contains(content)
+				.parent()
+				.parent()
+				.within(() => {
+					cy.getByAriaLabel(label).click();
+				});
 
-	cy.getByDataTest('popover-body')
-		.last()
-		.within(() => {
-			updatedStates.forEach((state) => {
-				cy.contains(state).should('exist');
+		cy.getByDataTest('popover-body')
+			.last()
+			.within(() => {
+				Object.entries(changes).map(([device, updatedStates]) => {
+					cy.getByDataTest(`state-graph-${device}`).within(() => {
+						updatedStates.forEach((state) => {
+							cy.contains(state).should('exist');
+						});
+
+						//
+						states
+							.filter((state) => !updatedStates.includes(state))
+							.forEach((state) => {
+								cy.contains(state).should('not.exist');
+							});
+					});
+				});
+
+				devices
+					.filter(
+						(_device) => !Object.keys(changes).includes(_device)
+					)
+					.forEach((_device) => {
+						cy.getByDataTest(`state-graph-${_device}`).should(
+							'not.exist'
+						);
+					});
 			});
 
-			//
-			states
-				.filter((state) => !updatedStates.includes(state))
-				.forEach((state) => {
-					cy.contains(state).should('not.exist');
-				});
-		});
-});
+		// Close state graph
+		cy.getByDataTest('popover-header')
+			.last()
+			.within(() => cy.getByAriaLabel('Close').click());
+	}
+);
 
 Cypress.Commands.add('setColorControlValue', (label, value) => {
 	cy.getParentContainer(label)
@@ -349,3 +387,29 @@ Cypress.Commands.add('setColorControlValue', (label, value) => {
 		cy.get('input[maxlength="9"]').type(value);
 	});
 });
+
+Cypress.Commands.add(
+	'resetBlockeraAttribute',
+	(content, label, resetType, repeaterItem = false) => {
+		// Open label state graph
+		if (repeaterItem) {
+			// for repeater inner labels
+			cy.getByDataTest('popover-body').within(() => {
+				cy.getByAriaLabel(label).click();
+			});
+		} else
+			cy.get('h2')
+				.contains(content)
+				.parent()
+				.parent()
+				.within(() => {
+					cy.getByAriaLabel(label).click();
+				});
+
+		cy.getByDataTest('popover-body')
+			.last()
+			.within(() => {
+				cy.getByDataTest(`${resetType}-button`).click();
+			});
+	}
+);

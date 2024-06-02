@@ -4,6 +4,7 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
+import { useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -13,6 +14,7 @@ import {
 	SelectControl,
 	useControlContext,
 } from '@blockera/controls';
+import { RepeaterContext } from '@blockera/controls/js/libs/repeater-control/context';
 
 /**
  * Internal dependencies
@@ -39,6 +41,10 @@ const ItemBody = ({
 		dispatch: { changeRepeaterItem },
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 	} = useControlContext();
+
+	const { onChange, valueCleanup } =
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		useContext(RepeaterContext);
 
 	// clone options
 	const options = { ...states };
@@ -81,9 +87,11 @@ const ItemBody = ({
 					}
 
 					changeRepeaterItem({
-						controlId,
-						itemId,
 						value,
+						itemId,
+						onChange,
+						controlId,
+						valueCleanup,
 						getId: (): TStates => newValue,
 					});
 				}}
@@ -103,6 +111,8 @@ const ItemBody = ({
 								...item,
 								'css-class': newValue,
 							},
+							onChange,
+							valueCleanup,
 						})
 					}
 					label={__('CSS Class', 'blockera')}
