@@ -14,6 +14,16 @@ Blockera offers dynamic Gutenberg blocks for the WordPress block editor. Craft b
 
 Blockera is a Gutenberg Blocks page builder plugin that adds extra functionality to the WordPress Block Editor (also known as Gutenberg) for a better page-building experience without the need for traditional page builders like Elementor and Divi.
 
+---
+
+### Support 🤝
+
+We're here to help. Feel free to open a new thread on the [Support Forum](https://wordpress.org/support/plugin/blockera/).
+
+### Become a Contributor 💁‍♂️
+
+Blockera page builder is an open-source project, and we welcome contributors to be part of our vibrant community! Help us improve the plugin and make it even better - [GitHub Link](https://github.com/blockeraai/blockera/tree/feat/control/input-control)
+
 == Screenshots ==
 
 1. Gutenberg Button Block
