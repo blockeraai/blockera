@@ -83,6 +83,15 @@ npm run build
 php bin/generate-blockera-php.php > blockera.tmp.php
 mv blockera.tmp.php blockera.php
 
+
+# Temporarily modify `readme.txt`.
+# Use a temp file because `bin/generate-readme-txt.php` reads from `readme.txt`
+# so we need to avoid writing to that file at the same time.
+status "Generating readme.txt 📝"
+php bin/generate-readme-txt.php > readme.tmp.txt
+mv readme.tmp.txt readme.txt
+
+
 # Temporary copy some PHP files into "inc" directory.
 mkdir -p "inc"
 cp packages/blockera/php/app.php inc/app.php
