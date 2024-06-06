@@ -112,7 +112,6 @@ export const GeneralPanel = (): MixedElement => {
 								value={{
 									type: 'nested',
 									name: 'userRoles',
-									hasSideEffect: true,
 									value: Object.fromEntries(
 										Object.entries(
 											generalSettings.allowedUserRoles

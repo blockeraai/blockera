@@ -36,6 +36,7 @@ export const ControlContextProvider = ({
 	value: controlInfo,
 	children,
 	storeName = STORE_NAME,
+	notSyncWithRecievedValue = false,
 	...props
 }: ControlContextProviderProps): MixedElement | null => {
 	// $FlowFixMe
@@ -59,14 +60,14 @@ export const ControlContextProvider = ({
 
 	// Assume control has side effect from parent components ...
 	useEffect(() => {
-		if (!isEquals(controlInfo.value, value) && controlInfo?.hasSideEffect) {
+		if (!isEquals(controlInfo.value, value) && !notSyncWithRecievedValue) {
 			dispatch.modifyControlValue({
 				controlId: controlInfo.name,
 				value: controlInfo.value,
 			});
 		}
 		// eslint-disable-next-line
-	}, [controlInfo.value]);
+	}, [controlInfo]);
 
 	//You can to enable||disable current control with status column!
 	if (!status) {

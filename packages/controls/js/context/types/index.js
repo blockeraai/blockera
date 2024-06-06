@@ -18,7 +18,6 @@ export type ControlInfo = {
 	name: string,
 	attribute?: string,
 	blockName?: string,
-	hasSideEffect?: boolean,
 	description?: string | MixedElement | any,
 	type?: 'simple' | 'nested',
 };
@@ -28,6 +27,7 @@ export type ControlContextProviderProps = {
 	storeName?: string,
 	children: MixedElement | any,
 	type?: 'nested',
+	notSyncWithRecievedValue?: boolean,
 };
 
 export type ControlContextHookProps = {

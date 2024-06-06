@@ -228,7 +228,11 @@ const StatesManager: ComponentType<any> = memo(
 		};
 
 		return (
-			<ControlContextProvider storeName={STORE_NAME} value={contextValue}>
+			<ControlContextProvider
+				value={contextValue}
+				storeName={STORE_NAME}
+				notSyncWithRecievedValue={true}
+			>
 				<StateContainer>
 					<RepeaterControl
 						{...{
