@@ -11,22 +11,15 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import {
-	isFunction,
-	isNumber,
-	isString,
-	isUndefined,
-	useDragValue,
-} from '@blockera/utils';
+import { isNumber, isString, isUndefined, useDragValue } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { RangeControl } from '../../index';
+import type { InnerInputControlProps } from '../types';
 import { default as ArrowUpIcon } from '../icons/arrow-up';
 import { default as ArrowDownIcon } from '../icons/arrow-down';
-import { useEffect, useState } from '@wordpress/element';
-import type { InnerInputControlProps } from '../types';
 
 export function NumberInput({
 	value,
@@ -44,6 +37,7 @@ export function NumberInput({
 	actions = '',
 	children,
 	size,
+	isValidValue,
 	...props
 }: InnerInputControlProps): MixedElement {
 	// get the minimum value in number type
@@ -137,24 +131,6 @@ export function NumberInput({
 
 		setValue(value !== '' ? +value : value);
 	};
-
-	const [isValidValue, setIsValidValue] = useState(true);
-
-	// validator checking
-	useEffect(() => {
-		if (!validator) {
-			return;
-		}
-
-		let isValid = false;
-
-		if (isFunction(validator)) {
-			isValid = validator(value);
-		}
-
-		// Update isValidValue based on the result of validation
-		setIsValidValue(isValid);
-	}, [value]); // eslint-disable-line
 
 	const { onDragStart, onDragEnd } = useDragValue({
 		value: isString(value)

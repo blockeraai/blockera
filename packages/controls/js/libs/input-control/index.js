@@ -3,7 +3,9 @@
  * External dependencies
  */
 import PropTypes from 'prop-types';
+import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { useState, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -15,17 +17,22 @@ import { setValueAddon, useValueAddon } from '@blockera/value-addons';
 /**
  * Internal dependencies
  */
-import { useControlContext } from '../../context';
-import { BaseControl } from './../index';
+import type { InputControlProps } from './types';
 import { UnitInput } from './components/unit-input';
 import { OtherInput } from './components/other-input';
 import { NumberInput } from './components/number-input';
-import { getCSSUnits } from './utils';
-import type { InputControlProps } from './types';
+import { BaseControl, getFirstUnit, getUnitByValue } from './../index';
+import { ControlContextProvider, useControlContext } from '../../context';
+import { extractNumberAndUnit, getCSSUnits, isSpecialUnit } from './utils';
+
+export type ContextUnitInput = {
+	unitValue: Object,
+	inputValue: string,
+};
 
 export default function InputControl({
 	unitType = '',
-	units = [],
+	units: _units = [],
 	noBorder = false,
 	id,
 	range = false,
@@ -55,6 +62,11 @@ export default function InputControl({
 	children,
 	...props
 }: InputControlProps): MixedElement {
+	let isValidValue = true;
+	const [units, setUnits] = useState(
+		isEmpty(_units) ? getCSSUnits(unitType) : _units
+	);
+	const [pickedUnit, setPickedUnit] = useState(getFirstUnit(units));
 	const {
 		value,
 		setValue,
@@ -62,11 +74,16 @@ export default function InputControl({
 		blockName,
 		resetToDefault,
 		getControlPath,
+		controlInfo: { name: controlId },
 	} = useControlContext({
 		id,
 		defaultValue,
 		onChange,
 	});
+
+	if ('function' === typeof validator) {
+		isValidValue = validator(value);
+	}
 
 	const {
 		valueAddonClassNames,
@@ -98,6 +115,47 @@ export default function InputControl({
 		path: getControlPath(attribute, id),
 	};
 
+	const extractedValue = extractNumberAndUnit(value);
+
+	// Unit is not provided and there is a unit with empty value
+	// clear unit to let the empty unit be selected
+	if (extractedValue?.unitSimulated && pickedUnit.value === '') {
+		extractedValue.unit = '';
+	}
+
+	const extractedNoUnit =
+		isUndefined(extractedValue.unit) || extractedValue.unit === '';
+	const unitValue = extractedNoUnit
+		? pickedUnit
+		: getUnitByValue(extractedValue.unit, units);
+
+	const contextValue: ContextUnitInput = {
+		unitValue,
+		inputValue: extractedValue.value,
+	};
+
+	useEffect(() => {
+		// add css units
+		if (unitType !== '') {
+			const cssUnits: Array<any> = getCSSUnits(unitType);
+
+			if (unitValue?.notFound) {
+				const newUnits = [
+					...cssUnits,
+					{
+						options: [unitValue],
+						id: 'founded_from_inputs',
+						label: __('Founded From Inputs', 'blockera'),
+					},
+				];
+
+				setUnits(newUnits);
+				setPickedUnit(unitValue);
+			}
+		}
+		// eslint-disable-next-line
+	}, []);
+
 	if (isSetValueAddon()) {
 		return (
 			<BaseControl
@@ -122,11 +180,6 @@ export default function InputControl({
 		);
 	}
 
-	// add css units
-	if (unitType !== '' && (isUndefined(units) || isEmpty(units))) {
-		units = getCSSUnits(unitType);
-	}
-
 	return (
 		<BaseControl
 			label={label}
@@ -136,27 +189,84 @@ export default function InputControl({
 			{...labelProps}
 		>
 			{!isEmpty(units) ? (
-				<UnitInput
-					range={range}
-					units={units}
-					value={value}
-					setValue={setValue}
-					defaultValue={defaultValue}
-					noBorder={noBorder}
-					className={className + ' ' + valueAddonClassNames}
-					disabled={disabled}
-					validator={validator}
-					min={min}
-					max={max}
-					drag={drag}
-					float={float}
-					arrows={arrows}
-					size={size}
-					children={children}
-					{...props}
+				<ControlContextProvider
+					value={{
+						value: contextValue,
+						name: controlId + '-unit-input',
+					}}
 				>
-					<ValueAddonPointer />
-				</UnitInput>
+					<UnitInput
+						isValidValue={isValidValue}
+						range={range}
+						units={units}
+						defaultValue={defaultValue}
+						noBorder={noBorder}
+						className={className + ' ' + valueAddonClassNames}
+						disabled={disabled}
+						validator={validator}
+						min={min}
+						max={max}
+						drag={drag}
+						float={float}
+						arrows={arrows}
+						size={size}
+						children={children}
+						onChange={(newValue: ContextUnitInput): void => {
+							const { inputValue, unitValue } = newValue;
+
+							// to append founded not listed units by defaults in units from user input values.
+							if (unitValue?.notFound) {
+								units.forEach((unitPackage, index): void => {
+									if (
+										'founded_from_inputs' ===
+											unitPackage?.id &&
+										!unitPackage?.options.includes(
+											unitValue
+										)
+									) {
+										const newUnits = [...units];
+
+										newUnits[index].options.push(unitValue);
+
+										setUnits(newUnits);
+									}
+								});
+
+								if ('' !== value && !inputValue) {
+									setPickedUnit(unitValue);
+								}
+							}
+
+							if (
+								isSpecialUnit(unitValue.value) &&
+								value !== unitValue.value
+							) {
+								setValue(unitValue.value);
+							} else if (
+								(extractedNoUnit || !value) &&
+								inputValue &&
+								(unitValue.value || extractedValue.unit === '')
+							) {
+								setValue(inputValue + unitValue.value);
+							} else if (
+								!extractedNoUnit &&
+								value &&
+								value !== unitValue.value &&
+								'' !== inputValue
+							) {
+								setValue(inputValue + unitValue.value);
+							} else if ('' === inputValue && value) {
+								if (!isSpecialUnit(pickedUnit.value)) {
+									setPickedUnit(unitValue);
+								}
+								setValue(inputValue);
+							}
+						}}
+						{...props}
+					>
+						<ValueAddonPointer />
+					</UnitInput>
+				</ControlContextProvider>
 			) : (
 				<>
 					{type === 'number' ? (
@@ -177,6 +287,7 @@ export default function InputControl({
 								noBorder={noBorder}
 								disabled={disabled}
 								validator={validator}
+								isValidValue={isValidValue}
 								min={min}
 								max={max}
 								range={range}
@@ -202,6 +313,7 @@ export default function InputControl({
 							<OtherInput
 								value={value}
 								setValue={setValue}
+								isValidValue={isValidValue}
 								type={type}
 								noBorder={noBorder}
 								disabled={disabled}
