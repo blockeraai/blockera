@@ -175,29 +175,38 @@ export function onChangeBlockStates(
 	);
 
 	if (onChangeValue.hasOwnProperty('modifyControlValue')) {
+		let blockStates = {};
 		const { modifyControlValue, controlId } = onChangeValue;
+
+		if (isInnerBlock(currentBlock)) {
+			blockStates =
+				getSelectedBlock()?.attributes.blockeraInnerBlocks[currentBlock]
+					.attributes.blockeraBlockStates;
+		} else {
+			blockStates = getSelectedBlock()?.attributes.blockeraBlockStates;
+		}
 
 		modifyControlValue({
 			controlId,
 			value: Object.fromEntries(
-				Object.entries(
-					getSelectedBlock()?.attributes.blockeraBlockStates
-				).map(([stateType, stateItem], index) => {
-					const info = getStateInfo(index);
+				Object.entries(blockStates).map(
+					([stateType, stateItem], index) => {
+						const info = getStateInfo(index);
 
-					if ('normal' === stateType) {
-						info.deletable = false;
+						if ('normal' === stateType) {
+							info.deletable = false;
+						}
+
+						return [
+							stateType,
+							{
+								...info,
+								...stateItem,
+								isSelected: stateType === selectedState,
+							},
+						];
 					}
-
-					return [
-						stateType,
-						{
-							...info,
-							...stateItem,
-							isSelected: stateType === selectedState,
-						},
-					];
-				})
+				)
 			),
 		});
 
