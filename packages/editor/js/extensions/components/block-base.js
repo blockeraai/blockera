@@ -128,8 +128,18 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentBreakpoint,
 		});
 
-		const masterIsNormalState = (): boolean =>
-			'normal' === currentState && isLaptopBreakpoint(getDeviceType());
+		const masterIsNormalState = (): boolean => {
+			const masterActiveBreakpoint =
+				Object.keys(attributes.blockeraBlockStates.normal.breakpoints)
+					.length > 1
+					? getDeviceType()
+					: 'laptop';
+
+			return (
+				'normal' === currentState &&
+				isLaptopBreakpoint(masterActiveBreakpoint)
+			);
+		};
 
 		const isNormalState = (): boolean => {
 			if (isInnerBlock(currentBlock)) {
