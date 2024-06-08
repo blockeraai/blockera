@@ -65,6 +65,10 @@ if [ -z "$NO_CHECKS" ]; then
 	fi
 fi
 
+# Clean old and extra files
+status "Cleaning build files... 🗂"
+rm -r dist
+
 # Run the build.
 status "Installing dependencies... 📦"
 composer install --no-dev
