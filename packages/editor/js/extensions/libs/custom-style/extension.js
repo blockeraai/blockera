@@ -50,8 +50,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 			}
 
 			const isEditable =
-				getCurrentState() === 'normal' ||
-				getBreakpoint()?.type === 'laptop';
+				getCurrentState() === 'normal' || getBreakpoint() === 'laptop';
 
 			return (
 				<PanelBodyControl
@@ -108,7 +107,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 										{ ref }
 									)
 								}
-								editable={!isEditable}
+								editable={isEditable}
 								defaultValue={
 									attributes.blockeraCustomCSS.default
 								}
