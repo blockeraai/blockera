@@ -49,6 +49,7 @@ const BlockEditContextProvider = ({
 			isNormalState,
 			currentBlock,
 			currentState,
+			currentBreakpoint,
 			currentInnerBlockState,
 			masterIsNormalState,
 			blockeraInnerBlocks,
@@ -80,8 +81,7 @@ const BlockEditContextProvider = ({
 				setCurrentTab(tabName);
 			},
 			getBreakpoint(): BreakpointTypes {
-				return getAttributes()?.blockeraBlockStates[blockStateId]
-					?.breakpoints[breakpointId];
+				return currentBreakpoint;
 			},
 			getCurrentState(): TStates {
 				if (isInnerBlock(currentBlock)) {
