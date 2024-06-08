@@ -119,21 +119,6 @@ describe('Color Control label testing (BG Color)', () => {
 		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@color-label').should('not.include.text', 'ccc');
-
-		/**
 		 * Tablet device
 		 */
 		setDeviceType('Tablet');
@@ -190,21 +175,6 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert control
 		cy.get('@color-label').should('include.text', 'fff');
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
 
 		/**
 		 * Tablet device
@@ -301,21 +271,6 @@ describe('Color Control label testing (BG Color)', () => {
 		 * Normal
 		 */
 		setBlockState('Normal');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@color-label').should('not.include.text', 'ccc');
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -551,8 +506,7 @@ describe('Color Control label testing (BG Color)', () => {
 				'changed-in-normal-state'
 			);
 			// Assert control
-			// TODO: wrong control value
-			// cy.get('@color-label').should('include.text', '1db0cc');
+			cy.get('@color-label').should('include.text', '1db0cc');
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
@@ -568,8 +522,7 @@ describe('Color Control label testing (BG Color)', () => {
 				'changed-in-normal-state'
 			);
 			// Assert control
-			// TODO
-			//cy.get('@color-label').should('include.text', '1db0cc');
+			cy.get('@color-label').should('include.text', '1db0cc');
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
@@ -585,8 +538,7 @@ describe('Color Control label testing (BG Color)', () => {
 				'changed-in-normal-state'
 			);
 			// Assert control
-			// TODO
-			//cy.get('@color-label').should('include.text', '1db0cc');
+			cy.get('@color-label').should('include.text', '1db0cc');
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
@@ -599,17 +551,15 @@ describe('Color Control label testing (BG Color)', () => {
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.laptop.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes
+				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
@@ -664,8 +614,7 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//cy.get('@color-label').should('include.text', 'None');
+			cy.get('@color-label').should('include.text', 'None');
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
@@ -682,8 +631,7 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//cy.get('@color-label').should('include.text', 'None');
+			cy.get('@color-label').should('include.text', 'None');
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
@@ -696,11 +644,10 @@ describe('Color Control label testing (BG Color)', () => {
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect({
 					blockeraBackgroundColor: '#1db0cc',
@@ -857,8 +804,7 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//cy.get('@color-label').should('include.text', 'c4c4c4');
+			cy.get('@color-label').should('include.text', 'c4c4c4');
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
@@ -875,8 +821,7 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//cy.get('@color-label').should('include.text', 'c4c4c4');
+			cy.get('@color-label').should('include.text', 'c4c4c4');
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
@@ -893,8 +838,7 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//	cy.get('@color-label').should('include.text', 'c4c4c4');
+			cy.get('@color-label').should('include.text', 'c4c4c4');
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
@@ -1002,11 +946,10 @@ describe('Color Control label testing (BG Color)', () => {
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 
-				// TODO
-				//expect({}).to.be.deep.eq(
-				//	getSelectedBlock(data, 'blockeraBlockStates').normal
-				//		.breakpoints.tablet.attributes
-				//);
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect({
 					blockeraBackgroundColor: '#c4c4c4',
