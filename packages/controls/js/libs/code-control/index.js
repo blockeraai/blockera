@@ -6,11 +6,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState, useRef } from '@wordpress/element';
-import * as monaco from 'monaco-editor';
-import { Editor, loader } from '@monaco-editor/react';
-
-// load from node_modules
-loader.config({ monaco });
+// import { Editor } from '@monaco-editor/react';
 
 /**
  * Blockera dependencies
@@ -31,10 +27,10 @@ import type { CodeControlProps } from './types';
 
 const CodeControl = ({
 	lang = 'css',
-	width = '',
-	height = '',
+	// width = '',
+	// height = '',
 	placeholder = '',
-	editable = true,
+	// editable = true,
 	description = '',
 	//
 	id,
@@ -52,7 +48,7 @@ const CodeControl = ({
 }: CodeControlProps): MixedElement => {
 	const {
 		value,
-		setValue,
+		//setValue,
 		attribute,
 		blockName,
 		resetToDefault,
@@ -63,7 +59,8 @@ const CodeControl = ({
 		defaultValue,
 	});
 
-	const [showPlaceholder, setShowPlaceholder] = useState(false);
+	// setShowPlaceholder
+	const [showPlaceholder] = useState(true);
 
 	const editorRef = useRef(null);
 
@@ -134,7 +131,7 @@ const CodeControl = ({
 	return (
 		<BaseControl columns={columns} controlName={field} {...labelProps}>
 			<div className={controlClassNames('code', className)}>
-				<Editor
+				{/* <Editor
 					width={width || 250}
 					height={height || 200}
 					defaultLanguage={lang}
@@ -176,7 +173,7 @@ const CodeControl = ({
 					onMount={(editor: any) => {
 						editorRef.current = editor;
 					}}
-				/>
+				/> */}
 
 				{showPlaceholder && (
 					<div

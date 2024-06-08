@@ -4,6 +4,13 @@
 	gap: 10px;
 	position: relative;
 
+	&::before {
+		content: "";
+		height: 100px;
+		display: block;
+		background: #eaeaea;
+	}
+
 	& > section {
 		background-color: #f6f6f6;
 		border-radius: 2px;
@@ -32,10 +39,10 @@
 
 	.blockera-control-code-control__placeholder {
 		position: absolute;
-		top: 0;
+		top: 15px;
 		left: 28px;
 		right: 10px;
-		color: #979ea6;
+		color: #7d8a99;
 		font-family: Menlo, Monaco, "Courier New", monospace;
 		font-weight: 400;
 		font-style: italic;
