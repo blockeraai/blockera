@@ -90,9 +90,6 @@ while ( true ) {
 	}
 
 	switch ( trim( $line ) ) {
-		case '':
-			echo $line;
-			break;
 
 		case '### AUTO-GENERATED CHANGELOG':
 			echo print_changelog();
@@ -114,6 +111,7 @@ while ( true ) {
 			echo "Requires at least: $required_version\n";
 			break;
 
+		case '':
 		default:
 			echo $line;
 			break;
