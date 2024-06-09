@@ -92,7 +92,7 @@ while ( true ) {
 	switch ( trim( $line ) ) {
 
 		case '### AUTO-GENERATED CHANGELOG':
-			echo print_changelog();
+			print_changelog();
 			break;
 
 		case str_starts_with(trim( $line ), 'Stable tag:'):
