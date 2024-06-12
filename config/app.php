@@ -21,7 +21,7 @@ return [
 	'namespaces'    => [
 		'controllers' => '\Blockera\Setup\Http\Controllers\\',
 	],
-	'debug'         => defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ? BLOCKERA_APP_MODE : ( $env_mode || $wp_debug ),
+	'debug'         => (defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE && $env_mode) || $wp_debug,
 	'providers'     => [
 		\Blockera\Admin\Providers\AdminProvider::class,
 		\Blockera\Setup\Providers\AssetsProvider::class,
