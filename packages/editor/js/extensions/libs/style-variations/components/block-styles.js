@@ -14,7 +14,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Button } from '@blockera/components';
+import { Button } from '@blockera/controls';
 import {
 	componentClassNames,
 	componentInnerClassNames,

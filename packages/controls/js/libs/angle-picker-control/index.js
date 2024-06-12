@@ -15,12 +15,11 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button, Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
-import { BaseControl } from '../index';
+import { Button, Flex, BaseControl } from '../';
 import { useControlContext } from '../../context';
 import { addAngle, subtractAngle } from './utils';
 import { default as RotateLeftIcon } from './icons/rotate-left';

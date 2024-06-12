@@ -6,12 +6,12 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Popover } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { Popover } from '../../../';
 import { default as Search } from './search';
 import { default as IconLibraries } from './icon-libraries';
 

@@ -10,11 +10,11 @@ import { useSelect } from '@wordpress/data';
  * Blockera dependencies
  */
 import { isFunction } from '@blockera/utils';
-import { useBlocksStore } from '@blockera/editor';
 
 /**
  * Internal dependencies
  */
+import { useBlocksStore } from '../../hooks';
 import type { BlockStyleProps } from './types';
 import {
 	// MediaQuery,

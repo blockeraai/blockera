@@ -1,13 +1,12 @@
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { LabelControl } from '../../index';
+import { Flex, LabelControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 const { WithInspectorStyles, WithPopoverDataProvider, SharedDecorators } =

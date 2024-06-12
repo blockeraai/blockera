@@ -11,17 +11,17 @@ import { memo, useEffect, useContext } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isValid as isValidVariable } from '@blockera/value-addons';
+import { isValid as isValidVariable } from '../../../';
 
 /**
  * Internal dependencies
  */
 import {
+	Flex,
 	BaseControl,
 	InputControl,
 	MediaImageControl,

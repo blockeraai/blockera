@@ -10,11 +10,11 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Button } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
+import { Button } from '../../';
 import type { TShapeProps } from '../types';
 
 export const Shape = ({

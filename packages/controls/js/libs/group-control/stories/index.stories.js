@@ -1,13 +1,12 @@
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 /**
  * Internal dependencies
  */
-import { GroupControl } from '../../index';
+import { Flex, GroupControl } from '../../index';
 import { default as AccordionCustomOpenIcon } from './icons/accordion-custom-open-icon';
 import { default as AccordionCustomCloseIcon } from './icons/accordion-custom-close-icon';
 

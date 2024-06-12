@@ -14,7 +14,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button, Icon, MediaUploader } from '@blockera/components';
 import {
 	isEmpty,
 	isObject,
@@ -23,22 +22,20 @@ import {
 	hasSameProps,
 	useLateEffect,
 } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
+import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
 import { default as DeleteIcon } from './icons/delete';
-import { default as Suggestions } from './components/suggestions';
+import { Button, MediaUploader, BaseControl } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
-import { BaseControl } from '../index';
-import type { IconControlProps } from './types';
 
 function IconControl({
-	suggestionsQuery,
-	//
 	label,
 	columns,
 	field = 'icon',
@@ -107,7 +104,6 @@ function IconControl({
 	};
 
 	const defaultIconState = {
-		suggestionsQuery,
 		currentIcon,
 		dispatch: currentIconDispatch,
 		handleIconSelect,
@@ -174,8 +170,6 @@ function IconControl({
 						className
 					)}
 				>
-					<Suggestions />
-
 					{hasIcon() ? (
 						<div
 							className={controlInnerClassNames(
@@ -293,10 +287,6 @@ IconControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-	/**
-	 * A term a function that returns a term for preparing suggestions
-	 */
-	suggestionsQuery: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 	/**
 	 * Choose label
 	 */

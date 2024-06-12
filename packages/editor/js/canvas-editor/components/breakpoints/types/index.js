@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import type { BreakpointTypes } from '@blockera/editor/js/extensions/libs/block-states/types';
+import type { BreakpointTypes } from '../../../../extensions/libs/block-states/types';
 
 export type BreakpointsComponentProps = {
 	className: string,

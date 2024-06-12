@@ -36,7 +36,7 @@ export { store as extensionsStore } from './store';
 import bootstrapScripts from './scripts';
 export { isInnerBlock } from './components';
 
-export const defineGlobalProps = (): void => {
+export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 	domReady(() => {
 		if (window?.wp) {
 			window.blockera.coreData = {
@@ -59,6 +59,10 @@ export const defineGlobalProps = (): void => {
 			});
 
 			bootstrapScripts(window.wp);
+
+			if ('function' === typeof outsideDefinitions) {
+				outsideDefinitions();
+			}
 		}
 	});
 };

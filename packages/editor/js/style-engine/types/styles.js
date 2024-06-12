@@ -1,6 +1,6 @@
 // @flow
 
-import type { TBlockProps } from '@blockera/editor/js/extensions/libs/types';
+import type { TBlockProps } from '../../extensions/libs/types';
 import type { CssGeneratorModel } from './css-generator-model';
 
 export type StaticStyle = {

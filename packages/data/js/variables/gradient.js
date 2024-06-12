@@ -8,9 +8,8 @@ import { default as memoize } from 'fast-memoize';
 /**
  * Blockera dependencies
  */
-import { isValid } from '@blockera/value-addons';
-import { isString, isObject } from '@blockera/utils';
-import type { ValueAddon } from '@blockera/value-addons/js/types';
+import { isValid, isString, isObject } from '@blockera/utils';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 /**
  * Internal dependencies

@@ -8,14 +8,14 @@ import { useState, useContext } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { SearchControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
-import { default as SearchIcon } from '../../icons/search';
-import { getLibraryIcons } from '../../utils';
 import { IconContext } from '../../context';
+import { getLibraryIcons } from '../../utils';
+import SearchControl from '../../../search-control';
+import { default as SearchIcon } from '../../icons/search';
 
 export default function Search({}) {
 	const [searchInput, setSearchInput] = useState('');

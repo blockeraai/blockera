@@ -7,13 +7,12 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { BoxShadowControl } from '../../index';
+import { Flex, BoxShadowControl } from '../../index';
 import { STORE_NAME } from '../../repeater-control/store';
 import { ControlContextProvider } from '../../../context';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';

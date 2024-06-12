@@ -8,7 +8,6 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 import { cloud, Icon } from '@wordpress/icons';
-import { ToastContainer, toast } from 'react-toastify';
 import { Animate, Spinner } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 import { useContext, useState } from '@wordpress/element';
@@ -16,7 +15,7 @@ import { useContext, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Modal, Button, Flex } from '@blockera/components';
+import { Modal, Button, Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -49,17 +48,6 @@ const statuses = {
 		name: 'resetting',
 		label: __('Resetting', 'blockera'),
 	},
-};
-
-const toastOptions = {
-	position: 'bottom-right',
-	autoClose: 5000,
-	hideProgressBar: false,
-	closeOnClick: true,
-	pauseOnHover: true,
-	draggable: true,
-	progress: undefined,
-	theme: 'dark',
 };
 
 export const Update = ({
@@ -121,33 +109,20 @@ export const Update = ({
 
 				if ('reset-all' === type) {
 					setSettings(defaultSettings);
-
-					toast.success(`Blockera Reset All Done!`, toastOptions);
 				} else {
 					setSettings({
 						...settings,
 						[slug]: defaultSettings[slug],
 					});
-
-					toast.success(
-						`Blockera Reset ${tab.title} Done!`,
-						toastOptions
-					);
 				}
 			} else {
 				setSettings(record);
 				setStatus(statuses.saved);
-				toast.success(`Blockera ${tab.title} Updated!`, toastOptions);
 			}
 
 			setHasUpdates(!hasUpdate);
 		} else {
 			setStatus(statuses.error);
-
-			toast.error(
-				`Failed Blockera ${tab.title} updating process.`,
-				toastOptions
-			);
 		}
 
 		return response;
@@ -155,18 +130,6 @@ export const Update = ({
 
 	return (
 		<>
-			<ToastContainer
-				position="bottom-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				theme="dark"
-			/>
 			{[
 				'saving' === status.name && (
 					<Animate type="loading">

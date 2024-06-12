@@ -12,7 +12,7 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
  * Blockera dependencies
  */
 import { without } from '@blockera/utils';
-import { Button } from '@blockera/components';
+import { Button } from '@blockera/controls';
 
 /**
  * Internal dependencies

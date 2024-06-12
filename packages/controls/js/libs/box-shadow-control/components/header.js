@@ -9,13 +9,13 @@ import type { Element } from 'react';
 /**
  * Internal dependencies
  */
+import { ColorIndicator } from '../../';
 import type { THeaderItem } from '../types';
 import { prepValueForHeader } from '../../repeater-control/utils';
 
 /**
  * Blockera dependencies
  */
-import { ColorIndicator } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(

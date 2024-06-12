@@ -6,7 +6,6 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import { Observer, CanvasEditor } from '../../';
-import { blockeraBootstrapBlocks } from '@blockera/blocks';
 import { blockeraBootstrapControls } from '@blockera/controls';
 
 /**
@@ -113,9 +112,6 @@ export default function (wp: Object) {
 
 	// Bootstrap functions for extensions.
 	blockeraExtensionsBootstrap();
-
-	// Bootstrap functions for blocks.
-	blockeraBootstrapBlocks();
 
 	// Bootstrap functions for controls.
 	blockeraBootstrapControls();

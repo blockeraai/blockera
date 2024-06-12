@@ -6,12 +6,12 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
+import { Flex } from '../../';
 import BoxSpacingControl from '../index';
 import { ControlContextProvider } from '../../../context';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';

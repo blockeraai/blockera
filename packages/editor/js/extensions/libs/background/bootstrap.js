@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import type { ControlContextRef } from '@blockera/controls/js/context/types';
+import type { ControlContextRef } from '@blockera/controls';
 
 /**
  * Internal dependencies

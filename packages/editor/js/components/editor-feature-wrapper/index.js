@@ -8,14 +8,14 @@ import { useSelect } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { FeatureWrapper } from '@blockera/components';
-import { isLaptopBreakpoint } from '@blockera/editor';
-import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
+import { FeatureWrapper } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import type { EditorFeatureWrapperProps } from './types';
+import { isLaptopBreakpoint } from '../../canvas-editor';
+import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 
 export default function EditorFeatureWrapper({
 	config,

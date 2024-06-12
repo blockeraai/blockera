@@ -10,12 +10,12 @@ import { useState } from '@wordpress/element';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { setValueAddon, useValueAddon } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
+import { setValueAddon, useValueAddon } from '../../../../';
 import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';

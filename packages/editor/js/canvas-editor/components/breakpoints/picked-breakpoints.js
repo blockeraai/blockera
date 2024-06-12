@@ -11,9 +11,9 @@ import { useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
+import { Flex } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { BreakpointIcon } from '@blockera/editor/js/extensions/libs/block-states/helpers';
+import { BreakpointIcon } from '../../../extensions/libs/block-states/helpers';
 
 /**
  * Internal dependencies

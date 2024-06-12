@@ -6,17 +6,17 @@ import { __ } from '@wordpress/i18n';
 /**
  *  Storybook dependencies
  */
+import { Playground } from '@blockera/dev-storybook/js/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@blockera/editor';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
 } from '@blockera/dev-storybook/js/block-api';
-import { Playground } from '@blockera/dev-storybook/js/components';
+import { BaseExtension, ExtensionStyle } from '../../';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
 import BackgroundExtensionIcon from '../icons/extension-icon';

@@ -1,14 +1,13 @@
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
+import { Flex, ToggleControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { ToggleControl } from '../../index';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 

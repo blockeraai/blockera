@@ -9,7 +9,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Icon } from '@blockera/components';
+import { Icon } from '@blockera/icons';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 export const Preview = (): MixedElement => {

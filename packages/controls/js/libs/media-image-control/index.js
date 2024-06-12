@@ -9,7 +9,6 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Button, MediaUploader } from '@blockera/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
@@ -18,10 +17,10 @@ import {
 /**
  * Internal dependencies
  */
-import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
-import { default as DeleteIcon } from './icons/delete';
 import type { MediaImageControlProps } from './types';
+import { default as DeleteIcon } from './icons/delete';
+import { Button, MediaUploader, BaseControl } from '../index';
 
 export default function MediaImageControl({
 	labelChoose = __('Choose Image…', 'blockera'),

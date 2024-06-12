@@ -1,12 +1,12 @@
 // @flow
 
 /**
- * Blockera dependencies
+ * Internal dependencies
  */
 import type {
 	StateGraph,
 	StateGraphItem,
-} from '@blockera/editor/js/extensions/libs/block-states/store/selector';
+} from '../../../extensions/libs/block-states';
 
 export type LabelChangedStates = Array<{
 	id: number,

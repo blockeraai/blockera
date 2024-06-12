@@ -13,7 +13,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Flex, Tooltip } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -21,7 +20,13 @@ import { Flex, Tooltip } from '@blockera/components';
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 import type { Props } from './types';
-import { SelectControl, ToggleSelectControl, CheckboxControl } from '../index';
+import {
+	Flex,
+	Tooltip,
+	SelectControl,
+	CheckboxControl,
+	ToggleSelectControl,
+} from '../index';
 import { MatrixItem } from './components/matrix-item';
 // Icons
 import AlignItemsEmptyBlockIcon from './icons/align-items-empty';

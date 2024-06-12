@@ -11,7 +11,7 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import type { TTabProps } from '@blockera/components/js/tabs/types';
+import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 import { TabsContext, Sidebar, PanelHeader } from '@blockera/wordpress';
 
 import {
@@ -20,7 +20,10 @@ import {
 	LicenseManagerPanel,
 } from './components';
 
-export const Panel = (tab: TTabProps): MixedElement => {
+export const Panel = (tab: {
+	...TTabProps,
+	settingSlug: string,
+}): MixedElement => {
 	let description: Element<any> = <></>;
 	let activePanel: any = <></>;
 	const { settings } = useContext(TabsContext);

@@ -10,14 +10,14 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import {
+	ConditionalWrapper,
+	Flex,
 	PanelBodyControl,
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
 	BaseControl,
 } from '@blockera/controls';
-import { ConditionalWrapper, Flex } from '@blockera/components';
-import { EditorFeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 
@@ -26,6 +26,7 @@ import { extensionClassNames } from '@blockera/classnames';
  */
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
+import { EditorFeatureWrapper } from '../../../';
 import type { TSizeProps } from './types/size-props';
 import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
 import { default as OverflowVisibleIcon } from './icons/overflow-visible';

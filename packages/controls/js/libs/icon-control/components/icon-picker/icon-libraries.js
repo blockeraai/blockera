@@ -7,16 +7,16 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
-import { getIconLibrary } from '@blockera/components';
+import { getIconLibrary } from '@blockera/icons';
 import { isEmpty, isUndefined } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { default as IconLibrary } from './icon-library';
-import { default as SuggestionsIcon } from '../../icons/suggestions';
 import { IconContext } from '../../context';
+import SuggestionsIcon from '../../icons/suggestions';
+import { default as IconLibrary } from './icon-library';
 
 const IconLibraries = ({
 	libraries = {

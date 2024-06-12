@@ -14,7 +14,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -22,14 +21,15 @@ import { Button } from '@blockera/components';
 import { STORE_NAME } from '../repeater-control/store';
 import { default as AdvancedIcon } from './icons/advanced';
 import {
+	Button,
 	BaseControl,
 	InputControl,
 	CheckboxControl,
 	AttributesControl,
 } from '../index';
-import { ControlContextProvider, useControlContext } from '../../context';
 import type { LinkControlProps } from './types';
 import { linkControlValueCleaner } from './utils';
+import { ControlContextProvider, useControlContext } from '../../context';
 
 export default function LinkControl({
 	id,

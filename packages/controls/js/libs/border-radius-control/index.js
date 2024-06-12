@@ -11,15 +11,19 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button } from '@blockera/components';
-import { getValueAddonRealValue } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
-import { InputControl, LabelControl, LabelControlContainer } from '../index';
-import { default as CustomIcon } from './icons/custom';
+import {
+	Button,
+	InputControl,
+	LabelControl,
+	LabelControlContainer,
+} from '../index';
+import { getValueAddonRealValue } from '../../';
 import { useControlContext } from '../../context';
+import { default as CustomIcon } from './icons/custom';
 import type { BorderRadiusControlProps, BorderRadiusValue } from './types';
 
 export type * from './types';

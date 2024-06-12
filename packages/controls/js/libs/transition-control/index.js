@@ -9,17 +9,17 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
-import { PromotionPopover } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
-import RepeaterItemHeader from './components/header';
-import RepeaterControl from '../repeater-control';
+import { PromotionPopover } from '../';
 import Fields from './components/fields';
+import RepeaterControl from '../repeater-control';
+import RepeaterItemHeader from './components/header';
 import type { TTransitionControlProps } from './types';
 import { LabelDescription } from './components/label-description';
-import { getRepeaterActiveItemsCount } from '../repeater-control/utils';
+import { getRepeaterActiveItemsCount } from '../repeater-control/helpers';
 import { getTransitionTypeOptions, getTransitionTimingOptions } from './utils';
 
 export default function TransitionControl({

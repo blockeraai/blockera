@@ -15,13 +15,13 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { DynamicHtmlFormatter } from '@blockera/components';
 import { useLateEffect } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import BaseControl from '../base-control';
+import { DynamicHtmlFormatter } from '../';
 import { useControlContext } from '../../context';
 import type { CodeControlProps } from './types';
 

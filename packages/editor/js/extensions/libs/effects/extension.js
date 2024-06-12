@@ -10,14 +10,13 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import {
+	Button,
 	BaseControl,
 	TransformControl,
 	PanelBodyControl,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { isInteger, hasSameProps } from '@blockera/utils';
-import { Button } from '@blockera/components';
-import { EditorFeatureWrapper } from '@blockera/editor';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
@@ -27,6 +26,7 @@ import {
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
+import { EditorFeatureWrapper } from '../../../';
 import { default as GearIcon } from './icons/gear';
 import type { TEffectsProps } from './types/effects-props';
 import { generateExtensionId } from '../utils';

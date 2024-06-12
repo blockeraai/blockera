@@ -9,10 +9,10 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import {
+	Popover,
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { Popover } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**

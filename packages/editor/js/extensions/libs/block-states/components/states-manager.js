@@ -12,13 +12,15 @@ import { memo, useMemo, useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { PromotionPopover } from '@blockera/components';
 import { isEquals, omit } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { ControlContextProvider, RepeaterControl } from '@blockera/controls';
-import { STORE_NAME } from '@blockera/controls/js/libs/repeater-control/store';
-import { defaultItemValue } from '@blockera/controls/js/libs/repeater-control';
-import { getRepeaterActiveItemsCount } from '@blockera/controls/js/libs/repeater-control/utils';
+import {
+	RepeaterControl,
+	PromotionPopover,
+	defaultItemValue,
+	ControlContextProvider,
+	getRepeaterActiveItemsCount,
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -230,7 +232,7 @@ const StatesManager: ComponentType<any> = memo(
 		return (
 			<ControlContextProvider
 				value={contextValue}
-				storeName={STORE_NAME}
+				storeName={'blockera-core/controls/repeater'}
 				notSyncWithRecievedValue={true}
 			>
 				<StateContainer>

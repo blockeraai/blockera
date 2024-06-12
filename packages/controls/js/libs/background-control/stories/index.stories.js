@@ -9,14 +9,17 @@ import { userEvent, waitFor, within } from '@storybook/testing-library';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from '../../repeater-control/store';
-import { BackgroundControl, ControlContextProvider } from '../../../index';
+import {
+	Flex,
+	BackgroundControl,
+	ControlContextProvider,
+} from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 

@@ -8,8 +8,7 @@ import { dispatch } from '@wordpress/data';
 /**
  *  Dependencies
  */
-import { isValid } from '@blockera/value-addons';
-import { isSpecialUnit } from '@blockera/controls';
+import { isValid, isSpecialUnit } from '@blockera/controls';
 import { isObject, isString, isUndefined } from '@blockera/utils';
 
 export function toSimpleStyleWPCompatible({

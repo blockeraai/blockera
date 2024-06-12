@@ -10,15 +10,19 @@ import { useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
-import { Button, ColorIndicator } from '@blockera/components';
-import { setValueAddon, useValueAddon } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
+import { setValueAddon, useValueAddon } from '../../';
 import type { ColorControlProps } from './types';
 import { useControlContext } from '../../context';
-import { BaseControl, ColorPickerControl } from '../index';
+import {
+	Button,
+	BaseControl,
+	ColorIndicator,
+	ColorPickerControl,
+} from '../index';
 
 export default function ColorControl({
 	type = 'normal',

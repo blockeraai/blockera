@@ -8,22 +8,20 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { controlClassNames } from '@blockera/classnames';
 import { isObject } from '@blockera/utils';
-import { PromotionPopover } from '@blockera/components';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import RepeaterItemHeader from './components/header';
-import RepeaterControl from '../repeater-control';
+import { PromotionPopover } from '../';
 import Fields from './components/fields';
+import RepeaterControl from '../repeater-control';
+import RepeaterItemHeader from './components/header';
 import type { TransformControlProps } from './types';
+import { cleanupRepeaterItem } from '../repeater-control/utils';
 import { LabelDescription } from './components/label-description';
-import {
-	cleanupRepeaterItem,
-	getRepeaterActiveItemsCount,
-} from '../repeater-control/utils';
+import { getRepeaterActiveItemsCount } from '../repeater-control/helpers';
 
 export default function TransformControl({
 	defaultRepeaterItemValue = {

@@ -2,11 +2,9 @@
 /**
  * Blockera dependencies
  */
-import { getGradientType } from '@blockera/data';
-import { isValid } from '@blockera/value-addons';
-import type { ValueAddon } from '@blockera/value-addons/js/types';
+import { isValid, type ValueAddon } from '@blockera/controls';
+import { getGradientType, getGradientVAFromIdString } from '@blockera/data';
 import { isEmpty, isString, isEmptyObject, mergeObject } from '@blockera/utils';
-import { getGradientVAFromIdString } from '@blockera/data/js/variables/gradient';
 
 export function backgroundFromWPCompatibility({
 	attributes,

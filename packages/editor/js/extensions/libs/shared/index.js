@@ -12,9 +12,8 @@ import { memo, useEffect, useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import { isEquals } from '@blockera/utils';
-import { Tabs } from '@blockera/components';
+import { Tabs, type TTabProps } from '@blockera/controls';
 // import { useTraceUpdate } from '@blockera/editor';
-import type { TTabProps } from '@blockera/components/js/tabs/types';
 
 /**
  * Internal dependencies
@@ -838,7 +837,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			</StateContainer>
 		);
 	}
-	// FIXME: we are double check this to fix re-rendering problems.
+	// FIXME: we should double check this to fix re-rendering problems.
 	// propsAreEqual
 );
 

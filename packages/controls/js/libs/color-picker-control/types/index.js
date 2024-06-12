@@ -2,11 +2,11 @@
 /**
  * Blockera dependencies
  */
-import type { PopoverPlacement } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
+import type { PopoverPlacement } from '../../';
 import type { ControlGeneralTypes } from '../../../types';
 
 export type ColorPickerControlProps = {

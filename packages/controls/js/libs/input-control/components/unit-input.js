@@ -13,17 +13,12 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import {
-	Popover,
-	Button,
-	Tooltip,
-	ConditionalWrapper,
-} from '@blockera/components';
 import { isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
+import { Popover, Button, Tooltip, ConditionalWrapper } from '../../';
 import { OtherInput } from './other-input';
 import { NumberInput } from './number-input';
 import MaximizeIcon from '../icons/maximize';

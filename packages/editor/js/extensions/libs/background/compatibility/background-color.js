@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import { isValid } from '@blockera/value-addons';
+import { isValid } from '@blockera/controls';
 import { getColor, generateVariableString } from '@blockera/data';
 
 export function backgroundColorFromWPCompatibility({

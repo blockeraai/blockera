@@ -10,7 +10,7 @@ import { useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Popover } from '@blockera/components';
+import { Popover } from '@blockera/controls';
 
 /**
  * Internal dependencies

@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import type { ControlContextRef } from '@blockera/controls/js/context/types';
+import type { ControlContextRef } from '@blockera/controls';
 
 export type THandleOnChangeAttributes = (
 	attributeId: string,

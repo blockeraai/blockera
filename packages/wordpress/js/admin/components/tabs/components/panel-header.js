@@ -8,7 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
+import { Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies

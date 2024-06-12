@@ -9,14 +9,16 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { RepeaterContext } from '@blockera/controls/js/libs/repeater-control/context';
-import { useControlContext } from '@blockera/controls';
-import { Button } from '@blockera/components';
+import {
+	Button,
+	CloneIcon,
+	EnableIcon,
+	DisableIcon,
+	RepeaterContext,
+	useControlContext,
+	type RepeaterItemActionsProps,
+} from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
-import EnableIcon from '@blockera/controls/js/libs/repeater-control/icons/enable';
-import DisableIcon from '@blockera/controls/js/libs/repeater-control/icons/disable';
-import CloneIcon from '@blockera/controls/js/libs/repeater-control/icons/clone';
-import type { RepeaterItemActionsProps } from '@blockera/controls/js/libs/repeater-control/types';
 
 export function PopoverTitleButtons({
 	item,

@@ -15,7 +15,7 @@ import {
 	isInnerBlock,
 	isNormalState as _isNormalBlockState,
 } from '../../extensions/components/utils';
-import { useBlockContext } from '@blockera/editor/js/extensions/hooks/context';
+import { useBlockContext } from '../../extensions/hooks/context';
 
 /**
  * Internal dependencies

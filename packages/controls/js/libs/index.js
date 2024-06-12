@@ -1,4 +1,23 @@
 // @flow
+export * from './feature-wrapper';
+export { Switch } from './switch';
+export { default as Flex } from './flex';
+export { PromotionPopover } from './promotion-popover';
+export { default as Tabs, TabPanel } from './tabs';
+export * from './tabs/types';
+export { default as Grid } from './grid';
+export { Button, Buttons } from './button';
+export { default as Modal } from './modal';
+export { LoadingComponent } from './loading';
+export { default as Divider } from './divider';
+export { default as Popover } from './popover';
+export type { PopoverPlacement } from './popover/types';
+export { default as MediaUploader } from './media-uploader';
+export { Tooltip } from './tooltip';
+export { default as ConditionalWrapper } from './conditional-wrapper';
+export { default as MoreFeatures } from './more-features';
+export { ColorIndicator, ColorIndicatorStack } from './color-indicator';
+export { default as DynamicHtmlFormatter } from './dynamic-html-formatter';
 export { default as BaseControl } from './base-control';
 export {
 	default as AlignmentMatrixControl,
@@ -21,6 +40,14 @@ export { default as ToggleControl } from './toggle-control';
 export { default as SelectControl } from './select-control';
 export { default as ToggleSelectControl } from './toggle-select-control';
 export { default as RepeaterControl } from './repeater-control';
+export * from './repeater-control/icons';
+export * from './repeater-control/types';
+export * from './repeater-control/helpers';
+export { defaultItemValue } from './repeater-control/default-item-value';
+export {
+	RepeaterContext,
+	RepeaterContextProvider,
+} from './repeater-control/context';
 export { getSortedRepeater } from './repeater-control/utils';
 export { default as BoxShadowControl } from './box-shadow-control';
 export { default as TextShadowControl } from './text-shadow-control';

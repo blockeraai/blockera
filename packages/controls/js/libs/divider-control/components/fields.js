@@ -13,7 +13,6 @@ import type { Element } from 'react';
 /**
  * Blockera dependencies
  */
-import { Flex, Popover, Button } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -22,12 +21,15 @@ import { controlInnerClassNames } from '@blockera/classnames';
 import { RepeaterContext } from '../../repeater-control/context';
 import SearchIcon from '../icons/search';
 import {
+	Flex,
+	Popover,
+	Button,
+	BaseControl,
 	ColorControl,
 	InputControl,
-	ToggleSelectControl,
-	BaseControl,
 	ToggleControl,
 	NoticeControl,
+	ToggleSelectControl,
 } from '../../index';
 import { shapeIcons, selectedShape } from '../utils';
 import { Shape } from './shape';

@@ -9,7 +9,7 @@ import { useState, createContext } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import TabPanel from '@blockera/components/js/tabs/tab-panel';
+import { TabPanel } from '@blockera/controls';
 
 /**
  * Internal dependencies

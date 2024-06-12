@@ -18,11 +18,11 @@ import {
 } from '@blockera/wordpress';
 import { noop } from '@blockera/utils';
 import {
+	Flex,
 	ToggleControl,
 	CheckboxControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { Flex } from '@blockera/components';
 
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {

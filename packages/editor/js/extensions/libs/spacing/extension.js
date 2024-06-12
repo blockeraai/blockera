@@ -9,7 +9,6 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Blockera dependencies
  */
-import { EditorFeatureWrapper } from '@blockera/editor';
 import {
 	BaseControl,
 	PanelBodyControl,
@@ -22,9 +21,10 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { SpacingExtensionIcon } from './index';
 import { isShowField } from '../../api/utils';
+import { SpacingExtensionIcon } from './index';
 import { generateExtensionId } from '../utils';
+import { EditorFeatureWrapper } from '../../../';
 import type { TSpacingProps } from './types/spacing-props';
 
 export const SpacingExtension: ComponentType<TSpacingProps> = memo(

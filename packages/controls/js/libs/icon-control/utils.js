@@ -6,14 +6,14 @@ import { sprintf, __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import {
-	createStandardIconObject,
-	getIconLibraryIcons,
-	iconSearch,
-	Icon,
-	isValidIcon,
-} from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
+import {
+	Icon,
+	iconSearch,
+	isValidIcon,
+	getIconLibraryIcons,
+	createStandardIconObject,
+} from '@blockera/icons';
 
 export function getLibraryIcons({
 	library,

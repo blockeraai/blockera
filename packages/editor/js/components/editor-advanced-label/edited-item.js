@@ -8,9 +8,13 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
+import { Tooltip } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Tooltip } from '@blockera/components';
+
+/**
+ * Internal dependencies
+ */
+import type { TStates } from '../../extensions/libs/block-states/types';
 
 export default function EditedItem({
 	state,

@@ -9,15 +9,15 @@ import { useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { isFunction } from '@blockera/utils';
 import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import BaseControl from '../base-control';
+import { Flex } from '../';
 import { NoticeIcon } from './utils';
+import BaseControl from '../base-control';
 import DismissIcon from './icons/dismiss-icon';
 import type { TNoticeControlProps } from './types';
 

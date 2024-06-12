@@ -10,6 +10,7 @@ import { addFilter, applyFilters } from '@wordpress/hooks';
  */
 import {
 	reregistrationBlocks,
+	blockeraBootstrapBlocks,
 	registerThirdPartyExtensionDefinitions,
 } from '@blockera/blocks';
 import { noop } from '@blockera/utils';
@@ -22,7 +23,10 @@ import { applyHooks, defineGlobalProps } from '@blockera/editor';
 addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 	applyFilters('blockera.before.bootstrap', noop)();
 
-	defineGlobalProps();
+	defineGlobalProps(() => {
+		// Bootstrap functions for blocks.
+		blockeraBootstrapBlocks();
+	});
 
 	applyHooks(() => {
 		reregistrationBlocks();

@@ -4,7 +4,7 @@
  * Blockera dependencies
  */
 import { isUndefined } from '@blockera/utils';
-import { isValid } from '@blockera/value-addons';
+import { isValid } from '@blockera/controls';
 import { getColorVAFromIdString } from '@blockera/data';
 
 function isColorsEqual(

@@ -2,8 +2,7 @@
  * Blockera dependencies
  */
 import { isUndefined } from '@blockera/utils';
-import { getSortedRepeater } from '@blockera/controls';
-import { getValueAddonRealValue } from '@blockera/value-addons';
+import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
 
 /**
  * Internal dependencies

@@ -3,11 +3,11 @@
 /**
  * Blockera dependencies
  */
+import { isValid } from '@blockera/controls';
 import { isEmpty, isUndefined } from '@blockera/utils';
-import { isValid } from '@blockera/value-addons';
 import { getColorVAFromIdString } from '@blockera/data';
-import type { ValueAddon } from '@blockera/value-addons/js/types';
 // import { getColor, generateVariableString } from '@blockera/data';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 export function normalIconBackgroundColorFromWPCompatibility({
 	attributes,

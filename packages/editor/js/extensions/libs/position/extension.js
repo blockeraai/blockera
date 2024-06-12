@@ -17,13 +17,13 @@ import {
 	InputControl,
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
-import { EditorFeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { PositionExtensionIcon } from './index';
+import { EditorFeatureWrapper } from '../../../';
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import type { TPositionExtensionProps } from './types/position-extension-props';
