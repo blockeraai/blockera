@@ -88,15 +88,15 @@ class AssetsLoader {
 		$this->dequeue_stack  = $args['dequeue-stack'] ?? [];
 
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueDynamicStyles' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'registerAssets' ], 10 );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
-
+//			add_action( 'enqueue_block_assets', [ $this, 'registerAssets' ], 10 );
 			add_action( 'enqueue_block_assets', [ $this, 'enqueue' ] );
 		}
 
 		if ( ! empty( $args['enqueue-admin-assets'] ) ) {
 
+//			add_action( 'admin_enqueue_scripts', [ $this, 'registerAssets' ], 10 );
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		}
 	}
@@ -151,6 +151,8 @@ class AssetsLoader {
 					[],
 					$asset['version']
 				);
+
+				continue;
 			}
 
 			if ( ! $asset['script'] ) {
@@ -159,6 +161,11 @@ class AssetsLoader {
 			}
 
 			$deps = $this->excludeDependencies( $asset['deps'] );
+
+			foreach ($this->packages_deps[ $asset['name'] ] ?? [] as $dependency){
+
+				wp_enqueue_script($dependency);
+			}
 
 			wp_enqueue_script(
 				$asset['name'],
@@ -249,9 +256,11 @@ class AssetsLoader {
 	/**
 	 * Preparing current assets with info!
 	 *
+	 * @param bool $isRegistering the registering flag.
+	 *
 	 * @return array
 	 */
-	protected function prepareAssets(): array {
+	protected function prepareAssets( bool $isRegistering = false ): array {
 
 		$provider = $this;
 
@@ -269,7 +278,7 @@ class AssetsLoader {
 					return $assetInfo;
 
 				},
-				$this->assets
+				$isRegistering ? blockera_get_dist_assets() : $this->assets
 			)
 		);
 	}
@@ -282,16 +291,18 @@ class AssetsLoader {
 	public function registerAssets(): void {
 
 		// Registering assets ...
-		foreach ( $this->prepareAssets() as $asset ) {
+		foreach ( $this->prepareAssets( true ) as $asset ) {
 
 			if ( $asset['style'] ) {
 
 				wp_register_style(
-					'@blockera/' . $asset['name'],
+					$asset['name'],
 					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
 					$this->packages_deps[ $asset['name'] ] ?? [],
 					$asset['version']
 				);
+
+				continue;
 			}
 
 			if ( ! $asset['script'] ) {
@@ -302,7 +313,7 @@ class AssetsLoader {
 			$deps = $this->excludeDependencies( $asset['deps'] );
 
 			wp_register_script(
-				'@blockera/' . $asset['name'],
+				$asset['name'],
 				str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
 				$deps,
 				$asset['version'],
@@ -310,11 +321,6 @@ class AssetsLoader {
 					'in_footer' => true,
 				]
 			);
-		}
-
-		if ( ! is_admin() ) {
-
-			return;
 		}
 	}
 
@@ -383,12 +389,10 @@ class AssetsLoader {
 			$script = '';
 		}
 
-		$_name = str_contains( $name, '-styles' ) ? $name : "{$name}-styles";
-
 		$css_file = sprintf(
 			'%sdist/%s/style%s.css',
 			$this->root_info['path'],
-			$_name,
+			$name,
 			$this->is_development ? '' : '.min'
 		);
 
@@ -397,7 +401,7 @@ class AssetsLoader {
 			$style = sprintf(
 				'%sdist/%s/style%s.css',
 				$this->root_info['url'],
-				$_name,
+				$name,
 				$this->is_development ? '' : '.min'
 			);
 		} else {
