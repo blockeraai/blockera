@@ -5,13 +5,12 @@
 import { memo } from '@wordpress/element';
 import type { ComponentType, MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Blockera dependencies
  */
 import { extensionClassNames } from '@blockera/classnames';
-import { EditorFeatureWrapper } from '@blockera/editor';
-import { useSelect } from '@wordpress/data';
 import { PanelBodyControl } from '@blockera/controls';
 
 /**
@@ -19,6 +18,7 @@ import { PanelBodyControl } from '@blockera/controls';
  */
 import { isActiveField } from '../../api/utils';
 import { hasSameProps } from '@blockera/utils';
+import { EditorFeatureWrapper } from '../../../';
 import type { StyleVariationsExtensionProps } from './types';
 import BlockStyles from './components/block-styles';
 import { useStylesForBlocks } from './utils';

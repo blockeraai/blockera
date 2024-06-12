@@ -14,12 +14,18 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { hasSameProps } from '@blockera/utils';
-import { Button, Flex, Grid } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
-import { LabelControl, NoticeControl, SelectControl } from '../index';
+import {
+	Flex,
+	Grid,
+	Button,
+	LabelControl,
+	NoticeControl,
+	SelectControl,
+} from '../index';
 import { useControlContext } from '../../context';
 import type { BoxPositionControlProps } from './types';
 import { LabelControlContainer } from '../label-control';

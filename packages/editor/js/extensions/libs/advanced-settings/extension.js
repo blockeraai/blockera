@@ -16,7 +16,7 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
-import { EditorFeatureWrapper } from '@blockera/editor';
+import { EditorFeatureWrapper } from '../../../';
 import { hasSameProps } from '@blockera/utils';
 
 /**

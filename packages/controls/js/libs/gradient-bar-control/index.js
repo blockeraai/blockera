@@ -10,13 +10,13 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
-import { setValueAddon, useValueAddon } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
+import { setValueAddon, useValueAddon } from '../../';
 import type { GradientBarControlProps } from './types';
 
 export default function GradientBarControl({

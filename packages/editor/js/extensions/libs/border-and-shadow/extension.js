@@ -18,12 +18,12 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
+import { EditorFeatureWrapper } from '../../../';
 import { Border, BorderRadius } from './components';
 import { BorderAndShadowExtensionIcon } from './index';
 import { generateExtensionId } from '../utils';

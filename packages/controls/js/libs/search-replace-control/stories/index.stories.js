@@ -6,17 +6,16 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { SearchReplaceControl } from '../../index';
+import { Flex, SearchReplaceControl } from '../../index';
 import { STORE_NAME } from '../../repeater-control/store';
+import { ControlContextProvider } from '../../../context';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
-import { ControlContextProvider } from '../../../context';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 SharedDecorators.push(WithPlaygroundStyles);

@@ -9,13 +9,13 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import {
+	PromotionPopover,
 	BaseControl,
 	FilterControl,
 	ControlContextProvider,
 	FilterLabelDescription,
+	getRepeaterActiveItemsCount,
 } from '@blockera/controls';
-import { PromotionPopover } from '@blockera/components';
-import { getRepeaterActiveItemsCount } from '@blockera/controls/js/libs/repeater-control/utils';
 
 /**
  * Internal dependencies

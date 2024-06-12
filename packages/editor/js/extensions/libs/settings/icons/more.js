@@ -8,7 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Button } from '@blockera/components';
+import { Button } from '@blockera/controls';
 
 export const More = ({
 	label,

@@ -12,12 +12,16 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import {
-	controlInnerClassNames,
 	extensionClassNames,
+	controlInnerClassNames,
 } from '@blockera/classnames';
 import { hasSameProps } from '@blockera/utils';
-import { Button, MoreFeatures } from '@blockera/components';
-import { BaseControl, PanelBodyControl } from '@blockera/controls';
+import {
+	Button,
+	BaseControl,
+	MoreFeatures,
+	PanelBodyControl,
+} from '@blockera/controls';
 
 /**
  * Internal dependencies

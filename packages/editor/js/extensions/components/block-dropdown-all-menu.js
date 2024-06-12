@@ -13,7 +13,7 @@ import classNames from 'classnames';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
+import { Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies

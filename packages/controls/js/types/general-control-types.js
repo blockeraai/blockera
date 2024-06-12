@@ -8,7 +8,11 @@ import type { MixedElement } from 'react';
  * Blockera Dependencies
  */
 import type { VariableCategory } from '@blockera/data';
-import { type AddonTypes } from '@blockera/value-addons/js/types';
+
+/**
+ * Internal dependencies
+ */
+import { type AddonTypes } from '../value-addons/types';
 
 export type ControlSize = 'normal' | 'input' | 'small' | 'extra-small';
 

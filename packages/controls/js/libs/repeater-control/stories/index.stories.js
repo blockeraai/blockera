@@ -9,19 +9,19 @@ import { nanoid } from 'nanoid';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
+import { Flex } from '../../';
+import { STORE_NAME } from '../store';
+import CloneIcon from '../icons/clone';
+import { RepeaterContext } from '../context';
+import { default as InheritIcon } from './icons/inherit';
+import { InputControl, RepeaterControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { ControlContextProvider, useControlContext } from '../../../context';
-import { InputControl, RepeaterControl } from '../../index';
-import { RepeaterContext } from '../context';
-import { STORE_NAME } from '../store';
-import { default as InheritIcon } from './icons/inherit';
-import CloneIcon from '../icons/clone';
 
 const { WithInspectorStyles, WithPopoverDataProvider, SharedDecorators } =
 	Decorators;

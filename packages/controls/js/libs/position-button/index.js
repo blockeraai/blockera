@@ -10,16 +10,17 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { AlignmentMatrixControl, BaseControl } from '@blockera/controls';
-import { Popover, Button } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { Popover, Button } from '../';
+import BaseControl from '../base-control';
 import { renderPositionIcon } from './utils';
 import { useControlContext } from '../../context';
 import type { TPositionButtonProps } from './types';
+import AlignmentMatrixControl from '../alignment-matrix-control';
 
 export default function PositionButtonControl({
 	label,

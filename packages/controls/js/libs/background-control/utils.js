@@ -1,15 +1,9 @@
 // @flow
-/**
- * Blockera dependencies
- */
-import {
-	getValueAddonRealValue,
-	isValid as isValidVariable,
-} from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
+import { getValueAddonRealValue, isValid as isValidVariable } from '../../';
 import type { TDefaultRepeaterItemValue } from './types';
 
 export function getBackgroundItemBGProperty(

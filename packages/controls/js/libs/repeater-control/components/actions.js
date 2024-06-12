@@ -9,12 +9,12 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Button } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { Button } from '../../';
 import { RepeaterContext } from '../context';
 import DeleteIcon from '../icons/delete';
 import EnableIcon from '../icons/enable';

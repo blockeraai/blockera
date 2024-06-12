@@ -12,9 +12,9 @@ import { useContext } from '@wordpress/element';
 import {
 	InputControl,
 	SelectControl,
+	RepeaterContext,
 	useControlContext,
 } from '@blockera/controls';
-import { RepeaterContext } from '@blockera/controls/js/libs/repeater-control/context';
 
 /**
  * Internal dependencies

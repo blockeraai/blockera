@@ -11,7 +11,6 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import Button from '@blockera/components/js/button/button';
 import {
 	Tabs,
 	Header,
@@ -19,6 +18,7 @@ import {
 	SettingsContext,
 	handleCurrentActiveMenuPage,
 } from '@blockera/wordpress';
+import Button from '@blockera/controls/js/libs/button/button';
 
 /**
  * Internal dependencies

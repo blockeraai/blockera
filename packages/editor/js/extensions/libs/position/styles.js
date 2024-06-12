@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import { getValueAddonRealValue } from '@blockera/value-addons';
+import { getValueAddonRealValue } from '@blockera/controls';
 
 /**
  * Internal dependencies

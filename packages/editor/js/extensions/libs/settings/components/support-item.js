@@ -9,7 +9,7 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Icon, Button } from '@blockera/components';
+import { Icon, Button } from '@blockera/controls';
 import { componentClassNames } from '@blockera/classnames';
 
 export const SupportItem = ({

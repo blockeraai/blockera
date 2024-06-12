@@ -8,8 +8,8 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import type { ControlContextRef } from '@blockera/controls/js/context/types';
 import { mergeObject } from '@blockera/utils';
+import type { ControlContextRef } from '@blockera/controls';
 
 /**
  * Internal dependencies

@@ -11,10 +11,14 @@ import { useEffect, useState, createPortal } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex, Popover } from '@blockera/components';
 import { getIframeTag, isEquals } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { ControlContextProvider, InputControl } from '@blockera/controls';
+import {
+	Flex,
+	Popover,
+	ControlContextProvider,
+	InputControl,
+} from '@blockera/controls';
 
 /**
  * Internal dependencies

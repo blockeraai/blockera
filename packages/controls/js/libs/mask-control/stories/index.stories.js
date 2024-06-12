@@ -7,16 +7,16 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
+import { Flex } from '../../';
 import MaskControl from '../index';
-import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { ControlContextProvider } from '../../../context';
 import { STORE_NAME } from '../../repeater-control/store';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 const {
 	WithInspectorStyles,

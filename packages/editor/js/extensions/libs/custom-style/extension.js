@@ -16,13 +16,13 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
+import { EditorFeatureWrapper } from '../../../';
 import type { CustomStyleExtensionProps } from './types/props';
 import { CustomStyleExtensionIcon } from './index';
 import { useBlockContext } from '../../hooks';
@@ -37,7 +37,10 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 			attributes,
 			handleOnChangeAttributes,
 		}: CustomStyleExtensionProps): MixedElement => {
-			const { getCurrentState, getBreakpoint } = useBlockContext();
+			const {
+				getCurrentState = () => 'normal',
+				getBreakpoint = () => 'laptop',
+			} = useBlockContext();
 
 			const isShowCustomCSS = isShowField(
 				extensionConfig.blockeraCustomCSS,

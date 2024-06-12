@@ -14,15 +14,15 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { isEquals } from '@blockera/utils';
-import { Button } from '@blockera/components';
-import { isValid } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
+import { isValid } from '../../';
 import { useControlContext } from '../../context';
 import { default as CustomIcon } from './icons/custom';
 import {
+	Button,
 	BaseControl,
 	BorderControl,
 	LabelControl,

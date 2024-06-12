@@ -9,16 +9,16 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
-import { PromotionPopover } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
-import RepeaterItemHeader from './components/header';
+import { PromotionPopover } from '../';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import type { BoxShadowControlProps } from './types';
-import { getRepeaterActiveItemsCount } from '../repeater-control/utils';
+import RepeaterItemHeader from './components/header';
+import { getRepeaterActiveItemsCount } from '../repeater-control/helpers';
 
 export default function BoxShadowControl({
 	id = 'box-shadow',

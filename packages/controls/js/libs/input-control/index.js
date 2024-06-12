@@ -12,11 +12,11 @@ import { useState, useEffect } from '@wordpress/element';
  */
 import { isEmpty, isUndefined } from '@blockera/utils';
 import { controlClassNames } from '@blockera/classnames';
-import { setValueAddon, useValueAddon } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
+import { setValueAddon, useValueAddon } from '../../';
 import type { InputControlProps } from './types';
 import { UnitInput } from './components/unit-input';
 import { OtherInput } from './components/other-input';
@@ -192,7 +192,9 @@ export default function InputControl({
 				<ControlContextProvider
 					value={{
 						value: contextValue,
-						name: controlId + '-unit-input',
+						name: `${controlId}-${id || ''}-${
+							singularId || ''
+						}-unit-input`,
 					}}
 				>
 					<UnitInput

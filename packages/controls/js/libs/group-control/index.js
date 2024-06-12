@@ -15,12 +15,12 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button, Popover } from '@blockera/components';
 import { useOutsideClick, isFunction } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
+import { Button, Popover } from '../';
 import type { GroupControlProps } from './types';
 import { default as PopoverOpenIcon } from './icons/popover-open';
 import { default as AccordionOpenIcon } from './icons/accordion-open';

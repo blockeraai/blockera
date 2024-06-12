@@ -9,7 +9,7 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import { isBlockTheme, isString, isUndefined } from '@blockera/utils';
-import type { ValueAddon } from '@blockera/editor/js/use-value-addon/types';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 /**
  * Internal dependencies

@@ -10,6 +10,8 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import {
+	Flex,
+	Button,
 	BaseControl,
 	PanelBodyControl,
 	ControlContextProvider,
@@ -18,8 +20,6 @@ import {
 	LayoutMatrixControl,
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
-import { Flex, Button } from '@blockera/components';
-import { EditorFeatureWrapper } from '@blockera/editor';
 import { extensionClassNames } from '@blockera/classnames';
 
 /**
@@ -27,6 +27,7 @@ import { extensionClassNames } from '@blockera/classnames';
  */
 import { Gap } from './components';
 import { isShowField } from '../../api/utils';
+import { EditorFeatureWrapper } from '../../../';
 import DisplayGridIcon from './icons/display-grid';
 import { default as ReverseIcon } from './icons/reverse';
 import type { TLayoutProps } from './types/layout-props';

@@ -16,12 +16,19 @@ import { registerCoreBlocks } from '@wordpress/block-library';
  */
 import { noop } from '@blockera/utils';
 import { initializer } from '@blockera/bootstrap';
+import { LoadingComponent } from '@blockera/controls';
 import { unstableBootstrapServerSideEntities } from '@blockera/data';
 
 /**
  * Internal dependencies
  */
 import { Dashboard } from './dashboard';
+
+const root = createRoot(
+	document.getElementById('blockera-admin-settings-container')
+);
+
+root.render(<LoadingComponent />);
 
 const initializeBlockeraAdmin = (): void => {
 	domReady(() => {
@@ -44,10 +51,6 @@ const initializeBlockeraAdmin = (): void => {
 				baseURL: '/blockera/v1/settings',
 			},
 		]);
-
-		const root = createRoot(
-			document.getElementById('blockera-admin-settings-container')
-		);
 
 		root.render(<Dashboard />);
 	});

@@ -16,13 +16,13 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
+import { EditorFeatureWrapper } from '../../../';
 import {
 	cursorFieldOptions,
 	userSelectOptions,

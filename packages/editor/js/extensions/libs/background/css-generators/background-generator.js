@@ -1,8 +1,10 @@
 /**
  * Blockera dependencies
  */
-import { getValueAddonRealValue } from '@blockera/value-addons';
-import { getBackgroundItemBGProperty } from '@blockera/controls';
+import {
+	getValueAddonRealValue,
+	getBackgroundItemBGProperty,
+} from '@blockera/controls';
 
 /**
  * Internal dependencies

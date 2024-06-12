@@ -10,14 +10,20 @@ import { useState, useEffect } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Button, Flex, Grid, Popover } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
-import { useControlContext } from '../../../context';
-import { BaseControl, InputControl } from '../../index';
 import type { SidePopoverProps } from '../types';
+import { useControlContext } from '../../../context';
+import {
+	Flex,
+	Grid,
+	Button,
+	Popover,
+	BaseControl,
+	InputControl,
+} from '../../index';
 import ShortcutIcon from '../../box-position-control/icons/shortcut';
 
 export function SidePopover({

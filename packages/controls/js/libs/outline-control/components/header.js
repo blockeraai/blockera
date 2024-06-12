@@ -9,15 +9,15 @@ import type { Element } from 'react';
 /**
  * Blockera dependencies
  */
-import { ColorIndicator } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { ColorIndicator } from '../../';
+import CloneIcon from './../icons/outline';
 import type { THeaderItem } from '../types';
 import { prepValueForHeader } from '../../repeater-control/utils';
-import CloneIcon from './../icons/outline';
 import BorderStyleHSolidIcon from '../../border-control/icons/style-h-solid';
 import BorderStyleHDashedIcon from '../../border-control/icons/style-h-dashed';
 import BorderStyleHDottedIcon from '../../border-control/icons/style-h-dotted';

@@ -16,11 +16,11 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { isFunction } from '@blockera/utils';
-import { Button, Grid } from '@blockera/components';
 
 /**
  * Internal dependencies.
  */
+import { Button, Grid } from '../';
 import PlusIcon from './icons/plus';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
@@ -32,19 +32,9 @@ import { cleanupRepeater, isEnabledPromote } from './utils';
 /**
  * Types
  */
-import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
+import { defaultItemValue } from './default-item-value';
 import LabelControlContainer from '../label-control/label-control-container';
-
-export const defaultItemValue = {
-	isOpen: true,
-	display: true,
-	cloneable: true,
-	isVisible: true,
-	deletable: true,
-	isSelected: false,
-	selectable: false,
-	visibilitySupport: true,
-};
+import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
 
 export default function RepeaterControl(
 	props: RepeaterControlProps

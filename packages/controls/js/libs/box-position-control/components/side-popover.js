@@ -7,13 +7,19 @@ import { useState, useEffect } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Button, Flex, Grid, Popover } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { BaseControl, InputControl } from '../../index';
+import {
+	Flex,
+	Grid,
+	Button,
+	Popover,
+	BaseControl,
+	InputControl,
+} from '../../index';
 import { useControlContext } from '../../../context';
 import ShortcutIcon from '../icons/shortcut';
 

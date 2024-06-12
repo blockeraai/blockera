@@ -9,27 +9,31 @@ import type { MixedElement } from 'react';
 import { useState, useContext } from '@wordpress/element';
 
 /**
- *  Dependencies
+ * Blockera Dependencies
  */
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { SimpleLabelControl } from '@blockera/controls';
-import { useAdvancedLabelProps } from '@blockera/editor';
-import { Button, Flex, Popover } from '@blockera/components';
-import { useBlockContext } from '@blockera/editor/js/extensions/hooks/context';
 import { isEmpty, isFunction, isNull, isUndefined } from '@blockera/utils';
+import {
+	Button,
+	Flex,
+	Popover,
+	RepeaterContext,
+	SimpleLabelControl,
+} from '@blockera/controls';
 
 /**
  * Internal Dependencies
  */
+import { useBlockContext } from '../../extensions';
+import { useAdvancedLabelProps } from '../../hooks';
 import type { AdvancedLabelControlProps } from './types';
 import { StatesGraph } from './states-graph';
 import HelpIcon from './icons/help';
 import EditsIcon from './icons/edits';
 import RevertIcon from './icons/revert';
-import { RepeaterContext } from '@blockera/controls/js/libs/repeater-control/context';
 
 export const EditorAdvancedLabelControl = ({
 	path = null,

@@ -9,13 +9,45 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
  * WordPress dependencies
  */
 const postcssPlugins = require('@wordpress/postcss-plugins-preset');
+const {
+	camelCaseDash,
+} = require('@wordpress/dependency-extraction-webpack-plugin/lib/util');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 
 /**
  * Internal dependencies
  */
+const { dependencies } = require('../../../../package');
 const styleDependencies = require('./packages-styles');
+
+const exportDefaultPackages = [];
+const BLOCKERA_NAMESPACE = '@blockera/';
+const blockeraPackages = Object.keys(dependencies)
+	.filter((packageName) => packageName.startsWith(BLOCKERA_NAMESPACE))
+	.map((packageName) => packageName.replace(BLOCKERA_NAMESPACE, ''));
+const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
+	// Exclude dev packages.
+	if (-1 !== packageName.indexOf('dev-')) {
+		return memo;
+	}
+
+	return {
+		...memo,
+		[packageName]: {
+			import: `./packages/${packageName}`,
+			library: {
+				name: packageName.startsWith('blockera')
+					? camelCaseDash(packageName)
+					: camelCaseDash('blockera-' + packageName), //['blockera', camelCaseDash(packageName)],
+				type: 'var',
+				export: exportDefaultPackages.includes(packageName)
+					? 'default'
+					: undefined,
+			},
+		},
+	};
+}, {});
 const scssLoaders = ({ isLazy }) => [
 	{
 		loader: 'style-loader',
@@ -41,30 +73,7 @@ module.exports = (env, argv) => {
 		mode: argv.mode,
 		name: 'packages',
 		entry: {
-			blockera: {
-				import: './packages/blockera',
-				library: {
-					name: 'blockera',
-					type: 'var',
-					export: undefined,
-				},
-			},
-			wordpress: {
-				import: './packages/wordpress',
-				library: {
-					name: 'blockeraWP',
-					type: 'var',
-					export: undefined,
-				},
-			},
-			'blockera-admin': {
-				import: './packages/blockera-admin',
-				library: {
-					name: 'blockeraAdmin',
-					type: 'var',
-					export: undefined,
-				},
-			},
+			...blockeraEntries,
 			...styleDependencies.entry,
 		},
 		output: {
@@ -105,5 +114,18 @@ module.exports = (env, argv) => {
 			: {
 					devtool: 'source-map',
 			  }),
+		externals: {
+			// Externalize the local packages.
+			'@blockera/data': 'blockeraData',
+			'@blockera/icons': 'blockeraIcons',
+			'@blockera/utils': 'blockeraUtils',
+			'@blockera/editor': 'blockeraEditor',
+			'@blockera/blocks': 'blockeraBlocks',
+			'@blockera/controls': 'blockeraControls',
+			'@blockera/bootstrap': 'blockeraBootstrap',
+			'@blockera/wordpress': 'blockeraWordpress',
+			'@blockera/classnames': 'blockeraClassnames',
+			'@blockera/data-editor': 'blockeraDataEditor',
+		},
 	};
 };

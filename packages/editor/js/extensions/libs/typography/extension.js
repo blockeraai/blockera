@@ -10,6 +10,9 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import {
+	Flex,
+	Grid,
+	MoreFeatures,
 	BaseControl,
 	ColorControl,
 	InputControl,
@@ -20,8 +23,6 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 } from '@blockera/controls';
-import { Flex, Grid, MoreFeatures } from '@blockera/components';
-import { EditorFeatureWrapper } from '@blockera/editor';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 
@@ -30,6 +31,7 @@ import { extensionClassNames } from '@blockera/classnames';
  */
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
+import { EditorFeatureWrapper } from '../../../';
 import type { TTypographyProps } from './type/typography-props';
 import {
 	FontSize,

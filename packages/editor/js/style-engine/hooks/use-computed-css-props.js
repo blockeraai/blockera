@@ -1,7 +1,7 @@
 // @flow
 
 /**
- * Blockera dependencies
+ * Internal dependencies
  */
 import {
 	SizeStyles,
@@ -14,20 +14,16 @@ import {
 	useBlockContext,
 	BackgroundStyles,
 	TypographyStyles,
-	useStoreSelectors,
 	BorderAndShadowStyles,
-} from '@blockera/editor';
+} from '../../extensions';
+import { useStoreSelectors } from '../../hooks';
 import {
 	isNormalState,
 	prepareAttributesDefaultValues,
-} from '@blockera/editor/js/extensions/components';
-
-/**
- * Internal dependencies
- */
+} from '../../extensions/components';
 import type { CssRule } from '../types';
-import type { TBreakpoint } from '@blockera/editor/js/extensions/libs/block-states/types';
-import type { InnerBlockType } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
+import type { TBreakpoint } from '../../extensions/libs/block-states/types';
+import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
 
 export const useComputedCssProps = ({
 	state,

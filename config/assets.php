@@ -1,11 +1,27 @@
 <?php
 
-// direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) exit;
+/**
+ * Direct access is not allowed.
+ *
+ * @package config/assets.php
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 return [
 	'editor' => [
 		'list'      => [
+			'utils',
+			'classnames',
+			'data-editor',
+			'icons',
+			'data',
+			'controls',
+			'editor',
+			'blocks',
+			'bootstrap',
 			'blockera',
 			'editor-styles',
 			'controls-styles',
@@ -16,18 +32,20 @@ return [
 	],
 	'admin'  => [
 		'list'      => [
+			'utils',
+			'classnames',
+			'data-editor',
+			'data',
+			'icons',
+			'controls',
+			'bootstrap',
+			'wordpress',
 			'blockera-admin',
 			'controls-styles',
 			'wordpress-styles',
 			'components-styles',
 			'blockera-admin-styles',
 		],
-		'with-deps' => [
-			'@blockera/blockera-admin' => [
-				'wp-api',
-				'wp-blocks',
-				'wp-core-data',
-			],
-		],
+		'with-deps' => [],
 	],
 ];

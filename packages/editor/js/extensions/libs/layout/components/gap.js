@@ -8,8 +8,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Button, Grid } from '@blockera/components';
 import {
+	Grid,
+	Button,
 	BaseControl,
 	InputControl,
 	useControlContext,

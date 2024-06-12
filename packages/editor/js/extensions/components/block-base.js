@@ -27,7 +27,6 @@ import {
 	// prependPortal,
 	omitWithPattern,
 } from '@blockera/utils';
-import { isLaptopBreakpoint } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -42,6 +41,7 @@ import {
 } from '../../hooks';
 import { SideEffect } from '../libs/base';
 import { BlockPartials } from './block-partials';
+import { isLaptopBreakpoint } from '../../canvas-editor';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import {
@@ -50,10 +50,8 @@ import {
 	prepareAttributesDefaultValues,
 	propsAreEqual,
 } from './utils';
-import {
-	sharedBlockExtensionAttributes,
-	ignoreDefaultBlockAttributeKeysRegExp,
-} from '../libs';
+import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
+import { attributes as sharedBlockExtensionAttributes } from '../libs/shared/attributes';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -130,11 +128,18 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		});
 
 		const masterIsNormalState = (): boolean => {
-			const masterActiveBreakpoint =
-				Object.keys(attributes.blockeraBlockStates.normal.breakpoints)
-					.length > 1
-					? getDeviceType()
-					: 'laptop';
+			const normalBreakpoints = Object.keys(
+				attributes.blockeraBlockStates.normal.breakpoints
+			);
+			const states = Object.keys(attributes.blockeraBlockStates);
+			let masterActiveBreakpoint = 'laptop';
+
+			if (
+				(1 === states.length && 1 === normalBreakpoints.length) ||
+				1 < normalBreakpoints.length
+			) {
+				masterActiveBreakpoint = getDeviceType();
+			}
 
 			return (
 				'normal' === currentState &&

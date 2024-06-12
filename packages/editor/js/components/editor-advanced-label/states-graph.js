@@ -9,8 +9,6 @@ import type { MixedElement } from 'react';
  */
 import { isEmpty } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import type { TStates } from '@blockera/editor/js/extensions/libs/block-states/types';
-import { BreakpointIcon } from '@blockera/editor/js/extensions/libs/block-states/helpers';
 
 /**
  * Internal Dependencies
@@ -18,6 +16,8 @@ import { BreakpointIcon } from '@blockera/editor/js/extensions/libs/block-states
 import EditedItem from './edited-item';
 import type { LabelStates } from './types';
 import { getStatesGraph } from './helpers';
+import type { TStates } from '../../extensions/libs/block-states/types';
+import { BreakpointIcon } from '../../extensions/libs/block-states/helpers';
 
 export const StatesGraph = ({
 	onClick,

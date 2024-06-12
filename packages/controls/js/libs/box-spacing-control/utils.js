@@ -3,11 +3,11 @@
 /**
  * Blockera Dependencies
  */
-import { isValid } from '@blockera/value-addons';
 
 /**
  * Internal Dependencies
  */
+import { isValid } from '../../';
 import { extractNumberAndUnit } from '../input-control/utils';
 
 export function fixLabelText(value: Object | string): any {

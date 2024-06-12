@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import type { TTabProps } from '@blockera/components/js/tabs/types';
+import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 
 export type TabsProps = {
 	...TTabProps,

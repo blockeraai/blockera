@@ -11,21 +11,26 @@ import type { MixedElement } from 'react';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { isValid, setValueAddon, useValueAddon } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
  */
-import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { Side, SideProps, SideReturn } from '../types';
-import { SidePopover } from './side-popover';
-import { fixLabelText } from '../../box-spacing-control/utils';
+import {
+	isValid,
+	LabelControl,
+	setValueAddon,
+	useValueAddon,
+	extractNumberAndUnit,
+} from '../../../index';
+import { SideShape } from './side-shape';
 import SideTopIcon from '../icons/side-top';
-import SideBottomIcon from '../icons/side-bottom';
+import { SidePopover } from './side-popover';
 import SideLeftIcon from '../icons/side-left';
 import SideRightIcon from '../icons/side-right';
-import { SideShape } from './side-shape';
-import type { ValueAddon } from '@blockera/value-addons/js/types';
+import SideBottomIcon from '../icons/side-bottom';
+import type { ValueAddon } from '../../../value-addons';
+import type { Side, SideProps, SideReturn } from '../types';
+import { fixLabelText } from '../../box-spacing-control/utils';
 
 export function SideItem({
 	side,
@@ -47,7 +52,7 @@ export function SideItem({
 }: SideProps): SideReturn {
 	const sideId: Side = side;
 
-	function onDragSetValue(property: string, newValue: ValueAddon | string) {
+	function onDragSetValue(property: string, newValue: ValueAddon | any) {
 		if (isValid(newValue)) {
 			setValue({
 				...value,
@@ -64,7 +69,7 @@ export function SideItem({
 					[property]: '',
 				},
 			});
-		} else if ('string' === typeof newValue) {
+		} else if ('object' !== typeof newValue) {
 			const extracted = extractNumberAndUnit(value.position[property]);
 
 			if (

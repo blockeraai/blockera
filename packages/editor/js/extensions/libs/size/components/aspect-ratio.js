@@ -9,12 +9,12 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import {
+	Flex,
 	BaseControl,
 	InputControl,
 	SelectControl,
 	useControlContext,
 } from '@blockera/controls';
-import { Flex } from '@blockera/components';
 
 /**
  * Internal dependencies

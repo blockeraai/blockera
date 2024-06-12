@@ -260,3 +260,20 @@ if ( ! function_exists( 'blockera_get_array_deep_merge' ) ) {
 		return $merged;
 	}
 }
+
+if ( ! function_exists( 'blockera_get_dist_assets' ) ) {
+
+	/**
+	 * Get dist directory assets array.
+	 *
+	 * @return array the dist directory assets list.
+	 */
+	function blockera_get_dist_assets(): array {
+
+		return array_map( function ( string $asset_dir ): string {
+
+			return basename( $asset_dir );
+
+		}, glob( blockera_core_config( 'app.dist_path' ) . '*' ) );
+	}
+}

@@ -84,5 +84,6 @@ export const ControlContextProvider = ({
 	);
 };
 
+export * from './types';
 export { BaseControlContext } from './base-control-context';
 export { useControlContext, useControlEffect } from './hooks';

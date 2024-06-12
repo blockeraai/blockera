@@ -2,7 +2,7 @@
 /**
  * Blockera dependencies
  */
-import type { FeatureConfig } from '@blockera/editor/js/extensions/libs/base';
+import type { FeatureConfig } from '../../../extensions/libs/base';
 
 export type EditorFeatureWrapperProps = {
 	/**

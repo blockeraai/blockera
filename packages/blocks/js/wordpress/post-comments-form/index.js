@@ -24,7 +24,7 @@ import {
 	InnerBlockHeading4Icon,
 	InnerBlockHeading5Icon,
 	InnerBlockHeading6Icon,
-} from '@blockera/editor/js/extensions/libs';
+} from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 /**

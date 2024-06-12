@@ -2,16 +2,19 @@
  * Blockera dependencies
  */
 import { nanoid } from 'nanoid';
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { ControlContextProvider, GradientBarControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import {
+	Flex,
+	ControlContextProvider,
+	GradientBarControl,
+} from '../../../index';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 

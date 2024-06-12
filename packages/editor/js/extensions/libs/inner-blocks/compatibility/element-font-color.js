@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import { isValid } from '@blockera/value-addons';
+import { isValid } from '@blockera/controls';
 import { isEmpty, isUndefined } from '@blockera/utils';
 import { getColorVAFromVarString } from '@blockera/data';
 

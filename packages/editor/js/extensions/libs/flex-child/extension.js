@@ -17,12 +17,12 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
+import { EditorFeatureWrapper } from '../../../';
 import { default as GearIcon } from './icons/gear';
 import { default as SizingNotIcon } from './icons/sizing-not';
 import { generateExtensionId } from '../utils';

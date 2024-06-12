@@ -9,12 +9,12 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Button } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { Button } from '../../';
 import type { TShapeProps } from '../types';
 
 export const Shape = ({

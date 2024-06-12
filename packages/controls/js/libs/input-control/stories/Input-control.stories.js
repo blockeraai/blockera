@@ -7,17 +7,16 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { ControlContextProvider, InputControl } from '../../../index';
-import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
-import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 import { fireEvent, waitFor, within } from '@storybook/testing-library';
+import { Flex, ControlContextProvider, InputControl } from '../../../index';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
 	Decorators;

@@ -20,7 +20,6 @@ import {
 } from '@blockera/controls';
 import { checkVisibleItemLength, hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { EditorFeatureWrapper } from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -30,6 +29,7 @@ import ClipNoneIcon from './icons/clip-none';
 import InheritIcon from '../../icons/inherit';
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
+import { EditorFeatureWrapper } from '../../../';
 import ClipPaddingIcon from './icons/clip-padding';
 import ClipContentIcon from './icons/clip-content';
 import type { TBackgroundProps } from './types/background-props';

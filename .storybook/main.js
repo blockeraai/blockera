@@ -6,7 +6,6 @@ export default {
 	stories: [
 		'../packages/editor/js/**/stories/*.stories.@(js|jsx|ts|tsx)',
 		'../packages/controls/js/**/stories/*.stories.@(js|jsx|ts|tsx)',
-		'../packages/components/js/**/stories/*.stories.@(js|jsx|ts|tsx)',
 	],
 	...defaultConfig,
 };

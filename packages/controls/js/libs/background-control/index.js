@@ -9,12 +9,12 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { isObject } from '@blockera/utils';
-import { PromotionPopover } from '@blockera/components';
 import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { PromotionPopover } from '../';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
@@ -22,11 +22,9 @@ import type {
 	TBackgroundControlProps,
 	TDefaultRepeaterItemValue,
 } from './types';
-import {
-	cleanupRepeaterItem,
-	getRepeaterActiveItemsCount,
-} from '../repeater-control/utils';
+import { cleanupRepeaterItem } from '../repeater-control/utils';
 import { LabelDescription } from './components/label-description';
+import { getRepeaterActiveItemsCount } from '../repeater-control/helpers';
 import { default as generateMeshGradient } from './components/mesh-gradient/mesh-generator';
 
 /**

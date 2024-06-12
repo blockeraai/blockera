@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import type { TBlockProps } from '@blockera/editor/js/extensions/libs/types';
+import type { TBlockProps } from '../../extensions/libs/types';
 
 /**
  * Internal dependencies

@@ -6,9 +6,10 @@
 import { dispatch, select } from '@wordpress/data';
 
 /**
- * Blockera dependencies
+ * Internal dependencies
  */
-import { isEquals, mergeObject } from '@blockera/utils';
+import { isEquals } from '../array';
+import { mergeObject } from '../object';
 
 export const updateConfig = (key: string, value: Object): void => {
 	const STORE_NAME = 'blockera-core/extensions/config';

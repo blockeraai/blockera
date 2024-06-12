@@ -7,12 +7,12 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { ColorIndicator } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { ColorIndicator } from '../../';
 import { prepValueForHeader } from '../../repeater-control/utils';
 
 const RepeaterItemHeader = ({
