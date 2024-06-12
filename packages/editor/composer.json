@@ -1,0 +1,12 @@
+{
+	"name": "blockera/editor",
+	"description": "Blockera Editor php package to implements WordPress block and site editor functionalities on admin and front-end.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\Editor\\": "php/"
+		},
+		"files": [
+			"php/helpers.php"
+		]
+	}
+}

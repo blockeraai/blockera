@@ -6,7 +6,7 @@ import {
 	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies
@@ -54,4 +54,3 @@ describe('Comments Block → Inner Blocks', () => {
 		);
 	});
 });
-

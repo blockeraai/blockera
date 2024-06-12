@@ -36,8 +36,13 @@ const Fields = ({
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 
-	const { repeaterId, getControlId, defaultRepeaterItemValue } =
-		useContext(RepeaterContext);
+	const {
+		onChange,
+		valueCleanup,
+		repeaterId,
+		getControlId,
+		defaultRepeaterItemValue,
+	} = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
@@ -71,11 +76,14 @@ const Fields = ({
 						icon: <SkewIcon />,
 					},
 				]}
-				onChange={(type) =>
+				onChange={(type, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, type },
 					})
 				}
@@ -106,11 +114,14 @@ const Fields = ({
 						range={true}
 						min={-300}
 						max={300}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'move-x': newValue },
 							})
 						}
@@ -139,11 +150,14 @@ const Fields = ({
 						range={true}
 						min={-300}
 						max={300}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'move-y': newValue },
 							})
 						}
@@ -184,11 +198,14 @@ const Fields = ({
 						range={true}
 						min={-300}
 						max={300}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'move-z': newValue },
 							})
 						}
@@ -225,11 +242,14 @@ const Fields = ({
 						range={true}
 						min={0}
 						max={200}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, scale: newValue },
 							})
 						}
@@ -265,11 +285,14 @@ const Fields = ({
 						range={true}
 						min={-180}
 						max={180}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'rotate-x': newValue },
 							})
 						}
@@ -299,11 +322,14 @@ const Fields = ({
 						range={true}
 						min={-180}
 						max={180}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'rotate-y': newValue },
 							})
 						}
@@ -344,11 +370,14 @@ const Fields = ({
 						range={true}
 						min={-180}
 						max={180}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'rotate-z': newValue },
 							})
 						}
@@ -387,11 +416,14 @@ const Fields = ({
 						range={true}
 						min={-60}
 						max={60}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'skew-x': newValue },
 							})
 						}
@@ -426,11 +458,14 @@ const Fields = ({
 						range={true}
 						min={-60}
 						max={60}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'skew-y': newValue },
 							})
 						}

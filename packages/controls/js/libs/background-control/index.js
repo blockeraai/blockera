@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { isObject } from '@blockera/utils';
-import { Promotion } from '@blockera/components';
+import { PromotionPopover } from '@blockera/components';
 import { controlClassNames } from '@blockera/classnames';
 
 /**
@@ -169,14 +169,16 @@ export default function BackgroundControl({
 				}
 
 				return (
-					<Promotion
-						type={'popup'}
+					<PromotionPopover
+						heading={__('Multiple Backgrounds', 'blockera')}
+						featuresList={[
+							__('Multiple backgrounds', 'blockera'),
+							__('All background types', 'blockera'),
+							__('Advanced mesh gradient', 'blockera'),
+							__('Advanced background settings', 'blockera'),
+						]}
 						isOpen={isOpen}
 						onClose={onClose}
-						buttonText="Shop Now"
-						title="Special Offer!"
-						shopPage={'https://blockeraai.com/shop'}
-						description="Get 50% off on all products. Limited time offer."
 					/>
 				);
 			}}

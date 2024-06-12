@@ -29,8 +29,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId, customProps } =
-			useContext(RepeaterContext);
+		const {
+			repeaterId,
+			getControlId,
+			customProps,
+			onChange,
+			valueCleanup,
+		} = useContext(RepeaterContext);
 
 		const [valueFieldOptions, setValueFieldOptions] = useState(
 			getAttributeFieldValueOptions({
@@ -73,7 +78,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			return true;
 		}
 
-		function handleOnChange(newValue: string) {
+		function handleOnChange(newValue: string, ref?: Object) {
 			// update key
 			if (newValue !== '' && newValue !== 'custom') {
 				changeRepeaterItem({
@@ -86,6 +91,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						key: newValue,
 						value: '', // clear value to prevent issue
 					},
+					ref,
+					onChange,
+					valueCleanup,
 				});
 
 				setCustomMode(false);
@@ -113,6 +121,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						key: '',
 						value: '',
 					},
+					ref,
+					onChange,
+					valueCleanup,
 				});
 			} else if (newValue === 'custom') {
 				setValueFieldOptions([]);
@@ -129,6 +140,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						key: '',
 						value: '',
 					},
+					ref,
+					onChange,
+					valueCleanup,
 				});
 			}
 		}
@@ -202,8 +216,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										repeaterItem={itemId}
 										singularId={'value'}
 										defaultValue=""
-										onChange={(newValue) => {
+										onChange={(newValue, ref) => {
 											changeRepeaterItem({
+												ref,
 												controlId,
 												repeaterId,
 												itemId,
@@ -211,6 +226,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 													...item,
 													value: newValue,
 												},
+												onChange,
+												valueCleanup,
 											});
 										}}
 									/>
@@ -242,8 +259,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 												repeaterItem={itemId}
 												singularId={'value'}
 												defaultValue=""
-												onChange={(newValue) => {
+												onChange={(newValue, ref) => {
 													changeRepeaterItem({
+														ref,
 														controlId,
 														repeaterId,
 														itemId,
@@ -251,6 +269,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 															...item,
 															value: newValue,
 														},
+														onChange,
+														valueCleanup,
 													});
 												}}
 											/>
@@ -283,8 +303,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							repeaterItem={itemId}
 							singularId={'key'}
 							defaultValue=""
-							onChange={(newValue) => {
+							onChange={(newValue, ref) => {
 								changeRepeaterItem({
+									ref,
 									controlId,
 									repeaterId,
 									itemId,
@@ -292,6 +313,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										...item,
 										key: newValue,
 									},
+									onChange,
+									valueCleanup,
 								});
 							}}
 						>
@@ -327,8 +350,9 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							singularId={'value'}
 							type="text"
 							defaultValue=""
-							onChange={(newValue) => {
+							onChange={(newValue, ref) => {
 								changeRepeaterItem({
+									ref,
 									controlId,
 									repeaterId,
 									itemId,
@@ -336,6 +360,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 										...item,
 										value: newValue,
 									},
+									onChange,
+									valueCleanup,
 								});
 							}}
 						>

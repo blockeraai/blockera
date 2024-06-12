@@ -6,7 +6,7 @@ import {
 	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Quote Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -57,4 +57,3 @@ describe('Quote Block → Inner Blocks', () => {
 		);
 	});
 });
-

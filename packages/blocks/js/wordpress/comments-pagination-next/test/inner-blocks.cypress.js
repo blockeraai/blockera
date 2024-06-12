@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies
@@ -36,4 +36,3 @@ describe('Comments Pagination Next Block → Inner Blocks', () => {
 		);
 	});
 });
-

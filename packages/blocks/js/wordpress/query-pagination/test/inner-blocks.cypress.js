@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies
@@ -39,4 +39,3 @@ describe('Query Pagination Block → Inner Blocks', () => {
 		);
 	});
 });
-

@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import { useEffect, useState } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -12,7 +11,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isFunction } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -29,26 +27,9 @@ export function OtherInput({
 	validator,
 	actions,
 	children,
+	isValidValue,
 	...props
 }: InnerInputControlProps): MixedElement {
-	const [isValidValue, setIsValidValue] = useState(true);
-
-	// validator checking
-	useEffect(() => {
-		if (!validator) {
-			return;
-		}
-
-		let isValid = false;
-
-		if (isFunction(validator)) {
-			isValid = validator(value);
-		}
-
-		// Update isValidValue based on the result of validation
-		setIsValidValue(isValid);
-	}, [value]); // eslint-disable-line
-
 	return (
 		<>
 			<input

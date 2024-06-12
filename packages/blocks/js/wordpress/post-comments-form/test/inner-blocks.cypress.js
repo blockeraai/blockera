@@ -6,7 +6,7 @@ import {
 	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 import { testContent } from './test-content';
 
@@ -58,4 +58,3 @@ describe('Post Comments Form Block → Inner Blocks', () => {
 		);
 	});
 });
-

@@ -1,32 +1,33 @@
 <?php
 
+// direct access is not allowed.
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 return [
-	'list'      => [
-		'utils',
-		'hooks',
-		'blocks',
-		'editor',
-		'blockera',
-		'controls',
-		'bootstrap',
-		'core-data',
-		'classnames',
-		'data-editor',
-		'style-engine',
-		'editor-styles',
-		'components-styles',
-		'editor-extensions',
+	'editor' => [
+		'list'      => [
+			'blockera',
+			'editor-styles',
+			'controls-styles',
+			'components-styles',
+			'value-addons-styles',
+		],
+		'with-deps' => [],
 	],
-	'with-deps' => [
-		'blockera'          => [
-			'@blockera/editor-extensions',
+	'admin'  => [
+		'list'      => [
+			'blockera-admin',
+			'controls-styles',
+			'wordpress-styles',
+			'components-styles',
+			'blockera-admin-styles',
 		],
-		'editor-extensions' => [
-			'@blockera/controls',
-			'@blockera/editor',
+		'with-deps' => [
+			'@blockera/blockera-admin' => [
+				'wp-api',
+				'wp-blocks',
+				'wp-core-data',
+			],
 		],
-		'editor-styles'     => [
-			'@blockera/components-styles',
-		]
 	],
 ];

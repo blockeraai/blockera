@@ -1,0 +1,12 @@
+{
+	"name": "blockera/blocks",
+	"description": "The blocks package for Blockera editor.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\Blocks\\": "php/"
+		},
+		"files" : [
+			"./php/functions.php"
+		]
+	}
+}

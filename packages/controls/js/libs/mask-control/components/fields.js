@@ -48,8 +48,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			getControlPath,
 		} = useControlContext();
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			onChange,
+			valueCleanup,
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+		} = useContext(RepeaterContext);
 
 		const [isSelectShapeOpen, setIsSelectShapeOpen] = useState(false);
 
@@ -147,6 +152,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 														controlId,
 														repeaterId,
 														itemId,
+														onChange,
+														valueCleanup,
 														value: {
 															...item,
 															shape: {
@@ -207,11 +214,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						},
 					]}
 					defaultValue={defaultRepeaterItemValue.size}
-					onChange={(size) =>
+					onChange={(size, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: {
 								...item,
 								size,
@@ -248,11 +258,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								defaultValue={
 									defaultRepeaterItemValue['size-width']
 								}
-								onChange={(width) =>
+								onChange={(width, ref) =>
 									changeRepeaterItem({
+										ref,
 										controlId,
 										repeaterId,
 										itemId,
+										onChange,
+										valueCleanup,
 										value: {
 											...item,
 											'size-width': width,
@@ -290,11 +303,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								defaultValue={
 									defaultRepeaterItemValue['size-height']
 								}
-								onChange={(height) =>
+								onChange={(height, ref) =>
 									changeRepeaterItem({
+										ref,
 										controlId,
 										repeaterId,
 										itemId,
+										onChange,
+										valueCleanup,
 										value: {
 											...item,
 											'size-height': height,
@@ -352,11 +368,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						},
 					]}
 					defaultValue={defaultRepeaterItemValue.repeat}
-					onChange={(repeat) =>
+					onChange={(repeat, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, repeat },
 						})
 					}
@@ -380,11 +399,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					columns="columns-2"
-					onChange={(position) => {
+					onChange={(position, ref) => {
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, position },
 						});
 					}}
@@ -417,11 +439,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						defaultValue={
 							defaultRepeaterItemValue['horizontally-flip']
 						}
-						onChange={(hFlip) =>
+						onChange={(hFlip, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									'horizontally-flip': hFlip,
@@ -451,11 +476,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						defaultValue={
 							defaultRepeaterItemValue['vertically-flip']
 						}
-						onChange={(vFlip) =>
+						onChange={(vFlip, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									'vertically-flip': vFlip,

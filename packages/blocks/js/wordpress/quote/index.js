@@ -23,8 +23,8 @@ import {
 	InnerBlockHeading5Icon,
 	InnerBlockHeading6Icon,
 	InnerBlockLinkIcon,
-} from '@blockera/editor-extensions/js/libs';
-import type { InnerBlocks } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
+} from '@blockera/editor/js/extensions/libs';
+import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -205,13 +205,6 @@ export const Quote = {
 	attributes,
 	supports,
 	blockeraInnerBlocks,
-	blockeraStatesConfig: {
-		disabledSelectors: ['.a', '.b'],
-	},
-	blockeraBreakpointsConfig: {
-		// $FlowFixMe
-		disabledSelectors: [],
-	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

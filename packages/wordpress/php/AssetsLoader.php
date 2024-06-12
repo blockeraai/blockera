@@ -12,6 +12,13 @@ use Blockera\Bootstrap\Application;
 class AssetsLoader {
 
 	/**
+	 * Store loader identifier.
+	 *
+	 * @var string $id the loader identifier.
+	 */
+	protected string $id;
+
+	/**
 	 * Holds assets or packages name.
 	 *
 	 * @var array
@@ -24,6 +31,13 @@ class AssetsLoader {
 	 * @var string[]
 	 */
 	protected array $packages_deps = [];
+
+	/**
+	 * Store assets list to dequeue
+	 *
+	 * @var array $dequeue_stack the dequeue assets stack.
+	 */
+	protected array $dequeue_stack = [];
 
 	/**
 	 * Store root directory info.
@@ -66,12 +80,51 @@ class AssetsLoader {
 		$this->assets         = $assets;
 		$this->is_development = $args['debug-mode'] ?? false;
 		$this->packages_deps  = $args['packages-deps'] ?? [];
-		$this->root_info      = $args['root'] ?? [ 'path' => '', 'url' => '' ];
+		$this->root_info      = $args['root'] ?? [
+			'path' => '',
+			'url'  => '',
+		];
+		$this->id             = $args['id'] ?? 'blockera-wordpress-assets-loader';
+		$this->dequeue_stack  = $args['dequeue-stack'] ?? [];
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'registerAssets' ), 10 );
-		add_action( 'enqueue_block_editor_assets', array( $this, 'registerAssets' ), 10 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueDynamicStyles' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'registerAssets' ], 10 );
 
-		add_action( 'enqueue_block_assets', [ $this, 'enqueue_editor_assets' ] );
+		if ( ! empty( $args['enqueue-block-assets'] ) ) {
+
+			add_action( 'enqueue_block_assets', [ $this, 'enqueue' ] );
+		}
+
+		if ( ! empty( $args['enqueue-admin-assets'] ) ) {
+
+			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
+		}
+	}
+
+	/**
+	 * Dequeue registered scripts.
+	 *
+	 * @return void
+	 */
+	protected function dequeue(): void {
+
+		array_map( static function ( string $handle ) {
+
+			wp_dequeue_script( $handle );
+		}, $this->dequeue_stack );
+	}
+
+	/**
+	 * Enqueue removed scripts of queue.
+	 *
+	 * @return void
+	 */
+	protected function enqueueRemovedScripts(): void {
+
+		array_map( static function ( string $handle ) {
+
+			wp_enqueue_script( $handle );
+		}, $this->dequeue_stack );
 	}
 
 	/**
@@ -79,20 +132,22 @@ class AssetsLoader {
 	 *
 	 * @return void
 	 */
-	public function enqueue_editor_assets(): void {
+	public function enqueue(): void {
 
 		if ( ! is_admin() ) {
 
 			return;
 		}
 
+		$this->dequeue();
+
 		foreach ( $this->prepareAssets() as $asset ) {
 
 			if ( $asset['style'] ) {
 
 				wp_enqueue_style(
-					'@blockera/' . $asset['name'],
-					str_replace( '\\', '/', $asset['style'] ),
+					$asset['name'],
+					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
 					[],
 					$asset['version']
 				);
@@ -106,15 +161,88 @@ class AssetsLoader {
 			$deps = $this->excludeDependencies( $asset['deps'] );
 
 			wp_enqueue_script(
-				'@blockera/' . $asset['name'],
-				str_replace( '\\', '/', $asset['script'] ),
+				$asset['name'],
+				str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
 				array_merge(
 					$deps,
 					$this->packages_deps[ $asset['name'] ] ?? []
 				),
 				$asset['version'],
-				true
+				[
+					'in_footer' => true,
+				]
 			);
+		}
+
+		$this->enqueueRemovedScripts();
+
+		/**
+		 * This filter for extendable inline script from internal or third-party developers.
+		 *
+		 * @hook  'blockera/wordpress/{$this->id}/inline-script'
+		 * @since 1.0.0
+		 */
+		$inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/inline-script', '' );
+
+		/**
+		 * This filter for change handle name for inline script from internal or third-party developers.
+		 *
+		 * @hook  'blockera/wordpress/{$this->id}/handle/inline-script
+		 * @since 1.0.0
+		 */
+		$handle_inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/handle/inline-script', '' );
+
+		if ( empty( $inline_script ) || empty( $handle_inline_script ) ) {
+
+			return;
+		}
+
+		// blockera server side definitions.
+		wp_add_inline_script(
+			$handle_inline_script,
+			$inline_script,
+			'after'
+		);
+	}
+
+	/**
+	 * Enqueuing dynamic-assets
+	 *
+	 * @return void
+	 */
+	public function enqueueDynamicStyles(): void {
+
+		// Register empty css file to load from consumer plugin of that,
+		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
+		// Accessibility: on front-end.
+		$file    = $this->root_info['path'] . 'assets/dynamic-styles.css';
+		$fileURL = $this->root_info['url'] . 'assets/dynamic-styles.css';
+
+		if ( file_exists( $file ) && ! is_admin() ) {
+
+			$handle = 'blockera-inline-css';
+
+			wp_enqueue_style(
+				$handle,
+				$fileURL,
+				[],
+				filemtime( $file )
+			);
+
+			wp_add_inline_style(
+				$handle,
+				/**
+				 * Apply filter for add inline css into empty file.
+				 *
+				 * @since 1.0.0
+				 */
+				// phpcs:disable
+				apply_filters(
+					'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
+					''
+				)
+			);
+			// phpcs:enable
 		}
 	}
 
@@ -151,40 +279,7 @@ class AssetsLoader {
 	 *
 	 * @return void
 	 */
-	public function registerAssets() {
-
-		// Register empty css file to load from consumer plugin of that,
-		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
-		// Accessibility: on front-end.
-		$file    = $this->root_info['path'] . 'assets/dynamic-styles.css';
-		$fileURL = $this->root_info['url'] . 'assets/dynamic-styles.css';
-
-		if ( file_exists( $file ) && ! is_admin() ) {
-
-			$handle = 'blockera-inline-css';
-
-			wp_enqueue_style(
-				$handle,
-				$fileURL,
-				[],
-				filemtime( $file )
-			);
-
-			wp_add_inline_style(
-				$handle,
-				/**
-				 * Apply filter for add inline css into empty file.
-				 *
-				 * @since 1.0.0
-				 */
-				// phpcs:disable
-				apply_filters(
-					'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
-					''
-				)
-			);
-			// phpcs:enable
-		}
+	public function registerAssets(): void {
 
 		// Registering assets ...
 		foreach ( $this->prepareAssets() as $asset ) {
@@ -193,7 +288,7 @@ class AssetsLoader {
 
 				wp_register_style(
 					'@blockera/' . $asset['name'],
-					str_replace( '\\', '/', $asset['style'] ),
+					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
 					$this->packages_deps[ $asset['name'] ] ?? [],
 					$asset['version']
 				);
@@ -208,10 +303,12 @@ class AssetsLoader {
 
 			wp_register_script(
 				'@blockera/' . $asset['name'],
-				str_replace( '\\', '/', $asset['script'] ),
+				str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
 				$deps,
 				$asset['version'],
-				true
+				[
+					'in_footer' => true,
+				]
 			);
 		}
 
@@ -219,34 +316,6 @@ class AssetsLoader {
 
 			return;
 		}
-
-		/**
-		 * This filter for extendable inline script from internal or third-party developers.
-		 *
-		 * @hook  'blockera/wordpress/assets-loader/inline-script'
-		 * @since 1.0.0
-		 */
-		$inline_script = apply_filters( 'blockera/wordpress/assets-loader/inline-script', '' );
-
-		/**
-		 * This filter for change handle name for inline script from internal or third-party developers.
-		 *
-		 * @hook  'blockera/wordpress/assets-loader/handle/inline-script
-		 * @since 1.0.0
-		 */
-		$handle_inline_script = apply_filters( 'blockera/wordpress/assets-loader/handle/inline-script', '' );
-
-		if ( empty( $inline_script ) || empty( $handle_inline_script ) ) {
-
-			return;
-		}
-
-		// blockera-core server side dynamic value definitions.
-		wp_add_inline_script(
-			$handle_inline_script,
-			$inline_script,
-			'after'
-		);
 	}
 
 	/**
@@ -335,6 +404,8 @@ class AssetsLoader {
 
 			$style = '';
 		}
+
+		$name = '@blockera/' . $name;
 
 		return compact( 'name', 'deps', 'script', 'style', 'version' );
 	}

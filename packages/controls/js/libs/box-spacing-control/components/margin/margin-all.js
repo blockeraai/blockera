@@ -10,7 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { setValueAddon, useValueAddon } from '@blockera/editor';
+import { setValueAddon, useValueAddon } from '@blockera/value-addons';
 /**
  * Internal dependencies
  */

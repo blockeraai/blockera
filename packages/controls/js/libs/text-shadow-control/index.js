@@ -3,13 +3,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
+import { PromotionPopover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -18,6 +18,7 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { TTextShadowControlProps } from './types';
+import { getRepeaterActiveItemsCount } from '../repeater-control/utils';
 
 export default function TextShadowControl({
 	defaultRepeaterItemValue = {
@@ -56,6 +57,7 @@ export default function TextShadowControl({
 }: TTextShadowControlProps): MixedElement {
 	return (
 		<RepeaterControl
+			id={'text-shadow'}
 			className={controlClassNames('text-shadow', className)}
 			popoverTitle={popoverTitle}
 			addNewButtonLabel={__('Add New Text Shadow', 'blockera')}
@@ -64,37 +66,30 @@ export default function TextShadowControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			label={label}
 			labelDescription={labelDescription}
+			PromoComponent={({
+				items,
+				onClose = () => {},
+				isOpen = false,
+			}): MixedElement | null => {
+				if (getRepeaterActiveItemsCount(items) < 1) {
+					return null;
+				}
+
+				return (
+					<PromotionPopover
+						heading={__('Multiple Text Shadows', 'blockera')}
+						featuresList={[
+							__('Multiple text shadows', 'blockera'),
+							__('Advanced text shadow effects', 'blockera'),
+							__('Advanced features', 'blockera'),
+							__('Premium blocks', 'blockera'),
+						]}
+						isOpen={isOpen}
+						onClose={onClose}
+					/>
+				);
+			}}
 			{...props}
 		/>
 	);
 }
-
-TextShadowControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * The current value.
-	 */
-	value: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Default value of each repeater item
-	 */
-	// $FlowFixMe
-	defaultRepeaterItemValue: PropTypes.shape({
-		x: PropTypes.string,
-		y: PropTypes.string,
-		blur: PropTypes.string,
-		color: PropTypes.string,
-		isVisible: PropTypes.bool,
-	}),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-};

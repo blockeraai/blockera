@@ -6,9 +6,9 @@ import {
 	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
-describe('Column Block → Inner Blocks', () => {
+describe('Cover Block → Inner Blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -57,4 +57,3 @@ describe('Column Block → Inner Blocks', () => {
 		);
 	});
 });
-

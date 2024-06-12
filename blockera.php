@@ -1,23 +1,22 @@
 <?php
 /**
- * Plugin Name:       Blockera
- * Description:       provided all feature for creating application user interface into WordPress gutenberg editor or other 🔥.
+ * Plugin Name: Blockera
+ * Plugin URI: https://blockera.ai/blockera-page-builder/
+ * Description: Make Gutenberg a Real Page Builder!
  * Requires at least: 6.5.2
- * Requires PHP:      7.4
- * Version:           1.0-beta
- * Author:            blockeraai.com
- * License:           GPL-2.0-or-later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       blockera
+ * Tested up to: 6.5.2
+ * Requires PHP: 7.4
+ * Author: Blockera AI
+ * Author URI: https://blockera.ai/about-us/
+ * Version: 1.1.4
+ * Text Domain: blockera
+ * License: GPLv3 or later
  *
- * @package Core
+ * @package Blockera
  */
 
-// security code.
-if ( ! defined( 'ABSPATH' ) ) {
-
-	die( 'Access Denied!' );
-}
+// direct access is not allowed.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 // loading autoloader.
 require __DIR__ . '/vendor/autoload.php';
@@ -30,6 +29,10 @@ define( 'BLOCKERA_CORE_FILE', __FILE__ );
 define( 'BLOCKERA_CORE_URI', plugin_dir_url( __FILE__ ) );
 define( 'BLOCKERA_CORE_PATH', plugin_dir_path( __FILE__ ) );
 
+### BEGIN AUTO-GENERATED DEFINES
+define( 'BLOCKERA_APP_MODE', 'development' );
+### END AUTO-GENERATED DEFINES
+
 /**
  * This hook for extendable setup process from internal or third-party developers.
  *
@@ -38,17 +41,7 @@ define( 'BLOCKERA_CORE_PATH', plugin_dir_path( __FILE__ ) );
  */
 do_action( 'blockera/before/setup' );
 
-// loading front controller.
-require BLOCKERA_CORE_PATH . 'packages/blockera/php/app.php';
-
-/**
- * This hook for extendable setup process from internal or third-party developers.
- *
- * @hook  'blockera/after/setup'
- * @since 1.0.0
- */
-do_action( 'blockera/after/setup' );
-
+### BEGIN AUTO-GENERATED FRONT CONTROLLERS
 /**
  * For developers: Blockera debugging mode.
  *
@@ -67,3 +60,13 @@ if ( blockera_core_config( 'app.mode' ) ) {
 	$whoops->pushHandler( new \Whoops\Handler\PrettyPageHandler() );
 	$whoops->register();
 }
+require BLOCKERA_CORE_PATH . 'packages/blockera/php/app.php';
+### END AUTO-GENERATED FRONT CONTROLLERS
+
+/**
+ * This hook for extendable setup process from internal or third-party developers.
+ *
+ * @hook  'blockera/after/setup'
+ * @since 1.0.0
+ */
+do_action( 'blockera/after/setup' );

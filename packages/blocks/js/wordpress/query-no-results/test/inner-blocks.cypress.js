@@ -5,14 +5,14 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies
  */
 import { testContent } from './test-content';
 
-describe('Query Pagination Block → Inner Blocks', () => {
+describe('Query No Results Block → Inner Blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -37,4 +37,3 @@ describe('Query Pagination Block → Inner Blocks', () => {
 		);
 	});
 });
-

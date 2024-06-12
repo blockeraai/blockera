@@ -23,6 +23,7 @@ import CloneIcon from '../icons/clone';
 import { getArialLabelSuffix } from '../utils';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemActionsProps } from '../types';
+import { repeaterOnChange } from '../store/reducers/utils';
 
 export default function RepeaterItemActions({
 	item,
@@ -35,6 +36,8 @@ export default function RepeaterItemActions({
 		maxItems,
 		minItems,
 		onDelete,
+		onChange,
+		valueCleanup,
 		repeaterId,
 		overrideItem,
 		itemIdGenerator,
@@ -83,6 +86,8 @@ export default function RepeaterItemActions({
 							itemId,
 							value,
 							repeaterId,
+							onChange,
+							valueCleanup,
 						});
 					}}
 					label={
@@ -122,9 +127,11 @@ export default function RepeaterItemActions({
 							cloneRepeaterItem({
 								item,
 								itemId,
+								onChange,
 								controlId,
 								repeaterId,
 								overrideItem,
+								valueCleanup,
 								itemIdGenerator,
 							});
 						}}
@@ -154,17 +161,26 @@ export default function RepeaterItemActions({
 							) {
 								removeRepeaterItem({
 									itemId,
+									onChange,
 									controlId,
 									repeaterId,
+									valueCleanup,
 									itemIdGenerator,
 								});
 
 								return;
 							}
 
+							const value = onDelete(itemId, repeaterItems);
+
 							modifyControlValue({
 								controlId,
-								value: onDelete(itemId, repeaterItems),
+								value,
+							});
+
+							repeaterOnChange(value, {
+								onChange,
+								valueCleanup,
 							});
 						}}
 						label={__('Delete', 'blockera')}

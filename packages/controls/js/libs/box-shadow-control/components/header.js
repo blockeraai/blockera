@@ -15,8 +15,8 @@ import { prepValueForHeader } from '../../repeater-control/utils';
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
 import { ColorIndicator } from '@blockera/components';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 	({

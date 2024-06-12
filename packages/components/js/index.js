@@ -10,9 +10,10 @@ export {
 	getIconLibrarySearchData,
 	iconSearch,
 } from './icons';
-export { ColorIndicator, ColorIndicatorStack } from './color-indicator';
+export * from './feature-wrapper';
+export { Switch } from './switch';
 export { default as Flex } from './flex';
-export { Promotion } from './promotion';
+export { PromotionPopover } from './promotion-popover';
 export { default as Tabs } from './tabs';
 export { default as Grid } from './grid';
 export { Button, Buttons } from './button';
@@ -24,6 +25,6 @@ export type { PopoverPlacement } from './popover/types';
 export { default as MediaUploader } from './media-uploader';
 export { Tooltip } from './tooltip';
 export { default as ConditionalWrapper } from './conditional-wrapper';
-export { default as FeatureWrapper } from './feature-wrapper';
 export { default as MoreFeatures } from './more-features';
+export { ColorIndicator, ColorIndicatorStack } from './color-indicator';
 export { default as DynamicHtmlFormatter } from './dynamic-html-formatter';

@@ -5,7 +5,7 @@
 import {
 	getValueAddonRealValue,
 	isValid as isValidVariable,
-} from '@blockera/editor';
+} from '@blockera/value-addons';
 
 /**
  * Internal dependencies

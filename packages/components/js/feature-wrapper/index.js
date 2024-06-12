@@ -2,111 +2,128 @@
 /**
  * External dependencies
  */
-import type { Node } from 'react';
-import { useSelect } from '@wordpress/data';
+import type { MixedElement } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
-import { isLaptopBreakpoint } from '@blockera/editor';
 import {
-	isInnerBlock,
-	isNormalState,
-} from '@blockera/editor-extensions/js/components/utils';
+	componentClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
+import WarningIcon from '@blockera/controls/js/libs/notice-control/icons/warning-icon';
 
 /**
  * Internal dependencies
  */
-import { Wrapper } from './components/wrapper';
-import type { FeatureWrapperProps } from './types';
+import { ProIcon } from './icons/pro-icon';
 
-export default function FeatureWrapper({
-	config,
-	isActive = true,
+export function FeatureWrapper({
+	type,
+	typeName = '',
+	text = '',
 	children,
+	className = '',
+	showText = 'on-hover',
 	...props
-}: FeatureWrapperProps): Node {
-	const { blockera, currentBlock, getCurrentState, currentBreakpoint } =
-		useSelect((select) => {
-			const {
-				getExtensionCurrentBlock,
-				getExtensionInnerBlockState,
-				getExtensionCurrentBlockState,
-				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera-core/extensions');
-			const { getEntity } = select('blockera-core/data');
+}: {
+	type: 'free' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
+	typeName?: string,
+	text?: string | MixedElement,
+	className?: string,
+	showText?: 'on-hover' | 'always',
+	children: MixedElement,
+}): MixedElement {
+	let icon = <WarningIcon />;
 
-			return {
-				blockera: getEntity('blockera'),
-				getCurrentState: () =>
-					isInnerBlock(getExtensionCurrentBlock())
-						? getExtensionInnerBlockState()
-						: getExtensionCurrentBlockState(),
-				currentBlock: getExtensionCurrentBlock(),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-			};
-		});
+	if (!text) {
+		switch (type) {
+			case 'free':
+				text = __('Upgrade to PRO', 'blockera');
+				icon = <ProIcon />;
+				break;
+			case 'state':
+				text = typeName
+					? sprintf(
+							/* translators: %s is a state name. */
+							__('Only available in %s state!', 'blockera'),
+							typeName
+					  )
+					: __('Not available in current state!', 'blockera');
+				break;
+			case 'breakpoint':
+				text = typeName
+					? sprintf(
+							/* translators: %s is a breakpoint name. */
+							__('Only available in %s breakpoint!', 'blockera'),
+							typeName
+					  )
+					: __('Not available in current breakpoint!', 'blockera');
+				break;
+			case 'inner-block':
+				text = typeName
+					? sprintf(
+							/* translators: %s is a breakpoint name. */
+							__('Only available in %s inner block!', 'blockera'),
+							typeName
+					  )
+					: __('Not available in current inner block!', 'blockera');
+				break;
 
-	const feature = {
-		isActiveOnFree: true,
-		isActiveOnStates: true,
-		isActiveOnStatesOnFree: true,
-		isActiveOnBreakpoints: true,
-		isActiveOnBreakpointsOnFree: true,
-		isActiveOnInnerBlocks: true,
-		isActiveOnInnerBlocksOnFree: false,
-		...config,
-	};
-
-	if (!isActive) {
-		return <></>;
+			case 'parent-inactive':
+				text = typeName
+					? sprintf(
+							/* translators: %s is a breakpoint name. */
+							__('Only available when %s is active.', 'blockera'),
+							typeName
+					  )
+					: sprintf(
+							/* translators: %s is a breakpoint name. */
+							__(
+								'Not available when %s is inactive!',
+								'blockera'
+							),
+							typeName
+					  );
+				break;
+		}
 	}
 
-	const isLocked = /\w+-[orp]+/i.exec(blockera?.locked || '');
+	return (
+		<div
+			className={componentClassNames(
+				'feature-wrapper',
+				'type-' + type,
+				'show-text-' + showText,
+				className
+			)}
+			{...props}
+		>
+			<div
+				className={componentInnerClassNames('feature-wrapper__notice')}
+			>
+				{icon}
 
-	if (!isLocked && !feature.isActiveOnFree) {
-		return (
-			<Wrapper type="free" {...props}>
+				<div
+					className={componentInnerClassNames(
+						'feature-wrapper__notice__text'
+					)}
+				>
+					{text}
+				</div>
+			</div>
+
+			<div
+				className={componentInnerClassNames(
+					'feature-wrapper__children'
+				)}
+				onClick={(e) => {
+					e.preventDefault();
+				}}
+			>
 				{children}
-			</Wrapper>
-		);
-	}
-
-	if (
-		isInnerBlock(currentBlock) &&
-		feature.isActiveOnInnerBlocks &&
-		!feature.isActiveOnInnerBlocksOnFree
-	) {
-		return (
-			<Wrapper type="free" {...props}>
-				{children}
-			</Wrapper>
-		);
-	}
-
-	if (
-		!isNormalState(getCurrentState()) &&
-		feature.isActiveOnStates &&
-		!feature.isActiveOnStatesOnFree
-	) {
-		return (
-			<Wrapper type="state" typeName={'Normal!'} {...props}>
-				{children}
-			</Wrapper>
-		);
-	}
-
-	if (
-		!isLaptopBreakpoint(currentBreakpoint) &&
-		feature.isActiveOnBreakpoints &&
-		!feature.isActiveOnBreakpointsOnFree
-	) {
-		return (
-			<Wrapper type="breakpoint" typeName={'Laptop!'} {...props}>
-				{children}
-			</Wrapper>
-		);
-	}
-
-	return <>{children}</>;
+			</div>
+		</div>
+	);
 }

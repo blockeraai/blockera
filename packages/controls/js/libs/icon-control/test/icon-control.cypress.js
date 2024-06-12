@@ -6,7 +6,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('icon-control', () => {
 	beforeEach(() => {
@@ -80,4 +80,3 @@ describe('icon-control', () => {
 		});
 	});
 });
-

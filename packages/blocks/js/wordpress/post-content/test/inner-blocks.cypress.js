@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Post Content Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -31,4 +31,3 @@ describe('Post Content Block → Inner Blocks', () => {
 		);
 	});
 });
-

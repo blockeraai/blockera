@@ -1,0 +1,76 @@
+= 1.1.4 - 2024-6-9
+
+-   Tweak: Reduce 50% of the final package.
+-   Tweak: Improve build script.
+-   Tweak: Add more E2E tests.
+-   Tweak: Refactor input control to enhance performance and resolve bugs.
+
+-   Fix: Admin panel is loading slowly.
+-   Fix: Address various bugs.
+-   Fix: Resolve control label bugs.
+-   Fix: Fix responsive breakpoint bugs.
+
+
+= 1.1.3 - 2024-6-3
+
+-   New: add Github repository link to readme.txt
+-   New: add composer.json to build zip because the WP.org review team asked
+
+-   Tweak: More E2E tests.
+
+-   Fix: Various bugs in block states and block responsive settings.
+-   Fix: readme.txt file header. 
+-   Fix: Direct access to php files that has return or execution
+-   Fix: monaco-editor to load from local package and not CDN
+-   Fix: Reset and reset all for features.
+-   Fix: Various bugs in controls label.
+-   Fix: Border feature.
+
+
+= 1.1.2 - 2024-5-26 =
+
+-   New: Indicator for current responsive breakpoint.
+
+-   Tweak: Blocks and admin panel design improvement.
+-   Tweak: Various bug fixes.
+-   Tweak: A lot code refactor and improvement.
+-   Tweak: More E2E tests.
+-   Tweak: Blockera logos.
+
+-   Fix: Various bugs in block states.
+-   Fix: Typos.
+
+
+= 1.1.1 - 2024-5-24 =
+
+-   New: Option to disable Blockera power up for user roles (Pro Version).
+-   New: Advanced option panel reset functionality.
+
+-   Tweak: Improve admin panel design.
+-   Tweak: E2E tests for admin panel.
+-   Tweak: Various bug fixes.
+-   Tweak: A lot code refactor and improvement.
+
+-   Fix: Losing Blockera attributes on disabled blocks.
+-   Fix: Disable repeater add button if "Pro hints" is disabled. 
+-   Fix: Storybook styles loading.
+
+
+= 1.1.0 - 2024-5-17 =
+
+-   New: Settings panel to change Blockera behaviors. 
+-   New: Block Manager panel to enable/disable Blockera blocks power up on blocks.
+-   New: Setting for disabling Pro version hints in setting panel.
+
+-   Fix: Minor bugs and errors.
+
+
+= 1.0.1 - 2024-5-11 =
+
+-   Tweak: Smaller build version size (Assets and packages size).
+-   Tweak: Block inspector control compatibility.
+
+
+= 1.0.0 - 2024-5-9 =
+
+-   Initial version for WP.org review

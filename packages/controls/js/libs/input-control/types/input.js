@@ -65,6 +65,7 @@ export type InputControlProps = {
 	actions?: Node,
 	placeholder?: string,
 	size?: ControlSize,
+	isValidValue?: boolean,
 };
 
 export type InnerInputControlProps = {

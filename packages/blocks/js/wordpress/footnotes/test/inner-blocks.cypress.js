@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Footnotes Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -37,4 +37,3 @@ describe('Footnotes Block → Inner Blocks', () => {
 		);
 	});
 });
-

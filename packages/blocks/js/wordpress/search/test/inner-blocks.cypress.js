@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Search Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -34,4 +34,3 @@ describe('Search Block → Inner Blocks', () => {
 		);
 	});
 });
-

@@ -9,7 +9,7 @@ import { useRef } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { useBlockContext } from '@blockera/editor-extensions/js/hooks/context';
+import { useBlockContext } from '@blockera/editor/js/extensions/hooks/context';
 
 /**
  * Internal dependencies

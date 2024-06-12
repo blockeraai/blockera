@@ -6,7 +6,7 @@ import {
 	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Term Description Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -32,4 +32,3 @@ describe('Term Description Block → Inner Blocks', () => {
 		);
 	});
 });
-

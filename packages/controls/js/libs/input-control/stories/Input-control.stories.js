@@ -1224,9 +1224,8 @@ export const ValueAddonSupport = {
 						label="Field"
 						{...args}
 						defaultValue=""
-						controlAddonTypes={['variable', 'dynamic-value']}
+						controlAddonTypes={['variable']}
 						variableTypes={['font-size', 'spacing']}
-						dynamicValueTypes={['text']}
 					/>
 				</ControlContextProvider>
 
@@ -1256,39 +1255,8 @@ export const ValueAddonSupport = {
 						label="Field"
 						{...args}
 						defaultValue=""
-						controlAddonTypes={['variable', 'dynamic-value']}
+						controlAddonTypes={['variable']}
 						variableTypes={['font-size']}
-						dynamicValueTypes={['all']}
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: {
-							settings: {
-								name: 'Post Title',
-								id: 'post-title',
-								reference: {
-									type: 'core',
-								},
-								category: 'post',
-								type: 'text',
-							},
-							id: 'post-title',
-							isValueAddon: true,
-							valueType: 'dynamic-value',
-						},
-					}}
-				>
-					<ControlWithHooks
-						Control={InputControl}
-						type="text"
-						label="Post Title"
-						{...args}
-						defaultValue=""
-						controlAddonTypes={['dynamic-value']}
-						dynamicValueTypes={['all']}
 					/>
 				</ControlContextProvider>
 			</Flex>
@@ -1316,7 +1284,7 @@ export const PlayNumber = {
 	render: (args) => (
 		<ControlWithHooks
 			Control={InputControl}
-			controlAddonTypes={['variable', 'dynamic-value']}
+			controlAddonTypes={['variable']}
 			variableTypes={[
 				'color',
 				'font-size',
@@ -1325,7 +1293,6 @@ export const PlayNumber = {
 				'linear-gradient',
 				'radial-gradient',
 			]}
-			dynamicValueTypes={['text']}
 			{...args}
 		/>
 	),

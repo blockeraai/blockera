@@ -11,8 +11,8 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { getValueAddonRealValue } from '@blockera/editor';
 import { Button } from '@blockera/components';
+import { getValueAddonRealValue } from '@blockera/value-addons';
 
 /**
  * Internal dependencies

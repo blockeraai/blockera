@@ -4,10 +4,12 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+
 /**
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
+import { PromotionPopover } from '@blockera/components';
 
 /**
  * Internal dependencies
@@ -17,6 +19,8 @@ import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { TTransitionControlProps } from './types';
 import { LabelDescription } from './components/label-description';
+import { getRepeaterActiveItemsCount } from '../repeater-control/utils';
+import { getTransitionTypeOptions, getTransitionTimingOptions } from './utils';
 
 export default function TransitionControl({
 	defaultRepeaterItemValue = {
@@ -42,6 +46,32 @@ export default function TransitionControl({
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			id={'transition'}
+			getTransitionTypeOptions={getTransitionTypeOptions}
+			getTransitionTimingOptions={getTransitionTimingOptions}
+			PromoComponent={({
+				items,
+				onClose = () => {},
+				isOpen = false,
+			}): MixedElement | null => {
+				if (getRepeaterActiveItemsCount(items) < 1) {
+					return null;
+				}
+
+				return (
+					<PromotionPopover
+						heading={__('Multiple Transitions', 'blockera')}
+						featuresList={[
+							__('Multiple transitions', 'blockera'),
+							__('Advanced transition effects', 'blockera'),
+							__('Advanced features', 'blockera'),
+							__('Premium blocks', 'blockera'),
+						]}
+						isOpen={isOpen}
+						onClose={onClose}
+					/>
+				);
+			}}
 			{...props}
 		/>
 	);

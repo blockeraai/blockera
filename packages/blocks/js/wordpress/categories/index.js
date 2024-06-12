@@ -14,8 +14,8 @@ import {
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
 	InnerBlockLinkIcon,
-} from '@blockera/editor-extensions/js/libs';
-import type { InnerBlocks } from '@blockera/editor-extensions/js/libs/inner-blocks/types';
+} from '@blockera/editor/js/extensions/libs';
+import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -40,9 +40,9 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	item: {
+	list_item: {
 		name: 'core/list-item',
-		type: 'list-item',
+		type: 'list_item',
 		label: __('Link Parent', 'blockera'),
 		icon: <InnerBlockListItemIcon />,
 		selectors: {

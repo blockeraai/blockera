@@ -5,7 +5,7 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Pullquote Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -36,4 +36,3 @@ describe('Pullquote Block → Inner Blocks', () => {
 		);
 	});
 });
-

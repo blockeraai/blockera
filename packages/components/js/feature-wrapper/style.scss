@@ -2,10 +2,6 @@
 	position: relative;
 	user-select: none;
 
-	&:not(:last-child) {
-		margin-bottom: 15px;
-	}
-
 	&::after {
 		content: "";
 		display: block;
@@ -87,7 +83,8 @@
 		}
 	}
 
-	&:hover {
+	&.show-text-always,
+	&.show-text-on-hover:hover {
 
 		.blockera-component-feature-wrapper__notice {
 

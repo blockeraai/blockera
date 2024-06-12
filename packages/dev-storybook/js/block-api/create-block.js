@@ -16,7 +16,7 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { withBlockSettings } from '@blockera/editor-extensions';
+import { withBlockSettings } from '@blockera/editor';
 
 export function createBlockEditorContent({
 	wrapperBlockName,

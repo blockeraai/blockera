@@ -9,9 +9,9 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
-import { isValid, setValueAddon, useValueAddon } from '@blockera/editor';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { isValid, setValueAddon, useValueAddon } from '@blockera/value-addons';
 
 /**
  * Internal dependencies
@@ -25,6 +25,7 @@ import SideBottomIcon from '../icons/side-bottom';
 import SideLeftIcon from '../icons/side-left';
 import SideRightIcon from '../icons/side-right';
 import { SideShape } from './side-shape';
+import type { ValueAddon } from '@blockera/value-addons/js/types';
 
 export function SideItem({
 	side,
@@ -46,7 +47,7 @@ export function SideItem({
 }: SideProps): SideReturn {
 	const sideId: Side = side;
 
-	function onDragSetValue(property: string, newValue: string) {
+	function onDragSetValue(property: string, newValue: ValueAddon | string) {
 		if (isValid(newValue)) {
 			setValue({
 				...value,
@@ -63,7 +64,7 @@ export function SideItem({
 					[property]: '',
 				},
 			});
-		} else {
+		} else if ('string' === typeof newValue) {
 			const extracted = extractNumberAndUnit(value.position[property]);
 
 			if (

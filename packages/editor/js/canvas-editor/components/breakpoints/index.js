@@ -11,12 +11,8 @@ import { useEffect, useState, createPortal } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import {
-	useStoreDispatchers,
-	useStoreSelectors,
-} from '@blockera/editor-extensions/js/hooks';
-import { getIframeTag, isEquals } from '@blockera/utils';
 import { Flex, Popover } from '@blockera/components';
+import { getIframeTag, isEquals } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { ControlContextProvider, InputControl } from '@blockera/controls';
 
@@ -25,14 +21,18 @@ import { ControlContextProvider, InputControl } from '@blockera/controls';
  */
 import { Preview } from '../preview';
 import Circles from '../../icons/circles';
+import { isLaptopBreakpoint } from './helpers';
 import PickedBreakpoints from './picked-breakpoints';
 import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
-import { isLaptopBreakpoint } from './helpers';
+import { useStoreSelectors, useStoreDispatchers } from '../../../hooks';
 
 export const Breakpoints = ({
 	className,
 }: BreakpointsComponentProps): MixedElement => {
+	// todo remove this after finishing development
+	const disabledSettings = true;
+
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
 		select('blockera-core/editor');
 	const { setDeviceType, setCanvasSettings, updateBreakpoints } = useDispatch(
@@ -169,39 +169,48 @@ export const Breakpoints = ({
 					type: 'nested',
 				}}
 			>
-				<Flex className={className} justifyContent={'space-between'}>
-					<div
-						className={controlInnerClassNames(
-							'blockera-core-breakpoints'
-						)}
-					>
-						<Circles
-							onClick={() =>
-								handleOnChange(
-									'isOpenOtherBreakpoints',
-									!canvasSettings.isOpenOtherBreakpoints
-								)
-							}
-						/>
-					</div>
+				<Flex
+					className={className}
+					justifyContent={
+						!disabledSettings ? 'space-between' : 'center'
+					}
+				>
+					{!disabledSettings && (
+						<div
+							className={controlInnerClassNames(
+								'blockera-core-breakpoints'
+							)}
+						>
+							<Circles
+								onClick={() =>
+									handleOnChange(
+										'isOpenOtherBreakpoints',
+										!canvasSettings.isOpenOtherBreakpoints
+									)
+								}
+							/>
+						</div>
+					)}
 
 					<PickedBreakpoints onClick={handleOnClick} />
 
-					<div
-						style={{
-							cursor: 'pointer',
-							lineHeight: '36px',
-						}}
-						aria-label={__('Canvas Zoom', 'blockera')}
-						onClick={() =>
-							handleOnChange(
-								'isOpenSettings',
-								!canvasSettings.isOpenSettings
-							)
-						}
-					>
-						{canvasSettings.zoom}
-					</div>
+					{!disabledSettings && (
+						<div
+							style={{
+								cursor: 'pointer',
+								lineHeight: '36px',
+							}}
+							aria-label={__('Canvas Zoom', 'blockera')}
+							onClick={() =>
+								handleOnChange(
+									'isOpenSettings',
+									!canvasSettings.isOpenSettings
+								)
+							}
+						>
+							{canvasSettings.zoom}
+						</div>
+					)}
 				</Flex>
 
 				{canvasSettings.isOpenOtherBreakpoints && (

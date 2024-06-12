@@ -4,11 +4,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
-	entry: [path.join(__dirname, 'packages', 'index.js')],
+	entry: ['./packages/index.js'],
 	output: {
-		path: path.resolve(__dirname, 'tools/cypress/dist'),
+		path: './packages/dev-tools/js/cypress/dist',
 	},
-	devtool: false,
+	devtool: true,
 	module: {
 		rules: [
 			{

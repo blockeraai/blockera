@@ -9,7 +9,7 @@ import {
 	setBlockState,
 	addBlockState,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Group Block → Heading Inner Block → WP Data Compatibility', () => {
 	beforeEach(() => {
@@ -1098,4 +1098,3 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 		});
 	});
 });
-
