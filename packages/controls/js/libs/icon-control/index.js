@@ -75,16 +75,16 @@ function IconControl({
 				library: value.library,
 			});
 
-			return undefined;
+			// return undefined;
 		}
 
-		if (!value) {
-			currentIconDispatch({
-				type: 'DELETE_ICON',
-			});
-		}
+		// if (!value) {
+		// 	currentIconDispatch({
+		// 		type: 'DELETE_ICON',
+		// 	});
+		// }
 
-		return undefined;
+		// return undefined;
 		// eslint-disable-next-line
 	}, [value]);
 

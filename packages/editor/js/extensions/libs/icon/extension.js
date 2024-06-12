@@ -44,7 +44,14 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 			blockeraIconOptions,
 			blockeraIconPosition,
 		},
-		values: { icon, iconGap, iconSize, iconLink, iconColor, iconPosition },
+		values: {
+			blockeraIcon: icon,
+			blockeraIconGap: iconGap,
+			blockeraIconSize: iconSize,
+			blockeraIconLink: iconLink,
+			blockeraIconColor: iconColor,
+			blockeraIconPosition: iconPosition,
+		},
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TIconProps): MixedElement => {
@@ -69,10 +76,11 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 							suggestionsQuery={() => {
 								return 'button';
 							}}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									'blockeraIcon',
-									newValue
+									newValue,
+									{ ref }
 								)
 							}
 							{...extensionProps.blockeraIcon}
@@ -117,10 +125,11 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 										isDeselectable={true}
 										//
 										defaultValue=""
-										onChange={(newValue) =>
+										onChange={(newValue, ref) =>
 											handleOnChangeAttributes(
 												'blockeraIconPosition',
-												newValue
+												newValue,
+												{ ref }
 											)
 										}
 										{...extensionProps.blockeraIconPosition}
@@ -147,10 +156,11 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 										unitType="essential"
 										defaultValue=""
 										min={0}
-										onChange={(newValue) =>
+										onChange={(newValue, ref) =>
 											handleOnChangeAttributes(
 												'blockeraIconGap',
-												newValue
+												newValue,
+												{ ref }
 											)
 										}
 										{...extensionProps.blockeraIconGap}
@@ -177,10 +187,11 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 										unitType="essential"
 										defaultValue=""
 										min={8}
-										onChange={(newValue) =>
+										onChange={(newValue, ref) =>
 											handleOnChangeAttributes(
 												'blockeraIconSize',
-												newValue
+												newValue,
+												{ ref }
 											)
 										}
 										{...extensionProps.blockeraIconSize}
@@ -206,10 +217,11 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 										columns="columns-2"
 										//
 										defaultValue=""
-										onChange={(newValue) =>
+										onChange={(newValue, ref) =>
 											handleOnChangeAttributes(
 												'blockeraIconColor',
-												newValue
+												newValue,
+												{ ref }
 											)
 										}
 										{...extensionProps.blockeraIconColor}
@@ -236,10 +248,11 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 									label={__('Link', 'blockera')}
 									id={generateExtensionId(block, 'icon-link')}
 									//
-									onChange={(newValue) =>
+									onChange={(newValue, ref) =>
 										handleOnChangeAttributes(
 											'blockeraIconLink',
-											newValue
+											newValue,
+											{ ref }
 										)
 									}
 									{...extensionProps.blockeraIconLink}

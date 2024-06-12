@@ -1,36 +1,51 @@
 // @flow
-/**
- * Blockera dependencies
- */
-import { computedCssRules } from '@blockera/style-engine';
-import type { GeneratorReturnType } from '@blockera/style-engine/js/types';
 
 /**
  * Internal dependencies
  */
-import type { TBlockProps } from '../types';
+// import * as config from '../base/config';
+import type { StylesProps } from '../types';
+import type { CssRule } from '../../../style-engine/types';
 
-interface IConfigs {
-	iconConfig: {
-		cssGenerators: Object,
-	};
-	blockProps: TBlockProps;
-}
+export const IconStyles = ({
+	// eslint-disable-next-line
+	state,
+	// eslint-disable-next-line
+	clientId,
+	// eslint-disable-next-line
+	blockName,
+	// eslint-disable-next-line
+	currentBlock,
+	// supports,
+	// activeDeviceType,
+	// eslint-disable-next-line
+	selectors: blockSelectors,
+	// eslint-disable-next-line
+	attributes: currentBlockAttributes,
+}: StylesProps): Array<CssRule> => {
+	// const {
+	// blockeraIcon,
+	// blockeraIconOptions,
+	// blockeraIconPosition,
+	// blockeraIconGap,
+	// blockeraIconSize,
+	// blockeraIconColor,
+	// blockeraIconLink,
+	// } = config.iconConfig;
+	// const blockProps = {
+	// 	clientId,
+	// 	blockName,
+	// 	attributes: currentBlockAttributes,
+	// };
+	// const sharedParams = {
+	// 	...props,
+	// 	state,
+	// 	clientId,
+	// 	currentBlock,
+	// 	blockSelectors,
+	// 	className: currentBlockAttributes?.className,
+	// };
+	const styleGroup: Array<CssRule> = [];
 
-export function IconStyles({
-	iconConfig: { cssGenerators },
-	blockProps,
-}: IConfigs): Array<GeneratorReturnType> {
-	const generators = [];
-
-	generators.push(
-		computedCssRules(
-			{
-				...(cssGenerators || {}),
-			},
-			blockProps
-		)
-	);
-
-	return generators.flat();
-}
+	return styleGroup;
+};

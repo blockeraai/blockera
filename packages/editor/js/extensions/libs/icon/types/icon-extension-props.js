@@ -13,12 +13,12 @@ export type TIconProps = {
 	iconConfig: Object,
 	children?: MixedElement,
 	values: {
-		icon: Object,
-		iconGap: string,
-		iconSize: string,
-		iconLink: Object,
-		iconColor: string,
-		iconPosition: string,
+		blockeraIcon: Object,
+		blockeraIconGap: string,
+		blockeraIconSize: string,
+		blockeraIconLink: Object,
+		blockeraIconColor: string,
+		blockeraIconPosition: string,
 	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {

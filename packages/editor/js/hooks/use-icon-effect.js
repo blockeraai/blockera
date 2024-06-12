@@ -6,7 +6,7 @@ import { createRoot, useEffect, useRef } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Icon } from '@blockera/components';
+import { Icon } from '@blockera/icons';
 import { isEmpty, isUndefined } from '@blockera/utils';
 
 const IconComponent = ({ el, iconNode, position }) => {
