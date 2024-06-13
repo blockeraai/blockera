@@ -21,7 +21,6 @@ export {
 	supports as layoutSupports,
 } from './layout';
 export {
-	FlexChildExtensionIcon,
 	FlexChildStyles,
 	FlexChildExtension,
 	attributes as flexChildAttributes,
@@ -64,7 +63,6 @@ export {
 	supports as effectsExtensionSupports,
 } from './effects';
 export {
-	MouseExtensionIcon,
 	MouseStyles,
 	MouseExtension,
 	attributes as mouseExtensionAttributes,
@@ -88,7 +86,6 @@ export {
 	attributes as innerBlocksExtensionsAttributes,
 } from './inner-blocks';
 export {
-	EntranceAnimationExtensionIcon,
 	EntranceAnimationExtension,
 	attributes as entranceAnimationExtensionAttributes,
 	supports as entranceAnimationExtensionSupports,

@@ -1,6 +1,6 @@
 //@flow
 
-export type IconLibraryTypes = 'wp' | 'ui' | 'blockera';
+export type IconLibraryTypes = 'wp' | 'ui' | 'blockera' | 'cursor';
 
 export type UploadSVGProps = {
 	title: string,

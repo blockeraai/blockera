@@ -16,14 +16,13 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
 import type { ClickAnimationExtensionProps } from './types/props';
-import { ClickAnimationExtensionIcon } from './index';
-import AnimationIcon from './icons/animation-icon';
 import { isActiveField } from '../../api/utils';
 
 export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps> =
@@ -41,7 +40,7 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 				<PanelBodyControl
 					title={__('On Click', 'blockera')}
 					initialOpen={true}
-					icon={<ClickAnimationExtensionIcon />}
+					icon={<Icon icon="extension-click-animation" />}
 					className={extensionClassNames('click-animation')}
 				>
 					<ControlContextProvider
@@ -57,7 +56,7 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 							label=""
 							defaultValue={{}}
 							design="large"
-							icon={<AnimationIcon />}
+							icon={<Icon icon="click-animation" iconSize="26" />}
 							description={__(
 								'Clicking on the block will trigger the animation.',
 								'blockera'

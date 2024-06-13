@@ -16,6 +16,7 @@ import { isFunction, isUndefined } from '@blockera/utils';
 import { WPIcon } from './library-wp/index';
 import { BlockeraIcon } from './library-blockera/index';
 import { BlockeraUIIcon } from './library-ui/index';
+import { CursorIcon } from './library-cursor/index';
 import { isValidIconLibrary, getIconLibraryIcons } from './icon-library';
 import type { IconProps, IconLibraryTypes } from './types';
 
@@ -38,6 +39,9 @@ export function Icon({
 
 		case 'blockera':
 			return <BlockeraIcon {...props} />;
+
+		case 'cursor':
+			return <CursorIcon {...props} />;
 
 		default:
 			return <WPIcon {...props} />;
@@ -114,7 +118,7 @@ export function createStandardIconObject(
 		};
 	}
 
-	if (library === 'blockera' || library === 'ui') {
+	if (['blockera', 'ui', 'cursor'].includes(library)) {
 		if (isFunction(icon)) {
 			return {
 				icon,

@@ -25,6 +25,9 @@ import IconsSearchData from './library-blockera/search-data.json';
 // UI Library
 import { BlockeraUIIcons } from './library-ui';
 import { default as LibraryUIIcon } from './library-ui/library-icon';
+// Cursor Library
+import { CursorIcons } from './library-cursor';
+import { default as LibraryCursorIcon } from './library-cursor/library-icon';
 
 const IconLibraries = {
 	wp: {
@@ -44,6 +47,12 @@ const IconLibraries = {
 		// translators: Icon library name
 		name: __('User Interface', 'blockera'),
 		icon: <LibraryUIIcon />,
+	},
+	cursor: {
+		id: 'cursor',
+		// translators: Icon library name
+		name: __('Cursors', 'blockera'),
+		icon: <LibraryCursorIcon />,
 	},
 };
 
@@ -79,6 +88,9 @@ export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 
 		case 'wp':
 			return WPIcons;
+
+		case 'cursor':
+			return CursorIcons;
 	}
 
 	return {};

@@ -16,6 +16,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -29,7 +30,6 @@ import {
 	pointerEventsOptions,
 } from './utils';
 import type { TMouseProps } from './types/mouse-props';
-import { MouseExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
 
 export const MouseExtension: ComponentType<TMouseProps> = memo(
@@ -67,7 +67,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 			<PanelBodyControl
 				title={__('Mouse', 'blockera')}
 				initialOpen={true}
-				icon={<MouseExtensionIcon />}
+				icon={<Icon icon="extension-mouse" />}
 				className={extensionClassNames('mouse')}
 			>
 				<ExtensionSettings

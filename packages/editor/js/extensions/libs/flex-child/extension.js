@@ -17,26 +17,15 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
-import { default as GearIcon } from './icons/gear';
-import { default as SizingNotIcon } from './icons/sizing-not';
 import { generateExtensionId } from '../utils';
-import { default as SizingGrowIcon } from './icons/sizing-grow';
-import { default as AlignStretchIcon } from './icons/align-stretch';
-import { default as SizingShrinkIcon } from './icons/sizing-shrink';
-import { default as AlignFlexEndIcon } from './icons/align-flex-end';
-import { default as AlignBaselineIcon } from './icons/align-baseline';
-import { default as AlignFlexStartIcon } from './icons/align-flex-start';
-import { default as AlignFlexCenterIcon } from './icons/align-flex-center';
-import { default as OrderFirst } from './icons/order-first';
-import { default as OrderLast } from './icons/order-last';
 import type { TFlexChildProps } from './types/flex-child-props';
-import { FlexChildExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
 
 export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
@@ -77,7 +66,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 			<PanelBodyControl
 				title={__('Flex Child', 'blockera')}
 				initialOpen={true}
-				icon={<FlexChildExtensionIcon />}
+				icon={<Icon icon="extension-flex-child" />}
 				className={extensionClassNames('flex-child')}
 			>
 				<ExtensionSettings
@@ -111,22 +100,42 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 								{
 									label: __('Shrink', 'blockera'),
 									value: 'shrink',
-									icon: <SizingShrinkIcon />,
+									icon: (
+										<Icon
+											icon="flex-child-size-shrink"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Grow', 'blockera'),
 									value: 'grow',
-									icon: <SizingGrowIcon />,
+									icon: (
+										<Icon
+											icon="flex-child-size-grow"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('No Grow or Shrink', 'blockera'),
 									value: 'no',
-									icon: <SizingNotIcon />,
+									icon: (
+										<Icon
+											icon="flex-child-size-no-grow"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Custom', 'blockera'),
 									value: 'custom',
-									icon: <GearIcon />,
+									icon: (
+										<Icon
+											icon="more-horizontal"
+											iconSize="20"
+										/>
+									),
 								},
 							]}
 							isDeselectable={true}
@@ -289,27 +298,52 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 								{
 									label: __('Flex Start', 'blockera'),
 									value: 'flex-start',
-									icon: <AlignFlexStartIcon />,
+									icon: (
+										<Icon
+											icon="flex-child-align-start"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Center', 'blockera'),
 									value: 'center',
-									icon: <AlignFlexCenterIcon />,
+									icon: (
+										<Icon
+											icon="flex-child-align-center"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Flex End', 'blockera'),
 									value: 'flex-end',
-									icon: <AlignFlexEndIcon />,
+									icon: (
+										<Icon
+											icon="flex-child-align-end"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Stretch', 'blockera'),
 									value: 'stretch',
-									icon: <AlignStretchIcon />,
+									icon: (
+										<Icon
+											icon="flex-child-align-stretch"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Baseline', 'blockera'),
 									value: 'baseline',
-									icon: <AlignBaselineIcon />,
+									icon: (
+										<Icon
+											icon="flex-child-align-baseline"
+											iconSize="18"
+										/>
+									),
 								},
 							]}
 							isDeselectable={true}
@@ -352,17 +386,32 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 								{
 									label: __('First', 'blockera'),
 									value: 'first',
-									icon: <OrderFirst />,
+									icon: (
+										<Icon
+											icon="order-horizontal-first"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Last', 'blockera'),
 									value: 'last',
-									icon: <OrderLast />,
+									icon: (
+										<Icon
+											icon="order-horizontal-last"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Custom Order', 'blockera'),
 									value: 'custom',
-									icon: <GearIcon />,
+									icon: (
+										<Icon
+											icon="more-horizontal"
+											iconSize="20"
+										/>
+									),
 								},
 							]}
 							isDeselectable={true}

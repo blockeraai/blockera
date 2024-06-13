@@ -16,14 +16,13 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
 import type { ScrollExtensionProps } from './types/props';
-import { ScrollAnimationExtensionIcon } from './index';
-import AnimationIcon from './icons/animation-icon';
 import { isActiveField } from '../../api/utils';
 
 export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
@@ -41,7 +40,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 				<PanelBodyControl
 					title={__('On Scroll', 'blockera')}
 					initialOpen={true}
-					icon={<ScrollAnimationExtensionIcon />}
+					icon={<Icon icon="extension-scroll-animation" />}
 					className={extensionClassNames('scroll-animation')}
 				>
 					<ControlContextProvider
@@ -57,7 +56,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 							label=""
 							defaultValue={{}}
 							design="large"
-							icon={<AnimationIcon />}
+							icon={<Icon icon="scroll-animation" />}
 							description={__(
 								'Scrolling will trigger the animation.',
 								'blockera'
