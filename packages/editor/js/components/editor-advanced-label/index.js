@@ -23,6 +23,7 @@ import {
 	RepeaterContext,
 	SimpleLabelControl,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal Dependencies
@@ -31,9 +32,6 @@ import { useBlockContext } from '../../extensions';
 import { useAdvancedLabelProps } from '../../hooks';
 import type { AdvancedLabelControlProps } from './types';
 import { StatesGraph } from './states-graph';
-import HelpIcon from './icons/help';
-import EditsIcon from './icons/edits';
-import RevertIcon from './icons/revert';
 
 export const EditorAdvancedLabelControl = ({
 	path = null,
@@ -164,7 +162,7 @@ export const EditorAdvancedLabelControl = ({
 					offset={35}
 					title={
 						<>
-							<HelpIcon />
+							<Icon icon="question-circle" iconSize="24" />
 							{labelPopoverTitle !== ''
 								? labelPopoverTitle
 								: label}
@@ -186,7 +184,7 @@ export const EditorAdvancedLabelControl = ({
 									'label-section-title'
 								)}
 							>
-								<EditsIcon />
+								<Icon icon="pen-circle" iconSize="20" />
 								{__('Customization', 'blockera')}
 							</h3>
 
@@ -263,7 +261,10 @@ export const EditorAdvancedLabelControl = ({
 															'Reset',
 															'blockera'
 														)}
-														<RevertIcon />
+														<Icon
+															icon="undo"
+															iconSize="20"
+														/>
 													</>
 												}
 												label={__(
@@ -315,7 +316,10 @@ export const EditorAdvancedLabelControl = ({
 											text={
 												<>
 													{__('Reset', 'blockera')}
-													<RevertIcon />
+													<Icon
+														icon="undo"
+														iconSize="20"
+													/>
 												</>
 											}
 											label={__(
@@ -379,7 +383,10 @@ export const EditorAdvancedLabelControl = ({
 										'label-section-title'
 									)}
 								>
-									<HelpIcon />
+									<Icon
+										icon="question-circle"
+										iconSize="20"
+									/>
 									{__('Overview', 'blockera')}
 								</h3>
 							)}

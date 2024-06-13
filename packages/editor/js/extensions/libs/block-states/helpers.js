@@ -101,7 +101,7 @@ export function BreakpointIcon({
 		case 'large':
 			return (
 				<Icon
-					icon="device-large-screen"
+					icon="device-large"
 					aria-label={__('Large Screen', 'blockera')}
 					onClick={onClick}
 					{...props}

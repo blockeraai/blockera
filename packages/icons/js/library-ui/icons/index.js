@@ -125,6 +125,9 @@ export { default as OrderHorizontalLast } from './order-horizontal-last.svg';
 export { default as OverflowHidden } from './overflow-hidden.svg';
 export { default as OverflowScroll } from './overflow-scroll.svg';
 export { default as OverflowVisible } from './overflow-visible.svg';
+export { default as PenCircle } from './pen-circle.svg';
+export { default as QuestionCircle } from './question-circle.svg';
+export { default as Redo } from './redo.svg';
 export { default as Regenerate } from './regenerate.svg';
 export { default as ReverseHorizontal } from './reverse-horizontal.svg';
 export { default as ScrollAnimation } from './scroll-animation.svg';
@@ -142,6 +145,7 @@ export { default as TextOrientationStyle4 } from './text-orientation-style-4.svg
 export { default as TextTransformCapitalize } from './text-transform-capitalize.svg';
 export { default as TextTransformLowercase } from './text-transform-lowercase.svg';
 export { default as TextTransformUppercase } from './text-transform-uppercase.svg';
+export { default as Undo } from './undo.svg';
 export { default as Unlock } from './unlock.svg';
 export { default as WrapNo } from './wrap-no.svg';
 export { default as Wrap } from './wrap.svg';

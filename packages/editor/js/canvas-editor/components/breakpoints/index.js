@@ -19,12 +19,12 @@ import {
 	ControlContextProvider,
 	InputControl,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { Preview } from '../preview';
-import Circles from '../../icons/circles';
 import { isLaptopBreakpoint } from './helpers';
 import PickedBreakpoints from './picked-breakpoints';
 import BreakpointSettings from './breakpoint-settings';
@@ -185,7 +185,9 @@ export const Breakpoints = ({
 								'blockera-core-breakpoints'
 							)}
 						>
-							<Circles
+							<Icon
+								icon="more-horizontal"
+								iconSize="24"
 								onClick={() =>
 									handleOnChange(
 										'isOpenOtherBreakpoints',
