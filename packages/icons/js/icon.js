@@ -15,9 +15,15 @@ import { isFunction, isUndefined } from '@blockera/utils';
  */
 import { WPIcon } from './library-wp/index';
 import { BlockeraIcon } from './library-blockera/index';
+import { BlockeraUIIcon } from './library-ui/index';
 import { isValidIconLibrary, getIconLibraryIcons } from './icon-library';
+import type { IconProps, IconLibraryTypes } from './types';
 
-export function Icon({ library, uploadSVG, ...props }: Object): MixedElement {
+export function Icon({
+	library = 'ui',
+	uploadSVG,
+	...props
+}: IconProps): MixedElement {
 	if (uploadSVG) {
 		return <img alt={uploadSVG.title} src={uploadSVG.url} />;
 	}
@@ -27,6 +33,9 @@ export function Icon({ library, uploadSVG, ...props }: Object): MixedElement {
 	}
 
 	switch (library) {
+		case 'ui':
+			return <BlockeraUIIcon {...props} />;
+
 		case 'blockera':
 			return <BlockeraIcon {...props} />;
 
@@ -37,7 +46,7 @@ export function Icon({ library, uploadSVG, ...props }: Object): MixedElement {
 
 export function getIcon(
 	iconName: string,
-	libraryName: string,
+	libraryName: IconLibraryTypes = 'ui',
 	standardize: boolean = true
 ): null | Object {
 	if (!isValidIconLibrary(libraryName)) {
@@ -77,7 +86,7 @@ export function isValidIcon(icon: any, key: void | string): boolean {
 
 export function createStandardIconObject(
 	iconName: string,
-	library: string,
+	library: IconLibraryTypes = 'ui',
 	icon: Object
 ): Object {
 	// use getIcon if the icon shape did not provide
@@ -105,7 +114,7 @@ export function createStandardIconObject(
 		};
 	}
 
-	if (library === 'blockera') {
+	if (library === 'blockera' || library === 'ui') {
 		if (isFunction(icon)) {
 			return {
 				icon,

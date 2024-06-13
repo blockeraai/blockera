@@ -5,7 +5,7 @@
  */
 import * as _rawIcons from './icons/index';
 
-const BlockeraIcons: Object = Object.fromEntries(
+const BlockeraUIIcons: Object = Object.fromEntries(
 	Object.entries(_rawIcons).map(([key, value]) => [
 		key
 			.replace(/([a-z])([A-Z])/g, '$1-$2')
@@ -15,4 +15,4 @@ const BlockeraIcons: Object = Object.fromEntries(
 	])
 );
 
-export { BlockeraIcons };
+export { BlockeraUIIcons };

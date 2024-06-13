@@ -31,7 +31,6 @@ export {
 export {
 	SizeStyles,
 	SizeExtension,
-	SizeExtensionIcon,
 	supports as sizeSupports,
 	attributes as sizeAttributes,
 } from './size';
@@ -43,7 +42,6 @@ export {
 	supports as positionSupports,
 } from './position';
 export {
-	SpacingExtensionIcon,
 	SpacingStyles,
 	SpacingExtension,
 	attributes as spacingAttributes,

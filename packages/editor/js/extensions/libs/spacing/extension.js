@@ -17,12 +17,12 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
-import { SpacingExtensionIcon } from './index';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TSpacingProps } from './types/spacing-props';
@@ -50,7 +50,7 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 			<PanelBodyControl
 				title={__('Spacing', 'blockera')}
 				initialOpen={true}
-				icon={<SpacingExtensionIcon />}
+				icon={<Icon icon={'extension-spacing'} />}
 				className={extensionClassNames('spacing')}
 			>
 				<EditorFeatureWrapper

@@ -20,6 +20,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -28,12 +29,8 @@ import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TSizeProps } from './types/size-props';
-import { default as OverflowHiddenIcon } from './icons/overflow-hidden';
-import { default as OverflowVisibleIcon } from './icons/overflow-visible';
-import { default as OverflowScrollIcon } from './icons/overflow-scroll';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
-import { SizeExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
 
 export const SizeExtension: ComponentType<TSizeProps> = memo(
@@ -111,7 +108,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 			<PanelBodyControl
 				title={__('Size', 'blockera')}
 				initialOpen={true}
-				icon={<SizeExtensionIcon />}
+				icon={<Icon icon="extension-size" />}
 				className={extensionClassNames('size')}
 			>
 				<ExtensionSettings
@@ -606,7 +603,10 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 										)}
 									</p>
 									<h3>
-										<OverflowVisibleIcon />
+										<Icon
+											icon="overflow-visible"
+											iconSize="22"
+										/>
 										{__('Visible', 'blockera')}
 									</h3>
 									<p>
@@ -616,7 +616,10 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 										)}
 									</p>
 									<h3>
-										<OverflowHiddenIcon />
+										<Icon
+											icon="overflow-hidden"
+											iconSize="22"
+										/>
 										{__('Hidden', 'blockera')}
 									</h3>
 									<p>
@@ -626,7 +629,10 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 										)}
 									</p>
 									<h3>
-										<OverflowScrollIcon />
+										<Icon
+											icon="overflow-scroll"
+											iconSize="22"
+										/>
 										{__('Scroll', 'blockera')}
 									</h3>
 									<p>
@@ -643,17 +649,32 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 								{
 									label: __('Visible Overflow', 'blockera'),
 									value: 'visible',
-									icon: <OverflowVisibleIcon />,
+									icon: (
+										<Icon
+											icon="overflow-visible"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Hidden Overflow', 'blockera'),
 									value: 'hidden',
-									icon: <OverflowHiddenIcon />,
+									icon: (
+										<Icon
+											icon="overflow-hidden"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Scroll Overflow', 'blockera'),
 									value: 'scroll',
-									icon: <OverflowScrollIcon />,
+									icon: (
+										<Icon
+											icon="overflow-scroll"
+											iconSize="18"
+										/>
+									),
 								},
 							]}
 							defaultValue={attributes.blockeraOverflow.default}

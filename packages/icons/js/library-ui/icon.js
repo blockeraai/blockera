@@ -17,13 +17,13 @@ import { isString, isUndefined } from '@blockera/utils';
 import { getIcon } from '../index';
 import type { IconProps } from '../types';
 
-export function BlockeraIcon({
+export function BlockeraUIIcon({
 	icon,
 	iconSize,
 	...props
 }: IconProps): MixedElement {
 	if (isString(icon)) {
-		icon = getIcon(icon, 'blockera');
+		icon = getIcon(icon, 'ui');
 	}
 
 	//$FlowFixMe
@@ -44,12 +44,5 @@ export function BlockeraIcon({
 		}
 	}
 
-	return (
-		<WordPressIconComponent
-			icon={icon.icon}
-			width={iconSize}
-			height={iconSize}
-			{...props}
-		/>
-	);
+	return <WordPressIconComponent icon={icon.icon} {...props} />;
 }

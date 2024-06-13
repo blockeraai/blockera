@@ -15,18 +15,13 @@ import {
 	SelectControl,
 	useControlContext,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import FitNormalIcon from '../icons/fit-normal';
-import FitFillIcon from '../icons/fit-fill';
-import FitContainIcon from '../icons/fit-contain';
-import FitCoverIcon from '../icons/fit-cover';
-import FitScaleDownIcon from '../icons/fit-scale-down';
 import { generateExtensionId } from '../../utils';
-import FitNoneIcon from '../icons/fit-none';
 
 export default function ObjectFit({
 	block,
@@ -78,7 +73,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<FitFillIcon />
+						<Icon icon="fit-fill" iconSize="22" />
 						{__('Fill', 'blockera')}
 					</h3>
 					<p>
@@ -88,7 +83,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<FitContainIcon />
+						<Icon icon="fit-contain" iconSize="22" />
 						{__('Contain', 'blockera')}
 					</h3>
 					<p>
@@ -98,7 +93,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<FitCoverIcon />
+						<Icon icon="fit-cover" iconSize="22" />
 						{__('Cover', 'blockera')}
 					</h3>
 					<p>
@@ -108,7 +103,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<FitNoneIcon />
+						<Icon icon="fit-none" iconSize="22" />
 						{__('None', 'blockera')}
 					</h3>
 					<p>
@@ -118,7 +113,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<FitScaleDownIcon />
+						<Icon icon="fit-scale-down" iconSize="22" />
 						{__('Scale Down', 'blockera')}
 					</h3>
 					<p>
@@ -140,32 +135,32 @@ export default function ObjectFit({
 					{
 						label: __('Default', 'blockera'),
 						value: '',
-						icon: <FitNormalIcon />,
+						icon: <Icon icon="fit-normal" iconSize="18" />,
 					},
 					{
 						label: __('Fill', 'blockera'),
 						value: 'fill',
-						icon: <FitFillIcon />,
+						icon: <Icon icon="fit-fill" iconSize="18" />,
 					},
 					{
 						label: __('Contain', 'blockera'),
 						value: 'contain',
-						icon: <FitContainIcon />,
+						icon: <Icon icon="fit-contain" iconSize="18" />,
 					},
 					{
 						label: __('Cover', 'blockera'),
 						value: 'cover',
-						icon: <FitCoverIcon />,
+						icon: <Icon icon="fit-cover" iconSize="18" />,
 					},
 					{
 						label: __('None', 'blockera'),
 						value: 'none',
-						icon: <FitNormalIcon />,
+						icon: <Icon icon="fit-none" iconSize="18" />,
 					},
 					{
 						label: __('Scale Down', 'blockera'),
 						value: 'scale-down',
-						icon: <FitScaleDownIcon />,
+						icon: <Icon icon="fit-scale-down" iconSize="18" />,
 					},
 				]}
 				type="custom"
