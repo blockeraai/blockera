@@ -86,7 +86,8 @@ class AssetsLoader {
 		];
 		$this->id             = $args['id'] ?? 'blockera-wordpress-assets-loader';
 
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueDynamicStyles' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueBlockeraWPStyles' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueueBlockeraWPStyles' ] );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
@@ -178,17 +179,17 @@ class AssetsLoader {
 	}
 
 	/**
-	 * Enqueuing dynamic-assets
+	 * Enqueuing blockera requirement css styles on WordPress admin or front environments.
 	 *
 	 * @return void
 	 */
-	public function enqueueDynamicStyles(): void {
+	public function enqueueBlockeraWPStyles(): void {
 
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file    = $this->root_info['path'] . 'assets/dynamic-styles.css';
-		$fileURL = $this->root_info['url'] . 'assets/dynamic-styles.css';
+		$file    = $this->root_info['path'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
+		$file_url = $this->root_info['url'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
@@ -196,7 +197,7 @@ class AssetsLoader {
 
 			wp_enqueue_style(
 				$handle,
-				$fileURL,
+				$file_url,
 				[],
 				filemtime( $file )
 			);
@@ -215,6 +216,19 @@ class AssetsLoader {
 				)
 			);
 			// phpcs:enable
+		}
+
+		$file    = $this->root_info['path'] . 'packages/wordpress/php/Assets/css/admin.css';
+		$file_url = $this->root_info['url'] . 'packages/wordpress/php/Assets/css/admin.css';
+
+		if ( file_exists( $file ) && is_admin() ) {
+
+			wp_enqueue_style(
+				'blockera-admin-kit',
+				$file_url,
+				[],
+				filemtime( $file )
+			);
 		}
 	}
 

@@ -16,7 +16,6 @@ import { registerCoreBlocks } from '@wordpress/block-library';
  */
 import { noop } from '@blockera/utils';
 import { initializer } from '@blockera/bootstrap';
-import { LoadingComponent } from '@blockera/controls';
 import { unstableBootstrapServerSideEntities } from '@blockera/data';
 
 /**
@@ -27,8 +26,6 @@ import { Dashboard } from './dashboard';
 const root = createRoot(
 	document.getElementById('blockera-admin-settings-container')
 );
-
-root.render(<LoadingComponent />);
 
 const initializeBlockeraAdmin = (): void => {
 	domReady(() => {
