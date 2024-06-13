@@ -54,10 +54,35 @@ const BLOCKERA_NAMESPACE = '@blockera/';
 const blockeraPackages = Object.keys(dependencies)
 	.filter((packageName) => packageName.startsWith(BLOCKERA_NAMESPACE))
 	.map((packageName) => packageName.replace(BLOCKERA_NAMESPACE, ''));
+const blockeraPackagesVersion = Object.fromEntries(
+	blockeraPackages.map((packageName) => {
+		const {
+			version,
+		} = require(`../../../../packages/${packageName}/package.json`);
+
+		return [packageName, version.replace(/\./g, '_')];
+	})
+);
 const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
 	// Exclude dev packages.
 	if (-1 !== packageName.indexOf('dev-')) {
 		return memo;
+	}
+
+	if (!blockeraPackagesVersion[packageName]) {
+		return memo;
+	}
+
+	const version = blockeraPackagesVersion[packageName];
+
+	let name = packageName.startsWith('blockera')
+		? camelCaseDash(packageName + '_' + version)
+		: camelCaseDash('blockera-' + packageName + '_' + version);
+
+	if ('icons' === packageName) {
+		name = packageName.startsWith('blockera')
+			? camelCaseDash(packageName)
+			: camelCaseDash('blockera-' + packageName);
 	}
 
 	return {
@@ -65,9 +90,7 @@ const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
 		[packageName]: {
 			import: `./packages/${packageName}`,
 			library: {
-				name: packageName.startsWith('blockera')
-					? camelCaseDash(packageName)
-					: camelCaseDash('blockera-' + packageName), //['blockera', camelCaseDash(packageName)],
+				name,
 				type: 'var',
 				export: exportDefaultPackages.includes(packageName)
 					? 'default'
@@ -107,8 +130,8 @@ module.exports = (env, argv) => {
 		output: {
 			devtoolNamespace: 'blockera',
 			filename: isProduction
-				? './dist/[name]/index.min.js'
-				: './dist/[name]/index.js',
+				? './dist/[name]/[name].min.js'
+				: './dist/[name]/[name].js',
 			path: join(__dirname, '..', '..', '..', '..'),
 		},
 		module: {
@@ -149,16 +172,23 @@ module.exports = (env, argv) => {
 			  }),
 		externals: {
 			// Externalize the local packages.
-			'@blockera/data': 'blockeraData',
 			'@blockera/icons': 'blockeraIcons',
-			'@blockera/utils': 'blockeraUtils',
-			'@blockera/editor': 'blockeraEditor',
-			'@blockera/blocks': 'blockeraBlocks',
-			'@blockera/controls': 'blockeraControls',
-			'@blockera/bootstrap': 'blockeraBootstrap',
-			'@blockera/wordpress': 'blockeraWordpress',
-			'@blockera/classnames': 'blockeraClassnames',
-			'@blockera/data-editor': 'blockeraDataEditor',
+			'@blockera/data': 'blockeraData_' + blockeraPackagesVersion.data,
+			'@blockera/utils': 'blockeraUtils_' + blockeraPackagesVersion.utils,
+			'@blockera/editor':
+				'blockeraEditor_' + blockeraPackagesVersion.editor,
+			'@blockera/blocks':
+				'blockeraBlocks_' + blockeraPackagesVersion.blocks,
+			'@blockera/controls':
+				'blockeraControls_' + blockeraPackagesVersion.controls,
+			'@blockera/bootstrap':
+				'blockeraBootstrap_' + blockeraPackagesVersion.bootstrap,
+			'@blockera/wordpress':
+				'blockeraWordpress_' + blockeraPackagesVersion.wordpress,
+			'@blockera/classnames':
+				'blockeraClassnames_' + blockeraPackagesVersion.classnames,
+			'@blockera/data-editor':
+				'blockeraDataEditor_' + blockeraPackagesVersion['data-editor'],
 		},
 	};
 };

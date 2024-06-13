@@ -85,46 +85,17 @@ class AssetsLoader {
 			'url'  => '',
 		];
 		$this->id             = $args['id'] ?? 'blockera-wordpress-assets-loader';
-		$this->dequeue_stack  = $args['dequeue-stack'] ?? [];
 
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueDynamicStyles' ] );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
-//			add_action( 'enqueue_block_assets', [ $this, 'registerAssets' ], 10 );
+
 			add_action( 'enqueue_block_assets', [ $this, 'enqueue' ] );
-		}
 
-		if ( ! empty( $args['enqueue-admin-assets'] ) ) {
+		} elseif ( ! empty( $args['enqueue-admin-assets'] ) ) {
 
-//			add_action( 'admin_enqueue_scripts', [ $this, 'registerAssets' ], 10 );
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		}
-	}
-
-	/**
-	 * Dequeue registered scripts.
-	 *
-	 * @return void
-	 */
-	protected function dequeue(): void {
-
-		array_map( static function ( string $handle ) {
-
-			wp_dequeue_script( $handle );
-		}, $this->dequeue_stack );
-	}
-
-	/**
-	 * Enqueue removed scripts of queue.
-	 *
-	 * @return void
-	 */
-	protected function enqueueRemovedScripts(): void {
-
-		array_map( static function ( string $handle ) {
-
-			wp_enqueue_script( $handle );
-		}, $this->dequeue_stack );
 	}
 
 	/**
@@ -139,9 +110,7 @@ class AssetsLoader {
 			return;
 		}
 
-		$this->dequeue();
-
-		foreach ( $this->prepareAssets() as $asset ) {
+		array_map( function ( array $asset ): void {
 
 			if ( $asset['style'] ) {
 
@@ -152,20 +121,17 @@ class AssetsLoader {
 					$asset['version']
 				);
 
-				continue;
+				return;
 			}
 
 			if ( ! $asset['script'] ) {
 
-				continue;
+				return;
 			}
 
 			$deps = $this->excludeDependencies( $asset['deps'] );
 
-			foreach ($this->packages_deps[ $asset['name'] ] ?? [] as $dependency){
-
-				wp_enqueue_script($dependency);
-			}
+			array_map( 'wp_enqueue_script', $this->packages_deps[ $asset['name'] ] ?? [] );
 
 			wp_enqueue_script(
 				$asset['name'],
@@ -179,9 +145,8 @@ class AssetsLoader {
 					'in_footer' => true,
 				]
 			);
-		}
 
-		$this->enqueueRemovedScripts();
+		}, $this->prepareAssets() );
 
 		/**
 		 * This filter for extendable inline script from internal or third-party developers.
@@ -284,47 +249,6 @@ class AssetsLoader {
 	}
 
 	/**
-	 * Register all assets in WordPress.
-	 *
-	 * @return void
-	 */
-	public function registerAssets(): void {
-
-		// Registering assets ...
-		foreach ( $this->prepareAssets( true ) as $asset ) {
-
-			if ( $asset['style'] ) {
-
-				wp_register_style(
-					$asset['name'],
-					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
-					$this->packages_deps[ $asset['name'] ] ?? [],
-					$asset['version']
-				);
-
-				continue;
-			}
-
-			if ( ! $asset['script'] ) {
-
-				continue;
-			}
-
-			$deps = $this->excludeDependencies( $asset['deps'] );
-
-			wp_register_script(
-				$asset['name'],
-				str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
-				$deps,
-				$asset['version'],
-				[
-					'in_footer' => true,
-				]
-			);
-		}
-	}
-
-	/**
 	 * Exclude deps before register script!
 	 *
 	 * @param array $dependencies the dependencies of current asset.
@@ -353,7 +277,7 @@ class AssetsLoader {
 	public function assetInfo( string $name ): array {
 
 		$assetInfoFile = sprintf(
-			'%sdist/%s/index%s.asset.php',
+			'%1$sdist/%2$s/%2$s%3$s.asset.php',
 			$this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
@@ -370,7 +294,7 @@ class AssetsLoader {
 		$version = $assetInfo['version'] ?? filemtime( $assetInfoFile );
 
 		$js_file = sprintf(
-			'%sdist/%s/index%s.js',
+			'%1$sdist/%2$s/%2$s%3$s.js',
 			$this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
@@ -379,7 +303,7 @@ class AssetsLoader {
 		if ( file_exists( $js_file ) ) {
 
 			$script = sprintf(
-				'%sdist/%s/index%s.js',
+				'%1$sdist/%2$s/%2$s%3$s.js',
 				$this->root_info['url'],
 				$name,
 				$this->is_development ? '' : '.min'
