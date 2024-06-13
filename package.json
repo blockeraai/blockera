@@ -26,7 +26,6 @@
 		"ALLOW_EXPERIMENT_REREGISTRATION": true
 	},
 	"dependencies": {
-		"@blockera/icons": "file:packages/icons",
 		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/blockera-admin": "file:packages/blockera-admin",
 		"@blockera/blocks": "file:packages/blocks",
@@ -36,6 +35,7 @@
 		"@blockera/data": "file:packages/data",
 		"@blockera/data-editor": "file:packages/data-editor",
 		"@blockera/editor": "file:packages/editor",
+		"@blockera/icons": "file:packages/icons",
 		"@blockera/utils": "file:packages/utils",
 		"@blockera/wordpress": "file:packages/wordpress",
 		"@wordpress/icons": "^10.0.0",

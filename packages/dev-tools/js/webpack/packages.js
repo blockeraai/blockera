@@ -21,6 +21,34 @@ const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const { dependencies } = require('../../../../package');
 const styleDependencies = require('./packages-styles');
 
+/**
+ * Removes all svg rules from WordPress webpack config because it brakes the SVGR and SVGO plugins
+ * Related to: https://github.com/gregberge/svgr/issues/361
+ */
+defaultConfig.module.rules
+	.filter((rule) => rule.test)
+	.forEach((rule) => {
+		// Convert the test to a string, remove 'svg', and then create a new RegExp
+		const source = rule.test.source;
+		const modifiedSource = source
+			.replace(/\|?svg\|?/g, (match) => {
+				if (match.startsWith('|') && match.endsWith('|')) {
+					return '|';
+				}
+				return '';
+			})
+			.replace(/^\|/, '')
+			.replace(/\|$/, '');
+
+		// If the modified source is empty or invalid, remove the rule
+		if (modifiedSource) {
+			rule.test = new RegExp(modifiedSource);
+		} else {
+			// Handle the case where the pattern is completely removed and leaves an empty string
+			rule.test = null;
+		}
+	});
+
 const exportDefaultPackages = [];
 const BLOCKERA_NAMESPACE = '@blockera/';
 const blockeraPackages = Object.keys(dependencies)
@@ -90,6 +118,11 @@ module.exports = (env, argv) => {
 					test: /\.lazy\.scss$/,
 					use: scssLoaders({ isLazy: true }),
 					include: resolve(__dirname),
+				},
+				{
+					test: /\.svg$/i,
+					issuer: /\.[jt]sx?$/,
+					use: ['@svgr/webpack'],
 				},
 			],
 		},
