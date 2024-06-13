@@ -12,13 +12,12 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { generateExtensionId } from '../../utils';
-import FontStyleNormalIcon from '../icons/font-style-normal';
-import FontStyleItalicIcon from '../icons/font-style-italic';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export const FontStyle = ({
@@ -54,7 +53,7 @@ export const FontStyle = ({
 							)}
 						</p>
 						<h3>
-							<FontStyleNormalIcon />
+							<Icon icon="font-style-normal" iconSize="22" />
 							{__('Normal', 'blockera')}
 						</h3>
 						<p>
@@ -64,7 +63,7 @@ export const FontStyle = ({
 							)}
 						</p>
 						<h3>
-							<FontStyleItalicIcon />
+							<Icon icon="font-style-italic" iconSize="22" />
 							{__('Italic', 'blockera')}
 						</h3>
 						<p>
@@ -81,12 +80,12 @@ export const FontStyle = ({
 					{
 						label: __('Normal style', 'blockera'),
 						value: 'normal',
-						icon: <FontStyleNormalIcon />,
+						icon: <Icon icon="font-style-normal" iconSize="18" />,
 					},
 					{
 						label: __('Italic style', 'blockera'),
 						value: 'italic',
-						icon: <FontStyleItalicIcon />,
+						icon: <Icon icon="font-style-italic" iconSize="18" />,
 					},
 				]}
 				isDeselectable={true}

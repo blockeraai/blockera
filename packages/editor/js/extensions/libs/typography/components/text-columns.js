@@ -18,16 +18,12 @@ import {
 } from '@blockera/controls';
 import { isEmpty, isUndefined } from '@blockera/utils';
 import type { BorderControlBorderStyle } from '@blockera/controls/js/libs/border-control/types';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import NoneIcon from '../icons/none';
 import type { THandleOnChangeAttributes } from '../../types';
-import Columns2Icon from '../icons/columns-2';
-import Columns3Icon from '../icons/columns-3';
-import Columns4Icon from '../icons/columns-4';
-import Columns5Icon from '../icons/columns-5';
 
 export const TextColumns = ({
 	value,
@@ -116,27 +112,33 @@ export const TextColumns = ({
 						{
 							label: __('2 Columns Text', 'blockera'),
 							value: '2-columns',
-							icon: <Columns2Icon />,
+							icon: <Icon icon="number-2" size={18} />,
 						},
 						{
 							label: __('3 Columns Text', 'blockera'),
 							value: '3-columns',
-							icon: <Columns3Icon />,
+							icon: <Icon icon="number-3" size={18} />,
 						},
 						{
 							label: __('4 Columns Text', 'blockera'),
 							value: '4-columns',
-							icon: <Columns4Icon />,
+							icon: <Icon icon="number-4" size={18} />,
 						},
 						{
 							label: __('5 Columns Text', 'blockera'),
 							value: '5-columns',
-							icon: <Columns5Icon />,
+							icon: <Icon icon="number-5" size={18} />,
 						},
 						{
 							label: __('None', 'blockera'),
 							value: 'none',
-							icon: <NoneIcon />,
+							icon: (
+								<Icon
+									library="wp"
+									icon="close-small"
+									size={18}
+								/>
+							),
 						},
 					]}
 					isDeselectable={true}

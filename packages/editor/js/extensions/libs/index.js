@@ -83,7 +83,6 @@ export {
 export {
 	TypographyStyles,
 	TypographyExtension,
-	TypographyExtensionIcon,
 	supports as typographyExtensionSupports,
 	attributes as typographyExtensionAttributes,
 } from './typography';
