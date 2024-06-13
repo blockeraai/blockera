@@ -15,14 +15,7 @@ import {
 	sharedBlockExtensionAttributes,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-/**
- * Internal dependencies
- **/
-import { InnerBlockSeparatorIcon } from './icons/inner-block-separator';
-import { InnerBlockPrefixIcon } from './icons/inner-block-prefix';
-import { InnerBlockSuffixIcon } from './icons/inner-block-suffix';
-import { InnerBlockTermIcon } from './icons/inner-block-term';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -33,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/term-item',
 		type: 'link',
 		label: __('Term Items', 'blockera'),
-		icon: <InnerBlockTermIcon />,
+		icon: <Icon icon="block-post-terms-term" iconSize="20" />,
 		selectors: {
 			root: 'a:not(.wp-element-button)',
 		},
@@ -46,7 +39,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/separator',
 		type: 'separator',
 		label: __('Separator', 'blockera'),
-		icon: <InnerBlockSeparatorIcon />,
+		icon: <Icon icon="block-post-terms-separator" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-post-terms__separator',
 		},
@@ -59,7 +52,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/prefix',
 		type: 'prefix',
 		label: __('Prefix Text', 'blockera'),
-		icon: <InnerBlockPrefixIcon />,
+		icon: <Icon icon="block-post-terms-prefix" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-post-terms__prefix',
 		},
@@ -72,7 +65,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/suffix',
 		type: 'suffix',
 		label: __('Suffix Text', 'blockera'),
-		icon: <InnerBlockSuffixIcon />,
+		icon: <Icon icon="block-post-terms-suffix" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-post-terms__suffix',
 		},

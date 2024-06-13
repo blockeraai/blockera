@@ -13,11 +13,9 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	InnerBlockParagraphIcon,
-	InnerBlockButtonIcon,
-	InnerBlockInputIcon,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -28,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/title',
 		type: 'title',
 		label: __('Form Label', 'blockera'),
-		icon: <InnerBlockParagraphIcon />,
+		icon: <Icon icon="block-paragraph" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-search__label',
 		},
@@ -41,7 +39,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'input',
 		type: 'input',
 		label: __('Form Input', 'blockera'),
-		icon: <InnerBlockInputIcon />,
+		icon: <Icon icon="block-input" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-search__input',
 		},
@@ -54,7 +52,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/button',
 		type: 'button',
 		label: __('Form Button', 'blockera'),
-		icon: <InnerBlockButtonIcon />,
+		icon: <Icon icon="block-button" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-search__button',
 		},

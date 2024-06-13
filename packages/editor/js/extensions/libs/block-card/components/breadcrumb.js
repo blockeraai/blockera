@@ -5,17 +5,18 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { isRTL } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
 import { ucFirstWord } from '@blockera/utils';
 import { extensionInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { CaretIcon } from '../icons';
 import statesDefinition from '../../../libs/block-states/states';
 import type { StateTypes, TStates } from '../../block-states/types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
@@ -57,7 +58,12 @@ export function Breadcrumb({
 
 		return (
 			<>
-				<CaretIcon />
+				{isRTL() ? (
+					<Icon library="wp" icon="chevron-left" iconSize="16" />
+				) : (
+					<Icon library="wp" icon="chevron-right" iconSize="16" />
+				)}
+
 				<span
 					className={extensionInnerClassNames(
 						'block-card__title__item',
@@ -87,7 +93,12 @@ export function Breadcrumb({
 
 			{null !== currentInnerBlock && (
 				<>
-					<CaretIcon />
+					{isRTL() ? (
+						<Icon library="wp" icon="chevron-left" iconSize="16" />
+					) : (
+						<Icon library="wp" icon="chevron-right" iconSize="16" />
+					)}
+
 					<span
 						className={extensionInnerClassNames(
 							'block-card__title__item',
@@ -97,6 +108,7 @@ export function Breadcrumb({
 					>
 						{innerBlocks[activeBlock].label}
 					</span>
+
 					{0 !==
 						Object.keys(
 							currentInnerBlock?.attributes

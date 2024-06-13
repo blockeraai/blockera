@@ -13,16 +13,9 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	InnerBlockLinkIcon,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-/**
- * Internal dependencies
- */
-import { InnerBlockItemContainerIcon } from './icons/inner-block-item-container';
-import { InnerBlockItemNameIcon } from './icons/inner-block-item-name';
-import { InnerBlockItemIconIcon } from './icons/inner-block-item-icon';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -33,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/item_containers',
 		type: 'item_containers',
 		label: __('Buttons', 'blockera'),
-		icon: <InnerBlockItemContainerIcon />,
+		icon: <Icon icon="block-social-link-container" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-social-link',
 		},
@@ -46,7 +39,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/item_icons',
 		type: 'item_icons',
 		label: __('Buttons Icons', 'blockera'),
-		icon: <InnerBlockItemIconIcon />,
+		icon: <Icon icon="block-social-link-icon" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-social-link svg',
 		},
@@ -59,7 +52,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/item_names',
 		type: 'item_names',
 		label: __('Buttons Names', 'blockera'),
-		icon: <InnerBlockItemNameIcon />,
+		icon: <Icon icon="block-social-link-name" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-social-link .wp-block-social-link-label',
 		},

@@ -14,13 +14,12 @@ import classNames from 'classnames';
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { More } from '../libs/settings/icons';
-import { BlockeraIcon } from '../icons/blockera';
-import { WordPressIcon } from '../icons/wordpress';
 
 export const BlockDropdownAllMenu = ({
 	isActive,
@@ -58,7 +57,11 @@ export const BlockDropdownAllMenu = ({
 							})}
 						>
 							<Flex alignItems="center" gap="10px">
-								<BlockeraIcon />
+								<Icon
+									library="blockera"
+									icon="blockera"
+									iconSize="18"
+								/>
 								{'Blockera ' + __('Block', 'blockera')}
 							</Flex>
 						</MenuItem>
@@ -77,7 +80,11 @@ export const BlockDropdownAllMenu = ({
 							})}
 						>
 							<Flex alignItems="center" gap="10px">
-								<WordPressIcon />
+								<Icon
+									library="wp"
+									icon="wordpress"
+									iconSize="18"
+								/>
 								{__('WordPress Core Block', 'blockera')}
 							</Flex>
 						</MenuItem>

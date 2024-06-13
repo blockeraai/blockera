@@ -52,14 +52,12 @@ export {
 	supports as backgroundSupports,
 } from './background';
 export {
-	BorderAndShadowExtensionIcon,
 	BorderAndShadowStyles,
 	BorderAndShadowExtension,
 	attributes as borderAndShadowExtensionAttributes,
 	supports as borderAndShadowExtensionSupports,
 } from './border-and-shadow';
 export {
-	EffectsExtensionIcon,
 	EffectsStyles,
 	EffectsExtension,
 	attributes as effectsExtensionAttributes,
@@ -73,7 +71,6 @@ export {
 	supports as mouseExtensionSupports,
 } from './mouse';
 export {
-	CustomStyleExtensionIcon,
 	CustomStyleStyles,
 	CustomStyleExtension,
 	attributes as customStyleAttributes,
@@ -90,7 +87,6 @@ export {
 	InnerBlocksExtension,
 	attributes as innerBlocksExtensionsAttributes,
 } from './inner-blocks';
-export * from './inner-blocks/icons';
 export {
 	EntranceAnimationExtensionIcon,
 	EntranceAnimationExtension,

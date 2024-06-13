@@ -13,9 +13,9 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	InnerBlockButtonIcon,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -26,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/button',
 		type: 'button',
 		label: __('Buttons', 'blockera'),
-		icon: <InnerBlockButtonIcon />,
+		icon: <Icon icon="block-button" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-button > .wp-element-button',
 		},

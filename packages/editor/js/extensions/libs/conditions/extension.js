@@ -16,14 +16,13 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
 import type { ConditionsExtensionProps } from './types/props';
-import { ConditionsExtensionIcon } from './index';
-import ConditionIcon from './icons/condition-icon';
 import { isActiveField } from '../../api/utils';
 
 export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
@@ -41,7 +40,7 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 				<PanelBodyControl
 					title={__('Conditions', 'blockera')}
 					initialOpen={true}
-					icon={<ConditionsExtensionIcon />}
+					icon={<Icon icon="extension-conditions" />}
 					className={extensionClassNames('conditions')}
 				>
 					<ControlContextProvider
@@ -57,7 +56,7 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 							label=""
 							defaultValue={{}}
 							design="large"
-							icon={<ConditionIcon />}
+							icon={<Icon icon="condition" iconSize="26" />}
 							description={__(
 								'Set conditions for displaying the block on page.',
 								'blockera'

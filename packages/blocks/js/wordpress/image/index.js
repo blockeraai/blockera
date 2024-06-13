@@ -15,11 +15,7 @@ import {
 	sharedBlockExtensionAttributes,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-/**
- * Internal dependencies
- */
-import { InnerBlockImageCaptionIcon } from './icons/inner-block-image-caption';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -30,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/caption',
 		type: 'caption',
 		label: __('Caption', 'blockera'),
-		icon: <InnerBlockImageCaptionIcon />,
+		icon: <Icon icon="block-image-caption" iconSize="20" />,
 		selectors: {
 			root: 'figcaption',
 		},

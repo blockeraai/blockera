@@ -15,13 +15,7 @@ import {
 	sharedBlockExtensionAttributes,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-/**
- * Internal dependencies
- */
-import { InnerBlockNumbersIcon } from './icons/inner-block-numbers';
-import { InnerBlockDotsIcon } from './icons/inner-block-dots';
-import { InnerBlockCurrentIcon } from './icons/inner-block-current';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -32,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/numbers',
 		type: 'numbers',
 		label: __('Numbers', 'blockera'),
-		icon: <InnerBlockNumbersIcon />,
+		icon: <Icon icon="block-pagination-numbers" size="20" />,
 		selectors: {
 			root: '.page-numbers:not(.dots)',
 		},
@@ -45,7 +39,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/current',
 		type: 'current',
 		label: __('Current Page', 'blockera'),
-		icon: <InnerBlockCurrentIcon />,
+		icon: <Icon icon="block-pagination-numbers-current" size="20" />,
 		selectors: {
 			root: '.page-numbers.current',
 		},
@@ -58,7 +52,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/dots',
 		type: 'dots',
 		label: __('Dots', 'blockera'),
-		icon: <InnerBlockDotsIcon />,
+		icon: <Icon icon="block-pagination-numbers-dots" size="20" />,
 		selectors: {
 			root: '.page-numbers.dots',
 		},

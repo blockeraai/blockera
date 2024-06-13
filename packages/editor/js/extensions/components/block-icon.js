@@ -4,13 +4,13 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { BlockeraIcon } from '../icons/blockera';
 import { BlockIcon as WPBlockIcon } from '@wordpress/block-editor';
 
 /**
  * Blockera dependencies
  */
 import { getPascalCase } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 export const BlockIcon = ({
 	name,
@@ -25,7 +25,10 @@ export const BlockIcon = ({
 
 	return (
 		<>
-			<BlockeraIcon
+			<Icon
+				library="blockera"
+				icon="blockera"
+				iconSize="16"
 				className={'blockera-block-icon'}
 				data-test={ariaLabel}
 				aria-label={ariaLabel}
