@@ -18,11 +18,11 @@ import {
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
 import { hasSameProps } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { PositionExtensionIcon } from './index';
 import { EditorFeatureWrapper } from '../../../';
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
@@ -57,7 +57,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 			<PanelBodyControl
 				title={__('Position', 'blockera')}
 				initialOpen={true}
-				icon={<PositionExtensionIcon />}
+				icon={<Icon icon="extension-position" />}
 				className={extensionClassNames('position')}
 			>
 				<EditorFeatureWrapper

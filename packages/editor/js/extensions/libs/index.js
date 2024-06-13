@@ -15,7 +15,6 @@ export {
 	attributes as styleVariationsExtensionAttributes,
 } from './style-variations';
 export {
-	LayoutExtensionIcon,
 	LayoutStyles,
 	LayoutExtension,
 	attributes as layoutAttributes,
@@ -35,7 +34,6 @@ export {
 	attributes as sizeAttributes,
 } from './size';
 export {
-	PositionExtensionIcon,
 	PositionStyles,
 	PositionExtension,
 	attributes as positionAttributes,
