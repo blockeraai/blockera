@@ -46,7 +46,6 @@ export {
 	supports as spacingSupports,
 } from './spacing';
 export {
-	BackgroundExtensionIcon,
 	BackgroundStyles,
 	BackgroundExtension,
 	attributes as backgroundAttributes,

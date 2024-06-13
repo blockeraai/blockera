@@ -1228,7 +1228,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											</p>
 											<h3>
 												<Icon
-													icon="inherit"
+													icon="inherit-circle"
 													iconSize="22"
 												/>
 												{__('Inherit', 'blockera')}
@@ -1294,7 +1294,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											value: 'inherit',
 											icon: (
 												<Icon
-													icon="inherit"
+													icon="inherit-circle"
 													iconSize="18"
 												/>
 											),

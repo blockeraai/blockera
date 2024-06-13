@@ -20,20 +20,15 @@ import {
 } from '@blockera/controls';
 import { checkVisibleItemLength, hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import ClipTextIcon from './icons/clip-text';
-import ClipNoneIcon from './icons/clip-none';
-import InheritIcon from '../../icons/inherit';
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
-import ClipPaddingIcon from './icons/clip-padding';
-import ClipContentIcon from './icons/clip-content';
 import type { TBackgroundProps } from './types/background-props';
-import { default as BackgroundExtensionIcon } from './icons/extension-icon';
 import { ExtensionSettings } from '../settings';
 
 export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
@@ -80,7 +75,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 			<PanelBodyControl
 				title={__('Background', 'blockera')}
 				initialOpen={true}
-				icon={<BackgroundExtensionIcon />}
+				icon={<Icon icon="extension-background" />}
 				className={extensionClassNames('background')}
 			>
 				<ExtensionSettings
@@ -214,7 +209,10 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 										)}
 									</p>
 									<h3>
-										<ClipPaddingIcon />
+										<Icon
+											icon="clip-padding"
+											iconSize={18}
+										/>
 										{__('Clip to Padding', 'blockera')}
 									</h3>
 									<p>
@@ -224,7 +222,10 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 										)}
 									</p>
 									<h3>
-										<ClipContentIcon />
+										<Icon
+											icon="clip-content"
+											iconSize={18}
+										/>
 										{__('Clip to Content', 'blockera')}
 									</h3>
 									<p>
@@ -234,7 +235,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 										)}
 									</p>
 									<h3>
-										<ClipTextIcon />
+										<Icon icon="clip-text" iconSize={18} />
 										{__('Clip to Text', 'blockera')}
 									</h3>
 									<p>
@@ -250,7 +251,10 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 										)}
 									</p>
 									<h3>
-										<InheritIcon />
+										<Icon
+											icon="inherit-circle"
+											iconSize={18}
+										/>
 										{__('Inherit', 'blockera')}
 									</h3>
 									<p>
@@ -266,27 +270,49 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 								{
 									label: __('None', 'blockera'),
 									value: 'none',
-									icon: <ClipNoneIcon />,
+									icon: (
+										<Icon
+											icon="none-square"
+											iconSize={18}
+										/>
+									),
 								},
 								{
 									label: __('Clip to Padding', 'blockera'),
 									value: 'padding-box',
-									icon: <ClipPaddingIcon />,
+									icon: (
+										<Icon
+											icon="clip-padding"
+											iconSize={18}
+										/>
+									),
 								},
 								{
 									label: __('Clip to Content', 'blockera'),
 									value: 'content-box',
-									icon: <ClipContentIcon />,
+									icon: (
+										<Icon
+											icon="clip-content"
+											iconSize={18}
+										/>
+									),
 								},
 								{
 									label: __('Clip to Text', 'blockera'),
 									value: 'text',
-									icon: <ClipTextIcon />,
+									icon: (
+										<Icon icon="clip-text" iconSize={18} />
+									),
 								},
 								{
 									label: __('Inherit', 'blockera'),
 									value: 'inherit',
-									icon: <InheritIcon />,
+									icon: (
+										<Icon
+											icon="inherit-square"
+											iconSize={18}
+										/>
+									),
 								},
 							]}
 							type="custom"
