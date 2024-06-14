@@ -1427,7 +1427,7 @@ describe('Block State E2E Test', () => {
 					addBlockState('hover');
 					openBackgroundItem();
 					cy.getByDataTest('popover-body').within(() => {
-						cy.getByAriaLabel('Rotate Left').click();
+						cy.getByAriaLabel('Rotate Anti-clockwise').click();
 					});
 
 					// normal state updates should display

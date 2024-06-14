@@ -8,30 +8,27 @@
 		width: 68px;
 		display: grid;
 		grid-template-columns: repeat(3, 22px);
-		gap: 2px;
+		gap: 0;
 		grid-auto-flow: row;
 		align-items: center;
 		justify-content: center;
 		align-content: center;
 		justify-items: center;
 
-	    	.blockera-control-matrix-item {
-				width: 22px;
-				height: 22px;
-				cursor: pointer;
+		.blockera-control-matrix-item {
+			width: 20px;
+			height: 20px;
+			cursor: pointer;
 
-				svg {
-					fill: currentColor;
-				}
+			svg {
+				fill: currentColor;
+			}
 
-				&.selected {
-
-					svg {
-					   fill: var(--blockera-controls-primary-color);
-					   }
-
-		     	}
-				}
+			&:hover,
+			&.selected {
+				color: var(--blockera-controls-primary-color);
+			}
+		}
 	}
 
 	.blockera-field.blockera-field-input + .blockera-field.blockera-field-input {
