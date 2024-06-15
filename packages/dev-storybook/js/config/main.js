@@ -1,19 +1,20 @@
 // eslint-disable-next-line jsdoc/valid-types
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const config = {
-	// addons: [
-	// 	'@storybook/react',
-	// 	'@storybook/addon-a11y',
-	// 	'storybook-source-link',
-	// 	'@storybook/addon-jest',
-	// 	'@storybook/addon-links',
-	// 	'@storybook/addon-actions',
-	// 	'@storybook/addon-toolbars',
-	// 	'@storybook/addon-viewport',
-	// 	'@storybook/addon-controls',
-	// 	'@storybook/addon-essentials',
-	// 	'@storybook/addon-interactions',
-	// ],
+	addons: [
+		'@storybook/react',
+		'@storybook/addon-a11y',
+		'storybook-source-link',
+		'@storybook/addon-jest',
+		'@storybook/addon-links',
+		'@storybook/addon-actions',
+		'@storybook/addon-toolbars',
+		'@storybook/addon-viewport',
+		'@storybook/addon-controls',
+		'@storybook/addon-essentials',
+		'@storybook/addon-interactions',
+		'@storybook/addon-webpack5-compiler-babel',
+	],
 	framework: {
 		name: '@storybook/react-webpack5',
 		options: {},
@@ -60,6 +61,9 @@ const config = {
 		);
 
 		return config;
+	},
+	typescript: {
+		reactDocgen: 'react-docgen-typescript',
 	},
 };
 export default config;
