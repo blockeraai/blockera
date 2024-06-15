@@ -14,6 +14,7 @@ import type { Element } from 'react';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -33,10 +34,6 @@ import type { TFieldItem } from '../types';
 import SearchIcon from '../icons/search';
 import { maskShapeIcons, selectedShape } from '../utils';
 import { Shape } from './shape';
-import RepeatIcon from '../../background-control/icons/repeat';
-import RepeatXIcon from '../../background-control/icons/repeat-x';
-import RepeatYIcon from '../../background-control/icons/repeat-y';
-import RepeatNoIcon from '../../background-control/icons/repeat-no';
 import FitCoverIcon from '../icons/fit-cover';
 import FitContainIcon from '../icons/fit-contain';
 import FitNormalIcon from '../icons/fit-normal';
@@ -351,22 +348,29 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								'blockera'
 							),
 							value: 'repeat',
-							icon: <RepeatIcon />,
+							icon: <Icon icon="repeat" iconSize="18" />,
 						},
 						{
 							label: __('Horizontally', 'blockera'),
 							value: 'repeat-x',
-							icon: <RepeatXIcon />,
+							icon: (
+								<Icon
+									icon="repeat-horizontally"
+									iconSize="18"
+								/>
+							),
 						},
 						{
 							label: __('Vertically', 'blockera'),
 							value: 'repeat-y',
-							icon: <RepeatYIcon />,
+							icon: (
+								<Icon icon="repeat-vertoically" iconSize="18" />
+							),
 						},
 						{
 							label: __("Don't Tile", 'blockera'),
 							value: 'no-repeat',
-							icon: <RepeatNoIcon />,
+							icon: <Icon icon="repeat-no" iconSize="18" />,
 						},
 					]}
 					defaultValue={defaultRepeaterItemValue.repeat}

@@ -300,7 +300,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									value: 'flex-start',
 									icon: (
 										<Icon
-											icon="flex-child-align-start"
+											icon="flex-align-start"
 											iconSize="18"
 										/>
 									),
@@ -310,7 +310,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									value: 'center',
 									icon: (
 										<Icon
-											icon="flex-child-align-center"
+											icon="flex-align-center"
 											iconSize="18"
 										/>
 									),
@@ -320,7 +320,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									value: 'flex-end',
 									icon: (
 										<Icon
-											icon="flex-child-align-end"
+											icon="flex-align-end"
 											iconSize="18"
 										/>
 									),
@@ -330,7 +330,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									value: 'stretch',
 									icon: (
 										<Icon
-											icon="flex-child-align-stretch"
+											icon="flex-align-stretch"
 											iconSize="18"
 										/>
 									),
@@ -340,8 +340,9 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									value: 'baseline',
 									icon: (
 										<Icon
-											icon="flex-child-align-baseline"
+											icon="flex-align-baseline"
 											iconSize="18"
+											className="blockera-align-baseline"
 										/>
 									),
 								},

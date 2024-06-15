@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { useState, useContext } from '@wordpress/element';
@@ -8,6 +8,7 @@ import { useState, useContext } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -15,7 +16,6 @@ import { controlInnerClassNames } from '@blockera/classnames';
 import { IconContext } from '../../context';
 import { getLibraryIcons } from '../../utils';
 import SearchControl from '../../../search-control';
-import { default as SearchIcon } from '../../icons/search';
 
 export default function Search({}) {
 	const [searchInput, setSearchInput] = useState('');
@@ -56,7 +56,8 @@ export default function Search({}) {
 					)}
 				>
 					<div className={controlInnerClassNames('library-header')}>
-						<SearchIcon /> {__('Search Result', 'blockera')}
+						<Icon icon="search" iconSize="18" />{' '}
+						{__('Search Result', 'blockera')}
 					</div>
 
 					{searchInput.length < 3 ? (

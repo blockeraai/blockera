@@ -9,12 +9,11 @@ import { useCallback, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import TrashIcon from './icons/trash';
-import PickerIcon from './icons/picker';
 import { ColorPallet } from './components';
 import { useControlContext } from '../../context';
 import type { ColorPickerControlProps } from './types';
@@ -58,7 +57,7 @@ export default function ColorPickerControl({
 				setIsPopoverHidden(false);
 			} catch (e) {
 				console.warn(
-					'EyeDropper was not supported with your browser. please for use of color picker switch to chrome browser.'
+					'EyeDropper was not supported with your browser. please for use of color picker switch to Google Chrome browser.'
 				);
 				setIsPopoverHidden(false);
 			}
@@ -133,7 +132,7 @@ export default function ColorPickerControl({
 									}}
 									aria-label={__('Pick Color', 'blockera')}
 								>
-									<PickerIcon />
+									<Icon icon="eye-dropper" size="18" />
 								</Button>
 								{value && (
 									<Button
@@ -149,7 +148,7 @@ export default function ColorPickerControl({
 											'blockera'
 										)}
 									>
-										<TrashIcon />
+										<Icon icon="trash" size="20" />
 									</Button>
 								)}
 							</>
@@ -181,6 +180,7 @@ export default function ColorPickerControl({
 				onChangeComplete={(color) => setValue(color.hex)}
 				{...props}
 			/>
+
 			{hasClearBtn && (
 				<Button
 					onClick={() => setValue('')}

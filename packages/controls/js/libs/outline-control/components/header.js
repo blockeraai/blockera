@@ -10,6 +10,7 @@ import type { Element } from 'react';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -18,10 +19,6 @@ import { ColorIndicator } from '../../';
 import CloneIcon from './../icons/outline';
 import type { THeaderItem } from '../types';
 import { prepValueForHeader } from '../../repeater-control/utils';
-import BorderStyleHSolidIcon from '../../border-control/icons/style-h-solid';
-import BorderStyleHDashedIcon from '../../border-control/icons/style-h-dashed';
-import BorderStyleHDottedIcon from '../../border-control/icons/style-h-dotted';
-import BorderStyleHDoubleIcon from '../../border-control/icons/style-h-double';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 	({
@@ -36,13 +33,13 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 	}: THeaderItem): Element<any> => {
 		function getStyleIcon() {
 			if (style === 'solid') {
-				return <BorderStyleHSolidIcon />;
+				return <Icon icon="border-style-horizontal-solid" />;
 			} else if (style === 'dashed') {
-				return <BorderStyleHDashedIcon />;
+				return <Icon icon="border-style-horizontal-dashed" />;
 			} else if (style === 'dotted') {
-				return <BorderStyleHDottedIcon />;
+				return <Icon icon="border-style-horizontal-dotted" />;
 			} else if (style === 'double') {
-				return <BorderStyleHDoubleIcon />;
+				return <Icon icon="border-style-horizontal-double" />;
 			}
 		}
 

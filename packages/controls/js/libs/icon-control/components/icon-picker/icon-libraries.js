@@ -15,7 +15,6 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { IconContext } from '../../context';
-import SuggestionsIcon from '../../icons/suggestions';
 import { default as IconLibrary } from './icon-library';
 
 const IconLibraries = ({
@@ -51,7 +50,7 @@ const IconLibraries = ({
 
 		if (library === 'suggestions') {
 			title = __('AI Suggestions', 'blockera-cre');
-			icon = <SuggestionsIcon />;
+			icon = '';
 		} else {
 			const iconLibraryInfo = getIconLibrary(library);
 

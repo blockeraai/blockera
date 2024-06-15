@@ -6,6 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
+
 /**
  * Blockera dependencies
  */
@@ -14,13 +15,13 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { isEquals } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { isValid } from '../../';
 import { useControlContext } from '../../context';
-import { default as CustomIcon } from './icons/custom';
 import {
 	Button,
 	BaseControl,
@@ -255,7 +256,7 @@ export default function BoxBorderControl({
 							}
 						}}
 					>
-						<CustomIcon />
+						<Icon icon="border" iconSize="14" />
 					</Button>
 				</div>
 

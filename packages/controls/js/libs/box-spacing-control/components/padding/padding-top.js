@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -20,7 +21,6 @@ import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
-import PaddingTopIcon from '../../icons/padding-top';
 import { PaddingTopShape } from './shapes/padding-top-shape';
 
 export function PaddingTop({
@@ -243,7 +243,7 @@ export function PaddingTop({
 					<SidePopover
 						id={getId(id, 'padding.top')}
 						type="padding"
-						icon={<PaddingTopIcon />}
+						icon={<Icon icon="padding-top" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');

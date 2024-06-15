@@ -31,7 +31,6 @@ import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
-import { default as DeleteIcon } from './icons/delete';
 import { Button, MediaUploader, BaseControl } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
@@ -183,7 +182,13 @@ function IconControl({
 								className="btn-delete"
 								noBorder={true}
 								isFocus={isOpenModal}
-								icon={<DeleteIcon />}
+								icon={
+									<Icon
+										library="wp"
+										icon="close"
+										iconSize="20"
+									/>
+								}
 								onClick={(e) => {
 									e.stopPropagation();
 									currentIconDispatch({

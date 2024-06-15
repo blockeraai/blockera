@@ -6,13 +6,13 @@
 >
 	<g opacity="0.4">
 		<path
-			fillRule="evenodd"
-			clipRule="evenodd"
+			fill-rule="evenodd"
+			clip-rule="evenodd"
 			d="M16 15.3C16 15.6866 15.6561 16 15.2318 16L3.76818 16C3.34393 16 3 15.6866 3 15.3C3 14.9134 3.34393 14.6 3.76818 14.6L15.2318 14.6C15.6561 14.6 16 14.9134 16 15.3Z"
 		/>
 		<path
-			fillRule="evenodd"
-			clipRule="evenodd"
+			fill-rule="evenodd"
+			clip-rule="evenodd"
 			d="M16 2.7C16 3.0866 15.6561 3.4 15.2318 3.4L3.76818 3.4C3.34393 3.4 3 3.0866 3 2.7C3 2.3134 3.34393 2 3.76818 2L15.2318 2C15.6561 2 16 2.3134 16 2.7Z"
 		/>
 	</g>

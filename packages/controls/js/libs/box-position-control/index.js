@@ -14,6 +14,7 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { hasSameProps } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -30,22 +31,6 @@ import { useControlContext } from '../../context';
 import type { BoxPositionControlProps } from './types';
 import { LabelControlContainer } from '../label-control';
 import { SideItem } from './components/side-item';
-// icons
-import { default as StaticIcon } from './icons/static';
-import { default as RelativeIcon } from './icons/relative';
-import { default as AbsoluteIcon } from './icons/absolute';
-import { default as FixedIcon } from './icons/fixed';
-import { default as StickyIcon } from './icons/sticky';
-import { default as AbsoluteTopLeftIcon } from './icons/absolute-top-left';
-import { default as AbsoluteTopRightIcon } from './icons/absolute-top-right';
-import { default as AbsoluteBottomRightIcon } from './icons/absolute-bottom-right';
-import { default as AbsoluteBottomLeftIcon } from './icons/absolute-bottom-left';
-import { default as AbsoluteTopIcon } from './icons/absolute-top';
-import { default as AbsoluteRightIcon } from './icons/absolute-right';
-import { default as AbsoluteBottomIcon } from './icons/absolute-bottom';
-import { default as AbsoluteLeftIcon } from './icons/absolute-left';
-import { default as AbsoluteFullIcon } from './icons/absolute-full';
-import { default as AbsoluteCenterIcon } from './icons/absolute-center';
 
 const Component = ({
 	openSide = '',
@@ -111,7 +96,7 @@ const Component = ({
 					)}
 				</p>
 				<h3>
-					<RelativeIcon />
+					<Icon icon="position-relative" />
 					{__('Relative', 'blockera')}
 				</h3>
 				<p>
@@ -121,7 +106,7 @@ const Component = ({
 					)}
 				</p>
 				<h3>
-					<AbsoluteIcon />
+					<Icon icon="position-absolute" />
 					{__('Absolute', 'blockera')}
 				</h3>
 				<p>
@@ -131,7 +116,7 @@ const Component = ({
 					)}
 				</p>
 				<h3>
-					<FixedIcon />
+					<Icon icon="position-fixed" />
 					{__('Fixed', 'blockera')}
 				</h3>
 				<p>
@@ -141,7 +126,7 @@ const Component = ({
 					)}
 				</p>
 				<h3>
-					<StickyIcon />
+					<Icon icon="position-sticky" />
 					{__('Sticky', 'blockera')}
 				</h3>
 				<p>
@@ -216,27 +201,32 @@ const Component = ({
 						{
 							label: __('Default', 'blockera'),
 							value: 'static',
-							icon: <StaticIcon />,
+							icon: (
+								<Icon
+									icon="none-circle"
+									className="icon-soft-color"
+								/>
+							),
 						},
 						{
 							label: __('Relative', 'blockera'),
 							value: 'relative',
-							icon: <RelativeIcon />,
+							icon: <Icon icon="position-relative" />,
 						},
 						{
 							label: __('Absolute', 'blockera'),
 							value: 'absolute',
-							icon: <AbsoluteIcon />,
+							icon: <Icon icon="position-absolute" />,
 						},
 						{
 							label: __('Fixed', 'blockera'),
 							value: 'fixed',
-							icon: <FixedIcon />,
+							icon: <Icon icon="position-fixed" />,
 						},
 						{
 							label: __('Sticky', 'blockera'),
 							value: 'sticky',
-							icon: <StickyIcon />,
+							icon: <Icon icon="position-sticky" />,
 						},
 					]}
 					type="custom"
@@ -391,7 +381,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteTopLeftIcon />
+									<Icon icon="position-absolute-top-left" />
 								</Button>
 								<Button
 									label={__(
@@ -415,7 +405,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteTopRightIcon />
+									<Icon icon="position-absolute-top-right" />
 								</Button>
 								<Button
 									label={__(
@@ -439,7 +429,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteBottomLeftIcon />
+									<Icon icon="position-absolute-bottom-left" />
 								</Button>
 
 								<Button
@@ -464,7 +454,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteBottomRightIcon />
+									<Icon icon="position-absolute-bottom-right" />
 								</Button>
 							</Grid>
 
@@ -494,7 +484,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteTopIcon />
+									<Icon icon="position-absolute-top" />
 								</Button>
 								<Button
 									label={__(
@@ -518,7 +508,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteRightIcon />
+									<Icon icon="position-absolute-right" />
 								</Button>
 								<Button
 									label={__(
@@ -542,7 +532,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteBottomIcon />
+									<Icon icon="position-absolute-bottom" />
 								</Button>
 								<Button
 									label={__(
@@ -566,7 +556,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteLeftIcon />
+									<Icon icon="position-absolute-left" />
 								</Button>
 							</Grid>
 
@@ -593,7 +583,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteFullIcon />
+									<Icon icon="position-absolute-full" />
 								</Button>
 								<Button
 									label={__(
@@ -617,7 +607,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteCenterIcon />
+									<Icon icon="position-absolute-center" />
 								</Button>
 							</Grid>
 						</Flex>
@@ -656,7 +646,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteTopIcon />
+									<Icon icon="position-absolute-top" />
 								</Button>
 								<Button
 									label={__('Stick To Bottom', 'blockera')}
@@ -677,7 +667,7 @@ const Component = ({
 										});
 									}}
 								>
-									<AbsoluteBottomIcon />
+									<Icon icon="position-absolute-bottom" />
 								</Button>
 							</Grid>
 						</Flex>
@@ -720,9 +710,10 @@ const Component = ({
 									});
 								}}
 							>
-								<AbsoluteTopIcon />
+								<Icon icon="position-absolute-top" />
 								{__('Stick To Top', 'blockera')}
 							</Button>
+
 							<Button
 								label={__('Stick To Bottom', 'blockera')}
 								showTooltip={true}
@@ -742,7 +733,7 @@ const Component = ({
 									});
 								}}
 							>
-								<AbsoluteBottomIcon />
+								<Icon icon="position-absolute-bottom" />
 								{__('Stick To Bottom', 'blockera')}
 							</Button>
 						</Flex>

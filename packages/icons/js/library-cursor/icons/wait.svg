@@ -6,32 +6,32 @@
 	xmlns="http://www.w3.org/2000/svg"
 >
 	<path
-		fillRule="evenodd"
-		clipRule="evenodd"
+		fill-rule="evenodd"
+		clip-rule="evenodd"
 		d="M7 15.5C7 17.9855 9.015 20 11.5 20C13.985 20 16 17.9855 16 15.5C16 13.0145 13.985 11 11.5 11C9.015 11 7 13.0145 7 15.5Z"
 		fill="white"
 	/>
 	<path
-		fillRule="evenodd"
-		clipRule="evenodd"
+		fill-rule="evenodd"
+		clip-rule="evenodd"
 		d="M7 15.5C7 13.0147 9.01472 11 11.5 11V11V15.5H7V15.5Z"
 		fill="#4AB4EF"
 	/>
 	<path
-		fillRule="evenodd"
-		clipRule="evenodd"
+		fill-rule="evenodd"
+		clip-rule="evenodd"
 		d="M11.5 15.5H16V15.5C16 17.9853 13.9853 20 11.5 20V20V15.5Z"
 		fill="#2051DB"
 	/>
 	<path
-		fillRule="evenodd"
-		clipRule="evenodd"
+		fill-rule="evenodd"
+		clip-rule="evenodd"
 		d="M11.5 11V11C13.9853 11 16 13.0147 16 15.5V15.5H11.5V11Z"
 		fill="#6BDCFC"
 	/>
 	<path
-		fillRule="evenodd"
-		clipRule="evenodd"
+		fill-rule="evenodd"
+		clip-rule="evenodd"
 		d="M7 15.5H11.5V20V20C9.01472 20 7 17.9853 7 15.5V15.5Z"
 		fill="#4BC5F9"
 	/>

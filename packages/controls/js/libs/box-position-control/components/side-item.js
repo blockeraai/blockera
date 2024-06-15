@@ -11,6 +11,7 @@ import type { MixedElement } from 'react';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -23,11 +24,7 @@ import {
 	extractNumberAndUnit,
 } from '../../../index';
 import { SideShape } from './side-shape';
-import SideTopIcon from '../icons/side-top';
 import { SidePopover } from './side-popover';
-import SideLeftIcon from '../icons/side-left';
-import SideRightIcon from '../icons/side-right';
-import SideBottomIcon from '../icons/side-bottom';
 import type { ValueAddon } from '../../../value-addons';
 import type { Side, SideProps, SideReturn } from '../types';
 import { fixLabelText } from '../../box-spacing-control/utils';
@@ -156,13 +153,13 @@ export function SideItem({
 	function getSideIcon(side: Side): MixedElement {
 		switch (side) {
 			case 'top':
-				return <SideTopIcon />;
+				return <Icon icon="position-side-top" />;
 			case 'bottom':
-				return <SideBottomIcon />;
+				return <Icon icon="position-side-bottom" />;
 			case 'left':
-				return <SideLeftIcon />;
+				return <Icon icon="position-side-left" />;
 			case 'right':
-				return <SideRightIcon />;
+				return <Icon icon="position-side-right" />;
 		}
 
 		return <></>;

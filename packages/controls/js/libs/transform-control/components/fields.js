@@ -6,6 +6,11 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
+
+/**
  * Internal dependencies
  */
 import { default as MoveIcon } from '../icons/move';
@@ -16,7 +21,6 @@ import { default as RotateIcon } from '../icons/rotate';
 import { RepeaterContext } from '../../repeater-control/context';
 import { default as XCoordinateIcon } from '../icons/coordinate-x';
 import { default as YCoordinateIcon } from '../icons/coordinate-y';
-import { default as ZCoordinateIcon } from '../icons/coordinate-z';
 import { InputControl, ToggleSelectControl } from '../../index';
 import { default as RotateXCoordinateIcon } from '../icons/coordinate-rotate-x';
 import { default as RotateYCoordinateIcon } from '../icons/coordinate-rotate-y';
@@ -168,7 +172,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'move-z')}
 						singularId={'move-z'}
-						label={<ZCoordinateIcon />}
+						label={<Icon icon="coordinate-z" />}
 						labelPopoverTitle={__('Move Depth Axis', 'blockera')}
 						labelDescription={
 							<>

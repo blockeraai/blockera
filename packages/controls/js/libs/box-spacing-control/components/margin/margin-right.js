@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -20,7 +21,6 @@ import type { SideProps, SideReturn, Side } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
-import MarginRightIcon from '../../icons/margin-right';
 import { MarginRightSideShape } from './shapes/margin-right-shape';
 
 export function MarginRight({
@@ -239,7 +239,9 @@ export function MarginRight({
 							<SidePopover
 								id={getId(id, 'margin.right')}
 								offset={255}
-								icon={<MarginRightIcon />}
+								icon={
+									<Icon icon="margin-right" iconSize="18" />
+								}
 								onClose={() => {
 									setFocusSide('');
 									setOpenPopover('');

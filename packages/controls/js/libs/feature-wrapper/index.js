@@ -12,12 +12,7 @@ import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
-import WarningIcon from '../notice-control/icons/warning-icon';
-
-/**
- * Internal dependencies
- */
-import { ProIcon } from './icons/pro-icon';
+import { Icon } from '@blockera/icons';
 
 export function FeatureWrapper({
 	type,
@@ -35,13 +30,13 @@ export function FeatureWrapper({
 	showText?: 'on-hover' | 'always',
 	children: MixedElement,
 }): MixedElement {
-	let icon = <WarningIcon />;
+	let icon = <Icon icon="warning" iconSize="18" />;
 
 	if (!text) {
 		switch (type) {
 			case 'free':
 				text = __('Upgrade to PRO', 'blockera');
-				icon = <ProIcon />;
+				icon = <Icon icon="lock" iconSize="22" />;
 				break;
 			case 'state':
 				text = typeName

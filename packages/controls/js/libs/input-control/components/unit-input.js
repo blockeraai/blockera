@@ -14,6 +14,7 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { isUndefined } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -21,7 +22,6 @@ import { isUndefined } from '@blockera/utils';
 import { Popover, Button, Tooltip, ConditionalWrapper } from '../../';
 import { OtherInput } from './other-input';
 import { NumberInput } from './number-input';
-import MaximizeIcon from '../icons/maximize';
 import NoticeControl from '../../notice-control';
 import type { InputControlProps } from '../types';
 import TextAreaControl from '../../textarea-control';
@@ -210,7 +210,7 @@ export function UnitInput({
 								label={__('Open Editor', 'blockera')}
 								disabled={disabled}
 							>
-								<MaximizeIcon />
+								<Icon icon="maximize" iconSize="18" />
 							</Button>
 						)}
 
