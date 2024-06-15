@@ -48,17 +48,11 @@ function IconControl({
 	//
 	className,
 }: IconControlProps): MixedElement {
-	const {
-		value,
-		setValue,
-		attribute,
-		blockName,
-		description,
-		resetToDefault,
-	} = useControlContext({
-		defaultValue,
-		onChange,
-	});
+	const { value, setValue, attribute, blockName, resetToDefault } =
+		useControlContext({
+			defaultValue,
+			onChange,
+		});
 
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
 
@@ -157,7 +151,6 @@ function IconControl({
 				{...{
 					attribute,
 					blockName,
-					description,
 					resetToDefault,
 				}}
 			>
