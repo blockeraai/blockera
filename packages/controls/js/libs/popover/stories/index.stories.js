@@ -11,10 +11,10 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 /**
  * Internal dependencies
  */
-import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
 import Flex from '../../flex';
 import Popover from '../index';
 import { Button } from '../../button';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 

@@ -19,7 +19,8 @@ import {
 import { Playground } from '@blockera/dev-storybook/js/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
-import SpacingExtensionIcon from '../icons/extension-icon';
+// FIXME: please fix this import!
+// import SpacingExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -50,7 +51,7 @@ blocksInitializer({
 						{...{ ...props, attributes, setAttributes }}
 						initialOpen={true}
 						extensionId={'Spacing'}
-						icon={<SpacingExtensionIcon />}
+						// icon={<SpacingExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						title={__('Spacing', 'blockera')}

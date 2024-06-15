@@ -19,7 +19,8 @@ import {
 import { Playground } from '@blockera/dev-storybook/js/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
-import FlexChildExtensionIcon from '../icons/extension-icon';
+// FIXME: please fix this import!
+// import FlexChildExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -66,7 +67,7 @@ blocksInitializer({
 								attributes?.blockeraFlexChildOrderCustom || '',
 						}}
 						extensionId={'FlexChild'}
-						icon={<FlexChildExtensionIcon />}
+						// icon={<FlexChildExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						title={__('FlexChild', 'blockera')}

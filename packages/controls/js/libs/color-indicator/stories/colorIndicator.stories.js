@@ -9,7 +9,7 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 import { Flex } from '../../index';
 import { default as ColorIndicator } from '../color-indicator';
 import { default as ColorIndicatorStack } from '../color-indicator-stack';
-import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 

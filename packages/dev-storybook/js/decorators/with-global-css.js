@@ -4,7 +4,7 @@
 import classnames from 'classnames';
 
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { useEffect } from '@wordpress/element';
 
