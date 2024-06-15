@@ -1229,14 +1229,19 @@ const Fields: FieldItem = memo<FieldItem>(
 								)}
 								style={((): Object => {
 									return {
-										backgroundColor:
-											item['mesh-gradient-colors']['--c0']
-												.color,
+										backgroundColor: !item[
+											'mesh-gradient-colors'
+										]
+											? 'transparent'
+											: item['mesh-gradient-colors'][
+													'--c0'
+											  ].color,
 										backgroundImage: item['mesh-gradient'],
 										...Object.assign(
 											// $FlowFixMe
 											...Object.values(
-												item['mesh-gradient-colors']
+												item['mesh-gradient-colors'] ||
+													{}
 											).map((color, index): Object => ({
 												['--c' + index]: color.color,
 											}))
