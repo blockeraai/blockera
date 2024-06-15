@@ -274,6 +274,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 										<Icon
 											icon="none-square"
 											iconSize={18}
+											className="icon-soft-color"
 										/>
 									),
 								},
