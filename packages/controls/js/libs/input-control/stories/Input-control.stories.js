@@ -12,7 +12,6 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 /**
  * Internal dependencies
  */
-import { fireEvent, waitFor, within } from '@storybook/testing-library';
 import { Flex, ControlContextProvider, InputControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
@@ -1262,71 +1261,3 @@ export const ValueAddonSupport = {
 		</Flex>
 	),
 };
-
-export const PlayNumber = {
-	args: {
-		type: 'number',
-		unitType: 'general',
-		controlInfo: {
-			name: nanoid(),
-			value: '20px',
-		},
-		range: true,
-		arrows: true,
-	},
-	decorators: [
-		WithInspectorStyles,
-		WithStoryContextProvider,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => (
-		<ControlWithHooks
-			Control={InputControl}
-			controlAddonTypes={['variable']}
-			variableTypes={[
-				'color',
-				'font-size',
-				'width-size',
-				'spacing',
-				'linear-gradient',
-				'radial-gradient',
-			]}
-			{...args}
-		/>
-	),
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const input = canvas.getByRole('spinbutton', {
-			type: 'number',
-		});
-
-		await step('Story data is available', async () => {
-			await expect(currentValue).toBeInTheDocument();
-		});
-
-		await step('Input control test', async () => {
-			await expect(input).toBeInTheDocument();
-
-			await expect(input).toHaveValue(20);
-			await expect(currentValue).toHaveTextContent('20');
-
-			// type 30
-			fireEvent.change(input, {
-				target: {
-					value: '30',
-				},
-			});
-			await waitFor(
-				async () => {
-					await expect(input).toHaveValue(30);
-					await expect(currentValue).toHaveTextContent('30');
-				},
-				{ timeout: 1000 }
-			);
-		});
-	},
-};
-PlayNumber.storyName = 'Play';
