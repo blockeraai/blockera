@@ -1,8 +1,12 @@
 /**
+ * External dependencies
+ */
+import { useState } from '@wordpress/element';
+
+/**
  * Internal dependencies
  */
 import { PopoverContextData } from './context';
-import { useState } from '@wordpress/element';
 
 export const WithPopoverDataProvider = (Story, context) => {
 	const [value, setValue] = useState(

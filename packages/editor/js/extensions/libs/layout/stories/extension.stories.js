@@ -19,7 +19,8 @@ import {
 import { Playground } from '@blockera/dev-storybook/js/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
-import LayoutExtensionIcon from '../icons/extension-icon';
+// FIXME: please fix this import!
+// import LayoutExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -60,7 +61,7 @@ blocksInitializer({
 								attributes?.blockeraJustifyContent || '',
 						}}
 						extensionId={'Layout'}
-						icon={<LayoutExtensionIcon />}
+						// icon={<LayoutExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						title={__('Layout', 'blockera')}

@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 
@@ -19,7 +19,8 @@ import {
 import { BaseExtension, ExtensionStyle } from '../../';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
-import BackgroundExtensionIcon from '../icons/extension-icon';
+// FIXME: please fix this import!
+// import BackgroundExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';

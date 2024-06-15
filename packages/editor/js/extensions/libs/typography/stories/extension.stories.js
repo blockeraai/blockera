@@ -19,7 +19,8 @@ import {
 import { Playground } from '@blockera/dev-storybook/js/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
-import TypographyExtensionIcon from '../icons/extension-icon';
+// FIXME: please fix this import!
+// import TypographyExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -78,7 +79,7 @@ blocksInitializer({
 							textStroke: attributes?.blockeraTextStroke || '',
 						}}
 						extensionId={'Typography'}
-						icon={<TypographyExtensionIcon />}
+						// icon={<TypographyExtensionIcon />}
 						storeName={'blockera-core/controls/repeater'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						title={__('Typography', 'blockera')}

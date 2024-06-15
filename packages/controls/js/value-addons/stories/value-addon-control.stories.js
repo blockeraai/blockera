@@ -12,9 +12,9 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
  * Internal dependencies
  */
 import { Flex, InputControl, ControlContextProvider } from '../../';
-import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
-import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithPlaygroundStyles } from '../../../../../.storybook/preview';
+import ControlWithHooks from '../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../.storybook/decorators/with-control-data-provider';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 

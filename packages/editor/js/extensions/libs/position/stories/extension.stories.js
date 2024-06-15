@@ -19,7 +19,8 @@ import {
 import { Playground } from '@blockera/dev-storybook/js/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
-import PositionExtensionIcon from '../icons/extension-icon';
+// FIXME: please fix this import!
+// import PositionExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -52,7 +53,7 @@ blocksInitializer({
 						zIndexValue={attributes.blockeraZIndex}
 						positionValue={attributes.blockeraPosition}
 						extensionId={'Position'}
-						icon={<PositionExtensionIcon />}
+						// icon={<PositionExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						title={__('Position', 'blockera')}

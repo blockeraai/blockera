@@ -19,7 +19,8 @@ import {
 import { Playground } from '@blockera/dev-storybook/js/components';
 import { supports } from '../supports';
 import { attributes } from '../attributes';
-import MouseExtensionIcon from '../icons/extension-icon';
+// FIXME: please fix this import!
+// import MouseExtensionIcon from '../icons/extension-icon';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 import { useAttributes } from '../../shared/use-attributes';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -56,7 +57,7 @@ blocksInitializer({
 								attributes?.blockeraPointerEvents || '',
 						}}
 						extensionId={'Mouse'}
-						icon={<MouseExtensionIcon />}
+						// icon={<MouseExtensionIcon />}
 						storeName={'blockera-core/controls'}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						title={__('Mouse', 'blockera')}
