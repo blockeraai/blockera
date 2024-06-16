@@ -32,8 +32,9 @@
 		svg {
 			fill: currentColor;
 			order: 10;
-			border-radius: 2px;
+			border-radius: 100%;
 			transition: var(--blockera-controls-transition);
+			background: #ffffff9c;
 		}
 
 		.blockera-component-feature-wrapper__notice__text {
@@ -80,6 +81,13 @@
 			-webkit-user-select: none;
 			user-select: none;
 			z-index: 1;
+		}
+	}
+
+	&.show-text-always {
+
+		.blockera-component-feature-wrapper__notice {
+			padding-right: 4px;
 		}
 	}
 
