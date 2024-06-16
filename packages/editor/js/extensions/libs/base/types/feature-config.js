@@ -41,7 +41,7 @@ export type FeatureConfig = {
 	/**
 	 * Is active on block states? by default undefined.
 	 */
-	isActiveOnStates?: boolean,
+	isActiveOnStates?: boolean | Array<string>,
 	/**
 	 * Is active on free plugin states? by default undefined.
 	 */

@@ -102,7 +102,17 @@ export default function EditorFeatureWrapper({
 	}
 
 	if (!isNormalState(getCurrentState())) {
-		if (!feature.isActiveOnStates) {
+		if (isBoolean(feature.isActiveOnStates) && !feature.isActiveOnStates) {
+			return (
+				<FeatureWrapper type="state" typeName={'normal'} {...props}>
+					{children}
+				</FeatureWrapper>
+			);
+		} else if (
+			isArray(feature.isActiveOnStates) &&
+			//$FlowFixMe
+			!feature.isActiveOnStates.includes(getCurrentState())
+		) {
 			return (
 				<FeatureWrapper type="state" typeName={'normal'} {...props}>
 					{children}
