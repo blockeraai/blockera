@@ -183,13 +183,13 @@
 		"iconName": "captureVideo",
 		"title": "capture Video",
 		"library": "wp",
-		"tags": ["video recording", "film", "record"]
+		"tags": ["video recording", "film", "record", "camera"]
 	},
 	{
 		"iconName": "category",
 		"title": "category",
 		"library": "wp",
-		"tags": ["classification", "grouping", "categorization"]
+		"tags": ["classification", "grouping", "categorization", "folder"]
 	},
 	{
 		"iconName": "chartBar",
