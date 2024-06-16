@@ -1,7 +1,8 @@
 = 1.1.5 - 2024-6-17
--   Tweak: Reduce the final plugin zip file size from 4MB to 1.4MB.
+-   Tweak: Reduce the final plugin package file size from 4MB to 1.4MB.
 -   Tweak: Refactor, redesign, and compress all icons.
 -   Tweak: Enhance the design.
+-   Tweak: Admin panel Loading animation.
 
 -   Fix: Resolve the issue with Storybook not loading.
 -   Fix: Update Storybook to the latest version.
