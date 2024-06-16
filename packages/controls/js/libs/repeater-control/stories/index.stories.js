@@ -768,6 +768,8 @@ export const All = {
 			<AccordionFilled.render {...AccordionFilled.args} />
 
 			<AccordionOpenItem.render {...AccordionOpenItem.args} />
+
+			<DesignLarge.render {...DesignLarge.args} />
 		</Flex>
 	),
 };
