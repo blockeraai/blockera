@@ -11,14 +11,12 @@ import { __ } from '@wordpress/i18n';
  */
 import {
 	Button,
-	CloneIcon,
-	EnableIcon,
-	DisableIcon,
 	RepeaterContext,
 	useControlContext,
 	type RepeaterItemActionsProps,
 } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 export function PopoverTitleButtons({
 	item,
@@ -38,7 +36,13 @@ export function PopoverTitleButtons({
 			{item?.visibilitySupport && (
 				<Button
 					className={controlInnerClassNames('btn-visibility')}
-					icon={isVisible ? EnableIcon : DisableIcon}
+					icon={
+						isVisible ? (
+							<Icon icon="eye-show" iconSize="20" />
+						) : (
+							<Icon icon="eye-hide" iconSize="20" />
+						)
+					}
 					showTooltip={true}
 					onClick={(event) => {
 						event.stopPropagation();
@@ -74,7 +78,7 @@ export function PopoverTitleButtons({
 				(maxItems === -1 || repeaterItems?.length < maxItems) && (
 					<Button
 						className={controlInnerClassNames('btn-clone')}
-						icon={CloneIcon}
+						icon={<Icon icon="clone" iconSize="20" />}
 						showTooltip={true}
 						label={__('Clone State', 'blockera')}
 						onClick={(event) => {
