@@ -35,7 +35,7 @@ export default function ColorPickerControl({
 	field = 'color-picker',
 	//
 	className,
-	...props
+	children,
 }: ColorPickerControlProps): MixedElement {
 	const { value, setValue, attribute, blockName, resetToDefault } =
 		useControlContext({
@@ -157,9 +157,12 @@ export default function ColorPickerControl({
 						<ColorPallet
 							enableAlpha={true}
 							color={value}
-							onChangeComplete={(color) => setValue(color.hex)}
-							{...props}
+							onChangeComplete={(color: Object) =>
+								setValue(color.hex)
+							}
 						/>
+
+						{children}
 					</Popover>
 				)}
 			</BaseControl>
@@ -177,9 +180,10 @@ export default function ColorPickerControl({
 			<ColorPallet
 				enableAlpha={false}
 				color={value}
-				onChangeComplete={(color) => setValue(color.hex)}
-				{...props}
+				onChangeComplete={(color: Object) => setValue(color.hex)}
 			/>
+
+			{children}
 
 			{hasClearBtn && (
 				<Button
