@@ -52,6 +52,7 @@ import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
 import { useDisplayBlockControls } from '../../../hooks';
 import type { StateTypes, TBreakpoint, TStates } from '../block-states/types';
+import { useBlockContext } from '../../hooks';
 
 type Props = {
 	name: string,
@@ -99,6 +100,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			};
 			// eslint-disable-next-line
 		}, []);
+
+		const { setCurrentTab } = useBlockContext();
 
 		props = {
 			...props,
@@ -861,6 +864,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						tabs={tabs}
 						activeTab={currentTab}
 						getPanel={MappedExtensions}
+						setCurrentTab={setCurrentTab}
 					/>
 				)}
 				{children}

@@ -7,11 +7,6 @@ import type { Element } from 'react';
 import { useRef } from '@wordpress/element';
 
 /**
- * Blockera dependencies
- */
-import { useBlockContext } from '@blockera/editor/js/extensions/hooks/context';
-
-/**
  * Internal dependencies
  */
 import TabPanel from './tab-panel';
@@ -25,8 +20,9 @@ import type { TTabsProps, TTabProps } from './types';
  */
 const onSelect = (
 	tabName: string,
-	setCurrentTab: (tabName: string) => void
-): void => setCurrentTab(tabName);
+	setCurrentTab?: (tabName: string) => void
+): void =>
+	'function' === typeof setCurrentTab ? setCurrentTab(tabName) : undefined;
 
 export function Tabs(props: TTabsProps): Element<any> {
 	const { activeTab, tabs, getPanel } = props;
@@ -38,7 +34,6 @@ export function Tabs(props: TTabsProps): Element<any> {
 		}>,
 	} = useRef(tabs);
 	const ref = useRef();
-	const { setCurrentTab } = useBlockContext();
 	const classes = classnames('blockera-tab-panel');
 
 	return (
@@ -47,7 +42,7 @@ export function Tabs(props: TTabsProps): Element<any> {
 				className={classes}
 				activeClass="active-tab"
 				onSelect={(tabName) => {
-					onSelect(tabName, setCurrentTab);
+					onSelect(tabName, props.setCurrentTab);
 				}}
 				tabs={tabsRef.current}
 				initialTabName={activeTab}

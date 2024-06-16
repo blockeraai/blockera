@@ -16,6 +16,7 @@ import {
 	isValidIconLibrary,
 } from './icon-library';
 import { isValidIcon } from './icon';
+import { type IconLibraryTypes } from './types';
 
 export function iconSearch({
 	query,
@@ -23,8 +24,8 @@ export function iconSearch({
 	limit,
 }: {
 	query: string,
-	library: string,
 	limit: number,
+	library: IconLibraryTypes,
 }): Object {
 	if (!query) {
 		return {};
@@ -81,7 +82,7 @@ export function iconSearch({
 export function createIconsBaseSearchData({
 	library,
 }: {
-	library: string,
+	library: IconLibraryTypes,
 }): Array<any> {
 	if (!isValidIconLibrary(library)) {
 		return [];
