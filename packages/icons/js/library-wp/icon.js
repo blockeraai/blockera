@@ -26,12 +26,22 @@ export function WPIcon({ style = {}, iconSize = 24, icon, ...props }) {
 		return <></>;
 	}
 
+	if (iconSize) {
+		if (!props?.width) {
+			props.width = iconSize;
+		}
+
+		if (!props?.height) {
+			props.height = iconSize;
+		}
+	}
+
 	return (
 		<WordPressIconComponent
 			style={style}
 			icon={icon.icon}
-			size={iconSize}
 			{...props}
+			size={iconSize}
 		/>
 	);
 }
