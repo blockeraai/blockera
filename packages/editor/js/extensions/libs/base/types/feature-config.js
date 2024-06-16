@@ -49,7 +49,7 @@ export type FeatureConfig = {
 	/**
 	 * Is active on breakpoints? by default undefined.
 	 */
-	isActiveOnBreakpoints?: boolean,
+	isActiveOnBreakpoints?: boolean | Array<string>,
 	/**
 	 * Is active on free plugin breakpoints? by default undefined.
 	 */

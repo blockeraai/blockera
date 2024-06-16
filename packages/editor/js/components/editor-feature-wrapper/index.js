@@ -130,7 +130,24 @@ export default function EditorFeatureWrapper({
 	}
 
 	if (!isLaptopBreakpoint(currentBreakpoint)) {
-		if (!feature.isActiveOnBreakpoints) {
+		if (
+			isBoolean(feature.isActiveOnBreakpoints) &&
+			!feature.isActiveOnBreakpoints
+		) {
+			return (
+				<FeatureWrapper
+					type="breakpoint"
+					typeName={'laptop'}
+					{...props}
+				>
+					{children}
+				</FeatureWrapper>
+			);
+		} else if (
+			isArray(feature.isActiveOnBreakpoints) &&
+			//$FlowFixMe
+			!feature.isActiveOnBreakpoints.includes(currentBreakpoint)
+		) {
 			return (
 				<FeatureWrapper
 					type="breakpoint"
