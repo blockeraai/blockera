@@ -190,7 +190,7 @@ export function onChangeBlockStates(
 		modifyControlValue({
 			controlId,
 			value: Object.fromEntries(
-				Object.entries(blockStates).map(
+				Object.entries(blockStates || {}).map(
 					([stateType, stateItem], index) => {
 						const info = getStateInfo(index);
 
