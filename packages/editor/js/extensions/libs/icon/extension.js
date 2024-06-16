@@ -21,15 +21,13 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { IconExtensionIcon } from './index';
 import { isActiveField } from '../../api/utils';
-import { default as PositionLeftIcon } from './icons/position-left';
 import { generateExtensionId } from '../utils';
-import { default as PositionRightIcon } from './icons/position-right';
 import type { TIconProps } from './types/icon-extension-props';
 
 export const IconExtension: ComponentType<TIconProps> = memo(
@@ -59,7 +57,7 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 			<PanelBodyControl
 				title={__('Icon', 'blockera')}
 				initialOpen={true}
-				icon={<IconExtensionIcon />}
+				icon={<Icon icon="extension-icon" />}
 				className={extensionClassNames('icon')}
 			>
 				{isActiveField(blockeraIcon) && (
@@ -114,12 +112,22 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 											{
 												label: __('Left', 'blockera'),
 												value: 'left',
-												icon: <PositionLeftIcon />,
+												icon: (
+													<Icon
+														icon="icon-position-left"
+														iconSize="18"
+													/>
+												),
 											},
 											{
 												label: __('Right', 'blockera'),
 												value: 'right',
-												icon: <PositionRightIcon />,
+												icon: (
+													<Icon
+														icon="icon-position-right"
+														iconSize="18"
+													/>
+												),
 											},
 										]}
 										isDeselectable={true}
