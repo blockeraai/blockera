@@ -196,7 +196,7 @@ function IconControl({
 									alt={currentIcon.uploadSVG.title}
 								/>
 							) : (
-								<Icon {...currentIcon} size={50} />
+								<Icon {...currentIcon} iconSize={50} />
 							)}
 
 							<div
