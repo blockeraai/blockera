@@ -104,7 +104,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const { setCurrentTab } = useBlockContext();
 
 		// todo use this to enable icon extension
-		const iconExtensionIsEnabled = true;
+		const iconExtensionIsEnabled = false;
 
 		props = {
 			...props,
