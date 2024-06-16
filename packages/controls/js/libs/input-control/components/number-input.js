@@ -22,6 +22,7 @@ import { default as ArrowUpIcon } from '../icons/arrow-up';
 import { default as ArrowDownIcon } from '../icons/arrow-down';
 
 export function NumberInput({
+	id,
 	value,
 	setValue,
 	noBorder,
@@ -160,6 +161,7 @@ export function NumberInput({
 		<>
 			{range && !['small', 'extra-small'].includes(size) && (
 				<RangeControl
+					id={id}
 					withInputField={false}
 					sideEffect={false}
 					onChange={(newValue: number) => {
