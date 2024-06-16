@@ -1,9 +1,9 @@
 // @flow
 
 /**
- * Internal dependencies
+ * Blockera dependencies
  */
-import type { LabelControlProps } from './label-control-props';
+import type { LabelControlProps } from '@blockera/controls';
 
 export type AdvancedLabelControlProps = {
 	...LabelControlProps,

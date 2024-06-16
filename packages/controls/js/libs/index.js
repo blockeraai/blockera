@@ -36,6 +36,7 @@ export {
 	SimpleLabelControl,
 	LabelControlContainer,
 } from './label-control';
+export type { LabelControlProps } from './label-control';
 export { default as ToggleControl } from './toggle-control';
 export { default as SelectControl } from './select-control';
 export { default as ToggleSelectControl } from './toggle-select-control';
