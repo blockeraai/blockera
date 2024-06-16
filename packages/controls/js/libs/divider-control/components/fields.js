@@ -193,7 +193,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</span>
 
 						<span className="search-icon">
-							<Icon icon="search" iconSize="18" />
+							<Icon icon="search" iconSize="20" />
 						</span>
 					</Button>
 

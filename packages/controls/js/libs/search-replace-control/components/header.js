@@ -10,11 +10,11 @@ import type { Element } from 'react';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import SearchReplaceIcon from '../icons/search-replace';
 import type { THeaderItem } from '../types';
 
 const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
@@ -39,7 +39,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				)}
 			>
 				<span className={controlInnerClassNames('header-icon')}>
-					<SearchReplaceIcon />
+					<Icon icon="search" iconSize="20" />
 				</span>
 				<span
 					className={controlInnerClassNames('header-label')}

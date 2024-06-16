@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -16,9 +17,6 @@ import { controlInnerClassNames } from '@blockera/classnames';
 import { Button, Flex, Popover, Tooltip } from '../../../';
 import type { ValueAddonControlProps } from '../control/types';
 import { getDeletedItemInfo } from '../../helpers';
-import UnlinkIcon from '../../icons/unlink';
-import TrashIcon from '../../icons/trash';
-import InfoIcon from '../../icons/info';
 
 export default function ({
 	controlProps,
@@ -95,7 +93,9 @@ export default function ({
 													alignItems: 'center',
 												}}
 											>
-												<InfoIcon
+												<Icon
+													icon="information"
+													iconSize="16"
 													style={{
 														fill: 'var(--blockera-controls-border-color-soft)',
 													}}
@@ -161,7 +161,7 @@ export default function ({
 								label={__('Unlink Variable Value', 'blockera')}
 								style={{ padding: '2px 8px' }}
 							>
-								<UnlinkIcon />
+								<Icon icon="unlink" iconSize="20" />
 								{__('Unlink Variable', 'blockera')}
 							</Button>
 							<Button
@@ -193,9 +193,10 @@ export default function ({
 								label={__('Remove Variable Usage', 'blockera')}
 								style={{ padding: '2px 8px' }}
 							>
-								<TrashIcon />
+								<Icon icon="trash" iconSize="20" />
 								{__('Remove', 'blockera')}
 							</Button>
+
 							<Button
 								variant="tertiary"
 								tabIndex="-1"

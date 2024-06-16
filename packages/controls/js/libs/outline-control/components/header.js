@@ -16,7 +16,6 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { ColorIndicator } from '../../';
-import CloneIcon from './../icons/outline';
 import type { THeaderItem } from '../types';
 import { prepValueForHeader } from '../../repeater-control/utils';
 
@@ -56,7 +55,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				)}
 			>
 				<span className={controlInnerClassNames('header-icon')}>
-					<CloneIcon />
+					<Icon icon="outline" iconSize="18" />
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>

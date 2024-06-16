@@ -14,20 +14,19 @@ import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import Flex from '../flex';
 import Popover from '../popover';
-import Icon from './icons/icon';
-import CheckIcon from './icons/checkmark';
-import LockIcon from './icons/lock';
+import { default as Logo } from './icons/logo.svg';
 import type { PopoverPlacement } from '../popover/types/index';
 
 export const PromotionPopover = ({
 	title = __('Premium Feature', 'blockera'),
-	icon = <Icon />,
+	icon = <Logo />,
 	heading = __('It’s a PRO Feature', 'blockera'),
 	description = (
 		<p>{__('Elevate Your Design with Premium Features:', 'blockera')}</p>
@@ -77,7 +76,7 @@ export const PromotionPopover = ({
 			offset={offset}
 			title={
 				<>
-					<LockIcon />
+					<Icon icon="lock" iconSize="24" />
 					{title}
 				</>
 			}
@@ -127,7 +126,7 @@ export const PromotionPopover = ({
 					>
 						{featuresList.map((feature, index) => (
 							<li key={index}>
-								<CheckIcon />
+								<Icon icon="check" iconSize="20" />
 								{feature}
 							</li>
 						))}

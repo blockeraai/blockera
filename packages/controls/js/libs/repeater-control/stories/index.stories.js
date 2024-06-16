@@ -10,13 +10,13 @@ import { nanoid } from 'nanoid';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { Flex } from '../../';
 import { STORE_NAME } from '../store';
-import CloneIcon from '../icons/clone';
 import { RepeaterContext } from '../context';
 import { default as InheritIcon } from './icons/inherit';
 import { InputControl, RepeaterControl } from '../../index';
@@ -630,7 +630,7 @@ export const DesignLarge = {
 							{...args}
 							design="large"
 							label="Repeater Title"
-							icon={<CloneIcon />}
+							icon={<Icon icon="clone" />}
 							description={
 								'Block will animate when it enters into view.'
 							}
@@ -657,7 +657,7 @@ export const DesignLarge = {
 							{...args}
 							design="large"
 							label=""
-							icon={<CloneIcon />}
+							icon={<Icon icon="clone" />}
 							description={
 								'Block will animate when it enters into view.'
 							}
@@ -684,7 +684,7 @@ export const DesignLarge = {
 							{...args}
 							design="large"
 							label="Repeater"
-							icon={<CloneIcon />}
+							icon={<Icon icon="clone" />}
 							description={
 								'Block will animate when it enters into view.'
 							}

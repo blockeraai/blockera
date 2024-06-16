@@ -1,8 +1,13 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -10,8 +15,6 @@ import { memo, useContext } from '@wordpress/element';
 import { useControlContext } from '../../../context';
 import { RepeaterContext } from '../../repeater-control/context';
 import { ColorControl, InputControl } from '../../index';
-import XCoordinateIcon from '../icons/coordinate-x';
-import YCoordinateIcon from '../icons/coordinate-y';
 
 const Fields = ({ itemId, item }) => {
 	const {
@@ -35,7 +38,7 @@ const Fields = ({ itemId, item }) => {
 				id={getControlId(itemId, 'x')}
 				defaultValue={defaultRepeaterItemValue.x}
 				controlName="input"
-				label={<XCoordinateIcon />}
+				label={<Icon icon="coordinate-x" />}
 				labelPopoverTitle={__('Horizontal Offset (X)', 'blockera')}
 				labelDescription={
 					<>
@@ -78,7 +81,7 @@ const Fields = ({ itemId, item }) => {
 				id={getControlId(itemId, 'y')}
 				defaultValue={defaultRepeaterItemValue.y}
 				controlName="input"
-				label={<YCoordinateIcon />}
+				label={<Icon icon="coordinate-y" />}
 				labelPopoverTitle={__('Vertical Offset (Y)', 'blockera')}
 				labelDescription={
 					<>

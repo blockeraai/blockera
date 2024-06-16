@@ -7,6 +7,7 @@ import { useContext, useState, useRef, useEffect } from '@wordpress/element';
 import { Popover as WPPopover } from '@wordpress/components';
 import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
+
 /**
  * Blockera dependencies
  */
@@ -16,12 +17,12 @@ import {
 } from '@blockera/classnames';
 import { isFunction, isUndefined } from '@blockera/utils';
 import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-popover-data/context';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { Button } from '../button';
-import CloseIcon from './icons/close';
 import type { TPopoverProps } from './types';
 
 export default function Popover({
@@ -143,7 +144,7 @@ export default function Popover({
 											tooltipPosition="top"
 											showTooltip={true}
 										>
-											<CloseIcon />
+											<Icon icon="close" iconSize="16" />
 										</Button>
 									)}
 								</div>

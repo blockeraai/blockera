@@ -61,9 +61,9 @@ const GroupControl: ComponentType<any> = memo(
 			}
 
 			if (mode === 'accordion')
-				return <Icon library="wp" name="chevron-up" iconSize="24" />;
+				return <Icon library="wp" icon="chevron-up" iconSize="20" />;
 			else if (mode === 'popover')
-				return <Icon name="gear" iconSize="24" />;
+				return <Icon icon="gear" iconSize="18" />;
 
 			return '';
 		};
@@ -74,9 +74,9 @@ const GroupControl: ComponentType<any> = memo(
 			}
 
 			if (mode === 'accordion')
-				return <Icon library="wp" name="chevron-down" iconSize="24" />;
+				return <Icon library="wp" icon="chevron-down" iconSize="20" />;
 			else if (mode === 'popover')
-				return <Icon name="gear" iconSize="24" />;
+				return <Icon icon="gear" iconSize="18" />;
 
 			return '';
 		};

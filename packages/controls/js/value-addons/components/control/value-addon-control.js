@@ -22,8 +22,8 @@ import { Tooltip } from '../../../';
 import type { ValueAddonControlProps } from './types';
 import { ValueAddonPointer } from './index';
 import { getVariableIcon, isValid } from '../../helpers';
-import EmptyIcon from '../../icons/empty';
-import DeletedIcon from '../../icons/deleted';
+import { default as EmptyIcon } from '../../icons/empty.svg';
+import { default as DeletedIcon } from '../../icons/deleted.svg';
 
 export default function ({
 	classNames,

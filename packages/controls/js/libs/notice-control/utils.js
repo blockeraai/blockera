@@ -8,8 +8,6 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import SuccessIcon from './icons/success-icon';
-import ErrorIcon from './icons/error-icon';
 import type { NoticeControlType } from './types';
 
 export function NoticeIcon(type: NoticeControlType): any {
@@ -19,7 +17,7 @@ export function NoticeIcon(type: NoticeControlType): any {
 				<Icon
 					icon="information"
 					iconSize="18"
-					dataTest="notice-control-icon-info"
+					data-test="notice-control-icon-info"
 				/>
 			);
 		case 'warning':
@@ -27,13 +25,25 @@ export function NoticeIcon(type: NoticeControlType): any {
 				<Icon
 					icon="warning"
 					iconSize="18"
-					dataTest="notice-control-icon-warning"
+					data-test="notice-control-icon-warning"
 				/>
 			);
 		case 'error':
-			return <ErrorIcon />;
+			return (
+				<Icon
+					icon="error"
+					iconSize="18"
+					data-test="notice-control-icon-error"
+				/>
+			);
 		case 'success':
-			return <SuccessIcon />;
+			return (
+				<Icon
+					icon="success"
+					iconSize="18"
+					data-test="notice-control-icon-success"
+				/>
+			);
 		default:
 			return null;
 	}

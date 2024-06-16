@@ -1,4 +1,3 @@
-// @flow
 /**
  * Internal dependencies
  */
@@ -13,9 +12,6 @@ describe('media-image', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
-	// TODO we will add these tests when adding visual tests
-	// context('Rendering', () => {});
 
 	context('Functional', () => {
 		beforeEach(() => {

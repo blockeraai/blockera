@@ -13,12 +13,12 @@ import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { Button } from '../button';
-import CaretIcon from './icons/caret';
 import type { MoreFeaturesProps } from './types';
 
 export default function MoreFeatures({
@@ -56,7 +56,11 @@ export default function MoreFeatures({
 				label={ariaLabel}
 				showTooltip={!isOpen && label !== ariaLabel}
 			>
-				<CaretIcon isOpen={isOpen} />
+				{isOpen ? (
+					<Icon library="wp" icon="chevron-up" iconSize="20" />
+				) : (
+					<Icon library="wp" icon="chevron-down" iconSize="20" />
+				)}
 
 				{label}
 
