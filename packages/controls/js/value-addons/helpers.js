@@ -19,6 +19,7 @@ import {
 	type VariableCategory,
 } from '@blockera/data';
 import { isBlockTheme, isObject, isUndefined } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -29,9 +30,6 @@ import type {
 	ValueAddonProps,
 	VariableCategoryDetail,
 } from './types';
-import VarTypeFontSizeIcon from './icons/var-font-size';
-import VarTypeSpacingIcon from './icons/var-spacing';
-import VarTypeWidthSizeIcon from './icons/var-width-size';
 
 /**
  * Sets value addon.
@@ -113,7 +111,7 @@ export function getVariableIcon({
 }): MixedElement {
 	switch (type) {
 		case 'font-size':
-			return <VarTypeFontSizeIcon />;
+			return <Icon icon="variable-font-size" iconSize="20" />;
 
 		case 'radial-gradient':
 		case 'linear-gradient':
@@ -128,10 +126,10 @@ export function getVariableIcon({
 			return <ColorIndicator type="color" value={value} />;
 
 		case 'spacing':
-			return <VarTypeSpacingIcon />;
+			return <Icon icon="variable-spacing" iconSize="20" />;
 
 		case 'width-size':
-			return <VarTypeWidthSizeIcon />;
+			return <Icon icon="variable-width-size" iconSize="20" />;
 	}
 
 	return <></>;

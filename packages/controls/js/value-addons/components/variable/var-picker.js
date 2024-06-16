@@ -15,6 +15,7 @@ import {
 	generateVariableString,
 } from '@blockera/data';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -27,9 +28,6 @@ import {
 	isValid,
 } from '../../helpers';
 import { PickerValueItem, PickerCategory } from '../index';
-import PlusIcon from '../../icons/plus';
-import UnlinkIcon from '../../icons/unlink';
-import TrashIcon from '../../icons/trash';
 import type { ValueAddonControlProps } from '../control/types';
 import type { VariableCategoryDetail } from '../../types';
 
@@ -58,7 +56,7 @@ export default function ({
 								'blockera'
 							)}
 						>
-							<PlusIcon />
+							<Icon icon="plus" iconSize="20" />
 						</Button>
 					</>
 				}
@@ -206,7 +204,7 @@ export default function ({
 							style={{ padding: '5px' }}
 							label={__('Unlink Variable Value', 'blockera')}
 						>
-							<UnlinkIcon />
+							<Icon icon="unlink" iconSize="20" />
 						</Button>
 					)}
 
@@ -218,7 +216,7 @@ export default function ({
 							style={{ padding: '5px' }}
 							label={__('Remove', 'blockera')}
 						>
-							<TrashIcon />
+							<Icon icon="trash" iconSize="20" />
 						</Button>
 					)}
 				</>

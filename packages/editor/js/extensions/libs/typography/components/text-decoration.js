@@ -12,15 +12,12 @@ import {
 	ControlContextProvider,
 	ToggleSelectControl,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { generateExtensionId } from '../../utils';
-import TextDecorationUnderlineIcon from '../icons/text-decoration-underline';
-import TextDecorationLineThroughIcon from '../icons/text-dectoration-line-through';
-import TextDecorationOverlineIcon from '../icons/text-decoration-overline';
-import NoneIcon from '../icons/none';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export const TextDecoration = ({
@@ -58,7 +55,10 @@ export const TextDecoration = ({
 							)}
 						</p>
 						<h3>
-							<TextDecorationUnderlineIcon />
+							<Icon
+								icon="text-decoration-underline"
+								iconSize="22"
+							/>
 							{__('Underline', 'blockera')}
 						</h3>
 						<p>
@@ -68,7 +68,10 @@ export const TextDecoration = ({
 							)}
 						</p>
 						<h3>
-							<TextDecorationLineThroughIcon />
+							<Icon
+								icon="text-decoration-line-through"
+								iconSize="22"
+							/>
 							{__('Line Through', 'blockera')}
 						</h3>
 						<p>
@@ -78,12 +81,19 @@ export const TextDecoration = ({
 							)}
 						</p>
 						<h3>
-							<TextDecorationOverlineIcon />
+							<Icon
+								icon="text-decoration-overline"
+								iconSize="22"
+							/>
 							{__('Overline', 'blockera')}
 						</h3>
 						<p>{__('Places a line above the text.', 'blockera')}</p>
 						<h3>
-							<NoneIcon />
+							<Icon
+								library="wp"
+								icon="close-small"
+								iconSize="22"
+							/>
 							{__('None', 'blockera')}
 						</h3>
 						<p>
@@ -98,22 +108,43 @@ export const TextDecoration = ({
 					{
 						label: __('Underline', 'blockera'),
 						value: 'underline',
-						icon: <TextDecorationUnderlineIcon />,
+						icon: (
+							<Icon
+								icon="text-decoration-underline"
+								iconSize="18"
+							/>
+						),
 					},
 					{
 						label: __('Line Through', 'blockera'),
 						value: 'line-through',
-						icon: <TextDecorationLineThroughIcon />,
+						icon: (
+							<Icon
+								icon="text-decoration-line-through"
+								iconSize="18"
+							/>
+						),
 					},
 					{
 						label: __('Overline', 'blockera'),
 						value: 'overline',
-						icon: <TextDecorationOverlineIcon />,
+						icon: (
+							<Icon
+								icon="text-decoration-overline"
+								iconSize="18"
+							/>
+						),
 					},
 					{
 						label: __('None', 'blockera'),
 						value: 'initial',
-						icon: <NoneIcon />,
+						icon: (
+							<Icon
+								library="wp"
+								icon="close-small"
+								iconSize="18"
+							/>
+						),
 					},
 				]}
 				isDeselectable={true}

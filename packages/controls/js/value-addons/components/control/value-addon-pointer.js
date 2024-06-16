@@ -11,13 +11,12 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { isValid } from '../../helpers';
-import VariableIcon from '../../icons/variable';
-import RemoveIcon from '../../icons/remove';
 import { VarPicker, VarDeleted } from '../index';
 import type { ValueAddonControlProps } from './types';
 
@@ -51,10 +50,16 @@ export default function ({
 					onClick={handleVariableModal}
 					{...pointerProps}
 				>
-					<VariableIcon
+					<Icon
+						icon="variable"
+						iconSize="16"
+						data-cy="value-addon-btn-open"
 						className={controlInnerClassNames('var-pointer-icon')}
 					/>
-					<RemoveIcon
+
+					<Icon
+						icon="close-small"
+						data-cy="value-addon-btn-remove"
 						className={controlInnerClassNames('remove-icon')}
 					/>
 				</div>

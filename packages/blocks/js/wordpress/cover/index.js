@@ -13,17 +13,9 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	InnerBlockParagraphIcon,
-	InnerBlockHeadingsIcon,
-	InnerBlockHeading1Icon,
-	InnerBlockHeading2Icon,
-	InnerBlockHeading3Icon,
-	InnerBlockHeading4Icon,
-	InnerBlockHeading5Icon,
-	InnerBlockHeading6Icon,
-	InnerBlockButtonIcon,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -34,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/paragraph',
 		type: 'paragraph',
 		label: __('Paragraphs', 'blockera'),
-		icon: <InnerBlockParagraphIcon />,
+		icon: <Icon icon="block-paragraph" iconSize="20" />,
 		selectors: {
 			root: 'p',
 		},
@@ -47,7 +39,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/button',
 		type: 'button',
 		label: __('Buttons', 'blockera'),
-		icon: <InnerBlockButtonIcon />,
+		icon: <Icon icon="block-button" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-button > .wp-element-button',
 		},
@@ -60,7 +52,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		type: 'heading',
 		label: __('Headings', 'blockera'),
-		icon: <InnerBlockHeadingsIcon />,
+		icon: <Icon icon="block-headings" iconSize="20" />,
 		selectors: {
 			root: 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
 		},
@@ -78,7 +70,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h1',
 		type: 'h1',
 		label: __('H1s', 'blockera'),
-		icon: <InnerBlockHeading1Icon />,
+		icon: <Icon icon="block-heading-1" iconSize="20" />,
 		selectors: {
 			root: 'h1.wp-block-heading',
 		},
@@ -96,7 +88,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h2',
 		type: 'h2',
 		label: __('H2s', 'blockera'),
-		icon: <InnerBlockHeading2Icon />,
+		icon: <Icon icon="block-heading-2" iconSize="20" />,
 		selectors: {
 			root: 'h2.wp-block-heading',
 		},
@@ -114,7 +106,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h3',
 		type: 'h3',
 		label: __('H3s', 'blockera'),
-		icon: <InnerBlockHeading3Icon />,
+		icon: <Icon icon="block-heading-3" iconSize="20" />,
 		selectors: {
 			root: 'h3.wp-block-heading',
 		},
@@ -132,7 +124,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h4',
 		type: 'h4',
 		label: __('H4s', 'blockera'),
-		icon: <InnerBlockHeading4Icon />,
+		icon: <Icon icon="block-heading-4" iconSize="20" />,
 		selectors: {
 			root: 'h4.wp-block-heading',
 		},
@@ -150,7 +142,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h5',
 		type: 'h5',
 		label: __('H5s', 'blockera'),
-		icon: <InnerBlockHeading5Icon />,
+		icon: <Icon icon="block-heading-5" iconSize="20" />,
 		selectors: {
 			root: 'h5.wp-block-heading',
 		},
@@ -168,7 +160,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h6',
 		type: 'h6',
 		label: __('H6s', 'blockera'),
-		icon: <InnerBlockHeading6Icon />,
+		icon: <Icon icon="block-heading-6" iconSize="20" />,
 		selectors: {
 			root: 'h6.wp-block-heading',
 		},

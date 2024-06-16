@@ -9,14 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { updateConfig } from '@blockera/utils';
-
-/**
- * Internal dependencies
- */
-import TypeImageIcon from './icons/type-image';
-import TypeLinearGradientIcon from './icons/type-linear-gradient';
-import TypeRadialGradientIcon from './icons/type-radial-gradient';
-import { default as TypeMeshGradientIcon } from './icons/type-mesh-gradient';
+import { Icon } from '@blockera/icons';
 
 export const backgroundBootstrapper = (): void => {
 	return updateConfig('backgroundConfig', {
@@ -26,22 +19,37 @@ export const backgroundBootstrapper = (): void => {
 					{
 						label: __('Image', 'blockera'),
 						value: 'image',
-						icon: <TypeImageIcon />,
+						icon: <Icon icon="background-image" iconSize="18" />,
 					},
 					{
 						label: __('Linear Gradient', 'blockera'),
 						value: 'linear-gradient',
-						icon: <TypeLinearGradientIcon />,
+						icon: (
+							<Icon
+								icon="background-linear-gradient"
+								iconSize="18"
+							/>
+						),
 					},
 					{
 						label: __('Radial Gradient', 'blockera'),
 						value: 'radial-gradient',
-						icon: <TypeRadialGradientIcon />,
+						icon: (
+							<Icon
+								icon="background-radial-gradient"
+								iconSize="18"
+							/>
+						),
 					},
 					{
 						label: __('Mesh Gradient', 'blockera'),
 						value: 'mesh-gradient',
-						icon: <TypeMeshGradientIcon />,
+						icon: (
+							<Icon
+								icon="background-mesh-gradient"
+								iconSize="18"
+							/>
+						),
 					},
 				],
 				meshGradientColors: {

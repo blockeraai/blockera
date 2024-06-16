@@ -13,15 +13,21 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import type { IconLibraryTypes } from './types';
+// WP Library
 import { WPIcons } from './library-wp';
-import { BlockeraIcons } from './library-blockera';
-
-import WPIconsSearchData from './library-wp/search-data.json';
-import IconsSearchData from './library-blockera/search-data.json';
-// import searchIndex from './search-index.json';
-
 import { default as WPLibraryIcon } from './library-wp/library-icon';
+import WPIconsSearchData from './library-wp/search-data.json';
+// Blockera Library
+import { BlockeraIcons } from './library-blockera';
 import { default as LibraryIcon } from './library-blockera/library-icon';
+import IconsSearchData from './library-blockera/search-data.json';
+// UI Library
+import { BlockeraUIIcons } from './library-ui';
+import { default as LibraryUIIcon } from './library-ui/library-icon';
+// Cursor Library
+import { CursorIcons } from './library-cursor';
+import { default as LibraryCursorIcon } from './library-cursor/library-icon';
 
 const IconLibraries = {
 	wp: {
@@ -33,16 +39,28 @@ const IconLibraries = {
 	blockera: {
 		id: 'blockera',
 		// translators: Icon library name
-		name: __('', 'blockera'),
+		name: __('Blockera', 'blockera'),
 		icon: <LibraryIcon />,
+	},
+	ui: {
+		id: 'ui',
+		// translators: Icon library name
+		name: __('User Interface', 'blockera'),
+		icon: <LibraryUIIcon />,
+	},
+	cursor: {
+		id: 'cursor',
+		// translators: Icon library name
+		name: __('Cursors', 'blockera'),
+		icon: <LibraryCursorIcon />,
 	},
 };
 
-export function isValidIconLibrary(library: string): boolean {
+export function isValidIconLibrary(library: IconLibraryTypes): boolean {
 	return !isUndefined(IconLibraries[library]);
 }
 
-export function getIconLibrary(library: string): Object {
+export function getIconLibrary(library: IconLibraryTypes | 'all'): Object {
 	const libs: { [key: string]: any } = {};
 
 	if (library === 'all') {
@@ -56,23 +74,31 @@ export function getIconLibrary(library: string): Object {
 	return libs;
 }
 
-export function getIconLibraryIcons(iconLibrary: string): Object {
+export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 	if (!isValidIconLibrary(iconLibrary)) {
 		return {};
 	}
 
 	switch (iconLibrary) {
+		case 'ui':
+			return BlockeraUIIcons;
+
 		case 'blockera':
 			return BlockeraIcons;
 
 		case 'wp':
 			return WPIcons;
+
+		case 'cursor':
+			return CursorIcons;
 	}
 
 	return {};
 }
 
-export function getIconLibrarySearchData(library: string): Array<any> {
+export function getIconLibrarySearchData(
+	library: IconLibraryTypes | 'all'
+): Array<any> {
 	const searchData: Array<any> = [];
 
 	if (library === 'all' || isValidIconLibrary(library))

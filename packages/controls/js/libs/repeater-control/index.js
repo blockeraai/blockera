@@ -16,12 +16,12 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { isFunction } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies.
  */
 import { Button, Grid } from '../';
-import PlusIcon from './icons/plus';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
@@ -360,7 +360,7 @@ export default function RepeaterControl(
 											: {})}
 										onClick={addNewButtonOnClick}
 									>
-										<PlusIcon />
+										<Icon icon="plus" iconSize="20" />
 										{addNewButtonLabel ||
 											__('Add New', 'blockera')}
 									</Button>
@@ -435,7 +435,7 @@ export default function RepeaterControl(
 										}
 										onClick={addNewButtonOnClick}
 									>
-										<PlusIcon />
+										<Icon icon="plus" iconSize="20" />
 									</Button>
 								)}
 

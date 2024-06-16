@@ -14,8 +14,8 @@ import { controlClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import type { TAlignmentMatrixBox } from '../types';
-import MatrixItemIcon from '../icons/matrix-item';
-import MatrixItemIconSelected from '../icons/matrix-item-selected';
+import { default as MatrixItemIcon } from '../icons/matrix-item.svg';
+import { default as MatrixItemIconSelected } from '../icons/matrix-item-selected.svg';
 
 export default function AlignmentMatrixBox({
 	onChange,

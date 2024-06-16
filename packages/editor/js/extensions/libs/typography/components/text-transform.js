@@ -12,16 +12,13 @@ import {
 	ControlContextProvider,
 	ToggleSelectControl,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import NoneIcon from '../icons/none';
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
-import TextTransformLowercaseIcon from '../icons/text-transform-lowercase';
-import TextTransformUppercaseIcon from '../icons/text-transform-uppercase';
-import TextTransformCapitalizeIcon from '../icons/text-transform-capitalize';
 
 export const TextTransform = ({
 	block,
@@ -55,7 +52,10 @@ export const TextTransform = ({
 							)}
 						</p>
 						<h3>
-							<TextTransformCapitalizeIcon />
+							<Icon
+								icon="text-transform-capitalize"
+								iconSize="22"
+							/>
 							{__('Capitalize', 'blockera')}
 						</h3>
 						<p>
@@ -65,7 +65,10 @@ export const TextTransform = ({
 							)}
 						</p>
 						<h3>
-							<TextTransformLowercaseIcon />
+							<Icon
+								icon="text-transform-lowercase"
+								iconSize="22"
+							/>
 							{__('Lowercase', 'blockera')}
 						</h3>
 						<p>
@@ -75,7 +78,10 @@ export const TextTransform = ({
 							)}
 						</p>
 						<h3>
-							<TextTransformUppercaseIcon />
+							<Icon
+								icon="text-transform-uppercase"
+								iconSize="22"
+							/>
 							{__('Uppercase', 'blockera')}
 						</h3>
 						<p>
@@ -85,7 +91,11 @@ export const TextTransform = ({
 							)}
 						</p>
 						<h3>
-							<NoneIcon />
+							<Icon
+								library="wp"
+								icon="close-small"
+								iconSize="22"
+							/>
 							{__('None', 'blockera')}
 						</h3>
 						<p>
@@ -102,22 +112,43 @@ export const TextTransform = ({
 					{
 						label: __('Capitalize', 'blockera'),
 						value: 'capitalize',
-						icon: <TextTransformCapitalizeIcon />,
+						icon: (
+							<Icon
+								icon="text-transform-capitalize"
+								iconSize="18"
+							/>
+						),
 					},
 					{
 						label: __('Lowercase', 'blockera'),
 						value: 'lowercase',
-						icon: <TextTransformLowercaseIcon />,
+						icon: (
+							<Icon
+								icon="text-transform-lowercase"
+								iconSize="18"
+							/>
+						),
 					},
 					{
 						label: __('Uppercase', 'blockera'),
 						value: 'uppercase',
-						icon: <TextTransformUppercaseIcon />,
+						icon: (
+							<Icon
+								icon="text-transform-uppercase"
+								iconSize="18"
+							/>
+						),
 					},
 					{
 						label: __('None', 'blockera'),
 						value: 'initial',
-						icon: <NoneIcon />,
+						icon: (
+							<Icon
+								library="wp"
+								icon="close-small"
+								iconSize="18"
+							/>
+						),
 					},
 				]}
 				isDeselectable={true}

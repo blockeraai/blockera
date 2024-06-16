@@ -1,14 +1,16 @@
 // @flow
-/**
- * WordPress dependencies
- */
-import { __ } from '@wordpress/i18n';
-import { memo, useContext } from '@wordpress/element';
 
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
+import { memo, useContext } from '@wordpress/element';
 import type { Element } from 'react';
+
+/**
+ * External dependencies
+ */
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -18,8 +20,6 @@ import { RepeaterContext } from '../../repeater-control/context';
 import { useControlContext } from '../../../context';
 import { ColorControl, InputControl, SelectControl } from '../../index';
 import type { TFieldItem } from '../types';
-import XCoordinateIcon from '../icons/coordinate-x';
-import YCoordinateIcon from '../../box-shadow-control/icons/coordinate-y';
 
 const Fields: TFieldItem = memo<TFieldItem>(
 	({ itemId, item }: TFieldItem): Element<any> => {
@@ -113,7 +113,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							repeaterItem={itemId}
 							id={getControlId(itemId, 'drop-shadow-x')}
 							singularId={'drop-shadow-x'}
-							label={<XCoordinateIcon />}
+							label={<Icon icon="coordinate-x" iconSize="18" />}
 							labelPopoverTitle={__(
 								'Shadow Horizontal Offset',
 								'blockera'
@@ -157,7 +157,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							repeaterItem={itemId}
 							id={getControlId(itemId, 'drop-shadow-y')}
 							singularId={'drop-shadow-y'}
-							label={<YCoordinateIcon />}
+							label={<Icon icon="coordinate-y" iconSize="18" />}
 							labelPopoverTitle={__(
 								'Shadow Vertical Offset',
 								'blockera'

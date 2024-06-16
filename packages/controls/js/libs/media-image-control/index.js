@@ -13,13 +13,13 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { useControlContext } from '../../context';
 import type { MediaImageControlProps } from './types';
-import { default as DeleteIcon } from './icons/delete';
 import { Button, MediaUploader, BaseControl } from '../index';
 
 export default function MediaImageControl({
@@ -87,7 +87,9 @@ export default function MediaImageControl({
 						data-cy="delete-bg-img"
 						className="btn-delete"
 						noBorder={true}
-						icon={<DeleteIcon />}
+						icon={
+							<Icon library="close" icon="close" iconSize="16" />
+						}
 						onClick={() => {
 							setValue('');
 						}}

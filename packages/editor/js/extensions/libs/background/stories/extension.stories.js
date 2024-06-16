@@ -1,7 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
+import { select, useDispatch } from '@wordpress/data';
 
 /**
  *  Storybook dependencies
@@ -16,13 +17,13 @@ import {
 	blocksInitializer,
 	createBlockEditorContent,
 } from '@blockera/dev-storybook/js/block-api';
-import { BaseExtension, ExtensionStyle } from '../../';
-import { supports } from '../supports';
-import { attributes } from '../attributes';
-import BackgroundExtensionIcon from '../icons/extension-icon';
+import { BackgroundExtension } from '../../';
+import { attributes as defaultAttributes, supports } from '../../shared';
+import { useAttributes } from '../../../../hooks';
+import { BlockStyle } from '../../../../style-engine';
+import { STORE_NAME } from '../../base/store/constants';
+import * as config from '../../base/config';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
-import { useAttributes } from '../../shared/use-attributes';
-import { InspectorControls } from '@wordpress/block-editor';
 
 const { SharedDecorators } = Decorators;
 
@@ -35,42 +36,79 @@ blocksInitializer({
 	supports,
 	edit({ attributes, setAttributes, ...props }) {
 		// eslint-disable-next-line
-		const { handleOnChangeAttributes } = useAttributes(
-			attributes,
-			setAttributes,
-			{
-				blockId: targetBlock,
-			}
-		);
+		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
+			blockId: name,
+			innerBlocks: {},
+			blockeraInnerBlocks: {},
+			getAttributes: () => attributes,
+			isNormalState: () => true,
+			masterIsNormalState: () => true,
+		});
+		const block = {
+			blockName: name,
+			clientId: props.clientId,
+			currentState: 'normal',
+			currentBreakpoint: 'laptop',
+			currentBlock: 'core/paragraph',
+			currentInnerBlockState: 'normal',
+		};
+		const { updateExtension } = useDispatch(STORE_NAME);
+		const { getExtensions } = select(STORE_NAME);
+
+		const supports = getExtensions();
+		const [settings, setSettings] = useState(supports);
+
+		const handleOnChangeSettings = (
+			newSettings: Object,
+			key: string
+		): void => {
+			setSettings({
+				...settings,
+				[key]: {
+					...settings[key],
+					...newSettings,
+				},
+			});
+
+			updateExtension(key, newSettings);
+		};
 
 		return (
 			<>
-				<InspectorControls>
-					<BaseExtension
-						{...{ ...props, attributes, setAttributes }}
-						initialOpen={true}
-						values={{
-							background:
-								attributes?.blockeraBackground || undefined,
-							backgroundColor:
-								attributes?.blockeraBackgroundColor || '',
-							backgroundClip:
-								attributes?.blockeraBackgroundClip || 'none',
-						}}
-						extensionId={'Background'}
-						icon={<BackgroundExtensionIcon />}
-						storeName={'blockera-core/controls/repeater'}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Background', 'blockera')}
-					/>
-				</InspectorControls>
+				<BackgroundExtension
+					block={block}
+					setSettings={handleOnChangeSettings}
+					extensionConfig={config.backgroundConfig}
+					extensionProps={{
+						blockeraBackground: {},
+						blockeraBackgroundColor: {},
+						blockeraBackgroundClip: {},
+					}}
+					values={{
+						blockeraBackground: attributes?.blockeraBackground,
+						blockeraBackgroundColor:
+							attributes?.blockeraBackgroundColor,
+						blockeraBackgroundClip:
+							attributes?.blockeraBackgroundClip,
+					}}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					attributes={{
+						blockeraBackground: attributes.blockeraBackground,
+						blockeraBackgroundColor:
+							attributes.blockeraBackgroundColor,
+						blockeraBackgroundClip:
+							attributes.blockeraBackgroundClip,
+					}}
+				/>
 
-				<ExtensionStyle
-					extensions={['Background']}
+				<BlockStyle
 					{...{
-						...props,
 						attributes,
-						setAttributes,
+						blockName: props.name,
+						clientId: props.clientId,
+						supports: props.supports,
+						activeDeviceType: 'laptop',
+						currentAttributes: attributes,
 					}}
 				/>
 			</>

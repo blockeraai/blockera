@@ -15,13 +15,12 @@ import {
 	InputControl,
 	useControlContext,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { isActiveField } from '../../../api/utils';
-import LockIcon from '../icons/lock';
-import UnlockIcon from '../icons/unlock';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export default function ({
@@ -217,7 +216,11 @@ export default function ({
 						padding: '6px 3px',
 					}}
 				>
-					{gap?.lock ? <LockIcon /> : <UnlockIcon />}
+					{gap?.lock ? (
+						<Icon icon="lock" size="18" />
+					) : (
+						<Icon icon="unlock" size="18" />
+					)}
 				</Button>
 			</Grid>
 		</BaseControl>

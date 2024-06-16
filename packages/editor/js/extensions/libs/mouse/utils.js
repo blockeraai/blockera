@@ -1,38 +1,12 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 
-import CursorPointerIcon from './icons/cursors/pointer';
-import CursorNoneIcon from './icons/cursors/none';
-import CursorNotAllowedIcon from './icons/cursors/not-allowed';
-import CursorWaitIcon from './icons/cursors/wait';
-import CursorHelpIcon from './icons/cursors/help';
-import CursorContextMenuIcon from './icons/cursors/context-menu';
-import CursorCellIcon from './icons/cursors/cell';
-import CursorCrosshairIcon from './icons/cursors/crosshair';
-import CursorTextIcon from './icons/cursors/text';
-import CursorVerticalTextIcon from './icons/cursors/vertical-text';
-import CursorGrabIcon from './icons/cursors/grab';
-import CursorGrabbingIcon from './icons/cursors/grabbing';
-import CursorAliasIcon from './icons/cursors/alias';
-import CursorMoveIcon from './icons/cursors/move';
-import CursorZoomInIcon from './icons/cursors/zoom-in';
-import CursorZoomOutIcon from './icons/cursors/zoom-out';
-import CursorColResizeIcon from './icons/cursors/col-resize';
-import CursorRowResizeIcon from './icons/cursors/row-resize';
-import CursorNeswResizeIcon from './icons/cursors/nesw-resize';
-import CursorNwseResizeIcon from './icons/cursors/nwse-resize';
-import CursorEwResizeIcon from './icons/cursors/ew-resize';
-import CursorNsResizeIcon from './icons/cursors/ns-resize';
-import CursorNResizeIcon from './icons/cursors/n-resize';
-import CursorWResizeIcon from './icons/cursors/w-resize';
-import CursorSResizeIcon from './icons/cursors/s-resize';
-import CursorEResizeIcon from './icons/cursors/e-resize';
-import CursorNwResizeIcon from './icons/cursors/nw-resize';
-import CursorNeResizeIcon from './icons/cursors/ne-resize';
-import CursorSwResizeIcon from './icons/cursors/sw-resize';
-import CursorSeResizeIcon from './icons/cursors/se-resize';
+/**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
 
 // list of all cursor options for select field
 export const cursorFieldOptions = function () {
@@ -44,17 +18,17 @@ export const cursorFieldOptions = function () {
 				{
 					label: __('Auto', 'blockera'),
 					value: 'auto',
-					icon: <CursorPointerIcon />,
+					icon: <Icon library="cursor" icon="pointer" />,
 				},
 				{
 					label: __('Default', 'blockera'),
 					value: 'default',
-					icon: <CursorPointerIcon />,
+					icon: <Icon library="cursor" icon="pointer" />,
 				},
 				{
 					label: __('none', 'blockera'),
 					value: 'none',
-					icon: <CursorNoneIcon />,
+					icon: <Icon library="cursor" icon="none" />,
 				},
 			],
 		},
@@ -65,32 +39,32 @@ export const cursorFieldOptions = function () {
 				{
 					label: __('pointer', 'blockera'),
 					value: 'pointer',
-					icon: <CursorPointerIcon />,
+					icon: <Icon library="cursor" icon="pointer" />,
 				},
 				{
 					label: __('not-allowed', 'blockera'),
 					value: 'not-allowed',
-					icon: <CursorNotAllowedIcon />,
+					icon: <Icon library="cursor" icon="not-allowed" />,
 				},
 				{
 					label: __('wait', 'blockera'),
 					value: 'wait',
-					icon: <CursorWaitIcon />,
+					icon: <Icon library="cursor" icon="wait" />,
 				},
 				{
 					label: __('progress', 'blockera'),
 					value: 'progress',
-					icon: <CursorWaitIcon />,
+					icon: <Icon library="cursor" icon="wait" />,
 				},
 				{
 					label: __('help', 'blockera'),
 					value: 'help',
-					icon: <CursorHelpIcon />,
+					icon: <Icon library="cursor" icon="help" />,
 				},
 				{
 					label: __('context-menu', 'blockera'),
 					value: 'context-menu',
-					icon: <CursorContextMenuIcon />,
+					icon: <Icon library="cursor" icon="context-menu" />,
 				},
 			],
 		},
@@ -101,22 +75,22 @@ export const cursorFieldOptions = function () {
 				{
 					label: __('cell', 'blockera'),
 					value: 'cell',
-					icon: <CursorCellIcon />,
+					icon: <Icon library="cursor" icon="cell" />,
 				},
 				{
 					label: __('crosshair', 'blockera'),
 					value: 'crosshair',
-					icon: <CursorCrosshairIcon />,
+					icon: <Icon library="cursor" icon="crosshair" />,
 				},
 				{
 					label: __('text', 'blockera'),
 					value: 'text',
-					icon: <CursorTextIcon />,
+					icon: <Icon library="cursor" icon="text" />,
 				},
 				{
 					label: __('vertical-text', 'blockera'),
 					value: 'vertical-text',
-					icon: <CursorVerticalTextIcon />,
+					icon: <Icon library="cursor" icon="vertical-text" />,
 				},
 			],
 		},
@@ -127,22 +101,22 @@ export const cursorFieldOptions = function () {
 				{
 					label: __('grab', 'blockera'),
 					value: 'grab',
-					icon: <CursorGrabIcon />,
+					icon: <Icon library="cursor" icon="grab" />,
 				},
 				{
 					label: __('grabbing', 'blockera'),
 					value: 'grabbing',
-					icon: <CursorGrabbingIcon />,
+					icon: <Icon library="cursor" icon="grabbing" />,
 				},
 				{
 					label: __('alias', 'blockera'),
 					value: 'alias',
-					icon: <CursorAliasIcon />,
+					icon: <Icon library="cursor" icon="alias" />,
 				},
 				{
-					label: __('copy', 'blockera'),
+					label: __('move', 'blockera'),
 					value: 'move',
-					icon: <CursorMoveIcon />,
+					icon: <Icon library="cursor" icon="move" />,
 				},
 			],
 		},
@@ -153,12 +127,12 @@ export const cursorFieldOptions = function () {
 				{
 					label: __('zoom-in', 'blockera'),
 					value: 'zoom-in',
-					icon: <CursorZoomInIcon />,
+					icon: <Icon library="cursor" icon="zoom-in" />,
 				},
 				{
 					label: __('zoom-out', 'blockera'),
 					value: 'zoom-out',
-					icon: <CursorZoomOutIcon />,
+					icon: <Icon library="cursor" icon="zoom-out" />,
 				},
 			],
 		},
@@ -169,73 +143,72 @@ export const cursorFieldOptions = function () {
 				{
 					label: __('col-resize', 'blockera'),
 					value: 'col-resize',
-					icon: <CursorColResizeIcon />,
+					icon: <Icon library="cursor" icon="col-resize" />,
 				},
 				{
 					label: __('row-resize', 'blockera'),
 					value: 'row-resize',
-					icon: <CursorRowResizeIcon />,
+					icon: <Icon library="cursor" icon="row-resize" />,
 				},
-
 				{
 					label: __('nesw-resize', 'blockera'),
 					value: 'nesw-resize',
-					icon: <CursorNeswResizeIcon />,
+					icon: <Icon library="cursor" icon="nesw-resize" />,
 				},
 				{
 					label: __('nwse-resize', 'blockera'),
 					value: 'nwse-resize',
-					icon: <CursorNwseResizeIcon />,
+					icon: <Icon library="cursor" icon="nwse-resize" />,
 				},
 				{
 					label: __('ew-resize', 'blockera'),
 					value: 'ew-resize',
-					icon: <CursorEwResizeIcon />,
+					icon: <Icon library="cursor" icon="ew-resize" />,
 				},
 				{
 					label: __('ns-resize', 'blockera'),
 					value: 'ns-resize',
-					icon: <CursorNsResizeIcon />,
+					icon: <Icon library="cursor" icon="ns-resize" />,
 				},
 				{
 					label: __('n-resize', 'blockera'),
 					value: 'n-resize',
-					icon: <CursorNResizeIcon />,
+					icon: <Icon library="cursor" icon="n-resize" />,
 				},
 				{
 					label: __('w-resize', 'blockera'),
 					value: 'w-resize',
-					icon: <CursorWResizeIcon />,
+					icon: <Icon library="cursor" icon="w-resize" />,
 				},
 				{
 					label: __('s-resize', 'blockera'),
 					value: 's-resize',
-					icon: <CursorSResizeIcon />,
+					icon: <Icon library="cursor" icon="s-resize" />,
 				},
 				{
 					label: __('e-resize', 'blockera'),
 					value: 'e-resize',
-					icon: <CursorEResizeIcon />,
+					icon: <Icon library="cursor" icon="e-resize" />,
 				},
 				{
 					label: __('nw-resize', 'blockera'),
 					value: 'nw-resize',
-					icon: <CursorNwResizeIcon />,
+					icon: <Icon library="cursor" icon="nw-resize" />,
 				},
 				{
 					label: __('ne-resize', 'blockera'),
 					value: 'ne-resize',
-					icon: <CursorNeResizeIcon />,
+					icon: <Icon library="cursor" icon="ne-resize" />,
 				},
 				{
 					label: __('sw-resize', 'blockera'),
 					value: 'sw-resize',
-					icon: <CursorSwResizeIcon />,
+					icon: <Icon library="cursor" icon="sw-resize" />,
 				},
 				{
 					label: __('se-resize', 'blockera'),
 					value: 'se-resize',
-					icon: <CursorSeResizeIcon />,
+					icon: <Icon library="cursor" icon="se-resize" />,
 				},
 			],
 		},

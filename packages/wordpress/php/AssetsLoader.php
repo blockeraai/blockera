@@ -85,46 +85,18 @@ class AssetsLoader {
 			'url'  => '',
 		];
 		$this->id             = $args['id'] ?? 'blockera-wordpress-assets-loader';
-		$this->dequeue_stack  = $args['dequeue-stack'] ?? [];
 
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueDynamicStyles' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueBlockeraWPStyles' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueueBlockeraWPStyles' ] );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
-//			add_action( 'enqueue_block_assets', [ $this, 'registerAssets' ], 10 );
+
 			add_action( 'enqueue_block_assets', [ $this, 'enqueue' ] );
-		}
 
-		if ( ! empty( $args['enqueue-admin-assets'] ) ) {
+		} elseif ( ! empty( $args['enqueue-admin-assets'] ) ) {
 
-//			add_action( 'admin_enqueue_scripts', [ $this, 'registerAssets' ], 10 );
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		}
-	}
-
-	/**
-	 * Dequeue registered scripts.
-	 *
-	 * @return void
-	 */
-	protected function dequeue(): void {
-
-		array_map( static function ( string $handle ) {
-
-			wp_dequeue_script( $handle );
-		}, $this->dequeue_stack );
-	}
-
-	/**
-	 * Enqueue removed scripts of queue.
-	 *
-	 * @return void
-	 */
-	protected function enqueueRemovedScripts(): void {
-
-		array_map( static function ( string $handle ) {
-
-			wp_enqueue_script( $handle );
-		}, $this->dequeue_stack );
 	}
 
 	/**
@@ -139,9 +111,7 @@ class AssetsLoader {
 			return;
 		}
 
-		$this->dequeue();
-
-		foreach ( $this->prepareAssets() as $asset ) {
+		array_map( function ( array $asset ): void {
 
 			if ( $asset['style'] ) {
 
@@ -152,20 +122,17 @@ class AssetsLoader {
 					$asset['version']
 				);
 
-				continue;
+				return;
 			}
 
 			if ( ! $asset['script'] ) {
 
-				continue;
+				return;
 			}
 
 			$deps = $this->excludeDependencies( $asset['deps'] );
 
-			foreach ($this->packages_deps[ $asset['name'] ] ?? [] as $dependency){
-
-				wp_enqueue_script($dependency);
-			}
+			array_map( 'wp_enqueue_script', $this->packages_deps[ $asset['name'] ] ?? [] );
 
 			wp_enqueue_script(
 				$asset['name'],
@@ -179,9 +146,8 @@ class AssetsLoader {
 					'in_footer' => true,
 				]
 			);
-		}
 
-		$this->enqueueRemovedScripts();
+		}, $this->prepareAssets() );
 
 		/**
 		 * This filter for extendable inline script from internal or third-party developers.
@@ -213,17 +179,17 @@ class AssetsLoader {
 	}
 
 	/**
-	 * Enqueuing dynamic-assets
+	 * Enqueuing blockera requirement css styles on WordPress admin or front environments.
 	 *
 	 * @return void
 	 */
-	public function enqueueDynamicStyles(): void {
+	public function enqueueBlockeraWPStyles(): void {
 
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file    = $this->root_info['path'] . 'assets/dynamic-styles.css';
-		$fileURL = $this->root_info['url'] . 'assets/dynamic-styles.css';
+		$file    = $this->root_info['path'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
+		$file_url = $this->root_info['url'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
@@ -231,7 +197,7 @@ class AssetsLoader {
 
 			wp_enqueue_style(
 				$handle,
-				$fileURL,
+				$file_url,
 				[],
 				filemtime( $file )
 			);
@@ -250,6 +216,19 @@ class AssetsLoader {
 				)
 			);
 			// phpcs:enable
+		}
+
+		$file    = $this->root_info['path'] . 'packages/wordpress/php/Assets/css/admin.css';
+		$file_url = $this->root_info['url'] . 'packages/wordpress/php/Assets/css/admin.css';
+
+		if ( file_exists( $file ) && is_admin() ) {
+
+			wp_enqueue_style(
+				'blockera-admin-kit',
+				$file_url,
+				[],
+				filemtime( $file )
+			);
 		}
 	}
 
@@ -284,47 +263,6 @@ class AssetsLoader {
 	}
 
 	/**
-	 * Register all assets in WordPress.
-	 *
-	 * @return void
-	 */
-	public function registerAssets(): void {
-
-		// Registering assets ...
-		foreach ( $this->prepareAssets( true ) as $asset ) {
-
-			if ( $asset['style'] ) {
-
-				wp_register_style(
-					$asset['name'],
-					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
-					$this->packages_deps[ $asset['name'] ] ?? [],
-					$asset['version']
-				);
-
-				continue;
-			}
-
-			if ( ! $asset['script'] ) {
-
-				continue;
-			}
-
-			$deps = $this->excludeDependencies( $asset['deps'] );
-
-			wp_register_script(
-				$asset['name'],
-				str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
-				$deps,
-				$asset['version'],
-				[
-					'in_footer' => true,
-				]
-			);
-		}
-	}
-
-	/**
 	 * Exclude deps before register script!
 	 *
 	 * @param array $dependencies the dependencies of current asset.
@@ -353,7 +291,7 @@ class AssetsLoader {
 	public function assetInfo( string $name ): array {
 
 		$assetInfoFile = sprintf(
-			'%sdist/%s/index%s.asset.php',
+			'%1$sdist/%2$s/%2$s%3$s.asset.php',
 			$this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
@@ -370,7 +308,7 @@ class AssetsLoader {
 		$version = $assetInfo['version'] ?? filemtime( $assetInfoFile );
 
 		$js_file = sprintf(
-			'%sdist/%s/index%s.js',
+			'%1$sdist/%2$s/%2$s%3$s.js',
 			$this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
@@ -379,7 +317,7 @@ class AssetsLoader {
 		if ( file_exists( $js_file ) ) {
 
 			$script = sprintf(
-				'%sdist/%s/index%s.js',
+				'%1$sdist/%2$s/%2$s%3$s.js',
 				$this->root_info['url'],
 				$name,
 				$this->is_development ? '' : '.min'

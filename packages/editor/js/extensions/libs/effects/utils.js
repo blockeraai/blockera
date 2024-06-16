@@ -1,10 +1,12 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 
-import BlendIcon from './icons/blend/blend';
-import InheritIcon from '../../icons/inherit';
+/**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
 
 // list of all cursor options for select field
 export const blendModeFieldOptions = function () {
@@ -17,13 +19,13 @@ export const blendModeFieldOptions = function () {
 					label: __('Normal', 'blockera'),
 					value: 'normal',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Inherit', 'blockera'),
 					value: 'inherit',
 					className: 'hide-icon',
-					icon: <InheritIcon />,
+					icon: <Icon icon="inherit-square" iconSize={18} />,
 				},
 			],
 		},
@@ -35,13 +37,13 @@ export const blendModeFieldOptions = function () {
 					label: __('Darken', 'blockera'),
 					value: 'darken',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Multiply', 'blockera'),
 					value: 'multiply',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 			],
 		},
@@ -54,13 +56,13 @@ export const blendModeFieldOptions = function () {
 					label: __('Lighten', 'blockera'),
 					value: 'lighten',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Screen', 'blockera'),
 					value: 'screen',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 			],
 		},
@@ -72,19 +74,19 @@ export const blendModeFieldOptions = function () {
 					label: __('Overlay', 'blockera'),
 					value: 'overlay',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Soft Light', 'blockera'),
 					value: 'soft-light',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Hard Light', 'blockera'),
 					value: 'hard-light',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 			],
 		},
@@ -96,13 +98,13 @@ export const blendModeFieldOptions = function () {
 					label: __('Difference', 'blockera'),
 					value: 'difference',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Exclusion', 'blockera'),
 					value: 'exclusion',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 			],
 		},
@@ -114,13 +116,13 @@ export const blendModeFieldOptions = function () {
 					label: __('Hue', 'blockera'),
 					value: 'hue',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Color', 'blockera'),
 					value: 'color',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 			],
 		},
@@ -132,25 +134,25 @@ export const blendModeFieldOptions = function () {
 					label: __('Saturation', 'blockera'),
 					value: 'saturation',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Color Dodge', 'blockera'),
 					value: 'color-dodge',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Color Burn', 'blockera'),
 					value: 'color-burn',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 				{
 					label: __('Luminosity', 'blockera'),
 					value: 'luminosity',
 					className: 'hide-icon',
-					icon: <BlendIcon />,
+					icon: <Icon icon="blending" iconSize={18} />,
 				},
 			],
 		},

@@ -9,8 +9,9 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Icon, Button } from '@blockera/controls';
+import { Button } from '@blockera/controls';
 import { componentClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 export const SupportItem = ({
 	name,
@@ -73,7 +74,7 @@ export const SupportItem = ({
 			{...(!force ? { tabIndex: 1 } : {})}
 		>
 			{label}
-			{(force || show) && <Icon library={'wp'} icon={'check'} />}
+			{(force || show) && <Icon library="wp" icon="check" />}
 		</Button>
 	);
 };

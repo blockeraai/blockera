@@ -10,12 +10,12 @@ import type { Element } from 'react';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { getTypeLabel } from '../utils';
-import { default as TransitionIcon } from '../icons/transition';
 import type { THeaderItem } from '../types';
 import { prepValueForHeader } from '../../repeater-control/utils';
 
@@ -41,7 +41,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				)}
 			>
 				<span className={controlInnerClassNames('header-icon')}>
-					<TransitionIcon />
+					<Icon icon="transition" />
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>

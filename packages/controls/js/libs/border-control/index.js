@@ -10,20 +10,13 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
-import BorderStyleHSolidIcon from './icons/style-h-solid';
-import BorderStyleVSolidIcon from './icons/style-v-solid';
-import BorderStyleHDashedIcon from './icons/style-h-dashed';
-import BorderStyleHDottedIcon from './icons/style-h-dotted';
-import BorderStyleHDoubleIcon from './icons/style-h-double';
-import BorderStyleVDashedIcon from './icons/style-v-dashed';
-import BorderStyleVDottedIcon from './icons/style-v-dotted';
-import BorderStyleVDoubleIcon from './icons/style-v-double';
 import { InputControl, SelectControl, ColorControl } from '../index';
 import type { BorderControlProps } from './types';
 
@@ -144,9 +137,9 @@ export default function BorderControl({
 							label: '',
 							icon:
 								linesDirection === 'horizontal' ? (
-									<BorderStyleHSolidIcon />
+									<Icon icon="border-style-horizontal-solid" />
 								) : (
-									<BorderStyleVSolidIcon />
+									<Icon icon="border-style-vertical-solid" />
 								),
 							value: 'solid',
 							className: 'align-center',
@@ -155,9 +148,9 @@ export default function BorderControl({
 							label: '',
 							icon:
 								linesDirection === 'horizontal' ? (
-									<BorderStyleHDashedIcon />
+									<Icon icon="border-style-horizontal-dashed" />
 								) : (
-									<BorderStyleVDashedIcon />
+									<Icon icon="border-style-vertical-dashed" />
 								),
 							value: 'dashed',
 							className: 'align-center',
@@ -166,9 +159,9 @@ export default function BorderControl({
 							label: '',
 							icon:
 								linesDirection === 'horizontal' ? (
-									<BorderStyleHDottedIcon />
+									<Icon icon="border-style-horizontal-dotted" />
 								) : (
-									<BorderStyleVDottedIcon />
+									<Icon icon="border-style-vertical-dotted" />
 								),
 							value: 'dotted',
 							className: 'align-center',
@@ -177,9 +170,9 @@ export default function BorderControl({
 							label: '',
 							icon:
 								linesDirection === 'horizontal' ? (
-									<BorderStyleHDoubleIcon />
+									<Icon icon="border-style-horizontal-double" />
 								) : (
-									<BorderStyleVDoubleIcon />
+									<Icon icon="border-style-vertical-double" />
 								),
 							value: 'double',
 							className: 'align-center',

@@ -21,13 +21,13 @@ import {
 	controlInnerClassNames,
 	extensionClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
-import { default as GearIcon } from './icons/gear';
 import type { TEffectsProps } from './types/effects-props';
 import { generateExtensionId } from '../utils';
 import { TransformSettings } from './components/transform-setting';
@@ -36,7 +36,6 @@ import { Transition } from './components/transition';
 import { Filter } from './components/filter';
 import { BackdropFilter } from './components/backdrop-filter';
 import { Blending } from './components/blending';
-import { EffectsExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
 
 export const EffectsExtension: ComponentType<TEffectsProps> = memo(
@@ -99,7 +98,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			<PanelBodyControl
 				title={__('Effects', 'blockera')}
 				initialOpen={true}
-				icon={<EffectsExtensionIcon />}
+				icon={<Icon icon="extension-effects" />}
 				className={extensionClassNames('effects')}
 			>
 				<ExtensionSettings
@@ -170,7 +169,10 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 												)
 											}
 										>
-											<GearIcon />
+											<Icon
+												icon="gear-small"
+												iconSize="20"
+											/>
 										</Button>
 									</>
 								}

@@ -13,15 +13,9 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	InnerBlockImageIcon,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-/**
- * Internal dependencies
- */
-import { InnerBlockImageCaptionIcon } from './icons/inner-block-image-caption';
-import { InnerBlockGalleryCaptionIcon } from './icons/inner-block-gallery-caption';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -32,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/gallery_caption',
 		type: 'image',
 		label: __('Gallery Caption', 'blockera'),
-		icon: <InnerBlockGalleryCaptionIcon />,
+		icon: <Icon icon="block-gallery-caption" iconSize="20" />,
 		selectors: {
 			root: '> figcaption',
 		},
@@ -45,7 +39,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/image',
 		type: 'image',
 		label: __('Images', 'blockera'),
-		icon: <InnerBlockImageIcon />,
+		icon: <Icon icon="block-image" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-image img',
 		},
@@ -58,7 +52,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/image_caption',
 		type: 'image',
 		label: __('Images Captions', 'blockera'),
-		icon: <InnerBlockImageCaptionIcon />,
+		icon: <Icon icon="block-image-caption" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-image figcaption',
 		},

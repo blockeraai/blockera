@@ -23,6 +23,10 @@ import {
 /**
  * Internal dependencies
  */
+import bootstrapScripts from './scripts';
+import blockeraEditorPackageInfo from '../../../editor/package.json';
+
+// Exports
 export * from './api';
 export * from './libs';
 export {
@@ -32,20 +36,23 @@ export {
 	useBlockContext,
 	BlockEditContextProvider,
 } from './hooks';
-export { store as extensionsStore } from './store';
-import bootstrapScripts from './scripts';
 export { isInnerBlock } from './components';
+export { store as extensionsStore } from './store';
 
 export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 	domReady(() => {
+		const packageName =
+			'blockeraEditor_' +
+			blockeraEditorPackageInfo.version.replace(/\./g, '_');
+
 		if (window?.wp) {
-			window.blockera.coreData = {
+			window[packageName].coreData = {
 				select: select(store?.name),
 				unstableBootstrapServerSideEntities,
 				unstableBootstrapServerSideVariableDefinitions,
 			};
 
-			window.blockera.editor = {
+			window[packageName].editor = {
 				select: select(editorStore?.name),
 				unstableBootstrapServerSideBreakpointDefinitions,
 			};

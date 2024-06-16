@@ -1,25 +1,22 @@
 // @flow
-/**
- * WordPress dependencies
- */
-import { __ } from '@wordpress/i18n';
-import { memo, useContext, useState } from '@wordpress/element';
 
 /**
  * External dependencies
  */
 import type { Element } from 'react';
+import { __ } from '@wordpress/i18n';
+import { memo, useContext, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { RepeaterContext } from '../../repeater-control/context';
-import SearchIcon from '../icons/search';
 import {
 	Flex,
 	Popover,
@@ -196,7 +193,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</span>
 
 						<span className="search-icon">
-							<SearchIcon />
+							<Icon icon="search" iconSize="20" />
 						</span>
 					</Button>
 

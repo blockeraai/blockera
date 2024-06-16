@@ -7,11 +7,7 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
-
-/**
- * Internal dependencies
- */
-import { BlockeraIcon } from '../icons/blockera';
+import { Icon } from '@blockera/icons';
 
 export function PoweredBy() {
 	return (
@@ -23,7 +19,7 @@ export function PoweredBy() {
 			>
 				<span>{__('Powered by', 'blockera')}</span>
 				{'Blockera'}
-				<BlockeraIcon />
+				<Icon library="blockera" icon="blockera" iconSize={18} />
 			</a>
 		</div>
 	);

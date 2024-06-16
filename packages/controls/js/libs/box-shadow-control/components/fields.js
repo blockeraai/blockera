@@ -1,14 +1,15 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
+import type { Element } from 'react';
 
 /**
- * External dependencies
+ * Blockera dependencies
  */
-import type { Element } from 'react';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -17,8 +18,6 @@ import { RepeaterContext } from '../../repeater-control/context';
 import { ColorControl, InputControl, ToggleSelectControl } from '../../index';
 import { useControlContext } from '../../../context';
 import type { TFieldItem } from '../types';
-import XCoordinateIcon from '../icons/coordinate-x';
-import YCoordinateIcon from '../icons/coordinate-y';
 
 const Fields: TFieldItem = memo<TFieldItem>(
 	({ itemId, item }: TFieldItem): Element<any> => {
@@ -89,7 +88,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'x')}
 					singularId={'x'}
-					label={<XCoordinateIcon />}
+					label={<Icon icon="coordinate-x" />}
 					labelPopoverTitle={__('Horizontal Offset', 'blockera')}
 					labelDescription={
 						<>
@@ -131,7 +130,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'y')}
 					singularId={'y'}
-					label={<YCoordinateIcon />}
+					label={<Icon icon="coordinate-y" />}
 					labelPopoverTitle={__('Vertical Offset', 'blockera')}
 					labelDescription={
 						<>

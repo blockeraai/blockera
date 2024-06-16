@@ -18,14 +18,14 @@ import {
 	SettingsContext,
 	handleCurrentActiveMenuPage,
 } from '@blockera/wordpress';
-import Button from '@blockera/controls/js/libs/button/button';
+import { Button } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { Panel } from './panel';
 import { config as optionsConfig } from './config';
-import { PanelLogoIcon } from './icons/panel-logo-icon';
 
 const getCurrentPage = (): string => {
 	const location = window.location;
@@ -70,7 +70,13 @@ export const Dashboard = (): MixedElement => {
 				/>
 
 				<Header
-					icon={<PanelLogoIcon />}
+					icon={
+						<Icon
+							library={'blockera'}
+							icon={'blockera'}
+							iconSize={40}
+						/>
+					}
 					version={`v${blockeraVersion}`}
 					name={__('Blockera', 'blockera')}
 				>

@@ -25,6 +25,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -43,23 +44,6 @@ import {
 	TextColumns,
 	TextStroke,
 } from './components';
-import { TypographyExtensionIcon } from './index';
-
-// icons
-import NoneIcon from './icons/none';
-import InheritIcon from '../../icons/inherit';
-import DirectionRtlIcon from './icons/direction-rtl';
-import DirectionLtrIcon from './icons/direction-ltr';
-import TextAlignLeftIcon from './icons/text-align-left';
-import BreakingNormalIcon from './icons/breaking-normal';
-import TextAlignRightIcon from './icons/text-align-right';
-import TextAlignCenterIcon from './icons/text-align-center';
-import BreakingBreakAllIcon from './icons/breaking-break-all';
-import TextAlignJustifyIcon from './icons/text-align-justify';
-import TextOrientationStyle1Icon from './icons/text-orientation-style-1';
-import TextOrientationStyle2Icon from './icons/text-orientation-style-2';
-import TextOrientationStyle3Icon from './icons/text-orientation-style-3';
-import TextOrientationStyle4Icon from './icons/text-orientation-style-4';
 import { ExtensionSettings } from '../settings';
 
 export const TypographyExtension: ComponentType<TTypographyProps> = memo(
@@ -221,7 +205,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 			<PanelBodyControl
 				title={__('Typography', 'blockera')}
 				initialOpen={true}
-				icon={<TypographyExtensionIcon />}
+				icon={<Icon icon="extension-typography" />}
 				className={extensionClassNames('typography')}
 			>
 				<ExtensionSettings
@@ -454,7 +438,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														'blockera'
 													),
 													value: 'left',
-													icon: <TextAlignLeftIcon />,
+													icon: (
+														<Icon
+															icon="text-align-left"
+															iconSize="18"
+														/>
+													),
 												},
 												{
 													label: __(
@@ -463,7 +452,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													),
 													value: 'center',
 													icon: (
-														<TextAlignCenterIcon />
+														<Icon
+															icon="text-align-center"
+															iconSize="18"
+														/>
 													),
 												},
 												{
@@ -473,7 +465,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													),
 													value: 'right',
 													icon: (
-														<TextAlignRightIcon />
+														<Icon
+															icon="text-align-right"
+															iconSize="18"
+														/>
 													),
 												},
 												{
@@ -483,7 +478,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													),
 													value: 'justify',
 													icon: (
-														<TextAlignJustifyIcon />
+														<Icon
+															icon="text-align-justify"
+															iconSize="18"
+														/>
 													),
 												},
 												{
@@ -492,7 +490,13 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														'blockera'
 													),
 													value: 'initial',
-													icon: <NoneIcon />,
+													icon: (
+														<Icon
+															library="wp"
+															icon="close-small"
+															iconSize="18"
+														/>
+													),
 												},
 											]}
 											isDeselectable={true}
@@ -631,7 +635,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																	)}
 																</p>
 																<h3>
-																	<DirectionLtrIcon />
+																	<Icon
+																		icon="direction-ltr"
+																		iconSize="22"
+																	/>
 																	{__(
 																		'LTR',
 																		'blockera'
@@ -644,7 +651,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																	)}
 																</p>
 																<h3>
-																	<DirectionRtlIcon />
+																	<Icon
+																		icon="direction-rtl"
+																		iconSize="22"
+																	/>
 																	{__(
 																		'RTL',
 																		'blockera'
@@ -668,7 +678,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																),
 																value: 'ltr',
 																icon: (
-																	<DirectionLtrIcon />
+																	<Icon
+																		icon="direction-ltr"
+																		iconSize="18"
+																	/>
 																),
 															},
 															{
@@ -678,7 +691,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																),
 																value: 'rtl',
 																icon: (
-																	<DirectionRtlIcon />
+																	<Icon
+																		icon="direction-rtl"
+																		iconSize="22"
+																	/>
 																),
 															},
 														]}
@@ -869,7 +885,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														paddingTop: '5px',
 													}}
 												>
-													<TextOrientationStyle1Icon />
+													<Icon
+														icon="text-orientation-style-1"
+														iconSize="22"
+													/>
 												</h3>
 												<p>
 													{__(
@@ -888,7 +907,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														paddingTop: '5px',
 													}}
 												>
-													<TextOrientationStyle2Icon />
+													<Icon
+														icon="text-orientation-style-2"
+														iconSize="22"
+													/>
 												</h3>
 												<p>
 													{__(
@@ -907,7 +929,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														paddingTop: '5px',
 													}}
 												>
-													<TextOrientationStyle3Icon />
+													<Icon
+														icon="text-orientation-style-3"
+														iconSize="22"
+													/>
 												</h3>
 												<p>
 													{__(
@@ -926,7 +951,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														paddingTop: '5px',
 													}}
 												>
-													<TextOrientationStyle4Icon />
+													<Icon
+														icon="text-orientation-style-4"
+														iconSize="22"
+													/>
 												</h3>
 												<p>
 													{__(
@@ -945,7 +973,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														paddingTop: '2px',
 													}}
 												>
-													<NoneIcon />
+													<Icon
+														library="wp"
+														icon="close-small"
+														iconSize="22"
+													/>
 												</h3>
 												<p>
 													{__(
@@ -964,7 +996,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												'blockera'
 											),
 											value: 'style-1',
-											icon: <TextOrientationStyle1Icon />,
+											icon: (
+												<Icon
+													icon="text-orientation-style-1"
+													iconSize="16"
+												/>
+											),
 										},
 										{
 											label: __(
@@ -972,7 +1009,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												'blockera'
 											),
 											value: 'style-2',
-											icon: <TextOrientationStyle2Icon />,
+											icon: (
+												<Icon
+													icon="text-orientation-style-2"
+													iconSize="16"
+												/>
+											),
 										},
 										{
 											label: __(
@@ -980,7 +1022,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												'blockera'
 											),
 											value: 'style-3',
-											icon: <TextOrientationStyle3Icon />,
+											icon: (
+												<Icon
+													icon="text-orientation-style-3"
+													iconSize="16"
+												/>
+											),
 										},
 										{
 											label: __(
@@ -988,7 +1035,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												'blockera'
 											),
 											value: 'style-4',
-											icon: <TextOrientationStyle4Icon />,
+											icon: (
+												<Icon
+													icon="text-orientation-style-4"
+													iconSize="16"
+												/>
+											),
 										},
 										{
 											label: __(
@@ -996,7 +1048,13 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												'blockera'
 											),
 											value: 'initial',
-											icon: <NoneIcon />,
+											icon: (
+												<Icon
+													library="wp"
+													icon="close-small"
+													iconSize="18"
+												/>
+											),
 										},
 									]}
 									isDeselectable={true}
@@ -1111,7 +1169,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												)}
 											</p>
 											<h3>
-												<BreakingNormalIcon />
+												<Icon
+													icon="break-normal"
+													iconSize="22"
+												/>
 												{__('Normal', 'blockera')}
 											</h3>
 											<p>
@@ -1121,7 +1182,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												)}
 											</p>
 											<h3>
-												<BreakingBreakAllIcon />
+												<Icon
+													icon="break-all"
+													iconSize="22"
+												/>
 												{__(
 													'Break All Words',
 													'blockera'
@@ -1134,7 +1198,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												)}
 											</p>
 											<h3>
-												<BreakingNormalIcon />
+												<Icon
+													icon="break-normal"
+													iconSize="22"
+												/>
 												{__(
 													'Keep All Words',
 													'blockera'
@@ -1147,7 +1214,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												)}
 											</p>
 											<h3>
-												<BreakingBreakAllIcon />
+												<Icon
+													icon="break-all"
+													iconSize="22"
+												/>
 												{__('Break Word', 'blockera')}
 											</h3>
 											<p>
@@ -1157,7 +1227,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												)}
 											</p>
 											<h3>
-												<InheritIcon />
+												<Icon
+													icon="inherit-circle"
+													iconSize="22"
+												/>
 												{__('Inherit', 'blockera')}
 											</h3>
 											<p>
@@ -1173,7 +1246,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										{
 											label: __('Normal', 'blockera'),
 											value: 'normal',
-											icon: <BreakingNormalIcon />,
+											icon: (
+												<Icon
+													icon="break-normal"
+													iconSize="18"
+												/>
+											),
 										},
 										{
 											label: __(
@@ -1181,7 +1259,12 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												'blockera'
 											),
 											value: 'break-all',
-											icon: <BreakingBreakAllIcon />,
+											icon: (
+												<Icon
+													icon="break-all"
+													iconSize="18"
+												/>
+											),
 										},
 										{
 											label: __(
@@ -1189,17 +1272,32 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												'blockera'
 											),
 											value: 'keep-all',
-											icon: <BreakingNormalIcon />,
+											icon: (
+												<Icon
+													icon="break-normal"
+													iconSize="18"
+												/>
+											),
 										},
 										{
 											label: __('Break Word', 'blockera'),
 											value: 'break-word',
-											icon: <BreakingBreakAllIcon />,
+											icon: (
+												<Icon
+													icon="break-all"
+													iconSize="18"
+												/>
+											),
 										},
 										{
 											label: __('Inherit', 'blockera'),
 											value: 'inherit',
-											icon: <InheritIcon />,
+											icon: (
+												<Icon
+													icon="inherit-circle"
+													iconSize="18"
+												/>
+											),
 										},
 									]}
 									type="custom"

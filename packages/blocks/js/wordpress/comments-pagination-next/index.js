@@ -15,11 +15,7 @@ import {
 	sharedBlockExtensionAttributes,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-/**
- * Internal dependencies
- */
-import { InnerBlockArrowIcon } from './icons/inner-block-arrow';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -30,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/arrow',
 		type: 'arrow',
 		label: __('Arrow', 'blockera'),
-		icon: <InnerBlockArrowIcon />,
+		icon: <Icon icon="block-pagination-next-arrow" size="20" />,
 		selectors: {
 			root: '.wp-block-query-pagination-next-arrow',
 		},

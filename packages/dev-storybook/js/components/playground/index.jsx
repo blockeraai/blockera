@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import '@wordpress/format-library';
 import { useState } from '@wordpress/element';

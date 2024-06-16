@@ -1,8 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { __ } from '@wordpress/i18n';
-
+import { select, useDispatch } from '@wordpress/data';
+import { useState } from '@wordpress/element';
 /**
  *  Storybook dependencies
  */
@@ -11,19 +11,18 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@blockera/editor';
+import { BorderAndShadowExtension } from '@blockera/editor';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
 } from '@blockera/dev-storybook/js/block-api';
 import { Playground } from '@blockera/dev-storybook/js/components';
-import { supports } from '../supports';
-import { attributes } from '../attributes';
-import BorderAndShadowExtensionIcon from '../icons/extension-icon';
+import { supports, attributes } from '../../shared';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
-import { useAttributes } from '../../shared/use-attributes';
-import { InspectorControls } from '@wordpress/block-editor';
-import { include } from '@blockera/utils';
+import { useAttributes } from '../../../../hooks';
+import { BlockStyle } from '../../../../style-engine';
+import { STORE_NAME } from '../../base/store/constants';
+import * as config from '../../base/config';
 
 const { SharedDecorators } = Decorators;
 
@@ -36,47 +35,78 @@ blocksInitializer({
 	supports,
 	edit({ attributes, setAttributes, ...props }) {
 		// eslint-disable-next-line
-		const { handleOnChangeAttributes } = useAttributes(
-			attributes,
-			setAttributes,
-			{
-				targetId: targetBlock,
-			}
-		);
-		//	console.log('attr', attributes);
+		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
+			blockId: name,
+			innerBlocks: {},
+			blockeraInnerBlocks: {},
+			getAttributes: () => attributes,
+			isNormalState: () => true,
+			masterIsNormalState: () => true,
+		});
+		const block = {
+			blockName: name,
+			clientId: props.clientId,
+			currentState: 'normal',
+			currentBreakpoint: 'laptop',
+			currentBlock: 'core/paragraph',
+			currentInnerBlockState: 'normal',
+		};
+		const { updateExtension } = useDispatch(STORE_NAME);
+		const { getExtensions } = select(STORE_NAME);
+
+		const supports = getExtensions();
+		const [settings, setSettings] = useState(supports);
+
+		const handleOnChangeSettings = (
+			newSettings: Object,
+			key: string
+		): void => {
+			setSettings({
+				...settings,
+				[key]: {
+					...settings[key],
+					...newSettings,
+				},
+			});
+
+			updateExtension(key, newSettings);
+		};
+
 		return (
 			<>
-				<InspectorControls>
-					<BaseExtension
-						{...props}
-						initialOpen={true}
-						extensionId={'BorderAndShadow'}
-						values={include(
-							attributes,
-							[
-								'blockeraBorder',
-								'blockeraOutline',
-								'blockeraBoxShadow',
-								'blockeraBorderRadius',
-							],
-							'blockera'
-						)}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						defaultValue={{
-							borderColor: attributes?.borderColor || '',
-							border: attributes.style?.border || {},
-						}}
-						title={__('Border And Shadow', 'blockera')}
-						icon={<BorderAndShadowExtensionIcon />}
-					/>
-				</InspectorControls>
+				<BorderAndShadowExtension
+					block={block}
+					extensionConfig={config.borderAndShadowConfig}
+					extensionProps={{
+						blockeraBorder: {},
+						blockeraBorderRadius: {},
+						blockeraBoxShadow: {},
+						blockeraOutline: {},
+					}}
+					values={{
+						blockeraBorder: attributes.blockeraBorder,
+						blockeraBorderRadius: attributes.blockeraBorderRadius,
+						blockeraOutline: attributes.blockeraOutline,
+						blockeraBoxShadow: attributes.blockeraBoxShadow,
+					}}
+					attributes={{
+						blockeraBorder: attributes.blockeraBorder,
+						blockeraBorderRadius: attributes.blockeraBorderRadius,
+						blockeraOutline: attributes.blockeraOutline,
+						blockeraBoxShadow: attributes.blockeraBoxShadow,
+					}}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					setSettings={handleOnChangeSettings}
+				/>
 
-				<ExtensionStyle
-					extensions={['BorderAndShadow']}
+				<BlockStyle
 					{...{
-						...props,
 						attributes,
-						setAttributes,
+						blockName: props.name,
+						clientId: props.clientId,
+						supports: props.supports,
+						activeDeviceType: 'laptop',
+						currentAttributes: attributes,
 					}}
 				/>
 			</>

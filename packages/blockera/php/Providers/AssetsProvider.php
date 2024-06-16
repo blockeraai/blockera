@@ -100,10 +100,23 @@ class AssetsProvider extends ServiceProvider {
 			return $inline_script;
 		}
 
+		$editor_package_file = blockera_core_config( 'app.root_path' ) . 'vendor/blockera/editor/package.json';
+
+		if ( ! file_exists( $editor_package_file ) ) {
+
+			return $inline_script;
+		}
+
+		ob_start();
+		require $editor_package_file;
+		$editor_package = json_decode( ob_get_clean(), true );
+		$editor_version = str_replace( '.', '_', $editor_package['version'] );
+		$editor_object  = 'blockeraEditor_' . $editor_version;
+
 		$script = 'window.onload = () => {
-				blockera.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
-				blockera.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->app->getEntity( 'breakpoints' ) ) . ');
-				blockera.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
+				' . $editor_object . '.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
+				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->app->getEntity( 'breakpoints' ) ) . ');
+				' . $editor_object . '.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
 			};';
 
 		if ( false !== strpos( $inline_script, $script ) ) {

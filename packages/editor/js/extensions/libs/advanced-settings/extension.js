@@ -18,6 +18,7 @@ import {
 import { extensionClassNames } from '@blockera/classnames';
 import { EditorFeatureWrapper } from '../../../';
 import { hasSameProps } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -25,7 +26,6 @@ import { hasSameProps } from '@blockera/utils';
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import type { TAdvancedSettingsProps } from './types/advanced-props';
-import { AdvancedSettingsExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
 
 export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
@@ -53,7 +53,7 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 				<PanelBodyControl
 					title={__('Advanced', 'blockera')}
 					initialOpen={true}
-					icon={<AdvancedSettingsExtensionIcon />}
+					icon={<Icon icon="extension-advanced" />}
 					className={extensionClassNames('advanced-settings')}
 				>
 					<ExtensionSettings

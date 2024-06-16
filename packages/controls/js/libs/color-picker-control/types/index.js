@@ -36,3 +36,22 @@ export type ColorPickerControlProps = {
 	 */
 	hasClearBtn?: boolean,
 };
+
+export type ColorPalletProps = {
+	/**
+	 * ColorPallet className
+	 */
+	className?: string,
+	/**
+	 * Enable alpha channel
+	 */
+	enableAlpha?: boolean,
+	/**
+	 * Color of the color picker
+	 */
+	color: string,
+	/**
+	 * event that will be fired on color change
+	 */
+	onChangeComplete: (color: string) => void,
+};

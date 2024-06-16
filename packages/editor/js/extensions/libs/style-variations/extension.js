@@ -12,6 +12,7 @@ import { useSelect } from '@wordpress/data';
  */
 import { extensionClassNames } from '@blockera/classnames';
 import { PanelBodyControl } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -22,7 +23,6 @@ import { EditorFeatureWrapper } from '../../../';
 import type { StyleVariationsExtensionProps } from './types';
 import BlockStyles from './components/block-styles';
 import { useStylesForBlocks } from './utils';
-import { default as StyleVariationsExtensionIcon } from './icons/extension-icon';
 import { isInnerBlock } from '../../components';
 
 export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionProps> =
@@ -72,7 +72,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 				<PanelBodyControl
 					title={__('Style Variations', 'blockera')}
 					initialOpen={true}
-					icon={<StyleVariationsExtensionIcon />}
+					icon={<Icon icon="extension-style-variations" />}
 					className={extensionClassNames('style-variations')}
 				>
 					<EditorFeatureWrapper

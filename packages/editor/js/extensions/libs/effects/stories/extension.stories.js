@@ -1,7 +1,8 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { useDispatch, select } from '@wordpress/data';
+import { useState } from '@wordpress/element';
 
 /**
  *  Storybook dependencies
@@ -11,18 +12,18 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@blockera/editor';
+import { EffectsExtension } from '@blockera/editor';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
 } from '@blockera/dev-storybook/js/block-api';
 import { Playground } from '@blockera/dev-storybook/js/components';
-import { supports } from '../supports';
-import { attributes } from '../attributes';
-import EffectsExtensionIcon from '../icons/extension-icon';
+import { supports, attributes } from '../../shared';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
-import { useAttributes } from '../../shared/use-attributes';
-import { InspectorControls } from '@wordpress/block-editor';
+import { useAttributes } from '../../../../hooks';
+import { BlockStyle } from '../../../../style-engine';
+import * as config from '../../base/config';
+import { STORE_NAME } from '../../base/store/constants';
 
 const { SharedDecorators } = Decorators;
 
@@ -35,47 +36,110 @@ blocksInitializer({
 	supports,
 	edit({ attributes, setAttributes, ...props }) {
 		// eslint-disable-next-line
-		const { handleOnChangeAttributes } = useAttributes(
-			attributes,
-			setAttributes,
-			{
-				blockId: targetBlock,
-			}
-		);
+		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
+			blockId: name,
+			innerBlocks: {},
+			blockeraInnerBlocks: {},
+			getAttributes: () => attributes,
+			isNormalState: () => true,
+			masterIsNormalState: () => true,
+		});
+		const block = {
+			blockName: name,
+			clientId: props.clientId,
+			currentState: 'normal',
+			currentBreakpoint: 'laptop',
+			currentBlock: 'core/paragraph',
+			currentInnerBlockState: 'normal',
+		};
+		const { updateExtension } = useDispatch(STORE_NAME);
+		const { getExtensions } = select(STORE_NAME);
+
+		const supports = getExtensions();
+		const [settings, setSettings] = useState(supports);
+
+		const handleOnChangeSettings = (
+			newSettings: Object,
+			key: string
+		): void => {
+			setSettings({
+				...settings,
+				[key]: {
+					...settings[key],
+					...newSettings,
+				},
+			});
+
+			updateExtension(key, newSettings);
+		};
 
 		return (
 			<>
-				<InspectorControls>
-					<BaseExtension
-						{...{ ...props, attributes, setAttributes }}
-						initialOpen={true}
-						values={{
-							blockeraFilter: [],
-							blockeraOpacity: '',
-							blockeraTransform: [],
-							blockeraBlendMode: '',
-							blockeraTransition: [],
-							blockeraBackdropFilter: [],
-							blockeraBackfaceVisibility: '',
-							blockeraTransformSelfOrigin: {},
-							blockeraTransformChildOrigin: {},
-							blockeraTransformSelfPerspective: '',
-							blockeraTransformChildPerspective: '',
-						}}
-						extensionId={'Effects'}
-						icon={<EffectsExtensionIcon />}
-						storeName={'blockera-core/controls/repeater'}
-						handleOnChangeAttributes={handleOnChangeAttributes}
-						title={__('Effects', 'blockera')}
-					/>
-				</InspectorControls>
-
-				<ExtensionStyle
-					extensions={['Effects']}
+				<EffectsExtension
+					block={block}
+					extensionConfig={config.effectsConfig}
+					extensionProps={{
+						blockeraOpacity: {},
+						blockeraTransform: {},
+						blockeraTransformSelfPerspective: {},
+						blockeraTransformSelfOrigin: {},
+						blockeraBackfaceVisibility: {},
+						blockeraTransformChildPerspective: {},
+						blockeraTransformChildOrigin: {},
+						blockeraTransition: {},
+						blockeraFilter: {},
+						blockeraBackdropFilter: {},
+						blockeraBlendMode: {},
+					}}
+					values={{
+						blockeraOpacity: attributes.blockeraOpacity,
+						blockeraTransform: attributes.blockeraTransform,
+						blockeraBackfaceVisibility:
+							attributes.blockeraBackfaceVisibility,
+						blockeraTransformSelfPerspective:
+							attributes.blockeraTransformSelfPerspective,
+						blockeraTransformSelfOrigin:
+							attributes.blockeraTransformSelfOrigin,
+						blockeraTransformChildOrigin:
+							attributes.blockeraTransformChildOrigin,
+						blockeraTransformChildPerspective:
+							attributes.blockeraTransformChildPerspective,
+						blockeraTransition: attributes.blockeraTransition,
+						blockeraFilter: attributes.blockeraFilter,
+						blockeraBackdropFilter:
+							attributes.blockeraBackdropFilter,
+						blockeraBlendMode: attributes.blockeraBlendMode,
+					}}
+					attributes={{
+						blockeraOpacity: attributes.blockeraOpacity,
+						blockeraTransform: attributes.blockeraTransform,
+						blockeraBackfaceVisibility:
+							attributes.blockeraBackfaceVisibility,
+						blockeraTransformSelfPerspective:
+							attributes.blockeraTransformSelfPerspective,
+						blockeraTransformSelfOrigin:
+							attributes.blockeraTransformSelfOrigin,
+						blockeraTransformChildOrigin:
+							attributes.blockeraTransformChildOrigin,
+						blockeraTransformChildPerspective:
+							attributes.blockeraTransformChildPerspective,
+						blockeraTransition: attributes.blockeraTransition,
+						blockeraFilter: attributes.blockeraFilter,
+						blockeraBackdropFilter:
+							attributes.blockeraBackdropFilter,
+						blockeraBlendMode: attributes.blockeraBlendMode,
+					}}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					setSettings={handleOnChangeSettings}
+				/>
+				<BlockStyle
 					{...{
-						...props,
 						attributes,
-						setAttributes,
+						blockName: props.name,
+						clientId: props.clientId,
+						supports: props.supports,
+						activeDeviceType: 'laptop',
+						currentAttributes: attributes,
 					}}
 				/>
 			</>

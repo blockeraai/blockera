@@ -15,11 +15,12 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isValid as isValidVariable } from '../../../';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import { isValid as isValidVariable } from '../../../';
 import {
 	Flex,
 	BaseControl,
@@ -36,30 +37,14 @@ import { useControlContext } from '../../../context';
 import { RepeaterContext } from '../../repeater-control/context';
 
 // Icons
-import RepeatIcon from '../icons/repeat';
 import type { FieldItem } from '../types';
-import RepeatXIcon from '../icons/repeat-x';
-import RepeatYIcon from '../icons/repeat-y';
-import RepeatNoIcon from '../icons/repeat-no';
-import { default as RegenerateIcon } from '../icons/regenerate';
 import { default as MeshGradientFields } from './mesh-gradient/fields';
 import { default as MeshGradientHeader } from './mesh-gradient/header';
-import LinearGradientRepeatIcon from '../icons/linear-gradient-repeat';
-import RadialGradientRepeatIcon from '../icons/radial-gradient-repeat';
-import LinearGradientNoRepeatIcon from '../icons/linear-gradient-no-repeat';
-import RadialGradientNoRepeatIcon from '../icons/radial-gradient-no-repeat';
 import {
 	generateGradient,
 	getRandomHexColor,
 } from './mesh-gradient/mesh-generator';
-import RadialGradientClosestSideIcon from '../icons/radial-gradient-closest-side';
-import RadialGradientFarthestSideIcon from '../icons/radial-gradient-farthest-side';
-import RadialGradientClosestCornerIcon from '../icons/radial-gradient-closest-corner';
-import RadialGradientFarthestCornerIcon from '../icons/radial-gradient-farthest-corner';
 import { LabelDescription } from './label-description';
-import FitNormalIcon from '../icons/fit-normal';
-import FitCoverIcon from '../icons/fit-cover';
-import FitContainIcon from '../icons/fit-contain';
 import { meshGradientProvider } from '../';
 
 const Fields: FieldItem = memo<FieldItem>(
@@ -217,17 +202,26 @@ const Fields: FieldItem = memo<FieldItem>(
 								{
 									label: __('Custom', 'blockera'),
 									value: 'custom',
-									icon: <FitNormalIcon />,
+									icon: (
+										<Icon icon="fit-normal" iconSize="18" />
+									),
 								},
 								{
 									label: __('Cover', 'blockera'),
 									value: 'cover',
-									icon: <FitCoverIcon />,
+									icon: (
+										<Icon icon="fit-cover" iconSize="18" />
+									),
 								},
 								{
 									label: __('Contain', 'blockera'),
 									value: 'contain',
-									icon: <FitContainIcon />,
+									icon: (
+										<Icon
+											icon="fit-contain"
+											iconSize="18"
+										/>
+									),
 								},
 							]}
 							onChange={(size, ref) =>
@@ -434,17 +428,27 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'repeat',
-									icon: <RepeatIcon />,
+									icon: <Icon icon="repeat" iconSize="18" />,
 								},
 								{
 									label: __('Horizontally', 'blockera'),
 									value: 'repeat-x',
-									icon: <RepeatXIcon />,
+									icon: (
+										<Icon
+											icon="repeat-horizontally"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Vertically', 'blockera'),
 									value: 'repeat-y',
-									icon: <RepeatYIcon />,
+									icon: (
+										<Icon
+											icon="repeat-vertically"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __(
@@ -452,7 +456,9 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'no-repeat',
-									icon: <RepeatNoIcon />,
+									icon: (
+										<Icon icon="repeat-no" iconSize="18" />
+									),
 								},
 							]}
 							//
@@ -675,12 +681,22 @@ const Fields: FieldItem = memo<FieldItem>(
 									{
 										label: __("Don't Repeat", 'blockera'),
 										value: 'no-repeat',
-										icon: <LinearGradientNoRepeatIcon />,
+										icon: (
+											<Icon
+												icon="linear-gradient-no-repeat"
+												iconSize="18"
+											/>
+										),
 									},
 									{
 										label: __('Repeat', 'blockera'),
 										value: 'repeat',
-										icon: <LinearGradientRepeatIcon />,
+										icon: (
+											<Icon
+												icon="linear-gradient-repeat"
+												iconSize="18"
+											/>
+										),
 									},
 								]}
 								onChange={(newValue, ref) =>
@@ -913,7 +929,10 @@ const Fields: FieldItem = memo<FieldItem>(
 										)}
 									</p>
 									<h3>
-										<RadialGradientFarthestCornerIcon />
+										<Icon
+											icon="radial-gradient-farthest-corner"
+											iconSize="18"
+										/>
 										{__('Farthest Corner', 'blockera')}
 									</h3>
 									<p>
@@ -923,7 +942,10 @@ const Fields: FieldItem = memo<FieldItem>(
 										)}
 									</p>
 									<h3>
-										<RadialGradientFarthestSideIcon />
+										<Icon
+											icon="radial-gradient-farthest-side"
+											iconSize="18"
+										/>
 										{__('Farthest Side', 'blockera')}
 									</h3>
 									<p>
@@ -933,7 +955,10 @@ const Fields: FieldItem = memo<FieldItem>(
 										)}
 									</p>
 									<h3>
-										<RadialGradientClosestCornerIcon />
+										<Icon
+											icon="radial-gradient-closest-corner"
+											iconSize="18"
+										/>
 										{__('Closest Corner', 'blockera')}
 									</h3>
 									<p>
@@ -943,7 +968,10 @@ const Fields: FieldItem = memo<FieldItem>(
 										)}
 									</p>
 									<h3>
-										<RadialGradientClosestSideIcon />
+										<Icon
+											icon="radial-gradient-closest-side"
+											iconSize="18"
+										/>
 										{__('Closest Side', 'blockera')}
 									</h3>
 									<p>
@@ -962,7 +990,12 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'farthest-corner',
-									icon: <RadialGradientFarthestCornerIcon />,
+									icon: (
+										<Icon
+											icon="radial-gradient-farthest-corner"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __(
@@ -970,7 +1003,12 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'farthest-side',
-									icon: <RadialGradientFarthestSideIcon />,
+									icon: (
+										<Icon
+											icon="radial-gradient-farthest-side"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __(
@@ -978,7 +1016,12 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'closest-corner',
-									icon: <RadialGradientClosestCornerIcon />,
+									icon: (
+										<Icon
+											icon="radial-gradient-closest-corner"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __(
@@ -986,7 +1029,12 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'closest-side',
-									icon: <RadialGradientClosestSideIcon />,
+									icon: (
+										<Icon
+											icon="radial-gradient-closest-side"
+											iconSize="18"
+										/>
+									),
 								},
 							]}
 							onChange={(newValue, ref) =>
@@ -1049,12 +1097,22 @@ const Fields: FieldItem = memo<FieldItem>(
 									{
 										label: __("Don't Repeat", 'blockera'),
 										value: 'no-repeat',
-										icon: <RadialGradientNoRepeatIcon />,
+										icon: (
+											<Icon
+												icon="radial-gradient-no-repeat"
+												iconSize="18"
+											/>
+										),
 									},
 									{
 										label: __('Repeat', 'blockera'),
 										value: 'repeat',
-										icon: <RadialGradientRepeatIcon />,
+										icon: (
+											<Icon
+												icon="radial-gradient-repeat"
+												iconSize="18"
+											/>
+										),
 									},
 								]}
 								onChange={(newValue, ref) =>
@@ -1171,14 +1229,19 @@ const Fields: FieldItem = memo<FieldItem>(
 								)}
 								style={((): Object => {
 									return {
-										backgroundColor:
-											item['mesh-gradient-colors']['--c0']
-												.color,
+										backgroundColor: !item[
+											'mesh-gradient-colors'
+										]
+											? 'transparent'
+											: item['mesh-gradient-colors'][
+													'--c0'
+											  ].color,
 										backgroundImage: item['mesh-gradient'],
 										...Object.assign(
 											// $FlowFixMe
 											...Object.values(
-												item['mesh-gradient-colors']
+												item['mesh-gradient-colors'] ||
+													{}
 											).map((color, index): Object => ({
 												['--c' + index]: color.color,
 											}))
@@ -1201,7 +1264,8 @@ const Fields: FieldItem = memo<FieldItem>(
 										'mesh-generator-preview-regenerate'
 									)}
 								>
-									<RegenerateIcon /> {__('Regenerate')}
+									<Icon icon="regenerate" iconSize="18" />{' '}
+									{__('Regenerate')}
 								</span>
 							</div>
 						</BaseControl>

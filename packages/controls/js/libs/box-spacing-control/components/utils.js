@@ -6,21 +6,21 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * Blockera Dependencies
+ */
+import { Icon } from '@blockera/icons';
+
+/**
  * Internal Dependencies
  */
 import type { TNativeOption } from '../../select-control/types';
-import LockNoneIcon from '../icons/lock-none';
-import LockHorizontalIcon from '../icons/lock-horizontal';
-import LockVerticalIcon from '../icons/lock-vertical';
-import LockVerticalHorizontalIcon from '../icons/lock-vertical-horizontal';
-import LockAllIcon from '../icons/lock-all';
 
 export function getSideSelectOptions(disable: string): Array<TNativeOption> {
 	const options = [
 		{
 			label: __('No Lock', 'blockera'),
 			value: 'none',
-			icon: <LockNoneIcon />,
+			icon: <Icon icon="side-lock-none" iconSize="18" />,
 		},
 	];
 
@@ -28,26 +28,27 @@ export function getSideSelectOptions(disable: string): Array<TNativeOption> {
 		options.push({
 			label: __('Lock Horizontally', 'blockera'),
 			value: 'horizontal',
-			icon: <LockHorizontalIcon />,
+			icon: <Icon icon="side-lock-horizontal" iconSize="18" />,
 		});
 
 	if (disable !== 'vertical' && disable !== 'all')
 		options.push({
 			label: __('Lock Vertically', 'blockera'),
 			value: 'vertical',
-			icon: <LockVerticalIcon />,
+			icon: <Icon icon="side-lock-vertical" iconSize="18" />,
 		});
 
 	if (disable === 'none') {
 		options.push({
 			label: __('Lock Vertically & Horizontally', 'blockera'),
 			value: 'vertical-horizontal',
-			icon: <LockVerticalHorizontalIcon />,
+			icon: <Icon icon="side-lock-vertical-horizontal" iconSize="18" />,
 		});
+
 		options.push({
 			label: __('Lock All', 'blockera'),
 			value: 'all',
-			icon: <LockAllIcon />,
+			icon: <Icon icon="side-lock-all" iconSize="18" />,
 		});
 	}
 

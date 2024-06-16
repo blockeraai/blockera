@@ -9,15 +9,11 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-
-import { default as MoveIcon } from '../icons/move';
-import { default as RotateIcon } from '../icons/rotate';
-import { default as ScaleIcon } from '../icons/scale';
-import { default as SkewIcon } from '../icons/skew';
 import { prepValueForHeader } from '../../repeater-control/utils';
 import type { TransformControlRepeaterItemValue } from '../types';
 
@@ -48,13 +44,13 @@ const RepeaterItemHeader = ({
 					{prepValueForHeader(item['move-z'])}
 				</>
 			);
-			icon = <MoveIcon />;
+			icon = <Icon icon="transform-move" />;
 			break;
 
 		case 'scale':
 			label = __('Scale', 'blockera');
 			value = prepValueForHeader(item.scale);
-			icon = <ScaleIcon />;
+			icon = <Icon icon="transform-scale" />;
 			break;
 
 		case 'rotate':
@@ -66,7 +62,7 @@ const RepeaterItemHeader = ({
 					{prepValueForHeader(item['rotate-z'])}
 				</>
 			);
-			icon = <RotateIcon />;
+			icon = <Icon icon="transform-rotate" />;
 			break;
 
 		case 'skew':
@@ -77,7 +73,7 @@ const RepeaterItemHeader = ({
 					{prepValueForHeader(item['skew-y'])}
 				</>
 			);
-			icon = <SkewIcon />;
+			icon = <Icon icon="transform-skew" />;
 			break;
 	}
 

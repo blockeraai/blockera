@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { nanoid } from 'nanoid';
+
+/**
  * Blockera dependencies
  */
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
@@ -6,8 +11,9 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 /**
  * Internal dependencies
  */
-import { Flex, ToggleControl } from '../../index';
+import { ControlContextProvider, Flex, ToggleControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 
@@ -21,23 +27,54 @@ export default {
 
 export const Default = {
 	args: {
-		value: false,
+		controlInfo: {
+			name: nanoid(),
+			value: true,
+		},
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => <ControlWithHooks Control={ToggleControl} {...args} />,
 };
 
 export const States = {
 	args: {
-		label: 'test',
-		value: false,
+		// controlInfo: {
+		// 	name: nanoid(),
+		// 	value: false,
+		// },
+		// type: 'custom',
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
-	render: () => {
+	render: (args) => {
 		return (
 			<Flex direction="column" gap="15px">
 				<h2 className="story-heading">Toggle</h2>
-				<ToggleControl label="Not Checked" value={false} />
-				<ToggleControl label="Checked" value={true} />
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: false,
+					}}
+				>
+					<ControlWithHooks
+						Control={ToggleControl}
+						label="Not Checked"
+						{...args}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: true,
+					}}
+				>
+					<ControlWithHooks
+						Control={ToggleControl}
+						label="Checked"
+						{...args}
+					/>
+				</ControlContextProvider>
 			</Flex>
 		);
 	},

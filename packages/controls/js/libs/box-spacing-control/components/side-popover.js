@@ -10,6 +10,7 @@ import { useState, useEffect } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -24,7 +25,6 @@ import {
 	BaseControl,
 	InputControl,
 } from '../../index';
-import ShortcutIcon from '../../box-position-control/icons/shortcut';
 
 export function SidePopover({
 	id,
@@ -265,7 +265,7 @@ export function SidePopover({
 					<BaseControl
 						label={
 							<Flex gap="4px" alignItems="center">
-								<ShortcutIcon />
+								<Icon icon="shortcut" iconSize="20" />
 								{__('Shortcuts', 'blockera')}
 							</Flex>
 						}

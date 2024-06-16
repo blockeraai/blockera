@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { select } from '@wordpress/data';
 import {
@@ -28,7 +28,16 @@ export function createBlockEditorContent({
 
 	if (!blockType?.attributes?.blockeraPropsId) {
 		unregisterBlockType(blockName);
-		registerBlockType(blockName, withBlockSettings(blockType, blockName));
+		registerBlockType(
+			blockName,
+			withBlockSettings(blockType, blockName, {
+				unsupportedBlocks: [],
+				notAllowedUsers: [],
+				currentUser: {
+					roles: ['administrator'],
+				},
+			})
+		);
 
 		block = createBlock(blockName, attributes);
 	} else {

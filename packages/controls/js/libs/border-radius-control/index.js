@@ -1,9 +1,11 @@
 // @flow
+
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+
 /**
  * Blockera dependencies
  */
@@ -11,6 +13,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -23,7 +26,6 @@ import {
 } from '../index';
 import { getValueAddonRealValue } from '../../';
 import { useControlContext } from '../../context';
-import { default as CustomIcon } from './icons/custom';
 import type { BorderRadiusControlProps, BorderRadiusValue } from './types';
 
 export type * from './types';
@@ -193,7 +195,7 @@ export default function BorderRadiusControl({
 						}
 					}}
 				>
-					<CustomIcon />
+					<Icon icon="border-radius" iconSize="14" />
 				</Button>
 			</div>
 

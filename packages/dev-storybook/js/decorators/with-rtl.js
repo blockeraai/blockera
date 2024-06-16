@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { addFilter, removeFilter } from '@wordpress/hooks';
 import {

@@ -18,6 +18,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -25,7 +26,6 @@ import { extensionClassNames } from '@blockera/classnames';
 import { isShowField } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
 import { Border, BorderRadius } from './components';
-import { BorderAndShadowExtensionIcon } from './index';
 import { generateExtensionId } from '../utils';
 import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
 import { ExtensionSettings } from '../settings';
@@ -76,7 +76,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 				<PanelBodyControl
 					title={__('Border And Shadow', 'blockera')}
 					initialOpen={true}
-					icon={<BorderAndShadowExtensionIcon />}
+					icon={<Icon icon="extension-border" />}
 					className={extensionClassNames('border-and-shadow')}
 				>
 					<ExtensionSettings

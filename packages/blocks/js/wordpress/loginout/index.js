@@ -13,28 +13,9 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	InnerBlockParagraphIcon,
-	InnerBlockButtonIcon,
-	InnerBlockInputIcon,
-	InnerBlockLinkIcon,
-	InnerBlockHeadingsIcon,
-	InnerBlockHeading1Icon,
-	InnerBlockHeading2Icon,
-	InnerBlockHeading3Icon,
-	InnerBlockHeading4Icon,
-	InnerBlockHeading5Icon,
-	InnerBlockHeading6Icon,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-/**
- * Internal dependencies
- */
-import { InnerBlockFormContainerIcon } from './icons/inner-block-form-container';
-import { InnerBlockFormInputLabelIcon } from './icons/inner-block-form-input-label';
-import { InnerBlockFormInputFieldsIcon } from './icons/inner-block-form-input-fields';
-import { InnerBlockFormButtonIcon } from './icons/inner-block-form-button';
-import { InnerBlockFormRememberIcon } from './icons/inner-block-form-remember';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -45,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/form',
 		type: 'form',
 		label: __('Form Container', 'blockera'),
-		icon: <InnerBlockFormContainerIcon />,
+		icon: <Icon icon="block-login-form-container" iconSize="20" />,
 		selectors: {
 			root: 'form',
 		},
@@ -58,7 +39,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'input_label',
 		type: 'input_label',
 		label: __('Input Labels', 'blockera'),
-		icon: <InnerBlockFormInputLabelIcon />,
+		icon: <Icon icon="block-login-form-labels" iconSize="20" />,
 		selectors: {
 			root: '.login-password label, .login-username label',
 		},
@@ -71,7 +52,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'input',
 		type: 'input',
 		label: __('Inputs', 'blockera'),
-		icon: <InnerBlockFormInputFieldsIcon />,
+		icon: <Icon icon="block-login-form-inputs" iconSize="20" />,
 		selectors: {
 			root: '.login-password input, .login-username input',
 		},
@@ -84,7 +65,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'remember',
 		type: 'remember',
 		label: __('Remember Me', 'blockera'),
-		icon: <InnerBlockFormRememberIcon />,
+		icon: <Icon icon="block-login-form-remember" iconSize="20" />,
 		selectors: {
 			root: '.login-remember label',
 		},
@@ -97,7 +78,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/button',
 		type: 'button',
 		label: __('Submit Button', 'blockera'),
-		icon: <InnerBlockFormButtonIcon />,
+		icon: <Icon icon="block-login-form-button" iconSize="20" />,
 		selectors: {
 			root: '.button.button-primary',
 		},

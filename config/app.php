@@ -9,8 +9,6 @@ $env_mode = 'development' === blockera_core_env( 'APP_MODE', 'production' );
 return [
 	'root_url'      => BLOCKERA_CORE_URI,
 	'root_path'     => BLOCKERA_CORE_PATH,
-	'url'           => BLOCKERA_CORE_URI . 'app/',
-	'path'          => BLOCKERA_CORE_PATH . 'app/',
 	'name'          => 'blockera',
 	'dist_url'      => BLOCKERA_CORE_URI . 'dist/',
 	'dist_path'     => BLOCKERA_CORE_PATH . 'dist/',

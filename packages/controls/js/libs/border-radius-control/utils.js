@@ -1,6 +1,6 @@
 // @flow
 
-export function isBorderRadiusEmpty(borderRadius: object | undefined): boolean {
+export function isBorderRadiusEmpty(borderRadius: Object | void): boolean {
 	if (borderRadius === undefined) {
 		return false;
 	}

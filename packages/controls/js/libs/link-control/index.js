@@ -14,12 +14,12 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from '../repeater-control/store';
-import { default as AdvancedIcon } from './icons/advanced';
 import {
 	Button,
 	BaseControl,
@@ -121,7 +121,7 @@ export default function LinkControl({
 						noBorder={true}
 						aria-label={__('Open Advanced Settings', 'blockera')}
 					>
-						<AdvancedIcon />
+						<Icon icon="gear" iconSize="18" />
 					</Button>
 				</div>
 				{isAdvancedMode && (

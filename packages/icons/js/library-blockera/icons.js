@@ -3,16 +3,16 @@
 /**
  * Internal dependencies
  */
-import { default as blockera } from './icons/blockera';
-import { default as blockeraCircle } from './icons/blockera-cricle';
-import { default as blockeraInteraction } from './icons/blockera-interaction';
-import { default as blockeraSettings } from './icons/blockera-settings';
+import * as _rawIcons from './icons/index';
 
-const BlockeraIcons = {
-	blockera,
-	blockeraCircle,
-	blockeraSettings,
-	blockeraInteraction,
-};
+const BlockeraIcons: Object = Object.fromEntries(
+	Object.entries(_rawIcons).map(([key, value]) => [
+		key
+			.replace(/([a-z])([A-Z])/g, '$1-$2')
+			.replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+			.toLowerCase(),
+		value,
+	])
+);
 
 export { BlockeraIcons };

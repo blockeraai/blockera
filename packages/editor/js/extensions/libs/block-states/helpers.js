@@ -10,6 +10,7 @@ import { select, dispatch } from '@wordpress/data';
  * Blockera dependencies
  */
 import { isEquals, mergeObject } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -22,13 +23,6 @@ import type {
 	TBreakpoint,
 	TStates,
 } from './types';
-import DesktopIcon from './icons/desktop';
-import TabletIcon from './icons/tablet';
-import MobileIcon from './icons/mobile';
-import MobileLandscapeIcon from './icons/mobile-landscape';
-import LaptopIcon from './icons/laptop';
-import ExtraLargeIcon from './icons/extra-large';
-import LargeIcon from './icons/large';
 import { isInnerBlock } from '../../components/utils';
 
 export const getStateInfo = (state: TStates | number): StateTypes => {
@@ -56,7 +50,8 @@ export function BreakpointIcon({
 	switch (name) {
 		case 'laptop':
 			return (
-				<LaptopIcon
+				<Icon
+					icon="device-laptop"
 					aria-label={__('Laptop', 'blockera')}
 					onClick={onClick}
 					{...props}
@@ -65,7 +60,8 @@ export function BreakpointIcon({
 
 		case 'desktop':
 			return (
-				<DesktopIcon
+				<Icon
+					icon="device-desktop"
 					aria-label={__('Desktop', 'blockera')}
 					onClick={onClick}
 					{...props}
@@ -74,7 +70,8 @@ export function BreakpointIcon({
 
 		case 'tablet':
 			return (
-				<TabletIcon
+				<Icon
+					icon="device-tablet"
 					aria-label={__('Tablet', 'blockera')}
 					onClick={onClick}
 					{...props}
@@ -83,7 +80,8 @@ export function BreakpointIcon({
 
 		case 'mobile':
 			return (
-				<MobileIcon
+				<Icon
+					icon="device-mobile"
 					aria-label={__('Mobile', 'blockera')}
 					onClick={onClick}
 					{...props}
@@ -92,7 +90,8 @@ export function BreakpointIcon({
 
 		case 'mobile-landscape':
 			return (
-				<MobileLandscapeIcon
+				<Icon
+					icon="device-mobile-landscape"
 					aria-label={__('Mobile Landscape', 'blockera')}
 					onClick={onClick}
 					{...props}
@@ -101,7 +100,8 @@ export function BreakpointIcon({
 
 		case 'large':
 			return (
-				<LargeIcon
+				<Icon
+					icon="device-large"
 					aria-label={__('Large Screen', 'blockera')}
 					onClick={onClick}
 					{...props}
@@ -110,7 +110,8 @@ export function BreakpointIcon({
 
 		case 'extra-large':
 			return (
-				<ExtraLargeIcon
+				<Icon
+					icon="device-extra-large"
 					aria-label={__('Extra Large Screen', 'blockera')}
 					onClick={onClick}
 					{...props}
@@ -189,7 +190,7 @@ export function onChangeBlockStates(
 		modifyControlValue({
 			controlId,
 			value: Object.fromEntries(
-				Object.entries(blockStates).map(
+				Object.entries(blockStates || {}).map(
 					([stateType, stateItem], index) => {
 						const info = getStateInfo(index);
 

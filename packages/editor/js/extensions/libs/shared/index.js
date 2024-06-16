@@ -13,6 +13,7 @@ import { memo, useEffect, useState } from '@wordpress/element';
  */
 import { isEquals } from '@blockera/utils';
 import { Tabs, type TTabProps } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 // import { useTraceUpdate } from '@blockera/editor';
 
 /**
@@ -44,9 +45,6 @@ import {
 import { attributes } from './attributes';
 import StateContainer from '../../components/state-container';
 import { InnerBlocksExtension } from '../inner-blocks';
-import { SettingsIcon } from './icons/settings';
-import { StylesIcon } from './icons/styles';
-import { AnimationsIcon } from './icons/animations';
 import { STORE_NAME } from '../base/store/constants';
 import StatesManager from '../block-states/components/states-manager';
 import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
@@ -838,21 +836,21 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				title: __('Settings', 'blockera'),
 				tooltip: __('Block Settings', 'blockera'),
 				className: 'settings-tab',
-				icon: <SettingsIcon />,
+				icon: <Icon icon="gear" iconSize="20" />,
 			},
 			{
 				name: 'style',
 				title: __('Styles', 'blockera'),
 				tooltip: __('Block Design & Style Settings', 'blockera'),
 				className: 'style-tab',
-				icon: <StylesIcon />,
+				icon: <Icon library="wp" icon="styles" iconSize="20" />,
 			},
 			{
 				name: 'interactions',
 				title: __('Animations', 'blockera'),
 				tooltip: __('Block Interactions and Animations', 'blockera'),
 				className: 'interactions-tab',
-				icon: <AnimationsIcon />,
+				icon: <Icon icon="animations" iconSize="20" />,
 			},
 		];
 

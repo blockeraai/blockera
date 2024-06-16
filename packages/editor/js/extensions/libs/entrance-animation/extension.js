@@ -16,14 +16,13 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
 import type { EntranceExtensionProps } from './types/props';
-import { EntranceAnimationExtensionIcon } from './index';
-import AnimationIcon from './icons/animation-icon';
 import { isActiveField } from '../../api/utils';
 
 export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
@@ -41,7 +40,7 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 				<PanelBodyControl
 					title={__('On Entrance', 'blockera')}
 					initialOpen={true}
-					icon={<EntranceAnimationExtensionIcon />}
+					icon={<Icon icon="extension-entrance-animation" />}
 					className={extensionClassNames('entrance-animation')}
 				>
 					<ControlContextProvider
@@ -60,7 +59,9 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 							label=""
 							defaultValue={{}}
 							design="large"
-							icon={<AnimationIcon />}
+							icon={
+								<Icon icon="entrance-animation" iconSize="26" />
+							}
 							description={__(
 								'Block will animate when it enters into view.',
 								'blockera'

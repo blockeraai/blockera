@@ -13,13 +13,7 @@ import { isString, isUndefined } from '@blockera/utils';
  */
 import { getIcon } from '../index';
 
-export function WPIcon({
-	fixedSizing = false,
-	style = {},
-	size,
-	icon,
-	...props
-}) {
+export function WPIcon({ style = {}, iconSize = 24, icon, ...props }) {
 	if (isString(icon)) {
 		icon = getIcon(icon, 'wp');
 	}
@@ -28,16 +22,26 @@ export function WPIcon({
 		icon = getIcon(icon?.icon ? icon?.icon : icon?.iconName, 'wp');
 	}
 
-	if (isUndefined(icon.icon)) {
+	if (isUndefined(icon?.icon)) {
 		return <></>;
+	}
+
+	if (iconSize) {
+		if (!props?.width) {
+			props.width = iconSize;
+		}
+
+		if (!props?.height) {
+			props.height = iconSize;
+		}
 	}
 
 	return (
 		<WordPressIconComponent
 			style={style}
 			icon={icon.icon}
-			size={!fixedSizing ? size : 22}
 			{...props}
+			size={iconSize}
 		/>
 	);
 }

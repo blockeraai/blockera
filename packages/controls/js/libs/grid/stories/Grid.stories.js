@@ -7,8 +7,8 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
  * Internal dependencies
  */
 import Grid from '../index';
-import { WithPlaygroundStyles } from '../../../../../.storybook/decorators/with-playground-styles';
 import Flex from '../../flex';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 

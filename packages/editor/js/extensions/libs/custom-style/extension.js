@@ -16,6 +16,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -24,7 +25,6 @@ import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { CustomStyleExtensionProps } from './types/props';
-import { CustomStyleExtensionIcon } from './index';
 import { useBlockContext } from '../../hooks';
 
 export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
@@ -59,7 +59,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 				<PanelBodyControl
 					title={__('Custom CSS', 'blockera')}
 					initialOpen={false}
-					icon={<CustomStyleExtensionIcon />}
+					icon={<Icon icon="extension-custom-style" />}
 					className={extensionClassNames('custom-style')}
 					isEdited={
 						values.blockeraCustomCSS !==

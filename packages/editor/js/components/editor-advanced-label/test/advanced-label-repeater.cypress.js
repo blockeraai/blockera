@@ -423,7 +423,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			);
 
 			// Set value
-			cy.getByAriaLabel('Rotate Left').click();
+			cy.getByAriaLabel('Rotate Anti-clockwise').click();
 
 			// Assert Angel label
 			cy.get('@angel').should('have.class', 'changed-in-secondary-state');

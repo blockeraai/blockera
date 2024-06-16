@@ -1,0 +1,57 @@
+.blockera-loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin: 0;
+	background-color: #f0f0f0;
+}
+
+.blockera-loading-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.blockera-loading-logo {
+	width: 70px;
+	height: 70px;
+	display: inline-block;
+	animation: rollDice 2s infinite ease-in-out;
+}
+
+@keyframes rollDice {
+	0% {
+		transform: rotate(0deg) scale(1);
+	}
+	10% {
+		transform: rotate(90deg) scale(1.1);
+	}
+	20% {
+		transform: rotate(180deg) scale(1);
+	}
+	30% {
+		transform: rotate(270deg) scale(1.1);
+	}
+	40% {
+		transform: rotate(360deg) scale(1);
+	}
+	50% {
+		transform: rotate(450deg) scale(1.1);
+	}
+	60% {
+		transform: rotate(540deg) scale(1);
+	}
+	70% {
+		transform: rotate(630deg) scale(1.1);
+	}
+	80% {
+		transform: rotate(720deg) scale(1);
+	}
+	90% {
+		transform: rotate(810deg) scale(1.1);
+	}
+	100% {
+		transform: rotate(900deg) scale(1);
+	}
+}

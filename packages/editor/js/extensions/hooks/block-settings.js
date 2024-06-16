@@ -200,7 +200,7 @@ function mergeBlockSettings(
 			if (isFunction(additional?.edit) && isAvailableBlock()) {
 				const baseContextValue = {
 					components: {
-						FeaturesWrapper: EditorFeatureWrapper,
+						FeatureWrapper: EditorFeatureWrapper,
 						AdvancedLabelControl: EditorAdvancedLabelControl,
 					},
 				};

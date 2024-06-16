@@ -21,6 +21,7 @@ import {
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -28,24 +29,8 @@ import { extensionClassNames } from '@blockera/classnames';
 import { Gap } from './components';
 import { isShowField } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
-import DisplayGridIcon from './icons/display-grid';
-import { default as ReverseIcon } from './icons/reverse';
 import type { TLayoutProps } from './types/layout-props';
-import { default as WrapWrapIcon } from './icons/wrap-wrap';
 import { generateExtensionId } from '../utils';
-import { default as WrapNoWrapIcon } from './icons/wrap-nowrap';
-import { default as DisplayNoneIcon } from './icons/display-none';
-import { default as DisplayFlexIcon } from './icons/display-flex';
-import { default as DisplayBlockIcon } from './icons/display-block';
-import { default as DisplayInlineIcon } from './icons/display-inline';
-import { default as DisplayInlineBlockIcon } from './icons/display-inline-block';
-import { default as AlignContentCenterIcon } from './icons/align-content-center';
-import { default as AlignContentStretchIcon } from './icons/align-content-stretch';
-import { default as AlignContentFlexEndIcon } from './icons/align-content-flex-end';
-import { default as AlignContentFlexStartIcon } from './icons/align-content-flex-start';
-import { default as AlignContentSpaceAroundIcon } from './icons/align-content-space-around';
-import { default as AlignContentSpaceBetweenIcon } from './icons/align-content-space-between';
-import { LayoutExtensionIcon } from './index';
 import { ExtensionSettings } from '../settings';
 
 export const LayoutExtension: ComponentType<TLayoutProps> = memo(
@@ -98,7 +83,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 			<PanelBodyControl
 				title={__('Layout', 'blockera')}
 				initialOpen={true}
-				icon={<LayoutExtensionIcon />}
+				icon={<Icon icon="extension-layout" />}
 				className={extensionClassNames('layout')}
 			>
 				<ExtensionSettings
@@ -132,7 +117,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										)}
 									</p>
 									<h3>
-										<DisplayBlockIcon />
+										<Icon
+											icon="display-block"
+											iconSize={22}
+										/>
 										{__('Block', 'blockera')}
 									</h3>
 									<p>
@@ -142,7 +130,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										)}
 									</p>
 									<h3>
-										<DisplayFlexIcon />
+										<Icon
+											icon="display-flex"
+											iconSize={22}
+										/>
 										{__('Flex', 'blockera')}
 									</h3>
 									<p>
@@ -152,7 +143,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										)}
 									</p>
 									<h3>
-										<DisplayGridIcon />
+										<Icon
+											icon="display-grid"
+											iconSize={22}
+										/>
 										{__('Grid', 'blockera')}
 										<span>
 											{__('Coming soon…', 'blockera')}
@@ -165,7 +159,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										)}
 									</p>
 									<h3>
-										<DisplayInlineBlockIcon />
+										<Icon
+											icon="display-inline-block"
+											iconSize={22}
+										/>
 										{__('Inline Block', 'blockera')}
 									</h3>
 									<p>
@@ -175,7 +172,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										)}
 									</p>
 									<h3>
-										<DisplayInlineIcon />
+										<Icon
+											icon="display-inline"
+											iconSize={22}
+										/>
 										{__('Inline', 'blockera')}
 									</h3>
 									<p>
@@ -185,7 +185,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										)}
 									</p>
 									<h3>
-										<DisplayNoneIcon />
+										<Icon
+											icon="display-none"
+											iconSize={22}
+										/>
 										{__('None', 'blockera')}
 									</h3>
 									<p>
@@ -201,32 +204,62 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 								{
 									label: __('Block', 'blockera'),
 									value: 'block',
-									icon: <DisplayBlockIcon />,
+									icon: (
+										<Icon
+											icon="display-block"
+											iconSize={18}
+										/>
+									),
 								},
 								{
 									label: __('Flex', 'blockera'),
 									value: 'flex',
-									icon: <DisplayFlexIcon />,
+									icon: (
+										<Icon
+											icon="display-flex"
+											iconSize={18}
+										/>
+									),
 								},
 								// {
 								// 	label: __('Grid', 'blockera'),
 								// 	value: 'grid',
-								// 	icon: <DisplayGridIcon />,
+								// 	icon: (
+								// 		<Icon
+								// 			icon="display-grid"
+								// 			iconSize={18}
+								// 		/>
+								// 	),
 								// },
 								{
 									label: __('Inline Block', 'blockera'),
 									value: 'inline-block',
-									icon: <DisplayInlineBlockIcon />,
+									icon: (
+										<Icon
+											icon="display-inline-block"
+											iconSize={18}
+										/>
+									),
 								},
 								{
 									label: __('Inline', 'blockera'),
 									value: 'inline',
-									icon: <DisplayInlineIcon />,
+									icon: (
+										<Icon
+											icon="display-inline"
+											iconSize={18}
+										/>
+									),
 								},
 								{
 									label: __('None', 'blockera'),
 									value: 'none',
-									icon: <DisplayNoneIcon />,
+									icon: (
+										<Icon
+											icon="display-none"
+											iconSize={18}
+										/>
+									),
 								},
 							]}
 							isDeselectable={true}
@@ -377,7 +410,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													</p>
 
 													<h3>
-														<WrapNoWrapIcon />
+														<Icon
+															icon="wrap-no"
+															iconSize={22}
+														/>
 														{__(
 															'No Wrap',
 															'blockera'
@@ -390,7 +426,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														)}
 													</p>
 													<h3>
-														<WrapWrapIcon />
+														<Icon
+															icon="wrap"
+															iconSize={22}
+														/>
 														{__('Wrap', 'blockera')}
 													</h3>
 													<p>
@@ -426,7 +465,12 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														'blockera'
 													),
 													value: 'nowrap',
-													icon: <WrapNoWrapIcon />,
+													icon: (
+														<Icon
+															icon="wrap-no"
+															iconSize={18}
+														/>
+													),
 												},
 												{
 													label: __(
@@ -434,7 +478,12 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														'blockera'
 													),
 													value: 'wrap',
-													icon: <WrapWrapIcon />,
+													icon: (
+														<Icon
+															icon="wrap"
+															iconSize={18}
+														/>
+													),
 												},
 											]}
 											//
@@ -512,7 +561,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												);
 											}}
 										>
-											<ReverseIcon />
+											<Icon icon="reverse-horizontal" />
 										</Button>
 									</Flex>
 								</BaseControl>
@@ -556,7 +605,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														)}
 													</p>
 													<h3>
-														<AlignContentFlexStartIcon />
+														<Icon
+															icon="align-content-flex-start"
+															iconSize={22}
+														/>
 														{__(
 															'Flex Start',
 															'blockera'
@@ -569,7 +621,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														)}
 													</p>
 													<h3>
-														<AlignContentCenterIcon />
+														<Icon
+															icon="align-content-center"
+															iconSize="22"
+														/>
 														{__(
 															'Center',
 															'blockera'
@@ -582,7 +637,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														)}
 													</p>
 													<h3>
-														<AlignContentFlexEndIcon />
+														<Icon
+															icon="align-content-flex-end"
+															iconSize={22}
+														/>
 														{__(
 															'Flex End',
 															'blockera'
@@ -595,7 +653,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														)}
 													</p>
 													<h3>
-														<AlignContentSpaceAroundIcon />
+														<Icon
+															icon="align-content-space-around"
+															iconSize={22}
+														/>
 														{__(
 															'Space Around',
 															'blockera'
@@ -608,7 +669,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														)}
 													</p>
 													<h3>
-														<AlignContentSpaceBetweenIcon />
+														<Icon
+															icon="align-content-space-between"
+															iconSize={22}
+														/>
 														{__(
 															'Space Between',
 															'blockera'
@@ -621,7 +685,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 														)}
 													</p>
 													<h3>
-														<AlignContentStretchIcon />
+														<Icon
+															icon="align-content-stretch"
+															iconSize={22}
+														/>
 														{__(
 															'Stretch',
 															'blockera'
@@ -644,7 +711,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													),
 													value: 'flex-start',
 													icon: (
-														<AlignContentFlexStartIcon />
+														<Icon
+															icon="align-content-flex-start"
+															iconSize={18}
+														/>
 													),
 												},
 												{
@@ -654,7 +724,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													),
 													value: 'center',
 													icon: (
-														<AlignContentCenterIcon />
+														<Icon
+															icon="align-content-center"
+															iconSize="18"
+														/>
 													),
 												},
 												{
@@ -664,7 +737,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													),
 													value: 'flex-end',
 													icon: (
-														<AlignContentFlexEndIcon />
+														<Icon
+															icon="align-content-flex-end"
+															iconSize={18}
+														/>
 													),
 												},
 												{
@@ -674,7 +750,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													),
 													value: 'space-around',
 													icon: (
-														<AlignContentSpaceAroundIcon />
+														<Icon
+															icon="align-content-space-around"
+															iconSize={18}
+														/>
 													),
 												},
 												{
@@ -684,7 +763,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													),
 													value: 'space-between',
 													icon: (
-														<AlignContentSpaceBetweenIcon />
+														<Icon
+															icon="align-content-space-between"
+															iconSize={18}
+														/>
 													),
 												},
 												{
@@ -694,7 +776,10 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													),
 													value: 'stretch',
 													icon: (
-														<AlignContentStretchIcon />
+														<Icon
+															icon="align-content-stretch"
+															iconSize={18}
+														/>
 													),
 												},
 											]}

@@ -1,5 +1,5 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { registerCoreBlocks } from '@wordpress/block-library';
 

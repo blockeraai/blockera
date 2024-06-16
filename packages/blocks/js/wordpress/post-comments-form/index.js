@@ -13,31 +13,9 @@ import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
-	InnerBlockParagraphIcon,
-	InnerBlockButtonIcon,
-	InnerBlockInputIcon,
-	InnerBlockLinkIcon,
-	InnerBlockHeadingsIcon,
-	InnerBlockHeading1Icon,
-	InnerBlockHeading2Icon,
-	InnerBlockHeading3Icon,
-	InnerBlockHeading4Icon,
-	InnerBlockHeading5Icon,
-	InnerBlockHeading6Icon,
 } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-/**
- * Internal dependencies
- */
-import { InnerBlockFormContainerIcon } from './icons/inner-block-form-container';
-import { InnerBlockFormReplyTitleIcon } from './icons/inner-block-form-reply-title';
-import { InnerBlockFormNotesIcon } from './icons/inner-block-form-notes';
-import { InnerBlockFormInputLabelIcon } from './icons/inner-block-form-input-label';
-import { InnerBlockFormInputFieldsIcon } from './icons/inner-block-form-input-fields';
-import { InnerBlockFormTextareaIcon } from './icons/inner-block-form-textarea';
-import { InnerBlockFormCookieConsentIcon } from './icons/inner-block-form-cookie-consent';
-import { InnerBlockFormButtonIcon } from './icons/inner-block-form-button';
+import { Icon } from '@blockera/icons';
 
 const attributes = sharedBlockExtensionAttributes;
 
@@ -48,7 +26,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/title',
 		type: 'title',
 		label: __('Title', 'blockera'),
-		icon: <InnerBlockFormReplyTitleIcon />,
+		icon: <Icon icon="block-comments-form-reply-title" iconSize="20" />,
 		selectors: {
 			root: '.comment-reply-title',
 		},
@@ -61,7 +39,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/form',
 		type: 'form',
 		label: __('Form Container', 'blockera'),
-		icon: <InnerBlockFormContainerIcon />,
+		icon: <Icon icon="block-comments-form-container" iconSize="20" />,
 		selectors: {
 			root: '.comment-form',
 		},
@@ -74,7 +52,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/notes',
 		type: 'notes',
 		label: __('Notes', 'blockera'),
-		icon: <InnerBlockFormNotesIcon />,
+		icon: <Icon icon="block-comments-form-notes" iconSize="20" />,
 		selectors: {
 			root: '.comment-notes',
 		},
@@ -87,7 +65,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'input_label',
 		type: 'input_label',
 		label: __('Input Labels', 'blockera'),
-		icon: <InnerBlockFormInputLabelIcon />,
+		icon: <Icon icon="block-comments-form-labels" iconSize="20" />,
 		selectors: {
 			root: 'label',
 		},
@@ -100,7 +78,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'input',
 		type: 'input',
 		label: __('Input Fields', 'blockera'),
-		icon: <InnerBlockFormInputFieldsIcon />,
+		icon: <Icon icon="block-comments-form-inputs" iconSize="20" />,
 		selectors: {
 			root: '.wp-block-search__input',
 		},
@@ -113,7 +91,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'textarea',
 		type: 'textarea',
 		label: __('Textarea Field', 'blockera'),
-		icon: <InnerBlockFormTextareaIcon />,
+		icon: <Icon icon="block-comments-form-textarea" iconSize="20" />,
 		selectors: {
 			root: 'textarea',
 		},
@@ -126,7 +104,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'cookie_consent',
 		type: 'cookie_consent',
 		label: __('Cookie Consent', 'blockera'),
-		icon: <InnerBlockFormCookieConsentIcon />,
+		icon: <Icon icon="block-comments-form-cookie-consent" iconSize="20" />,
 		selectors: {
 			root: '.comment-form-cookies-consent',
 		},
@@ -139,7 +117,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/button',
 		type: 'button',
 		label: __('Submit Button', 'blockera'),
-		icon: <InnerBlockFormButtonIcon />,
+		icon: <Icon icon="block-comments-form-button" iconSize="20" />,
 		selectors: {
 			root: 'input[type=submit]',
 		},
@@ -152,7 +130,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/link',
 		type: 'link',
 		label: __('Links', 'blockera'),
-		icon: <InnerBlockLinkIcon />,
+		icon: <Icon icon="block-link" iconSize="20" />,
 		selectors: {
 			root: 'a:not(.wp-element-button)',
 		},
@@ -166,7 +144,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		type: 'heading',
 		label: __('Headings', 'blockera'),
-		icon: <InnerBlockHeadingsIcon />,
+		icon: <Icon icon="block-headings" iconSize="20" />,
 		selectors: {
 			root: 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
 		},
@@ -184,7 +162,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h1',
 		type: 'h1',
 		label: __('H1s', 'blockera'),
-		icon: <InnerBlockHeading1Icon />,
+		icon: <Icon icon="block-heading-1" iconSize="20" />,
 		selectors: {
 			root: 'h1.wp-block-heading',
 		},
@@ -202,7 +180,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h2',
 		type: 'h2',
 		label: __('H2s', 'blockera'),
-		icon: <InnerBlockHeading2Icon />,
+		icon: <Icon icon="block-heading-2" iconSize="20" />,
 		selectors: {
 			root: 'h2.wp-block-heading',
 		},
@@ -220,7 +198,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h3',
 		type: 'h3',
 		label: __('H3s', 'blockera'),
-		icon: <InnerBlockHeading3Icon />,
+		icon: <Icon icon="block-heading-3" iconSize="20" />,
 		selectors: {
 			root: 'h3.wp-block-heading',
 		},
@@ -238,7 +216,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h4',
 		type: 'h4',
 		label: __('H4s', 'blockera'),
-		icon: <InnerBlockHeading4Icon />,
+		icon: <Icon icon="block-heading-4" iconSize="20" />,
 		selectors: {
 			root: 'h4.wp-block-heading',
 		},
@@ -256,7 +234,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h5',
 		type: 'h5',
 		label: __('H5s', 'blockera'),
-		icon: <InnerBlockHeading5Icon />,
+		icon: <Icon icon="block-heading-5" iconSize="20" />,
 		selectors: {
 			root: 'h5.wp-block-heading',
 		},
@@ -274,7 +252,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/h6',
 		type: 'h6',
 		label: __('H6s', 'blockera'),
-		icon: <InnerBlockHeading6Icon />,
+		icon: <Icon icon="block-heading-6" iconSize="20" />,
 		selectors: {
 			root: 'h6.wp-block-heading',
 		},

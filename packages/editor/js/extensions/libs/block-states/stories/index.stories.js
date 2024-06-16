@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { InspectorControls } from '@wordpress/block-editor';
-
-/**
  *  Storybook dependencies
  */
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
@@ -11,16 +6,15 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 /**
  * Internal dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
-import BlockStates from '../';
+import { sharedBlockExtensionAttributes } from '@blockera/editor';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
 } from '@blockera/dev-storybook/js/block-api';
 import { Playground } from '@blockera/dev-storybook/js/components';
+import { BlockStyle } from '../../../../style-engine';
+import StatesManager from '../components/states-manager';
+import { useAttributes } from '../../../../hooks';
 import { WithPlaygroundStyles } from '../../../../../../../.storybook/decorators/with-playground-styles';
 
 const { SharedDecorators } = Decorators;
@@ -35,18 +29,46 @@ blocksInitializer({
 	},
 	supports: {},
 	edit({ attributes, setAttributes, ...props }) {
+		// eslint-disable-next-line
+		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
+			blockId: name,
+			innerBlocks: {},
+			blockeraInnerBlocks: {},
+			getAttributes: () => attributes,
+			isNormalState: () => true,
+			masterIsNormalState: () => true,
+		});
+
 		return (
 			<>
-				<InspectorControls>
-					<BlockStates
-						attributes={attributes}
-						supports={props.supports}
-						clientId={props.clientId}
-						blockName={props.blockName}
-						setAttributes={setAttributes}
-						Extension={SharedBlockExtension}
-					/>
-				</InspectorControls>
+				<StatesManager
+					states={attributes.blockeraBlockStates}
+					availableStates={undefined}
+					onChange={handleOnChangeAttributes}
+					block={{
+						clientId: props.clientId,
+						supports: props.supports,
+						setAttributes,
+						blockName: props.name,
+					}}
+					{...{
+						currentBlock: 'master',
+						currentState: 'normal',
+						currentBreakpoint: 'laptop',
+						currentInnerBlockState: 'normal',
+					}}
+				/>
+
+				<BlockStyle
+					{...{
+						attributes,
+						blockName: props.name,
+						clientId: props.clientId,
+						supports: props.supports,
+						activeDeviceType: 'laptop',
+						currentAttributes: attributes,
+					}}
+				/>
 			</>
 		);
 	},

@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-
 import { nanoid } from 'nanoid';
 
 /**
@@ -160,20 +159,4 @@ export const TextArea = {
 			</ControlContextProvider>
 		</Flex>
 	),
-};
-
-export const Play = {
-	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: 'test text',
-		},
-	},
-	decorators: [
-		WithInspectorStyles,
-		WithStoryContextProvider,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={TextAreaControl} {...args} />,
 };

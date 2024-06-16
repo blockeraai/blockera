@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
 import { dispatch, useSelect } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
@@ -22,13 +22,12 @@ import {
 	MoreFeatures,
 	PanelBodyControl,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { ArrowIcon } from './icons/arrow';
 import { isInnerBlock } from '../../components';
-import { InnerBlocksExtensionIcon } from './icons';
 import type {
 	InnerBlockModel,
 	InnerBlockType,
@@ -86,7 +85,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 							{__('Customize', 'blockera')}
 
-							<ArrowIcon />
+							{isRTL() ? (
+								<Icon icon="chevron-left" iconSize="20" />
+							) : (
+								<Icon icon="chevron-right" iconSize="20" />
+							)}
 						</Button>
 					</BaseControl>
 				);
@@ -103,7 +106,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			<PanelBodyControl
 				title={__('Inner Blocks', 'blockera')}
 				initialOpen={false}
-				icon={<InnerBlocksExtensionIcon />}
+				icon={<Icon icon="extension-inner-blocks" />}
 				className={extensionClassNames('inner-blocks')}
 			>
 				{forceInnerBlocks}
