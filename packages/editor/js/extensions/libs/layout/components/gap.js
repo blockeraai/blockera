@@ -43,10 +43,14 @@ export default function ({
 		useControlContext({
 			defaultValue,
 			onChange: (newValue) =>
-				handleOnChangeAttributes(attributeId, {
-					...gap,
-					gap: newValue,
-				}),
+				handleOnChangeAttributes(
+					attributeId,
+					{
+						...gap,
+						gap: newValue,
+					},
+					{}
+				),
 		});
 
 	const labelProps = {
@@ -194,19 +198,27 @@ export default function ({
 					size="small"
 					onClick={() => {
 						if (gap?.lock) {
-							handleOnChangeAttributes(attributeId, {
-								...gap,
-								lock: !gap?.lock,
-								rows: gap?.gap,
-								columns: gap?.gap,
-							});
+							handleOnChangeAttributes(
+								attributeId,
+								{
+									...gap,
+									lock: !gap?.lock,
+									rows: gap?.gap,
+									columns: gap?.gap,
+								},
+								{}
+							);
 						} else {
-							handleOnChangeAttributes(attributeId, {
-								lock: !gap?.lock,
-								gap: gap?.gap,
-								columns: '',
-								rows: '',
-							});
+							handleOnChangeAttributes(
+								attributeId,
+								{
+									lock: !gap?.lock,
+									gap: gap?.gap,
+									columns: '',
+									rows: '',
+								},
+								{}
+							);
 						}
 					}}
 					style={{
