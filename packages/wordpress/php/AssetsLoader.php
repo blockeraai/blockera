@@ -217,19 +217,6 @@ class AssetsLoader {
 			);
 			// phpcs:enable
 		}
-
-		$file    = $this->root_info['path'] . 'packages/wordpress/php/Assets/css/admin.css';
-		$file_url = $this->root_info['url'] . 'packages/wordpress/php/Assets/css/admin.css';
-
-		if ( file_exists( $file ) && is_admin() ) {
-
-			wp_enqueue_style(
-				'blockera-admin-kit',
-				$file_url,
-				[],
-				filemtime( $file )
-			);
-		}
 	}
 
 	/**
