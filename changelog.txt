@@ -1,3 +1,15 @@
+= 1.1.5 - 2024-6-17
+-   Tweak: Reduce the final plugin zip file size from 4MB to 1.4MB.
+-   Tweak: Refactor, redesign, and compress all icons.
+-   Tweak: Enhance the design.
+
+-   Fix: Resolve the issue with Storybook not loading.
+-   Fix: Update Storybook to the latest version.
+-   Fix: Background mesh gradient error. 
+-   Fix: Block states error encountered while editing and saving.
+-   Fix: Address various bugs.
+
+
 = 1.1.4 - 2024-6-9
 
 -   Tweak: Reduce 50% of the final package.
