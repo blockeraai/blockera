@@ -57,7 +57,7 @@ export type FeatureConfig = {
 	/**
 	 * Is active on inner blocks?
 	 */
-	isActiveOnInnerBlocks?: 'all' | Array<InnerBlockType>,
+	isActiveOnInnerBlocks?: boolean | 'all' | Array<InnerBlockType>,
 	/**
 	 * Is active on free plugin inner blocks? by default undefined.
 	 */

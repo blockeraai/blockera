@@ -9,6 +9,7 @@ import { useSelect } from '@wordpress/data';
  * Blockera dependencies
  */
 import { FeatureWrapper } from '@blockera/controls';
+import { isBoolean, isArray } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -70,7 +71,20 @@ export default function EditorFeatureWrapper({
 	}
 
 	if (isInnerBlock(currentBlock)) {
-		if (!feature.isActiveOnInnerBlocks) {
+		if (
+			isBoolean(feature.isActiveOnInnerBlocks) &&
+			!feature.isActiveOnInnerBlocks
+		) {
+			return (
+				<FeatureWrapper type="inner-block" {...props}>
+					{children}
+				</FeatureWrapper>
+			);
+		} else if (
+			isArray(feature.isActiveOnInnerBlocks) &&
+			//$FlowFixMe
+			!feature.isActiveOnInnerBlocks.includes(currentBlock)
+		) {
 			return (
 				<FeatureWrapper type="inner-block" {...props}>
 					{children}
