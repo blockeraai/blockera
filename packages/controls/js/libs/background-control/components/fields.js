@@ -1275,6 +1275,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							config={
 								blockeraBackground?.config?.meshGradientColors
 							}
+							showText="always"
 						>
 							<BaseControl
 								label=""
