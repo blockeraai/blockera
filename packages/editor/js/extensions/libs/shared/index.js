@@ -103,6 +103,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		const { setCurrentTab } = useBlockContext();
 
+		// todo use this to enable icon extension
+		const iconExtensionIsEnabled = true;
+
 		props = {
 			...props,
 			currentState,
@@ -238,35 +241,37 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'settings':
 					activePanel.push(
 						<>
-							<IconExtension
-								{...{
-									iconConfig,
-									block,
-									values: {
-										blockeraIcon:
-											currentStateAttributes.blockeraIcon,
-										blockeraIconGap:
-											currentStateAttributes.blockeraIconGap,
-										blockeraIconSize:
-											currentStateAttributes.blockeraIconSize,
-										blockeraIconLink:
-											currentStateAttributes.blockeraIconLink,
-										blockeraIconColor:
-											currentStateAttributes.blockeraIconColor,
-										blockeraIconPosition:
-											currentStateAttributes.blockeraIconPosition,
-									},
-									extensionProps: {
-										blockeraIcon: {},
-										blockeraIconPosition: {},
-										blockeraIconGap: {},
-										blockeraIconSize: {},
-										blockeraIconColor: {},
-										blockeraIconLink: {},
-									},
-									handleOnChangeAttributes,
-								}}
-							/>
+							{iconExtensionIsEnabled && (
+								<IconExtension
+									{...{
+										iconConfig,
+										block,
+										values: {
+											blockeraIcon:
+												currentStateAttributes.blockeraIcon,
+											blockeraIconGap:
+												currentStateAttributes.blockeraIconGap,
+											blockeraIconSize:
+												currentStateAttributes.blockeraIconSize,
+											blockeraIconLink:
+												currentStateAttributes.blockeraIconLink,
+											blockeraIconColor:
+												currentStateAttributes.blockeraIconColor,
+											blockeraIconPosition:
+												currentStateAttributes.blockeraIconPosition,
+										},
+										extensionProps: {
+											blockeraIcon: {},
+											blockeraIconPosition: {},
+											blockeraIconGap: {},
+											blockeraIconSize: {},
+											blockeraIconColor: {},
+											blockeraIconLink: {},
+										},
+										handleOnChangeAttributes,
+									}}
+								/>
+							)}
 
 							<ConditionsExtension
 								block={block}
