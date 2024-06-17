@@ -126,7 +126,7 @@ zip -r -q blockera.zip \
 	$vendor_without_blockera \
 	$(find ./vendor/blockera/blockera/ -type f \( -name "*.php" -o -name "*.json" \)) \
 	$(find ./vendor/blockera/blockera-admin/ -type f \( -name "*.php" -o -name "*.json" \)) \
-	$(find ./vendor/blockera/blocks/ -type f \( -name "*.php" -o -name "*.json" \)) \
+	$(find ./vendor/blockera/blocks-core/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/bootstrap/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/data/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/data-editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
