@@ -1,5 +1,5 @@
 {
-	"name": "@blockera/blocks",
+	"name": "@blockera/blocks-core",
 	"version": "1.0.0",
 	"description": "A blocks package to includes all core blocks and third-party blocks to compatible with blockera-core extensions.",
 	"author": "The Blockera Contributors",
@@ -7,11 +7,11 @@
 	"keywords": [
 		"blockera"
 	],
-	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/blocks/README.md",
+	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/blocks/core/README.md",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/blockeraai/blockera",
-		"directory": "packages/blocks"
+		"directory": "packages/blocks/core"
 	},
 	"bugs": {
 		"url": "https://github.com/blockeraai/blockera/issues"

@@ -56,9 +56,17 @@ const blockeraPackages = Object.keys(dependencies)
 	.map((packageName) => packageName.replace(BLOCKERA_NAMESPACE, ''));
 const blockeraPackagesVersion = Object.fromEntries(
 	blockeraPackages.map((packageName) => {
+		let parentDirectory = '';
+		let name = packageName;
+
+		if (-1 !== packageName.indexOf('blocks-')) {
+			parentDirectory = 'blocks/';
+			name = name.split('blocks-')[1];
+		}
+
 		const {
 			version,
-		} = require(`../../../../packages/${packageName}/package.json`);
+		} = require(`../../../../packages/${parentDirectory}${name}/package.json`);
 
 		return [packageName, version.replace(/\./g, '_')];
 	})
@@ -73,6 +81,13 @@ const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
 		return memo;
 	}
 
+	let parentDirectory = '';
+	let _packageName = packageName;
+
+	if (-1 !== packageName.indexOf('blocks-')) {
+		parentDirectory = 'blocks/';
+		_packageName = _packageName.split('blocks-')[1];
+	}
 	const version = blockeraPackagesVersion[packageName];
 
 	let name = packageName.startsWith('blockera')
@@ -88,7 +103,7 @@ const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
 	return {
 		...memo,
 		[packageName]: {
-			import: `./packages/${packageName}`,
+			import: `./packages/${parentDirectory}${_packageName}`,
 			library: {
 				name,
 				type: 'var',
@@ -177,8 +192,8 @@ module.exports = (env, argv) => {
 			'@blockera/utils': 'blockeraUtils_' + blockeraPackagesVersion.utils,
 			'@blockera/editor':
 				'blockeraEditor_' + blockeraPackagesVersion.editor,
-			'@blockera/blocks':
-				'blockeraBlocks_' + blockeraPackagesVersion.blocks,
+			'@blockera/core-blocks':
+				'blockeraBlocksCore_' + blockeraPackagesVersion['blocks-core'],
 			'@blockera/controls':
 				'blockeraControls_' + blockeraPackagesVersion.controls,
 			'@blockera/bootstrap':

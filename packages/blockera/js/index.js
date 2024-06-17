@@ -12,7 +12,7 @@ import {
 	reregistrationBlocks,
 	blockeraBootstrapBlocks,
 	registerThirdPartyExtensionDefinitions,
-} from '@blockera/blocks';
+} from '@blockera/blocks-core';
 import { noop } from '@blockera/utils';
 import { initializer } from '@blockera/bootstrap';
 import { applyHooks, defineGlobalProps } from '@blockera/editor';
