@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca7cbc74841ee10ae5ea0ef6dd05d6e9",
+    "content-hash": "c9082b57476c149deccd950deb75bd11",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -147,6 +147,28 @@
                 ]
             },
             "description": "Blockera Editor php package to implements WordPress block and site editor functionalities on admin and front-end.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/env",
+            "version": "dev-feat/control/input-control",
+            "dist": {
+                "type": "path",
+                "url": "packages/env",
+                "reference": "90a52bdf1835fdcacb277e40f5809a7de4dd266a"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Env\\": "php/"
+                },
+                "files": [
+                    "php/functions.php"
+                ]
+            },
+            "description": "The env package to read environment variables of json related files at the root of any project.",
             "transport-options": {
                 "relative": true
             }
@@ -2943,12 +2965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "cdeb0d99ecb1c4ad07e2e0b4e744d19965951d56"
+                "reference": "07da7f5d51ff0bc9b0ea757be084a57e174b1312"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/cdeb0d99ecb1c4ad07e2e0b4e744d19965951d56",
-                "reference": "cdeb0d99ecb1c4ad07e2e0b4e744d19965951d56",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/07da7f5d51ff0bc9b0ea757be084a57e174b1312",
+                "reference": "07da7f5d51ff0bc9b0ea757be084a57e174b1312",
                 "shasum": ""
             },
             "require": {
@@ -3038,7 +3060,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-11T09:46:58+00:00"
+            "time": "2024-06-17T05:30:09+00:00"
         },
         {
             "name": "psr/log",
@@ -7567,12 +7589,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli.git",
-                "reference": "f701f406aa39f6aeca2af16e92712780e2675bad"
+                "reference": "f7db3c109bb1d21624cb48befad60d4f2c0c3bab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/f701f406aa39f6aeca2af16e92712780e2675bad",
-                "reference": "f701f406aa39f6aeca2af16e92712780e2675bad",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/f7db3c109bb1d21624cb48befad60d4f2c0c3bab",
+                "reference": "f7db3c109bb1d21624cb48befad60d4f2c0c3bab",
                 "shasum": ""
             },
             "require": {
@@ -7630,7 +7652,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli/issues",
                 "source": "https://github.com/wp-cli/wp-cli"
             },
-            "time": "2024-05-23T18:17:46+00:00"
+            "time": "2024-06-17T05:15:36+00:00"
         },
         {
             "name": "wp-cli/wp-cli-bundle",

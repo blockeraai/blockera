@@ -47,6 +47,10 @@
 		{
 			"type": "path",
 			"url": "packages/blocks/core"
+		},
+		{
+			"type": "path",
+			"url": "packages/env"
 		}
 	],
 	"autoload-dev": {
@@ -66,6 +70,7 @@
 		"blockera/blockera-admin": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
+		"blockera/env": "*",
 		"blockera/editor": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
