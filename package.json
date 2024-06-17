@@ -29,6 +29,7 @@
 		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/blockera-admin": "file:packages/blockera-admin",
 		"@blockera/blocks-core": "file:packages/blocks/core",
+		"@blockera/env": "file:packages/env",
 		"@blockera/bootstrap": "file:packages/bootstrap",
 		"@blockera/classnames": "file:packages/classnames",
 		"@blockera/controls": "file:packages/controls",

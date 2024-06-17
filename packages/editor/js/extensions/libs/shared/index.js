@@ -11,9 +11,10 @@ import { memo, useEffect, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEquals } from '@blockera/utils';
-import { Tabs, type TTabProps } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { isEquals } from '@blockera/utils';
+import { experimental } from '@blockera/env';
+import { Tabs, type TTabProps } from '@blockera/controls';
 // import { useTraceUpdate } from '@blockera/editor';
 
 /**
@@ -104,7 +105,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const { setCurrentTab } = useBlockContext();
 
 		// todo use this to enable icon extension
-		const iconExtensionIsEnabled = false;
+		const iconExtensionIsEnabled = experimental().get(
+			'editor.extensions.iconExtension'
+		);
 
 		props = {
 			...props,

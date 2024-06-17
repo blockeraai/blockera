@@ -20,6 +20,7 @@ import {
 	InputControl,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { experimental } from '@blockera/env';
 
 /**
  * Internal dependencies
@@ -35,7 +36,7 @@ export const Breakpoints = ({
 	className,
 }: BreakpointsComponentProps): MixedElement => {
 	// todo remove this after finishing development
-	const disabledSettings = true;
+	const disabledSettings = experimental().get('editor.canvasEditor.settings');
 
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
 		select('blockera-core/editor');
