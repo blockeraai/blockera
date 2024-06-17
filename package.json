@@ -28,7 +28,7 @@
 	"dependencies": {
 		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/blockera-admin": "file:packages/blockera-admin",
-		"@blockera/blocks": "file:packages/blocks",
+		"@blockera/blocks-core": "file:packages/blocks/core",
 		"@blockera/bootstrap": "file:packages/bootstrap",
 		"@blockera/classnames": "file:packages/classnames",
 		"@blockera/controls": "file:packages/controls",
@@ -81,6 +81,7 @@
 		"@wordpress/block-library": "^8.12.0",
 		"@wordpress/browserslist-config": "^5.19.0",
 		"@wordpress/components": "^25.4.0",
+		"@wordpress/create-block": "^4.44.0",
 		"@wordpress/dependency-extraction-webpack-plugin": "^4.19.0",
 		"@wordpress/edit-post": "^7.25.0",
 		"@wordpress/edit-site": "^5.12.0",

@@ -46,7 +46,7 @@
 		},
 		{
 			"type": "path",
-			"url": "packages/blocks"
+			"url": "packages/blocks/core"
 		}
 	],
 	"autoload-dev": {
@@ -64,7 +64,7 @@
 		"php": ">=8.1",
 		"blockera/blockera": "*",
 		"blockera/blockera-admin": "*",
-		"blockera/blocks": "*",
+		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
 		"blockera/editor": "*",
 		"blockera/utils": "*",

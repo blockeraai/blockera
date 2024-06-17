@@ -20,7 +20,7 @@ return [
 			'data',
 			'controls',
 			'editor',
-			'blocks',
+			'blocks-core',
 			'bootstrap',
 			'blockera',
 			'editor-styles',

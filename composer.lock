@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c223b602afafc24c8e9fb1d79a7440e",
+    "content-hash": "ca7cbc74841ee10ae5ea0ef6dd05d6e9",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -51,23 +51,23 @@
             }
         },
         {
-            "name": "blockera/blocks",
+            "name": "blockera/blocks-core",
             "version": "dev-feat/control/input-control",
             "dist": {
                 "type": "path",
-                "url": "packages/blocks",
-                "reference": "8a2f7bb1f88778d988b9ce1bffb444bba3fcd982"
+                "url": "packages/blocks/core",
+                "reference": "7bcd88588ea7b6e24de52313834e07ace15fe951"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Blockera\\Blocks\\": "php/"
+                    "Blockera\\Blocks\\Core\\": "php/"
                 },
                 "files": [
                     "./php/functions.php"
                 ]
             },
-            "description": "The blocks package for Blockera editor.",
+            "description": "The WordPress core blocks package for Blockera editor.",
             "transport-options": {
                 "relative": true
             }
@@ -2242,12 +2242,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "daaadc3bae458908aa477b90a8932e7da9253f22"
+                "reference": "3ef0811e45ba7e91fb0f066af5af7d52c3b24469"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/daaadc3bae458908aa477b90a8932e7da9253f22",
-                "reference": "daaadc3bae458908aa477b90a8932e7da9253f22",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/3ef0811e45ba7e91fb0f066af5af7d52c3b24469",
+                "reference": "3ef0811e45ba7e91fb0f066af5af7d52c3b24469",
                 "shasum": ""
             },
             "require": {
@@ -2293,7 +2293,7 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/master"
             },
-            "time": "2024-06-03T06:24:19+00:00"
+            "time": "2024-06-12T18:31:58+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -6546,12 +6546,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/i18n-command.git",
-                "reference": "c7ddfda26da249c2ced4c6c95c2b0bfd5c132713"
+                "reference": "643422d7d0826154537a2fae8ab3e5b125010c0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/c7ddfda26da249c2ced4c6c95c2b0bfd5c132713",
-                "reference": "c7ddfda26da249c2ced4c6c95c2b0bfd5c132713",
+                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/643422d7d0826154537a2fae8ab3e5b125010c0b",
+                "reference": "643422d7d0826154537a2fae8ab3e5b125010c0b",
                 "shasum": ""
             },
             "require": {
@@ -6608,7 +6608,7 @@
                 "issues": "https://github.com/wp-cli/i18n-command/issues",
                 "source": "https://github.com/wp-cli/i18n-command/tree/main"
             },
-            "time": "2024-05-21T08:56:09+00:00"
+            "time": "2024-06-15T05:59:45+00:00"
         },
         {
             "name": "wp-cli/import-command",
