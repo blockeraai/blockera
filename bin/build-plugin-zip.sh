@@ -130,6 +130,7 @@ zip -r -q blockera.zip \
   $(find ./vendor/blockera/bootstrap/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/data/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/data-editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
+	$(find ./vendor/blockera/env/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/exceptions/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/http/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
