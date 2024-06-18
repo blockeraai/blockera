@@ -13,6 +13,7 @@ $plugin_version = get_plugin_version();
 $php_version = get_php_version();
 $tested_version = get_tested_version();
 $required_version = get_required_version();
+$short_desc = get_short_description();
 
 /**
  * Prints the changelog
@@ -80,6 +81,20 @@ function get_tested_version(){
 	return null;
 }
 
+/**
+ * Fetch tested up to version from `blockera.php` file.
+ */
+function get_short_description(){
+	
+	$content = file_get_contents(__DIR__ . '/../blockera.php');
+
+	if (preg_match( '/\s*\*\s*Description:\s*(.*)/', $content, $matches )) {
+		return $matches[1];
+	}
+
+	return null;
+}
+
 $skip_line = false;
 
 while ( true ) {
@@ -111,7 +126,10 @@ while ( true ) {
 			echo "Requires at least: $required_version\n";
 			break;
 
-		case '':
+		case str_starts_with(trim( $line ), 'Short Description:'):
+			echo "$short_desc\n";
+			break;
+
 		default:
 			echo $line;
 			break;

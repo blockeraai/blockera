@@ -8,7 +8,7 @@ Stable tag: ### AUTO-GENERATED
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-Make Gutenberg a Real Page Builder!
+Short Description: ### AUTO-GENERATED
 
 == Description ==
 
