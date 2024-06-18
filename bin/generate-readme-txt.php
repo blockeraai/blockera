@@ -106,6 +106,13 @@ while ( true ) {
 
 	switch ( trim( $line ) ) {
 
+
+		// All strings starts with an empty string
+		case '':
+		case "\n":
+			echo $line;
+			break;
+
 		case '### AUTO-GENERATED CHANGELOG':
 			print_changelog();
 			break;
