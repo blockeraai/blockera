@@ -36,7 +36,9 @@ export const Breakpoints = ({
 	className,
 }: BreakpointsComponentProps): MixedElement => {
 	// todo remove this after finishing development
-	const disabledSettings = experimental().get('editor.canvasEditor.settings');
+	const enableCanvasSettings = experimental().get(
+		'editor.canvasEditor.settings'
+	);
 
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
 		select('blockera-core/editor');
@@ -177,10 +179,10 @@ export const Breakpoints = ({
 				<Flex
 					className={className}
 					justifyContent={
-						!disabledSettings ? 'space-between' : 'center'
+						enableCanvasSettings ? 'space-between' : 'center'
 					}
 				>
-					{!disabledSettings && (
+					{enableCanvasSettings && (
 						<div
 							className={controlInnerClassNames(
 								'blockera-core-breakpoints'
@@ -201,7 +203,7 @@ export const Breakpoints = ({
 
 					<PickedBreakpoints onClick={handleOnClick} />
 
-					{!disabledSettings && (
+					{enableCanvasSettings && (
 						<div
 							style={{
 								cursor: 'pointer',
