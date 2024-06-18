@@ -67,7 +67,7 @@ fi
 
 # Clean old and extra files
 status "Cleaning build files... 🗂"
-rm -r dist
+rm -r -f dist
 
 # Run the build.
 status "Installing dependencies... 📦"
