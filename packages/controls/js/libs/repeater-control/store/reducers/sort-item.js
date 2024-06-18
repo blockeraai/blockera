@@ -72,7 +72,7 @@ export function sortItem(state: Object = {}, action: Object): Object {
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action)) {
-		repeaterOnChange(
+		const newValue = repeaterOnChange(
 			handleActionIncludeRepeaterId(controlInfo.value, action),
 			action
 		);
@@ -81,7 +81,7 @@ export function sortItem(state: Object = {}, action: Object): Object {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: handleActionIncludeRepeaterId(controlInfo.value, action),
+				value: newValue,
 			},
 		};
 	}

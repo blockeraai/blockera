@@ -58,7 +58,7 @@ export function cloneItem(state = {}, action) {
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action)) {
-		repeaterOnChange(
+		const newValue = repeaterOnChange(
 			handleActionIncludeRepeaterId(controlInfo.value, action),
 			action
 		);
@@ -67,7 +67,7 @@ export function cloneItem(state = {}, action) {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: handleActionIncludeRepeaterId(controlInfo.value, action),
+				value: newValue,
 			},
 		};
 	}
