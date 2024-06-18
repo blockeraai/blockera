@@ -1,3 +1,14 @@
+= 1.1.6 - 2024-6-18
+-   New:  Experimental feature infrastructure is being developed to enable the shipment of experimental features in upcoming updates. 
+          This infrastructure will allow us to release features as beta features in production releases before making them available to all users.
+		  Experimental features panel will be added in future.
+
+-   Tweak: Adjustments made to the package build script.
+
+-   Fix: Resolved all Plugin Check (PCP) errors and warnings.
+-   Fix: Addressed issues related to repeater controls actions.
+-   Fix: Fixed repeater tests.
+
 = 1.1.5 - 2024-6-17
 -   Tweak: Reduce the final plugin package file size from 4MB to 1.4MB.
 -   Tweak: Refactor, redesign, and compress all icons.
