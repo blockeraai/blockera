@@ -72,7 +72,7 @@ export function removeItem(state: Object = {}, action: Object): Object {
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action)) {
-		repeaterOnChange(
+		const newValue = repeaterOnChange(
 			handleActionIncludeRepeaterId(controlInfo.value, action),
 			action
 		);
@@ -81,7 +81,7 @@ export function removeItem(state: Object = {}, action: Object): Object {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: handleActionIncludeRepeaterId(controlInfo.value, action),
+				value: newValue,
 			},
 		};
 	}
@@ -90,14 +90,16 @@ export function removeItem(state: Object = {}, action: Object): Object {
 
 	delete value[action.itemId];
 
-	repeaterOnChange(regeneratedIds(value, action), action);
+	const newValue = regeneratedIds(value, action);
+
+	repeaterOnChange(newValue, action);
 
 	//by default behavior of "removeRepeaterItem" action
 	return {
 		...state,
 		[action.controlId]: {
 			...controlInfo,
-			value: regeneratedIds(value, action),
+			value: newValue,
 		},
 	};
 }

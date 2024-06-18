@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { dispatch } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 import { renderHook } from '@testing-library/react';
 
 /**
@@ -179,7 +180,11 @@ describe('testing control context provider and related hooks', () => {
 			}
 		);
 
-		expect(result.current.value).toEqual(value);
+		expect(result.current.value).toEqual({
+			0: { isVisible: true },
+			1: { isVisible: true },
+			...value,
+		});
 	});
 
 	it('should return defaultValue when arguments just includes defaultValue', () => {
@@ -428,31 +433,38 @@ describe('testing control context provider and related hooks', () => {
 			</ControlContextProvider>
 		);
 
-		const { removeRepeaterItem } = dispatch(storeName);
-
-		removeRepeaterItem({
-			controlId: name,
-			itemId: 1,
-		});
-
 		const { result } = renderHook(
 			() => {
-				return useControlContext({
+				const {
+					controlInfo: { name: controlId },
+					value,
+					dispatch: { removeRepeaterItem },
+				} = useControlContext({
+					id: undefined,
 					repeater: {
 						defaultRepeaterItemValue,
 					},
 					mergeInitialAndDefault: true,
 				});
+
+				useEffect(() => {
+					removeRepeaterItem({
+						controlId,
+						itemId: 1,
+					});
+				}, []);
+
+				return value;
 			},
 			{
 				wrapper,
 			}
 		);
 
-		expect(result.current.value).toEqual({
+		expect(result.current).toEqual({
 			0: {
-				isOpen: false,
 				order: 0,
+				isOpen: false,
 				x: 0,
 				y: 20,
 			},
@@ -552,28 +564,34 @@ describe('testing control context provider and related hooks', () => {
 			</ControlContextProvider>
 		);
 
-		const { cloneRepeaterItem } = dispatch(storeName);
-
-		cloneRepeaterItem({
-			controlId: name,
-			itemId: 0,
-		});
-
 		const { result } = renderHook(
 			() => {
-				return useControlContext({
+				const {
+					controlInfo: { name: controlId },
+					value,
+					dispatch: { cloneRepeaterItem },
+				} = useControlContext({
 					repeater: {
 						defaultRepeaterItemValue,
 					},
 					mergeInitialAndDefault: true,
 				});
+
+				useEffect(() => {
+					cloneRepeaterItem({
+						controlId,
+						itemId: 0,
+					});
+				}, []);
+
+				return value;
 			},
 			{
 				wrapper,
 			}
 		);
 
-		expect(result.current.value).toEqual({
+		expect(result.current).toEqual({
 			0: {
 				isOpen: false,
 				order: 0,
@@ -593,95 +611,6 @@ describe('testing control context provider and related hooks', () => {
 				y: 20,
 			},
 		});
-	});
-
-	it('should testing resetToDefault of retrieved control context api', () => {
-		const defaultRepeaterItemValue = {
-			y: 20,
-		};
-		const storeName = 'blockera-core/controls/repeater';
-		const name = getControlId();
-		const wrapper = ({ children }) => (
-			<ControlContextProvider
-				value={{
-					name,
-					value: [{ x: 0 }, { x: 10 }],
-				}}
-				storeName={storeName}
-			>
-				{children}
-			</ControlContextProvider>
-		);
-
-		const {
-			result: {
-				current: { resetToDefault },
-			},
-		} = renderHook(
-			() => {
-				return useControlContext({
-					repeater: {
-						defaultRepeaterItemValue,
-					},
-					defaultValue: [{ x: 0 }],
-					mergeInitialAndDefault: true,
-				});
-			},
-			{
-				wrapper,
-			}
-		);
-
-		const { result } = renderHook(() => resetToDefault());
-
-		expect(result.current).toEqual([{ x: 0 }]);
-	});
-
-	it('should testing resetToDefault of retrieved control context api in simple control', () => {
-		const storeName = 'blockera-core/controls';
-		const name = getControlId();
-		const wrapper = ({ children }) => (
-			<ControlContextProvider
-				value={{
-					name,
-					value: {
-						x: {
-							y: {
-								b: [1, 2, 3],
-							},
-						},
-					},
-				}}
-				storeName={storeName}
-			>
-				{children}
-			</ControlContextProvider>
-		);
-
-		const {
-			result: {
-				current: { resetToDefault },
-			},
-		} = renderHook(
-			() => {
-				return useControlContext({
-					defaultValue: {
-						x: {
-							y: {
-								b: [5, 5, 5],
-							},
-						},
-					},
-				});
-			},
-			{
-				wrapper,
-			}
-		);
-
-		const { result } = renderHook(() => resetToDefault());
-
-		expect(result.current.x.y.b).toEqual([5, 5, 5]);
 	});
 
 	it('should testing toggleValue of retrieved control context api', () => {

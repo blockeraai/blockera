@@ -29,7 +29,7 @@ export function changeItem(state = {}, action) {
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action, false)) {
-		repeaterOnChange(
+		const newValue = repeaterOnChange(
 			handleActionIncludeRepeaterId(controlInfo.value, action),
 			action
 		);
@@ -38,7 +38,7 @@ export function changeItem(state = {}, action) {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: handleActionIncludeRepeaterId(controlInfo.value, action),
+				value: newValue,
 			},
 		};
 	}

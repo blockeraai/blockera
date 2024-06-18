@@ -114,14 +114,18 @@ export const repeaterOnChange = (
 		valueCleanup: ((newValue: Object) => Object) | void,
 		onChange: (newValue: any, ref: Object | void) => void,
 	}
-): void => {
+): Object => {
 	if ('function' !== typeof onChange) {
-		return;
+		return value;
 	}
 
 	if ('function' === typeof valueCleanup) {
-		return onChange(valueCleanup(value), ref);
+		onChange(valueCleanup(value), ref);
+
+		return valueCleanup(value);
 	}
 
 	onChange(value, ref);
+
+	return value;
 };

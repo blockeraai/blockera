@@ -58,7 +58,7 @@ export function addItem(state: Object = {}, action: Object): Object {
 
 	// Assume action includes repeaterId prop.
 	if (hasRepeaterId(controlInfo.value, action)) {
-		repeaterOnChange(
+		const newValue = repeaterOnChange(
 			handleActionIncludeRepeaterId(controlInfo.value, action),
 			action
 		);
@@ -67,7 +67,7 @@ export function addItem(state: Object = {}, action: Object): Object {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: handleActionIncludeRepeaterId(controlInfo.value, action),
+				value: newValue,
 			},
 		};
 	}

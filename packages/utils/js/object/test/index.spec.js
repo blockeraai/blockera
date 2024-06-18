@@ -386,7 +386,7 @@ describe('Testing Object utilities', function () {
 					deletedProps: ['blockeraTextShadow'],
 				}
 			)
-		).toBeD({
+		).toEqual({
 			blockeraTextShadow: {
 				0: {
 					isVisible: true,
