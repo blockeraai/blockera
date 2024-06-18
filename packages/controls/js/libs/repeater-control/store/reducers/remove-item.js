@@ -90,14 +90,16 @@ export function removeItem(state: Object = {}, action: Object): Object {
 
 	delete value[action.itemId];
 
-	repeaterOnChange(regeneratedIds(value, action), action);
+	const newValue = regeneratedIds(value, action);
+
+	repeaterOnChange(newValue, action);
 
 	//by default behavior of "removeRepeaterItem" action
 	return {
 		...state,
 		[action.controlId]: {
 			...controlInfo,
-			value: regeneratedIds(value, action),
+			value: newValue,
 		},
 	};
 }
