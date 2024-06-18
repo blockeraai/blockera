@@ -1,8 +1,13 @@
 = 1.1.6 - 2024-6-18
--   New:  Experimental feature infrastructure is being developed to enable the shipment of experimental features in upcoming updates. 
-          This infrastructure will allow us to release features as beta features in production releases before making them available to all users.
-		  Experimental features panel will be added in future.
+-   New:  Experimental feature infrastructure is being developed to enable the shipment of 
+		  experimental features in upcoming updates. 
+          
+		  This infrastructure will allow us to release features as beta features in production 
+		  releases before making them available to all users.
+		  
+		  - Experimental features panel will be added in future.
 
+-   Tweak: 🔥 Reduce the final plugin package file size from 1.4MB to 801KB
 -   Tweak: Adjustments made to the package build script.
 
 -   Fix: Resolved all Plugin Check (PCP) errors and warnings.
@@ -10,7 +15,7 @@
 -   Fix: Fixed repeater tests.
 
 = 1.1.5 - 2024-6-17
--   Tweak: Reduce the final plugin package file size from 4MB to 1.4MB.
+-   Tweak: 🔥 Reduce the final plugin package file size from 4MB to 1.4MB.
 -   Tweak: Refactor, redesign, and compress all icons.
 -   Tweak: Enhance the design.
 -   Tweak: Admin panel Loading animation.
@@ -24,7 +29,7 @@
 
 = 1.1.4 - 2024-6-9
 
--   Tweak: Reduce 50% of the final package.
+-   Tweak: 🔥 Reduce 50% of the final package.
 -   Tweak: Improve build script.
 -   Tweak: Add more E2E tests.
 -   Tweak: Refactor input control to enhance performance and resolve bugs.
