@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
@@ -29,7 +30,13 @@ import { default as LibraryUIIcon } from './library-ui/library-icon';
 import { CursorIcons } from './library-cursor';
 import { default as LibraryCursorIcon } from './library-cursor/library-icon';
 
-const IconLibraries = {
+export const IconLibraries: {
+	[key: string]: {
+		id: IconLibraryTypes,
+		name: string,
+		icon: MixedElement,
+	},
+} = {
 	wp: {
 		id: 'wp',
 		// translators: Icon library name
