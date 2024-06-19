@@ -6,7 +6,7 @@ module.exports = {
 	mode: 'development',
 	entry: ['./packages/index.js'],
 	output: {
-		path: './packages/dev-tools/js/cypress/dist',
+		path: './packages/dev-cypress/js/dist',
 	},
 	devtool: true,
 	module: {
@@ -35,7 +35,11 @@ module.exports = {
 				use: {
 					loader: 'babel-loader',
 					options: {
-						presets: ['@babel/preset-env', '@babel/preset-react'],
+						presets: [
+							'@babel/preset-env',
+							'@babel/preset-react',
+							'@babel/preset-flow',
+						],
 					},
 				},
 			},
