@@ -10,7 +10,7 @@ jobs:
     cypress_e2e_tests:
         name: Cypress End 2 End Tests
         runs-on: ubuntu-latest
-        if: ${{ github.repository == 'blockeraai/blockera-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
             - name: Checkout Repository
@@ -31,7 +31,7 @@ jobs:
               uses: ./.github/setup-node
 
             - name: Install Composer Packages
-              run: composer install
+              run: composer install --no-dev -o --apcu-autoloader -a
 
             - name: Start WordPress Environment
               run: npm run env:start

@@ -11,7 +11,7 @@ jobs:
         name: JavaScript coding standards
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        if: ${{ github.repository == 'blockeraai/blockera-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
             - name: Checkout repository
@@ -38,7 +38,7 @@ jobs:
         name: CSS coding standards
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        if: ${{ github.repository == 'blockeraai/blockera-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
             - name: Checkout repository
@@ -54,7 +54,7 @@ jobs:
         name: PHP coding standards
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        if: ${{ github.repository == 'blockeraai/blockera-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
             - name: Checkout repository

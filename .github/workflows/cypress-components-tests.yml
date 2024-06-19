@@ -10,7 +10,7 @@ jobs:
     cypress_components_tests:
         name: Cypress Components Tests
         runs-on: ubuntu-latest
-        if: ${{ github.repository == 'blockeraai/blockera-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
             - name: Checkout Repository
