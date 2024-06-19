@@ -68,13 +68,16 @@ if (experimental().get('editor.extensions.effectsExtension.divider'))
 		isActiveOnStates: false,
 	};
 
-const blockeraMask: FeatureConfig = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Image Mask', 'blockera'),
-	isActiveOnStates: false,
-};
+let blockeraMask: FeatureConfig | false = false;
+
+if (experimental().get('editor.extensions.effectsExtension.mask'))
+	blockeraMask = {
+		show: true,
+		force: false,
+		status: true,
+		label: __('Image Mask', 'blockera'),
+		isActiveOnStates: false,
+	};
 
 export const effectsConfig = {
 	blockeraOpacity,
@@ -82,7 +85,6 @@ export const effectsConfig = {
 	blockeraTransition,
 	blockeraFilter,
 	blockeraBackdropFilter,
-	blockeraMask,
 	blockeraDivider,
 	blockeraMask,
 	blockeraBlendMode,

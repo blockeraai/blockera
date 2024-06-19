@@ -438,6 +438,7 @@ export const EffectsStyles = ({
 	}
 
 	if (
+		experimental().get('editor.extensions.effectsExtension.mask') &&
 		isActiveField(blockeraMask) &&
 		!arrayEquals(
 			attributes.blockeraMask.default,

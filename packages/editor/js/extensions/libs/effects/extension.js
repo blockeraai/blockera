@@ -84,14 +84,16 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			values?.blockeraBlendMode,
 			attributes.blockeraBlendMode.default
 		);
-		const isShowMask = isShowField(
-			extensionConfig.blockeraMask,
-			values?.blockeraMask,
-			attributes.blockeraMask.default
-		);
+
+		let isShowMask = false;
+		if (experimental().get('editor.extensions.effectsExtension.mask'))
+			isShowMask = isShowField(
+				extensionConfig.blockeraMask,
+				values?.blockeraMask,
+				attributes.blockeraMask.default
+			);
 
 		let isShowDivider = false;
-
 		if (experimental().get('editor.extensions.effectsExtension.divider'))
 			isShowDivider = isShowField(
 				extensionConfig.blockeraDivider,

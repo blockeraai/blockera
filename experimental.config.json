@@ -3,7 +3,8 @@
 		"extensions": {
 			"iconExtension": false,
 			"effectsExtension": {
-				"divider": false
+				"divider": false,
+				"mask": false
 			}
 		},
 		"canvasEditor": {
