@@ -50,6 +50,8 @@ export const TransformSettings = ({
 			top: string,
 			left: string,
 		},
+		blockeraMask: Array<Object>,
+		blockeraDivider: Array<Object>,
 	},
 	attributes: {
 		[key: string]: {
