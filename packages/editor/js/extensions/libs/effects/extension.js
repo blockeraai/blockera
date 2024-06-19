@@ -22,6 +22,7 @@ import {
 	extensionClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { experimental } from '@blockera/env';
 
 /**
  * Internal dependencies
@@ -77,16 +78,20 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 			values?.blockeraBackdropFilter,
 			attributes.blockeraBackdropFilter.default
 		);
-		const isShowDivider = isShowField(
-			extensionConfig.blockeraDivider,
-			values?.blockeraDivider,
-			attributes.blockeraDivider.default
-		);
 		const isShowBlendMode = isShowField(
 			extensionConfig.blockeraBlendMode,
 			values?.blockeraBlendMode,
 			attributes.blockeraBlendMode.default
 		);
+
+		let isShowDivider = false;
+
+		if (experimental().get('editor.extensions.effectsExtension.divider'))
+			isShowDivider = isShowField(
+				extensionConfig.blockeraDivider,
+				values?.blockeraDivider,
+				attributes.blockeraDivider.default
+			);
 
 		// Extension is not active
 		if (

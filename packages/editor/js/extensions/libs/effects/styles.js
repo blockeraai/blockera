@@ -3,6 +3,7 @@
  * Blockera dependencies
  */
 import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
+import { experimental } from '@blockera/env';
 
 /**
  * Internal dependencies
@@ -355,6 +356,7 @@ export const EffectsStyles = ({
 	}
 
 	if (
+		experimental().get('editor.extensions.effectsExtension.divider') &&
 		isActiveField(blockeraDivider) &&
 		!arrayEquals(
 			attributes.blockeraDivider.default,

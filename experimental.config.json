@@ -1,7 +1,10 @@
 {
 	"editor": {
 		"extensions": {
-			"iconExtension": false
+			"iconExtension": false,
+			"effectsExtension": {
+				"divider": false
+			}
 		},
 		"canvasEditor": {
 			"settings": false

@@ -6,6 +6,11 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * Blockera dependencies
+ */
+import { experimental } from '@blockera/env';
+
+/**
  * Internal dependencies
  */
 import type { FeatureConfig } from '../types';
@@ -52,13 +57,16 @@ const blockeraBlendMode: FeatureConfig = {
 	label: __('Blending Mode', 'blockera'),
 };
 
-const blockeraDivider: FeatureConfig = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Shape Dividers', 'blockera'),
-	isActiveOnStates: false,
-};
+let blockeraDivider: FeatureConfig | false = false;
+
+if (experimental().get('editor.extensions.effectsExtension.divider'))
+	blockeraDivider = {
+		show: true,
+		force: false,
+		status: true,
+		label: __('Shape Dividers', 'blockera'),
+		isActiveOnStates: false,
+	};
 
 export const effectsConfig = {
 	blockeraOpacity,
