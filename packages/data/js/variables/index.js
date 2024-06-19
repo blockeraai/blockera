@@ -24,6 +24,7 @@ export {
 	getLinearGradientVAFromIdString,
 	getRadialGradientVAFromIdString,
 	getGradientVAFromVarString,
+	getGradientVAFromIdString,
 	getGradientType,
 } from './gradient';
 export { getFontSizes, getFontSizeBy, getFontSize } from './font-size';

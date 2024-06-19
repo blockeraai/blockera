@@ -9,7 +9,8 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Icon } from '@blockera/components';
+import { Icon } from '@blockera/icons';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 export const Preview = (): MixedElement => {
 	const previewElement: HTMLElement | null = document.querySelector(
@@ -26,6 +27,7 @@ export const Preview = (): MixedElement => {
 			}
 			target={'_blank'}
 			rel="noreferrer"
+			className={controlInnerClassNames('canvas-editor-preview-link')}
 		>
 			<Icon
 				className={'blockera-canvas-preview-link'}

@@ -10,7 +10,15 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/blockera-admin"
+		},
+		{
+			"type": "path",
 			"url": "packages/bootstrap"
+		},
+		{
+			"type": "path",
+			"url": "packages/editor"
 		},
 		{
 			"type": "path",
@@ -19,10 +27,6 @@
 		{
 			"type": "path",
 			"url": "packages/wordpress"
-		},
-		{
-			"type": "path",
-			"url": "packages/style-engine"
 		},
 		{
 			"type": "path",
@@ -39,14 +43,16 @@
 		{
 			"type": "path",
 			"url": "packages/http"
+		},
+		{
+			"type": "path",
+			"url": "packages/blocks/core"
+		},
+		{
+			"type": "path",
+			"url": "packages/env"
 		}
 	],
-	"autoload": {
-		"files": [
-			"packages/style-engine/php/helpers.php",
-			"packages/blockera/php/functions.php"
-		]
-	},
 	"autoload-dev": {
 		"psr-4": {
 			"Blockera\\Framework\\Tests\\": ".dev/tests/phpunit"
@@ -59,23 +65,26 @@
 	],
 	"minimum-stability": "dev",
 	"require": {
-		"php": ">=7.4",
+		"php": ">=8.1",
 		"blockera/blockera": "*",
+		"blockera/blockera-admin": "*",
+		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
+		"blockera/env": "*",
+		"blockera/editor": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
-		"blockera/style-engine": "*",
 		"blockera/exceptions": "*",
 		"blockera/data": "*",
 		"blockera/data-editor": "*",
 		"blockera/http": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
-		"symfony/dom-crawler": "5.4.x-dev",
-		"symfony/css-selector": "5.4.x-dev",
-		"voku/simple_html_dom": "dev-master",
 		"illuminate/container": "8.x-dev"
 	},
 	"require-dev": {
+		"symfony/dom-crawler": "5.4.x-dev",
+		"symfony/css-selector": "5.4.x-dev",
+		"voku/simple_html_dom": "dev-master",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"phpunit/phpunit": "^9.5.21",
@@ -89,7 +98,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "7.4"
+			"php": "8.1"
 		},
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,

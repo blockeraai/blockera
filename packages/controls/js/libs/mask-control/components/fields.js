@@ -1,7 +1,4 @@
 // @flow
-/**
- * WordPress dependencies
- */
 
 /**
  * External dependencies
@@ -13,8 +10,8 @@ import type { Element } from 'react';
 /**
  * Blockera dependencies
  */
-import { Popover, Flex, Button } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -22,22 +19,17 @@ import { controlInnerClassNames } from '@blockera/classnames';
 import { RepeaterContext } from '../../repeater-control/context';
 import { useControlContext } from '../../../context';
 import {
-	ToggleSelectControl,
+	Flex,
+	Button,
+	Popover,
 	BaseControl,
-	ToggleControl,
 	InputControl,
+	ToggleControl,
+	ToggleSelectControl,
 } from '../../index';
 import type { TFieldItem } from '../types';
-import SearchIcon from '../icons/search';
 import { maskShapeIcons, selectedShape } from '../utils';
 import { Shape } from './shape';
-import RepeatIcon from '../../background-control/icons/repeat';
-import RepeatXIcon from '../../background-control/icons/repeat-x';
-import RepeatYIcon from '../../background-control/icons/repeat-y';
-import RepeatNoIcon from '../../background-control/icons/repeat-no';
-import FitCoverIcon from '../icons/fit-cover';
-import FitContainIcon from '../icons/fit-contain';
-import FitNormalIcon from '../icons/fit-normal';
 import PositionButtonControl from '../../position-button';
 
 const Fields: TFieldItem = memo<TFieldItem>(
@@ -48,8 +40,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			getControlPath,
 		} = useControlContext();
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			onChange,
+			valueCleanup,
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+		} = useContext(RepeaterContext);
 
 		const [isSelectShapeOpen, setIsSelectShapeOpen] = useState(false);
 
@@ -114,7 +111,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</span>
 
 						<span className={controlInnerClassNames('search-icon')}>
-							<SearchIcon />
+							<Icon icon="search" iconSize="20" />
 						</span>
 					</Button>
 
@@ -147,6 +144,8 @@ const Fields: TFieldItem = memo<TFieldItem>(
 														controlId,
 														repeaterId,
 														itemId,
+														onChange,
+														valueCleanup,
 														value: {
 															...item,
 															shape: {
@@ -193,25 +192,28 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						{
 							label: __('Custom', 'blockera'),
 							value: 'custom',
-							icon: <FitNormalIcon />,
+							icon: <Icon icon="fit-normal" size="18" />,
 						},
 						{
 							label: __('Cover', 'blockera'),
 							value: 'cover',
-							icon: <FitCoverIcon />,
+							icon: <Icon icon="fit-cover" size="18" />,
 						},
 						{
 							label: __('Contain', 'blockera'),
 							value: 'contain',
-							icon: <FitContainIcon />,
+							icon: <Icon icon="fit-contain" size="18" />,
 						},
 					]}
 					defaultValue={defaultRepeaterItemValue.size}
-					onChange={(size) =>
+					onChange={(size, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: {
 								...item,
 								size,
@@ -248,11 +250,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								defaultValue={
 									defaultRepeaterItemValue['size-width']
 								}
-								onChange={(width) =>
+								onChange={(width, ref) =>
 									changeRepeaterItem({
+										ref,
 										controlId,
 										repeaterId,
 										itemId,
+										onChange,
+										valueCleanup,
 										value: {
 											...item,
 											'size-width': width,
@@ -290,11 +295,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								defaultValue={
 									defaultRepeaterItemValue['size-height']
 								}
-								onChange={(height) =>
+								onChange={(height, ref) =>
 									changeRepeaterItem({
+										ref,
 										controlId,
 										repeaterId,
 										itemId,
+										onChange,
+										valueCleanup,
 										value: {
 											...item,
 											'size-height': height,
@@ -333,30 +341,40 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								'blockera'
 							),
 							value: 'repeat',
-							icon: <RepeatIcon />,
+							icon: <Icon icon="repeat" iconSize="18" />,
 						},
 						{
 							label: __('Horizontally', 'blockera'),
 							value: 'repeat-x',
-							icon: <RepeatXIcon />,
+							icon: (
+								<Icon
+									icon="repeat-horizontally"
+									iconSize="18"
+								/>
+							),
 						},
 						{
 							label: __('Vertically', 'blockera'),
 							value: 'repeat-y',
-							icon: <RepeatYIcon />,
+							icon: (
+								<Icon icon="repeat-vertically" iconSize="18" />
+							),
 						},
 						{
 							label: __("Don't Tile", 'blockera'),
 							value: 'no-repeat',
-							icon: <RepeatNoIcon />,
+							icon: <Icon icon="repeat-no" iconSize="18" />,
 						},
 					]}
 					defaultValue={defaultRepeaterItemValue.repeat}
-					onChange={(repeat) =>
+					onChange={(repeat, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, repeat },
 						})
 					}
@@ -380,11 +398,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					columns="columns-2"
-					onChange={(position) => {
+					onChange={(position, ref) => {
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, position },
 						});
 					}}
@@ -417,11 +438,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						defaultValue={
 							defaultRepeaterItemValue['horizontally-flip']
 						}
-						onChange={(hFlip) =>
+						onChange={(hFlip, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									'horizontally-flip': hFlip,
@@ -451,11 +475,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						defaultValue={
 							defaultRepeaterItemValue['vertically-flip']
 						}
-						onChange={(vFlip) =>
+						onChange={(vFlip, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: {
 									...item,
 									'vertically-flip': vFlip,

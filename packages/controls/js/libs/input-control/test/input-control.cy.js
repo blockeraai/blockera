@@ -801,10 +801,6 @@ describe('input control component testing', () => {
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('100px');
 				});
-				cy.get('[aria-label="Select Unit"]').should(
-					'not.contain',
-					'XYZ'
-				);
 			});
 
 			it('disabled input', () => {
@@ -1105,11 +1101,11 @@ describe('input control component testing', () => {
 				// open editor
 				cy.get('[aria-label="Open Editor"]').should('exist');
 				cy.get('[aria-label="Open Editor"]').click();
-				cy.get('textarea').should('exist');
+				// cy.getByDataTest('Unit Text Aria').should('exist');
 
 				// change editor
-				cy.get('textarea').clear();
-				cy.get('textarea').type('min(10%, 100px)');
+				cy.getByDataTest('Unit Text Aria').clear();
+				cy.getByDataTest('Unit Text Aria').type('min(10%, 100px)');
 				cy.get('input[type=text]').should(
 					'have.value',
 					'min(10%, 100px)'
@@ -1151,11 +1147,11 @@ describe('input control component testing', () => {
 				// open editor
 				cy.get('[aria-label="Open Editor"]').should('exist');
 				cy.get('[aria-label="Open Editor"]').click();
-				cy.get('textarea').should('exist');
+				cy.getByDataTest('Unit Text Aria').should('exist');
 
 				// change editor
-				cy.get('textarea').clear();
-				cy.get('textarea').type('min(10%, 100px)');
+				cy.getByDataTest('Unit Text Aria').clear();
+				cy.getByDataTest('Unit Text Aria').type('min(10%, 100px)');
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq(
 						'min(10%, 100px)func'

@@ -8,11 +8,11 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { ColorIndicator } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
+import { ColorIndicator } from '../../';
 import { prepValueForHeader } from '../../repeater-control/utils';
 
 const RepeaterItemHeader = ({
@@ -38,7 +38,7 @@ const RepeaterItemHeader = ({
 				className={controlInnerClassNames('header-icon')}
 				data-cy="header-icon"
 			>
-				<ColorIndicator value={color} />
+				<ColorIndicator value={color} test={true} />
 			</span>
 
 			<span

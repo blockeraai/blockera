@@ -2,9 +2,9 @@
 /**
  * External dependencies
  */
-import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -13,39 +13,22 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import {
-	isEquals,
-	isFunction,
-	isUndefined,
-	useLateEffect,
-} from '@blockera/utils';
-import {
-	Popover,
-	Button,
-	Tooltip,
-	ConditionalWrapper,
-} from '@blockera/components';
+import { isUndefined } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import {
-	isSpecialUnit,
-	getUnitByValue,
-	extractNumberAndUnit,
-	getFirstUnit,
-} from '../utils';
-import { NumberInput } from './number-input';
+import { Popover, Button, Tooltip, ConditionalWrapper } from '../../';
 import { OtherInput } from './other-input';
-import type { InnerInputControlProps } from '../types';
-import MaximizeIcon from '../icons/maximize';
-import TextAreaControl from '../../textarea-control';
+import { NumberInput } from './number-input';
 import NoticeControl from '../../notice-control';
-import { ControlContextProvider } from '../../../context';
+import type { InputControlProps } from '../types';
+import TextAreaControl from '../../textarea-control';
+import { ControlContextProvider, useControlContext } from '../../../context';
+import { isSpecialUnit, getUnitByValue, extractNumberAndUnit } from '../utils';
 
 export function UnitInput({
-	value,
-	setValue,
 	defaultValue,
 	range,
 	noBorder,
@@ -60,168 +43,108 @@ export function UnitInput({
 	arrows,
 	size,
 	children,
+	onChange,
+	isValidValue,
 	...props
-}: InnerInputControlProps): MixedElement {
-	const extractedValue = extractNumberAndUnit(value);
-
-	const firstUnit = getFirstUnit(units);
-
-	// Unit is not provided and there is a unit with empty value
-	// clear unit to let the empty unit be selected
-	if (extractedValue?.unitSimulated && firstUnit.value === '') {
-		extractedValue.unit = '';
-	}
-
-	const extractedNoUnit =
-		isUndefined(extractedValue.unit) || extractedValue.unit === '';
-
-	const initialUnit = extractedNoUnit
-		? firstUnit
-		: getUnitByValue(extractedValue.unit, units);
-
-	const [unitValue, setUnitValue] = useState(initialUnit);
-
-	// this state used to cache last unit value
-	// because while value is empty, control should be on the user selected unit and not reset
-	const [unitCache, setUnitCache] = useState(initialUnit);
-
-	const [inputValue, setInputValue] = useState(extractedValue.value);
-
-	useLateEffect(() => {
-		if (isSpecialUnit(unitValue.value) && value !== unitValue.value) {
-			setValue(unitValue.value);
-		} else if (inputValue === '' && value) {
-			setValue('');
-			setUnitCache(unitValue);
-		} else if (
-			(extractedNoUnit || !value) &&
-			inputValue &&
-			(unitValue.value || extractedValue.unit === '')
-		) {
-			setValue(inputValue + unitValue.value);
-		} else if (!extractedNoUnit && value && value !== unitValue.value) {
-			setValue(inputValue + unitValue.value);
-		}
-	}, [unitValue, inputValue]); // eslint-disable-line
-
-	// validator checking
-	useLateEffect(() => {
-		if (validator) {
-			let isValid = false;
-
-			if (isFunction(validator)) {
-				isValid = validator(value);
-			}
-
-			// Update isValidValue based on the result of validation
-			setIsValidValue(isValid);
-
-			return undefined;
-		}
-
-		if (!isEquals(initialUnit, unitValue)) {
-			if (value === '') {
-				setUnitValue(unitCache);
-			} else {
-				setUnitValue(initialUnit);
-			}
-		}
-
-		if (extractedValue?.value !== inputValue && '' !== inputValue) {
-			setInputValue(extractedValue.value);
-		}
-
-		if (extractedValue?.value && '' === inputValue) {
-			setInputValue(extractedValue.value);
-		}
-
-		return undefined;
-	}, [value]); // eslint-disable-line
+}: InputControlProps): MixedElement {
+	const { value, setValue } = useControlContext({
+		defaultValue,
+		onChange,
+	});
+	const { unitValue, inputValue } = value;
+	const [isMaximizeVisible, setIsMaximizeVisible] = useState(false);
 
 	const onChangeSelect = (newUnitValue: string) => {
+		newUnitValue = getUnitByValue(newUnitValue, units);
+
 		// new unit is func
 		// then append old unit to value and show it in the input
 		if (
-			newUnitValue === 'func' &&
+			newUnitValue.value === 'func' &&
 			inputValue !== '' &&
 			!isSpecialUnit(unitValue.value)
 		) {
-			setUnitCache(getUnitByValue(newUnitValue, units));
-			setUnitValue(getUnitByValue(newUnitValue, units));
-			setInputValue(inputValue + unitValue.value);
-			return;
+			return setValue({
+				...value,
+				unitValue: newUnitValue,
+				inputValue: inputValue + unitValue.value,
+			});
 		}
 
 		// old unit is func and new unit is not special
 		// extract number from old input value (func value)
 		if (
-			!isSpecialUnit(newUnitValue) &&
+			!isSpecialUnit(newUnitValue.value) &&
 			unitValue.value === 'func' &&
 			inputValue !== ''
 		) {
 			const extractedValue = extractNumberAndUnit(inputValue);
 
-			setUnitValue(getUnitByValue(newUnitValue, units));
-			setUnitCache(getUnitByValue(newUnitValue, units));
-
-			if (extractedValue.unit !== 'func') {
-				setInputValue(extractedValue.value);
-			} else {
-				setInputValue('');
-			}
-			return;
+			return setValue({
+				...value,
+				unitValue: newUnitValue,
+				inputValue:
+					'func' !== extractedValue.unit ? extractedValue.value : '',
+			});
 		}
 
 		// old unit is func and new is not
 		// then extract number value from value and keep it for next change
 		if (
-			isSpecialUnit(newUnitValue) &&
+			isSpecialUnit(newUnitValue.value) &&
 			!isSpecialUnit(unitValue.value) &&
 			unitValue.value === 'func'
 		) {
 			const extractedValue = extractNumberAndUnit(inputValue);
-			setInputValue(extractedValue.value); // save value for next change
-			setUnitValue(getUnitByValue(newUnitValue, units));
-			setUnitCache(getUnitByValue(newUnitValue, units));
-			return;
+
+			return setValue({
+				...value,
+				unitValue: newUnitValue,
+				inputValue: extractedValue.value,
+			});
 		}
 
 		if (
-			newUnitValue === 'func' &&
+			newUnitValue.value === 'func' &&
 			isSpecialUnit(unitValue.value) &&
 			inputValue !== ''
 		) {
-			setInputValue('');
-			setUnitValue(getUnitByValue(newUnitValue, units));
-			// setUnitCache(getUnitByValue(newUnitValue, units));
-			return;
+			return setValue({
+				...value,
+				inputValue: '',
+				unitValue: newUnitValue,
+			});
 		}
 
-		setUnitValue(getUnitByValue(newUnitValue, units));
-		setUnitCache(getUnitByValue(newUnitValue, units));
-
-		// old unit is special && current is not && value is empty
-		// then try to catch value from default value
-		if (
-			isSpecialUnit(unitValue.value) &&
-			!isSpecialUnit(newUnitValue) &&
-			inputValue === '' &&
-			defaultValue !== ''
-		) {
-			const extractedValue = extractNumberAndUnit(defaultValue);
-			setInputValue(extractedValue.value);
-		}
+		setValue({
+			...value,
+			inputValue,
+			// old unit is special && current is not && value is empty
+			// then try to catch value from default value
+			unitValue:
+				'' === inputValue &&
+				'' !== defaultValue &&
+				isSpecialUnit(unitValue.value) &&
+				!isSpecialUnit(newUnitValue.value)
+					? extractNumberAndUnit(defaultValue).value
+					: newUnitValue,
+		});
 	};
 
 	const isActiveRange =
 		range && !isSpecialUnit(unitValue.value) && unitValue.value !== 'func';
 
-	const [isValidValue, setIsValidValue] = useState(true);
-
-	const [isMaximizeVisible, setIsMaximizeVisible] = useState('');
-
-	const toggleIsMaximizeVisible = () => {
-		setIsMaximizeVisible((state) => !state);
+	const onChangeValue = (
+		newValue: string,
+		_isMaximizeVisible: boolean = false
+	): void => {
+		setIsMaximizeVisible(_isMaximizeVisible);
+		setValue({
+			...value,
+			inputValue: newValue,
+			unitValue:
+				'' === newValue && unitValue?.notFound ? unitValue : unitValue,
+		});
 	};
 
 	function getInputActions() {
@@ -267,16 +190,6 @@ export function UnitInput({
 								)}
 							</>
 						))}
-
-						{!isUndefined(unitValue?.notFound) &&
-							unitValue.notFound === true && (
-								<option
-									key={unitValue.value}
-									value={unitValue.value}
-								>
-									{unitValue.label}
-								</option>
-							)}
 					</select>
 				</ConditionalWrapper>
 
@@ -285,9 +198,9 @@ export function UnitInput({
 						{!['small', 'extra-small', 'input'].includes(size) && (
 							<Button
 								size="input"
-								onClick={() => {
-									toggleIsMaximizeVisible();
-								}}
+								onClick={() =>
+									setIsMaximizeVisible(!isMaximizeVisible)
+								}
 								className={controlInnerClassNames(
 									'maximise-btn',
 									isMaximizeVisible && 'is-open-popover'
@@ -297,7 +210,7 @@ export function UnitInput({
 								label={__('Open Editor', 'blockera')}
 								disabled={disabled}
 							>
-								<MaximizeIcon />
+								<Icon icon="maximize" iconSize="18" />
 							</Button>
 						)}
 
@@ -309,9 +222,7 @@ export function UnitInput({
 								className={controlInnerClassNames(
 									'typography-popover'
 								)}
-								onClose={() => {
-									setIsMaximizeVisible(false);
-								}}
+								onClose={() => setIsMaximizeVisible(false)}
 							>
 								<ControlContextProvider
 									value={{
@@ -320,11 +231,11 @@ export function UnitInput({
 									}}
 								>
 									<TextAreaControl
+										data-test={'Unit Text Aria'}
 										defaultValue={defaultValue}
-										onChange={(value) => {
-											setInputValue(value);
-											return value;
-										}}
+										onChange={(newValue) =>
+											onChangeValue(newValue, true)
+										}
 										height={100}
 									/>
 								</ControlContextProvider>
@@ -372,9 +283,9 @@ export function UnitInput({
 									className
 								)}
 								aria-label={__('Open Editor', 'blockera')}
-								onClick={() => {
-									toggleIsMaximizeVisible();
-								}}
+								onClick={() =>
+									setIsMaximizeVisible(!isMaximizeVisible)
+								}
 							>
 								{__('Edit', 'blockera')}
 							</span>
@@ -391,7 +302,9 @@ export function UnitInput({
 						<>
 							{unitValue.format === 'number' ? (
 								<NumberInput
+									id={'inputValue'}
 									value={inputValue}
+									isValidValue={isValidValue}
 									disabled={disabled}
 									className={controlInnerClassNames(
 										'single-input',
@@ -400,7 +313,7 @@ export function UnitInput({
 									)}
 									min={min}
 									max={max}
-									setValue={setInputValue}
+									setValue={onChangeValue}
 									range={isActiveRange}
 									drag={drag}
 									float={float}
@@ -412,7 +325,8 @@ export function UnitInput({
 							) : (
 								<OtherInput
 									value={inputValue}
-									setValue={setInputValue}
+									setValue={onChangeValue}
+									isValidValue={isValidValue}
 									disabled={disabled}
 									className={controlInnerClassNames(
 										'single-input',

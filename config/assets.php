@@ -1,32 +1,53 @@
 <?php
 
+/**
+ * Direct access is not allowed.
+ *
+ * @package config/assets.php
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 return [
-	'list'      => [
-		'utils',
-		'hooks',
-		'blocks',
-		'editor',
-		'blockera',
-		'controls',
-		'bootstrap',
-		'core-data',
-		'classnames',
-		'data-editor',
-		'style-engine',
-		'editor-styles',
-		'components-styles',
-		'editor-extensions',
+	'editor' => [
+		'list'      => [
+			'utils',
+			'classnames',
+			'data-editor',
+			'env',
+			'icons',
+			'data',
+			'controls',
+			'editor',
+			'blocks-core',
+			'bootstrap',
+			'blockera',
+			'editor-styles',
+			'controls-styles',
+			'components-styles',
+			'value-addons-styles',
+		],
+		'with-deps' => [],
 	],
-	'with-deps' => [
-		'blockera'          => [
-			'@blockera/editor-extensions',
+	'admin'  => [
+		'list'      => [
+			'utils',
+			'classnames',
+			'data-editor',
+			'env',
+			'data',
+			'icons',
+			'controls',
+			'bootstrap',
+			'wordpress',
+			'blockera-admin',
+			'controls-styles',
+			'wordpress-styles',
+			'components-styles',
+			'blockera-admin-styles',
 		],
-		'editor-extensions' => [
-			'@blockera/controls',
-			'@blockera/editor',
-		],
-		'editor-styles'     => [
-			'@blockera/components-styles',
-		]
+		'with-deps' => [],
 	],
 ];

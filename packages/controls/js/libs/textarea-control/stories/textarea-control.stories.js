@@ -1,18 +1,17 @@
 /**
  * External dependencies
  */
-
 import { nanoid } from 'nanoid';
 
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
+import { Flex } from '../../';
 import { ControlContextProvider, TextAreaControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
@@ -160,20 +159,4 @@ export const TextArea = {
 			</ControlContextProvider>
 		</Flex>
 	),
-};
-
-export const Play = {
-	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: 'test text',
-		},
-	},
-	decorators: [
-		WithInspectorStyles,
-		WithStoryContextProvider,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => <ControlWithHooks Control={TextAreaControl} {...args} />,
 };

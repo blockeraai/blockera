@@ -13,16 +13,16 @@ import type { TSelectControlProps } from '../types';
  * Blockera dependencies
  */
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
-import { Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
+import { Flex } from '../../';
 import { default as InheritIcon } from './icons/inherit';
-import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { ControlContextProvider, SelectControl } from '../../../index';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 

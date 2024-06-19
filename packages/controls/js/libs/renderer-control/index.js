@@ -41,14 +41,16 @@ export const RendererControl = ({
 		dispatch: { modifyControlValue },
 	} = useControlContext();
 
-	const handleOnChange = (newValue) => {
-		modifyControlValue({
-			controlId,
-			value: {
-				...value,
-				[id]: newValue,
-			},
-		});
+	const handleOnChange = (newValue: any) => {
+		if (id !== undefined) {
+			modifyControlValue({
+				controlId,
+				value: {
+					...value,
+					[(id: string)]: newValue,
+				},
+			});
+		}
 	};
 
 	// Assume conditions falsy!

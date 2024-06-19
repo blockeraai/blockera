@@ -10,11 +10,11 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import {
+	Flex,
 	BaseControl,
 	InputControl,
 	useControlContext,
 } from '@blockera/controls';
-import { Flex } from '@blockera/components';
 import { controlClassNames } from '@blockera/classnames';
 
 export default function ({

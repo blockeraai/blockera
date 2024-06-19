@@ -10,7 +10,6 @@ import type { Element } from 'react';
  * Internal dependencies
  */
 import { useControlContext } from '../../../context';
-import { getTypeOptions, getTimingOptions } from '../utils';
 import { RepeaterContext } from '../../repeater-control/context';
 import { InputControl, SelectControl } from '../../index';
 import type { TFieldItem } from '../types';
@@ -23,8 +22,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			onChange,
+			valueCleanup,
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+			customProps: {
+				getTransitionTypeOptions,
+				getTransitionTimingOptions,
+			},
+		} = useContext(RepeaterContext);
 
 		return (
 			<div
@@ -39,12 +47,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					labelPopoverTitle={__('Transition Property', 'blockera')}
 					labelDescription={<LabelDescription />}
 					columns="columns-2"
-					options={getTypeOptions()}
-					onChange={(type) =>
+					options={getTransitionTypeOptions()}
+					onChange={(type, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, type },
 						})
 					}
@@ -78,11 +89,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={0}
 					max={5000}
-					onChange={(duration) =>
+					onChange={(duration, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, duration },
 						})
 					}
@@ -116,12 +130,15 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					columns="columns-2"
-					options={getTimingOptions()}
-					onChange={(timing) =>
+					options={getTransitionTimingOptions()}
+					onChange={(timing, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, timing },
 						})
 					}
@@ -161,11 +178,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={0}
 					max={5000}
-					onChange={(delay) =>
+					onChange={(delay, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, delay },
 						})
 					}

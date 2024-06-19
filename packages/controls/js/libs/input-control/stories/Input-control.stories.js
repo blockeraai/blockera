@@ -7,17 +7,15 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { ControlContextProvider, InputControl } from '../../../index';
+import { Flex, ControlContextProvider, InputControl } from '../../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
-import { fireEvent, waitFor, within } from '@storybook/testing-library';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const { WithInspectorStyles, WithStoryContextProvider, SharedDecorators } =
 	Decorators;
@@ -1224,9 +1222,8 @@ export const ValueAddonSupport = {
 						label="Field"
 						{...args}
 						defaultValue=""
-						controlAddonTypes={['variable', 'dynamic-value']}
+						controlAddonTypes={['variable']}
 						variableTypes={['font-size', 'spacing']}
-						dynamicValueTypes={['text']}
 					/>
 				</ControlContextProvider>
 
@@ -1256,111 +1253,11 @@ export const ValueAddonSupport = {
 						label="Field"
 						{...args}
 						defaultValue=""
-						controlAddonTypes={['variable', 'dynamic-value']}
+						controlAddonTypes={['variable']}
 						variableTypes={['font-size']}
-						dynamicValueTypes={['all']}
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: nanoid(),
-						value: {
-							settings: {
-								name: 'Post Title',
-								id: 'post-title',
-								reference: {
-									type: 'core',
-								},
-								category: 'post',
-								type: 'text',
-							},
-							id: 'post-title',
-							isValueAddon: true,
-							valueType: 'dynamic-value',
-						},
-					}}
-				>
-					<ControlWithHooks
-						Control={InputControl}
-						type="text"
-						label="Post Title"
-						{...args}
-						defaultValue=""
-						controlAddonTypes={['dynamic-value']}
-						dynamicValueTypes={['all']}
 					/>
 				</ControlContextProvider>
 			</Flex>
 		</Flex>
 	),
 };
-
-export const PlayNumber = {
-	args: {
-		type: 'number',
-		unitType: 'general',
-		controlInfo: {
-			name: nanoid(),
-			value: '20px',
-		},
-		range: true,
-		arrows: true,
-	},
-	decorators: [
-		WithInspectorStyles,
-		WithStoryContextProvider,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-	render: (args) => (
-		<ControlWithHooks
-			Control={InputControl}
-			controlAddonTypes={['variable', 'dynamic-value']}
-			variableTypes={[
-				'color',
-				'font-size',
-				'width-size',
-				'spacing',
-				'linear-gradient',
-				'radial-gradient',
-			]}
-			dynamicValueTypes={['text']}
-			{...args}
-		/>
-	),
-	play: async ({ canvasElement, step }) => {
-		const canvas = within(canvasElement);
-
-		const currentValue = canvas.getByTestId('current-value');
-		const input = canvas.getByRole('spinbutton', {
-			type: 'number',
-		});
-
-		await step('Story data is available', async () => {
-			await expect(currentValue).toBeInTheDocument();
-		});
-
-		await step('Input control test', async () => {
-			await expect(input).toBeInTheDocument();
-
-			await expect(input).toHaveValue(20);
-			await expect(currentValue).toHaveTextContent('20');
-
-			// type 30
-			fireEvent.change(input, {
-				target: {
-					value: '30',
-				},
-			});
-			await waitFor(
-				async () => {
-					await expect(input).toHaveValue(30);
-					await expect(currentValue).toHaveTextContent('30');
-				},
-				{ timeout: 1000 }
-			);
-		});
-	},
-};
-PlayNumber.storyName = 'Play';

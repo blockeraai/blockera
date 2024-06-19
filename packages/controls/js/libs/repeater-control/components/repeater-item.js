@@ -52,6 +52,7 @@ const RepeaterItem = ({
 		mode,
 		design,
 		onChange,
+		valueCleanup,
 		repeaterId,
 		popoverTitle,
 		PromoComponent,
@@ -120,6 +121,8 @@ const RepeaterItem = ({
 				fromIndex,
 				toIndex,
 				repeaterId,
+				onChange,
+				valueCleanup,
 			});
 		}
 	};
@@ -264,12 +267,11 @@ const RepeaterItem = ({
 							}
 						);
 
-						modifyControlValue({
+						return onChange({
+							modifyControlValue,
 							controlId,
 							value: newItems,
 						});
-
-						return onChange(newItems);
 					}
 
 					return true;

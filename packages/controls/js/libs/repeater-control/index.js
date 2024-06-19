@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
@@ -15,34 +16,25 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { isFunction } from '@blockera/utils';
-import { Button, Grid } from '@blockera/components';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies.
  */
-import PlusIcon from './icons/plus';
+import { Button, Grid } from '../';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
+import { repeaterOnChange } from './store/reducers/utils';
 import { cleanupRepeater, isEnabledPromote } from './utils';
 
 /**
  * Types
  */
-import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
+import { defaultItemValue } from './default-item-value';
 import LabelControlContainer from '../label-control/label-control-container';
-
-export const defaultItemValue = {
-	isOpen: true,
-	display: true,
-	cloneable: true,
-	isVisible: true,
-	deletable: true,
-	isSelected: false,
-	selectable: false,
-	visibilitySupport: true,
-};
+import type { RepeaterControlProps, TRepeaterDefaultStateProps } from './types';
 
 export default function RepeaterControl(
 	props: RepeaterControlProps
@@ -88,7 +80,19 @@ export default function RepeaterControl(
 		PromoComponent,
 		//
 		className,
+		...customProps
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
+
+	const { getEntity } = select('blockera-core/data');
+	const {
+		settings: {
+			general: { disableProHints },
+		},
+	} = getEntity('blockera') || {
+		settings: {
+			general: { disableProHints: false },
+		},
+	};
 
 	if (onRoot) {
 		repeaterId = undefined;
@@ -141,6 +145,7 @@ export default function RepeaterControl(
 		controlId,
 		repeaterId,
 		overrideItem,
+		valueCleanup,
 		getControlPath,
 		PromoComponent,
 		itemIdGenerator,
@@ -151,13 +156,16 @@ export default function RepeaterControl(
 		defaultRepeaterItemValue,
 		repeaterItems, // value
 		//
-		customProps: { ...props },
+		customProps,
 	};
 	const [count, setCount] = useState(0);
+
+	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
 
 	const addNewButtonOnClick = () => {
 		if (isEnabledPromote(PromoComponent, repeaterItems)) {
 			setCount(count + 1);
+			setDisableAddNewItem(true);
 
 			return;
 		}
@@ -193,12 +201,19 @@ export default function RepeaterControl(
 				defaultRepeaterItemValue?.type ||
 				itemsCount + '';
 
+			const newValue = {
+				...clonedRepeaterItems,
+				[newItemId]: value,
+			};
+
 			modifyControlValue({
 				controlId,
-				value: {
-					...clonedRepeaterItems,
-					[newItemId]: value,
-				},
+				value: newValue,
+			});
+
+			repeaterOnChange(newValue, {
+				onChange,
+				valueCleanup,
 			});
 		};
 
@@ -220,8 +235,10 @@ export default function RepeaterControl(
 			}
 
 			addRepeaterItem({
+				onChange,
 				controlId,
 				repeaterId,
+				valueCleanup,
 				value: getDynamicDefaultRepeaterItem(
 					repeaterItems?.length,
 					defaultRepeaterItemValue
@@ -236,8 +253,10 @@ export default function RepeaterControl(
 		}
 
 		addRepeaterItem({
+			onChange,
 			controlId,
 			repeaterId,
+			valueCleanup,
 			itemIdGenerator,
 			value: defaultRepeaterItemValue,
 		});
@@ -327,7 +346,12 @@ export default function RepeaterControl(
 									<Button
 										size="extra-small"
 										className={controlInnerClassNames(
-											'btn-add'
+											'btn-add',
+											{
+												'is-deactivate':
+													disableProHints &&
+													disableAddNewItem,
+											}
 										)}
 										{...(maxItems !== -1 &&
 										Object.values(repeaterItems)?.length >=
@@ -336,7 +360,7 @@ export default function RepeaterControl(
 											: {})}
 										onClick={addNewButtonOnClick}
 									>
-										<PlusIcon />
+										<Icon icon="plus" iconSize="20" />
 										{addNewButtonLabel ||
 											__('Add New', 'blockera')}
 									</Button>
@@ -392,7 +416,12 @@ export default function RepeaterControl(
 									<Button
 										size="extra-small"
 										className={controlInnerClassNames(
-											'btn-add'
+											'btn-add',
+											{
+												'is-deactivate':
+													disableProHints &&
+													disableAddNewItem,
+											}
 										)}
 										{...(maxItems !== -1 &&
 										repeaterItems?.length >= maxItems
@@ -406,7 +435,7 @@ export default function RepeaterControl(
 										}
 										onClick={addNewButtonOnClick}
 									>
-										<PlusIcon />
+										<Icon icon="plus" iconSize="20" />
 									</Button>
 								)}
 
@@ -418,7 +447,8 @@ export default function RepeaterControl(
 					</>
 				)}
 			</div>
-			{count >= 1 &&
+			{!disableProHints &&
+				count >= 1 &&
 				isEnabledPromote(PromoComponent, repeaterItems) &&
 				PromoComponent({
 					isOpen: count >= 1,

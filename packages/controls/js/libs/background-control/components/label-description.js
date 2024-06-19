@@ -9,13 +9,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import TypeImageIcon from '../icons/type-image';
-import TypePatternIcon from '../icons/type-pattern';
-import TypeSlideshowIcon from '../icons/type-slideshow';
-import TypeVideoIcon from '../icons/type-video';
-import TypeLinearGradientIcon from '../icons/type-linear-gradient';
-import TypeRadialGradientIcon from '../icons/type-radial-gradient';
-import TypeMeshGradientIcon from '../icons/type-mesh-gradient';
+import { Icon } from '@blockera/icons';
 
 export function LabelDescription(): MixedElement {
 	return (
@@ -27,7 +21,7 @@ export function LabelDescription(): MixedElement {
 				)}
 			</p>
 			<h3>
-				<TypeImageIcon />
+				<Icon icon="background-image" iconSize="18" />
 				{__('Image', 'blockera')}
 			</h3>
 			<p>
@@ -37,19 +31,7 @@ export function LabelDescription(): MixedElement {
 				)}
 			</p>
 			<h3>
-				<TypePatternIcon />
-				{__('Image Pattern', 'blockera')}
-				<span>{__('Coming soon…', 'blockera')}</span>
-			</h3>
-			<p>
-				{__(
-					'Repeats a small image to form a continuous pattern across the background.',
-					'blockera'
-				)}
-			</p>
-
-			<h3>
-				<TypeSlideshowIcon />
+				<Icon icon="background-slideshow" iconSize="18" />
 				{__('Image Slideshow', 'blockera')}
 				<span>{__('Coming soon…', 'blockera')}</span>
 			</h3>
@@ -60,7 +42,7 @@ export function LabelDescription(): MixedElement {
 				)}
 			</p>
 			<h3>
-				<TypeVideoIcon />
+				<Icon icon="background-video" iconSize="18" />
 				{__('Video', 'blockera')}
 				<span>{__('Coming soon…', 'blockera')}</span>
 			</h3>
@@ -71,7 +53,7 @@ export function LabelDescription(): MixedElement {
 				)}
 			</p>
 			<h3>
-				<TypeLinearGradientIcon />
+				<Icon icon="background-linear-gradient" iconSize="18" />
 				{__('Linear Gradient', 'blockera')}
 			</h3>
 			<p>
@@ -81,7 +63,7 @@ export function LabelDescription(): MixedElement {
 				)}
 			</p>
 			<h3>
-				<TypeRadialGradientIcon />
+				<Icon icon="background-radial-gradient" iconSize="18" />
 				{__('Radial Gradient', 'blockera')}
 			</h3>
 			<p>
@@ -91,7 +73,7 @@ export function LabelDescription(): MixedElement {
 				)}
 			</p>
 			<h3>
-				<TypeMeshGradientIcon />
+				<Icon icon="background-mesh-gradient" iconSize="18" />
 				{__('Mesh Gradient', 'blockera')}
 			</h3>
 			<p>

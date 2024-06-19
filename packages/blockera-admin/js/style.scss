@@ -1,0 +1,126 @@
+@use "sass:math";
+@import "~@wordpress/base-styles/colors";
+@import "~@wordpress/base-styles/variables";
+@import "~@wordpress/base-styles/mixins";
+@import "~@wordpress/base-styles/breakpoints";
+@import "~@wordpress/base-styles/animations";
+@import "~@wordpress/base-styles/z-index";
+@import "~@wordpress/components/src/style";
+@import "~@blockera/controls/js/libs/switch/style.scss";
+
+
+#blockera-admin-settings-container {
+	font-size: 14px;
+	margin: 10px auto;
+	width: 100%;
+	max-width: 1140px;
+
+	.blockera-settings-header {
+
+		.blockera-settings-header-links {
+			margin-top: 12px;
+
+			.blockera-settings-knowledge-button {
+				margin-right: 10px;
+				background-color: #ffffff;
+				border: solid 1px var(--blockera-settings-border-color-parimary);
+			}
+		}
+	}
+
+	.blockera-settings-tabs {
+
+		.blockera-settings-active-panel {
+			flex: auto;
+			width: 80%;
+			min-width: 0;
+			align-self: flex-start;
+
+			.blockera-settings-panel-container {
+
+				.blockera-settings-general.section {
+					background-color: #ffffff;
+					padding: 30px;
+
+					.section-title {
+						margin: 0 0 20px 0;
+						padding: 0;
+					}
+
+					.section-desc {
+						margin: -10px 0 20px 0;
+					}
+				}
+
+				.blockera-settings-general.control-wrapper {
+
+					.blockera-settings-block-visibility.user-roles {
+						display: flex;
+						flex-direction: column;
+						gap: 8px;
+						padding-left: 47px;
+					}
+				}
+
+				.blockera-block-category {
+
+					.blockera-block-category-buttons {
+						display: flex;
+
+						.blockera-block-category-button {
+							border: none;
+							cursor: pointer;
+							font-weight: 600;
+							background: transparent;
+							color: rgba(0, 0, 0, 0.11);
+
+							&.is-active {
+								color: #000000;
+							}
+						}
+					}
+				}
+
+				.blockera-block-category-items {
+					gap: 15px;
+					flex-wrap: wrap;
+					resize: horizontal;
+					margin: 0 0 15px 0;
+
+					.blockera-block-category-item {
+						flex: auto;
+						width: 40%;
+						min-width: 0;
+						padding: 12px 13px;
+						background-color: #ffffff;
+
+						.blockera-block {
+							display: flex;
+							gap: 10px;
+							align-items: center;
+							justify-content: center;
+
+							.blockera-block-icon {
+								display: flex;
+
+								svg {
+									width: 22px;
+									height: 22px;
+								}
+							}
+
+							.blockera-block-type {
+								margin: 0;
+								display: flex;
+							}
+						}
+
+						.blockera-block-control {
+							display: flex;
+						}
+					}
+				}
+			}
+		}
+	}
+}

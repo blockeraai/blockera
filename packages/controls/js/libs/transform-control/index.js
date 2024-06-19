@@ -8,18 +8,20 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { controlClassNames } from '@blockera/classnames';
 import { isObject } from '@blockera/utils';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import RepeaterItemHeader from './components/header';
-import RepeaterControl from '../repeater-control';
+import { PromotionPopover } from '../';
 import Fields from './components/fields';
+import RepeaterControl from '../repeater-control';
+import RepeaterItemHeader from './components/header';
 import type { TransformControlProps } from './types';
-import { LabelDescription } from './components/label-description';
 import { cleanupRepeaterItem } from '../repeater-control/utils';
+import { LabelDescription } from './components/label-description';
+import { getRepeaterActiveItemsCount } from '../repeater-control/helpers';
 
 export default function TransformControl({
 	defaultRepeaterItemValue = {
@@ -89,6 +91,30 @@ export default function TransformControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			valueCleanup={valueCleanup}
+			id={'transform'}
+			PromoComponent={({
+				items,
+				onClose = () => {},
+				isOpen = false,
+			}): MixedElement | null => {
+				if (getRepeaterActiveItemsCount(items) < 1) {
+					return null;
+				}
+
+				return (
+					<PromotionPopover
+						heading={__('Multiple 2D & 3D Transforms', 'blockera')}
+						featuresList={[
+							__('Multiple transforms', 'blockera'),
+							__('Advanced transform effects', 'blockera'),
+							__('Advanced features', 'blockera'),
+							__('Premium blocks', 'blockera'),
+						]}
+						isOpen={isOpen}
+						onClose={onClose}
+					/>
+				);
+			}}
 			{...props}
 		/>
 	);

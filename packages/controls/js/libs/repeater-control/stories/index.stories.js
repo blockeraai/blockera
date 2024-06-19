@@ -9,19 +9,19 @@ import { nanoid } from 'nanoid';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import { Flex } from '../../';
+import { STORE_NAME } from '../store';
+import { RepeaterContext } from '../context';
+import { default as InheritIcon } from './icons/inherit';
+import { InputControl, RepeaterControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { ControlContextProvider, useControlContext } from '../../../context';
-import { InputControl, RepeaterControl } from '../../index';
-import { RepeaterContext } from '../context';
-import { STORE_NAME } from '../store';
-import { default as InheritIcon } from './icons/inherit';
-import CloneIcon from '../icons/clone';
 
 const { WithInspectorStyles, WithPopoverDataProvider, SharedDecorators } =
 	Decorators;
@@ -630,7 +630,7 @@ export const DesignLarge = {
 							{...args}
 							design="large"
 							label="Repeater Title"
-							icon={<CloneIcon />}
+							icon={<Icon icon="clone" />}
 							description={
 								'Block will animate when it enters into view.'
 							}
@@ -657,7 +657,7 @@ export const DesignLarge = {
 							{...args}
 							design="large"
 							label=""
-							icon={<CloneIcon />}
+							icon={<Icon icon="clone" />}
 							description={
 								'Block will animate when it enters into view.'
 							}
@@ -684,7 +684,7 @@ export const DesignLarge = {
 							{...args}
 							design="large"
 							label="Repeater"
-							icon={<CloneIcon />}
+							icon={<Icon icon="clone" />}
 							description={
 								'Block will animate when it enters into view.'
 							}
@@ -768,6 +768,8 @@ export const All = {
 			<AccordionFilled.render {...AccordionFilled.args} />
 
 			<AccordionOpenItem.render {...AccordionOpenItem.args} />
+
+			<DesignLarge.render {...DesignLarge.args} />
 		</Flex>
 	),
 };

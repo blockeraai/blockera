@@ -8,39 +8,8 @@ const styleEntries = {};
 const editorIframeStyles = {};
 const styleFiles = glob.sync('./packages/**/*.scss');
 
-function getPackage(name) {
-	const packageFiles = [];
-
-	styleFiles.forEach((file) => {
-		if (-1 === file.indexOf(name)) {
-			return;
-		}
-
-		// Exclude dev packages.
-		if (-1 !== file.indexOf('dev-')) {
-			return;
-		}
-
-		packageFiles.push(file);
-	});
-
-	return packageFiles;
-}
-
-styleFiles.map((currentEntry) => {
-	if (
-		/editor-\w+.scss/.test(currentEntry) &&
-		-1 !== currentEntry.indexOf('packages/editor/')
-	) {
-		Object.assign(editorIframeStyles, {
-			'editor-styles': [
-				...(editorIframeStyles['editor-styles'] || []),
-				currentEntry,
-			],
-		});
-	}
-
-	const regex = new RegExp('packages\\/(\\w+)', 'g');
+styleFiles.forEach((currentEntry) => {
+	const regex = new RegExp('packages\\/(\\w+(?:-\\w+|))', 'g');
 
 	let m;
 
@@ -56,13 +25,19 @@ styleFiles.map((currentEntry) => {
 				return;
 			}
 
+			// Exclude dev packages.
+			if (-1 !== match.indexOf('dev-')) {
+				return;
+			}
+
 			Object.assign(styleEntries, {
-				[`${match}-styles`]: getPackage(match),
+				[`${match}-styles`]: [
+					...(styleEntries[`${match}-styles`] || []),
+					currentEntry,
+				],
 			});
 		});
 	}
-
-	return currentEntry;
 });
 
 module.exports = {

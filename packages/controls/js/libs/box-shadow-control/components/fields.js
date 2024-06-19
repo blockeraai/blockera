@@ -1,14 +1,15 @@
 // @flow
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
+import type { Element } from 'react';
 
 /**
- * External dependencies
+ * Blockera dependencies
  */
-import type { Element } from 'react';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -17,8 +18,6 @@ import { RepeaterContext } from '../../repeater-control/context';
 import { ColorControl, InputControl, ToggleSelectControl } from '../../index';
 import { useControlContext } from '../../../context';
 import type { TFieldItem } from '../types';
-import XCoordinateIcon from '../icons/coordinate-x';
-import YCoordinateIcon from '../icons/coordinate-y';
 
 const Fields: TFieldItem = memo<TFieldItem>(
 	({ itemId, item }: TFieldItem): Element<any> => {
@@ -27,8 +26,13 @@ const Fields: TFieldItem = memo<TFieldItem>(
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			onChange,
+			valueCleanup,
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+		} = useContext(RepeaterContext);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -65,11 +69,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							value: 'inner',
 						},
 					]}
-					onChange={(type) =>
+					onChange={(type, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, type },
 						})
 					}
@@ -81,7 +88,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'x')}
 					singularId={'x'}
-					label={<XCoordinateIcon />}
+					label={<Icon icon="coordinate-x" />}
 					labelPopoverTitle={__('Horizontal Offset', 'blockera')}
 					labelDescription={
 						<>
@@ -104,11 +111,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={-100}
 					max={100}
-					onChange={(x) =>
+					onChange={(x, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, x },
 						})
 					}
@@ -120,7 +130,7 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'y')}
 					singularId={'y'}
-					label={<YCoordinateIcon />}
+					label={<Icon icon="coordinate-y" />}
 					labelPopoverTitle={__('Vertical Offset', 'blockera')}
 					labelDescription={
 						<>
@@ -143,11 +153,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={-100}
 					max={100}
-					onChange={(y) =>
+					onChange={(y, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, y },
 						})
 					}
@@ -181,11 +194,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={0}
 					max={100}
-					onChange={(blur) =>
+					onChange={(blur, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, blur },
 						})
 					}
@@ -219,11 +235,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					range={true}
 					min={-100}
 					max={100}
-					onChange={(spread) =>
+					onChange={(spread, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, spread },
 						})
 					}
@@ -254,11 +273,14 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						</>
 					}
 					columns="columns-2"
-					onChange={(color) =>
+					onChange={(color, ref) =>
 						changeRepeaterItem({
+							ref,
 							controlId,
 							repeaterId,
 							itemId,
+							onChange,
+							valueCleanup,
 							value: { ...item, color },
 						})
 					}

@@ -5,13 +5,12 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { OutlineControl } from '../../index';
+import { Flex, OutlineControl } from '../../index';
 import { ControlContextProvider } from '../../../context';
 import { STORE_NAME } from '../../repeater-control/store';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';

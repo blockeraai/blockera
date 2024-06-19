@@ -11,17 +11,18 @@ import { memo, useEffect, useContext } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex, FeatureWrapper } from '@blockera/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isValid as isValidVariable } from '@blockera/editor';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import { isValid as isValidVariable } from '../../../';
 import {
+	Flex,
 	BaseControl,
 	InputControl,
 	MediaImageControl,
@@ -36,35 +37,20 @@ import { useControlContext } from '../../../context';
 import { RepeaterContext } from '../../repeater-control/context';
 
 // Icons
-import RepeatIcon from '../icons/repeat';
 import type { FieldItem } from '../types';
-import RepeatXIcon from '../icons/repeat-x';
-import RepeatYIcon from '../icons/repeat-y';
-import RepeatNoIcon from '../icons/repeat-no';
-import { default as RegenerateIcon } from '../icons/regenerate';
 import { default as MeshGradientFields } from './mesh-gradient/fields';
 import { default as MeshGradientHeader } from './mesh-gradient/header';
-import LinearGradientRepeatIcon from '../icons/linear-gradient-repeat';
-import RadialGradientRepeatIcon from '../icons/radial-gradient-repeat';
-import LinearGradientNoRepeatIcon from '../icons/linear-gradient-no-repeat';
-import RadialGradientNoRepeatIcon from '../icons/radial-gradient-no-repeat';
 import {
 	generateGradient,
 	getRandomHexColor,
 } from './mesh-gradient/mesh-generator';
-import RadialGradientClosestSideIcon from '../icons/radial-gradient-closest-side';
-import RadialGradientFarthestSideIcon from '../icons/radial-gradient-farthest-side';
-import RadialGradientClosestCornerIcon from '../icons/radial-gradient-closest-corner';
-import RadialGradientFarthestCornerIcon from '../icons/radial-gradient-farthest-corner';
 import { LabelDescription } from './label-description';
-import FitNormalIcon from '../icons/fit-normal';
-import FitCoverIcon from '../icons/fit-cover';
-import FitContainIcon from '../icons/fit-contain';
 import { meshGradientProvider } from '../';
 
 const Fields: FieldItem = memo<FieldItem>(
 	({ itemId, item }: FieldItem): Element<any> => {
 		const {
+			components: { FeatureWrapper },
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
@@ -73,8 +59,13 @@ const Fields: FieldItem = memo<FieldItem>(
 		const blockeraBackground =
 			getExtension('backgroundConfig')?.blockeraBackground;
 
-		const { repeaterId, getControlId, defaultRepeaterItemValue } =
-			useContext(RepeaterContext);
+		const {
+			onChange,
+			valueCleanup,
+			repeaterId,
+			getControlId,
+			defaultRepeaterItemValue,
+		} = useContext(RepeaterContext);
 
 		useEffect(() => {
 			if (undefined === item['mesh-gradient-colors']) {
@@ -91,6 +82,8 @@ const Fields: FieldItem = memo<FieldItem>(
 			}
 
 			changeRepeaterItem({
+				onChange,
+				valueCleanup,
 				controlId,
 				repeaterId,
 				itemId,
@@ -99,6 +92,7 @@ const Fields: FieldItem = memo<FieldItem>(
 					'mesh-gradient': generateGradient(length),
 				},
 			});
+			// eslint-disable-next-line
 		}, [item['mesh-gradient-colors']]);
 
 		return (
@@ -113,8 +107,11 @@ const Fields: FieldItem = memo<FieldItem>(
 					labelDescription={<LabelDescription />}
 					columns="columns-2"
 					options={blockeraBackground?.config?.types}
-					onChange={(type) =>
+					onChange={(type, ref) =>
 						changeRepeaterItem({
+							ref,
+							onChange,
+							valueCleanup,
 							controlId,
 							repeaterId,
 							itemId,
@@ -150,8 +147,11 @@ const Fields: FieldItem = memo<FieldItem>(
 							}
 							field="empty"
 							columns="columns-1"
-							onChange={(image) => {
+							onChange={(image, ref) => {
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -202,21 +202,33 @@ const Fields: FieldItem = memo<FieldItem>(
 								{
 									label: __('Custom', 'blockera'),
 									value: 'custom',
-									icon: <FitNormalIcon />,
+									icon: (
+										<Icon icon="fit-normal" iconSize="18" />
+									),
 								},
 								{
 									label: __('Cover', 'blockera'),
 									value: 'cover',
-									icon: <FitCoverIcon />,
+									icon: (
+										<Icon icon="fit-cover" iconSize="18" />
+									),
 								},
 								{
 									label: __('Contain', 'blockera'),
 									value: 'contain',
-									icon: <FitContainIcon />,
+									icon: (
+										<Icon
+											icon="fit-contain"
+											iconSize="18"
+										/>
+									),
 								},
 							]}
-							onChange={(size) =>
+							onChange={(size, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -263,8 +275,11 @@ const Fields: FieldItem = memo<FieldItem>(
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										unitType="background-size"
-										onChange={(width) =>
+										onChange={(width, ref) =>
 											changeRepeaterItem({
+												ref,
+												onChange,
+												valueCleanup,
 												controlId,
 												repeaterId,
 												itemId,
@@ -309,8 +324,11 @@ const Fields: FieldItem = memo<FieldItem>(
 										columns="columns-1"
 										className="control-first label-center small-gap"
 										unitType="background-size"
-										onChange={(height) =>
+										onChange={(height, ref) =>
 											changeRepeaterItem({
+												ref,
+												onChange,
+												valueCleanup,
 												controlId,
 												repeaterId,
 												itemId,
@@ -358,8 +376,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
-							onChange={(newValue) => {
+							onChange={(newValue, ref) => {
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -407,17 +428,27 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'repeat',
-									icon: <RepeatIcon />,
+									icon: <Icon icon="repeat" iconSize="18" />,
 								},
 								{
 									label: __('Horizontally', 'blockera'),
 									value: 'repeat-x',
-									icon: <RepeatXIcon />,
+									icon: (
+										<Icon
+											icon="repeat-horizontally"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __('Vertically', 'blockera'),
 									value: 'repeat-y',
-									icon: <RepeatYIcon />,
+									icon: (
+										<Icon
+											icon="repeat-vertically"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __(
@@ -425,12 +456,17 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'no-repeat',
-									icon: <RepeatNoIcon />,
+									icon: (
+										<Icon icon="repeat-no" iconSize="18" />
+									),
 								},
 							]}
 							//
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -489,8 +525,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -531,8 +570,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							field="empty"
-							onChange={(newValue: string) => {
+							onChange={(newValue: string, ref) => {
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -579,12 +621,16 @@ const Fields: FieldItem = memo<FieldItem>(
 							}
 							columns="columns-2"
 							className={
-								isValidVariable(item['linear-gradient']) &&
-								'blockera-control-is-not-active'
+								isValidVariable(item['linear-gradient'])
+									? 'blockera-control-is-not-active'
+									: ''
 							}
-							onChange={(newValue: string) => {
+							onChange={(newValue: string, ref) => {
 								// update linear gradient value
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -635,16 +681,29 @@ const Fields: FieldItem = memo<FieldItem>(
 									{
 										label: __("Don't Repeat", 'blockera'),
 										value: 'no-repeat',
-										icon: <LinearGradientNoRepeatIcon />,
+										icon: (
+											<Icon
+												icon="linear-gradient-no-repeat"
+												iconSize="18"
+											/>
+										),
 									},
 									{
 										label: __('Repeat', 'blockera'),
 										value: 'repeat',
-										icon: <LinearGradientRepeatIcon />,
+										icon: (
+											<Icon
+												icon="linear-gradient-repeat"
+												iconSize="18"
+											/>
+										),
 									},
 								]}
-								onChange={(newValue) =>
+								onChange={(newValue, ref) =>
 									changeRepeaterItem({
+										ref,
+										onChange,
+										valueCleanup,
 										controlId,
 										repeaterId,
 										itemId,
@@ -655,8 +714,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									})
 								}
 								className={
-									isValidVariable(item['linear-gradient']) &&
-									'blockera-control-is-not-active'
+									isValidVariable(item['linear-gradient'])
+										? 'blockera-control-is-not-active'
+										: ''
 								}
 							/>
 
@@ -722,8 +782,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -764,8 +827,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							field="empty"
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -815,8 +881,11 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
-							onChange={(newValue) => {
+							onChange={(newValue, ref) => {
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -827,8 +896,9 @@ const Fields: FieldItem = memo<FieldItem>(
 								});
 							}}
 							className={
-								isValidVariable(item['radial-gradient']) &&
-								'blockera-control-is-not-active'
+								isValidVariable(item['radial-gradient'])
+									? 'blockera-control-is-not-active'
+									: ''
 							}
 						/>
 
@@ -859,7 +929,10 @@ const Fields: FieldItem = memo<FieldItem>(
 										)}
 									</p>
 									<h3>
-										<RadialGradientFarthestCornerIcon />
+										<Icon
+											icon="radial-gradient-farthest-corner"
+											iconSize="18"
+										/>
 										{__('Farthest Corner', 'blockera')}
 									</h3>
 									<p>
@@ -869,7 +942,10 @@ const Fields: FieldItem = memo<FieldItem>(
 										)}
 									</p>
 									<h3>
-										<RadialGradientFarthestSideIcon />
+										<Icon
+											icon="radial-gradient-farthest-side"
+											iconSize="18"
+										/>
 										{__('Farthest Side', 'blockera')}
 									</h3>
 									<p>
@@ -879,7 +955,10 @@ const Fields: FieldItem = memo<FieldItem>(
 										)}
 									</p>
 									<h3>
-										<RadialGradientClosestCornerIcon />
+										<Icon
+											icon="radial-gradient-closest-corner"
+											iconSize="18"
+										/>
 										{__('Closest Corner', 'blockera')}
 									</h3>
 									<p>
@@ -889,7 +968,10 @@ const Fields: FieldItem = memo<FieldItem>(
 										)}
 									</p>
 									<h3>
-										<RadialGradientClosestSideIcon />
+										<Icon
+											icon="radial-gradient-closest-side"
+											iconSize="18"
+										/>
 										{__('Closest Side', 'blockera')}
 									</h3>
 									<p>
@@ -908,7 +990,12 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'farthest-corner',
-									icon: <RadialGradientFarthestCornerIcon />,
+									icon: (
+										<Icon
+											icon="radial-gradient-farthest-corner"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __(
@@ -916,7 +1003,12 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'farthest-side',
-									icon: <RadialGradientFarthestSideIcon />,
+									icon: (
+										<Icon
+											icon="radial-gradient-farthest-side"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __(
@@ -924,7 +1016,12 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'closest-corner',
-									icon: <RadialGradientClosestCornerIcon />,
+									icon: (
+										<Icon
+											icon="radial-gradient-closest-corner"
+											iconSize="18"
+										/>
+									),
 								},
 								{
 									label: __(
@@ -932,11 +1029,19 @@ const Fields: FieldItem = memo<FieldItem>(
 										'blockera'
 									),
 									value: 'closest-side',
-									icon: <RadialGradientClosestSideIcon />,
+									icon: (
+										<Icon
+											icon="radial-gradient-closest-side"
+											iconSize="18"
+										/>
+									),
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -947,8 +1052,9 @@ const Fields: FieldItem = memo<FieldItem>(
 								})
 							}
 							className={
-								isValidVariable(item['radial-gradient']) &&
-								'blockera-control-is-not-active'
+								isValidVariable(item['radial-gradient'])
+									? 'blockera-control-is-not-active'
+									: ''
 							}
 						/>
 
@@ -991,16 +1097,29 @@ const Fields: FieldItem = memo<FieldItem>(
 									{
 										label: __("Don't Repeat", 'blockera'),
 										value: 'no-repeat',
-										icon: <RadialGradientNoRepeatIcon />,
+										icon: (
+											<Icon
+												icon="radial-gradient-no-repeat"
+												iconSize="18"
+											/>
+										),
 									},
 									{
 										label: __('Repeat', 'blockera'),
 										value: 'repeat',
-										icon: <RadialGradientRepeatIcon />,
+										icon: (
+											<Icon
+												icon="radial-gradient-repeat"
+												iconSize="18"
+											/>
+										),
 									},
 								]}
-								onChange={(newValue) =>
+								onChange={(newValue, ref) =>
 									changeRepeaterItem({
+										ref,
+										onChange,
+										valueCleanup,
 										controlId,
 										repeaterId,
 										itemId,
@@ -1011,8 +1130,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									})
 								}
 								className={
-									isValidVariable(item['radial-gradient']) &&
-									'blockera-control-is-not-active'
+									isValidVariable(item['radial-gradient'])
+										? 'blockera-control-is-not-active'
+										: ''
 								}
 							/>
 
@@ -1078,8 +1198,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,
@@ -1106,14 +1229,19 @@ const Fields: FieldItem = memo<FieldItem>(
 								)}
 								style={((): Object => {
 									return {
-										backgroundColor:
-											item['mesh-gradient-colors']['--c0']
-												.color,
+										backgroundColor: !item[
+											'mesh-gradient-colors'
+										]
+											? 'transparent'
+											: item['mesh-gradient-colors'][
+													'--c0'
+											  ].color,
 										backgroundImage: item['mesh-gradient'],
 										...Object.assign(
 											// $FlowFixMe
 											...Object.values(
-												item['mesh-gradient-colors']
+												item['mesh-gradient-colors'] ||
+													{}
 											).map((color, index): Object => ({
 												['--c' + index]: color.color,
 											}))
@@ -1122,6 +1250,8 @@ const Fields: FieldItem = memo<FieldItem>(
 								})()}
 								onClick={() => {
 									changeRepeaterItem({
+										onChange,
+										valueCleanup,
 										controlId,
 										repeaterId,
 										itemId,
@@ -1134,7 +1264,8 @@ const Fields: FieldItem = memo<FieldItem>(
 										'mesh-generator-preview-regenerate'
 									)}
 								>
-									<RegenerateIcon /> {__('Regenerate')}
+									<Icon icon="regenerate" iconSize="18" />{' '}
+									{__('Regenerate')}
 								</span>
 							</div>
 						</BaseControl>
@@ -1144,6 +1275,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							config={
 								blockeraBackground?.config?.meshGradientColors
 							}
+							showText="always"
 						>
 							<BaseControl
 								label=""
@@ -1264,8 +1396,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									value: 'fixed',
 								},
 							]}
-							onChange={(newValue) =>
+							onChange={(newValue, ref) =>
 								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
 									controlId,
 									repeaterId,
 									itemId,

@@ -30,6 +30,8 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 
 		$configIncludes = array(
 			'app'         => $config_dir . '/config/app.php',
+			'menu'        => $config_dir . '/config/menu.php',
+			'panel'       => $config_dir . '/config/panel.php',
 			'assets'      => $config_dir . '/config/assets.php',
 			'entities'    => $config_dir . '/config/entities.php',
 			'breakpoints' => $config_dir . '/config/breakpoints.php',
@@ -124,35 +126,6 @@ if ( ! function_exists( 'blockera_get_value_addon_real_value' ) ) {
 		}
 
 		if ( is_array( $value ) && ! empty( $value['isValueAddon'] ) && ! empty( $value['valueType'] ) ) {
-
-			if ( 'dynamic-value' === $value['valueType'] ) {
-
-				$valueAddons = $blockeraApp->getRegisteredValueAddons( $value['valueType'] );
-
-				if ( empty( $valueAddons ) ) {
-
-					return '';
-				}
-
-				$groupName = $value['settings']['group'];
-
-				$groupItems = $valueAddons[ $groupName ]['items'];
-
-				foreach ( $groupItems as $name => $item ) {
-
-					if ( $name !== $value['name'] ) {
-
-						continue;
-					}
-
-					$callback = $item['properties']['callback'];
-
-					if ( is_callable( $callback ) ) {
-
-						return $callback( $item['instance'] );
-					}
-				}
-			}
 
 			// todo validate that variable is currently available or not
 			if ( 'variable' === $value['valueType'] && isset( $value['settings']['var'] ) ) {
@@ -255,5 +228,52 @@ if ( ! function_exists( 'blockera_camel_case_join' ) ) {
 		}
 
 		return $firstPart . $secondaryPart;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_array_deep_merge' ) ) {
+
+	/**
+	 * Get resulting of array deeply merge.
+	 *
+	 * @param array $array1 the source array
+	 * @param array $array2 the array to merge with source array.
+	 *
+	 * @return array the merged array.
+	 */
+	function blockera_get_array_deep_merge( array $array1, array $array2 ): array {
+
+		$merged = $array1;
+
+		foreach ( $array2 as $key => $value ) {
+
+			if ( is_array( $value ) && isset( $merged[ $key ] ) && is_array( $merged[ $key ] ) ) {
+
+				$merged[ $key ] = blockera_get_array_deep_merge( $merged[ $key ], $value );
+
+			} else {
+
+				$merged[ $key ] = $value;
+			}
+		}
+
+		return $merged;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_dist_assets' ) ) {
+
+	/**
+	 * Get dist directory assets array.
+	 *
+	 * @return array the dist directory assets list.
+	 */
+	function blockera_get_dist_assets(): array {
+
+		return array_map( function ( string $asset_dir ): string {
+
+			return basename( $asset_dir );
+
+		}, glob( blockera_core_config( 'app.dist_path' ) . '*' ) );
 	}
 }

@@ -10,13 +10,13 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
-import { setValueAddon, useValueAddon } from '@blockera/editor';
 
 /**
  * Internal dependencies
  */
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
+import { setValueAddon, useValueAddon } from '../../';
 import type { GradientBarControlProps } from './types';
 
 export default function GradientBarControl({
@@ -36,7 +36,6 @@ export default function GradientBarControl({
 	//
 	controlAddonTypes,
 	variableTypes,
-	dynamicValueTypes,
 }: GradientBarControlProps): MixedElement {
 	const {
 		value,
@@ -62,7 +61,6 @@ export default function GradientBarControl({
 		setValue: (newValue: any): void =>
 			setValueAddon(newValue, setValue, defaultValue),
 		variableTypes,
-		dynamicValueTypes,
 		onChange: setValue,
 	});
 

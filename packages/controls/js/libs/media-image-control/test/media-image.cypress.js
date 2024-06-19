@@ -1,4 +1,3 @@
-// @flow
 /**
  * Internal dependencies
  */
@@ -7,15 +6,12 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	createPost,
-} from '../../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('media-image', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
-	// TODO we will add these tests when adding visual tests
-	// context('Rendering', () => {});
 
 	context('Functional', () => {
 		beforeEach(() => {
@@ -172,4 +168,3 @@ describe('media-image', () => {
 		});
 	});
 });
-

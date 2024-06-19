@@ -7,7 +7,12 @@ import { prepare, update } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { generatedDetailsId, hasLimitation, hasRepeaterId } from './utils';
+import {
+	generatedDetailsId,
+	hasLimitation,
+	hasRepeaterId,
+	repeaterOnChange,
+} from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
 	const targetRepeater = prepare(action.repeaterId, controlValue);
@@ -53,11 +58,16 @@ export function cloneItem(state = {}, action) {
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action)) {
+		const newValue = repeaterOnChange(
+			handleActionIncludeRepeaterId(controlInfo.value, action),
+			action
+		);
+
 		return {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: handleActionIncludeRepeaterId(controlInfo.value, action),
+				value: newValue,
 			},
 		};
 	}
@@ -87,6 +97,17 @@ export function cloneItem(state = {}, action) {
 	if (clonedItem?.selectable) {
 		controlInfo.value[action.itemId].isSelected = false;
 	}
+
+	repeaterOnChange(
+		{
+			...controlInfo.value,
+			[uniqueId]: {
+				...clonedItem,
+				order: Object.keys(controlInfo.value).length,
+			},
+		},
+		action
+	);
 
 	//by default behavior of "cloneRepeaterItem" action
 	return {

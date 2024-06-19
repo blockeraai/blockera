@@ -1,12 +1,12 @@
 {
-  	"name": "blockera/wordpress",
+	"name": "@blockera/wordpress",
 	"version": "1.0.0",
-  	"description": "The utilities for blockera on WordPress CMS.",
+	"description": "The utilities for blockera on WordPress CMS.",
 	"author": "The Blockera Contributors",
 	"license": "ISC",
 	"keywords": [
 		"blockera",
-	  	"wordpress"
+		"wordpress"
 	],
 	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/wordpress/README.md",
 	"repository": {

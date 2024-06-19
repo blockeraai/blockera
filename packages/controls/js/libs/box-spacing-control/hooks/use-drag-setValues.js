@@ -3,11 +3,11 @@
 /**
  *  Dependencies
  */
-import { isValid } from '@blockera/editor';
 
 /**
  * Internal Dependencies
  */
+import { isValid } from '../../../';
 import { extractNumberAndUnit } from '../../input-control/utils';
 
 type Property =

@@ -1,8 +1,8 @@
 // @flow
-import type { TItem } from './control-types';
+import type { TransitionControlItemValue } from './control-types';
 
 export type THeaderItem = {
-	item: TItem,
+	item: TransitionControlItemValue,
 	itemId?: number,
 	isOpen?: boolean,
 	setOpen: (isOpen: boolean) => void,

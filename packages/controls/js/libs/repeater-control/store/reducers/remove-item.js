@@ -8,7 +8,11 @@ import { prepare, update } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { countPropertiesWithPattern, hasRepeaterId } from './utils';
+import {
+	hasRepeaterId,
+	repeaterOnChange,
+	countPropertiesWithPattern,
+} from './utils';
 
 function regeneratedIds(value: Object, action: Object): Object {
 	const { itemIdGenerator = null } = action;
@@ -68,11 +72,16 @@ export function removeItem(state: Object = {}, action: Object): Object {
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action)) {
+		const newValue = repeaterOnChange(
+			handleActionIncludeRepeaterId(controlInfo.value, action),
+			action
+		);
+
 		return {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: handleActionIncludeRepeaterId(controlInfo.value, action),
+				value: newValue,
 			},
 		};
 	}
@@ -81,12 +90,16 @@ export function removeItem(state: Object = {}, action: Object): Object {
 
 	delete value[action.itemId];
 
+	const newValue = regeneratedIds(value, action);
+
+	repeaterOnChange(newValue, action);
+
 	//by default behavior of "removeRepeaterItem" action
 	return {
 		...state,
 		[action.controlId]: {
 			...controlInfo,
-			value: regeneratedIds(value, action),
+			value: newValue,
 		},
 	};
 }

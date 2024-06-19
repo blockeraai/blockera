@@ -9,12 +9,12 @@ import { memo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { ColorIndicator } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { ColorIndicator } from '../../../';
 import type { MeshGradientHeaderItem } from '../../types';
 
 const RepeaterItemHeader: MeshGradientHeaderItem = memo<MeshGradientHeaderItem>(

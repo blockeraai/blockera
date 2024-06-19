@@ -6,17 +6,9 @@ import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Internal Dependencies
+ * Blockera dependencies
  */
-import BlurIcon from '../icons/blur';
-import DropShadowIcon from '../icons/drop-shadow';
-import BrightnessIcon from '../icons/brightness';
-import ContrastIcon from '../icons/contrast';
-import HueRotateIcon from '../icons/hue-rotate';
-import SaturationIcon from '../icons/saturate';
-import GrayscaleIcon from '../icons/grayscale';
-import InvertIcon from '../icons/invert';
-import SepiaIcon from '../icons/sepia';
+import { Icon } from '@blockera/icons';
 
 export function FilterLabelDescription({
 	labelDescription,
@@ -27,7 +19,7 @@ export function FilterLabelDescription({
 		<>
 			{labelDescription}
 			<h3>
-				<BlurIcon />
+				<Icon icon="filter-blur" iconSize="18" />
 				{__('Blur', 'blockera')}
 			</h3>
 			<p>
@@ -36,8 +28,9 @@ export function FilterLabelDescription({
 					'blockera'
 				)}
 			</p>
+
 			<h3>
-				<DropShadowIcon />
+				<Icon icon="filter-drop-shadow" iconSize="18" />
 				{__('Drop Shadow', 'blockera')}
 			</h3>
 			<p>
@@ -52,18 +45,21 @@ export function FilterLabelDescription({
 					'blockera'
 				)}
 			</p>
+
 			<h3>
-				<BrightnessIcon />
+				<Icon icon="filter-brightness" iconSize="18" />
 				{__('Brightness', 'blockera')}
 			</h3>
 			<p>{__('It adjusts the brightness of the block.', 'blockera')}</p>
+
 			<h3>
-				<ContrastIcon />
+				<Icon icon="filter-contrast" iconSize="18" />
 				{__('Contrast', 'blockera')}
 			</h3>
 			<p>{__('It adjusts the contrast of the block.', 'blockera')}</p>
+
 			<h3>
-				<HueRotateIcon />
+				<Icon icon="filter-hue-rotate" iconSize="18" />
 				{__('Hue Rotate', 'blockera')}
 			</h3>
 			<p>
@@ -72,13 +68,15 @@ export function FilterLabelDescription({
 					'blockera'
 				)}
 			</p>
+
 			<h3>
-				<SaturationIcon />
+				<Icon icon="filter-saturate" iconSize="18" />
 				{__('Saturation', 'blockera')}
 			</h3>
 			<p>{__('It adjusts the saturation level of block.', 'blockera')}</p>
+
 			<h3>
-				<GrayscaleIcon />
+				<Icon icon="filter-grayscale" iconSize="18" />
 				{__('Grayscale', 'blockera')}
 			</h3>
 			<p>
@@ -87,8 +85,9 @@ export function FilterLabelDescription({
 					'blockera'
 				)}
 			</p>
+
 			<h3>
-				<InvertIcon />
+				<Icon icon="filter-invert" iconSize="18" />
 				{__('Invert', 'blockera')}
 			</h3>
 			<p>
@@ -97,8 +96,9 @@ export function FilterLabelDescription({
 					'blockera'
 				)}
 			</p>
+
 			<h3>
-				<SepiaIcon />
+				<Icon icon="filter-sepia" iconSize="18" />
 				{__('Sepia', 'blockera')}
 			</h3>
 			<p>

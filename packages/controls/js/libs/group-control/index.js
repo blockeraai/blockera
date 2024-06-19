@@ -15,16 +15,14 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button, Popover } from '@blockera/components';
 import { useOutsideClick, isFunction } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import { Button, Popover } from '../';
 import type { GroupControlProps } from './types';
-import { default as PopoverOpenIcon } from './icons/popover-open';
-import { default as AccordionOpenIcon } from './icons/accordion-open';
-import { default as AccordionCloseIcon } from './icons/accordion-close';
 
 const GroupControl: ComponentType<any> = memo(
 	({
@@ -62,8 +60,10 @@ const GroupControl: ComponentType<any> = memo(
 				return headerOpenIcon;
 			}
 
-			if (mode === 'accordion') return <AccordionOpenIcon />;
-			else if (mode === 'popover') return <PopoverOpenIcon />;
+			if (mode === 'accordion')
+				return <Icon library="wp" icon="chevron-up" iconSize="20" />;
+			else if (mode === 'popover')
+				return <Icon icon="gear" iconSize="18" />;
 
 			return '';
 		};
@@ -73,8 +73,10 @@ const GroupControl: ComponentType<any> = memo(
 				return headerCloseIcon;
 			}
 
-			if (mode === 'accordion') return <AccordionCloseIcon />;
-			else if (mode === 'popover') return <PopoverOpenIcon />;
+			if (mode === 'accordion')
+				return <Icon library="wp" icon="chevron-down" iconSize="20" />;
+			else if (mode === 'popover')
+				return <Icon icon="gear" iconSize="18" />;
 
 			return '';
 		};

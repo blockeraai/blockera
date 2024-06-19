@@ -11,6 +11,7 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -19,7 +20,6 @@ import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { CustomPropertyControlProps } from './types';
-import PropertyIcon from './icons/property';
 
 export default function CustomPropertyControl({
 	id,
@@ -44,7 +44,7 @@ export default function CustomPropertyControl({
 			popoverTitle={
 				popoverTitle || (
 					<>
-						<PropertyIcon />
+						<Icon icon="css-3" size="24" />
 						{__('CSS Property', 'blockera')}
 					</>
 				)

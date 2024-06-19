@@ -15,16 +15,14 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button, Flex } from '@blockera/components';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { BaseControl } from '../index';
+import { Button, Flex, BaseControl } from '../';
 import { useControlContext } from '../../context';
 import { addAngle, subtractAngle } from './utils';
-import { default as RotateLeftIcon } from './icons/rotate-left';
-import { default as RotateRightIcon } from './icons/rotate-right';
 import type { AnglePickerControlProps } from './types';
 
 export default function AnglePickerControl({
@@ -101,19 +99,27 @@ export default function AnglePickerControl({
 								'btn-rotate-left'
 							)}
 							showTooltip={true}
-							label={__('Rotate Left', 'blockera')}
-							icon={<RotateLeftIcon />}
+							label={__('Rotate Anti-clockwise', 'blockera')}
+							icon={
+								<Icon
+									icon="rotate-anti-clockwise"
+									iconSize="24"
+								/>
+							}
 							onClick={() => {
 								setValue(subtractAngle(value, 45));
 							}}
 						/>
+
 						<Button
 							className={controlInnerClassNames(
 								'btn-rotate-right'
 							)}
 							showTooltip={true}
-							label={__('Rotate Right', 'blockera')}
-							icon={<RotateRightIcon />}
+							label={__('Rotate Clockwise', 'blockera')}
+							icon={
+								<Icon icon="rotate-clockwise" iconSize="24" />
+							}
 							onClick={() => {
 								setValue(addAngle(value, 45));
 							}}

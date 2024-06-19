@@ -37,8 +37,7 @@ const IconLibrary = ({
 
 	const [isRendered, setRendered] = useState(false);
 
-	const { handleIconSelect, suggestionsQuery, isCurrentIcon } =
-		useContext(IconContext);
+	const { handleIconSelect, isCurrentIcon } = useContext(IconContext);
 
 	if (!lazyLoad && !isRendered) {
 		fetchLibraryIcons();
@@ -53,7 +52,7 @@ const IconLibrary = ({
 		iconsStack.push(
 			getLibraryIcons({
 				library,
-				query: searchQuery ? searchQuery : suggestionsQuery,
+				query: searchQuery,
 				onClick: handleIconSelect,
 				isCurrentIcon,
 			})

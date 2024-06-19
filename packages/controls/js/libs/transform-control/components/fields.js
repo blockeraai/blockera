@@ -6,21 +6,16 @@ import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
+
+/**
  * Internal dependencies
  */
-import { default as MoveIcon } from '../icons/move';
-import { default as SkewIcon } from '../icons/skew';
 import { useControlContext } from '../../../context';
-import { default as ScaleIcon } from '../icons/scale';
-import { default as RotateIcon } from '../icons/rotate';
 import { RepeaterContext } from '../../repeater-control/context';
-import { default as XCoordinateIcon } from '../icons/coordinate-x';
-import { default as YCoordinateIcon } from '../icons/coordinate-y';
-import { default as ZCoordinateIcon } from '../icons/coordinate-z';
 import { InputControl, ToggleSelectControl } from '../../index';
-import { default as RotateXCoordinateIcon } from '../icons/coordinate-rotate-x';
-import { default as RotateYCoordinateIcon } from '../icons/coordinate-rotate-y';
-import { default as RotateZCoordinateIcon } from '../icons/coordinate-rotate-z';
 import type { TransformControlRepeaterItemValue } from '../types';
 import { LabelDescription } from './label-description';
 
@@ -36,8 +31,13 @@ const Fields = ({
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 
-	const { repeaterId, getControlId, defaultRepeaterItemValue } =
-		useContext(RepeaterContext);
+	const {
+		onChange,
+		valueCleanup,
+		repeaterId,
+		getControlId,
+		defaultRepeaterItemValue,
+	} = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
@@ -53,29 +53,32 @@ const Fields = ({
 					{
 						label: __('Move', 'blockera'),
 						value: 'move',
-						icon: <MoveIcon />,
+						icon: <Icon icon="transform-move" />,
 					},
 					{
 						label: __('Scale', 'blockera'),
 						value: 'scale',
-						icon: <ScaleIcon />,
+						icon: <Icon icon="transform-scale" />,
 					},
 					{
 						label: __('Rotate', 'blockera'),
 						value: 'rotate',
-						icon: <RotateIcon />,
+						icon: <Icon icon="transform-rotate" />,
 					},
 					{
 						label: __('Skew', 'blockera'),
 						value: 'skew',
-						icon: <SkewIcon />,
+						icon: <Icon icon="transform-skew" />,
 					},
 				]}
-				onChange={(type) =>
+				onChange={(type, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, type },
 					})
 				}
@@ -88,7 +91,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'move-x')}
 						singularId={'move-x'}
-						label={<XCoordinateIcon />}
+						label={<Icon icon="coordinate-x" />}
 						labelPopoverTitle={__('Move Horizontally', 'blockera')}
 						labelDescription={
 							<>
@@ -106,11 +109,14 @@ const Fields = ({
 						range={true}
 						min={-300}
 						max={300}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'move-x': newValue },
 							})
 						}
@@ -121,7 +127,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'move-y')}
 						singularId={'move-y'}
-						label={<YCoordinateIcon />}
+						label={<Icon icon="coordinate-y" />}
 						labelPopoverTitle={__('Move Vertically', 'blockera')}
 						labelDescription={
 							<>
@@ -139,11 +145,14 @@ const Fields = ({
 						range={true}
 						min={-300}
 						max={300}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'move-y': newValue },
 							})
 						}
@@ -154,7 +163,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'move-z')}
 						singularId={'move-z'}
-						label={<ZCoordinateIcon />}
+						label={<Icon icon="coordinate-z" />}
 						labelPopoverTitle={__('Move Depth Axis', 'blockera')}
 						labelDescription={
 							<>
@@ -184,11 +193,14 @@ const Fields = ({
 						range={true}
 						min={-300}
 						max={300}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'move-z': newValue },
 							})
 						}
@@ -225,11 +237,14 @@ const Fields = ({
 						range={true}
 						min={0}
 						max={200}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, scale: newValue },
 							})
 						}
@@ -244,7 +259,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'rotate-x')}
 						singularId={'rotate-x'}
-						label={<RotateXCoordinateIcon />}
+						label={<Icon icon="coordinate-rotate-x" />}
 						labelPopoverTitle={__(
 							'Rotate Horizontally',
 							'blockera'
@@ -265,11 +280,14 @@ const Fields = ({
 						range={true}
 						min={-180}
 						max={180}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'rotate-x': newValue },
 							})
 						}
@@ -281,7 +299,7 @@ const Fields = ({
 						id={getControlId(itemId, 'rotate-y')}
 						singularId={'rotate-y'}
 						controlName="input"
-						label={<RotateYCoordinateIcon />}
+						label={<Icon icon="coordinate-rotate-y" />}
 						labelPopoverTitle={__('Rotate Vertically', 'blockera')}
 						labelDescription={
 							<>
@@ -299,11 +317,14 @@ const Fields = ({
 						range={true}
 						min={-180}
 						max={180}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'rotate-y': newValue },
 							})
 						}
@@ -314,7 +335,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'rotate-z')}
 						singularId={'rotate-z'}
-						label={<RotateZCoordinateIcon />}
+						label={<Icon icon="coordinate-rotate-z" />}
 						labelPopoverTitle={__('Rotate Depth Axis', 'blockera')}
 						labelDescription={
 							<>
@@ -344,11 +365,14 @@ const Fields = ({
 						range={true}
 						min={-180}
 						max={180}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'rotate-z': newValue },
 							})
 						}
@@ -363,7 +387,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'skew-x')}
 						singularId={'skew-x'}
-						label={<XCoordinateIcon />}
+						label={<Icon icon="coordinate-x" />}
 						labelPopoverTitle={__('Skew Horizontally', 'blockera')}
 						labelDescription={
 							<>
@@ -387,11 +411,14 @@ const Fields = ({
 						range={true}
 						min={-60}
 						max={60}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'skew-x': newValue },
 							})
 						}
@@ -402,7 +429,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'skew-y')}
 						singularId={'skew-y'}
-						label={<YCoordinateIcon />}
+						label={<Icon icon="coordinate-y" />}
 						labelPopoverTitle={__('Skew Vertically', 'blockera')}
 						labelDescription={
 							<>
@@ -426,11 +453,14 @@ const Fields = ({
 						range={true}
 						min={-60}
 						max={60}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								controlId,
 								repeaterId,
 								itemId,
+								onChange,
+								valueCleanup,
 								value: { ...item, 'skew-y': newValue },
 							})
 						}

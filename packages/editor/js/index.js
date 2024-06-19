@@ -8,7 +8,7 @@ import { dispatch } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import type { BreakpointTypes } from '@blockera/editor-extensions/js/libs/block-states/types';
+import type { BreakpointTypes } from './extensions/libs/block-states/types';
 
 /**
  * Internal dependencies
@@ -40,5 +40,7 @@ export function registerCanvasEditorSettings(settings: Object) {
 
 export * from './store';
 export * from './hooks';
+export * from './components';
+export * from './extensions';
 export { Observer } from './observer';
 export { CanvasEditor, isLaptopBreakpoint } from './canvas-editor';

@@ -55,16 +55,23 @@ class Routes {
 	 */
 	public static function register( string $route, string $methods, $controller ): void {
 
-		[ 'controller' => $controller, 'callback' => $callback ] = self::getController( $controller );
-
-		$controller = self::$app->make( $controller, [ self::$app, $route ] );
-
-		if ( ! $controller instanceof RestController ) {
+		if ( self::isRegistered( $route ) ) {
 
 			return;
 		}
 
-		if ( self::isRegistered( $route ) ) {
+		[ 'controller' => $controller, 'callback' => $callback ] = self::getController( $controller );
+
+		try {
+
+			$controller = self::$app->make( $controller, [ self::$app, $route ] );
+
+		} catch ( \Exception $exception ) {
+
+			$controller = new $controller( self::$app );
+		}
+
+		if ( ! $controller instanceof RestController ) {
 
 			return;
 		}

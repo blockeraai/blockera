@@ -6,14 +6,13 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 
 /**
  * Internal dependencies
  */
-import { TransformControl } from '../../index';
+import { Flex, TransformControl } from '../../index';
 import { STORE_NAME } from '../../repeater-control/store';
 import { ControlContextProvider } from '../../../context';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';

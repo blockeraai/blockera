@@ -10,17 +10,17 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
-import { setValueAddon, useValueAddon } from '@blockera/editor';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import { setValueAddon, useValueAddon } from '../../../../';
 import { extractNumberAndUnit, LabelControl } from '../../../index';
 import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
 import { fixLabelText } from '../../utils';
-import PaddingRightIcon from '../../icons/padding-right';
 import { PaddingRightShape } from './shapes/padding-right-shape';
 
 export function PaddingRight({
@@ -244,7 +244,7 @@ export function PaddingRight({
 						id={getId(id, 'padding.right')}
 						offset={215}
 						type="padding"
-						icon={<PaddingRightIcon />}
+						icon={<Icon icon="padding-right" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');

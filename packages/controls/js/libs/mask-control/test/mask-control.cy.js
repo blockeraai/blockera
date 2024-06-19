@@ -444,7 +444,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 1').click();
+					cy.getByAriaLabel('Shape: Blob 1').click();
 				});
 
 				//Check control
@@ -479,7 +479,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 2').click();
+					cy.getByAriaLabel('Shape: Blob 2').click();
 				});
 
 				//Check control
@@ -514,7 +514,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 3').click();
+					cy.getByAriaLabel('Shape: Blob 3').click();
 				});
 
 				//Check control
@@ -549,7 +549,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 4').click();
+					cy.getByAriaLabel('Shape: Blob 4').click();
 				});
 
 				//Check control
@@ -584,7 +584,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 5').click();
+					cy.getByAriaLabel('Shape: Blob 5').click();
 				});
 
 				//Check control
@@ -619,7 +619,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 6').click();
+					cy.getByAriaLabel('Shape: Blob 6').click();
 				});
 
 				//Check control
@@ -654,7 +654,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 7').click();
+					cy.getByAriaLabel('Shape: Blob 7').click();
 				});
 
 				//Check control
@@ -689,7 +689,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 8').click();
+					cy.getByAriaLabel('Shape: Blob 8').click();
 				});
 
 				//Check control
@@ -724,7 +724,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 9').click();
+					cy.getByAriaLabel('Shape: Blob 9').click();
 				});
 
 				//Check control
@@ -759,7 +759,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 10').click();
+					cy.getByAriaLabel('Shape: Blob 10').click();
 				});
 
 				//Check control
@@ -794,7 +794,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 11').click();
+					cy.getByAriaLabel('Shape: Blob 11').click();
 				});
 
 				//Check control
@@ -829,7 +829,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Blob 12').click();
+					cy.getByAriaLabel('Shape: Blob 12').click();
 				});
 
 				//Check control
@@ -864,7 +864,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Sketch 1').click();
+					cy.getByAriaLabel('Shape: Sketch 1').click();
 				});
 
 				//Check control
@@ -899,7 +899,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Sketch 2').click();
+					cy.getByAriaLabel('Shape: Sketch 2').click();
 				});
 
 				//Check control
@@ -934,7 +934,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Sketch 3').click();
+					cy.getByAriaLabel('Shape: Sketch 3').click();
 				});
 
 				//Check control
@@ -969,7 +969,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Sketch 4').click();
+					cy.getByAriaLabel('Shape: Sketch 4').click();
 				});
 
 				//Check control
@@ -1004,7 +1004,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Sketch 5').click();
+					cy.getByAriaLabel('Shape: Sketch 5').click();
 				});
 
 				//Check control
@@ -1039,7 +1039,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Sketch 6').click();
+					cy.getByAriaLabel('Shape: Sketch 6').click();
 				});
 
 				//Check control
@@ -1074,7 +1074,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Sketch 7').click();
+					cy.getByAriaLabel('Shape: Sketch 7').click();
 				});
 
 				//Check control
@@ -1109,7 +1109,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Sketch 8').click();
+					cy.getByAriaLabel('Shape: Sketch 8').click();
 				});
 
 				//Check control
@@ -1144,7 +1144,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Paint Circle 1').click();
+					cy.getByAriaLabel('Shape: Paint Circle 1').click();
 				});
 
 				//Check control
@@ -1179,7 +1179,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Paint Circle 2').click();
+					cy.getByAriaLabel('Shape: Paint Circle 2').click();
 				});
 
 				//Check control
@@ -1214,7 +1214,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Paint Circle 3').click();
+					cy.getByAriaLabel('Shape: Paint Circle 3').click();
 				});
 
 				//Check control
@@ -1249,7 +1249,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Paint Circle 4').click();
+					cy.getByAriaLabel('Shape: Paint Circle 4').click();
 				});
 
 				//Check control
@@ -1284,7 +1284,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Splatter 1').click();
+					cy.getByAriaLabel('Shape: Splatter 1').click();
 				});
 
 				//Check control
@@ -1319,7 +1319,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Splatter 2').click();
+					cy.getByAriaLabel('Shape: Splatter 2').click();
 				});
 
 				//Check control
@@ -1354,7 +1354,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Splatter 3').click();
+					cy.getByAriaLabel('Shape: Splatter 3').click();
 				});
 
 				//Check control
@@ -1389,7 +1389,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Splatter 4').click();
+					cy.getByAriaLabel('Shape: Splatter 4').click();
 				});
 
 				//Check control
@@ -1424,7 +1424,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Circle').click();
+					cy.getByAriaLabel('Shape: Circle').click();
 				});
 
 				//Check control
@@ -1459,7 +1459,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Triangle').click();
+					cy.getByAriaLabel('Shape: Triangle').click();
 				});
 
 				//Check control
@@ -1494,7 +1494,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Hexagon').click();
+					cy.getByAriaLabel('Shape: Hexagon').click();
 				});
 
 				//Check control
@@ -1529,7 +1529,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Octagon').click();
+					cy.getByAriaLabel('Shape: Octagon').click();
 				});
 
 				//Check control
@@ -1564,7 +1564,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Flower').click();
+					cy.getByAriaLabel('Shape: Flower').click();
 				});
 
 				//Check control
@@ -1599,7 +1599,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Multiplication').click();
+					cy.getByAriaLabel('Shape: Multiplication').click();
 				});
 
 				//Check control
@@ -1634,7 +1634,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Star').click();
+					cy.getByAriaLabel('Shape: Star').click();
 				});
 
 				//Check control
@@ -1669,7 +1669,7 @@ describe('Mask Control component testing', () => {
 
 				cy.getByDataTest('mask-shape-button').click();
 				cy.getByDataTest('mask-shape-popover').within(() => {
-					cy.getByAriaLabel('Icon Stairs').click();
+					cy.getByAriaLabel('Shape: Stairs').click();
 				});
 
 				//Check control
@@ -1695,4 +1695,3 @@ describe('Mask Control component testing', () => {
 		});
 	});
 });
-

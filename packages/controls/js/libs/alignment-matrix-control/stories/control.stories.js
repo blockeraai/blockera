@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
+import { Flex } from '../../';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**

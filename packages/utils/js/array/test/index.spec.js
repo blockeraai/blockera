@@ -4,6 +4,9 @@ import {
 	isEquals,
 	toObject,
 	arrayDiff,
+	difference,
+	union,
+	without,
 } from '../index';
 
 describe('Array Utils', function () {
@@ -54,5 +57,36 @@ describe('Array Utils', function () {
 
 	it('should retrieve differences between two recieved array', () => {
 		expect(arrayDiff(['normal', 'hover'], ['normal'])).toEqual(['hover']);
+	});
+
+	it('should equals same object', () => {
+		expect(
+			isEquals(
+				{
+					disabledBlocks: [],
+				},
+				{
+					disabledBlocks: [],
+				}
+			)
+		).toBeTruthy();
+	});
+
+	it('should get differences between two arrays', () => {
+		expect(difference([1, 2, 3], [4, 5, 6])).toEqual([1, 2, 3]);
+	});
+
+	it('should get unique array items', () => {
+		expect(union([1, 2, 3, 3, 5, 2, 1])).toEqual([1, 2, 3, 5]);
+		expect(
+			union(
+				[1, 2, 3, 3, 5, 2, 1],
+				[1, 2, 3, 3, 5, 2, 1, 1, 2, 2, 5, 5, 5, 6, 6, 6, 6]
+			)
+		).toEqual([1, 2, 3, 5, 6]);
+	});
+
+	it('should get without values to remove', () => {
+		expect(without([1, 2, 3, 5], [5])).toEqual([1, 2, 3]);
 	});
 });
