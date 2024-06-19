@@ -18,7 +18,7 @@ module.exports = (env, argv) => {
 	if (!argv) {
 		return require(path.resolve(
 			process.cwd(),
-			'packages/dev-tools/js/cypress/webpack.config.js'
+			'packages/dev-cypress/js/webpack.config.js'
 		));
 	}
 
