@@ -1,6 +1,6 @@
 <!--@see: https://github.com/wp-phpunit/docs to configuration project for wp phpunit testing-->
 <phpunit
-        bootstrap="./.dev/tests/phpunit/bootstrap.php"
+        bootstrap="./packages/dev-phpunit/php/bootstrap.php"
         backupGlobals="false"
         colors="true"
         convertErrorsToExceptions="true"
@@ -16,19 +16,22 @@
 
     <testsuites>
         <testsuite name="Test Suite">
-            <directory suffix=".php">./.dev/tests/phpunit/</directory>
-            <exclude>./.dev/tests/phpunit/Fixtures/</exclude>
+            <directory suffix=".php">./packages/dev-phpunit/php/</directory>
+            <directory suffix=".php">./packages/blockera/php/tests/</directory>
+            <directory suffix=".php">./packages/editor/php/tests/</directory>
+            <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
+            <exclude>./packages/editor/php/tests/Fixtures/</exclude>
             <exclude>./node_modules/</exclude>
             <exclude>./dist/</exclude>
         </testsuite>
     </testsuites>
 
     <php>
+        <env name="VERSION" value="1.0-beta" />
         <const name="PHPUNIT_PLUGIN_TEST" value="true"/>
-        <env name="VERSION" value="1.0-alpha" />
-        <env name="__BLOCKERA_DIR__" value="blockera-core" />
-        <env name="WP_PHPUNIT__TESTS_CONFIG" value="./.dev/tests/phpunit/config.php" />
-        <env name="WP_TESTS_CONFIG_FILE_PATH" value="./.dev/tests/phpunit/config.php" />
+        <env name="__BLOCKERA_DIR__" value="blockera" />
+        <env name="WP_PHPUNIT__TESTS_CONFIG" value="./packages/dev-phpunit/php/config.php" />
+        <env name="WP_TESTS_CONFIG_FILE_PATH" value="./packages/dev-phpunit/php/config.php" />
     </php>
 
 </phpunit>
