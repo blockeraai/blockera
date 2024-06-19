@@ -7,12 +7,12 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { LabelControl } from '@blockera/controls';
 import { fieldsClassNames, fieldsInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { LabelControl } from '../label-control';
 import type { BaseControlProps } from './types';
 
 export default function BaseControl({

@@ -14,7 +14,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button, Icon, MediaUploader } from '@blockera/components';
 import {
 	isEmpty,
 	isObject,
@@ -23,22 +22,19 @@ import {
 	hasSameProps,
 	useLateEffect,
 } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
-import { useControlContext } from '../../context';
-import { default as DeleteIcon } from './icons/delete';
-import { default as Suggestions } from './components/suggestions';
-import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
-import { BaseControl } from '../index';
 import type { IconControlProps } from './types';
+import { useControlContext } from '../../context';
+import { Button, MediaUploader, BaseControl } from '../index';
+import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
 function IconControl({
-	suggestionsQuery,
-	//
 	label,
 	columns,
 	field = 'icon',
@@ -52,17 +48,11 @@ function IconControl({
 	//
 	className,
 }: IconControlProps): MixedElement {
-	const {
-		value,
-		setValue,
-		attribute,
-		blockName,
-		description,
-		resetToDefault,
-	} = useControlContext({
-		defaultValue,
-		onChange,
-	});
+	const { value, setValue, attribute, blockName, resetToDefault } =
+		useControlContext({
+			defaultValue,
+			onChange,
+		});
 
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
 
@@ -78,16 +68,16 @@ function IconControl({
 				library: value.library,
 			});
 
-			return undefined;
+			// return undefined;
 		}
 
-		if (!value) {
-			currentIconDispatch({
-				type: 'DELETE_ICON',
-			});
-		}
+		// if (!value) {
+		// 	currentIconDispatch({
+		// 		type: 'DELETE_ICON',
+		// 	});
+		// }
 
-		return undefined;
+		// return undefined;
 		// eslint-disable-next-line
 	}, [value]);
 
@@ -107,7 +97,6 @@ function IconControl({
 	};
 
 	const defaultIconState = {
-		suggestionsQuery,
 		currentIcon,
 		dispatch: currentIconDispatch,
 		handleIconSelect,
@@ -162,7 +151,6 @@ function IconControl({
 				{...{
 					attribute,
 					blockName,
-					description,
 					resetToDefault,
 				}}
 			>
@@ -174,8 +162,6 @@ function IconControl({
 						className
 					)}
 				>
-					<Suggestions />
-
 					{hasIcon() ? (
 						<div
 							className={controlInnerClassNames(
@@ -189,7 +175,13 @@ function IconControl({
 								className="btn-delete"
 								noBorder={true}
 								isFocus={isOpenModal}
-								icon={<DeleteIcon />}
+								icon={
+									<Icon
+										library="wp"
+										icon="close"
+										iconSize="20"
+									/>
+								}
 								onClick={(e) => {
 									e.stopPropagation();
 									currentIconDispatch({
@@ -204,7 +196,7 @@ function IconControl({
 									alt={currentIcon.uploadSVG.title}
 								/>
 							) : (
-								<Icon {...currentIcon} size={50} />
+								<Icon {...currentIcon} iconSize={50} />
 							)}
 
 							<div
@@ -293,10 +285,6 @@ IconControl.propTypes = {
 	 * Function that will be fired while the control value state changes.
 	 */
 	onChange: PropTypes.func,
-	/**
-	 * A term a function that returns a term for preparing suggestions
-	 */
-	suggestionsQuery: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 	/**
 	 * Choose label
 	 */

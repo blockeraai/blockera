@@ -13,7 +13,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Flex, Tooltip } from '@blockera/components';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -21,42 +21,34 @@ import { Flex, Tooltip } from '@blockera/components';
 import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 import type { Props } from './types';
-import { SelectControl, ToggleSelectControl, CheckboxControl } from '../index';
+import {
+	Flex,
+	Tooltip,
+	SelectControl,
+	CheckboxControl,
+	ToggleSelectControl,
+} from '../index';
 import { MatrixItem } from './components/matrix-item';
-// Icons
-import AlignItemsEmptyBlockIcon from './icons/align-items-empty';
-import AlignItemsFlexStartBlockIcon from './icons/align-items-flex-start';
-import AlignItemsFlexEndBlockIcon from './icons/align-items-flex-end';
-import AlignItemsCenterBlockIcon from './icons/align-items-center';
-import AlignItemsStretchBlockIcon from './icons/align-items-stretch';
-import JustifyFlexStartIcon from './icons/justify-flex-start';
-import JustifyFlexEndIcon from './icons/justify-flex-end';
-import JustifyCenterIcon from './icons/justify-center';
-import JustifySpaceAroundIcon from './icons/justify-space-around';
-import JustifySpaceBetweenIcon from './icons/justify-space-between';
-import JustifyEmptyIcon from './icons/justify-empty';
-import DirectionRowIcon from './icons/direction-row';
-import DirectionColumnIcon from './icons/direction-column';
-import MatrixNormalEmptyIcon from './icons/matrix/matrix-normal-empty';
-import MatrixNormalTopLeftIcon from './icons/matrix/matrix-normal-top-left';
-import MatrixNormalTopCenterIcon from './icons/matrix/matrix-normal-top-center';
-import MatrixNormalTopRightIcon from './icons/matrix/matrix-normal-top-right';
-import MatrixNormalCenterLeftIcon from './icons/matrix/matrix-normal-center-left';
-import MatrixNormalCenterCenterIcon from './icons/matrix/matrix-normal-center-center';
-import MatrixNormalCenterRightIcon from './icons/matrix/matrix-normal-center-right';
-import MatrixNormalBottomLeftIcon from './icons/matrix/matrix-normal-bottom-left';
-import MatrixNormalBottomCenterIcon from './icons/matrix/matrix-normal-bottom-center';
-import MatrixNormalBottomRightIcon from './icons/matrix/matrix-normal-bottom-right';
-import MatrixStretchFillIcon from './icons/matrix/matrix-stretch-fill';
-import MatrixSpaceAroundStartFillIcon from './icons/matrix/matrix-space-around-start-fill';
-import MatrixSpaceAroundCenterFillIcon from './icons/matrix/matrix-space-around-center-fill';
-import MatrixSpaceAroundEndFillIcon from './icons/matrix/matrix-space-around-end-fill';
-import MatrixSpaceBetweenStartFillIcon from './icons/matrix/matrix-space-between-start-fill';
-import MatrixSpaceBetweenCenterFillIcon from './icons/matrix/matrix-space-between-center-fill';
-import MatrixSpaceBetweenEndFillIcon from './icons/matrix/matrix-space-between-end-fill';
-import MatrixStretchSpaceBetweenIcon from './icons/matrix/matrix-stretch-space-between';
-import MatrixStretchSpaceAroundIcon from './icons/matrix/matrix-stretch-space-around';
-import InformationIcon from '../notice-control/icons/information-icon';
+// Matrix Icons
+import MatrixNormalEmptyIcon from './matrix/matrix-normal-empty';
+import MatrixNormalTopLeftIcon from './matrix/matrix-normal-top-left';
+import MatrixNormalTopCenterIcon from './matrix/matrix-normal-top-center';
+import MatrixNormalTopRightIcon from './matrix/matrix-normal-top-right';
+import MatrixNormalCenterLeftIcon from './matrix/matrix-normal-center-left';
+import MatrixNormalCenterCenterIcon from './matrix/matrix-normal-center-center';
+import MatrixNormalCenterRightIcon from './matrix/matrix-normal-center-right';
+import MatrixNormalBottomLeftIcon from './matrix/matrix-normal-bottom-left';
+import MatrixNormalBottomCenterIcon from './matrix/matrix-normal-bottom-center';
+import MatrixNormalBottomRightIcon from './matrix/matrix-normal-bottom-right';
+import MatrixStretchFillIcon from './matrix/matrix-stretch-fill';
+import MatrixSpaceAroundStartFillIcon from './matrix/matrix-space-around-start-fill';
+import MatrixSpaceAroundCenterFillIcon from './matrix/matrix-space-around-center-fill';
+import MatrixSpaceAroundEndFillIcon from './matrix/matrix-space-around-end-fill';
+import MatrixSpaceBetweenStartFillIcon from './matrix/matrix-space-between-start-fill';
+import MatrixSpaceBetweenCenterFillIcon from './matrix/matrix-space-between-center-fill';
+import MatrixSpaceBetweenEndFillIcon from './matrix/matrix-space-between-end-fill';
+import MatrixStretchSpaceBetweenIcon from './matrix/matrix-stretch-space-between';
+import MatrixStretchSpaceAroundIcon from './matrix/matrix-stretch-space-around';
 
 export default function LayoutMatrixControl({
 	isDirectionActive = true,
@@ -969,12 +961,22 @@ export default function LayoutMatrixControl({
 									{
 										label: __('Row', 'blockera'),
 										value: 'row',
-										icon: <DirectionRowIcon />,
+										icon: (
+											<Icon
+												icon="flex-direction-row"
+												iconSize="18"
+											/>
+										),
 									},
 									{
 										label: __('Column', 'blockera'),
 										value: 'column',
-										icon: <DirectionColumnIcon />,
+										icon: (
+											<Icon
+												icon="flex-direction-column"
+												iconSize="18"
+											/>
+										),
 									},
 								]}
 								defaultValue={direction}
@@ -996,27 +998,57 @@ export default function LayoutMatrixControl({
 									{
 										label: __('Empty', 'blockera'),
 										value: '',
-										icon: <AlignItemsEmptyBlockIcon />,
+										icon: (
+											<Icon
+												icon="flex-align-empty"
+												iconSize="18"
+												dataTest="layout-matrix-align-empty"
+											/>
+										),
 									},
 									{
 										label: __('Start', 'blockera'),
 										value: 'flex-start',
-										icon: <AlignItemsFlexStartBlockIcon />,
+										icon: (
+											<Icon
+												icon="flex-align-start"
+												iconSize="18"
+												dataTest="layout-matrix-align-start"
+											/>
+										),
 									},
 									{
 										label: __('Center', 'blockera'),
 										value: 'center',
-										icon: <AlignItemsCenterBlockIcon />,
+										icon: (
+											<Icon
+												icon="flex-align-center"
+												iconSize="18"
+												dataTest="layout-matrix-align-center"
+											/>
+										),
 									},
 									{
 										label: __('End', 'blockera'),
 										value: 'flex-end',
-										icon: <AlignItemsFlexEndBlockIcon />,
+										icon: (
+											<Icon
+												icon="flex-align-end"
+												iconSize="18"
+												dataTest="layout-matrix-align-end"
+											/>
+										),
 									},
 									{
 										label: __('Stretch', 'blockera'),
 										value: 'stretch',
-										icon: <AlignItemsStretchBlockIcon />,
+										icon: (
+											<Icon
+												icon="flex-align-stretch"
+												iconSize="18"
+												dataTest="layout-matrix-align-stretch"
+											/>
+										),
 									},
 								]}
 								onChange={(newValue) =>
@@ -1038,32 +1070,70 @@ export default function LayoutMatrixControl({
 									{
 										label: __('Empty', 'blockera'),
 										value: '',
-										icon: <JustifyEmptyIcon />,
+										icon: (
+											<Icon
+												icon="justify-content-empty"
+												iconSize="18"
+												data-test="layout-matrix-justify-empty"
+											/>
+										),
 									},
 									{
 										label: __('Start', 'blockera'),
 										value: 'flex-start',
-										icon: <JustifyFlexStartIcon />,
+										icon: (
+											<Icon
+												icon="justify-content-start"
+												iconSize="18"
+												className="blockera-flex-justify-content-flex-start"
+												dataTest="layout-matrix-justify-start"
+											/>
+										),
 									},
 									{
 										label: __('Center', 'blockera'),
 										value: 'center',
-										icon: <JustifyCenterIcon />,
+										icon: (
+											<Icon
+												icon="justify-content-center"
+												iconSize="18"
+												dataTest="layout-matrix-justify-center"
+											/>
+										),
 									},
 									{
 										label: __('End', 'blockera'),
 										value: 'flex-end',
-										icon: <JustifyFlexEndIcon />,
+										icon: (
+											<Icon
+												icon="justify-content-end"
+												iconSize="18"
+												className="blockera-flex-justify-content-flex-end"
+												data-test="layout-matrix-justify-end"
+											/>
+										),
 									},
 									{
 										label: __('Space Around', 'blockera'),
 										value: 'space-around',
-										icon: <JustifySpaceAroundIcon />,
+										icon: (
+											<Icon
+												icon="justify-content-space-around"
+												iconSize="18"
+												data-test="layout-matrix-justify-around"
+											/>
+										),
 									},
 									{
 										label: __('Space Between', 'blockera'),
 										value: 'space-between',
-										icon: <JustifySpaceBetweenIcon />,
+										icon: (
+											<Icon
+												icon="justify-content-space-between"
+												iconSize="18"
+												data-test="layout-matrix-justify-between"
+											/>
+										),
 									},
 								]}
 								onChange={(newValue) =>
@@ -1107,7 +1177,9 @@ export default function LayoutMatrixControl({
 									}
 								>
 									<span>
-										<InformationIcon
+										<Icon
+											icon="information"
+											iconSize="18"
 											style={{
 												opacity: '30%',
 											}}

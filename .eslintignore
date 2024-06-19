@@ -1,7 +1,7 @@
 # lint top level dot files
 !.*
 /node_modules/*
-/cypress/*
+/packages/dev-cypress/*
 /.storybook/*
 build/*
 dist/*

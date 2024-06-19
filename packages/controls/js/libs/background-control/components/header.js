@@ -10,17 +10,14 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { ColorIndicator, ColorIndicatorStack } from '@blockera/components';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import type { HeaderItem } from '../types';
 import { getBackgroundItemBGProperty } from '../utils';
-import { default as TypeImageIcon } from '../icons/type-image';
-import { default as TypeLinearGradientIcon } from '../icons/type-linear-gradient';
-import { default as TypeRadialGradientIcon } from '../icons/type-radial-gradient';
-import { default as TypeMeshGradientIcon } from '../icons/type-mesh-gradient';
+import { ColorIndicator, ColorIndicatorStack } from '../../';
 
 const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 	({
@@ -41,7 +38,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				preview = (
 					<ColorIndicator type="image" value={itemBGProperty} />
 				);
-				icon = <TypeImageIcon />;
+				icon = <Icon icon="background-image" iconSize="18" />;
 				break;
 
 			case 'linear-gradient':
@@ -49,7 +46,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				preview = (
 					<ColorIndicator type="gradient" value={itemBGProperty} />
 				);
-				icon = <TypeLinearGradientIcon />;
+				icon = <Icon icon="background-linear-gradient" iconSize="18" />;
 				break;
 
 			case 'radial-gradient':
@@ -57,7 +54,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				preview = (
 					<ColorIndicator type="gradient" value={itemBGProperty} />
 				);
-				icon = <TypeRadialGradientIcon />;
+				icon = <Icon icon="background-radial-gradient" iconSize="18" />;
 				break;
 
 			case 'mesh-gradient':
@@ -71,7 +68,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 						)}
 					/>
 				);
-				icon = <TypeMeshGradientIcon />;
+				icon = <Icon icon="background-mesh-gradient" iconSize="18" />;
 				break;
 		}
 

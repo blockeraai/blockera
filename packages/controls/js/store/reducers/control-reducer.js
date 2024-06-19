@@ -2,6 +2,7 @@
 /**
  * Blockera dependencies
  */
+import { update, prepare } from '@blockera/data-editor';
 import { isEquals, isUndefined, omit } from '@blockera/utils';
 
 /**
@@ -40,6 +41,23 @@ export function controlReducer(state: Object = {}, action: Object): Object {
 						value,
 					},
 				};
+			}
+
+			if (!state[action.controlId].value[action.propId]) {
+				if (prepare(action.propId, state[action.controlId].value)) {
+					return {
+						...state,
+						[action.controlId]: {
+							...state[action.controlId],
+							value: update(
+								state[action.controlId].value,
+								action.propId,
+								value,
+								true
+							),
+						},
+					};
+				}
 			}
 
 			if (isEquals(state[action.controlId].value[action.propId], value)) {

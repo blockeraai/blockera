@@ -5,13 +5,12 @@
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { AnglePickerControl } from '../../index';
+import { Flex, AnglePickerControl } from '../../index';
 import { ControlContextProvider } from '../../../context';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';

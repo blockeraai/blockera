@@ -5,7 +5,7 @@ namespace Blockera\Setup\Providers;
 use Blockera\Http\Routes;
 use Blockera\Bootstrap\Application;
 use Blockera\Bootstrap\ServiceProvider;
-use Blockera\Setup\Http\Controllers\DynamicValuesController;
+use Blockera\Admin\Http\Controllers\SettingsController;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class RestAPIProvider extends ServiceProvider {
@@ -15,29 +15,18 @@ class RestAPIProvider extends ServiceProvider {
 	 */
 	public function register(): void {
 
-		parent::register();
+		$this->app->singleton(
+			Routes::class,
+			function ( Application $app ) {
 
-		try {
+				return new Routes( $app );
+			}
+		);
 
-			$this->app->singleton(
-				Routes::class,
-				function ( Application $app ) {
-
-					return new Routes( $app );
-				}
-			);
-
-			$this->app->singleton( DynamicValuesController::class );
-
-		} catch ( \Exception $handler ) {
-
-			throw new \Exception( 'Binding Service Failure! \n' . $handler->getMessage() );
-		}
+		$this->app->singleton( SettingsController::class );
 	}
 
 	public function boot(): void {
-
-		parent::boot();
 
 		add_action( 'rest_api_init', [ $this, 'initializeRestAPI' ], 20 );
 	}
@@ -51,8 +40,7 @@ class RestAPIProvider extends ServiceProvider {
 	public function initializeRestAPI(): array {
 
 		$routes = $this->app->make( Routes::class );
-
-		blockera_load( 'Routes.api', compact( 'routes' ) );
+		blockera_load( 'Routes.api', compact( 'routes' ), dirname( __DIR__ ) );
 
 		return $routes::getRoutes();
 	}

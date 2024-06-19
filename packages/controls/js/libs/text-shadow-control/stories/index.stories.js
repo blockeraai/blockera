@@ -6,17 +6,16 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
-import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
-import { ControlContextProvider } from '../../../context';
-import { TextShadowControl } from '../../index';
+import { Flex, TextShadowControl } from '../../index';
 import { STORE_NAME } from '../../repeater-control/store';
+import { ControlContextProvider } from '../../../context';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/decorators/with-playground-styles';
+import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';
 
 const { WithInspectorStyles, SharedDecorators, WithPopoverDataProvider } =
 	Decorators;

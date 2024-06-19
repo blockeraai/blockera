@@ -1,24 +1,49 @@
 // @flow
 
 /**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
+
+/**
  * Internal dependencies
  */
-import SuccessIcon from './icons/success-icon';
-import WarningIcon from './icons/warning-icon';
-import ErrorIcon from './icons/error-icon';
-import InformationIcon from './icons/information-icon';
 import type { NoticeControlType } from './types';
 
 export function NoticeIcon(type: NoticeControlType): any {
 	switch (type) {
 		case 'information':
-			return <InformationIcon />;
+			return (
+				<Icon
+					icon="information"
+					iconSize="18"
+					data-test="notice-control-icon-info"
+				/>
+			);
 		case 'warning':
-			return <WarningIcon />;
+			return (
+				<Icon
+					icon="warning"
+					iconSize="18"
+					data-test="notice-control-icon-warning"
+				/>
+			);
 		case 'error':
-			return <ErrorIcon />;
+			return (
+				<Icon
+					icon="error"
+					iconSize="18"
+					data-test="notice-control-icon-error"
+				/>
+			);
 		case 'success':
-			return <SuccessIcon />;
+			return (
+				<Icon
+					icon="success"
+					iconSize="18"
+					data-test="notice-control-icon-success"
+				/>
+			);
 		default:
 			return null;
 	}

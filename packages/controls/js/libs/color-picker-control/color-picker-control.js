@@ -4,23 +4,20 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import 'eyedropper-polyfill';
 import { useCallback, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { Button, Popover } from '@blockera/components';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { BaseControl } from '../index';
+import { ColorPallet } from './components';
 import { useControlContext } from '../../context';
 import type { ColorPickerControlProps } from './types';
-import TrashIcon from './icons/trash';
-import { ColorPallet } from './components';
-import PickerIcon from './icons/picker';
+import { Button, Popover, BaseControl } from '../index';
 
 export default function ColorPickerControl({
 	popoverTitle = __('Color Picker', 'blockera'),
@@ -38,7 +35,7 @@ export default function ColorPickerControl({
 	field = 'color-picker',
 	//
 	className,
-	...props
+	children,
 }: ColorPickerControlProps): MixedElement {
 	const { value, setValue, attribute, blockName, resetToDefault } =
 		useControlContext({
@@ -50,21 +47,23 @@ export default function ColorPickerControl({
 
 	const [isPopoverHidden, setIsPopoverHidden] = useState(false);
 
-	const eyeDropper = new window.EyeDropper();
+	const eyeDropper: any = window?.EyeDropper ? new window.EyeDropper() : null;
 
 	const pickColor = useCallback(() => {
 		const openPicker = async () => {
 			try {
-				const color = await eyeDropper.open();
-				setValue(color.sRGBHex);
+				const color = await eyeDropper?.open();
+				setValue(color?.sRGBHex);
 				setIsPopoverHidden(false);
 			} catch (e) {
-				console.log(e);
+				console.warn(
+					'EyeDropper was not supported with your browser. please for use of color picker switch to Google Chrome browser.'
+				);
 				setIsPopoverHidden(false);
 			}
 		};
 		openPicker();
-	}, [eyeDropper.open]);
+	}, [eyeDropper?.open]);
 
 	// make sure always we treat colors as lower case
 	function valueCleanup(value: string) {
@@ -73,6 +72,25 @@ export default function ColorPickerControl({
 		}
 
 		return value;
+	}
+
+	let colorPickerLabel = '';
+
+	if (!/Chrome|Opera/gi.exec(navigator.userAgent)) {
+		colorPickerLabel = __(
+			'This feature is not supported with your browser, switch to (Chrome, or Opera) browsers.',
+			'blockera'
+		);
+	} else if ('http:' === window.location.protocol) {
+		colorPickerLabel = __(
+			'This feature is available only in secure contexts (HTTPS), in some or all supporting browsers.',
+			'blockera'
+		);
+	} else if (!eyeDropper) {
+		colorPickerLabel = __(
+			'This feature is not supported with your browser, switch to (Chrome, or Opera) browsers.',
+			'blockera'
+		);
 	}
 
 	if (isPopover) {
@@ -96,6 +114,7 @@ export default function ColorPickerControl({
 						titleButtonsRight={
 							<>
 								<Button
+									label={colorPickerLabel}
 									tabIndex="-1"
 									size={'extra-small'}
 									className="btn-pick-color"
@@ -103,10 +122,17 @@ export default function ColorPickerControl({
 										setIsPopoverHidden(true);
 										pickColor();
 									}}
-									style={{ padding: '5px' }}
+									style={{
+										padding: '5px',
+										...(!eyeDropper
+											? {
+													opacity: 0.5,
+											  }
+											: {}),
+									}}
 									aria-label={__('Pick Color', 'blockera')}
 								>
-									<PickerIcon />
+									<Icon icon="eye-dropper" size="18" />
 								</Button>
 								{value && (
 									<Button
@@ -122,7 +148,7 @@ export default function ColorPickerControl({
 											'blockera'
 										)}
 									>
-										<TrashIcon />
+										<Icon icon="trash" size="20" />
 									</Button>
 								)}
 							</>
@@ -131,9 +157,12 @@ export default function ColorPickerControl({
 						<ColorPallet
 							enableAlpha={true}
 							color={value}
-							onChangeComplete={(color) => setValue(color.hex)}
-							{...props}
+							onChangeComplete={(color: Object) =>
+								setValue(color.hex)
+							}
 						/>
+
+						{children}
 					</Popover>
 				)}
 			</BaseControl>
@@ -151,9 +180,11 @@ export default function ColorPickerControl({
 			<ColorPallet
 				enableAlpha={false}
 				color={value}
-				onChangeComplete={(color) => setValue(color.hex)}
-				{...props}
+				onChangeComplete={(color: Object) => setValue(color.hex)}
 			/>
+
+			{children}
+
 			{hasClearBtn && (
 				<Button
 					onClick={() => setValue('')}

@@ -9,20 +9,18 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Button } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import { Button } from '../../';
 import { RepeaterContext } from '../context';
-import DeleteIcon from '../icons/delete';
-import EnableIcon from '../icons/enable';
-import DisableIcon from '../icons/disable';
-import CloneIcon from '../icons/clone';
 import { getArialLabelSuffix } from '../utils';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemActionsProps } from '../types';
+import { repeaterOnChange } from '../store/reducers/utils';
 
 export default function RepeaterItemActions({
 	item,
@@ -35,6 +33,8 @@ export default function RepeaterItemActions({
 		maxItems,
 		minItems,
 		onDelete,
+		onChange,
+		valueCleanup,
 		repeaterId,
 		overrideItem,
 		itemIdGenerator,
@@ -61,7 +61,13 @@ export default function RepeaterItemActions({
 				<Button
 					className={controlInnerClassNames('btn-visibility')}
 					noBorder={true}
-					icon={isVisible ? EnableIcon : DisableIcon}
+					icon={
+						isVisible ? (
+							<Icon icon="eye-show" iconSize="20" />
+						) : (
+							<Icon icon="eye-hide" iconSize="20" />
+						)
+					}
 					showTooltip={true}
 					tooltipPosition="top"
 					onClick={(event) => {
@@ -83,6 +89,8 @@ export default function RepeaterItemActions({
 							itemId,
 							value,
 							repeaterId,
+							onChange,
+							valueCleanup,
 						});
 					}}
 					label={
@@ -112,7 +120,7 @@ export default function RepeaterItemActions({
 					<Button
 						className={controlInnerClassNames('btn-clone')}
 						noBorder={true}
-						icon={CloneIcon}
+						icon={<Icon icon="clone" size="20" />}
 						showTooltip={true}
 						tooltipPosition="top"
 						label={__('Clone', 'blockera')}
@@ -122,9 +130,11 @@ export default function RepeaterItemActions({
 							cloneRepeaterItem({
 								item,
 								itemId,
+								onChange,
 								controlId,
 								repeaterId,
 								overrideItem,
+								valueCleanup,
 								itemIdGenerator,
 							});
 						}}
@@ -142,7 +152,7 @@ export default function RepeaterItemActions({
 					<Button
 						className={controlInnerClassNames('btn-delete')}
 						noBorder={true}
-						icon={DeleteIcon}
+						icon={<Icon icon="trash" size="20" />}
 						showTooltip={true}
 						tooltipPosition="top"
 						onClick={(event) => {
@@ -154,17 +164,26 @@ export default function RepeaterItemActions({
 							) {
 								removeRepeaterItem({
 									itemId,
+									onChange,
 									controlId,
 									repeaterId,
+									valueCleanup,
 									itemIdGenerator,
 								});
 
 								return;
 							}
 
+							const value = onDelete(itemId, repeaterItems);
+
 							modifyControlValue({
 								controlId,
-								value: onDelete(itemId, repeaterItems),
+								value,
+							});
+
+							repeaterOnChange(value, {
+								onChange,
+								valueCleanup,
 							});
 						}}
 						label={__('Delete', 'blockera')}

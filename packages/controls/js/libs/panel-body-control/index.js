@@ -14,6 +14,7 @@ import { controlClassNames } from '@blockera/classnames';
  * Internal Dependencies
  */
 import type { PanelBodyControlProps } from './types';
+import { PoweredBy } from './components/powered-by';
 
 export default function PanelBodyControl({
 	title,
@@ -23,6 +24,7 @@ export default function PanelBodyControl({
 	icon,
 	children,
 	onToggle,
+	showPoweredBy = true,
 	...props
 }: PanelBodyControlProps): MixedElement {
 	return (
@@ -48,6 +50,8 @@ export default function PanelBodyControl({
 			{...props}
 		>
 			{children}
+
+			{showPoweredBy && <PoweredBy />}
 		</WPPanelBody>
 	);
 }

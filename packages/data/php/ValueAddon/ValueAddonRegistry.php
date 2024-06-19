@@ -89,14 +89,14 @@ class ValueAddonRegistry {
 		$groups = blockera_core_config( $configKey );
 
 		$groupsHook = sprintf(
-			'blockera-core/%1$s/groups/registry',
+			'blockera/%1$s/groups/registry',
 			$instance->valueAddonType()
 		);
 
 		/**
 		 * Filterable groups of current value addon type.
 		 *
-		 * @hook 'blockera-core/variable/groups/registry'
+		 * @hook 'blockera/variable/groups/registry'
 		 */
 		$filteredGroups = apply_filters( $groupsHook, $groups );
 
@@ -130,7 +130,7 @@ class ValueAddonRegistry {
 			}
 
 			$hookName = sprintf(
-				'blockera-core/%1$s/groups/%2$s/items/registry',
+				'blockera/%1$s/groups/%2$s/items/registry',
 				$instance->valueAddonType(),
 				$group
 			);

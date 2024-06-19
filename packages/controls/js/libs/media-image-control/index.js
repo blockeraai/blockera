@@ -9,19 +9,18 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Button, MediaUploader } from '@blockera/components';
 import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
-import { default as DeleteIcon } from './icons/delete';
 import type { MediaImageControlProps } from './types';
+import { Button, MediaUploader, BaseControl } from '../index';
 
 export default function MediaImageControl({
 	labelChoose = __('Choose Image…', 'blockera'),
@@ -88,7 +87,9 @@ export default function MediaImageControl({
 						data-cy="delete-bg-img"
 						className="btn-delete"
 						noBorder={true}
-						icon={<DeleteIcon />}
+						icon={
+							<Icon library="close" icon="close" iconSize="16" />
+						}
 						onClick={() => {
 							setValue('');
 						}}

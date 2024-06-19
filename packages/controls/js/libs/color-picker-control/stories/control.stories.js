@@ -5,13 +5,12 @@
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { ColorPickerControl } from '../../index';
+import { Flex, ColorPickerControl } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';

@@ -10,16 +10,16 @@ import { useState } from '@wordpress/element';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { setValueAddon, useValueAddon } from '@blockera/editor';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import { setValueAddon, useValueAddon } from '../../../../';
 import { extractNumberAndUnit, LabelControl } from '../../../index';
 import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
-import MarginTopBottomIcon from '../../icons/margin-top-bottom';
 import { MarginVerticalSideShape } from './shapes/margin-vertical-shape';
 import { fixLabelText } from '../../utils';
 
@@ -282,7 +282,7 @@ export function MarginVertical({
 					<SidePopover
 						id={getId(id, 'margin.top')}
 						type="margin"
-						icon={<MarginTopBottomIcon />}
+						icon={<Icon icon="margin-vertical" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');

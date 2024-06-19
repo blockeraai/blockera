@@ -16,8 +16,8 @@ describe('angle-picker-control', () => {
 			});
 
 			cy.get('input');
-			cy.get('[aria-label="Rotate Left"]');
-			cy.get('[aria-label="Rotate Right"]');
+			cy.get('[aria-label="Rotate Anti-clockwise"]');
+			cy.get('[aria-label="Rotate Clockwise"]');
 		});
 
 		it('renders not render buttons when rotateButtons=false', () => {
@@ -28,8 +28,8 @@ describe('angle-picker-control', () => {
 				name,
 			});
 
-			cy.get('[aria-label="Rotate Left"]').should('not.exist');
-			cy.get('[aria-label="Rotate Right"]').should('not.exist');
+			cy.get('[aria-label="Rotate Anti-clockwise"]').should('not.exist');
+			cy.get('[aria-label="Rotate Clockwise"]').should('not.exist');
 		});
 	});
 
@@ -85,8 +85,8 @@ describe('angle-picker-control', () => {
 					name,
 				});
 
-				cy.get('[aria-label="Rotate Left"]').click();
-				cy.get('[aria-label="Rotate Left"]').click();
+				cy.get('[aria-label="Rotate Anti-clockwise"]').click();
+				cy.get('[aria-label="Rotate Anti-clockwise"]').click();
 
 				// visual assertion
 				cy.get('input[type="number"]')
@@ -105,8 +105,8 @@ describe('angle-picker-control', () => {
 					name,
 				});
 
-				cy.get('[aria-label="Rotate Right"]').click();
-				cy.get('[aria-label="Rotate Right"]').click();
+				cy.get('[aria-label="Rotate Clockwise"]').click();
+				cy.get('[aria-label="Rotate Clockwise"]').click();
 
 				// visual assertion
 				cy.get('input[type="number"]')
@@ -126,7 +126,7 @@ describe('angle-picker-control', () => {
 					name,
 				});
 
-				cy.get('[aria-label="Rotate Right"]').click();
+				cy.get('[aria-label="Rotate Clockwise"]').click();
 
 				// visual assertion
 				cy.get('input[type="number"]')
@@ -146,7 +146,7 @@ describe('angle-picker-control', () => {
 					name,
 				});
 
-				cy.get('[aria-label="Rotate Left"]').click();
+				cy.get('[aria-label="Rotate Anti-clockwise"]').click();
 
 				// visual assertion
 				cy.get('input[type="number"]')

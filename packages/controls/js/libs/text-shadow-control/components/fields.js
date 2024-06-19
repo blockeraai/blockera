@@ -1,8 +1,13 @@
 /**
- * WordPress dependencies
+ * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { memo, useContext } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -10,8 +15,6 @@ import { memo, useContext } from '@wordpress/element';
 import { useControlContext } from '../../../context';
 import { RepeaterContext } from '../../repeater-control/context';
 import { ColorControl, InputControl } from '../../index';
-import XCoordinateIcon from '../icons/coordinate-x';
-import YCoordinateIcon from '../icons/coordinate-y';
 
 const Fields = ({ itemId, item }) => {
 	const {
@@ -19,8 +22,13 @@ const Fields = ({ itemId, item }) => {
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 
-	const { repeaterId, getControlId, defaultRepeaterItemValue } =
-		useContext(RepeaterContext);
+	const {
+		onChange,
+		valueCleanup,
+		repeaterId,
+		getControlId,
+		defaultRepeaterItemValue,
+	} = useContext(RepeaterContext);
 
 	return (
 		<div id={`repeater-item-${itemId}`}>
@@ -30,7 +38,7 @@ const Fields = ({ itemId, item }) => {
 				id={getControlId(itemId, 'x')}
 				defaultValue={defaultRepeaterItemValue.x}
 				controlName="input"
-				label={<XCoordinateIcon />}
+				label={<Icon icon="coordinate-x" />}
 				labelPopoverTitle={__('Horizontal Offset (X)', 'blockera')}
 				labelDescription={
 					<>
@@ -53,11 +61,14 @@ const Fields = ({ itemId, item }) => {
 				range={true}
 				min={-100}
 				max={100}
-				onChange={(x) =>
+				onChange={(x, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, x },
 					})
 				}
@@ -70,7 +81,7 @@ const Fields = ({ itemId, item }) => {
 				id={getControlId(itemId, 'y')}
 				defaultValue={defaultRepeaterItemValue.y}
 				controlName="input"
-				label={<YCoordinateIcon />}
+				label={<Icon icon="coordinate-y" />}
 				labelPopoverTitle={__('Vertical Offset (Y)', 'blockera')}
 				labelDescription={
 					<>
@@ -93,11 +104,14 @@ const Fields = ({ itemId, item }) => {
 				range={true}
 				min={-100}
 				max={100}
-				onChange={(y) =>
+				onChange={(y, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, y },
 					})
 				}
@@ -133,11 +147,14 @@ const Fields = ({ itemId, item }) => {
 				range={true}
 				min={0}
 				max={100}
-				onChange={(blur) =>
+				onChange={(blur, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, blur },
 					})
 				}
@@ -162,11 +179,14 @@ const Fields = ({ itemId, item }) => {
 					</>
 				}
 				columns="columns-2"
-				onChange={(color) =>
+				onChange={(color, ref) =>
 					changeRepeaterItem({
+						ref,
 						controlId,
 						repeaterId,
 						itemId,
+						onChange,
+						valueCleanup,
 						value: { ...item, color },
 					})
 				}

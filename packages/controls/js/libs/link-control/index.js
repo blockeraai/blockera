@@ -14,22 +14,22 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { Button } from '@blockera/components';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from '../repeater-control/store';
-import { default as AdvancedIcon } from './icons/advanced';
 import {
+	Button,
 	BaseControl,
 	InputControl,
 	CheckboxControl,
 	AttributesControl,
 } from '../index';
-import { ControlContextProvider, useControlContext } from '../../context';
 import type { LinkControlProps } from './types';
 import { linkControlValueCleaner } from './utils';
+import { ControlContextProvider, useControlContext } from '../../context';
 
 export default function LinkControl({
 	id,
@@ -121,7 +121,7 @@ export default function LinkControl({
 						noBorder={true}
 						aria-label={__('Open Advanced Settings', 'blockera')}
 					>
-						<AdvancedIcon />
+						<Icon icon="gear" iconSize="18" />
 					</Button>
 				</div>
 				{isAdvancedMode && (

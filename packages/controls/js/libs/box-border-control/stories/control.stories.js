@@ -6,15 +6,14 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { BoxBorderControl } from '../../index';
-import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
+import { Flex, BoxBorderControl } from '../../index';
 import { ControlContextProvider } from '../../../context';
+import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;

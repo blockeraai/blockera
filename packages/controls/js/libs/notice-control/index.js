@@ -9,16 +9,16 @@ import { useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { isFunction } from '@blockera/utils';
 import { controlClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import BaseControl from '../base-control';
+import { Flex } from '../';
 import { NoticeIcon } from './utils';
-import DismissIcon from './icons/dismiss-icon';
+import BaseControl from '../base-control';
 import type { TNoticeControlProps } from './types';
 
 export default function NoticeControl({
@@ -90,7 +90,11 @@ export default function NoticeControl({
 							onClick={handleOnDismiss}
 							data-test="notice-control-dismiss"
 						>
-							<DismissIcon />
+							<Icon
+								icon="dismiss"
+								iconSize="18"
+								data-test="notice-control-icon-dismiss"
+							/>
 						</span>
 					)}
 				</Flex>

@@ -27,4 +27,8 @@ export type PanelBodyControlProps = {
 	isEdited?: boolean,
 	children: Node,
 	className?: string,
+	/**
+	 * Show Blockera powered by branding
+	 */
+	showPoweredBy?: boolean,
 };

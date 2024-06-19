@@ -9,22 +9,25 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
-import { isValid, setValueAddon, useValueAddon } from '@blockera/editor';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { extractNumberAndUnit, LabelControl } from '../../../index';
-import type { Side, SideProps, SideReturn } from '../types';
-import { SidePopover } from './side-popover';
-import { fixLabelText } from '../../box-spacing-control/utils';
-import SideTopIcon from '../icons/side-top';
-import SideBottomIcon from '../icons/side-bottom';
-import SideLeftIcon from '../icons/side-left';
-import SideRightIcon from '../icons/side-right';
+import {
+	isValid,
+	LabelControl,
+	setValueAddon,
+	useValueAddon,
+	extractNumberAndUnit,
+} from '../../../index';
 import { SideShape } from './side-shape';
+import { SidePopover } from './side-popover';
+import type { ValueAddon } from '../../../value-addons';
+import type { Side, SideProps, SideReturn } from '../types';
+import { fixLabelText } from '../../box-spacing-control/utils';
 
 export function SideItem({
 	side,
@@ -46,7 +49,7 @@ export function SideItem({
 }: SideProps): SideReturn {
 	const sideId: Side = side;
 
-	function onDragSetValue(property: string, newValue: string) {
+	function onDragSetValue(property: string, newValue: ValueAddon | any) {
 		if (isValid(newValue)) {
 			setValue({
 				...value,
@@ -63,7 +66,7 @@ export function SideItem({
 					[property]: '',
 				},
 			});
-		} else {
+		} else if ('object' !== typeof newValue) {
 			const extracted = extractNumberAndUnit(value.position[property]);
 
 			if (
@@ -150,13 +153,13 @@ export function SideItem({
 	function getSideIcon(side: Side): MixedElement {
 		switch (side) {
 			case 'top':
-				return <SideTopIcon />;
+				return <Icon icon="position-side-top" />;
 			case 'bottom':
-				return <SideBottomIcon />;
+				return <Icon icon="position-side-bottom" />;
 			case 'left':
-				return <SideLeftIcon />;
+				return <Icon icon="position-side-left" />;
 			case 'right':
-				return <SideRightIcon />;
+				return <Icon icon="position-side-right" />;
 		}
 
 		return <></>;

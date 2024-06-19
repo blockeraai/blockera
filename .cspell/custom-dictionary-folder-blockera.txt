@@ -1,0 +1,3 @@
+# Custom Dictionary Words
+blockera
+sprintf

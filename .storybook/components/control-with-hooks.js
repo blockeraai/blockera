@@ -1,5 +1,5 @@
 /**
- *  dependencies
+ * Blockera dependencies
  */
 import { useControlContext } from '@blockera/controls';
 
@@ -23,4 +23,3 @@ const ControlWithHooks = ({ Control, ...args }) => {
 };
 
 export default ControlWithHooks;
-

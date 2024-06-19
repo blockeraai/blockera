@@ -8,22 +8,8 @@ import { __ } from '@wordpress/i18n';
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { Icon } from '@blockera/icons';
 
-/**
- * Internal dependencies
- */
-import { default as AttributeIcon } from './icons/attribute';
-import { default as AttributeAriaIcon } from './icons/attribute-aria';
-import { default as ARelIcon } from './icons/a-rel';
-import { default as ATargetIcon } from './icons/a-target';
-import { default as AHreflangIcon } from './icons/a-hreflang';
-import { default as AReferrerpolicyIcon } from './icons/a-referrerpolicy';
-import { default as ButtonTypeIcon } from './icons/button-type';
-import { default as OlTypeIcon } from './icons/ol-type';
-import { default as OlReversedIcon } from './icons/ol-reversed';
-import { default as OlStartIcon } from './icons/ol-start';
-import { default as AttributeDataIcon } from './icons/attribute-data';
-import { default as AttributeRequiredIcon } from './icons/attribute-required';
 import type {
 	TAttributeFieldKeyOptions,
 	TAttributeFieldValueOptions,
@@ -355,58 +341,51 @@ export function getAttributeItemIcon({
 	attribute,
 }: TAttributeFieldValueOptions): MixedElement {
 	switch (element) {
-		case 'a':
-			switch (attribute) {
-				case 'rel':
-					return <ARelIcon />;
-
-				case 'target':
-					return <ATargetIcon />;
-
-				case 'hreflang':
-					return <AHreflangIcon />;
-
-				case 'referrerpolicy':
-					return <AReferrerpolicyIcon />;
-			}
-			break;
-
 		case 'button':
 			switch (attribute) {
 				case 'type':
-					return <ButtonTypeIcon />;
+					return <Icon icon="block-button" iconSize="20" />;
 			}
 			break;
 
 		case 'ol':
 			switch (attribute) {
 				case 'type':
-					return <OlTypeIcon />;
+					return <Icon icon="ol" iconSize="24" />;
 
 				case 'reversed':
-					return <OlReversedIcon />;
+					return <Icon icon="ol-order-descending" iconSize="24" />;
 
 				case 'start':
-					return <OlStartIcon />;
+					return <Icon icon="number-circle-1" iconSize="24" />;
 			}
 			break;
 	}
 
-	if (attribute === 'lang') {
-		return <AHreflangIcon />;
+	switch (attribute) {
+		case 'rel':
+			return <Icon library="wp" icon="replace" iconSize="20" />;
+
+		case 'lang':
+			return <Icon icon="hreflang" iconSize="24" />;
+
+		case 'target':
+			return <Icon icon="target-blank" iconSize="24" />;
+
+		case 'required':
+			return <Icon icon="asterisk" iconSize="24" />;
+
+		case 'referrerpolicy':
+			return <Icon icon="shield-checked" iconSize="24" />;
 	}
 
-	if (attribute === 'required') {
-		return <AttributeRequiredIcon />;
+	if (attribute && attribute.startsWith('aria-')) {
+		return <Icon icon="aria-label" iconSize="24" />;
 	}
 
-	if (attribute.startsWith('aria-')) {
-		return <AttributeAriaIcon />;
+	if (attribute && attribute.startsWith('data-')) {
+		return <Icon icon="data-attribute" iconSize="24" />;
 	}
 
-	if (attribute.startsWith('data-')) {
-		return <AttributeDataIcon />;
-	}
-
-	return <AttributeIcon />;
+	return <Icon icon="html-tag-attribute" iconSize="24" />;
 }

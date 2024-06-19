@@ -10,11 +10,13 @@
 }
 
 .blockera-core-canvas-breakpoints {
-	width: 450px;
+	max-width: 330px;
 	height: 36px;
 	background: #f0f0f0;
 	border-radius: 3px;
 	padding: 0 10px;
+	width: 100%;
+	min-width: 200px;
 
 	.blockera-control-blockera-core-breakpoints {
 		line-height: 36px;
@@ -26,7 +28,8 @@
 			transition: all 0.3s;
 		}
 
-		svg:hover {
+		svg:hover,
+ svg.is-active-breakpoint {
 			fill: var(--blockera-controls-primary-color);
 			color: var(--blockera-controls-primary-color);
 		}
@@ -55,3 +58,8 @@
 	}
 }
 
+.blockera-control-canvas-editor-preview-link {
+	display: flex;
+	align-items: center;
+	margin-left: 8px;
+}

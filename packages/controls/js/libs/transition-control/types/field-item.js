@@ -1,8 +1,8 @@
 // @flow
 
-import type { TItem } from './control-types';
+import type { TransitionControlItemValue } from './control-types';
 
 export type TFieldItem = {
 	itemId: number,
-	item: TItem,
+	item: TransitionControlItemValue,
 };

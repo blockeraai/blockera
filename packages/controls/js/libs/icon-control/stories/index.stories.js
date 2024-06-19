@@ -6,13 +6,12 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
-import { IconControl } from '../../index';
+import { Flex, IconControl } from '../../index';
 import { ControlContextProvider } from '../../../context';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import ControlWithHooks from '../../../../../../.storybook/components/control-with-hooks';
@@ -76,26 +75,6 @@ export const CustomURLIcon = {
 				},
 			},
 		},
-	},
-	render: (args) => <ControlWithHooks Control={IconControl} {...args} />,
-	decorators: [
-		WithInspectorStyles,
-		WithControlDataProvider,
-		...SharedDecorators,
-	],
-};
-
-export const WithSuggestions = {
-	args: {
-		controlInfo: {
-			name: nanoid(),
-			value: {
-				icon: 'pullLeft',
-				library: 'wp',
-				uploadSVG: '',
-			},
-		},
-		suggestionsQuery: 'left',
 	},
 	render: (args) => <ControlWithHooks Control={IconControl} {...args} />,
 	decorators: [

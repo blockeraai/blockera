@@ -9,11 +9,11 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
-import { Flex } from '@blockera/components';
 
 /**
  * Internal dependencies
  */
+import { Flex } from '../';
 import BaseControl from '../base-control';
 import { default as InputControl } from '../input-control';
 import { useControlContext } from '../../context';

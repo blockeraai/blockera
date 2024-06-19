@@ -1,0 +1,64 @@
+.blockera-control-value-addon {
+	height: 30px;
+	display: grid;
+	gap: 6px;
+	grid-template-columns: 1fr;
+	align-items: center;
+	align-content: center;
+	padding: 0 5px 0 8px;
+	border-radius: 2px;
+	font-size: 12px;
+	font-weight: 400;
+	cursor: pointer;
+	--va-color: #1e1e1e;
+	--va-border-color: #1e1e1e;
+	--va-bg-color: #dcdcdc;
+	color: var(--va-color);
+	border: 1px solid var(--va-border-color);
+	background-color: var(--va-bg-color);
+	user-select: none;
+	width: 100%;
+	text-align: inherit;
+
+	&.value-addon-with-icon {
+		grid-template-columns: 20px auto;
+	}
+
+	&.type-variable {
+		--va-color: var(--blockera-value-addon-var-color);
+		--va-border-color: var(--blockera-value-addon-var-border-color);
+		--va-bg-color: var(--blockera-value-addon-var-bg-color);
+
+		&.open-value-addon {
+			--va-border-color: var(--blockera-value-addon-var-color);
+			box-shadow: 0 0 0 1px var(--va-color);
+		}
+	}
+
+	&.type-deleted {
+		--va-color: var(--blockera-value-addon-deleted-color);
+		--va-border-color: var(--blockera-value-addon-deleted-border-color);
+		--va-bg-color: var(--blockera-value-addon-deleted-bg-color);
+
+		&.open-value-addon {
+			--va-border-color: var(--blockera-value-addon-deleted-color);
+			box-shadow: 0 0 0 1px var(--va-color);
+		}
+	}
+
+	.blockera-control-item-name {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.blockera-control-item-icon {
+		pointer-events: none;
+		display: flex;
+		align-items: center;
+
+		svg {
+			fill: currentColor;
+		}
+	}
+}

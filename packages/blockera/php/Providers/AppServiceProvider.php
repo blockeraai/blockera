@@ -10,7 +10,7 @@ use Blockera\WordPress\RenderBlock\{
 	SavePost,
 	Setup,
 };
-use Blockera\StyleEngine\{
+use Blockera\Editor\{
 	StyleDefinitions\Background,
 	StyleDefinitions\Border,
 	StyleDefinitions\BoxShadow,
@@ -31,7 +31,6 @@ use Blockera\Exceptions\BaseException;
 use Blockera\Bootstrap\ServiceProvider;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;
-use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -67,14 +66,6 @@ class AppServiceProvider extends ServiceProvider {
 				static function ( Application $app ): VariableType {
 
 					return new VariableType( $app );
-				}
-			);
-
-			$this->app->singleton(
-				DynamicValueType::class,
-				static function ( Application $app ): DynamicValueType {
-
-					return new DynamicValueType( $app );
 				}
 			);
 
@@ -145,7 +136,7 @@ class AppServiceProvider extends ServiceProvider {
 
 		} catch ( BaseException $handler ) {
 
-			throw new BaseException( 'Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage() );
+			throw new BaseException( esc_html( 'Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage() ) );
 		}
 	}
 
@@ -161,15 +152,13 @@ class AppServiceProvider extends ServiceProvider {
 
 		add_action( 'init', [ $this, 'loadTextDomain' ] );
 
-		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
-		$variableRegistry     = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
+		$variableRegistry = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
 
 		if ( $this->app instanceof Blockera ) {
 
 			$this->app->setRegisteredValueAddons(
 				[
-					'variable'      => $variableRegistry->getRegistered(),
-					'dynamic-value' => $dynamicValueRegistry->getRegistered(),
+					'variable' => $variableRegistry->getRegistered(),
 				]
 			);
 		}
@@ -178,7 +167,7 @@ class AppServiceProvider extends ServiceProvider {
 		$this->app->make( SavePost::class );
 		$this->app->make( EntityRegistry::class );
 
-		array_map( [ $this, 'renderBlocks' ], blockera_core_config( 'app.blocks' ) );
+		array_map( [ $this, 'renderBlocks' ], blockera_get_available_blocks() );
 	}
 
 	/**

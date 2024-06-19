@@ -6,12 +6,12 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/components';
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 
 /**
  * Internal dependencies
  */
+import { Flex } from '../../';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
 import { ControlContextProvider, MediaImageControl } from '../../../index';
 import { WithControlDataProvider } from '../../../../../../.storybook/decorators/with-control-data-provider';

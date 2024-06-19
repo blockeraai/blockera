@@ -169,6 +169,10 @@ export type RepeaterControlProps = {
 	 * The callback to generate id for items with custom pattern.
 	 */
 	itemIdGenerator?: (itemsCount: number) => string,
+	/**
+	 * Promotion component for repeater.
+	 */
+	PromoComponent?: MixedElement | any,
 };
 
 export type TRepeaterDefaultStateProps = {

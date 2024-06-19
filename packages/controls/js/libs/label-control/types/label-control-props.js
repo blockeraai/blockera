@@ -15,7 +15,7 @@ export type LabelControlProps = {
 	path?: string | null,
 	repeaterItem?: number,
 	singularId?: string | null,
-	mode?: 'advanced' | 'simple',
+	mode?: 'advanced' | 'simple' | 'none',
 	isRepeater?: void | boolean,
 	onClick?: (event: MouseEvent) => void,
 	resetToDefault?: (args?: {

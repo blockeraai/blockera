@@ -1,0 +1,12 @@
+{
+	"name": "blockera/env",
+	"description": "The env package to read environment variables of json related files at the root of any project.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Env\\": "php/"
+		},
+		"files": [
+			"php/functions.php"
+		]
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"name": "blockera/blocks-core",
+	"description": "The WordPress core blocks package for Blockera editor.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Blocks\\Core\\": "php/"
+		},
+		"files": [
+			"./php/functions.php"
+		]
+	}
+}

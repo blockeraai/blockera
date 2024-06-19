@@ -1,5 +1,7 @@
 <?php
 
+// direct access is not allowed.
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 $theme = wp_get_theme();
 
@@ -19,7 +21,9 @@ return apply_filters(
 			'url' => home_url(),
 		],
 		'blockera' => [
-			'name' => blockera_core_config( 'app.name' )
+			'settings' => get_option( 'blockera_settings', blockera_core_config( 'panel.std' )),
+			'name'     => blockera_core_config( 'app.name' ),
+			'version'  => blockera_core_config( 'app.version' ),
 		],
 	]
 );

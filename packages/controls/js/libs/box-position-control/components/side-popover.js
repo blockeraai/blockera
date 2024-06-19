@@ -7,15 +7,21 @@ import { useState, useEffect } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Button, Flex, Grid, Popover } from '@blockera/components';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import { BaseControl, InputControl } from '../../index';
+import {
+	Flex,
+	Grid,
+	Button,
+	Popover,
+	BaseControl,
+	InputControl,
+} from '../../index';
 import { useControlContext } from '../../../context';
-import ShortcutIcon from '../icons/shortcut';
 
 export function SidePopover({
 	id,
@@ -120,7 +126,7 @@ export function SidePopover({
 					<BaseControl
 						label={
 							<Flex gap="4px" alignItems="center">
-								<ShortcutIcon />
+								<Icon icon="shortcut" />
 								{__('Shortcuts', 'blockera')}
 							</Flex>
 						}

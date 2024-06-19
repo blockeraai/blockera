@@ -5,10 +5,15 @@
 import type { MixedElement } from 'react';
 
 /**
+ * Blockera dependencies
+ */
+import { useControlContext } from '../../context';
+
+/**
  * Internal dependencies
  */
 import type { LabelControlProps } from './types';
-import { AdvancedLabelControl, SimpleLabelControl } from './components';
+import { SimpleLabelControl } from './components';
 
 const LabelControl = ({
 	mode = 'simple',
@@ -26,7 +31,16 @@ const LabelControl = ({
 	resetToDefault,
 	...props
 }: LabelControlProps): MixedElement => {
-	if ('advanced' === mode) {
+	if ('none' === mode) {
+		return <></>;
+	}
+
+	const {
+		components: { AdvancedLabelControl },
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+	} = useControlContext();
+
+	if ('advanced' === mode && AdvancedLabelControl) {
 		return (
 			<AdvancedLabelControl
 				{...{

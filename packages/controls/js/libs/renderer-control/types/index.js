@@ -11,4 +11,5 @@ export type RendererControlProps = {
 	parentDefaultValue: any,
 	type: RendererControlTypes,
 	conditions?: Array<string>,
+	options?: Array<any> | Object,
 };

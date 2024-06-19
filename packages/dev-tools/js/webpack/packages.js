@@ -1,51 +1,50 @@
 /**
  * External dependencies
  */
-const { join, resolve } = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { join, resolve } = require('path');
 
 /**
  * WordPress dependencies
  */
-const postcssPlugins = require('@wordpress/postcss-plugins-preset');
-const {
-	camelCaseDash,
-} = require('@wordpress/dependency-extraction-webpack-plugin/lib/util');
-const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
+const postcssPlugins = require('@wordpress/postcss-plugins-preset');
+const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 
 /**
  * Internal dependencies
  */
-const { dependencies } = require('../../../../package');
 const styleDependencies = require('./packages-styles');
 
-const exportDefaultPackages = [];
-const BLOCKERA_NAMESPACE = '@blockera/';
-const blockeraPackages = Object.keys(dependencies)
-	.filter((packageName) => packageName.startsWith(BLOCKERA_NAMESPACE))
-	.map((packageName) => packageName.replace(BLOCKERA_NAMESPACE, ''));
-const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
-	// Exclude dev packages.
-	if (-1 !== packageName.indexOf('dev-')) {
-		return memo;
-	}
+/**
+ * Removes all svg rules from WordPress webpack config because it brakes the SVGR and SVGO plugins
+ * Related to: https://github.com/gregberge/svgr/issues/361
+ */
+defaultConfig.module.rules
+	.filter((rule) => rule.test)
+	.forEach((rule) => {
+		// Convert the test to a string, remove 'svg', and then create a new RegExp
+		const source = rule.test.source;
+		const modifiedSource = source
+			.replace(/\|?svg\|?/g, (match) => {
+				if (match.startsWith('|') && match.endsWith('|')) {
+					return '|';
+				}
+				return '';
+			})
+			.replace(/^\|/, '')
+			.replace(/\|$/, '');
 
-	return {
-		...memo,
-		[packageName]: {
-			import: `./packages/${packageName}`,
-			library: {
-				name: ['blockera', camelCaseDash(packageName)],
-				type: 'var',
-				export: exportDefaultPackages.includes(packageName)
-					? 'default'
-					: undefined,
-			},
-		},
-	};
-}, {});
+		// If the modified source is empty or invalid, remove the rule
+		if (modifiedSource) {
+			rule.test = new RegExp(modifiedSource);
+		} else {
+			// Handle the case where the pattern is completely removed and leaves an empty string
+			rule.test = null;
+		}
+	});
+
 const scssLoaders = ({ isLazy }) => [
 	{
 		loader: 'style-loader',
@@ -71,14 +70,14 @@ module.exports = (env, argv) => {
 		mode: argv.mode,
 		name: 'packages',
 		entry: {
-			...blockeraEntries,
+			...argv.entry,
 			...styleDependencies.entry,
 		},
 		output: {
-			devtoolNamespace: 'blockera',
+			devtoolNamespace: argv.devtoolNamespace,
 			filename: isProduction
-				? './dist/[name]/index.min.js'
-				: './dist/[name]/index.js',
+				? './dist/[name]/[name].min.js'
+				: './dist/[name]/[name].js',
 			path: join(__dirname, '..', '..', '..', '..'),
 		},
 		module: {
@@ -88,6 +87,11 @@ module.exports = (env, argv) => {
 					test: /\.lazy\.scss$/,
 					use: scssLoaders({ isLazy: true }),
 					include: resolve(__dirname),
+				},
+				{
+					test: /\.svg$/i,
+					issuer: /\.[jt]sx?$/,
+					use: ['@svgr/webpack'],
 				},
 			],
 		},
@@ -107,6 +111,11 @@ module.exports = (env, argv) => {
 				...styleDependencies.optimization.minimizer,
 			],
 		},
-		devtool: 'inline-source-map',
+		...(isProduction
+			? {}
+			: {
+					devtool: 'source-map',
+			  }),
+		externals: argv.externals,
 	};
 };

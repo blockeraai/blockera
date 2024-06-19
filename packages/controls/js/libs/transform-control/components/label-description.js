@@ -4,10 +4,11 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import MoveIcon from '../icons/move';
-import ScaleIcon from '../icons/scale';
-import RotateIcon from '../icons/rotate';
-import SkewIcon from '../icons/skew';
+
+/**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
 
 export function LabelDescription(): MixedElement {
 	return (
@@ -24,8 +25,9 @@ export function LabelDescription(): MixedElement {
 					'blockera'
 				)}
 			</p>
+
 			<h3>
-				<MoveIcon />
+				<Icon icon="transform-move" />
 				{__('Move (Translate)', 'blockera')}
 			</h3>
 			<p>
@@ -34,8 +36,9 @@ export function LabelDescription(): MixedElement {
 					'blockera'
 				)}
 			</p>
+
 			<h3>
-				<ScaleIcon />
+				<Icon icon="transform-scale" />
 				{__('Scale', 'blockera')}
 			</h3>
 			<p>
@@ -46,7 +49,7 @@ export function LabelDescription(): MixedElement {
 			</p>
 
 			<h3>
-				<RotateIcon />
+				<Icon icon="transform-rotate" />
 				{__('Rotate', 'blockera')}
 			</h3>
 			<p>
@@ -57,7 +60,7 @@ export function LabelDescription(): MixedElement {
 			</p>
 
 			<h3>
-				<SkewIcon />
+				<Icon icon="transform-skew" />
 				{__('Skew', 'blockera')}
 			</h3>
 			<p>{__('Distorts elements along the X and Y axes.', 'blockera')}</p>

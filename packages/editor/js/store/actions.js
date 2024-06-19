@@ -6,7 +6,7 @@
 import type {
 	TBreakpoint,
 	BreakpointTypes,
-} from '@blockera/editor-extensions/js/libs/block-states/types';
+} from '../extensions/libs/block-states/types';
 
 export const setBreakpoints = (breakpoints: {
 	[key: number]: BreakpointTypes,

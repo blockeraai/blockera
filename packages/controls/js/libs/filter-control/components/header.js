@@ -14,20 +14,11 @@ import type { Element } from 'react';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-
-import { default as BlurIcon } from '../icons/blur';
-import { default as DropShadowIcon } from '../icons/drop-shadow';
-import { default as BrightnessIcon } from '../icons/brightness';
-import { default as ContrastIcon } from '../icons/contrast';
-import { default as GrayscaleIcon } from '../icons/grayscale';
-import { default as HueRotateIcon } from '../icons/hue-rotate';
-import { default as InvertIcon } from '../icons/invert';
-import { default as SaturationIcon } from '../icons/saturate';
-import { default as SepiaIcon } from '../icons/sepia';
 import type { THeaderItem } from '../types';
 import { prepValueForHeader } from '../../repeater-control/utils';
 
@@ -46,7 +37,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 			case 'blur':
 				label = __('Blur', 'blockera');
 				value = prepValueForHeader(item.blur);
-				icon = <BlurIcon />;
+				icon = <Icon icon="filter-blur" iconSize="18" />;
 				break;
 
 			case 'drop-shadow':
@@ -58,49 +49,49 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 						{prepValueForHeader(item['drop-shadow-blur'])}
 					</>
 				);
-				icon = <DropShadowIcon />;
+				icon = <Icon icon="filter-drop-shadow" iconSize="18" />;
 				break;
 
 			case 'brightness':
 				label = __('Brightness', 'blockera');
 				value = prepValueForHeader(item.brightness);
-				icon = <BrightnessIcon />;
+				icon = <Icon icon="filter-brightness" iconSize="18" />;
 				break;
 
 			case 'contrast':
 				label = __('Contrast', 'blockera');
 				value = prepValueForHeader(item.contrast);
-				icon = <ContrastIcon />;
+				icon = <Icon icon="filter-contrast" iconSize="18" />;
 				break;
 
 			case 'hue-rotate':
 				label = __('Hue Rotate', 'blockera');
 				value = prepValueForHeader(item['hue-rotate']);
-				icon = <HueRotateIcon />;
+				icon = <Icon icon="filter-hue-rotate" iconSize="18" />;
 				break;
 
 			case 'saturate':
 				label = __('Saturation', 'blockera');
 				value = prepValueForHeader(item.saturate);
-				icon = <SaturationIcon />;
+				icon = <Icon icon="filter-saturate" iconSize="18" />;
 				break;
 
 			case 'grayscale':
 				label = __('Grayscale', 'blockera');
 				value = prepValueForHeader(item.grayscale);
-				icon = <GrayscaleIcon />;
+				icon = <Icon icon="filter-grayscale" iconSize="18" />;
 				break;
 
 			case 'invert':
 				label = __('Invert', 'blockera');
 				value = prepValueForHeader(item.invert);
-				icon = <InvertIcon />;
+				icon = <Icon icon="filter-invert" iconSize="18" />;
 				break;
 
 			case 'sepia':
 				label = __('Sepia', 'blockera');
 				value = prepValueForHeader(item.sepia);
-				icon = <SepiaIcon />;
+				icon = <Icon icon="filter-sepia" iconSize="18" />;
 				break;
 		}
 

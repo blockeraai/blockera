@@ -3,10 +3,6 @@
  */
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-
-/**
- * Internal dependencies
- */
 import Theme from '@wordpress/components/build-module/theme';
 
 const themes = {

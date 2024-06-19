@@ -8,7 +8,7 @@ import { update } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { hasRepeaterId } from './utils';
+import { hasRepeaterId, repeaterOnChange } from './utils';
 
 function getItemId(
 	newItemId: string,
@@ -72,25 +72,32 @@ export function sortItem(state: Object = {}, action: Object): Object {
 
 	// state management by action include repeaterId
 	if (hasRepeaterId(controlInfo.value, action)) {
+		const newValue = repeaterOnChange(
+			handleActionIncludeRepeaterId(controlInfo.value, action),
+			action
+		);
+
 		return {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: handleActionIncludeRepeaterId(controlInfo.value, action),
+				value: newValue,
 			},
 		};
 	}
 
-	const value = Object.entries(action.items).map((arr) =>
+	const values = Object.entries(action.items).map((arr) =>
 		sortingRepeater(arr, action)
 	);
+
+	repeaterOnChange(Object.fromEntries(values), action);
 
 	//by default behavior of "sortRepeaterItem" action
 	return {
 		...state,
 		[action.controlId]: {
 			...state[action.controlId],
-			value: Object.fromEntries(value),
+			value: Object.fromEntries(values),
 		},
 	};
 }
