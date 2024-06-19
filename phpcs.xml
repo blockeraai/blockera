@@ -50,7 +50,8 @@
 
     <!-- Exclude generated files -->
     <exclude-pattern>node_modules/*</exclude-pattern>
-    <exclude-pattern>/.dev/**/*</exclude-pattern>
+    <exclude-pattern>./packages/**/tests/*</exclude-pattern>
+    <exclude-pattern>./packages/dev-phpunit/*</exclude-pattern>
 
     <!-- Exclude third party libraries -->
     <exclude-pattern>./vendor/*</exclude-pattern>
