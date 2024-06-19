@@ -51,13 +51,12 @@
 		{
 			"type": "path",
 			"url": "packages/env"
+		},
+		{
+			"type": "path",
+			"url": "packages/dev-phpunit"
 		}
 	],
-	"autoload-dev": {
-		"psr-4": {
-			"Blockera\\Framework\\Tests\\": ".dev/tests/phpunit"
-		}
-	},
 	"authors": [
 		{
 			"name": "The Blockera Contributors"
@@ -72,6 +71,7 @@
 		"blockera/bootstrap": "*",
 		"blockera/env": "*",
 		"blockera/editor": "*",
+		"blockera/dev-phpunit": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
 		"blockera/exceptions": "*",

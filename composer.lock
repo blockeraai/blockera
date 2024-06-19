@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9082b57476c149deccd950deb75bd11",
+    "content-hash": "fafda0409a8f580c57b3a5184164b036",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -125,6 +125,25 @@
                 }
             },
             "description": "Blockera Data Editor package to access all property value with tokenized string.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/dev-phpunit",
+            "version": "dev-feat/control/input-control",
+            "dist": {
+                "type": "path",
+                "url": "packages/dev-phpunit",
+                "reference": "a15cdb258cb3ea251ed36d8c3c8d01d31328dea1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Dev\\PHPUnint\\": "php/"
+                }
+            },
+            "description": "The development phpunit package of blockera",
             "transport-options": {
                 "relative": true
             }
