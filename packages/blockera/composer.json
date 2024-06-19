@@ -8,5 +8,10 @@
 		"files": [
 			"php/functions.php"
 		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Setup\\Tests\\": "php/tests/"
+		}
 	}
 }
