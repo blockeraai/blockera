@@ -1,3 +1,16 @@
+const restrictedImports = [
+	{
+		name: 'lodash-es',
+		message:
+			'This Lodash is not recommended. Please use native functionality instead.',
+	},
+	{
+		name: 'lodash',
+		message:
+			'This Lodash is not recommended. Please use native functionality instead.',
+	},
+];
+
 module.exports = {
 	parser: 'hermes-eslint',
 	extends: [
@@ -31,6 +44,12 @@ module.exports = {
 		],
 		'jsx-a11y/no-static-element-interactions': 'off',
 		'jsx-a11y/click-events-have-key-events': 'off',
+		'no-restricted-imports': [
+			'error',
+			{
+				paths: restrictedImports,
+			},
+		],
 	},
 	env: {
 		jest: true,
