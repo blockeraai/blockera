@@ -23,7 +23,6 @@ import './commands';
  */
 import '../../../controls/js/style.scss';
 import '../../../../.storybook/styles/style.lazy.scss';
-import '../../../components/js/style.scss';
 import { WithControlDataProvider } from './components/providers/control-provider/with-control-data-provider';
 import { controlReducer } from '@blockera/controls/js/store/reducers/control-reducer';
 import { modifyControlValue } from '@blockera/controls/js/store/actions';

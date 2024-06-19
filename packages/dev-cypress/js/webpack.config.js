@@ -39,6 +39,11 @@ module.exports = {
 					},
 				},
 			},
+			{
+				test: /packages\/.*\.svg$/,
+				issuer: /\.[jt]sx?$/,
+				use: ['@svgr/webpack'],
+			},
 		],
 	},
 	plugins: [
