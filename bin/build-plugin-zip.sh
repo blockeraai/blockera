@@ -71,7 +71,7 @@ rm -r -f dist
 
 # Run the build.
 status "Installing dependencies... 📦"
-composer install --no-dev
+composer install --no-dev -o --apcu-autoloader -a
 if [ -z "$NO_INSTALL_NPM" ]; then
   npm cache verify
   npm ci

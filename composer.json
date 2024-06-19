@@ -110,5 +110,8 @@
 		"lint": "phpcs --standard=phpcs.xml",
 		"format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
 		"test:coverage": "@php ./vendor/bin/phpunit --coverage-html php-coverage"
-	}
+	},
+	"optimize-autoloader": "true",
+	"apcu-autoloader": true,
+	"classmap-authoritative": true
 }
