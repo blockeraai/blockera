@@ -43,10 +43,7 @@
     <arg name="cache" value=".cache/phpcs.json"/>
 
     <file>./bin</file>
-    <file>./blockera-core.php</file>
-    <file>./libs</file>
     <file>./packages</file>
-    <file>./.dev/tests/phpunit</file>
 
     <!-- Exclude generated files -->
     <exclude-pattern>node_modules/*</exclude-pattern>
@@ -56,15 +53,6 @@
     <!-- Exclude third party libraries -->
     <exclude-pattern>./vendor/*</exclude-pattern>
 
-    <!-- These special comments are markers for the build process -->
-    <rule ref="Squiz.Commenting.InlineComment.WrongStyle">
-        <exclude-pattern>blockera-core.php</exclude-pattern>
-    </rule>
-
-    <!-- Do not require docblocks for unit tests -->
-    <rule ref="Squiz.Commenting.FunctionComment.Missing">
-        <exclude-pattern>.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
     <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
         <exclude-pattern>*</exclude-pattern>
     </rule>
@@ -85,62 +73,6 @@
     </rule>
     <rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
         <exclude-pattern>*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.Commenting.ClassComment.Missing">
-        <exclude-pattern>.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.Commenting.ClassComment.SpacingAfter">
-        <exclude-pattern>.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionComment.MissingParamTag">
-        <exclude-pattern>.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Generic.Commenting.DocComment.Empty">
-        <exclude-pattern>.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Generic.Commenting.DocComment.MissingShort">
-        <exclude-pattern>.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.Commenting.VariableComment.Missing">
-        <exclude-pattern>.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionCommentThrowTag.Missing">
-        <exclude-pattern>.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-
-    <!-- Ignore filename error since it requires WP core build process change -->
-    <rule ref="WordPress.Files.FileName.InvalidClassFileName">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-
-    <rule ref="PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations.voidFound">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionComment.MissingParamComment">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations.voidFound">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="WordPress.Security.EscapeOutput.DeprecatedWhitelistCommentFound">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.PHP.CommentedOutCode.Found">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.Commenting.InlineComment.InvalidEndChar">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.PHP.CommentedOutCode.Found">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-
-    <!-- Exclude PHPUnit tests from file and class name sniffs (for Core parity). -->
-    <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
-    </rule>
-    <rule ref="PEAR.NamingConventions.ValidClassName.Invalid">
-        <exclude-pattern>/.dev/tests/phpunit/*</exclude-pattern>
     </rule>
     <rule ref="Squiz.Commenting.ClosingDeclarationComment.Missing">
         <exclude-pattern>/*</exclude-pattern>
