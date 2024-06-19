@@ -55,6 +55,12 @@ module.exports = {
 				paths: restrictedImports,
 			},
 		],
+		'@wordpress/i18n-text-domain': [
+			'error',
+			{
+				allowedTextDomain: ['blockera'],
+			},
+		],
 	},
 	env: {
 		jest: true,
