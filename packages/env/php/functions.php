@@ -6,11 +6,6 @@
  * @package packages/env/php/functions.php
  */
 
-// direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 if ( ! function_exists( 'blockera_get_experimental' ) ) {
 
 	/**
