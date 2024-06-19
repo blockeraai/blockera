@@ -8,5 +8,10 @@
 		"files": [
 			"php/helpers.php"
 		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Editor\\Tests": "php/tests/"
+		}
 	}
 }
