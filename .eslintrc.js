@@ -9,6 +9,11 @@ const restrictedImports = [
 		message:
 			'This Lodash is not recommended. Please use native functionality instead.',
 	},
+	{
+		name: 'classnames',
+		message:
+			"Please use `@blockera/classnames` instead. It's a lighter, faster and is compatible all Blockera packages.",
+	},
 ];
 
 module.exports = {
