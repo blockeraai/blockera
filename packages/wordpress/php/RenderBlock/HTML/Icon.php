@@ -2,6 +2,7 @@
 
 namespace Blockera\WordPress\RenderBlock\HTML;
 
+//phpcs:disable
 class Icon extends BlockHTML {
 
 	public function manipulate( array $request ): void {

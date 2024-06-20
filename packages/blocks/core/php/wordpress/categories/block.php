@@ -12,7 +12,7 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'term' => [
+				'term'      => [
 					'root' => 'li.cat-item > a',
 				],
 				'list_item' => [

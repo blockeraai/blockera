@@ -99,6 +99,7 @@ if ( ! function_exists( 'blockera_load' ) ) {
 			return false;
 		}
 
+		// phpcs:ignore
 		extract( $params );
 
 		return include $filename;
@@ -109,7 +110,7 @@ if ( ! function_exists( 'blockera_get_value_addon_real_value' ) ) {
 	/**
 	 * Gets the real value that can be used (Final Value)
 	 *
-	 * @param mixed $value value
+	 * @param mixed $value The addon value.
 	 *
 	 * @return mixed
 	 */
@@ -127,7 +128,7 @@ if ( ! function_exists( 'blockera_get_value_addon_real_value' ) ) {
 
 		if ( is_array( $value ) && ! empty( $value['isValueAddon'] ) && ! empty( $value['valueType'] ) ) {
 
-			// todo validate that variable is currently available or not
+			// todo validate that variable is currently available or not.
 			if ( 'variable' === $value['valueType'] && isset( $value['settings']['var'] ) ) {
 				return 'var(' . $value['settings']['var'] . ')';
 			}
@@ -162,7 +163,7 @@ if ( ! function_exists( 'blockera_array_flat' ) ) {
 	/**
 	 * Convert nested array (in two-level dimensions) to flat array.
 	 *
-	 * @param array $nestedArray
+	 * @param array $nestedArray The recieved nested array.
 	 *
 	 * @return array
 	 */
@@ -236,7 +237,7 @@ if ( ! function_exists( 'blockera_get_array_deep_merge' ) ) {
 	/**
 	 * Get resulting of array deeply merge.
 	 *
-	 * @param array $array1 the source array
+	 * @param array $array1 the source array.
 	 * @param array $array2 the array to merge with source array.
 	 *
 	 * @return array the merged array.
@@ -270,10 +271,13 @@ if ( ! function_exists( 'blockera_get_dist_assets' ) ) {
 	 */
 	function blockera_get_dist_assets(): array {
 
-		return array_map( function ( string $asset_dir ): string {
+		return array_map(
+			function ( string $asset_dir ): string {
 
-			return basename( $asset_dir );
+				return basename( $asset_dir );
 
-		}, glob( blockera_core_config( 'app.dist_path' ) . '*' ) );
+			},
+			glob( blockera_core_config( 'app.dist_path' ) . '*' )
+		);
 	}
 }

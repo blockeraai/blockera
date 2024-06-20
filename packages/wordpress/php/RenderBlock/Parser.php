@@ -16,14 +16,16 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 class Parser {
 
 	/**
-	 * hold the Application class instance
+	 * Hold the Application class instance.
 	 *
 	 * @var Application $app
 	 */
 	protected Application $app;
 
 	/**
-	 * @param Application $app
+	 * The Parser class constructor.
+	 *
+	 * @param Application $app The application container object.
 	 */
 	public function __construct( Application $app ) {
 
@@ -33,11 +35,11 @@ class Parser {
 	/**
 	 * Retrieve combine css of current block.
 	 *
-	 * @param array $params {
+	 * @param array $params  The params array includes block and block selector.
 	 *
-	 * @throws BindingResolutionException
+	 * @throws BindingResolutionException The BindingResolutionException for not bonded object.
 	 *
-	 * @return string string of css styles
+	 * @return string string of css styles.
 	 */
 	public function getCss( array $params ): string {
 
@@ -47,7 +49,9 @@ class Parser {
 		] = $params;
 
 		/**
-		 * @var StyleEngine $styleEngine
+		 * Describe type of variable.
+		 *
+		 * @var StyleEngine $styleEngine The style-engine object.
 		 */
 		$styleEngine = $this->app->make( StyleEngine::class, compact( 'block', 'fallbackSelector' ) );
 
@@ -55,45 +59,47 @@ class Parser {
 	}
 
 	/**
-	 * handle shared parsers in between all blocks to manipulate html.
+	 * Handle shared parsers in between all blocks to manipulate html.
 	 *
-	 * @param array $params {
+	 * @param array $params The params array includes dom, block, and unique_class_name indexes.
 	 *
-	 * @throws BindingResolutionException
-	 * @throws BaseException
+	 * @throws BindingResolutionException The BindingResolutionException for not bonded object.
+	 * @throws BaseException The BaseException when avoid base rules.
 	 * @return void
 	 */
-	public function htmlManipulate( array $params ) {
+	public function htmlManipulate( array $params ): void {
 
 		[
 			'dom'             => $dom,
 			'block'           => $block,
-			'uniqueClassname' => $uniqueClassname,
+			'unique_class_name' => $uniqueClassname,
 		] = $params;
 
 		/**
-		 * @var Render $block
+		 * Describe type of variable.
+		 *
+		 * @var Render $block The Render instance as $block variable.
 		 */
 		$render = $this->app->make( Render::class, [ 'blockName' => $block['blockName'] ] );
 
 		$selector     = $render->getSelector( $block );
 		$blockElement = $dom->findOne( $selector );
 
-		// add unique classname into block element
+		// add unique classname into block element.
+		// phpcs:ignore
 		$blockElement->classList->add( $uniqueClassname );
 
-		// Block Instances
+		// Block Instances.
 		{
 			$iconCustomizer = $this->app->make( Icon::class );
 		}
 
 		/**
-		 * TODO: Create Chain of HTML Customizers 💡
+		 * TODO: Create Chain of HTML Customizers 💡.
 		 *
-		 * @var Icon $iconCustomizer
+		 * @var Icon $iconCustomizer The Icon customizer html object.
 		 */
 
-		// Usage
 		{
 			$iconCustomizer->manipulate( compact( 'block', 'blockElement' ) );
 		}

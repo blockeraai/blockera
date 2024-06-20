@@ -12,16 +12,16 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'link' => [
+				'link'      => [
 					'root' => 'a:not(.wp-element-button)',
 				],
 				'separator' => [
 					'root' => '.wp-block-post-terms__separator',
 				],
-				'prefix' => [
+				'prefix'    => [
 					'root' => '.wp-block-post-terms__prefix',
 				],
-				'suffix' => [
+				'suffix'    => [
 					'root' => '.wp-block-post-terms__suffix',
 				],
 			],

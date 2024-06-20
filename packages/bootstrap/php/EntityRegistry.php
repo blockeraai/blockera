@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable
 namespace Blockera\Bootstrap;
 
 use Blockera\Bootstrap\Application;
@@ -35,8 +35,8 @@ class EntityRegistry {
 	/**
 	 * Register entity.
 	 *
-	 * @param mixed $entity   the any type of entity data.
 	 * @param mixed $instance the instance of any type of entity object.
+	 * @param mixed $entity   any type of entity data.
 	 *
 	 * @return void
 	 */

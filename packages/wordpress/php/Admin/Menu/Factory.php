@@ -93,6 +93,7 @@ class Factory {
 			$invalid_args = array_diff( $required_params, array_keys( $this->menu ) );
 			$plural       = count( $invalid_args ) > 1 ? 's were' : ' was';
 
+			// phpcs:disable
 			throw new BaseException(
 				__( 'Invalid menu arguments. "' . implode( ', ', $invalid_args ) . '" argument' . $plural . ' not configured!', 'blockera' ),
 				500

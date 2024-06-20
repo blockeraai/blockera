@@ -12,13 +12,13 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'citation' => [
+				'citation'  => [
 					'root' => 'cite',
 				],
 				'paragraph' => [
 					'root' => 'p',
 				],
-				'link' => [
+				'link'      => [
 					'root' => 'a:not(.wp-element-button)',
 				],
 			],

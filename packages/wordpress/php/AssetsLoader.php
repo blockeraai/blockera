@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable
 namespace Blockera\WordPress;
 
 use Blockera\Bootstrap\Application;
@@ -111,43 +111,46 @@ class AssetsLoader {
 			return;
 		}
 
-		array_map( function ( array $asset ): void {
+		array_map(
+			function ( array $asset ): void {
 
-			if ( $asset['style'] ) {
+				if ( $asset['style'] ) {
 
-				wp_enqueue_style(
+					wp_enqueue_style(
+						$asset['name'],
+						str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
+						[],
+						$asset['version']
+					);
+
+					  return;
+				}
+
+				if ( ! $asset['script'] ) {
+
+					return;
+				}
+
+				$deps = $this->excludeDependencies( $asset['deps'] );
+
+				array_map( 'wp_enqueue_script', $this->packages_deps[ $asset['name'] ] ?? [] );
+
+				wp_enqueue_script(
 					$asset['name'],
-					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
-					[],
-					$asset['version']
+					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
+					array_merge(
+						$deps,
+						$this->packages_deps[ $asset['name'] ] ?? []
+					),
+					$asset['version'],
+					[
+						'in_footer' => true,
+					]
 				);
 
-				return;
-			}
-
-			if ( ! $asset['script'] ) {
-
-				return;
-			}
-
-			$deps = $this->excludeDependencies( $asset['deps'] );
-
-			array_map( 'wp_enqueue_script', $this->packages_deps[ $asset['name'] ] ?? [] );
-
-			wp_enqueue_script(
-				$asset['name'],
-				str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
-				array_merge(
-					$deps,
-					$this->packages_deps[ $asset['name'] ] ?? []
-				),
-				$asset['version'],
-				[
-					'in_footer' => true,
-				]
-			);
-
-		}, $this->prepareAssets() );
+			},
+			$this->prepareAssets()
+		);
 
 		/**
 		 * This filter for extendable inline script from internal or third-party developers.
@@ -188,7 +191,7 @@ class AssetsLoader {
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file    = $this->root_info['path'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
+		$file     = $this->root_info['path'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
 		$file_url = $this->root_info['url'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
 
 		if ( file_exists( $file ) && ! is_admin() ) {

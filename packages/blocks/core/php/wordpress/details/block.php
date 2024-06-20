@@ -15,7 +15,7 @@ return array_merge(
 				'paragraph' => [
 					'root' => 'p',
 				],
-				'link' => [
+				'link'      => [
 					'root' => 'a:not(.wp-element-button)',
 				],
 			],

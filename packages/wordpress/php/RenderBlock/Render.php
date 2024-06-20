@@ -102,12 +102,17 @@ class Render {
 			return $html;
 		}
 
+		$is_enable_icon_extension = blockera_get_experimental( [ 'editor', 'extensions', 'iconExtension' ] );
+
 		// phpcs:disable
 		// create dom adapter.
 		/**
 		 * @var DomParser $dom
 		 */
-		// $dom = $this->app->make( DomParser::class )::str_get_html( $html );
+		if ( $is_enable_icon_extension ) {
+
+			$dom = $this->app->make( DomParser::class )::str_get_html( $html );
+		}
 		// phpcs:enable
 
 		$attributes = $block['attrs'];
@@ -133,9 +138,12 @@ class Render {
 		// phpcs:disable
 		// TODO: add into cache mechanism.
 		//manipulation HTML of block content
-		// $parser->htmlManipulate( compact( 'dom', 'block', 'uniqueClassname' ) );
-		//retrieve final html of block content
-		// $html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
+		if ( $is_enable_icon_extension ) {
+
+			$parser->htmlManipulate( compact( 'dom', 'block', 'unique_class_name' ) );
+			//retrieve final html of block content
+			$html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
+		}
 		// phpcs:enable
 
 		// Assume miss post id.
@@ -236,7 +244,7 @@ class Render {
 	 * Retrieve block css selector.
 	 * in this method, we can customize selector of block element based on block name.
 	 *
-	 * @param array  $block           the WordPress block details as array.
+	 * @param array  $block             the WordPress block details as array.
 	 * @param string $unique_class_name the block unique css classname.
 	 *
 	 * @return string the block css selector with unique classname.

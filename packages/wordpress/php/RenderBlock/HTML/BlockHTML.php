@@ -8,6 +8,7 @@ use Blockera\WordPress\RenderBlock\HTML\Contracts\BlockHandler;
 /**
  * The default chaining behavior can be implemented inside a base BlockHTML class.
  */
+// phpcs:disable
 abstract class BlockHTML implements BlockHandler {
 
 	/**

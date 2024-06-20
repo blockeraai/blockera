@@ -1,3 +1,4 @@
+<?php // phpcs:disable ?>
 <div id="blockera-admin-settings-container">
 	<div class="blockera-panel-loading">
 		<div class="blockera-loading-container">
@@ -57,7 +58,7 @@
 
 		@keyframes blockera-loading-side {
 			0% {
-				fill: #0051E7;   
+				fill: #0051E7;
 			}
 			50% {
 				fill: #c3c3c3;

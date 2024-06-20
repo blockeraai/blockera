@@ -21,10 +21,13 @@ class AdminProvider extends ServiceProvider {
 	 */
 	public function register(): void {
 
-		$this->app->singleton( Factory::class, static function ( Application $app, array $args = [] ) {
+		$this->app->singleton(
+			Factory::class,
+			static function ( Application $app, array $args = [] ) {
 
-			return new Factory( $args );
-		} );
+				return new Factory( $args );
+			}
+		);
 	}
 
 	/**

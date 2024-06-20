@@ -15,10 +15,10 @@ return array_merge(
 				'gallery_caption' => [
 					'root' => '> figcaption',
 				],
-				'image' => [
+				'image'           => [
 					'root' => '.wp-block-image img',
 				],
-				'image_caption' => [
+				'image_caption'   => [
 					'root' => '.wp-block-image figcaption',
 				],
 			],

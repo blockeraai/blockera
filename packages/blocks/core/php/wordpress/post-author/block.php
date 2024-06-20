@@ -21,7 +21,7 @@ return array_merge(
 				'author' => [
 					'root' => '.wp-block-post-author__name',
 				],
-				'link' => [
+				'link'   => [
 					'root' => 'a:not(.wp-element-button)',
 				],
 			],

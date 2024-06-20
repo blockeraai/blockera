@@ -9,18 +9,18 @@ namespace Blockera\WordPress\RenderBlock\HTML\Contracts;
 interface BlockHandler {
 
 	/**
-	 * Setup next block handler
+	 * Setup next block handler.
 	 *
-	 * @param BlockHandler $handler the instance of current class
+	 * @param BlockHandler $handler the instance of current class.
 	 *
 	 * @return BlockHandler self
 	 */
 	public function setNext( BlockHandler $handler ): BlockHandler;
 
 	/**
-	 * Manipulation block html
+	 * Manipulation block html.
 	 *
-	 * @param array $request settings requested of current block to customize HTML
+	 * @param array $request settings requested of current block to customize HTML.
 	 *
 	 * @return void
 	 */

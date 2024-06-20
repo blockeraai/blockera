@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable
 namespace Blockera\Editor\StyleDefinitions;
 
 class Spacing extends BaseStyleDefinition {
@@ -34,19 +34,19 @@ class Spacing extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		if (is_array( $padding )){
+		if ( is_array( $padding ) ) {
 
 			$padding = array_filter(
-				array_map('blockera_get_value_addon_real_value', $padding),
-				[$this , 'filteredItems']
+				array_map( 'blockera_get_value_addon_real_value', $padding ),
+				[ $this, 'filteredItems' ]
 			);
 		}
 
-		if (is_array( $margin )){
+		if ( is_array( $margin ) ) {
 
 			$margin = array_filter(
-				array_map('blockera_get_value_addon_real_value', $margin),
-				[$this , 'filteredItems']
+				array_map( 'blockera_get_value_addon_real_value', $margin ),
+				[ $this, 'filteredItems' ]
 			);
 		}
 

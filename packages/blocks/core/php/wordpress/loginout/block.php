@@ -12,19 +12,19 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'form' => [
+				'form'        => [
 					'root' => 'form',
 				],
 				'input_label' => [
 					'root' => '.login-password label, .login-username label',
 				],
-				'input' => [
+				'input'       => [
 					'root' => '.login-password input, .login-username input',
 				],
-				'remember' => [
+				'remember'    => [
 					'root' => '.login-remember label',
 				],
-				'button' => [
+				'button'      => [
 					'root' => '.button.button-primary',
 				],
 			],

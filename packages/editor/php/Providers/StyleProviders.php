@@ -49,7 +49,7 @@ class StyleProviders extends ServiceProvider {
 		$this->app->singleton( Border::class );
 		$this->app->singleton( Effects::class );
 
-		if( blockera_get_experimental(['editor.extensions.effectsExtension.divider']) ){
+		if ( blockera_get_experimental( [ 'editor.extensions.effectsExtension.divider' ] ) ) {
 			$this->app->singleton( Divider::class );
 		}
 

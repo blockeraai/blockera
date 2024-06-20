@@ -18,7 +18,7 @@ return array_merge(
 				'current' => [
 					'root' => '.page-numbers.current',
 				],
-				'dots' => [
+				'dots'    => [
 					'root' => '.page-numbers.dots',
 				],
 			],

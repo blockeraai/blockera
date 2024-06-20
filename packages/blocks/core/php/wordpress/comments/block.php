@@ -12,10 +12,10 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'link' => [
+				'link'     => [
 					'root' => 'a:not(.wp-element-button)',
 				],
-				'heading' => [
+				'heading'  => [
 					'root' => 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
 				],
 				'heading1' => [

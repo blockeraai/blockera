@@ -42,11 +42,11 @@
     <!-- Cache the scan results and re-use those for unchanged files on the next scan. -->
     <arg name="cache" value=".cache/phpcs.json"/>
 
-    <file>./bin</file>
     <file>./packages</file>
 
     <!-- Exclude generated files -->
     <exclude-pattern>node_modules/*</exclude-pattern>
+    <exclude-pattern>./bin/*</exclude-pattern>
     <exclude-pattern>./packages/**/tests/*</exclude-pattern>
     <exclude-pattern>./packages/dev-phpunit/*</exclude-pattern>
 

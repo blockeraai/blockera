@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable
 namespace Blockera\Http;
 
 use Blockera\Bootstrap\Application;
@@ -88,8 +88,6 @@ abstract class RestController {
 				case 'DELETE':
 					return $this->delete( $request );
 			}
-
-
 		} catch ( \Exception $exception ) {
 
 			return new \WP_REST_Response(
@@ -117,7 +115,7 @@ abstract class RestController {
 	 * if access is to be disallowed.
 	 * Anything else, including other “falsey” values, will grant access.
 	 */
-	abstract public function permission(\WP_REST_Request $request): bool;
+	abstract public function permission( \WP_REST_Request $request): bool;
 
 	/**
 	 * @return bool true on success, false when otherwise.

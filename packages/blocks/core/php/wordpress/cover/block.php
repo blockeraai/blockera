@@ -15,28 +15,28 @@ return array_merge(
 				'paragraph' => [
 					'root' => 'p',
 				],
-				'button' => [
+				'button'    => [
 					'root' => '.wp-block-button > .wp-element-button',
 				],
-				'heading' => [
+				'heading'   => [
 					'root' => 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
 				],
-				'heading1' => [
+				'heading1'  => [
 					'root' => 'h1.wp-block-heading',
 				],
-				'heading2' => [
+				'heading2'  => [
 					'root' => 'h2.wp-block-heading',
 				],
-				'heading3' => [
+				'heading3'  => [
 					'root' => 'h3.wp-block-heading',
 				],
-				'heading4' => [
+				'heading4'  => [
 					'root' => 'h4.wp-block-heading',
 				],
-				'heading5' => [
+				'heading5'  => [
 					'root' => 'h5.wp-block-heading',
 				],
-				'heading6' => [
+				'heading6'  => [
 					'root' => 'h6.wp-block-heading',
 				],
 			],

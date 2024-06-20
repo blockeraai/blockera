@@ -19,9 +19,11 @@ abstract class ValueAddonType {
 	protected Application $app;
 
 	/**
+	 * The class constructor.
+	 *
 	 * @param Application $application the app container.
 	 *
-	 * @throws \Exception
+	 * @throws \Exception The Exception related with application object.
 	 */
 	public function __construct( Application $application ) {
 

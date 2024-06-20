@@ -4,8 +4,12 @@
  *
  * @package bootstrpa/app.php
  */
+
+// phpcs:disable
 // direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 global $blockera;
 

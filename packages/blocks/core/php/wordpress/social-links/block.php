@@ -15,10 +15,10 @@ return array_merge(
 				'item_containers' => [
 					'root' => '.wp-block-social-link',
 				],
-				'item_icons' => [
+				'item_icons'      => [
 					'root' => '.wp-block-social-link svg',
 				],
-				'item_names' => [
+				'item_names'      => [
 					'root' => '.wp-block-social-link .wp-block-social-link-label',
 				],
 			],

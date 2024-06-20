@@ -12,7 +12,7 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'link' => [
+				'link'   => [
 					'root' => 'a:not(.wp-element-button)',
 				],
 				'button' => [

@@ -12,10 +12,10 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'label' => [
+				'label'  => [
 					'root' => '.wp-block-search__label',
 				],
-				'input' => [
+				'input'  => [
 					'root' => '.wp-block-search__input',
 				],
 				'button' => [

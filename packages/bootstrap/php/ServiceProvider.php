@@ -22,7 +22,7 @@ class ServiceProvider {
 	 *
 	 * @param Container $app the instance of application container.
 	 */
-	function __construct( Container $app ) {
+	public function __construct( Container $app ) {
 
 		$this->app = $app;
 	}
@@ -34,7 +34,6 @@ class ServiceProvider {
 	 */
 	public function register(): void {
 
-
 	}
 
 	/**
@@ -42,7 +41,7 @@ class ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function boot(): void{
+	public function boot(): void {
 
 	}
 

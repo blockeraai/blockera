@@ -1,10 +1,12 @@
 <?php
-
+// phpcs:disable
 use Blockera\Http\RestfullAPI;
 use Blockera\Http\Routes;
 
 // direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 /**

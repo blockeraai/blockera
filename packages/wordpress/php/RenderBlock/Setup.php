@@ -9,6 +9,9 @@ namespace Blockera\WordPress\RenderBlock;
  */
 class Setup {
 
+	/**
+	 * The Blockera\WordPress\RenderBlock\Setup constructor.
+	 */
 	public function __construct() {
 
 		add_filter( 'register_block_type_args', [ $this, 'register_block' ], 9e2, 2 );
@@ -59,7 +62,7 @@ class Setup {
 
 		switch ( $parsedName[0] ) {
 
-			// WordPress Core Blocks
+			// WordPress Core Blocks.
 			case 'core':
 				$directoryPath = sprintf( 'wordpress/%s', $parsedName[1] );
 				break;
