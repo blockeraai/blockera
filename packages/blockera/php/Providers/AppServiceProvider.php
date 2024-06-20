@@ -35,6 +35,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * Class AppServiceProvider for providing all application services.
+ *
+ * @package Blockera\Setup\Providers\AppServiceProvider
  */
 class AppServiceProvider extends ServiceProvider {
 

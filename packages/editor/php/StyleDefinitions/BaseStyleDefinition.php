@@ -7,28 +7,28 @@ use Blockera\Editor\StyleDefinitions\Contracts\HaveCustomSettings;
 abstract class BaseStyleDefinition {
 
 	/**
-	 * hold style definition settings from consumer request.
+	 * Hold style definition settings from consumer request.
 	 *
 	 * @var array
 	 */
 	protected array $settings = [];
 
 	/**
-	 * hold collection of properties of current style definition.
+	 * Hold collection of properties of current style definition.
 	 *
 	 * @var array
 	 */
 	protected array $declarations = [];
 
 	/**
-	 * store all css selectors.
+	 * Store all css selectors.
 	 *
 	 * @var array
 	 */
 	protected array $selectors = [];
 
 	/**
-	 * store css selector.
+	 * Store css selector.
 	 *
 	 * @var string
 	 */
@@ -43,7 +43,7 @@ abstract class BaseStyleDefinition {
 	protected array $css = [];
 
 	/**
-	 * hold collection of options to generate style
+	 * Hold collection of options to generate style
 	 *
 	 * @var array
 	 */
@@ -277,7 +277,7 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
-	 * collect all css selectors and declarations.
+	 * Collect all css selectors and declarations.
 	 *
 	 * @param array $setting the block setting.
 	 *

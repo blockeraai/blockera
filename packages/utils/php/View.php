@@ -35,6 +35,7 @@ class View {
 			return;
 		}
 
+		// phpcs:ignore
 		extract( $args );
 
 		if ( ! empty( $extra_args['return'] ) ) {

@@ -137,6 +137,11 @@ class AssetsProvider extends ServiceProvider {
 		return $this->handler;
 	}
 
+	/**
+	 * Localization data for exposed after wp-blocks script.
+	 *
+	 * @return void
+	 */
 	public function l10n(): void {
 
 		wp_add_inline_script(

@@ -2,8 +2,18 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
+/**
+ * A Typography class for generate typography css styles.
+ *
+ * @package Blockera\Editor\StyleDefinition\Typography
+ */
 class Typography extends BaseStyleDefinition {
 
+	/**
+	 * Hold collection of options to generate style
+	 *
+	 * @var array
+	 */
 	protected array $options = [
 		'is-important' => true,
 	];
@@ -74,7 +84,7 @@ class Typography extends BaseStyleDefinition {
 				if ( ! empty( $propertyValue['columns'] ) ) {
 					$declaration['column-count'] = 'none' === $propertyValue['columns'] ? 'initial' : preg_replace( '/\b-columns\b/i', '', $propertyValue['columns'] );
 
-					if ( $declaration['column-count'] !== 'initial' ) {
+					if ( 'initial' !== $declaration['column-count'] ) {
 						if ( ! empty( $propertyValue['gap'] ) ) {
 							$declaration['column-gap'] = $propertyValue['gap'];
 						}

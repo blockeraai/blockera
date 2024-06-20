@@ -15,9 +15,9 @@ class ValueAddonRegistry {
 	/**
 	 * Holds the failure registration items.
 	 *
-	 * @var array $failedRegistryStack
+	 * @var array $failure_registry
 	 */
-	protected array $failureRegistry = [];
+	protected array $failure_registry = [];
 
 	/**
 	 * Holds registered value type groups stack.
@@ -41,9 +41,12 @@ class ValueAddonRegistry {
 	protected $abstract;
 
 	/**
-	 * @param Application $app the application service container.
+	 * The ValueAddonRegistry constructor.
 	 *
-	 * @throws BindingResolutionException
+	 * @param Application     $app      the application service container.
+	 * @param callable|string $abstract the abstract ValueAddonType instance.
+	 *
+	 * @throws BindingResolutionException The BindingResolutionException for not bounded object.
 	 */
 	public function __construct( Application $app, $abstract ) {
 
@@ -59,6 +62,8 @@ class ValueAddonRegistry {
 	}
 
 	/**
+	 * Get registered stack.
+	 *
 	 * @return array
 	 */
 	public function getRegistered(): array {
@@ -67,7 +72,9 @@ class ValueAddonRegistry {
 	}
 
 	/**
-	 * @throws BindingResolutionException
+	 * Get instance.
+	 *
+	 * @throws BindingResolutionException The BindingResolutionException for not bounded object.
 	 */
 	protected function getInstance(): ValueAddonType {
 
@@ -77,7 +84,7 @@ class ValueAddonRegistry {
 	/**
 	 * Registration new groups for value addon type.
 	 *
-	 * @throws BindingResolutionException
+	 * @throws BindingResolutionException The BindingResolutionException for not bounded object.
 	 * @return void
 	 */
 	protected function register(): void {
@@ -98,9 +105,9 @@ class ValueAddonRegistry {
 		 *
 		 * @hook 'blockera/variable/groups/registry'
 		 */
-		$filteredGroups = apply_filters( $groupsHook, $groups );
+		$filtered_groups = apply_filters( $groupsHook, $groups );
 
-		foreach ( $filteredGroups as $group => $item ) {
+		foreach ( $filtered_groups as $group => $item ) {
 
 			if ( in_array( $group, $this->getRegistered(), true ) ) {
 
@@ -152,28 +159,28 @@ class ValueAddonRegistry {
 	/**
 	 * Registration new value type items on current registration group.
 	 *
-	 * @param string $group           the group identifier.
-	 * @param array  $valueAddonTypes the value type items array.
+	 * @param string $group             the group identifier.
+	 * @param array  $value_addon_types the value type items array.
 	 *
-	 * @throws BindingResolutionException
+	 * @throws BindingResolutionException The BindingResolutionException for not bounded object.
 	 *
 	 * @return array the registered valid items on current group.
 	 */
-	protected function registerItems( string $group, array $valueAddonTypes = [] ): array {
+	protected function registerItems( string $group, array $value_addon_types = [] ): array {
 
 		$registered = [];
 		$instance   = $this->getInstance();
 
-		foreach ( $valueAddonTypes as $valueAddonType ) {
+		foreach ( $value_addon_types as $value_addon_type ) {
 
-			if ( empty( $valueAddonType['name'] ) ) {
+			if ( empty( $value_addon_type['name'] ) ) {
 
-				$this->failureRegistry[] = $valueAddonType;
+				$this->failure_registry[] = $value_addon_type;
 
 				continue;
 			}
 
-			$name = $valueAddonType['name'];
+			$name = $value_addon_type['name'];
 
 			if ( array_key_exists( $name, $registered ) ) {
 
@@ -184,12 +191,12 @@ class ValueAddonRegistry {
 
 				$registered[ $name ] = [
 					'instance'   => $instance,
-					'properties' => $valueAddonType,
+					'properties' => $value_addon_type,
 				];
 
 			} catch ( \Exception $exception ) {
 
-				$this->failureRegistry[ $name ] = $valueAddonType;
+				$this->failure_registry[ $name ] = $value_addon_type;
 			}
 		}
 

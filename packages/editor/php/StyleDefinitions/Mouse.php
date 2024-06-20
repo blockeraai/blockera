@@ -5,7 +5,7 @@ namespace Blockera\Editor\StyleDefinitions;
 class Mouse extends BaseStyleDefinition {
 
 	/**
-	 * collect all css selectors and declarations.
+	 * Collect all css selectors and declarations.
 	 *
 	 * @param array $setting
 	 *

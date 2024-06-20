@@ -8,10 +8,17 @@ use Blockera\Bootstrap\ServiceProvider;
 use Blockera\Admin\Http\Controllers\SettingsController;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
+/**
+ * A RestAPIProvider class.
+ *
+ * @package Blockera\Setup\Providers\RestAPIProvider
+ */
 class RestAPIProvider extends ServiceProvider {
 
 	/**
-	 * @throws \Exception
+	 * Register any application services.
+	 *
+	 * @return void
 	 */
 	public function register(): void {
 
@@ -26,6 +33,11 @@ class RestAPIProvider extends ServiceProvider {
 		$this->app->singleton( SettingsController::class );
 	}
 
+	/**
+	 * Bootstrap any application services.
+	 *
+	 * @return void
+	 */
 	public function boot(): void {
 
 		add_action( 'rest_api_init', [ $this, 'initializeRestAPI' ], 20 );
@@ -34,7 +46,7 @@ class RestAPIProvider extends ServiceProvider {
 	/**
 	 * Initializing rest api
 	 *
-	 * @throws BindingResolutionException
+	 * @throws BindingResolutionException The BindingResolutionException for not bounded object.
 	 * @return array the list of registered routes.
 	 */
 	public function initializeRestAPI(): array {

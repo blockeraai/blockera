@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable
 namespace Blockera\Data\ValueAddon\Variable;
 
 use Blockera\Data\ValueAddon\HasGroupTypes;

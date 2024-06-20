@@ -109,7 +109,7 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 
 				if ( ! empty( $flexDirection['value'] ) ) {
 
-					$declaration['flex-wrap'] = $flexDirection['value'] . ( $flexDirection['reverse'] && $flexDirection['value'] === 'wrap' ? '-reverse' : '' );
+					$declaration['flex-wrap'] = $flexDirection['value'] . ( $flexDirection['reverse'] && 'wrap' === $flexDirection['value'] ? '-reverse' : '' );
 				}
 
 				break;

@@ -66,6 +66,7 @@ class AdminAssetsProvider extends ServiceProvider {
 	 */
 	public function boot(): void {
 
+		// phpcs:ignore
 		if ( ! empty( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'blockera-settings' ) ) {
 
 			add_filter( 'blockera/wordpress/' . $this->id . '/inline-script', [ $this, 'createInlineScript' ] );

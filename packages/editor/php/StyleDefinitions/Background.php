@@ -9,21 +9,26 @@ namespace Blockera\Editor\StyleDefinitions;
  */
 class Background extends BaseStyleDefinition {
 
+	/**
+	 * Hold collection of options to generate style
+	 *
+	 * @var array
+	 */
 	protected array $options = [
 		'is-important' => true,
 	];
 
 	/**
-	 * hold default props for background stack properties
+	 * Hold default props for background stack properties
 	 *
 	 * @var array|string[]
 	 */
-	protected array $defaultProps = [
-		// Background Size
+	protected array $default_props = [
+		// Background Size.
 		'background-size'     => 'auto',
-		// Background Position
+		// Background Position.
 		'background-position' => '0 0',
-		// Background Repeat
+		// Background Repeat.
 		'background-repeat'   => 'repeat',
 	];
 
@@ -75,9 +80,9 @@ class Background extends BaseStyleDefinition {
 	}
 
 	/**
-	 * collect all css props
+	 * Collect all css props.
 	 *
-	 * @param array $setting the background settings
+	 * @param array $setting The background settings.
 	 *
 	 * @return array
 	 */
@@ -170,13 +175,13 @@ class Background extends BaseStyleDefinition {
 	/**
 	 * Setup background image style properties into stack properties.
 	 *
-	 * @param array $setting the background image setting
+	 * @param array $setting The background image setting.
 	 *
 	 * @return void
 	 */
 	protected function setBackground( array $setting ): void {
 
-		if ( $setting['image-size'] === 'custom' ) {
+		if ( 'custom' === $setting['image-size'] ) {
 			$size = sprintf(
 				'%s %s',
 				! empty( $setting['image-size-width'] ) ? blockera_get_value_addon_real_value( $setting['image-size-width'] ) : '',
@@ -190,15 +195,15 @@ class Background extends BaseStyleDefinition {
 		$top  = ! empty( $setting['image-position']['top'] ) ? blockera_get_value_addon_real_value( $setting['image-position']['top'] ) : '';
 
 		$props = [
-			// Background Image
+			// Background Image.
 			'background-image'      => "url('{$setting['image']}'){$this->getImportant()}",
-			// Background Size
+			// Background Size.
 			'background-size'       => $size . $this->getImportant(),
-			// Background Position
+			// Background Position.
 			'background-position'   => ( $left . ' ' . $top ) . $this->getImportant(),
-			// Background Repeat
+			// Background Repeat.
 			'background-repeat'     => ( $setting['image-repeat'] ?? '' ) . $this->getImportant(),
-			// Background Attachment
+			// Background Attachment.
 			'background-attachment' => ( $setting['image-attachment'] ?? '' ) . $this->getImportant(),
 		];
 
@@ -208,7 +213,7 @@ class Background extends BaseStyleDefinition {
 	/**
 	 * Setup radial gradient style properties into stack properties.
 	 *
-	 * @param array $setting the radial gradient setting
+	 * @param array $setting The radial gradient setting.
 	 *
 	 * @return void
 	 */
@@ -227,7 +232,7 @@ class Background extends BaseStyleDefinition {
 				$gradient
 			);
 
-			if ( $setting['linear-gradient-repeat'] === 'repeat' ) {
+			if ( 'repeat' === $setting['linear-gradient-repeat'] ) {
 				$gradient = str_replace(
 					'linear-gradient(',
 					'repeating-linear-gradient(',
@@ -237,11 +242,11 @@ class Background extends BaseStyleDefinition {
 		}
 
 		$props = array_merge(
-			$this->defaultProps,
+			$this->default_props,
 			[
-				// Background Image
+				// Background Image.
 				'background-image'      => $gradient . $this->getImportant(),
-				// Background Attachment
+				// Background Attachment.
 				'background-attachment' => ( $setting['linear-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
 			]
 		);
@@ -252,7 +257,7 @@ class Background extends BaseStyleDefinition {
 	/**
 	 * Setup radial gradient style properties into stack properties.
 	 *
-	 * @param array $setting the radial gradient setting
+	 * @param array $setting The radial gradient setting.
 	 *
 	 * @return void
 	 */
@@ -265,17 +270,17 @@ class Background extends BaseStyleDefinition {
 			$gradient = blockera_get_value_addon_real_value( $gradient );
 
 			$props = array_merge(
-				$this->defaultProps,
+				$this->default_props,
 				[
-					// Background Image
+					// Background Image.
 					'background-image'      => $gradient . $this->getImportant(),
-					// Background Attachment
+					// Background Attachment.
 					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
 				]
 			);
 		} else {
 
-			if ( $setting['radial-gradient-repeat'] === 'repeat' ) {
+			if ( 'repeat' === $setting['radial-gradient-repeat'] ) {
 				$gradient = str_replace(
 					'radial-gradient(',
 					'repeating-radial-gradient(',
@@ -286,7 +291,7 @@ class Background extends BaseStyleDefinition {
 			$left = ! empty( $setting['radial-gradient-position']['left'] ) ? blockera_get_value_addon_real_value( $setting['radial-gradient-position']['left'] ) : '';
 			$top  = ! empty( $setting['radial-gradient-position']['top'] ) ? blockera_get_value_addon_real_value( $setting['radial-gradient-position']['top'] ) : '';
 
-			// Gradient Position
+			// Gradient Position.
 			if (
 				$left &&
 				$top
@@ -298,7 +303,7 @@ class Background extends BaseStyleDefinition {
 				);
 			}
 
-			// Gradient Size
+			// Gradient Size.
 			if ( $setting['radial-gradient-size'] ) {
 				$gradient = str_replace(
 					'circle at ',
@@ -308,13 +313,13 @@ class Background extends BaseStyleDefinition {
 			}
 
 			$props = array_merge(
-				$this->defaultProps,
+				$this->default_props,
 				[
-					// Background Image
+					// Background Image.
 					'background-image'      => $gradient . $this->getImportant(),
-					// Background Repeat
-					'background-repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->defaultProps['repeat'] ) . $this->getImportant(),
-					// Background Attachment
+					// Background Repeat.
+					'background-repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->default_props['repeat'] ) . $this->getImportant(),
+					// Background Attachment.
 					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
 				]
 			);
@@ -326,7 +331,7 @@ class Background extends BaseStyleDefinition {
 	/**
 	 * Setup mesh gradient style properties into stack properties.
 	 *
-	 * @param array $setting the mesh gradient setting
+	 * @param array $setting The mesh gradient setting.
 	 *
 	 * @return void
 	 */
@@ -363,13 +368,13 @@ class Background extends BaseStyleDefinition {
 		}
 
 		$props = array_merge(
-			$this->defaultProps,
+			$this->default_props,
 			[
-				// override bg color
+				// override bg color.
 				'background-color'      => ( array_values( $colors )[0]['color'] ? blockera_get_value_addon_real_value( array_values( $colors )[0]['color'] ) : '' ) . $this->getImportant(),
-				// Image
+				// Image.
 				'background-image'      => $gradient . $this->getImportant(),
-				// Background Attachment
+				// Background Attachment.
 				'background-attachment' => $setting['mesh-gradient-attachment'] . $this->getImportant(),
 			]
 		);

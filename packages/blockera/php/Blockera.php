@@ -10,6 +10,11 @@ namespace Blockera\Setup;
 use Blockera\Bootstrap\Application;
 use Blockera\Setup\Contracts\ContainerInterface;
 
+/**
+ * A Blockera class for setup service providers others ...
+ *
+ * @package Blockera\Setup\Blockera
+ */
 class Blockera extends Application implements ContainerInterface {
 
 	/**
@@ -30,6 +35,7 @@ class Blockera extends Application implements ContainerInterface {
 		 * @hook  'blockera/service/providers'
 		 * @since 1.0.0
 		 */
+		// phpcs:ignore
 		$this->service_providers = apply_filters( 'blockera/service/providers', blockera_core_config( 'app.providers' ) );
 
 		// Keep parent functionalities.

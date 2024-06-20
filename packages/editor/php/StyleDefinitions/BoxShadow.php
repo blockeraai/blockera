@@ -38,7 +38,7 @@ class BoxShadow extends BaseStyleDefinition {
 
 				return sprintf(
 					'%s %s %s %s %s %s',
-					$prop['type'] === 'inner' ? 'inset' : '',
+					'inner' === $prop['type'] ? 'inset' : '',
 					! empty( $prop['x'] ) ? blockera_get_value_addon_real_value( $prop['x'] ) : '',
 					! empty( $prop['y'] ) ? blockera_get_value_addon_real_value( $prop['y'] ) : '',
 					! empty( $prop['blur'] ) ? blockera_get_value_addon_real_value( $prop['blur'] ) : '',

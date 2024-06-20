@@ -102,7 +102,7 @@ class Effects extends BaseStyleDefinition {
 	 */
 	protected function setTransforms( array $settings, string $cssProperty ): void {
 
-		// add all transform items
+		// add all transform items.
 		if ( 'transform' === $cssProperty && ! empty( $settings[ $cssProperty ] ) ) {
 
 			array_map( [ $this, 'setTransformItem' ], array_filter( blockera_get_sorted_repeater( $settings[ $cssProperty ] ), [ $this, 'isVisibleSetting' ] ) );
@@ -415,7 +415,7 @@ class Effects extends BaseStyleDefinition {
 			return;
 		}
 
-		// todo move the svgs to files to do not load them on memory if not needed
+		// todo move the svgs to files to do not load them on memory if not needed.
 		$maskShapes = [
 			[
 				'id'           => 'Blob 1',
@@ -595,11 +595,11 @@ class Effects extends BaseStyleDefinition {
 			'blockeraTransition'                => 'transition',
 			'blockeraBlendMode'                 => 'mix-blend-mode',
 			'blockeraBackdropFilter'            => 'backdrop-filter',
-			'blockeraTransformSelfOrigin'       => 'self-origin', // transform-origin
-			'blockeraTransformChildOrigin'      => 'child-origin', // perspective-origin
+			'blockeraTransformSelfOrigin'       => 'self-origin', // transform-origin.
+			'blockeraTransformChildOrigin'      => 'child-origin', // perspective-origin.
 			'blockeraBackfaceVisibility'        => 'backface-visibility',
-			'blockeraTransformSelfPerspective'  => 'self-perspective', // perspective
-			'blockeraTransformChildPerspective' => 'child-perspective', // perspective
+			'blockeraTransformSelfPerspective'  => 'self-perspective', // perspective.
+			'blockeraTransformChildPerspective' => 'child-perspective', // perspective.
 		];
 	}
 

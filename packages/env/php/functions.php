@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The blockera/env package utils functions.
  *
