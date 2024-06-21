@@ -65,7 +65,7 @@ class Blockera extends Application implements ContainerInterface {
 
 		if ( empty( $key ) || empty( $this->registered_value_addons[ $key ] ) ) {
 
-			return $this->registered_value_addons;
+			return [];
 		}
 
 		if ( $includeContext ) {

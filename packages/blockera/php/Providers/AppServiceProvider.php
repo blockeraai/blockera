@@ -31,6 +31,7 @@ use Blockera\Exceptions\BaseException;
 use Blockera\Bootstrap\ServiceProvider;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;
+use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -70,6 +71,17 @@ class AppServiceProvider extends ServiceProvider {
 					return new VariableType( $app );
 				}
 			);
+
+			if ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ) {
+
+				$this->app->singleton(
+					DynamicValueType::class,
+					static function ( Application $app ): DynamicValueType {
+
+						return new DynamicValueType( $app );
+					}
+				);
+			}
 
 			$this->app->singleton(
 				ValueAddonRegistry::class,
@@ -154,14 +166,20 @@ class AppServiceProvider extends ServiceProvider {
 
 		add_action( 'init', [ $this, 'loadTextDomain' ] );
 
-		$variableRegistry = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
+		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
+		$variableRegistry     = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
 
 		if ( $this->app instanceof Blockera ) {
 
 			$this->app->setRegisteredValueAddons(
-				[
-					'variable' => $variableRegistry->getRegistered(),
-				]
+				array_merge(
+					[
+						'variable' => $variableRegistry->getRegistered(),
+					],
+					blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? [
+						'dynamic-value' => $dynamicValueRegistry->getRegistered(),
+					] : [],
+				)
 			);
 		}
 

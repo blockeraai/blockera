@@ -13,7 +13,11 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { isUndefined, isNumber } from '@blockera/utils';
-import type { VariableItem, ValueAddonItemStatus } from '@blockera/data';
+import type {
+	VariableItem,
+	DynamicValueItem,
+	ValueAddonItemStatus,
+} from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -40,8 +44,8 @@ export default function ({
 	type: string,
 	status: ValueAddonItemStatus,
 	valueType: AddonTypesItem,
-	data: VariableItem,
-	onClick: (data: VariableItem) => void,
+	data: VariableItem | DynamicValueItem,
+	onClick: (data: VariableItem | DynamicValueItem) => void,
 	isCurrent: boolean,
 	showValue: boolean,
 }): MixedElement {

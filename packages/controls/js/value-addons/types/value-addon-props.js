@@ -3,7 +3,7 @@
  * External dependencies
  */
 import type { ComponentType } from 'react';
-import type { VariableItem } from '@blockera/data';
+import type { VariableItem, DynamicValueItem } from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -41,6 +41,12 @@ export type ValueAddonProps = {
 	 * The callback function
 	 */
 	handleOnClickVar: (data: VariableItem) => void,
+	/**
+	 * Handle on click icon of dynamic values on control.
+	 *
+	 * The callback function
+	 */
+	handleOnClickDV: (data: DynamicValueItem) => void,
 	/**
 	 * Handle click on unlink button
 	 *

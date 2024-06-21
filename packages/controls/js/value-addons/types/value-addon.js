@@ -6,6 +6,8 @@
 import type {
 	VariableItem,
 	VariableCategory,
+	DynamicValueItem,
+	DynamicValueCategory,
 	ValueAddonReferenceType,
 } from '@blockera/data';
 
@@ -24,7 +26,7 @@ export type ValueAddon = {
 		id?: string,
 		label: string,
 		group: string,
-		type: VariableCategory,
+		type: VariableCategory | DynamicValueCategory,
 		reference?: ValueAddonReferenceType,
 		prepend?: string,
 		append?: string,
@@ -37,5 +39,11 @@ export type ValueAddon = {
 export type VariableCategoryDetail = {
 	label?: string,
 	items: Array<VariableItem> | [],
+	notFound?: boolean,
+};
+
+export type DynamicValueCategoryDetail = {
+	label?: DynamicValueCategory | '',
+	items: Array<DynamicValueItem> | [],
 	notFound?: boolean,
 };

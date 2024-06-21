@@ -12,7 +12,7 @@ import type { DynamicVariableType, DynamicVariableGroup } from './types';
 
 const _getVariableGroup = (
 	{ variables }: Object,
-	group
+	group: string
 ): DynamicVariableGroup => {
 	return variables[group];
 };
@@ -24,7 +24,7 @@ const _getVariableType = (
 	{ variables }: Object,
 	group: string,
 	name: string
-): DynamicVariableType => {
+): DynamicVariableType | void => {
 	return Object.values(variables[group].items).find(
 		(i: { ...Object, name: string }) => i.name === name
 	);
@@ -35,7 +35,7 @@ export const getVariableType: DynamicVariableType = memoize(_getVariableType);
 const _getVariableGroups = ({
 	variables,
 }: Object): Array<DynamicVariableGroup> => {
-	return variables;
+	return variables || {};
 };
 
 export const getVariableGroups: Array<DynamicVariableGroup> =

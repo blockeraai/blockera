@@ -6,6 +6,7 @@ use Blockera\Http\Routes;
 use Blockera\Bootstrap\Application;
 use Blockera\Bootstrap\ServiceProvider;
 use Blockera\Admin\Http\Controllers\SettingsController;
+use Blockera\Setup\Http\Controllers\DynamicValuesController;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -31,6 +32,11 @@ class RestAPIProvider extends ServiceProvider {
 		);
 
 		$this->app->singleton( SettingsController::class );
+
+		if ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ) {
+
+			$this->app->singleton( DynamicValuesController::class );
+		}
 	}
 
 	/**

@@ -15,6 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 try {
 
+	{ // Dynamic Values
+
+		// TODO: fire up rest api controllers
+		//$routes->get( 'dynamic/values/', [ \Blockera\Setup\Http\Controllers\DynamicValuesController::class, 'response' ] );
+	}
+
 	$routes->get( 'settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'index' ] );
 	$routes->update( 'settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'response' ] );
 

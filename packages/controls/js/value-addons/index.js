@@ -10,7 +10,12 @@ import { useState, useMemo } from '@wordpress/element';
  * Blockera dependencies
  */
 import { isObject, isUndefined } from '@blockera/utils';
-import { getVariable, type VariableItem, STORE_NAME } from '@blockera/data';
+import {
+	getVariable,
+	type VariableItem,
+	type DynamicValueItem,
+	STORE_NAME,
+} from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -32,8 +37,11 @@ export const useValueAddon = ({
 	pickerProps = {},
 	pointerProps = {},
 	variableTypes = [],
+	dynamicValueTypes = [],
 }: UseValueAddonProps): ValueAddonProps => {
 	const [isOpen, setOpen] = useState('');
+	const { getDynamicValue, getVariableType } = select(STORE_NAME);
+
 	value = useMemo(() => {
 		return isObject(value)
 			? {
@@ -66,8 +74,13 @@ export const useValueAddon = ({
 					typeof variableTypes === 'string'
 						? [variableTypes]
 						: variableTypes,
+				dynamicValueTypes:
+					typeof dynamicValueTypes === 'string'
+						? [dynamicValueTypes]
+						: dynamicValueTypes,
 				handleOnClickVar: () => {},
 				handleOnUnlinkVar: () => {},
+				handleOnClickDV: () => {},
 				handleOnClickRemove: () => {},
 				isOpen: '',
 				setOpen: () => {},
@@ -75,13 +88,13 @@ export const useValueAddon = ({
 				pickerProps: {},
 				pointerProps: {},
 				isDeletedVar: false,
+				isDeletedDV: false,
 			},
 			handleOnClickVar: () => {},
+			handleOnClickDV: () => {},
 			handleOnUnlinkVar: () => {},
 		};
 	}
-
-	const { getVariableType } = select(STORE_NAME);
 
 	const valueAddonClassNames = types
 		.map((type) => `blockera-value-addon-support-${type}`)
@@ -131,6 +144,21 @@ export const useValueAddon = ({
 		}
 	};
 
+	const handleOnClickDV = (data: DynamicValueItem): void => {
+		const newValue = {
+			settings: {
+				...data,
+			},
+			name: data.name,
+			isValueAddon: true,
+			valueType: 'dynamic-value',
+		};
+
+		setValue(newValue);
+		onChange(newValue);
+		setOpen('dv-settings');
+	};
+
 	const handleOnClickRemove = (): void => {
 		onChange('');
 		setValue({
@@ -149,8 +177,13 @@ export const useValueAddon = ({
 		types,
 		variableTypes:
 			typeof variableTypes === 'string' ? [variableTypes] : variableTypes,
+		dynamicValueTypes:
+			typeof dynamicValueTypes === 'string'
+				? [dynamicValueTypes]
+				: dynamicValueTypes,
 		handleOnClickVar,
 		handleOnUnlinkVar,
+		handleOnClickDV,
 		handleOnClickRemove,
 		isOpen,
 		setOpen,
@@ -158,6 +191,7 @@ export const useValueAddon = ({
 		pointerProps,
 		pickerProps,
 		isDeletedVar: false,
+		isDeletedDV: false,
 	};
 
 	/**
@@ -180,6 +214,15 @@ export const useValueAddon = ({
 
 				controlProps.isDeletedVar = isUndefined(item?.value);
 			}
+		} else if (controlProps.value.valueType === 'dynamic-value') {
+			const item = getDynamicValue(
+				controlProps.value.settings.group,
+				controlProps.value.settings.name
+			);
+
+			if (isUndefined(item?.name)) {
+				controlProps.isDeletedDV = true;
+			}
 		}
 	}
 
@@ -199,6 +242,7 @@ export const useValueAddon = ({
 		valueAddonControlProps: controlProps,
 		handleOnClickVar,
 		handleOnUnlinkVar,
+		handleOnClickDV,
 	};
 };
 

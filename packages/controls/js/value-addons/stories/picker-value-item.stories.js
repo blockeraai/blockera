@@ -10,16 +10,140 @@ import { Flex } from '../../';
 import { WithPlaygroundStyles } from '../../../../../.storybook/preview';
 
 import { PickerValueItem } from '../components';
-import { getVariableIcon } from '../helpers';
+import { getDynamicValueIcon, getVariableIcon } from '../helpers';
 
 const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
-export default {
-	title: 'Value Addon/PickerValueItem',
-	component: PickerValueItem,
-	tags: ['autodocs'],
+export const Default = {
+	args: {
+		value: '',
+		name: 'Post Title',
+		icon: getDynamicValueIcon('text'),
+		type: 'dynamic-value',
+		valueType: 'text',
+		data: {
+			name: 'Post Title',
+			id: 'post-title',
+			reference: {
+				type: 'core',
+			},
+			category: 'post',
+			type: 'text',
+		},
+		onClick: () => {},
+		isCurrent: false,
+		status: 'core',
+		showValue: true,
+	},
+	render: (args) => <PickerValueItem {...args} />,
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	parameters: {},
+};
+
+export const DynamicValueItems = {
+	args: {
+		value: '',
+		name: 'Post Title',
+		icon: getDynamicValueIcon('text'),
+		type: 'dynamic-value',
+		valueType: '',
+		data: {},
+		onClick: () => {},
+		isCurrent: false,
+		status: 'core',
+		showValue: true,
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+	render: (args) => (
+		<Flex direction="column" gap="50px">
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">Dynamic Value Items</h2>
+
+				<PickerValueItem {...args} />
+
+				<PickerValueItem
+					{...args}
+					name={'Post Link'}
+					icon={getDynamicValueIcon('link')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Featured Image'}
+					icon={getDynamicValueIcon('image')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Post ID'}
+					icon={getDynamicValueIcon('id')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Post Date'}
+					icon={getDynamicValueIcon('date')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Post Meta'}
+					icon={getDynamicValueIcon('meta')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Admin Email'}
+					icon={getDynamicValueIcon('email')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Shortcode'}
+					icon={getDynamicValueIcon('shortcode')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Post Categories'}
+					icon={getDynamicValueIcon('category')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Post Tags'}
+					icon={getDynamicValueIcon('tag')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Post Terms'}
+					icon={getDynamicValueIcon('term')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Post Comments'}
+					icon={getDynamicValueIcon('comment')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Post Reading Time'}
+					icon={getDynamicValueIcon('time')}
+				/>
+
+				<PickerValueItem
+					{...args}
+					name={'Current Item'}
+					icon={getDynamicValueIcon('time')}
+					isCurrent={true}
+				/>
+			</Flex>
+		</Flex>
+	),
 };
 
 export const VariableItems = {

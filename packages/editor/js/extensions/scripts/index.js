@@ -5,12 +5,12 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { Observer, CanvasEditor } from '../../';
 import { blockeraBootstrapControls } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
+import { Observer, CanvasEditor } from '../../';
 import { blockeraExtensionsBootstrap } from '../libs/bootstrap';
 
 export default function (wp: Object) {

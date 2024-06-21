@@ -76,7 +76,12 @@ class ValueAddonRegistry {
 	 *
 	 * @throws BindingResolutionException The BindingResolutionException for not bounded object.
 	 */
-	protected function getInstance(): ValueAddonType {
+	protected function getInstance(): ValueAddonType|null {
+
+		if ( ! $this->application->has( $this->abstract ) ) {
+
+			return null;
+		}
 
 		return $this->application->make( $this->abstract );
 	}
@@ -90,6 +95,11 @@ class ValueAddonRegistry {
 	protected function register(): void {
 
 		$instance = $this->getInstance();
+
+		if ( ! $instance ) {
+
+			return;
+		}
 
 		$configKey = sprintf( 'valueAddon.%s', $instance->getConfigKey() );
 
@@ -148,7 +158,7 @@ class ValueAddonRegistry {
 					/**
 					 * Filterable items of group registered.
 					 *
-					 * @hook `blockera-core/{$valueAddonType}/groups/{$valueAddonGroup}/items/registry`
+					 * @hook `blockera/{$valueAddonType}/groups/{$valueAddonGroup}/items/registry`
 					 */
 					'items' => $this->registerItems( $group, apply_filters( $hookName, $item['items'] ?? [] ) ),
 				]
@@ -170,6 +180,11 @@ class ValueAddonRegistry {
 
 		$registered = [];
 		$instance   = $this->getInstance();
+
+		if ( ! $instance ) {
+
+			return $registered;
+		}
 
 		foreach ( $value_addon_types as $value_addon_type ) {
 

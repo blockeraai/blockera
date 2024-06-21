@@ -11,25 +11,25 @@ import { select } from '@wordpress/data';
  */
 import {
 	STORE_NAME,
-	type VariableCategory,
 	generateVariableString,
+	type DynamicVariableGroup,
 } from '@blockera/data';
-import { controlInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { Button, Flex, Grid, Popover, ConditionalWrapper } from '../../../';
 import {
-	getVariableCategory,
+	isValid,
 	getVariableIcon,
 	canUnlinkVariable,
-	isValid,
+	getVariableCategory,
 } from '../../helpers';
+import type { VariableCategoryDetail } from '../../types';
 import { PickerValueItem, PickerCategory } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
-import type { VariableCategoryDetail } from '../../types';
+import { Button, Flex, Grid, Popover, ConditionalWrapper } from '../../../';
 
 export default function ({
 	controlProps,
@@ -74,8 +74,9 @@ export default function ({
 		return [
 			...controlProps.variableTypes,
 			...Object.keys(getVariableGroups()),
-		].map((type: VariableCategory | string, index) => {
-			let data: VariableCategoryDetail = getVariableCategory(type);
+		].map((type, index) => {
+			let data: DynamicVariableGroup | VariableCategoryDetail =
+				getVariableCategory(type);
 
 			if (data?.label === '') {
 				const { getVariableGroup } = select(STORE_NAME);

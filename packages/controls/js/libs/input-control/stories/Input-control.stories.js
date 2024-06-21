@@ -1222,8 +1222,9 @@ export const ValueAddonSupport = {
 						label="Field"
 						{...args}
 						defaultValue=""
-						controlAddonTypes={['variable']}
+						controlAddonTypes={['variable', 'dynamic-value']}
 						variableTypes={['font-size', 'spacing']}
+						dynamicValueTypes={['text']}
 					/>
 				</ControlContextProvider>
 
@@ -1253,8 +1254,39 @@ export const ValueAddonSupport = {
 						label="Field"
 						{...args}
 						defaultValue=""
-						controlAddonTypes={['variable']}
+						controlAddonTypes={['variable', 'dynamic-value']}
 						variableTypes={['font-size']}
+						dynamicValueTypes={['all']}
+					/>
+				</ControlContextProvider>
+
+				<ControlContextProvider
+					value={{
+						name: nanoid(),
+						value: {
+							settings: {
+								name: 'Post Title',
+								id: 'post-title',
+								reference: {
+									type: 'core',
+								},
+								category: 'post',
+								type: 'text',
+							},
+							id: 'post-title',
+							isValueAddon: true,
+							valueType: 'dynamic-value',
+						},
+					}}
+				>
+					<ControlWithHooks
+						Control={InputControl}
+						type="text"
+						label="Post Title"
+						{...args}
+						defaultValue=""
+						controlAddonTypes={['dynamic-value']}
+						dynamicValueTypes={['all']}
 					/>
 				</ControlContextProvider>
 			</Flex>

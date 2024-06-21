@@ -2,7 +2,7 @@
 /**
  * Blockera dependencies
  */
-import type { VariableCategory } from '@blockera/data';
+import type { DynamicValueTypes, VariableCategory } from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -10,7 +10,7 @@ import type { VariableCategory } from '@blockera/data';
 import type { ControlSize } from '../../';
 import type { ValueAddon } from './value-addon';
 
-export type AddonTypesItem = 'variable';
+export type AddonTypesItem = 'variable' | 'dynamic-value';
 
 export type AddonTypes = Array<AddonTypesItem>;
 
@@ -22,5 +22,6 @@ export type UseValueAddonProps = {
 	pointerProps?: Object,
 	setValue: (newValue: any) => void,
 	variableTypes?: Array<VariableCategory>,
+	dynamicValueTypes: Array<DynamicValueTypes>,
 	onChange: (value: string | ValueAddon) => void,
 };

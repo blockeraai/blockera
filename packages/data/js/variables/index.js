@@ -41,3 +41,4 @@ export { getVariable } from './get-variable';
 export { generateVariableString } from './utils';
 
 export * from './types';
+export * from './store/types';

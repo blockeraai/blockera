@@ -10,5 +10,8 @@
 		"canvasEditor": {
 			"settings": false
 		}
+	},
+	"data": {
+		"dynamicValue": true
 	}
 }

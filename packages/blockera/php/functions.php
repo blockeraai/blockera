@@ -128,6 +128,35 @@ if ( ! function_exists( 'blockera_get_value_addon_real_value' ) ) {
 
 		if ( is_array( $value ) && ! empty( $value['isValueAddon'] ) && ! empty( $value['valueType'] ) ) {
 
+			if ( 'dynamic-value' === $value['valueType'] && blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ) {
+
+				$valueAddons = $blockeraApp->getRegisteredValueAddons( $value['valueType'] );
+
+				if ( empty( $valueAddons ) ) {
+
+					return '';
+				}
+
+				$groupName = $value['settings']['group'];
+
+				$groupItems = $valueAddons[ $groupName ]['items'];
+
+				foreach ( $groupItems as $name => $item ) {
+
+					if ( $name !== $value['name'] ) {
+
+						continue;
+					}
+
+					$callback = $item['properties']['callback'];
+
+					if ( is_callable( $callback ) ) {
+
+						return $callback( $item['instance'] );
+					}
+				}
+			}
+
 			// todo validate that variable is currently available or not.
 			if ( 'variable' === $value['valueType'] && isset( $value['settings']['var'] ) ) {
 				return 'var(' . $value['settings']['var'] . ')';

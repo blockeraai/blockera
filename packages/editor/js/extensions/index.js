@@ -13,6 +13,7 @@ import {
 	store,
 	unstableBootstrapServerSideEntities,
 	unstableBootstrapServerSideVariableDefinitions,
+	unstableBootstrapServerSideDynamicValueDefinitions,
 } from '@blockera/data';
 import {
 	store as editorStore,
@@ -50,6 +51,7 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 				select: select(store?.name),
 				unstableBootstrapServerSideEntities,
 				unstableBootstrapServerSideVariableDefinitions,
+				unstableBootstrapServerSideDynamicValueDefinitions,
 			};
 
 			window[packageName].editor = {

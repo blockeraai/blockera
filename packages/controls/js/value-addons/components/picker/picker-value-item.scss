@@ -49,6 +49,15 @@
 		}
 	}
 
+	&.item-value-type-dynamic-value {
+		padding: 0 5px 0 8px;
+
+		.blockera-control-item-icon {
+			order: 100;
+			margin-left: auto;
+		}
+	}
+
 	.blockera-control-item-name {
 		white-space: nowrap;
 		overflow: hidden;
