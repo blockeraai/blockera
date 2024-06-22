@@ -104,11 +104,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		const { setCurrentTab } = useBlockContext();
 
-		// todo use this to enable icon extension
-		const iconExtensionIsEnabled = experimental().get(
-			'editor.extensions.iconExtension'
-		);
-
 		props = {
 			...props,
 			currentState,
@@ -244,7 +239,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'settings':
 					activePanel.push(
 						<>
-							{iconExtensionIsEnabled && (
+							{experimental().get(
+								'editor.extensions.iconExtension'
+							) && (
 								<IconExtension
 									{...{
 										iconConfig,
