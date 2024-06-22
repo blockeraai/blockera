@@ -1,4 +1,9 @@
 /**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
+
+/**
  * Internal dependencies
  */
 import { Tabs } from '../index';
@@ -11,19 +16,25 @@ describe('Tabs Component testing', () => {
 					name: 'general',
 					title: 'General',
 					className: 'general-tab',
-					icon: {
-						library: 'blockera',
-						name: 'blockeraSettings',
-					},
+					icon: (
+						<Icon
+							library="ui"
+							icon="gear"
+							data-test={'blockera-tab-icon'}
+						/>
+					),
 				},
 				{
 					name: 'style',
 					title: 'Style',
 					className: 'style-tab',
-					icon: {
-						library: 'wp',
-						name: 'styles',
-					},
+					icon: (
+						<Icon
+							library="wp"
+							icon="styles"
+							data-test={'blockera-tab-icon'}
+						/>
+					),
 				},
 			];
 
@@ -76,9 +87,12 @@ describe('Tabs Component testing', () => {
 			});
 
 			cy.get('button').contains('Style').click();
-			cy.getByDataTest('style-tab').should('have.class', 'active-tab');
+			cy.getByDataTest('style-tab').should('have.class', 'is-active-tab');
 			cy.get('button').contains('General').click();
-			cy.getByDataTest('general-tab').should('have.class', 'active-tab');
+			cy.getByDataTest('general-tab').should(
+				'have.class',
+				'is-active-tab'
+			);
 		});
 
 		it('should render panel when change tab and check expect components on the active panel.', () => {
