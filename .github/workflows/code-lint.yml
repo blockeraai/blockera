@@ -52,7 +52,7 @@ jobs:
             - name: Set up PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '7.4'
+                  php-version: '8.1'
                   coverage: none
                   tools: cs2pr
 
@@ -78,15 +78,15 @@ jobs:
             - name: Make Composer packages available globally
               run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
 
-            - name: Run PHPCS on all Blockera Core files
-              id: phpcs-blockera-core
+            - name: Run PHPCS on all Blockera files
+              id: phpcs-blockera
               run: |
                   pwd
                   mkdir -p .cache
                   phpcs --report-full --report-checkstyle=./.cache/phpcs-report.xml --standard=phpcs.xml
 
             - name: Show PHPCS results in PR
-              if: ${{ always() && steps.phpcs-blockera-core.outcome == 'failure' }}
+              if: ${{ always() && steps.phpcs-blockera.outcome == 'failure' }}
               run: cs2pr ./.cache/phpcs-report.xml
 
             - name: Ensure version-controlled files are not modified during the tests
