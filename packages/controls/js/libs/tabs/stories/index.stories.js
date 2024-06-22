@@ -2,6 +2,7 @@
  * Blockera dependencies
  */
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -27,10 +28,7 @@ export const OneTabs = {
 				name: 'general',
 				title: 'General',
 				className: 'general-tab',
-				icon: {
-					library: 'blockera',
-					name: 'blockeraSettings',
-				},
+				icon: <Icon icon="gear" iconSize="20" />,
 			},
 		],
 		getPanel: (tab) => tab.title,
@@ -45,19 +43,13 @@ export const TwoTabs = {
 				name: 'general',
 				title: 'General',
 				className: 'general-tab',
-				icon: {
-					library: 'blockera',
-					name: 'blockeraSettings',
-				},
+				icon: <Icon icon="gear" iconSize="20" />,
 			},
 			{
 				name: 'style',
 				title: 'Style',
 				className: 'style-tab',
-				icon: {
-					library: 'wp',
-					name: 'styles',
-				},
+				icon: <Icon library="wp" icon="styles" iconSize="20" />,
 			},
 		],
 		getPanel: (tab) => tab.title,
@@ -72,28 +64,19 @@ export const ThreeTabs = {
 				name: 'general',
 				title: 'General',
 				className: 'general-tab',
-				icon: {
-					library: 'blockera',
-					name: 'blockeraSettings',
-				},
+				icon: <Icon icon="gear" iconSize="20" />,
 			},
 			{
 				name: 'style',
 				title: 'Style',
 				className: 'style-tab',
-				icon: {
-					library: 'wp',
-					name: 'styles',
-				},
+				icon: <Icon library="wp" icon="styles" iconSize="20" />,
 			},
 			{
 				name: 'interaction',
 				title: 'Interaction',
 				className: 'interaction-tab',
-				icon: {
-					library: 'wp',
-					name: 'globe',
-				},
+				icon: <Icon icon="animations" iconSize="20" />,
 			},
 		],
 		getPanel: (tab) => tab.title,
@@ -108,37 +91,25 @@ export const FourTabs = {
 				name: 'general',
 				title: 'General',
 				className: 'general-tab',
-				icon: {
-					library: 'blockera',
-					name: 'blockeraSettings',
-				},
+				icon: <Icon icon="gear" iconSize="20" />,
 			},
 			{
 				name: 'style',
 				title: 'Style',
 				className: 'style-tab',
-				icon: {
-					library: 'wp',
-					name: 'styles',
-				},
+				icon: <Icon library="wp" icon="styles" iconSize="20" />,
 			},
 			{
 				name: 'interaction',
 				title: 'Interaction',
 				className: 'interaction-tab',
-				icon: {
-					library: 'wp',
-					name: 'globe',
-				},
+				icon: <Icon icon="animations" iconSize="20" />,
 			},
 			{
 				name: 'advanced',
 				title: 'Advanced',
 				className: 'advance-tab',
-				icon: {
-					library: 'fs',
-					name: 'settings',
-				},
+				icon: <Icon library="ui" icon="gear-small" />,
 			},
 		],
 		getPanel: (tab) => tab.title,
@@ -151,19 +122,13 @@ const tabs = [
 		name: 'general',
 		title: 'General',
 		className: 'general-tab',
-		icon: {
-			library: 'blockera',
-			name: 'blockeraSettings',
-		},
+		icon: <Icon library="wp" icon="styles" iconSize="20" />,
 	},
 	{
 		name: 'style',
 		title: 'Style',
 		className: 'style-tab',
-		icon: {
-			library: 'wp',
-			name: 'styles',
-		},
+		icon: <Icon library="wp" icon="styles" iconSize="20" />,
 	},
 ];
 
@@ -231,18 +196,12 @@ export const WithoutTabTitle = {
 			{
 				name: 'general',
 				className: 'general-tab',
-				icon: {
-					library: 'blockera',
-					name: 'blockeraSettings',
-				},
+				icon: <Icon icon="gear" iconSize="20" />,
 			},
 			{
 				name: 'style',
 				className: 'style-tab',
-				icon: {
-					library: 'wp',
-					name: 'styles',
-				},
+				icon: <Icon library="wp" icon="styles" iconSize="20" />,
 			},
 		],
 		getPanel: (tab) => {
@@ -254,6 +213,34 @@ export const WithoutTabTitle = {
 				</>
 			);
 		},
+	},
+	decorators: [WithInspectorStyles, ...SharedDecorators],
+};
+
+export const ModernDesignTabs = {
+	args: {
+		tabs: [
+			{
+				name: 'general',
+				title: 'General',
+				className: 'general-tab',
+				icon: <Icon icon="gear" iconSize="20" />,
+			},
+			{
+				name: 'style',
+				title: 'Style',
+				className: 'style-tab',
+				icon: <Icon library="wp" icon="styles" iconSize="20" />,
+			},
+			{
+				name: 'interaction',
+				title: 'Interaction',
+				className: 'interaction-tab',
+				icon: <Icon icon="animations" iconSize="20" />,
+			},
+		],
+		design: 'modern',
+		getPanel: (tab) => tab.title,
 	},
 	decorators: [WithInspectorStyles, ...SharedDecorators],
 };
@@ -307,6 +294,13 @@ export const All = {
 						Tabs<span>Without Title</span>
 					</h2>
 					<Tabs {...WithoutTabTitle.args} />
+				</Flex>
+
+				<Flex direction="column" gap="15px" style={style}>
+					<h2 className="story-heading">
+						Tabs<span>Modern Design</span>
+					</h2>
+					<Tabs {...ModernDesignTabs.args} />
 				</Flex>
 			</>
 		);
