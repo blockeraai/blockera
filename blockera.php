@@ -40,6 +40,14 @@ if ( ! function_exists( 'get_plugin_data' ) ) {
 define( 'BLOCKERA_VERSION', get_plugin_data( __FILE__ )['Version'] );
 ### END AUTO-GENERATED DEFINES
 
+// Loads current version for development in the development environment.
+// this code will be replaced by string version of plugin version pulled from header
+// in production build.
+if ( ! function_exists( 'get_plugin_data' ) ) {
+	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+}
+define( 'BLOCKERA_VERSION', get_plugin_data( __FILE__ )['Version'] );
+
 /**
  * This hook for extendable setup process from internal or third-party developers.
  *
