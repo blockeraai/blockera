@@ -34,6 +34,9 @@
     <rule ref="Squiz.Commenting.FunctionComment.MissingParamType">
         <exclude-pattern>*</exclude-pattern>
     </rule>
+    <rule ref="Squiz.Commenting.InlineComment.WrongStyle">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
     <rule ref="WordPress.WP.TimezoneChange.DeprecatedSniff">
         <exclude-pattern>*</exclude-pattern>
     </rule>
