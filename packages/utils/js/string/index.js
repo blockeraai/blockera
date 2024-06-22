@@ -18,10 +18,16 @@ export function getCamelCase(str: string, removePart: string): string {
 	return str.substring(0, 1).toLowerCase() + str.substring(1, str.length);
 }
 
+/**
+ * Check if the input string is a valid JSON string.
+ *
+ * @param {string} str - The input string to be checked.
+ * @return {boolean} Returns true if the input string is a valid JSON string, otherwise false.
+ */
 export function isJSONString(str: string): boolean {
 	try {
-		return JSON.parse(str);
+		return !!JSON.parse(str);
 	} catch (error) {
-		return str;
+		return false;
 	}
 }

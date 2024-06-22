@@ -22,6 +22,6 @@ export type UseValueAddonProps = {
 	pointerProps?: Object,
 	setValue: (newValue: any) => void,
 	variableTypes?: Array<VariableCategory>,
-	dynamicValueTypes: Array<DynamicValueTypes>,
+	dynamicValueTypes?: Array<DynamicValueTypes>,
 	onChange: (value: string | ValueAddon) => void,
 };

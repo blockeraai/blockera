@@ -16,6 +16,12 @@ const { WithInspectorStyles, SharedDecorators } = Decorators;
 
 SharedDecorators.push(WithPlaygroundStyles);
 
+export default {
+	title: 'Value Addon/PickerValueItem',
+	component: PickerValueItem,
+	tags: ['autodocs'],
+};
+
 export const Default = {
 	args: {
 		value: '',

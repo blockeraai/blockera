@@ -18,7 +18,7 @@ import {
 	createBlockEditorContent,
 } from '@blockera/dev-storybook/js/block-api';
 import { BackgroundExtension } from '../../';
-import { attributes as defaultAttributes, supports } from '../../shared';
+import { supports, attributes } from '../../shared';
 import { useAttributes } from '../../../../hooks';
 import { BlockStyle } from '../../../../style-engine';
 import { STORE_NAME } from '../../base/store/constants';
