@@ -17,7 +17,7 @@ import { Icon } from '@blockera/icons';
  */
 import { Button } from '../../';
 import { RepeaterContext } from '../context';
-import { getArialLabelSuffix } from '../utils';
+import { getArialLabelSuffix, isEnabledPromote } from '../utils';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemActionsProps } from '../types';
 import { repeaterOnChange } from '../store/reducers/utils';
@@ -29,6 +29,10 @@ export default function RepeaterItemActions({
 	setVisibility,
 }: RepeaterItemActionsProps): MixedElement {
 	const {
+		count,
+		setCount,
+		PromoComponent,
+		setDisableAddNewItem,
 		controlId,
 		maxItems,
 		minItems,
@@ -126,6 +130,15 @@ export default function RepeaterItemActions({
 						label={__('Clone', 'blockera')}
 						onClick={(event) => {
 							event.stopPropagation();
+
+							if (
+								isEnabledPromote(PromoComponent, repeaterItems)
+							) {
+								setCount(count + 1);
+								setDisableAddNewItem(true);
+
+								return;
+							}
 
 							cloneRepeaterItem({
 								item,
