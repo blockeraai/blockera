@@ -55,6 +55,7 @@ export const Tabs = ({
 				className={'blockera-settings-tabs'}
 				initialTabName={activeTab}
 				onSelect={onSelect}
+				design="default"
 			>
 				{(tab) => getPanel(tab)}
 			</TabPanel>

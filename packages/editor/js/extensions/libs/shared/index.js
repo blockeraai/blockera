@@ -874,10 +874,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			<StateContainer>
 				{useDisplayBlockControls() && (
 					<Tabs
+						design="modern"
+						orientation="horizontal"
 						tabs={tabs}
 						activeTab={currentTab}
 						getPanel={MappedExtensions}
 						setCurrentTab={setCurrentTab}
+						className="block-inspector-tabs"
 					/>
 				)}
 				{children}

@@ -16,9 +16,21 @@ export type TTabPanelProps = {
 		settingSlug?: string,
 	}>,
 	children: (props: Object) => Element<any>,
-	className: string,
+	className?: string,
 	initialTabName: ?string,
 	onSelect: (tab: string) => void,
-	orientation: string,
-	activeClass: string,
+	/**
+	 * @default 'horizontal'
+	 */
+	orientation?: 'horizontal' | 'vertical',
+	/**
+	 * @default 'is-active'
+	 */
+	activeClass?: string,
+	/**
+	 * Design of the tab.
+	 *
+	 * @default 'modern'
+	 */
+	design?: 'default' | 'modern',
 };

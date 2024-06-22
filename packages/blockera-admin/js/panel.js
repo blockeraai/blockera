@@ -61,6 +61,7 @@ export const Panel = (tab: {
 		<HStack
 			justifyContent={'flex-start'}
 			className={'blockera-settings-panel'}
+			gap="20"
 		>
 			<div className={'blockera-settings-active-panel'}>
 				<PanelHeader

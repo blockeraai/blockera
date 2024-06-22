@@ -2,8 +2,6 @@
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import type { Element } from 'react';
 import { useInstanceId } from '@wordpress/compose';
 import { useState, useEffect } from '@wordpress/element';
@@ -12,12 +10,14 @@ import { NavigableMenu, Button } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { noop } from '@blockera/utils';
+import {
+	componentClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import Flex from '../flex';
 import { Tooltip } from '../tooltip';
 import type { TTabPanelProps } from './types';
 import ConditionalWrapper from '../conditional-wrapper';
@@ -27,8 +27,9 @@ export default function TabPanel({
 	children,
 	onSelect,
 	className,
-	orientation,
-	activeClass,
+	design = 'clean',
+	orientation = 'horizontal',
+	activeClass = 'is-active-tab',
 	initialTabName,
 }: TTabPanelProps): Element<any> {
 	const instanceId = useInstanceId(TabPanel, 'tab-panel');
@@ -58,11 +59,11 @@ export default function TabPanel({
 			role="tablist"
 			orientation={orientation}
 			onNavigate={onNavigate}
-			className="components-tab-panel__tabs"
+			className={componentClassNames('tabs__list')}
 		>
 			{tabs.map((tab) => (
-				// eslint-disable-next-line react/jsx-key
 				<ConditionalWrapper
+					key={tab.name}
 					wrapper={(children) => (
 						<Tooltip text={tab.tooltip} key={tab.name}>
 							{children}
@@ -71,11 +72,12 @@ export default function TabPanel({
 					condition={tab.tooltip !== undefined}
 				>
 					<Button
-						className={classnames(
-							'components-tab-panel__tabs-item blockera-tab-button',
+						className={componentInnerClassNames(
+							'tabs__list__item',
+							'tab-item-button',
 							tab.className,
 							{
-								[activeClass]: tab.name === selected,
+								[(activeClass: string)]: tab.name === selected,
 							}
 						)}
 						tabId={`${instanceId}-${tab.name}`}
@@ -85,18 +87,9 @@ export default function TabPanel({
 						onClick={() => handleClick(tab.name)}
 						data-test={`${tab.name}-tab`}
 					>
-						<Flex
-							direction={'column'}
-							alignItems={'center'}
-							gap={'5px'}
-						>
-							{tab?.icon && (
-								<div data-test={'blockera-tab-icon'}>
-									{tab.icon}
-								</div>
-							)}
-							{tab.title}
-						</Flex>
+						{tab.icon}
+
+						{tab.title}
 					</Button>
 				</ConditionalWrapper>
 			))}
@@ -104,7 +97,13 @@ export default function TabPanel({
 	);
 
 	return (
-		<div className={className}>
+		<div
+			className={componentClassNames(
+				'tabs',
+				'design-' + design,
+				className
+			)}
+		>
 			<Menu />
 			{selectedTab && (
 				<div
@@ -112,7 +111,9 @@ export default function TabPanel({
 					aria-labelledby={selectedId}
 					role="tabpanel"
 					id={`${selectedId}-view`}
-					className="components-tab-panel__tab-content"
+					className={componentInnerClassNames(
+						'tabs__list__item__content'
+					)}
 				>
 					{children(selectedTab)}
 				</div>
@@ -120,28 +121,3 @@ export default function TabPanel({
 		</div>
 	);
 }
-
-TabPanel.propTypes = {
-	// $FlowFixMe
-	tabs: PropTypes.arrayOf(
-		PropTypes.shape({
-			name: PropTypes.string,
-			title: PropTypes.string,
-			className: PropTypes.string,
-			icon: PropTypes.element,
-		})
-	),
-	children: PropTypes.element,
-	onSelect: PropTypes.func,
-	className: PropTypes.string,
-	orientation: PropTypes.string,
-	activeClass: PropTypes.string,
-	initialTabName: PropTypes.string,
-};
-
-TabPanel.defaultProps = {
-	onSelect: noop,
-	activeClass: 'is-active',
-	orientation: 'horizontal',
-	initialTabName: undefined,
-};

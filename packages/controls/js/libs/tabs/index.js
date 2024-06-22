@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
 import type { Element } from 'react';
 import { useRef } from '@wordpress/element';
 
@@ -24,8 +23,15 @@ const onSelect = (
 ): void =>
 	'function' === typeof setCurrentTab ? setCurrentTab(tabName) : undefined;
 
-export function Tabs(props: TTabsProps): Element<any> {
-	const { activeTab, tabs, getPanel } = props;
+export function Tabs({
+	activeTab,
+	tabs,
+	getPanel,
+	design,
+	orientation,
+	setCurrentTab,
+	className,
+}: TTabsProps): Element<any> {
 	const tabsRef: {
 		current: Array<{
 			...TTabProps,
@@ -34,18 +40,19 @@ export function Tabs(props: TTabsProps): Element<any> {
 		}>,
 	} = useRef(tabs);
 	const ref = useRef();
-	const classes = classnames('blockera-tab-panel');
 
 	return (
 		<div ref={ref}>
 			<TabPanel
-				className={classes}
-				activeClass="active-tab"
+				activeClass="is-active-tab"
 				onSelect={(tabName) => {
-					onSelect(tabName, props.setCurrentTab);
+					onSelect(tabName, setCurrentTab);
 				}}
 				tabs={tabsRef.current}
 				initialTabName={activeTab}
+				design={design}
+				orientation={orientation}
+				className={className}
 			>
 				{(tab) => getPanel(tab)}
 			</TabPanel>
