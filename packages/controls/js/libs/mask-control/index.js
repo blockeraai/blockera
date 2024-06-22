@@ -12,10 +12,11 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import RepeaterItemHeader from './components/header';
-import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
 import type { TMaskControlProps } from './types';
+import RepeaterControl from '../repeater-control';
+import RepeaterItemHeader from './components/header';
+import { cleanupRepeater } from '../repeater-control/utils';
 
 export default function MaskControl({
 	defaultRepeaterItemValue = {
@@ -37,6 +38,18 @@ export default function MaskControl({
 	defaultValue = [],
 	...props
 }: TMaskControlProps): MixedElement {
+	function valueCleanup(item: Object) {
+		if (item?.size !== 'custom') {
+			delete item['size-width'];
+			delete item['size-height'];
+		}
+
+		// internal usage
+		delete item.isOpen;
+
+		return item;
+	}
+
 	return (
 		<RepeaterControl
 			className={controlClassNames('mask', className)}
@@ -68,6 +81,9 @@ export default function MaskControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			defaultValue={defaultValue}
 			maxItems={1}
+			valueCleanup={(value: Object): Object =>
+				cleanupRepeater(value, { callback: valueCleanup })
+			}
 			{...props}
 		/>
 	);
