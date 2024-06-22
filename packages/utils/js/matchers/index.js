@@ -2,7 +2,7 @@
 
 import { isEquals } from '../array';
 
-export function truthy(expression: string, data: object): boolean {
+export function truthy(expression: string, data: Object): boolean {
 	const [key, value] = expression.split('=');
 
 	if (!key || !value) {
