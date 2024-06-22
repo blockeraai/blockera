@@ -122,9 +122,17 @@ export default function RepeaterControl(
 		mergeInitialAndDefault: true,
 	});
 
+	const [count, setCount] = useState(0);
+
+	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
+
 	const defaultRepeaterState: TRepeaterDefaultStateProps = {
 		design,
 		mode,
+		count,
+		setCount,
+		disableAddNewItem,
+		setDisableAddNewItem,
 		popoverTitle: popoverTitle || label || '',
 		popoverTitleButtonsRight,
 		//
@@ -158,9 +166,6 @@ export default function RepeaterControl(
 		//
 		customProps,
 	};
-	const [count, setCount] = useState(0);
-
-	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
 
 	const addNewButtonOnClick = () => {
 		if (isEnabledPromote(PromoComponent, repeaterItems)) {

@@ -8,48 +8,7 @@ import { prepare, update } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import {
-	hasRepeaterId,
-	repeaterOnChange,
-	countPropertiesWithPattern,
-} from './utils';
-
-function regeneratedIds(value: Object, action: Object): Object {
-	const { itemIdGenerator = null } = action;
-	const sortedItems = Object.entries({ ...value }).sort(
-		([, a], [, b]) => (a.order || 0) - (b.order || 0)
-	);
-
-	const newValue: { [key: string]: any } = {};
-
-	sortedItems.forEach(([, item]: [string, any], index: number): void => {
-		item = {
-			...item,
-			order: index,
-		};
-
-		if ('function' === typeof itemIdGenerator) {
-			newValue[itemIdGenerator(index)] = item;
-
-			return;
-		}
-
-		if (!item?.type) {
-			newValue[index + ''] = item;
-
-			return;
-		}
-
-		const itemsCount = countPropertiesWithPattern(
-			newValue,
-			new RegExp(`^${item.type}`, 'i')
-		);
-
-		newValue[`${item.type}-${itemsCount}`] = item;
-	});
-
-	return newValue;
-}
+import { hasRepeaterId, repeaterOnChange, regeneratedIds } from './utils';
 
 function handleActionIncludeRepeaterId(
 	controlValue: Object,

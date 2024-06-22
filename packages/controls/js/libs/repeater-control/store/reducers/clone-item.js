@@ -8,10 +8,11 @@ import { prepare, update } from '@blockera/data-editor';
  * Internal dependencies
  */
 import {
-	generatedDetailsId,
+	reOrder,
 	hasLimitation,
 	hasRepeaterId,
 	repeaterOnChange,
+	generatedDetailsId,
 } from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
@@ -45,12 +46,18 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 		itemId = action.itemIdGenerator(itemsCount);
 	}
 
-	return update(controlValue, action.repeaterId, {
-		[itemId]: {
-			...clonedItem,
-			order: itemsCount,
+	return reOrder(
+		{
+			...update(controlValue, action.repeaterId, {
+				[itemId]: {
+					...clonedItem,
+					order: action.item.order + 1,
+				},
+			}),
 		},
-	});
+		itemId,
+		action.repeaterId
+	);
 }
 
 export function cloneItem(state = {}, action) {
@@ -98,29 +105,22 @@ export function cloneItem(state = {}, action) {
 		controlInfo.value[action.itemId].isSelected = false;
 	}
 
-	repeaterOnChange(
-		{
-			...controlInfo.value,
-			[uniqueId]: {
-				...clonedItem,
-				order: Object.keys(controlInfo.value).length,
-			},
+	const newValue = {
+		...controlInfo.value,
+		[uniqueId]: {
+			...clonedItem,
+			order: action.item.order + 1,
 		},
-		action
-	);
+	};
+
+	repeaterOnChange(reOrder(newValue, uniqueId), action);
 
 	//by default behavior of "cloneRepeaterItem" action
 	return {
 		...state,
 		[action.controlId]: {
 			...controlInfo,
-			value: {
-				...controlInfo.value,
-				[uniqueId]: {
-					...clonedItem,
-					order: Object.keys(controlInfo.value).length,
-				},
-			},
+			value: reOrder(newValue, uniqueId),
 		},
 	};
 }

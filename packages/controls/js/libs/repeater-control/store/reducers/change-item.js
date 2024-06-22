@@ -7,7 +7,12 @@ import { update, prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { hasRepeaterId, generatedDetailsId, repeaterOnChange } from './utils';
+import {
+	hasRepeaterId,
+	generatedDetailsId,
+	repeaterOnChange,
+	regeneratedIds,
+} from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
 	const targetRepeater = prepare(action.repeaterId, controlValue);
@@ -16,7 +21,7 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 		targetRepeater &&
 		isEquals(targetRepeater[action.itemId], action.value)
 	) {
-		return state;
+		return controlValue;
 	}
 
 	return update(controlValue, action.repeaterId, {
@@ -68,22 +73,18 @@ export function changeItem(state = {}, action) {
 			return state;
 		}
 
-		repeaterOnChange(
-			{
-				...clonedPrevValue,
-				[uniqueId]: { ...action.value, isOpen: true },
-			},
-			action
-		);
+		const newValue = {
+			...clonedPrevValue,
+			[uniqueId]: { ...action.value, isOpen: true },
+		};
+
+		repeaterOnChange(regeneratedIds(newValue, action), action);
 
 		return {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: {
-					...clonedPrevValue,
-					[uniqueId]: { ...action.value, isOpen: true },
-				},
+				value: regeneratedIds(newValue, action),
 			},
 		};
 	}

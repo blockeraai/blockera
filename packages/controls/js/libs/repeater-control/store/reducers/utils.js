@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import memoize from 'fast-memoize';
+
+/**
  * Blockera dependencies
  */
 import { prepare } from '@blockera/data-editor';
@@ -128,4 +133,103 @@ export const repeaterOnChange = (
 	onChange(value, ref);
 
 	return value;
+};
+
+export const regeneratedIds = (value: Object, action: Object): Object => {
+	const { itemIdGenerator = null } = action;
+	const sortedItems = Object.entries({ ...value }).sort(
+		([, a], [, b]) => (a.order || 0) - (b.order || 0)
+	);
+
+	const newValue: { [key: string]: any } = {};
+
+	sortedItems.forEach(
+		memoize(([, item]: [string, any], index: number): void => {
+			item = {
+				...item,
+				order: index,
+			};
+
+			if ('function' === typeof itemIdGenerator) {
+				newValue[itemIdGenerator(index)] = item;
+
+				return;
+			}
+
+			if (!item?.type) {
+				newValue[index + ''] = item;
+
+				return;
+			}
+
+			const itemsCount = countPropertiesWithPattern(
+				newValue,
+				new RegExp(`^${item.type}`, 'i')
+			);
+
+			newValue[`${item.type}-${itemsCount}`] = item;
+		})
+	);
+
+	return newValue;
+};
+
+export const reOrder = (
+	obj: Object,
+	uniqueId: string,
+	repeaterId: null | string = null
+): Object => {
+	let reOrdered = {};
+
+	if (repeaterId) {
+		const keys = [];
+		regexMatch(/[\w-]+/g, repeaterId, (match) => keys.push(match));
+		const index = obj[keys[0]][keys[1]][uniqueId].order;
+
+		Object.entries(obj[keys[0]][keys[1]]).forEach(
+			memoize(([key, value]) => {
+				if (
+					(value.order === index && key !== uniqueId) ||
+					index < value.order
+				) {
+					reOrdered = {
+						...reOrder,
+						...update(obj, repeaterId, {
+							[key]: { ...value, order: value.order + 1 },
+						}),
+					};
+				} else {
+					reOrdered = {
+						...reOrdered,
+						...update(obj, repeaterId, {
+							[key]: value,
+						}),
+					};
+				}
+			})
+		);
+	} else {
+		const index = obj[uniqueId]?.order;
+
+		Object.entries(obj).forEach(
+			memoize(([key, value]) => {
+				if (
+					(value.order === index && key !== uniqueId) ||
+					index < value.order
+				) {
+					reOrdered = {
+						...reOrdered,
+						[key]: { ...value, order: value.order + 1 },
+					};
+				} else {
+					reOrdered = {
+						...reOrdered,
+						[key]: value,
+					};
+				}
+			})
+		);
+	}
+
+	return reOrdered;
 };
