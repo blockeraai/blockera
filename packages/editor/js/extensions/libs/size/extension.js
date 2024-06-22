@@ -166,12 +166,8 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 											{ ref }
 										);
 									}}
-									controlAddonTypes={[
-										'variable',
-										'dynamic-value',
-									]}
+									controlAddonTypes={['variable']}
 									variableTypes={['width-size']}
-									dynamicValueTypes={['all']}
 									{...extensionProps.blockeraWidth}
 								/>
 							</ControlContextProvider>
