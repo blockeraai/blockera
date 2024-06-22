@@ -5,7 +5,7 @@
  * Description: Make Gutenberg a Real Page Builder!
  * Requires at least: 6.5.2
  * Tested up to: 6.5.2
- * Requires PHP: 7.4
+ * Requires PHP: 8.1
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about-us/
  * Version: 1.1.6
@@ -16,7 +16,10 @@
  */
 
 // direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+
+	exit;
+}
 
 // loading autoloader.
 require __DIR__ . '/vendor/autoload.php';
@@ -46,6 +49,7 @@ define( 'BLOCKERA_VERSION', get_plugin_data( __FILE__ )['Version'] );
  * @hook  'blockera/before/setup'
  * @since 1.0.0
  */
+// phpcs:ignore
 do_action( 'blockera/before/setup' );
 
 ### BEGIN AUTO-GENERATED FRONT CONTROLLERS
@@ -76,4 +80,5 @@ require BLOCKERA_CORE_PATH . 'packages/blockera/php/app.php';
  * @hook  'blockera/after/setup'
  * @since 1.0.0
  */
+// phpcs:ignore
 do_action( 'blockera/after/setup' );
