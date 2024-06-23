@@ -51,7 +51,7 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 			...update(controlValue, action.repeaterId, {
 				[itemId]: {
 					...clonedItem,
-					order: action.item.order + 1,
+					order: (action.item?.order || 0) + 1,
 				},
 			}),
 		},
@@ -109,7 +109,7 @@ export function cloneItem(state = {}, action) {
 		...controlInfo.value,
 		[uniqueId]: {
 			...clonedItem,
-			order: action.item.order + 1,
+			order: (action.item?.order || 0) + 1,
 		},
 	};
 

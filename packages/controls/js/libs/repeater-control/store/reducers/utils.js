@@ -8,7 +8,7 @@ import memoize from 'fast-memoize';
 /**
  * Blockera dependencies
  */
-import { prepare } from '@blockera/data-editor';
+import { prepare, update } from '@blockera/data-editor';
 import { isObject, isInteger, isString } from '@blockera/utils';
 
 /**
@@ -120,14 +120,10 @@ export const repeaterOnChange = (
 		onChange: (newValue: any, ref: Object | void) => void,
 	}
 ): Object => {
+	value = 'function' === typeof valueCleanup ? valueCleanup(value) : value;
+
 	if ('function' !== typeof onChange) {
 		return value;
-	}
-
-	if ('function' === typeof valueCleanup) {
-		onChange(valueCleanup(value), ref);
-
-		return valueCleanup(value);
 	}
 
 	onChange(value, ref);
@@ -182,12 +178,14 @@ export const reOrder = (
 	let reOrdered = {};
 
 	if (repeaterId) {
-		const keys = [];
-		regexMatch(/[\w-]+/g, repeaterId, (match) => keys.push(match));
-		const index = obj[keys[0]][keys[1]][uniqueId].order;
+		const index = prepare(repeaterId + `[${uniqueId}].order`, obj);
 
-		Object.entries(obj[keys[0]][keys[1]]).forEach(
+		Object.entries(prepare(repeaterId, obj)).forEach(
 			memoize(([key, value]) => {
+				if (Number(key)) {
+					key = Number(key);
+				}
+
 				if (
 					(value.order === index && key !== uniqueId) ||
 					index < value.order
@@ -195,7 +193,7 @@ export const reOrder = (
 					reOrdered = {
 						...reOrder,
 						...update(obj, repeaterId, {
-							[key]: { ...value, order: value.order + 1 },
+							[key]: { ...value, order: value?.order + 1 },
 						}),
 					};
 				} else {
