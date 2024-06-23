@@ -5,7 +5,7 @@ export type TTabProps = {
 	name: string,
 	title: string,
 	tooltip?: string,
-	className: string,
+	className?: string,
 	icon?: MixedElement,
 };
 
@@ -24,5 +24,5 @@ export type TTabsProps = {
 	 * @default 'modern'
 	 */
 	design?: 'default' | 'modern',
-	className?: '',
+	className?: string,
 };
