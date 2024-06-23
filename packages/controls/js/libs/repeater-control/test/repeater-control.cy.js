@@ -874,6 +874,7 @@ describe('repeater control component testing', () => {
 				});
 			});
 		});
+
 		it('should new item be selected in repeater selectable', () => {
 			const name = nanoid();
 
@@ -927,6 +928,7 @@ describe('repeater control component testing', () => {
 				).to.have.length(3);
 			});
 		});
+
 		it('should add new item', () => {
 			const name = nanoid();
 
@@ -954,6 +956,7 @@ describe('repeater control component testing', () => {
 				).to.have.length(7);
 			});
 		});
+
 		it('should add new item into repeater selectable', () => {
 			const name = nanoid();
 
@@ -985,6 +988,7 @@ describe('repeater control component testing', () => {
 				).to.have.length(7);
 			});
 		});
+
 		it('should selected repeater first item', () => {
 			const name = nanoid();
 
@@ -1012,6 +1016,7 @@ describe('repeater control component testing', () => {
 				.first()
 				.should('have.class', 'is-selected-item');
 		});
+
 		it('should render delete item', () => {
 			const name = nanoid();
 			cy.withDataProvider({
@@ -1042,6 +1047,7 @@ describe('repeater control component testing', () => {
 				).to.have.length(1);
 			});
 		});
+
 		it('should render copy item', () => {
 			const name = nanoid();
 			cy.withDataProvider({
@@ -1074,6 +1080,7 @@ describe('repeater control component testing', () => {
 				).to.have.length(5);
 			});
 		});
+
 		it('should render disable item', () => {
 			const name = nanoid();
 			cy.withDataProvider({
@@ -1104,6 +1111,7 @@ describe('repeater control component testing', () => {
 					.to.have.false;
 			});
 		});
+
 		it('should display field in body section', () => {
 			cy.withDataProvider({
 				component: (
@@ -1125,6 +1133,7 @@ describe('repeater control component testing', () => {
 
 			cy.get('input[type="text"]').should('have.value', 'john doe');
 		});
+
 		it('should display custom header icons', () => {
 			cy.withDataProvider({
 				component: (
@@ -1141,6 +1150,7 @@ describe('repeater control component testing', () => {
 			cy.getByDataCy('plus-svg').should('be.visible');
 			cy.getByDataCy('minus-svg').should('be.visible');
 		});
+
 		it('should render max items', () => {
 			cy.withDataProvider({
 				component: (
@@ -1158,6 +1168,7 @@ describe('repeater control component testing', () => {
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 4);
 		});
+
 		it('should render min items', () => {
 			cy.withDataProvider({
 				component: (
@@ -1180,6 +1191,7 @@ describe('repeater control component testing', () => {
 			cy.getByDataCy('repeater-item').first().realHover('mouse');
 			cy.get('[aria-label="Delete 1"]').should('not.exist');
 		});
+
 		it('should render item is open', () => {
 			const name = nanoid();
 			cy.withDataProvider({
@@ -1211,6 +1223,7 @@ describe('repeater control component testing', () => {
 				).to.have.true;
 			});
 		});
+
 		it('should display popover custom className', () => {
 			cy.withDataProvider({
 				component: (
@@ -1237,6 +1250,7 @@ describe('repeater control component testing', () => {
 			);
 		});
 	});
+
 	describe('accordion', () => {
 		it('should display field in body section', () => {
 			cy.withDataProvider({
@@ -1260,6 +1274,7 @@ describe('repeater control component testing', () => {
 
 			cy.get('input[type="text"]').should('have.value', 'john doe');
 		});
+
 		it('should display more className', () => {
 			cy.withDataProvider({
 				component: (
@@ -1283,6 +1298,7 @@ describe('repeater control component testing', () => {
 				'custom-class'
 			);
 		});
+
 		it('should disable all action buttons', () => {
 			cy.withDataProvider({
 				component: (
@@ -1308,6 +1324,7 @@ describe('repeater control component testing', () => {
 			cy.get(`[aria-label="Clone 1"]`).should('not.be.exist');
 			cy.get(`[aria-label="Disable 1"]`).should('not.be.exist');
 		});
+
 		it('should display label', () => {
 			cy.withDataProvider({
 				component: (
@@ -1330,6 +1347,7 @@ describe('repeater control component testing', () => {
 			});
 			cy.getByDataCy(`label-control`).should('contain', 'My Label');
 		});
+
 		it('should display default values', () => {
 			const name = nanoid();
 			cy.withDataProvider({
@@ -1362,6 +1380,7 @@ describe('repeater control component testing', () => {
 				).to.have.length(2);
 			});
 		});
+
 		it('should display data with data id', () => {
 			const name = nanoid();
 			cy.withDataProvider({
@@ -1390,6 +1409,7 @@ describe('repeater control component testing', () => {
 				).to.have.length(2);
 			});
 		});
+
 		it('should when repeater control value is changed, then context data provider value to changed!', () => {
 			const onChangeMock = cy.stub().as('onChangeMock');
 
@@ -1410,6 +1430,7 @@ describe('repeater control component testing', () => {
 			cy.multiClick(`[aria-label="Add New My Label"]`, 2);
 			cy.get('@onChangeMock').should('have.been.called');
 		});
+
 		it('should when repeater control value is changed, then context data provider value to changed!', () => {
 			const name = nanoid();
 
