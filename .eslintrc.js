@@ -12,7 +12,7 @@ const restrictedImports = [
 	{
 		name: 'classnames',
 		message:
-			"Please use `@blockera/classnames` instead. It's a lighter, faster and is compatible all Blockera packages.",
+			"Please use `classNames` function or other function from `@blockera/classnames` instead. It's a lighter, faster and is compatible all Blockera packages.",
 	},
 ];
 

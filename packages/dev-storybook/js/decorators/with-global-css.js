@@ -1,12 +1,12 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import { useEffect } from '@wordpress/element';
 
 /**
- * External dependencies
+ * Blockera dependencies
  */
-import { useEffect } from '@wordpress/element';
+import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -56,7 +56,7 @@ export const WithGlobalCSS = (Story, context) => {
 	}, [context.globals.css, lazyStyles]);
 
 	return (
-		<div className={classnames(classes)}>
+		<div className={classNames(classes)}>
 			{externalStyles.map((stylesheet) => (
 				<link key={stylesheet} rel="stylesheet" href={stylesheet} />
 			))}

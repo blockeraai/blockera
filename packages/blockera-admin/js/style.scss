@@ -64,15 +64,15 @@
 
 				.blockera-block-category {
 
-					.blockera-block-category-buttons {
+					.blockera-component-block-category-buttons {
 						display: flex;
 
-						.blockera-block-category-button {
-							border: none;
-							cursor: pointer;
-							font-weight: 600;
-							background: transparent;
-							color: rgba(0, 0, 0, 0.11);
+						.blockera-component-block-category-button {
+							color: rgba(0, 0, 0, 0.15);
+
+							&:hover {
+								color: rgba(0, 0, 0, 0.50);
+							}
 
 							&.is-active {
 								color: #000000;

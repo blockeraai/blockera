@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
 import { useState } from '@wordpress/element';
 import { debounce, useViewportMatch } from '@wordpress/compose';
 import {
@@ -10,16 +9,17 @@ import {
 	Popover,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
  */
 import { Button } from '@blockera/controls';
 import {
+	classNames,
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
-import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
@@ -100,12 +100,12 @@ function BlockStyles({
 			<div className={componentInnerClassNames('block-styles__variants')}>
 				{stylesToRender.map((style) => {
 					const buttonText = style.isDefault
-						? __('Default')
+						? __('Default', 'blockera')
 						: style.label || style.name;
 
 					return (
 						<Button
-							className={classnames(
+							className={classNames(
 								'block-editor-block-styles__item',
 								{
 									'is-active':

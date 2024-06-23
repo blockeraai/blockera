@@ -8,13 +8,13 @@ import { check } from '@wordpress/icons';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
-import classNames from 'classnames';
 
 /**
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies

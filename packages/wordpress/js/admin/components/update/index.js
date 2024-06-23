@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
@@ -16,6 +15,7 @@ import { useContext, useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Modal, Button, Flex } from '@blockera/controls';
+import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -135,7 +135,7 @@ export const Update = ({
 					<Animate type="loading">
 						{({ className: animateClassName }) => (
 							<span
-								className={classnames(
+								className={classNames(
 									'message',
 									animateClassName
 								)}
@@ -164,7 +164,7 @@ export const Update = ({
 			)}
 			<Button
 				variant={'primary'}
-				className={classnames('save-settings__save-button', {
+				className={classNames('save-settings__save-button', {
 					'is-busy': 'saving' === status.name,
 					'blockera-settings-has-update': hasUpdate,
 				})}

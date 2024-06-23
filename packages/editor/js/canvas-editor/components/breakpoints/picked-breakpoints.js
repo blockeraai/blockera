@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
@@ -12,7 +11,7 @@ import { useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
-import { controlInnerClassNames } from '@blockera/classnames';
+import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import { BreakpointIcon } from '../../../extensions/libs/block-states/helpers';
 
 /**
@@ -32,7 +31,7 @@ export default function ({
 			aria-label={__('Breakpoints', 'blockera')}
 		>
 			<BreakpointIcon
-				className={classnames({
+				className={classNames({
 					'is-active-breakpoint': 'laptop' === activeBreakpoint,
 				})}
 				name={'laptop'}
@@ -45,7 +44,7 @@ export default function ({
 			/>
 
 			<BreakpointIcon
-				className={classnames({
+				className={classNames({
 					'is-active-breakpoint': 'tablet' === activeBreakpoint,
 				})}
 				name={'tablet'}
@@ -58,7 +57,7 @@ export default function ({
 			/>
 
 			<BreakpointIcon
-				className={classnames({
+				className={classNames({
 					'is-active-breakpoint': 'mobile' === activeBreakpoint,
 				})}
 				name={'mobile'}

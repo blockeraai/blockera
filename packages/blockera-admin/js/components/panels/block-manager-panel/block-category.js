@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { __experimentalHStack as HStack } from '@wordpress/components';
@@ -13,6 +12,7 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
  */
 import { without } from '@blockera/utils';
 import { Button } from '@blockera/controls';
+import { componentInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -78,11 +78,15 @@ export default function BlockCategory(props: {
 						{category.title}
 					</h4>
 				</div>
-				<div className={'blockera-block-category-buttons'}>
+				<div
+					className={componentInnerClassNames(
+						'block-category-buttons'
+					)}
+				>
 					<Button
 						noBorder={true}
-						className={classnames(
-							'blockera-block-category-button',
+						className={componentInnerClassNames(
+							'block-category-button',
 							{
 								'is-active': isAllChecked,
 							}
@@ -93,8 +97,8 @@ export default function BlockCategory(props: {
 					/>
 					<Button
 						noBorder={true}
-						className={classnames(
-							'blockera-block-category-button',
+						className={componentInnerClassNames(
+							'block-category-button',
 							{
 								'is-active': !isAllChecked,
 							}

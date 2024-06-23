@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
 import { SlotFillProvider } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
 import type { Element, MixedElement, ComponentType } from 'react';
@@ -21,6 +20,7 @@ import {
 /**
  * Blockera dependencies
  */
+import { classNames } from '@blockera/classnames';
 import {
 	isEquals,
 	getIframeTag,
@@ -291,7 +291,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					if (!attributes?.className) {
 						filteredAttributes = {
 							...filteredAttributes,
-							className: classnames(
+							className: classNames(
 								{
 									'blockera-block': true,
 									[`blockera-block-${clientId}`]: true,
@@ -302,7 +302,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					} else if ('' === className) {
 						filteredAttributes = {
 							...filteredAttributes,
-							className: classnames(
+							className: classNames(
 								{
 									'blockera-block': true,
 									[`blockera-block-${clientId}`]: true,

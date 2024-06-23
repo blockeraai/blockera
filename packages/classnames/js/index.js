@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+// eslint-disable-next-line no-restricted-imports
 import classnames from 'classnames';
 import {
 	isArray,
@@ -46,6 +47,10 @@ function prepareClassName(section, items) {
 		items = newItems;
 	}
 	return items;
+}
+
+export function classNames(...names) {
+	return classnames(names);
 }
 
 export function getClassnames(
