@@ -62,17 +62,17 @@ export function getArialLabelSuffix(itemId: string): string | number {
 }
 
 export function cleanupRepeaterItem(item: Object): Object {
-	delete item.isOpen;
-	delete item.display;
-	delete item.cloneable;
-	delete item.deletable;
+	delete item?.isOpen;
+	delete item?.display;
+	delete item?.cloneable;
+	delete item?.deletable;
 
 	if (!item?.selectable) {
-		delete item.isSelected;
+		delete item?.isSelected;
 	}
 
-	delete item.selectable;
-	delete item.visibilitySupport;
+	delete item?.selectable;
+	delete item?.visibilitySupport;
 
 	return item;
 }

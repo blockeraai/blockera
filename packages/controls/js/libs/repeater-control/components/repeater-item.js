@@ -127,7 +127,7 @@ const RepeaterItem = ({
 		}
 	};
 
-	if (!item?.display && item.selectable) {
+	if (!item?.display && item?.selectable) {
 		return null;
 	}
 
@@ -169,7 +169,7 @@ const RepeaterItem = ({
 					'repeater-item-group',
 					item?.__className,
 					{
-						'is-selected-item': item.selectable
+						'is-selected-item': item?.selectable
 							? item.isSelected
 							: false,
 					}
@@ -246,7 +246,7 @@ const RepeaterItem = ({
 					});
 				}}
 				onClick={(): void | boolean => {
-					if (item.selectable) {
+					if (item?.selectable) {
 						const newItems: { [key: string]: any } = {};
 
 						Object.entries(items).forEach(

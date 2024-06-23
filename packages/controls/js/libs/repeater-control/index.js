@@ -185,7 +185,7 @@ export default function RepeaterControl(
 			const clonedRepeaterItems: { [key: string]: any } = {};
 
 			Object.entries(repeaterItems).forEach(([itemId, item]): void => {
-				if (item.display) {
+				if (item?.display) {
 					clonedRepeaterItems[itemId] = {
 						...item,
 						isSelected: false,
