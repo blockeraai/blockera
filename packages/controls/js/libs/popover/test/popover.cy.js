@@ -44,12 +44,14 @@ describe('popover component testing', () => {
 			cy.contains('click').click();
 			cy.contains('Popover Body');
 		});
+
 		it('should render correctly, when passing string title', () => {
 			mount(<Wrapper popoverProps={defaultProps} />);
 
 			cy.contains('click').click();
 			cy.contains('Popover Title');
 		});
+
 		it('should render correctly, when passing a jsx title', () => {
 			const ComponentAsTitle = () => {
 				return (
@@ -122,9 +124,9 @@ describe('popover component testing', () => {
 			mount(<Wrapper popoverProps={defaultProps} />);
 
 			cy.contains('click').click();
-			cy.get('[data-test="popover-header"')
-				.children('[aria-label="Close"]')
-				.click();
+
+			cy.get('[data-test="popover-header"] [aria-label="Close"]').click();
+
 			cy.get('[data-test="wrapper-component"]').should(
 				'not.contain',
 				'Popover Title'
@@ -148,9 +150,7 @@ describe('popover component testing', () => {
 	describe('test different placements and flip :', () => {
 		const testTransformOrigin = (data) => {
 			return cy
-				.get('[data-test="wrapper-component"]')
-				.children()
-				.last()
+				.get('[data-wp-component="Popover"]')
 				.should('have.attr', 'style')
 				.should('contain', `transform-origin: ${data}`);
 		};
@@ -167,8 +167,10 @@ describe('popover component testing', () => {
 				);
 
 				cy.contains('click').click();
+
 				testTransformOrigin('0% 100% 0px');
 			});
+
 			it('should render on bottom-start, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -200,6 +202,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('50% 100% 0px');
 			});
+
 			it('should render on bottom, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -231,6 +234,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('100% 100% 0px');
 			});
+
 			it('should render on bottom-end, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -261,6 +265,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('0% 0% 0px');
 			});
+
 			it('should render on left-start, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -292,6 +297,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('0% 50% 0px');
 			});
+
 			it('should render on left, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -323,6 +329,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('0% 100% 0px');
 			});
+
 			it('should render on left-end, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -353,6 +360,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('0% 0% 0px');
 			});
+
 			it('should render on top-start, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -383,6 +391,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('50% 0% 0px');
 			});
+
 			it('should render on top, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -414,6 +423,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('100% 0% 0px');
 			});
+
 			it('should render on top-end, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -445,6 +455,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('100% 0% 0px');
 			});
+
 			it('should render on right-start, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -475,6 +486,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('100% 50% 0px');
 			});
+
 			it('should render on right, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -491,6 +503,7 @@ describe('popover component testing', () => {
 				testTransformOrigin('0% 50% 0px');
 			});
 		});
+
 		describe('when passing left-end :', () => {
 			it('should render on left-end, if flip = false & has space in normal placement', () => {
 				mount(
@@ -505,6 +518,7 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('100% 100% 0');
 			});
+
 			it('should render on right-end, if flip = true & no space in normal placement', () => {
 				mount(
 					<Wrapper
@@ -529,9 +543,7 @@ describe('popover component testing', () => {
 		mount(<Wrapper popoverProps={defaultProps} />);
 
 		cy.contains('click').click();
-		cy.get('[data-test="popover-header"')
-			.children('[aria-label="Close"]')
-			.click();
+		cy.get('[data-test="popover-header"] [aria-label="Close"]').click();
 		cy.get('@onClose').should('have.been.called');
 	});
 });
