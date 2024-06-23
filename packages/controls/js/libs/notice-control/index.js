@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
 import { useState } from '@wordpress/element';
 
 /**
@@ -102,57 +101,3 @@ export default function NoticeControl({
 		)
 	);
 }
-
-NoticeControl.propTypes = {
-	/**
-	 * Label for field. If you pass empty value the field will not be added and simple control will be rendered
-	 *
-	 * @default ""
-	 */
-	label: PropTypes.string,
-	/**
-	 * Field id for passing into child Field component
-	 *
-	 * @default "toggle-select"
-	 */
-	field: PropTypes.string,
-	/**
-	 * Columns setting for Field grid.
-	 *
-	 * @default "columns-2"
-	 */
-	columns: PropTypes.string,
-	/**
-	 * Function that will be fired while clicking on dismiss.
-	 */
-	onDismiss: PropTypes.func,
-	/**
-	 * flag to show icon or not.
-	 */
-	showIcon: PropTypes.bool,
-	/**
-	 * define colors and icons based on type
-	 */
-	type: (PropTypes.oneOf([
-		'information',
-		'warning',
-		'success',
-		'error',
-	]): any),
-	/**
-	 * string or jsx to place in content.If you pass empty value, component will not render.
-	 */
-	children: PropTypes.string.isRequired,
-	/**
-	 * flag to show dismiss or not
-	 */
-	isDismissible: PropTypes.bool,
-	/**
-	 * flag to render control or not
-	 */
-	isShown: PropTypes.bool,
-	/**
-	 * Function that will be fired when control rendered
-	 */
-	onShown: PropTypes.func,
-};

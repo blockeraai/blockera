@@ -5,7 +5,6 @@
 import type { Node } from 'react';
 import { Tooltip as WPTooltip } from '@wordpress/components';
 import { componentClassNames } from '@blockera/classnames';
-import PropTypes from 'prop-types';
 
 /**
  * Int dependencies
@@ -36,27 +35,3 @@ export function Tooltip({
 		</WPTooltip>
 	);
 }
-
-Tooltip.propTypes = {
-	className: PropTypes.string,
-	children: PropTypes.node,
-	delay: PropTypes.number,
-	hideOnClick: PropTypes.func,
-	//$FlowFixMe
-	placement: PropTypes.oneOf([
-		'top',
-		'top-start',
-		'top-end',
-		'right',
-		'right-start',
-		'right-end',
-		'bottom',
-		'bottom-start',
-		'bottom-end',
-		'left',
-		'left-start',
-		'left-end',
-	]),
-	position: PropTypes.string,
-	text: PropTypes.string,
-};

@@ -17,5 +17,8 @@ export type TItem = {
 
 export type TOutlineControlProps = {
 	...RepeaterControlProps,
+	/**
+	 * Default value of each repeater item
+	 */
 	defaultRepeaterItemValue?: TItem,
 };

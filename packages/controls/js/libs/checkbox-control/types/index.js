@@ -11,5 +11,10 @@ import type { ControlGeneralTypes } from '../../../types';
 
 export type CheckboxControlProps = {
 	...ControlGeneralTypes,
+	/**
+	 * Label for checkbox.
+	 *
+	 * @default ""
+	 */
 	checkboxLabel: string | MixedElement,
 };

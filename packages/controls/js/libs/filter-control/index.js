@@ -1,10 +1,11 @@
 // @flow
+
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
+
 /**
  * Blockera dependencies
  */
@@ -160,47 +161,3 @@ export default function FilterControl({
 		/>
 	);
 }
-
-FilterControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.array,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Default value of each repeater item
-	 */
-	defaultRepeaterItemValue: (PropTypes.shape({
-		type: PropTypes.oneOf([
-			'blur',
-			'drop-shadow',
-			'brightness',
-			'contrast',
-			'hue-rotate',
-			'saturate',
-			'grayscale',
-			'invert',
-			'sepia',
-		]),
-		blur: PropTypes.string,
-		brightness: PropTypes.string,
-		contrast: PropTypes.string,
-		'hue-rotate': PropTypes.string,
-		saturate: PropTypes.string,
-		grayscale: PropTypes.string,
-		invert: PropTypes.string,
-		sepia: PropTypes.string,
-		'drop-shadow-x': PropTypes.string,
-		'drop-shadow-y': PropTypes.string,
-		'drop-shadow-blur': PropTypes.string,
-		'drop-shadow-color': PropTypes.string,
-		isVisible: PropTypes.bool,
-	}): any),
-	/**
-	 * Label for popover
-	 */
-	popoverTitle: PropTypes.string,
-};

@@ -1,29 +1,36 @@
+//@flow
+
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
+import type { MixedElement } from 'react';
+
+/**
+ * Blockera dependencies
+ */
+import { componentClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { componentClassNames } from '@blockera/classnames';
+import type { GapProps } from './types';
 
 export default function Grid({
-	gap,
-	columnGap,
-	rowGap,
-	gridTemplateColumns,
-	gridTemplateRows,
-	gridTemplate,
-	alignContent,
-	justifyContent,
-	alignItems,
-	justifyItems,
+	gap = '',
+	columnGap = '',
+	rowGap = '',
+	gridTemplateColumns = '',
+	gridTemplateRows = '',
+	gridTemplate = '',
+	alignContent = '',
+	justifyContent = '',
+	alignItems = '',
+	justifyItems = '',
 	children,
-	className,
+	className = '',
 	style,
 	...props
-}) {
+}: GapProps): MixedElement {
 	return (
 		<div
 			style={{
@@ -46,81 +53,3 @@ export default function Grid({
 		</div>
 	);
 }
-
-Grid.propTypes = {
-	/**
-	 * Sets the gaps (gutters) between rows and columns. It is a shorthand for `rowGap` and `columnGap`.
-	 */
-	gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	/**
-	 * Sets the size of the gap (gutter) between grid columns.
-	 */
-	columnGap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	/**
-	 * Sets the size of the gap (gutter) between grid rows.
-	 */
-	rowGap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	/**
-	 * It is a shorthand property for defining grid columns, grid rows, and grid areas.
-	 */
-	gridTemplate: PropTypes.string,
-	/**
-	 * Defines the line names and track sizing functions of the grid columns.
-	 */
-	gridTemplateColumns: PropTypes.string,
-	/**
-	 * Defines the line names and track sizing functions of the grid rows.
-	 */
-	gridTemplateRows: PropTypes.string,
-	/**
-	 * Sets the distribution of space between and around content items along a grid's block axis.
-	 */
-	alignContent: PropTypes.oneOf([
-		'',
-		'center',
-		'stretch',
-		'space-evenly',
-		'space-around',
-		'space-between',
-	]),
-	/**
-	 * Defines how the browser distributes space between and around content items along the inline axis of a grid container.
-	 */
-	justifyContent: PropTypes.oneOf([
-		'',
-		'end',
-		'start',
-		'center',
-		'space-around',
-		'space-evenly',
-		'space-between',
-	]),
-	/**
-	 * Sets the align-self value on all direct children as a group. In Grid Layout, it controls the alignment of items on the Block Axis within their grid area.
-	 */
-	alignItems: PropTypes.oneOf([
-		'',
-		'end',
-		'start',
-		'center',
-		'stretch',
-		'baseline',
-	]),
-	/**
-	 * Defines the default justify-self for all items of the box, giving them all a default way of justifying each box along the appropriate axis..
-	 */
-	justifyItems: PropTypes.oneOf(['', 'start', 'center', 'end', 'stretch']),
-};
-
-Grid.defaultProps = {
-	gap: '',
-	columnGap: '',
-	rowGap: '',
-	gridTemplate: '',
-	gridTemplateColumns: '',
-	gridTemplateRows: '',
-	alignContent: '',
-	justifyContent: '',
-	alignItems: '',
-	justifyItems: '',
-};

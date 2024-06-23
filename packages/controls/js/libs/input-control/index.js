@@ -1,8 +1,8 @@
 // @flow
+
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState, useEffect } from '@wordpress/element';
@@ -332,104 +332,3 @@ export default function InputControl({
 		</BaseControl>
 	);
 }
-
-InputControl.propTypes = {
-	/**
-	 * ID for retrieving value from control context
-	 */
-	id: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.string,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Sets to show range control for input or not
-	 */
-	range: PropTypes.bool,
-	/**
-	 * Show up and down arrow buttons or not
-	 */
-	arrows: PropTypes.bool,
-	/**
-	 * Type of CSS units from presets
-	 */
-	//$FlowFixMe
-	unitType: PropTypes.oneOf([
-		'outline',
-		'text-shadow',
-		'box-shadow',
-		'background-size',
-		'letter-spacing',
-		'text-indent',
-		'background-position',
-		'duration',
-		'angle',
-		'percent',
-		'width',
-		'essential',
-		'general',
-		'order',
-		'custom',
-		'flex-grow',
-		'flex-shrink',
-		'fex-basis',
-		'line-height',
-	]),
-	/**
-	 * Indicates units for showing unit for value.
-	 */
-	//$FlowFixMe
-	units: PropTypes.arrayOf(
-		PropTypes.shape({
-			value: PropTypes.string,
-			label: PropTypes.string,
-			default: PropTypes.number,
-		})
-	),
-	/**
-	 * By using this you can prevent the control to show the border and outline shape.
-	 */
-	noBorder: PropTypes.bool,
-	/**
-	 * By using this you can disable the control.
-	 */
-	disabled: PropTypes.bool,
-	/**
-	 * The minimum `value` allowed.
-	 */
-	//$FlowFixMe
-	min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	/**
-	 * The maximum `value` allowed.
-	 */
-	//$FlowFixMe
-	max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	/**
-	 * check the `input`,  A function used to validate input values.
-	 */
-	//$FlowFixMe
-	validator: PropTypes.oneOfType([
-		PropTypes.func,
-		PropTypes.arrayOf(
-			PropTypes.oneOf([
-				'calc',
-				'max',
-				'min',
-				'translate',
-				'scale',
-				'rotate',
-				'rgb',
-				'rgba',
-				'hsl',
-				'hsla',
-				'skew',
-				'var',
-				'attr',
-			])
-		),
-	]),
-};

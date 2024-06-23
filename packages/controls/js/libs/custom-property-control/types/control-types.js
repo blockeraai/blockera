@@ -12,5 +12,8 @@ export type TItem = {
 
 export type CustomPropertyControlProps = {
 	...RepeaterControlProps,
+	/**
+	 * Default value of each repeater item
+	 */
 	defaultRepeaterItemValue?: TItem,
 };

@@ -4,7 +4,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
@@ -198,45 +197,3 @@ export default function LinkControl({
 		</BaseControl>
 	);
 }
-
-LinkControl.propTypes = {
-	/**
-	 * The control attributes identifier is required property!
-	 */
-	attributesId: PropTypes.string.isRequired,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	// $FlowFixMe
-	defaultValue: (PropTypes.shape({
-		link: PropTypes.string,
-		target: PropTypes.bool,
-		nofollow: PropTypes.bool,
-		label: PropTypes.string,
-		attributes: PropTypes.arrayOf(
-			PropTypes.shape({
-				key: PropTypes.string,
-				value: PropTypes.string,
-				isVisible: PropTypes.bool,
-			})
-		),
-	}): any),
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Controls that advanced mode will be open automatic if the inside values where defined or not
-	 *
-	 * @default `auto`
-	 */
-	// $FlowFixMe
-	advancedOpen: PropTypes.oneOfType([
-		PropTypes.oneOf(['auto']),
-		PropTypes.bool,
-	]),
-	/**
-	 * link input placeholder text
-	 */
-	placeholder: PropTypes.string,
-};

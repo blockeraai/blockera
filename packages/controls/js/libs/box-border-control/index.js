@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
@@ -389,55 +388,3 @@ export default function BoxBorderControl({
 		</BaseControl>
 	);
 }
-
-BoxBorderControl.propTypes = {
-	/**
-	 * ID for retrieving value from control context
-	 */
-	id: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: (PropTypes.oneOfType([
-		PropTypes.shape({
-			type: 'all',
-			all: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-		}),
-		PropTypes.shape({
-			type: PropTypes.oneOf(['all', 'custom']),
-			all: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-			top: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-			right: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-			bottom: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-			left: PropTypes.shape({
-				width: PropTypes.string,
-				style: PropTypes.oneOf(['solid', 'dashed', 'dotted', 'double']),
-				color: PropTypes.string,
-			}),
-		}),
-	]): any),
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-};

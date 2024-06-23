@@ -1,8 +1,8 @@
 // @flow
+
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { memo, useState, useReducer, useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
@@ -267,37 +267,6 @@ function IconControl({
 		</IconContextProvider>
 	);
 }
-
-IconControl.propTypes = {
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.shape({
-		icon: PropTypes.string,
-		library: PropTypes.string,
-		uploadSVG: PropTypes.oneOf([
-			PropTypes.string,
-			PropTypes.object,
-			PropTypes.element,
-		]),
-	}),
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * Choose label
-	 */
-	labelChoose: PropTypes.string,
-	/**
-	 * Open icon library label
-	 */
-	labelIconLibrary: PropTypes.string,
-	/**
-	 * upload svg label
-	 */
-	labelUploadSvg: PropTypes.string,
-};
 
 // $FlowFixMe
 export default memo(IconControl, hasSameProps);

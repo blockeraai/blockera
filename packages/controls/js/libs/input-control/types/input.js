@@ -46,21 +46,47 @@ export type InputUnitTypes =
 export type InputControlProps = {
 	...ControlGeneralTypes,
 	...ControlValueAddonTypes,
-	// eslint-disable-next-line
+	/**
+	 * Type of CSS units from presets
+	 */
 	unitType?: InputUnitTypes,
+	/**
+	 * Indicates units for showing unit for value.
+	 */
 	units?: Array<Object>,
+	/**
+	 * By using this you can prevent the control to show the border and outline shape.
+	 */
 	noBorder?: boolean,
+	/**
+	 * Sets to show range control for input or not
+	 */
 	range?: boolean,
 	field?: string,
 	singularId?: string,
 	repeaterItem?: number,
 	type?: 'text' | 'number',
+	/**
+	 * The minimum `value` allowed.
+	 */
 	min?: number,
+	/**
+	 * The maximum `value` allowed.
+	 */
 	max?: number,
+	/**
+	 * check the `input`,  A function used to validate input values.
+	 */
 	validator?: (value: string | number) => boolean,
+	/**
+	 * By using this you can disable the control.
+	 */
 	disabled?: boolean,
 	drag?: boolean,
 	float?: boolean,
+	/**
+	 * Show up and down arrow buttons or not
+	 */
 	arrows?: boolean,
 	actions?: Node,
 	placeholder?: string,

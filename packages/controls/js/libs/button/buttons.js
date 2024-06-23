@@ -1,7 +1,9 @@
+//@flow
+
 /**
  * External dependencies
  */
-import { PropTypes } from 'prop-types';
+import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
@@ -12,16 +14,17 @@ import { componentClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { Flex } from '../index';
+import type { ButtonsProps } from './types';
 
 export default function Buttons({
-	direction,
-	gap,
+	direction = 'row',
+	gap = '8px',
 	justifyContent,
 	alignItems,
 	className,
 	children,
 	...props
-}) {
+}: ButtonsProps): MixedElement {
 	return (
 		<Flex
 			gap={gap}
@@ -34,37 +37,3 @@ export default function Buttons({
 		</Flex>
 	);
 }
-
-Buttons.propTypes = {
-	direction: PropTypes.oneOf([
-		'column',
-		'column-reverse',
-		'row',
-		'row-reverse',
-	]),
-	gap: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	justifyContent: PropTypes.oneOf([
-		'flex-start',
-		'center',
-		'flex-end',
-		'space-between',
-		'space-around',
-		'space-evenly',
-	]),
-	alignItems: PropTypes.oneOf([
-		'flex-start',
-		'center',
-		'flex-end',
-		'stretch',
-	]),
-	className: PropTypes.string,
-	children: PropTypes.element,
-};
-
-Buttons.defaultProps = {
-	direction: 'row',
-	gap: '8px',
-	justifyContent: '',
-	alignItems: '',
-	className: '',
-};

@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import PropTypes from 'prop-types';
 import type { MixedElement } from 'react';
 
 /**
@@ -88,26 +87,3 @@ export default function TextAreaControl({
 		</BaseControl>
 	);
 }
-
-TextAreaControl.propTypes = {
-	/**
-	 * ID for retrieving value from control context
-	 */
-	id: PropTypes.string,
-	/**
-	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
-	 */
-	defaultValue: PropTypes.string,
-	/**
-	 * Function that will be fired while the control value state changes.
-	 */
-	onChange: PropTypes.func,
-	/**
-	 * By using this you can disable the control.
-	 */
-	disabled: PropTypes.bool,
-	/**
-	 * Textarea custom height
-	 */
-	height: PropTypes.number,
-};
