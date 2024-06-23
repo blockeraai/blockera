@@ -28,9 +28,9 @@ export default function (wp: Object) {
 
 	if (
 		'function' === typeof registerPlugin &&
-		!getPlugin('blockera-core-editor-observer')
+		!getPlugin('blockera-editor-observer')
 	) {
-		registerPlugin('blockera-core-editor-observer', {
+		registerPlugin('blockera-editor-observer', {
 			render() {
 				return (
 					<Observer
@@ -52,7 +52,7 @@ export default function (wp: Object) {
 									}
 
 									const plugin =
-										'blockera-core-post-editor-top-bar';
+										'blockera-post-editor-top-bar';
 
 									if (getPlugin(plugin)) {
 										return;
@@ -85,7 +85,7 @@ export default function (wp: Object) {
 									}
 
 									const plugin =
-										'blockera-core-site-editor-top-bar';
+										'blockera-site-editor-top-bar';
 
 									if (getPlugin(plugin)) {
 										return;

@@ -168,7 +168,7 @@ class Utility {
 		 * @since 1.0.0
 		 */
 		// phpcs:ignore
-		return apply_filters( 'blockera-core/dynamic-value/utility/the_archive_title', $title, $page_type );
+		return apply_filters( 'blockera/dynamic-value/utility/the_archive_title', $title, $page_type );
 	}
 
 	/**
@@ -390,7 +390,7 @@ class Utility {
 		 * @since 1.0.0
 		 */
 		// phpcs:ignore
-		return apply_filters( 'blockera-core/dynamic-value/utility/placeholder_image_logo', $placeholder_image );
+		return apply_filters( 'blockera/dynamic-value/utility/placeholder_image_logo', $placeholder_image );
 	}
 
 }

@@ -32,7 +32,7 @@ export const AdminFeatureWrapper = ({
 		return <></>;
 	}
 
-	const { getEntity } = select('blockera-core/data');
+	const { getEntity } = select('blockera/data');
 	const blockera = getEntity('blockera');
 
 	const isLocked = /\w+-[orp]+/i.exec(blockera?.locked || '');

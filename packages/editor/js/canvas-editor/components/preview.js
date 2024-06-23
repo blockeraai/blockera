@@ -16,7 +16,7 @@ export const Preview = (): MixedElement => {
 	const previewElement: HTMLElement | null = document.querySelector(
 		'a[aria-label="View Post"]'
 	);
-	const { getEntity } = select('blockera-core/data');
+	const { getEntity } = select('blockera/data');
 	const { url: siteURL } = getEntity('site');
 
 	return (

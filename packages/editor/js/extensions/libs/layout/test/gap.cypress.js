@@ -45,7 +45,7 @@ describe('Gap → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'gap', '10px');
+		cy.get('.blockera-block').should('have.css', 'gap', '10px');
 	});
 
 	it('should update row-gap & column-gap correctly, when add data', () => {
@@ -93,7 +93,7 @@ describe('Gap → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block')
+		cy.get('.blockera-block')
 			.should('have.css', 'column-gap', '15px')
 			.and('have.css', 'row-gap', '10px');
 	});

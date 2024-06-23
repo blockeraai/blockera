@@ -42,6 +42,6 @@ describe('Cursor → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'cursor', 'wait');
+		cy.get('.blockera-block').should('have.css', 'cursor', 'wait');
 	});
 });

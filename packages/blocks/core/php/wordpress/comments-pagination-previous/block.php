@@ -4,7 +4,7 @@
  *
  * @var array $args the block arguments!
  *
- * @package blockera-core/packages/blocks/js/wordpress/comments-pagination-previous
+ * @package blockera/packages/blocks/js/wordpress/comments-pagination-previous
  */
 
 return array_merge(

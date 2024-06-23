@@ -95,7 +95,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				getExtensionInnerBlockState,
 				getExtensionCurrentBlockState,
 				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera-core/extensions');
+			} = select('blockera/extensions');
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),
@@ -114,9 +114,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
 			setExtensionsActiveBlockVariation: setActiveBlockVariation,
-		} = dispatch('blockera-core/extensions') || {};
+		} = dispatch('blockera/extensions') || {};
 
-		const { getDeviceType } = select('blockera-core/editor');
+		const { getDeviceType } = select('blockera/editor');
 
 		const { currentInnerBlock, blockeraInnerBlocks } = useInnerBlocksInfo({
 			name,
@@ -293,8 +293,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							...filteredAttributes,
 							className: classnames(
 								{
-									'blockera-core-block': true,
-									[`blockera-core-block-${clientId}`]: true,
+									'blockera-block': true,
+									[`blockera-block-${clientId}`]: true,
 								},
 								additional.editorProps.className || ''
 							),
@@ -304,8 +304,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							...filteredAttributes,
 							className: classnames(
 								{
-									'blockera-core-block': true,
-									[`blockera-core-block-${clientId}`]: true,
+									'blockera-block': true,
+									[`blockera-block-${clientId}`]: true,
 								},
 								additional.editorProps.className || ''
 							),
@@ -386,7 +386,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						clientId,
 						handleOnChangeAttributes,
 						attributes: currentAttributes,
-						storeName: 'blockera-core/controls',
+						storeName: 'blockera/controls',
 					},
 					attributes,
 					currentTab,
@@ -442,7 +442,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								states: attributes.blockeraBlockStates,
 								blockProps: {
 									// Sending props like exactly "edit" function props of WordPress Block.
-									// Because needs total block props in outside overriding component like "blockera-core" in overriding process.
+									// Because needs total block props in outside overriding component like "blockera" in overriding process.
 									name,
 									clientId,
 									supports,

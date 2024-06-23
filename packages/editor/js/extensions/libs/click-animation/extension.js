@@ -50,7 +50,7 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 							attribute: 'blockeraClickAnimation',
 							blockName: block.blockName,
 						}}
-						storeName={'blockera-core/controls/repeater'}
+						storeName={'blockera/controls/repeater'}
 					>
 						<RepeaterControl
 							label=""

@@ -363,7 +363,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							attribute: 'blockeraTextShadow',
 							blockName: block.blockName,
 						}}
-						storeName={'blockera-core/controls/repeater'}
+						storeName={'blockera/controls/repeater'}
 					>
 						<BaseControl
 							controlName="text-shadow"

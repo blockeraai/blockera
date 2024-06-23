@@ -31,8 +31,8 @@ export default function EditorFeatureWrapper({
 				getExtensionInnerBlockState,
 				getExtensionCurrentBlockState,
 				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera-core/extensions');
-			const { getEntity } = select('blockera-core/data');
+			} = select('blockera/extensions');
+			const { getEntity } = select('blockera/data');
 
 			return {
 				blockera: getEntity('blockera'),

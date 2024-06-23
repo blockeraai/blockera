@@ -83,7 +83,7 @@ export default function RepeaterControl(
 		...customProps
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
-	const { getEntity } = select('blockera-core/data');
+	const { getEntity } = select('blockera/data');
 	const {
 		settings: {
 			general: { disableProHints },

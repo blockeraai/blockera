@@ -215,11 +215,11 @@ function mergeBlockSettings(
 							}}
 						>
 							<SlotFillProvider>
-								<Slot name={'blockera-core-block-before'} />
+								<Slot name={'blockera-block-before'} />
 
 								<BlockPortals
 									blockId={`#block-${props.clientId}`}
-									mainSlot={'blockera-core-block-slot'}
+									mainSlot={'blockera-block-slot'}
 									slots={
 										// slot selectors is feature on configuration block to create custom slots for anywhere.
 										// we can add slotSelectors property on block configuration to handle custom preview of block.
@@ -227,7 +227,7 @@ function mergeBlockSettings(
 									}
 								/>
 
-								<Slot name={'blockera-core-block-after'} />
+								<Slot name={'blockera-block-after'} />
 							</SlotFillProvider>
 						</BlockBase>
 						{settings.edit(props)}

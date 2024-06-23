@@ -43,7 +43,7 @@ export const BackdropFilter = ({
 				attribute: 'blockeraBackdropFilter',
 				blockName: block.blockName,
 			}}
-			storeName={'blockera-core/controls/repeater'}
+			storeName={'blockera/controls/repeater'}
 		>
 			<BaseControl columns="columns-1" controlName="filter">
 				<FilterControl

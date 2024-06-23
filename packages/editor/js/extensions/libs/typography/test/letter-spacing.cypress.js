@@ -47,10 +47,6 @@ describe('Letter Spacing → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'letter-spacing',
-			'5px'
-		);
+		cy.get('.blockera-block').should('have.css', 'letter-spacing', '5px');
 	});
 });

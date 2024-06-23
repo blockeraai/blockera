@@ -50,7 +50,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 							attribute: 'blockeraScrollAnimation',
 							blockName: block.blockName,
 						}}
-						storeName={'blockera-core/controls/repeater'}
+						storeName={'blockera/controls/repeater'}
 					>
 						<RepeaterControl
 							label=""

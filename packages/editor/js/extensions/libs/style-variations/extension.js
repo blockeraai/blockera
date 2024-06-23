@@ -33,7 +33,7 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 		}: StyleVariationsExtensionProps): MixedElement => {
 			const { currentBlock = 'master' } = useSelect((select) => {
 				const { getExtensionCurrentBlock } = select(
-					'blockera-core/extensions'
+					'blockera/extensions'
 				);
 
 				return {

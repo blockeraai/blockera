@@ -212,8 +212,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
 			const activePanel = [
 				<Fill
-					key={`'blockera-core-block-${currentBlock}-card-children'`}
-					name={'blockera-core-block-card-children'}
+					key={`'blockera-block-${currentBlock}-card-children'`}
+					name={'blockera-block-card-children'}
 				>
 					<StatesManager
 						states={currentStateAttributes.blockeraBlockStates}

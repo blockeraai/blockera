@@ -48,7 +48,7 @@ describe('Blend Mode → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'mix-blend-mode',
 			'multiply'

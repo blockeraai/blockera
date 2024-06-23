@@ -181,7 +181,7 @@ export default function ({
 						? controlProps.value?.settings?.search
 						: [],
 				}}
-				storeName={'blockera-core/controls/repeater'}
+				storeName={'blockera/controls/repeater'}
 			>
 				<BaseControl controlName="dv-search" columns="columns-1">
 					<SearchReplaceControl

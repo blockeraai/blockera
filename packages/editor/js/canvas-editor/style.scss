@@ -1,4 +1,4 @@
-#blockera-core-canvas-editor {
+#blockera-canvas-editor {
 	display: flex;
 	justify-content: space-between;
 
@@ -9,7 +9,7 @@
 	}
 }
 
-.blockera-core-canvas-breakpoints {
+.blockera-canvas-breakpoints {
 	max-width: 330px;
 	height: 36px;
 	background: #f0f0f0;
@@ -18,7 +18,7 @@
 	width: 100%;
 	min-width: 200px;
 
-	.blockera-control-blockera-core-breakpoints {
+	.blockera-control-blockera-breakpoints {
 		line-height: 36px;
 
 		svg {
@@ -36,7 +36,7 @@
 	}
 }
 
-.blockera-core-canvas {
+.blockera-canvas {
 	border: 1px solid rgb(221, 221, 221);
 
 	&.is-tablet-preview,

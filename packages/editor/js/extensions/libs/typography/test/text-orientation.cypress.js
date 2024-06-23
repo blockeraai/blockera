@@ -127,7 +127,7 @@ describe('Text Orientation → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block')
+		cy.get('.blockera-block')
 			.should('have.css', 'writing-mode', 'vertical-lr')
 			.and('have.css', 'text-orientation', 'mixed');
 	});

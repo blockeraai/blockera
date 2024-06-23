@@ -42,10 +42,6 @@ describe('Opacity → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'opacity',
-			`${50 / 100}`
-		);
+		cy.get('.blockera-block').should('have.css', 'opacity', `${50 / 100}`);
 	});
 });

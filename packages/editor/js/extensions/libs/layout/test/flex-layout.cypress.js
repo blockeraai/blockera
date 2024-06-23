@@ -67,7 +67,7 @@ describe('Flex Layout → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'flex-direction',
 			'column'
@@ -136,13 +136,13 @@ describe('Flex Layout → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'align-items',
 			'flex-start'
 		);
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'justify-content',
 			'center'

@@ -48,7 +48,7 @@ describe('z-index → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block')
+		cy.get('.blockera-block')
 			.then(($el) => {
 				return window.getComputedStyle($el[0]);
 			})

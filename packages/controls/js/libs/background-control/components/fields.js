@@ -54,8 +54,7 @@ const Fields: FieldItem = memo<FieldItem>(
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
-		const { getExtension } =
-			select('blockera-core/extensions/config') || {};
+		const { getExtension } = select('blockera/extensions/config') || {};
 		const blockeraBackground =
 			getExtension('backgroundConfig')?.blockeraBackground;
 
@@ -1265,7 +1264,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									)}
 								>
 									<Icon icon="regenerate" iconSize="18" />{' '}
-									{__('Regenerate')}
+									{__('Regenerate', 'blockera')}
 								</span>
 							</div>
 						</BaseControl>
@@ -1326,11 +1325,11 @@ const Fields: FieldItem = memo<FieldItem>(
 									)}
 									popoverTitle={__(
 										'Mesh Gradient Color',
-										'blockera-color'
+										'blockera'
 									)}
 									addNewButtonLabel={__(
 										'Add New Mesh Gradient Color',
-										'blockera-color'
+										'blockera'
 									)}
 									repeaterItemHeader={MeshGradientHeader}
 									repeaterItemChildren={MeshGradientFields}

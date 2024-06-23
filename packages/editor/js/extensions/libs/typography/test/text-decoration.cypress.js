@@ -43,7 +43,7 @@ describe('Text Decoration → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block')
+		cy.get('.blockera-block')
 			.should('have.css', 'text-decoration')
 			.should('include', 'overline');
 	});

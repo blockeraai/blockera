@@ -55,11 +55,7 @@ describe('Border Radius → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'border-radius',
-			'25px'
-		);
+		cy.get('.blockera-block').should('have.css', 'border-radius', '25px');
 	});
 
 	it('should update correctly, when change all => custom', () => {
@@ -112,25 +108,25 @@ describe('Border Radius → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'border-top-left-radius',
 			'25px'
 		);
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'border-top-right-radius',
 			'25px'
 		);
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'border-bottom-left-radius',
 			'25px'
 		);
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'border-bottom-left-radius',
 			'25px'
@@ -256,25 +252,25 @@ describe('Border Radius → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'border-top-left-radius',
 			'25px'
 		);
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'border-top-right-radius',
 			'35px'
 		);
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'border-bottom-left-radius',
 			'45px'
 		);
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'border-bottom-right-radius',
 			'55px'

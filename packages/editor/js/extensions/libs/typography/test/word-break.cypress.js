@@ -49,10 +49,6 @@ describe('Word Break → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'word-break',
-			'keep-all'
-		);
+		cy.get('.blockera-block').should('have.css', 'word-break', 'keep-all');
 	});
 });

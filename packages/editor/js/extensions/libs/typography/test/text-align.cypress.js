@@ -46,10 +46,6 @@ describe('Text Align → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'text-align',
-			'center'
-		);
+		cy.get('.blockera-block').should('have.css', 'text-align', 'center');
 	});
 });

@@ -12,7 +12,7 @@ import { isEquals } from '../array';
 import { mergeObject } from '../object';
 
 export const updateConfig = (key: string, value: Object): void => {
-	const STORE_NAME = 'blockera-core/extensions/config';
+	const STORE_NAME = 'blockera/extensions/config';
 	const { getExtension } = select(STORE_NAME) || {};
 
 	if (!getExtension) {

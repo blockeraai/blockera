@@ -143,7 +143,7 @@ export const resetExtensionSettings = () => {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 		// changeExtensionCurrentBlockStateBreakpoint: setCurrentBreakpoint,
-	} = dispatch('blockera-core/extensions') || {};
+	} = dispatch('blockera/extensions') || {};
 
 	setCurrentBlock('master');
 	setCurrentState('normal');

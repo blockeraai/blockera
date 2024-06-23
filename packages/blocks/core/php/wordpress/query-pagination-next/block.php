@@ -4,7 +4,7 @@
  *
  * @var array $args the block arguments!
  *
- * @package blockera-core/packages/blocks/js/wordpress/query-pagination-next
+ * @package blockera/packages/blocks/js/wordpress/query-pagination-next
  */
 
 return array_merge(

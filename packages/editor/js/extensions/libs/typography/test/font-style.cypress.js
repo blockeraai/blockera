@@ -45,10 +45,6 @@ describe('Font Style → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'font-style',
-			'italic'
-		);
+		cy.get('.blockera-block').should('have.css', 'font-style', 'italic');
 	});
 });

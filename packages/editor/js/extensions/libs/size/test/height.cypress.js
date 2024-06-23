@@ -41,7 +41,7 @@ describe('Height → Functionality', () => {
 		//Check frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.blockera-core-block').should('have.css', 'height', '80px');
+		cy.get('.blockera-block').should('have.css', 'height', '80px');
 	});
 
 	it('variable value', () => {
@@ -80,8 +80,8 @@ describe('Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'height', '620px');
-		cy.get('.blockera-core-block').hasCssVar(
+		cy.get('.blockera-block').should('have.css', 'height', '620px');
+		cy.get('.blockera-block').hasCssVar(
 			'height',
 			'--wp--style--global--content-size'
 		);

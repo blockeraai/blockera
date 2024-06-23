@@ -72,7 +72,7 @@ describe('Background Image → Functionality', () => {
 			//assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.blockera-core-block')
+			cy.get('.blockera-block')
 				.should('have.css', 'background-image')
 				.and('match', /bg-extension-test/);
 		});
@@ -103,7 +103,7 @@ describe('Background Image → Functionality', () => {
 			//assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.blockera-core-block').should(
+			cy.get('.blockera-block').should(
 				'have.css',
 				'background-size',
 				'contain'
@@ -145,7 +145,7 @@ describe('Background Image → Functionality', () => {
 			//assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.blockera-core-block').should(
+			cy.get('.blockera-block').should(
 				'have.css',
 				'background-size',
 				'auto'
@@ -207,7 +207,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.blockera-core-block')
+			cy.get('.blockera-block')
 				.should('have.css', 'background-position', '20% 20%')
 				.and('have.css', 'background-repeat', 'no-repeat')
 				.and('have.css', 'background-attachment', 'fixed');
@@ -294,7 +294,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.blockera-core-block').should(($block) => {
+			cy.get('.blockera-block').should(($block) => {
 				// angle + also gradient
 				expect($block.css('background-image')).to.match(/7deg,/i);
 
@@ -355,7 +355,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.blockera-core-block').should(($block) => {
+			cy.get('.blockera-block').should(($block) => {
 				expect($block.css('background-image')).to.be.equal(
 					'linear-gradient(rgb(216, 97, 60) 0%, rgb(249, 249, 249) 100%)'
 				);
@@ -459,7 +459,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.blockera-core-block').should(($block) => {
+			cy.get('.blockera-block').should(($block) => {
 				// position + also gradient
 				expect($block.css('background-image')).to.match(/at 20% 20%,/i);
 
@@ -555,7 +555,7 @@ describe('Background Image → Functionality', () => {
 			// assert frontend
 			savePage();
 			redirectToFrontPage();
-			cy.get('.blockera-core-block').then(($block) => {
+			cy.get('.blockera-block').then(($block) => {
 				// colors + gradient
 				colorsInUi.forEach((colorInUi) => {
 					const rgbColorInUi = hexToRGB(colorInUi.color);

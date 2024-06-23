@@ -91,7 +91,7 @@ describe('Filters → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#blockera-core-inline-css-inline-css')
+		cy.get('style#blockera-inline-css-inline-css')
 			.invoke('text')
 			.should('include', 'filter: drop-shadow(50px 30px 40px #cccccc);');
 	});

@@ -42,10 +42,6 @@ describe('User Select → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'user-select',
-			'text'
-		);
+		cy.get('.blockera-block').should('have.css', 'user-select', 'text');
 	});
 });

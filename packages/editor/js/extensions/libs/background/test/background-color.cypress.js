@@ -54,7 +54,7 @@ describe('Background Color → Functionality', () => {
 		//assert frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'background-color',
 			'rgb(102, 102, 102)'
@@ -101,7 +101,7 @@ describe('Background Color → Functionality', () => {
 		//assert frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.blockera-core-block').hasCssVar(
+		cy.get('.blockera-block').hasCssVar(
 			'background-color',
 			'--wp--preset--color--accent-4'
 		);

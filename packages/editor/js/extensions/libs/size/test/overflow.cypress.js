@@ -80,6 +80,6 @@ describe('Overflow → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'overflow', 'scroll');
+		cy.get('.blockera-block').should('have.css', 'overflow', 'scroll');
 	});
 });

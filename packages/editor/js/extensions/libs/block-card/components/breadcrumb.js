@@ -79,7 +79,7 @@ export function Breadcrumb({
 	};
 
 	const { getActiveInnerState, getActiveMasterState } = select(
-		'blockera-core/extensions'
+		'blockera/extensions'
 	);
 	const masterActiveState = getActiveMasterState(clientId, blockName);
 	const activeInnerBlockState = getActiveInnerState(clientId, activeBlock);

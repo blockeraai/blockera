@@ -368,7 +368,7 @@ describe('Block State E2E Test', () => {
 			// FIXME: needs to fix responsive media queries config.
 			// Set Desktop viewport
 			cy.viewport(1441, 1920);
-			// cy.get('.blockera-core-block').should(
+			// cy.get('.blockera-block').should(
 			// 	'have.css',
 			// 	'width',
 			// 	'100px'
@@ -376,13 +376,13 @@ describe('Block State E2E Test', () => {
 
 			// Set Laptop viewport
 			cy.viewport(1366, 768);
-			cy.get('.blockera-core-block').should('have.css', 'width', '100px');
+			cy.get('.blockera-block').should('have.css', 'width', '100px');
 
 			// FIXME: needs to fix responsive media queries config.
 			// set Tablet viewport
 			cy.viewport(768, 1024);
 
-			// cy.get('.blockera-core-block').should(
+			// cy.get('.blockera-block').should(
 			// 	'have.css',
 			// 	'width',
 			// 	'100px'
@@ -439,7 +439,7 @@ describe('Block State E2E Test', () => {
 			// FIXME: needs to fix responsive media queries config.
 			// Set Desktop viewport
 			cy.viewport(1441, 1920);
-			// cy.get('.blockera-core-block').should(
+			// cy.get('.blockera-block').should(
 			// 	'not.have.css',
 			// 	'width',
 			// 	'100px'
@@ -447,20 +447,16 @@ describe('Block State E2E Test', () => {
 
 			// Set Laptop viewport.
 			cy.viewport(1366, 768);
-			cy.get('.blockera-core-block').should(
-				'not.have.css',
-				'width',
-				'100px'
-			);
+			cy.get('.blockera-block').should('not.have.css', 'width', '100px');
 
 			// Set Tablet viewport.
 			cy.viewport(768, 1024);
-			cy.get('.blockera-core-block').should('have.css', 'width', '100px');
+			cy.get('.blockera-block').should('have.css', 'width', '100px');
 
 			// FIXME: needs to fix responsive media queries config.
 			// Set Mobile viewport.
 			// cy.viewport(320, 480);
-			// cy.get('.blockera-core-block').should(
+			// cy.get('.blockera-block').should(
 			// 	'have.css',
 			// 	'width',
 			// 	'100px'
@@ -550,16 +546,12 @@ describe('Block State E2E Test', () => {
 			// FIXME: needs to fix responsive media queries config.
 			// Set Desktop viewport
 			cy.viewport(1025, 1200);
-			cy.get('.blockera-core-block').should(
-				'not.have.css',
-				'width',
-				'150px'
-			);
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should('have.css', 'width', '150px');
+			cy.get('.blockera-block').should('not.have.css', 'width', '150px');
+			cy.get('.blockera-block').realHover();
+			cy.get('.blockera-block').should('have.css', 'width', '150px');
 
-			// //.get('.blockera-core-block').realHover();
-			// cy.get('.blockera-core-block').should(
+			// //.get('.blockera-block').realHover();
+			// cy.get('.blockera-block').should(
 			// 	'have.css',
 			// 	'width',
 			// 	'100px'
@@ -569,8 +561,8 @@ describe('Block State E2E Test', () => {
 			// Set Tablet viewport
 			// cy.viewport(768, 1024);
 
-			// cy.get('.blockera-core-block').realHover();
-			// cy.get('.blockera-core-block').should(
+			// cy.get('.blockera-block').realHover();
+			// cy.get('.blockera-block').should(
 			// 	'have.css',
 			// 	'width',
 			// 	'100px'
@@ -651,25 +643,21 @@ describe('Block State E2E Test', () => {
 			// FIXME: needs to fix responsive media queries config.
 			// Set Desktop viewport
 			cy.viewport(1025, 1200);
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should(
-				'not.have.css',
-				'width',
-				'100px'
-			);
+			cy.get('.blockera-block').realHover();
+			cy.get('.blockera-block').should('not.have.css', 'width', '100px');
 
 			// FIXME: needs to fix responsive media queries config.
 			// Set Tablet viewport
 			cy.viewport(768, 1024);
 
-			cy.get('.blockera-core-block').realHover();
-			cy.get('.blockera-core-block').should('have.css', 'width', '100px');
+			cy.get('.blockera-block').realHover();
+			cy.get('.blockera-block').should('have.css', 'width', '100px');
 
 			// FIXME: needs to fix responsive media queries config.
 			// Set Mobile viewport
 			// cy.viewport(320, 480);
-			// cy.get('.blockera-core-block').realHover();
-			// cy.get('.blockera-core-block').should(
+			// cy.get('.blockera-block').realHover();
+			// cy.get('.blockera-block').should(
 			// 	'have.css',
 			// 	'width',
 			// 	'100px'
@@ -1320,15 +1308,15 @@ describe('Block State E2E Test', () => {
 					// FIXME: needs to fix responsive media queries config.
 					// Set Desktop viewport
 					cy.viewport(1025, 1200);
-					cy.get('.blockera-core-block').should(
+					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
 						'5px solid rgb(17, 17, 17)'
 					);
 
 					// Hover
-					cy.get('.blockera-core-block').realHover();
-					cy.get('.blockera-core-block')
+					cy.get('.blockera-block').realHover();
+					cy.get('.blockera-block')
 						.should(
 							'have.css',
 							'border',
@@ -1337,8 +1325,8 @@ describe('Block State E2E Test', () => {
 						.realMouseUp();
 
 					// Focus
-					cy.get('.blockera-core-block').focus();
-					cy.get('.blockera-core-block').should(
+					cy.get('.blockera-block').focus();
+					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
 						'5px dotted rgb(17, 17, 17)'
@@ -1347,7 +1335,7 @@ describe('Block State E2E Test', () => {
 					// Set desktop viewport
 					cy.viewport(1441, 1920);
 
-					cy.get('.blockera-core-block').should(
+					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
 						'5px solid rgb(17, 17, 17)'
@@ -1355,8 +1343,8 @@ describe('Block State E2E Test', () => {
 
 					// Hover
 					// TODO:
-					//cy.get('.blockera-core-block').realHover();
-					// cy.get('.blockera-core-block')
+					//cy.get('.blockera-block').realHover();
+					// cy.get('.blockera-block')
 					// 	.should(
 					// 		'have.css',
 					// 		'border',
@@ -1366,8 +1354,8 @@ describe('Block State E2E Test', () => {
 
 					// Active
 					// TODO:
-					// cy.get('.blockera-core-block').realMouseDown();
-					// cy.get('.blockera-core-block')
+					// cy.get('.blockera-block').realMouseDown();
+					// cy.get('.blockera-block')
 					// 	.should(
 					// 		'have.css',
 					// 		'border',
@@ -1379,8 +1367,8 @@ describe('Block State E2E Test', () => {
 					cy.viewport(320, 480);
 					//TODO:
 					// Active
-					// cy.get('.blockera-core-block').realMouseDown();
-					// cy.get('.blockera-core-block')
+					// cy.get('.blockera-block').realMouseDown();
+					// cy.get('.blockera-block')
 					// 	.should(
 					// 		'have.css',
 					// 		'border-top',
@@ -1859,15 +1847,15 @@ describe('Block State E2E Test', () => {
 
 							// Assert in default viewport
 							cy.viewport(1025, 1440);
-							cy.get('.blockera-core-block').should(
+							cy.get('.blockera-block').should(
 								'have.css',
 								'background-image',
 								'linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
 							);
 
 							// Hover
-							cy.get('.blockera-core-block').realHover();
-							cy.get('.blockera-core-block')
+							cy.get('.blockera-block').realHover();
+							cy.get('.blockera-block')
 								.should(
 									'have.css',
 									'background-image',
@@ -1876,8 +1864,8 @@ describe('Block State E2E Test', () => {
 								.realMouseMove(50, 50);
 
 							// Active
-							cy.get('.blockera-core-block').realMouseDown();
-							cy.get('.blockera-core-block')
+							cy.get('.blockera-block').realMouseDown();
+							cy.get('.blockera-block')
 								.should(
 									'have.css',
 									'background-image',
@@ -1888,7 +1876,7 @@ describe('Block State E2E Test', () => {
 
 							// Set desktop viewport
 							cy.viewport(1441, 1920);
-							cy.get('.blockera-core-block').should(
+							cy.get('.blockera-block').should(
 								'have.css',
 								'background-image',
 								'linear-gradient(90deg, rgb(0, 158, 250) 10%, rgb(229, 46, 0) 90%)'
@@ -1896,8 +1884,8 @@ describe('Block State E2E Test', () => {
 
 							//TODO
 							// Hover
-							//cy.get('.blockera-core-block').realHover();
-							// cy.get('.blockera-core-block')
+							//cy.get('.blockera-block').realHover();
+							// cy.get('.blockera-block')
 							// 	.should(
 							// 		'have.css',
 							// 		'background-image',
@@ -1906,8 +1894,8 @@ describe('Block State E2E Test', () => {
 							// 	.realMouseUp();
 
 							// Active
-							//cy.get('.blockera-core-block').realMouseDown();
-							// cy.get('.blockera-core-block')
+							//cy.get('.blockera-block').realMouseDown();
+							// cy.get('.blockera-block')
 							// 	.should(
 							// 		'have.css',
 							// 		'background-image',
@@ -1918,8 +1906,8 @@ describe('Block State E2E Test', () => {
 
 							// set mobile viewport
 							cy.viewport(380, 470);
-							cy.get('.blockera-core-block').realMouseDown();
-							cy.get('.blockera-core-block')
+							cy.get('.blockera-block').realMouseDown();
+							cy.get('.blockera-block')
 								.should(
 									'have.css',
 									'background-image',
@@ -2013,7 +2001,7 @@ describe('Block State E2E Test', () => {
 						redirectToFrontPage();
 
 						// default breakpoint
-						cy.get('.blockera-core-block').should(
+						cy.get('.blockera-block').should(
 							'have.css',
 							'width',
 							'150px'
@@ -2022,7 +2010,7 @@ describe('Block State E2E Test', () => {
 						// Set desktop viewport
 						cy.viewport(1441, 1920);
 						//TODO
-						// cy.get('.blockera-core-block').should(
+						// cy.get('.blockera-block').should(
 						// 	'have.css',
 						// 	'width',
 						// 	'150px'
@@ -2031,7 +2019,7 @@ describe('Block State E2E Test', () => {
 						// set tablet viewport
 						cy.viewport(768, 1024);
 
-						cy.get('.blockera-core-block').should(
+						cy.get('.blockera-block').should(
 							'have.css',
 							'width',
 							'100px'
@@ -2040,7 +2028,7 @@ describe('Block State E2E Test', () => {
 						// set mobile viewport
 						cy.viewport(320, 480);
 
-						cy.get('.blockera-core-block').should(
+						cy.get('.blockera-block').should(
 							'have.css',
 							'width',
 							'50px'

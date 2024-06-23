@@ -1,3 +1,3 @@
 // @flow
 
-export const STORE_NAME = 'blockera-core/extensions/config';
+export const STORE_NAME = 'blockera/extensions/config';

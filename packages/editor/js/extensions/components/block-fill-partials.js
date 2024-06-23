@@ -31,13 +31,13 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		blockeraInnerBlocks,
 		updateBlockEditorSettings,
 	}): Element<any> => {
-		const { isActiveBlockExtensions } = select('blockera-core/extensions');
+		const { isActiveBlockExtensions } = select('blockera/extensions');
 
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
-			const others = select('blockera-core/controls').getControls();
+			const others = select('blockera/controls').getControls();
 			const repeaters = select(
-				'blockera-core/controls/repeater'
+				'blockera/controls/repeater'
 			).getControls();
 
 			const getMemoizedControlNames = memoize((controls) =>
@@ -46,11 +46,11 @@ export const BlockFillPartials: ComponentType<any> = memo(
 
 			unregisterControl(
 				getMemoizedControlNames(others),
-				'blockera-core/controls'
+				'blockera/controls'
 			);
 			unregisterControl(
 				getMemoizedControlNames(repeaters),
-				'blockera-core/controls/repeater'
+				'blockera/controls/repeater'
 			);
 		}, [isActive]);
 

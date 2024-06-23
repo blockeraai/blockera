@@ -24,7 +24,7 @@ export const getRadialGradients: () => Array<VariableItem> = memoize(
 		};
 
 		if (isBlockTheme()) {
-			const { getCurrentTheme } = select('blockera-core/data');
+			const { getCurrentTheme } = select('blockera/data');
 
 			const {
 				name: { rendered: themeName },

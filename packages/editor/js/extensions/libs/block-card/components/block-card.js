@@ -101,7 +101,7 @@ export function BlockCard({
 				</div>
 			</div>
 
-			<Slot name={'blockera-core-block-card-children'} />
+			<Slot name={'blockera-block-card-children'} />
 			{children}
 		</div>
 	);

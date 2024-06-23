@@ -403,7 +403,7 @@ describe('border-radius-control component testing', () => {
 		const defaultValue = {
 			onChange: (value) => {
 				controlReducer(
-					select('blockera-core/controls').getControl(name),
+					select('blockera/controls').getControl(name),
 					modifyControlValue({
 						value,
 						controlId: name,
@@ -428,4 +428,3 @@ describe('border-radius-control component testing', () => {
 		cy.get('@onChange').should('have.been.called');
 	});
 });
-

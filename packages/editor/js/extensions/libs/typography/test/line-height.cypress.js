@@ -46,7 +46,7 @@ describe('Line Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'line-height');
+		cy.get('.blockera-block').should('have.css', 'line-height');
 	});
 
 	it('change line height to px', () => {
@@ -76,10 +76,6 @@ describe('Line Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'line-height',
-			'10px'
-		);
+		cy.get('.blockera-block').should('have.css', 'line-height', '10px');
 	});
 });

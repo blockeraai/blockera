@@ -27,7 +27,7 @@ export default function ({
 
 	return (
 		<Flex
-			className={controlInnerClassNames('blockera-core-breakpoints')}
+			className={controlInnerClassNames('blockera-breakpoints')}
 			justifyContent={'space-between'}
 			aria-label={__('Breakpoints', 'blockera')}
 		>

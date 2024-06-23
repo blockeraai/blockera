@@ -89,16 +89,12 @@ describe('Outline → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'outline',
 			'rgba(197, 238, 240, 0.67) dashed 3px'
 		);
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'outline-offset',
-			'10px'
-		);
+		cy.get('.blockera-block').should('have.css', 'outline-offset', '10px');
 	});
 });

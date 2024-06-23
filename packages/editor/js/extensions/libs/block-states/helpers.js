@@ -146,7 +146,7 @@ export function onChangeBlockStates(
 		setBlockClientMasterState,
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
-	} = dispatch('blockera-core/extensions') || {};
+	} = dispatch('blockera/extensions') || {};
 
 	let selectedState = null;
 
@@ -257,7 +257,7 @@ export const blockStatesValueCleanup = (value: {
 		},
 	} = {};
 	const currentBreakpoint = select(
-		'blockera-core/extensions'
+		'blockera/extensions'
 	).getExtensionCurrentBlockStateBreakpoint();
 
 	Object.entries(value).forEach(

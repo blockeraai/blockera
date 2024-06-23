@@ -46,7 +46,7 @@ describe('Min Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'min-height', '10px');
+		cy.get('.blockera-block').should('have.css', 'min-height', '10px');
 	});
 
 	it('variable value', () => {
@@ -88,12 +88,8 @@ describe('Min Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'min-height',
-			'620px'
-		);
-		cy.get('.blockera-core-block').hasCssVar(
+		cy.get('.blockera-block').should('have.css', 'min-height', '620px');
+		cy.get('.blockera-block').hasCssVar(
 			'min-height',
 			'--wp--style--global--content-size'
 		);

@@ -43,7 +43,7 @@ describe('Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'width', '100px');
+		cy.get('.blockera-block').should('have.css', 'width', '100px');
 	});
 
 	it('variable value', () => {
@@ -82,8 +82,8 @@ describe('Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'width', '620px');
-		cy.get('.blockera-core-block').hasCssVar(
+		cy.get('.blockera-block').should('have.css', 'width', '620px');
+		cy.get('.blockera-block').hasCssVar(
 			'width',
 			'--wp--style--global--content-size'
 		);

@@ -72,10 +72,6 @@ describe('Aspect Ratio → Functionality', () => {
 		// Check frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'aspect-ratio',
-			'2 / 5'
-		);
+		cy.get('.blockera-block').should('have.css', 'aspect-ratio', '2 / 5');
 	});
 });

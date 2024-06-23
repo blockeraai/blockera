@@ -134,7 +134,7 @@ function IconControl({
 			target = target.closest('svg');
 		}
 
-		if (target?.classList?.contains('blockera-core-is-pro-icon')) {
+		if (target?.classList?.contains('blockera-is-pro-icon')) {
 			return;
 		}
 

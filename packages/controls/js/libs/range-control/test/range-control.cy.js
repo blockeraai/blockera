@@ -104,7 +104,7 @@ describe('range-control component testing', () => {
 				field: 'range',
 				onChange: (value) => {
 					controlReducer(
-						select('blockera-core/controls').getControl(name),
+						select('blockera/controls').getControl(name),
 						modifyControlValue({
 							value,
 							controlId: name,

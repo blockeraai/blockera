@@ -89,7 +89,7 @@ describe('Transitions → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'transition',
 			'opacity 0.2s ease-in-out 2s'

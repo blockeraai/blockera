@@ -126,7 +126,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 								attribute: 'blockeraBoxShadow',
 								blockName: block.blockName,
 							}}
-							storeName={'blockera-core/controls/repeater'}
+							storeName={'blockera/controls/repeater'}
 						>
 							<BaseControl
 								controlName="box-shadow"
@@ -180,7 +180,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 								attribute: 'blockeraOutline',
 								blockName: block.blockName,
 							}}
-							storeName={'blockera-core/controls/repeater'}
+							storeName={'blockera/controls/repeater'}
 						>
 							<BaseControl
 								controlName="outline"

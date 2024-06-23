@@ -240,9 +240,7 @@ describe('Classnames testing ...', () => {
 		test('testing when passed names as String!', () => {
 			const generatedClassnames = getClassNames('class');
 
-			expect(generatedClassnames).toBe(
-				'blockera-core blockera-core-class'
-			);
+			expect(generatedClassnames).toBe('blockera blockera-class');
 		});
 
 		test('testing when passed names as Object!', () => {
@@ -253,22 +251,20 @@ describe('Classnames testing ...', () => {
 			});
 
 			expect(generatedClassnames).toBe(
-				'blockera-core blockera-core-class another-class'
+				'blockera blockera-class another-class'
 			);
 		});
 
 		test('testing when passed names as Array!', () => {
 			const generatedClassnames = getClassNames(['class']);
 
-			expect(generatedClassnames).toBe(
-				'blockera-core blockera-core-class'
-			);
+			expect(generatedClassnames).toBe('blockera blockera-class');
 		});
 
 		test('testing Inner class', () => {
 			const generatedClassnames = getInnerClassNames('class');
 
-			expect(generatedClassnames).toBe('blockera-core-class');
+			expect(generatedClassnames).toBe('blockera-class');
 		});
 
 		test('testing Inner class -> multiple', () => {
@@ -276,10 +272,7 @@ describe('Classnames testing ...', () => {
 				'class another-class'
 			);
 
-			expect(generatedClassnames).toBe(
-				'blockera-core-class another-class'
-			);
+			expect(generatedClassnames).toBe('blockera-class another-class');
 		});
 	});
 });
-

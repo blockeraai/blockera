@@ -65,7 +65,7 @@ describe('Box Position → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').as('element-style');
+		cy.get('.blockera-block').as('element-style');
 
 		cy.get('@element-style').should('have.css', 'position', 'relative');
 
@@ -331,7 +331,7 @@ describe('Box Position → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block')
+		cy.get('.blockera-block')
 			.then(($el) => {
 				return window.getComputedStyle($el[0]);
 			})

@@ -4,7 +4,7 @@
  *
  * @var array $args the block arguments!
  *
- * @package blockera-core/packages/blocks/js/wordpress/social-links
+ * @package blockera/packages/blocks/js/wordpress/social-links
  */
 
 return array_merge(

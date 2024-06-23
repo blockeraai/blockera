@@ -33,7 +33,7 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 			getExtensionInnerBlockState,
 			getExtensionCurrentBlockState,
 			getExtensionCurrentBlockStateBreakpoint,
-		} = select('blockera-core/extensions');
+		} = select('blockera/extensions');
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),

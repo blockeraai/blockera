@@ -92,7 +92,7 @@ describe('Text Shadows → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'text-shadow',
 			'rgb(112, 202, 158) 2px 3px 4px'

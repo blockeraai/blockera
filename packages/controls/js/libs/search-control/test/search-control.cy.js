@@ -80,7 +80,7 @@ describe('search control component testing', () => {
 			const defaultProps = {
 				onChange: (value) => {
 					controlReducer(
-						select('blockera-core/controls').getControl(name),
+						select('blockera/controls').getControl(name),
 						modifyControlValue({
 							value,
 							controlId: name,

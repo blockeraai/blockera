@@ -50,7 +50,7 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 							attribute: 'blockeraConditions',
 							blockName: block.blockName,
 						}}
-						storeName={'blockera-core/controls/repeater'}
+						storeName={'blockera/controls/repeater'}
 					>
 						<RepeaterControl
 							label=""

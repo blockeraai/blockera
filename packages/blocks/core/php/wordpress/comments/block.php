@@ -4,7 +4,7 @@
  *
  * @var array $args the block arguments!
  *
- * @package blockera-core/packages/blocks/js/wordpress/comments
+ * @package blockeraages/blocks/js/wordpress/comments
  */
 
 return array_merge(

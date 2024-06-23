@@ -89,6 +89,6 @@ describe('Display → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'display', 'none');
+		cy.get('.blockera-block').should('have.css', 'display', 'none');
 	});
 });

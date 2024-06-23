@@ -16,7 +16,7 @@ export const WithControlDataProvider = (Story, context) => {
 
 	return (
 		<ControlContextProvider
-			storeName={context?.allArgs?.storeName ?? 'blockera-core/controls'}
+			storeName={context?.allArgs?.storeName ?? 'blockera/controls'}
 			value={controlInfo}
 		>
 			<Story />

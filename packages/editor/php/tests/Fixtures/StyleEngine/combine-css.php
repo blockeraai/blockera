@@ -4,24 +4,24 @@ return [
 	[
 		'separatelyCss' => [
 			[
-				'.blockera-core-test:hover' => [
+				'.blockera-test:hover' => [
 					'transition' => 'all 2000ms ease 0ms',
 				],
-				'.blockera-core-test'       => [
+				'.blockera-test'       => [
 					'opacity' => '50%',
 				],
 			],
 			[
-				'.blockera-core-test' => [
+				'.blockera-test' => [
 					'background-color' => '#ed9537 !important',
 				],
 			],
 		],
 		'expected'      => [
-			'.blockera-core-test:hover' => [
+			'.blockera-test:hover' => [
 				'transition' => 'all 2000ms ease 0ms',
 			],
-			'.blockera-core-test'       => [
+			'.blockera-test'       => [
 				'opacity'          => '50%',
 				'background-color' => '#ed9537 !important',
 			],
@@ -30,34 +30,34 @@ return [
 	[
 		'separatelyCss' => [
 			[
-				'.blockera-core-test:hover a'       => [
+				'.blockera-test:hover a'       => [
 					'transition' => 'all 2000ms ease 0ms',
 				],
-				'.blockera-core-test:hover a:hover' => [
+				'.blockera-test:hover a:hover' => [
 					'color' => 'red',
 				],
-				'.blockera-core-test'               => [
+				'.blockera-test'               => [
 					'opacity' => '50%',
 				],
 			],
 			[
-				'.blockera-core-test:hover a' => [
+				'.blockera-test:hover a' => [
 					'background-color' => 'transparent',
 				],
-				'.blockera-core-test'         => [
+				'.blockera-test'         => [
 					'background-color' => '#ed9537 !important',
 				],
 			],
 		],
 		'expected'      => [
-			'.blockera-core-test:hover a'       => [
+			'.blockera-test:hover a'       => [
 				'transition'       => 'all 2000ms ease 0ms',
 				'background-color' => 'transparent',
 			],
-			'.blockera-core-test:hover a:hover' => [
+			'.blockera-test:hover a:hover' => [
 				'color' => 'red',
 			],
-			'.blockera-core-test'               => [
+			'.blockera-test'               => [
 				'opacity'          => '50%',
 				'background-color' => '#ed9537 !important',
 			],

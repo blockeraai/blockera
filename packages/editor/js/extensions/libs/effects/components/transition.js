@@ -39,7 +39,7 @@ export const Transition = ({
 				attribute: 'blockeraTransition',
 				blockName: block.blockName,
 			}}
-			storeName={'blockera-core/controls/repeater'}
+			storeName={'blockera/controls/repeater'}
 		>
 			<BaseControl controlName="transition" columns="columns-1">
 				<TransitionControl

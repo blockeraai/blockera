@@ -37,11 +37,9 @@ import type {
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({ innerBlocks }: InnerBlocksProps): MixedElement => {
 		const { changeExtensionCurrentBlock: setCurrentBlock } =
-			dispatch('blockera-core/extensions') || {};
+			dispatch('blockera/extensions') || {};
 		const { currentBlock = 'master' } = useSelect((select) => {
-			const { getExtensionCurrentBlock } = select(
-				'blockera-core/extensions'
-			);
+			const { getExtensionCurrentBlock } = select('blockera/extensions');
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),

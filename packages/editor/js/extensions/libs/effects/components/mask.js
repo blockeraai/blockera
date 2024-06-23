@@ -40,7 +40,7 @@ export const Mask = ({
 				attribute: 'blockeraMask',
 				blockName: block.blockName,
 			}}
-			storeName={'blockera-core/controls/repeater'}
+			storeName={'blockera/controls/repeater'}
 		>
 			<BaseControl controlName="Mask" columns="columns-1">
 				<MaskControl

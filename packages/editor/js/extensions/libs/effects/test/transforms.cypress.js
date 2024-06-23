@@ -81,7 +81,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-core-inline-css-inline-css')
+			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -137,7 +137,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-core-inline-css-inline-css')
+			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'transform: scale3d(130%, 130%, 50%);');
 		});
@@ -189,7 +189,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-core-inline-css-inline-css')
+			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -240,7 +240,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-core-inline-css-inline-css')
+			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'transform: skew(10deg, 20deg);');
 		});
@@ -283,7 +283,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-core-inline-css-inline-css')
+			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -326,7 +326,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-core-inline-css-inline-css')
+			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'transform-origin: 50% 50%;');
 		});
@@ -360,7 +360,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-core-inline-css-inline-css')
+			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'backface-visibility: hidden;');
 		});
@@ -396,7 +396,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('.blockera-core-block').should(
+			cy.get('.blockera-block').should(
 				'have.css',
 				'perspective',
 				'150px'
@@ -438,7 +438,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-core-inline-css-inline-css')
+			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
 				.should('include', 'perspective-origin: 50% 50%;');
 		});

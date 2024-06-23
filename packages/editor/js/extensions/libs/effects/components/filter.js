@@ -40,7 +40,7 @@ export const Filter = ({
 				attribute: 'blockeraFilter',
 				blockName: block.blockName,
 			}}
-			storeName={'blockera-core/controls/repeater'}
+			storeName={'blockera/controls/repeater'}
 		>
 			<BaseControl controlName="filter" columns="columns-1">
 				<FilterControl

@@ -41,6 +41,6 @@ describe('Direction → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'direction', 'rtl');
+		cy.get('.blockera-block').should('have.css', 'direction', 'rtl');
 	});
 });

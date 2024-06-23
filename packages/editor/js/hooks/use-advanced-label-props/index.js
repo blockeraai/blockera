@@ -63,7 +63,7 @@ export const useAdvancedLabelProps = (
 			getExtensionInnerBlockState = () => 'normal',
 			getExtensionCurrentBlockState = () => 'normal',
 			getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
-		} = select('blockera-core/extensions') || {};
+		} = select('blockera/extensions') || {};
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),

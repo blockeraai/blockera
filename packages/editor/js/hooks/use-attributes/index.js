@@ -70,7 +70,7 @@ export const useAttributes = (
 			getExtensionInnerBlockState,
 			getExtensionCurrentBlockState,
 			getExtensionCurrentBlockStateBreakpoint,
-		} = select('blockera-core/extensions');
+		} = select('blockera/extensions');
 
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!

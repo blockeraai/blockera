@@ -21,7 +21,7 @@ export const CanvasEditor = ({
 	const { getSelectedBlock } = select('core/block-editor');
 	const selectedBlock = getSelectedBlock();
 
-	const className = 'blockera-core-canvas-breakpoints';
+	const className = 'blockera-canvas-breakpoints';
 
 	useEffect(() => {
 		ref.current = {

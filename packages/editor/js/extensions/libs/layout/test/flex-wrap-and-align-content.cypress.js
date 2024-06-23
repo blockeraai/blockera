@@ -68,7 +68,7 @@ describe('Children Wrap and Align Content → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block')
+		cy.get('.blockera-block')
 			.should('have.css', 'flex-wrap', 'wrap-reverse')
 			.should('have.css', 'align-content', 'center');
 	});

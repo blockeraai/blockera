@@ -27,7 +27,7 @@ export default function StateContainer({ children }: Object): Element<any> {
 			getExtensionCurrentBlock,
 			getExtensionInnerBlockState,
 			getExtensionCurrentBlockState,
-		} = select('blockera-core/extensions');
+		} = select('blockera/extensions');
 
 		return {
 			currentBlock: getExtensionCurrentBlock(),

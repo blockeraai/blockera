@@ -94,7 +94,7 @@
 			],
 			"endTime": 1687673120154,
 			"message": "",
-			"name": "/Users/aliaghdam/Sites/site-blockeraai-platform/wp-content/plugins/blockera-core/libs/blockera-core/packages/data-extractor/src/test/prepare.spec.js",
+			"name": "/Users/aliaghdam/Sites/site-blockeraai-platform/wp-content/plugins/blockera/libs/blockera/packages/data-extractor/src/test/prepare.spec.js",
 			"startTime": 1687673118764,
 			"status": "passed",
 			"summary": ""
@@ -104,7 +104,7 @@
 			"coverage": {},
 			"endTime": 1687673120573,
 			"message": "  \u001b[1m● \u001b[22mTest suite failed to run\n\n    Cannot find module '@blockera/extensions/src/controls/box-shadow/helpers' from 'packages/style-engine/src/test/css-generator.spec.js'\n\n    \u001b[0m \u001b[90m 3 |\u001b[39m \u001b[90m */\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 4 |\u001b[39m \u001b[36mimport\u001b[39m \u001b[33mCssGenerators\u001b[39m \u001b[36mfrom\u001b[39m \u001b[32m'@blockera/style-engine'\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n    \u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m \u001b[36mimport\u001b[39m helpers \u001b[36mfrom\u001b[39m \u001b[32m'@blockera/extensions/src/controls/box-shadow/helpers'\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m   |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 6 |\u001b[39m\u001b[0m\n    \u001b[0m \u001b[90m 7 |\u001b[39m \u001b[36mconst\u001b[39m blockProps \u001b[33m=\u001b[39m {\u001b[0m\n    \u001b[0m \u001b[90m 8 |\u001b[39m \tclientId\u001b[33m:\u001b[39m \u001b[35m12354645546\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\n      \u001b[2mat Resolver._throwModNotFoundError (\u001b[22mnode_modules/jest-cli/node_modules/jest-resolve/build/resolver.js\u001b[2m:427:11)\u001b[22m\n      \u001b[2mat Object.require (\u001b[22m\u001b[0m\u001b[36mpackages/style-engine/src/test/css-generator.spec.js\u001b[39m\u001b[0m\u001b[2m:5:1)\u001b[22m\n",
-			"name": "/Users/aliaghdam/Sites/site-blockeraai-platform/wp-content/plugins/blockera-core/libs/blockera-core/packages/style-engine/src/test/css-generator.spec.js",
+			"name": "/Users/aliaghdam/Sites/site-blockeraai-platform/wp-content/plugins/blockera/libs/blockera/packages/style-engine/src/test/css-generator.spec.js",
 			"startTime": 1687673120573,
 			"status": "failed",
 			"summary": ""
@@ -434,7 +434,7 @@
 			],
 			"endTime": 1687673120484,
 			"message": "",
-			"name": "/Users/aliaghdam/Sites/site-blockeraai-platform/wp-content/plugins/blockera-core/libs/blockera-core/packages/classnames/src/test/index.spec.js",
+			"name": "/Users/aliaghdam/Sites/site-blockeraai-platform/wp-content/plugins/blockera/libs/blockera/packages/classnames/src/test/index.spec.js",
 			"startTime": 1687673118764,
 			"status": "passed",
 			"summary": ""
@@ -540,7 +540,7 @@
 			],
 			"endTime": 1687673120536,
 			"message": "",
-			"name": "/Users/aliaghdam/Sites/site-blockeraai-platform/wp-content/plugins/blockera-core/libs/blockera-core/packages/controls/src/angle-picker-control/test/utils.spec.js",
+			"name": "/Users/aliaghdam/Sites/site-blockeraai-platform/wp-content/plugins/blockera/libs/blockera/packages/controls/src/angle-picker-control/test/utils.spec.js",
 			"startTime": 1687673120160,
 			"status": "passed",
 			"summary": ""

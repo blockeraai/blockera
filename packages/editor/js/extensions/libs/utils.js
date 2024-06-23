@@ -50,7 +50,7 @@ export function generateExtensionId(
 		getExtensionInnerBlockState = () => 'normal',
 		getExtensionCurrentBlockState = () => 'normal',
 		getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
-	} = select('blockera-core/extensions') || {};
+	} = select('blockera/extensions') || {};
 
 	const currentBlock = getExtensionCurrentBlock();
 

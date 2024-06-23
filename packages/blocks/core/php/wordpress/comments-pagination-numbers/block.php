@@ -4,7 +4,7 @@
  *
  * @var array $args the block arguments!
  *
- * @package blockera-core/packages/blocks/js/wordpress/comments-pagination-numbers
+ * @package blockera/packages/blocks/js/wordpress/comments-pagination-numbers
  */
 
 return array_merge(

@@ -1,1 +1,1 @@
-export const STORE_NAME = 'blockera-core/extensions';
+export const STORE_NAME = 'blockera/extensions';

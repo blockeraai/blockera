@@ -4,7 +4,7 @@
  *
  * @var array $args the block arguments!
  *
- * @package blockera-core/packages/blocks/js/wordpress/query-title
+ * @package blockera/packages/blocks/js/wordpress/query-title
  */
 
 return array_merge(

@@ -46,7 +46,7 @@ export const registerThirdPartyExtensionDefinitions = (): void => {
 			const newDefinitionTypes = {};
 			let additionalDefinitionTypes = {};
 
-			const { getExtensions } = select('blockera-core/extensions/config');
+			const { getExtensions } = select('blockera/extensions/config');
 
 			Object.values(blocks).forEach((block: Object): Object => {
 				additionalDefinitionTypes = block?.blockeraInnerBlocks || {};

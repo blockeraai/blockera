@@ -15,8 +15,8 @@ describe('useAttributes Hook Testing ...', () => {
 	describe('handleOnChangeAttributes callback', () => {
 		it('should sets value when state is paragraph -> normal -> laptop', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -34,8 +34,8 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 		it('should sets value when state is paragraph -> normal -> tablet', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -84,8 +84,8 @@ describe('useAttributes Hook Testing ...', () => {
 
 		it('should sets value when state is paragraph -> hover -> laptop', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -107,8 +107,8 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 		it('should sets value when state is paragraph -> hover -> tablet', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -133,8 +133,8 @@ describe('useAttributes Hook Testing ...', () => {
 
 		it('should sets value when state is paragraph -> hover -> laptop -> link -> normal -> laptop', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 
@@ -159,8 +159,8 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 		it('should sets value when state is paragraph -> hover -> tablet -> link -> normal -> laptop', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-core-block blockera-core-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
+				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
+					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
 					'<!-- /wp:paragraph -->'
 			);
 

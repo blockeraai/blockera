@@ -81,9 +81,9 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		getExtensionInnerBlockState,
 		getExtensionCurrentBlockState,
 		getExtensionCurrentBlockStateBreakpoint,
-	} = select('blockera-core/extensions') || {};
+	} = select('blockera/extensions') || {};
 	const { getSelectedBlock } = select('core/block-editor') || {};
-	const { getBreakpoints } = select('blockera-core/editor') || {};
+	const { getBreakpoints } = select('blockera/editor') || {};
 
 	const initialRef = {
 		path: '',
@@ -188,7 +188,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			} = getSelectedBlock();
 			const states = Object.keys(blockeraBlockStates);
 			const breakpoints = Object.keys(getBreakpoints());
-			//get `blockera-core/controls` store or details of that
+			//get `blockera/controls` store or details of that
 			const { getControl } = isRepeaterControl()
 				? select(repeaterStore)
 				: select(controlStore);

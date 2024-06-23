@@ -168,7 +168,7 @@ describe('custom-property-control component testing', () => {
 			const propsToPass = {
 				onChange: (value) => {
 					controlReducer(
-						select('blockera-core/controls').getControl(name),
+						select('blockera/controls').getControl(name),
 						modifyControlValue({
 							value,
 							controlId: name,
@@ -195,4 +195,3 @@ describe('custom-property-control component testing', () => {
 		});
 	});
 });
-

@@ -49,7 +49,7 @@ describe('Background Clip → Functionality', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'background-clip',
 			'padding-box'
@@ -109,10 +109,6 @@ describe('Background Clip → Functionality', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'background-clip',
-			'text'
-		);
+		cy.get('.blockera-block').should('have.css', 'background-clip', 'text');
 	});
 });

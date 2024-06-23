@@ -78,7 +78,7 @@ describe('Media Fit Position → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'object-position',
 			'10% 30%'

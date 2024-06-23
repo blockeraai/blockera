@@ -67,7 +67,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 				getExtensionCurrentBlock,
 				getExtensionCurrentBlockState,
 				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera-core/extensions');
+			} = select('blockera/extensions');
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),

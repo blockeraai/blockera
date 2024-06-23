@@ -45,7 +45,7 @@ describe('Text Transform → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'text-transform',
 			'uppercase'

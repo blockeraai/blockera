@@ -53,7 +53,7 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 							attribute: 'blockeraEntranceAnimation',
 							blockName: block.blockName,
 						}}
-						storeName={'blockera-core/controls/repeater'}
+						storeName={'blockera/controls/repeater'}
 					>
 						<RepeaterControl
 							label=""

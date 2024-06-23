@@ -23,7 +23,7 @@ const BlockEditContextProvider = ({
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setCurrentInnerBlockState,
-	} = dispatch('blockera-core/extensions') || {};
+	} = dispatch('blockera/extensions') || {};
 
 	const memoizedValue: {
 		currentTab: string,

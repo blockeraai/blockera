@@ -14,7 +14,7 @@ describe('Categories Block → Inner Blocks', () => {
 
 	it('Should add all inner blocks to block settings', () => {
 		appendBlocks(`
-		<!-- wp:categories {"className":"blockera-core-block blockera-core-block-643cb3c4-396b-4baa-bf5f-7033c6462ca7","blockeraFlexWrap":{"reverse":false},"blockeraPropsId":"4784211580","blockeraCompatId":"4784211581"} /-->
+		<!-- wp:categories {"className":"blockera-block blockera-block-643cb3c4-396b-4baa-bf5f-7033c6462ca7","blockeraFlexWrap":{"reverse":false},"blockeraPropsId":"4784211580","blockeraCompatId":"4784211581"} /-->
 		`);
 
 		// Select target block

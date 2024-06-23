@@ -49,7 +49,7 @@ describe('Font Color → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'color',
 			'rgb(112, 202, 158)'
@@ -94,7 +94,7 @@ describe('Font Color → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').hasCssVar(
+		cy.get('.blockera-block').hasCssVar(
 			'color',
 			'--wp--preset--color--contrast'
 		);

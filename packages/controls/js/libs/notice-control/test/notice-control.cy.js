@@ -215,7 +215,7 @@ describe('notice-control component testing', () => {
 			const defaultProps = {
 				onDismiss: (value) => {
 					controlReducer(
-						select('blockera-core/controls').getControl(name),
+						select('blockera/controls').getControl(name),
 						modifyControlValue({
 							value,
 							controlId: name,
@@ -255,4 +255,3 @@ describe('notice-control component testing', () => {
 		});
 	});
 });
-

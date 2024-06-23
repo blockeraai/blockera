@@ -54,7 +54,7 @@ export const getCssSelector = ({
 		getExtensionCurrentBlock,
 		getExtensionInnerBlockState,
 		getExtensionCurrentBlockState,
-	} = select('blockera-core/extensions');
+	} = select('blockera/extensions');
 
 	// primitive block value.
 	let block: Object = {};

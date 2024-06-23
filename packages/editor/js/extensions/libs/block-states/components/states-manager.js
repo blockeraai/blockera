@@ -62,9 +62,9 @@ const StatesManager: ComponentType<any> = memo(
 		const {
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
-		} = dispatch('blockera-core/extensions') || {};
+		} = dispatch('blockera/extensions') || {};
 		const { getActiveMasterState, getActiveInnerState } = select(
-			'blockera-core/extensions'
+			'blockera/extensions'
 		);
 
 		const preparedStates = !availableStates
@@ -232,7 +232,7 @@ const StatesManager: ComponentType<any> = memo(
 		return (
 			<ControlContextProvider
 				value={contextValue}
-				storeName={'blockera-core/controls/repeater'}
+				storeName={'blockera/controls/repeater'}
 				notSyncWithRecievedValue={true}
 			>
 				<StateContainer>

@@ -54,7 +54,7 @@ blocksInitializer({
 						properties={attributes?.blockeraCSSProperties || []}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 						title={__('Advanced', 'blockera')}
-						storeName={'blockera-core/controls/repeater'}
+						storeName={'blockera/controls/repeater'}
 						// icon={<AdvancedExtensionIcon />}
 					/>
 				</InspectorControls>

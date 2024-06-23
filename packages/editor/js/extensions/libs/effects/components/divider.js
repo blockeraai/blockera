@@ -40,7 +40,7 @@ export const Divider = ({
 				attribute: 'blockeraDivider',
 				blockName: block.blockName,
 			}}
-			storeName={'blockera-core/controls/repeater'}
+			storeName={'blockera/controls/repeater'}
 		>
 			<BaseControl columns="columns-1" controlName="divider">
 				<DividerControl

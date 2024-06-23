@@ -46,10 +46,6 @@ describe('Pointer Events → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should(
-			'have.css',
-			'pointer-events',
-			'all'
-		);
+		cy.get('.blockera-block').should('have.css', 'pointer-events', 'all');
 	});
 });

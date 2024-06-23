@@ -43,7 +43,7 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').should('have.css', 'font-size', '10px');
+		cy.get('.blockera-block').should('have.css', 'font-size', '10px');
 	});
 
 	it('Variable value', () => {
@@ -85,7 +85,7 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-core-block').hasCssVar(
+		cy.get('.blockera-block').hasCssVar(
 			'font-size',
 			'--wp--preset--font-size--small'
 		);

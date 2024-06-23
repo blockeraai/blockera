@@ -41,12 +41,11 @@ export const Breakpoints = ({
 	);
 
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
-		select('blockera-core/editor');
-	const { setDeviceType, setCanvasSettings, updateBreakpoints } = useDispatch(
-		'blockera-core/editor'
-	);
+		select('blockera/editor');
+	const { setDeviceType, setCanvasSettings, updateBreakpoints } =
+		useDispatch('blockera/editor');
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
-		'blockera-core/extensions'
+		'blockera/extensions'
 	);
 	const [canvasSettings, updateCanvasSettings] = useState(
 		getCanvasSettings()
@@ -88,7 +87,7 @@ export const Breakpoints = ({
 			}
 
 			if (classes.length - 1 === index) {
-				editorWrapper.classList.add('blockera-core-canvas');
+				editorWrapper.classList.add('blockera-canvas');
 				editorWrapper.classList.add('preview-margin');
 				editorWrapper.classList.add(`is-${deviceType}-preview`);
 
@@ -185,7 +184,7 @@ export const Breakpoints = ({
 					{enableCanvasSettings && (
 						<div
 							className={controlInnerClassNames(
-								'blockera-core-breakpoints'
+								'blockera-breakpoints'
 							)}
 						>
 							<Icon
