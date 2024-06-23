@@ -29,6 +29,7 @@ module.exports = defineConfig({
 		runMode: 0,
 	},
 	coverage: true,
+	screenshotOnRunFailure: false,
 	screenshotsFolder: 'packages/dev-cypress/js/screenshots',
 	videosFolder: 'packages/dev-cypress/js/videos',
 	viewportHeight: 1440,
