@@ -32,6 +32,7 @@ runs:
           run: |
               mkdir .cache
               export CYPRESS_CACHE_FOLDER=.cache/Cypress
+          shell: bash
 
         - name: Install npm dependencies
           if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
