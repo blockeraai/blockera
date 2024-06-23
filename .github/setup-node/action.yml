@@ -28,6 +28,11 @@ runs:
               path: '**/node_modules'
               key: node_modules-${{ runner.os }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
 
+        - name: Setup cypress cache path
+          run: |
+              mkdir .cache
+              export CYPRESS_CACHE_FOLDER=.cache/Cypress
+
         - name: Install npm dependencies
           if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
           run: npm ci
