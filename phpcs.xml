@@ -56,6 +56,12 @@
         </properties>
     </rule>
 
+    <rule ref="WordPress.NamingConventions.ValidHookName">
+        <properties>
+            <property name="additionalWordDelimiters" value="/"/>
+        </properties>
+    </rule>
+
     <arg value="ps"/>
     <arg name="extensions" value="php"/>
 

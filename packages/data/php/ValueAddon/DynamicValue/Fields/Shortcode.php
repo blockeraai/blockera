@@ -36,8 +36,7 @@ class Shortcode extends Field {
 		 *
 		 * @since 2.2.1
 		 */
-		// phpcs:ignore
-		$should_escape = apply_filters( 'blockera/dynamic-value/fields/shortcode/should_escape', true );
+		$should_escape = apply_filters( 'blockera/dynamic_value/fields/shortcode/should_escape', true );
 
 		if ( $should_escape ) {
 

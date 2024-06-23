@@ -35,7 +35,6 @@ class Blockera extends Application implements ContainerInterface {
 		 * @hook  'blockera/service/providers'
 		 * @since 1.0.0
 		 */
-		// phpcs:ignore
 		$this->service_providers = apply_filters( 'blockera/service/providers', blockera_core_config( 'app.providers' ) );
 
 		// Keep parent functionalities.

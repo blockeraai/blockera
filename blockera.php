@@ -49,7 +49,6 @@ define( 'BLOCKERA_VERSION', get_plugin_data( __FILE__ )['Version'] );
  * @hook  'blockera/before/setup'
  * @since 1.0.0
  */
-// phpcs:ignore
 do_action( 'blockera/before/setup' );
 
 ### BEGIN AUTO-GENERATED FRONT CONTROLLERS
@@ -80,5 +79,4 @@ require BLOCKERA_CORE_PATH . 'packages/blockera/php/app.php';
  * @hook  'blockera/after/setup'
  * @since 1.0.0
  */
-// phpcs:ignore
 do_action( 'blockera/after/setup' );
