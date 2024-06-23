@@ -34,12 +34,14 @@ describe('box spacing control component testing', () => {
 				bottom: '23px',
 				left: '-10px',
 			},
+			marginLock: 'none',
 			padding: {
 				top: '9px',
 				right: '78px',
 				bottom: '23px',
 				left: '-10px',
 			},
+			paddingLock: 'none',
 		};
 		cy.withDataProvider({
 			component: (
@@ -62,6 +64,7 @@ describe('box spacing control component testing', () => {
 			return expect(getControlValue(name)).to.deep.eq(defaultValue);
 		});
 	});
+
 	it('should when box position value is changed, then context data provider value to changed!', () => {
 		const onChangeMock = cy.stub().as('onChangeMock');
 		const name = nanoid();
@@ -83,6 +86,7 @@ describe('box spacing control component testing', () => {
 			return expect(getControlValue(name).margin.top).to.eq('10px');
 		});
 	});
+
 	it('should display data with data id', () => {
 		const name = nanoid();
 		const defaultValue = {
@@ -92,12 +96,14 @@ describe('box spacing control component testing', () => {
 				bottom: '23px',
 				left: '-10px',
 			},
+			marginLock: 'none',
 			padding: {
 				top: '9px',
 				right: '78px',
 				bottom: '23px',
 				left: '-10px',
 			},
+			paddingLock: 'none',
 		};
 		cy.withDataProvider({
 			component: <BoxSpacingControl label="My Label" id="data.myData" />,
@@ -121,6 +127,7 @@ describe('box spacing control component testing', () => {
 			);
 		});
 	});
+
 	it('should must add custom class name', () => {
 		cy.withDataProvider({
 			component: (
@@ -272,12 +279,14 @@ describe('box spacing control component testing', () => {
 				bottom: '82px',
 				left: '83px',
 			},
+			marginLock: 'none',
 			padding: {
 				top: '80px',
 				right: '81px',
 				bottom: '82px',
 				left: '83px',
 			},
+			paddingLock: 'none',
 		};
 
 		// Check data provider value!
