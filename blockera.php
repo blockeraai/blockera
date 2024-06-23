@@ -5,7 +5,7 @@
  * Description: Make Gutenberg a Real Page Builder!
  * Requires at least: 6.5.2
  * Tested up to: 6.5.2
- * Requires PHP: 8.1
+ * Requires PHP: 7.4
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about-us/
  * Version: 1.1.6

@@ -64,7 +64,7 @@
 	],
 	"minimum-stability": "dev",
 	"require": {
-		"php": ">=8.1",
+		"php": ">=7.4",
 		"blockera/blockera": "*",
 		"blockera/blockera-admin": "*",
 		"blockera/blocks-core": "*",
@@ -98,7 +98,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "8.1"
+			"php": "7.4"
 		},
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
