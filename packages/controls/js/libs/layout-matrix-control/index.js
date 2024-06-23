@@ -1002,7 +1002,7 @@ export default function LayoutMatrixControl({
 											<Icon
 												icon="flex-align-empty"
 												iconSize="18"
-												dataTest="layout-matrix-align-empty"
+												data-test="layout-matrix-align-empty"
 											/>
 										),
 									},
@@ -1013,7 +1013,7 @@ export default function LayoutMatrixControl({
 											<Icon
 												icon="flex-align-start"
 												iconSize="18"
-												dataTest="layout-matrix-align-start"
+												data-test="layout-matrix-align-start"
 											/>
 										),
 									},
@@ -1024,7 +1024,7 @@ export default function LayoutMatrixControl({
 											<Icon
 												icon="flex-align-center"
 												iconSize="18"
-												dataTest="layout-matrix-align-center"
+												data-test="layout-matrix-align-center"
 											/>
 										),
 									},
@@ -1035,7 +1035,7 @@ export default function LayoutMatrixControl({
 											<Icon
 												icon="flex-align-end"
 												iconSize="18"
-												dataTest="layout-matrix-align-end"
+												data-test="layout-matrix-align-end"
 											/>
 										),
 									},
@@ -1046,7 +1046,7 @@ export default function LayoutMatrixControl({
 											<Icon
 												icon="flex-align-stretch"
 												iconSize="18"
-												dataTest="layout-matrix-align-stretch"
+												data-test="layout-matrix-align-stretch"
 											/>
 										),
 									},
@@ -1086,7 +1086,7 @@ export default function LayoutMatrixControl({
 												icon="justify-content-start"
 												iconSize="18"
 												className="blockera-flex-justify-content-flex-start"
-												dataTest="layout-matrix-justify-start"
+												data-test="layout-matrix-justify-start"
 											/>
 										),
 									},
@@ -1097,7 +1097,7 @@ export default function LayoutMatrixControl({
 											<Icon
 												icon="justify-content-center"
 												iconSize="18"
-												dataTest="layout-matrix-justify-center"
+												data-test="layout-matrix-justify-center"
 											/>
 										),
 									},
