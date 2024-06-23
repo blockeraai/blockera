@@ -297,8 +297,7 @@ describe('divider-control component testing', () => {
 			});
 		});
 
-		// FIXME: please remove skip from below test suite and pass it.
-		it.skip('should update data correctly, when add size', () => {
+		it('should update data correctly, when add size', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <DividerControl />,
