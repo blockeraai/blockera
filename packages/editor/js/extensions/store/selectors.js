@@ -8,7 +8,8 @@ import createSelector from 'rememo';
 /**
  * Blockera dependencies
  */
-import { get, isString } from '@blockera/utils';
+import { prepare } from '@blockera/data-editor';
+import { isString } from '@blockera/utils';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 import type { TBreakpoint, TStates } from '../libs/block-states/types';
 
@@ -179,7 +180,7 @@ export const getBlockExtensionSupport = (
 		return defaultExtensions;
 	}
 
-	return get(blockExtension.supports, feature, defaultExtensions);
+	return prepare(feature, blockExtension.supports) ?? defaultExtensions;
 };
 
 /**
