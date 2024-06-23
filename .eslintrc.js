@@ -14,6 +14,11 @@ const restrictedImports = [
 		message:
 			"Please use `classNames` function or other function from `@blockera/classnames` instead. It's a lighter, faster and is compatible all Blockera packages.",
 	},
+	{
+		name: 'prop-types',
+		message:
+			'`prop-types` is not recommended. Please use TypeScript or Flow.js for type checking.',
+	},
 ];
 
 module.exports = {
