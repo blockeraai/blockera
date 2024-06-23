@@ -44,7 +44,7 @@ export function Margin({
 					)}
 				>
 					<LabelControl
-						ariaLabel={__('Margin Spacing')}
+						ariaLabel={__('Margin Spacing', 'blockera')}
 						label={__('Margin', 'blockera')}
 					/>
 				</span>
@@ -57,7 +57,7 @@ export function Margin({
 				>
 					<LabelControl
 						mode={'advanced'}
-						ariaLabel={__('Margin Spacing')}
+						ariaLabel={__('Margin Spacing', 'blockera')}
 						labelDescription={
 							<>
 								<p>

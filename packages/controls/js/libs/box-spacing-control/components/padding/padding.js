@@ -44,7 +44,7 @@ export function Padding({
 					)}
 				>
 					<LabelControl
-						ariaLabel={__('Padding Spacing')}
+						ariaLabel={__('Padding Spacing', 'blockera')}
 						label={__('Padding', 'blockera')}
 					/>
 				</span>
@@ -57,7 +57,7 @@ export function Padding({
 				>
 					<LabelControl
 						mode={'advanced'}
-						ariaLabel={__('Padding Spacing')}
+						ariaLabel={__('Padding Spacing', 'blockera')}
 						label={__('Padding', 'blockera')}
 						labelDescription={
 							<>

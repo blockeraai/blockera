@@ -77,7 +77,7 @@ export function getRenderedStyles(styles: Array<any>): Array<Object> {
 		: [
 				{
 					name: 'default',
-					label: _x('Default', 'block style'),
+					label: _x('Default', 'block style', 'blockera'),
 					isDefault: true,
 				},
 				...styles,
