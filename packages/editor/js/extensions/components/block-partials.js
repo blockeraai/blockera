@@ -46,6 +46,7 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 		stylesTab.addEventListener('click', listener);
 
 		return () => stylesTab.removeEventListener('click', listener);
+		// eslint-disable-next-line
 	}, []);
 
 	return prependPortal(

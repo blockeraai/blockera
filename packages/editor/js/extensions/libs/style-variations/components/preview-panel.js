@@ -32,6 +32,7 @@ export default function BlockStylesPreviewPanel({
 			},
 			example,
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [genericPreviewBlock, styleClassName]);
 
 	return <InserterPreviewPanel item={previewBlocks} />;

@@ -63,6 +63,7 @@ export default function ColorPickerControl({
 			}
 		};
 		openPicker();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eyeDropper?.open]);
 
 	// make sure always we treat colors as lower case
