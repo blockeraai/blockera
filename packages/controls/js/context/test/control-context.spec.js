@@ -600,13 +600,13 @@ describe('testing control context provider and related hooks', () => {
 			},
 			1: {
 				isOpen: false,
-				order: 1,
+				order: 2,
 				x: 10,
 				y: 20,
 			},
 			2: {
 				isOpen: false,
-				order: 2,
+				order: 1,
 				x: 0,
 				y: 20,
 			},
