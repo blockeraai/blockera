@@ -360,7 +360,7 @@ describe('Mask Control component testing', () => {
 			cy.getByDataTest('position-button').click({ force: true });
 			// check control
 			cy.getByAriaLabel('Alignment Matrix Control').within(() => {
-				cy.contains('top center').click({ force: true });
+				cy.getByAriaLabel('top center item').click({ force: true });
 			});
 
 			// check data provider
