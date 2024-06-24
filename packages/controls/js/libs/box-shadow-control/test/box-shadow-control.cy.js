@@ -16,6 +16,7 @@ describe('box-shadow-control component testing', () => {
 					type: 'outer',
 					x: '10px',
 					y: '10px',
+					order: 0,
 					blur: '10px',
 					spread: '10px',
 					color: '#cccccc',
@@ -55,6 +56,7 @@ describe('box-shadow-control component testing', () => {
 							type: 'inner',
 							x: '5px',
 							y: '5px',
+							order: 0,
 							blur: '5px',
 							spread: '5px',
 							color: '#cccccc',
@@ -78,6 +80,7 @@ describe('box-shadow-control component testing', () => {
 					type: 'outer',
 					x: '10px',
 					y: '10px',
+					order: 0,
 					blur: '10px',
 					spread: '10px',
 					color: '#cccccc',
@@ -119,6 +122,7 @@ describe('box-shadow-control component testing', () => {
 						y: '0px',
 						blur: '0px',
 						spread: '0px',
+						order: 0,
 						color: '#000000ab',
 						isVisible: true,
 					},
@@ -144,6 +148,7 @@ describe('box-shadow-control component testing', () => {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
+						order: 0,
 						blur: '10px',
 						spread: '10px',
 						color: '#cccccc',
@@ -177,6 +182,7 @@ describe('box-shadow-control component testing', () => {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
+						order: 0,
 						blur: '10px',
 						spread: '10px',
 						color: '#cccccc',
@@ -247,6 +253,7 @@ describe('box-shadow-control component testing', () => {
 						type: 'outer',
 						x: '20px',
 						y: '40px',
+						order: 0,
 						blur: '35px',
 						spread: '25px',
 						color: '#2cf1dd',
@@ -261,14 +268,15 @@ describe('box-shadow-control component testing', () => {
 			cy.withDataProvider({
 				component: <BoxShadowControl popoverTitle={'Box Shadow'} />,
 				value: {
-					'outer-0': {
-						type: 'outer',
+					'inner-0': {
+						type: 'inner',
 						x: '10px',
 						y: '10px',
 						blur: '10px',
 						spread: '10px',
 						color: '#cccccc',
 						isVisible: true,
+						order: 0,
 					},
 				},
 				store: STORE_NAME,
@@ -279,8 +287,6 @@ describe('box-shadow-control component testing', () => {
 			cy.get('@repeater-item').click();
 			cy.contains('Box Shadow').parent().as('popover');
 
-			//change type
-			cy.get('@popover').get('button[aria-label="Inner"]').click();
 			//change x
 			cy.get('@popover').getByDataTest('box-shadow-x-input').clear();
 			cy.get('@popover').getByDataTest('box-shadow-x-input').type(40);
@@ -358,6 +364,7 @@ describe('box-shadow-control component testing', () => {
 						type: 'outer',
 						x: '0px',
 						y: '0px',
+						order: 0,
 						blur: '0px',
 						spread: '0px',
 						color: '#000000ab',
@@ -381,6 +388,7 @@ describe('box-shadow-control component testing', () => {
 						type: 'outer',
 						x: '0px',
 						y: '0px',
+						order: 0,
 						blur: '0px',
 						spread: '0px',
 						color: '#000000ab',
@@ -406,6 +414,7 @@ describe('box-shadow-control component testing', () => {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
+						order: 0,
 						blur: '10px',
 						spread: '10px',
 						color: '#cccccc',
@@ -429,6 +438,7 @@ describe('box-shadow-control component testing', () => {
 						type: 'outer',
 						x: '10px',
 						y: '10px',
+						order: 0,
 						blur: '10px',
 						spread: '10px',
 						color: '#cccccc',
