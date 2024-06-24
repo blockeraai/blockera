@@ -124,8 +124,8 @@ export function UnitInput({
 			unitValue:
 				'' === inputValue &&
 				'' !== defaultValue &&
-				isSpecialUnit(unitValue.value) &&
-				!isSpecialUnit(newUnitValue.value)
+				!isSpecialUnit(unitValue.value) &&
+				isSpecialUnit(newUnitValue.value)
 					? extractNumberAndUnit(defaultValue).value
 					: newUnitValue,
 		});
