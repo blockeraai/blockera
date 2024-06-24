@@ -185,18 +185,9 @@ export default function RepeaterControl(
 			const clonedRepeaterItems: { [key: string]: any } = {};
 
 			Object.entries(repeaterItems).forEach(([itemId, item]): void => {
-				if (item?.display) {
-					clonedRepeaterItems[itemId] = {
-						...item,
-						isSelected: false,
-					};
-
-					return;
-				}
-
 				clonedRepeaterItems[itemId] = {
 					...item,
-					display: true,
+					display: item?.display || true,
 					isSelected: false,
 				};
 			});
@@ -208,7 +199,7 @@ export default function RepeaterControl(
 
 			const newValue = {
 				...clonedRepeaterItems,
-				[newItemId]: value,
+				[newItemId]: value || defaultRepeaterItemValue,
 			};
 
 			modifyControlValue({
