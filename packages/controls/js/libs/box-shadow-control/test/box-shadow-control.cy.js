@@ -156,11 +156,13 @@ describe('box-shadow-control component testing', () => {
 
 			cy.get('button[aria-label="Add New Box Shadow"]').click();
 
-			cy.getByDataCy('group-control-header').should('have.length', '2');
+			cy.getByDataTest('popover-body').contains('Upgrade to PRO');
+
+			cy.getByDataCy('group-control-header').should('have.length', '1');
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect(2).to.be.equal(
+				expect(1).to.be.equal(
 					Object.keys(getControlValue(name, STORE_NAME)).length
 				);
 			});
@@ -335,11 +337,11 @@ describe('box-shadow-control component testing', () => {
 						type: 'inner',
 						x: '40px',
 						y: '60px',
+						order: 0,
 						blur: '15px',
 						spread: '55px',
 						color: '#2cf1dd',
 						isVisible: true,
-						isOpen: true,
 					},
 				}).to.be.deep.equal(getControlValue(name, STORE_NAME));
 			});
