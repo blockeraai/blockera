@@ -34,6 +34,7 @@ import {
 } from '../../index';
 import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
+import { backgroundComponentConfig } from '../bootstrap';
 import { RepeaterContext } from '../../repeater-control/context';
 
 // Icons
@@ -56,7 +57,9 @@ const Fields: FieldItem = memo<FieldItem>(
 		} = useControlContext();
 		const { getExtension } = select('blockera/extensions/config') || {};
 		const blockeraBackground =
-			getExtension('backgroundConfig')?.blockeraBackground;
+			'function' === typeof getExtension
+				? getExtension('backgroundConfig')?.blockeraBackground
+				: backgroundComponentConfig;
 
 		const {
 			onChange,
