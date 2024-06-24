@@ -195,6 +195,16 @@ export default function InputControl({
 						name: `${controlId}-${id || ''}-${
 							singularId || ''
 						}-unit-input`,
+						isUpdatableValue: (
+							savedValue: any,
+							recievedValue: any
+						): boolean => {
+							if ('' === recievedValue.inputValue) {
+								return true;
+							}
+
+							return '' !== savedValue.inputValue;
+						},
 					}}
 				>
 					<UnitInput
