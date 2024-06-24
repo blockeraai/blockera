@@ -196,7 +196,6 @@ export default function InputControl({
 							singularId || ''
 						}-unit-input`,
 					}}
-					notSyncWithRecievedValue={true}
 				>
 					<UnitInput
 						isValidValue={isValidValue}
