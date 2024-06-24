@@ -134,17 +134,24 @@ export const repeaterOnChange = (
 export const regeneratedIds = (value: Object, action: Object): Object => {
 	const { itemIdGenerator = null } = action;
 	const sortedItems = Object.entries({ ...value }).sort(
-		([, a], [, b]) => (a.order || 0) - (b.order || 0)
+		memoize(([, a], [, b]) => {
+			const result = (a.order || 0) - (b.order || 0);
+
+			if (result < 0) {
+				return -1;
+			} else if (result > 0) {
+				return 1;
+			}
+
+			return 0;
+		})
 	);
 
 	const newValue: { [key: string]: any } = {};
 
 	sortedItems.forEach(
 		memoize(([, item]: [string, any], index: number): void => {
-			item = {
-				...item,
-				order: index,
-			};
+			item.order = index;
 
 			if ('function' === typeof itemIdGenerator) {
 				newValue[itemIdGenerator(index)] = item;
@@ -193,6 +200,7 @@ export const reOrder = (
 					reOrdered = {
 						...reOrder,
 						...update(obj, repeaterId, {
+							// $FlowFixMe
 							[key]: { ...value, order: value?.order + 1 },
 						}),
 					};
@@ -200,6 +208,7 @@ export const reOrder = (
 					reOrdered = {
 						...reOrdered,
 						...update(obj, repeaterId, {
+							// $FlowFixMe
 							[key]: value,
 						}),
 					};
