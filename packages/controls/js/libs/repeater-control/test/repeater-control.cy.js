@@ -887,7 +887,9 @@ describe('repeater control component testing', () => {
 						defaultRepeaterItemValue={{
 							selectable: true,
 							isOpen: true,
+							isSelected: true,
 						}}
+						valueCleanup={(value) => value}
 					/>
 				),
 				value: {
@@ -1440,6 +1442,7 @@ describe('repeater control component testing', () => {
 						addNewButtonLabel="Add New My Label"
 						mode="accordion"
 						repeaterItemChildren={RepeaterFilledItemChildren}
+						valueCleanup={(value) => value}
 					/>
 				),
 				store: STORE_NAME,
