@@ -25,9 +25,12 @@ export default function OutlineControl({
 	popoverTitle = __('Outline', 'blockera'),
 	defaultRepeaterItemValue = {
 		border: {
-			width: '2px',
-			style: 'solid',
-			color: '#b6b6b6',
+			type: 'all',
+			all: {
+				width: '2px',
+				style: 'solid',
+				color: '#b6b6b6',
+			},
 		},
 		offset: '2px',
 		isVisible: true,
