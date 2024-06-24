@@ -26,6 +26,7 @@ export const ControlContext: Object = createContext({
 		attribute: null,
 		blockName: null,
 		description: null,
+		isUpdatableValue: undefined,
 	},
 	value: null,
 	dispatch: null,
@@ -61,6 +62,14 @@ export const ControlContextProvider = ({
 	// Assume control has side effect from parent components ...
 	useEffect(() => {
 		if (!isEquals(controlInfo.value, value) && !notSyncWithRecievedValue) {
+			// Handling custom conditions when synchronization recieved value with control saved store value!
+			if (
+				controlInfo?.isUpdatableValue &&
+				!controlInfo?.isUpdatableValue(value, controlInfo.value)
+			) {
+				return;
+			}
+
 			dispatch.modifyControlValue({
 				controlId: controlInfo.name,
 				value: controlInfo.value,

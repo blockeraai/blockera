@@ -20,6 +20,7 @@ export type ControlInfo = {
 	blockName?: string,
 	description?: string | MixedElement | any,
 	type?: 'simple' | 'nested',
+	isUpdatableValue?: (savedValue: any, recievedValue: any) => boolean,
 };
 
 export type ControlContextProviderProps = {
