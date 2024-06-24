@@ -330,7 +330,7 @@ describe('box spacing control component testing', () => {
 			cy.get('@Position')
 				.invoke('text')
 				.then((text) => {
-					expect(text.trim()).to.eq('10em');
+					expect(text.trim().replace(item, '')).to.eq('10em');
 				});
 
 			//
@@ -348,7 +348,7 @@ describe('box spacing control component testing', () => {
 				cy.get('@Position')
 					.invoke('text')
 					.then((text) => {
-						expect(text.trim()).to.eq('AUTO');
+						expect(text.trim().replace(item, '')).to.eq('AUTO');
 					});
 			}
 
@@ -361,7 +361,7 @@ describe('box spacing control component testing', () => {
 			cy.get('@Position')
 				.invoke('text')
 				.then((text) => {
-					expect(text.trim()).to.eq('CSS');
+					expect(text.trim().replace(item, '')).to.eq('CSS');
 				});
 		});
 	});
