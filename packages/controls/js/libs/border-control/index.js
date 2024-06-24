@@ -54,7 +54,6 @@ export default function BorderControl({
 		id,
 		onChange,
 		defaultValue,
-		mergeInitialAndDefault: true,
 	});
 
 	const labelProps = {
