@@ -113,9 +113,12 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'blur-0': {
-						type: 'blur',
-						blur: '20px',
+					'drop-shadow-0': {
+						type: 'drop-shadow',
+						'drop-shadow-x': '10px',
+						'drop-shadow-y': '10px',
+						'drop-shadow-blur': '10px',
+						'drop-shadow-color': '',
 					},
 				},
 			});
@@ -154,12 +157,9 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'drop-shadow-0': {
-						type: 'drop-shadow',
-						'drop-shadow-x': '10px',
-						'drop-shadow-y': '10px',
-						'drop-shadow-blur': '10px',
-						'drop-shadow-color': '',
+					'blur-0': {
+						type: 'blur',
+						blur: '20px',
 					},
 				},
 			});
@@ -228,9 +228,9 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'brightness-0': {
-						type: 'brightness',
-						brightness: '20%',
+					'blur-0': {
+						type: 'blur',
+						blur: '20px',
 					},
 				},
 			});
@@ -259,7 +259,7 @@ describe('filter-control component testing', () => {
 					'brightness-0': {
 						...controlValue['brightness-0'],
 						type: 'brightness',
-						brightness: '100px',
+						brightness: '100%',
 					},
 				}).to.be.deep.equal(controlValue);
 			});
@@ -272,9 +272,9 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'contrast-0': {
-						type: 'contrast',
-						contrast: '20%',
+					'blur-0': {
+						type: 'blur',
+						blur: '20px',
 					},
 				},
 			});
@@ -317,9 +317,9 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'hue-rotate-0': {
-						type: 'hue-rotate',
-						'hue-rotate': '20deg',
+					'blur-0': {
+						type: 'blur',
+						blur: '20px',
 					},
 				},
 			});
@@ -362,9 +362,9 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'saturate-0': {
-						type: 'saturate',
-						saturate: '20%',
+					'blur-0': {
+						type: 'blur',
+						blur: '20px',
 					},
 				},
 			});
@@ -407,9 +407,9 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'grayscale-0': {
-						type: 'grayscale',
-						grayscale: '20%',
+					'blur-0': {
+						type: 'blur',
+						blur: '20px',
 					},
 				},
 			});
@@ -452,9 +452,9 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'invert-0': {
-						type: 'invert',
-						invert: '20%',
+					'blur-0': {
+						type: 'blur',
+						blur: '20px',
 					},
 				},
 			});
@@ -494,9 +494,9 @@ describe('filter-control component testing', () => {
 				store: STORE_NAME,
 				name,
 				value: {
-					'sepia-0': {
-						type: 'sepia',
-						sepia: '20%',
+					'blur-0': {
+						type: 'blur',
+						blur: '20px',
 					},
 				},
 			});
