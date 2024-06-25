@@ -199,6 +199,13 @@ export default function InputControl({
 							savedValue: any,
 							recievedValue: any
 						): boolean => {
+							if (
+								recievedValue.inputValue ===
+								savedValue.inputValue
+							) {
+								return false;
+							}
+
 							if ('' === recievedValue.inputValue) {
 								return true;
 							}
