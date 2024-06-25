@@ -183,7 +183,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get(
 					'.components-custom-gradient-picker__gradient-bar-background'
@@ -219,7 +219,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get('[aria-label="Angel"]')
 					.parent()
@@ -341,7 +341,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get('input[type="number"]').eq(0).as('positionTopInput');
 				cy.get('@positionTopInput').clear();
@@ -369,7 +369,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get('button[data-value="closest-corner"]').click();
 				cy.get('button[data-value="closest-corner"]').then(() => {
@@ -394,7 +394,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get('button[aria-label="Repeat"]').click();
 				cy.get('button[aria-label="Repeat"]').then(() => {
@@ -419,7 +419,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get('button[aria-label="Parallax"]').click();
 				cy.get('button[aria-label="Parallax"]')
@@ -505,36 +505,45 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
-				cy.get('input[maxLength="9"]').as('colorInput');
-				cy.get('@colorInput').clear();
-				cy.get('@colorInput').type('4fecff', { delay: 0 });
-				cy.getByDataCy('control-group').then(() => {
-					const newColors = Object.values(
-						getControlValue(name, STORE_NAME)['mesh-gradient-0'][
-							'mesh-gradient-colors'
-						]
-					);
+				cy.getByDataCy('repeater-item').eq(3).click();
 
-					// color value change assertion
-					expect(newColors[newColors.length - 1].color).to.be.equal(
-						'#4fecff'
-					);
+				cy.get('.blockera-component-popover')
+					.last()
+					.within(() => {
+						cy.get('input[maxLength="9"]').as('colorInput');
+						cy.get('@colorInput').clear();
+						cy.get('@colorInput').type('4fecff', {
+							delay: 0,
+							force: true,
+						});
+					});
 
-					// gradient assertion
-					cy.get('.blockera-control-mesh-generator-preview').then(
-						($el) => {
-							const elementStyles = window.getComputedStyle(
-								$el[0]
-							);
-							expect(
-								elementStyles.getPropertyValue(
-									`--c${Object.keys(colors).length - 1}`
-								)
-							).to.be.equal('#4fecff');
-						}
-					);
-				});
+				cy.getByDataCy('repeater-item')
+					.eq(0)
+					.within(() => {
+						const newColors = Object.values(
+							getControlValue(name, STORE_NAME)[
+								'mesh-gradient-0'
+							]['mesh-gradient-colors']
+						);
+
+						// color value change assertion
+						expect(
+							newColors[newColors.length - 1].color
+						).to.be.equal('#4fecff');
+					});
+
+				// gradient assertion
+				cy.get('.blockera-control-mesh-generator-preview').then(
+					($el) => {
+						const elementStyles = window.getComputedStyle($el[0]);
+						expect(
+							elementStyles.getPropertyValue(
+								`--c${Object.keys(colors).length - 1}`
+							)
+						).to.be.equal('#4fecff');
+					}
+				);
 			});
 
 			it('should add new random color at the end and regenerate gradient', () => {
