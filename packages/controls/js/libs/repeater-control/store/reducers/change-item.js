@@ -73,18 +73,28 @@ export function changeItem(state = {}, action) {
 			return state;
 		}
 
-		const newValue = {
-			...clonedPrevValue,
-			[uniqueId]: { ...action.value, isOpen: true },
-		};
-
-		repeaterOnChange(regeneratedIds(newValue, action), action);
+		repeaterOnChange(
+			regeneratedIds(
+				{
+					...clonedPrevValue,
+					[uniqueId]: { ...action.value, isOpen: true },
+				},
+				action
+			),
+			action
+		);
 
 		return {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: regeneratedIds(newValue, action),
+				value: regeneratedIds(
+					{
+						...clonedPrevValue,
+						[uniqueId]: { ...action.value, isOpen: true },
+					},
+					action
+				),
 			},
 		};
 	}
