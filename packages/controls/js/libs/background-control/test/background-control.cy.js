@@ -221,21 +221,23 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('[aria-label="Angel"]')
-					.parent()
-					.siblings()
-					.find('input[type="number"]')
-					.as('angelInput');
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get('[aria-label="Angel"]')
+						.parent()
+						.siblings()
+						.find('input[type="number"]')
+						.as('angelInput');
 
-				cy.get('@angelInput').clear();
-				cy.get('@angelInput').type('135', { delay: 0 });
+					cy.get('@angelInput').clear();
+					cy.get('@angelInput').type('135', { delay: 0 });
+				});
 
-				cy.get('@angelInput').then(() => {
-					const angel = getControlValue(name, STORE_NAME)[
-						'linear-gradient-0'
-					]['linear-gradient-angel'];
+				cy.then(() => {
+					const angel = getControlValue(name, STORE_NAME);
 
-					expect(angel).to.be.equal(135);
+					expect(
+						angel['linear-gradient-0']['linear-gradient-angel']
+					).to.be.equal(135);
 				});
 			});
 
