@@ -45,21 +45,26 @@ import {
 	generateGradient,
 	getRandomHexColor,
 } from './mesh-gradient/mesh-generator';
-import { LabelDescription } from './label-description';
 import { meshGradientProvider } from '../';
+import { LabelDescription } from './label-description';
 
 const Fields: FieldItem = memo<FieldItem>(
 	({ itemId, item }: FieldItem): Element<any> => {
-		const {
+		let {
 			components: { FeatureWrapper },
 			controlInfo: { name: controlId },
 			dispatch: { changeRepeaterItem },
 		} = useControlContext();
+
+		if (!FeatureWrapper) {
+			FeatureWrapper = ({ children }) => <>{children}</>;
+		}
+
 		const { getExtension } = select('blockera/extensions/config') || {};
 		const blockeraBackground =
 			'function' === typeof getExtension
 				? getExtension('backgroundConfig')?.blockeraBackground
-				: backgroundComponentConfig;
+				: backgroundComponentConfig?.blockeraBackground;
 
 		const {
 			onChange,
