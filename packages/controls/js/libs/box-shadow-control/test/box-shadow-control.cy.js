@@ -197,54 +197,65 @@ describe('box-shadow-control component testing', () => {
 			cy.get('@repeater-item').click();
 			cy.get('div').contains('Box Shadow').parent().as('popover');
 
-			//change x
-			cy.get('@popover').getByDataTest('box-shadow-x-input').clear();
-			cy.get('@popover').getByDataTest('box-shadow-x-input').type(20);
-			//change y
-			cy.get('@popover').getByDataTest('box-shadow-y-input').clear();
-			cy.get('@popover').getByDataTest('box-shadow-y-input').type(40);
-			//change blur
-			cy.get('@popover').getByDataTest('box-shadow-blur-input').clear();
-			cy.get('@popover').getByDataTest('box-shadow-blur-input').type(35);
-			//change spread
-			cy.get('@popover').getByDataTest('box-shadow-spread-input').clear();
-			cy.get('@popover')
-				.getByDataTest('box-shadow-spread-input')
-				.type(25);
-			//change color
-			cy.get('@popover')
-				.getByDataTest('box-shadow-color-control')
-				.click();
-			cy.contains('Color Picker').as('color-picker');
-			cy.get('@color-picker').get('input[maxlength="9"]').clear();
-			cy.get('@color-picker').get('input[maxlength="9"]').type('2cf1dd');
+			cy.get('@popover').within(() => {
+				//change x
+				cy.getByDataTest('box-shadow-x-input').clear();
+				cy.getByDataTest('box-shadow-x-input').type(20);
+				cy.getByDataTest('box-shadow-x-input').should(
+					'have.value',
+					'20'
+				);
 
-			//Check value
-			cy.getByDataTest('box-shadow-x-input').should('have.value', '20');
-			cy.getByDataTest('box-shadow-y-input').should('have.value', '40');
-			cy.getByDataTest('box-shadow-blur-input').should(
-				'have.value',
-				'35'
-			);
-			cy.getByDataTest('box-shadow-spread-input').should(
-				'have.value',
-				'25'
-			);
+				//change y
+				cy.getByDataTest('box-shadow-y-input').clear();
+				cy.getByDataTest('box-shadow-y-input').type(40);
+				cy.getByDataTest('box-shadow-y-input').should(
+					'have.value',
+					'40'
+				);
+
+				//change blur
+				cy.getByDataTest('box-shadow-blur-input').clear();
+				cy.getByDataTest('box-shadow-blur-input').type(35);
+				cy.getByDataTest('box-shadow-blur-input').should(
+					'have.value',
+					'35'
+				);
+
+				//change spread
+				cy.getByDataTest('box-shadow-spread-input').clear();
+				cy.getByDataTest('box-shadow-spread-input').type(25);
+				cy.getByDataTest('box-shadow-spread-input').should(
+					'have.value',
+					'25'
+				);
+
+				//change color
+				cy.getByDataTest('box-shadow-color-control').click();
+			});
+
+			cy.get('.blockera-component-popover').last().as('color-picker');
+			cy.get('@color-picker').within(() => {
+				cy.get('@color-picker').get('input[maxlength="9"]').clear();
+				cy.get('@color-picker')
+					.get('input[maxlength="9"]')
+					.type('2cf1dd');
+			});
 			cy.getByDataTest('box-shadow-color-control').contains('#2cf1dd');
 
 			//check repeater item value
-			cy.get('@repeater-item').contains('Outer');
-			cy.get('@repeater-item').contains('20');
-			cy.get('@repeater-item').contains('40');
-			cy.get('@repeater-item').contains('35');
-			cy.get('@repeater-item').contains('25');
-			cy.get('@repeater-item')
-				.children()
-				.first()
-				.children()
-				.first()
-				.children()
-				.should('have.attr', 'style', 'background: rgb(44, 241, 221);');
+			cy.get('@repeater-item').within(() => {
+				cy.contains('Outer');
+				cy.contains('20');
+				cy.contains('40');
+				cy.contains('35');
+				cy.contains('25');
+				cy.get('.blockera-component-color-indicator').should(
+					'have.attr',
+					'style',
+					'background: rgb(44, 241, 221);'
+				);
+			});
 
 			//Check data provider value
 			cy.get('body').then(() => {
@@ -285,56 +296,68 @@ describe('box-shadow-control component testing', () => {
 
 			cy.getByDataCy('group-control-header').eq(0).as('repeater-item');
 			cy.get('@repeater-item').click();
-			cy.get('div').contains('Box Shadow').parent().as('popover');
 
-			//change x
-			cy.get('@popover').getByDataTest('box-shadow-x-input').clear();
-			cy.get('@popover').getByDataTest('box-shadow-x-input').type(40);
-			//change y
-			cy.get('@popover').getByDataTest('box-shadow-y-input').clear();
-			cy.get('@popover').getByDataTest('box-shadow-y-input').type(60);
-			//change blur
-			cy.get('@popover').getByDataTest('box-shadow-blur-input').clear();
-			cy.get('@popover').getByDataTest('box-shadow-blur-input').type(15);
-			//change spread
-			cy.get('@popover').getByDataTest('box-shadow-spread-input').clear();
-			cy.get('@popover')
-				.getByDataTest('box-shadow-spread-input')
-				.type(55);
-			//change color
-			cy.get('@popover')
-				.getByDataTest('box-shadow-color-control')
-				.click();
-			cy.contains('Color Picker').as('color-picker');
-			cy.get('@color-picker').get('input[maxlength="9"]').clear();
-			cy.get('@color-picker').get('input[maxlength="9"]').type('2cf1dd');
+			cy.get('.blockera-component-popover').as('popover');
 
-			//Check value
-			cy.getByDataTest('box-shadow-x-input').should('have.value', '40');
-			cy.getByDataTest('box-shadow-y-input').should('have.value', '60');
-			cy.getByDataTest('box-shadow-blur-input').should(
-				'have.value',
-				'15'
-			);
-			cy.getByDataTest('box-shadow-spread-input').should(
-				'have.value',
-				'55'
-			);
+			cy.get('@popover').within(() => {
+				//change x
+				cy.getByDataTest('box-shadow-x-input').clear();
+				cy.getByDataTest('box-shadow-x-input').type(40);
+				cy.getByDataTest('box-shadow-x-input').should(
+					'have.value',
+					'40'
+				);
+
+				//change y
+				cy.getByDataTest('box-shadow-y-input').clear();
+				cy.getByDataTest('box-shadow-y-input').type(60);
+				cy.getByDataTest('box-shadow-y-input').should(
+					'have.value',
+					'60'
+				);
+
+				//change blur
+				cy.getByDataTest('box-shadow-blur-input').clear();
+				cy.getByDataTest('box-shadow-blur-input').type(15);
+				cy.getByDataTest('box-shadow-blur-input').should(
+					'have.value',
+					'15'
+				);
+
+				//change spread
+				cy.getByDataTest('box-shadow-spread-input').clear();
+				cy.getByDataTest('box-shadow-spread-input').type(55);
+				cy.getByDataTest('box-shadow-spread-input').should(
+					'have.value',
+					'55'
+				);
+
+				//change color
+				cy.get('@popover')
+					.getByDataTest('box-shadow-color-control')
+					.click();
+			});
+
+			cy.get('.blockera-component-popover').last().as('color-picker');
+			cy.get('@color-picker').within(() => {
+				cy.get('input[maxlength="9"]').clear();
+				cy.get('input[maxlength="9"]').type('2cf1dd');
+			});
 			cy.getByDataTest('box-shadow-color-control').contains('#2cf1dd');
 
 			//check repeater item value
-			cy.get('@repeater-item').contains('Inner');
-			cy.get('@repeater-item').contains('40');
-			cy.get('@repeater-item').contains('60');
-			cy.get('@repeater-item').contains('15');
-			cy.get('@repeater-item').contains('55');
-			cy.get('@repeater-item')
-				.children()
-				.first()
-				.children()
-				.first()
-				.children()
-				.should('have.attr', 'style', 'background: rgb(44, 241, 221);');
+			cy.get('@repeater-item').within(() => {
+				cy.contains('Inner');
+				cy.contains('40');
+				cy.contains('60');
+				cy.contains('15');
+				cy.contains('55');
+				cy.get('.blockera-component-color-indicator').should(
+					'have.attr',
+					'style',
+					'background: rgb(44, 241, 221);'
+				);
+			});
 
 			//Check data provider value
 			cy.get('body').then(() => {
