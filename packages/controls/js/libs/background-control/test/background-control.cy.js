@@ -256,8 +256,11 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('button[aria-label="Repeat"]').click();
-				cy.get('button[aria-label="Repeat"]').then(() => {
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get('button[aria-label="Repeat"]').click();
+				});
+
+				cy.then(() => {
 					const repeat = getControlValue(name, STORE_NAME)[
 						'linear-gradient-0'
 					]['linear-gradient-repeat'];
@@ -279,17 +282,23 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('button[aria-label="Parallax"]').click();
-				cy.get('button[aria-label="Parallax"]')
-					.should('have.attr', 'aria-checked', 'true')
-					.then(() => {
-						const linearGradientAttachment = getControlValue(
-							name,
-							STORE_NAME
-						)['linear-gradient-0']['linear-gradient-attachment'];
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get('button[aria-label="Parallax"]').click();
+					cy.get('button[aria-label="Parallax"]').should(
+						'have.attr',
+						'aria-checked',
+						'true'
+					);
+				});
 
-						expect(linearGradientAttachment).to.be.equal('fixed');
-					});
+				cy.then(() => {
+					const linearGradientAttachment = getControlValue(
+						name,
+						STORE_NAME
+					)['linear-gradient-0']['linear-gradient-attachment'];
+
+					expect(linearGradientAttachment).to.be.equal('fixed');
+				});
 			});
 		});
 
@@ -309,11 +318,13 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get(
-					'.components-custom-gradient-picker__gradient-bar-background'
-				).as('gradientBar');
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get(
+						'.components-custom-gradient-picker__gradient-bar-background'
+					).as('gradientBar');
 
-				cy.get('@gradientBar').click();
+					cy.get('@gradientBar').click();
+				});
 
 				cy.get('input[maxLength="9"]').as('colorInput');
 				cy.get('@colorInput').clear();
@@ -322,7 +333,9 @@ describe('background control', () => {
 				cy.get('@gradientBar').should(($gradientBar) => {
 					const background = $gradientBar.css('background');
 					expect(background).to.include('rgb(255, 163, 60)');
+				});
 
+				cy.then(() => {
 					const radialGradient = getControlValue(name, STORE_NAME)[
 						'radial-gradient-0'
 					]['radial-gradient'];
