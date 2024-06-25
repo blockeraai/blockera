@@ -177,12 +177,13 @@ describe('background control', () => {
 					value: {
 						'linear-gradient-0': {
 							type: 'linear-gradient',
-							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get(
 					'.components-custom-gradient-picker__gradient-bar-background'
@@ -192,7 +193,7 @@ describe('background control', () => {
 
 				cy.get('input[maxLength="9"]').as('colorInput');
 				cy.get('@colorInput').clear();
-				cy.get('@colorInput').type('FFA33C');
+				cy.get('@colorInput').type('FFA33C', { delay: 0 });
 
 				cy.get('@gradientBar').should(($gradientBar) => {
 					const background = $gradientBar.css('background');
@@ -212,12 +213,13 @@ describe('background control', () => {
 					value: {
 						'linear-gradient-0': {
 							type: 'linear-gradient',
-							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get('[aria-label="Angel"]')
 					.parent()
@@ -226,7 +228,7 @@ describe('background control', () => {
 					.as('angelInput');
 
 				cy.get('@angelInput').clear();
-				cy.get('@angelInput').type('135');
+				cy.get('@angelInput').type('135', { delay: 0 });
 
 				cy.get('@angelInput').then(() => {
 					const angel = getControlValue(name, STORE_NAME)[
@@ -241,10 +243,16 @@ describe('background control', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <BackgroundControl />,
-					value: [{ type: 'linear-gradient', isOpen: true }],
+					value: {
+						'linear-gradient-0': {
+							type: 'linear-gradient',
+						},
+					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get('button[aria-label="Repeat"]').click();
 				cy.get('button[aria-label="Repeat"]').then(() => {
@@ -260,10 +268,14 @@ describe('background control', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <BackgroundControl />,
-					value: [{ type: 'linear-gradient', isOpen: true }],
+					value: {
+						'linear-gradient-0': { type: 'linear-gradient' },
+					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get('button[aria-label="Parallax"]').click();
 				cy.get('button[aria-label="Parallax"]')
@@ -287,12 +299,13 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
-							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get(
 					'.components-custom-gradient-picker__gradient-bar-background'
@@ -322,12 +335,13 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
-							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get('input[type="number"]').eq(0).as('positionTopInput');
 				cy.get('@positionTopInput').clear();
@@ -349,12 +363,13 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
-							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get('button[data-value="closest-corner"]').click();
 				cy.get('button[data-value="closest-corner"]').then(() => {
@@ -373,12 +388,13 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
-							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get('button[aria-label="Repeat"]').click();
 				cy.get('button[aria-label="Repeat"]').then(() => {
@@ -397,12 +413,13 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
-							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.getByDataCy('control-group').last().click();
 
 				cy.get('button[aria-label="Parallax"]').click();
 				cy.get('button[aria-label="Parallax"]')
@@ -491,8 +508,8 @@ describe('background control', () => {
 				cy.getByDataCy('control-group').last().click();
 				cy.get('input[maxLength="9"]').as('colorInput');
 				cy.get('@colorInput').clear();
-				cy.get('@colorInput').type('4fecff');
-				cy.get('@colorInput').then(() => {
+				cy.get('@colorInput').type('4fecff', { delay: 0 });
+				cy.getByDataCy('control-group').then(() => {
 					const newColors = Object.values(
 						getControlValue(name, STORE_NAME)['mesh-gradient-0'][
 							'mesh-gradient-colors'
@@ -714,4 +731,3 @@ describe('background control', () => {
 		});
 	});
 });
-
