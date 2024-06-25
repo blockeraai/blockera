@@ -622,14 +622,13 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.contains('Colors')
-					.parent()
-					.parent()
-					.within(() => {
-						cy.get('[aria-label="Delete 1"]').should('not.exist');
-						cy.get('[aria-label="Delete 2"]').should('not.exist');
-						cy.get('[aria-label="Delete 3"]').should('not.exist');
-					});
+				cy.getByDataId('--c1').realHover();
+				cy.getByAriaLabel('Delete c2').should('not.exist');
+
+				cy.getByAriaLabel('Add New Mesh Gradient Color').click();
+
+				cy.getByDataId('--c1').realHover();
+				cy.getByAriaLabel('Delete c2').should('exist');
 			});
 
 			it('should remove color and regenerate gradient', () => {
@@ -716,16 +715,21 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.get('button[aria-label="Parallax"]').click();
-				cy.get('button[aria-label="Parallax"]')
+				cy.getByAriaLabel('Parallax').click();
+
+				cy.getByAriaLabel('Parallax')
 					.should('have.attr', 'aria-checked', 'true')
 					.then(() => {
 						const meshGradientAttachment = getControlValue(
 							name,
 							STORE_NAME
-						)['mesh-gradient-0']['mesh-gradient-attachment'];
+						);
 
-						expect(meshGradientAttachment).to.be.equal('fixed');
+						expect(
+							meshGradientAttachment['mesh-gradient-0'][
+								'mesh-gradient-attachment'
+							]
+						).to.be.equal('fixed');
 					});
 			});
 		});
