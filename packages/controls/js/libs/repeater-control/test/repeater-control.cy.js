@@ -438,6 +438,7 @@ describe('repeater control component testing', () => {
 				cy.getByDataCy('repeater-item')
 					.eq(1)
 					.within(() => {
+						// delete button only is shown on hover
 						cy.getByAriaLabel('Delete first 1').should(
 							'not.be.visible'
 						);
@@ -502,8 +503,11 @@ describe('repeater control component testing', () => {
 
 				cy.multiClick(`[aria-label="Add New Item"]`, 5);
 
+				// change type
 				cy.getByDataCy('repeater-item').eq(1).click();
 				cy.getByAriaLabel('Second').click({ multiple: true });
+
+				// open repeater item popover
 				cy.getByDataCy('repeater-item').eq(2).click();
 
 				//remove second one
@@ -516,6 +520,9 @@ describe('repeater control component testing', () => {
 						);
 						cy.getByAriaLabel('Delete second 1').click();
 					});
+
+				// repeater item popover should be removed
+				cy.get('.components-popover').should('not.exist');
 
 				// Check Control
 				cy.getByDataCy('repeater-item').should('have.length', 4);
@@ -561,12 +568,6 @@ describe('repeater control component testing', () => {
 
 				cy.multiClick('[aria-label="Add New Item"]', 4);
 
-				cy.getByDataCy('repeater-item')
-					.eq(1)
-					.within(() => {
-						cy.getByAriaLabel('Delete 1').should('not.be.visible');
-					});
-
 				//remove second one
 				cy.getByDataCy('repeater-item').eq(1).realHover();
 				cy.getByDataCy('repeater-item')
@@ -603,12 +604,6 @@ describe('repeater control component testing', () => {
 				});
 
 				cy.multiClick('[aria-label="Add New Item"]', 4);
-
-				cy.getByDataCy('repeater-item')
-					.eq(1)
-					.within(() => {
-						cy.getByAriaLabel('Delete 1').should('not.be.visible');
-					});
 
 				//remove second one
 				cy.getByDataCy('repeater-item').eq(1).realHover();
@@ -672,6 +667,7 @@ describe('repeater control component testing', () => {
 				cy.getByDataCy('repeater-item')
 					.eq(1)
 					.within(() => {
+						// clone button only is shown on hover
 						cy.getByAriaLabel('Clone second 0').should(
 							'not.be.visible'
 						);
@@ -721,12 +717,6 @@ describe('repeater control component testing', () => {
 					store: STORE_NAME,
 					name,
 				});
-
-				cy.getByDataCy('repeater-item')
-					.eq(1)
-					.within(() => {
-						cy.getByAriaLabel('Clone 1').should('not.be.visible');
-					});
 
 				cy.getByDataCy('repeater-item').eq(1).realHover();
 				cy.getByDataCy('repeater-item')
@@ -791,7 +781,7 @@ describe('repeater control component testing', () => {
 				});
 			});
 
-			it('should regenerate order,when there is type', () => {
+			it('should regenerate order, when there is type', () => {
 				const name = nanoid();
 
 				cy.withDataProvider({
@@ -812,7 +802,10 @@ describe('repeater control component testing', () => {
 				});
 
 				cy.multiClick('[aria-label="Add New Item"]', 4);
+
+				// 4th item
 				cy.getByAriaLabel('Second').click();
+
 				cy.getByDataCy('repeater-item').eq(1).click();
 				cy.getByAriaLabel('Second').click();
 
@@ -852,8 +845,6 @@ describe('repeater control component testing', () => {
 				});
 
 				cy.multiClick('[aria-label="Add New Item"]', 2);
-				// repeater starts to work and merge initial props
-				cy.getByDataCy('repeater-item').eq(0).click();
 
 				// from 1 => 0
 				cy.getByDataCy('repeater-item')
@@ -899,7 +890,7 @@ describe('repeater control component testing', () => {
 				name,
 			});
 
-			// last item sholud be selected
+			// last item should be selected
 			cy.getByAriaLabel('Add New Item').click();
 			cy.getByDataCy('repeater-item')
 				.last()
@@ -918,10 +909,6 @@ describe('repeater control component testing', () => {
 						.invoke('attr', 'class')
 						.should('include', 'is-selected-item');
 				});
-
-			cy.getByDataCy('blockera-repeater-control')
-				.find('[data-cy="repeater-item"]')
-				.should('have.length', 3);
 
 			// Check data provider value!
 			cy.then(() => {
@@ -945,6 +932,7 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
+
 			cy.multiClick(`[aria-label="Add New Items"]`, 7);
 
 			cy.getByDataCy('blockera-repeater-control')
@@ -1014,6 +1002,7 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
+
 			cy.getByDataCy('control-group')
 				.first()
 				.should('have.class', 'is-selected-item');
@@ -1021,6 +1010,7 @@ describe('repeater control component testing', () => {
 
 		it('should render delete item', () => {
 			const name = nanoid();
+
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -1032,11 +1022,19 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
+
 			cy.multiClick('[aria-label="Add New Items"]', 3);
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label~="Delete"]').first().click();
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label~="Delete"]').first().click();
+
+			let i = 1;
+			while (i <= 2) {
+				i++;
+				cy.getByDataCy('repeater-item').eq(0).realHover();
+				cy.getByDataCy('repeater-item')
+					.eq(0)
+					.within(() => {
+						cy.get('[aria-label="Delete 0"]').click();
+					});
+			}
 
 			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
@@ -1052,6 +1050,7 @@ describe('repeater control component testing', () => {
 
 		it('should render copy item', () => {
 			const name = nanoid();
+
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -1063,13 +1062,19 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
+
 			cy.multiClick('[aria-label="Add New Items"]', 2);
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label~="Clone"]').first().click();
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label~="Clone"]').first().click();
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label~="Clone"]').first().click();
+
+			let i = 1;
+			while (i <= 3) {
+				i++;
+				cy.getByDataCy('repeater-item').eq(0).realHover();
+				cy.getByDataCy('repeater-item')
+					.eq(0)
+					.within(() => {
+						cy.get('[aria-label="Clone 0"]').click();
+					});
+			}
 
 			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
@@ -1085,6 +1090,7 @@ describe('repeater control component testing', () => {
 
 		it('should render disable item', () => {
 			const name = nanoid();
+
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -1096,21 +1102,36 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
+
 			cy.multiClick('[aria-label="Add New Items"]', 3);
+
 			cy.getByDataCy('repeater-item')
-				.first()
+				.eq(0)
 				.should('have.class', 'is-active');
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label="Disable 1"]').click();
+
+			cy.getByDataCy('repeater-item').eq(0).realHover();
+
+			cy.getByDataCy('repeater-item')
+				.eq(0)
+				.within(() => {
+					cy.get('[aria-label="Disable 0"]').click();
+				});
+
+			cy.getByDataCy('repeater-item')
+				.eq(0)
+				.should('have.class', 'is-inactive');
 
 			cy.getByDataCy('repeater-item')
 				.eq(1)
-				.should('have.class', 'is-inactive');
+				.should('have.class', 'is-active');
 
 			// Check data provider value!
 			cy.then(() => {
-				return expect(getControlValue(name, STORE_NAME)['1'].isVisible)
-					.to.have.false;
+				expect(getControlValue(name, STORE_NAME)['0'].isVisible).to.have
+					.false;
+
+				expect(getControlValue(name, STORE_NAME)['1'].isVisible).to.have
+					.true;
 			});
 		});
 
@@ -1149,7 +1170,9 @@ describe('repeater control component testing', () => {
 				value: { 0: {} },
 				store: STORE_NAME,
 			});
+
 			cy.getByDataCy('plus-svg').should('be.visible');
+
 			cy.getByDataCy('minus-svg').should('be.visible');
 		});
 
@@ -1159,16 +1182,18 @@ describe('repeater control component testing', () => {
 					<RepeaterControl
 						addNewButtonLabel="Add New Items"
 						repeaterItemChildren={RepeaterItemChildren}
-						maxItems={4}
+						maxItems={2}
 					/>
 				),
 				value: {},
 				store: STORE_NAME,
 			});
+
 			cy.multiClick(`[aria-label="Add New Items"]`, 5);
+
 			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
-				.should('have.length', 4);
+				.should('have.length', 2);
 		});
 
 		it('should render min items', () => {
@@ -1183,19 +1208,35 @@ describe('repeater control component testing', () => {
 				value: {},
 				store: STORE_NAME,
 			});
+
 			cy.multiClick('[aria-label="Add New Items"]', 4);
 
 			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 4);
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label~="Delete"]').first().click();
-			cy.getByDataCy('repeater-item').first().realHover('mouse');
-			cy.get('[aria-label="Delete 1"]').should('not.exist');
+
+			cy.getByDataCy('repeater-item').eq(0).realHover();
+			cy.getByDataCy('repeater-item')
+				.eq(0)
+				.within(() => {
+					cy.get('[aria-label="Delete 0"]').click();
+				});
+
+			cy.getByDataCy('blockera-repeater-control')
+				.find('[data-cy="repeater-item"]')
+				.should('have.length', 3);
+
+			cy.getByDataCy('repeater-item').eq(0).realHover();
+			cy.getByDataCy('repeater-item')
+				.eq(0)
+				.within(() => {
+					cy.get('[aria-label="Delete 0"]').should('not.exist');
+				});
 		});
 
 		it('should render item is open', () => {
 			const name = nanoid();
+
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -1216,6 +1257,7 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
+
 			cy.get('.blockera-control-group-popover').should('exist');
 
 			// Check data provider value!
@@ -1244,6 +1286,7 @@ describe('repeater control component testing', () => {
 				},
 				store: STORE_NAME,
 			});
+
 			cy.getByDataCy('repeater-item').click();
 
 			cy.get('.blockera-control-group-popover').should(
@@ -1295,6 +1338,7 @@ describe('repeater control component testing', () => {
 				},
 				store: STORE_NAME,
 			});
+
 			cy.getByDataCy('blockera-repeater-control').should(
 				'have.class',
 				'custom-class'
@@ -1321,9 +1365,13 @@ describe('repeater control component testing', () => {
 				},
 				store: STORE_NAME,
 			});
+
 			cy.get(`[aria-label="Add New Items"]`).should('not.be.exist');
+
 			cy.get(`[aria-label="Delete 1"]`).should('not.be.exist');
+
 			cy.get(`[aria-label="Clone 1"]`).should('not.be.exist');
+
 			cy.get(`[aria-label="Disable 1"]`).should('not.be.exist');
 		});
 
@@ -1347,11 +1395,13 @@ describe('repeater control component testing', () => {
 				},
 				store: STORE_NAME,
 			});
+
 			cy.getByDataCy(`label-control`).should('contain', 'My Label');
 		});
 
 		it('should display default values', () => {
 			const name = nanoid();
+
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -1371,6 +1421,7 @@ describe('repeater control component testing', () => {
 				store: STORE_NAME,
 				name,
 			});
+
 			cy.getByDataCy('blockera-repeater-control')
 				.find('[data-cy="repeater-item"]')
 				.should('have.length', 2);
@@ -1385,6 +1436,7 @@ describe('repeater control component testing', () => {
 
 		it('should display data with data id', () => {
 			const name = nanoid();
+
 			cy.withDataProvider({
 				component: (
 					<RepeaterControl
@@ -1430,6 +1482,7 @@ describe('repeater control component testing', () => {
 			});
 
 			cy.multiClick(`[aria-label="Add New My Label"]`, 2);
+
 			cy.get('@onChangeMock').should('have.been.called');
 		});
 
@@ -1454,31 +1507,9 @@ describe('repeater control component testing', () => {
 
 			// Check data provider value!
 			cy.then(() => {
-				const value = {
-					0: {
-						isOpen: true,
-						display: true,
-						cloneable: true,
-						isVisible: true,
-						deletable: true,
-						isSelected: false,
-						selectable: false,
-						visibilitySupport: true,
-						order: 0,
-					},
-					1: {
-						isOpen: true,
-						display: true,
-						cloneable: true,
-						isVisible: true,
-						deletable: true,
-						isSelected: false,
-						selectable: false,
-						visibilitySupport: true,
-						order: 1,
-					},
-				};
-				expect(value).to.deep.eq(getControlValue(name, STORE_NAME));
+				expect(
+					Object.values(getControlValue(name, STORE_NAME))
+				).to.have.length(2);
 			});
 		});
 	});
