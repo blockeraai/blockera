@@ -41,6 +41,14 @@ Cypress.Commands.add('getByDataTest', (selector, ...args) => {
 	return cy.get(`[data-test="${selector}"]`, ...args);
 });
 
+Cypress.Commands.add('getByDataId', (selector, ...args) => {
+	return cy.get(`[data-id="${selector}"]`, ...args);
+});
+
+Cypress.Commands.add('getByTestId', (selector, ...args) => {
+	return cy.get(`[test-id="${selector}"]`, ...args);
+});
+
 Cypress.Commands.add('getByAriaLabel', (selector, ...args) => {
 	const fallbackLabel = args[0];
 
