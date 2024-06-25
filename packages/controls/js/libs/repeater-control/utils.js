@@ -58,7 +58,16 @@ export function getSortedRepeater(items: Object): Array<Object> {
 }
 
 export function getArialLabelSuffix(itemId: string): string | number {
-	return itemId.replaceAll('-', ' ');
+	// Replace all '-' with a single space
+	let result = itemId.replaceAll('-', ' ');
+
+	// Replace multiple consecutive spaces with a single space
+	result = result.replace(/\s+/g, ' ');
+
+	// Trim the string from both sides
+	result = result.trim();
+
+	return result;
 }
 
 export function cleanupRepeaterItem(item: Object): Object {

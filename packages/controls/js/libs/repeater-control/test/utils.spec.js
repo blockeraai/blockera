@@ -1,4 +1,4 @@
-import { prepValueForHeader } from '../utils';
+import { prepValueForHeader, getArialLabelSuffix } from '../utils';
 
 describe('Util functions', () => {
 	describe('prepValueForHeader', () => {
@@ -63,6 +63,26 @@ describe('Util functions', () => {
 		test('grad value', () => {
 			expect(prepValueForHeader('12grad')).toStrictEqual(
 				<span className="unit-value">12°</span>
+			);
+		});
+	});
+
+	describe('getArialLabelSuffix', () => {
+		test('empty', () => {
+			expect(getArialLabelSuffix('')).toStrictEqual('');
+		});
+
+		test('string with space in start and end', () => {
+			expect(getArialLabelSuffix('  test   ')).toStrictEqual('test');
+		});
+
+		test('string with space in start and end after removing not allowed chars', () => {
+			expect(getArialLabelSuffix('--  test   --')).toStrictEqual('test');
+		});
+
+		test('not allowed strings between other words', () => {
+			expect(getArialLabelSuffix('this-is-test')).toStrictEqual(
+				'this is test'
 			);
 		});
 	});
