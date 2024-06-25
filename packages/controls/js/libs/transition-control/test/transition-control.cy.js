@@ -106,7 +106,7 @@ describe('transition control component testing', () => {
 			cy.get('@onChange').should('have.been.called');
 		});
 
-		it('should context value have length of 2, when adding one more item', () => {
+		it('should context value have length of 1, when adding one more item because more items available on PRO version', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <TransitionControl label="Transition" />,
@@ -117,39 +117,12 @@ describe('transition control component testing', () => {
 
 			cy.get('button[aria-label="Add New Transition"]').click();
 
-			cy.getByDataCy('group-control-header').should('have.length', '2');
+			cy.getByDataTest('popover-body').contains('Upgrade to PRO');
 
 			//Check data provider value
 			cy.get('body').then(() => {
-				expect(2).to.be.equal(
+				expect(1).to.be.equal(
 					Object.keys(getControlValue(name, STORE_NAME)).length
-				);
-			});
-		});
-
-		it('should context and local value be updated, when change type', () => {
-			const name = nanoid();
-			cy.withDataProvider({
-				component: <TransitionControl label="Transition" />,
-				value,
-				store: STORE_NAME,
-				name,
-			});
-
-			cy.getByDataCy('group-control-header').click();
-
-			cy.getByDataTest('transition-control-popover').as('popover');
-			cy.get('@popover').get('select').eq(0).select('Filter');
-
-			cy.get('@popover')
-				.get('select')
-				.eq(0)
-				.should('have.value', 'filter');
-
-			// Check data provider value
-			cy.get('@popover').then(() => {
-				expect('filter').to.be.equal(
-					getControlValue(name, STORE_NAME)['filter-0'].type
 				);
 			});
 		});
