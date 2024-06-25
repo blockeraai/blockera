@@ -89,7 +89,7 @@ describe('box-shadow-control component testing', () => {
 			},
 		});
 
-		cy.contains('Box Shadow');
+		cy.get('div').contains('Box Shadow');
 	});
 
 	describe('interaction test: ', () => {
@@ -132,14 +132,14 @@ describe('box-shadow-control component testing', () => {
 			});
 
 			cy.getByDataCy('group-control-header').eq(0).click();
-			cy.contains('Box Shadow').as('popover');
+			cy.get('div').contains('Box Shadow').as('popover');
 
 			cy.get('@popover').get('button[aria-label="Inner"]').click();
 
 			cy.get('@onChange').should('have.been.called');
 		});
 
-		it('should context value have length of 2, when adding one more item', () => {
+		it('should context value have length of 1, when adding one more item because more items available on PRO version', () => {
 			const name = nanoid();
 			cy.withDataProvider({
 				component: <BoxShadowControl label={'Box Shadow'} />,
@@ -195,7 +195,7 @@ describe('box-shadow-control component testing', () => {
 
 			cy.getByDataCy('group-control-header').eq(0).as('repeater-item');
 			cy.get('@repeater-item').click();
-			cy.contains('Box Shadow').parent().as('popover');
+			cy.get('div').contains('Box Shadow').parent().as('popover');
 
 			//change x
 			cy.get('@popover').getByDataTest('box-shadow-x-input').clear();
@@ -285,7 +285,7 @@ describe('box-shadow-control component testing', () => {
 
 			cy.getByDataCy('group-control-header').eq(0).as('repeater-item');
 			cy.get('@repeater-item').click();
-			cy.contains('Box Shadow').parent().as('popover');
+			cy.get('div').contains('Box Shadow').parent().as('popover');
 
 			//change x
 			cy.get('@popover').getByDataTest('box-shadow-x-input').clear();
@@ -376,7 +376,7 @@ describe('box-shadow-control component testing', () => {
 				name,
 			});
 
-			cy.contains('Box Shadow').should('not.exist');
+			cy.get('div').contains('Box Shadow').should('not.exist');
 		});
 
 		it('should popover be open at first rendering, when passing true', () => {
@@ -400,7 +400,7 @@ describe('box-shadow-control component testing', () => {
 				name,
 			});
 
-			cy.contains('Box Shadow').should('exist');
+			cy.get('div').contains('Box Shadow').should('exist');
 		});
 	});
 
