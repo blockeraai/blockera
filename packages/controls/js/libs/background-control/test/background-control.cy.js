@@ -252,7 +252,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get('button[aria-label="Repeat"]').click();
 				cy.get('button[aria-label="Repeat"]').then(() => {
@@ -275,7 +275,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get('button[aria-label="Parallax"]').click();
 				cy.get('button[aria-label="Parallax"]')
@@ -305,7 +305,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByDataCy('control-group').last().click();
+				cy.getByDataCy('repeater-item').click();
 
 				cy.get(
 					'.components-custom-gradient-picker__gradient-bar-background'
