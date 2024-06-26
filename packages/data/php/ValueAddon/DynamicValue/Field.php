@@ -103,6 +103,6 @@ abstract class Field extends BaseField {
 	 *
 	 * @return mixed everything's.
 	 */
-	abstract public function theValue( array $options = [] ): mixed;
+	abstract public function theValue( array $options = [] );
 
 }

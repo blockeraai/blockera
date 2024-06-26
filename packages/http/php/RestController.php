@@ -155,7 +155,7 @@ abstract class RestController {
 	 *
 	 * @return mixed anything's or instance of \WP_REST_Response object.
 	 */
-	public function __call( string $method, array $parameters = [] ): mixed {
+	public function __call( string $method, array $parameters = [] ) {
 
 		if ( method_exists( $this, $method ) ) {
 

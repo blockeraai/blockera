@@ -14,7 +14,7 @@ if ( ! function_exists( 'blockera_get_experimental' ) ) {
 	 *
 	 * @return mixed the value of experimental support.
 	 */
-	function blockera_get_experimental( array $support_path ): mixed {
+	function blockera_get_experimental( array $support_path ) {
 
 		$experimental_config_file = dirname( __DIR__, 3 ) . '/experimental.config.json';
 
