@@ -215,7 +215,7 @@ describe('background control', () => {
 				// Wait for the popover to ensure the component is fully rendered
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
-				}).should('exist');
+				}).should('be.visible');
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
@@ -260,7 +260,7 @@ describe('background control', () => {
 				// Wait for the popover to ensure the component is fully rendered
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
-				}).should('exist');
+				}).should('be.visible');
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.getParentContainer('Angel').within(() => {
@@ -338,7 +338,7 @@ describe('background control', () => {
 				// Wait for the popover to ensure the component is fully rendered
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
-				}).should('exist');
+				}).should('be.visible');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -380,7 +380,7 @@ describe('background control', () => {
 				// Wait for the popover to ensure the component is fully rendered
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
-				}).should('exist');
+				}).should('be.visible');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -425,7 +425,7 @@ describe('background control', () => {
 				// Wait for the popover to ensure the component is fully rendered
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
-				}).should('exist');
+				}).should('be.visible');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -461,7 +461,7 @@ describe('background control', () => {
 				// Wait for the popover to ensure the component is fully rendered
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
-				}).should('exist');
+				}).should('be.visible');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -492,14 +492,9 @@ describe('background control', () => {
 					name,
 				});
 
-				// Wait for the popover to ensure the component is fully rendered
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
-				}).should('exist');
-
-				cy.get('.blockera-component-popover', {
-					timeout: 20000,
-				}).should('exist');
+				}).should('be.visible');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -531,10 +526,9 @@ describe('background control', () => {
 					name,
 				});
 
-				// Wait for the popover to ensure the component is fully rendered
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
-				}).should('exist');
+				}).should('be.visible');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
