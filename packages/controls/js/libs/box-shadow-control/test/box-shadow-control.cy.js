@@ -25,7 +25,7 @@ describe('box-shadow-control component testing', () => {
 			},
 		});
 
-		cy.getByDataCy('group-control-header').should('exist');
+		cy.getByDataCy('repeater-item').should('exist');
 	});
 
 	it('should render correctly with empty value', () => {
@@ -35,7 +35,7 @@ describe('box-shadow-control component testing', () => {
 			value: [],
 		});
 
-		cy.getByDataCy('group-control-header').should('not.exist');
+		cy.getByDataCy('repeater-item').should('not.exist');
 	});
 
 	it('should render correctly without value and defaultValue', () => {
@@ -44,7 +44,7 @@ describe('box-shadow-control component testing', () => {
 			store: STORE_NAME,
 		});
 
-		cy.getByDataCy('group-control-header').should('not.exist');
+		cy.getByDataCy('repeater-item').should('not.exist');
 	});
 
 	it('should render correctly with defaultValue', () => {
@@ -68,10 +68,10 @@ describe('box-shadow-control component testing', () => {
 			store: STORE_NAME,
 		});
 
-		cy.getByDataCy('group-control-header').eq(0).contains('Inner');
+		cy.getByDataCy('repeater-item').contains('Inner');
 	});
 
-	it('should render correctly with label', () => {
+	it('should render correctly with Outer label', () => {
 		cy.withDataProvider({
 			component: <BoxShadowControl label={'Box Shadow'} />,
 			store: STORE_NAME,
@@ -89,7 +89,28 @@ describe('box-shadow-control component testing', () => {
 			},
 		});
 
-		cy.get('div').contains('Box Shadow');
+		cy.getByDataCy('repeater-item').contains('Outer');
+	});
+
+	it('should render correctly with Inner label', () => {
+		cy.withDataProvider({
+			component: <BoxShadowControl label={'Box Shadow'} />,
+			store: STORE_NAME,
+			value: {
+				'inner-0': {
+					type: 'inner',
+					x: '10px',
+					y: '10px',
+					order: 0,
+					blur: '10px',
+					spread: '10px',
+					color: '#cccccc',
+					isVisible: true,
+				},
+			},
+		});
+
+		cy.getByDataCy('repeater-item').contains('Inner');
 	});
 
 	describe('interaction test: ', () => {
@@ -106,6 +127,7 @@ describe('box-shadow-control component testing', () => {
 					);
 				},
 			};
+
 			cy.stub(defaultProps, 'onChange').as('onChange');
 
 			cy.withDataProvider({
@@ -131,12 +153,15 @@ describe('box-shadow-control component testing', () => {
 				name,
 			});
 
-			cy.getByDataCy('group-control-header').eq(0).click();
-			cy.get('div').contains('Box Shadow').as('popover');
+			cy.getByDataCy('repeater-item').click();
 
-			cy.get('@popover').get('button[aria-label="Inner"]').click();
-
-			cy.get('@onChange').should('have.been.called');
+			cy.get('.blockera-component-popover')
+				.within(() => {
+					cy.get('button[aria-label="Inner"]').click();
+				})
+				.then(() => {
+					cy.get('@onChange').should('have.been.called');
+				});
 		});
 
 		it('should context value have length of 1, when adding one more item because more items available on PRO version', () => {
@@ -163,7 +188,7 @@ describe('box-shadow-control component testing', () => {
 
 			cy.getByDataTest('popover-body').contains('Upgrade to PRO');
 
-			cy.getByDataCy('group-control-header').should('have.length', '1');
+			cy.getByDataCy('repeater-item').should('have.length', '1');
 
 			//Check data provider value
 			cy.get('body').then(() => {
@@ -193,11 +218,10 @@ describe('box-shadow-control component testing', () => {
 				name,
 			});
 
-			cy.getByDataCy('group-control-header').eq(0).as('repeater-item');
+			cy.getByDataCy('repeater-item').as('repeater-item');
 			cy.get('@repeater-item').click();
-			cy.get('div').contains('Box Shadow').parent().as('popover');
 
-			cy.get('@popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				//change x
 				cy.getByDataTest('box-shadow-x-input').clear();
 				cy.getByDataTest('box-shadow-x-input').type(20);
@@ -294,12 +318,10 @@ describe('box-shadow-control component testing', () => {
 				name,
 			});
 
-			cy.getByDataCy('group-control-header').eq(0).as('repeater-item');
+			cy.getByDataCy('repeater-item').as('repeater-item');
 			cy.get('@repeater-item').click();
 
-			cy.get('.blockera-component-popover').as('popover');
-
-			cy.get('@popover').within(() => {
+			cy.get('.blockera-component-popover').within(() => {
 				//change x
 				cy.getByDataTest('box-shadow-x-input').clear();
 				cy.getByDataTest('box-shadow-x-input').type(40);
@@ -333,9 +355,7 @@ describe('box-shadow-control component testing', () => {
 				);
 
 				//change color
-				cy.get('@popover')
-					.getByDataTest('box-shadow-color-control')
-					.click();
+				cy.getByDataTest('box-shadow-color-control').click();
 			});
 
 			cy.get('.blockera-component-popover').last().as('color-picker');
