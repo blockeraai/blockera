@@ -28,6 +28,13 @@ jobs:
             - name: Start WordPress Environment
               run: npm run env:start
 
+            - name: 'Create env file'
+              run: |
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
+
             - name: Build wp-env app
               run: npm run build
 
