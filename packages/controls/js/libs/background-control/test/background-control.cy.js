@@ -219,8 +219,7 @@ describe('background control', () => {
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
-						'.components-custom-gradient-picker__gradient-bar-background',
-						{ timeout: 20000 }
+						'.components-custom-gradient-picker__gradient-bar-background'
 					).as('gradientBar');
 
 					cy.get('@gradientBar').click();
@@ -299,18 +298,14 @@ describe('background control', () => {
 					timeout: 20000,
 				}).should('exist');
 
-				cy.get('.blockera-component-popover', { timeout: 20000 }).then(
-					() => {
-						cy.log('Popover found');
+				cy.get('.blockera-component-popover').then(() => {
+					cy.log('Popover found');
 
-						cy.get('button[aria-label="Repeat"]', {
-							timeout: 20000,
-						}).then(($btn) => {
-							cy.log('Repeat button found', $btn);
-							$btn.click();
-						});
-					}
-				);
+					cy.get('button[aria-label="Repeat"]').then(($btn) => {
+						cy.log('Repeat button found', $btn);
+						$btn.click();
+					});
+				});
 
 				cy.then(() => {
 					const repeat = getControlValue(name, STORE_NAME)[
@@ -340,9 +335,7 @@ describe('background control', () => {
 					timeout: 20000,
 				}).should('be.visible');
 
-				cy.get('.blockera-component-popover', {
-					timeout: 20000,
-				}).within(() => {
+				cy.get('.blockera-component-popover').within(() => {
 					cy.get('button[aria-label="Parallax"]').click();
 					cy.get('button[aria-label="Parallax"]').should(
 						'have.attr',
@@ -382,9 +375,7 @@ describe('background control', () => {
 					timeout: 20000,
 				}).should('be.visible');
 
-				cy.get('.blockera-component-popover', {
-					timeout: 20000,
-				}).within(() => {
+				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
 						'.components-custom-gradient-picker__gradient-bar-background'
 					).as('gradientBar');
@@ -427,9 +418,7 @@ describe('background control', () => {
 					timeout: 20000,
 				}).should('be.visible');
 
-				cy.get('.blockera-component-popover', {
-					timeout: 20000,
-				}).within(() => {
+				cy.get('.blockera-component-popover').within(() => {
 					cy.get('input[type="number"]').eq(0).as('positionTopInput');
 					cy.get('@positionTopInput').clear();
 					cy.get('@positionTopInput').type('80');
@@ -463,9 +452,7 @@ describe('background control', () => {
 					timeout: 20000,
 				}).should('be.visible');
 
-				cy.get('.blockera-component-popover', {
-					timeout: 20000,
-				}).within(() => {
+				cy.get('.blockera-component-popover').within(() => {
 					cy.get('button[data-value="closest-corner"]').click();
 				});
 
@@ -496,9 +483,7 @@ describe('background control', () => {
 					timeout: 20000,
 				}).should('be.visible');
 
-				cy.get('.blockera-component-popover', {
-					timeout: 20000,
-				}).within(() => {
+				cy.get('.blockera-component-popover').within(() => {
 					cy.log('Popover found');
 					cy.get('button[aria-label="Repeat"]').click();
 				});
@@ -530,9 +515,7 @@ describe('background control', () => {
 					timeout: 20000,
 				}).should('be.visible');
 
-				cy.get('.blockera-component-popover', {
-					timeout: 20000,
-				}).within(() => {
+				cy.get('.blockera-component-popover').within(() => {
 					cy.get('button[aria-label="Parallax"]').click();
 
 					cy.get('button[aria-label="Parallax"]').should(
@@ -751,6 +734,10 @@ describe('background control', () => {
 					name,
 				});
 
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('be.visible');
+
 				cy.getByDataId('--c1').realHover();
 				cy.getByAriaLabel('Delete c2').should('not.exist');
 
@@ -781,43 +768,48 @@ describe('background control', () => {
 					},
 					store: STORE_NAME,
 					name,
-				}).then(() => {
-					const prevMesh = getControlValue(name, STORE_NAME)[
-						'mesh-gradient-0'
-					]['mesh-gradient'];
-
-					cy.get('[aria-label="Add New Mesh Gradient Color"]')
-						.as('addColor')
-						.click();
-
-					cy.get('[data-id="--c1"]').within(() => {
-						cy.get('[aria-label~="Delete"]').click({
-							force: true,
-						});
-					});
-					cy.contains('Colors')
-						.parent()
-						.siblings('[data-cy="repeater-item"]')
-						.should(($items) => {
-							expect($items).to.have.length(
-								Object.keys(colors).length
-							);
-						})
-						.then(() => {
-							const newColors = getControlValue(name, STORE_NAME)[
-								'mesh-gradient-0'
-							]['mesh-gradient-colors'];
-							expect(Object.keys(newColors).length).to.be.equal(
-								Object.keys(colors).length
-							);
-
-							const newMesh = getControlValue(name, STORE_NAME)[
-								'mesh-gradient-0'
-							]['mesh-gradient'];
-
-							expect(newMesh).to.be.not.deep.equal(prevMesh);
-						});
 				});
+
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('be.visible');
+
+				const prevMesh = getControlValue(name, STORE_NAME)[
+					'mesh-gradient-0'
+				]['mesh-gradient'];
+
+				cy.get('[aria-label="Add New Mesh Gradient Color"]')
+					.as('addColor')
+					.click();
+
+				cy.get('[data-id="--c1"]').within(() => {
+					cy.get('[aria-label~="Delete"]').click({
+						force: true,
+					});
+				});
+
+				cy.contains('Colors')
+					.parent()
+					.siblings('[data-cy="repeater-item"]')
+					.should(($items) => {
+						expect($items).to.have.length(
+							Object.keys(colors).length
+						);
+					})
+					.then(() => {
+						const newColors = getControlValue(name, STORE_NAME)[
+							'mesh-gradient-0'
+						]['mesh-gradient-colors'];
+						expect(Object.keys(newColors).length).to.be.equal(
+							Object.keys(colors).length
+						);
+
+						const newMesh = getControlValue(name, STORE_NAME)[
+							'mesh-gradient-0'
+						]['mesh-gradient'];
+
+						expect(newMesh).to.be.not.deep.equal(prevMesh);
+					});
 			});
 
 			// attachment
