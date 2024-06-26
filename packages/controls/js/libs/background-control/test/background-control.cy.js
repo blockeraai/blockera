@@ -212,7 +212,10 @@ describe('background control', () => {
 					name,
 				});
 
-				// cy.wait(1000);
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
@@ -254,7 +257,10 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(1000);
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.getParentContainer('Angel').within(() => {
@@ -288,7 +294,10 @@ describe('background control', () => {
 					name,
 				});
 
-				// cy.wait(1000);
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover', { timeout: 20000 }).then(
 					() => {
@@ -326,7 +335,10 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(1000);
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -365,7 +377,10 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(1000);
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -400,15 +415,17 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
 
-				cy.wait(1000);
-
-				cy.getByDataCy('repeater-item').click();
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -434,15 +451,17 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
 
-				cy.wait(1000);
-
-				cy.getByDataCy('repeater-item').click();
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -466,15 +485,17 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
 
-				cy.wait(1000);
-
-				cy.getByDataCy('repeater-item').click();
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
@@ -503,15 +524,17 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
 
-				cy.wait(1000);
-
-				cy.getByDataCy('repeater-item').click();
+				// Wait for the popover to ensure the component is fully rendered
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('exist');
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
