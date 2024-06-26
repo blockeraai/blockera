@@ -287,11 +287,20 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(1000);
+				// cy.wait(1000);
 
-				cy.get('.blockera-component-popover').then(() => {
-					cy.get('button[aria-label="Repeat"]').click();
-				});
+				cy.get('.blockera-component-popover', { timeout: 20000 }).then(
+					() => {
+						cy.log('Popover found');
+
+						cy.get('button[aria-label="Repeat"]', {
+							timeout: 20000,
+						}).then(($btn) => {
+							cy.log('Repeat button found', $btn);
+							$btn.click();
+						});
+					}
+				);
 
 				cy.then(() => {
 					const repeat = getControlValue(name, STORE_NAME)[
