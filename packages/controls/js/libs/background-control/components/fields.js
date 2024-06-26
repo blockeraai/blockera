@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { Element } from 'react';
-import { select } from '@wordpress/data';
+// import { select } from '@wordpress/data';
 import {
 	memo,
 	// useEffect,
@@ -64,11 +64,14 @@ const Fields: FieldItem = memo<FieldItem>(
 			FeatureWrapper = ({ children }) => <>{children}</>;
 		}
 
-		const { getExtension } = select('blockera/extensions/config') || {};
+		// const { getExtension } =
+		// select('blockera/extensions/config') ||
+		// {};
 		const blockeraBackground =
-			'function' === typeof getExtension
-				? getExtension('backgroundConfig')?.blockeraBackground
-				: backgroundComponentConfig?.blockeraBackground;
+			// 'function' === typeof getExtension
+			// ? getExtension('backgroundConfig')?.blockeraBackground
+			// :
+			backgroundComponentConfig?.blockeraBackground;
 
 		const {
 			onChange,
