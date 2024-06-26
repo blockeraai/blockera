@@ -844,6 +844,10 @@ describe('background control', () => {
 					name,
 				});
 
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).should('be.visible');
+
 				cy.get('.blockera-component-popover').within(() => {
 					cy.getByAriaLabel('Parallax').click();
 
