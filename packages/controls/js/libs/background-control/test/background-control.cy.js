@@ -858,6 +858,8 @@ describe('background control', () => {
 					);
 				});
 
+				cy.wait(1000);
+
 				cy.then(() => {
 					const meshGradientAttachment = getControlValue(
 						name,
