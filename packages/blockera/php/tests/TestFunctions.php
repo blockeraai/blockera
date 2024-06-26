@@ -129,7 +129,7 @@ class TestFunctions extends \Blockera\Dev\PHPUnit\AppTestCase {
 			],
 			[
 				'path'     => 'app.debug',
-				'expected' => true,
+				'expected' => false,
 			],
 			[
 				'path'     => 'breakpoints.0',
