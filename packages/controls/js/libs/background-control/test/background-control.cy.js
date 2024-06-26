@@ -37,10 +37,11 @@ describe(
 						});
 
 						cy.then(() => {
-							const imageSize = getControlValue(name, STORE_NAME)[
-								'image-0'
-							]['image-size'];
-							expect(imageSize).to.be.equal('contain');
+							const items = getControlValue(name, STORE_NAME);
+
+							expect(items['image-0']['image-size']).to.be.equal(
+								'contain'
+							);
 						});
 					});
 
@@ -103,12 +104,11 @@ describe(
 
 							expect(imageWidth).to.be.equal('50px');
 
-							const imageHeight = getControlValue(
-								name,
-								STORE_NAME
-							)['image-0']['image-size-height'];
+							const items = getControlValue(name, STORE_NAME);
 
-							expect(imageHeight).to.be.equal('40px');
+							expect(
+								items['image-0']['image-size-height']
+							).to.be.equal('40px');
 						});
 					});
 				});
@@ -136,12 +136,11 @@ describe(
 						});
 
 						cy.then(() => {
-							const positionTop = getControlValue(
-								name,
-								STORE_NAME
-							)['image-0']['image-position'].top;
+							const items = getControlValue(name, STORE_NAME);
 
-							expect(positionTop).to.be.equal('80%');
+							expect(
+								items['image-0']['image-position'].top
+							).to.be.equal('80%');
 						});
 					});
 				});
@@ -170,12 +169,11 @@ describe(
 						});
 
 						cy.then(() => {
-							const imageRepeat = getControlValue(
-								name,
-								STORE_NAME
-							)['image-0']['image-repeat'];
+							const items = getControlValue(name, STORE_NAME);
 
-							expect(imageRepeat).to.be.equal('repeat-y');
+							expect(
+								items['image-0']['image-repeat']
+							).to.be.equal('repeat-y');
 						});
 					});
 				});
@@ -205,12 +203,11 @@ describe(
 						});
 
 						cy.then(() => {
-							const imageAttachment = getControlValue(
-								name,
-								STORE_NAME
-							)['image-0']['image-attachment'];
+							const items = getControlValue(name, STORE_NAME);
 
-							expect(imageAttachment).to.be.equal('fixed');
+							expect(
+								items['image-0']['image-attachment']
+							).to.be.equal('fixed');
 						});
 					});
 				});
@@ -253,15 +250,10 @@ describe(
 					});
 
 					cy.then(() => {
-						const linearGradient = getControlValue(
-							name,
-							STORE_NAME
-						);
+						const items = getControlValue(name, STORE_NAME);
 
 						expect(
-							linearGradient['linear-gradient-0'][
-								'linear-gradient'
-							]
+							items['linear-gradient-0']['linear-gradient']
 						).to.include('rgb(255,163,60)');
 					});
 				});
@@ -295,10 +287,10 @@ describe(
 					});
 
 					cy.then(() => {
-						const angel = getControlValue(name, STORE_NAME);
+						const items = getControlValue(name, STORE_NAME);
 
 						expect(
-							angel['linear-gradient-0']['linear-gradient-angel']
+							items['linear-gradient-0']['linear-gradient-angel']
 						).to.be.equal(135);
 					});
 				});
@@ -332,11 +324,11 @@ describe(
 					});
 
 					cy.then(() => {
-						const repeat = getControlValue(name, STORE_NAME)[
-							'linear-gradient-0'
-						]['linear-gradient-repeat'];
+						const items = getControlValue(name, STORE_NAME);
 
-						expect(repeat).to.be.equal('repeat');
+						expect(
+							items['linear-gradient-0']['linear-gradient-repeat']
+						).to.be.equal('repeat');
 					});
 				});
 
@@ -369,12 +361,13 @@ describe(
 					});
 
 					cy.then(() => {
-						const linearGradientAttachment = getControlValue(
-							name,
-							STORE_NAME
-						)['linear-gradient-0']['linear-gradient-attachment'];
+						const items = getControlValue(name, STORE_NAME);
 
-						expect(linearGradientAttachment).to.be.equal('fixed');
+						expect(
+							items['linear-gradient-0'][
+								'linear-gradient-attachment'
+							]
+						).to.be.equal('fixed');
 					});
 				});
 			});
@@ -416,11 +409,11 @@ describe(
 					});
 
 					cy.then(() => {
-						const radialGradient = getControlValue(
-							name,
-							STORE_NAME
-						)['radial-gradient-0']['radial-gradient'];
-						expect(radialGradient).to.include('rgb(255,163,60)');
+						const items = getControlValue(name, STORE_NAME);
+
+						expect(
+							items['radial-gradient-0']['radial-gradient']
+						).to.include('rgb(255,163,60)');
 					});
 				});
 
@@ -452,11 +445,13 @@ describe(
 					});
 
 					cy.then(() => {
-						const positionTop = getControlValue(name, STORE_NAME)[
-							'radial-gradient-0'
-						]['radial-gradient-position'].top;
+						const items = getControlValue(name, STORE_NAME);
 
-						expect(positionTop).to.be.equal('80%');
+						expect(
+							items['radial-gradient-0'][
+								'radial-gradient-position'
+							].top
+						).to.be.equal('80%');
 					});
 				});
 
@@ -484,11 +479,11 @@ describe(
 					});
 
 					cy.then(() => {
-						const size = getControlValue(name, STORE_NAME)[
-							'radial-gradient-0'
-						]['radial-gradient-size'];
+						const items = getControlValue(name, STORE_NAME);
 
-						expect(size).to.be.equal('closest-corner');
+						expect(
+							items['radial-gradient-0']['radial-gradient-size']
+						).to.be.equal('closest-corner');
 					});
 				});
 
@@ -516,11 +511,11 @@ describe(
 					});
 
 					cy.then(() => {
-						const repeat = getControlValue(name, STORE_NAME)[
-							'radial-gradient-0'
-						]['radial-gradient-repeat'];
+						const items = getControlValue(name, STORE_NAME);
 
-						expect(repeat).to.be.equal('repeat');
+						expect(
+							items['radial-gradient-0']['radial-gradient-repeat']
+						).to.be.equal('repeat');
 					});
 				});
 
@@ -553,12 +548,13 @@ describe(
 					});
 
 					cy.then(() => {
-						const linearGradientAttachment = getControlValue(
-							name,
-							STORE_NAME
-						)['radial-gradient-0']['radial-gradient-attachment'];
+						const items = getControlValue(name, STORE_NAME);
 
-						expect(linearGradientAttachment).to.be.equal('fixed');
+						expect(
+							items['radial-gradient-0'][
+								'radial-gradient-attachment'
+							]
+						).to.be.equal('fixed');
 					});
 				});
 			});
@@ -810,7 +806,7 @@ describe(
 						timeout: 20000,
 					}).should('be.visible');
 
-					const prevMesh = getControlValue(name, STORE_NAME);
+					const prevItems = getControlValue(name, STORE_NAME);
 
 					cy.get('[aria-label="Add New Mesh Gradient Color"]')
 						.as('addColor')
@@ -841,12 +837,12 @@ describe(
 							Object.keys(colors).length
 						);
 
-						const newMesh = getControlValue(name, STORE_NAME);
+						const newItems = getControlValue(name, STORE_NAME);
 
 						expect(
-							newMesh['mesh-gradient-0']['mesh-gradient']
+							newItems['mesh-gradient-0']['mesh-gradient']
 						).to.be.not.deep.equal(
-							prevMesh['mesh-gradient-0']['mesh-gradient']
+							prevItems['mesh-gradient-0']['mesh-gradient']
 						);
 					});
 				});
@@ -892,15 +888,10 @@ describe(
 					cy.wait(1000);
 
 					cy.then(() => {
-						const meshGradientAttachment = getControlValue(
-							name,
-							STORE_NAME
-						);
+						const items = getControlValue(name, STORE_NAME);
 
 						expect(
-							meshGradientAttachment['mesh-gradient-0'][
-								'mesh-gradient-attachment'
-							]
+							items['mesh-gradient-0']['mesh-gradient-attachment']
 						).to.be.equal('fixed');
 					});
 				});
