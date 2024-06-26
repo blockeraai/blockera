@@ -3,13 +3,11 @@
 export function getRepeaterActiveItemsCount(items: Object): number {
 	let activeItemsCount = 0;
 
-	Object.entries(items).forEach(([, item]) => {
-		if (!item.isVisible) {
-			return;
+	for (const key in items) {
+		if (items[key]?.isVisible) {
+			activeItemsCount++;
 		}
-
-		++activeItemsCount;
-	});
+	}
 
 	return activeItemsCount;
 }
