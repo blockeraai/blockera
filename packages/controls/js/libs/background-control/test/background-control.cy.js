@@ -185,11 +185,13 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get(
-					'.components-custom-gradient-picker__gradient-bar-background'
-				).as('gradientBar');
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get(
+						'.components-custom-gradient-picker__gradient-bar-background'
+					).as('gradientBar');
 
-				cy.get('@gradientBar').click();
+					cy.get('@gradientBar').click();
+				});
 
 				cy.get('input[maxLength="9"]').as('colorInput');
 				cy.get('@colorInput').clear();
