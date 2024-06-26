@@ -23,6 +23,8 @@ describe('background control', () => {
 						name,
 					});
 
+					cy.wait(500);
+
 					cy.get('.blockera-component-popover').within(() => {
 						cy.get('[aria-label="Contain"]').click();
 					});
@@ -43,6 +45,8 @@ describe('background control', () => {
 						store: STORE_NAME,
 						name,
 					});
+
+					cy.wait(500);
 
 					cy.get('.blockera-component-popover').within(() => {
 						cy.get('[aria-label="Custom"]').click();
@@ -108,6 +112,8 @@ describe('background control', () => {
 						name,
 					});
 
+					cy.wait(500);
+
 					cy.get('.blockera-component-popover').within(() => {
 						cy.get('input[type="number"]')
 							.eq(0)
@@ -135,6 +141,8 @@ describe('background control', () => {
 						store: STORE_NAME,
 						name,
 					});
+
+					cy.wait(500);
 
 					cy.get('.blockera-component-popover').within(() => {
 						cy.get('[aria-label="Vertically"]').click();
@@ -165,6 +173,8 @@ describe('background control', () => {
 						store: STORE_NAME,
 						name,
 					});
+
+					cy.wait(500);
 
 					cy.get('.blockera-component-popover').within(() => {
 						cy.get('button[aria-label="Parallax"]').click();
@@ -202,6 +212,8 @@ describe('background control', () => {
 					name,
 				});
 
+				cy.wait(500);
+
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
 						'.components-custom-gradient-picker__gradient-bar-background'
@@ -227,37 +239,39 @@ describe('background control', () => {
 				});
 			});
 
-			// it('should change linear-gradient-angel in data when entering new value in angel input', () => {
-			// 	const name = nanoid();
-			// 	cy.withDataProvider({
-			// 		component: <BackgroundControl />,
-			// 		value: {
-			// 			'linear-gradient-0': {
-			// 				type: 'linear-gradient',
-			// 				isOpen: true,
-			// 			},
-			// 		},
-			// 		store: STORE_NAME,
-			// 		name,
-			// 	});
+			it('should change linear-gradient-angel in data when entering new value in angel input', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <BackgroundControl />,
+					value: {
+						'linear-gradient-0': {
+							type: 'linear-gradient',
+							isOpen: true,
+						},
+					},
+					store: STORE_NAME,
+					name,
+				});
 
-			// 	cy.get('.blockera-component-popover').within(() => {
-			// 		cy.getParentContainer('Angel').within(() => {
-			// 			cy.get('input[type="number"]').clear();
-			// 			cy.get('input[type="number"]').type('135', {
-			// 				delay: 0,
-			// 			});
-			// 		});
-			// 	});
+				cy.wait(500);
 
-			// 	cy.then(() => {
-			// 		const angel = getControlValue(name, STORE_NAME);
+				cy.get('.blockera-component-popover').within(() => {
+					cy.getParentContainer('Angel').within(() => {
+						cy.get('input[type="number"]').clear();
+						cy.get('input[type="number"]').type('135', {
+							delay: 0,
+						});
+					});
+				});
 
-			// 		expect(
-			// 			angel['linear-gradient-0']['linear-gradient-angel']
-			// 		).to.be.equal(135);
-			// 	});
-			// });
+				cy.then(() => {
+					const angel = getControlValue(name, STORE_NAME);
+
+					expect(
+						angel['linear-gradient-0']['linear-gradient-angel']
+					).to.be.equal(135);
+				});
+			});
 
 			it('should change linear-gradient-repeat in data when toggling between repeat options', () => {
 				const name = nanoid();
@@ -272,6 +286,8 @@ describe('background control', () => {
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.wait(500);
 
 				cy.get('.blockera-component-popover').then(() => {
 					cy.get('button[aria-label="Repeat"]').click();
@@ -291,13 +307,16 @@ describe('background control', () => {
 				cy.withDataProvider({
 					component: <BackgroundControl />,
 					value: {
-						'linear-gradient-0': { type: 'linear-gradient' },
+						'linear-gradient-0': {
+							type: 'linear-gradient',
+							isOpen: true,
+						},
 					},
 					store: STORE_NAME,
 					name,
 				});
 
-				cy.getByDataCy('repeater-item').click();
+				cy.wait(500);
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get('button[aria-label="Parallax"]').click();
@@ -333,6 +352,8 @@ describe('background control', () => {
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.wait(500);
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
@@ -371,6 +392,8 @@ describe('background control', () => {
 					name,
 				});
 
+				cy.wait(500);
+
 				cy.getByDataCy('repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
@@ -401,6 +424,8 @@ describe('background control', () => {
 					name,
 				});
 
+				cy.wait(500);
+
 				cy.getByDataCy('repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
@@ -428,6 +453,8 @@ describe('background control', () => {
 					store: STORE_NAME,
 					name,
 				});
+
+				cy.wait(500);
 
 				cy.getByDataCy('repeater-item').click();
 
@@ -457,6 +484,8 @@ describe('background control', () => {
 					name,
 				});
 
+				cy.wait(500);
+
 				cy.getByDataCy('repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
@@ -480,320 +509,320 @@ describe('background control', () => {
 			});
 		});
 
-		// context('mesh-gradient type', () => {
-		// 	it('should randomly re-generate colors and gradient by click on preview', () => {
-		// 		const colors = {
-		// 			'--c0': { color: '#fefe', order: 0 },
-		// 			'--c1': { color: '#35ff4c', order: 1 },
-		// 			'--c2': { color: '#4deaff', order: 2 },
-		// 		};
+		context('mesh-gradient type', () => {
+			it('should randomly re-generate colors and gradient by click on preview', () => {
+				const colors = {
+					'--c0': { color: '#fefe', order: 0 },
+					'--c1': { color: '#35ff4c', order: 1 },
+					'--c2': { color: '#4deaff', order: 2 },
+				};
 
-		// 		const name = nanoid();
-		// 		cy.withDataProvider({
-		// 			component: <BackgroundControl />,
-		// 			value: {
-		// 				'mesh-gradient-0': {
-		// 					type: 'mesh-gradient',
-		// 					'mesh-gradient': '',
-		// 					'mesh-gradient-colors': colors,
-		// 					'mesh-gradient-attachment': 'scroll',
-		// 					isVisible: true,
-		// 					isOpen: true,
-		// 				},
-		// 			},
-		// 			store: STORE_NAME,
-		// 			name,
-		// 		}).then(() => {
-		// 			const prevMesh = getControlValue(name, STORE_NAME)[
-		// 				'mesh-gradient-0'
-		// 			]['mesh-gradient'];
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <BackgroundControl />,
+					value: {
+						'mesh-gradient-0': {
+							type: 'mesh-gradient',
+							'mesh-gradient': '',
+							'mesh-gradient-colors': colors,
+							'mesh-gradient-attachment': 'scroll',
+							isVisible: true,
+							isOpen: true,
+						},
+					},
+					store: STORE_NAME,
+					name,
+				}).then(() => {
+					const prevMesh = getControlValue(name, STORE_NAME)[
+						'mesh-gradient-0'
+					]['mesh-gradient'];
 
-		// 			cy.get('.blockera-control-mesh-generator-preview').click();
+					cy.get('.blockera-control-mesh-generator-preview').click();
 
-		// 			cy.get('.blockera-control-mesh-generator-preview').then(
-		// 				() => {
-		// 					const newColors = getControlValue(name, STORE_NAME)[
-		// 						'mesh-gradient-0'
-		// 					]['mesh-gradient-colors'];
-		// 					expect(newColors.length).to.be.equal(colors.length);
-		// 					expect(newColors).to.not.be.deep.equal(colors);
-		// 					const newMesh = getControlValue(name, STORE_NAME)[
-		// 						'mesh-gradient-0'
-		// 					]['mesh-gradient'];
-		// 					expect(newMesh).to.not.deep.equal(prevMesh);
-		// 				}
-		// 			);
-		// 		});
-		// 	});
+					cy.get('.blockera-control-mesh-generator-preview').then(
+						() => {
+							const newColors = getControlValue(name, STORE_NAME)[
+								'mesh-gradient-0'
+							]['mesh-gradient-colors'];
+							expect(newColors.length).to.be.equal(colors.length);
+							expect(newColors).to.not.be.deep.equal(colors);
+							const newMesh = getControlValue(name, STORE_NAME)[
+								'mesh-gradient-0'
+							]['mesh-gradient'];
+							expect(newMesh).to.not.deep.equal(prevMesh);
+						}
+					);
+				});
+			});
 
-		// 	it("should change existed color's value and update gradient with new value for changed color", () => {
-		// 		const colors = {
-		// 			'--c0': { color: '#fefe', order: 0 },
-		// 			'--c1': { color: '#35ff4c', order: 1 },
-		// 			'--c2': { color: '#4deaff', order: 2 },
-		// 		};
+			it("should change existed color's value and update gradient with new value for changed color", () => {
+				const colors = {
+					'--c0': { color: '#fefe', order: 0 },
+					'--c1': { color: '#35ff4c', order: 1 },
+					'--c2': { color: '#4deaff', order: 2 },
+				};
 
-		// 		const name = nanoid();
-		// 		cy.withDataProvider({
-		// 			component: <BackgroundControl />,
-		// 			value: {
-		// 				'mesh-gradient-0': {
-		// 					type: 'mesh-gradient',
-		// 					'mesh-gradient': '',
-		// 					'mesh-gradient-colors': colors,
-		// 					'mesh-gradient-attachment': 'scroll',
-		// 					isVisible: true,
-		// 					isOpen: true,
-		// 				},
-		// 			},
-		// 			store: STORE_NAME,
-		// 			name,
-		// 		}).then(() => {
-		// 			cy.getByDataCy('repeater-item').eq(3).click();
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <BackgroundControl />,
+					value: {
+						'mesh-gradient-0': {
+							type: 'mesh-gradient',
+							'mesh-gradient': '',
+							'mesh-gradient-colors': colors,
+							'mesh-gradient-attachment': 'scroll',
+							isVisible: true,
+							isOpen: true,
+						},
+					},
+					store: STORE_NAME,
+					name,
+				}).then(() => {
+					cy.getByDataCy('repeater-item').eq(3).click();
 
-		// 			cy.get('.blockera-component-popover')
-		// 				.last()
-		// 				.within(() => {
-		// 					cy.get('input[maxLength="9"]').as('colorInput');
-		// 					cy.get('@colorInput').clear();
-		// 					cy.get('@colorInput').type('4fecff', {
-		// 						delay: 0,
-		// 						force: true,
-		// 					});
-		// 				});
+					cy.get('.blockera-component-popover')
+						.last()
+						.within(() => {
+							cy.get('input[maxLength="9"]').as('colorInput');
+							cy.get('@colorInput').clear();
+							cy.get('@colorInput').type('4fecff', {
+								delay: 0,
+								force: true,
+							});
+						});
 
-		// 			cy.getByDataCy('repeater-item')
-		// 				.eq(0)
-		// 				.within(() => {
-		// 					const newColors = Object.values(
-		// 						getControlValue(name, STORE_NAME)[
-		// 							'mesh-gradient-0'
-		// 						]['mesh-gradient-colors']
-		// 					);
+					cy.getByDataCy('repeater-item')
+						.eq(0)
+						.within(() => {
+							const newColors = Object.values(
+								getControlValue(name, STORE_NAME)[
+									'mesh-gradient-0'
+								]['mesh-gradient-colors']
+							);
 
-		// 					// color value change assertion
-		// 					expect(
-		// 						newColors[newColors.length - 1].color
-		// 					).to.be.equal('#4fecff');
-		// 				});
+							// color value change assertion
+							expect(
+								newColors[newColors.length - 1].color
+							).to.be.equal('#4fecff');
+						});
 
-		// 			// gradient assertion
-		// 			cy.get('.blockera-control-mesh-generator-preview').then(
-		// 				($el) => {
-		// 					const elementStyles = window.getComputedStyle(
-		// 						$el[0]
-		// 					);
-		// 					expect(
-		// 						elementStyles.getPropertyValue(
-		// 							`--c${Object.keys(colors).length - 1}`
-		// 						)
-		// 					).to.be.equal('#4fecff');
-		// 				}
-		// 			);
-		// 		});
-		// 	});
+					// gradient assertion
+					cy.get('.blockera-control-mesh-generator-preview').then(
+						($el) => {
+							const elementStyles = window.getComputedStyle(
+								$el[0]
+							);
+							expect(
+								elementStyles.getPropertyValue(
+									`--c${Object.keys(colors).length - 1}`
+								)
+							).to.be.equal('#4fecff');
+						}
+					);
+				});
+			});
 
-		// 	it('should add new random color at the end and regenerate gradient', () => {
-		// 		const colors = {
-		// 			'--c0': { color: '#fefe', order: 0 },
-		// 			'--c1': { color: '#35ff4c', order: 1 },
-		// 			'--c2': { color: '#4deaff', order: 2 },
-		// 		};
+			it('should add new random color at the end and regenerate gradient', () => {
+				const colors = {
+					'--c0': { color: '#fefe', order: 0 },
+					'--c1': { color: '#35ff4c', order: 1 },
+					'--c2': { color: '#4deaff', order: 2 },
+				};
 
-		// 		const name = nanoid();
-		// 		cy.withDataProvider({
-		// 			component: <BackgroundControl />,
-		// 			value: {
-		// 				'mesh-gradient-0': {
-		// 					type: 'mesh-gradient',
-		// 					'mesh-gradient': '',
-		// 					'mesh-gradient-colors': colors,
-		// 					'mesh-gradient-attachment': 'scroll',
-		// 					isVisible: true,
-		// 					isOpen: true,
-		// 				},
-		// 			},
-		// 			store: STORE_NAME,
-		// 			name,
-		// 		}).then(() => {
-		// 			const prevMesh = getControlValue(name, STORE_NAME)[
-		// 				'mesh-gradient-0'
-		// 			]['mesh-gradient'];
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <BackgroundControl />,
+					value: {
+						'mesh-gradient-0': {
+							type: 'mesh-gradient',
+							'mesh-gradient': '',
+							'mesh-gradient-colors': colors,
+							'mesh-gradient-attachment': 'scroll',
+							isVisible: true,
+							isOpen: true,
+						},
+					},
+					store: STORE_NAME,
+					name,
+				}).then(() => {
+					const prevMesh = getControlValue(name, STORE_NAME)[
+						'mesh-gradient-0'
+					]['mesh-gradient'];
 
-		// 			cy.get('[aria-label="Add New Mesh Gradient Color"]')
-		// 				.as('addColor')
-		// 				.click();
+					cy.get('[aria-label="Add New Mesh Gradient Color"]')
+						.as('addColor')
+						.click();
 
-		// 			cy.contains('Colors')
-		// 				.parent()
-		// 				.siblings('[data-cy="repeater-item"]')
-		// 				.should(($items) => {
-		// 					expect($items).to.have.length(
-		// 						Object.keys(colors).length + 1
-		// 					);
-		// 					expect($items.last().text()).to.match(/^#\w{6}$/);
-		// 				})
-		// 				.then(() => {
-		// 					const newColors = Object.values(
-		// 						getControlValue(name, STORE_NAME)[
-		// 							'mesh-gradient-0'
-		// 						]['mesh-gradient-colors']
-		// 					);
+					cy.contains('Colors')
+						.parent()
+						.siblings('[data-cy="repeater-item"]')
+						.should(($items) => {
+							expect($items).to.have.length(
+								Object.keys(colors).length + 1
+							);
+							expect($items.last().text()).to.match(/^#\w{6}$/);
+						})
+						.then(() => {
+							const newColors = Object.values(
+								getControlValue(name, STORE_NAME)[
+									'mesh-gradient-0'
+								]['mesh-gradient-colors']
+							);
 
-		// 					expect(newColors.length).to.be.equal(
-		// 						Object.keys(colors).length + 1
-		// 					);
-		// 					expect(newColors.slice(-1)[0].color).to.match(
-		// 						/^#\w{6}/
-		// 					);
+							expect(newColors.length).to.be.equal(
+								Object.keys(colors).length + 1
+							);
+							expect(newColors.slice(-1)[0].color).to.match(
+								/^#\w{6}/
+							);
 
-		// 					const newMesh = getControlValue(name, STORE_NAME)[
-		// 						'mesh-gradient-0'
-		// 					]['mesh-gradient'];
-		// 					expect(newMesh).to.be.not.deep.equal(prevMesh);
-		// 				});
-		// 		});
-		// 	});
+							const newMesh = getControlValue(name, STORE_NAME)[
+								'mesh-gradient-0'
+							]['mesh-gradient'];
+							expect(newMesh).to.be.not.deep.equal(prevMesh);
+						});
+				});
+			});
 
-		// 	it('should not be available to delete color when there are less than 4 colors.', () => {
-		// 		const colors = {
-		// 			'--c0': { color: '#fefe', order: 0 },
-		// 			'--c1': { color: '#35ff4c', order: 1 },
-		// 			'--c2': { color: '#4deaff', order: 2 },
-		// 		};
-		// 		const name = nanoid();
-		// 		cy.withDataProvider({
-		// 			component: <BackgroundControl />,
-		// 			value: {
-		// 				'mesh-gradient-0': {
-		// 					type: 'mesh-gradient',
-		// 					'mesh-gradient': [],
-		// 					'mesh-gradient-colors': colors,
-		// 					'mesh-gradient-attachment': 'scroll',
-		// 					isVisible: true,
-		// 					isOpen: true,
-		// 				},
-		// 			},
-		// 			store: STORE_NAME,
-		// 			name,
-		// 		});
+			it('should not be available to delete color when there are less than 4 colors.', () => {
+				const colors = {
+					'--c0': { color: '#fefe', order: 0 },
+					'--c1': { color: '#35ff4c', order: 1 },
+					'--c2': { color: '#4deaff', order: 2 },
+				};
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <BackgroundControl />,
+					value: {
+						'mesh-gradient-0': {
+							type: 'mesh-gradient',
+							'mesh-gradient': [],
+							'mesh-gradient-colors': colors,
+							'mesh-gradient-attachment': 'scroll',
+							isVisible: true,
+							isOpen: true,
+						},
+					},
+					store: STORE_NAME,
+					name,
+				});
 
-		// 		cy.getByDataId('--c1').realHover();
-		// 		cy.getByAriaLabel('Delete c2').should('not.exist');
+				cy.getByDataId('--c1').realHover();
+				cy.getByAriaLabel('Delete c2').should('not.exist');
 
-		// 		cy.getByAriaLabel('Add New Mesh Gradient Color').click();
+				cy.getByAriaLabel('Add New Mesh Gradient Color').click();
 
-		// 		cy.getByDataId('--c1').realHover();
-		// 		cy.getByAriaLabel('Delete c2').should('exist');
-		// 	});
+				cy.getByDataId('--c1').realHover();
+				cy.getByAriaLabel('Delete c2').should('exist');
+			});
 
-		// 	it('should remove color and regenerate gradient', () => {
-		// 		const colors = {
-		// 			'--c0': { color: '#fefe', order: 0 },
-		// 			'--c1': { color: '#35ff4c', order: 1 },
-		// 			'--c2': { color: '#4deaff', order: 2 },
-		// 		};
-		// 		const name = nanoid();
-		// 		cy.withDataProvider({
-		// 			component: <BackgroundControl />,
-		// 			value: {
-		// 				'mesh-gradient-0': {
-		// 					type: 'mesh-gradient',
-		// 					'mesh-gradient': [],
-		// 					'mesh-gradient-colors': colors,
-		// 					'mesh-gradient-attachment': 'scroll',
-		// 					isVisible: true,
-		// 					isOpen: true,
-		// 				},
-		// 			},
-		// 			store: STORE_NAME,
-		// 			name,
-		// 		}).then(() => {
-		// 			const prevMesh = getControlValue(name, STORE_NAME)[
-		// 				'mesh-gradient-0'
-		// 			]['mesh-gradient'];
+			it('should remove color and regenerate gradient', () => {
+				const colors = {
+					'--c0': { color: '#fefe', order: 0 },
+					'--c1': { color: '#35ff4c', order: 1 },
+					'--c2': { color: '#4deaff', order: 2 },
+				};
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <BackgroundControl />,
+					value: {
+						'mesh-gradient-0': {
+							type: 'mesh-gradient',
+							'mesh-gradient': [],
+							'mesh-gradient-colors': colors,
+							'mesh-gradient-attachment': 'scroll',
+							isVisible: true,
+							isOpen: true,
+						},
+					},
+					store: STORE_NAME,
+					name,
+				}).then(() => {
+					const prevMesh = getControlValue(name, STORE_NAME)[
+						'mesh-gradient-0'
+					]['mesh-gradient'];
 
-		// 			cy.get('[aria-label="Add New Mesh Gradient Color"]')
-		// 				.as('addColor')
-		// 				.click();
+					cy.get('[aria-label="Add New Mesh Gradient Color"]')
+						.as('addColor')
+						.click();
 
-		// 			cy.get('[data-id="--c1"]').within(() => {
-		// 				cy.get('[aria-label~="Delete"]').click({
-		// 					force: true,
-		// 				});
-		// 			});
-		// 			cy.contains('Colors')
-		// 				.parent()
-		// 				.siblings('[data-cy="repeater-item"]')
-		// 				.should(($items) => {
-		// 					expect($items).to.have.length(
-		// 						Object.keys(colors).length
-		// 					);
-		// 				})
-		// 				.then(() => {
-		// 					const newColors = getControlValue(name, STORE_NAME)[
-		// 						'mesh-gradient-0'
-		// 					]['mesh-gradient-colors'];
-		// 					expect(Object.keys(newColors).length).to.be.equal(
-		// 						Object.keys(colors).length
-		// 					);
+					cy.get('[data-id="--c1"]').within(() => {
+						cy.get('[aria-label~="Delete"]').click({
+							force: true,
+						});
+					});
+					cy.contains('Colors')
+						.parent()
+						.siblings('[data-cy="repeater-item"]')
+						.should(($items) => {
+							expect($items).to.have.length(
+								Object.keys(colors).length
+							);
+						})
+						.then(() => {
+							const newColors = getControlValue(name, STORE_NAME)[
+								'mesh-gradient-0'
+							]['mesh-gradient-colors'];
+							expect(Object.keys(newColors).length).to.be.equal(
+								Object.keys(colors).length
+							);
 
-		// 					const newMesh = getControlValue(name, STORE_NAME)[
-		// 						'mesh-gradient-0'
-		// 					]['mesh-gradient'];
+							const newMesh = getControlValue(name, STORE_NAME)[
+								'mesh-gradient-0'
+							]['mesh-gradient'];
 
-		// 					expect(newMesh).to.be.not.deep.equal(prevMesh);
-		// 				});
-		// 		});
-		// 	});
+							expect(newMesh).to.be.not.deep.equal(prevMesh);
+						});
+				});
+			});
 
-		// 	// attachment
-		// 	it('should change mesh-gradient-attachment in data when toggling between effect options', () => {
-		// 		const name = nanoid();
-		// 		const colors = {
-		// 			'--c0': { color: '#fefe', order: 0 },
-		// 			'--c1': { color: '#35ff4c', order: 1 },
-		// 			'--c2': { color: '#4deaff', order: 2 },
-		// 		};
-		// 		cy.withDataProvider({
-		// 			component: <BackgroundControl />,
-		// 			value: {
-		// 				'mesh-gradient-0': {
-		// 					type: 'mesh-gradient',
-		// 					'mesh-gradient': '',
-		// 					'mesh-gradient-colors': colors,
-		// 					'mesh-gradient-attachment': 'scroll',
-		// 					isVisible: true,
-		// 					isOpen: true,
-		// 				},
-		// 			},
-		// 			store: STORE_NAME,
-		// 			name,
-		// 		});
+			// attachment
+			it('should change mesh-gradient-attachment in data when toggling between effect options', () => {
+				const name = nanoid();
+				const colors = {
+					'--c0': { color: '#fefe', order: 0 },
+					'--c1': { color: '#35ff4c', order: 1 },
+					'--c2': { color: '#4deaff', order: 2 },
+				};
+				cy.withDataProvider({
+					component: <BackgroundControl />,
+					value: {
+						'mesh-gradient-0': {
+							type: 'mesh-gradient',
+							'mesh-gradient': '',
+							'mesh-gradient-colors': colors,
+							'mesh-gradient-attachment': 'scroll',
+							isVisible: true,
+							isOpen: true,
+						},
+					},
+					store: STORE_NAME,
+					name,
+				});
 
-		// 		cy.get('.blockera-component-popover').within(() => {
-		// 			cy.getByAriaLabel('Parallax').click();
+				cy.get('.blockera-component-popover').within(() => {
+					cy.getByAriaLabel('Parallax').click();
 
-		// 			cy.getByAriaLabel('Parallax').should(
-		// 				'have.attr',
-		// 				'aria-checked',
-		// 				'true'
-		// 			);
-		// 		});
+					cy.getByAriaLabel('Parallax').should(
+						'have.attr',
+						'aria-checked',
+						'true'
+					);
+				});
 
-		// 		cy.then(() => {
-		// 			const meshGradientAttachment = getControlValue(
-		// 				name,
-		// 				STORE_NAME
-		// 			);
+				cy.then(() => {
+					const meshGradientAttachment = getControlValue(
+						name,
+						STORE_NAME
+					);
 
-		// 			expect(
-		// 				meshGradientAttachment['mesh-gradient-0'][
-		// 					'mesh-gradient-attachment'
-		// 				]
-		// 			).to.be.equal('fixed');
-		// 		});
-		// 	});
-		// });
+					expect(
+						meshGradientAttachment['mesh-gradient-0'][
+							'mesh-gradient-attachment'
+						]
+					).to.be.equal('fixed');
+				});
+			});
+		});
 	});
 });
