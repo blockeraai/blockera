@@ -104,54 +104,55 @@ export default function BackgroundControl({
 			return value;
 		}
 
-		let clonedValue = { ...value };
+		const cleanedValue: { [string]: Object } = {};
 
-		clonedValue = Object.fromEntries(
-			Object.entries(clonedValue).map(([itemId, item]): Object => {
-				if (item?.type !== 'image') {
-					delete item.image;
-					delete item['image-size'];
-					delete item['image-size-width'];
-					delete item['image-size-height'];
-					delete item['image-position'];
-					delete item['image-repeat'];
-					delete item['image-attachment'];
+		for (const [itemId, item] of Object.entries(value)) {
+			const cleanedItem: Object = cleanupRepeaterItem({ ...item });
+
+			if (item?.type !== 'image') {
+				delete cleanedItem.image;
+				delete cleanedItem['image-size'];
+				delete cleanedItem['image-size-width'];
+				delete cleanedItem['image-size-height'];
+				delete cleanedItem['image-position'];
+				delete cleanedItem['image-repeat'];
+				delete cleanedItem['image-attachment'];
+			}
+
+			if (item?.type !== 'mesh-gradient') {
+				delete cleanedItem['mesh-gradient'];
+				delete cleanedItem['mesh-gradient-colors'];
+				delete cleanedItem['mesh-gradient-attachment'];
+			} else if (cleanedItem['mesh-gradient-colors']) {
+				const cleanedMeshGradientColors: { [string]: any } = {};
+				for (const [colorId, color] of Object.entries(
+					cleanedItem['mesh-gradient-colors']
+				)) {
+					cleanedMeshGradientColors[colorId] =
+						cleanupRepeaterItem(color);
 				}
+				cleanedItem['mesh-gradient-colors'] = cleanedMeshGradientColors;
+			}
 
-				if (item?.type !== 'mesh-gradient') {
-					delete item['mesh-gradient'];
-					delete item['mesh-gradient-colors'];
-					delete item['mesh-gradient-attachment'];
-				} else {
-					item['mesh-gradient-colors'] = Object.fromEntries(
-						Object.entries(item['mesh-gradient-colors']).map(
-							([colorId, color]) => {
-								return [colorId, cleanupRepeaterItem(color)];
-							}
-						)
-					);
-				}
+			if (item?.type !== 'linear-gradient') {
+				delete cleanedItem['linear-gradient'];
+				delete cleanedItem['linear-gradient-angel'];
+				delete cleanedItem['linear-gradient-repeat'];
+				delete cleanedItem['linear-gradient-attachment'];
+			}
 
-				if (item?.type !== 'linear-gradient') {
-					delete item['linear-gradient'];
-					delete item['linear-gradient-angel'];
-					delete item['linear-gradient-repeat'];
-					delete item['linear-gradient-attachment'];
-				}
+			if (item?.type !== 'radial-gradient') {
+				delete cleanedItem['radial-gradient'];
+				delete cleanedItem['radial-gradient-position'];
+				delete cleanedItem['radial-gradient-size'];
+				delete cleanedItem['radial-gradient-repeat'];
+				delete cleanedItem['radial-gradient-attachment'];
+			}
 
-				if (item?.type !== 'radial-gradient') {
-					delete item['radial-gradient'];
-					delete item['radial-gradient-position'];
-					delete item['radial-gradient-size'];
-					delete item['radial-gradient-repeat'];
-					delete item['radial-gradient-attachment'];
-				}
+			cleanedValue[itemId] = cleanedItem;
+		}
 
-				return [itemId, cleanupRepeaterItem(item)];
-			})
-		);
-
-		return clonedValue;
+		return cleanedValue;
 	}
 
 	return (
