@@ -215,13 +215,12 @@ describe('background control', () => {
 					value: {
 						'linear-gradient-0': {
 							type: 'linear-gradient',
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
-
-				cy.getByDataCy('repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.getParentContainer('Angel').within(() => {
