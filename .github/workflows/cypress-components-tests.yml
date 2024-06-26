@@ -23,4 +23,4 @@ jobs:
               run: npx cypress install
 
             - name: Run Cypress Tests
-              run: npm run test:ct
+              run: npm run test:ct --parallel
