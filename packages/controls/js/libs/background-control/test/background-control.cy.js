@@ -800,50 +800,48 @@ describe(
 						},
 						store: STORE_NAME,
 						name,
-					});
-
-					cy.get('.blockera-component-popover', {
-						timeout: 20000,
-					}).should('be.visible');
-
-					cy.wait(1000);
-
-					const prevItems = getControlValue(name, STORE_NAME);
-
-					cy.get('[aria-label="Add New Mesh Gradient Color"]')
-						.as('addColor')
-						.click();
-
-					cy.get('[data-id="--c1"]').within(() => {
-						cy.get('[aria-label~="Delete"]').click({
-							force: true,
-						});
-					});
-
-					cy.contains('Colors')
-						.parent()
-						.siblings('[data-cy="repeater-item"]')
-						.should(($items) => {
-							expect($items).to.have.length(
-								Object.keys(colors).length
-							);
-						});
-
-					cy.wait(2000).then(() => {
-						const newColors = getControlValue(name, STORE_NAME)[
+					}).then(() => {
+						const prevMesh = getControlValue(name, STORE_NAME)[
 							'mesh-gradient-0'
-						]['mesh-gradient-colors'];
-						expect(Object.keys(newColors).length).to.be.equal(
-							Object.keys(colors).length
-						);
+						]['mesh-gradient'];
 
-						const newItems = getControlValue(name, STORE_NAME);
+						cy.get('.blockera-component-popover', {
+							timeout: 20000,
+						}).should('be.visible');
 
-						expect(
-							newItems['mesh-gradient-0']['mesh-gradient']
-						).to.be.not.deep.equal(
-							prevItems['mesh-gradient-0']['mesh-gradient']
-						);
+						cy.get('[aria-label="Add New Mesh Gradient Color"]')
+							.as('addColor')
+							.click();
+
+						cy.get('[data-id="--c1"]').within(() => {
+							cy.get('[aria-label~="Delete"]').click({
+								force: true,
+							});
+						});
+						cy.contains('Colors')
+							.parent()
+							.siblings('[data-cy="repeater-item"]')
+							.should(($items) => {
+								expect($items).to.have.length(
+									Object.keys(colors).length
+								);
+							})
+							.then(() => {
+								const newColors = getControlValue(
+									name,
+									STORE_NAME
+								)['mesh-gradient-0']['mesh-gradient-colors'];
+								expect(
+									Object.keys(newColors).length
+								).to.be.equal(Object.keys(colors).length);
+
+								const newMesh = getControlValue(
+									name,
+									STORE_NAME
+								)['mesh-gradient-0']['mesh-gradient'];
+
+								expect(newMesh).to.be.not.deep.equal(prevMesh);
+							});
 					});
 				});
 
@@ -875,23 +873,22 @@ describe(
 						timeout: 20000,
 					}).should('be.visible');
 
-					cy.get('.blockera-component-popover').within(() => {
-						cy.getByAriaLabel('Parallax').click();
+					cy.getByAriaLabel('Parallax').click();
 
-						cy.getByAriaLabel('Parallax').should(
-							'have.attr',
-							'aria-checked',
-							'true'
-						);
-					});
+					cy.getByAriaLabel('Parallax')
+						.should('have.attr', 'aria-checked', 'true')
+						.then(() => {
+							const meshGradientAttachment = getControlValue(
+								name,
+								STORE_NAME
+							);
 
-					cy.wait(2000).then(() => {
-						const items = getControlValue(name, STORE_NAME);
-
-						expect(
-							items['mesh-gradient-0']['mesh-gradient-attachment']
-						).to.be.equal('fixed');
-					});
+							expect(
+								meshGradientAttachment['mesh-gradient-0'][
+									'mesh-gradient-attachment'
+								]
+							).to.be.equal('fixed');
+						});
 				});
 			});
 		});
