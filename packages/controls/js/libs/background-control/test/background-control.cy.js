@@ -358,11 +358,13 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('input[type="number"]').eq(0).as('positionTopInput');
-				cy.get('@positionTopInput').clear();
-				cy.get('@positionTopInput').type('80');
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get('input[type="number"]').eq(0).as('positionTopInput');
+					cy.get('@positionTopInput').clear();
+					cy.get('@positionTopInput').type('80');
+				});
 
-				cy.get('@positionTopInput').then(() => {
+				cy.then(() => {
 					const positionTop = getControlValue(name, STORE_NAME)[
 						'radial-gradient-0'
 					]['radial-gradient-position'].top;
