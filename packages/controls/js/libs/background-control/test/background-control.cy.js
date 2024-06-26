@@ -177,13 +177,12 @@ describe('background control', () => {
 					value: {
 						'linear-gradient-0': {
 							type: 'linear-gradient',
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
-
-				cy.getByDataCy('repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
@@ -193,9 +192,8 @@ describe('background control', () => {
 					cy.get('@gradientBar').click();
 				});
 
-				cy.get('input[maxLength="9"]').as('colorInput');
-				cy.get('@colorInput').clear();
-				cy.get('@colorInput').type('FFA33C', { delay: 0 });
+				cy.get('input[maxLength="9"]').clear();
+				cy.get('input[maxLength="9"]').type('FFA33C', { delay: 0 });
 
 				cy.get('@gradientBar').should(($gradientBar) => {
 					const background = $gradientBar.css('background');
@@ -257,7 +255,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.get('.blockera-component-popover').within(() => {
+				cy.get('.blockera-component-popover').then(() => {
 					cy.get('button[aria-label="Repeat"]').click();
 				});
 
@@ -311,13 +309,12 @@ describe('background control', () => {
 					value: {
 						'radial-gradient-0': {
 							type: 'radial-gradient',
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
-
-				cy.getByDataCy('repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
@@ -327,9 +324,8 @@ describe('background control', () => {
 					cy.get('@gradientBar').click();
 				});
 
-				cy.get('input[maxLength="9"]').as('colorInput');
-				cy.get('@colorInput').clear();
-				cy.get('@colorInput').type('FFA33C');
+				cy.get('input[maxLength="9"]').clear();
+				cy.get('input[maxLength="9"]').type('FFA33C');
 
 				cy.get('@gradientBar').should(($gradientBar) => {
 					const background = $gradientBar.css('background');
