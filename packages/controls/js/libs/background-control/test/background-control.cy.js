@@ -212,7 +212,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				cy.wait(1000);
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
@@ -253,7 +253,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				cy.wait(1000);
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.getParentContainer('Angel').within(() => {
@@ -287,7 +287,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				cy.wait(1000);
 
 				cy.get('.blockera-component-popover').then(() => {
 					cy.get('button[aria-label="Repeat"]').click();
@@ -316,7 +316,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				cy.wait(1000);
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get('button[aria-label="Parallax"]').click();
@@ -353,7 +353,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				cy.wait(1000);
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
@@ -392,7 +392,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				cy.wait(1000);
 
 				cy.getByDataCy('repeater-item').click();
 
@@ -424,7 +424,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				cy.wait(1000);
 
 				cy.getByDataCy('repeater-item').click();
 
@@ -454,7 +454,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				ccy.wait(1000);
 
 				cy.getByDataCy('repeater-item').click();
 
@@ -484,7 +484,7 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(500);
+				cy.wait(1000);
 
 				cy.getByDataCy('repeater-item').click();
 
