@@ -64,7 +64,7 @@ do_action( 'blockera/before/setup' );
  *
  * @link TODO: please insert link of docs.
  */
-if ( blockera_core_config( 'app.mode' ) ) {
+if ( blockera_core_config( 'app.debug' ) && class_exists( \Whoops\Run::class ) ) {
 
 	$whoops = new \Whoops\Run();
 	$whoops->pushHandler( new \Whoops\Handler\PrettyPageHandler() );
