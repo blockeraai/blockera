@@ -224,14 +224,12 @@ describe('background control', () => {
 				cy.getByDataCy('repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
-					cy.get('[aria-label="Angel"]')
-						.parent()
-						.siblings()
-						.find('input[type="number"]')
-						.as('angelInput');
-
-					cy.get('@angelInput').clear();
-					cy.get('@angelInput').type('135', { delay: 0 });
+					cy.getParentContainer('Angel').within(() => {
+						cy.get('input[type="number"]').clear();
+						cy.get('input[type="number"]').type('135', {
+							delay: 0,
+						});
+					});
 				});
 
 				cy.then(() => {
