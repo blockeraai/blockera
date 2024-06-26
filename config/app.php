@@ -1,9 +1,15 @@
 <?php
+/**
+ * Direct access is not allowed.
+ *
+ * @package config/app.php
+ */
 
-// direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
 
-$wp_debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
+	exit;
+}
+
 $env_mode = 'development' === blockera_core_env( 'APP_MODE', 'production' );
 
 return [
@@ -19,7 +25,7 @@ return [
 	'namespaces'    => [
 		'controllers' => '\Blockera\Setup\Http\Controllers\\',
 	],
-	'debug'         => (defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE && $env_mode) || $wp_debug,
+	'debug'         => defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE && $env_mode,
 	'providers'     => [
 		\Blockera\Admin\Providers\AdminProvider::class,
 		\Blockera\Setup\Providers\AssetsProvider::class,
