@@ -371,8 +371,8 @@ describe('repeater control component testing', () => {
 						'first-0',
 						'first-1',
 						'second-0',
-						'second-1',
 						'first-2',
+						'first-3',
 					]);
 				});
 			});
