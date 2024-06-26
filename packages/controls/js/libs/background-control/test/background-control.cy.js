@@ -212,11 +212,12 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.wait(1000);
+				// cy.wait(1000);
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get(
-						'.components-custom-gradient-picker__gradient-bar-background'
+						'.components-custom-gradient-picker__gradient-bar-background',
+						{ timeout: 20000 }
 					).as('gradientBar');
 
 					cy.get('@gradientBar').click();

@@ -100,7 +100,7 @@ Cypress.Commands.add(
 	'getParentContainer',
 	(ariaLabel, parentsDataCy = 'base-control') => {
 		return cy
-			.get(`[aria-label="${ariaLabel}"]`)
+			.get(`[aria-label="${ariaLabel}"]`, { timeout: 20000 })
 			.closest(`[data-cy=${parentsDataCy}]`);
 	}
 );
