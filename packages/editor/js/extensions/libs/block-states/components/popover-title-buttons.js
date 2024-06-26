@@ -85,10 +85,10 @@ export function PopoverTitleButtons({
 							event.stopPropagation();
 
 							cloneRepeaterItem({
-								item,
 								itemId,
 								controlId,
 								repeaterId,
+								value: item,
 								overrideItem,
 							});
 						}}

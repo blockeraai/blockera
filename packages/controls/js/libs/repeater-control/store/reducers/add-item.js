@@ -12,7 +12,7 @@ import {
 	hasLimitation,
 	hasRepeaterId,
 	repeaterOnChange,
-	generatedDetailsId,
+	getNewIdDetails,
 } from './utils';
 
 /**
@@ -72,7 +72,7 @@ export function addItem(state: Object = {}, action: Object): Object {
 		};
 	}
 
-	const { itemsCount, uniqueId } = generatedDetailsId(state, action);
+	const { itemsCount, uniqueId } = getNewIdDetails(state, action);
 
 	//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
 	if (hasLimitation(action) && itemsCount >= action.maxItems) {

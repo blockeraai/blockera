@@ -59,7 +59,7 @@ describe('Clone Repeater Item', function () {
 			cloneRepeaterItem({
 				itemId: 1,
 				repeaterId: 'x',
-				item: { x: 12, order: 1 },
+				value: { x: 12, order: 1 },
 				controlId: 'TestRepeaterControl',
 			})
 		);
@@ -102,7 +102,7 @@ describe('Clone Repeater Item', function () {
 			state,
 			cloneRepeaterItem({
 				itemId: 1,
-				item: { x: 12, order: 1 },
+				value: { x: 12, order: 1 },
 				repeaterId: 'x[0].y[0].z',
 				controlId: 'TestRepeaterControl1',
 			})
@@ -154,7 +154,7 @@ describe('Clone Repeater Item', function () {
 			cloneRepeaterItem({
 				itemId: 1,
 				maxItems: 2,
-				item: { x: 12, order: 1 },
+				value: { x: 12, order: 1 },
 				repeaterId: 'x[0].y[0].z',
 				controlId: 'TestRepeaterControl2',
 			})
@@ -198,7 +198,7 @@ describe('Clone Repeater Item', function () {
 				itemId: 1,
 				maxItems: 2,
 				repeaterId: 'z',
-				item: { x: 12, order: 1 },
+				value: { x: 12, order: 1 },
 				controlId: 'TestRepeaterControl3',
 			})
 		);
@@ -230,7 +230,7 @@ describe('Clone Repeater Item', function () {
 				itemId: 1,
 				maxItems: 2,
 				repeaterId: 'z',
-				item: { x: 12, order: 1 },
+				value: { x: 12, order: 1 },
 				controlId: 'TestRepeaterControl4',
 			})
 		);
@@ -259,7 +259,7 @@ describe('Clone Repeater Item', function () {
 			state,
 			cloneRepeaterItem({
 				itemId: 2,
-				item: { x: 12, order: 2 },
+				value: { x: 12, order: 2 },
 				repeaterId: 'z',
 				controlId: 'TestRepeaterControl5',
 			})

@@ -141,11 +141,11 @@ export default function RepeaterItemActions({
 							}
 
 							cloneRepeaterItem({
-								item,
 								itemId,
 								onChange,
 								controlId,
 								repeaterId,
+								value: item,
 								overrideItem,
 								valueCleanup,
 								itemIdGenerator,

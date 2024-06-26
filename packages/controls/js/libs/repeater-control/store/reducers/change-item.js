@@ -9,7 +9,7 @@ import { update, prepare } from '@blockera/data-editor';
  */
 import {
 	hasRepeaterId,
-	generatedDetailsId,
+	getNewIdDetails,
 	repeaterOnChange,
 	regeneratedIds,
 } from './utils';
@@ -60,7 +60,7 @@ export function changeItem(state = {}, action) {
 	) {
 		delete clonedPrevValue[action.itemId];
 
-		let { uniqueId } = generatedDetailsId(state, action);
+		let { uniqueId } = getNewIdDetails(state, action);
 
 		if ('function' === typeof action.getId) {
 			uniqueId = action.getId();

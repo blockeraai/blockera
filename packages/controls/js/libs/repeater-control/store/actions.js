@@ -87,7 +87,7 @@ export function sortRepeaterItem({
 }
 
 export function cloneRepeaterItem({
-	item,
+	value,
 	itemId,
 	onChange,
 	controlId,
@@ -98,7 +98,7 @@ export function cloneRepeaterItem({
 	overrideItem = null,
 }) {
 	return {
-		item,
+		value,
 		itemId,
 		onChange,
 		maxItems,

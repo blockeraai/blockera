@@ -69,19 +69,22 @@ export const countPropertiesWithPattern: (
 /**
  * Generate id for repeater item with state and action params.
  *
+ * use cases: ["add-item", "change-item", "clone-item"]
+ *
  * @param {Object} state The repeater control state.
  * @param {Object} action The action params.
  * @return {string} The generated id for repeater item.
  */
-export const generatedDetailsId = (
+export const getNewIdDetails = (
 	state: Object,
 	action: Object
 ): { itemsCount: number, uniqueId: string } => {
 	let itemsCount = 0;
+	const value = action.value;
 	const controlInfo = state[action.controlId];
-	const actionValue = action.value || action.item;
 
-	if (!action.id && !actionValue?.type) {
+	// Assume recieved value of action has not "type" property!
+	if (!value?.type) {
 		itemsCount = Object.keys(controlInfo.value).length;
 
 		return {
@@ -90,21 +93,23 @@ export const generatedDetailsId = (
 		};
 	}
 
+	// Assume recieved controlId of action has not exists in store state!
 	if (!state[action.controlId]) {
 		return {
 			itemsCount,
-			uniqueId: `${action.id}-${itemsCount}`,
+			uniqueId: `${value?.type || ''}-${itemsCount}`,
 		};
 	}
 
+	// Get count number of exists same types in control value.
 	itemsCount = countPropertiesWithPattern(
 		controlInfo.value,
-		new RegExp(`^${action.id || actionValue.type}`, 'i')
+		new RegExp(`^${value.type}`, 'i')
 	);
 
 	return {
 		itemsCount,
-		uniqueId: `${action.id || actionValue.type}-${itemsCount}`,
+		uniqueId: `${value.type}-${itemsCount}`,
 	};
 };
 

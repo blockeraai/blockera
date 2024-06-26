@@ -12,7 +12,7 @@ import {
 	hasLimitation,
 	hasRepeaterId,
 	repeaterOnChange,
-	generatedDetailsId,
+	getNewIdDetails,
 } from './utils';
 
 function handleActionIncludeRepeaterId(controlValue, action) {
@@ -51,7 +51,7 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 			...update(controlValue, action.repeaterId, {
 				[itemId]: {
 					...clonedItem,
-					order: (action.item?.order || 0) + 1,
+					order: (action.value?.order || 0) + 1,
 				},
 			}),
 		},
@@ -79,7 +79,7 @@ export function cloneItem(state = {}, action) {
 		};
 	}
 
-	const { itemsCount, uniqueId } = generatedDetailsId(state, action);
+	const { itemsCount, uniqueId } = getNewIdDetails(state, action);
 
 	//To limit the number of control items, it is enough to set the maxItems number and this value is less than the current number of state items.
 	if (hasLimitation(action) && itemsCount >= action.maxItems) {
@@ -96,7 +96,7 @@ export function cloneItem(state = {}, action) {
 		clonedItem = {
 			...clonedItem,
 			...(isFunction(action.overrideItem)
-				? action.overrideItem(action.item, action.itemId) || {}
+				? action.overrideItem(action.value, action.itemId) || {}
 				: action.overrideItem),
 		};
 	}
@@ -109,7 +109,7 @@ export function cloneItem(state = {}, action) {
 		...controlInfo.value,
 		[uniqueId]: {
 			...clonedItem,
-			order: (action.item?.order || 0) + 1,
+			order: (action.value?.order || 0) + 1,
 		},
 	};
 
