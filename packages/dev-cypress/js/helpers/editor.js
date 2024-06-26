@@ -134,7 +134,7 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 			}
 		});
 
-	cy.get('.interface-pinned-items [aria-label="Settings"]').click();
+	cy.openDocumentSettingsSidebar('Block');
 
 	// Click on added new block item.
 	cy.getBlock(blockName).click();
@@ -196,7 +196,9 @@ export function addNewGroupToPost() {
  * From inside the WordPress editor open the blockera Gutenberg editor panel
  */
 export function savePage() {
-	cy.get('.edit-post-header__settings button.is-primary').click();
+	cy.get(
+		'.editor-header__settings button.is-primary,.edit-post-header__settings button.is-primary'
+	).click();
 
 	cy.get('.components-editor-notices__snackbar', { timeout: 120000 }).should(
 		'not.be.empty'
@@ -221,6 +223,8 @@ export function appendBlocks(blocksCode) {
 	});
 
 	cy.get('button').contains('Exit code editor').click();
+
+	cy.openDocumentSettingsSidebar('Block');
 }
 
 /**
@@ -435,3 +439,32 @@ export const reSelectBlock = () => {
 	// reselect block
 	cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
 };
+
+// https://github.com/10up/cypress-wp-utils/blob/013915676935410cf3390829a52bc5e0c80b6deb/src/commands/open-document-settings-sidebar.ts
+Cypress.Commands.add('openDocumentSettingsSidebar', (tab = 'Post') => {
+	cy.get('body').then(($body) => {
+		const $settingButtonIds = [
+			'button[aria-expanded="false"][aria-label="Settings"]',
+		];
+
+		$settingButtonIds.forEach(($settingButtonId) => {
+			if ($body.find($settingButtonId).length) {
+				cy.get($settingButtonId).click();
+				cy.wrap($body.find($settingButtonId)).as('sidebarButton');
+			}
+		});
+
+		const $tabSelectors = [
+			// commented from original code because it is not valid
+			// `div[role="tablist"] button:contains("${tab}")`,
+			`.edit-post-sidebar__panel-tabs button:contains("${tab}")`,
+		];
+
+		$tabSelectors.forEach(($tabSelector) => {
+			if ($body.find($tabSelector).length) {
+				cy.get($tabSelector).first().click();
+				cy.wrap($body.find($tabSelector)).as('selectedTab');
+			}
+		});
+	});
+});
