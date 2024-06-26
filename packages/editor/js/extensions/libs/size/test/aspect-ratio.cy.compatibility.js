@@ -75,7 +75,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			});
 		});
 
-		it('Use WP not supported value', () => {
+		it('Use custom aspect ratio - WP6.6 compatibility', () => {
 			appendBlocks(
 				'<!-- wp:image {"id":60,"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"is-resized"} -->\n' +
 					'<figure class="wp-block-image size-full is-resized"><img src="https://placehold.co/600x400" alt="" class="wp-image-60" style="aspect-ratio:4/3;object-fit:cover"/></figure>\n' +
@@ -89,6 +89,12 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			cy.getParentContainer('Aspect Ratio', 'base-control').as(
 				'aspectContainer'
 			);
+
+			getWPDataObject().then((data) => {
+				expect('4/3').to.be.equal(
+					getSelectedBlock(data, 'aspectRatio')
+				);
+			});
 
 			//
 			// Test 1: Blockera data to WP
@@ -106,9 +112,8 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				cy.get('input').eq(1).type('3');
 			});
 
-			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
-				expect(undefined).to.be.equal(
+				expect('2/3').to.be.equal(
 					getSelectedBlock(data, 'aspectRatio')
 				);
 			});

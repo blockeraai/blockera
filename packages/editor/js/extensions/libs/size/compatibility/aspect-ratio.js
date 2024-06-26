@@ -1,6 +1,5 @@
 // @flow
 
-// todo in WP 6.6 custom ratios added and we have to support them.
 export const coreWPAspectRatioValues = [
 	'1',
 	'4/3',
@@ -28,12 +27,10 @@ export function ratioFromWPCompatibility({
 	switch (blockId) {
 		case 'core/post-featured-image':
 		case 'core/image':
-			if (coreWPAspectRatioValues.includes(attributes.aspectRatio)) {
-				attributes.blockeraRatio = {
-					value: attributes.aspectRatio,
-					width: '',
-					height: '',
-				};
+			const ratio = detectWPAspectRatioValue(attributes.aspectRatio);
+
+			if (ratio?.value) {
+				attributes.blockeraRatio = ratio;
 			}
 
 			return attributes;
@@ -63,18 +60,87 @@ export function ratioToWPCompatibility({
 			if (
 				newValue === undefined ||
 				newValue === '' ||
-				newValue?.value === '' ||
-				coreWPAspectRatioValues.indexOf(newValue?.value) < 0
+				newValue?.value === ''
 			) {
 				return {
 					aspectRatio: undefined,
 				};
 			}
 
+			const convertedRatio = convertAspectRatioValueToWP(newValue);
+
+			if (!convertedRatio) {
+				return {
+					aspectRatio: undefined,
+				};
+			}
+
 			return {
-				aspectRatio: newValue.value,
+				aspectRatio: convertedRatio,
 			};
 	}
 
 	return null;
+}
+
+export function detectWPAspectRatioValue(aspectRatio: string): {
+	value: string,
+	width: '' | string,
+	height: '' | string,
+} {
+	if (!aspectRatio) {
+		return {
+			value: '',
+			width: '',
+			height: '',
+		};
+	}
+
+	// Check if input matches predefined aspect ratios
+	if (coreWPAspectRatioValues.includes(aspectRatio)) {
+		return {
+			value: aspectRatio,
+			width: '',
+			height: '',
+		};
+	}
+
+	// If it's a custom aspect ratio, assume it's in the format 'width/height'
+	if (aspectRatio.includes('/')) {
+		const [width, height] = aspectRatio
+			.split('/')
+			.map((part) => part.trim());
+
+		return {
+			value: 'custom',
+			width: width || '',
+			height: height || '',
+		};
+	}
+
+	return {
+		value: 'custom',
+		width: aspectRatio,
+		height: aspectRatio,
+	};
+}
+
+export function convertAspectRatioValueToWP(aspectRatio: {
+	value: string,
+	width: '' | string,
+	height: '' | string,
+}): string {
+	if (!aspectRatio?.value) {
+		return '';
+	}
+
+	if (aspectRatio?.value !== 'custom') {
+		return aspectRatio?.value;
+	}
+
+	if (aspectRatio?.width === aspectRatio?.height) {
+		return aspectRatio?.width;
+	}
+
+	return aspectRatio?.width + '/' + aspectRatio?.height;
 }
