@@ -1,5 +1,10 @@
 // @flow
 
+/**
+ * Blockera dependencies
+ */
+import { isUndefined } from '@blockera/utils';
+
 export const coreWPAspectRatioValues = [
 	'1',
 	'4/3',
@@ -17,20 +22,32 @@ export function ratioFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (
-		attributes?.blockeraRatio?.value !== '' ||
-		attributes?.aspectRatio === undefined
-	) {
+	if (attributes?.blockeraRatio?.value !== '') {
 		return attributes;
 	}
 
 	switch (blockId) {
 		case 'core/post-featured-image':
 		case 'core/image':
-			const ratio = detectWPAspectRatioValue(attributes.aspectRatio);
+			if (!isUndefined(attributes?.aspectRatio)) {
+				const ratio = detectWPAspectRatioValue(attributes.aspectRatio);
 
-			if (ratio?.value) {
-				attributes.blockeraRatio = ratio;
+				if (ratio?.value) {
+					attributes.blockeraRatio = ratio;
+				}
+			}
+
+			return attributes;
+
+		case 'core/cover':
+			if (!isUndefined(attributes.style.dimensions.aspectRatio)) {
+				const _ratio = detectWPAspectRatioValue(
+					attributes.style.dimensions.aspectRatio
+				);
+
+				if (_ratio?.value) {
+					attributes.blockeraRatio = _ratio;
+				}
 			}
 
 			return attributes;
@@ -49,6 +66,35 @@ export function ratioToWPCompatibility({
 	blockId: string,
 }): Object {
 	switch (blockId) {
+		case 'core/cover':
+			if ('reset' === ref?.current?.action) {
+				return {
+					style: { dimensions: { aspectRatio: undefined } },
+				};
+			}
+
+			if (
+				newValue === undefined ||
+				newValue === '' ||
+				newValue?.value === ''
+			) {
+				return {
+					style: { dimensions: { aspectRatio: undefined } },
+				};
+			}
+
+			const _convertedRatio = convertAspectRatioValueToWP(newValue);
+
+			if (!_convertedRatio) {
+				return {
+					style: { dimensions: { aspectRatio: undefined } },
+				};
+			}
+
+			return {
+				style: { dimensions: { aspectRatio: _convertedRatio } },
+			};
+
 		case 'core/post-featured-image':
 		case 'core/image':
 			if ('reset' === ref?.current?.action) {
