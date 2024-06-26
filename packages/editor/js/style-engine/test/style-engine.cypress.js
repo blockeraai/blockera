@@ -6,7 +6,7 @@ import {
 	setBlockState,
 	setInnerBlock,
 	// setDeviceType,
-} from '../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 //// Switch to normal state.
 // 		cy.get('[data-id="normal"]').click();
