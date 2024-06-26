@@ -745,20 +745,24 @@ describe('background control', () => {
 
 				cy.getByAriaLabel('Parallax').click();
 
-				cy.getByAriaLabel('Parallax')
-					.should('have.attr', 'aria-checked', 'true')
-					.then(() => {
-						const meshGradientAttachment = getControlValue(
-							name,
-							STORE_NAME
-						);
+				cy.getByAriaLabel('Parallax').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
-						expect(
-							meshGradientAttachment['mesh-gradient-0'][
-								'mesh-gradient-attachment'
-							]
-						).to.be.equal('fixed');
-					});
+				cy.then(() => {
+					const meshGradientAttachment = getControlValue(
+						name,
+						STORE_NAME
+					);
+
+					expect(
+						meshGradientAttachment['mesh-gradient-0'][
+							'mesh-gradient-attachment'
+						]
+					).to.be.equal('fixed');
+				});
 			});
 		});
 	});
