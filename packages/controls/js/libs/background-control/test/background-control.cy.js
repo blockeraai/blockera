@@ -478,7 +478,12 @@ describe('background control', () => {
 
 				cy.get('.blockera-component-popover', {
 					timeout: 20000,
+				}).should('exist');
+
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
 				}).within(() => {
+					cy.log('Popover found');
 					cy.get('button[aria-label="Repeat"]').click();
 				});
 
