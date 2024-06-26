@@ -559,7 +559,7 @@ const Fields: FieldItem = memo<FieldItem>(
 
 				{item.type === 'linear-gradient' && (
 					<>
-						<GradientBarControl
+						{/* <GradientBarControl
 							repeaterItem={itemId}
 							singularId={'linear-gradient'}
 							id={getControlId(itemId, 'linear-gradient')}
@@ -601,7 +601,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							height={40}
 							controlAddonTypes={['variable']}
 							variableTypes={['linear-gradient']}
-						/>
+						/> */}
 
 						<AnglePickerControl
 							repeaterItem={itemId}

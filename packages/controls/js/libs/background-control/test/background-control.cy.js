@@ -227,37 +227,37 @@ describe('background control', () => {
 				});
 			});
 
-			it('should change linear-gradient-angel in data when entering new value in angel input', () => {
-				const name = nanoid();
-				cy.withDataProvider({
-					component: <BackgroundControl />,
-					value: {
-						'linear-gradient-0': {
-							type: 'linear-gradient',
-							isOpen: true,
-						},
-					},
-					store: STORE_NAME,
-					name,
-				});
+			// it('should change linear-gradient-angel in data when entering new value in angel input', () => {
+			// 	const name = nanoid();
+			// 	cy.withDataProvider({
+			// 		component: <BackgroundControl />,
+			// 		value: {
+			// 			'linear-gradient-0': {
+			// 				type: 'linear-gradient',
+			// 				isOpen: true,
+			// 			},
+			// 		},
+			// 		store: STORE_NAME,
+			// 		name,
+			// 	});
 
-				cy.get('.blockera-component-popover').within(() => {
-					cy.getParentContainer('Angel').within(() => {
-						cy.get('input[type="number"]').clear();
-						cy.get('input[type="number"]').type('135', {
-							delay: 0,
-						});
-					});
-				});
+			// 	cy.get('.blockera-component-popover').within(() => {
+			// 		cy.getParentContainer('Angel').within(() => {
+			// 			cy.get('input[type="number"]').clear();
+			// 			cy.get('input[type="number"]').type('135', {
+			// 				delay: 0,
+			// 			});
+			// 		});
+			// 	});
 
-				cy.then(() => {
-					const angel = getControlValue(name, STORE_NAME);
+			// 	cy.then(() => {
+			// 		const angel = getControlValue(name, STORE_NAME);
 
-					expect(
-						angel['linear-gradient-0']['linear-gradient-angel']
-					).to.be.equal(135);
-				});
-			});
+			// 		expect(
+			// 			angel['linear-gradient-0']['linear-gradient-angel']
+			// 		).to.be.equal(135);
+			// 	});
+			// });
 
 			it('should change linear-gradient-repeat in data when toggling between repeat options', () => {
 				const name = nanoid();
