@@ -1,5 +1,6 @@
 // @flow
 
+// todo in WP 6.6 custom ratios added and we have to support them.
 export const coreWPAspectRatioValues = [
 	'1',
 	'4/3',
