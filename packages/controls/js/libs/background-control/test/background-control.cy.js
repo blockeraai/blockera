@@ -23,8 +23,11 @@ describe('background control', () => {
 						name,
 					});
 
-					cy.get('[aria-label="Contain"]').click();
-					cy.get('[aria-label="Contain"]').then(() => {
+					cy.get('.blockera-component-popover').within(() => {
+						cy.get('[aria-label="Contain"]').click();
+					});
+
+					cy.then(() => {
 						const imageSize = getControlValue(name, STORE_NAME)[
 							'image-0'
 						]['image-size'];
@@ -41,51 +44,51 @@ describe('background control', () => {
 						name,
 					});
 
-					cy.get('[aria-label="Custom"]').click();
+					cy.get('.blockera-component-popover').within(() => {
+						cy.get('[aria-label="Custom"]').click();
 
-					//
-					// Width
-					//
-					cy.get('[aria-label="Select Unit"]')
-						.eq(0)
-						.as('widthSelect');
+						//
+						// Width
+						//
+						cy.get('[aria-label="Select Unit"]')
+							.eq(0)
+							.as('widthSelect');
 
-					cy.get('@widthSelect').select('px');
+						cy.get('@widthSelect').select('px');
 
-					cy.get('@widthSelect')
-						.parent()
-						.siblings('input[type="number"]')
-						.as('widthInput');
+						cy.get('@widthSelect')
+							.parent()
+							.siblings('input[type="number"]')
+							.as('widthInput');
 
-					cy.get('@widthInput').clear();
-					cy.get('@widthInput').type('50');
+						cy.get('@widthInput').clear();
+						cy.get('@widthInput').type('50');
 
-					cy.get('@widthInput').then(() => {
+						//
+						// Height
+						//
+						cy.get('[aria-label="Select Unit"]')
+							.eq(1)
+							.as('heightSelect');
+
+						cy.get('@heightSelect').select('px');
+
+						cy.get('@heightSelect')
+							.parent()
+							.siblings('input[type="number"]')
+							.as('heightInput');
+
+						cy.get('@heightInput').clear();
+						cy.get('@heightInput').type('40');
+					});
+
+					cy.then(() => {
 						const imageWidth = getControlValue(name, STORE_NAME)[
 							'image-0'
 						]['image-size-width'];
 
 						expect(imageWidth).to.be.equal('50px');
-					});
 
-					//
-					// Height
-					//
-					cy.get('[aria-label="Select Unit"]')
-						.eq(1)
-						.as('heightSelect');
-
-					cy.get('@heightSelect').select('px');
-
-					cy.get('@heightSelect')
-						.parent()
-						.siblings('input[type="number"]')
-						.as('heightInput');
-
-					cy.get('@heightInput').clear();
-					cy.get('@heightInput').type('40');
-
-					cy.get('@heightInput').then(() => {
 						const imageHeight = getControlValue(name, STORE_NAME)[
 							'image-0'
 						]['image-size-height'];
@@ -105,10 +108,15 @@ describe('background control', () => {
 						name,
 					});
 
-					cy.get('input[type="number"]').eq(0).as('positionTopInput');
-					cy.get('@positionTopInput').clear();
-					cy.get('@positionTopInput').type('80');
-					cy.get('@positionTopInput').then(() => {
+					cy.get('.blockera-component-popover').within(() => {
+						cy.get('input[type="number"]')
+							.eq(0)
+							.as('positionTopInput');
+						cy.get('@positionTopInput').clear();
+						cy.get('@positionTopInput').type('80');
+					});
+
+					cy.then(() => {
 						const positionTop = getControlValue(name, STORE_NAME)[
 							'image-0'
 						]['image-position'].top;
@@ -128,18 +136,22 @@ describe('background control', () => {
 						name,
 					});
 
-					cy.get('[aria-label="Vertically"').as('verticalRepeatBtn');
-					cy.get('@verticalRepeatBtn').click();
-					cy.get('@verticalRepeatBtn')
-						.should('have.attr', 'aria-checked', 'true')
-						.then(() => {
-							const imageRepeat = getControlValue(
-								name,
-								STORE_NAME
-							)['image-0']['image-repeat'];
+					cy.get('.blockera-component-popover').within(() => {
+						cy.get('[aria-label="Vertically"]').click();
+						cy.get('[aria-label="Vertically"]').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
+					});
 
-							expect(imageRepeat).to.be.equal('repeat-y');
-						});
+					cy.then(() => {
+						const imageRepeat = getControlValue(name, STORE_NAME)[
+							'image-0'
+						]['image-repeat'];
+
+						expect(imageRepeat).to.be.equal('repeat-y');
+					});
 				});
 			});
 
@@ -154,17 +166,23 @@ describe('background control', () => {
 						name,
 					});
 
-					cy.get('button[aria-label="Parallax"]').click();
-					cy.get('button[aria-label="Parallax"]')
-						.should('have.attr', 'aria-checked', 'true')
-						.then(() => {
-							const imageAttachment = getControlValue(
-								name,
-								STORE_NAME
-							)['image-0']['image-attachment'];
+					cy.get('.blockera-component-popover').within(() => {
+						cy.get('button[aria-label="Parallax"]').click();
+						cy.get('button[aria-label="Parallax"]').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
+					});
 
-							expect(imageAttachment).to.be.equal('fixed');
-						});
+					cy.then(() => {
+						const imageAttachment = getControlValue(
+							name,
+							STORE_NAME
+						)['image-0']['image-attachment'];
+
+						expect(imageAttachment).to.be.equal('fixed');
+					});
 				});
 			});
 		});
@@ -385,8 +403,11 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('button[data-value="closest-corner"]').click();
-				cy.get('button[data-value="closest-corner"]').then(() => {
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get('button[data-value="closest-corner"]').click();
+				});
+
+				cy.then(() => {
 					const size = getControlValue(name, STORE_NAME)[
 						'radial-gradient-0'
 					]['radial-gradient-size'];
@@ -410,8 +431,11 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('button[aria-label="Repeat"]').click();
-				cy.get('button[aria-label="Repeat"]').then(() => {
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get('button[aria-label="Repeat"]').click();
+				});
+
+				cy.then(() => {
 					const repeat = getControlValue(name, STORE_NAME)[
 						'radial-gradient-0'
 					]['radial-gradient-repeat'];
@@ -435,17 +459,24 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('button[aria-label="Parallax"]').click();
-				cy.get('button[aria-label="Parallax"]')
-					.should('have.attr', 'aria-checked', 'true')
-					.then(() => {
-						const linearGradientAttachment = getControlValue(
-							name,
-							STORE_NAME
-						)['radial-gradient-0']['radial-gradient-attachment'];
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get('button[aria-label="Parallax"]').click();
 
-						expect(linearGradientAttachment).to.be.equal('fixed');
-					});
+					cy.get('button[aria-label="Parallax"]').should(
+						'have.attr',
+						'aria-checked',
+						'true'
+					);
+				});
+
+				cy.then(() => {
+					const linearGradientAttachment = getControlValue(
+						name,
+						STORE_NAME
+					)['radial-gradient-0']['radial-gradient-attachment'];
+
+					expect(linearGradientAttachment).to.be.equal('fixed');
+				});
 			});
 		});
 
