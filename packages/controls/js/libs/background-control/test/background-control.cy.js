@@ -740,13 +740,15 @@ describe('background control', () => {
 					name,
 				});
 
-				cy.getByAriaLabel('Parallax').click();
+				cy.get('.blockera-component-popover').within(() => {
+					cy.getByAriaLabel('Parallax').click();
 
-				cy.getByAriaLabel('Parallax').should(
-					'have.attr',
-					'aria-checked',
-					'true'
-				);
+					cy.getByAriaLabel('Parallax').should(
+						'have.attr',
+						'aria-checked',
+						'true'
+					);
+				});
 
 				cy.then(() => {
 					const meshGradientAttachment = getControlValue(
