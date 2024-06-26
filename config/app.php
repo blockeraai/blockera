@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $wp_debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
 $env_mode = 'development' === blockera_core_env( 'APP_MODE', 'production' );
-
+var_dump(blockera_core_env( 'APP_MODE', 'production' ), $wp_debug);exit;
 return [
 	'root_url'      => BLOCKERA_CORE_URI,
 	'root_path'     => BLOCKERA_CORE_PATH,
