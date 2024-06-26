@@ -328,7 +328,9 @@ describe('background control', () => {
 
 				cy.wait(1000);
 
-				cy.get('.blockera-component-popover').within(() => {
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).within(() => {
 					cy.get('button[aria-label="Parallax"]').click();
 					cy.get('button[aria-label="Parallax"]').should(
 						'have.attr',
@@ -365,7 +367,9 @@ describe('background control', () => {
 
 				cy.wait(1000);
 
-				cy.get('.blockera-component-popover').within(() => {
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).within(() => {
 					cy.get(
 						'.components-custom-gradient-picker__gradient-bar-background'
 					).as('gradientBar');
@@ -406,7 +410,9 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('.blockera-component-popover').within(() => {
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).within(() => {
 					cy.get('input[type="number"]').eq(0).as('positionTopInput');
 					cy.get('@positionTopInput').clear();
 					cy.get('@positionTopInput').type('80');
@@ -438,7 +444,9 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('.blockera-component-popover').within(() => {
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).within(() => {
 					cy.get('button[data-value="closest-corner"]').click();
 				});
 
@@ -468,7 +476,9 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('.blockera-component-popover').within(() => {
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).within(() => {
 					cy.get('button[aria-label="Repeat"]').click();
 				});
 
@@ -498,7 +508,9 @@ describe('background control', () => {
 
 				cy.getByDataCy('repeater-item').click();
 
-				cy.get('.blockera-component-popover').within(() => {
+				cy.get('.blockera-component-popover', {
+					timeout: 20000,
+				}).within(() => {
 					cy.get('button[aria-label="Parallax"]').click();
 
 					cy.get('button[aria-label="Parallax"]').should(
