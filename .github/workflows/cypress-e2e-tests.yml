@@ -38,9 +38,6 @@ jobs:
             - name: Build wp-env app
               run: npm run build
 
-            - name: Remove .env file
-              run: rm -rf .env
-
             - name: Run Cypress E2E Tests
               run: npm run test:e2e
 
