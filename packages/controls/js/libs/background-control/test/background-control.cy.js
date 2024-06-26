@@ -829,9 +829,7 @@ describe(
 							);
 						});
 
-					cy.wait(2000);
-
-					cy.then(() => {
+					cy.wait(2000).then(() => {
 						const newColors = getControlValue(name, STORE_NAME)[
 							'mesh-gradient-0'
 						]['mesh-gradient-colors'];
@@ -887,9 +885,7 @@ describe(
 						);
 					});
 
-					cy.wait(2000);
-
-					cy.then(() => {
+					cy.wait(2000).then(() => {
 						const items = getControlValue(name, STORE_NAME);
 
 						expect(
