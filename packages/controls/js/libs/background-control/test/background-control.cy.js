@@ -806,6 +806,8 @@ describe(
 						timeout: 20000,
 					}).should('be.visible');
 
+					cy.wait(1000);
+
 					const prevItems = getControlValue(name, STORE_NAME);
 
 					cy.get('[aria-label="Add New Mesh Gradient Color"]')
@@ -827,7 +829,7 @@ describe(
 							);
 						});
 
-					cy.wait(1000);
+					cy.wait(2000);
 
 					cy.then(() => {
 						const newColors = getControlValue(name, STORE_NAME)[
@@ -885,7 +887,7 @@ describe(
 						);
 					});
 
-					cy.wait(1000);
+					cy.wait(2000);
 
 					cy.then(() => {
 						const items = getControlValue(name, STORE_NAME);
