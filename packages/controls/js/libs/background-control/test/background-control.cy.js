@@ -810,9 +810,7 @@ describe(
 						timeout: 20000,
 					}).should('be.visible');
 
-					const prevMesh = getControlValue(name, STORE_NAME)[
-						'mesh-gradient-0'
-					]['mesh-gradient'];
+					const prevMesh = getControlValue(name, STORE_NAME);
 
 					cy.get('[aria-label="Add New Mesh Gradient Color"]')
 						.as('addColor')
@@ -831,21 +829,26 @@ describe(
 							expect($items).to.have.length(
 								Object.keys(colors).length
 							);
-						})
-						.then(() => {
-							const newColors = getControlValue(name, STORE_NAME)[
-								'mesh-gradient-0'
-							]['mesh-gradient-colors'];
-							expect(Object.keys(newColors).length).to.be.equal(
-								Object.keys(colors).length
-							);
-
-							const newMesh = getControlValue(name, STORE_NAME)[
-								'mesh-gradient-0'
-							]['mesh-gradient'];
-
-							expect(newMesh).to.be.not.deep.equal(prevMesh);
 						});
+
+					cy.wait(1000);
+
+					cy.then(() => {
+						const newColors = getControlValue(name, STORE_NAME)[
+							'mesh-gradient-0'
+						]['mesh-gradient-colors'];
+						expect(Object.keys(newColors).length).to.be.equal(
+							Object.keys(colors).length
+						);
+
+						const newMesh = getControlValue(name, STORE_NAME);
+
+						expect(
+							newMesh['mesh-gradient-0']['mesh-gradient']
+						).to.be.not.deep.equal(
+							prevMesh['mesh-gradient-0']['mesh-gradient']
+						);
+					});
 				});
 
 				// attachment
