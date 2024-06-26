@@ -6,15 +6,19 @@
 import { __ } from '@wordpress/i18n';
 import type { Element } from 'react';
 import { select } from '@wordpress/data';
-import { memo, useEffect, useContext } from '@wordpress/element';
+import {
+	memo,
+	// useEffect,
+	useContext,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import {
-	controlClassNames,
-	controlInnerClassNames,
-} from '@blockera/classnames';
+// import {
+// 	controlClassNames,
+// 	controlInnerClassNames,
+// } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -32,20 +36,20 @@ import {
 	AlignmentMatrixControl,
 	NoticeControl,
 } from '../../index';
-import RepeaterControl from '../../repeater-control';
+// import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
 import { backgroundComponentConfig } from '../bootstrap';
 import { RepeaterContext } from '../../repeater-control/context';
 
 // Icons
 import type { FieldItem } from '../types';
-import { default as MeshGradientFields } from './mesh-gradient/fields';
-import { default as MeshGradientHeader } from './mesh-gradient/header';
-import {
-	generateGradient,
-	getRandomHexColor,
-} from './mesh-gradient/mesh-generator';
-import { meshGradientProvider } from '../';
+// import { default as MeshGradientFields } from './mesh-gradient/fields';
+// import { default as MeshGradientHeader } from './mesh-gradient/header';
+// import {
+// 	// generateGradient,
+// 	getRandomHexColor,
+// } from './mesh-gradient/mesh-generator';
+// import { meshGradientProvider } from '../';
 import { LabelDescription } from './label-description';
 
 const Fields: FieldItem = memo<FieldItem>(
@@ -74,33 +78,33 @@ const Fields: FieldItem = memo<FieldItem>(
 			defaultRepeaterItemValue,
 		} = useContext(RepeaterContext);
 
-		useEffect(() => {
-			if (undefined === item['mesh-gradient-colors']) {
-				return;
-			}
+		// useEffect(() => {
+		// 	if (undefined === item['mesh-gradient-colors']) {
+		// 		return;
+		// 	}
 
-			const length = Object.values(item['mesh-gradient-colors']).length;
+		// 	const length = Object.values(item['mesh-gradient-colors']).length;
 
-			if (
-				item['mesh-gradient'] &&
-				new RegExp(`--c${length - 1}`, 'g').test(item['mesh-gradient'])
-			) {
-				return;
-			}
+		// 	if (
+		// 		item['mesh-gradient'] &&
+		// 		new RegExp(`--c${length - 1}`, 'g').test(item['mesh-gradient'])
+		// 	) {
+		// 		return;
+		// 	}
 
-			changeRepeaterItem({
-				onChange,
-				valueCleanup,
-				controlId,
-				repeaterId,
-				itemId,
-				value: {
-					...item,
-					'mesh-gradient': generateGradient(length),
-				},
-			});
-			// eslint-disable-next-line
-		}, [item['mesh-gradient-colors']]);
+		// 	changeRepeaterItem({
+		// 		onChange,
+		// 		valueCleanup,
+		// 		controlId,
+		// 		repeaterId,
+		// 		itemId,
+		// 		value: {
+		// 			...item,
+		// 			'mesh-gradient': generateGradient(length),
+		// 		},
+		// 	});
+		// 	// eslint-disable-next-line
+		// }, [item['mesh-gradient-colors']]);
 
 		return (
 			<div id={`repeater-item-${itemId}`}>
@@ -1223,7 +1227,7 @@ const Fields: FieldItem = memo<FieldItem>(
 					</>
 				)}
 
-				{item.type === 'mesh-gradient' && (
+				{/* {item.type === 'mesh-gradient' && (
 					<>
 						<BaseControl
 							label=""
@@ -1419,7 +1423,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							}
 						/>
 					</>
-				)}
+				)} */}
 			</div>
 		);
 	}
