@@ -19,5 +19,8 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Install Cypress
+              run: npx cypress install
+
             - name: Run Cypress Tests
               run: npm run test:ct

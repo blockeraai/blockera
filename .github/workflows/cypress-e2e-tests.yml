@@ -19,6 +19,9 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Install Cypress
+              run: npx cypress install
+
             - name: Install Composer Packages
               run: composer install --no-dev -o --apcu-autoloader -a
 
