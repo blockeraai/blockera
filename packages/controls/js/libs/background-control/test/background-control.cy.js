@@ -200,11 +200,14 @@ describe('background control', () => {
 				cy.get('@gradientBar').should(($gradientBar) => {
 					const background = $gradientBar.css('background');
 					expect(background).to.include('rgb(255, 163, 60)');
+				});
 
-					const linearGradient = getControlValue(name, STORE_NAME)[
-						'linear-gradient-0'
-					]['linear-gradient'];
-					expect(linearGradient).to.include('rgb(255,163,60)');
+				cy.then(() => {
+					const linearGradient = getControlValue(name, STORE_NAME);
+
+					expect(
+						linearGradient['linear-gradient-0']['linear-gradient']
+					).to.include('rgb(255,163,60)');
 				});
 			});
 
@@ -247,13 +250,12 @@ describe('background control', () => {
 					value: {
 						'linear-gradient-0': {
 							type: 'linear-gradient',
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
 					name,
 				});
-
-				cy.getByDataCy('repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
 					cy.get('button[aria-label="Repeat"]').click();
@@ -519,47 +521,49 @@ describe('background control', () => {
 					},
 					store: STORE_NAME,
 					name,
-				});
+				}).then(() => {
+					cy.getByDataCy('repeater-item').eq(3).click();
 
-				cy.getByDataCy('repeater-item').eq(3).click();
-
-				cy.get('.blockera-component-popover')
-					.last()
-					.within(() => {
-						cy.get('input[maxLength="9"]').as('colorInput');
-						cy.get('@colorInput').clear();
-						cy.get('@colorInput').type('4fecff', {
-							delay: 0,
-							force: true,
+					cy.get('.blockera-component-popover')
+						.last()
+						.within(() => {
+							cy.get('input[maxLength="9"]').as('colorInput');
+							cy.get('@colorInput').clear();
+							cy.get('@colorInput').type('4fecff', {
+								delay: 0,
+								force: true,
+							});
 						});
-					});
 
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						const newColors = Object.values(
-							getControlValue(name, STORE_NAME)[
-								'mesh-gradient-0'
-							]['mesh-gradient-colors']
-						);
+					cy.getByDataCy('repeater-item')
+						.eq(0)
+						.within(() => {
+							const newColors = Object.values(
+								getControlValue(name, STORE_NAME)[
+									'mesh-gradient-0'
+								]['mesh-gradient-colors']
+							);
 
-						// color value change assertion
-						expect(
-							newColors[newColors.length - 1].color
-						).to.be.equal('#4fecff');
-					});
+							// color value change assertion
+							expect(
+								newColors[newColors.length - 1].color
+							).to.be.equal('#4fecff');
+						});
 
-				// gradient assertion
-				cy.get('.blockera-control-mesh-generator-preview').then(
-					($el) => {
-						const elementStyles = window.getComputedStyle($el[0]);
-						expect(
-							elementStyles.getPropertyValue(
-								`--c${Object.keys(colors).length - 1}`
-							)
-						).to.be.equal('#4fecff');
-					}
-				);
+					// gradient assertion
+					cy.get('.blockera-control-mesh-generator-preview').then(
+						($el) => {
+							const elementStyles = window.getComputedStyle(
+								$el[0]
+							);
+							expect(
+								elementStyles.getPropertyValue(
+									`--c${Object.keys(colors).length - 1}`
+								)
+							).to.be.equal('#4fecff');
+						}
+					);
+				});
 			});
 
 			it('should add new random color at the end and regenerate gradient', () => {
