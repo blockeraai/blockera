@@ -161,27 +161,29 @@ class SettingsController extends RestController {
 		// Get older saved settings.
 		$saved_settings = get_option( $this->option_key );
 		$new_settings   = array_merge(
-			$saved_settings,
+			$saved_settings ? $saved_settings : [],
 			[
 				$resetType => $default,
 			]
 		);
 
-		// Update the plugin settings.
-		$updated = update_option( $this->option_key, $new_settings );
+		if ( $saved_settings !== $new_settings ) {
+			// Update the plugin settings.
+			$updated = update_option( $this->option_key, $new_settings );
 
-		if ( ! $updated ) {
+			if ( ! $updated ) {
 
-			return new \WP_REST_Response(
-				[
-					'code'    => 500,
-					'success' => false,
-					'data'    => [
-						'message' => __( 'Failed reset process.', 'blockera' ),
+				return new \WP_REST_Response(
+					[
+						'code'    => 500,
+						'success' => false,
+						'data'    => [
+							'message' => __( 'Failed reset process.', 'blockera' ),
+						],
 					],
-				],
-				500
-			);
+					500
+				);
+			}
 		}
 
 		return new \WP_REST_Response(
