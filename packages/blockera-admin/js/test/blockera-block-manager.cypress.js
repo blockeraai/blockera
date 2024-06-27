@@ -7,6 +7,7 @@ import {
 	getBlockeraEntity,
 	getWPDataObject,
 } from '@blockera/dev-cypress/js/helpers/editor';
+import { resetPanelSettings } from '@blockera/dev-cypress/js/helpers';
 
 describe('Block Manager Settings Testing ...', () => {
 	beforeEach(() => {
@@ -14,203 +15,207 @@ describe('Block Manager Settings Testing ...', () => {
 	});
 
 	it('blockera should not support core/paragraph of WordPress core block', () => {
-		cy.window()
-			.its('blockeraSettings')
-			.then(({ disabledBlocks }) => {
-				if (disabledBlocks.length) {
-					cy.getByDataTest('reset-settings').click();
+		cy.get('.blockera-settings-active-panel').should('be.visible');
 
-					cy.wait(1000);
-				}
+		resetPanelSettings(false);
 
-				cy.getByDataTest('togglecore_paragraph').click();
+		cy.getByDataTest('item-core_paragraph').within(() => {
+			cy.get('input').click();
 
-				cy.getByDataTest('update-settings').as('update');
+			cy.get('input').should('not.be.checked');
+		});
 
-				cy.get('@update').then(() => {
-					cy.get('@update').click();
-					cy.wait(2000);
+		cy.getByDataTest('update-settings').as('update');
 
-					createPost();
+		cy.get('@update').then(() => {
+			cy.get('@update').click();
+			cy.wait(2000);
 
-					appendBlocks(`<!-- wp:paragraph /-->`);
+			createPost();
 
-					cy.getBlock('core/paragraph').click();
+			appendBlocks(`<!-- wp:paragraph /-->`);
 
-					cy.getByAriaLabel('Add New Background').should('not.exist');
-				});
-			});
+			cy.getBlock('core/paragraph').click();
+
+			cy.getByAriaLabel('Add New Background').should('not.exist');
+		});
 	});
 
+	// this test needs the prev test because it was disabled the block
+	// and we want to make sure reactivation is work
 	it('blockera should support core/paragraph of WordPress core block', () => {
-		cy.window()
-			.its('blockeraSettings')
-			.then(({ disabledBlocks }) => {
-				if (disabledBlocks.length) {
-					cy.getByDataTest('reset-settings').click();
+		cy.get('.blockera-settings-active-panel').should('be.visible');
 
-					cy.wait(1000);
-				}
+		cy.getByDataTest('item-core_paragraph').within(() => {
+			cy.get('input').click();
 
-				createPost();
+			cy.get('input').should('be.checked');
+		});
 
-				appendBlocks(`<!-- wp:paragraph /-->`);
+		cy.getByDataTest('update-settings').as('update');
 
-				cy.getBlock('core/paragraph').click();
+		cy.get('@update').then(() => {
+			cy.get('@update').click();
+			cy.wait(2000);
 
-				cy.getByAriaLabel('Add New Background');
-			});
+			createPost();
+
+			appendBlocks(`<!-- wp:paragraph /-->`);
+
+			cy.getBlock('core/paragraph').click();
+
+			cy.getByAriaLabel('Add New Background');
+		});
 	});
 
-	const textBlocksCode =
-		'<!-- wp:paragraph -->\n' +
-		'<p></p>\n' +
-		'<!-- /wp:paragraph -->\n' +
-		'\n' +
-		'<!-- wp:heading -->\n' +
-		'<h2 class="wp-block-heading"></h2>\n' +
-		'<!-- /wp:heading -->\n' +
-		'\n' +
-		'<!-- wp:code -->\n' +
-		'<pre class="wp-block-code"><code></code></pre>\n' +
-		'<!-- /wp:code -->\n' +
-		'\n' +
-		'<!-- wp:details -->\n' +
-		'<details class="wp-block-details"><summary></summary><!-- wp:paragraph {"placeholder":"Type / to add a hidden block"} -->\n' +
-		'<p></p>\n' +
-		'<!-- /wp:paragraph --></details>\n' +
-		'<!-- /wp:details -->\n' +
-		'\n' +
-		'<!-- wp:list -->\n' +
-		'<ul><!-- wp:list-item -->\n' +
-		'<li></li>\n' +
-		'<!-- /wp:list-item --></ul>\n' +
-		'<!-- /wp:list -->\n' +
-		'\n' +
-		'<!-- wp:preformatted -->\n' +
-		'<pre class="wp-block-preformatted"></pre>\n' +
-		'<!-- /wp:preformatted -->\n' +
-		'\n' +
-		'<!-- wp:pullquote -->\n' +
-		'<figure class="wp-block-pullquote"><blockquote><p></p></blockquote></figure>\n' +
-		'<!-- /wp:pullquote -->\n' +
-		'\n' +
-		'<!-- wp:quote -->\n' +
-		'<blockquote class="wp-block-quote"><!-- wp:paragraph -->\n' +
-		'<p></p>\n' +
-		'<!-- /wp:paragraph --></blockquote>\n' +
-		'<!-- /wp:quote -->\n' +
-		'\n' +
-		'<!-- wp:table /-->\n' +
-		'\n' +
-		'<!-- wp:verse -->\n' +
-		'<pre class="wp-block-verse"></pre>\n' +
-		'<!-- /wp:verse -->';
+	const textBlocksCode = `
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading"></h2>
+<!-- /wp:heading -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code></code></pre>
+<!-- /wp:code -->
+
+<!-- wp:details -->
+<details class="wp-block-details"><summary></summary><!-- wp:paragraph {"placeholder":"Type / to add a hidden block"} -->
+<p></p>
+<!-- /wp:paragraph --></details>
+<!-- /wp:details -->
+
+<!-- wp:list -->
+<ul><!-- wp:list-item -->
+<li></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:preformatted -->
+<pre class="wp-block-preformatted"></pre>
+<!-- /wp:preformatted -->
+
+<!-- wp:pullquote -->
+<figure class="wp-block-pullquote"><blockquote><p></p></blockquote></figure>
+<!-- /wp:pullquote -->
+
+<!-- wp:quote -->
+<blockquote class="wp-block-quote"><!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph --></blockquote>
+<!-- /wp:quote -->
+
+<!-- wp:table /-->
+
+<!-- wp:verse -->
+<pre class="wp-block-verse"></pre>
+<!-- /wp:verse -->`;
 
 	it('blockera should not support all WordPress core blocks inside Text category', () => {
-		cy.window()
-			.its('blockeraSettings')
-			.then(({ disabledBlocks }) => {
-				if (disabledBlocks.length) {
-					cy.getByDataTest('reset-settings').click();
+		cy.get('.blockera-settings-active-panel').should('be.visible');
 
-					cy.wait(1000);
-				}
+		resetPanelSettings(false);
 
-				cy.getByDataTest('text-category=disable').click();
+		cy.getByDataTest('text-category=disable').click();
 
-				cy.getByDataTest('update-settings').as('update');
+		cy.getByDataTest('update-settings').as('update');
 
-				cy.get('@update').then(() => {
-					cy.get('@update').click();
-					cy.wait(2000);
+		cy.get('@update').then(() => {
+			cy.get('@update').click();
+			cy.wait(2000);
 
-					createPost();
+			createPost();
 
-					appendBlocks(textBlocksCode);
+			appendBlocks(textBlocksCode);
 
-					cy.getBlock('core/details').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/details').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/code').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/code').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/heading').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/heading').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/list').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/list').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/list-item').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/list-item').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/paragraph').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/paragraph').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/preformatted').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/preformatted').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/pullquote').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/pullquote').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/quote').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/quote').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/table').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
+			cy.getBlock('core/table').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-					cy.getBlock('core/verse').click();
-					cy.getByAriaLabel('Add New Background').should('not.exist');
-				});
-			});
+			cy.getBlock('core/verse').click();
+			cy.getByAriaLabel('Add New Background').should('not.exist');
+		});
 	});
 
+	// this test needs the prev test because it was disabled text category
+	// and we want to make sure reactivation is work
 	it('blockera should support all WordPress core blocks inside Text category', () => {
-		cy.window()
-			.its('blockeraSettings')
-			.then(({ disabledBlocks }) => {
-				if (disabledBlocks.length) {
-					cy.getByDataTest('reset-settings').click();
+		cy.get('.blockera-settings-active-panel').should('be.visible');
 
-					cy.wait(1000);
-				}
+		resetPanelSettings(false);
 
-				createPost();
+		cy.getByDataTest('text-category=enable').click();
 
-				appendBlocks(textBlocksCode);
+		cy.getByDataTest('update-settings').as('update');
 
-				cy.getBlock('core/details').click();
-				cy.getByAriaLabel('Add New Background');
+		cy.get('@update').then(() => {
+			cy.get('@update').click();
+			cy.wait(2000);
 
-				cy.getBlock('core/code').click();
-				cy.getByAriaLabel('Add New Background');
+			createPost();
 
-				cy.getBlock('core/heading').click();
-				cy.getByAriaLabel('Add New Background');
+			appendBlocks(textBlocksCode);
 
-				cy.getBlock('core/list').click();
-				cy.getByAriaLabel('Add New Background');
+			cy.getBlock('core/details').click();
+			cy.getByAriaLabel('Add New Background');
 
-				cy.getBlock('core/list-item').click();
-				cy.getByAriaLabel('Add New Background');
+			cy.getBlock('core/code').click();
+			cy.getByAriaLabel('Add New Background');
 
-				cy.getBlock('core/paragraph').click();
-				cy.getByAriaLabel('Add New Background');
+			cy.getBlock('core/heading').click();
+			cy.getByAriaLabel('Add New Background');
 
-				cy.getBlock('core/preformatted').click();
-				cy.getByAriaLabel('Add New Background');
+			cy.getBlock('core/list').click();
+			cy.getByAriaLabel('Add New Background');
 
-				cy.getBlock('core/pullquote').click();
-				cy.getByAriaLabel('Add New Background');
+			cy.getBlock('core/list-item').click();
+			cy.getByAriaLabel('Add New Background');
 
-				cy.getBlock('core/quote').click();
-				cy.getByAriaLabel('Add New Background');
+			cy.getBlock('core/paragraph').click();
+			cy.getByAriaLabel('Add New Background');
 
-				cy.getBlock('core/table').click();
-				cy.getByAriaLabel('Add New Background');
+			cy.getBlock('core/preformatted').click();
+			cy.getByAriaLabel('Add New Background');
 
-				cy.getBlock('core/verse').click();
-				cy.getByAriaLabel('Add New Background');
-			});
+			cy.getBlock('core/pullquote').click();
+			cy.getByAriaLabel('Add New Background');
+
+			cy.getBlock('core/quote').click();
+			cy.getByAriaLabel('Add New Background');
+
+			cy.getBlock('core/table').click();
+			cy.getByAriaLabel('Add New Background');
+
+			cy.getBlock('core/verse').click();
+			cy.getByAriaLabel('Add New Background');
+		});
 	});
 });

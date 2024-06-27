@@ -27,7 +27,10 @@ export default function BlockType(props: Object): MixedElement {
 	};
 
 	return (
-		<div className={'blockera-block-category-item'}>
+		<div
+			className={'blockera-block-category-item'}
+			data-test={`item-${blockType.name.replace('/', '_')}`}
+		>
 			<HStack
 				justifyContent={'space-between'}
 				className={'blockera-block-manage'}
