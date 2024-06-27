@@ -56,4 +56,5 @@ export type FlexProps = {
 	className?: string,
 	children?: any,
 	props?: Object,
+	'aria-label'?: string,
 };
