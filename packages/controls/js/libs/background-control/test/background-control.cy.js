@@ -30,7 +30,10 @@ describe(
 							name,
 						});
 
-						cy.wait(500);
+						// Wait for the popover to ensure the component is fully rendered
+						cy.get('.blockera-component-popover', {
+							timeout: 20000,
+						}).should('be.visible');
 
 						cy.get('.blockera-component-popover').within(() => {
 							cy.get('[aria-label="Contain"]').click();
@@ -56,7 +59,10 @@ describe(
 							name,
 						});
 
-						cy.wait(500);
+						// Wait for the popover to ensure the component is fully rendered
+						cy.get('.blockera-component-popover', {
+							timeout: 20000,
+						}).should('be.visible');
 
 						cy.get('.blockera-component-popover').within(() => {
 							cy.get('[aria-label="Custom"]').click();
@@ -125,7 +131,10 @@ describe(
 							name,
 						});
 
-						cy.wait(500);
+						// Wait for the popover to ensure the component is fully rendered
+						cy.get('.blockera-component-popover', {
+							timeout: 20000,
+						}).should('be.visible');
 
 						cy.get('.blockera-component-popover').within(() => {
 							cy.get('input[type="number"]')
@@ -157,7 +166,10 @@ describe(
 							name,
 						});
 
-						cy.wait(500);
+						// Wait for the popover to ensure the component is fully rendered
+						cy.get('.blockera-component-popover', {
+							timeout: 20000,
+						}).should('be.visible');
 
 						cy.get('.blockera-component-popover').within(() => {
 							cy.get('[aria-label="Vertically"]').click();
@@ -191,7 +203,10 @@ describe(
 							name,
 						});
 
-						cy.wait(500);
+						// Wait for the popover to ensure the component is fully rendered
+						cy.get('.blockera-component-popover', {
+							timeout: 20000,
+						}).should('be.visible');
 
 						cy.get('.blockera-component-popover').within(() => {
 							cy.get('button[aria-label="Parallax"]').click();
