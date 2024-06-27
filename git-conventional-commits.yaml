@@ -12,7 +12,7 @@ convention:
         - ops
         - docs
         - merge
-        - chor
+        - chore
         - submodule
         - story
     commitScopes: []
