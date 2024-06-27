@@ -15,9 +15,22 @@ export const arraySortItems = ({
 	toIndex,
 	fromIndex,
 }: Object): Array<any> => {
-	const newArr = [...args];
-	const [removed] = newArr.splice(fromIndex, 1);
-	newArr.splice(toIndex, 0, removed);
+	if (fromIndex === toIndex) return args;
+
+	const newArr = args.slice();
+	const item = newArr[fromIndex];
+
+	if (fromIndex < toIndex) {
+		for (let i = fromIndex; i < toIndex; i++) {
+			newArr[i] = newArr[i + 1];
+		}
+	} else {
+		for (let i = fromIndex; i > toIndex; i--) {
+			newArr[i] = newArr[i - 1];
+		}
+	}
+
+	newArr[toIndex] = item;
 
 	return newArr;
 };
