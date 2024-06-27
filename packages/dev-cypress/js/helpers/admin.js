@@ -16,6 +16,11 @@ export const resetPanelSettings = (all = true) => {
 	}
 
 	cy.then(() => {
-		cy.wait(1000);
+		cy.wait(2000);
 	});
+
+	// reset should not return error
+	cy.get('.blockera-component-modal .message.update-failed').should(
+		'not.exist'
+	);
 };
