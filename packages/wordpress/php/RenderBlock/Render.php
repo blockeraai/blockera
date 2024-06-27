@@ -189,7 +189,7 @@ class Render {
 				$postId,
 				$cacheKey,
 				array_merge(
-					$cache ?? [],
+					$cache ? $cache : [],
 					[
 						'css' => $this->computed_css_rules,
 						// TODO: implements cache mechanism for html manipulating process.
@@ -205,7 +205,7 @@ class Render {
 			set_transient(
 				$cacheKey,
 				array_merge(
-					$cache ?? [],
+					$cache ? $cache : [],
 					[
 						'css' => $this->computed_css_rules,
 						// TODO: implements cache mechanism for html manipulating process.
