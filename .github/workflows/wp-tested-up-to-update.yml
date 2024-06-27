@@ -1,0 +1,27 @@
+name: 'WP "Tested up to" Check'
+
+on:
+    schedule:
+        - cron: '0 0 * * 0' # Every Sunday at midnight
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    tut-check:
+        name: Check for new "Tested up to" version
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+              with:
+                  ref: develop
+
+            - name: Run wp-tut-updater-action
+              uses: AlecRust/wp-tut-updater-action@main
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  file-paths: blockera.php
