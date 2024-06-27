@@ -217,6 +217,7 @@ describe(
 							spread: '10px',
 							color: '#cccccc',
 							isVisible: true,
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
@@ -229,7 +230,6 @@ describe(
 				}).should('be.visible');
 
 				cy.getByDataCy('repeater-item').as('repeater-item');
-				cy.get('@repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
 					//change x
@@ -324,6 +324,7 @@ describe(
 							color: '#cccccc',
 							isVisible: true,
 							order: 0,
+							isOpen: true,
 						},
 					},
 					store: STORE_NAME,
@@ -336,7 +337,6 @@ describe(
 				}).should('be.visible');
 
 				cy.getByDataCy('repeater-item').as('repeater-item');
-				cy.get('@repeater-item').click();
 
 				cy.get('.blockera-component-popover').within(() => {
 					//change x
