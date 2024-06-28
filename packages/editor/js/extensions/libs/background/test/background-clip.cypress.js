@@ -77,7 +77,7 @@ describe('Background Clip → Functionality', () => {
 
 		cy.get('#menu-item-upload').click();
 		cy.get('input[type="file"]').selectFile(
-			'cypress/fixtures/bg-extension-test.jpeg',
+			'packages/dev-cypress/js/fixtures/bg-extension-test.jpeg',
 			{
 				force: true,
 			}
