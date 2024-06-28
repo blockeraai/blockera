@@ -1,4 +1,3 @@
-/// <reference types="Cypress" />
 /**
  * External dependencies
  */
@@ -473,4 +472,3 @@ describe('box position control component testing', () => {
 		});
 	});
 });
-

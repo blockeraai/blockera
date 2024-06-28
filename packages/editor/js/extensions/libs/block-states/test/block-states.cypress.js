@@ -4,7 +4,7 @@
 import 'cypress-real-events';
 
 /**
- * Internal dependencies
+ * Blockera dependencies
  */
 import {
 	savePage,

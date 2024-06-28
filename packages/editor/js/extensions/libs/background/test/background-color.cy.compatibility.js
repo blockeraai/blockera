@@ -1,5 +1,5 @@
 /**
- * Cypress dependencies
+ * Blockera dependencies
  */
 import {
 	appendBlocks,

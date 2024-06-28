@@ -1,5 +1,5 @@
 /**
- * Internal dependencies
+ * Blockera dependencies
  */
 import {
 	savePage,

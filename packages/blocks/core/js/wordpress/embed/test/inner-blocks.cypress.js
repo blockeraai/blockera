@@ -1,5 +1,5 @@
 /**
- * Cypress dependencies
+ * Blockera dependencies
  */
 import { appendBlocks, createPost } from '@blockera/dev-cypress/js/helpers';
 

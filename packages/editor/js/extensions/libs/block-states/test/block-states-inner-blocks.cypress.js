@@ -1,5 +1,10 @@
 /**
- * Internal dependencies
+ * External dependencies
+ */
+import 'cypress-real-events';
+
+/**
+ * Blockera dependencies
  */
 import {
 	getWPDataObject,
@@ -17,7 +22,6 @@ import {
 	getBlockClientId,
 	checkBlockCard,
 } from '@blockera/dev-cypress/js/helpers';
-import 'cypress-real-events';
 
 describe('Inner Blocks E2E Test', () => {
 	beforeEach(() => {

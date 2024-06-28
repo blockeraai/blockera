@@ -1,10 +1,14 @@
 /**
+ * External dependencies
+ */
+import { nanoid } from 'nanoid';
+
+/**
  * Internal dependencies
  */
 import BackgroundControl from '../index';
 import { STORE_NAME } from '../../repeater-control/store';
 import { getControlValue } from '../../../store/selectors';
-import { nanoid } from 'nanoid';
 
 describe(
 	'background control',

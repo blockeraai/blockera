@@ -1,8 +1,8 @@
-/// <reference types="Cypress" />
 /**
  * External dependencies
  */
 import { nanoid } from 'nanoid';
+
 /**
  * Internal dependencies
  */
