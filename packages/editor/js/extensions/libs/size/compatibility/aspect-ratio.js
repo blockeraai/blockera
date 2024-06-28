@@ -40,7 +40,7 @@ export function ratioFromWPCompatibility({
 			return attributes;
 
 		case 'core/cover':
-			if (!isUndefined(attributes.style.dimensions.aspectRatio)) {
+			if (!isUndefined(attributes?.style?.dimensions?.aspectRatio)) {
 				const _ratio = detectWPAspectRatioValue(
 					attributes.style.dimensions.aspectRatio
 				);
