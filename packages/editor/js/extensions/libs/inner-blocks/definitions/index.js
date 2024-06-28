@@ -9,18 +9,18 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Internal dependencies
  */
-import { heading } from './heading';
-import * as config from '../../base/config';
+// import { heading } from './heading';
+// import * as config from '../../base/config';
 import { STORE_NAME } from '../../base/store/constants';
 
 export const definitionTypes = {
-	heading: {
-		...config,
-		backgroundConfig: {
-			...config.backgroundConfig,
-			...heading,
-		},
-	},
+	// heading: {
+	// 	...config,
+	// 	backgroundConfig: {
+	// 		...config.backgroundConfig,
+	// 		...heading,
+	// 	},
+	// },
 };
 
 export const __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition =
