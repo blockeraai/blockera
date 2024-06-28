@@ -33,14 +33,12 @@ describe('box spacing control component testing', () => {
 				bottom: '23px',
 				left: '-10px',
 			},
-			marginLock: 'none',
 			padding: {
 				top: '9px',
 				right: '78px',
 				bottom: '23px',
 				left: '-10px',
 			},
-			paddingLock: 'none',
 		};
 		cy.withDataProvider({
 			component: (
@@ -95,14 +93,12 @@ describe('box spacing control component testing', () => {
 				bottom: '23px',
 				left: '-10px',
 			},
-			marginLock: 'none',
 			padding: {
 				top: '9px',
 				right: '78px',
 				bottom: '23px',
 				left: '-10px',
 			},
-			paddingLock: 'none',
 		};
 		cy.withDataProvider({
 			component: <BoxSpacingControl label="My Label" id="data.myData" />,
@@ -278,14 +274,12 @@ describe('box spacing control component testing', () => {
 				bottom: '82px',
 				left: '83px',
 			},
-			marginLock: 'none',
 			padding: {
 				top: '80px',
 				right: '81px',
 				bottom: '82px',
 				left: '83px',
 			},
-			paddingLock: 'none',
 		};
 
 		// Check data provider value!
