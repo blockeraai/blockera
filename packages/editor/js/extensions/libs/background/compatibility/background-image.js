@@ -34,7 +34,7 @@ export function backgroundFromWPCompatibility({
 				},
 				'image-repeat': 'repeat',
 				'image-attachment': 'scroll',
-				isOpen: false,
+				isVisible: true,
 				order: 0,
 			},
 		};
@@ -84,7 +84,7 @@ export function backgroundFromWPCompatibility({
 					'linear-gradient-angel': angel,
 					'linear-gradient-repeat': 'no-repeat',
 					'linear-gradient-attachment': 'scroll',
-					isOpen: false,
+					isVisible: true,
 					order: 1,
 				},
 			};
@@ -96,8 +96,9 @@ export function backgroundFromWPCompatibility({
 					'radial-gradient': gradient,
 					'radial-gradient-position': { top: '50%', left: '50%' },
 					'radial-gradient-size': 'farthest-corner',
-					'linear-gradient-attachment': 'scroll',
-					isOpen: false,
+					'radial-gradient-attachment': 'scroll',
+					'radial-gradient-repeat': 'no-repeat',
+					isVisible: true,
 					order: 1,
 				},
 			};
