@@ -13,7 +13,12 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import type { BoxSpacingControlProps, Side, OpenPopover } from './types';
+import type {
+	BoxSpacingControlProps,
+	TDefaultValue,
+	Side,
+	OpenPopover,
+} from './types';
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import { MarginAll } from './components/margin/margin-all';
@@ -80,7 +85,18 @@ export default function BoxSpacingControl({
 		onChange,
 		defaultValue,
 		mergeInitialAndDefault: true,
+		valueCleanup,
 	});
+
+	function valueCleanup(value: TDefaultValue) {
+		//$FlowFixMe
+		delete value?.marginLock;
+
+		//$FlowFixMe
+		delete value?.paddingLock;
+
+		return value;
+	}
 
 	const [openPopover, setOpenPopover]: [OpenPopover, (OpenPopover) => void] =
 		useState(openSide);

@@ -18,7 +18,7 @@ export type BoxSpacingLock =
 
 type BoxSpacingSideDisable = 'none' | 'vertical' | 'horizontal' | 'all';
 
-type TDefaultValue = {
+export type TDefaultValue = {
 	margin: {
 		top: string,
 		right: string,
