@@ -344,7 +344,34 @@ describe('Border → WP Compatibility', () => {
 
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
-					expect('').to.be.equal(
+					expect({
+						type: 'custom',
+						all: {
+							width: '',
+							style: '',
+							color: '',
+						},
+						top: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						right: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						bottom: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						left: {
+							width: '',
+							color: '',
+							style: '',
+						},
+					}).to.be.deep.equal(
 						getSelectedBlock(data, 'blockeraBorder')
 					);
 
@@ -459,7 +486,34 @@ describe('Border → WP Compatibility', () => {
 
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
-					expect('').to.be.equal(
+					expect({
+						type: 'custom',
+						all: {
+							width: '',
+							style: '',
+							color: '',
+						},
+						top: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						right: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						bottom: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						left: {
+							width: '',
+							color: '',
+							style: '',
+						},
+					}).to.be.deep.equal(
 						getSelectedBlock(data, 'blockeraBorder')
 					);
 
@@ -607,7 +661,34 @@ describe('Border → WP Compatibility', () => {
 				});
 
 				getWPDataObject().then((data) => {
-					expect('').to.be.equal(
+					expect({
+						type: 'custom',
+						all: {
+							width: '',
+							style: '',
+							color: '',
+						},
+						top: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						right: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						bottom: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						left: {
+							width: '',
+							color: '',
+							style: '',
+						},
+					}).to.be.deep.equal(
 						getSelectedBlock(data, 'blockeraBorder')
 					);
 
@@ -941,7 +1022,34 @@ describe('Border → WP Compatibility', () => {
 
 				// WP data should be removed too
 				getWPDataObject().then((data) => {
-					expect('').to.be.equal(
+					expect({
+						type: 'custom',
+						all: {
+							width: '',
+							style: '',
+							color: '',
+						},
+						top: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						right: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						bottom: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						left: {
+							width: '',
+							color: '',
+							style: '',
+						},
+					}).to.be.deep.equal(
 						getSelectedBlock(data, 'blockeraBorder')
 					);
 
