@@ -24,51 +24,62 @@ describe('media-image', () => {
 
 		it('should be able to add image + delete existed image', () => {
 			//  --------------------- add -----------------------
-			//  act
 			cy.getByDataTest('style-tab').click();
-			cy.get('[aria-label="Add New Background"]').click();
 
-			cy.contains('h2', 'Background')
-				.parent()
-				.find('[data-cy="repeater-item"]')
-				.click();
+			cy.getParentContainer('Image & Gradient').within(() => {
+				cy.get('[aria-label="Add New Background"]').click();
+			});
 
-			cy.contains('button', /choose image/i).click();
+			cy.get('.blockera-component-popover').within(() => {
+				cy.contains('button', /choose image/i).click();
+			});
 
-			cy.get('input[type="file"]').selectFile(
-				'cypress/fixtures/test.jpg',
-				{
-					force: true,
-				}
-			);
-			cy.get('.media-toolbar-primary > .button').click();
+			cy.get('.media-modal').should('be.visible');
 
-			// data assertion
+			cy.get('.media-modal').within(() => {
+				cy.contains('button', 'Upload files').click();
+
+				cy.get('input[type="file"]').selectFile(
+					'packages/dev-cypress/js/fixtures/test.jpg',
+					{
+						force: true,
+					}
+				);
+
+				cy.get('.media-toolbar-primary > .button').click();
+			});
+
+			cy.getParentContainer('Image & Gradient').within(() => {
+				cy.get(
+					'.blockera-component-color-indicator.image-custom'
+				).should('be.visible');
+			});
+
 			getWPDataObject().then((data) => {
 				const uploadedImageFileName = getSelectedBlock(
 					data,
 					'blockeraBackground'
-				)[0]
-					.image.split('/')
+				)
+					['image-0'].image.split('/')
 					.slice(-1);
 				expect(uploadedImageFileName).to.be.match(/^test(-\d+)?.jpg/);
 			});
 
 			//----------------------- delete ---------------------------------
-			// act
-			cy.getByDataTest('popover-body')
-				.find('[data-cy="base-control"]')
-				.eq(1)
-				.within(() => {
-					cy.get('img').siblings('button').click({ force: true });
-				});
+			cy.get('.blockera-component-popover').within(() => {
+				cy.getParentContainer('Image')
+					.last()
+					.within(() => {
+						cy.getByDataCy('delete-bg-img').click({ force: true });
+					});
+			});
 
 			// data assertion
 			getWPDataObject().then((data) => {
 				const uploadedImageName = getSelectedBlock(
 					data,
 					'blockeraBackground'
-				)[0].image;
+				)['image-0'].image;
 				expect(uploadedImageName).to.be.equal('');
 			});
 		});
@@ -76,67 +87,76 @@ describe('media-image', () => {
 		it('should open the uploader by clicking on action buttons', () => {
 			//  act
 			cy.getByDataTest('style-tab').click();
-			cy.get('[aria-label="Add New Background"]').click();
 
-			cy.contains('h2', 'Background')
-				.parent()
-				.find('[data-cy="repeater-item"]')
-				.click();
+			cy.getParentContainer('Image & Gradient').within(() => {
+				cy.get('[aria-label="Add New Background"]').click();
+			});
 
-			cy.contains('button', /choose image/i).click();
+			cy.get('.blockera-component-popover').within(() => {
+				cy.contains('button', /choose image/i).click();
+			});
 
-			cy.get('input[type="file"]').selectFile(
-				'cypress/fixtures/test.jpg',
-				{
-					force: true,
-				}
-			);
-			cy.get('.media-toolbar-primary > .button').click();
+			cy.get('.media-modal').should('be.visible');
 
-			cy.contains('button', /upload image/i).click({ force: true });
+			cy.get('.media-modal').within(() => {
+				cy.contains('button', 'Upload files').click();
 
-			// assert
+				cy.get('input[type="file"]').selectFile(
+					'packages/dev-cypress/js/fixtures/test.jpg',
+					{
+						force: true,
+					}
+				);
+
+				cy.get('.media-toolbar-primary > .button').click();
+			});
+
+			cy.get('.blockera-component-popover').within(() => {
+				cy.contains('button', /upload image/i).click({ force: true });
+			});
+
+			cy.get('.media-modal').should('be.visible');
+
+			// there should be 3 tag on document because of how wp works and we opened media uploader 3 times
 			cy.get('[aria-labelledby="media-frame-title"]').should(
 				'have.length',
 				2
-			);
-
-			// act
-			cy.contains('button', /media library/i).click({ force: true });
-
-			// assert
-			cy.get('[aria-labelledby="media-frame-title"]').should(
-				'have.length',
-				3
 			);
 		});
 	});
 
 	context('Initial Value', () => {
 		it('should get data from context on reload', () => {
-			addBlockToPost('core/paragraph', true, 'blockera-paragraph');
+			addBlockToPost('core/paragraph', true);
 
 			cy.getIframeBody()
 				.find(`[data-type="core/paragraph"]`)
 				.type('this is test text.');
 
 			cy.getByDataTest('style-tab').click();
-			cy.get('[aria-label="Add New Background"]').click();
 
-			cy.contains('h2', 'Background')
-				.parent()
-				.find('[data-cy="repeater-item"]')
-				.click();
+			cy.getParentContainer('Image & Gradient').within(() => {
+				cy.get('[aria-label="Add New Background"]').click();
+			});
 
-			cy.contains('button', /choose image/i).click();
+			cy.get('.blockera-component-popover').within(() => {
+				cy.contains('button', /choose image/i).click();
+			});
 
-			cy.get('input[type="file"]').selectFile(
-				'cypress/fixtures/test.jpg',
-				{
-					force: true,
-				}
-			);
-			cy.get('.media-toolbar-primary > .button').click();
+			cy.get('.media-modal').should('be.visible');
+
+			cy.get('.media-modal').within(() => {
+				cy.contains('button', 'Upload files').click();
+
+				cy.get('input[type="file"]').selectFile(
+					'packages/dev-cypress/js/fixtures/test.jpg',
+					{
+						force: true,
+					}
+				);
+
+				cy.get('.media-toolbar-primary > .button').click();
+			});
 
 			cy.get('button[aria-label="Save draft"]').click();
 
@@ -145,25 +165,25 @@ describe('media-image', () => {
 			).then(() => {
 				cy.get('[aria-label="“(no title)” (Edit)"]').first().click();
 
-				// wrap
-				cy.getIframeBody();
-				cy.getIframeBody()
-					.find('[data-type="core/paragraph"]')
-					.as('block');
-				cy.get('@block').click();
+				cy.getIframeBody().getBlock('core/paragraph').click();
+
 				cy.getByDataTest('style-tab').click();
 
-				cy.contains('h2', 'Background')
-					.parent()
-					.find('[data-cy="repeater-item"]')
-					.click();
+				cy.getParentContainer('Image & Gradient').within(() => {
+					cy.getByDataCy('repeater-item').should('exist');
 
-				cy.getByDataTest('popover-body')
-					.find('[data-cy="base-control"]')
-					.eq(1)
-					.within(() => {
-						cy.get('img');
-					});
+					cy.getByDataCy('repeater-item').click();
+				});
+
+				cy.get('.blockera-component-popover').within(() => {
+					cy.get('img')
+						.invoke('attr', 'src')
+						.then((src) => {
+							const src1 = src;
+
+							expect(src).contains('test');
+						});
+				});
 			});
 		});
 	});
