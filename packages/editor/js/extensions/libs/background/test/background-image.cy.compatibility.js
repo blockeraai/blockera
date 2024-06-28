@@ -6,7 +6,6 @@ import {
 	createPost,
 	getSelectedBlock,
 	getWPDataObject,
-	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Background → WP Compatibility', () => {
