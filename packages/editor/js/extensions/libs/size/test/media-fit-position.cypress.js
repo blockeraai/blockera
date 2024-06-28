@@ -32,7 +32,7 @@ describe('Media Fit Position → Functionality', () => {
 		});
 
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('span[aria-label="top center"]').click({
+			cy.get('span[aria-label="top center item"]').click({
 				force: true,
 			});
 		});
