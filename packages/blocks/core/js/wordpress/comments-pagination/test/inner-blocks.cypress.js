@@ -23,6 +23,8 @@ describe('Comments Pagination Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/comments-pagination').click();
 
+		cy.getByAriaLabel('Select parent block: Comments Pagination').click();
+
 		// open inner block settings
 		openInnerBlocksExtension();
 
