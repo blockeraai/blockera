@@ -31,8 +31,8 @@ describe('Inner Blocks E2E Test', () => {
 
 	const initialSetting = () => {
 		appendBlocks(
-			`<!-- wp:paragraph {"className":"publisher-core-block publisher-core-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","publisherBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"publisherPropsId":"224185412280","publisherCompatId":"224185412280"} -->
-			<p class="publisher-core-block publisher-core-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74"><a href="http://localhost/wordpress/2023/12/16/5746/" data-type="post" data-id="5746" class="my-link">link</a></p>
+			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
+			<p class="blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74"><a href="http://localhost/wordpress/2023/12/16/5746/" data-type="post" data-id="5746" class="my-link">link</a></p>
 			<!-- /wp:paragraph -->`
 		);
 		cy.getIframeBody().find('[data-type="core/paragraph"]').click();
@@ -44,8 +44,8 @@ describe('Inner Blocks E2E Test', () => {
 			setInnerBlock('Link');
 
 			cy.cssVar(
-				'--publisher-tab-panel-active-color',
-				'[aria-label="Publisher Block State Container"]:first-child'
+				'--blockera-tab-panel-active-color',
+				'[aria-label="Blockera Block State Container"]:first-child'
 			).should('eq', '#cc0000');
 		});
 
@@ -55,8 +55,8 @@ describe('Inner Blocks E2E Test', () => {
 			addBlockState('hover');
 
 			cy.cssVar(
-				'--publisher-tab-panel-active-color',
-				'[aria-label="Publisher Block State Container"]:first-child'
+				'--blockera-tab-panel-active-color',
+				'[aria-label="Blockera Block State Container"]:first-child'
 			).should('eq', '#D47C14');
 		});
 
@@ -64,7 +64,7 @@ describe('Inner Blocks E2E Test', () => {
 			initialSetting();
 			setInnerBlock('Link');
 
-			cy.getByAriaLabel('Publisher Block State Container')
+			cy.getByAriaLabel('Blockera Block State Container')
 				.first()
 				.within(() => {
 					cy.contains('Inner Block States').should('exist');
@@ -86,7 +86,7 @@ describe('Inner Blocks E2E Test', () => {
 				.parent()
 				.parent()
 				.parent()
-				.should('have.class', 'publisher-not-allowed');
+				.should('have.class', 'blockera-not-allowed');
 		});
 
 		it('Set the current state when add new block states', () => {
@@ -192,8 +192,8 @@ describe('Inner Blocks E2E Test', () => {
 			getWPDataObject().then((data) => {
 				expect(['normal', 'hover']).to.be.deep.equal(
 					Object.keys(
-						getSelectedBlock(data, 'publisherInnerBlocks').link
-							.attributes.publisherBlockStates
+						getSelectedBlock(data, 'blockeraInnerBlocks').link
+							.attributes.blockeraBlockStates
 					)
 				);
 			});
@@ -207,8 +207,8 @@ describe('Inner Blocks E2E Test', () => {
 			getWPDataObject().then((data) => {
 				expect(['normal', 'focus']).to.be.deep.equal(
 					Object.keys(
-						getSelectedBlock(data, 'publisherInnerBlocks').link
-							.attributes.publisherBlockStates
+						getSelectedBlock(data, 'blockeraInnerBlocks').link
+							.attributes.blockeraBlockStates
 					)
 				);
 			});
@@ -283,11 +283,11 @@ describe('Inner Blocks E2E Test', () => {
 				expect({
 					link: {
 						attributes: {
-							publisherOverflow: 'hidden',
+							blockeraOverflow: 'hidden',
 						},
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks')
+					getSelectedBlock(data, 'blockeraInnerBlocks')
 				);
 			});
 
@@ -363,15 +363,15 @@ describe('Inner Blocks E2E Test', () => {
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect({}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks')
+					getSelectedBlock(data, 'blockeraInnerBlocks')
 				);
 
 				expect({
-					publisherInnerBlocks: {
-						link: { attributes: { publisherOverflow: 'hidden' } },
+					blockeraInnerBlocks: {
+						link: { attributes: { blockeraOverflow: 'hidden' } },
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherBlockStates').normal
+					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes
 				);
 			});
@@ -477,10 +477,10 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect({ publisherOverflow: 'hidden' }).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks').link
-						.attributes.publisherBlockStates.hover.breakpoints
-						.laptop.attributes
+				expect({ blockeraOverflow: 'hidden' }).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraInnerBlocks').link
+						.attributes.blockeraBlockStates.hover.breakpoints.laptop
+						.attributes
 				);
 			});
 
@@ -616,17 +616,17 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect({ publisherOverflow: 'hidden' }).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherBlockStates').normal
-						.breakpoints.tablet.attributes.publisherInnerBlocks.link
-						.attributes.publisherBlockStates.hover.breakpoints
-						.tablet.attributes
+				expect({ blockeraOverflow: 'hidden' }).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints.tablet
+						.attributes
 				);
 
 				expect({}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks').link
-						.attributes.publisherBlockStates.hover.breakpoints
-						.laptop.attributes
+					getSelectedBlock(data, 'blockeraInnerBlocks').link
+						.attributes.blockeraBlockStates.hover.breakpoints.laptop
+						.attributes
 				);
 			});
 
@@ -1056,10 +1056,10 @@ describe('Inner Blocks E2E Test', () => {
 									// 		laptop: { attributes: {} },
 									// 		tablet: {
 									// 			attributes: {
-									// 				publisherInnerBlocks: {
+									// 				blockeraInnerBlocks: {
 									// 					link: {
 									// 						attributes: {
-									// 							publisherBlockStates:
+									// 							blockeraBlockStates:
 									// 								{
 									// 									active: {
 									// 										breakpoints:
@@ -1067,7 +1067,7 @@ describe('Inner Blocks E2E Test', () => {
 									// 												tablet: {
 									// 													attributes:
 									// 														{
-									// 															publisherFlexLayout:
+									// 															blockeraFlexLayout:
 									// 																{
 									// 																	direction:
 									// 																		'row',
@@ -1089,7 +1089,7 @@ describe('Inner Blocks E2E Test', () => {
 									// 	}).to.be.deep.eq(
 									// 		getSelectedBlock(
 									// 			data,
-									// 			'publisherBlockStates'
+									// 			'blockeraBlockStates'
 									// 		).normal.breakpoints
 									// 	);
 									// });
@@ -1099,8 +1099,8 @@ describe('Inner Blocks E2E Test', () => {
 									// 	expect({
 									// 		link: {
 									// 			attributes: {
-									// 				publisherDisplay: 'flex',
-									// 				publisherBlockStates: {
+									// 				blockeraDisplay: 'flex',
+									// 				blockeraBlockStates: {
 									// 					normal: {
 									// 						breakpoints: {
 									// 							laptop: {
@@ -1115,7 +1115,7 @@ describe('Inner Blocks E2E Test', () => {
 									// 							laptop: {
 									// 								attributes:
 									// 									{
-									// 										publisherFlexLayout:
+									// 										blockeraFlexLayout:
 									// 											{
 									// 												direction:
 									// 													'column',
@@ -1134,7 +1134,7 @@ describe('Inner Blocks E2E Test', () => {
 									// 							laptop: {
 									// 								attributes:
 									// 									{
-									// 										publisherFlexLayout:
+									// 										blockeraFlexLayout:
 									// 											{
 									// 												direction:
 									// 													'row',
@@ -1154,7 +1154,7 @@ describe('Inner Blocks E2E Test', () => {
 									// 	}).to.be.deep.eq(
 									// 		getSelectedBlock(
 									// 			data,
-									// 			'publisherInnerBlocks'
+									// 			'blockeraInnerBlocks'
 									// 		)
 									// 	);
 									//});
@@ -1890,10 +1890,10 @@ describe('Inner Blocks E2E Test', () => {
 											laptop: { attributes: {} },
 											tablet: {
 												attributes: {
-													publisherInnerBlocks: {
+													blockeraInnerBlocks: {
 														link: {
 															attributes: {
-																publisherBoxShadow:
+																blockeraBoxShadow:
 																	{
 																		'outer-0':
 																			{
@@ -1907,7 +1907,7 @@ describe('Inner Blocks E2E Test', () => {
 																				order: 0,
 																			},
 																	},
-																publisherBlockStates:
+																blockeraBlockStates:
 																	{
 																		active: {
 																			breakpoints:
@@ -1915,7 +1915,7 @@ describe('Inner Blocks E2E Test', () => {
 																					tablet: {
 																						attributes:
 																							{
-																								publisherBoxShadow:
+																								blockeraBoxShadow:
 																									{
 																										'outer-0':
 																											{
@@ -1942,14 +1942,14 @@ describe('Inner Blocks E2E Test', () => {
 										}).to.be.deep.eq(
 											getSelectedBlock(
 												data,
-												'publisherBlockStates'
+												'blockeraBlockStates'
 											).normal.breakpoints
 										);
 
 										expect({
 											link: {
 												attributes: {
-													publisherBoxShadow: {
+													blockeraBoxShadow: {
 														'outer-0': {
 															type: 'outer',
 															x: '10px',
@@ -1961,7 +1961,7 @@ describe('Inner Blocks E2E Test', () => {
 															order: 0,
 														},
 													},
-													publisherBlockStates: {
+													blockeraBlockStates: {
 														normal: {
 															breakpoints: {
 																laptop: {
@@ -1976,7 +1976,7 @@ describe('Inner Blocks E2E Test', () => {
 																laptop: {
 																	attributes:
 																		{
-																			publisherBoxShadow:
+																			blockeraBoxShadow:
 																				{
 																					'outer-0':
 																						{
@@ -2000,7 +2000,7 @@ describe('Inner Blocks E2E Test', () => {
 																laptop: {
 																	attributes:
 																		{
-																			publisherBoxShadow:
+																			blockeraBoxShadow:
 																				{
 																					'outer-0':
 																						{
@@ -2036,7 +2036,7 @@ describe('Inner Blocks E2E Test', () => {
 										}).to.be.deep.eq(
 											getSelectedBlock(
 												data,
-												'publisherInnerBlocks'
+												'blockeraInnerBlocks'
 											)
 										);
 									});
@@ -2216,15 +2216,15 @@ describe('Inner Blocks E2E Test', () => {
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect({
-					publisherInnerBlocks: {
+					blockeraInnerBlocks: {
 						link: {
 							attributes: {
-								publisherFontSize: '25px',
+								blockeraFontSize: '25px',
 							},
 						},
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
+					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.laptop.attributes
 				);
 			});
@@ -2239,19 +2239,19 @@ describe('Inner Blocks E2E Test', () => {
 
 			// TODO :
 			// real hover
-			cy.get('.publisher-core-block').realHover();
+			cy.get('.blockera-block').realHover();
 			cy.get('.my-link').should('have.css', 'font-size', '25px');
 
 			// Set desktop viewport
 			cy.viewport(1441, 1920);
 
-			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.blockera-block').realHover();
 			// cy.get('.my-link').should('have.css', 'font-size', '25px');
 
 			//  set Tablet viewport
 			cy.viewport(768, 1024);
 			//TODO
-			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.blockera-block').realHover();
 			// cy.get('.my-link').should('have.css', 'font-size', '25px');
 		});
 
@@ -2290,15 +2290,15 @@ describe('Inner Blocks E2E Test', () => {
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect({
-					publisherInnerBlocks: {
+					blockeraInnerBlocks: {
 						link: {
 							attributes: {
-								publisherFontSize: '25px',
+								blockeraFontSize: '25px',
 							},
 						},
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
+					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.mobile.attributes
 				);
 			});
@@ -2312,19 +2312,19 @@ describe('Inner Blocks E2E Test', () => {
 			cy.viewport(1025, 1440);
 
 			// real hover
-			cy.get('.publisher-core-block').realHover();
+			cy.get('.blockera-block').realHover();
 			cy.get('.my-link').should('not.have.css', 'font-size', '25px');
 
 			// Set desktop viewport
 			cy.viewport(1441, 1920);
 
-			cy.get('.publisher-core-block').realHover();
+			cy.get('.blockera-block').realHover();
 			cy.get('.my-link').should('not.have.css', 'font-size', '25px');
 
 			//  set mobile viewport
 			cy.viewport(320, 480);
 			//TODO
-			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.blockera-block').realHover();
 			// cy.get('.my-link').should('have.css', 'font-size', '25px');
 		});
 
@@ -2380,15 +2380,15 @@ describe('Inner Blocks E2E Test', () => {
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect({
-					publisherInnerBlocks: {
+					blockeraInnerBlocks: {
 						link: {
 							attributes: {
-								publisherBlockStates: {
+								blockeraBlockStates: {
 									hover: {
 										breakpoints: {
 											laptop: {
 												attributes: {
-													publisherFontSize: '25px',
+													blockeraFontSize: '25px',
 												},
 											},
 										},
@@ -2407,7 +2407,7 @@ describe('Inner Blocks E2E Test', () => {
 						},
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
+					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.laptop.attributes
 				);
 			});
@@ -2422,7 +2422,7 @@ describe('Inner Blocks E2E Test', () => {
 
 			// TODO :
 			// real hover
-			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.blockera-block').realHover();
 			// cy.get('.my-link')
 			// 	.realHover()
 			// 	.should('have.css', 'font-size', '25px');
@@ -2430,7 +2430,7 @@ describe('Inner Blocks E2E Test', () => {
 			// // Set desktop viewport
 			// cy.viewport(1441, 1920);
 
-			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.blockera-block').realHover();
 			// cy.get('.my-link')
 			// 	.realHover()
 			// 	.should('have.css', 'font-size', '25px');
@@ -2438,7 +2438,7 @@ describe('Inner Blocks E2E Test', () => {
 			// //  set Tablet viewport
 			// cy.viewport(768, 1024);
 			// //TODO
-			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.blockera-block').realHover();
 			// cy.get('.my-link')
 			// 	.realHover()
 			// 	.should('have.css', 'font-size', '25px');
@@ -2497,15 +2497,15 @@ describe('Inner Blocks E2E Test', () => {
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect({
-					publisherInnerBlocks: {
+					blockeraInnerBlocks: {
 						link: {
 							attributes: {
-								publisherBlockStates: {
+								blockeraBlockStates: {
 									hover: {
 										breakpoints: {
 											mobile: {
 												attributes: {
-													publisherFontSize: '25px',
+													blockeraFontSize: '25px',
 												},
 											},
 										},
@@ -2524,7 +2524,7 @@ describe('Inner Blocks E2E Test', () => {
 						},
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherBlockStates').hover
+					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.mobile.attributes
 				);
 			});
@@ -2538,7 +2538,7 @@ describe('Inner Blocks E2E Test', () => {
 			cy.viewport(1025, 1440);
 
 			// real hover
-			cy.get('.publisher-core-block').realHover();
+			cy.get('.blockera-block').realHover();
 			cy.get('.my-link')
 				.realHover()
 				.should('not.have.css', 'font-size', '25px');
@@ -2546,7 +2546,7 @@ describe('Inner Blocks E2E Test', () => {
 			// Set desktop viewport
 			cy.viewport(1441, 1920);
 
-			cy.get('.publisher-core-block').realHover();
+			cy.get('.blockera-block').realHover();
 			cy.get('.my-link')
 				.realHover()
 				.should('not.have.css', 'font-size', '25px');
@@ -2554,7 +2554,7 @@ describe('Inner Blocks E2E Test', () => {
 			//   set mobile viewport
 			cy.viewport(320, 480);
 			// TODO
-			// cy.get('.publisher-core-block').realHover();
+			// cy.get('.blockera-block').realHover();
 			// cy.get('.my-link')
 			// 	.realHover()
 			// 	.should('have.css', 'font-size', '25px');
@@ -3160,17 +3160,17 @@ describe('Inner Blocks E2E Test', () => {
 												expect({
 													laptop: {
 														attributes: {
-															publisherInnerBlocks:
+															blockeraInnerBlocks:
 																{
 																	link: {
 																		attributes:
 																			{
-																				publisherBorderRadius:
+																				blockeraBorderRadius:
 																					{
 																						type: 'all',
 																						all: '5px',
 																					},
-																				publisherBlockStates:
+																				blockeraBlockStates:
 																					{
 																						focus: {
 																							isVisible: true,
@@ -3179,7 +3179,7 @@ describe('Inner Blocks E2E Test', () => {
 																									laptop: {
 																										attributes:
 																											{
-																												publisherBorderRadius:
+																												blockeraBorderRadius:
 																													{
 																														type: 'all',
 																														all: '15px',
@@ -3195,7 +3195,7 @@ describe('Inner Blocks E2E Test', () => {
 																									laptop: {
 																										attributes:
 																											{
-																												publisherBorderRadius:
+																												blockeraBorderRadius:
 																													{
 																														type: 'custom',
 																														all: '5px',
@@ -3213,7 +3213,7 @@ describe('Inner Blocks E2E Test', () => {
 																									mobile: {
 																										attributes:
 																											{
-																												publisherBorderRadius:
+																												blockeraBorderRadius:
 																													{
 																														type: 'all',
 																														all: '20px',
@@ -3240,12 +3240,12 @@ describe('Inner Blocks E2E Test', () => {
 													},
 													mobile: {
 														attributes: {
-															publisherInnerBlocks:
+															blockeraInnerBlocks:
 																{
 																	link: {
 																		attributes:
 																			{
-																				publisherBorderRadius:
+																				blockeraBorderRadius:
 																					{
 																						type: 'custom',
 																						all: '',
@@ -3258,7 +3258,7 @@ describe('Inner Blocks E2E Test', () => {
 																						bottomRight:
 																							'30px',
 																					},
-																				publisherBlockStates:
+																				blockeraBlockStates:
 																					{
 																						focus: {
 																							breakpoints:
@@ -3266,7 +3266,7 @@ describe('Inner Blocks E2E Test', () => {
 																									laptop: {
 																										attributes:
 																											{
-																												publisherBorderRadius:
+																												blockeraBorderRadius:
 																													{
 																														type: 'all',
 																														all: '15px',
@@ -3282,7 +3282,7 @@ describe('Inner Blocks E2E Test', () => {
 																									laptop: {
 																										attributes:
 																											{
-																												publisherBorderRadius:
+																												blockeraBorderRadius:
 																													{
 																														type: 'custom',
 																														all: '5px',
@@ -3300,7 +3300,7 @@ describe('Inner Blocks E2E Test', () => {
 																									mobile: {
 																										attributes:
 																											{
-																												publisherBorderRadius:
+																												blockeraBorderRadius:
 																													{
 																														type: 'all',
 																														all: '20px',
@@ -3329,7 +3329,7 @@ describe('Inner Blocks E2E Test', () => {
 												}).to.be.deep.equal(
 													getSelectedBlock(
 														data,
-														'publisherBlockStates'
+														'blockeraBlockStates'
 													).hover.breakpoints
 												);
 											});
@@ -3343,7 +3343,7 @@ describe('Inner Blocks E2E Test', () => {
 											// Assert in default viewport
 											cy.viewport(1025, 1440);
 											cy.get(
-												'.publisher-core-block'
+												'.blockera-block'
 											).realHover();
 
 											cy.get('.my-link').should(
@@ -3375,7 +3375,7 @@ describe('Inner Blocks E2E Test', () => {
 											// Set desktop viewport
 											cy.viewport(1441, 1920);
 											cy.get(
-												'.publisher-core-block'
+												'.blockera-block'
 											).realHover();
 
 											// cy.get('.my-link').should(
@@ -3407,7 +3407,7 @@ describe('Inner Blocks E2E Test', () => {
 											// Set mobile viewport
 											cy.viewport(380, 470);
 											cy.get(
-												'.publisher-core-block'
+												'.blockera-block'
 											).realHover();
 
 											// cy.get('.my-link').should(
@@ -3776,21 +3776,20 @@ describe('Inner Blocks E2E Test', () => {
 			getWPDataObject().then((data) => {
 				expect(1).to.be.equal(
 					Object.keys(
-						getSelectedBlock(data, 'publisherInnerBlocks').link
+						getSelectedBlock(data, 'blockeraInnerBlocks').link
 							.attributes
 					).length
 				);
 
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks').link
-						.attributes.publisherBlockStates.hover.breakpoints
-						.tablet
+					getSelectedBlock(data, 'blockeraInnerBlocks').link
+						.attributes.blockeraBlockStates.hover.breakpoints.tablet
 				);
 
 				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks').link
-						.attributes.publisherBlockStates.hover.breakpoints
-						.laptop.attributes.publisherHeight
+					getSelectedBlock(data, 'blockeraInnerBlocks').link
+						.attributes.blockeraBlockStates.hover.breakpoints.laptop
+						.attributes.blockeraHeight
 				);
 
 				expect({
@@ -3802,13 +3801,13 @@ describe('Inner Blocks E2E Test', () => {
 					},
 					hover: {
 						breakpoints: {
-							laptop: { attributes: { publisherWidth: '100px' } },
+							laptop: { attributes: { blockeraWidth: '100px' } },
 						},
 						isVisible: true,
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'publisherInnerBlocks').link
-						.attributes.publisherBlockStates
+					getSelectedBlock(data, 'blockeraInnerBlocks').link
+						.attributes.blockeraBlockStates
 				);
 			});
 		});
