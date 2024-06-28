@@ -21,17 +21,19 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				expect('27px').to.be.equal(
-					getSelectedBlock(data, 'blockeraFontSize')
+				expect('#000000').to.be.equal(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 			});
 		});
+
 		it('should sets value when state is paragraph -> normal -> tablet', () => {
 			appendBlocks(
 				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
@@ -40,17 +42,18 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			setDeviceType('Tablet');
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				expect('27px').to.be.equal(
+				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraFontSize
+						.breakpoints.tablet.attributes.blockeraBackgroundColor
 				);
 			});
 		});
@@ -63,21 +66,22 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			setDeviceType('Tablet');
 			setInnerBlock('Link');
 
 			cy.getByAriaLabel('Add New State').click();
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				expect('27px').to.be.equal(
+				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
 						.attributes.blockeraBlockStates.hover.breakpoints.tablet
-						.attributes.blockeraFontSize
+						.attributes.blockeraBackgroundColor
 				);
 			});
 		});
@@ -90,21 +94,23 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				expect('27px').to.be.equal(
+				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraFontSize
+						.breakpoints.laptop.attributes.blockeraBackgroundColor
 				);
 			});
 		});
+
 		it('should sets value when state is paragraph -> hover -> tablet', () => {
 			appendBlocks(
 				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
@@ -113,20 +119,21 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			setDeviceType('Tablet');
 
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				expect('27px').to.be.equal(
+				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet.attributes.blockeraFontSize
+						.breakpoints.tablet.attributes.blockeraBackgroundColor
 				);
 			});
 		});
@@ -139,24 +146,26 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
 			setInnerBlock('Link');
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				expect('27px').to.be.equal(
+				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraFontSize
+						.attributes.blockeraBackgroundColor
 				);
 			});
 		});
+
 		it('should sets value when state is paragraph -> hover -> tablet -> link -> normal -> laptop', () => {
 			appendBlocks(
 				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
@@ -165,7 +174,7 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			setDeviceType('Tablet');
 
@@ -174,15 +183,16 @@ describe('useAttributes Hook Testing ...', () => {
 
 			setInnerBlock('Link');
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				console.log(getSelectedBlock(data, 'blockeraBlockStates'));
-				expect('27px').to.be.equal(
+				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraFontSize
+						.attributes.blockeraBackgroundColor
 				);
 			});
 		});
@@ -195,7 +205,7 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			cy.getByAriaLabel('Add New State').click();
 
@@ -203,18 +213,20 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.getByAriaLabel('Add New State').click();
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				expect('27px').to.be.equal(
+				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
 						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes.blockeraFontSize
+						.attributes.blockeraBackgroundColor
 				);
 			});
 		});
+
 		it('should sets value when state is paragraph -> hover -> mobile -> link -> hover -> mobile', () => {
 			appendBlocks(
 				'<!-- wp:paragraph -->\n' +
@@ -223,7 +235,7 @@ describe('useAttributes Hook Testing ...', () => {
 			);
 
 			// Select target block
-			cy.get('[data-type="core/paragraph"]').click();
+			cy.getBlock('core/paragraph').click();
 
 			cy.getByAriaLabel('Add New State').click();
 
@@ -232,20 +244,21 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.getByAriaLabel('Add New State').click();
 
-			cy.setInputFieldValue('Font Size', 'Typography', 27);
+			cy.setColorControlValue('BG Color', '#000000');
+			cy.getParentContainer('BG Color').should('contain', '#000000');
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				expect('27px').to.be.equal(
+				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.mobile.attributes.blockeraInnerBlocks.link
 						.attributes.blockeraBlockStates.hover.breakpoints.mobile
-						.attributes.blockeraFontSize
+						.attributes.blockeraBackgroundColor
 				);
 			});
 		});
 
-		describe('in paragraph -> normal -> laptop state has blockeraFontSize with 27px value', () => {
+		describe('in paragraph -> normal -> laptop state has blockeraBackgroundColor with 27px value', () => {
 			beforeEach(() => {
 				appendBlocks(
 					'<!-- wp:paragraph -->\n' +
@@ -254,9 +267,10 @@ describe('useAttributes Hook Testing ...', () => {
 				);
 
 				// Select target block
-				cy.get('[data-type="core/paragraph"]').click();
+				cy.getBlock('core/paragraph').click();
 
-				cy.setInputFieldValue('Font Size', 'Typography', 27);
+				cy.setColorControlValue('BG Color', '#000000');
+				cy.getParentContainer('BG Color').should('contain', '#000000');
 			});
 
 			describe('adding hover -> laptop state', () => {
@@ -306,6 +320,7 @@ describe('useAttributes Hook Testing ...', () => {
 				});
 			});
 		});
+
 		describe('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
 			beforeEach(() => {
 				appendBlocks(
@@ -315,7 +330,7 @@ describe('useAttributes Hook Testing ...', () => {
 				);
 
 				// Select target block
-				cy.get('[data-type="core/paragraph"]').click();
+				cy.getBlock('core/paragraph').click();
 
 				// Add default text shadow item
 				cy.getByAriaLabel('Add New Text Shadow').click();
@@ -368,6 +383,7 @@ describe('useAttributes Hook Testing ...', () => {
 				});
 			});
 		});
+
 		describe('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
 			beforeEach(() => {
 				appendBlocks(
@@ -377,7 +393,7 @@ describe('useAttributes Hook Testing ...', () => {
 				);
 
 				// Select target block
-				cy.get('[data-type="core/paragraph"]').click();
+				cy.getBlock('core/paragraph').click();
 
 				// Add default text shadow item
 				cy.getByAriaLabel('Add New Text Shadow').click();
