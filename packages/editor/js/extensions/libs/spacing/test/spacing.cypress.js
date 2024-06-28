@@ -1,4 +1,5 @@
 import {
+	createPost,
 	savePage,
 	addBlockToPost,
 	getWPDataObject,
@@ -77,7 +78,7 @@ describe('Spacing Extension', () => {
 
 				redirectToFrontPage();
 
-				cy.get('.blockera-paragraph')
+				cy.get('.blockera-block')
 					.should('have.css', 'margin-top', '10px')
 					.and('have.css', 'margin-right', '20px')
 					.and('have.css', 'margin-bottom', '10px')
@@ -157,7 +158,7 @@ describe('Spacing Extension', () => {
 
 				redirectToFrontPage();
 
-				cy.get('.blockera-paragraph')
+				cy.get('.blockera-block')
 					.should('have.css', 'padding-top', '10px')
 					.and('have.css', 'padding-right', '20px')
 					.and('have.css', 'padding-bottom', '10px')
