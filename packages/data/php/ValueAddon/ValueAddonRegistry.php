@@ -75,8 +75,10 @@ class ValueAddonRegistry {
 	 * Get instance.
 	 *
 	 * @throws BindingResolutionException The BindingResolutionException for not bounded object.
+	 *
+	 * @return ValueAddonType|null
 	 */
-	protected function getInstance(): ValueAddonType|null {
+	protected function getInstance() {
 
 		if ( ! $this->application->has( $this->abstract ) ) {
 
