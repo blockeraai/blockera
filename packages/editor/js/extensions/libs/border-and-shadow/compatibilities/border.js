@@ -8,6 +8,7 @@ import {
 	getColorVAFromVarString,
 } from '@blockera/data';
 import { isValid, isBorderEmpty } from '@blockera/controls';
+import { isEquals } from '@blockera/utils';
 
 export function borderFromWPCompatibility({
 	attributes,
@@ -147,6 +148,55 @@ export function borderToWPCompatibility({
 			},
 		};
 	} else if (newValue.type === 'custom') {
+		// if type is custom but value is empty
+		// then we should not set wp data compatibility
+		if (
+			isEquals(newValue, {
+				type: 'custom',
+				all: {
+					width: '',
+					style: '',
+					color: '',
+				},
+				top: {
+					width: '',
+					color: '',
+					style: '',
+				},
+				right: {
+					width: '',
+					color: '',
+					style: '',
+				},
+				bottom: {
+					width: '',
+					color: '',
+					style: '',
+				},
+				left: {
+					width: '',
+					color: '',
+					style: '',
+				},
+			})
+		) {
+			const newBorder = {
+				style: {
+					border: {
+						color: undefined,
+						width: undefined,
+						style: undefined,
+						top: undefined,
+						right: undefined,
+						bottom: undefined,
+						left: undefined,
+					},
+				},
+			};
+
+			return newBorder;
+		}
+
 		const border = {
 			style: {
 				border: {
