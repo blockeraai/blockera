@@ -3,7 +3,7 @@ import {
 	createPost,
 	// setInnerBlock,
 	// setDeviceType,
-} from '../../../../../cypress/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 function setFontSize(value) {
 	// Alias
