@@ -1,3 +1,22 @@
+= 1.1.7 - 2024-6-29
+-   Tweak: PHP requirement decreased to PHP v7.4.
+-   Tweak: WP requirement decreased to v6.4.5.
+-   Tweak: Custom aspect ratio compatibility in WP 6.6 Data.
+-   Tweak: Box spacing feature WP Data compatibility improvement.
+-   Tweak: Border feature WP Data compatibility improvement.
+-   Tweak: Background image feature WP Data compatibility improvement.
+-   Tweak: Add more E2E, component, and PHP unit tests.
+-   Tweak: Various performance improvements.
+-   Tweak: Update Storybook and Cypress to the latest versions.
+-   Tweak: Experimental features are on the main branch of the plugin.
+-   Tweak: Design improvements in some block features.
+
+-   Fix: Blocks and admin panel not working if WP debug is true.
+-   Fix: PHPCS errors and warnings.
+-   Fix: Bugs in repeater features.
+-   Fix: Address various bugs.
+
+
 = 1.1.6 - 2024-6-18
 -   New:  Experimental feature infrastructure is being developed to enable the shipment of 
 		  experimental features in upcoming updates. 
