@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Direct access is not allowed.
  *
