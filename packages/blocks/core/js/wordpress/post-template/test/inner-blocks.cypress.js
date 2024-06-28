@@ -23,6 +23,8 @@ describe('Post Template Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/post-template').click();
 
+		cy.get('button[aria-label="Post Template"]').click();
+
 		// open inner block settings
 		openInnerBlocksExtension();
 
