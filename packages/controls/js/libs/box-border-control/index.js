@@ -92,7 +92,7 @@ export default function BoxBorderControl({
 	// value clean up for removing extra values to prevent saving extra data!
 	function valueCleanup(value: TValueTypes) {
 		if (isEquals(value, defaultValue)) {
-			return value;
+			return '';
 		}
 
 		if (value.type === 'all') {
@@ -119,40 +119,6 @@ export default function BoxBorderControl({
 					value[key].style = '';
 				}
 			});
-
-			// return empty object if all values are empty
-			if (
-				isEquals(value, {
-					type: 'custom',
-					all: {
-						width: '',
-						style: '',
-						color: '',
-					},
-					top: {
-						width: '',
-						color: '',
-						style: '',
-					},
-					right: {
-						width: '',
-						color: '',
-						style: '',
-					},
-					bottom: {
-						width: '',
-						color: '',
-						style: '',
-					},
-					left: {
-						width: '',
-						color: '',
-						style: '',
-					},
-				})
-			) {
-				return '';
-			}
 		}
 
 		return value;
