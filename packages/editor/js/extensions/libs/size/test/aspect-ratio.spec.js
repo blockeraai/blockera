@@ -13,6 +13,14 @@ describe('detectWPAspectRatioValue', () => {
 		});
 	});
 
+	test('auto means original in Blockera', () => {
+		expect(detectWPAspectRatioValue('auto')).toEqual({
+			value: '',
+			width: '',
+			height: '',
+		});
+	});
+
 	test('WP core values', () => {
 		coreWPAspectRatioValues.forEach((item) => {
 			expect(detectWPAspectRatioValue(item)).toEqual({

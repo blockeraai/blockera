@@ -134,7 +134,7 @@ export function detectWPAspectRatioValue(aspectRatio: string): {
 	width: '' | string,
 	height: '' | string,
 } {
-	if (!aspectRatio) {
+	if (!aspectRatio || aspectRatio === 'auto') {
 		return {
 			value: '',
 			width: '',
