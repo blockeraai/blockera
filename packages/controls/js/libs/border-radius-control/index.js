@@ -77,14 +77,6 @@ export default function BorderRadiusControl({
 			if (value?.all === '') {
 				return '';
 			}
-		} else if (
-			value?.type === 'custom' &&
-			value?.topLeft === '' &&
-			value?.topRight === '' &&
-			value?.bottomLeft === '' &&
-			value?.bottomRight === ''
-		) {
-			return '';
 		}
 
 		return value;
