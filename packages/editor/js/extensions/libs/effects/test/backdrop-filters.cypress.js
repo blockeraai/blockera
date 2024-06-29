@@ -50,16 +50,14 @@ describe('Backdrop Filters → Functionality', () => {
 			});
 
 		// Check block
-		cy.getBlock('core/paragraph')
-			.parent()
-			.within(() => {
-				cy.get('style')
-					.invoke('text')
-					.should(
-						'include',
-						'backdrop-filter: drop-shadow(50px 30px 40px #cccccc);'
-					);
-			});
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-styles-wrapper')
+				.invoke('text')
+				.should(
+					'include',
+					'backdrop-filter: drop-shadow(50px 30px 40px #cccccc);'
+				);
+		});
 
 		// Check store
 		getWPDataObject().then((data) => {
