@@ -194,7 +194,7 @@
 		"prepare": "husky install",
 		"flow": "npx flow status",
 		"setup": "npm install && npm run build",
-		"test:e2e": "npx cypress run --config video=false --browser chrome --spec 'editor/js/extensions/libs/border-and-shadow/test/outline.cypress.js'",
+		"test:e2e": "npx cypress run --config video=false --browser chrome --spec 'editor/js/extensions/libs/border-and-shadow/test/border.cy.compatibility.js'",
 		"test:ct": "npx cypress run --component",
 		"test:ct:debug": "npx cypress open --component",
 		"test:e2e:debug": "npx cypress open --e2e",
