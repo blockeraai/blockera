@@ -21,7 +21,7 @@ describe('Post Template Block → Inner Blocks', () => {
 		appendBlocks(testContent);
 
 		// Select target block
-		cy.getBlock('core/post-template').click();
+		cy.getBlock('core/post-template').click({ force: true });
 
 		cy.get('button[aria-label="Post Template"]').click();
 
