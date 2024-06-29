@@ -3,7 +3,15 @@
 	"description": "The utilities for blockera on WordPress CMS.",
 	"autoload": {
 		"psr-4": {
-		 	"Blockera\\WordPress\\": "php/"
+			"Blockera\\WordPress\\": "php/"
+		},
+		"files": [
+			"php/functions.php"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\WordPress\\Test\\": "php/tests/"
 		}
 	}
 }

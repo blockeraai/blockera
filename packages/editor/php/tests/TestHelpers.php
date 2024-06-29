@@ -2,6 +2,8 @@
 
 namespace Blockera\Editor\Tests;
 
+use Blockera\WordPress\RenderBlock\Setup;
+
 class TestHelpers extends \WP_UnitTestCase {
 
 	public function testItShouldRetrieveCssUniqueClassname(): void {
@@ -91,24 +93,6 @@ class TestHelpers extends \WP_UnitTestCase {
 			),
 			[]
 		);
-	}
-
-	/**
-	 * @dataProvider getBlocksWithSelectors
-	 *
-	 * @param string $blockType
-	 * @param array  $expectedSelectors
-	 *
-	 * @return void
-	 */
-	public function testItShouldRetrieveBlockTypeCssSelectorsExpectedList( string $blockType = '', array $expectedSelectors = [] ): void {
-
-		$this->assertSame( $expectedSelectors, blockera_get_block_type_selectors( $blockType ) );
-	}
-
-	public function getBlocksWithSelectors(): array {
-
-		return require __DIR__ . '/Fixtures/StyleEngine/blocks-with-selectors.php';
 	}
 
 	/**

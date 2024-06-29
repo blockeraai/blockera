@@ -225,7 +225,7 @@ final class StyleEngine {
 		}
 
 		$selectors = blockera_get_block_state_selectors(
-			blockera_get_block_type_selectors( $this->block['blockName'] ),
+			blockera_get_block_type_property( $this->block['blockName'], 'selectors' ),
 			[
 				'is-inner-block'     => false,
 				'block-type'         => 'master',
@@ -280,7 +280,7 @@ final class StyleEngine {
 
 		// Inner block status set TRUE.
 		$selectors = blockera_get_block_state_selectors(
-			blockera_get_block_type_selectors( $this->block['blockName'] ),
+			blockera_get_block_type_property( $this->block['blockName'], 'selectors' ),
 			[
 				'is-inner-block'     => true,
 				'block-type'         => $blockType,

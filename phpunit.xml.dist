@@ -19,6 +19,7 @@
             <directory suffix=".php">./packages/dev-phpunit/php/</directory>
             <directory suffix=".php">./packages/blockera/php/tests/</directory>
             <directory suffix=".php">./packages/editor/php/tests/</directory>
+            <directory suffix=".php">./packages/wordpress/php/tests/</directory>
             <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
             <exclude>./packages/editor/php/tests/Fixtures/</exclude>
             <exclude>./node_modules/</exclude>

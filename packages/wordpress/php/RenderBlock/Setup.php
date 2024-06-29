@@ -10,6 +10,13 @@ namespace Blockera\WordPress\RenderBlock;
 class Setup {
 
 	/**
+	 * Store block directory path.
+	 *
+	 * @var string $block_dir_path the block directory path.
+	 */
+	public string $block_dir_path = '';
+
+	/**
 	 * The Blockera\WordPress\RenderBlock\Setup constructor.
 	 */
 	public function __construct() {
@@ -18,7 +25,7 @@ class Setup {
 	}
 
 	/**
-	 * Register block extra arguments.
+	 * Register block extra arguments for third party block types.
 	 *
 	 * @param array  $args       The block args.
 	 * @param string $block_type The block type name.
@@ -27,11 +34,12 @@ class Setup {
 	 */
 	public function register_block( array $args, string $block_type ): array {
 
-		$relativePathDir = $this->getBlockDirectoryPath( $block_type );
-		$blockFile       = sprintf(
+		$this->setBlockDirectoryPath( $block_type );
+
+		$blockFile = sprintf(
 			'%1$sblockera/blocks-core/php/%2$s/block.php',
 			blockera_core_config( 'app.vendor_path' ),
-			$relativePathDir
+			$this->getBlockDirectoryPath()
 		);
 
 		if ( ! file_exists( $blockFile ) ) {
@@ -43,33 +51,41 @@ class Setup {
 	}
 
 	/**
-	 * Get block directory path with blockType name.
+	 * Get block directory relative path.
+	 *
+	 * @return string the block directory relative path includes in packages/blocks/
+	 */
+	public function getBlockDirectoryPath(): string {
+
+		return $this->block_dir_path;
+	}
+
+	/**
+	 * Set block directory path with blockType name.
 	 *
 	 * @param string $blockType The block type full name.
 	 *
-	 * @return string the block directory relative path includes in packages/blocks/js/
+	 * @return void
 	 */
-	protected function getBlockDirectoryPath( string $blockType ): string {
+	public function setBlockDirectoryPath( string $blockType ): void {
 
 		$parsedName = explode( '/', $blockType );
 
 		if ( count( $parsedName ) < 2 ) {
 
-			return $blockType;
-		}
+			$this->block_dir_path = $blockType;
 
-		$directoryPath = '';
+			return;
+		}
 
 		switch ( $parsedName[0] ) {
 
 			// WordPress Core Blocks.
 			case 'core':
-				$directoryPath = sprintf( 'wordpress/%s', $parsedName[1] );
+				$this->block_dir_path = sprintf( 'wordpress/%s', $parsedName[1] );
 				break;
 			// TODO: Implements other blocks in this here ...
 		}
-
-		return $directoryPath;
 	}
 
 }

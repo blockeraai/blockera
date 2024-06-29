@@ -93,28 +93,6 @@ if ( ! function_exists( 'blockera_block_state_validate' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_get_block_type_selectors' ) ) {
-
-	/**
-	 * Retrieve block type mapped selectors array.
-	 *
-	 * @param string $name the block name.
-	 *
-	 * @return array the css mapped to array css selectors.
-	 */
-	function blockera_get_block_type_selectors( string $name ): array {
-
-		$registered = WP_Block_Type_Registry::get_instance()->get_registered( $name );
-
-		if ( null === $registered ) {
-
-			return [];
-		}
-
-		return WP_Block_Type_Registry::get_instance()->get_registered( $name )->selectors;
-	}
-}
-
 if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 	/**
 	 * Retrieve block state selectors.
