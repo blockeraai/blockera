@@ -63,6 +63,21 @@ export function borderRadiusToWPCompatibility({
 			};
 		}
 	} else if (newValue.type === 'custom') {
+		if (
+			newValue?.topLeft === '' &&
+			newValue?.topRight === '' &&
+			newValue?.bottomLeft === '' &&
+			newValue?.bottomRight === ''
+		) {
+			return {
+				style: {
+					border: {
+						radius: undefined,
+					},
+				},
+			};
+		}
+
 		const corners: {
 			topLeft?: string,
 			topRight?: string,

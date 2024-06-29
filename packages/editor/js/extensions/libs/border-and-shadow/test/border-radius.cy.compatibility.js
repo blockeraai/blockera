@@ -198,7 +198,14 @@ describe('Border Radius → WP Compatibility', () => {
 
 			// WP data should be removed too
 			getWPDataObject().then((data) => {
-				expect('').to.be.equal(
+				expect({
+					type: 'custom',
+					all: '',
+					topLeft: '',
+					topRight: '',
+					bottomLeft: '',
+					bottomRight: '',
+				}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBorderRadius')
 				);
 
@@ -306,7 +313,14 @@ describe('Border Radius → WP Compatibility', () => {
 
 			// WP data should be removed too
 			getWPDataObject().then((data) => {
-				expect('').to.be.equal(
+				expect({
+					type: 'custom',
+					all: '',
+					topLeft: '',
+					topRight: '',
+					bottomLeft: '',
+					bottomRight: '',
+				}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBorderRadius')
 				);
 
