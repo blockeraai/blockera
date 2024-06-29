@@ -85,7 +85,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		cy.get('.components-popover').within(() => {
 			cy.get('input').as('hexColorInput');
 			cy.get('@hexColorInput').clear();
-			cy.get('@hexColorInput').type('666');
+			cy.get('@hexColorInput').type('666666', { delay: 0 });
 		});
 
 		//
@@ -100,7 +100,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		cy.get('.components-popover').within(() => {
 			cy.get('input').as('hexColorInput');
 			cy.get('@hexColorInput').clear();
-			cy.get('@hexColorInput').type('888');
+			cy.get('@hexColorInput').type('888888', { delay: 0 });
 		});
 
 		getWPDataObject().then((data) => {
@@ -110,9 +110,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					normal: {
 						isVisible: true,
 						breakpoints: {
-							laptop: {
-								attributes: {},
-							},
+							laptop: {},
 						},
 					},
 					hover: {
@@ -345,9 +343,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 				blockeraBlockStates: {
 					normal: {
 						breakpoints: {
-							laptop: {
-								attributes: {},
-							},
+							laptop: {},
 						},
 						isVisible: true,
 					},
