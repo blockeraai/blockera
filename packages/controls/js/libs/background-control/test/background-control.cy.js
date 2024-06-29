@@ -41,6 +41,11 @@ describe(
 
 						cy.get('.blockera-component-popover').within(() => {
 							cy.get('[aria-label="Contain"]').click();
+							cy.get('[aria-label="Contain"]').should(
+								'have.attr',
+								'aria-checked',
+								'true'
+							);
 						});
 
 						cy.then(() => {
@@ -302,6 +307,10 @@ describe(
 							cy.get('input[type="number"]').type('135', {
 								delay: 0,
 							});
+							cy.get('input[type="number"]').should(
+								'have.value',
+								'135'
+							);
 						});
 					});
 
@@ -334,12 +343,14 @@ describe(
 					}).should('exist');
 
 					cy.get('.blockera-component-popover').then(() => {
-						cy.log('Popover found');
-
 						cy.get('button[aria-label="Repeat"]').then(($btn) => {
-							cy.log('Repeat button found', $btn);
 							$btn.click();
 						});
+						cy.get('button[aria-label="Repeat"]').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
 					});
 
 					cy.then(() => {
@@ -461,6 +472,7 @@ describe(
 							.as('positionTopInput');
 						cy.get('@positionTopInput').clear();
 						cy.get('@positionTopInput').type('80');
+						cy.get('@positionTopInput').should('have.value', '80');
 					});
 
 					cy.then(() => {
@@ -495,6 +507,11 @@ describe(
 
 					cy.get('.blockera-component-popover').within(() => {
 						cy.get('button[data-value="closest-corner"]').click();
+						cy.get('button[data-value="closest-corner"]').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
 					});
 
 					cy.then(() => {
@@ -525,8 +542,12 @@ describe(
 					}).should('be.visible');
 
 					cy.get('.blockera-component-popover').within(() => {
-						cy.log('Popover found');
 						cy.get('button[aria-label="Repeat"]').click();
+						cy.get('button[aria-label="Repeat"]').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
 					});
 
 					cy.then(() => {
