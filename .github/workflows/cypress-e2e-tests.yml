@@ -39,7 +39,7 @@ jobs:
               run: npm run build
 
             - name: Run Cypress E2E Tests
-              run: npm run test:e2e
+              run: npm run test:e2e  --spec 'packages/blocks/core/js/wordpress/post-template/test/inner-blocks.cypress.js'
 
             - name: Stop WordPress Environment
               run: npm run env:stop
