@@ -42,16 +42,14 @@ describe('Transforms → Functionality', () => {
 			});
 
 			// Check block CSS
-			cy.getBlock('core/paragraph')
-				.parent()
-				.within(() => {
-					cy.get('style')
-						.invoke('text')
-						.should(
-							'include',
-							`transform: translate3d(150px, 200px, 100px);`
-						);
-				});
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should(
+						'include',
+						`transform: translate3d(150px, 200px, 100px);`
+					);
+			});
 
 			// Check store data
 			getWPDataObject().then((data) => {
@@ -107,16 +105,11 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Check block
-			cy.getBlock('core/paragraph')
-				.parent()
-				.within(() => {
-					cy.get('style')
-						.invoke('text')
-						.should(
-							'include',
-							'transform: scale3d(130%, 130%, 50%);'
-						);
-				});
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should('include', 'transform: scale3d(130%, 130%, 50%);');
+			});
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -157,16 +150,14 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Check block
-			cy.getBlock('core/paragraph')
-				.parent()
-				.within(() => {
-					cy.get('style')
-						.invoke('text')
-						.should(
-							'include',
-							'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg);'
-						);
-				});
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should(
+						'include',
+						'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg);'
+					);
+			});
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -212,13 +203,11 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Check block
-			cy.getBlock('core/paragraph')
-				.parent()
-				.within(() => {
-					cy.get('style')
-						.invoke('text')
-						.should('include', 'transform: skew(10deg, 20deg);');
-				});
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should('include', 'transform: skew(10deg, 20deg);');
+			});
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -260,16 +249,14 @@ describe('Transforms → Functionality', () => {
 				});
 
 			//Check block
-			cy.getBlock('core/paragraph')
-				.parent()
-				.within(() => {
-					cy.get('style')
-						.invoke('text')
-						.should(
-							'include',
-							'transform: perspective(150px) translate3d(0px, 0px, 0px)'
-						);
-				});
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should(
+						'include',
+						'transform: perspective(150px) translate3d(0px, 0px, 0px)'
+					);
+			});
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -300,19 +287,16 @@ describe('Transforms → Functionality', () => {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('span[aria-label="center center"]').click({
+					cy.get('span[aria-label="center center item"]').click({
 						force: true,
 					});
 				});
 
-			//Check block
-			cy.getBlock('core/paragraph')
-				.parent()
-				.within(() => {
-					cy.get('style')
-						.invoke('text')
-						.should('include', 'transform-origin: 50% 50%;');
-				});
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should('include', 'transform-origin: 50% 50%;');
+			});
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -340,13 +324,11 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Check block
-			cy.getBlock('core/paragraph')
-				.parent()
-				.within(() => {
-					cy.get('style')
-						.invoke('text')
-						.should('include', 'backface-visibility: hidden;');
-				});
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should('include', 'backface-visibility: hidden;');
+			});
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -412,19 +394,17 @@ describe('Transforms → Functionality', () => {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('span[aria-label="center center"]').click({
+					cy.get('span[aria-label="center center item"]').click({
 						force: true,
 					});
 				});
 
 			//Check block
-			cy.getBlock('core/paragraph')
-				.parent()
-				.within(() => {
-					cy.get('style')
-						.invoke('text')
-						.should('include', 'perspective-origin: 50% 50%;');
-				});
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should('include', 'perspective-origin: 50% 50%;');
+			});
 
 			//Check store
 			getWPDataObject().then((data) => {
