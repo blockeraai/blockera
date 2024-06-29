@@ -26,25 +26,26 @@ describe('box spacing control component testing', () => {
 
 	it('should display default value', () => {
 		const name = nanoid();
-		const defaultValue = {
-			margin: {
-				top: '10px',
-				right: '78px',
-				bottom: '23px',
-				left: '-10px',
-			},
-			padding: {
-				top: '9px',
-				right: '78px',
-				bottom: '23px',
-				left: '-10px',
-			},
-		};
 		cy.withDataProvider({
 			component: (
 				<BoxSpacingControl
 					label="My Label"
-					defaultValue={defaultValue}
+					defaultValue={{
+						margin: {
+							top: '10px',
+							right: '78px',
+							bottom: '23px',
+							left: '-10px',
+						},
+						marginLock: 'none',
+						padding: {
+							top: '9px',
+							right: '78px',
+							bottom: '23px',
+							left: '-10px',
+						},
+						paddingLock: 'none',
+					}}
 				/>
 			),
 			name,
@@ -58,7 +59,20 @@ describe('box spacing control component testing', () => {
 
 		// Check data provider value!
 		cy.then(() => {
-			return expect(getControlValue(name)).to.deep.eq(defaultValue);
+			return expect(getControlValue(name)).to.deep.eq({
+				margin: {
+					top: '10px',
+					right: '78px',
+					bottom: '23px',
+					left: '-10px',
+				},
+				padding: {
+					top: '9px',
+					right: '78px',
+					bottom: '23px',
+					left: '-10px',
+				},
+			});
 		});
 	});
 
