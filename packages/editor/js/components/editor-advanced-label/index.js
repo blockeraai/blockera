@@ -233,7 +233,6 @@ export const EditorAdvancedLabelControl = ({
 													return resetToDefault();
 												}
 
-												//FIXME: please implements reset_all action!
 												resetToDefault({
 													path,
 													onChange,
