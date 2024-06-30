@@ -302,7 +302,8 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		}
 
 		const prep = prepare(id, currentValue);
-		if (prep !== '' && !isUndefined(prep)) {
+
+		if (!isUndefined(prep)) {
 			return prep;
 		}
 
