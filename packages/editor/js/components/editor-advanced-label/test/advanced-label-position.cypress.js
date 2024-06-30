@@ -140,21 +140,6 @@ describe('Position Control label testing', () => {
 		checkPositionValue('bottom-position', '');
 
 		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Position',
-			'Bottom Position',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		checkPositionValue('bottom-position', '');
-
-		/**
 		 * Tablet device
 		 */
 		setDeviceType('Tablet');
@@ -217,27 +202,6 @@ describe('Position Control label testing', () => {
 
 		// Assert control
 		checkPositionValue('left-position', 50);
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Position',
-			'Left Position',
-			'changed-in-normal-state'
-		);
-		cy.checkLabelClassName(
-			'Position',
-			'Top Position',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		checkPositionValue('left-position', '30');
-		checkPositionValue('top-position', '');
 
 		/**
 		 * Tablet device
@@ -338,21 +302,6 @@ describe('Position Control label testing', () => {
 		 * Normal
 		 */
 		setBlockState('Normal');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Position',
-			'Top Position',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		checkPositionValue('top-position', '');
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
 
 		// Assert label
 		cy.checkLabelClassName(

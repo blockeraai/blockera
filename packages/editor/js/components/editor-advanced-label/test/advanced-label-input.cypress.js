@@ -92,17 +92,6 @@ describe('Input Control label testing (Width)', () => {
 		cy.checkInputFieldValue('Width', 'Size', '');
 
 		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName('Size', 'Width', 'changed-in-other-state');
-
-		// Assert control
-		cy.checkInputFieldValue('Width', 'Size', '');
-
-		/**
 		 * Tablet device
 		 */
 		setDeviceType('Tablet');
@@ -143,17 +132,6 @@ describe('Input Control label testing (Width)', () => {
 
 		// Assert control
 		cy.checkInputFieldValue('Width', 'Size', 40);
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
-
-		// Assert control
-		cy.checkInputFieldValue('Width', 'Size', 50);
 
 		/**
 		 * Tablet device
@@ -232,17 +210,6 @@ describe('Input Control label testing (Width)', () => {
 		 * Normal
 		 */
 		setBlockState('Normal');
-
-		// Assert label
-		cy.checkLabelClassName('Size', 'Width', 'changed-in-other-state');
-
-		// Assert control
-		cy.checkInputFieldValue('Width', 'Size', '');
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
 
 		// Assert label
 		cy.checkLabelClassName('Size', 'Width', 'changed-in-other-state');

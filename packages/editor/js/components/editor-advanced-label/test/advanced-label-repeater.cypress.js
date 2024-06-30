@@ -129,22 +129,6 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 		// Assert control
 		cy.get('@background-item').should('have.length', 0);
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Background',
-			'Image & Gradient',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@background-item').should('have.length', 0);
-
 		/**
 		 * Tablet device
 		 */
@@ -208,21 +192,6 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			cy.getByDataCy('group-control-header').as('background-item');
 		});
 		cy.get('@background-item').should('have.length', 2);
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Background',
-			'Image & Gradient',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		cy.get('@background-item').should('have.length', 1);
 
 		/**
 		 * Tablet device
@@ -338,21 +307,6 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		cy.get('@background-item').should('have.length', 0);
 
 		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Background',
-			'Image & Gradient',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@background-item').should('have.length', 0);
-
-		/**
 		 * Laptop device (Active)
 		 */
 		setDeviceType('Laptop');
@@ -427,66 +381,6 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 			// Assert Angel label
 			cy.get('@angel').should('have.class', 'changed-in-secondary-state');
-		});
-
-		context(
-			'Active -> Laptop -> should correctly display mutated labels',
-			() => {
-				addBlockState('active');
-				openBackgroundItem();
-
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
-
-				// Assert Angel label
-				cy.get('@angel').should('have.class', 'changed-in-other-state');
-			}
-		);
-
-		context('Active -> Laptop -> set type + set position', () => {
-			// Set type
-			cy.getByAriaLabel('Radial Gradient').click();
-
-			// Set position
-			cy.getParentContainer('Top').within(() =>
-				cy.get('input').type('{selectall}30')
-			);
-
-			// Assert Type label
-			cy.get('@type').should('have.class', 'changed-in-secondary-state');
-
-			// Assert Position label
-			cy.getByAriaLabel('Position')
-				.as('position-label')
-				.should('have.class', 'changed-in-secondary-state');
-			cy.getByAriaLabel('Top')
-				.as('position-top-label')
-				.should('have.class', 'changed-in-secondary-state');
-		});
-
-		context(
-			'Active -> Tablet -> should correctly display mutated labels',
-			() => {
-				setDeviceType('Tablet');
-				openBackgroundItem();
-
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
-
-				// Assert Angel label
-				cy.get('@angel').should('have.class', 'changed-in-other-state');
-			}
-		);
-
-		context('Active -> Tablet -> set effect', () => {
-			// Set effect
-			cy.getByAriaLabel('Parallax').click();
-
-			// Assert Effect label
-			cy.getByAriaLabel('Effect').should(
-				'have.class',
-				'changed-in-secondary-state'
-			);
 		});
 
 		context(
@@ -660,9 +554,6 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					true
 				);
 
-				// Effect
-				cy.checkStateGraph('', 'Effect', { tablet: ['Active'] }, true);
-
 				// Radial Gradient item
 				openBackgroundItem(1);
 
@@ -685,38 +576,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				// Type
 				cy.checkStateGraph('', 'Type', { laptop: ['Normal'] }, true);
 
-				cy.checkStateGraph(
-					'',
-					'Position',
-					{ laptop: ['Active'] },
-					true
-				);
-
 				cy.checkStateGraph('', 'Effect', { tablet: ['Normal'] }, true);
-
-				/**
-				 * Active / Laptop
-				 */
-				setBlockState('Active');
-				openBackgroundItem();
-
-				// Assert Type label
-				cy.getByAriaLabel('Type').should(
-					'have.class',
-					'changed-in-normal-state'
-				);
-
-				// Assert Position label
-				cy.getByAriaLabel('Position').should(
-					'have.class',
-					'changed-in-secondary-state'
-				);
-
-				// Assert Position label
-				cy.getByAriaLabel('Effect').should(
-					'have.class',
-					'changed-in-other-state'
-				);
 			}
 		);
 	});

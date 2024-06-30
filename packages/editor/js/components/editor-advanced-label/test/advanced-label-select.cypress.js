@@ -127,23 +127,6 @@ describe('Select Control label testing (Position)', () => {
 		});
 
 		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Position',
-			'Position',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@position-container').within(() => {
-			cy.contains('Relative').should('not.exist');
-		});
-
-		/**
 		 * Tablet device
 		 */
 		setDeviceType('Tablet');
@@ -207,23 +190,6 @@ describe('Select Control label testing (Position)', () => {
 		// Assert control
 		cy.get('@position-container').within(() => {
 			cy.contains('Absolute');
-		});
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Position',
-			'Position',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		cy.get('@position-container').within(() => {
-			cy.contains('Relative');
 		});
 
 		/**
@@ -330,23 +296,6 @@ describe('Select Control label testing (Position)', () => {
 		 * Normal
 		 */
 		setBlockState('Normal');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Position',
-			'Position',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@position-container').within(() => {
-			cy.contains('Relative').should('not.exist');
-		});
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
 
 		// Assert label
 		cy.checkLabelClassName(

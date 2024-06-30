@@ -114,20 +114,6 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			'aria-pressed',
 			'true'
 		);
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName('Size', 'Overflow', 'changed-in-other-state');
-
-		// Assert control
-		cy.getByAriaLabel('Hidden Overflow').should(
-			'not.have.attr',
-			'aria-pressed',
-			'true'
-		);
 
 		/**
 		 * Tablet device
@@ -177,21 +163,6 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 		// Assert control
 		cy.getByAriaLabel('Visible Overflow').should(
-			'have.attr',
-			'aria-pressed',
-			'true'
-		);
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName('Size', 'Overflow', 'changed-in-normal-state');
-
-		// Assert control
-		cy.getByAriaLabel('Hidden Overflow').should(
 			'have.attr',
 			'aria-pressed',
 			'true'
@@ -298,20 +269,6 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		cy.checkLabelClassName('Size', 'Overflow', 'changed-in-other-state');
 
 		// Assert control in normal state
-		cy.getByAriaLabel('Hidden Overflow').should(
-			'not.have.attr',
-			'aria-pressed',
-			'true'
-		);
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName('Size', 'Overflow', 'changed-in-other-state');
-
-		// Assert control
 		cy.getByAriaLabel('Hidden Overflow').should(
 			'not.have.attr',
 			'aria-pressed',

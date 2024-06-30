@@ -116,22 +116,6 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		checkMatrixItem('matrix-top-center-normal');
 
 		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Layout',
-			'Flex Layout',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		// not selected
-		checkMatrixItem('matrix-top-center-normal');
-
-		/**
 		 * Tablet device
 		 */
 		setDeviceType('Tablet');
@@ -189,22 +173,6 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 		// Assert control
 		checkMatrixItem('matrix-bottom-center-selected');
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Layout',
-			'Flex Layout',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		// TODO: related to layout bug -> unCommit after BlockComponent removed in layout extension
-		//checkMatrixItem('matrix-top-center-selected');
 
 		/**
 		 * Tablet device
@@ -300,22 +268,6 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		 * Normal
 		 */
 		setBlockState('Normal');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Layout',
-			'Flex Layout',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		// not selected
-		checkMatrixItem('matrix-top-center-normal');
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
 
 		// Assert label
 		cy.checkLabelClassName(

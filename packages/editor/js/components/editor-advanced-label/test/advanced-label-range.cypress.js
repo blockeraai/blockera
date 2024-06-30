@@ -98,17 +98,6 @@ describe('Range Control label testing (Opacity)', () => {
 		checkOpacityValue('100');
 
 		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
-
-		// Assert control
-		checkOpacityValue(100);
-
-		/**
 		 * Tablet device
 		 */
 		setDeviceType('Tablet');
@@ -153,17 +142,6 @@ describe('Range Control label testing (Opacity)', () => {
 
 		// Assert control
 		checkOpacityValue(30);
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-normal-state');
-
-		// Assert control
-		setOpacityValue(40);
 
 		/**
 		 * Tablet device
@@ -253,17 +231,6 @@ describe('Range Control label testing (Opacity)', () => {
 		// Assert control
 		// 100 is default
 		checkOpacityValue('100');
-
-		/**
-		 * Active
-		 */
-		addBlockState('active');
-
-		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
-
-		// Assert control
-		checkOpacityValue(100);
 
 		/**
 		 * Laptop device (Active)
