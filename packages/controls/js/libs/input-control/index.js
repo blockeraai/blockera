@@ -206,11 +206,10 @@ export default function InputControl({
 								return false;
 							}
 
-							if ('' === recievedValue.inputValue) {
-								return true;
-							}
-
-							return '' !== savedValue.inputValue;
+							return (
+								'' !== savedValue.inputValue ||
+								'' !== recievedValue.inputValue
+							);
 						},
 					}}
 				>
