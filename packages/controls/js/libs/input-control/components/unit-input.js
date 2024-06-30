@@ -44,17 +44,26 @@ export function UnitInput({
 	size,
 	children,
 	onChange,
+	unitValue,
+	inputValue,
 	isValidValue,
 	...props
-}: InputControlProps): MixedElement {
-	const { value, setValue } = useControlContext({
+}: {
+	...InputControlProps,
+	inputValue: string,
+	unitValue: Object,
+}): MixedElement {
+	const { value } = useControlContext({
 		defaultValue,
 		onChange,
 	});
-	const { unitValue, inputValue } = value;
 	const [isMaximizeVisible, setIsMaximizeVisible] = useState(false);
 
 	const onChangeSelect = (newUnitValue: string) => {
+		if ('undefined' === typeof onChange) {
+			return;
+		}
+
 		newUnitValue = getUnitByValue(newUnitValue, units);
 
 		// new unit is func
@@ -64,7 +73,7 @@ export function UnitInput({
 			inputValue !== '' &&
 			!isSpecialUnit(unitValue.value)
 		) {
-			return setValue({
+			return onChange({
 				...value,
 				unitValue: newUnitValue,
 				inputValue: inputValue + unitValue.value,
@@ -80,7 +89,7 @@ export function UnitInput({
 		) {
 			const extractedValue = extractNumberAndUnit(inputValue);
 
-			return setValue({
+			return onChange({
 				...value,
 				unitValue: newUnitValue,
 				inputValue:
@@ -97,7 +106,7 @@ export function UnitInput({
 		) {
 			const extractedValue = extractNumberAndUnit(inputValue);
 
-			return setValue({
+			return onChange({
 				...value,
 				unitValue: newUnitValue,
 				inputValue: extractedValue.value,
@@ -109,14 +118,14 @@ export function UnitInput({
 			isSpecialUnit(unitValue.value) &&
 			inputValue !== ''
 		) {
-			return setValue({
+			return onChange({
 				...value,
 				inputValue: '',
 				unitValue: newUnitValue,
 			});
 		}
 
-		setValue({
+		onChange({
 			...value,
 			inputValue,
 			// old unit is special && current is not && value is empty
@@ -139,7 +148,12 @@ export function UnitInput({
 		_isMaximizeVisible: boolean = false
 	): void => {
 		setIsMaximizeVisible(_isMaximizeVisible);
-		setValue({
+
+		if ('undefined' === typeof onChange) {
+			return;
+		}
+
+		return onChange({
 			...value,
 			inputValue: newValue,
 			unitValue:

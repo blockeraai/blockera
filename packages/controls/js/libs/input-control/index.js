@@ -16,13 +16,13 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { setValueAddon, useValueAddon } from '../../';
 import type { InputControlProps } from './types';
+import { useControlContext } from '../../context';
 import { UnitInput } from './components/unit-input';
+import { setValueAddon, useValueAddon } from '../../';
 import { OtherInput } from './components/other-input';
 import { NumberInput } from './components/number-input';
 import { BaseControl, getFirstUnit, getUnitByValue } from './../index';
-import { ControlContextProvider, useControlContext } from '../../context';
 import { extractNumberAndUnit, getCSSUnits, isSpecialUnit } from './utils';
 
 export type ContextUnitInput = {
@@ -74,7 +74,6 @@ export default function InputControl({
 		blockName,
 		resetToDefault,
 		getControlPath,
-		controlInfo: { name: controlId },
 	} = useControlContext({
 		id,
 		defaultValue,
@@ -128,11 +127,6 @@ export default function InputControl({
 	const unitValue = extractedNoUnit
 		? pickedUnit
 		: getUnitByValue(extractedValue.unit, units);
-
-	const contextValue: ContextUnitInput = {
-		unitValue,
-		inputValue: extractedValue.value,
-	};
 
 	useEffect(() => {
 		// add css units
@@ -189,102 +183,79 @@ export default function InputControl({
 			{...labelProps}
 		>
 			{!isEmpty(units) ? (
-				<ControlContextProvider
-					value={{
-						value: contextValue,
-						name: `${controlId}-${id || ''}-${
-							singularId || ''
-						}-unit-input`,
-						isUpdatableValue: (
-							savedValue: any,
-							recievedValue: any
-						): boolean => {
-							if (
-								recievedValue.inputValue ===
-								savedValue.inputValue
-							) {
-								return false;
-							}
+				<UnitInput
+					isValidValue={isValidValue}
+					range={range}
+					inputValue={extractedValue.value}
+					unitValue={unitValue}
+					units={units}
+					defaultValue={defaultValue}
+					noBorder={noBorder}
+					className={className + ' ' + valueAddonClassNames}
+					disabled={disabled}
+					validator={validator}
+					min={min}
+					max={max}
+					drag={drag}
+					float={float}
+					arrows={arrows}
+					size={size}
+					children={children}
+					onChange={(newValue: ContextUnitInput): void => {
+						const { inputValue, unitValue } = newValue;
 
-							return (
-								'' !== savedValue.inputValue ||
-								'' !== recievedValue.inputValue
-							);
-						},
+						// to append founded not listed units by defaults in units from user input values.
+						if (unitValue?.notFound) {
+							units.forEach((unitPackage, index): void => {
+								if (
+									'founded_from_inputs' === unitPackage?.id &&
+									!unitPackage?.options.includes(unitValue)
+								) {
+									const newUnits = [...units];
+
+									newUnits[index].options.push(unitValue);
+
+									setUnits(newUnits);
+								}
+							});
+
+							if ('' !== value && !inputValue) {
+								setPickedUnit(unitValue);
+							}
+						}
+
+						if (
+							isSpecialUnit(unitValue.value) &&
+							value !== unitValue.value
+						) {
+							setValue(unitValue.value);
+						} else if (
+							(extractedNoUnit || !value) &&
+							inputValue &&
+							(unitValue.value || extractedValue.unit === '')
+						) {
+							setValue(inputValue + unitValue.value);
+						} else if (
+							!extractedNoUnit &&
+							value &&
+							value !== unitValue.value &&
+							'' !== inputValue
+						) {
+							setValue(inputValue + unitValue.value);
+						} else if (
+							('' === inputValue && value) ||
+							('' === inputValue && '' === value)
+						) {
+							if (!isSpecialUnit(pickedUnit.value)) {
+								setPickedUnit(unitValue);
+							}
+							setValue(inputValue);
+						}
 					}}
+					{...props}
 				>
-					<UnitInput
-						isValidValue={isValidValue}
-						range={range}
-						units={units}
-						defaultValue={defaultValue}
-						noBorder={noBorder}
-						className={className + ' ' + valueAddonClassNames}
-						disabled={disabled}
-						validator={validator}
-						min={min}
-						max={max}
-						drag={drag}
-						float={float}
-						arrows={arrows}
-						size={size}
-						children={children}
-						onChange={(newValue: ContextUnitInput): void => {
-							const { inputValue, unitValue } = newValue;
-
-							// to append founded not listed units by defaults in units from user input values.
-							if (unitValue?.notFound) {
-								units.forEach((unitPackage, index): void => {
-									if (
-										'founded_from_inputs' ===
-											unitPackage?.id &&
-										!unitPackage?.options.includes(
-											unitValue
-										)
-									) {
-										const newUnits = [...units];
-
-										newUnits[index].options.push(unitValue);
-
-										setUnits(newUnits);
-									}
-								});
-
-								if ('' !== value && !inputValue) {
-									setPickedUnit(unitValue);
-								}
-							}
-
-							if (
-								isSpecialUnit(unitValue.value) &&
-								value !== unitValue.value
-							) {
-								setValue(unitValue.value);
-							} else if (
-								(extractedNoUnit || !value) &&
-								inputValue &&
-								(unitValue.value || extractedValue.unit === '')
-							) {
-								setValue(inputValue + unitValue.value);
-							} else if (
-								!extractedNoUnit &&
-								value &&
-								value !== unitValue.value &&
-								'' !== inputValue
-							) {
-								setValue(inputValue + unitValue.value);
-							} else if ('' === inputValue && value) {
-								if (!isSpecialUnit(pickedUnit.value)) {
-									setPickedUnit(unitValue);
-								}
-								setValue(inputValue);
-							}
-						}}
-						{...props}
-					>
-						<ValueAddonPointer />
-					</UnitInput>
-				</ControlContextProvider>
+					<ValueAddonPointer />
+				</UnitInput>
 			) : (
 				<>
 					{type === 'number' ? (

@@ -13,14 +13,13 @@ export type ControlContextRef = {
 };
 
 export type ControlInfo = {
-	block?: Object,
 	value: any,
 	name: string,
+	block?: Object,
 	attribute?: string,
 	blockName?: string,
-	description?: string | MixedElement | any,
 	type?: 'simple' | 'nested',
-	isUpdatableValue?: (savedValue: any, recievedValue: any) => boolean,
+	description?: string | MixedElement | any,
 };
 
 export type ControlContextProviderProps = {
