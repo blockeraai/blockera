@@ -26,6 +26,8 @@ export type LabelControlProps = {
 		propId?: string | null,
 		action?: string,
 		attribute?: string,
+		onChange?: (newValue: any) => void,
+		valueCleanup?: (newValue: any) => any,
 	}) => any,
 };
 
