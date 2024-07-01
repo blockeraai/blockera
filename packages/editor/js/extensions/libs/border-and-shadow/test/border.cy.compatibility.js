@@ -669,31 +669,11 @@ describe('Border → WP Compatibility', () => {
 
 				getWPDataObject().then((data) => {
 					expect({
-						type: 'custom',
+						type: 'all',
 						all: {
 							width: '',
 							style: '',
 							color: '',
-						},
-						top: {
-							width: '',
-							color: '',
-							style: '',
-						},
-						right: {
-							width: '',
-							color: '',
-							style: '',
-						},
-						bottom: {
-							width: '',
-							color: '',
-							style: '',
-						},
-						left: {
-							width: '',
-							color: '',
-							style: '',
 						},
 					}).to.be.deep.equal(
 						getSelectedBlock(data, 'blockeraBorder')
