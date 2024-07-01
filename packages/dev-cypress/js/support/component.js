@@ -16,7 +16,7 @@ import { ControlContextProvider, STORE_NAME } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import './commands';
+import { registerCommands } from './commands';
 
 /**
  * Style dependencies
@@ -26,6 +26,8 @@ import '../../../../.storybook/styles/style.lazy.scss';
 import { WithControlDataProvider } from './components/providers/control-provider/with-control-data-provider';
 import { controlReducer } from '@blockera/controls/js/store/reducers/control-reducer';
 import { modifyControlValue } from '@blockera/controls/js/store/actions';
+
+registerCommands();
 
 Cypress.Commands.add('mount', mount);
 

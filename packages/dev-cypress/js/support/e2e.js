@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import './commands';
+import { registerCommands } from './commands';
 import { loginToSite, goTo } from '../helpers';
 
 /**
@@ -9,6 +9,8 @@ import { loginToSite, goTo } from '../helpers';
  */
 import 'cypress-real-events';
 import '@cypress/code-coverage/support';
+
+registerCommands();
 
 beforeEach(function () {
 	// run these tests as if in a desktop

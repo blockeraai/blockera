@@ -1,21 +1,17 @@
 const { defineConfig } = require('cypress');
 
+const setupNodeEvents = (on, config) => {
+	require('./packages/dev-cypress/js/plugins/index.js')(on, config);
+	require('@cypress/code-coverage/task')(on, config);
+
+	return config;
+};
+
 module.exports = defineConfig({
 	chromeWebSecurity: false,
 	defaultCommandTimeout: 15000,
 	e2e: {
-		setupNodeEvents(on, config) {
-			require('./packages/dev-cypress/js/plugins/index.js')(on, {
-				...config,
-				env: {
-					...config.env,
-					isE2E: true,
-				},
-			});
-			require('@cypress/code-coverage/task')(on, config);
-
-			return config;
-		},
+		setupNodeEvents,
 		specPattern: [
 			'packages/**/*.cypress.js',
 			'packages/**/*.cy.compatibility.js',
@@ -41,12 +37,7 @@ module.exports = defineConfig({
 	viewportHeight: 1440,
 	viewportWidth: 2560,
 	component: {
-		setupNodeEvents(on, config) {
-			require('./packages/dev-cypress/js/plugins/index.js')(on, config);
-			require('@cypress/code-coverage/task')(on, config);
-
-			return config;
-		},
+		setupNodeEvents,
 		devServer: {
 			framework: 'react',
 			bundler: 'webpack',
