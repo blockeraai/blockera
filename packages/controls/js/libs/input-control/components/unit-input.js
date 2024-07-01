@@ -316,7 +316,6 @@ export function UnitInput({
 						<>
 							{unitValue.format === 'number' ? (
 								<NumberInput
-									id={'inputValue'}
 									value={inputValue}
 									isValidValue={isValidValue}
 									disabled={disabled}
