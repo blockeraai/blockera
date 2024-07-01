@@ -381,6 +381,12 @@ describe('Range Control label testing (Opacity)', () => {
 						'changed-in-secondary-state',
 						'not-have'
 					);
+					cy.checkLabelClassName(
+						'Effects',
+						'Opacity',
+						'changed-in-normal-state',
+						'not-have'
+					);
 
 					// Assert control
 					checkOpacityValue(100);
@@ -430,8 +436,7 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkOpacityValue(15);
+			checkOpacityValue(15);
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
@@ -448,14 +453,12 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkOpacityValue(15);
+			checkOpacityValue(15);
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Effects', 'Opacity', {
-			// 	laptop: ['Normal'],
-			// });
+			cy.checkStateGraph('Effects', 'Opacity', {
+				laptop: ['Normal'],
+			});
 
 			// Normal/Laptop
 			setBlockState('Normal');
@@ -467,14 +470,12 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkOpacityValue(15);
+			checkOpacityValue(15);
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Effects', 'Opacity', {
-			// 	laptop: ['Normal'],
-			// });
+			cy.checkStateGraph('Effects', 'Opacity', {
+				laptop: ['Normal'],
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -482,23 +483,20 @@ describe('Range Control label testing (Opacity)', () => {
 					getSelectedBlock(data, 'blockeraOpacity')
 				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.laptop.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes
+				);
 
-				// TODO : has value (input bug)
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 
@@ -542,43 +540,37 @@ describe('Range Control label testing (Opacity)', () => {
 			// Normal/Tablet
 			setDeviceType('Tablet');
 			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Effects',
-			// 	'Opacity',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName(
+				'Effects',
+				'Opacity',
+				'changed-in-other-state'
+			);
 
 			// Assert control
-			// TODO
-			//checkOpacityValue(100);
+			checkOpacityValue(100);
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Effects', 'Opacity', {
-			// 	laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Effects', 'Opacity', {
+				laptop: ['Hover'],
+			});
 
 			// Hover/Tablet
 			setBlockState('Hover');
 
 			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Effects',
-			// 	'Opacity',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName(
+				'Effects',
+				'Opacity',
+				'changed-in-other-state'
+			);
 
 			// Assert control
-			// TODO
-			// checkOpacityValue(100);
+			checkOpacityValue(100);
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Effects', 'Opacity', {
-			// 	laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Effects', 'Opacity', {
+				laptop: ['Hover'],
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -586,16 +578,15 @@ describe('Range Control label testing (Opacity)', () => {
 					getSelectedBlock(data, 'blockeraOpacity')
 				);
 
-				// TODO : has value
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
-				// expect({ blockeraOpacity: '35%' }).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.laptop.attributes
-				// );
+				expect({ blockeraOpacity: '35%' }).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes
+				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
@@ -627,20 +618,18 @@ describe('Range Control label testing (Opacity)', () => {
 				() => {
 					// Normal/Tablet
 					// Assert label
-					// TODO
-					// cy.checkLabelClassName(
-					// 	'Effects',
-					// 	'Opacity',
-					// 	'changed-in-normal-state',
-					// 	'not-have'
-					// );
+					cy.checkLabelClassName(
+						'Effects',
+						'Opacity',
+						'changed-in-normal-state',
+						'not-have'
+					);
 
 					// Assert control
 					checkOpacityValue(100);
 
 					// Assert state graph
-					// TODO
-					// cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Effects', 'Opacity', {});
 
 					// Hover/Tablet
 					setBlockState('Hover');
@@ -656,8 +645,7 @@ describe('Range Control label testing (Opacity)', () => {
 					checkOpacityValue(100);
 
 					// Assert state graph
-					// TODO
-					//cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Effects', 'Opacity', {});
 
 					// Hover/Laptop
 					setDeviceType('Laptop');
@@ -673,8 +661,7 @@ describe('Range Control label testing (Opacity)', () => {
 					checkOpacityValue(100);
 
 					// Assert state graph
-					// TODO
-					// cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Effects', 'Opacity', {});
 
 					// Normal/Laptop
 					setBlockState('Normal');
@@ -690,15 +677,13 @@ describe('Range Control label testing (Opacity)', () => {
 					checkOpacityValue(100);
 
 					// Assert state graph
-					// TODO
-					// cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Effects', 'Opacity', {});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
-						// TODO
-						// expect('100%').to.be.deep.eq(
-						// 	getSelectedBlock(data, 'blockeraOpacity')
-						// );
+						expect('100%').to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraOpacity')
+						);
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').normal
@@ -741,8 +726,7 @@ describe('Range Control label testing (Opacity)', () => {
 			// Hover/Laptop
 			setBlockState('Hover');
 			// Assert control
-			// TODO
-			//checkOpacityValue(45);
+			checkOpacityValue(45);
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -759,8 +743,7 @@ describe('Range Control label testing (Opacity)', () => {
 			// Hover/Tablet
 			setDeviceType('Tablet');
 			// Assert control
-			// TODO
-			//checkOpacityValue(45);
+			checkOpacityValue(45);
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -777,8 +760,7 @@ describe('Range Control label testing (Opacity)', () => {
 			// Normal/Tablet
 			setBlockState('Normal');
 			// Assert control
-			// TODO
-			//checkOpacityValue(45);
+			checkOpacityValue(45);
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -830,10 +812,9 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Effects', 'Opacity', {
-			// 	tablet: ['Normal'],
-			// });
+			cy.checkStateGraph('Effects', 'Opacity', {
+				tablet: ['Normal'],
+			});
 
 			// Navigate between states and devices :
 			// Hover/Tablet
@@ -849,10 +830,9 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Effects', 'Opacity', {
-			// 	tablet: ['Normal'],
-			// });
+			cy.checkStateGraph('Effects', 'Opacity', {
+				tablet: ['Normal'],
+			});
 
 			// Hover/Laptop
 			setDeviceType('Laptop');
@@ -860,18 +840,16 @@ describe('Range Control label testing (Opacity)', () => {
 			checkOpacityValue(100);
 
 			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Effects',
-			// 	'Opacity',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName(
+				'Effects',
+				'Opacity',
+				'changed-in-other-state'
+			);
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Effects', 'Opacity', {
-			// 	tablet: ['Normal'],
-			// });
+			cy.checkStateGraph('Effects', 'Opacity', {
+				tablet: ['Normal'],
+			});
 
 			// Normal/Laptop
 			setBlockState('Normal');
@@ -879,22 +857,20 @@ describe('Range Control label testing (Opacity)', () => {
 			checkOpacityValue(100);
 
 			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Effects',
-			// 	'Opacity',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName(
+				'Effects',
+				'Opacity',
+				'changed-in-other-state'
+			);
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Effects', 'Opacity', {
-			// 	tablet: ['Normal'],
-			// });
+			cy.checkStateGraph('Effects', 'Opacity', {
+				tablet: ['Normal'],
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('').to.be.equal(
+				expect('100%').to.be.equal(
 					getSelectedBlock(data, 'blockeraOpacity')
 				);
 
@@ -908,11 +884,10 @@ describe('Range Control label testing (Opacity)', () => {
 						.breakpoints.laptop.attributes
 				);
 
-				// TODO
-				// expect({}).to.be.deep.equal(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 	});

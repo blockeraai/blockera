@@ -492,9 +492,13 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				return reset(dataset);
 			}
 
+			const preparedValue = prepare(args?.path, dataset);
+
 			return reset(
 				calculatedValueBasedOnSavedValue(
-					prepare(args?.path, dataset),
+					['RESET_TO_DEFAULT', 'RESET_ALL'].includes(args?.action)
+						? preparedValue || defaultValue
+						: preparedValue,
 					args
 				)
 			);
