@@ -401,7 +401,7 @@ describe('Border Control label testing (Border Line)', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
-					all: { width: '', style: 'solid', color: '' },
+					all: { width: '', style: '', color: '' },
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraBorder'));
 			});
 		});
@@ -439,7 +439,7 @@ describe('Border Control label testing (Border Line)', () => {
 						type: 'all',
 						all: {
 							width: '4px',
-							style: 'solid',
+							style: '',
 							color: '',
 						},
 					},
@@ -552,7 +552,7 @@ describe('Border Control label testing (Border Line)', () => {
 							type: 'all',
 							all: {
 								width: '',
-								style: 'solid',
+								style: '',
 								color: '',
 							},
 						}).to.be.deep.eq(
@@ -652,7 +652,7 @@ describe('Border Control label testing (Border Line)', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
-					all: { style: 'solid', color: '', width: '12px' },
+					all: { style: '', color: '', width: '12px' },
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
 
 				expect({}).to.be.deep.eq(
@@ -748,7 +748,7 @@ describe('Border Control label testing (Border Line)', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					type: 'all',
-					all: { style: 'solid', width: '', color: '' },
+					all: { style: '', width: '', color: '' },
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraBorder'));
 
 				expect({}).to.be.deep.eq(
@@ -759,7 +759,7 @@ describe('Border Control label testing (Border Line)', () => {
 				expect({
 					blockeraBorder: {
 						type: 'all',
-						all: { style: 'solid', width: '15px', color: '' },
+						all: { style: '', width: '15px', color: '' },
 					},
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
