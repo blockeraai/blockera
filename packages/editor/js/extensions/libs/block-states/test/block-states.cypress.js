@@ -906,7 +906,7 @@ describe('Block State E2E Test', () => {
 		});
 	});
 
-	describe.only('multiple states testing ...', () => {
+	describe('multiple states testing ...', () => {
 		beforeEach(() => {
 			initialSetting();
 		});
