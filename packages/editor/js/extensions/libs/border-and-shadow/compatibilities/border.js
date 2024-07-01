@@ -154,6 +154,7 @@ export function borderToWPCompatibility({
 			})
 		) {
 			const newBorder = {
+				borderColor: undefined,
 				style: {
 					border: {
 						color: undefined,
