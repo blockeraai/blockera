@@ -13,7 +13,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isEquals } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -91,23 +90,18 @@ export default function BoxBorderControl({
 
 	// value clean up for removing extra values to prevent saving extra data!
 	function valueCleanup(value: TValueTypes) {
-		if (isEquals(value, defaultValue)) {
-			return defaultValue;
-		}
-
 		if (value.type === 'all') {
 			delete value?.top;
 			delete value?.right;
 			delete value?.bottom;
 			delete value?.left;
-
 			// return empty object if all values are empty
 			if (
 				value?.all?.color === '' &&
 				value?.all?.width === '' &&
 				(value?.all?.style === 'solid' || value?.all?.style === '')
 			) {
-				return '';
+				value.all.style = '';
 			}
 		} else {
 			['all', 'top', 'right', 'bottom', 'left'].forEach((key) => {

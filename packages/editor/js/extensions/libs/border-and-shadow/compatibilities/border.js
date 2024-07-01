@@ -133,6 +133,43 @@ export function borderToWPCompatibility({
 			};
 		}
 
+		// if type is custom but value is empty
+		// then we should not set wp data compatibility
+		if (
+			isEquals(newValue, {
+				type: 'all',
+				all: {
+					width: '',
+					style: 'solid',
+					color: '',
+				},
+			}) ||
+			isEquals(newValue, {
+				type: 'all',
+				all: {
+					width: '',
+					style: '',
+					color: '',
+				},
+			})
+		) {
+			const newBorder = {
+				style: {
+					border: {
+						color: undefined,
+						width: undefined,
+						style: undefined,
+						top: undefined,
+						right: undefined,
+						bottom: undefined,
+						left: undefined,
+					},
+				},
+			};
+
+			return newBorder;
+		}
+
 		return {
 			borderColor: undefined,
 			style: {

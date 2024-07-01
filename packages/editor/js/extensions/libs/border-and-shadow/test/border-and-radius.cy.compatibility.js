@@ -132,7 +132,14 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				});
 
 				getWPDataObject().then((data) => {
-					expect('').to.be.equal(
+					expect({
+						type: 'all',
+						all: {
+							width: '',
+							style: '',
+							color: '',
+						},
+					}).to.be.deep.equal(
 						getSelectedBlock(data, 'blockeraBorder')
 					);
 

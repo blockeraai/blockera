@@ -101,7 +101,7 @@ describe('Border → Functionality', () => {
 				type: 'all',
 				all: {
 					width: '5px',
-					style: 'solid',
+					style: '',
 					color: '#37e6d4',
 				},
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));

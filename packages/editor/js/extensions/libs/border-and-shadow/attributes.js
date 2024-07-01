@@ -5,7 +5,7 @@ export const attributes = {
 			type: 'all',
 			all: {
 				width: '',
-				style: 'solid',
+				style: '',
 				color: '',
 			},
 		},
