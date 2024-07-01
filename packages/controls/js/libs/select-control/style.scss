@@ -1,0 +1,191 @@
+.blockera-control-select.native {
+
+	.components-input-control__backdrop {
+		border-color: var(--blockera-controls-border-color) !important;
+	}
+
+	&:not(.no-border).is-hovered,
+	&:not(.no-border):hover {
+
+		.components-input-control__backdrop {
+			border-color: var(--blockera-controls-border-color-hover) !important;
+		}
+	}
+
+	&:not(.no-border).is-focused:hover,
+	&:not(.no-border).is-hovered:hover,
+	&:not(.no-border).is-focused,
+	&:not(.no-border):focus-within:hover,
+	&:not(.no-border):focus-within {
+
+		.components-input-control__backdrop {
+			border-color: var(--blockera-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color, transparent) !important;
+		}
+	}
+
+	.components-select-control__input {
+		padding-left: 10px !important;
+		font-size: 12px !important;
+	}
+}
+
+.blockera-control-select.custom {
+	--blockera-border-color: transparent;
+
+	.components-custom-select-control__label:empty {
+		display: none;
+	}
+
+	.item-label,
+	.item-icon {
+		display: flex;
+		align-items: center;
+	}
+
+	.components-custom-select-control__button {
+		display: flex !important;
+		align-items: center;
+		gap: 8px;
+		padding-left: 10px !important;
+		font-size: 12px !important;
+		height: 30px !important;
+		min-height: 30px !important;
+
+		svg {
+			fill: currentColor;
+		}
+
+		svg.icon-soft-color {
+			color: var(--blockera-controls-border-color);
+			fill: currentColor;
+		}
+	}
+
+	&.input-align-center .components-custom-select-control__button {
+		justify-content: center;
+	}
+
+	&.input-hide-label .components-custom-select-control__button .item-label {
+		display: none;
+	}
+
+	&.input-hide-icon .components-custom-select-control__button .item-icon {
+		display: none;
+	}
+
+	&.input-hide-caret {
+
+		.components-input-control__suffix {
+			display: none;
+		}
+
+		.components-custom-select-control__button {
+			padding-right: 10px;
+		}
+	}
+
+	.components-input-control__container {
+		min-width: fit-content;
+	}
+
+	.components-input-control__backdrop {
+		border-style: solid;
+		border-width: 1px;
+		border-color: var(--blockera-controls-border-color) !important;
+		box-shadow: 0 0 0 1px var(--blockera-border-color, transparent) !important;
+	}
+
+	&.no-border {
+
+		.components-input-control__container {
+			background: none;
+		}
+
+		.components-input-control__backdrop {
+			border: none;
+			box-shadow: none;
+			background: none;
+		}
+	}
+
+	&:not(.no-border).is-hovered .components-input-control__backdrop,
+	&:not(.no-border, .is-focused):hover .components-input-control__backdrop {
+		border: 1px solid var(--blockera-controls-border-color-hover) !important;
+	}
+
+	&.is-hovered:hover .components-input-control__backdrop,
+	&.is-focused .components-input-control__backdrop,
+	.components-custom-select-control__button[aria-expanded="true"] + .components-input-control__suffix + .components-input-control__backdrop {
+		border: 1px solid var(--blockera-controls-primary-color) !important;
+		--blockera-border-color: var(--blockera-controls-primary-color);
+	}
+
+	.components-custom-select-control__menu {
+		border: 2px solid var(--blockera-controls-primary-color);
+		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1882352941);
+		border-radius: 3px;
+		padding: 3px;
+		max-height: 400px;
+		user-select: none;
+
+		.components-custom-select-control__item {
+			line-height: 18px;
+			display: flex;
+			min-height: 30px;
+			gap: 10px;
+			cursor: pointer;
+			font-size: 12px;
+			margin: 0 0 5px;
+			padding: 0 5px 0 6px;
+
+			.components-custom-select-control__item-icon {
+				position: absolute;
+				right: 3px;
+			}
+
+			&.option-group {
+				pointer-events: none;
+				cursor: auto !important;
+				color: var(--blockera-controls-primary-color);
+				font-weight: 600;
+
+				&.is-highlighted {
+					background: none;
+				}
+			}
+
+			& + .option-group {
+				margin-top: 15px;
+			}
+
+			&.level-2-item.disabled {
+				pointer-events: none;
+				color: #cccccc;
+			}
+
+			&.level-2-item:not(.width-icon) {
+				padding-left: 15px;
+			}
+
+			&.align-center {
+				justify-content: center;
+			}
+
+			&.hide-icon .item-icon {
+				display: none;
+			}
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	&.menu-position-top {
+
+		.components-custom-select-control__menu {
+			bottom: 30px !important;
+		}
+	}
+}

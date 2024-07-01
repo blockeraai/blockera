@@ -1,0 +1,65 @@
+#blockera-canvas-editor {
+	display: flex;
+	justify-content: space-between;
+
+	.blockera-canvas-preview-link {
+		position: absolute;
+		top: 18px;
+		margin-left: 15px;
+	}
+}
+
+.blockera-canvas-breakpoints {
+	max-width: 330px;
+	height: 36px;
+	background: #f0f0f0;
+	border-radius: 3px;
+	padding: 0 10px;
+	width: 100%;
+	min-width: 200px;
+
+	.blockera-control-blockera-breakpoints {
+		line-height: 36px;
+
+		svg {
+			top: 6px;
+			cursor: pointer;
+			position: relative;
+			transition: all 0.3s;
+		}
+
+		svg:hover,
+ svg.is-active-breakpoint {
+			fill: var(--blockera-controls-primary-color);
+			color: var(--blockera-controls-primary-color);
+		}
+	}
+}
+
+.blockera-canvas {
+	border: 1px solid rgb(221, 221, 221);
+
+	&.is-tablet-preview,
+	&.is-mobile-preview,
+	&.is-large-preview,
+	&.is-extra-large-preview,
+	&.is-mobile-landscape-preview {
+		overflow-y: auto;
+		border-radius: 2px;
+		background: #ffffff;
+		transition: min-width 0.5s ease;
+		-o-transition: min-width 0.5s ease;
+		-moz-transition: min-width 0.5s ease;
+		-webkit-transition: min-width 0.5s ease;
+	}
+
+	&.preview-margin {
+		margin: 72px auto;
+	}
+}
+
+.blockera-control-canvas-editor-preview-link {
+	display: flex;
+	align-items: center;
+	margin-left: 8px;
+}

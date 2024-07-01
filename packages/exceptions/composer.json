@@ -1,0 +1,9 @@
+{
+	"name": "blockera/exceptions",
+	"description": "The blockera exceptions package.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\Exceptions\\": "php/"
+		}
+	}
+}

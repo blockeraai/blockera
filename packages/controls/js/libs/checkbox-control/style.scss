@@ -1,0 +1,42 @@
+.blockera-control.blockera-control-checkbox {
+	margin: 0 !important;
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+
+	.components-checkbox-control__input-container {
+		margin-right: 10px;
+	}
+
+	.components-checkbox-control__input[type="checkbox"] {
+		border-color: var(--blockera-controls-border-color);
+
+		&:checked {
+			border-color: var(--blockera-controls-primary-color) !important;
+			background-color: var(--blockera-controls-primary-color) !important;
+		}
+
+		&:focus {
+			box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--blockera-controls-primary-color);
+			outline: 2px solid transparent;
+		}
+	}
+
+	&:hover {
+
+		.components-checkbox-control__input[type="checkbox"] {
+			border-color: var(--blockera-controls-border-color-hover);
+		}
+	}
+
+	.components-checkbox-control__label {
+		display: inline-flex;
+		gap: 4px;
+		align-items: center;
+
+		* {
+			display: inline-flex;
+			align-items: center;
+		}
+	}
+}

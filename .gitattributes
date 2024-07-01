@@ -1,2 +1,4 @@
-core.autocrlf=true
+* text=auto eol=lf
+*.sh text
+core.autocrlf=false
 core.filemode=false

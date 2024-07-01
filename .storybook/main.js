@@ -1,12 +1,12 @@
-import { defaultConfig } from '@publisher/storybook';
+import { defaultConfig } from '@blockera/dev-storybook';
 
 process.env.NODE_ENV = 'DEVELOPMENT';
 
 export default {
 	stories: [
-		'../packages/controls/src/**/stories/*.stories.@(js|jsx|ts|tsx)',
-		'../packages/components/src/**/stories/*.stories.@(js|jsx|ts|tsx)',
-		'../packages/extensions/src/**/stories/*.stories.@(js|jsx|ts|tsx)',
+		'../packages/editor/js/**/stories/*.stories.@(js|jsx|ts|tsx)',
+		'../packages/controls/js/**/stories/*.stories.@(js|jsx|ts|tsx)',
+		'../packages/icons/js/**/stories/*.stories.@(js|jsx|ts|tsx)',
 	],
 	...defaultConfig,
 };

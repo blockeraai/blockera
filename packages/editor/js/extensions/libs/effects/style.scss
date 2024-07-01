@@ -1,0 +1,8 @@
+.blockera-transform-child-perspective,
+.blockera-transform-self-perspective {
+
+	& > .blockera-field.blockera-field-control {
+
+		flex-direction: row;
+	}
+}

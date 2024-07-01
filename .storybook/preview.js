@@ -4,9 +4,9 @@
 import { withTests } from '@storybook/addon-jest';
 
 /**
- * Publisher Storybook dependencies
+ *  Storybook dependencies
  */
-import { defaultPreviewConfig } from '@publisher/storybook';
+import { defaultPreviewConfig } from '@blockera/dev-storybook';
 
 /**
  * Internal dependencies

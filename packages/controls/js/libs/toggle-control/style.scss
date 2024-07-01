@@ -1,0 +1,16 @@
+.blockera-control-toggle {
+	margin: 0 !important;
+}
+
+.blockera-field-toggle {
+
+	.blockera-control.blockera-control-toggle {
+		display: flex;
+		min-height: 30px;
+		align-items: center;
+
+		.components-toggle-control__label:empty {
+			display: none;
+		}
+	}
+}

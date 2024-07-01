@@ -37,7 +37,7 @@ jobs:
         needs: compute-previous-wordpress-version
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: true
             matrix:
@@ -60,18 +60,8 @@ jobs:
             WP_ENV_CORE: ${{ matrix.wordpress == '' && 'WordPress/WordPress' || format( 'https://wordpress.org/wordpress-{0}.zip', matrix.wordpress ) }}
 
         steps:
-            - uses: actions/checkout@v3
-
-            - name: Setup SSH
-              uses: MrSquaare/ssh-setup-action@v1
-              with:
-                  host: github.com
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-            - name: Clone Submodule
-              run: |
-                  cd libs
-                  git clone git@github.com:publisherwp/storybook.git
+            - name: Checkout Repository
+              uses: actions/checkout@v3
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
@@ -126,6 +116,13 @@ jobs:
 
             - name: Start WordPress Environment
               run: npm run env:start
+
+            - name: 'Create env file'
+              run: |
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
 
             - name: Running single site unit tests
               if: ${{ ! matrix.multisite }}

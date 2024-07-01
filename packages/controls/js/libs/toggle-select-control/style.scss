@@ -1,0 +1,50 @@
+.blockera-control-toggle-select {
+
+	.blockera-control-toggle-select-inner {
+		border-color: var(--blockera-controls-border-color) !important;
+		width: 100%;
+		min-height: 30px !important;
+
+		&.is-hovered,
+		&:hover {
+			border-color: var(--blockera-controls-border-color-hover) !important;
+		}
+
+		&.is-focused,
+		&:focus-within {
+			border-color: var(--blockera-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+		}
+
+		.components-toggle-group-control-option-base {
+			width: 100% !important;
+			padding: 0 5px !important;
+			transition: all ease 100ms;
+			height: 24px;
+
+			// remove inner item style for focus
+
+			&:focus {
+				border: none !important;
+				box-shadow: none !important;
+				outline: none !important;
+			}
+
+			&:hover:not([aria-pressed="true"]):not([aria-checked="true"]) {
+				color: var(--blockera-controls-primary-color);
+			}
+		}
+
+		// remove inner item style for focus
+
+		&.is-focused .components-toggle-group-control-option-base {
+			border: none !important;
+			box-shadow: none !important;
+			outline: none !important;
+		}
+
+		div[role="presentation"] {
+			background: var(--blockera-controls-primary-color);
+		}
+	}
+}

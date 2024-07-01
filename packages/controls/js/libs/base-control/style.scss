@@ -1,0 +1,105 @@
+.blockera-field {
+	--gap: 8px;
+	width: 100%;
+
+	&.small-gap {
+		--gap: 5px;
+	}
+
+	&.no-gap {
+		--gap: 0;
+	}
+
+	.blockera-field-label {
+		order: 2;
+		display: flex;
+		align-items: center;
+		height: 30px;
+		position: relative;
+		z-index: 10;
+
+		&:empty {
+			display: none;
+		}
+	}
+
+	&.small-gap .blockera-field-label .blockera-control-label {
+		min-height: initial;
+	}
+
+	&.label-center .blockera-field-label {
+		margin-left: auto;
+		margin-right: auto;
+		justify-content: center;
+		min-height: auto;
+		height: 22px;
+	}
+
+	.blockera-field-control {
+		order: 3;
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap);
+
+		& > .components-base-control,
+		& > .components-base-control > .components-base-control__field {
+			margin-bottom: 0;
+		}
+
+		// this is the extra tag that popover adds!
+
+		& > span:empty {
+			display: none;
+		}
+	}
+
+	&.control-first .blockera-field-control {
+		order: 1;
+	}
+
+
+	&.columns-custom,
+	&.columns-1 {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--gap);
+	}
+
+	&.columns-2 {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: var(--gap);
+		align-items: start;
+	}
+
+	.blockera-control-group-popover &.columns-2 {
+		grid-template-columns: 2fr 5fr;
+	}
+
+	// remove for stacked
+
+	& & + & {
+		margin-top: 0;
+	}
+
+	&.blockera-field-general {
+		align-items: start;
+	}
+
+	code,
+	kbd {
+		padding: 2px 4px;
+		margin: 0 1px;
+		background: #def0fb;
+		color: var(--blockera-controls-color);
+		border-radius: 2px;
+		font-size: 90%;
+	}
+}
+
+*:not(.blockera-field):not(.blockera-component-flex) > .blockera-field + .blockera-component-feature-wrapper,
+*:not(.blockera-field):not(.blockera-component-flex) > .blockera-component-feature-wrapper + .blockera-component-feature-wrapper,
+*:not(.blockera-field):not(.blockera-component-flex) > .blockera-component-feature-wrapper + .blockera-field,
+*:not(.blockera-field):not(.blockera-component-flex) > .blockera-field + .blockera-field {
+	margin-top: 15px;
+}

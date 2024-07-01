@@ -1,0 +1,17 @@
+.blockera-component-popover {
+
+	&.blockera-control-popover-variables {
+		--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
+		--blockera-controls-primary-color-darker-20: var(--blockera-value-addon-var-color-darker-20);
+		--va-color: var(--blockera-value-addon-var-color);
+		--va-border-color: var(--blockera-value-addon-var-border-color);
+		--va-bg-color: var(--blockera-value-addon-var-bg-color);
+
+		.blockera-control-picker-category {
+
+			.blockera-control-picker-category-header {
+				color: var(--blockera-controls-primary-color);
+			}
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"name": "blockera/bootstrap",
+	"description": "The initializer blockera any application on wordpress site.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\Bootstrap\\": "php/"
+		}
+	}
+}

@@ -1,7 +1,32 @@
+const restrictedImports = [
+	{
+		name: 'lodash-es',
+		message:
+			'This Lodash is not recommended. Please use native functionality instead.',
+	},
+	{
+		name: 'lodash',
+		message:
+			'This Lodash is not recommended. Please use native functionality instead.',
+	},
+	{
+		name: 'classnames',
+		message:
+			"Please use `classNames` function or other function from `@blockera/classnames` instead. It's a lighter, faster and is compatible all Blockera packages.",
+	},
+	{
+		name: 'prop-types',
+		message:
+			'`prop-types` is not recommended. Please use TypeScript or Flow.js for type checking.',
+	},
+];
+
 module.exports = {
+	parser: 'hermes-eslint',
 	extends: [
 		'plugin:@wordpress/eslint-plugin/recommended',
 		'plugin:cypress/recommended',
+		'plugin:ft-flow/recommended',
 	],
 	rules: {
 		'prettier/prettier': [
@@ -10,6 +35,7 @@ module.exports = {
 				endOfLine: 'auto',
 			},
 		],
+		'@wordpress/i18n-no-collapsible-whitespace': 'off',
 		'import/no-extraneous-dependencies': 'off',
 		'@wordpress/no-unsafe-wp-apis': 'off',
 		'@wordpress/no-base-control-with-label-without-id': 'off',
@@ -28,6 +54,18 @@ module.exports = {
 		],
 		'jsx-a11y/no-static-element-interactions': 'off',
 		'jsx-a11y/click-events-have-key-events': 'off',
+		'no-restricted-imports': [
+			'error',
+			{
+				paths: restrictedImports,
+			},
+		],
+		'@wordpress/i18n-text-domain': [
+			'error',
+			{
+				allowedTextDomain: ['blockera'],
+			},
+		],
 	},
 	env: {
 		jest: true,

@@ -10,36 +10,33 @@ jobs:
     cypress_e2e_tests:
         name: Cypress End 2 End Tests
         runs-on: ubuntu-latest
-        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
 
-            - name: Setup SSH
-              uses: MrSquaare/ssh-setup-action@v1
-              with:
-                  host: github.com
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-            - name: Clone Submodule
-              run: |
-                  cd libs
-                  git clone git@github.com:publisherwp/storybook.git
-
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Install Cypress
+              run: npx cypress install
+
             - name: Install Composer Packages
-              run: composer install
+              run: composer install --no-dev -o --apcu-autoloader -a
 
             - name: Start WordPress Environment
               run: npm run env:start
 
-            - name: Build wp-env app
+            - name: 'Create env file'
               run: |
-                  npm run build
-                  npm run build:wp-env-app
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
+
+            - name: Build wp-env app
+              run: npm run build
 
             - name: Run Cypress E2E Tests
               run: npm run test:e2e

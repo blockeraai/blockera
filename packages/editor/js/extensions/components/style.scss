@@ -1,0 +1,115 @@
+.blockera-block-inspector.loading {
+	position: absolute;
+	z-index: 999999999;
+	background: #ffffff;
+	width: 100%;
+	height: 100%;
+
+	div {
+		margin: 0 auto;
+	}
+}
+
+.blockera-block-card-wrapper {
+
+	.blockera-dropdown-menu {
+		position: relative;
+
+		.components-dropdown-menu {
+			position: absolute;
+			right: -12px;
+			padding: 0;
+			margin: 0;
+			top: -6px;
+		}
+	}
+}
+
+.blockera-block-menu-item {
+
+	span.components-menu-item__item {
+		display: block;
+	}
+}
+
+.blockera-block-menu-item-selected {
+	cursor: none;
+	pointer-events: none;
+	color: var(--blockera-controls-primary-color);
+
+	&:hover {
+		color: inherit !important;
+	}
+}
+
+.blockera-not-allowed {
+	opacity: 0.5;
+	user-select: none;
+	cursor: not-allowed;
+
+	* {
+		pointer-events: none;
+	}
+}
+
+.blockera-block-icon {
+	--icon-size: 16px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: var(--icon-size) !important;
+	min-height: var(--icon-size) !important;
+	max-width: var(--icon-size) !important;
+	max-height: var(--icon-size) !important;
+	color: #cad0d3;
+	fill: currentColor;
+	transition: all 0.15s ease-out;
+	display: none;
+}
+
+// Block inserter
+
+.block-editor-inserter__block-list {
+
+	.blockera-block-icon {
+		display: block;
+		top: 15px;
+		right: 20px;
+		margin-right: -7px;
+	}
+}
+
+// Block preview popover
+
+.components-popover__content .block-editor-block-card .block-editor-block-icon {
+	position: relative;
+
+	.blockera-block-icon {
+		color: #1e1e1e;
+		display: block;
+		top: -10px;
+		right: -10px;
+		background: #ffffff;
+		--icon-size: 20px;
+		border-radius: 50%;
+		border: 2px solid #ffffff;
+	}
+}
+
+// Editor block manager
+
+.editor-block-manager__checklist .block-editor-block-icon {
+	position: relative;
+
+	.blockera-block-icon {
+		display: block;
+		--icon-size: 20px;
+		top: 50%;
+		margin-top: -10px;
+		right: 40px;
+		background: #ffffff;
+		border-radius: 50%;
+		border: 2px solid #ffffff;
+		color: #1e1e1e;
+	}
+}

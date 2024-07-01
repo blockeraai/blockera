@@ -1,0 +1,9 @@
+{
+	"name": "blockera/data",
+	"description": "Core Data is a data module intended to simplify access and manipulation to core WordPress and entities.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\Data\\": "php/"
+		}
+	}
+}

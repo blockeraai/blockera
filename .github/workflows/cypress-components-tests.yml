@@ -10,25 +10,17 @@ jobs:
     cypress_components_tests:
         name: Cypress Components Tests
         runs-on: ubuntu-latest
-        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
 
-            - name: Setup SSH
-              uses: MrSquaare/ssh-setup-action@v1
-              with:
-                  host: github.com
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-            - name: Clone Submodule
-              run: |
-                  cd libs
-                  git clone git@github.com:publisherwp/storybook.git
-
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
+
+            - name: Install Cypress
+              run: npx cypress install
 
             - name: Run Cypress Tests
               run: npm run test:ct
