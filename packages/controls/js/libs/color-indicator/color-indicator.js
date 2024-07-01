@@ -8,16 +8,16 @@ import type { Node } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	isObject,
-	getValueAddonRealValue,
-	isValid as isValidVariable,
-} from '@blockera/utils';
+import { isObject } from '@blockera/utils';
 import { componentClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import {
+	getValueAddonRealValue,
+	isValid as isValidVariable,
+} from '../../value-addons';
 import type { ColorIndicatorProps } from './types';
 
 export default function ColorIndicator({
