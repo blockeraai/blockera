@@ -43,7 +43,7 @@ describe('useAdvancedLabelProps Hook Testing ...', () => {
 		);
 
 		// Select target block
-		cy.get('[data-type="core/paragraph"]').click();
+		cy.getBlock('core/paragraph').click();
 
 		setFontSize(27);
 
