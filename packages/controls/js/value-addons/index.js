@@ -20,7 +20,8 @@ import {
 /**
  * Internal dependencies
  */
-import { canUnlinkVariable, isValid } from './helpers';
+import { isValid } from './utils';
+import { canUnlinkVariable } from './helpers';
 import { ValueAddonControl, ValueAddonPointer } from './components';
 import type { UseValueAddonProps, ValueAddonProps } from './types';
 import type { ValueAddonControlProps } from './components/control/types';
@@ -246,4 +247,5 @@ export const useValueAddon = ({
 	};
 };
 
+export * from './utils';
 export * from './helpers';

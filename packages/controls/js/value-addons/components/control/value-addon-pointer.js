@@ -25,7 +25,7 @@ import {
 	VarDeleted,
 	DVSettingsAdvanced,
 } from '../index';
-import { isValid } from '../../helpers';
+import { isValid } from '../../utils';
 import RemoveIcon from '../../icons/remove';
 import type { ValueAddonControlProps } from './types';
 import DynamicValueIcon from '../../icons/dynamic-value';

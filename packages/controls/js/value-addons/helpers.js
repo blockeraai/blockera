@@ -32,6 +32,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
+import { isValid } from './utils';
 import { ColorIndicator, NoticeControl } from '../';
 import type {
 	ValueAddon,
@@ -167,11 +168,6 @@ export function setValueAddon(
 	}
 
 	setState(newValue);
-}
-
-export function isValid(value: ValueAddon | string): boolean {
-	//$FlowFixMe
-	return !!value?.isValueAddon;
 }
 
 export function getValueAddonRealValue(value: ValueAddon | string): any {

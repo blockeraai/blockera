@@ -15,10 +15,11 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
+import { isValid } from '../../utils';
 import TrashIcon from '../../icons/trash';
+import { getDynamicValueIcon } from '../../helpers';
 import { PickerCategory, PickerValueItem } from '../picker';
 import { Button, Flex, Popover, Grid } from '../../../libs';
-import { getDynamicValueIcon, isValid } from '../../helpers';
 import type { ValueAddonControlProps } from '../control/types';
 
 export default function ({

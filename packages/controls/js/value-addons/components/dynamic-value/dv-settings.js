@@ -16,12 +16,13 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
+import { isValid } from '../../utils';
 import GearIcon from '../../icons/gear';
 import TrashIcon from '../../icons/trash';
 import SearchIcon from '../../icons/search';
+import { getDynamicValueIcon } from '../../helpers';
 import CaretRightIcon from '../../icons/caret-right';
 import { ControlContextProvider } from '../../../context';
-import { getDynamicValueIcon, isValid } from '../../helpers';
 import type { ValueAddonControlProps } from '../control/types';
 import { Button, Popover, BaseControl, RendererControl } from '../../../libs';
 

@@ -21,11 +21,11 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import {
-	isValid,
 	getVariableIcon,
 	canUnlinkVariable,
 	getVariableCategory,
 } from '../../helpers';
+import { isValid } from '../../utils';
 import type { VariableCategoryDetail } from '../../types';
 import { PickerValueItem, PickerCategory } from '../index';
 import type { ValueAddonControlProps } from '../control/types';

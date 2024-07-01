@@ -20,11 +20,12 @@ import { getVariable, STORE_NAME } from '@blockera/data';
  * Internal dependencies
  */
 import { Tooltip } from '../../../';
+import { isValid } from '../../utils';
 import { ValueAddonPointer } from './index';
 import type { ValueAddonControlProps } from './types';
 import { default as EmptyIcon } from '../../icons/empty.svg';
 import { default as DeletedIcon } from '../../icons/deleted.svg';
-import { getDynamicValueIcon, getVariableIcon, isValid } from '../../helpers';
+import { getDynamicValueIcon, getVariableIcon } from '../../helpers';
 
 export default function ({
 	classNames,
