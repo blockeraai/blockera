@@ -5,8 +5,8 @@ import {
 	getVariableIcon,
 	getDynamicValueCategory,
 	getDynamicValueIcon,
-	isValid,
 } from '../helpers';
+import { isValid } from '../utils';
 import { generateVariableString } from '@blockera/data';
 import { __ } from '@wordpress/i18n';
 
