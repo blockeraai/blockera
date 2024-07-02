@@ -83,7 +83,11 @@ export default function BoxSpacingControl({
 	} = useControlContext({
 		id,
 		onChange,
-		defaultValue,
+		defaultValue: {
+			marginLock: 'none',
+			paddingLock: 'none',
+			...defaultValue,
+		},
 		mergeInitialAndDefault: true,
 		valueCleanup,
 	});
