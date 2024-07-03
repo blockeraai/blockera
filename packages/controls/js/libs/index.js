@@ -74,6 +74,7 @@ export { default as BoxPositionControl } from './box-position-control';
 export { default as SearchControl } from './search-control';
 export { default as LinkControl } from './link-control';
 export { default as CheckboxControl } from './checkbox-control';
+export { default as ChangeIndicator } from './change-indicator';
 export { default as TransformControl } from './transform-control';
 export { default as PanelBodyControl } from './panel-body-control';
 export { default as CustomPropertyControl } from './custom-property-control';
