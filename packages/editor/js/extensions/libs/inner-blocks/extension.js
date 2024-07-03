@@ -21,6 +21,7 @@ import {
 	BaseControl,
 	MoreFeatures,
 	PanelBodyControl,
+	ChangeIndicator,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 
@@ -82,6 +83,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 							{icon}
 
 							{__('Customize', 'blockera')}
+
+							<ChangeIndicator
+								isChanged={false}
+								isChangedOnStates={false}
+							/>
 
 							{isRTL() ? (
 								<Icon icon="chevron-left" iconSize="20" />
