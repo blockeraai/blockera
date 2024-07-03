@@ -1,13 +1,14 @@
 import PanelBodyControl from '..';
 import InheritIcon from '../stories/icons/inherit';
 
+const panelTitle = 'Panel Title';
+const panelBodyText = 'Panel Body';
+
 describe('Panel Body Control', () => {
 	beforeEach(() => {
 		cy.viewport(1280, 720);
 	});
 	context('Default', () => {
-		const panelTitle = 'Panel Title';
-		const panelBodyText = 'Panel Body';
 		it('renders panel title, arrow.', () => {
 			cy.withInspector(
 				<PanelBodyControl title={panelTitle}>
@@ -54,8 +55,6 @@ describe('Panel Body Control', () => {
 	});
 
 	context('Icon', () => {
-		const panelTitle = 'Panel Title';
-		const panelBodyText = 'Panel Body';
 		it('renders icon correctly', () => {
 			cy.withInspector(
 				<PanelBodyControl title={panelTitle} icon={<InheritIcon />}>
@@ -64,6 +63,76 @@ describe('Panel Body Control', () => {
 			);
 
 			cy.get('.components-panel__icon').find('svg');
+		});
+	});
+
+	context('Changed indicator', () => {
+		it('No change', () => {
+			cy.withInspector(
+				<PanelBodyControl title={panelTitle}>
+					<p>{panelBodyText}</p>
+				</PanelBodyControl>
+			);
+
+			cy.get('.components-panel__body-title').within(() => {
+				cy.getByDataTest('change-indicator').should('not.exist');
+				cy.getByDataTest('primary-change-indicator').should(
+					'not.exist'
+				);
+				cy.getByDataTest('states-change-indicator').should('not.exist');
+			});
+		});
+
+		it('Primary changed', () => {
+			cy.withInspector(
+				<PanelBodyControl title={panelTitle} isChanged={true}>
+					<p>{panelBodyText}</p>
+				</PanelBodyControl>
+			);
+
+			cy.get('.components-panel__body-title').within(() => {
+				cy.getByDataTest('change-indicator').should('exist');
+				cy.getByDataTest('primary-change-indicator').should('exist');
+				cy.getByDataTest('states-change-indicator').should('not.exist');
+			});
+		});
+
+		it('States changed', () => {
+			cy.withInspector(
+				<PanelBodyControl
+					title={panelTitle}
+					isChanged={false}
+					isChangedOnStates={true}
+				>
+					<p>{panelBodyText}</p>
+				</PanelBodyControl>
+			);
+
+			cy.get('.components-panel__body-title').within(() => {
+				cy.getByDataTest('change-indicator').should('exist');
+				cy.getByDataTest('primary-change-indicator').should(
+					'not.exist'
+				);
+				cy.getByDataTest('states-change-indicator').should('exist');
+			});
+		});
+
+		it('Both changed', () => {
+			cy.withInspector(
+				<PanelBodyControl
+					title={panelTitle}
+					isChanged={true}
+					isChangedOnStates={true}
+				>
+					<p>{panelBodyText}</p>
+				</PanelBodyControl>
+			);
+
+			cy.get('.components-panel__body-title').within(() => {
+				cy.getByDataTest('change-indicator').should('exist');
+				cy.getByDataTest('primary-change-indicator').should('exist');
+				cy.getByDataTest('states-change-indicator').should('exist');
+			});
 		});
 	});
 });
