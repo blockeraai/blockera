@@ -249,7 +249,7 @@ export const useAdvancedLabelProps = (
 				) {
 					const _stateValue = prepare(path, stateValue);
 
-					// * to remove blocheraAttribute from path
+					// * to removing blockeraAttribute from path ...
 					const preparedPath = path.substring(path.indexOf('.') + 1);
 
 					const _clonedDefaultValue =

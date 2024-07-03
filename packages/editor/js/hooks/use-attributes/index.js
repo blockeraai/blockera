@@ -126,7 +126,6 @@ export const useAttributes = (
 			updateInnerBlockStates,
 			updateInnerBlockInsideParentState,
 		}: UseAttributesActions = actions({
-			ref,
 			blockId,
 			newValue,
 			attributeId,
@@ -140,6 +139,7 @@ export const useAttributes = (
 			blockeraInnerBlocks,
 			currentInnerBlockState,
 			attributeIsBlockStates,
+			ref: { ...ref?.current },
 		});
 
 		// Assume reference current action is 'reset_all_states'

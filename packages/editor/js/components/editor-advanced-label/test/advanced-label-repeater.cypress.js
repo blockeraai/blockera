@@ -177,7 +177,8 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		);
 
 		// Set value
-		cy.getByAriaLabel('Add New Background').click();
+		openBackgroundItem();
+		cy.getByAriaLabel('Linear Gradient').click();
 
 		// Assert label after set value
 		cy.checkLabelClassName(
@@ -185,13 +186,6 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			'Image & Gradient',
 			'changed-in-secondary-state'
 		);
-
-		// Assert control
-		cy.getParentContainer('Image & Gradient').within(() => {
-			// Alias
-			cy.getByDataCy('group-control-header').as('background-item');
-		});
-		cy.get('@background-item').should('have.length', 2);
 
 		/**
 		 * Tablet device
@@ -204,9 +198,6 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			'Image & Gradient',
 			'changed-in-normal-state'
 		);
-
-		// Assert control
-		cy.get('@background-item').should('have.length', 1);
 
 		// Assert state graph
 		cy.checkStateGraph('Background', 'Image & Gradient', {
@@ -343,242 +334,94 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 	});
 
 	it('repeater nested items test...', () => {
-		context('Normal -> Laptop -> set background item + set type', () => {
-			cy.getByAriaLabel('Add New Background').click();
+		cy.getByAriaLabel('Add New Background').click();
 
-			cy.getByDataTest('popover-body').within(() => {
-				cy.getByAriaLabel('Linear Gradient').click();
+		cy.getByDataTest('popover-body').within(() => {
+			cy.getByAriaLabel('Linear Gradient').click();
 
-				// Alias
-				cy.getByAriaLabel('Type').as('type');
-				cy.getByAriaLabel('Angel').as('angel');
+			// Alias
+			cy.getByAriaLabel('Type').as('type');
+			cy.getByAriaLabel('Angel').as('angel');
+			cy.getByAriaLabel('Effect').as('effect');
 
-				// Assert label in normal state
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
-			});
-		});
-
-		context(
-			'Hover -> Laptop -> should correctly display mutated labels',
-			() => {
-				addBlockState('hover');
-				openBackgroundItem();
-
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
-			}
-		);
-
-		context('Hover -> Laptop -> set angel', () => {
-			// Assert angel label before set value
-			cy.get('@angel').should(
-				'not.have.class',
-				'changed-in-normal-state'
-			);
-
-			// Set value
-			cy.getByAriaLabel('Rotate Anti-clockwise').click();
-
-			// Assert Angel label
-			cy.get('@angel').should('have.class', 'changed-in-secondary-state');
-		});
-
-		context(
-			'Normal -> Tablet -> should correctly display mutated labels',
-			() => {
-				setBlockState('Normal');
-				openBackgroundItem();
-
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
-
-				// Assert Angel label
-				cy.get('@angel').should('have.class', 'changed-in-other-state');
-
-				// Assert Effect label
-				cy.getByAriaLabel('Effect').should(
-					'have.class',
-					'changed-in-other-state'
-				);
-			}
-		);
-
-		context('Normal -> Tablet -> set type + set effect', () => {
-			// Set type
-			cy.getByAriaLabel('Radial Gradient').click();
-			// Set effect
-			cy.getByAriaLabel('Parallax').click();
-
-			// Assert Type label
+			// Assert label in normal state
 			cy.get('@type').should('have.class', 'changed-in-normal-state');
-
-			// Assert Effect label
-			cy.getByAriaLabel('Effect').should(
-				'have.class',
-				'changed-in-normal-state'
-			);
-
-			// Assert Position label
-			cy.get('@position-label').should(
-				'have.class',
-				'changed-in-other-state'
-			);
-			cy.get('@position-top-label').should(
-				'have.class',
-				'changed-in-other-state'
-			);
 		});
 
-		context('Normal -> Laptop -> add radial gradient item', () => {
-			setDeviceType('Laptop');
+		addBlockState('hover');
+		openBackgroundItem();
 
-			// Add new item
-			cy.getByAriaLabel('Add New Background').click();
+		// Assert Type label
+		cy.get('@type').should('have.class', 'changed-in-normal-state');
 
-			// Set type
-			cy.getByAriaLabel('Radial Gradient').last().click();
-		});
+		// Assert angel label before set value
+		cy.get('@angel').should('not.have.class', 'changed-in-normal-state');
 
-		context(
-			'should display correct label color and state graph when navigate between states and devices',
-			() => {
-				/**
-				 * Normal/Laptop
-				 */
-				// Assert type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
-				// Assert Effect label
-				cy.getByAriaLabel('Effect').should(
-					'have.class',
-					'changed-in-other-state'
-				);
-				// Assert Position label
-				cy.get('@position-label').should(
-					'have.class',
-					'changed-in-other-state'
-				);
-				cy.get('@position-top-label').should(
-					'have.class',
-					'changed-in-other-state'
-				);
+		// Set value
+		cy.getByAriaLabel('Rotate Anti-clockwise').click();
 
-				/**
-				 * Hover / Laptop
-				 */
-				setBlockState('Hover');
-				openBackgroundItem();
+		// Assert Angel label
+		cy.get('@angel').should('have.class', 'changed-in-secondary-state');
 
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
+		// Assert angel label before set value
+		cy.get('@effect').should('not.have.class', 'changed-in-normal-state');
 
-				// Assert Angel label
-				cy.get('@angel').should(
-					'have.class',
-					'changed-in-secondary-state'
-				);
+		// Set value
+		cy.getByAriaLabel('Parallax').click();
 
-				// Assert Effect label
-				cy.getByAriaLabel('Effect').should(
-					'have.class',
-					'changed-in-other-state'
-				);
+		// Assert Angel label
+		cy.get('@effect').should('have.class', 'changed-in-secondary-state');
 
-				/**
-				 * Hover / Tablet
-				 */
-				setDeviceType('Tablet');
-				openBackgroundItem();
+		setBlockState('Normal');
+		openBackgroundItem();
 
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
+		// Assert Type label
+		cy.get('@type').should('have.class', 'changed-in-normal-state');
 
-				// Assert Angel label
-				cy.get('@angel').should('have.class', 'changed-in-other-state');
+		// Assert Angel label
+		cy.get('@angel').should('have.class', 'changed-in-other-state');
 
-				// Assert Effect label
-				cy.getByAriaLabel('Effect').should(
-					'have.class',
-					'changed-in-other-state'
-				);
+		// Assert Effect label
+		cy.get('@effect').should('have.class', 'changed-in-other-state');
 
-				/**
-				 * Normal/Tablet
-				 */
-				setBlockState('Normal');
-				openBackgroundItem();
+		// Set effect
+		cy.getByAriaLabel('Parallax').click();
 
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
+		// Assert Effect label
+		cy.get('@effect').should('have.class', 'changed-in-normal-state');
 
-				// Assert Position label
-				cy.get('@position-label').should(
-					'have.class',
-					'changed-in-other-state'
-				);
+		/**
+		 * Hover / Tablet
+		 */
+		setDeviceType('Tablet');
+		openBackgroundItem();
 
-				// Assert Effect label
-				cy.getByAriaLabel('Effect').should(
-					'have.class',
-					'changed-in-normal-state'
-				);
+		// Assert Type label
+		cy.get('@type').should('have.class', 'changed-in-normal-state');
 
-				/**
-				 * Normal/Laptop
-				 */
-				setDeviceType('Laptop');
-				// Linear Gradient item
-				openBackgroundItem();
+		// Assert Angel label
+		cy.get('@angel').should('have.class', 'changed-in-other-state');
 
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
-
-				// Assert Angel label
-				cy.get('@angel').should('have.class', 'changed-in-other-state');
-
-				// Assert Effect label
-				cy.getByAriaLabel('Effect').should(
-					'have.class',
-					'changed-in-other-state'
-				);
-
-				// Assert state graph
-				// Type
-				cy.checkStateGraph('', 'Type', { laptop: ['Normal'] }, true);
-
-				// Angel
-				cy.checkStateGraph(
-					'',
-					'Angel',
-					{ laptop: ['Hover'] },
-
-					true
-				);
-
-				// Radial Gradient item
-				openBackgroundItem(1);
-
-				// Assert Type label
-				cy.get('@type').should('have.class', 'changed-in-normal-state');
-
-				// Assert Position label
-				cy.get('@position-label').should(
-					'have.class',
-					'changed-in-other-state'
-				);
-
-				// Assert Effect label
-				cy.getByAriaLabel('Effect').should(
-					'have.class',
-					'changed-in-other-state'
-				);
-
-				// Assert state graph
-				// Type
-				cy.checkStateGraph('', 'Type', { laptop: ['Normal'] }, true);
-
-				cy.checkStateGraph('', 'Effect', { tablet: ['Normal'] }, true);
-			}
+		// Assert Effect label
+		cy.getByAriaLabel('Effect').should(
+			'have.class',
+			'changed-in-other-state'
 		);
+
+		/**
+		 * Normal/Tablet
+		 */
+		setBlockState('Normal');
+		openBackgroundItem();
+
+		// Assert Effect label
+		cy.getByAriaLabel('Effect').should(
+			'have.class',
+			'changed-in-normal-state'
+		);
+
+		// Assert Angel label
+		cy.get('@angel').should('have.class', 'changed-in-other-state');
 	});
 
 	describe('reset action testing...', () => {
@@ -591,130 +434,124 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			openBackgroundItem();
 			cy.getByAriaLabel('Cover').click();
 
-			context(
-				'should correctly reset blockeraBackground, and display effected fields(label, control, stateGraph) in hover/laptop',
-				() => {
-					// Reset
-					cy.resetBlockeraAttribute(
-						'Background',
-						'Image & Gradient',
-						'reset'
-					);
-
-					openBackgroundItem();
-
-					// Assert label
-					// TODO
-					//  cy.checkLabelClassName('Background','Image & Gradient','changed-in-normal-state')
-					cy.getByAriaLabel('Size').should(
-						'not.have.class',
-						'changed-in-secondary-state'
-					);
-
-					// Assert control
-					cy.getByAriaLabel('Cover').should(
-						'not.have.attr',
-						'aria-checked',
-						'true'
-					);
-
-					// Assert state graph
-					cy.checkStateGraph('Background', 'Image & Gradient', {
-						laptop: ['Normal'],
-					});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect('custom').to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBackground')[
-								'image-0'
-							]['image-size']
-						);
-
-						// TODO
-						// expect({}).to.be.deep.eq(
-						// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-						// 		.breakpoints.laptop.attributes
-
-						// );
-					});
-				}
+			// Reset
+			cy.resetBlockeraAttribute(
+				'Background',
+				'Image & Gradient',
+				'reset'
 			);
 
-			context('set value in normal/laptop', () => {
-				setBlockState('Normal');
+			// Assert label
+			cy.checkLabelClassName(
+				'Background',
+				'Image & Gradient',
+				'changed-in-normal-state'
+			);
 
-				openBackgroundItem();
+			cy.getByAriaLabel('Size').should(
+				'not.have.class',
+				'changed-in-secondary-state'
+			);
 
-				// Assert before set value
-				// Assert label
-				cy.checkLabelClassName(
-					'Background',
-					'Image & Gradient',
-					'changed-in-normal-state'
+			openBackgroundItem();
+
+			// Assert control
+			cy.getByAriaLabel('Cover').should(
+				'not.have.attr',
+				'aria-checked',
+				'true'
+			);
+
+			// Assert state graph
+			cy.checkStateGraph('Background', 'Image & Gradient', {
+				laptop: ['Normal'],
+			});
+
+			// Assert store data
+			getWPDataObject().then((data) => {
+				expect('custom').to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBackground')['image-0'][
+						'image-size'
+					]
 				);
-				cy.getByAriaLabel('Size').should(
-					'not.have.class',
-					'changed-in-other-state'
-				);
 
-				// Assert control
-				cy.getByAriaLabel('Cover').should(
-					'not.have.attr',
-					'aria-checked',
-					'true'
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes
 				);
+			});
 
-				// Assert state graph
-				cy.checkStateGraph('Background', 'Image & Gradient', {
+			setBlockState('Normal');
+
+			openBackgroundItem();
+
+			// Assert before set value
+			// Assert label
+			cy.checkLabelClassName(
+				'Background',
+				'Image & Gradient',
+				'changed-in-normal-state'
+			);
+			cy.getByAriaLabel('Size').should(
+				'not.have.class',
+				'changed-in-other-state'
+			);
+
+			// Assert control
+			cy.getByAriaLabel('Cover').should(
+				'not.have.attr',
+				'aria-checked',
+				'true'
+			);
+
+			// Assert state graph
+			cy.checkStateGraph('Background', 'Image & Gradient', {
+				laptop: ['Normal'],
+			});
+
+			openBackgroundItem();
+
+			// Set value
+			cy.getByAriaLabel('Contain').click();
+
+			// Assert label
+			cy.getByAriaLabel('Size').should(
+				'have.class',
+				'changed-in-normal-state'
+			);
+
+			// Assert control
+			cy.getByAriaLabel('Contain').should(
+				'have.attr',
+				'aria-checked',
+				'true'
+			);
+
+			// Assert state graph
+			cy.checkStateGraph(
+				'',
+				'Size',
+				{
 					laptop: ['Normal'],
-				});
+				},
+				true
+			);
+			cy.checkStateGraph('Background', 'Image & Gradient', {
+				laptop: ['Normal'],
+			});
 
-				openBackgroundItem();
-				// Set value
-				cy.getByAriaLabel('Contain').click();
-
-				// Assert label
-				cy.getByAriaLabel('Size').should(
-					'have.class',
-					'changed-in-normal-state'
+			// Assert store data
+			getWPDataObject().then((data) => {
+				expect('contain').to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBackground')['image-0'][
+						'image-size'
+					]
 				);
 
-				// Assert control
-				cy.getByAriaLabel('Contain').should(
-					'have.attr',
-					'aria-checked',
-					'true'
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes
 				);
-
-				// Assert state graph
-				cy.checkStateGraph(
-					'',
-					'Size',
-					{
-						laptop: ['Normal'],
-					},
-					true
-				);
-				// TODO
-				// cy.checkStateGraph('Background', 'Image & Gradient', {
-				// 	laptop: ['Normal'],
-				// });
-
-				// Assert store data
-				getWPDataObject().then((data) => {
-					expect('contain').to.be.deep.eq(
-						getSelectedBlock(data, 'blockeraBackground')['image-0'][
-							'image-size'
-						]
-					);
-
-					// TODO
-					// expect({}).to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.laptop.attributes
-					// );
-				});
 			});
 		});
 
@@ -754,39 +591,34 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 							'changed-in-normal-state'
 						);
 
-						// TODO : does not reset
-
 						// Assert control
-						// TODO
-						// cy.getByAriaLabel('Horizontally').should(
-						// 	'have.attr',
-						// 	'aria-checked',
-						// 	'true'
-						// );
+						cy.getByAriaLabel('Horizontally').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
 
 						// Assert state graph
-						// TODO
-						// cy.checkStateGraph(
-						// 	'',
-						// 	'Repeat',
-						// 	{
-						// 		tablet: ['Hover'],
-						// 		laptop: ['Hover', 'Normal'],
-						// 	},
-						// 	true
-						// );
+						cy.checkStateGraph(
+							'',
+							'Repeat',
+							{
+								tablet: ['Hover'],
+								laptop: ['Hover', 'Normal'],
+							},
+							true
+						);
 
 						// Assert store data
-						// TODO
-						// getWPDataObject().then((data) => {
-						// 	expect('repeat-x').to.be.deep.eq(
-						// 		getSelectedBlock(data, 'blockeraBlockStates')
-						// 			.normal.breakpoints.tablet.attributes
-						// 			.blockeraBackground['image-0'][
-						// 			'image-repeat'
-						// 		]
-						// 	);
-						// });
+						getWPDataObject().then((data) => {
+							expect('repeat-x').to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraBlockStates')
+									.normal.breakpoints.tablet.attributes
+									.blockeraBackground['image-0'][
+									'image-repeat'
+								]
+							);
+						});
 					}
 				);
 
@@ -799,42 +631,38 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 						cy.resetBlockeraAttribute('', 'Repeat', 'reset', true);
 
 						// Assert label
-						// TODO
-						// cy.getByAriaLabel('Repeat').should(
-						// 	'have.class',
-						// 	'changed-in-normal-state'
-						// );
+						cy.getByAriaLabel('Repeat').should(
+							'have.class',
+							'changed-in-normal-state'
+						);
 
 						// Assert control
-						// TODO
-						// cy.getByAriaLabel('Horizontally').should(
-						// 	'have.attr',
-						// 	'aria-checked',
-						// 	'true'
-						// );
+						cy.getByAriaLabel('Horizontally').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
 
 						// Assert state graph
-						// TODO
-						// cy.checkStateGraph(
-						// 	'',
-						// 	'Repeat',
-						// 	{
-						// 		laptop: ['Hover', 'Normal'],
-						// 	},
-						// 	true
-						// );
+						cy.checkStateGraph(
+							'',
+							'Repeat',
+							{
+								laptop: ['Hover', 'Normal'],
+							},
+							true
+						);
 
 						// Assert store data
-						// TODO
-						// getWPDataObject().then((data) => {
-						// 	expect('repeat-x').to.be.deep.eq(
-						// 		getSelectedBlock(data, 'blockeraBlockStates')
-						// 			.hover.breakpoints.tablet.attributes
-						// 			.blockeraBackground['image-0'][
-						// 			'image-repeat'
-						// 		]
-						// 	);
-						// });
+						getWPDataObject().then((data) => {
+							expect('repeat-x').to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraBlockStates')
+									.hover.breakpoints.tablet.attributes
+									.blockeraBackground['image-0'][
+									'image-repeat'
+								]
+							);
+						});
 					}
 				);
 
@@ -849,41 +677,37 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 						cy.resetBlockeraAttribute('', 'Repeat', 'reset', true);
 
 						// Assert label
-						// TODO
-						// cy.getByAriaLabel('Repeat').should(
-						// 	'have.class',
-						// 	'changed-in-other-state'
-						// );
+						cy.getByAriaLabel('Repeat').should(
+							'have.class',
+							'changed-in-other-state'
+						);
 
 						// Assert control
-						// TODO
-						// cy.getByAriaLabel('Horizontally and Vertically').should(
-						// 	'have.attr',
-						// 	'aria-checked',
-						// 	'true'
-						// );
+						cy.getByAriaLabel('Horizontally and Vertically').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
 
 						// Assert state graph
-						// TODO
-						// cy.checkStateGraph(
-						// 	'',
-						// 	'Repeat',
-						// 	{
-						// 		laptop: ['Hover'],
-						// 		tablet: ['Normal', 'Hover'],
-						// 	},
-						// 	true
-						// );
+						cy.checkStateGraph(
+							'',
+							'Repeat',
+							{
+								laptop: ['Hover'],
+								tablet: ['Normal', 'Hover'],
+							},
+							true
+						);
 
 						// Assert store data
-						// TODO
-						// getWPDataObject().then((data) => {
-						// 	expect('repeat').to.be.deep.eq(
-						// 		getSelectedBlock(data, 'blockeraBackground')[
-						// 			'image-0'
-						// 		]['image-repeat']
-						// 	);
-						// });
+						getWPDataObject().then((data) => {
+							expect('repeat').to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraBackground')[
+									'image-0'
+								]['image-repeat']
+							);
+						});
 					}
 				);
 
@@ -896,42 +720,38 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 						cy.resetBlockeraAttribute('', 'Repeat', 'reset', true);
 
 						// Assert label
-						// TODO
-						// cy.getByAriaLabel('Repeat').should(
-						// 	'have.class',
-						// 	'changed-in-other-state'
-						// );
+						cy.getByAriaLabel('Repeat').should(
+							'have.class',
+							'changed-in-other-state'
+						);
 
 						// Assert control
-						// TODO
-						// cy.getByAriaLabel('Horizontally and Vertically').should(
-						// 	'have.attr',
-						// 	'aria-checked',
-						// 	'true'
-						// );
+						cy.getByAriaLabel('Horizontally and Vertically').should(
+							'have.attr',
+							'aria-checked',
+							'true'
+						);
 
 						// Assert state graph
-						// TODO
-						// cy.checkStateGraph(
-						// 	'',
-						// 	'Repeat',
-						// 	{
-						// 		tablet: ['Normal', 'Hover'],
-						// 	},
-						// 	true
-						// );
+						cy.checkStateGraph(
+							'',
+							'Repeat',
+							{
+								tablet: ['Normal', 'Hover'],
+							},
+							true
+						);
 
 						// Assert store data
-						// TODO
-						// getWPDataObject().then((data) => {
-						// 	expect('repeat').to.be.deep.eq(
-						// 		getSelectedBlock(data, 'blockeraBlockStates')
-						// 			.hover.breakpoints.laptop.attributes
-						// 			.blockeraBackground['image-0'][
-						// 			'image-repeat'
-						// 		]
-						// 	);
-						// });
+						getWPDataObject().then((data) => {
+							expect('repeat').to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraBlockStates')
+									.hover.breakpoints.laptop.attributes
+									.blockeraBackground['image-0'][
+									'image-repeat'
+								]
+							);
+						});
 					}
 				);
 			});
@@ -956,104 +776,98 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{
-				// 		laptop: ['Normal'],
-				// 		tablet: ['Normal', 'Hover'],
-				// 	},
-				// 	true
-				// );
+				cy.checkStateGraph(
+					'',
+					'Repeat',
+					{
+						laptop: ['Normal'],
+						tablet: ['Normal', 'Hover'],
+					},
+					true
+				);
 
 				// Navigate between states and devices
 				// Hover/Laptop
 				setBlockState('Hover');
 				openBackgroundItem();
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat')
-				// 	.should('not.have.class', 'changed-in-normal-state')
-				// 	.and('not.have.class', 'changed-in-secondary-state');
+				cy.getByAriaLabel('Repeat')
+					.should('not.have.class', 'changed-in-normal-state')
+					.and('not.have.class', 'changed-in-secondary-state');
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally and Vertically').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{
-				// 		laptop: ['Normal'],
-				// 		tablet: ['Normal', 'Hover'],
-				// 	},
-				// 	true
-				// );
+				cy.checkStateGraph(
+					'',
+					'Repeat',
+					{
+						laptop: ['Normal'],
+						tablet: ['Normal', 'Hover'],
+					},
+					true
+				);
 
 				// Hover/Tablet
 				setDeviceType('Tablet');
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat')
-				// 	.and('have.class', 'changed-in-secondary-state');
+				cy.getByAriaLabel('Repeat').and(
+					'have.class',
+					'changed-in-secondary-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{
-				// 		laptop: ['Normal'],
-				// 		tablet: ['Normal', 'Hover'],
-				// 	},
-				// 	true
-				// );
+				cy.checkStateGraph(
+					'',
+					'Repeat',
+					{
+						laptop: ['Normal'],
+						tablet: ['Normal', 'Hover'],
+					},
+					true
+				);
 
 				// Normal/Tablet
 				setBlockState('Normal');
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat')
-				// 	.and('have.class', 'changed-in-normal-state');
+				cy.getByAriaLabel('Repeat').and(
+					'have.class',
+					'changed-in-normal-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{
-				// 		laptop: ['Normal'],
-				// 		tablet: ['Normal', 'Hover'],
-				// 	},
-				// 	true
-				// );
+				cy.checkStateGraph(
+					'',
+					'Repeat',
+					{
+						laptop: ['Normal'],
+						tablet: ['Normal', 'Hover'],
+					},
+					true
+				);
 
 				// Assert store data
 				getWPDataObject().then((data) => {
@@ -1063,29 +877,30 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 						]
 					);
 
-					// TODO
-					// expect('repeat-x').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-					// 		.breakpoints.tablet.attributes.blockeraBackground['image-0']['image-repeat']
-					// );
+					expect('repeat-x').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
 
-					// TODO
-					// expect('repeat').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.laptop.attributes.blockeraBackground['image-0']['image-repeat']
-					// );
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.laptop.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
 
-					// TODO
-					// expect('repeat-x').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.tablet.attributes.blockeraBackground['image-0']['image-repeat']
-					// );
+					expect('repeat-x').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
 				});
 			});
 
 			it('set value in hover/laptop and navigate between states', () => {
-				openBackgroundItem();
-
 				cy.getByAriaLabel("Don't Tile Background").click();
 
 				// Assert label
@@ -1102,16 +917,15 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{
-				// 		laptop: ['Hover'],
-				// 		tablet: ['Normal', 'Hover'],
-				// 	},
-				// 	true
-				// );
+				cy.checkStateGraph(
+					'',
+					'Repeat',
+					{
+						laptop: ['Hover'],
+						tablet: ['Normal', 'Hover'],
+					},
+					true
+				);
 
 				// Navigate between states and devices:
 				// Normal/Laptop
@@ -1119,117 +933,110 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-other-state'
-				// );
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-other-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally and Vertically').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{
-				// 		laptop: ['Hover'],
-				// 		tablet: ['Normal', 'Hover'],
-				// 	},
-				// 	true
-				// );
+				cy.checkStateGraph(
+					'',
+					'Repeat',
+					{
+						laptop: ['Hover'],
+						tablet: ['Normal', 'Hover'],
+					},
+					true
+				);
 
 				// Normal/Tablet
 				setDeviceType('Tablet');
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-secondary-state'
-				// );
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-normal-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{
-				// 		laptop: ['Hover'],
-				// 		tablet: ['Normal', 'Hover'],
-				// 	},
-				// 	true
-				// );
+				cy.checkStateGraph(
+					'',
+					'Repeat',
+					{
+						laptop: ['Hover'],
+						tablet: ['Normal', 'Hover'],
+					},
+					true
+				);
 
 				// Hover/Tablet
 				setBlockState('Hover');
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-secondary-state'
-				// );
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-secondary-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{
-				// 		laptop: ['Hover'],
-				// 		tablet: ['Normal', 'Hover'],
-				// 	},
-				// 	true
-				// );
+				cy.checkStateGraph(
+					'',
+					'Repeat',
+					{
+						laptop: ['Hover'],
+						tablet: ['Normal', 'Hover'],
+					},
+					true
+				);
 
 				// Assert store data
 				getWPDataObject().then((data) => {
-					// TODO
-					// expect('repeat').to.be.eq(
-					// 	getSelectedBlock(data, 'blockeraBackground')['image-0'][
-					// 		'image-repeat'
-					// 	]
-					// );
-					// TODO
-					// expect('repeat-x').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-					// 		.breakpoints.tablet.attributes.blockeraBackground['image-0']['image-repeat']
-					// );
-					// TODO
-					// expect('repeat-y').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.laptop.attributes.blockeraBackground['image-0']['image-repeat']
-					// );
-					// TODO
-					// expect('repeat-x').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.tablet.attributes.blockeraBackground['image-0']['image-repeat']
-					// );
+					expect('repeat').to.be.eq(
+						getSelectedBlock(data, 'blockeraBackground')['image-0'][
+							'image-repeat'
+						]
+					);
+					expect('repeat-x').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+					expect('no-repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.laptop.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+					expect('repeat-x').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
 				});
 			});
 		});
@@ -1252,139 +1059,109 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				'reset-all'
 			);
 
-			context(
-				'should correctly reset blockeraBackground, and display effected fields(label, control, stateGraph) in all states',
-				() => {
-					// Assert label
-					cy.checkLabelClassName(
-						'Background',
-						'Image & Gradient',
-						'changed-in-normal-state',
-						'not-have'
-					);
-					// TODO
-					// cy.checkLabelClassName(
-					// 	'Background',
-					// 	'Image & Gradient',
-					// 	'changed-in-secondary-state',
-					// 	'not-have'
-					// );
-
-					// Assert control
-					// TODO
-					// cy.getParentContainer('Image & Gradient').within(() =>
-					// 	cy
-					// 		.getByDataCy('group-control-header')
-					// 		.should('have.length', 0)
-					// );
-
-					// Assert state graph
-					// TODO
-					//	cy.checkStateGraph('Background', 'Image & Gradient', {});
-
-					// Normal/Laptop
-					setBlockState('Normal');
-
-					// Assert label
-					// TODO
-					// cy.checkLabelClassName(
-					// 	'Background',
-					// 	'Image & Gradient',
-					// 	'changed-in-normal-state',
-					// 	'not-have'
-					// );
-
-					// Assert control
-					// TODO
-					// cy.getParentContainer('Image & Gradient').within(() =>
-					// 	cy
-					// 		.getByDataCy('group-control-header')
-					// 		.should('have.length', 0)
-					// );
-
-					// Assert state graph
-					// TODO
-					//	cy.checkStateGraph('Background', 'Image & Gradient', {});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						// TODO
-						// expect({}).to.be.deep.eq(
-						// 	getSelectedBlock(data, 'blockeraBackground')
-						// );
-						// TODO
-						// expect({}).to.be.deep.eq(
-						// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-						// 		.breakpoints.laptop.attributes
-						// );
-					});
-				}
+			// Assert label
+			cy.checkLabelClassName(
+				'Background',
+				'Image & Gradient',
+				'changed-in-normal-state',
+				'not-have'
 			);
 
-			context(
-				'set value in normal/laptop and navigate between states',
-				() => {
-					cy.getByAriaLabel('Add New Background').click();
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Background',
-						'Image & Gradient',
-						'changed-in-normal-state'
-					);
-
-					// Assert control
-					cy.getParentContainer('Image & Gradient').within(() =>
-						cy
-							.getByDataCy('group-control-header')
-							.should('have.length', 1)
-					);
-
-					// Assert state graph
-					// TODO
-					// cy.checkStateGraph('Background', 'Image & Gradient', {
-					// 	laptop: ['Normal'],
-					// });
-
-					// Hover/Laptop
-					setBlockState('Hover');
-					// Assert label
-					// TODO
-					// cy.checkLabelClassName(
-					// 	'Background',
-					// 	'Image & Gradient',
-					// 	'changed-in-normal-state'
-					// );
-
-					// Assert control
-					cy.getParentContainer('Image & Gradient').within(() =>
-						cy
-							.getByDataCy('group-control-header')
-							.should('have.length', 1)
-					);
-
-					// Assert state graph
-					// TODO
-					// cy.checkStateGraph('Background', 'Image & Gradient', {
-					// 	laptop: ['Normal'],
-					// });
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect(1).to.be.deep.eq(
-							Object.keys(
-								getSelectedBlock(data, 'blockeraBackground')
-							).length
-						);
-
-						// TODO
-						// expect({}).to.be.deep.eq(
-						// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-						// 		.breakpoints.laptop.attributes
-						// );
-					});
-				}
+			cy.checkLabelClassName(
+				'Background',
+				'Image & Gradient',
+				'changed-in-secondary-state',
+				'not-have'
 			);
+
+			// Assert control
+			cy.getParentContainer('Image & Gradient').within(() =>
+				cy.getByDataCy('group-control-header').should('have.length', 0)
+			);
+
+			// Assert state graph
+			cy.checkStateGraph('Background', 'Image & Gradient', {});
+
+			// Normal/Laptop
+			setBlockState('Normal');
+
+			// Assert label
+			cy.checkLabelClassName(
+				'Background',
+				'Image & Gradient',
+				'changed-in-normal-state',
+				'not-have'
+			);
+
+			// Assert control
+			cy.getParentContainer('Image & Gradient').within(() =>
+				cy.getByDataCy('group-control-header').should('have.length', 0)
+			);
+
+			// Assert state graph
+			cy.checkStateGraph('Background', 'Image & Gradient', {});
+
+			// Assert store data
+			getWPDataObject().then((data) => {
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBackground')
+				);
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes
+				);
+			});
+
+			cy.getByAriaLabel('Add New Background').click();
+
+			// Assert label
+			cy.checkLabelClassName(
+				'Background',
+				'Image & Gradient',
+				'changed-in-normal-state'
+			);
+
+			// Assert control
+			cy.getParentContainer('Image & Gradient').within(() =>
+				cy.getByDataCy('group-control-header').should('have.length', 1)
+			);
+
+			// Assert state graph
+			cy.checkStateGraph('Background', 'Image & Gradient', {
+				laptop: ['Normal'],
+			});
+
+			// Hover/Laptop
+			setBlockState('Hover');
+			// Assert label
+			cy.checkLabelClassName(
+				'Background',
+				'Image & Gradient',
+				'changed-in-normal-state'
+			);
+
+			// Assert control
+			cy.getParentContainer('Image & Gradient').within(() =>
+				cy.getByDataCy('group-control-header').should('have.length', 1)
+			);
+
+			// Assert state graph
+			cy.checkStateGraph('Background', 'Image & Gradient', {
+				laptop: ['Normal'],
+			});
+
+			// Assert store data
+			getWPDataObject().then((data) => {
+				expect(1).to.be.deep.eq(
+					Object.keys(getSelectedBlock(data, 'blockeraBackground'))
+						.length
+				);
+
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes
+				);
+			});
 		});
 
 		describe('repeater nested items :', () => {
@@ -1414,144 +1191,109 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				// Reset All
 				cy.resetBlockeraAttribute('', 'Repeat', 'reset-all', true);
 
-				context(
-					'should correctly reset blockeraBackground["image-0"]["image-repeat"], and display effected fields(label, control, stateGraph) in all states',
-					() => {
-						// Normal/Tablet
-						// Assert label
-						// TODO : does not reset
-						// cy.getByAriaLabel('Repeat').should(
-						// 	'not.have.class',
-						// 	'changed-in-normal-state'
-						// );
-
-						// Assert control
-						// TODO
-						// cy.getByAriaLabel('Horizontally and Vertically').should(
-						// 	'have.attr',
-						// 	'aria-checked',
-						// 	'true'
-						// );
-
-						// Assert state graph
-						// TODO
-						// cy.checkStateGraph(
-						// 	'',
-						// 	'Repeat',
-						// 	{},
-						// 	true
-						// );
-
-						// Hover/Tablet
-						setBlockState('Hover');
-						openBackgroundItem();
-
-						// Assert label
-						// TODO : does not reset
-						// cy.getByAriaLabel('Repeat').should(
-						// 	'not.have.class',
-						// 	'changed-in-secondary-state'
-						// );
-
-						// Assert control
-						// TODO
-						// cy.getByAriaLabel('Horizontally and Vertically').should(
-						// 	'have.attr',
-						// 	'aria-checked',
-						// 	'true'
-						// );
-
-						// Assert state graph
-						// TODO
-						// cy.checkStateGraph(
-						// 	'',
-						// 	'Repeat',
-						// 	{},
-						// 	true
-						// );
-
-						// Hover/Laptop
-						setDeviceType('Laptop');
-						openBackgroundItem();
-
-						// Assert label
-						// TODO : does not reset
-						// cy.getByAriaLabel('Repeat').should(
-						// 	'not.have.class',
-						// 	'changed-in-secondary-state'
-						// );
-
-						// Assert control
-						// TODO
-						// cy.getByAriaLabel('Horizontally and Vertically').should(
-						// 	'have.attr',
-						// 	'aria-checked',
-						// 	'true'
-						// );
-
-						// Assert state graph
-						// TODO
-						// cy.checkStateGraph(
-						// 	'',
-						// 	'Repeat',
-						// 	{},
-						// 	true
-						// );
-
-						// Normal/Laptop
-						setBlockState('Normal');
-						openBackgroundItem();
-
-						// Assert label
-						// TODO : does not reset
-						// cy.getByAriaLabel('Repeat').should(
-						// 	'not.have.class',
-						// 	'changed-in-normal-state'
-						// );
-
-						// Assert control
-						// TODO
-						// cy.getByAriaLabel('Horizontally and Vertically').should(
-						// 	'have.attr',
-						// 	'aria-checked',
-						// 	'true'
-						// );
-
-						// Assert state graph
-						// TODO
-						// cy.checkStateGraph(
-						// 	'',
-						// 	'Repeat',
-						// 	{},
-						// 	true
-						// );
-
-						// Assert store data
-						getWPDataObject().then((data) => {
-							// TODO
-							// expect('repeat').to.be.deep.eq(
-							// 	getSelectedBlock(data, 'blockeraBackground')[
-							// 		'image-0'
-							// 	]['image-repeat']
-							// );
-							// expect('repeat').to.be.deep.eq(
-							// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-							// 		.breakpoints.tablet.attributes
-							// 		.blockeraBackground['image-0']['image-repeat']
-							// );
-							// expect('repeat').to.be.deep.eq(
-							// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-							// 		.breakpoints.laptop.attributes
-							// 		.blockeraBackground['image-0']['image-repeat']
-							// );
-							// expect('repeat').to.be.deep.eq(
-							// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-							// 		.breakpoints.tablet.attributes
-							// 		.blockeraBackground['image-0']['image-repeat']
-							// );
-						});
-					}
+				// Normal/Tablet
+				// Assert label
+				cy.getByAriaLabel('Repeat').should(
+					'not.have.class',
+					'changed-in-normal-state'
 				);
+
+				// Assert control
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
+
+				// Assert state graph
+				cy.checkStateGraph('', 'Repeat', {}, true);
+
+				// Hover/Tablet
+				setBlockState('Hover');
+				openBackgroundItem();
+
+				// Assert label
+				cy.getByAriaLabel('Repeat').should(
+					'not.have.class',
+					'changed-in-secondary-state'
+				);
+
+				// Assert control
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
+
+				// Assert state graph
+				cy.checkStateGraph('', 'Repeat', {}, true);
+
+				// Hover/Laptop
+				setDeviceType('Laptop');
+				openBackgroundItem();
+
+				// Assert label
+				cy.getByAriaLabel('Repeat').should(
+					'not.have.class',
+					'changed-in-secondary-state'
+				);
+
+				// Assert control
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
+
+				// Assert state graph
+				cy.checkStateGraph('', 'Repeat', {}, true);
+
+				// Normal/Laptop
+				setBlockState('Normal');
+				openBackgroundItem();
+
+				// Assert label
+				cy.getByAriaLabel('Repeat').should(
+					'not.have.class',
+					'changed-in-normal-state'
+				);
+
+				// Assert control
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
+
+				// Assert state graph
+				cy.checkStateGraph('', 'Repeat', {}, true);
+
+				// Assert store data
+				getWPDataObject().then((data) => {
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBackground')['image-0'][
+							'image-repeat'
+						]
+					);
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.laptop.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+				});
 			});
 
 			it('set value in normal/laptop and navigate between states', () => {
@@ -1571,13 +1313,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{laptop:['Normal]},
-				// 	true
-				// );
+				cy.checkStateGraph('', 'Repeat', { laptop: ['Normal'] }, true);
 
 				// Navigate between states and devices
 				// Hover/Laptop
@@ -1585,108 +1321,86 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-normal-state'
-				// )
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-normal-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally and Vertically').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{laptop:['Normal]},
-				// 	true
-				// );
+				cy.checkStateGraph('', 'Repeat', { laptop: ['Normal'] }, true);
 
 				// Hover/Tablet
 				setDeviceType('Tablet');
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-normal-state'
-				// )
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-normal-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally and Vertically').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{laptop:['Normal]},
-				// 	true
-				// );
+				cy.checkStateGraph('', 'Repeat', { laptop: ['Normal'] }, true);
 
 				// Normal/Laptop
 				setBlockState('Normal');
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-normal-state'
-				// )
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-normal-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally and Vertically').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{laptop:['Normal]},
-				// 	true
-				// );
+				cy.checkStateGraph('', 'Repeat', { laptop: ['Normal'] }, true);
 
 				// Assert store data
 				getWPDataObject().then((data) => {
-					// TODO
-					// expect('repeat-y').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBackground')[
-					// 		'image-0'
-					// 	]['image-repeat']
-					// );
-					// expect('repeat').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-					// 		.breakpoints.tablet.attributes
-					// 		.blockeraBackground['image-0']['image-repeat']
-					// );
-					// expect('repeat').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.laptop.attributes
-					// 		.blockeraBackground['image-0']['image-repeat']
-					// );
-					// expect('repeat').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.tablet.attributes
-					// 		.blockeraBackground['image-0']['image-repeat']
-					// );
+					expect('repeat-y').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBackground')['image-0'][
+							'image-repeat'
+						]
+					);
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.laptop.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
 				});
 			});
 
@@ -1709,13 +1423,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{laptop:['Hover]},
-				// 	true
-				// );
+				cy.checkStateGraph('', 'Repeat', { laptop: ['Hover'] }, true);
 
 				// Navigate between states and devices
 				// Normal/Laptop
@@ -1723,108 +1431,86 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-other-state'
-				// );
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-other-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally and Vertically').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{laptop:['Hover]},
-				// 	true
-				// );
+				cy.checkStateGraph('', 'Repeat', { laptop: ['Hover'] }, true);
 
 				// Normal/Tablet
 				setDeviceType('Tablet');
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-other-state'
-				// );
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-other-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally and Vertically').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{laptop:['Hover]},
-				// 	true
-				// );
+				cy.checkStateGraph('', 'Repeat', { laptop: ['Hover'] }, true);
 
 				// Hover/Tablet
 				setBlockState('Hover');
 				openBackgroundItem();
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Repeat').should(
-				// 	'have.class',
-				// 	'changed-in-other-state'
-				// );
+				cy.getByAriaLabel('Repeat').should(
+					'have.class',
+					'changed-in-other-state'
+				);
 
 				// Assert control
-				// TODO
-				// cy.getByAriaLabel('Horizontally and Vertically').should(
-				// 	'have.attr',
-				// 	'aria-checked',
-				// 	'true'
-				// );
+				cy.getByAriaLabel('Horizontally and Vertically').should(
+					'have.attr',
+					'aria-checked',
+					'true'
+				);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph(
-				// 	'',
-				// 	'Repeat',
-				// 	{laptop:['Hover]},
-				// 	true
-				// );
+				cy.checkStateGraph('', 'Repeat', { laptop: ['Hover'] }, true);
 
 				// Assert store data
 				getWPDataObject().then((data) => {
-					// TODO
-					// expect('repeat').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBackground')[
-					// 		'image-0'
-					// 	]['image-repeat']
-					// );
-					// expect('repeat').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-					// 		.breakpoints.tablet.attributes
-					// 		.blockeraBackground['image-0']['image-repeat']
-					// );
-					// expect('repeat-y').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.laptop.attributes
-					// 		.blockeraBackground['image-0']['image-repeat']
-					// );
-					// expect('repeat').to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.tablet.attributes
-					// 		.blockeraBackground['image-0']['image-repeat']
-					// );
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBackground')['image-0'][
+							'image-repeat'
+						]
+					);
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+					expect('repeat-y').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.laptop.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
+					expect('repeat').to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.tablet.attributes.blockeraBackground[
+							'image-0'
+						]['image-repeat']
+					);
 				});
 			});
 		});

@@ -9,7 +9,7 @@ import memoize from 'fast-memoize';
  * Blockera dependencies
  */
 import { update } from '@blockera/data-editor';
-import { isEquals, isObject, mergeObject } from '@blockera/utils';
+import { isEquals, isEmpty, isObject, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -217,7 +217,8 @@ export const memoizedBlockStates: (
 );
 
 export const resetAllStates = (state: Object, action: Object): Object => {
-	const { attributeId, newValue, currentBlock } = action;
+	const { attributeId, newValue, currentBlock, ref } = action;
+	const blockeraBlockStates: { [key: string]: Object } = {};
 
 	if (isInnerBlock(currentBlock)) {
 		const newState = update(
@@ -227,110 +228,82 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 			true
 		);
 
+		const blockStates =
+			newState.blockeraInnerBlocks[currentBlock].attributes
+				?.blockeraBlockStates || {};
+
+		for (const stateType in blockStates) {
+			const _state = blockStates[stateType];
+			const breakpoints = blockStates[stateType]?.breakpoints;
+
+			for (const breakpointType in breakpoints) {
+				blockeraBlockStates[stateType] = mergeObject(
+					_state,
+					update(
+						breakpoints[breakpointType],
+						`attributes.${attributeId}`,
+						newValue,
+						true
+					)
+				);
+			}
+		}
+
 		return mergeObject(newState, {
 			blockeraInnerBlocks: mergeObject(newState.blockeraInnerBlocks, {
 				[currentBlock]: {
 					attributes: {
-						blockeraBlockStates: Object.fromEntries(
-							Object.entries(
-								newState.blockeraInnerBlocks[currentBlock]
-									.attributes?.blockeraBlockStates || {}
-							).map(
-								([stateType, _state]: [string, Object]): [
-									string,
-									Object
-								] => {
-									return [
-										stateType,
-										mergeObject(_state, {
-											breakpoints: Object.fromEntries(
-												Object.entries(
-													_state.breakpoints
-												).map(
-													([
-														breakpointType,
-														breakpoint,
-													]: [string, Object]): [
-														string,
-														Object
-													] => {
-														return [
-															breakpointType,
-															update(
-																breakpoint,
-																`attributes.${attributeId}`,
-																newValue,
-																true
-															),
-														];
-													}
-												)
-											),
-										}),
-									];
-								}
-							)
-						),
+						blockeraBlockStates,
 					},
 				},
 			}),
 		});
 	}
 
-	const blockeraBlockStates = Object.fromEntries(
-		Object.entries(state.blockeraBlockStates).map(
-			([stateType, _state]: [string, Object]): [string, Object] => {
-				const breakpoints = Object.fromEntries(
-					Object.entries(_state.breakpoints).map(
-						([breakpointType, breakpoint]: [string, Object]): [
-							string,
-							Object
-						] => {
-							if (
-								'normal' === stateType &&
-								'laptop' === breakpointType
-							) {
-								return [breakpointType, breakpoint];
-							}
+	const blockStates = state.blockeraBlockStates;
 
-							// TODO: uncomment after fixed cleanup breakpoint.
-							// if (Object.keys(breakpoint.attributes).length < 2) {
-							// 	return [breakpointType, undefined];
-							// }
+	for (const stateType in blockStates) {
+		const breakpoints = blockStates[stateType].breakpoints;
+		const stateBreakpoints: { [key: string]: Object } = {};
 
-							return [
-								breakpointType,
-								{
-									...breakpoint,
-									attributes: {
-										...breakpoint.attributes,
-										[attributeId]: undefined,
-									},
-								},
-							];
-						}
-					)
-				);
+		for (const breakpointType in breakpoints) {
+			if ('normal' === stateType && 'laptop' === breakpointType) {
+				stateBreakpoints[breakpointType] = breakpoints[breakpointType];
 
-				return [
-					stateType,
-					mergeObject(
-						_state,
-						{
-							breakpoints,
-						},
-						{
-							deletedProps: [
-								attributeId,
-								// TODO: uncomment after fixed cleanup breakpoint.
-								// ...Object.keys(_state.breakpoints),
-							],
-						}
-					),
-				];
+				continue;
 			}
-		)
-	);
+
+			const resetValue =
+				isEquals(newValue, ref.defaultValue) ||
+				isEquals(state[attributeId], newValue) ||
+				(isObject(newValue) && isEmpty(newValue))
+					? undefined
+					: newValue;
+
+			stateBreakpoints[breakpointType] = mergeObject(
+				breakpoints[breakpointType],
+				{
+					attributes: {
+						[attributeId]: resetValue,
+					},
+				}
+			);
+		}
+
+		blockeraBlockStates[stateType] = mergeObject(
+			blockStates[stateType],
+			{
+				breakpoints: stateBreakpoints,
+			},
+			{
+				deletedProps: [
+					attributeId,
+					// FIXME: uncomment after fixed cleanup breakpoint.
+					// ...Object.keys(_state.breakpoints),
+				],
+			}
+		);
+	}
 
 	return {
 		...state,
@@ -510,7 +483,11 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 					breakpoints: {
 						[currentBreakpoint]: {
 							attributes: {
-								[attributeId]: undefined,
+								[attributeId]:
+									isEquals(state[attributeId], newValue) ||
+									(isObject(newValue) && isEmpty(newValue))
+										? undefined
+										: newValue,
 							},
 						},
 					},
