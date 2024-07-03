@@ -8,13 +8,13 @@
 		display: inline-block;
 		width: var(--indicator-size);
 		height: var(--indicator-size);
-		background: var(--blockera-controls-primary-color);
+		background: var(--blockera-controls-primary-color-bk);
 		border-radius: 50%;
 		z-index: 1;
 		outline: 1.5px solid var(--indicator-outline-color);
 
 		&.indicator-states {
-			--blockera-controls-primary-color: #d47c14;
+			background: var(--blockera-controls-states-color-bk);
 		}
 
 		&:not(:first-child) {
