@@ -12,11 +12,11 @@ import { useState } from '@wordpress/element';
  */
 import { Flex } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
-import { BreakpointIcon } from '../../../extensions/libs/block-states/helpers';
 
 /**
  * Internal dependencies
  */
+import { BreakpointIcon } from './breakpoint-icon';
 import type { PickedBreakpointsComponentProps } from './types';
 
 export default function ({

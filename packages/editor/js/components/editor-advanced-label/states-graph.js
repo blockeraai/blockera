@@ -17,7 +17,7 @@ import EditedItem from './edited-item';
 import type { LabelStates } from './types';
 import { getStatesGraph } from './helpers';
 import type { TStates } from '../../extensions/libs/block-states/types';
-import { BreakpointIcon } from '../../extensions/libs/block-states/helpers';
+import { BreakpointIcon } from '../../canvas-editor/components/breakpoints/breakpoint-icon';
 
 export const StatesGraph = ({
 	onClick,

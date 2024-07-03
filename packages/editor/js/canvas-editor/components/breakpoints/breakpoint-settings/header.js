@@ -10,7 +10,7 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { BreakpointIcon } from '../../../../extensions/libs/block-states/helpers';
+import { BreakpointIcon } from '../breakpoint-icon';
 
 export default function ({
 	item,
