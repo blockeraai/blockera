@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { Popover, SlotFillProvider } from '@wordpress/components';
+
+/**
  * Blockera dependencies
  */
 import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
@@ -6,9 +11,8 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 /**
  * Internal dependencies
  */
-import { PanelBodyControl } from '../../index';
+import { PanelBodyControl, Flex } from '../../index';
 import { WithPlaygroundStyles } from '../../../../../../.storybook/preview';
-import { Popover, SlotFillProvider } from '@wordpress/components';
 
 import { default as InheritIcon } from './icons/inherit';
 
@@ -79,7 +83,7 @@ export const Icon = {
 	},
 };
 
-export const Edited = {
+export const Changed = {
 	args: {
 		title: 'Panel Title',
 		children: <p>Body content is here...</p>,
@@ -95,11 +99,54 @@ export const Edited = {
 								className="components-tab-panel__tab-content"
 								style={{ padding: '20px 0' }}
 							>
-								<PanelBodyControl
-									{...args}
-									icon={<InheritIcon />}
-									isEdited={true}
-								/>
+								<Flex direction="column" gap="50px">
+									<Flex direction="column" gap="15px">
+										<h2 className="story-heading">
+											Not Changed
+										</h2>
+										<PanelBodyControl
+											{...args}
+											icon={<InheritIcon />}
+											isChanged={false}
+											isChangedOnStates={false}
+										/>
+									</Flex>
+
+									<Flex direction="column" gap="15px">
+										<h2 className="story-heading">
+											Changed on Primary
+										</h2>
+										<PanelBodyControl
+											{...args}
+											icon={<InheritIcon />}
+											isChanged={true}
+										/>
+									</Flex>
+
+									<Flex direction="column" gap="15px">
+										<h2 className="story-heading">
+											Changed on States
+										</h2>
+										<PanelBodyControl
+											{...args}
+											icon={<InheritIcon />}
+											isChanged={false}
+											isChangedOnStates={true}
+										/>
+									</Flex>
+
+									<Flex direction="column" gap="15px">
+										<h2 className="story-heading">
+											Changed on Both
+										</h2>
+										<PanelBodyControl
+											{...args}
+											icon={<InheritIcon />}
+											isChanged={true}
+											isChangedOnStates={true}
+										/>
+									</Flex>
+								</Flex>
 							</div>
 						</div>
 					</div>
