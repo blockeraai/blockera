@@ -47,6 +47,9 @@
 
 :root {
 	--blockera-controls-primary-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
+	--blockera-controls-primary-color-bk: var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
+	--blockera-controls-states-color: #d47c14;
+	--blockera-controls-states-color-bk: #d47c14;
 	--blockera-controls-primary-color-darker-20: var(--wp-components-color-accent-darker-20, var(--wp-admin-theme-color-darker-20, #183ad6));
 	--blockera-controls-background-color: #ffffff;
 	--blockera-controls-color: #1e1e1e;
