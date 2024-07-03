@@ -15,11 +15,13 @@ import { controlClassNames } from '@blockera/classnames';
  */
 import type { PanelBodyControlProps } from './types';
 import { PoweredBy } from './components/powered-by';
+import { ChangeIndicator } from '../../index';
 
 export default function PanelBodyControl({
 	title,
 	initialOpen = true,
-	isEdited = false,
+	isChanged = false,
+	isChangedOnStates = false,
 	className,
 	icon,
 	children,
@@ -30,18 +32,13 @@ export default function PanelBodyControl({
 	return (
 		<WPPanelBody
 			title={
-				!isEdited ? (
-					title
-				) : (
-					<>
-						{title}
-						<span
-							className={controlClassNames(
-								'panel-content-edited-indicator'
-							)}
-						/>
-					</>
-				)
+				<>
+					{title}
+					<ChangeIndicator
+						isChanged={isChanged}
+						isChangedOnStates={isChangedOnStates}
+					/>
+				</>
 			}
 			initialOpen={initialOpen}
 			className={controlClassNames('panel-body', className)}

@@ -22,9 +22,13 @@ export type PanelBodyControlProps = {
 	 */
 	onToggle?: () => void,
 	/**
-	 * Is panel content edited to show edited indicator
+	 * Is panel content changed to show change indicator
 	 */
-	isEdited?: boolean,
+	isChanged?: boolean,
+	/**
+	 * Is panel content changed on states to show change indicator
+	 */
+	isChangedOnStates?: boolean,
 	children: Node,
 	className?: string,
 	/**

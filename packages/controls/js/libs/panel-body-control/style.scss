@@ -24,24 +24,20 @@
 					fill: currentcolor;
 				}
 			}
+		}
 
-			.blockera-control-panel-content-edited-indicator {
-				display: inline-block;
-				width: 20px;
-				height: 20px;
-				position: relative;
+		.blockera-component-change-indicator {
+			margin-left: 5px;
 
-				&::before {
-					content: "";
-					position: absolute;
-					width: 6px;
-					height: 6px;
-					background: var(--blockera-controls-primary-color);
-					border-radius: 50%;
-					transform: translate(-50%, -50%);
-					top: 50%;
-					left: 50%;
-				}
+			.blockera-component-indicator {
+				transition: 0.1s background ease-in-out;
+			}
+		}
+
+		&:hover {
+
+			.blockera-component-change-indicator {
+				--indicator-outline-color: #f0f0f0;
 			}
 		}
 	}
