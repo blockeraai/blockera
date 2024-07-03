@@ -11,7 +11,7 @@ import { default as Decorators } from '@blockera/dev-storybook/js/decorators';
 /**
  * Internal dependencies
  */
-import { BaseExtension, ExtensionStyle } from '@blockera/editor';
+import { CustomStyleExtension, CustomStyleStyles } from '@blockera/editor';
 import {
 	blocksInitializer,
 	createBlockEditorContent,
@@ -47,7 +47,7 @@ blocksInitializer({
 		return (
 			<>
 				<InspectorControls>
-					<BaseExtension
+					<CustomStyleExtension
 						initialOpen={true}
 						extensionId={'Advanced'}
 						attributes={attributes?.blockeraAttributes || []}
@@ -59,7 +59,7 @@ blocksInitializer({
 					/>
 				</InspectorControls>
 
-				<ExtensionStyle
+				<CustomStyleStyles
 					extensions={['Advanced']}
 					{...{
 						...props,
