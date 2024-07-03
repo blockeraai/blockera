@@ -40,6 +40,7 @@ export function PaddingHorizontal({
 	openPopover,
 	setOpenPopover,
 	paddingDisable,
+	paddingLock,
 }: SideProps): SideReturn {
 	const sideId: Side = 'padding-horizontal';
 
@@ -109,14 +110,14 @@ export function PaddingHorizontal({
 		},
 	});
 
-	let paddingLock = value.paddingLock;
-	if (paddingLock === 'vertical-horizontal') {
-		paddingLock = 'horizontal';
+	let _paddingLock = paddingLock;
+	if (_paddingLock === 'vertical-horizontal') {
+		_paddingLock = 'horizontal';
 	}
 
 	if (
-		paddingLock !== 'horizontal' ||
-		(paddingLock === 'horizontal' && paddingDisable === 'all')
+		_paddingLock !== 'horizontal' ||
+		(_paddingLock === 'horizontal' && paddingDisable === 'all')
 	) {
 		return {
 			shape: <></>,

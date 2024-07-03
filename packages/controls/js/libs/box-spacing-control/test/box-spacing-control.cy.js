@@ -37,15 +37,15 @@ describe('box spacing control component testing', () => {
 							bottom: '23px',
 							left: '-10px',
 						},
-						marginLock: 'none',
 						padding: {
 							top: '9px',
 							right: '78px',
 							bottom: '23px',
 							left: '-10px',
 						},
-						paddingLock: 'none',
 					}}
+					marginLock={'none'}
+					paddingLock={'none'}
 				/>
 			),
 			name,

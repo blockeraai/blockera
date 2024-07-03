@@ -40,6 +40,7 @@ export function MarginVertical({
 	openPopover,
 	setOpenPopover,
 	marginDisable,
+	marginLock,
 }: SideProps): SideReturn {
 	const sideId: Side = 'margin-vertical';
 
@@ -108,14 +109,14 @@ export function MarginVertical({
 		},
 	});
 
-	let marginLock = value.marginLock;
-	if (marginLock === 'vertical-horizontal') {
-		marginLock = 'vertical';
+	let _marginLock = marginLock;
+	if (_marginLock === 'vertical-horizontal') {
+		_marginLock = 'vertical';
 	}
 
 	if (
-		marginLock !== 'vertical' ||
-		(marginLock === 'vertical' && marginDisable === 'all')
+		_marginLock !== 'vertical' ||
+		(_marginLock === 'vertical' && marginDisable === 'all')
 	) {
 		return {
 			shape: <></>,

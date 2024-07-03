@@ -39,6 +39,7 @@ export function PaddingAll({
 	setFocusSide,
 	openPopover,
 	setOpenPopover,
+	paddingLock,
 }: SideProps): SideReturn {
 	const sideId: Side = 'padding-all';
 
@@ -108,7 +109,7 @@ export function PaddingAll({
 		},
 	});
 
-	if (value.paddingLock !== 'all') {
+	if (paddingLock !== 'all') {
 		return {
 			shape: <></>,
 			label: <></>,

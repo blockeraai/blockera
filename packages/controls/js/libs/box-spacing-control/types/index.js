@@ -25,14 +25,12 @@ export type TDefaultValue = {
 		bottom: string,
 		left: string,
 	},
-	marginLock: BoxSpacingLock,
 	padding: {
 		top: string,
 		right: string,
 		bottom: string,
 		left: string,
 	},
-	paddingLock: BoxSpacingLock,
 };
 
 export type BoxSpacingControlProps = {
@@ -47,6 +45,8 @@ export type BoxSpacingControlProps = {
 	 * @default ``
 	 */
 	openSide?: 'top' | 'right' | 'bottom' | 'left' | '',
+	marginLock: BoxSpacingLock,
+	paddingLock: BoxSpacingLock,
 	paddingDisable?: BoxSpacingSideDisable,
 	marginDisable?: BoxSpacingSideDisable,
 };
@@ -105,6 +105,10 @@ export type SideProps = {
 	paddingDisable: BoxSpacingSideDisable,
 	marginDisable: BoxSpacingSideDisable,
 	setControlClassName: (string) => void,
+	marginLock: BoxSpacingLock,
+	setMarginLock: (side: Side) => void,
+	paddingLock: BoxSpacingLock,
+	setPaddingLock: (side: Side) => void,
 };
 
 export type SideReturn = {

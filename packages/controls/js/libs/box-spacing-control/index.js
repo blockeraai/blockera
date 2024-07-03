@@ -15,9 +15,9 @@ import { controlClassNames } from '@blockera/classnames';
  */
 import type {
 	BoxSpacingControlProps,
-	TDefaultValue,
 	Side,
 	OpenPopover,
+	BoxSpacingLock,
 } from './types';
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
@@ -56,17 +56,17 @@ export default function BoxSpacingControl({
 			bottom: '',
 			left: '',
 		},
-		marginLock: 'none',
 		padding: {
 			top: '',
 			right: '',
 			bottom: '',
 			left: '',
 		},
-		paddingLock: 'none',
 	},
 	onChange = () => {},
 	field,
+	marginLock: _marginLock = 'none',
+	paddingLock: _paddingLock = 'none',
 	marginDisable = 'none',
 	paddingDisable = 'none',
 	//
@@ -83,30 +83,22 @@ export default function BoxSpacingControl({
 	} = useControlContext({
 		id,
 		onChange,
-		defaultValue: {
-			marginLock: 'none',
-			paddingLock: 'none',
-			...defaultValue,
-		},
+		defaultValue,
 		mergeInitialAndDefault: true,
-		valueCleanup,
 	});
-
-	function valueCleanup(value: TDefaultValue) {
-		//$FlowFixMe
-		delete value?.marginLock;
-
-		//$FlowFixMe
-		delete value?.paddingLock;
-
-		return value;
-	}
 
 	const [openPopover, setOpenPopover]: [OpenPopover, (OpenPopover) => void] =
 		useState(openSide);
+
 	const [focusSide, setFocusSide]: [Side, (Side) => void] = useState('');
+
 	const [controlClassName, setControlClassName]: [string, (string) => void] =
 		useState('');
+
+	const [marginLock, setMarginLock]: [BoxSpacingLock, (string) => void] =
+		useState(_marginLock);
+	const [paddingLock, setPaddingLock]: [BoxSpacingLock, (string) => void] =
+		useState(_paddingLock);
 
 	const sideProps = {
 		id,
@@ -127,6 +119,10 @@ export default function BoxSpacingControl({
 		marginDisable,
 		paddingDisable,
 		setControlClassName,
+		marginLock,
+		paddingLock,
+		setMarginLock,
+		setPaddingLock,
 	};
 
 	const marginAll = MarginAll(sideProps);
@@ -171,8 +167,8 @@ export default function BoxSpacingControl({
 				{...props}
 				className={controlClassNames(
 					'box-spacing',
-					'padding-lock-' + value.paddingLock,
-					'margin-lock-' + value.marginLock,
+					'padding-lock-' + paddingLock,
+					'margin-lock-' + marginLock,
 					className,
 					controlClassName
 				)}

@@ -22,7 +22,6 @@ export function Margin({
 	getId,
 	//
 	value,
-	setValue,
 	attribute,
 	blockName,
 	defaultValue,
@@ -33,6 +32,8 @@ export function Margin({
 	setOpenPopover,
 	marginDisable,
 	setControlClassName,
+	marginLock,
+	setMarginLock,
 }: SideProps): MixedElement {
 	return (
 		<>
@@ -91,7 +92,7 @@ export function Margin({
 			{marginDisable !== 'all' && (
 				<SelectControl
 					id={getId(id, 'marginLock')}
-					defaultValue={defaultValue.marginLock}
+					defaultValue={marginLock}
 					type="custom"
 					noBorder={true}
 					customHideInputLabel={true}
@@ -102,10 +103,7 @@ export function Margin({
 					)}
 					onChange={(newValue) => {
 						setOpenPopover('');
-						setValue({
-							...value,
-							marginLock: newValue,
-						});
+						setMarginLock(newValue);
 
 						const shakeSide = 'margin-' + newValue;
 

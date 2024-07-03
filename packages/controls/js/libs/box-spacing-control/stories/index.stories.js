@@ -629,15 +629,15 @@ export const LockedSides = {
 					<ControlContextProvider
 						value={{
 							name: nanoid(),
+							marginLock: 'none',
+							paddingLock: 'none',
 							value: {
-								marginLock: 'none',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'none',
 								padding: {
 									top: '',
 									right: '',
@@ -661,15 +661,15 @@ export const LockedSides = {
 					<ControlContextProvider
 						value={{
 							name: nanoid(),
+							marginLock: 'horizontal',
+							paddingLock: 'none',
 							value: {
-								marginLock: 'horizontal',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'none',
 								padding: {
 									top: '',
 									right: '',
@@ -694,14 +694,12 @@ export const LockedSides = {
 						value={{
 							name: nanoid(),
 							value: {
-								marginLock: 'vertical',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'none',
 								padding: {
 									top: '',
 									right: '',
@@ -713,6 +711,8 @@ export const LockedSides = {
 					>
 						<ControlWithHooks
 							Control={BoxSpacingControl}
+							marginLock={'vertical'}
+							paddingLock={'none'}
 							{...args}
 						/>
 					</ControlContextProvider>
@@ -726,14 +726,12 @@ export const LockedSides = {
 						value={{
 							name: nanoid(),
 							value: {
-								marginLock: 'vertical-horizontal',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'none',
 								padding: {
 									top: '',
 									right: '',
@@ -745,6 +743,8 @@ export const LockedSides = {
 					>
 						<ControlWithHooks
 							Control={BoxSpacingControl}
+							marginLock={'vertical-horizontal'}
+							paddingLock={'none'}
 							{...args}
 						/>
 					</ControlContextProvider>
@@ -758,14 +758,12 @@ export const LockedSides = {
 						value={{
 							name: nanoid(),
 							value: {
-								marginLock: 'all',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'none',
 								padding: {
 									top: '',
 									right: '',
@@ -777,6 +775,8 @@ export const LockedSides = {
 					>
 						<ControlWithHooks
 							Control={BoxSpacingControl}
+							marginLock={'all'}
+							paddingLock={'none'}
 							{...args}
 						/>
 					</ControlContextProvider>
@@ -792,14 +792,12 @@ export const LockedSides = {
 						value={{
 							name: nanoid(),
 							value: {
-								marginLock: 'none',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'none',
 								padding: {
 									top: '',
 									right: '',
@@ -811,6 +809,8 @@ export const LockedSides = {
 					>
 						<ControlWithHooks
 							Control={BoxSpacingControl}
+							marginLock={'none'}
+							paddingLock={'none'}
 							{...args}
 						/>
 					</ControlContextProvider>
@@ -824,14 +824,12 @@ export const LockedSides = {
 						value={{
 							name: nanoid(),
 							value: {
-								marginLock: 'none',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'horizontal',
 								padding: {
 									top: '',
 									right: '',
@@ -843,6 +841,8 @@ export const LockedSides = {
 					>
 						<ControlWithHooks
 							Control={BoxSpacingControl}
+							marginLock={'none'}
+							paddingLock={'horizontal'}
 							{...args}
 						/>
 					</ControlContextProvider>
@@ -856,14 +856,12 @@ export const LockedSides = {
 						value={{
 							name: nanoid(),
 							value: {
-								marginLock: 'none',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'vertical',
 								padding: {
 									top: '',
 									right: '',
@@ -875,6 +873,8 @@ export const LockedSides = {
 					>
 						<ControlWithHooks
 							Control={BoxSpacingControl}
+							marginLock={'none'}
+							paddingLock={'vertical'}
 							{...args}
 						/>
 					</ControlContextProvider>
@@ -888,14 +888,12 @@ export const LockedSides = {
 						value={{
 							name: nanoid(),
 							value: {
-								marginLock: 'none',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'vertical-horizontal',
 								padding: {
 									top: '',
 									right: '',
@@ -907,6 +905,8 @@ export const LockedSides = {
 					>
 						<ControlWithHooks
 							Control={BoxSpacingControl}
+							marginLock={'none'}
+							paddingLock={'vertical-horizontal'}
 							{...args}
 						/>
 					</ControlContextProvider>
@@ -920,14 +920,12 @@ export const LockedSides = {
 						value={{
 							name: nanoid(),
 							value: {
-								marginLock: 'none',
 								margin: {
 									top: '',
 									right: '',
 									bottom: '',
 									left: '',
 								},
-								paddingLock: 'all',
 								padding: {
 									top: '',
 									right: '',
@@ -939,6 +937,8 @@ export const LockedSides = {
 					>
 						<ControlWithHooks
 							Control={BoxSpacingControl}
+							marginLock={'none'}
+							paddingLock={'all'}
 							{...args}
 						/>
 					</ControlContextProvider>

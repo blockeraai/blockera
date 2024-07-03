@@ -77,6 +77,8 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 								defaultValue={
 									attributes.blockeraSpacing.default
 								}
+								marginLock={'none'}
+								paddingLock={'none'}
 								{...extensionProps.blockeraSpacing}
 							/>
 						</BaseControl>

@@ -40,6 +40,7 @@ export function PaddingTop({
 	openPopover,
 	setOpenPopover,
 	paddingDisable,
+	paddingLock,
 }: SideProps): SideReturn {
 	const sideId: Side = 'padding-top';
 
@@ -124,7 +125,7 @@ export function PaddingTop({
 		};
 	}
 
-	if (value.paddingLock !== 'none' && value.paddingLock !== 'horizontal') {
+	if (paddingLock !== 'none' && paddingLock !== 'horizontal') {
 		return {
 			shape: <></>,
 			label: <></>,

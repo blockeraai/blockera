@@ -39,6 +39,7 @@ export function MarginAll({
 	setFocusSide,
 	openPopover,
 	setOpenPopover,
+	marginLock,
 }: SideProps): SideReturn {
 	const sideId: Side = 'margin-all';
 
@@ -107,7 +108,7 @@ export function MarginAll({
 		},
 	});
 
-	if (value.marginLock !== 'all') {
+	if (marginLock !== 'all') {
 		return {
 			shape: <></>,
 			label: <></>,

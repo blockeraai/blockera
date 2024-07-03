@@ -22,7 +22,6 @@ export function Padding({
 	getId,
 	//
 	value,
-	setValue,
 	attribute,
 	blockName,
 	defaultValue,
@@ -33,6 +32,8 @@ export function Padding({
 	setOpenPopover,
 	paddingDisable,
 	setControlClassName,
+	paddingLock,
+	setPaddingLock,
 }: SideProps): MixedElement {
 	return (
 		<>
@@ -85,7 +86,7 @@ export function Padding({
 			{paddingDisable !== 'all' && (
 				<SelectControl
 					id={getId(id, 'paddingLock')}
-					defaultValue={defaultValue.paddingLock}
+					defaultValue={paddingLock}
 					type="custom"
 					noBorder={true}
 					customHideInputLabel={true}
@@ -96,10 +97,7 @@ export function Padding({
 					)}
 					onChange={(newValue) => {
 						setOpenPopover('');
-						setValue({
-							...value,
-							paddingLock: newValue,
-						});
+						setPaddingLock(newValue);
 
 						const shakeSide = 'padding-' + newValue;
 
