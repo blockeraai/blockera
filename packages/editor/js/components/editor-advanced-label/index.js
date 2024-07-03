@@ -127,7 +127,12 @@ export const EditorAdvancedLabelControl = ({
 							(!isNormalState() &&
 								(isChangedOnLaptopNormal ||
 									isChangedOnCurrentBreakpointNormal) &&
-								!isChangedOnCurrentState),
+								!isChangedOnCurrentState) ||
+							(!isNormalState() &&
+								(isChangedOnLaptopNormal ||
+									isChangedOnCurrentBreakpointNormal) &&
+								!isChanged &&
+								isChangedOnCurrentState),
 						'changed-in-secondary-state':
 							(isInnerBlock &&
 								'normal' !== currentInnerBlockState &&
