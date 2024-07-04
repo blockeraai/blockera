@@ -948,17 +948,23 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 						'image-position'
 					]
 				);
-				expect({}).to.be.deep.eq(
+				expect({ top: '50%', left: '50%' }).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes
+						.breakpoints.tablet.attributes.blockeraBackground[
+						'image-0'
+					]['image-position']
 				);
-				expect({}).to.be.deep.eq(
+				expect({ top: '50%', left: '50%' }).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.laptop.attributes.blockeraBackground[
+						'image-0'
+					]['image-position']
 				);
-				expect({}).to.be.deep.eq(
+				expect({ top: '50%', left: '50%' }).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet.attributes
+						.breakpoints.tablet.attributes.blockeraBackground[
+						'image-0'
+					]['image-position']
 				);
 			});
 		});
