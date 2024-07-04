@@ -35,10 +35,34 @@ export function getWPDataObject() {
  * @param {string} field the field of attributes of selectedBlock.
  * @return {*} retrieved th field value of selected block attributes.
  */
-export function getSelectedBlock(data, field) {
-	return data.select('core/block-editor').getSelectedBlock().attributes[
-		field
-	];
+export function getSelectedBlock(data, field = '') {
+	const selectedBlock = data.select('core/block-editor').getSelectedBlock();
+
+	if (!field) {
+		return selectedBlock;
+	}
+
+	return selectedBlock.attributes[field];
+}
+
+/**
+ * Get editor content.
+ *
+ * @param {Object} data the WordPress data.
+ * @return {*} retrieved th field value of selected block attributes.
+ */
+export function getEditorContent(data) {
+	const { getEditedEntityRecord } = data.select('core');
+	const { getCurrentPostType, getCurrentPostId } = data.select('core/editor');
+	const _type = getCurrentPostType();
+	const _id = getCurrentPostId();
+	const editedRecord = getEditedEntityRecord('postType', _type, _id);
+
+	if ('function' === typeof editedRecord?.content) {
+		return editedRecord?.content({ blocks: editedRecord?.blocks });
+	}
+
+	return editedRecord?.content;
 }
 
 /**
