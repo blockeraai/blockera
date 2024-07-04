@@ -12,7 +12,7 @@ import { memo, useMemo, useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEquals, omit } from '@blockera/utils';
+import { isEquals, isEmpty, omit } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	RepeaterControl,
@@ -66,6 +66,21 @@ const StatesManager: ComponentType<any> = memo(
 		const { getActiveMasterState, getActiveInnerState } = select(
 			'blockera/extensions'
 		);
+		const initializeStates = {
+			normal: {
+				isVisible: true,
+				breakpoints: {
+					laptop: {
+						attributes: {},
+					},
+				},
+			},
+		};
+
+		if (isEmpty(states)) {
+			// Sets initialize states ...
+			states = initializeStates;
+		}
 
 		const preparedStates = !availableStates
 			? defaultStates
@@ -146,9 +161,7 @@ const StatesManager: ComponentType<any> = memo(
 					selectable: true,
 					isSelected: true,
 					visibilitySupport: false,
-					breakpoints:
-						StateSettings.blockeraBlockStates.default.normal
-							.breakpoints,
+					breakpoints: initializeStates.normal.breakpoints,
 				},
 			};
 			// eslint-disable-next-line
