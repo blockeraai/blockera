@@ -3,8 +3,9 @@
 /**
  * External dependencies
  */
-import { SlotFillProvider } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
+import { detailedDiff } from 'deep-object-diff';
+import { SlotFillProvider } from '@wordpress/components';
 import type { Element, MixedElement, ComponentType } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -248,6 +249,19 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			 */
 			useEffect(
 				() => {
+					const { added, updated } = detailedDiff(
+						attributes,
+						prepareAttributesDefaultValues(defaultAttributes)
+					);
+
+					// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
+					if (
+						!Object.keys(added).length &&
+						!Object.keys(updated).length
+					) {
+						return;
+					}
+
 					// Creat mutable constant to prevent directly change to immutable state constant.
 					let filteredAttributes = { ...attributes };
 
