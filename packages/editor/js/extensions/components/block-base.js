@@ -41,11 +41,10 @@ import {
 } from '../../hooks';
 import { SideEffect } from '../libs/base';
 import { BlockPartials } from './block-partials';
-import { isLaptopBreakpoint } from '../../canvas-editor';
+import { isBaseBreakpoint } from '../../canvas-editor';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import {
-	isBaseBreakpoint,
 	isInnerBlock,
 	prepareAttributesDefaultValues,
 	propsAreEqual,
@@ -128,13 +127,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		});
 
 		const masterIsNormalState = (): boolean =>
-			'normal' === currentState && isLaptopBreakpoint(getDeviceType());
+			'normal' === currentState && isBaseBreakpoint(getDeviceType());
 
 		const isNormalState = (): boolean => {
 			if (isInnerBlock(currentBlock)) {
 				return (
 					'normal' === currentInnerBlockState &&
-					isLaptopBreakpoint(getDeviceType())
+					isBaseBreakpoint(getDeviceType())
 				);
 			}
 

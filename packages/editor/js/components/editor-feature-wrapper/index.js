@@ -15,7 +15,7 @@ import { isBoolean, isArray } from '@blockera/utils';
  * Internal dependencies
  */
 import type { EditorFeatureWrapperProps } from './types';
-import { isLaptopBreakpoint } from '../../canvas-editor';
+import { isBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 
 export default function EditorFeatureWrapper({
@@ -129,7 +129,7 @@ export default function EditorFeatureWrapper({
 		}
 	}
 
-	if (!isLaptopBreakpoint(currentBreakpoint)) {
+	if (!isBaseBreakpoint(currentBreakpoint)) {
 		if (
 			isBoolean(feature.isActiveOnBreakpoints) &&
 			!feature.isActiveOnBreakpoints

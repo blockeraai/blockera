@@ -19,7 +19,8 @@ import {
 	prepCustomCssClasses,
 	resetCurrentState,
 } from './helpers';
-import { isBaseBreakpoint, isInnerBlock } from '../../extensions/components';
+import { isBaseBreakpoint } from '../../canvas-editor';
+import { isInnerBlock } from '../../extensions/components';
 import { sharedBlockExtensionAttributes as defaultAttributes } from '../../extensions/libs';
 
 const reducer = (state: Object = {}, action: Object): Object => {

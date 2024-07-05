@@ -43,4 +43,4 @@ export * from './hooks';
 export * from './components';
 export * from './extensions';
 export { Observer } from './observer';
-export { CanvasEditor, isLaptopBreakpoint } from './canvas-editor';
+export { CanvasEditor, isBaseBreakpoint } from './canvas-editor';

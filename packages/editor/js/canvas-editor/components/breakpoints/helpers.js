@@ -5,5 +5,11 @@
  */
 import type { TBreakpoint } from '../../../extensions/libs/block-states/types';
 
-export const isLaptopBreakpoint = (device: TBreakpoint): boolean =>
-	/laptop/i.test(device);
+/**
+ * Check if given breakpoint is base breakpoint
+ *
+ * @param {TBreakpoint} breakPoint The breakpoint to check.
+ * @return {boolean} true on success, false on otherwise.
+ */
+export const isBaseBreakpoint = (breakPoint: TBreakpoint): boolean =>
+	'laptop' === breakPoint;

@@ -26,7 +26,7 @@ import { experimental } from '@blockera/env';
  * Internal dependencies
  */
 import { Preview } from '../preview';
-import { isLaptopBreakpoint } from './helpers';
+import { isBaseBreakpoint } from './helpers';
 import PickedBreakpoints from './picked-breakpoints';
 import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
@@ -78,7 +78,7 @@ export const Breakpoints = ({
 				editorWrapper.classList.remove(className);
 			}
 
-			if (isLaptopBreakpoint(deviceType)) {
+			if (isBaseBreakpoint(deviceType)) {
 				editorWrapper.style.minWidth = '100%';
 				editorWrapper.style.maxWidth = '100%';
 				editorWrapper.classList.remove('preview-margin');

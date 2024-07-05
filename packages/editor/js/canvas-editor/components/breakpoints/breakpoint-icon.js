@@ -18,7 +18,7 @@ import {
  * Internal dependencies
  */
 import type { TBreakpoint } from '../../../extensions/libs/block-states/types';
-import { isLaptopBreakpoint } from './helpers';
+import { isBaseBreakpoint } from './helpers';
 
 export function BreakpointIcon({
 	name,
@@ -43,7 +43,7 @@ export function BreakpointIcon({
 					onClick={onClick}
 					{...props}
 				>
-					{isLaptopBreakpoint(name) && (
+					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
 							iconSize="14"
@@ -71,7 +71,7 @@ export function BreakpointIcon({
 					onClick={onClick}
 					{...props}
 				>
-					{isLaptopBreakpoint(name) && (
+					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
 							iconSize="14"
@@ -99,7 +99,7 @@ export function BreakpointIcon({
 					onClick={onClick}
 					{...props}
 				>
-					{isLaptopBreakpoint(name) && (
+					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
 							iconSize="14"
@@ -127,7 +127,7 @@ export function BreakpointIcon({
 					onClick={onClick}
 					{...props}
 				>
-					{isLaptopBreakpoint(name) && (
+					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
 							iconSize="14"
@@ -155,7 +155,7 @@ export function BreakpointIcon({
 					onClick={onClick}
 					{...props}
 				>
-					{isLaptopBreakpoint(name) && (
+					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
 							iconSize="14"
@@ -183,7 +183,7 @@ export function BreakpointIcon({
 					onClick={onClick}
 					{...props}
 				>
-					{isLaptopBreakpoint(name) && (
+					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
 							iconSize="14"
@@ -211,7 +211,7 @@ export function BreakpointIcon({
 					onClick={onClick}
 					{...props}
 				>
-					{isLaptopBreakpoint(name) && (
+					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
 							iconSize="14"
