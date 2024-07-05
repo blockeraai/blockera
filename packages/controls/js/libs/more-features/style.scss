@@ -21,20 +21,11 @@
 			fill: currentColor;
 		}
 
-		.blockera-component-more-features__button__changed {
-			display: none;
-			width: 6px;
-			height: 6px;
-			background-color: var(--blockera-controls-primary-color);
-			border-radius: 50%;
-		}
-
 		&:hover {
 			color: var(--blockera-controls-primary-color) !important;
 		}
 
 		&:focus {
-			border: 1px solid var(--blockera-controls-primary-color);
 			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 		}
 	}
@@ -52,10 +43,6 @@
 		.blockera-component-more-features__button {
 			color: var(--blockera-controls-primary-color) !important;
 			margin-bottom: 10px;
-
-			.blockera-component-more-features__button__changed {
-				display: inline-block;
-			}
 		}
 
 		.blockera-component-more-features__body {
@@ -64,16 +51,6 @@
 			visibility: visible;
 			overflow: visible;
 			height: auto;
-		}
-	}
-
-	&.is-changed {
-
-		.blockera-component-more-features__button {
-
-			.blockera-component-more-features__button__changed {
-				display: inline-block;
-			}
 		}
 	}
 }

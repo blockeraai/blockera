@@ -20,6 +20,7 @@ import { Icon } from '@blockera/icons';
  */
 import { Button } from '../button';
 import type { MoreFeaturesProps } from './types';
+import { ChangeIndicator } from '../';
 
 export default function MoreFeatures({
 	isOpen: _isOpen = false,
@@ -64,13 +65,7 @@ export default function MoreFeatures({
 
 				{label}
 
-				{isChanged && (
-					<span
-						className={componentInnerClassNames(
-							'more-features__button__changed'
-						)}
-					/>
-				)}
+				<ChangeIndicator isChanged={isChanged} />
 			</Button>
 
 			{isOpen && (
