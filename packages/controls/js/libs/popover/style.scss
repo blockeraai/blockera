@@ -91,5 +91,9 @@
 		& > :last-child {
 			padding-bottom: 20px;
 		}
+
+		.blockera-component-breakpoint-icon {
+			--icon-outline-color: var(--popover-bg-color);
+		}
 	}
 }

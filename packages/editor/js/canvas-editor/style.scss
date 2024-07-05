@@ -18,18 +18,11 @@
 	width: 100%;
 	min-width: 200px;
 
-	.blockera-control-blockera-breakpoints {
-		line-height: 36px;
+	.blockera-component-breakpoint-icon {
+		cursor: pointer;
 
-		svg {
-			top: 6px;
-			cursor: pointer;
-			position: relative;
-			transition: all 0.3s;
-		}
-
-		svg:hover,
- svg.is-active-breakpoint {
+		&:hover,
+		&.is-active-breakpoint {
 			fill: var(--blockera-controls-primary-color);
 			color: var(--blockera-controls-primary-color);
 		}
@@ -48,9 +41,6 @@
 		border-radius: 2px;
 		background: #ffffff;
 		transition: min-width 0.5s ease;
-		-o-transition: min-width 0.5s ease;
-		-moz-transition: min-width 0.5s ease;
-		-webkit-transition: min-width 0.5s ease;
 	}
 
 	&.preview-margin {
@@ -62,4 +52,106 @@
 	display: flex;
 	align-items: center;
 	margin-left: 8px;
+}
+
+.blockera-component-breakpoint-icon {
+	width: 24px;
+	height: 24px;
+	position: relative;
+	transition: var(--blockera-controls-transition);
+	--icon-outline-color: #f0f0f0;
+
+	.blockera-component-base-breakpoint-icon {
+		position: absolute;
+		left: -3px;
+		top: -2px;
+		stroke-width: 5px;
+		stroke: var(--icon-outline-color);
+		paint-order: stroke;
+	}
+
+	.blockera-component-change-indicator {
+		position: absolute;
+		top: 2px;
+		right: 2px;
+		--indicator-size: 4px;
+		--indicator-outline-color: var(--icon-outline-color);
+	}
+
+	&.breakpoint-extra-large {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -5px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 0;
+		}
+	}
+
+	&.breakpoint-large {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -3px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 1px;
+		}
+	}
+
+	&.breakpoint-laptop {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -3px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 2px;
+		}
+	}
+
+	&.breakpoint-desktop {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -3px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 3px;
+		}
+	}
+
+	&.breakpoint-tablet {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -1px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 4px;
+		}
+	}
+
+	&.breakpoint-mobile {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -1px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 5px;
+		}
+	}
+
+	&.breakpoint-mobile-landscape {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -3px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 4px;
+		}
+	}
 }
