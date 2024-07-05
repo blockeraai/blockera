@@ -14,11 +14,7 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
 import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 import { TabsContext, Sidebar, PanelHeader } from '@blockera/wordpress';
 
-import {
-	GeneralPanel,
-	BlockManagerPanel,
-	LicenseManagerPanel,
-} from './components';
+import { GeneralPanel, BlockManagerPanel } from './components';
 
 export const Panel = (tab: {
 	...TTabProps,
@@ -50,10 +46,6 @@ export const Panel = (tab: {
 					)}
 				</p>
 			);
-			break;
-		case 'license-manager':
-			activePanel = <LicenseManagerPanel />;
-			description = <p>{__('License activation panel…', 'blockera')}</p>;
 			break;
 	}
 

@@ -112,12 +112,6 @@ export const Dashboard = (): MixedElement => {
 							className: 'block-manager-tab',
 							title: __('Block Manager', 'blockera'),
 						},
-						{
-							name: 'license-manager',
-							settingSlug: 'licence',
-							className: 'license-manager-tab',
-							title: __('License Manager', 'blockera'),
-						},
 					]}
 					getPanel={Panel}
 				/>
