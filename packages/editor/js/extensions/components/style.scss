@@ -17,10 +17,17 @@
 
 		.components-dropdown-menu {
 			position: absolute;
-			right: -12px;
+			right: -8px;
 			padding: 0;
 			margin: 0;
 			top: -6px;
+
+			.components-button.has-icon {
+			    justify-content: center;
+				min-width: 32px;
+				height: 32px;
+				padding: 0;
+			}
 		}
 	}
 }

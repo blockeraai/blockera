@@ -16,11 +16,6 @@ import { Flex } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
 
-/**
- * Internal dependencies
- */
-import { More } from '../libs/settings/icons';
-
 export const BlockDropdownAllMenu = ({
 	isActive,
 	setActive,
@@ -32,7 +27,7 @@ export const BlockDropdownAllMenu = ({
 
 	return (
 		<DropdownMenu
-			icon={() => <More className={'blockera-disable'} />}
+			icon={<Icon icon="more-vertical" iconSize="24" />}
 			label="Block Settings"
 			popoverProps={{
 				offset: 20,
