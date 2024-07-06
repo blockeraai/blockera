@@ -6,6 +6,7 @@ import {
 	appendBlocks,
 	getBlockeraEntity,
 	getWPDataObject,
+	getBlockInserter,
 } from '@blockera/dev-cypress/js/helpers/editor';
 import { resetPanelSettings } from '@blockera/dev-cypress/js/helpers';
 
@@ -38,6 +39,15 @@ describe('Block Manager Settings Testing ...', () => {
 			cy.getBlock('core/paragraph').click();
 
 			cy.getByAriaLabel('Add New Background').should('not.exist');
+
+			// open inserter panel
+			getBlockInserter().click();
+
+			// should not show blockera block icon on paragraph block
+			cy.get('.editor-block-list-item-paragraph').should('be.visible');
+			cy.get('.editor-block-list-item-paragraph').within(() => {
+				cy.get('.blockera-block-icon').should('not.exist');
+			});
 		});
 	});
 
@@ -65,6 +75,15 @@ describe('Block Manager Settings Testing ...', () => {
 			cy.getBlock('core/paragraph').click();
 
 			cy.getByAriaLabel('Add New Background');
+
+			// open inserter panel
+			getBlockInserter().click();
+
+			// should show blockera block icon on paragraph block
+			cy.get('.editor-block-list-item-paragraph').should('be.visible');
+			cy.get('.editor-block-list-item-paragraph').within(() => {
+				cy.get('.blockera-block-icon').should('be.visible');
+			});
 		});
 	});
 
