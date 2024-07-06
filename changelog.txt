@@ -4,6 +4,7 @@
 -   Tweak: Border feature functionality + WP data compatibility.
 -   Tweak: Border radius feature functionality + WP data compatibility.
 -   Tweak: Block style variation design.
+-   Tweak: Various improvements.
 
 -   Fix: drop license manager because it's non compliant with WP guidelines on free plugin.
 
