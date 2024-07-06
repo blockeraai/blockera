@@ -8,6 +8,7 @@ import { createRoot, useEffect, useRef } from '@wordpress/element';
  */
 import { Icon } from '@blockera/icons';
 import { isEmpty, isUndefined } from '@blockera/utils';
+import { experimental } from '@blockera/env';
 
 const IconComponent = ({ el, iconNode, position }) => {
 	const refId = useRef(null);
@@ -92,7 +93,10 @@ export const useIconEffect = (
 	dependencies
 ) => {
 	useEffect(() => {
-		if (!allowedBlocks.includes(name)) {
+		if (
+			!experimental().get('editor.extensions.iconExtension') ||
+			!allowedBlocks.includes(name)
+		) {
 			return;
 		}
 
