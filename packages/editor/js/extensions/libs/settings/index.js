@@ -15,8 +15,7 @@ import { Popover } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { More } from './icons';
-import { Supports } from './components';
+import { More, Supports } from './components';
 
 export const ExtensionSettings = ({
 	buttonLabel = __('More Settings', 'blockera'),
