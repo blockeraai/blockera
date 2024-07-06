@@ -1,8 +1,7 @@
 /**
  * External dependencies
  */
-// eslint-disable-next-line no-restricted-imports
-import classnames from 'classnames';
+import { clsx } from 'clsx';
 import {
 	isArray,
 	isEmpty,
@@ -50,7 +49,7 @@ function prepareClassName(section, items) {
 }
 
 export function classNames(...names) {
-	return classnames(names);
+	return clsx(names);
 }
 
 export function getClassnames(
@@ -69,17 +68,17 @@ export function getClassnames(
 
 	// return only section
 	if (isUndefined(names) || isEmpty(names)) {
-		return classnames(section);
+		return clsx(section);
 	}
 
 	// prepend section prefix to all classes
 	names = prepareClassName(section, names);
 
 	if (addSectionClass) {
-		return classnames(section, names);
+		return clsx(section, names);
 	}
 
-	return classnames(names);
+	return clsx(names);
 }
 
 export function getClassNames(...names) {
