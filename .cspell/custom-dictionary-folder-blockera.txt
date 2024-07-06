@@ -2,5 +2,6 @@
 ABSPATH
 autoloader
 blockera
+clsx
 phpcs
 sprintf
