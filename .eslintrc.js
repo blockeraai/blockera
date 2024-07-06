@@ -92,6 +92,23 @@ module.exports = {
 			},
 		],
 	},
+	overrides: [
+		{
+			files: ['packages/classnames/js/**'],
+			rules: {
+				'no-restricted-imports': [
+					'error',
+					// The `clsx` us used inside the `@blockera/classnames`, hence why importing this
+					// dependency should be allowed in the classnames package.
+					{
+						paths: restrictedImports.filter(
+							({ name }) => 'clsx' !== name
+						),
+					},
+				],
+			},
+		},
+	],
 	env: {
 		jest: true,
 	},
