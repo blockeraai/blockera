@@ -51,6 +51,7 @@ import {
 } from './utils';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
 import { attributes as sharedBlockExtensionAttributes } from '../libs/shared/attributes';
+import { experimental } from '@blockera/env';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -466,7 +467,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						/>
 					</SlotFillProvider>
 				</InspectorControls>
-				<div ref={blockEditRef} />
+				{experimental().get('editor.extensions.iconExtension') && (
+					<div ref={blockEditRef} />
+				)}
 
 				{stylesWrapperElement &&
 					createPortal(
