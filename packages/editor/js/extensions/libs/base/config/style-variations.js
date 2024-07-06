@@ -15,6 +15,8 @@ const blockeraStyleVariation: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Style Variation', 'blockera'),
+	isActiveOnStates: ['normal'],
+	isActiveOnBreakpoints: ['laptop'],
 };
 
 export const styleVariationsConfig = {

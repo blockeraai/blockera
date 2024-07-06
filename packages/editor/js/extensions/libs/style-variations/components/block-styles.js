@@ -91,12 +91,7 @@ function BlockStyles({
 	};
 
 	return (
-		<div
-			className={componentClassNames(
-				'block-styles',
-				!isNormalState() ? 'blockera-control-is-not-active' : ''
-			)}
-		>
+		<div className={componentClassNames('block-styles')}>
 			<div className={componentInnerClassNames('block-styles__variants')}>
 				{stylesToRender.map((style) => {
 					const buttonText = style.isDefault
