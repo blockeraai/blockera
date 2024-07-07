@@ -494,36 +494,35 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			// Navigate between states :
 			// Hover/Laptop
 			setBlockState('Hover');
-			// TODO : no selected item
-			// cy.getByAriaLabel('Scroll Overflow').should(
-			// 	'have.attr',
-			// 	'aria-pressed',
-			// 	'true'
-			// );
+			cy.getByAriaLabel('Scroll Overflow').should(
+				'have.attr',
+				'aria-pressed',
+				'true'
+			);
 			cy.checkStateGraph('Size', 'Overflow', {
 				laptop: ['Normal'],
 			});
 
 			// Hover/Tablet
 			setDeviceType('Tablet');
-			// TODO : wrong control value
-			// cy.getByAriaLabel('Scroll Overflow').should(
-			// 	'have.attr',
-			// 	'aria-pressed',
-			// 	'true'
-			// );
+
+			cy.getByAriaLabel('Scroll Overflow').should(
+				'have.attr',
+				'aria-pressed',
+				'true'
+			);
 			cy.checkStateGraph('Size', 'Overflow', {
 				laptop: ['Normal'],
 			});
 
 			// Normal/Laptop
 			setBlockState('Normal');
-			// TODO : same bug*
-			// cy.getByAriaLabel('Scroll Overflow').should(
-			// 	'have.attr',
-			// 	'aria-pressed',
-			// 	'true'
-			// );
+
+			cy.getByAriaLabel('Scroll Overflow').should(
+				'have.attr',
+				'aria-pressed',
+				'true'
+			);
 			cy.checkStateGraph('Size', 'Overflow', {
 				laptop: ['Normal'],
 			});
@@ -534,22 +533,20 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 					getSelectedBlock(data, 'blockeraOverflow')
 				);
 
-				// TODO : tablet is not exist in breakpoints
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.laptop.attributes
 				);
 
-				// TODO : tablet is not exist in breakpoints
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 
@@ -605,12 +602,12 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 				'aria-pressed',
 				'true'
 			);
-			// TODO
-			// cy.getByAriaLabel('Visible Overflow').should(
-			// 	'not.have.attr',
-			// 	'aria-pressed',
-			// 	'true'
-			// );
+
+			cy.getByAriaLabel('Visible Overflow').should(
+				'not.have.attr',
+				'aria-pressed',
+				'true'
+			);
 
 			cy.checkStateGraph('Size', 'Overflow', {
 				laptop: ['Hover'],
@@ -628,12 +625,12 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 				'aria-pressed',
 				'true'
 			);
-			// TODO
-			// cy.getByAriaLabel('Visible Overflow').should(
-			// 	'not.have.attr',
-			// 	'aria-pressed',
-			// 	'true'
-			// );
+
+			cy.getByAriaLabel('Visible Overflow').should(
+				'not.have.attr',
+				'aria-pressed',
+				'true'
+			);
 
 			cy.checkStateGraph('Size', 'Overflow', {
 				laptop: ['Hover'],
@@ -852,12 +849,11 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			// Hover/Laptop
 			setBlockState('Hover');
 			// Assert control
-			// TODO : no selected item
-			// cy.getByAriaLabel('Scroll Overflow').should(
-			// 	'have.attr',
-			// 	'aria-pressed',
-			// 	'true'
-			// );
+			cy.getByAriaLabel('Scroll Overflow').should(
+				'have.attr',
+				'aria-pressed',
+				'true'
+			);
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -872,12 +868,11 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			// Hover/Tablet
 			setDeviceType('Tablet');
 			// Assert control
-			// TODO
-			// cy.getByAriaLabel('Scroll Overflow').should(
-			// 	'have.attr',
-			// 	'aria-pressed',
-			// 	'true'
-			// );
+			cy.getByAriaLabel('Scroll Overflow').should(
+				'have.attr',
+				'aria-pressed',
+				'true'
+			);
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -892,12 +887,11 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			// Normal/Tablet
 			setBlockState('Normal');
 			// Assert control
-			// TODO
-			// cy.getByAriaLabel('Scroll Overflow').should(
-			// 	'have.attr',
-			// 	'aria-pressed',
-			// 	'true'
-			// );
+			cy.getByAriaLabel('Scroll Overflow').should(
+				'have.attr',
+				'aria-pressed',
+				'true'
+			);
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -1065,11 +1059,10 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 						.breakpoints.laptop.attributes
 				);
 
-				// TODO : tablet is not exist in breakpoints
-				// expect({}).to.be.deep.equal(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 	});
