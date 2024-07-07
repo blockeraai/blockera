@@ -85,11 +85,12 @@ describe('Select Control label testing (Position)', () => {
 		 * Hover
 		 */
 		addBlockState('hover');
+
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Position',
 			'Position',
-			'changed-in-normal-state',
+			'changed-in-secondary-state',
 			'not-have'
 		);
 
@@ -368,11 +369,10 @@ describe('Select Control label testing (Position)', () => {
 						'changed-in-normal-state'
 					);
 
-					// TODO
-					// // Assert control
-					// cy.get('@position-container').within(() => {
-					// 	cy.contains('Relative');
-					// });
+					// Assert control
+					cy.get('@position-container').within(() => {
+						cy.contains('Relative');
+					});
 
 					// Assert state graph
 					cy.checkStateGraph('Position', 'Position', {
@@ -404,11 +404,10 @@ describe('Select Control label testing (Position)', () => {
 						'changed-in-normal-state'
 					);
 
-					// TODO
 					// Assert control
-					// cy.get('@position-container').within(() => {
-					// 	cy.contains('Relative');
-					// });
+					cy.get('@position-container').within(() => {
+						cy.contains('Relative');
+					});
 
 					// Assert state graph
 					cy.checkStateGraph('Position', 'Position', {
@@ -482,11 +481,10 @@ describe('Select Control label testing (Position)', () => {
 						'not-have'
 					);
 
-					// TODO
 					// Assert control
-					// cy.get('@position-container').within(() => {
-					// 	cy.contains('Default');
-					// });
+					cy.get('@position-container').within(() => {
+						cy.contains('Default');
+					});
 
 					// Assert state graph
 					cy.checkStateGraph('Position', 'Position', {});
@@ -538,10 +536,9 @@ describe('Select Control label testing (Position)', () => {
 			);
 
 			// Assert control
-			// TODO
-			// cy.get('@position-container').within(() => {
-			// 	cy.contains('Sticky');
-			// });
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
@@ -559,10 +556,9 @@ describe('Select Control label testing (Position)', () => {
 			);
 
 			// Assert control
-			// TODO
-			// cy.get('@position-container').within(() => {
-			// 	cy.contains('Sticky');
-			// });
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
@@ -579,10 +575,9 @@ describe('Select Control label testing (Position)', () => {
 			);
 
 			// Assert control
-			// TODO
-			// cy.get('@position-container').within(() => {
-			// 	cy.contains('Sticky');
-			// });
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
@@ -606,16 +601,15 @@ describe('Select Control label testing (Position)', () => {
 						.breakpoints.laptop.attributes
 				);
 
-				// TODO : tablet isn't exist in breakpoints
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 
@@ -673,10 +667,9 @@ describe('Select Control label testing (Position)', () => {
 			);
 
 			// Assert control
-			// TODO
-			// cy.get('@position-container').within(() => {
-			// 	cy.contains('Default');
-			// });
+			cy.get('@position-container').within(() => {
+				cy.contains('Default');
+			});
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
@@ -694,10 +687,9 @@ describe('Select Control label testing (Position)', () => {
 			);
 
 			// Assert control
-			// TODO
-			// cy.get('@position-container').within(() => {
-			// 	cy.contains('Default');
-			// });
+			cy.get('@position-container').within(() => {
+				cy.contains('Default');
+			});
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
@@ -729,11 +721,10 @@ describe('Select Control label testing (Position)', () => {
 						.breakpoints.tablet.attributes
 				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 	});
@@ -897,10 +888,9 @@ describe('Select Control label testing (Position)', () => {
 			);
 
 			// Assert control
-			// TODO
-			// cy.get('@position-container').within(() => {
-			// 	cy.contains('Sticky');
-			// });
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', { laptop: ['Normal'] });
@@ -914,10 +904,9 @@ describe('Select Control label testing (Position)', () => {
 				'changed-in-normal-state'
 			);
 
-			// TODO
-			// cy.get('@position-container').within(() => {
-			// 	cy.contains('Sticky');
-			// });
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', { laptop: ['Normal'] });
@@ -932,10 +921,9 @@ describe('Select Control label testing (Position)', () => {
 			);
 
 			// Assert control
-			// TODO
-			// cy.get('@position-container').within(() => {
-			// 	cy.contains('Sticky');
-			// });
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', { laptop: ['Normal'] });
@@ -1046,11 +1034,10 @@ describe('Select Control label testing (Position)', () => {
 					getSelectedBlock(data, 'blockeraPosition').type
 				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect({
 					blockeraPosition: {
