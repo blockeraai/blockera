@@ -30,12 +30,15 @@ export type StatesManagerProps = {
 		...TBlockProps,
 		attributes?: Object,
 	},
-	states: {
-		[key: TStates]: {
-			isVisible: boolean,
-			breakpoints: {
-				[key: TBreakpoint]: {
-					attributes: Object,
+	attributes: {
+		...Object,
+		blockeraBlockStates: {
+			[key: TStates]: {
+				isVisible: boolean,
+				breakpoints: {
+					[key: TBreakpoint]: {
+						attributes: Object,
+					},
 				},
 			},
 		},

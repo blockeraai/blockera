@@ -4,6 +4,7 @@
  * External dependencies
  */
 import memoize from 'fast-memoize';
+import { select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -14,12 +15,19 @@ import { isEquals, isEmpty, isObject, mergeObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { sharedBlockExtensionAttributes as defaultAttributes } from '../../extensions/libs';
-import { isInnerBlock, isNormalState } from '../../extensions/components';
 import type {
 	StateTypes,
 	BreakpointTypes,
+	TStates,
+	TBreakpoint,
 } from '../../extensions/libs/block-states/types';
+import { getBaseBreakpoint } from '../../canvas-editor';
+import { isInnerBlock, isNormalState } from '../../extensions/components';
+import {
+	blockStatesValueCleanup,
+	isNormalStateOnBaseBreakpoint,
+} from '../../extensions/libs/block-states/helpers';
+import { sharedBlockExtensionAttributes as defaultAttributes } from '../../extensions/libs';
 
 // Check required to update.
 export const isChanged = (
@@ -185,17 +193,32 @@ export const memoizedBlockStates: (
 		args: Object = {
 			currentState: 'normal',
 			insideInnerBlock: false,
+			currentBlock: 'master',
 		}
 	): Object => {
-		const { currentState: recievedState, insideInnerBlock } = args;
+		const {
+			currentState: recievedState,
+			insideInnerBlock,
+			currentBlock,
+		} = args;
 		const { currentState, currentBreakpoint } = action;
+		const { getBlockStates } = select('blockera/extensions');
+		const { clientId, name } =
+			select('core/block-editor')?.getSelectedBlock();
+		const blockStates = blockStatesValueCleanup(
+			getBlockStates(
+				clientId,
+				!insideInnerBlock && isInnerBlock(currentBlock)
+					? currentBlock
+					: name
+			)
+		);
+
 		const breakpoints =
-			currentBlockAttributes?.blockeraBlockStates[
-				recievedState || currentState
-			]?.breakpoints;
+			blockStates[recievedState || currentState]?.breakpoints;
 
 		return mergeObject(
-			currentBlockAttributes?.blockeraBlockStates,
+			currentBlockAttributes?.blockeraBlockStates || {},
 			{
 				[recievedState || currentState]: {
 					breakpoints: {
@@ -262,29 +285,26 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 
 	const blockStates = state.blockeraBlockStates;
 
-	for (const stateType in blockStates) {
+	// $FlowFixMe
+	for (const stateType: TStates in blockStates) {
 		const breakpoints = blockStates[stateType].breakpoints;
 		const stateBreakpoints: { [key: string]: Object } = {};
 
-		for (const breakpointType in breakpoints) {
-			if ('normal' === stateType && 'laptop' === breakpointType) {
+		// $FlowFixMe
+		for (const breakpointType: TBreakpoint in breakpoints) {
+			if (isNormalStateOnBaseBreakpoint(stateType, breakpointType)) {
 				stateBreakpoints[breakpointType] = breakpoints[breakpointType];
 
 				continue;
 			}
 
-			const resetValue =
-				isEquals(newValue, ref.defaultValue) ||
-				isEquals(state[attributeId], newValue) ||
-				(isObject(newValue) && isEmpty(newValue))
-					? undefined
-					: newValue;
-
 			stateBreakpoints[breakpointType] = mergeObject(
 				breakpoints[breakpointType],
 				{
 					attributes: {
-						[attributeId]: resetValue,
+						[attributeId]: isEquals(newValue, ref.defaultValue)
+							? undefined
+							: newValue,
 					},
 				}
 			);
@@ -363,7 +383,10 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 	const args = { deletedProps: [attributeId] };
 
 	if (isInnerBlock(currentBlock)) {
-		if (!isNormalState(currentState) || 'laptop' !== currentBreakpoint) {
+		if (
+			!isNormalState(currentState) ||
+			getBaseBreakpoint() !== currentBreakpoint
+		) {
 			if (!isNormalState(currentInnerBlockState)) {
 				return mergeObject(
 					state,
@@ -465,7 +488,10 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 		);
 	}
 
-	if (isNormalState(currentState) && 'laptop' === currentBreakpoint) {
+	if (
+		isNormalState(currentState) &&
+		getBaseBreakpoint() === currentBreakpoint
+	) {
 		return mergeObject(
 			state,
 			{

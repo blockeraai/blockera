@@ -17,12 +17,11 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
+import type { StateTypes } from '../../block-states/types';
 import statesDefinition from '../../../libs/block-states/states';
-import type { StateTypes, TStates } from '../../block-states/types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 
 export function Breadcrumb({
-	states,
 	children,
 	clientId,
 	blockName,
@@ -35,13 +34,17 @@ export function Breadcrumb({
 	children?: MixedElement,
 	activeBlock: 'master' | InnerBlockType,
 	currentInnerBlock: InnerBlockModel | null,
-	states: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
+	const { getBlockStates } = select('blockera/extensions');
+	const states = getBlockStates(clientId, blockName);
+
 	// do not show normal state and inner block was not selected
 	if (Object.keys(states).length <= 1 && !currentInnerBlock) {
 		return <></>;
 	}
+
+	const innerBlockStates = getBlockStates(clientId, activeBlock);
 
 	const CurrentState = ({
 		current,
@@ -86,10 +89,12 @@ export function Breadcrumb({
 
 	return (
 		<>
-			<CurrentState
-				current={masterActiveState}
-				definition={statesDefinition[masterActiveState]}
-			/>
+			{Object.keys(states).length > 1 && states[masterActiveState] && (
+				<CurrentState
+					current={masterActiveState}
+					definition={statesDefinition[masterActiveState]}
+				/>
+			)}
 
 			{null !== currentInnerBlock && (
 				<>
@@ -109,14 +114,8 @@ export function Breadcrumb({
 						{innerBlocks[activeBlock].label}
 					</span>
 
-					{0 !==
-						Object.keys(
-							currentInnerBlock?.attributes
-								?.blockeraBlockStates || {}
-						).length &&
-						currentInnerBlock?.attributes?.blockeraBlockStates[
-							activeInnerBlockState
-						] &&
+					{0 !== Object.keys(innerBlockStates).length > 1 &&
+						innerBlockStates[activeInnerBlockState] &&
 						'normal' !== activeInnerBlockState && (
 							<CurrentState
 								current={activeInnerBlockState}

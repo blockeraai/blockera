@@ -83,7 +83,7 @@ export const useAttributes = (
 		const currentBlock = getExtensionCurrentBlock();
 
 		const attributeIsBlockStates = 'blockeraBlockStates' === attributeId;
-		let hasRootAttributes =
+		const hasRootAttributes =
 			_attributes.blockeraInnerBlocks &&
 			_attributes.blockeraInnerBlocks[currentBlock];
 
@@ -165,45 +165,6 @@ export const useAttributes = (
 			// Assume master block isn't in normal state!
 			// action = UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE
 			if (!masterIsNormalState()) {
-				let currentBlockAttributes: Object = {};
-
-				if (
-					_attributes.blockeraBlockStates[currentState].breakpoints[
-						currentBreakpoint
-					]
-				) {
-					currentBlockAttributes =
-						_attributes.blockeraBlockStates[currentState]
-							.breakpoints[currentBreakpoint].attributes;
-				}
-
-				if (
-					!currentBlockAttributes?.blockeraInnerBlocks ||
-					!currentBlockAttributes?.blockeraInnerBlocks[currentBlock]
-				) {
-					hasRootAttributes = false;
-				}
-
-				if (
-					hasRootAttributes &&
-					!isChanged(
-						{
-							..._attributes,
-							..._attributes.blockeraBlockStates[currentState]
-								.breakpoints[currentBreakpoint]?.attributes,
-							...(hasRootAttributes
-								? currentBlockAttributes?.blockeraInnerBlocks[
-										currentBlock
-								  ]?.attributes
-								: {}),
-						},
-						attributeId,
-						newValue
-					)
-				) {
-					return;
-				}
-
 				return setAttributes(
 					reducer(attributes, updateInnerBlockInsideParentState())
 				);
@@ -211,47 +172,6 @@ export const useAttributes = (
 			// Assume current block isn't in normal state and attributeId isn't "blockeraBlockStates" for prevent cyclic object error!
 			// action = UPDATE_INNER_BLOCK_STATES
 			if (!isNormalState() && !attributeIsBlockStates) {
-				let currentBlockAttributes: Object = {};
-
-				if (
-					_attributes.blockeraInnerBlocks[currentBlock].attributes
-						.blockeraBlockStates[currentInnerBlockState]
-						.breakpoints[currentBreakpoint]
-				) {
-					currentBlockAttributes =
-						_attributes.blockeraInnerBlocks[currentBlock].attributes
-							.blockeraBlockStates[currentInnerBlockState]
-							.breakpoints[currentBreakpoint].attributes;
-				}
-
-				if (
-					!currentBlockAttributes?.blockeraInnerBlocks ||
-					!currentBlockAttributes?.blockeraInnerBlocks[currentBlock]
-				) {
-					hasRootAttributes = false;
-				}
-				if (
-					!isChanged(
-						{
-							..._attributes,
-							...(hasRootAttributes
-								? _attributes.blockeraInnerBlocks[currentBlock]
-										.attributes
-								: {}),
-							...(hasRootAttributes
-								? _attributes.blockeraInnerBlocks[currentBlock]
-										.attributes.blockeraBlockStates[
-										currentInnerBlockState
-								  ].breakpoints[currentBreakpoint].attributes
-								: {}),
-						},
-						attributeId,
-						newValue
-					)
-				) {
-					return;
-				}
-
 				return setAttributes(
 					reducer(_attributes, updateInnerBlockStates())
 				);
@@ -262,26 +182,6 @@ export const useAttributes = (
 		// action = UPDATE_NORMAL_STATE
 		if (attributeIsBlockStates || isNormalState()) {
 			return setAttributes(reducer(_attributes, updateNormalState()));
-		}
-
-		if (
-			_attributes.blockeraBlockStates[currentState].breakpoints[
-				currentBreakpoint
-			] &&
-			!isChanged(
-				{
-					..._attributes,
-					..._attributes.blockeraBlockStates[currentState]
-						.breakpoints[currentBreakpoint].attributes,
-				},
-				attributeId,
-				newValue,
-				{
-					[attributeId]: null,
-				}
-			)
-		) {
-			return;
 		}
 
 		// handle update attributes in activated state and breakpoint for master block.

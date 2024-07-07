@@ -167,6 +167,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 						currentState,
 						insideInnerBlock:
 							'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' === type,
+						currentBlock,
 					}),
 				},
 				...hookParams
@@ -190,13 +191,17 @@ const reducer = (state: Object = {}, action: Object): Object => {
 							[currentBlock]: {
 								attributes: {
 									blockeraBlockStates: memoizedBlockStates(
-										state.blockeraInnerBlocks[currentBlock]
-											.attributes,
+										(
+											state.blockeraInnerBlocks[
+												currentBlock
+											] || {}
+										)?.attributes || {},
 										action,
 										{
 											currentState:
 												currentInnerBlockState,
 											insideInnerBlock: false,
+											currentBlock,
 										}
 									),
 								},

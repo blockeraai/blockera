@@ -216,7 +216,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					name={'blockera-block-card-children'}
 				>
 					<StatesManager
-						states={currentStateAttributes.blockeraBlockStates}
+						attributes={currentStateAttributes}
 						availableStates={availableBlockStates}
 						onChange={handleOnChangeAttributes}
 						block={{

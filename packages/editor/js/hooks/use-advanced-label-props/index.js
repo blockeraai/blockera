@@ -9,17 +9,18 @@ import { useState, useEffect, useMemo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEquals, isObject, isEmpty, isUndefined } from '@blockera/utils';
 import { prepare } from '@blockera/data-editor';
-import {
-	isInnerBlock,
-	isNormalState as _isNormalBlockState,
-} from '../../extensions/components/utils';
-import { useBlockContext } from '../../extensions/hooks/context';
+import { isEquals, isObject, isEmpty, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
+import {
+	isInnerBlock,
+	isNormalState as _isNormalState,
+} from '../../extensions/components/utils';
+import { useBlockContext } from '../../extensions/hooks/context';
+import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
 import type {
 	CalculatedAdvancedLabelProps,
 	AdvancedLabelHookProps,
@@ -29,6 +30,7 @@ import type {
 	TStates,
 	BreakpointTypes,
 } from '../../extensions/libs/block-states/types';
+import { getBaseBreakpoint } from '../../canvas-editor';
 
 export const useAdvancedLabelProps = (
 	{
@@ -44,9 +46,10 @@ export const useAdvancedLabelProps = (
 	}: AdvancedLabelHookProps,
 	delay: number
 ): CalculatedAdvancedLabelProps => {
+	const baseBreakpoint = getBaseBreakpoint();
 	const [labelStatus, setLabelStatus] = useState({
 		isChanged: false,
-		isChangedOnLaptopNormal: false,
+		isChangedNormalStateOnBaseBreakpoint: false,
 		isChangedOnOtherStates: false,
 		isChangedOnCurrentState: false,
 		isInnerBlock: false,
@@ -62,7 +65,7 @@ export const useAdvancedLabelProps = (
 			getExtensionCurrentBlock = () => 'master',
 			getExtensionInnerBlockState = () => 'normal',
 			getExtensionCurrentBlockState = () => 'normal',
-			getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
+			getExtensionCurrentBlockStateBreakpoint = () => baseBreakpoint,
 		} = select('blockera/extensions') || {};
 
 		return {
@@ -75,42 +78,44 @@ export const useAdvancedLabelProps = (
 	// Get static blockeraInnerBlocks value to use as fallback.
 	const { blockeraInnerBlocks } = useBlockContext();
 	const currentBlockAttributes = useMemo(() => {
-		let calculatedAttributes = blockAttributes;
+		const calculatedAttributes = blockAttributes;
 
 		if (isInnerBlock(currentBlock)) {
-			// Assume current inner block inside master pseudo state!
-			if (!_isNormalBlockState(currentState)) {
+			if (
+				!isNormalStateOnBaseBreakpoint(currentState, currentBreakpoint)
+			) {
 				if (
-					!blockAttributes.blockeraBlockStates[currentState]
-						?.breakpoints[currentBreakpoint]?.attributes
-						?.blockeraInnerBlocks ||
-					!blockAttributes.blockeraBlockStates[currentState]
-						?.breakpoints[currentBreakpoint]?.attributes
-						?.blockeraInnerBlocks[currentBlock]
+					!isNormalStateOnBaseBreakpoint(
+						currentInnerBlockState,
+						currentBreakpoint
+					)
 				) {
-					calculatedAttributes =
-						blockeraInnerBlocks[currentBlock].attributes || {};
-				} else {
-					calculatedAttributes =
-						blockAttributes.blockeraBlockStates[currentState]
-							.breakpoints[currentBreakpoint].attributes
-							?.blockeraInnerBlocks[currentBlock].attributes ||
-						blockeraInnerBlocks[currentBlock].attributes ||
-						{};
+					return (
+						prepare(
+							`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes.blockeraInnerBlocks[${currentBlock}].attributes.blockeraBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
+							calculatedAttributes
+						) || {}
+					);
 				}
-			} else if ('laptop' !== currentBreakpoint) {
-				calculatedAttributes =
-					blockAttributes.blockeraBlockStates[currentState]
-						.breakpoints[currentBreakpoint]?.attributes
-						?.blockeraInnerBlocks[currentBlock].attributes || {};
-			} else {
-				calculatedAttributes =
-					(blockAttributes.blockeraInnerBlocks[currentBlock] &&
-						blockAttributes.blockeraInnerBlocks[currentBlock]
-							.attributes) ||
-					blockeraInnerBlocks[currentBlock].attributes ||
-					{};
+
+				return (
+					prepare(
+						`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
+						calculatedAttributes
+					) ||
+					blockeraInnerBlocks[currentBlock]?.attributes ||
+					{}
+				);
 			}
+
+			return (
+				prepare(
+					`blockeraInnerBlocks[${currentBlock}].attributes`,
+					calculatedAttributes
+				) ||
+				blockeraInnerBlocks[currentBlock]?.attributes ||
+				{}
+			);
 		}
 
 		return calculatedAttributes;
@@ -130,7 +135,7 @@ export const useAdvancedLabelProps = (
 			) {
 				return setLabelStatus({
 					isChanged: false,
-					isChangedOnLaptopNormal: false,
+					isChangedNormalStateOnBaseBreakpoint: false,
 					isChangedOnOtherStates: false,
 					isChangedOnCurrentState: false,
 					isInnerBlock: isInnerBlock(currentBlock),
@@ -142,15 +147,34 @@ export const useAdvancedLabelProps = (
 			if (!blockHasStates(currentBlockAttributes)) {
 				const isChanged = !isEquals(defaultValue, value);
 
+				if (
+					!isNormalStateOnBaseBreakpoint(
+						isInnerBlock(currentBlock)
+							? currentInnerBlockState
+							: currentState,
+						currentBreakpoint
+					)
+				) {
+					return setLabelStatus({
+						isChanged: false,
+						isChangedNormalStateOnBaseBreakpoint: isChanged,
+						isChangedOnOtherStates: isChanged,
+						isChangedOnCurrentState: false,
+						isInnerBlock: isInnerBlock(currentBlock),
+						isChangedOnCurrentBreakpointNormal: isChanged,
+					});
+				}
+
 				return setLabelStatus({
 					isChanged,
-					isChangedOnLaptopNormal: isChanged,
+					isChangedNormalStateOnBaseBreakpoint: isChanged,
 					isChangedOnOtherStates: false,
 					isChangedOnCurrentState: isChanged,
 					isInnerBlock: isInnerBlock(currentBlock),
 					isChangedOnCurrentBreakpointNormal: isChanged,
 				});
 			}
+
 			const currentBlockState =
 				currentBlockAttributes?.blockeraBlockStates[
 					!isInnerBlock(currentBlock)
@@ -311,7 +335,7 @@ export const useAdvancedLabelProps = (
 								): boolean => {
 									const stateValue =
 										'normal' === stateType &&
-										'laptop' ===
+										getBaseBreakpoint() ===
 											breakpointTypes[breakpointIndex]
 											? currentBlockAttributes
 											: breakpoint?.attributes;
@@ -339,7 +363,7 @@ export const useAdvancedLabelProps = (
 				}
 			}
 
-			const isChangedOnLaptopNormal =
+			const isChangedNormalStateOnBaseBreakpoint =
 				isChangedOnSpecificStateAndBreakpoint(
 					currentBlockAttributes,
 					currentState,
@@ -350,10 +374,11 @@ export const useAdvancedLabelProps = (
 				breakpoint: BreakpointTypes,
 				stateType: TStates
 			) => {
-				if (isUndefined(breakpoint)) return false;
+				if (isUndefined(breakpoint))
+					return isChanged && _isNormalState(stateType);
 
 				const stateValue =
-					currentBreakpoint === 'laptop' && isNormalState
+					currentBreakpoint === baseBreakpoint && isNormalState
 						? currentBlockAttributes
 						: breakpoint?.attributes;
 
@@ -375,7 +400,7 @@ export const useAdvancedLabelProps = (
 
 			const isChangedOnCurrentBreakpointNormal =
 				isChangedOnSpecificStateAndBreakpoint(
-					currentBreakpoint === 'laptop'
+					currentBreakpoint === baseBreakpoint
 						? currentBlockAttributes
 						: currentBlockAttributes.blockeraBlockStates.normal
 								?.breakpoints[currentBreakpoint]?.attributes,
@@ -385,7 +410,7 @@ export const useAdvancedLabelProps = (
 
 			setLabelStatus({
 				isChanged,
-				isChangedOnLaptopNormal,
+				isChangedNormalStateOnBaseBreakpoint,
 				isChangedOnCurrentState,
 				isChangedOnOtherStates:
 					Object.keys(isChangedOnOtherStates).length > 0,

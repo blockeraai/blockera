@@ -5,11 +5,6 @@
 import { select, dispatch } from '@wordpress/data';
 
 /**
- * Blockera dependencies
- */
-import { isEquals, mergeObject } from '@blockera/utils';
-
-/**
  * Internal dependencies
  */
 import states from './states';
@@ -20,7 +15,23 @@ import type {
 	TBreakpoint,
 	TStates,
 } from './types';
-import { isInnerBlock } from '../../components/utils';
+import { getBaseBreakpoint } from '../../../canvas-editor';
+import { isInnerBlock, isNormalState } from '../../components/utils';
+
+/**
+ * Is normal state on base breakpoint?
+ *
+ * @param {TStates} stateType the current state type.
+ * @param {TBreakpoint} breakpointType the current breakpoint type.
+ *
+ * @return {boolean} true on success, false on otherwise.
+ */
+export const isNormalStateOnBaseBreakpoint = (
+	stateType: TStates,
+	breakpointType: TBreakpoint
+): boolean => {
+	return isNormalState(stateType) && getBaseBreakpoint() === breakpointType;
+};
 
 export const getStateInfo = (state: TStates | number): StateTypes => {
 	return 'number' === typeof state
@@ -40,20 +51,16 @@ export function onChangeBlockStates(
 	params: Object
 ): void {
 	const onChangeValue: Object = { ...newValue };
+
 	if (newValue.hasOwnProperty('modifyControlValue')) {
 		newValue = onChangeValue?.value;
 	}
 
-	const {
-		states: _states,
-		onChange,
-		currentBlock,
-		valueCleanup,
-		getStateInfo,
-	} = params;
+	const { currentBlock, getStateInfo, getBlockStates } = params;
 	const { getSelectedBlock } = select('core/block-editor');
 
 	const {
+		setBlockClientStates,
 		setBlockClientInnerState,
 		setBlockClientMasterState,
 		changeExtensionCurrentBlockState: setCurrentState,
@@ -62,92 +69,82 @@ export function onChangeBlockStates(
 
 	let selectedState = null;
 
-	Object.entries(newValue).forEach(
-		([id, state]: [
-			TStates,
-			{ ...StateTypes, isSelected: boolean }
-		]): void => {
-			if (isInnerBlock(currentBlock) && state?.isSelected) {
-				selectedState = id;
-				setInnerBlockState(id);
-				setBlockClientInnerState({
-					currentState: id,
-					innerBlockType: currentBlock,
-					clientId: getSelectedBlock()?.clientId,
-				});
-			} else if (state?.isSelected) {
-				selectedState = id;
-				setCurrentState(id);
-				setBlockClientMasterState({
-					currentState: id,
-					name: getSelectedBlock()?.name,
-					clientId: getSelectedBlock()?.clientId,
-				});
+	// $FlowFixMe
+	for (const stateType: TStates in newValue) {
+		const state = newValue[stateType];
+		const setInnerBlockDetails = () => {
+			selectedState = stateType;
+			setInnerBlockState(stateType);
+			setBlockClientInnerState({
+				currentState: stateType,
+				innerBlockType: currentBlock,
+				clientId: getSelectedBlock()?.clientId,
+			});
+		};
+		const setBlockDetails = () => {
+			selectedState = stateType;
+			setCurrentState(stateType);
+			setBlockClientMasterState({
+				currentState: stateType,
+				name: getSelectedBlock()?.name,
+				clientId: getSelectedBlock()?.clientId,
+			});
+		};
+
+		if (isInnerBlock(currentBlock) && state?.isSelected) {
+			setInnerBlockDetails();
+		} else if (state?.isSelected) {
+			setBlockDetails();
+		} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
+			if (isInnerBlock(currentBlock)) {
+				setInnerBlockDetails();
+			} else {
+				setBlockDetails();
 			}
 		}
-	);
+	}
+
+	setBlockClientStates({
+		clientId: getSelectedBlock()?.clientId,
+		blockType: isInnerBlock(currentBlock)
+			? currentBlock
+			: getSelectedBlock()?.name,
+		blockStates: newValue,
+	});
 
 	if (onChangeValue.hasOwnProperty('modifyControlValue')) {
 		let blockStates = {};
 		const { modifyControlValue, controlId } = onChangeValue;
+		const { clientId, name } = getSelectedBlock();
 
-		if (isInnerBlock(currentBlock)) {
-			blockStates =
-				getSelectedBlock()?.attributes.blockeraInnerBlocks[currentBlock]
-					.attributes.blockeraBlockStates;
-		} else {
-			blockStates = getSelectedBlock()?.attributes.blockeraBlockStates;
+		blockStates = getBlockStates(
+			clientId,
+			isInnerBlock(currentBlock) ? currentBlock : name
+		);
+
+		const value: { [key: string]: Object } = {};
+
+		for (const stateType in blockStates) {
+			const stateItem = blockStates[stateType];
+			const index = Object.keys(blockStates).indexOf(stateType);
+			const info = getStateInfo(index);
+
+			if ('normal' === stateType) {
+				info.deletable = false;
+			}
+
+			value[stateType] = {
+				...info,
+				...stateItem,
+				isSelected: stateType === selectedState,
+			};
 		}
 
 		modifyControlValue({
 			controlId,
-			value: Object.fromEntries(
-				Object.entries(blockStates || {}).map(
-					([stateType, stateItem], index) => {
-						const info = getStateInfo(index);
-
-						if ('normal' === stateType) {
-							info.deletable = false;
-						}
-
-						return [
-							stateType,
-							{
-								...info,
-								...stateItem,
-								isSelected: stateType === selectedState,
-							},
-						];
-					}
-				)
-			),
+			value,
 		});
-
-		return;
 	}
-
-	if (isEquals(valueCleanup(_states), valueCleanup(newValue))) {
-		return;
-	}
-
-	const deletedProps = [];
-
-	Object.entries(_states).forEach(([name]: [string, any]): void => {
-		if (!newValue.hasOwnProperty(name)) {
-			deletedProps.push(name);
-			newValue = {
-				...newValue,
-				[name]: undefined,
-			};
-		}
-	});
-
-	onChange(
-		'blockeraBlockStates',
-		mergeObject(valueCleanup(_states), valueCleanup(newValue), {
-			deletedProps,
-		})
-	);
 }
 
 export const blockStatesValueCleanup = (value: {
@@ -168,82 +165,72 @@ export const blockStatesValueCleanup = (value: {
 			'css-class'?: string,
 		},
 	} = {};
-	const currentBreakpoint = select(
-		'blockera/extensions'
-	).getExtensionCurrentBlockStateBreakpoint();
 
-	Object.entries(value).forEach(
-		([itemId, item]: [
-			TStates,
-			{
-				...StateTypes,
-				isVisible: boolean,
-				'css-class'?: string,
-			}
-		]): void => {
-			/**
-			 * To compatible with deleted props of mergeObject api.
-			 *
-			 * @see ../helpers.js on line 179
-			 */
-			if (undefined === item) {
-				clonedValue[itemId] = item;
+	// $FlowFixMe
+	for (const itemId: TStates in value) {
+		const item = value[itemId];
 
-				return;
-			}
+		/**
+		 * To compatible with deleted props of mergeObject api.
+		 *
+		 * @see ../helpers.js on line 179
+		 */
+		if (undefined === item) {
+			clonedValue[itemId] = item;
 
-			const breakpoints: {
-				[key: TBreakpoint]: {
-					attributes: Object,
-				},
-			} = {};
+			continue;
+		}
 
-			Object.entries(item?.breakpoints)?.forEach(
-				([breakpointType, breakpoint]: [TBreakpoint, Object]) => {
-					if (
-						!Object.keys(breakpoint?.attributes || {}).length &&
-						'laptop' !== breakpointType
-					) {
-						return;
-					}
+		const breakpoints: {
+			[key: TBreakpoint]: {
+				attributes: Object,
+			},
+		} = {};
 
-					const { attributes = {} } = breakpoint;
+		// $FlowFixMe
+		for (const breakpointType: TBreakpoint in item?.breakpoints) {
+			const breakpoint = item?.breakpoints[breakpointType];
 
-					if (
-						!Object.keys(attributes).length &&
-						'normal' !== itemId
-					) {
-						return;
-					}
-
-					breakpoints[breakpointType] = {
-						attributes,
-					};
-				}
-			);
-
-			if (!Object.values(breakpoints).length && 'normal' !== itemId) {
-				breakpoints[currentBreakpoint] = {
-					attributes: {},
-				};
+			if (!Object.keys(breakpoint?.attributes || {}).length) {
+				continue;
 			}
 
-			if (['custom-class', 'parent-class'].includes(itemId)) {
-				clonedValue[itemId] = {
-					breakpoints,
-					isVisible: item?.isVisible,
-					'css-class': item['css-class'] || '',
-				};
+			const { attributes = {} } = breakpoint;
 
-				return;
+			if (!Object.keys(attributes).length) {
+				continue;
 			}
 
+			breakpoints[breakpointType] = {
+				attributes,
+			};
+		}
+
+		const currentBreakpoint: TBreakpoint = select(
+			'blockera/extensions'
+		).getExtensionCurrentBlockStateBreakpoint();
+
+		if (!Object.values(breakpoints).length) {
+			breakpoints[currentBreakpoint] = {
+				attributes: {},
+			};
+		}
+
+		if (['custom-class', 'parent-class'].includes(itemId)) {
 			clonedValue[itemId] = {
 				breakpoints,
 				isVisible: item?.isVisible,
+				'css-class': item['css-class'] || '',
 			};
+
+			continue;
 		}
-	);
+
+		clonedValue[itemId] = {
+			breakpoints,
+			isVisible: item?.isVisible,
+		};
+	}
 
 	return clonedValue;
 };

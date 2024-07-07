@@ -21,11 +21,12 @@ import { prepare } from '@blockera/data-editor';
  * Internal dependencies
  */
 import {
-	getStatesGraphNodes,
 	type StateGraph,
+	getStatesGraphNodes,
 	type StateGraphItem,
-} from '../../extensions/libs/block-states';
-import { useBlockContext } from '../../extensions';
+} from './selector';
+import { getBaseBreakpoint } from '../../canvas-editor';
+import { isInnerBlock, useBlockContext } from '../../extensions';
 import type { LabelStates, LabelChangedStates } from './types';
 
 export const getStatesGraph = ({
@@ -44,7 +45,7 @@ export const getStatesGraph = ({
 	const blockStates = controlId ? getStatesGraphNodes() : [];
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const { getAttributes = () => {} } = useBlockContext();
+	const { getAttributes = () => {}, currentBlock } = useBlockContext();
 
 	const { getBlockType } = select('core/blocks');
 
@@ -74,6 +75,16 @@ export const getStatesGraph = ({
 									isNull(state.attributes)
 								) {
 									return null;
+								}
+
+								if (
+									isInnerBlock(currentBlock) &&
+									state?.attributes?.blockeraInnerBlocks
+								) {
+									state =
+										state.attributes.blockeraInnerBlocks[
+											currentBlock
+										];
 								}
 
 								if (
@@ -132,7 +143,8 @@ export const getStatesGraph = ({
 
 								if (
 									(state.type !== 'normal' ||
-										stateGraph.type !== 'laptop') &&
+										stateGraph.type !==
+											getBaseBreakpoint()) &&
 									isEquals(value, rootValue)
 								) {
 									return null;

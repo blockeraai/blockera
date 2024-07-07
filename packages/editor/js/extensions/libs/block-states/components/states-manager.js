@@ -12,7 +12,7 @@ import { memo, useMemo, useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEquals, isEmpty, omit } from '@blockera/utils';
+import { isEquals, isEmpty, omit, mergeObject } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	RepeaterControl,
@@ -46,12 +46,13 @@ import type {
 import { isInnerBlock } from '../../../components';
 import { LabelDescription } from './label-description';
 import { PopoverTitleButtons } from './popover-title-buttons';
+import { getBaseBreakpoint } from '../../../../canvas-editor';
 import StateContainer from '../../../components/state-container';
 
 const StatesManager: ComponentType<any> = memo(
 	({
 		block,
-		states,
+		attributes,
 		onChange,
 		currentBlock,
 		currentState,
@@ -59,27 +60,24 @@ const StatesManager: ComponentType<any> = memo(
 		currentBreakpoint,
 		currentInnerBlockState,
 	}: StatesManagerProps): Element<any> => {
+		let states = { ...(attributes?.blockeraBlockStates || {}) };
 		const {
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
 		} = dispatch('blockera/extensions') || {};
-		const { getActiveMasterState, getActiveInnerState } = select(
-			'blockera/extensions'
+		const { getBlockStates, getActiveMasterState, getActiveInnerState } =
+			select('blockera/extensions');
+		const savedBlockStates = getBlockStates(
+			block?.clientId,
+			isInnerBlock(currentBlock) ? currentBlock : block?.blockName
 		);
-		const initializeStates = {
-			normal: {
-				isVisible: true,
-				breakpoints: {
-					laptop: {
-						attributes: {},
-					},
-				},
-			},
-		};
+		const clonedSavedStates = { ...states };
 
 		if (isEmpty(states)) {
 			// Sets initialize states ...
-			states = initializeStates;
+			states = savedBlockStates;
+		} else {
+			states = mergeObject(savedBlockStates, states);
 		}
 
 		const preparedStates = !availableStates
@@ -132,7 +130,8 @@ const StatesManager: ComponentType<any> = memo(
 							isSelected,
 							deletable: 'normal' !== itemId,
 							breakpoints: state?.breakpoints ?? {
-								laptop: {
+								// $FlowFixMe
+								[getBaseBreakpoint()]: {
 									attributes: {},
 								},
 							},
@@ -161,7 +160,7 @@ const StatesManager: ComponentType<any> = memo(
 					selectable: true,
 					isSelected: true,
 					visibilitySupport: false,
-					breakpoints: initializeStates.normal.breakpoints,
+					breakpoints: states.normal.breakpoints,
 				},
 			};
 			// eslint-disable-next-line
@@ -223,6 +222,39 @@ const StatesManager: ComponentType<any> = memo(
 					filteredStates[_itemId] = _item;
 				}
 			);
+
+			let isDeletedItem: boolean = false;
+
+			// $FlowFixMe
+			for (const stateType: TStates in clonedSavedStates) {
+				if (!filteredStates[stateType]) {
+					isDeletedItem = true;
+					delete clonedSavedStates[stateType];
+				}
+			}
+
+			if (isDeletedItem) {
+				// Remove base breakpoint of normal state.
+				delete clonedSavedStates?.normal?.breakpoints[
+					getBaseBreakpoint()
+				];
+
+				// Remove normal state while not exists any breakpoints.
+				if (
+					!Object.keys(clonedSavedStates?.normal?.breakpoints || {})
+						.length
+				) {
+					delete clonedSavedStates?.normal;
+				}
+
+				onChange(
+					'blockeraBlockStates',
+					!Object.keys(clonedSavedStates).length
+						? {}
+						: clonedSavedStates,
+					{}
+				);
+			}
 
 			return filteredStates;
 		};
@@ -318,6 +350,7 @@ const StatesManager: ComponentType<any> = memo(
 									currentBlock,
 									valueCleanup,
 									getStateInfo,
+									getBlockStates,
 									currentInnerBlockState,
 								}),
 							//Override item when occurred clone action!

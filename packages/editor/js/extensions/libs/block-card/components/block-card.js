@@ -28,7 +28,6 @@ import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 
 export function BlockCard({
-	states,
 	clientId,
 	children,
 	blockName,
@@ -37,7 +36,6 @@ export function BlockCard({
 	handleOnClick,
 	currentInnerBlock,
 }: {
-	states: Object,
 	clientId: string,
 	blockName: string,
 	children?: MixedElement,
@@ -78,7 +76,6 @@ export function BlockCard({
 						</span>
 
 						<Breadcrumb
-							states={states}
 							clientId={clientId}
 							blockName={blockName}
 							activeBlock={activeBlock}

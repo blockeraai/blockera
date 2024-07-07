@@ -8,7 +8,6 @@ import { useSelect } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import { prepare } from '@blockera/data-editor';
 
 /**
@@ -17,9 +16,10 @@ import { prepare } from '@blockera/data-editor';
 import type { CalculateCurrentAttributesProps } from './types';
 import {
 	isInnerBlock,
-	isNormalState,
 	prepareAttributesDefaultValues,
 } from '../../extensions/components/utils';
+import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
+import { getBaseBreakpoint } from '../../canvas-editor';
 
 export const useCalculateCurrentAttributes = ({
 	attributes,
@@ -28,111 +28,43 @@ export const useCalculateCurrentAttributes = ({
 	blockeraInnerBlocks,
 }: CalculateCurrentAttributesProps): Object => {
 	let currentAttributes: Object = {};
-	const {
-		currentBlock,
-		currentState,
-		currentBreakpoint,
-		currentInnerBlockState,
-	} = useSelect((select) => {
-		const {
-			getExtensionCurrentBlock = () => 'master',
-			getExtensionInnerBlockState = () => 'normal',
-			getExtensionCurrentBlockState = () => 'normal',
-			getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
-		} = select('blockera/extensions') || {};
+	const { currentBlock, currentState, currentBreakpoint } = useSelect(
+		(select) => {
+			const {
+				getExtensionCurrentBlock = () => 'master',
+				getExtensionInnerBlockState = () => 'normal',
+				getExtensionCurrentBlockState = () => 'normal',
+				getExtensionCurrentBlockStateBreakpoint = () =>
+					getBaseBreakpoint(),
+			} = select('blockera/extensions') || {};
 
-		return {
-			currentBlock: getExtensionCurrentBlock(),
-			currentState: getExtensionCurrentBlockState(),
-			currentInnerBlockState: getExtensionInnerBlockState(),
-			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-		};
-	});
+			return {
+				currentBlock: getExtensionCurrentBlock(),
+				currentState: getExtensionCurrentBlockState(),
+				currentInnerBlockState: getExtensionInnerBlockState(),
+				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+			};
+		}
+	);
 	const blockAttributesDefaults =
 		prepareAttributesDefaultValues(blockAttributes);
 
 	// Assume block is inner block type.
 	if (isInnerBlock(currentBlock)) {
-		// Assume master block in normal state.
-		if (isNormalState(currentState) && 'laptop' === currentBreakpoint) {
-			// Assume inner block in normal state.
-			if (
-				isNormalState(currentInnerBlockState) &&
-				'laptop' === currentBreakpoint
-			) {
-				currentAttributes = {
-					...blockAttributesDefaults,
-					...((blockeraInnerBlocks[currentBlock] || {})?.attributes ||
-						{}),
-					...currentInnerBlock?.attributes,
-				};
-			}
-			// Assume inner block is not in normal state.
-			else if (
-				!isNormalState(currentInnerBlockState) ||
-				'laptop' !== currentBreakpoint
-			) {
-				currentAttributes = {
-					...blockAttributesDefaults,
-					...((blockeraInnerBlocks[currentBlock] || {})?.attributes ||
-						{}),
-					...currentInnerBlock?.attributes,
-					...currentInnerBlock?.attributes?.blockeraBlockStates[
-						currentInnerBlockState
-					]?.breakpoints[currentBreakpoint]?.attributes,
-				};
-			}
-		}
-		// Assume master block is not in normal state.
-		else if (
-			!isNormalState(currentState) ||
-			'laptop' !== currentBreakpoint
-		) {
-			// Assume inner block in normal state inside master block in pseudo-class.
-			if (
-				isNormalState(currentInnerBlockState) &&
-				'laptop' === currentBreakpoint
-			) {
-				currentAttributes = {
-					...blockAttributesDefaults,
-					...((blockeraInnerBlocks[currentBlock] || {})?.attributes ||
-						{}),
-					...mergeObject(
-						currentInnerBlock?.attributes,
-						prepare(
-							`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
-							attributes
-						) || {}
-					),
-				};
-			}
-			// Assume inner block and master block in pseudo-class.
-			else if (
-				!isNormalState(currentInnerBlockState) ||
-				'laptop' !== currentBreakpoint
-			) {
-				currentAttributes = {
-					...blockAttributesDefaults,
-					...((blockeraInnerBlocks[currentBlock] || {})?.attributes ||
-						{}),
-					...currentInnerBlock?.attributes,
-					...(prepare(
-						`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes.blockeraBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
-						attributes
-					) || {}),
-				};
-			}
-		}
+		currentAttributes = {
+			...blockAttributesDefaults,
+			...currentInnerBlock,
+		};
 	}
 	// Assume master block in normal state.
-	else if (isNormalState(currentState) && 'laptop' === currentBreakpoint) {
+	else if (isNormalStateOnBaseBreakpoint(currentState, currentBreakpoint)) {
 		currentAttributes = {
 			...blockAttributesDefaults,
 			...attributes,
 		};
 	}
-	// Assume master block is not in normal state and laptop breakpoint.
-	else if (!isNormalState(currentState) || 'laptop' !== currentBreakpoint) {
+	// Assume master block is not in normal state and base breakpoint.
+	else if (!isNormalStateOnBaseBreakpoint(currentState, currentBreakpoint)) {
 		currentAttributes = {
 			...blockAttributesDefaults,
 			...attributes,

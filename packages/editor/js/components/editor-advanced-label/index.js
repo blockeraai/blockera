@@ -69,7 +69,7 @@ export const EditorAdvancedLabelControl = ({
 		isChanged,
 		isInnerBlock,
 		isChangedOnOtherStates,
-		isChangedOnLaptopNormal,
+		isChangedNormalStateOnBaseBreakpoint,
 		isChangedOnCurrentState,
 		isChangedOnCurrentBreakpointNormal,
 	} = useAdvancedLabelProps(
@@ -95,7 +95,7 @@ export const EditorAdvancedLabelControl = ({
 
 	const isChangedValue =
 		(isChanged && isChangedOnCurrentState) ||
-		isChangedOnLaptopNormal ||
+		isChangedNormalStateOnBaseBreakpoint ||
 		isChangedOnOtherStates;
 
 	return (
@@ -116,7 +116,7 @@ export const EditorAdvancedLabelControl = ({
 							(isInnerBlock &&
 								(!isNormalState() ||
 									'normal' !== currentInnerBlockState) &&
-								isChangedOnLaptopNormal &&
+								isChangedNormalStateOnBaseBreakpoint &&
 								!isChangedOnCurrentState),
 						'changed-in-other-state':
 							!isChangedOnCurrentState && isChangedOnOtherStates,
@@ -125,11 +125,11 @@ export const EditorAdvancedLabelControl = ({
 								isChanged &&
 								isChangedOnCurrentState) ||
 							(!isNormalState() &&
-								(isChangedOnLaptopNormal ||
+								(isChangedNormalStateOnBaseBreakpoint ||
 									isChangedOnCurrentBreakpointNormal) &&
 								!isChangedOnCurrentState) ||
 							(!isNormalState() &&
-								(isChangedOnLaptopNormal ||
+								(isChangedNormalStateOnBaseBreakpoint ||
 									isChangedOnCurrentBreakpointNormal) &&
 								!isChanged &&
 								isChangedOnCurrentState),
@@ -255,7 +255,7 @@ export const EditorAdvancedLabelControl = ({
 									)}
 
 									{isNormalState() &&
-										isChangedOnCurrentState && (
+										isChangedNormalStateOnBaseBreakpoint && (
 											<Button
 												variant={'primary'}
 												size="input"

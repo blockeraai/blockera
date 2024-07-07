@@ -14,9 +14,9 @@ export type CalculatedAdvancedLabelProps = {
 	isChanged: boolean,
 	isInnerBlock: boolean,
 	isChangedOnOtherStates: boolean,
-	isChangedOnLaptopNormal: boolean,
 	isChangedOnCurrentState: boolean,
 	isChangedOnCurrentBreakpointNormal: boolean,
+	isChangedNormalStateOnBaseBreakpoint: boolean,
 };
 
 export type AdvancedLabelHookProps = {
