@@ -298,18 +298,33 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 				continue;
 			}
 
-			stateBreakpoints[breakpointType] = mergeObject(
-				breakpoints[breakpointType],
-				{
-					attributes: {
-						[attributeId]: isEquals(newValue, ref.defaultValue)
-							? undefined
-							: newValue,
-					},
-				}
-			);
-		}
+			if (ref.path && ref.path !== attributeId) {
+				const preparedPathValue = update(
+					breakpoints[breakpointType].attributes,
+					ref.path,
+					ref.defaultValue
+				);
 
+				stateBreakpoints[breakpointType] = mergeObject(
+					breakpoints[breakpointType],
+					{
+						attributes: preparedPathValue,
+					}
+				);
+			} else {
+				stateBreakpoints[breakpointType] = mergeObject(
+					breakpoints[breakpointType],
+					{
+						attributes: {
+							[attributeId]: isEquals(newValue, ref.defaultValue)
+								? undefined
+								: newValue,
+						},
+					}
+				);
+			}
+		}
+		console.log(stateBreakpoints);
 		blockeraBlockStates[stateType] = mergeObject(
 			blockStates[stateType],
 			{
