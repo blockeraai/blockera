@@ -12,4 +12,11 @@ import type { TBreakpoint } from '../../../extensions/libs/block-states/types';
  * @return {boolean} true on success, false on otherwise.
  */
 export const isBaseBreakpoint = (breakPoint: TBreakpoint): boolean =>
-	'laptop' === breakPoint;
+	getBaseBreakpoint() === breakPoint;
+
+/**
+ * Get based breakpoint id.
+ *
+ * @return {string} the breakpoint identifier.
+ */
+export const getBaseBreakpoint = (): TBreakpoint => 'laptop';
