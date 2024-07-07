@@ -89,6 +89,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		path: '',
 		reset: false,
 		action: 'normal',
+		defaultValue: null,
 	};
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -418,6 +419,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		if (['RESET_TO_NORMAL', 'RESET_TO_DEFAULT'].includes(args?.action)) {
 			ref.current = {
 				reset: true,
+				defaultValue,
 				action: 'reset',
 				path: args?.path,
 			};
@@ -428,6 +430,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		if ('RESET_ALL' === args?.action) {
 			ref.current = {
 				reset: true,
+				defaultValue,
 				path: args?.path,
 				action: 'reset_all_states',
 			};
