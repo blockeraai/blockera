@@ -125,7 +125,7 @@ export function setBlockClientMasterState({
 		name,
 		clientId,
 		currentState,
-		type: 'SET_BLOCK_CLIENT_MASTER_STATE',
+		type: 'SET_BLOCK_CLIENT_CURRENT_STATE',
 	};
 }
 
@@ -137,7 +137,20 @@ export function setBlockClientInnerState({
 	return {
 		clientId,
 		currentState,
-		innerBlockType,
-		type: 'SET_BLOCK_CLIENT_INNER_STATE',
+		name: innerBlockType,
+		type: 'SET_BLOCK_CLIENT_CURRENT_STATE',
+	};
+}
+
+export function setBlockClientStates({
+	clientId,
+	blockType,
+	blockStates,
+}: Object): Object {
+	return {
+		clientId,
+		blockType,
+		blockStates,
+		type: 'SET_BLOCK_CLIENT_STATES',
 	};
 }

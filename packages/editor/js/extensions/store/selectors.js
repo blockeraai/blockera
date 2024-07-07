@@ -10,6 +10,11 @@ import createSelector from 'rememo';
  */
 import { prepare } from '@blockera/data-editor';
 import { isString } from '@blockera/utils';
+
+/**
+ * Internal dependencies
+ */
+import { getBaseBreakpoint } from '../../canvas-editor';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 import type { TBreakpoint, TStates } from '../libs/block-states/types';
 
@@ -297,7 +302,7 @@ export function getExtensionInnerBlockState({
 export function getExtensionCurrentBlockStateBreakpoint({
 	blockExtensions,
 }: Object): TBreakpoint {
-	return blockExtensions?.currentBreakpoint || 'laptop';
+	return blockExtensions?.currentBreakpoint || getBaseBreakpoint();
 }
 
 /**
@@ -360,4 +365,35 @@ export function getActiveInnerState(
 	return blockExtensions[clientId]
 		? blockExtensions[clientId][blockType + '-active-state'] || 'normal'
 		: 'normal';
+}
+
+/**
+ * Get block states with client identifier and block type params.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ * @param {string} clientId the block client identifier.
+ * @param {'master'|InnerBlockType} blockType the one of available inner block types.
+ * @return {*|string} the block states.
+ */
+export function getBlockStates(
+	{ blockExtensions }: Object,
+	clientId: string,
+	blockType: 'master' | InnerBlockType
+): Object {
+	const initializeStates = {
+		normal: {
+			isVisible: true,
+			breakpoints: {
+				// $FlowFixMe
+				[getBaseBreakpoint()]: {
+					attributes: {},
+				},
+			},
+		},
+	};
+
+	return blockExtensions[clientId]
+		? blockExtensions[clientId][blockType + '-block-states'] ||
+				initializeStates
+		: initializeStates;
 }

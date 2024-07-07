@@ -101,20 +101,22 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 				...state,
 				activeBlockVariation: action.variation,
 			};
-		case 'SET_BLOCK_CLIENT_MASTER_STATE':
+		case 'SET_BLOCK_CLIENT_CURRENT_STATE':
 			return {
 				...state,
 				[action.clientId]: mergeObject(state[action.clientId] || {}, {
 					[action.name + '-active-state']: action.currentState,
 				}),
 			};
-		case 'SET_BLOCK_CLIENT_INNER_STATE':
+		case 'SET_BLOCK_CLIENT_STATES':
+			const { clientId, blockType, blockStates } = action;
+
 			return {
 				...state,
-				[action.clientId]: mergeObject(state[action.clientId] || {}, {
-					[action.innerBlockType + '-active-state']:
-						action.currentState,
-				}),
+				[clientId]: {
+					...(state[clientId] || {}),
+					[blockType + '-block-states']: blockStates,
+				},
 			};
 	}
 
