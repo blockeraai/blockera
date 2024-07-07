@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { copy } from 'fastest-json-copy';
+
+/**
  * Internal dependencies
  */
 import { getCamelCase } from '../string';
@@ -184,4 +189,17 @@ export function hasInvolvesSomeItems(
 	}
 
 	return Object.values(statuses).includes(true);
+}
+
+/**
+ * Create a deep copy of an object.
+ *
+ * This function use the `fastest-json-copy` that is fastest way to clone objects.
+ * source: https://github.com/streamich/fastest-json-copy
+ *
+ * @param {Object} obj
+ * @return {Object} the cloned object
+ */
+export function cloneObject(obj: Object): object {
+	return copy(obj);
 }

@@ -41,6 +41,7 @@
 		"@blockera/wordpress": "file:packages/wordpress",
 		"@wordpress/icons": "^10.0.0",
 		"fast-memoize": "^2.5.2",
+		"fastest-json-copy": "^1.0.1",
 		"fuse.js": "^6.6.2",
 		"rememo": "^4.0.2"
 	},
