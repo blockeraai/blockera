@@ -405,7 +405,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		// Assert Effect label
 		cy.getByAriaLabel('Effect').should(
 			'have.class',
-			'changed-in-other-state'
+			'changed-in-normal-state'
 		);
 
 		/**
@@ -1499,7 +1499,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 							'image-0'
 						]['image-repeat']
 					);
-					expect('repeat-y').to.be.deep.eq(
+					expect('repeat-x').to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
 							.breakpoints.laptop.attributes.blockeraBackground[
 							'image-0'
