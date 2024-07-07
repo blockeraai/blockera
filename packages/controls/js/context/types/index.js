@@ -28,7 +28,6 @@ export type ControlContextProviderProps = {
 	storeName?: string,
 	children: MixedElement | any,
 	type?: 'nested',
-	notSyncWithRecievedValue?: boolean,
 };
 
 export type ControlContextHookProps = {

@@ -278,7 +278,6 @@ const StatesManager: ComponentType<any> = memo(
 			<ControlContextProvider
 				value={contextValue}
 				storeName={'blockera/controls/repeater'}
-				notSyncWithRecievedValue={true}
 			>
 				<StateContainer>
 					<RepeaterControl
