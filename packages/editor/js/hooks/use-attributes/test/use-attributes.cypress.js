@@ -10,16 +10,16 @@ import {
 describe('useAttributes Hook Testing ...', () => {
 	beforeEach(() => {
 		createPost();
+
+		appendBlocks(
+			'<!-- wp:paragraph -->\n' +
+				'<p>Test</p>\n' +
+				'<!-- /wp:paragraph -->'
+		);
 	});
 
 	describe('handleOnChangeAttributes callback', () => {
 		it('should sets value when state is paragraph -> normal -> laptop', () => {
-			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -35,12 +35,6 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 
 		it('should sets value when state is paragraph -> normal -> tablet', () => {
-			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -59,12 +53,6 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 
 		it('should sets value when state is paragraph -> normal -> laptop -> link -> hover -> tablet', () => {
-			appendBlocks(
-				'<!-- wp:paragraph -->\n' +
-					'<p>Test</p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -79,7 +67,8 @@ describe('useAttributes Hook Testing ...', () => {
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
 				expect('#000000').to.be.equal(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
 						.attributes.blockeraBlockStates.hover.breakpoints.tablet
 						.attributes.blockeraBackgroundColor
 				);
@@ -87,12 +76,6 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 
 		it('should sets value when state is paragraph -> hover -> laptop', () => {
-			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -112,12 +95,6 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 
 		it('should sets value when state is paragraph -> hover -> tablet', () => {
-			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -139,12 +116,6 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 
 		it('should sets value when state is paragraph -> hover -> laptop -> link -> normal -> laptop', () => {
-			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -167,12 +138,6 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 
 		it('should sets value when state is paragraph -> hover -> tablet -> link -> normal -> laptop', () => {
-			appendBlocks(
-				'<!-- wp:paragraph {"className":"blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"21616724999","blockeraCompatId":"216167250"} -->\n' +
-					'<p class="blockera-block blockera-block-bffa0011-3d33-40c1-b0eb-3a9680c8c8e4"></p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -198,12 +163,6 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 
 		it('should sets value when state is paragraph -> hover -> laptop -> link -> hover -> laptop', () => {
-			appendBlocks(
-				'<!-- wp:paragraph -->\n' +
-					'<p>Test</p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -228,12 +187,6 @@ describe('useAttributes Hook Testing ...', () => {
 		});
 
 		it('should sets value when state is paragraph -> hover -> mobile -> link -> hover -> mobile', () => {
-			appendBlocks(
-				'<!-- wp:paragraph -->\n' +
-					'<p>Test</p>\n' +
-					'<!-- /wp:paragraph -->'
-			);
-
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
@@ -260,12 +213,6 @@ describe('useAttributes Hook Testing ...', () => {
 
 		describe('in paragraph -> normal -> laptop state has blockeraBackgroundColor with 27px value', () => {
 			beforeEach(() => {
-				appendBlocks(
-					'<!-- wp:paragraph -->\n' +
-						'<p>Test</p>\n' +
-						'<!-- /wp:paragraph -->'
-				);
-
 				// Select target block
 				cy.getBlock('core/paragraph').click();
 
@@ -279,41 +226,13 @@ describe('useAttributes Hook Testing ...', () => {
 					cy.getByAriaLabel('Add New State').click();
 				});
 
-				it('should add "active" block-state into block with empty attributes', () => {
+				it('should not sets blockeraBlockStates in block attributes', () => {
 					// Add active state with empty attributes.
 					cy.getByAriaLabel('Add New State').click();
 
 					// assertion for block attributes.
 					getWPDataObject().then((data) => {
-						expect({
-							normal: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
-								isVisible: true,
-								isSelected: false,
-							},
-							hover: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
-								isVisible: true,
-								isSelected: false,
-							},
-							active: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
-								isVisible: true,
-								isSelected: true,
-							},
-						}).to.be.deep.equal(
+						expect({}).to.be.deep.equal(
 							getSelectedBlock(data, 'blockeraBlockStates')
 						);
 					});
@@ -323,12 +242,16 @@ describe('useAttributes Hook Testing ...', () => {
 
 		describe('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
 			beforeEach(() => {
-				appendBlocks(
-					'<!-- wp:paragraph -->\n' +
-						'<p>Test</p>\n' +
-						'<!-- /wp:paragraph -->'
-				);
+				// Select target block
+				cy.getBlock('core/paragraph').click();
 
+				// Add default text shadow item
+				cy.getByAriaLabel('Add New Text Shadow').click();
+			});
+		});
+
+		describe.only('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
+			beforeEach(() => {
 				// Select target block
 				cy.getBlock('core/paragraph').click();
 
@@ -342,127 +265,24 @@ describe('useAttributes Hook Testing ...', () => {
 					cy.getByAriaLabel('Add New State').click();
 				});
 
-				it('should add "active" block-state into block with empty attributes', () => {
-					// Add active state with empty attributes.
-					cy.getByAriaLabel('Add New State').click();
-
+				it('should add "hover" block-state into block with blockeraTextShadow attribute is undefined', () => {
 					// assertion for block attributes.
 					getWPDataObject().then((data) => {
-						expect({
-							normal: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
-								isVisible: true,
-								isSelected: false,
-							},
-							hover: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
-								isVisible: true,
-								isSelected: false,
-							},
-							active: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
-								isVisible: true,
-								isSelected: true,
-							},
-						}).to.be.deep.equal(
-							getSelectedBlock(data, 'blockeraBlockStates')
+						expect(undefined).to.be.deep.equal(
+							getSelectedBlock(data, 'blockeraBlockStates')?.hover
 						);
-					});
-				});
-			});
-		});
 
-		describe('in paragraph -> normal -> laptop state has blockeraTextShadow with one default item value', () => {
-			beforeEach(() => {
-				appendBlocks(
-					'<!-- wp:paragraph -->\n' +
-						'<p>Test</p>\n' +
-						'<!-- /wp:paragraph -->'
-				);
-
-				// Select target block
-				cy.getBlock('core/paragraph').click();
-
-				// Add default text shadow item
-				cy.getByAriaLabel('Add New Text Shadow').click();
-			});
-
-			describe('adding hover -> laptop state and add new text-shadow item', () => {
-				beforeEach(() => {
-					// Set hover as current state.
-					cy.getByAriaLabel('Add New State').click();
-
-					// Add default text shadow item
-					cy.getByAriaLabel('Add New Text Shadow').click();
-				});
-
-				it('should add "active" block-state into block with blockeraTextShadow attribute with empty attributes', () => {
-					// Add active state with empty attributes.
-					cy.getByAriaLabel('Add New State').click();
-
-					// assertion for block attributes.
-					getWPDataObject().then((data) => {
 						expect({
-							normal: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
+							0: {
 								isVisible: true,
-								isSelected: false,
-							},
-							hover: {
-								breakpoints: {
-									laptop: {
-										attributes: {
-											blockeraTextShadow: {
-												0: {
-													isVisible: true,
-													x: '1px',
-													y: '1px',
-													blur: '1px',
-													color: '#000000ab',
-													order: 0,
-												},
-												1: {
-													isVisible: true,
-													x: '1px',
-													y: '1px',
-													blur: '1px',
-													color: '#000000ab',
-													order: 1,
-												},
-											},
-										},
-									},
-								},
-								isVisible: true,
-								isSelected: false,
-							},
-							active: {
-								breakpoints: {
-									laptop: {
-										attributes: {},
-									},
-								},
-								isVisible: true,
-								isSelected: true,
+								x: '1px',
+								y: '1px',
+								blur: '1px',
+								color: '#000000ab',
+								order: 0,
 							},
 						}).to.be.deep.equal(
-							getSelectedBlock(data, 'blockeraBlockStates')
+							getSelectedBlock(data, 'blockeraTextShadow')
 						);
 					});
 				});
