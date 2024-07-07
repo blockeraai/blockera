@@ -316,7 +316,6 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('bottom right');
 
 		// Assert state graph
-		// TODO
 		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
 
 		// Navigate between states and devices
@@ -377,18 +376,11 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			);
 
 			expect(undefined).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBlockStates').normal.breakpoints
-					.tablet
-			);
-
-			expect({}).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBlockStates').hover.breakpoints
-					.laptop.attributes
+				getSelectedBlock(data, 'blockeraBlockStates').normal
 			);
 
 			expect(undefined).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBlockStates').hover.breakpoints
-					.tablet
+				getSelectedBlock(data, 'blockeraBlockStates').hover
 			);
 		});
 	});
@@ -469,210 +461,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			);
 
 			expect(undefined).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBlockStates').normal.breakpoints
-					.tablet
-			);
-
-			expect({ top: '100%', left: '100%' }).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBlockStates').hover.breakpoints
-					.laptop.attributes.blockeraBackground['image-0'][
-					'image-position'
-				]
-			);
-
-			// TODO: please uncomment
-			// expect(undefined).to.be.deep.eq(
-			// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-			// 		.breakpoints.tablet
-			// );
-		});
-	});
-
-	it('set value in normal/laptop and navigate between states', () => {
-		setMatrixItem('bottom right');
-
-		// Assert label
-		cy.getByAriaLabel('Position').should(
-			'have.class',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		checkMatrixItem('bottom right');
-
-		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
-
-		// Navigate between states and devices
-		// Hover/Laptop
-		addBlockState('hover');
-		openImageItem();
-
-		// Assert label
-		cy.getByAriaLabel('Position').should(
-			'have.class',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		checkMatrixItem('bottom right');
-
-		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
-
-		// Hover/Tablet
-		setDeviceType('Tablet');
-		openImageItem();
-
-		// Assert label
-		cy.getByAriaLabel('Position').should(
-			'have.class',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		checkMatrixItem('bottom right');
-
-		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
-
-		// Normal/Laptop
-		setBlockState('Normal');
-		openImageItem();
-
-		// Assert label
-		cy.getByAriaLabel('Position').should(
-			'have.class',
-			'changed-in-normal-state'
-		);
-
-		// Assert control
-		checkMatrixItem('bottom right');
-
-		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
-
-		// Assert store data
-		getWPDataObject().then((data) => {
-			expect({ top: '100%', left: '100%' }).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBackground')['image-0'][
-					'image-position'
-				]
-			);
-
-			expect({}).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBlockStates').hover.breakpoints
-					.laptop.attributes
-			);
-
-			expect(undefined).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBlockStates').hover.breakpoints
-					.tablet
-			);
-		});
-	});
-
-	it('set value in hover/laptop and navigate between states', () => {
-		addBlockState('hover');
-		openImageItem();
-
-		setMatrixItem('bottom right');
-
-		// Assert label
-		cy.getByAriaLabel('Position').should(
-			'have.class',
-			'changed-in-secondary-state'
-		);
-
-		// Assert control
-		checkMatrixItem('bottom right');
-
-		// Assert state graph
-		cy.checkStateGraph(
-			'',
-			'Position',
-			{
-				laptop: ['Hover'],
-			},
-			true
-		);
-
-		// Navigate between states and devices
-		// Normal/Laptop
-		setBlockState('Normal');
-		openImageItem();
-
-		// Assert label
-		cy.getByAriaLabel('Position').should(
-			'have.class',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		checkMatrixItem('center center');
-
-		// Assert state graph
-		cy.checkStateGraph(
-			'',
-			'Position',
-			{
-				laptop: ['Hover'],
-			},
-			true
-		);
-
-		// Normal/Tablet
-		setDeviceType('Tablet');
-		openImageItem();
-
-		// Assert label
-		cy.getByAriaLabel('Position').should(
-			'have.class',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		checkMatrixItem('center center');
-
-		// Assert state graph
-		cy.checkStateGraph(
-			'',
-			'Position',
-			{
-				laptop: ['Hover'],
-			},
-			true
-		);
-
-		// Hover/Tablet
-		setBlockState('Hover');
-		openImageItem();
-
-		// Assert label
-		cy.getByAriaLabel('Position').should(
-			'have.class',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		checkMatrixItem('center center');
-
-		// Assert state graph
-		cy.checkStateGraph(
-			'',
-			'Position',
-			{
-				laptop: ['Hover'],
-			},
-			true
-		);
-
-		// Assert store data
-		getWPDataObject().then((data) => {
-			expect({ top: '50%', left: '50%' }).to.be.deep.eq(
-				getSelectedBlock(data, 'blockeraBackground')['image-0'][
-					'image-position'
-				]
+				getSelectedBlock(data, 'blockeraBlockStates').normal
 			);
 
 			expect({ top: '100%', left: '100%' }).to.be.deep.eq(
@@ -689,7 +478,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		});
 	});
 
-	describe('Alignment Matrix Control label reset action testing...', () => {
+	describe('reset action testing...', () => {
 		beforeEach(() => {
 			// Set value in normal/laptop
 			setMatrixItem('top left');
@@ -735,7 +524,6 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			);
 
 			// Assert store data
-			// TODO : 'image-0' should be deleted from other device and state objects, because it's equal with root
 			getWPDataObject().then((data) => {
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
