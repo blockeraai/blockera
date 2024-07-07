@@ -495,8 +495,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkMatrixItem('matrix-bottom-left-selected');
+			checkMatrixItem('matrix-bottom-left-selected');
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
@@ -513,8 +512,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkMatrixItem('matrix-bottom-left-selected');
+			checkMatrixItem('matrix-bottom-left-selected');
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
@@ -530,8 +528,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 				'changed-in-normal-state'
 			);
 			// Assert control
-			// TODO
-			//checkMatrixItem('matrix-bottom-left-selected');
+			checkMatrixItem('matrix-bottom-left-selected');
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
@@ -546,22 +543,20 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					justifyContent: 'flex-start',
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraFlexLayout'));
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.laptop.attributes
 				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 
@@ -619,8 +614,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkMatrixItem('matrix-top-left-normal');
+			checkMatrixItem('matrix-top-left-normal');
 			checkMatrixItem('matrix-top-center-normal');
 			checkMatrixItem('matrix-top-right-normal');
 			checkMatrixItem('matrix-center-left-normal');
@@ -645,8 +639,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkMatrixItem('matrix-top-left-normal');
+			checkMatrixItem('matrix-top-left-normal');
 			checkMatrixItem('matrix-top-center-normal');
 			checkMatrixItem('matrix-top-right-normal');
 			checkMatrixItem('matrix-center-left-normal');
@@ -669,11 +662,10 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					justifyContent: '',
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraFlexLayout'));
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect({
 					blockeraFlexLayout: {
@@ -775,7 +767,6 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					);
 
 					// Assert control
-					// TODO
 					checkMatrixItem('matrix-top-left-normal');
 					checkMatrixItem('matrix-top-center-normal');
 					checkMatrixItem('matrix-top-right-normal');
@@ -800,7 +791,6 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					);
 
 					// Assert control
-					// TODO
 					checkMatrixItem('matrix-top-left-normal');
 					checkMatrixItem('matrix-top-center-normal');
 					checkMatrixItem('matrix-top-right-normal');
@@ -872,8 +862,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkMatrixItem('matrix-bottom-center-selected');
+			checkMatrixItem('matrix-bottom-center-selected');
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
@@ -890,8 +879,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//	checkMatrixItem('matrix-bottom-center-selected');
+			checkMatrixItem('matrix-bottom-center-selected');
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
@@ -908,8 +896,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			// Assert control
-			// TODO
-			//checkMatrixItem('matrix-bottom-center-selected');
+			checkMatrixItem('matrix-bottom-center-selected');
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
@@ -1044,11 +1031,10 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					justifyContent: '',
 				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraFlexLayout'));
 
-				//TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect({
 					blockeraFlexLayout: {
