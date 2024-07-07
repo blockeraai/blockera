@@ -126,6 +126,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentBlock,
 			currentState,
 			currentBreakpoint,
+			currentInnerBlockState,
 		});
 
 		const masterIsNormalState = (): boolean =>
@@ -453,7 +454,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								blockeraInnerBlocks,
 								currentInnerBlockState,
 								updateBlockEditorSettings,
-								states: attributes.blockeraBlockStates,
 								blockProps: {
 									// Sending props like exactly "edit" function props of WordPress Block.
 									// Because needs total block props in outside overriding component like "blockera" in overriding process.

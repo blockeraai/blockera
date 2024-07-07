@@ -10,10 +10,10 @@ import { omitWithPattern, hasSameProps } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+// import { detailedDiff } from 'deep-object-diff';
 import type { TStates } from '../libs/block-states/types';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
-// import { detailedDiff } from 'deep-object-diff';
 
 export const propsAreEqual = (
 	prev: { attributes: Object, name: string },

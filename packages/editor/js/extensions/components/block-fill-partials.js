@@ -21,7 +21,6 @@ import { BlockCard } from '../libs/block-card';
 
 export const BlockFillPartials: ComponentType<any> = memo(
 	({
-		states,
 		clientId,
 		isActive,
 		blockProps,
@@ -58,7 +57,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			<>
 				<Fill name={`blockera-block-card-content-${clientId}`}>
 					<BlockCard
-						states={states}
 						clientId={clientId}
 						activeBlock={currentBlock}
 						blockName={blockProps.name}
