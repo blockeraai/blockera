@@ -42,7 +42,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 		cy.get('@color-label').should('include.text', 'aaa');
 	});
 
-	it.only('should render link inner block with correctly values when navigate between all states of self and parent block', () => {
+	it('should render link inner block with correctly values when navigate between all states of self and parent block', () => {
 		{
 			// Sets values on Link inner block for laptop device ...
 
@@ -132,7 +132,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// set "Hover" state on paragraph.
 			setBlockState('Hover');
 			// Expected text-color control value of paragraph/normal/link/hover.
-			cy.get('@color-label').should('include.text', 'aaa');
+			cy.get('@color-label').should('include.text', 'eee');
 			// Set value.
 			cy.setColorControlValue('Text Color', 'fff');
 
@@ -152,7 +152,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// set "Hover" state on paragraph.
 			setBlockState('Hover');
 			// Expected text-color control value of paragraph/hover/link/hover.
-			cy.get('@color-label').should('include.text', 'aaa');
+			cy.get('@color-label').should('include.text', '000');
 			// Set value.
 			cy.setColorControlValue('Text Color', '111');
 		}
