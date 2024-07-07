@@ -46,7 +46,7 @@ export function BreakpointIcon({
 					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
-							iconSize="14"
+							iconSize="12"
 							className={componentInnerClassNames(
 								'base-breakpoint-icon'
 							)}
@@ -74,7 +74,7 @@ export function BreakpointIcon({
 					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
-							iconSize="14"
+							iconSize="12"
 							className={componentInnerClassNames(
 								'base-breakpoint-icon'
 							)}
@@ -102,7 +102,7 @@ export function BreakpointIcon({
 					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
-							iconSize="14"
+							iconSize="12"
 							className={componentInnerClassNames(
 								'base-breakpoint-icon'
 							)}
@@ -130,7 +130,7 @@ export function BreakpointIcon({
 					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
-							iconSize="14"
+							iconSize="12"
 							className={componentInnerClassNames(
 								'base-breakpoint-icon'
 							)}
@@ -158,7 +158,7 @@ export function BreakpointIcon({
 					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
-							iconSize="14"
+							iconSize="12"
 							className={componentInnerClassNames(
 								'base-breakpoint-icon'
 							)}
@@ -186,7 +186,7 @@ export function BreakpointIcon({
 					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
-							iconSize="14"
+							iconSize="12"
 							className={componentInnerClassNames(
 								'base-breakpoint-icon'
 							)}
@@ -214,7 +214,7 @@ export function BreakpointIcon({
 					{isBaseBreakpoint(name) && (
 						<Icon
 							icon="asterisk"
-							iconSize="14"
+							iconSize="12"
 							className={componentInnerClassNames(
 								'base-breakpoint-icon'
 							)}
