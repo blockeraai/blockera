@@ -15,6 +15,7 @@ import { hasSameProps } from '@blockera/utils';
  */
 import type { TBlockProps } from './types';
 import { isInnerBlock, isNormalState } from '../components/utils';
+import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
 
 // import { detailedDiff } from 'deep-object-diff';
 
@@ -49,7 +50,7 @@ export function generateExtensionId(
 		getExtensionCurrentBlock = () => 'master',
 		getExtensionInnerBlockState = () => 'normal',
 		getExtensionCurrentBlockState = () => 'normal',
-		getExtensionCurrentBlockStateBreakpoint = () => 'laptop',
+		getExtensionCurrentBlockStateBreakpoint = () => getBaseBreakpoint(),
 	} = select('blockera/extensions') || {};
 
 	const currentBlock = getExtensionCurrentBlock();

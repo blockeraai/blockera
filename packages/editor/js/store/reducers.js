@@ -5,6 +5,11 @@
  */
 import { combineReducers } from '@wordpress/data';
 
+/**
+ * Internal dependencies
+ */
+import { getBaseBreakpoint } from '../canvas-editor';
+
 export const breakpoints = (state: Object = [], action: Object): Object => {
 	switch (action?.type) {
 		case 'SET_BREAKPOINTS':
@@ -39,7 +44,7 @@ export const canvasEditorSettings = (
 		case 'SWITCH_BREAKPOINT':
 			return {
 				...state,
-				deviceType: action.device || 'laptop',
+				deviceType: action.device || getBaseBreakpoint(),
 			};
 		case 'REGISTER_CANVAS_SETTINGS':
 			return {

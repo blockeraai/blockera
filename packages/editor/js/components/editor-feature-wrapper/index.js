@@ -15,7 +15,7 @@ import { isBoolean, isArray } from '@blockera/utils';
  * Internal dependencies
  */
 import type { EditorFeatureWrapperProps } from './types';
-import { isBaseBreakpoint } from '../../canvas-editor';
+import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 
 export default function EditorFeatureWrapper({
@@ -137,7 +137,7 @@ export default function EditorFeatureWrapper({
 			return (
 				<FeatureWrapper
 					type="breakpoint"
-					typeName={'laptop'}
+					typeName={getBaseBreakpoint()}
 					{...props}
 				>
 					{children}
@@ -151,7 +151,7 @@ export default function EditorFeatureWrapper({
 			return (
 				<FeatureWrapper
 					type="breakpoint"
-					typeName={'laptop'}
+					typeName={getBaseBreakpoint()}
 					{...props}
 				>
 					{children}

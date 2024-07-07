@@ -20,6 +20,7 @@ import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
 import { getSelector } from './utils';
 import type { NormalizedSelectorProps } from './types';
 import { isNormalState } from '../extensions/components';
+import { getBaseBreakpoint } from '../canvas-editor';
 
 export const getCssSelector = ({
 	state,
@@ -30,11 +31,11 @@ export const getCssSelector = ({
 	blockSelectors,
 	className = '',
 	suffixClass = '',
-	device = 'laptop',
+	device = getBaseBreakpoint(),
 	fallbackSupportId,
 }: NormalizedSelectorProps): string => {
 	const rootSelector =
-		'laptop' === device
+		getBaseBreakpoint() === device
 			? '{{BLOCK_ID}}'
 			: `.is-${device}-preview {{BLOCK_ID}}`;
 

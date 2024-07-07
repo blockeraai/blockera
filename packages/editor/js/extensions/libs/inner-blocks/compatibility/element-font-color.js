@@ -7,6 +7,11 @@ import { isValid } from '@blockera/controls';
 import { isEmpty, isUndefined } from '@blockera/utils';
 import { getColorVAFromVarString } from '@blockera/data';
 
+/**
+ * Internal dependencies
+ */
+import { getBaseBreakpoint } from '../../../../canvas-editor';
+
 export function elementNormalFontColorFromWPCompatibility({
 	element,
 	attributes,
@@ -54,13 +59,15 @@ export function elementHoverFontColorFromWPCompatibility({
 						attributes: {
 							blockeraBlockStates: {
 								normal: {
-									breakpoints: { laptop: {} },
+									// $FlowFixMe
+									breakpoints: { [getBaseBreakpoint()]: {} },
 									isVisible: true,
 								},
 								hover: {
 									isVisible: true,
 									breakpoints: {
-										laptop: {
+										// $FlowFixMe
+										[getBaseBreakpoint()]: {
 											attributes: {
 												blockeraFontColor: color,
 											},

@@ -23,9 +23,10 @@ import { Icon } from '@blockera/icons';
  */
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
-import { EditorFeatureWrapper } from '../../../';
-import type { CustomStyleExtensionProps } from './types/props';
 import { useBlockContext } from '../../hooks';
+import { EditorFeatureWrapper } from '../../../';
+import { getBaseBreakpoint } from '../../../canvas-editor';
+import type { CustomStyleExtensionProps } from './types/props';
 
 export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 	memo(
@@ -39,7 +40,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 		}: CustomStyleExtensionProps): MixedElement => {
 			const {
 				getCurrentState = () => 'normal',
-				getBreakpoint = () => 'laptop',
+				getBreakpoint = () => getBaseBreakpoint(),
 			} = useBlockContext();
 
 			const isShowCustomCSS = isShowField(
@@ -53,7 +54,8 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 			}
 
 			const isEditable =
-				getCurrentState() === 'normal' || getBreakpoint() === 'laptop';
+				getCurrentState() === 'normal' ||
+				getBreakpoint() === getBaseBreakpoint();
 
 			return (
 				<PanelBodyControl

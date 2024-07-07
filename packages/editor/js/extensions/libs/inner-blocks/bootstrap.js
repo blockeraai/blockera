@@ -29,6 +29,7 @@ import {
 	elementNormalBackgroundFromWPCompatibility,
 	elementNormalBackgroundToWPCompatibility,
 } from './compatibility/element-bg';
+import { getBaseBreakpoint } from '../../../canvas-editor';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -99,8 +100,9 @@ export const bootstrap = (): void => {
 				) {
 					if (
 						!attributes?.blockeraInnerBlocks?.link?.attributes
-							?.blockeraBlockStates?.breakpoints?.laptop
-							?.attributes?.blockeraFontColor
+							?.blockeraBlockStates?.breakpoints[
+							getBaseBreakpoint()
+						]?.attributes?.blockeraFontColor
 					) {
 						const newAttributes =
 							elementHoverFontColorFromWPCompatibility({

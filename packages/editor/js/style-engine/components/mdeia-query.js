@@ -14,6 +14,7 @@ import { useMedia } from '../';
  * Internal dependencies
  */
 import type { MediaQueryProps } from './types';
+import { getBaseBreakpoint } from '../../canvas-editor';
 
 export const MediaQuery = ({
 	breakpoint,
@@ -23,7 +24,7 @@ export const MediaQuery = ({
 
 	return (
 		<>
-			{'laptop' === breakpoint && children}
+			{getBaseBreakpoint() === breakpoint && children}
 			{media}
 			{'{'}
 			{children}

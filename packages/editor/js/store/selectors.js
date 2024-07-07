@@ -4,6 +4,7 @@ import type {
 	BreakpointTypes,
 	TBreakpoint,
 } from '../extensions/libs/block-states/types';
+import { getBaseBreakpoint } from '../canvas-editor';
 
 /**
  * Get breakpoints.
@@ -83,5 +84,5 @@ export const getDeviceType = ({
 }: {
 	canvasEditorSettings: Object,
 }): TBreakpoint => {
-	return canvasEditorSettings.deviceType || 'laptop';
+	return canvasEditorSettings.deviceType || getBaseBreakpoint();
 };

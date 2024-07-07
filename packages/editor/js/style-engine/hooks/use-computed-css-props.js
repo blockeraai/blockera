@@ -24,6 +24,7 @@ import {
 import type { CssRule } from '../types';
 import type { TBreakpoint } from '../../extensions/libs/block-states/types';
 import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
+import { getBaseBreakpoint } from '../../canvas-editor';
 
 export const useComputedCssProps = ({
 	state,
@@ -86,7 +87,7 @@ export const useComputedCssProps = ({
 		appendStyles({
 			...calculatedProps,
 			currentBlock: 'master',
-			device: 'laptop',
+			device: getBaseBreakpoint(),
 		});
 
 		const generateCssForInnersInsideNormalState = (
@@ -127,7 +128,7 @@ export const useComputedCssProps = ({
 		// Calculation styles for each normal state in all breakpoints ...
 		Object.entries(settings?.breakpoints || {}).forEach(
 			([breakpoint, setting]: [TBreakpoint | string, Object]): void => {
-				if ('laptop' === breakpoint) {
+				if (getBaseBreakpoint() === breakpoint) {
 					return;
 				}
 
@@ -214,7 +215,7 @@ export const useComputedCssProps = ({
 					(innerBlock: [string, Object]): void =>
 						generateCssForInnersInsidePseudoState(
 							innerBlock,
-							'laptop'
+							getBaseBreakpoint()
 						)
 				);
 

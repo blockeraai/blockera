@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import type { FeatureConfig } from '../types';
+import { getBaseBreakpoint } from '../../../../canvas-editor/components/breakpoints/helpers';
 
 const blockeraStyleVariation: FeatureConfig = {
 	show: true,
@@ -16,7 +17,7 @@ const blockeraStyleVariation: FeatureConfig = {
 	status: true,
 	label: __('Style Variation', 'blockera'),
 	isActiveOnStates: ['normal'],
-	isActiveOnBreakpoints: ['laptop'],
+	isActiveOnBreakpoints: [getBaseBreakpoint()],
 };
 
 export const styleVariationsConfig = {
