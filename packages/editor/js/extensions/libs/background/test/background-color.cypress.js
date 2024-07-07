@@ -31,8 +31,8 @@ describe('Background Color → Functionality', () => {
 		});
 
 		// act: entering new hexColor
-		cy.get('.components-popover').within(() => {
-			cy.get('input').as('hexColorInput');
+		cy.get('.components-popover').each(() => {
+			cy.get('.components-popover input').as('hexColorInput');
 			cy.get('@hexColorInput').clear();
 			cy.get('@hexColorInput').type('666');
 		});
