@@ -19,6 +19,10 @@ import type {
 	OpenPopover,
 	BoxSpacingLock,
 } from './types';
+import {
+	boxPositionControlDefaultValue,
+	boxSpacingValueCleanup,
+} from './utils';
 import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import { MarginAll } from './components/margin/margin-all';
@@ -49,20 +53,7 @@ export default function BoxSpacingControl({
 	repeaterItem,
 	singularId,
 	columns = '',
-	defaultValue = {
-		margin: {
-			top: '',
-			right: '',
-			bottom: '',
-			left: '',
-		},
-		padding: {
-			top: '',
-			right: '',
-			bottom: '',
-			left: '',
-		},
-	},
+	defaultValue = boxPositionControlDefaultValue,
 	onChange = () => {},
 	field,
 	marginLock: _marginLock = 'none',
@@ -84,6 +75,7 @@ export default function BoxSpacingControl({
 		id,
 		onChange,
 		defaultValue,
+		valueCleanup: boxSpacingValueCleanup,
 		mergeInitialAndDefault: true,
 	});
 

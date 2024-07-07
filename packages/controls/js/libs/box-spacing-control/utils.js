@@ -1,14 +1,15 @@
 // @flow
-
 /**
  * Blockera Dependencies
  */
+import { isEquals, isEmpty, cloneObject } from '@blockera/utils';
 
 /**
  * Internal Dependencies
  */
 import { isValid } from '../../';
 import { extractNumberAndUnit } from '../input-control/utils';
+import type { TDefaultValue } from './types';
 
 export function fixLabelText(value: Object | string): any {
 	if (value === '') {
@@ -43,4 +44,43 @@ export function fixLabelText(value: Object | string): any {
 				</>
 			);
 	}
+}
+
+export const boxPositionControlDefaultValue: TDefaultValue = {
+	margin: {
+		top: '',
+		right: '',
+		bottom: '',
+		left: '',
+	},
+	padding: {
+		top: '',
+		right: '',
+		bottom: '',
+		left: '',
+	},
+};
+
+// value clean up for removing extra values to prevent saving extra data!
+export function boxSpacingValueCleanup(value: Object): Object {
+	if (isEquals(value, boxPositionControlDefaultValue)) {
+		return value;
+	}
+
+	// const updatedValue = JSON.parse(JSON.stringify(value));
+	const updatedValue = cloneObject(value);
+
+	['padding', 'margin'].forEach((type) => {
+		['top', 'right', 'bottom', 'left'].forEach((side) => {
+			if (isEmpty(updatedValue[type][side])) {
+				delete updatedValue[type][side];
+			}
+		});
+
+		if (isEmpty(updatedValue[type])) {
+			delete updatedValue[type];
+		}
+	});
+
+	return updatedValue;
 }
