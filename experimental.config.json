@@ -12,6 +12,6 @@
 		}
 	},
 	"data": {
-		"dynamicValue": true
+		"dynamicValue": false
 	}
 }
