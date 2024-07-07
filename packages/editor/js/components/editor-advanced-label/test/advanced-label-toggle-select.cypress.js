@@ -640,9 +640,9 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			getWPDataObject().then((data) => {
 				expect('').to.be.eq(getSelectedBlock(data, 'blockeraOverflow'));
 
-				expect({}).to.be.deep.eq(
+				expect(undefined).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.laptop.attributes
+						.breakpoints.laptop
 				);
 
 				expect({ blockeraOverflow: 'scroll' }).to.be.deep.eq(

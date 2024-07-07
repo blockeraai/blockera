@@ -36,7 +36,6 @@ export const ControlContextProvider = ({
 	value: controlInfo,
 	children,
 	storeName = STORE_NAME,
-	notSyncWithRecievedValue = false,
 	...props
 }: ControlContextProviderProps): MixedElement | null => {
 	// $FlowFixMe
@@ -60,7 +59,7 @@ export const ControlContextProvider = ({
 
 	// Assume control has side effect from parent components ...
 	useEffect(() => {
-		if (!isEquals(controlInfo.value, value) && !notSyncWithRecievedValue) {
+		if (!isEquals(controlInfo.value, value)) {
 			dispatch.modifyControlValue({
 				controlId: controlInfo.name,
 				value: controlInfo.value,

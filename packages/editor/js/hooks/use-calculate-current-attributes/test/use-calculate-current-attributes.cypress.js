@@ -140,10 +140,9 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.getParentContainer('BG Color').should('contain', '#eeeeee');
 	});
 
-	// TODO @reza this test looks correct but the functionality is not!
 	it('For Paragraph -> Normal -> Laptop -> Link -> Hover -> Tablet', () => {
 		appendBlocks(
-			'<!-- wp:paragraph {"className":"blockera-block blockera-block-2762a1c8-98b1-49a8-afe2-61d176d55923","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraInnerBlocks":{"link":{"attributes":{"blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":false},"hover":{"breakpoints":{"laptop":{"attributes":{}},"tablet":{"attributes":{"blockeraBackgroundColor":"#eeeeee"}}},"isVisible":true,"isSelected":true}}}}},"blockeraPropsId":"217143657689","blockeraCompatId":"217143657689"} -->\n' +
+			'<!-- wp:paragraph {"className":"blockera-block blockera-block-05359826-41fa-43dd-880e-fcebf2a85252","blockeraBlockStates":{"normal":{"breakpoints":{"tablet":{"attributes":{"blockeraInnerBlocks":{"link":{"attributes":{"blockeraBlockStates":{"hover":{"breakpoints":{"tablet":{"attributes":{"blockeraBackgroundColor":"#eeeeee"}}}}}}}}}}}}},"blockeraPropsId":"6814023600","blockeraCompatId":"6814023600"} -->\n' +
 				'<p class="blockera-block blockera-block-2762a1c8-98b1-49a8-afe2-61d176d55923">test</p>\n' +
 				'<!-- /wp:paragraph -->'
 		);
@@ -154,10 +153,10 @@ describe('Should calculate current attributes correctly:', () => {
 		setInnerBlock('Link');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setBlockState('Hover');
+		setDeviceType('Tablet');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setDeviceType('Tablet');
+		setBlockState('Hover');
 		cy.getParentContainer('BG Color').should('contain', '#eeeeee');
 	});
 
