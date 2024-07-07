@@ -385,9 +385,8 @@ describe('Position Control label testing', () => {
 						);
 
 						// Assert control
-						// TODO
-						//checkPositionValue('top-position', 10);
-						//checkPositionValue('bottom-position', 15);
+						checkPositionValue('top-position', 10);
+						checkPositionValue('bottom-position', 15);
 
 						// Assert state graph
 						cy.checkStateGraph('Position', 'Relative', {
@@ -424,9 +423,8 @@ describe('Position Control label testing', () => {
 						);
 
 						// Assert control
-						//TODO
-						//checkPositionValue('top-position', 10);
-						//checkPositionValue('bottom-position', 15);
+						checkPositionValue('top-position', 10);
+						checkPositionValue('bottom-position', 15);
 
 						// Assert state graph
 						cy.checkStateGraph('Position', 'Relative', {
@@ -554,8 +552,7 @@ describe('Position Control label testing', () => {
 					'changed-in-normal-state'
 				);
 				// Assert control
-				// TODO
-				//checkPositionValue('top-position', 60);
+				checkPositionValue('top-position', 60);
 
 				// Assert state graph
 				cy.checkStateGraph('Position', 'Relative', {
@@ -572,8 +569,7 @@ describe('Position Control label testing', () => {
 					'changed-in-normal-state'
 				);
 				// Assert control
-				// TODO
-				//checkPositionValue('top-position', 60);
+				checkPositionValue('top-position', 60);
 
 				// Assert state graph
 				cy.checkStateGraph('Position', 'Relative', {
@@ -590,8 +586,7 @@ describe('Position Control label testing', () => {
 					'changed-in-normal-state'
 				);
 				// Assert control
-				// TODO
-				//checkPositionValue('top-position', 60);
+				checkPositionValue('top-position', 60);
 
 				// Assert state graph
 				cy.checkStateGraph('Position', 'Relative', {
@@ -612,22 +607,20 @@ describe('Position Control label testing', () => {
 						getSelectedBlock(data, 'blockeraPosition')
 					);
 
-					// TODO
-					// expect({}).to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-					// 		.breakpoints.tablet.attributes
-					// );
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes
+					);
 
 					expect({}).to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
 							.breakpoints.laptop.attributes
 					);
 
-					// TODO
-					// expect({}).to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 		.breakpoints.tablet.attributes
-					// );
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.tablet.attributes
+					);
 				});
 			});
 
@@ -715,11 +708,10 @@ describe('Position Control label testing', () => {
 						getSelectedBlock(data, 'blockeraPosition')
 					);
 
-					// TODO
-					// expect({}).to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-					// 		.breakpoints.tablet.attributes
-					// );
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes
+					);
 
 					expect({
 						blockeraPosition: {
@@ -761,36 +753,32 @@ describe('Position Control label testing', () => {
 					cy.resetBlockeraAttribute('', 'Top', 'reset', true);
 
 					// Assert label
-					// TODO
-					// cy.getByAriaLabel('Top Position').should(
-					// 	'have.class',
-					// 	'changed-in-normal-state'
-					// );
-					// cy.checkLabelClassName(
-					// 	'Position',
-					// 	'Relative',
-					// 	'changed-in-normal-state'
-					// );
+					cy.getByAriaLabel('Top Position').should(
+						'have.class',
+						'changed-in-normal-state'
+					);
+					cy.checkLabelClassName(
+						'Position',
+						'Relative',
+						'changed-in-normal-state'
+					);
 
 					// Assert control
-					// TODO
-					// checkPositionValue('top-position', 20);
+					checkPositionValue('top-position', 20);
 					checkPositionValue('bottom-position', 15);
 
 					// Assert state graph
-					// TODO : should position object be deleted, because it's equal with root
-					// cy.checkStateGraph('Position', 'Relative', {
-					// 	laptop: ['Normal'],
-					// });
+					cy.checkStateGraph('Position', 'Relative', {
+						laptop: ['Normal'],
+					});
 
 					// Assert store data
-					// TODO : should position object be deleted, because it's equal with root
-					// getWPDataObject().then((data) => {
-					// 	expect({}).to.be.deep.eq(
-					// 		getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 			.breakpoints.laptop.attributes
-					// 	);
-					// });
+					getWPDataObject().then((data) => {
+						expect({}).to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraBlockStates').hover
+								.breakpoints.laptop.attributes
+						);
+					});
 				}
 			);
 
@@ -848,10 +836,9 @@ describe('Position Control label testing', () => {
 				checkPositionValue('bottom-position', 15);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph('Position', 'Relative', {
-				// 	laptop: ['Normal'],
-				// });
+				cy.checkStateGraph('Position', 'Relative', {
+					laptop: ['Normal'],
+				});
 
 				// Assert store data
 				getWPDataObject().then((data) => {
@@ -872,31 +859,27 @@ describe('Position Control label testing', () => {
 				setBlockState('Hover');
 
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Top Position').should(
-				// 	'have.class',
-				// 	'changed-in-normal-state'
-				// );
+				cy.getByAriaLabel('Top Position').should(
+					'have.class',
+					'changed-in-normal-state'
+				);
 
 				// Assert control
-				// TODO
-				//checkPositionValue('top-position', 30);
+				checkPositionValue('top-position', 30);
 				checkPositionValue('bottom-position', 15);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph('Position', 'Relative', {
-				// 	laptop: ['Normal'],
-				// });
+				cy.checkStateGraph('Position', 'Relative', {
+					laptop: ['Normal'],
+				});
 
 				// Assert store data
-				// TODO
-				// getWPDataObject().then((data) => {
-				// 	expect({}).to.be.deep.eq(
-				// 		getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 			.breakpoints.laptop.attributes
-				// 	);
-				// });
+				getWPDataObject().then((data) => {
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.laptop.attributes
+					);
+				});
 			});
 		});
 	});
@@ -1056,8 +1039,7 @@ describe('Position Control label testing', () => {
 				);
 
 				// Assert control
-				// TODO
-				//checkPositionValue('top-position', 45);
+				checkPositionValue('top-position', 45);
 
 				// Assert state graph
 				cy.checkStateGraph('Position', 'Relative', {
@@ -1074,8 +1056,7 @@ describe('Position Control label testing', () => {
 				);
 
 				// Assert control
-				// TODO
-				// checkPositionValue('top-position', 45);
+				checkPositionValue('top-position', 45);
 
 				// Assert state graph
 				cy.checkStateGraph('Position', 'Relative', {
@@ -1092,8 +1073,7 @@ describe('Position Control label testing', () => {
 				);
 
 				// Assert control
-				// TODO
-				// checkPositionValue('top-position', 45);
+				checkPositionValue('top-position', 45);
 
 				// Assert state graph
 				cy.checkStateGraph('Position', 'Relative', {
@@ -1216,16 +1196,10 @@ describe('Position Control label testing', () => {
 						getSelectedBlock(data, 'blockeraPosition')
 					);
 
-					console.log(
-						'///',
-						getSelectedBlock(data, 'blockeraBlockStates')
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes
 					);
-
-					// TODO
-					// expect({}).to.be.deep.eq(
-					// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-					// 		.breakpoints.tablet.attributes
-					// );
 
 					expect({
 						blockeraPosition: {
@@ -1268,63 +1242,57 @@ describe('Position Control label testing', () => {
 				() => {
 					// Hover/ Laptop
 					// Assert label
-					// TODO
-					//cy.getByAriaLabel('Top Position').should(
-					//	'not.have.class',
-					//	'changed-in-secondary-state'
-					// );
-					// cy.checkLabelClassName(
-					// 	'Position',
-					// 	'Relative',
-					// 	'changed-in-secondary-state',
-					// 	'not-have'
-					// );
+					cy.getByAriaLabel('Top Position').should(
+						'not.have.class',
+						'changed-in-secondary-state'
+					);
+					cy.checkLabelClassName(
+						'Position',
+						'Relative',
+						'changed-in-secondary-state',
+						'not-have'
+					);
 
 					// Assert control
 					checkPositionValue('top-position', '');
 					checkPositionValue('bottom-position', 15);
 
 					// Assert state graph
-					// TODO
-					// cy.checkStateGraph('', 'Top', {}, true);
+					cy.checkStateGraph('', 'Top', {}, true);
 
 					// Normal/Laptop
 					// Assert label
 					setBlockState('Normal');
-					// TODO
-					// cy.getByAriaLabel('Top Position').should(
-					// 	'not.have.class',
-					// 	'changed-in-normal-state'
-					// );
+					cy.getByAriaLabel('Top Position').should(
+						'not.have.class',
+						'changed-in-normal-state'
+					);
 
 					// Assert control
-					// TODO
-					//checkPositionValue('top-position', '');
+					checkPositionValue('top-position', '');
 					checkPositionValue('bottom-position', 15);
 
 					// Assert state graph
-					// TODO
-					// cy.getByAriaLabel('Top Position').click();
-					// cy.checkStateGraph('', 'Top', {}, true);
+					cy.getByAriaLabel('Top Position').click();
+					cy.checkStateGraph('', 'Top', {}, true);
 
 					// Assert store data
-					// TODO
 					getWPDataObject().then((data) => {
-						// expect({
-						// 	type: 'relative',
-						// 	position: {
-						// 		top: '',
-						// 		left: '',
-						// 		bottom: '15px',
-						// 		right: '',
-						// 	},
-						// }).to.be.deep.eq(
-						// 	getSelectedBlock(data, 'blockeraPosition')
-						// );
-						// expect({}).to.be.deep.eq(
-						// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-						// 		.breakpoints.tablet.attributes
-						// );
+						expect({
+							type: 'relative',
+							position: {
+								top: '',
+								left: '',
+								bottom: '15px',
+								right: '',
+							},
+						}).to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraPosition')
+						);
+						expect({}).to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraBlockStates').normal
+								.breakpoints.tablet.attributes
+						);
 					});
 				}
 			);
@@ -1343,10 +1311,9 @@ describe('Position Control label testing', () => {
 				checkPositionValue('bottom-position', 15);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph('Position', 'Relative', {
-				// 	laptop: ['Normal'],
-				// });
+				cy.checkStateGraph('Position', 'Relative', {
+					laptop: ['Normal'],
+				});
 
 				// Assert store data
 				getWPDataObject().then((data) => {
@@ -1366,33 +1333,29 @@ describe('Position Control label testing', () => {
 				// Hover/Laptop
 				setBlockState('Hover');
 				// Assert label
-				// TODO
-				// cy.getByAriaLabel('Top Position').should(
-				// 	'have.class',
-				// 	'changed-in-normal-state'
-				// );
+				cy.getByAriaLabel('Top Position').should(
+					'have.class',
+					'changed-in-normal-state'
+				);
 
 				// Assert control
-				// TODO
-				//checkPositionValue('top-position', 30);
+				checkPositionValue('top-position', 30);
 				checkPositionValue('bottom-position', 15);
 
 				// Assert state graph
-				// TODO
-				// cy.checkStateGraph('Position', 'Relative', {
-				// 	laptop: ['Normal'],
-				// });
+				cy.checkStateGraph('Position', 'Relative', {
+					laptop: ['Normal'],
+				});
 				cy.getByAriaLabel('Top Position').click();
 				cy.checkStateGraph('', 'Top', { laptop: ['Normal'] }, true);
 
 				// Assert store data
-				// TODO
-				// getWPDataObject().then((data) => {
-				// 	expect({}).to.be.deep.eq(
-				// 		getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 			.breakpoints.laptop.attributes
-				// 	);
-				// });
+				getWPDataObject().then((data) => {
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.laptop.attributes
+					);
+				});
 			});
 		});
 	});
