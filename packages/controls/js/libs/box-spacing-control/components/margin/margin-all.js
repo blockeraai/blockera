@@ -15,7 +15,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { setValueAddon, useValueAddon } from '../../../../';
+import { useValueAddon } from '../../../../';
 import { LabelControl, extractNumberAndUnit } from '../../../index';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
@@ -55,8 +55,9 @@ export function MarginAll({
 		useValueAddon({
 			types: ['variable'],
 			value: value.margin.top,
-			setValue: (newValue: any): void =>
-				setValueAddon(newValue, setValue, defaultValue),
+			setValue: (): void => {
+				// no need to set value because we do it on onChange
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

@@ -16,7 +16,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { extractNumberAndUnit, LabelControl } from '../../../index';
-import { setValueAddon, useValueAddon } from '../../../../';
+import { useValueAddon } from '../../../../';
 import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
 import { useDragSetValues } from '../../hooks/use-drag-setValues';
@@ -56,8 +56,9 @@ export function PaddingVertical({
 		useValueAddon({
 			types: ['variable'],
 			value: value.padding.top,
-			setValue: (newValue: any): void =>
-				setValueAddon(newValue, setValue, defaultValue),
+			setValue: (): void => {
+				// no need to set value because we do it on onChange
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

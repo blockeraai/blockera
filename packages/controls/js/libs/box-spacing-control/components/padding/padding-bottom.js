@@ -15,7 +15,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { setValueAddon, useValueAddon } from '../../../../';
+import { useValueAddon } from '../../../../';
 import { extractNumberAndUnit, LabelControl } from '../../../index';
 import type { Side, SideProps, SideReturn } from '../../types';
 import { SidePopover } from '../side-popover';
@@ -56,8 +56,9 @@ export function PaddingBottom({
 		useValueAddon({
 			types: ['variable'],
 			value: value.padding.bottom,
-			setValue: (newValue: any): void =>
-				setValueAddon(newValue, setValue, defaultValue),
+			setValue: (): void => {
+				// no need to set value because we do it on onChange
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');
