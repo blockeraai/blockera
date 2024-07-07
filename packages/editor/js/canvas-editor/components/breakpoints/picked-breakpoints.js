@@ -16,13 +16,15 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
+import { getBaseBreakpoint } from './helpers';
 import { BreakpointIcon } from './breakpoint-icon';
 import type { PickedBreakpointsComponentProps } from './types';
 
 export default function ({
 	onClick,
 }: PickedBreakpointsComponentProps): MixedElement {
-	const [activeBreakpoint, setActiveBreakpoint] = useState('laptop');
+	const baseBreakpoint = getBaseBreakpoint();
+	const [activeBreakpoint, setActiveBreakpoint] = useState(baseBreakpoint);
 
 	return (
 		<Flex
@@ -34,14 +36,14 @@ export default function ({
 		>
 			<BreakpointIcon
 				className={classNames({
-					'is-active-breakpoint': 'laptop' === activeBreakpoint,
+					'is-active-breakpoint': baseBreakpoint === activeBreakpoint,
 				})}
-				name={'laptop'}
+				name={baseBreakpoint}
 				onClick={(event) => {
 					event.stopPropagation();
 
-					onClick('laptop');
-					setActiveBreakpoint('laptop');
+					onClick(baseBreakpoint);
+					setActiveBreakpoint(baseBreakpoint);
 				}}
 			/>
 

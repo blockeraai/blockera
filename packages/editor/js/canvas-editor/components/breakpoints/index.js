@@ -26,7 +26,7 @@ import { experimental } from '@blockera/env';
  * Internal dependencies
  */
 import { Preview } from '../preview';
-import { isBaseBreakpoint } from './helpers';
+import { getBaseBreakpoint, isBaseBreakpoint } from './helpers';
 import PickedBreakpoints from './picked-breakpoints';
 import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
@@ -139,8 +139,10 @@ export const Breakpoints = ({
 		};
 
 		if (device === getDeviceType()) {
-			updateDeviceType('laptop');
-			changeExtensionCurrentBlockStateBreakpoint('laptop');
+			const baseBreakpoint = getBaseBreakpoint();
+
+			updateDeviceType(baseBreakpoint);
+			changeExtensionCurrentBlockStateBreakpoint(baseBreakpoint);
 
 			updateSelectedBlock();
 
