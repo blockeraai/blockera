@@ -411,8 +411,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// Assert control
-			// TODO
-			// cy.getByAriaLabel('Input Width').should('have.value', '20');
+			cy.getByAriaLabel('Input Width').should('have.value', '20');
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
@@ -422,18 +421,15 @@ describe('Input Control label testing (Width)', () => {
 			// Hover/Tablet
 			setDeviceType('Tablet');
 			// Assert label
-			//TODO
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// Assert control
-			// TODO
-			// cy.getByAriaLabel('Input Width').should('have.value', '20');
+			cy.getByAriaLabel('Input Width').should('have.value', '20');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Size', 'Width', {
-			// 	laptop: ['Normal'],
-			// });
+			cy.checkStateGraph('Size', 'Width', {
+				laptop: ['Normal'],
+			});
 
 			// Normal/Laptop
 			setBlockState('Normal');
@@ -441,14 +437,12 @@ describe('Input Control label testing (Width)', () => {
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// Assert control
-			// TODO
-			// cy.getByAriaLabel('Input Width').should('have.value', '20');
+			cy.getByAriaLabel('Input Width').should('have.value', '20');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Size', 'Width', {
-			// 	laptop: ['Normal'],
-			// });
+			cy.checkStateGraph('Size', 'Width', {
+				laptop: ['Normal'],
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -456,23 +450,20 @@ describe('Input Control label testing (Width)', () => {
 					getSelectedBlock(data, 'blockeraWidth')
 				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.laptop.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.laptop.attributes
+				);
 
-				// TODO
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 
@@ -514,54 +505,38 @@ describe('Input Control label testing (Width)', () => {
 			setDeviceType('Tablet');
 
 			// Assert label
-			// TODO : display changed on normal/tablet
-			// cy.checkLabelClassName(
-			// 	'Size',
-			// 	'Width',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName('Size', 'Width', 'changed-in-other-state');
 
 			// Assert control
-			// TODO
-			//	cy.getByAriaLabel('Input Width').should('have.value', '');
+			cy.getByAriaLabel('Input Width').should('have.value', '');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Size', 'Width', {
-			// 		laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Size', 'Width', {
+				laptop: ['Hover'],
+			});
 
 			// Hover/Tablet
 			setBlockState('Hover');
 			// Assert label
-			// TODO
-			// cy.checkLabelClassName(
-			// 	'Size',
-			// 	'Width',
-			// 	'changed-in-other-state'
-			// );
+			cy.checkLabelClassName('Size', 'Width', 'changed-in-other-state');
 
 			// Assert control
-			// TODO
-			//	cy.getByAriaLabel('Input Width').should('have.value', '');
+			cy.getByAriaLabel('Input Width').should('have.value', '');
 
 			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Size', 'Width', {
-			// 		laptop: ['Hover'],
-			// });
+			cy.checkStateGraph('Size', 'Width', {
+				laptop: ['Hover'],
+			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect('').to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraWidth')
 				);
-
-				// TODO : has value
-				// expect({}).to.be.deep.eq(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').normal
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').normal
+						.breakpoints.tablet.attributes
+				);
 
 				expect('20px').to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
@@ -705,8 +680,7 @@ describe('Input Control label testing (Width)', () => {
 			setBlockState('Hover');
 
 			// Assert control
-			// TODO
-			//cy.checkInputFieldValue('Width', 'Size', '25');
+			cy.checkInputFieldValue('Width', 'Size', '25');
 
 			// Assert label
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
@@ -717,8 +691,7 @@ describe('Input Control label testing (Width)', () => {
 			// Hover/Tablet
 			setDeviceType('Tablet');
 			// Assert control
-			// TODO
-			// cy.checkInputFieldValue('Width', 'Size', '25');
+			cy.checkInputFieldValue('Width', 'Size', '25');
 
 			// Assert label
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
@@ -729,8 +702,7 @@ describe('Input Control label testing (Width)', () => {
 			// Normal/Tablet
 			setBlockState('Normal');
 			// Assert control
-			// TODO
-			// cy.checkInputFieldValue('Width', 'Size', '25');
+			cy.checkInputFieldValue('Width', 'Size', '25');
 
 			// Assert label
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
@@ -830,11 +802,10 @@ describe('Input Control label testing (Width)', () => {
 						.breakpoints.laptop.attributes
 				);
 
-				// TODO : tablet is not exist in breakpoints
-				// expect({}).to.be.deep.equal(
-				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.tablet.attributes
-				// );
+				expect({}).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
+				);
 			});
 		});
 	});
