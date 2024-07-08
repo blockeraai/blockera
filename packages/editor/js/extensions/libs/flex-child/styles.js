@@ -21,7 +21,7 @@ export const FlexChildStyles = ({
 	blockName,
 	currentBlock,
 	// supports,
-	// activeDeviceType,
+	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
 	...props
@@ -43,6 +43,7 @@ export const FlexChildStyles = ({
 		clientId,
 		currentBlock,
 		blockSelectors,
+		device: activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 	const staticDefinitionParams = {

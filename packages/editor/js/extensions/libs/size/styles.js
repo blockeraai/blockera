@@ -23,7 +23,7 @@ export const SizeStyles = ({
 	blockName,
 	currentBlock,
 	// supports,
-	// activeDeviceType,
+	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
 	...props
@@ -50,6 +50,7 @@ export const SizeStyles = ({
 		clientId,
 		currentBlock,
 		blockSelectors,
+		device: activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 	const staticDefinitionParams = {

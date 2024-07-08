@@ -22,7 +22,7 @@ export const BackgroundStyles = ({
 	blockName,
 	currentBlock,
 	// supports,
-	// activeDeviceType,
+	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
 }: StylesProps): Array<CssRule> => {
@@ -41,6 +41,7 @@ export const BackgroundStyles = ({
 		clientId,
 		currentBlock,
 		blockSelectors,
+		device: activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 	const styleGroup: Array<CssRule> = [];

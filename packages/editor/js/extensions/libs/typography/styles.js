@@ -23,6 +23,7 @@ export function TypographyStyles({
 	clientId,
 	blockName,
 	currentBlock,
+	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
 	...props
@@ -58,6 +59,7 @@ export function TypographyStyles({
 		clientId,
 		currentBlock,
 		blockSelectors,
+		device: activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 

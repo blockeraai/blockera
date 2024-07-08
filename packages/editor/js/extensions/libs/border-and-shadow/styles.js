@@ -23,7 +23,7 @@ export const BorderAndShadowStyles = ({
 	blockName,
 	currentBlock,
 	// supports,
-	// activeDeviceType,
+	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
 	...props
@@ -47,6 +47,7 @@ export const BorderAndShadowStyles = ({
 		clientId,
 		currentBlock,
 		blockSelectors,
+		device: activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 

@@ -5,10 +5,7 @@
  */
 // import type { TBlockProps } from './block-props';
 import type { InnerBlockType } from '../inner-blocks/types';
-import type {
-	// TBreakpoint,
-	TStates,
-} from '../block-states/types';
+import type { TStates, TBreakpoint } from '../block-states/types';
 
 export type StylesProps = {
 	state: TStates,
@@ -18,6 +15,6 @@ export type StylesProps = {
 	// supports?: Object,
 	attributes: Object,
 	// blockProps: TBlockProps,
-	// activeDeviceType?: TBreakpoint,
+	activeDeviceType?: TBreakpoint,
 	currentBlock: 'master' | InnerBlockType | string,
 };
