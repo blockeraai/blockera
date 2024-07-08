@@ -31,7 +31,7 @@ export function BreakpointIcon({
 	onClick?: (event: MouseEvent) => void,
 }): MixedElement {
 	switch (name) {
-		case 'laptop':
+		case '2xl-desktop':
 			return (
 				<div
 					className={componentClassNames(
@@ -39,7 +39,10 @@ export function BreakpointIcon({
 						'breakpoint-' + name,
 						className
 					)}
-					aria-label={__('Laptop', 'blockera')}
+					aria-label={__(
+						'2X Large Screens (Widescreen and TV)',
+						'blockera'
+					)}
 					onClick={onClick}
 					{...props}
 				>
@@ -53,7 +56,63 @@ export function BreakpointIcon({
 						/>
 					)}
 
-					<Icon icon="device-laptop" />
+					<Icon icon="device-2xl-desktop" />
+
+					{/* <ChangeIndicator isChanged={true} /> */}
+				</div>
+			);
+
+		case 'xl-desktop':
+			return (
+				<div
+					className={componentClassNames(
+						'breakpoint-icon',
+						'breakpoint-' + name,
+						className
+					)}
+					aria-label={__('X Large Screens', 'blockera')}
+					onClick={onClick}
+					{...props}
+				>
+					{isBaseBreakpoint(name) && (
+						<Icon
+							icon="asterisk"
+							iconSize="12"
+							className={componentInnerClassNames(
+								'base-breakpoint-icon'
+							)}
+						/>
+					)}
+
+					<Icon icon="device-xl-desktop" />
+
+					{/* <ChangeIndicator isChanged={true} /> */}
+				</div>
+			);
+
+		case 'l-desktop':
+			return (
+				<div
+					className={componentClassNames(
+						'breakpoint-icon',
+						'breakpoint-' + name,
+						className
+					)}
+					aria-label={__('Large Desktop', 'blockera')}
+					onClick={onClick}
+					{...props}
+				>
+					{isBaseBreakpoint(name) && (
+						<Icon
+							icon="asterisk"
+							iconSize="12"
+							className={componentInnerClassNames(
+								'base-breakpoint-icon'
+							)}
+						/>
+					)}
+
+					<Icon icon="device-l-desktop" />
 
 					{/* <ChangeIndicator isChanged={true} /> */}
 				</div>
@@ -123,7 +182,7 @@ export function BreakpointIcon({
 						'breakpoint-' + name,
 						className
 					)}
-					aria-label={__('Mobile', 'blockera')}
+					aria-label={__('Mobile Portrait', 'blockera')}
 					onClick={onClick}
 					{...props}
 				>
@@ -166,62 +225,6 @@ export function BreakpointIcon({
 					)}
 
 					<Icon icon="device-mobile-landscape" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		case 'large':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__('Large Screen', 'blockera')}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
-
-					<Icon icon="device-large" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		case 'extra-large':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__('Extra Large Screen', 'blockera')}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
-
-					<Icon icon="device-extra-large" />
 
 					{/* <ChangeIndicator isChanged={true} /> */}
 				</div>
