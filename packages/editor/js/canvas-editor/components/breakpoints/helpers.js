@@ -19,4 +19,4 @@ export const isBaseBreakpoint = (breakPoint: TBreakpoint): boolean =>
  *
  * @return {string} the breakpoint identifier.
  */
-export const getBaseBreakpoint = (): TBreakpoint => 'laptop';
+export const getBaseBreakpoint = (): TBreakpoint => 'desktop';
