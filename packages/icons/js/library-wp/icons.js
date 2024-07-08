@@ -4,16 +4,11 @@
  * External dependencies
  */
 import * as _rawIcons from '@wordpress/icons';
+import { getIconKebabId } from '../helpers';
 
 const WPIcons: Object = Object.fromEntries(
 	Object.entries(_rawIcons)
-		.map(([key, value]: [string, any]) => [
-			key
-				.replace(/([a-z])([A-Z])/g, '$1-$2')
-				.replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
-				.toLowerCase(),
-			value,
-		])
+		.map(([key, value]) => [getIconKebabId(key), value])
 		.filter(([key]) => key !== 'icon')
 );
 
