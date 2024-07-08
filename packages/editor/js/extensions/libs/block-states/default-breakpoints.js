@@ -16,43 +16,43 @@ export default function (parentState: TStates = 'normal'): {
 	const attributes = 'normal' === parentState ? {} : { attributes: {} };
 
 	return {
-		'extra-large': {
-			type: 'extra-large',
+		'2xl-desktop': {
+			type: '2xl-desktop',
 			force: false,
-			label: __('Extra Large Screen', 'blockera'),
+			label: __('2X Large Screens (Widescreen and TV)', 'blockera'),
 			settings: {
-				min: '2561px',
+				min: '1920px',
 				max: '',
 			},
 			attributes: {},
 		},
-		large: {
-			type: 'large',
+		'xl-desktop': {
+			type: 'xl-desktop',
 			force: false,
-			label: __('Large Screen', 'blockera'),
+			label: __('X Large Screens', 'blockera'),
 			settings: {
-				min: '1921px',
-				max: '2560px',
+				min: '1440px',
+				max: '',
+			},
+			attributes: {},
+		},
+		'l-desktop': {
+			type: 'l-desktop',
+			force: false,
+			label: __('Large Desktop', 'blockera'),
+			settings: {
+				min: '1280px',
+				max: '',
 			},
 			attributes: {},
 		},
 		desktop: {
 			type: 'desktop',
-			force: false,
+			force: true,
 			label: __('Desktop', 'blockera'),
 			settings: {
-				min: '1441px',
-				max: '1920px',
-			},
-			attributes: {},
-		},
-		laptop: {
-			type: 'laptop',
-			force: true,
-			label: __('Laptop', 'blockera'),
-			settings: {
-				min: '1025px',
-				max: '1440px',
+				min: '',
+				max: '',
 			},
 			...attributes,
 		},
@@ -61,8 +61,8 @@ export default function (parentState: TStates = 'normal'): {
 			force: false,
 			label: __('Tablet', 'blockera'),
 			settings: {
-				min: '768px',
-				max: '1024px',
+				min: '',
+				max: '991px',
 			},
 			attributes: {},
 		},
@@ -71,7 +71,7 @@ export default function (parentState: TStates = 'normal'): {
 			force: false,
 			label: __('Mobile Landscape', 'blockera'),
 			settings: {
-				min: '481px',
+				min: '',
 				max: '767px',
 			},
 			attributes: {},
@@ -79,10 +79,10 @@ export default function (parentState: TStates = 'normal'): {
 		mobile: {
 			type: 'mobile',
 			force: false,
-			label: __('Mobile', 'blockera'),
+			label: __('Mobile Portrait', 'blockera'),
 			settings: {
 				min: '',
-				max: '480px',
+				max: '478px',
 			},
 			attributes: {},
 		},

@@ -1,9 +1,9 @@
 // @flow
 
 export type TBreakpoint =
-	| 'laptop'
-	| 'extra-large'
-	| 'large'
+	| '2xl-desktop'
+	| 'xl-desktop'
+	| 'l-desktop'
 	| 'desktop'
 	| 'tablet'
 	| 'mobile-landscape'
