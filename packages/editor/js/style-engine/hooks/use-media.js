@@ -16,7 +16,7 @@ export const useMedia = (): { [key: string]: string } => {
 			let media = '';
 
 			if (min && max) {
-				media = `@media screen and (max-width: ${max}) and (min-width: ${min})`;
+				media = `@media screen and (max-width: ${max})`;
 			} else if (min) {
 				media = `@media screen and (min-width: ${min})`;
 			} else if (max) {

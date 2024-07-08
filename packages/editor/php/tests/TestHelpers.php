@@ -33,11 +33,11 @@ class TestHelpers extends \WP_UnitTestCase {
 			blockera_get_css_media_queries(),
 			[
 				"extra-large"      => "@media screen and (min-width: 2561px)",
-				"large"            => "@media screen and (max-width: 2560px) and (min-width: 1921px)",
-				"desktop"          => "@media screen and (max-width: 1920px) and (min-width: 1441px)",
-				"laptop"           => "@media screen and (max-width: 1440px) and (min-width: 1025px)",
-				"tablet"           => "@media screen and (max-width: 1024px) and (min-width: 768px)",
-				"mobile-landscape" => "@media screen and (max-width: 767px) and (min-width: 481px)",
+				"large"            => "@media screen and (max-width: 2560px)",
+				"desktop"          => "@media screen and (max-width: 1920px)",
+				"laptop"           => "@media screen and (max-width: 1440px)",
+				"tablet"           => "@media screen and (max-width: 1024px)",
+				"mobile-landscape" => "@media screen and (max-width: 767px)",
 				"mobile"           => "@media screen and (max-width: 480px)",
 			]
 		);

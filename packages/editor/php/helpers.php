@@ -37,13 +37,13 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 				continue;
 			}
 
-			[ 'min' => $min, 'max' => $max ] = $breakpoint['settings'];
+			[ 'min' => $min ,'max' => $max ] = $breakpoint['settings'];
 
 			$media = '';
 
 			if ( $min && $max ) {
 
-				$media = "@media screen and (max-width: $max) and (min-width: $min)";
+				$media = "@media screen and (max-width: $max)";
 
 			} elseif ( $min ) {
 
