@@ -4,6 +4,10 @@
  * External dependencies
  */
 import * as _rawIcons from '@wordpress/icons';
+
+/**
+ * Internal dependencies
+ */
 import { getIconKebabId } from '../helpers';
 
 const WPIcons: Object = Object.fromEntries(
