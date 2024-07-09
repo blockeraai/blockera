@@ -18,8 +18,8 @@ export default function (parentState: TStates = 'normal'): {
 	return {
 		'2xl-desktop': {
 			type: '2xl-desktop',
-			label: __('2X Large Screens (Widescreen and TV)', 'blockera'),
 			base: false,
+			label: __('Widescreens and TVs', 'blockera'),
 			settings: {
 				min: '1920px',
 				max: '',
@@ -28,8 +28,8 @@ export default function (parentState: TStates = 'normal'): {
 		},
 		'xl-desktop': {
 			type: 'xl-desktop',
-			label: __('X Large Screens', 'blockera'),
 			base: false,
+			label: __('Extra Large Desktop', 'blockera'),
 			settings: {
 				min: '1440px',
 				max: '',
