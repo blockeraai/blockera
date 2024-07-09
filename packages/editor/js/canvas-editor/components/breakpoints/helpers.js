@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { __, sprintf } from '@wordpress/i18n';
 import { default as memoize } from 'fast-memoize';
 
 /**
@@ -116,3 +117,137 @@ export const getLargestBreakpoint: (breakpoints?: {
 
 	return maxBreakpointId;
 });
+
+/**
+ * Get breakpoint tooltip description based on given breakpoint id.
+ *
+ * @param {TBreakpoint} breakpoint
+ * @return {string} the tooltip description
+ */
+export const getBreakpointLongDescription = (
+	breakpoint: TBreakpoint
+): string => {
+	const breakpoints = defaultBreakpoints();
+
+	if (isBaseBreakpoint(breakpoint)) {
+		return sprintf(
+			// translators: it's the aria label for repeater item
+			__(
+				"%s styles apply at all breakpoints, unless they're edited at a larger or smaller breakpoint.",
+				'blockera'
+			),
+			breakpoints[breakpoint].label
+		);
+	}
+
+	if (!isUndefined(breakpoints[breakpoint])) {
+		if (
+			breakpoints[breakpoint].settings.min &&
+			breakpoints[breakpoint].settings.max
+		) {
+			return sprintf(
+				// translators: %1$s and %2$s are breakpoint min-width and max-width values
+				__(
+					'Styles added here will apply from %1$s to %2$s.',
+					'blockera'
+				),
+				breakpoints[breakpoint].settings.min,
+				breakpoints[breakpoint].settings.max
+			);
+		}
+
+		if (breakpoints[breakpoint].settings.min) {
+			if (getLargestBreakpoint() === breakpoint) {
+				return sprintf(
+					// translators: %s is breakpoint min-width value
+					__(
+						'Styles added here will apply at %s and up.',
+						'blockera'
+					),
+					breakpoints[breakpoint].settings.min
+				);
+			}
+
+			return sprintf(
+				// translators: %s is breakpoint min-width value
+				__(
+					'Styles added here will apply at %s and up, unless they are edited at a larger breakpoint.',
+					'blockera'
+				),
+				breakpoints[breakpoint].settings.min
+			);
+		}
+
+		if (breakpoints[breakpoint].settings.max) {
+			if (getSmallestBreakpoint() === breakpoint) {
+				return sprintf(
+					// translators: %s is breakpoint max-width value
+					__(
+						'Styles added here will apply at %s and down.',
+						'blockera'
+					),
+					breakpoints[breakpoint].settings.max
+				);
+			}
+
+			return sprintf(
+				// translators: %s is breakpoint max-width value
+				__(
+					'Styles added here will apply at %s and down, unless they are edited at a smaller breakpoint.',
+					'blockera'
+				),
+				breakpoints[breakpoint].settings.max
+			);
+		}
+	}
+
+	return '';
+};
+
+/**
+ * Get breakpoint tooltip description based on given breakpoint id.
+ *
+ * @param {TBreakpoint} breakpoint
+ * @return {string} the tooltip description
+ */
+export const getBreakpointShortDescription = (
+	breakpoint: TBreakpoint
+): string => {
+	if (isBaseBreakpoint(breakpoint)) {
+		return __('Base breakpoint', 'blockera');
+	}
+
+	const breakpoints = defaultBreakpoints();
+
+	if (!isUndefined(breakpoints[breakpoint])) {
+		if (
+			breakpoints[breakpoint].settings.min &&
+			breakpoints[breakpoint].settings.max
+		) {
+			return sprintf(
+				// translators: %1$s and %2$s are breakpoint min-width and max-width values
+				__('Between %1$s and %2$s', 'blockera'),
+				breakpoints[breakpoint].settings.min,
+				breakpoints[breakpoint].settings.max
+			);
+		}
+
+		if (breakpoints[breakpoint].settings.min) {
+			return sprintf(
+				// translators: %s is breakpoint min-width value
+				__('%s and up', 'blockera'),
+				breakpoints[breakpoint].settings.min
+			);
+		}
+
+		if (breakpoints[breakpoint].settings.max) {
+			return sprintf(
+				// translators: %s is breakpoint max-width value
+				__('%s and down', 'blockera'),
+				breakpoints[breakpoint].settings.max
+			);
+		}
+	}
+
+	return '';
+};

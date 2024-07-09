@@ -13,12 +13,19 @@ import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
+import { Tooltip, Flex } from '@blockera/controls';
+import { isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import type { TBreakpoint } from '../../../extensions/libs/block-states/types';
-import { isBaseBreakpoint } from './helpers';
+import {
+	isBaseBreakpoint,
+	getBreakpointLongDescription,
+	getBreakpointShortDescription,
+} from './helpers';
+import { default as defaultBreakpoints } from '../../../extensions/libs/block-states/default-breakpoints';
 
 export function BreakpointIcon({
 	name,
@@ -30,207 +37,78 @@ export function BreakpointIcon({
 	className?: string,
 	onClick?: (event: MouseEvent) => void,
 }): MixedElement {
-	switch (name) {
-		case '2xl-desktop':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__(
-						'2X Large Screens (Widescreen and TV)',
-						'blockera'
-					)}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
+	const breakpoints = defaultBreakpoints();
 
-					<Icon icon="device-2xl-desktop" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		case 'xl-desktop':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__('X Large Screens', 'blockera')}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
-
-					<Icon icon="device-xl-desktop" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		case 'l-desktop':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__('Large Desktop', 'blockera')}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
-
-					<Icon icon="device-l-desktop" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		case 'desktop':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__('Desktop', 'blockera')}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
-
-					<Icon icon="device-desktop" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		case 'tablet':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__('Tablet', 'blockera')}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
-
-					<Icon icon="device-tablet" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		case 'mobile':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__('Mobile Portrait', 'blockera')}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
-
-					<Icon icon="device-mobile" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		case 'mobile-landscape':
-			return (
-				<div
-					className={componentClassNames(
-						'breakpoint-icon',
-						'breakpoint-' + name,
-						className
-					)}
-					aria-label={__('Mobile Landscape', 'blockera')}
-					onClick={onClick}
-					{...props}
-				>
-					{isBaseBreakpoint(name) && (
-						<Icon
-							icon="asterisk"
-							iconSize="12"
-							className={componentInnerClassNames(
-								'base-breakpoint-icon'
-							)}
-						/>
-					)}
-
-					<Icon icon="device-mobile-landscape" />
-
-					{/* <ChangeIndicator isChanged={true} /> */}
-				</div>
-			);
-
-		default:
-			return <></>;
+	if (isUndefined(breakpoints[name])) {
+		return <></>;
 	}
+
+	return (
+		<Tooltip
+			width="220px"
+			style={{ padding: '12px' }}
+			text={
+				<>
+					<h5>{breakpoints[name].label}</h5>
+
+					{isBaseBreakpoint(name) ? (
+						<Flex
+							direction="row"
+							gap="0"
+							justifyContent="flex-start"
+							alignItems="center"
+						>
+							<Icon icon="asterisk" iconSize="20" />
+							{getBreakpointShortDescription(name)}
+						</Flex>
+					) : (
+						<p>{getBreakpointShortDescription(name)}</p>
+					)}
+
+					<p
+						style={{
+							color: '#b0b0b0',
+						}}
+					>
+						{getBreakpointLongDescription(name)}
+					</p>
+
+					{isBaseBreakpoint(name) && (
+						<p
+							style={{
+								color: '#b0b0b0',
+							}}
+						>
+							{__('Start your styling here.', 'blockera')}
+						</p>
+					)}
+				</>
+			}
+		>
+			<div
+				className={componentClassNames(
+					'breakpoint-icon',
+					'breakpoint-' + name,
+					className
+				)}
+				aria-label={breakpoints[name].label}
+				onClick={onClick}
+				{...props}
+			>
+				{isBaseBreakpoint(name) && (
+					<Icon
+						icon="asterisk"
+						iconSize="12"
+						className={componentInnerClassNames(
+							'base-breakpoint-icon'
+						)}
+					/>
+				)}
+
+				<Icon icon={'device-' + name} />
+
+				{/* <ChangeIndicator isChanged={true} /> */}
+			</div>
+		</Tooltip>
+	);
 }
