@@ -51,12 +51,18 @@ export const getSmallestBreakpoint: (breakpoints?: {
 
 	let minBreakpoint = Infinity;
 
-	let minBreakpointId: TBreakpoint = 'desktop';
+	let minBreakpointId: TBreakpoint = getBaseBreakpoint();
 
 	for (const key in breakpoints) {
 		const typedKey: TBreakpoint = (key: any);
 
+		// Skip disabled breakpoints
+		if (!breakpoints[typedKey].status) {
+			continue;
+		}
+
 		const min = breakpoints[typedKey].settings.min;
+
 		const max = breakpoints[typedKey].settings.max;
 
 		if (min && !isNaN(parseInt(min, 10))) {
@@ -92,10 +98,15 @@ export const getLargestBreakpoint: (breakpoints?: {
 
 	let maxBreakpoint = -Infinity;
 
-	let maxBreakpointId = 'desktop';
+	let maxBreakpointId = getBaseBreakpoint();
 
 	for (const key in breakpoints) {
 		const typedKey: TBreakpoint = (key: any);
+
+		// Skip disabled breakpoints
+		if (!breakpoints[typedKey].status) {
+			continue;
+		}
 
 		const min = breakpoints[typedKey].settings.min;
 		const max = breakpoints[typedKey].settings.max;
