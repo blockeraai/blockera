@@ -19,12 +19,40 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import { getBaseBreakpoint } from './helpers';
 import { BreakpointIcon } from './breakpoint-icon';
 import type { PickedBreakpointsComponentProps } from './types';
+import { default as defaultBreakpoints } from '../../../extensions/libs/block-states/default-breakpoints';
 
 export default function ({
 	onClick,
 }: PickedBreakpointsComponentProps): MixedElement {
 	const baseBreakpoint = getBaseBreakpoint();
-	const [activeBreakpoint, setActiveBreakpoint] = useState(baseBreakpoint);
+	const [currentActiveBreakpoint, setActiveBreakpoint] =
+		useState(baseBreakpoint);
+
+	function activeBreakpoints() {
+		const breakpoints = [];
+
+		Object.entries(defaultBreakpoints()).forEach(([itemId, item]) => {
+			if (item.status) {
+				breakpoints.push(
+					<BreakpointIcon
+						className={classNames({
+							'is-active-breakpoint':
+								itemId === currentActiveBreakpoint,
+						})}
+						name={itemId}
+						onClick={(event) => {
+							event.stopPropagation();
+
+							onClick(itemId);
+							setActiveBreakpoint(itemId);
+						}}
+					/>
+				);
+			}
+		});
+
+		return breakpoints;
+	}
 
 	return (
 		<Flex
@@ -34,44 +62,7 @@ export default function ({
 			aria-label={__('Breakpoints', 'blockera')}
 			gap="12px"
 		>
-			<BreakpointIcon
-				className={classNames({
-					'is-active-breakpoint': baseBreakpoint === activeBreakpoint,
-				})}
-				name={baseBreakpoint}
-				onClick={(event) => {
-					event.stopPropagation();
-
-					onClick(baseBreakpoint);
-					setActiveBreakpoint(baseBreakpoint);
-				}}
-			/>
-
-			<BreakpointIcon
-				className={classNames({
-					'is-active-breakpoint': 'tablet' === activeBreakpoint,
-				})}
-				name={'tablet'}
-				onClick={(event) => {
-					event.stopPropagation();
-
-					onClick('tablet');
-					setActiveBreakpoint('tablet');
-				}}
-			/>
-
-			<BreakpointIcon
-				className={classNames({
-					'is-active-breakpoint': 'mobile' === activeBreakpoint,
-				})}
-				name={'mobile'}
-				onClick={(event) => {
-					event.stopPropagation();
-
-					onClick('mobile');
-					setActiveBreakpoint('mobile');
-				}}
-			/>
+			{activeBreakpoints()}
 		</Flex>
 	);
 }

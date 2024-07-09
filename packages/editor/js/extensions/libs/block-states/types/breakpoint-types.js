@@ -17,6 +17,10 @@ export type BreakpointTypes = {
 	 * Define if this is the base breakpoint.
 	 */
 	base: boolean,
+	/**
+	 * Status of breakpoint
+	 */
+	status: boolean,
 	label: TBreakpointLabel,
 	settings: {
 		min: string,
