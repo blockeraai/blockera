@@ -136,10 +136,9 @@ export const getLargestBreakpoint: (breakpoints?: {
  * @return {string} the tooltip description
  */
 export const getBreakpointLongDescription = (
-	breakpoint: TBreakpoint
+	breakpoint: TBreakpoint,
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes } = defaultBreakpoints()
 ): string => {
-	const breakpoints = defaultBreakpoints();
-
 	if (isBaseBreakpoint(breakpoint)) {
 		return sprintf(
 			// translators: it's the aria label for repeater item
@@ -168,7 +167,7 @@ export const getBreakpointLongDescription = (
 		}
 
 		if (breakpoints[breakpoint].settings.min) {
-			if (getLargestBreakpoint() === breakpoint) {
+			if (getLargestBreakpoint(breakpoints) === breakpoint) {
 				return sprintf(
 					// translators: %s is breakpoint min-width value
 					__(
@@ -190,7 +189,7 @@ export const getBreakpointLongDescription = (
 		}
 
 		if (breakpoints[breakpoint].settings.max) {
-			if (getSmallestBreakpoint() === breakpoint) {
+			if (getSmallestBreakpoint(breakpoints) === breakpoint) {
 				return sprintf(
 					// translators: %s is breakpoint max-width value
 					__(
