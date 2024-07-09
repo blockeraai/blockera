@@ -18,8 +18,8 @@ export default function (parentState: TStates = 'normal'): {
 	return {
 		'2xl-desktop': {
 			type: '2xl-desktop',
-			force: false,
 			label: __('2X Large Screens (Widescreen and TV)', 'blockera'),
+			base: false,
 			settings: {
 				min: '1920px',
 				max: '',
@@ -28,8 +28,8 @@ export default function (parentState: TStates = 'normal'): {
 		},
 		'xl-desktop': {
 			type: 'xl-desktop',
-			force: false,
 			label: __('X Large Screens', 'blockera'),
+			base: false,
 			settings: {
 				min: '1440px',
 				max: '',
@@ -38,7 +38,7 @@ export default function (parentState: TStates = 'normal'): {
 		},
 		'l-desktop': {
 			type: 'l-desktop',
-			force: false,
+			base: false,
 			label: __('Large Desktop', 'blockera'),
 			settings: {
 				min: '1280px',
@@ -48,7 +48,7 @@ export default function (parentState: TStates = 'normal'): {
 		},
 		desktop: {
 			type: 'desktop',
-			force: true,
+			base: true,
 			label: __('Desktop', 'blockera'),
 			settings: {
 				min: '',
@@ -58,7 +58,7 @@ export default function (parentState: TStates = 'normal'): {
 		},
 		tablet: {
 			type: 'tablet',
-			force: false,
+			base: false,
 			label: __('Tablet', 'blockera'),
 			settings: {
 				min: '',
@@ -68,7 +68,7 @@ export default function (parentState: TStates = 'normal'): {
 		},
 		'mobile-landscape': {
 			type: 'mobile-landscape',
-			force: false,
+			base: false,
 			label: __('Mobile Landscape', 'blockera'),
 			settings: {
 				min: '',
@@ -78,7 +78,7 @@ export default function (parentState: TStates = 'normal'): {
 		},
 		mobile: {
 			type: 'mobile',
-			force: false,
+			base: false,
 			label: __('Mobile Portrait', 'blockera'),
 			settings: {
 				min: '',

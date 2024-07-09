@@ -8,11 +8,15 @@ export type TBreakpoint =
 	| 'tablet'
 	| 'mobile-landscape'
 	| 'mobile';
+
 export type TBreakpointLabel = 'Desktop' | 'Tablet' | 'Mobile';
 
 export type BreakpointTypes = {
 	type: TBreakpoint,
-	force: boolean,
+	/**
+	 * Define if this is the base breakpoint.
+	 */
+	base: boolean,
 	label: TBreakpointLabel,
 	settings: {
 		min: string,

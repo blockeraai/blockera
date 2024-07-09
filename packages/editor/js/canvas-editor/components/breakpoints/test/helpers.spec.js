@@ -17,7 +17,7 @@ describe('Helper functions test', () => {
 
 		it('all breakpoints from default breakpoints', () => {
 			Object.entries(defaultBreakpoints()).forEach(([itemId, item]) => {
-				expect(isBaseBreakpoint(item.type)).toBe(item.force);
+				expect(isBaseBreakpoint(item.type)).toBe(item.base);
 			});
 		});
 	});
