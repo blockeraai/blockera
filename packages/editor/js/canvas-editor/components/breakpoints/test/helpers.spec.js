@@ -36,10 +36,11 @@ describe('Helper functions test', () => {
 		});
 
 		describe('custom breakpoints', () => {
-			it('mobile landscape is smallest breakpoint', () => {
+			it('mobile-landscape is smallest breakpoint', () => {
 				const breakpoints = defaultBreakpoints();
 
-				delete breakpoints.mobile;
+				breakpoints.mobile.status = false;
+				breakpoints['mobile-landscape'].status = true;
 
 				expect(getSmallestBreakpoint(breakpoints)).toBe(
 					'mobile-landscape'
@@ -49,8 +50,8 @@ describe('Helper functions test', () => {
 			it('tablet is smallest breakpoint', () => {
 				const breakpoints = defaultBreakpoints();
 
-				delete breakpoints.mobile;
-				delete breakpoints['mobile-landscape'];
+				breakpoints.mobile.status = false;
+				breakpoints['mobile-landscape'].status = false;
 
 				expect(getSmallestBreakpoint(breakpoints)).toBe('tablet');
 			});
@@ -58,9 +59,10 @@ describe('Helper functions test', () => {
 			it('l-desktop is smallest breakpoint', () => {
 				const breakpoints = defaultBreakpoints();
 
-				delete breakpoints.mobile;
-				delete breakpoints['mobile-landscape'];
-				delete breakpoints.tablet;
+				breakpoints.mobile.status = false;
+				breakpoints['mobile-landscape'].status = false;
+				breakpoints.tablet.status = false;
+				breakpoints['l-desktop'].status = true;
 
 				expect(getSmallestBreakpoint(breakpoints)).toBe('l-desktop');
 			});
@@ -70,7 +72,13 @@ describe('Helper functions test', () => {
 	describe('getLargestBreakpoint function', () => {
 		describe('default breakpoints', () => {
 			it('2xl-desktop is largest breakpoint', () => {
-				expect(getLargestBreakpoint()).toBe('2xl-desktop');
+				const breakpoints = defaultBreakpoints();
+
+				breakpoints['2xl-desktop'].status = true;
+				breakpoints['xl-desktop'].status = true;
+				breakpoints['l-desktop'].status = true;
+
+				expect(getLargestBreakpoint(breakpoints)).toBe('2xl-desktop');
 			});
 		});
 
@@ -78,7 +86,9 @@ describe('Helper functions test', () => {
 			it('xl-desktop is largest breakpoint', () => {
 				const breakpoints = defaultBreakpoints();
 
-				delete breakpoints['2xl-desktop'];
+				breakpoints['2xl-desktop'].status = false;
+				breakpoints['xl-desktop'].status = true;
+				breakpoints['l-desktop'].status = true;
 
 				expect(getLargestBreakpoint(breakpoints)).toBe('xl-desktop');
 			});
@@ -86,8 +96,9 @@ describe('Helper functions test', () => {
 			it('l-desktop is largest breakpoint', () => {
 				const breakpoints = defaultBreakpoints();
 
-				delete breakpoints['2xl-desktop'];
-				delete breakpoints['xl-desktop'];
+				breakpoints['2xl-desktop'].status = false;
+				breakpoints['xl-desktop'].status = false;
+				breakpoints['l-desktop'].status = true;
 
 				expect(getLargestBreakpoint(breakpoints)).toBe('l-desktop');
 			});
@@ -95,9 +106,9 @@ describe('Helper functions test', () => {
 			it('tablet is largest breakpoint', () => {
 				const breakpoints = defaultBreakpoints();
 
-				delete breakpoints['2xl-desktop'];
-				delete breakpoints['xl-desktop'];
-				delete breakpoints['l-desktop'];
+				breakpoints['2xl-desktop'].status = false;
+				breakpoints['xl-desktop'].status = false;
+				breakpoints['l-desktop'].status = false;
 
 				expect(getLargestBreakpoint(breakpoints)).toBe('tablet');
 			});
