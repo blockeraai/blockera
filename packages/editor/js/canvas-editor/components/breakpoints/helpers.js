@@ -221,13 +221,12 @@ export const getBreakpointLongDescription = (
  * @return {string} the tooltip description
  */
 export const getBreakpointShortDescription = (
-	breakpoint: TBreakpoint
+	breakpoint: TBreakpoint,
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes } = defaultBreakpoints()
 ): string => {
 	if (isBaseBreakpoint(breakpoint)) {
 		return __('Base breakpoint', 'blockera');
 	}
-
-	const breakpoints = defaultBreakpoints();
 
 	if (!isUndefined(breakpoints[breakpoint])) {
 		if (
