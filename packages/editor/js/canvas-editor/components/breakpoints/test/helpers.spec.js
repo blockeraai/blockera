@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { isBaseBreakpoint } from '../helpers';
+import { isBaseBreakpoint, getBaseBreakpoint } from '../helpers';
 import { default as defaultBreakpoints } from '../../../../extensions/libs/block-states/default-breakpoints';
 
 describe('Helper functions test', () => {
@@ -14,6 +14,12 @@ describe('Helper functions test', () => {
 			Object.entries(defaultBreakpoints()).forEach(([itemId, item]) => {
 				expect(isBaseBreakpoint(item.type)).toBe(item.force);
 			});
+		});
+	});
+
+	describe('getBaseBreakpoint function', () => {
+		it('desktop is base', () => {
+			expect(getBaseBreakpoint()).toBe('desktop');
 		});
 	});
 });
