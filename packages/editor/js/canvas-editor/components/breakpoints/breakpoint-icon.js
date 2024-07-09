@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
@@ -54,11 +54,19 @@ export function BreakpointIcon({
 					{isBaseBreakpoint(name) ? (
 						<Flex
 							direction="row"
-							gap="0"
+							gap="2px"
 							justifyContent="flex-start"
 							alignItems="center"
 						>
-							<Icon icon="asterisk" iconSize="20" />
+							<Icon
+								icon="asterisk"
+								iconSize="20"
+								style={
+									isRTL()
+										? { marginRight: '-5px' }
+										: { marginLeft: '-5px' }
+								}
+							/>
 							{getBreakpointShortDescription(name)}
 						</Flex>
 					) : (
@@ -98,7 +106,7 @@ export function BreakpointIcon({
 				{isBaseBreakpoint(name) && (
 					<Icon
 						icon="asterisk"
-						iconSize="12"
+						iconSize="13"
 						className={componentInnerClassNames(
 							'base-breakpoint-icon'
 						)}
