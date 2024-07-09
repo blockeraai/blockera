@@ -29,11 +29,12 @@ describe('Block States Helpers', () => {
 
 		expect(getBreakpointInfo('mobile', parentState)).toEqual({
 			type: 'mobile',
-			force: false,
-			label: 'Mobile',
+			base: false,
+			status: true,
+			label: 'Mobile Portrait',
 			settings: {
 				min: '',
-				max: '480px',
+				max: '478px',
 			},
 			attributes: {},
 		});
@@ -44,11 +45,12 @@ describe('Block States Helpers', () => {
 
 		expect(getBreakpointInfo('tablet', parentState)).toEqual({
 			type: 'tablet',
-			force: false,
+			base: false,
+			status: true,
 			label: 'Tablet',
 			settings: {
-				min: '768px',
-				max: '1024px',
+				min: '',
+				max: '991px',
 			},
 			attributes: {},
 		});
