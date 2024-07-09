@@ -54,4 +54,10 @@ export type TTooltipItem = {
 	 * The text shown in the tooltip when anchor element is focused or hovered.
 	 */
 	text?: string | MixedElement,
+	/**
+	 * The width of the tooltip.
+	 */
+	width?: string,
+	style?: Object,
+	props?: Object,
 };

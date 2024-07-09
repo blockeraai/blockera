@@ -12,6 +12,7 @@ import { componentClassNames } from '@blockera/classnames';
 import type { TTooltipItem } from './types';
 
 export function Tooltip({
+	width = 'auto',
 	hideOnClick = true,
 	placement = 'top',
 	position = 'top',
@@ -27,7 +28,14 @@ export function Tooltip({
 			hideOnClick={hideOnClick}
 			placement={placement}
 			position={position}
-			text={text}
+			text={
+				<div
+					className={componentClassNames('tooltip', className)}
+					style={{ '--tooltip-width': width }}
+				>
+					{text}
+				</div>
+			}
 			delay={delay}
 			{...props}
 		>
