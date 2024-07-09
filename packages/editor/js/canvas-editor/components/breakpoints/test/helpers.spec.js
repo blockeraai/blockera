@@ -5,6 +5,7 @@ import {
 	isBaseBreakpoint,
 	getBaseBreakpoint,
 	getSmallestBreakpoint,
+	getLargestBreakpoint,
 } from '../helpers';
 import { default as defaultBreakpoints } from '../../../../extensions/libs/block-states/default-breakpoints';
 
@@ -62,6 +63,43 @@ describe('Helper functions test', () => {
 				delete breakpoints.tablet;
 
 				expect(getSmallestBreakpoint(breakpoints)).toBe('l-desktop');
+			});
+		});
+	});
+
+	describe('getLargestBreakpoint function', () => {
+		describe('default breakpoints', () => {
+			it('2xl-desktop is largest breakpoint', () => {
+				expect(getLargestBreakpoint()).toBe('2xl-desktop');
+			});
+		});
+
+		describe('custom breakpoints', () => {
+			it('xl-desktop is largest breakpoint', () => {
+				const breakpoints = defaultBreakpoints();
+
+				delete breakpoints['2xl-desktop'];
+
+				expect(getLargestBreakpoint(breakpoints)).toBe('xl-desktop');
+			});
+
+			it('l-desktop is largest breakpoint', () => {
+				const breakpoints = defaultBreakpoints();
+
+				delete breakpoints['2xl-desktop'];
+				delete breakpoints['xl-desktop'];
+
+				expect(getLargestBreakpoint(breakpoints)).toBe('l-desktop');
+			});
+
+			it('tablet is largest breakpoint', () => {
+				const breakpoints = defaultBreakpoints();
+
+				delete breakpoints['2xl-desktop'];
+				delete breakpoints['xl-desktop'];
+				delete breakpoints['l-desktop'];
+
+				expect(getLargestBreakpoint(breakpoints)).toBe('tablet');
 			});
 		});
 	});
