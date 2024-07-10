@@ -21,7 +21,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		});
 	};
 
-	it('should display changed value on Image & Gradient -> Normal -> Laptop', () => {
+	it('should display changed value on Image & Gradient -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Background',
@@ -82,11 +82,11 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Background', 'Image & Gradient', {
-			laptop: ['Normal'],
+			desktop: ['Normal'],
 		});
 	});
 
-	it('should display changed value on Image & Gradient -> Hover -> Laptop', () => {
+	it('should display changed value on Image & Gradient -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
@@ -146,7 +146,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Background', 'Image & Gradient', {
-			laptop: ['Hover'],
+			desktop: ['Hover'],
 		});
 	});
 
@@ -201,7 +201,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Background', 'Image & Gradient', {
-			laptop: ['Normal', 'Hover'],
+			desktop: ['Normal', 'Hover'],
 		});
 	});
 
@@ -232,9 +232,9 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		});
 		cy.get('@background-item').should('have.length', 1);
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -298,9 +298,9 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		cy.get('@background-item').should('have.length', 0);
 
 		/**
-		 * Laptop device (Active)
+		 * Desktop device (Active)
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -313,7 +313,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		cy.get('@background-item').should('have.length', 0);
 
 		/**
-		 * Laptop device (Normal)
+		 * Desktop device (Normal)
 		 */
 		setBlockState('Normal');
 
@@ -426,10 +426,10 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 	describe('reset action testing...', () => {
 		it('repeater item :', () => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.getByAriaLabel('Add New Background').click();
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			openBackgroundItem();
 			cy.getByAriaLabel('Cover').click();
@@ -464,7 +464,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'Image & Gradient', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -477,7 +477,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 			});
 
@@ -506,7 +506,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'Image & Gradient', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			openBackgroundItem();
@@ -532,12 +532,12 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				'',
 				'Size',
 				{
-					laptop: ['Normal'],
+					desktop: ['Normal'],
 				},
 				true
 			);
 			cy.checkStateGraph('Background', 'Image & Gradient', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -550,18 +550,18 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 			});
 		});
 
 		describe('repeater nested items :', () => {
 			beforeEach(() => {
-				// Set value in normal/laptop
+				// Set value in normal/desktop
 				cy.getByAriaLabel('Add New Background').click();
 				cy.getByAriaLabel('Horizontally').click();
 
-				// Set value in hover/laptop
+				// Set value in hover/desktop
 				addBlockState('hover');
 				openBackgroundItem();
 				cy.getByAriaLabel('Cover').click();
@@ -604,7 +604,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 							'Repeat',
 							{
 								tablet: ['Hover'],
-								laptop: ['Hover', 'Normal'],
+								desktop: ['Hover', 'Normal'],
 							},
 							true
 						);
@@ -648,7 +648,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 							'',
 							'Repeat',
 							{
-								laptop: ['Hover', 'Normal'],
+								desktop: ['Hover', 'Normal'],
 							},
 							true
 						);
@@ -667,9 +667,9 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				context(
-					'should correctly reset blockeraBackground["image-0"]["image-repeat"], and display effected fields(label, control, stateGraph) in normal/laptop',
+					'should correctly reset blockeraBackground["image-0"]["image-repeat"], and display effected fields(label, control, stateGraph) in normal/desktop',
 					() => {
-						setDeviceType('Laptop');
+						setDeviceType('Desktop');
 						setBlockState('Normal');
 						openBackgroundItem();
 
@@ -694,7 +694,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 							'',
 							'Repeat',
 							{
-								laptop: ['Hover'],
+								desktop: ['Hover'],
 								tablet: ['Normal', 'Hover'],
 							},
 							true
@@ -712,7 +712,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				context(
-					'should correctly reset blockeraBackground["image-0"]["image-repeat"], and display effected fields(label, control, stateGraph) in hover/laptop',
+					'should correctly reset blockeraBackground["image-0"]["image-repeat"], and display effected fields(label, control, stateGraph) in hover/desktop',
 					() => {
 						setBlockState('Hover');
 						openBackgroundItem();
@@ -746,7 +746,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 						getWPDataObject().then((data) => {
 							expect('repeat').to.be.deep.eq(
 								getSelectedBlock(data, 'blockeraBlockStates')
-									.hover.breakpoints.laptop.attributes
+									.hover.breakpoints.desktop.attributes
 									.blockeraBackground['image-0'][
 									'image-repeat'
 								]
@@ -756,7 +756,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 			});
 
-			it('set value in normal/laptop and navigate between states', () => {
+			it('set value in normal/desktop and navigate between states', () => {
 				setBlockState('Normal');
 				openBackgroundItem();
 
@@ -780,14 +780,14 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					'',
 					'Repeat',
 					{
-						laptop: ['Normal'],
+						desktop: ['Normal'],
 						tablet: ['Normal', 'Hover'],
 					},
 					true
 				);
 
 				// Navigate between states and devices
-				// Hover/Laptop
+				// Hover/Desktop
 				setBlockState('Hover');
 				openBackgroundItem();
 				// Assert label
@@ -807,7 +807,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					'',
 					'Repeat',
 					{
-						laptop: ['Normal'],
+						desktop: ['Normal'],
 						tablet: ['Normal', 'Hover'],
 					},
 					true
@@ -835,7 +835,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					'',
 					'Repeat',
 					{
-						laptop: ['Normal'],
+						desktop: ['Normal'],
 						tablet: ['Normal', 'Hover'],
 					},
 					true
@@ -863,7 +863,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					'',
 					'Repeat',
 					{
-						laptop: ['Normal'],
+						desktop: ['Normal'],
 						tablet: ['Normal', 'Hover'],
 					},
 					true
@@ -886,7 +886,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 					expect('repeat').to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
-							.breakpoints.laptop.attributes.blockeraBackground[
+							.breakpoints.desktop.attributes.blockeraBackground[
 							'image-0'
 						]['image-repeat']
 					);
@@ -900,7 +900,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				});
 			});
 
-			it('set value in hover/laptop and navigate between states', () => {
+			it('set value in hover/desktop and navigate between states', () => {
 				cy.getByAriaLabel("Don't Tile Background").click();
 
 				// Assert label
@@ -921,14 +921,14 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					'',
 					'Repeat',
 					{
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 						tablet: ['Normal', 'Hover'],
 					},
 					true
 				);
 
 				// Navigate between states and devices:
-				// Normal/Laptop
+				// Normal/Desktop
 				setBlockState('Normal');
 				openBackgroundItem();
 
@@ -950,7 +950,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					'',
 					'Repeat',
 					{
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 						tablet: ['Normal', 'Hover'],
 					},
 					true
@@ -978,7 +978,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					'',
 					'Repeat',
 					{
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 						tablet: ['Normal', 'Hover'],
 					},
 					true
@@ -1006,7 +1006,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					'',
 					'Repeat',
 					{
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 						tablet: ['Normal', 'Hover'],
 					},
 					true
@@ -1027,7 +1027,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					);
 					expect('no-repeat').to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
-							.breakpoints.laptop.attributes.blockeraBackground[
+							.breakpoints.desktop.attributes.blockeraBackground[
 							'image-0'
 						]['image-repeat']
 					);
@@ -1044,10 +1044,10 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 	describe('reset-all action testing...', () => {
 		it('repeater item :', () => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.getByAriaLabel('Add New Background').click();
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			openBackgroundItem();
 			cy.getByAriaLabel('Cover').click();
@@ -1082,7 +1082,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			// Assert state graph
 			cy.checkStateGraph('Background', 'Image & Gradient', {});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 
 			// Assert label
@@ -1108,7 +1108,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 			});
 
@@ -1128,10 +1128,10 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'Image & Gradient', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
@@ -1147,7 +1147,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'Image & Gradient', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -1159,18 +1159,18 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 			});
 		});
 
 		describe('repeater nested items :', () => {
 			beforeEach(() => {
-				// Set value in normal/laptop
+				// Set value in normal/desktop
 				cy.getByAriaLabel('Add New Background').click();
 				cy.getByAriaLabel('Horizontally').click();
 
-				// Set value in hover/laptop
+				// Set value in hover/desktop
 				addBlockState('hover');
 				openBackgroundItem();
 				cy.getByAriaLabel('Cover').click();
@@ -1228,8 +1228,8 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				// Assert state graph
 				cy.checkStateGraph('', 'Repeat', {}, true);
 
-				// Hover/Laptop
-				setDeviceType('Laptop');
+				// Hover/Desktop
+				setDeviceType('Desktop');
 				openBackgroundItem();
 
 				// Assert label
@@ -1248,7 +1248,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				// Assert state graph
 				cy.checkStateGraph('', 'Repeat', {}, true);
 
-				// Normal/Laptop
+				// Normal/Desktop
 				setBlockState('Normal');
 				openBackgroundItem();
 
@@ -1283,7 +1283,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					);
 					expect('repeat').to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
-							.breakpoints.laptop.attributes.blockeraBackground[
+							.breakpoints.desktop.attributes.blockeraBackground[
 							'image-0'
 						]['image-repeat']
 					);
@@ -1296,7 +1296,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				});
 			});
 
-			it('set value in normal/laptop and navigate between states', () => {
+			it('set value in normal/desktop and navigate between states', () => {
 				cy.getByAriaLabel('Vertically').click();
 
 				// Assert label
@@ -1313,10 +1313,10 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				cy.checkStateGraph('', 'Repeat', { laptop: ['Normal'] }, true);
+				cy.checkStateGraph('', 'Repeat', { desktop: ['Normal'] }, true);
 
 				// Navigate between states and devices
-				// Hover/Laptop
+				// Hover/Desktop
 				setBlockState('Hover');
 				openBackgroundItem();
 
@@ -1334,7 +1334,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				cy.checkStateGraph('', 'Repeat', { laptop: ['Normal'] }, true);
+				cy.checkStateGraph('', 'Repeat', { desktop: ['Normal'] }, true);
 
 				// Hover/Tablet
 				setDeviceType('Tablet');
@@ -1354,9 +1354,9 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				cy.checkStateGraph('', 'Repeat', { laptop: ['Normal'] }, true);
+				cy.checkStateGraph('', 'Repeat', { desktop: ['Normal'] }, true);
 
-				// Normal/Laptop
+				// Normal/Desktop
 				setBlockState('Normal');
 				openBackgroundItem();
 
@@ -1374,7 +1374,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				cy.checkStateGraph('', 'Repeat', { laptop: ['Normal'] }, true);
+				cy.checkStateGraph('', 'Repeat', { desktop: ['Normal'] }, true);
 
 				// Assert store data
 				getWPDataObject().then((data) => {
@@ -1391,7 +1391,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					);
 					expect('repeat').to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
-							.breakpoints.laptop.attributes.blockeraBackground[
+							.breakpoints.desktop.attributes.blockeraBackground[
 							'image-0'
 						]['image-repeat']
 					);
@@ -1404,7 +1404,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				});
 			});
 
-			it('set value in hover/laptop and navigate between states', () => {
+			it('set value in hover/desktop and navigate between states', () => {
 				setBlockState('Hover');
 				openBackgroundItem();
 				cy.getByAriaLabel('Horizontally').click();
@@ -1423,10 +1423,10 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				cy.checkStateGraph('', 'Repeat', { laptop: ['Hover'] }, true);
+				cy.checkStateGraph('', 'Repeat', { desktop: ['Hover'] }, true);
 
 				// Navigate between states and devices
-				// Normal/Laptop
+				// Normal/Desktop
 				setBlockState('Normal');
 				openBackgroundItem();
 
@@ -1444,7 +1444,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				cy.checkStateGraph('', 'Repeat', { laptop: ['Hover'] }, true);
+				cy.checkStateGraph('', 'Repeat', { desktop: ['Hover'] }, true);
 
 				// Normal/Tablet
 				setDeviceType('Tablet');
@@ -1464,7 +1464,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				cy.checkStateGraph('', 'Repeat', { laptop: ['Hover'] }, true);
+				cy.checkStateGraph('', 'Repeat', { desktop: ['Hover'] }, true);
 
 				// Hover/Tablet
 				setBlockState('Hover');
@@ -1484,7 +1484,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				);
 
 				// Assert state graph
-				cy.checkStateGraph('', 'Repeat', { laptop: ['Hover'] }, true);
+				cy.checkStateGraph('', 'Repeat', { desktop: ['Hover'] }, true);
 
 				// Assert store data
 				getWPDataObject().then((data) => {
@@ -1501,7 +1501,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 					);
 					expect('repeat-x').to.be.deep.eq(
 						getSelectedBlock(data, 'blockeraBlockStates').hover
-							.breakpoints.laptop.attributes.blockeraBackground[
+							.breakpoints.desktop.attributes.blockeraBackground[
 							'image-0'
 						]['image-repeat']
 					);

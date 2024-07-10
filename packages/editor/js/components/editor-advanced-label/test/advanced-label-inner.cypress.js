@@ -22,7 +22,7 @@ describe('Inner Blocks label testing', () => {
 		});
 	});
 
-	it('should display changed value on Test Color -> Inner -> Normal -> Laptop', () => {
+	it('should display changed value on Test Color -> Inner -> Normal -> Desktop', () => {
 		// Set Inner Block
 		setInnerBlock('Link');
 		// Assert label before set value
@@ -63,7 +63,7 @@ describe('Inner Blocks label testing', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Typography', 'Text Color', {
-			laptop: ['Normal'],
+			desktop: ['Normal'],
 		});
 
 		/**
@@ -105,7 +105,7 @@ describe('Inner Blocks label testing', () => {
 		cy.checkStateGraph('Typography', 'Text Color', {});
 	});
 
-	it('should display changed value on Text Color -> Inner -> Hover -> Laptop', () => {
+	it('should display changed value on Text Color -> Inner -> Hover -> Desktop', () => {
 		// Set Inner Block
 		setInnerBlock('Link');
 		/**
@@ -149,7 +149,7 @@ describe('Inner Blocks label testing', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Typography', 'Text Color', {
-			laptop: ['Hover'],
+			desktop: ['Hover'],
 		});
 
 		// /**
@@ -169,7 +169,7 @@ describe('Inner Blocks label testing', () => {
 		// cy.get('@color-label').should('include.text', 'None');
 
 		/**
-		 * should not display changed on label when breakpoint is not laptop
+		 * should not display changed on label when breakpoint is not desktop
 		 */
 
 		/**
@@ -220,11 +220,11 @@ describe('Inner Blocks label testing', () => {
 
 				// Asset state graph
 				cy.checkStateGraph('Typography', 'Text Color', {
-					laptop: ['Normal'],
+					desktop: ['Normal'],
 				});
 
 				/**
-				 * Inner -> Hover(laptop)
+				 * Inner -> Hover(desktop)
 				 */
 				addBlockState('Hover');
 				// Assert label before set value
@@ -246,7 +246,7 @@ describe('Inner Blocks label testing', () => {
 
 				// Asset state graph
 				cy.checkStateGraph('Typography', 'Text Color', {
-					laptop: ['Normal', 'Hover'],
+					desktop: ['Normal', 'Hover'],
 				});
 			}
 		);
@@ -288,7 +288,7 @@ describe('Inner Blocks label testing', () => {
 					'changed-in-inner-normal-state'
 				);
 
-				// TODO: display changed on laptop
+				// TODO: display changed on desktop
 				// // Asset state graph
 				// cy.checkStateGraph('Typography', 'Text Color', {
 				// 	tablet: ['Normal'],
@@ -297,13 +297,13 @@ describe('Inner Blocks label testing', () => {
 		);
 
 		context(
-			'should not display tablets changes on Text Color on laptop device',
+			'should not display tablets changes on Text Color on desktop device',
 			() => {
-				setDeviceType('Laptop');
+				setDeviceType('Desktop');
 
 				// Asset state graph
 				cy.checkStateGraph('Typography', 'Text Color', {
-					laptop: ['Normal', 'Hover'],
+					desktop: ['Normal', 'Hover'],
 				});
 			}
 		);
@@ -341,7 +341,7 @@ describe('Inner Blocks label testing', () => {
 
 				// Asset state graph
 				cy.checkStateGraph('Typography', 'Text Color', {
-					laptop: ['Normal'],
+					desktop: ['Normal'],
 				});
 
 				/**
@@ -360,7 +360,7 @@ describe('Inner Blocks label testing', () => {
 
 				// Asset state graph
 				cy.checkStateGraph('Typography', 'Text Color', {
-					laptop: ['Normal'],
+					desktop: ['Normal'],
 				});
 			}
 		);
@@ -388,10 +388,10 @@ describe('Inner Blocks label testing', () => {
 			 */
 			setInnerBlock('Link');
 
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.setColorControlValue('Text Color', 'ccc');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.setColorControlValue('Text Color', 'bbb');
 
@@ -413,16 +413,16 @@ describe('Inner Blocks label testing', () => {
 			// Set value in normal/tablet
 			cy.setColorControlValue('Text Color', 'fff');
 
-			// Set value in normal/laptop
-			setDeviceType('Laptop');
+			// Set value in normal/desktop
+			setDeviceType('Desktop');
 			cy.setColorControlValue('Text Color', '777');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			setBlockState('Hover');
 			cy.setColorControlValue('Text Color', '555');
 
 			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Hover -> Inner -> hover/laptop',
+				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Hover -> Inner -> hover/desktop',
 				() => {
 					// Reset to normal
 					cy.resetBlockeraAttribute(
@@ -444,16 +444,16 @@ describe('Inner Blocks label testing', () => {
 					// Assert state graph
 					// TODO : recheck expectancy
 					// cy.checkStateGraph('Typography', 'Text Color', {
-					// 	laptop: ['Normal'],
+					// 	desktop: ['Normal'],
 					// });
 
 					// Assert store data
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 								.blockeraInnerBlocks.link.attributes
-								.blockeraBlockStates.hover.breakpoints.laptop
+								.blockeraBlockStates.hover.breakpoints.desktop
 								.attributes
 						);
 					});
@@ -500,9 +500,9 @@ describe('Inner Blocks label testing', () => {
 			);
 
 			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Hover -> Inner -> normal/laptop',
+				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Hover -> Inner -> normal/desktop',
 				() => {
-					setDeviceType('Laptop');
+					setDeviceType('Desktop');
 
 					// Reset to normal
 					// TODO : state graph does not display changes / no reset button
@@ -534,7 +534,7 @@ describe('Inner Blocks label testing', () => {
 					// getWPDataObject().then((data) => {
 					// 	expect(undefined).to.be.deep.eq(
 					// 		getSelectedBlock(data, 'blockeraBlockStates').hover
-					// 			.breakpoints.laptop.attributes
+					// 			.breakpoints.desktop.attributes
 					// 			.blockeraInnerBlocks.link.attributes
 					// 			.blockeraFontColor
 					// 	);
@@ -543,7 +543,7 @@ describe('Inner Blocks label testing', () => {
 			);
 
 			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Normal -> Inner -> normal/laptop',
+				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Normal -> Inner -> normal/desktop',
 				() => {
 					reSelectBlock();
 					setBlockState('Normal');
@@ -574,7 +574,7 @@ describe('Inner Blocks label testing', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Typography', 'Text Color', {
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 					});
 
 					// Assert store data
@@ -588,7 +588,7 @@ describe('Inner Blocks label testing', () => {
 			);
 
 			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Normal -> Inner -> hover/laptop',
+				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Normal -> Inner -> hover/desktop',
 				() => {
 					setBlockState('Hover');
 
@@ -618,7 +618,7 @@ describe('Inner Blocks label testing', () => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraInnerBlocks').link
 								.attributes.blockeraBlockStates.hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 					});
 				}
@@ -711,8 +711,8 @@ describe('Inner Blocks label testing', () => {
 			);
 		});
 
-		it('set value in Normal -> Inner -> Normal/laptop and navigate between states and devices', () => {
-			setDeviceType('Laptop');
+		it('set value in Normal -> Inner -> Normal/desktop and navigate between states and devices', () => {
+			setDeviceType('Desktop');
 			cy.setColorControlValue('Text Color', '333');
 
 			// Assert label
@@ -727,7 +727,7 @@ describe('Inner Blocks label testing', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states and devices
@@ -736,7 +736,7 @@ describe('Inner Blocks label testing', () => {
 			 * Normal -> inner
 			 */
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 
 			// Assert label
@@ -754,7 +754,7 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			// TODO:
 			// cy.checkStateGraph('Typography', 'Text Color', {
-			// 	laptop: ['Normal'],
+			// 	desktop: ['Normal'],
 			// });
 
 			// Hover/Tablet
@@ -773,7 +773,7 @@ describe('Inner Blocks label testing', () => {
 			// TODO : what value should control display ??
 
 			// Assert state graph
-			// TODO : display changed in hover/laptop
+			// TODO : display changed in hover/desktop
 			//cy.checkStateGraph('Typography', 'Text Color', {});
 
 			// Normal/Tablet
@@ -816,9 +816,9 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {});
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
-			setDeviceType('Laptop');
+			setDeviceType('Desktop');
 
 			// Assert label
 			// TODO
@@ -845,15 +845,15 @@ describe('Inner Blocks label testing', () => {
 				// TODO: has value !!
 				// expect({}).to.be.deep.eq(
 				// 	getSelectedBlock(data, 'blockeraInnerBlocks').link
-				// 		.attributes.blockeraBlockStates.hover.breakpoints.laptop
+				// 		.attributes.blockeraBlockStates.hover.breakpoints.desktop
 				// 		.attributes
 				// );
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -922,8 +922,8 @@ describe('Inner Blocks label testing', () => {
 			// 	tablet: ['Hover'],
 			// });
 
-			// Normal/Laptop
-			setDeviceType('Laptop');
+			// Normal/Desktop
+			setDeviceType('Desktop');
 			// **should not display prev changes
 
 			// Assert label
@@ -940,7 +940,7 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {});
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 
 			// Assert label
@@ -965,7 +965,7 @@ describe('Inner Blocks label testing', () => {
 			setBlockState('Hover');
 			setInnerBlock('Link');
 
-			// Hover/Laptop
+			// Hover/Desktop
 			// Assert label
 			cy.checkLabelClassName(
 				'Typography',
@@ -1024,15 +1024,15 @@ describe('Inner Blocks label testing', () => {
 				// TODO : has value
 				// expect({}).to.be.deep.eq(
 				// 	getSelectedBlock(data, 'blockeraInnerBlocks').link
-				// 		.attributes.blockeraBlockStates.hover.breakpoints.laptop
+				// 		.attributes.blockeraBlockStates.hover.breakpoints.desktop
 				// 		.attributes
 				// );
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -1105,8 +1105,8 @@ describe('Inner Blocks label testing', () => {
 			// 	tablet: ['Normal'],
 			// });
 
-			// Hover/Laptop
-			setDeviceType('Laptop');
+			// Hover/Desktop
+			setDeviceType('Desktop');
 			// **should not display prev changes
 
 			// Assert label
@@ -1123,7 +1123,7 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 
 			// Assert label
@@ -1148,7 +1148,7 @@ describe('Inner Blocks label testing', () => {
 			setBlockState('Normal');
 			setInnerBlock('Link');
 
-			// Normal/Laptop
+			// Normal/Desktop
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -1164,7 +1164,7 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {});
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 
 			// Assert label
@@ -1226,21 +1226,21 @@ describe('Inner Blocks label testing', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				// TODO : has value
 				// expect({}).to.be.deep.eq(
 				// 	getSelectedBlock(data, 'blockeraBlockStates').hover
-				// 		.breakpoints.laptop.attributes.blockeraInnerBlocks.link
+				// 		.breakpoints.desktop.attributes.blockeraInnerBlocks.link
 				// 		.attributes
 				// );
 
@@ -1273,10 +1273,10 @@ describe('Inner Blocks label testing', () => {
 			 */
 			setInnerBlock('Link');
 
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.setColorControlValue('Text Color', 'ccc');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.setColorControlValue('Text Color', 'bbb');
 
@@ -1298,9 +1298,9 @@ describe('Inner Blocks label testing', () => {
 			// Set value in normal/tablet
 			cy.setColorControlValue('Text Color', 'c4c4c4');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			setBlockState('Hover');
-			setDeviceType('Laptop');
+			setDeviceType('Desktop');
 			cy.setColorControlValue('Text Color', 'fff');
 
 			// Reset All
@@ -1309,7 +1309,7 @@ describe('Inner Blocks label testing', () => {
 			context(
 				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in all states',
 				() => {
-					// Hover -> inner -> Hover/Laptop
+					// Hover -> inner -> Hover/Desktop
 					// Assert label
 					cy.checkLabelClassName(
 						'Typography',
@@ -1394,8 +1394,8 @@ describe('Inner Blocks label testing', () => {
 					// Assert state graph
 					cy.checkStateGraph('Typography', 'Text Color', {});
 
-					// Normal -> inner -> Normal/Laptop
-					setDeviceType('Laptop');
+					// Normal -> inner -> Normal/Desktop
+					setDeviceType('Desktop');
 
 					// Assert label
 					cy.checkLabelClassName(
@@ -1411,7 +1411,7 @@ describe('Inner Blocks label testing', () => {
 					// Assert state graph
 					cy.checkStateGraph('Typography', 'Text Color', {});
 
-					// Normal -> inner -> Hover/Laptop
+					// Normal -> inner -> Hover/Desktop
 					setBlockState('Hover');
 
 					// Assert label
@@ -1438,14 +1438,14 @@ describe('Inner Blocks label testing', () => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraInnerBlocks').link
 								.attributes.blockeraBlockStates.hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 								.blockeraInnerBlocks.link.attributes
-								.blockeraBlockStates.hover.breakpoints.laptop
+								.blockeraBlockStates.hover.breakpoints.desktop
 								.attributes
 						);
 
@@ -1474,7 +1474,7 @@ describe('Inner Blocks label testing', () => {
 			);
 		});
 
-		it('set value in Normal -> Inner -> Normal/laptop and navigate between states and devices', () => {
+		it('set value in Normal -> Inner -> Normal/desktop and navigate between states and devices', () => {
 			setBlockState('Normal');
 			cy.setColorControlValue('Text Color', '333');
 
@@ -1490,7 +1490,7 @@ describe('Inner Blocks label testing', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states and devices
@@ -1499,7 +1499,7 @@ describe('Inner Blocks label testing', () => {
 			 * Normal -> inner
 			 */
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 
 			// Assert label
@@ -1515,7 +1515,7 @@ describe('Inner Blocks label testing', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -1575,9 +1575,9 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {});
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
-			setDeviceType('Laptop');
+			setDeviceType('Desktop');
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -1602,15 +1602,15 @@ describe('Inner Blocks label testing', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -1677,8 +1677,8 @@ describe('Inner Blocks label testing', () => {
 				tablet: ['Hover'],
 			});
 
-			// Normal/Laptop
-			setDeviceType('Laptop');
+			// Normal/Desktop
+			setDeviceType('Desktop');
 			// **should not display prev changes
 
 			// Assert label
@@ -1695,7 +1695,7 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {});
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 
 			// Assert label
@@ -1715,7 +1715,7 @@ describe('Inner Blocks label testing', () => {
 			/**
 			 * Hover -> inner
 			 */
-			// Hover/Laptop
+			// Hover/Desktop
 			reSelectBlock();
 			setBlockState('Hover');
 			setInnerBlock('Link');
@@ -1761,15 +1761,15 @@ describe('Inner Blocks label testing', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -1793,7 +1793,7 @@ describe('Inner Blocks label testing', () => {
 			});
 		});
 
-		it('set value in Hover -> Inner -> Normal/Laptop and navigate between states and devices', () => {
+		it('set value in Hover -> Inner -> Normal/Desktop and navigate between states and devices', () => {
 			reSelectBlock();
 			setBlockState('Hover');
 			setInnerBlock('Link');
@@ -1824,7 +1824,7 @@ describe('Inner Blocks label testing', () => {
 			 * Hover -> inner
 			 */
 
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 
 			// Assert label
@@ -1918,8 +1918,8 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {});
 
-			// Hover/Laptop
-			setDeviceType('Laptop');
+			// Hover/Desktop
+			setDeviceType('Desktop');
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -1935,7 +1935,7 @@ describe('Inner Blocks label testing', () => {
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 
 			// Assert label
@@ -1961,20 +1961,20 @@ describe('Inner Blocks label testing', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 
 				expect('#333333').to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraInnerBlocks.link
+						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
 						.attributes.blockeraFontColor
 				);
 

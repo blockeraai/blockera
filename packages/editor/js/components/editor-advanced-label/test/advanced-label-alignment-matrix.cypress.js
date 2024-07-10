@@ -42,7 +42,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		});
 	};
 
-	it('should display changed value of Position on Normal -> Laptop', () => {
+	it('should display changed value of Position on Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.get('@position-label').should(
 			'not.have.class',
@@ -77,10 +77,10 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('top left');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Normal'] }, true);
 	});
 
-	it('should display changed value of Position on Hover -> Laptop', () => {
+	it('should display changed value of Position on Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
@@ -137,10 +137,10 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('center center');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Hover'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Hover'] }, true);
 	});
 
-	it('should display changed value of Position on Hover and Normal -> Laptop', () => {
+	it('should display changed value of Position on Hover and Normal -> Desktop', () => {
 		/**
 		 * Normal
 		 */
@@ -196,7 +196,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		cy.checkStateGraph(
 			'',
 			'Position',
-			{ laptop: ['Normal', 'Hover'] },
+			{ desktop: ['Normal', 'Hover'] },
 			true
 		);
 	});
@@ -223,9 +223,9 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('top left');
 
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 		openImageItem();
 
 		// Assert label
@@ -283,9 +283,9 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('center center');
 
 		/**
-		 * Laptop device (Normal)
+		 * Desktop device (Normal)
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 		openImageItem();
 
 		// Assert label
@@ -302,7 +302,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		cy.checkStateGraph('', 'Position', { tablet: ['Hover'] }, true);
 	});
 
-	it('set value in normal/laptop and navigate between states', () => {
+	it('set value in normal/desktop and navigate between states', () => {
 		// Set value
 		setMatrixItem('bottom right');
 
@@ -316,10 +316,10 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('bottom right');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Normal'] }, true);
 
 		// Navigate between states and devices
-		// Hover/Laptop
+		// Hover/Desktop
 		addBlockState('hover');
 		openImageItem();
 
@@ -333,7 +333,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('bottom right');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Normal'] }, true);
 
 		// Hover/Tablet
 		setDeviceType('Tablet');
@@ -349,7 +349,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('bottom right');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Normal'] }, true);
 
 		// Normal/Tablet
 		setBlockState('Normal');
@@ -365,7 +365,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('bottom right');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Normal'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Normal'] }, true);
 
 		// Assert store data
 		getWPDataObject().then((data) => {
@@ -385,7 +385,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		});
 	});
 
-	it('set value in hover/laptop and navigate between states', () => {
+	it('set value in hover/desktop and navigate between states', () => {
 		addBlockState('hover');
 		openImageItem();
 
@@ -401,10 +401,10 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('bottom right');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Hover'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Hover'] }, true);
 
 		// Navigate between states and devices:
-		// Normal/Laptop
+		// Normal/Desktop
 		setBlockState('Normal');
 		openImageItem();
 
@@ -418,7 +418,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('center center');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Hover'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Hover'] }, true);
 
 		// Normal/Tablet
 		setDeviceType('Tablet');
@@ -434,7 +434,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('center center');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Hover'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Hover'] }, true);
 
 		// Hover/Tablet
 		setBlockState('Hover');
@@ -450,7 +450,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		checkMatrixItem('center center');
 
 		// Assert state graph
-		cy.checkStateGraph('', 'Position', { laptop: ['Hover'] }, true);
+		cy.checkStateGraph('', 'Position', { desktop: ['Hover'] }, true);
 
 		// Assert store data
 		getWPDataObject().then((data) => {
@@ -466,7 +466,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 
 			expect({ top: '100%', left: '100%' }).to.be.deep.eq(
 				getSelectedBlock(data, 'blockeraBlockStates').hover.breakpoints
-					.laptop.attributes.blockeraBackground['image-0'][
+					.desktop.attributes.blockeraBackground['image-0'][
 					'image-position'
 				]
 			);
@@ -480,10 +480,10 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			setMatrixItem('top left');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			openImageItem();
 			setMatrixItem('top center');
@@ -518,7 +518,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 				'Position',
 				{
 					tablet: ['Hover'],
-					laptop: ['Hover', 'Normal'],
+					desktop: ['Hover', 'Normal'],
 				},
 				true
 			);
@@ -554,7 +554,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 				'Position',
 				{
 					tablet: ['Normal'],
-					laptop: ['Hover', 'Normal'],
+					desktop: ['Hover', 'Normal'],
 				},
 				true
 			);
@@ -568,8 +568,8 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			});
 		});
 
-		it('should correctly reset Position, and display effected fields(label, control, stateGraph) in normal/laptop', () => {
-			setDeviceType('Laptop');
+		it('should correctly reset Position, and display effected fields(label, control, stateGraph) in normal/desktop', () => {
+			setDeviceType('Desktop');
 			setBlockState('Normal');
 			openImageItem();
 			// Reset to normal
@@ -590,7 +590,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 				'Position',
 				{
 					tablet: ['Hover', 'Normal'],
-					laptop: ['Hover'],
+					desktop: ['Hover'],
 				},
 				true
 			);
@@ -605,8 +605,8 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			});
 		});
 
-		it('should correctly reset Position, and display effected fields(label, control, stateGraph) in hover/laptop', () => {
-			setDeviceType('Laptop');
+		it('should correctly reset Position, and display effected fields(label, control, stateGraph) in hover/desktop', () => {
+			setDeviceType('Desktop');
 			setBlockState('Hover');
 			openImageItem();
 
@@ -627,7 +627,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 				'',
 				'Position',
 				{
-					laptop: ['Normal'],
+					desktop: ['Normal'],
 					tablet: ['Normal', 'Hover'],
 				},
 				true
@@ -637,7 +637,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			getWPDataObject().then((data) => {
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 			});
 		});
@@ -645,10 +645,10 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			setMatrixItem('top left');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			openImageItem();
 			setMatrixItem('top center');
@@ -697,8 +697,8 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			// Assert state graph
 			cy.checkStateGraph('', 'Position', {}, true);
 
-			// Hover/Laptop
-			setDeviceType('Laptop');
+			// Hover/Desktop
+			setDeviceType('Desktop');
 			openImageItem();
 
 			// Assert label
@@ -713,7 +713,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			// Assert state graph
 			cy.checkStateGraph('', 'Position', {}, true);
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			openImageItem();
 
@@ -744,7 +744,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 				);
 				expect({ top: '50%', left: '50%' }).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraBackground[
+						.breakpoints.desktop.attributes.blockeraBackground[
 						'image-0'
 					]['image-position']
 				);

@@ -27,7 +27,7 @@ describe('Range Control label testing (Opacity)', () => {
 		);
 	};
 
-	it('should display changed value on Opacity -> Normal -> Laptop', () => {
+	it('should display changed value on Opacity -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Effects',
@@ -57,10 +57,10 @@ describe('Range Control label testing (Opacity)', () => {
 		checkOpacityValue(50);
 
 		// Assert state graph
-		cy.checkStateGraph('Effects', 'Opacity', { laptop: ['Normal'] });
+		cy.checkStateGraph('Effects', 'Opacity', { desktop: ['Normal'] });
 	});
 
-	it('should display changed value on Opacity -> Hover -> Laptop', () => {
+	it('should display changed value on Opacity -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
@@ -109,7 +109,7 @@ describe('Range Control label testing (Opacity)', () => {
 		checkOpacityValue(100);
 
 		// Assert state graph
-		cy.checkStateGraph('Effects', 'Opacity', { laptop: ['Hover'] });
+		cy.checkStateGraph('Effects', 'Opacity', { desktop: ['Hover'] });
 	});
 
 	it('should display changed value on Opacity, when set value in two states', () => {
@@ -156,7 +156,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Effects', 'Opacity', {
-			laptop: ['Normal', 'Hover'],
+			desktop: ['Normal', 'Hover'],
 		});
 	});
 
@@ -180,9 +180,9 @@ describe('Range Control label testing (Opacity)', () => {
 		checkOpacityValue(50);
 
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
@@ -233,9 +233,9 @@ describe('Range Control label testing (Opacity)', () => {
 		checkOpacityValue('100');
 
 		/**
-		 * Laptop device (Active)
+		 * Desktop device (Active)
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
@@ -244,7 +244,7 @@ describe('Range Control label testing (Opacity)', () => {
 		checkOpacityValue(100);
 
 		/**
-		 * Normal (Laptop device)
+		 * Normal (Desktop device)
 		 */
 		setBlockState('Normal');
 
@@ -260,9 +260,9 @@ describe('Range Control label testing (Opacity)', () => {
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			setOpacityValue(50);
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			setOpacityValue(40);
 			// Set value in hover/tablet
@@ -291,7 +291,7 @@ describe('Range Control label testing (Opacity)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Effects', 'Opacity', {
 						tablet: ['Hover'],
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -323,7 +323,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Effects', 'Opacity', {
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -337,9 +337,9 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraOpacity, and display effected fields(label, control, stateGraph) in normal/laptop',
+				'should correctly reset blockeraOpacity, and display effected fields(label, control, stateGraph) in normal/desktop',
 				() => {
-					setDeviceType('Laptop');
+					setDeviceType('Desktop');
 					setBlockState('Normal');
 					// Reset to default
 					cy.resetBlockeraAttribute('Effects', 'Opacity', 'reset');
@@ -355,7 +355,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Effects', 'Opacity', {
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 					});
 
 					// Assert store data
@@ -368,7 +368,7 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraOpacity, and display effected fields(label, control, stateGraph) in hover/laptop',
+				'should correctly reset blockeraOpacity, and display effected fields(label, control, stateGraph) in hover/desktop',
 				() => {
 					setBlockState('Hover');
 					// Reset to default
@@ -398,14 +398,14 @@ describe('Range Control label testing (Opacity)', () => {
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 					});
 				}
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			setBlockState('Normal');
 			// Set value
 			setOpacityValue(15);
@@ -422,11 +422,11 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states :
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
@@ -440,7 +440,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -457,10 +457,10 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -474,7 +474,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -490,7 +490,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -500,7 +500,7 @@ describe('Range Control label testing (Opacity)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			// Set value
 			setOpacityValue(35);
 
@@ -516,11 +516,11 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Navigate between states :
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -534,7 +534,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Normal/Tablet
@@ -551,7 +551,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
@@ -569,7 +569,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
@@ -585,7 +585,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 				expect({ blockeraOpacity: '35%' }).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -598,9 +598,9 @@ describe('Range Control label testing (Opacity)', () => {
 
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			setOpacityValue(50);
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			setOpacityValue(40);
 			// Set value in hover/tablet
@@ -647,8 +647,8 @@ describe('Range Control label testing (Opacity)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Effects', 'Opacity', {});
 
-					// Hover/Laptop
-					setDeviceType('Laptop');
+					// Hover/Desktop
+					setDeviceType('Desktop');
 					// Assert label
 					cy.checkLabelClassName(
 						'Effects',
@@ -663,7 +663,7 @@ describe('Range Control label testing (Opacity)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Effects', 'Opacity', {});
 
-					// Normal/Laptop
+					// Normal/Desktop
 					setBlockState('Normal');
 					// Assert label
 					cy.checkLabelClassName(
@@ -692,7 +692,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 
 						expect({}).to.be.deep.eq(
@@ -704,7 +704,7 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			setOpacityValue(45);
 
 			// Assert control
@@ -719,11 +719,11 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states and devices :
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert control
 			checkOpacityValue(45);
@@ -737,7 +737,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -754,7 +754,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Normal/Tablet
@@ -771,7 +771,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Effects', 'Opacity', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -787,7 +787,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -834,8 +834,8 @@ describe('Range Control label testing (Opacity)', () => {
 				tablet: ['Normal'],
 			});
 
-			// Hover/Laptop
-			setDeviceType('Laptop');
+			// Hover/Desktop
+			setDeviceType('Desktop');
 			// Assert control
 			checkOpacityValue(100);
 
@@ -851,7 +851,7 @@ describe('Range Control label testing (Opacity)', () => {
 				tablet: ['Normal'],
 			});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert control
 			checkOpacityValue(100);
@@ -881,7 +881,7 @@ describe('Range Control label testing (Opacity)', () => {
 
 				expect({}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.equal(

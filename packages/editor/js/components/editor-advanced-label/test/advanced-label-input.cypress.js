@@ -15,7 +15,7 @@ describe('Input Control label testing (Width)', () => {
 		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 	});
 
-	it('should display changed value on Width -> Normal -> Laptop', () => {
+	it('should display changed value on Width -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Size',
@@ -56,10 +56,10 @@ describe('Input Control label testing (Width)', () => {
 		cy.checkInputFieldValue('Width', 'Size', 50);
 
 		// Assert state graph
-		cy.checkStateGraph('Size', 'Width', { laptop: ['Normal'] });
+		cy.checkStateGraph('Size', 'Width', { desktop: ['Normal'] });
 	});
 
-	it('should display changed value on Width -> Hover -> Laptop', () => {
+	it('should display changed value on Width -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
@@ -103,7 +103,7 @@ describe('Input Control label testing (Width)', () => {
 		cy.checkInputFieldValue('Width', 'Size', '');
 
 		// Assert state graph
-		cy.checkStateGraph('Size', 'Width', { laptop: ['Hover'] });
+		cy.checkStateGraph('Size', 'Width', { desktop: ['Hover'] });
 	});
 
 	it('should display changed value on Width, when set value in two states', () => {
@@ -146,7 +146,7 @@ describe('Input Control label testing (Width)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Size', 'Width', {
-			laptop: ['Normal', 'Hover'],
+			desktop: ['Normal', 'Hover'],
 		});
 	});
 
@@ -170,9 +170,9 @@ describe('Input Control label testing (Width)', () => {
 		cy.checkInputFieldValue('Width', 'Size', 50);
 
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName('Size', 'Width', 'changed-in-other-state');
@@ -218,9 +218,9 @@ describe('Input Control label testing (Width)', () => {
 		cy.checkInputFieldValue('Width', 'Size', '');
 
 		/**
-		 * Laptop device (Active)
+		 * Desktop device (Active)
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName('Size', 'Width', 'changed-in-other-state');
@@ -229,7 +229,7 @@ describe('Input Control label testing (Width)', () => {
 		cy.checkInputFieldValue('Width', 'Size', '');
 
 		/**
-		 * Laptop device (Normal)
+		 * Desktop device (Normal)
 		 */
 		setBlockState('Normal');
 
@@ -245,10 +245,10 @@ describe('Input Control label testing (Width)', () => {
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.setInputFieldValue('Width', 'Size', 50);
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.setInputFieldValue('Width', 'Size', 40);
 
@@ -279,7 +279,7 @@ describe('Input Control label testing (Width)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Width', {
 						tablet: ['Hover'],
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -311,7 +311,7 @@ describe('Input Control label testing (Width)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Width', {
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -325,9 +325,9 @@ describe('Input Control label testing (Width)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraWidth, and display effected fields(label, control, stateGraph) in normal/laptop',
+				'should correctly reset blockeraWidth, and display effected fields(label, control, stateGraph) in normal/desktop',
 				() => {
-					setDeviceType('Laptop');
+					setDeviceType('Desktop');
 					setBlockState('Normal');
 					// Reset to default
 					cy.resetBlockeraAttribute('Size', 'Width', 'reset');
@@ -344,7 +344,7 @@ describe('Input Control label testing (Width)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Width', {
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 					});
 
 					// Assert store data
@@ -357,7 +357,7 @@ describe('Input Control label testing (Width)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraWidth, and display effected fields(label, control, stateGraph) in hover/laptop',
+				'should correctly reset blockeraWidth, and display effected fields(label, control, stateGraph) in hover/desktop',
 				() => {
 					setBlockState('Hover');
 					// Reset to default
@@ -381,14 +381,14 @@ describe('Input Control label testing (Width)', () => {
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 					});
 				}
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			setBlockState('Normal');
 			// Set value
 			cy.setInputFieldValue('Width', 'Size', 20);
@@ -401,11 +401,11 @@ describe('Input Control label testing (Width)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states and devices:
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
@@ -415,7 +415,7 @@ describe('Input Control label testing (Width)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -428,10 +428,10 @@ describe('Input Control label testing (Width)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
@@ -441,7 +441,7 @@ describe('Input Control label testing (Width)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -457,7 +457,7 @@ describe('Input Control label testing (Width)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -467,7 +467,7 @@ describe('Input Control label testing (Width)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			// Set value
 			cy.setInputFieldValue('Width', 'Size', 20);
 
@@ -483,11 +483,11 @@ describe('Input Control label testing (Width)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Navigate between states and devices:
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 
 			// Assert label
@@ -498,7 +498,7 @@ describe('Input Control label testing (Width)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Normal/Tablet
@@ -512,7 +512,7 @@ describe('Input Control label testing (Width)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
@@ -525,7 +525,7 @@ describe('Input Control label testing (Width)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Width', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
@@ -540,7 +540,7 @@ describe('Input Control label testing (Width)', () => {
 
 				expect('20px').to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraWidth
+						.breakpoints.desktop.attributes.blockeraWidth
 				);
 
 				expect({}).to.be.deep.eq(
@@ -553,10 +553,10 @@ describe('Input Control label testing (Width)', () => {
 
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.setInputFieldValue('Width', 'Size', 50);
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.setInputFieldValue('Width', 'Size', 40);
 
@@ -605,8 +605,8 @@ describe('Input Control label testing (Width)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Width', {});
 
-					// Hover/Laptop
-					setDeviceType('Laptop');
+					// Hover/Desktop
+					setDeviceType('Desktop');
 					// Assert label
 					cy.checkLabelClassName(
 						'Size',
@@ -621,7 +621,7 @@ describe('Input Control label testing (Width)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Width', {});
 
-					// Normal/Laptop
+					// Normal/Desktop
 					setBlockState('Normal');
 					// Assert label
 					cy.checkLabelClassName(
@@ -650,7 +650,7 @@ describe('Input Control label testing (Width)', () => {
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 
 						expect({}).to.be.deep.eq(
@@ -662,7 +662,7 @@ describe('Input Control label testing (Width)', () => {
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			// Set value
 			cy.setInputFieldValue('Width', 'Size', '25');
 
@@ -673,10 +673,10 @@ describe('Input Control label testing (Width)', () => {
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// Assert state graph
-			cy.checkStateGraph('Size', 'Width', { laptop: ['Normal'] });
+			cy.checkStateGraph('Size', 'Width', { desktop: ['Normal'] });
 
 			// Navigate between states and devices :
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 
 			// Assert control
@@ -686,7 +686,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// Assert state graph
-			cy.checkStateGraph('Size', 'Width', { laptop: ['Normal'] });
+			cy.checkStateGraph('Size', 'Width', { desktop: ['Normal'] });
 
 			// Hover/Tablet
 			setDeviceType('Tablet');
@@ -697,7 +697,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// Assert state graph
-			cy.checkStateGraph('Size', 'Width', { laptop: ['Normal'] });
+			cy.checkStateGraph('Size', 'Width', { desktop: ['Normal'] });
 
 			// Normal/Tablet
 			setBlockState('Normal');
@@ -708,7 +708,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
 
 			// Assert state graph
-			cy.checkStateGraph('Size', 'Width', { laptop: ['Normal'] });
+			cy.checkStateGraph('Size', 'Width', { desktop: ['Normal'] });
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -723,7 +723,7 @@ describe('Input Control label testing (Width)', () => {
 
 				expect({}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.equal(
@@ -762,8 +762,8 @@ describe('Input Control label testing (Width)', () => {
 				tablet: ['Normal'],
 			});
 
-			// Hover/Laptop
-			setDeviceType('Laptop');
+			// Hover/Desktop
+			setDeviceType('Desktop');
 			// Assert control
 			cy.checkInputFieldValue('Width', 'Size', '');
 
@@ -775,7 +775,7 @@ describe('Input Control label testing (Width)', () => {
 				tablet: ['Normal'],
 			});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert control
 			cy.checkInputFieldValue('Width', 'Size', '');
@@ -799,7 +799,7 @@ describe('Input Control label testing (Width)', () => {
 
 				expect({}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.equal(

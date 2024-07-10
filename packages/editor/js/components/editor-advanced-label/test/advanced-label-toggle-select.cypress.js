@@ -15,7 +15,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 	});
 
-	it('should display changed value on Overflow -> Normal -> Laptop', () => {
+	it('should display changed value on Overflow -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Size',
@@ -68,10 +68,10 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		);
 
 		// Assert state graph
-		cy.checkStateGraph('Size', 'Overflow', { laptop: ['Normal'] });
+		cy.checkStateGraph('Size', 'Overflow', { desktop: ['Normal'] });
 	});
 
-	it('should display changed value on Overflow -> Hover -> Laptop', () => {
+	it('should display changed value on Overflow -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
@@ -130,7 +130,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			'true'
 		);
 		// Assert state graph
-		cy.checkStateGraph('Size', 'Overflow', { laptop: ['Hover'] });
+		cy.checkStateGraph('Size', 'Overflow', { desktop: ['Hover'] });
 	});
 
 	it('should display changed value on Overflow, when set value in two states', () => {
@@ -184,7 +184,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		);
 		// Assert state graph
 		cy.checkStateGraph('Size', 'Overflow', {
-			laptop: ['Normal', 'Hover'],
+			desktop: ['Normal', 'Hover'],
 		});
 	});
 
@@ -212,9 +212,9 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		);
 
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName('Size', 'Overflow', 'changed-in-other-state');
@@ -276,9 +276,9 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		);
 
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName('Size', 'Overflow', 'changed-in-other-state');
@@ -291,7 +291,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		);
 
 		/**
-		 * Normal (laptop)
+		 * Normal (desktop)
 		 */
 		setBlockState('Normal');
 
@@ -311,10 +311,10 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.getByAriaLabel('Visible Overflow').click();
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.getByAriaLabel('Hidden Overflow').click();
 
@@ -349,7 +349,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Overflow', {
 						tablet: ['Hover'],
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -385,7 +385,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Overflow', {
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -399,9 +399,9 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraOverflow, and display effected fields(label, control, stateGraph) in normal/laptop',
+				'should correctly reset blockeraOverflow, and display effected fields(label, control, stateGraph) in normal/desktop',
 				() => {
-					setDeviceType('Laptop');
+					setDeviceType('Desktop');
 					setBlockState('Normal');
 					// Reset to default
 					cy.resetBlockeraAttribute('Size', 'Overflow', 'reset');
@@ -421,7 +421,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Overflow', {
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 					});
 
 					// Assert store data
@@ -434,7 +434,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraOverflow, and display effected fields(label, control, stateGraph) in hover/laptop',
+				'should correctly reset blockeraOverflow, and display effected fields(label, control, stateGraph) in hover/desktop',
 				() => {
 					setBlockState('Hover');
 					// Reset to default
@@ -467,21 +467,21 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 					});
 				}
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			setBlockState('Normal');
 			// Set value
 			cy.getByAriaLabel('Scroll Overflow').click();
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Overflow', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert control
@@ -492,7 +492,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			// Navigate between states :
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			cy.getByAriaLabel('Scroll Overflow').should(
 				'have.attr',
@@ -500,7 +500,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 				'true'
 			);
 			cy.checkStateGraph('Size', 'Overflow', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -512,10 +512,10 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 				'true'
 			);
 			cy.checkStateGraph('Size', 'Overflow', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 
 			cy.getByAriaLabel('Scroll Overflow').should(
@@ -524,7 +524,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 				'true'
 			);
 			cy.checkStateGraph('Size', 'Overflow', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -540,7 +540,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -550,13 +550,13 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			// Set value
 			cy.getByAriaLabel('Scroll Overflow').click();
 
 			// Assert state graph
 			cy.checkStateGraph('Size', 'Overflow', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert control
@@ -567,7 +567,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			// Navigate between states :
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 
 			cy.getByAriaLabel('Scroll Overflow').should(
@@ -587,7 +587,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			cy.checkStateGraph('Size', 'Overflow', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Normal/Tablet
@@ -610,7 +610,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			cy.checkStateGraph('Size', 'Overflow', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
@@ -633,7 +633,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			cy.checkStateGraph('Size', 'Overflow', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
@@ -642,12 +642,12 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 				expect(undefined).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.laptop
+						.breakpoints.desktop
 				);
 
 				expect({ blockeraOverflow: 'scroll' }).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -660,10 +660,10 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.getByAriaLabel('Visible Overflow').click();
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.getByAriaLabel('Hidden Overflow').click();
 
@@ -740,8 +740,8 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Overflow', {});
 
-					// Hover/Laptop
-					setDeviceType('Laptop');
+					// Hover/Desktop
+					setDeviceType('Desktop');
 					// Assert label
 					cy.checkLabelClassName(
 						'Size',
@@ -770,7 +770,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Size', 'Overflow', {});
 
-					// Normal/Laptop
+					// Normal/Desktop
 					setBlockState('Normal');
 					// Assert label
 					cy.checkLabelClassName(
@@ -813,7 +813,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 
 						expect({}).to.be.deep.eq(
@@ -825,7 +825,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			cy.getByAriaLabel('Scroll Overflow').click();
 
 			// Assert control
@@ -843,10 +843,10 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			// Assert state graph
-			cy.checkStateGraph('Size', 'Overflow', { laptop: ['Normal'] });
+			cy.checkStateGraph('Size', 'Overflow', { desktop: ['Normal'] });
 
 			// Navigate between states and devices :
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert control
 			cy.getByAriaLabel('Scroll Overflow').should(
@@ -863,7 +863,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			// Assert state graph
-			cy.checkStateGraph('Size', 'Overflow', { laptop: ['Normal'] });
+			cy.checkStateGraph('Size', 'Overflow', { desktop: ['Normal'] });
 
 			// Hover/Tablet
 			setDeviceType('Tablet');
@@ -882,7 +882,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			// Assert state graph
-			cy.checkStateGraph('Size', 'Overflow', { laptop: ['Normal'] });
+			cy.checkStateGraph('Size', 'Overflow', { desktop: ['Normal'] });
 
 			// Normal/Tablet
 			setBlockState('Normal');
@@ -901,7 +901,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			);
 
 			// Assert state graph
-			cy.checkStateGraph('Size', 'Overflow', { laptop: ['Normal'] });
+			cy.checkStateGraph('Size', 'Overflow', { desktop: ['Normal'] });
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -916,7 +916,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 				expect({}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.equal(
@@ -981,8 +981,8 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 				tablet: ['Normal'],
 			});
 
-			// Hover/Laptop
-			setDeviceType('Laptop');
+			// Hover/Desktop
+			setDeviceType('Desktop');
 			// Assert control
 			cy.getByAriaLabel('Visible Overflow').should(
 				'not.have.attr',
@@ -1012,7 +1012,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 				tablet: ['Normal'],
 			});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert control
 			cy.getByAriaLabel('Visible Overflow').should(
@@ -1056,7 +1056,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 
 				expect({}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.equal(

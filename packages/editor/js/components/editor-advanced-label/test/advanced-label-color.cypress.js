@@ -20,7 +20,7 @@ describe('Color Control label testing (BG Color)', () => {
 		});
 	});
 
-	it('should display changed value on BG Color -> Normal -> Laptop', () => {
+	it('should display changed value on BG Color -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Background',
@@ -74,11 +74,11 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Background', 'BG Color', {
-			laptop: ['Normal'],
+			desktop: ['Normal'],
 		});
 	});
 
-	it('should display changed value on BG Color -> Hover -> Laptop', () => {
+	it('should display changed value on BG Color -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
@@ -134,7 +134,7 @@ describe('Color Control label testing (BG Color)', () => {
 		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		// Assert state graph
-		cy.checkStateGraph('Background', 'BG Color', { laptop: ['Hover'] });
+		cy.checkStateGraph('Background', 'BG Color', { desktop: ['Hover'] });
 	});
 
 	it('should display changed value on BG Color, when set value in two states', () => {
@@ -193,7 +193,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Background', 'BG Color', {
-			laptop: ['Normal', 'Hover'],
+			desktop: ['Normal', 'Hover'],
 		});
 	});
 
@@ -221,9 +221,9 @@ describe('Color Control label testing (BG Color)', () => {
 		cy.get('@color-label').should('include.text', 'ccc');
 
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -283,9 +283,9 @@ describe('Color Control label testing (BG Color)', () => {
 		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		/**
-		 * Laptop device (Active)
+		 * Desktop device (Active)
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -298,7 +298,7 @@ describe('Color Control label testing (BG Color)', () => {
 		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		/**
-		 * Laptop device (Normal)
+		 * Desktop device (Normal)
 		 */
 		setBlockState('Normal');
 
@@ -318,10 +318,10 @@ describe('Color Control label testing (BG Color)', () => {
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.setColorControlValue('BG Color', 'ccc');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.setColorControlValue('BG Color', 'bbb');
 
@@ -356,7 +356,7 @@ describe('Color Control label testing (BG Color)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Background', 'BG Color', {
 						tablet: ['Hover'],
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -392,7 +392,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Background', 'BG Color', {
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -406,9 +406,9 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in normal/laptop',
+				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in normal/desktop',
 				() => {
-					setDeviceType('Laptop');
+					setDeviceType('Desktop');
 					setBlockState('Normal');
 					// Reset to default
 					cy.resetBlockeraAttribute(
@@ -429,7 +429,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Background', 'BG Color', {
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 					});
 
 					// Assert store data
@@ -442,7 +442,7 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in hover/laptop',
+				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in hover/desktop',
 				() => {
 					setBlockState('Hover');
 					// Reset to normal
@@ -470,14 +470,14 @@ describe('Color Control label testing (BG Color)', () => {
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 					});
 				}
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			setBlockState('Normal');
 
 			cy.setColorControlValue('BG Color', '1db0cc');
@@ -493,11 +493,11 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states and devices
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
@@ -510,7 +510,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -526,7 +526,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Normal/Tablet
@@ -542,7 +542,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -558,7 +558,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -568,7 +568,7 @@ describe('Color Control label testing (BG Color)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			cy.setColorControlValue('BG Color', '1db0cc');
 
 			// Assert label
@@ -583,11 +583,11 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Navigate between states and devices:
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -601,7 +601,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Normal/Tablet
@@ -618,7 +618,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
@@ -635,7 +635,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
@@ -653,7 +653,7 @@ describe('Color Control label testing (BG Color)', () => {
 					blockeraBackgroundColor: '#1db0cc',
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -666,10 +666,10 @@ describe('Color Control label testing (BG Color)', () => {
 
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.setColorControlValue('BG Color', 'ccc');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.setColorControlValue('BG Color', 'bbb');
 
@@ -718,8 +718,8 @@ describe('Color Control label testing (BG Color)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Background', 'BG Color', {});
 
-					// Hover/Laptop
-					setDeviceType('Laptop');
+					// Hover/Desktop
+					setDeviceType('Desktop');
 					// Assert label
 					cy.checkLabelClassName(
 						'Background',
@@ -734,7 +734,7 @@ describe('Color Control label testing (BG Color)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Background', 'BG Color', {});
 
-					// Normal/Laptop
+					// Normal/Desktop
 					setBlockState('Normal');
 					// Assert label
 					cy.checkLabelClassName(
@@ -763,7 +763,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 
 						expect({}).to.be.deep.eq(
@@ -775,7 +775,7 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			cy.setColorControlValue('BG Color', '{selectall}c4c4c4');
 
 			// Assert label
@@ -790,11 +790,11 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states and devices
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
@@ -808,7 +808,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -825,10 +825,10 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -842,7 +842,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -858,7 +858,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -868,7 +868,7 @@ describe('Color Control label testing (BG Color)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			setBlockState('Hover');
 
 			cy.setColorControlValue('BG Color', '{selectall}c4c4c4');
@@ -885,11 +885,11 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Navigate between states and devices
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -903,7 +903,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Normal/Tablet
@@ -920,7 +920,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
@@ -937,7 +937,7 @@ describe('Color Control label testing (BG Color)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Background', 'BG Color', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
@@ -955,7 +955,7 @@ describe('Color Control label testing (BG Color)', () => {
 					blockeraBackgroundColor: '#c4c4c4',
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(

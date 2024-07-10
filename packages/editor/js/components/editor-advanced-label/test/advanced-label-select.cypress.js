@@ -18,7 +18,7 @@ describe('Select Control label testing (Position)', () => {
 		cy.getParentContainer('Position').as('position-container');
 	});
 
-	it('should display changed value on Position -> Normal -> Laptop', () => {
+	it('should display changed value on Position -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Position',
@@ -77,10 +77,10 @@ describe('Select Control label testing (Position)', () => {
 		});
 
 		// Assert state graph
-		cy.checkStateGraph('Position', 'Position', { laptop: ['Normal'] });
+		cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 	});
 
-	it('should display changed value on Position -> Hover -> Laptop', () => {
+	it('should display changed value on Position -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
@@ -145,7 +145,7 @@ describe('Select Control label testing (Position)', () => {
 		});
 
 		// Assert state graph
-		cy.checkStateGraph('Position', 'Position', { laptop: ['Hover'] });
+		cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 	});
 
 	it('should display changed value on Position, when set value in two states', () => {
@@ -212,7 +212,7 @@ describe('Select Control label testing (Position)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Position', 'Position', {
-			laptop: ['Normal', 'Hover'],
+			desktop: ['Normal', 'Hover'],
 		});
 	});
 
@@ -244,9 +244,9 @@ describe('Select Control label testing (Position)', () => {
 		});
 
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -311,9 +311,9 @@ describe('Select Control label testing (Position)', () => {
 		});
 
 		/**
-		 * Laptop device (Active)
+		 * Desktop device (Active)
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -333,12 +333,12 @@ describe('Select Control label testing (Position)', () => {
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.get('@position-container').within(() => {
 				cy.customSelect('Relative');
 			});
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.get('@position-container').within(() => {
 				cy.customSelect('Absolute');
@@ -377,7 +377,7 @@ describe('Select Control label testing (Position)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Position', 'Position', {
 						tablet: ['Hover'],
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -411,7 +411,7 @@ describe('Select Control label testing (Position)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Position', 'Position', {
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -425,9 +425,9 @@ describe('Select Control label testing (Position)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraPosition, and display effected fields(label, control, stateGraph) in normal/laptop',
+				'should correctly reset blockeraPosition, and display effected fields(label, control, stateGraph) in normal/desktop',
 				() => {
-					setDeviceType('Laptop');
+					setDeviceType('Desktop');
 					setBlockState('Normal');
 					// Reset to default
 					cy.resetBlockeraAttribute('Position', 'Position', 'reset');
@@ -446,7 +446,7 @@ describe('Select Control label testing (Position)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Position', 'Position', {
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 					});
 
 					// Assert store data
@@ -493,14 +493,14 @@ describe('Select Control label testing (Position)', () => {
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 					});
 				}
 			);
 		});
 
-		it('set value in normal/laptop(root) and navigate between states', () => {
+		it('set value in normal/desktop(root) and navigate between states', () => {
 			setBlockState('Normal');
 			// Set value
 			cy.get('@position-container').within(() => {
@@ -521,11 +521,11 @@ describe('Select Control label testing (Position)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states :
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 
 			// Assert label
@@ -542,7 +542,7 @@ describe('Select Control label testing (Position)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -562,7 +562,7 @@ describe('Select Control label testing (Position)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Normal/Tablet
@@ -581,7 +581,7 @@ describe('Select Control label testing (Position)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -598,7 +598,7 @@ describe('Select Control label testing (Position)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -613,7 +613,7 @@ describe('Select Control label testing (Position)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			// Set value
 			cy.get('@position-container').within(() => {
 				cy.customSelect('Sticky');
@@ -633,11 +633,11 @@ describe('Select Control label testing (Position)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Navigate between states :
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 
 			// Assert label
@@ -654,7 +654,7 @@ describe('Select Control label testing (Position)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Normal/Tablet
@@ -673,7 +673,7 @@ describe('Select Control label testing (Position)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
@@ -693,7 +693,7 @@ describe('Select Control label testing (Position)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Position', 'Position', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
@@ -703,7 +703,7 @@ describe('Select Control label testing (Position)', () => {
 					position: { top: '', left: '', right: '', bottom: '' },
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes.blockeraPosition
+						.breakpoints.desktop.attributes.blockeraPosition
 				);
 
 				expect({
@@ -731,12 +731,12 @@ describe('Select Control label testing (Position)', () => {
 
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			cy.get('@position-container').within(() => {
 				cy.customSelect('Relative');
 			});
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			cy.get('@position-container').within(() => {
 				cy.customSelect('Absolute');
@@ -795,8 +795,8 @@ describe('Select Control label testing (Position)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Position', 'Position', {});
 
-					// Hover/Laptop
-					setDeviceType('Laptop');
+					// Hover/Desktop
+					setDeviceType('Desktop');
 					// Assert label
 					cy.checkLabelClassName(
 						'Position',
@@ -813,7 +813,7 @@ describe('Select Control label testing (Position)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Position', 'Position', {});
 
-					// Normal/Laptop
+					// Normal/Desktop
 					setBlockState('Normal');
 					// Assert label
 					cy.checkLabelClassName(
@@ -844,7 +844,7 @@ describe('Select Control label testing (Position)', () => {
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 
 						expect({}).to.be.deep.eq(
@@ -856,7 +856,7 @@ describe('Select Control label testing (Position)', () => {
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			// Set value
 			cy.get('@position-container').within(() => {
 				cy.customSelect('Sticky');
@@ -875,10 +875,10 @@ describe('Select Control label testing (Position)', () => {
 			});
 
 			// Assert state graph
-			cy.checkStateGraph('Position', 'Position', { laptop: ['Normal'] });
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 
 			// Navigate between states and devices
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
@@ -893,7 +893,7 @@ describe('Select Control label testing (Position)', () => {
 			});
 
 			// Assert state graph
-			cy.checkStateGraph('Position', 'Position', { laptop: ['Normal'] });
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 
 			// Hover/Tablet
 			setDeviceType('Tablet');
@@ -909,7 +909,7 @@ describe('Select Control label testing (Position)', () => {
 			});
 
 			// Assert state graph
-			cy.checkStateGraph('Position', 'Position', { laptop: ['Normal'] });
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 
 			// Normal/Tablet
 			setBlockState('Normal');
@@ -926,7 +926,7 @@ describe('Select Control label testing (Position)', () => {
 			});
 
 			// Assert state graph
-			cy.checkStateGraph('Position', 'Position', { laptop: ['Normal'] });
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -941,7 +941,7 @@ describe('Select Control label testing (Position)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -951,7 +951,7 @@ describe('Select Control label testing (Position)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			setBlockState('Hover');
 
 			// Set value
@@ -972,10 +972,10 @@ describe('Select Control label testing (Position)', () => {
 			});
 
 			// Assert state graph
-			cy.checkStateGraph('Position', 'Position', { laptop: ['Hover'] });
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 
 			// Navigate between states and devices
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -990,7 +990,7 @@ describe('Select Control label testing (Position)', () => {
 			});
 
 			// Assert state graph
-			cy.checkStateGraph('Position', 'Position', { laptop: ['Hover'] });
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 
 			// Normal/Tablet
 			setDeviceType('Tablet');
@@ -1008,7 +1008,7 @@ describe('Select Control label testing (Position)', () => {
 			});
 
 			// Assert state graph
-			cy.checkStateGraph('Position', 'Position', { laptop: ['Hover'] });
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 
 			// Hover/Tablet
 			setBlockState('Hover');
@@ -1026,7 +1026,7 @@ describe('Select Control label testing (Position)', () => {
 			});
 
 			// Assert state graph
-			cy.checkStateGraph('Position', 'Position', { laptop: ['Hover'] });
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 
 			// Assert store data
 			getWPDataObject().then((data) => {
@@ -1046,7 +1046,7 @@ describe('Select Control label testing (Position)', () => {
 					},
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(

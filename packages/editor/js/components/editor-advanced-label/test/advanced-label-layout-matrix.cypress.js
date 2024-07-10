@@ -30,7 +30,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		);
 	};
 
-	it('should display changed value on Flex Layout -> Normal -> Laptop', () => {
+	it('should display changed value on Flex Layout -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Layout',
@@ -69,11 +69,11 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Layout', 'Flex Layout', {
-			laptop: ['Normal'],
+			desktop: ['Normal'],
 		});
 	});
 
-	it('should display changed value on Flex Layout -> Hover -> Laptop', () => {
+	it('should display changed value on Flex Layout -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
@@ -132,7 +132,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		checkMatrixItem('matrix-top-center-normal');
 
 		// Assert state graph
-		cy.checkStateGraph('Layout', 'Flex Layout', { laptop: ['Hover'] });
+		cy.checkStateGraph('Layout', 'Flex Layout', { desktop: ['Hover'] });
 	});
 
 	it('should display changed value on Flex Layout, when set value in two states', () => {
@@ -191,7 +191,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 		// Assert state graph
 		cy.checkStateGraph('Layout', 'Flex Layout', {
-			laptop: ['Normal', 'Hover'],
+			desktop: ['Normal', 'Hover'],
 		});
 	});
 
@@ -219,9 +219,9 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		checkMatrixItem('matrix-top-center-selected');
 
 		/**
-		 * Laptop device
+		 * Desktop device
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -281,9 +281,9 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		checkMatrixItem('matrix-top-center-normal');
 
 		/**
-		 * Laptop device (Active)
+		 * Desktop device (Active)
 		 */
-		setDeviceType('Laptop');
+		setDeviceType('Desktop');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -297,7 +297,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		checkMatrixItem('matrix-top-center-normal');
 
 		/**
-		 * Normal (Laptop device)
+		 * Normal (Desktop device)
 		 */
 		setBlockState('Normal');
 
@@ -318,10 +318,10 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			setMatrixItem('matrix-top-left-normal');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			setMatrixItem('matrix-top-center-normal');
 
@@ -352,7 +352,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Layout', 'Flex Layout', {
 						tablet: ['Hover'],
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -384,7 +384,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Layout', 'Flex Layout', {
-						laptop: ['Hover', 'Normal'],
+						desktop: ['Hover', 'Normal'],
 					});
 
 					// Assert store data
@@ -398,9 +398,9 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraFlexLayout, and display effected fields(label, control, stateGraph) in normal/laptop',
+				'should correctly reset blockeraFlexLayout, and display effected fields(label, control, stateGraph) in normal/desktop',
 				() => {
-					setDeviceType('Laptop');
+					setDeviceType('Desktop');
 					setBlockState('Normal');
 					// Reset to default
 					cy.resetBlockeraAttribute('Layout', 'Flex Layout', 'reset');
@@ -417,7 +417,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 					// Assert state graph
 					cy.checkStateGraph('Layout', 'Flex Layout', {
-						laptop: ['Hover'],
+						desktop: ['Hover'],
 					});
 
 					// Assert store data
@@ -434,7 +434,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraFlexLayout, and display effected fields(label, control, stateGraph) in hover/laptop',
+				'should correctly reset blockeraFlexLayout, and display effected fields(label, control, stateGraph) in hover/desktop',
 				() => {
 					setBlockState('Hover');
 					// Reset to normal
@@ -458,14 +458,14 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 					});
 				}
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			setBlockState('Normal');
 			setMatrixItem('matrix-bottom-left-normal');
 
@@ -481,11 +481,11 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states and devices
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
@@ -499,7 +499,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -516,7 +516,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Normal/Tablet
@@ -532,7 +532,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -550,7 +550,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -560,7 +560,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			setMatrixItem('matrix-bottom-right-normal');
 
 			// Assert label
@@ -575,11 +575,11 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Navigate between states and devices:
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -601,7 +601,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Normal/Tablet
@@ -626,7 +626,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
@@ -651,7 +651,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
@@ -675,7 +675,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					},
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -688,10 +688,10 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
-			// Set value in normal/laptop
+			// Set value in normal/desktop
 			setMatrixItem('matrix-top-left-normal');
 
-			// Set value in hover/laptop
+			// Set value in hover/desktop
 			addBlockState('hover');
 			setMatrixItem('matrix-top-center-normal');
 
@@ -756,8 +756,8 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Layout', 'Flex Layout', {});
 
-					// Hover/Laptop
-					setDeviceType('Laptop');
+					// Hover/Desktop
+					setDeviceType('Desktop');
 					// Assert label
 					cy.checkLabelClassName(
 						'Layout',
@@ -780,7 +780,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					// Assert state graph
 					cy.checkStateGraph('Layout', 'Flex Layout', {});
 
-					// Normal/Laptop
+					// Normal/Desktop
 					setBlockState('Normal');
 					// Assert label
 					cy.checkLabelClassName(
@@ -821,7 +821,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.laptop.attributes
+								.breakpoints.desktop.attributes
 						);
 
 						expect({}).to.be.deep.eq(
@@ -833,7 +833,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			);
 		});
 
-		it('set value in normal/laptop and navigate between states', () => {
+		it('set value in normal/desktop and navigate between states', () => {
 			setMatrixItem('matrix-bottom-center-normal');
 
 			// Assert label
@@ -848,11 +848,11 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Navigate between states and devices
-			// Hover/Laptop
+			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
@@ -866,7 +866,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
@@ -883,10 +883,10 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -900,7 +900,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Normal'],
+				desktop: ['Normal'],
 			});
 
 			// Assert store data
@@ -918,7 +918,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -928,7 +928,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			});
 		});
 
-		it('set value in hover/laptop and navigate between states', () => {
+		it('set value in hover/desktop and navigate between states', () => {
 			setBlockState('Hover');
 			setMatrixItem('matrix-bottom-right-normal');
 
@@ -944,11 +944,11 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Navigate between states and devices
-			// Normal/Laptop
+			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
@@ -970,7 +970,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Normal/Tablet
@@ -995,7 +995,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
@@ -1020,7 +1020,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 
 			// Assert state graph
 			cy.checkStateGraph('Layout', 'Flex Layout', {
-				laptop: ['Hover'],
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
@@ -1044,7 +1044,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 					},
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.laptop.attributes
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(

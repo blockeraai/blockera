@@ -23,7 +23,7 @@ if (experimental().get('editor.extensions.effectsExtension.divider')) {
 			cy.getByDataTest('divider-item-header').as('divider-item');
 		});
 
-		it('should display changed value on Divider/Animation -> Normal -> Laptop', () => {
+		it('should display changed value on Divider/Animation -> Normal -> Desktop', () => {
 			// Assert label before set value
 			cy.getByAriaLabel('Animation').should(
 				'not.have.class',
@@ -62,7 +62,7 @@ if (experimental().get('editor.extensions.effectsExtension.divider')) {
 				.should('have.class', 'is-checked');
 
 			// Assert state graph
-			cy.checkStateGraph('', 'Animation', { laptop: ['Normal'] }, true);
+			cy.checkStateGraph('', 'Animation', { desktop: ['Normal'] }, true);
 		});
 
 		it('should display changed value on Divider/Animation -> Normal -> Tablet', () => {
@@ -90,9 +90,9 @@ if (experimental().get('editor.extensions.effectsExtension.divider')) {
 				.should('have.class', 'is-checked');
 
 			/**
-			 * Laptop device
+			 * Desktop device
 			 */
-			setDeviceType('Laptop');
+			setDeviceType('Desktop');
 			cy.get('@divider-item').click();
 
 			// Assert label
