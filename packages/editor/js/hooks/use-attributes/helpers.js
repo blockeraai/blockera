@@ -127,6 +127,10 @@ export const memoizedRootBreakpoints: (
 														},
 													},
 												},
+												// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
+												// We need to address the isVisible property in the block-states repeater item,
+												// as there is currently no UI for this property in the block-states repeater item.
+												isVisible: true,
 											},
 										},
 									},
@@ -228,6 +232,10 @@ export const memoizedBlockStates: (
 							insideInnerBlock
 						),
 					},
+					// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
+					// We need to address the isVisible property in the block-states repeater item,
+					// as there is currently no UI for this property in the block-states repeater item.
+					isVisible: true,
 				},
 			},
 			{
