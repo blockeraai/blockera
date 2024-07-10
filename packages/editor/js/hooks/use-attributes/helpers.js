@@ -332,7 +332,7 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 				);
 			}
 		}
-		console.log(stateBreakpoints);
+
 		blockeraBlockStates[stateType] = mergeObject(
 			blockStates[stateType],
 			{
