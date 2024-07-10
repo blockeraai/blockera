@@ -27,17 +27,23 @@ export const getCssSelector = ({
 	query,
 	support,
 	clientId,
+	masterState,
 	currentBlock,
 	blockSelectors,
 	className = '',
 	suffixClass = '',
-	device = getBaseBreakpoint(),
+	activeDeviceType,
 	fallbackSupportId,
+	device = getBaseBreakpoint(),
 }: NormalizedSelectorProps): string => {
-	const rootSelector =
+	let rootSelector =
 		getBaseBreakpoint() === device
 			? '{{BLOCK_ID}}'
 			: `.is-${device}-preview {{BLOCK_ID}}`;
+
+	if (device === activeDeviceType && getBaseBreakpoint() !== device) {
+		rootSelector = `.is-${device}-preview {{BLOCK_ID}}`;
+	}
 
 	const selectors: {
 		[key: TStates]: {
@@ -45,17 +51,13 @@ export const getCssSelector = ({
 		},
 	} = {};
 	const customizedPseudoClasses = [
-		'normal',
 		'parent-class',
 		'custom-class',
 		'parent-hover',
 	];
 	const { getSelectedBlock } = select('core/block-editor');
-	const {
-		getExtensionCurrentBlock,
-		getExtensionInnerBlockState,
-		getExtensionCurrentBlockState,
-	} = select('blockera/extensions');
+	const { getExtensionInnerBlockState, getExtensionCurrentBlockState } =
+		select('blockera/extensions');
 
 	// primitive block value.
 	let block: Object = {};
@@ -102,34 +104,31 @@ export const getCssSelector = ({
 			const generateSelector = (selector: string): string => {
 				// Current Block is inner block.
 				if (fromInnerBlock) {
-					// Recieved state is not normal and recieved state is not one of customizedPseudoClasses.
-					// because customizedPseudoClasses by default not supported in css.
-					if (
-						!isNormalState(state) &&
-						!customizedPseudoClasses.includes(state)
-					) {
-						// Master block is not normal.
-						if (!isNormalState(getExtensionCurrentBlockState())) {
-							// Assume recieved state equals with master block real state.
+					// Assume inner block inside pseudo-state of master.
+					if (masterState && !isNormalState(masterState)) {
+						if (!isNormalState(state)) {
 							if (
-								state === getExtensionCurrentBlockState() &&
-								isInnerBlock(getExtensionCurrentBlock())
+								!isNormalState(
+									getExtensionCurrentBlockState()
+								) &&
+								masterState ===
+									getExtensionCurrentBlockState() &&
+								!isNormalState(getExtensionInnerBlockState()) &&
+								state === getExtensionInnerBlockState()
 							) {
-								return `${rootSelector}:${state} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+								return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
 							}
 
-							// Assume real current block is master.
-							if (!isInnerBlock(getExtensionCurrentBlock())) {
-								return `${rootSelector} ${selector}${suffixClass}:${state}`;
-							}
-
-							return `${rootSelector}:${state} ${selector}${suffixClass}:${state}`;
+							return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}`;
 						}
 
-						// Assume recieved state equals with inner block real state.
+						return `${rootSelector}:${masterState} ${selector}${suffixClass}`;
+					}
+
+					if (!isNormalState(state) && masterState) {
 						if (
-							state === getExtensionInnerBlockState() &&
-							isInnerBlock(getExtensionCurrentBlock())
+							!isNormalState(getExtensionInnerBlockState()) &&
+							state === getExtensionInnerBlockState()
 						) {
 							return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
 						}
@@ -137,24 +136,11 @@ export const getCssSelector = ({
 						return `${rootSelector} ${selector}${suffixClass}:${state}`;
 					}
 
-					// Assume active master block state is not normal and recieved state is not one of customizedPseudoClasses.
-					// because customizedPseudoClasses by default not supported in css.
-					if (
-						!isNormalState(getExtensionCurrentBlockState()) &&
-						!customizedPseudoClasses.includes(state)
-					) {
-						return `${rootSelector}:${state} ${selector}${suffixClass}, ${rootSelector} ${selector}${suffixClass}`;
-					}
-
 					return `${rootSelector} ${selector}${suffixClass}`;
 				}
 
-				// Recieved state is not normal and recieved state is not one of customizedPseudoClasses.
-				// because customizedPseudoClasses by default not supported in css.
-				if (
-					!isNormalState(state) &&
-					!customizedPseudoClasses.includes(state)
-				) {
+				// Recieved state is not normal.
+				if (!isNormalState(state)) {
 					// Assume active master block state is not normal.
 					if (
 						!isNormalState(getExtensionCurrentBlockState()) &&
@@ -170,11 +156,21 @@ export const getCssSelector = ({
 			};
 
 			if (1 === parsedSelectors.length) {
+				if (customizedPseudoClasses.includes(state)) {
+					return _selector;
+				}
+
 				return generateSelector(_selector);
 			}
 
 			return parsedSelectors
-				.map((selector: string): string => generateSelector(selector))
+				.map((selector: string): string => {
+					if (customizedPseudoClasses.includes(state)) {
+						return selector;
+					}
+
+					return generateSelector(selector);
+				})
 				.join(', ');
 		};
 

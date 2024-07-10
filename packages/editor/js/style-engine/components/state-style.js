@@ -5,6 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { useId } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -73,8 +74,21 @@ export const StateStyle = (
 	const states: Array<TStates | string> = Object.keys(blockStates);
 
 	return states.map(
-		(state: TStates | string, index: number): MixedElement => (
-			<Stylesheet key={state + index + id} {...{ ...props, state }} />
-		)
+		(state: TStates | string, index: number): MixedElement => {
+			// Filtered allowed states to generate stylesheet.
+			// in free version allowed just "normal" and "hover".
+			if (
+				!applyFilters('blockera.editor.styleEngine.allowedStates', [
+					'normal',
+					'hover',
+				]).includes(state)
+			) {
+				return <></>;
+			}
+
+			return (
+				<Stylesheet key={state + index + id} {...{ ...props, state }} />
+			);
+		}
 	);
 };

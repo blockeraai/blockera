@@ -17,12 +17,12 @@ import {
 	BorderAndShadowStyles,
 } from '../../extensions';
 import { useStoreSelectors } from '../../hooks';
-import {
-	isNormalState,
-	prepareAttributesDefaultValues,
-} from '../../extensions/components';
+import { prepareAttributesDefaultValues } from '../../extensions/components';
 import type { CssRule } from '../types';
-import type { TBreakpoint } from '../../extensions/libs/block-states/types';
+import type {
+	TBreakpoint,
+	TStates,
+} from '../../extensions/libs/block-states/types';
 import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 
@@ -44,6 +44,7 @@ export const useComputedCssProps = ({
 		state,
 		selectors,
 	};
+
 	// eslint-disable-next-line @wordpress/no-unused-vars-before-return,react-hooks/exhaustive-deps
 	const defaultAttributes = prepareAttributesDefaultValues(
 		getBlockType(blockName)?.attributes || {}
@@ -67,205 +68,123 @@ export const useComputedCssProps = ({
 			].flat()
 		);
 	};
-	const validateState = (
-		states: Object,
-		normalFlag: boolean = false
-	): boolean => {
-		// Has pseudo-classes in block states for current block?
-		if (Object.keys(states).length < 2 && !normalFlag) {
-			return false;
-		}
-
-		const settings = states[state];
-
-		// Recieved state has any values for current block attributes?
-		return !!settings && settings?.isVisible && settings?.breakpoints;
+	const validateBlockStates = (state: Object): boolean => {
+		return state?.isVisible && !!state?.breakpoints;
 	};
 
-	// Calculation root styles ...
-	if (isNormalState(state)) {
-		appendStyles({
-			...calculatedProps,
-			currentBlock: 'master',
-			device: getBaseBreakpoint(),
-		});
-
-		const generateCssForInnersInsideNormalState = (
-			[blockType, { attributes }]: [InnerBlockType | string, Object],
-			device: TBreakpoint | string
-		): void => {
-			// Assume attributes hasn't any values.
-			if (!Object.keys(attributes)) {
-				return;
-			}
-
-			appendStyles({
-				...calculatedProps,
-				selectors: blockeraInnerBlocks[blockType]?.selectors || {},
-				attributes: {
-					...defaultAttributes,
-					...attributes,
-				},
-				currentBlock: blockType,
-				device,
-			});
-		};
-
-		// Calculation inner blocks styles for normal state ...
-		Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
-			(innerBlock: [InnerBlockType | string, Object]): void =>
-				generateCssForInnersInsideNormalState(innerBlock, 'laptop')
-		);
-
-		// Assume recieved state is invalid.
-		if (!validateState(params?.attributes?.blockeraBlockStates, true)) {
-			return stylesStack.flat();
+	const generateCssStyleForInnerBlocks = (
+		[blockType, { attributes }]: [InnerBlockType | string, Object],
+		device: TBreakpoint | string,
+		masterState: TStates
+	): void => {
+		// Assume attributes hasn't any values.
+		if (!Object.keys(attributes).length) {
+			return;
 		}
 
-		const states = params?.attributes?.blockeraBlockStates;
-		const settings = states.normal;
+		for (const stateType in attributes?.blockeraBlockStates || {}) {
+			const stateItem = attributes?.blockeraBlockStates[stateType];
 
-		// Calculation styles for each normal state in all breakpoints ...
-		Object.entries(settings?.breakpoints || {}).forEach(
-			([breakpoint, setting]: [TBreakpoint | string, Object]): void => {
-				if (getBaseBreakpoint() === breakpoint) {
-					return;
-				}
+			if (!validateBlockStates(stateItem)) {
+				continue;
+			}
 
-				if (!Object.keys(setting?.attributes).length) {
-					return;
+			const breakpoints = stateItem.breakpoints;
+
+			for (const breakpointType in breakpoints) {
+				const breakpointItem = breakpoints[breakpointType];
+
+				if (!Object.keys(breakpointItem?.attributes).length) {
+					continue;
 				}
 
 				appendStyles({
 					...calculatedProps,
+					state: stateType,
+					masterState,
+					selectors: blockeraInnerBlocks[blockType]?.selectors || {},
 					attributes: {
 						...defaultAttributes,
-						...setting?.attributes,
+						...breakpointItem?.attributes,
 					},
-					currentBlock: 'master',
-					device: breakpoint,
+					currentBlock: blockType,
+					device: breakpointType,
 				});
-
-				// Calculation inner blocks styles for recieved state ...
-				Object.entries(
-					setting?.attributes?.blockeraInnerBlocks || {}
-				).forEach(
-					(innerBlock: [InnerBlockType | string, Object]): void =>
-						generateCssForInnersInsideNormalState(
-							innerBlock,
-							breakpoint
-						)
-				);
 			}
-		);
-	}
-	// Calculation styles pseudo-classes ...
-	else {
-		switch (state) {
-			// case 'hover':
-			// case 'active':
-			// case 'focus':
-			// case 'visited':
-			// case 'before':
-			// case 'after':
-			default:
-				const generateCssForInnersInsidePseudoState = (
-					[blockType, { attributes }]: [string, Object],
-					device: TBreakpoint | string
-				): void => {
-					// Assume attributes hasn't any values.
-					if (!attributes?.blockeraBlockStates) {
-						return;
-					}
-
-					if (!validateState(attributes?.blockeraBlockStates)) {
-						return;
-					}
-
-					const settings = attributes.blockeraBlockStates[state];
-
-					// Calculation inner block styles for pseudo-classes ...
-					Object.entries(settings?.breakpoints).forEach(
-						([, { attributes: _attributes }]: [
-							string,
-							Object
-						]): void => {
-							if (!Object.keys(_attributes).length) {
-								return;
-							}
-
-							appendStyles({
-								...calculatedProps,
-								selectors:
-									blockeraInnerBlocks[blockType]?.selectors ||
-									{},
-								attributes: {
-									...defaultAttributes,
-									..._attributes,
-								},
-								currentBlock: blockType,
-								device,
-							});
-						}
-					);
-				};
-
-				// Calculation inner blocks styles for pseudo state ...
-				Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
-					(innerBlock: [string, Object]): void =>
-						generateCssForInnersInsidePseudoState(
-							innerBlock,
-							getBaseBreakpoint()
-						)
-				);
-
-				// Assume recieved state is invalid.
-				if (!validateState(params?.attributes?.blockeraBlockStates)) {
-					return stylesStack.flat();
-				}
-
-				const states = params?.attributes?.blockeraBlockStates;
-				const settings = states[state];
-
-				// Calculation styles for recieved state ...
-				Object.entries(settings?.breakpoints || {}).forEach(
-					([breakpoint, setting]): void => {
-						if (!Object.keys(setting?.attributes).length) {
-							return;
-						}
-
-						appendStyles({
-							...calculatedProps,
-							attributes: {
-								...defaultAttributes,
-								...setting?.attributes,
-							},
-							currentBlock: 'master',
-							device: breakpoint,
-						});
-
-						// Calculation inner blocks styles for recieved state ...
-						Object.entries(
-							setting?.attributes?.blockeraInnerBlocks || {}
-						).forEach((innerBlock: [string, Object]): void =>
-							generateCssForInnersInsidePseudoState(
-								innerBlock,
-								breakpoint
-							)
-						);
-					}
-				);
-
-				break;
-			case 'custom-class':
-			case 'parent-class':
-				// FIXME: implements ...
-				break;
-			case 'parent-hover':
-				break;
 		}
 
+		appendStyles({
+			...calculatedProps,
+			state: 'normal',
+			masterState,
+			selectors: blockeraInnerBlocks[blockType]?.selectors || {},
+			attributes: {
+				...defaultAttributes,
+				...attributes,
+			},
+			currentBlock: blockType,
+			device,
+		});
+	};
+
+	// TODO: please implemented custom special pseudo-states for all blocks.
+	if (['custom-class', 'parent-class', 'parent-hover'].includes(state)) {
 		return stylesStack.flat();
+	}
+
+	// 1- create css styles for master blocks with root attributes.
+	appendStyles({
+		...calculatedProps,
+		state: 'normal',
+		currentBlock: 'master',
+		device: getBaseBreakpoint(),
+	});
+
+	// 2- create css styles for inner blocks inside master normal state on base breakpoint.
+	Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
+		(innerBlock: [InnerBlockType | string, Object]): void =>
+			generateCssStyleForInnerBlocks(
+				innerBlock,
+				getBaseBreakpoint(),
+				'normal'
+			)
+	);
+
+	// 3- validate saved block-states to creating css styles for all states of blocks.
+	const states = params?.attributes?.blockeraBlockStates;
+	const stateItem = states[state];
+
+	if (validateBlockStates(stateItem)) {
+		for (const breakpointType in stateItem?.breakpoints || {}) {
+			const breakpoint = stateItem?.breakpoints[breakpointType];
+
+			if (!Object.keys(breakpoint?.attributes).length) {
+				continue;
+			}
+
+			appendStyles({
+				...calculatedProps,
+				attributes: {
+					...defaultAttributes,
+					...breakpoint?.attributes,
+				},
+				currentBlock: 'master',
+				device: breakpointType,
+			});
+
+			// creating css styles for inner blocks inside master pseudo-states ...
+			for (const innerBlockType in breakpoint?.attributes
+				?.blockeraInnerBlocks || {}) {
+				const innerBlock =
+					breakpoint?.attributes?.blockeraInnerBlocks[innerBlockType];
+
+				generateCssStyleForInnerBlocks(
+					[innerBlockType, innerBlock],
+					breakpointType,
+					state
+				);
+			}
+		}
 	}
 
 	return stylesStack.flat();
