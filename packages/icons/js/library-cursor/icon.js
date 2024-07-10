@@ -18,12 +18,13 @@ import { getIcon } from '../index';
 import type { IconProps } from '../types';
 
 export function CursorIcon({
+	library = 'cursor',
 	icon,
 	iconSize = 20,
 	...props
 }: IconProps): MixedElement {
 	if (isString(icon)) {
-		icon = getIcon(icon, 'cursor');
+		icon = getIcon(icon, library);
 	}
 
 	//$FlowFixMe

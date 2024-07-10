@@ -18,12 +18,13 @@ import { getIcon } from '../index';
 import type { IconProps } from '../types';
 
 export function BlockeraIcon({
+	library = 'blockera',
 	icon,
 	iconSize,
 	...props
 }: IconProps): MixedElement {
 	if (isString(icon)) {
-		icon = getIcon(icon, 'blockera');
+		icon = getIcon(icon, library);
 	}
 
 	//$FlowFixMe

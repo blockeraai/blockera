@@ -35,16 +35,16 @@ export function Icon({
 
 	switch (library) {
 		case 'ui':
-			return <BlockeraUIIcon {...props} />;
+			return <BlockeraUIIcon library={library} {...props} />;
 
 		case 'blockera':
-			return <BlockeraIcon {...props} />;
+			return <BlockeraIcon library={library} {...props} />;
 
 		case 'cursor':
-			return <CursorIcon {...props} />;
+			return <CursorIcon library={library} {...props} />;
 
 		default:
-			return <WPIcon {...props} />;
+			return <WPIcon library={library} {...props} />;
 	}
 }
 
@@ -54,6 +54,9 @@ export function getIcon(
 	standardize: boolean = true
 ): null | Object {
 	if (!isValidIconLibrary(libraryName)) {
+		console.warn(
+			`Icon library is not correct or not found. Library: '${libraryName}', Icon: '${iconName}'`
+		);
 		return null;
 	}
 
@@ -71,6 +74,9 @@ export function getIcon(
 		return { iconName, library: libraryName, icon: lib[iconName] };
 	}
 
+	console.warn(
+		`Icon id is not correct or not found. Icon: '${iconName}', Library: '${libraryName}'`
+	);
 	return null;
 }
 
