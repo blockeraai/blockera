@@ -15,10 +15,12 @@ export type NormalizedSelectorProps = {
 	clientId: string,
 	support?: string,
 	className?: string,
+	masterState?: TStates,
 	suffixClass?: string,
 	device?: TBreakpoint,
 	blockSelectors: Object,
 	fallbackSupportId?: string,
+	activeDeviceType?: TBreakpoint,
 	currentBlock: 'master' | InnerBlockType | string,
 };
 

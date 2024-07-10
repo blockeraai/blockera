@@ -135,7 +135,7 @@ describe('Inner Blocks E2E Test', () => {
 			cy.contains('Hover').should('not.exist');
 		});
 
-		it('should create correct id for repeater item when update states', () => {
+		it('should not changed blockeraInnerBlocks attribute because add state but not changed anythings on selected state', () => {
 			initialSetting();
 			setInnerBlock('Link');
 
@@ -144,11 +144,8 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Check store
 			getWPDataObject().then((data) => {
-				expect(['normal', 'hover']).to.be.deep.equal(
-					Object.keys(
-						getSelectedBlock(data, 'blockeraInnerBlocks').link
-							.attributes.blockeraBlockStates
-					)
+				expect(undefined).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraInnerBlocks').link
 				);
 			});
 		});
@@ -244,22 +241,20 @@ describe('Inner Blocks E2E Test', () => {
 			// Set desktop viewport
 			cy.viewport(1441, 1920);
 
-			//TODO
-			// cy.get('.my-link').should(
-			// 	'have.css',
-			// 	'background-color',
-			// 	'rgb(204, 204, 204)'
-			// );
+			cy.get('.my-link').should(
+				'not.have.css',
+				'background-color',
+				'rgb(204, 204, 204)'
+			);
 
 			// // set Tablet viewport
 			cy.viewport(768, 1024);
 
-			//TODO
-			// cy.get('.my-link').should(
-			// 	'have.css',
-			// 	'background-color',
-			// 	'rgb(204, 204, 204)'
-			// );
+			cy.get('.my-link').should(
+				'have.css',
+				'background-color',
+				'rgb(204, 204, 204)'
+			);
 		});
 
 		it('should set attribute correctly when breakpoint : Tablet', () => {
@@ -337,36 +332,26 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Assert in default viewport
 			cy.get('.my-link').should(
-				'have.css',
+				'not.have.css',
 				'background-color',
 				'rgb(204, 204, 204)'
 			);
 
-			// Set desktop viewport
-			cy.viewport(1441, 1920);
+			// set tablet viewport
+			cy.viewport(768, 1024);
 			cy.get('.my-link').should(
 				'have.css',
 				'background-color',
 				'rgb(204, 204, 204)'
 			);
 
-			// TODO:
-			// set tablet viewport
-			// cy.viewport(768, 1024);
-			// cy.get('.my-link').should(
-			// 	'have.css',
-			// 	'background-color',
-			// 	'rgb(204, 204, 204)'
-			// );
-
-			// todo
 			// set mobile viewport
-			// cy.viewport(320, 480);
-			// cy.get('.my-link').should(
-			// 	'have.css',
-			// 	'background-color',
-			// 	'rgb(204, 204, 204)'
-			// );
+			cy.viewport(320, 480);
+			cy.get('.my-link').should(
+				'have.css',
+				'background-color',
+				'rgb(204, 204, 204)'
+			);
 		});
 	});
 
@@ -429,14 +414,6 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Assert block css : inner / normal
 			getWPDataObject().then((data) => {
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)} a`)
-					.should(
-						'not.have.css',
-						'background-color',
-						'rgb(204, 204, 204)'
-					);
-
 				// Real hover
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)} a`)
@@ -444,7 +421,7 @@ describe('Inner Blocks E2E Test', () => {
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)} a`)
 					.should(
-						'not.have.css',
+						'have.css',
 						'background-color',
 						'rgb(204, 204, 204)'
 					);
@@ -471,27 +448,15 @@ describe('Inner Blocks E2E Test', () => {
 				'rgb(204, 204, 204)'
 			);
 
-			//TODO:
-			// Set desktop viewport
-			cy.viewport(1441, 1920);
-
-			//cy.get('.my-link').realHover();
-			// cy.get('.my-link').should(
-			// 	'have.css',
-			// 	'background-color',
-			// 	'rgb(204, 204, 204)'
-			// );
-
-			// TODO:
 			// set tablet viewport
 			cy.viewport(768, 1024);
 
-			//cy.get('.my-link').realHover();
-			// cy.get('.my-link').should(
-			// 	'have.css',
-			// 	'background-color',
-			// 	'rgb(204, 204, 204)'
-			// );
+			cy.get('.my-link').realHover();
+			cy.get('.my-link').should(
+				'have.css',
+				'background-color',
+				'rgb(204, 204, 204)'
+			);
 		});
 
 		it('should set attribute correctly when : Tablet', () => {
@@ -514,11 +479,13 @@ describe('Inner Blocks E2E Test', () => {
 			cy.setColorControlValue('BG Color', 'cccccc');
 
 			// Reselect
+			setBlockState('Normal');
 			reSelectBlock();
 			setInnerBlock('Link');
+			setBlockState('Hover');
 
 			// Assert control value
-			cy.setColorControlValue('BG Color', 'cccccc');
+			cy.getParentContainer('BG Color').should('contain', '#cccccc');
 			checkCurrentState('hover');
 
 			// Assert block css : inner / hover / tablet
@@ -547,6 +514,9 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Change device to laptop
 			setDeviceType('Laptop');
+			setBlockState('Normal');
+			reSelectBlock();
+			setInnerBlock('Link');
 
 			// Assert block css : inner / hover / laptop
 			getWPDataObject().then((data) => {
@@ -612,7 +582,7 @@ describe('Inner Blocks E2E Test', () => {
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)} a`)
 					.should(
-						'not.have.css',
+						'have.css',
 						'background-color',
 						'rgb(204, 204, 204)'
 					);
@@ -627,10 +597,8 @@ describe('Inner Blocks E2E Test', () => {
 						.attributes
 				);
 
-				expect({}).to.be.deep.equal(
+				expect(undefined).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
 				);
 			});
 
@@ -645,21 +613,6 @@ describe('Inner Blocks E2E Test', () => {
 				'rgb(204, 204, 204)'
 			);
 
-			cy.get('.my-link').realHover();
-			cy.get('.my-link').should(
-				'have.css',
-				'background-color',
-				'rgb(204, 204, 204)'
-			);
-
-			// Set desktop viewport
-			cy.viewport(1441, 1920);
-
-			cy.get('.my-link').should(
-				'not.have.css',
-				'background-color',
-				'rgb(204, 204, 204)'
-			);
 			cy.get('.my-link').realHover();
 			cy.get('.my-link').should(
 				'not.have.css',
@@ -713,24 +666,13 @@ describe('Inner Blocks E2E Test', () => {
 					).length
 				);
 
-				expect(undefined).to.be.equal(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints.tablet
-				);
-
-				expect(undefined).to.be.equal(
+				expect('#cccccc').to.be.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
 						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes.blockeraHeight
+						.attributes.blockeraBackgroundColor
 				);
 
 				expect({
-					normal: {
-						breakpoints: {
-							laptop: { attributes: {} },
-						},
-						isVisible: true,
-					},
 					hover: {
 						breakpoints: {
 							laptop: {
@@ -796,7 +738,11 @@ describe('Inner Blocks E2E Test', () => {
 
 					setInnerBlock('Link');
 
-					checkCurrentState('normal');
+					getWPDataObject().then((data) => {
+						expect(undefined).to.be.deep.equal(
+							getSelectedBlock(data, 'blockeraInnerBlocks').link
+						);
+					});
 				});
 			});
 		});

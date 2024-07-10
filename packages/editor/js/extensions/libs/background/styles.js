@@ -20,11 +20,12 @@ export const BackgroundStyles = ({
 	state,
 	clientId,
 	blockName,
+	masterState,
 	currentBlock,
-	// supports,
 	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
 	const {
 		blockeraBackground,
@@ -37,11 +38,13 @@ export const BackgroundStyles = ({
 		attributes: currentBlockAttributes,
 	};
 	const sharedParams = {
+		...props,
 		state,
 		clientId,
+		masterState,
 		currentBlock,
 		blockSelectors,
-		device: activeDeviceType,
+		activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 	const styleGroup: Array<CssRule> = [];
