@@ -19,8 +19,8 @@ export const PositionStyles = ({
 	state,
 	clientId,
 	blockName,
+	masterState,
 	currentBlock,
-	// supports,
 	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
@@ -37,9 +37,10 @@ export const PositionStyles = ({
 		...props,
 		state,
 		clientId,
+		masterState,
 		currentBlock,
 		blockSelectors,
-		device: activeDeviceType,
+		activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 	const staticDefinitionParams = {

@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import { isEmptyObject } from '@blockera/utils';
+import { isEmptyObject, isEquals } from '@blockera/utils';
 import { getValueAddonRealValue } from '@blockera/controls';
 
 /**
@@ -22,6 +22,7 @@ export function TypographyStyles({
 	state,
 	clientId,
 	blockName,
+	masterState,
 	currentBlock,
 	activeDeviceType,
 	selectors: blockSelectors,
@@ -57,9 +58,10 @@ export function TypographyStyles({
 		...props,
 		state,
 		clientId,
+		masterState,
 		currentBlock,
 		blockSelectors,
-		device: activeDeviceType,
+		activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 
@@ -476,7 +478,12 @@ export function TypographyStyles({
 	if (isActiveField(blockeraTextColumns)) {
 		const blockeraTextColumns = blockProps.attributes.blockeraTextColumns;
 
-		if (blockeraTextColumns !== attributes.blockeraTextColumns.default) {
+		if (
+			!isEquals(
+				blockeraTextColumns,
+				attributes.blockeraTextColumns.default
+			)
+		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
 				query: 'blockeraTextColumns',

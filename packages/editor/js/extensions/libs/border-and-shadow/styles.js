@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * Blockera dependencies
+ */
+import { isEquals } from '@blockera/utils';
+
+/**
  * Internal dependencies
  */
 import * as config from '../base/config';
@@ -21,8 +26,8 @@ export const BorderAndShadowStyles = ({
 	state,
 	clientId,
 	blockName,
+	masterState,
 	currentBlock,
-	// supports,
 	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
@@ -45,9 +50,10 @@ export const BorderAndShadowStyles = ({
 		...props,
 		state,
 		clientId,
+		masterState,
 		currentBlock,
 		blockSelectors,
-		device: activeDeviceType,
+		activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 
@@ -142,7 +148,12 @@ export const BorderAndShadowStyles = ({
 	if (isActiveField(blockeraBorderRadius)) {
 		const blockeraBorderRadius = blockProps.attributes.blockeraBorderRadius;
 
-		if (blockeraBorderRadius !== attributes.blockeraBorderRadius.default) {
+		if (
+			!isEquals(
+				blockeraBorderRadius,
+				attributes.blockeraBorderRadius.default
+			)
+		) {
 			const pickedSelector = getCssSelector({
 				...sharedParams,
 				query: 'blockeraBorderRadius',

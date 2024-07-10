@@ -30,8 +30,8 @@ export const EffectsStyles = ({
 	state,
 	clientId,
 	blockName,
+	masterState,
 	currentBlock,
-	// supports,
 	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
@@ -58,9 +58,10 @@ export const EffectsStyles = ({
 		...props,
 		state,
 		clientId,
+		masterState,
 		currentBlock,
 		blockSelectors,
-		device: activeDeviceType,
+		activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 
@@ -189,7 +190,10 @@ export const EffectsStyles = ({
 			)}`;
 		}
 
-		if (blockProps.attributes.blockeraBackfaceVisibility) {
+		if (
+			blockProps.attributes.blockeraBackfaceVisibility !==
+			attributes.blockeraBackfaceVisibility.default
+		) {
 			transformProperties['backface-visibility'] =
 				blockProps.attributes.blockeraBackfaceVisibility;
 		}

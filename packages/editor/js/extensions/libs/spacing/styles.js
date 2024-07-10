@@ -78,8 +78,8 @@ export const SpacingStyles = ({
 	state,
 	clientId,
 	blockName,
+	masterState,
 	currentBlock,
-	// supports,
 	activeDeviceType,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
@@ -96,9 +96,10 @@ export const SpacingStyles = ({
 		...props,
 		state,
 		clientId,
+		masterState,
 		currentBlock,
 		blockSelectors,
-		device: activeDeviceType,
+		activeDeviceType,
 		className: currentBlockAttributes?.className,
 	};
 	const staticDefinitionParams = {
