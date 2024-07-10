@@ -31,7 +31,7 @@ describe('Inner Blocks E2E Test', () => {
 
 	const initialSetting = () => {
 		appendBlocks(
-			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{"normal":{"breakpoints":{"laptop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
+			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{"normal":{"breakpoints":{"desktop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
 			<p class="blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74"><a href="http://localhost/wordpress/2023/12/16/5746/" data-type="post" data-id="5746" class="my-link">link</a></p>
 			<!-- /wp:paragraph -->`
 		);
@@ -290,13 +290,13 @@ describe('Inner Blocks E2E Test', () => {
 					);
 			});
 
-			// Change device to laptop
-			setDeviceType('Laptop');
+			// Change device to desktop
+			setDeviceType('Desktop');
 
 			// Assert control
 			cy.getParentContainer('BG Color').should('contain', 'None');
 
-			// Assert block css : inner /laptop
+			// Assert block css : inner /desktop
 			getWPDataObject().then((data) => {
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)} a`)
@@ -431,8 +431,8 @@ describe('Inner Blocks E2E Test', () => {
 			getWPDataObject().then((data) => {
 				expect({ blockeraBackgroundColor: '#cccccc' }).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes
 				);
 			});
 
@@ -512,13 +512,13 @@ describe('Inner Blocks E2E Test', () => {
 					);
 			});
 
-			// Change device to laptop
-			setDeviceType('Laptop');
+			// Change device to desktop
+			setDeviceType('Desktop');
 			setBlockState('Normal');
 			reSelectBlock();
 			setInnerBlock('Link');
 
-			// Assert block css : inner / hover / laptop
+			// Assert block css : inner / hover / desktop
 			getWPDataObject().then((data) => {
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)} a`)
@@ -547,7 +547,7 @@ describe('Inner Blocks E2E Test', () => {
 			// Change state to normal
 			setBlockState('Normal');
 
-			// Assert block css : inner / normal / laptop
+			// Assert block css : inner / normal / desktop
 			getWPDataObject().then((data) => {
 				// Real hover
 				cy.getIframeBody()
@@ -668,14 +668,14 @@ describe('Inner Blocks E2E Test', () => {
 
 				expect('#cccccc').to.be.equal(
 					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints.laptop
-						.attributes.blockeraBackgroundColor
+						.attributes.blockeraBlockStates.hover.breakpoints
+						.desktop.attributes.blockeraBackgroundColor
 				);
 
 				expect({
 					hover: {
 						breakpoints: {
-							laptop: {
+							desktop: {
 								attributes: {
 									blockeraBackgroundColor: '#cccccc',
 								},
