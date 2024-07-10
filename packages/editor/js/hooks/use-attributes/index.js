@@ -74,11 +74,7 @@ export const useAttributes = (
 
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!
-		let _attributes = { ...attributes };
-
-		if (!_attributes?.blockeraPropsId) {
-			_attributes = getAttributesWithIds(_attributes, 'blockeraPropsId');
-		}
+		const _attributes = { ...attributes };
 
 		const currentBlock = getExtensionCurrentBlock();
 
