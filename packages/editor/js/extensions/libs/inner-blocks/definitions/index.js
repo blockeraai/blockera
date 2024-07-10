@@ -28,14 +28,14 @@ export const __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition
 		/**
 		 * Filterable definitionTypes list before registration process.
 		 *
-		 * hook: `blockeraCore.extensions.innerBlocks.definitionTypes`
+		 * hook: `blockera.extensions.innerBlocks.definitionTypes`
 		 *
 		 * @since 1.0.0
 		 *
 		 * @type {Object}
 		 */
 		const filteredDefinitions = applyFilters(
-			'blockeraCore.extensions.innerBlocks.definitionTypes',
+			'blockera.extensions.innerBlocks.definitionTypes',
 			definitionTypes
 		);
 

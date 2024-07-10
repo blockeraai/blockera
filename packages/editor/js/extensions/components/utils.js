@@ -22,7 +22,7 @@ export const propsAreEqual = (
 	const normalizedBlockName = prev.name.replace('/', '.');
 
 	const excludedAttributeKeys = applyFilters(
-		`blockeraCore.blockEdit.${normalizedBlockName}.memoization.excludedAttributeKeys`,
+		`blockera.blockEdit.${normalizedBlockName}.memoization.excludedAttributeKeys`,
 		['content']
 	).map((attributeId: string): string => `\b${attributeId}\b`);
 

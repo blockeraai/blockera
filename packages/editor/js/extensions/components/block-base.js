@@ -244,7 +244,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			/**
 			 * Filterable attributes before initializing block edit component.
 			 *
-			 * hook: 'blockeraCore.blockEdit.attributes'
+			 * hook: 'blockera.blockEdit.attributes'
 			 *
 			 * @since 1.0.0
 			 */
@@ -269,13 +269,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					/**
 					 * Filtering block attributes based on "blockeraPropsId" attribute.
 					 *
-					 * hook: 'blockeraCore.blockEdit.attributes'
+					 * hook: 'blockera.blockEdit.attributes'
 					 *
 					 * @since 1.0.0
 					 */
 					if (!attributes?.blockeraPropsId) {
 						filteredAttributes = applyFilters(
-							'blockeraCore.blockEdit.attributes',
+							'blockera.blockEdit.attributes',
 							getAttributesWithIds(
 								filteredAttributes,
 								'blockeraPropsId'
@@ -287,13 +287,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					/**
 					 * Filtering block attributes based on "blockeraCompatId" attribute value to running WordPress compatibilities.
 					 *
-					 * hook: 'blockeraCore.blockEdit.compatibility.attributes'
+					 * hook: 'blockera.blockEdit.compatibility.attributes'
 					 *
 					 * @since 1.0.0
 					 */
 					if (!attributes?.blockeraCompatId) {
 						filteredAttributes = applyFilters(
-							'blockeraCore.blockEdit.compatibility.attributes',
+							'blockera.blockEdit.compatibility.attributes',
 							getAttributesWithIds(
 								filteredAttributes,
 								'blockeraCompatId'

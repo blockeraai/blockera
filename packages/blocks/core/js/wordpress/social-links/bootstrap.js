@@ -22,8 +22,8 @@ import {
 
 export const bootstrapSocialLinksCoreBlock = (): void => {
 	addFilter(
-		'blockeraCore.blockEdit.attributes',
-		'blockeraCore.blockEdit.socialLinksBlock.bootstrap',
+		'blockera.blockEdit.attributes',
+		'blockera.blockEdit.socialLinksBlock.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const {
 				blockId,
@@ -74,8 +74,8 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 	);
 
 	addFilter(
-		'blockeraCore.blockEdit.setAttributes',
-		'blockeraCore.blockEdit.socialLinksBlock.bootstrap.setAttributes',
+		'blockera.blockEdit.setAttributes',
+		'blockera.blockEdit.socialLinksBlock.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *

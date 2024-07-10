@@ -87,7 +87,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				}
 
 				return applyFilters(
-					'blockeraCore.blockEdit.setAttributes',
+					'blockera.blockEdit.setAttributes',
 					mergeObject(
 						state,
 						{
@@ -132,12 +132,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'blockeraCore.blockEdit.setAttributes'
+			 * hook: 'blockera.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'blockeraCore.blockEdit.setAttributes',
+				'blockera.blockEdit.setAttributes',
 				{
 					...state,
 					...effectiveItems,
@@ -155,12 +155,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'blockeraCore.blockEdit.setAttributes'
+			 * hook: 'blockera.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'blockeraCore.blockEdit.setAttributes',
+				'blockera.blockEdit.setAttributes',
 				{
 					...state,
 					blockeraBlockStates: memoizedBlockStates(state, action, {
@@ -178,12 +178,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'blockeraCore.blockEdit.setAttributes'
+			 * hook: 'blockera.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'blockeraCore.blockEdit.setAttributes',
+				'blockera.blockEdit.setAttributes',
 				mergeObject(
 					state,
 					{
@@ -220,12 +220,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'blockeraCore.blockEdit.setAttributes'
+			 * hook: 'blockera.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'blockeraCore.blockEdit.setAttributes',
+				'blockera.blockEdit.setAttributes',
 				resetAllStates(state, action),
 				...hookParams
 			);
@@ -235,12 +235,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 * Filterable attributes before set next state.
 			 * usefully in add WordPress compatibility and any other filters.
 			 *
-			 * hook: 'blockeraCore.blockEdit.setAttributes'
+			 * hook: 'blockera.blockEdit.setAttributes'
 			 *
 			 * @since 1.0.0
 			 */
 			return applyFilters(
-				'blockeraCore.blockEdit.setAttributes',
+				'blockera.blockEdit.setAttributes',
 				resetCurrentState(state, action),
 				...hookParams
 			);
@@ -250,12 +250,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 	 * Filterable attributes before set next state.
 	 * usefully in add WordPress compatibility and any other filters.
 	 *
-	 * hook: 'blockeraCore.blockEdit.setAttributes'
+	 * hook: 'blockera.blockEdit.setAttributes'
 	 *
 	 * @since 1.0.0
 	 */
 	return applyFilters(
-		'blockeraCore.blockEdit.setAttributes',
+		'blockera.blockEdit.setAttributes',
 		state,
 		...hookParams
 	);

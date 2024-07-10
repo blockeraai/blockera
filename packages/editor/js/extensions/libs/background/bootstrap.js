@@ -26,8 +26,8 @@ import type { BlockDetail } from '../block-states/types';
 
 export const bootstrap = (): void => {
 	addFilter(
-		'blockeraCore.blockEdit.attributes',
-		'blockeraCore.blockEdit.backgroundExtension.bootstrap',
+		'blockera.blockEdit.attributes',
+		'blockera.blockEdit.backgroundExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const {
 				blockId,
@@ -56,8 +56,8 @@ export const bootstrap = (): void => {
 	);
 
 	addFilter(
-		'blockeraCore.blockEdit.setAttributes',
-		'blockeraCore.blockEdit.backgroundExtension.bootstrap.setAttributes',
+		'blockera.blockEdit.setAttributes',
+		'blockera.blockEdit.backgroundExtension.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *

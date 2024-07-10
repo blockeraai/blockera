@@ -40,8 +40,8 @@ export const reregistrationBlocks = (): void => {
 
 export const registerThirdPartyExtensionDefinitions = (): void => {
 	addFilter(
-		'blockeraCore.extensions.innerBlocks.definitionTypes',
-		'blockeraCore.extensions.innerBlocks.definitionTypes.mergeBlockSettings',
+		'blockera.extensions.innerBlocks.definitionTypes',
+		'blockera.extensions.innerBlocks.definitionTypes.mergeBlockSettings',
 		(definitionTypes: Object): Object => {
 			const newDefinitionTypes = {};
 			let additionalDefinitionTypes = {};

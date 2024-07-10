@@ -54,8 +54,8 @@ import type { BlockDetail } from '../block-states/types';
 
 export const bootstrap = (): void => {
 	addFilter(
-		'blockeraCore.blockEdit.attributes',
-		'blockeraCore.blockEdit.typographyExtension.bootstrap',
+		'blockera.blockEdit.attributes',
+		'blockera.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { isNormalState, isBaseBreakpoint, isMasterBlock } =
 				blockDetail;
@@ -168,8 +168,8 @@ export const bootstrap = (): void => {
 	);
 
 	addFilter(
-		'blockeraCore.blockEdit.setAttributes',
-		'blockeraCore.blockEdit.typographyExtension.bootstrap.setAttributes',
+		'blockera.blockEdit.setAttributes',
+		'blockera.blockEdit.typographyExtension.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *
