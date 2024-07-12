@@ -23,7 +23,7 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 } from '@blockera/controls';
-import { hasSameProps } from '@blockera/utils';
+import { hasSameProps, isEquals } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -193,10 +193,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					attributes.blockeraWordSpacing.default ||
 				values?.blockeraTextIndent !==
 					attributes.blockeraTextIndent.default ||
-				values?.blockeraTextColumns !==
-					attributes.blockeraTextColumns.default ||
-				values?.blockeraTextStroke !==
-					attributes.blockeraTextStroke.default ||
+				!isEquals(
+					values?.blockeraTextColumns,
+					attributes.blockeraTextColumns.default
+				) ||
+				!isEquals(
+					values?.blockeraTextStroke,
+					attributes.blockeraTextStroke.default
+				) ||
 				values?.blockeraWordBreak !==
 					attributes.blockeraWordBreak.default;
 		}

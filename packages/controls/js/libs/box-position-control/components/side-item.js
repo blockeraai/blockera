@@ -19,7 +19,6 @@ import { Icon } from '@blockera/icons';
 import {
 	isValid,
 	LabelControl,
-	setValueAddon,
 	useValueAddon,
 	extractNumberAndUnit,
 } from '../../../index';
@@ -94,8 +93,9 @@ export function SideItem({
 		useValueAddon({
 			types: ['variable'],
 			value: value.position[side],
-			setValue: (newValue: any): void =>
-				setValueAddon(newValue, setValue, defaultValue),
+			setValue: (): void => {
+				// no need to set value because we do it on onChange
+			},
 			variableTypes: ['spacing'],
 			onChange: (newValue) => {
 				setOpenPopover('');

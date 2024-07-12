@@ -13,13 +13,19 @@ import { isString, isUndefined } from '@blockera/utils';
  */
 import { getIcon } from '../index';
 
-export function WPIcon({ style = {}, iconSize = 24, icon, ...props }) {
+export function WPIcon({
+	library = 'wp',
+	style = {},
+	iconSize = 24,
+	icon,
+	...props
+}) {
 	if (isString(icon)) {
-		icon = getIcon(icon, 'wp');
+		icon = getIcon(icon, library);
 	}
 
 	if (isString(icon?.icon)) {
-		icon = getIcon(icon?.icon ? icon?.icon : icon?.iconName, 'wp');
+		icon = getIcon(icon?.icon ? icon?.icon : icon?.iconName, library);
 	}
 
 	if (isUndefined(icon?.icon)) {
