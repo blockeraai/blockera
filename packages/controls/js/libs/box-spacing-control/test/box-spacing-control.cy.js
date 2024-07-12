@@ -4,6 +4,14 @@
 import { nanoid } from 'nanoid';
 
 /**
+ * Blockera dependencies.
+ */
+import {
+	setBoxSpacingSide,
+	openBoxSpacingSide,
+} from '@blockera/dev-cypress/js/helpers';
+
+/**
  * Internal dependencies.
  */
 import BoxSpacingControl from '../index';
@@ -51,9 +59,7 @@ describe('box spacing control component testing', () => {
 			name,
 		});
 
-		cy.get(
-			'span[aria-label="Top Margin"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('margin-top');
 
 		cy.getByDataCy('box-spacing-set-10').click();
 
@@ -86,9 +92,8 @@ describe('box spacing control component testing', () => {
 			name,
 		});
 
-		cy.get(
-			'span[aria-label="Top Margin"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('margin-top');
+
 		cy.getByDataCy('box-spacing-set-10').click();
 		cy.get('@onChangeMock').should('have.been.called');
 
@@ -124,9 +129,7 @@ describe('box spacing control component testing', () => {
 			name,
 		});
 
-		cy.get(
-			'span[aria-label="Top Margin"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('margin-top');
 		cy.getByDataCy('box-spacing-set-10').click();
 
 		// Check data provider value!
@@ -158,9 +161,8 @@ describe('box spacing control component testing', () => {
 			),
 			name,
 		});
-		cy.get(
-			'span[aria-label="Top Margin"][data-cy="label-control"]'
-		).click();
+
+		openBoxSpacingSide('margin-top');
 
 		cy.getByDataCy('box-spacing-set-auto').click();
 		// Check data provider value!
@@ -234,51 +236,35 @@ describe('box spacing control component testing', () => {
 		});
 
 		// add top margin
-		cy.get(
-			'span[aria-label="Top Margin"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('margin-top');
 		cy.get('input[type=range]').setSliderValue(80);
 
 		// add top right margin
-		cy.get(
-			'span[aria-label="Right Margin"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('margin-right');
 		cy.get('input[type=range]').setSliderValue(81);
 
 		// add top bottom margin
-		cy.get(
-			'span[aria-label="Bottom Margin"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('margin-bottom');
 		cy.get('input[type=range]').setSliderValue(82);
 
 		// add top left margin
-		cy.get(
-			'span[aria-label="Left Margin"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('margin-left');
 		cy.get('input[type=range]').setSliderValue(83);
 
 		// add top padding
-		cy.get(
-			'span[aria-label="Top Padding"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('padding-top');
 		cy.get('input[type=range]').setSliderValue(80);
 
 		// add top right padding
-		cy.get(
-			'span[aria-label="Right Padding"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('padding-right');
 		cy.get('input[type=range]').setSliderValue(81);
 
 		// add top bottom padding
-		cy.get(
-			'span[aria-label="Bottom Padding"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('padding-bottom');
 		cy.get('input[type=range]').setSliderValue(82);
 
 		// add top left padding
-		cy.get(
-			'span[aria-label="Left Padding"][data-cy="label-control"]'
-		).click();
+		openBoxSpacingSide('padding-left');
 		cy.get('input[type=range]').setSliderValue(83);
 
 		const expectValue = {
@@ -310,20 +296,20 @@ describe('box spacing control component testing', () => {
 		});
 
 		const items = [
-			'Top Margin',
-			'Right Margin',
-			'Bottom Margin',
-			'Left Margin',
-			'Top Padding',
-			'Right Padding',
-			'Bottom Padding',
-			'Left Padding',
+			'margin-top',
+			'margin-right',
+			'margin-bottom',
+			'margin-left',
+			'padding-top',
+			'padding-right',
+			'padding-bottom',
+			'padding-left',
 		];
 
 		items.forEach((item) => {
-			cy.get(`span[aria-label="${item}"][data-cy="label-control"]`).as(
-				'Position'
-			);
+			cy.get(
+				`[data-cy="box-spacing-${item}"] [data-cy="label-control"]`
+			).as('Position');
 
 			cy.get('@Position').click();
 			cy.get('input[type=number]').clear();
@@ -345,10 +331,10 @@ describe('box spacing control component testing', () => {
 			//
 			if (
 				[
-					'Top Margin',
-					'Right Margin',
-					'Bottom Margin',
-					'Left Margin',
+					'margin-top',
+					'margin-right',
+					'margin-bottom',
+					'margin-left',
 				].includes(item)
 			) {
 				cy.get('[aria-label="Select Unit"]').select('auto');
