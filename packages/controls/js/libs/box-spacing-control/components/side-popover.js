@@ -252,8 +252,7 @@ export function SidePopover({
 							id={id}
 							unitType={type}
 							range={true}
-							min={type === 'margin' ? -100 : 0}
-							max={100}
+							min={type === 'margin' ? undefined : 0}
 							//
 							defaultValue={defaultValue}
 							onChange={setValue}
