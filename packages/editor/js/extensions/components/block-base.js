@@ -307,17 +307,22 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					if (!attributes?.blockeraCompatId) {
 						const withWPCompatibilities = applyFilters(
 							'blockera.blockEdit.attributes',
-							filteredAttributes,
+							getAttributesWithIds(
+								filteredAttributes,
+								'blockeraCompatId'
+							),
 							args
 						);
 
+						// Assume after executing compatibilities hook orginal attributes equals with attribute includes wp compatibility values.
+						// in this case we should not add blockeraCompatId because not changed anything.
 						if (
-							!isEquals(withWPCompatibilities, filteredAttributes)
+							isEquals(withWPCompatibilities, filteredAttributes)
 						) {
-							filteredAttributes = getAttributesWithIds(
-								withWPCompatibilities,
-								'blockeraCompatId'
-							);
+							filteredAttributes = {
+								...filteredAttributes,
+								blockeraCompatId: '',
+							};
 						}
 					}
 
