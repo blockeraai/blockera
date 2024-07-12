@@ -1,77 +1,98 @@
 <?php
+/**
+ * Configuration of available breakpoints on blockera editor.
+ *
+ * @package config/breakpoints.php
+ */
 
-// direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) exit;
+/**
+ * Direct access is not allowed.
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 return [
-	[
-		'type'       => 'extra-large',
-		'force'      => false,
-		'label'      => __( 'Extra Large Screen', 'blockera' ),
-		'settings'   => [
-			'min' => '2561px',
-			'max' => '',
+	// We use of "base" index to the fastest accessibility to base breakpoint.
+	// It's recommended to set it; otherwise, we could find the base breakpoint with the process "list" index in the loop :/ .
+	'base' => 'desktop',
+	'list' => [
+		'2xl-desktop'      => [
+			'type'       => '2xl-desktop',
+			'base'       => false,
+			'status'     => false,
+			'label'      => __( 'Widescreens and TVs', 'blockera' ),
+			'settings'   => [
+				'min' => '1920px',
+				'max' => '',
+			],
+			'attributes' => [],
 		],
-		'attributes' => [],
-	],
-	[
-		'type'       => 'large',
-		'force'      => false,
-		'label'      => __( 'Large Screen', 'blockera' ),
-		'settings'   => [
-			'min' => '1921px',
-			'max' => '2560px',
+		'xl-desktop'       => [
+			'type'       => 'xl-desktop',
+			'base'       => false,
+			'status'     => false,
+			'label'      => __( 'Extra Large Desktop', 'blockera' ),
+			'settings'   => [
+				'min' => '1440px',
+				'max' => '',
+			],
+			'attributes' => [],
 		],
-		'attributes' => [],
-	],
-	[
-		'type'       => 'desktop',
-		'force'      => false,
-		'label'      => __( 'Desktop', 'blockera' ),
-		'settings'   => [
-			'min' => '1441px',
-			'max' => '1920px',
+		'l-desktop'        => [
+			'type'       => 'l-desktop',
+			'base'       => false,
+			'status'     => false,
+			'label'      => __( 'Large Desktop', 'blockera' ),
+			'settings'   => [
+				'min' => '1280px',
+				'max' => '',
+			],
+			'attributes' => [],
 		],
-		'attributes' => [],
-	],
-	[
-		'type'       => 'laptop',
-		'force'      => true,
-		'label'      => __( 'Laptop', 'blockera' ),
-		'settings'   => [
-			'min' => '1025px',
-			'max' => '1440px',
+		'desktop'          => [
+			'type'       => 'desktop',
+			'base'       => true,
+			'status'     => true,
+			'label'      => __( 'Desktop', 'blockera' ),
+			'settings'   => [
+				'min' => '',
+				'max' => '',
+			],
+			'attributes' => [],
 		],
-		'attributes' => [],
-	],
-	[
-		'type'       => 'tablet',
-		'force'      => false,
-		'label'      => __( 'Tablet', 'blockera' ),
-		'settings'   => [
-			'min' => '768px',
-			'max' => '1024px',
+		'tablet'           => [
+			'type'       => 'tablet',
+			'base'       => false,
+			'status'     => true,
+			'label'      => __( 'Tablet', 'blockera' ),
+			'settings'   => [
+				'min' => '',
+				'max' => '991px',
+			],
+			'attributes' => [],
 		],
-		'attributes' => [],
-	],
-	[
-		'type'       => 'mobile-landscape',
-		'force'      => false,
-		'label'      => __( 'Mobile Landscape', 'blockera' ),
-		'settings'   => [
-			'min' => '481px',
-			'max' => '767px',
+		'mobile-landscape' => [
+			'type'       => 'mobile-landscape',
+			'base'       => false,
+			'status'     => false,
+			'label'      => __( 'Mobile Landscape', 'blockera' ),
+			'settings'   => [
+				'min' => '',
+				'max' => '767px',
+			],
+			'attributes' => [],
 		],
-		'attributes' => [],
-	],
-	[
-		'type'       => 'mobile',
-		'force'      => false,
-		'label'      => __( 'Mobile', 'blockera' ),
-		'settings'   => [
-			'min' => '',
-			'max' => '480px',
+		'mobile'           => [
+			'type'       => 'mobile',
+			'base'       => false,
+			'status'     => true,
+			'label'      => __( 'Mobile Portrait', 'blockera' ),
+			'settings'   => [
+				'min' => '',
+				'max' => '478px',
+			],
+			'attributes' => [],
 		],
-		'attributes' => [],
 	],
 ];
