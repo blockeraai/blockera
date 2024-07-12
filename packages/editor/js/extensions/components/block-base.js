@@ -305,14 +305,20 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					 * @since 1.0.0
 					 */
 					if (!attributes?.blockeraCompatId) {
-						filteredAttributes = applyFilters(
+						const withWPCompatibilities = applyFilters(
 							'blockera.blockEdit.attributes',
-							getAttributesWithIds(
-								filteredAttributes,
-								'blockeraCompatId'
-							),
+							filteredAttributes,
 							args
 						);
+
+						if (
+							!isEquals(withWPCompatibilities, filteredAttributes)
+						) {
+							filteredAttributes = getAttributesWithIds(
+								withWPCompatibilities,
+								'blockeraCompatId'
+							);
+						}
 					}
 
 					// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
