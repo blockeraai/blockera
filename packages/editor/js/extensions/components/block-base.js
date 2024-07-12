@@ -315,11 +315,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						);
 					}
 
-					// Prevent redundant set state!
-					if (isEquals(attributes, filteredAttributes)) {
-						return;
-					}
-
 					// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
 					if (
 						!Object.keys(added).length &&
