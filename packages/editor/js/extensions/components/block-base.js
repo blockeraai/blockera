@@ -314,7 +314,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							args
 						);
 
-						// Assume after executing compatibilities hook orginal attributes equals with attribute includes wp compatibility values.
+						// Assume after executing compatibilities hook original attributes equals with attribute includes wp compatibility values.
 						// in this case we should not add blockeraCompatId because not changed anything.
 						if (
 							isEquals(withWPCompatibilities, filteredAttributes)
@@ -323,6 +323,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								...filteredAttributes,
 								blockeraCompatId: '',
 							};
+						} else {
+							filteredAttributes = withWPCompatibilities;
 						}
 					}
 
