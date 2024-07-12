@@ -35,7 +35,6 @@ import {
 	blockStatesValueCleanup,
 } from '../helpers';
 import { generateExtensionId } from '../../utils';
-import getBreakpoints from '../default-breakpoints';
 import { attributes as StateSettings } from '../attributes';
 import type {
 	BreakpointTypes,
@@ -67,6 +66,7 @@ const StatesManager: ComponentType<any> = memo(
 		} = dispatch('blockera/extensions') || {};
 		const { getBlockStates, getActiveMasterState, getActiveInnerState } =
 			select('blockera/extensions');
+		const { getBreakpoints } = select('blockera/editor');
 		const savedBlockStates = getBlockStates(
 			block?.clientId,
 			isInnerBlock(currentBlock) ? currentBlock : block?.blockName

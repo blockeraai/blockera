@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { default as memoize } from 'fast-memoize';
 
@@ -37,7 +38,7 @@ export const isBaseBreakpoint = (breakPoint: TBreakpoint): boolean =>
 export const getBaseBreakpoint = (): TBreakpoint => 'desktop';
 
 /**
- * Get smallest breakpoint id.
+ * Get the smallest breakpoint id.
  *
  * @param {Object} breakpoints Optional breakpoints object and if not provided will use default
  * @return {string} the breakpoint identifier.
@@ -47,7 +48,11 @@ export const getSmallestBreakpoint: (breakpoints?: {
 }) => TBreakpoint = memoize(function (breakpoints?: {
 	[key: TBreakpoint]: BreakpointTypes,
 }): TBreakpoint {
-	if (isUndefined(breakpoints)) breakpoints = defaultBreakpoints();
+	const { getBreakpoints } = select('blockera/editor') || {
+		getBreakpoints: defaultBreakpoints,
+	};
+
+	if (isUndefined(breakpoints)) breakpoints = getBreakpoints();
 
 	let minBreakpoint = Infinity;
 
@@ -84,7 +89,7 @@ export const getSmallestBreakpoint: (breakpoints?: {
 });
 
 /**
- * Get largest breakpoint id.
+ * Get the largest breakpoint id.
  *
  * @param {Object} breakpoints Optional breakpoints object and if not provided will use default
  * @return {string} the breakpoint ID.
@@ -94,7 +99,11 @@ export const getLargestBreakpoint: (breakpoints?: {
 }) => TBreakpoint = memoize(function (breakpoints?: {
 	[key: TBreakpoint]: BreakpointTypes,
 }): TBreakpoint {
-	if (isUndefined(breakpoints)) breakpoints = defaultBreakpoints();
+	const { getBreakpoints } = select('blockera/editor') || {
+		getBreakpoints: defaultBreakpoints,
+	};
+
+	if (isUndefined(breakpoints)) breakpoints = getBreakpoints();
 
 	let maxBreakpoint = -Infinity;
 
@@ -132,13 +141,23 @@ export const getLargestBreakpoint: (breakpoints?: {
 /**
  * Get breakpoint tooltip description based on given breakpoint id.
  *
- * @param {TBreakpoint} breakpoint
+ * @param {TBreakpoint} breakpoint the breakpoint type.
+ * @param {Object} breakpoints the list of available breakpoints.
+ *
  * @return {string} the tooltip description
  */
 export const getBreakpointLongDescription = (
 	breakpoint: TBreakpoint,
-	breakpoints: { [key: TBreakpoint]: BreakpointTypes } = defaultBreakpoints()
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes }
 ): string => {
+	const { getBreakpoints } = select('blockera/editor') || {
+		getBreakpoints: defaultBreakpoints,
+	};
+
+	if (!breakpoints) {
+		breakpoints = getBreakpoints();
+	}
+
 	if (isBaseBreakpoint(breakpoint)) {
 		return sprintf(
 			// translators: it's the aria label for repeater item
@@ -218,12 +237,21 @@ export const getBreakpointLongDescription = (
  * Get breakpoint tooltip description based on given breakpoint id.
  *
  * @param {TBreakpoint} breakpoint
+ * @param {Object} breakpoints the list of available breakpoints.
  * @return {string} the tooltip description
  */
 export const getBreakpointShortDescription = (
 	breakpoint: TBreakpoint,
-	breakpoints: { [key: TBreakpoint]: BreakpointTypes } = defaultBreakpoints()
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes }
 ): string => {
+	const { getBreakpoints } = select('blockera/editor') || {
+		getBreakpoints: defaultBreakpoints,
+	};
+
+	if (!breakpoints) {
+		breakpoints = getBreakpoints();
+	}
+
 	if (isBaseBreakpoint(breakpoint)) {
 		return __('Base breakpoint', 'blockera');
 	}

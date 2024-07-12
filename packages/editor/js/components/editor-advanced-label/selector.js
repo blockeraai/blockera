@@ -24,7 +24,6 @@ import type {
 import { getBaseBreakpoint } from '../../canvas-editor';
 import staticStates from '../../extensions/libs/block-states/states';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
-import getBreakpoints from '../../extensions/libs/block-states/default-breakpoints';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
 
 export type State = {
@@ -65,6 +64,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 		getExtensionCurrentBlockState,
 		getExtensionCurrentBlockStateBreakpoint,
 	} = select('blockera/extensions');
+	const { getBreakpoints } = select('blockera/editor');
 
 	const currentBlock = getExtensionCurrentBlock();
 	const currentState = getExtensionCurrentBlockState();

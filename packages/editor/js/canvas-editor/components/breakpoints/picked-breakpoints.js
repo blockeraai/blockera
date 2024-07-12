@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 
@@ -19,11 +20,17 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import { getBaseBreakpoint } from './helpers';
 import { BreakpointIcon } from './breakpoint-icon';
 import type { PickedBreakpointsComponentProps } from './types';
-import { default as defaultBreakpoints } from '../../../extensions/libs/block-states/default-breakpoints';
+import type {
+	TBreakpoint,
+	BreakpointTypes,
+} from '../../../extensions/libs/block-states/types';
 
 export default function ({
 	onClick,
 }: PickedBreakpointsComponentProps): MixedElement {
+	const { getBreakpoints } = select('blockera/editor');
+	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } =
+		getBreakpoints();
 	const baseBreakpoint = getBaseBreakpoint();
 	const [currentActiveBreakpoint, setActiveBreakpoint] =
 		useState(baseBreakpoint);
@@ -31,25 +38,27 @@ export default function ({
 	function activeBreakpoints() {
 		const breakpoints = [];
 
-		Object.entries(defaultBreakpoints()).forEach(([itemId, item]) => {
-			if (item.status) {
-				breakpoints.push(
-					<BreakpointIcon
-						className={classNames({
-							'is-active-breakpoint':
-								itemId === currentActiveBreakpoint,
-						})}
-						name={itemId}
-						onClick={(event) => {
-							event.stopPropagation();
+		Object.entries(availableBreakpoints).forEach(
+			([itemId, item]: [TBreakpoint, BreakpointTypes]) => {
+				if (item.status) {
+					breakpoints.push(
+						<BreakpointIcon
+							className={classNames({
+								'is-active-breakpoint':
+									itemId === currentActiveBreakpoint,
+							})}
+							name={itemId}
+							onClick={(event) => {
+								event.stopPropagation();
 
-							onClick(itemId);
-							setActiveBreakpoint(itemId);
-						}}
-					/>
-				);
+								onClick(itemId);
+								setActiveBreakpoint(itemId);
+							}}
+						/>
+					);
+				}
 			}
-		});
+		);
 
 		return breakpoints;
 	}

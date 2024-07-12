@@ -15,21 +15,17 @@ import type { BreakpointTypes } from './extensions/libs/block-states/types';
  */
 import { STORE_NAME } from './store';
 
-export function unstableBootstrapServerSideBreakpointDefinitions(
-	definitions: Array<BreakpointTypes>
-) {
+export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
+	[key: string]: BreakpointTypes,
+}) {
 	const { setBreakpoints } = dispatch(STORE_NAME);
+	const breakpointsStack: { [key: string]: BreakpointTypes } = {};
 
-	setBreakpoints(
-		Object.fromEntries(
-			definitions.map(
-				(breakpoint: BreakpointTypes): [string, BreakpointTypes] => [
-					breakpoint.type,
-					breakpoint,
-				]
-			)
-		)
-	);
+	for (const definitionType in definitions) {
+		breakpointsStack[definitionType] = definitions[definitionType];
+	}
+
+	setBreakpoints(breakpointsStack);
 }
 
 export function registerCanvasEditorSettings(settings: Object) {

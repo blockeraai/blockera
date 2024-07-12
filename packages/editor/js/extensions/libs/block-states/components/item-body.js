@@ -4,6 +4,7 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -22,8 +23,9 @@ import {
 import states from '../states';
 import type { TStates } from '../types';
 import { getStateInfo } from '../helpers';
-import getBreakpoints from '../default-breakpoints';
 import { LabelDescription } from './label-description';
+import { isNormalState } from '../../../components/utils';
+import { getBaseBreakpoint } from '../../../../canvas-editor';
 
 const ItemBody = ({
 	item,
@@ -50,6 +52,9 @@ const ItemBody = ({
 	const options = { ...states };
 	delete options.normal;
 
+	const { getBreakpoints } = select('blockera/editor');
+	const breakpoints = getBreakpoints();
+
 	return (
 		<>
 			<SelectControl
@@ -69,13 +74,17 @@ const ItemBody = ({
 				onChange={(newValue: TStates): void => {
 					const dynamicValue = getStateInfo(newValue);
 
+					if (isNormalState(newValue)) {
+						delete breakpoints[getBaseBreakpoint()]?.attributes;
+					}
+
 					let value = {
 						...item,
 						...dynamicValue,
 						breakpoints:
 							item?.breakpoints?.length > 1
 								? item.breakpoints
-								: getBreakpoints(newValue),
+								: breakpoints,
 						isSelected: true,
 					};
 

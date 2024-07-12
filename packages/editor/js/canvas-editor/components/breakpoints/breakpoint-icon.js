@@ -2,8 +2,9 @@
 /**
  * External dependencies
  */
-import { __, isRTL } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { __, isRTL } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -25,7 +26,6 @@ import {
 	getBreakpointLongDescription,
 	getBreakpointShortDescription,
 } from './helpers';
-import { default as defaultBreakpoints } from '../../../extensions/libs/block-states/default-breakpoints';
 
 export function BreakpointIcon({
 	name,
@@ -37,7 +37,8 @@ export function BreakpointIcon({
 	className?: string,
 	onClick?: (event: MouseEvent) => void,
 }): MixedElement {
-	const breakpoints = defaultBreakpoints();
+	const { getBreakpoints } = select('blockera/editor');
+	const breakpoints = getBreakpoints();
 
 	if (isUndefined(breakpoints[name])) {
 		return <></>;
