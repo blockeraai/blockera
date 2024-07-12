@@ -5,6 +5,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	setBoxSpacingSide,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Spacing Extension', () => {
@@ -20,29 +21,10 @@ describe('Spacing Extension', () => {
 
 	describe('Margin', () => {
 		it('Simple value', () => {
-			/* Top */
-			cy.getByAriaLabel('Top Margin').click();
-			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[type="number"]').type(10);
-			});
-
-			/* Right */
-			cy.getByAriaLabel('Right Margin').click();
-			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[type="number"]').type(20);
-			});
-
-			/* Bottom */
-			cy.getByAriaLabel('Bottom Margin').click();
-			cy.getByDataTest('popover-body').within(() => {
-				cy.get('[aria-label="Set 10px"]').click();
-			});
-
-			/* Left */
-			cy.getByAriaLabel('Left Margin').click();
-			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[type="number"]').type(30);
-			});
+			setBoxSpacingSide('margin-top', 10);
+			setBoxSpacingSide('margin-right', 20);
+			setBoxSpacingSide('margin-bottom', 10);
+			setBoxSpacingSide('margin-left', 30);
 
 			//Check block
 			cy.getBlock('core/paragraph')
@@ -79,29 +61,10 @@ describe('Spacing Extension', () => {
 
 	describe('Padding', () => {
 		it('Simple value', () => {
-			/* Top */
-			cy.getByAriaLabel('Top Padding').click();
-			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[type="number"]').type(10);
-			});
-
-			/* Right */
-			cy.getByAriaLabel('Right Padding').click();
-			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[type="number"]').type(20);
-			});
-
-			/* Bottom */
-			cy.getByAriaLabel('Bottom Padding').click();
-			cy.getByDataTest('popover-body').within(() => {
-				cy.getByAriaLabel('Set 10px').click();
-			});
-
-			/* Left */
-			cy.getByAriaLabel('Left Padding').click();
-			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[type="number"]').type(30);
-			});
+			setBoxSpacingSide('padding-top', 10);
+			setBoxSpacingSide('padding-right', 20);
+			setBoxSpacingSide('padding-bottom', 10);
+			setBoxSpacingSide('padding-left', 30);
 
 			//Check block
 			cy.getBlock('core/paragraph')
