@@ -30,16 +30,16 @@ class TestHelpers extends \WP_UnitTestCase {
 	public function testItShouldRetrieveCssMediaQueriesEqualsWithExpects(): void {
 
 		$this->assertEquals(
-			blockera_get_css_media_queries(),
 			[
-				"extra-large"      => "@media screen and (min-width: 2561px)",
-				"large"            => "@media screen and (max-width: 2560px)",
-				"desktop"          => "@media screen and (max-width: 1920px)",
-				"laptop"           => "@media screen and (max-width: 1440px)",
-				"tablet"           => "@media screen and (max-width: 1024px)",
-				"mobile-landscape" => "@media screen and (max-width: 767px)",
-				"mobile"           => "@media screen and (max-width: 480px)",
-			]
+				'desktop'          => '',
+				'tablet'           => '@media screen and (max-width: 991px)',
+				'mobile-landscape' => '@media screen and (max-width: 767px)',
+				'mobile'           => '@media screen and (max-width: 478px)',
+				'2xl-desktop'      => '@media screen and (min-width: 1920px)',
+				'xl-desktop'       => '@media screen and (min-width: 1440px)',
+				'l-desktop'        => '@media screen and (min-width: 1280px)',
+			],
+			blockera_get_css_media_queries()
 		);
 	}
 
@@ -232,4 +232,17 @@ class TestHelpers extends \WP_UnitTestCase {
 		);
 	}
 
+	public function testItShouldRetrieveDesktopAsBaseBreakpoint(): void {
+
+		$this->assertEquals('desktop', blockera_get_base_breakpoint());
+	}
+
+	public function testItShouldRetrieveResultOfIsNormalStateOnBreakpoint(): void {
+
+		$this->assertTrue(blockera_is_normal_on_base_breakpoint('normal', 'desktop'));
+		$this->assertFalse(blockera_is_normal_on_base_breakpoint('normal', 'xl-desktop'));
+		$this->assertFalse(blockera_is_normal_on_base_breakpoint('normal', '2xl-desktop'));
+		$this->assertFalse(blockera_is_normal_on_base_breakpoint('normal', 'mobile'));
+		$this->assertFalse(blockera_is_normal_on_base_breakpoint('hover', 'desktop'));
+	}
 }

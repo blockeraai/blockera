@@ -132,13 +132,14 @@ class TestFunctions extends \Blockera\Dev\PHPUnit\AppTestCase {
 				'expected' => false,
 			],
 			[
-				'path'     => 'breakpoints.0',
+				'path'     => 'breakpoints.list.desktop',
 				'expected' => [
-					'type'       => 'extra-large',
-					'force'      => false,
-					'label'      => __( 'Extra Large Screen', 'blockera' ),
+					'type'       => 'desktop',
+					'base'       => true,
+					'status'     => true,
+					'label'      => __( 'Desktop', 'blockera' ),
 					'settings'   => [
-						'min' => '2561px',
+						'min' => '',
 						'max' => '',
 					],
 					'attributes' => [],

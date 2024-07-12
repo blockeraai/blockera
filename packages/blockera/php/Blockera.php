@@ -44,7 +44,7 @@ class Blockera extends Application implements ContainerInterface {
 			array_merge(
 				blockera_core_config( 'entities' ),
 				[
-					'breakpoints' => blockera_core_config( 'breakpoints' ),
+					'breakpoints' => blockera_core_config( 'breakpoints.list' ),
 				]
 			)
 		);

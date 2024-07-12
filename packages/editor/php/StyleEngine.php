@@ -80,7 +80,7 @@ final class StyleEngine {
 	 *
 	 * @var string $breakpoint
 	 */
-	protected string $breakpoint = 'laptop';
+	protected string $breakpoint;
 
 	/**
 	 * Constructor.
@@ -99,6 +99,9 @@ final class StyleEngine {
 		$this->settings    = $settings;
 		$this->definitions = $styleDefinitions;
 		$this->selector    = $fallbackSelector;
+
+		// by default store base breakpoint.
+		$this->breakpoint = blockera_core_config( 'breakpoints.base' );
 	}
 
 	/**
@@ -109,7 +112,7 @@ final class StyleEngine {
 	public function getStylesheet(): string {
 
 		$breakpointsCssRules = array_filter(
-			array_map( [ $this, 'prepareBreakpointStyles' ], blockera_core_config( 'breakpoints' ) ),
+			array_map( [ $this, 'prepareBreakpointStyles' ], blockera_core_config( 'breakpoints.list' ) ),
 			'blockera_get_filter_empty_array_item'
 		);
 
@@ -146,19 +149,27 @@ final class StyleEngine {
 			return '';
 		}
 
+		$styles = implode(
+			PHP_EOL,
+			array_unique(
+				array_filter(
+					blockera_array_flat( $stateCssRules ),
+					'blockera_get_filter_empty_array_item'
+				)
+			)
+		);
+
+		// append css styles on root for base breakpoint.
+		if ( empty( $mediaQueries[ $breakpoint['type'] ] ) ) {
+
+			return $styles;
+		}
+
 		// Concatenate generated css media query includes all css rules for current recieved breakpoint type.
 		return sprintf(
 			'%1$s{%2$s}',
 			$mediaQueries[ $breakpoint['type'] ],
-			implode(
-				PHP_EOL,
-				array_unique(
-					array_filter(
-						blockera_array_flat( $stateCssRules ),
-						'blockera_get_filter_empty_array_item'
-					)
-				)
-			),
+			$styles,
 		);
 	}
 
@@ -314,7 +325,7 @@ final class StyleEngine {
 					array_map(
 						static function ( array $state, string $_pseudoState ) use ( $engine, $blockType ): array {
 
-							if ( empty( $state['breakpoints'] ) || ( 'normal' === $_pseudoState && 'laptop' === $engine->breakpoint ) ) {
+							if ( empty( $state['breakpoints'] ) || ( blockera_is_normal_on_base_breakpoint( $_pseudoState, $engine->breakpoint ) ) ) {
 
 								return [];
 							}
@@ -374,7 +385,7 @@ final class StyleEngine {
 	 */
 	public function getSettings(): array {
 
-		if ( 'normal' === $this->pseudo_state && 'laptop' === $this->breakpoint ) {
+		if ( blockera_is_normal_on_base_breakpoint( $this->pseudo_state, $this->breakpoint ) ) {
 
 			return $this->settings;
 		}

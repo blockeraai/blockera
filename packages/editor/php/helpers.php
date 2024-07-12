@@ -29,7 +29,7 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 
 		$queries = [];
 
-		foreach ( blockera_core_config( 'breakpoints' ) as $breakpoint ) {
+		foreach ( blockera_core_config( 'breakpoints.list' ) as $breakpoint ) {
 
 			// skip invalid breakpoint.
 			if ( empty( $breakpoint['type'] ) ) {
@@ -37,13 +37,13 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 				continue;
 			}
 
-			[ 'min' => $min ,'max' => $max ] = $breakpoint['settings'];
+			[ 'min' => $min, 'max' => $max ] = $breakpoint['settings'];
 
 			$media = '';
 
 			if ( $min && $max ) {
 
-				$media = "@media screen and (max-width: $max)";
+				$media = "@media screen and (max-width: $max) and (min-width: $min)";
 
 			} elseif ( $min ) {
 
@@ -594,5 +594,56 @@ if ( ! function_exists( 'blockera_get_normalized_selector' ) ) {
 				)
 			)
 		);
+	}
+}
+
+if ( ! function_exists( 'blockera_get_base_breakpoint' ) ) {
+
+	/**
+	 * Get blockera base breakpoint from config.
+	 *
+	 * FIXME: refactor this function to solve base breakpoint with read of database.
+	 *
+	 * @return string the base breakpoint name.
+	 */
+	function blockera_get_base_breakpoint(): string {
+
+		$base = blockera_core_config( 'breakpoints.base' );
+
+		if ( ! is_string( $base ) ) {
+
+			return $base;
+		}
+
+		$prepared_breakpoints = array_filter(
+			blockera_core_config( 'breakpoints.list' ),
+			function ( array $breakpoint ): bool {
+
+				return ! empty( $breakpoint['base'] ) && ! empty( $breakpoint['status'] );
+			}
+		);
+
+		$base = array_shift( $prepared_breakpoints );
+
+		if ( empty( $prepared_breakpoints ) || ! $base || empty( $base['type'] ) ) {
+
+			// fallback breakpoint.
+			return 'desktop';
+		}
+
+		return $base['type'];
+	}
+}
+
+if ( ! function_exists( 'blockera_is_normal_on_base_breakpoint' ) ) {
+
+	/**
+	 * Is normal state on base breakpoint?
+	 *
+	 * @return bool true on success, false on failure.
+	 */
+	function blockera_is_normal_on_base_breakpoint( string $current_state, $current_breakpoint ): bool {
+
+		return 'normal' === $current_state && blockera_get_base_breakpoint() === $current_breakpoint;
 	}
 }
