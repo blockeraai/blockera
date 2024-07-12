@@ -27,7 +27,15 @@ class Spacing extends BaseStyleDefinition {
 
 		$this->setSelector( $cssProperty );
 
-		[ 'padding' => $padding, 'margin' => $margin ] = $setting[ $cssProperty ];
+		$padding = $margin = [];
+
+		if (isset($setting[$cssProperty]['padding'])) {
+			$padding = $setting[$cssProperty]['padding'];
+		}
+
+		if (isset($setting[$cssProperty]['margin'])) {
+			$margin = $setting[$cssProperty]['margin'];
+		}
 
 		if ( empty( $padding ) && empty( $margin ) ) {
 
