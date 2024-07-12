@@ -36,7 +36,6 @@ describe('Spacing Extension', () => {
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
-					padding: { top: '', right: '', bottom: '', left: '' },
 					margin: {
 						top: '10px',
 						right: '20px',
@@ -81,12 +80,6 @@ describe('Spacing Extension', () => {
 						right: '20px',
 						bottom: '10px',
 						left: '30px',
-					},
-					margin: {
-						top: '',
-						right: '',
-						bottom: '',
-						left: '',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraSpacing'));
 			});
