@@ -19,13 +19,13 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Popover, Button, Tooltip, ConditionalWrapper } from '../../';
 import { OtherInput } from './other-input';
 import { NumberInput } from './number-input';
 import NoticeControl from '../../notice-control';
 import type { InputControlProps } from '../types';
 import TextAreaControl from '../../textarea-control';
-import { ControlContextProvider, useControlContext } from '../../../context';
+import { ControlContextProvider } from '../../../context';
+import { Popover, Button, Tooltip, ConditionalWrapper } from '../../';
 import { isSpecialUnit, getUnitByValue, extractNumberAndUnit } from '../utils';
 
 export function UnitInput({
@@ -53,10 +53,6 @@ export function UnitInput({
 	inputValue: string,
 	unitValue: Object,
 }): MixedElement {
-	const { value } = useControlContext({
-		defaultValue,
-		onChange,
-	});
 	const [isMaximizeVisible, setIsMaximizeVisible] = useState(false);
 
 	const onChangeSelect = (newUnitValue: string) => {
@@ -74,7 +70,6 @@ export function UnitInput({
 			!isSpecialUnit(unitValue.value)
 		) {
 			return onChange({
-				...value,
 				unitValue: newUnitValue,
 				inputValue: inputValue + unitValue.value,
 			});
@@ -90,7 +85,6 @@ export function UnitInput({
 			const extractedValue = extractNumberAndUnit(inputValue);
 
 			return onChange({
-				...value,
 				unitValue: newUnitValue,
 				inputValue:
 					'func' !== extractedValue.unit ? extractedValue.value : '',
@@ -107,7 +101,6 @@ export function UnitInput({
 			const extractedValue = extractNumberAndUnit(inputValue);
 
 			return onChange({
-				...value,
 				unitValue: newUnitValue,
 				inputValue: extractedValue.value,
 			});
@@ -119,14 +112,12 @@ export function UnitInput({
 			inputValue !== ''
 		) {
 			return onChange({
-				...value,
 				inputValue: '',
 				unitValue: newUnitValue,
 			});
 		}
 
 		onChange({
-			...value,
 			inputValue,
 			// old unit is special && current is not && value is empty
 			// then try to catch value from default value
@@ -154,7 +145,6 @@ export function UnitInput({
 		}
 
 		return onChange({
-			...value,
 			inputValue: newValue,
 			unitValue:
 				'' === newValue && unitValue?.notFound ? unitValue : unitValue,

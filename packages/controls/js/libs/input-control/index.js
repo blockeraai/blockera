@@ -246,9 +246,7 @@ export default function InputControl({
 							('' === inputValue && value) ||
 							('' === inputValue && '' === value)
 						) {
-							if (!isSpecialUnit(pickedUnit.value)) {
-								setPickedUnit(unitValue);
-							}
+							setPickedUnit(unitValue);
 							setValue(inputValue);
 						}
 					}}
