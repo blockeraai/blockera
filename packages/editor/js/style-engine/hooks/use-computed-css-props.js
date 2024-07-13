@@ -94,7 +94,7 @@ export const useComputedCssProps = ({
 			for (const breakpointType in breakpoints) {
 				const breakpointItem = breakpoints[breakpointType];
 
-				if (!Object.keys(breakpointItem?.attributes).length) {
+				if (!Object.keys(breakpointItem?.attributes || {}).length) {
 					continue;
 				}
 
@@ -158,7 +158,7 @@ export const useComputedCssProps = ({
 		for (const breakpointType in stateItem?.breakpoints || {}) {
 			const breakpoint = stateItem?.breakpoints[breakpointType];
 
-			if (!Object.keys(breakpoint?.attributes).length) {
+			if (!Object.keys(breakpoint?.attributes || {}).length) {
 				continue;
 			}
 
