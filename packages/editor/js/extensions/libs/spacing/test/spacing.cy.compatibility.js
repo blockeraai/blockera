@@ -601,5 +601,313 @@ describe('Box Spacing → WP Compatibility', () => {
 				);
 			});
 		});
+
+		it('Both (Variable and simple values)', () => {
+			appendBlocks(
+				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"100px","bottom":"100px","left":"var:preset|spacing|10","right":"var:preset|spacing|10"},"margin":{"top":"var:preset|spacing|10","bottom":"var:preset|spacing|10","left":"100px","right":"100px"}}}} -->
+<p style="margin-top:var(--wp--preset--spacing--10);margin-right:100px;margin-bottom:var(--wp--preset--spacing--10);margin-left:100px;padding-top:100px;padding-right:var(--wp--preset--spacing--10);padding-bottom:100px;padding-left:var(--wp--preset--spacing--10)">Test paragraph...</p>
+<!-- /wp:paragraph -->`
+			);
+
+			// Select target block
+			cy.getBlock('core/paragraph').click();
+
+			// Assert WP value
+			getWPDataObject().then((data) => {
+				expect({
+					margin: {
+						top: 'var:preset|spacing|10',
+						right: '100px',
+						bottom: 'var:preset|spacing|10',
+						left: '100px',
+					},
+					padding: {
+						top: '100px',
+						right: 'var:preset|spacing|10',
+						bottom: '100px',
+						left: 'var:preset|spacing|10',
+					},
+				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
+			});
+
+			//
+			// Test 1: WP data to Blockera
+			//
+
+			// Assert Blockera value
+			getWPDataObject().then((data) => {
+				expect({
+					padding: {
+						top: '100px',
+						right: {
+							settings: {
+								name: '1',
+								id: '10',
+								value: '1rem',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Four',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--10',
+							},
+							name: '1',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						bottom: '100px',
+						left: {
+							settings: {
+								name: '1',
+								id: '10',
+								value: '1rem',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Four',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--10',
+							},
+							name: '1',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+					},
+					margin: {
+						top: {
+							settings: {
+								name: '1',
+								id: '10',
+								value: '1rem',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Four',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--10',
+							},
+							name: '1',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						right: '100px',
+						bottom: {
+							settings: {
+								name: '1',
+								id: '10',
+								value: '1rem',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Four',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--10',
+							},
+							name: '1',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						left: '100px',
+					},
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraSpacing'));
+			});
+
+			//
+			// Test 2: Blockera value to WP data
+			//
+
+			// change top margin
+			cy.get(`[data-cy="box-spacing-margin-top"]`).within(() => {
+				cy.removeValueAddon();
+			});
+			setBoxSpacingSide('margin-top', '50');
+
+			// change right margin
+			cy.get(`[data-cy="box-spacing-margin-right"]`).within(() => {
+				cy.openValueAddon();
+			});
+			cy.selectValueAddonItem('50');
+
+			// // change bottom margin
+			cy.get(`[data-cy="box-spacing-margin-bottom"]`).within(() => {
+				cy.removeValueAddon();
+			});
+			setBoxSpacingSide('margin-bottom', '50');
+
+			// // change left margin
+			cy.get(`[data-cy="box-spacing-margin-left"]`).within(() => {
+				cy.openValueAddon();
+			});
+			cy.selectValueAddonItem('50');
+
+			// change top padding
+			cy.get(`[data-cy="box-spacing-padding-top"]`).within(() => {
+				cy.openValueAddon();
+			});
+			cy.selectValueAddonItem('50');
+
+			// change right padding
+			cy.get(`[data-cy="box-spacing-padding-right"]`).within(() => {
+				cy.removeValueAddon();
+			});
+			setBoxSpacingSide('padding-right', '50');
+
+			// change bottom padding
+			cy.get(`[data-cy="box-spacing-padding-bottom"]`).within(() => {
+				cy.openValueAddon();
+			});
+			cy.selectValueAddonItem('50');
+
+			// change left padding
+			cy.get(`[data-cy="box-spacing-padding-left"]`).within(() => {
+				cy.removeValueAddon();
+			});
+			setBoxSpacingSide('padding-left', '50');
+
+			// Assert Blockera value
+			getWPDataObject().then((data) => {
+				expect({
+					margin: {
+						right: {
+							settings: {
+								name: '5',
+								id: '50',
+								value: 'min(6.5rem, 8vw)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Four',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--50',
+							},
+							name: '5',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						left: {
+							settings: {
+								name: '5',
+								id: '50',
+								value: 'min(6.5rem, 8vw)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Four',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--50',
+							},
+							name: '5',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						top: '50px',
+						bottom: '50px',
+					},
+					padding: {
+						top: {
+							settings: {
+								name: '5',
+								id: '50',
+								value: 'min(6.5rem, 8vw)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Four',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--50',
+							},
+							name: '5',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						bottom: {
+							settings: {
+								name: '5',
+								id: '50',
+								value: 'min(6.5rem, 8vw)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Four',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--50',
+							},
+							name: '5',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						right: '50px',
+						left: '50px',
+					},
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraSpacing'));
+			});
+
+			// Assert WP value
+			getWPDataObject().then((data) => {
+				expect({
+					padding: {
+						top: '--wp--preset--spacing--50',
+						bottom: '--wp--preset--spacing--50',
+						left: '50px',
+						right: '50px',
+					},
+					margin: {
+						top: '50px',
+						bottom: '50px',
+						left: '--wp--preset--spacing--50',
+						right: '--wp--preset--spacing--50',
+					},
+				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
+			});
+
+			//
+			// Test 3: Clear Blockera value and check WP data
+			//
+
+			// clear margin
+			clearBoxSpacingSide('margin-top');
+			cy.get(`[data-cy="box-spacing-margin-right"]`).within(() => {
+				cy.removeValueAddon();
+			});
+			clearBoxSpacingSide('margin-bottom');
+			cy.get(`[data-cy="box-spacing-margin-left"]`).within(() => {
+				cy.removeValueAddon();
+			});
+
+			// clear padding
+			cy.get(`[data-cy="box-spacing-padding-top"]`).within(() => {
+				cy.removeValueAddon();
+			});
+			clearBoxSpacingSide('padding-right');
+			cy.get(`[data-cy="box-spacing-padding-bottom"]`).within(() => {
+				cy.removeValueAddon();
+			});
+			clearBoxSpacingSide('padding-left');
+
+			// WP data should be removed too
+			getWPDataObject().then((data) => {
+				expect({
+					margin: {
+						top: '',
+						right: '',
+						bottom: '',
+						left: '',
+					},
+					padding: {
+						top: '',
+						right: '',
+						bottom: '',
+						left: '',
+					},
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraSpacing'));
+
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'style')?.spacing?.margin
+				);
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'style')?.spacing?.padding
+				);
+			});
+		});
 	});
 });
