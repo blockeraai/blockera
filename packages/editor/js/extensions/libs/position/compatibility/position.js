@@ -4,6 +4,11 @@
  * Blockera dependencies
  */
 import { isEmpty, isUndefined } from '@blockera/utils';
+import {
+	getSpacingVAFromVarString,
+	generateAttributeVarStringFromVA,
+} from '@blockera/data';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 export function positionFromWPCompatibility({
 	attributes,
@@ -16,13 +21,37 @@ export function positionFromWPCompatibility({
 		// WP  do have position
 		attributes?.style?.position?.type !== undefined
 	) {
+		let top: ValueAddon | string = '';
+		if (attributes?.style?.position?.top) {
+			top = getSpacingVAFromVarString(attributes?.style?.position?.top);
+		}
+
+		let right: ValueAddon | string = '';
+		if (attributes?.style?.position?.right) {
+			right = getSpacingVAFromVarString(
+				attributes?.style?.position?.right
+			);
+		}
+
+		let bottom: ValueAddon | string = '';
+		if (attributes?.style?.position?.bottom) {
+			bottom = getSpacingVAFromVarString(
+				attributes?.style?.position?.bottom
+			);
+		}
+
+		let left: ValueAddon | string = '';
+		if (attributes?.style?.position?.left) {
+			left = getSpacingVAFromVarString(attributes?.style?.position?.left);
+		}
+
 		attributes.blockeraPosition = {
 			type: attributes?.style?.position?.type || '',
 			position: {
-				top: attributes?.style?.position?.top || '',
-				right: attributes?.style?.position?.right || '',
-				bottom: attributes?.style?.position?.bottom || '',
-				left: attributes?.style?.position?.left || '',
+				top,
+				right,
+				bottom,
+				left,
 			},
 		};
 	}
@@ -54,10 +83,22 @@ export function positionToWPCompatibility({
 		style: {
 			position: {
 				type: newValue.type,
-				top: newValue?.position?.top,
-				right: newValue?.position?.right,
-				bottom: newValue?.position?.bottom,
-				left: newValue?.position?.left,
+				top: newValue?.position?.top
+					? generateAttributeVarStringFromVA(newValue?.position?.top)
+					: '',
+				right: newValue?.position?.right
+					? generateAttributeVarStringFromVA(
+							newValue?.position?.right
+					  )
+					: '',
+				bottom: newValue?.position?.bottom
+					? generateAttributeVarStringFromVA(
+							newValue?.position?.bottom
+					  )
+					: '',
+				left: newValue?.position?.left
+					? generateAttributeVarStringFromVA(newValue?.position?.left)
+					: '',
 			},
 		},
 	};
