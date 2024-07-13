@@ -284,11 +284,11 @@ describe('Background → WP Compatibility', () => {
 
 	describe('Group Block', () => {
 		describe('Background Image', () => {
-			it('Simple Value', () => {
+			it('simple value background image', () => {
 				appendBlocks(
 					'<!-- wp:group {"style":{"background":{"backgroundImage":{"url":"https://placehold.co/600x400","id":87,"source":"file","title":"about-sofia"}}},"layout":{"type":"constrained"}} -->\n' +
 						'<div class="wp-block-group"><!-- wp:paragraph -->\n' +
-						'<p>Paragraph inisde group block</p>\n' +
+						'<p>Paragraph inside group block</p>\n' +
 						'<!-- /wp:paragraph --></div>\n' +
 						'<!-- /wp:group -->'
 				);
@@ -343,6 +343,7 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// change an inner item of background image
+				// to make sure the value will be moved to WP data again
 				cy.get('.components-popover').within(() => {
 					cy.get('[data-value="cover"]').click();
 				});
@@ -376,6 +377,12 @@ describe('Background → WP Compatibility', () => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.background
 							?.backgroundImage
+					);
+				});
+
+				getWPDataObject().then((data) => {
+					expect({}).to.be.deep.equal(
+						getSelectedBlock(data, 'blockeraBackground')
 					);
 				});
 			});
