@@ -32,6 +32,33 @@ describe('Testing util functions', () => {
 			expect(value).toEqual(boxPositionControlDefaultValue);
 		});
 
+		test('empty value but not exact as default value', () => {
+			let value = boxSpacingValueCleanup({
+				margin: {
+					top: '',
+				},
+				padding: {
+					top: '',
+				},
+			});
+
+			expect(value).toEqual(boxPositionControlDefaultValue);
+
+			value = boxSpacingValueCleanup({
+				margin: {
+					top: '',
+					right: '',
+				},
+				padding: {
+					top: '',
+					right: '',
+					left: '',
+				},
+			});
+
+			expect(value).toEqual(boxPositionControlDefaultValue);
+		});
+
 		test('complex', () => {
 			const value = boxSpacingValueCleanup({
 				margin: {

@@ -67,7 +67,6 @@ export function boxSpacingValueCleanup(value: Object): Object {
 		return value;
 	}
 
-	// const updatedValue = JSON.parse(JSON.stringify(value));
 	const updatedValue = cloneObject(value);
 
 	['padding', 'margin'].forEach((type) => {
@@ -81,6 +80,10 @@ export function boxSpacingValueCleanup(value: Object): Object {
 			delete updatedValue[type];
 		}
 	});
+
+	if (isEmpty(updatedValue)) {
+		return boxPositionControlDefaultValue;
+	}
 
 	return updatedValue;
 }
