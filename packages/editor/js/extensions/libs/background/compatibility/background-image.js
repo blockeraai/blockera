@@ -20,23 +20,62 @@ export function backgroundFromWPCompatibility({
 	// Background Image
 	//
 	if (attributes?.style?.background?.backgroundImage?.url !== undefined) {
+		const bgImage = {
+			type: 'image',
+			image: attributes?.style?.background?.backgroundImage?.url,
+			'image-size': 'custom',
+			'image-size-width': 'auto',
+			'image-size-height': 'auto',
+			'image-position': {
+				top: '50%',
+				left: '50%',
+			},
+			'image-repeat': 'repeat',
+			'image-attachment': 'scroll',
+			isVisible: true,
+			order: 0,
+		};
+
+		if (attributes?.style?.background?.backgroundSize) {
+			switch (attributes?.style?.background?.backgroundSize) {
+				case 'cover':
+				case 'contain':
+					bgImage['image-size'] =
+						attributes?.style?.background?.backgroundSize;
+					break;
+
+				case 'auto':
+					bgImage['image-size'] = 'custom';
+					bgImage['image-size-width'] = 'auto';
+					bgImage['image-size-height'] = 'auto';
+					break;
+
+				default:
+					bgImage['image-size'] = 'custom';
+					bgImage['image-size-width'] =
+						attributes?.style?.background?.backgroundSize;
+					break;
+			}
+		}
+
+		if (attributes?.style?.background?.backgroundPosition) {
+			const position =
+				attributes?.style?.background?.backgroundPosition.split(' ');
+
+			bgImage['image-position'] = {
+				top: position[0] ?? '',
+				left: position[1] ?? '',
+			};
+		}
+
+		if (attributes?.style?.background?.backgroundRepeat) {
+			bgImage['image-repeat'] =
+				attributes?.style?.background?.backgroundRepeat;
+		}
+
 		attributes.blockeraBackground = {
 			...attributes.blockeraBackground,
-			'image-0': {
-				type: 'image',
-				image: attributes?.style?.background?.backgroundImage?.url,
-				'image-size': 'custom',
-				'image-size-width': 'auto',
-				'image-size-height': 'auto',
-				'image-position': {
-					top: '50%',
-					left: '50%',
-				},
-				'image-repeat': 'repeat',
-				'image-attachment': 'scroll',
-				isVisible: true,
-				order: 0,
-			},
+			'image-0': bgImage,
 		};
 	}
 
@@ -120,6 +159,9 @@ export function backgroundToWPCompatibility({
 			style: {
 				background: {
 					backgroundImage: undefined,
+					backgroundSize: undefined,
+					backgroundPosition: undefined,
+					backgroundRepeat: undefined,
 				},
 				color: {
 					gradient: undefined,
@@ -158,9 +200,28 @@ export function backgroundToWPCompatibility({
 								id: 0,
 								title: 'background image',
 							},
+							backgroundPosition: `${item['image-position'].top} ${item['image-position'].left}`,
 						},
 					},
 				});
+
+				switch (item['image-size']) {
+					case 'cover':
+					case 'contain':
+						result.style.background.backgroundSize =
+							item['image-size'];
+						break;
+
+					default:
+						result.style.background.backgroundSize =
+							item['image-size-width'];
+						break;
+				}
+
+				result.style.background.backgroundRepeat =
+					item['image-repeat'] === 'no-repeat'
+						? 'no-repeat'
+						: undefined;
 
 				processedItems.push(item?.type);
 
