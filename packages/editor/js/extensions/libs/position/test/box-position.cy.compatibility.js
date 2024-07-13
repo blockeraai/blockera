@@ -128,7 +128,7 @@ describe('Box Position → WP Compatibility', () => {
 <div class="wp-block-group"><!-- wp:paragraph -->
 <p>test paragraph</p>
 <!-- /wp:paragraph --></div>
-<!-- /wp:group -->`
+<!-- /wp:group --> `
 			);
 
 			// Select target block
