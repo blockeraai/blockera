@@ -40,10 +40,9 @@ export const getStateInfo = (state: TStates | number): StateTypes => {
 };
 
 export const getBreakpointInfo = (
-	breakpoint: TBreakpoint,
-	parentState: TStates = 'normal'
+	breakpoint: TBreakpoint
 ): BreakpointTypes | void => {
-	return breakpoints(parentState)[breakpoint];
+	return breakpoints()[breakpoint];
 };
 
 export function onChangeBlockStates(

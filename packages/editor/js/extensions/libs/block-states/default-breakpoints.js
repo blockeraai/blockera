@@ -8,13 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { BreakpointTypes, TStates, TBreakpoint } from './types';
+import type { BreakpointTypes, TBreakpoint } from './types';
 
-export default function (parentState: TStates = 'normal'): {
+export default function (): {
 	[key: TBreakpoint]: BreakpointTypes,
 } {
-	const attributes = 'normal' === parentState ? {} : { attributes: {} };
-
 	return {
 		'2xl-desktop': {
 			type: '2xl-desktop',
@@ -58,7 +56,7 @@ export default function (parentState: TStates = 'normal'): {
 				min: '',
 				max: '',
 			},
-			...attributes,
+			attributes: {},
 		},
 		tablet: {
 			type: 'tablet',

@@ -15,9 +15,7 @@ describe('Block States Helpers', () => {
 	});
 
 	it('should retrieve state with getStateInfo(stateName)', () => {
-		const pickedState = 'hover';
-
-		expect(getStateInfo(pickedState)).toEqual({
+		expect(getStateInfo()).toEqual({
 			type: 'hover',
 			label: 'Hover',
 			breakpoints: {},
@@ -25,9 +23,7 @@ describe('Block States Helpers', () => {
 	});
 
 	it('should retrieve breakpoint with getBreakpointInfo(breakpointId, parentState)', () => {
-		const parentState = 'hover';
-
-		expect(getBreakpointInfo('mobile', parentState)).toEqual({
+		expect(getBreakpointInfo('mobile')).toEqual({
 			type: 'mobile',
 			base: false,
 			status: true,
@@ -40,10 +36,8 @@ describe('Block States Helpers', () => {
 		});
 	});
 
-	it('should retrieve breakpoint with getBreakpointInfo(breakpointName, parentState)', () => {
-		const parentState = 'hover';
-
-		expect(getBreakpointInfo('tablet', parentState)).toEqual({
+	it('should retrieve breakpoint with getBreakpointInfo(breakpointName)', () => {
+		expect(getBreakpointInfo('tablet')).toEqual({
 			type: 'tablet',
 			base: false,
 			status: true,
