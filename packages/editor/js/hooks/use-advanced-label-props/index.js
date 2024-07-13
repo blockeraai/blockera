@@ -10,7 +10,13 @@ import { useState, useEffect, useMemo } from '@wordpress/element';
  * Blockera dependencies
  */
 import { prepare } from '@blockera/data-editor';
-import { isEquals, isObject, isEmpty, isUndefined } from '@blockera/utils';
+import {
+	omit,
+	isEquals,
+	isObject,
+	isEmpty,
+	isUndefined,
+} from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -81,6 +87,34 @@ export const useAdvancedLabelProps = (
 		const calculatedAttributes = blockAttributes;
 
 		if (isInnerBlock(currentBlock)) {
+			const rootInnerBlock =
+				prepare(
+					`blockeraInnerBlocks[${currentBlock}].attributes`,
+					calculatedAttributes
+				) ||
+				blockeraInnerBlocks[currentBlock]?.attributes ||
+				{};
+
+			const hasValidStates = (states: Object): boolean => {
+				const validStates: { [key: TStates]: Object } = {};
+
+				// $FlowFixMe
+				for (const stateType: TStates in states) {
+					const stateItem = states[stateType];
+
+					for (const breakpointType in stateItem?.breakpoints || {}) {
+						const breakpointItem =
+							stateItem?.breakpoints[breakpointType];
+
+						if (Object.keys(breakpointItem?.attributes).length) {
+							validStates[stateType] = stateItem;
+						}
+					}
+				}
+
+				return Object.keys(validStates).length > 0;
+			};
+
 			if (
 				!isNormalStateOnBaseBreakpoint(currentState, currentBreakpoint)
 			) {
@@ -90,37 +124,57 @@ export const useAdvancedLabelProps = (
 						currentBreakpoint
 					)
 				) {
-					return (
+					const stateOfInnerBlock =
 						prepare(
-							`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes.blockeraInnerBlocks[${currentBlock}].attributes.blockeraBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
+							`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
 							calculatedAttributes
-						) || {}
+						) || {};
+
+					if (isEmpty(rootInnerBlock) || isEmpty(stateOfInnerBlock)) {
+						return omit(rootInnerBlock, ['blockeraBlockStates']);
+					}
+
+					const isValidStates = hasValidStates(
+						stateOfInnerBlock?.blockeraBlockStates || {}
 					);
+
+					if (!isValidStates) {
+						return omit(stateOfInnerBlock || rootInnerBlock, [
+							'blockeraBlockStates',
+						]);
+					}
+
+					return stateOfInnerBlock || rootInnerBlock;
 				}
 
 				return (
 					prepare(
 						`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
 						calculatedAttributes
-					) ||
-					blockeraInnerBlocks[currentBlock]?.attributes ||
-					{}
+					) || rootInnerBlock
 				);
 			}
 
-			return (
-				prepare(
-					`blockeraInnerBlocks[${currentBlock}].attributes`,
-					calculatedAttributes
-				) ||
-				blockeraInnerBlocks[currentBlock]?.attributes ||
-				{}
+			const isValidStates = hasValidStates(
+				rootInnerBlock?.blockeraBlockStates || {}
 			);
+
+			if (!isValidStates) {
+				return omit(rootInnerBlock, 'blockeraBlockStates');
+			}
+
+			return rootInnerBlock;
 		}
 
 		return calculatedAttributes;
 		// eslint-disable-next-line
-	}, [blockAttributes, currentBlock]);
+	}, [
+		blockAttributes,
+		currentBlock,
+		currentBreakpoint,
+		currentState,
+		currentInnerBlockState,
+	]);
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
@@ -128,11 +182,7 @@ export const useAdvancedLabelProps = (
 			// Rule:
 			// - If current block not has any changed attributes!
 			// - Recieved attribute is equals with "blockeraBlockStates".
-			if (
-				['', 'blockeraBlockStates'].includes(attribute) ||
-				!currentBlockAttributes ||
-				!Object.values(currentBlockAttributes).length
-			) {
+			if (['', 'blockeraBlockStates'].includes(attribute)) {
 				return setLabelStatus({
 					isChanged: false,
 					isChangedNormalStateOnBaseBreakpoint: false,
@@ -146,7 +196,40 @@ export const useAdvancedLabelProps = (
 			// Assume block has not any states!
 			if (!blockHasStates(currentBlockAttributes)) {
 				const isChanged = !isEquals(defaultValue, value);
+				const isChangedOnOtherStates = Object.values(
+					blockAttributes?.blockeraBlockStates || {}
+				)
+					.map((item) =>
+						Object.values(item?.breakpoints)
+							.map((_item) => {
+								const rootValue =
+									_item?.attributes?.blockeraInnerBlocks[
+										currentBlock
+									]?.attributes[attribute];
 
+								return (
+									!!rootValue ||
+									Object.values(
+										rootValue?.blockeraBlockStates || {}
+									)
+										.map(
+											(innerItem) =>
+												Object.values(
+													innerItem?.breakpoints
+												).filter(
+													(_innerItem) =>
+														!!_innerItem
+															?.attributes[
+															attribute
+														]
+												).length > 0
+										)
+										.includes(true)
+								);
+							})
+							.includes(true)
+					)
+					.includes(true);
 				if (
 					!isNormalStateOnBaseBreakpoint(
 						isInnerBlock(currentBlock)
@@ -158,7 +241,24 @@ export const useAdvancedLabelProps = (
 					return setLabelStatus({
 						isChanged: false,
 						isChangedNormalStateOnBaseBreakpoint: isChanged,
-						isChangedOnOtherStates: isChanged,
+						isChangedOnOtherStates:
+							isChanged ||
+							Object.values(
+								blockAttributes?.blockeraInnerBlocks[
+									currentBlock
+								] || {}
+							)
+								.map((item) =>
+									Object.values(item?.breakpoints || {})
+										.map((_item) => {
+											return !!_item?.attributes[
+												attribute
+											];
+										})
+										.includes(true)
+								)
+								.includes(true) ||
+							isChangedOnOtherStates,
 						isChangedOnCurrentState: false,
 						isInnerBlock: isInnerBlock(currentBlock),
 						isChangedOnCurrentBreakpointNormal: isChanged,
@@ -168,7 +268,7 @@ export const useAdvancedLabelProps = (
 				return setLabelStatus({
 					isChanged,
 					isChangedNormalStateOnBaseBreakpoint: isChanged,
-					isChangedOnOtherStates: false,
+					isChangedOnOtherStates,
 					isChangedOnCurrentState: isChanged,
 					isInnerBlock: isInnerBlock(currentBlock),
 					isChangedOnCurrentBreakpointNormal: isChanged,
@@ -203,7 +303,13 @@ export const useAdvancedLabelProps = (
 					clonedDefaultValue = _defaultValue;
 				}
 
-				if (stateValue) {
+				if (
+					isInnerBlock(currentBlock) &&
+					isEmpty(stateValue) &&
+					_isNormalState(currentInnerBlockState)
+				) {
+					stateValue = prepare(path, currentBlockAttributes);
+				} else if (stateValue) {
 					stateValue = prepare(path, stateValue);
 				}
 			}
@@ -316,7 +422,7 @@ export const useAdvancedLabelProps = (
 				);
 			};
 
-			const isChangedOnOtherStates = Object.fromEntries(
+			const otherStates = Object.fromEntries(
 				// $FlowFixMe
 				Object.entries(
 					currentBlockAttributes?.blockeraBlockStates
@@ -388,15 +494,14 @@ export const useAdvancedLabelProps = (
 				);
 			};
 
-			const isChangedOnCurrentState =
-				isChangedOnCurrentBreakpointAndState(
-					isChangedOnOtherStates[
-						isInnerBlock(currentBlock)
-							? currentInnerBlockState
-							: currentState
-					]?.breakpoints[currentBreakpoint],
-					currentState
-				);
+			let isChangedOnCurrentState = isChangedOnCurrentBreakpointAndState(
+				otherStates[
+					isInnerBlock(currentBlock)
+						? currentInnerBlockState
+						: currentState
+				]?.breakpoints[currentBreakpoint],
+				currentState
+			);
 
 			const isChangedOnCurrentBreakpointNormal =
 				isChangedOnSpecificStateAndBreakpoint(
@@ -408,12 +513,21 @@ export const useAdvancedLabelProps = (
 					false
 				);
 
+			const isChangedOnOtherStates = Object.keys(otherStates).length > 0;
+
+			if (!isChangedOnCurrentState && isChanged) {
+				if (!isChangedOnOtherStates && isNormalState) {
+					isChangedOnCurrentState = isChanged;
+				} else {
+					isChangedOnCurrentState = isChangedOnOtherStates;
+				}
+			}
+
 			setLabelStatus({
 				isChanged,
 				isChangedNormalStateOnBaseBreakpoint,
 				isChangedOnCurrentState,
-				isChangedOnOtherStates:
-					Object.keys(isChangedOnOtherStates).length > 0,
+				isChangedOnOtherStates,
 				isInnerBlock: isInnerBlock(currentBlock),
 				isChangedOnCurrentBreakpointNormal,
 			});
