@@ -1,6 +1,13 @@
 // @flow
 
 /**
+ * Blockera dependencies
+ */
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+import { isString } from '@blockera/utils';
+import { isValid } from '@blockera/controls/js/value-addons/utils';
+
+/**
  * Internal dependencies
  */
 import type { ValueAddonReference } from '../types';
@@ -46,4 +53,33 @@ export function generateVariableString({
 	}
 
 	return `--wp--${_reference}--${_type}--${id}`;
+}
+
+export function generateVariableStringFromVA(
+	valueAddon: ValueAddon | string
+): string {
+	if (isString(valueAddon)) {
+		//$FlowFixMe
+		return valueAddon;
+	}
+
+	if (isValid(valueAddon)) {
+		//$FlowFixMe
+		if (valueAddon?.settings?.var) {
+			return valueAddon.settings.var;
+		}
+
+		return generateVariableString({
+			//$FlowFixMe
+			reference: valueAddon?.settings?.reference || {
+				type: '',
+			},
+			type: 'spacing',
+			//$FlowFixMe
+			id: valueAddon?.id || '',
+		});
+	}
+
+	//$FlowFixMe
+	return valueAddon;
 }
