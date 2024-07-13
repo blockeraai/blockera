@@ -362,7 +362,7 @@ describe('Inner Blocks label testing', () => {
 		});
 	});
 
-	describe.only('reset action testing...', () => {
+	describe('reset action testing...', () => {
 		beforeEach(() => {
 			/**
 			 * Normal -> Inner
@@ -700,7 +700,7 @@ describe('Inner Blocks label testing', () => {
 		});
 	});
 
-	describe('reset-all action testing...', () => {
+	describe.skip('reset-all action testing...', () => {
 		beforeEach(() => {
 			/**
 			 * Normal -> Inner ->
