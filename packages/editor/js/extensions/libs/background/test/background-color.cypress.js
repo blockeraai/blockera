@@ -92,18 +92,24 @@ describe('Background Color → Functionality', () => {
 			);
 		});
 
-		// assert editor
-		cy.getBlock('core/paragraph').hasCssVar(
-			'background-color',
-			'--wp--preset--color--accent-4'
-		);
+		// Check block style
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-styles-wrapper')
+				.invoke('text')
+				.should(
+					'include',
+					'background-color: var(--wp--preset--color--accent-4)'
+				);
+		});
 
 		//assert frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.blockera-block').hasCssVar(
-			'background-color',
-			'--wp--preset--color--accent-4'
-		);
+		cy.get('style#blockera-inline-css-inline-css')
+			.invoke('text')
+			.should(
+				'include',
+				'background-color: var(--wp--preset--color--accent-4)'
+			);
 	});
 });

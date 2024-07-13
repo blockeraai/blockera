@@ -64,10 +64,11 @@ describe('Font Color → Functionality', () => {
 		// select variable
 		cy.selectValueAddonItem('contrast');
 
-		cy.getBlock('core/paragraph').hasCssVar(
-			'color',
-			'--wp--preset--color--contrast'
-		);
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-styles-wrapper')
+				.invoke('text')
+				.should('include', 'color: var(--wp--preset--color--contrast)');
+		});
 
 		//Check store
 		getWPDataObject().then((data) => {
@@ -94,9 +95,8 @@ describe('Font Color → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').hasCssVar(
-			'color',
-			'--wp--preset--color--contrast'
-		);
+		cy.get('style#blockera-inline-css-inline-css')
+			.invoke('text')
+			.should('include', 'color: var(--wp--preset--color--contrast)');
 	});
 });

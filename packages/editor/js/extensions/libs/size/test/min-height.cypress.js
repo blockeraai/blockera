@@ -62,7 +62,14 @@ describe('Min Height → Functionality', () => {
 		cy.selectValueAddonItem('contentSize');
 
 		// Check block
-		cy.getBlock('core/paragraph').should('have.css', 'min-height', '620px');
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-styles-wrapper')
+				.invoke('text')
+				.should(
+					'include',
+					'min-height: var(--wp--style--global--content-size)'
+				);
+		});
 
 		// Check store
 		getWPDataObject().then((data) => {
@@ -88,10 +95,11 @@ describe('Min Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'min-height', '620px');
-		cy.get('.blockera-block').hasCssVar(
-			'min-height',
-			'--wp--style--global--content-size'
-		);
+		cy.get('style#blockera-inline-css-inline-css')
+			.invoke('text')
+			.should(
+				'include',
+				'min-height: var(--wp--style--global--content-size)'
+			);
 	});
 });

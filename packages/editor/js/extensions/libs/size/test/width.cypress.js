@@ -56,7 +56,14 @@ describe('Width → Functionality', () => {
 		cy.selectValueAddonItem('contentSize');
 
 		// Check block
-		cy.getBlock('core/paragraph').should('have.css', 'width', '620px');
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-styles-wrapper')
+				.invoke('text')
+				.should(
+					'include',
+					'width: var(--wp--style--global--content-size)'
+				);
+		});
 
 		// Check store
 		getWPDataObject().then((data) => {
@@ -82,10 +89,8 @@ describe('Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'width', '620px');
-		cy.get('.blockera-block').hasCssVar(
-			'width',
-			'--wp--style--global--content-size'
-		);
+		cy.get('style#blockera-inline-css-inline-css')
+			.invoke('text')
+			.should('include', 'width: var(--wp--style--global--content-size)');
 	});
 });

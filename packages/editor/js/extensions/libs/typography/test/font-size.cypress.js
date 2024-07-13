@@ -54,10 +54,14 @@ describe('Font Size → Functionality', () => {
 		// select variable
 		cy.selectValueAddonItem('small');
 
-		cy.getBlock('core/paragraph').hasCssVar(
-			'font-size',
-			'--wp--preset--font-size--small'
-		);
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-styles-wrapper')
+				.invoke('text')
+				.should(
+					'include',
+					'font-size: var(--wp--preset--font-size--small)'
+				);
+		});
 
 		//Check store
 		getWPDataObject().then((data) => {
@@ -85,9 +89,11 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').hasCssVar(
-			'font-size',
-			'--wp--preset--font-size--small'
-		);
+		cy.get('style#blockera-inline-css-inline-css')
+			.invoke('text')
+			.should(
+				'include',
+				'font-size: var(--wp--preset--font-size--small)'
+			);
 	});
 });

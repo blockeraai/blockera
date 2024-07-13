@@ -148,33 +148,6 @@ export const registerCommands = () => {
 		return cy.get(`[data-test=${selector}]`, ...args);
 	});
 
-	Cypress.Commands.add(
-		'hasCssVar',
-		{ prevSubject: true },
-		(subject, styleName, cssVarName) => {
-			cy.document().then((doc) => {
-				const dummy = doc.createElement('span');
-				dummy.style.setProperty(styleName, `var(${cssVarName})`);
-				doc.body.appendChild(dummy);
-
-				const evaluatedStyle = window
-					.getComputedStyle(dummy)
-					.getPropertyValue(styleName)
-					.trim();
-				dummy.remove();
-
-				cy.wrap(subject)
-					.then(($el) =>
-						window
-							.getComputedStyle($el[0])
-							.getPropertyValue(styleName)
-							.trim()
-					)
-					.should('eq', evaluatedStyle);
-			});
-		}
-	);
-
 	Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 		let counter = 0;
 		while (counter !== count) {
