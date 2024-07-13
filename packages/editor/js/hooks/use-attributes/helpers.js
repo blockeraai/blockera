@@ -252,43 +252,85 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 	const blockeraBlockStates: { [key: string]: Object } = {};
 
 	if (isInnerBlock(currentBlock)) {
-		const newState = update(
-			state,
-			`blockeraInnerBlocks.${currentBlock}.attributes.${attributeId}`,
-			newValue,
-			true
-		);
-
 		const blockStates =
-			newState.blockeraInnerBlocks[currentBlock].attributes
+			state.blockeraInnerBlocks[currentBlock].attributes
 				?.blockeraBlockStates || {};
-
-		for (const stateType in blockStates) {
+		// $FlowFixMe
+		for (const stateType: TStates in blockStates) {
 			const _state = blockStates[stateType];
-			const breakpoints = blockStates[stateType]?.breakpoints;
+			const breakpoints = _state?.breakpoints;
+			const stateBreakpoints: { [key: string]: Object } = {};
 
-			for (const breakpointType in breakpoints) {
-				blockeraBlockStates[stateType] = mergeObject(
-					_state,
-					update(
+			// $FlowFixMe
+			for (const breakpointType: TBreakpoint in breakpoints) {
+				if (isNormalStateOnBaseBreakpoint(stateType, breakpointType)) {
+					stateBreakpoints[breakpointType] =
+						breakpoints[breakpointType];
+
+					continue;
+				}
+
+				if (ref.path && ref.path !== attributeId) {
+					const preparedPathValue = update(
+						breakpoints[breakpointType].attributes,
+						ref.path,
+						ref.defaultValue
+					);
+
+					stateBreakpoints[breakpointType] = mergeObject(
 						breakpoints[breakpointType],
-						`attributes.${attributeId}`,
-						newValue,
-						true
-					)
-				);
+						{
+							attributes: preparedPathValue,
+						}
+					);
+				} else {
+					stateBreakpoints[breakpointType] = mergeObject(
+						breakpoints[breakpointType],
+						{
+							attributes: {
+								[attributeId]: isEquals(
+									newValue,
+									ref.defaultValue
+								)
+									? undefined
+									: newValue,
+							},
+						}
+					);
+				}
 			}
+
+			blockeraBlockStates[stateType] = mergeObject(
+				blockStates[stateType],
+				{
+					breakpoints: stateBreakpoints,
+				}
+			);
 		}
 
-		return mergeObject(newState, {
-			blockeraInnerBlocks: mergeObject(newState.blockeraInnerBlocks, {
-				[currentBlock]: {
-					attributes: {
-						blockeraBlockStates,
+		return {
+			...state,
+			blockeraInnerBlocks: mergeObject(
+				state?.blockeraInnerBlocks || {},
+				{
+					[currentBlock]: {
+						attributes: {
+							[attributeId]: isEquals(newValue, ref.defaultValue)
+								? undefined
+								: newValue,
+							blockeraBlockStates,
+						},
 					},
 				},
-			}),
-		});
+				{
+					deletedProps: [
+						attributeId,
+						// FIXME: uncomment after fixed cleanup breakpoint.
+						// ...Object.keys(_state.breakpoints),
+					],
+				}
+			),
+		};
 	}
 
 	const blockStates = state.blockeraBlockStates;
@@ -394,6 +436,7 @@ export const prepCustomCssClasses = (
 
 export const resetCurrentState = (_state: Object, action: Object): Object => {
 	const {
+		ref,
 		newValue,
 		attributeId,
 		currentState,
@@ -417,24 +460,32 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 						blockeraBlockStates: {
 							[currentState]: {
 								breakpoints: {
-									attributes: {
-										blockeraInnerBlocks: {
-											[currentBlock]: {
-												attributes: {
-													blockeraBlockStates: {
-														[currentInnerBlockState]:
-															{
-																breakpoints: {
-																	[currentBreakpoint]:
+									[currentBreakpoint]: {
+										attributes: {
+											blockeraInnerBlocks: {
+												[currentBlock]: {
+													attributes: {
+														blockeraBlockStates: {
+															[currentInnerBlockState]:
+																{
+																	breakpoints:
 																		{
-																			attributes:
+																			[currentBreakpoint]:
 																				{
-																					[attributeId]:
-																						undefined,
+																					attributes:
+																						{
+																							[attributeId]:
+																								isEquals(
+																									newValue,
+																									ref.defaultValue
+																								)
+																									? undefined
+																									: newValue,
+																						},
 																				},
 																		},
 																},
-															},
+														},
 													},
 												},
 											},
@@ -458,7 +509,12 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 										blockeraInnerBlocks: {
 											[currentBlock]: {
 												attributes: {
-													[attributeId]: undefined,
+													[attributeId]: isEquals(
+														newValue,
+														ref.defaultValue
+													)
+														? undefined
+														: newValue,
 												},
 											},
 										},
@@ -482,7 +538,12 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 										breakpoints: {
 											[currentBreakpoint]: {
 												attributes: {
-													[attributeId]: undefined,
+													[attributeId]: isEquals(
+														newValue,
+														ref.defaultValue
+													)
+														? undefined
+														: newValue,
 												},
 											},
 										},
