@@ -9,11 +9,12 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import {
+	isNull,
 	isEmpty,
 	isEquals,
-	isNull,
-	isUndefined,
 	isObject,
+	isUndefined,
+	mergeObject,
 } from '@blockera/utils';
 import { prepare } from '@blockera/data-editor';
 
@@ -81,10 +82,12 @@ export const getStatesGraph = ({
 									isInnerBlock(currentBlock) &&
 									state?.attributes?.blockeraInnerBlocks
 								) {
-									state =
+									state = mergeObject(
+										state,
 										state.attributes.blockeraInnerBlocks[
 											currentBlock
-										];
+										]
+									);
 								}
 
 								if (

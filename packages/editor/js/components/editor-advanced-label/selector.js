@@ -24,7 +24,6 @@ import type {
 import { getBaseBreakpoint } from '../../canvas-editor';
 import staticStates from '../../extensions/libs/block-states/states';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
-import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
 
 export type State = {
 	type: TStates,
@@ -59,43 +58,17 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 		return [];
 	}
 
-	const {
-		getExtensionCurrentBlock,
-		getExtensionCurrentBlockState,
-		getExtensionCurrentBlockStateBreakpoint,
-	} = select('blockera/extensions');
+	const { getExtensionCurrentBlock } = select('blockera/extensions');
 	const { getBreakpoints } = select('blockera/editor');
 
 	const currentBlock = getExtensionCurrentBlock();
-	const currentState = getExtensionCurrentBlockState();
-	const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
 
 	const breakpoints = getBreakpoints();
 	const normals = [];
 
-	let blockAttributes = block.attributes;
-	let blockeraBlockStates: { [key: TStates]: StateTypes } =
+	const blockAttributes = block.attributes;
+	const blockeraBlockStates: { [key: TStates]: StateTypes } =
 		blockAttributes?.blockeraBlockStates;
-
-	if (isInnerBlock(currentBlock)) {
-		if (!isNormalStateOnBaseBreakpoint(currentState, currentBreakpoint)) {
-			blockAttributes =
-				prepare(
-					`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
-					blockAttributes
-				) || {};
-		} else {
-			blockAttributes =
-				prepare(
-					`blockeraInnerBlocks[${currentBlock}].attributes`,
-					blockAttributes
-				) || {};
-		}
-
-		blockeraBlockStates =
-			blockAttributes.blockeraBlockStates ||
-			block.attributes.blockeraBlockStates;
-	}
 
 	const graphStates: Array<{
 		type: TBreakpoint,
@@ -108,13 +81,54 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 		const breakpoint = breakpoints[breakpointType];
 		const states: StateGraphStates = [];
 
-		if (getBaseBreakpoint() === breakpoint.type) {
+		if (
+			!isInnerBlock(currentBlock) &&
+			getBaseBreakpoint() === breakpoint.type
+		) {
 			// $FlowFixMe
 			states.push({
 				type: 'normal',
 				label: staticStates.normal.label,
 				attributes: omit(blockAttributes, ['blockeraBlockStates']),
 			});
+		}
+
+		const innerBlockAttributes =
+			prepare(
+				`blockeraInnerBlocks[${currentBlock}].attributes`,
+				blockAttributes
+			) || {};
+
+		if (isInnerBlock(currentBlock) && !isEmpty(innerBlockAttributes)) {
+			const innerBlockStates =
+				innerBlockAttributes?.blockeraBlockStates || {};
+
+			if (getBaseBreakpoint() === breakpoint.type) {
+				// $FlowFixMe
+				states.push({
+					type: 'normal',
+					label: staticStates.normal.label,
+					attributes: omit(innerBlockAttributes, [
+						'blockeraBlockStates',
+					]),
+				});
+			}
+
+			// $FlowFixMe
+			for (const stateType: TStates in innerBlockStates) {
+				const state = innerBlockStates[stateType];
+
+				if (!state || !state.breakpoints[breakpointType]) {
+					continue;
+				}
+
+				// $FlowFixMe
+				states.push({
+					type: stateType,
+					label: staticStates[stateType].label,
+					attributes: state.breakpoints[breakpoint.type]?.attributes,
+				});
+			}
 		}
 
 		// $FlowFixMe
@@ -125,12 +139,49 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 				continue;
 			}
 
-			// $FlowFixMe
-			states.push({
-				type: stateType,
-				label: staticStates[stateType].label,
-				attributes: state.breakpoints[breakpoint.type]?.attributes,
-			});
+			if (
+				isInnerBlock(currentBlock) &&
+				state.breakpoints[breakpoint.type]?.attributes &&
+				state.breakpoints[breakpoint.type]?.attributes
+					?.blockeraInnerBlocks[currentBlock]
+			) {
+				const currentAttributes =
+					state.breakpoints[breakpoint.type]?.attributes
+						?.blockeraInnerBlocks[currentBlock]?.attributes;
+
+				// $FlowFixMe
+				states.push({
+					type: 'normal',
+					label: staticStates.normal.label,
+					attributes: currentAttributes,
+				});
+
+				// $FlowFixMe
+				for (const _stateType: TStates in currentAttributes?.blockeraBlockStates ||
+					{}) {
+					const _state =
+						currentAttributes?.blockeraBlockStates[_stateType];
+
+					if (!_state || !_state.breakpoints[breakpointType]) {
+						continue;
+					}
+
+					// $FlowFixMe
+					states.push({
+						type: _stateType,
+						label: staticStates[_stateType].label,
+						attributes:
+							_state.breakpoints[breakpoint.type]?.attributes,
+					});
+				}
+			} else {
+				// $FlowFixMe
+				states.push({
+					type: stateType,
+					label: staticStates[stateType].label,
+					attributes: state.breakpoints[breakpoint.type]?.attributes,
+				});
+			}
 		}
 
 		graphStates.push({
