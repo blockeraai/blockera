@@ -5,7 +5,7 @@
  */
 import {
 	getSpacingVAFromVarString,
-	generateVariableStringFromVA,
+	generateAttributeVarStringFromVA,
 } from '@blockera/data';
 import { isEquals } from '@blockera/utils';
 import { boxPositionControlDefaultValue } from '@blockera/controls/js/libs/box-spacing-control/utils';
@@ -150,16 +150,16 @@ export function spacingToWPCompatibility({
 	//
 	newSpacing.margin = {
 		top: newValue?.margin?.top
-			? generateVariableStringFromVA(newValue?.margin?.top)
+			? generateAttributeVarStringFromVA(newValue?.margin?.top)
 			: '',
 		right: newValue?.margin?.right
-			? generateVariableStringFromVA(newValue?.margin?.right)
+			? generateAttributeVarStringFromVA(newValue?.margin?.right)
 			: '',
 		bottom: newValue?.margin?.bottom
-			? generateVariableStringFromVA(newValue?.margin?.bottom)
+			? generateAttributeVarStringFromVA(newValue?.margin?.bottom)
 			: '',
 		left: newValue?.margin?.left
-			? generateVariableStringFromVA(newValue?.margin?.left)
+			? generateAttributeVarStringFromVA(newValue?.margin?.left)
 			: '',
 	};
 
@@ -179,16 +179,16 @@ export function spacingToWPCompatibility({
 	//
 	newSpacing.padding = {
 		top: newValue?.padding?.top
-			? generateVariableStringFromVA(newValue?.padding?.top)
+			? generateAttributeVarStringFromVA(newValue?.padding?.top)
 			: '',
 		right: newValue?.padding?.right
-			? generateVariableStringFromVA(newValue?.padding?.right)
+			? generateAttributeVarStringFromVA(newValue?.padding?.right)
 			: '',
 		bottom: newValue?.padding?.bottom
-			? generateVariableStringFromVA(newValue?.padding?.bottom)
+			? generateAttributeVarStringFromVA(newValue?.padding?.bottom)
 			: '',
 		left: newValue?.padding?.left
-			? generateVariableStringFromVA(newValue?.padding?.left)
+			? generateAttributeVarStringFromVA(newValue?.padding?.left)
 			: '',
 	};
 

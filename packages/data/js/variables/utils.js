@@ -56,7 +56,7 @@ export function generateVariableString({
 	return `--wp--${_reference}--${_type}--${id}`;
 }
 
-export function generateVariableStringFromVA(
+export function generateAttributeVarStringFromVA(
 	valueAddon: ValueAddon | string
 ): string {
 	if (isString(valueAddon)) {

@@ -44,7 +44,10 @@ export {
 	getColorVAFromVarString,
 } from './color';
 export { getVariable } from './get-variable';
-export { generateVariableString, generateVariableStringFromVA } from './utils';
+export {
+	generateVariableString,
+	generateAttributeVarStringFromVA,
+} from './utils';
 
 export * from './types';
 export * from './store/types';
