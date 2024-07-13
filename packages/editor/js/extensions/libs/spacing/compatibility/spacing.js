@@ -3,8 +3,13 @@
 /**
  * Blockera dependencies
  */
-import { isEmpty, isUndefined, isEquals } from '@blockera/utils';
+import {
+	getSpacingVAFromVarString,
+	generateVariableStringFromVA,
+} from '@blockera/data';
+import { isEquals } from '@blockera/utils';
 import { boxPositionControlDefaultValue } from '@blockera/controls/js/libs/box-spacing-control/utils';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 export function spacingFromWPCompatibility({
 	attributes,
@@ -18,18 +23,82 @@ export function spacingFromWPCompatibility({
 		// Blockera have not custom spacing
 		isEquals(attributes?.blockeraSpacing, boxPositionControlDefaultValue)
 	) {
+		// padding top
+		let paddingTop: ValueAddon | string = '';
+		if (attributes?.style?.spacing?.padding?.top) {
+			paddingTop = getSpacingVAFromVarString(
+				attributes?.style?.spacing?.padding?.top
+			);
+		}
+
+		// padding right
+		let paddingRight: ValueAddon | string = '';
+		if (attributes?.style?.spacing?.padding?.right) {
+			paddingRight = getSpacingVAFromVarString(
+				attributes?.style?.spacing?.padding?.right
+			);
+		}
+
+		// padding right
+		let paddingBottom: ValueAddon | string = '';
+		if (attributes?.style?.spacing?.padding?.bottom) {
+			paddingBottom = getSpacingVAFromVarString(
+				attributes?.style?.spacing?.padding?.bottom
+			);
+		}
+
+		// padding right
+		let paddingLeft: ValueAddon | string = '';
+		if (attributes?.style?.spacing?.padding?.left) {
+			paddingLeft = getSpacingVAFromVarString(
+				attributes?.style?.spacing?.padding?.left
+			);
+		}
+
+		// margin top
+		let marginTop: ValueAddon | string = '';
+		if (attributes?.style?.spacing?.margin?.top) {
+			marginTop = getSpacingVAFromVarString(
+				attributes?.style?.spacing?.margin?.top
+			);
+		}
+
+		// margin right
+		let marginRight: ValueAddon | string = '';
+		if (attributes?.style?.spacing?.margin?.right) {
+			marginRight = getSpacingVAFromVarString(
+				attributes?.style?.spacing?.margin?.right
+			);
+		}
+
+		// margin right
+		let marginBottom: ValueAddon | string = '';
+		if (attributes?.style?.spacing?.margin?.bottom) {
+			marginBottom = getSpacingVAFromVarString(
+				attributes?.style?.spacing?.margin?.bottom
+			);
+		}
+
+		// padding right
+		let marginLeft: ValueAddon | string = '';
+		if (attributes?.style?.spacing?.margin?.left) {
+			marginLeft = getSpacingVAFromVarString(
+				attributes?.style?.spacing?.margin?.left
+			);
+		}
+
 		attributes.blockeraSpacing = {
 			padding: {
-				top: attributes?.style?.spacing?.padding?.top || '',
-				right: attributes?.style?.spacing?.padding?.right || '',
-				bottom: attributes?.style?.spacing?.padding?.bottom || '',
-				left: attributes?.style?.spacing?.padding?.left || '',
+				top: paddingTop,
+				right: paddingRight,
+				bottom: paddingBottom,
+				left: paddingLeft,
 			},
 			margin: {
-				top: attributes?.style?.spacing?.margin?.top || '',
-				right: attributes?.style?.spacing?.margin?.right || '',
-				bottom: attributes?.style?.spacing?.margin?.bottom || '',
-				left: attributes?.style?.spacing?.margin?.left || '',
+				top: marginTop,
+				right: marginRight,
+				bottom: marginBottom,
+				left: marginLeft,
 			},
 		};
 	}
@@ -46,9 +115,7 @@ export function spacingToWPCompatibility({
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
-		isEmpty(newValue) ||
-		isUndefined(newValue) ||
-		newValue.type === 'static'
+		isEquals(newValue, boxPositionControlDefaultValue)
 	) {
 		return {
 			style: {
@@ -82,10 +149,18 @@ export function spacingToWPCompatibility({
 	// margin
 	//
 	newSpacing.margin = {
-		top: newValue?.margin?.top ?? '',
-		right: newValue?.margin?.right ?? '',
-		bottom: newValue?.margin?.bottom ?? '',
-		left: newValue?.margin?.left ?? '',
+		top: newValue?.margin?.top
+			? generateVariableStringFromVA(newValue?.margin?.top)
+			: '',
+		right: newValue?.margin?.right
+			? generateVariableStringFromVA(newValue?.margin?.right)
+			: '',
+		bottom: newValue?.margin?.bottom
+			? generateVariableStringFromVA(newValue?.margin?.bottom)
+			: '',
+		left: newValue?.margin?.left
+			? generateVariableStringFromVA(newValue?.margin?.left)
+			: '',
 	};
 
 	if (
@@ -103,10 +178,18 @@ export function spacingToWPCompatibility({
 	// padding
 	//
 	newSpacing.padding = {
-		top: newValue?.padding?.top ?? '',
-		right: newValue?.padding?.right ?? '',
-		bottom: newValue?.padding?.bottom ?? '',
-		left: newValue?.padding?.left ?? '',
+		top: newValue?.padding?.top
+			? generateVariableStringFromVA(newValue?.padding?.top)
+			: '',
+		right: newValue?.padding?.right
+			? generateVariableStringFromVA(newValue?.padding?.right)
+			: '',
+		bottom: newValue?.padding?.bottom
+			? generateVariableStringFromVA(newValue?.padding?.bottom)
+			: '',
+		left: newValue?.padding?.left
+			? generateVariableStringFromVA(newValue?.padding?.left)
+			: '',
 	};
 
 	if (
