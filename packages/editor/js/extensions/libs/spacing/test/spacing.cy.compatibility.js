@@ -542,16 +542,16 @@ describe('Box Spacing → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					margin: {
-						top: '--wp--preset--spacing--30',
-						right: '--wp--preset--spacing--40',
-						bottom: '--wp--preset--spacing--50',
-						left: '--wp--preset--spacing--60',
+						top: 'var:preset|spacing|30',
+						right: 'var:preset|spacing|40',
+						bottom: 'var:preset|spacing|50',
+						left: 'var:preset|spacing|60',
 					},
 					padding: {
-						top: '--wp--preset--spacing--10',
-						right: '--wp--preset--spacing--20',
-						bottom: '--wp--preset--spacing--30',
-						left: '--wp--preset--spacing--40',
+						top: 'var:preset|spacing|10',
+						right: 'var:preset|spacing|20',
+						bottom: 'var:preset|spacing|30',
+						left: 'var:preset|spacing|40',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
@@ -846,16 +846,16 @@ describe('Box Spacing → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					padding: {
-						top: '--wp--preset--spacing--50',
-						bottom: '--wp--preset--spacing--50',
+						top: 'var:preset|spacing|50',
+						bottom: 'var:preset|spacing|50',
 						left: '50px',
 						right: '50px',
 					},
 					margin: {
 						top: '50px',
 						bottom: '50px',
-						left: '--wp--preset--spacing--50',
-						right: '--wp--preset--spacing--50',
+						left: 'var:preset|spacing|50',
+						right: 'var:preset|spacing|50',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
