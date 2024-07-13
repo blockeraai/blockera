@@ -1,4 +1,5 @@
 // @flow
+
 /**
  * External dependencies
  */
@@ -6,15 +7,16 @@ import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
 
 /**
- * Internal dependencies
- */
-import { getBlockEditorSettings } from './index';
-import type { VariableItem } from './types';
-
-/**
  * Blockera dependencies
  */
-import { isBlockTheme, isUndefined } from '@blockera/utils';
+import { isBlockTheme, isUndefined, isString } from '@blockera/utils';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+
+/**
+ * Internal dependencies
+ */
+import { generateVariableString, getBlockEditorSettings } from './index';
+import type { VariableItem } from './types';
 
 export const getSpacings: () => Array<VariableItem> = memoize(
 	function (): Array<VariableItem> {
@@ -73,4 +75,39 @@ export const getSpacing: (id: string) => ?VariableItem = memoize(function (
 export const getSpacingBy: (field: string, value: any) => ?VariableItem =
 	memoize(function (field: string, value: any): ?VariableItem {
 		return getSpacings().find((item) => item[field] === value);
+	});
+
+export const getSpacingVAFromIdString: (value: string) => ValueAddon | string =
+	memoize(function (value: string): ValueAddon | string {
+		const spacingVar = getSpacing(value);
+
+		if (spacingVar) {
+			return {
+				settings: {
+					...spacingVar,
+					type: 'spacing',
+					var: generateVariableString({
+						reference: spacingVar?.reference || {
+							type: '',
+						},
+						type: 'spacing',
+						id: spacingVar?.id || '',
+					}),
+				},
+				name: spacingVar?.name || '',
+				isValueAddon: true,
+				valueType: 'variable',
+			};
+		}
+
+		return value;
+	});
+
+export const getSpacingVAFromVarString: (value: string) => ValueAddon | string =
+	memoize(function (value: string): ValueAddon | string {
+		if (isString(value) && value.startsWith('var:')) {
+			return getSpacingVAFromIdString(value.split('|')[2]);
+		}
+
+		return value;
 	});
