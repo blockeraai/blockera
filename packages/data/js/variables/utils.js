@@ -66,19 +66,29 @@ export function generateVariableStringFromVA(
 
 	if (isValid(valueAddon)) {
 		//$FlowFixMe
-		if (valueAddon?.settings?.var) {
-			return valueAddon.settings.var;
+		let _reference: string = valueAddon?.settings?.reference?.type;
+
+		switch (_reference) {
+			case 'custom':
+				_reference = 'blockera';
+				break;
+
+			case 'theme':
+			case 'plugin':
+			case 'core':
+			case 'core-pro':
+			default:
+				_reference = 'preset';
+				break;
 		}
 
-		return generateVariableString({
-			//$FlowFixMe
-			reference: valueAddon?.settings?.reference || {
-				type: '',
-			},
-			type: 'spacing',
-			//$FlowFixMe
-			id: valueAddon?.id || '',
-		});
+		//$FlowFixMe
+		const type = valueAddon?.settings?.type || '';
+
+		//$FlowFixMe
+		const id = valueAddon?.settings?.id || '';
+
+		return 'var:' + _reference + '|' + type + '|' + id;
 	}
 
 	//$FlowFixMe
