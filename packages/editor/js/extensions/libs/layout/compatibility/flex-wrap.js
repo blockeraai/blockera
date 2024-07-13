@@ -1,5 +1,10 @@
 // @flow
 
+/**
+ * Blockera dependencies
+ */
+import { isUndefined } from '@blockera/utils';
+
 export function flexWrapFromWPCompatibility({
 	attributes,
 }: {
@@ -7,18 +12,9 @@ export function flexWrapFromWPCompatibility({
 }): Object {
 	if (
 		attributes?.blockeraFlexWrap?.value !== '' ||
-		attributes?.layout?.flexWrap === ''
+		attributes?.layout?.flexWrap === '' ||
+		isUndefined(attributes?.layout?.flexWrap)
 	) {
-		return false;
-	}
-
-	// TODO: @ali please check below condition, it seems we should not change "blockeraFlexWrap" while current block not any attributes like below example.
-	// Example: `<!-- wp:paragraph -->
-	// <p>test</p>
-	// <!-- /wp:paragraph -->`
-	// @reza: we should add below condition to fix block clean up attributes.
-	// please remove comments after checkup.
-	if ('undefined' === typeof attributes?.layout?.flexWrap) {
 		return false;
 	}
 
