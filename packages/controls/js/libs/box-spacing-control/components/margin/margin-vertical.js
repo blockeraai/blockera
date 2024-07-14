@@ -283,6 +283,7 @@ export function MarginVertical({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						type="margin"
 						icon={<Icon icon="margin-vertical" iconSize="18" />}

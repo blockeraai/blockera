@@ -326,7 +326,10 @@ export function PaddingAll({
 
 				{openPopover === sideId && (
 					<SidePopover
-						id={getId(id, 'padding.top')}
+						singularId={'top'}
+						value={value}
+						defaultValue={defaultValue}
+						id={getId(id, 'padding')}
 						type="padding"
 						icon={<Icon icon="padding-all" iconSize="18" />}
 						onClose={() => {

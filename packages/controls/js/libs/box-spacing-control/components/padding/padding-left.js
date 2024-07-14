@@ -243,6 +243,7 @@ export function PaddingLeft({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'padding.left')}
 						offset={78}
 						type="padding"

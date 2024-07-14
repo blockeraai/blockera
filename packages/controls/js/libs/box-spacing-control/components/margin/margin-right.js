@@ -239,6 +239,7 @@ export function MarginRight({
 
 						{openPopover === sideId && (
 							<SidePopover
+								defaultValue={defaultValue}
 								id={getId(id, 'margin.right')}
 								offset={255}
 								icon={

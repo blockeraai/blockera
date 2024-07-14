@@ -290,6 +290,7 @@ export function MarginHorizontal({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
 						type="margin"
 						icon={<Icon icon="margin-horizontal" iconSize="18" />}

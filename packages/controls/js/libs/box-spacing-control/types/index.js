@@ -52,7 +52,8 @@ export type BoxSpacingControlProps = {
 };
 
 export type SidePopoverProps = {
-	id?: string,
+	id: string,
+	singularId?: string,
 	title: string,
 	icon: MixedElement | string,
 	isOpen: boolean,
@@ -60,8 +61,8 @@ export type SidePopoverProps = {
 	unit?: string,
 	offset?: number,
 	onClose: () => void,
-	onChange: (data: string) => string | void,
-	defaultValue?: string,
+	onChange: (data: Object) => void,
+	defaultValue: Object,
 	inputLabel?: string | MixedElement,
 	inputLabelDescription?: string | MixedElement,
 	inputLabelPopoverTitle?: string | MixedElement,

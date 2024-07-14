@@ -243,6 +243,7 @@ export function PaddingTop({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
 						type="padding"
 						icon={<Icon icon="padding-top" iconSize="18" />}

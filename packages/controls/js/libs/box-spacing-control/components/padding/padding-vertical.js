@@ -284,6 +284,7 @@ export function PaddingVertical({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
 						type="padding"
 						icon={<Icon icon="padding-vertical" iconSize="18" />}

@@ -243,6 +243,7 @@ export function PaddingRight({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'padding.right')}
 						offset={215}
 						type="padding"

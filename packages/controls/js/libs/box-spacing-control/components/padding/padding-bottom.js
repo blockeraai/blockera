@@ -243,6 +243,7 @@ export function PaddingBottom({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'padding.bottom')}
 						type="padding"
 						icon={<Icon icon="padding-bottom" iconSize="18" />}

@@ -9,14 +9,14 @@ import { useState, useEffect } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { prepare } from '@blockera/data-editor';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
 import type { SidePopoverProps } from '../types';
-import { useControlContext } from '../../../context';
 import {
 	Flex,
 	Grid,
@@ -28,6 +28,7 @@ import {
 
 export function SidePopover({
 	id,
+	singularId,
 	title = '',
 	icon = '',
 	isOpen,
@@ -35,27 +36,12 @@ export function SidePopover({
 	unit,
 	offset = 35,
 	onClose = () => {},
-	onChange = (newValue) => {
-		return newValue;
-	},
+	onChange,
 	defaultValue = '0px',
 	inputLabel = __('Space', 'blockera'),
 	inputLabelDescription = '',
 	inputLabelPopoverTitle = '',
 }: SidePopoverProps): MixedElement {
-	const {
-		value,
-		setValue,
-		attribute,
-		blockName,
-		resetToDefault,
-		getControlPath,
-	} = useControlContext({
-		id,
-		onChange,
-		defaultValue,
-	});
-
 	const [unitType, setUnitType] = useState('px');
 
 	useEffect(() => {
@@ -76,9 +62,9 @@ export function SidePopover({
 					aria-label="Set 0px"
 					onClick={() => {
 						if (unitType === 'auto' || unitType === 'func') {
-							setValue('0px');
+							onChange('0px');
 						} else {
-							setValue('0' + unitType);
+							onChange('0' + unitType);
 						}
 					}}
 					style={{
@@ -94,9 +80,9 @@ export function SidePopover({
 					aria-label="Set 10px"
 					onClick={() => {
 						if (unitType === 'auto' || unitType === 'func') {
-							setValue('10px');
+							onChange('10px');
 						} else {
-							setValue('10' + unitType);
+							onChange('10' + unitType);
 						}
 					}}
 					style={{
@@ -112,9 +98,9 @@ export function SidePopover({
 					aria-label="Set 20px"
 					onClick={() => {
 						if (unitType === 'auto' || unitType === 'func') {
-							setValue('20px');
+							onChange('20px');
 						} else {
-							setValue('20' + unitType);
+							onChange('20' + unitType);
 						}
 					}}
 					style={{
@@ -130,9 +116,9 @@ export function SidePopover({
 					aria-label="Set 30px"
 					onClick={() => {
 						if (unitType === 'auto' || unitType === 'func') {
-							setValue('30px');
+							onChange('30px');
 						} else {
-							setValue('30' + unitType);
+							onChange('30' + unitType);
 						}
 					}}
 					style={{
@@ -148,9 +134,9 @@ export function SidePopover({
 					aria-label="Set 60px"
 					onClick={() => {
 						if (unitType === 'auto' || unitType === 'func') {
-							setValue('60px');
+							onChange('60px');
 						} else {
-							setValue('60' + unitType);
+							onChange('60' + unitType);
 						}
 					}}
 					style={{
@@ -166,9 +152,9 @@ export function SidePopover({
 					aria-label="Set 80px"
 					onClick={() => {
 						if (unitType === 'auto' || unitType === 'func') {
-							setValue('80px');
+							onChange('80px');
 						} else {
-							setValue('80' + unitType);
+							onChange('80' + unitType);
 						}
 					}}
 					style={{
@@ -184,9 +170,9 @@ export function SidePopover({
 					aria-label="Set 100px"
 					onClick={() => {
 						if (unitType === 'auto' || unitType === 'func') {
-							setValue('100px');
+							onChange('100px');
 						} else {
-							setValue('100' + unitType);
+							onChange('100' + unitType);
 						}
 					}}
 					style={{
@@ -202,9 +188,9 @@ export function SidePopover({
 					aria-label="Set 120px"
 					onClick={() => {
 						if (unitType === 'auto' || unitType === 'func') {
-							setValue('120px');
+							onChange('120px');
 						} else {
-							setValue('120' + unitType);
+							onChange('120' + unitType);
 						}
 					}}
 					style={{
@@ -232,34 +218,24 @@ export function SidePopover({
 					className="spacing-edit-popover"
 					onClose={onClose}
 				>
-					<BaseControl
-						controlName="input"
+					<InputControl
+						columns={'columns-2'}
 						label={inputLabel}
 						labelPopoverTitle={inputLabelPopoverTitle}
 						labelDescription={inputLabelDescription}
-						columns={'columns-2'}
-						style={{ marginBottom: '25px' }}
-						value={value}
-						attribute={attribute}
-						blockName={blockName}
-						defaultValue={defaultValue}
-						resetToDefault={resetToDefault}
-						singularId={id}
-						path={getControlPath(attribute, id)}
-						mode="advanced"
-					>
-						<InputControl
-							id={id}
-							unitType={type}
-							range={true}
-							min={type === 'margin' ? undefined : 0}
-							//
-							defaultValue={defaultValue}
-							onChange={setValue}
-							controlAddonTypes={['variable']}
-							variableTypes={['spacing']}
-						/>
-					</BaseControl>
+						id={singularId ? `${id}.${singularId}` : id}
+						unitType={type}
+						range={true}
+						min={type === 'margin' ? undefined : 0}
+						//
+						defaultValue={prepare(
+							singularId ? id + '.' + singularId : id,
+							defaultValue
+						)}
+						onChange={onChange}
+						controlAddonTypes={['variable']}
+						variableTypes={['spacing']}
+					/>
 
 					<BaseControl
 						label={
@@ -286,7 +262,7 @@ export function SidePopover({
 											aria-label="Set Auto"
 											className="auto-btn"
 											onClick={() => {
-												setValue('auto');
+												onChange('auto');
 											}}
 											data-cy="box-spacing-set-auto"
 										>

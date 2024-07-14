@@ -242,6 +242,7 @@ export function MarginTop({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						icon={<Icon icon="margin-top" iconSize="18" />}
 						onClose={() => {

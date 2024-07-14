@@ -284,6 +284,7 @@ export function PaddingHorizontal({
 
 				{openPopover === sideId && (
 					<SidePopover
+						defaultValue={defaultValue}
 						id={getId(id, 'padding.left')}
 						type="padding"
 						icon={<Icon icon="padding-horizontal" iconSize="18" />}
