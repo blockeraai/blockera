@@ -678,17 +678,17 @@ describe('Inner Blocks label testing', () => {
 						'changed-in-inner-state',
 						'not-have'
 					);
-
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {});
 				}
 			);
 		});
 
 		it('should value is undefined after resetting on Normal -> Tablet of inner block attribute', () => {
+			// Assert control
+			cy.get('@color-label').should('include.text', 'None');
+
+			// Assert state graph
+			cy.checkStateGraph('Typography', 'Text Color', {});
+
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.deep.eq(
