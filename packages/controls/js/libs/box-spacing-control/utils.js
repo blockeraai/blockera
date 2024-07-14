@@ -2,7 +2,7 @@
 /**
  * Blockera Dependencies
  */
-import { isEquals, isEmpty, isObject, cloneObject } from '@blockera/utils';
+import { isEquals, isEmpty, cloneObject } from '@blockera/utils';
 
 /**
  * Internal Dependencies
