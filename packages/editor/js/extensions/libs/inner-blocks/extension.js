@@ -90,9 +90,23 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 							/>
 
 							{isRTL() ? (
-								<Icon icon="chevron-left" iconSize="20" />
+								<Icon
+									library="wp"
+									icon="chevron-left"
+									iconSize="18"
+									className={controlInnerClassNames(
+										'inner-block__button__edit_icon'
+									)}
+								/>
 							) : (
-								<Icon icon="chevron-right" iconSize="20" />
+								<Icon
+									library="wp"
+									icon="chevron-right"
+									iconSize="18"
+									className={controlInnerClassNames(
+										'inner-block__button__edit_icon'
+									)}
+								/>
 							)}
 						</Button>
 					</BaseControl>

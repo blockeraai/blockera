@@ -1,9 +1,14 @@
 .blockera-component-button.blockera-control-inner-block__button {
 	--blockera-controls-primary-color: #cc0000;
 	transition: var(--blockera-controls-transition);
+	padding: 2px 8px !important;
 
 	&:hover {
 		color: var(--blockera-controls-primary-color) !important;
 		--blockera-controls-border-color: var(--blockera-controls-primary-color) !important;
+	}
+
+	.blockera-control-inner-block__button__edit_icon {
+		margin-left: auto;
 	}
 }
