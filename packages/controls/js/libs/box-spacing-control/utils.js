@@ -17,7 +17,8 @@ export function fixLabelText(value: Object | string): any {
 	}
 
 	if (isValid(value)) {
-		return <b>VAR</b>;
+		//$FlowFixMe
+		return <b>{value?.settings?.name ?? 'VAR'}</b>;
 	}
 
 	const extracted = extractNumberAndUnit(value);

@@ -147,6 +147,9 @@
 
 			b {
 				font-size: 8px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 		}
 
