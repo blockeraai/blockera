@@ -71,7 +71,11 @@ export function boxSpacingValueCleanup(value: Object): Object {
 
 	['padding', 'margin'].forEach((type) => {
 		['top', 'right', 'bottom', 'left'].forEach((side) => {
-			if (isEmpty(updatedValue[type][side])) {
+			if (
+				typeof updatedValue[type] !== 'undefined' &&
+				typeof updatedValue[type][side] !== 'undefined' &&
+				isEmpty(updatedValue[type][side])
+			) {
 				delete updatedValue[type][side];
 			}
 		});
