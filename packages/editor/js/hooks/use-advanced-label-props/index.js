@@ -518,8 +518,6 @@ export const useAdvancedLabelProps = (
 			if (!isChangedOnCurrentState && isChanged) {
 				if (!isChangedOnOtherStates && isNormalState) {
 					isChangedOnCurrentState = isChanged;
-				} else {
-					isChangedOnCurrentState = isChangedOnOtherStates;
 				}
 			}
 
