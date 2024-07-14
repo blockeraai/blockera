@@ -35,10 +35,6 @@ export function SidePopover({
 	onClose = () => {},
 	defaultValue,
 	setValue,
-	attribute,
-	blockName,
-	resetToDefault,
-	getControlPath,
 	value,
 }) {
 	const [unitType, setUnitType] = useState('px');
@@ -63,8 +59,7 @@ export function SidePopover({
 					className="spacing-edit-popover"
 					onClose={onClose}
 				>
-					<BaseControl
-						controlName="input"
+					<InputControl
 						label={sideLabel}
 						labelPopoverTitle={sprintf(
 							// Translators: %s is the position name (top, right, bottom, left)
@@ -85,42 +80,25 @@ export function SidePopover({
 							</>
 						}
 						columns={'columns-2'}
-						style={{ marginBottom: '25px' }}
-						{...{
-							attribute,
-							blockName,
-							resetToDefault,
-							mode: 'advanced',
-							value: value.position[sideId],
-							singularId: 'position.' + sideId,
-							defaultValue: defaultValue.position[sideId],
-							path: getControlPath(
-								attribute,
-								'position.' + sideId
-							),
-						}}
-					>
-						<InputControl
-							id={getId(id, 'position.' + sideId)}
-							unitType="essential"
-							range={true}
-							min={-250}
-							max={250}
-							//
-							defaultValue={defaultValue.position[sideId]}
-							onChange={(newValue) =>
-								setValue({
-									...value,
-									position: {
-										...value.position,
-										[sideId]: newValue,
-									},
-								})
-							}
-							controlAddonTypes={['variable']}
-							variableTypes={['spacing']}
-						/>
-					</BaseControl>
+						id={getId(id, 'position.' + sideId)}
+						unitType="essential"
+						range={true}
+						min={-250}
+						max={250}
+						//
+						defaultValue={defaultValue.position[sideId]}
+						onChange={(newValue) =>
+							setValue({
+								...value,
+								position: {
+									...value.position,
+									[sideId]: newValue,
+								},
+							})
+						}
+						controlAddonTypes={['variable']}
+						variableTypes={['spacing']}
+					/>
 
 					<BaseControl
 						label={
@@ -248,9 +226,21 @@ export function SidePopover({
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
-										setValue('60px');
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '60px',
+											},
+										});
 									} else {
-										setValue('60' + unitType);
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '60' + unitType,
+											},
+										});
 									}
 								}}
 								data-cy="set-60"
