@@ -28,7 +28,6 @@ import {
 
 export function SidePopover({
 	id,
-	singularId,
 	title = '',
 	icon = '',
 	isOpen,
@@ -223,15 +222,12 @@ export function SidePopover({
 						label={inputLabel}
 						labelPopoverTitle={inputLabelPopoverTitle}
 						labelDescription={inputLabelDescription}
-						id={singularId ? `${id}.${singularId}` : id}
+						id={id}
 						unitType={type}
 						range={true}
 						min={type === 'margin' ? undefined : 0}
 						//
-						defaultValue={prepare(
-							singularId ? id + '.' + singularId : id,
-							defaultValue
-						)}
+						defaultValue={prepare(id, defaultValue)}
 						onChange={onChange}
 						controlAddonTypes={['variable']}
 						variableTypes={['spacing']}

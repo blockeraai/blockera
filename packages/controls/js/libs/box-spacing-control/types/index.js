@@ -53,7 +53,6 @@ export type BoxSpacingControlProps = {
 
 export type SidePopoverProps = {
 	id: string,
-	singularId?: string,
 	title: string,
 	icon: MixedElement | string,
 	isOpen: boolean,
