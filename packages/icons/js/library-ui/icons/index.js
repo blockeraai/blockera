@@ -211,6 +211,7 @@ export { default as PaddingRight } from './padding-right.svg';
 export { default as PaddingTopBottom } from './padding-top-bottom.svg';
 export { default as PaddingTop } from './padding-top.svg';
 export { default as PenCircle } from './pen-circle.svg';
+export { default as Pen } from './pen.svg';
 export { default as Plus } from './plus.svg';
 export { default as PositionAbsoluteBottomLeft } from './position-absolute-bottom-left.svg';
 export { default as PositionAbsoluteBottomRight } from './position-absolute-bottom-right.svg';
