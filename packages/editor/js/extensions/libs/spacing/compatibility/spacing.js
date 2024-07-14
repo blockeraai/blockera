@@ -7,7 +7,7 @@ import {
 	getSpacingVAFromVarString,
 	generateAttributeVarStringFromVA,
 } from '@blockera/data';
-import { isEquals } from '@blockera/utils';
+import { isEquals, isNumber } from '@blockera/utils';
 import { boxPositionControlDefaultValue } from '@blockera/controls/js/libs/box-spacing-control/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
@@ -26,7 +26,7 @@ export function spacingFromWPCompatibility({
 		// padding top
 		let paddingTop: ValueAddon | string = '';
 		if (attributes?.style?.spacing?.padding?.top) {
-			paddingTop = getSpacingVAFromVarString(
+			paddingTop = convertFromValue(
 				attributes?.style?.spacing?.padding?.top
 			);
 		}
@@ -34,7 +34,7 @@ export function spacingFromWPCompatibility({
 		// padding right
 		let paddingRight: ValueAddon | string = '';
 		if (attributes?.style?.spacing?.padding?.right) {
-			paddingRight = getSpacingVAFromVarString(
+			paddingRight = convertFromValue(
 				attributes?.style?.spacing?.padding?.right
 			);
 		}
@@ -42,7 +42,7 @@ export function spacingFromWPCompatibility({
 		// padding right
 		let paddingBottom: ValueAddon | string = '';
 		if (attributes?.style?.spacing?.padding?.bottom) {
-			paddingBottom = getSpacingVAFromVarString(
+			paddingBottom = convertFromValue(
 				attributes?.style?.spacing?.padding?.bottom
 			);
 		}
@@ -50,7 +50,7 @@ export function spacingFromWPCompatibility({
 		// padding right
 		let paddingLeft: ValueAddon | string = '';
 		if (attributes?.style?.spacing?.padding?.left) {
-			paddingLeft = getSpacingVAFromVarString(
+			paddingLeft = convertFromValue(
 				attributes?.style?.spacing?.padding?.left
 			);
 		}
@@ -58,7 +58,7 @@ export function spacingFromWPCompatibility({
 		// margin top
 		let marginTop: ValueAddon | string = '';
 		if (attributes?.style?.spacing?.margin?.top) {
-			marginTop = getSpacingVAFromVarString(
+			marginTop = convertFromValue(
 				attributes?.style?.spacing?.margin?.top
 			);
 		}
@@ -66,7 +66,7 @@ export function spacingFromWPCompatibility({
 		// margin right
 		let marginRight: ValueAddon | string = '';
 		if (attributes?.style?.spacing?.margin?.right) {
-			marginRight = getSpacingVAFromVarString(
+			marginRight = convertFromValue(
 				attributes?.style?.spacing?.margin?.right
 			);
 		}
@@ -74,7 +74,7 @@ export function spacingFromWPCompatibility({
 		// margin right
 		let marginBottom: ValueAddon | string = '';
 		if (attributes?.style?.spacing?.margin?.bottom) {
-			marginBottom = getSpacingVAFromVarString(
+			marginBottom = convertFromValue(
 				attributes?.style?.spacing?.margin?.bottom
 			);
 		}
@@ -82,7 +82,7 @@ export function spacingFromWPCompatibility({
 		// padding right
 		let marginLeft: ValueAddon | string = '';
 		if (attributes?.style?.spacing?.margin?.left) {
-			marginLeft = getSpacingVAFromVarString(
+			marginLeft = convertFromValue(
 				attributes?.style?.spacing?.margin?.left
 			);
 		}
@@ -104,6 +104,18 @@ export function spacingFromWPCompatibility({
 	}
 
 	return attributes;
+}
+
+export function convertFromValue(spacing: string | Object): string {
+	spacing = getSpacingVAFromVarString(spacing);
+
+	if (isNumber(spacing)) {
+		//$FlowFixMe
+		spacing = spacing + 'px';
+	}
+
+	//$FlowFixMe
+	return spacing;
 }
 
 export function spacingToWPCompatibility({
@@ -149,17 +161,15 @@ export function spacingToWPCompatibility({
 	// margin
 	//
 	newSpacing.margin = {
-		top: newValue?.margin?.top
-			? generateAttributeVarStringFromVA(newValue?.margin?.top)
-			: '',
+		top: newValue?.margin?.top ? convertToValue(newValue?.margin?.top) : '',
 		right: newValue?.margin?.right
-			? generateAttributeVarStringFromVA(newValue?.margin?.right)
+			? convertToValue(newValue?.margin?.right)
 			: '',
 		bottom: newValue?.margin?.bottom
-			? generateAttributeVarStringFromVA(newValue?.margin?.bottom)
+			? convertToValue(newValue?.margin?.bottom)
 			: '',
 		left: newValue?.margin?.left
-			? generateAttributeVarStringFromVA(newValue?.margin?.left)
+			? convertToValue(newValue?.margin?.left)
 			: '',
 	};
 
@@ -179,16 +189,16 @@ export function spacingToWPCompatibility({
 	//
 	newSpacing.padding = {
 		top: newValue?.padding?.top
-			? generateAttributeVarStringFromVA(newValue?.padding?.top)
+			? convertToValue(newValue?.padding?.top)
 			: '',
 		right: newValue?.padding?.right
-			? generateAttributeVarStringFromVA(newValue?.padding?.right)
+			? convertToValue(newValue?.padding?.right)
 			: '',
 		bottom: newValue?.padding?.bottom
-			? generateAttributeVarStringFromVA(newValue?.padding?.bottom)
+			? convertToValue(newValue?.padding?.bottom)
 			: '',
 		left: newValue?.padding?.left
-			? generateAttributeVarStringFromVA(newValue?.padding?.left)
+			? convertToValue(newValue?.padding?.left)
 			: '',
 	};
 
@@ -208,4 +218,15 @@ export function spacingToWPCompatibility({
 			spacing: newSpacing,
 		},
 	};
+}
+
+export function convertToValue(spacing: string | Object): string {
+	spacing = generateAttributeVarStringFromVA(spacing);
+
+	// css func not supported
+	if (spacing.endsWith('css')) {
+		spacing = '';
+	}
+
+	return spacing;
 }
