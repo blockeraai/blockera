@@ -9,7 +9,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { update } from '@blockera/data-editor';
+import { update, prepare } from '@blockera/data-editor';
 import { isEquals, isEmpty, isObject, mergeObject } from '@blockera/utils';
 
 /**
@@ -23,10 +23,7 @@ import type {
 } from '../../extensions/libs/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components';
-import {
-	blockStatesValueCleanup,
-	isNormalStateOnBaseBreakpoint,
-} from '../../extensions/libs/block-states/helpers';
+import { blockStatesValueCleanup } from '../../extensions/libs/block-states/helpers';
 import { sharedBlockExtensionAttributes as defaultAttributes } from '../../extensions/libs';
 
 // Check required to update.
@@ -249,7 +246,8 @@ export const memoizedBlockStates: (
 
 export const resetAllStates = (state: Object, action: Object): Object => {
 	const { attributeId, newValue, currentBlock, ref } = action;
-	const blockeraBlockStates: { [key: string]: Object } = {};
+	let blockeraBlockStates: { [key: string]: Object } = {};
+	let blockeraInnerBlocks = state?.blockeraInnerBlocks;
 
 	if (isInnerBlock(currentBlock)) {
 		const blockStates =
@@ -263,14 +261,12 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 
 			// $FlowFixMe
 			for (const breakpointType: TBreakpoint in breakpoints) {
-				if (isNormalStateOnBaseBreakpoint(stateType, breakpointType)) {
-					stateBreakpoints[breakpointType] =
-						breakpoints[breakpointType];
+				const preparedRefPath = prepare(
+					ref.path || '',
+					breakpoints[breakpointType].attributes
+				);
 
-					continue;
-				}
-
-				if (ref.path && ref.path !== attributeId) {
+				if (ref.path && ref.path !== attributeId && preparedRefPath) {
 					const preparedPathValue = update(
 						breakpoints[breakpointType].attributes,
 						ref.path,
@@ -308,29 +304,29 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 			);
 		}
 
-		return {
-			...state,
-			blockeraInnerBlocks: mergeObject(
-				state?.blockeraInnerBlocks || {},
-				{
-					[currentBlock]: {
-						attributes: {
-							[attributeId]: isEquals(newValue, ref.defaultValue)
-								? undefined
-								: newValue,
-							blockeraBlockStates,
-						},
+		blockeraInnerBlocks = mergeObject(
+			state?.blockeraInnerBlocks || {},
+			{
+				[currentBlock]: {
+					attributes: {
+						[attributeId]: isEquals(newValue, ref.defaultValue)
+							? undefined
+							: newValue,
+						blockeraBlockStates,
 					},
 				},
-				{
-					deletedProps: [
-						attributeId,
-						// FIXME: uncomment after fixed cleanup breakpoint.
-						// ...Object.keys(_state.breakpoints),
-					],
-				}
-			),
-		};
+			},
+			{
+				deletedProps: [
+					attributeId,
+					// FIXME: uncomment after fixed cleanup breakpoint.
+					// ...Object.keys(_state.breakpoints),
+				],
+			}
+		);
+
+		// cleanup block states stack;
+		blockeraBlockStates = {};
 	}
 
 	const blockStates = state.blockeraBlockStates;
@@ -342,15 +338,120 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 
 		// $FlowFixMe
 		for (const breakpointType: TBreakpoint in breakpoints) {
-			if (isNormalStateOnBaseBreakpoint(stateType, breakpointType)) {
-				stateBreakpoints[breakpointType] = breakpoints[breakpointType];
+			const dataset = breakpoints[breakpointType].attributes;
+
+			if (
+				isInnerBlock(currentBlock) &&
+				dataset?.blockeraInnerBlocks[currentBlock]
+			) {
+				const blockStates =
+					dataset.blockeraInnerBlocks[currentBlock].attributes
+						?.blockeraBlockStates || {};
+
+				// $FlowFixMe
+				for (const _stateType: TStates in blockStates) {
+					const _state = blockStates[_stateType];
+					const _breakpoints = _state?.breakpoints;
+
+					// $FlowFixMe
+					for (const _breakpointType: TBreakpoint in _breakpoints) {
+						const _preparedRefPath = prepare(
+							ref.path || '',
+							_breakpoints[breakpointType].attributes
+						);
+
+						if (
+							ref.path &&
+							ref.path !== attributeId &&
+							_preparedRefPath
+						) {
+							const _preparedPathValue = update(
+								_breakpoints[_breakpointType].attributes,
+								ref.path,
+								ref.defaultValue
+							);
+
+							stateBreakpoints[breakpointType] = mergeObject(
+								breakpoints[breakpointType],
+								{
+									attributes: {
+										blockeraInnerBlocks: {
+											[currentBlock]: {
+												attributes: {
+													blockeraBlockStates: {
+														// $FlowFixMe
+														[_stateType]: {
+															breakpoints: {
+																// $FlowFixMe
+																[_breakpointType]:
+																	{
+																		attributes:
+																			_preparedPathValue,
+																	},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								}
+							);
+
+							//_preparedPathValue
+						} else {
+							stateBreakpoints[breakpointType] = mergeObject(
+								breakpoints[breakpointType],
+								{
+									attributes: {
+										blockeraInnerBlocks: {
+											[currentBlock]: {
+												attributes: {
+													[attributeId]: isEquals(
+														newValue,
+														ref.defaultValue
+													)
+														? undefined
+														: newValue,
+													blockeraBlockStates: {
+														// $FlowFixMe
+														[_stateType]: {
+															breakpoints: {
+																// $FlowFixMe
+																[_breakpointType]:
+																	{
+																		attributes:
+																			{
+																				[attributeId]:
+																					isEquals(
+																						newValue,
+																						ref.defaultValue
+																					)
+																						? undefined
+																						: newValue,
+																			},
+																	},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								}
+							);
+						}
+					}
+				}
 
 				continue;
 			}
 
-			if (ref.path && ref.path !== attributeId) {
+			const preparedRefPath = prepare(ref.path || '', dataset);
+
+			if (ref.path && ref.path !== attributeId && preparedRefPath) {
 				const preparedPathValue = update(
-					breakpoints[breakpointType].attributes,
+					dataset,
 					ref.path,
 					ref.defaultValue
 				);
@@ -394,6 +495,11 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 		...state,
 		[attributeId]: newValue,
 		blockeraBlockStates,
+		...(isInnerBlock(currentBlock)
+			? {
+					blockeraInnerBlocks,
+			  }
+			: {}),
 	};
 };
 
