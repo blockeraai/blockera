@@ -10,6 +10,7 @@ import { __, sprintf } from '@wordpress/i18n';
  */
 import { Tooltip } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -58,6 +59,14 @@ export default function EditedItem({
 						{__('Current', 'blockera')}
 					</span>
 				)}
+
+				<Icon
+					icon="pen"
+					iconSize="18"
+					className={controlInnerClassNames(
+						'states-changes-item__edit-icon'
+					)}
+				/>
 			</div>
 		</Tooltip>
 	);

@@ -310,6 +310,10 @@
 			&:hover {
 				border-color: #585b5e;
 				background-color: #2e3439;
+
+				.blockera-control-states-changes-item__edit-icon {
+					opacity: 1;
+				}
 			}
 
 			&::after {
@@ -327,6 +331,12 @@
 				color: var(--blockera-controls-primary-color);
 				margin-left: auto;
 				font-style: italic;
+			}
+
+			.blockera-control-states-changes-item__edit-icon {
+				opacity: 0;
+				margin-left: auto;
+				transition: all 0.1s linear;
 			}
 		}
 	}
