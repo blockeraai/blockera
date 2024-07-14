@@ -6,10 +6,7 @@ import { nanoid } from 'nanoid';
 /**
  * Blockera dependencies.
  */
-import {
-	setBoxSpacingSide,
-	openBoxSpacingSide,
-} from '@blockera/dev-cypress/js/helpers';
+import { openBoxSpacingSide } from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies.
@@ -285,77 +282,6 @@ describe('box spacing control component testing', () => {
 		// Check data provider value!
 		cy.then(() => {
 			return expect(getControlValue(name)).to.deep.eq(expectValue);
-		});
-	});
-
-	it('Labels', () => {
-		const name = nanoid();
-		cy.withDataProvider({
-			component: <BoxSpacingControl label="My Label" />,
-			name,
-		});
-
-		const items = [
-			'margin-top',
-			'margin-right',
-			'margin-bottom',
-			'margin-left',
-			'padding-top',
-			'padding-right',
-			'padding-bottom',
-			'padding-left',
-		];
-
-		items.forEach((item) => {
-			cy.get(
-				`[data-cy="box-spacing-${item}"] [data-cy="label-control"]`
-			).as('Position');
-
-			cy.get('@Position').click();
-			cy.get('input[type=number]').clear();
-			cy.get('input[type=number]').type(10);
-			cy.get('@Position').contains(/^10$/);
-
-			//
-			// Change to EM
-			//
-			cy.get('[aria-label="Select Unit"]').select('em');
-			cy.get('@Position')
-				.invoke('text')
-				.then((text) => {
-					expect(text.trim().replace(item, '')).to.eq('10em');
-				});
-
-			//
-			// Change to Auto (only in margin)
-			//
-			if (
-				[
-					'margin-top',
-					'margin-right',
-					'margin-bottom',
-					'margin-left',
-				].includes(item)
-			) {
-				cy.get('[aria-label="Select Unit"]').select('auto');
-				cy.get('@Position')
-					.invoke('text')
-					.then((text) => {
-						expect(text.trim().replace(item, '')).to.eq('AUTO');
-					});
-			}
-
-			//
-			// Change to CSS Func
-			//
-			cy.get('[aria-label="Select Unit"]').select('func');
-			cy.get('input[type=text]').clear();
-			cy.get('input[type=text]').type('calc(10px + 10px)');
-			cy.get('@Position')
-				.invoke('text')
-				.then((text) => {
-					expect(text.trim().replace(item, '')).to.eq('CSS');
-				});
 		});
 	});
 });

@@ -580,4 +580,138 @@ describe('Spacing Extension', () => {
 				);
 		});
 	});
+
+	it('Label on sides with different value types', () => {
+		const items = [
+			'margin-top',
+			'margin-right',
+			'margin-bottom',
+			'margin-left',
+			'padding-top',
+			'padding-right',
+			'padding-bottom',
+			'padding-left',
+		];
+
+		items.forEach((item) => {
+			cy.get(
+				`[data-cy="box-spacing-${item}"] [data-cy="label-control"]`
+			).as('Position');
+
+			//
+			// Default label
+			//
+			cy.get('@Position')
+				.invoke('text')
+				.then((text) => {
+					expect(text.trim().replace(item, '')).to.eq('-');
+				});
+
+			//
+			// Change to 10 (10px)
+			//
+			setBoxSpacingSide(item, 10);
+			cy.get('@Position')
+				.invoke('text')
+				.then((text) => {
+					expect(text.trim().replace(item, '')).to.eq('10');
+				});
+
+			//
+			// Change to EM
+			//
+			cy.get('[data-wp-component="Popover"]')
+				.last()
+				.within(() => {
+					cy.get('[aria-label="Select Unit"]').select('em');
+				});
+			cy.get('@Position')
+				.invoke('text')
+				.then((text) => {
+					expect(text.trim().replace(item, '')).to.eq('10em');
+				});
+
+			//
+			// Change to Auto (only in margin)
+			//
+			if (
+				[
+					'margin-top',
+					'margin-right',
+					'margin-bottom',
+					'margin-left',
+				].includes(item)
+			) {
+				cy.get('[data-wp-component="Popover"]')
+					.last()
+					.within(() => {
+						cy.get('[aria-label="Select Unit"]').select('auto');
+					});
+
+				cy.get('@Position')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('AUTO');
+					});
+			}
+
+			//
+			// Change to Px and negative value
+			//
+			if (
+				[
+					'margin-top',
+					'margin-right',
+					'margin-bottom',
+					'margin-left',
+				].includes(item)
+			) {
+				cy.get('[data-wp-component="Popover"]')
+					.last()
+					.within(() => {
+						cy.get('[aria-label="Select Unit"]').select('px');
+						cy.get('input[type=number]').type('-15');
+					});
+
+				cy.get('@Position')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('-15');
+					});
+			}
+
+			//
+			// Change to CSS Func
+			//
+			cy.get('[data-wp-component="Popover"]')
+				.last()
+				.within(() => {
+					cy.get('[aria-label="Select Unit"]').select('func');
+					cy.get('input[type=text]').clear();
+					cy.get('input[type=text]').type('calc(10px + 10px)');
+				});
+
+			cy.get('@Position')
+				.invoke('text')
+				.then((text) => {
+					expect(text.trim().replace(item, '')).to.eq('CSS');
+				});
+
+			//
+			// Change to a variable
+			//
+			cy.get('[data-wp-component="Popover"]')
+				.last()
+				.within(() => {
+					cy.openValueAddon();
+					cy.selectValueAddonItem('10');
+				});
+
+			cy.get('@Position')
+				.invoke('text')
+				.then((text) => {
+					expect(text.trim().replace(item, '')).to.eq('1');
+				});
+		});
+	});
 });
