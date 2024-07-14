@@ -188,10 +188,7 @@ const Component = ({
 			<div className={controlInnerClassNames('position-header')}>
 				{label && (
 					<LabelControlContainer>
-						<LabelControl
-							{...labelProps}
-							path={getControlPath(attribute, 'type')}
-						/>
+						<LabelControl {...labelProps} />
 					</LabelControlContainer>
 				)}
 
@@ -269,10 +266,10 @@ const Component = ({
 					<span className={controlInnerClassNames('box-model-label')}>
 						<LabelControl
 							{...labelProps}
+							label={labelText}
+							value={value.position}
 							singularId={'position'}
 							defaultValue={defaultValue.position}
-							value={value.position}
-							label={labelText}
 							path={getControlPath(attribute, 'position')}
 							labelDescription={
 								<>

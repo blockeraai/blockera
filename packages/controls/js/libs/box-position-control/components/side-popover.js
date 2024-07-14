@@ -21,12 +21,10 @@ import {
 	BaseControl,
 	InputControl,
 } from '../../index';
-import { useControlContext } from '../../../context';
 
 export function SidePopover({
 	id,
 	getId,
-	property,
 	sideId,
 	sideLabel,
 	title = '',
@@ -35,24 +33,14 @@ export function SidePopover({
 	isOpen,
 	offset = 35,
 	onClose = () => {},
-	onChange = (newValue) => {
-		return newValue;
-	},
-	defaultValue = '',
+	defaultValue,
+	setValue,
+	attribute,
+	blockName,
+	resetToDefault,
+	getControlPath,
+	value,
 }) {
-	const {
-		value,
-		setValue,
-		attribute,
-		blockName,
-		resetToDefault,
-		getControlPath,
-	} = useControlContext({
-		id: property,
-		onChange,
-		defaultValue,
-	});
-
 	const [unitType, setUnitType] = useState('px');
 
 	useEffect(() => {
@@ -99,25 +87,36 @@ export function SidePopover({
 						columns={'columns-2'}
 						style={{ marginBottom: '25px' }}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: sideId,
-							path: getControlPath(attribute, property),
 							mode: 'advanced',
+							value: value.position[sideId],
+							singularId: 'position.' + sideId,
+							defaultValue: defaultValue.position[sideId],
+							path: getControlPath(
+								attribute,
+								'position.' + sideId
+							),
 						}}
 					>
 						<InputControl
-							id={getId(id, property)}
+							id={getId(id, 'position.' + sideId)}
 							unitType="essential"
 							range={true}
 							min={-250}
 							max={250}
 							//
-							defaultValue={defaultValue}
-							onChange={setValue}
+							defaultValue={defaultValue.position[sideId]}
+							onChange={(newValue) =>
+								setValue({
+									...value,
+									position: {
+										...value.position,
+										[sideId]: newValue,
+									},
+								})
+							}
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
 						/>
@@ -141,9 +140,21 @@ export function SidePopover({
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
-										setValue('0px');
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '0px',
+											},
+										});
 									} else {
-										setValue('0' + unitType);
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '0' + unitType,
+											},
+										});
 									}
 								}}
 								data-cy="set-0"
@@ -156,9 +167,21 @@ export function SidePopover({
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
-										setValue('10px');
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '10px',
+											},
+										});
 									} else {
-										setValue('10' + unitType);
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '10' + unitType,
+											},
+										});
 									}
 								}}
 								data-cy="set-10"
@@ -171,9 +194,21 @@ export function SidePopover({
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
-										setValue('20px');
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '20px',
+											},
+										});
 									} else {
-										setValue('20' + unitType);
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '20' + unitType,
+											},
+										});
 									}
 								}}
 								data-cy="set-20"
@@ -186,9 +221,21 @@ export function SidePopover({
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
-										setValue('30px');
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '30px',
+											},
+										});
 									} else {
-										setValue('30' + unitType);
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '30' + unitType,
+											},
+										});
 									}
 								}}
 								data-cy="set-30"
@@ -216,9 +263,21 @@ export function SidePopover({
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
-										setValue('80px');
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '80px',
+											},
+										});
 									} else {
-										setValue('80' + unitType);
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '80' + unitType,
+											},
+										});
 									}
 								}}
 								data-cy="set-80"
@@ -231,9 +290,21 @@ export function SidePopover({
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
-										setValue('100px');
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '100px',
+											},
+										});
 									} else {
-										setValue('100' + unitType);
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '100' + unitType,
+											},
+										});
 									}
 								}}
 								data-cy="set-100"
@@ -246,9 +317,21 @@ export function SidePopover({
 								size="small"
 								onClick={() => {
 									if (unitType === 'func') {
-										setValue('120px');
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '120px',
+											},
+										});
 									} else {
-										setValue('120' + unitType);
+										setValue({
+											...value,
+											position: {
+												...value.position,
+												[sideId]: '120' + unitType,
+											},
+										});
 									}
 								}}
 								data-cy="set-120"

@@ -285,14 +285,14 @@ export function SideItem({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value: value.position[side],
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'position.' + side,
-							path: getControlPath(attribute, 'position.' + side),
 							mode: 'advanced',
+							value: value.position[side],
+							singularId: 'position.' + side,
+							defaultValue: defaultValue.position[side],
+							path: getControlPath(attribute, 'position.' + side),
 						}}
 					/>
 
@@ -303,7 +303,6 @@ export function SideItem({
 					id={id}
 					getId={getId}
 					sideId={side}
-					property={'position.' + side}
 					title={sprintf(
 						// Translators: %s is the position name (top, right, bottom, left)
 						__('%s Position', 'blockera'),
@@ -317,15 +316,12 @@ export function SideItem({
 					}}
 					isOpen={openPopover === sideId}
 					unit={sideSpace?.unit}
-					onChange={(newValue) => {
-						setValue({
-							...value,
-							position: {
-								...value.position,
-								[(side: string)]: newValue,
-							},
-						});
-					}}
+					value={value}
+					setValue={setValue}
+					attribute={attribute}
+					blockName={blockName}
+					resetToDefault={resetToDefault}
+					getControlPath={getControlPath}
 					defaultValue={defaultValue}
 				/>
 			</>
