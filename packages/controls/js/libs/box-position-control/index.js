@@ -3,8 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, memo } from '@wordpress/element';
 import type { MixedElement } from 'react';
+import { useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -13,7 +13,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { hasSameProps } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -28,11 +27,11 @@ import {
 	SelectControl,
 } from '../index';
 import { useControlContext } from '../../context';
+import { SideItem } from './components/side-item';
 import type { BoxPositionControlProps } from './types';
 import { LabelControlContainer } from '../label-control';
-import { SideItem } from './components/side-item';
 
-const Component = ({
+const BoxPositionControl = ({
 	openSide = '',
 	//
 	id,
@@ -739,8 +738,5 @@ const Component = ({
 		</div>
 	);
 };
-
-const BoxPositionControl: BoxPositionControlProps =
-	memo<BoxPositionControlProps>(Component, hasSameProps);
 
 export default BoxPositionControl;
