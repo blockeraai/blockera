@@ -55,7 +55,15 @@ export function isNull(value: any): boolean {
  * @return {boolean} boolean
  */
 export function isNumber(value: any): boolean {
-	return Number.isFinite(value);
+	if (typeof value === 'number') {
+		return Number.isFinite(value);
+	}
+
+	if (typeof value === 'string' && value.trim() !== '') {
+		return !isNaN(Number(value));
+	}
+
+	return false;
 }
 
 /**

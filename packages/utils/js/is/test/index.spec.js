@@ -62,8 +62,12 @@ describe('is* testing', () => {
 	});
 
 	describe('isNumber testing...', () => {
+		test('valid string passed', () => {
+			expect(isNumber('12')).toBe(true);
+		});
+
 		test('string passed', () => {
-			expect(isNumber('12')).toBe(false);
+			expect(isNumber('12px')).toBe(false);
 		});
 
 		test('number passed', () => {
