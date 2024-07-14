@@ -16,6 +16,7 @@ import {
 	isObject,
 	isBoolean,
 	isUndefined,
+	mergeObject,
 } from '@blockera/utils';
 
 /**
@@ -279,13 +280,13 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 				if (isObject(defaultValue)) {
 					if (!isUndefined(id)) {
-						return {
-							...defaultValue,
-							...prepare(id, currentValue),
-						};
+						return mergeObject(
+							defaultValue,
+							prepare(id, currentValue)
+						);
 					}
 
-					return { ...defaultValue, ...currentValue };
+					return mergeObject(defaultValue, currentValue);
 				}
 			}
 		}
