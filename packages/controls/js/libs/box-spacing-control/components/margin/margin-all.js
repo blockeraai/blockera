@@ -210,12 +210,12 @@ export function MarginAll({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
 							singularId: 'margin.top',
+							value: value?.margin?.top,
+							defaultValue: defaultValue?.margin?.top,
 							path: getControlPath(attribute, 'margin.top'),
 						}}
 					/>
@@ -244,14 +244,14 @@ export function MarginAll({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'margin.right',
-							path: getControlPath(attribute, 'margin.right'),
 							mode: 'advanced',
+							singularId: 'margin.right',
+							value: value?.margin?.right,
+							defaultValue: defaultValue?.margin?.top,
+							path: getControlPath(attribute, 'margin.right'),
 						}}
 					/>
 				</div>
@@ -277,14 +277,14 @@ export function MarginAll({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'margin.bottom',
-							path: getControlPath(attribute, 'margin.bottom'),
 							mode: 'advanced',
+							singularId: 'margin.bottom',
+							value: value?.margin?.bottom,
+							defaultValue: defaultValue?.margin?.bottom,
+							path: getControlPath(attribute, 'margin.bottom'),
 						}}
 					/>
 				</div>
@@ -310,14 +310,14 @@ export function MarginAll({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'margin.left',
-							path: getControlPath(attribute, 'margin.left'),
 							mode: 'advanced',
+							singularId: 'margin.left',
+							value: value?.margin?.left,
+							defaultValue: defaultValue?.margin?.left,
+							path: getControlPath(attribute, 'margin.left'),
 						}}
 					/>
 				</div>

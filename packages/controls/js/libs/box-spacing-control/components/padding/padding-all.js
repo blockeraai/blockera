@@ -211,14 +211,14 @@ export function PaddingAll({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.top',
-							path: getControlPath(attribute, 'padding.top'),
 							mode: 'advanced',
+							singularId: 'padding.top',
+							value: value?.padding?.top,
+							defaultValue: defaultValue?.padding?.top,
+							path: getControlPath(attribute, 'padding.top'),
 						}}
 					/>
 
@@ -246,14 +246,14 @@ export function PaddingAll({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.right',
-							path: getControlPath(attribute, 'padding.right'),
 							mode: 'advanced',
+							singularId: 'padding.right',
+							value: value?.padding?.right,
+							defaultValue: defaultValue?.padding?.right,
+							path: getControlPath(attribute, 'padding.right'),
 						}}
 					/>
 				</div>
@@ -279,14 +279,14 @@ export function PaddingAll({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.bottom',
-							path: getControlPath(attribute, 'padding.bottom'),
 							mode: 'advanced',
+							singularId: 'padding.bottom',
+							value: value?.padding?.bottom,
+							defaultValue: defaultValue?.padding?.bottom,
+							path: getControlPath(attribute, 'padding.bottom'),
 						}}
 					/>
 				</div>
@@ -312,14 +312,14 @@ export function PaddingAll({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.left',
-							path: getControlPath(attribute, 'padding.left'),
 							mode: 'advanced',
+							singularId: 'padding.left',
+							value: value?.padding?.left,
+							defaultValue: defaultValue?.padding?.left,
+							path: getControlPath(attribute, 'padding.left'),
 						}}
 					/>
 				</div>

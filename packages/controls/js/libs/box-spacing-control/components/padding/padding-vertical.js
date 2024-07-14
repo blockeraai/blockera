@@ -235,14 +235,14 @@ export function PaddingVertical({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.top',
-							path: getControlPath(attribute, 'padding.top'),
 							mode: 'advanced',
+							singularId: 'padding.top',
+							value: value?.padding?.top,
+							defaultValue: defaultValue?.padding?.top,
+							path: getControlPath(attribute, 'padding.top'),
 						}}
 					/>
 
@@ -270,14 +270,14 @@ export function PaddingVertical({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.bottom',
-							path: getControlPath(attribute, 'padding.bottom'),
 							mode: 'advanced',
+							singularId: 'padding.bottom',
+							value: value?.padding?.bottom,
+							defaultValue: defaultValue?.padding?.bottom,
+							path: getControlPath(attribute, 'padding.bottom'),
 						}}
 					/>
 				</div>

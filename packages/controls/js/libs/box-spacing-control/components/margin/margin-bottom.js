@@ -225,14 +225,14 @@ export function MarginBottom({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'margin.bottom',
-							path: getControlPath(attribute, 'margin.bottom'),
 							mode: 'advanced',
+							singularId: 'margin.bottom',
+							value: value?.margin?.bottom,
+							defaultValue: defaultValue?.margin?.bottom,
+							path: getControlPath(attribute, 'margin.bottom'),
 						}}
 					/>
 

@@ -234,14 +234,14 @@ export function MarginVertical({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'margin.top',
-							path: getControlPath(attribute, 'margin.top'),
 							mode: 'advanced',
+							singularId: 'margin.top',
+							value: value?.margin?.top,
+							defaultValue: defaultValue?.margin?.top,
+							path: getControlPath(attribute, 'margin.top'),
 						}}
 					/>
 
@@ -269,12 +269,13 @@ export function MarginVertical({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
+							mode: 'advanced',
 							singularId: 'margin.bottom',
+							value: value?.margin?.bottom,
+							defaultValue: defaultValue?.margin?.bottom,
 							path: getControlPath(attribute, 'margin.bottom'),
 						}}
 					/>

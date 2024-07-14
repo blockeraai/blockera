@@ -227,14 +227,14 @@ export function PaddingBottom({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.bottom',
-							path: getControlPath(attribute, 'padding.bottom'),
 							mode: 'advanced',
+							singularId: 'padding.bottom',
+							value: value?.padding?.bottom,
+							defaultValue: defaultValue?.padding?.bottom,
+							path: getControlPath(attribute, 'padding.bottom'),
 						}}
 					/>
 

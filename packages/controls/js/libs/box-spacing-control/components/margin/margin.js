@@ -77,12 +77,13 @@ export function Margin({
 						}
 						label={__('Margin', 'blockera')}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
+							mode: 'advanced',
 							singularId: 'margin',
+							value: value?.margin,
+							defaultValue: defaultValue?.margin,
 							path: getControlPath(attribute, 'margin'),
 						}}
 					/>

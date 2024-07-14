@@ -235,14 +235,14 @@ export function PaddingHorizontal({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.right',
-							path: getControlPath(attribute, 'padding.right'),
 							mode: 'advanced',
+							singularId: 'padding.right',
+							value: value?.padding?.right,
+							defaultValue: defaultValue?.padding?.right,
+							path: getControlPath(attribute, 'padding.right'),
 						}}
 					/>
 
@@ -270,14 +270,14 @@ export function PaddingHorizontal({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'padding.left',
-							path: getControlPath(attribute, 'padding.left'),
 							mode: 'advanced',
+							singularId: 'padding.left',
+							value: value?.padding?.left,
+							defaultValue: defaultValue?.padding?.left,
+							path: getControlPath(attribute, 'padding.left'),
 						}}
 					/>
 				</div>

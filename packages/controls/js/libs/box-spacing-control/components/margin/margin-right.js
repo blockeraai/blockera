@@ -224,14 +224,14 @@ export function MarginRight({
 								setOpenPopover(sideId);
 							}}
 							{...{
-								value,
 								attribute,
 								blockName,
-								defaultValue,
 								resetToDefault,
-								singularId: 'margin.right',
-								path: getControlPath(attribute, 'margin.right'),
 								mode: 'advanced',
+								singularId: 'margin.right',
+								value: value?.margin?.right,
+								defaultValue: defaultValue?.margin?.right,
+								path: getControlPath(attribute, 'margin.right'),
 							}}
 						/>
 

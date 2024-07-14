@@ -241,14 +241,14 @@ export function MarginHorizontal({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'margin.right',
-							path: getControlPath(attribute, 'margin.right'),
 							mode: 'advanced',
+							singularId: 'margin.right',
+							value: value?.margin?.right,
+							defaultValue: defaultValue?.margin?.right,
+							path: getControlPath(attribute, 'margin.right'),
 						}}
 					/>
 
@@ -276,14 +276,14 @@ export function MarginHorizontal({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'margin.left',
-							path: getControlPath(attribute, 'margin.left'),
 							mode: 'advanced',
+							singularId: 'margin.left',
+							value: value?.margin?.left,
+							defaultValue: defaultValue?.margin?.left,
+							path: getControlPath(attribute, 'margin.left'),
 						}}
 					/>
 				</div>

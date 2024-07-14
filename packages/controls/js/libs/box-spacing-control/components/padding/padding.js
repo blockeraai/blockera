@@ -71,12 +71,13 @@ export function Padding({
 							</>
 						}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
+							mode: 'advanced',
 							singularId: 'padding',
+							value: value?.padding,
+							defaultValue: defaultValue?.padding,
 							path: getControlPath(attribute, 'padding'),
 						}}
 					/>

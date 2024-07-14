@@ -226,14 +226,14 @@ export function MarginTop({
 							setOpenPopover(sideId);
 						}}
 						{...{
-							value,
 							attribute,
 							blockName,
-							defaultValue,
 							resetToDefault,
-							singularId: 'margin.top',
-							path: getControlPath(attribute, 'margin.top'),
 							mode: 'advanced',
+							singularId: 'margin.top',
+							value: value?.margin.top,
+							defaultValue: defaultValue?.margin.top,
+							path: getControlPath(attribute, 'margin.top'),
 						}}
 					/>
 
