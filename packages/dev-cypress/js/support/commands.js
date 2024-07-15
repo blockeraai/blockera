@@ -400,4 +400,39 @@ export const registerCommands = () => {
 				});
 		}
 	);
+
+	Cypress.Commands.add(
+		'dragValue',
+		{ prevSubject: 'element' },
+		(subject, type = 'vertical', movement = 10) => {
+			cy.wrap(subject[0]).trigger('mousedown', 'topLeft', {
+				which: 1,
+				force: true,
+			});
+
+			if (type === 'vertical') {
+				// down movement is negative and up movement is positive
+				cy.get('.blockera-virtual-cursor-box').trigger('mousemove', {
+					which: 1,
+					clientY:
+						Math.ceil(subject[0].getBoundingClientRect().top) +
+						movement * -1,
+				});
+			} else if (type === 'horizontal') {
+				// left movement is negative and right movement is positive
+				cy.get('.blockera-virtual-cursor-box').trigger('mousemove', {
+					which: 1,
+					clientX:
+						Math.ceil(subject[0].getBoundingClientRect().left) +
+						movement,
+				});
+			}
+
+			cy.get('.blockera-virtual-cursor-box').trigger('mouseup', {
+				which: 1,
+			});
+
+			return cy.wrap(subject);
+		}
+	);
 };
