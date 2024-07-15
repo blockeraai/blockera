@@ -238,11 +238,11 @@ describe('Inner Blocks E2E Test', () => {
 				'rgb(204, 204, 204)'
 			);
 
-			// Set desktop viewport
+			// Set xl-desktop viewport
 			cy.viewport(1441, 1920);
 
 			cy.get('.my-link').should(
-				'not.have.css',
+				'have.css',
 				'background-color',
 				'rgb(204, 204, 204)'
 			);

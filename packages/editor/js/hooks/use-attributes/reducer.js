@@ -161,15 +161,25 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			 */
 			return applyFilters(
 				'blockera.blockEdit.setAttributes',
-				{
-					...state,
-					blockeraBlockStates: memoizedBlockStates(state, action, {
-						currentState,
-						insideInnerBlock:
-							'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' === type,
-						currentBlock,
-					}),
-				},
+				mergeObject(
+					state,
+					{
+						blockeraBlockStates: memoizedBlockStates(
+							state,
+							action,
+							{
+								currentState,
+								insideInnerBlock:
+									'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' ===
+									type,
+								currentBlock,
+							}
+						),
+					},
+					{
+						deletedProps: [attributeId],
+					}
+				),
 				...hookParams
 			);
 
@@ -209,6 +219,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 						},
 					},
 					{
+						deletedProps: [attributeId],
 						forceUpdated: isObject(newValue) ? [attributeId] : [],
 					}
 				),

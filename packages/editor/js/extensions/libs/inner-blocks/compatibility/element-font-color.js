@@ -58,11 +58,6 @@ export function elementHoverFontColorFromWPCompatibility({
 					[element]: {
 						attributes: {
 							blockeraBlockStates: {
-								normal: {
-									// $FlowFixMe
-									breakpoints: { [getBaseBreakpoint()]: {} },
-									isVisible: true,
-								},
 								hover: {
 									isVisible: true,
 									breakpoints: {

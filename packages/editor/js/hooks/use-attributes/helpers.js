@@ -136,7 +136,6 @@ export const memoizedRootBreakpoints: (
 						},
 					},
 					{
-						deletedProps: [attributeId],
 						forceUpdated:
 							!isEqualsWithDefault && isObject(newValue)
 								? [attributeId]
@@ -173,7 +172,6 @@ export const memoizedRootBreakpoints: (
 				},
 			},
 			{
-				deletedProps: [attributeId],
 				forceUpdated:
 					!isEqualsWithDefault && isObject(newValue)
 						? [attributeId]

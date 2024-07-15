@@ -44,16 +44,10 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			expect({
 				blockeraFontColor: '#ffbaba',
 				blockeraBlockStates: {
-					normal: {
-						breakpoints: {
-							laptop: {},
-						},
-						isVisible: true,
-					},
 					hover: {
 						isVisible: true,
 						breakpoints: {
-							laptop: {
+							desktop: {
 								attributes: {
 									blockeraFontColor: '#ff1d1d',
 								},
@@ -107,16 +101,10 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			expect({
 				blockeraFontColor: '#666666',
 				blockeraBlockStates: {
-					normal: {
-						isVisible: true,
-						breakpoints: {
-							laptop: {},
-						},
-					},
 					hover: {
 						isVisible: true,
 						breakpoints: {
-							laptop: {
+							desktop: {
 								attributes: {
 									blockeraFontColor: '#888888',
 								},
@@ -177,18 +165,10 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		getWPDataObject().then((data) => {
 			expect({
 				blockeraBlockStates: {
-					normal: {
-						isVisible: true,
-						breakpoints: {
-							laptop: {
-								attributes: {},
-							},
-						},
-					},
 					hover: {
 						isVisible: true,
 						breakpoints: {
-							laptop: {
+							desktop: {
 								attributes: {},
 							},
 						},
@@ -256,16 +236,10 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					valueType: 'variable',
 				},
 				blockeraBlockStates: {
-					normal: {
-						breakpoints: {
-							laptop: {},
-						},
-						isVisible: true,
-					},
 					hover: {
 						isVisible: true,
 						breakpoints: {
-							laptop: {
+							desktop: {
 								attributes: {
 									blockeraFontColor: {
 										settings: {
@@ -341,16 +315,10 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					valueType: 'variable',
 				},
 				blockeraBlockStates: {
-					normal: {
-						breakpoints: {
-							laptop: {},
-						},
-						isVisible: true,
-					},
 					hover: {
 						isVisible: true,
 						breakpoints: {
-							laptop: {
+							desktop: {
 								attributes: {
 									blockeraFontColor: {
 										settings: {
@@ -418,18 +386,10 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		getWPDataObject().then((data) => {
 			expect({
 				blockeraBlockStates: {
-					normal: {
-						isVisible: true,
-						breakpoints: {
-							laptop: {
-								attributes: {},
-							},
-						},
-					},
 					hover: {
 						isVisible: true,
 						breakpoints: {
-							laptop: {
+							desktop: {
 								attributes: {},
 							},
 						},
