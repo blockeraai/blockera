@@ -20,7 +20,7 @@ export const useDragValue = ({
 	// calculate the diff in positions of the cursor.
 	const [startVal, setStartVal] = useState(0);
 
-	const [dragStarted, setDragStarted] = useState(false);
+	const [dragStarted, setDragStarted] = useState('');
 
 	const createVirtualCursorBox = (cursor) => {
 		// Create a new div element
@@ -62,12 +62,12 @@ export const useDragValue = ({
 				setStartVal(event.clientY);
 
 				// add cursor
-				createVirtualCursorBox(`ns-resize`);
+				createVirtualCursorBox('ns-resize');
 			} else if (movement === 'horizontal') {
 				setStartVal(event.clientX);
 
 				// add cursor
-				createVirtualCursorBox(`ew-resize`);
+				createVirtualCursorBox('ew-resize');
 			}
 
 			setSnapshot(value);
@@ -78,11 +78,6 @@ export const useDragValue = ({
 
 	// Only change the value if the drag was actually started.
 	const onUpdate = (event) => {
-		// not started yet
-		if (!dragStarted || !startVal) {
-			return;
-		}
-
 		let newValue;
 
 		if (movement === 'vertical') {
@@ -109,7 +104,7 @@ export const useDragValue = ({
 	const onEnd = (event, force = false) => {
 		// stop only if the drag was actually started
 		// or force
-		if (!dragStarted && !force) return;
+		if ((dragStarted === false || dragStarted === '') && !force) return;
 
 		// call outside callback
 		callbackOnEnd();
@@ -125,14 +120,19 @@ export const useDragValue = ({
 	// because the mouse may not be present over the label during
 	// the operation..
 	useEffect(() => {
-		document.addEventListener('mousemove', onUpdate);
-		document.addEventListener('mouseup', onEnd);
+		if (dragStarted === true) {
+			document.addEventListener('mousemove', onUpdate);
+			document.addEventListener('mouseup', onEnd);
+		} else if (dragStarted === false && dragStarted !== '') {
+			document.removeEventListener('mousemove', onUpdate);
+			document.removeEventListener('mouseup', onEnd);
+		}
 
 		return () => {
 			document.removeEventListener('mousemove', onUpdate);
 			document.removeEventListener('mouseup', onEnd);
 		};
-	}, [snapshot, movement, dragStarted, value]); // eslint-disable-line
+	}, [dragStarted]); // eslint-disable-line
 
 	return {
 		onDragStart: onStart,
