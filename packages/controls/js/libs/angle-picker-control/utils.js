@@ -5,6 +5,14 @@ export function addAngle(angle, add) {
 		return 0;
 	}
 
+	if (typeof angle === 'string' && angle.trim() !== '') {
+		angle = Number(angle);
+	}
+
+	if (typeof add === 'string' && add.trim() !== '') {
+		add = Number(add);
+	}
+
 	// Add the value to the angle
 	let result = angle + add;
 
@@ -21,6 +29,14 @@ export function addAngle(angle, add) {
 export function subtractAngle(angle, subtract) {
 	if (!isNumber(angle) || !isNumber(subtract)) {
 		return 0;
+	}
+
+	if (typeof angle === 'string' && angle.trim() !== '') {
+		angle = Number(angle);
+	}
+
+	if (typeof subtract === 'string' && subtract.trim() !== '') {
+		subtract = Number(subtract);
 	}
 
 	// Subtract the value from the angle

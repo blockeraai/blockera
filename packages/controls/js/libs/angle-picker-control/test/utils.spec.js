@@ -5,7 +5,7 @@ describe('Testing util functions', () => {
 		test('testing when passed values as String!', () => {
 			const value = addAngle('45', '45');
 
-			expect(value).toBe(0);
+			expect(value).toBe(90);
 		});
 
 		test('testing when passed as number!', () => {
