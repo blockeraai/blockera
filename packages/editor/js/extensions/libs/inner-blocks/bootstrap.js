@@ -100,7 +100,7 @@ export const bootstrap = (): void => {
 				) {
 					if (
 						!attributes?.blockeraInnerBlocks?.link?.attributes
-							?.blockeraBlockStates?.breakpoints[
+							?.blockeraBlockStates?.hover?.breakpoints[
 							getBaseBreakpoint()
 						]?.attributes?.blockeraFontColor
 					) {
