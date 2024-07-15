@@ -721,7 +721,7 @@ describe('Spacing Extension', () => {
 	});
 
 	describe('Drag Value Changes', () => {
-		it.only('change values with drag', () => {
+		it('change values with drag', () => {
 			const marginVerticalItems = ['margin-top', 'margin-bottom'];
 
 			marginVerticalItems.forEach((item) => {
