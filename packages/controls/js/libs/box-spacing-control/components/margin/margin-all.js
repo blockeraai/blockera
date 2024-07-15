@@ -325,7 +325,6 @@ export function MarginAll({
 
 				{openPopover === sideId && (
 					<SidePopover
-						value={value}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin')}
 						type="margin"

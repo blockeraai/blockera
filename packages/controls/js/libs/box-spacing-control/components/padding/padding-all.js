@@ -326,7 +326,6 @@ export function PaddingAll({
 
 				{openPopover === sideId && (
 					<SidePopover
-						value={value}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding')}
 						type="padding"
