@@ -18,7 +18,7 @@ export function SideShapePath({
 }: SideShapeProps): MixedElement {
 	return (
 		<path
-			className={controlInnerClassNames('shape-side', className)}
+			className={controlInnerClassNames('position-shape-side', className)}
 			d={shape}
 			{...props}
 		/>
