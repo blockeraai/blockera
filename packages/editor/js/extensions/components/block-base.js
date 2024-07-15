@@ -317,7 +317,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						// Assume after executing compatibilities hook original attributes equals with attribute includes wp compatibility values.
 						// in this case we should not add blockeraCompatId because not changed anything.
 						if (
-							isEquals(withWPCompatibilities, filteredAttributes)
+							isEquals(
+								omit(withWPCompatibilities, [
+									'blockeraCompatId',
+								]),
+								omit(filteredAttributes, ['blockeraCompatId'])
+							)
 						) {
 							filteredAttributes = {
 								...filteredAttributes,
@@ -333,6 +338,10 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						!Object.keys(added).length &&
 						!Object.keys(updated).length
 					) {
+						if (!isActive) {
+							return;
+						}
+
 						// Prevent redundant set state!
 						if (isEquals(attributes, filteredAttributes)) {
 							return;
@@ -340,6 +349,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 						setAttributes(filteredAttributes);
 
+						return;
+					}
+
+					// Prevent to running other filters, because we are waiting until user interacted with settings of block, and after we allow to run other filters.
+					if (isEquals(['blockeraCompatId'], Object.keys(updated))) {
 						return;
 					}
 
