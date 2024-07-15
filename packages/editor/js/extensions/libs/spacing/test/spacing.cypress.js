@@ -1,3 +1,6 @@
+/**
+ * Blockera dependencies
+ */
 import {
 	createPost,
 	savePage,
@@ -581,7 +584,7 @@ describe('Spacing Extension', () => {
 		});
 	});
 
-	describe('Complex', () => {
+	describe('Labels tests', () => {
 		it('Label on sides with different value types', () => {
 			const items = [
 				'margin-top',
@@ -688,7 +691,7 @@ describe('Spacing Extension', () => {
 					.last()
 					.within(() => {
 						cy.get('[aria-label="Select Unit"]').select('func');
-						cy.get('input[type=text]').clear();
+						cy.get('input[type=text]').clear({ force: true });
 						cy.get('input[type=text]').type('calc(10px + 10px)');
 					});
 
@@ -712,6 +715,154 @@ describe('Spacing Extension', () => {
 					.invoke('text')
 					.then((text) => {
 						expect(text.trim().replace(item, '')).to.eq('1');
+					});
+			});
+		});
+	});
+
+	describe('Drag Value Changes', () => {
+		it.only('change values with drag', () => {
+			const marginVerticalItems = ['margin-top', 'margin-bottom'];
+
+			marginVerticalItems.forEach((item) => {
+				cy.get(
+					`[data-cy="box-spacing-${item}"] [data-cy="label-control"]`
+				).as('SideLabel');
+
+				cy.get(`.blockera-control-spacing-shape-side.side-${item}`).as(
+					'SideShape'
+				);
+
+				// positive drag value change
+				cy.get('@SideShape').dragValue('vertical', 20);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('20');
+					});
+
+				// negative drag value change
+				// margin supports negative values
+				cy.get('@SideShape').dragValue('vertical', -35);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('-15');
+					});
+			});
+
+			const marginHorizontalItems = ['margin-left', 'margin-right'];
+
+			marginHorizontalItems.forEach((item) => {
+				cy.get(
+					`[data-cy="box-spacing-${item}"] [data-cy="label-control"]`
+				).as('SideLabel');
+
+				cy.get(`.blockera-control-spacing-shape-side.side-${item}`).as(
+					'SideShape'
+				);
+
+				// positive drag value change
+				cy.get('@SideShape').dragValue('horizontal', 20);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('20');
+					});
+
+				// negative drag value change
+				// margin supports negative values
+				cy.get('@SideShape').dragValue('horizontal', -35);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('-15');
+					});
+			});
+
+			const paddingVerticalItems = ['padding-top', 'padding-bottom'];
+
+			paddingVerticalItems.forEach((item) => {
+				cy.get(
+					`[data-cy="box-spacing-${item}"] [data-cy="label-control"]`
+				).as('SideLabel');
+
+				cy.get(`.blockera-control-spacing-shape-side.side-${item}`).as(
+					'SideShape'
+				);
+
+				// positive drag value change
+				cy.get('@SideShape').dragValue('vertical', 20);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('20');
+					});
+
+				// negative drag value change
+				cy.get('@SideShape').dragValue('vertical', -15);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('5');
+					});
+
+				// negative drag value change
+				// padding does not supports negative values
+				// min value is 0
+				cy.get('@SideShape').dragValue('vertical', -15);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('0');
+					});
+			});
+
+			const paddingHorizontalItems = ['padding-left', 'padding-right'];
+
+			paddingHorizontalItems.forEach((item) => {
+				cy.get(
+					`[data-cy="box-spacing-${item}"] [data-cy="label-control"]`
+				).as('SideLabel');
+
+				cy.get(`.blockera-control-spacing-shape-side.side-${item}`).as(
+					'SideShape'
+				);
+
+				// positive drag value change
+				cy.get('@SideShape').dragValue('horizontal', 20);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('20');
+					});
+
+				// negative drag value change
+				cy.get('@SideShape').dragValue('horizontal', -15);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('5');
+					});
+
+				// negative drag value change
+				// padding does not supports negative values
+				// min value is 0
+				cy.get('@SideShape').dragValue('horizontal', -15);
+
+				cy.get('@SideLabel')
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim().replace(item, '')).to.eq('0');
 					});
 			});
 		});

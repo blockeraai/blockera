@@ -14,12 +14,12 @@
 
 		pointer-events: none;
 
-		.blockera-control-shape-side {
+		.blockera-control-spacing-shape-side {
 			--blockera-controls-primary-color: #ff3131; // neon color red (only for animation)
 		}
 	}
 
-	.blockera-control-shape-side {
+	.blockera-control-spacing-shape-side {
 		transition: all 0.2s ease;
 		fill: var(--blockera-controls-fill-color);
 		stroke: var(--blockera-controls-border-color);
