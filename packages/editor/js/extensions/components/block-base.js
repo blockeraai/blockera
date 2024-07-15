@@ -305,7 +305,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					 * @since 1.0.0
 					 */
 					if (!attributes?.blockeraCompatId) {
-						const withWPCompatibilities = applyFilters(
+						filteredAttributes = applyFilters(
 							'blockera.blockEdit.attributes',
 							getAttributesWithIds(
 								filteredAttributes,
@@ -313,49 +313,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							),
 							args
 						);
-
-						// Assume after executing compatibilities hook original attributes equals with attribute includes wp compatibility values.
-						// in this case we should not add blockeraCompatId because not changed anything.
-						if (
-							isEquals(
-								omit(withWPCompatibilities, [
-									'blockeraCompatId',
-								]),
-								omit(filteredAttributes, ['blockeraCompatId'])
-							)
-						) {
-							filteredAttributes = {
-								...filteredAttributes,
-								blockeraCompatId: '',
-							};
-						} else {
-							filteredAttributes = withWPCompatibilities;
-						}
 					}
 
-					// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
-					if (
-						!Object.keys(added).length &&
-						!Object.keys(updated).length
-					) {
-						if (!isActive) {
-							return;
-						}
-
-						// Prevent redundant set state!
-						if (isEquals(attributes, filteredAttributes)) {
-							return;
-						}
-
-						setAttributes(filteredAttributes);
-
-						return;
-					}
-
-					// Prevent to running other filters, because we are waiting until user interacted with settings of block, and after we allow to run other filters.
-					if (isEquals(['blockeraCompatId'], Object.keys(updated))) {
-						return;
-					}
+					const hasCompatId = attributes?.blockeraCompatId;
 
 					/**
 					 * Filtering block attributes based on "blockeraPropsId" attribute.
@@ -364,7 +324,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					 *
 					 * @since 1.0.0
 					 */
-					if (!attributes?.blockeraPropsId) {
+					if (!attributes?.blockeraPropsId && hasCompatId) {
 						filteredAttributes = applyFilters(
 							'blockera.blockEdit.attributes',
 							getAttributesWithIds(
@@ -376,7 +336,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					}
 
 					// Merging block classnames ...
-					if (!attributes?.className) {
+					if (!attributes?.className && hasCompatId) {
 						filteredAttributes = {
 							...filteredAttributes,
 							className: classNames(
@@ -387,7 +347,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								additional.editorProps.className || ''
 							),
 						};
-					} else if ('' === className) {
+					} else if ('' === className && hasCompatId) {
 						filteredAttributes = {
 							...filteredAttributes,
 							className: classNames(
@@ -401,7 +361,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					}
 
 					// Assume disabled blockera panel, so filtering attributes to clean up all blockera attributes.
-					if (!isActive) {
+					if (
+						!isActive &&
+						hasCompatId &&
+						attributes?.blockeraPropsId
+					) {
 						filteredAttributes = {
 							...attributes,
 							...omitWithPattern(
@@ -415,6 +379,14 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 					// Prevent redundant set state!
 					if (isEquals(attributes, filteredAttributes)) {
+						return;
+					}
+
+					// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
+					if (
+						!Object.keys(added).length &&
+						!Object.keys(updated).length
+					) {
 						return;
 					}
 
