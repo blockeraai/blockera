@@ -57,7 +57,7 @@ export const bootstrap = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { isNormalState, isBaseBreakpoint, isMasterBlock } =
+			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
 				blockDetail;
 
 			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
@@ -91,6 +91,7 @@ export const bootstrap = (): void => {
 			//
 			const textAlignAttrs = textAlignFromWPCompatibility({
 				attributes,
+				blockId,
 			});
 
 			if (textAlignAttrs) {
@@ -191,7 +192,7 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { isNormalState, isBaseBreakpoint, isMasterBlock } =
+			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
 				blockDetail;
 
 			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
@@ -223,6 +224,7 @@ export const bootstrap = (): void => {
 						textAlignToWPCompatibility({
 							newValue,
 							ref,
+							blockId,
 						})
 					);
 
