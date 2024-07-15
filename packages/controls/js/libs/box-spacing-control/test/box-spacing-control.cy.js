@@ -234,35 +234,43 @@ describe('box spacing control component testing', () => {
 
 		// add top margin
 		openBoxSpacingSide('margin-top');
-		cy.get('input[type=range]').setSliderValue(80);
+		cy.get('input[type=number]').clear();
+		cy.get('input[type=number]').type(80, { force: true });
 
 		// add top right margin
 		openBoxSpacingSide('margin-right');
-		cy.get('input[type=range]').setSliderValue(81);
+		cy.get('input[type=number]').clear();
+		cy.get('input[type=number]').type(81, { force: true });
 
 		// add top bottom margin
 		openBoxSpacingSide('margin-bottom');
-		cy.get('input[type=range]').setSliderValue(82);
+		cy.get('input[type=number]').clear();
+		cy.get('input[type=number]').type(82, { force: true });
 
 		// add top left margin
 		openBoxSpacingSide('margin-left');
-		cy.get('input[type=range]').setSliderValue(83);
+		cy.get('input[type=number]').clear();
+		cy.get('input[type=number]').type(83, { force: true });
 
 		// add top padding
 		openBoxSpacingSide('padding-top');
-		cy.get('input[type=range]').setSliderValue(80);
+		cy.get('input[type=number]').clear();
+		cy.get('input[type=number]').type(80, { force: true });
 
 		// add top right padding
 		openBoxSpacingSide('padding-right');
-		cy.get('input[type=range]').setSliderValue(81);
+		cy.get('input[type=number]').clear();
+		cy.get('input[type=number]').type(81, { force: true });
 
 		// add top bottom padding
 		openBoxSpacingSide('padding-bottom');
-		cy.get('input[type=range]').setSliderValue(82);
+		cy.get('input[type=number]').clear();
+		cy.get('input[type=number]').type(82, { force: true });
 
 		// add top left padding
 		openBoxSpacingSide('padding-left');
-		cy.get('input[type=range]').setSliderValue(83);
+		cy.get('input[type=number]').clear();
+		cy.get('input[type=number]').type(83, { force: true });
 
 		const expectValue = {
 			margin: {

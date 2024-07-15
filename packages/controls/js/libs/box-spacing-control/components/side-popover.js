@@ -218,13 +218,13 @@ export function SidePopover({
 					onClose={onClose}
 				>
 					<InputControl
-						columns={'columns-2'}
+						columns="1fr 1fr"
 						label={inputLabel}
 						labelPopoverTitle={inputLabelPopoverTitle}
 						labelDescription={inputLabelDescription}
 						id={id}
 						unitType={type}
-						range={true}
+						range={false}
 						min={type === 'margin' ? undefined : 0}
 						//
 						defaultValue={prepare(id, defaultValue)}
