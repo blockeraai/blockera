@@ -142,11 +142,12 @@
 				font-size: 8px;
 				color: #b9b9b9;
 				position: absolute;
-				transform: translate(calc(100% + -2px), -16px);
+				left: calc(100% + 4px);
+				top: -8px;
 			}
 
 			b {
-				font-size: 8px;
+				font-weight: 500;
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
@@ -176,28 +177,46 @@
 			}
 		}
 
-		&.side-vertical i {
-			transform: translate(calc(100% + 7px), -4px);
-			position: absolute;
+		&.side-horizontal.side-margin-left,
+		&.side-horizontal.side-padding-left {
+
+			.blockera-control-label {
+				position: static;
+			}
+
+			i {
+				top: 18px;
+				width: 30px;
+				left: 0;
+				right: 0;
+				padding: 0 0 0 4px;
+				text-align: left;
+			}
 		}
 
-		&.side-horizontal.side-margin-right i,
-		&.side-horizontal.side-margin-left i {
-			transform: translate(calc(100% - 26px), -16px);
-			text-align: right;
-			width: 80%;
+		&.side-horizontal.side-margin-right,
+		&.side-horizontal.side-padding-right {
+
+			.blockera-control-label {
+				position: static;
+			}
+
+			i {
+				top: 18px;
+				width: 30px;
+				left: 0;
+				right: 0;
+				padding: 0 4px 0 0;
+				text-align: right;
+			}
 		}
 
-		&.side-horizontal.side-padding-left i {
-			transform: translate(calc(100% - 23px), -16px);
-			text-align: left;
-			width: 80%;
-		}
+		&.side-horizontal.side-margin-right,
+		&.side-horizontal.side-margin-left {
 
-		&.side-horizontal.side-padding-right i {
-			transform: translate(calc(100% - 26px), -16px);
-			text-align: right;
-			width: 80%;
+			i {
+				top: 56px;
+			}
 		}
 
 		&.side-margin-top {
