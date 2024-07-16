@@ -7,15 +7,15 @@ const setupNodeEvents = (on, config) => {
 	return config;
 };
 
+// Get category from environment variable
+const category = process.env.CYPRESS_CATEGORY || '';
+
 module.exports = defineConfig({
 	chromeWebSecurity: false,
 	defaultCommandTimeout: 15000,
 	e2e: {
 		setupNodeEvents,
-		specPattern: [
-			'packages/**/*.cypress.js',
-			'packages/**/*.cy.compatibility.js',
-		],
+		specPattern: [`packages/**/*.cy.e2e.${category}.js`],
 		supportFile: 'packages/dev-cypress/js/support/e2e.js',
 	},
 	env: {

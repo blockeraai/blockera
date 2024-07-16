@@ -24,7 +24,9 @@ jobs:
 
       - name: List test categories
         id: set_categories
-        run: echo "::set-output name=categories::$(node .github/scripts/list-categories.js)"
+        run: |
+          categories=$(node .github/scripts/list-categories.js)
+          echo "categories=${categories}" >> $GITHUB_OUTPUT
 
   cypress_e2e_tests:
     needs: detect_categories
