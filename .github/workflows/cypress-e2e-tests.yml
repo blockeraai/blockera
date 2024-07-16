@@ -1,45 +1,66 @@
 name: Cypress E2E Tests
 
 on:
-    pull_request:
-        types: [opened, synchronize, ready_for_review]
-
-    workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  workflow_dispatch:
 
 jobs:
-    cypress_e2e_tests:
-        name: Cypress End 2 End Tests
-        runs-on: ubuntu-latest
-        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+  detect_categories:
+    runs-on: ubuntu-latest
+    outputs:
+      categories: ${{ steps.set_categories.outputs.categories }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
+      - name: Install dependencies
+        run: npm install
 
-            - name: Install Cypress
-              run: npx cypress install
+      - name: List test categories
+        id: set_categories
+        run: echo "::set-output name=categories::$(node .github/scripts/list-categories.js)"
 
-            - name: Install Composer Packages
-              run: composer install --no-dev -o --apcu-autoloader -a
+  cypress_e2e_tests:
+    needs: detect_categories
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+    strategy:
+      matrix:
+        category: [${{ fromJson(needs.detect_categories.outputs.categories) }}]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-            - name: Start WordPress Environment
-              run: npm run env:start
+      - name: Setup Node.js and install dependencies
+        uses: ./.github/setup-node
 
-            - name: 'Create env file'
-              run: |
-                  touch .env
-                  echo APP_MODE=production >> .env
-                  echo DB=wp_tests >> .env
-                  cat .env
+      - name: Install Cypress
+        run: npx cypress install
 
-            - name: Build wp-env app
-              run: npm run build
+      - name: Install Composer Packages
+        run: composer install --no-dev -o --apcu-autoloader -a
 
-            - name: Run Cypress E2E Tests
-              run: npm run test:e2e
+      - name: Start WordPress Environment
+        run: npm run env:start
 
-            - name: Stop WordPress Environment
-              run: npm run env:stop
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo APP_MODE=production >> .env
+          echo DB=wp_tests >> .env
+          cat .env
+
+      - name: Build wp-env app
+        run: npm run build
+
+      - name: Run Cypress E2E Tests
+        run: npm run test:e2e -- --spec "packages/**/*.cy.e2e.${{ matrix.category }}.js"
+
+      - name: Stop WordPress Environment
+        run: npm run env:stop
