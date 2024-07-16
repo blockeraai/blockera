@@ -57,6 +57,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			isNormalState: isNormalState(),
 			isMasterBlock: !isInnerBlock(currentBlock),
 			isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
+			blockAttributes: defaultAttributes,
 		},
 	];
 

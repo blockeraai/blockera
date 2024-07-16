@@ -1,5 +1,10 @@
 // @flow
 
+/**
+ * Blockera dependencies
+ */
+import { isEquals } from '@blockera/utils';
+
 export function alignItemsFromWPCompatibility({
 	attributes,
 }: {
@@ -79,11 +84,13 @@ export function directionFromWPCompatibility({
 export function flexLayoutToWPCompatibility({
 	newValue,
 	ref,
+	defaultValue,
 }: {
 	newValue: Object,
 	ref?: Object,
+	defaultValue: Object,
 }): Object {
-	if ('reset' === ref?.current?.action || newValue === '') {
+	if ('reset' === ref?.current?.action || isEquals(newValue, defaultValue)) {
 		return {
 			layout: {
 				orientation: undefined,

@@ -134,8 +134,13 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
-				blockDetail;
+			const {
+				blockId,
+				isNormalState,
+				isBaseBreakpoint,
+				isMasterBlock,
+				blockAttributes,
+			} = blockDetail;
 
 			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
 				return nextState;
@@ -167,6 +172,8 @@ export const bootstrap = (): void => {
 						flexLayoutToWPCompatibility({
 							newValue,
 							ref,
+							defaultValue:
+								blockAttributes?.blockeraFlexLayout?.default,
 						})
 					);
 			}
