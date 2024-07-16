@@ -35,7 +35,7 @@ jobs:
                   echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
 
     cypress_e2e_tests:
-        name: Running E2E Test
+        name: E2E Test
         needs: detect_categories
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
