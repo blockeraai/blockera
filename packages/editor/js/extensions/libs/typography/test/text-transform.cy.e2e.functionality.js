@@ -1,6 +1,5 @@
 import {
 	savePage,
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
@@ -11,13 +10,7 @@ import {
 describe('Text Transform → Functionality', () => {
 	beforeEach(() => {
 		createPost();
-
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-		cy.getBlock('core/paragraph').type('This is test text.', {
-			delay: 0,
-		});
-
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 		cy.getByDataTest('style-tab').click();
 	});
 

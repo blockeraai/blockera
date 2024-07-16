@@ -1,14 +1,12 @@
 import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
-import {
-	addBlockToPost,
-	getBlockInserter,
-} from '@blockera/dev-cypress/js/helpers/editor';
+import { getBlockInserter } from '@blockera/dev-cypress/js/helpers/editor';
 
 describe('Block Settings tests ...', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+		cy.getByDataTest('style-tab').click();
 	});
 
 	it('should render blockera block icon for supported WordPress core blocks', () => {

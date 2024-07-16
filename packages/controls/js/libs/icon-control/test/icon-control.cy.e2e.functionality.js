@@ -2,7 +2,6 @@
  * Blockera dependencies
  */
 import {
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	createPost,
@@ -13,15 +12,10 @@ if (experimental().get('editor.extensions.iconExtension')) {
 	describe('icon-control', () => {
 		beforeEach(() => {
 			createPost();
+			cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 		});
 
 		context('Functional', () => {
-			beforeEach(() => {
-				addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-				cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
-			});
-
 			it('should be able to upload custom svg when there is selected icon', () => {
 				// act
 				cy.get('[aria-label="button Icon"]').click();

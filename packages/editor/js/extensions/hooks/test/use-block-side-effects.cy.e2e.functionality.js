@@ -1,7 +1,4 @@
-import {
-	addBlockToPost,
-	appendBlocks,
-} from '@blockera/dev-cypress/js/helpers/editor';
+import { appendBlocks } from '@blockera/dev-cypress/js/helpers/editor';
 import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
 import { addBlockState } from '@blockera/dev-cypress/js/helpers/block-states';
 
@@ -11,9 +8,7 @@ describe('useBlockSideEffects Testing ...', () => {
 	});
 
 	it('should be able to hide WordPress block original tabs on styles tab on normal', () => {
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-		cy.getBlock('core/paragraph').click();
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
 		cy.getByDataTest('style-tab').click();
 

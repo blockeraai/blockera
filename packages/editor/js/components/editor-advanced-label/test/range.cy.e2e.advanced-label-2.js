@@ -1,5 +1,4 @@
 import {
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	createPost,
@@ -12,7 +11,8 @@ describe('Range Control label testing (Opacity)', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+		cy.getByDataTest('style-tab').click();
 	});
 
 	const setOpacityValue = (value) => {

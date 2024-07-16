@@ -1,8 +1,4 @@
-import {
-	addBlockToPost,
-	createPost,
-	setDeviceType,
-} from '@blockera/dev-cypress/js/helpers';
+import { createPost, setDeviceType } from '@blockera/dev-cypress/js/helpers';
 import { experimental } from '@blockera/env';
 
 if (experimental().get('editor.extensions.effectsExtension.divider')) {
@@ -10,7 +6,8 @@ if (experimental().get('editor.extensions.effectsExtension.divider')) {
 		beforeEach(() => {
 			createPost();
 
-			addBlockToPost('core/paragraph', true, 'blockera-paragraph');
+			cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+			cy.getByDataTest('style-tab').click();
 
 			// Add divider
 			cy.getByAriaLabel('Add New Divider').click();

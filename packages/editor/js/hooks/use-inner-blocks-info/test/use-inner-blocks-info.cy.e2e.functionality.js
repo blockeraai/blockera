@@ -8,16 +8,15 @@ import {
 	setBlockState,
 	setDeviceType,
 	reSelectBlock,
-	addBlockToPost,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('useInnerBlocksInfo custom hook testing ...', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+		cy.getByDataTest('style-tab').click();
 
-		// Aliases ...
 		cy.getParentContainer('Text Color').within(() => {
 			cy.getByDataCy('color-label').as('color-label');
 		});

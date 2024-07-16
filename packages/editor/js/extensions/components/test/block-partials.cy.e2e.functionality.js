@@ -1,8 +1,5 @@
 import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
-import {
-	addBlockToPost,
-	appendBlocks,
-} from '@blockera/dev-cypress/js/helpers/editor';
+import { appendBlocks } from '@blockera/dev-cypress/js/helpers/editor';
 
 describe('Block Partials Testing ...', () => {
 	beforeEach(() => {
@@ -10,9 +7,8 @@ describe('Block Partials Testing ...', () => {
 	});
 
 	it('should be able to hide WordPress original block card and display blockera block card', () => {
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 
-		cy.getBlock('core/paragraph').click();
 		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
 		cy.getByDataTest('style-tab').click();
 

@@ -1,6 +1,5 @@
 import {
 	savePage,
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
@@ -12,12 +11,7 @@ describe('Background Image → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		// add block, select it, open style tab
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-		cy.getBlock('core/paragraph').type("life is too short. isn't it?", {
-			delay: 0,
-		});
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 
 		cy.getByAriaLabel('Settings').eq(1).click({ force: true });
 

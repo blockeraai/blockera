@@ -1,7 +1,6 @@
 import {
 	getWPDataObject,
 	getSelectedBlock,
-	addBlockToPost,
 	savePage,
 	redirectToFrontPage,
 	createPost,
@@ -11,11 +10,7 @@ describe('User Select → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-		cy.getBlock('core/paragraph').type('this is test text.', {
-			delay: 0,
-		});
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 
 		cy.getByDataTest('interactions-tab').click();
 

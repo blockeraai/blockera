@@ -1,6 +1,5 @@
 import {
 	savePage,
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
@@ -11,9 +10,7 @@ describe('Background Clip → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-		cy.getBlock('core/paragraph').click();
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
 		cy.getByDataTest('style-tab').click();
 
@@ -57,11 +54,6 @@ describe('Background Clip → Functionality', () => {
 	});
 
 	it('should set text clipping when block has text and background-mage', () => {
-		// type to block
-		cy.getBlock('core/paragraph').type('smile =)', { delay: 0 });
-
-		cy.getByDataTest('style-tab').click();
-
 		cy.getParentContainer('Image & Gradient').as('image-and-gradient');
 
 		cy.get('@image-and-gradient').within(() => {

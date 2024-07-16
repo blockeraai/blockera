@@ -1,6 +1,5 @@
 import {
 	savePage,
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
@@ -11,9 +10,7 @@ describe('Background Color → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-		cy.getBlock('core/paragraph').click();
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 
 		cy.get('[aria-label="Settings"]').eq(1).click({ force: true });
 

@@ -4,7 +4,6 @@
 import {
 	createPost,
 	savePage,
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
@@ -16,10 +15,7 @@ describe('Spacing Extension', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-		cy.getBlock('core/paragraph').type('This is test text.', { delay: 0 });
-
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 		cy.getByDataTest('style-tab').click();
 
 		cy.get('.blockera-control-box-spacing').as('spacing');

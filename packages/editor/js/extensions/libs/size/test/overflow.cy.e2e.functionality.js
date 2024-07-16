@@ -3,7 +3,6 @@
  */
 import {
 	savePage,
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
@@ -14,12 +13,7 @@ describe('Overflow → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
-		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-		cy.getBlock('core/paragraph').type('This is a test text.', {
-			delay: 0,
-		});
-
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 		cy.getByDataTest('style-tab').click();
 	});
 

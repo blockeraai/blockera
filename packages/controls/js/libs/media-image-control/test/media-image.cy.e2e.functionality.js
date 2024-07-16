@@ -2,7 +2,6 @@
  * Blockera dependencies
  */
 import {
-	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	createPost,
@@ -11,21 +10,14 @@ import {
 describe('media-image', () => {
 	beforeEach(() => {
 		createPost();
+
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+		cy.getByDataTest('style-tab').click();
 	});
 
 	context('Functional', () => {
-		beforeEach(() => {
-			addBlockToPost('core/paragraph', true, 'blockera-paragraph');
-
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.type('this is test text.');
-		});
-
 		it('should be able to add image + delete existed image', () => {
 			//  --------------------- add -----------------------
-			cy.getByDataTest('style-tab').click();
-
 			cy.getParentContainer('Image & Gradient').within(() => {
 				cy.get('[aria-label="Add New Background"]').click();
 			});
@@ -85,9 +77,6 @@ describe('media-image', () => {
 		});
 
 		it('should open the uploader by clicking on action buttons', () => {
-			//  act
-			cy.getByDataTest('style-tab').click();
-
 			cy.getParentContainer('Image & Gradient').within(() => {
 				cy.get('[aria-label="Add New Background"]').click();
 			});
@@ -127,14 +116,6 @@ describe('media-image', () => {
 
 	context('Initial Value', () => {
 		it('should get data from context on reload', () => {
-			addBlockToPost('core/paragraph', true);
-
-			cy.getIframeBody()
-				.find(`[data-type="core/paragraph"]`)
-				.type('this is test text.');
-
-			cy.getByDataTest('style-tab').click();
-
 			cy.getParentContainer('Image & Gradient').within(() => {
 				cy.get('[aria-label="Add New Background"]').click();
 			});
