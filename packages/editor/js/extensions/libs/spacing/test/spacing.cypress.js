@@ -21,6 +21,8 @@ describe('Spacing Extension', () => {
 		cy.getBlock('core/paragraph').type('This is test text.', { delay: 0 });
 
 		cy.getByDataTest('style-tab').click();
+
+		cy.get('.blockera-control-box-spacing').as('spacing');
 	});
 
 	describe('Margin', () => {
@@ -864,6 +866,455 @@ describe('Spacing Extension', () => {
 					.then((text) => {
 						expect(text.trim().replace(item, '')).to.eq('0');
 					});
+			});
+		});
+	});
+
+	describe('Side locking', () => {
+		it('Lock button for padding and margin', () => {
+			['margin', 'padding'].forEach((item) => {
+				//
+				// Horizontal locking
+				//
+
+				cy.get('@spacing').within(() => {
+					if (item === 'padding') {
+						// last is padding select
+						cy.get('.blockera-control-select.custom')
+							.last()
+							.within(() => {
+								cy.customSelect('Lock Horizontally');
+							});
+					} else {
+						// first is margin select
+						cy.get('.blockera-control-select.custom')
+							.first()
+							.within(() => {
+								cy.customSelect('Lock Horizontally');
+							});
+					}
+				});
+
+				cy.get(
+					`.blockera-control-spacing-shape-side.side-horizontal.side-${item}-horizontal`
+				).dragValue('horizontal', 20);
+
+				['left', 'right'].forEach((_side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+					)
+						.invoke('text')
+						.then((text) => {
+							expect(text.trim()).to.eq('20');
+						});
+				});
+
+				//
+				// open popover by clicking on left and right label
+				//
+				['left', 'right'].forEach((side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${side}"] [data-cy="label-control"]`
+					).click();
+
+					// set value
+					cy.get('[data-wp-component="Popover"]')
+						.last()
+						.within(() => {
+							cy.get('[data-test="popover-header"]').contains(
+								`Left & Right ${item} Space`,
+								{ matchCase: false }
+							);
+
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').type(
+								side === 'left' ? '30' : '40',
+								{ delay: 0, force: true }
+							);
+
+							// close popover
+							cy.getByAriaLabel('Close').click();
+						});
+
+					['left', 'right'].forEach((_side) => {
+						cy.get(
+							`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+						)
+							.invoke('text')
+							.then((text) => {
+								expect(text.trim()).to.eq(
+									side === 'left' ? '30' : '40'
+								);
+							});
+					});
+				});
+
+				//
+				// Vertical locking
+				//
+
+				cy.get('@spacing').within(() => {
+					if (item === 'padding') {
+						// last is padding select
+						cy.get('.blockera-control-select.custom')
+							.last()
+							.within(() => {
+								cy.customSelect('Lock Vertically');
+							});
+					} else {
+						// first is margin select
+						cy.get('.blockera-control-select.custom')
+							.first()
+							.within(() => {
+								cy.customSelect('Lock Vertically');
+							});
+					}
+				});
+
+				cy.get(
+					`.blockera-control-spacing-shape-side.side-vertical.side-${item}-vertical`
+				).dragValue('vertical', 20);
+
+				['top', 'bottom'].forEach((_side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+					)
+						.invoke('text')
+						.then((text) => {
+							expect(text.trim()).to.eq('20');
+						});
+				});
+
+				//
+				// open popover by clicking on top and bottom labels
+				//
+				['top', 'bottom'].forEach((side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${side}"] [data-cy="label-control"]`
+					).click();
+
+					// set value
+					cy.get('[data-wp-component="Popover"]')
+						.last()
+						.within(() => {
+							cy.get('[data-test="popover-header"]').contains(
+								`Top & Bottom ${item} Space`,
+								{ matchCase: false }
+							);
+
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').type(
+								side === 'top' ? '30' : '40',
+								{ delay: 0, force: true }
+							);
+
+							// close popover
+							cy.getByAriaLabel('Close').click();
+						});
+
+					['top', 'bottom'].forEach((_side) => {
+						cy.get(
+							`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+						)
+							.invoke('text')
+							.then((text) => {
+								expect(text.trim()).to.eq(
+									side === 'top' ? '30' : '40'
+								);
+							});
+					});
+				});
+
+				//
+				// Vertically and Horizontally locking
+				//
+
+				cy.get('@spacing').within(() => {
+					if (item === 'padding') {
+						// last is padding select
+						cy.get('.blockera-control-select.custom')
+							.last()
+							.within(() => {
+								cy.customSelect(
+									'Lock Vertically & Horizontally'
+								);
+							});
+					} else {
+						// first is margin select
+						cy.get('.blockera-control-select.custom')
+							.first()
+							.within(() => {
+								cy.customSelect(
+									'Lock Vertically & Horizontally'
+								);
+							});
+					}
+				});
+
+				cy.get(
+					`.blockera-control-spacing-shape-side.side-vertical.side-${item}-vertical`
+				).dragValue('vertical', 20);
+
+				cy.get(
+					`.blockera-control-spacing-shape-side.side-horizontal.side-${item}-horizontal`
+				).dragValue('horizontal', 20);
+
+				['top', 'bottom', 'left', 'right'].forEach((_side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+					)
+						.invoke('text')
+						.then((text) => {
+							expect(text.trim()).to.eq('60');
+						});
+				});
+
+				//
+				// open popover by clicking on left and right labels
+				//
+				['left', 'right'].forEach((side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${side}"] [data-cy="label-control"]`
+					).click();
+
+					// set value
+					cy.get('[data-wp-component="Popover"]')
+						.last()
+						.within(() => {
+							cy.get('[data-test="popover-header"]').contains(
+								`Left & Right ${item} Space`,
+								{ matchCase: false }
+							);
+
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').type(
+								side === 'left' ? '30' : '40',
+								{ delay: 0, force: true }
+							);
+
+							// close popover
+							cy.getByAriaLabel('Close').click();
+						});
+
+					['left', 'right'].forEach((_side) => {
+						cy.get(
+							`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+						)
+							.invoke('text')
+							.then((text) => {
+								expect(text.trim()).to.eq(
+									side === 'left' ? '30' : '40'
+								);
+							});
+					});
+				});
+
+				//
+				// open popover by clicking on top and bottom labels
+				//
+				['top', 'bottom'].forEach((side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${side}"] [data-cy="label-control"]`
+					).click();
+
+					// set value
+					cy.get('[data-wp-component="Popover"]')
+						.last()
+						.within(() => {
+							cy.get('[data-test="popover-header"]').contains(
+								`Top & Bottom ${item} Space`,
+								{ matchCase: false }
+							);
+
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').type(
+								side === 'top' ? '30' : '40',
+								{ delay: 0, force: true }
+							);
+
+							// close popover
+							cy.getByAriaLabel('Close').click();
+						});
+
+					['top', 'bottom'].forEach((_side) => {
+						cy.get(
+							`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+						)
+							.invoke('text')
+							.then((text) => {
+								expect(text.trim()).to.eq(
+									side === 'top' ? '30' : '40'
+								);
+							});
+					});
+				});
+
+				//
+				// All locking
+				//
+
+				cy.get('@spacing').within(() => {
+					if (item === 'padding') {
+						// last is padding select
+						cy.get('.blockera-control-select.custom')
+							.last()
+							.within(() => {
+								cy.customSelect('Lock All');
+							});
+					} else {
+						// first is margin select
+						cy.get('.blockera-control-select.custom')
+							.first()
+							.within(() => {
+								cy.customSelect('Lock All');
+							});
+					}
+				});
+
+				cy.get(
+					'.blockera-control-spacing-shape-side.side-all'
+				).dragValue('vertical', 20);
+
+				['top', 'bottom', 'left', 'right'].forEach((_side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+					)
+						.invoke('text')
+						.then((text) => {
+							expect(text.trim()).to.eq('60');
+						});
+				});
+
+				//
+				// open popover by clicking on top and bottom labels
+				//
+				['top', 'bottom'].forEach((side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${side}"] [data-cy="label-control"]`
+					).click();
+
+					// set value
+					cy.get('[data-wp-component="Popover"]')
+						.last()
+						.within(() => {
+							cy.get('[data-test="popover-header"]').contains(
+								`All Sides ${item}`,
+								{ matchCase: false }
+							);
+
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').type(
+								side === 'top' ? '30' : '40',
+								{ delay: 0, force: true }
+							);
+
+							// close popover
+							cy.getByAriaLabel('Close').click();
+						});
+
+					['top', 'bottom', 'left', 'right'].forEach((_side) => {
+						cy.get(
+							`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+						)
+							.invoke('text')
+							.then((text) => {
+								expect(text.trim()).to.eq(
+									side === 'top' ? '30' : '40'
+								);
+							});
+					});
+				});
+
+				//
+				// open popover by clicking on left and right labels
+				//
+				['left', 'right'].forEach((side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${side}"] [data-cy="label-control"]`
+					).click();
+
+					// set value
+					cy.get('[data-wp-component="Popover"]')
+						.last()
+						.within(() => {
+							cy.get('[data-test="popover-header"]').contains(
+								`All Sides ${item}`,
+								{ matchCase: false }
+							);
+
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').clear({ force: true });
+							cy.get('input[type=number]').type(
+								side === 'left' ? '30' : '40',
+								{ delay: 0, force: true }
+							);
+
+							// close popover
+							cy.getByAriaLabel('Close').click();
+						});
+
+					['top', 'bottom', 'left', 'right'].forEach((_side) => {
+						cy.get(
+							`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
+						)
+							.invoke('text')
+							.then((text) => {
+								expect(text.trim()).to.eq(
+									side === 'left' ? '30' : '40'
+								);
+							});
+					});
+				});
+
+				//
+				// No locking
+				//
+
+				cy.get('@spacing').within(() => {
+					if (item === 'padding') {
+						// last is padding select
+						cy.get('.blockera-control-select.custom')
+							.last()
+							.within(() => {
+								cy.customSelect('No Lock');
+							});
+					} else {
+						// first is margin select
+						cy.get('.blockera-control-select.custom')
+							.first()
+							.within(() => {
+								cy.customSelect('No Lock');
+							});
+					}
+				});
+
+				cy.get(
+					`.blockera-control-spacing-shape-side.side-${item}-top`
+				).dragValue('vertical', 20);
+
+				// Top label value
+				cy.get(
+					`[data-cy="box-spacing-${item}-top"] [data-cy="label-control"]`
+				)
+					.invoke('text')
+					.then((text) => {
+						expect(text.trim()).to.eq('60');
+					});
+
+				['bottom', 'left', 'right'].forEach((side) => {
+					cy.get(
+						`[data-cy="box-spacing-${item}-${side}"] [data-cy="label-control"]`
+					)
+						.invoke('text')
+						.then((text) => {
+							expect(text.trim()).to.eq('40');
+						});
+				});
 			});
 		});
 	});
