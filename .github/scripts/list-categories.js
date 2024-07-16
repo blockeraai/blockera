@@ -28,7 +28,7 @@ const main = () => {
 		}
 	});
 
-	console.log(Array.from(categories).join(','));
+	console.log(JSON.stringify(Array.from(categories)));
 };
 
 main();
