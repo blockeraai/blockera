@@ -326,7 +326,7 @@ export function MarginAll({
 				{openPopover === sideId && (
 					<SidePopover
 						defaultValue={defaultValue}
-						id={getId(id, 'margin')}
+						id={getId(id, 'margin.top')}
 						type="margin"
 						icon={<Icon icon="margin-all" iconSize="18" />}
 						onClose={() => {

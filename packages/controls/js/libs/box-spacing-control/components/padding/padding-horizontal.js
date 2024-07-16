@@ -146,7 +146,7 @@ export function PaddingHorizontal({
 			<PaddingHorizontalShape
 				className={[
 					'side-horizontal',
-					'side-padding-right',
+					'side-padding-horizontal',
 					focusSide === sideId ? 'selected-side' : '',
 					valueAddonControlProps.isOpen
 						? 'selected-side selected-side-value-addon'
