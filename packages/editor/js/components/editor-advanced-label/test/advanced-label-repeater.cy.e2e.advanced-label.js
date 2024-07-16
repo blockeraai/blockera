@@ -6,7 +6,7 @@ import {
 	setDeviceType,
 	getWPDataObject,
 	getSelectedBlock,
-} from '../../../../../dev-cypress/js/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Repeater Control label testing (Image & Gradient)', () => {
 	beforeEach(() => {

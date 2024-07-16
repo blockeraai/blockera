@@ -6,7 +6,7 @@ import {
 	setBlockState,
 	addBlockState,
 	setDeviceType,
-} from '../../../../../dev-cypress/js/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Toggle Select Control label testing (Overflow)', () => {
 	beforeEach(() => {

@@ -2,7 +2,7 @@ import {
 	addBlockToPost,
 	createPost,
 	setDeviceType,
-} from '../../../../../dev-cypress/js/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 import { experimental } from '@blockera/env';
 
 if (experimental().get('editor.extensions.effectsExtension.divider')) {

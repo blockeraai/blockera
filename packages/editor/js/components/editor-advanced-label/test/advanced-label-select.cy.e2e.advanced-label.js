@@ -6,41 +6,43 @@ import {
 	setBlockState,
 	addBlockState,
 	setDeviceType,
-} from '../../../../../dev-cypress/js/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
-describe('Color Control label testing (BG Color)', () => {
+describe('Select Control label testing (Position)', () => {
 	beforeEach(() => {
 		createPost();
 
 		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
 
 		// Alias
-		cy.getParentContainer('BG Color').within(() => {
-			cy.getByDataCy('color-label').as('color-label');
-		});
+		cy.getParentContainer('Position').as('position-container');
 	});
 
-	it('should display changed value on BG Color -> Normal -> Desktop', () => {
+	it('should display changed value on Position -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state',
 			'not-have'
 		);
 
 		// Set value
-		cy.setColorControlValue('BG Color', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.customSelect('Relative');
+		});
 
 		// Assert label after set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state'
 		);
 
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative');
+		});
 
 		/**
 		 * Tablet device
@@ -49,13 +51,14 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state'
 		);
-
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative');
+		});
 
 		/**
 		 * Pseudo State (Hover/Tablet)
@@ -64,44 +67,48 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state'
 		);
-
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative');
+		});
 
 		// Assert state graph
-		cy.checkStateGraph('Background', 'BG Color', {
-			desktop: ['Normal'],
-		});
+		cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 	});
 
-	it('should display changed value on BG Color -> Hover -> Desktop', () => {
+	it('should display changed value on Position -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
 		addBlockState('hover');
+
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
-			'changed-in-normal-state',
+			'Position',
+			'Position',
+			'changed-in-secondary-state',
 			'not-have'
 		);
 
 		// Set value
-		cy.setColorControlValue('BG Color', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.customSelect('Relative');
+		});
 
 		// Assert label after set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-secondary-state'
 		);
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative');
+		});
 
 		/**
 		 * Normal
@@ -110,13 +117,15 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-other-state'
 		);
 
 		// Assert control
-		cy.get('@color-label').should('not.include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative').should('not.exist');
+		});
 
 		/**
 		 * Tablet device
@@ -125,29 +134,33 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-other-state'
 		);
 
 		// Assert control
-		cy.get('@color-label').should('not.include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative').should('not.exist');
+		});
 
 		// Assert state graph
-		cy.checkStateGraph('Background', 'BG Color', { desktop: ['Hover'] });
+		cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 	});
 
-	it('should display changed value on BG Color, when set value in two states', () => {
+	it('should display changed value on Position, when set value in two states', () => {
 		/**
 		 * Normal
 		 */
 		// Set value
-		cy.setColorControlValue('BG Color', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.customSelect('Relative');
+		});
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state'
 		);
 
@@ -158,23 +171,27 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state'
 		);
 
 		// Set value
-		cy.setColorControlValue('BG Color', 'fff');
+		cy.get('@position-container').within(() => {
+			cy.customSelect('Absolute');
+		});
 
 		// Assert label after set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-secondary-state'
 		);
 
 		// Assert control
-		cy.get('@color-label').should('include.text', 'fff');
+		cy.get('@position-container').within(() => {
+			cy.contains('Absolute');
+		});
 
 		/**
 		 * Tablet device
@@ -183,42 +200,48 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state'
 		);
 
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative');
+		});
 
 		// Assert state graph
-		cy.checkStateGraph('Background', 'BG Color', {
+		cy.checkStateGraph('Position', 'Position', {
 			desktop: ['Normal', 'Hover'],
 		});
 	});
 
-	it('should display changed value on BG Color -> Normal -> Tablet', () => {
-		setDeviceType('Tablet');
+	it('should display changed value on Position -> Normal -> Mobile', () => {
+		setDeviceType('Mobile');
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state',
 			'not-have'
 		);
 
 		// Set value
-		cy.setColorControlValue('BG Color', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.customSelect('Relative');
+		});
 
 		// Assert label after set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state'
 		);
 
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative');
+		});
 
 		/**
 		 * Desktop device
@@ -227,45 +250,48 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-other-state'
 		);
-
 		// Assert control
-		cy.get('@color-label').should('not.include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative').should('not.exist');
+		});
 
 		// Assert state graph
-		cy.checkStateGraph('Background', 'BG Color', {
-			tablet: ['Normal'],
-		});
+		cy.checkStateGraph('Position', 'Position', { mobile: ['Normal'] });
 	});
 
-	it('should display changed value on BG Color -> Hover -> Tablet', () => {
-		setDeviceType('Tablet');
+	it('should display changed value on Position -> Hover -> Mobile', () => {
+		setDeviceType('Mobile');
 		/**
 		 * Hover
 		 */
 		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-normal-state',
 			'not-have'
 		);
 
 		// Set value
-		cy.setColorControlValue('BG Color', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.customSelect('Relative');
+		});
 
 		// Assert label after set value
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-secondary-state'
 		);
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative');
+		});
 
 		/**
 		 * Normal
@@ -274,13 +300,15 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-other-state'
 		);
 
 		// Assert control
-		cy.get('@color-label').should('not.include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative').should('not.exist');
+		});
 
 		/**
 		 * Desktop device (Active)
@@ -289,72 +317,65 @@ describe('Color Control label testing (BG Color)', () => {
 
 		// Assert label
 		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
+			'Position',
+			'Position',
 			'changed-in-other-state'
 		);
 
 		// Assert control
-		cy.get('@color-label').should('not.include.text', 'ccc');
-
-		/**
-		 * Desktop device (Normal)
-		 */
-		setBlockState('Normal');
-
-		// Assert label
-		cy.checkLabelClassName(
-			'Background',
-			'BG Color',
-			'changed-in-other-state'
-		);
-
-		// Assert control
-		cy.get('@color-label').should('not.include.text', 'ccc');
+		cy.get('@position-container').within(() => {
+			cy.contains('Relative').should('not.exist');
+		});
 
 		// Assert state graph
-		cy.checkStateGraph('Background', 'BG Color', { tablet: ['Hover'] });
+		cy.checkStateGraph('Position', 'Position', { mobile: ['Hover'] });
 	});
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
 			// Set value in normal/desktop
-			cy.setColorControlValue('BG Color', 'ccc');
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Relative');
+			});
 
 			// Set value in hover/desktop
 			addBlockState('hover');
-			cy.setColorControlValue('BG Color', 'bbb');
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Absolute');
+			});
 
 			// Set value in hover/tablet
 			setDeviceType('Tablet');
-			cy.setColorControlValue('BG Color', 'aaa');
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Fixed');
+			});
 
 			// Set value in normal/tablet
 			setBlockState('Normal');
-			cy.setColorControlValue('BG Color', 'eee');
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Sticky');
+			});
 
 			context(
-				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in normal/tablet',
+				'should correctly reset blockeraPosition, and display effected fields(label, control, stateGraph) in normal/tablet',
 				() => {
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Background',
-						'BG Color',
-						'reset'
-					);
+					// Reset to default
+					cy.resetBlockeraAttribute('Position', 'Position', 'reset');
 
 					// Assert label
 					cy.checkLabelClassName(
-						'Background',
-						'BG Color',
+						'Position',
+						'Position',
 						'changed-in-normal-state'
 					);
 
 					// Assert control
-					cy.get('@color-label').should('include.text', 'ccc');
+					cy.get('@position-container').within(() => {
+						cy.contains('Relative');
+					});
 
 					// Assert state graph
-					cy.checkStateGraph('Background', 'BG Color', {
+					cy.checkStateGraph('Position', 'Position', {
 						tablet: ['Hover'],
 						desktop: ['Hover', 'Normal'],
 					});
@@ -370,28 +391,26 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in hover/tablet',
+				'should correctly reset blockeraPosition, and display effected fields(label, control, stateGraph) in hover/tablet',
 				() => {
 					setBlockState('Hover');
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Background',
-						'BG Color',
-						'reset'
-					);
+					// Reset to default
+					cy.resetBlockeraAttribute('Position', 'Position', 'reset');
 
-					// Assert label
+					// // Assert label
 					cy.checkLabelClassName(
-						'Background',
-						'BG Color',
+						'Position',
+						'Position',
 						'changed-in-normal-state'
 					);
 
 					// Assert control
-					cy.get('@color-label').should('include.text', 'ccc');
+					cy.get('@position-container').within(() => {
+						cy.contains('Relative');
+					});
 
 					// Assert state graph
-					cy.checkStateGraph('Background', 'BG Color', {
+					cy.checkStateGraph('Position', 'Position', {
 						desktop: ['Hover', 'Normal'],
 					});
 
@@ -406,65 +425,69 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in normal/desktop',
+				'should correctly reset blockeraPosition, and display effected fields(label, control, stateGraph) in normal/desktop',
 				() => {
 					setDeviceType('Desktop');
 					setBlockState('Normal');
 					// Reset to default
-					cy.resetBlockeraAttribute(
-						'Background',
-						'BG Color',
-						'reset'
-					);
+					cy.resetBlockeraAttribute('Position', 'Position', 'reset');
 
 					// Assert label
 					cy.checkLabelClassName(
-						'Background',
-						'BG Color',
+						'Position',
+						'Position',
 						'changed-in-other-state'
 					);
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
+					//Assert control
+					cy.get('@position-container').within(() => {
+						cy.contains('Default');
+					});
 
 					// Assert state graph
-					cy.checkStateGraph('Background', 'BG Color', {
+					cy.checkStateGraph('Position', 'Position', {
 						desktop: ['Hover'],
 					});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
-						expect('').to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBackgroundColor')
+						expect({
+							type: 'static',
+							position: {
+								top: '',
+								right: '',
+								left: '',
+								bottom: '',
+							},
+						}).to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraPosition')
 						);
 					});
 				}
 			);
 
 			context(
-				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in hover/desktop',
+				'should correctly reset blockeraPosition, and display effected fields(label, control, stateGraph) in hover/tablet',
 				() => {
 					setBlockState('Hover');
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Background',
-						'BG Color',
-						'reset'
-					);
+					// Reset to default
+					cy.resetBlockeraAttribute('Position', 'Position', 'reset');
 
 					// Assert label
 					cy.checkLabelClassName(
-						'Background',
-						'BG Color',
+						'Position',
+						'Position',
 						'changed-in-secondary-state',
 						'not-have'
 					);
 
 					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
+					cy.get('@position-container').within(() => {
+						cy.contains('Default');
+					});
 
 					// Assert state graph
-					cy.checkStateGraph('Background', 'BG Color', {});
+					cy.checkStateGraph('Position', 'Position', {});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
@@ -477,55 +500,68 @@ describe('Color Control label testing (BG Color)', () => {
 			);
 		});
 
-		it('set value in normal/desktop and navigate between states', () => {
+		it('set value in normal/desktop(root) and navigate between states', () => {
 			setBlockState('Normal');
-
-			cy.setColorControlValue('BG Color', '1db0cc');
+			// Set value
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Sticky');
+			});
 
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-normal-state'
 			);
+
 			// Assert control
-			cy.get('@color-label').should('include.text', '1db0cc');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
+			cy.checkStateGraph('Position', 'Position', {
 				desktop: ['Normal'],
 			});
 
-			// Navigate between states and devices
+			// Navigate between states :
 			// Hover/Desktop
 			setBlockState('Hover');
+
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-normal-state'
 			);
+
 			// Assert control
-			cy.get('@color-label').should('include.text', '1db0cc');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
+			cy.checkStateGraph('Position', 'Position', {
 				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
 			setDeviceType('Tablet');
+
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-normal-state'
 			);
+
 			// Assert control
-			cy.get('@color-label').should('include.text', '1db0cc');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
+			cy.checkStateGraph('Position', 'Position', {
 				desktop: ['Normal'],
 			});
 
@@ -533,32 +569,41 @@ describe('Color Control label testing (BG Color)', () => {
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-normal-state'
 			);
+
 			// Assert control
-			cy.get('@color-label').should('include.text', '1db0cc');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
+			cy.checkStateGraph('Position', 'Position', {
 				desktop: ['Normal'],
 			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('#1db0cc').to.be.eq(
-					getSelectedBlock(data, 'blockeraBackgroundColor')
+				expect({
+					type: 'sticky',
+					position: {
+						top: '',
+						right: '',
+						left: '',
+						bottom: '',
+					},
+				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraPosition'));
+
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.desktop.attributes
 				);
 
 				expect({}).to.be.deep.eq(
@@ -569,38 +614,46 @@ describe('Color Control label testing (BG Color)', () => {
 		});
 
 		it('set value in hover/desktop and navigate between states', () => {
-			cy.setColorControlValue('BG Color', '1db0cc');
+			// Set value
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Sticky');
+			});
 
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-secondary-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', '1db0cc');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
+			cy.checkStateGraph('Position', 'Position', {
 				desktop: ['Hover'],
 			});
 
-			// Navigate between states and devices:
+			// Navigate between states :
 			// Normal/Desktop
 			setBlockState('Normal');
+
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
+			cy.get('@position-container').within(() => {
+				cy.contains('Default');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
+			cy.checkStateGraph('Position', 'Position', {
 				desktop: ['Hover'],
 			});
 
@@ -608,56 +661,68 @@ describe('Color Control label testing (BG Color)', () => {
 			setDeviceType('Tablet');
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
+			cy.get('@position-container').within(() => {
+				cy.contains('Default');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
+			cy.checkStateGraph('Position', 'Position', {
 				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
 			setBlockState('Hover');
+
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
+			cy.get('@position-container').within(() => {
+				cy.contains('Default');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
+			cy.checkStateGraph('Position', 'Position', {
 				desktop: ['Hover'],
 			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('').to.be.eq(
-					getSelectedBlock(data, 'blockeraBackgroundColor')
+				expect({
+					type: 'sticky',
+					position: { top: '', left: '', right: '', bottom: '' },
+				}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.desktop.attributes.blockeraPosition
+				);
+
+				expect({
+					type: 'static',
+					position: {
+						top: '',
+						left: '',
+						right: '',
+						bottom: '',
+					},
+				}).to.be.deep.eq(getSelectedBlock(data, 'blockeraPosition'));
+
+				expect({}).to.be.deep.eq(
+					getSelectedBlock(data, 'blockeraBlockStates').hover
+						.breakpoints.tablet.attributes
 				);
 
 				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes
-				);
-
-				expect({
-					blockeraBackgroundColor: '#1db0cc',
-				}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.desktop.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes
 				);
 			});
@@ -667,93 +732,109 @@ describe('Color Control label testing (BG Color)', () => {
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
 			// Set value in normal/desktop
-			cy.setColorControlValue('BG Color', 'ccc');
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Relative');
+			});
 
 			// Set value in hover/desktop
 			addBlockState('hover');
-			cy.setColorControlValue('BG Color', 'bbb');
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Absolute');
+			});
 
 			// Set value in hover/tablet
 			setDeviceType('Tablet');
-			cy.setColorControlValue('BG Color', 'aaa');
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Fixed');
+			});
 
 			// Set value in normal/tablet
 			setBlockState('Normal');
-			cy.setColorControlValue('BG Color', 'eee');
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Sticky');
+			});
 
 			// Reset All
-			cy.resetBlockeraAttribute('Background', 'BG Color', 'reset-all');
+			cy.resetBlockeraAttribute('Position', 'Position', 'reset-all');
 
 			context(
-				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in all states',
+				'should correctly reset blockeraPosition, and display effected fields(label, control, stateGraph) in all states',
 				() => {
 					// Normal/Tablet
 					// Assert label
 					cy.checkLabelClassName(
-						'Background',
-						'BG Color',
+						'Position',
+						'Position',
 						'changed-in-normal-state',
 						'not-have'
 					);
 
 					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
+					cy.get('@position-container').within(() => {
+						cy.contains('Default');
+					});
 
 					// Assert state graph
-					cy.checkStateGraph('Background', 'BG Color', {});
+					cy.checkStateGraph('Position', 'Position', {});
 
 					// Hover/Tablet
 					setBlockState('Hover');
 					// Assert label
 					cy.checkLabelClassName(
-						'Background',
-						'BG Color',
-						'changed-in-secondary-state',
-						'not-have'
-					);
-
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Background', 'BG Color', {});
-
-					// Hover/Desktop
-					setDeviceType('Desktop');
-					// Assert label
-					cy.checkLabelClassName(
-						'Background',
-						'BG Color',
-						'changed-in-secondary-state',
-						'not-have'
-					);
-
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Background', 'BG Color', {});
-
-					// Normal/Desktop
-					setBlockState('Normal');
-					// Assert label
-					cy.checkLabelClassName(
-						'Background',
-						'BG Color',
+						'Position',
+						'Position',
 						'changed-in-normal-state',
 						'not-have'
 					);
 
 					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
+					cy.get('@position-container').within(() => {
+						cy.contains('Default');
+					});
 
 					// Assert state graph
-					cy.checkStateGraph('Background', 'BG Color', {});
+					cy.checkStateGraph('Position', 'Position', {});
+
+					// Hover/Desktop
+					setDeviceType('Desktop');
+					// Assert label
+					cy.checkLabelClassName(
+						'Position',
+						'Position',
+						'changed-in-normal-state',
+						'not-have'
+					);
+
+					// Assert control
+					cy.get('@position-container').within(() => {
+						cy.contains('Default');
+					});
+
+					// Assert state graph
+					cy.checkStateGraph('Position', 'Position', {});
+
+					// Normal/Desktop
+					setBlockState('Normal');
+					// Assert label
+					cy.checkLabelClassName(
+						'Position',
+						'Position',
+						'changed-in-normal-state',
+						'not-have'
+					);
+
+					// Assert control
+					cy.get('@position-container').within(() => {
+						cy.contains('Default');
+					});
+
+					// Assert state graph
+					cy.checkStateGraph('Position', 'Position', {});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
-						expect('').to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBackgroundColor')
+						expect('static').to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraPosition').type
 						);
 
 						expect({}).to.be.deep.eq(
@@ -776,79 +857,81 @@ describe('Color Control label testing (BG Color)', () => {
 		});
 
 		it('set value in normal/desktop and navigate between states', () => {
-			cy.setColorControlValue('BG Color', '{selectall}c4c4c4');
+			// Set value
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Sticky');
+			});
 
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-normal-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'c4c4c4');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
-				desktop: ['Normal'],
-			});
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 
 			// Navigate between states and devices
 			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-normal-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'c4c4c4');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
-				desktop: ['Normal'],
-			});
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 
 			// Hover/Tablet
 			setDeviceType('Tablet');
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-normal-state'
 			);
 
-			// Assert control
-			cy.get('@color-label').should('include.text', 'c4c4c4');
-
-			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
-				desktop: ['Normal'],
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
 			});
 
-			// Normal/Desktop
+			// Assert state graph
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
+
+			// Normal/Tablet
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-normal-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'c4c4c4');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
-				desktop: ['Normal'],
-			});
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Normal'] });
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('#c4c4c4').to.be.eq(
-					getSelectedBlock(data, 'blockeraBackgroundColor')
+				expect('sticky').to.be.eq(
+					getSelectedBlock(data, 'blockeraPosition').type
 				);
 
 				expect({}).to.be.deep.eq(
@@ -871,79 +954,84 @@ describe('Color Control label testing (BG Color)', () => {
 		it('set value in hover/desktop and navigate between states', () => {
 			setBlockState('Hover');
 
-			cy.setColorControlValue('BG Color', '{selectall}c4c4c4');
+			// Set value
+			cy.get('@position-container').within(() => {
+				cy.customSelect('Sticky');
+			});
 
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-secondary-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'c4c4c4');
+			cy.get('@position-container').within(() => {
+				cy.contains('Sticky');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
-				desktop: ['Hover'],
-			});
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 
 			// Navigate between states and devices
 			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
+			cy.get('@position-container').within(() => {
+				cy.contains('Default');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
-				desktop: ['Hover'],
-			});
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 
 			// Normal/Tablet
 			setDeviceType('Tablet');
+
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
+			cy.get('@position-container').within(() => {
+				cy.contains('Default');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
-				desktop: ['Hover'],
-			});
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 
 			// Hover/Tablet
 			setBlockState('Hover');
+
 			// Assert label
 			cy.checkLabelClassName(
-				'Background',
-				'BG Color',
+				'Position',
+				'Position',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
+			cy.get('@position-container').within(() => {
+				cy.contains('Default');
+			});
 
 			// Assert state graph
-			cy.checkStateGraph('Background', 'BG Color', {
-				desktop: ['Hover'],
-			});
+			cy.checkStateGraph('Position', 'Position', { desktop: ['Hover'] });
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('').to.be.eq(
-					getSelectedBlock(data, 'blockeraBackgroundColor')
+				expect('static').to.be.eq(
+					getSelectedBlock(data, 'blockeraPosition').type
 				);
 
 				expect({}).to.be.deep.eq(
@@ -952,7 +1040,10 @@ describe('Color Control label testing (BG Color)', () => {
 				);
 
 				expect({
-					blockeraBackgroundColor: '#c4c4c4',
+					blockeraPosition: {
+						type: 'sticky',
+						position: { top: '', left: '', right: '', bottom: '' },
+					},
 				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.desktop.attributes
