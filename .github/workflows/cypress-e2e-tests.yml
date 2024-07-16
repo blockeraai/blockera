@@ -7,7 +7,7 @@ on:
 
 jobs:
     detect_categories:
-        name: Detect Categories
+        name: Detecting E2E Test Categories
         runs-on: ubuntu-latest
         outputs:
             categories: ${{ steps.set_categories.outputs.categories }}
@@ -26,7 +26,7 @@ jobs:
             - name: List test categories
               id: set_categories
               run: |
-                  categories=$(node .github/scripts/list-categories.js)
+                  categories=$(node .github/scripts/list-e2e-test-categories.js)
                   categories_json=$(echo $categories | jq -c '.')
                   echo "categories=$categories_json" >> $GITHUB_OUTPUT
 
@@ -35,7 +35,7 @@ jobs:
                   echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
 
     cypress_e2e_tests:
-        name: Run Tests
+        name: Running E2E Test
         needs: detect_categories
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
