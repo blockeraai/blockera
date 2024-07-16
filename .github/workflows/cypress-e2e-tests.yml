@@ -29,6 +29,10 @@ jobs:
                   echo "categories=${categories}"
                   echo "categories=${categories}" >> $GITHUB_OUTPUT
 
+            - name: Print categories output
+              run: |
+                  echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
+
     cypress_e2e_tests:
         needs: detect_categories
         runs-on: ubuntu-latest
@@ -67,7 +71,7 @@ jobs:
                   echo "Running category: ${{ matrix.category }}"
 
             - name: Run Cypress E2E Tests
-              run: npm run test:e2e -- --spec "packages/**/*.cy.e2e.${{ matrix.category }}.js"
+              run: npm run test:e2e -- --spec "packages/**/*${{ matrix.category }}*.cy.e2e.*.js"
 
             - name: Stop WordPress Environment
               run: npm run env:stop
