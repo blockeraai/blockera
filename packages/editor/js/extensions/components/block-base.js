@@ -21,7 +21,6 @@ import {
 /**
  * Blockera dependencies
  */
-import { classNames } from '@blockera/classnames';
 import {
 	omit,
 	isEquals,
@@ -223,6 +222,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const { getAttributesWithIds, handleOnChangeAttributes } =
 			useAttributes(setAttributes, {
+				className,
 				isNormalState,
 				getAttributes,
 				blockId: name,
@@ -279,151 +279,97 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const { edit: BlockEditComponent } = additional;
 
-		const FilterAttributes = (): MixedElement => {
-			/**
-			 * Filterable attributes before initializing block edit component.
-			 *
-			 * hook: 'blockera.blockEdit.attributes'
-			 *
-			 * @since 1.0.0
-			 */
-			useEffect(
-				() => {
-					const { added, updated } = detailedDiff(
-						attributes,
-						prepareAttributesDefaultValues(defaultAttributes)
-					);
-
-					// Create mutable constant to prevent directly change to immutable state constant.
-					let filteredAttributes = { ...attributes };
-
-					const hasCompatId = attributes?.blockeraCompatId;
-
-					/**
-					 * Filtering block attributes based on "blockeraCompatId" attribute value to running WordPress compatibilities.
-					 *
-					 * hook: 'blockera.blockEdit.compatibility.attributes'
-					 *
-					 * @since 1.0.0
-					 */
-					if (!hasCompatId) {
-						filteredAttributes = applyFilters(
-							'blockera.blockEdit.attributes',
-							getAttributesWithIds(
-								filteredAttributes,
-								'blockeraCompatId'
-							),
-							args
-						);
-					}
-
-					/**
-					 * Filtering block attributes based on "blockeraPropsId" attribute.
-					 *
-					 * hook: 'blockera.blockEdit.attributes'
-					 *
-					 * @since 1.0.0
-					 */
-					if (!attributes?.blockeraPropsId && hasCompatId) {
-						filteredAttributes = applyFilters(
-							'blockera.blockEdit.attributes',
-							getAttributesWithIds(
-								filteredAttributes,
-								'blockeraPropsId'
-							),
-							args
-						);
-					}
-
-					// Merging block classnames ...
-					if (!attributes?.className && hasCompatId) {
-						filteredAttributes = {
-							...filteredAttributes,
-							className: classNames(
-								{
-									'blockera-block': true,
-									[`blockera-block-${clientId}`]: true,
-								},
-								additional.editorProps.className || ''
-							),
-						};
-					} else if ('' === className && hasCompatId) {
-						filteredAttributes = {
-							...filteredAttributes,
-							className: classNames(
-								{
-									'blockera-block': true,
-									[`blockera-block-${clientId}`]: true,
-								},
-								additional.editorProps.className || ''
-							),
-						};
-					}
-
-					// Assume disabled blockera panel, so filtering attributes to clean up all blockera attributes.
-					if (
-						!isActive &&
-						hasCompatId &&
-						attributes?.blockeraPropsId
-					) {
-						filteredAttributes = {
-							...attributes,
-							...omitWithPattern(
-								prepareAttributesDefaultValues(
-									defaultAttributes
-								),
-								ignoreDefaultBlockAttributeKeysRegExp()
-							),
-						};
-					}
-
-					// Prevent redundant set state!
-					if (isEquals(attributes, filteredAttributes)) {
-						return;
-					}
-
-					// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
-					if (
-						!Object.keys(added).length &&
-						!Object.keys(updated).length &&
-						(hasCompatId ||
-							isEquals(
-								omit(attributes, ['blockeraCompatId']),
-								omit(filteredAttributes, ['blockeraCompatId'])
-							))
-					) {
-						return;
-					}
-
-					setAttributes(filteredAttributes);
-				},
-				// eslint-disable-next-line
-				[]
-			);
-
-			useEffect(() => {
-				// Creat mutable constant to prevent directly change to immutable state constant.
+		useEffect(
+			() => {
+				// Create mutable constant to prevent directly change to immutable state constant.
 				let filteredAttributes = { ...attributes };
 
-				if (!isEquals(activeVariation, activeBlockVariation)) {
-					setActiveBlockVariation(activeBlockVariation);
+				const hasPropsId = attributes?.blockeraPropsId;
+				const hasCompatId = attributes?.blockeraCompatId;
 
+				/**
+				 * Filtering block attributes based on "blockeraCompatId" attribute value to running WordPress compatibilities.
+				 *
+				 * hook: 'blockera.blockEdit.compatibility.attributes'
+				 *
+				 * @since 1.0.0
+				 */
+				if (!hasCompatId) {
+					filteredAttributes = applyFilters(
+						'blockera.blockEdit.attributes',
+						getAttributesWithIds(
+							filteredAttributes,
+							'blockeraCompatId'
+						),
+						args
+					);
+				}
+
+				// Assume disabled blockera panel, so filtering attributes to clean up all blockera attributes.
+				if (!isActive && hasCompatId && hasPropsId) {
 					filteredAttributes = {
 						...attributes,
-						blockeraCompatId: '',
+						...omitWithPattern(
+							prepareAttributesDefaultValues(defaultAttributes),
+							ignoreDefaultBlockAttributeKeysRegExp()
+						),
 					};
-
-					// Prevent redundant set state!
-					if (isEquals(attributes, filteredAttributes)) {
-						return;
-					}
-
-					setAttributes(filteredAttributes);
 				}
-			}, [activeBlockVariation]);
 
-			return <></>;
-		};
+				// Prevent redundant set state!
+				if (isEquals(attributes, filteredAttributes)) {
+					return;
+				}
+
+				const filteredAttributesWithoutIds = {
+					...filteredAttributes,
+					blockeraPropsId: '',
+					blockeraCompatId: '',
+					...(attributes.hasOwnProperty('className')
+						? { className: attributes?.className || '' }
+						: {}),
+				};
+
+				const { added, updated } = detailedDiff(
+					filteredAttributesWithoutIds,
+					prepareAttributesDefaultValues(defaultAttributes)
+				);
+
+				// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
+				if (
+					!Object.keys(added).length &&
+					!Object.keys(updated).length &&
+					isEquals(attributes, filteredAttributesWithoutIds)
+				) {
+					return;
+				}
+
+				setAttributes(filteredAttributes);
+			},
+			// eslint-disable-next-line
+			[attributes]
+		);
+
+		useEffect(() => {
+			// Creat mutable constant to prevent directly change to immutable state constant.
+			let filteredAttributes = { ...attributes };
+
+			if (!isEquals(activeVariation, activeBlockVariation)) {
+				setActiveBlockVariation(activeBlockVariation);
+
+				filteredAttributes = {
+					...attributes,
+					blockeraCompatId: '',
+				};
+
+				// Prevent redundant set state!
+				if (isEquals(attributes, filteredAttributes)) {
+					return;
+				}
+
+				setAttributes(filteredAttributes);
+			}
+		}, [activeBlockVariation]);
 
 		const stylesWrapperId = 'blockera-styles-wrapper';
 		const iframeBodyElement = getIframeTag('body');
@@ -485,7 +431,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							isActive,
 						}}
 					/>
-					<FilterAttributes />
 					<SlotFillProvider>
 						<BlockPartials
 							clientId={clientId}

@@ -6,6 +6,11 @@
 import { select } from '@wordpress/data';
 
 /**
+ * Blockera dependencies
+ */
+import { classNames } from '@blockera/classnames';
+
+/**
  * Internal dependencies
  */
 import reducer from './reducer';
@@ -18,6 +23,7 @@ export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
 	{
 		blockId,
+		className,
 		isNormalState,
 		getAttributes,
 		innerBlocks,
@@ -25,6 +31,7 @@ export const useAttributes = (
 		blockeraInnerBlocks,
 	}: {
 		blockId: string,
+		className: string,
 		innerBlocks: Object,
 		isNormalState: () => boolean,
 		blockeraInnerBlocks: Object,
@@ -64,7 +71,8 @@ export const useAttributes = (
 	): void => {
 		const { ref, effectiveItems = {} } = options;
 		const { getSelectedBlock } = select('core/block-editor');
-		const { attributes = getAttributes() } = getSelectedBlock() || {};
+		const { attributes = getAttributes(), clientId } =
+			getSelectedBlock() || {};
 		const {
 			getExtensionCurrentBlock,
 			getExtensionInnerBlockState,
@@ -74,7 +82,37 @@ export const useAttributes = (
 
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!
-		const _attributes = { ...attributes };
+		let _attributes = { ...attributes };
+
+		// Sets "blockeraPropsId" if it is empty.
+		if (!_attributes?.blockeraPropsId) {
+			_attributes = getAttributesWithIds(_attributes, 'blockeraPropsId');
+		}
+
+		// Sets "className" attribute value is existing on block attributes to merge with default value.
+		if (
+			!attributes?.className &&
+			_attributes?.hasOwnProperty('className')
+		) {
+			_attributes = {
+				..._attributes,
+				className: classNames({
+					'blockera-block': true,
+					[`blockera-block-${clientId}`]: true,
+				}),
+			};
+		} else if (
+			'' === className &&
+			_attributes?.hasOwnProperty('className')
+		) {
+			_attributes = {
+				..._attributes,
+				className: classNames({
+					'blockera-block': true,
+					[`blockera-block-${clientId}`]: true,
+				}),
+			};
+		}
 
 		const currentBlock = getExtensionCurrentBlock();
 
