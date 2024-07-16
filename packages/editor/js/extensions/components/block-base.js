@@ -294,7 +294,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						prepareAttributesDefaultValues(defaultAttributes)
 					);
 
-					// Creat mutable constant to prevent directly change to immutable state constant.
+					// Create mutable constant to prevent directly change to immutable state constant.
 					let filteredAttributes = { ...attributes };
 
 					const hasCompatId = attributes?.blockeraCompatId;
