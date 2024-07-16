@@ -14,7 +14,7 @@ export function alignItemsFromWPCompatibility({
 		attributes?.blockeraFlexLayout?.alignItems !== '' ||
 		attributes?.layout?.verticalAlignment === undefined
 	) {
-		return false;
+		return attributes;
 	}
 
 	// left WP value - right Blockera value
@@ -25,11 +25,10 @@ export function alignItemsFromWPCompatibility({
 		stretch: 'stretch',
 	};
 
-	return {
-		blockeraFlexLayout: {
-			alignItems: values[attributes?.layout?.verticalAlignment] ?? '',
-		},
-	};
+	attributes.blockeraFlexLayout.alignItems =
+		values[attributes?.layout?.verticalAlignment] ?? '';
+
+	return attributes;
 }
 
 export function justifyContentFromWPCompatibility({
@@ -41,7 +40,7 @@ export function justifyContentFromWPCompatibility({
 		attributes?.blockeraFlexLayout?.justifyContent !== '' ||
 		attributes?.layout?.justifyContent === undefined
 	) {
-		return false;
+		return attributes;
 	}
 
 	// left WP value - right Blockera value
@@ -52,11 +51,10 @@ export function justifyContentFromWPCompatibility({
 		'space-between': 'space-between',
 	};
 
-	return {
-		blockeraFlexLayout: {
-			justifyContent: values[attributes?.layout?.justifyContent] ?? '',
-		},
-	};
+	attributes.blockeraFlexLayout.justifyContent =
+		values[attributes?.layout?.justifyContent] ?? '';
+
+	return attributes;
 }
 
 export function directionFromWPCompatibility({
@@ -65,7 +63,7 @@ export function directionFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (attributes?.layout?.orientation === undefined) {
-		return false;
+		return attributes;
 	}
 
 	// left WP value - right Blockera value
@@ -74,11 +72,10 @@ export function directionFromWPCompatibility({
 		vertical: 'column',
 	};
 
-	return {
-		blockeraFlexLayout: {
-			direction: values[attributes?.layout?.orientation] ?? '',
-		},
-	};
+	attributes.blockeraFlexLayout.direction =
+		values[attributes?.layout?.orientation];
+
+	return attributes;
 }
 
 export function flexLayoutToWPCompatibility({

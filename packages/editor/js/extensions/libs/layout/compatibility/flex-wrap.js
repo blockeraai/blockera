@@ -15,15 +15,15 @@ export function flexWrapFromWPCompatibility({
 		attributes?.layout?.flexWrap === '' ||
 		isUndefined(attributes?.layout?.flexWrap)
 	) {
-		return false;
+		return attributes;
 	}
 
-	return {
-		blockeraFlexWrap: {
-			value: attributes?.layout?.flexWrap,
-			reverse: false,
-		},
+	attributes.blockeraFlexWrap = {
+		value: attributes?.layout?.flexWrap,
+		reverse: false,
 	};
+
+	return attributes;
 }
 
 export function flexWrapToWPCompatibility({

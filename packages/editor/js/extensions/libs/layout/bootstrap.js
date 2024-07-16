@@ -52,58 +52,38 @@ export const bootstrap = (): void => {
 			//
 			// Display compatibility
 			//
-			const displayAttrs = displayFromWPCompatibility({
+			attributes = displayFromWPCompatibility({
 				attributes,
 				blockId,
 			});
 
-			if (displayAttrs) {
-				attributes = mergeObject(attributes, displayAttrs);
-			}
-
 			//
 			// Flex wrap compatibility
 			//
-			const flexWrapAttrs = flexWrapFromWPCompatibility({
+			attributes = flexWrapFromWPCompatibility({
 				attributes,
 			});
-
-			if (flexWrapAttrs) {
-				attributes = mergeObject(attributes, flexWrapAttrs);
-			}
 
 			//
 			// direction compatibility
 			//
-			const directionAttrs = directionFromWPCompatibility({
+			attributes = directionFromWPCompatibility({
 				attributes,
 			});
-
-			if (directionAttrs) {
-				attributes = mergeObject(attributes, directionAttrs);
-			}
 
 			//
 			// Align items compatibility
 			//
-			const alignItemsAttrs = alignItemsFromWPCompatibility({
+			attributes = alignItemsFromWPCompatibility({
 				attributes,
 			});
-
-			if (alignItemsAttrs) {
-				attributes = mergeObject(attributes, alignItemsAttrs);
-			}
 
 			//
 			// Justify content compatibility
 			//
-			const justifyContentAttrs = justifyContentFromWPCompatibility({
+			attributes = justifyContentFromWPCompatibility({
 				attributes,
 			});
-
-			if (justifyContentAttrs) {
-				attributes = mergeObject(attributes, justifyContentAttrs);
-			}
 
 			return attributes;
 		}

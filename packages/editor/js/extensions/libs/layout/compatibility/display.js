@@ -14,20 +14,20 @@ export function displayFromWPCompatibility({
 	switch (blockId) {
 		case 'core/group':
 			if (attributes?.layout?.type !== 'constrained') {
-				return { blockeraDisplay: attributes?.layout?.type };
+				attributes.blockeraDisplay = attributes?.layout?.type;
 			}
 
-			return false;
+			return attributes;
 
 		case 'core/buttons':
 			if (attributes?.layout?.type !== 'constrained') {
-				return { blockeraDisplay: attributes?.layout?.type };
+				attributes.blockeraDisplay = attributes?.layout?.type;
 			}
 
-			return false;
+			return attributes;
 	}
 
-	return false;
+	return attributes;
 }
 
 export function displayToWPCompatibility({
