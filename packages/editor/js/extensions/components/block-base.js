@@ -297,6 +297,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					// Creat mutable constant to prevent directly change to immutable state constant.
 					let filteredAttributes = { ...attributes };
 
+					const hasCompatId = attributes?.blockeraCompatId;
+
 					/**
 					 * Filtering block attributes based on "blockeraCompatId" attribute value to running WordPress compatibilities.
 					 *
@@ -304,7 +306,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					 *
 					 * @since 1.0.0
 					 */
-					if (!attributes?.blockeraCompatId) {
+					if (!hasCompatId) {
 						filteredAttributes = applyFilters(
 							'blockera.blockEdit.attributes',
 							getAttributesWithIds(
@@ -314,8 +316,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							args
 						);
 					}
-
-					const hasCompatId = attributes?.blockeraCompatId;
 
 					/**
 					 * Filtering block attributes based on "blockeraPropsId" attribute.
@@ -385,7 +385,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
 					if (
 						!Object.keys(added).length &&
-						!Object.keys(updated).length
+						!Object.keys(updated).length &&
+						(hasCompatId ||
+							isEquals(
+								omit(attributes, ['blockeraCompatId']),
+								omit(filteredAttributes, ['blockeraCompatId'])
+							))
 					) {
 						return;
 					}
