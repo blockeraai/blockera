@@ -53,7 +53,7 @@ export function include(
 }
 
 /**
- * Delete recieved path of main object.
+ * Delete received path of main object.
  *
  * @param {Object} obj the main object.
  * @param {string} path the delete property path.
@@ -200,6 +200,6 @@ export function hasInvolvesSomeItems(
  * @param {Object} obj
  * @return {Object} the cloned object
  */
-export function cloneObject(obj: Object): object {
+export function cloneObject(obj: Object): Object {
 	return copy(obj);
 }
