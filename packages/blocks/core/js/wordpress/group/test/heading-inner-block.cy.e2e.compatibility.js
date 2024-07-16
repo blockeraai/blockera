@@ -64,11 +64,13 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				cy.get('button').click();
 			});
 
-			cy.get('.components-popover').within(() => {
-				cy.get('input').as('hexColorInput');
-				cy.get('@hexColorInput').clear();
-				cy.get('@hexColorInput').type('666');
-			});
+			cy.get('.components-popover')
+				.last()
+				.within(() => {
+					cy.get('input').as('hexColorInput');
+					cy.get('@hexColorInput').clear();
+					cy.get('@hexColorInput').type('666');
+				});
 
 			getWPDataObject().then((data) => {
 				expect({
