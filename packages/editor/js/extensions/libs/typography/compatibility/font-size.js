@@ -19,36 +19,35 @@ export function fontSizeFromWPCompatibility({
 			const fontSizeVar = getFontSizeBy('id', attributes?.fontSize);
 
 			if (fontSizeVar) {
-				return {
-					blockeraFontSize: {
-						settings: {
-							...fontSizeVar,
+				attributes.blockeraFontSize = {
+					settings: {
+						...fontSizeVar,
+						type: 'font-size',
+						var: generateVariableString({
+							reference: fontSizeVar?.reference || {
+								type: '',
+							},
 							type: 'font-size',
-							var: generateVariableString({
-								reference: fontSizeVar?.reference || {
-									type: '',
-								},
-								type: 'font-size',
-								id: fontSizeVar?.id || '',
-							}),
-						},
-						name: fontSizeVar?.name,
-						isValueAddon: true,
-						valueType: 'variable',
+							id: fontSizeVar?.id || '',
+						}),
 					},
+					name: fontSizeVar?.name,
+					isValueAddon: true,
+					valueType: 'variable',
 				};
+				return attributes;
 			}
 		}
 
 		// font size is not variable
 		if (attributes?.style?.typography?.fontSize !== undefined) {
-			return {
-				blockeraFontSize: attributes?.style?.typography?.fontSize,
-			};
+			attributes.blockeraFontSize =
+				attributes?.style?.typography?.fontSize;
+			return attributes;
 		}
 	}
 
-	return false;
+	return attributes;
 }
 
 export function fontSizeToWPCompatibility({

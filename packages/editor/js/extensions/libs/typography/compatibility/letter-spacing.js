@@ -9,12 +9,11 @@ export function letterSpacingFromWPCompatibility({
 		attributes?.blockeraLetterSpacing === '' &&
 		attributes?.style?.typography?.letterSpacing !== undefined
 	) {
-		return {
-			blockeraLetterSpacing: attributes?.style?.typography?.letterSpacing,
-		};
+		attributes.blockeraLetterSpacing =
+			attributes?.style?.typography?.letterSpacing;
 	}
 
-	return false;
+	return attributes;
 }
 
 export function letterSpacingToWPCompatibility({

@@ -67,102 +67,66 @@ export const bootstrap = (): void => {
 			//
 			// Font Size
 			//
-			const fontSizeAttrs = fontSizeFromWPCompatibility({
+			attributes = fontSizeFromWPCompatibility({
 				attributes,
 			});
-
-			if (fontSizeAttrs) {
-				attributes = mergeObject(attributes, fontSizeAttrs);
-			}
 
 			//
 			// Line Height
 			//
-			const lineHeightAttrs = lineHeightFromWPCompatibility({
+			attributes = lineHeightFromWPCompatibility({
 				attributes,
 			});
-
-			if (lineHeightAttrs) {
-				attributes = mergeObject(attributes, lineHeightAttrs);
-			}
 
 			//
 			// Text Align
 			//
-			const textAlignAttrs = textAlignFromWPCompatibility({
+			attributes = textAlignFromWPCompatibility({
 				attributes,
 				blockId,
 			});
 
-			if (textAlignAttrs) {
-				attributes = mergeObject(attributes, textAlignAttrs);
-			}
-
 			//
 			// Text Decoration
 			//
-			const textDecorationAttrs = textDecorationFromWPCompatibility({
+			attributes = textDecorationFromWPCompatibility({
 				attributes,
 			});
-
-			if (textDecorationAttrs) {
-				attributes = mergeObject(attributes, textDecorationAttrs);
-			}
 
 			//
 			// Font Style
 			//
-			const fontStyleAttrs = fontStyleFromWPCompatibility({
+			attributes = fontStyleFromWPCompatibility({
 				attributes,
 			});
-
-			if (fontStyleAttrs) {
-				attributes = mergeObject(attributes, fontStyleAttrs);
-			}
 
 			//
 			// Text Transform
 			//
-			const textTransformAttrs = textTransformFromWPCompatibility({
+			attributes = textTransformFromWPCompatibility({
 				attributes,
 			});
-
-			if (textTransformAttrs) {
-				attributes = mergeObject(attributes, textTransformAttrs);
-			}
 
 			//
 			// Letter Spacing
 			//
-			const letterSpacingAttrs = letterSpacingFromWPCompatibility({
+			attributes = letterSpacingFromWPCompatibility({
 				attributes,
 			});
-
-			if (letterSpacingAttrs) {
-				attributes = mergeObject(attributes, letterSpacingAttrs);
-			}
 
 			//
 			// Text Orientation
 			//
-			const textOrientationAttrs = textOrientationFromWPCompatibility({
+			attributes = textOrientationFromWPCompatibility({
 				attributes,
 			});
-
-			if (textOrientationAttrs) {
-				attributes = mergeObject(attributes, textOrientationAttrs);
-			}
 
 			//
 			// Text Color
 			//
-			const fontColorAttrs = fontColorFromWPCompatibility({
+			attributes = fontColorFromWPCompatibility({
 				attributes,
 			});
-
-			if (fontColorAttrs) {
-				attributes = mergeObject(attributes, fontColorAttrs);
-			}
 
 			return attributes;
 		}

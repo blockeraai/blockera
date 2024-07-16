@@ -8,24 +8,24 @@ export function textAlignFromWPCompatibility({
 	blockId: string,
 }): Object {
 	if (attributes?.blockeraTextAlign !== '') {
-		return false;
+		return attributes;
 	}
 
 	switch (blockId) {
 		case 'core/paragraph':
 			if (attributes?.align !== undefined) {
-				return { blockeraTextAlign: attributes?.align };
+				attributes.blockeraTextAlign = attributes?.align;
 			}
 			break;
 
 		default:
 			if (attributes?.textAlign !== undefined) {
-				return { blockeraTextAlign: attributes?.textAlign };
+				attributes.blockeraTextAlign = attributes?.textAlign;
 			}
 			break;
 	}
 
-	return false;
+	return attributes;
 }
 
 export function textAlignToWPCompatibility({

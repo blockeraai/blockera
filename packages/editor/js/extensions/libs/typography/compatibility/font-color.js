@@ -36,21 +36,19 @@ export function fontColorFromWPCompatibility({
 			const color = getColorVAFromIdString(attributes?.textColor);
 
 			if (color) {
-				return {
-					blockeraFontColor: color,
-				};
+				attributes.blockeraFontColor = color;
+				return attributes;
 			}
 		}
 
-		// font size is not variable
+		// font color is not variable
 		if (attributes?.style?.color?.text !== undefined) {
-			return {
-				blockeraFontColor: attributes?.style?.color?.text,
-			};
+			attributes.blockeraFontColor = attributes?.style?.color?.text;
+			return attributes;
 		}
 	}
 
-	return false;
+	return attributes;
 }
 
 export function fontColorToWPCompatibility({

@@ -9,13 +9,11 @@ export function textDecorationFromWPCompatibility({
 		attributes?.blockeraTextDecoration === '' &&
 		attributes?.style?.typography?.textDecoration !== undefined
 	) {
-		return {
-			blockeraTextDecoration:
-				attributes?.style?.typography?.textDecoration,
-		};
+		attributes.blockeraTextDecoration =
+			attributes?.style?.typography?.textDecoration;
 	}
 
-	return false;
+	return attributes;
 }
 
 export function textDecorationToWPCompatibility({

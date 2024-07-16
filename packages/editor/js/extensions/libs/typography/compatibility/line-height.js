@@ -9,12 +9,11 @@ export function lineHeightFromWPCompatibility({
 		attributes?.blockeraLineHeight === '' &&
 		attributes?.style?.typography?.lineHeight !== undefined
 	) {
-		return {
-			blockeraLineHeight: attributes?.style?.typography?.lineHeight,
-		};
+		attributes.blockeraLineHeight =
+			attributes?.style?.typography?.lineHeight;
 	}
 
-	return false;
+	return attributes;
 }
 
 export function lineHeightToWPCompatibility({

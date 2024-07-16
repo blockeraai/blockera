@@ -9,12 +9,11 @@ export function textTransformFromWPCompatibility({
 		attributes?.blockeraTextTransform === '' &&
 		attributes?.style?.typography?.textTransform !== undefined
 	) {
-		return {
-			blockeraTextTransform: attributes?.style?.typography?.textTransform,
-		};
+		attributes.blockeraTextTransform =
+			attributes?.style?.typography?.textTransform;
 	}
 
-	return false;
+	return attributes;
 }
 
 export function textTransformToWPCompatibility({

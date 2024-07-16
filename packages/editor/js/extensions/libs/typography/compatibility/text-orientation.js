@@ -10,15 +10,15 @@ export function textOrientationFromWPCompatibility({
 		attributes?.style?.typography?.writingMode !== undefined
 	) {
 		if (attributes?.style?.typography?.writingMode === 'horizontal-tb') {
-			return { blockeraTextOrientation: 'initial' };
+			attributes.blockeraTextOrientation = 'initial';
 		} else if (
 			attributes?.style?.typography?.writingMode === 'vertical-rl'
 		) {
-			return { blockeraTextOrientation: 'style-1' };
+			attributes.blockeraTextOrientation = 'style-1';
 		}
 	}
 
-	return false;
+	return attributes;
 }
 
 export function textOrientationToWPCompatibility({

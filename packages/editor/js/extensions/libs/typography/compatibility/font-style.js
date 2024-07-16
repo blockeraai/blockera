@@ -9,10 +9,10 @@ export function fontStyleFromWPCompatibility({
 		attributes?.blockeraFontStyle === '' &&
 		attributes?.style?.typography?.fontStyle !== undefined
 	) {
-		return { blockeraFontStyle: attributes?.style?.typography?.fontStyle };
+		attributes.blockeraFontStyle = attributes?.style?.typography?.fontStyle;
 	}
 
-	return false;
+	return attributes;
 }
 
 export function fontStyleToWPCompatibility({
