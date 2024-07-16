@@ -8,7 +8,7 @@ import {
 	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
-} from '../../../../../dev-cypress/js/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Inner Blocks label testing', () => {
 	beforeEach(() => {

@@ -3,15 +3,46 @@ name: Cypress E2E Tests
 on:
     pull_request:
         types: [opened, synchronize, ready_for_review]
-
     workflow_dispatch:
 
 jobs:
+    detect_categories:
+        name: Detecting E2E Test Categories
+        runs-on: ubuntu-latest
+        outputs:
+            categories: ${{ steps.set_categories.outputs.categories }}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '16'
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: List test categories
+              id: set_categories
+              run: |
+                  categories=$(node .github/scripts/list-e2e-test-categories.js)
+                  categories_json=$(echo $categories | jq -c '.')
+                  echo "categories=$categories_json" >> $GITHUB_OUTPUT
+
+            - name: Print categories output
+              run: |
+                  echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
+
     cypress_e2e_tests:
-        name: Cypress End 2 End Tests
+        name: Running E2E Test
+        needs: detect_categories
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
-
+        strategy:
+            fail-fast: false
+            matrix:
+                category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
@@ -28,7 +59,7 @@ jobs:
             - name: Start WordPress Environment
               run: npm run env:start
 
-            - name: 'Create env file'
+            - name: Create env file
               run: |
                   touch .env
                   echo APP_MODE=production >> .env
@@ -38,8 +69,12 @@ jobs:
             - name: Build wp-env app
               run: npm run build
 
+            - name: Debug Matrix Category
+              run: |
+                  echo "Running category: ${{ matrix.category }}"
+
             - name: Run Cypress E2E Tests
-              run: npm run test:e2e
+              run: npm run test:e2e -- --spec "packages/**/*.cy.e2e.${{ matrix.category }}.js"
 
             - name: Stop WordPress Environment
               run: npm run env:stop

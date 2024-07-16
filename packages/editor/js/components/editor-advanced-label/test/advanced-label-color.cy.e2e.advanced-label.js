@@ -6,44 +6,41 @@ import {
 	setBlockState,
 	addBlockState,
 	setDeviceType,
-} from '../../../../../dev-cypress/js/helpers';
+} from '@blockera/dev-cypress/js/helpers';
 
-describe('Range Control label testing (Opacity)', () => {
+describe('Color Control label testing (BG Color)', () => {
 	beforeEach(() => {
 		createPost();
 
 		addBlockToPost('core/paragraph', true, 'blockera-paragraph');
+
+		// Alias
+		cy.getParentContainer('BG Color').within(() => {
+			cy.getByDataCy('color-label').as('color-label');
+		});
 	});
 
-	const setOpacityValue = (value) => {
-		cy.getParentContainer('Opacity').within(() =>
-			cy.get('input[type="range"]').setSliderValue(value)
-		);
-	};
-
-	const checkOpacityValue = (value) => {
-		cy.getParentContainer('Opacity').within(() =>
-			cy.get('input[type="range"]').should('have.value', value)
-		);
-	};
-
-	it('should display changed value on Opacity -> Normal -> Desktop', () => {
+	it('should display changed value on BG Color -> Normal -> Desktop', () => {
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Effects',
-			'Opacity',
+			'Background',
+			'BG Color',
 			'changed-in-normal-state',
 			'not-have'
 		);
 
 		// Set value
-		setOpacityValue(50);
+		cy.setColorControlValue('BG Color', 'ccc');
 
 		// Assert label after set value
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-normal-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-normal-state'
+		);
 
 		// Assert control
-		checkOpacityValue(50);
+		cy.get('@color-label').should('include.text', 'ccc');
 
 		/**
 		 * Tablet device
@@ -51,39 +48,60 @@ describe('Range Control label testing (Opacity)', () => {
 		setDeviceType('Tablet');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-normal-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-normal-state'
+		);
 
 		// Assert control
-		checkOpacityValue(50);
+		cy.get('@color-label').should('include.text', 'ccc');
+
+		/**
+		 * Pseudo State (Hover/Tablet)
+		 */
+		addBlockState('hover');
+
+		// Assert label
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-normal-state'
+		);
+
+		// Assert control
+		cy.get('@color-label').should('include.text', 'ccc');
 
 		// Assert state graph
-		cy.checkStateGraph('Effects', 'Opacity', { desktop: ['Normal'] });
+		cy.checkStateGraph('Background', 'BG Color', {
+			desktop: ['Normal'],
+		});
 	});
 
-	it('should display changed value on Opacity -> Hover -> Desktop', () => {
+	it('should display changed value on BG Color -> Hover -> Desktop', () => {
 		/**
 		 * Hover
 		 */
 		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Effects',
-			'Opacity',
+			'Background',
+			'BG Color',
 			'changed-in-normal-state',
 			'not-have'
 		);
 
 		// Set value
-		setOpacityValue(50);
+		cy.setColorControlValue('BG Color', 'ccc');
 
 		// Assert label after set value
 		cy.checkLabelClassName(
-			'Effects',
-			'Opacity',
+			'Background',
+			'BG Color',
 			'changed-in-secondary-state'
 		);
 		// Assert control
-		checkOpacityValue(50);
+		cy.get('@color-label').should('include.text', 'ccc');
 
 		/**
 		 * Normal
@@ -91,11 +109,14 @@ describe('Range Control label testing (Opacity)', () => {
 		setBlockState('Normal');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-other-state'
+		);
 
 		// Assert control
-		// 100 is default
-		checkOpacityValue('100');
+		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		/**
 		 * Tablet device
@@ -103,24 +124,32 @@ describe('Range Control label testing (Opacity)', () => {
 		setDeviceType('Tablet');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-other-state'
+		);
 
 		// Assert control
-		checkOpacityValue(100);
+		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		// Assert state graph
-		cy.checkStateGraph('Effects', 'Opacity', { desktop: ['Hover'] });
+		cy.checkStateGraph('Background', 'BG Color', { desktop: ['Hover'] });
 	});
 
-	it('should display changed value on Opacity, when set value in two states', () => {
+	it('should display changed value on BG Color, when set value in two states', () => {
 		/**
 		 * Normal
 		 */
 		// Set value
-		setOpacityValue(40);
+		cy.setColorControlValue('BG Color', 'ccc');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-normal-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-normal-state'
+		);
 
 		/**
 		 * Hover
@@ -128,20 +157,24 @@ describe('Range Control label testing (Opacity)', () => {
 		addBlockState('hover');
 
 		// Assert label before set value
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-normal-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-normal-state'
+		);
 
 		// Set value
-		setOpacityValue(30);
+		cy.setColorControlValue('BG Color', 'fff');
 
 		// Assert label after set value
 		cy.checkLabelClassName(
-			'Effects',
-			'Opacity',
+			'Background',
+			'BG Color',
 			'changed-in-secondary-state'
 		);
 
 		// Assert control
-		checkOpacityValue(30);
+		cy.get('@color-label').should('include.text', 'fff');
 
 		/**
 		 * Tablet device
@@ -149,35 +182,43 @@ describe('Range Control label testing (Opacity)', () => {
 		setDeviceType('Tablet');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-normal-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-normal-state'
+		);
 
 		// Assert control
-		checkOpacityValue(40);
+		cy.get('@color-label').should('include.text', 'ccc');
 
 		// Assert state graph
-		cy.checkStateGraph('Effects', 'Opacity', {
+		cy.checkStateGraph('Background', 'BG Color', {
 			desktop: ['Normal', 'Hover'],
 		});
 	});
 
-	it('should display changed value on Opacity -> Normal -> Tablet', () => {
+	it('should display changed value on BG Color -> Normal -> Tablet', () => {
 		setDeviceType('Tablet');
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Effects',
-			'Opacity',
+			'Background',
+			'BG Color',
 			'changed-in-normal-state',
 			'not-have'
 		);
 
 		// Set value
-		setOpacityValue(50);
+		cy.setColorControlValue('BG Color', 'ccc');
 
 		// Assert label after set value
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-normal-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-normal-state'
+		);
 
 		// Assert control
-		checkOpacityValue(50);
+		cy.get('@color-label').should('include.text', 'ccc');
 
 		/**
 		 * Desktop device
@@ -185,16 +226,22 @@ describe('Range Control label testing (Opacity)', () => {
 		setDeviceType('Desktop');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-other-state'
+		);
 
 		// Assert control
-		checkOpacityValue(100);
+		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		// Assert state graph
-		cy.checkStateGraph('Effects', 'Opacity', { tablet: ['Normal'] });
+		cy.checkStateGraph('Background', 'BG Color', {
+			tablet: ['Normal'],
+		});
 	});
 
-	it('should display changed value on Opacity -> Hover -> Tablet', () => {
+	it('should display changed value on BG Color -> Hover -> Tablet', () => {
 		setDeviceType('Tablet');
 		/**
 		 * Hover
@@ -202,23 +249,23 @@ describe('Range Control label testing (Opacity)', () => {
 		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
-			'Effects',
-			'Opacity',
+			'Background',
+			'BG Color',
 			'changed-in-normal-state',
 			'not-have'
 		);
 
 		// Set value
-		setOpacityValue(50);
+		cy.setColorControlValue('BG Color', 'ccc');
 
 		// Assert label after set value
 		cy.checkLabelClassName(
-			'Effects',
-			'Opacity',
+			'Background',
+			'BG Color',
 			'changed-in-secondary-state'
 		);
 		// Assert control
-		checkOpacityValue(50);
+		cy.get('@color-label').should('include.text', 'ccc');
 
 		/**
 		 * Normal
@@ -226,11 +273,14 @@ describe('Range Control label testing (Opacity)', () => {
 		setBlockState('Normal');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-other-state'
+		);
 
 		// Assert control
-		// 100 is default
-		checkOpacityValue('100');
+		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		/**
 		 * Desktop device (Active)
@@ -238,58 +288,73 @@ describe('Range Control label testing (Opacity)', () => {
 		setDeviceType('Desktop');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-other-state'
+		);
 
 		// Assert control
-		checkOpacityValue(100);
+		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		/**
-		 * Normal (Desktop device)
+		 * Desktop device (Normal)
 		 */
 		setBlockState('Normal');
 
 		// Assert label
-		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-other-state');
+		cy.checkLabelClassName(
+			'Background',
+			'BG Color',
+			'changed-in-other-state'
+		);
 
 		// Assert control
-		checkOpacityValue(100);
+		cy.get('@color-label').should('not.include.text', 'ccc');
 
 		// Assert state graph
-		cy.checkStateGraph('Effects', 'Opacity', { tablet: ['Hover'] });
+		cy.checkStateGraph('Background', 'BG Color', { tablet: ['Hover'] });
 	});
 
 	describe('reset action testing...', () => {
 		beforeEach(() => {
 			// Set value in normal/desktop
-			setOpacityValue(50);
+			cy.setColorControlValue('BG Color', 'ccc');
+
 			// Set value in hover/desktop
 			addBlockState('hover');
-			setOpacityValue(40);
+			cy.setColorControlValue('BG Color', 'bbb');
+
 			// Set value in hover/tablet
 			setDeviceType('Tablet');
-			setOpacityValue(30);
+			cy.setColorControlValue('BG Color', 'aaa');
+
 			// Set value in normal/tablet
 			setBlockState('Normal');
-			setOpacityValue(20);
+			cy.setColorControlValue('BG Color', 'eee');
 
 			context(
-				'should correctly reset blockeraOpacity, and display effected fields(label, control, stateGraph) in normal/tablet',
+				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in normal/tablet',
 				() => {
 					// Reset to normal
-					cy.resetBlockeraAttribute('Effects', 'Opacity', 'reset');
+					cy.resetBlockeraAttribute(
+						'Background',
+						'BG Color',
+						'reset'
+					);
 
 					// Assert label
 					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
+						'Background',
+						'BG Color',
 						'changed-in-normal-state'
 					);
 
 					// Assert control
-					checkOpacityValue(50);
+					cy.get('@color-label').should('include.text', 'ccc');
 
 					// Assert state graph
-					cy.checkStateGraph('Effects', 'Opacity', {
+					cy.checkStateGraph('Background', 'BG Color', {
 						tablet: ['Hover'],
 						desktop: ['Hover', 'Normal'],
 					});
@@ -305,24 +370,28 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraOpacity, and display effected fields(label, control, stateGraph) in hover/tablet',
+				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in hover/tablet',
 				() => {
 					setBlockState('Hover');
 					// Reset to normal
-					cy.resetBlockeraAttribute('Effects', 'Opacity', 'reset');
+					cy.resetBlockeraAttribute(
+						'Background',
+						'BG Color',
+						'reset'
+					);
 
 					// Assert label
 					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
+						'Background',
+						'BG Color',
 						'changed-in-normal-state'
 					);
 
 					// Assert control
-					checkOpacityValue(50);
+					cy.get('@color-label').should('include.text', 'ccc');
 
 					// Assert state graph
-					cy.checkStateGraph('Effects', 'Opacity', {
+					cy.checkStateGraph('Background', 'BG Color', {
 						desktop: ['Hover', 'Normal'],
 					});
 
@@ -337,62 +406,65 @@ describe('Range Control label testing (Opacity)', () => {
 			);
 
 			context(
-				'should correctly reset blockeraOpacity, and display effected fields(label, control, stateGraph) in normal/desktop',
+				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in normal/desktop',
 				() => {
 					setDeviceType('Desktop');
 					setBlockState('Normal');
 					// Reset to default
-					cy.resetBlockeraAttribute('Effects', 'Opacity', 'reset');
+					cy.resetBlockeraAttribute(
+						'Background',
+						'BG Color',
+						'reset'
+					);
 
 					// Assert label
 					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
+						'Background',
+						'BG Color',
 						'changed-in-other-state'
 					);
+
 					// Assert control
-					checkOpacityValue(100);
+					cy.get('@color-label').should('include.text', 'None');
 
 					// Assert state graph
-					cy.checkStateGraph('Effects', 'Opacity', {
+					cy.checkStateGraph('Background', 'BG Color', {
 						desktop: ['Hover'],
 					});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
-						expect('100%').to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraOpacity')
+						expect('').to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraBackgroundColor')
 						);
 					});
 				}
 			);
 
 			context(
-				'should correctly reset blockeraOpacity, and display effected fields(label, control, stateGraph) in hover/desktop',
+				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in hover/desktop',
 				() => {
 					setBlockState('Hover');
-					// Reset to default
-					cy.resetBlockeraAttribute('Effects', 'Opacity', 'reset');
+					// Reset to normal
+					cy.resetBlockeraAttribute(
+						'Background',
+						'BG Color',
+						'reset'
+					);
 
 					// Assert label
 					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
+						'Background',
+						'BG Color',
 						'changed-in-secondary-state',
-						'not-have'
-					);
-					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
-						'changed-in-normal-state',
 						'not-have'
 					);
 
 					// Assert control
-					checkOpacityValue(100);
+					cy.get('@color-label').should('include.text', 'None');
 
 					// Assert state graph
-					cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Background', 'BG Color', {});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
@@ -407,39 +479,37 @@ describe('Range Control label testing (Opacity)', () => {
 
 		it('set value in normal/desktop and navigate between states', () => {
 			setBlockState('Normal');
-			// Set value
-			setOpacityValue(15);
+
+			cy.setColorControlValue('BG Color', '1db0cc');
 
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-normal-state'
 			);
-
 			// Assert control
-			checkOpacityValue(15);
+			cy.get('@color-label').should('include.text', '1db0cc');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Normal'],
 			});
 
-			// Navigate between states :
+			// Navigate between states and devices
 			// Hover/Desktop
 			setBlockState('Hover');
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-normal-state'
 			);
-
 			// Assert control
-			checkOpacityValue(15);
+			cy.get('@color-label').should('include.text', '1db0cc');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Normal'],
 			});
 
@@ -447,40 +517,38 @@ describe('Range Control label testing (Opacity)', () => {
 			setDeviceType('Tablet');
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-normal-state'
 			);
-
 			// Assert control
-			checkOpacityValue(15);
+			cy.get('@color-label').should('include.text', '1db0cc');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Normal'],
 			});
 
-			// Normal/Desktop
+			// Normal/Tablet
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-normal-state'
 			);
-
 			// Assert control
-			checkOpacityValue(15);
+			cy.get('@color-label').should('include.text', '1db0cc');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Normal'],
 			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('15%').to.be.eq(
-					getSelectedBlock(data, 'blockeraOpacity')
+				expect('#1db0cc').to.be.eq(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 
 				expect({}).to.be.deep.eq(
@@ -501,39 +569,38 @@ describe('Range Control label testing (Opacity)', () => {
 		});
 
 		it('set value in hover/desktop and navigate between states', () => {
-			// Set value
-			setOpacityValue(35);
+			cy.setColorControlValue('BG Color', '1db0cc');
 
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-secondary-state'
 			);
 
 			// Assert control
-			checkOpacityValue(35);
+			cy.get('@color-label').should('include.text', '1db0cc');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Hover'],
 			});
 
-			// Navigate between states :
+			// Navigate between states and devices:
 			// Normal/Desktop
 			setBlockState('Normal');
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			checkOpacityValue(100);
+			cy.get('@color-label').should('include.text', 'None');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Hover'],
 			});
 
@@ -541,41 +608,40 @@ describe('Range Control label testing (Opacity)', () => {
 			setDeviceType('Tablet');
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			checkOpacityValue(100);
+			cy.get('@color-label').should('include.text', 'None');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Hover'],
 			});
 
 			// Hover/Tablet
 			setBlockState('Hover');
-
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-other-state'
 			);
 
 			// Assert control
-			checkOpacityValue(100);
+			cy.get('@color-label').should('include.text', 'None');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Hover'],
 			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('100%').to.be.eq(
-					getSelectedBlock(data, 'blockeraOpacity')
+				expect('').to.be.eq(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 
 				expect({}).to.be.deep.eq(
@@ -583,7 +649,9 @@ describe('Range Control label testing (Opacity)', () => {
 						.breakpoints.tablet.attributes
 				);
 
-				expect({ blockeraOpacity: '35%' }).to.be.deep.eq(
+				expect({
+					blockeraBackgroundColor: '#1db0cc',
+				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.desktop.attributes
 				);
@@ -599,90 +667,93 @@ describe('Range Control label testing (Opacity)', () => {
 	describe('reset-all action testing...', () => {
 		beforeEach(() => {
 			// Set value in normal/desktop
-			setOpacityValue(50);
+			cy.setColorControlValue('BG Color', 'ccc');
+
 			// Set value in hover/desktop
 			addBlockState('hover');
-			setOpacityValue(40);
+			cy.setColorControlValue('BG Color', 'bbb');
+
 			// Set value in hover/tablet
 			setDeviceType('Tablet');
-			setOpacityValue(30);
+			cy.setColorControlValue('BG Color', 'aaa');
+
 			// Set value in normal/tablet
 			setBlockState('Normal');
-			setOpacityValue(20);
+			cy.setColorControlValue('BG Color', 'eee');
 
 			// Reset All
-			cy.resetBlockeraAttribute('Effects', 'Opacity', 'reset-all');
+			cy.resetBlockeraAttribute('Background', 'BG Color', 'reset-all');
 
 			context(
-				'should correctly reset-all blockeraOpacity, and display effected fields(label, control, stateGraph) in all states and devices',
+				'should correctly reset blockeraBackgroundColor, and display effected fields(label, control, stateGraph) in all states',
 				() => {
 					// Normal/Tablet
 					// Assert label
 					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
+						'Background',
+						'BG Color',
 						'changed-in-normal-state',
 						'not-have'
 					);
 
 					// Assert control
-					checkOpacityValue(100);
+					cy.get('@color-label').should('include.text', 'None');
 
 					// Assert state graph
-					cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Background', 'BG Color', {});
 
 					// Hover/Tablet
 					setBlockState('Hover');
 					// Assert label
 					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
+						'Background',
+						'BG Color',
 						'changed-in-secondary-state',
 						'not-have'
 					);
 
 					// Assert control
-					checkOpacityValue(100);
+					cy.get('@color-label').should('include.text', 'None');
 
 					// Assert state graph
-					cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Background', 'BG Color', {});
 
 					// Hover/Desktop
 					setDeviceType('Desktop');
 					// Assert label
 					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
+						'Background',
+						'BG Color',
 						'changed-in-secondary-state',
 						'not-have'
 					);
 
 					// Assert control
-					checkOpacityValue(100);
+					cy.get('@color-label').should('include.text', 'None');
 
 					// Assert state graph
-					cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Background', 'BG Color', {});
 
 					// Normal/Desktop
 					setBlockState('Normal');
 					// Assert label
 					cy.checkLabelClassName(
-						'Effects',
-						'Opacity',
+						'Background',
+						'BG Color',
 						'changed-in-normal-state',
 						'not-have'
 					);
 
 					// Assert control
-					checkOpacityValue(100);
+					cy.get('@color-label').should('include.text', 'None');
 
 					// Assert state graph
-					cy.checkStateGraph('Effects', 'Opacity', {});
+					cy.checkStateGraph('Background', 'BG Color', {});
 
 					// Assert store data
 					getWPDataObject().then((data) => {
-						expect('100%').to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraOpacity')
+						expect('').to.be.deep.eq(
+							getSelectedBlock(data, 'blockeraBackgroundColor')
 						);
 
 						expect({}).to.be.deep.eq(
@@ -705,79 +776,79 @@ describe('Range Control label testing (Opacity)', () => {
 		});
 
 		it('set value in normal/desktop and navigate between states', () => {
-			setOpacityValue(45);
-
-			// Assert control
-			checkOpacityValue(45);
+			cy.setColorControlValue('BG Color', '{selectall}c4c4c4');
 
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-normal-state'
 			);
 
+			// Assert control
+			cy.get('@color-label').should('include.text', 'c4c4c4');
+
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Normal'],
 			});
 
-			// Navigate between states and devices :
+			// Navigate between states and devices
 			// Hover/Desktop
 			setBlockState('Hover');
-			// Assert control
-			checkOpacityValue(45);
-
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-normal-state'
 			);
 
+			// Assert control
+			cy.get('@color-label').should('include.text', 'c4c4c4');
+
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Normal'],
 			});
 
 			// Hover/Tablet
 			setDeviceType('Tablet');
-			// Assert control
-			checkOpacityValue(45);
-
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-normal-state'
 			);
 
+			// Assert control
+			cy.get('@color-label').should('include.text', 'c4c4c4');
+
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Normal'],
 			});
 
-			// Normal/Tablet
+			// Normal/Desktop
 			setBlockState('Normal');
-			// Assert control
-			checkOpacityValue(45);
-
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-normal-state'
 			);
 
+			// Assert control
+			cy.get('@color-label').should('include.text', 'c4c4c4');
+
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
+			cy.checkStateGraph('Background', 'BG Color', {
 				desktop: ['Normal'],
 			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('45%').to.be.eq(
-					getSelectedBlock(data, 'blockeraOpacity')
+				expect('#c4c4c4').to.be.eq(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 
 				expect({}).to.be.deep.eq(
@@ -797,94 +868,97 @@ describe('Range Control label testing (Opacity)', () => {
 			});
 		});
 
-		it('set value in normal/tablet and navigate between states', () => {
-			setDeviceType('Tablet');
-			setOpacityValue(25);
-
-			// Assert control
-			checkOpacityValue(25);
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
-				'changed-in-normal-state'
-			);
-
-			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
-				tablet: ['Normal'],
-			});
-
-			// Navigate between states and devices :
-			// Hover/Tablet
+		it('set value in hover/desktop and navigate between states', () => {
 			setBlockState('Hover');
-			// Assert control
-			checkOpacityValue(100);
+
+			cy.setColorControlValue('BG Color', '{selectall}c4c4c4');
 
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
-				'changed-in-normal-state'
+				'Background',
+				'BG Color',
+				'changed-in-secondary-state'
 			);
 
-			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
-				tablet: ['Normal'],
-			});
-
-			// Hover/Desktop
-			setDeviceType('Desktop');
 			// Assert control
-			checkOpacityValue(100);
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
-				'changed-in-other-state'
-			);
+			cy.get('@color-label').should('include.text', 'c4c4c4');
 
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
-				tablet: ['Normal'],
+			cy.checkStateGraph('Background', 'BG Color', {
+				desktop: ['Hover'],
 			});
 
+			// Navigate between states and devices
 			// Normal/Desktop
 			setBlockState('Normal');
-			// Assert control
-			checkOpacityValue(100);
-
 			// Assert label
 			cy.checkLabelClassName(
-				'Effects',
-				'Opacity',
+				'Background',
+				'BG Color',
 				'changed-in-other-state'
 			);
 
+			// Assert control
+			cy.get('@color-label').should('include.text', 'None');
+
 			// Assert state graph
-			cy.checkStateGraph('Effects', 'Opacity', {
-				tablet: ['Normal'],
+			cy.checkStateGraph('Background', 'BG Color', {
+				desktop: ['Hover'],
+			});
+
+			// Normal/Tablet
+			setDeviceType('Tablet');
+			// Assert label
+			cy.checkLabelClassName(
+				'Background',
+				'BG Color',
+				'changed-in-other-state'
+			);
+
+			// Assert control
+			cy.get('@color-label').should('include.text', 'None');
+
+			// Assert state graph
+			cy.checkStateGraph('Background', 'BG Color', {
+				desktop: ['Hover'],
+			});
+
+			// Hover/Tablet
+			setBlockState('Hover');
+			// Assert label
+			cy.checkLabelClassName(
+				'Background',
+				'BG Color',
+				'changed-in-other-state'
+			);
+
+			// Assert control
+			cy.get('@color-label').should('include.text', 'None');
+
+			// Assert state graph
+			cy.checkStateGraph('Background', 'BG Color', {
+				desktop: ['Hover'],
 			});
 
 			// Assert store data
 			getWPDataObject().then((data) => {
-				expect('100%').to.be.equal(
-					getSelectedBlock(data, 'blockeraOpacity')
+				expect('').to.be.eq(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
 
-				expect({ blockeraOpacity: '25%' }).to.be.deep.equal(
+				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
 						.breakpoints.tablet.attributes
 				);
 
-				expect({}).to.be.deep.equal(
+				expect({
+					blockeraBackgroundColor: '#c4c4c4',
+				}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.desktop.attributes
 				);
 
-				expect({}).to.be.deep.equal(
+				expect({}).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes
 				);
