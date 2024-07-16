@@ -26,6 +26,7 @@ jobs:
               id: set_categories
               run: |
                   categories=$(node .github/scripts/list-categories.js)
+                  echo "categories=${categories}"
                   echo "categories=${categories}" >> $GITHUB_OUTPUT
 
     cypress_e2e_tests:
@@ -60,6 +61,10 @@ jobs:
 
             - name: Build wp-env app
               run: npm run build
+
+            - name: Debug Matrix Category
+              run: |
+                  echo "Running category: ${{ matrix.category }}"
 
             - name: Run Cypress E2E Tests
               run: npm run test:e2e -- --spec "packages/**/*.cy.e2e.${{ matrix.category }}.js"
