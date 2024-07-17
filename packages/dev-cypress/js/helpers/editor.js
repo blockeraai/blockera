@@ -84,11 +84,6 @@ export function getBlockClientId(data) {
  */
 export function disableGutenbergFeatures() {
 	return getWPDataObject().then((data) => {
-		// Enable "Top Toolbar"
-		if (!data.select('core/edit-post').isFeatureActive('fixedToolbar')) {
-			data.dispatch('core/edit-post').toggleFeature('fixedToolbar');
-		}
-
 		if (data.select('core/edit-post').isFeatureActive('welcomeGuide')) {
 			data.dispatch('core/edit-post').toggleFeature('welcomeGuide');
 		}
