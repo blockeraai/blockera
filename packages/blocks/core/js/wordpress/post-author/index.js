@@ -17,6 +17,11 @@ import {
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
+/**
+ * Internal dependencies
+ */
+import link from '../inners/link';
+
 const attributes = sharedBlockExtensionAttributes;
 
 const supports = sharedBlockExtensionSupports;
@@ -27,52 +32,29 @@ const blockeraInnerBlocks: InnerBlocks = {
 		type: 'avatar',
 		label: __('Avatar', 'blockera'),
 		icon: <Icon icon="block-post-author-avatar" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-post-author__avatar > img',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
 	byline: {
-		name: 'core/byline',
+		name: 'elements/byline',
 		type: 'byline',
 		label: __('Byline', 'blockera'),
 		icon: <Icon icon="block-post-author-byline" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-post-author__byline',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
 	author: {
-		name: 'core/author',
+		name: 'elements/author',
 		type: 'author',
 		label: __('Name', 'blockera'),
 		icon: <Icon icon="block-post-author-name" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-post-author__name',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
-		},
-	},
-	link: {
-		name: 'core/link',
-		type: 'link',
-		label: __('Link', 'blockera'),
-		icon: <Icon icon="block-link" iconSize="20" />,
-		selectors: {
-			root: 'a:not(.wp-element-button)',
-		},
-		attributes,
-		innerBlockSettings: {
-			force: true,
-			dataCompatibility: ['font-color', 'font-color-hover'],
 		},
 	},
 };
@@ -82,7 +64,10 @@ export const PostAuthor = {
 	targetBlock: 'core/post-author',
 	attributes,
 	supports,
-	blockeraInnerBlocks,
+	blockeraInnerBlocks: {
+		...blockeraInnerBlocks,
+		...link,
+	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

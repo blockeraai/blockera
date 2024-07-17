@@ -23,15 +23,11 @@ const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	caption: {
-		name: 'core/caption',
-		type: 'caption',
+		name: 'elements/caption',
 		label: __('Caption', 'blockera'),
 		icon: <Icon icon="block-image-caption" iconSize="20" />,
-		selectors: {
-			root: 'figcaption',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},

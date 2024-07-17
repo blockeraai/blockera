@@ -23,28 +23,20 @@ const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	term: {
-		name: 'core/term-item',
-		type: 'term',
+		name: 'elements/term-item',
 		label: __('Link', 'blockera'),
 		icon: <Icon icon="block-link" iconSize="20" />,
-		selectors: {
-			root: 'li.cat-item > a',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
 	list_item: {
 		name: 'core/list-item',
-		type: 'list_item',
 		label: __('Link Parent', 'blockera'),
 		icon: <Icon icon="block-list-item" iconSize="20" />,
-		selectors: {
-			root: 'li.cat-item',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},

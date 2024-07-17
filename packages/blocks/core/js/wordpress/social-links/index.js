@@ -23,41 +23,29 @@ const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	item_containers: {
-		name: 'core/item_containers',
-		type: 'item_containers',
+		name: 'elements/item-containers',
 		label: __('Buttons', 'blockera'),
 		icon: <Icon icon="block-social-link-container" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-social-link',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
 	item_icons: {
-		name: 'core/item_icons',
-		type: 'item_icons',
+		name: 'elements/item-icons',
 		label: __('Buttons Icons', 'blockera'),
 		icon: <Icon icon="block-social-link-icon" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-social-link svg',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
 	item_names: {
-		name: 'core/item_names',
-		type: 'item_names',
+		name: 'elements/item-names',
 		label: __('Buttons Names', 'blockera'),
 		icon: <Icon icon="block-social-link-name" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-social-link .wp-block-social-link-label',
-		},
 		attributes,
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
