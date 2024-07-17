@@ -15,6 +15,9 @@ $theme = wp_get_theme();
 return apply_filters(
 	'blockera/config/entities',
 	[
+		'wp'       => [
+			'version' => get_bloginfo( 'version' ),
+		],
 		'theme'    => [
 			'name'        => [
 				'raw'      => $theme->template,
