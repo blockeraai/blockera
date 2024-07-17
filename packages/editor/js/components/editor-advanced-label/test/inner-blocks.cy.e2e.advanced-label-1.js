@@ -34,7 +34,7 @@ describe('Inner Blocks label testing', () => {
 		);
 
 		// Set value
-		cy.setColorControlValue('Text Color', 'ccc');
+		cy.setColorControlValue('Text Color', 'cccccc');
 
 		// Assert label after set value
 		cy.checkLabelClassName(
@@ -44,7 +44,7 @@ describe('Inner Blocks label testing', () => {
 		);
 
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@color-label').should('include.text', 'cccccc');
 
 		/**
 		 * Pseudo State (Hover)
@@ -123,7 +123,7 @@ describe('Inner Blocks label testing', () => {
 		);
 
 		// Set value
-		cy.setColorControlValue('Text Color', 'ccc');
+		cy.setColorControlValue('Text Color', 'cccccc');
 
 		// Assert label after set value
 		cy.checkLabelClassName(
@@ -132,7 +132,7 @@ describe('Inner Blocks label testing', () => {
 			'changed-in-secondary-state'
 		);
 		// Assert control
-		cy.get('@color-label').should('include.text', 'ccc');
+		cy.get('@color-label').should('include.text', 'cccccc');
 
 		/**
 		 * Normal
@@ -192,7 +192,7 @@ describe('Inner Blocks label testing', () => {
 				);
 
 				// Set value
-				cy.setColorControlValue('Text Color', 'aaa');
+				cy.setColorControlValue('Text Color', 'aaaaaa');
 
 				// Assert label after set value
 				cy.checkLabelClassName(
@@ -218,7 +218,7 @@ describe('Inner Blocks label testing', () => {
 				);
 
 				// Set value
-				cy.setColorControlValue('Text Color', 'eee');
+				cy.setColorControlValue('Text Color', 'eeeeee');
 
 				// Assert label after set value
 				cy.checkLabelClassName(
@@ -260,7 +260,7 @@ describe('Inner Blocks label testing', () => {
 			});
 
 			// Set value
-			cy.setColorControlValue('Text Color', 'bbb');
+			cy.setColorControlValue('Text Color', 'bbbbbb');
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -370,19 +370,19 @@ describe('Inner Blocks label testing', () => {
 			setInnerBlock('Link');
 
 			// Set value in normal/desktop
-			cy.setColorControlValue('Text Color', 'ccc');
+			cy.setColorControlValue('Text Color', 'cccccc');
 
 			// Set value in hover/desktop
 			addBlockState('hover');
-			cy.setColorControlValue('Text Color', 'bbb');
+			cy.setColorControlValue('Text Color', 'bbbbbb');
 
 			// Set value in hover/tablet
 			setDeviceType('Tablet');
-			cy.setColorControlValue('Text Color', 'aaa');
+			cy.setColorControlValue('Text Color', 'aaaaaa');
 
 			// Set value in normal/tablet
 			setBlockState('Normal');
-			cy.setColorControlValue('Text Color', 'eee');
+			cy.setColorControlValue('Text Color', 'eeeeee');
 
 			/**
 			 * Hover -> Inner
@@ -392,15 +392,15 @@ describe('Inner Blocks label testing', () => {
 			setInnerBlock('Link');
 
 			// Set value in normal/tablet
-			cy.setColorControlValue('Text Color', 'fff');
+			cy.setColorControlValue('Text Color', 'ffffff');
 
 			// Set value in normal/desktop
 			setDeviceType('Desktop');
-			cy.setColorControlValue('Text Color', '777');
+			cy.setColorControlValue('Text Color', '777777');
 
 			// Set value in hover/desktop
 			setBlockState('Hover');
-			cy.setColorControlValue('Text Color', '555');
+			cy.setColorControlValue('Text Color', '555555');
 
 			context(
 				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Hover -> Inner -> hover/desktop',
@@ -708,19 +708,19 @@ describe('Inner Blocks label testing', () => {
 			setInnerBlock('Link');
 
 			// Set value in normal/desktop
-			cy.setColorControlValue('Text Color', 'ccc');
+			cy.setColorControlValue('Text Color', 'cccccc');
 
 			// Set value in hover/desktop
 			addBlockState('hover');
-			cy.setColorControlValue('Text Color', 'bbb');
+			cy.setColorControlValue('Text Color', 'bbbbbb');
 
 			// Set value in hover/tablet
 			setDeviceType('Tablet');
-			cy.setColorControlValue('Text Color', 'aaa');
+			cy.setColorControlValue('Text Color', 'aaaaaa');
 
 			// Set value in normal/tablet
 			setBlockState('Normal');
-			cy.setColorControlValue('Text Color', 'eee');
+			cy.setColorControlValue('Text Color', 'eeeeee');
 
 			/**
 			 * Hover -> inner ->
@@ -735,7 +735,7 @@ describe('Inner Blocks label testing', () => {
 			// Set value in hover/desktop
 			setBlockState('Hover');
 			setDeviceType('Desktop');
-			cy.setColorControlValue('Text Color', 'fff');
+			cy.setColorControlValue('Text Color', 'ffffff');
 
 			// Reset All
 			cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset-all');
@@ -910,7 +910,7 @@ describe('Inner Blocks label testing', () => {
 
 		it('set value in Normal -> Inner -> Normal/desktop and navigate between states and devices', () => {
 			setBlockState('Normal');
-			cy.setColorControlValue('Text Color', '333');
+			cy.setColorControlValue('Text Color', '333333');
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -920,7 +920,7 @@ describe('Inner Blocks label testing', () => {
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', '333');
+			cy.get('@color-label').should('include.text', '333333');
 
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {
@@ -1070,7 +1070,7 @@ describe('Inner Blocks label testing', () => {
 
 		it('set value in Normal -> Inner -> Hover/Tablet and navigate between states and devices', () => {
 			setDeviceType('Tablet');
-			cy.setColorControlValue('Text Color', '333');
+			cy.setColorControlValue('Text Color', '333333');
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -1080,7 +1080,7 @@ describe('Inner Blocks label testing', () => {
 			);
 
 			// Assert control
-			cy.get('@color-label').should('include.text', '333');
+			cy.get('@color-label').should('include.text', '333333');
 
 			// Assert state graph
 			cy.checkStateGraph('Typography', 'Text Color', {
@@ -1233,7 +1233,7 @@ describe('Inner Blocks label testing', () => {
 			setInnerBlock('Link');
 			setBlockState('Normal');
 
-			cy.setColorControlValue('Text Color', '333');
+			cy.setColorControlValue('Text Color', '333333');
 
 			// Assert label
 			// TODO : doesn't show changes
@@ -1244,7 +1244,7 @@ describe('Inner Blocks label testing', () => {
 			// );
 
 			// Assert control
-			cy.get('@color-label').should('include.text', '333');
+			cy.get('@color-label').should('include.text', '333333');
 
 			// Assert state graph
 			// TODO
