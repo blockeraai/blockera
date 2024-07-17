@@ -192,7 +192,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.getByAriaLabel('Add New State').click();
 
-			setDeviceType('Mobile');
+			setDeviceType('Mobile Portrait');
 			setInnerBlock('Link');
 
 			cy.getByAriaLabel('Add New State').click();

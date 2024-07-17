@@ -217,7 +217,8 @@ describe('Select Control label testing (Position)', () => {
 	});
 
 	it('should display changed value on Position -> Normal -> Mobile', () => {
-		setDeviceType('Mobile');
+		setDeviceType('Mobile Portrait');
+
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Position',
@@ -264,7 +265,8 @@ describe('Select Control label testing (Position)', () => {
 	});
 
 	it('should display changed value on Position -> Hover -> Mobile', () => {
-		setDeviceType('Mobile');
+		setDeviceType('Mobile Portrait');
+
 		/**
 		 * Hover
 		 */
