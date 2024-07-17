@@ -5,7 +5,6 @@ import {
 	appendBlocks,
 	createPost,
 	openInnerBlocksExtension,
-	openBlockNavigator,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Loginout Block → Inner Blocks', () => {
@@ -14,12 +13,9 @@ describe('Loginout Block → Inner Blocks', () => {
 	});
 
 	it('Should add all inner blocks to block settings', () => {
-		appendBlocks(`<!-- wp:loginout {"displayLoginAsForm":true} /-->`);
+		appendBlocks(`<!-- wp:loginout {"displayLoginAsForm":true} /-->  `);
 
-		// because of unknown issue we can not select bock from the editor
-		openBlockNavigator();
-
-		cy.get('[aria-label="Login/out"]').click();
+		cy.getBlock('core/loginout').click();
 
 		// open inner block settings
 		openInnerBlocksExtension();
