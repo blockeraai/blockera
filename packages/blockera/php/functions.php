@@ -83,12 +83,12 @@ if ( ! function_exists( 'blockera_load' ) ) {
 	 * Loading file by path and params.
 	 *
 	 * @param string $path    the path of file to load.
-	 * @param array  $params  the required params to load file data.
 	 * @param string $baseDir the path current base directory.
+	 * @param array  $params  the required params to load file data.
 	 *
 	 * @return mixed file data on success, false on otherwise!
 	 */
-	function blockera_load( string $path, array $params = [], string $baseDir = '' ) {
+	function blockera_load( string $path, string $baseDir = '', array $params = [] ) {
 
 		$file = str_replace( '.', DIRECTORY_SEPARATOR, $path ) . '.php';
 

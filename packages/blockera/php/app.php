@@ -19,9 +19,9 @@ $blockera = new \Blockera\Setup\Blockera();
 if ( ! defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ) {
 
 	// Experimental filter for variables.
-	blockera_load( 'hooks', [], __DIR__ );
+	blockera_load( 'hooks', __DIR__ );
 }
 
-blockera_load( 'wordpress.php.Admin.Menu.hooks', [], dirname( __DIR__, 2 ) );
+blockera_load( 'wordpress.php.Admin.Menu.hooks', dirname( __DIR__, 2 ) );
 
 $blockera->bootstrap();
