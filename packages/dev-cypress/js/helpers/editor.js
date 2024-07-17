@@ -456,7 +456,7 @@ export const reSelectBlock = () => {
 	cy.getIframeBody().find('h1').click();
 
 	// reselect block
-	cy.getIframeBody().find(`[data-type="core/paragraph"]`).click();
+	cy.getIframeBody().find(`[data-type="core/paragraph"]`).first().click();
 };
 
 // https://github.com/10up/cypress-wp-utils/blob/013915676935410cf3390829a52bc5e0c80b6deb/src/commands/open-document-settings-sidebar.ts
