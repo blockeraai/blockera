@@ -78,6 +78,7 @@ export function Margin({
 							</>
 						}
 						label={__('Margin', 'blockera')}
+						offset={130}
 						{...{
 							attribute,
 							blockName,

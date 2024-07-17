@@ -245,7 +245,6 @@ export function PaddingRight({
 					<SidePopover
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.right')}
-						offset={215}
 						type="padding"
 						icon={<Icon icon="padding-right" iconSize="18" />}
 						onClose={() => {

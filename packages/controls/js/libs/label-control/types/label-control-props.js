@@ -29,6 +29,7 @@ export type LabelControlProps = {
 		onChange?: (newValue: any) => void,
 		valueCleanup?: (newValue: any) => any,
 	}) => any,
+	offset?: number,
 };
 
 export type SimpleLabelControlProps = {

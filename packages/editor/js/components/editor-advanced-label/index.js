@@ -49,6 +49,7 @@ export const EditorAdvancedLabelControl = ({
 	repeaterItem,
 	resetToDefault,
 	onClick,
+	offset = 35,
 	...props
 }: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
@@ -164,7 +165,7 @@ export const EditorAdvancedLabelControl = ({
 
 			{isOpenModal && (
 				<Popover
-					offset={35}
+					offset={offset}
 					title={
 						<>
 							<Icon icon="question-circle" iconSize="24" />

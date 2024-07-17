@@ -9,4 +9,5 @@ export type AdvancedLabelControlProps = {
 	...LabelControlProps,
 	blockName?: string,
 	attribute?: string,
+	offset?: number,
 };
