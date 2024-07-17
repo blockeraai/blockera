@@ -90,24 +90,10 @@ export const useAttributes = (
 		}
 
 		// Sets "className" attribute value is existing on block attributes to merge with default value.
-		if (
-			!attributes?.className &&
-			_attributes?.hasOwnProperty('className')
-		) {
+		if (!attributes?.className) {
 			_attributes = {
 				..._attributes,
-				className: classNames({
-					'blockera-block': true,
-					[`blockera-block-${clientId}`]: true,
-				}),
-			};
-		} else if (
-			'' === className &&
-			_attributes?.hasOwnProperty('className')
-		) {
-			_attributes = {
-				..._attributes,
-				className: classNames({
+				className: classNames(className, {
 					'blockera-block': true,
 					[`blockera-block-${clientId}`]: true,
 				}),
