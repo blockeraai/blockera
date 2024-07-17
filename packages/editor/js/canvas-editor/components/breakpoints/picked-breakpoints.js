@@ -51,8 +51,10 @@ export default function ({
 							onClick={(event) => {
 								event.stopPropagation();
 
-								onClick(itemId);
-								setActiveBreakpoint(itemId);
+								if (itemId !== currentActiveBreakpoint) {
+									onClick(itemId);
+									setActiveBreakpoint(itemId);
+								}
 							}}
 						/>
 					);
