@@ -233,13 +233,11 @@ export function appendBlocks(blocksCode) {
 
 	cy.get('.editor-post-text-editor')
 		.invoke('val', blocksCode)
-		.trigger('change');
-
-	// type a space to make sure the value is updated in the editor
-	cy.get('.editor-post-text-editor').type(' ', {
-		parseSpecialCharSequences: false,
-		keystrokeDelay: 0,
-	});
+		.trigger('change')
+		.then(() => {
+			// type a space to make sure the value is updated in the editor
+			cy.get('.editor-post-text-editor').type(' ', { force: true });
+		});
 
 	cy.get('button').contains('Exit code editor').click();
 
