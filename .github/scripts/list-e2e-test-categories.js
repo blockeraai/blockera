@@ -28,7 +28,7 @@ const main = () => {
 		}
 	});
 
-	console.log(JSON.stringify(Array.from(categories)));
+	console.log(JSON.stringify(Array.from(categories).sort()));
 };
 
 main();
