@@ -7,20 +7,21 @@
  * @package blockera/packages/blocks/js/wordpress/search
  */
 
+$inputs = blockera_load( 'inners.inputs', dirname( __DIR__ ) );
+
+// We not needs to "elements/input-label" and "elements/remember" inside search block!
+unset( $inputs['elements/input-label'], $inputs['elements/remember'] );
+
 return array_merge(
 	$args,
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'label'  => [
+				'elements/label' => [
 					'root' => '.wp-block-search__label',
 				],
-				'input'  => [
-					'root' => '.wp-block-search__input',
-				],
-				'button' => [
-					'root' => '.wp-block-search__button',
-				],
+				'elements/input' => $inputs['elements/input'],
+				...blockera_load( 'inners.button', dirname( __DIR__ ) ),
 			],
 		],
 	]

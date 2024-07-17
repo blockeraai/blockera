@@ -11,11 +11,7 @@ return array_merge(
 	$args,
 	[
 		'selectors' => [
-			'innerBlocks' => [
-				'button' => [
-					'root' => '.wp-block-button > .wp-element-button',
-				],
-			],
+			'innerBlocks' => blockera_load( 'inners.button', dirname( __DIR__ ) ),
 		],
 	]
 );

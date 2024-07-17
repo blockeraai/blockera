@@ -12,7 +12,7 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'caption' => [
+				'elements/caption' => [
 					'root' => 'figcaption',
 				],
 			],

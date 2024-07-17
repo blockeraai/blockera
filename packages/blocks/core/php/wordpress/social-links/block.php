@@ -12,13 +12,13 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'item_containers' => [
+				'elements/item-containers' => [
 					'root' => '.wp-block-social-link',
 				],
-				'item_icons'      => [
+				'elements/item-icons'      => [
 					'root' => '.wp-block-social-link svg',
 				],
-				'item_names'      => [
+				'elements/item-names'      => [
 					'root' => '.wp-block-social-link .wp-block-social-link-label',
 				],
 			],

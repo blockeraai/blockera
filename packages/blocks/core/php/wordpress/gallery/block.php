@@ -12,13 +12,11 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'gallery_caption' => [
+				'elements/gallery-caption' => [
 					'root' => '> figcaption',
 				],
-				'image'           => [
-					'root' => '.wp-block-image img',
-				],
-				'image_caption'   => [
+				...blockera_load( 'inners.image', dirname( __DIR__ ) ),
+				'elements/image-caption'   => [
 					'root' => '.wp-block-image figcaption',
 				],
 			],

@@ -12,21 +12,11 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'form'        => [
+				'elements/form' => [
 					'root' => 'form',
 				],
-				'input_label' => [
-					'root' => '.login-password label, .login-username label',
-				],
-				'input'       => [
-					'root' => '.login-password input, .login-username input',
-				],
-				'remember'    => [
-					'root' => '.login-remember label',
-				],
-				'button'      => [
-					'root' => '.button.button-primary',
-				],
+				...blockera_load( 'inners.inputs', dirname( __DIR__ ) ),
+				...blockera_load( 'inners.button', dirname( __DIR__ ) ),
 			],
 		],
 	]

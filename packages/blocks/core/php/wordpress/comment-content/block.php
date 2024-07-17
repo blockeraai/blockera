@@ -12,9 +12,7 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'link' => [
-					'root' => 'a:not(.wp-element-button)',
-				],
+				...blockera_load( 'inners.link', dirname( __DIR__ ) ),
 			],
 		],
 	]

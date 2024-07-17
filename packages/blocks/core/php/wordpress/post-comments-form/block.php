@@ -7,59 +7,35 @@
  * @package blockera/packages/blocks/js/wordpress/post-comments-form
  */
 
+$inputs = blockera_load( 'inners.inputs', dirname( __DIR__ ) );
+
+// We not needs to "elements/remember" selectors inside post-comment-form block!
+unset( $inputs['elements/remember'] );
+
 return array_merge(
 	$args,
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'title'          => [
+				...$inputs,
+				'elements/title'          => [
 					'root' => '.comment-reply-title',
 				],
-				'form'           => [
+				'elements/form'           => [
 					'root' => '.comment-form',
 				],
-				'notes'          => [
+				'elements/notes'          => [
 					'root' => '.comment-notes',
 				],
-				'input_label'    => [
-					'root' => 'label',
-				],
-				'input'          => [
-					'root' => '.wp-block-search__input',
-				],
-				'textarea'       => [
+				'elements/textarea'       => [
 					'root' => 'textarea',
 				],
-				'cookie_consent' => [
+				'elements/cookie-consent' => [
 					'root' => '.comment-form-cookies-consent',
 				],
-				'link'           => [
-					'root' => 'a:not(.wp-element-button)',
-				],
-				'button'         => [
-					'root' => '.wp-block-button > .wp-element-button',
-				],
-				'heading'        => [
-					'root' => 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
-				],
-				'heading1'       => [
-					'root' => 'h1.wp-block-heading',
-				],
-				'heading2'       => [
-					'root' => 'h2.wp-block-heading',
-				],
-				'heading3'       => [
-					'root' => 'h3.wp-block-heading',
-				],
-				'heading4'       => [
-					'root' => 'h4.wp-block-heading',
-				],
-				'heading5'       => [
-					'root' => 'h5.wp-block-heading',
-				],
-				'heading6'       => [
-					'root' => 'h6.wp-block-heading',
-				],
+				...blockera_load( 'inners.link', dirname( __DIR__ ) ),
+				...blockera_load( 'inners.button', dirname( __DIR__ ) ),
+				...blockera_load( 'inners.headings', dirname( __DIR__ ) ),
 			],
 		],
 	]

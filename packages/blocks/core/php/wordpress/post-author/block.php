@@ -12,18 +12,16 @@ return array_merge(
 	[
 		'selectors' => [
 			'innerBlocks' => [
-				'avatar' => [
+				'core/avatar'     => [
 					'root' => '.wp-block-post-author__avatar > img',
 				],
-				'byline' => [
+				'elements/byline' => [
 					'root' => '.wp-block-post-author__byline',
 				],
-				'author' => [
+				'elements/author' => [
 					'root' => '.wp-block-post-author__name',
 				],
-				'link'   => [
-					'root' => 'a:not(.wp-element-button)',
-				],
+				...blockera_load( 'inners.link', dirname( __DIR__ ) ),
 			],
 		],
 	]
