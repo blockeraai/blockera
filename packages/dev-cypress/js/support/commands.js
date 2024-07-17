@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { hexStringToByte } from '../helpers';
+import { hexStringToByte, openBoxSpacingSide } from '../helpers';
 
 export const registerCommands = () => {
 	// Custom uploadFile command
@@ -294,28 +294,6 @@ export const registerCommands = () => {
 	Cypress.Commands.add(
 		'checkStateGraph',
 		(content, label, changes, repeaterItem = false) => {
-			const states = [
-				'Normal',
-				'Hover',
-				'Active',
-				'Focus',
-				'Visited',
-				'Before',
-				'After',
-				'Custom Class',
-				'Parent Class',
-				'Parent Hover',
-			];
-			const devices = [
-				'laptop',
-				'extra-large',
-				'large',
-				'desktop',
-				'tablet',
-				'mobile-landscape',
-				'mobile',
-			];
-
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
@@ -331,41 +309,119 @@ export const registerCommands = () => {
 						cy.getByAriaLabel(label).click();
 					});
 
-			cy.getByDataTest('popover-body')
-				.last()
-				.within(() => {
-					Object.entries(changes).map(([device, updatedStates]) => {
-						cy.getByDataTest(`state-graph-${device}`).within(() => {
-							updatedStates.forEach((state) => {
-								cy.contains(state).should('exist');
-							});
+			cy.checkStateGraphPopover(changes);
+		}
+	);
 
-							//
-							states
-								.filter(
-									(state) => !updatedStates.includes(state)
-								)
-								.forEach((state) => {
-									cy.contains(state).should('not.exist');
-								});
-						});
+	Cypress.Commands.add(
+		'checkBoxSpacingStateGraph',
+		(type = 'margin', side = 'top', changes) => {
+			openBoxSpacingSide(side ? `${type}-${side}` : type);
+
+			// if there is no side it means there is no second popover
+			if (side) {
+				// open state graph
+				cy.get('[data-wp-component="Popover"]')
+					.last()
+					.within(() => {
+						cy.get('[data-cy="label-control"]').first().click();
 					});
+			}
 
-					devices
-						.filter(
-							(_device) => !Object.keys(changes).includes(_device)
-						)
-						.forEach((_device) => {
-							cy.getByDataTest(`state-graph-${_device}`).should(
-								'not.exist'
-							);
+			cy.checkStateGraphPopover(changes);
+
+			// if there is no side it means there is no second popover
+			if (side) {
+				// close state graph
+				cy.get('[data-wp-component="Popover"]')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel('Close').click();
+					});
+			}
+		}
+	);
+
+	Cypress.Commands.add('checkStateGraphPopover', (changes) => {
+		const states = [
+			'Normal',
+			'Hover',
+			'Active',
+			'Focus',
+			'Visited',
+			'Before',
+			'After',
+			'Custom Class',
+			'Parent Class',
+			'Parent Hover',
+		];
+		const devices = [
+			'laptop',
+			'extra-large',
+			'large',
+			'desktop',
+			'tablet',
+			'mobile-landscape',
+			'mobile',
+		];
+
+		cy.getByDataTest('popover-body')
+			.last()
+			.within(() => {
+				Object.entries(changes).map(([device, updatedStates]) => {
+					cy.getByDataTest(`state-graph-${device}`).within(() => {
+						updatedStates.forEach((state) => {
+							cy.contains(state).should('exist');
 						});
+
+						//
+						states
+							.filter((state) => !updatedStates.includes(state))
+							.forEach((state) => {
+								cy.contains(state).should('not.exist');
+							});
+					});
 				});
 
-			// Close state graph
-			cy.getByDataTest('popover-header')
-				.last()
-				.within(() => cy.getByAriaLabel('Close').click());
+				devices
+					.filter(
+						(_device) => !Object.keys(changes).includes(_device)
+					)
+					.forEach((_device) => {
+						cy.getByDataTest(`state-graph-${_device}`).should(
+							'not.exist'
+						);
+					});
+			});
+
+		// Close state graph
+		cy.getByDataTest('popover-header')
+			.last()
+			.within(() => cy.getByAriaLabel('Close').click());
+	});
+
+	Cypress.Commands.add(
+		'checkBoxSpacingLabelClassName',
+		(type = 'margin', side = 'top', cssClass, condition = 'have') => {
+			cy.get(
+				`[data-cy="box-spacing-${
+					side ? type + '-' + side : type
+				}"] [data-cy="label-control"]`
+			).should(
+				condition === 'have' ? 'have.class' : 'not.have.class',
+				cssClass
+			);
+		}
+	);
+
+	Cypress.Commands.add(
+		'checkBoxSpacingLabelContent',
+		(type = 'margin', side = 'top', content) => {
+			cy.get(
+				`[data-cy="box-spacing-${
+					side ? type + '-' + side : type
+				}"] [data-cy="label-control"]`
+			).contains(content);
 		}
 	);
 
