@@ -61,7 +61,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			(innerBlockType: InnerBlockType | string) => {
 				const innerBlock: InnerBlockModel = innerBlocks[innerBlockType];
 
-				const { name, label, icon, innerBlockSettings } = innerBlock;
+				const { name, label, icon, settings } = innerBlock;
 
 				const item = (
 					<BaseControl
@@ -112,7 +112,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 					</BaseControl>
 				);
 
-				if (innerBlockSettings?.force) {
+				if (settings?.force) {
 					forceInnerBlocks.push(item);
 				} else {
 					moreInnerBlocks.push(item);

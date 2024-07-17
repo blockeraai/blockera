@@ -27,7 +27,7 @@ export type InnerBlockModel = {
 		[key: string]: string,
 	},
 	attributes: Object,
-	innerBlockSettings: {
+	settings: {
 		force?: boolean,
 	},
 	...Object,
