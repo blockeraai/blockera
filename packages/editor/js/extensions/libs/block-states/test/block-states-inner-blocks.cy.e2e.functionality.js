@@ -21,6 +21,7 @@ import {
 	createPost,
 	getBlockClientId,
 	checkBlockCard,
+	getBlockInserter,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Inner Blocks E2E Test', () => {
@@ -704,7 +705,7 @@ describe('Inner Blocks E2E Test', () => {
 					// unfocus block
 					cy.getIframeBody().find('[aria-label="Add title"]').click();
 					// add new block
-					cy.getIframeBody().find('[aria-label="Add block"]').click();
+					getBlockInserter().click();
 
 					cy.get('.block-editor-inserter__panel-content').within(
 						() => {
