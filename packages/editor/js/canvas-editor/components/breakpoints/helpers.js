@@ -148,7 +148,7 @@ export const getLargestBreakpoint: (breakpoints?: {
  */
 export const getBreakpointLongDescription = (
 	breakpoint: TBreakpoint,
-	breakpoints: { [key: TBreakpoint]: BreakpointTypes }
+	breakpoints?: { [key: TBreakpoint]: BreakpointTypes }
 ): string => {
 	const { getBreakpoints } = select('blockera/editor') || {
 		getBreakpoints: defaultBreakpoints,
@@ -242,7 +242,7 @@ export const getBreakpointLongDescription = (
  */
 export const getBreakpointShortDescription = (
 	breakpoint: TBreakpoint,
-	breakpoints: { [key: TBreakpoint]: BreakpointTypes }
+	breakpoints?: { [key: TBreakpoint]: BreakpointTypes }
 ): string => {
 	const { getBreakpoints } = select('blockera/editor') || {
 		getBreakpoints: defaultBreakpoints,
