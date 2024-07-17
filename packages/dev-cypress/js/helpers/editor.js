@@ -233,7 +233,7 @@ export function savePage() {
 }
 
 export function appendBlocks(blocksCode) {
-	cy.get('[aria-label="Options"]').click();
+	cy.get('[aria-label="Options"]').first().click();
 	cy.get('span').contains('Code editor').click();
 
 	cy.get('.editor-post-text-editor')
