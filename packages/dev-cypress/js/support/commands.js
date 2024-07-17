@@ -1,4 +1,8 @@
 /**
+ * Blockera dependencies
+ */
+import { isString } from '@blockera/utils';
+/**
  * Internal dependencies
  */
 import { hexStringToByte, openBoxSpacingSide } from '../helpers';
@@ -403,14 +407,20 @@ export const registerCommands = () => {
 	Cypress.Commands.add(
 		'checkBoxSpacingLabelClassName',
 		(type = 'margin', side = 'top', cssClass, condition = 'have') => {
-			cy.get(
-				`[data-cy="box-spacing-${
-					side ? type + '-' + side : type
-				}"] [data-cy="label-control"]`
-			).should(
-				condition === 'have' ? 'have.class' : 'not.have.class',
-				cssClass
-			);
+			if (isString(cssClass)) {
+				cssClass = [cssClass];
+			}
+
+			cssClass.forEach((classItem) => {
+				cy.get(
+					`[data-cy="box-spacing-${
+						side ? type + '-' + side : type
+					}"] [data-cy="label-control"]`
+				).should(
+					condition === 'have' ? 'have.class' : 'not.have.class',
+					classItem
+				);
+			});
 		}
 	);
 
