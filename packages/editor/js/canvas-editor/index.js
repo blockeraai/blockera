@@ -47,3 +47,4 @@ export const CanvasEditor = ({
 };
 
 export * from './components';
+export * from './bootstrap';

@@ -15,7 +15,11 @@ import {
 } from '@blockera/blocks-core';
 import { noop } from '@blockera/utils';
 import { initializer } from '@blockera/bootstrap';
-import { applyHooks, defineGlobalProps } from '@blockera/editor';
+import {
+	applyHooks,
+	defineGlobalProps,
+	bootstrapCanvasEditor,
+} from '@blockera/editor';
 
 /**
  * Initialize blockera react application.
@@ -26,6 +30,9 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 	defineGlobalProps(() => {
 		// Bootstrap functions for blocks.
 		blockeraBootstrapBlocks();
+
+		// Bootstrap canvas editor UI.
+		bootstrapCanvasEditor(window.wp);
 	});
 
 	applyHooks(() => {

@@ -67,7 +67,7 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 				isOpenOtherBreakpoints: false,
 			});
 
-			bootstrapScripts(window.wp);
+			bootstrapScripts();
 
 			if ('function' === typeof outsideDefinitions) {
 				outsideDefinitions();
