@@ -43,6 +43,7 @@ export function Padding({
 						'box-model-label',
 						'box-mode-padding'
 					)}
+					data-cy="box-spacing-padding"
 				>
 					<LabelControl
 						ariaLabel={__('Padding Spacing', 'blockera')}
@@ -55,6 +56,7 @@ export function Padding({
 						'box-model-label',
 						'box-mode-padding'
 					)}
+					data-cy="box-spacing-padding"
 				>
 					<LabelControl
 						mode={'advanced'}

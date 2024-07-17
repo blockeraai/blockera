@@ -43,6 +43,7 @@ export function Margin({
 						'box-model-label',
 						'box-mode-margin'
 					)}
+					data-cy="box-spacing-margin"
 				>
 					<LabelControl
 						ariaLabel={__('Margin Spacing', 'blockera')}
@@ -55,6 +56,7 @@ export function Margin({
 						'box-model-label',
 						'box-mode-margin'
 					)}
+					data-cy="box-spacing-margin"
 				>
 					<LabelControl
 						mode={'advanced'}
