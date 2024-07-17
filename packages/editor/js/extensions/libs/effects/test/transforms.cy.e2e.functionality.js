@@ -26,16 +26,18 @@ describe('Transforms → Functionality', () => {
 			});
 
 			// Add data
-			cy.get('.components-popover').within(() => {
-				cy.get('[aria-label="Move-X"]').clear();
-				cy.get('[aria-label="Move-X"]').type(150);
+			cy.get('.components-popover')
+				.last()
+				.within(() => {
+					cy.get('[aria-label="Move-X"]').clear();
+					cy.get('[aria-label="Move-X"]').type(150);
 
-				cy.get('[aria-label="Move-Y"]').clear();
-				cy.get('[aria-label="Move-Y"]').type(200);
+					cy.get('[aria-label="Move-Y"]').clear();
+					cy.get('[aria-label="Move-Y"]').type(200);
 
-				cy.get('[aria-label="Move-Z"]').clear();
-				cy.get('[aria-label="Move-Z"]').type(100);
-			});
+					cy.get('[aria-label="Move-Z"]').clear();
+					cy.get('[aria-label="Move-Z"]').type(100);
+				});
 
 			// Check block CSS
 			cy.getIframeBody().within(() => {
@@ -89,16 +91,18 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Add data
-			cy.get('.components-popover').within(() => {
-				cy.getByAriaLabel('Scale').click();
+			cy.get('.components-popover')
+				.last()
+				.within(() => {
+					cy.getByAriaLabel('Scale').click();
 
-				cy.getByAriaLabel('Scale')
-					.eq(1)
-					.parents('[data-cy="base-control"]')
-					.within(() => {
-						cy.get('input[type=range]').setSliderValue(130);
-					});
-			});
+					cy.getByAriaLabel('Scale')
+						.eq(1)
+						.parents('[data-cy="base-control"]')
+						.within(() => {
+							cy.get('input[type=range]').setSliderValue(130);
+						});
+				});
 
 			//Check block
 			cy.getIframeBody().within(() => {
@@ -137,13 +141,15 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Add data
-			cy.get('.components-popover').within(() => {
-				cy.getByAriaLabel('Rotate').click();
+			cy.get('.components-popover')
+				.last()
+				.within(() => {
+					cy.getByAriaLabel('Rotate').click();
 
-				cy.get('[aria-label="Rotate-X"]').type(10);
-				cy.get('[aria-label="Rotate-Y"]').type(20);
-				cy.get('[aria-label="Rotate-Z"]').type(30);
-			});
+					cy.get('[aria-label="Rotate-X"]').type(10);
+					cy.get('[aria-label="Rotate-Y"]').type(20);
+					cy.get('[aria-label="Rotate-Z"]').type(30);
+				});
 
 			//Check block
 			cy.getIframeBody().within(() => {
@@ -190,13 +196,15 @@ describe('Transforms → Functionality', () => {
 			});
 
 			//Add data
-			cy.get('.components-popover').within(() => {
-				cy.getByAriaLabel('Skew').click();
+			cy.get('.components-popover')
+				.last()
+				.within(() => {
+					cy.getByAriaLabel('Skew').click();
 
-				cy.get('[aria-label="Skew-X"]').type(10);
+					cy.get('[aria-label="Skew-X"]').type(10);
 
-				cy.get('[aria-label="Skew-Y"]').type(20);
-			});
+					cy.get('[aria-label="Skew-Y"]').type(20);
+				});
 
 			//Check block
 			cy.getIframeBody().within(() => {

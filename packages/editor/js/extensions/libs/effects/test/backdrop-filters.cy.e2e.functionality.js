@@ -21,22 +21,24 @@ describe('Backdrop Filters → Functionality', () => {
 			cy.getByAriaLabel('Add New Backdrop Filter').click();
 		});
 
-		cy.get('.components-popover').within(() => {
-			cy.getParentContainer('Type').within(() => {
-				cy.get('select').select('drop-shadow');
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.getParentContainer('Type').within(() => {
+					cy.get('select').select('drop-shadow');
+				});
+
+				cy.getByDataTest('filter-drop-shadow-x-input').clear();
+				cy.getByDataTest('filter-drop-shadow-x-input').type(50);
+
+				cy.getByDataTest('filter-drop-shadow-y-input').clear();
+				cy.getByDataTest('filter-drop-shadow-y-input').type(30);
+
+				cy.getByDataTest('filter-drop-shadow-blur-input').clear();
+				cy.getByDataTest('filter-drop-shadow-blur-input').type(40);
+
+				cy.getByDataTest('filter-drop-shadow-color').click();
 			});
-
-			cy.getByDataTest('filter-drop-shadow-x-input').clear();
-			cy.getByDataTest('filter-drop-shadow-x-input').type(50);
-
-			cy.getByDataTest('filter-drop-shadow-y-input').clear();
-			cy.getByDataTest('filter-drop-shadow-y-input').type(30);
-
-			cy.getByDataTest('filter-drop-shadow-blur-input').clear();
-			cy.getByDataTest('filter-drop-shadow-blur-input').type(40);
-
-			cy.getByDataTest('filter-drop-shadow-color').click();
-		});
 
 		cy.get('.components-popover')
 			.last()

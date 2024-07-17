@@ -38,9 +38,11 @@ describe('Block Partials Testing ...', () => {
 		cy.getByAriaLabel('Pill Shape').contains('Pill Shape');
 
 		cy.getByAriaLabel('Block Settings').click();
-		cy.get('[data-wp-component="Popover"]').within(() => {
-			cy.getByDataTest('Gutenberg Block').click();
-		});
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.getByDataTest('Gutenberg Block').click();
+			});
 		cy.getByAriaLabel('Styles').click();
 
 		cy.getByAriaLabel('Pill Shape').contains('Pill Shape');

@@ -63,9 +63,11 @@ describe('Background Clip → Functionality', () => {
 		});
 
 		// add background image
-		cy.get('.components-popover').within(() => {
-			cy.contains('button', /choose image/i).click();
-		});
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.contains('button', /choose image/i).click();
+			});
 
 		cy.get('#menu-item-upload').click();
 		cy.get('input[type="file"]').selectFile(

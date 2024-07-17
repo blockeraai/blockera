@@ -21,33 +21,35 @@ describe('Transitions → Functionality', () => {
 			cy.getByAriaLabel('Add New Transition').click();
 		});
 
-		cy.get('.components-popover').within(() => {
-			cy.getParentContainer('Type').within(() => {
-				// check disabled options
-				cy.get('select').within(() => {
-					cy.get('[value="margin"]').should('be.disabled');
-					cy.get('[value="padding"]').should('be.disabled');
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.getParentContainer('Type').within(() => {
+					// check disabled options
+					cy.get('select').within(() => {
+						cy.get('[value="margin"]').should('be.disabled');
+						cy.get('[value="padding"]').should('be.disabled');
+					});
+
+					cy.get('select').select('opacity');
 				});
 
-				cy.get('select').select('opacity');
-			});
+				cy.getByDataTest('transition-input-duration').clear();
+				cy.getByDataTest('transition-input-duration').type(200);
 
-			cy.getByDataTest('transition-input-duration').clear();
-			cy.getByDataTest('transition-input-duration').type(200);
+				cy.getParentContainer('Timing').within(() => {
+					// check disabled options
+					cy.get('select').within(() => {
+						cy.get('[value="ease-in-quad"]').should('be.disabled');
+						cy.get('[value="ease-in-cubic"]').should('be.disabled');
+					});
 
-			cy.getParentContainer('Timing').within(() => {
-				// check disabled options
-				cy.get('select').within(() => {
-					cy.get('[value="ease-in-quad"]').should('be.disabled');
-					cy.get('[value="ease-in-cubic"]').should('be.disabled');
+					cy.get('select').select('ease-in-out');
 				});
 
-				cy.get('select').select('ease-in-out');
+				cy.getByDataTest('transition-input-delay').clear();
+				cy.getByDataTest('transition-input-delay').type(2000);
 			});
-
-			cy.getByDataTest('transition-input-delay').clear();
-			cy.getByDataTest('transition-input-delay').type(2000);
-		});
 
 		//Check block
 		cy.getBlock('core/paragraph').should(
