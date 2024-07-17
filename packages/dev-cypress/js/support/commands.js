@@ -474,6 +474,29 @@ export const registerCommands = () => {
 	);
 
 	Cypress.Commands.add(
+		'resetBoxSpacingAttribute',
+		(type = 'margin', side = 'top', resetType) => {
+			openBoxSpacingSide(side ? `${type}-${side}` : type);
+
+			// if there is no side it means there is no second popover
+			if (side) {
+				// open state graph
+				cy.get('[data-wp-component="Popover"]')
+					.last()
+					.within(() => {
+						cy.get('[data-cy="label-control"]').first().click();
+					});
+			}
+
+			cy.getByDataTest('popover-body')
+				.last()
+				.within(() => {
+					cy.getByDataTest(`${resetType}-button`).click();
+				});
+		}
+	);
+
+	Cypress.Commands.add(
 		'dragValue',
 		{ prevSubject: 'element' },
 		(subject, type = 'vertical', movement = 10) => {
