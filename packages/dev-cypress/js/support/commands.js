@@ -443,7 +443,7 @@ export const registerCommands = () => {
 			});
 		cy.getByDataTest('popover-body').within(() => {
 			cy.get('input[maxlength="9"]').clear();
-			cy.get('input[maxlength="9"]').type(value);
+			cy.get('input[maxlength="9"]').type(value, { delay: 0 });
 		});
 	});
 
