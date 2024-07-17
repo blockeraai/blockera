@@ -277,11 +277,13 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 					cy.get('button').click();
 				});
 
-				cy.get('.components-popover').within(() => {
-					cy.get('input').as('hexColorInput');
-					cy.get('@hexColorInput').clear();
-					cy.get('@hexColorInput').type('666');
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('input').as('hexColorInput');
+						cy.get('@hexColorInput').clear();
+						cy.get('@hexColorInput').type('666');
+					});
 
 				getWPDataObject().then((data) => {
 					expect({
@@ -303,9 +305,13 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				// Test 3: Clear Blockera value and check WP data
 				//
 
-				cy.get('.components-popover').within(() => {
-					cy.get('button[aria-label="Reset Color (Clear)"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get(
+							'button[aria-label="Reset Color (Clear)"]'
+						).click();
+					});
 
 				getWPDataObject().then((data) => {
 					expect({}).to.be.deep.equal(

@@ -121,11 +121,13 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 					cy.getByDataTest('border-control-color').click();
 				});
 
-				cy.get('.components-popover').within(() => {
-					cy.getByAriaLabel('Reset Color (Clear)').click({
-						force: true,
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel('Reset Color (Clear)').click({
+							force: true,
+						});
 					});
-				});
 
 				cy.get('@radius').within(() => {
 					cy.get('input').clear({ force: true });

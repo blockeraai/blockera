@@ -81,9 +81,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background repeat to no-repeat
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('button[data-value="no-repeat"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('button[data-value="no-repeat"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -198,9 +200,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background repeat to repeat
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('button[data-value="repeat"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('button[data-value="repeat"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -316,9 +320,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background repeat to repeat
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('button[data-value="repeat"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('button[data-value="repeat"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -332,9 +338,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background repeat to repeat-x
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('button[data-value="repeat-x"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('button[data-value="repeat-x"]').click();
+					});
 
 				getWPDataObject().then((data) => {
 					// repeat-x does not supported by wp and should be removed
@@ -347,9 +355,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background repeat to repeat-y
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('button[data-value="repeat-y"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('button[data-value="repeat-y"]').click();
+					});
 
 				getWPDataObject().then((data) => {
 					// repeat-y does not supported by wp and should be removed
@@ -362,9 +372,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background repeat to no-repeat
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('button[data-value="no-repeat"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('button[data-value="no-repeat"]').click();
+					});
 
 				getWPDataObject().then((data) => {
 					// no-repeat is supported

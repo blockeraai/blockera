@@ -57,11 +57,13 @@ describe('Font Color → WP Compatibility', () => {
 				});
 
 				// change color to #666 (#666666)
-				cy.get('.components-popover').within(() => {
-					cy.get('input').as('hexColorInput');
-					cy.get('@hexColorInput').clear();
-					cy.get('@hexColorInput').type('666');
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('input').as('hexColorInput');
+						cy.get('@hexColorInput').clear();
+						cy.get('@hexColorInput').type('666');
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -81,9 +83,11 @@ describe('Font Color → WP Compatibility', () => {
 				//
 
 				// clear value
-				cy.get('.components-popover').within(() => {
-					cy.getByAriaLabel('Reset Color (Clear)').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel('Reset Color (Clear)').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -141,11 +145,13 @@ describe('Font Color → WP Compatibility', () => {
 				});
 
 				// change color to #666 (#666666)
-				cy.get('.components-popover').within(() => {
-					cy.get('input').as('hexColorInput');
-					cy.get('@hexColorInput').clear();
-					cy.get('@hexColorInput').type('666');
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('input').as('hexColorInput');
+						cy.get('@hexColorInput').clear();
+						cy.get('@hexColorInput').type('666');
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -164,9 +170,11 @@ describe('Font Color → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 				// clear value
-				cy.get('.components-popover').within(() => {
-					cy.getByAriaLabel('Reset Color (Clear)').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel('Reset Color (Clear)').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -364,9 +372,11 @@ describe('Font Color → WP Compatibility', () => {
 				});
 
 				// change variable
-				cy.get('.components-popover').within(() => {
-					cy.selectValueAddonItem('contrast');
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.selectValueAddonItem('contrast');
+					});
 
 				// Check WP data
 				getWPDataObject().then((data) => {

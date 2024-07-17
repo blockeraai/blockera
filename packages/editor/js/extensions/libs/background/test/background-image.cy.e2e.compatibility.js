@@ -60,13 +60,15 @@ describe('Background → WP Compatibility', () => {
 				});
 
 				// change color to #666 (#666666)
-				cy.get('.components-popover').within(() => {
-					cy.getParentContainer('Angel').within(() => {
-						cy.get('input[type="number"]').as('angelInput');
-						cy.get('@angelInput').clear();
-						cy.get('@angelInput').type('45');
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getParentContainer('Angel').within(() => {
+							cy.get('input[type="number"]').as('angelInput');
+							cy.get('@angelInput').clear();
+							cy.get('@angelInput').type('45');
+						});
 					});
-				});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -248,9 +250,11 @@ describe('Background → WP Compatibility', () => {
 					cy.get('@repeaterBtn').click();
 				});
 
-				cy.get('.components-popover').within(() => {
-					cy.get('[data-value="farthest-side"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('[data-value="farthest-side"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -344,9 +348,11 @@ describe('Background → WP Compatibility', () => {
 
 				// change an inner item of background image
 				// to make sure the value will be moved to WP data again
-				cy.get('.components-popover').within(() => {
-					cy.get('[data-value="cover"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('[data-value="cover"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {

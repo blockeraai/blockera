@@ -76,9 +76,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background size → contain
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('[data-value="contain"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('[data-value="contain"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -185,9 +187,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background size → contain
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('[data-value="cover"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('[data-value="cover"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -294,12 +298,14 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background size → change to customized width
 				//
-				cy.get('.components-popover').within(() => {
-					cy.getParentContainer('Width').within(() => {
-						cy.get('select').select('px');
-						cy.get('input').type('10');
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getParentContainer('Width').within(() => {
+							cy.get('select').select('px');
+							cy.get('input').type('10');
+						});
 					});
-				});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -342,11 +348,13 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background size → change to auto
 				//
-				cy.get('.components-popover').within(() => {
-					cy.getParentContainer('Width').within(() => {
-						cy.get('select').select('auto');
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getParentContainer('Width').within(() => {
+							cy.get('select').select('auto');
+						});
 					});
-				});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -389,9 +397,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background size → change to contain
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('[data-value="contain"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('[data-value="contain"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -521,12 +531,14 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background size → change to customized width
 				//
-				cy.get('.components-popover').within(() => {
-					cy.getParentContainer('Width').within(() => {
-						cy.get('input').clear({ force: true });
-						cy.get('input').type('200');
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getParentContainer('Width').within(() => {
+							cy.get('input').clear({ force: true });
+							cy.get('input').type('200');
+						});
 					});
-				});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -569,11 +581,13 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background size → change to auto
 				//
-				cy.get('.components-popover').within(() => {
-					cy.getParentContainer('Width').within(() => {
-						cy.get('select').select('auto');
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getParentContainer('Width').within(() => {
+							cy.get('select').select('auto');
+						});
 					});
-				});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -616,9 +630,11 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background size → change to contain
 				//
-				cy.get('.components-popover').within(() => {
-					cy.get('[data-value="contain"]').click();
-				});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('[data-value="contain"]').click();
+					});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {

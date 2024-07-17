@@ -84,11 +84,13 @@ describe('Social Links Block → WP Compatibility', () => {
 			cy.get('button').click();
 		});
 
-		cy.get('.components-popover').within(() => {
-			cy.get('input').as('hexColorInput');
-			cy.get('@hexColorInput').clear();
-			cy.get('@hexColorInput').type('666');
-		});
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.get('input').as('hexColorInput');
+				cy.get('@hexColorInput').clear();
+				cy.get('@hexColorInput').type('666');
+			});
 
 		//
 		// Buttons Icons inner block
@@ -100,11 +102,13 @@ describe('Social Links Block → WP Compatibility', () => {
 			cy.get('button').click();
 		});
 
-		cy.get('.components-popover').within(() => {
-			cy.get('input').as('hexColorInput');
-			cy.get('@hexColorInput').clear();
-			cy.get('@hexColorInput').type('888');
-		});
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.get('input').as('hexColorInput');
+				cy.get('@hexColorInput').clear();
+				cy.get('@hexColorInput').type('888');
+			});
 
 		//
 		// Buttons Names inner block
@@ -116,11 +120,13 @@ describe('Social Links Block → WP Compatibility', () => {
 			cy.get('button').click();
 		});
 
-		cy.get('.components-popover').within(() => {
-			cy.get('input').as('hexColorInput');
-			cy.get('@hexColorInput').clear();
-			cy.get('@hexColorInput').type('999');
-		});
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.get('input').as('hexColorInput');
+				cy.get('@hexColorInput').clear();
+				cy.get('@hexColorInput').type('999');
+			});
 
 		//
 		// Check
@@ -172,9 +178,11 @@ describe('Social Links Block → WP Compatibility', () => {
 			cy.get('button').click();
 		});
 
-		cy.get('.components-popover').within(() => {
-			cy.get('button[aria-label="Reset Color (Clear)"]').click();
-		});
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.get('button[aria-label="Reset Color (Clear)"]').click();
+			});
 
 		//
 		// Buttons Icons inner block
@@ -186,9 +194,11 @@ describe('Social Links Block → WP Compatibility', () => {
 			cy.get('button').click();
 		});
 
-		cy.get('.components-popover').within(() => {
-			cy.get('button[aria-label="Reset Color (Clear)"]').click();
-		});
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.get('button[aria-label="Reset Color (Clear)"]').click();
+			});
 
 		//
 		// Buttons Names inner block
@@ -200,9 +210,11 @@ describe('Social Links Block → WP Compatibility', () => {
 			cy.get('button').click();
 		});
 
-		cy.get('.components-popover').within(() => {
-			cy.get('button[aria-label="Reset Color (Clear)"]').click();
-		});
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.get('button[aria-label="Reset Color (Clear)"]').click();
+			});
 
 		getWPDataObject().then((data) => {
 			expect(undefined).to.be.equal(getSelectedBlock(data, 'iconColor'));

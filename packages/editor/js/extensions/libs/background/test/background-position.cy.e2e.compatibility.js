@@ -81,17 +81,19 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background position
 				//
-				cy.get('.components-popover').within(() => {
-					cy.getParentContainer('Top').within(() => {
-						cy.get('input').clear();
-						cy.get('input').type('20');
-					});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getParentContainer('Top').within(() => {
+							cy.get('input').clear();
+							cy.get('input').type('20');
+						});
 
-					cy.getParentContainer('Left').within(() => {
-						cy.get('input').clear();
-						cy.get('input').type('30');
+						cy.getParentContainer('Left').within(() => {
+							cy.get('input').clear();
+							cy.get('input').type('30');
+						});
 					});
-				});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -206,17 +208,19 @@ describe('Background → WP Compatibility', () => {
 				//
 				// change: background position
 				//
-				cy.get('.components-popover').within(() => {
-					cy.getParentContainer('Top').within(() => {
-						cy.get('input').clear();
-						cy.get('input').type('100');
-					});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getParentContainer('Top').within(() => {
+							cy.get('input').clear();
+							cy.get('input').type('100');
+						});
 
-					cy.getParentContainer('Left').within(() => {
-						cy.get('input').clear();
-						cy.get('input').type('100');
+						cy.getParentContainer('Left').within(() => {
+							cy.get('input').clear();
+							cy.get('input').type('100');
+						});
 					});
-				});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
