@@ -275,22 +275,24 @@ export const registerCommands = () => {
 
 	Cypress.Commands.add(
 		'checkLabelClassName',
-		(content, label, cssClass, type = 'have') => {
+		(content, label, cssClass, condition = 'have') => {
+			if (isString(cssClass)) {
+				cssClass = [cssClass];
+			}
+
 			cy.get('h2')
 				.contains(content)
 				.parent()
 				.parent()
 				.within(() => {
-					if (type === 'not-have') {
+					cssClass.forEach((classItem) => {
 						cy.get(`[aria-label="${label}"]`).should(
-							'not.have.class',
-							cssClass
+							condition === 'have'
+								? 'have.class'
+								: 'not.have.class',
+							classItem
 						);
-					} else
-						cy.get(`[aria-label="${label}"]`).should(
-							'have.class',
-							cssClass
-						);
+					});
 				});
 		}
 	);
