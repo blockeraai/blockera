@@ -143,6 +143,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 					);
 
 					if (
+						!memoizedInnerBlocks[blockType?.name] &&
 						!blocks.find((block) => block.name === blockType?.name)
 					) {
 						blocks.push({
