@@ -36,7 +36,9 @@ export function Breadcrumb({
 	currentInnerBlock: InnerBlockModel | null,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
-	const { getBlockStates } = select('blockera/extensions');
+	const { getBlockStates, getExtensionCurrentBlock } = select(
+		'blockera/extensions'
+	);
 	const states = getBlockStates(clientId, blockName);
 
 	// do not show normal state and inner block was not selected
@@ -87,6 +89,23 @@ export function Breadcrumb({
 	const masterActiveState = getActiveMasterState(clientId, blockName);
 	const activeInnerBlockState = getActiveInnerState(clientId, activeBlock);
 
+	const { getBlockType } = select('core/blocks');
+
+	const getInnerBlockDetails = (): Object => {
+		if (innerBlocks[activeBlock]) {
+			return innerBlocks[activeBlock];
+		}
+
+		const registeredBlock = getBlockType(getExtensionCurrentBlock());
+
+		return {
+			...registeredBlock,
+			label: registeredBlock?.title,
+		};
+	};
+
+	const innerBlock = getInnerBlockDetails();
+
 	return (
 		<>
 			{Object.keys(states).length > 1 && states[masterActiveState] && (
@@ -109,9 +128,9 @@ export function Breadcrumb({
 							'block-card__title__item',
 							'inner-block'
 						)}
-						aria-label={`${innerBlocks[activeBlock].label} Inner Block`}
+						aria-label={`${innerBlock.label} Inner Block`}
 					>
-						{innerBlocks[activeBlock].label}
+						{innerBlock.label}
 					</span>
 
 					{0 !== Object.keys(innerBlockStates).length > 1 &&
