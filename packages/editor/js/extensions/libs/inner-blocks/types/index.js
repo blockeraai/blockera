@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 
 export type InnerBlockType =
 	| 'heading'
@@ -37,4 +38,9 @@ export type InnerBlocks = { [key: InnerBlockType | string]: InnerBlockModel };
 
 export type InnerBlocksProps = {
 	innerBlocks: InnerBlocks,
+	block: {
+		...TBlockProps,
+		attributes?: Object,
+	},
+	onChange: THandleOnChangeAttributes,
 };

@@ -8,8 +8,8 @@ import memoize from 'fast-memoize';
 /**
  * Internal dependencies
  */
-import type { InnerBlocks, InnerBlockType } from './types';
 import { prepareAttributesDefaultValues } from '../../components';
+import type { InnerBlocks, InnerBlockModel, InnerBlockType } from './types';
 
 /**
  * Preparing inner blocks.
@@ -57,3 +57,23 @@ export function prepareInnerBlockTypes(
 
 	return getMemoizedInnerBlocks(keys);
 }
+
+/**
+ * Is element instance.
+ *
+ * @param {InnerBlockModel} entity the inner block model.
+ * @return {boolean} true on success, false on failure.
+ */
+export const isElement = (entity: InnerBlockModel): boolean => {
+	return new RegExp('^elements/', 'ig').test(entity.name);
+};
+
+/**
+ * Is block instance.
+ *
+ * @param {InnerBlockModel} entity the inner block model.
+ * @return {boolean} true on success, false on failure.
+ */
+export const isBlock = (entity: InnerBlockModel): boolean => {
+	return new RegExp('^core/', 'ig').test(entity.name);
+};
