@@ -60,6 +60,7 @@ type Props = {
 	clientId: string,
 	supports: Object,
 	attributes: Object,
+	currentAttributes: Object,
 	controllerProps: {
 		currentTab: string,
 		currentState: TStates,
@@ -79,10 +80,11 @@ type Props = {
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
-		attributes: currentBlockAttributes,
+		attributes: blockAttributes,
 		setAttributes,
 		availableBlockStates,
 		currentStateAttributes,
+		currentAttributes: currentBlockAttributes,
 		controllerProps: {
 			currentTab,
 			currentBlock,
@@ -317,6 +319,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							/>
 
 							<InnerBlocksExtension
+								values={blockAttributes.blockeraInnerBlocks}
 								innerBlocks={blockeraInnerBlocks}
 								block={{
 									clientId: props.clientId,
