@@ -15,9 +15,12 @@ import { classNames } from '@blockera/classnames';
 
 export const Inserter = ({
 	callback,
+	maxItems,
+	insertArgs,
 	PlusButton,
 	AvailableBlocks,
 }: {
+	maxItems: number,
 	insertArgs: Object,
 	callback: () => void,
 	PlusButton: ComponentType<any>,
@@ -27,7 +30,21 @@ export const Inserter = ({
 
 	return (
 		<>
-			<PlusButton onClick={() => setOpenPicker(true)} />
+			<PlusButton
+				onClick={() => {
+					if (
+						Object.keys(insertArgs?.repeaterItems).length >=
+						maxItems
+					) {
+						return;
+					}
+
+					setOpenPicker(true);
+				}}
+				disabled={
+					Object.keys(insertArgs?.repeaterItems).length >= maxItems
+				}
+			/>
 
 			{isOpenPicker && (
 				<Popover

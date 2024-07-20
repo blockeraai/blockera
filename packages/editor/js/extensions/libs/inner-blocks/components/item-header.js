@@ -27,7 +27,10 @@ export default function ItemHeader({
 }): Element<any> {
 	return (
 		<div
-			className={controlInnerClassNames('repeater-group-header')}
+			className={controlInnerClassNames(
+				'repeater-group-header',
+				'blockera-inner-block-item'
+			)}
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
@@ -36,7 +39,10 @@ export default function ItemHeader({
 			)}
 		>
 			<span className={controlInnerClassNames('header-label')}>
-				{item.label}
+				{item.icon}
+				<span className={'blockera-inner-block-label'}>
+					{item.label}
+				</span>
 			</span>
 
 			{children}

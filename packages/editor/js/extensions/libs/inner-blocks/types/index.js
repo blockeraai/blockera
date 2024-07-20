@@ -37,6 +37,7 @@ export type InnerBlockModel = {
 export type InnerBlocks = { [key: InnerBlockType | string]: InnerBlockModel };
 
 export type InnerBlocksProps = {
+	values: InnerBlocks,
 	innerBlocks: InnerBlocks,
 	block: {
 		...TBlockProps,
