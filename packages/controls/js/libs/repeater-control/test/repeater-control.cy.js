@@ -1511,4 +1511,48 @@ describe('repeater control component testing', () => {
 			});
 		});
 	});
+
+	describe('external inserter support', () => {
+		it('should add new items with external inserter when on click plus button', () => {
+			const name = nanoid();
+
+			cy.withDataProvider({
+				component: (
+					<RepeaterControl
+						{...{
+							id: 'test-control',
+							isSupportInserter: true,
+							InserterComponent: (props: {
+								insertArgs: Object,
+								callback: () => void,
+								PlusButton: ComponentType<any>,
+							}) => {
+								const { PlusButton } = props;
+
+								return <PlusButton />;
+							},
+						}}
+						repeaterItemChildren={() => <RepeaterItemChildren />}
+						defaultRepeaterItemValue={{
+							selectable: true,
+							isOpen: true,
+						}}
+						addNewButtonLabel={__('Add New Item', 'blockera')}
+					/>
+				),
+				value: {},
+				store: STORE_NAME,
+				name,
+			});
+
+			cy.multiClick('[aria-label="Add New Item"]', 7);
+
+			// Check data provider value!
+			cy.then(() => {
+				expect(
+					Object.values(getControlValue(name, STORE_NAME))
+				).to.have.length(7);
+			});
+		});
+	});
 });
