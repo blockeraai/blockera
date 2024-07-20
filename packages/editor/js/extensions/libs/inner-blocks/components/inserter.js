@@ -11,6 +11,7 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import { Popover } from '@blockera/controls';
+import { classNames } from '@blockera/classnames';
 
 export const Inserter = ({
 	callback,
@@ -33,6 +34,7 @@ export const Inserter = ({
 					placement={'left-start'}
 					onClose={() => setOpenPicker(false)}
 					title={__('Select block/element', 'blockera')}
+					className={classNames('blockera-inner-blocks-picker')}
 				>
 					<AvailableBlocks onClick={callback} />
 				</Popover>

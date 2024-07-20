@@ -12,13 +12,11 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import {
-	classNames,
 	extensionClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { mergeObject, hasSameProps } from '@blockera/utils';
 import {
-	Flex,
 	RepeaterControl,
 	PanelBodyControl,
 	ControlContextProvider,
@@ -41,6 +39,7 @@ import { Inserter } from './components/inserter';
 import { generateExtensionId } from '../utils';
 import { isBlock, isElement } from './helpers';
 import { useBlockContext } from '../../hooks';
+import { AvailableBlocksAndElements } from './components/avialable-blocks-and-elements';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({ innerBlocks, block, onChange }: InnerBlocksProps): MixedElement => {
@@ -67,6 +66,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				(innerBlockType: InnerBlockType | string) => {
 					const innerBlock: InnerBlockModel =
 						innerBlocks[innerBlockType];
+
+					// Skip added inner items.
+					if (memoizedInnerBlocks[innerBlockType]) {
+						return;
+					}
 
 					if (isElement(innerBlock)) {
 						elements.push(innerBlock);
@@ -125,92 +129,6 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			name: generateExtensionId(block, 'inner-blocks', false),
 		};
 
-		const AvailableBlocksAndElements = () => {
-			const CategorizedItems = ({
-				items,
-				title,
-				category,
-			}: Object): MixedElement => (
-				<Flex
-					direction={'column'}
-					className={classNames('blockera-inner-blocks-inserter')}
-				>
-					<strong
-						className={classNames('blockera-inner-block-category')}
-					>
-						{title}
-					</strong>
-					<Flex
-						gap={'30px 5px'}
-						flexWrap={'wrap'}
-						justifyContent={'space-between'}
-						className={`blockera-inner-block-types blockera-inner-${category}-wrapper`}
-					>
-						{items.map(
-							(
-								innerBlock: InnerBlockModel,
-								index: number
-							): MixedElement => {
-								const { name, icon, label } = innerBlock;
-
-								return (
-									<div
-										key={index}
-										onClick={() => {
-											setBlockClientInners({
-												clientId: block.clientId,
-												inners: {
-													...getBlockInners(
-														block.clientId
-													),
-													[name]: innerBlock,
-												},
-											});
-											setCurrentBlock(name);
-										}}
-										aria-label={name}
-										className={classNames(
-											'blockera-inner-block-type'
-										)}
-									>
-										<div
-											className={classNames(
-												'blockera-inner-block-icon'
-											)}
-										>
-											{icon}
-										</div>
-										<div
-											className={classNames(
-												'blockera-inner-block-label'
-											)}
-										>
-											{label}
-										</div>
-									</div>
-								);
-							}
-						)}
-					</Flex>
-				</Flex>
-			);
-
-			return (
-				<>
-					<CategorizedItems
-						category={'elements'}
-						items={elements}
-						title={__('Elements', 'blockera')}
-					/>
-					<CategorizedItems
-						category={'blocks'}
-						items={blocks}
-						title={__('Blocks', 'blockera')}
-					/>
-				</>
-			);
-		};
-
 		return (
 			<PanelBodyControl
 				title={__('Inner Blocks', 'blockera')}
@@ -251,16 +169,27 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 									setCurrentBlock(item.name);
 								}
 							},
-							InserterComponent: (props: Object) => {
-								return (
-									<Inserter
-										AvailableBlocks={
-											AvailableBlocksAndElements
-										}
-										{...props}
-									/>
-								);
-							},
+							InserterComponent: (props: Object) => (
+								<Inserter
+									{...{
+										...props,
+										AvailableBlocks: () => (
+											<AvailableBlocksAndElements
+												blocks={blocks}
+												elements={elements}
+												setCurrentBlock={
+													setCurrentBlock
+												}
+												setBlockClientInners={
+													setBlockClientInners
+												}
+												clientId={block?.clientId}
+												getBlockInners={getBlockInners}
+											/>
+										),
+									}}
+								/>
+							),
 							repeaterItemHeader: ItemHeader,
 							// repeaterItemOpener: ItemOpener,
 							repeaterItemChildren: (props) => (
