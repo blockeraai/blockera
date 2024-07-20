@@ -397,3 +397,21 @@ export function getBlockStates(
 				initializeStates
 		: initializeStates;
 }
+
+/**
+ * Get block inners with client identifier and block type params.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ * @param {string} clientId the block client identifier.
+ * @return {*|string} the block states.
+ */
+export function getBlockInners(
+	{ blockExtensions }: Object,
+	clientId: string
+): Object {
+	const initializeStates = {};
+
+	return blockExtensions[clientId]
+		? blockExtensions[clientId]?.innerBlocks || initializeStates
+		: initializeStates;
+}

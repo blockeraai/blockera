@@ -109,13 +109,19 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 				}),
 			};
 		case 'SET_BLOCK_CLIENT_STATES':
-			const { clientId, blockType, blockStates } = action;
-
 			return {
 				...state,
-				[clientId]: {
-					...(state[clientId] || {}),
-					[blockType + '-block-states']: blockStates,
+				[action.clientId]: {
+					...(state[action.clientId] || {}),
+					[action.blockType + '-block-states']: action.blockStates,
+				},
+			};
+		case 'SET_BLOCK_CLIENT_INNERS':
+			return {
+				...state,
+				[action.clientId]: {
+					...(state[action.clientId] || {}),
+					innerBlocks: action.inners,
 				},
 			};
 	}
