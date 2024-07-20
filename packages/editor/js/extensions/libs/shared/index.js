@@ -318,6 +318,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<InnerBlocksExtension
 								innerBlocks={blockeraInnerBlocks}
+								block={{
+									clientId: props.clientId,
+									supports,
+									setAttributes,
+									blockName: props.name,
+								}}
+								onChange={handleOnChangeAttributes}
 							/>
 
 							<SpacingExtension
