@@ -6,7 +6,7 @@
  */
 
 return [
-	'link' => [
+	'elements/link' => [
 		'root' => 'a:not(.wp-element-button)',
 	],
 ];
