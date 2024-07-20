@@ -27,7 +27,7 @@ const attributes = sharedBlockExtensionAttributes;
 const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
-	gallery_caption: {
+	'elements/gallery-caption': {
 		name: 'elements/gallery-caption',
 		label: __('Gallery Caption', 'blockera'),
 		icon: <Icon icon="block-gallery-caption" iconSize="20" />,
@@ -36,7 +36,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	image_caption: {
+	'elements/image-caption': {
 		name: 'elements/image-caption',
 		label: __('Images Captions', 'blockera'),
 		icon: <Icon icon="block-image-caption" iconSize="20" />,

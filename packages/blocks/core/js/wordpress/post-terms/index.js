@@ -27,9 +27,8 @@ const attributes = sharedBlockExtensionAttributes;
 const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
-	separator: {
+	'core/separator': {
 		name: 'core/separator',
-		type: 'separator',
 		label: __('Separator', 'blockera'),
 		icon: <Icon icon="block-post-terms-separator" iconSize="20" />,
 		attributes,
@@ -37,9 +36,8 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	prefix: {
+	'elements/prefix': {
 		name: 'elements/prefix',
-		type: 'prefix',
 		label: __('Prefix Text', 'blockera'),
 		icon: <Icon icon="block-post-terms-prefix" iconSize="20" />,
 		attributes,
@@ -47,9 +45,8 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	suffix: {
+	'elements/suffix': {
 		name: 'elements/suffix',
-		type: 'suffix',
 		label: __('Suffix Text', 'blockera'),
 		icon: <Icon icon="block-post-terms-suffix" iconSize="20" />,
 		attributes,

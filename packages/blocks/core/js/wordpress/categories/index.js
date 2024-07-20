@@ -22,7 +22,7 @@ const attributes = sharedBlockExtensionAttributes;
 const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
-	term: {
+	'elements/term-item': {
 		name: 'elements/term-item',
 		label: __('Link', 'blockera'),
 		icon: <Icon icon="block-link" iconSize="20" />,
@@ -31,7 +31,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	list_item: {
+	'core/list-item': {
 		name: 'core/list-item',
 		label: __('Link Parent', 'blockera'),
 		icon: <Icon icon="block-list-item" iconSize="20" />,

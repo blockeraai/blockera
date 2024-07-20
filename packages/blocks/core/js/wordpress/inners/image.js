@@ -16,7 +16,7 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 const attributes = sharedBlockExtensionAttributes;
 
 const image: InnerBlocks = {
-	image: {
+	'core/image': {
 		name: 'core/image',
 		label: __('Image', 'blockera'),
 		icon: <Icon icon="block-image" iconSize="20" />,

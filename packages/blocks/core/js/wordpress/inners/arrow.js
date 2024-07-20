@@ -15,7 +15,7 @@ import { Icon } from '@blockera/icons';
 const attributes = sharedBlockExtensionAttributes;
 
 const arrow: InnerBlocks = {
-	'next-arrow': {
+	'elements/next-arrow': {
 		name: 'elements/next-arrow',
 		label: __('Arrow', 'blockera'),
 		icon: <Icon icon="block-pagination-next-arrow" size="20" />,
@@ -24,7 +24,7 @@ const arrow: InnerBlocks = {
 			force: true,
 		},
 	},
-	'prev-arrow': {
+	'elements/prev-arrow': {
 		name: 'elements/prev-arrow',
 		label: __('Arrow', 'blockera'),
 		icon: <Icon icon="block-pagination-previous-arrow" size="20" />,

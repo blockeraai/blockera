@@ -22,7 +22,7 @@ const attributes = sharedBlockExtensionAttributes;
 const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
-	item_icon: {
+	'elements/item-icon': {
 		name: 'elements/item-icon',
 		label: __('Button Icon', 'blockera'),
 		icon: <Icon icon="block-social-link-icon" iconSize="20" />,
@@ -31,7 +31,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	item_name: {
+	'elements/item-name': {
 		name: 'elements/item-name',
 		label: __('Button Name', 'blockera'),
 		icon: <Icon icon="block-social-link-name" iconSize="20" />,

@@ -15,7 +15,7 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 const attributes = sharedBlockExtensionAttributes;
 
 const link: InnerBlocks = {
-	link: {
+	'elements/link': {
 		name: 'elements/link',
 		label: __('Links', 'blockera'),
 		icon: <Icon icon="block-link" iconSize="20" />,

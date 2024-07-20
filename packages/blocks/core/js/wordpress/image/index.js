@@ -22,7 +22,7 @@ const attributes = sharedBlockExtensionAttributes;
 const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
-	caption: {
+	'elements/caption': {
 		name: 'elements/caption',
 		label: __('Caption', 'blockera'),
 		icon: <Icon icon="block-image-caption" iconSize="20" />,

@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
@@ -14,8 +13,6 @@ import {
 	sharedBlockExtensionSupports,
 	sharedBlockExtensionAttributes,
 } from '@blockera/editor';
-import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies

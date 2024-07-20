@@ -15,7 +15,7 @@ import { Icon } from '@blockera/icons';
 const attributes = sharedBlockExtensionAttributes;
 
 const button: InnerBlocks = {
-	button: {
+	'core/button': {
 		name: 'core/button',
 		label: __('Buttons', 'blockera'),
 		icon: <Icon icon="block-button" iconSize="20" />,

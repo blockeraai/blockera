@@ -15,7 +15,7 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 const attributes = sharedBlockExtensionAttributes;
 
 const inputs: InnerBlocks = {
-	input_label: {
+	'elements/input-label': {
 		name: 'elements/input-label',
 		label: __('Input Labels', 'blockera'),
 		icon: <Icon icon="block-login-form-labels" iconSize="20" />,
@@ -24,7 +24,7 @@ const inputs: InnerBlocks = {
 			force: true,
 		},
 	},
-	input: {
+	'elements/input': {
 		name: 'elements/input',
 		label: __('Inputs', 'blockera'),
 		icon: <Icon icon="block-login-form-inputs" iconSize="20" />,
@@ -33,7 +33,7 @@ const inputs: InnerBlocks = {
 			force: true,
 		},
 	},
-	remember: {
+	'elements/remember': {
 		name: 'elements/remember',
 		label: __('Remember Me', 'blockera'),
 		icon: <Icon icon="block-login-form-remember" iconSize="20" />,

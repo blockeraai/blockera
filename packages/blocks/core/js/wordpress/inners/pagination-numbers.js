@@ -16,7 +16,7 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 const attributes = sharedBlockExtensionAttributes;
 
 const paginationNumbers: InnerBlocks = {
-	numbers: {
+	'elements/numbers': {
 		name: 'elements/numbers',
 		label: __('Numbers', 'blockera'),
 		icon: <Icon icon="block-pagination-numbers" size="20" />,
@@ -25,7 +25,7 @@ const paginationNumbers: InnerBlocks = {
 			force: true,
 		},
 	},
-	current: {
+	'elements/current': {
 		name: 'elements/current',
 		label: __('Current Page', 'blockera'),
 		icon: <Icon icon="block-pagination-numbers-current" size="20" />,
@@ -34,7 +34,7 @@ const paginationNumbers: InnerBlocks = {
 			force: true,
 		},
 	},
-	dots: {
+	'elements/dots': {
 		name: 'elements/dots',
 		label: __('Dots', 'blockera'),
 		icon: <Icon icon="block-pagination-numbers-dots" size="20" />,

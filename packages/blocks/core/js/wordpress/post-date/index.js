@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**

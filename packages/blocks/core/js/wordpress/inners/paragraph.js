@@ -15,7 +15,7 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 const attributes = sharedBlockExtensionAttributes;
 
 const paragraph: InnerBlocks = {
-	paragraph: {
+	'core/paragraph': {
 		name: 'core/paragraph',
 		label: __('Paragraphs', 'blockera'),
 		icon: <Icon icon="block-paragraph" iconSize="20" />,

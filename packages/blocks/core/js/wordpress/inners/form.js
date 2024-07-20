@@ -21,7 +21,7 @@ import button from './button';
 const attributes = sharedBlockExtensionAttributes;
 
 const form: InnerBlocks = {
-	form: {
+	'elements/form': {
 		name: 'elements/form',
 		label: __('Form Container', 'blockera'),
 		icon: <Icon icon="block-login-form-container" iconSize="20" />,

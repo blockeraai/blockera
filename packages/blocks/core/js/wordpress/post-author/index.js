@@ -27,7 +27,7 @@ const attributes = sharedBlockExtensionAttributes;
 const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
-	avatar: {
+	'core/avatar': {
 		name: 'core/avatar',
 		type: 'avatar',
 		label: __('Avatar', 'blockera'),
@@ -37,7 +37,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	byline: {
+	'elements/byline': {
 		name: 'elements/byline',
 		type: 'byline',
 		label: __('Byline', 'blockera'),
@@ -47,7 +47,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	author: {
+	'elements/author': {
 		name: 'elements/author',
 		type: 'author',
 		label: __('Name', 'blockera'),

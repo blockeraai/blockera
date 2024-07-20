@@ -16,7 +16,7 @@ import { Icon } from '@blockera/icons';
 const attributes = sharedBlockExtensionAttributes;
 
 const citation: InnerBlocks = {
-	citation: {
+	'elements/citation': {
 		name: 'elements/citation',
 		label: __('Citation', 'blockera'),
 		icon: <Icon icon="block-citation" iconSize="20" />,

@@ -31,7 +31,7 @@ const attributes = sharedBlockExtensionAttributes;
 const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
-	title: {
+	'elements/title': {
 		name: 'elements/title',
 		label: __('Title', 'blockera'),
 		icon: <Icon icon="block-comments-form-reply-title" iconSize="20" />,
@@ -40,7 +40,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	notes: {
+	'elements/notes': {
 		name: 'elements/notes',
 		label: __('Notes', 'blockera'),
 		icon: <Icon icon="block-comments-form-notes" iconSize="20" />,
@@ -49,7 +49,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	textarea: {
+	'elements/textarea': {
 		name: 'elements/textarea',
 		label: __('Textarea Field', 'blockera'),
 		icon: <Icon icon="block-comments-form-textarea" iconSize="20" />,
@@ -58,7 +58,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
-	cookie_consent: {
+	'elements/cookie-consent': {
 		name: 'elements/cookie-consent',
 		label: __('Cookie Consent', 'blockera'),
 		icon: <Icon icon="block-comments-form-cookie-consent" iconSize="20" />,
@@ -70,7 +70,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 };
 
 // We not needs to remember in post-comments-form block!
-delete form?.remember;
+delete form['elements/remember'];
 
 export const PostCommentsFrom = {
 	name: 'blockeraPostCommentsForm',
