@@ -148,9 +148,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 											iconSize={22}
 										/>
 										{__('Grid', 'blockera')}
-										<span>
-											{__('Coming soon…', 'blockera')}
-										</span>
 									</h3>
 									<p>
 										{__(
@@ -221,16 +218,16 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										/>
 									),
 								},
-								// {
-								// 	label: __('Grid', 'blockera'),
-								// 	value: 'grid',
-								// 	icon: (
-								// 		<Icon
-								// 			icon="display-grid"
-								// 			iconSize={18}
-								// 		/>
-								// 	),
-								// },
+								{
+									label: __('Grid', 'blockera'),
+									value: 'grid',
+									icon: (
+										<Icon
+											icon="display-grid"
+											iconSize={18}
+										/>
+									),
+								},
 								{
 									label: __('Inline Block', 'blockera'),
 									value: 'inline-block',
@@ -290,519 +287,482 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				</EditorFeatureWrapper>
 
 				{values.blockeraDisplay === 'flex' && (
-					<>
-						<EditorFeatureWrapper
-							isActive={isShowFlexLayout}
-							config={extensionConfig.blockeraFlexLayout}
+					<EditorFeatureWrapper
+						isActive={isShowFlexLayout}
+						config={extensionConfig.blockeraFlexLayout}
+					>
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'flex-layout'),
+								value: values.blockeraFlexLayout,
+								attribute: 'blockeraFlexLayout',
+								blockName: block.blockName,
+							}}
 						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'flex-layout'
-									),
-									value: values.blockeraFlexLayout,
-									attribute: 'blockeraFlexLayout',
-									blockName: block.blockName,
-								}}
-							>
-								<LayoutMatrixControl
-									columns="80px 160px"
-									label={__('Flex Layout', 'blockera')}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'This is an intuitive interface for you to effortlessly configure Flexbox properties easily.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'You have the ability to configure the flex direction as either horizontal or vertical, and you can also select how items are aligned along these axes.',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									defaultValue={
-										attributes.blockeraFlexLayout.default
-									}
-									onChange={(newValue, ref) =>
-										handleOnChangeAttributes(
-											'blockeraFlexLayout',
-											newValue,
-											{ ref }
-										)
-									}
-									{...extensionProps.blockeraFlexLayout}
-								/>
-							</ControlContextProvider>
-						</EditorFeatureWrapper>
-
-						<EditorFeatureWrapper
-							isActive={isShowGap}
-							config={extensionConfig.blockeraGap}
-						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(block, 'gap'),
-									value: values.blockeraGap,
-									attribute: 'blockeraGap',
-									blockName: block.blockName,
-									type: 'nested',
-								}}
-							>
-								<Gap
-									block={block}
-									gap={values.blockeraGap}
-									field={extensionConfig.blockeraGap}
-									attributeId="blockeraGap"
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-									defaultValue={
-										attributes.blockeraGap.default
-									}
-									{...extensionProps.blockeraGap}
-								/>
-							</ControlContextProvider>
-						</EditorFeatureWrapper>
-
-						<EditorFeatureWrapper
-							isActive={isShowFlexWrap}
-							config={extensionConfig.blockeraFlexWrap}
-						>
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										block,
-										'flexWrap'
-									),
-									value: values.blockeraFlexWrap,
-									attribute: 'blockeraFlexWrap',
-									blockName: block.blockName,
-									type: 'nested',
-								}}
-							>
-								<BaseControl columns="columns-1">
-									<Flex>
-										<ToggleSelectControl
-											id={'value'}
-											columns="80px 120px"
-											label={__(
-												'Children Wrap',
+							<LayoutMatrixControl
+								columns="80px 160px"
+								label={__('Flex Layout', 'blockera')}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'This is an intuitive interface for you to effortlessly configure Flexbox properties easily.',
 												'blockera'
 											)}
-											labelDescription={
-												<>
-													<p>
-														{__(
-															'It controls whether flex items are forced into a single line or can be wrapped onto multiple lines, adjusting layout flexibility and responsiveness.',
-															'blockera'
-														)}
-													</p>
-													<p>
-														{__(
-															'It is crucial for managing the layout of flex items, especially when the container cannot accommodate all items in one row, ensuring content adaptability and orderliness.',
-															'blockera'
-														)}
-													</p>
-
-													<h3>
-														<Icon
-															icon="wrap-no"
-															iconSize={22}
-														/>
-														{__(
-															'No Wrap',
-															'blockera'
-														)}
-													</h3>
-													<p>
-														{__(
-															'All flex items will be on one line regardless of their size.',
-															'blockera'
-														)}
-													</p>
-													<h3>
-														<Icon
-															icon="wrap"
-															iconSize={22}
-														/>
-														{__('Wrap', 'blockera')}
-													</h3>
-													<p>
-														{__(
-															'Flex items will wrap onto multiple lines, from top to bottom.',
-															'blockera'
-														)}
-													</p>
-													<p>
-														<span
-															style={{
-																fontWeight:
-																	'600',
-																color: '#ffffff',
-															}}
-														>
-															{__(
-																'Note:',
-																'blockera'
-															)}
-														</span>{' '}
-														{__(
-															'Using the reverse function flex items will wrap onto multiple lines in reverse order.',
-															'blockera'
-														)}
-													</p>
-												</>
-											}
-											options={[
-												{
-													label: __(
-														'No Wrap',
-														'blockera'
-													),
-													value: 'nowrap',
-													icon: (
-														<Icon
-															icon="wrap-no"
-															iconSize={18}
-														/>
-													),
-												},
-												{
-													label: __(
-														'Wrap',
-														'blockera'
-													),
-													value: 'wrap',
-													icon: (
-														<Icon
-															icon="wrap"
-															iconSize={18}
-														/>
-													),
-												},
-											]}
-											//
-											defaultValue={
-												attributes.blockeraFlexWrap
-													.default.value
-											}
-											onChange={(newValue, ref) => {
-												if (newValue === '') {
-													handleOnChangeAttributes(
-														'blockeraFlexWrap',
-														attributes
-															.blockeraFlexWrap
-															.default,
-														{ ref }
-													);
-												} else if (
-													newValue === 'nowrap'
-												) {
-													handleOnChangeAttributes(
-														'blockeraFlexWrap',
-														{
-															value: newValue,
-															reverse: false,
-														},
-														{ ref }
-													);
-												} else {
-													handleOnChangeAttributes(
-														'blockeraFlexWrap',
-														{
-															...values.blockeraFlexWrap,
-															value: 'wrap',
-														},
-														{ ref }
-													);
-												}
-											}}
-											isDeselectable={true}
-											{...extensionProps.blockeraFlexWrap}
-										/>
-
-										<Button
-											showTooltip={true}
-											tooltipPosition="top"
-											label={__(
-												'Reverse Children Wrapping',
+										</p>
+										<p>
+											{__(
+												'You have the ability to configure the flex direction as either horizontal or vertical, and you can also select how items are aligned along these axes.',
 												'blockera'
 											)}
-											size="small"
-											style={{
-												color: values.blockeraFlexWrap
-													?.reverse
-													? 'var(--blockera-controls-primary-color)'
-													: 'var(--blockera-controls-color)',
-												padding: '6px',
-											}}
-											disabled={
-												values.blockeraFlexWrap
-													.value === 'nowrap' || ''
-											}
-											onClick={() => {
+										</p>
+									</>
+								}
+								defaultValue={
+									attributes.blockeraFlexLayout.default
+								}
+								onChange={(newValue, ref) =>
+									handleOnChangeAttributes(
+										'blockeraFlexLayout',
+										newValue,
+										{ ref }
+									)
+								}
+								{...extensionProps.blockeraFlexLayout}
+							/>
+						</ControlContextProvider>
+					</EditorFeatureWrapper>
+				)}
+
+				{['flex', 'grid'].includes(values.blockeraDisplay) && (
+					<EditorFeatureWrapper
+						isActive={isShowGap}
+						config={extensionConfig.blockeraGap}
+					>
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'gap'),
+								value: values.blockeraGap,
+								attribute: 'blockeraGap',
+								blockName: block.blockName,
+								type: 'nested',
+							}}
+						>
+							<Gap
+								block={block}
+								gap={values.blockeraGap}
+								field={extensionConfig.blockeraGap}
+								attributeId="blockeraGap"
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								defaultValue={attributes.blockeraGap.default}
+								{...extensionProps.blockeraGap}
+							/>
+						</ControlContextProvider>
+					</EditorFeatureWrapper>
+				)}
+
+				{values.blockeraDisplay === 'flex' && (
+					<EditorFeatureWrapper
+						isActive={isShowFlexWrap}
+						config={extensionConfig.blockeraFlexWrap}
+					>
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'flexWrap'),
+								value: values.blockeraFlexWrap,
+								attribute: 'blockeraFlexWrap',
+								blockName: block.blockName,
+								type: 'nested',
+							}}
+						>
+							<BaseControl columns="columns-1">
+								<Flex>
+									<ToggleSelectControl
+										id={'value'}
+										columns="80px 120px"
+										label={__('Children Wrap', 'blockera')}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'It controls whether flex items are forced into a single line or can be wrapped onto multiple lines, adjusting layout flexibility and responsiveness.',
+														'blockera'
+													)}
+												</p>
+												<p>
+													{__(
+														'It is crucial for managing the layout of flex items, especially when the container cannot accommodate all items in one row, ensuring content adaptability and orderliness.',
+														'blockera'
+													)}
+												</p>
+
+												<h3>
+													<Icon
+														icon="wrap-no"
+														iconSize={22}
+													/>
+													{__('No Wrap', 'blockera')}
+												</h3>
+												<p>
+													{__(
+														'All flex items will be on one line regardless of their size.',
+														'blockera'
+													)}
+												</p>
+												<h3>
+													<Icon
+														icon="wrap"
+														iconSize={22}
+													/>
+													{__('Wrap', 'blockera')}
+												</h3>
+												<p>
+													{__(
+														'Flex items will wrap onto multiple lines, from top to bottom.',
+														'blockera'
+													)}
+												</p>
+												<p>
+													<span
+														style={{
+															fontWeight: '600',
+															color: '#ffffff',
+														}}
+													>
+														{__(
+															'Note:',
+															'blockera'
+														)}
+													</span>{' '}
+													{__(
+														'Using the reverse function flex items will wrap onto multiple lines in reverse order.',
+														'blockera'
+													)}
+												</p>
+											</>
+										}
+										options={[
+											{
+												label: __(
+													'No Wrap',
+													'blockera'
+												),
+												value: 'nowrap',
+												icon: (
+													<Icon
+														icon="wrap-no"
+														iconSize={18}
+													/>
+												),
+											},
+											{
+												label: __('Wrap', 'blockera'),
+												value: 'wrap',
+												icon: (
+													<Icon
+														icon="wrap"
+														iconSize={18}
+													/>
+												),
+											},
+										]}
+										//
+										defaultValue={
+											attributes.blockeraFlexWrap.default
+												.value
+										}
+										onChange={(newValue, ref) => {
+											if (newValue === '') {
+												handleOnChangeAttributes(
+													'blockeraFlexWrap',
+													attributes.blockeraFlexWrap
+														.default,
+													{ ref }
+												);
+											} else if (newValue === 'nowrap') {
+												handleOnChangeAttributes(
+													'blockeraFlexWrap',
+													{
+														value: newValue,
+														reverse: false,
+													},
+													{ ref }
+												);
+											} else {
 												handleOnChangeAttributes(
 													'blockeraFlexWrap',
 													{
 														...values.blockeraFlexWrap,
-														reverse:
-															!values
-																.blockeraFlexWrap
-																.reverse,
+														value: 'wrap',
 													},
-													{
-														ref: undefined,
-													}
+													{ ref }
 												);
-											}}
-										>
-											<Icon icon="reverse-horizontal" />
-										</Button>
-									</Flex>
-								</BaseControl>
-							</ControlContextProvider>
+											}
+										}}
+										isDeselectable={true}
+										{...extensionProps.blockeraFlexWrap}
+									/>
 
-							{values.blockeraFlexWrap?.value === 'wrap' && (
-								<EditorFeatureWrapper
-									isActive={isShowAlignContent}
-									config={
-										extensionConfig.blockeraAlignContent
-									}
-								>
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'align-content'
-											),
-											value: values.blockeraAlignContent,
-											attribute: 'blockeraAlignContent',
-											blockName: block.blockName,
+									<Button
+										showTooltip={true}
+										tooltipPosition="top"
+										label={__(
+											'Reverse Children Wrapping',
+											'blockera'
+										)}
+										size="small"
+										style={{
+											color: values.blockeraFlexWrap
+												?.reverse
+												? 'var(--blockera-controls-primary-color)'
+												: 'var(--blockera-controls-color)',
+											padding: '6px',
+										}}
+										disabled={
+											values.blockeraFlexWrap.value ===
+												'nowrap' || ''
+										}
+										onClick={() => {
+											handleOnChangeAttributes(
+												'blockeraFlexWrap',
+												{
+													...values.blockeraFlexWrap,
+													reverse:
+														!values.blockeraFlexWrap
+															.reverse,
+												},
+												{
+													ref: undefined,
+												}
+											);
 										}}
 									>
-										<ToggleSelectControl
-											label={__(
-												'Align Content',
-												'blockera'
-											)}
-											labelDescription={
-												<>
-													<p>
-														{__(
-															'Align-Content controls the alignment and distribution of lines within a flex container when there is extra space along the cross-axis, offering various alignment options.',
-															'blockera'
-														)}
-													</p>
-													<p>
-														{__(
-															'This property is vital in multi-line flex containers, especially when the height of the container is greater than that of the flex items, ensuring a balanced, visually appealing layout.',
-															'blockera'
-														)}
-													</p>
-													<h3>
-														<Icon
-															icon="align-content-flex-start"
-															iconSize={22}
-														/>
-														{__(
-															'Flex Start',
-															'blockera'
-														)}
-													</h3>
-													<p>
-														{__(
-															'Packs lines toward the start of the container.',
-															'blockera'
-														)}
-													</p>
-													<h3>
-														<Icon
-															icon="align-content-center"
-															iconSize="22"
-														/>
-														{__(
-															'Center',
-															'blockera'
-														)}
-													</h3>
-													<p>
-														{__(
-															'Centers lines within the container.',
-															'blockera'
-														)}
-													</p>
-													<h3>
-														<Icon
-															icon="align-content-flex-end"
-															iconSize={22}
-														/>
-														{__(
-															'Flex End',
-															'blockera'
-														)}
-													</h3>
-													<p>
-														{__(
-															'Packs lines toward the end of the container.',
-															'blockera'
-														)}
-													</p>
-													<h3>
-														<Icon
-															icon="align-content-space-around"
-															iconSize={22}
-														/>
-														{__(
-															'Space Around',
-															'blockera'
-														)}
-													</h3>
-													<p>
-														{__(
-															'Distributes lines evenly, with equal space around each line.',
-															'blockera'
-														)}
-													</p>
-													<h3>
-														<Icon
-															icon="align-content-space-between"
-															iconSize={22}
-														/>
-														{__(
-															'Space Between',
-															'blockera'
-														)}
-													</h3>
-													<p>
-														{__(
-															'Distributes lines evenly, with the first line at the start and the last at the end.',
-															'blockera'
-														)}
-													</p>
-													<h3>
-														<Icon
-															icon="align-content-stretch"
-															iconSize={22}
-														/>
-														{__(
-															'Stretch',
-															'blockera'
-														)}
-													</h3>
-													<p>
-														{__(
-															'Stretches lines to fill the container (default behavior).',
-															'blockera'
-														)}
-													</p>
-												</>
-											}
-											columns="80px 160px"
-											options={[
-												{
-													label: __(
+										<Icon icon="reverse-horizontal" />
+									</Button>
+								</Flex>
+							</BaseControl>
+						</ControlContextProvider>
+
+						{values.blockeraFlexWrap?.value === 'wrap' && (
+							<EditorFeatureWrapper
+								isActive={isShowAlignContent}
+								config={extensionConfig.blockeraAlignContent}
+							>
+								<ControlContextProvider
+									value={{
+										name: generateExtensionId(
+											block,
+											'align-content'
+										),
+										value: values.blockeraAlignContent,
+										attribute: 'blockeraAlignContent',
+										blockName: block.blockName,
+									}}
+								>
+									<ToggleSelectControl
+										label={__('Align Content', 'blockera')}
+										labelDescription={
+											<>
+												<p>
+													{__(
+														'Align-Content controls the alignment and distribution of lines within a flex container when there is extra space along the cross-axis, offering various alignment options.',
+														'blockera'
+													)}
+												</p>
+												<p>
+													{__(
+														'This property is vital in multi-line flex containers, especially when the height of the container is greater than that of the flex items, ensuring a balanced, visually appealing layout.',
+														'blockera'
+													)}
+												</p>
+												<h3>
+													<Icon
+														icon="align-content-flex-start"
+														iconSize={22}
+													/>
+													{__(
 														'Flex Start',
 														'blockera'
-													),
-													value: 'flex-start',
-													icon: (
-														<Icon
-															icon="align-content-flex-start"
-															iconSize={18}
-														/>
-													),
-												},
-												{
-													label: __(
-														'Center',
+													)}
+												</h3>
+												<p>
+													{__(
+														'Packs lines toward the start of the container.',
 														'blockera'
-													),
-													value: 'center',
-													icon: (
-														<Icon
-															icon="align-content-center"
-															iconSize="18"
-														/>
-													),
-												},
-												{
-													label: __(
-														'Flex End',
+													)}
+												</p>
+												<h3>
+													<Icon
+														icon="align-content-center"
+														iconSize="22"
+													/>
+													{__('Center', 'blockera')}
+												</h3>
+												<p>
+													{__(
+														'Centers lines within the container.',
 														'blockera'
-													),
-													value: 'flex-end',
-													icon: (
-														<Icon
-															icon="align-content-flex-end"
-															iconSize={18}
-														/>
-													),
-												},
-												{
-													label: __(
+													)}
+												</p>
+												<h3>
+													<Icon
+														icon="align-content-flex-end"
+														iconSize={22}
+													/>
+													{__('Flex End', 'blockera')}
+												</h3>
+												<p>
+													{__(
+														'Packs lines toward the end of the container.',
+														'blockera'
+													)}
+												</p>
+												<h3>
+													<Icon
+														icon="align-content-space-around"
+														iconSize={22}
+													/>
+													{__(
 														'Space Around',
 														'blockera'
-													),
-													value: 'space-around',
-													icon: (
-														<Icon
-															icon="align-content-space-around"
-															iconSize={18}
-														/>
-													),
-												},
-												{
-													label: __(
+													)}
+												</h3>
+												<p>
+													{__(
+														'Distributes lines evenly, with equal space around each line.',
+														'blockera'
+													)}
+												</p>
+												<h3>
+													<Icon
+														icon="align-content-space-between"
+														iconSize={22}
+													/>
+													{__(
 														'Space Between',
 														'blockera'
-													),
-													value: 'space-between',
-													icon: (
-														<Icon
-															icon="align-content-space-between"
-															iconSize={18}
-														/>
-													),
-												},
-												{
-													label: __(
-														'Stretch',
+													)}
+												</h3>
+												<p>
+													{__(
+														'Distributes lines evenly, with the first line at the start and the last at the end.',
 														'blockera'
-													),
-													value: 'stretch',
-													icon: (
-														<Icon
-															icon="align-content-stretch"
-															iconSize={18}
-														/>
-													),
-												},
-											]}
-											isDeselectable={true}
-											//
-											defaultValue={
-												attributes.blockeraAlignContent
-													.default
-											}
-											onChange={(newValue, ref) =>
-												handleOnChangeAttributes(
-													'blockeraAlignContent',
-													newValue,
-													{ ref }
-												)
-											}
-											{...extensionProps.blockeraAlignContent}
-										/>
-									</ControlContextProvider>
-								</EditorFeatureWrapper>
-							)}
-						</EditorFeatureWrapper>
-					</>
+													)}
+												</p>
+												<h3>
+													<Icon
+														icon="align-content-stretch"
+														iconSize={22}
+													/>
+													{__('Stretch', 'blockera')}
+												</h3>
+												<p>
+													{__(
+														'Stretches lines to fill the container (default behavior).',
+														'blockera'
+													)}
+												</p>
+											</>
+										}
+										columns="80px 160px"
+										options={[
+											{
+												label: __(
+													'Flex Start',
+													'blockera'
+												),
+												value: 'flex-start',
+												icon: (
+													<Icon
+														icon="align-content-flex-start"
+														iconSize={18}
+													/>
+												),
+											},
+											{
+												label: __('Center', 'blockera'),
+												value: 'center',
+												icon: (
+													<Icon
+														icon="align-content-center"
+														iconSize="18"
+													/>
+												),
+											},
+											{
+												label: __(
+													'Flex End',
+													'blockera'
+												),
+												value: 'flex-end',
+												icon: (
+													<Icon
+														icon="align-content-flex-end"
+														iconSize={18}
+													/>
+												),
+											},
+											{
+												label: __(
+													'Space Around',
+													'blockera'
+												),
+												value: 'space-around',
+												icon: (
+													<Icon
+														icon="align-content-space-around"
+														iconSize={18}
+													/>
+												),
+											},
+											{
+												label: __(
+													'Space Between',
+													'blockera'
+												),
+												value: 'space-between',
+												icon: (
+													<Icon
+														icon="align-content-space-between"
+														iconSize={18}
+													/>
+												),
+											},
+											{
+												label: __(
+													'Stretch',
+													'blockera'
+												),
+												value: 'stretch',
+												icon: (
+													<Icon
+														icon="align-content-stretch"
+														iconSize={18}
+													/>
+												),
+											},
+										]}
+										isDeselectable={true}
+										//
+										defaultValue={
+											attributes.blockeraAlignContent
+												.default
+										}
+										onChange={(newValue, ref) =>
+											handleOnChangeAttributes(
+												'blockeraAlignContent',
+												newValue,
+												{ ref }
+											)
+										}
+										{...extensionProps.blockeraAlignContent}
+									/>
+								</ControlContextProvider>
+							</EditorFeatureWrapper>
+						)}
+					</EditorFeatureWrapper>
 				)}
 			</PanelBodyControl>
 		);
