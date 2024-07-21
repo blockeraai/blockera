@@ -32,7 +32,7 @@ import type { InnerBlocksProps } from './types';
 import { Inserter } from './components/inserter';
 import ItemHeader from './components/item-header';
 import { useAvailableItems, useMemoizedInnerBlocks } from './hooks';
-import { AvailableBlocksAndElements } from './components/avialable-blocks-and-elements';
+import { AvailableBlocksAndElements } from './components/available-blocks-and-elements';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({
