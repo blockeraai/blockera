@@ -8,6 +8,7 @@ import memoize from 'fast-memoize';
 /**
  * Blockera dependencies
  */
+import { mergeObject } from '@blockera/utils';
 import { prepare } from '@blockera/data-editor';
 
 /**
@@ -48,14 +49,25 @@ export const useInnerBlocksInfo = ({
 	 * @return {InnerBlockModel|null} The selected current inner block on selected one of types ,Not selected is null.
 	 */
 	const getCurrentInnerBlock = (): InnerBlockModel | null => {
+		const getSanitizedBlockName = () => currentBlock.replace(/-\d+/g, '');
+
+		let inheritOfCoreBlock =
+			prepare(
+				`blockeraInnerBlocks[${getSanitizedBlockName()}].attributes`,
+				attributes
+			) || {};
+
 		if (isInnerBlock(currentBlock)) {
-			const blockRootAttributes =
+			const blockRootAttributes = mergeObject(
+				// Specific the inheritance attributes values from main object of core block.
+				inheritOfCoreBlock,
 				prepare(
 					`blockeraInnerBlocks[${currentBlock}].attributes`,
 					attributes
 				) ||
-				blockeraInnerBlocks[currentBlock]?.attributes ||
-				{};
+					blockeraInnerBlocks[currentBlock]?.attributes ||
+					{}
+			);
 
 			if (
 				!isNormalStateOnBaseBreakpoint(currentState, currentBreakpoint)
@@ -66,8 +78,30 @@ export const useInnerBlocksInfo = ({
 						currentBreakpoint
 					)
 				) {
+					const inheritOfCoreBlockAttributesOnDesktop =
+						prepare(
+							`blockeraBlockStates[${currentState}].breakpoints.desktop.attributes.blockeraInnerBlocks[${getSanitizedBlockName()}].attributes`,
+							attributes
+						) || {};
+					const inheritOfCoreBlockAttributesOnCurrentBreakpoint =
+						prepare(
+							`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${getSanitizedBlockName()}].attributes`,
+							attributes
+						) || {};
+					const inheritOfCoreBlockAttributesOnCurrentStateOfBreakpoint =
+						prepare(
+							`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${getSanitizedBlockName()}].attributes.blockeraBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
+							attributes
+						) || {};
+
 					return {
 						...blockRootAttributes,
+						// Specific the inheritance attributes values from main object of core block on desktop pseudo states.
+						...inheritOfCoreBlockAttributesOnDesktop,
+						// Specific the inheritance attributes values from main object of core block on current breakpoint pseudo states.
+						...inheritOfCoreBlockAttributesOnCurrentBreakpoint,
+						// Specific the inheritance attributes values from main object of core block on current states of current breakpoint pseudo states.
+						...inheritOfCoreBlockAttributesOnCurrentStateOfBreakpoint,
 						...(prepare(
 							`blockeraBlockStates[${currentState}].breakpoints.desktop.attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
 							attributes
@@ -83,7 +117,15 @@ export const useInnerBlocksInfo = ({
 					};
 				}
 
+				inheritOfCoreBlock =
+					prepare(
+						`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${getSanitizedBlockName()}].attributes`,
+						attributes
+					) || {};
+
 				return {
+					// Specific the inheritance attributes values from main object of core block.
+					...inheritOfCoreBlock,
 					...blockRootAttributes,
 					...(prepare(
 						`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
