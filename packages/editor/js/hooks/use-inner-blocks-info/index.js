@@ -22,6 +22,7 @@ import type {
 	InnerBlockType,
 	InnerBlockModel,
 } from '../../extensions/libs/inner-blocks/types';
+import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock } from '../../extensions/components';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
 
@@ -80,7 +81,7 @@ export const useInnerBlocksInfo = ({
 				) {
 					const inheritOfCoreBlockAttributesOnDesktop =
 						prepare(
-							`blockeraBlockStates[${currentState}].breakpoints.desktop.attributes.blockeraInnerBlocks[${getSanitizedBlockName()}].attributes`,
+							`blockeraBlockStates[${currentState}].breakpoints[${getBaseBreakpoint()}]attributes.blockeraInnerBlocks[${getSanitizedBlockName()}].attributes`,
 							attributes
 						) || {};
 					const inheritOfCoreBlockAttributesOnCurrentBreakpoint =
@@ -96,14 +97,14 @@ export const useInnerBlocksInfo = ({
 
 					return {
 						...blockRootAttributes,
-						// Specific the inheritance attributes values from main object of core block on desktop pseudo states.
+						// Specific the inheritance attributes values from main object of core block on base breakpoint pseudo states.
 						...inheritOfCoreBlockAttributesOnDesktop,
 						// Specific the inheritance attributes values from main object of core block on current breakpoint pseudo states.
 						...inheritOfCoreBlockAttributesOnCurrentBreakpoint,
 						// Specific the inheritance attributes values from main object of core block on current states of current breakpoint pseudo states.
 						...inheritOfCoreBlockAttributesOnCurrentStateOfBreakpoint,
 						...(prepare(
-							`blockeraBlockStates[${currentState}].breakpoints.desktop.attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
+							`blockeraBlockStates[${currentState}].breakpoints[${getBaseBreakpoint()}]attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
 							attributes
 						) || {}),
 						...(prepare(
