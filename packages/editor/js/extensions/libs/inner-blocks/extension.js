@@ -155,7 +155,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 											continue;
 										}
 
-										setCurrentBlock(item.name);
+										setCurrentBlock(name);
 									}
 								}
 							},
