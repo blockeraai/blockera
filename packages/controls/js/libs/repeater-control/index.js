@@ -278,6 +278,10 @@ export default function RepeaterControl(
 		</>
 	);
 
+	const disabledAddNewItem =
+		!maxItems ||
+		(maxItems !== -1 && Object.keys(repeaterItems)?.length >= maxItems);
+
 	const LargeNativeInserter = ({
 		onClick,
 	}: {
@@ -288,10 +292,7 @@ export default function RepeaterControl(
 			className={controlInnerClassNames('btn-add', {
 				'is-deactivate': disableProHints && disableAddNewItem,
 			})}
-			{...(maxItems !== -1 &&
-			Object.values(repeaterItems)?.length >= maxItems
-				? { disabled: true }
-				: {})}
+			disabled={disabledAddNewItem}
 			onClick={() =>
 				'function' === typeof onClick
 					? onClick(addNewButtonOnClick)
@@ -313,9 +314,7 @@ export default function RepeaterControl(
 			className={controlInnerClassNames('btn-add', {
 				'is-deactivate': disableProHints && disableAddNewItem,
 			})}
-			{...(maxItems !== -1 && repeaterItems?.length >= maxItems
-				? { disabled: true }
-				: {})}
+			disabled={disabledAddNewItem}
 			showTooltip={true}
 			tooltipPosition="top"
 			label={addNewButtonLabel || __('Add New', 'blockera')}
