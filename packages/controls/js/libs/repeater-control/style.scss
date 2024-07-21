@@ -165,7 +165,7 @@
 		justify-content: center;
 		gap: 6px;
 		border-radius: 5px;
-		min-height: 130px;
+		min-height: 180px;
 
 		& > .blockera-control-header {
 			display: flex;
@@ -174,7 +174,7 @@
 		}
 
 		& > .blockera-control-repeater__desc {
-			max-width: 80%;
+			max-width: 90%;
 			text-wrap: pretty;
 			font-size: 13px;
 			margin-bottom: 5px;
@@ -198,6 +198,14 @@
 
 		.blockera-control-repeater-item {
 			width: 100%;
+
+			&:first-of-type {
+				margin-top: 5px;
+			}
+		}
+
+		.blockera-control-repeater-item + .blockera-control-repeater__desc {
+			margin-top: 10px;
 		}
 	}
 }
