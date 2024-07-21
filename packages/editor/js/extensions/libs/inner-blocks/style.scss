@@ -92,24 +92,13 @@
 
 .blockera-inner-block-item {
 
-	.blockera-control-header-label {
+	.blockera-control-header-icon {
 
-		.block-editor-block-icon {
-			top: 4px;
-			position: relative;
-			display: inline-block;
-
-			svg {
-				max-height: 20px;
-				max-width: 20px;
-				min-height: 15px;
-				min-width: 15px;
-			}
-		}
-
-		.blockera-inner-block-label {
-			top: -2px;
-			position: relative;
+		svg {
+			max-height: 18px;
+			max-width: 18px;
+			min-height: 16px;
+			min-width: 16px;
 		}
 	}
 }
