@@ -184,7 +184,10 @@ const BoxPositionControl = ({
 			data-cy="box-position-control"
 			{...props}
 		>
-			<div className={controlInnerClassNames('position-header')}>
+			<div
+				className={controlInnerClassNames('position-header')}
+				data-cy={'box-position-label-control'}
+			>
 				{label && (
 					<LabelControlContainer>
 						<LabelControl {...labelProps} />
@@ -262,7 +265,10 @@ const BoxPositionControl = ({
 					{SideBottom.label}
 					{SideLeft.label}
 
-					<span className={controlInnerClassNames('box-model-label')}>
+					<span
+						className={controlInnerClassNames('box-model-label')}
+						data-cy={'box-position-label-box'}
+					>
 						<LabelControl
 							{...labelProps}
 							label={labelText}

@@ -152,20 +152,29 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			return attributes;
 		};
 
-		const { activeBlockVariation, variations } = useSelect((select) => {
+		const {
+			activeBlockVariation,
+			blockVariations,
+			getActiveBlockVariation,
+		} = useSelect((select) => {
 			const { getActiveBlockVariation, getBlockVariations } =
 				select('core/blocks');
+
 			const { getBlockName, getBlockAttributes } =
 				select('core/block-editor');
+
 			const name = clientId && getBlockName(clientId);
+
 			return {
+				getActiveBlockVariation,
 				activeBlockVariation: getActiveBlockVariation(
 					name,
 					getBlockAttributes(clientId)
 				),
-				variations: name && getBlockVariations(name, 'transform'),
+				blockVariations: name && getBlockVariations(name, 'transform'),
 			};
 		});
+
 		const args = {
 			blockId: name,
 			blockClientId: clientId,
@@ -177,8 +186,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentState: isInnerBlock(currentBlock)
 				? currentInnerBlockState
 				: currentState,
-			variations,
+			blockVariations,
 			activeBlockVariation,
+			getActiveBlockVariation,
 			innerBlocks: additional?.blockeraInnerBlocks,
 			blockAttributes: sharedBlockExtensionAttributes,
 		};
@@ -229,6 +239,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				masterIsNormalState,
 				blockeraInnerBlocks,
 				innerBlocks: additional?.blockeraInnerBlocks,
+				blockVariations,
+				activeBlockVariation,
+				getActiveBlockVariation,
 			});
 
 		const updateBlockEditorSettings: UpdateBlockEditorSettings = (
@@ -351,7 +364,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		);
 
 		useEffect(() => {
-			// Creat mutable constant to prevent directly change to immutable state constant.
+			// Create mutable constant to prevent directly change to immutable state constant.
 			let filteredAttributes = { ...attributes };
 
 			if (!isEquals(activeVariation, activeBlockVariation)) {

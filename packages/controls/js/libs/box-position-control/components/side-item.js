@@ -267,7 +267,7 @@ export function SideItem({
 						'side-' + side,
 						labelClassName
 					)}
-					data-cy={'box-position-' + side}
+					data-cy={'box-position-label-' + side}
 				>
 					<LabelControl
 						ariaLabel={sprintf(

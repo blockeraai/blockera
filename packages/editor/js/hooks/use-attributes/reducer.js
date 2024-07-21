@@ -36,8 +36,11 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		isNormalState,
 		getAttributes,
 		effectiveItems,
+		blockVariations,
 		currentBreakpoint,
+		activeBlockVariation,
 		currentInnerBlockState,
+		getActiveBlockVariation,
 	} = action;
 
 	const hookParams = [
@@ -49,15 +52,18 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			blockId,
 			innerBlocks,
 			currentBlock,
+			blockVariations,
 			currentState: isInnerBlock(currentBlock)
 				? currentInnerBlockState
 				: currentState,
 			currentBreakpoint,
+			activeBlockVariation,
 			currentInnerBlockState,
 			isNormalState: isNormalState(),
 			isMasterBlock: !isInnerBlock(currentBlock),
 			isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
 			blockAttributes: defaultAttributes,
+			getActiveBlockVariation,
 		},
 	];
 

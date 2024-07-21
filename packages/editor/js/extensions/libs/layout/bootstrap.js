@@ -29,6 +29,10 @@ import {
 	justifyContentFromWPCompatibility,
 	directionFromWPCompatibility,
 } from './compatibility/flex-layout';
+import {
+	gapFromWPCompatibility,
+	gapToWPCompatibility,
+} from './compatibility/gap';
 
 import type { BlockDetail } from '../block-states/types';
 
@@ -82,6 +86,13 @@ export const bootstrap = (): void => {
 			// Justify content compatibility
 			//
 			attributes = justifyContentFromWPCompatibility({
+				attributes,
+			});
+
+			//
+			// Block gap compatibility
+			//
+			attributes = gapFromWPCompatibility({
 				attributes,
 			});
 
@@ -154,6 +165,17 @@ export const bootstrap = (): void => {
 							ref,
 							defaultValue:
 								blockAttributes?.blockeraFlexLayout?.default,
+						})
+					);
+
+				case 'blockeraGap':
+					return mergeObject(
+						nextState,
+						gapToWPCompatibility({
+							newValue,
+							ref,
+							defaultValue: blockAttributes?.blockeraGap?.default,
+							blockId,
 						})
 					);
 			}

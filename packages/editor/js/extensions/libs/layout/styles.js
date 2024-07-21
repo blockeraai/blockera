@@ -193,7 +193,7 @@ export const LayoutStyles = ({
 									{
 										...staticDefinitionParams,
 										properties: {
-											gap: _attributes.blockeraGap.gap,
+											gap,
 										},
 									},
 								],
