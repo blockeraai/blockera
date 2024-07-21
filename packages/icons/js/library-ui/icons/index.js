@@ -163,6 +163,7 @@ export { default as iconPositionRight } from './icon-position-right.svg';
 export { default as Information } from './information.svg';
 export { default as InheritSquare } from './inherit-square.svg';
 export { default as InheritCircle } from './inherit-circle.svg';
+export { default as InnerBlocks } from './inner-blocks.svg';
 export { default as JustifyContentCenter } from './justify-content-center.svg';
 export { default as JustifyContentEmpty } from './justify-content-empty.svg';
 export { default as JustifyContentEnd } from './justify-content-end.svg';
