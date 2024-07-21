@@ -5,7 +5,11 @@ import { isString } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { hexStringToByte, openBoxSpacingSide } from '../helpers';
+import {
+	hexStringToByte,
+	openBoxSpacingSide,
+	openBoxPositionSide,
+} from '../helpers';
 
 export const registerCommands = () => {
 	// Custom uploadFile command
@@ -348,6 +352,25 @@ export const registerCommands = () => {
 		}
 	);
 
+	Cypress.Commands.add(
+		'checkBoxPositionStateGraph',
+		(side = 'top', changes) => {
+			openBoxPositionSide(side);
+
+			// open state graph
+			// not for control and box
+			if (!['control', 'box'].includes(side)) {
+				cy.get('[data-wp-component="Popover"]')
+					.last()
+					.within(() => {
+						cy.get('[data-cy="label-control"]').first().click();
+					});
+			}
+
+			cy.checkStateGraphPopover(changes);
+		}
+	);
+
 	Cypress.Commands.add('checkStateGraphPopover', (changes) => {
 		const states = [
 			'Normal',
@@ -427,12 +450,39 @@ export const registerCommands = () => {
 	);
 
 	Cypress.Commands.add(
+		'checkBoxPositionLabelClassName',
+		(side = 'top', cssClass, condition = 'have') => {
+			if (isString(cssClass)) {
+				cssClass = [cssClass];
+			}
+
+			cssClass.forEach((classItem) => {
+				cy.get(
+					`[data-cy="box-position-label-${side}"] [data-cy="label-control"]`
+				).should(
+					condition === 'have' ? 'have.class' : 'not.have.class',
+					classItem
+				);
+			});
+		}
+	);
+
+	Cypress.Commands.add(
 		'checkBoxSpacingLabelContent',
 		(type = 'margin', side = 'top', content) => {
 			cy.get(
-				`[data-cy="box-spacing-${
+				`[data-cy="box-spacing-label-${
 					side ? type + '-' + side : type
 				}"] [data-cy="label-control"]`
+			).contains(content);
+		}
+	);
+
+	Cypress.Commands.add(
+		'checkBoxPositionLabelContent',
+		(side = 'top', content) => {
+			cy.get(
+				`[data-cy="box-position-label-${side}"] [data-cy="label-control"]`
 			).contains(content);
 		}
 	);
@@ -451,7 +501,7 @@ export const registerCommands = () => {
 
 	Cypress.Commands.add(
 		'resetBlockeraAttribute',
-		(content, label, resetType, repeaterItem = false) => {
+		(content, label, resetType = 'reset', repeaterItem = false) => {
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
@@ -477,7 +527,7 @@ export const registerCommands = () => {
 
 	Cypress.Commands.add(
 		'resetBoxSpacingAttribute',
-		(type = 'margin', side = 'top', resetType) => {
+		(type = 'margin', side = 'top', resetType = 'reset') => {
 			openBoxSpacingSide(side ? `${type}-${side}` : type);
 
 			// if there is no side it means there is no second popover
@@ -494,6 +544,31 @@ export const registerCommands = () => {
 				.last()
 				.within(() => {
 					cy.getByDataTest(`${resetType}-button`).click();
+				});
+		}
+	);
+
+	Cypress.Commands.add(
+		'resetBoxPositionAttribute',
+		(side = 'top', resetType = 'reset') => {
+			openBoxPositionSide(side);
+
+			// open state graph
+			// not for control and box
+			if (!['control', 'box'].includes(side)) {
+				cy.get('[data-wp-component="Popover"]')
+					.last()
+					.within(() => {
+						cy.get('[data-cy="label-control"]').first().click();
+					});
+			}
+
+			cy.getByDataTest('popover-body')
+				.last()
+				.within(() => {
+					cy.getByDataTest(`${resetType}-button`).click({
+						force: true,
+					});
 				});
 		}
 	);
