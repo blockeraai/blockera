@@ -29,7 +29,7 @@ export const Inserter = ({
 	const [isOpenPicker, setOpenPicker] = useState(false);
 
 	return (
-		<>
+		<div>
 			<PlusButton
 				onClick={() => {
 					if (
@@ -48,7 +48,8 @@ export const Inserter = ({
 
 			{isOpenPicker && (
 				<Popover
-					placement={'left-start'}
+					offset={35}
+					placement="left-start"
 					onClose={() => setOpenPicker(false)}
 					title={__('Select Block', 'blockera')}
 					className={classNames('blockera-inner-blocks-picker')}
@@ -56,6 +57,6 @@ export const Inserter = ({
 					<AvailableBlocks onClick={callback} />
 				</Popover>
 			)}
-		</>
+		</div>
 	);
 };
