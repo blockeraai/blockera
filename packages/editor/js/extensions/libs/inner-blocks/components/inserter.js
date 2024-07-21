@@ -50,7 +50,7 @@ export const Inserter = ({
 				<Popover
 					placement={'left-start'}
 					onClose={() => setOpenPicker(false)}
-					title={__('Select block/element', 'blockera')}
+					title={__('Select Block', 'blockera')}
 					className={classNames('blockera-inner-blocks-picker')}
 				>
 					<AvailableBlocks onClick={callback} />

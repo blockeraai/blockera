@@ -184,14 +184,21 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 							repeaterItemHeader: ItemHeader,
 						}}
 						defaultValue={{}}
-						label={__('Core & Virtual Blocks', 'blockera')}
-						addNewButtonLabel={__('Add New Block', 'blockera')}
-						popoverTitle={__('Core & Virtual Blocks', 'blockera')}
+						label={__('Inner Blocks', 'blockera')}
+						addNewButtonLabel={__('Add Inner Block', 'blockera')}
+						popoverTitle={__(
+							'Inner Blocks Customization',
+							'blockera'
+						)}
 						className={controlInnerClassNames(
 							'inner-blocks-repeater'
 						)}
-						itemColumns={2}
-						design={'minimal'}
+						icon={<Icon icon="inner-blocks" />}
+						description={__(
+							'Customize inner blocks style.',
+							'blockera'
+						)}
+						design="large"
 						actionButtonClone={false}
 						actionButtonVisibility={false}
 					/>

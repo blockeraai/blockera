@@ -38,11 +38,17 @@ export default function ItemHeader({
 				itemId + 1
 			)}
 		>
-			<span className={controlInnerClassNames('header-label')}>
+			<span className={controlInnerClassNames('header-icon')}>
 				{item.icon}
-				<span className={'blockera-inner-block-label'}>
-					{item.label}
-				</span>
+			</span>
+
+			<span
+				className={controlInnerClassNames(
+					'header-label',
+					'blockera-inner-block-label'
+				)}
+			>
+				{item.label}
 			</span>
 
 			{children}
