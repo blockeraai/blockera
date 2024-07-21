@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 
 /**
@@ -25,18 +26,29 @@ export const AvailableBlocksAndElements = ({
 	setCurrentBlock,
 	setBlockClientInners,
 }: {
+	clientId: string,
 	blocks: InnerBlocks,
 	elements: InnerBlocks,
-	clientId: string,
 	setBlockClientInners: (args: Object) => void,
 	setCurrentBlock: (currentBlock: string) => void,
 	getBlockInners: (clientId: string) => InnerBlocks,
 }): MixedElement => {
+	const { getCategories } = select('core/blocks');
+
 	const CategorizedItems = ({
 		items,
 		title,
 		category,
+		limited = false,
 	}: Object): MixedElement => {
+		// Filtering items while not exists on recieved category ...
+		if (limited) {
+			items = items.filter(
+				(innerBlock: InnerBlockModel): boolean =>
+					category === innerBlock?.category
+			);
+		}
+
 		if (!Object.keys(items).length) {
 			return <></>;
 		}
@@ -118,15 +130,21 @@ export const AvailableBlocksAndElements = ({
 	return (
 		<>
 			<CategorizedItems
-				category={'elements'}
 				items={elements}
+				category={'elements'}
 				title={__('Elements', 'blockera')}
 			/>
-			<CategorizedItems
-				category={'blocks'}
-				items={blocks}
-				title={__('Blocks', 'blockera')}
-			/>
+			{Object.values(getCategories() || {}).map(
+				({ slug, title }, index) => (
+					<CategorizedItems
+						title={title}
+						limited={true}
+						items={blocks}
+						category={slug}
+						key={`${slug}-${index}`}
+					/>
+				)
+			)}
 		</>
 	);
 };
