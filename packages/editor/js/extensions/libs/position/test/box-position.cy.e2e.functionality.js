@@ -383,7 +383,7 @@ describe('Box Position → Functionality', () => {
 
 			items.forEach((item) => {
 				cy.get(
-					`[data-cy="box-position-${item}"] [data-cy="label-control"]`
+					`[data-cy="box-position-label-${item}"] [data-cy="label-control"]`
 				).as('Position');
 
 				//
@@ -490,7 +490,7 @@ describe('Box Position → Functionality', () => {
 
 			verticalItems.forEach((item) => {
 				cy.get(
-					`[data-cy="box-position-${item}"] [data-cy="label-control"]`
+					`[data-cy="box-position-label-${item}"] [data-cy="label-control"]`
 				).as('SideLabel');
 
 				cy.get(`.blockera-control-position-shape-side.side-${item}`).as(
@@ -521,7 +521,7 @@ describe('Box Position → Functionality', () => {
 
 			horizontalItems.forEach((item) => {
 				cy.get(
-					`[data-cy="box-position-${item}"] [data-cy="label-control"]`
+					`[data-cy="box-position-label-${item}"] [data-cy="label-control"]`
 				).as('SideLabel');
 
 				cy.get(`.blockera-control-position-shape-side.side-${item}`).as(

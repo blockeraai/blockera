@@ -306,7 +306,7 @@ describe('Box Position → WP Compatibility', () => {
 
 			// clear side values
 			['top', 'right', 'bottom', 'left'].forEach((side) => {
-				cy.get(`[data-cy="box-position-${side}"]`).within(() => {
+				cy.get(`[data-cy="box-position-label-${side}"]`).within(() => {
 					cy.removeValueAddon();
 				});
 			});

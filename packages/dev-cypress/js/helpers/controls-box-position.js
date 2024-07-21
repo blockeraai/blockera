@@ -39,6 +39,6 @@ export function clearBoxPositionSide(side) {
  */
 export function openBoxPositionSide(side) {
 	cy.get(
-		`[data-cy="box-position-${side}"] [data-cy="label-control"]`
+		`[data-cy="box-position-label-${side}"] [data-cy="label-control"]`
 	).click();
 }
