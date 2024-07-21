@@ -24,18 +24,24 @@ export const useAttributes = (
 	{
 		blockId,
 		className,
+		innerBlocks,
 		isNormalState,
 		getAttributes,
-		innerBlocks,
+		blockVariations,
 		masterIsNormalState,
 		blockeraInnerBlocks,
+		activeBlockVariation,
+		getActiveBlockVariation,
 	}: {
 		blockId: string,
 		className: string,
 		innerBlocks: Object,
 		isNormalState: () => boolean,
+		getActiveBlockVariation: (name: string, attributes: Object) => boolean,
+		blockVariations: Object,
 		blockeraInnerBlocks: Object,
 		masterIsNormalState: () => boolean,
+		activeBlockVariation: Object,
 		getAttributes: (key?: string) => any,
 	}
 ): ({
@@ -155,10 +161,13 @@ export const useAttributes = (
 			effectiveItems,
 			getAttributes,
 			isNormalState,
+			blockVariations,
 			currentBreakpoint,
 			blockeraInnerBlocks,
+			activeBlockVariation,
 			currentInnerBlockState,
 			attributeIsBlockStates,
+			getActiveBlockVariation,
 			ref: { ...ref?.current },
 		});
 

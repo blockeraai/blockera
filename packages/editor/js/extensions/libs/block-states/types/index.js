@@ -18,11 +18,12 @@ export type BlockDetail = {
 	currentBlock: 'master' | string,
 	currentState: TStates,
 	blockAttributes: Object,
-	variations: Array<Object>,
+	blockVariations: Array<Object>,
 	activeBlockVariation: Object,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
 	innerBlocks: Object,
+	getActiveBlockVariation: (name: string, attrs: Object) => boolean,
 };
 
 export type StatesManagerProps = {
