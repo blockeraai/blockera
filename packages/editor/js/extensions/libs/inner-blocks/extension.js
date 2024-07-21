@@ -55,7 +55,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 		// External selectors. to access selected block type on WordPress editor store api.
 		const { getSelectedBlock } = select('core/block-editor');
-		const { innerBlocks: insteredInnerBlocks = [] } =
+		const { innerBlocks: insertedInnerBlocks = [] } =
 			getSelectedBlock() || {};
 
 		// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
@@ -168,11 +168,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			}
 
 			// Appending inserted inners in WordPress selected block ...
-			appendBlocks(insteredInnerBlocks);
+			appendBlocks(insertedInnerBlocks);
 
 			return { elements, blocks };
 			// eslint-disable-next-line
-		}, [innerBlocks, insteredInnerBlocks, memoizedInnerBlocks]);
+		}, [innerBlocks, insertedInnerBlocks, memoizedInnerBlocks]);
 
 		// Merging all categories, as available blocks.
 		const availableBlocks = [...elements, ...blocks];
