@@ -33,7 +33,7 @@ export const AvailableBlocksAndElements = ({
 	setCurrentBlock: (currentBlock: string) => void,
 	getBlockInners: (clientId: string) => InnerBlocks,
 }): MixedElement => {
-	const { getCategories } = select('core/blocks');
+	const { getCategories, getBlockType } = select('core/blocks');
 
 	const CategorizedItems = ({
 		items,
@@ -45,7 +45,9 @@ export const AvailableBlocksAndElements = ({
 		if (limited) {
 			items = items.filter(
 				(innerBlock: InnerBlockModel): boolean =>
-					category === innerBlock?.category
+					category ===
+					(innerBlock?.category ||
+						getBlockType(innerBlock?.name)?.category)
 			);
 		}
 
@@ -74,20 +76,24 @@ export const AvailableBlocksAndElements = ({
 						): MixedElement => {
 							const { name, icon, label, settings } = innerBlock;
 
+							let id = name;
+
+							// We skip force blocks in regenerating id process.
+							if (!settings?.force) {
+								// We do add exceptions for picked inner block identifier in here.
+								// Usually use instanceId of block settings to re-generate identifier for that. any way, we do support "level" number for heading instances.
+								if ('core/heading' === name) {
+									id = `${name}-${settings?.level}`;
+								} else if (settings?.instanceId) {
+									id = `${name}-${settings?.instanceId}`;
+								}
+							}
+
 							return (
 								<div
 									key={index}
 									onClick={() => {
-										let id = name;
 										const inners = getBlockInners(clientId);
-
-										// Assume, in advance exists picked inner block name on inners stack.
-										if (inners[name]) {
-											// We do add exceptions for picked inner block identifier in here.
-											if ('core/heading' === name) {
-												id = `${name}-${settings?.level}`;
-											}
-										}
 
 										setBlockClientInners({
 											clientId,
@@ -99,7 +105,7 @@ export const AvailableBlocksAndElements = ({
 
 										setCurrentBlock(id);
 									}}
-									aria-label={name}
+									aria-label={id}
 									className={classNames(
 										'blockera-inner-block-type'
 									)}
@@ -132,7 +138,7 @@ export const AvailableBlocksAndElements = ({
 			<CategorizedItems
 				items={elements}
 				category={'elements'}
-				title={__('Elements', 'blockera')}
+				title={__('Virtual Blocks', 'blockera')}
 			/>
 			{Object.values(getCategories() || {}).map(
 				({ slug, title }, index) => (

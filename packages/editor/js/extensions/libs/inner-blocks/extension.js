@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useMemo } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 import { dispatch, useSelect, select } from '@wordpress/data';
 
@@ -15,27 +15,23 @@ import {
 	extensionClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { mergeObject, isString } from '@blockera/utils';
 import {
 	RepeaterControl,
 	PanelBodyControl,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
-import { isInnerBlock } from '../../components';
-import type {
-	InnerBlockModel,
-	InnerBlockType,
-	InnerBlocksProps,
-} from './types';
-import ItemHeader from './components/item-header';
-import { Inserter } from './components/inserter';
 import { generateExtensionId } from '../utils';
-import { isBlock, isElement } from './helpers';
+import { isInnerBlock } from '../../components';
+import type { InnerBlocksProps } from './types';
+import { Inserter } from './components/inserter';
+import ItemHeader from './components/item-header';
+import { useAvailableItems, useMemoizedInnerBlocks } from './hooks';
 import { AvailableBlocksAndElements } from './components/avialable-blocks-and-elements';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
@@ -45,14 +41,6 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		onChange,
 		innerBlocks,
 	}: InnerBlocksProps): MixedElement => {
-		// External selectors. to access registered block types on WordPress blocks store api.
-		const { getBlockType, getBlockTypes } = select('core/blocks');
-		const registeredAllBlocks = getBlockTypes();
-		const {
-			allowedBlocks = null,
-			attributes: { allowedBlocks: allowedBlocksAttribute = null },
-		} = getBlockType(block.blockName) || {};
-
 		// External selectors. to access selected block type on WordPress editor store api.
 		const { getSelectedBlock } = select('core/block-editor');
 		const { innerBlocks: insertedInnerBlocks = [] } =
@@ -79,100 +67,24 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		} = dispatch('blockera/extensions') || {};
 
 		// Calculation: to prepare standard values for "blockeraInnerBlocks" block attribute with set initial value for repeater by "setBlockClientInners" dispatcher.
-		const memoizedInnerBlocks = useMemo(() => {
-			const stack: { [key: InnerBlockType]: InnerBlockModel } = {};
-
-			// $FlowFixMe
-			for (const name: InnerBlockType in values) {
-				const registeredBlockType = getBlockType(name);
-
-				if (registeredBlockType) {
-					stack[name] = mergeObject(
-						{
-							...registeredBlockType,
-							label:
-								registeredBlockType?.title ||
-								innerBlocks[name]?.label ||
-								'',
-							icon: registeredBlockType?.icon?.src ||
-								innerBlocks[name]?.icon || <></>,
-						},
-						values[name]
-					);
-
-					continue;
-				}
-
-				stack[name] = mergeObject(innerBlocks[name], values[name]);
-			}
-
-			// Previous inner blocks stack.
-			const inners = getBlockInners(block.clientId);
-
-			setBlockClientInners({
-				clientId: block.clientId,
-				inners: mergeObject(inners, stack),
-			});
-
-			return stack;
-			// eslint-disable-next-line
-		}, [values, innerBlocks]);
+		const memoizedInnerBlocks = useMemoizedInnerBlocks({
+			getBlockInners,
+			setBlockClientInners,
+			controlValue: values,
+			clientId: block?.clientId,
+			reservedInnerBlocks: innerBlocks,
+		});
 
 		// Calculation: to categorized in two category (elements and blocks) from available inner blocks on current WordPress selected block.
-		const { elements, blocks } = useMemo(() => {
-			const blocks: Array<InnerBlockModel> = [];
-			const elements: Array<InnerBlockModel> = [];
-
-			Object.keys(innerBlocks).forEach(
-				(innerBlockType: InnerBlockType | string) => {
-					const innerBlock: InnerBlockModel =
-						innerBlocks[innerBlockType];
-
-					if (isElement(innerBlock)) {
-						elements.push(innerBlock);
-					} else if (isBlock(innerBlock)) {
-						blocks.push(innerBlock);
-					}
-				}
-			);
-
-			const appendBlocks = (stack: Array<any>) => {
-				stack.forEach((innerBlock: any) => {
-					const blockType = getBlockType(
-						isString(innerBlock) ? innerBlock : innerBlock.name
-					);
-
-					if (
-						!memoizedInnerBlocks[blockType?.name] &&
-						!blocks.find((block) => block.name === blockType?.name)
-					) {
-						blocks.push({
-							...blockType,
-							icon: blockType?.icon?.src ||
-								innerBlocks[blockType.name]?.icon || <></>,
-							label:
-								blockType?.title ||
-								innerBlocks[blockType.name]?.label,
-						});
-					}
-				});
-			};
-
-			if (allowedBlocks && allowedBlocks.length) {
-				appendBlocks(allowedBlocks);
-			} else if (
-				allowedBlocksAttribute &&
-				!allowedBlocksAttribute?.default
-			) {
-				appendBlocks(Object.values(registeredAllBlocks));
-			}
-
-			// Appending inserted inners in WordPress selected block ...
-			appendBlocks(insertedInnerBlocks);
-
-			return { elements, blocks };
-			// eslint-disable-next-line
-		}, [innerBlocks, insertedInnerBlocks, memoizedInnerBlocks]);
+		const { elements, blocks } = useAvailableItems({
+			getBlockInners,
+			insertedInnerBlocks,
+			memoizedInnerBlocks,
+			setBlockClientInners,
+			clientId: block?.clientId,
+			reservedInnerBlocks: innerBlocks,
+			selectedBlockName: block?.blockName,
+		});
 
 		// Merging all categories, as available blocks.
 		const availableBlocks = [...elements, ...blocks];
@@ -192,13 +104,13 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		const contextValue = {
 			block,
 			value,
-			attribute: 'values',
 			blockName: block.blockName,
+			attribute: 'blockeraInnerBlocks',
 			name: generateExtensionId(block, 'inner-blocks', false),
 		};
 
 		// Calculation: repeater maxItems property.
-		const maxItems = Object.keys(availableBlocks).length;
+		const maxItems = availableBlocks.length;
 
 		return (
 			<PanelBodyControl
@@ -213,10 +125,9 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				>
 					<RepeaterControl
 						{...{
-							id: 'inner-blocks',
-							// FIXME: temporarily, we sets count all of block supported inner items as maxItems, we needs to specific maxItems for free version!
 							maxItems,
 							selectable: true,
+							id: 'inner-blocks',
 							isSupportInserter: true,
 							onDelete: (itemId, items) => {
 								delete values[itemId];
@@ -273,9 +184,9 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 							repeaterItemHeader: ItemHeader,
 						}}
 						defaultValue={{}}
+						label={__('Core & Virtual Blocks', 'blockera')}
 						addNewButtonLabel={__('Add New Block', 'blockera')}
-						label={__('Blocks & Elements', 'blockera')}
-						popoverTitle={__('Blocks & Elements', 'blockera')}
+						popoverTitle={__('Core & Virtual Blocks', 'blockera')}
 						className={controlInnerClassNames(
 							'inner-blocks-repeater'
 						)}

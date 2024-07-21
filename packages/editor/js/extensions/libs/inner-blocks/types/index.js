@@ -45,3 +45,27 @@ export type InnerBlocksProps = {
 	},
 	onChange: THandleOnChangeAttributes,
 };
+
+export type MemoizedInnerBlocks = {
+	clientId: string,
+	setBlockClientInners: ({
+		clientId: string,
+		inners: InnerBlocks,
+	}) => void,
+	controlValue: InnerBlocks,
+	reservedInnerBlocks: InnerBlocks,
+	getBlockInners: (clientId: string) => InnerBlocks,
+};
+
+export type AvailableItems = {
+	clientId: string,
+	setBlockClientInners: ({
+		clientId: string,
+		inners: InnerBlocks,
+	}) => void,
+	selectedBlockName: string,
+	reservedInnerBlocks: InnerBlocks,
+	memoizedInnerBlocks: InnerBlocks,
+	insertedInnerBlocks: Array<InnerBlockType>,
+	getBlockInners: (clientId: string) => InnerBlocks,
+};
