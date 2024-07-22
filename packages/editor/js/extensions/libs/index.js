@@ -1,14 +1,5 @@
 // @flow
 
-/**
- * Internal dependencies
- */
-import { __experimentalExtensionsSupportRegistration } from './base';
-import { __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition } from './inner-blocks';
-
-__experimentalExtensionsSupportRegistration();
-__experimentalRegistrationInnerBlockExtensionCustomConfigDefinition();
-
 export * from './utils';
 export {
 	StyleVariationsExtension,
@@ -81,7 +72,6 @@ export {
 	attributes as typographyExtensionAttributes,
 } from './typography';
 export {
-	definitionTypes,
 	InnerBlocksExtension,
 	attributes as innerBlocksExtensionsAttributes,
 } from './inner-blocks';
@@ -105,9 +95,9 @@ export * as extensionConfig from './base/config';
 export {
 	ExtensionsSupportStore,
 	EXTENSIONS_SUPPORT_STORE_NAME,
-	__experimentalExtensionsSupportRegistration,
+	registerBlockExtensionsSupports,
 } from './base';
-export { __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition } from './inner-blocks';
+export { registerInnerBlockExtensionsSupports } from './inner-blocks';
 
 export {
 	sharedBlockStates,
