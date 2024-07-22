@@ -14,6 +14,13 @@ abstract class BaseStyleDefinition {
 	protected array $settings = [];
 
 	/**
+	 * Store configuration for style definitions.
+	 *
+	 * @var array $config The style engine config.
+	 */
+	protected array $config = [];
+
+	/**
 	 * Hold collection of properties of current style definition.
 	 *
 	 * @var array
@@ -71,13 +78,26 @@ abstract class BaseStyleDefinition {
 	 * Sets suitable css selector for related property.
 	 *
 	 * @param string $featureId The feature identifier.
+	 * @param string $suffixClass The suffix css class.
 	 */
-	public function setSelector( string $featureId ): void {
+	public function setSelector( string $featureId, string $suffixClass = '' ): void {
 
 		$selectors  = $this->getSelectors();
 		$fallbackId = $this->calculateFallbackFeatureId( $featureId );
 
-		$this->selector = blockera_calculate_feature_css_selector( $selectors, $featureId, $fallbackId );
+		$this->selector = blockera_calculate_feature_css_selector( $selectors, $featureId, $fallbackId ) . $suffixClass;
+	}
+
+	/**
+	 * Sets configuration.
+	 *
+	 * @param array $config The style recieved definition config.
+	 *
+	 * @return void
+	 */
+	public function setConfig( array $config ):void {
+
+		$this->config = $config;
 	}
 
 	/**
