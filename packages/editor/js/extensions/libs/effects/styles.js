@@ -9,7 +9,6 @@ import { experimental } from '@blockera/env';
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
-import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
@@ -28,6 +27,7 @@ import {
 
 export const EffectsStyles = ({
 	state,
+	config,
 	clientId,
 	blockName,
 	masterState,

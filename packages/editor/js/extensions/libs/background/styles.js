@@ -8,7 +8,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
-import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
@@ -18,6 +17,7 @@ import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
 
 export const BackgroundStyles = ({
 	state,
+	config,
 	clientId,
 	blockName,
 	masterState,

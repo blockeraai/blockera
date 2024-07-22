@@ -8,7 +8,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
@@ -17,6 +16,7 @@ import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
 
 export const LayoutStyles = ({
 	state,
+	config,
 	clientId,
 	blockName,
 	masterState,

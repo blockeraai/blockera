@@ -25,6 +25,7 @@ export type BlockStyleProps = {
 
 export type StateStyleProps = {
 	...BlockStyleProps,
+	config: Object,
 	selectors?: Object,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,

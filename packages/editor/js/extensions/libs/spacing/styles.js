@@ -9,7 +9,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { useBlocksStore } from '../../../hooks';
@@ -76,6 +75,7 @@ function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 
 export const SpacingStyles = ({
 	state,
+	config,
 	clientId,
 	blockName,
 	masterState,

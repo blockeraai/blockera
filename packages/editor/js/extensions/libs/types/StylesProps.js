@@ -9,6 +9,7 @@ import type { TStates, TBreakpoint } from '../block-states/types';
 
 export type StylesProps = {
 	state: TStates,
+	config: Object,
 	clientId: string,
 	blockName: string,
 	selectors: Object,

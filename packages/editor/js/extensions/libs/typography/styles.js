@@ -10,7 +10,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
-import * as config from '../base/config';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
@@ -20,6 +19,7 @@ import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
 
 export function TypographyStyles({
 	state,
+	config,
 	clientId,
 	blockName,
 	masterState,
