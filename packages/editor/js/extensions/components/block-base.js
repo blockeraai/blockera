@@ -54,6 +54,10 @@ import {
 } from './utils';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
 import { attributes as sharedBlockExtensionAttributes } from '../libs/shared/attributes';
+import {
+	registerBlockExtensionsSupports,
+	registerInnerBlockExtensionsSupports,
+} from '../libs';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -129,6 +133,22 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentBreakpoint,
 			currentInnerBlockState,
 		});
+
+		const { edit: BlockEditComponent, registerExtensions = null } =
+			additional;
+
+		// On mounting block base component, we're firing bootstrapper scripts and add experimental extensions support.
+		useEffect(() => {
+			if ('function' === typeof registerExtensions) {
+				registerExtensions(clientId);
+
+				return;
+			}
+
+			registerBlockExtensionsSupports(clientId);
+			registerInnerBlockExtensionsSupports(clientId, blockeraInnerBlocks);
+			// eslint-disable-next-line
+		}, []);
 
 		const masterIsNormalState = (): boolean =>
 			'normal' === currentState && isBaseBreakpoint(getDeviceType());
@@ -289,8 +309,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			},
 			[currentAttributes]
 		);
-
-		const { edit: BlockEditComponent } = additional;
 
 		useEffect(
 			() => {
