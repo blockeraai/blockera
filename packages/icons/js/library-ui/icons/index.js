@@ -113,6 +113,7 @@ export { default as ExtensionConditions } from './extension-conditions.svg';
 export { default as ExtensionCustomStyle } from './extension-custom-style.svg';
 export { default as ExtensionEffects } from './extension-effects.svg';
 export { default as ExtensionEntranceAnimation } from './extension-entrance-animation.svg';
+export { default as ExtensionFlexChild } from './extension-flex-child.svg';
 export { default as ExtensionIcon } from './extension-icon.svg';
 export { default as ExtensionInnerBlocks } from './extension-inner-blocks.svg';
 export { default as ExtensionLayout } from './extension-layout.svg';
