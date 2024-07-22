@@ -11,7 +11,7 @@ import { dispatch, select } from '@wordpress/data';
 import { isEquals } from '../array';
 import { mergeObject } from '../object';
 
-export const updateConfig = (key: string, value: Object): void => {
+export const updateConfig = (name: string, value: Object): void => {
 	const STORE_NAME = 'blockera/extensions/config';
 	const { getExtension } = select(STORE_NAME) || {};
 
@@ -19,7 +19,14 @@ export const updateConfig = (key: string, value: Object): void => {
 		return;
 	}
 
-	const savedConfig = getExtension(key);
+	const { getSelectedBlock = () => ({}) } = select('core/block-editor');
+	const { clientId } = getSelectedBlock() || {};
+
+	if (!clientId) {
+		return;
+	}
+
+	const savedConfig = getExtension(name, clientId);
 
 	if (isEquals(value, savedConfig)) {
 		return;
@@ -27,5 +34,9 @@ export const updateConfig = (key: string, value: Object): void => {
 
 	const { updateExtension } = dispatch(STORE_NAME);
 
-	updateExtension(key, mergeObject(savedConfig, value));
+	updateExtension({
+		name,
+		clientId,
+		newSupports: mergeObject(savedConfig, value),
+	});
 };

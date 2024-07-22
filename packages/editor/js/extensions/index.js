@@ -24,7 +24,6 @@ import {
 /**
  * Internal dependencies
  */
-import bootstrapScripts from './scripts';
 import blockeraEditorPackageInfo from '../../../editor/package.json';
 
 // Exports
@@ -66,8 +65,6 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 				isOpenSettings: false,
 				isOpenOtherBreakpoints: false,
 			});
-
-			bootstrapScripts();
 
 			if ('function' === typeof outsideDefinitions) {
 				outsideDefinitions();

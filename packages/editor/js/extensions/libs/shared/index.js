@@ -54,6 +54,7 @@ import { resetExtensionSettings } from '../../utils';
 import { useDisplayBlockControls } from '../../../hooks';
 import type { StateTypes, TBreakpoint, TStates } from '../block-states/types';
 import { useBlockContext } from '../../hooks';
+import bootstrapScripts from '../../scripts';
 
 type Props = {
 	name: string,
@@ -126,13 +127,23 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			useDispatch(STORE_NAME);
 		const { getExtensions, getDefinition } = select(STORE_NAME);
 
-		const supports = getExtensions();
+		const supports = getExtensions(props.clientId);
+
 		const [settings, setSettings] = useState(supports);
+
+		// On mounting shared extension component, we can bootstrap scripts.
+		useEffect(() => {
+			bootstrapScripts();
+			// eslint-disable-next-line
+		}, []);
 
 		// Get next settings after switch between blocks.
 		useEffect(() => {
 			if (isInnerBlock(currentBlock)) {
-				const innerBlockDefinition = getDefinition(currentBlock);
+				const innerBlockDefinition = getDefinition(
+					currentBlock,
+					props.clientId
+				);
 
 				if (
 					innerBlockDefinition &&
@@ -153,28 +164,33 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		}, [currentBlock]);
 
 		const handleOnChangeSettings = (
-			newSettings: Object,
-			key: string
+			newSupports: Object,
+			name: string
 		): void => {
 			setSettings({
 				...settings,
-				[key]: {
-					...settings[key],
-					...newSettings,
+				[name]: {
+					...settings[name],
+					...newSupports,
 				},
 			});
 
 			if (isInnerBlock(currentBlock)) {
-				updateDefinitionExtensionSupport(
-					key,
-					newSettings,
-					currentBlock
-				);
+				updateDefinitionExtensionSupport({
+					name,
+					newSupports,
+					clientId: props.clientId,
+					definitionName: currentBlock,
+				});
 
 				return;
 			}
 
-			updateExtension(key, newSettings);
+			updateExtension({
+				name,
+				newSupports,
+				clientId: props.clientId,
+			});
 		};
 
 		const {

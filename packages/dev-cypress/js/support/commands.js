@@ -471,7 +471,7 @@ export const registerCommands = () => {
 		'checkBoxSpacingLabelContent',
 		(type = 'margin', side = 'top', content) => {
 			cy.get(
-				`[data-cy="box-spacing-label-${
+				`[data-cy="box-spacing-${
 					side ? type + '-' + side : type
 				}"] [data-cy="label-control"]`
 			).contains(content);
