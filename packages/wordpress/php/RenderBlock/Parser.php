@@ -35,7 +35,7 @@ class Parser {
 	/**
 	 * Retrieve combine css of current block.
 	 *
-	 * @param array $params  The params array includes block and block selector.
+	 * @param array $params The params array includes block and block selector.
 	 *
 	 * @throws BindingResolutionException The BindingResolutionException for not bonded object.
 	 *
@@ -70,8 +70,8 @@ class Parser {
 	public function htmlManipulate( array $params ): void {
 
 		[
-			'dom'             => $dom,
-			'block'           => $block,
+			'dom'               => $dom,
+			'block'             => $block,
 			'unique_class_name' => $uniqueClassname,
 		] = $params;
 

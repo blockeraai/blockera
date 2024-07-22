@@ -20,13 +20,13 @@ export const updateConfig = (name: string, value: Object): void => {
 	}
 
 	const { getSelectedBlock = () => ({}) } = select('core/block-editor');
-	const { clientId } = getSelectedBlock() || {};
+	const { name: blockName } = getSelectedBlock() || {};
 
-	if (!clientId) {
+	if (!blockName) {
 		return;
 	}
 
-	const savedConfig = getExtension(name, clientId);
+	const savedConfig = getExtension(name, blockName);
 
 	if (isEquals(value, savedConfig)) {
 		return;
@@ -36,7 +36,7 @@ export const updateConfig = (name: string, value: Object): void => {
 
 	updateExtension({
 		name,
-		clientId,
+		blockName,
 		newSupports: mergeObject(savedConfig, value),
 	});
 };

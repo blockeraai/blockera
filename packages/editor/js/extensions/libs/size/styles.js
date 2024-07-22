@@ -9,7 +9,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import * as config from '../base/config';
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import type { StylesProps } from '../types';
@@ -19,6 +18,7 @@ import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
 
 export const SizeStyles = ({
 	state,
+	config,
 	clientId,
 	blockName,
 	masterState,

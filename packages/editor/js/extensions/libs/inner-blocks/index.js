@@ -14,7 +14,7 @@ import { STORE_NAME } from '../base/store';
 import type { InnerBlocks } from './types';
 
 export const registerInnerBlockExtensionsSupports = (
-	clientId: string,
+	blockName: string,
 	innerBlockModels: InnerBlocks,
 	externalConfig?: Object
 ): void => {
@@ -38,7 +38,7 @@ export const registerInnerBlockExtensionsSupports = (
 
 			addDefinition({
 				name,
-				clientId,
+				blockName,
 				definition,
 				extensions: filteredDefinitions[name],
 			});

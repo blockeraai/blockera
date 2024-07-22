@@ -43,11 +43,16 @@ export const useComputedCssProps = ({
 		selectors,
 	};
 
+	const stylesStack = [];
+
+	if (!params?.config) {
+		return stylesStack;
+	}
+
 	// eslint-disable-next-line @wordpress/no-unused-vars-before-return,react-hooks/exhaustive-deps
 	const defaultAttributes = prepareAttributesDefaultValues(
 		getBlockType(blockName)?.attributes || {}
 	);
-	const stylesStack = [];
 
 	const appendStyles = (settings: Object): void => {
 		stylesStack.push(

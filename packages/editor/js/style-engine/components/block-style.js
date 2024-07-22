@@ -20,9 +20,11 @@ import {
 	// MediaQuery,
 	StateStyle,
 } from '../';
+import { getExtensionConfig } from '../../extensions';
 
 export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 	const {
+		config,
 		currentBlock,
 		currentState,
 		currentBreakpoint,
@@ -36,6 +38,10 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 		} = select('blockera/extensions');
 
 		return {
+			config: getExtensionConfig(
+				props.blockName,
+				getExtensionCurrentBlock()
+			),
 			currentBlock: getExtensionCurrentBlock(),
 			currentState: getExtensionCurrentBlockState(),
 			currentInnerBlockState: getExtensionInnerBlockState(),
@@ -45,10 +51,15 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 
 	const { getBlockType } = useBlocksStore();
 	let selectors = {};
+	let styleEngineConfig = {};
 
 	if (isFunction(getBlockType)) {
-		const { selectors: blockSelectors } = getBlockType(props.blockName);
+		const {
+			selectors: blockSelectors,
+			supports: { blockeraStyleEngine: reservedConfig },
+		} = getBlockType(props.blockName);
 		selectors = blockSelectors;
+		styleEngineConfig = reservedConfig;
 	}
 
 	return (
@@ -57,10 +68,12 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 			<StateStyle
 				{...{
 					...props,
+					config,
 					selectors,
 					currentState,
 					currentBlock,
 					currentBreakpoint,
+					styleEngineConfig,
 					currentInnerBlockState,
 				}}
 			/>

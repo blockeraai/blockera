@@ -8,7 +8,6 @@ import { isEquals } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import * as config from '../base/config';
 import { arrayEquals } from '../utils';
 import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
@@ -24,6 +23,7 @@ import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
 
 export const BorderAndShadowStyles = ({
 	state,
+	config,
 	clientId,
 	blockName,
 	masterState,

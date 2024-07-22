@@ -126,7 +126,7 @@ class Render {
 			$unique_class_name = blockera_get_unique_classname( 'blockera-' . $block['blockName'] );
 		}
 
-		$selector = $this->getSelector( $block, $unique_class_name );
+		$selector = $this->getSelector( $unique_class_name );
 
 		/**
 		 * Get parser object.
@@ -244,30 +244,13 @@ class Render {
 	 * Retrieve block css selector.
 	 * in this method, we can customize selector of block element based on block name.
 	 *
-	 * @param array  $block             the WordPress block details as array.
 	 * @param string $unique_class_name the block unique css classname.
 	 *
 	 * @return string the block css selector with unique classname.
 	 */
-	public function getSelector( array $block, string $unique_class_name = '' ): string {
+	public function getSelector( string $unique_class_name = '' ): string {
 
 		return ! empty( $unique_class_name ) ? ( '.' !== $unique_class_name[0] ? ".{$unique_class_name}" : $unique_class_name ) : '';
-		// phpcs:disable
-		// TODO: normalizing css classnames based on block type.
-		//		switch ( $block['blockName'] ) {
-		//			case 'core/button':
-		//			case 'core/buttons':
-		//				return ".wp-block-button .wp-block-button__link{$selector}";
-		//
-		//			case 'core/site-title':
-		//				return ".wp-block-site-title a{$selector}";
-		//
-		//			case 'core/paragraph':
-		//				return "p{$selector}";
-		//		}
-		//
-		//		return $selector;
-		// phpcs:enable
 	}
 
 	/**

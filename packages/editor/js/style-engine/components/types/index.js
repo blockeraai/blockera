@@ -25,8 +25,10 @@ export type BlockStyleProps = {
 
 export type StateStyleProps = {
 	...BlockStyleProps,
+	config: Object,
 	selectors?: Object,
 	currentState: TStates,
+	styleEngineConfig?: Object,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
 	currentBlock?: 'master' | InnerBlockType | string,

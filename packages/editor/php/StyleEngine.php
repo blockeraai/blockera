@@ -248,6 +248,12 @@ final class StyleEngine {
 		);
 
 		$this->definition->flushDeclarations();
+		$this->definition->setConfig(
+			blockera_get_block_type_property(
+				$this->block['blockName'],
+				'supports'
+			)['blockeraStyleEngine'] ?? []
+		);
 		$this->definition->setSettings( $settings );
 		$this->definition->setSelectors( $selectors );
 

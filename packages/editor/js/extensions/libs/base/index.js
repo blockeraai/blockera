@@ -12,13 +12,13 @@ import * as config from './config';
 import { STORE_NAME } from './store/constants';
 
 export const registerBlockExtensionsSupports = (
-	clientId: string,
+	blockName: string,
 	externalConfig?: Object
 ): void => {
 	Object.keys(externalConfig || config).forEach((name: string) =>
 		dispatch(STORE_NAME).addExtension({
 			name,
-			clientId,
+			blockName,
 			supports: (externalConfig || config)[name],
 		})
 	);
