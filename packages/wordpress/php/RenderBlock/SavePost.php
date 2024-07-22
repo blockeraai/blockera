@@ -103,7 +103,7 @@ class SavePost {
 
 		} else {
 			// Fallback way to providing unique css selector for block element.
-			$selector = $this->render->getSelector( $block, blockera_get_unique_classname( $block['blockName'] ) );
+			$selector = $this->render->getSelector( blockera_get_unique_classname( $block['blockName'] ) );
 		}
 
 		/**
