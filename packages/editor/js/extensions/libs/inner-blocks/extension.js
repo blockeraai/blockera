@@ -185,6 +185,28 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 						}}
 						defaultValue={{}}
 						label={__('Inner Blocks', 'blockera')}
+						labelDescription={
+							<>
+								<p>
+									{__(
+										'By using inner blocks, you can group blocks together and customize them in a single place without the need to customize the block itself.',
+										'blockera'
+									)}
+								</p>
+								<p>
+									{__(
+										'The customization is attached to the parent block and will be applied to all nested blocks.',
+										'blockera'
+									)}
+								</p>
+								<p>
+									{__(
+										'Some blocks have the `Virtual Inner Blocks` that are not real blocks but elements that are inside the block and you can use them for more customization.',
+										'blockera'
+									)}
+								</p>
+							</>
+						}
 						addNewButtonLabel={__('Add Inner Block', 'blockera')}
 						popoverTitle={__(
 							'Inner Blocks Customization',
@@ -195,7 +217,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 						)}
 						icon={<Icon icon="inner-blocks" />}
 						description={__(
-							'Customize inner blocks style.',
+							'Customize nested blocks style.',
 							'blockera'
 						)}
 						design="large"
