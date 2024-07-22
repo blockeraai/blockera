@@ -16,6 +16,7 @@ export type StylesProps = {
 	// supports?: Object,
 	attributes: Object,
 	masterState: TStates,
+	styleEngineConfig: Object,
 	// blockProps: TBlockProps,
 	activeDeviceType?: TBreakpoint,
 	currentBlock: 'master' | InnerBlockType | string,

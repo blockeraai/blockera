@@ -22,6 +22,7 @@ export const LayoutStyles = ({
 	masterState,
 	currentBlock,
 	activeDeviceType,
+	// styleEngineConfig,
 	selectors: blockSelectors,
 	attributes: currentBlockAttributes,
 	...props

@@ -51,10 +51,15 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 
 	const { getBlockType } = useBlocksStore();
 	let selectors = {};
+	let styleEngineConfig = {};
 
 	if (isFunction(getBlockType)) {
-		const { selectors: blockSelectors } = getBlockType(props.blockName);
+		const {
+			selectors: blockSelectors,
+			supports: { blockeraStyleEngine: reservedConfig },
+		} = getBlockType(props.blockName);
 		selectors = blockSelectors;
+		styleEngineConfig = reservedConfig;
 	}
 
 	return (
@@ -68,6 +73,7 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 					currentState,
 					currentBlock,
 					currentBreakpoint,
+					styleEngineConfig,
 					currentInnerBlockState,
 				}}
 			/>
