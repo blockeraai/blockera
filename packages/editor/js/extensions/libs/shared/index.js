@@ -54,6 +54,7 @@ import { resetExtensionSettings } from '../../utils';
 import { useDisplayBlockControls } from '../../../hooks';
 import type { StateTypes, TBreakpoint, TStates } from '../block-states/types';
 import { useBlockContext } from '../../hooks';
+import bootstrapScripts from '../../scripts';
 
 type Props = {
 	name: string,
@@ -127,6 +128,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const supports = getExtensions(props.clientId);
 
 		const [settings, setSettings] = useState(supports);
+
+		// On mounting shared extension component, we can bootstrap scripts.
+		useEffect(() => {
+			bootstrapScripts();
+			// eslint-disable-next-line
+		}, []);
 
 		// Get next settings after switch between blocks.
 		useEffect(() => {

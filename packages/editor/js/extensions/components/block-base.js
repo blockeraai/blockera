@@ -58,6 +58,7 @@ import {
 	registerBlockExtensionsSupports,
 	registerInnerBlockExtensionsSupports,
 } from '../libs';
+import { blockeraExtensionsBootstrap } from '../libs/bootstrap';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -139,6 +140,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		// On mounting block base component, we're firing bootstrapper scripts and add experimental extensions support.
 		useEffect(() => {
+			// Bootstrap functions for extensions.
+			blockeraExtensionsBootstrap();
+
 			if ('function' === typeof registerExtensions) {
 				registerExtensions(clientId);
 
