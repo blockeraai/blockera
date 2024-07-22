@@ -3,13 +3,20 @@
 /**
  * Internal dependencies
  */
-import type { CoreExtensionDefinition, CoreDefinitionModel } from './types';
+import type {
+	CoreDefinitionModel,
+	CoreExtensionDefinition,
+	CoreExtensionDefinitionClient,
+} from './types';
 
-export const getExtensions = ({
-	CoreConfigDefinition,
-}: {
-	CoreConfigDefinition: CoreExtensionDefinition,
-}): CoreExtensionDefinition => CoreConfigDefinition;
+export const getExtensions = (
+	{
+		CoreConfigDefinition,
+	}: {
+		CoreConfigDefinition: CoreExtensionDefinition,
+	},
+	clientId: string
+): CoreExtensionDefinitionClient => CoreConfigDefinition[clientId];
 
 export const getExtension = (
 	{
@@ -17,16 +24,22 @@ export const getExtension = (
 	}: {
 		CoreConfigDefinition: CoreExtensionDefinition,
 	},
-	name: string
+	name: string,
+	clientId: string
 ): CoreDefinitionModel => {
-	return CoreConfigDefinition[name];
+	return CoreConfigDefinition[clientId][name];
 };
 
-export const getDefinitions = ({
-	CustomConfigDefinitions,
-}: {
-	CustomConfigDefinitions: CoreExtensionDefinition,
-}): CoreExtensionDefinition => CustomConfigDefinitions;
+export const getDefinitions = (
+	{
+		CustomConfigDefinitions,
+	}: {
+		CustomConfigDefinitions: CoreExtensionDefinition,
+	},
+	clientId: string,
+	definition: string
+): CoreExtensionDefinitionClient =>
+	CustomConfigDefinitions[clientId][definition];
 
 export const getDefinition = (
 	{
@@ -34,7 +47,8 @@ export const getDefinition = (
 	}: {
 		CustomConfigDefinitions: CoreExtensionDefinition,
 	},
-	name: string
+	definition: string,
+	clientId: string
 ): CoreDefinitionModel => {
-	return CustomConfigDefinitions[name];
+	return CustomConfigDefinitions[clientId][definition];
 };

@@ -10,20 +10,31 @@ const CoreConfigDefinition = (state: Object = {}, action: Object): Object => {
 		case 'ADD_EXTENSION':
 			return {
 				...state,
-				[action.name]: action.supports,
+				[action.clientId]: {
+					...(state[action.clientId] || {}),
+					[action.name]: action.supports,
+				},
 			};
 		case 'ADD_EXTENSION_SUPPORT':
 			return {
 				...state,
-				[action.extensionName]: {
-					...state[action.extensionName],
-					[action.name]: action.support,
+				[action.clientId]: {
+					...(state[action.clientId] || {}),
+					[action.extensionName]: {
+						...((state[action.clientId] || {})[
+							action.extensionName
+						] || {}),
+						[action.name]: action.support,
+					},
 				},
 			};
 		case 'UPDATE_EXTENSION':
 			return {
 				...state,
-				[action.name]: action.newSupports,
+				[action.clientId]: {
+					...(state[action.clientId] || {}),
+					[action.name]: action.newSupports,
+				},
 			};
 	}
 
@@ -38,22 +49,25 @@ const CustomConfigDefinitions = (
 		case 'ADD_DEFINITION':
 			return {
 				...state,
-				[action.name]: action.extensions,
-			};
-		case 'ADD_DEFINITION_EXTENSION_SUPPORT':
-			return {
-				...state,
-				[action.definitionName]: {
-					...state[action.definitionName],
-					[action.name]: action.support,
+				[action.clientId]: {
+					[action.definition]: {
+						...((state[action.clientId] || {})[action.definition] ||
+							{}),
+						[action.name]: action.extensions,
+					},
 				},
 			};
 		case 'UPDATE_DEFINITION_EXTENSION_SUPPORT':
 			return {
 				...state,
-				[action.definitionName]: {
-					...state[action.definitionName],
-					[action.name]: action.newSupport,
+				[action.clientId]: {
+					...(state[action.clientId] || {}),
+					[action.definitionName]: {
+						...((state[action.clientId] || {})[
+							action.definitionName
+						] || {}),
+						[action.name]: action.newSupports,
+					},
 				},
 			};
 	}

@@ -11,11 +11,15 @@ import { dispatch } from '@wordpress/data';
 import * as config from './config';
 import { STORE_NAME } from './store/constants';
 
-export const __experimentalExtensionsSupportRegistration = (): void => {
-	Object.keys(config).forEach((name: string) =>
+export const registerBlockExtensionsSupports = (
+	clientId: string,
+	externalConfig?: Object
+): void => {
+	Object.keys(externalConfig || config).forEach((name: string) =>
 		dispatch(STORE_NAME).addExtension({
 			name,
-			supports: config[name],
+			clientId,
+			supports: (externalConfig || config)[name],
 		})
 	);
 };
