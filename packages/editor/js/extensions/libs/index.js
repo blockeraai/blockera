@@ -102,7 +102,11 @@ export {
 	supports as sharedBlockExtensionSupports,
 } from './shared';
 export * as extensionConfig from './base/config';
-export { __experimentalExtensionsSupportRegistration } from './base';
+export {
+	ExtensionsSupportStore,
+	EXTENSIONS_SUPPORT_STORE_NAME,
+	__experimentalExtensionsSupportRegistration,
+} from './base';
 export { __experimentalRegistrationInnerBlockExtensionCustomConfigDefinition } from './inner-blocks';
 
 export {
