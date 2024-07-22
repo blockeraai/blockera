@@ -13,7 +13,7 @@ export type CoreExtensionDefinition = {
 	},
 };
 
-export type CoreExtensionDefinitionClient = {
+export type CoreExtensionDefinitionBlock = {
 	[key: string]: {
 		[key: string]: FeatureConfig,
 	},

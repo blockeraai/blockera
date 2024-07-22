@@ -6,7 +6,7 @@
 import type {
 	CoreDefinitionModel,
 	CoreExtensionDefinition,
-	CoreExtensionDefinitionClient,
+	CoreExtensionDefinitionBlock,
 } from './types';
 
 export const getExtensions = (
@@ -15,8 +15,8 @@ export const getExtensions = (
 	}: {
 		CoreConfigDefinition: CoreExtensionDefinition,
 	},
-	clientId: string
-): CoreExtensionDefinitionClient => CoreConfigDefinition[clientId];
+	blockName: string
+): CoreExtensionDefinitionBlock => CoreConfigDefinition[blockName];
 
 export const getExtension = (
 	{
@@ -25,9 +25,9 @@ export const getExtension = (
 		CoreConfigDefinition: CoreExtensionDefinition,
 	},
 	name: string,
-	clientId: string
+	blockName: string
 ): CoreDefinitionModel => {
-	return CoreConfigDefinition[clientId][name];
+	return CoreConfigDefinition[blockName][name];
 };
 
 export const getDefinitions = (
@@ -36,10 +36,9 @@ export const getDefinitions = (
 	}: {
 		CustomConfigDefinitions: CoreExtensionDefinition,
 	},
-	clientId: string,
+	blockName: string,
 	definition: string
-): CoreExtensionDefinitionClient =>
-	CustomConfigDefinitions[clientId][definition];
+): CoreDefinitionModel => CustomConfigDefinitions[blockName][definition];
 
 export const getDefinition = (
 	{
@@ -48,7 +47,7 @@ export const getDefinition = (
 		CustomConfigDefinitions: CoreExtensionDefinition,
 	},
 	definition: string,
-	clientId: string
+	blockName: string
 ): CoreDefinitionModel => {
-	return CustomConfigDefinitions[clientId][definition];
+	return CustomConfigDefinitions[blockName][definition];
 };

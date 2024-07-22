@@ -144,13 +144,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			blockeraExtensionsBootstrap();
 
 			if ('function' === typeof registerExtensions) {
-				registerExtensions(clientId);
+				registerExtensions(name);
 
 				return;
 			}
 
-			registerBlockExtensionsSupports(clientId);
-			registerInnerBlockExtensionsSupports(clientId, blockeraInnerBlocks);
+			registerBlockExtensionsSupports(name);
+			registerInnerBlockExtensionsSupports(name, blockeraInnerBlocks);
 			// eslint-disable-next-line
 		}, []);
 

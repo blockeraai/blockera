@@ -3,58 +3,37 @@
 /**
  * Internal dependencies
  */
-import type { FeatureConfig } from '../types';
 import type { CoreDefinitionModel } from './types';
 
 export const addExtension = ({
 	name,
 	supports,
-	clientId,
+	blockName,
 }: {
 	name: string,
-	clientId: string,
+	blockName: string,
 	supports: CoreDefinitionModel,
 }): Object => {
 	return {
 		name,
-		clientId,
+		blockName,
 		supports,
 		type: 'ADD_EXTENSION',
 	};
 };
 
-export const addExtensionSupport = ({
-	name,
-	support,
-	clientId,
-	extensionName,
-}: {
-	name: string,
-	clientId: string,
-	support: FeatureConfig,
-	extensionName: string,
-}): Object => {
-	return {
-		name,
-		support,
-		clientId,
-		extensionName,
-		type: 'ADD_EXTENSION_SUPPORT',
-	};
-};
-
 export const updateExtension = ({
 	name,
-	clientId,
+	blockName,
 	newSupports,
 }: {
 	name: string,
-	clientId: string,
+	blockName: string,
 	newSupports: CoreDefinitionModel,
 }): Object => {
 	return {
 		name,
-		clientId,
+		blockName,
 		newSupports,
 		type: 'UPDATE_EXTENSION',
 	};
@@ -62,18 +41,18 @@ export const updateExtension = ({
 
 export const addDefinition = ({
 	name,
-	clientId,
+	blockName,
 	extensions,
 	definition,
 }: {
 	name: string,
-	clientId: string,
+	blockName: string,
 	definition: string,
 	extensions: CoreDefinitionModel,
 }): Object => {
 	return {
 		name,
-		clientId,
+		blockName,
 		definition,
 		extensions,
 		type: 'ADD_DEFINITION',
@@ -82,18 +61,18 @@ export const addDefinition = ({
 
 export const updateDefinitionExtensionSupport = ({
 	name,
-	clientId,
+	blockName,
 	newSupports,
 	definitionName,
 }: {
 	name: string,
-	clientId: string,
+	blockName: string,
 	definitionName: string,
 	newSupports: CoreDefinitionModel,
 }): Object => {
 	return {
 		name,
-		clientId,
+		blockName,
 		newSupports,
 		definitionName,
 		type: 'UPDATE_DEFINITION_EXTENSION_SUPPORT',
