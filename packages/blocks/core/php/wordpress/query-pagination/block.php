@@ -10,13 +10,15 @@
 return array_merge(
 	$args,
 	[
-		'attributes' => [
-			...( $args['attributes'] ?? [] ),
-			'blockeraDisplay' => [
-				'type'    => 'string',
-				'default' => 'flex',
-			],
-		],
+		'attributes' => array_merge(
+			$args['attributes'] ?? [],
+			[
+				'blockeraDisplay' => [
+					'type'    => 'string',
+					'default' => 'flex',
+				],
+			]
+		),
 		'selectors'  => [
 			...( $args['selectors'] ?? [] ),
 			'innerBlocks' => [
