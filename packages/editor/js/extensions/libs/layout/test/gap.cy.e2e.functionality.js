@@ -6,7 +6,16 @@ import {
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Gap → Functionality', () => {
+/**
+ * This test is for `gap` type that works for `flex` or `grid`.
+ *
+ * This behavior can changed by setting supports.blockeraStyleEngine['gap-type']
+ * i it was not defined means it's value is `gap`
+ *
+ * Some blocks like `Group` have different functionality that if display is not `flex` or `grid` then
+ * it generates gap for different CSS property. The complete tests for that scenario is on the Group block tests.
+ */
+describe('Gap → Functionality (Type: gap)', () => {
 	beforeEach(() => {
 		createPost();
 
