@@ -91,6 +91,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentState,
 			activeVariation,
 			currentBreakpoint,
+			availableAttributes,
 			currentInnerBlockState,
 			isActiveBlockExtensions,
 		} = useSelect((select) => {
@@ -103,10 +104,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				getExtensionCurrentBlockStateBreakpoint,
 			} = select('blockera/extensions');
 
+			const { getBlockType } = select('core/blocks');
+
 			return {
 				currentBlock: getExtensionCurrentBlock(),
 				currentState: getExtensionCurrentBlockState(),
 				isActiveBlockExtensions: isActiveBlockExtensions(),
+				availableAttributes: getBlockType(name)?.attributes,
 				currentInnerBlockState: getExtensionInnerBlockState(),
 				activeVariation: getActiveBlockVariation(),
 				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
@@ -139,6 +143,19 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		// On mounting block base component, we're firing bootstrapper scripts and add experimental extensions support.
 		useEffect(() => {
+			// Migrate to blockera attributes for some blocks where includes attributes migrations, if made of Blockera.
+			if (
+				!attributes?.blockeraPropsId &&
+				availableAttributes?.blockeraPropsId
+			) {
+				setAttributes(
+					mergeObject(
+						attributes,
+						prepareAttributesDefaultValues(defaultAttributes)
+					)
+				);
+			}
+
 			// Bootstrap functions for extensions.
 			blockeraExtensionsBootstrap();
 
