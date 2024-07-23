@@ -9,11 +9,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 
 /**
  * Internal dependencies

@@ -8,12 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	sharedBlockStates,
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
+import { sharedBlockStates, SharedBlockExtension } from '@blockera/editor';
 
 delete sharedBlockStates.active;
 

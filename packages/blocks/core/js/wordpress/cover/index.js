@@ -8,11 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
