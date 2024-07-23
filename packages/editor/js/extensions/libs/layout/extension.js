@@ -22,6 +22,7 @@ import {
 import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { prepare } from '@blockera/data-editor';
 
 /**
  * Internal dependencies
@@ -77,6 +78,36 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				!isShowAlignContent)
 		) {
 			return <></>;
+		}
+
+		/**
+		 * Calculate gap showing by it's type for current block
+		 */
+		let showGapFeature = isShowGap;
+
+		if (showGapFeature) {
+			const gapType = prepare(
+				'supports.blockeraStyleEngine.gap-type',
+				block
+			);
+
+			if (gapType !== undefined) {
+				switch (gapType) {
+					case 'gap-and-margin':
+						showGapFeature = true;
+						break;
+
+					case 'gap':
+						showGapFeature = ['flex', 'grid'].includes(
+							values.blockeraDisplay
+						);
+						break;
+				}
+			} else {
+				showGapFeature = ['flex', 'grid'].includes(
+					values.blockeraDisplay
+				);
+			}
 		}
 
 		return (
@@ -334,7 +365,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 					</EditorFeatureWrapper>
 				)}
 
-				{['flex', 'grid'].includes(values.blockeraDisplay) && (
+				{showGapFeature && (
 					<EditorFeatureWrapper
 						isActive={isShowGap}
 						config={extensionConfig.blockeraGap}
