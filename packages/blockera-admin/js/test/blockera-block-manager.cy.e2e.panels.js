@@ -149,37 +149,37 @@ describe('Block Manager Settings Testing ...', () => {
 
 			appendBlocks(textBlocksCode);
 
-			cy.getBlock('core/details').click();
+			cy.getBlock('core/details').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/code').click();
+			cy.getBlock('core/code').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/heading').click();
+			cy.getBlock('core/heading').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/list').click();
+			cy.getBlock('core/list').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/list-item').click();
+			cy.getBlock('core/list-item').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/paragraph').click();
+			cy.getBlock('core/paragraph').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/preformatted').click();
+			cy.getBlock('core/preformatted').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/pullquote').click();
+			cy.getBlock('core/pullquote').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/quote').click();
+			cy.getBlock('core/quote').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/table').click();
+			cy.getBlock('core/table').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
-			cy.getBlock('core/verse').click();
+			cy.getBlock('core/verse').first().click();
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 		});
 	});
@@ -203,37 +203,37 @@ describe('Block Manager Settings Testing ...', () => {
 
 			appendBlocks(textBlocksCode);
 
-			cy.getBlock('core/details').click();
+			cy.getBlock('core/details').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/code').click();
+			cy.getBlock('core/code').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/heading').click();
+			cy.getBlock('core/heading').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/list').click();
+			cy.getBlock('core/list').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/list-item').click();
+			cy.getBlock('core/list-item').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/paragraph').click();
+			cy.getBlock('core/paragraph').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/preformatted').click();
+			cy.getBlock('core/preformatted').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/pullquote').click();
+			cy.getBlock('core/pullquote').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/quote').click();
+			cy.getBlock('core/quote').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/table').click();
+			cy.getBlock('core/table').first().click();
 			cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/verse').click();
+			cy.getBlock('core/verse').first().click();
 			cy.getByAriaLabel('Add New Background');
 		});
 	});

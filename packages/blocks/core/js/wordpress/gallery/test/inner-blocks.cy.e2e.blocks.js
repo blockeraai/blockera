@@ -32,7 +32,7 @@ describe('Gallery Block → Inner Blocks', () => {
 		);
 
 		// Select target block
-		cy.getBlock('core/image').click();
+		cy.getBlock('core/image').first().click();
 
 		cy.getByAriaLabel('Select Gallery').click();
 

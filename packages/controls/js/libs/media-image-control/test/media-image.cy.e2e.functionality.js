@@ -146,7 +146,7 @@ describe('media-image', () => {
 			).then(() => {
 				cy.get('[aria-label="“(no title)” (Edit)"]').first().click();
 
-				cy.getIframeBody().getBlock('core/paragraph').click();
+				cy.getIframeBody().getBlock('core/paragraph').first().click();
 
 				cy.getByDataTest('style-tab').click();
 
