@@ -8,7 +8,6 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import { SharedBlockExtension } from '@blockera/editor';
 
 /**
@@ -18,14 +17,6 @@ import link from '../inners/link';
 import button from '../inners/button';
 import headings from '../inners/headings';
 import paragraph from '../inners/paragraph';
-
-const attributes: Object = mergeObject(sharedBlockExtensionAttributes, {
-	blockeraDisplay: {
-		default: 'flex',
-	},
-});
-
-const supports = sharedBlockExtensionSupports;
 
 export const Group = {
 	name: 'blockeraGroup',

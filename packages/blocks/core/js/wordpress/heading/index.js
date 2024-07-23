@@ -19,7 +19,6 @@ import link from '../inners/link';
 export const Heading = {
 	name: 'blockeraHeading',
 	targetBlock: 'core/heading',
-	attributes,
 	blockeraInnerBlocks: link,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

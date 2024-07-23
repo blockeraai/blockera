@@ -18,7 +18,6 @@ import link from '../inners/link';
 export const PostNavigationLink = {
 	name: 'blockeraPostNavigationLink',
 	targetBlock: 'core/post-navigation-link',
-	attributes,
 	blockeraInnerBlocks: link,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
