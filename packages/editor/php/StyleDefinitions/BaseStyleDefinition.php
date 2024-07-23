@@ -21,6 +21,13 @@ abstract class BaseStyleDefinition {
 	protected array $config = [];
 
 	/**
+	 * Hold style definition default settings from consumer request.
+	 *
+	 * @var array
+	 */
+	protected array $default_settings = [];
+
+	/**
 	 * Hold collection of properties of current style definition.
 	 *
 	 * @var array
@@ -98,6 +105,18 @@ abstract class BaseStyleDefinition {
 	public function setConfig( array $config ):void {
 
 		$this->config = $config;
+	}
+
+	/**
+	 * Sets default settings.
+	 *
+	 * @param array $default_settings The default settings.
+	 *
+	 * @return void
+	 */
+	public function setDefaultSettings( array $default_settings ): void {
+
+		$this->default_settings = $default_settings;
 	}
 
 	/**

@@ -254,6 +254,12 @@ final class StyleEngine {
 				'supports'
 			)['blockeraStyleEngine'] ?? []
 		);
+		$this->definition->setDefaultSettings(
+			blockera_get_block_type_property(
+				$this->block['blockName'],
+				'attributes'
+			)
+		);
 		$this->definition->setSettings( $settings );
 		$this->definition->setSelectors( $selectors );
 
