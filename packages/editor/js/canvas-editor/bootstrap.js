@@ -35,14 +35,17 @@ export const bootstrapCanvasEditor = (wp: Object): void => {
 				const { version } = getEntity('wp');
 
 				// Compatibility for WordPress supported versions.
-				const targets = {
-					'6.6': '.editor-header__center',
-					'6.5.5': '.edit-post-header__center',
-					'6.5.4': '.edit-post-header__center',
-					'6.5.3': '.edit-post-header__center',
-					'6.5.2': '.edit-post-header__center',
+				const getTarget = () => {
+					// For WordPress version equals or bigger than 6.6 version.
+					if (Number(version.replace(/\./g, '')) >= 66) {
+						return '.editor-header__center';
+					}
+
+					// For less than WordPress 6.6 versions.
+					return '.edit-post-header__center';
 				};
-				const target = targets[version];
+
+				const target = getTarget();
 
 				return (
 					<Observer
