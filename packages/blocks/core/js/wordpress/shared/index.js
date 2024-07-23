@@ -16,8 +16,6 @@ import {
 
 export const Shared = {
 	name: 'Shared',
-	attributes,
-	supports,
 	edit: ({ children, ...props }: Object): MixedElement => {
 		return (
 			<SharedBlockExtension {...props}>{children}</SharedBlockExtension>

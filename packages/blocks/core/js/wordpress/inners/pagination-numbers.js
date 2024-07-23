@@ -20,7 +20,6 @@ const paginationNumbers: InnerBlocks = {
 		name: 'elements/numbers',
 		label: __('Numbers', 'blockera'),
 		icon: <Icon icon="block-pagination-numbers" size="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -29,7 +28,6 @@ const paginationNumbers: InnerBlocks = {
 		name: 'elements/current',
 		label: __('Current Page', 'blockera'),
 		icon: <Icon icon="block-pagination-numbers-current" size="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -38,7 +36,6 @@ const paginationNumbers: InnerBlocks = {
 		name: 'elements/dots',
 		label: __('Dots', 'blockera'),
 		icon: <Icon icon="block-pagination-numbers-dots" size="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},

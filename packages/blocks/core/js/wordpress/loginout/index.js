@@ -19,15 +19,9 @@ import {
  */
 import form from '../inners/form';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const Loginout = {
 	name: 'blockeraLoginout',
 	targetBlock: 'core/loginout',
-	attributes,
-	supports,
 	blockeraInnerBlocks: form,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

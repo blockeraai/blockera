@@ -34,8 +34,6 @@ const supports = sharedBlockExtensionSupports;
 export const Group = {
 	name: 'blockeraGroup',
 	targetBlock: 'core/group',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...paragraph,
 		...link,

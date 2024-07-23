@@ -19,15 +19,9 @@ import {
  */
 import paginationNumbers from '../inners/pagination-numbers';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const QueryPaginationNumbers = {
 	name: 'blockeraQueryPaginationNumbers',
 	targetBlock: 'core/query-pagination-numbers',
-	attributes,
-	supports,
 	blockeraInnerBlocks: paginationNumbers,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

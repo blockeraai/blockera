@@ -14,15 +14,9 @@ import {
 	sharedBlockExtensionAttributes,
 } from '@blockera/editor';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const Embed = {
 	name: 'blockeraEmbed',
 	targetBlock: 'core/embed',
-	attributes,
-	supports,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

@@ -19,7 +19,6 @@ const arrow: InnerBlocks = {
 		name: 'elements/next-arrow',
 		label: __('Arrow', 'blockera'),
 		icon: <Icon icon="block-pagination-next-arrow" size="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -28,7 +27,6 @@ const arrow: InnerBlocks = {
 		name: 'elements/prev-arrow',
 		label: __('Arrow', 'blockera'),
 		icon: <Icon icon="block-pagination-previous-arrow" size="20" />,
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},

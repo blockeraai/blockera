@@ -20,7 +20,6 @@ const headings: InnerBlocks = {
 		name: 'core/heading',
 		label: __('Headings', 'blockera'),
 		icon: <Icon icon="block-headings" iconSize="20" />,
-		attributes,
 		settings: {
 			// because "core/heading" block default value for "level" attribute is "2".
 			level: 2,
@@ -36,7 +35,6 @@ const headings: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H1s', 'blockera'),
 		icon: <Icon icon="block-heading-1" iconSize="20" />,
-		attributes,
 		settings: {
 			level: 1,
 			force: false,
@@ -51,7 +49,6 @@ const headings: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H2s', 'blockera'),
 		icon: <Icon icon="block-heading-2" iconSize="20" />,
-		attributes,
 		settings: {
 			level: 2,
 			force: false,
@@ -66,7 +63,6 @@ const headings: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H3s', 'blockera'),
 		icon: <Icon icon="block-heading-3" iconSize="20" />,
-		attributes,
 		settings: {
 			level: 3,
 			force: false,
@@ -81,7 +77,6 @@ const headings: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H4s', 'blockera'),
 		icon: <Icon icon="block-heading-4" iconSize="20" />,
-		attributes,
 		settings: {
 			level: 4,
 			force: false,
@@ -96,7 +91,6 @@ const headings: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H5s', 'blockera'),
 		icon: <Icon icon="block-heading-5" iconSize="20" />,
-		attributes,
 		settings: {
 			level: 5,
 			force: false,
@@ -111,7 +105,6 @@ const headings: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H6s', 'blockera'),
 		icon: <Icon icon="block-heading-6" iconSize="20" />,
-		attributes,
 		settings: {
 			level: 6,
 			force: false,

@@ -19,18 +19,12 @@ import {
  */
 import arrow from '../inners/arrow';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 // We not needs to "next-arrow" in query-pagination-previous block!
 delete arrow['next-arrow'];
 
 export const QueryPaginationPrevious = {
 	name: 'blockeraQueryPaginationPrevious',
 	targetBlock: 'core/query-pagination-previous',
-	attributes,
-	supports,
 	blockeraInnerBlocks: arrow,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

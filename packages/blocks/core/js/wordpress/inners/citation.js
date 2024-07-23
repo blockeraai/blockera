@@ -20,7 +20,6 @@ const citation: InnerBlocks = {
 		name: 'elements/citation',
 		label: __('Citation', 'blockera'),
 		icon: <Icon icon="block-citation" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},

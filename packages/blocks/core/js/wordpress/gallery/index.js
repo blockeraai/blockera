@@ -22,16 +22,11 @@ import { Icon } from '@blockera/icons';
  */
 import image from '../inners/image';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 const blockeraInnerBlocks: InnerBlocks = {
 	'elements/gallery-caption': {
 		name: 'elements/gallery-caption',
 		label: __('Gallery Caption', 'blockera'),
 		icon: <Icon icon="block-gallery-caption" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -40,7 +35,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'elements/image-caption',
 		label: __('Images Captions', 'blockera'),
 		icon: <Icon icon="block-image-caption" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -50,8 +44,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const Gallery = {
 	name: 'blockeraGallery',
 	targetBlock: 'core/gallery',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...blockeraInnerBlocks,
 		...image,

@@ -22,15 +22,9 @@ import button from '../inners/button';
 import headings from '../inners/headings';
 import paragraph from '../inners/paragraph';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const Columns = {
 	name: 'blockeraColumns',
 	targetBlock: 'core/columns',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...link,
 		...paragraph,

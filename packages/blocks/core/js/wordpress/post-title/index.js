@@ -19,15 +19,9 @@ import {
  */
 import link from '../inners/link';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const PostTitle = {
 	name: 'blockeraPostTitle',
 	targetBlock: 'core/post-title',
-	attributes,
-	supports,
 	blockeraInnerBlocks: link,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

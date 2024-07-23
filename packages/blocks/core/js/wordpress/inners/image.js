@@ -20,7 +20,6 @@ const image: InnerBlocks = {
 		name: 'core/image',
 		label: __('Image', 'blockera'),
 		icon: <Icon icon="block-image" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},

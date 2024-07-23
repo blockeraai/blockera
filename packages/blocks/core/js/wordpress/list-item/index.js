@@ -14,15 +14,9 @@ import {
 	sharedBlockExtensionAttributes,
 } from '@blockera/editor';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const ListItem = {
 	name: 'blockeraListItem',
 	targetBlock: 'core/list-item',
-	attributes,
-	supports,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

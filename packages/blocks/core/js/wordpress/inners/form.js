@@ -25,7 +25,6 @@ const form: InnerBlocks = {
 		name: 'elements/form',
 		label: __('Form Container', 'blockera'),
 		icon: <Icon icon="block-login-form-container" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},

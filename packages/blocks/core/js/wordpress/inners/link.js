@@ -19,7 +19,6 @@ const link: InnerBlocks = {
 		name: 'elements/link',
 		label: __('Links', 'blockera'),
 		icon: <Icon icon="block-link" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 			dataCompatibility: ['font-color', 'font-color-hover'],

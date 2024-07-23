@@ -21,15 +21,9 @@ import link from '../inners/link';
 import citation from '../inners/citation';
 import paragraph from '../inners/paragraph';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const Pullquote = {
 	name: 'blockeraPullquote',
 	targetBlock: 'core/pullquote',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...citation,
 		...paragraph,

@@ -19,7 +19,6 @@ const paragraph: InnerBlocks = {
 		name: 'core/paragraph',
 		label: __('Paragraphs', 'blockera'),
 		icon: <Icon icon="block-paragraph" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},

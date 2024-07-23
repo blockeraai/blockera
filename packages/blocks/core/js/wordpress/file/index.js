@@ -20,15 +20,9 @@ import {
 import link from '../inners/link';
 import button from '../inners/button';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const File = {
 	name: 'blockeraFile',
 	targetBlock: 'core/file',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...link,
 		...button,

@@ -17,16 +17,11 @@ import {
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 const blockeraInnerBlocks: InnerBlocks = {
 	'elements/caption': {
 		name: 'elements/caption',
 		label: __('Caption', 'blockera'),
 		icon: <Icon icon="block-image-caption" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -36,8 +31,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const Image = {
 	name: 'blockeraImage',
 	targetBlock: 'core/image',
-	attributes,
-	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

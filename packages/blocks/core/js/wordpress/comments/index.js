@@ -22,15 +22,9 @@ import { Icon } from '@blockera/icons';
 import link from '../inners/link';
 import headings from '../inners/headings';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const Comments = {
 	name: 'blockeraComments',
 	targetBlock: 'core/comments',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...link,
 		...headings,

@@ -19,7 +19,6 @@ const inputs: InnerBlocks = {
 		name: 'elements/input-label',
 		label: __('Input Labels', 'blockera'),
 		icon: <Icon icon="block-login-form-labels" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -28,7 +27,6 @@ const inputs: InnerBlocks = {
 		name: 'elements/input',
 		label: __('Inputs', 'blockera'),
 		icon: <Icon icon="block-login-form-inputs" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -37,7 +35,6 @@ const inputs: InnerBlocks = {
 		name: 'elements/remember',
 		label: __('Remember Me', 'blockera'),
 		icon: <Icon icon="block-login-form-remember" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},

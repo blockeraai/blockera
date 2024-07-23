@@ -23,10 +23,6 @@ import { Icon } from '@blockera/icons';
 import inputs from '../inners/inputs';
 import button from '../inners/button';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 // We not needs to "input_label" in search block!
 delete inputs?.input_label;
 // We not needs to "remember" in search block!
@@ -38,7 +34,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		type: 'title',
 		label: __('Form Label', 'blockera'),
 		icon: <Icon icon="block-paragraph" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -48,8 +43,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const Search = {
 	name: 'blockeraSearch',
 	targetBlock: 'core/search',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...blockeraInnerBlocks,
 		...inputs,

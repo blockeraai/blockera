@@ -22,15 +22,9 @@ import citation from '../inners/citation';
 import headings from '../inners/headings';
 import paragraph from '../inners/paragraph';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const Quote = {
 	name: 'blockeraQuote',
 	targetBlock: 'core/quote',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...citation,
 		...paragraph,

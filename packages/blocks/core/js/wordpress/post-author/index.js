@@ -22,17 +22,12 @@ import { Icon } from '@blockera/icons';
  */
 import link from '../inners/link';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 const blockeraInnerBlocks: InnerBlocks = {
 	'core/avatar': {
 		name: 'core/avatar',
 		type: 'avatar',
 		label: __('Avatar', 'blockera'),
 		icon: <Icon icon="block-post-author-avatar" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -42,7 +37,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		type: 'byline',
 		label: __('Byline', 'blockera'),
 		icon: <Icon icon="block-post-author-byline" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -52,7 +46,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		type: 'author',
 		label: __('Name', 'blockera'),
 		icon: <Icon icon="block-post-author-name" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -62,8 +55,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const PostAuthor = {
 	name: 'blockeraPostAuthor',
 	targetBlock: 'core/post-author',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...blockeraInnerBlocks,
 		...link,

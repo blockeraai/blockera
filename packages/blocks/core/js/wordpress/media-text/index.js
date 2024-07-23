@@ -22,15 +22,9 @@ import image from '../inners/image';
 import headings from '../inners/headings';
 import paragraph from '../inners/paragraph';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 export const MediaText = {
 	name: 'blockeraMediaText',
 	targetBlock: 'core/media-text',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...paragraph,
 		...image,

@@ -26,16 +26,11 @@ import inputs from '../inners/inputs';
 import button from '../inners/button';
 import headings from '../inners/headings';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 const blockeraInnerBlocks: InnerBlocks = {
 	'elements/title': {
 		name: 'elements/title',
 		label: __('Title', 'blockera'),
 		icon: <Icon icon="block-comments-form-reply-title" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -44,7 +39,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'elements/notes',
 		label: __('Notes', 'blockera'),
 		icon: <Icon icon="block-comments-form-notes" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -53,7 +47,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'elements/textarea',
 		label: __('Textarea Field', 'blockera'),
 		icon: <Icon icon="block-comments-form-textarea" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -62,7 +55,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'elements/cookie-consent',
 		label: __('Cookie Consent', 'blockera'),
 		icon: <Icon icon="block-comments-form-cookie-consent" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -75,8 +67,6 @@ delete form['elements/remember'];
 export const PostCommentsFrom = {
 	name: 'blockeraPostCommentsForm',
 	targetBlock: 'core/post-comments-form',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...form,
 		...blockeraInnerBlocks,

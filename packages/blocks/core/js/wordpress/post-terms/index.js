@@ -22,16 +22,11 @@ import { Icon } from '@blockera/icons';
  */
 import link from '../inners/link';
 
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
-
 const blockeraInnerBlocks: InnerBlocks = {
 	'core/separator': {
 		name: 'core/separator',
 		label: __('Separator', 'blockera'),
 		icon: <Icon icon="block-post-terms-separator" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -40,7 +35,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'elements/prefix',
 		label: __('Prefix Text', 'blockera'),
 		icon: <Icon icon="block-post-terms-prefix" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -49,7 +43,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'elements/suffix',
 		label: __('Suffix Text', 'blockera'),
 		icon: <Icon icon="block-post-terms-suffix" iconSize="20" />,
-		attributes,
 		settings: {
 			force: true,
 		},
@@ -59,8 +52,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const PostTerms = {
 	name: 'blockeraPostTerms',
 	targetBlock: 'core/post-terms',
-	attributes,
-	supports,
 	blockeraInnerBlocks: {
 		...link,
 		...blockeraInnerBlocks,
