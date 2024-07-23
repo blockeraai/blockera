@@ -9,7 +9,6 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import {
 	SharedBlockExtension,
 	sharedBlockExtensionSupports,
@@ -18,11 +17,7 @@ import {
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
-const attributes: Object = mergeObject(sharedBlockExtensionAttributes, {
-	blockeraDisplay: {
-		default: 'flex',
-	},
-});
+const attributes = sharedBlockExtensionAttributes;
 
 const supports = sharedBlockExtensionSupports;
 
