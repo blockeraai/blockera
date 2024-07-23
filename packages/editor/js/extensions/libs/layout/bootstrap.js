@@ -36,18 +36,19 @@ import {
 
 import type { BlockDetail } from '../block-states/types';
 
-/**
- * Blocks
- * -> Group
- * -> Buttons
- */
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.layoutExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
-				blockDetail;
+			const {
+				blockId,
+				isNormalState,
+				isBaseBreakpoint,
+				isMasterBlock,
+				blockAttributes,
+				activeBlockVariation,
+			} = blockDetail;
 
 			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
 				return attributes;
@@ -59,6 +60,9 @@ export const bootstrap = (): void => {
 			attributes = displayFromWPCompatibility({
 				attributes,
 				blockId,
+				defaultValue: blockAttributes.blockeraDisplay.default,
+				//$FlowFixMe
+				activeVariation: activeBlockVariation?.name,
 			});
 
 			//
@@ -73,6 +77,9 @@ export const bootstrap = (): void => {
 			//
 			attributes = directionFromWPCompatibility({
 				attributes,
+				blockId,
+				//$FlowFixMe
+				activeVariation: activeBlockVariation?.name,
 			});
 
 			//
@@ -131,6 +138,7 @@ export const bootstrap = (): void => {
 				isBaseBreakpoint,
 				isMasterBlock,
 				blockAttributes,
+				activeBlockVariation,
 			} = blockDetail;
 
 			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
@@ -145,6 +153,8 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							blockId,
+							//$FlowFixMe
+							activeVariation: activeBlockVariation?.name,
 						})
 					);
 
