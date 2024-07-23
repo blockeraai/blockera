@@ -248,18 +248,7 @@ final class StyleEngine {
 		);
 
 		$this->definition->flushDeclarations();
-		$this->definition->setConfig(
-			blockera_get_block_type_property(
-				$this->block['blockName'],
-				'supports'
-			)['blockeraStyleEngine'] ?? []
-		);
-		$this->definition->setDefaultSettings(
-			blockera_get_block_type_property(
-				$this->block['blockName'],
-				'attributes'
-			)
-		);
+		$this->configureDefinition( $this->definition );
 		$this->definition->setSettings( $settings );
 		$this->definition->setSelectors( $selectors );
 
@@ -321,6 +310,7 @@ final class StyleEngine {
 		}
 
 		$this->definition->flushDeclarations();
+		$this->configureDefinition( $this->definition );
 		$this->definition->setSettings( $settings['attributes'] );
 		$this->definition->setSelectors( $selectors['innerBlocks'][ $blockType ] );
 
@@ -426,6 +416,30 @@ final class StyleEngine {
 		}
 
 		return $breakpointSettings['attributes'] ?? [];
+	}
+
+	/**
+	 * Sets config on definition properties.
+	 *
+	 * @param BaseStyleDefinition $definition The style definition instance.
+	 *
+	 * @return void
+	 */
+	private function configureDefinition( BaseStyleDefinition $definition ) {
+
+		$this->definition->setConfig(
+			blockera_get_block_type_property(
+				$this->block['blockName'],
+				'supports'
+			)['blockeraStyleEngine'] ?? []
+		);
+
+		$this->definition->setDefaultSettings(
+			blockera_get_block_type_property(
+				$this->block['blockName'],
+				'attributes'
+			)
+		);
 	}
 
 }
