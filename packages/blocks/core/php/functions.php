@@ -81,3 +81,15 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 		];
 	}
 }
+
+if ( ! function_exists( 'blockera_get_shared_block_attributes' ) ) {
+	/**
+	 * Get blockera shared block attributes.
+	 *
+	 * @return array the shared block attributes.
+	 */
+	function blockera_get_shared_block_attributes(): array {
+
+		return blockera_load( 'shared.attributes', __DIR__ );
+	}
+}

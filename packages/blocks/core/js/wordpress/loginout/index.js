@@ -9,17 +9,9 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
-
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	form: {
@@ -30,7 +22,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'form',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -43,7 +34,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.login-password label, .login-username label',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -56,7 +46,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.login-password input, .login-username input',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -69,7 +58,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.login-remember label',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -82,7 +70,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.button.button-primary',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -92,8 +79,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const Loginout = {
 	name: 'blockeraLoginout',
 	targetBlock: 'core/loginout',
-	attributes,
-	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

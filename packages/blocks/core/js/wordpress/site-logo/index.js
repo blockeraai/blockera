@@ -8,21 +8,11 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
-
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
+import { SharedBlockExtension } from '@blockera/editor';
 
 export const SiteLogo = {
 	name: 'blockeraSiteLogo',
 	targetBlock: 'core/site-logo',
-	attributes,
-	supports,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

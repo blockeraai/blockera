@@ -9,17 +9,9 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
-
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	link: {
@@ -30,7 +22,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'a:not(.wp-element-button)',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 			dataCompatibility: ['font-color', 'font-color-hover'],
@@ -44,7 +35,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-button > .wp-element-button',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 			dataCompatibility: [
@@ -59,8 +49,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const File = {
 	name: 'blockeraFile',
 	targetBlock: 'core/file',
-	attributes,
-	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

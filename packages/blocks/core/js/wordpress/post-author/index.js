@@ -9,22 +9,9 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
-import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
+import { SharedBlockExtension } from '@blockera/editor';
 import { Icon } from '@blockera/icons';
-
-const attributes: Object = mergeObject(sharedBlockExtensionAttributes, {
-	blockeraDisplay: {
-		default: 'flex',
-	},
-});
-
-const supports = sharedBlockExtensionSupports;
+import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 const blockeraInnerBlocks: InnerBlocks = {
 	avatar: {
@@ -35,7 +22,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-post-author__avatar > img',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -48,7 +34,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-post-author__byline',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -61,7 +46,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-post-author__name',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -74,7 +58,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'a:not(.wp-element-button)',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 			dataCompatibility: ['font-color', 'font-color-hover'],
@@ -85,8 +68,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const PostAuthor = {
 	name: 'blockeraPostAuthor',
 	targetBlock: 'core/post-author',
-	attributes,
-	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

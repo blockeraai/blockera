@@ -9,17 +9,9 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
-
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	label: {
@@ -30,7 +22,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-search__label',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -43,7 +34,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-search__input',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -56,7 +46,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-search__button',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -66,8 +55,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const Search = {
 	name: 'blockeraSearch',
 	targetBlock: 'core/search',
-	attributes,
-	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

@@ -9,17 +9,9 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
-
-const attributes = sharedBlockExtensionAttributes;
-
-const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	title: {
@@ -30,7 +22,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.comment-reply-title',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -43,7 +34,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.comment-form',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -56,7 +46,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.comment-notes',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -69,7 +58,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'label',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -82,7 +70,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-search__input',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -95,7 +82,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'textarea',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -108,7 +94,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.comment-form-cookies-consent',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -121,7 +106,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'input[type=submit]',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -134,7 +118,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'a:not(.wp-element-button)',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: false,
 			dataCompatibility: ['font-color', 'font-color-hover'],
@@ -148,7 +131,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: false,
 			dataCompatibility: [
@@ -166,7 +148,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'h1.wp-block-heading',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: false,
 			dataCompatibility: [
@@ -184,7 +165,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'h2.wp-block-heading',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: false,
 			dataCompatibility: [
@@ -202,7 +182,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'h3.wp-block-heading',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: false,
 			dataCompatibility: [
@@ -220,7 +199,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'h4.wp-block-heading',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: false,
 			dataCompatibility: [
@@ -238,7 +216,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'h5.wp-block-heading',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: false,
 			dataCompatibility: [
@@ -256,7 +233,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: 'h6.wp-block-heading',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: false,
 			dataCompatibility: [
@@ -271,8 +247,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const PostCommentsFrom = {
 	name: 'blockeraPostCommentsForm',
 	targetBlock: 'core/post-comments-form',
-	attributes,
-	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

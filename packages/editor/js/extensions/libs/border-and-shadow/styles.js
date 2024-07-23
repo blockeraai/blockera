@@ -9,7 +9,6 @@ import { isEquals } from '@blockera/utils';
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
-import { attributes } from './attributes';
 import { isActiveField } from '../../api/utils';
 import {
 	OutlineGenerator,
@@ -30,6 +29,7 @@ export const BorderAndShadowStyles = ({
 	currentBlock,
 	activeDeviceType,
 	selectors: blockSelectors,
+	defaultAttributes: attributes,
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {

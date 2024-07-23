@@ -10,21 +10,9 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionSupports,
-	sharedBlockExtensionAttributes,
-} from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
-
-const attributes: Object = mergeObject(sharedBlockExtensionAttributes, {
-	blockeraDisplay: {
-		default: 'flex',
-	},
-});
-
-const supports = sharedBlockExtensionSupports;
 
 const blockeraInnerBlocks: InnerBlocks = {
 	item_containers: {
@@ -35,7 +23,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-social-link',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -48,7 +35,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-social-link svg',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -61,7 +47,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 		selectors: {
 			root: '.wp-block-social-link .wp-block-social-link-label',
 		},
-		attributes,
 		innerBlockSettings: {
 			force: true,
 		},
@@ -71,8 +56,6 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const SocialLinks = {
 	name: 'blockeraSocialLinks',
 	targetBlock: 'core/social-links',
-	attributes,
-	supports,
 	blockeraInnerBlocks,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;

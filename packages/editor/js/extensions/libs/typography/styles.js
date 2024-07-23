@@ -10,7 +10,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
-import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import { TextShadowGenerator } from './css-generators';
@@ -26,6 +25,7 @@ export function TypographyStyles({
 	currentBlock,
 	activeDeviceType,
 	selectors: blockSelectors,
+	defaultAttributes: attributes,
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> {

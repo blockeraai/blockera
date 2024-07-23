@@ -10,7 +10,15 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
+		'attributes' => [
+			...( $args['attributes'] ?? [] ),
+			'blockeraDisplay' => [
+				'type'    => 'string',
+				'default' => 'flex',
+			],
+		],
+		'selectors'  => [
+			...( $args['selectors'] ?? [] ),
 			'innerBlocks' => [
 				'link' => [
 					'root' => 'a:not(.wp-element-button)',

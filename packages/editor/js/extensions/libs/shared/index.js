@@ -43,7 +43,6 @@ import {
 	// FIXME: we are double check this to fix re-rendering problems.
 	// propsAreEqual
 } from '../../components/utils';
-import { attributes } from './attributes';
 import StateContainer from '../../components/state-container';
 import { InnerBlocksExtension } from '../inner-blocks';
 import { STORE_NAME } from '../base/store/constants';
@@ -61,6 +60,7 @@ type Props = {
 	clientId: string,
 	supports: Object,
 	attributes: Object,
+	defaultAttributes: Object,
 	controllerProps: {
 		currentTab: string,
 		currentState: TStates,
@@ -80,6 +80,7 @@ type Props = {
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
+		defaultAttributes: attributes,
 		attributes: currentBlockAttributes,
 		setAttributes,
 		availableBlockStates,
@@ -903,6 +904,3 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 	// FIXME: we should double check this to fix re-rendering problems.
 	// propsAreEqual
 );
-
-export { supports } from './supports';
-export { attributes } from './attributes';
