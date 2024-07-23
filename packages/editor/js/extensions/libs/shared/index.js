@@ -213,16 +213,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		} = settings;
 
 		const block = {
-			blockName: props.name,
-			clientId: props.clientId,
-			// FIXME: important!
-			// 1- create new constant with "forceUpdateProps" name and assign below constants into that.
-			// 2- we should pass below constants to all extensions,
-			// because needs re-rendering extensions when switch between master or inner blocks and as well as switch between block states!
 			currentBlock,
 			currentState,
-			currentInnerBlockState,
 			currentBreakpoint,
+			blockName: props.name,
+			currentInnerBlockState,
+			supports: props.supports,
+			clientId: props.clientId,
 		};
 
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {

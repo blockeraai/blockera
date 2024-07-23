@@ -7,14 +7,8 @@ import type { MixedElement } from 'react';
 import { useSelect } from '@wordpress/data';
 
 /**
- * Blockera dependencies
- */
-import { isFunction } from '@blockera/utils';
-
-/**
  * Internal dependencies
  */
-import { useBlocksStore } from '../../hooks';
 import type { BlockStyleProps } from './types';
 import {
 	// MediaQuery,
@@ -49,19 +43,6 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 		};
 	});
 
-	const { getBlockType } = useBlocksStore();
-	let selectors = {};
-	let styleEngineConfig = {};
-
-	if (isFunction(getBlockType)) {
-		const {
-			selectors: blockSelectors,
-			supports: { blockeraStyleEngine: reservedConfig },
-		} = getBlockType(props.blockName);
-		selectors = blockSelectors;
-		styleEngineConfig = reservedConfig;
-	}
-
 	return (
 		<style>
 			{/*<MediaQuery breakpoint={currentBreakpoint}>*/}
@@ -69,12 +50,11 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 				{...{
 					...props,
 					config,
-					selectors,
 					currentState,
 					currentBlock,
 					currentBreakpoint,
-					styleEngineConfig,
 					currentInnerBlockState,
+					styleEngineConfig: props.supports?.blockeraStyleEngine,
 				}}
 			/>
 			{/*</MediaQuery>*/}

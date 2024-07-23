@@ -286,7 +286,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			}
 		};
 
-		const { supports } = useSelect((select) => {
+		const { supports, selectors } = useSelect((select) => {
 			const { getBlockType } = select('core/blocks');
 
 			return getBlockType(name);
@@ -521,8 +521,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							{...{
 								clientId,
 								supports,
-								blockName: name,
+								selectors,
 								attributes,
+								blockName: name,
 								currentAttributes,
 								activeDeviceType: getDeviceType(),
 							}}
@@ -535,8 +536,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						{...{
 							clientId,
 							supports,
-							blockName: name,
+							selectors,
 							attributes,
+							blockName: name,
 							currentAttributes,
 							activeDeviceType: getDeviceType(),
 						}}
