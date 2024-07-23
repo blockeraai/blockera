@@ -43,6 +43,11 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 		};
 	});
 
+	// We should not generate styles for no blockera blocks.
+	if (!props?.attributes?.blockeraPropsId) {
+		return <></>;
+	}
+
 	return (
 		<style>
 			{/*<MediaQuery breakpoint={currentBreakpoint}>*/}
