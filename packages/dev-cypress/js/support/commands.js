@@ -120,10 +120,11 @@ export const registerCommands = () => {
 		if (blockName === 'default') {
 			cy.getIframeBody().find(`[aria-label="Add default block"]`).click();
 			blockName = 'core/paragraph';
+			return cy.getIframeBody().find(`[data-type="${blockName}"]`).eq(0);
 		}
 
 		if (Cypress.$('iframe[name="editor-canvas"]').length) {
-			return cy.getIframeBody().find(`[data-type="${blockName}"]`).eq(0);
+			return cy.getIframeBody().find(`[data-type="${blockName}"]`);
 		} else {
 			return cy.get(`[data-type="${blockName}"]`);
 		}
