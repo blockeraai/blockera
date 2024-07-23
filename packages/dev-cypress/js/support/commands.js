@@ -607,4 +607,20 @@ export const registerCommands = () => {
 			return cy.wrap(subject);
 		}
 	);
+
+	Cypress.Commands.add('setBlockVariation', (variation) => {
+		cy.get('.blockera-block-card-wrapper').within(() => {
+			cy.getByAriaLabel('Transform to variation').within(() => {
+				cy.get(`button[value="${variation}"]`).click();
+			});
+		});
+	});
+
+	Cypress.Commands.add('checkActiveBlockVariation', (variation) => {
+		cy.get('.blockera-block-card-wrapper').within(() => {
+			cy.getByAriaLabel('Transform to variation').within(() => {
+				cy.get(`button[value="${variation}"][aria-checked="true"]`);
+			});
+		});
+	});
 };
