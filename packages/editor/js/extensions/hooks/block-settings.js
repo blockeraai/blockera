@@ -17,10 +17,6 @@ import { isObject, isFunction, mergeObject } from '@blockera/utils';
  * Internal dependencies
  */
 import {
-	blockStatesAttributes,
-	innerBlocksExtensionsAttributes,
-} from '../index';
-import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
 } from '../../components';
@@ -89,10 +85,6 @@ export default function withBlockSettings(
 	name: Object,
 	args: extraArguments
 ): Object {
-	if (settings.attributes.hasOwnProperty('blockeraPropsId')) {
-		return settings;
-	}
-
 	const { getBlockExtensionBy } = select(STORE_NAME) || {};
 
 	const blockExtension = getBlockExtensionBy('targetBlock', name);
@@ -129,24 +121,6 @@ function mergeBlockSettings(
 	if (!isEnabledExtension(additional)) {
 		return settings;
 	}
-
-	const overrideAttributes = mergeObject(
-		settings.attributes,
-		mergeObject(additional.attributes, blockStatesAttributes)
-	);
-
-	const defaultAttributes = mergeObject(overrideAttributes, {
-		blockeraInnerBlocks:
-			innerBlocksExtensionsAttributes.blockeraInnerBlocks,
-		blockeraPropsId: {
-			type: 'string',
-			default: '',
-		},
-		blockeraCompatId: {
-			type: 'string',
-			default: '',
-		},
-	});
 
 	const isAvailableBlock = () =>
 		!unsupportedBlocks.includes(settings.name) &&
@@ -188,7 +162,6 @@ function mergeBlockSettings(
 
 	return {
 		...settings,
-		attributes: defaultAttributes,
 		supports: mergeObject(settings.supports, additional.supports),
 		selectors: mergeObject(settings.selectors, additional.selectors),
 		transforms: {
@@ -211,7 +184,7 @@ function mergeBlockSettings(
 							{...{
 								...props,
 								additional,
-								defaultAttributes,
+								defaultAttributes: settings.attributes,
 							}}
 						>
 							<SlotFillProvider>
@@ -247,7 +220,10 @@ function mergeBlockSettings(
 
 			props = {
 				...props,
-				attributes: sanitizedBlockAttributes(props.attributes),
+				attributes: sanitizedBlockAttributes(
+					props.attributes,
+					settings?.attributes
+				),
 			};
 
 			return settings.save(props);

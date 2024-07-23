@@ -10,7 +10,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
  * Internal dependencies
  */
 import { arrayEquals } from '../utils';
-import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
@@ -25,6 +24,7 @@ export const SizeStyles = ({
 	currentBlock,
 	activeDeviceType,
 	selectors: blockSelectors,
+	defaultAttributes: attributes,
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
@@ -325,7 +325,6 @@ export const SizeStyles = ({
 
 	if (isActiveField(blockeraRatio) && currentBlockAttributes?.blockeraRatio) {
 		const ratio = currentBlockAttributes.blockeraRatio.value;
-
 		if (ratio !== attributes.blockeraRatio.default.value) {
 			let value = '';
 

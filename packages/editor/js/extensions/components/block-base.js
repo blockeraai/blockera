@@ -53,7 +53,6 @@ import {
 	propsAreEqual,
 } from './utils';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
-import { attributes as sharedBlockExtensionAttributes } from '../libs/shared/attributes';
 import {
 	registerBlockExtensionsSupports,
 	registerInnerBlockExtensionsSupports,
@@ -213,8 +212,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			blockVariations,
 			activeBlockVariation,
 			getActiveBlockVariation,
+			blockAttributes: defaultAttributes,
 			innerBlocks: additional?.blockeraInnerBlocks,
-			blockAttributes: sharedBlockExtensionAttributes,
 		};
 
 		/**
@@ -257,15 +256,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const { getAttributesWithIds, handleOnChangeAttributes } =
 			useAttributes(setAttributes, {
 				className,
+				blockId: name,
 				isNormalState,
 				getAttributes,
-				blockId: name,
+				blockVariations,
+				defaultAttributes,
 				masterIsNormalState,
 				blockeraInnerBlocks,
-				innerBlocks: additional?.blockeraInnerBlocks,
-				blockVariations,
 				activeBlockVariation,
 				getActiveBlockVariation,
+				innerBlocks: additional?.blockeraInnerBlocks,
 			});
 
 		const updateBlockEditorSettings: UpdateBlockEditorSettings = (
@@ -286,7 +286,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			}
 		};
 
-		const { supports } = useSelect((select) => {
+		const { supports, selectors } = useSelect((select) => {
 			const { getBlockType } = select('core/blocks');
 
 			return getBlockType(name);
@@ -297,7 +297,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			attributes,
 			currentInnerBlock,
 			blockeraInnerBlocks,
-			blockAttributes: sharedBlockExtensionAttributes,
+			blockAttributes: defaultAttributes,
 		});
 
 		useIconEffect(
@@ -493,6 +493,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 									className,
 									attributes,
 									setAttributes,
+									defaultAttributes,
 									currentAttributes,
 									controllerProps: {
 										currentTab,
@@ -522,9 +523,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							{...{
 								clientId,
 								supports,
-								blockName: name,
+								selectors,
 								attributes,
+								blockName: name,
 								currentAttributes,
+								defaultAttributes,
 								activeDeviceType: getDeviceType(),
 							}}
 						/>,
@@ -536,9 +539,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						{...{
 							clientId,
 							supports,
-							blockName: name,
+							selectors,
 							attributes,
+							blockName: name,
 							currentAttributes,
+							defaultAttributes,
 							activeDeviceType: getDeviceType(),
 						}}
 					/>

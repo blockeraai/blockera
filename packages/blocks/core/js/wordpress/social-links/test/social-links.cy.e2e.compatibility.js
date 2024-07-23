@@ -28,7 +28,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		);
 
 		// Select target block
-		cy.getBlock('core/social-link').click();
+		cy.getBlock('core/social-link').first().click();
 
 		// Switch to parent block
 		cy.getByAriaLabel('Select parent block: Social Icons').click();

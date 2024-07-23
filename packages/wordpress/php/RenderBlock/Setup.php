@@ -34,6 +34,17 @@ class Setup {
 	 */
 	public function register_block( array $args, string $block_type ): array {
 
+		// Merging blockera shared block attributes.
+		$args = array_merge(
+			$args,
+			[
+				'attributes' => [
+					...( $args['attributes'] ?? [] ),
+					...blockera_get_shared_block_attributes(),
+				],
+			]
+		);
+
 		$this->setBlockDirectoryPath( $block_type );
 
 		$blockFile = sprintf(

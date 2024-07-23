@@ -43,7 +43,6 @@ import {
 	// FIXME: we are double check this to fix re-rendering problems.
 	// propsAreEqual
 } from '../../components/utils';
-import { attributes } from './attributes';
 import StateContainer from '../../components/state-container';
 import { InnerBlocksExtension } from '../inner-blocks';
 import { STORE_NAME } from '../base/store/constants';
@@ -62,6 +61,7 @@ type Props = {
 	supports: Object,
 	attributes: Object,
 	currentAttributes: Object,
+	defaultAttributes: Object,
 	controllerProps: {
 		currentTab: string,
 		currentState: TStates,
@@ -82,6 +82,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
 		attributes: blockAttributes,
+		defaultAttributes: attributes,
 		setAttributes,
 		availableBlockStates,
 		currentStateAttributes,
@@ -215,16 +216,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		} = settings;
 
 		const block = {
-			blockName: props.name,
-			clientId: props.clientId,
-			// FIXME: important!
-			// 1- create new constant with "forceUpdateProps" name and assign below constants into that.
-			// 2- we should pass below constants to all extensions,
-			// because needs re-rendering extensions when switch between master or inner blocks and as well as switch between block states!
 			currentBlock,
 			currentState,
-			currentInnerBlockState,
 			currentBreakpoint,
+			blockName: props.name,
+			currentInnerBlockState,
+			supports: props.supports,
+			clientId: props.clientId,
 		};
 
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
@@ -916,6 +914,3 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 	// FIXME: we should double check this to fix re-rendering problems.
 	// propsAreEqual
 );
-
-export { supports } from './supports';
-export { attributes } from './attributes';

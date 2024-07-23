@@ -232,6 +232,7 @@ export function appendBlocks(blocksCode) {
 	cy.get('span').contains('Code editor').click();
 
 	cy.get('.editor-post-text-editor')
+		.focus()
 		.invoke('val', blocksCode)
 		.trigger('change')
 		.then(() => {

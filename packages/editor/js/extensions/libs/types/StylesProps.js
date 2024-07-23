@@ -16,6 +16,7 @@ export type StylesProps = {
 	// supports?: Object,
 	attributes: Object,
 	masterState: TStates,
+	defaultAttributes: Object,
 	styleEngineConfig: Object,
 	// blockProps: TBlockProps,
 	activeDeviceType?: TBreakpoint,

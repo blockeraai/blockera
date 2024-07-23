@@ -11,6 +11,7 @@ return array_merge(
 	$args,
 	[
 		'selectors' => [
+			...( $args['selectors'] ?? [] ),
 			'innerBlocks' => [
 				'elements/item-icon' => [
 					'root' => 'svg',

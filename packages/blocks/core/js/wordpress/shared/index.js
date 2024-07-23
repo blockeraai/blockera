@@ -8,11 +8,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	SharedBlockExtension,
-	sharedBlockExtensionAttributes as attributes,
-	sharedBlockExtensionSupports as supports,
-} from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 
 export const Shared = {
 	name: 'Shared',

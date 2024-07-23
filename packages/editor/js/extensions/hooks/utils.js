@@ -13,10 +13,6 @@ import { omit, omitWithPattern } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import {
-	sharedBlockExtensionAttributes,
-	blockStatesAttributes,
-} from '../index';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 /**
@@ -54,16 +50,14 @@ export const enhance: Object = compose(
 	})
 );
 
-export const sanitizedBlockAttributes = (attributes: Object): Object => {
+export const sanitizedBlockAttributes = (
+	attributes: Object,
+	availableAttributes: Object
+): Object => {
 	const omittedWPAttributes = omitWithPattern(
 		attributes,
 		ignoreDefaultBlockAttributeKeysRegExp()
 	);
-
-	const availableAttributes = {
-		...blockStatesAttributes,
-		...sharedBlockExtensionAttributes,
-	};
 
 	const cleanupKeys = [];
 	const attributeKeys = Object.keys(omittedWPAttributes);

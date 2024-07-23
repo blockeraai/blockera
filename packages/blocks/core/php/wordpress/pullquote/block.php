@@ -11,6 +11,7 @@ return array_merge(
 	$args,
 	[
 		'selectors' => [
+			...( $args['selectors'] ?? [] ),
 			'innerBlocks' => [
 				...blockera_load( 'inners.citation', dirname( __DIR__ ) ),
 				...blockera_load( 'inners.paragraph', dirname( __DIR__ ) ),

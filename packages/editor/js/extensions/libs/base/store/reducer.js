@@ -37,6 +37,7 @@ const CustomConfigDefinitions = (
 			return {
 				...state,
 				[action.blockName]: {
+					...(state[action.blockName] || {}),
 					[action.definition]: {
 						...((state[action.blockName] || {})[
 							action.definition

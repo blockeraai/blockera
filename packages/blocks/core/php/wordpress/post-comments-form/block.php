@@ -16,6 +16,7 @@ return array_merge(
 	$args,
 	[
 		'selectors' => [
+			...( $args['selectors'] ?? [] ),
 			'innerBlocks' => [
 				...$inputs,
 				'elements/title'          => [

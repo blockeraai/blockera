@@ -41,6 +41,7 @@ export const useComputedCssProps = ({
 		...params,
 		state,
 		selectors,
+		blockName,
 	};
 
 	const stylesStack = [];

@@ -11,6 +11,7 @@ return array_merge(
 	$args,
 	[
 		'selectors' => [
+			...( $args['selectors'] ?? [] ),
 			'innerBlocks' => [
 				'elements/gallery-caption' => [
 					'root' => '> figcaption',

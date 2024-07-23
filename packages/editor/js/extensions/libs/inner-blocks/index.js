@@ -47,5 +47,4 @@ export const registerInnerBlockExtensionsSupports = (
 };
 
 export * from './extension';
-export { attributes } from './attributes';
 export * from './helpers';

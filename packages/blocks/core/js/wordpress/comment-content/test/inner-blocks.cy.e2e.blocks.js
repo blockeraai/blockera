@@ -23,7 +23,7 @@ describe('Comment Content Block → Inner Blocks', () => {
 		appendBlocks(testContent);
 
 		// Select target block
-		cy.getBlock('core/comment-content').click();
+		cy.getBlock('core/comment-content').first().click();
 
 		// open inner block settings
 		openInnerBlocksExtension();

@@ -21,7 +21,6 @@ import {
 } from './helpers';
 import { isBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock } from '../../extensions/components';
-import { sharedBlockExtensionAttributes as defaultAttributes } from '../../extensions/libs';
 
 const reducer = (state: Object = {}, action: Object): Object => {
 	const {
@@ -37,6 +36,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		getAttributes,
 		effectiveItems,
 		blockVariations,
+		defaultAttributes,
 		currentBreakpoint,
 		activeBlockVariation,
 		currentInnerBlockState,
@@ -53,6 +53,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			innerBlocks,
 			currentBlock,
 			blockVariations,
+			defaultAttributes,
 			currentState: isInnerBlock(currentBlock)
 				? currentInnerBlockState
 				: currentState,
@@ -62,7 +63,6 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			isNormalState: isNormalState(),
 			isMasterBlock: !isInnerBlock(currentBlock),
 			isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
-			blockAttributes: defaultAttributes,
 			getActiveBlockVariation,
 		},
 	];

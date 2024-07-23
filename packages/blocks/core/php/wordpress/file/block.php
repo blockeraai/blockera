@@ -11,6 +11,7 @@ return array_merge(
 	$args,
 	[
 		'selectors' => [
+			...( $args['selectors'] ?? [] ),
 			'innerBlocks' => [
 				...blockera_load( 'inners.link', dirname( __DIR__ ) ),
 				...blockera_load( 'inners.button', dirname( __DIR__ ) ),

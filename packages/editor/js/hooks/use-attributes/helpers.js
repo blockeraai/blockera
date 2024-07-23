@@ -24,7 +24,6 @@ import type {
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components';
 import { blockStatesValueCleanup } from '../../extensions/libs/block-states/helpers';
-import { sharedBlockExtensionAttributes as defaultAttributes } from '../../extensions/libs';
 
 // Check required to update.
 export const isChanged = (
@@ -60,6 +59,7 @@ export const memoizedRootBreakpoints: (
 			currentBlock,
 			effectiveItems,
 			currentBreakpoint,
+			defaultAttributes,
 			currentInnerBlockState,
 		},
 		insideInnerBlock: boolean = false

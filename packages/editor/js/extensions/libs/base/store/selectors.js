@@ -27,7 +27,7 @@ export const getExtension = (
 	name: string,
 	blockName: string
 ): CoreDefinitionModel => {
-	return CoreConfigDefinition[blockName][name];
+	return (CoreConfigDefinition[blockName] || {})[name];
 };
 
 export const getDefinitions = (
@@ -36,9 +36,8 @@ export const getDefinitions = (
 	}: {
 		CustomConfigDefinitions: CoreExtensionDefinition,
 	},
-	blockName: string,
-	definition: string
-): CoreDefinitionModel => CustomConfigDefinitions[blockName][definition];
+	blockName: string
+): CoreExtensionDefinitionBlock => CustomConfigDefinitions[blockName];
 
 export const getDefinition = (
 	{
@@ -49,5 +48,5 @@ export const getDefinition = (
 	definition: string,
 	blockName: string
 ): CoreDefinitionModel => {
-	return CustomConfigDefinitions[blockName][definition];
+	return (CustomConfigDefinitions[blockName] || {})[definition];
 };

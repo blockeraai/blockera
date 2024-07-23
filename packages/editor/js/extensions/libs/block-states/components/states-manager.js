@@ -35,7 +35,6 @@ import {
 	blockStatesValueCleanup,
 } from '../helpers';
 import { generateExtensionId } from '../../utils';
-import { attributes as StateSettings } from '../attributes';
 import type {
 	BreakpointTypes,
 	StatesManagerProps,
@@ -260,7 +259,6 @@ const StatesManager: ComponentType<any> = memo(
 		};
 
 		const defaultRepeaterItemValue = {
-			...StateSettings.blockeraBlockStates.default[0],
 			deletable: true,
 			selectable: true,
 			visibilitySupport: true,

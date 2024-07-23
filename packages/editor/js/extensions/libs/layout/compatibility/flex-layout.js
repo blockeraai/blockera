@@ -59,9 +59,30 @@ export function justifyContentFromWPCompatibility({
 
 export function directionFromWPCompatibility({
 	attributes,
+	blockId,
+	activeVariation,
 }: {
 	attributes: Object,
+	blockId: string,
+	activeVariation?: string,
 }): Object {
+	//
+	// custom direction compatibility for blocks
+	//
+	switch (blockId) {
+		case 'core/group':
+			switch (activeVariation) {
+				case 'group-stack':
+					attributes.blockeraFlexLayout.direction = 'column';
+					return attributes;
+
+				case 'group-row':
+					attributes.blockeraFlexLayout.direction = 'row';
+					return attributes;
+			}
+			break;
+	}
+
 	if (attributes?.layout?.orientation === undefined) {
 		return attributes;
 	}

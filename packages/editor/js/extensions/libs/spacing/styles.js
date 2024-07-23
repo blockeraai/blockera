@@ -9,7 +9,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { attributes } from './attributes';
 import type { StylesProps } from '../types';
 import { useBlocksStore } from '../../../hooks';
 import { isActiveField } from '../../api/utils';
@@ -82,6 +81,7 @@ export const SpacingStyles = ({
 	currentBlock,
 	activeDeviceType,
 	selectors: blockSelectors,
+	defaultAttributes: attributes,
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
