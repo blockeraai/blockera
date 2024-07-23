@@ -10,13 +10,15 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'caption' => [
-					'root' => 'figcaption',
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'caption' => [
+						'root' => 'figcaption',
+					],
 				],
-			],
-		],
+			]
+		),
 	]
 );

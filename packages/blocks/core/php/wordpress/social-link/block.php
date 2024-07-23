@@ -10,16 +10,18 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'item_icon' => [
-					'root' => 'svg',
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'item_icon' => [
+						'root' => 'svg',
+					],
+					'item_name' => [
+						'root' => '.wp-block-social-link-label',
+					],
 				],
-				'item_name' => [
-					'root' => '.wp-block-social-link-label',
-				],
-			],
-		],
+			]
+		),
 	]
 );

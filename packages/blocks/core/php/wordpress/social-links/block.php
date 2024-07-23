@@ -19,19 +19,21 @@ return array_merge(
 				],
 			]
 		),
-		'selectors'  => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'item_containers' => [
-					'root' => '.wp-block-social-link',
+		'selectors'  => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'item_containers' => [
+						'root' => '.wp-block-social-link',
+					],
+					'item_icons'      => [
+						'root' => '.wp-block-social-link svg',
+					],
+					'item_names'      => [
+						'root' => '.wp-block-social-link .wp-block-social-link-label',
+					],
 				],
-				'item_icons'      => [
-					'root' => '.wp-block-social-link svg',
-				],
-				'item_names'      => [
-					'root' => '.wp-block-social-link .wp-block-social-link-label',
-				],
-			],
-		],
+			]
+		),
 	]
 );

@@ -10,19 +10,21 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'citation'  => [
-					'root' => 'cite',
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'citation'  => [
+						'root' => 'cite',
+					],
+					'paragraph' => [
+						'root' => 'p',
+					],
+					'link'      => [
+						'root' => 'a:not(.wp-element-button)',
+					],
 				],
-				'paragraph' => [
-					'root' => 'p',
-				],
-				'link'      => [
-					'root' => 'a:not(.wp-element-button)',
-				],
-			],
-		],
+			]
+		),
 	]
 );

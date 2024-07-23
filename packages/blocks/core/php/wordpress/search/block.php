@@ -10,19 +10,21 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'label'  => [
-					'root' => '.wp-block-search__label',
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'label'  => [
+						'root' => '.wp-block-search__label',
+					],
+					'input'  => [
+						'root' => '.wp-block-search__input',
+					],
+					'button' => [
+						'root' => '.wp-block-search__button',
+					],
 				],
-				'input'  => [
-					'root' => '.wp-block-search__input',
-				],
-				'button' => [
-					'root' => '.wp-block-search__button',
-				],
-			],
-		],
+			]
+		),
 	]
 );

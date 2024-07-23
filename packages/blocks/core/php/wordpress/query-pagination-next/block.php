@@ -10,13 +10,15 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'arrow' => [
-					'root' => '.wp-block-query-pagination-next-arrow',
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'arrow' => [
+						'root' => '.wp-block-query-pagination-next-arrow',
+					],
 				],
-			],
-		],
+			]
+		),
 	]
 );

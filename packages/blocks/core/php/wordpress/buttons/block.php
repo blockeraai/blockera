@@ -19,13 +19,15 @@ return array_merge(
 				],
 			]
 		),
-		'selectors'  => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'button' => [
-					'root' => '.wp-block-button > .wp-element-button',
+		'selectors'  => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'button' => [
+						'root' => '.wp-block-button > .wp-element-button',
+					],
 				],
-			],
-		],
+			]
+		),
 	]
 );

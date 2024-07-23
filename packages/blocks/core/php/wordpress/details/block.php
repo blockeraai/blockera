@@ -10,16 +10,18 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'paragraph' => [
-					'root' => 'p',
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'paragraph' => [
+						'root' => 'p',
+					],
+					'link'      => [
+						'root' => 'a:not(.wp-element-button)',
+					],
 				],
-				'link'      => [
-					'root' => 'a:not(.wp-element-button)',
-				],
-			],
-		],
+			]
+		),
 	]
 );

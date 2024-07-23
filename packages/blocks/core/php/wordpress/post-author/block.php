@@ -19,22 +19,24 @@ return array_merge(
 				],
 			]
 		),
-		'selectors'  => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'avatar' => [
-					'root' => '.wp-block-post-author__avatar > img',
+		'selectors'  => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'avatar' => [
+						'root' => '.wp-block-post-author__avatar > img',
+					],
+					'byline' => [
+						'root' => '.wp-block-post-author__byline',
+					],
+					'author' => [
+						'root' => '.wp-block-post-author__name',
+					],
+					'link'   => [
+						'root' => 'a:not(.wp-element-button)',
+					],
 				],
-				'byline' => [
-					'root' => '.wp-block-post-author__byline',
-				],
-				'author' => [
-					'root' => '.wp-block-post-author__name',
-				],
-				'link'   => [
-					'root' => 'a:not(.wp-element-button)',
-				],
-			],
-		],
+			]
+		),
 	]
 );

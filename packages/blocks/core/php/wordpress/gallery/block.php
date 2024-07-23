@@ -10,19 +10,21 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'gallery_caption' => [
-					'root' => '> figcaption',
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'gallery_caption' => [
+						'root' => '> figcaption',
+					],
+					'image'           => [
+						'root' => '.wp-block-image img',
+					],
+					'image_caption'   => [
+						'root' => '.wp-block-image figcaption',
+					],
 				],
-				'image'           => [
-					'root' => '.wp-block-image img',
-				],
-				'image_caption'   => [
-					'root' => '.wp-block-image figcaption',
-				],
-			],
-		],
+			]
+		),
 	]
 );
