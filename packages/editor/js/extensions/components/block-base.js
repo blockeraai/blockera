@@ -49,6 +49,7 @@ import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import {
 	isInnerBlock,
+	isSelectedBlock,
 	prepareAttributesDefaultValues,
 	propsAreEqual,
 } from './utils';
@@ -108,11 +109,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 			return {
 				currentBlock: getExtensionCurrentBlock(),
+				activeVariation: getActiveBlockVariation(),
 				currentState: getExtensionCurrentBlockState(),
 				isActiveBlockExtensions: isActiveBlockExtensions(),
 				availableAttributes: getBlockType(name)?.attributes,
 				currentInnerBlockState: getExtensionInnerBlockState(),
-				activeVariation: getActiveBlockVariation(),
 				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			};
 		});
@@ -333,6 +334,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		useEffect(
 			() => {
+				// We should prevent of side effect executing because this effect should just execute on selected block!
+				if (!isSelectedBlock(name)) {
+					return;
+				}
+
 				// Create mutable constant to prevent directly change to immutable state constant.
 				let filteredAttributes = { ...attributes };
 
@@ -399,10 +405,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				setAttributes(filteredAttributes);
 			},
 			// eslint-disable-next-line
-			[attributes]
+			[isActive, attributes]
 		);
 
+		// While change active block variation, we should clean up blockeraCompatId because we need to running compatibilities again.
 		useEffect(() => {
+			// We should not try to clean up blockeraCompatId while not selected block because still not executing compatibility on current block.
+			if (!isSelectedBlock(name)) {
+				return;
+			}
+
 			// Create mutable constant to prevent directly change to immutable state constant.
 			let filteredAttributes = { ...attributes };
 
@@ -421,6 +433,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 				setAttributes(filteredAttributes);
 			}
+			// eslint-disable-next-line
 		}, [activeBlockVariation]);
 
 		const stylesWrapperId = 'blockera-styles-wrapper';
@@ -429,6 +442,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		// WordPress block editor sometimes wrapped body into iframe, so we should append generated styles into iframe to apply user styles.
 		useEffect(() => {
+			// We should not try to append styles wrapper on document because the current block nothing has any settings.
+			if (!attributes?.blockeraPropsId) {
+				return;
+			}
+
 			const div = document.createElement('div');
 			div.id = stylesWrapperId;
 
@@ -439,6 +457,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			if (!iframeBodyElement?.querySelector(`#${stylesWrapperId}`)) {
 				iframeBodyElement.append(div);
 			}
+			// eslint-disable-next-line
 		}, [iframeBodyElement]);
 
 		return (
