@@ -405,11 +405,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		// WordPress block editor sometimes wrapped body into iframe, so we should append generated styles into iframe to apply user styles.
 		useEffect(() => {
-			// We should not try to append styles wrapper on document because the current block nothing has any settings.
-			if (!attributes?.blockeraPropsId) {
-				return;
-			}
-
 			const div = document.createElement('div');
 			div.id = stylesWrapperId;
 
