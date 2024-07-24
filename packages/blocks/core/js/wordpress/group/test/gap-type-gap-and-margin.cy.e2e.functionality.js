@@ -1,10 +1,8 @@
 import {
 	savePage,
-	getWPDataObject,
-	getSelectedBlock,
-	redirectToFrontPage,
 	createPost,
 	appendBlocks,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -48,7 +46,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			//
-			// Asset parent block CSS
+			// Asset group block CSS
 			//
 			cy.getBlock('core/group').should('not.have.css', 'gap', '100px');
 
@@ -64,7 +62,26 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				.last()
 				.should('have.css', 'margin-block-start', '100px');
 
-			// TODO: implement front end check for CSS generation
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			//
+			// Asset group block CSS
+			//
+			cy.get('.wp-block-group.blockera-block').should(
+				'not.have.css',
+				'gap',
+				'100px'
+			);
+
+			//
+			// Assert child block to have valid property for gap
+			//
+			cy.get('.wp-block-group.blockera-block p')
+				.last()
+				.should('have.css', 'margin-block-start', '100px');
 		});
 
 		it('Unlocked gap - the css property should be margin-block-start', () => {
@@ -97,7 +114,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			//
-			// Asset parent block CSS
+			// Asset group block CSS
 			//
 			cy.getBlock('core/group').should(
 				'not.have.css',
@@ -117,7 +134,26 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				.last()
 				.should('have.css', 'margin-block-start', '100px');
 
-			// TODO: implement front end check for CSS generation
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			//
+			// Asset group block CSS
+			//
+			cy.get('.wp-block-group.blockera-block').should(
+				'not.have.css',
+				'row-gap',
+				'100px'
+			);
+
+			//
+			// Assert child block to have valid property for gap
+			//
+			cy.get('.wp-block-group.blockera-block p')
+				.last()
+				.should('have.css', 'margin-block-start', '100px');
 		});
 	});
 
@@ -157,7 +193,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			//
-			// Asset parent block CSS
+			// Asset group block CSS
 			//
 			cy.getBlock('core/group').should('have.css', 'gap', '100px');
 
@@ -173,7 +209,26 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				.last()
 				.should('have.css', 'margin-block-start', '0px');
 
-			// TODO: implement front end check for CSS generation
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			//
+			// Asset group block CSS
+			//
+			cy.get('.wp-block-group.blockera-block').should(
+				'have.css',
+				'gap',
+				'100px'
+			);
+
+			//
+			// Assert child block to have valid property for gap
+			//
+			cy.get('.wp-block-group.blockera-block p')
+				.last()
+				.should('have.css', 'margin-block-start', '0px');
 		});
 
 		it('Unlocked gap - the css property should be gap', () => {
@@ -214,7 +269,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			//
-			// Asset parent block CSS
+			// Asset group block CSS
 			//
 			cy.getBlock('core/group').should('have.css', 'row-gap', '100px');
 
@@ -230,7 +285,26 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				.last()
 				.should('have.css', 'margin-block-start', '0px');
 
-			// TODO: implement front end check for CSS generation
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			//
+			// Asset group block CSS
+			//
+			cy.get('.wp-block-group.blockera-block').should(
+				'have.css',
+				'row-gap',
+				'100px'
+			);
+
+			//
+			// Assert child block to have valid property for gap
+			//
+			cy.get('.wp-block-group.blockera-block p')
+				.last()
+				.should('have.css', 'margin-block-start', '0px');
 		});
 	});
 
@@ -270,7 +344,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			//
-			// Asset parent block CSS
+			// Asset group block CSS
 			//
 			cy.getBlock('core/group').should('have.css', 'gap', '100px');
 
@@ -286,7 +360,26 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				.last()
 				.should('have.css', 'margin-block-start', '0px');
 
-			// TODO: implement front end check for CSS generation
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			//
+			// Asset group block CSS
+			//
+			cy.get('.wp-block-group.blockera-block').should(
+				'have.css',
+				'gap',
+				'100px'
+			);
+
+			//
+			// Assert child block to have valid property for gap
+			//
+			cy.get('.wp-block-group.blockera-block p')
+				.last()
+				.should('have.css', 'margin-block-start', '0px');
 		});
 
 		it('Unlocked gap - the css property should be gap', () => {
@@ -327,7 +420,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			//
-			// Asset parent block CSS
+			// Asset group block CSS
 			//
 			cy.getBlock('core/group').should('have.css', 'row-gap', '100px');
 
@@ -343,7 +436,26 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				.last()
 				.should('have.css', 'margin-block-start', '0px');
 
-			// TODO: implement front end check for CSS generation
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			//
+			// Asset group block CSS
+			//
+			cy.get('.wp-block-group.blockera-block').should(
+				'have.css',
+				'row-gap',
+				'100px'
+			);
+
+			//
+			// Assert child block to have valid property for gap
+			//
+			cy.get('.wp-block-group.blockera-block p')
+				.last()
+				.should('have.css', 'margin-block-start', '0px');
 		});
 	});
 
@@ -379,7 +491,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			//
-			// Asset parent block CSS
+			// Asset group block CSS
 			//
 			cy.getBlock('core/group').should('have.css', 'gap', '100px');
 
@@ -395,7 +507,26 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				.last()
 				.should('have.css', 'margin-block-start', '0px');
 
-			// TODO: implement front end check for CSS generation
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			//
+			// Asset group block CSS
+			//
+			cy.get('.wp-block-group.blockera-block').should(
+				'have.css',
+				'gap',
+				'100px'
+			);
+
+			//
+			// Assert child block to have valid property for gap
+			//
+			cy.get('.wp-block-group.blockera-block p')
+				.last()
+				.should('have.css', 'margin-block-start', '0px');
 		});
 
 		it('Unlocked gap - the css property should be gap', () => {
@@ -432,7 +563,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			//
-			// Asset parent block CSS
+			// Asset group block CSS
 			//
 			cy.getBlock('core/group').should('have.css', 'row-gap', '100px');
 
@@ -448,7 +579,26 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				.last()
 				.should('have.css', 'margin-block-start', '0px');
 
-			// TODO: implement front end check for CSS generation
+			//Check frontend
+			savePage();
+
+			redirectToFrontPage();
+
+			//
+			// Asset group block CSS
+			//
+			cy.get('.wp-block-group.blockera-block').should(
+				'have.css',
+				'row-gap',
+				'100px'
+			);
+
+			//
+			// Assert child block to have valid property for gap
+			//
+			cy.get('.wp-block-group.blockera-block p')
+				.last()
+				.should('have.css', 'margin-block-start', '0px');
 		});
 	});
 });
