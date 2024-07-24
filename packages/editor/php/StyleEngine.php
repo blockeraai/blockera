@@ -427,14 +427,16 @@ final class StyleEngine {
 	 */
 	private function configureDefinition( BaseStyleDefinition $definition ) {
 
-		$this->definition->setConfig(
+		$definition->setBlock( $this->block );
+
+		$definition->setConfig(
 			blockera_get_block_type_property(
 				$this->block['blockName'],
 				'supports'
 			)['blockeraStyleEngine'] ?? []
 		);
 
-		$this->definition->setDefaultSettings(
+		$definition->setDefaultSettings(
 			blockera_get_block_type_property(
 				$this->block['blockName'],
 				'attributes'
