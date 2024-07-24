@@ -28,21 +28,23 @@ import {
 addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 	applyFilters('blockera.before.bootstrap', noop)();
 
-	defineGlobalProps(() => {
-		// Bootstrap functions for blocks.
-		blockeraBootstrapBlocks();
+	return () => {
+		defineGlobalProps(() => {
+			// Bootstrap functions for blocks.
+			blockeraBootstrapBlocks();
 
-		// Bootstrap canvas editor UI.
-		bootstrapCanvasEditor(window.wp);
+			// Bootstrap canvas editor UI.
+			bootstrapCanvasEditor(window.wp);
 
-		// Bootstrap functions for extensions.
-		blockeraExtensionsBootstrap();
-	});
+			// Bootstrap functions for extensions.
+			blockeraExtensionsBootstrap();
+		});
 
-	applyHooks(() => {
-		reregistrationBlocks();
-		registerThirdPartyExtensionDefinitions();
-	});
+		applyHooks(() => {
+			reregistrationBlocks();
+			registerThirdPartyExtensionDefinitions();
+		});
+	};
 });
 
 initializer();
