@@ -19,6 +19,7 @@ import {
 	applyHooks,
 	defineGlobalProps,
 	bootstrapCanvasEditor,
+	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
 
 /**
@@ -33,6 +34,9 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 
 		// Bootstrap canvas editor UI.
 		bootstrapCanvasEditor(window.wp);
+
+		// Bootstrap functions for extensions.
+		blockeraExtensionsBootstrap();
 	});
 
 	applyHooks(() => {
