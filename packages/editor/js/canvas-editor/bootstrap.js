@@ -34,10 +34,15 @@ export const bootstrapCanvasEditor = (wp: Object): void => {
 			render() {
 				const { version } = getEntity('wp');
 
+				// Prevent of rendering canvas editor while version not available.
+				if (!version) {
+					return <></>;
+				}
+
 				// Compatibility for WordPress supported versions.
 				const getTarget = () => {
 					// For WordPress version equals or bigger than 6.6 version.
-					if (Number(version.replace(/\./g, '')) >= 66) {
+					if (Number(version?.replace(/\./g, '')) >= 66) {
 						return '.editor-header__center';
 					}
 
