@@ -1,5 +1,9 @@
 // @flow
 
+/**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -14,6 +18,12 @@ import { omitWithPattern, hasSameProps } from '@blockera/utils';
 import type { TStates } from '../libs/block-states/types';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
+
+export const isSelectedBlock = (name: string): boolean => {
+	const { getSelectedBlock } = select('core/block-editor');
+
+	return getSelectedBlock?.name === name;
+};
 
 export const propsAreEqual = (
 	prev: { attributes: Object, name: string },
