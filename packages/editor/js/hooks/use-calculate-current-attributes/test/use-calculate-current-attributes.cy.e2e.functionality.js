@@ -18,8 +18,8 @@ describe('Should calculate current attributes correctly:', () => {
 
 	it('For Paragraph -> Normal -> Desktop', () => {
 		appendBlocks(
-			'<!-- wp:paragraph {"style":{"typography":{"fontSize":"22px"}},"className":"blockera-block blockera-block-5c0ef777-bb94-42dd-9c68-2e0e1a5ecd48","blockeraBackgroundColor":"#000000","blockeraInnerBlocks":{"link":{"attributes":{"blockeraBackgroundColor":"#eeeeee"}}},"blockeraPropsId":"2131738221","blockeraCompatId":"2131738221"} -->\n' +
-				'<p class="blockera-block blockera-block-5c0ef777-bb94-42dd-9c68-2e0e1a5ecd48"></p>\n' +
+			'<!-- wp:paragraph {"style":{"typography":{"fontSize":"22px"}},"className":"blockera-block blockera-block-602a2f46-ce00-4e74-adb1-b45c59b6886d","blockeraBackgroundColor":"#000000","blockeraBlockStates":{"normal":{"breakpoints":{"tablet":{"attributes":{"blockeraBackgroundColor":"#eeeeee"}}},"isVisible":true}},"blockeraPropsId":"216142147583","blockeraCompatId":"216142147584"} -->\n' +
+				'<p class="blockera-block blockera-block-602a2f46-ce00-4e74-adb1-b45c59b6886d" style="font-size:22px"></p>\n' +
 				'<!-- /wp:paragraph -->'
 		);
 
