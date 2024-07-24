@@ -7,7 +7,7 @@ import { isEquals, isEmpty, cloneObject } from '@blockera/utils';
 /**
  * Internal Dependencies
  */
-import { isValid } from '../../';
+import { isValid } from '../../value-addons/utils';
 import { extractNumberAndUnit } from '../input-control/utils';
 import type { TDefaultValue } from './types';
 
