@@ -13,12 +13,9 @@ import { isString } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { store as controlStore } from '../store';
-import {
-	store as repeaterStore,
-	STORE_NAME as repeaterControlStoreName,
-} from '../libs/repeater-control/store';
 import type { ControlRegistrationProps } from './types';
+import { STORE_NAME as CONTROL_STORE_NAME } from '../store/constants';
+import { STORE_NAME as REPEATER_CONTROL_STORE_NAME } from '../libs/repeater-control/store/constants';
 
 //Register control into store to use in control context provider
 export function registerControl({
@@ -32,9 +29,9 @@ export function registerControl({
 
 	//get `blockera/controls` store or details of that
 	const { getControl } =
-		repeaterControlStoreName === STORE_NAME
-			? select(repeaterStore)
-			: select(controlStore);
+		REPEATER_CONTROL_STORE_NAME === STORE_NAME
+			? select(REPEATER_CONTROL_STORE_NAME)
+			: select(CONTROL_STORE_NAME);
 
 	//Check is registered control or not!
 	if (getControl(name)) {
@@ -52,9 +49,9 @@ export function registerControl({
 
 	//get `addControl` of `blockera/controls` || `blockera/controls/repeater` store dispatchers
 	const { addControl } =
-		repeaterControlStoreName === STORE_NAME
-			? dispatch(repeaterStore)
-			: dispatch(controlStore);
+		REPEATER_CONTROL_STORE_NAME === STORE_NAME
+			? dispatch(REPEATER_CONTROL_STORE_NAME)
+			: dispatch(CONTROL_STORE_NAME);
 
 	//fire add control action
 	addControl({ name, ..._control });
@@ -66,9 +63,9 @@ export function registerControl({
 export function unregisterControl(names: Array<string>, store: string): void {
 	//get `addControl` of `blockera/controls` || `blockera/controls/repeater` store dispatchers
 	const { removeControl } =
-		repeaterControlStoreName === store
-			? dispatch(repeaterStore)
-			: dispatch(controlStore);
+		REPEATER_CONTROL_STORE_NAME === store
+			? dispatch(REPEATER_CONTROL_STORE_NAME)
+			: dispatch(CONTROL_STORE_NAME);
 
 	removeControl(names);
 }
