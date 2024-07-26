@@ -10,6 +10,14 @@
 return array_merge(
 	$args,
 	[
+		'supports'  => array_merge(
+			$args['supports'] ?? [],
+			[
+				'blockeraStyleEngine' => [
+					'gap-type' => 'gap-and-margin',
+				],
+			]
+		),
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
