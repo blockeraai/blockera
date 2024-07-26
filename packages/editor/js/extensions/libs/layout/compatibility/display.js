@@ -1,10 +1,5 @@
 // @flow
 
-/**
- * External dependencies
- */
-import { isUndefined } from '@blockera/utils';
-
 export function displayFromWPCompatibility({
 	attributes,
 	blockId,
@@ -55,8 +50,8 @@ export function displayFromWPCompatibility({
 
 	if (
 		attributes?.blockeraDisplay === defaultValue &&
-		!isUndefined(attributes?.layout?.type) &&
-		attributes?.layout?.type !== 'constrained'
+		attributes?.layout?.type &&
+		!['constrained', 'default'].includes(attributes?.layout?.type)
 	) {
 		attributes.blockeraDisplay = attributes?.layout?.type;
 	}
