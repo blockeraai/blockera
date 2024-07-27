@@ -4,11 +4,12 @@
  * External dependencies
  */
 import memoize from 'fast-memoize';
+import equal from 'fast-deep-equal';
 
 /**
  * Internal dependencies
  */
-import { isUndefined, isObject, isArray } from '../is';
+import { isUndefined } from '../is';
 
 export const arraySortItems = ({
 	args,
@@ -39,72 +40,11 @@ export const toObject = (arr: Array<any>): Object => {
 	return arr.reduce((acc, cur) => Object.assign(acc, cur), {});
 };
 
-const memoizedIsEquals: (a: any, b: any) => boolean = memoize(
+export const isEquals: (a: any, b: any) => boolean = memoize(
 	(a: any, b: any): boolean => {
-		if (a === b) {
-			return true;
-		}
-
-		if (isUndefined(a) || isUndefined(b)) {
-			return false;
-		}
-
-		if (isArray(a) && isArray(a)) {
-			if (a === b) {
-				return true;
-			}
-
-			if (a.length !== b.length) {
-				return false;
-			}
-
-			for (let i = 0; i < a.length; i++) {
-				if (Array.isArray(a[i]) && Array.isArray(b[i])) {
-					if (!isEquals(a[i], b[i])) {
-						return false;
-					}
-				} else if (!isEquals(a[i], b[i])) {
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		if (isObject(a) && isObject(a)) {
-			if (a === b) {
-				return true;
-			}
-
-			const keys1 = Object.keys(a);
-			const keys2 = Object.keys(b);
-
-			if (keys1.length !== keys2.length) {
-				return false;
-			}
-
-			for (const key of keys1) {
-				const val1 = a[key];
-				const val2 = b[key];
-
-				const areObjects = isObject(val1) && isObject(val2);
-
-				if (
-					(areObjects && !isEquals(val1, val2)) ||
-					(!areObjects && !isEquals(val1, val2))
-				) {
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		return JSON.stringify(a) === JSON.stringify(b);
+		return equal(a, b);
 	}
 );
-
-export const isEquals = memoizedIsEquals;
 
 export const indexOf = (arr: Array<any>, q: string): number => {
 	if (isUndefined(arr)) {
