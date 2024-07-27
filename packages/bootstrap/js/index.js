@@ -26,7 +26,5 @@ export const initializer = (): void => {
 		return;
 	}
 
-	bootstrap();
-
-	return domReady(applyFilters('blockera.bootstrapper.domReady', noop));
+	return domReady(bootstrap);
 };
