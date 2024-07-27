@@ -23,6 +23,16 @@ import {
 } from '@blockera/editor';
 
 /**
+ * Registration blockera core block settings with internal definitions.
+ */
+addFilter('blockera.bootstrapper.before.domReady', 'blockera.bootstrap', () => {
+	applyHooks(() => {
+		reregistrationBlocks();
+		registerThirdPartyExtensionDefinitions();
+	});
+});
+
+/**
  * Initialize blockera react application.
  */
 addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
@@ -38,11 +48,6 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 
 			// Bootstrap functions for extensions.
 			blockeraExtensionsBootstrap();
-		});
-
-		applyHooks(() => {
-			reregistrationBlocks();
-			registerThirdPartyExtensionDefinitions();
 		});
 	};
 });

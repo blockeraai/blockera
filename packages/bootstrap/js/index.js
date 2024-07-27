@@ -26,5 +26,14 @@ export const initializer = (): void => {
 		return;
 	}
 
+	const bootstrapBeforeDomReady = applyFilters(
+		'blockera.bootstrapper.before.domReady',
+		noop
+	);
+
+	if ('function' === typeof bootstrapBeforeDomReady) {
+		bootstrapBeforeDomReady();
+	}
+
 	return domReady(bootstrap);
 };
