@@ -171,6 +171,10 @@ export function setValueAddon(
 }
 
 export function getValueAddonRealValue(value: ValueAddon | string): any {
+	if (value === undefined) {
+		return '';
+	}
+
 	if (typeof value === 'number') {
 		return value;
 	}
