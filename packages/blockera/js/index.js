@@ -34,7 +34,7 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 			blockeraBootstrapBlocks();
 
 			// Bootstrap canvas editor UI.
-			bootstrapCanvasEditor(window.wp);
+			bootstrapCanvasEditor();
 
 			// Bootstrap functions for extensions.
 			blockeraExtensionsBootstrap();
