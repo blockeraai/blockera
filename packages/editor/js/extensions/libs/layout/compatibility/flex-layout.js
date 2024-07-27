@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import { isEquals } from '@blockera/utils';
+import { isEquals, mergeObject } from '@blockera/utils';
 
 export function alignItemsFromWPCompatibility({
 	attributes,
@@ -25,8 +25,9 @@ export function alignItemsFromWPCompatibility({
 		stretch: 'stretch',
 	};
 
-	attributes.blockeraFlexLayout.alignItems =
-		values[attributes?.layout?.verticalAlignment] ?? '';
+	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
+		verticalAlignment: values[attributes?.layout?.verticalAlignment] ?? '',
+	});
 
 	return attributes;
 }
@@ -51,8 +52,9 @@ export function justifyContentFromWPCompatibility({
 		'space-between': 'space-between',
 	};
 
-	attributes.blockeraFlexLayout.justifyContent =
-		values[attributes?.layout?.justifyContent] ?? '';
+	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
+		justifyContent: values[attributes?.layout?.justifyContent] ?? '',
+	});
 
 	return attributes;
 }
@@ -73,11 +75,23 @@ export function directionFromWPCompatibility({
 		case 'core/group':
 			switch (activeVariation) {
 				case 'group-stack':
-					attributes.blockeraFlexLayout.direction = 'column';
+					attributes.blockeraFlexLayout = mergeObject(
+						attributes.blockeraFlexLayout,
+						{
+							direction: 'column',
+						}
+					);
+
 					return attributes;
 
 				case 'group-row':
-					attributes.blockeraFlexLayout.direction = 'row';
+					attributes.blockeraFlexLayout = mergeObject(
+						attributes.blockeraFlexLayout,
+						{
+							direction: 'row',
+						}
+					);
+
 					return attributes;
 			}
 			break;
@@ -93,8 +107,9 @@ export function directionFromWPCompatibility({
 		vertical: 'column',
 	};
 
-	attributes.blockeraFlexLayout.direction =
-		values[attributes?.layout?.orientation];
+	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
+		direction: values[attributes?.layout?.orientation],
+	});
 
 	return attributes;
 }
