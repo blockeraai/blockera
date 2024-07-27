@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
+import { registerPlugin, getPlugin } from '@wordpress/plugins';
 
 /**
  * Internal dependencies
@@ -11,33 +12,13 @@ import { select } from '@wordpress/data';
 import { Observer } from '../observer';
 import { CanvasEditor } from './index';
 
-export const bootstrapCanvasEditor = (wp: Object): void => {
-	const {
-		plugins: { registerPlugin, getPlugin },
-	} = wp?.plugins
-		? wp
-		: {
-				...wp,
-				plugins: {
-					registerPlugin: null,
-					getPlugin: null,
-				},
-		  };
-
+export const bootstrapCanvasEditor = (): void => {
 	const { getEntity } = select('blockera/data') || {};
 
-	if (
-		'function' === typeof registerPlugin &&
-		!getPlugin('blockera-editor-observer')
-	) {
-		registerPlugin('blockera-editor-observer', {
+	if (!getPlugin('blockera-canvas-editor-observer')) {
+		registerPlugin('blockera-canvas-editor-observer', {
 			render() {
 				const { version } = getEntity('wp');
-
-				// Prevent of rendering canvas editor while version not available.
-				if (!version) {
-					return <></>;
-				}
 
 				// Compatibility for WordPress supported versions.
 				const getTarget = () => {
@@ -58,7 +39,7 @@ export const bootstrapCanvasEditor = (wp: Object): void => {
 							{
 								options: {
 									root: document.querySelector(
-										'div[aria-label="Editor top bar"]'
+										'.interface-interface-skeleton__header'
 									),
 									threshold: 1.0,
 								},
@@ -72,7 +53,7 @@ export const bootstrapCanvasEditor = (wp: Object): void => {
 									}
 
 									const plugin =
-										'blockera-post-editor-top-bar';
+										'blockera-post-canvas-editor-top-bar';
 
 									if (getPlugin(plugin)) {
 										return;
@@ -105,7 +86,7 @@ export const bootstrapCanvasEditor = (wp: Object): void => {
 									}
 
 									const plugin =
-										'blockera-site-editor-top-bar';
+										'blockera-site-canvas-editor-top-bar';
 
 									if (getPlugin(plugin)) {
 										return;
@@ -121,7 +102,7 @@ export const bootstrapCanvasEditor = (wp: Object): void => {
 										},
 									});
 								},
-								target: 'div[aria-label="Editor top bar"]',
+								target,
 							},
 						]}
 					/>
