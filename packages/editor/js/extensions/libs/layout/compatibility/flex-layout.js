@@ -161,10 +161,11 @@ export function flexLayoutToWPCompatibility({
 
 	return {
 		layout: {
-			orientation: directionValues[newValue?.direction] ?? '',
-			verticalAlignment: alignItemsValues[newValue?.alignItems] ?? '',
+			orientation: directionValues[newValue?.direction] ?? undefined,
+			verticalAlignment:
+				alignItemsValues[newValue?.alignItems] ?? undefined,
 			justifyContent:
-				justifyContentValues[newValue?.justifyContent] ?? '',
+				justifyContentValues[newValue?.justifyContent] ?? undefined,
 		},
 	};
 }
