@@ -5,7 +5,7 @@
  */
 import { applyFilters } from '@wordpress/hooks';
 import { detailedDiff } from 'deep-object-diff';
-import { SlotFillProvider } from '@wordpress/components';
+import { SlotFillProvider, Fill } from '@wordpress/components';
 import type { Element, MixedElement, ComponentType } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -14,25 +14,19 @@ import {
 	useRef,
 	useState,
 	useEffect,
-	createPortal,
 	// StrictMode,
 } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import {
-	isEquals,
-	getIframeTag,
-	mergeObject,
-	omitWithPattern,
-} from '@blockera/utils';
+import { isEquals, mergeObject, omitWithPattern } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
 /**
  * Internal dependencies
  */
-import { BlockStyle } from '../../style-engine';
+import { BlockStyle, StylesWrapper } from '../../style-engine';
 import { BlockEditContextProvider } from '../hooks';
 import {
 	useIconEffect,
@@ -399,25 +393,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			// eslint-disable-next-line
 		}, [activeBlockVariation]);
 
-		const stylesWrapperId = 'blockera-styles-wrapper';
-		const iframeBodyElement = getIframeTag('body');
-		const stylesWrapperElement = getIframeTag(`body #${stylesWrapperId}`);
-
-		// WordPress block editor sometimes wrapped body into iframe, so we should append generated styles into iframe to apply user styles.
-		useEffect(() => {
-			const div = document.createElement('div');
-			div.id = stylesWrapperId;
-
-			if (!iframeBodyElement) {
-				return;
-			}
-
-			if (!iframeBodyElement?.querySelector(`#${stylesWrapperId}`)) {
-				iframeBodyElement.append(div);
-			}
-			// eslint-disable-next-line
-		}, [iframeBodyElement]);
-
 		return (
 			<BlockEditContextProvider
 				{...{
@@ -511,8 +486,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					<div ref={blockEditRef} />
 				)}
 
-				{stylesWrapperElement &&
-					createPortal(
+				<StylesWrapper clientId={clientId}>
+					<Fill name={'blockera-styles-wrapper-' + clientId}>
 						<BlockStyle
 							{...{
 								clientId,
@@ -524,24 +499,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								defaultAttributes,
 								activeDeviceType: getDeviceType(),
 							}}
-						/>,
-						stylesWrapperElement
-					)}
-
-				{!iframeBodyElement && (
-					<BlockStyle
-						{...{
-							clientId,
-							supports,
-							selectors,
-							attributes,
-							blockName: name,
-							currentAttributes,
-							defaultAttributes,
-							activeDeviceType: getDeviceType(),
-						}}
-					/>
-				)}
+						/>
+					</Fill>
+				</StylesWrapper>
 				{/*</StrictMode>*/}
 
 				{children}
