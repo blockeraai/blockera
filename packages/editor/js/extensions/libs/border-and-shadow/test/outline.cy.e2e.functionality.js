@@ -45,8 +45,8 @@ describe('Outline → Functionality', () => {
 		cy.getByDataTest('popover-body')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear();
-				cy.get('input[maxlength="9"]').type('c5eef0ab');
+				cy.get('input[maxlength="9"]').clear({ force: true });
+				cy.get('input[maxlength="9"]').type('c5eef0ab ');
 			});
 
 		//Check block

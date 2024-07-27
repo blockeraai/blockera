@@ -20,8 +20,8 @@ describe('Font Color → Functionality', () => {
 		});
 
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input[maxlength="9"]').clear();
-			cy.get('input[maxlength="9"]').type('70ca9e');
+			cy.get('input[maxlength="9"]').clear({ force: true });
+			cy.get('input[maxlength="9"]').type('70ca9e ');
 		});
 
 		//Check block

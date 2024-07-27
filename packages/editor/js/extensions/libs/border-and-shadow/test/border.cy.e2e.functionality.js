@@ -27,8 +27,8 @@ describe('Border → Functionality', () => {
 		});
 
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input[maxlength="9"]').clear();
-			cy.get('input[maxlength="9"]').type('37e6d4');
+			cy.get('input[maxlength="9"]').clear({ force: true });
+			cy.get('input[maxlength="9"]').type('37e6d4 ');
 		});
 
 		cy.get('@container').within(() => {
@@ -78,8 +78,8 @@ describe('Border → Functionality', () => {
 		});
 
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input[maxlength="9"]').clear();
-			cy.get('input[maxlength="9"]').type('37e6d4');
+			cy.get('input[maxlength="9"]').clear({ force: true });
+			cy.get('input[maxlength="9"]').type('37e6d4 ');
 		});
 
 		//Check block
@@ -137,7 +137,7 @@ describe('Border → Functionality', () => {
 		// color
 		cy.getByDataTest('popover-body').within(() => {
 			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type('73ddab', { force: true });
+			cy.get('input[maxlength="9"]').type('73ddab ');
 		});
 
 		//Check block
@@ -186,8 +186,8 @@ describe('Border → Functionality', () => {
 
 		// color
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input[maxlength="9"]').clear();
-			cy.get('input[maxlength="9"]').type('9958e3');
+			cy.get('input[maxlength="9"]').clear({ force: true });
+			cy.get('input[maxlength="9"]').type('9958e3 ');
 		});
 
 		//Check block
@@ -241,7 +241,7 @@ describe('Border → Functionality', () => {
 		// color
 		cy.getByDataTest('popover-body').within(() => {
 			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type('eba492', { force: true });
+			cy.get('input[maxlength="9"]').type('eba492 ');
 		});
 
 		//Check block
@@ -299,7 +299,7 @@ describe('Border → Functionality', () => {
 		// color
 		cy.getByDataTest('popover-body').within(() => {
 			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type('1893da', { force: true });
+			cy.get('input[maxlength="9"]').type('1893da ');
 		});
 
 		//Check block

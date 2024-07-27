@@ -479,8 +479,10 @@ describe('Block State E2E Test', () => {
 					cy.getByDataTest('popover-body')
 						.last()
 						.within(() => {
-							cy.get('input[maxlength="9"]').clear();
-							cy.get('input[maxlength="9"]').type('ccc');
+							cy.get('input[maxlength="9"]').clear({
+								force: true,
+							});
+							cy.get('input[maxlength="9"]').type('cccccc ');
 						});
 
 					// inherit of normal.

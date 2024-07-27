@@ -265,8 +265,10 @@ describe(
 						cy.get('@gradientBar').click();
 					});
 
-					cy.get('input[maxLength="9"]').clear();
-					cy.get('input[maxLength="9"]').type('FFA33C', { delay: 0 });
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('FFA33C ', {
+						delay: 0,
+					});
 
 					cy.get('@gradientBar').should(($gradientBar) => {
 						const background = $gradientBar.css('background');
@@ -430,8 +432,8 @@ describe(
 						cy.get('@gradientBar').click();
 					});
 
-					cy.get('input[maxLength="9"]').clear();
-					cy.get('input[maxLength="9"]').type('FFA33C');
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('FFA33C ');
 
 					cy.get('@gradientBar').should(($gradientBar) => {
 						const background = $gradientBar.css('background');
@@ -683,9 +685,9 @@ describe(
 						cy.get('.blockera-component-popover')
 							.last()
 							.within(() => {
-								cy.get('input[maxLength="9"]').as('colorInput');
-								cy.get('@colorInput').clear();
-								cy.get('@colorInput').type('4fecff', {
+								cy.get('input[maxlength="9"]').as('colorInput');
+								cy.get('@colorInput').clear({ force: true });
+								cy.get('@colorInput').type('4fecff ', {
 									delay: 0,
 									force: true,
 								});

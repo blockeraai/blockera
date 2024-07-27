@@ -47,9 +47,7 @@ describe('Text Shadows → Functionality', () => {
 			.last()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('70ca9e', {
-					force: true,
-				});
+				cy.get('input[maxlength="9"]').type('70ca9e ');
 			});
 
 		//Check block

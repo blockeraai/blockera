@@ -43,8 +43,8 @@ describe('Filters → Functionality', () => {
 		cy.get('.components-popover')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear();
-				cy.get('input[maxlength="9"]').type('cccccc');
+				cy.get('input[maxlength="9"]').clear({ force: true });
+				cy.get('input[maxlength="9"]').type('cccccc ');
 			});
 
 		//Check block
