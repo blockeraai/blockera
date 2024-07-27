@@ -3,7 +3,7 @@
 export type IntersectionObserverProps = {
 	callback: (...args: Array<any>) => any,
 	options: IntersectionObserverOptions,
-	target: string,
+	target: string | HTMLElement,
 };
 
 export type Ancestors = Array<IntersectionObserverProps>;

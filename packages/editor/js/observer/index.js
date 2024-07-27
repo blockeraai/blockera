@@ -46,7 +46,17 @@ export const Observer = ({ ancestors }: ObserverProps) => {
 	const observers = useObservers(ancestors);
 
 	observers.forEach((observer: IntersectionObserver, index: number): void => {
-		const target = document.querySelector(ancestors[index].target);
+		let target;
+
+		if ('string' === typeof ancestors[index].target) {
+			target = document.querySelector(ancestors[index].target);
+
+			if (!target) {
+				return;
+			}
+		} else {
+			target = ancestors[index].target;
+		}
 
 		if (!target) {
 			return;
