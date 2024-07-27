@@ -26,7 +26,7 @@ export function alignItemsFromWPCompatibility({
 	};
 
 	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
-		verticalAlignment: values[attributes?.layout?.verticalAlignment] ?? '',
+		alignItems: values[attributes?.layout?.verticalAlignment] ?? '',
 	});
 
 	return attributes;
