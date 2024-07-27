@@ -50,10 +50,6 @@ export const Observer = ({ ancestors }: ObserverProps) => {
 
 		if ('string' === typeof ancestors[index].target) {
 			target = document.querySelector(ancestors[index].target);
-
-			if (!target) {
-				return;
-			}
 		} else {
 			target = ancestors[index].target;
 		}
