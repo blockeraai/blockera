@@ -15,7 +15,7 @@ describe('Block States Helpers', () => {
 	});
 
 	it('should retrieve state with getStateInfo(stateName)', () => {
-		expect(getStateInfo()).toEqual({
+		expect(getStateInfo('hover')).toEqual({
 			type: 'hover',
 			label: 'Hover',
 			breakpoints: {},

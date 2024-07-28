@@ -14,11 +14,12 @@ describe('Helper Functions', () => {
 	describe('getValueAddonRealValue', () => {
 		describe('Simple Values', () => {
 			test('undefined', () => {
-				expect(getValueAddonRealValue()).toBe(undefined);
+				expect(getValueAddonRealValue(undefined)).toBe('');
 			});
 
 			test('empty', () => {
 				expect(getValueAddonRealValue('')).toBe('');
+				expect(getValueAddonRealValue()).toBe('');
 			});
 
 			test('number', () => {
