@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
  * Internal dependencies
  */
 import type {
@@ -42,7 +47,10 @@ const useObservers = (ancestors: Ancestors): Array<IntersectionObserver> => {
 	);
 };
 
-export const Observer = ({ ancestors }: ObserverProps) => {
+export const Observer = ({
+	ancestors,
+	children,
+}: ObserverProps): MixedElement => {
 	const observers = useObservers(ancestors);
 
 	observers.forEach((observer: IntersectionObserver, index: number): void => {
@@ -60,4 +68,6 @@ export const Observer = ({ ancestors }: ObserverProps) => {
 
 		observer.observe(target);
 	});
+
+	return children;
 };
