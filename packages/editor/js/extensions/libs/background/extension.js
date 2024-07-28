@@ -252,7 +252,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 									</p>
 									<h3>
 										<Icon
-											icon="inherit-circle"
+											icon="inherit-square"
 											iconSize={18}
 										/>
 										{__('Inherit', 'blockera')}
