@@ -5,8 +5,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
+import { dispatch, useSelect } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
-import { dispatch, useSelect, select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -41,11 +41,6 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		onChange,
 		innerBlocks,
 	}: InnerBlocksProps): MixedElement => {
-		// External selectors. to access selected block type on WordPress editor store api.
-		const { getSelectedBlock } = select('core/block-editor');
-		const { innerBlocks: insertedInnerBlocks = [] } =
-			getSelectedBlock() || {};
-
 		// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
 		const { currentBlock = 'master', getBlockInners } = useSelect(
 			(select) => {
@@ -78,7 +73,6 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		// Calculation: to categorized in two category (elements and blocks) from available inner blocks on current WordPress selected block.
 		const { elements, blocks } = useAvailableItems({
 			getBlockInners,
-			insertedInnerBlocks,
 			memoizedInnerBlocks,
 			setBlockClientInners,
 			clientId: block?.clientId,

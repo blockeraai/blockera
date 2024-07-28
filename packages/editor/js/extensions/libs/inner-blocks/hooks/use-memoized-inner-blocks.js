@@ -60,12 +60,14 @@ export const useMemoizedInnerBlocks = ({
 		// Previous inner blocks stack.
 		const inners = getBlockInners(clientId);
 
+		const mergedStackWithStoreInners = mergeObject(inners, stack);
+
 		setBlockClientInners({
 			clientId,
-			inners: mergeObject(inners, stack),
+			inners: mergedStackWithStoreInners,
 		});
 
-		return stack;
+		return mergedStackWithStoreInners;
 		// eslint-disable-next-line
 	}, [controlValue, reservedInnerBlocks]);
 };

@@ -25,7 +25,6 @@ import type {
 export const useAvailableItems = ({
 	clientId,
 	getBlockInners,
-	insertedInnerBlocks,
 	reservedInnerBlocks,
 	memoizedInnerBlocks,
 	setBlockClientInners,
@@ -120,5 +119,5 @@ export const useAvailableItems = ({
 
 		return { elements, blocks };
 		// eslint-disable-next-line
-	}, [reservedInnerBlocks, insertedInnerBlocks, memoizedInnerBlocks]);
+	}, [reservedInnerBlocks, memoizedInnerBlocks]);
 };

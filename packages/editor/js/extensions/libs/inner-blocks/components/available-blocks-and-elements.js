@@ -16,14 +16,15 @@ import {
 	Flex,
 	SearchControl,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import type { InnerBlockModel, InnerBlocks } from '../types';
-import { searchBlockItems } from '../search-items';
 import { isElement } from '../helpers';
+import { searchBlockItems } from '../search-items';
+import type { InnerBlockModel, InnerBlocks } from '../types';
 
 export const AvailableBlocksAndElements = ({
 	blocks: _blocks,
@@ -117,6 +118,7 @@ export const AvailableBlocksAndElements = ({
 										setCurrentBlock(id);
 									}}
 									aria-label={id}
+									data-id={'blockera-inner-block-type'}
 									className={classNames(
 										'blockera-inner-block-type'
 									)}
@@ -153,6 +155,7 @@ export const AvailableBlocksAndElements = ({
 				}}
 			>
 				<SearchControl
+					data-id={'search bar'}
 					className={'blockera-inner-blocks-inserter-search'}
 					onChange={(newValue) => {
 						setSearchTerm(newValue);
@@ -188,6 +191,16 @@ export const AvailableBlocksAndElements = ({
 					placeholder={__('Search', 'blockera')}
 				/>
 			</ControlContextProvider>
+			{!elements.length && !blocks.length && (
+				<>
+					<Flex direction={'column'} justifyContent={'space-between'}>
+						<Icon icon={'blockDefault'} library={'wp'} />
+						<p data-id={'not-found-text'}>
+							{__('No results found.', 'blockera')}
+						</p>
+					</Flex>
+				</>
+			)}
 			<CategorizedItems
 				items={elements}
 				category={'elements'}

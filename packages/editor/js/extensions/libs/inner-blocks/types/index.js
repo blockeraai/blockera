@@ -65,6 +65,5 @@ export type AvailableItems = {
 	}) => void,
 	reservedInnerBlocks: InnerBlocks,
 	memoizedInnerBlocks: InnerBlocks,
-	insertedInnerBlocks: Array<InnerBlockType>,
 	getBlockInners: (clientId: string) => InnerBlocks,
 };
