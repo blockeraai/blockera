@@ -83,7 +83,6 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			setBlockClientInners,
 			clientId: block?.clientId,
 			reservedInnerBlocks: innerBlocks,
-			selectedBlockName: block?.blockName,
 		});
 
 		// Merging all categories, as available blocks.

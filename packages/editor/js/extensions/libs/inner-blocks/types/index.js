@@ -63,7 +63,6 @@ export type AvailableItems = {
 		clientId: string,
 		inners: InnerBlocks,
 	}) => void,
-	selectedBlockName: string,
 	reservedInnerBlocks: InnerBlocks,
 	memoizedInnerBlocks: InnerBlocks,
 	insertedInnerBlocks: Array<InnerBlockType>,

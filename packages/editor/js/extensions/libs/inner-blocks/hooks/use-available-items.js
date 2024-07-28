@@ -25,19 +25,15 @@ import type {
 export const useAvailableItems = ({
 	clientId,
 	getBlockInners,
-	selectedBlockName,
 	insertedInnerBlocks,
 	reservedInnerBlocks,
 	memoizedInnerBlocks,
 	setBlockClientInners,
 }: AvailableItems): { blocks: InnerBlocks, elements: InnerBlocks } => {
 	// External selectors. to access registered block types on WordPress blocks store api.
-	const { getBlockType, getBlockTypes } = select('core/blocks');
-	const registeredAllBlocks = getBlockTypes();
-	const {
-		allowedBlocks = null,
-		attributes: { allowedBlocks: allowedBlocksAttribute = null },
-	} = getBlockType(selectedBlockName) || {};
+	const { getBlockType } = select('core/blocks');
+	const { getAllowedBlocks } = select('core/block-editor');
+	const allowedBlockTypes = getAllowedBlocks(clientId);
 
 	return useMemo(() => {
 		const forces: Array<InnerBlockModel> = [];
@@ -95,14 +91,8 @@ export const useAvailableItems = ({
 			});
 		};
 
-		if (allowedBlocks && allowedBlocks.length) {
-			appendBlocks(allowedBlocks);
-		} else if (allowedBlocksAttribute && !allowedBlocksAttribute?.default) {
-			appendBlocks(Object.values(registeredAllBlocks));
-		}
-
-		// Appending inserted inners in WordPress selected block ...
-		appendBlocks(insertedInnerBlocks);
+		// Appending allowed block types of WordPress selected block ...
+		appendBlocks(allowedBlockTypes);
 
 		// Appending forces into repeater state.
 		if (forces.length) {
