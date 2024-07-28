@@ -14,7 +14,7 @@ import { Icon } from '@blockera/icons';
 const button: InnerBlocks = {
 	'core/button': {
 		name: 'core/button',
-		label: __('Buttons', 'blockera'),
+		label: __('Button', 'blockera'),
 		icon: <Icon icon="block-button" iconSize="20" />,
 		settings: {
 			force: true,
