@@ -32,7 +32,7 @@ class TestAssetsProvider extends \Blockera\Dev\PHPUnit\AppTestCase {
 		set_current_screen( 'post.php' );
 
 		do_action( 'admin_enqueue_scripts' );
-		do_action( 'enqueue_block_assets' );
+		do_action( 'enqueue_block_editor_assets' );
 
 		if ( false !== strpos( $asset, '-styles' ) ) {
 
@@ -48,7 +48,7 @@ class TestAssetsProvider extends \Blockera\Dev\PHPUnit\AppTestCase {
 
 		self::$provider->boot();
 
-		do_action( 'wp_enqueue_scripts' );
+		do_action( 'enqueue_block_editor_assets' );
 
 		$this->assertTrue( wp_script_is( '@blockera/utils', 'enqueued' ) );
 		$this->assertTrue( wp_script_is( '@blockera/controls', 'enqueued' ) );
