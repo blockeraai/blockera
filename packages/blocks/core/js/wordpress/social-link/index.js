@@ -14,27 +14,19 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 import { Icon } from '@blockera/icons';
 
 const blockeraInnerBlocks: InnerBlocks = {
-	item_icon: {
-		name: 'core/item_icon',
-		type: 'item_icon',
+	'elements/item-icon': {
+		name: 'elements/item-icon',
 		label: __('Button Icon', 'blockera'),
 		icon: <Icon icon="block-social-link-icon" iconSize="20" />,
-		selectors: {
-			root: 'svg',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
-	item_name: {
-		name: 'core/item_name',
-		type: 'item_name',
+	'elements/item-name': {
+		name: 'elements/item-name',
 		label: __('Button Name', 'blockera'),
 		icon: <Icon icon="block-social-link-name" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-social-link-label',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},

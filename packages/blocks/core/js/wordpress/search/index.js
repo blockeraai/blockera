@@ -13,40 +13,24 @@ import { SharedBlockExtension } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
+/**
+ * Internal dependencies
+ */
+import inputs from '../inners/inputs';
+import button from '../inners/button';
+
+// We not needs to "input_label" in search block!
+delete inputs?.input_label;
+// We not needs to "remember" in search block!
+delete inputs?.remember;
+
 const blockeraInnerBlocks: InnerBlocks = {
 	label: {
 		name: 'core/title',
 		type: 'title',
 		label: __('Form Label', 'blockera'),
 		icon: <Icon icon="block-paragraph" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-search__label',
-		},
-		innerBlockSettings: {
-			force: true,
-		},
-	},
-	input: {
-		name: 'input',
-		type: 'input',
-		label: __('Form Input', 'blockera'),
-		icon: <Icon icon="block-input" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-search__input',
-		},
-		innerBlockSettings: {
-			force: true,
-		},
-	},
-	button: {
-		name: 'core/button',
-		type: 'button',
-		label: __('Form Button', 'blockera'),
-		icon: <Icon icon="block-button" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-search__button',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
@@ -55,7 +39,11 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const Search = {
 	name: 'blockeraSearch',
 	targetBlock: 'core/search',
-	blockeraInnerBlocks,
+	blockeraInnerBlocks: {
+		...blockeraInnerBlocks,
+		...inputs,
+		...button,
+	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

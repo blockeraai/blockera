@@ -13,40 +13,25 @@ import { SharedBlockExtension } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
+/**
+ * Internal dependencies
+ */
+import image from '../inners/image';
+
 const blockeraInnerBlocks: InnerBlocks = {
-	gallery_caption: {
-		name: 'core/gallery_caption',
-		type: 'image',
+	'elements/gallery-caption': {
+		name: 'elements/gallery-caption',
 		label: __('Gallery Caption', 'blockera'),
 		icon: <Icon icon="block-gallery-caption" iconSize="20" />,
-		selectors: {
-			root: '> figcaption',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
-	image: {
-		name: 'core/image',
-		type: 'image',
-		label: __('Images', 'blockera'),
-		icon: <Icon icon="block-image" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-image img',
-		},
-		innerBlockSettings: {
-			force: true,
-		},
-	},
-	image_caption: {
-		name: 'core/image_caption',
-		type: 'image',
+	'elements/image-caption': {
+		name: 'elements/image-caption',
 		label: __('Images Captions', 'blockera'),
 		icon: <Icon icon="block-image-caption" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-image figcaption',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
@@ -55,7 +40,10 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const Gallery = {
 	name: 'blockeraGallery',
 	targetBlock: 'core/gallery',
-	blockeraInnerBlocks,
+	blockeraInnerBlocks: {
+		...blockeraInnerBlocks,
+		...image,
+	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

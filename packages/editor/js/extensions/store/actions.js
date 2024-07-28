@@ -154,3 +154,11 @@ export function setBlockClientStates({
 		type: 'SET_BLOCK_CLIENT_STATES',
 	};
 }
+
+export function setBlockClientInners({ inners, clientId }: Object): Object {
+	return {
+		inners,
+		clientId,
+		type: 'SET_BLOCK_CLIENT_INNERS',
+	};
+}

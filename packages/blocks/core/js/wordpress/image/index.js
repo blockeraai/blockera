@@ -14,15 +14,11 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 import { Icon } from '@blockera/icons';
 
 const blockeraInnerBlocks: InnerBlocks = {
-	caption: {
-		name: 'core/caption',
-		type: 'caption',
+	'elements/caption': {
+		name: 'elements/caption',
 		label: __('Caption', 'blockera'),
 		icon: <Icon icon="block-image-caption" iconSize="20" />,
-		selectors: {
-			root: 'figcaption',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},

@@ -14,13 +14,13 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'innerBlocks' => [
-					'label'  => [
+					'elements/label'  => [
 						'root' => '.wp-block-search__label',
 					],
-					'input'  => [
+					'elements/input'  => [
 						'root' => '.wp-block-search__input',
 					],
-					'button' => [
+					'elements/button' => [
 						'root' => '.wp-block-search__button',
 					],
 				],

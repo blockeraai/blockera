@@ -54,9 +54,9 @@ export const bootstrap = (): void => {
 			Object.keys(innerBlocks).forEach((element) => {
 				if (
 					!attributes?.style?.elements[element] ||
-					innerBlocks[element]?.innerBlockSettings
-						?.dataCompatibility === undefined ||
-					innerBlocks[element]?.innerBlockSettings?.dataCompatibility
+					innerBlocks[element]?.settings?.dataCompatibility ===
+						undefined ||
+					innerBlocks[element]?.settings?.dataCompatibility
 						?.length === 0
 				) {
 					return;
@@ -66,9 +66,7 @@ export const bootstrap = (): void => {
 				// Normal font color
 				//
 				if (
-					innerBlocks[
-						element
-					]?.innerBlockSettings?.dataCompatibility.includes(
+					innerBlocks[element]?.settings?.dataCompatibility.includes(
 						'font-color'
 					)
 				) {
@@ -92,9 +90,7 @@ export const bootstrap = (): void => {
 				// Hover font color
 				//
 				if (
-					innerBlocks[
-						element
-					]?.innerBlockSettings?.dataCompatibility.includes(
+					innerBlocks[element]?.settings?.dataCompatibility.includes(
 						'font-color-hover'
 					)
 				) {
@@ -125,9 +121,7 @@ export const bootstrap = (): void => {
 				// Background Color
 				//
 				if (
-					innerBlocks[
-						element
-					]?.innerBlockSettings?.dataCompatibility.includes(
+					innerBlocks[element]?.settings?.dataCompatibility.includes(
 						'background-color'
 					)
 				) {
@@ -153,9 +147,7 @@ export const bootstrap = (): void => {
 				//
 				if (
 					!bgAttributes &&
-					innerBlocks[
-						element
-					]?.innerBlockSettings?.dataCompatibility.includes(
+					innerBlocks[element]?.settings?.dataCompatibility.includes(
 						'background-image'
 					)
 				) {
@@ -220,9 +212,9 @@ export const bootstrap = (): void => {
 
 			if (
 				innerBlocks[currentBlock] === undefined ||
-				innerBlocks[currentBlock]?.innerBlockSettings
-					?.dataCompatibility === undefined ||
-				innerBlocks[currentBlock]?.innerBlockSettings?.dataCompatibility
+				innerBlocks[currentBlock]?.settings?.dataCompatibility ===
+					undefined ||
+				innerBlocks[currentBlock]?.settings?.dataCompatibility
 					?.length === 0
 			) {
 				return nextState;
@@ -234,9 +226,9 @@ export const bootstrap = (): void => {
 			if (
 				currentState === 'normal' &&
 				featureId === 'blockeraFontColor' &&
-				innerBlocks[
-					currentBlock
-				]?.innerBlockSettings?.dataCompatibility.includes('font-color')
+				innerBlocks[currentBlock]?.settings?.dataCompatibility.includes(
+					'font-color'
+				)
 			) {
 				return mergeObject(
 					nextState,
@@ -254,9 +246,7 @@ export const bootstrap = (): void => {
 			if (
 				currentState === 'hover' &&
 				featureId === 'blockeraFontColor' &&
-				innerBlocks[
-					currentBlock
-				]?.innerBlockSettings?.dataCompatibility.includes(
+				innerBlocks[currentBlock]?.settings?.dataCompatibility.includes(
 					'font-color-hover'
 				)
 			) {
@@ -276,9 +266,7 @@ export const bootstrap = (): void => {
 			if (
 				currentState === 'normal' &&
 				featureId === 'blockeraBackgroundColor' &&
-				innerBlocks[
-					currentBlock
-				]?.innerBlockSettings?.dataCompatibility.includes(
+				innerBlocks[currentBlock]?.settings?.dataCompatibility.includes(
 					'background-color'
 				)
 			) {
@@ -298,9 +286,7 @@ export const bootstrap = (): void => {
 			else if (
 				currentState === 'normal' &&
 				featureId === 'blockeraBackground' &&
-				innerBlocks[
-					currentBlock
-				]?.innerBlockSettings?.dataCompatibility.includes(
+				innerBlocks[currentBlock]?.settings?.dataCompatibility.includes(
 					'background-image'
 				)
 			) {

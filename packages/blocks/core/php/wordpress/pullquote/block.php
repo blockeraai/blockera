@@ -13,17 +13,15 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'citation'  => [
-						'root' => 'cite',
+				'innerBlocks' => array_merge(
+					[
+						'citation' => [
+							'root' => 'cite',
+						],
 					],
-					'paragraph' => [
-						'root' => 'p',
-					],
-					'link'      => [
-						'root' => 'a:not(.wp-element-button)',
-					],
-				],
+					blockera_load( 'inners.link', dirname( __DIR__ ) ),
+					blockera_load( 'inners.paragraph', dirname( __DIR__ ) ),
+				),
 			]
 		),
 	]

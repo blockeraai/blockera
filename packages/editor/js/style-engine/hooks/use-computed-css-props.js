@@ -11,7 +11,6 @@ import {
 	EffectsStyles,
 	PositionStyles,
 	FlexChildStyles,
-	useBlockContext,
 	BackgroundStyles,
 	TypographyStyles,
 	BorderAndShadowStyles,
@@ -38,7 +37,6 @@ export const useComputedCssProps = ({
 	const {
 		blocks: { getBlockType },
 	} = useStoreSelectors();
-	const { blockeraInnerBlocks } = useBlockContext();
 	const calculatedProps = {
 		...params,
 		state,
@@ -108,7 +106,7 @@ export const useComputedCssProps = ({
 					...calculatedProps,
 					state: stateType,
 					masterState,
-					selectors: blockeraInnerBlocks[blockType]?.selectors || {},
+					selectors: selectors?.innerBlocks[blockType] || {},
 					attributes: {
 						...defaultAttributes,
 						...breakpointItem?.attributes,
@@ -123,7 +121,7 @@ export const useComputedCssProps = ({
 			...calculatedProps,
 			state: 'normal',
 			masterState,
-			selectors: blockeraInnerBlocks[blockType]?.selectors || {},
+			selectors: selectors?.innerBlocks[blockType] || {},
 			attributes: {
 				...defaultAttributes,
 				...attributes,

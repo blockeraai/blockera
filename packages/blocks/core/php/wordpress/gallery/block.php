@@ -23,13 +23,13 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'innerBlocks' => [
-					'gallery_caption' => [
+					'elements/gallery-caption' => [
 						'root' => '> figcaption',
 					],
-					'image'           => [
+					'core/image'               => [
 						'root' => '.wp-block-image img',
 					],
-					'image_caption'   => [
+					'elements/image-caption'   => [
 						'root' => '.wp-block-image figcaption',
 					],
 				],

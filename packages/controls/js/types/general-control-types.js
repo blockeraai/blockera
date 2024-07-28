@@ -41,6 +41,8 @@ export type ControlGeneralTypes = {
 	valueCleanup?: (data: any) => void,
 	//
 	'data-test'?: string,
+	'data-cy'?: string,
+	'data-id'?: string,
 	'aria-label'?: string,
 };
 

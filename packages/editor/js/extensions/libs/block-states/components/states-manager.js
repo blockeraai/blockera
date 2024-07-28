@@ -360,7 +360,10 @@ const StatesManager: ComponentType<any> = memo(
 											(
 												b: BreakpointTypes
 											): BreakpointTypes => {
-												if ('desktop' === b.type) {
+												if (
+													getBaseBreakpoint() ===
+													b.type
+												) {
 													return {
 														...b,
 														attributes: {},

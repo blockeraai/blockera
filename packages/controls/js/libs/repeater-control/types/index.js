@@ -57,6 +57,10 @@ export type RepeaterControlProps = {
 	 */
 	selectable?: boolean,
 	/**
+	 * Is support external inserter component?
+	 */
+	isSupportInserter?: boolean,
+	/**
 	 * Flag for support advanced label or not.
 	 */
 	withoutAdvancedLabel?: boolean,
@@ -126,6 +130,10 @@ export type RepeaterControlProps = {
 	 * Header component for each repeater item
 	 */
 	repeaterItemHeader?: MixedElement | any,
+	/**
+	 * External inserter component.
+	 */
+	InserterComponent?: MixedElement | any,
 	/**
 	 * Children components for each repeater item
 	 */

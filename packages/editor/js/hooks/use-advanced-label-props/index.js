@@ -37,6 +37,7 @@ import type {
 	BreakpointTypes,
 } from '../../extensions/libs/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
+import unAvailableAttributes from './unavailable-attributes';
 
 export const useAdvancedLabelProps = (
 	{
@@ -182,7 +183,7 @@ export const useAdvancedLabelProps = (
 			// Rule:
 			// - If current block not has any changed attributes!
 			// - Recieved attribute is equals with "blockeraBlockStates".
-			if (['', 'blockeraBlockStates'].includes(attribute)) {
+			if (unAvailableAttributes.includes(attribute)) {
 				return setLabelStatus({
 					isChanged: false,
 					isChangedNormalStateOnBaseBreakpoint: false,

@@ -22,20 +22,20 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'avatar' => [
-						'root' => '.wp-block-post-author__avatar > img',
-					],
-					'byline' => [
-						'root' => '.wp-block-post-author__byline',
-					],
-					'author' => [
-						'root' => '.wp-block-post-author__name',
-					],
-					'link'   => [
-						'root' => 'a:not(.wp-element-button)',
-					],
-				],
+				'innerBlocks' => array_merge(
+					blockera_load( 'inners.link', dirname( __DIR__ ) ),
+					[
+						'core/avatar'     => [
+							'root' => '.wp-block-post-author__avatar > img',
+						],
+						'elements/byline' => [
+							'root' => '.wp-block-post-author__byline',
+						],
+						'elements/author' => [
+							'root' => '.wp-block-post-author__name',
+						],
+					]
+				),
 			]
 		),
 	]

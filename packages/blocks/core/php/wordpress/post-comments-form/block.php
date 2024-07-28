@@ -13,56 +13,34 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'title'          => [
-						'root' => '.comment-reply-title',
+				'innerBlocks' => array_merge(
+					[
+						'elements/title'          => [
+							'root' => '.comment-reply-title',
+						],
+						'elements/form'           => [
+							'root' => '.comment-form',
+						],
+						'elements/notes'          => [
+							'root' => '.comment-notes',
+						],
+						'elements/input-label'    => [
+							'root' => 'label',
+						],
+						'elements/input'          => [
+							'root' => '.wp-block-search__input',
+						],
+						'elements/textarea'       => [
+							'root' => 'textarea',
+						],
+						'elements/cookie-consent' => [
+							'root' => '.comment-form-cookies-consent',
+						],
 					],
-					'form'           => [
-						'root' => '.comment-form',
-					],
-					'notes'          => [
-						'root' => '.comment-notes',
-					],
-					'input_label'    => [
-						'root' => 'label',
-					],
-					'input'          => [
-						'root' => '.wp-block-search__input',
-					],
-					'textarea'       => [
-						'root' => 'textarea',
-					],
-					'cookie_consent' => [
-						'root' => '.comment-form-cookies-consent',
-					],
-					'link'           => [
-						'root' => 'a:not(.wp-element-button)',
-					],
-					'button'         => [
-						'root' => '.wp-block-button > .wp-element-button',
-					],
-					'heading'        => [
-						'root' => 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
-					],
-					'heading1'       => [
-						'root' => 'h1.wp-block-heading',
-					],
-					'heading2'       => [
-						'root' => 'h2.wp-block-heading',
-					],
-					'heading3'       => [
-						'root' => 'h3.wp-block-heading',
-					],
-					'heading4'       => [
-						'root' => 'h4.wp-block-heading',
-					],
-					'heading5'       => [
-						'root' => 'h5.wp-block-heading',
-					],
-					'heading6'       => [
-						'root' => 'h6.wp-block-heading',
-					],
-				],
+					blockera_load( 'inners.link', dirname( __DIR__ ) ),
+					blockera_load( 'inners.button', dirname( __DIR__ ) ),
+					blockera_load( 'inners.headings', dirname( __DIR__ ) ),
+				),
 			]
 		),
 	]

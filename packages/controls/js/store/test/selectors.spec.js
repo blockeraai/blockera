@@ -3,6 +3,7 @@
  */
 import { getControlValue } from '../selectors';
 import { registerControl } from '../../api';
+import store from '../../store';
 
 function generateControlId() {
 	return String(Math.random());

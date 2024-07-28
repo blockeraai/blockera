@@ -14,10 +14,10 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'innerBlocks' => [
-					'item_icon' => [
+					'elements/item-icon' => [
 						'root' => 'svg',
 					],
-					'item_name' => [
+					'elements/item-name' => [
 						'root' => '.wp-block-social-link-label',
 					],
 				],

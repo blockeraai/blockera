@@ -10,57 +10,40 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
-import { Icon } from '@blockera/icons';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
+import { Icon } from '@blockera/icons';
+
+/**
+ * Internal dependencies
+ */
+import link from '../inners/link';
 
 const blockeraInnerBlocks: InnerBlocks = {
-	avatar: {
+	'core/avatar': {
 		name: 'core/avatar',
 		type: 'avatar',
 		label: __('Avatar', 'blockera'),
 		icon: <Icon icon="block-post-author-avatar" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-post-author__avatar > img',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
-	byline: {
-		name: 'core/byline',
+	'elements/byline': {
+		name: 'elements/byline',
 		type: 'byline',
 		label: __('Byline', 'blockera'),
 		icon: <Icon icon="block-post-author-byline" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-post-author__byline',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
-	author: {
-		name: 'core/author',
+	'elements/author': {
+		name: 'elements/author',
 		type: 'author',
 		label: __('Name', 'blockera'),
 		icon: <Icon icon="block-post-author-name" iconSize="20" />,
-		selectors: {
-			root: '.wp-block-post-author__name',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
-		},
-	},
-	link: {
-		name: 'core/link',
-		type: 'link',
-		label: __('Link', 'blockera'),
-		icon: <Icon icon="block-link" iconSize="20" />,
-		selectors: {
-			root: 'a:not(.wp-element-button)',
-		},
-		innerBlockSettings: {
-			force: true,
-			dataCompatibility: ['font-color', 'font-color-hover'],
 		},
 	},
 };
@@ -68,7 +51,10 @@ const blockeraInnerBlocks: InnerBlocks = {
 export const PostAuthor = {
 	name: 'blockeraPostAuthor',
 	targetBlock: 'core/post-author',
-	blockeraInnerBlocks,
+	blockeraInnerBlocks: {
+		...blockeraInnerBlocks,
+		...link,
+	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},

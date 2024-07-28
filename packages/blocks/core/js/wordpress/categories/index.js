@@ -14,27 +14,19 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 import { Icon } from '@blockera/icons';
 
 const blockeraInnerBlocks: InnerBlocks = {
-	term: {
-		name: 'core/term-item',
-		type: 'term',
+	'elements/term-item': {
+		name: 'elements/term-item',
 		label: __('Link', 'blockera'),
 		icon: <Icon icon="block-link" iconSize="20" />,
-		selectors: {
-			root: 'li.cat-item > a',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
-	list_item: {
+	'core/list-item': {
 		name: 'core/list-item',
-		type: 'list_item',
 		label: __('Link Parent', 'blockera'),
 		icon: <Icon icon="block-list-item" iconSize="20" />,
-		selectors: {
-			root: 'li.cat-item',
-		},
-		innerBlockSettings: {
+		settings: {
 			force: true,
 		},
 	},
