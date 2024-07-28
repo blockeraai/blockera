@@ -30,6 +30,18 @@ export function getWPDataObject() {
 }
 
 /**
+ * Get block type registered object.
+ *
+ * @param {Object} data the WordPress data.
+ * @param {string} blockType the block type name.
+ *
+ * @return {*} retrieved the block type.
+ */
+export function getBlockType(data, blockType) {
+	return data.select('core/blocks').getBlockType(blockType);
+}
+
+/**
  *
  * @param {Object} data the WordPress data.
  * @param {string} field the field of attributes of selectedBlock.

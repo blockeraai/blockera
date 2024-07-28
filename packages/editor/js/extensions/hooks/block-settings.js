@@ -22,9 +22,9 @@ import {
 } from '../../components';
 import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors } from '../../hooks';
-import { sanitizedBlockAttributes } from './utils';
 import { BlockBase, BlockPortals, BlockIcon } from '../components';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
+import { sanitizedBlockAttributes, sanitizeDefaultAttributes } from './utils';
 
 const useSharedBlockSideEffect = (): void => {
 	const {
@@ -162,6 +162,7 @@ function mergeBlockSettings(
 
 	return {
 		...settings,
+		attributes: sanitizeDefaultAttributes(settings.attributes),
 		supports: mergeObject(settings.supports, additional.supports),
 		selectors: mergeObject(settings.selectors, additional.selectors),
 		transforms: {

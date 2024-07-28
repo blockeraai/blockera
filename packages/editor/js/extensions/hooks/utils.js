@@ -80,3 +80,24 @@ export const sanitizedBlockAttributes = (
 
 	return omit(attributes, cleanupKeys);
 };
+
+/**
+ * Retrieve sanitized default attributes for block registration.
+ *
+ * @param {Object} attributes the registration block attributes
+ * @return {Object|{}} the override block registration attributes.
+ */
+export const sanitizeDefaultAttributes = (attributes: Object): Object => {
+	const newAttributes = attributes || {};
+
+	for (const name in newAttributes) {
+		const attribute = newAttributes[name];
+
+		// Exception for object types with default array value!
+		if ('object' === attribute.type && Array.isArray(attribute.default)) {
+			newAttributes[name].default = {};
+		}
+	}
+
+	return newAttributes;
+};
