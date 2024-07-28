@@ -153,6 +153,7 @@ export const AvailableBlocksAndElements = ({
 				}}
 			>
 				<SearchControl
+					className={'blockera-inner-blocks-inserter-search'}
 					onChange={(newValue) => {
 						setSearchTerm(newValue);
 
