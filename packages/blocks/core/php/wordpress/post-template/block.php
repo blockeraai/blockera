@@ -21,11 +21,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'link' => [
-						'root' => 'a:not(.wp-element-button)',
-					],
-				],
+				'innerBlocks' => blockera_load( 'inners.link', dirname( __DIR__ ) ),
 			]
 		),
 	]

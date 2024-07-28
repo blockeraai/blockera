@@ -6,8 +6,6 @@
  */
 
 return [
-	'arrow' => [
-		'next' => '.wp-block-query-pagination-next-arrow',
-		'prev' => '.wp-block-query-pagination-previous-arrow',
-	],
+	'elements/next-arrow' => '.wp-block-query-pagination-next-arrow',
+	'elements/prev-arrow' => '.wp-block-query-pagination-previous-arrow',
 ];

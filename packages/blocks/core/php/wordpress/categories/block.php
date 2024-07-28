@@ -14,10 +14,10 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'innerBlocks' => [
-					'term'      => [
+					'elements/term-item' => [
 						'root' => 'li.cat-item > a',
 					],
-					'list_item' => [
+					'elements/list-item' => [
 						'root' => 'li.cat-item',
 					],
 				],

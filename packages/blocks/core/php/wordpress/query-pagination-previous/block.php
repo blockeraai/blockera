@@ -13,11 +13,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'arrow' => [
-						'root' => '.wp-block-query-pagination-previous-arrow',
-					],
-				],
+				'innerBlocks' => blockera_load( 'inners.arrow', dirname( __DIR__ ) ),
 			]
 		),
 	]

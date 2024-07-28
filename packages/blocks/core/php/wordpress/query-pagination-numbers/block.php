@@ -13,17 +13,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'numbers' => [
-						'root' => '.page-numbers:not(.dots)',
-					],
-					'current' => [
-						'root' => '.page-numbers.current',
-					],
-					'dots'    => [
-						'root' => '.page-numbers.dots',
-					],
-				],
+				'innerBlocks' => blockera_load( 'inners.numbers', dirname( __DIR__ ) ),
 			]
 		),
 	]
