@@ -450,12 +450,12 @@ export function openMoreFeaturesControl(label) {
 		});
 }
 
-export const reSelectBlock = () => {
+export const reSelectBlock = (blockType = 'core/paragraph') => {
 	// unfocus block
 	cy.getIframeBody().find('h1').click();
 
 	// reselect block
-	cy.getIframeBody().find(`[data-type="core/paragraph"]`).first().click();
+	cy.getIframeBody().find(`[data-type="${blockType}"]`).first().click();
 };
 
 // https://github.com/10up/cypress-wp-utils/blob/013915676935410cf3390829a52bc5e0c80b6deb/src/commands/open-document-settings-sidebar.ts
