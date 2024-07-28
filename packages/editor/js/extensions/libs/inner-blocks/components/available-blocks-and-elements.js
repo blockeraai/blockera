@@ -6,21 +6,28 @@
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import {
+	ControlContextProvider,
+	Flex,
+	SearchControl,
+} from '@blockera/controls';
 import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
 import type { InnerBlockModel, InnerBlocks } from '../types';
+import { searchBlockItems } from '../search-items';
+import { isElement } from '../helpers';
 
 export const AvailableBlocksAndElements = ({
-	blocks,
-	elements,
+	blocks: _blocks,
+	elements: _elements,
 	clientId,
 	getBlockInners,
 	setCurrentBlock,
@@ -33,7 +40,11 @@ export const AvailableBlocksAndElements = ({
 	setCurrentBlock: (currentBlock: string) => void,
 	getBlockInners: (clientId: string) => InnerBlocks,
 }): MixedElement => {
-	const { getCategories, getBlockType } = select('core/blocks');
+	const [blocks, setBlocks] = useState(_blocks);
+	const [elements, setElements] = useState(_elements);
+	const [searchTerm, setSearchTerm] = useState('');
+	const { getCategories, getBlockType, getCollections } =
+		select('core/blocks');
 
 	const CategorizedItems = ({
 		items,
@@ -135,6 +146,47 @@ export const AvailableBlocksAndElements = ({
 
 	return (
 		<>
+			<ControlContextProvider
+				value={{
+					name: 'search-block-' + clientId,
+					value: searchTerm,
+				}}
+			>
+				<SearchControl
+					onChange={(newValue) => {
+						setSearchTerm(newValue);
+
+						if (!newValue) {
+							setBlocks(_blocks);
+							setElements(_elements);
+
+							return;
+						}
+
+						const filteredItems = searchBlockItems(
+							[...elements, ...blocks],
+							getCategories(),
+							getCollections(),
+							newValue
+						);
+
+						const newBlocks = [];
+						const newElements = [];
+
+						filteredItems.forEach((item: Object) => {
+							if (isElement(item)) {
+								newElements.push(item);
+							} else {
+								newBlocks.push(item);
+							}
+						});
+
+						setBlocks(newBlocks);
+						setElements(newElements);
+					}}
+					placeholder={__('Search', 'blockera')}
+				/>
+			</ControlContextProvider>
 			<CategorizedItems
 				items={elements}
 				category={'elements'}
