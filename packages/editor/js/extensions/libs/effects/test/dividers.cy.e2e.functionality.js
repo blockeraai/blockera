@@ -123,8 +123,8 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('input[maxlength="9"]').clear();
-					cy.get('input[maxlength="9"]').type('cecece');
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('cecece ');
 				});
 
 			//Check block
@@ -309,8 +309,8 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
-					cy.get('input[maxlength="9"]').clear();
-					cy.get('input[maxlength="9"]').type('cecece');
+					cy.get('input[maxlength="9"]').clear({ force: true });
+					cy.get('input[maxlength="9"]').type('cecece ');
 				});
 
 			//Check block

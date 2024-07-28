@@ -10,26 +10,30 @@
 return array_merge(
 	$args,
 	[
-		'attributes' => [
-			...( $args['attributes'] ?? [] ),
-			'blockeraDisplay' => [
-				'type'    => 'string',
-				'default' => 'flex',
-			],
-		],
-		'selectors'  => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'elements/item-containers' => [
-					'root' => '.wp-block-social-link',
+		'attributes' => array_merge(
+			$args['attributes'] ?? [],
+			[
+				'blockeraDisplay' => [
+					'type'    => 'string',
+					'default' => 'flex',
 				],
-				'elements/item-icons'      => [
-					'root' => '.wp-block-social-link svg',
+			]
+		),
+		'selectors'  => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'item_containers' => [
+						'root' => '.wp-block-social-link',
+					],
+					'item_icons'      => [
+						'root' => '.wp-block-social-link svg',
+					],
+					'item_names'      => [
+						'root' => '.wp-block-social-link .wp-block-social-link-label',
+					],
 				],
-				'elements/item-names'      => [
-					'root' => '.wp-block-social-link .wp-block-social-link-label',
-				],
-			],
-		],
+			]
+		),
 	]
 );

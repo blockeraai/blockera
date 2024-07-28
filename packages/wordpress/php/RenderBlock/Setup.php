@@ -38,10 +38,10 @@ class Setup {
 		$args = array_merge(
 			$args,
 			[
-				'attributes' => [
-					...( $args['attributes'] ?? [] ),
-					...blockera_get_shared_block_attributes(),
-				],
+				'attributes' => array_merge(
+					$args['attributes'] ?? [],
+					blockera_get_shared_block_attributes()
+				),
 			]
 		);
 

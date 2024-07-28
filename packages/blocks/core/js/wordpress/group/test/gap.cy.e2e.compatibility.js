@@ -7,7 +7,7 @@ import {
 	appendBlocks,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Gap → Functionality', () => {
+describe('Group Block → Gap → Compatibility', () => {
 	beforeEach(() => {
 		createPost();
 	});

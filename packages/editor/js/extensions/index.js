@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import domReady from '@wordpress/dom-ready';
 
 /**
  * Blockera dependencies
@@ -40,35 +39,28 @@ export { isInnerBlock } from './components';
 export { store as extensionsStore } from './store';
 
 export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
-	domReady(() => {
-		const packageName =
-			'blockeraEditor_' +
-			blockeraEditorPackageInfo.version.replace(/\./g, '_');
+	const packageName =
+		'blockeraEditor_' +
+		blockeraEditorPackageInfo.version.replace(/\./g, '_');
 
-		if (window?.wp) {
-			window[packageName].coreData = {
-				select: select(store?.name),
-				unstableBootstrapServerSideEntities,
-				unstableBootstrapServerSideVariableDefinitions,
-				unstableBootstrapServerSideDynamicValueDefinitions,
-			};
+	window[packageName].coreData = {
+		select: select(store?.name),
+		unstableBootstrapServerSideEntities,
+		unstableBootstrapServerSideVariableDefinitions,
+		unstableBootstrapServerSideDynamicValueDefinitions,
+	};
 
-			window[packageName].editor = {
-				select: select(editorStore?.name),
-				unstableBootstrapServerSideBreakpointDefinitions,
-			};
+	window[packageName].editor = {
+		init: outsideDefinitions,
+		select: select(editorStore?.name),
+		unstableBootstrapServerSideBreakpointDefinitions,
+	};
 
-			registerCanvasEditorSettings({
-				zoom: '100%',
-				width: '100%',
-				height: '100%',
-				isOpenSettings: false,
-				isOpenOtherBreakpoints: false,
-			});
-
-			if ('function' === typeof outsideDefinitions) {
-				outsideDefinitions();
-			}
-		}
+	registerCanvasEditorSettings({
+		zoom: '100%',
+		width: '100%',
+		height: '100%',
+		isOpenSettings: false,
+		isOpenOtherBreakpoints: false,
 	});
 };

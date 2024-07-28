@@ -10,18 +10,24 @@
 return array_merge(
 	$args,
 	[
-		'attributes' => [
-			...( $args['attributes'] ?? [] ),
-			'blockeraDisplay' => [
-				'type'    => 'string',
-				'default' => 'flex',
-			],
-		],
-		'selectors'  => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				...blockera_load( 'inners.link', dirname( __DIR__ ) ),
-			],
-		],
+		'attributes' => array_merge(
+			$args['attributes'] ?? [],
+			[
+				'blockeraDisplay' => [
+					'type'    => 'string',
+					'default' => 'flex',
+				],
+			]
+		),
+		'selectors'  => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'link' => [
+						'root' => 'a:not(.wp-element-button)',
+					],
+				],
+			]
+		),
 	]
 );

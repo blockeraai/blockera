@@ -495,8 +495,8 @@ export const registerCommands = () => {
 				cy.getByDataCy('color-btn').click();
 			});
 		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input[maxlength="9"]').clear();
-			cy.get('input[maxlength="9"]').type(value, { delay: 0 });
+			cy.get('input[maxlength="9"]').clear({ force: true });
+			cy.get('input[maxlength="9"]').type(value + ' ');
 		});
 	});
 

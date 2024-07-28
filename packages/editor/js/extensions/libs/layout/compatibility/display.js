@@ -50,7 +50,8 @@ export function displayFromWPCompatibility({
 
 	if (
 		attributes?.blockeraDisplay === defaultValue &&
-		attributes?.layout?.type !== 'constrained'
+		attributes?.layout?.type &&
+		!['constrained', 'default'].includes(attributes?.layout?.type)
 	) {
 		attributes.blockeraDisplay = attributes?.layout?.type;
 	}

@@ -19,7 +19,18 @@ import {
 	applyHooks,
 	defineGlobalProps,
 	bootstrapCanvasEditor,
+	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
+
+/**
+ * Registration blockera core block settings with internal definitions.
+ */
+addFilter('blockera.bootstrapper.before.domReady', 'blockera.bootstrap', () => {
+	applyHooks(() => {
+		reregistrationBlocks();
+		registerThirdPartyExtensionDefinitions();
+	});
+});
 
 /**
  * Initialize blockera react application.
@@ -27,18 +38,18 @@ import {
 addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 	applyFilters('blockera.before.bootstrap', noop)();
 
-	defineGlobalProps(() => {
-		// Bootstrap functions for blocks.
-		blockeraBootstrapBlocks();
+	return () => {
+		defineGlobalProps(() => {
+			// Bootstrap functions for blocks.
+			blockeraBootstrapBlocks();
 
-		// Bootstrap canvas editor UI.
-		bootstrapCanvasEditor(window.wp);
-	});
+			// Bootstrap canvas editor UI.
+			bootstrapCanvasEditor();
 
-	applyHooks(() => {
-		reregistrationBlocks();
-		registerThirdPartyExtensionDefinitions();
-	});
+			// Bootstrap functions for extensions.
+			blockeraExtensionsBootstrap();
+		});
+	};
 });
 
 initializer();

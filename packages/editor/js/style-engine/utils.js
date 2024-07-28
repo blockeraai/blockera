@@ -154,7 +154,7 @@ export const getProperties = (props: {
 
 		if (!isString(value)) {
 			console.warn(
-				`CSS property value must be string given ${typeof value}, please double check properties.`
+				`CSS ${property} property value must be string given ${typeof value}, please double check properties.`
 			);
 			continue;
 		}

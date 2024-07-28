@@ -7,9 +7,16 @@ use Blockera\Editor\StyleDefinitions\Contracts\HaveCustomSettings;
 abstract class BaseStyleDefinition {
 
 	/**
-	 * Hold style definition settings from consumer request.
+	 * Store the block details includes all settings.
 	 *
-	 * @var array
+	 * @var array $block The block details.
+	 */
+	protected array $block = [];
+
+	/**
+	 * Hold style definition settings for specific state and breakpoint.
+	 *
+	 * @var array $settings The specific state and breakpoint settings.
 	 */
 	protected array $settings = [];
 
@@ -19,6 +26,13 @@ abstract class BaseStyleDefinition {
 	 * @var array $config The style engine config.
 	 */
 	protected array $config = [];
+
+	/**
+	 * Hold style definition default settings from consumer request.
+	 *
+	 * @var array
+	 */
+	protected array $default_settings = [];
 
 	/**
 	 * Hold collection of properties of current style definition.
@@ -98,6 +112,30 @@ abstract class BaseStyleDefinition {
 	public function setConfig( array $config ):void {
 
 		$this->config = $config;
+	}
+
+	/**
+	 * Sets default settings.
+	 *
+	 * @param array $default_settings The default settings.
+	 *
+	 * @return void
+	 */
+	public function setDefaultSettings( array $default_settings ): void {
+
+		$this->default_settings = $default_settings;
+	}
+
+	/**
+	 * Sets block name property.
+	 *
+	 * @param array $block The block details.
+	 *
+	 * @return void
+	 */
+	public function setBlock( array $block ): void {
+
+		$this->block = $block;
 	}
 
 	/**

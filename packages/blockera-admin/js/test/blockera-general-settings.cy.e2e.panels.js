@@ -31,7 +31,9 @@ describe('General Settings Testing ...', () => {
 
 			createPost();
 
-			appendBlocks(`<!-- wp:paragraph /-->`);
+			appendBlocks(`<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->`);
 
 			cy.getBlock('core/paragraph').click();
 
@@ -60,7 +62,9 @@ describe('General Settings Testing ...', () => {
 
 			createPost();
 
-			appendBlocks(`<!-- wp:paragraph /-->`);
+			appendBlocks(`<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->`);
 
 			cy.getBlock('core/paragraph').click();
 

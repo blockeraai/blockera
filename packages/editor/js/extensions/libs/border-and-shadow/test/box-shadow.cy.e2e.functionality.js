@@ -45,9 +45,7 @@ describe('Box Shadow → Functionality', () => {
 			.last()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('c5eef0ab', {
-					force: true,
-				});
+				cy.get('input[maxlength="9"]').type('c5eef0ab ');
 			});
 
 		//Check block

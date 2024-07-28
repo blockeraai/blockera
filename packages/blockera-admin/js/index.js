@@ -27,30 +27,32 @@ const root = createRoot(
 	document.getElementById('blockera-admin-settings-container')
 );
 
-const initializeBlockeraAdmin = (): void => {
-	domReady(() => {
-		applyFilters('blockera.admin.before.bootstrap', noop)();
+const initializeBlockeraAdmin = (): (() => void) => {
+	return () => {
+		domReady(() => {
+			applyFilters('blockera.admin.before.bootstrap', noop)();
 
-		registerCoreBlocks();
-		const { addEntities } = dispatch(coreDataStore);
-		const { unstableBlockeraBootstrapServerSideEntities } = window;
+			registerCoreBlocks();
+			const { addEntities } = dispatch(coreDataStore);
+			const { unstableBlockeraBootstrapServerSideEntities } = window;
 
-		unstableBootstrapServerSideEntities(
-			unstableBlockeraBootstrapServerSideEntities
-		);
+			unstableBootstrapServerSideEntities(
+				unstableBlockeraBootstrapServerSideEntities
+			);
 
-		// Adding entities into WordPress core data.
-		addEntities([
-			{
-				label: __('Blockera Settings', 'blockera'),
-				kind: 'blockera/v1',
-				name: 'settings',
-				baseURL: '/blockera/v1/settings',
-			},
-		]);
+			// Adding entities into WordPress core data.
+			addEntities([
+				{
+					label: __('Blockera Settings', 'blockera'),
+					kind: 'blockera/v1',
+					name: 'settings',
+					baseURL: '/blockera/v1/settings',
+				},
+			]);
 
-		root.render(<Dashboard />);
-	});
+			root.render(<Dashboard />);
+		});
+	};
 };
 
 /**

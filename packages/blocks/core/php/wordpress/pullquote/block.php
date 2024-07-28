@@ -10,13 +10,21 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				...blockera_load( 'inners.citation', dirname( __DIR__ ) ),
-				...blockera_load( 'inners.paragraph', dirname( __DIR__ ) ),
-				...blockera_load( 'inners.link', dirname( __DIR__ ) ),
-			],
-		],
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'citation'  => [
+						'root' => 'cite',
+					],
+					'paragraph' => [
+						'root' => 'p',
+					],
+					'link'      => [
+						'root' => 'a:not(.wp-element-button)',
+					],
+				],
+			]
+		),
 	]
 );

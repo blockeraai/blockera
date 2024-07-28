@@ -10,12 +10,18 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				...blockera_load( 'inners.link', dirname( __DIR__ ) ),
-				...blockera_load( 'inners.button', dirname( __DIR__ ) ),
-			],
-		],
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'link'   => [
+						'root' => 'a:not(.wp-element-button)',
+					],
+					'button' => [
+						'root' => '.wp-block-button > .wp-element-button',
+					],
+				],
+			]
+		),
 	]
 );

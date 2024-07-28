@@ -10,11 +10,21 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				...blockera_load( 'inners.pagination-numbers', dirname( __DIR__ ) ),
-			],
-		],
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'numbers' => [
+						'root' => '.page-numbers:not(.dots)',
+					],
+					'current' => [
+						'root' => '.page-numbers.current',
+					],
+					'dots'    => [
+						'root' => '.page-numbers.dots',
+					],
+				],
+			]
+		),
 	]
 );

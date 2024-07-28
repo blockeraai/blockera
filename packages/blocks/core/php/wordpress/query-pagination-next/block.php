@@ -10,11 +10,15 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				...blockera_load( 'inners.arrow', dirname( __DIR__ ) ),
-			],
-		],
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'arrow' => [
+						'root' => '.wp-block-query-pagination-next-arrow',
+					],
+				],
+			]
+		),
 	]
 );

@@ -34,7 +34,9 @@ describe('Block Manager Settings Testing ...', () => {
 
 			createPost();
 
-			appendBlocks(`<!-- wp:paragraph /-->`);
+			appendBlocks(`<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->`);
 
 			cy.getBlock('core/paragraph').click();
 
@@ -70,7 +72,9 @@ describe('Block Manager Settings Testing ...', () => {
 
 			createPost();
 
-			appendBlocks(`<!-- wp:paragraph /-->`);
+			appendBlocks(`<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->`);
 
 			cy.getBlock('core/paragraph').click();
 

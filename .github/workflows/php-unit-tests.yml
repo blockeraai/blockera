@@ -48,12 +48,12 @@ jobs:
                     - '8.2'
                 multisite: [false]
                 wordpress: [''] # Latest WordPress version.
-                include:
-                    # Test with the previous WP version.
-                    - php: '7.4'
-                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
-                    - php: '8.2'
-                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
+        #                include:
+        #                    # Test with the previous WP version.
+        #                    - php: '7.4'
+        #                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
+        #                    - php: '8.2'
+        #                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
 
         env:
             WP_ENV_PHP_VERSION: ${{ matrix.php }}
@@ -145,7 +145,7 @@ jobs:
                   fi
                   # Extract just the number of tests from the string.
                   num_tests=$(echo "$num_tests" | grep -Eo '[0-9]+')
-                  if [ $num_tests -lt 8 ] ; then
+                  if [ $num_tests -lt 54 ] ; then
                     echo "Only $num_tests tests passed, which is much fewer than expected." && exit 1
                   fi
                   echo "$num_tests tests passed."

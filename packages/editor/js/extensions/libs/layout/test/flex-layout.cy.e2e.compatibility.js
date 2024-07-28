@@ -122,7 +122,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 		cy.getByAriaLabel('Reset To Default Setting').click();
 
 		getWPDataObject().then((data) => {
-			expect(undefined).to.be.equal(
+			expect('horizontal').to.be.equal(
 				getSelectedBlock(data, 'layout')?.orientation
 			);
 

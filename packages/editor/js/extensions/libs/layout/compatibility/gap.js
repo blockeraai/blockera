@@ -30,7 +30,7 @@ export function convertFromValue(spacing: string | Object): string {
 		// left means columns for WP 🤦‍♂️
 		if (spacing?.left) {
 			//$FlowFixMe
-			convertedGap.columns = getSpacingVAFromVarString(spacing?.top);
+			convertedGap.columns = getSpacingVAFromVarString(spacing?.left);
 		}
 
 		if (isObject(convertedGap.rows) && isObject(convertedGap.columns)) {
@@ -39,6 +39,8 @@ export function convertFromValue(spacing: string | Object): string {
 				convertedGap.gap = convertedGap.rows;
 				convertedGap.columns = '';
 				convertedGap.rows = '';
+			} else {
+				convertedGap.lock = false;
 			}
 		} else if (convertedGap.rows === convertedGap.columns) {
 			convertedGap.lock = true;
@@ -57,10 +59,13 @@ export function convertFromValue(spacing: string | Object): string {
 
 export function convertToValue(
 	newValue: string | Object,
-	mode: 'simple' | 'advanced' = 'simple'
-): string {
-	let newGap = '';
+	mode: 'simple' | 'advanced' | '' = 'simple'
+): string | Object {
+	let newGap: string | Object = '';
 
+	//
+	// Simple gap mode for WP is when it stores data as string and only one value for gap
+	//
 	if (mode === 'simple') {
 		if (newValue.lock) {
 			//$FlowFixMe
@@ -79,8 +84,52 @@ export function convertToValue(
 				newGap = '';
 			}
 		}
-	} else if (mode === 'advanced') {
-		// todo implement advanced mode
+	}
+	//
+	// Advanced mode for WP is when it stores data as object with top (rows) and left (columns) properties
+	//
+	else if (mode === 'advanced') {
+		if (newValue.lock) {
+			//$FlowFixMe
+			newGap = generateAttributeVarStringFromVA(newValue.gap);
+
+			// css func not supported
+			if (newGap.endsWith('css')) {
+				newGap = '';
+			}
+
+			if (newGap) {
+				newGap = {
+					top: newGap,
+					left: newGap,
+				};
+			}
+		} else {
+			//$FlowFixMe
+			let rowGap = generateAttributeVarStringFromVA(newValue.rows);
+
+			// css func not supported
+			if (rowGap.endsWith('css')) {
+				rowGap = '';
+			}
+
+			//$FlowFixMe
+			let columnGap = generateAttributeVarStringFromVA(newValue.columns);
+
+			// css func not supported
+			if (columnGap.endsWith('css')) {
+				columnGap = '';
+			}
+
+			if (rowGap || columnGap) {
+				newGap = {
+					top: rowGap,
+					left: columnGap,
+				};
+			} else {
+				newGap = '';
+			}
+		}
 	}
 
 	return newGap;
@@ -112,7 +161,7 @@ export function gapToWPCompatibility({
 	newValue: Object,
 	ref?: Object,
 	defaultValue: Object,
-	blockId?: string,
+	blockId: string,
 }): Object {
 	if ('reset' === ref?.current?.action || isEquals(newValue, defaultValue)) {
 		return {
@@ -124,18 +173,44 @@ export function gapToWPCompatibility({
 		};
 	}
 
-	switch (blockId) {
-		case 'core/group':
-			const spacing = convertToValue(newValue, 'simple');
+	const blockWPGapDataType = getBlockGapWPDataType(blockId);
 
-			return {
-				style: {
-					spacing: {
-						blockGap: isEmpty(spacing) ? undefined : spacing,
-					},
+	if (blockWPGapDataType) {
+		const spacing = convertToValue(newValue, blockWPGapDataType);
+
+		return {
+			style: {
+				spacing: {
+					blockGap: isEmpty(spacing) ? undefined : spacing,
 				},
-			};
+			},
+		};
 	}
 
 	return {};
+}
+
+/**
+ * In WP we have 2 type of storing data. first one is object that we name it 'advanced' and second one is string that we name it 'simple'.
+ *
+ * There is no standard for it and we have to manually detect and care it.
+ */
+function getBlockGapWPDataType(blockId: string): 'simple' | 'advanced' | '' {
+	switch (blockId) {
+		case 'core/details':
+		case 'core/group':
+		case 'core/buttons':
+		case 'core/quote':
+		case 'core/cover':
+		case 'core/column':
+		case 'core/post-template':
+			return 'simple';
+
+		case 'core/social-links':
+		case 'core/columns':
+		case 'core/gallery':
+			return 'advanced';
+	}
+
+	return '';
 }

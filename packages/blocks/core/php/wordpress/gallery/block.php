@@ -10,17 +10,30 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'elements/gallery-caption' => [
-					'root' => '> figcaption',
+		'attributes' => array_merge(
+			$args['attributes'] ?? [],
+			[
+				'blockeraDisplay' => [
+					'type'    => 'string',
+					'default' => 'flex',
 				],
-				...blockera_load( 'inners.image', dirname( __DIR__ ) ),
-				'elements/image-caption'   => [
-					'root' => '.wp-block-image figcaption',
+			]
+		),
+		'selectors'  => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'gallery_caption' => [
+						'root' => '> figcaption',
+					],
+					'image'           => [
+						'root' => '.wp-block-image img',
+					],
+					'image_caption'   => [
+						'root' => '.wp-block-image figcaption',
+					],
 				],
-			],
-		],
+			]
+		),
 	]
 );

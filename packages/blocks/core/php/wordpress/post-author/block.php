@@ -10,27 +10,33 @@
 return array_merge(
 	$args,
 	[
-		'attributes' => [
-			...( $args['attributes'] ?? [] ),
-			'blockeraDisplay' => [
-				'type'    => 'string',
-				'default' => 'flex',
-			],
-		],
-		'selectors'  => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'core/avatar'     => [
-					'root' => '.wp-block-post-author__avatar > img',
+		'attributes' => array_merge(
+			$args['attributes'] ?? [],
+			[
+				'blockeraDisplay' => [
+					'type'    => 'string',
+					'default' => 'flex',
 				],
-				'elements/byline' => [
-					'root' => '.wp-block-post-author__byline',
+			]
+		),
+		'selectors'  => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'avatar' => [
+						'root' => '.wp-block-post-author__avatar > img',
+					],
+					'byline' => [
+						'root' => '.wp-block-post-author__byline',
+					],
+					'author' => [
+						'root' => '.wp-block-post-author__name',
+					],
+					'link'   => [
+						'root' => 'a:not(.wp-element-button)',
+					],
 				],
-				'elements/author' => [
-					'root' => '.wp-block-post-author__name',
-				],
-				...blockera_load( 'inners.link', dirname( __DIR__ ) ),
-			],
-		],
+			]
+		),
 	]
 );

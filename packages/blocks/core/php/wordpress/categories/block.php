@@ -10,16 +10,18 @@
 return array_merge(
 	$args,
 	[
-		'selectors' => [
-			...( $args['selectors'] ?? [] ),
-			'innerBlocks' => [
-				'elements/term-item' => [
-					'root' => 'li.cat-item > a',
+		'selectors' => array_merge(
+			$args['selectors'] ?? [],
+			[
+				'innerBlocks' => [
+					'term'      => [
+						'root' => 'li.cat-item > a',
+					],
+					'list_item' => [
+						'root' => 'li.cat-item',
+					],
 				],
-				'elements/list-item' => [
-					'root' => 'li.cat-item',
-				],
-			],
-		],
+			]
+		),
 	]
 );

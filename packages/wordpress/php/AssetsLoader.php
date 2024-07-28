@@ -91,7 +91,7 @@ class AssetsLoader {
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
-			add_action( 'enqueue_block_assets', [ $this, 'enqueue' ] );
+			add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue' ] );
 
 		} elseif ( ! empty( $args['enqueue-admin-assets'] ) ) {
 
