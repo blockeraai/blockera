@@ -65,7 +65,16 @@ export function prepareInnerBlockTypes(
  * @return {boolean} true on success, false on failure.
  */
 export const isElement = (entity: InnerBlockModel): boolean => {
-	return new RegExp('^elements/', 'ig').test(entity.name);
+	const isElementType = new RegExp('^elements/', 'ig').test(entity.name);
+
+	if (isElementType) {
+		return isElementType;
+	}
+
+	return (
+		entity?.settings?.hasOwnProperty('level') ||
+		entity?.settings?.hasOwnProperty('instanceId')
+	);
 };
 
 /**
