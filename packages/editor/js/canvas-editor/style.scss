@@ -60,7 +60,19 @@
 .blockera-control-canvas-editor-preview-link {
 	display: flex;
 	align-items: center;
-	margin-left: 8px;
+
+	> a {
+		padding: 0;
+    	height: 26px !important;
+		justify-content: center;
+		color: var(--wp-components-color-foreground, #1e1e1e) !important;
+		background: none !important;
+
+		&:hover {
+			color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) !important;
+			background: none !important;
+		}
+	}
 }
 
 .blockera-component-breakpoint-icon {
