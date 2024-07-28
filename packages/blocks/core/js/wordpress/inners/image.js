@@ -9,11 +9,8 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { sharedBlockExtensionAttributes } from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
-
-const attributes = sharedBlockExtensionAttributes;
 
 const image: InnerBlocks = {
 	'core/image': {

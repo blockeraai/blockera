@@ -9,7 +9,6 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { sharedBlockExtensionAttributes } from '@blockera/editor';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 /**
@@ -17,8 +16,6 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
  */
 import inputs from './inputs';
 import button from './button';
-
-const attributes = sharedBlockExtensionAttributes;
 
 const form: InnerBlocks = {
 	'elements/form': {
