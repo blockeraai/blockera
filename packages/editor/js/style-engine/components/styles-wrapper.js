@@ -4,7 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { createRoot } from '@wordpress/element';
+import { useState, useEffect, createPortal } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
@@ -24,11 +24,46 @@ export const StylesWrapper = ({
 	clientId: string,
 	children: MixedElement,
 }): Object => {
-	const iframeBodyElement: HTMLElement | void = getIframeTag('body');
+	const slotName = 'blockera-styles-wrapper';
+	const blockId = 'block-' + clientId;
 
-	if (!iframeBodyElement) {
+	const [entry, setEntry] = useState(null);
+
+	const callback = (entries: Array<IntersectionObserverEntry>) => {
+		const blockeraStylesWrapper = document.createElement('div');
+		blockeraStylesWrapper.id = slotName;
+
+		if (!entries[0].target.querySelector(`#${slotName}`)) {
+			entries[0].target?.append(blockeraStylesWrapper);
+		}
+
+		const clientStylesWrapper = document.createElement('div');
+		clientStylesWrapper.id = blockId;
+
+		if (!entries[0].target.querySelector(`#${slotName} #${blockId}`)) {
+			entries[0].target
+				.querySelector(`#${slotName}`)
+				?.append(clientStylesWrapper);
+		}
+
+		if (!entries[0].target.querySelector(`#${slotName} #${blockId}`)) {
+			return;
+		}
+
+		setEntry(entries[0].target.querySelector(`#${slotName} #${blockId}`));
+	};
+
+	useEffect(() => {
+		// $FlowFixMe
+		callback([{ target: getIframeTag('body') }]);
+		// eslint-disable-next-line
+	}, []);
+
+	if (!entry) {
 		return <></>;
 	}
+
+	const iframeBodyElement: HTMLElement | void = getIframeTag('body');
 
 	return (
 		<Observer
@@ -38,56 +73,19 @@ export const StylesWrapper = ({
 						root: document.querySelector('body'),
 						threshold: 1.0,
 					},
-					callback(entries: Array<IntersectionObserverEntry>) {
-						const slotName = 'blockera-styles-wrapper';
-
-						const blockeraStylesWrapper =
-							document.createElement('div');
-						blockeraStylesWrapper.id = slotName;
-
-						if (!entries[0].target.querySelector(`#${slotName}`)) {
-							entries[0].target?.append(blockeraStylesWrapper);
-						}
-
-						const clientStylesWrapper =
-							document.createElement('div');
-						const blockId = 'block-' + clientId;
-						clientStylesWrapper.id = blockId;
-
-						if (
-							!entries[0].target.querySelector(
-								`#${slotName} #${blockId}`
-							)
-						) {
-							entries[0].target
-								.querySelector(`#${slotName}`)
-								?.append(clientStylesWrapper);
-						}
-
-						if (
-							!entries[0].target.querySelector(
-								`#${slotName} #${blockId}`
-							)
-						) {
-							return;
-						}
-
-						const root = createRoot(
-							entries[0].target.querySelector(
-								`#${slotName} #${blockId}`
-							)
-						);
-
-						root.render(
-							<SlotFillProvider>
-								<Slot name={`${slotName}-${clientId}`} />
-								{children}
-							</SlotFillProvider>
-						);
-					},
+					callback,
 					target: iframeBodyElement,
 				},
 			]}
-		/>
+		>
+			{entry &&
+				createPortal(
+					<SlotFillProvider>
+						<Slot name={`${slotName}-${clientId}`} />
+						{children}
+					</SlotFillProvider>,
+					entry
+				)}
+		</Observer>
 	);
 };
