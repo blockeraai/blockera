@@ -17,7 +17,15 @@
 	padding: 0 10px;
 	width: 100%;
 	min-width: 200px;
-	margin: 0 10px;
+	margin: 0;
+
+	&:hover {
+		background: #e0e0e0;
+
+		.blockera-component-breakpoint-icon {
+			--icon-outline-color: #e0e0e0;
+		}
+	}
 
 	.blockera-component-breakpoint-icon {
 		cursor: pointer;
@@ -155,4 +163,21 @@
 			right: 3px;
 		}
 	}
+}
+
+.editor-header__center {
+	gap: 10px;
+	align-items: center;
+
+	.editor-document-bar {
+		width: min(100%, 300px) !important;
+	}
+}
+
+@media (min-width: 960px) {
+
+	.blockera-canvas-breakpoints,
+    .editor-document-bar {
+		width: min(100%, 300px) !important;
+    }
 }
