@@ -193,8 +193,12 @@ export const AvailableBlocksAndElements = ({
 			</ControlContextProvider>
 			{!elements.length && !blocks.length && (
 				<>
-					<Flex direction={'column'} justifyContent={'space-between'}>
-						<Icon icon={'blockDefault'} library={'wp'} />
+					<Flex
+						alignItems={'center'}
+						direction={'column'}
+						justifyContent={'space-between'}
+					>
+						<Icon icon={'block-default'} library={'wp'} />
 						<p data-id={'not-found-text'}>
 							{__('No results found.', 'blockera')}
 						</p>
