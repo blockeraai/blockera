@@ -3,8 +3,12 @@
 /**
  * External dependencies
  */
-import { noCase } from 'change-case';
 import removeAccents from 'remove-accents';
+
+/**
+ * Blockera dependencies
+ */
+import { noCase } from '@blockera/utils';
 
 // Default search helpers.
 const defaultGetName = (item: Object) => item.name || '';
