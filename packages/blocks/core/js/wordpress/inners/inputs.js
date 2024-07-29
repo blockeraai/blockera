@@ -14,7 +14,7 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 const inputs: InnerBlocks = {
 	'elements/input-label': {
 		name: 'elements/input-label',
-		label: __('Input Labels', 'blockera'),
+		label: __('Input Label', 'blockera'),
 		icon: <Icon icon="block-login-form-labels" iconSize="20" />,
 		settings: {
 			force: true,
@@ -22,7 +22,7 @@ const inputs: InnerBlocks = {
 	},
 	'elements/input': {
 		name: 'elements/input',
-		label: __('Inputs', 'blockera'),
+		label: __('Input', 'blockera'),
 		icon: <Icon icon="block-login-form-inputs" iconSize="20" />,
 		settings: {
 			force: true,

@@ -15,7 +15,7 @@ const button: InnerBlocks = {
 	'core/button': {
 		name: 'core/button',
 		label: __('Button', 'blockera'),
-		icon: <Icon icon="block-button" iconSize="20" />,
+		icon: <Icon icon="button" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
 			dataCompatibility: [

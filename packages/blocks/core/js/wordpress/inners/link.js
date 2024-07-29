@@ -14,8 +14,8 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 const link: InnerBlocks = {
 	'elements/link': {
 		name: 'elements/link',
-		label: __('Links', 'blockera'),
-		icon: <Icon icon="block-link" iconSize="20" />,
+		label: __('Link', 'blockera'),
+		icon: <Icon icon="link" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
 			dataCompatibility: ['font-color', 'font-color-hover'],

@@ -14,8 +14,8 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-bloc
 const paragraph: InnerBlocks = {
 	'core/paragraph': {
 		name: 'core/paragraph',
-		label: __('Paragraphs', 'blockera'),
-		icon: <Icon icon="block-paragraph" iconSize="20" />,
+		label: __('Paragraph', 'blockera'),
+		icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
 		},

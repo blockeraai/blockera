@@ -16,7 +16,7 @@ const citation: InnerBlocks = {
 	'elements/citation': {
 		name: 'elements/citation',
 		label: __('Citation', 'blockera'),
-		icon: <Icon icon="block-citation" iconSize="20" />,
+		icon: <Icon icon="verse" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
 		},
