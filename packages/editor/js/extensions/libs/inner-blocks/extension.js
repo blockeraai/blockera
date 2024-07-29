@@ -174,6 +174,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 									}}
 								/>
 							),
+							repeaterItemChildren: () => {},
 							repeaterItemHeader: ItemHeader,
 						}}
 						defaultValue={{}}
