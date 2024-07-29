@@ -139,8 +139,6 @@ const GroupControl: ComponentType<any> = memo(
 					data-cy="group-control-header"
 					onClick={handleOnClick}
 				>
-					{header}
-
 					<div className={controlInnerClassNames('action-buttons')}>
 						{injectHeaderButtonsStart}
 
@@ -164,6 +162,8 @@ const GroupControl: ComponentType<any> = memo(
 
 						{injectHeaderButtonsEnd}
 					</div>
+
+					{header}
 				</div>
 
 				{mode === 'popover' && isOpenPopover && (

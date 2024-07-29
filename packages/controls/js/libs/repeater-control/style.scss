@@ -118,14 +118,14 @@
 		}
 	}
 
-	.blockera-control-group.is-hovered .blockera-control-action-buttons,
-	.blockera-control-group-header:hover .blockera-control-action-buttons {
+	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty),
+	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) {
 		opacity: 1;
 		visibility: visible;
 	}
 
-	.blockera-control-group.is-hovered .blockera-control-header-values,
-	.blockera-control-group-header:hover .blockera-control-header-values {
+	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values,
+	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values {
 		opacity: 0;
 		visibility: hidden;
 	}
