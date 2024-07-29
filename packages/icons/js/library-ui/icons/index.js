@@ -14,8 +14,6 @@ export { default as BackgroundRadialGradient } from './background-radial-gradien
 export { default as BackgroundSlideshow } from './background-slideshow.svg';
 export { default as BackgroundVideo } from './background-video.svg';
 export { default as Blending } from './blending.svg';
-export { default as BlockButton } from './block-button.svg';
-export { default as BlockCitation } from './block-citation.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';
@@ -25,15 +23,7 @@ export { default as BlockCommentsFormNotes } from './block-comments-form-notes.s
 export { default as BlockCommentsFormReplyTitle } from './block-comments-form-reply-title.svg';
 export { default as BlockCommentsFormTextarea } from './block-comments-form-textarea.svg';
 export { default as BlockGalleryCaption } from './block-gallery-caption.svg';
-export { default as BlockHeading1 } from './block-heading-1.svg';
-export { default as BlockHeading2 } from './block-heading-2.svg';
-export { default as BlockHeading3 } from './block-heading-3.svg';
-export { default as BlockHeading4 } from './block-heading-4.svg';
-export { default as BlockHeading5 } from './block-heading-5.svg';
-export { default as BlockHeading6 } from './block-heading-6.svg';
-export { default as BlockHeadings } from './block-headings.svg';
 export { default as BlockImageCaption } from './block-image-caption.svg';
-export { default as BlockImage } from './block-image.svg';
 export { default as BlockInput } from './block-input.svg';
 export { default as BlockLink } from './block-link.svg';
 export { default as BlockListItem } from './block-list-item.svg';
@@ -47,7 +37,6 @@ export { default as BlockPaginationNumbersCurrent } from './block-pagination-num
 export { default as BlockPaginationNumbersDots } from './block-pagination-numbers-dots.svg';
 export { default as BlockPaginationNumbers } from './block-pagination-numbers.svg';
 export { default as BlockPaginationPreviousArrow } from './block-pagination-previous-arrow.svg';
-export { default as BlockParagraph } from './block-paragraph.svg';
 export { default as BlockPostAuthorAvatar } from './block-post-author-avatar.svg';
 export { default as BlockPostAuthorByline } from './block-post-author-byline.svg';
 export { default as BlockPostAuthorName } from './block-post-author-name.svg';

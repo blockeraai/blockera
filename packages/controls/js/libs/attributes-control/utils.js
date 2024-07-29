@@ -344,7 +344,7 @@ export function getAttributeItemIcon({
 		case 'button':
 			switch (attribute) {
 				case 'type':
-					return <Icon icon="block-button" iconSize="20" />;
+					return <Icon icon="button" library="wp" iconSize="20" />;
 			}
 			break;
 

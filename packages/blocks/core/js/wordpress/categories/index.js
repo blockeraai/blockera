@@ -17,7 +17,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 	'elements/term-item': {
 		name: 'elements/term-item',
 		label: __('Link', 'blockera'),
-		icon: <Icon icon="block-link" iconSize="20" />,
+		icon: <Icon icon="link" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
 		},

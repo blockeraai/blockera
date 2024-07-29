@@ -16,7 +16,7 @@ const image: InnerBlocks = {
 	'core/image': {
 		name: 'core/image',
 		label: __('Image', 'blockera'),
-		icon: <Icon icon="block-image" iconSize="20" />,
+		icon: <Icon icon="image" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
 		},

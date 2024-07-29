@@ -29,7 +29,7 @@ const blockeraInnerBlocks: InnerBlocks = {
 		name: 'core/title',
 		type: 'title',
 		label: __('Form Label', 'blockera'),
-		icon: <Icon icon="block-paragraph" iconSize="20" />,
+		icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
 		},
