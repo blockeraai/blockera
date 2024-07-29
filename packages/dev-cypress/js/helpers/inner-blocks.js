@@ -14,7 +14,7 @@ export function setInnerBlock(blockType) {
 	openInnerBlocksExtension();
 
 	cy.get('.blockera-extension.blockera-extension-inner-blocks').within(() => {
-		cy.get(`[aria-label="${blockType}"]`).click();
+		cy.getByDataId(blockType).click();
 	});
 }
 
