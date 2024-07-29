@@ -72,6 +72,7 @@ export const AvailableBlocksAndElements = ({
 			<Flex
 				direction={'column'}
 				className={classNames('blockera-inner-blocks-inserter')}
+				gap="10px"
 			>
 				<h2 className={classNames('blockera-inner-block-category')}>
 					{title}
