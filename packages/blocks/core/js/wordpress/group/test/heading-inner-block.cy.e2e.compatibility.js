@@ -54,7 +54,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 			// Test 2: Blockera value to WP data
 			//
 
-			setInnerBlock('Headings');
+			setInnerBlock('core/heading');
 
 			//
 			// Normal → Text Color
@@ -165,7 +165,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 			// Test 2: Blockera value to WP data
 			//
 
-			setInnerBlock('Headings');
+			setInnerBlock('core/heading');
 
 			cy.getParentContainer('Text Color').within(() => {
 				cy.clickValueAddonButton();
@@ -267,7 +267,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				// Test 2: Blockera value to WP data
 				//
 
-				setInnerBlock('Headings');
+				setInnerBlock('core/heading');
 
 				//
 				// Normal → Text Color
@@ -380,7 +380,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 				// Test 2: Blockera value to WP data
 				//
 
-				setInnerBlock('Headings');
+				setInnerBlock('core/heading');
 
 				cy.getParentContainer('BG Color').within(() => {
 					cy.clickValueAddonButton();

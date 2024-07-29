@@ -55,7 +55,7 @@ describe('Should calculate current attributes correctly:', () => {
 
 		cy.getParentContainer('BG Color').should('contain', '#000000');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 
 		cy.getParentContainer('BG Color').should('contain', '#eeeeee');
 	});
@@ -72,7 +72,7 @@ describe('Should calculate current attributes correctly:', () => {
 
 		setDeviceType('Tablet');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 
 		cy.getParentContainer('BG Color').should('contain', '#eeeeee');
 	});
@@ -87,14 +87,14 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.getBlock('core/paragraph').click();
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
 		setParentBlock();
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
 		setBlockState('Hover');
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 
 		cy.getParentContainer('BG Color').should('contain', '#eeeeee');
 	});
@@ -109,14 +109,14 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.getBlock('core/paragraph').click();
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
 		setParentBlock();
 		setBlockState('Hover');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
 		setDeviceType('Tablet');
@@ -133,7 +133,7 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.getBlock('core/paragraph').click();
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
 		setBlockState('Hover');
@@ -150,7 +150,7 @@ describe('Should calculate current attributes correctly:', () => {
 		cy.getBlock('core/paragraph').click();
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
 		setDeviceType('Tablet');
@@ -173,7 +173,7 @@ describe('Should calculate current attributes correctly:', () => {
 		setBlockState('Hover');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
 		setBlockState('Hover');
@@ -196,7 +196,7 @@ describe('Should calculate current attributes correctly:', () => {
 		setDeviceType('Mobile Portrait');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		cy.getParentContainer('BG Color').should('contain', 'None');
 
 		setBlockState('Hover');

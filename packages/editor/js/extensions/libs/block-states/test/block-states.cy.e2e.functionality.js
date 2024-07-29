@@ -150,7 +150,7 @@ describe('Block State E2E Test', () => {
 				);
 			});
 
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			addBlockState('hover');
 

@@ -24,7 +24,7 @@ describe('Inner Blocks label testing', () => {
 
 	it('should display changed value on Test Color -> Inner -> Normal -> Desktop', () => {
 		// Set Inner Block
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Typography',
@@ -72,7 +72,7 @@ describe('Inner Blocks label testing', () => {
 		reSelectBlock();
 		addBlockState('hover');
 		// Set inner
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 
 		/**
 		 * Hover -> inner-> Hover
@@ -109,7 +109,7 @@ describe('Inner Blocks label testing', () => {
 
 	it('should display changed value on Text Color -> Inner -> Hover -> Desktop', () => {
 		// Set Inner Block
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 		/**
 		 * Hover
 		 */
@@ -181,7 +181,7 @@ describe('Inner Blocks label testing', () => {
 			() => {
 				addBlockState('hover');
 				// Set Inner Block
-				setInnerBlock('Link');
+				setInnerBlock('elements/link');
 
 				// Assert label before set value
 				cy.checkLabelClassName(
@@ -294,7 +294,7 @@ describe('Inner Blocks label testing', () => {
 			() => {
 				reSelectBlock();
 				setBlockState('Normal');
-				setInnerBlock('Link');
+				setInnerBlock('elements/link');
 
 				/**
 				 * Normal -> Inner -> Normal
@@ -367,7 +367,7 @@ describe('Inner Blocks label testing', () => {
 			/**
 			 * Normal -> Inner
 			 */
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Set value in normal/desktop
 			cy.setColorControlValue('Text Color', 'cccccc');
@@ -389,7 +389,7 @@ describe('Inner Blocks label testing', () => {
 			 */
 			reSelectBlock();
 			addBlockState('hover');
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Set value in normal/tablet
 			cy.setColorControlValue('Text Color', 'ffffff');
@@ -527,7 +527,7 @@ describe('Inner Blocks label testing', () => {
 				() => {
 					reSelectBlock();
 					setBlockState('Normal');
-					setInnerBlock('Link');
+					setInnerBlock('elements/link');
 
 					// Reset to normal
 					cy.resetBlockeraAttribute(
@@ -705,7 +705,7 @@ describe('Inner Blocks label testing', () => {
 			/**
 			 * Normal -> Inner ->
 			 */
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Set value in normal/desktop
 			cy.setColorControlValue('Text Color', 'cccccc');
@@ -727,7 +727,7 @@ describe('Inner Blocks label testing', () => {
 			 */
 			reSelectBlock();
 			addBlockState('hover');
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Set value in normal/tablet
 			cy.setColorControlValue('Text Color', 'c4c4c4');
@@ -795,7 +795,7 @@ describe('Inner Blocks label testing', () => {
 					// Normal -> inner -> Hover/Tablet
 					reSelectBlock();
 					setBlockState('Normal');
-					setInnerBlock('Link');
+					setInnerBlock('elements/link');
 
 					// Assert label
 					cy.checkLabelClassName(
@@ -993,7 +993,7 @@ describe('Inner Blocks label testing', () => {
 			// Normal/Tablet
 			reSelectBlock();
 			setBlockState('Hover');
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -1152,7 +1152,7 @@ describe('Inner Blocks label testing', () => {
 			// Hover/Desktop
 			reSelectBlock();
 			setBlockState('Hover');
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Assert label
 			cy.checkLabelClassName(
@@ -1230,7 +1230,7 @@ describe('Inner Blocks label testing', () => {
 		it('set value in Hover -> Inner -> Normal/Desktop and navigate between states and devices', () => {
 			reSelectBlock();
 			setBlockState('Hover');
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			setBlockState('Normal');
 
 			cy.setColorControlValue('Text Color', '333333');
@@ -1317,7 +1317,7 @@ describe('Inner Blocks label testing', () => {
 			 */
 			reSelectBlock();
 			setBlockState('Normal');
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Normal/Tablet
 

@@ -57,7 +57,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getBlock('core/paragraph').click();
 
 			setDeviceType('Tablet');
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			cy.getByAriaLabel('Add New State').click();
 
@@ -122,7 +122,7 @@ describe('useAttributes Hook Testing ...', () => {
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			cy.setColorControlValue('BG Color', '#000000');
 			cy.getParentContainer('BG Color').should('contain', '#000000');
@@ -146,7 +146,7 @@ describe('useAttributes Hook Testing ...', () => {
 			// set hover state
 			cy.getByAriaLabel('Add New State').click();
 
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			cy.setColorControlValue('BG Color', '#000000');
 			cy.getParentContainer('BG Color').should('contain', '#000000');
@@ -168,7 +168,7 @@ describe('useAttributes Hook Testing ...', () => {
 
 			cy.getByAriaLabel('Add New State').click();
 
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			cy.getByAriaLabel('Add New State').click();
 
@@ -193,7 +193,7 @@ describe('useAttributes Hook Testing ...', () => {
 			cy.getByAriaLabel('Add New State').click();
 
 			setDeviceType('Mobile Portrait');
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			cy.getByAriaLabel('Add New State').click();
 

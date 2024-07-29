@@ -78,7 +78,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		//
 		// Buttons inner block
 		//
-		setInnerBlock('Buttons');
+		setInnerBlock('elements/item-containers');
 
 		cy.getParentContainer('BG Color').within(() => {
 			cy.get('button').click();
@@ -96,7 +96,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons Icons inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons Icons');
+		setInnerBlock('elements/item-icons');
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.get('button').click();
@@ -114,7 +114,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons Names inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons Names');
+		setInnerBlock('elements/item-names');
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.get('button').click();
@@ -172,7 +172,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons');
+		setInnerBlock('elements/item-containers');
 
 		cy.getParentContainer('BG Color').within(() => {
 			cy.get('button').click();
@@ -188,7 +188,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons Icons inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons Icons');
+		setInnerBlock('elements/item-icons');
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.get('button').click();
@@ -204,7 +204,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons Names inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons Names');
+		setInnerBlock('elements/item-names');
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.get('button').click();
@@ -358,7 +358,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		//
 		// Buttons inner block
 		//
-		setInnerBlock('Buttons');
+		setInnerBlock('elements/item-containers');
 
 		cy.getParentContainer('BG Color').within(() => {
 			cy.clickValueAddonButton();
@@ -371,7 +371,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons Icons inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons Icons');
+		setInnerBlock('elements/item-icons');
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.clickValueAddonButton();
@@ -384,7 +384,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons Names inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons Names');
+		setInnerBlock('elements/item-names');
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.clickValueAddonButton();
@@ -482,7 +482,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons');
+		setInnerBlock('elements/item-containers');
 
 		cy.getParentContainer('BG Color').within(() => {
 			cy.removeValueAddon();
@@ -492,7 +492,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons Icons inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons Icons');
+		setInnerBlock('elements/item-icons');
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.removeValueAddon();
@@ -502,7 +502,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Buttons Names inner block
 		//
 		setParentBlock();
-		setInnerBlock('Buttons Names');
+		setInnerBlock('elements/item-names');
 
 		cy.getParentContainer('Text Color').within(() => {
 			cy.removeValueAddon();

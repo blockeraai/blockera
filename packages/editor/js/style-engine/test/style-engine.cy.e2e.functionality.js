@@ -32,7 +32,7 @@ describe('Style Engine Testing ...', () => {
 			// ********************* After Passed Master Block Assertions ************************ //
 
 			// 3- Go to customize link inner block panel.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// 4- Set color for link inner block.
 			cy.setColorControlValue('BG Color', '#000000');

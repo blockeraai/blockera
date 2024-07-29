@@ -42,7 +42,7 @@ describe('Inner Blocks E2E Test', () => {
 	describe('state-container', () => {
 		it('Set the "Inner Blocks" color on the root of the container using CSS variables.', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
@@ -52,7 +52,7 @@ describe('Inner Blocks E2E Test', () => {
 
 		it('Set the "third-party" state (Like: hover, active, etc) color on the root of the container using CSS variables.', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			addBlockState('hover');
 
 			cy.cssVar(
@@ -63,7 +63,7 @@ describe('Inner Blocks E2E Test', () => {
 
 		it('should block state container title be correct', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			cy.getByAriaLabel('Blockera Block State Container')
 				.first()
@@ -76,7 +76,7 @@ describe('Inner Blocks E2E Test', () => {
 	describe('current-state', () => {
 		it('Set the hidden style for WordPress block origin features when choose state (apart from normal state)', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			cy.getByAriaLabel('Add New State').click();
 
 			//In this assertion not available data attribute for this selector، Please don't be sensitive.
@@ -92,7 +92,7 @@ describe('Inner Blocks E2E Test', () => {
 
 		it('Set the current state when add new block states', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			checkBlockCard([
 				{
 					label: 'Link',
@@ -119,7 +119,7 @@ describe('Inner Blocks E2E Test', () => {
 	describe('add new state', () => {
 		it('should not display normal when delete hover state ', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// do not render normal when adding new state
 			cy.contains('Normal').should('not.exist');
@@ -138,7 +138,7 @@ describe('Inner Blocks E2E Test', () => {
 
 		it('should not changed blockeraInnerBlocks attribute because add state but not changed anythings on selected state', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// add
 			addBlockState('hover');
@@ -160,7 +160,7 @@ describe('Inner Blocks E2E Test', () => {
 			cy.setInputFieldValue('Width', 'Size', 50);
 
 			// Inner
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Assert control
 			cy.checkInputFieldValue('Width', 'Size', '');
@@ -174,7 +174,7 @@ describe('Inner Blocks E2E Test', () => {
 			cy.setInputFieldValue('Width', 'Size', 50);
 
 			// Inner
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Assert control
 			cy.checkInputFieldValue('Width', 'Size', '');
@@ -186,7 +186,7 @@ describe('Inner Blocks E2E Test', () => {
 	describe('Master → Normal → InnerBlock → Normal', () => {
 		it('should set attr in innerBlocks root when default breakPoint', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			//
 			checkBlockCard([
 				{
@@ -199,7 +199,7 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Reselect
 			reSelectBlock();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Assert control value
 			cy.getParentContainer('BG Color').should('contain', '#cccccc');
@@ -260,7 +260,7 @@ describe('Inner Blocks E2E Test', () => {
 
 		it('should set attribute correctly when breakpoint : Tablet', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			setDeviceType('Tablet');
 			//
 			checkBlockCard([
@@ -275,7 +275,7 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Reselect
 			reSelectBlock();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Assert control value
 			cy.getParentContainer('BG Color').should('contain', '#cccccc');
@@ -359,7 +359,7 @@ describe('Inner Blocks E2E Test', () => {
 	describe('Master → Normal → InnerBlock → Hover', () => {
 		it('should set attribute correctly when : default breakPoint', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			addBlockState('hover');
 			//
 			checkBlockCard([
@@ -377,7 +377,7 @@ describe('Inner Blocks E2E Test', () => {
 
 			// Reselect
 			reSelectBlock();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Assert control value
 			cy.getParentContainer('BG Color').should('contain', '#cccccc');
@@ -462,7 +462,7 @@ describe('Inner Blocks E2E Test', () => {
 
 		it('should set attribute correctly when : Tablet', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			addBlockState('hover');
 			setDeviceType('Tablet');
 			//
@@ -482,7 +482,7 @@ describe('Inner Blocks E2E Test', () => {
 			// Reselect
 			setBlockState('Normal');
 			reSelectBlock();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			setBlockState('Hover');
 
 			// Assert control value
@@ -517,7 +517,7 @@ describe('Inner Blocks E2E Test', () => {
 			setDeviceType('Desktop');
 			setBlockState('Normal');
 			reSelectBlock();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 
 			// Assert block css : inner / hover / desktop
 			getWPDataObject().then((data) => {
@@ -654,7 +654,7 @@ describe('Inner Blocks E2E Test', () => {
 	describe('ValueCleanup', () => {
 		it('should not have extra breakpoints and attributes in saved data', () => {
 			initialSetting();
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			addBlockState('hover');
 			cy.setColorControlValue('BG Color', 'cccccc');
 
@@ -696,7 +696,7 @@ describe('Inner Blocks E2E Test', () => {
 		context('add block → go to inner → switch state to hover', () => {
 			beforeEach(() => {
 				initialSetting();
-				setInnerBlock('Link');
+				setInnerBlock('elements/link');
 				addBlockState('hover');
 			});
 
@@ -724,7 +724,7 @@ describe('Inner Blocks E2E Test', () => {
 				});
 
 				it('should current state be hover', () => {
-					setInnerBlock('Link');
+					setInnerBlock('elements/link');
 
 					checkCurrentState('hover');
 				});
@@ -737,7 +737,7 @@ describe('Inner Blocks E2E Test', () => {
 						.eq(0)
 						.click();
 
-					setInnerBlock('Link');
+					setInnerBlock('elements/link');
 
 					getWPDataObject().then((data) => {
 						expect(undefined).to.be.deep.equal(

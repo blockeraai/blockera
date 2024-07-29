@@ -24,7 +24,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 
 	it('should render link inner block with correctly values in paragraph/normal/link/normal', () => {
 		// Set "Link" Inner Block as current block.
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 
 		// Set value
 		cy.setColorControlValue('Text Color', 'aaaaaa');
@@ -35,7 +35,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 		reSelectBlock();
 
 		// Set "Link" Inner Block as current block.
-		setInnerBlock('Link');
+		setInnerBlock('elements/link');
 
 		// Assert control
 		cy.get('@color-label').should('include.text', 'aaaaaa');
@@ -48,7 +48,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// ====================== paragraph/(normal and hover)/link/(normal and hover) ====================== //
 
 			// Set "Link" Inner Block as current block.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			// Set value.
 			cy.setColorControlValue('Text Color', 'aaa');
 			// set "Hover" state on paragraph.
@@ -64,7 +64,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// set "Hover" state on paragraph.
 			addBlockState('hover');
 			// Set "Link" Inner Block as current block.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			// Set value.
 			cy.setColorControlValue('Text Color', 'cccccc');
 			// set "Hover" state on paragraph.
@@ -85,7 +85,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// ====================== paragraph/(normal and hover)/link/(normal and hover) ====================== //
 
 			// Set "Link" Inner Block as current block.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			// Expected text-color control value of paragraph/normal/link/normal.
 			cy.get('@color-label').should('include.text', 'aaaaaa');
 			// Set "Hover" state.
@@ -101,7 +101,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// Set "Hover" state.
 			setBlockState('Hover');
 			// Set "Link" Inner Block as current block.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			// Expected text-color control value of paragraph/hover/link/normal.
 			cy.get('@color-label').should('include.text', 'cccccc');
 			// Set "Hover" state.
@@ -123,7 +123,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// ====================== paragraph/(normal and hover)/link/(normal and hover) ====================== //
 
 			// Set "Link" Inner Block as current block.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			// Expected text-color control value of paragraph/normal/link/normal.
 			cy.get('@color-label').should('include.text', 'aaaaaa');
 			// Set value.
@@ -143,7 +143,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// set "Hover" state on paragraph.
 			setBlockState('Hover');
 			// Set "Link" Inner Block as current block.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			// Expected text-color control value of paragraph/hover/link/normal.
 			cy.get('@color-label').should('include.text', 'cccccc');
 			// Set value.
@@ -168,7 +168,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// ====================== paragraph/(normal and hover)/link/(normal and hover) ====================== //
 
 			// Set "Link" Inner Block as current block.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			// Expected text-color control value of paragraph/normal/link/normal.
 			cy.get('@color-label').should('include.text', 'eeeeee');
 			// Set "Hover" state.
@@ -184,7 +184,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// Set "Hover" state.
 			setBlockState('Hover');
 			// Set "Link" Inner Block as current block.
-			setInnerBlock('Link');
+			setInnerBlock('elements/link');
 			// Expected text-color control value of paragraph/hover/link/normal.
 			cy.get('@color-label').should('include.text', '000000');
 			// Set "Hover" state.
