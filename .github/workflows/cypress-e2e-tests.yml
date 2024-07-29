@@ -53,16 +53,6 @@ jobs:
               id: wp_env_running
               run: npm run env:start
 
-            - name: Create env file
-              run: |
-                  touch .env
-                  echo APP_MODE=production >> .env
-                  echo DB=wp_tests >> .env
-                  cat .env
-
-            - name: Build wp-env app
-              run: npm run build
-
     cypress_e2e_tests:
         name: E2E Test
         needs:
@@ -77,6 +67,19 @@ jobs:
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Create env file
+              run: |
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
+
+            - name: Build wp-env app
+              run: npm run build
 
             - name: Install Cypress
               run: npx cypress install
