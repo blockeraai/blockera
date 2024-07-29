@@ -17,7 +17,7 @@ beforeEach(function () {
 	// browser with a 720p monitor
 	cy.viewport(1280, 720);
 
-	cy.login();
+	// cy.login();
 });
 
 Cypress.Commands.add('login', (user = '', pass = '') => {
