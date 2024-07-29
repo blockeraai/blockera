@@ -52,8 +52,11 @@ export const bootstrap = (): void => {
 			}
 
 			Object.keys(innerBlocks).forEach((element) => {
+				const elementCompatId =
+					innerBlocks[element]?.settings?.compatId || element;
+
 				if (
-					!attributes?.style?.elements[element] ||
+					!attributes?.style?.elements[elementCompatId] ||
 					innerBlocks[element]?.settings?.dataCompatibility ===
 						undefined ||
 					innerBlocks[element]?.settings?.dataCompatibility
@@ -71,13 +74,14 @@ export const bootstrap = (): void => {
 					)
 				) {
 					if (
-						!attributes?.blockeraInnerBlocks?.link?.attributes
-							?.blockeraFontColor
+						!attributes?.blockeraInnerBlocks['elements/link']
+							?.attributes?.blockeraFontColor
 					) {
 						const newAttributes =
 							elementNormalFontColorFromWPCompatibility({
 								element,
 								attributes,
+								elementCompatId,
 							});
 
 						if (newAttributes) {
@@ -95,15 +99,16 @@ export const bootstrap = (): void => {
 					)
 				) {
 					if (
-						!attributes?.blockeraInnerBlocks?.link?.attributes
-							?.blockeraBlockStates?.hover?.breakpoints[
-							getBaseBreakpoint()
-						]?.attributes?.blockeraFontColor
+						!attributes?.blockeraInnerBlocks['elements/link']
+							?.attributes?.blockeraBlockStates?.hover
+							?.breakpoints[getBaseBreakpoint()]?.attributes
+							?.blockeraFontColor
 					) {
 						const newAttributes =
 							elementHoverFontColorFromWPCompatibility({
 								element,
 								attributes,
+								elementCompatId,
 							});
 
 						if (newAttributes) {
@@ -134,6 +139,7 @@ export const bootstrap = (): void => {
 							elementNormalBackgroundColorFromWPCompatibility({
 								element,
 								attributes,
+								elementCompatId,
 							});
 
 						if (bgAttributes) {
@@ -160,6 +166,7 @@ export const bootstrap = (): void => {
 							elementNormalBackgroundFromWPCompatibility({
 								element,
 								attributes,
+								elementCompatId,
 							});
 
 						if (bgAttributes) {
@@ -220,6 +227,9 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
+			const element =
+				innerBlocks[currentBlock]?.settings?.compatId || currentBlock;
+
 			//
 			// Normal font color
 			//
@@ -233,7 +243,7 @@ export const bootstrap = (): void => {
 				return mergeObject(
 					nextState,
 					elementNormalFontColorToWPCompatibility({
-						element: currentBlock,
+						element,
 						newValue,
 						ref,
 					})
@@ -253,7 +263,7 @@ export const bootstrap = (): void => {
 				return mergeObject(
 					nextState,
 					elementHoverFontColorToWPCompatibility({
-						element: currentBlock,
+						element,
 						newValue,
 						ref,
 					})
@@ -273,7 +283,7 @@ export const bootstrap = (): void => {
 				return mergeObject(
 					nextState,
 					elementNormalBackgroundColorToWPCompatibility({
-						element: currentBlock,
+						element,
 						newValue,
 						ref,
 						getAttributes,
@@ -304,7 +314,7 @@ export const bootstrap = (): void => {
 				return mergeObject(
 					nextState,
 					elementNormalBackgroundToWPCompatibility({
-						element: currentBlock,
+						element,
 						newValue,
 						ref,
 					})

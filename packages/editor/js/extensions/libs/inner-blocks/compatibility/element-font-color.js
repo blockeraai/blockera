@@ -15,13 +15,15 @@ import { getBaseBreakpoint } from '../../../../canvas-editor';
 export function elementNormalFontColorFromWPCompatibility({
 	element,
 	attributes,
+	elementCompatId,
 }: {
 	element: string,
 	attributes: Object,
+	elementCompatId: string,
 }): Object {
-	if (attributes.style.elements[element]?.color?.text) {
+	if (attributes.style.elements[elementCompatId]?.color?.text) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[element].color.text
+			attributes.style.elements[elementCompatId].color.text
 		);
 
 		if (color) {
@@ -43,13 +45,15 @@ export function elementNormalFontColorFromWPCompatibility({
 export function elementHoverFontColorFromWPCompatibility({
 	element,
 	attributes,
+	elementCompatId,
 }: {
 	element: string,
 	attributes: Object,
+	elementCompatId: string,
 }): Object {
-	if (attributes.style.elements[element][':hover']?.color?.text) {
+	if (attributes.style.elements[elementCompatId][':hover']?.color?.text) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[element][':hover'].color.text
+			attributes.style.elements[elementCompatId][':hover'].color.text
 		);
 
 		if (color) {

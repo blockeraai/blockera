@@ -9,11 +9,13 @@ import { getGradientVAFromVarString, getGradientType } from '@blockera/data';
 export function elementNormalBackgroundFromWPCompatibility({
 	element,
 	attributes,
+	elementCompatId,
 }: {
 	element: string,
 	attributes: Object,
+	elementCompatId: string,
 }): Object {
-	if (!attributes.style.elements[element]?.color?.gradient) {
+	if (!attributes.style.elements[elementCompatId]?.color?.gradient) {
 		return false;
 	}
 
@@ -24,19 +26,21 @@ export function elementNormalBackgroundFromWPCompatibility({
 	let gradientType: string = '';
 
 	if (
-		attributes.style.elements[element]?.color?.gradient.startsWith('var:')
+		attributes.style.elements[elementCompatId]?.color?.gradient.startsWith(
+			'var:'
+		)
 	) {
 		gradient = getGradientVAFromVarString(
-			attributes.style.elements[element]?.color?.gradient
+			attributes.style.elements[elementCompatId]?.color?.gradient
 		);
 
 		if (isValid(gradient)) {
 			gradientType = getGradientType(gradient);
 		}
 	} else {
-		gradient = attributes.style.elements[element]?.color?.gradient;
+		gradient = attributes.style.elements[elementCompatId]?.color?.gradient;
 		gradientType = getGradientType(
-			attributes.style.elements[element]?.color?.gradient
+			attributes.style.elements[elementCompatId]?.color?.gradient
 		);
 	}
 

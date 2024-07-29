@@ -15,13 +15,15 @@ import { elementNormalBackgroundToWPCompatibility } from './element-bg';
 export function elementNormalBackgroundColorFromWPCompatibility({
 	element,
 	attributes,
+	elementCompatId,
 }: {
 	element: string,
 	attributes: Object,
+	elementCompatId: string,
 }): Object {
-	if (attributes.style.elements[element]?.color?.background) {
+	if (attributes.style.elements[elementCompatId]?.color?.background) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[element].color.background
+			attributes.style.elements[elementCompatId].color.background
 		);
 
 		if (color) {
