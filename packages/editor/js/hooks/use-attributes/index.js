@@ -8,6 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
+import { mergeObject } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 
 /**
@@ -15,9 +16,12 @@ import { classNames } from '@blockera/classnames';
  */
 import reducer from './reducer';
 import { isChanged } from './helpers';
-import { isInnerBlock } from '../../extensions/components/utils';
 import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../extensions/libs/types';
+import {
+	isInnerBlock,
+	prepareAttributesDefaultValues,
+} from '../../extensions/components/utils';
 
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
@@ -29,6 +33,7 @@ export const useAttributes = (
 		getAttributes,
 		blockVariations,
 		defaultAttributes,
+		availableAttributes,
 		masterIsNormalState,
 		blockeraInnerBlocks,
 		activeBlockVariation,
@@ -39,6 +44,7 @@ export const useAttributes = (
 		innerBlocks: Object,
 		blockVariations: Object,
 		defaultAttributes: Object,
+		availableAttributes: Object,
 		blockeraInnerBlocks: Object,
 		isNormalState: () => boolean,
 		activeBlockVariation: Object,
@@ -91,6 +97,19 @@ export const useAttributes = (
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!
 		let _attributes = { ...attributes };
+
+		// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component, if we supported them.
+		if (
+			!_attributes?.blockeraPropsId &&
+			availableAttributes?.blockeraPropsId
+		) {
+			setAttributes(
+				mergeObject(
+					attributes,
+					prepareAttributesDefaultValues(defaultAttributes)
+				)
+			);
+		}
 
 		// Sets "blockeraPropsId" if it is empty.
 		if (!_attributes?.blockeraPropsId) {

@@ -20,7 +20,7 @@ import {
 /**
  * Blockera dependencies
  */
-import { isEquals, mergeObject, omitWithPattern } from '@blockera/utils';
+import { isEquals, omitWithPattern } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
 /**
@@ -140,19 +140,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		// On mounting block base component, we're firing bootstrapper scripts and add experimental extensions support.
 		useEffect(() => {
-			// Migrate to blockera attributes for some blocks where includes attributes migrations, if made of Blockera.
-			if (
-				!attributes?.blockeraPropsId &&
-				availableAttributes?.blockeraPropsId
-			) {
-				setAttributes(
-					mergeObject(
-						attributes,
-						prepareAttributesDefaultValues(defaultAttributes)
-					)
-				);
-			}
-
 			if ('function' === typeof registerExtensions) {
 				registerExtensions(name);
 
@@ -235,6 +222,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				getAttributes,
 				blockVariations,
 				defaultAttributes,
+				availableAttributes,
 				masterIsNormalState,
 				blockeraInnerBlocks,
 				activeBlockVariation,
