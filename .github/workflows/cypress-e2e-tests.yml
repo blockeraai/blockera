@@ -57,7 +57,7 @@ jobs:
               run: composer install --no-dev -o --apcu-autoloader -a
 
             - name: Start WordPress Environment
-              run: npm run env:start
+              run: npm run blockera:now
 
             - name: Create env file
               run: |
