@@ -10,11 +10,11 @@ export function setParentBlock() {
 	).click();
 }
 
-export function setInnerBlock(blockType, suffix = ' Customize') {
+export function setInnerBlock(blockType) {
 	openInnerBlocksExtension();
 
 	cy.get('.blockera-extension.blockera-extension-inner-blocks').within(() => {
-		cy.get(`[aria-label="${blockType}${suffix}"]`).click();
+		cy.get(`[aria-label="${blockType}"]`).click();
 	});
 }
 
