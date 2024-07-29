@@ -3,7 +3,9 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import memoize from 'fast-memoize';
+import type { MixedElement } from 'react';
 
 /**
  * Internal dependencies
@@ -85,4 +87,24 @@ export const isElement = (entity: InnerBlockModel): boolean => {
  */
 export const isBlock = (entity: InnerBlockModel): boolean => {
 	return new RegExp('^core/', 'ig').test(entity.name);
+};
+
+export const getVirtualInnerBlockDescription = (): MixedElement => {
+	return (
+		<>
+			<h5>{__('What is a Virtual Block?', 'blockera')}</h5>
+			<p>
+				{__(
+					'A Virtual Block is a child inner element of a block that there is no way to select and customize it in editor.',
+					'blockera'
+				)}
+			</p>
+			<p>
+				{__(
+					"We've included these elements as Virtual Blocks so you can fully customize them.",
+					'blockera'
+				)}
+			</p>
+		</>
+	);
 };

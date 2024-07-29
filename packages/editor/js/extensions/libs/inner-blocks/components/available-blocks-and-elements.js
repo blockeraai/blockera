@@ -15,6 +15,7 @@ import {
 	ControlContextProvider,
 	Flex,
 	SearchControl,
+	Tooltip,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
@@ -22,7 +23,7 @@ import { classNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { isElement } from '../helpers';
+import { isElement, getVirtualInnerBlockDescription } from '../helpers';
 import { searchBlockItems } from '../search-items';
 import type { InnerBlockModel, InnerBlocks } from '../types';
 
@@ -75,6 +76,7 @@ export const AvailableBlocksAndElements = ({
 				<h2 className={classNames('blockera-inner-block-category')}>
 					{title}
 				</h2>
+
 				<Flex
 					gap={'0'}
 					flexWrap={'wrap'}
@@ -191,25 +193,51 @@ export const AvailableBlocksAndElements = ({
 					placeholder={__('Search', 'blockera')}
 				/>
 			</ControlContextProvider>
+
 			{!elements.length && !blocks.length && (
 				<>
 					<Flex
 						alignItems={'center'}
 						direction={'column'}
 						justifyContent={'space-between'}
+						gap="0"
+						style={{ padding: '40px 0' }}
 					>
-						<Icon icon={'block-default'} library={'wp'} />
+						<Icon
+							icon={'block-default'}
+							library={'wp'}
+							style={{ fill: '#949494' }}
+						/>
+
 						<p data-id={'not-found-text'}>
 							{__('No results found.', 'blockera')}
 						</p>
 					</Flex>
 				</>
 			)}
+
 			<CategorizedItems
 				items={elements}
 				category={'elements'}
-				title={__('Virtual Blocks', 'blockera')}
+				title={
+					<>
+						{__('Virtual Blocks', 'blockera')}
+
+						<Tooltip
+							width="220px"
+							style={{ padding: '12px' }}
+							text={getVirtualInnerBlockDescription()}
+						>
+							<Icon
+								icon="information"
+								library="ui"
+								iconSize="16"
+							/>
+						</Tooltip>
+					</>
+				}
 			/>
+
 			{Object.values(getCategories() || {}).map(
 				({ slug, title }, index) => (
 					<CategorizedItems

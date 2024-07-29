@@ -26,6 +26,19 @@
 		font-weight: 500;
 		margin: 12px 0;
 		text-transform: uppercase;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		svg {
+			fill: currentColor;
+			color: var(--blockera-controls-placeholder-color);
+			cursor: pointer;
+
+			&:hover {
+				color: var(--blockera-controls-primary-color);
+			}
+		}
 	}
 
 	.blockera-inner-block-types {
@@ -44,7 +57,7 @@
 			font-size: 13px;
 			height: auto;
 			justify-content: center;
-    		padding: 13px 0;
+    		padding: 15px 0;
 			position: relative;
 			transition: all 0.05s ease-in-out;
 			word-break: break-word;
@@ -68,7 +81,7 @@
 			}
 
 			.blockera-inner-block-icon {
-				margin-bottom: 10px;
+				margin-bottom: 8px;
 
 				.block-editor-block-icon {
 					display: inline-block;
@@ -76,8 +89,10 @@
 
 				svg,
  				.block-editor-block-icon svg {
-					width: 20px;
-					height: auto;
+					max-height: 20px;
+					max-width: 20px;
+					min-height: 20px;
+					min-width: 20px;
 				}
 			}
 
@@ -90,11 +105,19 @@
 
 .blockera-inner-block-item {
 
+	.blockera-control-header-values {
+		font-size: 11px;
+		color: var(--blockera-controls-placeholder-color);
+		letter-spacing: -0.2px;
+	}
+
 	.blockera-control-header-icon {
 
 		svg {
-			width: 18px;
-			height: auto;
+			max-height: 18px;
+			max-width: 18px;
+			min-height: 18px;
+			min-width: 18px;
 		}
 	}
 }
