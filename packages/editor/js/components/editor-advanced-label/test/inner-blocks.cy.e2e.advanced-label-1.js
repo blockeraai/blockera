@@ -433,7 +433,7 @@ describe('Inner Blocks label testing', () => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.desktop.attributes
-								.blockeraInnerBlocks.link.attributes
+								.blockeraInnerBlocks['elements/link'].attributes
 								.blockeraBlockStates.hover.breakpoints.desktop
 								.attributes
 						);
@@ -475,7 +475,7 @@ describe('Inner Blocks label testing', () => {
 						expect(undefined).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks.link.attributes
+								.blockeraInnerBlocks['elements/link'].attributes
 								.blockeraFontColor
 						);
 					});
@@ -515,7 +515,7 @@ describe('Inner Blocks label testing', () => {
 						expect(undefined).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.desktop.attributes
-								.blockeraInnerBlocks.link.attributes
+								.blockeraInnerBlocks['elements/link'].attributes
 								.blockeraFontColor
 						);
 					});
@@ -561,8 +561,9 @@ describe('Inner Blocks label testing', () => {
 					// Assert store data
 					getWPDataObject().then((data) => {
 						expect(undefined).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraInnerBlocks').link
-								.attributes.blockeraFontColor
+							getSelectedBlock(data, 'blockeraInnerBlocks')[
+								'elements/link'
+							].attributes.blockeraFontColor
 						);
 					});
 				}
@@ -605,9 +606,10 @@ describe('Inner Blocks label testing', () => {
 					// Assert store data
 					getWPDataObject().then((data) => {
 						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraInnerBlocks').link
-								.attributes.blockeraBlockStates.hover
-								.breakpoints.desktop.attributes
+							getSelectedBlock(data, 'blockeraInnerBlocks')[
+								'elements/link'
+							].attributes.blockeraBlockStates.hover.breakpoints
+								.desktop.attributes
 						);
 					});
 				}
@@ -651,7 +653,7 @@ describe('Inner Blocks label testing', () => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').normal
 								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks.link.attributes
+								.blockeraInnerBlocks['elements/link'].attributes
 								.blockeraBlockStates.hover.breakpoints.tablet
 								.attributes
 						);
@@ -693,8 +695,9 @@ describe('Inner Blocks label testing', () => {
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.deep.eq(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraFontColor
+						.breakpoints.tablet.attributes.blockeraInnerBlocks[
+						'elements/link'
+					].attributes.blockeraFontColor
 				);
 			});
 		});
@@ -865,20 +868,22 @@ describe('Inner Blocks label testing', () => {
 					// Assert store data
 					getWPDataObject().then((data) => {
 						expect(undefined).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraInnerBlocks').link
-								.attributes.blockeraFontColor
+							getSelectedBlock(data, 'blockeraInnerBlocks')[
+								'elements/link'
+							].attributes.blockeraFontColor
 						);
 
 						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraInnerBlocks').link
-								.attributes.blockeraBlockStates.hover
-								.breakpoints.desktop.attributes
+							getSelectedBlock(data, 'blockeraInnerBlocks')[
+								'elements/link'
+							].attributes.blockeraBlockStates.hover.breakpoints
+								.desktop.attributes
 						);
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.desktop.attributes
-								.blockeraInnerBlocks.link.attributes
+								.blockeraInnerBlocks['elements/link'].attributes
 								.blockeraBlockStates.hover.breakpoints.desktop
 								.attributes
 						);
@@ -886,13 +891,13 @@ describe('Inner Blocks label testing', () => {
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').hover
 								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks.link.attributes
+								.blockeraInnerBlocks['elements/link'].attributes
 						);
 
 						expect({}).to.be.deep.eq(
 							getSelectedBlock(data, 'blockeraBlockStates').normal
 								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks.link.attributes
+								.blockeraInnerBlocks['elements/link'].attributes
 								.blockeraBlockStates.hover.breakpoints.tablet
 								.attributes
 						);

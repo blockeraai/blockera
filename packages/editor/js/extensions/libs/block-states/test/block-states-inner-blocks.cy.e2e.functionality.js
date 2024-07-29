@@ -146,7 +146,9 @@ describe('Inner Blocks E2E Test', () => {
 			// Check store
 			getWPDataObject().then((data) => {
 				expect(undefined).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
+					getSelectedBlock(data, 'blockeraInnerBlocks')[
+						'elements/link'
+					]
 				);
 			});
 		});
@@ -431,9 +433,10 @@ describe('Inner Blocks E2E Test', () => {
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect({ blockeraBackgroundColor: '#cccccc' }).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.desktop.attributes
+					getSelectedBlock(data, 'blockeraInnerBlocks')[
+						'elements/link'
+					].attributes.blockeraBlockStates.hover.breakpoints.desktop
+						.attributes
 				);
 			});
 
@@ -593,13 +596,16 @@ describe('Inner Blocks E2E Test', () => {
 			getWPDataObject().then((data) => {
 				expect({ blockeraBackgroundColor: '#cccccc' }).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.tablet
+						.breakpoints.tablet.attributes.blockeraInnerBlocks[
+						'elements/link'
+					].attributes.blockeraBlockStates.hover.breakpoints.tablet
 						.attributes
 				);
 
 				expect(undefined).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
+					getSelectedBlock(data, 'blockeraInnerBlocks')[
+						'elements/link'
+					]
 				);
 			});
 
@@ -662,15 +668,17 @@ describe('Inner Blocks E2E Test', () => {
 			getWPDataObject().then((data) => {
 				expect(1).to.be.equal(
 					Object.keys(
-						getSelectedBlock(data, 'blockeraInnerBlocks').link
-							.attributes
+						getSelectedBlock(data, 'blockeraInnerBlocks')[
+							'elements/link'
+						].attributes
 					).length
 				);
 
 				expect('#cccccc').to.be.equal(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.desktop.attributes.blockeraBackgroundColor
+					getSelectedBlock(data, 'blockeraInnerBlocks')[
+						'elements/link'
+					].attributes.blockeraBlockStates.hover.breakpoints.desktop
+						.attributes.blockeraBackgroundColor
 				);
 
 				expect({
@@ -685,8 +693,9 @@ describe('Inner Blocks E2E Test', () => {
 						isVisible: true,
 					},
 				}).to.be.deep.equal(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates
+					getSelectedBlock(data, 'blockeraInnerBlocks')[
+						'elements/link'
+					].attributes.blockeraBlockStates
 				);
 			});
 		});
@@ -741,7 +750,9 @@ describe('Inner Blocks E2E Test', () => {
 
 					getWPDataObject().then((data) => {
 						expect(undefined).to.be.deep.equal(
-							getSelectedBlock(data, 'blockeraInnerBlocks').link
+							getSelectedBlock(data, 'blockeraInnerBlocks')[
+								'elements/link'
+							]
 						);
 					});
 				});

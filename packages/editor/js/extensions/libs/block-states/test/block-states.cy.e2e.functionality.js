@@ -885,7 +885,6 @@ describe('Block State E2E Test', () => {
 
 						// Assert block css
 						getWPDataObject().then((data) => {
-							//TODO
 							cy.getIframeBody()
 								.find(`#block-${getBlockClientId(data)}`)
 								.should('have.css', 'width', '50px');
@@ -899,7 +898,6 @@ describe('Block State E2E Test', () => {
 
 						// Assert block css
 						getWPDataObject().then((data) => {
-							//TODO
 							cy.getIframeBody()
 								.find(`#block-${getBlockClientId(data)}`)
 								.should('have.css', 'width', '100px');

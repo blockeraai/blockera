@@ -68,8 +68,9 @@ describe('useAttributes Hook Testing ...', () => {
 			getWPDataObject().then((data) => {
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.tablet
+						.breakpoints.tablet.attributes.blockeraInnerBlocks[
+						'elements/link'
+					].attributes.blockeraBlockStates.hover.breakpoints.tablet
 						.attributes.blockeraBackgroundColor
 				);
 			});
