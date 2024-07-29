@@ -16,9 +16,9 @@ module.exports = defineConfig({
 		supportFile: 'packages/dev-cypress/js/support/e2e.js',
 	},
 	env: {
-		wpUsername: 'admin',
-		wpPassword: 'password',
-		testURL: 'http://localhost:8888',
+		wpUsername: '',
+		wpPassword: '',
+		testURL: 'http://localhost:8881',
 	},
 	fixturesFolder: 'packages/dev-cypress/js/fixtures',
 	pageLoadTimeout: 120000,
