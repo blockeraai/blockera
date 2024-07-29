@@ -34,15 +34,11 @@ jobs:
               run: |
                   echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
 
-    cypress_e2e_tests:
-        name: E2E Test
-        needs: detect_categories
+    start_wp_env:
+        name: Start WordPress Environment
         runs-on: ubuntu-latest
-        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
-        strategy:
-            fail-fast: false
-            matrix:
-                category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
+        outputs:
+            wp_env_running: ${{ steps.wp_env_running.outputs.wp_env_running }}
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
@@ -50,13 +46,11 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
-            - name: Install Cypress
-              run: npx cypress install
-
             - name: Install Composer Packages
               run: composer install --no-dev -o --apcu-autoloader -a
 
             - name: Start WordPress Environment
+              id: wp_env_running
               run: npm run env:start
 
             - name: Create env file
@@ -69,6 +63,24 @@ jobs:
             - name: Build wp-env app
               run: npm run build
 
+    cypress_e2e_tests:
+        name: E2E Test
+        needs:
+            - detect_categories
+            - start_wp_env
+        runs-on: ubuntu-latest
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+        strategy:
+            fail-fast: false
+            matrix:
+                category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Install Cypress
+              run: npx cypress install
+
             - name: Debug Matrix Category
               run: |
                   echo "Running category: ${{ matrix.category }}"
@@ -76,5 +88,11 @@ jobs:
             - name: Run Cypress E2E Tests
               run: npm run test:e2e -- --spec "packages/**/*.cy.e2e.${{ matrix.category }}.js"
 
+    stop_wp_env:
+        name: Stop WordPress Environment
+        runs-on: ubuntu-latest
+        needs: start_wp_env
+        if: ${{ needs.start_wp_env.outputs.wp_env_running == 'true' }}
+        steps:
             - name: Stop WordPress Environment
               run: npm run env:stop
