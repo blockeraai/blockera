@@ -12,7 +12,6 @@ import { controlInnerClassNames } from '@blockera/classnames';
 
 export default function ItemHeader({
 	item,
-	itemId,
 	isOpen,
 	setOpen,
 	children,
@@ -34,8 +33,8 @@ export default function ItemHeader({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'blockera'),
-				itemId + 1
+				__('Item %s', 'blockera'),
+				item?.name
 			)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
