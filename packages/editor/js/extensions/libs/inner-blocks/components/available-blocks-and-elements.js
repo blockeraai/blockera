@@ -76,7 +76,7 @@ export const AvailableBlocksAndElements = ({
 					{title}
 				</h2>
 				<Flex
-					gap={'30px 11px'}
+					gap={'0'}
 					flexWrap={'wrap'}
 					justifyContent={'flex-start'}
 					className={`blockera-inner-block-types blockera-inner-${category}-wrapper`}
