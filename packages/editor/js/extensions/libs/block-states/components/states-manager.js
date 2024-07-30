@@ -106,18 +106,6 @@ const StatesManager: ComponentType<any> = memo(
 							? itemId === activeInnerBlockState
 							: itemId === activeMasterBlockState;
 
-						// Assume block-state for inner blocks and itemId equals with store active state.
-						if (
-							isInnerBlock(currentBlock) &&
-							itemId === activeInnerBlockState
-						) {
-							setInnerBlockState(itemId);
-						}
-						// Assume block-state for master block and itemId equals with store active state.
-						else if (itemId === activeMasterBlockState) {
-							setCurrentState(itemId);
-						}
-
 						initialValue[itemId] = {
 							...state,
 							...preparedStates[itemId],
