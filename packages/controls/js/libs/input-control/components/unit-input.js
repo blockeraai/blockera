@@ -163,6 +163,7 @@ export function UnitInput({
 					)}
 				>
 					<select
+						key={unitValue.value}
 						disabled={disabled}
 						onChange={(e) => onChangeSelect(e.target.value)}
 						value={unitValue.value}
@@ -177,7 +178,7 @@ export function UnitInput({
 						{units.map((unit, key) => (
 							<>
 								{!isUndefined(unit?.options) ? (
-									<optgroup label={unit.label}>
+									<optgroup label={unit.label} key={key}>
 										{unit?.options.map((_unit, _key) => (
 											<option
 												key={_key}
