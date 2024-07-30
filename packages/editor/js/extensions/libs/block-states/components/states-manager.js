@@ -41,7 +41,7 @@ import type {
 	StateTypes,
 	TStates,
 } from '../types';
-import { isInnerBlock } from '../../../components';
+import { isInnerBlock, isNormalState } from '../../../components';
 import { LabelDescription } from './label-description';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { getBaseBreakpoint } from '../../../../canvas-editor';
@@ -143,9 +143,12 @@ const StatesManager: ComponentType<any> = memo(
 				return initialValue;
 			}
 
-			if (!isInnerBlock(currentBlock)) {
+			if (!isInnerBlock(currentBlock) && !isNormalState(currentState)) {
 				setCurrentState('normal');
-			} else {
+			} else if (
+				isInnerBlock(currentBlock) &&
+				!isNormalState(currentInnerBlockState)
+			) {
 				setInnerBlockState('normal');
 			}
 
