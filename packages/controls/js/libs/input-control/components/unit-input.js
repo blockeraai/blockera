@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
+import { useState, Fragment } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -176,9 +176,9 @@ export function UnitInput({
 						aria-label={__('Select Unit', 'blockera')}
 					>
 						{units.map((unit, key) => (
-							<>
+							<Fragment key={`${unit.label}-${key}`}>
 								{!isUndefined(unit?.options) ? (
-									<optgroup label={unit.label} key={key}>
+									<optgroup label={unit.label}>
 										{unit?.options.map((_unit, _key) => (
 											<option
 												key={_key}
@@ -189,11 +189,11 @@ export function UnitInput({
 										))}
 									</optgroup>
 								) : (
-									<option key={key} value={unit?.value}>
+									<option value={unit?.value}>
 										{unit?.label}
 									</option>
 								)}
-							</>
+							</Fragment>
 						))}
 					</select>
 				</ConditionalWrapper>
