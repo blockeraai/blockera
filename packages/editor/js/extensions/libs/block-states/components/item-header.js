@@ -63,8 +63,8 @@ export default function ItemHeader({
 			onClick={(event) => isOpenPopoverEvent(event) && setOpen(!isOpen)}
 			aria-label={sprintf(
 				// translators: it's the aria label for repeater item
-				__('Item %d', 'blockera'),
-				itemId + 1
+				__('Item %s', 'blockera'),
+				itemId
 			)}
 		>
 			{/*<span*/}
