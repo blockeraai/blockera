@@ -58,6 +58,7 @@ export default function ({
 		) {
 			pointers.push(
 				<div
+					key={'dynamic-value-addon-pointer'}
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'dv-pointer',
@@ -82,6 +83,7 @@ export default function ({
 		if (controlProps.types.includes('variable')) {
 			pointers.push(
 				<div
+					key={'variable-value-addon-pointer'}
 					className={controlInnerClassNames(
 						'value-addon-pointer',
 						'var-pointer',
