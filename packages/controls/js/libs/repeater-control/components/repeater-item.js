@@ -147,6 +147,7 @@ const RepeaterItem = ({
 			data-cy="repeater-item"
 			style={styleRef.current}
 			data-id={itemId}
+			data-test={itemId}
 		>
 			<GroupControl
 				mode={

@@ -121,7 +121,7 @@ export const AvailableBlocksAndElements = ({
 										setCurrentBlock(id);
 									}}
 									aria-label={id}
-									data-id={'blockera-inner-block-type'}
+									data-test={'blockera-inner-block-type'}
 									className={classNames(
 										'blockera-inner-block-type'
 									)}
@@ -210,7 +210,7 @@ export const AvailableBlocksAndElements = ({
 							style={{ fill: '#949494' }}
 						/>
 
-						<p data-id={'not-found-text'}>
+						<p data-test={'not-found-text'}>
 							{__('No results found.', 'blockera')}
 						</p>
 					</Flex>
