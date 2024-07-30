@@ -159,7 +159,6 @@ export default function LinkControl({
 						/>
 
 						<InputControl
-							controlName="input"
 							label={__('Label', 'blockera')}
 							columns="columns-2"
 							id={'label'}

@@ -89,7 +89,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					id={getControlId(itemId, 'offset')}
 					singularId={'offset'}
 					repeaterItem={itemId}
-					controlName="input"
 					label={__('Offset', 'blockera')}
 					labelPopoverTitle={__('Outline Offset', 'blockera')}
 					labelDescription={

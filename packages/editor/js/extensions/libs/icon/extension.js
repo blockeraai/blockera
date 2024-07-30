@@ -105,7 +105,6 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 									}}
 								>
 									<ToggleSelectControl
-										controlName="toggle-select"
 										label={__('Position', 'blockera')}
 										columns="columns-2"
 										options={[
@@ -158,7 +157,6 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 									}}
 								>
 									<InputControl
-										controlName="input"
 										label={__('Gap', 'blockera')}
 										columns="columns-2"
 										unitType="essential"
@@ -189,7 +187,6 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 									}}
 								>
 									<InputControl
-										controlName="input"
 										label={__('Size', 'blockera')}
 										columns="columns-2"
 										unitType="essential"
@@ -220,7 +217,6 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 									}}
 								>
 									<ColorControl
-										controlName="color"
 										label={__('Color', 'blockera')}
 										columns="columns-2"
 										//
@@ -251,7 +247,6 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 								}}
 							>
 								<LinkControl
-									controlName="link"
 									columns="1fr 3fr"
 									label={__('Link', 'blockera')}
 									id={generateExtensionId(block, 'icon-link')}

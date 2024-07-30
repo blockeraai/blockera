@@ -298,7 +298,6 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'rotate-y')}
 						singularId={'rotate-y'}
-						controlName="input"
 						label={<Icon icon="coordinate-rotate-y" />}
 						labelPopoverTitle={__('Rotate Vertically', 'blockera')}
 						labelDescription={

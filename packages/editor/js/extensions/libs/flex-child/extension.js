@@ -90,7 +90,6 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 					>
 						<ToggleSelectControl
 							columns="1fr 2.65fr"
-							controlName="toggle-select"
 							label={__('Self Size', 'blockera')}
 							className={
 								'items-flex-direction-' +
@@ -165,7 +164,6 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 										}}
 									>
 										<InputControl
-											controlName="input"
 											label={__('Grow', 'blockera')}
 											aria-label={__(
 												'Custom Grow',
@@ -205,7 +203,6 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 										}}
 									>
 										<InputControl
-											controlName="input"
 											label={__('Shrink', 'blockera')}
 											aria-label={__(
 												'Custom Shrink',
@@ -244,7 +241,6 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 										}}
 									>
 										<InputControl
-											controlName="input"
 											label={__('Basis', 'blockera')}
 											aria-label={__(
 												'Custom Basis',
@@ -288,7 +284,6 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 					>
 						<ToggleSelectControl
 							columns="1fr 2.65fr"
-							controlName="toggle-select"
 							label={__('Self Align', 'blockera')}
 							className={
 								'items-flex-direction-' +
@@ -443,7 +438,6 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									}}
 								>
 									<InputControl
-										controlName="input"
 										label={__('Custom', 'blockera')}
 										columns="2fr 3fr"
 										unitType="order"

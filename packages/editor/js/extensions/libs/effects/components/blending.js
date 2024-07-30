@@ -39,7 +39,6 @@ export const Blending = ({
 			}}
 		>
 			<SelectControl
-				controlName="select"
 				label={__('Blending', 'blockera')}
 				labelPopoverTitle={__('Mix Blending Mode', 'blockera')}
 				labelDescription={

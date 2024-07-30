@@ -37,7 +37,6 @@ const Fields = ({ itemId, item }) => {
 				singularId={'x'}
 				id={getControlId(itemId, 'x')}
 				defaultValue={defaultRepeaterItemValue.x}
-				controlName="input"
 				label={<Icon icon="coordinate-x" />}
 				labelPopoverTitle={__('Horizontal Offset (X)', 'blockera')}
 				labelDescription={
@@ -80,7 +79,6 @@ const Fields = ({ itemId, item }) => {
 				singularId={'y'}
 				id={getControlId(itemId, 'y')}
 				defaultValue={defaultRepeaterItemValue.y}
-				controlName="input"
 				label={<Icon icon="coordinate-y" />}
 				labelPopoverTitle={__('Vertical Offset (Y)', 'blockera')}
 				labelDescription={
@@ -123,7 +121,6 @@ const Fields = ({ itemId, item }) => {
 				singularId={'blur'}
 				id={getControlId(itemId, 'blur')}
 				defaultValue={defaultRepeaterItemValue.blur}
-				controlName="input"
 				label={__('Blur', 'blockera')}
 				labelPopoverTitle={__('Blur Effect', 'blockera')}
 				labelDescription={

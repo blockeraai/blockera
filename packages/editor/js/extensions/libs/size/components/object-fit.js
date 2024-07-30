@@ -129,7 +129,6 @@ export default function ObjectFit({
 			{...labelProps}
 		>
 			<SelectControl
-				controlName="select"
 				columns="columns-1"
 				options={[
 					{
