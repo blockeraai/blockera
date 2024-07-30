@@ -2,12 +2,11 @@
 /**
  * External dependencies
  */
-import { nanoid } from 'nanoid';
 import { __ } from '@wordpress/i18n';
 import { Fill } from '@wordpress/components';
 import { select, useDispatch } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
-import { memo, useEffect, useState, Fragment } from '@wordpress/element';
+import { memo, useEffect, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -228,7 +227,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
 			const activePanel = [
-				<Fill key={nanoid()} name={'blockera-block-card-children'}>
+				<Fill
+					key={`'blockera-block-${currentBlock}-card-children'`}
+					name={'blockera-block-card-children'}
+				>
 					<StatesManager
 						attributes={currentStateAttributes}
 						availableStates={availableBlockStates}
@@ -252,7 +254,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			switch (tab.name) {
 				case 'settings':
 					activePanel.push(
-						<Fragment key={nanoid()}>
+						<>
 							{experimental().get(
 								'editor.extensions.iconExtension'
 							) && (
@@ -318,13 +320,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									handleOnChangeAttributes
 								}
 							/>
-						</Fragment>
+						</>
 					);
 					break;
 
 				case 'style':
 					activePanel.push(
-						<Fragment key={nanoid()}>
+						<>
 							<StyleVariationsExtension
 								block={block}
 								extensionConfig={styleVariationsConfig}
@@ -796,13 +798,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									handleOnChangeAttributes
 								}
 							/>
-						</Fragment>
+						</>
 					);
 					break;
 
 				case 'interactions':
 					activePanel.push(
-						<Fragment key={nanoid()}>
+						<>
 							<EntranceAnimationExtension
 								block={block}
 								extensionConfig={entranceAnimationConfig}
@@ -860,7 +862,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								}
 								setSettings={handleOnChangeSettings}
 							/>
-						</Fragment>
+						</>
 					);
 					break;
 			}
