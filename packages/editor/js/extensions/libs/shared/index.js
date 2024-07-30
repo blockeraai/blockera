@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import { nanoid } from 'nanoid';
 import { __ } from '@wordpress/i18n';
 import { Fill } from '@wordpress/components';
 import { select, useDispatch } from '@wordpress/data';
@@ -228,7 +227,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
 			const activePanel = [
-				<Fill key={nanoid()} name={'blockera-block-card-children'}>
+				<Fill
+					key={`${props.clientId}-states-manager`}
+					name={'blockera-block-card-children'}
+				>
 					<StatesManager
 						attributes={currentStateAttributes}
 						availableStates={availableBlockStates}
@@ -252,7 +254,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			switch (tab.name) {
 				case 'settings':
 					activePanel.push(
-						<Fragment key={nanoid()}>
+						<Fragment key={`${props.clientId}-settings-panel`}>
 							{experimental().get(
 								'editor.extensions.iconExtension'
 							) && (
@@ -324,7 +326,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 				case 'style':
 					activePanel.push(
-						<Fragment key={nanoid()}>
+						<Fragment key={`${props.clientId}-style-panel`}>
 							<StyleVariationsExtension
 								block={block}
 								extensionConfig={styleVariationsConfig}
@@ -802,7 +804,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 				case 'interactions':
 					activePanel.push(
-						<Fragment key={nanoid()}>
+						<Fragment key={`${props.clientId}-interactions-panel`}>
 							<EntranceAnimationExtension
 								block={block}
 								extensionConfig={entranceAnimationConfig}
