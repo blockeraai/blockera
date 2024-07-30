@@ -5,7 +5,7 @@
  */
 import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
-import { mergeObject } from '@blockera/utils';
+import { isEquals, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -62,10 +62,12 @@ export const useMemoizedInnerBlocks = ({
 
 		const mergedStackWithStoreInners = mergeObject(inners, stack);
 
-		setBlockClientInners({
-			clientId,
-			inners: mergedStackWithStoreInners,
-		});
+		if (!isEquals(inners, mergedStackWithStoreInners)) {
+			setBlockClientInners({
+				clientId,
+				inners: mergedStackWithStoreInners,
+			});
+		}
 
 		return mergedStackWithStoreInners;
 		// eslint-disable-next-line
