@@ -39,10 +39,11 @@ export default function ({
 		const breakpoints = [];
 
 		Object.entries(availableBreakpoints).forEach(
-			([itemId, item]: [TBreakpoint, BreakpointTypes]) => {
+			([itemId, item]: [TBreakpoint, BreakpointTypes], index: number) => {
 				if (item.status) {
 					breakpoints.push(
 						<BreakpointIcon
+							key={`${itemId}-${index}`}
 							className={classNames({
 								'is-active-breakpoint':
 									itemId === currentActiveBreakpoint,
