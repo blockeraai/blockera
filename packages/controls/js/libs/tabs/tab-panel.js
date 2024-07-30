@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import { nanoid } from 'nanoid';
 import type { Element } from 'react';
 import { useInstanceId } from '@wordpress/compose';
 import { useState, useEffect } from '@wordpress/element';
@@ -110,7 +111,12 @@ export default function TabPanel({
 						'tabs__list__item__content'
 					)}
 				>
-					<ChildComponent {...selectedTab} />
+					<ChildComponent
+						{...{
+							...selectedTab,
+							key: nanoid(),
+						}}
+					/>
 					{/*{children(selectedTab)}*/}
 				</div>
 			)}
