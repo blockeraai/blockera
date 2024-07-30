@@ -2,6 +2,7 @@
 /**
  * External dependencies
  */
+import { nanoid } from 'nanoid';
 import type { Element } from 'react';
 import { useInstanceId } from '@wordpress/compose';
 import { useState, useEffect } from '@wordpress/element';
@@ -24,7 +25,7 @@ import ConditionalWrapper from '../conditional-wrapper';
 
 export default function TabPanel({
 	tabs,
-	children,
+	children: ChildComponent,
 	onSelect,
 	className,
 	design = 'clean',
@@ -65,9 +66,7 @@ export default function TabPanel({
 				<ConditionalWrapper
 					key={tab.name}
 					wrapper={(children) => (
-						<Tooltip text={tab.tooltip} key={tab.name}>
-							{children}
-						</Tooltip>
+						<Tooltip text={tab.tooltip}>{children}</Tooltip>
 					)}
 					condition={tab.tooltip !== undefined}
 				>
@@ -82,7 +81,6 @@ export default function TabPanel({
 						)}
 						aria-controls={`${instanceId}-${tab.name}-view`}
 						selected={tab.name === selected}
-						key={tab.name}
 						onClick={() => handleClick(tab.name)}
 						data-test={`${tab.name}-tab`}
 					>
@@ -106,7 +104,6 @@ export default function TabPanel({
 			<Menu />
 			{selectedTab && (
 				<div
-					key={selectedId}
 					aria-labelledby={selectedId}
 					role="tabpanel"
 					id={`${selectedId}-view`}
@@ -114,7 +111,13 @@ export default function TabPanel({
 						'tabs__list__item__content'
 					)}
 				>
-					{children(selectedTab)}
+					<ChildComponent
+						{...{
+							...selectedTab,
+							key: nanoid(),
+						}}
+					/>
+					{/*{children(selectedTab)}*/}
 				</div>
 			)}
 		</div>

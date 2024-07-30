@@ -26,7 +26,7 @@ const onSelect = (
 export function Tabs({
 	activeTab,
 	tabs,
-	getPanel,
+	getPanel: Panel,
 	design,
 	orientation,
 	setCurrentTab,
@@ -54,7 +54,7 @@ export function Tabs({
 				orientation={orientation}
 				className={className}
 			>
-				{(tab) => getPanel(tab)}
+				{(tab) => <Panel {...{ ...tab, key: tab.name }} />}
 			</TabPanel>
 		</div>
 	);
