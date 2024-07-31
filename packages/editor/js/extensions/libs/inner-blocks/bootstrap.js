@@ -51,15 +51,16 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			Object.keys(innerBlocks).forEach((element) => {
-				const elementCompatId =
-					innerBlocks[element]?.settings?.compatId || element;
+			Object.keys(innerBlocks).forEach((innerBlock) => {
+				const dataCompatibilityElement =
+					innerBlocks[innerBlock]?.settings
+						?.dataCompatibilityElement || innerBlock;
 
 				if (
-					!attributes?.style?.elements[elementCompatId] ||
-					innerBlocks[element]?.settings?.dataCompatibility ===
+					!attributes?.style?.elements[dataCompatibilityElement] ||
+					innerBlocks[innerBlock]?.settings?.dataCompatibility ===
 						undefined ||
-					innerBlocks[element]?.settings?.dataCompatibility
+					innerBlocks[innerBlock]?.settings?.dataCompatibility
 						?.length === 0
 				) {
 					return;
@@ -69,9 +70,9 @@ export const bootstrap = (): void => {
 				// Normal font color
 				//
 				if (
-					innerBlocks[element]?.settings?.dataCompatibility.includes(
-						'font-color'
-					)
+					innerBlocks[
+						innerBlock
+					]?.settings?.dataCompatibility.includes('font-color')
 				) {
 					if (
 						!attributes?.blockeraInnerBlocks['elements/link']
@@ -79,9 +80,9 @@ export const bootstrap = (): void => {
 					) {
 						const newAttributes =
 							elementNormalFontColorFromWPCompatibility({
-								element,
+								innerBlock,
 								attributes,
-								elementCompatId,
+								dataCompatibilityElement,
 							});
 
 						if (newAttributes) {
@@ -94,9 +95,9 @@ export const bootstrap = (): void => {
 				// Hover font color
 				//
 				if (
-					innerBlocks[element]?.settings?.dataCompatibility.includes(
-						'font-color-hover'
-					)
+					innerBlocks[
+						innerBlock
+					]?.settings?.dataCompatibility.includes('font-color-hover')
 				) {
 					if (
 						!attributes?.blockeraInnerBlocks['elements/link']
@@ -106,9 +107,9 @@ export const bootstrap = (): void => {
 					) {
 						const newAttributes =
 							elementHoverFontColorFromWPCompatibility({
-								element,
+								innerBlock,
 								attributes,
-								elementCompatId,
+								dataCompatibilityElement,
 							});
 
 						if (newAttributes) {
@@ -126,20 +127,20 @@ export const bootstrap = (): void => {
 				// Background Color
 				//
 				if (
-					innerBlocks[element]?.settings?.dataCompatibility.includes(
-						'background-color'
-					)
+					innerBlocks[
+						innerBlock
+					]?.settings?.dataCompatibility.includes('background-color')
 				) {
 					if (
-						!attributes.blockeraInnerBlocks[element] ||
-						!attributes.blockeraInnerBlocks[element]?.attributes
+						!attributes.blockeraInnerBlocks[innerBlock] ||
+						!attributes.blockeraInnerBlocks[innerBlock]?.attributes
 							?.blockeraBackgroundColor
 					) {
 						bgAttributes =
 							elementNormalBackgroundColorFromWPCompatibility({
-								element,
+								innerBlock,
 								attributes,
-								elementCompatId,
+								dataCompatibilityElement,
 							});
 
 						if (bgAttributes) {
@@ -153,20 +154,20 @@ export const bootstrap = (): void => {
 				//
 				if (
 					!bgAttributes &&
-					innerBlocks[element]?.settings?.dataCompatibility.includes(
-						'background-image'
-					)
+					innerBlocks[
+						innerBlock
+					]?.settings?.dataCompatibility.includes('background-image')
 				) {
 					if (
-						!attributes.blockeraInnerBlocks[element] ||
-						!attributes.blockeraInnerBlocks[element]?.attributes
+						!attributes.blockeraInnerBlocks[innerBlock] ||
+						!attributes.blockeraInnerBlocks[innerBlock]?.attributes
 							?.blockeraBackground
 					) {
 						bgAttributes =
 							elementNormalBackgroundFromWPCompatibility({
-								element,
+								innerBlock,
 								attributes,
-								elementCompatId,
+								dataCompatibilityElement,
 							});
 
 						if (bgAttributes) {
@@ -228,7 +229,8 @@ export const bootstrap = (): void => {
 			}
 
 			const element =
-				innerBlocks[currentBlock]?.settings?.compatId || currentBlock;
+				innerBlocks[currentBlock]?.settings?.dataCompatibilityElement ||
+				currentBlock;
 
 			//
 			// Normal font color

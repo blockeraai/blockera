@@ -13,23 +13,23 @@ import { getColorVAFromVarString } from '@blockera/data';
 import { getBaseBreakpoint } from '../../../../canvas-editor';
 
 export function elementNormalFontColorFromWPCompatibility({
-	element,
+	innerBlock,
 	attributes,
-	elementCompatId,
+	dataCompatibilityElement,
 }: {
-	element: string,
+	innerBlock: string,
 	attributes: Object,
-	elementCompatId: string,
+	dataCompatibilityElement: string,
 }): Object {
-	if (attributes.style.elements[elementCompatId]?.color?.text) {
+	if (attributes.style.elements[dataCompatibilityElement]?.color?.text) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[elementCompatId].color.text
+			attributes.style.elements[dataCompatibilityElement].color.text
 		);
 
 		if (color) {
 			return {
 				blockeraInnerBlocks: {
-					[element]: {
+					[innerBlock]: {
 						attributes: {
 							blockeraFontColor: color,
 						},
@@ -43,23 +43,27 @@ export function elementNormalFontColorFromWPCompatibility({
 }
 
 export function elementHoverFontColorFromWPCompatibility({
-	element,
+	innerBlock,
 	attributes,
-	elementCompatId,
+	dataCompatibilityElement,
 }: {
-	element: string,
+	innerBlock: string,
 	attributes: Object,
-	elementCompatId: string,
+	dataCompatibilityElement: string,
 }): Object {
-	if (attributes.style.elements[elementCompatId][':hover']?.color?.text) {
+	if (
+		attributes.style.elements[dataCompatibilityElement][':hover']?.color
+			?.text
+	) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[elementCompatId][':hover'].color.text
+			attributes.style.elements[dataCompatibilityElement][':hover'].color
+				.text
 		);
 
 		if (color) {
 			return {
 				blockeraInnerBlocks: {
-					[element]: {
+					[innerBlock]: {
 						attributes: {
 							blockeraBlockStates: {
 								hover: {

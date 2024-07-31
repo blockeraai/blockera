@@ -26,17 +26,19 @@ const sharedInnerBlocks: InnerBlocks = {
 		icon: <Icon icon="link" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
+			dataCompatibilityElement: 'link',
 			dataCompatibility: ['font-color', 'font-color-hover'],
 		},
 	},
 	'core/heading': {
 		name: 'core/heading',
-		label: __('Headings', 'blockera'),
+		label: __('Heading', 'blockera'),
 		icon: <Icon icon="heading" library="wp" iconSize="20" />,
 		settings: {
 			// because "core/heading" block default value for "level" attribute is "2".
 			level: 2,
 			force: true,
+			dataCompatibilityElement: 'heading',
 			dataCompatibility: [
 				'font-color',
 				'background-color',
@@ -51,6 +53,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			level: 1,
 			force: false,
+			dataCompatibilityElement: 'h1',
 			dataCompatibility: [
 				'font-color',
 				'background-color',
@@ -65,6 +68,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			level: 2,
 			force: false,
+			dataCompatibilityElement: 'h2',
 			dataCompatibility: [
 				'font-color',
 				'background-color',
@@ -79,6 +83,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			level: 3,
 			force: false,
+			dataCompatibilityElement: 'h3',
 			dataCompatibility: [
 				'font-color',
 				'background-color',
@@ -93,6 +98,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			level: 4,
 			force: false,
+			dataCompatibilityElement: 'h4',
 			dataCompatibility: [
 				'font-color',
 				'background-color',
@@ -107,6 +113,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			level: 5,
 			force: false,
+			dataCompatibilityElement: 'h5',
 			dataCompatibility: [
 				'font-color',
 				'background-color',
@@ -121,6 +128,12 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			level: 6,
 			force: false,
+			dataCompatibilityElement: 'h6',
+			dataCompatibility: [
+				'font-color',
+				'background-color',
+				'background-image',
+			],
 		},
 	},
 	'core/button': {
@@ -129,6 +142,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		icon: <Icon icon="button" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
+			dataCompatibilityElement: 'button',
 			dataCompatibility: [
 				'font-color',
 				'background-color',

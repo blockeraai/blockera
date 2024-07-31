@@ -13,23 +13,25 @@ import { isEmpty, isUndefined, mergeObject } from '@blockera/utils';
 import { elementNormalBackgroundToWPCompatibility } from './element-bg';
 
 export function elementNormalBackgroundColorFromWPCompatibility({
-	element,
+	innerBlock,
 	attributes,
-	elementCompatId,
+	dataCompatibilityElement,
 }: {
-	element: string,
+	innerBlock: string,
 	attributes: Object,
-	elementCompatId: string,
+	dataCompatibilityElement: string,
 }): Object {
-	if (attributes.style.elements[elementCompatId]?.color?.background) {
+	if (
+		attributes.style.elements[dataCompatibilityElement]?.color?.background
+	) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[elementCompatId].color.background
+			attributes.style.elements[dataCompatibilityElement].color.background
 		);
 
 		if (color) {
 			return {
 				blockeraInnerBlocks: {
-					[element]: {
+					[innerBlock]: {
 						attributes: {
 							blockeraBackgroundColor: color,
 						},
