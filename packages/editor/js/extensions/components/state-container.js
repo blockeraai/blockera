@@ -46,6 +46,7 @@ export default function StateContainer({ children }: Object): Element<any> {
 
 	return (
 		<div
+			data-test={'blockera-block-state-container'}
 			className={getClassNames('state-container')}
 			aria-label={__('Blockera Block State Container', 'blockera')}
 			style={{
