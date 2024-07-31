@@ -1,9 +1,20 @@
+//@flow
+
 /**
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
 
-export default {
+export type BlockStateType = {
+	type: string,
+	label: string,
+	breakpoints: Object,
+	disabled?: boolean,
+};
+
+const sharedBlockStates: {
+	[key: string]: BlockStateType,
+} = {
 	normal: {
 		type: 'normal',
 		label: 'Normal',
@@ -79,3 +90,5 @@ export default {
 		disabled: true,
 	},
 };
+
+export default sharedBlockStates;
