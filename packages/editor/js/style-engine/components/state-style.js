@@ -45,23 +45,18 @@ const Stylesheet = ({
 	});
 
 	const MappedStyleGroups = () =>
-		combineDeclarations(styles)
-			.filter(
-				({ selector, declarations }: Object): boolean =>
-					!declarations.length && !selector
+		combineDeclarations(styles).map(
+			(
+				{ selector, declarations }: Object,
+				index: number
+			): MixedElement => (
+				<Style
+					key={index + id}
+					selector={selector}
+					cssDeclaration={declarations}
+				/>
 			)
-			.map(
-				(
-					{ selector, declarations }: Object,
-					index: number
-				): MixedElement => (
-					<Style
-						key={index + id}
-						selector={selector}
-						cssDeclaration={declarations}
-					/>
-				)
-			);
+		);
 
 	return <MappedStyleGroups />;
 };
