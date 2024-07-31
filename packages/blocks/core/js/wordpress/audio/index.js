@@ -10,7 +10,12 @@ import type { MixedElement } from 'react';
  */
 import { SharedBlockExtension } from '@blockera/editor';
 
-export const Audio = {
+/**
+ * Internal dependencies
+ */
+import type { BlockType } from '../../type';
+
+export const Audio: BlockType = {
 	name: 'blockeraAudio',
 	targetBlock: 'core/audio',
 	edit: (props: Object): MixedElement => {
