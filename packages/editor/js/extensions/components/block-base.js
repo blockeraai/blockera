@@ -20,7 +20,7 @@ import {
 /**
  * Blockera dependencies
  */
-import { isEquals, omitWithPattern } from '@blockera/utils';
+import { isEquals, mergeObject, omitWithPattern } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
 /**
@@ -295,7 +295,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						filteredAttributes = applyFilters(
 							'blockera.blockEdit.attributes',
 							getAttributesWithIds(
-								filteredAttributes,
+								mergeObject(
+									filteredAttributes,
+									prepareAttributesDefaultValues(
+										defaultAttributes
+									)
+								),
 								'blockeraCompatId'
 							),
 							args
