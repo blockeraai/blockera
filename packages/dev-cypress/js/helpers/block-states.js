@@ -25,7 +25,7 @@ export function setBlockState(state) {
 }
 
 export const checkCurrentState = (id) => {
-	cy.getByAriaLabel('Blockera Block State Container')
+	cy.getByDataTest('blockera-block-state-container')
 		.first()
 		.within(() => {
 			// selected repeater item
