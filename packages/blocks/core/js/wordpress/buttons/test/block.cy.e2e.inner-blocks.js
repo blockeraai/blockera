@@ -2,9 +2,11 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
+	savePage,
 	createPost,
-	openInnerBlocksExtension,
+	appendBlocks,
+	setInnerBlock,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Buttons Block → Inner Blocks', () => {
@@ -27,15 +29,61 @@ describe('Buttons Block → Inner Blocks', () => {
 
 		cy.getByAriaLabel('Select Buttons').click();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		//
+		// 1. Edit Inner Blocks
+		//
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByAriaLabel('Buttons Customize').should('exist');
+		//
+		// 1.1. Button inner block
+		//
+		setInnerBlock('core/button');
 
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
-			}
-		);
+		//
+		// 1.1.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'cccccc');
+
+		cy.getBlock('core/button')
+			.first()
+			.within(() => {
+				cy.get('.wp-element-button').should(
+					'have.css',
+					'background-color',
+					'rgb(204, 204, 204)'
+				);
+			});
+
+		//
+		// 1.1.2. Text color
+		//
+		cy.setColorControlValue('Text Color', 'efefef');
+
+		cy.getBlock('core/button')
+			.first()
+			.within(() => {
+				cy.get('.wp-element-button').should(
+					'have.css',
+					'color',
+					'rgb(239, 239, 239)'
+				);
+			});
+
+		//
+		// 2. Assert inner blocks selectors in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block').within(() => {
+			// bg color
+			cy.get('.wp-element-button')
+				.first()
+				.should('have.css', 'background-color', 'rgb(204, 204, 204)');
+
+			// text color
+			cy.get('.wp-element-button')
+				.first()
+				.should('have.css', 'color', 'rgb(239, 239, 239)');
+		});
 	});
 });
