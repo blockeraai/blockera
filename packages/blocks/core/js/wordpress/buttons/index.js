@@ -13,12 +13,15 @@ import { SharedBlockExtension } from '@blockera/editor';
 /**
  * Internal dependencies
  */
-import button from '../inners/button';
+import sharedInnerBlocks from '../inners/shared';
+import type { BlockType } from '../../type';
 
-export const Buttons = {
+export const Buttons: BlockType = {
 	name: 'blockeraButtons',
 	targetBlock: 'core/buttons',
-	blockeraInnerBlocks: button,
+	blockeraInnerBlocks: {
+		'core/button': sharedInnerBlocks['core/button'],
+	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},
