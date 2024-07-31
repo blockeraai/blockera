@@ -108,7 +108,7 @@ export default function RepeaterControl(
 
 	const {
 		value: repeaterItems,
-		dispatch: { addRepeaterItem },
+		dispatch: { addRepeaterItem, modifyControlValue },
 		controlInfo: { name: controlId, attribute, blockName },
 		getControlPath,
 		resetToDefault,
@@ -203,6 +203,11 @@ export default function RepeaterControl(
 				...clonedRepeaterItems,
 				[newItemId]: value || defaultRepeaterItemValue,
 			};
+
+			modifyControlValue({
+				controlId,
+				value: newValue,
+			});
 
 			repeaterOnChange(newValue, {
 				onChange,
