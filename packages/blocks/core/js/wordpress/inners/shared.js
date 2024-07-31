@@ -121,6 +121,14 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			level: 6,
 			force: false,
+		},
+	},
+	'core/button': {
+		name: 'core/button',
+		label: __('Button', 'blockera'),
+		icon: <Icon icon="button" library="wp" iconSize="20" />,
+		settings: {
+			force: true,
 			dataCompatibility: [
 				'font-color',
 				'background-color',
