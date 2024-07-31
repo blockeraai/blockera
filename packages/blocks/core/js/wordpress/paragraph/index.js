@@ -13,12 +13,14 @@ import { SharedBlockExtension } from '@blockera/editor';
 /**
  * Internal dependencies
  */
-import link from '../inners/link';
+import sharedInnerBlocks from '../inners/shared';
 
 export const Paragraph = {
 	name: 'blockeraParagraph',
 	targetBlock: 'core/paragraph',
-	blockeraInnerBlocks: link,
+	blockeraInnerBlocks: {
+		'elements/link': sharedInnerBlocks['elements/link'],
+	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},
