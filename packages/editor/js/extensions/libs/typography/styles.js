@@ -58,6 +58,7 @@ export function TypographyStyles({
 		...props,
 		state,
 		clientId,
+		blockName,
 		masterState,
 		currentBlock,
 		blockSelectors,

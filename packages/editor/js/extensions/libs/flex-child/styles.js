@@ -41,6 +41,7 @@ export const FlexChildStyles = ({
 		...props,
 		state,
 		clientId,
+		blockName,
 		masterState,
 		currentBlock,
 		blockSelectors,

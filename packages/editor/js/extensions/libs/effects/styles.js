@@ -58,6 +58,7 @@ export const EffectsStyles = ({
 		...props,
 		state,
 		clientId,
+		blockName,
 		masterState,
 		currentBlock,
 		blockSelectors,

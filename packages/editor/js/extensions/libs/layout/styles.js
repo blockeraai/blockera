@@ -45,6 +45,7 @@ export const LayoutStyles = ({
 		...props,
 		state,
 		clientId,
+		blockName,
 		masterState,
 		currentBlock,
 		blockSelectors,

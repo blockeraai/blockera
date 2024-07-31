@@ -50,6 +50,7 @@ export const BorderAndShadowStyles = ({
 		...props,
 		state,
 		clientId,
+		blockName,
 		masterState,
 		currentBlock,
 		blockSelectors,

@@ -18,15 +18,16 @@ import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
  * Internal dependencies
  */
 import { getSelector } from './utils';
+import { getBaseBreakpoint } from '../canvas-editor';
 import type { NormalizedSelectorProps } from './types';
 import { isNormalState } from '../extensions/components';
-import { getBaseBreakpoint } from '../canvas-editor';
 
 export const getCssSelector = ({
 	state,
 	query,
 	support,
 	clientId,
+	blockName,
 	masterState,
 	currentBlock,
 	blockSelectors,
@@ -55,9 +56,25 @@ export const getCssSelector = ({
 		'custom-class',
 		'parent-hover',
 	];
-	const { getSelectedBlock } = select('core/block-editor');
-	const { getExtensionInnerBlockState, getExtensionCurrentBlockState } =
-		select('blockera/extensions');
+
+	const { getSelectedBlock } = select('core/block-editor') || {};
+	const { clientId: _clientId } = getSelectedBlock() || {};
+
+	const {
+		getActiveInnerState,
+		getActiveMasterState,
+		getExtensionInnerBlockState,
+		getExtensionCurrentBlockState,
+	} = select('blockera/extensions');
+
+	const getInnerState = () =>
+		_clientId === clientId
+			? getActiveInnerState(clientId, currentBlock)
+			: getExtensionInnerBlockState();
+	const getMasterState = () =>
+		_clientId === clientId
+			? getActiveMasterState(clientId, blockName)
+			: getExtensionCurrentBlockState();
 
 	// primitive block value.
 	let block: Object = {};
@@ -108,13 +125,10 @@ export const getCssSelector = ({
 					if (masterState && !isNormalState(masterState)) {
 						if (!isNormalState(state)) {
 							if (
-								!isNormalState(
-									getExtensionCurrentBlockState()
-								) &&
-								masterState ===
-									getExtensionCurrentBlockState() &&
-								!isNormalState(getExtensionInnerBlockState()) &&
-								state === getExtensionInnerBlockState()
+								!isNormalState(getMasterState()) &&
+								masterState === getMasterState() &&
+								!isNormalState(getInnerState()) &&
+								state === getInnerState()
 							) {
 								return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
 							}
@@ -127,8 +141,8 @@ export const getCssSelector = ({
 
 					if (!isNormalState(state) && masterState) {
 						if (
-							!isNormalState(getExtensionInnerBlockState()) &&
-							state === getExtensionInnerBlockState()
+							!isNormalState(getInnerState()) &&
+							state === getInnerState()
 						) {
 							return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
 						}
@@ -143,8 +157,8 @@ export const getCssSelector = ({
 				if (!isNormalState(state)) {
 					// Assume active master block state is not normal.
 					if (
-						!isNormalState(getExtensionCurrentBlockState()) &&
-						state === getExtensionCurrentBlockState()
+						!isNormalState(getMasterState()) &&
+						state === getMasterState()
 					) {
 						return `${selector}${suffixClass}:${state}, ${selector}${suffixClass}`;
 					}
