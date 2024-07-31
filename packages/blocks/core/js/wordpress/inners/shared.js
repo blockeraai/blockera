@@ -20,6 +20,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			force: true,
 		},
 	},
+	// Compatibility tests: ../group/test/link.cy.e2e.inner-blocks-compatibility.js
 	'elements/link': {
 		name: 'elements/link',
 		label: __('Link', 'blockera'),

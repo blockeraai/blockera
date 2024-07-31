@@ -56,7 +56,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')['elements/link']
+					?.attributes
 			);
 		});
 
@@ -72,34 +73,14 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		setBlockState('Normal');
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.get('button').click();
-		});
-
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.get('input').as('hexColorInput');
-				cy.get('@hexColorInput').clear();
-				cy.get('@hexColorInput').type('666666', { delay: 0 });
-			});
+		cy.setColorControlValue('Text Color', '666666');
 
 		//
 		// Hover → Text Color
 		//
 		setBlockState('Hover');
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.get('button').click();
-		});
-
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.get('input').as('hexColorInput');
-				cy.get('@hexColorInput').clear();
-				cy.get('@hexColorInput').type('888888', { delay: 0 });
-			});
+		cy.setColorControlValue('Text Color', '888888');
 
 		getWPDataObject().then((data) => {
 			expect({
@@ -117,7 +98,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')['elements/link']
+					?.attributes
 			);
 		});
 
@@ -144,15 +126,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		setBlockState('Normal');
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.get('button').click();
-		});
-
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.get('button[aria-label="Reset Color (Clear)"]').click();
-			});
+		cy.clearColorControlValue('Text Color');
 
 		//
 		// Hover → Text Color
@@ -160,15 +134,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 
 		setBlockState('Hover');
 
-		cy.getParentContainer('Text Color').within(() => {
-			cy.get('button').click();
-		});
-
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.get('button[aria-label="Reset Color (Clear)"]').click();
-			});
+		cy.clearColorControlValue('Text Color');
 
 		getWPDataObject().then((data) => {
 			expect({
@@ -183,7 +149,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')['elements/link']
+					?.attributes
 			);
 		});
 
@@ -271,7 +238,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')['elements/link']
+					?.attributes
 			);
 		});
 
@@ -350,7 +318,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')['elements/link']
+					?.attributes
 			);
 		});
 
@@ -404,7 +373,8 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 					},
 				},
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.link?.attributes
+				getSelectedBlock(data, 'blockeraInnerBlocks')['elements/link']
+					?.attributes
 			);
 		});
 
