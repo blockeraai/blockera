@@ -78,12 +78,15 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 	}
 
 	const {
+		getActiveInnerState,
+		getActiveMasterState,
 		getExtensionCurrentBlock,
-		getExtensionInnerBlockState,
-		getExtensionCurrentBlockState,
 		getExtensionCurrentBlockStateBreakpoint,
 	} = select('blockera/extensions') || {};
-	const { getSelectedBlock } = select('core/block-editor') || {};
+
+	const { getSelectedBlock = () => ({}) } = select('core/block-editor') || {};
+	const { clientId } = getSelectedBlock() || {};
+
 	const { getBreakpoints } = select('blockera/editor') || {};
 
 	const initialRef = {
@@ -197,8 +200,11 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 
 			states.forEach((state) => {
 				const currentState = isInnerBlock(getExtensionCurrentBlock())
-					? getExtensionInnerBlockState()
-					: getExtensionCurrentBlockState();
+					? getActiveInnerState(clientId, getExtensionCurrentBlock())
+					: getActiveMasterState(
+							clientId,
+							getExtensionCurrentBlock()
+					  );
 				const controlName = controlInfo.name.replace(
 					currentState,
 					state

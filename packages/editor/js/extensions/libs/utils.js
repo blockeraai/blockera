@@ -16,8 +16,6 @@ import { hasSameProps } from '@blockera/utils';
 import type { TBlockProps } from './types';
 import { isInnerBlock, isNormalState } from '../components/utils';
 import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
-import type { InnerBlockType } from './inner-blocks/types';
-import { STORE_NAME } from './base/store/constants';
 
 // import { detailedDiff } from 'deep-object-diff';
 
@@ -49,9 +47,9 @@ export function generateExtensionId(
 	flag: boolean = true
 ): string {
 	const {
+		getActiveInnerState = () => 'normal',
+		getActiveMasterState = () => 'normal',
 		getExtensionCurrentBlock = () => 'master',
-		getExtensionInnerBlockState = () => 'normal',
-		getExtensionCurrentBlockState = () => 'normal',
 		getExtensionCurrentBlockStateBreakpoint = () => getBaseBreakpoint(),
 	} = select('blockera/extensions') || {};
 
@@ -63,17 +61,26 @@ export function generateExtensionId(
 
 	// Assume control inside innerBlock and current innerBlock inside master block!
 	if (
-		!isNormalState(getExtensionCurrentBlockState()) &&
+		!isNormalState(getActiveMasterState(clientId, currentBlock)) &&
 		isInnerBlock(currentBlock)
 	) {
-		return `${blockName}/${id}/${clientId}-master-${currentBlock}-${getExtensionInnerBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
+		return `${blockName}/${id}/${clientId}-master-${currentBlock}-${getActiveInnerState(
+			clientId,
+			currentBlock
+		)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 	// Assume master block in normal state and current control inside inner block.
 	if (isInnerBlock(currentBlock)) {
-		return `${blockName}/${id}/${clientId}-${currentBlock}-${getExtensionInnerBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
+		return `${blockName}/${id}/${clientId}-${currentBlock}-${getActiveInnerState(
+			clientId,
+			currentBlock
+		)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 	}
 
-	return `${blockName}/${id}/${clientId}-${currentBlock}-${getExtensionCurrentBlockState()}-${getExtensionCurrentBlockStateBreakpoint()}`;
+	return `${blockName}/${id}/${clientId}-${currentBlock}-${getActiveMasterState(
+		clientId,
+		currentBlock
+	)}-${getExtensionCurrentBlockStateBreakpoint()}`;
 }
 
 /**
@@ -83,30 +90,4 @@ export function generateExtensionId(
  */
 export function ignoreDefaultBlockAttributeKeysRegExp(): Object {
 	return /^(?!blockera\w+).*/i;
-}
-
-/**
- * Get extensions config order by block name and current block type.
- *
- * @param {string} blockName the WordPress block name.
- * @param {'master' | InnerBlockType | string} currentBlock the current block type.
- *
- * @return {Object} the extensions config.
- */
-export function getExtensionConfig(
-	blockName: string,
-	currentBlock: 'master' | InnerBlockType | string
-): Object {
-	// Access to extensions configuration for master and inner block from Blockera internal base extension store apis.
-	const { getExtensions, getDefinition } = select(STORE_NAME);
-	// By default config store master block configuration.
-	let config = getExtensions(blockName);
-
-	// Assume current block is one of inner block types,
-	// in this case we should override extensions configuration order by current block identifier and selected block name.
-	if (isInnerBlock(currentBlock)) {
-		config = getDefinition(currentBlock, blockName);
-	}
-
-	return config;
 }

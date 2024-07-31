@@ -49,6 +49,7 @@ import {
 	registerBlockExtensionsSupports,
 	registerInnerBlockExtensionsSupports,
 } from '../libs';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -80,34 +81,28 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const {
 			currentBlock,
 			currentState,
+			currentBreakpoint,
+			currentInnerBlockState,
+		} = useExtensionsStore({ name, clientId, test: true });
+
+		const {
 			selectedBlock,
 			activeVariation,
-			currentBreakpoint,
 			availableAttributes,
-			currentInnerBlockState,
 			isActiveBlockExtensions,
 		} = useSelect((select) => {
-			const {
-				isActiveBlockExtensions,
-				getActiveBlockVariation,
-				getExtensionCurrentBlock,
-				getExtensionInnerBlockState,
-				getExtensionCurrentBlockState,
-				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera/extensions');
+			const { isActiveBlockExtensions, getActiveBlockVariation } = select(
+				'blockera/extensions'
+			);
 
 			const { getBlockType } = select('core/blocks');
 			const { getSelectedBlock } = select('core/block-editor');
 
 			return {
-				currentBlock: getExtensionCurrentBlock(),
 				activeVariation: getActiveBlockVariation(),
-				currentState: getExtensionCurrentBlockState(),
 				selectedBlock: (getSelectedBlock() || {})?.name,
 				isActiveBlockExtensions: isActiveBlockExtensions(),
 				availableAttributes: getBlockType(name)?.attributes,
-				currentInnerBlockState: getExtensionInnerBlockState(),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			};
 		});
 
@@ -220,12 +215,16 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				blockId: name,
 				isNormalState,
 				getAttributes,
+				currentBlock,
+				currentState,
 				blockVariations,
 				defaultAttributes,
+				currentBreakpoint,
 				availableAttributes,
 				masterIsNormalState,
 				blockeraInnerBlocks,
 				activeBlockVariation,
+				currentInnerBlockState,
 				getActiveBlockVariation,
 				innerBlocks: additional?.blockeraInnerBlocks,
 			});

@@ -48,6 +48,7 @@ export const SizeStyles = ({
 		...props,
 		state,
 		clientId,
+		blockName,
 		masterState,
 		currentBlock,
 		blockSelectors,

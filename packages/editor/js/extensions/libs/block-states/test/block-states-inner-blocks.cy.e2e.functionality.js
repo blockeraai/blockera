@@ -234,7 +234,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			// Assert store data
 			getWPDataObject().then((data) => {
 				expect({
-					link: {
+					'elements/link': {
 						attributes: {
 							blockeraBackgroundColor: '#cccccc',
 						},
@@ -332,7 +332,7 @@ describe('Block States on inner blocks E2E tests', () => {
 
 				expect({
 					blockeraInnerBlocks: {
-						link: {
+						'elements/link': {
 							attributes: { blockeraBackgroundColor: '#cccccc' },
 						},
 					},
