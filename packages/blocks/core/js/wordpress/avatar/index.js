@@ -8,14 +8,16 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { sharedBlockStates, SharedBlockExtension } from '@blockera/editor';
+import { SharedBlockExtension } from '@blockera/editor';
 
-delete sharedBlockStates.active;
+/**
+ * Internal dependencies
+ */
+import type { BlockType } from '../../type';
 
-export const Avatar = {
+export const Avatar: BlockType = {
 	name: 'blockeraAvatar',
 	targetBlock: 'core/avatar',
-	availableBlockStates: sharedBlockStates,
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},
