@@ -494,10 +494,30 @@ export const registerCommands = () => {
 			.within(() => {
 				cy.getByDataCy('color-btn').click();
 			});
-		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type(value + ' ');
-		});
+
+		cy.get('[data-wp-component="Popover"]')
+			.last()
+			.within(() => {
+				cy.get('input[maxlength="9"]').clear({ force: true });
+				cy.get('input[maxlength="9"]').type(value + ' ');
+
+				// close popover
+				cy.getByAriaLabel('Close').click();
+			});
+	});
+
+	Cypress.Commands.add('clearColorControlValue', (label) => {
+		cy.getParentContainer(label)
+			.last()
+			.within(() => {
+				cy.getByDataCy('color-btn').click();
+			});
+
+		cy.get('[data-wp-component="Popover"]')
+			.last()
+			.within(() => {
+				cy.getByAriaLabel('Reset Color (Clear)').click();
+			});
 	});
 
 	Cypress.Commands.add(
