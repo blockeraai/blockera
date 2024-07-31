@@ -24,7 +24,18 @@ import {
 	getBlockInserter,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Inner Blocks E2E Test', () => {
+/**
+ * We will test block states extension on inner blocks context.
+ *
+ * 1- Checking state container to has correctly color style and exists wrapper.
+ * 2- Checking Block card breadcrumb to show correctly states and inner block name.
+ * 3- Checking add new state process.
+ * 4- Checking not inherit attribute value in inner blocks from master block.
+ * 5- Checking sets attributes correctly in master block in normal or pseudo states and inner block on normal and pseudo states.
+ * 6- Checking value cleanup of block states in inner blocks.
+ * 7- Switch between blocks and checking attributes values.
+ */
+describe('Block States on inner blocks E2E tests', () => {
 	beforeEach(() => {
 		createPost();
 		cy.viewport(1440, 1025);
@@ -32,7 +43,7 @@ describe('Inner Blocks E2E Test', () => {
 
 	const initialSetting = () => {
 		appendBlocks(
-			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{"normal":{"breakpoints":{"desktop":{"attributes":{}}},"isVisible":true,"isSelected":true}},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
+			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
 			<p class="blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74"><a href="http://localhost/wordpress/2023/12/16/5746/" data-type="post" data-id="5746" class="my-link">link</a></p>
 			<!-- /wp:paragraph -->`
 		);
@@ -65,7 +76,7 @@ describe('Inner Blocks E2E Test', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 
-			cy.getByAriaLabel('Blockera Block State Container')
+			cy.getByDataTest('blockera-block-state-container')
 				.first()
 				.within(() => {
 					cy.contains('Inner Block States').should('exist');
@@ -124,23 +135,26 @@ describe('Inner Blocks E2E Test', () => {
 			// do not render normal when adding new state
 			cy.contains('Normal').should('not.exist');
 
-			cy.getByAriaLabel('Add New State').click();
-			// render normal when adding new state
-			cy.contains('Hover').should('exist');
+			context('add hover', () => {
+				cy.getByAriaLabel('Add New State').click();
+				// render normal when adding new state
+				cy.contains('Normal').should('exist');
+				cy.contains('Hover').should('exist');
+			});
 
-			//
-			cy.getByAriaLabel('Delete hover').click({ force: true });
-
-			//
-			cy.contains('Normal').should('not.exist');
-			cy.contains('Hover').should('not.exist');
+			context('delete hover', () => {
+				cy.getByAriaLabel('Delete hover').click({ force: true });
+				// should not render normal and hover stat items.
+				cy.contains('Normal').should('not.exist');
+				cy.contains('Hover').should('not.exist');
+			});
 		});
 
 		it('should not changed blockeraInnerBlocks attribute because add state but not changed anythings on selected state', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 
-			// add
+			// add hover.
 			addBlockState('hover');
 
 			// Check store
@@ -186,7 +200,7 @@ describe('Inner Blocks E2E Test', () => {
 	});
 
 	describe('Master → Normal → InnerBlock → Normal', () => {
-		it('should set attr in innerBlocks root when default breakPoint', () => {
+		it('should set attribute in picked inner block at the root of attributes', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 			//
@@ -260,7 +274,7 @@ describe('Inner Blocks E2E Test', () => {
 			);
 		});
 
-		it('should set attribute correctly when breakpoint : Tablet', () => {
+		it('should set attribute in picked inner block at the root of tablet breakpoint', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 			setDeviceType('Tablet');
@@ -359,7 +373,7 @@ describe('Inner Blocks E2E Test', () => {
 	});
 
 	describe('Master → Normal → InnerBlock → Hover', () => {
-		it('should set attribute correctly when : default breakPoint', () => {
+		it('should set attribute in picked inner block at the hover state base breakpoint', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 			addBlockState('hover');
@@ -463,7 +477,7 @@ describe('Inner Blocks E2E Test', () => {
 			);
 		});
 
-		it('should set attribute correctly when : Tablet', () => {
+		it('should set attribute in picked inner block at the hover state tablet breakpoint', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 			addBlockState('hover');
