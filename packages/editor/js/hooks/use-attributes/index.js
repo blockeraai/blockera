@@ -22,6 +22,11 @@ import {
 	isInnerBlock,
 	prepareAttributesDefaultValues,
 } from '../../extensions/components/utils';
+import type {
+	TBreakpoint,
+	TStates,
+} from '../../extensions/libs/block-states/types';
+import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
 
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
@@ -29,27 +34,35 @@ export const useAttributes = (
 		blockId,
 		className,
 		innerBlocks,
+		currentBlock,
+		currentState,
 		isNormalState,
 		getAttributes,
 		blockVariations,
+		currentBreakpoint,
 		defaultAttributes,
 		availableAttributes,
 		masterIsNormalState,
 		blockeraInnerBlocks,
 		activeBlockVariation,
+		currentInnerBlockState,
 		getActiveBlockVariation,
 	}: {
 		blockId: string,
 		className: string,
 		innerBlocks: Object,
+		currentState: TStates,
 		blockVariations: Object,
 		defaultAttributes: Object,
 		availableAttributes: Object,
 		blockeraInnerBlocks: Object,
 		isNormalState: () => boolean,
 		activeBlockVariation: Object,
+		currentBreakpoint: TBreakpoint,
+		currentInnerBlockState: TStates,
 		masterIsNormalState: () => boolean,
 		getAttributes: (key?: string) => any,
+		currentBlock: string | 'master' | InnerBlockType,
 		getActiveBlockVariation: (name: string, attributes: Object) => boolean,
 	}
 ): ({
@@ -87,12 +100,6 @@ export const useAttributes = (
 		const { getSelectedBlock } = select('core/block-editor');
 		const { attributes = getAttributes(), clientId } =
 			getSelectedBlock() || {};
-		const {
-			getExtensionCurrentBlock,
-			getExtensionInnerBlockState,
-			getExtensionCurrentBlockState,
-			getExtensionCurrentBlockStateBreakpoint,
-		} = select('blockera/extensions');
 
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!
@@ -127,8 +134,6 @@ export const useAttributes = (
 			};
 		}
 
-		const currentBlock = getExtensionCurrentBlock();
-
 		const attributeIsBlockStates = 'blockeraBlockStates' === attributeId;
 		const hasRootAttributes =
 			_attributes.blockeraInnerBlocks &&
@@ -161,10 +166,6 @@ export const useAttributes = (
 				return;
 			}
 		}
-
-		const currentState = getExtensionCurrentBlockState();
-		const currentInnerBlockState = getExtensionInnerBlockState();
-		const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
 
 		const {
 			reset,
