@@ -20,7 +20,7 @@ export type InnerBlocksInfoProps = {
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
-	currentBlock: 'master' | InnerBlockType,
+	currentBlock: 'master' | InnerBlockType | string,
 };
 
 export type InnerBlocksInfo = {
