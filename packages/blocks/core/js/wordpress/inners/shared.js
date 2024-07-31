@@ -31,6 +31,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			dataCompatibility: ['font-color', 'font-color-hover'],
 		},
 	},
+	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading': {
 		name: 'core/heading',
 		label: __('Heading', 'blockera'),
@@ -47,6 +48,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 		},
 	},
+	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-1': {
 		name: 'core/heading',
 		label: __('Heading 1', 'blockera'),
@@ -62,6 +64,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 		},
 	},
+	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-2': {
 		name: 'core/heading',
 		label: __('Heading 2', 'blockera'),
@@ -77,6 +80,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 		},
 	},
+	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-3': {
 		name: 'core/heading',
 		label: __('Heading 3', 'blockera'),
@@ -92,6 +96,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 		},
 	},
+	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-4': {
 		name: 'core/heading',
 		label: __('Heading 4', 'blockera'),
@@ -107,6 +112,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 		},
 	},
+	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-5': {
 		name: 'core/heading',
 		label: __('Heading 5', 'blockera'),
@@ -122,6 +128,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 		},
 	},
+	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-6': {
 		name: 'core/heading',
 		label: __('Heading 6', 'blockera'),
