@@ -10,7 +10,12 @@ import type { MixedElement } from 'react';
  */
 import { SharedBlockExtension } from '@blockera/editor';
 
-export const Button = {
+/**
+ * Internal dependencies
+ */
+import type { BlockType } from '../../type';
+
+export const Button: BlockType = {
 	name: 'blockeraButton',
 	targetBlock: 'core/button',
 	edit: (props: Object): MixedElement => {
