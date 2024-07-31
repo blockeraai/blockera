@@ -251,6 +251,11 @@ export const combineDeclarations = (
 	cssRules.forEach((item) => {
 		const { selector, declarations } = item;
 
+		// Skip cssRule with empty selector or declarations stack.
+		if (!declarations.length || !selector) {
+			return;
+		}
+
 		if (combinedObjects[selector]) {
 			combinedObjects[selector].declarations = [
 				...(combinedObjects[selector].declarations || []),
