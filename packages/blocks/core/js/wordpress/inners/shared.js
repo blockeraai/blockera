@@ -144,6 +144,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 		},
 	},
+	// Compatibility tests: ../group/test/button.cy.e2e.inner-blocks-compatibility.js
 	'core/button': {
 		name: 'core/button',
 		label: __('Button', 'blockera'),
