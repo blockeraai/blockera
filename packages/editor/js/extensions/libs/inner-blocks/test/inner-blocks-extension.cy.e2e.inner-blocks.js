@@ -91,10 +91,10 @@ describe('Inner Blocks Functionality Tests ...', () => {
 			context(
 				'Checking forces items, and inserter items count with searching "buttons" block type to select that',
 				() => {
-					cy.getByDataId('core/paragraph').should('exist');
-					cy.getByDataId('elements/link').should('exist');
-					cy.getByDataId('core/button').should('exist');
-					cy.getByDataId('core/heading').should('exist');
+					cy.getByDataTest('core/paragraph').should('exist');
+					cy.getByDataTest('elements/link').should('exist');
+					cy.getByDataTest('core/button').should('exist');
+					cy.getByDataTest('core/heading').should('exist');
 
 					// Add Inner Block click.
 					openInserterInnerBlock();
@@ -103,18 +103,16 @@ describe('Inner Blocks Functionality Tests ...', () => {
 					cy.getByDataTest('popover-body')
 						.should('exist')
 						.within(() => {
-							cy.getByDataId('blockera-inner-block-type').should(
-								'have.length',
-								62
-							);
+							cy.getByDataTest(
+								'blockera-inner-block-type'
+							).should('have.length', 62);
 
 							// Searching buttons block type.
 							search('buttons');
 
-							cy.getByDataId('blockera-inner-block-type').should(
-								'have.length',
-								1
-							);
+							cy.getByDataTest(
+								'blockera-inner-block-type'
+							).should('have.length', 1);
 
 							cy.getByAriaLabel('core/buttons').click();
 						});
@@ -130,11 +128,11 @@ describe('Inner Blocks Functionality Tests ...', () => {
 					// Opening Extension.
 					openInnerBlocksExtension();
 
-					cy.getByDataId('core/paragraph').should('exist');
-					cy.getByDataId('elements/link').should('exist');
-					cy.getByDataId('core/button').should('exist');
-					cy.getByDataId('core/heading').should('exist');
-					cy.getByDataId('core/buttons').should('exist');
+					cy.getByDataTest('core/paragraph').should('exist');
+					cy.getByDataTest('elements/link').should('exist');
+					cy.getByDataTest('core/button').should('exist');
+					cy.getByDataTest('core/heading').should('exist');
+					cy.getByDataTest('core/buttons').should('exist');
 
 					// Add Inner Block click.
 					openInserterInnerBlock();
@@ -143,15 +141,14 @@ describe('Inner Blocks Functionality Tests ...', () => {
 					cy.getByDataTest('popover-body')
 						.should('exist')
 						.within(() => {
-							cy.getByDataId('blockera-inner-block-type').should(
-								'have.length',
-								61
-							);
+							cy.getByDataTest(
+								'blockera-inner-block-type'
+							).should('have.length', 61);
 
 							// Searching buttons block type.
 							search('buttons');
 
-							cy.getByDataId('not-found-text').should('exist');
+							cy.getByDataTest('not-found-text').should('exist');
 						});
 				}
 			);

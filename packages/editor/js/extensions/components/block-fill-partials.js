@@ -19,6 +19,8 @@ import { unregisterControl } from '@blockera/controls';
  */
 import { BlockCard } from '../libs/block-card';
 
+const excludedControls = ['canvas-editor'];
+
 export const BlockFillPartials: ComponentType<any> = memo(
 	({
 		clientId,
@@ -40,7 +42,9 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			).getControls();
 
 			const getMemoizedControlNames = memoize((controls) =>
-				controls.map((c) => c?.name)
+				controls
+					.filter((c) => !excludedControls.includes(c?.name))
+					.map((c) => c?.name)
 			);
 
 			unregisterControl(

@@ -103,7 +103,6 @@ export const TransformSettings = ({
 				}}
 			>
 				<ToggleSelectControl
-					controlName="toggle-select"
 					label={__('Backface Visibility', 'blockera')}
 					labelDescription={
 						<>

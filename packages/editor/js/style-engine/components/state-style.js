@@ -45,24 +45,23 @@ const Stylesheet = ({
 	});
 
 	const MappedStyleGroups = () =>
-		combineDeclarations(styles).map(
-			(
-				{ selector, declarations }: Object,
-				index: number
-			): MixedElement => {
-				if (!declarations.length || !selector) {
-					return <></>;
-				}
-
-				return (
+		combineDeclarations(styles)
+			.filter(
+				({ selector, declarations }: Object): boolean =>
+					!declarations.length && !selector
+			)
+			.map(
+				(
+					{ selector, declarations }: Object,
+					index: number
+				): MixedElement => (
 					<Style
 						key={index + id}
 						selector={selector}
 						cssDeclaration={declarations}
 					/>
-				);
-			}
-		);
+				)
+			);
 
 	return <MappedStyleGroups />;
 };
@@ -73,22 +72,18 @@ export const StateStyle = (
 	const id = useId();
 	const states: Array<TStates | string> = Object.keys(blockStates);
 
-	return states.map(
-		(state: TStates | string, index: number): MixedElement => {
-			// Filtered allowed states to generate stylesheet.
-			// in free version allowed just "normal" and "hover".
-			if (
-				!applyFilters('blockera.editor.styleEngine.allowedStates', [
-					'normal',
-					'hover',
-				]).includes(state)
-			) {
-				return <></>;
-			}
+	// Filtered allowed states to generate stylesheet.
+	// in free version allowed just "normal" and "hover".
+	const allowedStates = ['normal', 'hover'];
 
-			return (
-				<Stylesheet key={state + index + id} {...{ ...props, state }} />
-			);
-		}
-	);
+	return states
+		.filter((state) =>
+			applyFilters(
+				'blockera.editor.styleEngine.allowedStates',
+				allowedStates
+			).includes(state)
+		)
+		.map((state: TStates | string, index: number): MixedElement => (
+			<Stylesheet key={state + index + id} {...{ ...props, state }} />
+		));
 };

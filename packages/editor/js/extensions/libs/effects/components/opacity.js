@@ -45,7 +45,6 @@ export const Opacity = ({
 		>
 			<BaseControl columns="columns-1">
 				<InputControl
-					controlName="input"
 					label={__('Opacity', 'blockera')}
 					labelDescription={
 						<>
@@ -69,7 +68,6 @@ export const Opacity = ({
 					range={true}
 					min={0}
 					max={100}
-					initialPosition={100}
 					defaultValue={defaultValue}
 					onChange={(newValue, ref) =>
 						handleOnChangeAttributes('blockeraOpacity', newValue, {

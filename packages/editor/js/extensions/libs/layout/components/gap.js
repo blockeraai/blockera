@@ -115,7 +115,6 @@ export default function ({
 				) : (
 					<Grid gridTemplateColumns="55px 55px" gap="10px">
 						<InputControl
-							controlName="input"
 							columns="columns-1"
 							className="control-first label-center small-gap"
 							label={__('Rows', 'blockera')}
@@ -153,7 +152,6 @@ export default function ({
 						/>
 
 						<InputControl
-							controlName="input"
 							columns="columns-1"
 							className="control-first label-center small-gap"
 							label={__('Columns', 'blockera')}

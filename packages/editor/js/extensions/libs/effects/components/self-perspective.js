@@ -100,7 +100,6 @@ export function SelfPerspective({
 					{...labelProps}
 				>
 					<InputControl
-						controlName="input"
 						unitType={'essential'}
 						min={0}
 						max={2000}

@@ -80,7 +80,6 @@ export default function TabPanel({
 								[(activeClass: string)]: tab.name === selected,
 							}
 						)}
-						tabId={`${instanceId}-${tab.name}`}
 						aria-controls={`${instanceId}-${tab.name}-view`}
 						selected={tab.name === selected}
 						key={tab.name}

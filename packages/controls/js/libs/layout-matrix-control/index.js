@@ -992,7 +992,6 @@ export default function LayoutMatrixControl({
 						<Flex direction="row" justifyContent="space-between">
 							<SelectControl
 								id="alignItems"
-								controlName="select"
 								label=""
 								options={[
 									{
@@ -1064,7 +1063,6 @@ export default function LayoutMatrixControl({
 
 							<SelectControl
 								id="justifyContent"
-								controlName="select"
 								label=""
 								options={[
 									{
