@@ -15,6 +15,8 @@ import { isBoolean, isArray } from '@blockera/utils';
  * Internal dependencies
  */
 import type { EditorFeatureWrapperProps } from './types';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
+import type { TStates } from '../../extensions/libs/block-states/types';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 
@@ -24,26 +26,21 @@ export default function EditorFeatureWrapper({
 	children,
 	...props
 }: EditorFeatureWrapperProps): Node {
-	const { blockera, currentBlock, getCurrentState, currentBreakpoint } =
-		useSelect((select) => {
-			const {
-				getExtensionCurrentBlock,
-				getExtensionInnerBlockState,
-				getExtensionCurrentBlockState,
-				getExtensionCurrentBlockStateBreakpoint,
-			} = select('blockera/extensions');
-			const { getEntity } = select('blockera/data');
+	const {
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		currentInnerBlockState,
+	} = useExtensionsStore();
+	const getCurrentState = (): TStates =>
+		isInnerBlock(currentBlock) ? currentInnerBlockState : currentState;
+	const { blockera } = useSelect((select) => {
+		const { getEntity } = select('blockera/data');
 
-			return {
-				blockera: getEntity('blockera'),
-				getCurrentState: () =>
-					isInnerBlock(getExtensionCurrentBlock())
-						? getExtensionInnerBlockState()
-						: getExtensionCurrentBlockState(),
-				currentBlock: getExtensionCurrentBlock(),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-			};
-		});
+		return {
+			blockera: getEntity('blockera'),
+		};
+	});
 
 	const feature = {
 		isActiveOnFree: true,

@@ -1,11 +1,6 @@
 // @flow
 
 /**
- * External dependencies
- */
-import { useSelect } from '@wordpress/data';
-
-/**
  * Blockera dependencies
  */
 import { prepare } from '@blockera/data-editor';
@@ -18,8 +13,8 @@ import {
 	isInnerBlock,
 	prepareAttributesDefaultValues,
 } from '../../extensions/components/utils';
+import { useExtensionsStore } from '../use-extensions-store';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
-import { getBaseBreakpoint } from '../../canvas-editor';
 
 export const useCalculateCurrentAttributes = ({
 	attributes,
@@ -28,24 +23,8 @@ export const useCalculateCurrentAttributes = ({
 	blockeraInnerBlocks,
 }: CalculateCurrentAttributesProps): Object => {
 	let currentAttributes: Object = {};
-	const { currentBlock, currentState, currentBreakpoint } = useSelect(
-		(select) => {
-			const {
-				getExtensionCurrentBlock = () => 'master',
-				getExtensionInnerBlockState = () => 'normal',
-				getExtensionCurrentBlockState = () => 'normal',
-				getExtensionCurrentBlockStateBreakpoint = () =>
-					getBaseBreakpoint(),
-			} = select('blockera/extensions') || {};
-
-			return {
-				currentBlock: getExtensionCurrentBlock(),
-				currentState: getExtensionCurrentBlockState(),
-				currentInnerBlockState: getExtensionInnerBlockState(),
-				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-			};
-		}
-	);
+	const { currentBlock, currentState, currentBreakpoint } =
+		useExtensionsStore();
 	const blockAttributesDefaults =
 		prepareAttributesDefaultValues(blockAttributes);
 

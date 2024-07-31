@@ -4,7 +4,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { Element } from 'react';
-import { useSelect } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -16,27 +15,13 @@ import { getClassNames } from '@blockera/classnames';
  */
 import { isInnerBlock, isNormalState } from './utils';
 import { settings } from '../libs/block-states/config';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export default function StateContainer({ children }: Object): Element<any> {
-	const {
-		currentBlock = 'master',
-		currentInnerBlockState = 'normal',
-		masterBlockState = 'normal',
-	} = useSelect((select) => {
-		const {
-			getExtensionCurrentBlock,
-			getExtensionInnerBlockState,
-			getExtensionCurrentBlockState,
-		} = select('blockera/extensions');
+	const { currentBlock, currentState, currentInnerBlockState } =
+		useExtensionsStore();
 
-		return {
-			currentBlock: getExtensionCurrentBlock(),
-			currentInnerBlockState: getExtensionInnerBlockState(),
-			masterBlockState: getExtensionCurrentBlockState(),
-		};
-	});
-
-	let activeColor = settings[masterBlockState].color;
+	let activeColor = settings[currentState].color;
 
 	if (isInnerBlock(currentBlock) && isNormalState(currentInnerBlockState)) {
 		activeColor = '#cc0000';

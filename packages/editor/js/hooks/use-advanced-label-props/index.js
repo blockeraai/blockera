@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { useSelect } from '@wordpress/data';
 import { useState, useEffect, useMemo } from '@wordpress/element';
 
 /**
@@ -38,6 +37,7 @@ import type {
 } from '../../extensions/libs/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import unAvailableAttributes from './unavailable-attributes';
+import { useExtensionsStore } from '../use-extensions-store';
 
 export const useAdvancedLabelProps = (
 	{
@@ -67,21 +67,7 @@ export const useAdvancedLabelProps = (
 		currentState,
 		currentBreakpoint,
 		currentInnerBlockState,
-	} = useSelect((select) => {
-		const {
-			getExtensionCurrentBlock = () => 'master',
-			getExtensionInnerBlockState = () => 'normal',
-			getExtensionCurrentBlockState = () => 'normal',
-			getExtensionCurrentBlockStateBreakpoint = () => baseBreakpoint,
-		} = select('blockera/extensions') || {};
-
-		return {
-			currentBlock: getExtensionCurrentBlock(),
-			currentState: getExtensionCurrentBlockState(),
-			currentInnerBlockState: getExtensionInnerBlockState(),
-			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-		};
-	});
+	} = useExtensionsStore();
 	// Get static blockeraInnerBlocks value to use as fallback.
 	const { blockeraInnerBlocks } = useBlockContext();
 	const currentBlockAttributes = useMemo(() => {

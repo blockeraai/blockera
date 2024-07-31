@@ -4,7 +4,6 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -14,7 +13,7 @@ import {
 	// MediaQuery,
 	StateStyle,
 } from '../';
-import { getExtensionConfig } from '../../extensions';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 	const {
@@ -23,24 +22,9 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 		currentState,
 		currentBreakpoint,
 		currentInnerBlockState,
-	} = useSelect((select) => {
-		const {
-			getExtensionCurrentBlock,
-			getExtensionInnerBlockState,
-			getExtensionCurrentBlockState,
-			getExtensionCurrentBlockStateBreakpoint,
-		} = select('blockera/extensions');
-
-		return {
-			config: getExtensionConfig(
-				props.blockName,
-				getExtensionCurrentBlock()
-			),
-			currentBlock: getExtensionCurrentBlock(),
-			currentState: getExtensionCurrentBlockState(),
-			currentInnerBlockState: getExtensionInnerBlockState(),
-			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-		};
+	} = useExtensionsStore({
+		name: props.blockName,
+		clientId: props.clientId,
 	});
 
 	// We should not generate styles for no blockera blocks.
