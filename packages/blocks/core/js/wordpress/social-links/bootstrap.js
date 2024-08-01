@@ -43,8 +43,8 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 			}
 
 			if (
-				!attributes?.blockeraInnerBlocks?.item_icons?.attributes
-					?.blockeraFontColor
+				!attributes?.blockeraInnerBlocks['elements/item-icons']
+					?.attributes?.blockeraFontColor
 			) {
 				const newAttributes = normalIconColorFromWPCompatibility({
 					attributes,
@@ -56,8 +56,8 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 			}
 
 			if (
-				!attributes?.blockeraInnerBlocks?.item_containers?.attributes
-					?.blockeraBackgroundColor
+				!attributes?.blockeraInnerBlocks['elements/item-containers']
+					?.attributes?.blockeraBackgroundColor
 			) {
 				const newAttributes =
 					normalIconBackgroundColorFromWPCompatibility({
@@ -114,7 +114,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 			// icon font color
 			//
 			if (
-				currentBlock === 'item_icons' &&
+				currentBlock === 'elements/item-icons' &&
 				currentState === 'normal' &&
 				featureId === 'blockeraFontColor'
 			) {
@@ -132,7 +132,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 			// container background color
 			//
 			if (
-				currentBlock === 'item_containers' &&
+				currentBlock === 'elements/item-containers' &&
 				currentState === 'normal' &&
 				featureId === 'blockeraBackgroundColor'
 			) {

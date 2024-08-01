@@ -27,7 +27,7 @@ export function normalIconBackgroundColorFromWPCompatibility({
 	if (color) {
 		return {
 			blockeraInnerBlocks: {
-				item_containers: {
+				'elements/item-containers': {
 					attributes: {
 						blockeraBackgroundColor: color,
 					},

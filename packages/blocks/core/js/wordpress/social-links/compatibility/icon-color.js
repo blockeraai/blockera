@@ -27,12 +27,12 @@ export function normalIconColorFromWPCompatibility({
 	if (color) {
 		return {
 			blockeraInnerBlocks: {
-				item_icons: {
+				'elements/item-icons': {
 					attributes: {
 						blockeraFontColor: color,
 					},
 				},
-				item_names: {
+				'elements/item-names': {
 					attributes: {
 						blockeraFontColor: color,
 					},
