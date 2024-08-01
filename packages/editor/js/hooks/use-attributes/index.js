@@ -107,7 +107,7 @@ export const useAttributes = (
 
 		// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component, if we supported them.
 		if (
-			!_attributes?.blockeraPropsId &&
+			'undefined' === typeof _attributes?.blockeraPropsId &&
 			availableAttributes?.blockeraPropsId
 		) {
 			setAttributes(

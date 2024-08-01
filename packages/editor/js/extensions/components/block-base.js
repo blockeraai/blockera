@@ -295,12 +295,18 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						filteredAttributes = applyFilters(
 							'blockera.blockEdit.attributes',
 							getAttributesWithIds(
-								mergeObject(
-									filteredAttributes,
-									prepareAttributesDefaultValues(
-										defaultAttributes
-									)
-								),
+								// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component,
+								// if we supported them.
+								'undefined' ===
+									typeof filteredAttributes?.blockeraPropsId &&
+									availableAttributes?.blockeraPropsId
+									? mergeObject(
+											filteredAttributes,
+											prepareAttributesDefaultValues(
+												defaultAttributes
+											)
+									  )
+									: filteredAttributes,
 								'blockeraCompatId'
 							),
 							args
