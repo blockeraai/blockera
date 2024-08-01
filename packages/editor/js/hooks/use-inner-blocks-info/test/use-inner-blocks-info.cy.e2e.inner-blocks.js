@@ -145,7 +145,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// Set "Link" Inner Block as current block.
 			setInnerBlock('elements/link');
 			// Expected text-color control value of paragraph/hover/link/normal.
-			cy.get('@color-label').should('include.text', 'cccccc');
+			cy.get('@color-label').should('include.text', 'aaaaaa');
 			// Set value.
 			cy.setColorControlValue('Text Color', '000000');
 			// set "Hover" state on paragraph.
