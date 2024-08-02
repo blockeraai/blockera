@@ -2,10 +2,9 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
 	openInnerBlocksExtension,
-	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Details Block → Inner Blocks', () => {
@@ -30,10 +29,11 @@ describe('Details Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Links Customize').should('exist');
-				cy.getByAriaLabel('Paragraphs Customize').should('exist');
+				cy.getByDataTest('elements/link').should('exist');
+				cy.getByDataTest('core/paragraph').should('exist');
 
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
+				// no other item
+				cy.getByDataTest('core/heading').should('not.exist');
 			}
 		);
 	});

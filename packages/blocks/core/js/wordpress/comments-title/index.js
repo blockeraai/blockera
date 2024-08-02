@@ -1,19 +1,19 @@
 // @flow
 
 /**
- * External dependencies
- */
-import type { MixedElement } from 'react';
-
-/**
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
 
-export const CommentsTitle = {
+/**
+ * Internal dependencies
+ */
+import type { BlockType } from '../../type';
+
+export const CommentsTitle: BlockType = {
 	name: 'blockeraCommentsTitle',
 	targetBlock: 'core/comments-title',
-	edit: (props: Object): MixedElement => {
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };

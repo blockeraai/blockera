@@ -24,7 +24,7 @@ export const testContent = `
 <!-- /wp:columns -->
 <!-- /wp:comment-template -->
 
-<!-- wp:comments-pagination -->
+<!-- wp:comments-pagination {"paginationArrow":"arrow"} -->
 <!-- wp:comments-pagination-previous /-->
 
 <!-- wp:comments-pagination-numbers /-->

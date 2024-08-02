@@ -2,9 +2,9 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
-	openInnerBlocksExtension,
+	appendBlocks,
+	setInnerBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -23,16 +23,28 @@ describe('Comments Pagination Previous Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/comments-pagination-previous').click();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		//
+		// 1. Edit Inner Blocks
+		//
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByAriaLabel('Arrow Customize').should('exist');
+		//
+		// 1.1. Arrow inner block
+		//
+		setInnerBlock('elements/arrow');
 
-				// no other item
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
-			}
-		);
+		//
+		// 1.1.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'cccccc');
+
+		cy.getBlock('core/comments-pagination-previous')
+			.first()
+			.within(() => {
+				cy.get('.wp-block-comments-pagination-previous-arrow').should(
+					'have.css',
+					'background-color',
+					'rgb(204, 204, 204)'
+				);
+			});
 	});
 });

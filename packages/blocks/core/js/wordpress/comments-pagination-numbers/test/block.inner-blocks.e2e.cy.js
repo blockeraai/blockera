@@ -2,9 +2,10 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
-	openInnerBlocksExtension,
+	appendBlocks,
+	setInnerBlock,
+	setParentBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -23,18 +24,70 @@ describe('Comments Pagination Numbers Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/comments-pagination-numbers').click();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		//
+		// 1. Edit Inner Blocks
+		//
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByAriaLabel('Numbers Customize').should('exist');
-				cy.getByAriaLabel('Current Page Customize').should('exist');
-				cy.getByAriaLabel('Dots Customize').should('exist');
+		//
+		// 1.1. elements/numbers inner block
+		//
+		setInnerBlock('elements/numbers');
 
-				// no other item
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
-			}
-		);
+		//
+		// 1.1.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'cccccc');
+
+		cy.getBlock('core/comments-pagination-numbers')
+			.first()
+			.within(() => {
+				cy.get('.page-numbers:not(.dots)').should(
+					'have.css',
+					'background-color',
+					'rgb(204, 204, 204)'
+				);
+			});
+
+		//
+		// 1.2. elements/current inner block
+		//
+		setParentBlock();
+		setInnerBlock('elements/current');
+
+		//
+		// 1.2.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff2020');
+
+		cy.getBlock('core/comments-pagination-numbers')
+			.first()
+			.within(() => {
+				cy.get('.page-numbers.current').should(
+					'have.css',
+					'background-color',
+					'rgb(255, 32, 32)'
+				);
+			});
+
+		//
+		// 1.3. elements/dots inner block
+		//
+		setParentBlock();
+		setInnerBlock('elements/dots');
+
+		//
+		// 1.4.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff4040');
+
+		cy.getBlock('core/comments-pagination-numbers')
+			.first()
+			.within(() => {
+				cy.get('.page-numbers.dots').should(
+					'have.css',
+					'background-color',
+					'rgb(255, 64, 64)'
+				);
+			});
 	});
 });

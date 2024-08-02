@@ -1,11 +1,6 @@
 // @flow
 
 /**
- * External dependencies
- */
-import type { MixedElement } from 'react';
-
-/**
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
@@ -31,7 +26,7 @@ export const Column: BlockType = {
 		'core/heading-5': sharedInnerBlocks['core/heading-5'],
 		'core/heading-6': sharedInnerBlocks['core/heading-6'],
 	},
-	edit: (props: Object): MixedElement => {
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };

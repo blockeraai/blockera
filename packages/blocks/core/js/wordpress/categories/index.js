@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
@@ -38,7 +37,7 @@ export const Categories: BlockType = {
 			},
 		},
 	},
-	edit: (props: Object): MixedElement => {
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };

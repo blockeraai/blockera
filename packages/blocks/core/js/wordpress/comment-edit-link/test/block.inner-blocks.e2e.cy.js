@@ -2,11 +2,9 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
-	createPost,
 	editPost,
+	appendBlocks,
 	openInnerBlocksExtension,
-	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -30,10 +28,10 @@ describe('Comment Edit Link Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Link Customize').should('exist');
+				cy.getByDataTest('elements/link').should('exist');
 
 				// no other item
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
+				cy.getByDataTest('core/paragraph').should('not.exist');
 			}
 		);
 	});

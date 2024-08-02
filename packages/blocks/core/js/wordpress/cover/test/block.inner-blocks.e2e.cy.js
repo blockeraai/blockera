@@ -2,10 +2,9 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
 	openInnerBlocksExtension,
-	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Cover Block → Inner Blocks', () => {
@@ -33,26 +32,12 @@ describe('Cover Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Links Customize').should('not.exist');
-				cy.getByAriaLabel('Paragraphs Customize').should('exist');
-				cy.getByAriaLabel('Buttons Customize').should('exist');
-				cy.getByAriaLabel('Headings Customize').should('exist');
+				cy.getByDataTest('core/heading').should('exist');
+				cy.getByDataTest('core/paragraph').should('exist');
+				cy.getByDataTest('core/button').should('exist');
 
-				cy.getByAriaLabel('H1s Customize').should('not.exist');
-				cy.getByAriaLabel('H2s Customize').should('not.exist');
-				cy.getByAriaLabel('H3s Customize').should('not.exist');
-				cy.getByAriaLabel('H4s Customize').should('not.exist');
-				cy.getByAriaLabel('H5s Customize').should('not.exist');
-				cy.getByAriaLabel('H6s Customize').should('not.exist');
-
-				openMoreFeaturesControl('More Inner Blocks');
-
-				cy.getByAriaLabel('H1s Customize').should('exist');
-				cy.getByAriaLabel('H2s Customize').should('exist');
-				cy.getByAriaLabel('H3s Customize').should('exist');
-				cy.getByAriaLabel('H4s Customize').should('exist');
-				cy.getByAriaLabel('H5s Customize').should('exist');
-				cy.getByAriaLabel('H6s Customize').should('exist');
+				// no other item
+				cy.getByDataTest('elements/link').should('not.exist');
 			}
 		);
 	});

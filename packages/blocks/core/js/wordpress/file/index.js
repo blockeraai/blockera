@@ -1,11 +1,6 @@
 // @flow
 
 /**
- * External dependencies
- */
-import type { MixedElement } from 'react';
-
-/**
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
@@ -13,17 +8,17 @@ import { SharedBlockExtension } from '@blockera/editor';
 /**
  * Internal dependencies
  */
-import link from '../inners/link';
-import button from '../inners/button';
+import sharedInnerBlocks from '../inners/shared';
+import type { BlockType } from '../../type';
 
-export const File = {
+export const File: BlockType = {
 	name: 'blockeraFile',
 	targetBlock: 'core/file',
 	blockeraInnerBlocks: {
-		...link,
-		...button,
+		'elements/link': sharedInnerBlocks['elements/link'],
+		'core/button': sharedInnerBlocks['core/button'],
 	},
-	edit: (props: Object): MixedElement => {
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };

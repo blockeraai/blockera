@@ -2,8 +2,8 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
 	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -27,11 +27,11 @@ describe('File Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Link Customize').should('exist');
-				cy.getByAriaLabel('Button Customize').should('exist');
+				cy.getByDataTest('elements/link').should('exist');
+				cy.getByDataTest('core/button').should('exist');
 
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
-				cy.getByAriaLabel('H1s Customize').should('not.exist');
+				// no other item
+				cy.getByDataTest('core/heading').should('not.exist');
 			}
 		);
 	});
