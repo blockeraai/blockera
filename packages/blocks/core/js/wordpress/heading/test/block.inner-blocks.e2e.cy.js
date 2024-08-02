@@ -12,12 +12,10 @@ describe('Heading Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
-		appendBlocks(
-			'<!-- wp:heading -->\n' +
-				'<h2 class="wp-block-heading">Heading text</h2>\n' +
-				'<!-- /wp:heading -->'
-		);
+	it('Inner blocks existence', () => {
+		appendBlocks(`<!-- wp:heading -->
+<h2 class="wp-block-heading">Heading text</h2>
+<!-- /wp:heading -->`);
 
 		// Select target block
 		cy.getBlock('core/heading').click();
@@ -27,10 +25,10 @@ describe('Heading Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Links Customize').should('exist');
+				cy.getByDataTest('elements/link').should('exist');
 
 				// no other item
-				cy.getByAriaLabel('Buttons Customize').should('not.exist');
+				cy.getByDataTest('core/heading').should('not.exist');
 			}
 		);
 	});

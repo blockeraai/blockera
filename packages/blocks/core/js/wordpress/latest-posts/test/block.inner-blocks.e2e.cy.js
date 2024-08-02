@@ -2,8 +2,8 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
 	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -12,7 +12,7 @@ describe('Latest Posts Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Inner blocks existence', () => {
 		appendBlocks('<!-- wp:latest-posts /--> \n');
 
 		// Select target block
@@ -23,10 +23,10 @@ describe('Latest Posts Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Links Customize').should('exist');
+				cy.getByDataTest('elements/link').should('exist');
 
-				cy.getByAriaLabel('Paragraphs Customize').should('not.exist');
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
+				// no other item
+				cy.getByDataTest('core/heading').should('not.exist');
 			}
 		);
 	});

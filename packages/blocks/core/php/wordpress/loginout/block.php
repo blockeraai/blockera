@@ -13,15 +13,23 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => array_merge(
-					[
-						'elements/form' => [
-							'root' => 'form',
-						],
+				'innerBlocks' => [
+					'elements/form'        => [
+						'root' => 'form',
 					],
-					blockera_load( 'inners.inputs', dirname( __DIR__ ) ),
-					blockera_load( 'inners.button', dirname( __DIR__ ) ),
-				),
+					'elements/input-label' => [
+						'root' => '.login-password label, .login-username label',
+					],
+					'elements/input'       => [
+						'root' => '.login-password input, .login-username input',
+					],
+					'elements/remember'    => [
+						'root' => '.login-remember label',
+					],
+					'core/button'          => [
+						'root' => '.login-submit .button.button-primary',
+					],
+				],
 			]
 		),
 	]

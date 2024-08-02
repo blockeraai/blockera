@@ -4,31 +4,32 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
-import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
-const blockeraInnerBlocks: InnerBlocks = {
-	'elements/caption': {
-		name: 'elements/caption',
-		label: __('Caption', 'blockera'),
-		icon: <Icon icon="block-image-caption" iconSize="20" />,
-		settings: {
-			force: true,
-		},
-	},
-};
+/**
+ * Internal dependencies
+ */
+import type { BlockType } from '../../type';
 
-export const Image = {
+export const Image: BlockType = {
 	name: 'blockeraImage',
 	targetBlock: 'core/image',
-	blockeraInnerBlocks,
-	edit: (props: Object): MixedElement => {
+	blockeraInnerBlocks: {
+		'elements/caption': {
+			name: 'elements/caption',
+			label: __('Caption', 'blockera'),
+			icon: <Icon icon="block-image-caption" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+	},
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };
