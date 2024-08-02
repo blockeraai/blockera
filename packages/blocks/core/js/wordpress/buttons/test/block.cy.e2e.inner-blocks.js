@@ -14,7 +14,7 @@ describe('Buttons Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should not have inner blocks', () => {
+	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
 		appendBlocks(`<!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button">button 1</a></div>
