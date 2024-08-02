@@ -10,32 +10,34 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
-import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
-const blockeraInnerBlocks: InnerBlocks = {
-	'elements/term-item': {
-		name: 'elements/term-item',
-		label: __('Link', 'blockera'),
-		icon: <Icon icon="link" library="wp" iconSize="20" />,
-		settings: {
-			force: true,
-		},
-	},
-	'core/list-item': {
-		name: 'core/list-item',
-		label: __('Link Parent', 'blockera'),
-		icon: <Icon icon="block-list-item" iconSize="20" />,
-		settings: {
-			force: true,
-		},
-	},
-};
+/**
+ * Internal dependencies
+ */
+import type { BlockType } from '../../type';
 
-export const Categories = {
+export const Categories: BlockType = {
 	name: 'blockeraCategories',
 	targetBlock: 'core/categories',
-	blockeraInnerBlocks,
+	blockeraInnerBlocks: {
+		'elements/term-item': {
+			name: 'elements/term-item',
+			label: __('Link', 'blockera'),
+			icon: <Icon icon="link" library="wp" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+		'elements/list-item': {
+			name: 'elements/list-item',
+			label: __('Link Parent', 'blockera'),
+			icon: <Icon icon="block-list-item" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+	},
 	edit: (props: Object): MixedElement => {
 		return <SharedBlockExtension {...props} />;
 	},
