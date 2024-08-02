@@ -1,12 +1,7 @@
 /**
  * Blockera dependencies
  */
-import {
-	appendBlocks,
-	createPost,
-	openInnerBlocksExtension,
-	openMoreFeaturesControl,
-} from '@blockera/dev-cypress/js/helpers';
+import { createPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
 
 describe('Code Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -14,8 +9,7 @@ describe('Code Block → Inner Blocks', () => {
 	});
 
 	it('Should not have inner blocks', () => {
-		appendBlocks(`
-			<!-- wp:code -->
+		appendBlocks(`<!-- wp:code -->
 <pre class="wp-block-code"><code>Hello world</code></pre>
 <!-- /wp:code -->
 		`);
