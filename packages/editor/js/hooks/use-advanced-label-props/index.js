@@ -111,27 +111,17 @@ export const useAdvancedLabelProps = (
 						currentBreakpoint
 					)
 				) {
-					const stateOfInnerBlock =
-						prepare(
+					return {
+						...rootInnerBlock,
+						...(prepare(
+							`blockeraBlockStates[${currentState}].breakpoints[${getBaseBreakpoint()}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
+							calculatedAttributes
+						) || {}),
+						...(prepare(
 							`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks[${currentBlock}].attributes`,
 							calculatedAttributes
-						) || {};
-
-					if (isEmpty(rootInnerBlock) || isEmpty(stateOfInnerBlock)) {
-						return omit(rootInnerBlock, ['blockeraBlockStates']);
-					}
-
-					const isValidStates = hasValidStates(
-						stateOfInnerBlock?.blockeraBlockStates || {}
-					);
-
-					if (!isValidStates) {
-						return omit(stateOfInnerBlock || rootInnerBlock, [
-							'blockeraBlockStates',
-						]);
-					}
-
-					return stateOfInnerBlock || rootInnerBlock;
+						) || {}),
+					};
 				}
 
 				return (
@@ -459,7 +449,9 @@ export const useAdvancedLabelProps = (
 			const isChangedNormalStateOnBaseBreakpoint =
 				isChangedOnSpecificStateAndBreakpoint(
 					currentBlockAttributes,
-					currentState,
+					isInnerBlock(currentBlock)
+						? currentInnerBlockState
+						: currentState,
 					false
 				);
 
@@ -481,14 +473,17 @@ export const useAdvancedLabelProps = (
 				);
 			};
 
-			let isChangedOnCurrentState = isChangedOnCurrentBreakpointAndState(
-				otherStates[
+			const isChangedOnCurrentState =
+				isChangedOnCurrentBreakpointAndState(
+					otherStates[
+						isInnerBlock(currentBlock)
+							? currentInnerBlockState
+							: currentState
+					]?.breakpoints[currentBreakpoint],
 					isInnerBlock(currentBlock)
 						? currentInnerBlockState
 						: currentState
-				]?.breakpoints[currentBreakpoint],
-				currentState
-			);
+				);
 
 			const isChangedOnCurrentBreakpointNormal =
 				isChangedOnSpecificStateAndBreakpoint(
@@ -496,17 +491,13 @@ export const useAdvancedLabelProps = (
 						? currentBlockAttributes
 						: currentBlockAttributes.blockeraBlockStates.normal
 								?.breakpoints[currentBreakpoint]?.attributes,
-					currentState,
+					isInnerBlock(currentBlock)
+						? currentInnerBlockState
+						: currentState,
 					false
 				);
 
 			const isChangedOnOtherStates = Object.keys(otherStates).length > 0;
-
-			if (!isChangedOnCurrentState && isChanged) {
-				if (!isChangedOnOtherStates && isNormalState) {
-					isChangedOnCurrentState = isChanged;
-				}
-			}
 
 			setLabelStatus({
 				isChanged,

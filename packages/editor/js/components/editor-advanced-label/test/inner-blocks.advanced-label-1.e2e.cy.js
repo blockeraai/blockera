@@ -1,5 +1,6 @@
 import {
 	createPost,
+	appendBlocks,
 	setBlockState,
 	addBlockState,
 	setDeviceType,
@@ -13,8 +14,13 @@ describe('Inner Blocks label testing', () => {
 	beforeEach(() => {
 		createPost();
 
-		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
+		appendBlocks(
+			`<!-- wp:paragraph -->
+<p>This is test paragraph block with <a href="#">link</a> as virtual block.</p>
+<!-- /wp:paragraph -->`
+		);
+
+		cy.getBlock('core/paragraph').click();
 
 		// Alias
 		cy.getParentContainer('Text Color').within(() => {
@@ -363,1078 +369,576 @@ describe('Inner Blocks label testing', () => {
 	});
 
 	describe('reset action testing...', () => {
-		beforeEach(() => {
-			/**
-			 * Normal -> Inner
-			 */
+		it('should resetting blockeraFontColor on any states with correctly values while switching between states', () => {
 			setInnerBlock('elements/link');
 
-			// Set value in normal/desktop
-			cy.setColorControlValue('Text Color', 'cccccc');
-
-			// Set value in hover/desktop
-			addBlockState('hover');
-			cy.setColorControlValue('Text Color', 'bbbbbb');
-
-			// Set value in hover/tablet
-			setDeviceType('Tablet');
-			cy.setColorControlValue('Text Color', 'aaaaaa');
-
-			// Set value in normal/tablet
-			setBlockState('Normal');
-			cy.setColorControlValue('Text Color', 'eeeeee');
-
-			/**
-			 * Hover -> Inner
-			 */
-			reSelectBlock();
-			addBlockState('hover');
-			setInnerBlock('elements/link');
-
-			// Set value in normal/tablet
-			cy.setColorControlValue('Text Color', 'ffffff');
-
-			// Set value in normal/desktop
-			setDeviceType('Desktop');
-			cy.setColorControlValue('Text Color', '777777');
-
-			// Set value in hover/desktop
-			setBlockState('Hover');
-			cy.setColorControlValue('Text Color', '555555');
-
 			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Hover -> Inner -> hover/desktop',
+				'sets values for blockeraFontColor on desktop and laptop devices on normal and hover states',
 				() => {
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Typography',
-						'Text Color',
-						'reset'
-					);
+					// Set value in elements/link/normal/desktop
+					cy.setColorControlValue('Text Color', 'cccccc');
 
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state'
-					);
+					addBlockState('hover');
 
-					// Assert control
-					cy.get('@color-label').should('include.text', '777');
+					// Set value in elements/link/hover/desktop
+					cy.setColorControlValue('Text Color', 'bbbbbb');
 
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {
-						desktop: ['Normal', 'Hover'],
-						tablet: ['Normal', 'Hover'],
-					});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.desktop.attributes
-								.blockeraInnerBlocks['elements/link'].attributes
-								.blockeraBlockStates.hover.breakpoints.desktop
-								.attributes
-						);
-					});
-				}
-			);
-
-			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Hover -> Inner -> normal/tablet',
-				() => {
-					setBlockState('Normal');
+					// Set value in elements/link/hover/tablet
 					setDeviceType('Tablet');
+					cy.setColorControlValue('Text Color', 'aaaaaa');
 
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Typography',
-						'Text Color',
-						'reset'
-					);
+					setBlockState('Normal');
 
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state'
-					);
-
-					// Assert control
-					cy.get('@color-label').should('include.text', '777');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {
-						desktop: ['Normal', 'Hover'],
-						tablet: ['Normal', 'Hover'],
-					});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect(undefined).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks['elements/link'].attributes
-								.blockeraFontColor
-						);
-					});
+					// Set value in elements/link/normal/tablet
+					cy.setColorControlValue('Text Color', 'eeeeee');
 				}
 			);
 
 			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Hover -> Inner -> normal/desktop',
-				() => {
-					setDeviceType('Desktop');
-
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Typography',
-						'Text Color',
-						'reset'
-					);
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state'
-					);
-
-					// Assert control
-					cy.get('@color-label').should('include.text', 'ccc');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {
-						desktop: ['Normal', 'Hover'],
-						tablet: ['Normal', 'Hover'],
-					});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect(undefined).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.desktop.attributes
-								.blockeraInnerBlocks['elements/link'].attributes
-								.blockeraFontColor
-						);
-					});
-				}
-			);
-
-			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Normal -> Inner -> normal/desktop',
+				'reselect block and add hover state on tablet device for master block',
 				() => {
 					reSelectBlock();
-					setBlockState('Normal');
-					setInnerBlock('elements/link');
 
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Typography',
-						'Text Color',
-						'reset'
-					);
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state',
-						'not-have'
-					);
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-other-state'
-					);
-
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {
-						desktop: ['Hover'],
-						tablet: ['Normal', 'Hover'],
-					});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect(undefined).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraInnerBlocks')[
-								'elements/link'
-							].attributes.blockeraFontColor
-						);
-					});
+					addBlockState('hover');
 				}
 			);
+
+			setInnerBlock('elements/link');
 
 			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Normal -> Inner -> hover/desktop',
+				'sets values for blockeraFontColor on "master/hover/[tablet, desktop]/elements/link"',
 				() => {
-					setBlockState('Hover');
+					context('tablet on [normal, hover]', () => {
+						// Set value in master/hover/tablet/elements/link/normal/tablet
+						cy.setColorControlValue('Text Color', 'ffffff');
 
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Typography',
-						'Text Color',
-						'reset'
-					);
+						setBlockState('Hover');
 
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-secondary-state',
-						'not-have'
-					);
-
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-other-state'
-					);
-
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {
-						tablet: ['Normal', 'Hover'],
+						// Set value in master/hover/tablet/elements/link/hover/tablet
+						cy.setColorControlValue('Text Color', '000000');
 					});
 
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraInnerBlocks')[
-								'elements/link'
-							].attributes.blockeraBlockStates.hover.breakpoints
-								.desktop.attributes
+					context('desktop on [hover, normal]', () => {
+						setDeviceType('Desktop');
+
+						// Set value in master/hover/desktop/elements/link/hover/desktop
+						cy.setColorControlValue('Text Color', '777777');
+
+						setBlockState('Normal');
+
+						// Set value in master/hover/desktop/elements/link/normal/desktop
+						cy.setColorControlValue('Text Color', '555555');
+					});
+				}
+			);
+
+			context('reset blockeraFontColor to normal value', () => {
+				context(
+					'on "master/hover/desktop/elements/link/normal/desktop" state',
+					() => {
+						cy.resetBlockeraAttribute(
+							'Typography',
+							'Text Color',
+							'reset'
 						);
-					});
-				}
-			);
 
-			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Normal -> Inner -> hover/tablet',
-				() => {
-					setDeviceType('Tablet');
+						context(
+							'should resets value to normal and with checking other states values and real attributes values',
+							() => {
+								// Assert label
+								cy.checkLabelClassName(
+									'Typography',
+									'Text Color',
+									'changed-in-inner-normal-state'
+								);
 
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Typography',
-						'Text Color',
-						'reset'
-					);
+								// Assert control
+								cy.get('@color-label').should(
+									'include.text',
+									'ccc'
+								);
 
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-secondary-state',
-						'not-have'
-					);
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state'
-					);
+								// Assert state graph
+								cy.checkStateGraph('Typography', 'Text Color', {
+									desktop: ['Normal', 'Hover'],
+									tablet: ['Normal', 'Hover'],
+								});
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'eee');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {
-						tablet: ['Normal'],
-					});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').normal
-								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks['elements/link'].attributes
-								.blockeraBlockStates.hover.breakpoints.tablet
-								.attributes
+								// Assert store data
+								getWPDataObject().then((data) => {
+									expect(undefined).to.be.deep.eq(
+										getSelectedBlock(
+											data,
+											'blockeraBlockStates'
+										).hover.breakpoints.desktop.attributes
+											.blockeraInnerBlocks[
+											'elements/link'
+										].attributes.blockeraFontColor
+									);
+								});
+							}
 						);
-					});
-				}
-			);
+					}
+				);
 
-			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in Normal -> Inner -> normal/tablet',
-				() => {
-					setBlockState('Normal');
+				setBlockState('Hover');
 
-					// Reset to normal
-					cy.resetBlockeraAttribute(
-						'Typography',
-						'Text Color',
-						'reset'
-					);
+				context(
+					'on "master/hover/desktop/elements/link/hover/desktop" state',
+					() => {
+						cy.resetBlockeraAttribute(
+							'Typography',
+							'Text Color',
+							'reset'
+						);
 
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-state',
-						'not-have'
-					);
-				}
-			);
-		});
+						context(
+							'should resets value to normal and with checking other states values and real attributes values',
+							() => {
+								// Assert label
+								cy.checkLabelClassName(
+									'Typography',
+									'Text Color',
+									'changed-in-inner-normal-state'
+								);
 
-		it('should value is undefined after resetting on Normal -> Tablet of inner block attribute', () => {
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
+								// Assert control
+								cy.get('@color-label').should(
+									'include.text',
+									'ccc'
+								);
 
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
+								// Assert state graph
+								cy.checkStateGraph('Typography', 'Text Color', {
+									desktop: ['Normal', 'Hover'],
+									tablet: ['Normal', 'Hover'],
+								});
 
-			// Assert store data
-			getWPDataObject().then((data) => {
-				expect(undefined).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks[
-						'elements/link'
-					].attributes.blockeraFontColor
+								// Assert store data
+								getWPDataObject().then((data) => {
+									expect({}).to.be.deep.eq(
+										getSelectedBlock(
+											data,
+											'blockeraBlockStates'
+										).hover.breakpoints.desktop.attributes
+											.blockeraInnerBlocks[
+											'elements/link'
+										].attributes.blockeraBlockStates.hover
+											.breakpoints.desktop.attributes
+									);
+								});
+							}
+						);
+					}
+				);
+
+				setDeviceType('Tablet');
+
+				context(
+					'on "master/hover/tablet/elements/link/hover/tablet" state',
+					() => {
+						// Reset to normal
+						cy.resetBlockeraAttribute(
+							'Typography',
+							'Text Color',
+							'reset'
+						);
+
+						// Assert label
+						cy.checkLabelClassName(
+							'Typography',
+							'Text Color',
+							'changed-in-inner-normal-state'
+						);
+
+						// Assert control
+						cy.get('@color-label').should('include.text', 'fff');
+
+						// Assert state graph
+						cy.checkStateGraph('Typography', 'Text Color', {
+							desktop: ['Normal', 'Hover'],
+							tablet: ['Normal', 'Hover'],
+						});
+
+						// Assert store data
+						getWPDataObject().then((data) => {
+							expect(undefined).to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraBlockStates')
+									.hover.breakpoints.tablet.attributes
+									.blockeraInnerBlocks['elements/link']
+									.attributes.blockeraBlockStates.hover
+									.breakpoints.tablet.attributes
+									.blockeraFontColor
+							);
+						});
+					}
+				);
+
+				setBlockState('Normal');
+
+				context(
+					'on "master/hover/tablet/elements/link/normal/tablet" state',
+					() => {
+						// Reset to normal
+						cy.resetBlockeraAttribute(
+							'Typography',
+							'Text Color',
+							'reset'
+						);
+
+						// Assert label
+						cy.checkLabelClassName(
+							'Typography',
+							'Text Color',
+							'changed-in-inner-normal-state'
+						);
+
+						// Assert control
+						cy.get('@color-label').should('include.text', 'ccc');
+
+						// Assert state graph
+						cy.checkStateGraph('Typography', 'Text Color', {
+							desktop: ['Normal', 'Hover'],
+							tablet: ['Normal', 'Hover'],
+						});
+
+						// Assert store data
+						getWPDataObject().then((data) => {
+							expect(undefined).to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraBlockStates')
+									.hover.breakpoints.tablet.attributes
+									.blockeraInnerBlocks['elements/link']
+									.attributes.blockeraFontColor
+							);
+						});
+					}
+				);
+
+				reSelectBlock();
+				setBlockState('Normal');
+				setInnerBlock('elements/link');
+
+				context(
+					'on "master/normal/tablet/elements/link/normal/tablet"',
+					() => {
+						// Reset to normal
+						cy.resetBlockeraAttribute(
+							'Typography',
+							'Text Color',
+							'reset'
+						);
+
+						// Assert label
+						cy.checkLabelClassName(
+							'Typography',
+							'Text Color',
+							'changed-in-inner-normal-state'
+						);
+
+						// Assert control
+						cy.get('@color-label').should('include.text', 'ccc');
+
+						// Assert state graph
+						cy.checkStateGraph('Typography', 'Text Color', {
+							desktop: ['Normal', 'Hover'],
+							tablet: ['Hover'],
+						});
+
+						// Assert store data
+						getWPDataObject().then((data) => {
+							expect(undefined).to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraBlockStates')
+									.normal.breakpoints.tablet.attributes
+									.blockeraInnerBlocks['elements/link']
+									.attributes.blockeraFontColor
+							);
+						});
+					}
+				);
+
+				setBlockState('Hover');
+
+				context(
+					'on "master/normal/tablet/elements/link/hover/tablet"',
+					() => {
+						// Reset to normal
+						cy.resetBlockeraAttribute(
+							'Typography',
+							'Text Color',
+							'reset'
+						);
+
+						// Assert label
+						cy.checkLabelClassName(
+							'Typography',
+							'Text Color',
+							'changed-in-inner-normal-state'
+						);
+
+						// Assert control
+						cy.get('@color-label').should('include.text', 'ccc');
+
+						// Assert state graph
+						cy.checkStateGraph('Typography', 'Text Color', {
+							desktop: ['Normal', 'Hover'],
+						});
+
+						// Assert store data
+						getWPDataObject().then((data) => {
+							expect(undefined).to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraBlockStates')
+									.normal.breakpoints.tablet.attributes
+									.blockeraInnerBlocks['elements/link']
+									.attributes.blockeraBlockStates.hover
+									.breakpoints.tablet.attributes
+									.blockeraFontColor
+							);
+						});
+					}
+				);
+
+				setDeviceType('Desktop');
+
+				context(
+					'on "master/normal/desktop/elements/link/hover/desktop"',
+					() => {
+						// Reset to normal
+						cy.resetBlockeraAttribute(
+							'Typography',
+							'Text Color',
+							'reset'
+						);
+
+						// Assert label
+						cy.checkLabelClassName(
+							'Typography',
+							'Text Color',
+							'changed-in-inner-normal-state'
+						);
+
+						// Assert control
+						cy.get('@color-label').should('include.text', 'ccc');
+
+						// Assert state graph
+						cy.checkStateGraph('Typography', 'Text Color', {
+							desktop: ['Normal'],
+						});
+
+						// Assert store data
+						getWPDataObject().then((data) => {
+							expect(undefined).to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraInnerBlocks')[
+									'elements/link'
+								].attributes.blockeraBlockStates.hover
+									.breakpoints.desktop.attributes
+									.blockeraFontColor
+							);
+						});
+					}
+				);
+
+				setBlockState('Normal');
+
+				context(
+					'on "master/normal/desktop/elements/link/normal/desktop"',
+					() => {
+						// Reset to normal
+						cy.resetBlockeraAttribute(
+							'Typography',
+							'Text Color',
+							'reset'
+						);
+
+						// Assert label
+						cy.checkLabelClassName(
+							'Typography',
+							'Text Color',
+							'changed-in-inner-normal-state'
+						);
+
+						// Assert control
+						cy.get('@color-label').should('include.text', 'None');
+
+						// Assert state graph
+						cy.checkStateGraph('Typography', 'Text Color', {});
+
+						// Assert store data
+						getWPDataObject().then((data) => {
+							expect(undefined).to.be.deep.eq(
+								getSelectedBlock(data, 'blockeraInnerBlocks')[
+									'elements/link'
+								].attributes.blockeraFontColor
+							);
+						});
+					}
 				);
 			});
 		});
 	});
 
-	describe.skip('reset-all action testing...', () => {
-		beforeEach(() => {
-			/**
-			 * Normal -> Inner ->
-			 */
+	describe('reset-all action testing...', () => {
+		it('should resetting all blockeraFontColor on any states', () => {
 			setInnerBlock('elements/link');
 
-			// Set value in normal/desktop
-			cy.setColorControlValue('Text Color', 'cccccc');
+			context(
+				'sets values for blockeraFontColor on desktop and laptop devices on normal and hover states',
+				() => {
+					// Set value in elements/link/normal/desktop
+					cy.setColorControlValue('Text Color', 'cccccc');
 
-			// Set value in hover/desktop
-			addBlockState('hover');
-			cy.setColorControlValue('Text Color', 'bbbbbb');
+					addBlockState('hover');
 
-			// Set value in hover/tablet
-			setDeviceType('Tablet');
-			cy.setColorControlValue('Text Color', 'aaaaaa');
+					// Set value in elements/link/hover/desktop
+					cy.setColorControlValue('Text Color', 'bbbbbb');
 
-			// Set value in normal/tablet
-			setBlockState('Normal');
-			cy.setColorControlValue('Text Color', 'eeeeee');
+					// Set value in elements/link/hover/tablet
+					setDeviceType('Tablet');
+					cy.setColorControlValue('Text Color', 'aaaaaa');
 
-			/**
-			 * Hover -> inner ->
-			 */
-			reSelectBlock();
-			addBlockState('hover');
+					setBlockState('Normal');
+
+					// Set value in elements/link/normal/tablet
+					cy.setColorControlValue('Text Color', 'eeeeee');
+				}
+			);
+
+			context(
+				'reselect block and add hover state on tablet device for master block',
+				() => {
+					reSelectBlock();
+
+					addBlockState('hover');
+				}
+			);
+
 			setInnerBlock('elements/link');
 
-			// Set value in normal/tablet
-			cy.setColorControlValue('Text Color', 'c4c4c4');
+			context(
+				'sets values for blockeraFontColor on "master/hover/[tablet, desktop]/elements/link"',
+				() => {
+					context('tablet on [normal, hover]', () => {
+						// Set value in master/hover/tablet/elements/link/normal/tablet
+						cy.setColorControlValue('Text Color', 'ffffff');
 
-			// Set value in hover/desktop
-			setBlockState('Hover');
-			setDeviceType('Desktop');
-			cy.setColorControlValue('Text Color', 'ffffff');
+						setBlockState('Hover');
+
+						// Set value in master/hover/tablet/elements/link/hover/tablet
+						cy.setColorControlValue('Text Color', '000000');
+					});
+
+					context('desktop on [hover, normal]', () => {
+						setDeviceType('Desktop');
+
+						// Set value in master/hover/desktop/elements/link/hover/desktop
+						cy.setColorControlValue('Text Color', '777777');
+
+						setBlockState('Normal');
+
+						// Set value in master/hover/desktop/elements/link/normal/desktop
+						cy.setColorControlValue('Text Color', '555555');
+					});
+				}
+			);
 
 			// Reset All
 			cy.resetBlockeraAttribute('Typography', 'Text Color', 'reset-all');
 
-			context(
-				'should correctly reset blockeraFontColor, and display effected fields(label, control, stateGraph) in all states',
-				() => {
-					// Hover -> inner -> Hover/Desktop
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-secondary-state',
-						'not-have'
+			context('checking values on all states', () => {
+				// Assert control
+				cy.get('@color-label').should('include.text', 'None');
+
+				setBlockState('Normal');
+
+				// Assert control
+				cy.get('@color-label').should('include.text', 'None');
+
+				setDeviceType('Tablet');
+
+				// Assert control
+				cy.get('@color-label').should('include.text', 'None');
+
+				setBlockState('Hover');
+
+				reSelectBlock();
+				setBlockState('Normal');
+				setInnerBlock('elements/link');
+
+				// Assert control
+				cy.get('@color-label').should('include.text', 'None');
+
+				setBlockState('Normal');
+
+				// Assert control
+				cy.get('@color-label').should('include.text', 'None');
+
+				// Assert store data
+				getWPDataObject().then((data) => {
+					// root
+					expect(undefined).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraInnerBlocks')[
+							'elements/link'
+						].attributes.blockeraFontColor
 					);
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {});
-
-					// Hover -> inner -> Normal/Tablet
-					setDeviceType('Tablet');
-					setBlockState('Normal');
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state',
-						'not-have'
+					// root/desktop/hover
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraInnerBlocks')[
+							'elements/link'
+						].attributes.blockeraBlockStates.hover.breakpoints
+							.desktop.attributes
 					);
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {});
-
-					// Hover -> inner -> Hover/Tablet
-					setBlockState('Hover');
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state',
-						'not-have'
+					// parent/hover/desktop/hover
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.desktop.attributes.blockeraInnerBlocks[
+							'elements/link'
+						].attributes.blockeraBlockStates.hover.breakpoints
+							.desktop.attributes
 					);
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {});
-
-					// Normal -> inner -> Hover/Tablet
-					reSelectBlock();
-					setBlockState('Normal');
-					setInnerBlock('elements/link');
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-secondary-state',
-						'not-have'
+					// parent/hover/desktop
+					expect(undefined).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.desktop.attributes.blockeraInnerBlocks[
+							'elements/link'
+						].attributes.blockeraFontColor
 					);
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {});
-
-					// Normal -> inner -> Normal/Tablet
-					setBlockState('Normal');
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state',
-						'not-have'
+					// parent/hover/tablet/normal
+					expect(undefined).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.tablet.attributes.blockeraInnerBlocks[
+							'elements/link'
+						].attributes.blockeraFontColor
 					);
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {});
-
-					// Normal -> inner -> Normal/Desktop
-					setDeviceType('Desktop');
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-inner-normal-state',
-						'not-have'
+					// parent/hover/tablet/hover/tablet
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').hover
+							.breakpoints.tablet.attributes.blockeraInnerBlocks[
+							'elements/link'
+						].attributes.blockeraBlockStates.hover.breakpoints
+							.tablet.attributes
 					);
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {});
-
-					// Normal -> inner -> Hover/Desktop
-					setBlockState('Hover');
-
-					// Assert label
-					cy.checkLabelClassName(
-						'Typography',
-						'Text Color',
-						'changed-in-secondary-state',
-						'not-have'
+					// parent/normal/tablet/hover/tablet
+					expect({}).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes.blockeraInnerBlocks[
+							'elements/link'
+						].attributes.blockeraBlockStates.hover.breakpoints
+							.tablet.attributes
 					);
 
-					// Assert control
-					cy.get('@color-label').should('include.text', 'None');
-
-					// Assert state graph
-					cy.checkStateGraph('Typography', 'Text Color', {});
-
-					// Assert store data
-					getWPDataObject().then((data) => {
-						expect(undefined).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraInnerBlocks')[
-								'elements/link'
-							].attributes.blockeraFontColor
-						);
-
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraInnerBlocks')[
-								'elements/link'
-							].attributes.blockeraBlockStates.hover.breakpoints
-								.desktop.attributes
-						);
-
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.desktop.attributes
-								.blockeraInnerBlocks['elements/link'].attributes
-								.blockeraBlockStates.hover.breakpoints.desktop
-								.attributes
-						);
-
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').hover
-								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks['elements/link'].attributes
-						);
-
-						expect({}).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').normal
-								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks['elements/link'].attributes
-								.blockeraBlockStates.hover.breakpoints.tablet
-								.attributes
-						);
-
-						expect(undefined).to.be.deep.eq(
-							getSelectedBlock(data, 'blockeraBlockStates').normal
-								.breakpoints.tablet.attributes
-								.blockeraInnerBlocks.link.attributes
-								.blockeraFontColor
-						);
-					});
-				}
-			);
-		});
-
-		it('set value in Normal -> Inner -> Normal/desktop and navigate between states and devices', () => {
-			setBlockState('Normal');
-			cy.setColorControlValue('Text Color', '333333');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', '333333');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {
-				desktop: ['Normal'],
-			});
-
-			// Navigate between states and devices
-
-			/**
-			 * Normal -> inner
-			 */
-
-			// Hover/Desktop
-			setBlockState('Hover');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state'
-			);
-
-			// Assert control
-			// TODO
-			//	cy.get('@color-label').should('include.text', '333');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {
-				desktop: ['Normal'],
-			});
-
-			// Hover/Tablet
-			setDeviceType('Tablet');
-			// **should not display prev changes
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state',
-				'not-have'
-			);
-
-			// Assert control
-			// TODO : what value should control display ??
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Normal/Tablet
-			setBlockState('Normal');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state',
-				'not-have'
-			);
-
-			// Assert control
-			// TODO : what value should control display ??
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			/**
-			 * Hover -> inner
-			 */
-			// Normal/Tablet
-			reSelectBlock();
-			setBlockState('Hover');
-			setInnerBlock('elements/link');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state',
-				'not-have'
-			);
-
-			// Assert control
-			// TODO : what value should control display ??
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Hover/Desktop
-			setBlockState('Hover');
-			setDeviceType('Desktop');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state',
-				'not-have'
-			);
-
-			// Assert control
-			// TODO : what value should control display ??
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Assert store data
-			getWPDataObject().then((data) => {
-				expect('#333333').to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraFontColor
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.desktop.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.desktop.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.tablet
-						.attributes
-				);
-
-				expect(undefined).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraFontColor
-				);
-			});
-		});
-
-		it('set value in Normal -> Inner -> Hover/Tablet and navigate between states and devices', () => {
-			setDeviceType('Tablet');
-			cy.setColorControlValue('Text Color', '333333');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-secondary-state'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', '333333');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {
-				tablet: ['Hover'],
-			});
-
-			// Navigate between states and devices
-
-			/**
-			 * Normal -> inner
-			 */
-
-			// Normal/Tablet
-			setBlockState('Normal');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {
-				tablet: ['Hover'],
-			});
-
-			// Normal/Desktop
-			setDeviceType('Desktop');
-			// **should not display prev changes
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Hover/Desktop
-			setBlockState('Hover');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			/**
-			 * Hover -> inner
-			 */
-			// Hover/Desktop
-			reSelectBlock();
-			setBlockState('Hover');
-			setInnerBlock('elements/link');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Normal/Tablet
-			setBlockState('Normal');
-			setDeviceType('Tablet');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Assert store data
-			getWPDataObject().then((data) => {
-				expect(undefined).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraFontColor
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.desktop.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.desktop.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes
-				);
-
-				expect({ blockeraFontColor: '#333333' }).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.tablet
-						.attributes
-				);
-
-				expect(undefined).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraFontColor
-				);
-			});
-		});
-
-		it('set value in Hover -> Inner -> Normal/Desktop and navigate between states and devices', () => {
-			reSelectBlock();
-			setBlockState('Hover');
-			setInnerBlock('elements/link');
-			setBlockState('Normal');
-
-			cy.setColorControlValue('Text Color', '333333');
-
-			// Assert label
-			// TODO : doesn't show changes
-			// cy.checkLabelClassName(
-			// 	'Typography',
-			// 	'Text Color',
-			// 	'changed-in-inner-normal-state'
-			// );
-
-			// Assert control
-			cy.get('@color-label').should('include.text', '333333');
-
-			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Typography', 'Text Color', {
-			// 	normal: ['Normal'],
-			// });
-
-			// Navigate between states and devices
-
-			/**
-			 * Hover -> inner
-			 */
-
-			// Hover/Desktop
-			setBlockState('Hover');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state'
-			);
-
-			// Assert control
-			// TODO : what value should control display?
-
-			// Assert state graph
-			// TODO
-			// cy.checkStateGraph('Typography', 'Text Color', {
-			// 	normal: ['Normal'],
-			// });
-
-			// Hover/Tablet
-			setDeviceType('Tablet');
-			// **should not display prev changes
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Normal/Tablet
-			setBlockState('Normal');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-inner-normal-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			/**
-			 * Normal -> inner
-			 */
-			reSelectBlock();
-			setBlockState('Normal');
-			setInnerBlock('elements/link');
-
-			// Normal/Tablet
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Hover/Tablet
-			setBlockState('Hover');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Hover/Desktop
-			setDeviceType('Desktop');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Normal/Desktop
-			setBlockState('Normal');
-
-			// Assert label
-			cy.checkLabelClassName(
-				'Typography',
-				'Text Color',
-				'changed-in-other-state',
-				'not-have'
-			);
-
-			// Assert control
-			cy.get('@color-label').should('include.text', 'None');
-
-			// Assert state graph
-			cy.checkStateGraph('Typography', 'Text Color', {});
-
-			// Assert store data
-			getWPDataObject().then((data) => {
-				expect(undefined).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraFontColor
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraInnerBlocks').link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.desktop.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints
-						.desktop.attributes
-				);
-
-				expect('#333333').to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.desktop.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraFontColor
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').hover
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes
-				);
-
-				expect({}).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraBlockStates.hover.breakpoints.tablet
-						.attributes
-				);
-
-				expect(undefined).to.be.deep.eq(
-					getSelectedBlock(data, 'blockeraBlockStates').normal
-						.breakpoints.tablet.attributes.blockeraInnerBlocks.link
-						.attributes.blockeraFontColor
-				);
+					// parent/normal/tablet/normal
+					expect(undefined).to.be.deep.eq(
+						getSelectedBlock(data, 'blockeraBlockStates').normal
+							.breakpoints.tablet.attributes.blockeraInnerBlocks[
+							'elements/link'
+						].attributes.blockeraFontColor
+					);
+				});
 			});
 		});
 	});

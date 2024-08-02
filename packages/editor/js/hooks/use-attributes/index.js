@@ -110,11 +110,9 @@ export const useAttributes = (
 			'undefined' === typeof _attributes?.blockeraPropsId &&
 			availableAttributes?.blockeraPropsId
 		) {
-			setAttributes(
-				mergeObject(
-					attributes,
-					prepareAttributesDefaultValues(defaultAttributes)
-				)
+			_attributes = mergeObject(
+				attributes,
+				prepareAttributesDefaultValues(defaultAttributes)
 			);
 		}
 
@@ -218,7 +216,7 @@ export const useAttributes = (
 			// action = UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE
 			if (!masterIsNormalState()) {
 				return setAttributes(
-					reducer(attributes, updateInnerBlockInsideParentState())
+					reducer(_attributes, updateInnerBlockInsideParentState())
 				);
 			}
 			// Assume current block isn't in normal state and attributeId isn't "blockeraBlockStates" for prevent cyclic object error!
