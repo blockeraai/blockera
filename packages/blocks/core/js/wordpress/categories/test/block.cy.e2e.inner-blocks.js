@@ -15,7 +15,7 @@ describe('Categories Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
 		appendBlocks(`<!-- wp:categories /--> `);
 
 		// Select target block
