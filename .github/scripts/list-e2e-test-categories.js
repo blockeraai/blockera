@@ -25,17 +25,32 @@ const getFiles = (dir, pattern) => {
 };
 
 const main = () => {
-	const testFiles = getFiles('packages', /\.cy\.e2e\.(.*?)\.js/);
 	const categories = new Set();
 
-	testFiles.forEach((file) => {
-		const match = file.match(/\.cy\.e2e\.(.*?)\.js/);
+	const categorizedFiles = getFiles('packages', /\.(.*?)\.e2e\.cy\.js/);
+	categorizedFiles.forEach((file) => {
+		const match = file.match(/\.(.*?)\.e2e\.cy\.js/);
 		if (match && match[1]) {
 			categories.add(match[1]);
 		}
 	});
 
-	console.log(JSON.stringify(Array.from(categories).sort()));
+	const generalFiles = getFiles('packages', /\/[\w-]+\.e2e\.cy\.js/);
+	if (generalFiles.length) {
+		categories.add('general');
+	}
+
+	// sort the categories
+	let sortedCategories = Array.from(categories).sort();
+
+	if (sortedCategories.includes('general')) {
+		sortedCategories = [
+			'general',
+			...sortedCategories.filter((category) => category !== 'general'),
+		];
+	}
+
+	console.log(JSON.stringify(sortedCategories));
 };
 
 main();
