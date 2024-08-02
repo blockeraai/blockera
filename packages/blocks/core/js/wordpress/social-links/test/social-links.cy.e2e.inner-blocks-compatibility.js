@@ -58,16 +58,19 @@ describe('Social Links Block → WP Compatibility', () => {
 			);
 
 			expect('#f3f3f3').to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_icons
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-icons'
+				]?.attributes?.blockeraFontColor
 			);
 			expect('#f3f3f3').to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_names
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-names'
+				]?.attributes?.blockeraFontColor
 			);
 			expect('#000000').to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_containers
-					?.attributes?.blockeraBackgroundColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-containers'
+				]?.attributes?.blockeraBackgroundColor
 			);
 		});
 
@@ -151,16 +154,19 @@ describe('Social Links Block → WP Compatibility', () => {
 			);
 
 			expect('#888888').to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_icons
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-icons'
+				]?.attributes?.blockeraFontColor
 			);
 			expect('#999999').to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_names
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-names'
+				]?.attributes?.blockeraFontColor
 			);
 			expect('#666666').to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_containers
-					?.attributes?.blockeraBackgroundColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-containers'
+				]?.attributes?.blockeraBackgroundColor
 			);
 		});
 
@@ -236,16 +242,19 @@ describe('Social Links Block → WP Compatibility', () => {
 			);
 
 			expect(undefined).to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_icons
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-icons'
+				]?.attributes?.blockeraFontColor
 			);
 			expect(undefined).to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_names
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-names'
+				]?.attributes?.blockeraFontColor
 			);
 			expect(undefined).to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_containers
-					?.attributes?.blockeraBackgroundColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-containers'
+				]?.attributes?.blockeraBackgroundColor
 			);
 		});
 	});
@@ -308,8 +317,9 @@ describe('Social Links Block → WP Compatibility', () => {
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_icons
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-icons'
+				]?.attributes?.blockeraFontColor
 			);
 			expect({
 				settings: {
@@ -327,8 +337,9 @@ describe('Social Links Block → WP Compatibility', () => {
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_names
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-names'
+				]?.attributes?.blockeraFontColor
 			);
 			expect({
 				settings: {
@@ -346,8 +357,9 @@ describe('Social Links Block → WP Compatibility', () => {
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_containers
-					?.attributes?.blockeraBackgroundColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-containers'
+				]?.attributes?.blockeraBackgroundColor
 			);
 		});
 
@@ -431,8 +443,9 @@ describe('Social Links Block → WP Compatibility', () => {
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_icons
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-icons'
+				]?.attributes?.blockeraFontColor
 			);
 			expect({
 				settings: {
@@ -450,8 +463,9 @@ describe('Social Links Block → WP Compatibility', () => {
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_names
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-names'
+				]?.attributes?.blockeraFontColor
 			);
 			expect({
 				settings: {
@@ -469,8 +483,9 @@ describe('Social Links Block → WP Compatibility', () => {
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_containers
-					?.attributes?.blockeraBackgroundColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-containers'
+				]?.attributes?.blockeraBackgroundColor
 			);
 		});
 
@@ -528,16 +543,19 @@ describe('Social Links Block → WP Compatibility', () => {
 			);
 
 			expect(undefined).to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_icons
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-icons'
+				]?.attributes?.blockeraFontColor
 			);
 			expect(undefined).to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_names
-					?.attributes?.blockeraFontColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-names'
+				]?.attributes?.blockeraFontColor
 			);
 			expect(undefined).to.be.equal(
-				getSelectedBlock(data, 'blockeraInnerBlocks')?.item_containers
-					?.attributes?.blockeraBackgroundColor
+				getSelectedBlock(data, 'blockeraInnerBlocks')[
+					'elements/item-containers'
+				]?.attributes?.blockeraBackgroundColor
 			);
 		});
 	});
