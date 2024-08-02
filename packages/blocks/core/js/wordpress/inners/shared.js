@@ -51,7 +51,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-1': {
 		name: 'core/heading',
-		label: __('Heading 1', 'blockera'),
+		label: __('Heading: H1', 'blockera'),
 		icon: <Icon icon="heading-level-1" library="wp" iconSize="20" />,
 		settings: {
 			level: 1,
@@ -67,7 +67,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-2': {
 		name: 'core/heading',
-		label: __('Heading 2', 'blockera'),
+		label: __('Heading: H2', 'blockera'),
 		icon: <Icon icon="heading-level-2" library="wp" iconSize="20" />,
 		settings: {
 			level: 2,
@@ -83,7 +83,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-3': {
 		name: 'core/heading',
-		label: __('Heading 3', 'blockera'),
+		label: __('Heading: H3', 'blockera'),
 		icon: <Icon icon="heading-level-3" library="wp" iconSize="20" />,
 		settings: {
 			level: 3,
@@ -99,7 +99,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-4': {
 		name: 'core/heading',
-		label: __('Heading 4', 'blockera'),
+		label: __('Heading: H4', 'blockera'),
 		icon: <Icon icon="heading-level-4" library="wp" iconSize="20" />,
 		settings: {
 			level: 4,
@@ -115,7 +115,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-5': {
 		name: 'core/heading',
-		label: __('Heading 5', 'blockera'),
+		label: __('Heading: H5', 'blockera'),
 		icon: <Icon icon="heading-level-5" library="wp" iconSize="20" />,
 		settings: {
 			level: 5,
@@ -131,7 +131,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	'core/heading-6': {
 		name: 'core/heading',
-		label: __('Heading 6', 'blockera'),
+		label: __('Heading: H6', 'blockera'),
 		icon: <Icon icon="heading-level-6" library="wp" iconSize="20" />,
 		settings: {
 			level: 6,
