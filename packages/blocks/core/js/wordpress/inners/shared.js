@@ -12,6 +12,7 @@ import { Icon } from '@blockera/icons';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 
 const sharedInnerBlocks: InnerBlocks = {
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/paragraph': {
 		name: 'core/paragraph',
 		label: __('Paragraph', 'blockera'),
@@ -21,6 +22,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		},
 	},
 	// Compatibility tests: ../group/test/link.cy.e2e.inner-blocks-compatibility.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'elements/link': {
 		name: 'elements/link',
 		label: __('Link', 'blockera'),
@@ -32,6 +34,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading': {
 		name: 'core/heading',
 		label: __('Heading', 'blockera'),
@@ -49,6 +52,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-1': {
 		name: 'core/heading',
 		label: __('Heading: H1', 'blockera'),
@@ -65,6 +69,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-2': {
 		name: 'core/heading',
 		label: __('Heading: H2', 'blockera'),
@@ -81,6 +86,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-3': {
 		name: 'core/heading',
 		label: __('Heading: H3', 'blockera'),
@@ -97,6 +103,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-4': {
 		name: 'core/heading',
 		label: __('Heading: H4', 'blockera'),
@@ -113,6 +120,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-5': {
 		name: 'core/heading',
 		label: __('Heading: H5', 'blockera'),
@@ -129,6 +137,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-6': {
 		name: 'core/heading',
 		label: __('Heading: H6', 'blockera'),
@@ -146,6 +155,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	},
 	// Compatibility tests: ../group/test/button.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../buttons/test/block.cy.e2e.inner-blocks.js
+	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/button': {
 		name: 'core/button',
 		label: __('Button', 'blockera'),
@@ -158,6 +168,15 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+		},
+	},
+	// Functionality tests: ../packages/gallery/test/block.inner-blocks.e2e.cy.js
+	'core/image': {
+		name: 'core/image',
+		label: __('Image', 'blockera'),
+		icon: <Icon icon="image" library="wp" iconSize="20" />,
+		settings: {
+			force: true,
 		},
 	},
 };

@@ -12,14 +12,12 @@ describe('Details Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
-		appendBlocks(
-			'<!-- wp:details -->\n' +
-				'<details class="wp-block-details"><summary>test title</summary><!-- wp:paragraph {"placeholder":"Type / to add a hidden block"} -->\n' +
-				'<p>Paragraph text...</p>\n' +
-				'<!-- /wp:paragraph --></details>\n' +
-				'<!-- /wp:details -->'
-		);
+	it('Inner blocks existence', () => {
+		appendBlocks(`<!-- wp:details -->
+<details class="wp-block-details"><summary>test title</summary><!-- wp:paragraph {"placeholder":"Type / to add a hidden block"} -->
+<p>Paragraph text...</p>
+<!-- /wp:paragraph --></details>
+<!-- /wp:details -->`);
 
 		// Select target block
 		cy.getBlock('core/details').click();

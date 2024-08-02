@@ -17,7 +17,8 @@ describe('Comments Pagination Next Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	// We didn't check it in front end because it needs pagination
+	it('Inner blocks existence + CSS selectors in editor', () => {
 		appendBlocks(testContent);
 
 		// Select target block

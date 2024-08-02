@@ -19,7 +19,7 @@ describe('Comment Reply Link Block → Inner Blocks', () => {
 		editPost({ postID: 1 });
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Inner blocks existence', () => {
 		appendBlocks(testContent);
 
 		// Select target block

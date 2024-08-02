@@ -17,7 +17,7 @@ describe('Comments Pagination Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Inner blocks existence', () => {
 		appendBlocks(testContent);
 
 		// Select target block

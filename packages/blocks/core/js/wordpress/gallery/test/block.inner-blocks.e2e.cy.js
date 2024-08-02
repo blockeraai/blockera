@@ -2,10 +2,12 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
+	savePage,
 	createPost,
-	openInnerBlocksExtension,
-	openMoreFeaturesControl,
+	appendBlocks,
+	setInnerBlock,
+	setParentBlock,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Gallery Block → Inner Blocks', () => {
@@ -13,20 +15,20 @@ describe('Gallery Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
 		appendBlocks(
 			`<!-- wp:gallery {"linkTo":"none"} -->
-<figure class="wp-block-gallery has-nested-images columns-default is-cropped"><!-- wp:image {"id":7144,"sizeSlug":"large","linkDestination":"none","className":"blockera-block blockera-block-0e1eb5b2-0332-49c4-8ab7-d6da3510191d","blockeraFlexWrap":{"reverse":false},"blockeraPropsId":"47111938578","blockeraCompatId":"47111938578"} -->
-<figure class="wp-block-image size-large blockera-block blockera-block-0e1eb5b2-0332-49c4-8ab7-d6da3510191d"><img src="https://placehold.co/600x400" alt="" class="wp-image-7144"/></figure>
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped"><!-- wp:image {"id":7144,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="https://placehold.co/600x400" alt="" class="wp-image-7144"/><figcaption class="wp-element-caption">Image 1 caption</figcaption></figure>
 <!-- /wp:image -->
 
 <!-- wp:image {"id":7139,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://placehold.co/600x400" alt="" class="wp-image-7139"/></figure>
+<figure class="wp-block-image size-large"><img src="https://placehold.co/600x400" alt="" class="wp-image-7139"/><figcaption class="wp-element-caption">Image 2 caption</figcaption></figure>
 <!-- /wp:image -->
 
-<!-- wp:image {"id":7123,"sizeSlug":"large","linkDestination":"none","className":"blockera-block blockera-block-4df1fe55-0eae-4065-b060-4675d2c0304a","blockeraFlexWrap":{"reverse":false},"blockeraPropsId":"47112011175","blockeraCompatId":"47112011175"} -->
-<figure class="wp-block-image size-large blockera-block blockera-block-4df1fe55-0eae-4065-b060-4675d2c0304a"><img src="https://placehold.co/600x400" alt="" class="wp-image-7123"/><figcaption class="wp-element-caption">Image test caption</figcaption></figure>
-<!-- /wp:image --><figcaption class="blocks-gallery-caption wp-element-caption">Gallery test caption...</figcaption></figure>
+<!-- wp:image {"id":7123,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="https://placehold.co/600x400" alt="" class="wp-image-7123"/></figure>
+<!-- /wp:image --><figcaption class="blocks-gallery-caption wp-element-caption">Gallery caption...</figcaption></figure>
 <!-- /wp:gallery -->
 			`
 		);
@@ -36,17 +38,87 @@ describe('Gallery Block → Inner Blocks', () => {
 
 		cy.getByAriaLabel('Select Gallery').click();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		//
+		// 1. Edit Inner Blocks
+		//
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByAriaLabel('Gallery Caption Customize').should('exist');
-				cy.getByAriaLabel('Images Customize').should('exist');
-				cy.getByAriaLabel('Images Captions Customize').should('exist');
+		//
+		// 1.1. Image inner block
+		//
+		setInnerBlock('core/image');
 
-				cy.getByAriaLabel('H1s Customize').should('not.exist');
-			}
-		);
+		//
+		// 1.1.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff0000');
+
+		cy.getBlock('core/gallery')
+			.first()
+			.within(() => {
+				cy.get('.wp-block-image img')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+			});
+
+		//
+		// 1.2. Image caption inner block
+		//
+		setParentBlock();
+		setInnerBlock('elements/image-caption');
+
+		//
+		// 1.2.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff2020');
+
+		cy.getBlock('core/gallery')
+			.first()
+			.within(() => {
+				cy.get('.wp-block-image figcaption')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 32, 32)');
+			});
+
+		//
+		// 1.3. Gallery caption inner block
+		//
+		setParentBlock();
+		setInnerBlock('elements/gallery-caption');
+
+		//
+		// 1.3.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff4040');
+
+		cy.getBlock('core/gallery')
+			.first()
+			.within(() => {
+				cy.get('> figcaption')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 64, 64)');
+			});
+
+		//
+		// 2. Assert inner blocks selectors in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block').within(() => {
+			// image inner block
+			cy.get('.wp-block-image img')
+				.first()
+				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+
+			// image caption inner block
+			cy.get('.wp-block-image figcaption')
+				.first()
+				.should('have.css', 'background-color', 'rgb(255, 32, 32)');
+
+			// gallery caption inner block
+			cy.get('> figcaption')
+				.first()
+				.should('have.css', 'background-color', 'rgb(255, 64, 64)');
+		});
 	});
 });
