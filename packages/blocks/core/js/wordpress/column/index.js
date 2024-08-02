@@ -13,14 +13,6 @@ import { SharedBlockExtension } from '@blockera/editor';
 /**
  * Internal dependencies
  */
-import link from '../inners/link';
-import button from '../inners/button';
-import headings from '../inners/headings';
-import paragraph from '../inners/paragraph';
-
-/**
- * Internal dependencies
- */
 import sharedInnerBlocks from '../inners/shared';
 import type { BlockType } from '../../type';
 
