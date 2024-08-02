@@ -11,11 +11,30 @@ export function setParentBlock() {
 }
 
 export function setInnerBlock(blockType) {
-	openInnerBlocksExtension();
+	cy.wrap(openInnerBlocksExtension())
+		.wait(10)
+		.get('body')
+		.then(($body) => {
+			if (
+				$body.find(
+					`.blockera-extension.blockera-extension-inner-blocks div[data-id="${blockType}"]`
+				).length > 0
+			) {
+				cy.get(
+					'.blockera-extension.blockera-extension-inner-blocks'
+				).within(() => {
+					cy.getByDataId(blockType).click();
+				});
+			} else {
+				openInserterInnerBlock();
 
-	cy.get('.blockera-extension.blockera-extension-inner-blocks').within(() => {
-		cy.getByDataId(blockType).click();
-	});
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel(blockType).click();
+					});
+			}
+		});
 }
 
 export function openInserterInnerBlock(disabled = '') {
