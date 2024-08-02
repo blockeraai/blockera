@@ -73,7 +73,8 @@ jobs:
                   if [ "${{ matrix.category }}" != "general" ]; then
                     spec_pattern="packages/**/*.${{ matrix.category }}.e2e.cy.js"
                   else
-                    spec_pattern="packages/**/*.e2e.cy.js"
+                    spec_pattern=$(find packages -type f -name "*.e2e.cy.js" ! -name "*.*.e2e.cy.js" | tr '\n' ',')
+                    spec_pattern="${spec_pattern%,}" # Remove trailing comma
                   fi
                   npm run test:e2e -- --spec "$spec_pattern"
 
