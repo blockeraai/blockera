@@ -69,7 +69,13 @@ jobs:
                   echo "Running category: ${{ matrix.category }}"
 
             - name: Run Cypress E2E Tests
-              run: npm run test:e2e -- --spec "packages/**/*.cy.e2e.${{ matrix.category }}.js"
+              run: |
+                  if [ "${{ matrix.category }}" != "general" ]; then
+                    spec_pattern="packages/**/*.${{ matrix.category }}.e2e.cy.js"
+                  else
+                    spec_pattern="packages/**/*.e2e.cy.js"
+                  fi
+                  npm run test:e2e -- --spec "$spec_pattern"
 
             - name: Stop WordPress Environment
               run: npm run env:stop
