@@ -85,8 +85,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		// Get repeater value from internal Blockera store api.
 		const value = getBlockInners(block.clientId);
 
+		// cache length to not calculate it multiple times
+		const innerBlocksLength = Object.keys(innerBlocks).length;
+
 		if (
-			!Object.keys(innerBlocks).length ||
+			!innerBlocksLength ||
 			(!availableBlocks.length && !Object.keys(value).length) ||
 			isInnerBlock(currentBlock)
 		) {
@@ -103,7 +106,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		};
 
 		// Calculation: repeater maxItems property.
-		const maxItems = availableBlocks.length;
+		const maxItems = innerBlocksLength;
 
 		return (
 			<PanelBodyControl
