@@ -21,6 +21,8 @@ const BlockEditContextProvider = ({
 	...props
 }: Object): MixedElement => {
 	const {
+		setBlockClientInnerState,
+		setBlockClientMasterState,
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setCurrentInnerBlockState,
 	} = dispatch('blockera/extensions') || {};
@@ -68,8 +70,19 @@ const BlockEditContextProvider = ({
 			handleOnChangeAttributes,
 			switchBlockState: (state: TStates): void => {
 				if (isInnerBlock(currentBlock)) {
+					setBlockClientInnerState({
+						currentState: state,
+						innerBlockType: currentBlock,
+						clientId: props?.block?.clientId,
+					});
 					return setCurrentInnerBlockState(state);
 				}
+
+				setBlockClientMasterState({
+					currentState: state,
+					name: props?.block?.blockName,
+					clientId: props?.block?.clientId,
+				});
 
 				setCurrentState(state);
 			},
