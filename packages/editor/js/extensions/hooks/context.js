@@ -4,7 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
+import { dispatch, select } from '@wordpress/data';
 import { createContext, useContext, useMemo } from '@wordpress/element';
 
 /**
@@ -12,7 +12,11 @@ import { createContext, useContext, useMemo } from '@wordpress/element';
  */
 import { isInnerBlock } from '../components/utils';
 import type { THandleOnChangeAttributes } from '../libs/types';
-import type { BreakpointTypes, TStates } from '../libs/block-states/types';
+import type {
+	TStates,
+	TBreakpoint,
+	BreakpointTypes,
+} from '../libs/block-states/types';
 
 const BlockEditContext: Object = createContext({});
 
@@ -26,6 +30,7 @@ const BlockEditContextProvider = ({
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setCurrentInnerBlockState,
 	} = dispatch('blockera/extensions') || {};
+	const { updatePickedDeviceType } = select('blockera/editor') || {};
 
 	const memoizedValue: {
 		currentTab: string,
@@ -68,7 +73,12 @@ const BlockEditContextProvider = ({
 			masterIsNormalState,
 			blockeraInnerBlocks,
 			handleOnChangeAttributes,
-			switchBlockState: (state: TStates): void => {
+			switchBlockState: (
+				state: TStates,
+				breakpoint: TBreakpoint
+			): void => {
+				updatePickedDeviceType(breakpoint);
+
 				if (isInnerBlock(currentBlock)) {
 					setBlockClientInnerState({
 						currentState: state,

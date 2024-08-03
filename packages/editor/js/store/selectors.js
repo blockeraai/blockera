@@ -86,3 +86,14 @@ export const getDeviceType = ({
 }): TBreakpoint => {
 	return canvasEditorSettings.deviceType || getBaseBreakpoint();
 };
+
+export const updatePickedDeviceType = (
+	{
+		canvasEditorSettings,
+	}: {
+		canvasEditorSettings: Object,
+	},
+	device: TBreakpoint
+): TBreakpoint => {
+	return canvasEditorSettings.updatePickedDeviceType(device);
+};

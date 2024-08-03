@@ -42,8 +42,12 @@ export const Breakpoints = ({
 
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
 		select('blockera/editor');
-	const { setDeviceType, setCanvasSettings, updateBreakpoints } =
-		useDispatch('blockera/editor');
+	const {
+		setDeviceType,
+		setCanvasSettings,
+		updateBreakpoints,
+		updaterDeviceType,
+	} = useDispatch('blockera/editor');
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
 		'blockera/extensions'
 	);
@@ -109,6 +113,7 @@ export const Breakpoints = ({
 		);
 
 		setDeviceType(deviceType);
+		updaterDeviceType(updateDeviceType);
 		// eslint-disable-next-line
 	}, [deviceType]);
 

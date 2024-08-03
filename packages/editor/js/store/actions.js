@@ -55,3 +55,12 @@ export const setDeviceType = (device: TBreakpoint): Object => {
 		type: 'SWITCH_BREAKPOINT',
 	};
 };
+
+export const updaterDeviceType = (
+	updater: (device: TBreakpoint) => void
+): Object => {
+	return {
+		updater,
+		type: 'UPDATER_DEVICE_TYPE',
+	};
+};

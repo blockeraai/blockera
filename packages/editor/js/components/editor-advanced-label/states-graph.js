@@ -120,7 +120,10 @@ export const StatesGraph = ({
 												breakpoint={state.graph.label}
 												key={`${key}-state`}
 												onClick={(): void => {
-													onClick(_state.type);
+													onClick(
+														_state.type,
+														state.graph.type
+													);
 												}}
 												current={false}
 											/>
