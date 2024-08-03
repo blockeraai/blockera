@@ -23,6 +23,7 @@ export type BlockDetail = {
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
 	innerBlocks: Object,
+	isMasterNormalState: boolean,
 	getActiveBlockVariation: (name: string, attrs: Object) => boolean,
 };
 

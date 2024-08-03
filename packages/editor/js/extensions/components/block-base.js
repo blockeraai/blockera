@@ -194,6 +194,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const args = {
 			blockId: name,
 			blockClientId: clientId,
+			isMasterNormalState: masterIsNormalState(),
 			isNormalState: isNormalState(),
 			isMasterBlock: !isInnerBlock(currentBlock),
 			isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),

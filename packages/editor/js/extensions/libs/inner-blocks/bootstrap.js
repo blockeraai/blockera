@@ -208,9 +208,13 @@ export const bootstrap = (): void => {
 				currentState,
 				currentBlock,
 				innerBlocks,
+				isMasterNormalState,
 			} = blockDetail;
 
-			if ((!isBaseBreakpoint || isMasterBlock) && !isResetRef(ref)) {
+			if (
+				(!isBaseBreakpoint || isMasterBlock || !isMasterNormalState) &&
+				!isResetRef(ref)
+			) {
 				return nextState;
 			}
 
