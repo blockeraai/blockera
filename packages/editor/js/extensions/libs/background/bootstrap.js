@@ -32,7 +32,7 @@ export const bootstrap = (): void => {
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { blockId, blockAttributes } = blockDetail;
 
-			if (!isBlockNotOriginalState(blockDetail)) {
+			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 

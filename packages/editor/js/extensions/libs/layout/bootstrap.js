@@ -45,7 +45,7 @@ export const bootstrap = (): void => {
 			const { blockId, blockAttributes, activeBlockVariation } =
 				blockDetail;
 
-			if (!isBlockNotOriginalState(blockDetail)) {
+			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 

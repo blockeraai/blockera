@@ -26,7 +26,7 @@ export const bootstrap = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.spacingExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			if (!isBlockNotOriginalState(blockDetail)) {
+			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 
