@@ -162,10 +162,10 @@ describe('Inner Blocks Functionality Tests ...', () => {
 			getWPDataObject().then((data) => {
 				// Assertion for store api.
 				expect([
+					'core/heading',
 					'core/paragraph',
 					'elements/link',
 					'core/button',
-					'core/heading',
 					'core/buttons',
 				]).to.be.deep.equal(
 					Object.keys(getBlockTypeInnerBlocksStore(data))
