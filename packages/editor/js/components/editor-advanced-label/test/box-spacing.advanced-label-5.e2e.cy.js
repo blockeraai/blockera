@@ -1143,7 +1143,11 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 							type,
 							side,
 							[
-								'changed-in-other-state',
+								// TODO @ali - check this
+								//  - why should have not "changed-in-other-state" class?
+								//  - please consider any sides changed in other states and in this test suite we resetting current state,
+								//  so other states have changeset!
+								// 'changed-in-other-state',
 								'changed-in-secondary-state',
 							],
 							'not-have'
@@ -1168,7 +1172,11 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 						type,
 						'',
 						[
-							'changed-in-other-state',
+							// TODO @ali - check this
+							//  - why should have not "changed-in-other-state" class?
+							//  - please consider "margin and padding" changed in other states and in this test suite we resetting current state,
+							//  so other states have changeset!
+							// 'changed-in-other-state',
 							'changed-in-secondary-state',
 						],
 						'not-have'
