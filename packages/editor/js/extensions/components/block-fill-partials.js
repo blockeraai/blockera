@@ -67,6 +67,9 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						innerBlocks={blockeraInnerBlocks}
 						currentInnerBlock={currentInnerBlock}
 						handleOnClick={updateBlockEditorSettings}
+						states={
+							blockProps.currentAttributes.blockeraBlockStates
+						}
 					/>
 				</Fill>
 				{isActiveBlockExtensions() && (

@@ -10,7 +10,7 @@ import { isRTL } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { ucFirstWord } from '@blockera/utils';
+import { isEmpty, mergeObject, ucFirstWord } from '@blockera/utils';
 import { extensionInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -22,6 +22,7 @@ import statesDefinition from '../../../libs/block-states/states';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 
 export function Breadcrumb({
+	states,
 	children,
 	clientId,
 	blockName,
@@ -31,6 +32,7 @@ export function Breadcrumb({
 }: {
 	clientId: string,
 	blockName: string,
+	states: StateTypes,
 	children?: MixedElement,
 	activeBlock: 'master' | InnerBlockType,
 	currentInnerBlock: InnerBlockModel | null,
@@ -39,7 +41,15 @@ export function Breadcrumb({
 	const { getBlockStates, getExtensionCurrentBlock } = select(
 		'blockera/extensions'
 	);
-	const states = getBlockStates(clientId, blockName);
+
+	const savedBlockStates = getBlockStates(clientId, blockName);
+
+	if (isEmpty(states)) {
+		// Sets initialize states ...
+		states = savedBlockStates;
+	} else {
+		states = mergeObject(savedBlockStates, states);
+	}
 
 	// do not show normal state and inner block was not selected
 	if (Object.keys(states).length <= 1 && !currentInnerBlock) {

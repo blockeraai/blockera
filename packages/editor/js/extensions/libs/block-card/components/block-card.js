@@ -26,8 +26,10 @@ import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
+import type { StateTypes } from '../../block-states/types';
 
 export function BlockCard({
+	states,
 	clientId,
 	children,
 	blockName,
@@ -38,6 +40,7 @@ export function BlockCard({
 }: {
 	clientId: string,
 	blockName: string,
+	states: StateTypes,
 	children?: MixedElement,
 	currentInnerBlock: InnerBlockModel,
 	activeBlock: 'master' | InnerBlockType,
@@ -76,6 +79,7 @@ export function BlockCard({
 						</span>
 
 						<Breadcrumb
+							states={states}
 							clientId={clientId}
 							blockName={blockName}
 							activeBlock={activeBlock}
