@@ -1,5 +1,10 @@
 //@flow
 
+/**
+ * Internal dependencies
+ */
+import type { ControlGeneralTypes } from '../../../types';
+
 export type FlexDirectionsTypes =
 	| 'column'
 	| 'column-reverse'
@@ -23,6 +28,7 @@ export type FlexAlignItemsTypes =
 export type FlexWrapTypes = 'nowrap' | 'wrap' | 'wrap-reverse';
 
 export type FlexProps = {
+	...ControlGeneralTypes,
 	/**
 	 * The flex-direction sets how flex items are placed in the flex container
 	 * defining the main axis and the direction (normal or reversed).
@@ -52,9 +58,5 @@ export type FlexProps = {
 	 * If wrapping is allowed, it sets the direction that lines are stacked.
 	 */
 	flexWrap?: FlexWrapTypes,
-	style?: Object,
-	className?: string,
-	children?: any,
 	props?: Object,
-	'aria-label'?: string,
 };
