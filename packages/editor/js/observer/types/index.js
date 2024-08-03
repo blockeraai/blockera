@@ -15,5 +15,5 @@ export type Ancestors = Array<IntersectionObserverProps>;
 
 export type ObserverProps = {
 	ancestors: Ancestors,
-	children: MixedElement,
+	children?: MixedElement,
 };
