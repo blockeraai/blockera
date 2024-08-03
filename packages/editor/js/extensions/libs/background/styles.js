@@ -104,7 +104,8 @@ export const BackgroundStyles = ({
 							{
 								type: 'static',
 								properties: {
-									'background-color': blockeraBackgroundColor,
+									'background-color':
+										blockeraBackgroundColor + ' !important',
 								},
 							},
 						],
