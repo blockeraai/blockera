@@ -109,7 +109,7 @@ export default function AlignmentMatrixControl({
 			<Flex
 				gap="8px"
 				direction="row"
-				justify="space-around"
+				justifyContent="space-around"
 				className={controlClassNames('alignment-matrix')}
 			>
 				<div style={{ width: '72px' }}>
@@ -132,7 +132,11 @@ export default function AlignmentMatrixControl({
 				</div>
 
 				<div style={{ width: 'calc(100% - 80px)' }}>
-					<Flex direction="column" gap="8px" justify="space-around">
+					<Flex
+						direction="column"
+						gap="8px"
+						justifyContent="space-around"
+					>
 						<InputControl
 							columns="columns-2"
 							id={id === undefined ? 'top' : `${id}.top`}
