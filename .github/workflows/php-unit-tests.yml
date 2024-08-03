@@ -100,10 +100,10 @@ jobs:
             - name: Npm build
               run: npm run build
 
-            - name: Docker debug information
-              run: |
-                  docker -v
-                  docker-compose -v
+            #            - name: Docker debug information
+            #              run: |
+            #                  docker -v
+            #                  docker-compose -v
 
             - name: General debug information
               run: |
