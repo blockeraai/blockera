@@ -51,7 +51,7 @@ import {
 	fontColorToWPCompatibility,
 } from './compatibility/font-color';
 import type { BlockDetail } from '../block-states/types';
-import { isBlockOriginalState, isInvalidCompatibilityRun } from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -60,7 +60,7 @@ export const bootstrap = (): void => {
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { blockId } = blockDetail;
 
-			if (!isBlockOriginalState(blockDetail)) {
+			if (!isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 

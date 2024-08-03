@@ -19,14 +19,14 @@ import {
 	spacingToWPCompatibility,
 } from './compatibility/spacing';
 import type { BlockDetail } from '../block-states/types';
-import { isBlockOriginalState, isInvalidCompatibilityRun } from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.spacingExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			if (!isBlockOriginalState(blockDetail)) {
+			if (!isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 

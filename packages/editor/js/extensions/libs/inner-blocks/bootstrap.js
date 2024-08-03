@@ -30,7 +30,7 @@ import {
 	elementNormalBackgroundToWPCompatibility,
 } from './compatibility/element-bg';
 import { getBaseBreakpoint } from '../../../canvas-editor';
-import { isBlockOriginalState, isInvalidCompatibilityRun } from '../utils';
+import { isBlockNotOriginalState, isResetRef } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -39,7 +39,7 @@ export const bootstrap = (): void => {
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { innerBlocks } = blockDetail;
 
-			if (!isBlockOriginalState(blockDetail)) {
+			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 
@@ -202,9 +202,15 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { currentState, currentBlock, innerBlocks } = blockDetail;
+			const {
+				isBaseBreakpoint,
+				isMasterBlock,
+				currentState,
+				currentBlock,
+				innerBlocks,
+			} = blockDetail;
 
-			if (isInvalidCompatibilityRun(blockDetail, ref)) {
+			if ((!isBaseBreakpoint || isMasterBlock) && !isResetRef(ref)) {
 				return nextState;
 			}
 

@@ -35,7 +35,7 @@ import {
 } from './compatibility/gap';
 
 import type { BlockDetail } from '../block-states/types';
-import { isBlockOriginalState, isInvalidCompatibilityRun } from '../utils';
+import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -45,7 +45,7 @@ export const bootstrap = (): void => {
 			const { blockId, blockAttributes, activeBlockVariation } =
 				blockDetail;
 
-			if (!isBlockOriginalState(blockDetail)) {
+			if (!isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 

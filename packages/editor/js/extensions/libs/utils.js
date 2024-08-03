@@ -112,10 +112,10 @@ export function isResetRef(ref: ControlContextRefCurrent): boolean {
  *
  * @return {boolean} true on success, false on otherwise!
  */
-export function isBlockOriginalState(blockInfo: BlockDetail): boolean {
+export function isBlockNotOriginalState(blockInfo: BlockDetail): boolean {
 	const { isNormalState, isBaseBreakpoint, isMasterBlock } = blockInfo;
 
-	return isNormalState && isBaseBreakpoint && !isMasterBlock;
+	return !isNormalState || !isBaseBreakpoint || !isMasterBlock;
 }
 
 /**
@@ -130,5 +130,5 @@ export function isInvalidCompatibilityRun(
 	blockInfo: BlockDetail,
 	ref: ControlContextRefCurrent
 ): boolean {
-	return !isBlockOriginalState(blockInfo) && isResetRef(ref);
+	return isBlockNotOriginalState(blockInfo) && !isResetRef(ref);
 }
