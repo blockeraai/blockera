@@ -278,38 +278,38 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const FilterAttributes = (): MixedElement => {
 			useEffect(
 				() => {
-					// Create mutable constant to prevent directly change to immutable state constant.
-					let filteredAttributes = { ...attributes };
-
-					const hasPropsId = attributes?.blockeraPropsId;
-					const hasCompatId = attributes?.blockeraCompatId;
-
 					/**
 					 * Filtering block attributes based on "blockeraCompatId" attribute value to running WordPress compatibilities.
+					 * Create mutable constant to prevent directly change to immutable state constant.
 					 *
 					 * hook: 'blockera.blockEdit.compatibility.attributes'
 					 *
 					 * @since 1.0.0
 					 */
+					let filteredAttributes = applyFilters(
+						'blockera.blockEdit.attributes',
+						{ ...attributes },
+						args
+					);
+
+					const hasPropsId = attributes?.blockeraPropsId;
+					const hasCompatId = attributes?.blockeraCompatId;
+
 					if (!hasCompatId) {
-						filteredAttributes = applyFilters(
-							'blockera.blockEdit.attributes',
-							getAttributesWithIds(
-								// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component,
-								// if we supported them.
-								'undefined' ===
-									typeof filteredAttributes?.blockeraPropsId &&
-									availableAttributes?.blockeraPropsId
-									? mergeObject(
-											filteredAttributes,
-											prepareAttributesDefaultValues(
-												defaultAttributes
-											)
-									  )
-									: filteredAttributes,
-								'blockeraCompatId'
-							),
-							args
+						filteredAttributes = getAttributesWithIds(
+							// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component,
+							// if we supported them.
+							'undefined' ===
+								typeof filteredAttributes?.blockeraPropsId &&
+								availableAttributes?.blockeraPropsId
+								? mergeObject(
+										filteredAttributes,
+										prepareAttributesDefaultValues(
+											defaultAttributes
+										)
+								  )
+								: filteredAttributes,
+							'blockeraCompatId'
 						);
 					}
 
@@ -352,6 +352,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						isEquals(attributes, filteredAttributesWithoutIds)
 					) {
 						return;
+					}
+
+					if (hasCompatId && !hasPropsId) {
+						filteredAttributes = getAttributesWithIds(
+							filteredAttributes,
+							'blockeraPropsId'
+						);
 					}
 
 					setAttributes(filteredAttributes);

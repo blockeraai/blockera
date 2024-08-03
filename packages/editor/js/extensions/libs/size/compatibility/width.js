@@ -10,10 +10,6 @@ export function widthFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (attributes?.blockeraWidth !== '') {
-		return attributes;
-	}
-
 	switch (blockId) {
 		// extra attr for unit
 		case 'core/search':
