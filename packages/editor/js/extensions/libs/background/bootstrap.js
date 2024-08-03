@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import type { ControlContextRef } from '@blockera/controls';
+import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -23,21 +23,16 @@ import {
 	backgroundColorToWPCompatibility,
 } from './compatibility/background-color';
 import type { BlockDetail } from '../block-states/types';
+import { isBlockOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.backgroundExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const {
-				blockId,
-				isNormalState,
-				isMasterBlock,
-				blockAttributes,
-				isBaseBreakpoint,
-			} = blockDetail;
+			const { blockId, blockAttributes } = blockDetail;
 
-			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
+			if (!isBlockOriginalState(blockDetail)) {
 				return attributes;
 			}
 
@@ -66,7 +61,7 @@ export const bootstrap = (): void => {
 		 * @param {Object} nextState The block attributes changed with blockera feature newValue and latest version of block state.
 		 * @param {string} featureId The blockera feature identifier.
 		 * @param {*} newValue The newValue sets to feature.
-		 * @param {ControlContextRef} ref The reference of control context action occurred.
+		 * @param {ControlContextRefCurrent} ref The reference of control context action occurred.
 		 * @param {getAttributes} getAttributes The getter block attributes.
 		 * @param {blockDetail} blockDetail detail of current block
 		 *
@@ -76,14 +71,11 @@ export const bootstrap = (): void => {
 			nextState: Object,
 			featureId: string,
 			newValue: any,
-			ref: ControlContextRef,
+			ref: ControlContextRefCurrent,
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { isNormalState, isBaseBreakpoint, isMasterBlock } =
-				blockDetail;
-
-			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
+			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
 			}
 

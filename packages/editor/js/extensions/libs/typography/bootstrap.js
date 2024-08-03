@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import type { ControlContextRef } from '@blockera/controls';
+import type { ControlContextRefCurrent } from '@blockera/controls';
 import { mergeObject } from '@blockera/utils';
 
 /**
@@ -51,16 +51,16 @@ import {
 	fontColorToWPCompatibility,
 } from './compatibility/font-color';
 import type { BlockDetail } from '../block-states/types';
+import { isBlockOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
-				blockDetail;
+			const { blockId } = blockDetail;
 
-			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
+			if (!isBlockOriginalState(blockDetail)) {
 				return attributes;
 			}
 
@@ -143,7 +143,7 @@ export const bootstrap = (): void => {
 		 * @param {Object} nextState The block attributes changed with blockera feature newValue and latest version of block state.
 		 * @param {string} featureId The blockera feature identifier.
 		 * @param {*} newValue The newValue sets to feature.
-		 * @param {ControlContextRef} ref The reference of control context action occurred.
+		 * @param {ControlContextRefCurrent} ref The reference of control context action occurred.
 		 * @param {blockDetail} blockDetail detail of current block
 		 *
 		 * @return {Object|{}} The retrieve updated block attributes with all of wp compatibilities.
@@ -152,14 +152,13 @@ export const bootstrap = (): void => {
 			nextState: Object,
 			featureId: string,
 			newValue: any,
-			ref: ControlContextRef,
+			ref: ControlContextRefCurrent,
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, isNormalState, isBaseBreakpoint, isMasterBlock } =
-				blockDetail;
+			const { blockId } = blockDetail;
 
-			if (!isNormalState || !isBaseBreakpoint || !isMasterBlock) {
+			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
 			}
 

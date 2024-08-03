@@ -4,13 +4,15 @@
  */
 import type { MixedElement } from 'react';
 
+export type ControlContextRefCurrent = {
+	path: string,
+	reset: boolean,
+	defaultValue: any,
+	action: 'reset' | 'normal' | 'reset_all_states',
+};
+
 export type ControlContextRef = {
-	current: {
-		path: string,
-		reset: boolean,
-		defaultValue: any,
-		action: 'reset' | 'normal' | 'reset_all_states',
-	},
+	current: ControlContextRefCurrent,
 };
 
 export type ControlInfo = {

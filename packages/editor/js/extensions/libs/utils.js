@@ -16,6 +16,8 @@ import { hasSameProps } from '@blockera/utils';
 import type { TBlockProps } from './types';
 import { isInnerBlock, isNormalState } from '../components/utils';
 import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
+import { ControlContextRefCurrent } from '@blockera/controls';
+import type { BlockDetail } from './block-states/types';
 
 // import { detailedDiff } from 'deep-object-diff';
 
@@ -90,4 +92,43 @@ export function generateExtensionId(
  */
 export function ignoreDefaultBlockAttributeKeysRegExp(): Object {
 	return /^(?!blockera\w+).*/i;
+}
+
+/**
+ * Is reference of sets value one of types "reset" or "reset_all_states"?
+ *
+ * @param {ControlContextRefCurrent} ref the reference of control context provider while calling setState.
+ *
+ * @return {boolean} true on success, false on otherwise!
+ */
+export function isResetRef(ref: ControlContextRefCurrent): boolean {
+	return ['reset', 'reset_all_states'].includes(ref?.action);
+}
+
+/**
+ * Validate compatibility run while if it needs.
+ *
+ * @param {BlockDetail} blockInfo the block information while validation compatibility execution.
+ *
+ * @return {boolean} true on success, false on otherwise!
+ */
+export function isBlockOriginalState(blockInfo: BlockDetail): boolean {
+	const { isNormalState, isBaseBreakpoint, isMasterBlock } = blockInfo;
+
+	return isNormalState && isBaseBreakpoint && !isMasterBlock;
+}
+
+/**
+ * Validate compatibility run while if it needs.
+ *
+ * @param {BlockDetail} blockInfo the block information while validation compatibility execution.
+ * @param {ControlContextRefCurrent} ref the reference of control context provider while calling setState.
+ *
+ * @return {boolean} true on success, false on otherwise!
+ */
+export function isInvalidCompatibilityRun(
+	blockInfo: BlockDetail,
+	ref: ControlContextRefCurrent
+): boolean {
+	return !isBlockOriginalState(blockInfo) && isResetRef(ref);
 }
