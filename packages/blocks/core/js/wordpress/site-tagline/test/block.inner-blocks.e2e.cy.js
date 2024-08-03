@@ -1,12 +1,7 @@
 /**
  * Blockera dependencies
  */
-import {
-	appendBlocks,
-	createPost,
-	openInnerBlocksExtension,
-	openMoreFeaturesControl,
-} from '@blockera/dev-cypress/js/helpers';
+import { createPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
 
 describe('Site Tagline Block → Inner Blocks', () => {
 	beforeEach(() => {

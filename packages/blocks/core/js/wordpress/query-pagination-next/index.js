@@ -3,26 +3,33 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import arrow from '../inners/arrow';
+import type { BlockType } from '../../type';
 
-// We not needs to "prev-arrow" in query-pagination-next block!
-delete arrow['prev-arrow'];
-
-export const QueryPaginationNext = {
+export const QueryPaginationNext: BlockType = {
 	name: 'blockeraQueryPaginationNext',
 	targetBlock: 'core/query-pagination-next',
-	blockeraInnerBlocks: arrow,
-	edit: (props: Object): MixedElement => {
+	blockeraInnerBlocks: {
+		'elements/arrow': {
+			name: 'elements/arrow',
+			label: __('Arrow', 'blockera'),
+			icon: <Icon icon="block-pagination-next-arrow" size="20" />,
+			settings: {
+				force: true,
+			},
+		},
+	},
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };

@@ -4,39 +4,40 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
-import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
-const blockeraInnerBlocks: InnerBlocks = {
-	'elements/item-icon': {
-		name: 'elements/item-icon',
-		label: __('Button Icon', 'blockera'),
-		icon: <Icon icon="block-social-link-icon" iconSize="20" />,
-		settings: {
-			force: true,
-		},
-	},
-	'elements/item-name': {
-		name: 'elements/item-name',
-		label: __('Button Name', 'blockera'),
-		icon: <Icon icon="block-social-link-name" iconSize="20" />,
-		settings: {
-			force: true,
-		},
-	},
-};
+/**
+ * Internal dependencies
+ */
+import type { BlockType } from '../../type';
 
-export const SocialLink = {
+export const SocialLink: BlockType = {
 	name: 'blockeraSocialLink',
 	targetBlock: 'core/social-link',
-	blockeraInnerBlocks,
-	edit: (props: Object): MixedElement => {
+	blockeraInnerBlocks: {
+		'elements/item-icon': {
+			name: 'elements/item-icon',
+			label: __('Button Icon', 'blockera'),
+			icon: <Icon icon="block-social-link-icon" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+		'elements/item-name': {
+			name: 'elements/item-name',
+			label: __('Button Name', 'blockera'),
+			icon: <Icon icon="block-social-link-name" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+	},
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };

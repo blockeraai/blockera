@@ -2,10 +2,9 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
 	openInnerBlocksExtension,
-	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Term Description Block → Inner Blocks', () => {
@@ -13,7 +12,7 @@ describe('Term Description Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Inner blocks existence', () => {
 		appendBlocks('<!-- wp:term-description /-->');
 
 		// Select target block
@@ -24,10 +23,10 @@ describe('Term Description Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Link Customize').should('exist');
+				cy.getByDataTest('elements/link').should('exist');
 
 				// no other item
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
+				cy.getByDataTest('core/heading').should('not.exist');
 			}
 		);
 	});

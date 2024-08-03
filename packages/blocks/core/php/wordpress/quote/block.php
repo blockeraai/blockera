@@ -23,10 +23,8 @@ return array_merge(
 			[
 				'innerBlocks' => array_merge(
 					[
-						[
-							'citation' => [
-								'root' => 'cite',
-							],
+						'elements/citation' => [
+							'root' => 'cite',
 						],
 					],
 					blockera_load( 'inners.link', dirname( __DIR__ ) ),

@@ -7,7 +7,6 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Paragraph Block → Inner Blocks', () => {
@@ -15,7 +14,7 @@ describe('Paragraph Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Inner blocks selectors in editor and front-end', () => {
+	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
 		appendBlocks(`
 		<!-- wp:paragraph -->
 <p>This is a test <a href="#a">paragraph</a>...</p>

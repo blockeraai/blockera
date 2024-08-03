@@ -2,8 +2,8 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
 	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -23,10 +23,10 @@ describe('Post Navigation Link Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Links Customize').should('exist');
+				cy.getByDataTest('elements/link').should('exist');
 
 				// no other item
-				cy.getByAriaLabel('Buttons Customize').should('not.exist');
+				cy.getByDataTest('core/heading').should('not.exist');
 			}
 		);
 	});

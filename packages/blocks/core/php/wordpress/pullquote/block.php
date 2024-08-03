@@ -15,7 +15,7 @@ return array_merge(
 			[
 				'innerBlocks' => array_merge(
 					[
-						'citation' => [
+						'elements/citation' => [
 							'root' => 'cite',
 						],
 					],

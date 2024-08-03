@@ -4,47 +4,49 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
-import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
 import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import inputs from '../inners/inputs';
-import button from '../inners/button';
+import type { BlockType } from '../../type';
 
-// We not needs to "input_label" in search block!
-delete inputs?.input_label;
-// We not needs to "remember" in search block!
-delete inputs?.remember;
-
-const blockeraInnerBlocks: InnerBlocks = {
-	label: {
-		name: 'core/title',
-		type: 'title',
-		label: __('Form Label', 'blockera'),
-		icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
-		settings: {
-			force: true,
-		},
-	},
-};
-
-export const Search = {
+export const Search: BlockType = {
 	name: 'blockeraSearch',
 	targetBlock: 'core/search',
 	blockeraInnerBlocks: {
-		...blockeraInnerBlocks,
-		...inputs,
-		...button,
+		'elements/label': {
+			name: 'elements/label',
+			type: 'title',
+			label: __('Label', 'blockera'),
+			icon: <Icon icon="block-paragraph" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+		'elements/input': {
+			name: 'elements/input',
+			label: __('Input', 'blockera'),
+			icon: <Icon icon="block-input" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+		'elements/button': {
+			name: 'elements/button',
+			label: __('Button', 'blockera'),
+			icon: <Icon icon="button" library="wp" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
 	},
-	edit: (props: Object): MixedElement => {
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };

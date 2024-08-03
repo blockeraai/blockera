@@ -28,7 +28,7 @@ return array_merge(
 							'root' => 'label',
 						],
 						'elements/input'          => [
-							'root' => '.wp-block-search__input',
+							'root' => 'input[type="text"],input[type="url"],input[type="email"]',
 						],
 						'elements/textarea'       => [
 							'root' => 'textarea',

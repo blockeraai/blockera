@@ -2,10 +2,11 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
+	savePage,
 	createPost,
-	openInnerBlocksExtension,
-	openMoreFeaturesControl,
+	appendBlocks,
+	setInnerBlock,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Quote Block → Inner Blocks', () => {
@@ -13,7 +14,7 @@ describe('Quote Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Inner blocks existence + CSS selectors in block editor and front-end', () => {
 		appendBlocks(
 			'<!-- wp:quote -->\n' +
 				'<blockquote class="wp-block-quote"><!-- wp:paragraph -->\n' +
@@ -28,32 +29,39 @@ describe('Quote Block → Inner Blocks', () => {
 		// Switch to parent block
 		cy.getByAriaLabel('Select Quote').click();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		//
+		// 1. Edit Inner Blocks
+		//
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByAriaLabel('Citation Customize').should('exist');
-				cy.getByAriaLabel('Links Customize').should('exist');
-				cy.getByAriaLabel('Paragraphs Customize').should('exist');
-				cy.getByAriaLabel('Headings Customize').should('exist');
+		//
+		// 1.1. elements/citation
+		//
+		setInnerBlock('elements/citation');
 
-				cy.getByAriaLabel('H1s Customize').should('not.exist');
-				cy.getByAriaLabel('H2s Customize').should('not.exist');
-				cy.getByAriaLabel('H3s Customize').should('not.exist');
-				cy.getByAriaLabel('H4s Customize').should('not.exist');
-				cy.getByAriaLabel('H5s Customize').should('not.exist');
-				cy.getByAriaLabel('H6s Customize').should('not.exist');
+		//
+		// 1.1.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff0000');
 
-				openMoreFeaturesControl('More Inner Blocks');
+		cy.getBlock('core/quote')
+			.first()
+			.within(() => {
+				cy.get('cite')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+			});
 
-				cy.getByAriaLabel('H1s Customize').should('exist');
-				cy.getByAriaLabel('H2s Customize').should('exist');
-				cy.getByAriaLabel('H3s Customize').should('exist');
-				cy.getByAriaLabel('H4s Customize').should('exist');
-				cy.getByAriaLabel('H5s Customize').should('exist');
-				cy.getByAriaLabel('H6s Customize').should('exist');
-			}
-		);
+		//
+		// 2. Assert inner blocks selectors in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block').within(() => {
+			// elements/citation
+			cy.get('cite')
+				.first()
+				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+		});
 	});
 });

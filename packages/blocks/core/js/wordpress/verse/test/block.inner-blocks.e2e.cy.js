@@ -2,8 +2,8 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
 	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -12,12 +12,10 @@ describe('Verse Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
-		appendBlocks(
-			'<!-- wp:verse -->\n' +
-				'<pre class="wp-block-verse">It\'s the verse...</pre>\n' +
-				'<!-- /wp:verse -->'
-		);
+	it('Inner blocks existence', () => {
+		appendBlocks(`<!-- wp:verse -->
+<pre class="wp-block-verse">It\'s the verse...</pre>
+<!-- /wp:verse -->`);
 
 		// Select target block
 		cy.getBlock('core/verse').click();
@@ -27,10 +25,10 @@ describe('Verse Block → Inner Blocks', () => {
 
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
 			() => {
-				cy.getByAriaLabel('Links Customize').should('exist');
+				cy.getByDataTest('elements/link').should('exist');
 
 				// no other item
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
+				cy.getByDataTest('core/heading').should('not.exist');
 			}
 		);
 	});

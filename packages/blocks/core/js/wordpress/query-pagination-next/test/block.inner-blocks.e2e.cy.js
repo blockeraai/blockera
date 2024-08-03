@@ -2,8 +2,9 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
+	setInnerBlock,
 	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -17,22 +18,34 @@ describe('Query Pagination Next Block → Inner Blocks', () => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Inner blocks existence', () => {
 		appendBlocks(testContent);
 
 		// Select target block
 		cy.getBlock('core/query-pagination-next').click();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		//
+		// 1. Edit Inner Blocks
+		//
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByAriaLabel('Arrow Customize').should('exist');
+		//
+		// 1.1. Arrow inner block
+		//
+		setInnerBlock('elements/arrow');
 
-				// no other item
-				cy.getByAriaLabel('Headings Customize').should('not.exist');
-			}
-		);
+		//
+		// 1.1.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'cccccc');
+
+		cy.getBlock('core/query-pagination-next')
+			.first()
+			.within(() => {
+				cy.get('.wp-block-query-pagination-next-arrow').should(
+					'have.css',
+					'background-color',
+					'rgb(204, 204, 204)'
+				);
+			});
 	});
 });

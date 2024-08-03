@@ -13,13 +13,16 @@ import { SharedBlockExtension } from '@blockera/editor';
 /**
  * Internal dependencies
  */
-import link from '../inners/link';
+import sharedInnerBlocks from '../inners/shared';
+import type { BlockType } from '../../type';
 
-export const SiteTitle = {
+export const SiteTitle: BlockType = {
 	name: 'blockeraSiteTitle',
 	targetBlock: 'core/site-title',
-	blockeraInnerBlocks: link,
-	edit: (props: Object): MixedElement => {
+	blockeraInnerBlocks: {
+		'elements/link': sharedInnerBlocks['elements/link'],
+	},
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };

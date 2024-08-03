@@ -3,29 +3,36 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
 import { SharedBlockExtension } from '@blockera/editor';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import link from '../inners/link';
-import citation from '../inners/citation';
-import paragraph from '../inners/paragraph';
+import sharedInnerBlocks from '../inners/shared';
+import type { BlockType } from '../../type';
 
-export const Pullquote = {
+export const Pullquote: BlockType = {
 	name: 'blockeraPullquote',
 	targetBlock: 'core/pullquote',
 	blockeraInnerBlocks: {
-		...citation,
-		...paragraph,
-		...link,
+		'elements/citation': {
+			name: 'elements/citation',
+			label: __('Citation', 'blockera'),
+			icon: <Icon icon="verse" library="wp" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+		'core/paragraph': sharedInnerBlocks['core/paragraph'],
+		'elements/link': sharedInnerBlocks['elements/link'],
 	},
-	edit: (props: Object): MixedElement => {
+	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
 };
