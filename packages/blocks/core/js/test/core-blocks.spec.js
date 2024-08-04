@@ -11,86 +11,94 @@ import wordpressBlocks from '../wordpress-blocks-list.json';
 
 const ajv = new Ajv();
 
-describe('Validate WordPress Core Blocks JSON', () => {
-	test('Validate file with schema', () => {
-		const validate = ajv.compile(schema);
-		const valid = validate(wordpressBlocks);
+['WordPress'].forEach((product) => {
+	switch (product) {
+		case 'WordPress':
+			var blocks = wordpressBlocks;
+			break;
+	}
 
-		// show log for debug
-		if (!valid) console.log(validate.errors);
+	describe(`Validate ${product} Blocks JSON`, () => {
+		test('Validate file with schema', () => {
+			const validate = ajv.compile(schema);
+			const valid = validate(blocks);
 
-		expect(true).toBe(valid);
-	});
+			// show log for debug
+			if (!valid) console.log(validate.errors);
 
-	test('Total blocks to be equal with sum of all blocks', () => {
-		const total = wordpressBlocks.data.total;
+			expect(true).toBe(valid);
+		});
 
-		let itemsCount = 0;
+		test('Total blocks to be equal with sum of all blocks', () => {
+			const total = blocks.data.total;
 
-		if (typeof wordpressBlocks.supported !== 'undefined') {
-			itemsCount += wordpressBlocks.supported.length;
-		}
+			let itemsCount = 0;
 
-		if (typeof wordpressBlocks['not-supported'] !== 'undefined') {
-			itemsCount += wordpressBlocks['not-supported'].length;
-		}
+			if (typeof blocks.supported !== 'undefined') {
+				itemsCount += blocks.supported.length;
+			}
 
-		if (typeof wordpressBlocks['no-need-to-support'] !== 'undefined') {
-			itemsCount += wordpressBlocks['no-need-to-support'].length;
-		}
+			if (typeof blocks['not-supported'] !== 'undefined') {
+				itemsCount += blocks['not-supported'].length;
+			}
 
-		expect(itemsCount).toBe(total);
-	});
+			if (typeof blocks['no-need-to-support'] !== 'undefined') {
+				itemsCount += blocks['no-need-to-support'].length;
+			}
 
-	test('Supported blocks count', () => {
-		const total = wordpressBlocks.data['supported'];
+			expect(itemsCount).toBe(total);
+		});
 
-		let itemsCount = 0;
+		test('Supported blocks count', () => {
+			const total = blocks.data['supported'];
 
-		if (typeof wordpressBlocks.supported !== 'undefined') {
-			itemsCount += wordpressBlocks.supported.length;
-		}
+			let itemsCount = 0;
 
-		expect(itemsCount).toBe(total);
-	});
+			if (typeof blocks.supported !== 'undefined') {
+				itemsCount += blocks.supported.length;
+			}
 
-	test('Soft supported blocks count (supported + no need to support)', () => {
-		const total = wordpressBlocks.data['soft-supported'];
+			expect(itemsCount).toBe(total);
+		});
 
-		let itemsCount = 0;
+		test('Soft supported blocks count (supported + no need to support)', () => {
+			const total = blocks.data['soft-supported'];
 
-		if (typeof wordpressBlocks.supported !== 'undefined') {
-			itemsCount += wordpressBlocks.supported.length;
-		}
+			let itemsCount = 0;
 
-		if (typeof wordpressBlocks['no-need-to-support'] !== 'undefined') {
-			itemsCount += wordpressBlocks['no-need-to-support'].length;
-		}
+			if (typeof blocks.supported !== 'undefined') {
+				itemsCount += blocks.supported.length;
+			}
 
-		expect(itemsCount).toBe(total);
-	});
+			if (typeof blocks['no-need-to-support'] !== 'undefined') {
+				itemsCount += blocks['no-need-to-support'].length;
+			}
 
-	test('Not supported blocks count', () => {
-		const total = wordpressBlocks.data['not-supported'];
+			expect(itemsCount).toBe(total);
+		});
 
-		let itemsCount = 0;
+		test('Not supported blocks count', () => {
+			const total = blocks.data['not-supported'];
 
-		if (typeof wordpressBlocks['not-supported'] !== 'undefined') {
-			itemsCount += wordpressBlocks['not-supported'].length;
-		}
+			let itemsCount = 0;
 
-		expect(itemsCount).toBe(total);
-	});
+			if (typeof blocks['not-supported'] !== 'undefined') {
+				itemsCount += blocks['not-supported'].length;
+			}
 
-	test('No need to support blocks count', () => {
-		const total = wordpressBlocks.data['no-need-to-support'];
+			expect(itemsCount).toBe(total);
+		});
 
-		let itemsCount = 0;
+		test('No need to support blocks count', () => {
+			const total = blocks.data['no-need-to-support'];
 
-		if (typeof wordpressBlocks['no-need-to-support'] !== 'undefined') {
-			itemsCount += wordpressBlocks['no-need-to-support'].length;
-		}
+			let itemsCount = 0;
 
-		expect(itemsCount).toBe(total);
+			if (typeof blocks['no-need-to-support'] !== 'undefined') {
+				itemsCount += blocks['no-need-to-support'].length;
+			}
+
+			expect(itemsCount).toBe(total);
+		});
 	});
 });
