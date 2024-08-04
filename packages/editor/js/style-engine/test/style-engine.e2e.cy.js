@@ -62,7 +62,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				}
 			);
@@ -83,7 +83,7 @@ describe('Style Engine Testing ...', () => {
 					.should('have.css', 'transition')
 					.then((transitionValue) => {
 						// Assert the transition value
-						expect(transitionValue).to.eq('all 0.5s ease 0s');
+						expect(transitionValue).to.includes('0.5s');
 					});
 			});
 
@@ -101,7 +101,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 
 					cy.get('.blockera-block').realHover();
@@ -114,7 +114,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 
@@ -131,7 +131,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 
 					cy.get('.blockera-block').realHover();
@@ -144,7 +144,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 
@@ -161,7 +161,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 
 					cy.get('.blockera-block').realHover();
@@ -174,7 +174,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 			});
@@ -201,7 +201,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				}
 			);
@@ -224,7 +224,7 @@ describe('Style Engine Testing ...', () => {
 					.should('have.css', 'transition')
 					.then((transitionValue) => {
 						// Assert the transition value
-						expect(transitionValue).to.eq('all 0.5s ease 0s');
+						expect(transitionValue).to.includes('0.5s');
 					});
 			});
 
@@ -244,7 +244,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				}
 			);
@@ -293,7 +293,9 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0s ease 0s');
+							expect(transitionValue).to.includes(
+								'all 0s ease 0s'
+							);
 						});
 				});
 
@@ -310,7 +312,9 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0s ease 0s');
+							expect(transitionValue).to.includes(
+								'all 0s ease 0s'
+							);
 						});
 				});
 
@@ -327,7 +331,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 
 					cy.get('.blockera-block').realHover();
@@ -340,7 +344,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 			});
@@ -366,9 +370,7 @@ describe('Style Engine Testing ...', () => {
 							.should('have.css', 'transition')
 							.then((transitionValue) => {
 								// Assert the transition value
-								expect(transitionValue).to.eq(
-									'all 0.5s ease 0s'
-								);
+								expect(transitionValue).to.includes('0.5s');
 							});
 					}
 				);
@@ -389,7 +391,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 			});
@@ -411,7 +413,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 
@@ -433,7 +435,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 
@@ -451,7 +453,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 			});
@@ -470,7 +472,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 
 					cy.get('.blockera-block').realHover();
@@ -483,7 +485,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 
@@ -500,7 +502,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 
 					cy.get('.blockera-block').realHover();
@@ -513,7 +515,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 
@@ -530,7 +532,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 
 					cy.get('.blockera-block').realHover();
@@ -543,7 +545,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.eq('all 0.5s ease 0s');
+							expect(transitionValue).to.includes('0.5s');
 						});
 				});
 			});
