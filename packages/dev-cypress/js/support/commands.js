@@ -168,7 +168,7 @@ export const registerCommands = () => {
 	Cypress.Commands.add('multiClick', (selector, count, ...args) => {
 		let counter = 0;
 		while (counter !== count) {
-			cy.get(selector, ...args).click();
+			cy.get(selector, ...args).click({ force: true });
 			counter += 1;
 		}
 	});

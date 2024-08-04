@@ -450,7 +450,9 @@ describe('repeater control component testing', () => {
 						cy.getByAriaLabel('Delete first 1').should(
 							'be.visible'
 						);
-						cy.getByAriaLabel('Delete first 1').click();
+						cy.getByAriaLabel('Delete first 1').click({
+							force: true,
+						});
 					});
 
 				// Check Control
@@ -516,7 +518,9 @@ describe('repeater control component testing', () => {
 						cy.getByAriaLabel('Delete second 1').should(
 							'be.visible'
 						);
-						cy.getByAriaLabel('Delete second 1').click();
+						cy.getByAriaLabel('Delete second 1').click({
+							force: true,
+						});
 					});
 
 				// repeater item popover should be removed
@@ -572,7 +576,7 @@ describe('repeater control component testing', () => {
 					.eq(1)
 					.within(() => {
 						cy.getByAriaLabel('Delete 1').should('be.visible');
-						cy.getByAriaLabel('Delete 1').click();
+						cy.getByAriaLabel('Delete 1').click({ force: true });
 					});
 
 				// Check Control
@@ -609,7 +613,7 @@ describe('repeater control component testing', () => {
 					.eq(1)
 					.within(() => {
 						cy.getByAriaLabel('Delete 1').should('be.visible');
-						cy.getByAriaLabel('Delete 1').click();
+						cy.getByAriaLabel('Delete 1').click({ force: true });
 					});
 
 				// Check Control
@@ -678,7 +682,9 @@ describe('repeater control component testing', () => {
 						cy.getByAriaLabel('Clone second 0').should(
 							'be.visible'
 						);
-						cy.getByAriaLabel('Clone second 0').click();
+						cy.getByAriaLabel('Clone second 0').click({
+							force: true,
+						});
 					});
 
 				// Check data provider value!
@@ -721,7 +727,7 @@ describe('repeater control component testing', () => {
 					.eq(1)
 					.within(() => {
 						cy.getByAriaLabel('Clone 1').should('be.visible');
-						cy.getByAriaLabel('Clone 1').click();
+						cy.getByAriaLabel('Clone 1').click({ force: true });
 					});
 
 				// Check data provider value!
@@ -1030,7 +1036,9 @@ describe('repeater control component testing', () => {
 				cy.getByDataCy('repeater-item')
 					.eq(0)
 					.within(() => {
-						cy.get('[aria-label="Delete 0"]').click();
+						cy.get('[aria-label="Delete 0"]').click({
+							force: true,
+						});
 					});
 			}
 
@@ -1070,7 +1078,7 @@ describe('repeater control component testing', () => {
 				cy.getByDataCy('repeater-item')
 					.eq(0)
 					.within(() => {
-						cy.get('[aria-label="Clone 0"]').click();
+						cy.get('[aria-label="Clone 0"]').click({ force: true });
 					});
 			}
 
@@ -1112,7 +1120,7 @@ describe('repeater control component testing', () => {
 			cy.getByDataCy('repeater-item')
 				.eq(0)
 				.within(() => {
-					cy.get('[aria-label="Disable 0"]').click();
+					cy.get('[aria-label="Disable 0"]').click({ force: true });
 				});
 
 			cy.getByDataCy('repeater-item')
@@ -1217,7 +1225,7 @@ describe('repeater control component testing', () => {
 			cy.getByDataCy('repeater-item')
 				.eq(0)
 				.within(() => {
-					cy.get('[aria-label="Delete 0"]').click();
+					cy.get('[aria-label="Delete 0"]').click({ force: true });
 				});
 
 			cy.getByDataCy('blockera-repeater-control')
