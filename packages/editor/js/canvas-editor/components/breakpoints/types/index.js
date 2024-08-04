@@ -3,7 +3,10 @@
 /**
  * Internal dependencies
  */
-import type { BreakpointTypes } from '../../../../extensions/libs/block-states/types';
+import type {
+	BreakpointTypes,
+	TBreakpoint,
+} from '../../../../extensions/libs/block-states/types';
 
 export type BreakpointsComponentProps = {
 	className: string,
@@ -20,4 +23,5 @@ export type BreakpointSettingsComponentProps = {
 
 export type PickedBreakpointsComponentProps = {
 	onClick: HandleOnPickBreakpoints,
+	updaterDeviceIndicator: ((device: TBreakpoint) => void) => void,
 };

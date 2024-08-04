@@ -47,6 +47,7 @@ export const Breakpoints = ({
 		setCanvasSettings,
 		updateBreakpoints,
 		updaterDeviceType,
+		updaterDeviceIndicator,
 	} = useDispatch('blockera/editor');
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
 		'blockera/extensions'
@@ -207,7 +208,10 @@ export const Breakpoints = ({
 						</div>
 					)}
 
-					<PickedBreakpoints onClick={handleOnClick} />
+					<PickedBreakpoints
+						onClick={handleOnClick}
+						updaterDeviceIndicator={updaterDeviceIndicator}
+					/>
 
 					{enableCanvasSettings && (
 						<div

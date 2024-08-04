@@ -30,7 +30,8 @@ const BlockEditContextProvider = ({
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setCurrentInnerBlockState,
 	} = dispatch('blockera/extensions') || {};
-	const { updatePickedDeviceType } = select('blockera/editor') || {};
+	const { updatePickedDeviceType, updateDeviceIndicator } =
+		select('blockera/editor') || {};
 
 	const memoizedValue: {
 		currentTab: string,
@@ -78,6 +79,7 @@ const BlockEditContextProvider = ({
 				breakpoint: TBreakpoint
 			): void => {
 				updatePickedDeviceType(breakpoint);
+				updateDeviceIndicator(breakpoint);
 
 				if (isInnerBlock(currentBlock)) {
 					setBlockClientInnerState({

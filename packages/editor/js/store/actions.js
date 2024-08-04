@@ -64,3 +64,12 @@ export const updaterDeviceType = (
 		type: 'UPDATER_DEVICE_TYPE',
 	};
 };
+
+export const updaterDeviceIndicator = (
+	updater: (device: TBreakpoint) => void
+): Object => {
+	return {
+		updater,
+		type: 'UPDATER_DEVICE_INDICATOR',
+	};
+};
