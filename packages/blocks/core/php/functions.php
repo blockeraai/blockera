@@ -9,6 +9,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 	function blockera_get_available_blocks(): array {
 
 		return [
+			// Core Block Editor Blocks.
 			'core/audio',
 			'core/avatar',
 			'core/button',
@@ -78,6 +79,9 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 			'core/term-description',
 			'core/verse',
 			'core/video',
+
+			// WooCommerce Blocks.
+			'woocommerce/product-price',
 		];
 	}
 }

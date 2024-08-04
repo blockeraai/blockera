@@ -2,12 +2,17 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 103,
-		"supported": 0,
-		"soft-supported": 0,
-		"not-supported": 103,
+		"supported": 1,
+		"soft-supported": 1,
+		"not-supported": 102,
 		"no-need-to-support": 0
 	},
-	"supported": [],
+	"supported": [
+		{
+			"name": "woocommerce/product-price",
+			"title": "Product Price"
+		}
+	],
 	"no-need-to-support": [],
 	"not-supported": [
 		{
@@ -17,10 +22,6 @@
 		{
 			"name": "woocommerce/product-title",
 			"title": "Product Title"
-		},
-		{
-			"name": "woocommerce/product-price",
-			"title": "Product Price"
 		},
 		{
 			"name": "woocommerce/product-image",
