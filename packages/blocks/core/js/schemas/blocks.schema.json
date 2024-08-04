@@ -1,0 +1,117 @@
+{
+	"$id": "https://blockera.ai/blocks-list.schema.json",
+	"title": "Product Blocks Support State",
+	"description": "The full list of state for a product blocks by detail.",
+	"type": "object",
+	"properties": {
+		"data": {
+			"description": "the statistics about blocks.",
+			"type": "object",
+			"properties": {
+				"total": {
+					"description": "The total number of blocks.",
+					"type": "number",
+					"minimum": 0
+				},
+				"supported": {
+					"description": "Supported blocks count.",
+					"type": "number",
+					"minimum": 0
+				},
+				"soft-supported": {
+					"description": "Supported blocks count + no need to support blocks count.",
+					"type": "number",
+					"minimum": 0
+				},
+				"not-supported": {
+					"description": "Not supported blocks count.",
+					"type": "number",
+					"minimum": 0
+				},
+				"no-need-to-support": {
+					"description": "No need to support blocks count.",
+					"type": "number",
+					"minimum": 0
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"total",
+				"supported",
+				"soft-supported",
+				"not-supported",
+				"no-need-to-support"
+			]
+		},
+		"supported": {
+			"description": "List of supported blocks by Blockera",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"description": "The block name (ID).",
+						"type": "string"
+					},
+					"title": {
+						"description": "The block title.",
+						"type": "string"
+					},
+					"note": {
+						"description": "Extra notes for developers.",
+						"type": "string"
+					}
+				},
+				"required": ["name", "title"],
+				"additionalProperties": false
+			}
+		},
+		"not-supported": {
+			"description": "List of blocks that are not supported by Blockera (yet)",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"description": "The block name (ID).",
+						"type": "string"
+					},
+					"title": {
+						"description": "The block title.",
+						"type": "string"
+					},
+					"note": {
+						"description": "Extra notes for developers.",
+						"type": "string"
+					}
+				},
+				"required": ["name", "title"],
+				"additionalProperties": false
+			}
+		},
+		"no-need-to-support": {
+			"description": "List of blocks that are not supported by Blockera (yet)",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"description": "The block name (ID).",
+						"type": "string"
+					},
+					"title": {
+						"description": "The block title.",
+						"type": "string"
+					},
+					"note": {
+						"description": "Extra notes for developers.",
+						"type": "string"
+					}
+				},
+				"required": ["name", "title"],
+				"additionalProperties": false
+			}
+		}
+	},
+	"required": ["data", "supported", "not-supported", "no-need-to-support"]
+}
