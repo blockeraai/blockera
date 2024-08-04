@@ -16,7 +16,10 @@ import { controlInnerClassNames } from '@blockera/classnames';
 import EditedItem from './edited-item';
 import type { LabelStates } from './types';
 import { getStatesGraph } from './helpers';
-import type { TStates } from '../../extensions/libs/block-states/types';
+import type {
+	TBreakpoint,
+	TStates,
+} from '../../extensions/libs/block-states/types';
 import { BreakpointIcon } from '../../canvas-editor/components/breakpoints/breakpoint-icon';
 
 export const StatesGraph = ({
@@ -30,7 +33,7 @@ export const StatesGraph = ({
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
-	onClick: (state: TStates) => void,
+	onClick: (state: TStates, device: TBreakpoint) => void,
 	path: null | string,
 	isRepeaterItem: Boolean,
 }): null | MixedElement => {
@@ -120,7 +123,10 @@ export const StatesGraph = ({
 												breakpoint={state.graph.label}
 												key={`${key}-state`}
 												onClick={(): void => {
-													onClick(_state.type);
+													onClick(
+														_state.type,
+														state.graph.type
+													);
 												}}
 												current={false}
 											/>

@@ -30,6 +30,10 @@ export const StylesWrapper = ({
 	const [entry, setEntry] = useState(null);
 
 	const callback = (entries: Array<IntersectionObserverEntry>) => {
+		if (!entries[0]?.target) {
+			return;
+		}
+
 		const blockeraStylesWrapper = document.createElement('div');
 		blockeraStylesWrapper.id = slotName;
 
@@ -55,7 +59,16 @@ export const StylesWrapper = ({
 
 	useEffect(() => {
 		// $FlowFixMe
-		callback([{ target: getIframeTag('body') }]);
+		callback([
+			// $FlowFixMe
+			{
+				target:
+					getIframeTag('body') ||
+					document.querySelector(
+						'.interface-navigable-region.interface-interface-skeleton__content'
+					),
+			},
+		]);
 		// eslint-disable-next-line
 	}, []);
 

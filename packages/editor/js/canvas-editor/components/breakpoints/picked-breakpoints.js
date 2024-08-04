@@ -6,7 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -27,6 +27,7 @@ import type {
 
 export default function ({
 	onClick,
+	updaterDeviceIndicator,
 }: PickedBreakpointsComponentProps): MixedElement {
 	const { getBreakpoints } = select('blockera/editor');
 	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } =
@@ -34,6 +35,11 @@ export default function ({
 	const baseBreakpoint = getBaseBreakpoint();
 	const [currentActiveBreakpoint, setActiveBreakpoint] =
 		useState(baseBreakpoint);
+
+	useEffect(() => {
+		updaterDeviceIndicator(setActiveBreakpoint);
+		// eslint-disable-next-line
+	}, []);
 
 	function activeBreakpoints() {
 		const breakpoints = [];

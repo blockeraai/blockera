@@ -46,6 +46,16 @@ export const canvasEditorSettings = (
 				...state,
 				deviceType: action.device || getBaseBreakpoint(),
 			};
+		case 'UPDATER_DEVICE_TYPE':
+			return {
+				...state,
+				updatePickedDeviceType: action.updater,
+			};
+		case 'UPDATER_DEVICE_INDICATOR':
+			return {
+				...state,
+				updateDeviceIndicator: action.updater,
+			};
 		case 'REGISTER_CANVAS_SETTINGS':
 			return {
 				...state,
