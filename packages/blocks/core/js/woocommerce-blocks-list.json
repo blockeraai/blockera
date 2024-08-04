@@ -1,0 +1,427 @@
+{
+	"$schema": "./schemas/blocks.schema.json",
+	"data": {
+		"total": 103,
+		"supported": 1,
+		"soft-supported": 1,
+		"not-supported": 102,
+		"no-need-to-support": 0
+	},
+	"supported": [
+		{
+			"name": "woocommerce/product-price",
+			"title": "Product Price"
+		}
+	],
+	"no-need-to-support": [],
+	"not-supported": [
+		{
+			"name": "woocommerce/active-filters",
+			"title": "Active Filters Controls"
+		},
+		{
+			"name": "woocommerce/product-title",
+			"title": "Product Title"
+		},
+		{
+			"name": "woocommerce/product-image",
+			"title": "Product Image"
+		},
+		{
+			"name": "woocommerce/product-rating-stars",
+			"title": "Product Rating Stars"
+		},
+		{
+			"name": "woocommerce/product-rating-counter",
+			"title": "Product Rating Counter"
+		},
+		{
+			"name": "woocommerce/product-average-rating",
+			"title": "Product Average Rating (Beta)"
+		},
+		{
+			"name": "woocommerce/product-button",
+			"title": "Add to Cart Button"
+		},
+		{
+			"name": "woocommerce/product-summary",
+			"title": "Product Summary"
+		},
+		{
+			"name": "woocommerce/product-sale-badge",
+			"title": "On-Sale Badge"
+		},
+		{
+			"name": "woocommerce/product-sku",
+			"title": "Product SKU"
+		},
+		{
+			"name": "woocommerce/product-stock-indicator",
+			"title": "Product Stock Indicator"
+		},
+		{
+			"name": "woocommerce/all-products",
+			"title": "All Products"
+		},
+		{
+			"name": "woocommerce/all-reviews",
+			"title": "All Reviews"
+		},
+		{
+			"name": "woocommerce/attribute-filter",
+			"title": "Filter by Attribute Controls"
+		},
+		{
+			"name": "woocommerce/classic-shortcode",
+			"title": "Classic Shortcode"
+		},
+		{
+			"name": "woocommerce/coming-soon",
+			"title": "Coming Soon"
+		},
+		{
+			"name": "woocommerce/customer-account",
+			"title": "Customer account"
+		},
+		{
+			"name": "woocommerce/featured-category",
+			"title": "Featured Category"
+		},
+		{
+			"name": "woocommerce/featured-product",
+			"title": "Featured Product"
+		},
+		{
+			"name": "woocommerce/filter-wrapper",
+			"title": "Filter Block"
+		},
+		{
+			"name": "woocommerce/handpicked-products",
+			"title": "Hand-picked Products"
+		},
+		{
+			"name": "woocommerce/mini-cart",
+			"title": "Mini-Cart"
+		},
+		{
+			"name": "woocommerce/store-notices",
+			"title": "Store Notices"
+		},
+		{
+			"name": "woocommerce/price-filter",
+			"title": "Filter by Price Controls"
+		},
+		{
+			"name": "woocommerce/product-best-sellers",
+			"title": "Best Selling Products"
+		},
+		{
+			"name": "woocommerce/product-categories",
+			"title": "Product Categories List"
+		},
+		{
+			"name": "woocommerce/product-category",
+			"title": "Products by Category"
+		},
+		{
+			"name": "woocommerce/product-collection",
+			"title": "Product Collection"
+		},
+		{
+			"name": "woocommerce/product-collection-no-results",
+			"title": "No results"
+		},
+		{
+			"name": "woocommerce/product-gallery-large-image",
+			"title": "Large Image"
+		},
+		{
+			"name": "woocommerce/product-new",
+			"title": "Newest Products"
+		},
+		{
+			"name": "woocommerce/product-on-sale",
+			"title": "On Sale Products"
+		},
+		{
+			"name": "woocommerce/product-template",
+			"title": "Product Template"
+		},
+		{
+			"name": "woocommerce/product-search",
+			"title": "Product Search"
+		},
+		{
+			"name": "woocommerce/product-tag",
+			"title": "Products by Tag"
+		},
+		{
+			"name": "woocommerce/product-top-rated",
+			"title": "Top Rated Products"
+		},
+		{
+			"name": "woocommerce/products-by-attribute",
+			"title": "Products by Attribute"
+		},
+		{
+			"name": "woocommerce/rating-filter",
+			"title": "Filter by Rating Controls"
+		},
+		{
+			"name": "woocommerce/reviews-by-category",
+			"title": "Reviews by Category"
+		},
+		{
+			"name": "woocommerce/reviews-by-product",
+			"title": "Reviews by Product"
+		},
+		{
+			"name": "woocommerce/single-product",
+			"title": "Single Product"
+		},
+		{
+			"name": "woocommerce/stock-filter",
+			"title": "Filter by Stock Controls"
+		},
+		{
+			"name": "woocommerce/page-content-wrapper",
+			"title": "WooCommerce Page"
+		},
+		{
+			"name": "woocommerce/filled-cart-block",
+			"title": "Filled Cart"
+		},
+		{
+			"name": "woocommerce/cart-items-block",
+			"title": "Cart Items"
+		},
+		{
+			"name": "woocommerce/cart-line-items-block",
+			"title": "Cart Line Items"
+		},
+		{
+			"name": "woocommerce/cart-cross-sells-block",
+			"title": "Cart Cross-Sells"
+		},
+		{
+			"name": "woocommerce/cart-cross-sells-products-block",
+			"title": "Cart Cross-Sells Products"
+		},
+		{
+			"name": "woocommerce/cart-totals-block",
+			"title": "Cart Totals"
+		},
+		{
+			"name": "woocommerce/cart-express-payment-block",
+			"title": "Express Checkout"
+		},
+		{
+			"name": "woocommerce/proceed-to-checkout-block",
+			"title": "Proceed to Checkout"
+		},
+		{
+			"name": "woocommerce/empty-cart-block",
+			"title": "Empty Cart"
+		},
+		{
+			"name": "woocommerce/cart-accepted-payment-methods-block",
+			"title": "Accepted Payment Methods"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-block",
+			"title": "Order Summary"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-subtotal-block",
+			"title": "Subtotal"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-totals-block",
+			"title": "Totals"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-fee-block",
+			"title": "Fees"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-discount-block",
+			"title": "Discount"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-shipping-block",
+			"title": "Shipping"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-coupon-form-block",
+			"title": "Coupon Form"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-taxes-block",
+			"title": "Taxes"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-heading-block",
+			"title": "Heading"
+		},
+		{
+			"name": "woocommerce/cart",
+			"title": "Cart"
+		},
+		{
+			"name": "woocommerce/checkout-fields-block",
+			"title": "Checkout Fields"
+		},
+		{
+			"name": "woocommerce/checkout-totals-block",
+			"title": "Checkout Totals"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-address-block",
+			"title": "Shipping Address"
+		},
+		{
+			"name": "woocommerce/checkout-terms-block",
+			"title": "Terms and Conditions"
+		},
+		{
+			"name": "woocommerce/checkout-contact-information-block",
+			"title": "Contact Information"
+		},
+		{
+			"name": "woocommerce/checkout-billing-address-block",
+			"title": "Billing Address"
+		},
+		{
+			"name": "woocommerce/checkout-actions-block",
+			"title": "Actions"
+		},
+		{
+			"name": "woocommerce/checkout-additional-information-block",
+			"title": "Additional information"
+		},
+		{
+			"name": "woocommerce/checkout-order-note-block",
+			"title": "Order Note"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-block",
+			"title": "Order Summary"
+		},
+		{
+			"name": "woocommerce/checkout-payment-block",
+			"title": "Payment Options"
+		},
+		{
+			"name": "woocommerce/checkout-express-payment-block",
+			"title": "Express Checkout"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-method-block",
+			"title": "Delivery"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-methods-block",
+			"title": "Shipping Options"
+		},
+		{
+			"name": "woocommerce/checkout-pickup-options-block",
+			"title": "Pickup Method"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-subtotal-block",
+			"title": "Subtotal"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-fee-block",
+			"title": "Fees"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-discount-block",
+			"title": "Discount"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-shipping-block",
+			"title": "Shipping"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-coupon-form-block",
+			"title": "Coupon Form"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-taxes-block",
+			"title": "Taxes"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-cart-items-block",
+			"title": "Cart Items"
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-totals-block",
+			"title": "Totals"
+		},
+		{
+			"name": "woocommerce/checkout",
+			"title": "Checkout"
+		},
+		{
+			"name": "woocommerce/empty-mini-cart-contents-block",
+			"title": "Empty Mini-Cart view"
+		},
+		{
+			"name": "woocommerce/filled-mini-cart-contents-block",
+			"title": "Filled Mini-Cart view"
+		},
+		{
+			"name": "woocommerce/mini-cart-title-block",
+			"title": "Mini-Cart Title"
+		},
+		{
+			"name": "woocommerce/mini-cart-title-items-counter-block",
+			"title": "Mini-Cart Title Items Counter"
+		},
+		{
+			"name": "woocommerce/mini-cart-title-label-block",
+			"title": "Mini-Cart Title Label"
+		},
+		{
+			"name": "woocommerce/mini-cart-items-block",
+			"title": "Mini-Cart Items"
+		},
+		{
+			"name": "woocommerce/mini-cart-products-table-block",
+			"title": "Mini-Cart Products Table"
+		},
+		{
+			"name": "woocommerce/mini-cart-footer-block",
+			"title": "Mini-Cart Footer"
+		},
+		{
+			"name": "woocommerce/mini-cart-shopping-button-block",
+			"title": "Mini-Cart Shopping Button"
+		},
+		{
+			"name": "woocommerce/mini-cart-cart-button-block",
+			"title": "Mini-Cart View Cart Button"
+		},
+		{
+			"name": "woocommerce/mini-cart-checkout-button-block",
+			"title": "Mini-Cart Proceed to Checkout Button"
+		},
+		{
+			"name": "woocommerce/mini-cart-contents",
+			"title": "Mini-Cart Contents"
+		},
+		{
+			"name": "woocommerce/product-rating",
+			"title": "Product Rating"
+		},
+		{
+			"name": "woocommerce/add-to-cart-form",
+			"title": "Add to Cart with Options"
+		},
+		{
+			"name": "woocommerce/product-meta",
+			"title": "Product Meta"
+		}
+	]
+}

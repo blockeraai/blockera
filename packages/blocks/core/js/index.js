@@ -15,12 +15,14 @@ import { registerBlockExtension } from '@blockera/editor';
 /**
  * Internal dependencies
  */
-import * as wordpress from './wordpress';
+import * as wpBlocks from './wordpress';
+import * as wooBlocks from './woocommerce';
 
 export { blockeraBootstrapBlocks } from './bootstrap';
 
 const blocks = {
-	...wordpress,
+	...wpBlocks,
+	...wooBlocks,
 };
 
 export const reregistrationBlocks = (): void => {
