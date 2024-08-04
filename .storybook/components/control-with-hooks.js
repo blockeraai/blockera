@@ -1,7 +1,7 @@
 /**
- * Publisher dependencies
+ * Blockera dependencies
  */
-import { useControlContext } from '@publisher/controls';
+import { useControlContext } from '@blockera/controls';
 
 const ControlWithHooks = ({ Control, ...args }) => {
 	const {

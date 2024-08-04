@@ -3,46 +3,80 @@ name: Cypress E2E Tests
 on:
     pull_request:
         types: [opened, synchronize, ready_for_review]
-
     workflow_dispatch:
 
 jobs:
-    cypress_e2e_tests:
-        name: Cypress End 2 End Tests
+    detect_categories:
+        name: Detecting E2E Test Categories
         runs-on: ubuntu-latest
-        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
-
+        outputs:
+            categories: ${{ steps.set_categories.outputs.categories }}
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
 
-            - name: Setup SSH
-              uses: MrSquaare/ssh-setup-action@v1
-              with:
-                  host: github.com
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
 
-            - name: Clone Submodule
+            - name: List test categories
+              id: set_categories
               run: |
-                  cd libs
-                  git clone git@github.com:publisherwp/storybook.git
+                  categories=$(node .github/scripts/list-e2e-test-categories.js)
+                  categories_json=$(echo $categories | jq -c '.')
+                  echo "categories=$categories_json" >> $GITHUB_OUTPUT
+
+            - name: Print categories output
+              run: |
+                  echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
+
+    cypress_e2e_tests:
+        name: Test
+        needs: detect_categories
+        runs-on: ubuntu-latest
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+        strategy:
+            fail-fast: false
+            matrix:
+                category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Install Cypress
+              run: npx cypress install
+
             - name: Install Composer Packages
-              run: composer install
+              run: composer install --no-dev -o --apcu-autoloader -a
 
             - name: Start WordPress Environment
               run: npm run env:start
 
-            - name: Build wp-env app
+            - name: Create env file
               run: |
-                  npm run build
-                  npm run build:wp-env-app
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
+
+            - name: Build wp-env app
+              run: npm run build
+
+            - name: Debug Matrix Category
+              run: |
+                  echo "Running category: ${{ matrix.category }}"
 
             - name: Run Cypress E2E Tests
-              run: npm run test:e2e
+              run: |
+                  if [ "${{ matrix.category }}" != "general" ]; then
+                    spec_pattern="packages/**/*.${{ matrix.category }}.e2e.cy.js"
+                  else
+                    spec_pattern=$(find packages -type f -name "*.e2e.cy.js" ! -name "*.*.e2e.cy.js" | tr '\n' ',')
+                    spec_pattern="${spec_pattern%,}" # Remove trailing comma
+                  fi
+                  npm run test:e2e -- --spec "$spec_pattern"
 
             - name: Stop WordPress Environment
               run: npm run env:stop

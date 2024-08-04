@@ -1,0 +1,61 @@
+.blockera-component-tooltip {
+	font-size: 12px;
+	text-align: left;
+	color: #ffffff;
+	width: var(--tooltip-width, auto);
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: 500;
+    	color: #ffffff;
+	}
+
+	* {
+		font-size: 12px;
+		margin: 8px 0;
+
+		&:first-child {
+			margin-top: 0;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	p {
+		color: #ffffff;
+	}
+
+	svg {
+		fill: currentColor;
+	}
+
+	h1 {
+		font-size: 22px;
+	}
+
+	h2 {
+		font-size: 20px;
+	}
+
+	h3 {
+		font-size: 18px;
+	}
+
+	h4 {
+		font-size: 16px;
+	}
+
+	h5 {
+		font-size: 14px;
+	}
+
+	h6 {
+		font-size: 12px;
+	}
+}

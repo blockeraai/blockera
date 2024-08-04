@@ -1,0 +1,40 @@
+.blockera-component-change-indicator {
+	--indicator-size: 6px;
+	--indicator-outline-color: #ffffff;
+	display: flex;
+	align-items: center;
+
+	.blockera-component-indicator {
+		display: inline-block;
+		width: var(--indicator-size);
+		height: var(--indicator-size);
+		background: #ffffff;
+		border-radius: 50%;
+		z-index: 1;
+		outline: 1.5px solid var(--indicator-outline-color);
+		position: relative;
+
+		&::before {
+			content: "";
+			display: inline-block;
+			width: var(--indicator-size);
+			height: var(--indicator-size);
+			background: var(--blockera-controls-primary-color-bk);
+			border-radius: 50%;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		&.indicator-states {
+
+			&::before {
+				background: var(--blockera-controls-states-color-bk);
+			}
+		}
+
+		&:not(:first-child) {
+			z-index: 0;
+		}
+	}
+}

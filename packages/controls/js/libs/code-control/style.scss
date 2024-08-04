@@ -1,0 +1,67 @@
+.blockera-control.blockera-control-code {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	position: relative;
+
+	&::before {
+		content: "";
+		height: 100px;
+		display: block;
+		background: #eaeaea;
+	}
+
+	& > section {
+		background-color: #f6f6f6;
+		border-radius: 2px;
+	}
+
+	.blockera-control-code-control__description {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-size: 13px;
+		line-height: 1.4;
+		color: #929292;
+		transition: var(--blockera-controls-transition);
+
+		&:hover {
+			color: var(--blockera-controls-color);
+		}
+
+		p {
+			margin: 0;
+			line-height: 1.4;
+			font-size: 13px;
+			color: currentColor;
+		}
+	}
+
+	.blockera-control-code-control__placeholder {
+		position: absolute;
+		top: 15px;
+		left: 28px;
+		right: 10px;
+		color: #7d8a99;
+		font-family: Menlo, Monaco, "Courier New", monospace;
+		font-weight: 400;
+		font-style: italic;
+		font-size: 13px;
+		font-feature-settings: "liga" 0, "calt" 0;
+		font-variation-settings: normal;
+		line-height: 20px;
+		letter-spacing: 0;
+		pointer-events: none;
+	}
+}
+
+.block-editor-block-inspector {
+
+	.blockera-control.blockera-control-code {
+
+		.monaco-editor .suggest-widget {
+			width: 248px !important;
+			transform: translateX(202px) !important;
+		}
+	}
+}

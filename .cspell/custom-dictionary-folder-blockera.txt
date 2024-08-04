@@ -1,0 +1,7 @@
+# Custom Dictionary Words
+ABSPATH
+autoloader
+blockera
+clsx
+phpcs
+sprintf

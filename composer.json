@@ -1,47 +1,99 @@
 {
-	"name": "publisher/core",
-	"description": "A New Publisher Editor experience base on Gutenberg core modules.",
+	"name": "blockera/plugin",
+	"description": "A Blockera Site Editor experience base on Gutenberg core modules.",
 	"type": "library",
 	"license": "ISC",
-	"autoload": {
-		"psr-4": {
-			"Publisher\\Framework\\": "app/"
+	"repositories": [
+		{
+			"type": "path",
+			"url": "packages/blockera"
 		},
-		"files": [
-			"app/functions.php",
-			"app/Illuminate/Support/helpers.php",
-			"app/Illuminate/StyleEngine/helpers.php"
-		]
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Publisher\\Framework\\Tests\\": ".dev/tests/phpunit"
+		{
+			"type": "path",
+			"url": "packages/blockera-admin"
+		},
+		{
+			"type": "path",
+			"url": "packages/bootstrap"
+		},
+		{
+			"type": "path",
+			"url": "packages/editor"
+		},
+		{
+			"type": "path",
+			"url": "packages/utils"
+		},
+		{
+			"type": "path",
+			"url": "packages/wordpress"
+		},
+		{
+			"type": "path",
+			"url": "packages/exceptions"
+		},
+		{
+			"type": "path",
+			"url": "packages/data"
+		},
+		{
+			"type": "path",
+			"url": "packages/data-editor"
+		},
+		{
+			"type": "path",
+			"url": "packages/http"
+		},
+		{
+			"type": "path",
+			"url": "packages/blocks/core"
+		},
+		{
+			"type": "path",
+			"url": "packages/env"
+		},
+		{
+			"type": "path",
+			"url": "packages/dev-phpunit"
 		}
-	},
+	],
 	"authors": [
 		{
-			"name": "The Publisher Contributors"
+			"name": "The Blockera Contributors"
 		}
 	],
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.4",
+		"blockera/blockera": "*",
+		"blockera/blockera-admin": "*",
+		"blockera/blocks-core": "*",
+		"blockera/bootstrap": "*",
+		"blockera/env": "*",
+		"blockera/editor": "*",
+		"blockera/dev-phpunit": "*",
+		"blockera/utils": "*",
+		"blockera/wordpress": "*",
+		"blockera/exceptions": "*",
+		"blockera/data": "*",
+		"blockera/data-editor": "*",
+		"blockera/http": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
-		"symfony/dom-crawler": "5.4.x-dev",
-		"symfony/css-selector": "5.4.x-dev",
-		"voku/simple_html_dom": "dev-master",
 		"illuminate/container": "8.x-dev"
 	},
 	"require-dev": {
+		"symfony/dom-crawler": "5.4.x-dev",
+		"symfony/css-selector": "5.4.x-dev",
+		"voku/simple_html_dom": "dev-master",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"phpunit/phpunit": "^9.5.21",
 		"squizlabs/php_codesniffer": "^3.5",
 		"wp-cli/wp-cli-bundle": "^2.4",
 		"wp-coding-standards/wpcs": "^2.1",
-		"wp-phpunit/wp-phpunit": "^6.0.1",
+		"wp-phpunit/wp-phpunit": "dev-master",
 		"filp/whoops": "^2.15",
-		"yoast/phpunit-polyfills": "^1.0",
+		"yoast/phpunit-polyfills": "^2.0@dev",
 		"symfony/var-dumper": "5.4.x-dev"
 	},
 	"config": {
@@ -58,5 +110,8 @@
 		"lint": "phpcs --standard=phpcs.xml",
 		"format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
 		"test:coverage": "@php ./vendor/bin/phpunit --coverage-html php-coverage"
-	}
+	},
+	"optimize-autoloader": "true",
+	"apcu-autoloader": true,
+	"classmap-authoritative": true
 }

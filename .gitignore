@@ -56,10 +56,23 @@ dist
 # php code sniffer report
 .cache/phpcs-report.xml
 
-.cache/phpcs.json
+# any cache files
+.cache/**
 
 # Storybook Build directory
 storybook-static
 
 # nyc plugin of cypress
 .nyc_output
+
+# Cypress screenshots
+packages/dev-cypress/js/screenshots
+
+# Cypress downloads
+packages/dev-cypress/js/downloads
+
+# Cypress videos
+packages/dev-cypress/js/videos
+
+# includes directory
+inc

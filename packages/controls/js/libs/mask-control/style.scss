@@ -1,0 +1,91 @@
+.blockera-control-mask,
+.blockera-control-mask-popover {
+
+	.blockera-control-header-icon {
+
+		svg {
+			width: 18px;
+			height: auto;
+		}
+
+		&.h-flip {
+			transform: scaleX(-1);
+		}
+
+		&.v-flip {
+			transform: scaleY(-1);
+		}
+
+		&.h-flip.v-flip {
+			transform: scaleY(-1) scaleX(-1);
+		}
+	}
+
+	.blockera-control-shape-button {
+
+		.blockera-control-search-icon {
+			width: 100%;
+			justify-content: flex-end;
+			display: flex;
+			align-items: center;
+		}
+
+		.blockera-control-shape-icon {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			height: auto;
+			max-width: 18px;
+			max-height: 18px;
+
+			&.h-flip {
+     			transform: scaleX(-1);
+			}
+
+			&.v-flip {
+				transform: scaleY(-1);
+			}
+
+			&.h-flip.v-flip {
+				transform: scaleY(-1) scaleX(-1);
+			}
+
+	    }
+    }
+
+	.blockera-field-toggle.flip-toggle {
+
+		.blockera-control.blockera-control-toggle {
+			margin-left: auto !important;
+		}
+	}
+}
+
+.blockera-control-mask-shape-popover {
+
+	.disabled-element-wrapper {
+		width: 100% !important;
+    }
+
+	.shapes-field {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+	 	gap: 10px;
+		row-gap: 10px;
+
+		.blockera-control-shape {
+			display: flex;
+			width: auto;
+		    height: 50px;
+			justify-content: center;
+			align-items: center;
+
+			svg {
+				width: 100%;
+				height: auto;
+				max-width: 30px;
+				max-height: 30px;
+			}
+		}
+	}
+}

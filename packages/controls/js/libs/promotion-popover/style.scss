@@ -1,0 +1,75 @@
+.blockera-component-promotion-popover {
+	--blockera-controls-primary-color: #0047eb;
+	--blockera-controls-primary-color-darker-20: #a4a4a4;
+	--popover-height: 520px;
+
+	.blockera-component-popover-body {
+		text-align: center;
+	}
+
+	.blockera-component-popover-header {
+
+		svg {
+			fill: var(--blockera-controls-primary-color);
+		}
+	}
+
+	.blockera-component-promotion-popover__image {
+		text-align: center;
+	}
+
+	.blockera-component-promotion-popover__heading {
+		color: var(--blockera-controls-primary-color);
+		font-size: 16px;
+		font-weight: 500;
+		margin: 0;
+	}
+
+	.blockera-component-promotion-popover__description {
+		color: #a4a4a4;
+		font-size: 13px;
+		font-weight: 400;
+		width: 80%;
+		margin: 0 auto;
+
+		p {
+			margin: 0 0 10px 0;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.blockera-component-promotion-popover__list {
+		font-size: 13px;
+		font-weight: 500;
+		list-style: none;
+		margin: 0 auto;
+		width: auto;
+		text-align: left;
+
+		li {
+			display: flex;
+			flex-direction: row;
+			gap: 5px;
+			margin-bottom: 8px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+			svg {
+				fill: var(--blockera-controls-primary-color);
+			}
+		}
+	}
+
+	.blockera-component-promotion-popover__button {
+		margin: 10px auto 8px;
+		width: auto;
+		padding-left: 60px;
+		padding-right: 60px;
+		font-weight: 400;
+	}
+}

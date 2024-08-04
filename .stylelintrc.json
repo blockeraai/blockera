@@ -15,7 +15,10 @@
 	},
 	"ignoreFiles": [
 		"coverage/**/*.css",
-		"libs/storybook/**/*.css",
-		"libs/storybook/**/*.scss"
+		"packages/dev-cypress/**/*.css",
+		"packages/dev-cypress/**/*.scss",
+		"packages/dev-storybook/**/*.css",
+		"packages/dev-storybook/**/*.scss",
+		"packages/blockera-admin/js/style.scss"
 	]
 }

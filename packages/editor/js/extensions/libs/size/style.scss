@@ -1,0 +1,25 @@
+.blockera-object-fit {
+
+	& > .blockera-field.blockera-field-control {
+
+		flex-direction: row;
+	}
+
+	.blockera-control.blockera-control-input.input-range {
+
+		gap: 10px;
+
+		& > .components-base-control {
+			min-width: 50px;
+		}
+
+	}
+
+}
+
+.blockera-colon {
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 30px;
+	color: var(--blockera-controls-border-color);
+}

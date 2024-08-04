@@ -1,0 +1,90 @@
+.blockera-control.blockera-control-panel-body {
+
+	.components-panel__body-title {
+
+		.components-panel__body-toggle {
+			color: var(--blockera-controls-primary-color);
+			font-weight: 600;
+			font-size: 13px;
+			padding: 0 16px;
+			height: 48px;
+			position: relative;
+
+			&:focus {
+				z-index: 1;
+			}
+
+			.components-panel__icon {
+				order: -1;
+				margin: 0 5px 0 0;
+				display: inline-flex;
+
+				svg {
+					color: var(--blockera-controls-primary-color);
+					fill: currentcolor;
+				}
+			}
+		}
+
+		.blockera-component-change-indicator {
+			margin-left: 5px;
+
+			.blockera-component-indicator {
+				transition: 0.1s background ease-in-out;
+			}
+		}
+
+		&:hover {
+
+			.blockera-component-change-indicator {
+				--indicator-outline-color: #f0f0f0;
+			}
+		}
+	}
+
+	&.is-opened {
+		padding: 16px 16px 10px;
+		margin-bottom: 10px;
+		position: relative;
+	}
+
+	&.is-opened > .components-panel__body-title {
+		margin-bottom: 5px;
+	}
+
+	.blockera-control.blockera-control-extensions-powered-by {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: right;
+		font-size: 10px;
+		text-transform: uppercase;
+		font-weight: 500;
+		color: #cad0d3;
+		gap: 13px;
+		padding-top: 14px;
+		margin-bottom: -5px;
+
+		a {
+			text-decoration: none;
+			color: #cad0d3;
+			font-weight: 600;
+			display: flex;
+			flex-direction: row;
+			gap: 5px;
+			transition: var(--blockera-controls-transition);
+
+			&:hover {
+				color: var(--blockera-controls-primary-color);
+
+				span {
+					opacity: 1;
+				}
+			}
+
+			svg {
+				fill: currentColor;
+			}
+		}
+	}
+}

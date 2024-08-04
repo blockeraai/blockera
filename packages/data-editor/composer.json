@@ -1,0 +1,9 @@
+{
+	"name": "blockera/data-editor",
+	"description": "Blockera Data Editor package to access all property value with tokenized string.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\DataEditor\\": "php/"
+		}
+	}
+}

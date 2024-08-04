@@ -1,2 +1,11 @@
 <?php
-//Let's show them we are better 😉
+/**
+ * Empty index.php
+ *
+ * @package Blockera
+ */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}

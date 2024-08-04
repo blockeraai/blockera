@@ -1,0 +1,9 @@
+{
+	"name": "blockera/http",
+	"description": "The blockera http abstraction package.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\Http\\": "php/"
+		}
+	}
+}

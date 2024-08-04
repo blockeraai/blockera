@@ -1,0 +1,165 @@
+.blockera-component-buttons {
+	display: flex;
+	gap: 10px;
+}
+
+.components-button.blockera-component-button {
+	font-size: 13px;
+	font-weight: 400;
+	display: flex;
+	justify-content: center !important;
+
+	&.size-input,
+	&.size-small {
+		height: 30px;
+		padding: 0 10px;
+		line-height: 30px;
+		font-size: 12px;
+		gap: 8px;
+	}
+
+	&.size-input {
+		gap: 6px;
+		padding: 2px 10px;
+	}
+
+	&.size-extra-small {
+		font-size: 12.4px;
+		height: 22px;
+		padding: 0 5px;
+		line-height: 22px;
+	}
+
+	&.content-align-left {
+		justify-content: flex-start !important;
+	}
+
+	&.content-align-right {
+		justify-content: flex-end !important;
+	}
+
+	&.components-button.no-border {
+
+		&:focus:not(:disabled),
+		&:hover,
+		& {
+			border: none;
+			box-shadow: none;
+			outline: none;
+		}
+	}
+
+	&.is-primary {
+		background: var(--blockera-controls-primary-color);
+		color: #ffffff;
+		outline: 1px solid transparent;
+
+		&:disabled,
+		&[aria-disabled="true"],
+		&[aria-disabled="true"]:hover {
+			opacity: 0.5;
+			outline: none;
+			transform: none;
+		}
+
+		&:hover:not(:disabled) {
+			background: var(--blockera-controls-primary-color-darker-20);
+			color: #ffffff;
+		}
+
+		&:active:not(:disabled) {
+			background: var(--blockera-controls-primary-color-darker-20);
+			border-color: var(--blockera-controls-primary-color-darker-20);
+			color: #ffffff;
+		}
+
+		&.is-focus:not(:disabled),
+		&:focus:not(:disabled) {
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff), 0 0 0 1px var(--blockera-controls-background-color), 0 0 0 2.5px var(--blockera-controls-primary-color) !important;
+		}
+
+		&:disabled,
+		&:disabled:active:enabled,
+		&[aria-disabled="true"],
+		&[aria-disabled="true"]:active:enabled,
+		&[aria-disabled="true"]:enabled {
+			background: var(--blockera-controls-primary-color);
+			border-color: var(--blockera-controls-primary-color);
+			color: hsla(0, 0%, 100%, 0.4);
+			opacity: 1;
+			outline: none;
+		}
+
+		&:disabled:active:enabled:focus:enabled,
+		&:disabled:focus:enabled,
+		&[aria-disabled="true"]:active:enabled:focus:enabled,
+		&[aria-disabled="true"]:enabled:focus:enabled,
+		&[aria-disabled="true"]:focus:enabled {
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 3px var(--blockera-controls-primary-color);
+		}
+	}
+
+	&.is-secondary {
+		outline: 3px solid transparent;
+		box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
+		color: var(--blockera-controls-primary-color);
+
+		&:hover:not(:disabled, .no-border) {
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff);
+		}
+
+		&.is-focus:not(:disabled),
+		&:focus:not(:disabled, .no-border) {
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff), 0 0 0 1px var(--blockera-controls-background-color), 0 0 0 2.5px var(--blockera-controls-primary-color) !important;
+		}
+
+		&:disabled,
+		&[aria-disabled="true"],
+		&[aria-disabled="true"]:hover {
+			opacity: 0.5;
+			outline: none;
+			transform: none;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
+			color: var(--blockera-controls-primary-color);
+		}
+	}
+
+	&.is-tertiary {
+		color: var(--blockera-controls-color);
+		--wp-components-color-accent: var(--blockera-controls-border-color);
+		background: transparent;
+
+		&:not(.no-border) {
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color);
+			outline: 1px solid transparent;
+		}
+
+		&.no-border:hover {
+			background: var(--blockera-controls-background-color);
+		}
+
+		&:hover:not(:disabled, [aria-disabled="true"], .no-border) {
+			background: var(--blockera-controls-background-color);
+			color: var(--blockera-controls-color);
+			--blockera-controls-border-color: var(--blockera-controls-border-color-hover);
+		}
+
+		&.is-focus:not(.no-border) {
+			background: var(--blockera-controls-background-color);
+		}
+
+		&.is-focus:not(:disabled),
+		&:focus:not(:disabled, .no-border, .toggle-focus) {
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 1px var(--blockera-controls-primary-color) !important;
+			outline: 2px solid transparent !important;
+		}
+
+		&:disabled,
+		&[aria-disabled="true"],
+		&[aria-disabled="true"]:hover {
+			opacity: 0.5;
+			outline: none;
+			transform: none;
+		}
+	}
+}
