@@ -58,11 +58,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.getBlock('core/paragraph').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.getBlock('core/paragraph')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				}
 			);
 
@@ -78,11 +79,12 @@ describe('Style Engine Testing ...', () => {
 					'background-color',
 					'rgb(227, 23, 139)'
 				);
-				cy.getBlock('core/paragraph').should(
-					'have.css',
-					'transition',
-					'all 0.5s ease 0s'
-				);
+				cy.getBlock('core/paragraph')
+					.should('have.css', 'transition')
+					.then((transitionValue) => {
+						// Assert the transition value
+						expect(transitionValue).to.eq('all 0.5s ease 0s');
+					});
 			});
 
 			context('front end - check style inheritance', () => {
@@ -95,11 +97,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 
 					cy.get('.blockera-block').realHover();
 					cy.get('.blockera-block').should(
@@ -107,11 +110,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 
 				context('xl-desktop', () => {
@@ -123,11 +127,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 
 					cy.get('.blockera-block').realHover();
 					cy.get('.blockera-block').should(
@@ -135,11 +140,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 
 				context('tablet', () => {
@@ -151,11 +157,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 
 					cy.get('.blockera-block').realHover();
 					cy.get('.blockera-block').should(
@@ -163,11 +170,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 			});
 		});
@@ -189,11 +197,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.getBlock('core/paragraph').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.getBlock('core/paragraph')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				}
 			);
 
@@ -211,11 +220,12 @@ describe('Style Engine Testing ...', () => {
 					'background-color',
 					'rgb(227, 23, 139)'
 				);
-				cy.getBlock('core/paragraph').should(
-					'have.css',
-					'transition',
-					'all 0.5s ease 0s'
-				);
+				cy.getBlock('core/paragraph')
+					.should('have.css', 'transition')
+					.then((transitionValue) => {
+						// Assert the transition value
+						expect(transitionValue).to.eq('all 0.5s ease 0s');
+					});
 			});
 
 			context(
@@ -230,11 +240,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.getBlock('core/paragraph').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.getBlock('core/paragraph')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				}
 			);
 
@@ -278,11 +289,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0s ease 0s');
+						});
 				});
 
 				context('xl-desktop', () => {
@@ -294,11 +306,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0s ease 0s');
+						});
 				});
 
 				context('tablet', () => {
@@ -310,11 +323,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 
 					cy.get('.blockera-block').realHover();
 					cy.get('.blockera-block').should(
@@ -322,11 +336,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 			});
 		});
@@ -347,11 +362,14 @@ describe('Style Engine Testing ...', () => {
 							'background-color',
 							'rgb(22, 226, 193)'
 						);
-						cy.getBlock('core/paragraph').should(
-							'have.css',
-							'transition',
-							'all 0.5s ease 0s'
-						);
+						cy.getBlock('core/paragraph')
+							.should('have.css', 'transition')
+							.then((transitionValue) => {
+								// Assert the transition value
+								expect(transitionValue).to.eq(
+									'all 0.5s ease 0s'
+								);
+							});
 					}
 				);
 
@@ -367,11 +385,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.getBlock('core/paragraph').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.getBlock('core/paragraph')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 			});
 
@@ -388,11 +407,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.getBlock('core/paragraph').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.getBlock('core/paragraph')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 
 				context('add hover with assertions', () => {
@@ -409,11 +429,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.getBlock('core/paragraph').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.getBlock('core/paragraph')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 
 				context('checking generated styles on normal', () => {
@@ -426,11 +447,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.getBlock('core/paragraph').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.getBlock('core/paragraph')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 			});
 
@@ -444,11 +466,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 
 					cy.get('.blockera-block').realHover();
 					cy.get('.blockera-block').should(
@@ -456,11 +479,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 
 				context('xl-desktop', () => {
@@ -472,11 +496,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 
 					cy.get('.blockera-block').realHover();
 					cy.get('.blockera-block').should(
@@ -484,11 +509,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 
 				context('tablet', () => {
@@ -500,11 +526,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 
 					cy.get('.blockera-block').realHover();
 					cy.get('.blockera-block').should(
@@ -512,11 +539,12 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('.blockera-block').should(
-						'have.css',
-						'transition',
-						'all 0.5s ease 0s'
-					);
+					cy.get('.blockera-block')
+						.should('have.css', 'transition')
+						.then((transitionValue) => {
+							// Assert the transition value
+							expect(transitionValue).to.eq('all 0.5s ease 0s');
+						});
 				});
 			});
 		});
