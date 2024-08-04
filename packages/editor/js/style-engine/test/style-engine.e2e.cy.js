@@ -5,6 +5,10 @@ import {
 	getWPDataObject,
 	setBlockState,
 	setInnerBlock,
+	setDeviceType,
+	addBlockState,
+	savePage,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Style Engine Testing ...', () => {
@@ -12,48 +16,509 @@ describe('Style Engine Testing ...', () => {
 		createPost();
 
 		appendBlocks(
-			'<!-- wp:paragraph -->\n' +
-				'<p>Test <a href="#">Link</a></p>\n' +
-				'<!-- /wp:paragraph -->'
+			`<!-- wp:paragraph -->
+<p>Test paragraph WordPress core block with includes <a href="#">Link</a> element</p>
+<!-- /wp:paragraph -->`
 		);
 
 		// Select target block
 		cy.getBlock('core/paragraph').click();
 	});
 
-	describe('Testing Normal State', () => {
-		it('should generate css for root attributes of master and inners block', () => {
-			// 1- Set width for master block.
-			cy.setInputFieldValue('Width', 'Size', 100);
+	function setDevice(device) {
+		if ('desktop' !== device) {
+			if (
+				!Cypress.$('iframe[name="editor-canvas"]')
+					.find('body')
+					.hasClass(`is-${device}-preview`)
+			) {
+				setDeviceType('Desktop');
+				setDeviceType(device);
 
-			// 2- Assert master block css.
-			cy.getBlock('core/paragraph').should('have.css', 'width', '100px');
+				return;
+			}
+		}
 
-			// ********************* After Passed Master Block Assertions ************************ //
+		setDeviceType('Desktop');
+	}
 
-			// 3- Go to customize link inner block panel.
-			setInnerBlock('elements/link');
+	describe('Responsive design', () => {
+		it('should generate css for desktop device', () => {
+			context(
+				'sets background-color and transition on normal of desktop device',
+				() => {
+					// Set background color.
+					cy.setColorControlValue('BG Color', '#16e2c1');
 
-			// 4- Set color for link inner block.
-			cy.setColorControlValue('BG Color', '#000000');
+					// Set transition.
+					cy.getByAriaLabel('Add New Transition').click();
 
-			// 5- Assert link inner block css.
-			cy.getBlock('core/paragraph').should(
-				'have.css',
-				'background-color',
-				'rgba(0, 0, 0, 0)'
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				}
 			);
 
-			// ********************* After Passed Link Inner Block Assertions ************************ //
+			context('add hover on desktop device with assertions', () => {
+				// set hover block state.
+				addBlockState('hover');
 
-			// 6- Reassert master block css.
-			cy.getBlock('core/paragraph').should('have.css', 'width', '100px');
+				// Set background color.
+				cy.setColorControlValue('BG Color', '#e3178b');
 
-			// 7- Switch to Master block.
-			cy.getByAriaLabel('Selected Block').click();
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'background-color',
+					'rgb(227, 23, 139)'
+				);
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'transition',
+					'all 0.5s ease 0s'
+				);
+			});
 
-			// 8- Reassert master block css.
-			cy.getBlock('core/paragraph').should('have.css', 'width', '100px');
+			context('front end - check style inheritance', () => {
+				savePage();
+				redirectToFrontPage();
+
+				context('base breakpoint', () => {
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+
+					cy.get('.blockera-block').realHover();
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+
+				context('xl-desktop', () => {
+					// Set xl-desktop viewport
+					cy.viewport(1441, 1920);
+
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+
+					cy.get('.blockera-block').realHover();
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+
+				context('tablet', () => {
+					// Set tablet viewport
+					cy.viewport(991, 1368);
+
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+
+					cy.get('.blockera-block').realHover();
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+			});
+		});
+
+		it('should generate css for tablet device', () => {
+			context(
+				'sets background-color and transition on normal of tablet device',
+				() => {
+					setDevice('Tablet');
+
+					// Set background color.
+					cy.setColorControlValue('BG Color', '#16e2c1');
+
+					// Set transition.
+					cy.getByAriaLabel('Add New Transition').click();
+
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				}
+			);
+
+			context('add hover on tablet device with assertions', () => {
+				setDevice('Tablet');
+
+				// set hover block state.
+				addBlockState('hover');
+
+				// Set background color.
+				cy.setColorControlValue('BG Color', '#e3178b');
+
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'background-color',
+					'rgb(227, 23, 139)'
+				);
+				cy.getBlock('core/paragraph').should(
+					'have.css',
+					'transition',
+					'all 0.5s ease 0s'
+				);
+			});
+
+			context(
+				'checking generated styles on normal of tablet device',
+				() => {
+					setDevice('Tablet');
+					setBlockState('Normal');
+
+					cy.getBlock('core/paragraph').realHover();
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				}
+			);
+
+			context('checking generated styles on desktop device', () => {
+				setDevice('Desktop');
+
+				cy.getBlock('core/paragraph').should(
+					'not.have.css',
+					'background-color',
+					'rgb(22, 226, 193)'
+				);
+				cy.getBlock('core/paragraph').should(
+					'not.have.css',
+					'transition',
+					'all 0.5s ease 0s'
+				);
+
+				cy.getBlock('core/paragraph').realHover();
+				cy.getBlock('core/paragraph').should(
+					'not.have.css',
+					'background-color',
+					'rgb(227, 23, 139)'
+				);
+				cy.getBlock('core/paragraph').should(
+					'not.have.css',
+					'transition',
+					'all 0.5s ease 0s'
+				);
+			});
+
+			context('front end - check style inheritance', () => {
+				savePage();
+				redirectToFrontPage();
+
+				context('base breakpoint', () => {
+					// Set xl-desktop viewport
+					cy.viewport(1441, 1920);
+
+					cy.get('.blockera-block').should(
+						'not.have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0s ease 0s'
+					);
+				});
+
+				context('xl-desktop', () => {
+					// Set xl-desktop viewport
+					cy.viewport(1441, 1920);
+
+					cy.get('.blockera-block').should(
+						'not.have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0s ease 0s'
+					);
+				});
+
+				context('tablet', () => {
+					// Set tablet viewport
+					cy.viewport(991, 1368);
+
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+
+					cy.get('.blockera-block').realHover();
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+			});
+		});
+
+		it('should generate css for desktop and tablet device on normal and hover states', () => {
+			context('desktop', () => {
+				context(
+					'sets background-color and transition on normal',
+					() => {
+						// Set background color.
+						cy.setColorControlValue('BG Color', '#16e2c1');
+
+						// Set transition.
+						cy.getByAriaLabel('Add New Transition').click();
+
+						cy.getBlock('core/paragraph').should(
+							'have.css',
+							'background-color',
+							'rgb(22, 226, 193)'
+						);
+						cy.getBlock('core/paragraph').should(
+							'have.css',
+							'transition',
+							'all 0.5s ease 0s'
+						);
+					}
+				);
+
+				context('add hover with assertions', () => {
+					// set hover block state.
+					addBlockState('hover');
+
+					// Set background color.
+					cy.setColorControlValue('BG Color', '#e3178b');
+
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+			});
+
+			context('tablet', () => {
+				context('sets background-color on normal', () => {
+					setDevice('Tablet');
+					setBlockState('Normal');
+
+					// Set background color.
+					cy.setColorControlValue('BG Color', '#16e2c1');
+
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+
+				context('add hover with assertions', () => {
+					setDevice('Tablet');
+
+					// set hover block state.
+					setBlockState('Hover');
+
+					// Set background color.
+					cy.setColorControlValue('BG Color', '#e3178b');
+
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+
+				context('checking generated styles on normal', () => {
+					setDevice('Tablet');
+					setBlockState('Normal');
+
+					cy.getBlock('core/paragraph').realHover();
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.getBlock('core/paragraph').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+			});
+
+			context('front end - check style inheritance', () => {
+				savePage();
+				redirectToFrontPage();
+
+				context('base breakpoint', () => {
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+
+					cy.get('.blockera-block').realHover();
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+
+				context('xl-desktop', () => {
+					// Set xl-desktop viewport
+					cy.viewport(1441, 1920);
+
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+
+					cy.get('.blockera-block').realHover();
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+
+				context('tablet', () => {
+					// Set tablet viewport
+					cy.viewport(991, 1368);
+
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(22, 226, 193)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+
+					cy.get('.blockera-block').realHover();
+					cy.get('.blockera-block').should(
+						'have.css',
+						'background-color',
+						'rgb(227, 23, 139)'
+					);
+					cy.get('.blockera-block').should(
+						'have.css',
+						'transition',
+						'all 0.5s ease 0s'
+					);
+				});
+			});
 		});
 	});
 });
