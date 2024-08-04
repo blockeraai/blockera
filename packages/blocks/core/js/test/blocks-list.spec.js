@@ -8,13 +8,18 @@ import Ajv from 'ajv';
  */
 import schema from '../schemas/blocks.schema.json';
 import wordpressBlocks from '../wordpress-blocks-list.json';
+import wooCommerceBlocks from '../woocommerce-blocks-list.json';
 
 const ajv = new Ajv();
 
-['WordPress'].forEach((product) => {
+['WordPress', 'WooCommerce'].forEach((product) => {
 	switch (product) {
 		case 'WordPress':
 			var blocks = wordpressBlocks;
+			break;
+
+		case 'WooCommerce':
+			var blocks = wooCommerceBlocks;
 			break;
 	}
 
