@@ -62,7 +62,7 @@ const Fields: FieldItem = memo<FieldItem>(
 
 		const { getSelectedBlock = () => ({}) } =
 			select('core/block-editor') || {};
-		const { name = '' } = getSelectedBlock();
+		const { name = '' } = getSelectedBlock() || {};
 		const { getExtension } = select('blockera/extensions/config') || {};
 		const blockeraBackground =
 			'function' === typeof getExtension
