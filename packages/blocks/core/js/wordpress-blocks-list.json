@@ -327,71 +327,88 @@
 	"not-supported": [
 		{
 			"name": "core/block",
-			"title": "Pattern"
+			"title": "Pattern",
+			"note": "No supported for front end needed but we can add some custom functionality like conditions."
 		},
 		{
 			"name": "core/rss",
-			"title": "RSS"
+			"title": "RSS",
+			"note": "Advanced inner blocks setup needed"
 		},
 		{
 			"name": "core/spacer",
-			"title": "Spacer"
+			"title": "Spacer",
+			"note": "Advanced compatibility for responsive height needed."
 		},
 		{
 			"name": "core/navigation",
-			"title": "Navigation"
+			"title": "Navigation",
+			"note": "Advanced editor setting panel compatibility needed."
 		},
 		{
 			"name": "core/navigation-link",
-			"title": "Custom Link"
+			"title": "Custom Link",
+			"note": "Advanced editor setting panel compatibility needed."
 		},
 		{
 			"name": "core/navigation-submenu",
-			"title": "Submenu"
+			"title": "Submenu",
+			"note": "Advanced editor setting panel compatibility needed."
 		},
 		{
 			"name": "core/query",
-			"title": "Query Loop"
+			"title": "Query Loop",
+			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
 		},
 		{
 			"name": "core/template-part",
-			"title": "Template Part"
+			"title": "Template Part",
+			"note": "No supported for front end needed but we can add some custom functionality like conditions."
 		},
 		{
 			"name": "core/post-template",
-			"title": "Post Template"
+			"title": "Post Template",
+			"note": "No supported for front end needed but we can add some custom functionality like conditions."
 		},
 		{
 			"name": "core/home-link",
-			"title": "Home Link"
+			"title": "Home Link",
+			"note": "Advanced editor setting panel compatibility needed."
 		},
 		{
 			"name": "core/legacy-widget",
-			"title": "Legacy Widget"
+			"title": "Legacy Widget",
+			"note": "Investigate if this block can be supported."
 		},
 		{
 			"name": "core/widget-group",
-			"title": "Widget Group"
+			"title": "Widget Group",
+			"note": "Investigate if this block can be supported."
 		},
 		{
 			"name": "core/archives",
-			"title": "Archives"
+			"title": "Archives",
+			"note": "There is a block editor js error about attributes."
 		},
 		{
 			"name": "core/calendar",
-			"title": "Calendar"
+			"title": "Calendar",
+			"note": "There is a block editor js error about attributes."
 		},
 		{
 			"name": "core/latest-comments",
-			"title": "Latest Comments"
+			"title": "Latest Comments",
+			"note": "Advanced inner blocks setup needed"
 		},
 		{
 			"name": "core/more",
-			"title": "More"
+			"title": "More",
+			"note": "Investigate if this block can be supported."
 		},
 		{
 			"name": "core/page-list-item",
-			"title": "Page List Item"
+			"title": "Page List Item",
+			"note": "Investigate if this block can be supported."
 		}
 	]
 }
