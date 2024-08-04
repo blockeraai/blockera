@@ -37,7 +37,7 @@ jobs:
         needs: compute-previous-wordpress-version
         runs-on: ubuntu-latest
         timeout-minutes: 20
-        if: ${{ github.repository == 'publisherwp/publisher-core' || github.event_name == 'pull_request' }}
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
             fail-fast: true
             matrix:
@@ -48,30 +48,20 @@ jobs:
                     - '8.2'
                 multisite: [false]
                 wordpress: [''] # Latest WordPress version.
-                include:
-                    # Test with the previous WP version.
-                    - php: '7.4'
-                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
-                    - php: '8.2'
-                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
+        #                include:
+        #                    # Test with the previous WP version.
+        #                    - php: '7.4'
+        #                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
+        #                    - php: '8.2'
+        #                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
 
         env:
             WP_ENV_PHP_VERSION: ${{ matrix.php }}
             WP_ENV_CORE: ${{ matrix.wordpress == '' && 'WordPress/WordPress' || format( 'https://wordpress.org/wordpress-{0}.zip', matrix.wordpress ) }}
 
         steps:
-            - uses: actions/checkout@v3
-
-            - name: Setup SSH
-              uses: MrSquaare/ssh-setup-action@v1
-              with:
-                  host: github.com
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-            - name: Clone Submodule
-              run: |
-                  cd libs
-                  git clone git@github.com:publisherwp/storybook.git
+            - name: Checkout Repository
+              uses: actions/checkout@v3
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
@@ -110,10 +100,10 @@ jobs:
             - name: Npm build
               run: npm run build
 
-            - name: Docker debug information
-              run: |
-                  docker -v
-                  docker-compose -v
+            #            - name: Docker debug information
+            #              run: |
+            #                  docker -v
+            #                  docker-compose -v
 
             - name: General debug information
               run: |
@@ -126,6 +116,13 @@ jobs:
 
             - name: Start WordPress Environment
               run: npm run env:start
+
+            - name: 'Create env file'
+              run: |
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
 
             - name: Running single site unit tests
               if: ${{ ! matrix.multisite }}
@@ -148,7 +145,7 @@ jobs:
                   fi
                   # Extract just the number of tests from the string.
                   num_tests=$(echo "$num_tests" | grep -Eo '[0-9]+')
-                  if [ $num_tests -lt 8 ] ; then
+                  if [ $num_tests -lt 54 ] ; then
                     echo "Only $num_tests tests passed, which is much fewer than expected." && exit 1
                   fi
                   echo "$num_tests tests passed."

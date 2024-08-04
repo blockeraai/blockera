@@ -1,0 +1,9 @@
+{
+	"name": "blockera/utils",
+	"description": "The utilities for JavaScript and PHP blockera applications.",
+	"autoload": {
+		"psr-4": {
+		 	"Blockera\\Utils\\": "php/"
+		}
+	}
+}

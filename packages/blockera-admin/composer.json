@@ -1,0 +1,12 @@
+{
+	"name": "blockera/blockera-admin",
+	"description": "The blockera admin menus on WordPress admin dashboard.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Admin\\": "php/"
+		},
+		"files": [
+			"./php/functions.php"
+		]
+	}
+}

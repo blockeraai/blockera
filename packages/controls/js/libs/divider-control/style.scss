@@ -1,0 +1,105 @@
+.blockera-control-divider {
+
+	.blockera-control-group-header {
+		padding: 0 10px !important;
+
+		.shape-icon {
+			display: flex;
+		}
+	}
+}
+
+.blockera-control-divider-popover,
+.blockera-control-divider-shape-popover {
+
+	.disabled-element-wrapper {
+       width: 100% !important;
+	}
+
+	.blockera-control-shape-button,
+	.blockera-control-shape {
+
+	   .search-icon,
+	   .shape-icon {
+			display: flex;
+			align-items: center;
+	   }
+
+	   .shape-icon {
+
+			svg {
+				width: 100%;
+			}
+
+			&.bottom {
+
+				svg {
+					transform: rotate(180deg);
+				}
+			}
+	   }
+	}
+
+	.blockera-control-shape-button {
+
+        .shape-icon {
+
+			svg {
+				transform: scaleY(1.5);
+			}
+
+			&.bottom {
+
+				svg {
+					transform: scaleY(1.5) rotate(180deg);
+				}
+			}
+		}
+	}
+
+	.shapes {
+
+		.blockera-control-label {
+			min-height: 21px;
+		}
+
+        .blockera-field-control {
+			gap: 6px;
+		}
+
+		.blockera-control-shape {
+				padding: 10px;
+				height: 36px;
+
+				&.bottom {
+
+					svg {
+						transform: rotate(180deg);
+					}
+				}
+			}
+	}
+
+
+	.blockera-control-toggle-field {
+		align-items: baseline;
+	}
+}
+
+.blockera-control-repeater-group-header {
+
+	.shape-icon {
+
+		svg {
+			width: 100%;
+		}
+
+		&.bottom {
+
+			svg {
+				transform: rotate(180deg);
+			}
+		}
+	}
+
+}

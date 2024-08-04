@@ -1,0 +1,41 @@
+
+.blockera-component-tabs.blockera-settings-tabs {
+
+	.blockera-component-tabs__list {
+		z-index: 1;
+		position: relative;
+		gap: 20px;
+		padding: 15px;
+		background: #fff;
+		margin: 20px 0 ;
+
+		.blockera-component-tabs__list__item {
+			flex: none;
+
+			&:hover {
+				background-color: #ffffff;
+			}
+
+			&.is-active-tab::before {
+				top: -15px;
+			}
+		}
+	}
+}
+
+.blockera-settings-tabs {
+
+	.blockera-settings-sidebar-wrapper {
+		flex: auto;
+		width: 33%;
+		min-width: 0;
+		align-self: flex-start;
+	}
+
+	.blockera-settings-panel-desc {
+		font-size: 15px;
+		line-height: 2;
+		font-weight: 400;
+		color: #626262;
+	}
+}

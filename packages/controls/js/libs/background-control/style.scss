@@ -1,0 +1,56 @@
+.blockera-control-background {
+
+	.blockera-control-item-preview {
+		width: 18px;
+		height: 18px;
+		display: block;
+		border-radius: 50%;
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+		box-shadow: inset 0 0 0 1px #00000033;
+	}
+}
+
+.blockera-control-mesh-generator-preview {
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+	border-radius: 2px;
+	height: 100px;
+	cursor: pointer;
+	position: relative;
+	user-select: none;
+
+	.blockera-control-mesh-generator-preview-regenerate {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		padding: 5px;
+		height: 28px;
+		font-size: 11px;
+		gap: 4px;
+		visibility: hidden;
+		border-radius: 2px 0 0 0;
+		display: flex;
+		align-items: center;
+		color: #000000;
+		font-weight: 500;
+		text-transform: uppercase;
+		mix-blend-mode: color-burn;
+
+		svg {
+			width: 18px;
+			fill: currentcolor;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	&:hover {
+
+		.blockera-control-mesh-generator-preview-regenerate {
+			visibility: visible;
+		}
+	}
+}

@@ -1,0 +1,1 @@
+export { EntranceAnimationExtension } from './extension';

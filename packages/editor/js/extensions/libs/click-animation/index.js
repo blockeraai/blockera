@@ -1,0 +1,1 @@
+export { ClickAnimationExtension } from './extension';

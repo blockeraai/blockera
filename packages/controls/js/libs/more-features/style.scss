@@ -1,0 +1,56 @@
+.blockera-component-more-features {
+	position: relative;
+	margin-top: 14px;
+
+	.blockera-component-more-features__button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		height: 30px;
+		border-radius: 2px;
+		font-size: 12px;
+		font-weight: 500;
+		transition: var(--blockera-controls-transition);
+		cursor: pointer;
+		-webkit-user-select: none;
+		user-select: none;
+		width: 100%;
+
+		svg {
+			fill: currentColor;
+		}
+
+		&:hover {
+			color: var(--blockera-controls-primary-color) !important;
+		}
+
+		&:focus {
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+		}
+	}
+
+	.blockera-component-more-features__body {
+		height: 0;
+		overflow: hidden;
+		visibility: hidden;
+		transition: var(--blockera-controls-transition);
+		width: 100%;
+	}
+
+	&.is-open {
+
+		.blockera-component-more-features__button {
+			color: var(--blockera-controls-primary-color) !important;
+			margin-bottom: 10px;
+		}
+
+		.blockera-component-more-features__body {
+			margin-top: 10px;
+			display: inline-block;
+			visibility: visible;
+			overflow: visible;
+			height: auto;
+		}
+	}
+}
