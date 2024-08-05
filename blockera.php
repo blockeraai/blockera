@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Blockera
  * Plugin URI: https://blockera.ai/blockera-page-builder/
- * Description: Make Gutenberg a Real Page Builder!
+ * Description: Blockera Transforms Gutenberg into a Powerful Page Builder.
  * Requires at least: 6.6
  * Tested up to: 6.5.2
  * Requires PHP: 7.4
