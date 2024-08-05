@@ -24,7 +24,7 @@ This unique approach ensures a seamless transition and empowers you to create st
 
 Blockera is perfect for WordPress website designers that want to create professional websites with Gutenberg but need features of a real page builder. 
 
-<h3>6️⃣ Key Missing Features of Gutenberg that Blockera Adds</h3>
+<h3>7️⃣ Key Missing Features of Gutenberg that Blockera Adds</h3>
 
 - 1️⃣ **Responsive Design Controls**: Blockera’s allow you to customize **all style settings** for **all responsive breakpoints** easily, ensuring your site looks perfect on all devices. This feature is not just advanced but also unique to Blockera.
 
