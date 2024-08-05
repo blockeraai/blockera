@@ -52,7 +52,10 @@ export function createPost({ postType = 'post' } = {}) {
 	goTo('/wp-admin/post-new.php?post_type=' + postType).then(() => {
 		// eslint-disable-next-line
 		cy.wait(2000);
-		disableGutenbergFeatures();
+
+		if (['post', 'page'].includes(postType)) {
+			disableGutenbergFeatures();
+		}
 	});
 }
 
