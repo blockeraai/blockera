@@ -43,3 +43,24 @@ Our commitment to continuous improvement ensures that Blockera evolves to meet t
 
 -   **Style Variation Manager**: We are working on blocks style variation manager that lets you to create new style variation for blocks or update current styles form block editor. (⚙️ Cooming soon)
 
+
+## Installation
+
+1. Download Blockera from the [WordPress plugin directory](https://wordpress.org/plugins/blockera/).
+2. Install and Activate it 🎉
+
+## Support
+
+Need help? This is a developer's portal for Blockera and should not be used for general support and queries. Please visit the [Blockera support forum on WordPress.org](https://wordpress.org/support/plugin/blockera) for assistance.
+
+## Contributors
+
+Blockera is built by [contributors and volunteers](CONTRIBUTORS.md) around the globe.
+
+## Screenshots
+<p align="center">
+<img alt="Screenshot 1" src="./.wordpress-org/screenshot-1.gif">
+<img alt="Screenshot 2" src="./.wordpress-org/screenshot-2.gif">
+<img alt="Screenshot 3" src="./.wordpress-org/screenshot-3.gif">
+<img alt="Screenshot 4" src="./.wordpress-org/screenshot-4.gif">
+</p>
