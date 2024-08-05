@@ -101,6 +101,10 @@
 			"title": "Pullquote"
 		},
 		{
+			"name": "core/preformatted",
+			"title": "Preformatted"
+		},
+		{
 			"name": "core/search",
 			"title": "Search"
 		},
@@ -302,11 +306,6 @@
 			"name": "core/pattern",
 			"title": "Pattern placeholder",
 			"note": "This block has not front end support."
-		},
-		{
-			"name": "core/preformatted",
-			"title": "Preformatted",
-			"note": "There is no wrapper tag for this block and can not be supported."
 		},
 		{
 			"name": "core/shortcode",
