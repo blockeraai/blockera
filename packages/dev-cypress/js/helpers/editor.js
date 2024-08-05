@@ -20,6 +20,19 @@ export function getIframeBody(containerClass) {
  * Safely obtain the window object or error
  * when the window object is not available.
  */
+export function getWindowProperty(path) {
+	return cy
+		.window()
+		.its(path)
+		.then((data) => {
+			return data;
+		});
+}
+
+/**
+ * Safely obtain the window object or error
+ * when the window object is not available.
+ */
 export function getWPDataObject() {
 	return cy
 		.window()
