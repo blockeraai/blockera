@@ -124,6 +124,19 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 					innerBlocks: action.inners,
 				},
 			};
+		case 'REGISTER_SHARED_BLOCK_ATTRIBUTES':
+			return {
+				...state,
+				sharedBlockAttributes: action.attributes,
+			};
+		case 'REGISTER_BLOCK_TYPE_ATTRIBUTES':
+			return {
+				...state,
+				blockTypes: {
+					...(state?.blockTypes || {}),
+					[action.name]: action.attributes,
+				},
+			};
 	}
 
 	return state;
