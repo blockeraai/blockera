@@ -27,7 +27,7 @@
 <a href="https://wordpress.org/plugins/blockera/"><img alt="WordPress Plugin Active Installs" src="https://img.shields.io/wordpress/plugin/installs/blockera?label=Plugin%20Active%20Installs&color=49c320"></a>
 </p>
 
-## Our Vision
+## Our Vision 😎
 At Blockera, our vision is to transform the WordPress block editor into a powerful page builder. 
 
 We empower users to create any type of website with **advanced features**, **responsive controls**, and **core blocks compatibility**, all within the core block editor. 
@@ -53,20 +53,28 @@ Our commitment to continuous improvement ensures that Blockera evolves to meet t
 -   **Style Variation Manager**: We are working on blocks style variation manager that lets you to create new style variation for blocks or update current styles form block editor. (⚙️ Cooming soon)
 
 
-## Installation
+## Installation 😍
 
 1. Download Blockera from the [WordPress plugin directory](https://wordpress.org/plugins/blockera/).
 2. Install and Activate it 🎉
 
-## Support
+
+## Support 👋
 
 Need help? This is a developer's portal for Blockera and should not be used for general support and queries. Please visit the [Blockera support forum on WordPress.org](https://wordpress.org/support/plugin/blockera) for assistance.
 
-## Contributors
+
+## Change log and Releases 📝
+Complete list of updates and relases is avaliable in [changelog](./changelog.txt).
+
+
+## Contributors 😎
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/t/blockeraai/blockera?label=Total%20Commits"> <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/blockeraai/blockera?label=Monthly%20Commits">
+<img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/blockeraai/blockera?label=Contributors"> <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/blockeraai/blockera?label=Issues">
 
 Blockera is built by [contributors and volunteers](CONTRIBUTORS.md) around the globe.
 
-## Screenshots
+## Screenshots 🌇
 <p align="center">
 <img alt="Screenshot 1" src="./.wordpress-org/screenshot-1.gif">
 <img alt="Screenshot 2" src="./.wordpress-org/screenshot-2.gif">
