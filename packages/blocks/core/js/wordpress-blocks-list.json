@@ -194,6 +194,11 @@
 			"title": "Post Terms"
 		},
 		{
+			"name": "core/post-template",
+			"title": "Post Template",
+			"note": "supported with blockera but it needs to be improved inners core and virtual blocks."
+		},
+		{
 			"name": "core/query-pagination",
 			"title": "Pagination"
 		},
@@ -362,11 +367,6 @@
 		{
 			"name": "core/template-part",
 			"title": "Template Part",
-			"note": "No supported for front end needed but we can add some custom functionality like conditions."
-		},
-		{
-			"name": "core/post-template",
-			"title": "Post Template",
 			"note": "No supported for front end needed but we can add some custom functionality like conditions."
 		},
 		{
