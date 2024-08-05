@@ -1,11 +1,20 @@
 <p align="center">
-<img src="./.wordpress-org/banner-1544x500.jpg" alt="Blockera">
+<img src="./.wordpress-org/icon-256x256.png" alt="Blockera" width="110">
 </p>
 
 <h2 align="center">Blockera - Advanced Mode for Gutenberg</h3>
 
 <p align="center">
 	Transform WordPress Block Editor into a Powerful Page Builder with Blockera
+</p>
+
+<p align="center">
+	<a href="https://blockera.ai">🌐 Blockera Website</a> · <a href="https://wordpress.org/plugins/blockera/"><img height="12" width="12" src="https://cdn.simpleicons.org/wordpress" /> Download Plugin</a>
+<p>
+
+
+<p align="center">
+<img src="./.wordpress-org/banner-1544x500.jpg" alt="Blockera">
 </p>
 
 <p align="center">
