@@ -3,11 +3,10 @@
  */
 import {
 	createPost,
+	getBlockType,
 	addBlockToPost,
 	getWPDataObject,
 	getWindowProperty,
-	getSelectedBlock,
-	getBlockType,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -17,11 +16,9 @@ import {
  * support 3rd party plugins block types. for example => 'woocommerce/product-price'
  */
 describe('Blockera editor bootstrapper', () => {
-	beforeEach(() => {
-		createPost();
-	});
-
 	it('should available store apis on blockera editor global variable', () => {
+		createPost();
+
 		getWindowProperty('blockeraEditor_1_0_0').then((data) => {
 			expect(true).to.eq(
 				data.editor.hasOwnProperty(
@@ -37,6 +34,13 @@ describe('Blockera editor bootstrapper', () => {
 	});
 
 	it('should added blockera supports on woocommerce/product-price', () => {
+		createPost('product');
+
+		cy.get('input[name="post_title"]').type('Cap', { delay: 0 });
+		cy.get('input[value="Publish"]').click();
+
+		createPost();
+
 		addBlockToPost('woocommerce/all-products');
 
 		cy.getBlock('woocommerce/all-products').click();
