@@ -8,8 +8,8 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
+import { getSmallHash, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -127,7 +127,7 @@ export const useAttributes = (
 				..._attributes,
 				className: classNames(className, {
 					'blockera-block': true,
-					[`blockera-block-${clientId}`]: true,
+					[`blockera-block-${getSmallHash(clientId)}`]: true,
 				}),
 			};
 		}
