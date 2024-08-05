@@ -34,7 +34,7 @@ describe('Blockera editor bootstrapper', () => {
 	});
 
 	it('should added blockera supports on woocommerce/product-price', () => {
-		createPost('product');
+		createPost({ postType: 'product' });
 
 		cy.get('input[name="post_title"]').type('Cap', { delay: 0 });
 		cy.get('input[value="Publish"]').click();
