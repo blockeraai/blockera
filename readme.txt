@@ -12,25 +12,29 @@ Short Description: ### AUTO-GENERATED
 
 == Description ==
 
-<h3>What is Blockera?</h3>
+<h3>Tired of Gutenberg's limitations?</h3>
 
-While the default Gutenberg editor offers a clean and simple interface, it always falls short 🤦‍♂️ for those seeking advanced customization options. 
+**🧐 Imagine this:** All the familiarity of Gutenberg, same core blocks but **supercharged** with **advanced options** and **responsive controls**. 
 
-**Blockera transforms Gutenberg into a powerful page builder by enhancing all core blocks** 😍 without introducing new ones 👌 and adding missing feature into block editor and site editor.
+That's **Blockera**, It's the Block Era 😎.
 
-This unique approach ensures a seamless transition and empowers you to create stunning, responsive websites with advanced design capabilities.
+Blockera transforms block editor (Gutenberg) into a powerful page builder, by enhancing all core blocks. It's the ADVANCED MODE for Gutenberg.
 
-<h3>Who Is Blockera For? 🔍</h3>
+This unique approach ensures a seamless transition and empowers you to create stunning, responsive websites with advanced design capabilities and animations.
 
-Blockera is perfect for WordPress website designers that want to create professional websites with Gutenberg but need features of a real page builder. 
+<h3>Who Is Blockera For? 🎯</h3>
 
-<h3>6️⃣ Key Missing Features of Gutenberg that Blockera Adds</h3>
+Blockera is for anyone that tired of Gutenberg's limitations and weak performance of other page builders. 
 
-- 1️⃣ **Responsive Design Controls**: Blockera’s allow you to customize **all style settings** for **all responsive breakpoints** easily, ensuring your site looks perfect on all devices. This feature is not just advanced but also unique to Blockera.
+Install Blockera today and unlock the true potential of Gutenberg for creating professional and blazing fast websites!
+
+<h3>7️⃣ Key Missing Features of Gutenberg that Blockera Adds 🏆</h3>
+
+- 1️⃣ **Responsive Design Controls**: Allows you to customize **all style settings** for **all screen sizes** easily, ensuring your site looks perfect on all devices. This feature is not just advanced but also unique to Blockera.
 
 - 2️⃣ **Advanced Style Customization Options**: Blockera offers all CSS style customization options for all blocks, making it easy to achieve any design you can imagine. With an intuitive UX, even complex CSS adjustments are a breeze.
 
-- 3️⃣ **Supporting All Core Blocks**<sup>1</sup>: Blockera doesn’t overwhelm you with new blocks. Instead, it supercharges all existing core blocks, adding the advanced features you need to take your website to the next level. Also Blockera is compatible with all WordPress themes, including site editor and non-site editor themes.
+- 3️⃣ **Supporting All Core Blocks**<sup>1</sup>: Blockera doesn’t overwhelm you with new blocks. Instead, it supercharges all existing core blocks, adding the advanced features you need to take your website to the next level. Works with all block themes, classic themes and Gutenberg-enabled websites.
 
 - 4️⃣ **Block States**: Design **hover effects** and other state-specific styles to create a more engaging user experience in all blocks. Blockera supports all HTML states for unparalleled flexibility in all core blocks<sup>2</sup>.
 
@@ -40,7 +44,11 @@ Blockera is perfect for WordPress website designers that want to create professi
 
 - 7️⃣ **Supporting All WooCommerce Blocks**<sup>4</sup>: Blockera supports WooCommerce blocks as same as core blocks with advanced options, such as block states, custom CSS, and more.
 
-<h3>Upcoming Features of Blockera 🔥</h3>
+All of these features are available in Blockera already. So what's the future of Blockera?
+
+All of these features are available in Blockera already. So what's the future of Blockera?
+
+<h3>Upcoming Features of Blockera 🔥🔥🔥</h3>
 
 Currently we are working on the following features to add in Blockera:
 
@@ -56,7 +64,7 @@ Currently we are working on the following features to add in Blockera:
 
 - **Block Conditions**: We will add option to add visibility conditions for all blocks with features to create advanced conditions to show or hide blocks.
 
-- **AI Features**: We will add AI integration to block editor for creating content or designing websites with the help of AI on core blocks.
+- **AI Integration**: We will add AI integration to block editor for creating content or designing websites. We are working on it.
 
 <h3>Responsive Design Controls</h3>
 
