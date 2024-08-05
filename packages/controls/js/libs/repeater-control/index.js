@@ -288,6 +288,7 @@ export default function RepeaterControl(
 		onClick?: (callback: () => void) => void,
 	}) => (
 		<Button
+			data-test={addNewButtonLabel || __('Add New', 'blockera')}
 			size="extra-small"
 			className={controlInnerClassNames('btn-add', {
 				'is-deactivate': disableProHints && disableAddNewItem,
@@ -310,6 +311,7 @@ export default function RepeaterControl(
 		onClick?: (callback: () => void) => void,
 	}) => (
 		<Button
+			data-test={addNewButtonLabel || __('Add New', 'blockera')}
 			size="extra-small"
 			className={controlInnerClassNames('btn-add', {
 				'is-deactivate': disableProHints && disableAddNewItem,
