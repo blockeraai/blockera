@@ -121,8 +121,14 @@ export const useAttributes = (
 			_attributes = getAttributesWithIds(_attributes, 'blockeraPropsId');
 		}
 
+		const indexOfBlockeraSelector =
+			attributes?.className?.indexOf('blockera-block');
+
 		// Sets "className" attribute value is existing on block attributes to merge with default value.
-		if (-1 === attributes?.className.indexOf('blockera-block')) {
+		if (
+			-1 === indexOfBlockeraSelector ||
+			'undefined' === typeof indexOfBlockeraSelector
+		) {
 			_attributes = {
 				..._attributes,
 				className: classNames(className, attributes.className, {
