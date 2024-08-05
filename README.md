@@ -48,9 +48,9 @@ Our commitment to continuous improvement ensures that Blockera evolves to meet t
 
 -   **Custom CSS Per Block**: Add custom CSS codes to individual blocks, giving expert developers more room for intricate customizations.
 
--   **WooCommerce Blocks**: We're constantly evolving, with plans to introduce custom blocks and full WooCommerce support. (⚙️ Cooming soon)
+-   **WooCommerce Blocks**: We're constantly evolving, with plans to introduce custom blocks and full WooCommerce support. (⚙️ Coming soon)
 
--   **Style Variation Manager**: We are working on blocks style variation manager that lets you to create new style variation for blocks or update current styles form block editor. (⚙️ Cooming soon)
+-   **Style Variation Manager**: We are working on blocks style variation manager that lets you to create new style variation for blocks or update current styles form block editor. (⚙️ Coming soon)
 
 
 ## Installation 😍
@@ -65,7 +65,7 @@ Need help? This is a developer's portal for Blockera and should not be used for 
 
 
 ## Change log and Releases 📝
-Complete list of updates and relases is avaliable in [changelog](./changelog.txt).
+Complete list of updates and releases is available in [changelog](./changelog.txt).
 
 
 ## Contributors 😎
