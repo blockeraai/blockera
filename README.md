@@ -48,9 +48,9 @@ Our commitment to continuous improvement ensures that Blockera evolves to meet t
 
 -   **Custom CSS Per Block**: Add custom CSS codes to individual blocks, giving expert developers more room for intricate customizations.
 
--   **WooCommerce Blocks**: We're constantly evolving, with plans to introduce custom blocks and full WooCommerce support. (⚙️ Cooming soon)
+-   **WooCommerce Blocks**: We're constantly evolving, with plans to introduce custom blocks and full WooCommerce support. (⚙️ Coming soon)
 
--   **Style Variation Manager**: We are working on blocks style variation manager that lets you to create new style variation for blocks or update current styles form block editor. (⚙️ Cooming soon)
+-   **Style Variation Manager**: We are working on blocks style variation manager that lets you to create new style variation for blocks or update current styles form block editor. (⚙️ Coming soon)
 
 
 ## Installation 😍
@@ -65,14 +65,14 @@ Need help? This is a developer's portal for Blockera and should not be used for 
 
 
 ## Change log and Releases 📝
-Complete list of updates and relases is avaliable in [changelog](./changelog.txt).
+Complete list of updates and releases is available in [changelog](./changelog.txt).
 
 
 ## Contributors 😎
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/t/blockeraai/blockera?label=Total%20Commits"> <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/blockeraai/blockera?label=Monthly%20Commits">
 <img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/blockeraai/blockera?label=Contributors"> <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/blockeraai/blockera?label=Issues">
 
-Blockera is built by [contributors and volunteers](CONTRIBUTORS.md) around the globe.
+Blockera is built by [contributors and volunteers](./.github/CONTRIBUTING.md) around the globe.
 
 ## Screenshots 🌇
 <p align="center">
