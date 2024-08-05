@@ -8,6 +8,17 @@
 	Transform WordPress Block Editor into a Powerful Page Builder with Blockera
 </p>
 
+<p align="center">
+<a href="https://github.com/blockeraai/blockera/actions/workflows/cypress-e2e-tests.yml"><img alt="E2E Tests" src="https://img.shields.io/github/actions/workflow/status/blockeraai/blockera/cypress-e2e-tests.yml?style=flat&label=Test / E2E"></a> 
+<a href="https://github.com/blockeraai/blockera/actions/workflows/jest-unit-tests.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/blockeraai/blockera/jest-unit-tests.yml?style=flat&label=Test / JS"></a> 
+<a href="https://github.com/blockeraai/blockera/actions/workflows/php-unit-tests.yml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/blockeraai/blockera/php-unit-tests.yml?style=flat&label=Test / PHP"></a> 
+<a href="https://github.com/blockeraai/blockera/blob/master/packages/blocks/core/js/wordpress-blocks-list.json"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fblockeraai%2Fblockera%2Fmaster%2Fpackages%2Fblocks%2Fcore%2Fjs%2Fwordpress-blocks-list.json&query=%24.data%5B%22soft-supported%22%5D&suffix=%20of%2093&logo=wordpress&logoColor=ffffff&label=WordPress%20Supported%20Blocks&labelColor=21759b&color=49c320"></a> 
+<a href="https://github.com/blockeraai/blockera/blob/master/packages/blocks/core/js/woocommerce-blocks-list.json"><img alt="Dynamic JSON Badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fblockeraai%2Fblockera%2Fmaster%2Fpackages%2Fblocks%2Fcore%2Fjs%2Fwoocommerce-blocks-list.json&query=%24.data%5B%22soft-supported%22%5D&suffix=%20of%20103&label=WooCommerce%20Supported%20Blocks&labelColor=7F54B3&color=49c320"></a> 
+<a href="https://wordpress.org/plugins/blockera/"><img alt="Total Plugin Downloads" src="https://img.shields.io/wordpress/plugin/dt/blockera?label=Total%20Downloads&color=49c320"></a>
+<a href="https://wordpress.org/plugins/blockera/"><img alt="WordPress Plugin Active Installs" src="https://img.shields.io/wordpress/plugin/installs/blockera?label=Plugin%20Active%20Installs&color=49c320"></a>
+
+
+</p>
 
 ## Our Vision
 At Blockera, our vision is to transform the WordPress block editor into a powerful page builder. 
