@@ -17,9 +17,11 @@ class Setup {
 	public string $block_dir_path = '';
 
 	/**
-	 * The Blockera\WordPress\RenderBlock\Setup constructor.
+	 * The apply blockera setup on WordPress hooks.
+	 *
+	 * @return void
 	 */
-	public function __construct() {
+	public function apply(): void {
 
 		add_filter( 'register_block_type_args', [ $this, 'register_block' ], 9e2, 2 );
 	}
@@ -34,6 +36,11 @@ class Setup {
 	 */
 	public function register_block( array $args, string $block_type ): array {
 
+		if ( ! in_array( $block_type, blockera_get_available_blocks(), true ) ) {
+
+			return $args;
+		}
+
 		// Merging blockera shared block attributes.
 		$args = array_merge(
 			$args,
@@ -44,6 +51,19 @@ class Setup {
 				),
 			]
 		);
+
+		return $this->getCustomizedBlock( $block_type, $args );
+	}
+
+	/**
+	 * Get customized block type arguments.
+	 *
+	 * @param string $block_type the block type name.
+	 * @param array  $args       the block type previous arguments.
+	 *
+	 * @return array the customized block type arguments.
+	 */
+	public function getCustomizedBlock( string $block_type, array $args ): array {
 
 		$this->setBlockDirectoryPath( $block_type );
 
