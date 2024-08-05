@@ -72,7 +72,7 @@ Complete list of updates and releases is available in [changelog](./changelog.tx
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/t/blockeraai/blockera?label=Total%20Commits"> <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/blockeraai/blockera?label=Monthly%20Commits">
 <img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/blockeraai/blockera?label=Contributors"> <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/blockeraai/blockera?label=Issues">
 
-Blockera is built by [contributors and volunteers](CONTRIBUTORS.md) around the globe.
+Blockera is built by [contributors and volunteers](./.github/CONTRIBUTORS.md) around the globe.
 
 ## Screenshots 🌇
 <p align="center">
