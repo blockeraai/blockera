@@ -29,6 +29,9 @@ node_modules/
 # dotenv environment variables file
 .env
 
+# WordPress .env file
+.wp-env.json
+
 # vendor directory includes php dependencies
 /vendor/
 
