@@ -29,6 +29,16 @@
 	"no-need-to-support": [],
 	"not-supported": [
 		{
+			"name": "woocommerce/all-products",
+			"title": "All Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-collection",
+			"title": "Product Collection",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
 			"name": "woocommerce/active-filters",
 			"title": "Active Filters Controls"
 		},
@@ -59,10 +69,6 @@
 		{
 			"name": "woocommerce/product-stock-indicator",
 			"title": "Product Stock Indicator"
-		},
-		{
-			"name": "woocommerce/all-products",
-			"title": "All Products"
 		},
 		{
 			"name": "woocommerce/all-reviews",
@@ -123,10 +129,6 @@
 		{
 			"name": "woocommerce/product-category",
 			"title": "Products by Category"
-		},
-		{
-			"name": "woocommerce/product-collection",
-			"title": "Product Collection"
 		},
 		{
 			"name": "woocommerce/product-collection-no-results",
