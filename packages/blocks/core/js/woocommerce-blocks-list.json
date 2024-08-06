@@ -3,7 +3,7 @@
 	"data": {
 		"total": 103,
 		"supported": 2,
-		"soft-supported": 0,
+		"soft-supported": 2,
 		"not-supported": 101,
 		"no-need-to-support": 0
 	},
