@@ -37,7 +37,7 @@ describe('Blockera editor bootstrapper', () => {
 		createPost({ postType: 'product' });
 
 		cy.get('input[name="post_title"]').type('Cap', { delay: 0 });
-		cy.get('input[value="Publish"]').click();
+		cy.get('input#publish').click();
 
 		createPost();
 
