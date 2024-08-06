@@ -69,5 +69,5 @@ export const Observer = ({
 		observer.observe(target);
 	});
 
-	return children;
+	return children || <></>;
 };
