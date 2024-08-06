@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 104,
-		"supported": 6,
-		"soft-supported": 6,
+		"total": 105,
+		"supported": 7,
+		"soft-supported": 7,
 		"not-supported": 98,
 		"no-need-to-support": 0
 	},
@@ -33,6 +33,10 @@
 		{
 			"name": "woocommerce/product-results-count",
 			"title": "Product Results Count"
+		},
+		{
+			"name": "woocommerce/catalog-sorting",
+			"title": "Catalog Sorting"
 		}
 	],
 	"no-need-to-support": [],
