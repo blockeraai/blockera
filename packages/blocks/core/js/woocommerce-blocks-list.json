@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 103,
-		"supported": 3,
-		"soft-supported": 3,
-		"not-supported": 100,
+		"supported": 4,
+		"soft-supported": 4,
+		"not-supported": 99,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -20,6 +20,10 @@
 		{
 			"name": "woocommerce/product-image",
 			"title": "Product Image"
+		},
+		{
+			"name": "woocommerce/product-button",
+			"title": "Add to Cart Button"
 		}
 	],
 	"no-need-to-support": [],
@@ -39,10 +43,6 @@
 		{
 			"name": "woocommerce/product-average-rating",
 			"title": "Product Average Rating (Beta)"
-		},
-		{
-			"name": "woocommerce/product-button",
-			"title": "Add to Cart Button"
 		},
 		{
 			"name": "woocommerce/product-summary",
