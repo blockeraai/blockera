@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 103,
-		"supported": 5,
-		"soft-supported": 5,
+		"total": 104,
+		"supported": 6,
+		"soft-supported": 6,
 		"not-supported": 98,
 		"no-need-to-support": 0
 	},
@@ -29,6 +29,10 @@
 			"name": "woocommerce/store-notices",
 			"title": "Store Notices",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-results-count",
+			"title": "Product Results Count"
 		}
 	],
 	"no-need-to-support": [],
