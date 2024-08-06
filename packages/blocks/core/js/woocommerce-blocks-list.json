@@ -2,15 +2,20 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 103,
-		"supported": 1,
-		"soft-supported": 1,
-		"not-supported": 102,
+		"supported": 2,
+		"soft-supported": 0,
+		"not-supported": 101,
 		"no-need-to-support": 0
 	},
 	"supported": [
 		{
 			"name": "woocommerce/product-price",
 			"title": "Product Price"
+		},
+		{
+			"name": "woocommerce/product-title",
+			"title": "Product Title",
+			"note": "This is a variation of `core/heading` block."
 		}
 	],
 	"no-need-to-support": [],
@@ -18,10 +23,6 @@
 		{
 			"name": "woocommerce/active-filters",
 			"title": "Active Filters Controls"
-		},
-		{
-			"name": "woocommerce/product-title",
-			"title": "Product Title"
 		},
 		{
 			"name": "woocommerce/product-image",
