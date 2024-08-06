@@ -184,6 +184,7 @@ export const Breakpoints = ({
 				}}
 			>
 				<Flex
+					data-test={'blockera-canvas-editor'}
 					className={className}
 					justifyContent={
 						enableCanvasSettings ? 'space-between' : 'center'
