@@ -55,9 +55,8 @@ export function createPost({ postType = 'post' } = {}) {
 
 		if (['post', 'page'].includes(postType)) {
 			disableGutenbergFeatures();
+			setAbsoluteBlockToolbar();
 		}
-
-		setAbsoluteBlockToolbar();
 	});
 }
 
