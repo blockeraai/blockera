@@ -5,3 +5,4 @@ blockera
 clsx
 phpcs
 sprintf
+woocommerce
