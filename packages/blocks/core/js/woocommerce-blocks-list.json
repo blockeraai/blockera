@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 103,
-		"supported": 4,
-		"soft-supported": 4,
-		"not-supported": 99,
+		"supported": 5,
+		"soft-supported": 5,
+		"not-supported": 98,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -24,6 +24,11 @@
 		{
 			"name": "woocommerce/product-button",
 			"title": "Add to Cart Button"
+		},
+		{
+			"name": "woocommerce/store-notices",
+			"title": "Store Notices",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [],
@@ -109,10 +114,6 @@
 		{
 			"name": "woocommerce/mini-cart",
 			"title": "Mini-Cart"
-		},
-		{
-			"name": "woocommerce/store-notices",
-			"title": "Store Notices"
 		},
 		{
 			"name": "woocommerce/price-filter",
