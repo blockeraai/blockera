@@ -56,6 +56,27 @@ export function createPost({ postType = 'post' } = {}) {
 		if (['post', 'page'].includes(postType)) {
 			disableGutenbergFeatures();
 		}
+
+		setAbsoluteBlockToolbar();
+	});
+}
+
+/**
+ * Safely set absolutely block top toolbar.
+ */
+export function setAbsoluteBlockToolbar() {
+	cy.get('[aria-label="Options"]').first().click();
+
+	cy.get('body').then(($body) => {
+		const selector =
+			'div[aria-labelledby="components-menu-group-label-0"] button:first-child';
+		const domElement = $body.find(selector);
+
+		// Check if the element exists in the DOM
+		if (domElement.length > 0 && domElement.find('svg').length > 0) {
+			// If it exists, click on the element
+			cy.get('span').contains('Top toolbar').click();
+		}
 	});
 }
 
