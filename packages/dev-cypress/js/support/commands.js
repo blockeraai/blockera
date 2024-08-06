@@ -118,9 +118,20 @@ export const registerCommands = () => {
 	Cypress.Commands.add('getBlock', (blockName, blockTag = '') => {
 		// by passing default it clicks on editor that creates a paragraph block
 		if (blockName === 'default') {
-			cy.getIframeBody().find(`[aria-label="Add default block"]`).click();
-			blockName = 'core/paragraph';
-			return cy.getIframeBody().find(`[data-type="${blockName}"]`).eq(0);
+			if (Cypress.$('iframe[name="editor-canvas"]').length) {
+				cy.getIframeBody()
+					.find(`[aria-label="Add default block"]`)
+					.click();
+				blockName = 'core/paragraph';
+				return cy
+					.getIframeBody()
+					.find(`[data-type="${blockName}"]`)
+					.eq(0);
+			} else {
+				cy.getByAriaLabel('Add default block').click();
+				blockName = 'core/paragraph';
+				return cy.get(`[data-type="${blockName}"]`).eq(0);
+			}
 		}
 
 		if (Cypress.$('iframe[name="editor-canvas"]').length) {
