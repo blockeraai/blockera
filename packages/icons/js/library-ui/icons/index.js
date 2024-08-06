@@ -43,6 +43,7 @@ export { default as BlockPostAuthorName } from './block-post-author-name.svg';
 export { default as BlockPostTermsPrefix } from './block-post-terms-prefix.svg';
 export { default as BlockPostTermsSeparator } from './block-post-terms-separator.svg';
 export { default as BlockPostTermsSuffix } from './block-post-terms-suffix.svg';
+export { default as BlockProductImageSale } from './block-product-image-sale.svg';
 export { default as BlockProductPriceCurrencySymbol } from './block-product-price-currency-symbol.svg';
 export { default as BlockProductPriceDiscount } from './block-product-price-discount.svg';
 export { default as BlockProductPriceNormal } from './block-product-price-normal.svg';
