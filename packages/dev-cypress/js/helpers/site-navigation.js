@@ -65,6 +65,7 @@ export function createPost({ postType = 'post' } = {}) {
  * Safely set absolutely block top toolbar.
  */
 export function setAbsoluteBlockToolbar() {
+	// open options menu.
 	cy.get('[aria-label="Options"]').first().click();
 
 	cy.get('body').then(($body) => {
@@ -77,6 +78,9 @@ export function setAbsoluteBlockToolbar() {
 			// If it exists, click on the element
 			cy.get('span').contains('Top toolbar').click();
 		}
+
+		// close options menu.
+		cy.get('[aria-label="Options"]').first().click();
 	});
 }
 
