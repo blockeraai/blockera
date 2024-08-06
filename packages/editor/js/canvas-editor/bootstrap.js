@@ -11,6 +11,26 @@ import { registerPlugin, getPlugin } from '@wordpress/plugins';
  */
 import { Observer } from '../observer';
 import { CanvasEditor } from './index';
+import type { GetTarget } from './types';
+
+// Compatibility for WordPress supported versions.
+const getTarget = (version: string): GetTarget => {
+	// For WordPress version equals or bigger than 6.6 version.
+	if (Number(version?.replace(/\./g, '')) >= 66) {
+		return {
+			header: '.editor-header__center',
+			previewDropdown: '.editor-preview-dropdown',
+			postPreviewElement: 'a[aria-label="View Post"]',
+		};
+	}
+
+	// For less than WordPress 6.6 versions.
+	return {
+		header: '.edit-post-header__center',
+		postPreviewElement: 'a[aria-label="View Post"]',
+		previewDropdown: 'div.block-editor-post-preview__dropdown',
+	};
+};
 
 export const bootstrapCanvasEditor = (): void => {
 	const { getEntity } = select('blockera/data') || {};
@@ -19,19 +39,8 @@ export const bootstrapCanvasEditor = (): void => {
 		registerPlugin('blockera-canvas-editor-observer', {
 			render() {
 				const { version } = getEntity('wp');
-
-				// Compatibility for WordPress supported versions.
-				const getTarget = () => {
-					// For WordPress version equals or bigger than 6.6 version.
-					if (Number(version?.replace(/\./g, '')) >= 66) {
-						return '.editor-header__center';
-					}
-
-					// For less than WordPress 6.6 versions.
-					return '.edit-post-header__center';
-				};
-
-				const target = getTarget();
+				const { header, previewDropdown, postPreviewElement } =
+					getTarget(version);
 
 				return (
 					<Observer
@@ -63,13 +72,17 @@ export const bootstrapCanvasEditor = (): void => {
 										render() {
 											return (
 												<CanvasEditor
+													{...{
+														previewDropdown,
+														postPreviewElement,
+													}}
 													entry={entries[0]}
 												/>
 											);
 										},
 									});
 								},
-								target,
+								target: header,
 							},
 							{
 								options: {
@@ -96,13 +109,17 @@ export const bootstrapCanvasEditor = (): void => {
 										render() {
 											return (
 												<CanvasEditor
+													{...{
+														previewDropdown,
+														postPreviewElement,
+													}}
 													entry={entries[0]}
 												/>
 											);
 										},
 									});
 								},
-								target,
+								target: header,
 							},
 						]}
 					/>

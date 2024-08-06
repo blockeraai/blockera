@@ -114,15 +114,18 @@ jobs:
                   svn --version
                   locale -a
 
-            - name: Start WordPress Environment
-              run: npm run env:start
-
-            - name: 'Create env file'
+            - name: Create requires environment files
               run: |
+                  touch .wp-env.json
+                  echo '{"plugins": ["."]}' >> .wp-env.json
+                  cat .wp-env.json
                   touch .env
                   echo APP_MODE=production >> .env
                   echo DB=wp_tests >> .env
                   cat .env
+
+            - name: Start WordPress Environment
+              run: npm run env:start
 
             - name: Running single site unit tests
               if: ${{ ! matrix.multisite }}

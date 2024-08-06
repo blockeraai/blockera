@@ -51,6 +51,7 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 	};
 
 	window[packageName].editor = {
+		...(window[packageName]?.editor || {}),
 		init: outsideDefinitions,
 		select: select(editorStore?.name),
 		unstableBootstrapServerSideBreakpointDefinitions,

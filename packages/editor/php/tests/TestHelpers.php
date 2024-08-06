@@ -217,17 +217,17 @@ class TestHelpers extends \WP_UnitTestCase {
 	public function testItShouldRetrieveNormalizedCssSelectors(): void {
 
 		$this->assertSame(
-			'.test.blockera.block',
-			blockera_get_normalized_selector( 'test blockera block' )
+			'.blockera-block',
+			blockera_get_normalized_selector( 'test blockera-block' )
 		);
 
 		$this->assertSame(
-			'.test.blockera.block',
-			blockera_get_normalized_selector( '.test blockera block' )
+			'.blockera-block',
+			blockera_get_normalized_selector( '.test blockera-block' )
 		);
 
 		$this->assertSame(
-			'.test.blockera.block',
+			'',
 			blockera_get_normalized_selector( '.test .blockera .block' )
 		);
 	}

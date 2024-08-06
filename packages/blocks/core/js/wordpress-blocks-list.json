@@ -2,10 +2,10 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 68,
-		"soft-supported": 76,
-		"not-supported": 17,
-		"no-need-to-support": 8
+		"supported": 70,
+		"soft-supported": 77,
+		"not-supported": 16,
+		"no-need-to-support": 7
 	},
 	"supported": [
 		{
@@ -101,6 +101,10 @@
 			"title": "Pullquote"
 		},
 		{
+			"name": "core/preformatted",
+			"title": "Preformatted"
+		},
+		{
 			"name": "core/search",
 			"title": "Search"
 		},
@@ -188,6 +192,11 @@
 		{
 			"name": "core/post-terms",
 			"title": "Post Terms"
+		},
+		{
+			"name": "core/post-template",
+			"title": "Post Template",
+			"note": "supported with blockera but it needs to be improved inners core and virtual blocks."
 		},
 		{
 			"name": "core/query-pagination",
@@ -304,11 +313,6 @@
 			"note": "This block has not front end support."
 		},
 		{
-			"name": "core/preformatted",
-			"title": "Preformatted",
-			"note": "There is no wrapper tag for this block and can not be supported."
-		},
-		{
 			"name": "core/shortcode",
 			"title": "Shortcode",
 			"note": "There is no wrapper tag for this block and can not be supported."
@@ -363,11 +367,6 @@
 		{
 			"name": "core/template-part",
 			"title": "Template Part",
-			"note": "No supported for front end needed but we can add some custom functionality like conditions."
-		},
-		{
-			"name": "core/post-template",
-			"title": "Post Template",
 			"note": "No supported for front end needed but we can add some custom functionality like conditions."
 		},
 		{

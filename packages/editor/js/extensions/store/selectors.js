@@ -415,3 +415,29 @@ export function getBlockInners(
 		? blockExtensions[clientId]?.innerBlocks || initializeStates
 		: initializeStates;
 }
+
+/**
+ * Get shared block attributes.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ *
+ * @return {Object} the shared block attributes.
+ */
+export function getSharedBlockAttributes({ blockExtensions }: Object): Object {
+	return blockExtensions.sharedBlockAttributes || {};
+}
+
+/**
+ * Get block type attributes with name.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ * @param {string} name the block type name.
+ *
+ * @return {Object} the shared block attributes.
+ */
+export function getBlockTypeAttributes(
+	{ blockExtensions }: Object,
+	name: string
+): Object {
+	return (blockExtensions?.blockTypes || {})[name]?.attributes || {};
+}
