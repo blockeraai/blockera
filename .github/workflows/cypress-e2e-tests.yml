@@ -51,7 +51,7 @@ jobs:
             - name: Install Composer Packages
               run: composer install --no-dev -o --apcu-autoloader -a
 
-            - name: Create env files
+            - name: Create requires environment files
               run: |
                   if [ "${{ matrix.category }}" != "bootstrap" ]; then
                     touch .wp-env.json
