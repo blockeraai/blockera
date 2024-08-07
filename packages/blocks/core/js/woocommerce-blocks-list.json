@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 27,
-		"soft-supported": 27,
-		"not-supported": 91,
+		"supported": 28,
+		"soft-supported": 28,
+		"not-supported": 90,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -125,6 +125,10 @@
 			"name": "woocommerce/cart-order-summary-taxes-block",
 			"title": "Taxes",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/proceed-to-checkout-block",
+			"title": "Proceed to Checkout"
 		}
 	],
 	"no-need-to-support": [],
@@ -314,11 +318,8 @@
 		},
 		{
 			"name": "woocommerce/cart-express-payment-block",
-			"title": "Express Checkout"
-		},
-		{
-			"name": "woocommerce/proceed-to-checkout-block",
-			"title": "Proceed to Checkout"
+			"title": "Express Checkout",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/empty-cart-block",
