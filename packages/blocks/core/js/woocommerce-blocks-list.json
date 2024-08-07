@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 42,
-		"soft-supported": 42,
-		"not-supported": 77,
+		"supported": 43,
+		"soft-supported": 43,
+		"not-supported": 75,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -188,6 +188,11 @@
 		{
 			"name": "woocommerce/checkout-terms-block",
 			"title": "Terms and Conditions"
+		},
+		{
+			"name": "woocommerce/checkout-actions-block",
+			"title": "Actions",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [],
@@ -408,10 +413,6 @@
 			"name": "woocommerce/checkout-additional-information-block",
 			"title": "Additional information",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
-		},
-		{
-			"name": "woocommerce/checkout-actions-block",
-			"title": "Actions"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-block",
