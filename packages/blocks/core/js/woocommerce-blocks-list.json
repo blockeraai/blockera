@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 39,
-		"soft-supported": 39,
-		"not-supported": 80,
+		"supported": 40,
+		"soft-supported": 40,
+		"not-supported": 79,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -176,6 +176,10 @@
 		{
 			"name": "woocommerce/checkout-shipping-methods-block",
 			"title": "Shipping Options"
+		},
+		{
+			"name": "woocommerce/checkout-payment-block",
+			"title": "Payment Options"
 		}
 	],
 	"no-need-to-support": [],
@@ -411,10 +415,6 @@
 		{
 			"name": "woocommerce/checkout-order-summary-block",
 			"title": "Order Summary"
-		},
-		{
-			"name": "woocommerce/checkout-payment-block",
-			"title": "Payment Options"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-subtotal-block",
