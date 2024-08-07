@@ -6,6 +6,7 @@ export * from './cart-order-summary-fee-block';
 export * from './cart-order-summary-heading-block';
 export * from './cart-order-summary-totals-block';
 export * from './cart-order-summary-subtotal-block';
+export * from './cart-order-summary-taxes-block';
 export * from './catalog-sorting';
 export * from './order-confirmation-additional-information';
 export * from './order-confirmation-additional-fields-wrapper';

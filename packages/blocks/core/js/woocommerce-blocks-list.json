@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 26,
-		"soft-supported": 26,
-		"not-supported": 93,
+		"supported": 27,
+		"soft-supported": 27,
+		"not-supported": 91,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -118,6 +118,11 @@
 		{
 			"name": "woocommerce/cart-order-summary-fee-block",
 			"title": "Fees",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-taxes-block",
+			"title": "Taxes",
 			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
@@ -329,10 +334,6 @@
 		{
 			"name": "woocommerce/cart-order-summary-shipping-block",
 			"title": "Shipping"
-		},
-		{
-			"name": "woocommerce/cart-order-summary-taxes-block",
-			"title": "Taxes"
 		},
 		{
 			"name": "woocommerce/cart",
