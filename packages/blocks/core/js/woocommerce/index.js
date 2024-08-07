@@ -23,6 +23,7 @@ export * from './checkout-order-summary-discount-block';
 export * from './checkout-order-summary-fee-block';
 export * from './checkout-order-summary-shipping-block';
 export * from './checkout-order-summary-subtotal-block';
+export * from './checkout-order-summary-taxes-block';
 export * from './checkout-order-summary-totals-block';
 export * from './checkout-payment-block';
 export * from './checkout-shipping-address-block';
