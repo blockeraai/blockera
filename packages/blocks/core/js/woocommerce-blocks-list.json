@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 25,
-		"soft-supported": 25,
-		"not-supported": 94,
+		"supported": 26,
+		"soft-supported": 26,
+		"not-supported": 93,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -113,6 +113,11 @@
 		{
 			"name": "woocommerce/cart-order-summary-subtotal-block",
 			"title": "Subtotal",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-fee-block",
+			"title": "Fees",
 			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
@@ -316,10 +321,6 @@
 		{
 			"name": "woocommerce/cart-accepted-payment-methods-block",
 			"title": "Accepted Payment Methods"
-		},
-		{
-			"name": "woocommerce/cart-order-summary-fee-block",
-			"title": "Fees"
 		},
 		{
 			"name": "woocommerce/cart-order-summary-discount-block",
