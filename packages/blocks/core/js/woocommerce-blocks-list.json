@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 19,
-		"soft-supported": 19,
-		"not-supported": 99,
+		"supported": 20,
+		"soft-supported": 20,
+		"not-supported": 98,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -87,6 +87,10 @@
 		{
 			"name": "woocommerce/order-confirmation-additional-information",
 			"title": "Additional Information"
+		},
+		{
+			"name": "woocommerce/page-content-wrapper",
+			"title": "WooCommerce Page"
 		}
 	],
 	"no-need-to-support": [],
@@ -244,10 +248,6 @@
 		{
 			"name": "woocommerce/stock-filter",
 			"title": "Filter by Stock Controls"
-		},
-		{
-			"name": "woocommerce/page-content-wrapper",
-			"title": "WooCommerce Page"
 		},
 		{
 			"name": "woocommerce/filled-cart-block",
