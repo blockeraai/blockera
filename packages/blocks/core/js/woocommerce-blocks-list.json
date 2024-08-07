@@ -259,7 +259,8 @@
 		},
 		{
 			"name": "woocommerce/cart-items-block",
-			"title": "Cart Items"
+			"title": "Cart Items",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/cart-line-items-block",
@@ -275,7 +276,8 @@
 		},
 		{
 			"name": "woocommerce/cart-totals-block",
-			"title": "Cart Totals"
+			"title": "Cart Totals",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/cart-express-payment-block",
