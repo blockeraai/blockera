@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 45,
-		"soft-supported": 45,
-		"not-supported": 73,
+		"supported": 46,
+		"soft-supported": 46,
+		"not-supported": 72,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -202,6 +202,11 @@
 		{
 			"name": "woocommerce/checkout-order-summary-cart-items-block",
 			"title": "Cart Items",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-coupon-form-block",
+			"title": "Coupon Form",
 			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
@@ -439,10 +444,6 @@
 		{
 			"name": "woocommerce/checkout-order-summary-shipping-block",
 			"title": "Shipping"
-		},
-		{
-			"name": "woocommerce/checkout-order-summary-coupon-form-block",
-			"title": "Coupon Form"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-taxes-block",
