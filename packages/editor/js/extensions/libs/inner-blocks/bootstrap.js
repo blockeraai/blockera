@@ -223,6 +223,7 @@ export const bootstrap = (): void => {
 			}
 
 			if (
+				isUndefined(innerBlocks) ||
 				isUndefined(innerBlocks[currentBlock]) ||
 				isUndefined(
 					innerBlocks[currentBlock]?.settings?.dataCompatibility
