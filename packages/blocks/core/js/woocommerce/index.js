@@ -11,6 +11,7 @@ export * from './cart-order-summary-totals-block';
 export * from './cart-order-summary-subtotal-block';
 export * from './cart-order-summary-taxes-block';
 export * from './catalog-sorting';
+export * from './checkout';
 export * from './customer-account';
 export * from './empty-cart-block';
 export * from './filled-cart-block';

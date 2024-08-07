@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 34,
-		"soft-supported": 34,
-		"not-supported": 84,
+		"supported": 35,
+		"soft-supported": 35,
+		"not-supported": 83,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -156,6 +156,10 @@
 			"name": "woocommerce/cart-order-summary-shipping-block",
 			"title": "Shipping",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout",
+			"title": "Checkout"
 		}
 	],
 	"no-need-to-support": [],
@@ -438,10 +442,6 @@
 		{
 			"name": "woocommerce/checkout-order-summary-totals-block",
 			"title": "Totals"
-		},
-		{
-			"name": "woocommerce/checkout",
-			"title": "Checkout"
 		},
 		{
 			"name": "woocommerce/empty-mini-cart-contents-block",
