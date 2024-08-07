@@ -39,6 +39,10 @@
 			"title": "Catalog Sorting"
 		},
 		{
+			"name": "woocommerce/order-confirmation-totals-wrapper",
+			"title": "Order Totals Section"
+		},
+		{
 			"name": "woocommerce/order-confirmation-status",
 			"title": "Order Status"
 		},
