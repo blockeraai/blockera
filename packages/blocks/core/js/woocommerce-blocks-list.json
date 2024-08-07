@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 110,
-		"supported": 12,
-		"soft-supported": 12,
+		"total": 111,
+		"supported": 13,
+		"soft-supported": 13,
 		"not-supported": 98,
 		"no-need-to-support": 0
 	},
@@ -53,6 +53,11 @@
 		{
 			"name": "woocommerce/order-confirmation-totals",
 			"title": "Order Totals",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/order-confirmation-downloads",
+			"title": "Order Downloads",
 			"note": "@todo we can add advanced inner blocks support."
 		},
 		{
