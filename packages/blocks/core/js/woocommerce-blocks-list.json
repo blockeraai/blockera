@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 31,
-		"soft-supported": 31,
-		"not-supported": 87,
+		"supported": 32,
+		"soft-supported": 32,
+		"not-supported": 86,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -142,6 +142,10 @@
 		{
 			"name": "woocommerce/empty-cart-block",
 			"title": "Empty Cart"
+		},
+		{
+			"name": "woocommerce/customer-account",
+			"title": "Customer Account"
 		}
 	],
 	"no-need-to-support": [],
@@ -208,10 +212,6 @@
 		{
 			"name": "woocommerce/coming-soon",
 			"title": "Coming Soon"
-		},
-		{
-			"name": "woocommerce/customer-account",
-			"title": "Customer account"
 		},
 		{
 			"name": "woocommerce/featured-category",
