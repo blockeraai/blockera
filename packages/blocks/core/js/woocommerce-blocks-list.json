@@ -353,11 +353,13 @@
 		},
 		{
 			"name": "woocommerce/checkout-fields-block",
-			"title": "Checkout Fields"
+			"title": "Checkout Fields",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/checkout-totals-block",
-			"title": "Checkout Totals"
+			"title": "Checkout Totals",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/checkout-shipping-address-block",
