@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 29,
-		"soft-supported": 29,
-		"not-supported": 89,
+		"supported": 30,
+		"soft-supported": 30,
+		"not-supported": 88,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -134,6 +134,10 @@
 			"name": "woocommerce/cart-accepted-payment-methods-block",
 			"title": "Accepted Payment Methods",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/filled-cart-block",
+			"title": "Filled Cart"
 		}
 	],
 	"no-need-to-support": [],
@@ -292,10 +296,6 @@
 		{
 			"name": "woocommerce/stock-filter",
 			"title": "Filter by Stock Controls"
-		},
-		{
-			"name": "woocommerce/filled-cart-block",
-			"title": "Filled Cart"
 		},
 		{
 			"name": "woocommerce/cart-items-block",

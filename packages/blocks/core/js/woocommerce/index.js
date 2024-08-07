@@ -9,6 +9,7 @@ export * from './cart-order-summary-totals-block';
 export * from './cart-order-summary-subtotal-block';
 export * from './cart-order-summary-taxes-block';
 export * from './catalog-sorting';
+export * from './filled-cart-block';
 export * from './order-confirmation-additional-information';
 export * from './order-confirmation-additional-fields-wrapper';
 export * from './order-confirmation-billing-address';
