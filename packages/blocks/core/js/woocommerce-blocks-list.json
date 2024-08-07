@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 28,
-		"soft-supported": 28,
-		"not-supported": 90,
+		"supported": 29,
+		"soft-supported": 29,
+		"not-supported": 89,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -129,6 +129,11 @@
 		{
 			"name": "woocommerce/proceed-to-checkout-block",
 			"title": "Proceed to Checkout"
+		},
+		{
+			"name": "woocommerce/cart-accepted-payment-methods-block",
+			"title": "Accepted Payment Methods",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [],
@@ -324,10 +329,6 @@
 		{
 			"name": "woocommerce/empty-cart-block",
 			"title": "Empty Cart"
-		},
-		{
-			"name": "woocommerce/cart-accepted-payment-methods-block",
-			"title": "Accepted Payment Methods"
 		},
 		{
 			"name": "woocommerce/cart-order-summary-discount-block",

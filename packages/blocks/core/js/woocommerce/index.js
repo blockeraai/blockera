@@ -1,5 +1,6 @@
 // @flow
 
+export * from './cart-accepted-payment-methods-block';
 export * from './cart-order-summary-block';
 export * from './cart-order-summary-coupon-form-block';
 export * from './cart-order-summary-fee-block';
