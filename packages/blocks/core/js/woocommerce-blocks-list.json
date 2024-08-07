@@ -370,6 +370,21 @@
 			"title": "Shipping Address"
 		},
 		{
+			"name": "woocommerce/checkout-express-payment-block",
+			"title": "Express Checkout",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-method-block",
+			"title": "Delivery",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/checkout-pickup-options-block",
+			"title": "Pickup Method",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
 			"name": "woocommerce/checkout-terms-block",
 			"title": "Terms and Conditions"
 		},
@@ -398,20 +413,8 @@
 			"title": "Payment Options"
 		},
 		{
-			"name": "woocommerce/checkout-express-payment-block",
-			"title": "Express Checkout"
-		},
-		{
-			"name": "woocommerce/checkout-shipping-method-block",
-			"title": "Delivery"
-		},
-		{
 			"name": "woocommerce/checkout-shipping-methods-block",
 			"title": "Shipping Options"
-		},
-		{
-			"name": "woocommerce/checkout-pickup-options-block",
-			"title": "Pickup Method"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-subtotal-block",
