@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 119,
+		"total": 118,
 		"supported": 21,
 		"soft-supported": 21,
-		"not-supported": 98,
+		"not-supported": 97,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -292,10 +292,6 @@
 		{
 			"name": "woocommerce/cart-accepted-payment-methods-block",
 			"title": "Accepted Payment Methods"
-		},
-		{
-			"name": "woocommerce/cart-order-summary-block",
-			"title": "Order Summary"
 		},
 		{
 			"name": "woocommerce/cart-order-summary-subtotal-block",
