@@ -94,7 +94,8 @@
 		},
 		{
 			"name": "woocommerce/cart-order-summary-block",
-			"title": "Cart Totals"
+			"title": "Cart Totals",
+			"note": "@todo we can add advanced inner blocks support."
 		},
 		{
 			"name": "woocommerce/cart-order-summary-heading-block",
