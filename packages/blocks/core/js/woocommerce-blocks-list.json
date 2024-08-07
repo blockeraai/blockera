@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 38,
-		"soft-supported": 38,
-		"not-supported": 81,
+		"supported": 39,
+		"soft-supported": 39,
+		"not-supported": 80,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -172,6 +172,10 @@
 		{
 			"name": "woocommerce/checkout-billing-address-block",
 			"title": "Billing Address"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-methods-block",
+			"title": "Shipping Options"
 		}
 	],
 	"no-need-to-support": [],
@@ -411,10 +415,6 @@
 		{
 			"name": "woocommerce/checkout-payment-block",
 			"title": "Payment Options"
-		},
-		{
-			"name": "woocommerce/checkout-shipping-methods-block",
-			"title": "Shipping Options"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-subtotal-block",
