@@ -1,5 +1,6 @@
 // @flow
 
+export * from './cart-order-summary-block';
 export * from './catalog-sorting';
 export * from './order-confirmation-additional-information';
 export * from './order-confirmation-additional-fields-wrapper';
