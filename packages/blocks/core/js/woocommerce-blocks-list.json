@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 23,
-		"soft-supported": 23,
-		"not-supported": 95,
+		"supported": 24,
+		"soft-supported": 24,
+		"not-supported": 94,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -104,6 +104,10 @@
 			"name": "woocommerce/cart-order-summary-coupon-form-block",
 			"title": "Coupon Form",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-totals-block",
+			"title": "Totals"
 		}
 	],
 	"no-need-to-support": [],
@@ -310,10 +314,6 @@
 		{
 			"name": "woocommerce/cart-order-summary-subtotal-block",
 			"title": "Subtotal"
-		},
-		{
-			"name": "woocommerce/cart-order-summary-totals-block",
-			"title": "Totals"
 		},
 		{
 			"name": "woocommerce/cart-order-summary-fee-block",
