@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 21,
-		"soft-supported": 21,
-		"not-supported": 97,
+		"supported": 22,
+		"soft-supported": 22,
+		"not-supported": 96,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -95,6 +95,10 @@
 		{
 			"name": "woocommerce/cart-order-summary-block",
 			"title": "Cart Totals"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-heading-block",
+			"title": "Heading"
 		}
 	],
 	"no-need-to-support": [],
@@ -322,10 +326,6 @@
 		{
 			"name": "woocommerce/cart-order-summary-taxes-block",
 			"title": "Taxes"
-		},
-		{
-			"name": "woocommerce/cart-order-summary-heading-block",
-			"title": "Heading"
 		},
 		{
 			"name": "woocommerce/cart",
