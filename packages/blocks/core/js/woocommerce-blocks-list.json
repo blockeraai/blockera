@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 119,
-		"supported": 53,
-		"soft-supported": 54,
+		"total": 120,
+		"supported": 54,
+		"soft-supported": 55,
 		"not-supported": 65,
 		"no-need-to-support": 1
 	},
@@ -242,6 +242,11 @@
 		{
 			"name": "woocommerce/product-template",
 			"title": "Product Template"
+		},
+		{
+			"name": "woocommerce/product-image-gallery",
+			"title": "Product Image Gallery",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
