@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 43,
-		"soft-supported": 43,
-		"not-supported": 75,
+		"supported": 44,
+		"soft-supported": 44,
+		"not-supported": 74,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -192,6 +192,11 @@
 		{
 			"name": "woocommerce/checkout-actions-block",
 			"title": "Actions",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-block",
+			"title": "Order Summary",
 			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
@@ -413,10 +418,6 @@
 			"name": "woocommerce/checkout-additional-information-block",
 			"title": "Additional information",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
-		},
-		{
-			"name": "woocommerce/checkout-order-summary-block",
-			"title": "Order Summary"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-subtotal-block",
