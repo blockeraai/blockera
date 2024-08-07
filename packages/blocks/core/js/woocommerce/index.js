@@ -19,6 +19,7 @@ export * from './checkout-order-note-block';
 export * from './checkout-order-summary-block';
 export * from './checkout-order-summary-cart-items-block';
 export * from './checkout-order-summary-coupon-form-block';
+export * from './checkout-order-summary-discount-block';
 export * from './checkout-order-summary-fee-block';
 export * from './checkout-order-summary-subtotal-block';
 export * from './checkout-order-summary-totals-block';
