@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 120,
-		"supported": 54,
-		"soft-supported": 55,
-		"not-supported": 65,
+		"supported": 55,
+		"soft-supported": 56,
+		"not-supported": 64,
 		"no-need-to-support": 1
 	},
 	"supported": [
@@ -246,6 +246,11 @@
 		{
 			"name": "woocommerce/product-image-gallery",
 			"title": "Product Image Gallery",
+			"note": "Important Block: @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-rating",
+			"title": "Product Rating",
 			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
@@ -517,10 +522,6 @@
 		{
 			"name": "woocommerce/mini-cart-contents",
 			"title": "Mini-Cart Contents"
-		},
-		{
-			"name": "woocommerce/product-rating",
-			"title": "Product Rating"
 		},
 		{
 			"name": "woocommerce/add-to-cart-form",
