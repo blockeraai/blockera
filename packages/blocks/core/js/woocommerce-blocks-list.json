@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 35,
-		"soft-supported": 35,
-		"not-supported": 83,
+		"supported": 36,
+		"soft-supported": 36,
+		"not-supported": 82,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -160,6 +160,10 @@
 		{
 			"name": "woocommerce/checkout",
 			"title": "Checkout"
+		},
+		{
+			"name": "woocommerce/checkout-contact-information-block",
+			"title": "Contact Information"
 		}
 	],
 	"no-need-to-support": [],
@@ -368,10 +372,6 @@
 		{
 			"name": "woocommerce/checkout-terms-block",
 			"title": "Terms and Conditions"
-		},
-		{
-			"name": "woocommerce/checkout-contact-information-block",
-			"title": "Contact Information"
 		},
 		{
 			"name": "woocommerce/checkout-billing-address-block",
