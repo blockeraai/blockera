@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 40,
-		"soft-supported": 40,
-		"not-supported": 79,
+		"supported": 41,
+		"soft-supported": 41,
+		"not-supported": 78,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -180,6 +180,10 @@
 		{
 			"name": "woocommerce/checkout-payment-block",
 			"title": "Payment Options"
+		},
+		{
+			"name": "woocommerce/checkout-order-note-block",
+			"title": "Order Note"
 		}
 	],
 	"no-need-to-support": [],
@@ -408,10 +412,6 @@
 		{
 			"name": "woocommerce/checkout-actions-block",
 			"title": "Actions"
-		},
-		{
-			"name": "woocommerce/checkout-order-note-block",
-			"title": "Order Note"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-block",
