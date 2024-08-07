@@ -13,6 +13,7 @@ export * from './cart-order-summary-taxes-block';
 export * from './catalog-sorting';
 export * from './checkout';
 export * from './checkout-contact-information-block';
+export * from './checkout-shipping-address-block';
 export * from './customer-account';
 export * from './empty-cart-block';
 export * from './filled-cart-block';

@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 36,
-		"soft-supported": 36,
-		"not-supported": 82,
+		"supported": 37,
+		"soft-supported": 37,
+		"not-supported": 81,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -164,6 +164,10 @@
 		{
 			"name": "woocommerce/checkout-contact-information-block",
 			"title": "Contact Information"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-address-block",
+			"title": "Shipping Address"
 		}
 	],
 	"no-need-to-support": [],
@@ -364,10 +368,6 @@
 			"name": "woocommerce/checkout-totals-block",
 			"title": "Checkout Totals",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
-		},
-		{
-			"name": "woocommerce/checkout-shipping-address-block",
-			"title": "Shipping Address"
 		},
 		{
 			"name": "woocommerce/checkout-express-payment-block",
