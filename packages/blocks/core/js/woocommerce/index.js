@@ -1,6 +1,7 @@
 // @flow
 
 export * from './catalog-sorting';
+export * from './order-confirmation-additional-information';
 export * from './order-confirmation-additional-fields-wrapper';
 export * from './order-confirmation-billing-address';
 export * from './order-confirmation-billing-wrapper';

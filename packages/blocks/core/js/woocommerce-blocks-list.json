@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 116,
-		"supported": 18,
-		"soft-supported": 18,
-		"not-supported": 98,
+		"total": 118,
+		"supported": 19,
+		"soft-supported": 19,
+		"not-supported": 99,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -83,6 +83,10 @@
 		{
 			"name": "woocommerce/order-confirmation-additional-fields-wrapper",
 			"title": "Additional Fields"
+		},
+		{
+			"name": "woocommerce/order-confirmation-additional-information",
+			"title": "Additional Information"
 		}
 	],
 	"no-need-to-support": [],
@@ -480,6 +484,11 @@
 		{
 			"name": "woocommerce/product-meta",
 			"title": "Product Meta"
+		},
+		{
+			"name": "woocommerce/order-confirmation-additional-fields",
+			"title": "Additional Field List",
+			"note": "There is a strange issue for supporting this block."
 		}
 	]
 }
