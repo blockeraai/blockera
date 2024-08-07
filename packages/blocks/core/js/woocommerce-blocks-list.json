@@ -151,6 +151,11 @@
 	"no-need-to-support": [],
 	"not-supported": [
 		{
+			"name": "woocommerce/mini-cart",
+			"title": "Mini-Cart",
+			"note": "Important Block: Needs advanced inner blocks support + data compatibility support."
+		},
+		{
 			"name": "woocommerce/all-products",
 			"title": "All Products",
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
@@ -228,10 +233,6 @@
 		{
 			"name": "woocommerce/handpicked-products",
 			"title": "Hand-picked Products"
-		},
-		{
-			"name": "woocommerce/mini-cart",
-			"title": "Mini-Cart"
 		},
 		{
 			"name": "woocommerce/price-filter",
