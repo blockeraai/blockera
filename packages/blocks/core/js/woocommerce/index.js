@@ -1,6 +1,7 @@
 // @flow
 
 export * from './catalog-sorting';
+export * from './order-confirmation-status';
 export * from './product-button';
 export * from './product-image';
 export * from './product-price';

@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 105,
-		"supported": 7,
-		"soft-supported": 7,
+		"total": 106,
+		"supported": 8,
+		"soft-supported": 8,
 		"not-supported": 98,
 		"no-need-to-support": 0
 	},
@@ -37,6 +37,10 @@
 		{
 			"name": "woocommerce/catalog-sorting",
 			"title": "Catalog Sorting"
+		},
+		{
+			"name": "woocommerce/order-confirmation-status",
+			"title": "Order Status"
 		}
 	],
 	"no-need-to-support": [],
