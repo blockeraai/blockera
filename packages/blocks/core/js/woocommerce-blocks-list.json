@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 112,
-		"supported": 14,
-		"soft-supported": 14,
+		"total": 113,
+		"supported": 15,
+		"soft-supported": 15,
 		"not-supported": 98,
 		"no-need-to-support": 0
 	},
@@ -67,6 +67,10 @@
 		{
 			"name": "woocommerce/order-confirmation-shipping-wrapper",
 			"title": "Shipping Address Section"
+		},
+		{
+			"name": "woocommerce/order-confirmation-shipping-address",
+			"title": "Shipping Address"
 		}
 	],
 	"no-need-to-support": [],
