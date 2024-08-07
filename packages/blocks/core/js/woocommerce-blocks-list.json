@@ -397,16 +397,17 @@
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
+			"name": "woocommerce/checkout-additional-information-block",
+			"title": "Additional information",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
 			"name": "woocommerce/checkout-terms-block",
 			"title": "Terms and Conditions"
 		},
 		{
 			"name": "woocommerce/checkout-actions-block",
 			"title": "Actions"
-		},
-		{
-			"name": "woocommerce/checkout-additional-information-block",
-			"title": "Additional information"
 		},
 		{
 			"name": "woocommerce/checkout-order-note-block",
