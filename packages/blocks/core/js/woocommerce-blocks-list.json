@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 119,
-		"supported": 52,
-		"soft-supported": 53,
-		"not-supported": 66,
+		"supported": 53,
+		"soft-supported": 54,
+		"not-supported": 65,
 		"no-need-to-support": 1
 	},
 	"supported": [
@@ -238,6 +238,10 @@
 			"name": "woocommerce/checkout-order-summary-taxes-block",
 			"title": "Taxes",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-template",
+			"title": "Product Template"
 		}
 	],
 	"no-need-to-support": [
@@ -359,10 +363,6 @@
 		{
 			"name": "woocommerce/product-on-sale",
 			"title": "On Sale Products"
-		},
-		{
-			"name": "woocommerce/product-template",
-			"title": "Product Template"
 		},
 		{
 			"name": "woocommerce/product-search",
