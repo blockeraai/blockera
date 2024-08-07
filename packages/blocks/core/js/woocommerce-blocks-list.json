@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 44,
-		"soft-supported": 44,
-		"not-supported": 74,
+		"supported": 45,
+		"soft-supported": 45,
+		"not-supported": 73,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -197,6 +197,11 @@
 		{
 			"name": "woocommerce/checkout-order-summary-block",
 			"title": "Order Summary",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-cart-items-block",
+			"title": "Cart Items",
 			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
@@ -442,10 +447,6 @@
 		{
 			"name": "woocommerce/checkout-order-summary-taxes-block",
 			"title": "Taxes"
-		},
-		{
-			"name": "woocommerce/checkout-order-summary-cart-items-block",
-			"title": "Cart Items"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-totals-block",
