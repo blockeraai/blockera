@@ -2,10 +2,10 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 50,
-		"soft-supported": 50,
-		"not-supported": 68,
-		"no-need-to-support": 0
+		"supported": 52,
+		"soft-supported": 53,
+		"not-supported": 65,
+		"no-need-to-support": 1
 	},
 	"supported": [
 		{
@@ -240,7 +240,12 @@
 			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
-	"no-need-to-support": [],
+	"no-need-to-support": [
+		{
+			"name": "woocommerce/coming-soon",
+			"title": "Coming Soon"
+		}
+	],
 	"not-supported": [
 		{
 			"name": "woocommerce/mini-cart",
@@ -305,10 +310,6 @@
 		{
 			"name": "woocommerce/classic-shortcode",
 			"title": "Classic Shortcode"
-		},
-		{
-			"name": "woocommerce/coming-soon",
-			"title": "Coming Soon"
 		},
 		{
 			"name": "woocommerce/featured-category",
