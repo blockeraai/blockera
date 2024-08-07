@@ -268,15 +268,18 @@
 		},
 		{
 			"name": "woocommerce/cart-line-items-block",
-			"title": "Cart Line Items"
+			"title": "Cart Line Items",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/cart-cross-sells-block",
-			"title": "Cart Cross-Sells"
+			"title": "Cart Cross-Sells",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/cart-cross-sells-products-block",
-			"title": "Cart Cross-Sells Products"
+			"title": "Cart Cross-Sells Products",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/cart-totals-block",
