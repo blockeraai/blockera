@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 48,
-		"soft-supported": 48,
-		"not-supported": 70,
+		"supported": 49,
+		"soft-supported": 49,
+		"not-supported": 69,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -217,6 +217,11 @@
 		{
 			"name": "woocommerce/checkout-order-summary-subtotal-block",
 			"title": "Subtotal",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-fee-block",
+			"title": "Fees",
 			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
@@ -438,10 +443,6 @@
 			"name": "woocommerce/checkout-additional-information-block",
 			"title": "Additional information",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
-		},
-		{
-			"name": "woocommerce/checkout-order-summary-fee-block",
-			"title": "Fees"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-discount-block",
