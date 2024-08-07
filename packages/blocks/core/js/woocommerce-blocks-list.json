@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 114,
-		"supported": 16,
-		"soft-supported": 16,
+		"total": 115,
+		"supported": 17,
+		"soft-supported": 17,
 		"not-supported": 98,
 		"no-need-to-support": 0
 	},
@@ -75,6 +75,10 @@
 		{
 			"name": "woocommerce/order-confirmation-billing-wrapper",
 			"title": "Billing Address Section"
+		},
+		{
+			"name": "woocommerce/order-confirmation-billing-address",
+			"title": "Billing Address"
 		}
 	],
 	"no-need-to-support": [],
