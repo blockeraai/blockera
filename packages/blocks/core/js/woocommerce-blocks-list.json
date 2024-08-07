@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 32,
-		"soft-supported": 32,
-		"not-supported": 86,
+		"supported": 33,
+		"soft-supported": 33,
+		"not-supported": 85,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -146,6 +146,11 @@
 		{
 			"name": "woocommerce/customer-account",
 			"title": "Customer Account"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-discount-block",
+			"title": "Discount",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [],
@@ -331,10 +336,6 @@
 			"name": "woocommerce/cart-express-payment-block",
 			"title": "Express Checkout",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
-		},
-		{
-			"name": "woocommerce/cart-order-summary-discount-block",
-			"title": "Discount"
 		},
 		{
 			"name": "woocommerce/cart-order-summary-shipping-block",

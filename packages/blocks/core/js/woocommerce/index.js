@@ -3,6 +3,7 @@
 export * from './cart-accepted-payment-methods-block';
 export * from './cart-order-summary-block';
 export * from './cart-order-summary-coupon-form-block';
+export * from './cart-order-summary-discount-block';
 export * from './cart-order-summary-fee-block';
 export * from './cart-order-summary-heading-block';
 export * from './cart-order-summary-totals-block';
