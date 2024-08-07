@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 106,
-		"supported": 8,
-		"soft-supported": 8,
+		"total": 107,
+		"supported": 9,
+		"soft-supported": 9,
 		"not-supported": 98,
 		"no-need-to-support": 0
 	},
@@ -41,6 +41,10 @@
 		{
 			"name": "woocommerce/order-confirmation-status",
 			"title": "Order Status"
+		},
+		{
+			"name": "woocommerce/order-confirmation-summary",
+			"title": "Order Summary"
 		}
 	],
 	"no-need-to-support": [],

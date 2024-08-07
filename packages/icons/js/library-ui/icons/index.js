@@ -32,6 +32,9 @@ export { default as BlockLoginFormContainer } from './block-login-form-container
 export { default as BlockLoginFormInputs } from './block-login-form-inputs.svg';
 export { default as BlockLoginFormLabels } from './block-login-form-labels.svg';
 export { default as BlockLoginFormRemember } from './block-login-form-remember.svg';
+export { default as BlockOrderConfirmationSummaryItemContainer } from './block-order-confirmation-summary-item-container.svg';
+export { default as BlockOrderConfirmationSummaryItemTitle } from './block-order-confirmation-summary-item-title.svg';
+export { default as BlockOrderConfirmationSummaryItemValue } from './block-order-confirmation-summary-item-value.svg';
 export { default as BlockPaginationNextArrow } from './block-pagination-next-arrow.svg';
 export { default as BlockPaginationNumbersCurrent } from './block-pagination-numbers-current.svg';
 export { default as BlockPaginationNumbersDots } from './block-pagination-numbers-dots.svg';
