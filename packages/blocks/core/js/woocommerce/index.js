@@ -21,6 +21,7 @@ export * from './checkout-order-summary-cart-items-block';
 export * from './checkout-order-summary-coupon-form-block';
 export * from './checkout-order-summary-discount-block';
 export * from './checkout-order-summary-fee-block';
+export * from './checkout-order-summary-shipping-block';
 export * from './checkout-order-summary-subtotal-block';
 export * from './checkout-order-summary-totals-block';
 export * from './checkout-payment-block';

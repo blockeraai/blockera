@@ -228,6 +228,11 @@
 			"name": "woocommerce/checkout-order-summary-discount-block",
 			"title": "Discount",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-shipping-block",
+			"title": "Shipping",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [],
@@ -448,10 +453,6 @@
 			"name": "woocommerce/checkout-additional-information-block",
 			"title": "Additional information",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
-		},
-		{
-			"name": "woocommerce/checkout-order-summary-shipping-block",
-			"title": "Shipping"
 		},
 		{
 			"name": "woocommerce/checkout-order-summary-taxes-block",
