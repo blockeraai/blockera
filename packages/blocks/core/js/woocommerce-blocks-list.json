@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 118,
+		"total": 119,
 		"supported": 52,
 		"soft-supported": 53,
-		"not-supported": 65,
+		"not-supported": 66,
 		"no-need-to-support": 1
 	},
 	"supported": [
@@ -247,6 +247,11 @@
 		}
 	],
 	"not-supported": [
+		{
+			"name": "woocommerce/breadcrumbs",
+			"title": "Store Breadcrumbs",
+			"note": "Important Block: Needs advanced inner blocks support + data compatibility support."
+		},
 		{
 			"name": "woocommerce/mini-cart",
 			"title": "Mini-Cart",
