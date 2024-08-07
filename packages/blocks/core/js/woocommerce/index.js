@@ -18,6 +18,7 @@ export * from './checkout-order-note-block';
 export * from './checkout-payment-block';
 export * from './checkout-shipping-address-block';
 export * from './checkout-shipping-methods-block';
+export * from './checkout-terms-block';
 export * from './customer-account';
 export * from './empty-cart-block';
 export * from './filled-cart-block';
