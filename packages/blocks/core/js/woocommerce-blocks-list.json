@@ -2,8 +2,8 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 37,
-		"soft-supported": 37,
+		"supported": 38,
+		"soft-supported": 38,
 		"not-supported": 81,
 		"no-need-to-support": 0
 	},
@@ -168,6 +168,10 @@
 		{
 			"name": "woocommerce/checkout-shipping-address-block",
 			"title": "Shipping Address"
+		},
+		{
+			"name": "woocommerce/checkout-billing-address-block",
+			"title": "Billing Address"
 		}
 	],
 	"no-need-to-support": [],
@@ -387,10 +391,6 @@
 		{
 			"name": "woocommerce/checkout-terms-block",
 			"title": "Terms and Conditions"
-		},
-		{
-			"name": "woocommerce/checkout-billing-address-block",
-			"title": "Billing Address"
 		},
 		{
 			"name": "woocommerce/checkout-actions-block",
