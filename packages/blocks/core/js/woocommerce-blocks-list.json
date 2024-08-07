@@ -341,7 +341,8 @@
 		},
 		{
 			"name": "woocommerce/cart",
-			"title": "Cart"
+			"title": "Cart",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/checkout-fields-block",
