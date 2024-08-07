@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 118,
-		"supported": 30,
-		"soft-supported": 30,
-		"not-supported": 88,
+		"supported": 31,
+		"soft-supported": 31,
+		"not-supported": 87,
 		"no-need-to-support": 0
 	},
 	"supported": [
@@ -138,6 +138,10 @@
 		{
 			"name": "woocommerce/filled-cart-block",
 			"title": "Filled Cart"
+		},
+		{
+			"name": "woocommerce/empty-cart-block",
+			"title": "Empty Cart"
 		}
 	],
 	"no-need-to-support": [],
@@ -326,10 +330,6 @@
 			"name": "woocommerce/cart-express-payment-block",
 			"title": "Express Checkout",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
-		},
-		{
-			"name": "woocommerce/empty-cart-block",
-			"title": "Empty Cart"
 		},
 		{
 			"name": "woocommerce/cart-order-summary-discount-block",
