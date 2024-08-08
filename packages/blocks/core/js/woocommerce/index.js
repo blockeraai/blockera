@@ -41,6 +41,7 @@ export * from './featured-product';
 export * from './filled-cart-block';
 export * from './filled-mini-cart-contents-block';
 export * from './filter-wrapper';
+export * from './mini-cart-title-block';
 export * from './order-confirmation-additional-information';
 export * from './order-confirmation-additional-fields';
 export * from './order-confirmation-additional-fields-wrapper';
