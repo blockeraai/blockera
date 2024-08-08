@@ -68,6 +68,7 @@ export * from './product-results-count';
 export * from './product-reviews';
 export * from './product-sale-badge';
 export * from './product-sku';
+export * from './product-stock-indicator';
 export * from './product-template';
 export * from './product-title';
 export * from './related-products';
