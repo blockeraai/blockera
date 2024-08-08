@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 122,
-		"supported": 58,
-		"soft-supported": 61,
+		"total": 123,
+		"supported": 59,
+		"soft-supported": 62,
 		"not-supported": 61,
 		"no-need-to-support": 3
 	},
@@ -265,6 +265,11 @@
 		{
 			"name": "woocommerce/product-sku",
 			"title": "Product SKU"
+		},
+		{
+			"name": "woocommerce/product-details",
+			"title": "Product Details",
+			"note": "Important Block: @todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
