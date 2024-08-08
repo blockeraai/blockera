@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 122,
-		"supported": 57,
-		"soft-supported": 60,
-		"not-supported": 62,
+		"supported": 58,
+		"soft-supported": 61,
+		"not-supported": 61,
 		"no-need-to-support": 3
 	},
 	"supported": [
@@ -261,6 +261,10 @@
 		{
 			"name": "woocommerce/product-meta",
 			"title": "Product Meta"
+		},
+		{
+			"name": "woocommerce/product-sku",
+			"title": "Product SKU"
 		}
 	],
 	"no-need-to-support": [
@@ -328,10 +332,6 @@
 		{
 			"name": "woocommerce/product-sale-badge",
 			"title": "On-Sale Badge"
-		},
-		{
-			"name": "woocommerce/product-sku",
-			"title": "Product SKU"
 		},
 		{
 			"name": "woocommerce/product-stock-indicator",
