@@ -39,6 +39,7 @@ export * from './featured-product';
 export * from './filled-cart-block';
 export * from './filter-wrapper';
 export * from './order-confirmation-additional-information';
+export * from './order-confirmation-additional-fields';
 export * from './order-confirmation-additional-fields-wrapper';
 export * from './order-confirmation-billing-address';
 export * from './order-confirmation-billing-wrapper';

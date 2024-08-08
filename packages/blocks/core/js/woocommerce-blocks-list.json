@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 69,
-		"soft-supported": 80,
-		"not-supported": 51,
+		"supported": 70,
+		"soft-supported": 81,
+		"not-supported": 50,
 		"no-need-to-support": 11
 	},
 	"supported": [
@@ -82,7 +82,13 @@
 		},
 		{
 			"name": "woocommerce/order-confirmation-additional-fields-wrapper",
-			"title": "Additional Fields"
+			"title": "Additional Fields",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/order-confirmation-additional-fields",
+			"title": "Additional Field List",
+			"note": "@todo we can add advanced inner blocks support."
 		},
 		{
 			"name": "woocommerce/order-confirmation-additional-information",
@@ -599,11 +605,6 @@
 		{
 			"name": "woocommerce/mini-cart-contents",
 			"title": "Mini-Cart Contents"
-		},
-		{
-			"name": "woocommerce/order-confirmation-additional-fields",
-			"title": "Additional Field List",
-			"note": "There is a strange issue for supporting this block."
 		}
 	]
 }
