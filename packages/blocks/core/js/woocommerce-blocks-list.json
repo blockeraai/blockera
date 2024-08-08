@@ -416,6 +416,26 @@
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
 		},
 		{
+			"name": "woocommerce/product-on-sale",
+			"title": "On Sale Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-tag",
+			"title": "Products by Tag",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-top-rated",
+			"title": "Top Rated Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/products-by-attribute",
+			"title": "Products by Attribute",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
 			"name": "woocommerce/product-rating-stars",
 			"title": "Product Rating Stars"
 		},
@@ -454,22 +474,6 @@
 		{
 			"name": "woocommerce/product-gallery-large-image",
 			"title": "Large Image"
-		},
-		{
-			"name": "woocommerce/product-on-sale",
-			"title": "On Sale Products"
-		},
-		{
-			"name": "woocommerce/product-tag",
-			"title": "Products by Tag"
-		},
-		{
-			"name": "woocommerce/product-top-rated",
-			"title": "Top Rated Products"
-		},
-		{
-			"name": "woocommerce/products-by-attribute",
-			"title": "Products by Attribute"
 		},
 		{
 			"name": "woocommerce/rating-filter",
