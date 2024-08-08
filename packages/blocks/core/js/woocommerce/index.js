@@ -55,6 +55,7 @@ export * from './product-meta';
 export * from './product-price';
 export * from './product-rating';
 export * from './product-results-count';
+export * from './product-reviews';
 export * from './product-sku';
 export * from './product-template';
 export * from './product-title';
