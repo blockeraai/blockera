@@ -1,6 +1,0 @@
-{
-	"plugins": [
-		".",
-		"https://downloads.wordpress.org/plugin/svg-support.2.5.5.zip"
-	]
-}

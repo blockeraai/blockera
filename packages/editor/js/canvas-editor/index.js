@@ -14,7 +14,11 @@ import { Breakpoints } from './components';
 
 export const CanvasEditor = ({
 	entry,
+	previewDropdown,
+	postPreviewElement,
 }: {
+	previewDropdown: string,
+	postPreviewElement: string,
 	entry: IntersectionObserverEntry,
 }): MixedElement => {
 	const ref = useRef(null);
@@ -25,23 +29,17 @@ export const CanvasEditor = ({
 
 	useEffect(() => {
 		ref.current = {
-			previewElement: document.querySelector('a[aria-label="View Post"]'),
-			dropDownPreview: document.querySelector(
-				'div.block-editor-post-preview__dropdown'
-			),
+			postPreviewElement: document.querySelector(postPreviewElement),
+			previewDropdown: document.querySelector(previewDropdown),
 		};
 
-		if (ref.current.previewElement) {
-			ref.current.previewElement.style.display = 'none';
+		if (ref.current.postPreviewElement) {
+			ref.current.postPreviewElement.style.display = 'none';
 		}
-		if (ref.current.dropDownPreview) {
-			ref.current.dropDownPreview.style.display = 'none';
+		if (ref.current.previewDropdown) {
+			ref.current.previewDropdown.style.display = 'none';
 		}
 	}, [selectedBlock]);
-
-	if (!ref.current) {
-		return <></>;
-	}
 
 	return createPortal(<Breakpoints className={className} />, entry.target);
 };

@@ -16,7 +16,7 @@ class TestSetup extends \WP_UnitTestCase {
 		$wp_filter = [];
 		$this->assertEmpty( $wp_filter );
 
-		new Setup();
+		(new Setup())->apply();
 
 		// Ensure the filter is added
 		$this->assertInstanceOf( \WP_Hook::class, $wp_filter['register_block_type_args'] );

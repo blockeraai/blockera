@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
+import { mergeObject, isUndefined } from '@blockera/utils';
 import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
@@ -43,7 +43,10 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			if (attributes?.style?.elements === undefined) {
+			if (
+				isUndefined(attributes?.style?.elements) ||
+				isUndefined(innerBlocks)
+			) {
 				return attributes;
 			}
 
@@ -54,8 +57,9 @@ export const bootstrap = (): void => {
 
 				if (
 					!attributes?.style?.elements[dataCompatibilityElement] ||
-					innerBlocks[innerBlock]?.settings?.dataCompatibility ===
-						undefined ||
+					isUndefined(
+						innerBlocks[innerBlock]?.settings?.dataCompatibility
+					) ||
 					innerBlocks[innerBlock]?.settings?.dataCompatibility
 						?.length === 0
 				) {
@@ -219,9 +223,11 @@ export const bootstrap = (): void => {
 			}
 
 			if (
-				innerBlocks[currentBlock] === undefined ||
-				innerBlocks[currentBlock]?.settings?.dataCompatibility ===
-					undefined ||
+				isUndefined(innerBlocks) ||
+				isUndefined(innerBlocks[currentBlock]) ||
+				isUndefined(
+					innerBlocks[currentBlock]?.settings?.dataCompatibility
+				) ||
 				innerBlocks[currentBlock]?.settings?.dataCompatibility
 					?.length === 0
 			) {
@@ -306,7 +312,7 @@ export const bootstrap = (): void => {
 
 				// Item has BG color
 				if (
-					attrs.blockeraInnerBlocks[currentBlock] !== undefined &&
+					!isUndefined(attrs.blockeraInnerBlocks[currentBlock]) &&
 					attrs.blockeraInnerBlocks[currentBlock]?.attributes
 						?.blockeraBackgroundColor
 				) {

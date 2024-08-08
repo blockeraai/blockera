@@ -8,8 +8,8 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
+import { getSmallHash, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -121,13 +121,19 @@ export const useAttributes = (
 			_attributes = getAttributesWithIds(_attributes, 'blockeraPropsId');
 		}
 
+		const indexOfBlockeraSelector =
+			attributes?.className?.indexOf('blockera-block');
+
 		// Sets "className" attribute value is existing on block attributes to merge with default value.
-		if (!attributes?.className) {
+		if (
+			-1 === indexOfBlockeraSelector ||
+			'undefined' === typeof indexOfBlockeraSelector
+		) {
 			_attributes = {
 				..._attributes,
-				className: classNames(className, {
+				className: classNames(className, attributes.className, {
 					'blockera-block': true,
-					[`blockera-block-${clientId}`]: true,
+					[`blockera-block-${getSmallHash(clientId)}`]: true,
 				}),
 			};
 		}

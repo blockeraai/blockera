@@ -162,3 +162,21 @@ export function setBlockClientInners({ inners, clientId }: Object): Object {
 		type: 'SET_BLOCK_CLIENT_INNERS',
 	};
 }
+
+export const registerSharedBlockAttributes = (attributes: Object): Object => {
+	return {
+		attributes,
+		type: 'REGISTER_SHARED_BLOCK_ATTRIBUTES',
+	};
+};
+
+export const registerBlockTypeAttributes = (
+	attributes: Object,
+	name: string
+): Object => {
+	return {
+		name,
+		attributes,
+		type: 'REGISTER_BLOCK_TYPE_ATTRIBUTES',
+	};
+};

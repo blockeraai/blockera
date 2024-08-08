@@ -11,7 +11,7 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
  * Blockera dependencies
  */
 import { BaseControlContext } from '@blockera/controls';
-import { isObject, isFunction, mergeObject } from '@blockera/utils';
+import { isObject, isFunction, mergeObject, isEmpty } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -122,6 +122,11 @@ function mergeBlockSettings(
 		return settings;
 	}
 
+	const {
+		getSharedBlockAttributes = () => ({}),
+		getBlockTypeAttributes = () => ({}),
+	} = select('blockera/extensions') || {};
+
 	const isAvailableBlock = () =>
 		!unsupportedBlocks.includes(settings.name) &&
 		!notAllowedUsers.filter((role) => currentUser.roles.includes(role))
@@ -160,9 +165,23 @@ function mergeBlockSettings(
 		});
 	};
 
+	const blockeraOverrideBlockTypeAttributes = getBlockTypeAttributes(
+		settings.name
+	);
+	const blockeraOverrideBlockAttributes = isEmpty(
+		blockeraOverrideBlockTypeAttributes
+	)
+		? getSharedBlockAttributes()
+		: blockeraOverrideBlockTypeAttributes;
+
 	return {
 		...settings,
-		attributes: sanitizeDefaultAttributes(settings.attributes),
+		attributes: !settings.attributes?.blockeraPropsId
+			? mergeObject(
+					sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
+					sanitizeDefaultAttributes(settings.attributes)
+			  )
+			: sanitizeDefaultAttributes(settings.attributes),
 		supports: mergeObject(settings.supports, additional.supports),
 		selectors: mergeObject(settings.selectors, additional.selectors),
 		transforms: {
@@ -185,7 +204,13 @@ function mergeBlockSettings(
 							{...{
 								...props,
 								additional,
-								defaultAttributes: settings.attributes,
+								defaultAttributes: !settings.attributes
+									?.blockeraPropsId
+									? mergeObject(
+											settings.attributes,
+											blockeraOverrideBlockAttributes
+									  )
+									: settings.attributes,
 							}}
 						>
 							<SlotFillProvider>

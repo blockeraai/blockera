@@ -39,7 +39,8 @@ export default function applyHooks(beforeApplyHooks: () => void) {
 					'blockera.editor.extensions.hooks.withBlockSettings.disabledBlocks',
 					[]
 				),
-			})
+			}),
+		9e2
 	);
 }
 export { default as withBlockSettings } from './block-settings';

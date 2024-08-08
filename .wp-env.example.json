@@ -1,0 +1,7 @@
+{
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/svg-support.2.5.5.zip",
+		"https://downloads.wordpress.org/plugin/woocommerce.9.1.4.zip"
+	]
+}

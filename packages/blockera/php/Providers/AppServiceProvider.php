@@ -183,8 +183,8 @@ class AppServiceProvider extends ServiceProvider {
 			);
 		}
 
-		$this->app->make( Setup::class );
 		$this->app->make( SavePost::class );
+		$this->app->make( Setup::class )->apply();
 		$this->app->make( EntityRegistry::class );
 
 		array_map( [ $this, 'renderBlocks' ], blockera_get_available_blocks() );

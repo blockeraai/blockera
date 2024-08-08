@@ -6,6 +6,7 @@ use Blockera\Setup\Blockera;
 use Blockera\Bootstrap\Application;
 use Blockera\WordPress\AssetsLoader;
 use Blockera\Bootstrap\ServiceProvider;
+use Blockera\WordPress\RenderBlock\Setup;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -115,8 +116,39 @@ class AssetsProvider extends ServiceProvider {
 
 		$dynamic_value_bootstrapper = $editor_object . '.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');';
 
-		$script = 'window.onload = () => {
-				' . $editor_object . '.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
+		/**
+		 * Filterable shared block attributes,
+		 * For external developers to extending blockera shared block attributes.
+		 *
+		 * @since 1.0.0
+		 */
+		$shared_block_attributes = apply_filters( 'blockera/assets/provider/inline-script/shared-block-attributes', blockera_get_shared_block_attributes() );
+
+		$app = $this->app;
+
+		$blocks_attributes_scripts = array_map(
+			function ( string $block_type ) use ( $editor_object, $app ): string {
+
+				return sprintf(
+					'%$1s.editor.unstableRegistrationBlockTypeAttributes(%2$s, %3$s)',
+					$editor_object,
+					wp_json_encode( $app->make( Setup::class )->getCustomizedBlock( $block_type, blockera_get_shared_block_attributes() ) ),
+					$block_type
+				);
+			},
+			/**
+			 * Filterable 3rd party plugin block types list,
+			 * For external developers to customized blockera shared block attributes for provided block type names.
+			 *
+			 * @since 1.0.0
+			 */
+			apply_filters( 'blockera/assets/provider/inline-script/register/3rd-party-blocks/attributes', [] )
+		);
+
+		$script = implode( ";\n", $blocks_attributes_scripts ) . '
+				' . $editor_object . '.editor.unstableRegistrationSharedBlockAttributes(' . wp_json_encode( $shared_block_attributes ) . ');
+		window.onload = () => {
+				' . $editor_object . '.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');  
 				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->app->getEntity( 'breakpoints' ) ) . ');
 				' . $editor_object . '.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
 				' . $editor_object . '.editor.init();

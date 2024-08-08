@@ -8,81 +8,35 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 	 */
 	function blockera_get_available_blocks(): array {
 
-		return [
-			// Core Block Editor Blocks.
-			'core/audio',
-			'core/avatar',
-			'core/button',
-			'core/buttons',
-			'core/categories',
-			'core/code',
-			'core/column',
-			'core/columns',
-			'core/comment-author-name',
-			'core/comment-content',
-			'core/comment-date',
-			'core/comment-edit-link',
-			'core/comment-reply-link',
-			'core/comment-template',
-			'core/comments',
-			'core/comments-pagination',
-			'core/comments-pagination-next',
-			'core/comments-pagination-numbers',
-			'core/comments-pagination-previous',
-			'core/comments-title',
-			'core/cover',
-			'core/details',
-			'core/embed',
-			'core/file',
-			'core/footnotes',
-			'core/gallery',
-			'core/group',
-			'core/heading',
-			'core/image',
-			'core/latest-posts',
-			'core/list',
-			'core/list-item',
-			'core/loginout',
-			'core/media-text',
-			'core/page-list',
-			'core/paragraph',
-			'core/post-author',
-			'core/post-author-biography',
-			'core/post-author-name',
-			'core/post-comments-form',
-			'core/post-content',
-			'core/post-date',
-			'core/post-excerpt',
-			'core/post-featured-image',
-			'core/post-navigation-link',
-			'core/post-template',
-			'core/post-terms',
-			'core/post-title',
-			'core/preformatted',
-			'core/pullquote',
-			'core/query-no-results',
-			'core/query-pagination',
-			'core/query-pagination-next',
-			'core/query-pagination-numbers',
-			'core/query-pagination-previous',
-			'core/query-title',
-			'core/quote',
-			'core/read-more',
-			'core/search',
-			'core/separator',
-			'core/site-logo',
-			'core/site-tagline',
-			'core/site-title',
-			'core/social-link',
-			'core/social-links',
-			'core/table',
-			'core/term-description',
-			'core/verse',
-			'core/video',
+		$available_blocks = [];
+		$config_files     = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/blocks-core/js/*-blocks-list.json' );
 
-			// WooCommerce Blocks.
-			'woocommerce/product-price',
-		];
+		foreach ( $config_files as $config_file ) {
+
+			ob_start();
+
+			require $config_file;
+
+			$config = json_decode( ob_get_clean(), true );
+
+			if ( empty( $config['supported'] ) ) {
+
+				continue;
+			}
+
+			$available_blocks = array_merge(
+				$available_blocks,
+				array_map(
+					function ( array $support ): string {
+
+						return $support['name'];
+					},
+					$config['supported']
+				)
+			);
+		}
+
+		return $available_blocks;
 	}
 }
 

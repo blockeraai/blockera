@@ -581,6 +581,12 @@ if ( ! function_exists( 'blockera_get_normalized_selector' ) ) {
 				array_map(
 					function ( string $_selector ): string {
 
+						// ignore external selectors.
+						if ( false === strpos( $_selector, 'blockera-block' ) ) {
+
+							return '';
+						}
+
 						$_selector = trim( $_selector );
 
 						if ( ! empty( $_selector ) && '.' === $_selector[0] ) {

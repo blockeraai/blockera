@@ -106,7 +106,7 @@ export const useComputedCssProps = ({
 					...calculatedProps,
 					state: stateType,
 					masterState,
-					selectors: selectors?.innerBlocks[blockType] || {},
+					selectors: (selectors?.innerBlocks || {})[blockType] || {},
 					attributes: {
 						...defaultAttributes,
 						...breakpointItem?.attributes,
@@ -121,7 +121,7 @@ export const useComputedCssProps = ({
 			...calculatedProps,
 			state: 'normal',
 			masterState,
-			selectors: selectors?.innerBlocks[blockType] || {},
+			selectors: (selectors?.innerBlocks || {})[blockType] || {},
 			attributes: {
 				...defaultAttributes,
 				...attributes,
