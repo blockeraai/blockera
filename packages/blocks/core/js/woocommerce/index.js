@@ -61,4 +61,5 @@ export * from './product-template';
 export * from './product-title';
 export * from './related-products';
 export * from './reviews-by-category';
+export * from './reviews-by-product';
 export * from './store-notices';
