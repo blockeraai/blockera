@@ -1,11 +1,11 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 121,
+		"total": 122,
 		"supported": 57,
-		"soft-supported": 59,
+		"soft-supported": 60,
 		"not-supported": 62,
-		"no-need-to-support": 2
+		"no-need-to-support": 3
 	},
 	"supported": [
 		{
@@ -267,6 +267,11 @@
 		{
 			"name": "woocommerce/coming-soon",
 			"title": "Coming Soon"
+		},
+		{
+			"name": "core/post-terms",
+			"title": "Product categories",
+			"note": "It's a block variation."
 		},
 		{
 			"name": "core/post-terms",
