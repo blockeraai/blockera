@@ -411,6 +411,11 @@
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
 		},
 		{
+			"name": "woocommerce/product-category",
+			"title": "Products by Category",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
 			"name": "woocommerce/product-rating-stars",
 			"title": "Product Rating Stars"
 		},
@@ -441,10 +446,6 @@
 		{
 			"name": "woocommerce/price-filter",
 			"title": "Filter by Price Controls"
-		},
-		{
-			"name": "woocommerce/product-category",
-			"title": "Products by Category"
 		},
 		{
 			"name": "woocommerce/product-collection-no-results",
