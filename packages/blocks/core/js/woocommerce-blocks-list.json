@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 126,
-		"supported": 61,
-		"soft-supported": 65,
-		"not-supported": 61,
+		"supported": 62,
+		"soft-supported": 66,
+		"not-supported": 60,
 		"no-need-to-support": 4
 	},
 	"supported": [
@@ -279,6 +279,11 @@
 			"name": "woocommerce/product-reviews",
 			"title": "Product Reviews",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/reviews-by-category",
+			"title": "Reviews by Category",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -431,10 +436,6 @@
 		{
 			"name": "woocommerce/rating-filter",
 			"title": "Filter by Rating Controls"
-		},
-		{
-			"name": "woocommerce/reviews-by-category",
-			"title": "Reviews by Category"
 		},
 		{
 			"name": "woocommerce/reviews-by-product",
