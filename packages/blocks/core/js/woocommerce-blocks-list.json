@@ -493,10 +493,6 @@
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
 		},
 		{
-			"name": "woocommerce/product-gallery-large-image",
-			"title": "Large Image"
-		},
-		{
 			"name": "woocommerce/single-product",
 			"title": "Single Product",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
@@ -567,6 +563,15 @@
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
+			"name": "woocommerce/mini-cart-contents",
+			"title": "Mini-Cart Contents",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/product-gallery-large-image",
+			"title": "Large Image"
+		},
+		{
 			"name": "woocommerce/empty-mini-cart-contents-block",
 			"title": "Empty Mini-Cart view"
 		},
@@ -609,10 +614,6 @@
 		{
 			"name": "woocommerce/mini-cart-checkout-button-block",
 			"title": "Mini-Cart Proceed to Checkout Button"
-		},
-		{
-			"name": "woocommerce/mini-cart-contents",
-			"title": "Mini-Cart Contents"
 		}
 	]
 }
