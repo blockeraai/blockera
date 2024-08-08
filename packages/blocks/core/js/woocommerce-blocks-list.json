@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 127,
-		"supported": 66,
-		"soft-supported": 73,
-		"not-supported": 54,
+		"supported": 67,
+		"soft-supported": 74,
+		"not-supported": 53,
 		"no-need-to-support": 7
 	},
 	"supported": [
@@ -304,6 +304,10 @@
 			"name": "woocommerce/featured-product",
 			"title": "Featured Product",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/filter-wrapper",
+			"title": "Filter Block"
 		}
 	],
 	"no-need-to-support": [
@@ -402,10 +406,6 @@
 		{
 			"name": "woocommerce/attribute-filter",
 			"title": "Filter by Attribute Controls"
-		},
-		{
-			"name": "woocommerce/filter-wrapper",
-			"title": "Filter Block"
 		},
 		{
 			"name": "woocommerce/price-filter",
