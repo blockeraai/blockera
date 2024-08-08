@@ -35,6 +35,7 @@ export * from './checkout-shipping-methods-block';
 export * from './checkout-terms-block';
 export * from './customer-account';
 export * from './empty-cart-block';
+export * from './empty-mini-cart-contents-block';
 export * from './featured-category';
 export * from './featured-product';
 export * from './filled-cart-block';

@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 81,
-		"soft-supported": 93,
-		"not-supported": 38,
+		"supported": 82,
+		"soft-supported": 94,
+		"not-supported": 37,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -374,6 +374,10 @@
 		{
 			"name": "woocommerce/filled-mini-cart-contents-block",
 			"title": "Filled Mini-Cart view"
+		},
+		{
+			"name": "woocommerce/empty-mini-cart-contents-block",
+			"title": "Empty Mini-Cart view"
 		}
 	],
 	"no-need-to-support": [
@@ -574,10 +578,6 @@
 		{
 			"name": "woocommerce/product-gallery-large-image",
 			"title": "Large Image"
-		},
-		{
-			"name": "woocommerce/empty-mini-cart-contents-block",
-			"title": "Empty Mini-Cart view"
 		},
 		{
 			"name": "woocommerce/mini-cart-title-block",
