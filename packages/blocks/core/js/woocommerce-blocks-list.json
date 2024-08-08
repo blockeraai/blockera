@@ -3,9 +3,9 @@
 	"data": {
 		"total": 126,
 		"supported": 63,
-		"soft-supported": 67,
-		"not-supported": 59,
-		"no-need-to-support": 4
+		"soft-supported": 68,
+		"not-supported": 58,
+		"no-need-to-support": 5
 	},
 	"supported": [
 		{
@@ -310,6 +310,11 @@
 			"name": "core/query",
 			"title": "Related Products Controls",
 			"note": "It's a block variation of `core/query` that Blockera supports it."
+		},
+		{
+			"name": "woocommerce/product-search",
+			"title": "Product Search",
+			"note": "It's a block variation of `core/search` that Blockera supports it."
 		}
 	],
 	"not-supported": [
@@ -421,10 +426,6 @@
 		{
 			"name": "woocommerce/product-on-sale",
 			"title": "On Sale Products"
-		},
-		{
-			"name": "woocommerce/product-search",
-			"title": "Product Search"
 		},
 		{
 			"name": "woocommerce/product-tag",
