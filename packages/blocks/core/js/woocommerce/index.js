@@ -34,6 +34,7 @@ export * from './checkout-terms-block';
 export * from './customer-account';
 export * from './empty-cart-block';
 export * from './featured-category';
+export * from './featured-product';
 export * from './filled-cart-block';
 export * from './order-confirmation-additional-information';
 export * from './order-confirmation-additional-fields-wrapper';
