@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 68,
-		"soft-supported": 79,
-		"not-supported": 52,
+		"supported": 69,
+		"soft-supported": 80,
+		"not-supported": 51,
 		"no-need-to-support": 11
 	},
 	"supported": [
@@ -313,6 +313,11 @@
 			"name": "woocommerce/active-filters",
 			"title": "Active Filters Controls",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-categories",
+			"title": "Product Categories List",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -436,10 +441,6 @@
 		{
 			"name": "woocommerce/price-filter",
 			"title": "Filter by Price Controls"
-		},
-		{
-			"name": "woocommerce/product-categories",
-			"title": "Product Categories List"
 		},
 		{
 			"name": "woocommerce/product-category",
