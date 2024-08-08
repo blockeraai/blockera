@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 80,
-		"soft-supported": 92,
-		"not-supported": 39,
+		"supported": 81,
+		"soft-supported": 93,
+		"not-supported": 38,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -370,6 +370,10 @@
 		{
 			"name": "woocommerce/stock-filter",
 			"title": "Filter by Stock Controls"
+		},
+		{
+			"name": "woocommerce/filled-mini-cart-contents-block",
+			"title": "Filled Mini-Cart view"
 		}
 	],
 	"no-need-to-support": [
@@ -574,10 +578,6 @@
 		{
 			"name": "woocommerce/empty-mini-cart-contents-block",
 			"title": "Empty Mini-Cart view"
-		},
-		{
-			"name": "woocommerce/filled-mini-cart-contents-block",
-			"title": "Filled Mini-Cart view"
 		},
 		{
 			"name": "woocommerce/mini-cart-title-block",
