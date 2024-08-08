@@ -1,11 +1,11 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 130,
+		"total": 131,
 		"supported": 68,
-		"soft-supported": 78,
+		"soft-supported": 79,
 		"not-supported": 52,
-		"no-need-to-support": 10
+		"no-need-to-support": 11
 	},
 	"supported": [
 		{
@@ -361,6 +361,11 @@
 		{
 			"name": "woocommerce/filter-wrapper",
 			"title": "Filter By Attribute",
+			"note": "It's a block variation of `woocommerce/filter-wrapper` that Blockera supports it. @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/filter-wrapper",
+			"title": "Filter By Rating",
 			"note": "It's a block variation of `woocommerce/filter-wrapper` that Blockera supports it. @todo we can add advanced inner blocks support."
 		}
 	],
