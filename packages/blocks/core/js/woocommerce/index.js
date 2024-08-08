@@ -73,6 +73,7 @@ export * from './product-sku';
 export * from './product-stock-indicator';
 export * from './product-template';
 export * from './product-title';
+export * from './rating-filter';
 export * from './related-products';
 export * from './reviews-by-category';
 export * from './reviews-by-product';

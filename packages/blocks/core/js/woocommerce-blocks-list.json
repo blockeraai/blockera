@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 77,
-		"soft-supported": 89,
-		"not-supported": 42,
+		"supported": 78,
+		"soft-supported": 90,
+		"not-supported": 41,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -357,6 +357,11 @@
 			"name": "woocommerce/price-filter",
 			"title": "Filter by Price Controls",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/rating-filter",
+			"title": "Filter by Rating Controls",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -486,10 +491,6 @@
 		{
 			"name": "woocommerce/product-gallery-large-image",
 			"title": "Large Image"
-		},
-		{
-			"name": "woocommerce/rating-filter",
-			"title": "Filter by Rating Controls"
 		},
 		{
 			"name": "woocommerce/single-product",
