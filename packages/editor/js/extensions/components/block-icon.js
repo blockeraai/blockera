@@ -29,7 +29,16 @@ export const BlockIcon = ({
 				library="blockera"
 				icon="blockera"
 				iconSize="16"
-				className={'blockera-block-icon'}
+				className={'blockera-block-icon blockera-main-icon'}
+				data-test={ariaLabel}
+				aria-label={ariaLabel}
+			/>
+
+			<Icon
+				library="blockera"
+				icon="blockera-cube"
+				iconSize="16"
+				className={'blockera-block-icon blockera-cube-icon'}
 				data-test={ariaLabel}
 				aria-label={ariaLabel}
 			/>

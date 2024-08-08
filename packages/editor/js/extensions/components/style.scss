@@ -60,6 +60,7 @@
 }
 
 .blockera-block-icon {
+	display: none;
 	--icon-size: 16px;
 	position: absolute;
 	top: 0;
@@ -68,10 +69,13 @@
 	min-height: var(--icon-size) !important;
 	max-width: var(--icon-size) !important;
 	max-height: var(--icon-size) !important;
-	color: #cad0d3;
 	fill: currentColor;
-	transition: all 0.15s ease-out;
-	display: none;
+	transition: all 0.1s ease-out !important;
+	opacity: 0;
+
+	&.blockera-main-icon {
+		color: var(--blockera-controls-primary-color);
+	}
 }
 
 // Block inserter
@@ -84,6 +88,25 @@
 		right: 20px;
 		margin-right: -7px;
 	}
+
+	.blockera-block-icon.blockera-cube-icon {
+		opacity: 0.2;
+	}
+
+	.blockera-block-icon.blockera-main-icon {
+		opacity: 0;
+	}
+
+	.block-editor-block-types-list__list-item:hover {
+
+		.blockera-block-icon.blockera-cube-icon {
+			opacity: 0;
+		}
+
+		.blockera-block-icon.blockera-main-icon {
+			opacity: 0.4;
+		}
+	}
 }
 
 // Block preview popover
@@ -91,9 +114,10 @@
 .components-popover__content .block-editor-block-card .block-editor-block-icon {
 	position: relative;
 
-	.blockera-block-icon {
-		color: #1e1e1e;
+	.blockera-block-icon.blockera-main-icon {
+		color: currentColor;
 		display: block;
+		opacity: 0.2;
 		top: -10px;
 		right: -10px;
 		background: #ffffff;
@@ -110,6 +134,7 @@
 
 	.blockera-block-icon {
 		display: block;
+		opacity: 0.2;
 		--icon-size: 20px;
 		top: 50%;
 		margin-top: -10px;
@@ -117,6 +142,43 @@
 		background: #ffffff;
 		border-radius: 50%;
 		border: 2px solid #ffffff;
-		color: #1e1e1e;
+	}
+}
+
+.block-editor-block-switcher__container {
+
+	.components-menu-item__button {
+		position: relative;
+
+		.blockera-block-icon {
+			display: block;
+			opacity: 0.2;
+			--icon-size: 20px;
+			top: 50%;
+			margin-top: -10px;
+    		right: 5px;
+			background: #ffffff;
+			border-radius: 50%;
+			border: 2px solid #ffffff;
+		}
+
+		.blockera-block-icon.blockera-cube-icon {
+			opacity: 0.2;
+		}
+
+		.blockera-block-icon.blockera-main-icon {
+			opacity: 0;
+		}
+
+		&:hover {
+
+			.blockera-block-icon.blockera-cube-icon {
+				opacity: 0;
+			}
+
+			.blockera-block-icon.blockera-main-icon {
+				opacity: 0.4;
+			}
+		}
 	}
 }
