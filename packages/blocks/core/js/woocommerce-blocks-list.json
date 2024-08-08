@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 120,
-		"supported": 56,
-		"soft-supported": 57,
-		"not-supported": 63,
+		"supported": 57,
+		"soft-supported": 58,
+		"not-supported": 62,
 		"no-need-to-support": 1
 	},
 	"supported": [
@@ -257,6 +257,10 @@
 			"name": "woocommerce/add-to-cart-form",
 			"title": "Add to Cart with Options",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-meta",
+			"title": "Product Meta"
 		}
 	],
 	"no-need-to-support": [
@@ -527,10 +531,6 @@
 		{
 			"name": "woocommerce/mini-cart-contents",
 			"title": "Mini-Cart Contents"
-		},
-		{
-			"name": "woocommerce/product-meta",
-			"title": "Product Meta"
 		},
 		{
 			"name": "woocommerce/order-confirmation-additional-fields",

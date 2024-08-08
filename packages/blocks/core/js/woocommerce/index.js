@@ -50,6 +50,7 @@ export * from './proceed-to-checkout-block';
 export * from './product-button';
 export * from './product-image';
 export * from './product-image-gallery';
+export * from './product-meta';
 export * from './product-price';
 export * from './product-rating';
 export * from './product-results-count';
