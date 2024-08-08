@@ -61,6 +61,7 @@ export * from './product-image-gallery';
 export * from './product-meta';
 export * from './product-price';
 export * from './product-rating';
+export * from './product-rating-counter';
 export * from './product-rating-stars';
 export * from './product-results-count';
 export * from './product-reviews';
