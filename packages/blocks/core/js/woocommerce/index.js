@@ -58,4 +58,5 @@ export * from './product-results-count';
 export * from './product-sku';
 export * from './product-template';
 export * from './product-title';
+export * from './related-products';
 export * from './store-notices';
