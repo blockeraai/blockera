@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 72,
-		"soft-supported": 84,
-		"not-supported": 47,
+		"supported": 73,
+		"soft-supported": 85,
+		"not-supported": 46,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -334,6 +334,11 @@
 			"name": "woocommerce/product-rating-counter",
 			"title": "Product Rating Counter",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-average-rating",
+			"title": "Product Average Rating (Beta)",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -455,10 +460,6 @@
 			"name": "woocommerce/products-by-attribute",
 			"title": "Products by Attribute",
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
-		},
-		{
-			"name": "woocommerce/product-average-rating",
-			"title": "Product Average Rating (Beta)"
 		},
 		{
 			"name": "woocommerce/product-sale-badge",
