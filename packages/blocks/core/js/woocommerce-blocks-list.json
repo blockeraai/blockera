@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 79,
-		"soft-supported": 91,
-		"not-supported": 40,
+		"supported": 80,
+		"soft-supported": 92,
+		"not-supported": 39,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -366,6 +366,10 @@
 		{
 			"name": "woocommerce/product-collection-no-results",
 			"title": "No results"
+		},
+		{
+			"name": "woocommerce/stock-filter",
+			"title": "Filter by Stock Controls"
 		}
 	],
 	"no-need-to-support": [
@@ -496,10 +500,6 @@
 			"name": "woocommerce/single-product",
 			"title": "Single Product",
 			"note": "@todo there is an issue for supporting this block that needs to be fixed"
-		},
-		{
-			"name": "woocommerce/stock-filter",
-			"title": "Filter by Stock Controls"
 		},
 		{
 			"name": "woocommerce/cart-items-block",

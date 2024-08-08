@@ -78,4 +78,5 @@ export * from './rating-filter';
 export * from './related-products';
 export * from './reviews-by-category';
 export * from './reviews-by-product';
+export * from './stock-filter';
 export * from './store-notices';
