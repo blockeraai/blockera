@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 127,
-		"supported": 67,
-		"soft-supported": 74,
-		"not-supported": 53,
+		"supported": 68,
+		"soft-supported": 75,
+		"not-supported": 52,
 		"no-need-to-support": 7
 	},
 	"supported": [
@@ -308,6 +308,11 @@
 		{
 			"name": "woocommerce/filter-wrapper",
 			"title": "Filter Block"
+		},
+		{
+			"name": "woocommerce/active-filters",
+			"title": "Active Filters Controls",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -374,10 +379,6 @@
 			"name": "woocommerce/handpicked-products",
 			"title": "Hand-picked Products",
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
-		},
-		{
-			"name": "woocommerce/active-filters",
-			"title": "Active Filters Controls"
 		},
 		{
 			"name": "woocommerce/product-rating-stars",

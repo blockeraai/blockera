@@ -1,5 +1,6 @@
 // @flow
 
+export * from './active-filters';
 export * from './add-to-cart-form';
 export * from './all-reviews';
 export * from './cart-accepted-payment-methods-block';
