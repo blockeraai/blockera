@@ -144,3 +144,41 @@
 		border: 2px solid #ffffff;
 	}
 }
+
+.block-editor-block-switcher__container {
+
+	.components-menu-item__button {
+		position: relative;
+
+		.blockera-block-icon {
+			display: block;
+			opacity: 0.2;
+			--icon-size: 20px;
+			top: 50%;
+			margin-top: -10px;
+    		right: 5px;
+			background: #ffffff;
+			border-radius: 50%;
+			border: 2px solid #ffffff;
+		}
+
+		.blockera-block-icon.blockera-cube-icon {
+			opacity: 0.2;
+		}
+
+		.blockera-block-icon.blockera-main-icon {
+			opacity: 0;
+		}
+
+		&:hover {
+
+			.blockera-block-icon.blockera-cube-icon {
+				opacity: 0;
+			}
+
+			.blockera-block-icon.blockera-main-icon {
+				opacity: 0.4;
+			}
+		}
+	}
+}
