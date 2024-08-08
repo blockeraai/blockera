@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 70,
-		"soft-supported": 82,
-		"not-supported": 49,
+		"supported": 71,
+		"soft-supported": 83,
+		"not-supported": 48,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -324,6 +324,11 @@
 			"name": "woocommerce/product-categories",
 			"title": "Product Categories List",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-rating-stars",
+			"title": "Product Rating Stars",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -445,10 +450,6 @@
 			"name": "woocommerce/products-by-attribute",
 			"title": "Products by Attribute",
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
-		},
-		{
-			"name": "woocommerce/product-rating-stars",
-			"title": "Product Rating Stars"
 		},
 		{
 			"name": "woocommerce/product-rating-counter",
