@@ -42,6 +42,7 @@ export * from './filled-cart-block';
 export * from './filled-mini-cart-contents-block';
 export * from './filter-wrapper';
 export * from './mini-cart-items-block';
+export * from './mini-cart-products-table-block';
 export * from './mini-cart-title-block';
 export * from './mini-cart-title-items-counter-block';
 export * from './mini-cart-title-label-block';
