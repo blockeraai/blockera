@@ -494,7 +494,8 @@
 		},
 		{
 			"name": "woocommerce/single-product",
-			"title": "Single Product"
+			"title": "Single Product",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
 		},
 		{
 			"name": "woocommerce/stock-filter",
