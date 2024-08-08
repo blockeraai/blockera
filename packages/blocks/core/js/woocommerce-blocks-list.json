@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 127,
-		"supported": 64,
-		"soft-supported": 71,
-		"not-supported": 56,
+		"supported": 65,
+		"soft-supported": 72,
+		"not-supported": 55,
 		"no-need-to-support": 7
 	},
 	"supported": [
@@ -294,6 +294,11 @@
 			"name": "woocommerce/all-reviews",
 			"title": "All Reviews",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/featured-category",
+			"title": "Featured Category",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -387,10 +392,6 @@
 		{
 			"name": "woocommerce/attribute-filter",
 			"title": "Filter by Attribute Controls"
-		},
-		{
-			"name": "woocommerce/featured-category",
-			"title": "Featured Category"
 		},
 		{
 			"name": "woocommerce/featured-product",
