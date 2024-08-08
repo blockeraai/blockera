@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 73,
-		"soft-supported": 85,
-		"not-supported": 46,
+		"supported": 74,
+		"soft-supported": 86,
+		"not-supported": 45,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -339,6 +339,10 @@
 			"name": "woocommerce/product-average-rating",
 			"title": "Product Average Rating (Beta)",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-sale-badge",
+			"title": "On-Sale Badge"
 		}
 	],
 	"no-need-to-support": [
@@ -460,10 +464,6 @@
 			"name": "woocommerce/products-by-attribute",
 			"title": "Products by Attribute",
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
-		},
-		{
-			"name": "woocommerce/product-sale-badge",
-			"title": "On-Sale Badge"
 		},
 		{
 			"name": "woocommerce/product-stock-indicator",
