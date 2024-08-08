@@ -1,11 +1,11 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 126,
+		"total": 127,
 		"supported": 64,
-		"soft-supported": 70,
+		"soft-supported": 71,
 		"not-supported": 56,
-		"no-need-to-support": 6
+		"no-need-to-support": 7
 	},
 	"supported": [
 		{
@@ -324,6 +324,10 @@
 		{
 			"name": "woocommerce/classic-shortcode",
 			"title": "Classic Shortcode"
+		},
+		{
+			"name": "woocommerce/legacy-template",
+			"title": "Product (Classic)"
 		}
 	],
 	"not-supported": [
