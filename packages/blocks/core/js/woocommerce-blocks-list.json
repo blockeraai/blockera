@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 88,
-		"soft-supported": 100,
-		"not-supported": 31,
+		"supported": 89,
+		"soft-supported": 101,
+		"not-supported": 30,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -401,7 +401,12 @@
 		},
 		{
 			"name": "woocommerce/mini-cart-footer-block",
-			"title": "Mini-Cart Footer"
+			"title": "Mini-Cart Footer",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/mini-cart-cart-button-block",
+			"title": "Mini-Cart View Cart Button"
 		}
 	],
 	"no-need-to-support": [
@@ -606,10 +611,6 @@
 		{
 			"name": "woocommerce/mini-cart-shopping-button-block",
 			"title": "Mini-Cart Shopping Button"
-		},
-		{
-			"name": "woocommerce/mini-cart-cart-button-block",
-			"title": "Mini-Cart View Cart Button"
 		},
 		{
 			"name": "woocommerce/mini-cart-checkout-button-block",
