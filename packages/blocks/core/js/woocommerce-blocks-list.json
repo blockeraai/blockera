@@ -3,9 +3,9 @@
 	"data": {
 		"total": 131,
 		"supported": 70,
-		"soft-supported": 81,
-		"not-supported": 50,
-		"no-need-to-support": 11
+		"soft-supported": 82,
+		"not-supported": 49,
+		"no-need-to-support": 12
 	},
 	"supported": [
 		{
@@ -378,6 +378,11 @@
 			"name": "woocommerce/filter-wrapper",
 			"title": "Filter By Rating",
 			"note": "It's a block variation of `woocommerce/filter-wrapper` that Blockera supports it. @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-summary",
+			"title": "Product Summary",
+			"note": "It's a block variation of `core/paragraph` that Blockera supports it."
 		}
 	],
 	"not-supported": [
@@ -452,10 +457,6 @@
 		{
 			"name": "woocommerce/product-average-rating",
 			"title": "Product Average Rating (Beta)"
-		},
-		{
-			"name": "woocommerce/product-summary",
-			"title": "Product Summary"
 		},
 		{
 			"name": "woocommerce/product-sale-badge",
