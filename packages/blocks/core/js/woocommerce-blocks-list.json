@@ -1,11 +1,11 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 124,
+		"total": 125,
 		"supported": 60,
-		"soft-supported": 63,
+		"soft-supported": 64,
 		"not-supported": 61,
-		"no-need-to-support": 3
+		"no-need-to-support": 4
 	},
 	"supported": [
 		{
@@ -284,12 +284,17 @@
 		{
 			"name": "core/post-terms",
 			"title": "Product categories",
-			"note": "It's a block variation."
+			"note": "It's a block variation of `core/post-terms` that Blockera supports it."
 		},
 		{
 			"name": "core/post-terms",
 			"title": "Product tags",
-			"note": "It's a block variation."
+			"note": "It's a block variation of `core/post-terms` that Blockera supports it."
+		},
+		{
+			"name": "core/query",
+			"title": "Related Products Controls",
+			"note": "It's a block variation of `core/query` that Blockera supports it."
 		}
 	],
 	"not-supported": [
