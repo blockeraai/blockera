@@ -3,9 +3,9 @@
 	"data": {
 		"total": 126,
 		"supported": 64,
-		"soft-supported": 69,
-		"not-supported": 57,
-		"no-need-to-support": 5
+		"soft-supported": 70,
+		"not-supported": 56,
+		"no-need-to-support": 6
 	},
 	"supported": [
 		{
@@ -320,6 +320,10 @@
 			"name": "woocommerce/product-search",
 			"title": "Product Search",
 			"note": "It's a block variation of `core/search` that Blockera supports it."
+		},
+		{
+			"name": "woocommerce/classic-shortcode",
+			"title": "Classic Shortcode"
 		}
 	],
 	"not-supported": [
@@ -379,10 +383,6 @@
 		{
 			"name": "woocommerce/attribute-filter",
 			"title": "Filter by Attribute Controls"
-		},
-		{
-			"name": "woocommerce/classic-shortcode",
-			"title": "Classic Shortcode"
 		},
 		{
 			"name": "woocommerce/featured-category",
