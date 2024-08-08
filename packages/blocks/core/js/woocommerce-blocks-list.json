@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 131,
-		"supported": 76,
-		"soft-supported": 88,
-		"not-supported": 43,
+		"supported": 77,
+		"soft-supported": 89,
+		"not-supported": 42,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -352,6 +352,11 @@
 			"name": "woocommerce/attribute-filter",
 			"title": "Filter by Attribute Controls",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/price-filter",
+			"title": "Filter by Price Controls",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -473,10 +478,6 @@
 			"name": "woocommerce/products-by-attribute",
 			"title": "Products by Attribute",
 			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
-		},
-		{
-			"name": "woocommerce/price-filter",
-			"title": "Filter by Price Controls"
 		},
 		{
 			"name": "woocommerce/product-collection-no-results",

@@ -53,6 +53,7 @@ export * from './order-confirmation-summary';
 export * from './order-confirmation-totals';
 export * from './order-confirmation-totals-wrapper';
 export * from './page-content-wrapper';
+export * from './price-filter';
 export * from './proceed-to-checkout-block';
 export * from './product-average-rating';
 export * from './product-button';
