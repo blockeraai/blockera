@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 126,
-		"supported": 63,
-		"soft-supported": 68,
-		"not-supported": 58,
+		"supported": 64,
+		"soft-supported": 69,
+		"not-supported": 57,
 		"no-need-to-support": 5
 	},
 	"supported": [
@@ -289,6 +289,11 @@
 			"name": "woocommerce/reviews-by-product",
 			"title": "Reviews by Product",
 			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/all-reviews",
+			"title": "All Reviews",
+			"note": "@todo we can add advanced inner blocks support."
 		}
 	],
 	"no-need-to-support": [
@@ -370,10 +375,6 @@
 		{
 			"name": "woocommerce/product-stock-indicator",
 			"title": "Product Stock Indicator"
-		},
-		{
-			"name": "woocommerce/all-reviews",
-			"title": "All Reviews"
 		},
 		{
 			"name": "woocommerce/attribute-filter",
