@@ -60,6 +60,50 @@
 					"note": {
 						"description": "Extra notes for developers.",
 						"type": "string"
+					},
+					"inner-blocks": {
+						"description": "List of inner blocks.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"description": "The block name (ID).",
+									"type": "string"
+								},
+								"title": {
+									"description": "The block title.",
+									"type": "string"
+								},
+								"icon": {
+									"description": "The block icon.",
+									"type": "object",
+									"properties": {
+										"icon": {
+											"description": "The block icon background.",
+											"type": "string"
+										},
+										"library": {
+											"description": "The block icon foreground.",
+											"type": "string",
+											"enum": [
+												"wp",
+												"ui",
+												"cursor",
+												"blockera"
+											]
+										}
+									},
+									"required": ["icon", "library"]
+								},
+								"note": {
+									"description": "Extra notes for inner block.",
+									"type": "string"
+								}
+							},
+							"required": ["name", "title"],
+							"additionalProperties": false
+						}
 					}
 				},
 				"required": ["name", "title"],
@@ -83,6 +127,50 @@
 					"note": {
 						"description": "Extra notes for developers.",
 						"type": "string"
+					},
+					"inner-blocks": {
+						"description": "List of inner blocks.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"description": "The block name (ID).",
+									"type": "string"
+								},
+								"title": {
+									"description": "The block title.",
+									"type": "string"
+								},
+								"icon": {
+									"description": "The block icon.",
+									"type": "object",
+									"properties": {
+										"icon": {
+											"description": "The block icon background.",
+											"type": "string"
+										},
+										"library": {
+											"description": "The block icon foreground.",
+											"type": "string",
+											"enum": [
+												"wp",
+												"ui",
+												"cursor",
+												"blockera"
+											]
+										}
+									},
+									"required": ["icon", "library"]
+								},
+								"note": {
+									"description": "Extra notes for inner block.",
+									"type": "string"
+								}
+							},
+							"required": ["name", "title"],
+							"additionalProperties": false
+						}
 					}
 				},
 				"required": ["name", "title"],
@@ -106,6 +194,50 @@
 					"note": {
 						"description": "Extra notes for developers.",
 						"type": "string"
+					},
+					"inner-blocks": {
+						"description": "List of inner blocks.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"description": "The block name (ID).",
+									"type": "string"
+								},
+								"title": {
+									"description": "The block title.",
+									"type": "string"
+								},
+								"icon": {
+									"description": "The block icon.",
+									"type": "object",
+									"properties": {
+										"icon": {
+											"description": "The block icon background.",
+											"type": "string"
+										},
+										"library": {
+											"description": "The block icon foreground.",
+											"type": "string",
+											"enum": [
+												"wp",
+												"ui",
+												"cursor",
+												"blockera"
+											]
+										}
+									},
+									"required": ["icon", "library"]
+								},
+								"note": {
+									"description": "Extra notes for inner block.",
+									"type": "string"
+								}
+							},
+							"required": ["name", "title"],
+							"additionalProperties": false
+						}
 					}
 				},
 				"required": ["name", "title"],
