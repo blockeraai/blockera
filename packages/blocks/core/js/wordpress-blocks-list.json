@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 70,
-		"soft-supported": 78,
-		"not-supported": 15,
+		"supported": 71,
+		"soft-supported": 79,
+		"not-supported": 14,
 		"no-need-to-support": 8
 	},
 	"supported": [
@@ -289,6 +289,10 @@
 		{
 			"name": "core/loginout",
 			"title": "Login/out"
+		},
+		{
+			"name": "core/rss",
+			"title": "RSS"
 		}
 	],
 	"no-need-to-support": [
@@ -334,11 +338,6 @@
 		}
 	],
 	"not-supported": [
-		{
-			"name": "core/rss",
-			"title": "RSS",
-			"note": "Advanced inner blocks setup needed"
-		},
 		{
 			"name": "core/spacer",
 			"title": "Spacer",
