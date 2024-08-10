@@ -86,7 +86,8 @@
 		},
 		{
 			"name": "core/latest-posts",
-			"title": "Latest Posts"
+			"title": "Latest Posts",
+			"note": "@todo there is a lot of room for inner blocks improvements."
 		},
 		{
 			"name": "core/media-text",
