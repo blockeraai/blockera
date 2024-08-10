@@ -3,9 +3,9 @@
 	"data": {
 		"total": 93,
 		"supported": 71,
-		"soft-supported": 79,
-		"not-supported": 14,
-		"no-need-to-support": 8
+		"soft-supported": 80,
+		"not-supported": 13,
+		"no-need-to-support": 9
 	},
 	"supported": [
 		{
@@ -335,6 +335,11 @@
 			"name": "core/block",
 			"title": "Pattern",
 			"note": "No supported for front end needed but we can add some custom functionality like conditions."
+		},
+		{
+			"name": "core/query",
+			"title": "Query Loop",
+			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
 		}
 	],
 	"not-supported": [
@@ -357,11 +362,6 @@
 			"name": "core/navigation-submenu",
 			"title": "Submenu",
 			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/query",
-			"title": "Query Loop",
-			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
 		},
 		{
 			"name": "core/template-part",
