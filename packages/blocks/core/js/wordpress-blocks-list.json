@@ -3,9 +3,9 @@
 	"data": {
 		"total": 93,
 		"supported": 70,
-		"soft-supported": 77,
-		"not-supported": 16,
-		"no-need-to-support": 7
+		"soft-supported": 78,
+		"not-supported": 15,
+		"no-need-to-support": 8
 	},
 	"supported": [
 		{
@@ -326,14 +326,14 @@
 			"name": "core/freeform",
 			"title": "Classic",
 			"note": "There is no wrapper tag for this block and can not be supported."
-		}
-	],
-	"not-supported": [
+		},
 		{
 			"name": "core/block",
 			"title": "Pattern",
 			"note": "No supported for front end needed but we can add some custom functionality like conditions."
-		},
+		}
+	],
+	"not-supported": [
 		{
 			"name": "core/rss",
 			"title": "RSS",
