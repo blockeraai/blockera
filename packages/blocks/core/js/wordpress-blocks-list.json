@@ -2,10 +2,10 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 70,
-		"soft-supported": 77,
-		"not-supported": 16,
-		"no-need-to-support": 7
+		"supported": 72,
+		"soft-supported": 85,
+		"not-supported": 8,
+		"no-need-to-support": 13
 	},
 	"supported": [
 		{
@@ -86,7 +86,8 @@
 		},
 		{
 			"name": "core/latest-posts",
-			"title": "Latest Posts"
+			"title": "Latest Posts",
+			"note": "@todo there is a lot of room for inner blocks improvements."
 		},
 		{
 			"name": "core/media-text",
@@ -289,6 +290,14 @@
 		{
 			"name": "core/loginout",
 			"title": "Login/out"
+		},
+		{
+			"name": "core/rss",
+			"title": "RSS"
+		},
+		{
+			"name": "core/latest-comments",
+			"title": "Latest Comments"
 		}
 	],
 	"no-need-to-support": [
@@ -326,19 +335,39 @@
 			"name": "core/freeform",
 			"title": "Classic",
 			"note": "There is no wrapper tag for this block and can not be supported."
-		}
-	],
-	"not-supported": [
+		},
 		{
 			"name": "core/block",
 			"title": "Pattern",
 			"note": "No supported for front end needed but we can add some custom functionality like conditions."
 		},
 		{
-			"name": "core/rss",
-			"title": "RSS",
-			"note": "Advanced inner blocks setup needed"
+			"name": "core/query",
+			"title": "Query Loop",
+			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
 		},
+		{
+			"name": "core/template-part",
+			"title": "Template Part",
+			"note": "No supported for front end needed but we can add some custom functionality like conditions."
+		},
+		{
+			"name": "core/more",
+			"title": "More",
+			"note": "Investigate if this block can be supported."
+		},
+		{
+			"name": "core/legacy-widget",
+			"title": "Legacy Widget",
+			"note": "Investigate if this block can be supported."
+		},
+		{
+			"name": "core/widget-group",
+			"title": "Widget Group",
+			"note": "Investigate if this block can be supported."
+		}
+	],
+	"not-supported": [
 		{
 			"name": "core/spacer",
 			"title": "Spacer",
@@ -360,28 +389,13 @@
 			"note": "Advanced editor setting panel compatibility needed."
 		},
 		{
-			"name": "core/query",
-			"title": "Query Loop",
-			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
-		},
-		{
-			"name": "core/template-part",
-			"title": "Template Part",
-			"note": "No supported for front end needed but we can add some custom functionality like conditions."
-		},
-		{
 			"name": "core/home-link",
 			"title": "Home Link",
 			"note": "Advanced editor setting panel compatibility needed."
 		},
 		{
-			"name": "core/legacy-widget",
-			"title": "Legacy Widget",
-			"note": "Investigate if this block can be supported."
-		},
-		{
-			"name": "core/widget-group",
-			"title": "Widget Group",
+			"name": "core/page-list-item",
+			"title": "Page List Item",
 			"note": "Investigate if this block can be supported."
 		},
 		{
@@ -393,21 +407,6 @@
 			"name": "core/calendar",
 			"title": "Calendar",
 			"note": "There is a block editor js error about attributes."
-		},
-		{
-			"name": "core/latest-comments",
-			"title": "Latest Comments",
-			"note": "Advanced inner blocks setup needed"
-		},
-		{
-			"name": "core/more",
-			"title": "More",
-			"note": "Investigate if this block can be supported."
-		},
-		{
-			"name": "core/page-list-item",
-			"title": "Page List Item",
-			"note": "Investigate if this block can be supported."
 		}
 	]
 }
