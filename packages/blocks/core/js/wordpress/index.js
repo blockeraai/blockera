@@ -29,6 +29,7 @@ export * from './gallery';
 export * from './group';
 export * from './heading';
 export * from './image';
+export * from './latest-comments';
 export * from './latest-posts';
 export * from './list';
 export * from './list-item';

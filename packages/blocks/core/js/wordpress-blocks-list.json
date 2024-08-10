@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 71,
-		"soft-supported": 80,
-		"not-supported": 13,
+		"supported": 72,
+		"soft-supported": 81,
+		"not-supported": 12,
 		"no-need-to-support": 9
 	},
 	"supported": [
@@ -293,6 +293,10 @@
 		{
 			"name": "core/rss",
 			"title": "RSS"
+		},
+		{
+			"name": "core/latest-comments",
+			"title": "Latest Comments"
 		}
 	],
 	"no-need-to-support": [
@@ -392,11 +396,6 @@
 			"name": "core/calendar",
 			"title": "Calendar",
 			"note": "There is a block editor js error about attributes."
-		},
-		{
-			"name": "core/latest-comments",
-			"title": "Latest Comments",
-			"note": "Advanced inner blocks setup needed"
 		},
 		{
 			"name": "core/more",
