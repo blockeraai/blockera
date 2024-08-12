@@ -122,7 +122,10 @@ export const BlockCompatibility: ComponentType<any> = memo(
 					);
 				}
 
-				setAttributes(mergeObject(attributes, filteredAttributes));
+				setAttributes({
+					...attributes,
+					...filteredAttributes,
+				});
 			},
 			// eslint-disable-next-line
 			[isActive, originalAttributes]
