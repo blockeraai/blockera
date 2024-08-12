@@ -6,7 +6,7 @@
  */
 
 return [
-	'elements/link' => [
+	'blockera/elements/link' => [
 		'root' => 'a:not(.wp-element-button)',
 	],
 ];

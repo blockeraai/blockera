@@ -6,13 +6,13 @@
  */
 
 return [
-	'elements/numbers' => [
+	'blockera/elements/numbers' => [
 		'root' => '.page-numbers:not(.dots)',
 	],
-	'elements/current' => [
+	'blockera/elements/current' => [
 		'root' => '.page-numbers.current',
 	],
-	'elements/dots'    => [
+	'blockera/elements/dots'    => [
 		'root' => '.page-numbers.dots',
 	],
 ];

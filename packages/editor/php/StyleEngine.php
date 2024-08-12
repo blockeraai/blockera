@@ -304,7 +304,7 @@ final class StyleEngine {
 		);
 
 		// Exclude inner blocks styles when hasn't any selectors for this context.
-		if ( empty( $selectors['innerBlocks'][ $blockType ] ) ) {
+		if ( empty( $selectors[ $blockType ] ) ) {
 
 			return [];
 		}
@@ -312,7 +312,7 @@ final class StyleEngine {
 		$this->definition->flushDeclarations();
 		$this->configureDefinition( $this->definition );
 		$this->definition->setSettings( $settings['attributes'] );
-		$this->definition->setSelectors( $selectors['innerBlocks'][ $blockType ] );
+		$this->definition->setSelectors( $selectors[ $blockType ] );
 
 		$cssRules = $this->definition->getCssRules();
 

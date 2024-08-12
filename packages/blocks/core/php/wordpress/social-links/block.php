@@ -22,16 +22,14 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/item-containers' => [
-						'root' => '.wp-block-social-link',
-					],
-					'elements/item-icons'      => [
-						'root' => '.wp-block-social-link svg',
-					],
-					'elements/item-names'      => [
-						'root' => '.wp-block-social-link .wp-block-social-link-label',
-					],
+				'blockera/elements/item-containers' => [
+					'root' => '.wp-block-social-link',
+				],
+				'blockera/elements/item-icons'      => [
+					'root' => '.wp-block-social-link svg',
+				],
+				'blockera/elements/item-names'      => [
+					'root' => '.wp-block-social-link .wp-block-social-link-label',
 				],
 			]
 		),

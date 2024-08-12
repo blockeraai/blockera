@@ -13,13 +13,11 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'core/heading'     => [
-						'root' => '.wc-block-components-checkout-step__heading .wc-block-components-title',
-					],
-					'core/description' => [
-						'root' => '.wc-block-components-checkout-step__description',
-					],
+				'blockera/core/heading'     => [
+					'root' => '.wc-block-components-checkout-step__heading .wc-block-components-title',
+				],
+				'blockera/core/description' => [
+					'root' => '.wc-block-components-checkout-step__description',
 				],
 			]
 		),

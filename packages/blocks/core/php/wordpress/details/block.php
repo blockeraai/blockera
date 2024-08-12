@@ -20,12 +20,10 @@ return array_merge(
 		),
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
-			[
-				'innerBlocks' => array_merge(
-					blockera_load( 'inners.link', dirname( __DIR__ ) ),
-					blockera_load( 'inners.paragraph', dirname( __DIR__ ) ),
-				),
-			]
+			(array) array_merge(
+				blockera_load( 'inners.link', dirname( __DIR__ ) ),
+				blockera_load( 'inners.paragraph', dirname( __DIR__ ) ),
+			)
 		),
 	]
 );

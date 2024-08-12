@@ -13,13 +13,11 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/term-item' => [
-						'root' => 'li.cat-item > a',
-					],
-					'elements/list-item' => [
-						'root' => 'li.cat-item',
-					],
+				'blockera/elements/term-item' => [
+					'root' => 'li.cat-item > a',
+				],
+				'blockera/elements/list-item' => [
+					'root' => 'li.cat-item',
 				],
 			]
 		),

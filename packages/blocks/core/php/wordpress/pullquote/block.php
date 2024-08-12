@@ -12,17 +12,15 @@ return array_merge(
 	[
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
-			[
-				'innerBlocks' => array_merge(
-					[
-						'elements/citation' => [
-							'root' => 'cite',
-						],
+			(array) array_merge(
+				[
+					'blockera/elements/citation' => [
+						'root' => 'cite',
 					],
-					blockera_load( 'inners.link', dirname( __DIR__ ) ),
-					blockera_load( 'inners.paragraph', dirname( __DIR__ ) ),
-				),
-			]
+				],
+				blockera_load( 'inners.link', dirname( __DIR__ ) ),
+				blockera_load( 'inners.paragraph', dirname( __DIR__ ) ),
+			)
 		),
 	]
 );

@@ -93,6 +93,21 @@ if ( ! function_exists( 'blockera_block_state_validate' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_append_blockera_block_prefix' ) ) {
+
+	/**
+	 * Appending "blockera/" prefix at block type name.
+	 *
+	 * @param string $block_type the block type name.
+	 *
+	 * @return string the block type name with "blockera/" prefix.
+	 */
+	function blockera_append_blockera_block_prefix( string $block_type ): string {
+
+		return "blockera/{$block_type}";
+	}
+}
+
 if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 	/**
 	 * Retrieve block state selectors.
@@ -123,8 +138,10 @@ if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 		// Handle inner blocks selectors based on recieved state.
 		if ( $isInner_block ) {
 
+			$inner_block_id = blockera_append_blockera_block_prefix( $block_type );
+
 			// Validate inner block type.
-			if ( empty( $selectors['innerBlocks'][ $block_type ] ) ) {
+			if ( empty( $selectors[ $inner_block_id ] ) ) {
 
 				return $selectors;
 			}
@@ -134,15 +151,15 @@ if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 					'fallback'   => $selectors['fallback'] ?? '',
 					'parentRoot' => $selectors['root'] ?? $selectors['fallback'] ?? '',
 				],
-				$selectors['innerBlocks'][ $block_type ],
+				$selectors[ $inner_block_id ],
 			);
 
-			$selectors['innerBlocks'][ $block_type ] = blockera_get_inner_block_state_selectors( $innerBlockSelectors, $args );
+			$selectors[ $inner_block_id ] = blockera_get_inner_block_state_selectors( $innerBlockSelectors, $args );
 
 			// Delete custom fallback and parentRoot selector of inner block list.
 			unset(
-				$selectors['innerBlocks'][ $block_type ]['fallback'],
-				$selectors['innerBlocks'][ $block_type ]['parentRoot']
+				$selectors[ $inner_block_id ]['fallback'],
+				$selectors[ $inner_block_id ]['parentRoot']
 			);
 
 			return $selectors;
@@ -153,7 +170,7 @@ if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 		foreach ( $selectors as $key => $value ) {
 
 			// Excluding inner blocks.
-			if ( 'innerBlocks' === $key ) {
+			if ( false === strpos( $key, 'blockera/' ) ) {
 
 				continue;
 			}

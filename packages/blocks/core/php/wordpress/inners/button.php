@@ -6,7 +6,7 @@
  */
 
 return [
-	'core/button' => [
+	'blockera/core/button' => [
 		'root' => '.wp-block-button > .wp-element-button',
 	],
 ];
