@@ -35,10 +35,10 @@ import {
 } from '../../hooks';
 import { SideEffect } from '../libs/base';
 import { BlockPartials } from './block-partials';
+import { isInnerBlock, propsAreEqual } from './utils';
 import { isBaseBreakpoint } from '../../canvas-editor';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
-import { isInnerBlock, propsAreEqual } from './utils';
 import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
 import { BlockCompatibility } from './block-compatibility';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
@@ -361,13 +361,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					<BlockCompatibility
 						{...{
 							args,
-							defaultAttributes,
-							availableAttributes,
-							getAttributesWithIds,
 							isActive,
-							attributes: _attributes,
+							defaultAttributes,
 							setCompatibilities,
 							originalAttributes,
+							availableAttributes,
+							getAttributesWithIds,
+							attributes: _attributes,
 						}}
 					/>
 					<SideEffect
