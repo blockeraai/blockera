@@ -3,8 +3,6 @@
 /**
  * External dependencies
  */
-import { applyFilters } from '@wordpress/hooks';
-import { detailedDiff } from 'deep-object-diff';
 import { SlotFillProvider, Fill } from '@wordpress/components';
 import type { Element, MixedElement, ComponentType } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
@@ -12,16 +10,16 @@ import { InspectorControls } from '@wordpress/block-editor';
 import {
 	memo,
 	useRef,
+	useMemo,
 	useState,
 	useEffect,
 	// StrictMode,
-	useTransition,
 } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { omit, isEquals, mergeObject, omitWithPattern } from '@blockera/utils';
+import { omit, isEquals, omitWithPattern } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
 /**
@@ -40,19 +38,13 @@ import { BlockPartials } from './block-partials';
 import { isBaseBreakpoint } from '../../canvas-editor';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
-import {
-	isInnerBlock,
-	propsAreEqual,
-	prepareAttributesDefaultValues,
-} from './utils';
-import {
-	ignoreBlockeraAttributeKeysRegExp,
-	ignoreDefaultBlockAttributeKeysRegExp,
-} from '../libs/utils';
+import { isInnerBlock, propsAreEqual } from './utils';
+import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
 import {
 	registerBlockExtensionsSupports,
 	registerInnerBlockExtensionsSupports,
 } from '../libs';
+import { BlockCompatibility } from './block-compatibility';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export type BlockBaseProps = {
@@ -66,119 +58,6 @@ export type BlockBaseProps = {
 	defaultAttributes: Object,
 };
 
-const FilterAttributes = memo(
-	({
-		args,
-		isActive,
-		attributes,
-		setAttributes,
-		defaultAttributes,
-		originalAttributes,
-		availableAttributes,
-		getAttributesWithIds,
-	}: {
-		args: Object,
-		isActive: boolean,
-		attributes: Object,
-		defaultAttributes: Object,
-		originalAttributes: Object,
-		availableAttributes: Object,
-		setAttributes: (attributes: Object) => void,
-		getAttributesWithIds: (attributes: Object, id: string) => Object,
-	}): MixedElement => {
-		useEffect(
-			() => {
-				/**
-				 * Filtering block attributes based on "blockeraCompatId" attribute value to running WordPress compatibilities.
-				 * Create mutable constant to prevent directly change to immutable state constant.
-				 *
-				 * hook: 'blockera.blockEdit.compatibility.attributes'
-				 *
-				 * @since 1.0.0
-				 */
-				let filteredAttributes = applyFilters(
-					'blockera.blockEdit.attributes',
-					{ ...originalAttributes },
-					args
-				);
-
-				const hasPropsId = attributes?.blockeraPropsId;
-				const hasCompatId = attributes?.blockeraCompatId;
-
-				if (!hasCompatId) {
-					filteredAttributes = getAttributesWithIds(
-						// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component,
-						// if we supported them.
-						'undefined' ===
-							typeof filteredAttributes?.blockeraPropsId &&
-							availableAttributes?.blockeraPropsId
-							? mergeObject(
-									filteredAttributes,
-									prepareAttributesDefaultValues(
-										defaultAttributes
-									)
-							  )
-							: filteredAttributes,
-						'blockeraCompatId'
-					);
-				}
-
-				// Assume disabled blockera panel, so filtering attributes to clean up all blockera attributes.
-				if (!isActive && hasCompatId && hasPropsId) {
-					filteredAttributes = {
-						...originalAttributes,
-						...omitWithPattern(
-							prepareAttributesDefaultValues(defaultAttributes),
-							ignoreDefaultBlockAttributeKeysRegExp()
-						),
-					};
-				}
-
-				// Prevent redundant set state!
-				if (isEquals(originalAttributes, filteredAttributes)) {
-					return;
-				}
-
-				const filteredAttributesWithoutIds = {
-					...filteredAttributes,
-					blockeraPropsId: '',
-					blockeraCompatId: '',
-					...(originalAttributes.hasOwnProperty('className')
-						? { className: originalAttributes?.className || '' }
-						: {}),
-				};
-
-				const { added, updated } = detailedDiff(
-					filteredAttributesWithoutIds,
-					prepareAttributesDefaultValues(defaultAttributes)
-				);
-
-				// Our Goal is cleanup blockera attributes of core blocks when not changed anything!
-				if (
-					!Object.keys(added).length &&
-					!Object.keys(updated).length &&
-					isEquals(originalAttributes, filteredAttributesWithoutIds)
-				) {
-					return;
-				}
-
-				if (hasCompatId && !hasPropsId) {
-					filteredAttributes = getAttributesWithIds(
-						filteredAttributes,
-						'blockeraPropsId'
-					);
-				}
-
-				setAttributes(mergeObject(attributes, filteredAttributes));
-			},
-			// eslint-disable-next-line
-		[isActive, originalAttributes]
-		);
-
-		return <></>;
-	}
-);
-
 export const BlockBase: ComponentType<BlockBaseProps> = memo(
 	({
 		additional,
@@ -191,24 +70,21 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		defaultAttributes,
 		...props
 	}: BlockBaseProps): Element<any> | null => {
-		const [, startTransition] = useTransition();
 		const [attributes, updateAttributes] = useState(_attributes);
 		const [currentTab, setCurrentTab] = useState(
 			additional?.activeTab || 'style'
 		);
+		const [isCompatibleWithWP, setWPCompatibility] = useState(false);
 
 		const setAttributes = (newAttributes: Object): void => {
-			startTransition(() => {
-				updateAttributes(newAttributes);
-			});
+			setWPCompatibility(false);
+			updateAttributes(newAttributes);
 		};
 
 		useEffect(() => {
-			startTransition(() => {
-				if (!isEquals(attributes, _attributes)) {
-					_setAttributes(attributes);
-				}
-			});
+			if (!isEquals(attributes, _attributes) && !isCompatibleWithWP) {
+				_setAttributes(attributes);
+			}
 			// eslint-disable-next-line
 		}, [attributes]);
 
@@ -438,10 +314,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			// eslint-disable-next-line
 		}, [activeBlockVariation]);
 
-		const originalAttributes = omitWithPattern(
-			omit(_attributes, ['content']),
-			ignoreBlockeraAttributeKeysRegExp()
-		);
+		const originalAttributes = useMemo(() => {
+			return omitWithPattern(
+				omit(_attributes, ['content']),
+				ignoreBlockeraAttributeKeysRegExp()
+			);
+		}, [_attributes]);
 
 		return (
 			<BlockEditContextProvider
@@ -476,15 +354,19 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			>
 				{/*<StrictMode>*/}
 				<InspectorControls>
-					<FilterAttributes
+					<BlockCompatibility
 						{...{
 							args,
 							defaultAttributes,
 							availableAttributes,
 							getAttributesWithIds,
 							isActive,
-							attributes,
-							setAttributes,
+							attributes: _attributes,
+							setAttributes: (newAttributes: Object): void => {
+								updateAttributes(newAttributes);
+								_setAttributes(newAttributes);
+								setWPCompatibility(true);
+							},
 							originalAttributes,
 						}}
 					/>
