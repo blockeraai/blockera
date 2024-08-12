@@ -115,6 +115,9 @@ class Setup {
 			case 'core':
 				$this->block_dir_path = sprintf( 'wordpress/%s', $parsedName[1] );
 				break;
+			case 'woocommerce':
+				$this->block_dir_path = sprintf( 'woocommerce/%s', $parsedName[1] );
+				break;
 			// TODO: Implements other blocks in this here ...
 		}
 	}

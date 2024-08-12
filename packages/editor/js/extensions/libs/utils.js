@@ -95,6 +95,15 @@ export function ignoreDefaultBlockAttributeKeysRegExp(): Object {
 }
 
 /**
+ * Exclude or ignore blockera attribute keys with regular expression.
+ *
+ * @return {Object} The regex pattern.
+ */
+export function ignoreBlockeraAttributeKeysRegExp(): Object {
+	return /^blockera\w+/i;
+}
+
+/**
  * Is reference of sets value one of types "reset" or "reset_all_states"?
  *
  * @param {ControlContextRefCurrent} ref the reference of control context provider while calling setState.
