@@ -17,6 +17,10 @@ import { isObject, isFunction, mergeObject, isEmpty } from '@blockera/utils';
  * Internal dependencies
  */
 import {
+	registerBlockExtensionsSupports,
+	registerInnerBlockExtensionsSupports,
+} from '../libs';
+import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
 } from '../../components';
@@ -126,6 +130,7 @@ function mergeBlockSettings(
 		getSharedBlockAttributes = () => ({}),
 		getBlockTypeAttributes = () => ({}),
 	} = select('blockera/extensions') || {};
+	const { getExtension } = select('blockera/extensions/config');
 
 	const isAvailableBlock = () =>
 		!unsupportedBlocks.includes(settings.name) &&
@@ -173,6 +178,19 @@ function mergeBlockSettings(
 	)
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
+
+	const { registerExtensions = null } = additional;
+
+	// On registering block type, we're firing bootstrapper scripts and add experimental extensions support.
+	if ('function' === typeof registerExtensions) {
+		registerExtensions(settings.name);
+	} else if (!getExtension(settings.name)) {
+		registerBlockExtensionsSupports(settings.name);
+		registerInnerBlockExtensionsSupports(
+			settings.name,
+			additional?.blockeraInnerBlocks || {}
+		);
+	}
 
 	return {
 		...settings,

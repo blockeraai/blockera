@@ -40,10 +40,6 @@ import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { isInnerBlock, propsAreEqual } from './utils';
 import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
-import {
-	registerBlockExtensionsSupports,
-	registerInnerBlockExtensionsSupports,
-} from '../libs';
 import { BlockCompatibility } from './block-compatibility';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
@@ -140,21 +136,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentInnerBlockState,
 		});
 
-		const { edit: BlockEditComponent, registerExtensions = null } =
-			additional;
-
-		// On mounting block base component, we're firing bootstrapper scripts and add experimental extensions support.
-		useEffect(() => {
-			if ('function' === typeof registerExtensions) {
-				registerExtensions(name);
-
-				return;
-			}
-
-			registerBlockExtensionsSupports(name);
-			registerInnerBlockExtensionsSupports(name, blockeraInnerBlocks);
-			// eslint-disable-next-line
-		}, []);
+		const { edit: BlockEditComponent } = additional;
 
 		const masterIsNormalState = (): boolean =>
 			'normal' === currentState && isBaseBreakpoint(getDeviceType());
