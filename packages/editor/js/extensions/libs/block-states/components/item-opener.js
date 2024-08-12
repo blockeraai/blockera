@@ -25,7 +25,7 @@ const ItemOpener = ({
 		return false;
 	}
 
-	return <Icon library={'blockera'} icon={'blockeraSettings'} />;
+	return <Icon library={'ui'} icon={'gear'} iconSize={18} />;
 };
 
 ItemOpener.hasButton = (item: StateTypes, itemId: TStates): boolean =>
