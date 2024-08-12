@@ -24,7 +24,7 @@ export const BlockCompatibility: ComponentType<any> = memo(
 		args,
 		isActive,
 		attributes,
-		setAttributes,
+		setCompatibilities,
 		defaultAttributes,
 		originalAttributes,
 		availableAttributes,
@@ -36,7 +36,7 @@ export const BlockCompatibility: ComponentType<any> = memo(
 		defaultAttributes: Object,
 		originalAttributes: Object,
 		availableAttributes: Object,
-		setAttributes: (attributes: Object) => void,
+		setCompatibilities: (attributes: Object) => void,
 		getAttributesWithIds: (attributes: Object, id: string) => Object,
 	}): MixedElement => {
 		useEffect(
@@ -122,10 +122,7 @@ export const BlockCompatibility: ComponentType<any> = memo(
 					);
 				}
 
-				setAttributes({
-					...attributes,
-					...filteredAttributes,
-				});
+				setCompatibilities(filteredAttributes);
 			},
 			// eslint-disable-next-line
 			[isActive, originalAttributes]
@@ -134,7 +131,10 @@ export const BlockCompatibility: ComponentType<any> = memo(
 		return <></>;
 	},
 	(perv, next) => {
-		const keys: Array<string> = ['getAttributesWithIds', 'setAttributes'];
+		const keys: Array<string> = [
+			'getAttributesWithIds',
+			'setCompatibilities',
+		];
 
 		return isEquals(omit(perv, keys), omit(next, keys));
 	}

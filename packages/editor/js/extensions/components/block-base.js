@@ -72,11 +72,30 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		);
 		const [isCompatibleWithWP, setWPCompatibility] = useState(false);
 
+		/**
+		 * Sets attributes and wp compatibility states.
+		 *
+		 * @param {Object} newAttributes the next attributes state.
+		 */
 		const setAttributes = (newAttributes: Object): void => {
 			setWPCompatibility(false);
 			updateAttributes(newAttributes);
 		};
 
+		/**
+		 * Sets native attributes and wp compatibility and block original states.
+		 *
+		 * @param {Object} newAttributes the next attributes state.
+		 */
+		const setCompatibilities = (newAttributes: Object): void => {
+			setWPCompatibility(true);
+			_setAttributes(newAttributes);
+			updateAttributes(newAttributes);
+		};
+
+		/**
+		 * Updating block original attributes state while changed native attributes state.
+		 */
 		useEffect(() => {
 			if (!isEquals(attributes, _attributes) && !isCompatibleWithWP) {
 				_setAttributes(attributes);
@@ -291,7 +310,10 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					return;
 				}
 
-				setAttributes(filteredAttributes);
+				// Prevent of bad set state!
+				if (!isEquals(attributes, filteredAttributes)) {
+					updateAttributes(filteredAttributes);
+				}
 			}
 			// eslint-disable-next-line
 		}, [activeBlockVariation]);
@@ -344,11 +366,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							getAttributesWithIds,
 							isActive,
 							attributes: _attributes,
-							setAttributes: (newAttributes: Object): void => {
-								updateAttributes(newAttributes);
-								_setAttributes(newAttributes);
-								setWPCompatibility(true);
-							},
+							setCompatibilities,
 							originalAttributes,
 						}}
 					/>
