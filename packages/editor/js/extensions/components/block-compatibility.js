@@ -24,8 +24,8 @@ export const BlockCompatibility: ComponentType<any> = memo(
 		args,
 		isActive,
 		attributes,
-		setCompatibilities,
 		defaultAttributes,
+		setCompatibilities,
 		originalAttributes,
 		availableAttributes,
 		getAttributesWithIds,
@@ -136,6 +136,12 @@ export const BlockCompatibility: ComponentType<any> = memo(
 			'setCompatibilities',
 		];
 
-		return isEquals(omit(perv, keys), omit(next, keys));
+		const pervContent = perv?.attributes?.content;
+		const nextContent = next?.attributes?.content;
+
+		return (
+			isEquals(pervContent, nextContent) &&
+			isEquals(omit(perv, keys), omit(next, keys))
+		);
 	}
 );
