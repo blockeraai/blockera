@@ -7,6 +7,7 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
+import { isBlockNotOriginalState } from '@blockera/editor/js/extensions/libs/utils';
 
 /**
  * Internal dependencies
@@ -38,6 +39,13 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 				!isNormalState ||
 				!isBaseBreakpoint ||
 				!isMasterBlock
+			) {
+				return attributes;
+			}
+
+			if (
+				blockId !== 'core/social-links' ||
+				isBlockNotOriginalState(blockDetail)
 			) {
 				return attributes;
 			}
