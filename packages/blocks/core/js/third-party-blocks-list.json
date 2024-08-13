@@ -1,0 +1,22 @@
+{
+	"$schema": "./schemas/blocks.schema.json",
+	"data": {
+		"total": 1,
+		"supported": 1,
+		"soft-supported": 1,
+		"not-supported": 0,
+		"no-need-to-support": 0
+	},
+	"supported": [
+		{
+			"name": "outermost/icon-block",
+			"title": "Icon",
+			"product": {
+				"name": "The Icon Block By Nick Diego",
+				"link": "https://wordpress.org/plugins/icon-block/"
+			}
+		}
+	],
+	"no-need-to-support": [],
+	"not-supported": []
+}
