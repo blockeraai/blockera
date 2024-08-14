@@ -36,15 +36,6 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 
 			if (
 				blockId !== 'core/social-links' ||
-				!isNormalState ||
-				!isBaseBreakpoint ||
-				!isMasterBlock
-			) {
-				return attributes;
-			}
-
-			if (
-				blockId !== 'core/social-links' ||
 				isBlockNotOriginalState(blockDetail)
 			) {
 				return attributes;
@@ -114,7 +105,11 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 				innerBlocks,
 			} = blockDetail;
 
-			if (!isBaseBreakpoint || isMasterBlock) {
+			if (
+				blockId !== 'core/social-links' ||
+				!isBaseBreakpoint ||
+				isMasterBlock
+			) {
 				return nextState;
 			}
 
