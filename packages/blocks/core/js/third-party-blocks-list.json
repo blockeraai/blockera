@@ -12,7 +12,8 @@
 			"name": "outermost/icon-block",
 			"title": "Icon",
 			"product": {
-				"name": "The Icon Block By Nick Diego",
+				"name": "The Icon Block",
+				"author": "Nick Diego",
 				"link": "https://wordpress.org/plugins/icon-block/"
 			}
 		}
