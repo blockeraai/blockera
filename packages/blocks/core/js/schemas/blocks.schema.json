@@ -60,21 +60,18 @@
 					"product": {
 						"description": "Related product of the block.",
 						"type": "object",
-						"items": {
-							"type": "object",
-							"properties": {
-								"name": {
-									"description": "The Product name.",
-									"type": "string"
-								},
-								"link": {
-									"description": "The block link.",
-									"type": "string"
-								}
+						"properties": {
+							"name": {
+								"description": "The Product name.",
+								"type": "string"
 							},
-							"required": ["name", "link"],
-							"additionalProperties": false
-						}
+							"link": {
+								"description": "The block link.",
+								"type": "string"
+							}
+						},
+						"required": ["name", "link"],
+						"additionalProperties": false
 					},
 					"note": {
 						"description": "Extra notes for developers.",
@@ -102,21 +99,18 @@
 					"product": {
 						"description": "Related product of the block.",
 						"type": "object",
-						"items": {
-							"type": "object",
-							"properties": {
-								"name": {
-									"description": "The Product name.",
-									"type": "string"
-								},
-								"link": {
-									"description": "The block link.",
-									"type": "string"
-								}
+						"properties": {
+							"name": {
+								"description": "The Product name.",
+								"type": "string"
 							},
-							"required": ["name", "link"],
-							"additionalProperties": false
-						}
+							"link": {
+								"description": "The block link.",
+								"type": "string"
+							}
+						},
+						"required": ["name", "link"],
+						"additionalProperties": false
 					},
 					"note": {
 						"description": "Extra notes for developers.",
@@ -144,21 +138,18 @@
 					"product": {
 						"description": "Related product of the block.",
 						"type": "object",
-						"items": {
-							"type": "object",
-							"properties": {
-								"name": {
-									"description": "The Product name.",
-									"type": "string"
-								},
-								"link": {
-									"description": "The block link.",
-									"type": "string"
-								}
+						"properties": {
+							"name": {
+								"description": "The Product name.",
+								"type": "string"
 							},
-							"required": ["name", "link"],
-							"additionalProperties": false
-						}
+							"link": {
+								"description": "The block link.",
+								"type": "string"
+							}
+						},
+						"required": ["name", "link"],
+						"additionalProperties": false
 					},
 					"note": {
 						"description": "Extra notes for developers.",
