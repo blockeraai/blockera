@@ -4,7 +4,7 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useEffect } from '@wordpress/element';
+import { memo, useEffect } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
@@ -17,14 +17,23 @@ import { isObject, isFunction, mergeObject, isEmpty } from '@blockera/utils';
  * Internal dependencies
  */
 import {
+	registerBlockExtensionsSupports,
+	registerInnerBlockExtensionsSupports,
+} from '../libs';
+import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
 } from '../../components';
 import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors } from '../../hooks';
-import { BlockBase, BlockPortals, BlockIcon } from '../components';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 import { sanitizedBlockAttributes, sanitizeDefaultAttributes } from './utils';
+import {
+	BlockBase,
+	BlockPortals,
+	BlockIcon,
+	propsAreEqual,
+} from '../components';
 
 const useSharedBlockSideEffect = (): void => {
 	const {
@@ -126,6 +135,7 @@ function mergeBlockSettings(
 		getSharedBlockAttributes = () => ({}),
 		getBlockTypeAttributes = () => ({}),
 	} = select('blockera/extensions') || {};
+	const { getExtension } = select('blockera/extensions/config');
 
 	const isAvailableBlock = () =>
 		!unsupportedBlocks.includes(settings.name) &&
@@ -174,6 +184,70 @@ function mergeBlockSettings(
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
 
+	const { registerExtensions = null } = additional;
+
+	// On registering block type, we're firing bootstrapper scripts and add experimental extensions support.
+	if ('function' === typeof registerExtensions) {
+		registerExtensions(settings.name);
+	} else if (!getExtension(settings.name)) {
+		registerBlockExtensionsSupports(settings.name);
+		registerInnerBlockExtensionsSupports(
+			settings.name,
+			additional?.blockeraInnerBlocks || {}
+		);
+	}
+
+	const Edit = memo((props: Object): MixedElement => {
+		if (isFunction(additional?.edit) && isAvailableBlock()) {
+			const baseContextValue = {
+				components: {
+					FeatureWrapper: EditorFeatureWrapper,
+					AdvancedLabelControl: EditorAdvancedLabelControl,
+				},
+			};
+
+			return (
+				<BaseControlContext.Provider value={baseContextValue}>
+					<BlockBase
+						{...{
+							...props,
+							additional,
+							defaultAttributes: !settings.attributes
+								?.blockeraPropsId
+								? mergeObject(
+										settings.attributes,
+										blockeraOverrideBlockAttributes
+								  )
+								: settings.attributes,
+						}}
+					>
+						<SlotFillProvider>
+							<Slot name={'blockera-block-before'} />
+
+							<BlockPortals
+								blockId={`#block-${props.clientId}`}
+								mainSlot={'blockera-block-slot'}
+								slots={
+									// slot selectors is feature on configuration block to create custom slots for anywhere.
+									// we can add slotSelectors property on block configuration to handle custom preview of block.
+									additional?.slotSelectors || {}
+								}
+							/>
+
+							<Slot name={'blockera-block-after'} />
+						</SlotFillProvider>
+					</BlockBase>
+					{settings.edit(props)}
+				</BaseControlContext.Provider>
+			);
+		}
+
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		useSharedBlockSideEffect();
+
+		return settings.edit(props);
+	}, propsAreEqual);
+
 	return {
 		...settings,
 		attributes: !settings.attributes?.blockeraPropsId
@@ -189,56 +263,7 @@ function mergeBlockSettings(
 			...(additional?.transforms || {}),
 		},
 		variations: getVariations(),
-		edit(props: Object): MixedElement {
-			if (isFunction(additional?.edit) && isAvailableBlock()) {
-				const baseContextValue = {
-					components: {
-						FeatureWrapper: EditorFeatureWrapper,
-						AdvancedLabelControl: EditorAdvancedLabelControl,
-					},
-				};
-
-				return (
-					<BaseControlContext.Provider value={baseContextValue}>
-						<BlockBase
-							{...{
-								...props,
-								additional,
-								defaultAttributes: !settings.attributes
-									?.blockeraPropsId
-									? mergeObject(
-											settings.attributes,
-											blockeraOverrideBlockAttributes
-									  )
-									: settings.attributes,
-							}}
-						>
-							<SlotFillProvider>
-								<Slot name={'blockera-block-before'} />
-
-								<BlockPortals
-									blockId={`#block-${props.clientId}`}
-									mainSlot={'blockera-block-slot'}
-									slots={
-										// slot selectors is feature on configuration block to create custom slots for anywhere.
-										// we can add slotSelectors property on block configuration to handle custom preview of block.
-										additional?.slotSelectors || {}
-									}
-								/>
-
-								<Slot name={'blockera-block-after'} />
-							</SlotFillProvider>
-						</BlockBase>
-						{settings.edit(props)}
-					</BaseControlContext.Provider>
-				);
-			}
-
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			useSharedBlockSideEffect();
-
-			return settings.edit(props);
-		},
+		edit: Edit,
 		save(props: Object): MixedElement {
 			if (!isAvailableBlock()) {
 				return settings?.save(props);

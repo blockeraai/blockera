@@ -57,6 +57,26 @@
 						"description": "The block title.",
 						"type": "string"
 					},
+					"product": {
+						"description": "Related product of the block.",
+						"type": "object",
+						"properties": {
+							"name": {
+								"description": "The Product name.",
+								"type": "string"
+							},
+							"author": {
+								"description": "The Product author.",
+								"type": "string"
+							},
+							"link": {
+								"description": "The block link.",
+								"type": "string"
+							}
+						},
+						"required": ["name", "author", "link"],
+						"additionalProperties": false
+					},
 					"note": {
 						"description": "Extra notes for developers.",
 						"type": "string"
@@ -124,6 +144,26 @@
 						"description": "The block title.",
 						"type": "string"
 					},
+					"product": {
+						"description": "Related product of the block.",
+						"type": "object",
+						"properties": {
+							"name": {
+								"description": "The Product name.",
+								"type": "string"
+							},
+							"author": {
+								"description": "The Product author.",
+								"type": "string"
+							},
+							"link": {
+								"description": "The block link.",
+								"type": "string"
+							}
+						},
+						"required": ["name", "author", "link"],
+						"additionalProperties": false
+					},
 					"note": {
 						"description": "Extra notes for developers.",
 						"type": "string"
@@ -190,6 +230,26 @@
 					"title": {
 						"description": "The block title.",
 						"type": "string"
+					},
+					"product": {
+						"description": "Related product of the block.",
+						"type": "object",
+						"properties": {
+							"name": {
+								"description": "The Product name.",
+								"type": "string"
+							},
+							"author": {
+								"description": "The Product author.",
+								"type": "string"
+							},
+							"link": {
+								"description": "The block link.",
+								"type": "string"
+							}
+						},
+						"required": ["name", "author", "link"],
+						"additionalProperties": false
 					},
 					"note": {
 						"description": "Extra notes for developers.",

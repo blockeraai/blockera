@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -8,58 +10,46 @@ import { addFilter } from '@wordpress/hooks';
  */
 import { mergeObject } from '@blockera/utils';
 import { isBlockNotOriginalState } from '@blockera/editor/js/extensions/libs/utils';
+import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-states/types';
+import type { ControlContextRef } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import {
-	normalIconColorFromWPCompatibility,
-	normalIconColorToWPCompatibility,
+	iconColorFromWPCompatibility,
+	iconColorToWPCompatibility,
 } from './compatibility/icon-color';
+
 import {
-	normalIconBackgroundColorFromWPCompatibility,
-	normalIconBackgroundColorToWPCompatibility,
+	iconBackgroundColorFromWPCompatibility,
+	iconBackgroundColorToWPCompatibility,
 } from './compatibility/icon-background-color';
 
-export const bootstrapSocialLinksCoreBlock = (): void => {
+export const bootstrapOutermostIconBlock = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
-		'blockera.blockEdit.socialLinksBlock.bootstrap',
+		'blockera.blockEdit.OutermostIconBlock.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { blockId } = blockDetail;
 
 			if (
-				blockId !== 'core/social-links' ||
+				blockId !== 'outermost/icon-block' ||
 				isBlockNotOriginalState(blockDetail)
 			) {
 				return attributes;
 			}
 
-			if (
-				!attributes?.blockeraInnerBlocks['elements/item-icons']
-					?.attributes?.blockeraFontColor
-			) {
-				const newAttributes = normalIconColorFromWPCompatibility({
+			if (!attributes?.blockeraFontColor) {
+				attributes = iconColorFromWPCompatibility({
 					attributes,
 				});
-
-				if (newAttributes) {
-					attributes = mergeObject(attributes, newAttributes);
-				}
 			}
 
-			if (
-				!attributes?.blockeraInnerBlocks['elements/item-containers']
-					?.attributes?.blockeraBackgroundColor
-			) {
-				const newAttributes =
-					normalIconBackgroundColorFromWPCompatibility({
-						attributes,
-					});
-
-				if (newAttributes) {
-					attributes = mergeObject(attributes, newAttributes);
-				}
+			if (!attributes?.blockeraBackgroundColor) {
+				attributes = iconBackgroundColorFromWPCompatibility({
+					attributes,
+				});
 			}
 
 			return attributes;
@@ -68,7 +58,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 
 	addFilter(
 		'blockera.blockEdit.setAttributes',
-		'blockera.blockEdit.socialLinksBlock.bootstrap.setAttributes',
+		'blockera.blockEdit.OutermostIconBlock.bootstrap.setAttributes',
 		/**
 		 * Retrieve block attributes with WordPress compatibilities.
 		 *
@@ -91,35 +81,23 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const {
-				blockId,
-				isBaseBreakpoint,
-				isMasterBlock,
-				currentState,
-				currentBlock,
-				innerBlocks,
-			} = blockDetail;
+			const { blockId, isBaseBreakpoint, isMasterBlock } = blockDetail;
 
 			if (
-				blockId !== 'core/social-links' ||
+				blockId !== 'outermost/icon-block' ||
 				!isBaseBreakpoint ||
-				isMasterBlock
+				!isMasterBlock
 			) {
 				return nextState;
 			}
 
 			//
-			// icon font color
+			// icon color
 			//
-			if (
-				currentBlock === 'elements/item-icons' &&
-				currentState === 'normal' &&
-				featureId === 'blockeraFontColor'
-			) {
+			if (featureId === 'blockeraFontColor') {
 				return mergeObject(
 					nextState,
-					normalIconColorToWPCompatibility({
-						element: currentBlock,
+					iconColorToWPCompatibility({
 						newValue,
 						ref,
 					})
@@ -127,17 +105,12 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 			}
 
 			//
-			// container background color
+			// icon background color
 			//
-			if (
-				currentBlock === 'elements/item-containers' &&
-				currentState === 'normal' &&
-				featureId === 'blockeraBackgroundColor'
-			) {
+			if (featureId === 'blockeraBackgroundColor') {
 				return mergeObject(
 					nextState,
-					normalIconBackgroundColorToWPCompatibility({
-						element: currentBlock,
+					iconBackgroundColorToWPCompatibility({
 						newValue,
 						ref,
 					})

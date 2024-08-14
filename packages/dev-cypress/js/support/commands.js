@@ -512,10 +512,14 @@ export const registerCommands = () => {
 			.last()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type(value + ' ');
-
-				// close popover
-				cy.getByAriaLabel('Close').click();
+				cy.get('input[maxlength="9"]')
+					.type(value + ' ', { delay: 0 })
+					.then(() => {
+						if (Cypress.$(`[aria-label="Close"]`).length) {
+							// close popover
+							Cypress.$(`[aria-label="Close"]`)[0].click();
+						}
+					});
 			});
 	});
 

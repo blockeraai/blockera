@@ -1,54 +1,23 @@
 // @flow
 
-import { applyFilters } from '@wordpress/hooks';
-
 /**
  * Blockera dependencies
  */
-import { omitWithPattern, hasSameProps } from '@blockera/utils';
+import { isEquals, omit } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
-// import { detailedDiff } from 'deep-object-diff';
 import type { TStates } from '../libs/block-states/types';
 import type { InnerBlockType } from '../libs/inner-blocks/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
 
-export const propsAreEqual = (
-	prev: { attributes: Object, name: string },
-	next: { attributes: Object }
-): boolean => {
-	const normalizedBlockName = prev.name.replace('/', '.');
+export const propsAreEqual = (perv: Object, next: Object): boolean => {
+	const excludeKeys = ['content'];
 
-	const excludedAttributeKeys = applyFilters(
-		`blockera.blockEdit.${normalizedBlockName}.memoization.excludedAttributeKeys`,
-		['content']
-	).map((attributeId: string): string => `\b${attributeId}\b`);
-
-	//FIXME: we needs to declaration excludedAttributeKeys for WP Compatibilities and prevent of redundant re-rendering process,
-	// please double check all extensions bootstrap files to define these!
-	if (!excludedAttributeKeys.length) {
-		// Debug Code:
-		// console.log('No Excluded Keys of Props:',detailedDiff(prev.attributes, next.attributes));
-
-		return hasSameProps(prev.attributes, next.attributes);
-	}
-
-	const regexp = new RegExp(excludedAttributeKeys.join('|'));
-
-	// Debug Code:
-	// console.log(
-	//	'With Excluded Keys of Props:'
-	// 	detailedDiff(
-	// 		omitWithPattern(prev.attributes, regexp),
-	// 		omitWithPattern(next.attributes, regexp)
-	// 	)
-	// );
-
-	return hasSameProps(
-		omitWithPattern(prev.attributes, regexp),
-		omitWithPattern(next.attributes, regexp)
+	return isEquals(
+		omit(perv?.attributes, excludeKeys),
+		omit(next?.attributes, excludeKeys)
 	);
 };
 

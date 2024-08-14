@@ -9,10 +9,11 @@ import Ajv from 'ajv';
 import schema from '../schemas/blocks.schema.json';
 import wordpressBlocks from '../wordpress-blocks-list.json';
 import wooCommerceBlocks from '../woocommerce-blocks-list.json';
+import thirdPartyBlocks from '../third-party-blocks-list.json';
 
 const ajv = new Ajv();
 
-['WordPress', 'WooCommerce'].forEach((product) => {
+['WordPress', 'WooCommerce', 'Third Party'].forEach((product) => {
 	switch (product) {
 		case 'WordPress':
 			var blocks = wordpressBlocks;
@@ -20,6 +21,10 @@ const ajv = new Ajv();
 
 		case 'WooCommerce':
 			var blocks = wooCommerceBlocks;
+			break;
+
+		case 'Third Party':
+			var blocks = thirdPartyBlocks;
 			break;
 	}
 
