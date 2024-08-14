@@ -13,16 +13,14 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/item-container' => [
-						'root' => '.wc-block-order-confirmation-summary-list-item',
-					],
-					'elements/item-title'     => [
-						'root' => '.wc-block-order-confirmation-summary-list-item__key',
-					],
-					'elements/item-value'     => [
-						'root' => 'wc-block-order-confirmation-summary-list-item__value',
-					],
+				'blockera/elements/item-container' => [
+					'root' => '.wc-block-order-confirmation-summary-list-item',
+				],
+				'blockera/elements/item-title'     => [
+					'root' => '.wc-block-order-confirmation-summary-list-item__key',
+				],
+				'blockera/elements/item-value'     => [
+					'root' => 'wc-block-order-confirmation-summary-list-item__value',
 				],
 			]
 		),

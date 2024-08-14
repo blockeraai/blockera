@@ -13,10 +13,8 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/sale-badge' => [
-						'root' => '.wc-block-components-product-sale-badge',
-					],
+				'blockera/elements/sale-badge' => [
+					'root' => '.wc-block-components-product-sale-badge',
 				],
 			]
 		),

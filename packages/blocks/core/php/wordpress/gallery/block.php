@@ -22,16 +22,14 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'core/image'               => [
-						'root' => '.wp-block-image img',
-					],
-					'elements/gallery-caption' => [
-						'root' => '> figcaption',
-					],
-					'elements/image-caption'   => [
-						'root' => '.wp-block-image figcaption',
-					],
+				'blockera/core/image'               => [
+					'root' => '.wp-block-image img',
+				],
+				'blockera/elements/gallery-caption' => [
+					'root' => '> figcaption',
+				],
+				'blockera/elements/image-caption'   => [
+					'root' => '.wp-block-image figcaption',
 				],
 			]
 		),

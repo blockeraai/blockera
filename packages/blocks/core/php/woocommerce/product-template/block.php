@@ -21,9 +21,7 @@ return array_merge(
 		),
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
-			[
-				'innerBlocks' => blockera_load( 'inners.link', dirname( __DIR__ ) ),
-			]
+			blockera_load( 'wordpress.inners.link', dirname( __DIR__, 2 ) )
 		),
 	]
 );

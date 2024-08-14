@@ -25,6 +25,10 @@ import type {
 import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 
+const appendBlockeraPrefix = (blockType: string): string => {
+	return `blockera/${blockType}`;
+};
+
 export const useComputedCssProps = ({
 	state,
 	selectors,
@@ -106,7 +110,7 @@ export const useComputedCssProps = ({
 					...calculatedProps,
 					state: stateType,
 					masterState,
-					selectors: (selectors?.innerBlocks || {})[blockType] || {},
+					selectors: selectors[appendBlockeraPrefix(blockType)] || {},
 					attributes: {
 						...defaultAttributes,
 						...breakpointItem?.attributes,
@@ -121,7 +125,7 @@ export const useComputedCssProps = ({
 			...calculatedProps,
 			state: 'normal',
 			masterState,
-			selectors: (selectors?.innerBlocks || {})[blockType] || {},
+			selectors: selectors[appendBlockeraPrefix(blockType)] || {},
 			attributes: {
 				...defaultAttributes,
 				...attributes,

@@ -13,10 +13,8 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/arrow' => [
-						'root' => '.wp-block-query-pagination-next-arrow',
-					],
+				'blockera/elements/arrow' => [
+					'root' => '.wp-block-query-pagination-next-arrow',
 				],
 			]
 		),

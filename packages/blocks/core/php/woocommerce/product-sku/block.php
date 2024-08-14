@@ -13,10 +13,8 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/sku' => [
-						'root' => '.sku',
-					],
+				'blockera/elements/sku' => [
+					'root' => '.sku',
 				],
 			]
 		),
