@@ -92,6 +92,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 			blockDetail: BlockDetail
 		): Object => {
 			const {
+				blockId,
 				isBaseBreakpoint,
 				isMasterBlock,
 				currentState,
@@ -99,7 +100,11 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 				innerBlocks,
 			} = blockDetail;
 
-			if (!isBaseBreakpoint || isMasterBlock) {
+			if (
+				blockId !== 'core/social-links' ||
+				!isBaseBreakpoint ||
+				isMasterBlock
+			) {
 				return nextState;
 			}
 
