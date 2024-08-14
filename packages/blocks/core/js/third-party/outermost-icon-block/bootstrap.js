@@ -81,9 +81,13 @@ export const bootstrapOutermostIconBlock = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { isBaseBreakpoint, isMasterBlock } = blockDetail;
+			const { blockId, isBaseBreakpoint, isMasterBlock } = blockDetail;
 
-			if (!isBaseBreakpoint || !isMasterBlock) {
+			if (
+				blockId !== 'outermost/icon-block' ||
+				!isBaseBreakpoint ||
+				!isMasterBlock
+			) {
 				return nextState;
 			}
 
