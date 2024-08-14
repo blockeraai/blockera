@@ -398,12 +398,12 @@ describe('Style Engine Testing ...', () => {
 					setBlockState('Normal');
 
 					// Set background color.
-					cy.setColorControlValue('BG Color', '#16e2c1');
+					cy.setColorControlValue('BG Color', '#e3178b');
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(22, 226, 193)'
+						'rgb(227, 23, 139)'
 					);
 					cy.getBlock('core/paragraph')
 						.should('have.css', 'transition')
@@ -420,12 +420,12 @@ describe('Style Engine Testing ...', () => {
 					setBlockState('Hover');
 
 					// Set background color.
-					cy.setColorControlValue('BG Color', '#e3178b');
+					cy.setColorControlValue('BG Color', '#16e2c1');
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(227, 23, 139)'
+						'rgb(22, 226, 193)'
 					);
 					cy.getBlock('core/paragraph')
 						.should('have.css', 'transition')
@@ -443,7 +443,7 @@ describe('Style Engine Testing ...', () => {
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(227, 23, 139)'
+						'rgb(22, 226, 193)'
 					);
 					cy.getBlock('core/paragraph')
 						.should('have.css', 'transition')
@@ -522,7 +522,7 @@ describe('Style Engine Testing ...', () => {
 					cy.get('.blockera-block').should(
 						'have.css',
 						'background-color',
-						'rgb(22, 226, 193)'
+						'rgb(227, 23, 139)'
 					);
 					cy.get('.blockera-block')
 						.should('have.css', 'transition')
@@ -535,7 +535,7 @@ describe('Style Engine Testing ...', () => {
 					cy.get('.blockera-block').should(
 						'have.css',
 						'background-color',
-						'rgb(227, 23, 139)'
+						'rgb(22, 226, 193)'
 					);
 					cy.get('.blockera-block')
 						.should('have.css', 'transition')
