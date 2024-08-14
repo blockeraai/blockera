@@ -6,7 +6,10 @@
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
 
 export const MouseStyles = ({
 	state,
@@ -52,7 +55,7 @@ export const MouseStyles = ({
 		isActiveField(blockeraCursor) &&
 		currBlockAttributes.blockeraCursor !== attributes.blockeraCursor.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraCursor',
 			support: 'blockeraCursor',
@@ -82,7 +85,7 @@ export const MouseStyles = ({
 		currBlockAttributes.blockeraUserSelect !==
 			attributes.blockeraUserSelect.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraUserSelect',
 			support: 'blockeraUserSelect',
@@ -113,7 +116,7 @@ export const MouseStyles = ({
 		currBlockAttributes.blockeraPointerEvents !==
 			attributes.blockeraPointerEvents.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraPointerEvents',
 			support: 'blockeraPointerEvents',

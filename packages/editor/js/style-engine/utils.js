@@ -196,13 +196,13 @@ export function getVars(queries: string): Array<string> {
 	return replacements;
 }
 
-export const getSelector = ({
-	state,
-	clientId,
-	className,
-	selectors,
-	currentBlock,
-}: {
+/**
+ * Replacing variable values on block selector.
+ *
+ * @param {Object} params the parameters to replace variables (Like: {{BLOCK_ID}}, {{className}}) of block selector.
+ * @return {string|string} the block selector with variable values.
+ */
+export const replaceVariablesValue = (params: {
 	state: TStates,
 	clientId: string,
 	className: string,
@@ -213,6 +213,8 @@ export const getSelector = ({
 	},
 	currentBlock: 'master' | InnerBlockType | string,
 }): string => {
+	const { state, clientId, className, selectors, currentBlock } = params;
+
 	if (!state) {
 		return '';
 	}
@@ -267,4 +269,72 @@ export const combineDeclarations = (
 	});
 
 	return Object.values(combinedObjects);
+};
+
+/**
+ * Cloned from WordPress/gutenberg repository.
+ *
+ * @see @wordpress/block-editor/src/components/global-styles/utils.js on line 366
+ *
+ * Function that scopes a selector with another one. This works a bit like
+ * SCSS nesting except the `&` operator isn't supported.
+ *
+ * @example
+ * ```js
+ * const scope = '.a, .b .c';
+ * const selector = '> .x, .y';
+ * const merged = scopeSelector( scope, selector );
+ * // merged is '.a > .x, .a .y, .b .c > .x, .b .c .y'
+ * ```
+ *
+ * @param {string} scope    Selector to scope to.
+ * @param {string} selector Original selector.
+ *
+ * @return {string} Scoped selector.
+ */
+export function scopeSelector(scope: string, selector: string): string {
+	if (!scope || !selector) {
+		return selector;
+	}
+
+	const scopes = scope.split(',');
+	const selectors = selector.split(',');
+
+	const selectorsScoped = [];
+	scopes.forEach((outer) => {
+		selectors.forEach((inner) => {
+			selectorsScoped.push(`${outer.trim()} ${inner.trim()}`);
+		});
+	});
+
+	return selectorsScoped.join(', ');
+}
+
+/**
+ * Cloned from WordPress/gutenberg repository.
+ *
+ * @see @wordpress/block-editor/src/utils/object.js on line 44
+ *
+ * Helper util to return a value from a certain path of the object.
+ * Path is specified as either:
+ * - a string of properties, separated by dots, for example: "x.y".
+ * - an array of properties, for example `[ 'x', 'y' ]`.
+ * You can also specify a default value in case the result is nullish.
+ *
+ * @param {Object}       object       Input object.
+ * @param {string|Array} path         Path to the object property.
+ * @param {*}            defaultValue Default value if the value at the specified path is nullish.
+ * @return {*} Value of the object property at the specified path.
+ */
+export const getValueFromObjectPath = (
+	object: Object,
+	path: string,
+	defaultValue: any
+): any => {
+	const arrayPath = Array.isArray(path) ? path : path.split('.');
+	let value = object;
+	arrayPath.forEach((fieldName) => {
+		value = value?.[fieldName];
+	});
+	return value ?? defaultValue;
 };
