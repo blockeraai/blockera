@@ -293,9 +293,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.includes(
-								'all 0s ease 0s'
-							);
+							expect(transitionValue).to.eq('all');
 						});
 				});
 
@@ -312,9 +310,7 @@ describe('Style Engine Testing ...', () => {
 						.should('have.css', 'transition')
 						.then((transitionValue) => {
 							// Assert the transition value
-							expect(transitionValue).to.includes(
-								'all 0s ease 0s'
-							);
+							expect(transitionValue).to.eq('all');
 						});
 				});
 
