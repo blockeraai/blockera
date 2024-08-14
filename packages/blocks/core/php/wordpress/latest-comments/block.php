@@ -13,25 +13,23 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/container'    => [
-						'root' => '.wp-block-latest-comments__comment',
-					],
-					'elements/avatar'       => [
-						'root' => '.wp-block-latest-comments__comment-avatar',
-					],
-					'elements/author'       => [
-						'root' => '.wp-block-latest-comments__comment-author',
-					],
-					'elements/post-title'   => [
-						'root' => '.wp-block-latest-comments__comment-link',
-					],
-					'elements/date'         => [
-						'root' => '.wp-block-latest-comments__comment-date',
-					],
-					'elements/comment-text' => [
-						'root' => '.wp-block-latest-comments__comment-excerpt',
-					],
+				'blockera/elements/container'    => [
+					'root' => '.wp-block-latest-comments__comment',
+				],
+				'blockera/elements/avatar'       => [
+					'root' => '.wp-block-latest-comments__comment-avatar',
+				],
+				'blockera/elements/author'       => [
+					'root' => '.wp-block-latest-comments__comment-author',
+				],
+				'blockera/elements/post-title'   => [
+					'root' => '.wp-block-latest-comments__comment-link',
+				],
+				'blockera/elements/date'         => [
+					'root' => '.wp-block-latest-comments__comment-date',
+				],
+				'blockera/elements/comment-text' => [
+					'root' => '.wp-block-latest-comments__comment-excerpt',
 				],
 			]
 		),

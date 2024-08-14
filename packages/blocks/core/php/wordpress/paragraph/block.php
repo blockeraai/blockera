@@ -13,10 +13,8 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/link' => [
-						'root' => 'a:not(.wp-element-button)',
-					],
+				'blockera/elements/link' => [
+					'root' => 'a:not(.wp-element-button)',
 				],
 			]
 		),
