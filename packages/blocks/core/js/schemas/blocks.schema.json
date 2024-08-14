@@ -65,12 +65,16 @@
 								"description": "The Product name.",
 								"type": "string"
 							},
+							"author": {
+								"description": "The Product author.",
+								"type": "string"
+							},
 							"link": {
 								"description": "The block link.",
 								"type": "string"
 							}
 						},
-						"required": ["name", "link"],
+						"required": ["name", "author", "link"],
 						"additionalProperties": false
 					},
 					"note": {
@@ -104,12 +108,16 @@
 								"description": "The Product name.",
 								"type": "string"
 							},
+							"author": {
+								"description": "The Product author.",
+								"type": "string"
+							},
 							"link": {
 								"description": "The block link.",
 								"type": "string"
 							}
 						},
-						"required": ["name", "link"],
+						"required": ["name", "author", "link"],
 						"additionalProperties": false
 					},
 					"note": {
@@ -143,12 +151,16 @@
 								"description": "The Product name.",
 								"type": "string"
 							},
+							"author": {
+								"description": "The Product author.",
+								"type": "string"
+							},
 							"link": {
 								"description": "The block link.",
 								"type": "string"
 							}
 						},
-						"required": ["name", "link"],
+						"required": ["name", "author", "link"],
 						"additionalProperties": false
 					},
 					"note": {
