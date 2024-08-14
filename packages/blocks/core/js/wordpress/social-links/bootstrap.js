@@ -26,22 +26,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.socialLinksBlock.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const {
-				blockId,
-				isNormalState,
-				isMasterBlock,
-				blockAttributes,
-				isBaseBreakpoint,
-			} = blockDetail;
-
-			if (
-				blockId !== 'core/social-links' ||
-				!isNormalState ||
-				!isBaseBreakpoint ||
-				!isMasterBlock
-			) {
-				return attributes;
-			}
+			const { blockId } = blockDetail;
 
 			if (
 				blockId !== 'core/social-links' ||
