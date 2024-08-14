@@ -51,14 +51,19 @@ jobs:
             - name: Install Composer Packages
               run: composer install --no-dev -o --apcu-autoloader -a
 
-            - name: Create requires environment files
+            - name: Create required environment files
               run: |
-                  if [ "${{ matrix.category }}" != "bootstrap" ]; then
-                    touch .wp-env.json
-                    echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/svg-support.2.5.5.zip"]}' >> .wp-env.json
-                  else
-                    echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/svg-support.2.5.5.zip", "https://downloads.wordpress.org/plugin/woocommerce.9.1.4.zip"]}' >> .wp-env.json
-                  fi
+                  case "${{ matrix.category }}" in
+                    "woocommerce")
+                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"]}' >> .wp-env.json
+                      ;;
+                    "plugins")
+                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"]}' >> .wp-env.json
+                      ;;
+                    *)
+                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"]}' >> .wp-env.json
+                      ;;
+                  esac
                   cat .wp-env.json
                   touch .env
                   echo APP_MODE=production >> .env
