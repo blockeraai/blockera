@@ -1,38 +1,28 @@
 <?php
 
 return [
+	// It should retrieve root selector of "core/sample" block but rewrite root selector with blockera unique selector for block type.
 	[
-		'selectors' => [
-			'root' => '.a',
-		],
-		'featureId' => 'invalid-feature-id',
+		'featureId'  => 'root',
 		'fallbackId' => '',
-		'expected'  => '.a',
+		'expected'   => '.blockera-block.blockera-block--phggmy.wp-block-sample, .blockera-block.blockera-block--phggmy.wp-block-sample .first-child, .blockera-block.blockera-block--phggmy.wp-block-sample .second-child, .wp-block-sample.blockera-block.blockera-block--phggmy, .wp-block-sample.blockera-block.blockera-block--phggmy .first-child, .wp-block-sample.blockera-block.blockera-block--phggmy .second-child',
 	],
+	// It should retrieve fallback selector of "core/sample" block type.
 	[
-		'selectors' => [],
-		'featureId' => 'invalid-feature-id',
+		'featureId'  => 'invalid-feature-id',
 		'fallbackId' => '',
-		'expected'  => '',
+		'expected'   => '.blockera-block.blockera-block--phggmy',
 	],
+	// It should retrieve root selector of "core/sample" block but rewrite root selector with blockera unique selector for block type.
 	[
-		'selectors' => [
-			'dimensions' => [
-				'aspectRatio' => '.a',
-			],
-		],
-		'featureId' => 'aspect-ratio',
-		'fallbackId' => 'dimensions.aspectRatio',
-		'expected'  => '.a',
+		'featureId'  => 'blockera/elements/link',
+		'fallbackId' => '',
+		'expected'   => 'a:not(.wp-element-button)',
 	],
+	// It should retrieve root selector of "blockera/elements/link" of "core/sample" block but rewrite root selector with blockera unique selector for block type.
 	[
-		'selectors' => [
-			'dimensions' => [
-				'aspectRatio' => '.a',
-			],
-		],
-		'featureId' => 'aspect-ratio',
-		'fallbackId' => 'dimensions.aspectRatio',
-		'expected'  => '.a',
+		'featureId'  => 'blockeraWidth',
+		'fallbackId' => [ 'blockera/elements/link', 'width' ],
+		'expected'   => '.blockera-block.blockera-block--phggmy.wp-block-sample a, .wp-block-sample.blockera-block.blockera-block--phggmy a',
 	],
 ];

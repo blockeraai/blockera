@@ -120,10 +120,10 @@ if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
 	function blockera_get_block_state_selectors( array $selectors, array $args = [] ): array {
 
 		[
-			'block-type'         => $block_type,
-			'pseudo-class'       => $pseudo_class,
-			'is-inner-block'     => $is_inner_block,
-			'block-settings'     => $block_settings,
+			'block-type'     => $block_type,
+			'pseudo-class'   => $pseudo_class,
+			'is-inner-block' => $is_inner_block,
+			'block-settings' => $block_settings,
 		] = $args;
 
 		// Provide fallback css selector to use this when $selectors is empty.
@@ -365,43 +365,89 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selectors' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_calculate_feature_css_selector' ) ) {
+if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 	/**
-	 * Calculation suitable css selector for related property.
+	 * Calculation suitable block css selector for related support identifier.
 	 *
-	 * @param array         $selectors  The mapped css selectors block related.
-	 * @param string        $featureId  The feature identifier.
-	 * @param string | null $fallbackId The feature fallback identifier.
+	 * @param array  $selectors  The mapped css selectors block related.
+	 * @param string $feature_id The feature identifier.
+	 * @param array  $args       The extra arguments {@type string | null $fallbackId The feature fallback identifier.}.
 	 *
 	 * @return string the css selector.
 	 */
-	function blockera_calculate_feature_css_selector( array $selectors, string $featureId, string $fallbackId = null ): string {
+	function blockera_get_compatible_block_css_selector( array $selectors, string $feature_id, array $args ): string {
 
-		// 1- TODO: Handle custom-class state
+		// TODO: Handle custom-class state.
 
-		// Calculation with arguments.
-		if ( ! empty( $fallbackId ) ) {
+		$block_type = blockera_get_block_type( $args['blockName'] );
 
-			$parsedFallback = explode( '.', $fallbackId );
+		$cloned_block_type = new WP_Block_Type( $args['blockName'], $block_type );
 
-			$selector = $selectors[ array_shift( $parsedFallback ) ] ?? $selectors['root'] ?? '';
+		// Rewrite block type selectors because we provide suitable selectors array of original array.
+		$cloned_block_type->selectors = $selectors;
 
-			foreach ( $parsedFallback as $id ) {
+		$selector = wp_get_block_css_selector( $cloned_block_type, $feature_id );
 
-				if ( ! is_array( $selector ) ) {
+		if ( ! $selector && ! empty( $args['fallback'] ) ) {
 
-					continue;
-				}
-
-				$selector = $selector[ $id ] ?? $selector['root'] ?? '';
-			}
-
-			return $selector ? $selector : $selectors['root'] ?? $selectors['fallback'] ?? '';
+			$selector = wp_get_block_css_selector( $cloned_block_type, $args['fallback'], true );
 		}
 
-		// Use of root when recieved invalid arguments.
-		return $selectors['root'] ?? $selectors['fallback'] ?? '';
+		// We not needs append blockera root block css selector into inners selector.
+		// Like => current $selector value is one of feature id of "elements/link" inner block selectors.
+		if ( ! $feature_id || str_starts_with( $feature_id, 'blockera/' ) ) {
+
+			return $selector ?? $selectors['fallback'];
+		}
+
+		return blockera_append_root_block_css_selector(
+			$selector ?? '',
+			$selectors['fallback'],
+			[
+				'blockName' => str_replace( '/', '-', str_replace( 'core/', '', $args['blockName'] ) ),
+			]
+		);
+	}
+}
+
+if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
+
+	/**
+	 * Appending blockera block root css selector inside recieved selector.
+	 *
+	 * @param string $selector The recieved block css selector.
+	 * @param string $root     The root block css selector.
+	 * @param array  $args     The arguments {@type string $blockName The block type name}.
+	 *
+	 * @return string the combined block prepared css selector with root.
+	 */
+	function blockera_append_root_block_css_selector( string $selector, string $root, array $args = [] ): string {
+
+		$root = preg_replace( '/:\w+/i', '', $root );
+
+		// Assume recieved selector is invalid.
+		if ( empty( trim( $selector ) ) ) {
+
+			return $root;
+		}
+
+		// Assume recieved selector is another reference to root, so we should concat together.
+		if ( preg_match( '/\.(wp-block-' . $args['blockName'] . ')/', $selector, $matches ) ) {
+
+			$prefix = str_replace( $matches[0], $root . $matches[0], $selector );
+			$suffix = str_replace( $matches[0], $matches[0] . $root, $selector );
+
+			return sprintf( '%s, %s', $prefix, $suffix );
+		}
+
+		// Assume received selector started with html tag name!
+		if ( '.' !== $selector[0] ) {
+
+			return "{$selector}{$root}";
+		}
+
+		return "{$root}{$selector}";
 	}
 }
 

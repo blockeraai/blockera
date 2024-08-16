@@ -2,6 +2,7 @@
 
 return [
 	[
+		// It Should retrieve selectors array with just fallback item because original block selectors array is empty!
 		[
 			'block-settings'     => [],
 			'is-inner-block'     => false,
@@ -16,6 +17,7 @@ return [
 		],
 	],
 	[
+		// It Should retrieve selectors array include merged fallback item with original block selectors array.
 		[
 			'block-settings'     => [],
 			'is-inner-block'     => false,
@@ -41,6 +43,7 @@ return [
 		],
 	],
 	[
+		// It Should retrieve selectors array with appending pseudo-class as suffix to "elements/link" selectors.
 		[
 			'block-settings'     => [],
 			'is-inner-block'     => true,
@@ -72,6 +75,7 @@ return [
 		],
 	],
 	[
+		// It Should retrieve selectors array with merged fallback item with original block selectors array.
 		[
 			'block-settings'     => [],
 			'is-inner-block'     => false,
