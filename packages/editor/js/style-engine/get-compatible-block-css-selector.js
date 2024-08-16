@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isUndefined } from '@blockera/utils';
+import { isEmpty, isUndefined } from '@blockera/utils';
 import { isInnerBlock } from '../extensions/components/utils';
 import type { TStates } from '../extensions/libs/block-states/types';
 import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
@@ -270,7 +270,7 @@ export const getCompatibleBlockCssSelector = ({
 	});
 
 	if (selector && selector.trim()) {
-		register(`${selector}, ${rootSelector}${selector}`);
+		register(appendRootBlockCssSelector(selector, rootSelector));
 	} else {
 		register(rootSelector);
 	}
@@ -332,7 +332,10 @@ export function prepareBlockCssSelector(params: {
 
 		// Preparing selector with support identifier.
 		return (
-			getBlockCSSSelector(blockType, support, { fallback: true }) ||
+			getBlockCSSSelector(blockType, support) ||
+			getBlockCSSSelector(blockType, fallbackSupportId || 'root', {
+				fallback: true,
+			}) ||
 			selectors[support].root ||
 			selectors.root
 		);
@@ -341,3 +344,36 @@ export function prepareBlockCssSelector(params: {
 	// Prepared selector with query of support ids like: 'a.b.c.d'.
 	return selector;
 }
+
+/**
+ * Appending recieved root css selector into base block css selector.
+ *
+ * @param {string} selector the prepared block css selector order by support identifier or query.
+ * @param {string} root the root block css selector.
+ * @return {string} The css selector with include recieved root selector.
+ */
+const appendRootBlockCssSelector = (selector: string, root: string): string => {
+	// Assume recieved selector is invalid.
+	if (!selector || isEmpty(selector.trim())) {
+		return root;
+	}
+
+	// Assume recieved selector is another reference to root, so we should concat together.
+	if (/(wp-block[a-z-_A-Z]+)/g.test(selector)) {
+		return `${root}${selector}`;
+	}
+
+	// Assume received selector is html tag name!
+	if (!/\.|\s/.test(selector)) {
+		const regexp = /is-\w+-preview/g;
+
+		// Assume recieved root selector inside other breakpoint.
+		if (regexp.test(root)) {
+			return root.replace('-preview ', `-preview ${selector}`);
+		}
+
+		return `${selector}${root}`;
+	}
+
+	return `${root}${selector}`;
+};

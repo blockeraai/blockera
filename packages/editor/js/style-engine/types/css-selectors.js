@@ -14,7 +14,7 @@ export type NormalizedSelectorProps = {
 	state: TStates,
 	clientId: string,
 	support?: string,
-	supports: Object,
+	supports?: Object,
 	blockName: string,
 	className?: string,
 	masterState?: TStates,
