@@ -162,7 +162,7 @@ export const BorderAndShadowStyles = ({
 				...sharedParams,
 				query: 'blockeraBorderRadius',
 				support: 'blockeraBorderRadius',
-				fallbackSupportId: 'border-radius',
+				fallbackSupportId: 'border',
 			});
 
 			styleGroup.push({
