@@ -387,9 +387,11 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 		// Rewrite block type selectors because we provide suitable selectors array of original array.
 		$cloned_block_type->selectors = $selectors;
 
-		$selector = wp_get_block_css_selector( $cloned_block_type, $feature_id );
+		$has_fallback = ! empty( $args['fallback'] );
 
-		if ( ! $selector && ! empty( $args['fallback'] ) ) {
+		$selector = wp_get_block_css_selector( $cloned_block_type, $feature_id, ! $has_fallback );
+
+		if ( ! $selector && $has_fallback ) {
 
 			$selector = wp_get_block_css_selector( $cloned_block_type, $args['fallback'], true );
 		}
@@ -423,8 +425,6 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 	 * @return string the combined block prepared css selector with root.
 	 */
 	function blockera_append_root_block_css_selector( string $selector, string $root, array $args = [] ): string {
-
-		$root = preg_replace( '/:\w+/i', '', $root );
 
 		// Assume recieved selector is invalid.
 		if ( empty( trim( $selector ) ) ) {
