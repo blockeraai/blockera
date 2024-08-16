@@ -69,7 +69,7 @@ abstract class BaseStyleDefinition {
 	 * @var array
 	 */
 	protected array $options = [
-		'is-important' => false,
+		'is-important' => true,
 	];
 
 	public function setOptions( array $options ): void {
@@ -91,7 +91,7 @@ abstract class BaseStyleDefinition {
 	/**
 	 * Sets suitable css selector for related property.
 	 *
-	 * @param string $featureId The feature identifier.
+	 * @param string $featureId   The feature identifier.
 	 * @param string $suffixClass The suffix css class.
 	 */
 	public function setSelector( string $featureId, string $suffixClass = '' ): void {
@@ -99,7 +99,18 @@ abstract class BaseStyleDefinition {
 		$selectors  = $this->getSelectors();
 		$fallbackId = $this->calculateFallbackFeatureId( $featureId );
 
-		$this->selector = blockera_calculate_feature_css_selector( $selectors, $featureId, $fallbackId ) . $suffixClass;
+		$this->selector = sprintf(
+			'%s%s',
+			blockera_get_compatible_block_css_selector(
+				$selectors,
+				$featureId,
+				[
+					'fallback'  => $fallbackId,
+					'blockName' => $this->block['blockName'],
+				]
+			),
+			$suffixClass
+		);
 	}
 
 	/**
@@ -109,7 +120,7 @@ abstract class BaseStyleDefinition {
 	 *
 	 * @return void
 	 */
-	public function setConfig( array $config ):void {
+	public function setConfig( array $config ): void {
 
 		$this->config = $config;
 	}
@@ -209,6 +220,17 @@ abstract class BaseStyleDefinition {
 	 * @param array $declaration the generated css declarations array.
 	 */
 	public function setCss( array $declaration ): void {
+
+		if ( $this->isImportant() ) {
+
+			$declaration = array_map(
+				function ( string $declaration_item ): string {
+
+					return $declaration_item . $this->getImportant();
+				},
+				$declaration
+			);
+		}
 
 		if ( isset( $this->css[ $this->getSelector() ] ) ) {
 

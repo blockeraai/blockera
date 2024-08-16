@@ -26,7 +26,7 @@ class Border extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$this->setSelector( $cssProperty );
+		$this->setSelector( 'border' );
 
 		switch ( $cssProperty ) {
 			case 'border':
