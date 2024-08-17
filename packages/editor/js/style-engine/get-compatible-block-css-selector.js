@@ -270,7 +270,11 @@ export const getCompatibleBlockCssSelector = ({
 	});
 
 	if (selector && selector.trim()) {
-		register(appendRootBlockCssSelector(selector, rootSelector));
+		if (isInnerBlock(currentBlock)) {
+			register(selector);
+		} else {
+			register(appendRootBlockCssSelector(selector, rootSelector));
+		}
 	} else {
 		register(rootSelector);
 	}

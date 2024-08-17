@@ -338,3 +338,13 @@ export const getValueFromObjectPath = (
 	});
 	return value ?? defaultValue;
 };
+
+/**
+ * Appending "blockera/" word as prefix.
+ *
+ * @param {string} blockType The block type name.
+ * @return {string} The string start with "blockera/" prefix.
+ */
+export const appendBlockeraPrefix = (blockType: string): string => {
+	return `blockera/${blockType}`;
+};
