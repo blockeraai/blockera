@@ -11,7 +11,10 @@ import { getValueAddonRealValue } from '@blockera/controls';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
 
 export const PositionStyles = ({
 	state,
@@ -58,7 +61,7 @@ export const PositionStyles = ({
 		_attributes.blockeraPosition !== attributes.blockeraPosition.default &&
 		_attributes.blockeraPosition.type !== 'static'
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraPosition.type',
 			fallbackSupportId: 'position',
@@ -85,7 +88,7 @@ export const PositionStyles = ({
 			_attributes.blockeraPosition.position?.top
 		);
 		if (positionTop !== '') {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraPosition.position.top',
 				fallbackSupportId: 'positionTop',
@@ -113,7 +116,7 @@ export const PositionStyles = ({
 			_attributes.blockeraPosition.position?.right
 		);
 		if (positionRight !== '') {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraPosition.position.right',
 				fallbackSupportId: 'positionRight',
@@ -141,7 +144,7 @@ export const PositionStyles = ({
 			_attributes.blockeraPosition.position?.bottom
 		);
 		if (positionBottom !== '') {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraPosition.position.bottom',
 				fallbackSupportId: 'positionBottom',
@@ -169,7 +172,7 @@ export const PositionStyles = ({
 			_attributes.blockeraPosition.position?.left
 		);
 		if (positionLeft !== '') {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraPosition.position.left',
 				fallbackSupportId: 'positionLeft',
@@ -197,7 +200,7 @@ export const PositionStyles = ({
 			const zIndex = getValueAddonRealValue(_attributes.blockeraZIndex);
 
 			if (zIndex !== attributes.blockeraZIndex.default) {
-				const pickedSelector = getCssSelector({
+				const pickedSelector = getCompatibleBlockCssSelector({
 					...sharedParams,
 					query: 'blockeraZIndex',
 					support: 'blockeraZIndex',

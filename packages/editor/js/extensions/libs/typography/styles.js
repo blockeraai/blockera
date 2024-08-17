@@ -14,7 +14,10 @@ import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import { TextShadowGenerator } from './css-generators';
 import type { CssRule } from '../../../style-engine/types';
-import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
+import {
+	computedCssDeclarations,
+	getCompatibleBlockCssSelector,
+} from '../../../style-engine';
 
 export function TypographyStyles({
 	state,
@@ -74,7 +77,7 @@ export function TypographyStyles({
 		);
 
 		if (blockeraFontSize !== attributes.blockeraFontSize.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFontSize',
 				support: 'blockeraFontSize',
@@ -107,7 +110,7 @@ export function TypographyStyles({
 		);
 
 		if (blockeraLineHeight !== attributes.blockeraLineHeight.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraLineHeight',
 				support: 'blockeraLineHeight',
@@ -140,7 +143,7 @@ export function TypographyStyles({
 		);
 
 		if (blockeraFontColor !== attributes.blockeraFontColor.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFontColor',
 				support: 'blockeraFontColor',
@@ -170,7 +173,7 @@ export function TypographyStyles({
 		const blockeraTextAlign = blockProps.attributes.blockeraTextAlign;
 
 		if (blockeraTextAlign !== attributes.blockeraTextAlign.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextAlign',
 				support: 'blockeraTextAlign',
@@ -203,7 +206,7 @@ export function TypographyStyles({
 		if (
 			blockeraTextDecoration !== attributes.blockeraTextDecoration.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextDecoration',
 				support: 'blockeraTextDecoration',
@@ -233,7 +236,7 @@ export function TypographyStyles({
 		const blockeraFontStyle = blockProps.attributes.blockeraFontStyle;
 
 		if (blockeraFontStyle !== attributes.blockeraFontStyle.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFontStyle',
 				support: 'blockeraFontStyle',
@@ -266,7 +269,7 @@ export function TypographyStyles({
 		if (
 			blockeraTextTransform !== attributes.blockeraTextTransform.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextTransform',
 				support: 'blockeraTextTransform',
@@ -296,7 +299,7 @@ export function TypographyStyles({
 		const blockeraDirection = blockProps.attributes.blockeraDirection;
 
 		if (blockeraDirection !== attributes.blockeraDirection.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraDirection',
 				support: 'blockeraDirection',
@@ -329,7 +332,7 @@ export function TypographyStyles({
 		if (
 			blockeraLetterSpacing !== attributes.blockeraLetterSpacing.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraLetterSpacing',
 				support: 'blockeraLetterSpacing',
@@ -359,7 +362,7 @@ export function TypographyStyles({
 		const blockeraWordSpacing = blockProps.attributes.blockeraWordSpacing;
 
 		if (blockeraWordSpacing !== attributes.blockeraWordSpacing.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraWordSpacing',
 				support: 'blockeraWordSpacing',
@@ -389,7 +392,7 @@ export function TypographyStyles({
 		const blockeraTextIndent = blockProps.attributes.blockeraTextIndent;
 
 		if (blockeraTextIndent !== attributes.blockeraTextIndent.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextIndent',
 				support: 'blockeraTextIndent',
@@ -423,7 +426,7 @@ export function TypographyStyles({
 			blockeraTextOrientation !==
 			attributes.blockeraTextOrientation.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextOrientation',
 				support: 'blockeraTextOrientation',
@@ -485,7 +488,7 @@ export function TypographyStyles({
 				attributes.blockeraTextColumns.default
 			)
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextColumns',
 				support: 'blockeraTextColumns',
@@ -553,7 +556,7 @@ export function TypographyStyles({
 		const blockeraTextStroke = blockProps.attributes.blockeraTextStroke;
 
 		if (blockeraTextStroke !== attributes.blockeraTextStroke.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextStroke',
 				support: 'blockeraTextStroke',
@@ -595,7 +598,7 @@ export function TypographyStyles({
 			blockeraWordBreak !== attributes.blockeraWordBreak.default &&
 			blockeraWordBreak !== 'normal'
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraWordBreak',
 				support: 'blockeraWordBreak',
@@ -628,7 +631,7 @@ export function TypographyStyles({
 			blockProps.attributes.blockeraTextShadow
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraTextShadow',
 			support: 'blockeraTextShadow',

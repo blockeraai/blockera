@@ -24,7 +24,7 @@ class Mouse extends BaseStyleDefinition {
 
 		$this->setCss(
 			[
-				$cssProperty => $setting[ $cssProperty ] . $this->getImportant(),
+				$cssProperty => $setting[ $cssProperty ],
 			]
 		);
 

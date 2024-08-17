@@ -81,7 +81,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform: translate3d(150px, 200px, 100px);'
+					'transform: translate3d(150px, 200px, 100px) !important;'
 				);
 		});
 
@@ -132,7 +132,10 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'transform: scale3d(130%, 130%, 50%);');
+				.should(
+					'include',
+					'transform: scale3d(130%, 130%, 50%) !important;'
+				);
 		});
 
 		it('should update transform, when add value to rotate', () => {
@@ -186,7 +189,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg);'
+					'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg) !important;'
 				);
 		});
 
@@ -235,7 +238,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'transform: skew(10deg, 20deg);');
+				.should('include', 'transform: skew(10deg, 20deg) !important;');
 		});
 	});
 
@@ -278,7 +281,7 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform: perspective(150px) translate3d(0px, 0px, 0px)'
+					'transform: perspective(150px) translate3d(0px, 0px, 0px) !important'
 				);
 		});
 
@@ -316,7 +319,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'transform-origin: 50% 50%;');
+				.should('include', 'transform-origin: 50% 50% !important;');
 		});
 
 		it('should update backface-visibility, when add value to backface-visibility', () => {
@@ -348,7 +351,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'backface-visibility: hidden;');
+				.should('include', 'backface-visibility: hidden !important;');
 		});
 
 		it('should update perspective, when add value to child perspective', () => {
@@ -424,7 +427,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'perspective-origin: 50% 50%;');
+				.should('include', 'perspective-origin: 50% 50% !important;');
 		});
 	});
 });

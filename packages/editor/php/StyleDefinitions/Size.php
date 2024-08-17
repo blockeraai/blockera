@@ -34,16 +34,15 @@ class Size extends BaseStyleDefinition {
 				if ( 'custom' === $setting[ $cssProperty ]['value'] ) {
 
 					$declaration[ $cssProperty ] = sprintf(
-						'%1$s%2$s%3$s%4$s',
+						'%1$s%2$s%3$s',
 						$setting[ $cssProperty ]['width'],
 						! empty( $setting[ $cssProperty ]['width'] ) && ! empty( $setting[ $cssProperty ]['height'] ) ? ' / ' : '',
-						$setting[ $cssProperty ]['height'],
-						$this->getImportant()
+						$setting[ $cssProperty ]['height']
 					);
 
 				} else {
 
-					$declaration[ $cssProperty ] = $setting[ $cssProperty ]['value'] . $this->getImportant();
+					$declaration[ $cssProperty ] = $setting[ $cssProperty ]['value'];
 				}
 
 				$this->setCss( $declaration );
@@ -52,17 +51,16 @@ class Size extends BaseStyleDefinition {
 
 			case 'object-position':
 				$declaration[ $cssProperty ] = sprintf(
-					'%1$s %2$s%3$s',
+					'%1$s %2$s',
 					$setting[ $cssProperty ]['top'],
-					$setting[ $cssProperty ]['left'],
-					$this->getImportant()
+					$setting[ $cssProperty ]['left']
 				);
 
 				$this->setCss( $declaration );
 				break;
 
 			default:
-				$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant();
+				$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $setting[ $cssProperty ] );
 
 				$this->setCss( $declaration );
 				break;

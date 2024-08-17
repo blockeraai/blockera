@@ -44,25 +44,25 @@ class Typography extends BaseStyleDefinition {
 			case 'text-orientation':
 				switch ( $propertyValue ) {
 					case 'style-1':
-						$declaration['writing-mode']     = 'vertical-lr' . $this->getImportant();
-						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-lr';
+						$declaration['text-orientation'] = 'mixed';
 						break;
 					case 'style-2':
-						$declaration['writing-mode']     = 'vertical-rl' . $this->getImportant();
-						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-rl';
+						$declaration['text-orientation'] = 'mixed';
 						break;
 					case 'style-3':
-						$declaration['writing-mode']     = 'vertical-lr' . $this->getImportant();
-						$declaration['text-orientation'] = 'upright' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-lr';
+						$declaration['text-orientation'] = 'upright';
 						break;
 					case 'style-4':
-						$declaration['writing-mode']     = 'vertical-rl' . $this->getImportant();
-						$declaration['text-orientation'] = 'upright' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-rl';
+						$declaration['text-orientation'] = 'upright';
 						break;
 					case 'initial':
 						$declaration['writing-mode']     =
-							'horizontal-tb' . $this->getImportant();
-						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
+							'horizontal-tb';
+						$declaration['text-orientation'] = 'mixed';
 				}
 				break;
 

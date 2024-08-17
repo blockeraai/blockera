@@ -18,7 +18,10 @@ import {
 } from './css-generators';
 import type { StylesProps } from '../types';
 import type { CssRule } from '../../../style-engine/types';
-import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
+import {
+	computedCssDeclarations,
+	getCompatibleBlockCssSelector,
+} from '../../../style-engine';
 
 export const BorderAndShadowStyles = ({
 	state,
@@ -67,7 +70,7 @@ export const BorderAndShadowStyles = ({
 			blockProps.attributes.blockeraBoxShadow
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraBoxShadow',
 			support: 'blockeraBoxShadow',
@@ -94,7 +97,7 @@ export const BorderAndShadowStyles = ({
 		const blockeraOutline = blockProps.attributes.blockeraOutline;
 
 		if (blockeraOutline !== attributes.blockeraOutline.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraOutline',
 				support: 'blockeraOutline',
@@ -122,7 +125,7 @@ export const BorderAndShadowStyles = ({
 		const blockeraBorder = blockProps.attributes.blockeraBorder;
 
 		if (blockeraBorder !== attributes.blockeraBorder.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraBorder',
 				support: 'blockeraBorder',
@@ -155,11 +158,11 @@ export const BorderAndShadowStyles = ({
 				attributes.blockeraBorderRadius.default
 			)
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraBorderRadius',
 				support: 'blockeraBorderRadius',
-				fallbackSupportId: 'border-radius',
+				fallbackSupportId: 'border',
 			});
 
 			styleGroup.push({

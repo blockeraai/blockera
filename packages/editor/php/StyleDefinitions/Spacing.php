@@ -4,10 +4,6 @@ namespace Blockera\Editor\StyleDefinitions;
 
 class Spacing extends BaseStyleDefinition {
 
-	protected array $options = [
-		'is-important' => true,
-	];
-
 	/**
 	 * @inheritDoc
 	 *
@@ -58,21 +54,19 @@ class Spacing extends BaseStyleDefinition {
 			);
 		}
 
-		$isImportant = $this->getImportant();
-
 		$declaration = array_merge(
 			...array_map(
-				static function ( string $item, string $property ) use ( $isImportant ): array {
+				static function ( string $item, string $property ): array {
 
-					return [ "padding-{$property}" => blockera_get_value_addon_real_value( $item ) . $isImportant ];
+					return [ "padding-{$property}" => blockera_get_value_addon_real_value( $item ) ];
 				},
 				$padding,
 				array_keys( $padding )
 			),
 			...array_map(
-				static function ( string $item, string $property ) use ( $isImportant ): array {
+				static function ( string $item, string $property ): array {
 
-					return [ "margin-{$property}" => blockera_get_value_addon_real_value( $item ) . $isImportant ];
+					return [ "margin-{$property}" => blockera_get_value_addon_real_value( $item ) ];
 				},
 				$margin,
 				array_keys( $margin )

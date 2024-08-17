@@ -8,8 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { prepare } from '@blockera/data-editor';
-import { isString, isUndefined } from '@blockera/utils';
+import { isEmpty, isUndefined } from '@blockera/utils';
 import { isInnerBlock } from '../extensions/components/utils';
 import type { TStates } from '../extensions/libs/block-states/types';
 import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
@@ -17,15 +16,17 @@ import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
 /**
  * Internal dependencies
  */
-import { getSelector } from './utils';
+import { replaceVariablesValue } from './utils';
 import { getBaseBreakpoint } from '../canvas-editor';
 import type { NormalizedSelectorProps } from './types';
 import { isNormalState } from '../extensions/components';
+import { getBlockCSSSelector } from './get-block-css-selector';
 
-export const getCssSelector = ({
+export const getCompatibleBlockCssSelector = ({
 	state,
 	query,
 	support,
+	supports,
 	clientId,
 	blockName,
 	masterState,
@@ -252,28 +253,34 @@ export const getCssSelector = ({
 		}
 	};
 
-	// preparing css selector from support path as key in block selectors map as object.
-	// eslint-disable-next-line @wordpress/no-unused-vars-before-return
-	const selector = prepareCssSelector({
-		query,
-		support,
-		fallbackSupportId,
-		selectors: blockSelectors,
-	});
-
 	// FIXME: after implements parent-hover infrastructure please remove exclude this pseudo-class!
 	if (['parent-hover'].includes(state)) {
 		// TODO: implements ...
 		return '';
 	}
 
+	// preparing css selector from support path as key in block selectors map as object.
+	const selector = prepareBlockCssSelector({
+		query,
+		support,
+		supports,
+		blockName,
+		fallbackSupportId,
+		selectors: blockSelectors,
+	});
+
 	if (selector && selector.trim()) {
-		register(selector);
+		if (isInnerBlock(currentBlock)) {
+			register(selector);
+		} else {
+			register(appendRootBlockCssSelector(selector, rootSelector));
+		}
 	} else {
 		register(rootSelector);
 	}
 
-	return getSelector({
+	// Replace: {{BLOCK_ID}} and {{className}} with values on prepared block selector.
+	return replaceVariablesValue({
 		state,
 		clientId,
 		selectors,
@@ -285,38 +292,92 @@ export const getCssSelector = ({
 /**
  * Retrieve css selector with selectors dataset , support id and query string.
  *
- * @param {{support:string,selectors:Object,query:string,fallbackSupportId:string}} props
+ * @param {{support:string,supports:Object,blockName:string,selectors:Object,query:string,fallbackSupportId:string}} params the params to preparing block css selector.
  *
- * @return {string} the css selector for support
+ * @return {string} the css selector for support.
  */
-export function prepareCssSelector(props: {
-	support?: string,
-	selectors: Object,
+export function prepareBlockCssSelector(params: {
 	query?: string,
+	support?: string,
+	supports: Object,
+	blockName: string,
+	selectors: Object,
 	fallbackSupportId?: string,
 }): string | void {
-	const { support, selectors, query, fallbackSupportId } = props;
+	const {
+		query,
+		support,
+		supports,
+		blockName,
+		selectors,
+		fallbackSupportId,
+	} = params;
 
-	//Preparing selector with query of support.
-	const selector = prepare(query, selectors);
+	const blockType = {
+		name: blockName,
+		supports,
+		selectors,
+	};
 
-	//Fallback for sub feature of support to return selector
+	// Preparing selector with query of support.
+	const selector = getBlockCSSSelector(blockType, query);
+
+	// Fallback for sub feature of support to return selector.
 	if (!selector) {
-		if (isUndefined(support) || isUndefined(selectors[support])) {
-			return !isUndefined(fallbackSupportId)
-				? prepareCssSelector({
-						...props,
-						support: fallbackSupportId,
-						fallbackSupportId: undefined,
-				  })
-				: selectors.root;
+		if (isUndefined(support)) {
+			return (
+				getBlockCSSSelector(blockType, fallbackSupportId || 'root', {
+					fallback: true,
+				}) ||
+				selectors[support].root ||
+				selectors.root
+			);
 		}
 
-		return isString(selectors[support])
-			? selectors[support]
-			: selectors[support].root || selectors.root;
+		// Preparing selector with support identifier.
+		return (
+			getBlockCSSSelector(blockType, support) ||
+			getBlockCSSSelector(blockType, fallbackSupportId || 'root', {
+				fallback: true,
+			}) ||
+			selectors[support].root ||
+			selectors.root
+		);
 	}
 
-	//Selector for sub feature of support
+	// Prepared selector with query of support ids like: 'a.b.c.d'.
 	return selector;
 }
+
+/**
+ * Appending recieved root css selector into base block css selector.
+ *
+ * @param {string} selector the prepared block css selector order by support identifier or query.
+ * @param {string} root the root block css selector.
+ * @return {string} The css selector with include recieved root selector.
+ */
+const appendRootBlockCssSelector = (selector: string, root: string): string => {
+	// Assume recieved selector is invalid.
+	if (!selector || isEmpty(selector.trim())) {
+		return root;
+	}
+
+	// Assume recieved selector is another reference to root, so we should concat together.
+	if (/(wp-block[a-z-_A-Z]+)/g.test(selector)) {
+		return `${root}${selector}`;
+	}
+
+	// Assume received selector is html tag name!
+	if (!/\.|\s/.test(selector)) {
+		const regexp = /is-\w+-preview/g;
+
+		// Assume recieved root selector inside other breakpoint.
+		if (regexp.test(root)) {
+			return root.replace('-preview ', `-preview ${selector}`);
+		}
+
+		return `${selector}${root}`;
+	}
+
+	return `${root}${selector}`;
+};

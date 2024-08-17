@@ -6,6 +6,30 @@ use Blockera\WordPress\RenderBlock\Setup;
 
 class TestHelpers extends \WP_UnitTestCase {
 
+	public array $selectors = [
+		'root'                   => '.wp-block-sample, .wp-block-sample .first-child, .wp-block-sample .second-child',
+		'blockera/elements/link' => [
+			'root' => 'a:not(.wp-element-button)',
+			'width' => '.wp-block-sample a'
+		],
+		'fallback'               => '.blockera-block.blockera-block--phggmy',
+	];
+
+	public function set_up() {
+
+		$selectors = $this->selectors;
+
+		add_filter( 'register_block_type_args', function ( array $args ) use ( $selectors ): array {
+
+			return array_merge(
+				$args,
+				[
+					'selectors' => $selectors,
+				]
+			);
+		}, 10 );
+	}
+
 	public function testItShouldRetrieveCssUniqueClassname(): void {
 
 		$blocks = [
@@ -98,18 +122,22 @@ class TestHelpers extends \WP_UnitTestCase {
 	/**
 	 * @dataProvider getDataProviderForCalculationCssSelector
 	 *
-	 * @param array  $selectors
 	 * @param string $featureId
-	 * @param string $fallbackId
+	 * @param string|array $fallbackId
 	 * @param string $expected
 	 *
 	 * @return void
 	 */
-	public function testItShouldCalculatedSuitableCssSelectorForRelatedPropertyOfRecievedList( array $selectors, string $featureId, string $fallbackId, string $expected ): void {
+	public function testItShouldGetBlockeraCompatibleBlockCssSelectorWithWPAPI( string $featureId, $fallbackId, string $expected ): void {
+
+		register_block_type( 'core/sample' );
 
 		$this->assertEquals(
 			$expected,
-			blockera_calculate_feature_css_selector( $selectors, $featureId, $fallbackId )
+			blockera_get_compatible_block_css_selector( $this->selectors, $featureId, [
+				'blockName' => 'core/sample',
+				'fallback'  => $fallbackId,
+			] )
 		);
 	}
 
@@ -234,15 +262,28 @@ class TestHelpers extends \WP_UnitTestCase {
 
 	public function testItShouldRetrieveDesktopAsBaseBreakpoint(): void {
 
-		$this->assertEquals('desktop', blockera_get_base_breakpoint());
+		$this->assertEquals( 'desktop', blockera_get_base_breakpoint() );
 	}
 
 	public function testItShouldRetrieveResultOfIsNormalStateOnBreakpoint(): void {
 
-		$this->assertTrue(blockera_is_normal_on_base_breakpoint('normal', 'desktop'));
-		$this->assertFalse(blockera_is_normal_on_base_breakpoint('normal', 'xl-desktop'));
-		$this->assertFalse(blockera_is_normal_on_base_breakpoint('normal', '2xl-desktop'));
-		$this->assertFalse(blockera_is_normal_on_base_breakpoint('normal', 'mobile'));
-		$this->assertFalse(blockera_is_normal_on_base_breakpoint('hover', 'desktop'));
+		$this->assertTrue( blockera_is_normal_on_base_breakpoint( 'normal', 'desktop' ) );
+		$this->assertFalse( blockera_is_normal_on_base_breakpoint( 'normal', 'xl-desktop' ) );
+		$this->assertFalse( blockera_is_normal_on_base_breakpoint( 'normal', '2xl-desktop' ) );
+		$this->assertFalse( blockera_is_normal_on_base_breakpoint( 'normal', 'mobile' ) );
+		$this->assertFalse( blockera_is_normal_on_base_breakpoint( 'hover', 'desktop' ) );
 	}
+
+	public function tear_down() {
+
+		// Removes test block types registered by test cases.
+		$block_types = \WP_Block_Type_Registry::get_instance()->get_all_registered();
+		foreach ( $block_types as $block_type ) {
+			$block_name = $block_type->name;
+			if ( $block_name === 'core/sample' ) {
+				unregister_block_type( $block_name );
+			}
+		}
+	}
+
 }
