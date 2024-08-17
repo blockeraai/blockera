@@ -10,15 +10,6 @@ namespace Blockera\Editor\StyleDefinitions;
 class Background extends BaseStyleDefinition {
 
 	/**
-	 * Hold collection of options to generate style
-	 *
-	 * @var array
-	 */
-	protected array $options = [
-		'is-important' => true,
-	];
-
-	/**
 	 * Hold default props for background stack properties
 	 *
 	 * @var array|string[]
@@ -117,7 +108,7 @@ class Background extends BaseStyleDefinition {
 
 			case 'background-color':
 				$declaration = [
-					$cssProperty => blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) . $this->getImportant(),
+					$cssProperty => blockera_get_value_addon_real_value( $setting[ $cssProperty ] ),
 				];
 				break;
 
@@ -196,15 +187,15 @@ class Background extends BaseStyleDefinition {
 
 		$props = [
 			// Background Image.
-			'background-image'      => "url('{$setting['image']}'){$this->getImportant()}",
+			'background-image'      => "url('{$setting['image']}')",
 			// Background Size.
-			'background-size'       => $size . $this->getImportant(),
+			'background-size'       => $size,
 			// Background Position.
-			'background-position'   => ( $left . ' ' . $top ) . $this->getImportant(),
+			'background-position'   => ( $left . ' ' . $top ),
 			// Background Repeat.
-			'background-repeat'     => ( $setting['image-repeat'] ?? '' ) . $this->getImportant(),
+			'background-repeat'     => ( $setting['image-repeat'] ?? '' ),
 			// Background Attachment.
-			'background-attachment' => ( $setting['image-attachment'] ?? '' ) . $this->getImportant(),
+			'background-attachment' => ( $setting['image-attachment'] ?? '' ),
 		];
 
 		$this->setDeclarations( $this->modifyProperties( $props ) );
@@ -245,9 +236,9 @@ class Background extends BaseStyleDefinition {
 			$this->default_props,
 			[
 				// Background Image.
-				'background-image'      => $gradient . $this->getImportant(),
+				'background-image'      => $gradient,
 				// Background Attachment.
-				'background-attachment' => ( $setting['linear-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
+				'background-attachment' => ( $setting['linear-gradient-attachment'] ?? 'scroll' ),
 			]
 		);
 
@@ -273,9 +264,9 @@ class Background extends BaseStyleDefinition {
 				$this->default_props,
 				[
 					// Background Image.
-					'background-image'      => $gradient . $this->getImportant(),
+					'background-image'      => $gradient,
 					// Background Attachment.
-					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
+					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ),
 				]
 			);
 		} else {
@@ -316,11 +307,11 @@ class Background extends BaseStyleDefinition {
 				$this->default_props,
 				[
 					// Background Image.
-					'background-image'      => $gradient . $this->getImportant(),
+					'background-image'      => $gradient,
 					// Background Repeat.
-					'background-repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->default_props['repeat'] ) . $this->getImportant(),
+					'background-repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->default_props['repeat'] ),
 					// Background Attachment.
-					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ) . $this->getImportant(),
+					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ),
 				]
 			);
 		}
@@ -371,11 +362,11 @@ class Background extends BaseStyleDefinition {
 			$this->default_props,
 			[
 				// override bg color.
-				'background-color'      => ( array_values( $colors )[0]['color'] ? blockera_get_value_addon_real_value( array_values( $colors )[0]['color'] ) : '' ) . $this->getImportant(),
+				'background-color'      => ( array_values( $colors )[0]['color'] ? blockera_get_value_addon_real_value( array_values( $colors )[0]['color'] ) : '' ),
 				// Image.
-				'background-image'      => $gradient . $this->getImportant(),
+				'background-image'      => $gradient,
 				// Background Attachment.
-				'background-attachment' => $setting['mesh-gradient-attachment'] . $this->getImportant(),
+				'background-attachment' => $setting['mesh-gradient-attachment'],
 			]
 		);
 

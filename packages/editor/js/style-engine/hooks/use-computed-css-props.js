@@ -22,12 +22,9 @@ import type {
 	TBreakpoint,
 	TStates,
 } from '../../extensions/libs/block-states/types';
+import { appendBlockeraPrefix } from '../utils';
 import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
-
-const appendBlockeraPrefix = (blockType: string): string => {
-	return `blockera/${blockType}`;
-};
 
 export const useComputedCssProps = ({
 	state,

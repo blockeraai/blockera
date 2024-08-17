@@ -11,7 +11,10 @@ import { getValueAddonRealValue } from '@blockera/controls';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
 
 export const FlexChildStyles = ({
 	state,
@@ -95,7 +98,7 @@ export const FlexChildStyles = ({
 				break;
 		}
 
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFlexChildSizing',
 			support: 'blockeraFlexChildSizing',
@@ -123,7 +126,7 @@ export const FlexChildStyles = ({
 		_attributes.blockeraFlexChildAlign !==
 			attributes.blockeraFlexChildAlign.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFlexChildAlign',
 			support: 'blockeraFlexChildAlign',
@@ -175,7 +178,7 @@ export const FlexChildStyles = ({
 				break;
 		}
 
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFlexChildOrder',
 			support: 'blockeraFlexChildOrder',
