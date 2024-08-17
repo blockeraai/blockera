@@ -114,7 +114,7 @@ class Blockera extends Application implements ContainerInterface {
 		if ( ! isset( $blockera_fs ) ) {
 
 			// Include Freemius SDK.
-			require_once blockera_core_config( 'app.packages_path' ) . 'freemius-sdk/php/start.php';
+			require_once blockera_core_config( 'app.vendor_path' ) . 'blockera/freemius-sdk/php/start.php';
 
 			$blockera_fs = fs_dynamic_init(
 				array(
