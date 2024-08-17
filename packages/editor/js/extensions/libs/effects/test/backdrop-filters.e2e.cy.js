@@ -90,7 +90,7 @@ describe('Backdrop Filters → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'backdrop-filter: drop-shadow(50px 30px 40px #cccccc);'
+				'backdrop-filter: drop-shadow(50px 30px 40px #cccccc) !important;'
 			);
 	});
 });

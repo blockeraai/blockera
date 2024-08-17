@@ -91,6 +91,9 @@ describe('Font Color → Functionality', () => {
 
 		cy.get('style#blockera-inline-css-inline-css')
 			.invoke('text')
-			.should('include', 'color: var(--wp--preset--color--contrast)');
+			.should(
+				'include',
+				'color: var(--wp--preset--color--contrast) !important'
+			);
 	});
 });
