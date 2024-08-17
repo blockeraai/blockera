@@ -82,6 +82,7 @@
 		"blockera/data": "*",
 		"blockera/data-editor": "*",
 		"blockera/http": "*",
+		"blockera/freemius-sdk": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
 		"illuminate/container": "8.x-dev"
 	},
