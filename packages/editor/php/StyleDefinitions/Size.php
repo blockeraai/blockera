@@ -51,7 +51,7 @@ class Size extends BaseStyleDefinition {
 
 			case 'object-position':
 				$declaration[ $cssProperty ] = sprintf(
-					'%1$s %2$s%3$s',
+					'%1$s %2$s',
 					$setting[ $cssProperty ]['top'],
 					$setting[ $cssProperty ]['left']
 				);
