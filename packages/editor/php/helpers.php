@@ -398,9 +398,9 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		// We not needs append blockera root block css selector into inners selector.
 		// Like => current $selector value is one of feature id of "elements/link" inner block selectors.
-		if ( ! $feature_id || str_starts_with( $feature_id, 'blockera/' ) ) {
+		if ( ! $feature_id || str_starts_with( $feature_id, 'blockera/' ) || empty( $selectors['fallback'] ) ) {
 
-			return $selector ?? $selectors['fallback'];
+			return $selector ?? $selectors['fallback'] ?? '';
 		}
 
 		return blockera_append_root_block_css_selector(
