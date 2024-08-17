@@ -103,8 +103,11 @@ Blockera is built by [contributors and volunteers](./.github/CONTRIBUTING.md) ar
 
 ## Screenshots 🌇
 <p align="center">
-<img alt="Screenshot 1" src="./.wordpress-org/screenshot-1.gif">
-<img alt="Screenshot 2" src="./.wordpress-org/screenshot-2.gif">
-<img alt="Screenshot 3" src="./.wordpress-org/screenshot-3.gif">
-<img alt="Screenshot 4" src="./.wordpress-org/screenshot-4.gif">
+<img alt="Screenshot 1" src="./.wordpress-org/screenshot-1.jpg">
+<img alt="Screenshot 2" src="./.wordpress-org/screenshot-2.jpg">
+<img alt="Screenshot 3" src="./.wordpress-org/screenshot-3.jpg">
+<img alt="Screenshot 4" src="./.wordpress-org/screenshot-4.jpg">
+<img alt="Screenshot 5" src="./.wordpress-org/screenshot-5.jpg">
+<img alt="Screenshot 6" src="./.wordpress-org/screenshot-6.jpg">
+<img alt="Screenshot 7" src="./.wordpress-org/screenshot-7.jpg">
 </p>

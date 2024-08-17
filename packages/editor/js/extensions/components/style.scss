@@ -132,7 +132,7 @@
 .editor-block-manager__checklist .block-editor-block-icon {
 	position: relative;
 
-	.blockera-block-icon {
+	.blockera-block-icon.blockera-main-icon {
 		display: block;
 		opacity: 0.2;
 		--icon-size: 20px;
@@ -142,6 +142,7 @@
 		background: #ffffff;
 		border-radius: 50%;
 		border: 2px solid #ffffff;
+		color: #3c434a;
 	}
 }
 
