@@ -55,6 +55,10 @@
 		{
 			"type": "path",
 			"url": "packages/dev-phpunit"
+		},
+		{
+			"type": "path",
+			"url": "packages/freemius-sdk"
 		}
 	],
 	"authors": [
