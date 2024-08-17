@@ -44,6 +44,8 @@ export function widthFromWPCompatibility({
 
 			return attributes;
 
+		// the Icon Block by Nick Diego
+		case 'outermost/icon-block':
 		case 'core/post-featured-image':
 		case 'core/column':
 		case 'core/image':
@@ -168,8 +170,12 @@ export function widthToWPCompatibility({
 				width: newValue,
 			};
 
-		// all unit types are valid except special ones
-		// A string attribute for width with unit
+		/**
+		 * all unit types are valid except special ones
+		 * A string attribute for width with unit
+		 */
+		// the Icon Block by Nick Diego
+		case 'outermost/icon-block':
 		case 'core/post-featured-image':
 		case 'core/column':
 			if ('reset' === ref?.current?.action) {

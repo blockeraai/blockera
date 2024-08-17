@@ -303,8 +303,10 @@ final class StyleEngine {
 			]
 		);
 
+		$selector_id = blockera_append_blockera_block_prefix( $blockType );
+
 		// Exclude inner blocks styles when hasn't any selectors for this context.
-		if ( empty( $selectors['innerBlocks'][ $blockType ] ) ) {
+		if ( empty( $selectors[ $selector_id ] ) ) {
 
 			return [];
 		}
@@ -312,7 +314,7 @@ final class StyleEngine {
 		$this->definition->flushDeclarations();
 		$this->configureDefinition( $this->definition );
 		$this->definition->setSettings( $settings['attributes'] );
-		$this->definition->setSelectors( $selectors['innerBlocks'][ $blockType ] );
+		$this->definition->setSelectors( $selectors[ $selector_id ] );
 
 		$cssRules = $this->definition->getCssRules();
 

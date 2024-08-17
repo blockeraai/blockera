@@ -13,10 +13,8 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/caption' => [
-						'root' => 'figcaption',
-					],
+				'blockera/elements/caption' => [
+					'root' => 'figcaption',
 				],
 			]
 		),

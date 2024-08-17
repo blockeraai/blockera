@@ -13,13 +13,11 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/item-icon' => [
-						'root' => 'svg',
-					],
-					'elements/item-name' => [
-						'root' => '.wp-block-social-link-label',
-					],
+				'blockera/elements/item-icon' => [
+					'root' => 'svg',
+				],
+				'blockera/elements/item-name' => [
+					'root' => '.wp-block-social-link-label',
 				],
 			]
 		),

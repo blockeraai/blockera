@@ -7,6 +7,7 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
+import { isBlockNotOriginalState } from '@blockera/editor/js/extensions/libs/utils';
 
 /**
  * Internal dependencies
@@ -25,19 +26,11 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.socialLinksBlock.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const {
-				blockId,
-				isNormalState,
-				isMasterBlock,
-				blockAttributes,
-				isBaseBreakpoint,
-			} = blockDetail;
+			const { blockId } = blockDetail;
 
 			if (
 				blockId !== 'core/social-links' ||
-				!isNormalState ||
-				!isBaseBreakpoint ||
-				!isMasterBlock
+				isBlockNotOriginalState(blockDetail)
 			) {
 				return attributes;
 			}
@@ -99,6 +92,7 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 			blockDetail: BlockDetail
 		): Object => {
 			const {
+				blockId,
 				isBaseBreakpoint,
 				isMasterBlock,
 				currentState,
@@ -106,7 +100,11 @@ export const bootstrapSocialLinksCoreBlock = (): void => {
 				innerBlocks,
 			} = blockDetail;
 
-			if (!isBaseBreakpoint || isMasterBlock) {
+			if (
+				blockId !== 'core/social-links' ||
+				!isBaseBreakpoint ||
+				isMasterBlock
+			) {
 				return nextState;
 			}
 

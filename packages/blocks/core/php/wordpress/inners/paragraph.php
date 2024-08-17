@@ -6,7 +6,7 @@
  */
 
 return [
-	'core/paragraph' => [
+	'blockera/core/paragraph' => [
 		'root' => 'p',
 	],
 ];

@@ -13,16 +13,14 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/currency-symbol'     => [
-						'root' => '.woocommerce-Price-currencySymbol',
-					],
-					'elements/sale-discount-price' => [
-						'root' => 'del .woocommerce-Price-amount',
-					],
-					'elements/sale-normal-price'   => [
-						'root' => 'ins .woocommerce-Price-amount',
-					],
+				'blockera/elements/currency-symbol'     => [
+					'root' => '.woocommerce-Price-currencySymbol',
+				],
+				'blockera/elements/sale-discount-price' => [
+					'root' => 'del .woocommerce-Price-amount',
+				],
+				'blockera/elements/sale-normal-price'   => [
+					'root' => 'ins .woocommerce-Price-amount',
 				],
 			]
 		),
