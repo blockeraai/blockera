@@ -136,7 +136,7 @@ zip -r -q blockera.zip \
   $(find ./vendor/blockera/editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/utils/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/wordpress/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/freemius-sdk/ -type f \( -name "*.php" -o -name "*.json" \)) \
+  $(find ./vendor/blockera/freemius-sdk/) \
   && echo "blockera.zip created successfully ✅" || echo "blockera.zip creation failed ❌"
 
 status "Cleaning up... 🧹"
