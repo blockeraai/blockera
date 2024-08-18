@@ -57,6 +57,9 @@ jobs:
                     "woocommerce")
                       echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"], "config": {"WP_FS__SIMULATE_FREEMIUS_OFF": true}}' >> .wp-env.json
                       ;;
+                    "freemius")
+                      echo '{"plugins": ["."]}' >> .wp-env.json
+                      ;;
                     "plugins")
                       echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"], "config": {"WP_FS__SIMULATE_FREEMIUS_OFF": true}}' >> .wp-env.json
                       ;;
