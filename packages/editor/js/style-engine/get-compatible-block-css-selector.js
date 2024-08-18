@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isUndefined } from '@blockera/utils';
+import { isEmpty, isUndefined, union } from '@blockera/utils';
 import { isInnerBlock } from '../extensions/components/utils';
 import type { TStates } from '../extensions/libs/block-states/types';
 import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
@@ -302,7 +302,7 @@ export function prepareBlockCssSelector(params: {
 	supports: Object,
 	blockName: string,
 	selectors: Object,
-	fallbackSupportId?: string,
+	fallbackSupportId?: string | Array<string>,
 }): string | void {
 	const {
 		query,
@@ -324,22 +324,28 @@ export function prepareBlockCssSelector(params: {
 
 	// Fallback for sub feature of support to return selector.
 	if (!selector) {
+		const fallbackSelector = Array.isArray(fallbackSupportId)
+			? union(
+					fallbackSupportId.map((supportId) =>
+						getBlockCSSSelector(blockType, supportId || 'root', {
+							fallback: true,
+						})
+					)
+			  ).join(', ')
+			: getBlockCSSSelector(blockType, fallbackSupportId || 'root', {
+					fallback: true,
+			  });
+
 		if (isUndefined(support)) {
 			return (
-				getBlockCSSSelector(blockType, fallbackSupportId || 'root', {
-					fallback: true,
-				}) ||
-				selectors[support].root ||
-				selectors.root
+				fallbackSelector || selectors[support].root || selectors.root
 			);
 		}
 
 		// Preparing selector with support identifier.
 		return (
 			getBlockCSSSelector(blockType, support) ||
-			getBlockCSSSelector(blockType, fallbackSupportId || 'root', {
-				fallback: true,
-			}) ||
+			fallbackSelector ||
 			selectors[support].root ||
 			selectors.root
 		);

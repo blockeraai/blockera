@@ -21,7 +21,7 @@ export type NormalizedSelectorProps = {
 	suffixClass?: string,
 	device?: TBreakpoint,
 	blockSelectors: Object,
-	fallbackSupportId?: string,
+	fallbackSupportId?: string | Array<string>,
 	styleEngineConfig?: Object,
 	activeDeviceType?: TBreakpoint,
 	currentBlock: 'master' | InnerBlockType | string,
