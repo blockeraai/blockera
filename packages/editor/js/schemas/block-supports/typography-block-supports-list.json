@@ -1,0 +1,118 @@
+{
+	"$schema": "../block.supports.schema.json",
+	"title": "typography",
+	"supports": [
+		{
+			"status": true,
+			"name": "blockeraTextShadow",
+			"css-property": "text-shadow",
+			"fallback": ["text-shadow"],
+			"description": "Support for \"blockeraTextShadow\" value."
+		},
+		{
+			"status": true,
+			"name": "blockeraFontColor",
+			"css-property": "color",
+			"fallback": ["color"],
+			"description": "Support for \"blockeraFontColor\" value, this is mirror for WordPress block core \"color\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraFontSize",
+			"css-property": "font-size",
+			"fallback": ["fontSize"],
+			"description": "Support for \"blockeraFontSize\" value, this is mirror for WordPress block core \"fontSize\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraDirection",
+			"css-property": "direction",
+			"fallback": ["direction"],
+			"description": "Support for \"blockeraDirection\" value, this is mirror for WordPress block core \"direction\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraTextAlign",
+			"css-property": "text-align",
+			"fallback": ["align"],
+			"description": "Support for \"blockeraTextAlign\" value, this is mirror for WordPress block core \"align\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraFontStyle",
+			"css-property": "font-style",
+			"fallback": ["fontStyle"],
+			"description": "Support for \"blockeraFontStyle\" value, this is mirror for WordPress block core \"fontStyle\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraWordBreak",
+			"css-property": "word-break",
+			"fallback": ["word-break"],
+			"description": "Support for \"blockeraWordBreak\" value, this is mirror for WordPress block core \"word-break\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraTextIndent",
+			"css-property": "text-indent",
+			"fallback": ["text-indent"],
+			"description": "Support for \"blockeraTextIndent\" value, this is mirror for WordPress block core \"text-indent\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraLineHeight",
+			"css-property": "line-height",
+			"fallback": ["lineHeight"],
+			"description": "Support for \"blockeraLineHeight\" value, this is mirror for WordPress block core \"lineHeight\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraWordSpacing",
+			"css-property": "word-spacing",
+			"fallback": ["word-spacing"],
+			"description": "Support for \"blockeraWordSpacing\" value, this is mirror for WordPress block core \"word-spacing\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraTextColumns",
+			"css-property": "column-count",
+			"fallback": ["column-count"],
+			"description": "Support for \"blockeraTextColumns\" value, this is mirror for WordPress block core \"column-count\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraTextTransform",
+			"css-property": "text-transform",
+			"fallback": ["text-transform"],
+			"description": "Support for \"blockeraTextTransform\" value, this is mirror for WordPress block core \"text-transform\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraLetterSpacing",
+			"css-property": "letter-spacing",
+			"fallback": ["letter-spacing"],
+			"description": "Support for \"blockeraLetterSpacing\" value, this is mirror for WordPress block core \"letter-spacing\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraTextDecoration",
+			"css-property": "text-decoration",
+			"fallback": ["text-decoration"],
+			"description": "Support for \"blockeraTextDecoration\" value, this is mirror for WordPress block core \"text-decoration\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraTextOrientation",
+			"css-property": "text-orientation",
+			"fallback": ["text-orientation"],
+			"description": "Support for \"blockeraTextOrientation\" value."
+		},
+		{
+			"status": true,
+			"name": "blockeraTextStroke",
+			"css-property": "-webkit-text-stroke-color",
+			"fallback": ["textStroke"],
+			"description": "Support for \"blockeraTextStroke\" value."
+		}
+	]
+}

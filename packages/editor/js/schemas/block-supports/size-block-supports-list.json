@@ -1,0 +1,76 @@
+{
+	"$schema": "../block.supports.schema.json",
+	"title": "size",
+	"supports": [
+		{
+			"status": true,
+			"name": "blockeraWidth",
+			"fallback": "width",
+			"css-property": "width",
+			"description": "Support for \"blockeraWidth\" size, this is mirror for WordPress block core \"width\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraHeight",
+			"fallback": "height",
+			"css-property": "height",
+			"description": "Support for \"blockeraHeight\" size, this is mirror for WordPress block core \"height\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraMinWidth",
+			"css-property": "min-width",
+			"fallback": ["dimensions.minWidth"],
+			"description": "Support for \"blockeraMinWidth\" size, this is mirror for WordPress block core \"dimensions.minWidth\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraMaxWidth",
+			"css-property": "max-width",
+			"fallback": ["dimensions.maxWidth"],
+			"description": "Support for \"blockeraMaxWidth\" size, this is mirror for WordPress block core \"dimensions.maxWidth\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraMinHeight",
+			"css-property": "min-height",
+			"fallback": ["dimensions.minHeight"],
+			"description": "Support for \"blockeraMinHeight\" size, this is mirror for WordPress block core \"dimensions.minHeight\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraMaxHeight",
+			"css-property": "max-height",
+			"fallback": ["dimensions.maxHeight"],
+			"description": "Support for \"blockeraMaxHeight\" size, this is mirror for WordPress block core \"dimensions.maxHeight\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraRatio",
+			"css-property": "aspect-ratio",
+			"fallback": ["dimensions.aspectRatio"],
+			"description": "Support for \"blockeraRatio\" value, this is mirror for WordPress block core \"dimensions.aspectRatio\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraOverflow",
+			"css-property": "overflow",
+			"fallback": ["overflow"],
+			"description": "Support for \"blockeraOverflow\" value, this is mirror for WordPress block core \"overflow\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraFit",
+			"css-property": "object-fit",
+			"fallback": ["object-fit"],
+			"description": "Support for \"blockeraFit\" value, this is mirror for WordPress block core \"object-fit\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraFitPosition",
+			"css-property": "object-position",
+			"fallback": ["object-position"],
+			"description": "Support for \"blockeraFitPosition\" value, this is mirror for WordPress block core \"object-position\" support."
+		}
+	]
+}

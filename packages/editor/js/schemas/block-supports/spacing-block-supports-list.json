@@ -1,0 +1,13 @@
+{
+	"$schema": "../block.supports.schema.json",
+	"title": "spacing",
+	"supports": [
+		{
+			"status": true,
+			"name": "blockeraSpacing",
+			"css-property": "spacing",
+			"fallback": ["spacing"],
+			"description": "Support for \"blockeraSpacing\" value, this is mirror for WordPress block core \"spacing\" support."
+		}
+	]
+}

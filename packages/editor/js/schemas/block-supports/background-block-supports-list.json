@@ -1,0 +1,27 @@
+{
+	"$schema": "../block.supports.schema.json",
+	"title": "background",
+	"supports": [
+		{
+			"status": true,
+			"name": "blockeraBackground",
+			"css-property": "object-position",
+			"fallback": ["background-image"],
+			"description": "Support for \"background-image\" value."
+		},
+		{
+			"status": true,
+			"name": "blockeraBackgroundClip",
+			"css-property": "background-clip",
+			"fallback": ["background-clip"],
+			"description": "Support for \"blockeraBackgroundClip\" value."
+		},
+		{
+			"status": true,
+			"name": "blockeraBackgroundColor",
+			"css-property": "background-color",
+			"fallback": ["color.background"],
+			"description": "Support for \"blockeraBackgroundColor\" value, this is mirror for WordPress block core \"color.background\" support"
+		}
+	]
+}
