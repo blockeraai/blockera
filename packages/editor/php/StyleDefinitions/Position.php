@@ -26,8 +26,6 @@ class Position extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$this->setSelector( $cssProperty );
-
 		switch ( $cssProperty ) {
 
 			case 'position':
@@ -62,19 +60,6 @@ class Position extends BaseStyleDefinition {
 		$this->setCss( $declaration );
 
 		return $this->css;
-	}
-
-	/**
-	 * Get allowed reserved properties.
-	 *
-	 * @return array
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraPosition' => 'position',
-			'blockeraZIndex'   => 'z-index',
-		];
 	}
 
 }

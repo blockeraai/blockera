@@ -2,7 +2,7 @@
 
 namespace Blockera\Editor\StyleDefinitions\Contracts;
 
-interface HaveCustomSettings {
+interface CustomStyle {
 
 	/**
 	 * Retrieve css props.

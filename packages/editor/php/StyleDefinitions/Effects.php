@@ -25,8 +25,6 @@ class Effects extends BaseStyleDefinition {
 			return [];
 		}
 
-		$this->setSelector( $cssProperty );
-
 		switch ( $cssProperty ) {
 
 			case 'transform':
@@ -105,7 +103,16 @@ class Effects extends BaseStyleDefinition {
 		// add all transform items.
 		if ( 'transform' === $cssProperty && ! empty( $settings[ $cssProperty ] ) ) {
 
-			array_map( [ $this, 'setTransformItem' ], array_filter( blockera_get_sorted_repeater( $settings[ $cssProperty ] ), [ $this, 'isVisibleSetting' ] ) );
+			array_map(
+				[ $this, 'setTransformItem' ],
+				array_filter(
+					blockera_get_sorted_repeater( $settings[ $cssProperty ] ),
+					[
+						$this,
+						'isVisibleSetting',
+					]
+				)
+			);
 		}
 
 		if ( 'self-perspective' === $cssProperty && ! empty( $this->declarations['transform'] ) && ! empty( $settings[ $cssProperty ] ) ) {
@@ -576,31 +583,6 @@ class Effects extends BaseStyleDefinition {
 		$size = 'custom' === $setting['size'] ? $widthSize . ' ' . $heightSize : $setting['size'];
 
 		$this->setDeclaration( 'mask', $selectedShape . ' ' . $setting['position']['left'] . ' ' . $setting['position']['top'] . '/' . $size . ' ' . $setting['repeat'] );
-	}
-
-
-	/**
-	 * @inheritDoc
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraMask'                      => 'mask',
-			'blockeraFilter'                    => 'filter',
-			'blockeraOpacity'                   => 'opacity',
-			'blockeraDivider'                   => 'divider',
-			'blockeraTransform'                 => 'transform',
-			'blockeraTransition'                => 'transition',
-			'blockeraBlendMode'                 => 'mix-blend-mode',
-			'blockeraBackdropFilter'            => 'backdrop-filter',
-			'blockeraTransformSelfOrigin'       => 'self-origin', // transform-origin.
-			'blockeraTransformChildOrigin'      => 'child-origin', // perspective-origin.
-			'blockeraBackfaceVisibility'        => 'backface-visibility',
-			'blockeraTransformSelfPerspective'  => 'self-perspective', // perspective.
-			'blockeraTransformChildPerspective' => 'child-perspective', // perspective.
-		];
 	}
 
 }
