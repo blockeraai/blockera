@@ -4,5 +4,8 @@
 		"https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip",
 		"https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip",
 		"https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"
-	]
+	],
+	"config": {
+		"WP_FS__SIMULATE_FREEMIUS_OFF": true
+	}
 }
