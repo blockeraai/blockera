@@ -5,7 +5,7 @@
 		{
 			"status": true,
 			"name": "blockeraBackground",
-			"css-property": "object-position",
+			"css-property": "background-image",
 			"fallback": ["background-image"],
 			"description": "Support for \"background-image\" value."
 		},
