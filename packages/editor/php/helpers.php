@@ -433,6 +433,9 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		// Assume recieved selector is another reference to root, so we should concat together.
 		if ( preg_match( '/\.(wp-block-' . $args['blockName'] . ')/', $selector, $matches ) ) {
 
+			// Cleanup root selector from any css standard pseudo-classes in this state.
+			$root = preg_replace( '/:\w+/', '', $root );
+
 			$prefix = str_replace( $matches[0], $root . $matches[0], $selector );
 			$suffix = str_replace( $matches[0], $matches[0] . $root, $selector );
 
