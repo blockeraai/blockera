@@ -13,6 +13,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'blockeraWidth'             => '.wp-block-image img',
 				'blockera/elements/caption' => [
 					'root' => 'figcaption',
 				],
