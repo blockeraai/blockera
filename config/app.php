@@ -19,7 +19,7 @@ return [
 	'dist_url'      => BLOCKERA_CORE_URI . 'dist/',
 	'dist_path'     => BLOCKERA_CORE_PATH . 'dist/',
 	'packages_url'  => BLOCKERA_CORE_URI . 'packages/',
-	'packages_path' => BLOCKERA_CORE_PATH . 'packages/',
+	'packages_path' => blockera_core_env( 'APP_MODE', 'production' ) === 'development' ? BLOCKERA_CORE_PATH . 'packages/' : BLOCKERA_CORE_PATH . 'vendor/',
 	'vendor_path'   => BLOCKERA_CORE_PATH . 'vendor/',
 	'version'       => defined( 'BLOCKERA_VERSION' ) ? BLOCKERA_VERSION : blockera_core_env( 'VERSION' ),
 	'namespaces'    => [

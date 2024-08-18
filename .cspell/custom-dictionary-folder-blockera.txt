@@ -3,6 +3,7 @@ ABSPATH
 autoloader
 blockera
 clsx
+freemius
 phpcs
 sprintf
 woocommerce
