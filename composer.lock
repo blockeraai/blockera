@@ -265,12 +265,17 @@
             "dist": {
                 "type": "path",
                 "url": "packages/utils",
-                "reference": "64ac16113698e2ef2d4ab74caec687a042972e4b"
+                "reference": "97ad343b2181d664b54317cce003bcefcf38bc96"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Blockera\\Utils\\": "php/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Blockera\\Utils\\Tests\\": "php/tests/"
                 }
             },
             "description": "The utilities for JavaScript and PHP blockera applications.",
