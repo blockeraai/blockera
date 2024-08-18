@@ -8,7 +8,7 @@
     "packages": [
         {
             "name": "blockera/blockera",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/blockera",
@@ -35,7 +35,7 @@
         },
         {
             "name": "blockera/blockera-admin",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/blockera-admin",
@@ -57,7 +57,7 @@
         },
         {
             "name": "blockera/blocks-core",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/blocks/core",
@@ -79,7 +79,7 @@
         },
         {
             "name": "blockera/bootstrap",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/bootstrap",
@@ -98,7 +98,7 @@
         },
         {
             "name": "blockera/data",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/data",
@@ -117,7 +117,7 @@
         },
         {
             "name": "blockera/data-editor",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/data-editor",
@@ -136,7 +136,7 @@
         },
         {
             "name": "blockera/dev-phpunit",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/dev-phpunit",
@@ -155,7 +155,7 @@
         },
         {
             "name": "blockera/editor",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/editor",
@@ -182,7 +182,7 @@
         },
         {
             "name": "blockera/env",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/env",
@@ -204,7 +204,7 @@
         },
         {
             "name": "blockera/exceptions",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/exceptions",
@@ -223,7 +223,7 @@
         },
         {
             "name": "blockera/freemius-sdk",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/freemius-sdk",
@@ -242,7 +242,7 @@
         },
         {
             "name": "blockera/http",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/http",
@@ -261,7 +261,7 @@
         },
         {
             "name": "blockera/utils",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/utils",
@@ -280,7 +280,7 @@
         },
         {
             "name": "blockera/wordpress",
-            "version": "dev-feat/freemius-integration",
+            "version": "dev-refactor/blocks-selectors",
             "dist": {
                 "type": "path",
                 "url": "packages/wordpress",
@@ -4387,12 +4387,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "6fbbc1078094d905f0773421f13830744a144d1e"
+                "reference": "41a426cac70d410183189bc31c63f474f6f53548"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/6fbbc1078094d905f0773421f13830744a144d1e",
-                "reference": "6fbbc1078094d905f0773421f13830744a144d1e",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/41a426cac70d410183189bc31c63f474f6f53548",
+                "reference": "41a426cac70d410183189bc31c63f474f6f53548",
                 "shasum": ""
             },
             "require": {
@@ -4460,7 +4460,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-08-13T18:32:44+00:00"
+            "time": "2024-08-17T17:43:40+00:00"
         },
         {
             "name": "symfony/console",
@@ -8018,5 +8018,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
