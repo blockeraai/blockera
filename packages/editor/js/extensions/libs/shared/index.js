@@ -649,6 +649,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									blockeraBackground: {},
 									blockeraBackgroundColor: {},
 									blockeraBackgroundClip: {},
+									blockeraOverlay: {},
 								}}
 								values={{
 									blockeraBackground:
@@ -657,6 +658,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										currentStateAttributes?.blockeraBackgroundColor,
 									blockeraBackgroundClip:
 										currentStateAttributes?.blockeraBackgroundClip,
+									blockeraOverlay:
+										currentStateAttributes?.blockeraOverlay,
 								}}
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
@@ -668,6 +671,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										attributes.blockeraBackgroundColor,
 									blockeraBackgroundClip:
 										attributes.blockeraBackgroundClip,
+									blockeraOverlay: attributes.blockeraOverlay,
 								}}
 							/>
 

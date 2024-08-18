@@ -45,6 +45,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 			blockeraBackground,
 			blockeraBackgroundColor,
 			blockeraBackgroundClip,
+			blockeraOverlay,
 		} = extensionConfig;
 
 		const isShowBackground = isShowField(
@@ -62,11 +63,17 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 			values.blockeraBackgroundClip,
 			attributes.blockeraBackgroundClip.default
 		);
+		const isShowOverlay = isShowField(
+			extensionConfig.blockeraOverlay,
+			values.blockeraOverlay,
+			attributes.blockeraOverlay.default
+		);
 
 		if (
 			!isShowBackground &&
 			!isShowBackgroundColor &&
-			!isShowBackgroundClip
+			!isShowBackgroundClip &&
+			!isShowOverlay
 		) {
 			return <></>;
 		}
@@ -343,6 +350,38 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 									)}
 								</NoticeControl>
 							)}
+					</ControlContextProvider>
+				</EditorFeatureWrapper>
+
+				<EditorFeatureWrapper
+					isActive={isShowOverlay}
+					config={blockeraOverlay}
+				>
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'overlay'),
+							value: values.blockeraOverlay,
+							attribute: 'isShowOverlay',
+							blockName: block.blockName,
+						}}
+						storeName={'blockera/controls/repeater'}
+					>
+						<BaseControl controlName="overlay" columns="columns-1">
+							<BackgroundControl
+								label={__('Overlay', 'blockera')}
+								onChange={(newValue, ref) => {
+									handleOnChangeAttributes(
+										'blockeraOverlay',
+										newValue,
+										{ ref }
+									);
+								}}
+								defaultValue={
+									attributes.blockeraOverlay.default
+								}
+								{...extensionProps.blockeraOverlay}
+							/>
+						</BaseControl>
 					</ControlContextProvider>
 				</EditorFeatureWrapper>
 			</PanelBodyControl>
