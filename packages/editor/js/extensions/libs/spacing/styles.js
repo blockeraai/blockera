@@ -18,6 +18,9 @@ import {
 	getCompatibleBlockCssSelector,
 	computedCssDeclarations,
 } from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('spacing');
 
 function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 	const properties: TCssProps = {};
@@ -128,7 +131,7 @@ export const SpacingStyles = ({
 		...sharedParams,
 		query: 'blockeraSpacing',
 		support: 'blockeraSpacing',
-		fallbackSupportId: 'spacing',
+		fallbackSupportId: getBlockSupportFallback(supports, 'blockeraSpacing'),
 	});
 
 	return [
