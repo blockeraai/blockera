@@ -362,184 +362,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								}
 							/>
 
-							<PositionExtension
-								block={block}
-								extensionConfig={positionConfig}
-								values={{
-									blockeraPosition:
-										currentStateAttributes.blockeraPosition,
-									blockeraZIndex:
-										currentStateAttributes.blockeraZIndex,
-								}}
-								attributes={{
-									blockeraPosition:
-										attributes.blockeraPosition,
-									blockeraZIndex: attributes.blockeraZIndex,
-								}}
-								extensionProps={{
-									blockeraPosition: {},
-									blockeraZIndex: {},
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-							/>
-
-							<SizeExtension
-								block={block}
-								extensionConfig={sizeConfig}
-								values={{
-									blockeraWidth:
-										currentStateAttributes.blockeraWidth,
-									blockeraMinWidth:
-										currentStateAttributes.blockeraMinWidth,
-									blockeraMaxWidth:
-										currentStateAttributes.blockeraMaxWidth,
-									blockeraHeight:
-										currentStateAttributes.blockeraHeight,
-									blockeraMinHeight:
-										currentStateAttributes.blockeraMinHeight,
-									blockeraMaxHeight:
-										currentStateAttributes.blockeraMaxHeight,
-									blockeraOverflow:
-										currentStateAttributes.blockeraOverflow,
-									blockeraRatio:
-										currentStateAttributes.blockeraRatio,
-									blockeraFit:
-										currentStateAttributes.blockeraFit,
-									blockeraFitPosition:
-										currentStateAttributes.blockeraFitPosition,
-								}}
-								attributes={{
-									blockeraWidth: attributes.blockeraWidth,
-									blockeraMinWidth:
-										attributes.blockeraMinWidth,
-									blockeraMaxWidth:
-										attributes.blockeraMaxWidth,
-									blockeraHeight: attributes.blockeraHeight,
-									blockeraMinHeight:
-										attributes.blockeraMinHeight,
-									blockeraMaxHeight:
-										attributes.blockeraMaxHeight,
-									blockeraOverflow:
-										attributes.blockeraOverflow,
-									blockeraRatio: attributes.blockeraRatio,
-									blockeraFit: attributes.blockeraFit,
-									blockeraFitPosition:
-										attributes.blockeraFitPosition,
-								}}
-								extensionProps={{
-									blockeraWidth: {},
-									blockeraHeight: {},
-									blockeraMinWidth: {},
-									blockeraMinHeight: {},
-									blockeraMaxWidth: {},
-									blockeraMaxHeight: {},
-									blockeraOverflow: {},
-									blockeraRatio: {},
-									blockeraFit: {},
-									blockeraFitPosition: {},
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-
-							<LayoutExtension
-								block={block}
-								extensionConfig={layoutConfig}
-								extensionProps={{
-									blockeraDisplay: {},
-									blockeraFlexLayout: {},
-									blockeraGap: {},
-									blockeraFlexWrap: {},
-									blockeraAlignContent: {},
-								}}
-								values={{
-									blockeraDisplay:
-										currentStateAttributes.blockeraDisplay,
-									blockeraFlexLayout:
-										currentStateAttributes.blockeraFlexLayout,
-									blockeraGap:
-										currentStateAttributes.blockeraGap,
-									blockeraFlexWrap:
-										currentStateAttributes.blockeraFlexWrap,
-									blockeraAlignContent:
-										currentStateAttributes.blockeraAlignContent,
-								}}
-								attributes={{
-									blockeraDisplay: attributes.blockeraDisplay,
-									blockeraFlexLayout:
-										attributes.blockeraFlexLayout,
-									blockeraGap: attributes.blockeraGap,
-									blockeraFlexWrap:
-										attributes.blockeraFlexWrap,
-									blockeraAlignContent:
-										attributes.blockeraAlignContent,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-
-							{directParentBlock?.innerBlocks.length &&
-								directParentBlock?.attributes
-									.blockeraDisplay === 'flex' && (
-									<FlexChildExtension
-										block={block}
-										extensionConfig={flexChildConfig}
-										values={{
-											blockeraFlexChildSizing:
-												currentStateAttributes.blockeraFlexChildSizing,
-											blockeraFlexChildGrow:
-												currentStateAttributes.blockeraFlexChildGrow,
-											blockeraFlexChildShrink:
-												currentStateAttributes.blockeraFlexChildShrink,
-											blockeraFlexChildBasis:
-												currentStateAttributes.blockeraFlexChildBasis,
-											blockeraFlexChildOrder:
-												currentStateAttributes.blockeraFlexChildOrder,
-											blockeraFlexChildOrderCustom:
-												currentStateAttributes.blockeraFlexChildOrderCustom,
-											blockeraFlexDirection:
-												directParentBlock?.attributes
-													?.blockeraFlexLayout
-													?.direction,
-										}}
-										attributes={{
-											blockeraFlexChildSizing:
-												attributes.blockeraFlexChildSizing,
-											blockeraFlexChildGrow:
-												attributes.blockeraFlexChildGrow,
-											blockeraFlexChildShrink:
-												attributes.blockeraFlexChildShrink,
-											blockeraFlexChildBasis:
-												attributes.blockeraFlexChildBasis,
-											blockeraFlexChildAlign:
-												attributes.blockeraFlexChildAlign,
-											blockeraFlexChildOrder:
-												attributes.blockeraFlexChildOrder,
-											blockeraFlexChildOrderCustom:
-												attributes.blockeraFlexChildOrderCustom,
-										}}
-										extensionProps={{
-											blockeraFlexChildSizing: {},
-											blockeraFlexChildGrow: {},
-											blockeraFlexChildShrink: {},
-											blockeraFlexChildBasis: {},
-											blockeraFlexChildAlign: {},
-											blockeraFlexChildOrder: {},
-											blockeraFlexChildOrderCustom: {},
-										}}
-										handleOnChangeAttributes={
-											handleOnChangeAttributes
-										}
-										setSettings={handleOnChangeSettings}
-									/>
-								)}
-
 							<TypographyExtension
 								block={block}
 								extensionConfig={typographyConfig}
@@ -702,6 +524,184 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									handleOnChangeAttributes
 								}
 								setSettings={handleOnChangeSettings}
+							/>
+
+							<LayoutExtension
+								block={block}
+								extensionConfig={layoutConfig}
+								extensionProps={{
+									blockeraDisplay: {},
+									blockeraFlexLayout: {},
+									blockeraGap: {},
+									blockeraFlexWrap: {},
+									blockeraAlignContent: {},
+								}}
+								values={{
+									blockeraDisplay:
+										currentStateAttributes.blockeraDisplay,
+									blockeraFlexLayout:
+										currentStateAttributes.blockeraFlexLayout,
+									blockeraGap:
+										currentStateAttributes.blockeraGap,
+									blockeraFlexWrap:
+										currentStateAttributes.blockeraFlexWrap,
+									blockeraAlignContent:
+										currentStateAttributes.blockeraAlignContent,
+								}}
+								attributes={{
+									blockeraDisplay: attributes.blockeraDisplay,
+									blockeraFlexLayout:
+										attributes.blockeraFlexLayout,
+									blockeraGap: attributes.blockeraGap,
+									blockeraFlexWrap:
+										attributes.blockeraFlexWrap,
+									blockeraAlignContent:
+										attributes.blockeraAlignContent,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
+
+							{directParentBlock?.innerBlocks.length &&
+								directParentBlock?.attributes
+									.blockeraDisplay === 'flex' && (
+									<FlexChildExtension
+										block={block}
+										extensionConfig={flexChildConfig}
+										values={{
+											blockeraFlexChildSizing:
+												currentStateAttributes.blockeraFlexChildSizing,
+											blockeraFlexChildGrow:
+												currentStateAttributes.blockeraFlexChildGrow,
+											blockeraFlexChildShrink:
+												currentStateAttributes.blockeraFlexChildShrink,
+											blockeraFlexChildBasis:
+												currentStateAttributes.blockeraFlexChildBasis,
+											blockeraFlexChildOrder:
+												currentStateAttributes.blockeraFlexChildOrder,
+											blockeraFlexChildOrderCustom:
+												currentStateAttributes.blockeraFlexChildOrderCustom,
+											blockeraFlexDirection:
+												directParentBlock?.attributes
+													?.blockeraFlexLayout
+													?.direction,
+										}}
+										attributes={{
+											blockeraFlexChildSizing:
+												attributes.blockeraFlexChildSizing,
+											blockeraFlexChildGrow:
+												attributes.blockeraFlexChildGrow,
+											blockeraFlexChildShrink:
+												attributes.blockeraFlexChildShrink,
+											blockeraFlexChildBasis:
+												attributes.blockeraFlexChildBasis,
+											blockeraFlexChildAlign:
+												attributes.blockeraFlexChildAlign,
+											blockeraFlexChildOrder:
+												attributes.blockeraFlexChildOrder,
+											blockeraFlexChildOrderCustom:
+												attributes.blockeraFlexChildOrderCustom,
+										}}
+										extensionProps={{
+											blockeraFlexChildSizing: {},
+											blockeraFlexChildGrow: {},
+											blockeraFlexChildShrink: {},
+											blockeraFlexChildBasis: {},
+											blockeraFlexChildAlign: {},
+											blockeraFlexChildOrder: {},
+											blockeraFlexChildOrderCustom: {},
+										}}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										setSettings={handleOnChangeSettings}
+									/>
+								)}
+
+							<SizeExtension
+								block={block}
+								extensionConfig={sizeConfig}
+								values={{
+									blockeraWidth:
+										currentStateAttributes.blockeraWidth,
+									blockeraMinWidth:
+										currentStateAttributes.blockeraMinWidth,
+									blockeraMaxWidth:
+										currentStateAttributes.blockeraMaxWidth,
+									blockeraHeight:
+										currentStateAttributes.blockeraHeight,
+									blockeraMinHeight:
+										currentStateAttributes.blockeraMinHeight,
+									blockeraMaxHeight:
+										currentStateAttributes.blockeraMaxHeight,
+									blockeraOverflow:
+										currentStateAttributes.blockeraOverflow,
+									blockeraRatio:
+										currentStateAttributes.blockeraRatio,
+									blockeraFit:
+										currentStateAttributes.blockeraFit,
+									blockeraFitPosition:
+										currentStateAttributes.blockeraFitPosition,
+								}}
+								attributes={{
+									blockeraWidth: attributes.blockeraWidth,
+									blockeraMinWidth:
+										attributes.blockeraMinWidth,
+									blockeraMaxWidth:
+										attributes.blockeraMaxWidth,
+									blockeraHeight: attributes.blockeraHeight,
+									blockeraMinHeight:
+										attributes.blockeraMinHeight,
+									blockeraMaxHeight:
+										attributes.blockeraMaxHeight,
+									blockeraOverflow:
+										attributes.blockeraOverflow,
+									blockeraRatio: attributes.blockeraRatio,
+									blockeraFit: attributes.blockeraFit,
+									blockeraFitPosition:
+										attributes.blockeraFitPosition,
+								}}
+								extensionProps={{
+									blockeraWidth: {},
+									blockeraHeight: {},
+									blockeraMinWidth: {},
+									blockeraMinHeight: {},
+									blockeraMaxWidth: {},
+									blockeraMaxHeight: {},
+									blockeraOverflow: {},
+									blockeraRatio: {},
+									blockeraFit: {},
+									blockeraFitPosition: {},
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
+
+							<PositionExtension
+								block={block}
+								extensionConfig={positionConfig}
+								values={{
+									blockeraPosition:
+										currentStateAttributes.blockeraPosition,
+									blockeraZIndex:
+										currentStateAttributes.blockeraZIndex,
+								}}
+								attributes={{
+									blockeraPosition:
+										attributes.blockeraPosition,
+									blockeraZIndex: attributes.blockeraZIndex,
+								}}
+								extensionProps={{
+									blockeraPosition: {},
+									blockeraZIndex: {},
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
 							/>
 
 							<EffectsExtension
