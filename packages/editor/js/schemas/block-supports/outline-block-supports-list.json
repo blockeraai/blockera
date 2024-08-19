@@ -6,14 +6,14 @@
 			"status": true,
 			"name": "blockeraOutline",
 			"css-property": "outline",
-			"fallback": ["outline"],
+			"fallback": ["outline.color", "outline"],
 			"description": "Support for \"blockeraOutline\" value."
 		},
 		{
 			"status": true,
 			"name": "blockeraOffset",
 			"css-property": "outline-offset",
-			"fallback": ["outline-offset"],
+			"fallback": ["outline.offset", "outline"],
 			"description": "Support for \"blockeraOffset\" value."
 		}
 	]

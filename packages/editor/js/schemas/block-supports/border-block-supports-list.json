@@ -6,14 +6,14 @@
 			"status": true,
 			"name": "blockeraBorder",
 			"css-property": "border",
-			"fallback": ["border"],
+			"fallback": ["border.color", "border"],
 			"description": "Support for \"blockeraBorder\" value, this is mirror for WordPress block core \"border\" support"
 		},
 		{
 			"status": true,
 			"name": "blockeraBorderRadius",
 			"css-property": "border-radius",
-			"fallback": ["border", "border-radius"],
+			"fallback": ["border.radius", "border.color", "border"],
 			"description": "Support for \"blockeraBorder\" value, this is mirror for WordPress block core \"border-radius\" support"
 		}
 	]

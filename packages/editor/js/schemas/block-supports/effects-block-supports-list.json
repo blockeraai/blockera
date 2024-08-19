@@ -83,7 +83,7 @@
 			"status": true,
 			"name": "blockeraFilter",
 			"css-property": "filter",
-			"fallback": "filter",
+			"fallback": ["filter.duotone", "filter"],
 			"description": "Support for \"blockeraFilter\" value."
 		},
 		{

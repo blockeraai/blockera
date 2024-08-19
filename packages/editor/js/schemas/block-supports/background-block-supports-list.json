@@ -6,21 +6,33 @@
 			"status": true,
 			"name": "blockeraBackground",
 			"css-property": "background-image",
-			"fallback": ["background-image"],
+			"fallback": [
+				"background.backgroundImage",
+				"background",
+				"color.background"
+			],
 			"description": "Support for \"background-image\" value."
 		},
 		{
 			"status": true,
 			"name": "blockeraBackgroundClip",
 			"css-property": "background-clip",
-			"fallback": ["background-clip"],
+			"fallback": [
+				"background.backgroundImage",
+				"background",
+				"color.background"
+			],
 			"description": "Support for \"blockeraBackgroundClip\" value."
 		},
 		{
 			"status": true,
 			"name": "blockeraBackgroundColor",
 			"css-property": "background-color",
-			"fallback": ["color.background"],
+			"fallback": [
+				"color.background",
+				"background.backgroundImage",
+				"background"
+			],
 			"description": "Support for \"blockeraBackgroundColor\" value, this is mirror for WordPress block core \"color.background\" support"
 		}
 	]

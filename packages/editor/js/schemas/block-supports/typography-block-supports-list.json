@@ -13,105 +13,105 @@
 			"status": true,
 			"name": "blockeraFontColor",
 			"css-property": "color",
-			"fallback": ["color"],
+			"fallback": ["color.text", "color", "typography"],
 			"description": "Support for \"blockeraFontColor\" value, this is mirror for WordPress block core \"color\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraFontSize",
 			"css-property": "font-size",
-			"fallback": ["fontSize"],
+			"fallback": ["typography.fontSize", "typography"],
 			"description": "Support for \"blockeraFontSize\" value, this is mirror for WordPress block core \"fontSize\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraDirection",
 			"css-property": "direction",
-			"fallback": ["direction"],
+			"fallback": ["direction", "typography"],
 			"description": "Support for \"blockeraDirection\" value, this is mirror for WordPress block core \"direction\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraTextAlign",
 			"css-property": "text-align",
-			"fallback": ["align"],
+			"fallback": ["text-align", "typography"],
 			"description": "Support for \"blockeraTextAlign\" value, this is mirror for WordPress block core \"align\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraFontStyle",
 			"css-property": "font-style",
-			"fallback": ["fontStyle"],
+			"fallback": ["typography.fontStyle", "typography"],
 			"description": "Support for \"blockeraFontStyle\" value, this is mirror for WordPress block core \"fontStyle\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraWordBreak",
 			"css-property": "word-break",
-			"fallback": ["word-break"],
+			"fallback": ["word-break", "typography"],
 			"description": "Support for \"blockeraWordBreak\" value, this is mirror for WordPress block core \"word-break\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraTextIndent",
 			"css-property": "text-indent",
-			"fallback": ["text-indent"],
+			"fallback": ["text-indent", "typography"],
 			"description": "Support for \"blockeraTextIndent\" value, this is mirror for WordPress block core \"text-indent\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraLineHeight",
 			"css-property": "line-height",
-			"fallback": ["lineHeight"],
+			"fallback": ["typography.lineHeight", "typography"],
 			"description": "Support for \"blockeraLineHeight\" value, this is mirror for WordPress block core \"lineHeight\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraWordSpacing",
 			"css-property": "word-spacing",
-			"fallback": ["word-spacing"],
+			"fallback": ["word-spacing", "typography"],
 			"description": "Support for \"blockeraWordSpacing\" value, this is mirror for WordPress block core \"word-spacing\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraTextColumns",
 			"css-property": "column-count",
-			"fallback": ["column-count"],
+			"fallback": ["typography.textColumns", "typography"],
 			"description": "Support for \"blockeraTextColumns\" value, this is mirror for WordPress block core \"column-count\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraTextTransform",
 			"css-property": "text-transform",
-			"fallback": ["text-transform"],
+			"fallback": ["typography.textTransform", "typography"],
 			"description": "Support for \"blockeraTextTransform\" value, this is mirror for WordPress block core \"text-transform\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraLetterSpacing",
 			"css-property": "letter-spacing",
-			"fallback": ["letter-spacing"],
+			"fallback": ["typography"],
 			"description": "Support for \"blockeraLetterSpacing\" value, this is mirror for WordPress block core \"letter-spacing\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraTextDecoration",
 			"css-property": "text-decoration",
-			"fallback": ["text-decoration"],
+			"fallback": ["typography.textDecoration", "typography"],
 			"description": "Support for \"blockeraTextDecoration\" value, this is mirror for WordPress block core \"text-decoration\" support."
 		},
 		{
 			"status": true,
 			"name": "blockeraTextOrientation",
 			"css-property": "text-orientation",
-			"fallback": ["text-orientation"],
+			"fallback": ["typography.writingMode", "typography"],
 			"description": "Support for \"blockeraTextOrientation\" value."
 		},
 		{
 			"status": true,
 			"name": "blockeraTextStroke",
 			"css-property": "-webkit-text-stroke-color",
-			"fallback": ["textStroke"],
+			"fallback": ["typography"],
 			"description": "Support for \"blockeraTextStroke\" value."
 		}
 	]
