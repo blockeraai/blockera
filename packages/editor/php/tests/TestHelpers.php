@@ -9,7 +9,7 @@ class TestHelpers extends \WP_UnitTestCase {
 	public array $selectors = [
 		'root'                   => '.wp-block-sample, .wp-block-sample .first-child, .wp-block-sample .second-child',
 		'blockera/elements/link' => [
-			'root' => 'a:not(.wp-element-button)',
+			'root'  => 'a:not(.wp-element-button)',
 			'width' => '.wp-block-sample a'
 		],
 		'fallback'               => '.blockera-block.blockera-block--phggmy',
@@ -122,9 +122,9 @@ class TestHelpers extends \WP_UnitTestCase {
 	/**
 	 * @dataProvider getDataProviderForCalculationCssSelector
 	 *
-	 * @param string $featureId
+	 * @param string       $featureId
 	 * @param string|array $fallbackId
-	 * @param string $expected
+	 * @param string       $expected
 	 *
 	 * @return void
 	 */
@@ -272,6 +272,61 @@ class TestHelpers extends \WP_UnitTestCase {
 		$this->assertFalse( blockera_is_normal_on_base_breakpoint( 'normal', '2xl-desktop' ) );
 		$this->assertFalse( blockera_is_normal_on_base_breakpoint( 'normal', 'mobile' ) );
 		$this->assertFalse( blockera_is_normal_on_base_breakpoint( 'hover', 'desktop' ) );
+	}
+
+	public function testEmptySelector() {
+
+		$selector = '';
+		$root     = '.my-root';
+		$args     = [ 'blockName' => 'my-block' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( $root, $result );
+	}
+
+	public function testSelectorWithBlockName() {
+
+		$selector = '.wp-block-my-block';
+		$root     = '.my-root';
+		$args     = [ 'blockName' => 'my-block' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( '.my-root.wp-block-my-block, .wp-block-my-block.my-root', $result );
+	}
+
+	public function testSelectorWithBlockNameAndOtherClasses() {
+
+		$selector = '.wp-block-my-block.other-class';
+		$root     = '.my-root';
+		$args     = [ 'blockName' => 'my-block' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( '.my-root.wp-block-my-block.other-class, .wp-block-my-block.other-class.my-root', $result );
+	}
+
+	public function testSelectorWithTagName() {
+
+		$selector = 'div';
+		$root     = '.my-root';
+		$args     = [ 'blockName' => 'my-block' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( 'div.my-root', $result );
+	}
+
+	public function testSelectorStartingWithDot() {
+
+		$selector = '.my-class';
+		$root     = '.my-root';
+		$args     = [ 'blockName' => 'my-block' ];
+
+		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+
+		$this->assertEquals( '.my-root.my-class', $result );
 	}
 
 	public function tear_down() {

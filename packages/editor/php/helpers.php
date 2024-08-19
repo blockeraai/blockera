@@ -430,14 +430,32 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
+		$pattern = '/\.\bwp-block-' . preg_quote( $args['blockName'], '/' ) . '\b/';
+
 		// Assume recieved selector is another reference to root, so we should concat together.
-		if ( preg_match( '/\.(wp-block-' . $args['blockName'] . ')/', $selector, $matches ) ) {
+		if ( preg_match( $pattern, $selector, $matches ) ) {
 
 			// Cleanup root selector from any css standard pseudo-classes in this state.
 			$root = preg_replace( '/:\w+/', '', $root );
 
 			$prefix = str_replace( $matches[0], $root . $matches[0], $selector );
-			$suffix = str_replace( $matches[0], $matches[0] . $root, $selector );
+
+			$has_white_space = preg_match( '/\s/', $selector );
+
+			$suffix_regexp = sprintf(
+				'/%1$s\.\w+.(?:\w+)%2$s/',
+				preg_quote( $matches[0], '/' ),
+				$has_white_space ? '\s' : ''
+			);
+
+			if ( preg_match( $suffix_regexp, $selector, $m ) ) {
+
+				$suffix = str_replace( $m, $m[0] . $root, $selector );
+
+			} else {
+
+				$suffix = str_replace( $matches[0], $matches[0] . $root, $selector );
+			}
 
 			return sprintf( '%s, %s', $prefix, $suffix );
 		}
