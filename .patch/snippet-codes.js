@@ -1,8 +1,13 @@
 /**
  * Returns list of blocks that have customized selectors excluding the Blockera ones.
+ *
+ * This function is used in `/packages/blocks/core/test/customized-selector.blocks.e2e.cy.js`
+ * for creating the cache of blocks with customized selectors.
  */
 function blockTypesWithCustomizedSelectorsNoneBlockera() {
-	return wp.data
+	let blocks = {};
+
+	wp.data
 		.select('core/blocks')
 		.getBlockTypes()
 		.filter((block) => {
@@ -12,12 +17,18 @@ function blockTypesWithCustomizedSelectorsNoneBlockera() {
 
 			const selectors = Object.fromEntries(
 				Object.entries(block.selectors).filter(
-					([key]) => !key.startsWith('blockera/')
+					([key]) => !key.startsWith('blockera')
 				)
 			);
 
-			return Object.keys(selectors).length > 0;
+			if (Object.keys(selectors).length > 0) {
+				blocks[block.name] = selectors;
+			}
+
+			return false;
 		});
+
+	return blocks;
 }
 
 /**
