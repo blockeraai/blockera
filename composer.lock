@@ -265,7 +265,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/utils",
-                "reference": "97ad343b2181d664b54317cce003bcefcf38bc96"
+                "reference": "685d33104f94ade181dd764f82b2c6ffafc5d049"
             },
             "type": "library",
             "autoload": {
@@ -8023,5 +8023,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
