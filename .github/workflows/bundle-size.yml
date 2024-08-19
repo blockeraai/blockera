@@ -45,8 +45,12 @@ jobs:
                   fetch-depth: 1
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
+            - name: Use desired version of Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  check-latest: true
+                  cache: npm
 
             - uses: preactjs/compressed-size-action@v2
               with:
