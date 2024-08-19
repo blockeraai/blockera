@@ -49,7 +49,7 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version-file: '.nvmrc'
-                  node-version: true
+                  check-latest: true
                   cache: npm
 
             - uses: preactjs/compressed-size-action@v2
