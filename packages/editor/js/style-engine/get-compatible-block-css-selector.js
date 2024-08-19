@@ -59,23 +59,13 @@ export const getCompatibleBlockCssSelector = ({
 	];
 
 	const { getSelectedBlock } = select('core/block-editor') || {};
-	const { clientId: _clientId } = getSelectedBlock() || {};
 
-	const {
-		getActiveInnerState,
-		getActiveMasterState,
-		getExtensionInnerBlockState,
-		getExtensionCurrentBlockState,
-	} = select('blockera/extensions');
+	const { getActiveInnerState, getActiveMasterState } = select(
+		'blockera/extensions'
+	);
 
-	const getInnerState = () =>
-		_clientId === clientId
-			? getActiveInnerState(clientId, currentBlock)
-			: getExtensionInnerBlockState();
-	const getMasterState = () =>
-		_clientId === clientId
-			? getActiveMasterState(clientId, blockName)
-			: getExtensionCurrentBlockState();
+	const getInnerState = () => getActiveInnerState(clientId, currentBlock);
+	const getMasterState = () => getActiveMasterState(clientId, blockName);
 
 	// primitive block value.
 	let block: Object = {};
@@ -120,16 +110,19 @@ export const getCompatibleBlockCssSelector = ({
 		): string => {
 			const parsedSelectors = _selector.split(',');
 			const generateSelector = (selector: string): string => {
+				const innerStateType = getInnerState();
+				const masterStateType = getMasterState();
+
 				// Current Block is inner block.
 				if (fromInnerBlock) {
 					// Assume inner block inside pseudo-state of master.
 					if (masterState && !isNormalState(masterState)) {
 						if (!isNormalState(state)) {
 							if (
-								!isNormalState(getMasterState()) &&
-								masterState === getMasterState() &&
-								!isNormalState(getInnerState()) &&
-								state === getInnerState()
+								!isNormalState(masterStateType) &&
+								masterState === masterStateType &&
+								!isNormalState(innerStateType) &&
+								state === innerStateType
 							) {
 								return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
 							}
@@ -142,8 +135,8 @@ export const getCompatibleBlockCssSelector = ({
 
 					if (!isNormalState(state) && masterState) {
 						if (
-							!isNormalState(getInnerState()) &&
-							state === getInnerState()
+							!isNormalState(innerStateType) &&
+							state === innerStateType
 						) {
 							return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
 						}
@@ -158,8 +151,8 @@ export const getCompatibleBlockCssSelector = ({
 				if (!isNormalState(state)) {
 					// Assume active master block state is not normal.
 					if (
-						!isNormalState(getMasterState()) &&
-						state === getMasterState()
+						!isNormalState(masterStateType) &&
+						state === masterStateType
 					) {
 						return `${selector}${suffixClass}:${state}, ${selector}${suffixClass}`;
 					}
