@@ -196,6 +196,7 @@
 		"start": "wp-scripts start --progress --mode development",
 		"start:debug": "DEBUG_MODE=on wp-scripts start --progress",
 		"clean": "rm -rf build dist/* node_modules vendor wordpress",
+		"distclean": "git clean --force -d -X",
 		"prepare": "husky install",
 		"flow": "npx flow status",
 		"setup": "npm install && npm run build",
