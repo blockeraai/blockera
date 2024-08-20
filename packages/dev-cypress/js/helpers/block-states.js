@@ -9,7 +9,7 @@ export function addBlockState(state) {
 		.last()
 		.within(() => {
 			cy.getParentContainer('State').within(() => {
-				cy.get('select').select(state);
+				cy.get('select').select(state, { force: true });
 			});
 		});
 }

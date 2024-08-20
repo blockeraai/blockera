@@ -17,9 +17,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 	const openBackgroundItem = (index = 0) => {
 		cy.getParentContainer('Image & Gradient').within(() => {
-			cy.getByDataCy('group-control-header')
-				.eq(index)
-				.click({ force: true });
+			cy.getByDataCy('group-control-header').eq(index).click();
 		});
 	};
 

@@ -534,13 +534,13 @@ export const registerCommands = () => {
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
-				cy.getByDataCy('color-btn').click({ force: true });
+				cy.getByDataCy('color-btn').click();
 			});
 
 		cy.get('[data-wp-component="Popover"]')
 			.last()
 			.within(() => {
-				cy.getByAriaLabel('Reset Color (Clear)').click({ force: true });
+				cy.getByAriaLabel('Reset Color (Clear)').click();
 			});
 	});
 
