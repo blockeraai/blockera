@@ -445,7 +445,7 @@ export const registerCommands = () => {
 		// Close state graph
 		cy.getByDataTest('popover-header')
 			.last()
-			.within(() => cy.getByAriaLabel('Close').click());
+			.within(() => cy.getByAriaLabel('Close').click({ force: true }));
 	});
 
 	Cypress.Commands.add(
