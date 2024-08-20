@@ -7,7 +7,11 @@
 	background-color: #ffffff;
 
 	.blockera-control-block-states-repeater {
-    	padding: 0 2px 5px;
+    	padding: 0 2px;
+
+		.blockera-control-repeater-items-container {
+    		padding-bottom: 5px;
+		}
 	}
 
 	&.is-sticky-active {
