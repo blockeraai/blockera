@@ -26,8 +26,6 @@ class BoxShadow extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$this->setSelector( $cssProperty );
-
 		$boxShadows = array_map(
 			static function ( array $prop ) {
 
@@ -52,28 +50,6 @@ class BoxShadow extends BaseStyleDefinition {
 		$this->setCss( [ $cssProperty => implode( ',', $boxShadows ) ] );
 
 		return $this->css;
-	}
-
-	/**
-	 * @inheritDoc
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraBoxShadow' => 'box-shadow',
-		];
-	}
-
-	/**
-	 * Compatibility
-	 *
-	 * @inheritDoc
-	 */
-	protected function calculateFallbackFeatureId( string $cssProperty ): string {
-
-		return 'shadow';
 	}
 
 }

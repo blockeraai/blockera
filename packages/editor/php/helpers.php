@@ -1,7 +1,5 @@
 <?php
 
-use Blockera\Editor\StyleEngine;
-
 if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	/**
 	 * Retrieve css classname with suffix string.
@@ -432,11 +430,32 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
+		$pattern = '/\.\bwp-block-' . preg_quote( $args['blockName'], '/' ) . '\b/';
+
 		// Assume recieved selector is another reference to root, so we should concat together.
-		if ( preg_match( '/\.(wp-block-' . $args['blockName'] . ')/', $selector, $matches ) ) {
+		if ( preg_match( $pattern, $selector, $matches ) ) {
+
+			// Cleanup root selector from any css standard pseudo-classes in this state.
+			$root = preg_replace( '/:\w+/', '', $root );
 
 			$prefix = str_replace( $matches[0], $root . $matches[0], $selector );
-			$suffix = str_replace( $matches[0], $matches[0] . $root, $selector );
+
+			$has_white_space = preg_match( '/\s/', $selector );
+
+			$suffix_regexp = sprintf(
+				'/%1$s\.\w+.(?:\w+)%2$s/',
+				preg_quote( $matches[0], '/' ),
+				$has_white_space ? '\s' : ''
+			);
+
+			if ( preg_match( $suffix_regexp, $selector, $m ) ) {
+
+				$suffix = str_replace( $m, $m[0] . $root, $selector );
+
+			} else {
+
+				$suffix = str_replace( $matches[0], $matches[0] . $root, $selector );
+			}
 
 			return sprintf( '%s, %s', $prefix, $suffix );
 		}
@@ -713,5 +732,86 @@ if ( ! function_exists( 'blockera_is_normal_on_base_breakpoint' ) ) {
 	function blockera_is_normal_on_base_breakpoint( string $current_state, $current_breakpoint ): bool {
 
 		return 'normal' === $current_state && blockera_get_base_breakpoint() === $current_breakpoint;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_available_block_supports' ) ) {
+
+	/**
+	 * Retrieve available block supports list.
+	 *
+	 * @see: ../js/schemas/blockera-block-supports-list.json
+	 *
+	 * @param string $support_category the support category name.
+	 *
+	 * @return array The available block supports list for support category or all categories.
+	 */
+	function blockera_get_available_block_supports( string $support_category = '' ): array {
+
+		$supports = [];
+		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
+
+		foreach ( $files as $support_file ) {
+
+			ob_start();
+
+			require $support_file;
+
+			$support_config = json_decode( ob_get_clean(), true );
+
+			if ( empty( $support_config['supports'] ) || ( ! empty( trim( $support_category ) ) && $support_config['title'] !== $support_category ) ) {
+
+				continue;
+			}
+
+			$supports = array_merge(
+				$supports,
+				blockera_array_flat(
+					array_map(
+						function ( array $support ): array {
+
+							return [
+								$support['name'] => $support,
+							];
+						},
+						$support_config['supports']
+					)
+				)
+			);
+		}
+
+		return $supports;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_block_support' ) ) {
+
+	/**
+	 * Retrieve available block support properties by name.
+	 *
+	 * @param string $support_category the block support category name.
+	 * @param string $name             the block support name.
+	 * @param string $property         the block support property. default is empty.
+	 *
+	 * @return mixed The available block supports list as array, or string, boolean on success, null while failure!
+	 */
+	function blockera_get_block_support( string $support_category, string $name, string $property = '' ) {
+
+		$support_category = \Blockera\Utils\Utils::kebabCase( $support_category );
+		$supports         = blockera_get_available_block_supports( $support_category );
+
+		if ( empty( $supports ) || empty( $supports[ $name ] ) ) {
+
+			return null;
+		}
+
+		$available_support = $supports[ $name ];
+
+		if ( ! empty( $property ) && ! empty( $available_support[ $property ] ) ) {
+
+			return $available_support[ $property ];
+		}
+
+		return $available_support;
 	}
 }

@@ -18,6 +18,9 @@ import {
 	computedCssDeclarations,
 	getCompatibleBlockCssSelector,
 } from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('typography');
 
 export function TypographyStyles({
 	state,
@@ -81,7 +84,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraFontSize',
 				support: 'blockeraFontSize',
-				fallbackSupportId: 'font-size',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontSize'
+				),
 			});
 
 			styleGroup.push({
@@ -114,7 +120,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraLineHeight',
 				support: 'blockeraLineHeight',
-				fallbackSupportId: 'line-height',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraLineHeight'
+				),
 			});
 
 			styleGroup.push({
@@ -147,7 +156,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraFontColor',
 				support: 'blockeraFontColor',
-				fallbackSupportId: 'color',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontColor'
+				),
 			});
 
 			styleGroup.push({
@@ -177,7 +189,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraTextAlign',
 				support: 'blockeraTextAlign',
-				fallbackSupportId: 'text-align;',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextAlign'
+				),
 			});
 
 			styleGroup.push({
@@ -210,7 +225,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraTextDecoration',
 				support: 'blockeraTextDecoration',
-				fallbackSupportId: 'text-decoration',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextDecoration'
+				),
 			});
 
 			styleGroup.push({
@@ -240,7 +258,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraFontStyle',
 				support: 'blockeraFontStyle',
-				fallbackSupportId: 'font-style',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontStyle'
+				),
 			});
 
 			styleGroup.push({
@@ -273,7 +294,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraTextTransform',
 				support: 'blockeraTextTransform',
-				fallbackSupportId: 'text-transform',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextTransform'
+				),
 			});
 
 			styleGroup.push({
@@ -303,7 +327,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraDirection',
 				support: 'blockeraDirection',
-				fallbackSupportId: 'direction',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraDirection'
+				),
 			});
 
 			styleGroup.push({
@@ -336,7 +363,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraLetterSpacing',
 				support: 'blockeraLetterSpacing',
-				fallbackSupportId: 'letter-spacing',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraLetterSpacing'
+				),
 			});
 
 			styleGroup.push({
@@ -366,7 +396,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraWordSpacing',
 				support: 'blockeraWordSpacing',
-				fallbackSupportId: 'word-spacing',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraWordSpacing'
+				),
 			});
 
 			styleGroup.push({
@@ -396,7 +429,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraTextIndent',
 				support: 'blockeraTextIndent',
-				fallbackSupportId: 'text-indent',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextIndent'
+				),
 			});
 
 			styleGroup.push({
@@ -430,7 +466,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraTextOrientation',
 				support: 'blockeraTextOrientation',
-				fallbackSupportId: 'text-orientation',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextOrientation'
+				),
 			});
 
 			const properties: {
@@ -492,7 +531,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraTextColumns',
 				support: 'blockeraTextColumns',
-				fallbackSupportId: 'text-columns',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextColumns'
+				),
 			});
 
 			const properties: {
@@ -560,7 +602,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraTextStroke',
 				support: 'blockeraTextStroke',
-				fallbackSupportId: 'text-stroke',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextStroke'
+				),
 			});
 
 			const textStrokeColor = getValueAddonRealValue(
@@ -602,7 +647,10 @@ export function TypographyStyles({
 				...sharedParams,
 				query: 'blockeraWordBreak',
 				support: 'blockeraWordBreak',
-				fallbackSupportId: 'word-break',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraWordBreak'
+				),
 			});
 
 			styleGroup.push({
@@ -635,7 +683,10 @@ export function TypographyStyles({
 			...sharedParams,
 			query: 'blockeraTextShadow',
 			support: 'blockeraTextShadow',
-			fallbackSupportId: 'text-shadow',
+			fallbackSupportId: getBlockSupportFallback(
+				getBlockSupportCategory('textShadow'),
+				'blockeraTextShadow'
+			),
 		});
 
 		styleGroup.push({

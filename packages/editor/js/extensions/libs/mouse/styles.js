@@ -10,6 +10,9 @@ import {
 	getCompatibleBlockCssSelector,
 	computedCssDeclarations,
 } from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('mouse');
 
 export const MouseStyles = ({
 	state,
@@ -59,7 +62,10 @@ export const MouseStyles = ({
 			...sharedParams,
 			query: 'blockeraCursor',
 			support: 'blockeraCursor',
-			fallbackSupportId: 'cursor',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraCursor'
+			),
 		});
 
 		styleGroup.push({
@@ -89,7 +95,10 @@ export const MouseStyles = ({
 			...sharedParams,
 			query: 'blockeraUserSelect',
 			support: 'blockeraUserSelect',
-			fallbackSupportId: 'userSelect',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraUserSelect'
+			),
 		});
 
 		styleGroup.push({
@@ -120,7 +129,10 @@ export const MouseStyles = ({
 			...sharedParams,
 			query: 'blockeraPointerEvents',
 			support: 'blockeraPointerEvents',
-			fallbackSupportId: 'pointerEvent',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraPointerEvents'
+			),
 		});
 
 		styleGroup.push({

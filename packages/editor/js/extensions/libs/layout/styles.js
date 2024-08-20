@@ -16,6 +16,9 @@ import {
 	getCompatibleBlockCssSelector,
 	computedCssDeclarations,
 } from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('layout');
 
 export const LayoutStyles = ({
 	state,
@@ -71,7 +74,10 @@ export const LayoutStyles = ({
 			...sharedParams,
 			query: 'blockeraDisplay',
 			support: 'blockeraDisplay',
-			fallbackSupportId: 'display',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraDisplay'
+			),
 		});
 
 		styleGroup.push({
@@ -100,7 +106,10 @@ export const LayoutStyles = ({
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.direction',
-				fallbackSupportId: 'flexDirection',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexLayout'
+				),
 			});
 
 			styleGroup.push({
@@ -127,7 +136,10 @@ export const LayoutStyles = ({
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.alignItems',
-				fallbackSupportId: 'alignItems',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexLayout'
+				),
 			});
 
 			styleGroup.push({
@@ -154,7 +166,10 @@ export const LayoutStyles = ({
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.justifyContent',
-				fallbackSupportId: 'justifyContent',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexLayout'
+				),
 			});
 
 			styleGroup.push({
@@ -196,7 +211,10 @@ export const LayoutStyles = ({
 			...sharedParams,
 			query: 'blockeraFlexWrap',
 			support: 'blockeraFlexWrap',
-			fallbackSupportId: 'flexWrap',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraFlexWrap'
+			),
 		});
 
 		styleGroup.push({
@@ -227,7 +245,10 @@ export const LayoutStyles = ({
 			...sharedParams,
 			query: 'blockeraAlignContent',
 			support: 'blockeraAlignContent',
-			fallbackSupportId: 'alignContent',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraAlignContent'
+			),
 		});
 
 		styleGroup.push({
@@ -285,7 +306,10 @@ export const LayoutStyles = ({
 					...sharedParams,
 					query: 'blockeraGap',
 					support: 'blockeraGap',
-					fallbackSupportId: 'gap',
+					fallbackSupportId: getBlockSupportFallback(
+						supports,
+						'blockeraGap'
+					),
 					...(gapSuffixClass ? { suffixClass: gapSuffixClass } : {}),
 				});
 
@@ -331,7 +355,10 @@ export const LayoutStyles = ({
 				const pickedSelector = getCompatibleBlockCssSelector({
 					...sharedParams,
 					query: 'blockeraGap.rows',
-					fallbackSupportId: 'rowGap',
+					fallbackSupportId: getBlockSupportFallback(
+						supports,
+						'blockeraGap'
+					),
 					...(gapSuffixClass ? { suffixClass: gapSuffixClass } : {}),
 				});
 
@@ -380,7 +407,10 @@ export const LayoutStyles = ({
 				const pickedSelector = getCompatibleBlockCssSelector({
 					...sharedParams,
 					query: 'blockeraGap.columns',
-					fallbackSupportId: 'columnGap',
+					fallbackSupportId: getBlockSupportFallback(
+						supports,
+						'blockeraGap'
+					),
 					...(gapSuffixClass ? { suffixClass: gapSuffixClass } : {}),
 				});
 
@@ -414,7 +444,10 @@ export const LayoutStyles = ({
 				...sharedParams,
 				query: 'blockeraGap',
 				support: 'blockeraGap',
-				fallbackSupportId: 'gap',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraGap'
+				),
 				suffixClass: '> * + *',
 			});
 

@@ -20,8 +20,6 @@ class Mouse extends BaseStyleDefinition {
 			return [];
 		}
 
-		$this->setSelector( $cssProperty );
-
 		$this->setCss(
 			[
 				$cssProperty => $setting[ $cssProperty ],
@@ -29,20 +27,6 @@ class Mouse extends BaseStyleDefinition {
 		);
 
 		return $this->css;
-	}
-
-	/**
-	 * @inheritdoc
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraCursor'        => 'cursor',
-			'blockeraUserSelect'    => 'user-select',
-			'blockeraPointerEvents' => 'pointer-events',
-		];
 	}
 
 }

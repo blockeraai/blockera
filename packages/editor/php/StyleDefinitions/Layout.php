@@ -2,28 +2,16 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\Contracts\HaveCustomSettings;
+use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
 
-class Layout extends BaseStyleDefinition implements HaveCustomSettings {
+class Layout extends BaseStyleDefinition implements CustomStyle {
 
 	/**
-	 * @inheritdoc
+	 * Store removal flag for gap with "margin-block-start".
 	 *
-	 * @return string[]
+	 * @var bool $with_gap_margin_block_start the flag to removal gap with "margin-block-start".
 	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraGap'             => 'gap',
-			'blockeraFlexChildSizing' => 'flex',
-			'blockeraFlexChildOrder'  => 'order',
-			'blockeraDisplay'         => 'display',
-			'blockeraFlexWrap'        => 'flex-wrap',
-			'blockeraFlexChildAlign'  => 'align-self',
-			'blockeraAlignContent'    => 'align-content',
-			'blockeraFlexLayout'      => 'flex-direction',
-		];
-	}
+	protected bool $with_gap_margin_block_start = false;
 
 	/**
 	 * @inheritdoc
@@ -34,10 +22,8 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 	 */
 	protected function css( array $setting ): array {
 
-		$declaration               = [];
-		$cssProperty               = $setting['type'];
-		$selectorSuffix            = '';
-		$removeGapMarginBlockStart = false;
+		$declaration = [];
+		$cssProperty = $setting['type'];
 
 		if ( empty( $cssProperty ) ) {
 
@@ -174,7 +160,7 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 					'gap-and-margin' === $gapType &&
 					( 'flex' === $display || 'grid' === $display )
 				) {
-					$removeGapMarginBlockStart = true;
+					$this->with_gap_margin_block_start = true;
 				}
 
 				break;
@@ -183,24 +169,15 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 				break;
 		}
 
-		$this->setSelector(
-			$cssProperty,
-			$selectorSuffix
-		);
-
 		$this->setCss( $declaration );
 
 		/**
 		 * If gap type is both and the current display is flex or grid
 		 * then we use gap property to but still WP is creating gap with `margin-block-start` and we have to remove it.
 		 *
-		 * This variable is false by default but it will be enabled if the style clearing is needed.
+		 * This variable is false by default, but it will be enabled if the style clearing is needed.
 		 */
-		if ( $removeGapMarginBlockStart ) {
-			$this->setSelector(
-				'margin-block-start',
-				'> * + *'
-			);
+		if ( $this->with_gap_margin_block_start ) {
 
 			$this->setCss(
 				[
@@ -261,6 +238,26 @@ class Layout extends BaseStyleDefinition implements HaveCustomSettings {
 		}
 
 		return $setting;
+	}
+
+	public function setSelector( string $support ): void {
+
+		/**
+		 * If gap type is both and the current display is flex or grid
+		 * then we use gap property to but still WP is creating gap with `margin-block-start` and we have to remove it.
+		 *
+		 * This variable is false by default, but it will be enabled if the style clearing is needed.
+		 */
+		if ( $this->with_gap_margin_block_start ) {
+
+			parent::setSelector( 'margin-block-start' );
+
+			$this->selector .= '> * + *';
+
+			return;
+		}
+
+		parent::setSelector( $support );
 	}
 
 }

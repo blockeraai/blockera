@@ -1,6 +1,7 @@
 # Custom Dictionary Words
 ABSPATH
 autoloader
+backface
 blockera
 clsx
 freemius
