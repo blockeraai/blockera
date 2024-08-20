@@ -1,0 +1,27 @@
+{
+	"$schema": "../block.supports.schema.json",
+	"title": "mouse",
+	"supports": [
+		{
+			"status": true,
+			"name": "blockeraCursor",
+			"css-property": "cursor",
+			"fallback": ["cursor"],
+			"description": "Support for \"blockeraCursor\" value."
+		},
+		{
+			"status": true,
+			"name": "blockeraUserSelect",
+			"css-property": "user-select",
+			"fallback": ["user-select"],
+			"description": "Support for \"blockeraUserSelect\" value."
+		},
+		{
+			"status": true,
+			"name": "blockeraPointerEvents",
+			"css-property": "pointer-events",
+			"fallback": ["pointer-events"],
+			"description": "Support for \"blockeraPointerEvents\" value."
+		}
+	]
+}

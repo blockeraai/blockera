@@ -2,14 +2,14 @@ export function addBlockState(state) {
 	cy.getByAriaLabel('Blockera Block State Container').first().as('states');
 
 	cy.get('@states').within(() => {
-		cy.getByAriaLabel('Add New State').click();
+		cy.getByAriaLabel('Add New State').click({ force: true });
 	});
 
 	cy.get('.components-popover')
 		.last()
 		.within(() => {
 			cy.getParentContainer('State').within(() => {
-				cy.get('select').select(state);
+				cy.get('select').select(state, { force: true });
 			});
 		});
 }

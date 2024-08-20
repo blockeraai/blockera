@@ -26,8 +26,6 @@ class Size extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$this->setSelector( $cssProperty );
-
 		switch ( $cssProperty ) {
 
 			case 'aspect-ratio':
@@ -67,46 +65,6 @@ class Size extends BaseStyleDefinition {
 		}
 
 		return $this->css;
-	}
-
-	/**
-	 * Get allowed reserved properties.
-	 *
-	 * @return array
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraWidth'       => 'width',
-			'blockeraMinWidth'    => 'min-width',
-			'blockeraMaxWidth'    => 'max-width',
-			'blockeraHeight'      => 'height',
-			'blockeraMinHeight'   => 'min-height',
-			'blockeraMaxHeight'   => 'max-height',
-			'blockeraOverflow'    => 'overflow',
-			'blockeraFit'         => 'object-fit',
-			'blockeraRatio'       => 'aspect-ratio',
-			'blockeraFitPosition' => 'object-position',
-		];
-	}
-
-	/**
-	 * Calculation fallback feature id.
-	 * To be compatible with WordPress block selectors.
-	 *
-	 * @param string $cssProperty The css property key.
-	 *
-	 * @return string The path to fallback feature id.
-	 */
-	protected function calculateFallbackFeatureId( string $cssProperty ): string {
-
-		$paths = [
-			'min-width'    => 'dimensions.minWidth',
-			'min-height'   => 'dimensions.minHeight',
-			'aspect-ratio' => 'dimensions.aspectRatio',
-		];
-
-		return $paths[ $cssProperty ] ?? '';
 	}
 
 }

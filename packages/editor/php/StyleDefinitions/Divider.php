@@ -9,13 +9,6 @@ namespace Blockera\StyleEngine\StyleDefinitions;
  */
 class Divider extends BaseStyleDefinition {
 
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraDivider' => '',
-		];
-	}
-
 	protected function css( array $setting ): array {
 
 		$declaration = [];
@@ -25,8 +18,6 @@ class Divider extends BaseStyleDefinition {
 
 			return $declaration;
 		}
-
-		$this->setSelector( $cssProperty );
 
 		return $this->css;
 	}

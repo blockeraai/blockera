@@ -24,34 +24,6 @@ class Background extends BaseStyleDefinition {
 	];
 
 	/**
-	 * Get the allowed available properties.
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraBackgroundClip'  => 'background-clip',
-			'blockeraBackgroundColor' => 'background-color',
-			'blockeraBackground'      => 'background-image',
-		];
-	}
-
-	/**
-	 * Compatibility
-	 *
-	 * @inheritDoc
-	 */
-	protected function calculateFallbackFeatureId( string $cssProperty ): string {
-
-		$paths = [
-			'background-color' => 'color.background',
-		];
-
-		return $paths[ $cssProperty ] ?? '';
-	}
-
-	/**
 	 * Check is valid setting for style?
 	 *
 	 * @param array $setting array of style setting.
@@ -91,8 +63,6 @@ class Background extends BaseStyleDefinition {
 
 			return $this->declarations;
 		}
-
-		$this->setSelector( $cssProperty );
 
 		switch ( $cssProperty ) {
 

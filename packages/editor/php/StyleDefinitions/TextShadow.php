@@ -20,8 +20,6 @@ class TextShadow extends BaseStyleDefinition {
 			return [];
 		}
 
-		$this->setSelector( $cssProperty );
-
 		$textShadows = array_map(
 			static function ( array $prop ) {
 
@@ -45,15 +43,4 @@ class TextShadow extends BaseStyleDefinition {
 		return $this->css;
 	}
 
-	/**
-	 * @inheritDoc
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraTextShadow' => 'text-shadow',
-		];
-	}
 }

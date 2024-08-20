@@ -16,6 +16,9 @@ import {
 	getCompatibleBlockCssSelector,
 } from '../../../style-engine';
 import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('background');
 
 export const BackgroundStyles = ({
 	state,
@@ -64,7 +67,10 @@ export const BackgroundStyles = ({
 			...sharedParams,
 			query: 'blockeraBackground',
 			support: 'blockeraBackground',
-			fallbackSupportId: 'background',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBackground'
+			),
 		});
 
 		styleGroup.push({
@@ -96,7 +102,10 @@ export const BackgroundStyles = ({
 				...sharedParams,
 				query: 'blockeraBackgroundColor',
 				support: 'blockeraBackgroundColor',
-				fallbackSupportId: 'backgroundColor',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraBackgroundColor'
+				),
 			});
 
 			styleGroup.push({
@@ -128,7 +137,10 @@ export const BackgroundStyles = ({
 			...sharedParams,
 			query: 'blockeraBackgroundClip',
 			support: 'blockeraBackgroundClip',
-			fallbackSupportId: 'backgroundClip',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBackgroundClip'
+			),
 		});
 
 		styleGroup.push({

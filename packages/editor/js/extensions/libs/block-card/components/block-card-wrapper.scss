@@ -1,11 +1,56 @@
 .blockera-block-card-wrapper {
 	padding: 16px;
 	border: none;
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: 1px solid transparent;
 	margin-bottom: -1px;
 	min-height: 120px;
+	background-color: #ffffff;
 
 	.blockera-control-block-states-repeater {
-		padding: 0 5px 5px;
+    	padding: 0 2px;
+
+		.blockera-control-repeater-items-container {
+    		padding-bottom: 5px;
+		}
 	}
+
+	&.is-sticky-active {
+		position: sticky;
+		top: 0;
+		z-index: 9999;
+
+		&::after {
+			content: "";
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			pointer-events: none;
+			-webkit-user-select: none;
+			user-select: none;
+			height: 30px;
+			display: block;
+			box-shadow: 0 11px 11px -6px rgba(0, 0, 0, 0.16);
+			opacity: 0;
+			z-index: -1;
+			transition: all 0.075s ease;
+		}
+
+		&.is-stuck {
+			border-bottom-color: #e0e0e0;
+
+			&::after {
+				opacity: 1;
+			}
+		}
+	}
+}
+
+.blockera-block-card-sticky-sentinel {
+	height: 1px; /* Minimal height so it doesn't affect layout */
+	visibility: hidden; /* Keep it invisible */
+}
+
+.interface-complementary-area-header.editor-sidebar__panel-tabs {
+	position: static;
 }

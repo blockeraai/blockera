@@ -22,6 +22,9 @@ import {
 	computedCssDeclarations,
 	getCompatibleBlockCssSelector,
 } from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('border');
 
 export const BorderAndShadowStyles = ({
 	state,
@@ -74,7 +77,10 @@ export const BorderAndShadowStyles = ({
 			...sharedParams,
 			query: 'blockeraBoxShadow',
 			support: 'blockeraBoxShadow',
-			fallbackSupportId: 'box-shadow',
+			fallbackSupportId: getBlockSupportFallback(
+				getBlockSupportCategory('boxShadow'),
+				'blockeraBoxShadow'
+			),
 		});
 
 		styleGroup.push({
@@ -101,7 +107,10 @@ export const BorderAndShadowStyles = ({
 				...sharedParams,
 				query: 'blockeraOutline',
 				support: 'blockeraOutline',
-				fallbackSupportId: 'outline',
+				fallbackSupportId: getBlockSupportFallback(
+					getBlockSupportCategory('outline'),
+					'blockeraOutline'
+				),
 			});
 
 			styleGroup.push({
@@ -129,7 +138,10 @@ export const BorderAndShadowStyles = ({
 				...sharedParams,
 				query: 'blockeraBorder',
 				support: 'blockeraBorder',
-				fallbackSupportId: 'border',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraBorder'
+				),
 			});
 
 			styleGroup.push({
@@ -162,7 +174,10 @@ export const BorderAndShadowStyles = ({
 				...sharedParams,
 				query: 'blockeraBorderRadius',
 				support: 'blockeraBorderRadius',
-				fallbackSupportId: 'border',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraBorderRadius'
+				),
 			});
 
 			styleGroup.push({
