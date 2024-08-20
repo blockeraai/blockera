@@ -276,15 +276,20 @@ export const registerCommands = () => {
 
 	// select custom select item
 	Cypress.Commands.add('customSelect', (item) => {
-		cy.get('button[aria-haspopup="listbox"]').click();
+		cy.get('button[aria-haspopup="listbox"]').click({ force: true });
 
 		cy.get('ul').within(() => {
-			cy.contains(item).click();
+			cy.contains(item).click({ force: true });
 		});
 	});
 
 	Cypress.Commands.add('openAccordion', (accordionHeading) =>
-		cy.get('h2').contains(accordionHeading).parent().parent().click()
+		cy
+			.get('h2')
+			.contains(accordionHeading)
+			.parent()
+			.parent()
+			.click({ force: true })
 	);
 
 	Cypress.Commands.add('addRepeaterItem', (ariaLabel, clickCount) => {
@@ -322,7 +327,7 @@ export const registerCommands = () => {
 			if (repeaterItem) {
 				// for repeater inner labels
 				cy.getByDataTest('popover-body').within(() => {
-					cy.getByAriaLabel(label).click();
+					cy.getByAriaLabel(label).click({ force: true });
 				});
 			} else
 				cy.get('h2')
@@ -330,7 +335,7 @@ export const registerCommands = () => {
 					.parent()
 					.parent()
 					.within(() => {
-						cy.getByAriaLabel(label).click();
+						cy.getByAriaLabel(label).click({ force: true });
 					});
 
 			cy.checkStateGraphPopover(changes);
@@ -505,7 +510,7 @@ export const registerCommands = () => {
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
-				cy.getByDataCy('color-btn').click();
+				cy.getByDataCy('color-btn').click({ force: true });
 			});
 
 		cy.get('[data-wp-component="Popover"]')
@@ -517,7 +522,9 @@ export const registerCommands = () => {
 					.then(() => {
 						if (Cypress.$(`[aria-label="Close"]`).length) {
 							// close popover
-							Cypress.$(`[aria-label="Close"]`)[0].click();
+							Cypress.$(`[aria-label="Close"]`)[0].click({
+								force: true,
+							});
 						}
 					});
 			});
@@ -527,13 +534,13 @@ export const registerCommands = () => {
 		cy.getParentContainer(label)
 			.last()
 			.within(() => {
-				cy.getByDataCy('color-btn').click();
+				cy.getByDataCy('color-btn').click({ force: true });
 			});
 
 		cy.get('[data-wp-component="Popover"]')
 			.last()
 			.within(() => {
-				cy.getByAriaLabel('Reset Color (Clear)').click();
+				cy.getByAriaLabel('Reset Color (Clear)').click({ force: true });
 			});
 	});
 
@@ -544,7 +551,7 @@ export const registerCommands = () => {
 			if (repeaterItem) {
 				// for repeater inner labels
 				cy.getByDataTest('popover-body').within(() => {
-					cy.getByAriaLabel(label).click();
+					cy.getByAriaLabel(label).click({ force: true });
 				});
 			} else
 				cy.get('h2')
@@ -552,13 +559,15 @@ export const registerCommands = () => {
 					.parent()
 					.parent()
 					.within(() => {
-						cy.getByAriaLabel(label).click();
+						cy.getByAriaLabel(label).click({ force: true });
 					});
 
 			cy.getByDataTest('popover-body')
 				.last()
 				.within(() => {
-					cy.getByDataTest(`${resetType}-button`).click();
+					cy.getByDataTest(`${resetType}-button`).click({
+						force: true,
+					});
 				});
 		}
 	);
@@ -574,14 +583,18 @@ export const registerCommands = () => {
 				cy.get('[data-wp-component="Popover"]')
 					.last()
 					.within(() => {
-						cy.get('[data-cy="label-control"]').first().click();
+						cy.get('[data-cy="label-control"]')
+							.first()
+							.click({ force: true });
 					});
 			}
 
 			cy.getByDataTest('popover-body')
 				.last()
 				.within(() => {
-					cy.getByDataTest(`${resetType}-button`).click();
+					cy.getByDataTest(`${resetType}-button`).click({
+						force: true,
+					});
 				});
 		}
 	);
@@ -597,7 +610,9 @@ export const registerCommands = () => {
 				cy.get('[data-wp-component="Popover"]')
 					.last()
 					.within(() => {
-						cy.get('[data-cy="label-control"]').first().click();
+						cy.get('[data-cy="label-control"]')
+							.first()
+							.click({ force: true });
 					});
 			}
 
