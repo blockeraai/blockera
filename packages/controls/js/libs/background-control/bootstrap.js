@@ -51,6 +51,50 @@ export const backgroundComponentConfig: Object = {
 			},
 		},
 	},
+	blockeraOverlay: {
+		config: {
+			types: [
+				{
+					label: __('Color', 'blockera'),
+					value: 'color',
+					icon: <Icon icon="background-color" iconSize="18" />,
+				},
+				{
+					label: __('Image', 'blockera'),
+					value: 'image',
+					icon: <Icon icon="background-image" iconSize="18" />,
+				},
+				{
+					label: __('Linear Gradient', 'blockera'),
+					value: 'linear-gradient',
+					icon: (
+						<Icon icon="background-linear-gradient" iconSize="18" />
+					),
+				},
+				{
+					label: __('Radial Gradient', 'blockera'),
+					value: 'radial-gradient',
+					icon: (
+						<Icon icon="background-radial-gradient" iconSize="18" />
+					),
+				},
+				{
+					label: __('Mesh Gradient', 'blockera'),
+					value: 'mesh-gradient',
+					icon: (
+						<Icon icon="background-mesh-gradient" iconSize="18" />
+					),
+				},
+			],
+			meshGradientColors: {
+				show: true,
+				force: true,
+				status: true,
+				isActiveOnFree: false,
+				label: __('Colors', 'blockera'),
+			},
+		},
+	},
 };
 
 export const backgroundBootstrapper = (): void => {

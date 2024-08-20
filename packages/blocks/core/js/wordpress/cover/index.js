@@ -3,7 +3,13 @@
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	extensionConfig,
+	SharedBlockExtension,
+	registerBlockExtensionsSupports,
+	registerInnerBlockExtensionsSupports,
+} from '@blockera/editor';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -27,5 +33,16 @@ export const Cover: BlockType = {
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
+	},
+	registerExtensions: (blockName: string): void => {
+		const config = mergeObject(extensionConfig, {
+			backgroundConfig: {
+				blockeraOverlay: {
+					status: true,
+				},
+			},
+		});
+
+		registerBlockExtensionsSupports(blockName, config);
 	},
 };

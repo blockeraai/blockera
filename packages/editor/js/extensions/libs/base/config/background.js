@@ -32,8 +32,16 @@ const blockeraBackgroundClip: FeatureConfig = {
 	label: __('Background Clipping', 'blockera'),
 };
 
+const blockeraOverlay: FeatureConfig = {
+	show: true,
+	force: false,
+	status: false,
+	label: __('Overlay', 'blockera'),
+};
+
 export const backgroundConfig = {
 	blockeraBackground,
 	blockeraBackgroundColor,
 	blockeraBackgroundClip,
+	blockeraOverlay,
 };

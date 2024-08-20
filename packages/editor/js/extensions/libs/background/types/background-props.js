@@ -12,15 +12,18 @@ export type TBackgroundProps = {
 		blockeraBackground: FeatureConfig,
 		blockeraBackgroundColor: FeatureConfig,
 		blockeraBackgroundClip: FeatureConfig,
+		blockeraOverlay: FeatureConfig,
 	},
 	values: {
 		blockeraBackground: Object,
 		blockeraBackgroundColor: string,
 		blockeraBackgroundClip: string,
+		blockeraOverlay: Object,
 	},
 	extensionProps: {
 		blockeraBackground: Object,
 		blockeraBackgroundColor: Object,
 		blockeraBackgroundClip: Object,
+		blockeraOverlay: Object,
 	},
 };
