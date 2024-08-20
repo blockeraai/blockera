@@ -1,7 +1,7 @@
 .blockera-block-card-wrapper {
 	padding: 16px;
 	border: none;
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: 1px solid transparent;
 	margin-bottom: -1px;
 	min-height: 120px;
 	background-color: #ffffff;
@@ -16,7 +16,7 @@
 
 	&.is-sticky-active {
 		position: sticky;
-		top: 47px;
+		top: 0;
 		z-index: 9999;
 
 		&::after {
@@ -36,13 +36,21 @@
 			transition: all 0.075s ease;
 		}
 
-		&.is-stuck::after {
-			opacity: 1;
+		&.is-stuck {
+			border-bottom-color: #e0e0e0;
+
+			&::after {
+				opacity: 1;
+			}
 		}
 	}
+}
 
-	.blockera-block-card-sticky-sentinel {
-		height: 1px; /* Minimal height so it doesn't affect layout */
-		visibility: hidden; /* Keep it invisible */
-	}
+.blockera-block-card-sticky-sentinel {
+	height: 1px; /* Minimal height so it doesn't affect layout */
+	visibility: hidden; /* Keep it invisible */
+}
+
+.interface-complementary-area-header.editor-sidebar__panel-tabs {
+	position: static;
 }
