@@ -16,7 +16,7 @@ import type {
 	TStates,
 } from './types';
 import { getBaseBreakpoint } from '../../../canvas-editor';
-import { isInnerBlock, isNormalState } from '../../components/utils';
+import { isNormalState } from '../../components/utils';
 
 /**
  * Is normal state on base breakpoint?
@@ -55,7 +55,8 @@ export function onChangeBlockStates(
 		newValue = onChangeValue?.value;
 	}
 
-	const { currentBlock, getStateInfo, getBlockStates } = params;
+	const { currentBlock, getStateInfo, getBlockStates, isMasterBlockStates } =
+		params;
 	const { getSelectedBlock } = select('core/block-editor');
 
 	const {
@@ -90,12 +91,12 @@ export function onChangeBlockStates(
 			});
 		};
 
-		if (isInnerBlock(currentBlock) && state?.isSelected) {
+		if (!isMasterBlockStates && state?.isSelected) {
 			setInnerBlockDetails();
 		} else if (state?.isSelected) {
 			setBlockDetails();
 		} else if (Object.keys(newValue).length < 2 && newValue?.normal) {
-			if (isInnerBlock(currentBlock)) {
+			if (!isMasterBlockStates) {
 				setInnerBlockDetails();
 			} else {
 				setBlockDetails();
@@ -105,7 +106,7 @@ export function onChangeBlockStates(
 
 	setBlockClientStates({
 		clientId: getSelectedBlock()?.clientId,
-		blockType: isInnerBlock(currentBlock)
+		blockType: !isMasterBlockStates
 			? currentBlock
 			: getSelectedBlock()?.name,
 		blockStates: newValue,
@@ -118,7 +119,7 @@ export function onChangeBlockStates(
 
 		blockStates = getBlockStates(
 			clientId,
-			isInnerBlock(currentBlock) ? currentBlock : name
+			!isMasterBlockStates ? currentBlock : name
 		);
 
 		const value: { [key: string]: Object } = {};
