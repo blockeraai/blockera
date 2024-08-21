@@ -248,6 +248,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							currentInnerBlockState,
 						}}
 					/>
+				</Fill>,
+				<Fill
+					key={`${props.clientId}${currentBlock}-states-manager`}
+					name={`blockera-${kebabCase(
+						currentBlock
+					)}-inner-block-card-children`}
+				>
 					{isInnerBlock(currentBlock) && (
 						<StatesManager
 							id={`block-states-${kebabCase(currentBlock)}`}

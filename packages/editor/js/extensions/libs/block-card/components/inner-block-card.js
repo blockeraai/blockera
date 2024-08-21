@@ -4,12 +4,10 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import {
-	useBlockDisplayInformation,
-	__experimentalBlockVariationTransforms as BlockVariationTransforms,
-} from '@wordpress/block-editor';
 import { Slot } from '@wordpress/components';
+import { __experimentalBlockVariationTransforms as BlockVariationTransforms } from '@wordpress/block-editor';
 
 /**
  * Blockera dependencies
@@ -18,21 +16,24 @@ import {
 	extensionClassNames,
 	extensionInnerClassNames,
 } from '@blockera/classnames';
+import { kebabCase } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
-import type { StateTypes } from '../../block-states/types';
 import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
+import type { StateTypes } from '../../block-states/types';
 
-export function BlockCard({
+export function InnerBlockCard({
 	states,
 	clientId,
 	children,
 	blockName,
+	activeBlock,
+	innerBlocks,
 	handleOnClick,
 	currentInnerBlock,
 }: {
@@ -41,10 +42,31 @@ export function BlockCard({
 	states: StateTypes,
 	children?: MixedElement,
 	currentInnerBlock: InnerBlockModel,
+	activeBlock: 'master' | InnerBlockType,
 	handleOnClick: UpdateBlockEditorSettings,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
-	const blockInformation = useBlockDisplayInformation(clientId);
+	const { getBlockType } = select('core/blocks');
+	const { getExtensionCurrentBlock } = select('blockera/extensions');
+
+	const getInnerBlockDetails = (): Object => {
+		if (innerBlocks[activeBlock]) {
+			return innerBlocks[activeBlock];
+		}
+
+		const registeredBlock = getBlockType(getExtensionCurrentBlock());
+
+		if (!registeredBlock) {
+			return {};
+		}
+
+		return {
+			...registeredBlock,
+			label: registeredBlock?.title,
+		};
+	};
+
+	const blockInformation = getInnerBlockDetails();
 
 	return (
 		<div
@@ -52,7 +74,7 @@ export function BlockCard({
 			data-test={'blockera-block-card'}
 		>
 			<div className={extensionInnerClassNames('block-card__inner')}>
-				<BlockIcon icon={blockInformation.icon} />
+				<BlockIcon icon={blockInformation?.icon} />
 
 				<div
 					className={extensionInnerClassNames('block-card__content')}
@@ -68,17 +90,18 @@ export function BlockCard({
 								'block-card__title__block'
 							)}
 							onClick={() =>
-								handleOnClick('current-block', 'master')
+								handleOnClick('current-block', activeBlock)
 							}
-							aria-label={__('Selected Block', 'blockera')}
+							aria-label={__('Selected Inner Block', 'blockera')}
 						>
-							{blockInformation.title}
+							{blockInformation?.label}
 						</span>
 
 						<Breadcrumb
 							states={states}
 							clientId={clientId}
 							blockName={blockName}
+							activeBlock={activeBlock}
 							currentInnerBlock={currentInnerBlock}
 						/>
 					</h2>
@@ -97,7 +120,11 @@ export function BlockCard({
 				</div>
 			</div>
 
-			<Slot name={'blockera-block-card-children'} />
+			<Slot
+				name={`blockera-${kebabCase(
+					activeBlock
+				)}-inner-block-card-children`}
+			/>
 			{children}
 		</div>
 	);

@@ -27,20 +27,16 @@ export function Breadcrumb({
 	clientId,
 	blockName,
 	activeBlock,
-	innerBlocks,
 	currentInnerBlock,
 }: {
 	clientId: string,
 	blockName: string,
 	states: StateTypes,
 	children?: MixedElement,
-	activeBlock: 'master' | InnerBlockType,
+	activeBlock?: 'master' | InnerBlockType,
 	currentInnerBlock: InnerBlockModel | null,
-	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
-	const { getBlockStates, getExtensionCurrentBlock } = select(
-		'blockera/extensions'
-	);
+	const { getBlockStates } = select('blockera/extensions');
 
 	const savedBlockStates = getBlockStates(clientId, blockName);
 
@@ -55,8 +51,6 @@ export function Breadcrumb({
 	if (Object.keys(states).length <= 1 && !currentInnerBlock) {
 		return <></>;
 	}
-
-	const innerBlockStates = getBlockStates(clientId, activeBlock);
 
 	const CurrentState = ({
 		current,
@@ -99,62 +93,27 @@ export function Breadcrumb({
 	const masterActiveState = getActiveMasterState(clientId, blockName);
 	const activeInnerBlockState = getActiveInnerState(clientId, activeBlock);
 
-	const { getBlockType } = select('core/blocks');
-
-	const getInnerBlockDetails = (): Object => {
-		if (innerBlocks[activeBlock]) {
-			return innerBlocks[activeBlock];
-		}
-
-		const registeredBlock = getBlockType(getExtensionCurrentBlock());
-
-		return {
-			...registeredBlock,
-			label: registeredBlock?.title,
-		};
-	};
-
-	const innerBlock = getInnerBlockDetails();
-
 	return (
 		<>
-			{Object.keys(states).length > 1 && states[masterActiveState] && (
-				<CurrentState
-					current={masterActiveState}
-					definition={statesDefinition[masterActiveState]}
-				/>
-			)}
-
-			{null !== currentInnerBlock && (
-				<>
-					{isRTL() ? (
-						<Icon library="wp" icon="chevron-left" iconSize="16" />
-					) : (
-						<Icon library="wp" icon="chevron-right" iconSize="16" />
-					)}
-
-					<span
-						className={extensionInnerClassNames(
-							'block-card__title__item',
-							'inner-block'
-						)}
-						aria-label={`${innerBlock.label} Inner Block`}
-					>
-						{innerBlock.label}
-					</span>
-
-					{0 !== Object.keys(innerBlockStates).length > 1 &&
-						innerBlockStates[activeInnerBlockState] &&
-						'normal' !== activeInnerBlockState && (
-							<CurrentState
-								current={activeInnerBlockState}
-								definition={
-									statesDefinition[activeInnerBlockState]
-								}
-							/>
-						)}
-				</>
-			)}
+			{Object.keys(states).length > 1 &&
+				states[
+					activeBlock ? activeInnerBlockState : masterActiveState
+				] && (
+					<CurrentState
+						current={
+							activeBlock
+								? activeInnerBlockState
+								: masterActiveState
+						}
+						definition={
+							statesDefinition[
+								activeBlock
+									? activeInnerBlockState
+									: masterActiveState
+							]
+						}
+					/>
+				)}
 
 			{children}
 		</>
