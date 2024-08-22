@@ -1,7 +1,23 @@
 .blockera-extension.blockera-extension-block-card {
 	display: flex;
+	position: relative;
 	flex-direction: column;
 	gap: 10px;
+	padding: 16px;
+	border: none;
+	border-bottom: 1px solid transparent;
+	margin-bottom: -1px;
+	min-height: 120px;
+	background-color: #ffffff;
+	transition: height 0.2s ease, box-shadow 0.075s ease;
+
+	.blockera-control-block-states-repeater {
+    	padding: 0 2px;
+
+		.blockera-control-repeater-items-container {
+    		padding-bottom: 5px;
+		}
+	}
 
 	.blockera-extension-block-card__inner {
 		align-items: flex-start;
@@ -9,18 +25,25 @@
 	}
 
 	.blockera-component-block-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		flex: 0 0 24px;
 		height: 24px;
 		margin-left: 0;
 		margin-right: 12px;
 		width: 24px;
+
+		svg {
+			fill: currentColor;
+		}
 	}
 
 	.blockera-extension-block-card__content {
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		gap: 8px;
 
 		.blockera-extension-block-card__title {
 			line-height: 16px;
@@ -62,6 +85,18 @@
 			.blockera-extension-block-card__title__item.inner-block {
 				--blockera-controls-primary-color: #cc0000;
 			}
+
+			.blockera-extension-block-card__close {
+				position: absolute;
+				right: 12px;
+				opacity: 1;
+				cursor: pointer;
+				color: #1e1e1e;
+
+				&:hover {
+					color: var(--blockera-controls-primary-color);
+				}
+			}
 		}
 
 		.blockera-extension-block-card__description {
@@ -74,7 +109,7 @@
 
 		.block-editor-block-variation-transforms {
 			padding: 0;
-			margin: 8px 0 0;
+			margin: 5px 0 0 -4px;
 			display: flex;
 			flex-direction: row;
 			gap: 8px;
@@ -86,6 +121,7 @@
 			.components-toggle-group-control {
 				min-height: 34px;
 				height: 26px;
+				background-color: transparent;
 			}
 
 			.components-toggle-group-control-option-base {
@@ -99,6 +135,27 @@
 					margin: 0;
 				}
 			}
+		}
+	}
+
+	&.inner-block-is-selected {
+		background-color: #f6f6f6;
+		height: 55px;
+		min-height: auto;
+		overflow: hidden;
+		transition: all 0.2s ease;
+
+		& + .blockera-extension-block-card {
+			box-shadow: 0 -1px 0 #cbcbcb, 0 -11px 11px -6px rgba(0, 0, 0, 0.16);
+		}
+	}
+
+	&.block-card--inner-block {
+		--blockera-controls-primary-color: #cc0000;
+
+		.blockera-extension-block-card__title,
+		.blockera-component-block-icon {
+			color: var(--blockera-controls-primary-color);
 		}
 	}
 }

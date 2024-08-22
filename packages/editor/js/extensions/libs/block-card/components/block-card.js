@@ -3,13 +3,14 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 import {
 	useBlockDisplayInformation,
 	__experimentalBlockVariationTransforms as BlockVariationTransforms,
 } from '@wordpress/block-editor';
 import { Slot } from '@wordpress/components';
+import { useState, useRef, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -46,10 +47,42 @@ export function BlockCard({
 }): MixedElement {
 	const blockInformation = useBlockDisplayInformation(clientId);
 
+	const contentRef = useRef(null);
+	const [isHovered, setIsHovered] = useState(false);
+	const [height, setHeight] = useState('auto');
+	const maxHeight = '55px';
+
+	useEffect(() => {
+		if (currentInnerBlock !== null) {
+			if (isHovered) {
+				// Calculate the full height of the content
+				setHeight(`${contentRef.current.scrollHeight}px`);
+			} else {
+				// Set to the initial limited height
+				setHeight(maxHeight);
+			}
+		} else {
+			setHeight('auto');
+		}
+	}, [isHovered, currentInnerBlock]);
+
 	return (
 		<div
-			className={extensionClassNames('block-card')}
+			ref={contentRef}
+			className={extensionClassNames('block-card', {
+				'master-block-card': true,
+				'inner-block-is-selected': currentInnerBlock !== null,
+			})}
 			data-test={'blockera-block-card'}
+			onMouseEnter={() => {
+				setIsHovered(true);
+			}}
+			onMouseLeave={() => {
+				setIsHovered(false);
+			}}
+			style={{
+				height,
+			}}
 		>
 			<div className={extensionInnerClassNames('block-card__inner')}>
 				<BlockIcon icon={blockInformation.icon} />

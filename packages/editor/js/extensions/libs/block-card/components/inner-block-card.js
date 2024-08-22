@@ -7,7 +7,6 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
-import { __experimentalBlockVariationTransforms as BlockVariationTransforms } from '@wordpress/block-editor';
 
 /**
  * Blockera dependencies
@@ -17,6 +16,8 @@ import {
 	extensionInnerClassNames,
 } from '@blockera/classnames';
 import { kebabCase } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
+import { Tooltip } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -70,7 +71,10 @@ export function InnerBlockCard({
 
 	return (
 		<div
-			className={extensionClassNames('block-card')}
+			className={extensionClassNames(
+				'block-card',
+				'block-card--inner-block'
+			)}
 			data-test={'blockera-block-card'}
 		>
 			<div className={extensionInnerClassNames('block-card__inner')}>
@@ -104,6 +108,20 @@ export function InnerBlockCard({
 							activeBlock={activeBlock}
 							currentInnerBlock={currentInnerBlock}
 						/>
+
+						<Tooltip text={__('Close Inner Block', 'blockera')}>
+							<Icon
+								className={extensionInnerClassNames(
+									'block-card__close'
+								)}
+								library="wp"
+								icon="close-small"
+								iconSize="24"
+								onClick={() =>
+									handleOnClick('current-block', 'master')
+								}
+							/>
+						</Tooltip>
 					</h2>
 
 					{blockInformation?.description && (
@@ -115,8 +133,6 @@ export function InnerBlockCard({
 							{blockInformation.description}
 						</span>
 					)}
-
-					<BlockVariationTransforms blockClientId={clientId} />
 				</div>
 			</div>
 
