@@ -67,19 +67,15 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						innerBlocks={blockeraInnerBlocks}
 						currentInnerBlock={currentInnerBlock}
 						handleOnClick={updateBlockEditorSettings}
-						states={blockProps.attributes.blockeraBlockStates}
 					/>
+
 					{isInnerBlock(currentBlock) && (
 						<InnerBlockCard
 							clientId={clientId}
 							activeBlock={currentBlock}
 							blockName={blockProps.name}
 							innerBlocks={blockeraInnerBlocks}
-							currentInnerBlock={currentInnerBlock}
 							handleOnClick={updateBlockEditorSettings}
-							states={
-								blockProps.currentAttributes.blockeraBlockStates
-							}
 						/>
 					)}
 				</Fill>

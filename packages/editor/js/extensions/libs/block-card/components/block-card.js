@@ -26,12 +26,10 @@ import { ConditionalWrapper, Tooltip } from '@blockera/controls';
  */
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
-import type { StateTypes } from '../../block-states/types';
 import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 
 export function BlockCard({
-	states,
 	clientId,
 	children,
 	blockName,
@@ -40,7 +38,6 @@ export function BlockCard({
 }: {
 	clientId: string,
 	blockName: string,
-	states: StateTypes,
 	children?: MixedElement,
 	currentInnerBlock: InnerBlockModel,
 	handleOnClick: UpdateBlockEditorSettings,
@@ -91,7 +88,6 @@ export function BlockCard({
 				<div
 					className={extensionInnerClassNames('block-card__content')}
 				>
-					{/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
 					<h2
 						className={extensionInnerClassNames(
 							'block-card__title'
@@ -132,12 +128,7 @@ export function BlockCard({
 							</span>
 						</ConditionalWrapper>
 
-						<Breadcrumb
-							states={states}
-							clientId={clientId}
-							blockName={blockName}
-							currentInnerBlock={currentInnerBlock}
-						/>
+						<Breadcrumb clientId={clientId} blockName={blockName} />
 					</h2>
 
 					{blockInformation?.description && (

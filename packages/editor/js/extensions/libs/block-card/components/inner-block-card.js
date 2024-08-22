@@ -26,23 +26,18 @@ import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
-import type { StateTypes } from '../../block-states/types';
 
 export function InnerBlockCard({
-	states,
 	clientId,
 	children,
 	blockName,
 	activeBlock,
 	innerBlocks,
 	handleOnClick,
-	currentInnerBlock,
 }: {
 	clientId: string,
 	blockName: string,
-	states: StateTypes,
 	children?: MixedElement,
-	currentInnerBlock: InnerBlockModel,
 	activeBlock: 'master' | InnerBlockType,
 	handleOnClick: UpdateBlockEditorSettings,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
@@ -99,11 +94,9 @@ export function InnerBlockCard({
 						</span>
 
 						<Breadcrumb
-							states={states}
 							clientId={clientId}
 							blockName={blockName}
 							activeBlock={activeBlock}
-							currentInnerBlock={currentInnerBlock}
 						/>
 
 						<Tooltip text={__('Close Inner Block', 'blockera')}>

@@ -10,54 +10,54 @@ import { isRTL } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { isEmpty, mergeObject, ucFirstWord } from '@blockera/utils';
+import { ucFirstWord } from '@blockera/utils';
 import { extensionInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
-import type { StateTypes } from '../../block-states/types';
-import statesDefinition from '../../../libs/block-states/states';
-import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
+import {
+	default as statesDefinition,
+	type BlockStateType,
+} from '../../../libs/block-states/states';
+import type { InnerBlockType } from '../../inner-blocks/types';
 
 export function Breadcrumb({
-	states,
 	children,
 	clientId,
 	blockName,
 	activeBlock,
-	currentInnerBlock,
 }: {
 	clientId: string,
 	blockName: string,
-	states: StateTypes,
 	children?: MixedElement,
 	activeBlock?: 'master' | InnerBlockType,
-	currentInnerBlock: InnerBlockModel | null,
 }): MixedElement {
-	const { getBlockStates } = select('blockera/extensions');
+	const { getActiveInnerState, getActiveMasterState } = select(
+		'blockera/extensions'
+	);
 
-	const savedBlockStates = getBlockStates(clientId, blockName);
+	const masterActiveState = getActiveMasterState(clientId, blockName);
 
-	if (isEmpty(states)) {
-		// Sets initialize states ...
-		states = savedBlockStates;
-	} else {
-		states = mergeObject(savedBlockStates, states);
+	// do not show if is master and normal state
+	if (!activeBlock && masterActiveState === 'normal') {
+		return <>{children}</>;
 	}
 
-	// do not show normal state and inner block was not selected
-	if (Object.keys(states).length <= 1 && !currentInnerBlock) {
-		return <></>;
+	const activeInnerBlockState = getActiveInnerState(clientId, activeBlock);
+
+	// do not show if is inner block and normal state
+	if (activeBlock && activeInnerBlockState === 'normal') {
+		return <>{children}</>;
 	}
 
 	const CurrentState = ({
 		current,
 		definition,
 	}: {
-		current: { ...StateTypes, isSelected: boolean },
-		definition: { label: string, type: string },
+		current: string,
+		definition: BlockStateType,
 	}): MixedElement => {
 		const { label, type } = definition;
 
@@ -87,33 +87,18 @@ export function Breadcrumb({
 		);
 	};
 
-	const { getActiveInnerState, getActiveMasterState } = select(
-		'blockera/extensions'
-	);
-	const masterActiveState = getActiveMasterState(clientId, blockName);
-	const activeInnerBlockState = getActiveInnerState(clientId, activeBlock);
-
 	return (
 		<>
-			{Object.keys(states).length > 1 &&
-				states[
+			<CurrentState
+				current={
 					activeBlock ? activeInnerBlockState : masterActiveState
-				] && (
-					<CurrentState
-						current={
-							activeBlock
-								? activeInnerBlockState
-								: masterActiveState
-						}
-						definition={
-							statesDefinition[
-								activeBlock
-									? activeInnerBlockState
-									: masterActiveState
-							]
-						}
-					/>
-				)}
+				}
+				definition={
+					activeBlock
+						? statesDefinition[activeInnerBlockState]
+						: statesDefinition[masterActiveState]
+				}
+			/>
 
 			{children}
 		</>
