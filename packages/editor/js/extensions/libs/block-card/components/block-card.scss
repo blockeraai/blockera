@@ -7,7 +7,7 @@
 	border: none;
 	border-bottom: 1px solid transparent;
 	margin-bottom: -1px;
-	min-height: 120px;
+	min-height: 140px;
 	background-color: #ffffff;
 	transition: height 0.2s ease, box-shadow 0.075s ease;
 
@@ -22,6 +22,7 @@
 	.blockera-extension-block-card__inner {
 		align-items: flex-start;
 		display: flex;
+		flex-grow: 1;
 	}
 
 	.blockera-component-block-icon {
