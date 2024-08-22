@@ -22,7 +22,11 @@ export const SocialLink: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/item-icon': {
 			name: 'elements/item-icon',
-			label: __('Button Icon', 'blockera'),
+			label: __('Social Link Icon', 'blockera'),
+			description: __(
+				'The social link button icon elements.',
+				'blockera'
+			),
 			icon: <Icon icon="block-social-link-icon" iconSize="20" />,
 			settings: {
 				force: true,
@@ -30,7 +34,11 @@ export const SocialLink: BlockType = {
 		},
 		'elements/item-name': {
 			name: 'elements/item-name',
-			label: __('Button Name', 'blockera'),
+			label: __('Social Link Name', 'blockera'),
+			description: __(
+				'The social link button name elements.',
+				'blockera'
+			),
 			icon: <Icon icon="block-social-link-name" iconSize="20" />,
 			settings: {
 				force: true,

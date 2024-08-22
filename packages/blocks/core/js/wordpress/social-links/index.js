@@ -22,7 +22,8 @@ export const SocialLinks: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/item-containers': {
 			name: 'elements/item-containers',
-			label: __('Buttons', 'blockera'),
+			label: __('Social Links', 'blockera'),
+			description: __('The social link elements.', 'blockera'),
 			icon: <Icon icon="block-social-link-container" iconSize="20" />,
 			settings: {
 				force: true,
@@ -30,7 +31,8 @@ export const SocialLinks: BlockType = {
 		},
 		'elements/item-icons': {
 			name: 'elements/item-icons',
-			label: __('Buttons Icons', 'blockera'),
+			label: __('Social Link Icons', 'blockera'),
+			description: __('The social link icon elements.', 'blockera'),
 			icon: <Icon icon="block-social-link-icon" iconSize="20" />,
 			settings: {
 				force: true,
@@ -38,7 +40,8 @@ export const SocialLinks: BlockType = {
 		},
 		'elements/item-names': {
 			name: 'elements/item-names',
-			label: __('Buttons Names', 'blockera'),
+			label: __('Social Link Names', 'blockera'),
+			description: __('The social link name elements.', 'blockera'),
 			icon: <Icon icon="block-social-link-name" iconSize="20" />,
 			settings: {
 				force: true,

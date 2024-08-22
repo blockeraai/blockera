@@ -24,10 +24,12 @@ export const PostTerms: BlockType = {
 		'elements/link': {
 			...sharedInnerBlocks['elements/link'],
 			label: __('Term', 'blockera'),
+			description: __('All term elements.', 'blockera'),
 		},
 		'core/separator': {
 			name: 'core/separator',
 			label: __('Separator', 'blockera'),
+			description: __('The terms separator element.', 'blockera'),
 			icon: <Icon icon="block-post-terms-separator" iconSize="20" />,
 			settings: {
 				force: true,
@@ -36,6 +38,7 @@ export const PostTerms: BlockType = {
 		'elements/prefix': {
 			name: 'elements/prefix',
 			label: __('Prefix Text', 'blockera'),
+			description: __('The terms prefix text element.', 'blockera'),
 			icon: <Icon icon="block-post-terms-prefix" iconSize="20" />,
 			settings: {
 				force: true,
@@ -44,6 +47,7 @@ export const PostTerms: BlockType = {
 		'elements/suffix': {
 			name: 'elements/suffix',
 			label: __('Suffix Text', 'blockera'),
+			description: __('The terms suffix text element.', 'blockera'),
 			icon: <Icon icon="block-post-terms-suffix" iconSize="20" />,
 			settings: {
 				force: true,

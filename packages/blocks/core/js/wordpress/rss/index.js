@@ -24,6 +24,7 @@ export const Rss: BlockType = {
 		'elements/container': {
 			name: 'elements/container',
 			label: __('Item Container', 'blockera'),
+			description: __('All post items container elements.', 'blockera'),
 			icon: <Icon icon="stack" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -32,6 +33,7 @@ export const Rss: BlockType = {
 		'elements/title': {
 			name: 'elements/title',
 			label: __('Title', 'blockera'),
+			description: __('Posts title elements.', 'blockera'),
 			icon: <Icon icon="title" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -40,6 +42,7 @@ export const Rss: BlockType = {
 		'elements/author': {
 			name: 'elements/author',
 			label: __('Author', 'blockera'),
+			description: __('Posts author name elements.', 'blockera'),
 			icon: <Icon icon="post-author" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -48,6 +51,7 @@ export const Rss: BlockType = {
 		'elements/date': {
 			name: 'elements/date',
 			label: __('Date', 'blockera'),
+			description: __('Posts date elements.', 'blockera'),
 			icon: <Icon icon="post-date" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -56,6 +60,7 @@ export const Rss: BlockType = {
 		'elements/excerpt': {
 			name: 'elements/excerpt',
 			label: __('Excerpt', 'blockera'),
+			description: __('Posts excerpt elements.', 'blockera'),
 			icon: <Icon icon="post-excerpt" library="wp" iconSize="20" />,
 			settings: {
 				force: true,

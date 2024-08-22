@@ -23,6 +23,7 @@ export const WooCommerceProductSKU: BlockType = {
 		'elements/sku': {
 			name: 'elements/sku',
 			label: __('SKU Value', 'blockera'),
+			description: __('The product SKU value.', 'blockera'),
 			icon: <Icon icon="sku" iconSize="20" />,
 			settings: {
 				force: true,
