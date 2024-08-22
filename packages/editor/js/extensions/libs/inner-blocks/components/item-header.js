@@ -63,7 +63,7 @@ export default function ItemHeader({
 					text={getVirtualInnerBlockDescription()}
 				>
 					<span className={controlInnerClassNames('header-values')}>
-						{__('Virtual Block', 'blockera')}
+						{__('Virtual', 'blockera')}
 					</span>
 				</Tooltip>
 			)}
