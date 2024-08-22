@@ -5,9 +5,7 @@ export function openInnerBlocksExtension() {
 }
 
 export function setParentBlock() {
-	cy.get(
-		'.blockera-extension.blockera-extension-block-card .blockera-extension-block-card__title .blockera-extension-block-card__title__block'
-	).click();
+	cy.get('.blockera-extension-block-card__close').click();
 }
 
 export function setInnerBlock(blockType) {
