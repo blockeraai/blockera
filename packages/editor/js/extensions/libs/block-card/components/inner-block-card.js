@@ -26,6 +26,7 @@ import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
+import StateContainer from '../../../components/state-container';
 
 export function InnerBlockCard({
 	clientId,
@@ -126,11 +127,14 @@ export function InnerBlockCard({
 				</div>
 			</div>
 
-			<Slot
-				name={`blockera-${kebabCase(
-					activeBlock
-				)}-inner-block-card-children`}
-			/>
+			<StateContainer>
+				<Slot
+					name={`blockera-${kebabCase(
+						activeBlock
+					)}-inner-block-card-children`}
+				/>
+			</StateContainer>
+
 			{children}
 		</div>
 	);

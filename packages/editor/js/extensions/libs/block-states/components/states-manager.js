@@ -45,7 +45,6 @@ import { isNormalState } from '../../../components';
 import { LabelDescription } from './label-description';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { getBaseBreakpoint } from '../../../../canvas-editor';
-import StateContainer from '../../../components/state-container';
 
 const isMasterBlockStates = (id: string): boolean =>
 	'master-block-states' === id;
@@ -272,158 +271,152 @@ const StatesManager: ComponentType<any> = memo(
 				value={contextValue}
 				storeName={'blockera/controls/repeater'}
 			>
-				<StateContainer>
-					<RepeaterControl
-						{...{
-							onDelete,
-							id: 'block-states',
-							maxItems: Object.keys(preparedStates).length,
-							valueCleanup: (value) => value,
-							selectable: true,
-							/**
-							 * Retrieve dynamic default value for repeater items.
-							 *
-							 * @param {number} statesCount the states counter.
-							 * @param {Object} defaultRepeaterItemValue the state item default value.
-							 * @return {{settings: {max: number, min: number, color: string, cssSelector?: string}, force: boolean, label: string, breakpoints: Array<Object>, type: TStates}} the
-							 * state item with dynamic default value.
-							 */
-							getDynamicDefaultRepeaterItem: (
-								statesCount: number,
-								defaultRepeaterItemValue: Object
-							): Object => {
-								let defaultItem = {
-									...defaultRepeaterItemValue,
-									...getStateInfo(statesCount),
-									display: true,
-								};
+				<RepeaterControl
+					{...{
+						onDelete,
+						id: 'block-states',
+						maxItems: Object.keys(preparedStates).length,
+						valueCleanup: (value) => value,
+						selectable: true,
+						/**
+						 * Retrieve dynamic default value for repeater items.
+						 *
+						 * @param {number} statesCount the states counter.
+						 * @param {Object} defaultRepeaterItemValue the state item default value.
+						 * @return {{settings: {max: number, min: number, color: string, cssSelector?: string}, force: boolean, label: string, breakpoints: Array<Object>, type: TStates}} the
+						 * state item with dynamic default value.
+						 */
+						getDynamicDefaultRepeaterItem: (
+							statesCount: number,
+							defaultRepeaterItemValue: Object
+						): Object => {
+							let defaultItem = {
+								...defaultRepeaterItemValue,
+								...getStateInfo(statesCount),
+								display: true,
+							};
 
-								// Recalculate states count if deleted state re added.
-								if (
-									Object.keys(calculatedValue).indexOf(
-										defaultItem.type
-									) !== -1
-								) {
-									const newStatesCount = Object.values(
-										preparedStates
-									).findIndex(
-										(item) =>
-											!Object.keys(
-												calculatedValue
-											).includes(item.type)
-									);
-
-									defaultItem = {
-										...defaultItem,
-										...getStateInfo(newStatesCount),
-									};
-								}
-
-								if (
-									['custom-class', 'parent-class'].includes(
-										defaultItem.type
-									)
-								) {
-									defaultItem['css-class'] = '';
-								}
-
-								defaultItem.breakpoints = getBreakpoints(
+							// Recalculate states count if deleted state re added.
+							if (
+								Object.keys(calculatedValue).indexOf(
 									defaultItem.type
+								) !== -1
+							) {
+								const newStatesCount = Object.values(
+									preparedStates
+								).findIndex(
+									(item) =>
+										!Object.keys(calculatedValue).includes(
+											item.type
+										)
 								);
 
-								return defaultItem;
-							},
-							defaultRepeaterItemValue,
-							onChange: (newValue: Object) =>
-								onChangeBlockStates(newValue, {
-									states,
-									onChange,
-									currentState,
-									currentBlock,
-									valueCleanup,
-									getStateInfo,
-									getBlockStates,
-									currentInnerBlockState,
-									isMasterBlockStates:
-										isMasterBlockStates(id),
-								}),
-							//Override item when occurred clone action!
-							overrideItem: (item) => {
-								if ('normal' === item.type) {
-									return {
-										deletable: true,
-										visibilitySupport: true,
-										breakpoints: item?.breakpoints?.map(
-											(
-												b: BreakpointTypes
-											): BreakpointTypes => {
-												if (
-													getBaseBreakpoint() ===
-													b.type
-												) {
-													return {
-														...b,
-														attributes: {},
-													};
-												}
-
-												return b;
-											}
-										),
-									};
-								}
-
-								return {};
-							},
-							repeaterItemHeader: ItemHeader,
-							repeaterItemOpener: ItemOpener,
-							repeaterItemChildren: ItemBody,
-						}}
-						defaultValue={states}
-						addNewButtonLabel={__('Add New State', 'blockera')}
-						label={
-							'undefined' !== typeof currentBlock &&
-							!isMasterBlockStates(id)
-								? __('Inner Block States', 'blockera')
-								: __('Block States', 'blockera')
-						}
-						labelDescription={<LabelDescription />}
-						popoverTitle={__('Block State', 'blockera')}
-						className={controlInnerClassNames(
-							'block-states-repeater'
-						)}
-						itemColumns={2}
-						actionButtonClone={false}
-						actionButtonVisibility={false}
-						popoverTitleButtonsRight={PopoverTitleButtons}
-						PromoComponent={({
-							items,
-							onClose = () => {},
-							isOpen = false,
-						}): MixedElement | null => {
-							if (getRepeaterActiveItemsCount(items) < 2) {
-								return null;
+								defaultItem = {
+									...defaultItem,
+									...getStateInfo(newStatesCount),
+								};
 							}
 
-							return (
-								<PromotionPopover
-									heading={__(
-										'Advanced Block States',
-										'blockera'
-									)}
-									featuresList={[
-										__('Multiple states', 'blockera'),
-										__('All block states', 'blockera'),
-										__('Advanced features', 'blockera'),
-										__('Premium blocks', 'blockera'),
-									]}
-									isOpen={isOpen}
-									onClose={onClose}
-								/>
+							if (
+								['custom-class', 'parent-class'].includes(
+									defaultItem.type
+								)
+							) {
+								defaultItem['css-class'] = '';
+							}
+
+							defaultItem.breakpoints = getBreakpoints(
+								defaultItem.type
 							);
-						}}
-					/>
-				</StateContainer>
+
+							return defaultItem;
+						},
+						defaultRepeaterItemValue,
+						onChange: (newValue: Object) =>
+							onChangeBlockStates(newValue, {
+								states,
+								onChange,
+								currentState,
+								currentBlock,
+								valueCleanup,
+								getStateInfo,
+								getBlockStates,
+								currentInnerBlockState,
+								isMasterBlockStates: isMasterBlockStates(id),
+							}),
+						//Override item when occurred clone action!
+						overrideItem: (item) => {
+							if ('normal' === item.type) {
+								return {
+									deletable: true,
+									visibilitySupport: true,
+									breakpoints: item?.breakpoints?.map(
+										(
+											b: BreakpointTypes
+										): BreakpointTypes => {
+											if (
+												getBaseBreakpoint() === b.type
+											) {
+												return {
+													...b,
+													attributes: {},
+												};
+											}
+
+											return b;
+										}
+									),
+								};
+							}
+
+							return {};
+						},
+						repeaterItemHeader: ItemHeader,
+						repeaterItemOpener: ItemOpener,
+						repeaterItemChildren: ItemBody,
+					}}
+					defaultValue={states}
+					addNewButtonLabel={__('Add New State', 'blockera')}
+					label={
+						'undefined' !== typeof currentBlock &&
+						!isMasterBlockStates(id)
+							? __('Inner Block States', 'blockera')
+							: __('Block States', 'blockera')
+					}
+					labelDescription={<LabelDescription />}
+					popoverTitle={__('Block State', 'blockera')}
+					className={controlInnerClassNames('block-states-repeater')}
+					itemColumns={2}
+					actionButtonClone={false}
+					actionButtonVisibility={false}
+					popoverTitleButtonsRight={PopoverTitleButtons}
+					PromoComponent={({
+						items,
+						onClose = () => {},
+						isOpen = false,
+					}): MixedElement | null => {
+						if (getRepeaterActiveItemsCount(items) < 2) {
+							return null;
+						}
+
+						return (
+							<PromotionPopover
+								heading={__(
+									'Advanced Block States',
+									'blockera'
+								)}
+								featuresList={[
+									__('Multiple states', 'blockera'),
+									__('All block states', 'blockera'),
+									__('Advanced features', 'blockera'),
+									__('Premium blocks', 'blockera'),
+								]}
+								isOpen={isOpen}
+								onClose={onClose}
+							/>
+						);
+					}}
+				/>
 			</ControlContextProvider>
 		);
 	},

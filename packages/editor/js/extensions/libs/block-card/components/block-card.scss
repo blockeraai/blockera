@@ -13,9 +13,14 @@
 
 	.blockera-control-block-states-repeater {
     	padding: 0 2px;
+	    width: 100%;
 
 		.blockera-control-repeater-items-container {
     		padding-bottom: 5px;
+
+			.blockera-control-repeater-item:not(:first-child) {
+				--blockera-controls-primary-color: #d47c14;
+			}
 		}
 	}
 
