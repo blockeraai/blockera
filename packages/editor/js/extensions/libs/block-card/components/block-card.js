@@ -19,6 +19,7 @@ import {
 	extensionClassNames,
 	extensionInnerClassNames,
 } from '@blockera/classnames';
+import { ConditionalWrapper, Tooltip } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -96,17 +97,40 @@ export function BlockCard({
 							'block-card__title'
 						)}
 					>
-						<span
-							className={extensionInnerClassNames(
-								'block-card__title__block'
+						<ConditionalWrapper
+							condition={currentInnerBlock !== null}
+							wrapper={(children) => (
+								<Tooltip
+									text={__(
+										'Switch to parent block',
+										'blockera'
+									)}
+								>
+									{children}
+								</Tooltip>
 							)}
-							onClick={() =>
-								handleOnClick('current-block', 'master')
-							}
-							aria-label={__('Selected Block', 'blockera')}
 						>
-							{blockInformation.title}
-						</span>
+							<span
+								className={extensionInnerClassNames(
+									'block-card__title__block',
+									{
+										'title-is-clickable':
+											currentInnerBlock !== null,
+									}
+								)}
+								onClick={() => {
+									if (currentInnerBlock !== null) {
+										handleOnClick(
+											'current-block',
+											'master'
+										);
+									}
+								}}
+								aria-label={__('Selected Block', 'blockera')}
+							>
+								{blockInformation.title}
+							</span>
+						</ConditionalWrapper>
 
 						<Breadcrumb
 							states={states}

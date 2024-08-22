@@ -63,7 +63,7 @@
 				opacity: 0.3;
 			}
 
-			.blockera-extension-block-card__title__block:not(:last-child) {
+			.blockera-extension-block-card__title__block.title-is-clickable {
 				cursor: pointer;
 			}
 

@@ -93,9 +93,6 @@ export function InnerBlockCard({
 							className={extensionInnerClassNames(
 								'block-card__title__block'
 							)}
-							onClick={() =>
-								handleOnClick('current-block', activeBlock)
-							}
 							aria-label={__('Selected Inner Block', 'blockera')}
 						>
 							{blockInformation?.label}
