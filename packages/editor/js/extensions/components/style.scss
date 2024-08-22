@@ -13,14 +13,17 @@
 .blockera-block-card-wrapper {
 
 	.blockera-dropdown-menu {
-		position: relative;
+		position: absolute;
+		top: 0;
+		right: 0;
 
 		.components-dropdown-menu {
 			position: absolute;
-			right: -8px;
+			right: 8px;
 			padding: 0;
 			margin: 0;
-			top: -6px;
+			top: 13px;
+			z-index: 1;
 
 			.components-button.has-icon {
 			    justify-content: center;

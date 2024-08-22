@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { Slot } from '@wordpress/components';
+import { Slot, Fill } from '@wordpress/components';
 import { useEffect, memo, useRef } from '@wordpress/element';
 
 /**
@@ -94,6 +94,17 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 				ref={stickyWrapperRef}
 				className="blockera-block-card-wrapper is-sticky-active"
 			>
+				<Slot name={`blockera-block-card-content-${clientId}`} />
+			</div>
+
+			<div className="blockera-block-edit-wrapper">
+				<Slot name={`blockera-block-edit-content-${clientId}`} />
+			</div>
+
+			<Fill
+				key={`${clientId}-card-menu`}
+				name={'blockera-block-card-children'}
+			>
 				<div className={'blockera-dropdown-menu'}>
 					<BlockDropdownAllMenu
 						{...{
@@ -102,13 +113,7 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 						}}
 					/>
 				</div>
-
-				<Slot name={`blockera-block-card-content-${clientId}`} />
-			</div>
-
-			<div className="blockera-block-edit-wrapper">
-				<Slot name={`blockera-block-edit-content-${clientId}`} />
-			</div>
+			</Fill>
 		</>,
 		document.querySelector('.block-editor-block-inspector')
 	);
