@@ -99,6 +99,7 @@
 				opacity: 1;
 				cursor: pointer;
 				color: #1e1e1e;
+				fill: currentColor;
 
 				&:hover {
 					color: var(--blockera-controls-primary-color);
