@@ -25,6 +25,7 @@ export default function StateContainer({ children }: Object): Element<any> {
 
 	return (
 		<div
+			className="blockera-state-colors-container"
 			style={{
 				color: 'inherit',
 				'--blockera-controls-primary-color': activeColor,
