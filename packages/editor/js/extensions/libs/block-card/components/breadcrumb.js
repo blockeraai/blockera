@@ -68,9 +68,23 @@ export function Breadcrumb({
 		return (
 			<>
 				{isRTL() ? (
-					<Icon library="wp" icon="chevron-left" iconSize="16" />
+					<Icon
+						className={extensionInnerClassNames(
+							'block-card__title__separator'
+						)}
+						library="wp"
+						icon="chevron-left"
+						iconSize="16"
+					/>
 				) : (
-					<Icon library="wp" icon="chevron-right" iconSize="16" />
+					<Icon
+						className={extensionInnerClassNames(
+							'block-card__title__separator'
+						)}
+						library="wp"
+						icon="chevron-right"
+						iconSize="16"
+					/>
 				)}
 
 				<span

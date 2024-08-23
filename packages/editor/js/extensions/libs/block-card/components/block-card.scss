@@ -60,10 +60,11 @@
 			display: flex;
 			align-items: center;
 			min-height: 24px;
-			gap: 2px;
+			gap: 5px;
 			flex-wrap: wrap;
 
-			svg {
+			.blockera-extension-block-card__title__separator {
+				color: #1e1e1e;
 				fill: currentColor;
 				opacity: 0.3;
 			}
@@ -98,6 +99,7 @@
 				opacity: 1;
 				cursor: pointer;
 				color: #1e1e1e;
+				fill: currentColor;
 
 				&:hover {
 					color: var(--blockera-controls-primary-color);
