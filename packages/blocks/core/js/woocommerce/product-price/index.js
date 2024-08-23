@@ -23,6 +23,7 @@ export const WooCommerceProductPrice: BlockType = {
 		'elements/currency-symbol': {
 			name: 'elements/currency-symbol',
 			label: __('Currency Symbol', 'blockera'),
+			description: __('The currency symbol of prices.', 'blockera'),
 			icon: (
 				<Icon
 					icon="block-product-price-currency-symbol"
@@ -37,6 +38,7 @@ export const WooCommerceProductPrice: BlockType = {
 		'elements/sale-discount-price': {
 			name: 'elements/sale-discount-price',
 			label: __('Sale: Discount Price', 'blockera'),
+			description: __('The discounted price element.', 'blockera'),
 			icon: <Icon icon="block-product-price-discount" iconSize="20" />,
 			settings: {
 				force: true,
@@ -45,6 +47,10 @@ export const WooCommerceProductPrice: BlockType = {
 		'elements/sale-normal-price': {
 			name: 'elements/sale-normal-price',
 			label: __('Sale: Normal Price', 'blockera'),
+			description: __(
+				'The normal price while product have discount.',
+				'blockera'
+			),
 			icon: <Icon icon="block-product-price-normal" iconSize="20" />,
 			settings: {
 				force: true,

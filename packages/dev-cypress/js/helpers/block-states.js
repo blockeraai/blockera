@@ -1,5 +1,5 @@
 export function addBlockState(state) {
-	cy.getByAriaLabel('Blockera Block State Container').first().as('states');
+	cy.getByAriaLabel('Blockera Block State Container').last().as('states');
 
 	cy.get('@states').within(() => {
 		cy.getByAriaLabel('Add New State').click({ force: true });
@@ -16,7 +16,7 @@ export function addBlockState(state) {
 
 export function setBlockState(state) {
 	cy.getByAriaLabel('Blockera Block State Container')
-		.first()
+		.last()
 		.within(() => {
 			cy.getByDataCy('group-control-header')
 				.contains(state)
@@ -26,7 +26,7 @@ export function setBlockState(state) {
 
 export const checkCurrentState = (id) => {
 	cy.getByDataTest('blockera-block-state-container')
-		.first()
+		.last()
 		.within(() => {
 			// selected repeater item
 			cy.get(`[data-id="${id}"]`).within(() => {
@@ -38,12 +38,14 @@ export const checkCurrentState = (id) => {
 		});
 };
 
-export const checkBlockCard = (labels) => {
-	labels.forEach((label) => {
-		// should exist and have correct order
-		cy.getByAriaLabel(`${label.label} ${label.type}`).should(
-			'have.text',
-			label.label
-		);
-	});
+// blockCard = 'inner-block' or 'master-block'
+export const checkBlockCard = (labels, blockCard = 'master-block') => {
+	cy.get('.blockera-extension-block-card')
+		.eq(blockCard === 'master-block' ? 0 : 1)
+		.within(() => {
+			labels.forEach((label) => {
+				// should exist and have correct order
+				cy.getByAriaLabel(label.label).should('have.text', label.text);
+			});
+		});
 };

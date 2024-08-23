@@ -23,6 +23,10 @@ export const Image: BlockType = {
 		'elements/caption': {
 			name: 'elements/caption',
 			label: __('Caption', 'blockera'),
+			description: __(
+				'The image caption element inside image block.',
+				'blockera'
+			),
 			icon: <Icon icon="block-image-caption" iconSize="20" />,
 			settings: {
 				force: true,

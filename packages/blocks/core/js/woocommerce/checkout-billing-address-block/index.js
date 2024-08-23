@@ -23,6 +23,7 @@ export const WooCommerceCheckoutBillingAddressBlock: BlockType = {
 		'core/heading': {
 			name: 'core/heading',
 			label: __('Heading', 'blockera'),
+			description: __('The billing address heading element.', 'blockera'),
 			icon: <Icon icon="heading" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -31,6 +32,7 @@ export const WooCommerceCheckoutBillingAddressBlock: BlockType = {
 		'core/description': {
 			name: 'core/description',
 			label: __('Description', 'blockera'),
+			description: __('The billing address description.', 'blockera'),
 			icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 			settings: {
 				force: true,

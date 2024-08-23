@@ -12,7 +12,7 @@ import { memo, useEffect, useState, Fragment } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { isEquals } from '@blockera/utils';
+import { isEquals, kebabCase } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 import { Tabs, type TTabProps } from '@blockera/controls';
 // import { useTraceUpdate } from '@blockera/editor';
@@ -232,9 +232,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					name={'blockera-block-card-children'}
 				>
 					<StatesManager
-						attributes={currentStateAttributes}
-						availableStates={availableBlockStates}
+						attributes={blockAttributes}
 						onChange={handleOnChangeAttributes}
+						availableStates={availableBlockStates}
 						block={{
 							clientId: props.clientId,
 							supports,
@@ -248,6 +248,33 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							currentInnerBlockState,
 						}}
 					/>
+				</Fill>,
+				<Fill
+					key={`${props.clientId}${currentBlock}-states-manager`}
+					name={`blockera-${kebabCase(
+						currentBlock
+					)}-inner-block-card-children`}
+				>
+					{isInnerBlock(currentBlock) && (
+						<StatesManager
+							id={`block-states-${kebabCase(currentBlock)}`}
+							onChange={handleOnChangeAttributes}
+							attributes={currentStateAttributes}
+							availableStates={availableBlockStates}
+							block={{
+								clientId: props.clientId,
+								supports,
+								setAttributes,
+								blockName: props.name,
+							}}
+							{...{
+								currentBlock,
+								currentState,
+								currentBreakpoint,
+								currentInnerBlockState,
+							}}
+						/>
+					)}
 				</Fill>,
 			];
 

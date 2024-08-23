@@ -25,6 +25,10 @@ export const PostAuthor: BlockType = {
 			name: 'core/avatar',
 			type: 'avatar',
 			label: __('Avatar', 'blockera'),
+			description: __(
+				'The post author avatar image element.',
+				'blockera'
+			),
 			icon: <Icon icon="block-post-author-avatar" iconSize="20" />,
 			settings: {
 				force: true,
@@ -34,6 +38,7 @@ export const PostAuthor: BlockType = {
 			name: 'elements/byline',
 			type: 'byline',
 			label: __('Byline', 'blockera'),
+			description: __('The post author byline text element.', 'blockera'),
 			icon: <Icon icon="block-post-author-byline" iconSize="20" />,
 			settings: {
 				force: true,
@@ -43,6 +48,7 @@ export const PostAuthor: BlockType = {
 			name: 'elements/author',
 			type: 'author',
 			label: __('Author Name', 'blockera'),
+			description: __('The post author name element.', 'blockera'),
 			icon: <Icon icon="block-post-author-name" iconSize="20" />,
 			settings: {
 				force: true,

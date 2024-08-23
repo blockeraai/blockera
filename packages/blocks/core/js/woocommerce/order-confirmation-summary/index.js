@@ -23,6 +23,10 @@ export const WooCommerceOrderConfirmationSummary: BlockType = {
 		'elements/item': {
 			name: 'elements/item',
 			label: __('Item Container', 'blockera'),
+			description: __(
+				'The container element of each summary item.',
+				'blockera'
+			),
 			icon: (
 				<Icon
 					icon="block-order-confirmation-summary-item-container"
@@ -37,6 +41,10 @@ export const WooCommerceOrderConfirmationSummary: BlockType = {
 		'elements/item-title': {
 			name: 'elements/item-title',
 			label: __('Item Title', 'blockera'),
+			description: __(
+				'The title element of all summary items.',
+				'blockera'
+			),
 			icon: (
 				<Icon
 					icon="block-order-confirmation-summary-item-title"
@@ -51,6 +59,10 @@ export const WooCommerceOrderConfirmationSummary: BlockType = {
 		'elements/item-value': {
 			name: 'elements/item-value',
 			label: __('Item Value', 'blockera'),
+			description: __(
+				'The value element of all summary items.',
+				'blockera'
+			),
 			icon: (
 				<Icon
 					icon="block-order-confirmation-summary-item-value"

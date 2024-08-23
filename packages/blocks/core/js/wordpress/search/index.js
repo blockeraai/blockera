@@ -24,7 +24,8 @@ export const Search: BlockType = {
 			name: 'elements/label',
 			type: 'title',
 			label: __('Label', 'blockera'),
-			icon: <Icon icon="block-paragraph" iconSize="20" />,
+			description: __('The search form label element.', 'blockera'),
+			icon: <Icon icon="heading" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
 			},
@@ -32,6 +33,7 @@ export const Search: BlockType = {
 		'elements/input': {
 			name: 'elements/input',
 			label: __('Input', 'blockera'),
+			description: __('The search form text input element.', 'blockera'),
 			icon: <Icon icon="block-input" iconSize="20" />,
 			settings: {
 				force: true,
@@ -40,6 +42,7 @@ export const Search: BlockType = {
 		'elements/button': {
 			name: 'elements/button',
 			label: __('Button', 'blockera'),
+			description: __('The search form button element.', 'blockera'),
 			icon: <Icon icon="button" library="wp" iconSize="20" />,
 			settings: {
 				force: true,

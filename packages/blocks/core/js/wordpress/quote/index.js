@@ -24,6 +24,7 @@ export const Quote: BlockType = {
 		'elements/citation': {
 			name: 'elements/citation',
 			label: __('Citation', 'blockera'),
+			description: __('The quote citation element.', 'blockera'),
 			icon: <Icon icon="verse" library="wp" iconSize="20" />,
 			settings: {
 				force: true,

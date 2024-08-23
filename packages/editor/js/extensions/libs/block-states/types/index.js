@@ -28,6 +28,7 @@ export type BlockDetail = {
 };
 
 export type StatesManagerProps = {
+	id: string,
 	block: {
 		...TBlockProps,
 		attributes?: Object,
