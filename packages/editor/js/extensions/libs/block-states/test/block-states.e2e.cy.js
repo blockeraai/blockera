@@ -62,6 +62,33 @@ describe('Block State E2E Test', () => {
 				'.blockera-state-colors-container:last-child'
 			).should('eq', '#D47C14');
 		});
+
+		it('Switch to inner block and check normal state color to ba the color of inner block.', () => {
+			initialSetting();
+
+			setInnerBlock('elements/link');
+
+			// assert inner block normal state color to be #cc0000
+			cy.cssVar(
+				'--blockera-tab-panel-active-color',
+				'.blockera-state-colors-container:last-child'
+			).should('eq', '#cc0000');
+		});
+
+		it('Switch to inner block and check hover state color to ba the color of hover color.', () => {
+			initialSetting();
+
+			setInnerBlock('elements/link');
+
+			// add hover(or other pseudo state) state.
+			cy.getByAriaLabel('Add New State').last().click();
+
+			// assert inner block normal state color to be #cc0000
+			cy.cssVar(
+				'--blockera-tab-panel-active-color',
+				'.blockera-state-colors-container:last-child'
+			).should('eq', '#D47C14');
+		});
 	});
 
 	describe('current-state testing ...', () => {
