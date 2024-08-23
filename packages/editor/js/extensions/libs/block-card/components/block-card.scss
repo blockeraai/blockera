@@ -63,7 +63,8 @@
 			gap: 2px;
 			flex-wrap: wrap;
 
-			svg {
+			.blockera-extension-block-card__title__separator {
+				color: #1e1e1e;
 				fill: currentColor;
 				opacity: 0.3;
 			}
