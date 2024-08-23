@@ -38,12 +38,14 @@ export const checkCurrentState = (id) => {
 		});
 };
 
-export const checkBlockCard = (labels) => {
-	labels.forEach((label) => {
-		// should exist and have correct order
-		cy.getByAriaLabel(`${label.label} ${label.type}`).should(
-			'have.text',
-			label.label
-		);
-	});
+// blockCard = 'inner-block' or 'master-block'
+export const checkBlockCard = (labels, blockCard = 'master-block') => {
+	cy.get('.blockera-extension-block-card')
+		.eq(blockCard === 'master-block' ? 0 : 1)
+		.within(() => {
+			labels.forEach((label) => {
+				// should exist and have correct order
+				cy.getByAriaLabel(label.label).should('have.text', label.text);
+			});
+		});
 };

@@ -117,12 +117,15 @@ describe('Block State E2E Test', () => {
 
 			checkCurrentState('hover');
 			// Check block card
-			checkBlockCard([
-				{
-					label: 'Hover',
-					type: 'State',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Hover State',
+						text: 'Hover',
+					},
+				],
+				'master-block'
+			);
 		});
 
 		it('should hidden normal state after delete hover state', () => {
@@ -312,12 +315,15 @@ describe('Block State E2E Test', () => {
 
 			addBlockState('hover');
 
-			checkBlockCard([
-				{
-					label: 'Hover',
-					type: 'State',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Hover State',
+						text: 'Hover',
+					},
+				],
+				'master-block'
+			);
 
 			// Assert control value to testing useCalculateCurrentAttributes Hook.
 			cy.getByAriaLabel('Input Width').type(150, { force: true });
