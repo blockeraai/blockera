@@ -202,7 +202,7 @@ export function isIncludes(string: string, target: string): boolean {
  * @return {boolean} true on success, false on otherwise!
  */
 export function isLoadedSiteEditor(): boolean {
-	return !!select('core/edit-site');
+	return 'undefined' !== typeof select('core/edit-site');
 }
 
 /**
@@ -211,5 +211,5 @@ export function isLoadedSiteEditor(): boolean {
  * @return {boolean} true on success, false on otherwise!
  */
 export function isLoadedPostEditor(): boolean {
-	return !!select('core/edit-post');
+	return 'undefined' !== typeof select('core/edit-post');
 }
