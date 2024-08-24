@@ -8,7 +8,7 @@
  * Requires PHP: 7.4
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about-us/
- * Version: 0.9
+ * Version: 0.9.1
  * Text Domain: blockera
  * License: GPLv3 or later
  *
