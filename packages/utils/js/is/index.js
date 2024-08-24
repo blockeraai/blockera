@@ -1,4 +1,10 @@
 // @flow
+
+/**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
 /**
  * is a given value String?
  *
@@ -188,4 +194,22 @@ export function isIncludes(string: string, target: string): boolean {
 	target += '';
 
 	return string.indexOf(target) > -1;
+}
+
+/**
+ * Is loaded site editor?
+ *
+ * @return {boolean} true on success, false on otherwise!
+ */
+export function isLoadedSiteEditor(): boolean {
+	return !!select('core/edit-site');
+}
+
+/**
+ * Is loaded post (or block) editor?
+ *
+ * @return {boolean} true on success, false on otherwise!
+ */
+export function isLoadedPostEditor(): boolean {
+	return !!select('core/edit-post');
 }
