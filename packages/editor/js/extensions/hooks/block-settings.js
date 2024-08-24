@@ -11,7 +11,14 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
  * Blockera dependencies
  */
 import { BaseControlContext } from '@blockera/controls';
-import { isObject, isFunction, mergeObject, isEmpty } from '@blockera/utils';
+import {
+	isEmpty,
+	isObject,
+	isFunction,
+	mergeObject,
+	isLoadedPostEditor,
+	isLoadedSiteEditor,
+} from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -34,6 +41,7 @@ import {
 	BlockIcon,
 	propsAreEqual,
 } from '../components';
+import { bootstrapCanvasEditor } from '../../canvas-editor';
 
 const useSharedBlockSideEffect = (): void => {
 	const {
@@ -205,6 +213,11 @@ function mergeBlockSettings(
 					AdvancedLabelControl: EditorAdvancedLabelControl,
 				},
 			};
+
+			// Bootstrap canvas editor UI on WordPress site editor.
+			if (!isLoadedPostEditor() && isLoadedSiteEditor()) {
+				bootstrapCanvasEditor('site');
+			}
 
 			return (
 				<BaseControlContext.Provider value={baseContextValue}>

@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { select, dispatch } from '@wordpress/data';
 import { addFilter, applyFilters } from '@wordpress/hooks';
 
 /**
@@ -13,7 +14,7 @@ import {
 	blockeraBootstrapBlocks,
 	registerThirdPartyExtensionDefinitions,
 } from '@blockera/blocks-core';
-import { noop } from '@blockera/utils';
+import { noop, isLoadedSiteEditor, isLoadedPostEditor } from '@blockera/utils';
 import { initializer } from '@blockera/bootstrap';
 import {
 	applyHooks,
@@ -21,7 +22,6 @@ import {
 	bootstrapCanvasEditor,
 	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
-import { dispatch } from '@wordpress/data';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
 
 /**
@@ -62,8 +62,10 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 			// Bootstrap functions for blocks.
 			blockeraBootstrapBlocks();
 
-			// Bootstrap canvas editor UI.
-			bootstrapCanvasEditor();
+			// Bootstrap canvas editor UI on WordPress post editor.
+			if (!isLoadedSiteEditor() && isLoadedPostEditor()) {
+				bootstrapCanvasEditor('post');
+			}
 
 			// Bootstrap functions for extensions.
 			blockeraExtensionsBootstrap();
