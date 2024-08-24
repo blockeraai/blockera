@@ -1,0 +1,39 @@
+{
+	"$id": "https://blockera.ai/block-supports-list.schema.json",
+	"title": "Product Block Supports List",
+	"description": "The full list of state for a product block features by detail.",
+	"type": "object",
+	"properties": {
+		"supports": {
+			"description": "Supports map for Block Supports property by Blockera.",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"status": {
+						"description": "The block support status.",
+						"type": "boolean"
+					},
+					"name": {
+						"description": "The block support name (ID).",
+						"type": "string"
+					},
+					"fallback": {
+						"description": "The list of fallback ids for block support name.",
+						"type": ["array", "string"]
+					},
+					"css-property": {
+						"description": "The standard css property.",
+						"type": "string"
+					},
+					"note": {
+						"description": "Extra notes for developers.",
+						"type": "string"
+					}
+				},
+				"description": "The shared list of block supports, with consideration fallback ids."
+			}
+		}
+	},
+	"required": ["supports"]
+}

@@ -44,6 +44,18 @@ export function widthFromWPCompatibility({
 
 			return attributes;
 
+		// not unit in value
+		// unit is px always
+		case 'core/avatar':
+			if (
+				attributes?.size !== undefined &&
+				attributes?.blockeraWidth !== attributes?.size + 'px'
+			) {
+				attributes.blockeraWidth = attributes?.size + 'px';
+			}
+
+			return attributes;
+
 		// the Icon Block by Nick Diego
 		case 'outermost/icon-block':
 		case 'core/post-featured-image':
@@ -111,7 +123,7 @@ export function widthToWPCompatibility({
 				isUndefined(newValue) ||
 				isSpecialUnit(newValue) ||
 				!isString(newValue) ||
-				!newValue.endsWith('px') // only percent values
+				!newValue.endsWith('px') // only px values
 			) {
 				return {
 					width: undefined,
@@ -119,7 +131,31 @@ export function widthToWPCompatibility({
 			}
 
 			return {
-				width: +newValue.replace('px', ''), // remove % and convert to number
+				width: +newValue.replace('px', ''), // remove px and convert to number
+			};
+
+		// A number attribute for width without unit (px is unit)
+		case 'core/avatar':
+			if ('reset' === ref?.current?.action) {
+				return {
+					size: undefined,
+				};
+			}
+
+			if (
+				newValue === '' ||
+				isUndefined(newValue) ||
+				isSpecialUnit(newValue) ||
+				!isString(newValue) ||
+				!newValue.endsWith('px') // only px values
+			) {
+				return {
+					size: undefined,
+				};
+			}
+
+			return {
+				size: +newValue.replace('px', ''), // remove px and convert to number
 			};
 
 		// A number attribute for width without unit (% is unit)

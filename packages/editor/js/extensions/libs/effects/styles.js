@@ -26,6 +26,9 @@ import {
 	AfterDividerGenerator,
 	BeforeDividerGenerator,
 } from './css-generators/divider-generator';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('effects');
 
 export const EffectsStyles = ({
 	state,
@@ -80,7 +83,10 @@ export const EffectsStyles = ({
 			...sharedParams,
 			query: 'blockeraOpacity',
 			support: 'blockeraOpacity',
-			fallbackSupportId: 'opacity',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraOpacity'
+			),
 		});
 
 		styleGroup.push({
@@ -233,6 +239,10 @@ export const EffectsStyles = ({
 				...sharedParams,
 				query: 'blockeraTransform',
 				support: 'blockeraTransform',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTransform'
+				),
 			});
 
 			styleGroup.push({
@@ -263,6 +273,10 @@ export const EffectsStyles = ({
 			...sharedParams,
 			query: 'blockeraTransition',
 			support: 'blockeraTransition',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraTransition'
+			),
 		});
 
 		styleGroup.push({
@@ -292,6 +306,10 @@ export const EffectsStyles = ({
 			...sharedParams,
 			query: 'blockeraFilter',
 			support: 'blockeraFilter',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraFilter'
+			),
 		});
 
 		styleGroup.push({
@@ -321,6 +339,10 @@ export const EffectsStyles = ({
 			...sharedParams,
 			query: 'blockeraBackdropFilter',
 			support: 'blockeraBackdropFilter',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBackdropFilter'
+			),
 		});
 
 		styleGroup.push({
@@ -348,6 +370,10 @@ export const EffectsStyles = ({
 			...sharedParams,
 			query: 'blockeraBlendMode',
 			support: 'blockeraBlendMode',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBlendMode'
+			),
 		});
 
 		styleGroup.push({
@@ -381,6 +407,10 @@ export const EffectsStyles = ({
 			...sharedParams,
 			query: 'blockeraDivider',
 			support: 'blockeraDivider',
+			fallbackSupportId: getBlockSupportFallback(
+				getBlockSupportCategory('divider'),
+				'blockeraDivider'
+			),
 		});
 
 		styleGroup.push({
@@ -458,6 +488,10 @@ export const EffectsStyles = ({
 			...sharedParams,
 			query: 'blockeraMask',
 			support: 'blockeraMask',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraMask'
+			),
 		});
 
 		styleGroup.push({

@@ -15,6 +15,9 @@ import {
 	getCompatibleBlockCssSelector,
 	computedCssDeclarations,
 } from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('position');
 
 export const PositionStyles = ({
 	state,
@@ -64,7 +67,10 @@ export const PositionStyles = ({
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraPosition.type',
-			fallbackSupportId: 'position',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraPosition'
+			),
 		});
 
 		styleGroup.push({
@@ -91,7 +97,10 @@ export const PositionStyles = ({
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraPosition.position.top',
-				fallbackSupportId: 'positionTop',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraPosition'
+				),
 			});
 
 			styleGroup.push({
@@ -119,7 +128,10 @@ export const PositionStyles = ({
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraPosition.position.right',
-				fallbackSupportId: 'positionRight',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraPosition'
+				),
 			});
 
 			styleGroup.push({
@@ -147,7 +159,10 @@ export const PositionStyles = ({
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraPosition.position.bottom',
-				fallbackSupportId: 'positionBottom',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraPosition'
+				),
 			});
 
 			styleGroup.push({
@@ -175,7 +190,10 @@ export const PositionStyles = ({
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraPosition.position.left',
-				fallbackSupportId: 'positionLeft',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraPosition'
+				),
 			});
 
 			styleGroup.push({
@@ -204,7 +222,10 @@ export const PositionStyles = ({
 					...sharedParams,
 					query: 'blockeraZIndex',
 					support: 'blockeraZIndex',
-					fallbackSupportId: 'zIndex',
+					fallbackSupportId: getBlockSupportFallback(
+						supports,
+						'blockeraZIndex'
+					),
 				});
 
 				styleGroup.push({

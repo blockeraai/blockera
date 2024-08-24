@@ -21,8 +21,6 @@ class Outline extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$this->setSelector( $cssProperty );
-
 		foreach ( $setting[ $cssProperty ] as $item ) {
 
 			if ( empty( $item['isVisible'] ) ) {
@@ -43,14 +41,6 @@ class Outline extends BaseStyleDefinition {
 		$this->setCss( $declaration );
 
 		return $this->css;
-	}
-
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraOutline' => 'outline',
-			'blockeraOffset'  => 'outline-offset',
-		];
 	}
 
 }

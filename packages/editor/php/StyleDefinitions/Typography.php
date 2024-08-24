@@ -10,15 +10,6 @@ namespace Blockera\Editor\StyleDefinitions;
 class Typography extends BaseStyleDefinition {
 
 	/**
-	 * Hold collection of options to generate style
-	 *
-	 * @var array
-	 */
-	protected array $options = [
-		'is-important' => true,
-	];
-
-	/**
 	 * @inheritDoc
 	 *
 	 * @param array $setting
@@ -36,8 +27,6 @@ class Typography extends BaseStyleDefinition {
 		}
 
 		$propertyValue = $setting[ $cssProperty ];
-
-		$this->setSelector( $cssProperty );
 
 		switch ( $cssProperty ) {
 
@@ -125,32 +114,6 @@ class Typography extends BaseStyleDefinition {
 		$this->setCss( $declaration );
 
 		return $this->css;
-	}
-
-	/**
-	 * @inheritDoc
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraFontColor'       => 'color',
-			'blockeraFontSize'        => 'font-size',
-			'blockeraDirection'       => 'direction',
-			'blockeraTextAlign'       => 'text-align',
-			'blockeraFontStyle'       => 'font-style',
-			'blockeraWordBreak'       => 'word-break',
-			'blockeraTextIndent'      => 'text-indent',
-			'blockeraLineHeight'      => 'line-height',
-			'blockeraWordSpacing'     => 'word-spacing',
-			'blockeraTextColumns'     => 'column-count',
-			'blockeraTextTransform'   => 'text-transform',
-			'blockeraLetterSpacing'   => 'letter-spacing',
-			'blockeraTextDecoration'  => 'text-decoration',
-			'blockeraTextOrientation' => 'text-orientation',
-			'blockeraTextStroke'      => '-webkit-text-stroke-color',
-		];
 	}
 
 }

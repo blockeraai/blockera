@@ -2,7 +2,8 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\Contracts\HaveCustomSettings;
+use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
+use Blockera\Utils\Utils;
 
 abstract class BaseStyleDefinition {
 
@@ -91,25 +92,20 @@ abstract class BaseStyleDefinition {
 	/**
 	 * Sets suitable css selector for related property.
 	 *
-	 * @param string $featureId   The feature identifier.
-	 * @param string $suffixClass The suffix css class.
+	 * @param string $support The feature identifier.
 	 */
-	public function setSelector( string $featureId, string $suffixClass = '' ): void {
+	public function setSelector( string $support ): void {
 
-		$selectors  = $this->getSelectors();
-		$fallbackId = $this->calculateFallbackFeatureId( $featureId );
+		$selectors = $this->getSelectors();
+		$fallback  = $this->getFallbackSupport( $support );
 
-		$this->selector = sprintf(
-			'%s%s',
-			blockera_get_compatible_block_css_selector(
-				$selectors,
-				$featureId,
-				[
-					'fallback'  => $fallbackId,
-					'blockName' => $this->block['blockName'],
-				]
-			),
-			$suffixClass
+		$this->selector = blockera_get_compatible_block_css_selector(
+			$selectors,
+			$support,
+			[
+				'fallback'  => $fallback,
+				'blockName' => $this->block['blockName'],
+			]
 		);
 	}
 
@@ -168,13 +164,25 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
+	 * Filter blockera settings.
+	 *
+	 * @param string $name the blockera attribute name.
+	 *
+	 * @return bool true on success, false on otherwise.
+	 */
+	protected function filterSettings( string $name ): bool {
+
+		return str_starts_with( $name, 'blockera' ) && ! in_array( $name, [ 'blockeraPropsId', 'blockeraCompatId' ], true );
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getCssRules(): array {
 
-		// $this->filterSettings();
+		$settings = array_filter( $this->settings, [ $this, 'filterSettings' ], ARRAY_FILTER_USE_KEY );
 
-		array_map( [ $this, 'generateCssRules' ], $this->settings, array_keys( $this->settings ) );
+		array_map( [ $this, 'generateCssRules' ], $settings, array_keys( $settings ) );
 
 		return array_filter( $this->css, 'blockera_get_filter_empty_array_item' );
 	}
@@ -189,20 +197,20 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function generateCssRules( $value, string $name ): void {
 
-		$cssProperty = $this->getValidCssProp( $name );
+		$cssProperty = $this->getSupportCssProperty( $name );
 
 		if ( ! $cssProperty ) {
 
 			return;
 		}
 
-		if ( $this instanceof HaveCustomSettings ) {
+		if ( $this instanceof CustomStyle ) {
 
-			$setting = $this->getCustomSettings( $this->settings, $name, $cssProperty );
+			$settings = $this->getCustomSettings( $this->settings, $name, $cssProperty );
 
 		} else {
 
-			$setting = [
+			$settings = [
 				[
 					'isVisible'  => true,
 					'type'       => $cssProperty,
@@ -211,7 +219,29 @@ abstract class BaseStyleDefinition {
 			];
 		}
 
-		array_map( [ $this, 'css' ], $setting );
+		array_map(
+			function ( array $setting ) use ( $name ): void {
+
+				if ( ! blockera_get_block_support( $this->getId(), $name ) ) {
+
+					return;
+				}
+
+				$this->setSelector( $name );
+				$this->css( $setting );
+			},
+			$settings
+		);
+	}
+
+	/**
+	 * Get the abstraction id.
+	 *
+	 * @return string the abstract instance id.
+	 */
+	public function getId(): string {
+
+		return str_replace( [ __NAMESPACE__, '\\' ], '', get_class( $this ) );
 	}
 
 	/**
@@ -296,29 +326,15 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
-	 * Get allowed reserved properties.
+	 * Get blockera support standard css property name.
 	 *
-	 * @return array
+	 * @param string $support the blockera block support name.
+	 *
+	 * @return string the standard css property name
 	 */
-	abstract public function getAllowedProperties(): array;
+	public function getSupportCssProperty( string $support ): ?string {
 
-	/**
-	 * Get valid css property by reserved name.
-	 *
-	 * @param string $reservedName the setting reserved name.
-	 *
-	 * @return string|null string on access to available css property, null when not found related css property with setting reserved name.
-	 */
-	protected function getValidCssProp( string $reservedName ): ?string {
-
-		$allowedProps = $this->getAllowedProperties();
-
-		if ( ! empty( $allowedProps[ $reservedName ] ) ) {
-
-			return $allowedProps[ $reservedName ];
-		}
-
-		return null;
+		return blockera_get_block_support( $this->getId(), $support, 'css-property' );
 	}
 
 	/**
@@ -327,33 +343,6 @@ abstract class BaseStyleDefinition {
 	public function getDeclarations(): array {
 
 		return $this->declarations;
-	}
-
-	/**
-	 * Filtering settings property.
-	 */
-	protected function filterSettings(): void {
-
-		$definition = $this;
-
-		array_map( [ $this, 'removeInvalidSettings' ], $this->settings, array_keys( $this->settings ) );
-	}
-
-	/**
-	 * Remove invalid setting from stack.
-	 *
-	 * @param mixed        $setting the setting.
-	 * @param string | int $name    the name of setting.
-	 *
-	 * @return void
-	 */
-	protected function removeInvalidSettings( $setting, $name ): void {
-
-		// Assume current setting not allowed to handle on this definition.
-		if ( null === $setting || ! array_key_exists( $name, $this->getAllowedProperties() ) || ! is_string( $name ) ) {
-
-			unset( $this->settings[ $name ] );
-		}
 	}
 
 	/**
@@ -366,16 +355,16 @@ abstract class BaseStyleDefinition {
 	abstract protected function css( array $setting ): array;
 
 	/**
-	 * Calculation fallback feature id.
-	 * To be compatible with WordPress block selectors.
+	 * Get reserved fallback list or string by support name.
+	 * To be compatible with WordPress wp_get_block_css_selector() api.
 	 *
-	 * @param string $cssProperty The css property key.
+	 * @param string $support The blockera support name.
 	 *
-	 * @return string The path to fallback feature id.
+	 * @return string|array The path to fallback support id, or query as string, or array on success, "root" while failure access to fallback property.
 	 */
-	protected function calculateFallbackFeatureId( string $cssProperty ): string {
+	protected function getFallbackSupport( string $support ) {
 
-		return '';
+		return blockera_get_block_support( $this->getId(), $support, 'fallback' ) ?? 'root';
 	}
 
 	/**

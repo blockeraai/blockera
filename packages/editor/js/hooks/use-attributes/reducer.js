@@ -190,6 +190,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					},
 					{
 						deletedProps: [attributeId],
+						forceUpdated: isObject(newValue) ? [attributeId] : [],
 					}
 				),
 				...hookParams

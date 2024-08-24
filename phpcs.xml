@@ -79,6 +79,7 @@
     <exclude-pattern>./packages/**/tests/*</exclude-pattern>
     <exclude-pattern>./packages/dev-phpunit/*</exclude-pattern>
     <exclude-pattern>./packages/freemius-sdk/*</exclude-pattern>
+    <exclude-pattern>.patch/*</exclude-pattern>
 
     <!-- Exclude third party libraries -->
     <exclude-pattern>./vendor/*</exclude-pattern>

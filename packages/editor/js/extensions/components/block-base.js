@@ -108,7 +108,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentState,
 			currentBreakpoint,
 			currentInnerBlockState,
-		} = useExtensionsStore({ name, clientId, test: true });
+		} = useExtensionsStore({ name, clientId });
 
 		const {
 			selectedBlock,

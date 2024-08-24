@@ -182,6 +182,18 @@ final class StyleEngine {
 	 */
 	protected function getStateCssRules( string $breakpoint ): array {
 
+		if ( empty( $this->settings['blockeraBlockStates'] ) ) {
+
+			$css_rules = $this->prepareStateStyles( 'normal', blockera_get_base_breakpoint() );
+
+			if ( empty( $css_rules ) ) {
+
+				return [];
+			}
+
+			return [ $css_rules ];
+		}
+
 		return array_filter(
 			array_map(
 				function ( string $state ) use ( $breakpoint ): array {

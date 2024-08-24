@@ -24,6 +24,7 @@ export const LatestComments: BlockType = {
 		'elements/container': {
 			name: 'elements/container',
 			label: __('Item Container', 'blockera'),
+			description: __("Each comment's container element.", 'blockera'),
 			icon: <Icon icon="stack" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -32,6 +33,7 @@ export const LatestComments: BlockType = {
 		'elements/avatar': {
 			name: 'elements/avatar',
 			label: __('Avatar', 'blockera'),
+			description: __("The comment's author avatar element.", 'blockera'),
 			icon: (
 				<Icon icon="comment-author-avatar" library="wp" iconSize="20" />
 			),
@@ -42,6 +44,7 @@ export const LatestComments: BlockType = {
 		'elements/author': {
 			name: 'elements/author',
 			label: __('Author', 'blockera'),
+			description: __("The comment's author name element.", 'blockera'),
 			icon: <Icon icon="post-author" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -50,6 +53,7 @@ export const LatestComments: BlockType = {
 		'elements/post-title': {
 			name: 'elements/post-title',
 			label: __('Post Title', 'blockera'),
+			description: __("The comment's post title element.", 'blockera'),
 			icon: <Icon icon="title" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -58,6 +62,7 @@ export const LatestComments: BlockType = {
 		'elements/date': {
 			name: 'elements/date',
 			label: __('Date', 'blockera'),
+			description: __("The comment's publish date element.", 'blockera'),
 			icon: <Icon icon="post-date" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
@@ -66,6 +71,7 @@ export const LatestComments: BlockType = {
 		'elements/comment-text': {
 			name: 'elements/comment-text',
 			label: __('Comment', 'blockera'),
+			description: __("The comment's text element.", 'blockera'),
 			icon: <Icon icon="post-excerpt" library="wp" iconSize="20" />,
 			settings: {
 				force: true,

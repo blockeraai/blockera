@@ -1,0 +1,13 @@
+{
+	"$schema": "../block.supports.schema.json",
+	"title": "divider",
+	"supports": [
+		{
+			"status": true,
+			"name": "blockeraDivider",
+			"css-property": "divider",
+			"fallback": "divider",
+			"description": "Support for \"blockeraDivider\" value."
+		}
+	]
+}

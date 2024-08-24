@@ -2,13 +2,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { Element } from 'react';
-
-/**
- * Blockera dependencies
- */
-import { getClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -31,9 +25,7 @@ export default function StateContainer({ children }: Object): Element<any> {
 
 	return (
 		<div
-			data-test={'blockera-block-state-container'}
-			className={getClassNames('state-container')}
-			aria-label={__('Blockera Block State Container', 'blockera')}
+			className="blockera-state-colors-container"
 			style={{
 				color: 'inherit',
 				'--blockera-controls-primary-color': activeColor,
