@@ -32,8 +32,14 @@ const getTarget = (version: string): GetTarget => {
 	};
 };
 
-export const bootstrapCanvasEditor = (): void => {
+const allowedContexts = ['post', 'site'];
+
+export const bootstrapCanvasEditor = (context: string): void => {
 	const { getEntity } = select('blockera/data') || {};
+
+	if (!allowedContexts.includes(context)) {
+		return;
+	}
 
 	if (!getPlugin('blockera-canvas-editor-observer')) {
 		registerPlugin('blockera-canvas-editor-observer', {
@@ -42,88 +48,82 @@ export const bootstrapCanvasEditor = (): void => {
 				const { header, previewDropdown, postPreviewElement } =
 					getTarget(version);
 
-				return (
-					<Observer
-						ancestors={[
-							{
-								options: {
-									root: document.querySelector(
-										'.interface-interface-skeleton__header'
-									),
-									threshold: 1.0,
+				const ancestors = {
+					post: {
+						options: {
+							root: document.querySelector(
+								'.interface-interface-skeleton__header'
+							),
+							threshold: 1.0,
+						},
+						callback(entries: Array<IntersectionObserverEntry>) {
+							const editPost = select('core/edit-post');
+
+							if (!editPost) {
+								return;
+							}
+
+							const plugin =
+								'blockera-post-canvas-editor-top-bar';
+
+							if (getPlugin(plugin)) {
+								return;
+							}
+
+							registerPlugin(plugin, {
+								render() {
+									return (
+										<CanvasEditor
+											{...{
+												previewDropdown,
+												postPreviewElement,
+											}}
+											entry={entries[0]}
+										/>
+									);
 								},
-								callback(
-									entries: Array<IntersectionObserverEntry>
-								) {
-									const editPost = select('core/edit-post');
+							});
+						},
+						target: header,
+					},
+					site: {
+						options: {
+							root: document.querySelector('body'),
+							threshold: 1.0,
+						},
+						callback(entries: Array<IntersectionObserverEntry>) {
+							const editSite = select('core/edit-site');
 
-									if (!editPost) {
-										return;
-									}
+							if (!editSite) {
+								return;
+							}
 
-									const plugin =
-										'blockera-post-canvas-editor-top-bar';
+							const plugin =
+								'blockera-site-canvas-editor-top-bar';
 
-									if (getPlugin(plugin)) {
-										return;
-									}
+							if (getPlugin(plugin)) {
+								return;
+							}
 
-									registerPlugin(plugin, {
-										render() {
-											return (
-												<CanvasEditor
-													{...{
-														previewDropdown,
-														postPreviewElement,
-													}}
-													entry={entries[0]}
-												/>
-											);
-										},
-									});
+							registerPlugin(plugin, {
+								render() {
+									return (
+										<CanvasEditor
+											{...{
+												previewDropdown,
+												postPreviewElement,
+											}}
+											entry={entries[0]}
+										/>
+									);
 								},
-								target: header,
-							},
-							{
-								options: {
-									root: document.querySelector('body'),
-									threshold: 1.0,
-								},
-								callback(
-									entries: Array<IntersectionObserverEntry>
-								) {
-									const editSite = select('core/edit-site');
+							});
+						},
+						target: header,
+					},
+				};
 
-									if (!editSite) {
-										return;
-									}
-
-									const plugin =
-										'blockera-site-canvas-editor-top-bar';
-
-									if (getPlugin(plugin)) {
-										return;
-									}
-
-									registerPlugin(plugin, {
-										render() {
-											return (
-												<CanvasEditor
-													{...{
-														previewDropdown,
-														postPreviewElement,
-													}}
-													entry={entries[0]}
-												/>
-											);
-										},
-									});
-								},
-								target: header,
-							},
-						]}
-					/>
-				);
+				return <Observer ancestors={[ancestors[context]]} />;
 			},
 		});
 	}

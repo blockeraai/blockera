@@ -39,6 +39,7 @@ export const CanvasEditor = ({
 		if (ref.current.previewDropdown) {
 			ref.current.previewDropdown.style.display = 'none';
 		}
+		// eslint-disable-next-line
 	}, [selectedBlock]);
 
 	return createPortal(<Breakpoints className={className} />, entry.target);

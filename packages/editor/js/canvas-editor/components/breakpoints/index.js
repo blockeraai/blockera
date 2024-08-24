@@ -66,12 +66,19 @@ export const Breakpoints = ({
 	const breakpoints = getBreakpoints();
 
 	useEffect(() => {
-		const editorWrapper =
-			document.querySelector('.editor-styles-wrapper') ||
-			getIframeTag('.editor-styles-wrapper');
+		let isSiteEditorContext = false;
+		let editorWrapper: Object = document.querySelector(
+			'.editor-styles-wrapper'
+		);
 
-		if (!editorWrapper) {
-			return;
+		if (null === editorWrapper) {
+			editorWrapper = getIframeTag('.editor-styles-wrapper');
+
+			if (null === editorWrapper) {
+				return;
+			}
+
+			isSiteEditorContext = true;
 		}
 
 		const classes = Array.from(editorWrapper.classList);
@@ -88,12 +95,15 @@ export const Breakpoints = ({
 				editorWrapper.style.maxWidth = '100%';
 				editorWrapper.classList.remove('preview-margin');
 
+				// Assume user working with canvas editor on site editor!
+				if (isSiteEditorContext) {
+					editorWrapper.style.removeProperty('margin');
+				}
+
 				return;
 			}
 
 			if (classes.length - 1 === index) {
-				editorWrapper.classList.add('blockera-canvas');
-				editorWrapper.classList.add('preview-margin');
 				editorWrapper.classList.add(`is-${deviceType}-preview`);
 
 				editorWrapper.style.minWidth =
@@ -104,6 +114,18 @@ export const Breakpoints = ({
 				if (editorWrapper.parentElement) {
 					// $FlowFixMe
 					editorWrapper.parentElement.style.background = '#222222';
+				}
+			}
+
+			if (!editorWrapper.classList.contains('blockera-canvas')) {
+				editorWrapper.classList.add('blockera-canvas');
+			}
+			if (!editorWrapper.classList.contains('preview-margin')) {
+				editorWrapper.classList.add('preview-margin');
+
+				// Assume user working with canvas editor on site editor!
+				if (isSiteEditorContext) {
+					editorWrapper.style.margin = '72px auto';
 				}
 			}
 		});
