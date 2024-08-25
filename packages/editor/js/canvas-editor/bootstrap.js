@@ -4,7 +4,16 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import { registerPlugin, getPlugin } from '@wordpress/plugins';
+import {
+	getPlugin,
+	registerPlugin,
+	unregisterPlugin,
+} from '@wordpress/plugins';
+
+/**
+ * Blockera dependencies
+ */
+import { isLoadedPostEditor, isLoadedSiteEditor } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -34,20 +43,36 @@ const getTarget = (version: string): GetTarget => {
 
 const allowedContexts = ['post', 'site'];
 
-export const bootstrapCanvasEditor = (context: string): void => {
+const getPageQueryString = (): string => window.location.search;
+
+export const bootstrapCanvasEditor = (context: string): void | Object => {
 	const { getEntity } = select('blockera/data') || {};
 
 	if (!allowedContexts.includes(context)) {
 		return;
 	}
 
-	if (!getPlugin('blockera-canvas-editor-observer')) {
-		registerPlugin('blockera-canvas-editor-observer', {
-			render() {
-				const { version } = getEntity('wp');
-				const { header, previewDropdown, postPreviewElement } =
-					getTarget(version);
+	const observerPlugin = 'blockera-canvas-editor-observer';
+	const editPostPlugin = 'blockera-post-canvas-editor-top-bar';
+	const editSitePlugin = 'blockera-site-canvas-editor-top-bar';
 
+	const { version } = getEntity('wp');
+	const { header, previewDropdown, postPreviewElement } = getTarget(version);
+
+	// Executing on site editor. to ensure of rendering canvas editor at the WordPress top bar.
+	if (isLoadedSiteEditor() && !getPageQueryString().length) {
+		if (getPlugin(observerPlugin)) {
+			unregisterPlugin(observerPlugin);
+
+			if (getPlugin(editSitePlugin)) {
+				unregisterPlugin(editSitePlugin);
+			}
+		}
+	}
+
+	const registry = () =>
+		registerPlugin(observerPlugin, {
+			render() {
 				const ancestors = {
 					post: {
 						options: {
@@ -63,14 +88,11 @@ export const bootstrapCanvasEditor = (context: string): void => {
 								return;
 							}
 
-							const plugin =
-								'blockera-post-canvas-editor-top-bar';
-
-							if (getPlugin(plugin)) {
+							if (getPlugin(editPostPlugin)) {
 								return;
 							}
 
-							registerPlugin(plugin, {
+							registerPlugin(editPostPlugin, {
 								render() {
 									return (
 										<CanvasEditor
@@ -98,14 +120,11 @@ export const bootstrapCanvasEditor = (context: string): void => {
 								return;
 							}
 
-							const plugin =
-								'blockera-site-canvas-editor-top-bar';
-
-							if (getPlugin(plugin)) {
+							if (getPlugin(editSitePlugin)) {
 								return;
 							}
 
-							registerPlugin(plugin, {
+							registerPlugin(editSitePlugin, {
 								render() {
 									return (
 										<CanvasEditor
@@ -126,5 +145,16 @@ export const bootstrapCanvasEditor = (context: string): void => {
 				return <Observer ancestors={[ancestors[context]]} />;
 			},
 		});
+
+	if (
+		isLoadedSiteEditor() &&
+		-1 !== getPageQueryString().indexOf('canvas=edit') &&
+		!getPlugin(observerPlugin)
+	) {
+		return registry();
+	}
+
+	if (isLoadedPostEditor() && !getPlugin(observerPlugin)) {
+		return registry();
 	}
 };

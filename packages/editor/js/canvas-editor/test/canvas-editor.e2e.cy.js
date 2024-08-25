@@ -39,4 +39,22 @@ describe('Canvas editor testing', () => {
 
 		cy.getByDataTest('blockera-canvas-editor').should('exist');
 	});
+
+	it('should rendered blockera canvas editor at the header top bar of Site Editor while switch between edit and init components', () => {
+		goTo('/wp-admin/site-editor.php').then(() => {
+			// eslint-disable-next-line
+			cy.wait(2000);
+		});
+
+		cy.getIframeBody().find('main').click({ force: true });
+
+		cy.getByDataTest('blockera-canvas-editor').should('exist');
+
+		// We should use selector, because not founded any other data attribute for WordPress view mode toggle button.
+		cy.get('button.edit-site-layout__view-mode-toggle').click();
+
+		cy.getIframeBody().find('main').click({ force: true });
+
+		cy.getByDataTest('blockera-canvas-editor').should('exist');
+	});
 });

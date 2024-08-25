@@ -71,10 +71,10 @@ export const Breakpoints = ({
 			'.editor-styles-wrapper'
 		);
 
-		if (null === editorWrapper) {
+		if (!editorWrapper) {
 			editorWrapper = getIframeTag('.editor-styles-wrapper');
 
-			if (null === editorWrapper) {
+			if (!editorWrapper) {
 				return;
 			}
 
