@@ -11,8 +11,6 @@ import { useEffect, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { getIframe, getIframeTag, isEquals } from '@blockera/utils';
-import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	Flex,
 	Popover,
@@ -21,6 +19,8 @@ import {
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -66,7 +66,6 @@ export const Breakpoints = ({
 	const breakpoints = getBreakpoints();
 
 	useEffect(() => {
-		let inIframe = false;
 		let editorWrapper: Object = document.querySelector(
 			'.editor-styles-wrapper'
 		);
@@ -77,8 +76,6 @@ export const Breakpoints = ({
 			if (!editorWrapper) {
 				return;
 			}
-
-			inIframe = true;
 		}
 
 		const {
@@ -90,34 +87,27 @@ export const Breakpoints = ({
 			editorWrapper.classList.add('blockera-canvas');
 		}
 
-		if (isBaseBreakpoint(deviceType)) {
-			if (!editorWrapper.classList.contains('preview-margin')) {
-				if (editorWrapper.parentElement) {
-					editorWrapper.parentElement.style.background = '#222222';
-				}
-			} else {
-				editorWrapper.style.minWidth = '100%';
-				editorWrapper.style.maxWidth = '100%';
-				editorWrapper.classList.remove('preview-margin');
+		// We try to clean up additional styles added from our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile')
+		// of iframe and editor styles wrapper elements of post|site editor.
+		if (
+			isBaseBreakpoint(deviceType) &&
+			editorWrapper.classList.contains('preview-margin')
+		) {
+			editorWrapper.style.minWidth = '100%';
+			editorWrapper.style.maxWidth = '100%';
+			editorWrapper.style.removeProperty('margin');
+			editorWrapper.classList.remove('preview-margin');
+			editorWrapper.parentElement.style.removeProperty('background');
 
-				// Assume user working with canvas editor on site editor!
-				if (inIframe) {
-					editorWrapper.style.removeProperty('margin');
-				}
-
-				if (iframe) {
-					iframe.style.removeProperty('min-width');
-					iframe.style.removeProperty('max-width');
-					iframe.parentElement.style.removeProperty('background');
-				}
-
-				if (editorWrapper.parentElement) {
-					editorWrapper.parentElement.style.removeProperty(
-						'background'
-					);
-				}
+			if (iframe) {
+				iframe.style.removeProperty('min-width');
+				iframe.style.removeProperty('max-width');
+				iframe.parentElement.style.removeProperty('background');
 			}
-		} else {
+		}
+		// We try to set our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile') settings into,
+		// iframe element as dimensions with preview margin style.
+		else if (!['desktop', 'tablet', 'mobile'].includes(deviceType)) {
 			if (iframe) {
 				if (min && max) {
 					iframe.style.minWidth = min;
@@ -127,17 +117,10 @@ export const Breakpoints = ({
 				} else if (max) {
 					iframe.style.maxWidth = max;
 				}
-
-				iframe.parentElement.style.background = '#222222';
 			}
 
 			if (!editorWrapper.classList.contains('preview-margin')) {
 				editorWrapper.classList.add('preview-margin');
-
-				// Assume user working with canvas editor on site editor!
-				if (inIframe) {
-					editorWrapper.style.margin = '72px auto';
-				}
 			}
 		}
 
