@@ -31,7 +31,7 @@ export default function ({
 	updaterDeviceIndicator,
 }: PickedBreakpointsComponentProps): MixedElement {
 	const { __experimentalSetPreviewDeviceType } =
-		dispatch('core/edit-post') || {};
+		dispatch('core/edit-post') || dispatch('core/edit-site') || {};
 	const { getBreakpoints } = select('blockera/editor');
 	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } =
 		getBreakpoints();
