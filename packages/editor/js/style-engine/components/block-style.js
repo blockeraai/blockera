@@ -9,10 +9,7 @@ import type { MixedElement } from 'react';
  * Internal dependencies
  */
 import type { BlockStyleProps } from './types';
-import {
-	// MediaQuery,
-	StateStyle,
-} from '../';
+import { StateStyle } from '../';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export const BlockStyle = (props: BlockStyleProps): MixedElement => {
@@ -34,7 +31,6 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 
 	return (
 		<style>
-			{/*<MediaQuery breakpoint={currentBreakpoint}>*/}
 			<StateStyle
 				{...{
 					...props,
@@ -46,7 +42,6 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 					styleEngineConfig: props.supports?.blockeraStyleEngine,
 				}}
 			/>
-			{/*</MediaQuery>*/}
 		</style>
 	);
 };

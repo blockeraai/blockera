@@ -24,8 +24,8 @@ import type { GetTarget } from './types';
 
 // Compatibility for WordPress supported versions.
 const getTarget = (version: string): GetTarget => {
-	// For WordPress version equals or bigger than 6.6 version.
-	if (Number(version?.replace(/\./g, '')) >= 66) {
+	// For WordPress version equals or bigger than 6.6.1 version.
+	if (Number(version?.replace(/\./g, '')) >= 661) {
 		return {
 			header: '.editor-header__center',
 			previewDropdown: '.editor-preview-dropdown',
@@ -33,11 +33,13 @@ const getTarget = (version: string): GetTarget => {
 		};
 	}
 
-	// For less than WordPress 6.6 versions.
+	// For less than WordPress 6.6.1 versions.
 	return {
-		header: '.edit-post-header__center',
+		header: isLoadedSiteEditor()
+			? '.edit-site-header-edit-mode__center'
+			: '.edit-post-header__center',
 		postPreviewElement: 'a[aria-label="View Post"]',
-		previewDropdown: 'div.block-editor-post-preview__dropdown',
+		previewDropdown: 'div.edit-site-header-edit-mode__preview-options',
 	};
 };
 

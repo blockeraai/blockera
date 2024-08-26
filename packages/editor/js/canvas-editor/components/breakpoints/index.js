@@ -6,21 +6,21 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { select, dispatch, useDispatch } from '@wordpress/data';
-import { useEffect, useState, createPortal } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { getIframeTag, isEquals } from '@blockera/utils';
-import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	Flex,
 	Popover,
-	ControlContextProvider,
 	InputControl,
+	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -66,7 +66,6 @@ export const Breakpoints = ({
 	const breakpoints = getBreakpoints();
 
 	useEffect(() => {
-		let isSiteEditorContext = false;
 		let editorWrapper: Object = document.querySelector(
 			'.editor-styles-wrapper'
 		);
@@ -77,63 +76,53 @@ export const Breakpoints = ({
 			if (!editorWrapper) {
 				return;
 			}
-
-			isSiteEditorContext = true;
 		}
 
-		const classes = Array.from(editorWrapper.classList);
-		const selectedBreakpoint = getBreakpoint(deviceType);
+		const {
+			settings: { min, max },
+		} = getBreakpoint(deviceType);
+		const iframe = getIframe();
 
-		// remove all active preview related css class.
-		classes?.forEach((className: string, index: number) => {
-			if (-1 !== className.indexOf('-preview')) {
-				editorWrapper.classList.remove(className);
+		if (!editorWrapper.classList.contains('blockera-canvas')) {
+			editorWrapper.classList.add('blockera-canvas');
+		}
+
+		// We try to clean up additional styles added from our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile')
+		// of iframe and editor styles wrapper elements of post|site editor.
+		if (
+			isBaseBreakpoint(deviceType) &&
+			editorWrapper.classList.contains('preview-margin')
+		) {
+			editorWrapper.style.minWidth = '100%';
+			editorWrapper.style.maxWidth = '100%';
+			editorWrapper.style.removeProperty('margin');
+			editorWrapper.classList.remove('preview-margin');
+			editorWrapper.parentElement.style.removeProperty('background');
+
+			if (iframe) {
+				iframe.style.removeProperty('min-width');
+				iframe.style.removeProperty('max-width');
+				iframe.parentElement.style.removeProperty('background');
 			}
-
-			if (isBaseBreakpoint(deviceType)) {
-				editorWrapper.style.minWidth = '100%';
-				editorWrapper.style.maxWidth = '100%';
-				editorWrapper.classList.remove('preview-margin');
-
-				// Assume user working with canvas editor on site editor!
-				if (isSiteEditorContext) {
-					editorWrapper.style.removeProperty('margin');
+		}
+		// We try to set our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile') settings into,
+		// iframe element as dimensions with preview margin style.
+		else if (!['desktop', 'tablet', 'mobile'].includes(deviceType)) {
+			if (iframe) {
+				if (min && max) {
+					iframe.style.minWidth = min;
+					iframe.style.maxWidth = max;
+				} else if (min) {
+					iframe.style.minWidth = min;
+				} else if (max) {
+					iframe.style.maxWidth = max;
 				}
-
-				return;
 			}
 
-			if (classes.length - 1 === index) {
-				editorWrapper.classList.add(`is-${deviceType}-preview`);
-
-				editorWrapper.style.minWidth =
-					selectedBreakpoint?.settings?.min;
-				editorWrapper.style.maxWidth =
-					selectedBreakpoint?.settings?.max;
-
-				if (editorWrapper.parentElement) {
-					// $FlowFixMe
-					editorWrapper.parentElement.style.background = '#222222';
-				}
-			}
-
-			if (!editorWrapper.classList.contains('blockera-canvas')) {
-				editorWrapper.classList.add('blockera-canvas');
-			}
 			if (!editorWrapper.classList.contains('preview-margin')) {
 				editorWrapper.classList.add('preview-margin');
-
-				// Assume user working with canvas editor on site editor!
-				if (isSiteEditorContext) {
-					editorWrapper.style.margin = '72px auto';
-				}
 			}
-		});
-
-		createPortal(
-			<iframe srcDoc={editorWrapper} title={'canvas-editor'} />,
-			editorWrapper.parentElement
-		);
+		}
 
 		setDeviceType(deviceType);
 		updaterDeviceType(updateDeviceType);

@@ -17,7 +17,6 @@ import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
  * Internal dependencies
  */
 import { replaceVariablesValue } from './utils';
-import { getBaseBreakpoint } from '../canvas-editor';
 import type { NormalizedSelectorProps } from './types';
 import { isNormalState } from '../extensions/components';
 import { getBlockCSSSelector } from './get-block-css-selector';
@@ -34,18 +33,9 @@ export const getCompatibleBlockCssSelector = ({
 	blockSelectors,
 	className = '',
 	suffixClass = '',
-	activeDeviceType,
 	fallbackSupportId,
-	device = getBaseBreakpoint(),
 }: NormalizedSelectorProps): string => {
-	let rootSelector =
-		getBaseBreakpoint() === device
-			? '{{BLOCK_ID}}'
-			: `.is-${device}-preview {{BLOCK_ID}}`;
-
-	if (device === activeDeviceType && getBaseBreakpoint() !== device) {
-		rootSelector = `.is-${device}-preview {{BLOCK_ID}}`;
-	}
+	const rootSelector = '{{BLOCK_ID}}';
 
 	const selectors: {
 		[key: TStates]: {

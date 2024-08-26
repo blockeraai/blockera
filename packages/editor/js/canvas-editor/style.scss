@@ -177,7 +177,11 @@
 	}
 }
 
-.editor-header__center {
+// Compatible with WordPress 6.5.2 - 6.6.1 versions.
+
+.editor-header__center,
+ .edit-post-header__center,
+ .edit-site-header-edit-mode__center {
 	gap: 10px;
 	align-items: center;
 

@@ -51,10 +51,15 @@ describe('Canvas editor testing', () => {
 		cy.getByDataTest('blockera-canvas-editor').should('exist');
 
 		// We should use selector, because not founded any other data attribute for WordPress view mode toggle button.
-		cy.get('button.edit-site-layout__view-mode-toggle').click();
+		cy.get('button.edit-site-layout__view-mode-toggle').click({
+			force: true,
+		});
 
-		cy.getIframeBody().find('main').click({ force: true });
-
-		cy.getByDataTest('blockera-canvas-editor').should('exist');
+		cy.getIframeBody()
+			.find('main')
+			.click({ force: true })
+			.then(() => {
+				cy.getByDataTest('blockera-canvas-editor').should('exist');
+			});
 	});
 });
