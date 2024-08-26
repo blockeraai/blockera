@@ -24,7 +24,7 @@ import type {
 } from '../../extensions/libs/block-states/types';
 import { appendBlockeraPrefix } from '../utils';
 import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
-import { getBaseBreakpoint } from '../../canvas-editor';
+import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
 
 export const useComputedCssProps = ({
 	state,
@@ -87,37 +87,6 @@ export const useComputedCssProps = ({
 			return;
 		}
 
-		for (const stateType in attributes?.blockeraBlockStates || {}) {
-			const stateItem = attributes?.blockeraBlockStates[stateType];
-
-			if (!validateBlockStates(stateItem)) {
-				continue;
-			}
-
-			const breakpoints = stateItem.breakpoints;
-
-			for (const breakpointType in breakpoints) {
-				const breakpointItem = breakpoints[breakpointType];
-
-				if (!Object.keys(breakpointItem?.attributes || {}).length) {
-					continue;
-				}
-
-				appendStyles({
-					...calculatedProps,
-					state: stateType,
-					masterState,
-					selectors: selectors[appendBlockeraPrefix(blockType)] || {},
-					attributes: {
-						...defaultAttributes,
-						...breakpointItem?.attributes,
-					},
-					currentBlock: blockType,
-					device: breakpointType,
-				});
-			}
-		}
-
 		appendStyles({
 			...calculatedProps,
 			state: 'normal',
@@ -137,23 +106,25 @@ export const useComputedCssProps = ({
 		return stylesStack.flat();
 	}
 
-	// 1- create css styles for master blocks with root attributes.
-	appendStyles({
-		...calculatedProps,
-		state: 'normal',
-		currentBlock: 'master',
-		device: getBaseBreakpoint(),
-	});
+	if (isBaseBreakpoint(currentBreakpoint)) {
+		// 1- create css styles for master blocks with root attributes.
+		appendStyles({
+			...calculatedProps,
+			state: 'normal',
+			currentBlock: 'master',
+			device: getBaseBreakpoint(),
+		});
 
-	// 2- create css styles for inner blocks inside master normal state on base breakpoint.
-	Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
-		(innerBlock: [InnerBlockType | string, Object]): void =>
-			generateCssStyleForInnerBlocks(
-				innerBlock,
-				getBaseBreakpoint(),
-				'normal'
-			)
-	);
+		// 2- create css styles for inner blocks inside master normal state on base breakpoint.
+		Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
+			(innerBlock: [InnerBlockType | string, Object]): void =>
+				generateCssStyleForInnerBlocks(
+					innerBlock,
+					getBaseBreakpoint(),
+					'normal'
+				)
+		);
+	}
 
 	// 3- validate saved block-states to creating css styles for all states of blocks.
 	const states = params?.attributes?.blockeraBlockStates;
@@ -161,6 +132,10 @@ export const useComputedCssProps = ({
 
 	if (validateBlockStates(stateItem)) {
 		for (const breakpointType in stateItem?.breakpoints || {}) {
+			if (breakpointType !== currentBreakpoint) {
+				continue;
+			}
+
 			const breakpoint = stateItem?.breakpoints[breakpointType];
 
 			if (!Object.keys(breakpoint?.attributes || {}).length) {
@@ -190,6 +165,54 @@ export const useComputedCssProps = ({
 				);
 			}
 		}
+
+		Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
+			([blockType, { attributes }]: [
+				InnerBlockType | string,
+				Object
+			]): void => {
+				for (const stateType in attributes?.blockeraBlockStates || {}) {
+					const stateItem =
+						attributes?.blockeraBlockStates[stateType];
+
+					if (!validateBlockStates(stateItem)) {
+						continue;
+					}
+
+					const breakpoints = stateItem.breakpoints;
+
+					for (const breakpointType in breakpoints) {
+						if (breakpointType !== currentBreakpoint) {
+							continue;
+						}
+
+						const breakpointItem = breakpoints[breakpointType];
+
+						if (
+							!Object.keys(breakpointItem?.attributes || {})
+								.length
+						) {
+							continue;
+						}
+
+						appendStyles({
+							...calculatedProps,
+							state: stateType,
+							masterState: 'normal',
+							selectors:
+								selectors[appendBlockeraPrefix(blockType)] ||
+								{},
+							attributes: {
+								...defaultAttributes,
+								...breakpointItem?.attributes,
+							},
+							currentBlock: blockType,
+							device: breakpointType,
+						});
+					}
+				}
+			}
+		);
 	}
 
 	return stylesStack.flat();
