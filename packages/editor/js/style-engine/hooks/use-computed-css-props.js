@@ -77,6 +77,47 @@ export const useComputedCssProps = ({
 		return state?.isVisible && !!state?.breakpoints;
 	};
 
+	const generateCssStyleForInnerBlocksInPseudoStates = ({
+		blockType,
+		attributes,
+		masterState,
+	}: Object) => {
+		for (const stateType in attributes?.blockeraBlockStates || {}) {
+			const stateItem = attributes?.blockeraBlockStates[stateType];
+
+			if (!validateBlockStates(stateItem)) {
+				continue;
+			}
+
+			const breakpoints = stateItem.breakpoints;
+
+			for (const breakpointType in breakpoints) {
+				if (breakpointType !== currentBreakpoint) {
+					continue;
+				}
+
+				const breakpointItem = breakpoints[breakpointType];
+
+				if (!Object.keys(breakpointItem?.attributes || {}).length) {
+					continue;
+				}
+
+				appendStyles({
+					...calculatedProps,
+					state: stateType,
+					masterState,
+					selectors: selectors[appendBlockeraPrefix(blockType)] || {},
+					attributes: {
+						...defaultAttributes,
+						...breakpointItem?.attributes,
+					},
+					currentBlock: blockType,
+					device: breakpointType,
+				});
+			}
+		}
+	};
+
 	const generateCssStyleForInnerBlocks = (
 		[blockType, { attributes }]: [InnerBlockType | string, Object],
 		device: TBreakpoint | string,
@@ -86,6 +127,12 @@ export const useComputedCssProps = ({
 		if (!Object.keys(attributes).length) {
 			return;
 		}
+
+		generateCssStyleForInnerBlocksInPseudoStates({
+			blockType,
+			attributes,
+			masterState,
+		});
 
 		appendStyles({
 			...calculatedProps,
@@ -165,54 +212,6 @@ export const useComputedCssProps = ({
 				);
 			}
 		}
-
-		Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
-			([blockType, { attributes }]: [
-				InnerBlockType | string,
-				Object
-			]): void => {
-				for (const stateType in attributes?.blockeraBlockStates || {}) {
-					const stateItem =
-						attributes?.blockeraBlockStates[stateType];
-
-					if (!validateBlockStates(stateItem)) {
-						continue;
-					}
-
-					const breakpoints = stateItem.breakpoints;
-
-					for (const breakpointType in breakpoints) {
-						if (breakpointType !== currentBreakpoint) {
-							continue;
-						}
-
-						const breakpointItem = breakpoints[breakpointType];
-
-						if (
-							!Object.keys(breakpointItem?.attributes || {})
-								.length
-						) {
-							continue;
-						}
-
-						appendStyles({
-							...calculatedProps,
-							state: stateType,
-							masterState: 'normal',
-							selectors:
-								selectors[appendBlockeraPrefix(blockType)] ||
-								{},
-							attributes: {
-								...defaultAttributes,
-								...breakpointItem?.attributes,
-							},
-							currentBlock: blockType,
-							device: breakpointType,
-						});
-					}
-				}
-			}
-		);
 	}
 
 	return stylesStack.flat();
