@@ -132,7 +132,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 				if ( $gap['lock'] ) {
 
-					$cssProperty = $selectorSuffix ? 'margin-block-start' : 'gap';
+					$cssProperty = isset( $selectorSuffix ) ? 'margin-block-start' : 'gap';
 
 					if ( $gap['gap'] ) {
 						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['gap'] );
@@ -140,13 +140,13 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				} else {
 
 					if ( $gap['rows'] ) {
-						$cssProperty = $selectorSuffix ? 'margin-block-start' : 'row-gap';
+						$cssProperty = isset( $selectorSuffix ) ? 'margin-block-start' : 'row-gap';
 
 						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['rows'] );
 					}
 
 					if ( $gap['columns'] ) {
-						$cssProperty = $selectorSuffix ? 'margin-block-start' : 'column-gap';
+						$cssProperty = isset( $selectorSuffix ) ? 'margin-block-start' : 'column-gap';
 
 						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['columns'] );
 					}
