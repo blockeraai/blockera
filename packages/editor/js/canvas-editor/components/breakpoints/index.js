@@ -72,55 +72,53 @@ export const Breakpoints = ({
 
 		if (!editorWrapper) {
 			editorWrapper = getIframeTag('.editor-styles-wrapper');
+		}
 
-			if (!editorWrapper) {
-				return;
+		if (editorWrapper) {
+			const {
+				settings: { min, max },
+			} = getBreakpoint(deviceType);
+			const iframe = getIframe();
+
+			if (!editorWrapper.classList.contains('blockera-canvas')) {
+				editorWrapper.classList.add('blockera-canvas');
 			}
-		}
 
-		const {
-			settings: { min, max },
-		} = getBreakpoint(deviceType);
-		const iframe = getIframe();
+			// We try to clean up additional styles added from our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile')
+			// of iframe and editor styles wrapper elements of post|site editor.
+			if (
+				isBaseBreakpoint(deviceType) &&
+				editorWrapper.classList.contains('preview-margin')
+			) {
+				editorWrapper.style.minWidth = '100%';
+				editorWrapper.style.maxWidth = '100%';
+				editorWrapper.style.removeProperty('margin');
+				editorWrapper.classList.remove('preview-margin');
+				editorWrapper.parentElement.style.removeProperty('background');
 
-		if (!editorWrapper.classList.contains('blockera-canvas')) {
-			editorWrapper.classList.add('blockera-canvas');
-		}
-
-		// We try to clean up additional styles added from our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile')
-		// of iframe and editor styles wrapper elements of post|site editor.
-		if (
-			isBaseBreakpoint(deviceType) &&
-			editorWrapper.classList.contains('preview-margin')
-		) {
-			editorWrapper.style.minWidth = '100%';
-			editorWrapper.style.maxWidth = '100%';
-			editorWrapper.style.removeProperty('margin');
-			editorWrapper.classList.remove('preview-margin');
-			editorWrapper.parentElement.style.removeProperty('background');
-
-			if (iframe) {
-				iframe.style.removeProperty('min-width');
-				iframe.style.removeProperty('max-width');
-				iframe.parentElement.style.removeProperty('background');
-			}
-		}
-		// We try to set our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile') settings into,
-		// iframe element as dimensions with preview margin style.
-		else if (!['desktop', 'tablet', 'mobile'].includes(deviceType)) {
-			if (iframe) {
-				if (min && max) {
-					iframe.style.minWidth = min;
-					iframe.style.maxWidth = max;
-				} else if (min) {
-					iframe.style.minWidth = min;
-				} else if (max) {
-					iframe.style.maxWidth = max;
+				if (iframe) {
+					iframe.style.removeProperty('min-width');
+					iframe.style.removeProperty('max-width');
+					iframe.parentElement.style.removeProperty('background');
 				}
 			}
+			// We try to set our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile') settings into,
+			// iframe element as dimensions with preview margin style.
+			else if (!['desktop', 'tablet', 'mobile'].includes(deviceType)) {
+				if (iframe) {
+					if (min && max) {
+						iframe.style.minWidth = min;
+						iframe.style.maxWidth = max;
+					} else if (min) {
+						iframe.style.minWidth = min;
+					} else if (max) {
+						iframe.style.maxWidth = max;
+					}
+				}
 
-			if (!editorWrapper.classList.contains('preview-margin')) {
-				editorWrapper.classList.add('preview-margin');
+				if (!editorWrapper.classList.contains('preview-margin')) {
+					editorWrapper.classList.add('preview-margin');
+				}
 			}
 		}
 
