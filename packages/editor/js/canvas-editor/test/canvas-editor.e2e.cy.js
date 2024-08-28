@@ -59,6 +59,8 @@ describe('Canvas editor testing', () => {
 			.find('main')
 			.click({ force: true })
 			.then(() => {
+				cy.wait(2000);
+
 				cy.getByDataTest('blockera-canvas-editor').should('exist');
 			});
 	});
