@@ -1,3 +1,11 @@
+= 0.9.2 - 2024-8-28
+-   Tweak: Optimized the style generator for faster processing.
+-   Tweak: General improvements across various functionalities.
+-   Tweak: Updated breakpoint handling to ensure full compatibility with WordPress 6.5.2 and later versions.
+
+-   Fix: Resolved an issue where breakpoint styles were not being generated correctly in the Site Editor.
+
+
 = 0.9.1 - 2024-8-25
 -   Fix: Breakpoints not showing in Site Editor.
 
