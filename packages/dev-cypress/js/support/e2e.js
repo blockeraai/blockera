@@ -68,3 +68,11 @@ Cypress.Commands.add('getIframeBody', () => {
 	// chaining more Cypress commands, like ".find(...)
 	return cy.get('iframe[name="editor-canvas"]').its('0.contentDocument.body');
 });
+
+Cypress.Commands.add('getBlockeraStylesWrapper', () => {
+	if (Cypress.$('iframe[name="editor-canvas"]').length) {
+		return cy.getIframeBody().find('#blockera-styles-wrapper');
+	} else {
+		return cy.get('#blockera-styles-wrapper');
+	}
+});
