@@ -124,6 +124,7 @@ zip -r -q blockera.zip \
 	composer.json \
 	experimental.config.json \
 	$vendor_without_blockera \
+  ### BEGIN AUTO-GENERATED VENDOR PACKAGES PATH PATTERN
 	$(find ./vendor/blockera/blockera/ -type f \( -name "*.php" -o -name "*.json" \)) \
 	$(find ./vendor/blockera/blockera-admin/ -type f \( -name "*.php" -o -name "*.json" \)) \
 	$(find ./vendor/blockera/blocks-core/ -type f \( -name "*.php" -o -name "*.json" \)) \
@@ -137,6 +138,7 @@ zip -r -q blockera.zip \
   $(find ./vendor/blockera/utils/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/wordpress/ -type f \( -name "*.php" -o -name "*.json" \)) \
   $(find ./vendor/blockera/freemius-sdk/) \
+  ### END AUTO-GENERATED VENDOR PACKAGES PATH PATTERN
   && echo "blockera.zip created successfully ✅" || echo "blockera.zip creation failed ❌"
 
 status "Cleaning up... 🧹"
