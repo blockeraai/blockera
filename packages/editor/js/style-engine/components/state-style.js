@@ -3,9 +3,10 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useId } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
+import { useId, useMemo, useState, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -24,10 +25,9 @@ import { MediaQuery } from './media-query';
 import type { StateStyleProps } from './types';
 import { combineDeclarations } from '../utils';
 import { useComputedCssProps } from '../hooks';
-import { select } from '@wordpress/data';
 
 const Stylesheet = ({
-	state,
+	states,
 	selectors,
 	currentBlock,
 	currentState,
@@ -36,12 +36,12 @@ const Stylesheet = ({
 	...props
 }: {
 	...StateStyleProps,
-	state: TStates | string,
-}): MixedElement => {
+	states: Array<TStates | string>,
+}): any => {
 	const id = useId();
 	const styles = useComputedCssProps({
 		...props,
-		state,
+		states,
 		selectors,
 		currentBlock,
 		currentState,
@@ -49,19 +49,18 @@ const Stylesheet = ({
 		currentInnerBlockState,
 	});
 
-	const MappedStyleGroups = () =>
-		combineDeclarations(styles).map(
-			(
-				{ selector, declarations }: Object,
-				index: number
-			): MixedElement => (
-				<MediaQuery key={index + id} breakpoint={currentBreakpoint}>
-					<Style selector={selector} cssDeclaration={declarations} />
-				</MediaQuery>
-			)
-		);
+	const combinedDeclaration = useMemo(
+		() => combineDeclarations(styles),
+		[styles]
+	);
 
-	return <MappedStyleGroups />;
+	return combinedDeclaration.map(
+		({ selector, declarations }: Object, index: number): MixedElement => (
+			<MediaQuery key={index + id} breakpoint={currentBreakpoint}>
+				<Style selector={selector} cssDeclaration={declarations} />
+			</MediaQuery>
+		)
+	);
 };
 
 export const StateStyle = (
@@ -81,19 +80,34 @@ export const StateStyle = (
 	);
 
 	const { getBreakpoints } = select('blockera/editor');
-	const breakpoints = getBreakpoints();
+
+	const [breakpoints, setBreakpoints] = useState([]);
+
+	// Because we registering breakpoints after loaded all assets in front-end pages,
+	// We should in each interval time, try to set breakpoints into native state.
+	// FIXME: in this useEffect is performance bottleneck! please implements infrastructure to able remove it.
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			if (!breakpoints.length) {
+				setBreakpoints(getBreakpoints());
+			}
+		}, 1000);
+
+		return () => {
+			clearInterval(intervalId);
+		};
+		// eslint-disable-next-line
+	}, []);
 
 	return Object.entries(breakpoints).map(
-		([, breakpoint]: [string, BreakpointTypes]): any => {
+		([, breakpoint]: [string, BreakpointTypes], index: number): any => {
 			const { type } = breakpoint;
 
-			return states.map(
-				(state: TStates | string, index: number): MixedElement => (
-					<Stylesheet
-						key={state + index + id}
-						{...{ ...props, state, currentBreakpoint: type }}
-					/>
-				)
+			return (
+				<Stylesheet
+					key={index + id}
+					{...{ ...props, states, currentBreakpoint: type }}
+				/>
 			);
 		}
 	);
