@@ -3,7 +3,7 @@ name: Build Blockera Plugin Zip
 on:
     pull_request:
     push:
-        branches: [mian]
+        branches: [master]
     workflow_dispatch:
         inputs:
             version:
@@ -143,8 +143,8 @@ jobs:
               run: |
                   git checkout main
                   git pull
-                  MAIN_VERSION=$(jq --raw-output '.version' package.json)
-                  if [[ ${{ steps.get_version.outputs.old_version }} == "$MAIN_VERSION" ]]; then
+                  MASTER_VERSION=$(jq --raw-output '.version' package.json)
+                  if [[ ${{ steps.get_version.outputs.old_version }} == "$MASTER_VERSION" ]]; then
                     git cherry-pick "${{ steps.get_version.outputs.release_branch }}"
                     git push
                     echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
