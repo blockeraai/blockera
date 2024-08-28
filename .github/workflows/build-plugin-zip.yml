@@ -46,7 +46,7 @@ jobs:
     bump-version:
         name: Bump version
         runs-on: ubuntu-latest
-        needs: compute-stable-branches5
+        needs: compute-stable-branches
         if: |
             github.event_name == 'workflow_dispatch' && (
               (
