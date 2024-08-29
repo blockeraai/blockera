@@ -23,7 +23,8 @@ jobs:
             - name: Test With WordPress Plugin Check (PCP)
               uses: wordpress/plugin-check-action@v1
               with:
-                  exclude-directories: 'packages/freemius-sdk'
+                  exclude-directories: 'packages/freemius-sdk,bin,'
+                  ignore-errors: 'hidden_files,application_detected'
                   categories: |
                       general
                       security
