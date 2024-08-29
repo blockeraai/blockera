@@ -28,7 +28,7 @@ jobs:
               run: ./bin/build-plugin-zip.sh
               env:
                   NO_CHECKS: 'true'
-                  NO_INSTALL_NPM: 'true'
+                  NO_INSTALL_DEPS: 'true'
 
             - name: Test With WordPress Plugin Check (PCP)
               uses: wordpress/plugin-check-action@v1

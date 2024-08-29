@@ -52,7 +52,16 @@ jobs:
                   check-latest: true
                   cache: npm
 
+            - name: Setup PHP Composer install dependencies
+              uses: ./.github/setup-php
+
+            - name: Build Blockera plugin ZIP file
+              run: bash ./bin/build-plugin-zip.sh
+              env:
+                  NO_CHECKS: 'true'
+                  NO_INSTALL_DEPS: 'true'
+
             - uses: preactjs/compressed-size-action@v2
               with:
                   repo-token: '${{ secrets.GITHUB_TOKEN }}'
-                  pattern: '{dist/**/*.min.js,dist/**/*.css}'
+                  pattern: '{dist/**/*.min.js,dist/**/*.css,blockera.zip}'
