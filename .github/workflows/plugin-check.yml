@@ -1,0 +1,47 @@
+name: Blockera Plugin Checkup
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+
+    workflow_dispatch:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    # The concurrency group contains the workflow name and the branch name for pull requests
+    # or the commit hash for any other events.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    test_wp_plugin_check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Test With WordPress Plugin Check (PCP)
+              uses: wordpress/plugin-check-action@v1
+              with:
+                  exclude-directories: 'packages/freemius-sdk'
+                  categories: |
+                      general
+                      security
+                      performance
+                      plugin_repo
+                      accessibility
+
+    test_php_security_check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Cache mechanism
+              uses: actions/cache@v2
+              with:
+                  path: ~/.symfony/cache
+                  key: db
+
+            - name: Run PHP Security Check
+              uses: symfonycorp/security-checker-action@v5
