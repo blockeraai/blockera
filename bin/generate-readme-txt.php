@@ -9,18 +9,18 @@
 
 $f = fopen( dirname( __DIR__ ) . '/readme.txt', 'r' );
 
-$plugin_version = get_plugin_version();
-$php_version = get_php_version();
-$tested_version = get_tested_version();
+$plugin_version   = get_plugin_version();
+$php_version      = get_php_version();
+$tested_version   = get_tested_version();
 $required_version = get_required_version();
-$short_desc = get_short_description();
+$short_desc       = get_short_description();
 
 /**
  * Prints the changelog
  */
 function print_changelog() {
 
-	$content = file_get_contents(__DIR__ . '/../changelog.txt');
+	$content = file_get_contents( __DIR__ . '/../changelog.txt' );
 
 	echo $content;
 }
@@ -28,11 +28,11 @@ function print_changelog() {
 /**
  * Fetch current plugin version from `blockera.php` file.
  */
-function get_plugin_version(){
-	
-	$content = file_get_contents(__DIR__ . '/../blockera.php');
+function get_plugin_version() {
 
-	if (preg_match( '/\s*\*\s*Version:\s*([0-9.]+)/m', $content, $matches )) {
+	$content = file_get_contents( __DIR__ . '/../blockera.php' );
+
+	if ( preg_match( '/\s*\*\s*Version:\s*([0-9.]+)/m', $content, $matches ) ) {
 		return $matches[1];
 	}
 
@@ -42,11 +42,11 @@ function get_plugin_version(){
 /**
  * Fetch required PHP version from `blockera.php` file.
  */
-function get_php_version(){
-	
-	$content = file_get_contents(__DIR__ . '/../blockera.php');
+function get_php_version() {
 
-	if (preg_match( '/\s*\*\s*Requires PHP:\s*([0-9.]+)/m', $content, $matches )) {
+	$content = file_get_contents( __DIR__ . '/../blockera.php' );
+
+	if ( preg_match( '/\s*\*\s*Requires PHP:\s*([0-9.]+)/m', $content, $matches ) ) {
 		return $matches[1];
 	}
 
@@ -56,11 +56,11 @@ function get_php_version(){
 /**
  * Fetch required version from `blockera.php` file.
  */
-function get_required_version(){
-	
-	$content = file_get_contents(__DIR__ . '/../blockera.php');
+function get_required_version() {
 
-	if (preg_match( '/\s*\*\s*Requires at least:\s*([0-9.]+)/m', $content, $matches )) {
+	$content = file_get_contents( __DIR__ . '/../blockera.php' );
+
+	if ( preg_match( '/\s*\*\s*Requires at least:\s*([0-9.]+)/m', $content, $matches ) ) {
 		return $matches[1];
 	}
 
@@ -70,11 +70,11 @@ function get_required_version(){
 /**
  * Fetch tested up to version from `blockera.php` file.
  */
-function get_tested_version(){
-	
-	$content = file_get_contents(__DIR__ . '/../blockera.php');
+function get_tested_version() {
 
-	if (preg_match( '/\s*\*\s*Tested up to:\s*([0-9.]+)/m', $content, $matches )) {
+	$content = file_get_contents( __DIR__ . '/../blockera.php' );
+
+	if ( preg_match( '/\s*\*\s*Tested up to:\s*([0-9.]+)/m', $content, $matches ) ) {
 		return $matches[1];
 	}
 
@@ -84,11 +84,11 @@ function get_tested_version(){
 /**
  * Fetch tested up to version from `blockera.php` file.
  */
-function get_short_description(){
-	
-	$content = file_get_contents(__DIR__ . '/../blockera.php');
+function get_short_description() {
 
-	if (preg_match( '/\s*\*\s*Description:\s*(.*)/', $content, $matches )) {
+	$content = file_get_contents( __DIR__ . '/../blockera.php' );
+
+	if ( preg_match( '/\s*\*\s*Description:\s*(.*)/', $content, $matches ) ) {
 		return $matches[1];
 	}
 
@@ -96,6 +96,28 @@ function get_short_description(){
 }
 
 $skip_line = false;
+
+if ( ! function_exists( 'str_starts_with' ) ) {
+	/**
+	 * Polyfill for `str_starts_with()` function added in PHP 8.0.
+	 *
+	 * Performs a case-sensitive check indicating if
+	 * the haystack begins with needle.
+	 *
+	 * @since 5.9.0
+	 *
+	 * @param string $haystack The string to search in.
+	 * @param string $needle   The substring to search for in the `$haystack`.
+	 * @return bool True if `$haystack` starts with `$needle`, otherwise false.
+	 */
+	function str_starts_with( $haystack, $needle ) {
+		if ( '' === $needle ) {
+			return true;
+		}
+
+		return 0 === strpos( $haystack, $needle );
+	}
+}
 
 while ( true ) {
 	$line = fgets( $f );
@@ -117,23 +139,23 @@ while ( true ) {
 			print_changelog();
 			break;
 
-		case str_starts_with(trim( $line ), 'Stable tag:'):
+		case str_starts_with( trim( $line ), 'Stable tag:' ):
 			echo "Stable tag: $plugin_version\n";
 			break;
 
-		case str_starts_with(trim( $line ), 'Requires PHP:'):
+		case str_starts_with( trim( $line ), 'Requires PHP:' ):
 			echo "Requires PHP: $php_version\n";
 			break;
 
-		case str_starts_with(trim( $line ), 'Tested up to:'):
+		case str_starts_with( trim( $line ), 'Tested up to:' ):
 			echo "Tested up to: $tested_version\n";
 			break;
 
-		case str_starts_with(trim( $line ), 'Requires at least:'):
+		case str_starts_with( trim( $line ), 'Requires at least:' ):
 			echo "Requires at least: $required_version\n";
 			break;
 
-		case str_starts_with(trim( $line ), 'Short Description:'):
+		case str_starts_with( trim( $line ), 'Short Description:' ):
 			echo "$short_desc\n";
 			break;
 
