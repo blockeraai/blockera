@@ -24,6 +24,9 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Setup PHP Composer install dependencies
+              uses: ./.github/setup-php
+
             - name: Build Blockera plugin ZIP file
               run: bash ./bin/build-plugin-zip.sh
               env:

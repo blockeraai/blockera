@@ -4,6 +4,7 @@ inputs:
     php-version:
         description: 'Optional. The PHP version to use. When not specified, the version is 7.4'
         required: false
+        default: '7.4'
 
 runs:
     using: 'composite'
