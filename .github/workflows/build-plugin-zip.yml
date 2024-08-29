@@ -179,6 +179,8 @@ jobs:
 
             - name: Build Blockera plugin ZIP file
               run: ./bin/build-plugin-zip.sh
+              with:
+                  token: ${{ secrets.BLOCKERA_TOKEN }}
               env:
                   NO_CHECKS: 'true'
 
