@@ -15,10 +15,20 @@ concurrency:
 
 jobs:
     test_wp_plugin_check:
+        name: WordPress (PCP)
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Build Blockera plugin ZIP file
+              run: ./bin/build-plugin-zip.sh
+              env:
+                  NO_CHECKS: 'true'
+                  NO_INSTALL_NPM: 'true'
 
             - name: Test With WordPress Plugin Check (PCP)
               uses: wordpress/plugin-check-action@v1
@@ -33,6 +43,7 @@ jobs:
                       accessibility
 
     test_php_security_check:
+        name: PHP Security Check
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
