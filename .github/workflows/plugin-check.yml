@@ -25,7 +25,7 @@ jobs:
               uses: ./.github/setup-node
 
             - name: Build Blockera plugin ZIP file
-              run: ./bin/build-plugin-zip.sh
+              run: bash ./bin/build-plugin-zip.sh
               env:
                   NO_CHECKS: 'true'
                   NO_INSTALL_DEPS: 'true'
