@@ -178,7 +178,7 @@ jobs:
                   cache: npm
 
             - name: Build Blockera plugin ZIP file
-              run: ./bin/build-plugin-zip.sh
+              run: bash ./bin/build-plugin-zip.sh
               env:
                   NO_CHECKS: 'true'
 
