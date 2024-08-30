@@ -51,11 +51,8 @@ jobs:
             - name: Setup PHP Composer install dependencies
               uses: ./.github/setup-php
 
-            - name: Build Blockera plugin ZIP file
-              run: bash ./bin/build-plugin-zip.sh
-              env:
-                  NO_CHECKS: 'true'
-                  NO_INSTALL_DEPS: 'true'
+            - name: Build Plugin Zip File
+              uses: ./.github/build-plugin-zip
 
             - uses: preactjs/compressed-size-action@v2
               with:
