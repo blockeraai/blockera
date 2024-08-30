@@ -1,0 +1,64 @@
+name: Compressed Size
+
+on:
+    pull_request:
+        paths:
+            # Any change to a CSS, Sass, or JavaScript file should run checks.
+            - '**.js'
+            - '**.css'
+            - '**.scss'
+            # Changes to any NPM related files could affect the outcome.
+            - '**package*.json'
+            # These files configures ESLint. Changes could affect the outcome.
+            - '**.eslint*'
+            - 'packages/dev-tools/js/eslint/*.js'
+            # These files configures JSHint. Changes could affect the outcome.
+            - '**.jshint*'
+            # These files configures Prettier. Changes could affect the outcome.
+            - '**.prettier*'
+            # These files configures stylelint. Changes could affect the outcome.
+            - '**.stylelint*'
+            # These archive file of Blockera plugin. Changes could affect the outcome.
+            - 'blockera.zip'
+            # These files configures TypeScript. Changes could affect the outcome.
+            # TODO: uncomment below pattern to detect tsconfig file in future.
+            #- '**.tsconfig*'
+            # This file configures Webpack. Changes could affect the outcome.
+            - 'webpack.config.js'
+            - 'packages/dev-tools/js/webpack/*.js'
+            # Changes to this workflow file should always verify the changes are successful.
+            - '.github/workflows/bundle-size.yml'
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    # The concurrency group contains the workflow name and the branch name for pull requests
+    # or the commit hash for any other events.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    build:
+        name: Building and Give Sizes
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 1
+                  show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Setup PHP Composer install dependencies
+              uses: ./.github/setup-php
+              with:
+                  composer-options: '--no-dev -o --apcu-autoloader -a'
+
+            - name: Build Plugin Zip File
+              uses: ./.github/build-plugin-zip
+
+            - uses: preactjs/compressed-size-action@v2
+              with:
+                  repo-token: '${{ secrets.GITHUB_TOKEN }}'
+                  pattern: '{dist/**/*.min.js,dist/**/*.css,blockera.zip}'
