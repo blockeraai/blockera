@@ -1,17 +1,34 @@
 ## Generating "build-plugin-zip.sh" bash file  
 
-Enter below cli into terminal:
+### Regenerating bash script
 
-on linux:
+Enter below command into terminal:
 
- ```bash
-	php generate-build-plugin-zip-sh.php > build-plugin-zip.temp.sh
-	mv build-plugin-zip.temp.sh build-plugin-zip.sh
+ ```shell
+php generate-build-plugin-zip-sh.php > ./bin/build-plugin-zip.temp.sh
  ```
 
- on windows:
+### Change file mode
 
- ```bash
-	php generate-build-plugin-zip-sh.php > build-plugin-zip.temp.sh
-	move build-plugin-zip.temp.sh build-plugin-zip.sh
- ```
+We should not commit new file created ``build-plugin-zip.temp.sh``, 
+in this step we should run below command to change directory mode of created file.
+
+```shell
+chmod +x ./bin/build-plugin-zip.temp.sh
+```
+
+### Execute bash script
+
+We should execute bash script to generate plugin zip file.
+
+```shell
+./bin/build-plugin-zip.temp.sh
+```
+
+### Done
+
+We should not commit file on git, so delete permanently it.
+
+```shell
+rm -rf ./bin/build-plugin-zip.temp.sh
+```
