@@ -5,6 +5,10 @@ inputs:
         description: 'Optional. The PHP version to use. When not specified, the version is 7.4'
         required: false
         default: '7.4'
+    composer-options:
+        description: 'Optional. The options to use on composer install. When not specified, the options is empty'
+        required: false
+        default: ''
 
 runs:
     using: 'composite'
@@ -34,3 +38,4 @@ runs:
           uses: ramsey/composer-install@v2
           with:
               custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
+              composer-options: '${{ inputs.composer-options }}'
