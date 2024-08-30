@@ -47,6 +47,9 @@ jobs:
                   fetch-depth: 1
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
             - name: Setup PHP Composer install dependencies
               uses: ./.github/setup-php
 

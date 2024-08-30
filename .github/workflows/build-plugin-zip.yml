@@ -170,7 +170,7 @@ jobs:
                   ref: ${{ needs.bump-version.outputs.release_branch || github.ref }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
-            - name: Setup PHP Composer install dependencies
+            - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
             - name: Setup PHP Composer install dependencies
