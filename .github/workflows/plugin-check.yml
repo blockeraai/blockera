@@ -34,13 +34,14 @@ jobs:
 
             - name: Extract blockera.zip to build directory
               run: |
-                  unzip blockera.zip -d build
+                  mkdir build
+                  unzip blockera.zip -d ./build/blockera
                   rm -rf blockera.zip
 
             - name: Test With WordPress Plugin Check (PCP)
               uses: wordpress/plugin-check-action@v1
               with:
-                  build-dir: './build'
+                  build-dir: './build/blockera'
                   exclude-directories: 'packages/freemius-sdk'
                   categories: |
                       general
