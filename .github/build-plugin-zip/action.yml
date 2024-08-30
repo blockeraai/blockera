@@ -5,7 +5,7 @@ runs:
     using: 'composite'
     steps:
         - name: Regenerating Bash Script
-          run: php generate-build-plugin-zip-sh.php > ./bin/build-plugin-zip.temp.sh
+          run: php ./bin/generate-build-plugin-zip-sh.php > ./bin/build-plugin-zip.temp.sh
           shell: bash
 
         - name: CHMOD

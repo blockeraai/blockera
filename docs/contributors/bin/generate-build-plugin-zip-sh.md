@@ -5,7 +5,7 @@
 Enter below command into terminal:
 
  ```shell
-php generate-build-plugin-zip-sh.php > ./bin/build-plugin-zip.temp.sh
+php ./bin/generate-build-plugin-zip-sh.php > ./bin/build-plugin-zip.temp.sh
  ```
 
 ### Change file mode
