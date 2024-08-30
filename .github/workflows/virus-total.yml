@@ -1,0 +1,46 @@
+name: Virus Total Scan
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+
+    workflow_dispatch:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    # The concurrency group contains the workflow name and the branch name for pull requests
+    # or the commit hash for any other events.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    build:
+        name: Building and Scan Files
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 1
+                  show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Setup PHP Composer install dependencies
+              uses: ./.github/setup-php
+              with:
+                  composer-options: '--no-dev -o --apcu-autoloader -a'
+
+            - name: Build Plugin Zip File
+              uses: ./.github/build-plugin-zip
+              with:
+                  composer-options: '--no-dev -o --apcu-autoloader -a'
+
+            - name: VirusTotal Scan
+              uses: crazy-max/ghaction-virustotal@v4
+              with:
+                  vt_api_key: ${{ secrets.VT_API_KEY }}
+                  files: |
+                      ./blockera.zip
+                      ./
