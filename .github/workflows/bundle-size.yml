@@ -60,7 +60,7 @@ jobs:
               with:
                   composer-options: '--no-dev -o --apcu-autoloader -a'
 
-            - uses: preactjs/compressed-size-action@v2.6.0
+            - uses: preactjs/compressed-size-action@v2
               with:
                   repo-token: '${{ secrets.GITHUB_TOKEN }}'
                   pattern: '{dist/**/*.min.js,dist/**/*.css,blockera.zip}'
