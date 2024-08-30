@@ -18,6 +18,8 @@ on:
             - '**.prettier*'
             # These files configures stylelint. Changes could affect the outcome.
             - '**.stylelint*'
+            # These archive file of Blockera plugin. Changes could affect the outcome.
+            - 'blockera.zip'
             # These files configures TypeScript. Changes could affect the outcome.
             # TODO: uncomment below pattern to detect tsconfig file in future.
             #- '**.tsconfig*'
