@@ -57,8 +57,6 @@ jobs:
 
             - name: Build Plugin Zip File
               uses: ./.github/build-plugin-zip
-              with:
-                  composer-options: '--no-dev -o --apcu-autoloader -a'
 
             - uses: preactjs/compressed-size-action@v2
               with:
