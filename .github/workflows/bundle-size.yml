@@ -38,7 +38,7 @@ concurrency:
 
 jobs:
     build:
-        name: Check
+        name: Building and Give Sizes
         runs-on: ubuntu-latest
 
         steps:
@@ -48,13 +48,12 @@ jobs:
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Setup PHP Composer install dependencies
-              uses: ./.github/setup-node
-
-            - name: Setup PHP Composer install dependencies
               uses: ./.github/setup-php
 
             - name: Build Plugin Zip File
               uses: ./.github/build-plugin-zip
+              with:
+                  composer-options: '--no-dev -o --apcu-autoloader -a'
 
             - uses: preactjs/compressed-size-action@v2
               with:
