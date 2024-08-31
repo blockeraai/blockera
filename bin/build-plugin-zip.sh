@@ -119,6 +119,7 @@ zip -r -q blockera.zip \
 	readme.txt \
 	languages \
 	$build_files \
+	$WP_ENV_FILE \
 	blockera.php \
 	changelog.txt \
 	composer.json \

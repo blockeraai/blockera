@@ -1,6 +1,12 @@
 name: 'Auto Generate build-plugin-zip.temp.sh file'
 description: 'Generating temporary bash file to use of that to create blockera.zip file.'
 
+inputs:
+    with-wp-env-json:
+        description: 'Optional. The flag to .wp-env.json file add to archive file or not?'
+        required: false
+        default: 'false'
+
 runs:
     using: 'composite'
     steps:
@@ -17,6 +23,7 @@ runs:
           env:
               NO_CHECKS: 'true'
               NO_INSTALL_DEPS: 'true'
+              WP_ENV_FILE: '${{ inputs.with-wp-env-json }}'
           shell: bash
 
         - name: Delete Permanently Temporary File
