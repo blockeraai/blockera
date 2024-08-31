@@ -1,0 +1,65 @@
+name: Compressed Size
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+
+    workflow_dispatch:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    # The concurrency group contains the workflow name and the branch name for pull requests
+    # or the commit hash for any other events.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    build_tests:
+        name: Building and Run E2E Tests
+        runs-on: ubuntu-latest
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Install Composer dependencies
+              uses: ramsey/composer-install@v2
+              with:
+                  custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
+                  composer-options: '--no-dev -o --apcu-autoloader -a'
+
+            - name: Create .wp-env.json file
+              run: |
+                  touch .wp-env.json
+                  echo '{"plugins": ["."]}' >> .wp-env.json
+                  cat .wp-env.json
+
+            - name: Build Plugin Zip File
+              uses: ./.github/build-plugin-zip
+              with:
+                  wp-env-json: '.wp-env.json'
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Install Cypress
+              run: npx cypress install
+
+            - name: Install Composer Packages
+              run: composer install --no-dev -o --apcu-autoloader -a
+
+            - name: Start WordPress Environment
+              run: npm run env:start
+
+            - name: Build wp-env app
+              run: npm run build
+
+            - name: Run Cypress E2E Tests
+              run: npm run test:e2e -- --spec "packages/**/canvas-editor.e2e.cy.js"
+
+            - name: Stop WordPress Environment
+              run: npm run env:stop
