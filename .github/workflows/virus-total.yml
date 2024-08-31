@@ -17,6 +17,7 @@ jobs:
     build:
         name: Building and Scan Files
         runs-on: ubuntu-latest
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
             - uses: actions/checkout@v4
