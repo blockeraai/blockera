@@ -49,9 +49,10 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
-            - name: Setup PHP Composer install dependencies
-              uses: ./.github/setup-php
+            - name: Install Composer dependencies
+              uses: ramsey/composer-install@v2
               with:
+                  custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
                   composer-options: '--no-dev -o --apcu-autoloader -a'
 
             - name: Build Plugin Zip File
