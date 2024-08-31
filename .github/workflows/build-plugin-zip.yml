@@ -50,7 +50,7 @@ jobs:
         if: |
             github.event_name == 'workflow_dispatch' && (
               (
-                github.ref == 'refs/heads/main' ||
+                github.ref == 'refs/heads/master' ||
                 endsWith( github.ref, needs.compute-stable-branches.outputs.next_stable_branch )
               ) && (
                 github.event.inputs.version == 'rc' ||
@@ -65,7 +65,7 @@ jobs:
             new_version: ${{ steps.get_version.outputs.new_version }}
             release_branch: ${{ steps.get_version.outputs.release_branch }}
             release_branch_commit: ${{ steps.commit_version_bump_to_release_branch.outputs.version_bump_commit }}
-            main_commit: ${{ steps.commit_version_bump_to_main.outputs.version_bump_commit }}
+            master_commit: ${{ steps.commit_version_bump_to_master.outputs.version_bump_commit }}
 
         steps:
             - name: Checkout code
@@ -134,14 +134,14 @@ jobs:
                   git push --set-upstream origin "${{ steps.get_version.outputs.release_branch }}"
                   echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
 
-            - name: Fetch main
-              if: ${{ github.ref != 'refs/heads/main' }}
-              run: git fetch --depth=1 origin main
+            - name: Fetch master
+              if: ${{ github.ref != 'refs/heads/master' }}
+              run: git fetch --depth=1 origin master
 
-            - name: Cherry-pick the version bump commit to main
-              id: commit_version_bump_to_main
+            - name: Cherry-pick the version bump commit to master
+              id: commit_version_bump_to_master
               run: |
-                  git checkout main
+                  git checkout master
                   git pull
                   MASTER_VERSION=$(jq --raw-output '.version' package.json)
                   if [[ ${{ steps.get_version.outputs.old_version }} == "$MASTER_VERSION" ]]; then
@@ -248,13 +248,13 @@ jobs:
               run: |
                   git push origin :"${{ needs.bump-version.outputs.release_branch }}"
 
-            - name: Revert version bump on main
-              if: ${{ needs.bump-version.outputs.main_commit }}
+            - name: Revert version bump on master
+              if: ${{ needs.bump-version.outputs.master_commit }}
               run: |
-                  git fetch --depth=2 origin main
-                  git checkout main
-                  git revert --no-edit ${{ needs.bump-version.outputs.main_commit }}
-                  git push --set-upstream origin main
+                  git fetch --depth=2 origin master
+                  git checkout master
+                  git revert --no-edit ${{ needs.bump-version.outputs.master_commit }}
+                  git push --set-upstream origin master
 
     create-release:
         name: Create Release Draft and Attach Asset
