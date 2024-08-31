@@ -43,10 +43,8 @@ jobs:
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
 
         steps:
-            - uses: actions/checkout@v4
-              with:
-                  fetch-depth: 1
-                  show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+            - name: Checkout
+              uses: actions/checkout@v4
 
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
