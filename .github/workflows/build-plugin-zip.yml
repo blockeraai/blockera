@@ -101,8 +101,8 @@ jobs:
 
             - name: Configure git user name and email
               run: |
-                  git config user.name "Blockera Repository Automation"
-                  git config user.email blockera@blockera.ai
+                  git config user.name "blockerabot"
+                  git config user.email blockeraai+githubbot@gmail.com
 
             - name: Create and switch to release branch
               if: |
