@@ -45,7 +45,7 @@ describe('Transforms → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						`transform: translate3d(150px, 200px, 100px);`
+						`transform: translate3d(150px, 200px, 100px)`
 					);
 			});
 
@@ -108,7 +108,7 @@ describe('Transforms → Functionality', () => {
 			cy.getIframeBody().within(() => {
 				cy.get('#blockera-styles-wrapper')
 					.invoke('text')
-					.should('include', 'transform: scale3d(130%, 130%, 50%);');
+					.should('include', 'transform: scale3d(130%, 130%, 50%)');
 			});
 
 			//Check store
@@ -160,7 +160,7 @@ describe('Transforms → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg);'
+						'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg)'
 					);
 			});
 
@@ -213,7 +213,7 @@ describe('Transforms → Functionality', () => {
 			cy.getIframeBody().within(() => {
 				cy.get('#blockera-styles-wrapper')
 					.invoke('text')
-					.should('include', 'transform: skew(10deg, 20deg);');
+					.should('include', 'transform: skew(10deg, 20deg)');
 			});
 
 			//Check store
@@ -238,7 +238,7 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css-inline-css')
 				.invoke('text')
-				.should('include', 'transform: skew(10deg, 20deg) !important;');
+				.should('include', 'transform: skew(10deg, 20deg) !important');
 		});
 	});
 
@@ -302,7 +302,7 @@ describe('Transforms → Functionality', () => {
 			cy.getIframeBody().within(() => {
 				cy.get('#blockera-styles-wrapper')
 					.invoke('text')
-					.should('include', 'transform-origin: 50% 50%;');
+					.should('include', 'transform-origin: 50% 50%');
 			});
 
 			//Check store
@@ -334,7 +334,7 @@ describe('Transforms → Functionality', () => {
 			cy.getIframeBody().within(() => {
 				cy.get('#blockera-styles-wrapper')
 					.invoke('text')
-					.should('include', 'backface-visibility: hidden;');
+					.should('include', 'backface-visibility: hidden');
 			});
 
 			//Check store
@@ -410,7 +410,7 @@ describe('Transforms → Functionality', () => {
 			cy.getIframeBody().within(() => {
 				cy.get('#blockera-styles-wrapper')
 					.invoke('text')
-					.should('include', 'perspective-origin: 50% 50%;');
+					.should('include', 'perspective-origin: 50% 50%');
 			});
 
 			//Check store
