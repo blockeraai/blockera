@@ -4,6 +4,10 @@ let env = {
 	wpUsername: 'admin',
 	wpPassword: 'password',
 	testURL: 'http://localhost:8888',
+	e2e: {
+		specPattern: ['packages/**/*.e2e.cy.js'],
+		excludeSpecPattern: ['packages/**/*.build.e2e.js'],
+	},
 };
 
 try {
@@ -24,7 +28,8 @@ module.exports = defineConfig({
 	defaultCommandTimeout: 15000,
 	e2e: {
 		setupNodeEvents,
-		specPattern: ['packages/**/*.e2e.cy.js'],
+		specPattern: env.e2e.specPattern,
+		excludeSpecPattern: env.e2e.excludeSpecPattern,
 		supportFile: 'packages/dev-cypress/js/support/e2e.js',
 	},
 	env,
