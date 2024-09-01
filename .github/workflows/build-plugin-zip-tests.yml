@@ -71,5 +71,5 @@ jobs:
                   cd ./build/blockera
                   npx cypress install
                   npm run env:start
-                  npm run test:e2e -- --spec "packages/**/canvas-editor.e2e.cy.js"
+                  npm run test:e2e
                   npm run env:stop
