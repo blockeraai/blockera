@@ -46,6 +46,9 @@ jobs:
             - name: Create Requirements
               run: |
                   cd ./build/blockera
+                  mkdir packages
+                  mkdir packages/blockera
+                  mkdir packages/blockera/tests
                   touch .wp-env.json
                   echo '{"plugins": ["."]}' >> .wp-env.json
                   cat .wp-env.json
@@ -60,6 +63,7 @@ jobs:
             - name: Update Cypress Specs Patterns
               run: |
                   cp ./cypress.env-example.json ./build/blockera/cypress.env.json
+                  find ./packages/ -type f \( -name "*.build.e2e.cy.js" \) -exec cp {} ./build/blockera/packages/blockera/tests \;               
                   cp ./bin/update-cypress-env-specs.sh ./build/blockera
                   cd ./build/blockera
                   chmod +x ./update-cypress-env-specs.sh
