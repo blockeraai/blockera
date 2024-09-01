@@ -51,7 +51,7 @@ jobs:
                   echo '{"plugins": ["."]}' >> .wp-env.json
                   cat .wp-env.json
                   touch cypress.env.json
-                  echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": ["packages/**/*.e2e.cy.js"],"specPattern": ["packages/**/*.build.e2e.js"]}}' >> cypress.env.json
+                  echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": ["packages/**/*.e2e.cy.js"],"specPattern": ["packages/**/*.build.e2e.cy.js"]}}' >> cypress.env.json
                   cat cypress.env.json
                   cd ../..
                   cp -r ./cypress ./build/blockera
