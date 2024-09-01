@@ -57,6 +57,15 @@ jobs:
                   cp ./cypress.config.js ./build/blockera
                   cp -r ./packages/dev-cypress ./build/blockera/packages
 
+            - name: Update Cypress Specs Patterns
+              run: |
+                  cp ./cypress.env-example.json ./build/blockera/cypress.env.json
+                  cp ./bin/update-cypress-env-specs.sh ./build/blockera
+                  cd ./build/blockera
+                  chmod +x ./update-cypress-env-specs.sh
+                  ./update-cypress-env-specs.sh
+                  cd ../..
+
             - name: Setup and Run E2E tests on Blockera build
               run: |
                   cd ./build/blockera
