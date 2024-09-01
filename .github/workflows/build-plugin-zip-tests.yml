@@ -53,13 +53,13 @@ jobs:
                   cd ../..
                   cp -r ./cypress ./build/blockera
                   cp ./package.json ./build/blockera
+                  cp -r ./node_modules ./build/blockera
                   cp ./cypress.config.js ./build/blockera
                   cp -r ./packages/dev-cypress ./build/blockera/packages
 
             - name: Setup and Run E2E tests on Blockera build
               run: |
                   cd ./build/blockera
-                  npm ci
                   npx cypress install
                   npm run env:start
                   npm run test:e2e -- --spec "packages/**/canvas-editor.e2e.cy.js"
