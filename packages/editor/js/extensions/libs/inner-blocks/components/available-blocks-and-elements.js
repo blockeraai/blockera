@@ -114,7 +114,10 @@ export const AvailableBlocksAndElements = ({
 											clientId,
 											inners: {
 												...inners,
-												[id]: innerBlock,
+												[id]: {
+													...innerBlock,
+													isSelected: true,
+												},
 											},
 										});
 

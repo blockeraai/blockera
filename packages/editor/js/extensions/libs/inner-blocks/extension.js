@@ -42,29 +42,38 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		innerBlocks,
 	}: InnerBlocksProps): MixedElement => {
 		// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
-		const { currentBlock = 'master', getBlockInners } = useSelect(
-			(select) => {
-				const { getBlockInners, getExtensionCurrentBlock } = select(
-					'blockera/extensions'
-				);
+		const {
+			currentBlock = 'master',
+			getBlockInners,
+			selectedBlockHistory,
+		} = useSelect((select) => {
+			const {
+				getBlockInners,
+				getExtensionCurrentBlock,
+				getSelectedInnerBlockHistory,
+			} = select('blockera/extensions');
 
-				return {
-					getBlockInners,
-					currentBlock: getExtensionCurrentBlock(),
-				};
-			}
-		);
+			return {
+				getBlockInners,
+				selectedBlockHistory: getSelectedInnerBlockHistory(
+					block.clientId
+				),
+				currentBlock: getExtensionCurrentBlock(),
+			};
+		});
 
 		// Internal dispatchers. to use of "setCurrentBlock" and "setBlockClientInners" dispatchers of Blockera editor/extensions store api.
 		const {
 			changeExtensionCurrentBlock: setCurrentBlock,
 			setBlockClientInners,
+			setSelectedInnerBlockHistory,
 		} = dispatch('blockera/extensions') || {};
 
 		// Calculation: to prepare standard values for "blockeraInnerBlocks" block attribute with set initial value for repeater by "setBlockClientInners" dispatcher.
 		const memoizedInnerBlocks = useMemoizedInnerBlocks({
 			getBlockInners,
 			setBlockClientInners,
+			selectedBlockHistory,
 			controlValue: values,
 			clientId: block?.clientId,
 			reservedInnerBlocks: innerBlocks,
@@ -74,6 +83,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		const { elements, blocks } = useAvailableItems({
 			getBlockInners,
 			memoizedInnerBlocks,
+			selectedBlockHistory,
 			setBlockClientInners,
 			clientId: block?.clientId,
 			reservedInnerBlocks: innerBlocks,
@@ -111,9 +121,17 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		return (
 			<PanelBodyControl
 				title={__('Inner Blocks', 'blockera')}
-				initialOpen={false}
+				initialOpen={Boolean(selectedBlockHistory)}
 				icon={<Icon icon="extension-inner-blocks" />}
 				className={extensionClassNames('inner-blocks')}
+				onToggle={(isOpen) => {
+					if (!isOpen) {
+						setSelectedInnerBlockHistory({
+							clientId: block.clientId,
+							currentBlock: undefined,
+						});
+					}
+				}}
 			>
 				<ControlContextProvider
 					value={contextValue}
@@ -151,7 +169,21 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 											continue;
 										}
 
+										items[name] = {
+											...item,
+											isSelected: true,
+										};
+
 										setCurrentBlock(name);
+										setSelectedInnerBlockHistory({
+											currentBlock: name,
+											clientId: block.clientId,
+										});
+
+										setBlockClientInners({
+											clientId: block.clientId,
+											inners: items,
+										});
 									}
 								}
 							},
@@ -164,9 +196,21 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 											<AvailableBlocksAndElements
 												blocks={blocks}
 												elements={elements}
-												setCurrentBlock={
-													setCurrentBlock
-												}
+												setCurrentBlock={(
+													selectedBlock: string
+												) => {
+													setCurrentBlock(
+														selectedBlock
+													);
+													setSelectedInnerBlockHistory(
+														{
+															currentBlock:
+																selectedBlock,
+															clientId:
+																block.clientId,
+														}
+													);
+												}}
 												setBlockClientInners={
 													setBlockClientInners
 												}

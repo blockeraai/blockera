@@ -417,6 +417,22 @@ export function getBlockInners(
 }
 
 /**
+ * Get selected inner block history.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ * @param {string} clientId the block client identifier.
+ * @return {Object|null} the selected inner block history value.
+ */
+export function getSelectedInnerBlockHistory(
+	{ blockExtensions }: Object,
+	clientId: string
+): ?Object {
+	return blockExtensions[clientId]
+		? blockExtensions[clientId]?.selectedBlock
+		: null;
+}
+
+/**
  * Get shared block attributes.
  *
  * @param {Object} blockExtensions the block extension details.

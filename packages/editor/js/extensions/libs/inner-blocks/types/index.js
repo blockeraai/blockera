@@ -54,6 +54,7 @@ export type MemoizedInnerBlocks = {
 	}) => void,
 	controlValue: InnerBlocks,
 	reservedInnerBlocks: InnerBlocks,
+	selectedBlockHistory: InnerBlockType,
 	getBlockInners: (clientId: string) => InnerBlocks,
 };
 
@@ -65,5 +66,6 @@ export type AvailableItems = {
 	}) => void,
 	reservedInnerBlocks: InnerBlocks,
 	memoizedInnerBlocks: InnerBlocks,
+	selectedBlockHistory: InnerBlockType,
 	getBlockInners: (clientId: string) => InnerBlocks,
 };

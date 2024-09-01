@@ -21,6 +21,7 @@ export const useMemoizedInnerBlocks = ({
 	clientId,
 	controlValue,
 	getBlockInners,
+	selectedBlockHistory,
 	reservedInnerBlocks,
 	setBlockClientInners,
 }: MemoizedInnerBlocks): InnerBlocks => {
@@ -44,6 +45,7 @@ export const useMemoizedInnerBlocks = ({
 							'',
 						icon: registeredBlockType?.icon?.src ||
 							reservedInnerBlocks[name]?.icon || <></>,
+						isSelected: selectedBlockHistory === name,
 					},
 					controlValue[name]
 				);
@@ -52,7 +54,10 @@ export const useMemoizedInnerBlocks = ({
 			}
 
 			stack[name] = mergeObject(
-				reservedInnerBlocks[name],
+				{
+					...reservedInnerBlocks[name],
+					isSelected: selectedBlockHistory === name,
+				},
 				controlValue[name]
 			);
 		}

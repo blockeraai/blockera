@@ -28,6 +28,7 @@ export const useAvailableItems = ({
 	reservedInnerBlocks,
 	memoizedInnerBlocks,
 	setBlockClientInners,
+	selectedBlockHistory,
 }: AvailableItems): { blocks: InnerBlocks, elements: InnerBlocks } => {
 	// External selectors. to access registered block types on WordPress blocks store api.
 	const { getBlockType } = select('core/blocks');
@@ -108,6 +109,9 @@ export const useAvailableItems = ({
 								...innerBlock,
 								// Item force is not deletable!
 								deletable: false,
+								// Item set is selected or not.
+								isSelected:
+									innerBlock?.name === selectedBlockHistory,
 							},
 						}),
 						{}

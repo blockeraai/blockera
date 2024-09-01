@@ -76,6 +76,13 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 				...state,
 				currentBlock: action.currentBlock,
 			};
+		case 'SET_SELECTED_INNER_BLOCK_HISTORY':
+			return {
+				...state,
+				[action.clientId]: mergeObject(state[action.clientId] || {}, {
+					selectedBlock: action.currentBlock,
+				}),
+			};
 		case 'CHANGE_CURRENT_BLOCK_STATE':
 			return {
 				...state,

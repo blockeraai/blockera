@@ -75,6 +75,17 @@ export function changeExtensionCurrentBlock(
 	};
 }
 
+export const setSelectedInnerBlockHistory = ({
+	clientId,
+	currentBlock,
+}: Object): Object => {
+	return {
+		clientId,
+		currentBlock,
+		type: 'SET_SELECTED_INNER_BLOCK_HISTORY',
+	};
+};
+
 export function changeExtensionCurrentBlockState(
 	currentStateType: TStates
 ): Object {
