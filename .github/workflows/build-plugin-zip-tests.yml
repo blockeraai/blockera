@@ -50,22 +50,16 @@ jobs:
                   touch .wp-env.json
                   echo '{"plugins": ["."]}' >> .wp-env.json
                   cat .wp-env.json
+                  touch cypress.env.json
+                  echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": ["packages/**/*.e2e.cy.js"],"specPattern": ["packages/**/*.build.e2e.js"]}}' >> cypress.env.json
+                  cat cypress.env.json
                   cd ../..
                   cp -r ./cypress ./build/blockera
                   cp ./package.json ./build/blockera
                   cp -r ./node_modules ./build/blockera
                   cp ./cypress.config.js ./build/blockera
                   cp -r ./packages/dev-cypress ./build/blockera/packages
-
-            - name: Update Cypress Specs Patterns
-              run: |
-                  cp ./cypress.env-example.json ./build/blockera/cypress.env.json
-                  find ./packages/ -type f \( -name "*.build.e2e.cy.js" \) -exec cp {} ./build/blockera/packages/blockera/tests \;               
-                  cp ./bin/update-cypress-env-specs.sh ./build/blockera
-                  cd ./build/blockera
-                  chmod +x ./update-cypress-env-specs.sh
-                  ./update-cypress-env-specs.sh
-                  cd ../..
+                  find ./packages/ -type f \( -name "*.build.e2e.cy.js" \) -exec cp {} ./build/blockera/packages/blockera/tests \;
 
             - name: Setup and Run E2E tests on Blockera build
               run: |
