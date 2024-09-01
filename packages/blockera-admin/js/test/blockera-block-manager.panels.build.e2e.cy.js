@@ -12,7 +12,13 @@ import { resetPanelSettings } from '@blockera/dev-cypress/js/helpers';
 
 describe('Block Manager Settings Testing ...', () => {
 	beforeEach(() => {
-		goTo('/wp-admin/admin.php?page=blockera-settings-block-manager');
+		goTo('/wp-admin/admin.php?page=blockera-settings').then(() => {
+			if (Cypress.$('#skip_activation').length) {
+				cy.get('#skip_activation').click();
+			}
+
+			goTo('/wp-admin/admin.php?page=blockera-settings-block-manager');
+		});
 	});
 
 	it('blockera should not support core/paragraph of WordPress core block', () => {
