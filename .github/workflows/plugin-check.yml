@@ -44,7 +44,6 @@ jobs:
               uses: wordpress/plugin-check-action@v1
               with:
                   build-dir: './build/blockera'
-                  exclude-directories: 'packages/freemius-sdk'
                   categories: |
                       general
                       security
