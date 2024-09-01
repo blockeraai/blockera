@@ -32,25 +32,35 @@ jobs:
                   custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
                   composer-options: '--no-dev -o --apcu-autoloader -a'
 
-            - name: Create .wp-env.json file
-              run: |
-                  touch .wp-env.json
-                  echo '{"plugins": ["."]}' >> .wp-env.json
-                  cat .wp-env.json
-
             - name: Build Plugin Zip File
               uses: ./.github/build-plugin-zip
               with:
                   with-wp-env-json: '.wp-env.json'
 
-            - name: Install Cypress
-              run: npx cypress install
+            - name: Extract blockera.zip to build directory
+              run: |
+                  mkdir build
+                  unzip blockera.zip -d ./build/blockera
+                  rm -rf blockera.zip
 
-            - name: Start WordPress Environment
-              run: npm run env:start
+            - name: Create Requirements
+              run: |
+                  cd ./build/blockera
+                  touch .wp-env.json
+                  echo '{"plugins": ["."]}' >> .wp-env.json
+                  cat .wp-env.json
+                  mkdir packages
+                  cd ../..
+                  cp ./cypress ./build/blockera
+                  cp ./package.json ./build/blockera
+                  cp ./cypress.config.js ./build/blockera
+                  cp ./packages/dev-cypress ./build/blockera/packages
 
-            - name: Run Cypress E2E Tests
-              run: npm run test:e2e -- --spec "packages/**/canvas-editor.e2e.cy.js"
-
-            - name: Stop WordPress Environment
-              run: npm run env:stop
+            - name: Setup and Run E2E tests on Blockera build
+              run: |
+                  cd ./build/blockera
+                  npm ci
+                  npx cypress install
+                  npm run env:start
+                  npm run test:e2e -- --spec "packages/**/canvas-editor.e2e.cy.js"
+                  npm run env:stop
