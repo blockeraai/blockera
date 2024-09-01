@@ -34,8 +34,6 @@ jobs:
 
             - name: Build Plugin Zip File
               uses: ./.github/build-plugin-zip
-              with:
-                  with-wp-env-json: '.wp-env.json'
 
             - name: Extract blockera.zip to build directory
               run: |
@@ -52,7 +50,6 @@ jobs:
                   touch .wp-env.json
                   echo '{"plugins": ["."]}' >> .wp-env.json
                   cat .wp-env.json
-                  mkdir packages
                   cd ../..
                   cp -r ./cypress ./build/blockera
                   cp ./package.json ./build/blockera
