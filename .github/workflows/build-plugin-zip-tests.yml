@@ -51,10 +51,10 @@ jobs:
                   cat .wp-env.json
                   mkdir packages
                   cd ../..
-                  cp ./cypress ./build/blockera
+                  cp -r ./cypress ./build/blockera
                   cp ./package.json ./build/blockera
                   cp ./cypress.config.js ./build/blockera
-                  cp ./packages/dev-cypress ./build/blockera/packages
+                  cp -r ./packages/dev-cypress ./build/blockera/packages
 
             - name: Setup and Run E2E tests on Blockera build
               run: |
