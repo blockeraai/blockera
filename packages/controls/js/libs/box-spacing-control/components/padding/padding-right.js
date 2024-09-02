@@ -103,7 +103,7 @@ export function PaddingRight({
 		value:
 			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
 		setValue: onDragSetValue,
-		movement: 'horizontal',
+		movement: 'vertical',
 		min: 0,
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');

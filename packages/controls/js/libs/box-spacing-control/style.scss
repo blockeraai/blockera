@@ -41,6 +41,12 @@
 			pointer-events: none;
 		}
 
+		&.side-padding-horizontal.side-drag-active,
+		&.side-padding-right.side-drag-active,
+		&.side-padding-left.side-drag-active,
+		&.side-margin-horizontal.side-drag-active,
+		&.side-margin-right.side-drag-active,
+		&.side-margin-left.side-drag-active,
 		&.side-padding-vertical.side-drag-active,
 		&.side-padding-all.side-drag-active,
 		&.side-padding-bottom.side-drag-active,
@@ -61,15 +67,6 @@
 		&.side-margin-bottom:not(.side-drag-active),
 		&.side-margin-top:not(.side-drag-active) {
 			cursor: pointer;
-		}
-
-		&.side-padding-horizontal.side-drag-active,
-		&.side-padding-right.side-drag-active,
-		&.side-padding-left.side-drag-active,
-		&.side-margin-horizontal.side-drag-active,
-		&.side-margin-right.side-drag-active,
-		&.side-margin-left.side-drag-active {
-			cursor: ew-resize;
 		}
 
 		&.side-padding-horizontal:not(.side-drag-active),
