@@ -103,7 +103,7 @@ export function MarginLeft({
 		value:
 			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
 		setValue: onDragSetValue,
-		movement: 'horizontal',
+		movement: 'vertical',
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
