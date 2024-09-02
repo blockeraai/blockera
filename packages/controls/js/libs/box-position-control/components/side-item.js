@@ -142,8 +142,7 @@ export function SideItem({
 		setValue: (newValue) => {
 			onDragSetValue(side, newValue);
 		},
-		movement:
-			side === 'top' || side === 'bottom' ? 'vertical' : 'horizontal',
+		movement: 'vertical',
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
