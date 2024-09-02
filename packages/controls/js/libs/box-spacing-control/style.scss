@@ -3,7 +3,7 @@
 	height: 158px;
 	width: 250px;
 	margin: 0 auto 15px;
-	z-index: 1; // for advanced select control
+	z-index: 99; // for advanced select control
 	user-select: none;
 
 	svg {
@@ -343,6 +343,7 @@
 
 	.blockera-control-spacing-lock {
 		position: absolute;
+		z-index: 1;
 
 		.components-input-control__container {
 
