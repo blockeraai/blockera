@@ -48,27 +48,12 @@
 			stroke-width: 2px;
 		}
 
-		&.side-top.side-drag-active,
-		&.side-bottom.side-drag-active {
+		&.side-drag-active {
 			cursor: ns-resize;
 		}
 
-		&.side-top:not(.side-drag-active),
-		&.side-bottom:not(.side-drag-active) {
-			cursor: pointer;
-		}
-
-		&.side-right.side-drag-active,
-		&.side-left.side-drag-active {
-			cursor: ew-resize;
-		}
-
-		&.side-right:not(.side-drag-active),
-		&.side-left:not(.side-drag-active) {
-			cursor: pointer;
-		}
-
 		&.is-value-addon-side {
+			cursor: pointer;
 			--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
 			stroke: var(--blockera-value-addon-var-border-color);
 			stroke-width: 1px;
