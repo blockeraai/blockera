@@ -41,44 +41,12 @@
 			pointer-events: none;
 		}
 
-		&.side-padding-horizontal.side-drag-active,
-		&.side-padding-right.side-drag-active,
-		&.side-padding-left.side-drag-active,
-		&.side-margin-horizontal.side-drag-active,
-		&.side-margin-right.side-drag-active,
-		&.side-margin-left.side-drag-active,
-		&.side-padding-vertical.side-drag-active,
-		&.side-padding-all.side-drag-active,
-		&.side-padding-bottom.side-drag-active,
-		&.side-padding-top.side-drag-active,
-		&.side-margin-vertical.side-drag-active,
-		&.side-margin-all.side-drag-active,
-		&.side-margin-bottom.side-drag-active,
-		&.side-margin-top.side-drag-active {
+		&.side-drag-active {
 			cursor: ns-resize;
 		}
 
-		&.side-padding-all:not(.side-drag-active),
-		&.side-padding-vertical:not(.side-drag-active),
-		&.side-padding-bottom:not(.side-drag-active),
-		&.side-padding-top:not(.side-drag-active),
-		&.side-margin-all:not(.side-drag-active),
-		&.side-margin-vertical:not(.side-drag-active),
-		&.side-margin-bottom:not(.side-drag-active),
-		&.side-margin-top:not(.side-drag-active) {
-			cursor: pointer;
-		}
-
-		&.side-padding-horizontal:not(.side-drag-active),
-		&.side-padding-right:not(.side-drag-active),
-		&.side-padding-left:not(.side-drag-active),
-		&.side-margin-horizontal:not(.side-drag-active),
-		&.side-margin-right:not(.side-drag-active),
-		&.side-margin-left:not(.side-drag-active) {
-			cursor: pointer;
-		}
-
 		&.is-value-addon-side {
+			cursor: pointer;
 			--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
 			stroke: var(--blockera-value-addon-var-border-color);
 			stroke-width: 1px;
