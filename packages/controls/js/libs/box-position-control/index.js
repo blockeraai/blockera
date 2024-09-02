@@ -156,10 +156,22 @@ const BoxPositionControl = ({
 		setOpenPopover,
 	};
 
-	const SideTop = SideItem({ ...sideProps, side: 'top' });
-	const SideRight = SideItem({ ...sideProps, side: 'right' });
-	const SideBottom = SideItem({ ...sideProps, side: 'bottom' });
-	const SideLeft = SideItem({ ...sideProps, side: 'left' });
+	const SideTop = SideItem({ ...sideProps, side: 'top', popoverOffset: 35 });
+	const SideRight = SideItem({
+		...sideProps,
+		side: 'right',
+		popoverOffset: 255,
+	});
+	const SideBottom = SideItem({
+		...sideProps,
+		side: 'bottom',
+		popoverOffset: 35,
+	});
+	const SideLeft = SideItem({
+		...sideProps,
+		side: 'left',
+		popoverOffset: 37,
+	});
 
 	let labelText = '';
 
@@ -276,6 +288,7 @@ const BoxPositionControl = ({
 							singularId={'position'}
 							defaultValue={defaultValue.position}
 							path={getControlPath(attribute, 'position')}
+							offset={130}
 							labelDescription={
 								<>
 									{value.type === 'relative' && (

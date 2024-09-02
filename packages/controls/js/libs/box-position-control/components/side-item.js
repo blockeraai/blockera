@@ -45,6 +45,7 @@ export function SideItem({
 	setFocusSide,
 	openPopover,
 	setOpenPopover,
+	popoverOffset,
 }: SideProps): SideReturn {
 	const sideId: Side = side;
 
@@ -126,6 +127,7 @@ export function SideItem({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset,
 			},
 		});
 
