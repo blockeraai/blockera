@@ -89,6 +89,7 @@ export function MarginHorizontal({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset: 255,
 			},
 		});
 

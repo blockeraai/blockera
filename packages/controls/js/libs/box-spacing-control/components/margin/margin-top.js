@@ -89,6 +89,7 @@ export function MarginTop({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset: 35,
 			},
 		});
 
