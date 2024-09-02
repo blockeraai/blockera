@@ -46,6 +46,7 @@ export default function RepeaterControl(
 		mode = 'popover',
 		popoverTitle,
 		popoverTitleButtonsRight,
+		popoverOffset = 35,
 		addNewButtonLabel,
 		popoverClassName,
 		maxItems = -1,
@@ -136,6 +137,7 @@ export default function RepeaterControl(
 		disableAddNewItem,
 		setDisableAddNewItem,
 		popoverTitle: popoverTitle || label || '',
+		popoverOffset,
 		popoverTitleButtonsRight,
 		//
 		labelPopoverTitle,
