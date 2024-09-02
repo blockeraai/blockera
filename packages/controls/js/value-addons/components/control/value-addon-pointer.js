@@ -138,27 +138,30 @@ export default function ({
 
 			{controlProps.isOpen === 'var-deleted' &&
 				controlProps.types.includes('variable') && (
-					<VarDeleted controlProps={controlProps} />
+					<VarDeleted controlProps={controlProps} {...pickerProps} />
 				)}
 
 			{controlProps.isOpen === 'dv-picker' &&
 				controlProps.types.includes('dynamic-value') && (
-					<DVPicker controlProps={controlProps} />
+					<DVPicker controlProps={controlProps} {...pickerProps} />
 				)}
 
 			{controlProps.isOpen === 'dv-settings' &&
 				controlProps.types.includes('dynamic-value') && (
-					<DVSettings controlProps={controlProps} />
+					<DVSettings controlProps={controlProps} {...pickerProps} />
 				)}
 
 			{controlProps.isOpen === 'dv-settings-advanced' &&
 				controlProps.types.includes('dynamic-value') && (
-					<DVSettingsAdvanced controlProps={controlProps} />
+					<DVSettingsAdvanced
+						controlProps={controlProps}
+						{...pickerProps}
+					/>
 				)}
 
 			{controlProps.isOpen === 'dv-deleted' &&
 				controlProps.types.includes('dynamic-value') && (
-					<DVDeleted controlProps={controlProps} />
+					<DVDeleted controlProps={controlProps} {...pickerProps} />
 				)}
 
 			<MappedPointers
