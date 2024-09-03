@@ -4,9 +4,9 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
 import { dispatch, useSelect } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
+import { memo, useState, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -21,7 +21,7 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { mergeObject } from '@blockera/utils';
+import { isEquals, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -43,14 +43,16 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	}: InnerBlocksProps): MixedElement => {
 		// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
 		const {
-			currentBlock = 'master',
+			stateUpdater,
 			getBlockInners,
 			selectedBlockHistory,
+			currentBlock = 'master',
 		} = useSelect((select) => {
 			const {
 				getBlockInners,
 				getExtensionCurrentBlock,
 				getSelectedInnerBlockHistory,
+				getInnerBlocksExtensionStateUpdater,
 			} = select('blockera/extensions');
 
 			return {
@@ -59,14 +61,16 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 					block.clientId
 				),
 				currentBlock: getExtensionCurrentBlock(),
+				stateUpdater: getInnerBlocksExtensionStateUpdater,
 			};
 		});
 
 		// Internal dispatchers. to use of "setCurrentBlock" and "setBlockClientInners" dispatchers of Blockera editor/extensions store api.
 		const {
-			changeExtensionCurrentBlock: setCurrentBlock,
 			setBlockClientInners,
 			setSelectedInnerBlockHistory,
+			updaterInnerBlocksExtensionState,
+			changeExtensionCurrentBlock: setCurrentBlock,
 		} = dispatch('blockera/extensions') || {};
 
 		// Calculation: to prepare standard values for "blockeraInnerBlocks" block attribute with set initial value for repeater by "setBlockClientInners" dispatcher.
@@ -95,12 +99,32 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		// Get repeater value from internal Blockera store api.
 		const value = getBlockInners(block.clientId);
 
-		// cache length to not calculate it multiple times
+		const [blockInners, setBlockInners] = useState(value);
+
+		// Set inner block extension state updater on mount this component.
+		useEffect(() => {
+			if ('function' !== typeof stateUpdater(block.clientId)) {
+				updaterInnerBlocksExtensionState({
+					setBlockInners,
+					clientId: block.clientId,
+				});
+			}
+			// eslint-disable-next-line
+		}, []);
+
+		useEffect(() => {
+			if (!isEquals(value, blockInners)) {
+				setBlockInners(value);
+			}
+			// eslint-disable-next-line
+		}, [value]);
+
+		// cache length to not calculate it multiple times.
 		const innerBlocksLength = Object.keys(innerBlocks).length;
 
 		if (
 			!innerBlocksLength ||
-			(!availableBlocks.length && !Object.keys(value).length) ||
+			(!availableBlocks.length && !Object.keys(blockInners).length) ||
 			isInnerBlock(currentBlock)
 		) {
 			return <></>;
@@ -109,7 +133,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		// Assign control context provider value.
 		const contextValue = {
 			block,
-			value,
+			value: blockInners,
 			blockName: block.blockName,
 			attribute: 'blockeraInnerBlocks',
 			name: generateExtensionId(block, 'inner-blocks', false),
