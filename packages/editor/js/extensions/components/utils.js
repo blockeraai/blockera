@@ -34,10 +34,10 @@ export const isInnerBlock = (
 /**
  * is current block on normal state?
  *
- * @param {TStates} selectedState The current selected state.
+ * @param {TStates|string} selectedState The current selected state.
  * @return {boolean} true on success, false on otherwise.
  */
-export const isNormalState = (selectedState: TStates): boolean =>
+export const isNormalState = (selectedState: TStates | string): boolean =>
 	'normal' === selectedState;
 
 /**
