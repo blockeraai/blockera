@@ -14,5 +14,10 @@ export type ExtensionsStoreType = {
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
+	getBlockInners: (clientId: string) => Object,
 	currentBlock: string | 'master' | InnerBlockType,
+	getInnerBlocksExtensionStateUpdater: (
+		clientId: string
+	) => (blockInners: Object) => void,
+	getSelectedInnerBlockHistory: (clientId: string) => ?string,
 };

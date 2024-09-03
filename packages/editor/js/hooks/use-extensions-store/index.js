@@ -45,15 +45,21 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 		config,
 		currentBlock = 'master',
 		currentState = 'normal',
+		getSelectedInnerBlockHistory,
+		getBlockInners = () => ({}),
 		currentInnerBlockState = 'normal',
+		getInnerBlocksExtensionStateUpdater,
 		currentBreakpoint = getBaseBreakpoint(),
 	} = useSelect((select) => {
 		const { getSelectedBlock } = select('core/block-editor');
 		const { name, clientId } = getSelectedBlock() || props || {};
 		const {
+			getBlockInners,
 			getActiveInnerState,
 			getActiveMasterState,
 			getExtensionCurrentBlock,
+			getSelectedInnerBlockHistory,
+			getInnerBlocksExtensionStateUpdater,
 			getExtensionCurrentBlockStateBreakpoint,
 		} = select('blockera/extensions');
 
@@ -61,6 +67,9 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 
 		return {
 			currentBlock,
+			getBlockInners,
+			getSelectedInnerBlockHistory,
+			getInnerBlocksExtensionStateUpdater,
 			config: getExtensionConfig(name, currentBlock),
 			currentState: getActiveMasterState(clientId, name),
 			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
@@ -72,7 +81,10 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 		config,
 		currentState,
 		currentBlock,
+		getBlockInners,
 		currentBreakpoint,
 		currentInnerBlockState,
+		getSelectedInnerBlockHistory,
+		getInnerBlocksExtensionStateUpdater,
 	};
 };
