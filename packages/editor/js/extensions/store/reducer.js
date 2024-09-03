@@ -83,6 +83,13 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 					selectedBlock: action.currentBlock,
 				}),
 			};
+		case 'UPDATER_INNER_BLOCKS_EXTENSION_STATE':
+			return {
+				...state,
+				[action.clientId]: mergeObject(state[action.clientId] || {}, {
+					setBlockInners: action.setBlockInners,
+				}),
+			};
 		case 'CHANGE_CURRENT_BLOCK_STATE':
 			return {
 				...state,

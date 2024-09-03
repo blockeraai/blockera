@@ -433,6 +433,22 @@ export function getSelectedInnerBlockHistory(
 }
 
 /**
+ * Get inner blocks extension component state updater.
+ *
+ * @param {Object} blockExtensions the block extension details.
+ * @param {string} clientId the block client identifier.
+ * @return {Object|null} the updater inner blocks extension state.
+ */
+export function getInnerBlocksExtensionStateUpdater(
+	{ blockExtensions }: Object,
+	clientId: string
+): ?Object {
+	return blockExtensions[clientId]
+		? blockExtensions[clientId]?.setBlockInners
+		: null;
+}
+
+/**
  * Get shared block attributes.
  *
  * @param {Object} blockExtensions the block extension details.

@@ -86,6 +86,20 @@ export const setSelectedInnerBlockHistory = ({
 	};
 };
 
+export const updaterInnerBlocksExtensionState = ({
+	clientId,
+	setBlockInners,
+}: {
+	clientId: string,
+	setBlockInners: (inners: Object) => void,
+}): Object => {
+	return {
+		clientId,
+		setBlockInners,
+		type: 'UPDATER_INNER_BLOCKS_EXTENSION_STATE',
+	};
+};
+
 export function changeExtensionCurrentBlockState(
 	currentStateType: TStates
 ): Object {
