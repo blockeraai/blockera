@@ -39,10 +39,27 @@ export default function ({
 	const [currentActiveBreakpoint, setActiveBreakpoint] =
 		useState(baseBreakpoint);
 
+	const wpExperimentalSetDevicePreview = (itemId: TBreakpoint): void => {
+		// TODO: in this on click handler we need to do set other breakpoints as "previewDeviceType" in future like available breakpoints on WordPress,
+		// because WordPress is not support our all breakpoints.
+		// We should update WordPress "edit-post" store state for "previewDeviceType" property,
+		// because if registered one block type with apiVersion < 3, block-editor try to rendering blocks out of iframe element,
+		// so we need to set "previewDeviceType" to rendering blocks inside iframe element and we inject css generated style into iframe,
+		// for responsive reasons.
+		if ('function' === typeof __experimentalSetPreviewDeviceType) {
+			__experimentalSetPreviewDeviceType(pascalCase(itemId));
+		}
+	};
+
 	useEffect(() => {
 		updaterDeviceIndicator(setActiveBreakpoint);
 		// eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		wpExperimentalSetDevicePreview(currentActiveBreakpoint);
+		// eslint-disable-next-line
+	}, [currentActiveBreakpoint]);
 
 	function activeBreakpoints() {
 		const breakpoints = [];
@@ -65,20 +82,7 @@ export default function ({
 									onClick(itemId);
 									setActiveBreakpoint(itemId);
 
-									// TODO: in this on click handler we need to do set other breakpoints as "previewDeviceType" in future like available breakpoints on WordPress,
-									// because WordPress is not support our all breakpoints.
-									// We should update WordPress "edit-post" store state for "previewDeviceType" property,
-									// because if registered one block type with apiVersion < 3, block-editor try to rendering blocks out of iframe element,
-									// so we need to set "previewDeviceType" to rendering blocks inside iframe element and we inject css generated style into iframe,
-									// for responsive reasons.
-									if (
-										'function' ===
-										typeof __experimentalSetPreviewDeviceType
-									) {
-										__experimentalSetPreviewDeviceType(
-											pascalCase(itemId)
-										);
-									}
+									wpExperimentalSetDevicePreview(itemId);
 								}
 							}}
 						/>
