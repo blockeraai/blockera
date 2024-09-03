@@ -15,6 +15,8 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
+import { isInnerBlock } from '../../extensions';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 import type { TStates } from '../../extensions/libs/block-states/types';
 
 export default function EditedItem({
@@ -31,6 +33,9 @@ export default function EditedItem({
 	current: boolean,
 	onClick: () => void,
 }): MixedElement {
+	const { currentState, currentInnerBlockState, currentBlock } =
+		useExtensionsStore();
+
 	return (
 		<Tooltip
 			text={sprintf(
@@ -43,7 +48,15 @@ export default function EditedItem({
 			<div
 				className={controlInnerClassNames(
 					'states-changes-item',
-					'state-' + state
+					'state-' + state,
+					{
+						[`is-active-${state}-parent-state`]:
+							currentState === state &&
+							!isInnerBlock(currentBlock),
+						[`is-active-${state}-inner-state`]:
+							currentInnerBlockState === state &&
+							isInnerBlock(currentBlock),
+					}
 				)}
 				onClick={onClick}
 				{...props}

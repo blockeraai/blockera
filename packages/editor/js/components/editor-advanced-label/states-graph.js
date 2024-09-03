@@ -2,6 +2,7 @@
 /**
  * External Dependencies
  */
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 
 /**
@@ -55,6 +56,8 @@ export const StatesGraph = ({
 		return <></>;
 	}
 
+	const { getDeviceType } = select('blockera/editor');
+
 	return (
 		<div className={controlInnerClassNames('states-changes')}>
 			{statesGraph?.map(
@@ -78,7 +81,11 @@ export const StatesGraph = ({
 					return (
 						<div
 							className={controlInnerClassNames(
-								'states-changes-breakpoint'
+								'states-changes-breakpoint',
+								{
+									[`is-active-${state.graph.type}`]:
+										getDeviceType() === state.graph.type,
+								}
 							)}
 							key={`${state.graph.type}-${index}`}
 							data-test={`state-graph-${state.graph.type}`}
