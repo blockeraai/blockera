@@ -27,6 +27,8 @@ export function backgroundGenerator(id, props) {
 		backgroundColor: '',
 	};
 
+	let hasProps = true;
+
 	// Collect all properties
 	Object.entries(attributes?.blockeraBackground)?.map(([, item]) => {
 		if (!item.isVisible) {
@@ -37,6 +39,8 @@ export function backgroundGenerator(id, props) {
 		switch (item.type) {
 			case 'image':
 				if (!item.image) {
+					hasProps = false;
+
 					return undefined;
 				}
 
@@ -73,6 +77,8 @@ export function backgroundGenerator(id, props) {
 
 			case 'linear-gradient':
 				if (!item['linear-gradient']) {
+					hasProps = false;
+
 					return undefined;
 				}
 
@@ -95,6 +101,8 @@ export function backgroundGenerator(id, props) {
 
 			case 'radial-gradient':
 				if (!item['radial-gradient']) {
+					hasProps = false;
+
 					return undefined;
 				}
 
@@ -119,6 +127,8 @@ export function backgroundGenerator(id, props) {
 
 			case 'mesh-gradient':
 				if (!item['mesh-gradient']) {
+					hasProps = false;
+
 					return undefined;
 				}
 
@@ -172,6 +182,11 @@ export function backgroundGenerator(id, props) {
 
 		return undefined;
 	});
+
+	// Prevent to generate css props with values!
+	if (!hasProps) {
+		return '';
+	}
 
 	const { image, size, position, repeat, attachment, ..._properties } =
 		properties;
