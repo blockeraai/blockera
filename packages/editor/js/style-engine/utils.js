@@ -122,10 +122,15 @@ export const createCssDeclarations = (
 		return '';
 	}
 
-	const { properties: _props, options = { important: false } } = declaration;
+	const {
+		properties: _props,
+		// TODO: remove hard codes.
+		// options = { important: true }
+	} = declaration;
 
 	return getProperties({
-		options,
+		// TODO: remove hard codes.
+		options: { important: true },
 		properties: _props,
 	}).join('\n');
 };
@@ -162,8 +167,10 @@ export const getProperties = (props: {
 		let tempValue: string = '';
 
 		if (-1 === value.indexOf(';')) {
+			const hasImportantFlag = -1 !== value.indexOf('!important');
+
 			tempValue = `${property}: ${value}${
-				options.important ? ' !important' : ''
+				options.important && !hasImportantFlag ? ' !important' : ''
 			};\n`;
 		} else if (options.important) {
 			tempValue = value.replace(';', ' !important;\n');
