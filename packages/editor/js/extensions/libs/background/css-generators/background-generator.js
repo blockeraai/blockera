@@ -24,7 +24,6 @@ export function backgroundGenerator(id, props) {
 		position: [],
 		repeat: [],
 		attachment: [],
-		backgroundColor: '',
 	};
 
 	let hasProps = true;
@@ -188,8 +187,7 @@ export function backgroundGenerator(id, props) {
 		return '';
 	}
 
-	const { image, size, position, repeat, attachment, ..._properties } =
-		properties;
+	const { image, size, position, repeat, attachment } = properties;
 
 	const toReturnProperties = {
 		'background-image': image.join(', ') + ' !important',
@@ -197,7 +195,6 @@ export function backgroundGenerator(id, props) {
 		'background-position': position.join(', ') + ' !important',
 		'background-repeat': repeat.join(', ') + ' !important',
 		'background-attachment': attachment.join(', ') + ' !important',
-		..._properties,
 	};
 
 	if (properties['background-color'])
