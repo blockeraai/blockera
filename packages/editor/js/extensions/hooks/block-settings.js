@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { dispatch, select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { memo, useEffect } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
@@ -36,12 +36,15 @@ import { useStoreSelectors } from '../../hooks';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 import { sanitizedBlockAttributes, sanitizeDefaultAttributes } from './utils';
 import {
+	BlockApp,
 	BlockBase,
-	BlockPortals,
 	BlockIcon,
+	BlockPortals,
+	isInnerBlock,
 	propsAreEqual,
 } from '../components';
 import { bootstrapCanvasEditor } from '../../canvas-editor';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 const useSharedBlockSideEffect = (): void => {
 	const {
@@ -219,39 +222,115 @@ function mergeBlockSettings(
 				bootstrapCanvasEditor('site');
 			}
 
-			return (
-				<BaseControlContext.Provider value={baseContextValue}>
-					<BlockBase
-						{...{
-							...props,
-							additional,
-							defaultAttributes: !settings.attributes
-								?.blockeraPropsId
-								? mergeObject(
-										settings.attributes,
-										blockeraOverrideBlockAttributes
-								  )
-								: settings.attributes,
-						}}
-					>
-						<SlotFillProvider>
-							<Slot name={'blockera-block-before'} />
+			const {
+				currentBlock,
+				getBlockInners,
+				getSelectedInnerBlockHistory,
+				getInnerBlocksExtensionStateUpdater,
+				// eslint-disable-next-line
+			} = useExtensionsStore();
+			const { setBlockClientInners } = dispatch('blockera/extensions');
 
-							<BlockPortals
-								blockId={`#block-${props.clientId}`}
-								mainSlot={'blockera-block-slot'}
-								slots={
-									// slot selectors is feature on configuration block to create custom slots for anywhere.
-									// we can add slotSelectors property on block configuration to handle custom preview of block.
-									additional?.slotSelectors || {}
+			// Handler for global onClick event around block component.
+			const onClick = (event: Object) => {
+				const target = event.target;
+				const inners = getBlockInners(props.clientId);
+				const selectedBlockHistory = getSelectedInnerBlockHistory(
+					props.clientId
+				);
+
+				const hasSelectedInnerBlockType = Object.values(inners).filter(
+					(innerBlock) => innerBlock.isSelected
+				);
+
+				if (
+					(isInnerBlock(currentBlock) || !selectedBlockHistory) &&
+					!hasSelectedInnerBlockType.length
+				) {
+					return;
+				}
+
+				switch (true) {
+					case target.classList.contains(
+						'blockera-extension-block-card__title__block'
+					):
+						return;
+					default:
+						const setBlockInners =
+							getInnerBlocksExtensionStateUpdater(props.clientId);
+
+						const newInners = Object.values(inners).reduce(
+							(accumulator, innerBlock) => {
+								let isSelected =
+									innerBlock?.name === selectedBlockHistory
+										? false
+										: innerBlock?.isSelected;
+
+								if (!selectedBlockHistory) {
+									isSelected = false;
 								}
-							/>
 
-							<Slot name={'blockera-block-after'} />
-						</SlotFillProvider>
-					</BlockBase>
-					{settings.edit(props)}
-				</BaseControlContext.Provider>
+								return {
+									...accumulator,
+									[innerBlock?.name]: {
+										...innerBlock,
+										// Item set is selected or not.
+										isSelected,
+									},
+								};
+							},
+							{}
+						);
+
+						if ('function' === typeof setBlockInners) {
+							// update native state of inner blocks extension component state.
+							setBlockInners(newInners);
+
+							// update global store states.
+							setBlockClientInners({
+								clientId: props.clientId,
+								inners: newInners,
+							});
+						}
+						break;
+				}
+			};
+
+			return (
+				<BlockApp onClick={onClick}>
+					<BaseControlContext.Provider value={baseContextValue}>
+						<BlockBase
+							{...{
+								...props,
+								additional,
+								defaultAttributes: !settings.attributes
+									?.blockeraPropsId
+									? mergeObject(
+											settings.attributes,
+											blockeraOverrideBlockAttributes
+									  )
+									: settings.attributes,
+							}}
+						>
+							<SlotFillProvider>
+								<Slot name={'blockera-block-before'} />
+
+								<BlockPortals
+									blockId={`#block-${props.clientId}`}
+									mainSlot={'blockera-block-slot'}
+									slots={
+										// slot selectors is feature on configuration block to create custom slots for anywhere.
+										// we can add slotSelectors property on block configuration to handle custom preview of block.
+										additional?.slotSelectors || {}
+									}
+								/>
+
+								<Slot name={'blockera-block-after'} />
+							</SlotFillProvider>
+						</BlockBase>
+						{settings.edit(props)}
+					</BaseControlContext.Provider>
+				</BlockApp>
 			);
 		}
 
