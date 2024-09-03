@@ -12,6 +12,7 @@ import { useState, useEffect } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
+import { pascalCase } from '@blockera/utils';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -24,15 +25,17 @@ import type {
 	TBreakpoint,
 	BreakpointTypes,
 } from '../../../extensions/libs/block-states/types';
-import { pascalCase } from '@blockera/utils';
+import { useExtensionsStore } from '../../../hooks/use-extensions-store';
 
 export default function ({
 	onClick,
+	updateBlock,
 	updaterDeviceIndicator,
 }: PickedBreakpointsComponentProps): MixedElement {
 	const { __experimentalSetPreviewDeviceType } =
 		dispatch('core/edit-post') || dispatch('core/edit-site') || {};
 	const { getBreakpoints } = select('blockera/editor');
+	const { setCurrentBreakpoint } = useExtensionsStore();
 	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } =
 		getBreakpoints();
 	const baseBreakpoint = getBaseBreakpoint();
@@ -57,6 +60,8 @@ export default function ({
 	}, []);
 
 	useEffect(() => {
+		updateBlock(currentActiveBreakpoint);
+		setCurrentBreakpoint(currentActiveBreakpoint);
 		wpExperimentalSetDevicePreview(currentActiveBreakpoint);
 		// eslint-disable-next-line
 	}, [currentActiveBreakpoint]);
