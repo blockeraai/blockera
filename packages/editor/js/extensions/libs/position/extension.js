@@ -23,9 +23,10 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { EditorFeatureWrapper } from '../../../';
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
+import { EditorFeatureWrapper } from '../../../';
+import { useBlockSection } from '../../components';
 import type { TPositionExtensionProps } from './types/position-extension-props';
 
 export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
@@ -37,6 +38,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TPositionExtensionProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('positionConfig');
 		const isShownPosition = isShowField(
 			extensionConfig.blockeraPosition,
 			values?.blockeraPosition,
@@ -55,8 +57,9 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Position', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-position" />}
 				className={extensionClassNames('position')}
 			>

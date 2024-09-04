@@ -25,6 +25,7 @@ const blockeraZIndex: FeatureConfig = {
 };
 
 export const positionConfig = {
+	initialOpen: true,
 	blockeraPosition,
 	blockeraZIndex,
 };

@@ -21,5 +21,6 @@ const blockeraAttributes: FeatureConfig = {
 };
 
 export const advancedSettingsConfig = {
+	initialOpen: true,
 	blockeraAttributes,
 };

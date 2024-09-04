@@ -40,6 +40,7 @@ import { Blending } from './components/blending';
 import { ExtensionSettings } from '../settings';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
+import { useBlockSection } from '../../components';
 
 export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 	({
@@ -51,6 +52,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 		setSettings,
 		attributes,
 	}: TEffectsProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('effectsConfig');
 		const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 			useState(false);
 
@@ -117,8 +119,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Effects', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-effects" />}
 				className={extensionClassNames('effects')}
 			>
