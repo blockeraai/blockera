@@ -26,6 +26,7 @@
 		"ALLOW_EXPERIMENT_REREGISTRATION": true
 	},
 	"dependencies": {
+		"@blockera/storage": "file:packages/storage",
 		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/blockera-admin": "file:packages/blockera-admin",
 		"@blockera/blocks-core": "file:packages/blocks/core",
