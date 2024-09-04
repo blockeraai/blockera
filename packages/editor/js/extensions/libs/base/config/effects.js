@@ -80,6 +80,7 @@ if (experimental().get('editor.extensions.effectsExtension.mask'))
 	};
 
 export const effectsConfig = {
+	initialOpen: true,
 	blockeraOpacity,
 	blockeraTransform,
 	blockeraTransition,

@@ -130,6 +130,7 @@ const blockeraWordBreak: FeatureConfig = {
 };
 
 export const typographyConfig = {
+	initialOpen: true,
 	blockeraFontSize,
 	blockeraLineHeight,
 	blockeraFontColor,

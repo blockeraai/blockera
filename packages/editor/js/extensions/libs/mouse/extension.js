@@ -29,8 +29,9 @@ import {
 	userSelectOptions,
 	pointerEventsOptions,
 } from './utils';
-import type { TMouseProps } from './types/mouse-props';
 import { ExtensionSettings } from '../settings';
+import { useBlockSection } from '../../components';
+import type { TMouseProps } from './types/mouse-props';
 
 export const MouseExtension: ComponentType<TMouseProps> = memo(
 	({
@@ -42,6 +43,7 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 		extensionProps,
 		setSettings,
 	}: TMouseProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('mouseConfig');
 		const isShowCursor = isShowField(
 			mouseConfig.blockeraCursor,
 			values?.cursor,
@@ -65,8 +67,9 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Mouse', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-mouse" />}
 				className={extensionClassNames('mouse')}
 			>

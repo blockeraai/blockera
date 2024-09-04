@@ -33,6 +33,7 @@ import { EditorFeatureWrapper } from '../../../';
 import type { TLayoutProps } from './types/layout-props';
 import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
+import { useBlockSection } from '../../components';
 
 export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 	({
@@ -44,6 +45,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 		attributes,
 		setSettings,
 	}: TLayoutProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('layoutConfig');
 		const isShowDisplay = isShowField(
 			extensionConfig.blockeraDisplay,
 			values?.blockeraDisplay,
@@ -112,8 +114,9 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Layout', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-layout" />}
 				className={extensionClassNames('layout')}
 			>

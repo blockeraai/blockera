@@ -32,6 +32,7 @@ import type { TSizeProps } from './types/size-props';
 import { ObjectFit } from './components';
 import AspectRatio from './components/aspect-ratio';
 import { ExtensionSettings } from '../settings';
+import { useBlockSection } from '../../components';
 
 export const SizeExtension: ComponentType<TSizeProps> = memo(
 	({
@@ -43,6 +44,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 		extensionProps,
 		setSettings,
 	}: TSizeProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('sizeConfig');
 		const isShowWidth = isShowField(
 			extensionConfig.blockeraWidth,
 			values?.blockeraWidth,
@@ -106,8 +108,9 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Size', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-size" />}
 				className={extensionClassNames('size')}
 			>

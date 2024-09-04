@@ -25,6 +25,7 @@ import { Icon } from '@blockera/icons';
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
+import { useBlockSection } from '../../components';
 import type { TSpacingProps } from './types/spacing-props';
 
 export const SpacingExtension: ComponentType<TSpacingProps> = memo(
@@ -36,6 +37,7 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 		extensionProps,
 		attributes,
 	}: TSpacingProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('spacingConfig');
 		const isShowSpacing = isShowField(
 			extensionConfig.blockeraSpacing,
 			values.blockeraSpacing,
@@ -48,8 +50,9 @@ export const SpacingExtension: ComponentType<TSpacingProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Spacing', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon={'extension-spacing'} />}
 				className={extensionClassNames('spacing')}
 			>

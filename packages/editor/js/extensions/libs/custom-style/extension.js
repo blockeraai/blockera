@@ -25,6 +25,7 @@ import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { useBlockContext } from '../../hooks';
 import { EditorFeatureWrapper } from '../../../';
+import { useBlockSection } from '../../components';
 import { getBaseBreakpoint } from '../../../canvas-editor';
 import type { CustomStyleExtensionProps } from './types/props';
 
@@ -38,6 +39,8 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 			attributes,
 			handleOnChangeAttributes,
 		}: CustomStyleExtensionProps): MixedElement => {
+			const { initialOpen, onToggle } =
+				useBlockSection('conditionsConfig');
 			const {
 				getCurrentState = () => 'normal',
 				getBreakpoint = () => getBaseBreakpoint(),
@@ -59,8 +62,9 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 
 			return (
 				<PanelBodyControl
+					onToggle={onToggle}
 					title={__('Custom CSS', 'blockera')}
-					initialOpen={false}
+					initialOpen={initialOpen}
 					icon={<Icon icon="extension-custom-style" />}
 					className={extensionClassNames('custom-style')}
 					isChanged={

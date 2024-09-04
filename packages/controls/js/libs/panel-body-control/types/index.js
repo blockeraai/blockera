@@ -20,7 +20,7 @@ export type PanelBodyControlProps = {
 	/**
 	 * Function that will be fired while opening or closing of panel body
 	 */
-	onToggle?: () => void,
+	onToggle?: (isOpen: boolean) => void,
 	/**
 	 * Is panel content changed to show change indicator
 	 */
@@ -29,6 +29,7 @@ export type PanelBodyControlProps = {
 	 * Is panel content changed on states to show change indicator
 	 */
 	isChangedOnStates?: boolean,
+	scrollAfterOpen?: boolean,
 	children: Node,
 	className?: string,
 	/**

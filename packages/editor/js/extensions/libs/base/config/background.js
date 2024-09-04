@@ -33,6 +33,7 @@ const blockeraBackgroundClip: FeatureConfig = {
 };
 
 export const backgroundConfig = {
+	initialOpen: true,
 	blockeraBackground,
 	blockeraBackgroundColor,
 	blockeraBackgroundClip,

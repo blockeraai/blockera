@@ -26,8 +26,9 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
+import { isActiveField } from '../../api/utils';
+import { useBlockSection } from '../../components';
 import type { TIconProps } from './types/icon-extension-props';
 
 export const IconExtension: ComponentType<TIconProps> = memo(
@@ -53,10 +54,13 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 		handleOnChangeAttributes,
 		extensionProps,
 	}: TIconProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('iconConfig');
+
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Icon', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-icon" />}
 				className={extensionClassNames('icon')}
 			>
