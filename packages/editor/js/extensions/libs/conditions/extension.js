@@ -22,8 +22,9 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
-import type { ConditionsExtensionProps } from './types/props';
 import { isActiveField } from '../../api/utils';
+import { useBlockSection } from '../../components';
+import type { ConditionsExtensionProps } from './types/props';
 
 export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 	memo(
@@ -32,14 +33,18 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> =
 			block,
 			extensionConfig,
 		}: ConditionsExtensionProps): MixedElement => {
+			const { initialOpen, onToggle } =
+				useBlockSection('conditionsConfig');
+
 			if (!isActiveField(extensionConfig.blockeraConditions)) {
 				return <></>;
 			}
 
 			return (
 				<PanelBodyControl
+					onToggle={onToggle}
 					title={__('Conditions', 'blockera')}
-					initialOpen={true}
+					initialOpen={initialOpen}
 					icon={<Icon icon="extension-conditions" />}
 					className={extensionClassNames('conditions')}
 				>

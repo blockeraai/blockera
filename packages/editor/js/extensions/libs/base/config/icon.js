@@ -60,6 +60,7 @@ const blockeraIconLink: FeatureConfig = {
 };
 
 export const iconConfig = {
+	initialOpen: true,
 	blockeraIcon,
 	blockeraIconOptions,
 	blockeraIconPosition,
