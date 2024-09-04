@@ -127,7 +127,10 @@ export const StatesGraph = ({
 											<EditedItem
 												label={_state.label}
 												state={_state.type}
-												breakpoint={state.graph.label}
+												breakpoint={state.graph.type}
+												breakpointLabel={
+													state.graph.label
+												}
 												key={`${key}-state`}
 												onClick={(): void => {
 													onClick(
