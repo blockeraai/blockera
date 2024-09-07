@@ -16,7 +16,10 @@ import {
 	BorderAndShadowStyles,
 } from '../../extensions';
 import { useStoreSelectors } from '../../hooks';
-import { prepareAttributesDefaultValues } from '../../extensions/components';
+import {
+	isNormalState,
+	prepareAttributesDefaultValues,
+} from '../../extensions/components';
 import type { CssRule } from '../types';
 import type {
 	TBreakpoint,
@@ -156,7 +159,7 @@ export const useComputedCssProps = ({
 			return;
 		}
 
-		if (isBaseBreakpoint(currentBreakpoint)) {
+		if (isBaseBreakpoint(currentBreakpoint) && isNormalState(state)) {
 			// 1- create css styles for master blocks with root attributes.
 			appendStyles({
 				...calculatedProps,

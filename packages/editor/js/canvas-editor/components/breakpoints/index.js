@@ -136,30 +136,27 @@ export const Breakpoints = ({
 
 	const selectedBlock = getSelectedBlock();
 
+	const updateSelectedBlock = (device: string) => {
+		// Check if a block is selected
+		if (selectedBlock) {
+			// Update the block attributes
+			const updatedAttributes = {
+				blockeraCurrentDevice: device,
+			};
+
+			// Dispatch an action to update the selected block
+			updateBlockAttributes(selectedBlock.clientId, updatedAttributes);
+		}
+	};
+
 	const handleOnClick = (device: string): void => {
-		const updateSelectedBlock = () => {
-			// Check if a block is selected
-			if (selectedBlock) {
-				// Update the block attributes
-				const updatedAttributes = {
-					blockeraCurrentDevice: device,
-				};
-
-				// Dispatch an action to update the selected block
-				updateBlockAttributes(
-					selectedBlock.clientId,
-					updatedAttributes
-				);
-			}
-		};
-
 		if (device === getDeviceType()) {
 			const baseBreakpoint = getBaseBreakpoint();
 
 			updateDeviceType(baseBreakpoint);
 			changeExtensionCurrentBlockStateBreakpoint(baseBreakpoint);
 
-			updateSelectedBlock();
+			updateSelectedBlock(device);
 
 			return;
 		}
@@ -167,7 +164,7 @@ export const Breakpoints = ({
 		updateDeviceType(device);
 		changeExtensionCurrentBlockStateBreakpoint(device);
 
-		updateSelectedBlock();
+		updateSelectedBlock(device);
 	};
 
 	const handleOnChange = (key: string, value: any): void => {
@@ -220,6 +217,7 @@ export const Breakpoints = ({
 
 					<PickedBreakpoints
 						onClick={handleOnClick}
+						updateBlock={updateSelectedBlock}
 						updaterDeviceIndicator={updaterDeviceIndicator}
 					/>
 

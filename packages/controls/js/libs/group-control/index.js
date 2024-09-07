@@ -31,6 +31,7 @@ const GroupControl: ComponentType<any> = memo(
 		//
 		mode = 'popover',
 		popoverTitle,
+		popoverOffset = 35,
 		popoverTitleButtonsRight,
 		popoverClassName,
 		//
@@ -168,7 +169,7 @@ const GroupControl: ComponentType<any> = memo(
 
 				{mode === 'popover' && isOpenPopover && (
 					<Popover
-						offset={35}
+						offset={popoverOffset}
 						placement="left-start"
 						className={controlInnerClassNames(
 							'group-popover',

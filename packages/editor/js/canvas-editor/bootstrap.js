@@ -20,28 +20,7 @@ import { isLoadedPostEditor, isLoadedSiteEditor } from '@blockera/utils';
  */
 import { Observer } from '../observer';
 import { CanvasEditor } from './index';
-import type { GetTarget } from './types';
-
-// Compatibility for WordPress supported versions.
-const getTarget = (version: string): GetTarget => {
-	// For WordPress version equals or bigger than 6.6.1 version.
-	if (Number(version?.replace(/\./g, '')) >= 661) {
-		return {
-			header: '.editor-header__center',
-			previewDropdown: '.editor-preview-dropdown',
-			postPreviewElement: 'a[aria-label="View Post"]',
-		};
-	}
-
-	// For less than WordPress 6.6.1 versions.
-	return {
-		header: isLoadedSiteEditor()
-			? '.edit-site-header-edit-mode__center'
-			: '.edit-post-header__center',
-		postPreviewElement: 'a[aria-label="View Post"]',
-		previewDropdown: 'div.edit-site-header-edit-mode__preview-options',
-	};
-};
+import { getTarget } from './helpers';
 
 const allowedContexts = ['post', 'site'];
 

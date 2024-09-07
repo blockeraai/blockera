@@ -53,7 +53,7 @@ describe('Filters → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'filter: drop-shadow(50px 30px 40px #cccccc);'
+					'filter: drop-shadow(50px 30px 40px #cccccc)'
 				);
 		});
 

@@ -106,7 +106,7 @@ export default function ColorPickerControl({
 				{isOpen && (
 					<Popover
 						title={popoverTitle}
-						offset={20}
+						offset={120}
 						placement={placement}
 						className={`components-palette-edit-popover ${
 							isPopoverHidden ? 'hidden' : ''

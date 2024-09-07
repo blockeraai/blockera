@@ -89,6 +89,7 @@ export function MarginVertical({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset: 35,
 			},
 		});
 
