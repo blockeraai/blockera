@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getChangelog verify that the changelog is properly formatted 1`] = `
+"## Changelog
+
+### Bug Fixes
+
+- . ([163](https://github.com/blockeraai/blockera/pull/163))
+- . ([164](https://github.com/blockeraai/blockera/pull/164))
+- Fix Canvas editor rendering on Site Editor. ([154](https://github.com/blockeraai/blockera/pull/154))
+- Fix: Block card design and more tests. ([150](https://github.com/blockeraai/blockera/pull/150))
+- Fix: Repeater action buttons. ([144](https://github.com/blockeraai/blockera/pull/144))
+- fix: Icon name. ([136](https://github.com/blockeraai/blockera/pull/136))
+- fix: MergeObject() use-case on set state. ([151](https://github.com/blockeraai/blockera/pull/151))
+- fix: Set device preview state. ([158](https://github.com/blockeraai/blockera/pull/158))
+- fix: explode(): Argument #2 () must be of type string, array given. ([134](https://github.com/blockeraai/blockera/pull/134))
+
+
+### Various
+
+- Add css media query support into JavaScript style engine and refactor canvas editor interacts with Editor Iframe. ([157](https://github.com/blockeraai/blockera/pull/157))
+- Add new workflows into CI. ([148](https://github.com/blockeraai/blockera/pull/148))
+- Add new workflows to Github CI. ([147](https://github.com/blockeraai/blockera/pull/147))
+- Feat: Block Card v2. ([152](https://github.com/blockeraai/blockera/pull/152))
+- Feat: Freemius integration. ([143](https://github.com/blockeraai/blockera/pull/143))
+- Feat: Improvements and fixes for block card. ([153](https://github.com/blockeraai/blockera/pull/153))
+- Feat: The Icon Block By Nick Diego Support. ([140](https://github.com/blockeraai/blockera/pull/140))
+- Feat: UX Enhancements. ([149](https://github.com/blockeraai/blockera/pull/149))
+- Feat: V0.9 Public Release version. ([155](https://github.com/blockeraai/blockera/pull/155))
+- Feature: Implements block supports schemas. ([146](https://github.com/blockeraai/blockera/pull/146))
+- Improvements, and Complete Blockera repository CI/CD workflows. ([161](https://github.com/blockeraai/blockera/pull/161))
+- Refactor canvas editor bootstrap to solve problems on site editor and compatible with post(or block) editor. ([156](https://github.com/blockeraai/blockera/pull/156))
+- Temporary Optimize performance and functionalities of style engine. ([159](https://github.com/blockeraai/blockera/pull/159))
+- Update WordPress 'Tested up to' version to 6.6. ([162](https://github.com/blockeraai/blockera/pull/162))
+- feat: Implemented compatible block css selector with WP on editor sty…. ([141](https://github.com/blockeraai/blockera/pull/141))
+- feat: Screenshots. ([142](https://github.com/blockeraai/blockera/pull/142))
+- feat: Update banner and icon. ([137](https://github.com/blockeraai/blockera/pull/137))
+- feat: Update banner. ([138](https://github.com/blockeraai/blockera/pull/138))
+- feat: Update banner. ([139](https://github.com/blockeraai/blockera/pull/139))
+- feat: V0.9.2 BUMP. ([160](https://github.com/blockeraai/blockera/pull/160))
+- refactor: Remove redundant utilities. ([135](https://github.com/blockeraai/blockera/pull/135))
+
+
+"
+`;
+
+exports[`getContributorList verify that the contributors list is properly formatted 1`] = `
+"
+
+## Contributors
+
+The following contributors merged PRs in this release:
+
+@aliaghdam @rezaelahidev"
+`;
+
+exports[`getContributorProps verify that the contributors props are properly formatted 1`] = `""`;
