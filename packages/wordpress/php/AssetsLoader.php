@@ -191,8 +191,8 @@ class AssetsLoader {
 		// Register empty css file to load from consumer plugin of that,
 		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
 		// Accessibility: on front-end.
-		$file     = $this->root_info['path'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
-		$file_url = $this->root_info['url'] . 'packages/wordpress/php/Assets/css/dynamic-styles.css';
+		$file     = $this->root_info['path'] . 'assets/css/dynamic-styles.css';
+		$file_url = $this->root_info['url'] . 'assets/css/dynamic-styles.css';
 
 		if ( file_exists( $file ) && ! is_admin() ) {
 
