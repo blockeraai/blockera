@@ -7,6 +7,8 @@
  * @package blockera-build
  */
 
+require_once __DIR__ . '/plugin-helpers.php';
+
 $f = fopen( dirname( __DIR__ ) . '/readme.txt', 'r' );
 
 $plugin_version   = get_plugin_version();
@@ -14,86 +16,6 @@ $php_version      = get_php_version();
 $tested_version   = get_tested_version();
 $required_version = get_required_version();
 $short_desc       = get_short_description();
-
-/**
- * Prints the changelog
- */
-function print_changelog() {
-
-	$content = file_get_contents( __DIR__ . '/../changelog.txt' );
-
-	echo $content;
-}
-
-/**
- * Fetch current plugin version from `blockera.php` file.
- */
-function get_plugin_version() {
-
-	$content = file_get_contents( __DIR__ . '/../blockera.php' );
-
-	if ( preg_match( '/\s*\*\s*Version:\s*([0-9.]+)/m', $content, $matches ) ) {
-		return $matches[1];
-	}
-
-	return null;
-}
-
-/**
- * Fetch required PHP version from `blockera.php` file.
- */
-function get_php_version() {
-
-	$content = file_get_contents( __DIR__ . '/../blockera.php' );
-
-	if ( preg_match( '/\s*\*\s*Requires PHP:\s*([0-9.]+)/m', $content, $matches ) ) {
-		return $matches[1];
-	}
-
-	return null;
-}
-
-/**
- * Fetch required version from `blockera.php` file.
- */
-function get_required_version() {
-
-	$content = file_get_contents( __DIR__ . '/../blockera.php' );
-
-	if ( preg_match( '/\s*\*\s*Requires at least:\s*([0-9.]+)/m', $content, $matches ) ) {
-		return $matches[1];
-	}
-
-	return null;
-}
-
-/**
- * Fetch tested up to version from `blockera.php` file.
- */
-function get_tested_version() {
-
-	$content = file_get_contents( __DIR__ . '/../blockera.php' );
-
-	if ( preg_match( '/\s*\*\s*Tested up to:\s*([0-9.]+)/m', $content, $matches ) ) {
-		return $matches[1];
-	}
-
-	return null;
-}
-
-/**
- * Fetch tested up to version from `blockera.php` file.
- */
-function get_short_description() {
-
-	$content = file_get_contents( __DIR__ . '/../blockera.php' );
-
-	if ( preg_match( '/\s*\*\s*Description:\s*(.*)/', $content, $matches ) ) {
-		return $matches[1];
-	}
-
-	return null;
-}
 
 $skip_line = false;
 
@@ -104,13 +26,13 @@ if ( ! function_exists( 'str_starts_with' ) ) {
 	 * Performs a case-sensitive check indicating if
 	 * the haystack begins with needle.
 	 *
-	 * @since 5.9.0
-	 *
 	 * @param string $haystack The string to search in.
 	 * @param string $needle   The substring to search for in the `$haystack`.
+	 *
 	 * @return bool True if `$haystack` starts with `$needle`, otherwise false.
 	 */
 	function str_starts_with( $haystack, $needle ) {
+
 		if ( '' === $needle ) {
 			return true;
 		}
@@ -127,7 +49,6 @@ while ( true ) {
 	}
 
 	switch ( trim( $line ) ) {
-
 
 		// All strings starts with an empty string
 		case '':
