@@ -193,6 +193,7 @@ export type TRepeaterDefaultStateProps = {
 	getControlPath: (controlID: string, childControlId: string) => string,
 	repeaterItemOpener?: (props: Object) => boolean | MixedElement,
 	popoverTitle: string | MixedElement,
+	popoverOffset?: number,
 };
 
 export type RepeaterItemProps = {

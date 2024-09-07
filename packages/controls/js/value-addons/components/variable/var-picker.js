@@ -34,9 +34,11 @@ import { Button, Flex, Grid, Popover, ConditionalWrapper } from '../../../';
 export default function ({
 	controlProps,
 	onClose,
+	popoverOffset = 125,
 }: {
 	controlProps: ValueAddonControlProps,
 	onClose?: () => void,
+	popoverOffset?: number,
 }): Element<any> {
 	const CustomVariables = (): Element<any> => {
 		return (
@@ -188,7 +190,7 @@ export default function ({
 	return (
 		<Popover
 			title={__('Choose Variable', 'blockera')}
-			offset={125}
+			offset={popoverOffset}
 			placement="left-start"
 			onClose={() => {
 				controlProps.setOpen('');

@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { useSelect, select } from '@wordpress/data';
+import { useSelect, select, dispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -68,11 +68,16 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 		};
 	});
 
+	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
+		'blockera/extensions'
+	);
+
 	return {
 		config,
 		currentState,
 		currentBlock,
 		currentBreakpoint,
 		currentInnerBlockState,
+		setCurrentBreakpoint: changeExtensionCurrentBlockStateBreakpoint,
 	};
 };

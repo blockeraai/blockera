@@ -13,3 +13,4 @@ assets/*
 wordpress*
 **/test/*
 **/stories/*
+/bin/plugin/**

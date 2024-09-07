@@ -16,6 +16,7 @@
 		-webkit-user-select: none;
 		user-select: none;
 		width: 100%;
+		--blockera-controls-border-color: var(--blockera-controls-border-color-soft);
 
 		svg {
 			fill: currentColor;

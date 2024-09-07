@@ -102,6 +102,7 @@
 		"symfony/var-dumper": "5.4.x-dev"
 	},
 	"config": {
+		"process-timeout": 0,
 		"platform": {
 			"php": "7.4"
 		},

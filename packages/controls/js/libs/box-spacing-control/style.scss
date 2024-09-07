@@ -3,7 +3,7 @@
 	height: 158px;
 	width: 250px;
 	margin: 0 auto 15px;
-	z-index: 1; // for advanced select control
+	z-index: 99; // for advanced select control
 	user-select: none;
 
 	svg {
@@ -22,7 +22,7 @@
 	.blockera-control-spacing-shape-side {
 		transition: all 0.2s ease;
 		fill: var(--blockera-controls-fill-color);
-		stroke: var(--blockera-controls-border-color);
+		stroke: var(--blockera-controls-border-color-soft);
 		user-select: none;
 		stroke-linejoin: round;
 
@@ -41,47 +41,12 @@
 			pointer-events: none;
 		}
 
-		&.side-padding-vertical.side-drag-active,
-		&.side-padding-all.side-drag-active,
-		&.side-padding-bottom.side-drag-active,
-		&.side-padding-top.side-drag-active,
-		&.side-margin-vertical.side-drag-active,
-		&.side-margin-all.side-drag-active,
-		&.side-margin-bottom.side-drag-active,
-		&.side-margin-top.side-drag-active {
+		&.side-drag-active {
 			cursor: ns-resize;
 		}
 
-		&.side-padding-all:not(.side-drag-active),
-		&.side-padding-vertical:not(.side-drag-active),
-		&.side-padding-bottom:not(.side-drag-active),
-		&.side-padding-top:not(.side-drag-active),
-		&.side-margin-all:not(.side-drag-active),
-		&.side-margin-vertical:not(.side-drag-active),
-		&.side-margin-bottom:not(.side-drag-active),
-		&.side-margin-top:not(.side-drag-active) {
-			cursor: pointer;
-		}
-
-		&.side-padding-horizontal.side-drag-active,
-		&.side-padding-right.side-drag-active,
-		&.side-padding-left.side-drag-active,
-		&.side-margin-horizontal.side-drag-active,
-		&.side-margin-right.side-drag-active,
-		&.side-margin-left.side-drag-active {
-			cursor: ew-resize;
-		}
-
-		&.side-padding-horizontal:not(.side-drag-active),
-		&.side-padding-right:not(.side-drag-active),
-		&.side-padding-left:not(.side-drag-active),
-		&.side-margin-horizontal:not(.side-drag-active),
-		&.side-margin-right:not(.side-drag-active),
-		&.side-margin-left:not(.side-drag-active) {
-			cursor: pointer;
-		}
-
 		&.is-value-addon-side {
+			cursor: pointer;
 			--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
 			stroke: var(--blockera-value-addon-var-border-color);
 			stroke-width: 1px;
@@ -378,6 +343,7 @@
 
 	.blockera-control-spacing-lock {
 		position: absolute;
+		z-index: 1;
 
 		.components-input-control__container {
 

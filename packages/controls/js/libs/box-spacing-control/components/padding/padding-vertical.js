@@ -89,6 +89,7 @@ export function PaddingVertical({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset: 73,
 			},
 		});
 

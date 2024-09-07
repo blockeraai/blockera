@@ -3,9 +3,10 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext, useState, useRef, useEffect } from '@wordpress/element';
-import { Popover as WPPopover } from '@wordpress/components';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { Popover as WPPopover } from '@wordpress/components';
+import { useContext, useState, useRef, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -14,9 +15,10 @@ import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
-import { isFunction, isUndefined } from '@blockera/utils';
-import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-popover-data/context';
 import { Icon } from '@blockera/icons';
+import { isFunction, isUndefined } from '@blockera/utils';
+import { settings } from '@blockera/editor/js/extensions/libs/block-states/config';
+import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-popover-data/context';
 
 /**
  * Internal dependencies
@@ -42,6 +44,29 @@ export default function Popover({
 }: TPopoverProps): MixedElement {
 	const [isVisible, setIsVisible] = useState(true);
 
+	const { getSelectedBlock = () => ({ name: '', clientId: '' }) } =
+		select('core/block-editor') || {};
+	const { name, clientId } = getSelectedBlock() || {};
+
+	const {
+		getActiveInnerState = () => 'normal',
+		getActiveMasterState = () => 'normal',
+		getExtensionCurrentBlock = () => 'master',
+	} = select('blockera/extensions') || {};
+
+	let activeColor = settings[getActiveMasterState(clientId, name)].color;
+
+	if (
+		'master' !== getExtensionCurrentBlock() &&
+		'normal' === getActiveInnerState(clientId, getExtensionCurrentBlock())
+	) {
+		activeColor = '#cc0000';
+	} else if ('master' !== getExtensionCurrentBlock()) {
+		activeColor =
+			settings[getActiveInnerState(clientId, getExtensionCurrentBlock())]
+				.color;
+	}
+
 	/**
 	 * You can use popover context provider to wrap this component and prevent closing popover with
 	 * provided onFocusOutside fn for implement other functionality.
@@ -57,6 +82,27 @@ export default function Popover({
 	const popoverRef = useRef();
 
 	useEffect(() => popoverRef.current.focus(), []);
+	useEffect(() => {
+		const container = document.querySelector(
+			'.components-popover__fallback-container'
+		);
+
+		if (
+			container &&
+			!container.style['--blockera-tab-panel-active-color']
+		) {
+			container.style.setProperty('color', 'inherit');
+			container.style.setProperty(
+				'--blockera-controls-primary-color',
+				activeColor
+			);
+			container.style.setProperty(
+				'--blockera-tab-panel-active-color',
+				activeColor
+			);
+		}
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<>

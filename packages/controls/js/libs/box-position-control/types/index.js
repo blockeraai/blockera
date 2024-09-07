@@ -59,6 +59,7 @@ export type SideProps = {
 	setFocusSide: (side: Side | '') => void,
 	openPopover: OpenPopover,
 	setOpenPopover: (side: OpenPopover) => void,
+	popoverOffset?: number,
 };
 
 export type SideReturn = {

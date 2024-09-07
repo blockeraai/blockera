@@ -17,7 +17,9 @@ beforeEach(function () {
 	// browser with a 720p monitor
 	cy.viewport(1280, 720);
 
-	cy.login();
+	if (!Cypress.env('isLogin')) {
+		cy.login();
+	}
 });
 
 Cypress.Commands.add('login', (user = '', pass = '') => {
@@ -67,4 +69,12 @@ Cypress.Commands.add('getIframeBody', () => {
 	// wraps "body" DOM element to allow
 	// chaining more Cypress commands, like ".find(...)
 	return cy.get('iframe[name="editor-canvas"]').its('0.contentDocument.body');
+});
+
+Cypress.Commands.add('getBlockeraStylesWrapper', () => {
+	if (Cypress.$('iframe[name="editor-canvas"]').length) {
+		return cy.getIframeBody().find('#blockera-styles-wrapper');
+	} else {
+		return cy.get('#blockera-styles-wrapper');
+	}
 });
