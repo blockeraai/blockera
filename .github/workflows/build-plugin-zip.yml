@@ -71,7 +71,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
-                  token: ${{ secrets.BLOCKERA_BOT_TOEKN }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Compute old and new version
@@ -103,7 +103,6 @@ jobs:
               run: |
                   git config user.name "blockerabot"
                   git config user.email blockeraai+githubbot@gmail.com
-                  git remote set-url origin https://x-access-token:${{ secrets.BLOCKERA_BOT_TOEKN }}@github.com/blockeraai/blockera.git
 
             - name: Create and switch to release branch
               if: |
@@ -226,14 +225,13 @@ jobs:
               with:
                   fetch-depth: 2
                   ref: ${{ needs.bump-version.outputs.release_branch }}
-                  token: ${{ secrets.BLOCKERA_BOT_TOEKN }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Configure git user name and email
               run: |
                   git config user.name "blockerabot"
                   git config user.email blockeraai+githubbot@gmail.com
-                  git remote set-url origin https://x-access-token:${{ secrets.BLOCKERA_BOT_TOEKN }}@github.com/blockeraai/blockera.git
 
             - name: Revert version bump commit on release branch
               if: |
