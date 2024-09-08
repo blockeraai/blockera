@@ -71,7 +71,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
-                  token: ${{ secrets.BLOCKERA_TOKEN }}
+                  token: ${{ secrets.BLOCKERA_BOT_TOEKN }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Compute old and new version
@@ -225,7 +225,7 @@ jobs:
               with:
                   fetch-depth: 2
                   ref: ${{ needs.bump-version.outputs.release_branch }}
-                  token: ${{ secrets.BLOCKERA_TOKEN }}
+                  token: ${{ secrets.BLOCKERA_BOT_TOEKN }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Configure git user name and email
