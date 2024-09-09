@@ -2,8 +2,8 @@ name: Build Blockera Plugin Zip
 
 on:
     pull_request:
-    push:
-        branches: [master]
+    #    push:
+    #        branches: [master]
     workflow_dispatch:
         inputs:
             version:
@@ -155,8 +155,9 @@ jobs:
                   echo "master_version=${MASTER_VERSION}" >> $GITHUB_OUTPUT
 
             - name: Create Pull Request for Cherry-Pick to Master
+              id: cpr
               if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
-              uses: peter-evans/create-pull-request@v5
+              uses: peter-evans/create-pull-request@v7
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   commit-message: Cherry-pick version bump from release branch
@@ -165,16 +166,15 @@ jobs:
                   base: master
                   branch: version-bump-${{ steps.get_version.outputs.release_branch }}
 
-            - name: Approve Pull Request
-              if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
-              uses: peter-evans/approve-pull-request-action@v3
-              with:
-                  pull-request-number: ${{ github.event.pull_request.number }}
-                  token: ${{ secrets.GITHUB_TOKEN }}
+            - name: Auto approve
+              if: steps.cpr.outputs.pull-request-operation == 'created'
+              run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Auto Merge Pull Request
               if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
-              uses: peter-evans/auto-merge-action@v1
+              uses: peter-evans/enable-pull-request-automerge@v3
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   pull-request-number: ${{ github.event.pull_request.number }}
