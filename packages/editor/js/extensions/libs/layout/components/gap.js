@@ -94,7 +94,6 @@ export default function ({
 							aria-label={__('Gap', 'blockera')}
 							unitType="essential"
 							min={0}
-							max={200}
 							defaultValue={defaultValue.gap}
 							id={'gap'}
 							onChange={(newValue, ref) =>
@@ -131,7 +130,6 @@ export default function ({
 							}
 							unitType="essential"
 							min={0}
-							max={200}
 							defaultValue={defaultValue.rows}
 							id={'rows'}
 							singularId={'rows'}
@@ -168,7 +166,6 @@ export default function ({
 							}
 							unitType="essential"
 							min={0}
-							max={200}
 							defaultValue={defaultValue.columns}
 							id={'columns'}
 							singularId={'columns'}
