@@ -149,6 +149,7 @@ jobs:
                   MASTER_VERSION=$(jq --raw-output '.version' package.json)
                   if [[ ${{ steps.get_version.outputs.old_version }} == "$MASTER_VERSION" ]]; then
                     git cherry-pick "${{ steps.get_version.outputs.release_branch }}"
+                    git branch version-bump-${{ steps.get_version.outputs.release_branch }}
                     git push --set-upstream origin version-bump-${{ steps.get_version.outputs.release_branch }}
                     echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
                   fi
