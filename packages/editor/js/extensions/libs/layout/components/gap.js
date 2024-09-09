@@ -16,6 +16,7 @@ import {
 	useControlContext,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { isObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -45,10 +46,12 @@ export default function ({
 			onChange: (newValue) =>
 				handleOnChangeAttributes(
 					attributeId,
-					{
-						...gap,
-						gap: newValue,
-					},
+					isObject(newValue)
+						? newValue
+						: {
+								...gap,
+								gap: newValue,
+						  },
 					{}
 				),
 		});
