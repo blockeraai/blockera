@@ -20,6 +20,9 @@ concurrency:
 # step: commit_version_bump_to_master
 # Branch Protection Error: remote: error: GH006: Protected branch update failed for refs/heads/master.
 # git push
+# git branch version-bump-${{ steps.get_version.outputs.release_branch }}
+# git push --set-upstream origin version-bump-${{ steps.get_version.outputs.release_branch }}
+# echo "master_version=${MASTER_VERSION}" >> $GITHUB_OUTPUT
 jobs:
     compute-stable-branches:
         name: Compute current and next stable release branches
@@ -74,7 +77,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
               with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Compute old and new version
@@ -149,37 +152,35 @@ jobs:
                   MASTER_VERSION=$(jq --raw-output '.version' package.json)
                   if [[ ${{ steps.get_version.outputs.old_version }} == "$MASTER_VERSION" ]]; then
                     git cherry-pick "${{ steps.get_version.outputs.release_branch }}"
-                    git branch version-bump-${{ steps.get_version.outputs.release_branch }}
-                    git push --set-upstream origin version-bump-${{ steps.get_version.outputs.release_branch }}
+                    git push
                     echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
                   fi
-                  echo "master_version=${MASTER_VERSION}" >> $GITHUB_OUTPUT
 
-            - name: Create Pull Request for Cherry-Pick to Master
-              id: cpr
-              if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
-              uses: peter-evans/create-pull-request@v7
-              with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  commit-message: Cherry-pick version bump from release branch
-                  title: 'Cherry-pick version bump from ${{ steps.get_version.outputs.release_branch }} to master'
-                  body: 'This PR cherry-picks the version bump commit from the release branch.'
-                  base: master
-                  branch: version-bump-${{ steps.get_version.outputs.release_branch }}
-
-            - name: Auto approve
-              if: steps.cpr.outputs.pull-request-operation == 'created'
-              run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
-              env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Auto Merge Pull Request
-              if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
-              uses: peter-evans/enable-pull-request-automerge@v3
-              with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  pull-request-number: ${{ github.event.pull_request.number }}
-                  merge-method: squash # You can change this to merge or rebase if needed
+    #            - name: Create Pull Request for Cherry-Pick to Master
+    #              id: cpr
+    #              if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
+    #              uses: peter-evans/create-pull-request@v7
+    #              with:
+    #                  token: ${{ secrets.GITHUB_TOKEN }}
+    #                  commit-message: Cherry-pick version bump from release branch
+    #                  title: 'Cherry-pick version bump from ${{ steps.get_version.outputs.release_branch }} to master'
+    #                  body: 'This PR cherry-picks the version bump commit from the release branch.'
+    #                  base: master
+    #                  branch: version-bump-${{ steps.get_version.outputs.release_branch }}
+    #
+    #            - name: Auto approve
+    #              if: steps.cpr.outputs.pull-request-operation == 'created'
+    #              run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
+    #              env:
+    #                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #
+    #            - name: Auto Merge Pull Request
+    #              if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
+    #              uses: peter-evans/enable-pull-request-automerge@v3
+    #              with:
+    #                  token: ${{ secrets.GITHUB_TOKEN }}
+    #                  pull-request-number: ${{ github.event.pull_request.number }}
+    #                  merge-method: squash # You can change this to merge or rebase if needed
 
     build:
         name: Build Release Artifact
@@ -256,7 +257,7 @@ jobs:
               with:
                   fetch-depth: 2
                   ref: ${{ needs.bump-version.outputs.release_branch }}
-                  token: ${{ secrets.GITHUB_TOKEN }}
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
                   show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
             - name: Configure git user name and email
@@ -313,7 +314,7 @@ jobs:
               id: create_release
               uses: actions/create-release@v1
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
               with:
                   tag_name: 'v${{ needs.bump-version.outputs.new_version }}'
                   release_name: ${{ steps.get_release_version.outputs.version }}
@@ -326,7 +327,7 @@ jobs:
               id: upload-release-asset
               uses: actions/upload-release-asset@v4
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
               with:
                   upload_url: ${{ steps.create_release.outputs.upload_url }}
                   asset_path: ./blockera.zip
