@@ -17,6 +17,9 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
+# step: commit_version_bump_to_master
+# Branch Protection Error: remote: error: GH006: Protected branch update failed for refs/heads/master.
+# git push
 jobs:
     compute-stable-branches:
         name: Compute current and next stable release branches
@@ -146,9 +149,36 @@ jobs:
                   MASTER_VERSION=$(jq --raw-output '.version' package.json)
                   if [[ ${{ steps.get_version.outputs.old_version }} == "$MASTER_VERSION" ]]; then
                     git cherry-pick "${{ steps.get_version.outputs.release_branch }}"
-                    git push
+                    git push --set-upstream origin version-bump-${{ steps.get_version.outputs.release_branch }}
                     echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
                   fi
+                  echo "master_version=${MASTER_VERSION}" >> $GITHUB_OUTPUT
+
+            - name: Create Pull Request for Cherry-Pick to Master
+              if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
+              uses: peter-evans/create-pull-request@v5
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  commit-message: Cherry-pick version bump from release branch
+                  title: 'Cherry-pick version bump from ${{ steps.get_version.outputs.release_branch }} to master'
+                  body: 'This PR cherry-picks the version bump commit from the release branch.'
+                  base: master
+                  branch: version-bump-${{ steps.get_version.outputs.release_branch }}
+
+            - name: Approve Pull Request
+              if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
+              uses: peter-evans/approve-pull-request-action@v3
+              with:
+                  pull-request-number: ${{ github.event.pull_request.number }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Auto Merge Pull Request
+              if: ${{ steps.get_version.outputs.old_version == steps.commit_version_bump_to_master.outputs.master_version }}
+              uses: peter-evans/auto-merge-action@v1
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  pull-request-number: ${{ github.event.pull_request.number }}
+                  merge-method: squash # You can change this to merge or rebase if needed
 
     build:
         name: Build Release Artifact
