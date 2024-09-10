@@ -1,3 +1,7 @@
 ## Unreleased
 
-## 1.0.0 (2024-09-07)
+### New Features
+
+- Feat: configure jest library for all use cases.
+- Feat: create svg mock object.
+- Feat: implemented svg transformer.

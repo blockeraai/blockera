@@ -1,3 +1,7 @@
 ## Unreleased
 
-## 1.0.0 (2024-09-07)
+### New Features
+
+- Feat: implemented renderer block module to parse and render on server side.
+- Feat: implemented WordPress admin api in javascript.
+- Feat: implemented WordPress menu factory. 

@@ -16,7 +16,16 @@ const catchException = (command) => {
 	};
 };
 
+const releaseType = ['--releaseType <releaseType>', 'Release Type'];
+
 const { getReleaseChangelog } = require('./commands/changelog');
+const { updatePackagesChangelog } = require('./commands/packages');
+
+program
+	.command('update-packages-changelog')
+	.option(...releaseType)
+	.description('Blockera plugin and packages changelogs publishes to git.')
+	.action(catchException(updatePackagesChangelog));
 
 program
 	.command('release-plugin-changelog')

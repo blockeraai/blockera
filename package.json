@@ -195,6 +195,7 @@
 		"lint:js": "wp-scripts lint-js",
 		"lint:css": "wp-scripts lint-style packages/**/*.scss",
 		"lint:php": "composer run lint",
+		"update:changelogs": "node ./bin/plugin/cli.js update-packages-changelog",
 		"other:changelog": "node ./bin/plugin/cli.js changelog",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start --progress --mode development",
