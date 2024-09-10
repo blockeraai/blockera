@@ -1,5 +1,5 @@
 ## Unreleased
 
-### New Features
+### Improvements
 
-- Feat: configure PHPUnit for all use cases.
+- Configure PHPUnit for all use cases.

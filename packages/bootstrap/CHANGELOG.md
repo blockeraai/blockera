@@ -1,8 +1,8 @@
 ## Unreleased
 
-### New Features
+### Improvements
 
-- Feat: created javascript initializer on inside and outside of WordPress domReady.
-- Feat: created abstract application container on server side.
-- Feat: created abstract service provider on server side.
-- Feat: created abstract entity registry on server side.
+- Created javascriptJavaScript initializer on inside and outside of WordPress domReady.
+- Created abstract application container on server side.
+- Created abstract service provider on server side.
+- Created abstract entity registry on server side.
