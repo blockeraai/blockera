@@ -1,0 +1,23 @@
+{
+	"name": "@blockera/dev-phpunit",
+	"version": "1.0.0",
+	"description": "Blockera PHPUnit package.",
+	"author": "The Blockera Core Contributors",
+	"license": "ISC",
+	"keywords": [
+		"blockera",
+		"phpunit"
+	],
+	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/dev-phpunit/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/blockeraai/blockera",
+		"directory": "packages/dev-phpunit"
+	},
+	"bugs": {
+		"url": "https://github.com/blockeraai/blockera/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	}
+}
