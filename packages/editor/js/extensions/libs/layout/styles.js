@@ -66,10 +66,7 @@ export const LayoutStyles = ({
 	};
 	const styleGroup: Array<CssRule> = [];
 
-	if (
-		isActiveField(blockeraDisplay) &&
-		_attributes.blockeraDisplay !== attributes.blockeraDisplay.default
-	) {
+	if (isActiveField(blockeraDisplay) && _attributes.blockeraDisplay !== '') {
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraDisplay',
