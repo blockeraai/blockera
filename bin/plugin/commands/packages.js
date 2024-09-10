@@ -234,7 +234,11 @@ async function updatePackages(config) {
 		);
 	}
 
-	const { commit: commitHash } = await SimpleGit(gitWorkingDirectoryPath)
+	const { commit: commitHash, addConfig } = await SimpleGit(
+		gitWorkingDirectoryPath
+	)
+		.addConfig('user.name', 'blockerabot')
+		.addConfig('user.email', 'blockeraai+githubbot@gmail.com')
 		.add(['./*'])
 		.commit('docs: create release changelogs');
 
