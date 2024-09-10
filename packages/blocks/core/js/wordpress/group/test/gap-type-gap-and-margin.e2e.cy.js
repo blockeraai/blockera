@@ -188,6 +188,8 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				cy.getByAriaLabel('Row').click();
 			});
 
+			cy.getByDataTest('matrix-top-left-normal').click();
+
 			cy.getParentContainer('Gap').within(() => {
 				cy.get('input').type(100);
 			});
@@ -203,11 +205,17 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.getBlock('core/paragraph')
 				.first()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 
 			cy.getBlock('core/paragraph')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 
 			//Check frontend
 			savePage();
@@ -227,8 +235,18 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			// Assert child block to have valid property for gap
 			//
 			cy.get('.wp-block-group.blockera-block p')
+				.first()
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
+
+			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 		});
 
 		it('Unlocked gap - the css property should be gap', () => {
@@ -261,6 +279,8 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				cy.getByAriaLabel('Row').click();
 			});
 
+			cy.getByDataTest('matrix-top-left-normal').click();
+
 			cy.getParentContainer('Gap').within(() => {
 				cy.get('input').type(100);
 
@@ -279,11 +299,17 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.getBlock('core/paragraph')
 				.first()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 
 			cy.getBlock('core/paragraph')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 
 			//Check frontend
 			savePage();
@@ -303,8 +329,18 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			// Assert child block to have valid property for gap
 			//
 			cy.get('.wp-block-group.blockera-block p')
+				.first()
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
+
+			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 		});
 	});
 
@@ -339,6 +375,8 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				cy.getByAriaLabel('Column').click();
 			});
 
+			cy.getByDataTest('matrix-top-left-normal').click();
+
 			cy.getParentContainer('Gap').within(() => {
 				cy.get('input').type(100);
 			});
@@ -354,11 +392,17 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.getBlock('core/paragraph')
 				.first()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 
 			cy.getBlock('core/paragraph')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 
 			//Check frontend
 			savePage();
@@ -378,8 +422,18 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			// Assert child block to have valid property for gap
 			//
 			cy.get('.wp-block-group.blockera-block p')
+				.first()
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
+
+			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 		});
 
 		it('Unlocked gap - the css property should be gap', () => {
@@ -412,6 +466,8 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 				cy.getByAriaLabel('Column').click();
 			});
 
+			cy.getByDataTest('matrix-top-left-normal').click();
+
 			cy.getParentContainer('Gap').within(() => {
 				cy.get('input').type(100);
 
@@ -430,11 +486,17 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.getBlock('core/paragraph')
 				.first()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 
 			cy.getBlock('core/paragraph')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 
 			//Check frontend
 			savePage();
@@ -454,8 +516,18 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			// Assert child block to have valid property for gap
 			//
 			cy.get('.wp-block-group.blockera-block p')
+				.first()
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
+
+			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0px')
+				.should('not.have.css', 'flex-direction', 'column')
+				.should('not.have.css', 'align-items', 'flex-start')
+				.should('not.have.css', 'justify-content', 'flex-start');
 		});
 	});
 
