@@ -81,11 +81,13 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				}
 
 				if ( $item['alignItems'] ) {
-					$declaration['align-items'] = $item['alignItems'];
+					$prop                 = 'column' === $item['direction'] ? 'justify-content' : 'align-items';
+					$declaration[ $prop ] = $item['alignItems'];
 				}
 
 				if ( $item['justifyContent'] ) {
-					$declaration['justify-content'] = $item['justifyContent'];
+					$prop                 = 'column' === $item['direction'] ? 'align-items' : 'justify-content';
+					$declaration[ $prop ] = $item['justifyContent'];
 				}
 
 				break;
