@@ -1,3 +1,10 @@
 ## Unreleased
 
-## 1.0.0 (2024-09-07)
+### Bug Fixes
+
+- Fix: blockera bootstrapper problems while domReady!
+
+### New Features
+
+- Feat: Unstable registration shared and block type attributes.
+- Feat: bootstrap canvas editor on loaded WordPress site editor.

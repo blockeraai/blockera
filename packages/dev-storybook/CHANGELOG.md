@@ -1,3 +1,7 @@
 ## Unreleased
 
-## 1.0.0 (2024-09-07)
+### New Features
+
+- Feat: storybook configuration.
+- Feat: provided playground styles for storybook environment.
+- Feat: implemented useful decorators for working on storybook.

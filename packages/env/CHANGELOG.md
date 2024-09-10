@@ -1,3 +1,5 @@
 ## Unreleased
 
-## 1.0.0 (2024-09-07)
+### New Features
+
+- Feat: configure dotenv and experimental env variables around of project.
