@@ -81,11 +81,13 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				}
 
 				if ( $item['alignItems'] ) {
-					$declaration['align-items'] = $item['alignItems'];
+					$prop                 = 'column' === $item['direction'] ? 'justify-content' : 'align-items';
+					$declaration[ $prop ] = $item['alignItems'];
 				}
 
 				if ( $item['justifyContent'] ) {
-					$declaration['justify-content'] = $item['justifyContent'];
+					$prop                 = 'column' === $item['direction'] ? 'align-items' : 'justify-content';
+					$declaration[ $prop ] = $item['justifyContent'];
 				}
 
 				break;
@@ -118,12 +120,12 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				// Add suffix to selector based on gap type.
 				switch ( $gapType ) {
 					case 'margin':
-						$selectorSuffix = '> * + *';
+						$selectorSuffix = ' > * + *';
 						break;
 
 					case 'gap-and-margin':
 						if ( 'flex' !== $display && 'grid' !== $display ) {
-							$selectorSuffix = '> * + *';
+							$selectorSuffix = ' > * + *';
 						}
 						break;
 				}
@@ -252,7 +254,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 			parent::setSelector( 'margin-block-start' );
 
-			$this->selector .= '> * + *';
+			$this->selector .= ' > * + *';
 
 			return;
 		}

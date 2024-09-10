@@ -66,10 +66,7 @@ export const LayoutStyles = ({
 	};
 	const styleGroup: Array<CssRule> = [];
 
-	if (
-		isActiveField(blockeraDisplay) &&
-		_attributes.blockeraDisplay !== attributes.blockeraDisplay.default
-	) {
+	if (isActiveField(blockeraDisplay) && _attributes.blockeraDisplay !== '') {
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraDisplay',
@@ -142,6 +139,11 @@ export const LayoutStyles = ({
 				),
 			});
 
+			const alignProp: string =
+				_attributes?.blockeraFlexLayout?.direction === 'column'
+					? 'justify-content'
+					: 'align-items';
+
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -150,7 +152,7 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									'align-items':
+									[alignProp]:
 										_attributes.blockeraFlexLayout
 											.alignItems,
 								},
@@ -172,6 +174,11 @@ export const LayoutStyles = ({
 				),
 			});
 
+			const justifyProp: string =
+				_attributes?.blockeraFlexLayout?.direction === 'column'
+					? 'align-items'
+					: 'justify-content';
+
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -180,7 +187,7 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									'justify-content':
+									[justifyProp]:
 										_attributes.blockeraFlexLayout
 											.justifyContent,
 								},

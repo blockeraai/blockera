@@ -130,7 +130,7 @@ export default function InputControl({
 
 	useEffect(() => {
 		// add css units
-		if (unitType !== '') {
+		if (!isEmpty(unitType)) {
 			const cssUnits: Array<any> = getCSSUnits(unitType);
 
 			if (unitValue?.notFound) {
@@ -219,7 +219,7 @@ export default function InputControl({
 								}
 							});
 
-							if ('' !== value && !inputValue) {
+							if (!isEmpty(value) && !inputValue) {
 								setPickedUnit(unitValue);
 							}
 						}
@@ -239,12 +239,12 @@ export default function InputControl({
 							!extractedNoUnit &&
 							value &&
 							value !== unitValue.value &&
-							'' !== inputValue
+							!isEmpty(inputValue)
 						) {
 							setValue(inputValue + unitValue.value);
 						} else if (
-							('' === inputValue && value) ||
-							('' === inputValue && '' === value)
+							(isEmpty(inputValue) && value) ||
+							(isEmpty(inputValue) && '' === value)
 						) {
 							setPickedUnit(unitValue);
 							setValue(inputValue);
