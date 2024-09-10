@@ -116,28 +116,12 @@ async function updatePackages(config) {
 		releaseType,
 	} = config;
 
-	if (releaseType === 'wp') {
-		log(
-			'>> Skipping CHANGELOG files processing when targeting WordPress core.'
-		);
-		return;
-	}
-
 	const changelogFiles = await glob(
-		path.resolve(gitWorkingDirectoryPath, 'packages/*/CHANGELOG.md')
-	);
-	const changelogFilesPublicPackages = changelogFiles.filter(
-		(changelogPath) => {
-			const pkg = require(path.join(
-				path.dirname(changelogPath),
-				'package.json'
-			));
-			return pkg.private !== true;
-		}
+		path.resolve(process.cwd(), 'packages/*/CHANGELOG.md')
 	);
 
 	const processedPackages = await Promise.all(
-		changelogFilesPublicPackages.map(async (changelogPath) => {
+		changelogFiles.map(async (changelogPath) => {
 			const fileStream = fs.createReadStream(changelogPath);
 
 			const rl = readline.createInterface({
@@ -152,7 +136,7 @@ async function updatePackages(config) {
 				lines,
 				minimumVersionBump
 			);
-			const packageName = `@wordpress/${
+			const packageName = `@blockera/${
 				changelogPath.split('/').reverse()[1]
 			}`;
 			// Enforce version bump for all packages when
@@ -252,7 +236,7 @@ async function updatePackages(config) {
 
 	const { commit: commitHash } = await SimpleGit(gitWorkingDirectoryPath)
 		.add(['./*'])
-		.commit('Update changelog files');
+		.commit('docs: create release changelogs');
 
 	if (commitHash) {
 		await runPushGitChangesStep(config);
@@ -581,13 +565,13 @@ function getConfig(
 }
 
 /**
- * Publishes to npm packages synced from the Gutenberg plugin (latest dist-tag, production version).
+ * Publishes to npm packages synced from the Blockera plugin (latest dist-tag, production version).
  *
  * @param {WPPackagesCommandOptions} options Command options.
  */
-async function publishNpmGutenbergPlugin(options) {
+async function publishNpmBlockeraPlugin(options) {
 	await runPackagesRelease(getConfig('latest', options), [
-		'Welcome! This tool helps with npm publishing a new latest version of WordPress packages synced from the Gutenberg plugin.\n',
+		'Welcome! This tool helps with npm publishing a new latest version of Blockera packages synced from the Blockera plugin.\n',
 	]);
 }
 
@@ -626,9 +610,14 @@ async function publishNpmNext(options) {
 	]);
 }
 
+async function updatePackagesChangelog(config) {
+	await updatePackages(config);
+}
+
 module.exports = {
-	publishNpmGutenbergPlugin,
+	publishNpmBlockeraPlugin,
 	publishNpmBugfixLatest,
 	publishNpmBugfixWordPressCore,
 	publishNpmNext,
+	updatePackagesChangelog,
 };
