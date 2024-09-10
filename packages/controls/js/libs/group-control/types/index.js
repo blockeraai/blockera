@@ -4,6 +4,11 @@
  */
 import type { MixedElement } from 'react';
 
+/**
+ * Internal dependencies
+ */
+import type { TPopoverProps } from '../../popover/types';
+
 export type GroupControlMode = 'popover' | 'accordion' | 'nothing';
 
 export type GroupControlProps = {
@@ -24,6 +29,7 @@ export type GroupControlProps = {
 	 * The group open mode.
 	 */
 	mode: GroupControlMode,
+	popoverProps: TPopoverProps,
 	popoverTitle?: string | MixedElement,
 	/**
 	 * Offset for popover
