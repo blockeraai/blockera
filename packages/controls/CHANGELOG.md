@@ -7,3 +7,4 @@
 
 ### Improvements
 - Improve transform controls popover design.
+- Notice control design improvement.
