@@ -258,30 +258,6 @@ async function updatePackages(config) {
 			}
 		)
 	);
-
-	if (interactive) {
-		await askForConfirmation(
-			`All corresponding files were updated. Commit the changes?`,
-			true,
-			abortMessage
-		);
-	}
-
-	const { commit: commitHash, addConfig } = await SimpleGit(
-		gitWorkingDirectoryPath
-	)
-		.addConfig('user.name', 'blockerabot')
-		.addConfig('user.email', 'blockeraai+githubbot@gmail.com')
-		.add(['./*'])
-		.commit('docs: create release changelogs');
-
-	if (commitHash) {
-		await runPushGitChangesStep(config);
-	}
-
-	log('>> Changelog files have been updated successfully.');
-
-	return commitHash;
 }
 
 /**

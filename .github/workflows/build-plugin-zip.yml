@@ -118,6 +118,17 @@ jobs:
                   git fetch --depth=1 origin "${{ steps.get_version.outputs.release_branch }}"
                   git checkout "${{ steps.get_version.outputs.release_branch }}"
 
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Update the changelog of packages
+              id: update_packages
+              run: |
+                  npm run update:changelogs
+                  git add .
+                  git commit -m "Update Changelog for ${{ steps.get_version.outputs.new_version }}"
+                  echo "has_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
+
             - name: Update plugin version
               env:
                   VERSION: ${{ steps.get_version.outputs.new_version }}
@@ -126,16 +137,12 @@ jobs:
                   cat <<< $(jq --tab --arg version "${VERSION}" '.version = $version | .packages[""].version = $version' package-lock.json) > package-lock.json
                   sed -i "s/${{ steps.get_version.outputs.old_version }}/${VERSION}/g" blockera.php
 
-            - name: Setup Node.js and install dependencies
-              uses: ./.github/setup-node
-
             - name: Commit the version bump to the release branch
               id: commit_version_bump_to_release_branch
               run: |
                   git add blockera.php package.json package-lock.json
                   git commit -m "Bump plugin version to ${{ steps.get_version.outputs.new_version }}"
                   git push --set-upstream origin "${{ steps.get_version.outputs.release_branch }}"
-                  npm run update:changelogs
                   echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
 
             - name: Fetch master
@@ -149,6 +156,7 @@ jobs:
                   git pull
                   MASTER_VERSION=$(jq --raw-output '.version' package.json)
                   if [[ ${{ steps.get_version.outputs.old_version }} == "$MASTER_VERSION" ]]; then
+                    git cherry-pick "${{ steps.update_packages.outputs.has_commit }}"
                     git cherry-pick "${{ steps.get_version.outputs.release_branch }}"
                     git push
                     echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
