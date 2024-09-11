@@ -743,11 +743,11 @@ function combineChangelogSections(changelog) {
  * Formats the changelog string for a given list of packages.
  *
  * @param {string[]} changelogs List of pull requests.
- * @param {boolean} write The flag to write into changelog.txt or not
+ * @param {string} version The version number if it has value to update changelog.txt!
  *
  * @return {string} The formatted changelog string.
  */
-function getChangelog(changelogs, write = false) {
+function getChangelog(changelogs, version = '') {
 	let start =
 		'<details>\n' + '<summary>\n\n' + '## Changelog\n\n' + '</summary>\n\n';
 	let changelog = '';
@@ -773,8 +773,8 @@ function getChangelog(changelogs, write = false) {
 	// Combine same sections.
 	changelog = combineChangelogSections(changelog);
 
-	if (write) {
-		const _start = '== Changelog ==\n\n';
+	if (version.trim().length) {
+		const _start = '== Changelog ==\n\n= ' + version.trim() + ' =\n\n';
 		const _end =
 			'\n\n##More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
 

@@ -109,13 +109,13 @@ async function checkoutNpmReleaseBranch({
  * @return {?string}   The optional commit's hash when changelog files updated.
  */
 async function updatePackages(config) {
-	const { minimumVersionBump, releaseType } = config;
+	const { minimumVersionBump, releaseType, version } = config;
 
 	const changelogFiles = await glob(
 		path.resolve(process.cwd(), 'packages/*/CHANGELOG.md')
 	);
 
-	getChangelog(changelogFiles, true);
+	getChangelog(changelogFiles, version);
 
 	const processedPackages = await Promise.all(
 		changelogFiles.map(async (changelogPath) => {

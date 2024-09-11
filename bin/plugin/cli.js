@@ -23,6 +23,7 @@ const { updatePackagesChangelog } = require('./commands/packages');
 
 program
 	.command('update-packages-changelog')
+	.option('-v, --version <version>', 'Version')
 	.option(...releaseType)
 	.description('Blockera plugin and packages changelogs publishes to git.')
 	.action(catchException(updatePackagesChangelog));
