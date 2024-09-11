@@ -699,7 +699,11 @@ async function fetchAllPullRequests(octokit, settings) {
  * @return {string} The formatted changelog string.
  */
 function getChangelog(pullRequests) {
-	let changelog = '## Changelog\n\n';
+	let changelog =
+		'<details>\n' +
+		'<summary>\n\n' +
+		'## Development Changelog\n\n' +
+		'</summary>\n\n';
 
 	const groupedPullRequests = skipCreatedByBots(pullRequests).reduce(
 		(
@@ -784,7 +788,7 @@ function getChangelog(pullRequests) {
 		changelog += '\n';
 	}
 
-	return changelog;
+	return changelog + '\n\n</details>';
 }
 
 /**
