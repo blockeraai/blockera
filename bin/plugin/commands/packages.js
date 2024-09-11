@@ -152,16 +152,31 @@ async function updatePackages(config) {
 				'CHANGELOG.md',
 				'package.json'
 			);
-			const { version } = readJSONFile(packageJSONPath);
+			const composerJSONPath = changelogPath.replace(
+				'CHANGELOG.md',
+				'composer.json'
+			);
+
+			let jsonData;
+
+			if (fs.existsSync(packageJSONPath)) {
+				jsonData = readJSONFile(packageJSONPath);
+			} else {
+				jsonData = readJSONFile(composerJSONPath);
+			}
+
+			const { version } = jsonData;
+
 			const nextVersion =
 				versionBump !== null ? semverInc(version, versionBump) : null;
 
 			return {
+				version,
+				nextVersion,
+				packageName,
 				changelogPath,
 				packageJSONPath,
-				packageName,
-				nextVersion,
-				version,
+				composerJSONPath,
 			};
 		})
 	);
@@ -184,11 +199,12 @@ async function updatePackages(config) {
 	await Promise.all(
 		packagesToUpdate.map(
 			async ({
+				version,
+				nextVersion,
+				packageName,
 				changelogPath,
 				packageJSONPath,
-				packageName,
-				nextVersion,
-				version,
+				composerJSONPath,
 			}) => {
 				// Update changelog.
 				const content = fs.readFileSync(changelogPath, 'utf8');
@@ -204,16 +220,33 @@ async function updatePackages(config) {
 					)
 				);
 
-				// Update package.json.
-				const packageJson = readJSONFile(packageJSONPath);
-				const newPackageJson = {
-					...packageJson,
-					version: nextVersion + '-prerelease',
-				};
-				fs.writeFileSync(
-					packageJSONPath,
-					JSON.stringify(newPackageJson, null, '\t') + '\n'
-				);
+				if (fs.existsSync(packageJSONPath)) {
+					// Update package.json.
+					const packageJson = readJSONFile(packageJSONPath);
+					const newPackageJson = {
+						...packageJson,
+						version: nextVersion,
+					};
+
+					fs.writeFileSync(
+						packageJSONPath,
+						JSON.stringify(newPackageJson, null, '\t') + '\n'
+					);
+				}
+
+				if (fs.existsSync(composerJSONPath)) {
+					// Update composer.json
+					const composerJson = readJSONFile(composerJSONPath);
+					const newComposerJson = {
+						...composerJson,
+						version: nextVersion,
+					};
+
+					fs.writeFileSync(
+						composerJSONPath,
+						JSON.stringify(newComposerJson, null, '\t') + '\n'
+					);
+				}
 
 				log(
 					`   - ${packageName}: ${version} -> ${
