@@ -126,6 +126,9 @@ jobs:
                   cat <<< $(jq --tab --arg version "${VERSION}" '.version = $version | .packages[""].version = $version' package-lock.json) > package-lock.json
                   sed -i "s/${{ steps.get_version.outputs.old_version }}/${VERSION}/g" blockera.php
 
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
             - name: Commit the version bump to the release branch
               id: commit_version_bump_to_release_branch
               run: |
