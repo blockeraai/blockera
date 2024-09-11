@@ -1,9 +1,10 @@
 {
 	"name": "blockera/data",
+	"version": "0.9.2",
 	"description": "Core Data is a data module intended to simplify access and manipulation to core WordPress and entities.",
 	"autoload": {
 		"psr-4": {
-		 	"Blockera\\Data\\": "php/"
+			"Blockera\\Data\\": "php/"
 		}
 	}
 }
