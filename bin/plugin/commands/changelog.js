@@ -123,6 +123,8 @@ const GROUP_TITLE_ORDER = [
 	'Features',
 	'Enhancements',
 	'New APIs',
+	'New Features',
+	'Improvements',
 	'Bug Fixes',
 	`Accessibility`,
 	'Performance',
@@ -140,6 +142,8 @@ const GROUP_TITLE_ORDER = [
  * @type {Map<RegExp,string>}
  */
 const TITLE_TYPE_PATTERNS = new Map([
+	[/feat?(:|\/ )?/i, 'New Features'],
+	[/improve?\s*ment(s)?(:|\/ )?/i, 'Improvements'],
 	[/^(\w+:)?(bug)?\s*fix(es)?(:|\/ )?/i, 'Bug Fixes'],
 ]);
 
@@ -726,15 +730,33 @@ function combineChangelogSections(changelog) {
 		}
 	});
 
-	// Reconstruct the changelog with combined sections
+	// Define the priority order for sections
+	const priorityOrder = ['New Features', 'Improvements', 'Bug Fixes'];
+
+	// Reconstruct the changelog by priority
 	let combinedChangelog = '';
-	for (const section in sections) {
-		combinedChangelog += `\n### ${section}\n`;
-		combinedChangelog += sections[section]
-			.filter((line) => line.trim() !== '')
-			.join('\n');
-		combinedChangelog += '\n';
-	}
+
+	// Add sections based on priority first
+	priorityOrder.forEach((section) => {
+		if (sections[section]) {
+			combinedChangelog += `\n### ${section}\n`;
+			combinedChangelog += sections[section]
+				.filter((line) => line.trim() !== '')
+				.join('\n');
+			combinedChangelog += '\n';
+		}
+	});
+
+	// Add any other sections that were not prioritized
+	Object.keys(sections).forEach((section) => {
+		if (!priorityOrder.includes(section)) {
+			combinedChangelog += `\n### ${section}\n`;
+			combinedChangelog += sections[section]
+				.filter((line) => line.trim() !== '')
+				.join('\n');
+			combinedChangelog += '\n';
+		}
+	});
 
 	return combinedChangelog.trim();
 }
@@ -763,10 +785,7 @@ function getChangelog(changelogs, version = '') {
 		);
 
 		if (unreleasedSection) {
-			changelog += unreleasedSection[0].replace(
-				/##\sUnreleased(\n\n|\n)/g,
-				''
-			);
+			changelog += unreleasedSection[0].replace(/##\sUnreleased/g, '');
 		}
 	}
 
@@ -776,7 +795,7 @@ function getChangelog(changelogs, version = '') {
 	if (version.trim().length) {
 		const _start = '== Changelog ==\n\n= ' + version.trim() + ' =\n\n';
 		const _end =
-			'\n\n##More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
+			'\n\n## More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
 
 		// Update the changelog.txt file to include combined changes of all packages.
 		fs.writeFileSync(
