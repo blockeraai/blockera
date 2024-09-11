@@ -26,6 +26,7 @@ const {
 } = require('./common');
 const { join } = require('path');
 const pluginConfig = require('../config');
+const { getChangelog } = require('./changelog');
 
 /**
  * Release type names.
@@ -108,17 +109,13 @@ async function checkoutNpmReleaseBranch({
  * @return {?string}   The optional commit's hash when changelog files updated.
  */
 async function updatePackages(config) {
-	const {
-		abortMessage,
-		gitWorkingDirectoryPath,
-		interactive,
-		minimumVersionBump,
-		releaseType,
-	} = config;
+	const { minimumVersionBump, releaseType } = config;
 
 	const changelogFiles = await glob(
 		path.resolve(process.cwd(), 'packages/*/CHANGELOG.md')
 	);
+
+	getChangelog(changelogFiles, true);
 
 	const processedPackages = await Promise.all(
 		changelogFiles.map(async (changelogPath) => {

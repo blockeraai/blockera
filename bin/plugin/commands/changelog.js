@@ -17,6 +17,9 @@ const { log, formats } = require('../lib/logger');
 const config = require('../config');
 // @ts-ignore
 const manifest = require('../../../package.json');
+const fs = require('fs');
+const glob = require('fast-glob');
+const path = require('path');
 
 const UNKNOWN_FEATURE_FALLBACK_NAME = 'Uncategorized';
 
@@ -475,6 +478,7 @@ const createOmitByLabelPrefix = (prefixes) => (text, issue) =>
 	)
 		? undefined
 		: text;
+
 /**
  * Given an issue title and issue, returns the title with redundant grouping
  * type details removed. The prefix is redundant since it would already be clear
@@ -692,13 +696,59 @@ async function fetchAllPullRequests(octokit, settings) {
 }
 
 /**
- * Formats the changelog string for a given list of pull requests.
+ * Formats the changelog string for a given list of packages.
+ *
+ * @param {string[]} changelogs List of pull requests.
+ * @param {boolean} write The flag to write into changelog.txt or not
+ *
+ * @return {string} The formatted changelog string.
+ */
+function getChangelog(changelogs, write = false) {
+	let start =
+		'<details>\n' + '<summary>\n\n' + '## Changelog\n\n' + '</summary>\n\n';
+	let changelog = '';
+	const end = '\n\n</details>';
+
+	for (const changelogPath of changelogs) {
+		// Read the changelog file
+		const content = fs.readFileSync(changelogPath, 'utf8');
+
+		// Use a regular expression to extract the ## Unreleased section
+		const unreleasedSection = content.match(
+			/## Unreleased[\s\S]+?(?=\n## |\n$)/
+		);
+
+		if (unreleasedSection) {
+			changelog += unreleasedSection[0].replace(
+				/##\sUnreleased(\n\n|\n)/g,
+				''
+			);
+		}
+	}
+
+	if (write) {
+		const _start = '== Changelog ==\n\n';
+		const _end =
+			'\n\n To read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
+
+		// Update the changelog.txt file to include combined changes of all packages.
+		fs.writeFileSync(
+			path.resolve(process.cwd(), 'changelog.txt'),
+			_start + changelog + _end
+		);
+	}
+
+	return start + changelog + end;
+}
+
+/**
+ * Formats the development changelog string for a given list of pull requests.
  *
  * @param {IssuesListForRepoResponseItem[]} pullRequests List of pull requests.
  *
  * @return {string} The formatted changelog string.
  */
-function getChangelog(pullRequests) {
+function getDevelopmentChangelog(pullRequests) {
 	let changelog =
 		'<details>\n' +
 		'<summary>\n\n' +
@@ -988,12 +1038,16 @@ async function createChangelog(settings) {
 	try {
 		const pullRequests = await fetchAllPullRequests(octokit, settings);
 
-		const changelog = getChangelog(pullRequests);
+		const changelog = getChangelog(
+			await glob(path.resolve(process.cwd(), 'packages/*/CHANGELOG.md'))
+		);
+		const developmentChangelog = getDevelopmentChangelog(pullRequests);
 		const contributorProps = getContributorProps(pullRequests);
 		const contributorsList = getContributorsList(pullRequests);
 
 		releaselog = releaselog.concat(
 			changelog,
+			developmentChangelog,
 			contributorProps,
 			contributorsList
 		);
@@ -1049,6 +1103,7 @@ async function getReleaseChangelog(options) {
 	getContributorProps,
 	getContributorsList,
 	getChangelog,
+	getDevelopmentChangelog,
 	getUniqueByUsername,
 	skipCreatedByBots,
 	mapLabelsToFeatures,
