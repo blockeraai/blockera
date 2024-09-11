@@ -696,6 +696,50 @@ async function fetchAllPullRequests(octokit, settings) {
 }
 
 /**
+ * Combines repeated sections in a changelog string.
+ *
+ * @param {string} changelog the changelog text.
+ *
+ * @returns {string} the combined changelog same sections.
+ */
+function combineChangelogSections(changelog) {
+	// Split the changelog into lines
+	const lines = changelog.split('\n');
+
+	// Initialize an object to hold each section's content
+	const sections = {};
+	let currentSection = '';
+
+	// Loop through each line
+	lines.forEach((line) => {
+		// Check if the line starts with a section heading (e.g., ### Bug Fixes)
+		const sectionMatch = line.match(/^### (.+)$/);
+		if (sectionMatch) {
+			currentSection = sectionMatch[1];
+			// Initialize the section in the object if it doesn't exist
+			if (!sections[currentSection]) {
+				sections[currentSection] = [];
+			}
+		} else if (currentSection) {
+			// Add the line to the current section
+			sections[currentSection].push(line);
+		}
+	});
+
+	// Reconstruct the changelog with combined sections
+	let combinedChangelog = '';
+	for (const section in sections) {
+		combinedChangelog += `\n### ${section}\n`;
+		combinedChangelog += sections[section]
+			.filter((line) => line.trim() !== '')
+			.join('\n');
+		combinedChangelog += '\n';
+	}
+
+	return combinedChangelog.trim();
+}
+
+/**
  * Formats the changelog string for a given list of packages.
  *
  * @param {string[]} changelogs List of pull requests.
@@ -726,10 +770,13 @@ function getChangelog(changelogs, write = false) {
 		}
 	}
 
+	// Combine same sections.
+	changelog = combineChangelogSections(changelog);
+
 	if (write) {
 		const _start = '== Changelog ==\n\n';
 		const _end =
-			'\n\n To read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
+			'\n\n##More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
 
 		// Update the changelog.txt file to include combined changes of all packages.
 		fs.writeFileSync(
