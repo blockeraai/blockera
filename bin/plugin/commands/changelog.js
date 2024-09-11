@@ -764,16 +764,42 @@ function combineChangelogSections(changelog) {
 /**
  * Formats the changelog string for a given list of packages.
  *
- * @param {string[]} changelogs List of pull requests.
+ * @param {string[]} changelogPath the changelog path.
  * @param {string} version The version number if it has value to update changelog.txt!
  *
  * @return {string} The formatted changelog string.
  */
-function getChangelog(changelogs, version = '') {
+function getMainChangelog(changelogPath, version = '') {
 	let start =
 		'<details>\n' + '<summary>\n\n' + '## Changelog\n\n' + '</summary>\n\n';
 	let changelog = '';
 	const end = '\n\n</details>';
+
+	// Read the changelog file
+	const content = fs.readFileSync(changelogPath, 'utf8');
+
+	// Remove redundant headings or descriptions of changelog.
+	changelog = content
+		.replace(/== Changelog ==/g, '')
+		.replace(/=\s[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?\s=/g, '')
+		.trim();
+
+	return start + changelog + end;
+}
+
+/**
+ * Formats the changelog string for a given list of packages.
+ *
+ * @param {string[]} changelogs List of pull requests.
+ * @param {string} version The version number to update changelog.txt!
+ *
+ * @return {string} The formatted changelog string.
+ */
+function updateChangelog(changelogs, version) {
+	const start = '== Changelog ==\n\n= ' + version.trim() + ' =\n\n';
+	let changelog = '';
+	const end =
+		'\n\n## More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
 
 	for (const changelogPath of changelogs) {
 		// Read the changelog file
@@ -792,19 +818,11 @@ function getChangelog(changelogs, version = '') {
 	// Combine same sections.
 	changelog = combineChangelogSections(changelog);
 
-	if (version.trim().length) {
-		const _start = '== Changelog ==\n\n= ' + version.trim() + ' =\n\n';
-		const _end =
-			'\n\n## More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
-
-		// Update the changelog.txt file to include combined changes of all packages.
-		fs.writeFileSync(
-			path.resolve(process.cwd(), 'changelog.txt'),
-			_start + changelog + _end
-		);
-	}
-
-	return start + changelog + end;
+	// Update the changelog.txt file to include combined changes of all packages.
+	fs.writeFileSync(
+		path.resolve(process.cwd(), 'changelog.txt'),
+		start + changelog + end
+	);
 }
 
 /**
@@ -1104,15 +1122,15 @@ async function createChangelog(settings) {
 	try {
 		const pullRequests = await fetchAllPullRequests(octokit, settings);
 
-		const changelog = getChangelog(
-			await glob(path.resolve(process.cwd(), 'packages/*/CHANGELOG.md'))
-		);
 		const developmentChangelog = getDevelopmentChangelog(pullRequests);
 		const contributorProps = getContributorProps(pullRequests);
 		const contributorsList = getContributorsList(pullRequests);
 
 		releaselog = releaselog.concat(
-			changelog,
+			getMainChangelog(
+				path.resolve(process.cwd(), settings.file),
+				settings.version
+			),
 			developmentChangelog,
 			contributorProps,
 			contributorsList
@@ -1148,6 +1166,8 @@ async function getReleaseChangelog(options) {
 				  })
 				: options.milestone,
 		unreleased: options.unreleased,
+		file: options?.file || '',
+		version: options?.version || '',
 	});
 }
 
@@ -1168,7 +1188,7 @@ async function getReleaseChangelog(options) {
 	getFormattedItemDescription,
 	getContributorProps,
 	getContributorsList,
-	getChangelog,
+	updateChangelog,
 	getDevelopmentChangelog,
 	getUniqueByUsername,
 	skipCreatedByBots,

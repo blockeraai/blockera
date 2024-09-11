@@ -26,7 +26,7 @@ const {
 } = require('./common');
 const { join } = require('path');
 const pluginConfig = require('../config');
-const { getChangelog } = require('./changelog');
+const { updateChangelog } = require('./changelog');
 
 /**
  * Release type names.
@@ -115,7 +115,7 @@ async function updatePackages(config) {
 		path.resolve(process.cwd(), 'packages/*/CHANGELOG.md')
 	);
 
-	getChangelog(changelogFiles, version);
+	updateChangelog(changelogFiles, version);
 
 	const processedPackages = await Promise.all(
 		changelogFiles.map(async (changelogPath) => {

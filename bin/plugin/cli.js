@@ -31,6 +31,8 @@ program
 program
 	.command('release-plugin-changelog')
 	.alias('changelog')
+	.option('-f, --file <file>', 'File')
+	.option('-v, --version <version>', 'Version')
 	.option('-m, --milestone <milestone>', 'Milestone')
 	.option('-t, --token <token>', 'GitHub token')
 	.option(
