@@ -132,6 +132,7 @@ jobs:
                   git add blockera.php package.json package-lock.json
                   git commit -m "Bump plugin version to ${{ steps.get_version.outputs.new_version }}"
                   git push --set-upstream origin "${{ steps.get_version.outputs.release_branch }}"
+                  npm run update:changelogs
                   echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
 
             - name: Fetch master
@@ -194,7 +195,6 @@ jobs:
               run: |
                   IFS='.' read -r -a VERSION_ARRAY <<< "${VERSION}"
                   MILESTONE="Blockera ${VERSION_ARRAY[0]}.${VERSION_ARRAY[1]}"
-                  npm run update:changelogs
                   npm run other:changelog -- --milestone="$MILESTONE" --unreleased > release-notes.txt
                   sed -ie '1,6d' release-notes.txt
                   if [[ ${{ needs.bump-version.outputs.new_version }} != *"rc"* ]]; then

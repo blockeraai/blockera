@@ -151,109 +151,108 @@ jobs:
               with:
                   name: changelog ${{ matrix.label }}
                   path: ./changelog.txt
-
-    upload:
-        name: Publish as trunk (and tag)
-        runs-on: ubuntu-latest
-        environment: wp.org plugin
-        needs: [compute-should-update-trunk, update-changelog]
-        if: |
-            needs.compute-should-update-trunk.outputs.should_update_trunk == 'true' && github.event.release.assets[0]
-        env:
-            PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/blockera'
-            STABLE_VERSION_REGEX: '[0-9]\+\.[0-9]\+\.[0-9]\+\s*'
-            SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-            SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-            VERSION: ${{ github.event.release.name }}
-
-        steps:
-            - name: Check out Blockera trunk from WP.org plugin repo
-              run: svn checkout "$PLUGIN_REPO_URL/trunk" --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-
-            - name: Delete everything
-              working-directory: ./trunk
-              run: find . -maxdepth 1 -not -name ".svn" -not -name "." -not -name ".." -exec rm -rf {} +
-
-            - name: Download and unzip Blockera plugin asset into trunk folder
-              env:
-                  PLUGIN_URL: ${{ github.event.release.assets[0].browser_download_url }}
-              run: |
-                  curl -L -o blockera.zip $PLUGIN_URL
-                  unzip blockera.zip -d trunk
-                  rm blockera.zip
-
-            - name: Replace the stable tag placeholder with the existing stable tag on the SVN repository
-              env:
-                  STABLE_TAG_PLACEHOLDER: 'Stable tag: V\.V\.V'
-              run: |
-                  sed -i "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" ./trunk/readme.txt
-
-            - name: Download Changelog Artifact
-              uses: actions/download-artifact@v4
-              with:
-                  name: changelog trunk
-                  path: trunk
-
-            - name: Commit the content changes
-              working-directory: ./trunk
-              run: |
-                  svn st | grep '^?' | awk '{print $2}' | xargs -r svn add
-                  svn st | grep '^!' | awk '{print $2}' | xargs -r svn rm
-                  svn commit -m "Committing version $VERSION" \
-                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD" \
-                   --config-option=servers:global:http-timeout=300
-
-            - name: Create the SVN tag
-              working-directory: ./trunk
-              run: |
-                  svn copy "$PLUGIN_REPO_URL/trunk" "$PLUGIN_REPO_URL/tags/$VERSION" -m "Tagging version $VERSION" \
-                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-
-            - name: Update the plugin's stable version
-              working-directory: ./trunk
-              run: |
-                  sed -i "s/Stable tag: ${STABLE_VERSION_REGEX}/Stable tag: ${VERSION}/g" ./readme.txt
-                  svn commit -m "Releasing version $VERSION" \
-                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-
-    upload-tag:
-        name: Publish as tag
-        runs-on: ubuntu-latest
-        environment: wp.org plugin
-        needs: [compute-should-update-trunk, update-changelog]
-        if: |
-            needs.compute-should-update-trunk.outputs.should_update_trunk == 'false' && github.event.release.assets[0]
-        env:
-            PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/blockera'
-            STABLE_VERSION_REGEX: '[0-9]\+\.[0-9]\+\.[0-9]\+\s*'
-            SVN_USERNAME: ${{ secrets.svn_username }}
-            SVN_PASSWORD: ${{ secrets.svn_password }}
-            VERSION: ${{ github.event.release.name }}
-
-        steps:
-            - name: Download and unzip Blockera plugin asset into tags folder
-              env:
-                  PLUGIN_URL: ${{ github.event.release.assets[0].browser_download_url }}
-              run: |
-                  # do the magic here
-                  curl -L -o blockera.zip $PLUGIN_URL
-                  unzip blockera.zip -d "$VERSION"
-                  rm blockera.zip
-
-            - name: Replace the stable tag placeholder with the existing stable tag on the SVN repository
-              env:
-                  STABLE_TAG_PLACEHOLDER: 'Stable tag: V\.V\.V'
-              run: |
-                  sed -i "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" "$VERSION/readme.txt"
-
-            - name: Download Changelog Artifact
-              uses: actions/download-artifact@v4
-              with:
-                  name: changelog trunk
-                  path: ${{ github.event.release.name }}
-
-            - name: Add the new version directory and commit changes to the SVN repository
-              run: |
-                  svn import "$VERSION" "$PLUGIN_REPO_URL/tags/$VERSION" -m "Committing version $VERSION" \
-                  --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD" \
-                  --config-option=servers:global:http-timeout=300
+#    upload:
+#        name: Publish as trunk (and tag)
+#        runs-on: ubuntu-latest
+#        environment: wp.org plugin
+#        needs: [compute-should-update-trunk, update-changelog]
+#        if: |
+#            needs.compute-should-update-trunk.outputs.should_update_trunk == 'true' && github.event.release.assets[0]
+#        env:
+#            PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/blockera'
+#            STABLE_VERSION_REGEX: '[0-9]\+\.[0-9]\+\.[0-9]\+\s*'
+#            SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+#            SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+#            VERSION: ${{ github.event.release.name }}
+#
+#        steps:
+#            - name: Check out Blockera trunk from WP.org plugin repo
+#              run: svn checkout "$PLUGIN_REPO_URL/trunk" --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+#
+#            - name: Delete everything
+#              working-directory: ./trunk
+#              run: find . -maxdepth 1 -not -name ".svn" -not -name "." -not -name ".." -exec rm -rf {} +
+#
+#            - name: Download and unzip Blockera plugin asset into trunk folder
+#              env:
+#                  PLUGIN_URL: ${{ github.event.release.assets[0].browser_download_url }}
+#              run: |
+#                  curl -L -o blockera.zip $PLUGIN_URL
+#                  unzip blockera.zip -d trunk
+#                  rm blockera.zip
+#
+#            - name: Replace the stable tag placeholder with the existing stable tag on the SVN repository
+#              env:
+#                  STABLE_TAG_PLACEHOLDER: 'Stable tag: V\.V\.V'
+#              run: |
+#                  sed -i "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" ./trunk/readme.txt
+#
+#            - name: Download Changelog Artifact
+#              uses: actions/download-artifact@v4
+#              with:
+#                  name: changelog trunk
+#                  path: trunk
+#
+#            - name: Commit the content changes
+#              working-directory: ./trunk
+#              run: |
+#                  svn st | grep '^?' | awk '{print $2}' | xargs -r svn add
+#                  svn st | grep '^!' | awk '{print $2}' | xargs -r svn rm
+#                  svn commit -m "Committing version $VERSION" \
+#                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD" \
+#                   --config-option=servers:global:http-timeout=300
+#
+#            - name: Create the SVN tag
+#              working-directory: ./trunk
+#              run: |
+#                  svn copy "$PLUGIN_REPO_URL/trunk" "$PLUGIN_REPO_URL/tags/$VERSION" -m "Tagging version $VERSION" \
+#                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+#
+#            - name: Update the plugin's stable version
+#              working-directory: ./trunk
+#              run: |
+#                  sed -i "s/Stable tag: ${STABLE_VERSION_REGEX}/Stable tag: ${VERSION}/g" ./readme.txt
+#                  svn commit -m "Releasing version $VERSION" \
+#                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
+#
+#    upload-tag:
+#        name: Publish as tag
+#        runs-on: ubuntu-latest
+#        environment: wp.org plugin
+#        needs: [compute-should-update-trunk, update-changelog]
+#        if: |
+#            needs.compute-should-update-trunk.outputs.should_update_trunk == 'false' && github.event.release.assets[0]
+#        env:
+#            PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/blockera'
+#            STABLE_VERSION_REGEX: '[0-9]\+\.[0-9]\+\.[0-9]\+\s*'
+#            SVN_USERNAME: ${{ secrets.svn_username }}
+#            SVN_PASSWORD: ${{ secrets.svn_password }}
+#            VERSION: ${{ github.event.release.name }}
+#
+#        steps:
+#            - name: Download and unzip Blockera plugin asset into tags folder
+#              env:
+#                  PLUGIN_URL: ${{ github.event.release.assets[0].browser_download_url }}
+#              run: |
+#                  # do the magic here
+#                  curl -L -o blockera.zip $PLUGIN_URL
+#                  unzip blockera.zip -d "$VERSION"
+#                  rm blockera.zip
+#
+#            - name: Replace the stable tag placeholder with the existing stable tag on the SVN repository
+#              env:
+#                  STABLE_TAG_PLACEHOLDER: 'Stable tag: V\.V\.V'
+#              run: |
+#                  sed -i "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" "$VERSION/readme.txt"
+#
+#            - name: Download Changelog Artifact
+#              uses: actions/download-artifact@v4
+#              with:
+#                  name: changelog trunk
+#                  path: ${{ github.event.release.name }}
+#
+#            - name: Add the new version directory and commit changes to the SVN repository
+#              run: |
+#                  svn import "$VERSION" "$PLUGIN_REPO_URL/tags/$VERSION" -m "Committing version $VERSION" \
+#                  --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD" \
+#                  --config-option=servers:global:http-timeout=300
