@@ -125,8 +125,8 @@ jobs:
               id: update_packages
               run: |
                   npm run update:changelogs -- --version="${{ steps.get_version.outputs.new_version }}"
-                  changelog=$(cat changelog.txt)
-                  echo "changelog=$changelog" >> $GITHUB_OUTPUT
+                  CHANGELOG=$(cat changelog.txt | awk '{printf "%s\\n", $0}')
+                  echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
                   git add .
                   git commit -m "Update Changelog for ${{ steps.get_version.outputs.new_version }}"
                   echo "has_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
