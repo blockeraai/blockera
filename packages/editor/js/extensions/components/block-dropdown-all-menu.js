@@ -39,7 +39,7 @@ export const BlockDropdownAllMenu = ({
 				return (
 					<MenuGroup label={__('Block Settings', 'blockera')}>
 						<MenuItem
-							data-test={'Blockera Block'}
+							data-test={'advanced-mode-block'}
 							icon={isActive ? check : ''}
 							onClick={() => {
 								setBlockExtensionsStatus(!isActive);
@@ -57,12 +57,12 @@ export const BlockDropdownAllMenu = ({
 									icon="blockera"
 									iconSize="18"
 								/>
-								{'Blockera ' + __('Block', 'blockera')}
+								{__('Advanced Mode', 'blockera')}
 							</Flex>
 						</MenuItem>
 
 						<MenuItem
-							data-test={'Gutenberg Block'}
+							data-test={'basic-mode-block'}
 							icon={isActive ? '' : check}
 							onClick={() => {
 								setBlockExtensionsStatus(!isActive);
@@ -80,7 +80,7 @@ export const BlockDropdownAllMenu = ({
 									icon="wordpress"
 									iconSize="18"
 								/>
-								{__('WordPress Core Block', 'blockera')}
+								{__('Basic Mode', 'blockera')}
 							</Flex>
 						</MenuItem>
 					</MenuGroup>
