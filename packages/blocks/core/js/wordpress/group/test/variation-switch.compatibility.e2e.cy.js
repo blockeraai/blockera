@@ -90,6 +90,22 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
+		cy.getParentContainer('Display')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Flex')
+					.invoke('attr', 'aria-pressed')
+					.should('eq', 'true');
+			});
+
+		cy.getParentContainer('Flex Layout')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Row')
+					.invoke('attr', 'aria-checked')
+					.should('eq', 'true');
+			});
+
 		//
 		// Test 3: Change Variation to `group-stack`
 		//
@@ -115,6 +131,22 @@ describe('Group Block → Variation Switch Compatibility', () => {
 				getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 			);
 		});
+
+		cy.getParentContainer('Display')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Flex')
+					.invoke('attr', 'aria-pressed')
+					.should('eq', 'true');
+			});
+
+		cy.getParentContainer('Flex Layout')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Column')
+					.invoke('attr', 'aria-checked')
+					.should('eq', 'true');
+			});
 
 		//
 		// Test 4: Change Variation to `group-grid`
@@ -143,6 +175,14 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
+		cy.getParentContainer('Display')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Grid')
+					.invoke('attr', 'aria-pressed')
+					.should('eq', 'true');
+			});
+
 		//
 		// Test 5: Change Variation to `group`
 		//
@@ -169,6 +209,18 @@ describe('Group Block → Variation Switch Compatibility', () => {
 				getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 			);
 		});
+
+		cy.getParentContainer('Display')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Grid')
+					.invoke('attr', 'aria-pressed')
+					.should('eq', false);
+
+				cy.getByAriaLabel('Flex')
+					.invoke('attr', 'aria-pressed')
+					.should('eq', false);
+			});
 	});
 
 	it('Variation Switch (`To WP` Compatibility)', () => {
