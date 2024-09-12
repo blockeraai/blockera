@@ -411,6 +411,38 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_append_css_selector_suffix' ) ) {
+
+	/**
+	 * Concat block css selector with suffix.
+	 *
+	 * @param string $selector The css selector.
+	 * @param string $suffix   The suffix string to concat with recieved selector.
+	 *
+	 * @return string the css selector.
+	 */
+	function blockera_append_css_selector_suffix( string $selector, string $suffix ): string {
+
+		if ( empty( trim( $selector ) ) || empty( trim( $suffix ) ) ) {
+
+			return $selector;
+		}
+
+		$selectors = explode( ',', $selector );
+
+		return implode(
+			', ',
+			array_map(
+				function ( string $item ) use ( $suffix ): string {
+
+					return trim( $item ) . $suffix;
+				},
+				$selectors
+			)
+		);
+	}
+}
+
 if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 
 	/**

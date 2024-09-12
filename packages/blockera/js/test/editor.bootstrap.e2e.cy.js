@@ -1,13 +1,7 @@
 /**
  * Blockera dependencies
  */
-import {
-	createPost,
-	getBlockType,
-	addBlockToPost,
-	getWPDataObject,
-	getWindowProperty,
-} from '@blockera/dev-cypress/js/helpers';
+import { createPost } from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Blockera editor bootstrap scenarios.
@@ -19,14 +13,19 @@ describe('Blockera editor bootstrapper', () => {
 	it('should available store apis on blockera editor global variable', () => {
 		createPost();
 
-		getWindowProperty('blockeraEditor_1_0_0').then((data) => {
+		cy.window().then((win) => {
+			const blockeraEditorKey = Object.keys(win).filter((key) =>
+				/blockeraEditor_/.test(key)
+			);
+			const blockeraEditor = win[blockeraEditorKey];
+
 			expect(true).to.eq(
-				data.editor.hasOwnProperty(
+				blockeraEditor.editor.hasOwnProperty(
 					'unstableRegistrationBlockTypeAttributes'
 				)
 			);
 			expect(true).to.eq(
-				data.editor.hasOwnProperty(
+				blockeraEditor.editor.hasOwnProperty(
 					'unstableRegistrationSharedBlockAttributes'
 				)
 			);
