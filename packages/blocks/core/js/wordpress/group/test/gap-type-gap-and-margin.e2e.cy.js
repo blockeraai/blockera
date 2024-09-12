@@ -505,7 +505,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 
 			cy.get('.wp-block-group.blockera-block')
-				.eq(0)
+				.eq(1)
 				.should('have.css', 'gap', '200px');
 
 			//
