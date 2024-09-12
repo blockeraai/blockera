@@ -329,6 +329,78 @@ class TestHelpers extends \WP_UnitTestCase {
 		$this->assertEquals( '.my-root.my-class', $result );
 	}
 
+	/**
+	 * Test single selector with a suffix.
+	 */
+	public function testSingleSelectorWithSuffix() {
+
+		$selector = '.my-class';
+		$suffix   = '-active';
+		$expected = '.my-class-active';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test multiple selectors with a suffix.
+	 */
+	public function testMultipleSelectorsWithSuffix() {
+
+		$selector = '.my-class, #my-id';
+		$suffix   = '-hover';
+		$expected = '.my-class-hover, #my-id-hover';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test empty selector.
+	 */
+	public function testItShouldAppendSuffixIntoEmptySelector() {
+
+		$selector = '';
+		$suffix   = '-test';
+		$expected = '';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test empty suffix.
+	 */
+	public function testEmptySuffix() {
+
+		$selector = '.my-class, #my-id';
+		$suffix   = '';
+		$expected = '.my-class, #my-id';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test with whitespace in selectors.
+	 */
+	public function testWhitespaceInSelectors() {
+
+		$selector = '.my-class ,    #my-id';
+		$suffix   = '-modified';
+		$expected = '.my-class-modified, #my-id-modified';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test complex selectors with a suffix.
+	 */
+	public function testComplexSelectorsWithSuffix() {
+
+		$selector = '.my-class > .inner-class, #my-id + .another-class';
+		$suffix   = '-active';
+		$expected = '.my-class > .inner-class-active, #my-id + .another-class-active';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
 	public function tear_down() {
 
 		// Removes test block types registered by test cases.
