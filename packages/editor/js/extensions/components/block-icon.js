@@ -32,6 +32,9 @@ export const BlockIcon = ({
 				className={'blockera-block-icon blockera-main-icon'}
 				data-test={ariaLabel}
 				aria-label={ariaLabel}
+				style={{
+					display: 'none',
+				}}
 			/>
 
 			<Icon
@@ -41,6 +44,9 @@ export const BlockIcon = ({
 				className={'blockera-block-icon blockera-cube-icon'}
 				data-test={ariaLabel}
 				aria-label={ariaLabel}
+				style={{
+					display: 'none',
+				}}
 			/>
 
 			<WPBlockIcon icon={defaultIcon} />
