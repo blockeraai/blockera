@@ -591,7 +591,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								setSettings={handleOnChangeSettings}
 							/>
 
-							{directParentBlock?.innerBlocks.length &&
+							{directParentBlock?.innerBlocks?.length > 0 &&
 								directParentBlock?.attributes
 									.blockeraDisplay === 'flex' && (
 									<FlexChildExtension

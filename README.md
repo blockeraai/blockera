@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Blockera</h1>
-<h3 align="center">The Advanced Mode for Gutenberg</h3>
+<h3 align="center">The Advanced Mode for Block Editor</h3>
 
 <p align="center">
 	Transform WordPress Block Editor into a Powerful Page Builder with Blockera

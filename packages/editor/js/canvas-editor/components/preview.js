@@ -12,7 +12,7 @@ import { useEffect } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { Tooltip } from '@blockera/controls';
+import { Tooltip, ConditionalWrapper } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -105,7 +105,17 @@ export const Preview = (): MixedElement => {
 	}
 
 	return (
-		<Tooltip text={__('Preview in new tab', 'blockera')} placement="bottom">
+		<ConditionalWrapper
+			wrapper={(children) => (
+				<Tooltip
+					text={__('Preview in new tab', 'blockera')}
+					placement="bottom"
+				>
+					{children}
+				</Tooltip>
+			)}
+			condition={isSavablePost}
+		>
 			<div
 				className={controlInnerClassNames(
 					'canvas-editor-preview-link',
@@ -116,6 +126,6 @@ export const Preview = (): MixedElement => {
 			>
 				{previewButton}
 			</div>
-		</Tooltip>
+		</ConditionalWrapper>
 	);
 };

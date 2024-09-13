@@ -7,22 +7,30 @@ export function textAlignFromWPCompatibility({
 	attributes: Object,
 	blockId: string,
 }): Object {
-	if (attributes?.blockeraTextAlign !== '') {
-		return attributes;
+	let wpAlignAttrId = 'textAlign';
+	if (blockId === 'core/paragraph') {
+		wpAlignAttrId = 'align';
 	}
 
-	switch (blockId) {
-		case 'core/paragraph':
-			if (attributes?.align !== undefined) {
-				attributes.blockeraTextAlign = attributes?.align;
-			}
-			break;
+	// For detecting the text align changer from block editor controls
+	// we have to validate and make sure the value is correct and should be updated
+	if (
+		attributes[wpAlignAttrId] !== undefined &&
+		attributes?.blockeraTextAlign !== attributes[wpAlignAttrId]
+	) {
+		switch (blockId) {
+			case 'core/paragraph':
+				if (attributes[wpAlignAttrId] !== undefined) {
+					attributes.blockeraTextAlign = attributes[wpAlignAttrId];
+				}
+				break;
 
-		default:
-			if (attributes?.textAlign !== undefined) {
-				attributes.blockeraTextAlign = attributes?.textAlign;
-			}
-			break;
+			default:
+				if (attributes[wpAlignAttrId] !== undefined) {
+					attributes.blockeraTextAlign = attributes?.textAlign;
+				}
+				break;
+		}
 	}
 
 	return attributes;
