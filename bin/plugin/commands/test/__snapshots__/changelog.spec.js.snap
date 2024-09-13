@@ -1,7 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getChangelog verify that the changelog is properly formatted 1`] = `
-"## Changelog
+"<details>
+<summary>
+
+## Development Changelog
+
+</summary>
 
 ### Bug Fixes
 
@@ -41,7 +46,9 @@ exports[`getChangelog verify that the changelog is properly formatted 1`] = `
 - refactor: Remove redundant utilities. ([135](https://github.com/blockeraai/blockera/pull/135))
 
 
-"
+
+
+</details>"
 `;
 
 exports[`getContributorList verify that the contributors list is properly formatted 1`] = `

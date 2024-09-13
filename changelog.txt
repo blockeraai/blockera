@@ -2,8 +2,6 @@
 
 = 0.9.2 =
 
-## Changelog
-
 -   Tweak: Optimized the style generator for faster processing.
 -   Tweak: General improvements across various functionalities.
 -   Tweak: Updated breakpoint handling to ensure full compatibility with WordPress 6.5.2 and later versions.
@@ -13,21 +11,15 @@
 
 = 0.9.1 =
 
-## Changelog
-
 -   Fix: Breakpoints not showing in Site Editor.
 
 
 = 0.9.0 =
 
-## Changelog
-
 -   Public beta 1 release.
 
 
 = 0.8 =
-
-## Changelog
 
 -   Tweak: Add more E2E, component, and PHP unit tests.
 -   Tweak: Design improvements.
@@ -40,8 +32,6 @@
 
 
 = 0.7 =
-
-## Changelog
 
 -   Tweak: PHP requirement decreased to PHP v7.4.
 -   Tweak: WP requirement decreased to v6.4.5.
@@ -63,8 +53,6 @@
 
 = 0.6 =
 
-## Changelog
-
 -   New:  Experimental feature infrastructure is being developed to enable the shipment of
 		  experimental features in upcoming updates.
 
@@ -82,8 +70,6 @@
 
 = 0.5 =
 
-## Changelog
-
 -   Tweak: 🔥 Reduce the final plugin package file size from 4MB to 1.4MB.
 -   Tweak: Refactor, redesign, and compress all icons.
 -   Tweak: Enhance the design.
@@ -98,8 +84,6 @@
 
 = 0.4 =
 
-## Changelog
-
 -   Tweak: 🔥 Reduce 50% of the final package.
 -   Tweak: Improve build script.
 -   Tweak: Add more E2E tests.
@@ -112,8 +96,6 @@
 
 
 = 0.3 =
-
-## Changelog
 
 -   New: add Github repository link to readme.txt
 -   New: add composer.json to build zip because the WP.org review team asked
@@ -131,8 +113,6 @@
 
 = 0.2.2 =
 
-## Changelog
-
 -   New: Indicator for current responsive breakpoint.
 
 -   Tweak: Blocks and admin panel design improvement.
@@ -146,8 +126,6 @@
 
 
 = 0.2.1 =
-
-## Changelog
 
 -   New: Option to disable Blockera power up for user roles (Pro Version).
 -   New: Advanced option panel reset functionality.
@@ -164,8 +142,6 @@
 
 = 0.2 =
 
-## Changelog
-
 -   New: Settings panel to change Blockera behaviors.
 -   New: Block Manager panel to enable/disable Blockera blocks power up on blocks.
 -   New: Setting for disabling Pro version hints in setting panel.
@@ -175,14 +151,10 @@
 
 = 0.1.1 =
 
-## Changelog
-
 -   Tweak: Smaller build version size (Assets and packages size).
 -   Tweak: Block inspector control compatibility.
 
 
 = 0.1 =
-
-## Changelog
 
 -   Initial version for WP.org review

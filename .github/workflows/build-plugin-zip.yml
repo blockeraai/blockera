@@ -118,6 +118,19 @@ jobs:
                   git fetch --depth=1 origin "${{ steps.get_version.outputs.release_branch }}"
                   git checkout "${{ steps.get_version.outputs.release_branch }}"
 
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Update the changelog of packages
+              id: update_packages
+              run: |
+                  npm run update:changelogs -- --version="${{ steps.get_version.outputs.new_version }}"
+                  CHANGELOG=$(cat changelog.txt | awk '{printf "%s\\n", $0}')
+                  echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
+                  git add .
+                  git commit -m "Update Changelog for ${{ steps.get_version.outputs.new_version }}"
+                  echo "has_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
+
             - name: Update plugin version
               env:
                   VERSION: ${{ steps.get_version.outputs.new_version }}
@@ -145,6 +158,7 @@ jobs:
                   git pull
                   MASTER_VERSION=$(jq --raw-output '.version' package.json)
                   if [[ ${{ steps.get_version.outputs.old_version }} == "$MASTER_VERSION" ]]; then
+                    git cherry-pick "${{ steps.update_packages.outputs.has_commit }}"
                     git cherry-pick "${{ steps.get_version.outputs.release_branch }}"
                     git push
                     echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
@@ -194,8 +208,8 @@ jobs:
               run: |
                   IFS='.' read -r -a VERSION_ARRAY <<< "${VERSION}"
                   MILESTONE="Blockera ${VERSION_ARRAY[0]}.${VERSION_ARRAY[1]}"
-                  npm run update:changelogs
-                  npm run other:changelog -- --milestone="$MILESTONE" --unreleased > release-notes.txt
+                  echo ${{needs.update_packages.outputs.changelog}} >> release-note.txt
+                  npm run other:changelog -- --milestone="$MILESTONE" --unreleased --file="release-note.txt" --version="${{ needs.bump-version.outputs.new_version }}" > release-notes.txt
                   sed -ie '1,6d' release-notes.txt
                   if [[ ${{ needs.bump-version.outputs.new_version }} != *"rc"* ]]; then
                     # Include previous RCs' release notes, if any

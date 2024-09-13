@@ -171,8 +171,6 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				break;
 		}
 
-		$this->setCss( $declaration );
-
 		/**
 		 * If gap type is both and the current display is flex or grid
 		 * then we use gap property to but still WP is creating gap with `margin-block-start` and we have to remove it.
@@ -186,6 +184,10 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 					'margin-block-start' => '0',
 				]
 			);
+
+		} else {
+
+			$this->setCss( $declaration );
 		}
 
 		return $this->css;
@@ -254,7 +256,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 			parent::setSelector( 'margin-block-start' );
 
-			$this->selector .= ' > * + *';
+			$this->selector = blockera_append_css_selector_suffix( $this->selector, ' > * + *' );
 
 			return;
 		}

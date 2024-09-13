@@ -78,85 +78,11 @@ jobs:
                   RELEASE_BRANCH="release/${VERSION_ARRAY[0]}.${VERSION_ARRAY[1]}"
                   echo "release_branch=${RELEASE_BRANCH}" >> $GITHUB_OUTPUT
 
-    update-changelog:
-        name: Update Changelog on ${{ matrix.branch }} branch
-        runs-on: ubuntu-latest
-        if: |
-            github.event.release.assets[0]
-        needs: get-release-branch
-        env:
-            TAG: ${{ github.event.release.tag_name }}
-        strategy:
-            matrix:
-                include:
-                    - branch: trunk
-                      label: trunk
-                    - branch: ${{ needs.get-release-branch.outputs.release_branch }}
-                      label: release
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-              with:
-                  ref: ${{ matrix.branch }}
-                  token: ${{ secrets.BLOCKERA_TOKEN }}
-                  show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
-
-            - name: Update the Changelog to include the release notes
-              run: |
-                  # First, determine where to insert the new Changelog entry.
-                  SERIES="${RELEASE_BRANCH#release/}"
-                  SERIES_REGEX="=\s${SERIES}\.[0-9]+\s="
-                  CUT_MARKS=$( grep -nP -m 1 "${SERIES_REGEX}" changelog.txt | cut -d: -f1 )
-                  if [[ -z "${CUT_MARKS}" ]]; then
-                    CHANGELOG_REGEX="=\s[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?\s="
-                    RC_REGEX="=\s${TAG#v}(-rc\.[0-9]+)?\s="
-                    CUT_MARKS=$( awk "/${RC_REGEX}/ {print NR; next}; /${CHANGELOG_REGEX}/ {print NR; exit}" changelog.txt )
-                  fi
-                  BEFORE=$( echo "$CUT_MARKS" | head -n 1 )
-                  AFTER=$( echo "$CUT_MARKS" | tail -n 1 )
-                  # Okay, we have all we need to build the new Changelog.
-                  head -n $(( "${BEFORE}" - 1 )) changelog.txt > new_changelog.txt
-                  printf '= %s =\n\n' "${TAG#v}" >> new_changelog.txt
-                  # Need to use a heredoc in order to preserve special characters.
-                  cat <<- "EOF" > release_notes.txt
-                  ${{ github.event.release.body }}
-                  EOF
-                  # Normalize empty lines: Trim them from beginning and end of file...
-                  awk 'NF {p=1} p' <<< "$(< release_notes.txt)" >> new_changelog.txt
-                  # ...then add two empty lines at the end.
-                  printf '\n\n' >> new_changelog.txt
-                  tail -n +"${AFTER}" changelog.txt >> new_changelog.txt
-                  mv new_changelog.txt changelog.txt
-
-            - name: Configure git user name and email
-              run: |
-                  git config user.name "blockerabot"
-                  git config user.email blockeraai+githubbot@gmail.com
-
-            - name: Commit the Changelog update
-              run: |
-                  git add changelog.txt
-                  # Remove files that are not meant to be committed
-                  # ie. release_notes.txt created on the previous step.
-                  git clean -fd
-                  # Only attempt to commit changelog if it has been modified.
-                  if ! git diff-index --quiet HEAD --; then
-                    git commit -m "Update Changelog for ${TAG#v}"
-                    git push --set-upstream origin "${{ matrix.branch }}"
-                  fi
-
-            - name: Upload Changelog artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: changelog ${{ matrix.label }}
-                  path: ./changelog.txt
-
     upload:
         name: Publish as trunk (and tag)
         runs-on: ubuntu-latest
         environment: wp.org plugin
-        needs: [compute-should-update-trunk, update-changelog]
+        needs: [compute-should-update-trunk]
         if: |
             needs.compute-should-update-trunk.outputs.should_update_trunk == 'true' && github.event.release.assets[0]
         env:
@@ -220,7 +146,7 @@ jobs:
         name: Publish as tag
         runs-on: ubuntu-latest
         environment: wp.org plugin
-        needs: [compute-should-update-trunk, update-changelog]
+        needs: [compute-should-update-trunk]
         if: |
             needs.compute-should-update-trunk.outputs.should_update_trunk == 'false' && github.event.release.assets[0]
         env:
