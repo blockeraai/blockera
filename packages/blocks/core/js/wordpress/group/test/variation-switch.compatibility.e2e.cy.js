@@ -215,11 +215,11 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			.within(() => {
 				cy.getByAriaLabel('Grid')
 					.invoke('attr', 'aria-pressed')
-					.should('eq', false);
+					.should('eq', 'false');
 
 				cy.getByAriaLabel('Flex')
 					.invoke('attr', 'aria-pressed')
-					.should('eq', false);
+					.should('eq', 'false');
 			});
 	});
 
