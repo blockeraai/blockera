@@ -129,6 +129,22 @@ export const LayoutStyles = ({
 			});
 		}
 
+		let changeFlexInside = false;
+
+		if (
+			_attributes?.blockeraFlexLayout?.direction === 'column' &&
+			_attributes?.blockeraFlexLayout?.alignItems &&
+			_attributes?.blockeraFlexLayout?.justifyContent &&
+			['flex-start', 'center', 'flex-end'].includes(
+				_attributes?.blockeraFlexLayout?.alignItems
+			) &&
+			['flex-start', 'center', 'flex-end'].includes(
+				_attributes?.blockeraFlexLayout?.justifyContent
+			)
+		) {
+			changeFlexInside = true;
+		}
+
 		if (_attributes?.blockeraFlexLayout?.alignItems) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
@@ -139,10 +155,9 @@ export const LayoutStyles = ({
 				),
 			});
 
-			const alignProp: string =
-				_attributes?.blockeraFlexLayout?.direction === 'column'
-					? 'justify-content'
-					: 'align-items';
+			const alignProp: string = changeFlexInside
+				? 'justify-content'
+				: 'align-items';
 
 			styleGroup.push({
 				selector: pickedSelector,
@@ -174,10 +189,9 @@ export const LayoutStyles = ({
 				),
 			});
 
-			const justifyProp: string =
-				_attributes?.blockeraFlexLayout?.direction === 'column'
-					? 'align-items'
-					: 'justify-content';
+			const justifyProp: string = changeFlexInside
+				? 'align-items'
+				: 'justify-content';
 
 			styleGroup.push({
 				selector: pickedSelector,
