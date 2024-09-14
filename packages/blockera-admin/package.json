@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/blockera-admin",
-	"version": "1.0.0",
+	"version": "0.9.2",
 	"description": "The blockera admin menus on WordPress admin dashboard.",
 	"author": "The Blockera Contributors",
 	"license": "ISC",

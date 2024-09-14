@@ -17,6 +17,9 @@ const { log, formats } = require('../lib/logger');
 const config = require('../config');
 // @ts-ignore
 const manifest = require('../../../package.json');
+const fs = require('fs');
+const glob = require('fast-glob');
+const path = require('path');
 
 const UNKNOWN_FEATURE_FALLBACK_NAME = 'Uncategorized';
 
@@ -120,6 +123,8 @@ const GROUP_TITLE_ORDER = [
 	'Features',
 	'Enhancements',
 	'New APIs',
+	'New Features',
+	'Improvements',
 	'Bug Fixes',
 	`Accessibility`,
 	'Performance',
@@ -137,6 +142,8 @@ const GROUP_TITLE_ORDER = [
  * @type {Map<RegExp,string>}
  */
 const TITLE_TYPE_PATTERNS = new Map([
+	[/feat?(:|\/ )?/i, 'New Features'],
+	[/improve?\s*ment(s)?(:|\/ )?/i, 'Improvements'],
 	[/^(\w+:)?(bug)?\s*fix(es)?(:|\/ )?/i, 'Bug Fixes'],
 ]);
 
@@ -475,6 +482,7 @@ const createOmitByLabelPrefix = (prefixes) => (text, issue) =>
 	)
 		? undefined
 		: text;
+
 /**
  * Given an issue title and issue, returns the title with redundant grouping
  * type details removed. The prefix is redundant since it would already be clear
@@ -692,14 +700,144 @@ async function fetchAllPullRequests(octokit, settings) {
 }
 
 /**
- * Formats the changelog string for a given list of pull requests.
+ * Combines repeated sections in a changelog string.
+ *
+ * @param {string} changelog the changelog text.
+ *
+ * @returns {string} the combined changelog same sections.
+ */
+function combineChangelogSections(changelog) {
+	// Split the changelog into lines
+	const lines = changelog.split('\n');
+
+	// Initialize an object to hold each section's content
+	const sections = {};
+	let currentSection = '';
+
+	// Loop through each line
+	lines.forEach((line) => {
+		// Check if the line starts with a section heading (e.g., ### Bug Fixes)
+		const sectionMatch = line.match(/^### (.+)$/);
+		if (sectionMatch) {
+			currentSection = sectionMatch[1];
+			// Initialize the section in the object if it doesn't exist
+			if (!sections[currentSection]) {
+				sections[currentSection] = [];
+			}
+		} else if (currentSection) {
+			// Add the line to the current section
+			sections[currentSection].push(line);
+		}
+	});
+
+	// Define the priority order for sections
+	const priorityOrder = ['New Features', 'Improvements', 'Bug Fixes'];
+
+	// Reconstruct the changelog by priority
+	let combinedChangelog = '';
+
+	// Add sections based on priority first
+	priorityOrder.forEach((section) => {
+		if (sections[section]) {
+			combinedChangelog += `\n### ${section}\n`;
+			combinedChangelog += sections[section]
+				.filter((line) => line.trim() !== '')
+				.join('\n');
+			combinedChangelog += '\n';
+		}
+	});
+
+	// Add any other sections that were not prioritized
+	Object.keys(sections).forEach((section) => {
+		if (!priorityOrder.includes(section)) {
+			combinedChangelog += `\n### ${section}\n`;
+			combinedChangelog += sections[section]
+				.filter((line) => line.trim() !== '')
+				.join('\n');
+			combinedChangelog += '\n';
+		}
+	});
+
+	return combinedChangelog.trim();
+}
+
+/**
+ * Formats the changelog string for a given list of packages.
+ *
+ * @param {string[]} changelogPath the changelog path.
+ * @param {string} version The version number if it has value to update changelog.txt!
+ *
+ * @return {string} The formatted changelog string.
+ */
+function getMainChangelog(changelogPath, version = '') {
+	let start =
+		'<details>\n' + '<summary>\n\n' + '## Changelog\n\n' + '</summary>\n\n';
+	let changelog = '';
+	const end = '\n\n</details>';
+
+	// Read the changelog file
+	const content = fs.readFileSync(changelogPath, 'utf8');
+
+	// Remove redundant headings or descriptions of changelog.
+	changelog = content
+		.replace(/== Changelog ==/g, '')
+		.replace(/=\s[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?\s=/g, '')
+		.trim();
+
+	return start + changelog + end;
+}
+
+/**
+ * Formats the changelog string for a given list of packages.
+ *
+ * @param {string[]} changelogs List of pull requests.
+ * @param {string} version The version number to update changelog.txt!
+ *
+ * @return {string} The formatted changelog string.
+ */
+function updateChangelog(changelogs, version) {
+	const start = '== Changelog ==\n\n= ' + version.trim() + ' =\n\n';
+	let changelog = '';
+	const end =
+		'\n\n## More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
+
+	for (const changelogPath of changelogs) {
+		// Read the changelog file
+		const content = fs.readFileSync(changelogPath, 'utf8');
+
+		// Use a regular expression to extract the ## Unreleased section
+		const unreleasedSection = content.match(
+			/## Unreleased[\s\S]+?(?=\n## |\n$)/
+		);
+
+		if (unreleasedSection) {
+			changelog += unreleasedSection[0].replace(/##\sUnreleased/g, '');
+		}
+	}
+
+	// Combine same sections.
+	changelog = combineChangelogSections(changelog);
+
+	// Update the changelog.txt file to include combined changes of all packages.
+	fs.writeFileSync(
+		path.resolve(process.cwd(), 'changelog.txt'),
+		start + changelog + end
+	);
+}
+
+/**
+ * Formats the development changelog string for a given list of pull requests.
  *
  * @param {IssuesListForRepoResponseItem[]} pullRequests List of pull requests.
  *
  * @return {string} The formatted changelog string.
  */
-function getChangelog(pullRequests) {
-	let changelog = '## Changelog\n\n';
+function getDevelopmentChangelog(pullRequests) {
+	let changelog =
+		'<details>\n' +
+		'<summary>\n\n' +
+		'## Development Changelog\n\n' +
+		'</summary>\n\n';
 
 	const groupedPullRequests = skipCreatedByBots(pullRequests).reduce(
 		(
@@ -784,7 +922,7 @@ function getChangelog(pullRequests) {
 		changelog += '\n';
 	}
 
-	return changelog;
+	return changelog + '\n\n</details>';
 }
 
 /**
@@ -984,12 +1122,16 @@ async function createChangelog(settings) {
 	try {
 		const pullRequests = await fetchAllPullRequests(octokit, settings);
 
-		const changelog = getChangelog(pullRequests);
+		const developmentChangelog = getDevelopmentChangelog(pullRequests);
 		const contributorProps = getContributorProps(pullRequests);
 		const contributorsList = getContributorsList(pullRequests);
 
 		releaselog = releaselog.concat(
-			changelog,
+			getMainChangelog(
+				path.resolve(process.cwd(), settings.file),
+				settings.version
+			),
+			developmentChangelog,
 			contributorProps,
 			contributorsList
 		);
@@ -1024,6 +1166,8 @@ async function getReleaseChangelog(options) {
 				  })
 				: options.milestone,
 		unreleased: options.unreleased,
+		file: options?.file || '',
+		version: options?.version || '',
 	});
 }
 
@@ -1044,7 +1188,8 @@ async function getReleaseChangelog(options) {
 	getFormattedItemDescription,
 	getContributorProps,
 	getContributorsList,
-	getChangelog,
+	updateChangelog,
+	getDevelopmentChangelog,
 	getUniqueByUsername,
 	skipCreatedByBots,
 	mapLabelsToFeatures,

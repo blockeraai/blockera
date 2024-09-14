@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Blockera
  * Plugin URI: https://blockera.ai/blockera-page-builder/
- * Description: The Advanced Mode for Gutenberg
+ * Description: The Advanced Mode for Block Editor
  * Requires at least: 6.6
  * Tested up to: 6.6
  * Requires PHP: 7.4

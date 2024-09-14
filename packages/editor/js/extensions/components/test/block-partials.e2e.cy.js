@@ -41,7 +41,7 @@ describe('Block Partials Testing ...', () => {
 		cy.get('.components-popover')
 			.last()
 			.within(() => {
-				cy.getByDataTest('Gutenberg Block').click();
+				cy.getByDataTest('basic-mode-block').click();
 			});
 		cy.getByAriaLabel('Styles').click();
 

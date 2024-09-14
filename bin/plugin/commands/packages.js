@@ -26,6 +26,7 @@ const {
 } = require('./common');
 const { join } = require('path');
 const pluginConfig = require('../config');
+const { updateChangelog } = require('./changelog');
 
 /**
  * Release type names.
@@ -108,17 +109,13 @@ async function checkoutNpmReleaseBranch({
  * @return {?string}   The optional commit's hash when changelog files updated.
  */
 async function updatePackages(config) {
-	const {
-		abortMessage,
-		gitWorkingDirectoryPath,
-		interactive,
-		minimumVersionBump,
-		releaseType,
-	} = config;
+	const { minimumVersionBump, releaseType, version } = config;
 
 	const changelogFiles = await glob(
 		path.resolve(process.cwd(), 'packages/*/CHANGELOG.md')
 	);
+
+	updateChangelog(changelogFiles, version);
 
 	const processedPackages = await Promise.all(
 		changelogFiles.map(async (changelogPath) => {
@@ -152,16 +149,31 @@ async function updatePackages(config) {
 				'CHANGELOG.md',
 				'package.json'
 			);
-			const { version } = readJSONFile(packageJSONPath);
+			const composerJSONPath = changelogPath.replace(
+				'CHANGELOG.md',
+				'composer.json'
+			);
+
+			let jsonData;
+
+			if (fs.existsSync(packageJSONPath)) {
+				jsonData = readJSONFile(packageJSONPath);
+			} else {
+				jsonData = readJSONFile(composerJSONPath);
+			}
+
+			const { version } = jsonData;
+
 			const nextVersion =
 				versionBump !== null ? semverInc(version, versionBump) : null;
 
 			return {
+				version,
+				nextVersion,
+				packageName,
 				changelogPath,
 				packageJSONPath,
-				packageName,
-				nextVersion,
-				version,
+				composerJSONPath,
 			};
 		})
 	);
@@ -184,11 +196,12 @@ async function updatePackages(config) {
 	await Promise.all(
 		packagesToUpdate.map(
 			async ({
+				version,
+				nextVersion,
+				packageName,
 				changelogPath,
 				packageJSONPath,
-				packageName,
-				nextVersion,
-				version,
+				composerJSONPath,
 			}) => {
 				// Update changelog.
 				const content = fs.readFileSync(changelogPath, 'utf8');
@@ -204,16 +217,33 @@ async function updatePackages(config) {
 					)
 				);
 
-				// Update package.json.
-				const packageJson = readJSONFile(packageJSONPath);
-				const newPackageJson = {
-					...packageJson,
-					version: nextVersion + '-prerelease',
-				};
-				fs.writeFileSync(
-					packageJSONPath,
-					JSON.stringify(newPackageJson, null, '\t') + '\n'
-				);
+				if (fs.existsSync(packageJSONPath)) {
+					// Update package.json.
+					const packageJson = readJSONFile(packageJSONPath);
+					const newPackageJson = {
+						...packageJson,
+						version: nextVersion,
+					};
+
+					fs.writeFileSync(
+						packageJSONPath,
+						JSON.stringify(newPackageJson, null, '\t') + '\n'
+					);
+				}
+
+				if (fs.existsSync(composerJSONPath)) {
+					// Update composer.json
+					const composerJson = readJSONFile(composerJSONPath);
+					const newComposerJson = {
+						...composerJson,
+						version: nextVersion,
+					};
+
+					fs.writeFileSync(
+						composerJSONPath,
+						JSON.stringify(newComposerJson, null, '\t') + '\n'
+					);
+				}
 
 				log(
 					`   - ${packageName}: ${version} -> ${
@@ -225,26 +255,6 @@ async function updatePackages(config) {
 			}
 		)
 	);
-
-	if (interactive) {
-		await askForConfirmation(
-			`All corresponding files were updated. Commit the changes?`,
-			true,
-			abortMessage
-		);
-	}
-
-	const { commit: commitHash } = await SimpleGit(gitWorkingDirectoryPath)
-		.add(['./*'])
-		.commit('docs: create release changelogs');
-
-	if (commitHash) {
-		await runPushGitChangesStep(config);
-	}
-
-	log('>> Changelog files have been updated successfully.');
-
-	return commitHash;
 }
 
 /**

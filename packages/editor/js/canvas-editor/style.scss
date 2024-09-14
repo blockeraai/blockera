@@ -60,7 +60,9 @@
 .blockera-control-canvas-editor-preview-link {
 	display: flex;
 	align-items: center;
+	transition: var(--blockera-controls-transition);
 
+	> button,
 	> a {
 		padding: 0;
     	height: 26px !important;
@@ -72,6 +74,10 @@
 			color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) !important;
 			background: none !important;
 		}
+	}
+
+	&.is-disabled-preview-button {
+		opacity: 0.3;
 	}
 }
 

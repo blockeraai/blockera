@@ -9,6 +9,7 @@
 - Prevent of generated duplicate css props
 - Background feature CSS generator issues.
 - Some PHP warnings and errors.
+- Fix: editor bootstrapper e2e test problems.
 
 ### New Features
 
