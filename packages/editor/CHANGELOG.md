@@ -19,3 +19,6 @@
 ### Improvements
 
 - Design of post preview link in header improved.
+
+### Automated Tests:
+- Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
