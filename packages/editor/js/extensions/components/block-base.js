@@ -110,29 +110,22 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentInnerBlockState,
 		} = useExtensionsStore({ name, clientId });
 
-		const {
-			selectedBlock,
-			activeVariation,
-			availableAttributes,
-			isActiveBlockExtensions,
-		} = useSelect((select) => {
-			const { isActiveBlockExtensions, getActiveBlockVariation } = select(
-				'blockera/extensions'
-			);
+		const { availableAttributes, isActiveBlockExtensions } = useSelect(
+			(select) => {
+				const { isActiveBlockExtensions, getActiveBlockVariation } =
+					select('blockera/extensions');
 
-			const { getBlockType } = select('core/blocks');
-			const { getSelectedBlock } = select('core/block-editor');
+				const { getBlockType } = select('core/blocks');
+				const { getSelectedBlock } = select('core/block-editor');
 
-			return {
-				activeVariation: getActiveBlockVariation(),
-				selectedBlock: (getSelectedBlock() || {})?.name,
-				isActiveBlockExtensions: isActiveBlockExtensions(),
-				availableAttributes: getBlockType(name)?.attributes,
-			};
-		});
-
-		const isSelectedBlock = (name: string): boolean =>
-			selectedBlock === name;
+				return {
+					activeVariation: getActiveBlockVariation(),
+					selectedBlock: (getSelectedBlock() || {})?.name,
+					isActiveBlockExtensions: isActiveBlockExtensions(),
+					availableAttributes: getBlockType(name)?.attributes,
+				};
+			}
+		);
 
 		const [isActive, setActive] = useState(isActiveBlockExtensions);
 
@@ -140,7 +133,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			changeExtensionCurrentBlock: setCurrentBlock,
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
-			setExtensionsActiveBlockVariation: setActiveBlockVariation,
 		} = dispatch('blockera/extensions') || {};
 
 		const { getDeviceType } = select('blockera/editor');
@@ -286,37 +278,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			},
 			[currentAttributes]
 		);
-
-		// While change active block variation, we should clean up blockeraCompatId because we need to running compatibilities again.
-		useEffect(() => {
-			// We should not try to clean up blockeraCompatId while not selected block because still not executing compatibility on current block.
-			if (!isSelectedBlock(name)) {
-				return;
-			}
-
-			// Create mutable constant to prevent directly change to immutable state constant.
-			let filteredAttributes = { ...attributes };
-
-			if (!isEquals(activeVariation, activeBlockVariation)) {
-				setActiveBlockVariation(activeBlockVariation);
-
-				filteredAttributes = {
-					...attributes,
-					blockeraCompatId: '',
-				};
-
-				// Prevent redundant set state!
-				if (isEquals(attributes, filteredAttributes)) {
-					return;
-				}
-
-				// Prevent of bad set state!
-				if (!isEquals(attributes, filteredAttributes)) {
-					updateAttributes(filteredAttributes);
-				}
-			}
-			// eslint-disable-next-line
-		}, [activeBlockVariation]);
 
 		const originalAttributes = useMemo(() => {
 			return omitWithPattern(
