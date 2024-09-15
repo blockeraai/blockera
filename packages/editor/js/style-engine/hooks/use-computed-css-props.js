@@ -52,10 +52,6 @@ export const useComputedCssProps = ({
 			blockName,
 		};
 
-		if (!params?.config) {
-			return;
-		}
-
 		// eslint-disable-next-line @wordpress/no-unused-vars-before-return,react-hooks/exhaustive-deps
 		const defaultAttributes = prepareAttributesDefaultValues(
 			getBlockType(blockName)?.attributes || {}
