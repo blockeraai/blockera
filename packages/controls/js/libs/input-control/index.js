@@ -11,7 +11,7 @@ import { useState, useEffect } from '@wordpress/element';
  * Blockera dependencies
  */
 import { controlClassNames } from '@blockera/classnames';
-import { isEmpty, isNumber, isUndefined } from '@blockera/utils';
+import { isEmpty, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -231,7 +231,7 @@ export default function InputControl({
 							setValue(unitValue.value);
 						} else if (
 							(extractedNoUnit || !value) &&
-							isNumber(inputValue) &&
+							'' !== inputValue &&
 							(unitValue.value || extractedValue.unit === '')
 						) {
 							setValue(inputValue + unitValue.value);
