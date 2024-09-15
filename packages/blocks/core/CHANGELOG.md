@@ -15,6 +15,7 @@
 - Tests for the `Spacer Block` to ensure is supported by Blockera.
 - Added automated test for `Navigation Link Block` to check that the `Back to Parent` navigation buttons work correctly.
 - Added automated test for `Home Link Block` to check that the `Back to Parent` navigation buttons work correctly.
+- Added automated test for `Submenu Block` to check that the `Back to Parent` navigation buttons work correctly.
 
 ### Miscellaneous
 
