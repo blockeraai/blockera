@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 72,
-		"soft-supported": 85,
-		"not-supported": 8,
+		"supported": 73,
+		"soft-supported": 86,
+		"not-supported": 7,
 		"no-need-to-support": 13
 	},
 	"supported": [
@@ -298,6 +298,11 @@
 		{
 			"name": "core/latest-comments",
 			"title": "Latest Comments"
+		},
+		{
+			"name": "core/spacer",
+			"title": "Spacer",
+			"note": "@todo Advanced compatibility for responsive height needed."
 		}
 	],
 	"no-need-to-support": [
@@ -368,11 +373,6 @@
 		}
 	],
 	"not-supported": [
-		{
-			"name": "core/spacer",
-			"title": "Spacer",
-			"note": "Advanced compatibility for responsive height needed."
-		},
 		{
 			"name": "core/navigation",
 			"title": "Navigation",
