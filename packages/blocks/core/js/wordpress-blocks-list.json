@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 73,
-		"soft-supported": 86,
-		"not-supported": 7,
+		"supported": 74,
+		"soft-supported": 87,
+		"not-supported": 6,
 		"no-need-to-support": 13
 	},
 	"supported": [
@@ -303,6 +303,10 @@
 			"name": "core/spacer",
 			"title": "Spacer",
 			"note": "@todo Advanced compatibility for responsive height needed."
+		},
+		{
+			"name": "core/navigation-link",
+			"title": "Navigation Link"
 		}
 	],
 	"no-need-to-support": [
@@ -376,11 +380,6 @@
 		{
 			"name": "core/navigation",
 			"title": "Navigation",
-			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/navigation-link",
-			"title": "Custom Link",
 			"note": "Advanced editor setting panel compatibility needed."
 		},
 		{
