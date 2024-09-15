@@ -28,6 +28,7 @@ export * from './footnotes';
 export * from './gallery';
 export * from './group';
 export * from './heading';
+export * from './home-link';
 export * from './image';
 export * from './latest-comments';
 export * from './latest-posts';
