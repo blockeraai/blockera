@@ -4,6 +4,7 @@
 - Added `Spacer Block` support by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/spacer-block-support-pritFhuc8gbsXko)]
 - Added support for the `Navigation Link Block` by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
 - Added support for the `Home Link Block` by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
+- Added support for the `Submenu Block` by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
 
 
 ### Bug Fixes
