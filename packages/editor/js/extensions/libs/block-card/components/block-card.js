@@ -119,6 +119,7 @@ export function BlockCard({
 						}
 						size="small"
 						className="no-border"
+						data-test="back-to-parent-navigation"
 					/>
 				)}
 
