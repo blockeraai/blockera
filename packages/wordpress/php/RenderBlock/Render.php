@@ -96,11 +96,13 @@ class Render {
 	 */
 	public function render( string $html, array $block, int $postId = -1 ): string {
 
-		// Just running for blockera extensions settings!
+		// Check block to is support by Blockera?
 		if ( empty( $block['attrs']['blockeraPropsId'] ) || is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 
 			return $html;
 		}
+
+		$props_id = $block['attrs']['blockeraPropsId'];
 
 		$is_enable_icon_extension = blockera_get_experimental( [ 'editor', 'extensions', 'iconExtension' ] );
 
@@ -146,15 +148,15 @@ class Render {
 		}
 		// phpcs:enable
 
-		// Assume miss post id.
-		if ( -1 === $postId ) {
+		// Imagine the current page is home or $postId variable was not available!
+		if ( -1 === $postId || is_home() ) {
 
-			global $post;
+			$cacheKey = 'blockera-inline-css-post-' . $props_id;
 
-			$postId = $post->ID;
+		} else {
+
+			$cacheKey = 'blockera-inline-css-post-' . $postId;
 		}
-
-		$cacheKey = 'blockera-inline-css-post-' . $postId;
 
 		// Get cache data.
 		if ( is_single() ) {
