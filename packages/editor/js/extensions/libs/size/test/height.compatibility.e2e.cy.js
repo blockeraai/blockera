@@ -225,4 +225,100 @@ describe('Height → WP Compatibility', () => {
 			});
 		});
 	});
+
+	describe('core/spacer Block', () => {
+		it('Simple Value', () => {
+			appendBlocks(
+				`<!-- wp:spacer {"height":"200px"} -->
+<div style="height:200px" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer -->`
+			);
+
+			// Select target block
+			cy.getBlock('core/spacer').click();
+
+			// add alias to the feature container
+			cy.getParentContainer('Height').as('container');
+
+			//
+			// Test 1: WP data to Blockera
+			//
+
+			// WP data should come to Blockera
+			getWPDataObject().then((data) => {
+				expect('200px').to.be.equal(
+					getSelectedBlock(data, 'blockeraHeight')
+				);
+			});
+
+			//
+			// Test 2: Blockera value to WP data
+			//
+
+			// change value
+			cy.get('@container').within(() => {
+				cy.get('input').as('containerInput');
+				cy.get('@containerInput').clear();
+				cy.get('@containerInput').type('300', { force: true });
+			});
+
+			// Blockera value should be moved to WP data
+			getWPDataObject().then((data) => {
+				expect('300px').to.be.equal(getSelectedBlock(data, 'height'));
+			});
+
+			//
+			// Test 3: Clear Blockera value and check WP data
+			//
+
+			// clear
+			cy.get('@container').within(() => {
+				cy.get('input').clear({ force: true });
+			});
+
+			// WP data should be removed too
+			getWPDataObject().then((data) => {
+				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
+			});
+		});
+
+		it('Use WP not supported value', () => {
+			appendBlocks(
+				`<!-- wp:spacer {"height":"30%"} -->
+<div style="height:30%" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer --> `
+			);
+
+			// Select target block
+			cy.getBlock('core/spacer').click({ force: true });
+
+			// add alias to the feature container
+			cy.getParentContainer('Height').as('container');
+
+			//
+			// Test 1: Blockera dat to WP
+			//
+
+			// WP data should come to Blockera
+			getWPDataObject().then((data) => {
+				expect('30%').to.be.equal(
+					getSelectedBlock(data, 'blockeraHeight')
+				);
+			});
+
+			//
+			// Test 2: Blockera value to WP data
+			//
+
+			// change value
+			cy.get('@container').within(() => {
+				cy.get('select').select('auto');
+			});
+
+			// Blockera value should be moved to WP data
+			getWPDataObject().then((data) => {
+				expect(undefined).to.be.equal(getSelectedBlock(data, 'height'));
+			});
+		});
+	});
 });

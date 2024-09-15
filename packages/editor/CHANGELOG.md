@@ -22,3 +22,4 @@
 
 ### Automated Tests:
 - Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
+- Conducted WP data compatibility test for the Spacer Block to ensure correct functionality.
