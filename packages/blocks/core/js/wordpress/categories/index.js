@@ -24,7 +24,7 @@ export const Categories: BlockType = {
 			name: 'elements/term-item',
 			label: __('Terms', 'blockera'),
 			description: __('All term elements.', 'blockera'),
-			icon: <Icon icon="link" library="wp" iconSize="20" />,
+			icon: <Icon icon="block-list-item" iconSize="20" />,
 			settings: {
 				force: true,
 			},
@@ -33,7 +33,7 @@ export const Categories: BlockType = {
 			name: 'elements/list-item',
 			label: __('Terms Container', 'blockera'),
 			description: __('All terms container elements.', 'blockera'),
-			icon: <Icon icon="block-list-item" iconSize="20" />,
+			icon: <Icon icon="block-list-item-container" iconSize="20" />,
 			settings: {
 				force: true,
 			},
