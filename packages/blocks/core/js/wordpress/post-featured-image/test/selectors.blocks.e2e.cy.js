@@ -189,7 +189,7 @@ describe('Featured Image Block → Selectors test', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.wp-block-post-featured-image').within(() => {
 			cy.get('img')
 				.first()
 				.should('have.css', 'border', '5px dashed rgb(55, 230, 212)')
