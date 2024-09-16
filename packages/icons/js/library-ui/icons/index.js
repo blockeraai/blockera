@@ -27,6 +27,7 @@ export { default as BlockImageCaption } from './block-image-caption.svg';
 export { default as BlockInput } from './block-input.svg';
 export { default as BlockLink } from './block-link.svg';
 export { default as BlockListItemContainer } from './block-list-item-container.svg';
+export { default as BlockListItemMarker } from './block-list-item-marker.svg';
 export { default as BlockListItem } from './block-list-item.svg';
 export { default as BlockLoginFormButton } from './block-login-form-button.svg';
 export { default as BlockLoginFormContainer } from './block-login-form-container.svg';
