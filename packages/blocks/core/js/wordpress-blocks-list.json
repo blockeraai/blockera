@@ -311,6 +311,14 @@
 		{
 			"name": "core/navigation-link",
 			"title": "Navigation Link"
+		},
+		{
+			"name": "core/archives",
+			"title": "Archives"
+		},
+		{
+			"name": "core/calendar",
+			"title": "Calendar"
 		}
 	],
 	"no-need-to-support": [
@@ -390,16 +398,6 @@
 			"name": "core/navigation",
 			"title": "Navigation",
 			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/archives",
-			"title": "Archives",
-			"note": "There is a block editor js error about attributes."
-		},
-		{
-			"name": "core/calendar",
-			"title": "Calendar",
-			"note": "There is a block editor js error about attributes."
 		},
 		{
 			"name": "core/tag-cloud",
