@@ -15,42 +15,8 @@ import { prependPortal } from '@blockera/utils';
 import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
 
 export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
-	const stylesTab = document.querySelector('[aria-label="Styles"]');
-	const blockCard = document.querySelector('.block-editor-block-card');
-	const blockVariations = document.querySelector(
-		'.block-editor-block-inspector > .block-editor-block-variation-transforms'
-	);
-
 	const stickyWrapperRef = useRef(null);
 	const sentinelRef = useRef(null);
-
-	useEffect(() => {
-		if (blockCard) {
-			blockCard.style.display = 'none';
-		}
-
-		if (blockVariations) {
-			blockVariations.style.display = 'none';
-		}
-		// eslint-disable-next-line
-	}, []);
-
-	useEffect(() => {
-		if (!stylesTab) {
-			return;
-		}
-
-		const listener = () => {
-			if (blockCard) {
-				blockCard.style.display = 'flex';
-			}
-		};
-
-		stylesTab.addEventListener('click', listener);
-
-		return () => stylesTab.removeEventListener('click', listener);
-		// eslint-disable-next-line
-	}, []);
 
 	// implementing block card sticky behavior
 	useEffect(() => {
