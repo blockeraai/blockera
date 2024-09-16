@@ -77,7 +77,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -130,7 +130,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -185,7 +185,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -236,7 +236,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'transform: skew(10deg, 20deg) !important');
 		});
@@ -277,7 +277,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -317,7 +317,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'transform-origin: 50% 50% !important;');
 		});
@@ -349,7 +349,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'backface-visibility: hidden !important;');
 		});
@@ -425,7 +425,7 @@ describe('Transforms → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'perspective-origin: 50% 50% !important;');
 		});
