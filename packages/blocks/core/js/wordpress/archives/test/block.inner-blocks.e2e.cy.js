@@ -45,19 +45,6 @@ describe('Archives Block → Inner Blocks', () => {
 			});
 
 		//
-		// 1.1.2. Padding
-		//
-		setBoxSpacingSide('padding-right', 50);
-
-		cy.getBlock('core/archives')
-			.first()
-			.within(() => {
-				cy.get('li')
-					.first()
-					.should('have.css', 'padding-right', '50px');
-			});
-
-		//
 		// 1.2. elements/item-marker
 		//
 		setParentBlock();
@@ -71,13 +58,38 @@ describe('Archives Block → Inner Blocks', () => {
 		cy.getBlock('core/archives')
 			.first()
 			.within(() => {
-				cy.get('li').within(($el) => {
-					cy.window().then((win) => {
-						const marker = win.getComputedStyle($el[0], '::marker');
-						const markerColor = marker.getPropertyValue('color');
-						expect(markerColor).to.equal('rgb(0, 255, 223)');
+				cy.get('li')
+					.first()
+					.within(($el) => {
+						cy.window().then((win) => {
+							const marker = win.getComputedStyle(
+								$el[0],
+								'::marker'
+							);
+							const markerColor =
+								marker.getPropertyValue('color');
+							expect(markerColor).to.equal('rgb(0, 255, 223)');
+						});
 					});
-				});
+			});
+
+		//
+		// 1.3. elements/item-container
+		//
+		setParentBlock();
+		setInnerBlock('elements/item-container');
+
+		//
+		// 1.2.1. Text color
+		//
+		cy.setColorControlValue('BG Color', 'ff2020');
+
+		cy.getBlock('core/archives')
+			.first()
+			.within(() => {
+				cy.get('li')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 32, 32)');
 			});
 
 		//
@@ -91,16 +103,22 @@ describe('Archives Block → Inner Blocks', () => {
 			cy.get('a')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
-			cy.get('li').first().should('have.css', 'padding-right', '50px');
+
+			// elements/item-container
+			cy.get('li')
+				.first()
+				.should('have.css', 'background-color', 'rgb(255, 32, 32)');
 
 			// elements/item-marker
-			cy.get('li').within(($el) => {
-				cy.window().then((win) => {
-					const marker = win.getComputedStyle($el[0], '::marker');
-					const markerColor = marker.getPropertyValue('color');
-					expect(markerColor).to.equal('rgb(0, 255, 223)');
+			cy.get('li')
+				.first()
+				.within(($el) => {
+					cy.window().then((win) => {
+						const marker = win.getComputedStyle($el[0], '::marker');
+						const markerColor = marker.getPropertyValue('color');
+						expect(markerColor).to.equal('rgb(0, 255, 223)');
+					});
 				});
-			});
 		});
 	});
 });
