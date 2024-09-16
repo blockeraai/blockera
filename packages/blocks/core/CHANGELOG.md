@@ -26,6 +26,7 @@
 - Added automated test for `Archives Block` to check its inner blocks work correctly.
 - Added automated test for `Page List Block` to check its inner blocks work correctly.
 - Added automated test for `List Block` to check its inner blocks work correctly.
+- Added automated test for `List Item Block` to check its inner blocks work correctly.
 
 ### Miscellaneous
 
