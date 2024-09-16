@@ -979,6 +979,25 @@ describe('input control component testing', () => {
 					return expect(getControlValue(name)).to.eq('');
 				});
 			});
+
+			it.only('should accept 0 value', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="line-height" />,
+					name,
+					value: '12',
+				});
+
+				// switch to px
+				cy.get('[aria-label="Select Unit"]').select('px');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.get('input').clear();
+				cy.get('input').type('0');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('0px');
+				});
+				cy.get('input').should('have.value', '0');
+			});
 		});
 
 		describe('Custom Units', () => {

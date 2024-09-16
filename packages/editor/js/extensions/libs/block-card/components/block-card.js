@@ -4,13 +4,15 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 import {
+	store as blockEditorStore,
 	useBlockDisplayInformation,
 	__experimentalBlockVariationTransforms as BlockVariationTransforms,
 } from '@wordpress/block-editor';
 import { Slot } from '@wordpress/components';
 import { useState, useRef, useEffect } from '@wordpress/element';
+import { useSelect, useDispatch } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -19,7 +21,8 @@ import {
 	extensionClassNames,
 	extensionInnerClassNames,
 } from '@blockera/classnames';
-import { ConditionalWrapper, Tooltip } from '@blockera/controls';
+import { ConditionalWrapper, Tooltip, Button } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -64,6 +67,23 @@ export function BlockCard({
 		}
 	}, [isHovered, currentInnerBlock]);
 
+	// This is only used by the Navigation block for now. It's not ideal having Navigation block specific code here.
+	const { parentNavBlockClientId } = useSelect((select) => {
+		const { getSelectedBlockClientId, getBlockParentsByBlockName } =
+			select(blockEditorStore);
+
+		const _selectedBlockClientId = getSelectedBlockClientId();
+
+		return {
+			parentNavBlockClientId: getBlockParentsByBlockName(
+				_selectedBlockClientId,
+				'core/navigation',
+				true
+			)[0],
+		};
+	}, []);
+	const { selectBlock } = useDispatch(blockEditorStore);
+
 	return (
 		<div
 			ref={contentRef}
@@ -83,6 +103,26 @@ export function BlockCard({
 			}}
 		>
 			<div className={extensionInnerClassNames('block-card__inner')}>
+				{parentNavBlockClientId && ( // This is only used by the Navigation block for now. It's not ideal having Navigation block specific code here.
+					<Button
+						onClick={() => selectBlock(parentNavBlockClientId)}
+						label={__('Go to parent Navigation block', 'blockera')}
+						style={{ minWidth: 24, padding: 0, height: 24 }}
+						icon={
+							<Icon
+								library="wp"
+								icon={
+									isRTL() ? 'chevron-right' : 'chevron-left'
+								}
+								size={16}
+							/>
+						}
+						size="small"
+						className="no-border"
+						data-test="back-to-parent-navigation"
+					/>
+				)}
+
 				<BlockIcon icon={blockInformation.icon} />
 
 				<div
