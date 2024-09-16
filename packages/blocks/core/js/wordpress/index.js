@@ -74,6 +74,7 @@ export * from './social-link';
 export * from './social-links';
 export * from './spacer';
 export * from './table';
+export * from './tag-cloud';
 export * from './term-description';
 export * from './verse';
 export * from './video';
