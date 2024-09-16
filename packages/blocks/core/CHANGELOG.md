@@ -22,6 +22,7 @@
 - Added automated test for `Submenu Block` to check that the `Back to Parent` navigation buttons work correctly.
 - Added automated test to verify functionality of the `Tag Cloud Block` and its inner blocks.
 - Added automated test for `Archives Block` to check its inner blocks work correctly.
+- Added automated test for `Page List Block` to check its inner blocks work correctly.
 
 ### Miscellaneous
 
