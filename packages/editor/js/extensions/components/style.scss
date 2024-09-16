@@ -186,3 +186,7 @@
 		}
 	}
 }
+
+.blockera-block-inspector-controls-wrapper + .block-editor-block-card {
+	display: none !important;
+}

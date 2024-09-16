@@ -7,6 +7,7 @@ export function prependPortal(
 	container: Element
 ): MixedElement {
 	const portalContainer = document.createElement('div');
+	portalContainer.classList.add('blockera-block-inspector-controls-wrapper');
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
