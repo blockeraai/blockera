@@ -7,3 +7,5 @@
 ### Improvements
 
 - Refactored inline styles to be printed in the wp_head hook for better performance and consistency.
+- Enhanced the Render class by flushing and rewriting CSS rules for better efficiency.
+- Separated the experimental icon element rendering into a distinct process for improved modularity.

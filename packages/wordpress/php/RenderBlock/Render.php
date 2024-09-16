@@ -85,25 +85,30 @@ class Render {
 	}
 
 	/**
-	 * Block parser to customize HTML template!
+	 * Check is valid block?
 	 *
-	 * @param string $html   WordPress block rendered HTML.
-	 * @param array  $block  WordPress block details.
-	 * @param int    $postId the current post id. default is "-1".
+	 * @param array $block
+	 *
+	 * @return bool true on success, false on otherwise!
+	 */
+	protected function isValidBlock( array $block ): bool {
+
+		return ! empty( $block['attrs']['blockeraPropsId'] );
+	}
+
+	/**
+	 * Render block icon element.
+	 *
+	 * @param string $html   The block html output.
+	 * @param Parser $parser The block parser instance.
+	 * @param array  $args   The extra arguments to render block icon element.
 	 *
 	 * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
-	 * @return string block HTML.
+	 * @return string The block html include icon element if icon is existing.
 	 */
-	public function render( string $html, array $block, int $postId = -1 ): string {
+	protected function renderIcon( string $html, Parser $parser, array $args ): string {
 
-		// Check block to is support by Blockera?
-		if ( empty( $block['attrs']['blockeraPropsId'] ) || is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-
-			return $html;
-		}
-
-		$props_id = $block['attrs']['blockeraPropsId'];
-
+		// blockera active experimental icon extension?
 		$is_enable_icon_extension = blockera_get_experimental( [ 'editor', 'extensions', 'iconExtension' ] );
 
 		// phpcs:disable
@@ -116,6 +121,42 @@ class Render {
 			$dom = $this->app->make( DomParser::class )::str_get_html( $html );
 		}
 		// phpcs:enable
+
+		// phpcs:disable
+		// TODO: add into cache mechanism.
+		//manipulation HTML of block content
+		if ( $is_enable_icon_extension ) {
+
+			$parser->htmlManipulate( array_merge( $args, [ $dom ] ) );
+			//retrieve final html of block content
+			$html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
+		}
+
+		// phpcs:enable
+
+		return $html;
+	}
+
+	/**
+	 * Block parser to customize HTML template!
+	 *
+	 * @param string $html   WordPress block rendered HTML.
+	 * @param array  $block  WordPress block details.
+	 * @param int    $postId the current post id. default is "-1".
+	 *
+	 * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
+	 * @return string block HTML.
+	 */
+	public function render( string $html, array $block, int $postId = -1 ): string {
+
+		// Check block to is support by Blockera?
+		if ( ! $this->isValidBlock( $block ) || is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+
+			return $html;
+		}
+
+		// Prepare block props identify.
+		$props_id = $block['attrs']['blockeraPropsId'];
 
 		$attributes = $block['attrs'];
 
@@ -136,17 +177,6 @@ class Render {
 		 * @var Parser $parser the instance of Parser class.
 		 */
 		$parser = $this->app->make( Parser::class );
-
-		// phpcs:disable
-		// TODO: add into cache mechanism.
-		//manipulation HTML of block content
-		if ( $is_enable_icon_extension ) {
-
-			$parser->htmlManipulate( compact( 'dom', 'block', 'unique_class_name' ) );
-			//retrieve final html of block content
-			$html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
-		}
-		// phpcs:enable
 
 		// Imagine the current page is home or $postId variable was not available!
 		if ( -1 === $postId || is_home() ) {
@@ -175,6 +205,11 @@ class Render {
 			// Print css into inline style of document.
 			$this->addInlineCss( $cache['css'] );
 
+			if ( ! empty( $cache['html'] ) ) {
+
+				return $cache['html'];
+			}
+
 			return $html;
 		}
 
@@ -182,6 +217,9 @@ class Render {
 
 		// Print css into inline style of document.
 		$this->addInlineCss();
+
+		// Render icon element.
+		$html = $this->renderIcon( $html, $parser, compact( 'block', 'unique_class_name' ) );
 
 		// set cache data with merge exists data.
 		// Skip cache mechanism when application debug mode is on.
@@ -265,4 +303,13 @@ class Render {
 		return $this->computed_css_rules;
 	}
 
+	/**
+	 * Cleanup computed css rules property.
+	 *
+	 * @return void
+	 */
+	public function flushRewriteCssRules(): void {
+
+		$this->computed_css_rules = '';
+	}
 }

@@ -241,6 +241,8 @@ class AppServiceProvider extends ServiceProvider {
 
 		$render = $this->app->make( Render::class );
 
+		$render->flushRewriteCssRules();
+
 		$render->setName( $block );
 		$render->applyHooks();
 	}
