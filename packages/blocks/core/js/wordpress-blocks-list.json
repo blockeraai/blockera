@@ -3,9 +3,9 @@
 	"data": {
 		"total": 93,
 		"supported": 76,
-		"soft-supported": 89,
-		"not-supported": 4,
-		"no-need-to-support": 13
+		"soft-supported": 90,
+		"not-supported": 3,
+		"no-need-to-support": 14
 	},
 	"supported": [
 		{
@@ -382,6 +382,11 @@
 			"name": "core/widget-group",
 			"title": "Widget Group",
 			"note": "Investigate if this block can be supported."
+		},
+		{
+			"name": "core/page-list-item",
+			"title": "Page List Item",
+			"note": "This block is not selectable and there is no ui for it for user and we do not need to support it."
 		}
 	],
 	"not-supported": [
@@ -389,11 +394,6 @@
 			"name": "core/navigation",
 			"title": "Navigation",
 			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/page-list-item",
-			"title": "Page List Item",
-			"note": "Investigate if this block can be supported."
 		},
 		{
 			"name": "core/archives",
