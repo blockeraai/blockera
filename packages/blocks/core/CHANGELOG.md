@@ -6,6 +6,8 @@
 - Added support for the `Home Link Block` by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
 - Added support for the `Submenu Block` and its inner blocks by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
 - Added support for the `Tag Cloud Block` by Blockera.
+- Added support for the `Archives` by Blockera.
+- Added support for the `Calendar` by Blockera.
 
 ### Bug Fixes
 
