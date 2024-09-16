@@ -12,6 +12,7 @@
 - Enhanced inner blocks of the `Page List Block` for greater customization flexibility.
 - Enhanced inner blocks of the `List Block` for greater customization flexibility.
 - Enhanced inner blocks of the `List Item Block` for greater customization flexibility.
+- Enhanced inner blocks of the `Details Block` for greater customization flexibility.
 
 ### Bug Fixes
 
