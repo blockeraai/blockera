@@ -26,6 +26,24 @@ describe('Block Partials Testing ...', () => {
 		);
 	});
 
+	it.only('should be able to hide WordPress original block variation transform and display blockera block variation transform', () => {
+		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+
+		appendBlocks(`<!-- wp:group {"blockeraCompatId":"81683555276","blockeraDisplay":"flex","blockeraFlexLayout":{"direction":"column","alignItems":"","justifyContent":""},"layout":{"type":"flex","orientation":"vertical"}} -->
+<div class="wp-block-group"></div>
+<!-- /wp:group -->`);
+
+		cy.getBlock('core/group').click();
+
+		cy.get('.block-editor-block-variation-transforms')
+			.eq(1)
+			.should('have.css', 'display', 'none');
+
+		cy.get('.block-editor-block-variation-transforms')
+			.eq(0)
+			.should('have.css', 'display', 'flex');
+	});
+
 	it('should be able to hide WordPress original block variations and display blockera block variations', () => {
 		appendBlocks(
 			'<!-- wp:social-links {"className":"is-style-default"} -->\n' +
