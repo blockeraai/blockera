@@ -16,6 +16,7 @@
 - Added automated test for `Navigation Link Block` to check that the `Back to Parent` navigation buttons work correctly.
 - Added automated test for `Home Link Block` to check that the `Back to Parent` navigation buttons work correctly.
 - Added automated test for `Submenu Block` to check that the `Back to Parent` navigation buttons work correctly.
+- Added automated test to verify functionality of the `Tag Cloud Block` and its inner blocks.
 
 ### Miscellaneous
 
