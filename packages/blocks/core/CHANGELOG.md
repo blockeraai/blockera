@@ -9,6 +9,7 @@
 - Added support for the `Archives Block` by Blockera.
 - Added support for the inner blocks of `Archives` by Blockera.
 - Added support for the `Calendar` by Blockera.
+- Enhanced inner blocks of the `Page List Block` for greater customization flexibility.
 
 ### Bug Fixes
 
