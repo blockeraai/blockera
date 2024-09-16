@@ -14,11 +14,13 @@ return array_merge(
 			$args['selectors'] ?? [],
 			(array) array_merge(
 				[
-					'blockera/elements/item'        => [
-						'root'            => 'a',
-						'blockeraSpacing' => 'li',
+					'blockera/elements/item'           => [
+						'root' => 'a',
 					],
-					'blockera/elements/item-marker' => [
+					'blockera/elements/item-container' => [
+						'root' => 'li',
+					],
+					'blockera/elements/item-marker'    => [
 						'root' => 'li::marker',
 					],
 				],

@@ -44,6 +44,21 @@ export const Archives: BlockType = {
 				force: true,
 			},
 		},
+		'elements/item-container': {
+			name: 'elements/item-container',
+			label: __('Item Container', 'blockera'),
+			description: __('Container element of each item.', 'blockera'),
+			icon: (
+				<Icon
+					icon="block-list-item-container"
+					library="ui"
+					iconSize="20"
+				/>
+			),
+			settings: {
+				force: true,
+			},
+		},
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
