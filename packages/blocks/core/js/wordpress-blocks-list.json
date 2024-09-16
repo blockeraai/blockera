@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 75,
-		"soft-supported": 89,
-		"not-supported": 4,
+		"supported": 76,
+		"soft-supported": 90,
+		"not-supported": 3,
 		"no-need-to-support": 14
 	},
 	"supported": [
@@ -284,6 +284,10 @@
 			"title": "Term Description"
 		},
 		{
+			"name": "core/tag-cloud",
+			"title": "Tag Cloud"
+		},
+		{
 			"name": "core/query-title",
 			"title": "Query Title"
 		},
@@ -400,10 +404,6 @@
 			"name": "core/calendar",
 			"title": "Calendar",
 			"note": "There is a block editor js error about attributes."
-		},
-		{
-			"name": "core/tag-cloud",
-			"title": "Tag Cloud"
 		}
 	]
 }
