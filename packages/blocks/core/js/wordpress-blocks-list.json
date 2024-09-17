@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 77,
-		"soft-supported": 91,
-		"not-supported": 2,
+		"supported": 78,
+		"soft-supported": 92,
+		"not-supported": 1,
 		"no-need-to-support": 14
 	},
 	"supported": [
@@ -319,6 +319,10 @@
 		{
 			"name": "core/calendar",
 			"title": "Calendar"
+		},
+		{
+			"name": "core/tag-cloud",
+			"title": "Tag Cloud"
 		}
 	],
 	"no-need-to-support": [
@@ -398,10 +402,6 @@
 			"name": "core/navigation",
 			"title": "Navigation",
 			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/tag-cloud",
-			"title": "Tag Cloud"
 		}
 	]
 }
