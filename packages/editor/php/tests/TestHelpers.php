@@ -2,6 +2,7 @@
 
 namespace Blockera\Editor\Tests;
 
+use Blockera\Exceptions\BaseException;
 use Blockera\WordPress\RenderBlock\Setup;
 
 class TestHelpers extends \WP_UnitTestCase {
@@ -185,9 +186,34 @@ class TestHelpers extends \WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * @group        innerBlockStateSelectors
+	 * @dataProvider getInnerBlockStateSelectorsDataProvider
+	 *
+	 * @param array $args
+	 * @param array $selectors
+	 * @param array $blockStateSelectors
+	 *
+	 * @throws BaseException Exception for invalid selector.
+	 *
+	 * @return void
+	 */
+	public function testItShouldRetrieveInnerBlockStateSelectors( array $args, array $selectors, array $blockStateSelectors = [] ): void {
+
+		$this->assertSame(
+			$blockStateSelectors,
+			blockera_get_normalized_inner_block_selectors( $selectors, $args )
+		);
+	}
+
 	public function getBlockStateSelectorsDataProvider(): array {
 
 		return require __DIR__ . '/Fixtures/StyleEngine/block-state-selectors.php';
+	}
+
+	public function getInnerBlockStateSelectorsDataProvider(): array {
+
+		return require __DIR__ . '/Fixtures/StyleEngine/inner-block-state-selectors.php';
 	}
 
 	/**
@@ -399,6 +425,72 @@ class TestHelpers extends \WP_UnitTestCase {
 		$expected = '.my-class > .inner-class-active, #my-id + .another-class-active';
 
 		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	public function testCssSelectorFormatWithPseudoClasses() {
+
+		$selectors       = [
+			'parentRoot' => '.container',
+			'fallback'   => '.fallback'
+		];
+		$picked_selector = '.element';
+		$args            = [
+			'pseudoClass'       => 'hover',
+			'parentPseudoClass' => 'active'
+		];
+
+		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$this->assertEquals( '.container:active .element:hover', $result );
+	}
+
+	public function testCssSelectorFormatWithoutPseudoClasses() {
+
+		$selectors       = [
+			'parentRoot' => '.container',
+			'fallback'   => '.fallback'
+		];
+		$picked_selector = '.element';
+		$args            = [];
+
+		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$this->assertEquals( '.container .element', $result );
+	}
+
+	public function testCssSelectorFormatWithAmpersandInPickedSelector() {
+
+		$selectors       = [
+			'parentRoot' => '.container',
+			'fallback'   => '.fallback'
+		];
+		$picked_selector = '&.element';
+		$args            = [
+			'pseudoClass' => 'hover'
+		];
+
+		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$this->assertEquals( '.container.element:hover', $result );
+	}
+
+	public function testCssSelectorFormatFallbackWhenParentRootMissing() {
+
+		$selectors       = [
+			'fallback' => '.fallback'
+		];
+		$picked_selector = '.element';
+		$args            = [];
+
+		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$this->assertEquals( '.fallback .element', $result );
+	}
+
+	public function testCssSelectorFormatEmptySelectors() {
+
+		$selectors       = [];
+		$picked_selector = '.element';
+		$args            = [];
+
+		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$this->assertEquals( '.element', $result );
 	}
 
 	public function tear_down() {
