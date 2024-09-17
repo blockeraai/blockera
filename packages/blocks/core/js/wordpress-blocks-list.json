@@ -2,9 +2,9 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 75,
-		"soft-supported": 89,
-		"not-supported": 4,
+		"supported": 77,
+		"soft-supported": 91,
+		"not-supported": 2,
 		"no-need-to-support": 14
 	},
 	"supported": [
