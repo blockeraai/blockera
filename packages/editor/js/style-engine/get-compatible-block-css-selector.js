@@ -94,11 +94,17 @@ export const getNormalizedSelector = (
 	} = options;
 	const parsedSelectors = selector.split(',');
 
+	let isProccedSelector = false;
+
 	// Replace '&' with the rootSelector and trim unnecessary spaces
 	const processAmpersand = (selector: string): string => {
-		return selector.trim().startsWith('&')
-			? `${rootSelector}${selector.trim().substring(1)}`
-			: selector.trim();
+		if (selector.trim().startsWith('&')) {
+			isProccedSelector = true;
+
+			return `${rootSelector}${selector.trim().substring(1)}`;
+		}
+
+		return selector.trim();
 	};
 
 	// Helper to generate the appropriate selector string based on various states.
@@ -108,6 +114,8 @@ export const getNormalizedSelector = (
 
 		// Current Block is inner block.
 		if (fromInnerBlock) {
+			const spacer = isProccedSelector ? '' : ' ';
+
 			// Assume inner block inside pseudo-state of master.
 			if (masterState && !isNormalState(masterState)) {
 				if (!isNormalState(state)) {
@@ -117,13 +125,13 @@ export const getNormalizedSelector = (
 						!isNormalState(innerStateType) &&
 						state === innerStateType
 					) {
-						return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+						return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}:${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
 					}
 
-					return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}`;
+					return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}:${state}`;
 				}
 
-				return `${rootSelector}:${masterState} ${selector}${suffixClass}`;
+				return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}`;
 			}
 
 			if (!isNormalState(state) && masterState) {
@@ -131,13 +139,13 @@ export const getNormalizedSelector = (
 					!isNormalState(innerStateType) &&
 					state === innerStateType
 				) {
-					return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+					return `${rootSelector}${spacer}${selector}${suffixClass}:${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
 				}
 
-				return `${rootSelector} ${selector}${suffixClass}:${state}`;
+				return `${rootSelector}${spacer}${selector}${suffixClass}:${state}`;
 			}
 
-			return `${rootSelector} ${selector}${suffixClass}`;
+			return `${rootSelector}${spacer}${selector}${suffixClass}`;
 		}
 
 		// Recieved state is not normal.
@@ -156,6 +164,7 @@ export const getNormalizedSelector = (
 	// Handle single selector case.
 	if (parsedSelectors.length === 1) {
 		const processedSelector = processAmpersand(selector);
+
 		return customizedPseudoClasses.includes(state)
 			? processedSelector
 			: generateSelector(processedSelector);
