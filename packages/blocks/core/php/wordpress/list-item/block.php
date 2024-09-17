@@ -17,7 +17,7 @@ return array_merge(
 					'root' => 'a:not(.wp-element-button)',
 				],
 				'blockera/elements/item-marker' => [
-					'root' => '::marker',
+					'root' => '&::marker',
 				],
 			],
 		),
