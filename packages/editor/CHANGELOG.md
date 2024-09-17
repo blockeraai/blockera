@@ -19,7 +19,9 @@
 ### Improvements
 
 - Design of post preview link in header improved.
+- Enhanced the getNormalizedSelector API for better performance and functionality.
 
 ### Automated Tests:
 - Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
 - Conducted WP data compatibility test for the Spacer Block to ensure correct functionality.
+- Added new test suites to ensure the robustness of the getNormalizedSelector API.

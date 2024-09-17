@@ -21,6 +21,149 @@ import type { NormalizedSelectorProps } from './types';
 import { isNormalState } from '../extensions/components';
 import { getBlockCSSSelector } from './get-block-css-selector';
 
+/**
+ * Generates a CSS selector based on the provided state, suffix, and whether the block is an inner block or outer block.
+ * It also accounts for customized pseudo-classes and normal/non-normal states.
+ * Additionally, supports selectors starting with '&', which are replaced with the root selector.
+ *
+ * @param {string} selector - The base CSS selector string, can be a comma-separated list of selectors.
+ * @param {Object} options - Configuration object for generating the selector.
+ * @param {TStates} options.state - The current state of the block (e.g., 'normal', 'hover', 'active').
+ * @param {string} options.suffixClass - A suffix to append to the selector (e.g., '--modified').
+ * @param {TStates} [options.masterState] - The state of the parent/master block if applicable.
+ * @param {string} options.rootSelector - The root block selector used when dealing with inner blocks.
+ * @param {function(): TStates} options.getInnerState - Function that returns the current state of the inner block.
+ * @param {function(): TStates} options.getMasterState - Function that returns the current state of the master block.
+ * @param {boolean} [options.fromInnerBlock=false] - A flag indicating if the current block is an inner block.
+ * @param {Array<string>} options.customizedPseudoClasses - Array of customized pseudo-classes that should not be altered (e.g., 'parent-class', 'custom-class').
+ *
+ * @return {string} - The final normalized CSS selector string, adjusted based on the state, suffix, and inner/outer block context.
+ *
+ * @example
+ * // Normal state with suffix class
+ * normalizedSelector('.my-element', {
+ *   state: 'normal',
+ *   suffixClass: '--modified',
+ *   rootSelector: '.root',
+ *   getInnerState: () => 'normal',
+ *   getMasterState: () => 'normal',
+ *   customizedPseudoClasses: ['parent-class', 'custom-class', 'parent-hover'],
+ * });
+ * // Returns: '.my-element--modified'
+ *
+ * @example
+ * // Non-normal state with inner block and master state
+ * normalizedSelector('.my-element', {
+ *   state: 'hover',
+ *   masterState: 'active',
+ *   suffixClass: '--modified',
+ *   rootSelector: '.root',
+ *   getInnerState: () => 'hover',
+ *   getMasterState: () => 'active',
+ *   fromInnerBlock: true,
+ *   customizedPseudoClasses: ['parent-class', 'custom-class', 'parent-hover'],
+ * });
+ * // Returns: '.root:active .my-element--modified:hover'
+ */
+export const getNormalizedSelector = (
+	selector: string,
+	options: {
+		state: TStates,
+		suffixClass: string,
+		masterState?: TStates,
+		rootSelector: string,
+		fromInnerBlock?: boolean,
+		getInnerState: () => TStates,
+		getMasterState: () => TStates,
+		customizedPseudoClasses: Array<string>,
+	}
+): string => {
+	if (isEmpty(selector)) {
+		return selector;
+	}
+
+	const {
+		state,
+		suffixClass,
+		masterState,
+		rootSelector,
+		getInnerState,
+		getMasterState,
+		fromInnerBlock = false,
+		customizedPseudoClasses,
+	} = options;
+	const parsedSelectors = selector.split(',');
+
+	// Helper function to check if a state is normal.
+	const isNormal = (state: TStates) => isNormalState(state);
+
+	// Replace '&' with the rootSelector and trim unnecessary spaces
+	const processAmpersand = (selector: string): string => {
+		return selector.trim().startsWith('&')
+			? `${rootSelector}${selector.trim().substring(1)}`
+			: selector.trim();
+	};
+
+	// Helper to generate the appropriate selector string based on various states.
+	const generateSelector = (selector: string): string => {
+		const innerState = getInnerState();
+		const masterStateType = getMasterState();
+
+		const isStateNormal = isNormal(state);
+		const isMasterNormal = masterState && isNormal(masterState);
+
+		// Handle inner block cases.
+		if (fromInnerBlock) {
+			if (masterState && !isMasterNormal) {
+				if (
+					!isStateNormal &&
+					state === innerState &&
+					masterState === masterStateType
+				) {
+					return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+				}
+				return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}`;
+			}
+
+			if (!isStateNormal && state === innerState) {
+				return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+			}
+
+			return `${rootSelector} ${selector}${suffixClass}`;
+		}
+
+		const isMasterStateTypeNormal = isNormal(masterStateType);
+
+		// Handle non-normal states for outer block.
+		if (!isStateNormal) {
+			if (!isMasterStateTypeNormal && state === masterStateType) {
+				return `${selector}${suffixClass}:${state}, ${selector}${suffixClass}`;
+			}
+			return `${selector}${suffixClass}:${state}`;
+		}
+
+		// Default case: normal state.
+		return `${selector}${suffixClass}`;
+	};
+
+	// Handle single selector case.
+	if (parsedSelectors.length === 1) {
+		const processedSelector = processAmpersand(selector);
+		return customizedPseudoClasses.includes(state)
+			? processedSelector
+			: generateSelector(processedSelector);
+	}
+
+	// Handle multiple selectors.
+	return parsedSelectors
+		.map((selector) => {
+			const processedSelector = processAmpersand(selector);
+			return customizedPseudoClasses.includes(state)
+				? processedSelector
+				: generateSelector(processedSelector);
+		})
+		.join(', ');
+};
 export const getCompatibleBlockCssSelector = ({
 	state,
 	query,
@@ -95,83 +238,6 @@ export const getCompatibleBlockCssSelector = ({
 			};
 		};
 
-		const normalizedSelector = (
-			fromInnerBlock: boolean = false
-		): string => {
-			const parsedSelectors = _selector.split(',');
-			const generateSelector = (selector: string): string => {
-				const innerStateType = getInnerState();
-				const masterStateType = getMasterState();
-
-				// Current Block is inner block.
-				if (fromInnerBlock) {
-					// Assume inner block inside pseudo-state of master.
-					if (masterState && !isNormalState(masterState)) {
-						if (!isNormalState(state)) {
-							if (
-								!isNormalState(masterStateType) &&
-								masterState === masterStateType &&
-								!isNormalState(innerStateType) &&
-								state === innerStateType
-							) {
-								return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
-							}
-
-							return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}`;
-						}
-
-						return `${rootSelector}:${masterState} ${selector}${suffixClass}`;
-					}
-
-					if (!isNormalState(state) && masterState) {
-						if (
-							!isNormalState(innerStateType) &&
-							state === innerStateType
-						) {
-							return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
-						}
-
-						return `${rootSelector} ${selector}${suffixClass}:${state}`;
-					}
-
-					return `${rootSelector} ${selector}${suffixClass}`;
-				}
-
-				// Recieved state is not normal.
-				if (!isNormalState(state)) {
-					// Assume active master block state is not normal.
-					if (
-						!isNormalState(masterStateType) &&
-						state === masterStateType
-					) {
-						return `${selector}${suffixClass}:${state}, ${selector}${suffixClass}`;
-					}
-
-					return `${selector}${suffixClass}:${state}`;
-				}
-
-				return `${selector}${suffixClass}`;
-			};
-
-			if (1 === parsedSelectors.length) {
-				if (customizedPseudoClasses.includes(state)) {
-					return _selector;
-				}
-
-				return generateSelector(_selector);
-			}
-
-			return parsedSelectors
-				.map((selector: string): string => {
-					if (customizedPseudoClasses.includes(state)) {
-						return selector;
-					}
-
-					return generateSelector(selector);
-				})
-				.join(', ');
-		};
-
 		// Assume selector is invalid.
 		if (!_selector) {
 			// we try to use parent or custom css class if exists!
@@ -215,7 +281,18 @@ export const getCompatibleBlockCssSelector = ({
 					// TODO:
 					break;
 				default:
-					registerSelector(normalizedSelector(true));
+					registerSelector(
+						getNormalizedSelector(_selector, {
+							state,
+							suffixClass,
+							masterState,
+							rootSelector,
+							getInnerState,
+							getMasterState,
+							fromInnerBlock: false,
+							customizedPseudoClasses,
+						})
+					);
 					break;
 			}
 		}
@@ -230,7 +307,17 @@ export const getCompatibleBlockCssSelector = ({
 					// TODO:
 					break;
 				default:
-					registerSelector(normalizedSelector());
+					registerSelector(
+						getNormalizedSelector(_selector, {
+							state,
+							suffixClass,
+							masterState,
+							rootSelector,
+							getInnerState,
+							getMasterState,
+							customizedPseudoClasses,
+						})
+					);
 					break;
 			}
 		}
@@ -370,13 +457,6 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 
 	// Assume received selector is html tag name!
 	if (!/\.|\s/.test(selector)) {
-		const regexp = /is-\w+-preview/g;
-
-		// Assume recieved root selector inside other breakpoint.
-		if (regexp.test(root)) {
-			return root.replace('-preview ', `-preview ${selector}`);
-		}
-
 		return `${selector}${root}`;
 	}
 
