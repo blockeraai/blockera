@@ -94,9 +94,6 @@ export const getNormalizedSelector = (
 	} = options;
 	const parsedSelectors = selector.split(',');
 
-	// Helper function to check if a state is normal.
-	const isNormal = (state: TStates) => isNormalState(state);
-
 	// Replace '&' with the rootSelector and trim unnecessary spaces
 	const processAmpersand = (selector: string): string => {
 		return selector.trim().startsWith('&')
@@ -106,43 +103,53 @@ export const getNormalizedSelector = (
 
 	// Helper to generate the appropriate selector string based on various states.
 	const generateSelector = (selector: string): string => {
-		const innerState = getInnerState();
+		const innerStateType = getInnerState();
 		const masterStateType = getMasterState();
 
-		const isStateNormal = isNormal(state);
-		const isMasterNormal = masterState && isNormal(masterState);
-
-		// Handle inner block cases.
+		// Current Block is inner block.
 		if (fromInnerBlock) {
-			if (masterState && !isMasterNormal) {
-				if (
-					!isStateNormal &&
-					state === innerState &&
-					masterState === masterStateType
-				) {
-					return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+			// Assume inner block inside pseudo-state of master.
+			if (masterState && !isNormalState(masterState)) {
+				if (!isNormalState(state)) {
+					if (
+						!isNormalState(masterStateType) &&
+						masterState === masterStateType &&
+						!isNormalState(innerStateType) &&
+						state === innerStateType
+					) {
+						return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+					}
+
+					return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}`;
 				}
-				return `${rootSelector}:${masterState} ${selector}${suffixClass}:${state}`;
+
+				return `${rootSelector}:${masterState} ${selector}${suffixClass}`;
 			}
 
-			if (!isStateNormal && state === innerState) {
-				return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+			if (!isNormalState(state) && masterState) {
+				if (
+					!isNormalState(innerStateType) &&
+					state === innerStateType
+				) {
+					return `${rootSelector} ${selector}${suffixClass}:${state}, ${rootSelector} ${selector}${suffixClass}`;
+				}
+
+				return `${rootSelector} ${selector}${suffixClass}:${state}`;
 			}
 
 			return `${rootSelector} ${selector}${suffixClass}`;
 		}
 
-		const isMasterStateTypeNormal = isNormal(masterStateType);
-
-		// Handle non-normal states for outer block.
-		if (!isStateNormal) {
-			if (!isMasterStateTypeNormal && state === masterStateType) {
+		// Recieved state is not normal.
+		if (!isNormalState(state)) {
+			// Assume active master block state is not normal.
+			if (!isNormalState(masterStateType) && state === masterStateType) {
 				return `${selector}${suffixClass}:${state}, ${selector}${suffixClass}`;
 			}
+
 			return `${selector}${suffixClass}:${state}`;
 		}
 
-		// Default case: normal state.
 		return `${selector}${suffixClass}`;
 	};
 
@@ -164,6 +171,7 @@ export const getNormalizedSelector = (
 		})
 		.join(', ');
 };
+
 export const getCompatibleBlockCssSelector = ({
 	state,
 	query,
@@ -289,7 +297,7 @@ export const getCompatibleBlockCssSelector = ({
 							rootSelector,
 							getInnerState,
 							getMasterState,
-							fromInnerBlock: false,
+							fromInnerBlock: true,
 							customizedPseudoClasses,
 						})
 					);

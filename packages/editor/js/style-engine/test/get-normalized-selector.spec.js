@@ -104,6 +104,7 @@ describe('getNormalizedSelector', () => {
 			getInnerState,
 			getMasterState,
 			fromInnerBlock: true,
+			masterState: 'normal',
 			customizedPseudoClasses,
 		});
 
