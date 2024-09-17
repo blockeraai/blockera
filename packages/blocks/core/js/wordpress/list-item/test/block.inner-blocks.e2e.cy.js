@@ -53,6 +53,8 @@ describe('List Item Block → Inner Blocks', () => {
 				cy.get('li')
 					.first()
 					.within(($el) => {
+						cy.wait(2000);
+
 						cy.window().then((win) => {
 							const marker = win.getComputedStyle(
 								$el[0],
