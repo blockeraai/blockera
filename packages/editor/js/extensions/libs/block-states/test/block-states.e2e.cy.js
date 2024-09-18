@@ -427,10 +427,7 @@ describe('Block State E2E Test', () => {
 				// Real hover.
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)}`)
-					.realHover();
-
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}:hover`)
+					.realHover()
 					.should('have.css', 'width', '100px');
 
 				// to stop hover.

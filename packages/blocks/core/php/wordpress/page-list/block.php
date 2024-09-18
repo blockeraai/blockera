@@ -4,7 +4,7 @@
  *
  * @var array $args the block arguments!
  *
- * @package blockera/packages/blocks/js/wordpress/list
+ * @package blockera/packages/blocks/js/wordpress/page-list
  */
 
 return array_merge(
@@ -13,13 +13,13 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'blockera/elements/link'        => [
-					'root' => 'a:not(.wp-element-button)',
+				'blockera/elements/item'           => [
+					'root' => 'a',
 				],
-				'blockera/elements/item'        => [
+				'blockera/elements/item-container' => [
 					'root' => 'li',
 				],
-				'blockera/elements/item-marker' => [
+				'blockera/elements/item-marker'    => [
 					'root' => 'li::marker',
 				],
 			],

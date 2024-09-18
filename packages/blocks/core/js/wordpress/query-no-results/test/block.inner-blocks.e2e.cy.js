@@ -21,8 +21,8 @@ describe('Query No Results Block → Inner Blocks', () => {
 		appendBlocks(testContent);
 
 		// Select target block
-		cy.getBlock('core/query').click();
-		cy.getBlock('core/query-no-results').click();
+		cy.getBlock('core/query').click({ force: true });
+		cy.getBlock('core/query-no-results').click({ force: true });
 
 		// open inner block settings
 		openInnerBlocksExtension();

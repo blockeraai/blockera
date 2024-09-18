@@ -3,6 +3,7 @@
 namespace Blockera\Editor;
 
 use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
+use Blockera\Exceptions\BaseException;
 
 /**
  * Class StyleEngine generating css style for any state of breakpoints with any properties.
@@ -111,6 +112,12 @@ final class StyleEngine {
 	 */
 	public function getStylesheet(): string {
 
+		// Validation: check sets anything ...
+		if ( empty( $this->getSettings() ) ) {
+
+			return '';
+		}
+
 		$breakpointsCssRules = array_filter(
 			array_map( [ $this, 'prepareBreakpointStyles' ], blockera_core_config( 'breakpoints.list' ) ),
 			'blockera_get_filter_empty_array_item'
@@ -182,10 +189,13 @@ final class StyleEngine {
 	 */
 	protected function getStateCssRules( string $breakpoint ): array {
 
+		// Imagine blockera block states stack is empty.
 		if ( empty( $this->settings['blockeraBlockStates'] ) ) {
 
+			// We should just prepare normal state styles because not exists any other states.
 			$css_rules = $this->prepareStateStyles( 'normal', blockera_get_base_breakpoint() );
 
+			// Exclude empty $css_rules.
 			if ( empty( $css_rules ) ) {
 
 				return [];
@@ -194,6 +204,7 @@ final class StyleEngine {
 			return [ $css_rules ];
 		}
 
+		// We should process any supported pseudo classes by blockera to prepare each state styles.
 		return array_filter(
 			array_map(
 				function ( string $state ) use ( $breakpoint ): array {
@@ -218,12 +229,33 @@ final class StyleEngine {
 
 		$this->pseudo_state = $pseudoClass;
 
-		$blockCss = array_map( [ $this, 'generateBlockCss' ], $this->definitions );
+		$selectors = blockera_get_block_state_selectors(
+			blockera_get_block_type_property( $this->block['blockName'], 'selectors' ),
+			[
+				'is-inner-block'     => false,
+				'block-type'         => 'master',
+				'fallback'           => $this->selector,
+				'master-block-state' => $this->pseudo_state,
+				'pseudo-class'       => $this->pseudo_state,
+				'block-settings'     => $this->getSettings(),
+			]
+		);
+
+		$style_engine = $this;
+
+		// Prepare generated block css by supported each of style definitions.
+		$block_css = array_map(
+			static function ( BaseStyleDefinition $definition ) use ( $selectors, $style_engine ): array {
+
+				return $style_engine->generateBlockCss( $definition, $selectors );
+			},
+			$this->definitions
+		);
 
 		return $this->normalizeCssRules(
 			blockera_convert_css_declarations_to_css_valid_rules(
 				blockera_combine_css(
-					array_values( array_filter( $blockCss, 'blockera_get_filter_empty_array_item' ) )
+					array_values( array_filter( $block_css, 'blockera_get_filter_empty_array_item' ) )
 				)
 			)
 		);
@@ -233,31 +265,15 @@ final class StyleEngine {
 	 * Generating current block css styles.
 	 *
 	 * @param BaseStyleDefinition $definition the style definition instance.
+	 * @param array               $selectors  the available css selectors in current block.
 	 *
 	 * @return array The array of collection of selector and declaration.
 	 */
-	protected function generateBlockCss( BaseStyleDefinition $definition ): array {
+	protected function generateBlockCss( BaseStyleDefinition $definition, array $selectors ): array {
 
 		$this->definition = $definition;
 		// get current block settings.
 		$settings = $this->getSettings();
-
-		if ( empty( $settings ) ) {
-
-			return [];
-		}
-
-		$selectors = blockera_get_block_state_selectors(
-			blockera_get_block_type_property( $this->block['blockName'], 'selectors' ),
-			[
-				'is-inner-block'     => false,
-				'block-type'         => 'master',
-				'block-settings'     => $settings,
-				'fallback'           => $this->selector,
-				'master-block-state' => $this->pseudo_state,
-				'pseudo-class'       => $this->pseudo_state,
-			]
-		);
 
 		$this->definition->flushDeclarations();
 		$this->configureDefinition( $this->definition );
@@ -266,8 +282,10 @@ final class StyleEngine {
 
 		$cssRules = $this->definition->getCssRules();
 
+		// Validation: Check if sets blockera inner blocks?
 		if ( ! empty( $settings['blockeraInnerBlocks'] ) ) {
 
+			// Preparing inner blocks css ...
 			$cssRules = array_merge(
 				$cssRules,
 				blockera_array_flat(
@@ -293,6 +311,8 @@ final class StyleEngine {
 	 * @param string $blockType   the block type of available inner block.
 	 * @param string $pseudoState the pseudo state of inner block type.
 	 *
+	 * @throws BaseException Exception for invalid selector.
+	 *
 	 * @return array the generated css rules for inner blocks in current state.
 	 */
 	protected function generateInnerBlockCss( array $settings, string $blockType, string $pseudoState = '' ): array {
@@ -302,11 +322,10 @@ final class StyleEngine {
 			return [];
 		}
 
-		// Inner block status set TRUE.
-		$selectors = blockera_get_block_state_selectors(
+		// Preparing current inner block available selectors.
+		$selectors = blockera_get_inner_block_state_selectors(
 			blockera_get_block_type_property( $this->block['blockName'], 'selectors' ),
 			[
-				'is-inner-block'     => true,
 				'block-type'         => $blockType,
 				'fallback'           => $this->selector,
 				'master-block-state' => $this->pseudo_state,
@@ -315,7 +334,8 @@ final class StyleEngine {
 			]
 		);
 
-		$selector_id = blockera_append_blockera_block_prefix( $blockType );
+		// Get normalized blockera inner block identify.
+		$selector_id = blockera_get_normalized_inner_block_id( $blockType );
 
 		// Exclude inner blocks styles when hasn't any selectors for this context.
 		if ( empty( $selectors[ $selector_id ] ) ) {

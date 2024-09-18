@@ -14,17 +14,16 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import sharedInnerBlocks from '../inners/shared';
 import type { BlockType } from '../../type';
 
-export const List: BlockType = {
-	name: 'blockeraList',
-	targetBlock: 'core/list',
+export const Archives: BlockType = {
+	name: 'blockeraArchives',
+	targetBlock: 'core/archives',
 	blockeraInnerBlocks: {
 		'elements/item': {
 			name: 'elements/item',
-			label: __('List Items', 'blockera'),
-			description: __('Items inside list.', 'blockera'),
+			label: __('Items', 'blockera'),
+			description: __('Item inside archives list.', 'blockera'),
 			icon: <Icon icon="block-list-item" library="ui" iconSize="20" />,
 			settings: {
 				force: true,
@@ -32,7 +31,7 @@ export const List: BlockType = {
 		},
 		'elements/item-marker': {
 			name: 'elements/item-marker',
-			label: __('List Items Marker', 'blockera'),
+			label: __('Items Marker', 'blockera'),
 			description: __('Marker of list items.', 'blockera'),
 			icon: (
 				<Icon
@@ -45,7 +44,21 @@ export const List: BlockType = {
 				force: true,
 			},
 		},
-		'elements/link': sharedInnerBlocks['elements/link'],
+		'elements/item-container': {
+			name: 'elements/item-container',
+			label: __('Item Container', 'blockera'),
+			description: __('Container element of each item.', 'blockera'),
+			icon: (
+				<Icon
+					icon="block-list-item-container"
+					library="ui"
+					iconSize="20"
+				/>
+			),
+			settings: {
+				force: true,
+			},
+		},
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
