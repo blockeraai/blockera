@@ -59,7 +59,6 @@
 		"@blockera/dev-jest": "file:packages/dev-jest",
 		"@blockera/dev-storybook": "file:packages/dev-storybook",
 		"@cypress/browserify-preprocessor": "^3.0.2",
-		"@cypress/code-coverage": "^3.12.1",
 		"@cypress/webpack-dev-server": "^3.6.1",
 		"@cypress/webpack-preprocessor": "^6.0.0",
 		"@emotion/styled": "^11.11.0",

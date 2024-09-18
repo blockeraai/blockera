@@ -2,7 +2,6 @@
  * External dependencies
  */
 import 'cypress-real-events';
-import '@cypress/code-coverage/support';
 import '@10up/cypress-wp-utils';
 
 /**

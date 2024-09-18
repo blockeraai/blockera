@@ -18,7 +18,6 @@ try {
 
 const setupNodeEvents = (on, config) => {
 	require('./packages/dev-cypress/js/plugins/index.js')(on, config);
-	require('@cypress/code-coverage/task')(on, config);
 
 	return config;
 };
