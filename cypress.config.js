@@ -30,6 +30,8 @@ module.exports = defineConfig({
 		specPattern: env.e2e.specPattern,
 		excludeSpecPattern: env.e2e.excludeSpecPattern,
 		supportFile: 'packages/dev-cypress/js/support/e2e.js',
+		experimentalMemoryManagement: true,
+		numTestsKeptInMemory: 10,
 	},
 	env,
 	fixturesFolder: 'packages/dev-cypress/js/fixtures',
