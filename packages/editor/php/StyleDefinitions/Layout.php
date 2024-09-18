@@ -22,6 +22,9 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 	 */
 	protected function css( array $setting ): array {
 
+		// Before run css method we need reset properties.
+		$this->reset();
+
 		$declaration = [];
 		$cssProperty = $setting['type'];
 
@@ -87,9 +90,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 					'flex-end'   => true,
 				];
 
-				if ( 'column' === $item['direction'] &&
-					isset( $normalItems[ $item['alignItems'] ] ) &&
-					isset( $normalItems[ $item['justifyContent'] ] )
+				if ( 'column' === $item['direction'] && isset( $normalItems[ $item['alignItems'] ] ) && isset( $normalItems[ $item['justifyContent'] ] )
 				) {
 					$changeFlexInside = true;
 				}
@@ -276,6 +277,16 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 		}
 
 		parent::setSelector( $support );
+	}
+
+	/**
+	 * Flush properties of Layout class.
+	 *
+	 * @return void
+	 */
+	private function reset(): void {
+
+		$this->with_gap_margin_block_start = false;
 	}
 
 }

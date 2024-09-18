@@ -23,7 +23,8 @@
 - Design of post preview link in header improved.
 - Enhanced the getNormalizedSelector API for better performance and functionality.
 - Refactored server-side style engine with cleaner code and improved support for & ampersand in selector creation.
-- Added spacer for processed selector in the client-side style engine to improved css selector normalizer. 
+- Added spacer for processed selector in the client-side style engine to improved css selector normalizer.
+- Added a reset method in Layout style definition.
 
 ### Automated Tests:
 - Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
