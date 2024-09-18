@@ -7,54 +7,60 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
+	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('List Item Block → Inner Blocks', () => {
+describe('Archives Block → Inner Blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
 	it('Inner blocks existence + CSS selectors in block editor and front-end', () => {
-		appendBlocks(`<!-- wp:list -->
-<ul><!-- wp:list-item -->
-<li>item 1 <a href="#">link is here</a></li>
-<!-- /wp:list-item -->
-
-<!-- wp:list-item -->
-<li>item 2</li>
-<!-- /wp:list-item -->
-
-<!-- wp:list-item -->
-<li>item 3</li>
-<!-- /wp:list-item --></ul>
-<!-- /wp:list -->`);
+		appendBlocks(`<!-- wp:archives /-->\n `);
 
 		// Select target block
-		cy.getBlock('core/list-item').first().click();
+		cy.getBlock('core/archives').click();
 
 		//
 		// 1. Edit Inner Blocks
 		//
 
 		//
-		// 1.1. elements/item-marker
+		// 1.1. elements/item
 		//
+		setInnerBlock('elements/item');
+
+		//
+		// 1.1.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff0000');
+
+		cy.getBlock('core/archives')
+			.first()
+			.within(() => {
+				cy.get('a')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+			});
+
+		//
+		// 1.2. elements/item-marker
+		//
+		setParentBlock();
 		setInnerBlock('elements/item-marker');
 
 		//
-		// 1.1.1. Text color
+		// 1.2.1. Text color
 		//
 		cy.setColorControlValue('Text Color', '00ffdf');
 
-		cy.getBlock('core/list')
+		cy.getBlock('core/archives')
 			.first()
 			.within(() => {
 				cy.get('li')
 					.first()
 					.within(($el) => {
-						cy.wait(2000);
-
 						cy.window().then((win) => {
 							const marker = win.getComputedStyle(
 								$el[0],
@@ -68,20 +74,20 @@ describe('List Item Block → Inner Blocks', () => {
 			});
 
 		//
-		// 1.2. elements/link
+		// 1.3. elements/item-container
 		//
 		setParentBlock();
-		setInnerBlock('elements/link');
+		setInnerBlock('elements/item-container');
 
 		//
 		// 1.2.1. Text color
 		//
 		cy.setColorControlValue('BG Color', 'ff2020');
 
-		cy.getBlock('core/list')
+		cy.getBlock('core/archives')
 			.first()
 			.within(() => {
-				cy.get('a')
+				cy.get('li')
 					.first()
 					.should('have.css', 'background-color', 'rgb(255, 32, 32)');
 			});
@@ -92,14 +98,19 @@ describe('List Item Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.wp-block-list').within(() => {
-			// elements/link
-			cy.get('li.blockera-block a')
+		cy.get('.blockera-block.wp-block-archives').within(() => {
+			// elements/item
+			cy.get('a')
+				.first()
+				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+
+			// elements/item-container
+			cy.get('li')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 32, 32)');
 
 			// elements/item-marker
-			cy.get('li.blockera-block')
+			cy.get('li')
 				.first()
 				.within(($el) => {
 					cy.window().then((win) => {

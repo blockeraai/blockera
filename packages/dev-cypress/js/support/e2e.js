@@ -1,14 +1,14 @@
 /**
+ * External dependencies
+ */
+import 'cypress-real-events';
+import '@10up/cypress-wp-utils';
+
+/**
  * Internal dependencies
  */
 import { registerCommands } from './commands';
 import { loginToSite, goTo } from '../helpers';
-
-/**
- * External dependencies
- */
-import 'cypress-real-events';
-import '@cypress/code-coverage/support';
 
 registerCommands();
 

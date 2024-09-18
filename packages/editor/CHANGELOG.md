@@ -21,8 +21,13 @@
 ### Improvements
 
 - Design of post preview link in header improved.
+- Enhanced the getNormalizedSelector API for better performance and functionality.
+- Refactored server-side style engine with cleaner code and improved support for & ampersand in selector creation.
+- Added spacer for processed selector in the client-side style engine to improved css selector normalizer. 
 
 ### Automated Tests:
 - Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
 - Conducted WP data compatibility test for the Spacer Block to ensure correct functionality.
+- Added new test suites to ensure the robustness of the getNormalizedSelector API.
+- Updated tests to detect real hover states more accurately.
 - Updated Blockera inline style tag ID to ensure all assertions pass successfully.

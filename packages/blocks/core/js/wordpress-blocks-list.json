@@ -2,10 +2,10 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 76,
-		"soft-supported": 89,
-		"not-supported": 4,
-		"no-need-to-support": 13
+		"supported": 78,
+		"soft-supported": 92,
+		"not-supported": 1,
+		"no-need-to-support": 14
 	},
 	"supported": [
 		{
@@ -129,10 +129,6 @@
 			"name": "core/table",
 			"title": "Table",
 			"note": "@todo there is a lot of room for inner blocks."
-		},
-		{
-			"name": "core/tag-cloud",
-			"title": "Tag Cloud"
 		},
 		{
 			"name": "core/verse",
@@ -315,6 +311,18 @@
 		{
 			"name": "core/navigation-link",
 			"title": "Navigation Link"
+		},
+		{
+			"name": "core/archives",
+			"title": "Archives"
+		},
+		{
+			"name": "core/calendar",
+			"title": "Calendar"
+		},
+		{
+			"name": "core/tag-cloud",
+			"title": "Tag Cloud"
 		}
 	],
 	"no-need-to-support": [
@@ -382,6 +390,11 @@
 			"name": "core/widget-group",
 			"title": "Widget Group",
 			"note": "Investigate if this block can be supported."
+		},
+		{
+			"name": "core/page-list-item",
+			"title": "Page List Item",
+			"note": "This block is not selectable and there is no ui for it for user and we do not need to support it."
 		}
 	],
 	"not-supported": [
@@ -389,21 +402,6 @@
 			"name": "core/navigation",
 			"title": "Navigation",
 			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/page-list-item",
-			"title": "Page List Item",
-			"note": "Investigate if this block can be supported."
-		},
-		{
-			"name": "core/archives",
-			"title": "Archives",
-			"note": "There is a block editor js error about attributes."
-		},
-		{
-			"name": "core/calendar",
-			"title": "Calendar",
-			"note": "There is a block editor js error about attributes."
 		}
 	]
 }

@@ -47,6 +47,7 @@
 		"rememo": "^4.0.2"
 	},
 	"devDependencies": {
+		"@10up/cypress-wp-utils": "^0.4.0",
 		"@4tw/cypress-drag-drop": "^2.2.5",
 		"@babel/cli": "^7.22.9",
 		"@babel/core": "^7.22.9",
@@ -58,7 +59,6 @@
 		"@blockera/dev-jest": "file:packages/dev-jest",
 		"@blockera/dev-storybook": "file:packages/dev-storybook",
 		"@cypress/browserify-preprocessor": "^3.0.2",
-		"@cypress/code-coverage": "^3.12.1",
 		"@cypress/webpack-dev-server": "^3.6.1",
 		"@cypress/webpack-preprocessor": "^6.0.0",
 		"@emotion/styled": "^11.11.0",
@@ -204,8 +204,8 @@
 		"prepare": "husky install",
 		"flow": "npx flow status",
 		"setup": "npm install && npm run build",
-		"test:e2e": "npx cypress run --config video=false --browser chrome",
-		"test:ct": "npx cypress run --component",
+		"test:e2e": "NODE_OPTIONS=--max_old_space_size=4096 npx cypress run --config video=false --browser chrome",
+		"test:ct": "NODE_OPTIONS=--max_old_space_size=4096 npx cypress run --component",
 		"test:ct:debug": "npx cypress open --component",
 		"test:e2e:debug": "npx cypress open --e2e",
 		"test:e2e:headed": "npm run test:e2e --headed",
