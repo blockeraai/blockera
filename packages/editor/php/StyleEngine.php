@@ -229,28 +229,8 @@ final class StyleEngine {
 
 		$this->pseudo_state = $pseudoClass;
 
-		$selectors = blockera_get_block_state_selectors(
-			blockera_get_block_type_property( $this->block['blockName'], 'selectors' ),
-			[
-				'is-inner-block'     => false,
-				'block-type'         => 'master',
-				'fallback'           => $this->selector,
-				'master-block-state' => $this->pseudo_state,
-				'pseudo-class'       => $this->pseudo_state,
-				'block-settings'     => $this->getSettings(),
-			]
-		);
-
-		$style_engine = $this;
-
 		// Prepare generated block css by supported each of style definitions.
-		$block_css = array_map(
-			static function ( BaseStyleDefinition $definition ) use ( $selectors, $style_engine ): array {
-
-				return $style_engine->generateBlockCss( $definition, $selectors );
-			},
-			$this->definitions
-		);
+		$block_css = array_map( [ $this, 'generateBlockCss' ], $this->definitions );
 
 		return $this->normalizeCssRules(
 			blockera_convert_css_declarations_to_css_valid_rules(
@@ -265,11 +245,10 @@ final class StyleEngine {
 	 * Generating current block css styles.
 	 *
 	 * @param BaseStyleDefinition $definition the style definition instance.
-	 * @param array               $selectors  the available css selectors in current block.
 	 *
 	 * @return array The array of collection of selector and declaration.
 	 */
-	protected function generateBlockCss( BaseStyleDefinition $definition, array $selectors ): array {
+	protected function generateBlockCss( BaseStyleDefinition $definition ): array {
 
 		$this->definition = $definition;
 		// get current block settings.
@@ -278,7 +257,9 @@ final class StyleEngine {
 		$this->definition->flushDeclarations();
 		$this->configureDefinition( $this->definition );
 		$this->definition->setSettings( $settings );
-		$this->definition->setSelectors( $selectors );
+		$this->definition->setBlockType( 'master' );
+		$this->definition->setPseudoState( $this->pseudo_state );
+		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
 		$cssRules = $this->definition->getCssRules();
 
@@ -322,31 +303,13 @@ final class StyleEngine {
 			return [];
 		}
 
-		// Preparing current inner block available selectors.
-		$selectors = blockera_get_inner_block_state_selectors(
-			blockera_get_block_type_property( $this->block['blockName'], 'selectors' ),
-			[
-				'block-type'         => $blockType,
-				'fallback'           => $this->selector,
-				'master-block-state' => $this->pseudo_state,
-				'block-settings'     => $settings['attributes'],
-				'pseudo-class'       => $pseudoState ?? $this->pseudo_state,
-			]
-		);
-
-		// Get normalized blockera inner block identify.
-		$selector_id = blockera_get_normalized_inner_block_id( $blockType );
-
-		// Exclude inner blocks styles when hasn't any selectors for this context.
-		if ( empty( $selectors[ $selector_id ] ) ) {
-
-			return [];
-		}
-
 		$this->definition->flushDeclarations();
 		$this->configureDefinition( $this->definition );
+		$this->definition->setBlockType( $blockType );
+		$this->definition->setInnerPseudoState( $pseudoState );
+		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setSettings( $settings['attributes'] );
-		$this->definition->setSelectors( $selectors[ $selector_id ] );
+		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
 		$cssRules = $this->definition->getCssRules();
 

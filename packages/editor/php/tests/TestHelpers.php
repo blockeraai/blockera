@@ -129,15 +129,17 @@ class TestHelpers extends \WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function testItShouldGetBlockeraCompatibleBlockCssSelectorWithWPAPI( string $featureId, $fallbackId, string $expected ): void {
+	public function testItShouldGetBlockeraCompatibleBlockCssSelectorWithWPAPI( string $blockType, string $featureId, $fallbackId, string $expected ): void {
 
 		register_block_type( 'core/sample' );
 
 		$this->assertEquals(
 			$expected,
 			blockera_get_compatible_block_css_selector( $this->selectors, $featureId, [
-				'blockName' => 'core/sample',
-				'fallback'  => $fallbackId,
+				'block-name'               => 'core/sample',
+				'fallback'                 => $fallbackId,
+				'block-type'               => $blockType,
+				'blockera-unique-selector' => '.blockera-block.blockera-block--phggmy',
 			] )
 		);
 	}
@@ -173,16 +175,16 @@ class TestHelpers extends \WP_UnitTestCase {
 	 * @dataProvider getBlockStateSelectorsDataProvider
 	 *
 	 * @param array $args
-	 * @param array $selectors
-	 * @param array $blockStateSelectors
+	 * @param string $selectors
+	 * @param string $blockStateSelectors
 	 *
 	 * @return void
 	 */
-	public function testItShouldRetrieveBlockStateSelectors( array $args, array $selectors, array $blockStateSelectors = [] ): void {
+	public function testItShouldRetrieveBlockStateSelectors( array $args, string $selector, string $blockStateSelectors = '' ): void {
 
 		$this->assertSame(
 			$blockStateSelectors,
-			blockera_get_block_state_selectors( $selectors, $args )
+			blockera_get_master_block_state_selector( $selector, $args )
 		);
 	}
 
@@ -191,18 +193,18 @@ class TestHelpers extends \WP_UnitTestCase {
 	 * @dataProvider getInnerBlockStateSelectorsDataProvider
 	 *
 	 * @param array $args
-	 * @param array $selectors
-	 * @param array $blockStateSelectors
+	 * @param string $selectors
+	 * @param string $blockStateSelectors
 	 *
 	 * @throws BaseException Exception for invalid selector.
 	 *
 	 * @return void
 	 */
-	public function testItShouldRetrieveInnerBlockStateSelectors( array $args, array $selectors, array $blockStateSelectors = [] ): void {
+	public function testItShouldRetrieveInnerBlockStateSelectors( array $args, string $selector, string $blockStateSelector = '' ): void {
 
 		$this->assertSame(
-			$blockStateSelectors,
-			blockera_get_normalized_inner_block_selectors( $selectors, $args )
+			$blockStateSelector,
+			blockera_get_inner_block_state_selector( $selector, $args )
 		);
 	}
 
@@ -315,7 +317,7 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$selector = '.wp-block-my-block';
 		$root     = '.my-root';
-		$args     = [ 'blockName' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
@@ -326,7 +328,7 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$selector = '.wp-block-my-block.other-class';
 		$root     = '.my-root';
-		$args     = [ 'blockName' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
@@ -337,7 +339,7 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$selector = 'div';
 		$root     = '.my-root';
-		$args     = [ 'blockName' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
@@ -348,7 +350,7 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$selector = '.my-class';
 		$root     = '.my-root';
-		$args     = [ 'blockName' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
@@ -429,57 +431,42 @@ class TestHelpers extends \WP_UnitTestCase {
 
 	public function testCssSelectorFormatWithPseudoClasses() {
 
-		$selectors       = [
-			'parentRoot' => '.container',
-			'fallback'   => '.fallback'
-		];
 		$picked_selector = '.element';
 		$args            = [
-			'pseudoClass'       => 'hover',
-			'parentPseudoClass' => 'active'
+			'pseudo_class'       => 'hover',
+			'parent_pseudo_class' => 'active'
 		];
 
-		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
 		$this->assertEquals( '.container:active .element:hover', $result );
 	}
 
 	public function testCssSelectorFormatWithoutPseudoClasses() {
 
-		$selectors       = [
-			'parentRoot' => '.container',
-			'fallback'   => '.fallback'
-		];
 		$picked_selector = '.element';
 		$args            = [];
 
-		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
 		$this->assertEquals( '.container .element', $result );
 	}
 
 	public function testCssSelectorFormatWithAmpersandInPickedSelector() {
 
-		$selectors       = [
-			'parentRoot' => '.container',
-			'fallback'   => '.fallback'
-		];
 		$picked_selector = '&.element';
 		$args            = [
-			'pseudoClass' => 'hover'
+			'pseudo_class' => 'hover'
 		];
 
-		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
 		$this->assertEquals( '.container.element:hover', $result );
 	}
 
 	public function testCssSelectorFormatFallbackWhenParentRootMissing() {
 
-		$selectors       = [
-			'fallback' => '.fallback'
-		];
 		$picked_selector = '.element';
 		$args            = [];
 
-		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$result = blockera_get_css_selector_format( '.fallback', $picked_selector, $args );
 		$this->assertEquals( '.fallback .element', $result );
 	}
 
@@ -489,7 +476,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		$picked_selector = '.element';
 		$args            = [];
 
-		$result = blockera_get_css_selector_format( $selectors, $picked_selector, $args );
+		$result = blockera_get_css_selector_format( '', $picked_selector, $args );
 		$this->assertEquals( '.element', $result );
 	}
 
