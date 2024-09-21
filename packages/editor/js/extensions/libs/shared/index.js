@@ -553,44 +553,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								setSettings={handleOnChangeSettings}
 							/>
 
-							<LayoutExtension
-								block={block}
-								extensionConfig={layoutConfig}
-								extensionProps={{
-									blockeraDisplay: {},
-									blockeraFlexLayout: {},
-									blockeraGap: {},
-									blockeraFlexWrap: {},
-									blockeraAlignContent: {},
-								}}
-								values={{
-									blockeraDisplay:
-										currentStateAttributes.blockeraDisplay,
-									blockeraFlexLayout:
-										currentStateAttributes.blockeraFlexLayout,
-									blockeraGap:
-										currentStateAttributes.blockeraGap,
-									blockeraFlexWrap:
-										currentStateAttributes.blockeraFlexWrap,
-									blockeraAlignContent:
-										currentStateAttributes.blockeraAlignContent,
-								}}
-								attributes={{
-									blockeraDisplay: attributes.blockeraDisplay,
-									blockeraFlexLayout:
-										attributes.blockeraFlexLayout,
-									blockeraGap: attributes.blockeraGap,
-									blockeraFlexWrap:
-										attributes.blockeraFlexWrap,
-									blockeraAlignContent:
-										attributes.blockeraAlignContent,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-
 							{directParentBlock?.innerBlocks?.length > 0 &&
 								directParentBlock?.attributes
 									.blockeraDisplay === 'flex' && (
@@ -646,6 +608,44 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										setSettings={handleOnChangeSettings}
 									/>
 								)}
+
+							<LayoutExtension
+								block={block}
+								extensionConfig={layoutConfig}
+								extensionProps={{
+									blockeraDisplay: {},
+									blockeraFlexLayout: {},
+									blockeraGap: {},
+									blockeraFlexWrap: {},
+									blockeraAlignContent: {},
+								}}
+								values={{
+									blockeraDisplay:
+										currentStateAttributes.blockeraDisplay,
+									blockeraFlexLayout:
+										currentStateAttributes.blockeraFlexLayout,
+									blockeraGap:
+										currentStateAttributes.blockeraGap,
+									blockeraFlexWrap:
+										currentStateAttributes.blockeraFlexWrap,
+									blockeraAlignContent:
+										currentStateAttributes.blockeraAlignContent,
+								}}
+								attributes={{
+									blockeraDisplay: attributes.blockeraDisplay,
+									blockeraFlexLayout:
+										attributes.blockeraFlexLayout,
+									blockeraGap: attributes.blockeraGap,
+									blockeraFlexWrap:
+										attributes.blockeraFlexWrap,
+									blockeraAlignContent:
+										attributes.blockeraAlignContent,
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
 
 							<SizeExtension
 								block={block}
