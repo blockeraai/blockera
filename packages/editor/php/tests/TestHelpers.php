@@ -174,7 +174,7 @@ class TestHelpers extends \WP_UnitTestCase {
 	 * @group        blockStateSelectors
 	 * @dataProvider getBlockStateSelectorsDataProvider
 	 *
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $selectors
 	 * @param string $blockStateSelectors
 	 *
@@ -192,7 +192,7 @@ class TestHelpers extends \WP_UnitTestCase {
 	 * @group        innerBlockStateSelectors
 	 * @dataProvider getInnerBlockStateSelectorsDataProvider
 	 *
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $selectors
 	 * @param string $blockStateSelectors
 	 *
@@ -433,7 +433,7 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$picked_selector = '.element';
 		$args            = [
-			'pseudo_class'       => 'hover',
+			'pseudo_class'        => 'hover',
 			'parent_pseudo_class' => 'active'
 		];
 
