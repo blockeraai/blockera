@@ -33,3 +33,4 @@
 - Added new test suites to ensure the robustness of the getNormalizedSelector API.
 - Updated tests to detect real hover states more accurately.
 - Updated Blockera inline style tag ID to ensure all assertions pass successfully.
+- Added new automated tests to verify unique class names for blocks in Blockera.
