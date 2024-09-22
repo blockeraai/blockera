@@ -332,14 +332,14 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
-		$this->assertEquals( '.my-root.wp-block-my-block.other-class, .wp-block-my-block.other-class.my-root', $result );
+		$this->assertEquals( '.my-root.wp-block-my-block.other-class, .wp-block-my-block.my-root.other-class', $result );
 	}
 
 	public function testSelectorWithTagName() {
 
 		$selector = 'div';
 		$root     = '.my-root';
-		$args     = [ 'block-name' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block', 'block-type' => 'master' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
@@ -350,7 +350,7 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$selector = '.my-class';
 		$root     = '.my-root';
-		$args     = [ 'block-name' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block', 'block-type' => 'master' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 

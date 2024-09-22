@@ -454,36 +454,21 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
-		$preg_quote     = preg_quote( $args['block-name'], '/' );
-		$pattern        = '/\.\bwp-block-' . $preg_quote . '\b/';
-		$ignore_pattern = '/(\.wp-block-' . $preg_quote . '__|^.*\s\.wp-block-' . $preg_quote . ')/';
+		$preg_quote = preg_quote( $args['block-name'], '/' );
+		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
 		// Assume recieved selector is another reference to root, so we should concat together.
-		if ( preg_match( $pattern, $selector, $matches ) && ! preg_match( $ignore_pattern, $selector ) ) {
+		if ( preg_match( $pattern, $selector, $matches ) ) {
 
-			// Cleanup root selector from any css standard pseudo-classes in this state.
-			$root = preg_replace( '/:\w+/', '', $root );
-
-			$prefix = str_replace( $matches[0], $root . $matches[0], $selector );
-
-			$has_white_space = preg_match( '/\s/', $selector );
-
-			$suffix_regexp = sprintf(
-				'/%1$s\.\w+.(?:\w+)%2$s/',
-				preg_quote( $matches[0], '/' ),
-				$has_white_space ? '\s' : ''
+			// Appending blockera roo unique css selector into picked your selector.
+			return \Blockera\Utils\Utils::modifySelectorPos(
+				$selector,
+				$matches[0],
+				[
+					'prefix' => $root,
+					'suffix' => $root,
+				]
 			);
-
-			if ( preg_match( $suffix_regexp, $selector, $m ) ) {
-
-				$suffix = str_replace( $m, $m[0] . $root, $selector );
-
-			} else {
-
-				$suffix = str_replace( $matches[0], $matches[0] . $root, $selector );
-			}
-
-			return sprintf( '%s, %s', $prefix, $suffix );
 		}
 
 		// Imagine selector and root is same.
