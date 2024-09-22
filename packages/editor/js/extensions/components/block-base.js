@@ -19,7 +19,13 @@ import {
 /**
  * Blockera dependencies
  */
-import { omit, isEquals, omitWithPattern } from '@blockera/utils';
+import {
+	omit,
+	isEquals,
+	omitWithPattern,
+	isEmpty,
+	getSmallHash,
+} from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
 /**
@@ -106,9 +112,32 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const {
 			currentBlock,
 			currentState,
+			getBlockTypeClassNames,
 			currentBreakpoint,
+			registerBlockTypeClassNames,
 			currentInnerBlockState,
 		} = useExtensionsStore({ name, clientId });
+
+		// Handling duplicate blocks of block-editor to set unique blockera classname into them.
+		useEffect(() => {
+			if (isEmpty(getBlockTypeClassNames(clientId))) {
+				const blockeraUniqueClassName = `blockera-block-${getSmallHash(
+					clientId
+				)}`;
+
+				registerBlockTypeClassNames(blockeraUniqueClassName, clientId);
+				setAttributes({
+					...attributes,
+					className: attributes?.className
+						? attributes?.className.replace(
+								new RegExp('blockera-block-.*', 'gi'),
+								blockeraUniqueClassName
+						  )
+						: blockeraUniqueClassName,
+				});
+			}
+			// eslint-disable-next-line
+		}, [clientId]);
 
 		const { availableAttributes, isActiveBlockExtensions } = useSelect(
 			(select) => {
@@ -215,6 +244,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const { getAttributesWithIds, handleOnChangeAttributes } =
 			useAttributes(setAttributes, {
+				clientId,
 				className,
 				blockId: name,
 				isNormalState,

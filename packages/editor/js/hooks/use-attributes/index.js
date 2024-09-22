@@ -27,11 +27,13 @@ import type {
 	TStates,
 } from '../../extensions/libs/block-states/types';
 import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
+import { useExtensionsStore } from '../use-extensions-store';
 
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
 	{
 		blockId,
+		clientId,
 		className,
 		innerBlocks,
 		currentBlock,
@@ -49,6 +51,7 @@ export const useAttributes = (
 		getActiveBlockVariation,
 	}: {
 		blockId: string,
+		clientId: string,
 		className: string,
 		innerBlocks: Object,
 		currentState: TStates,
@@ -69,6 +72,11 @@ export const useAttributes = (
 	getAttributesWithIds: (state: Object, identifier: string) => Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }) => {
+	const { getBlockTypeClassNames } = useExtensionsStore({
+		name: blockId,
+		clientId,
+	});
+
 	const getAttributesWithIds = (
 		state: Object,
 		identifier: string
@@ -124,6 +132,13 @@ export const useAttributes = (
 		const indexOfBlockeraSelector =
 			attributes?.className?.indexOf('blockera-block');
 
+		const blockeraUniqueClassName = `blockera-block-${getSmallHash(
+			clientId
+		)}`;
+		const storedBlockeraUniqueClassName = getBlockTypeClassNames(
+			clientId
+		).replace(/\./, ' ');
+
 		// Sets "className" attribute value is existing on block attributes to merge with default value.
 		if (
 			-1 === indexOfBlockeraSelector ||
@@ -133,8 +148,20 @@ export const useAttributes = (
 				..._attributes,
 				className: classNames(className, attributes.className, {
 					'blockera-block': true,
-					[`blockera-block-${getSmallHash(clientId)}`]: true,
+					[blockeraUniqueClassName]: true,
 				}),
+			};
+		} else if (
+			-1 === _attributes.className.indexOf(storedBlockeraUniqueClassName)
+		) {
+			// Handling duplicate blocks of block-editor to set unique blockera classname into them.
+			// see: packages/editor/js/extensions/components/block-base.js on line 121 - 140
+			_attributes = {
+				..._attributes,
+				className: _attributes.className.replace(
+					new RegExp('blockera-block-.*', 'gi'),
+					storedBlockeraUniqueClassName
+				),
 			};
 		}
 
