@@ -381,18 +381,6 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		} else {
 
-			$master_block_state = $args['pseudo-class'] ?? 'normal';
-			// Filters standard css pseudo classes.
-			$parent_pseudo_class = in_array(
-				$master_block_state,
-				[
-					'normal',
-					'parent-class',
-					'custom-class',
-				],
-				true
-			) ? '' : $master_block_state;
-
 			// Re-Generate picked css selector to handle current inner block state!
 			$selector = blockera_get_inner_block_state_selector( $selector ?? '', $args );
 		}
@@ -466,8 +454,9 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
-		$pattern        = '/\.\bwp-block-' . preg_quote( $args['block-name'], '/' ) . '\b/';
-		$ignore_pattern = '/\.\bwp-block-' . preg_quote( $args['block-name'], '/' ) . '__/';
+		$preg_quote     = preg_quote( $args['block-name'], '/' );
+		$pattern        = '/\.\bwp-block-' . $preg_quote . '\b/';
+		$ignore_pattern = '/(\.wp-block-' . $preg_quote . '__|^.*\s\.wp-block-' . $preg_quote . ')/';
 
 		// Assume recieved selector is another reference to root, so we should concat together.
 		if ( preg_match( $pattern, $selector, $matches ) && ! preg_match( $ignore_pattern, $selector ) ) {
@@ -498,7 +487,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		}
 
 		// Imagine selector and root is same.
-		if ( $selector === $root ) {
+		if ( $selector === $root || blockera_is_inner_block( $args['block-type'] ) ) {
 
 			return $selector;
 		}
