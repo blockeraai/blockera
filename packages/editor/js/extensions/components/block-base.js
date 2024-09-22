@@ -125,6 +125,26 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					clientId
 				)}`;
 
+				let prefixClassName = '';
+				const indexOfBlockeraSelector =
+					attributes?.className?.indexOf('blockera-block');
+
+				if (
+					-1 === indexOfBlockeraSelector ||
+					'undefined' === typeof indexOfBlockeraSelector
+				) {
+					prefixClassName =
+						-1 === indexOfBlockeraSelector ||
+						'undefined' === typeof indexOfBlockeraSelector
+							? 'blockera-block'
+							: '';
+				}
+
+				prefixClassName =
+					'undefined' === typeof indexOfBlockeraSelector
+						? prefixClassName + ' '
+						: (attributes?.className || '') + ' ' + prefixClassName;
+
 				registerBlockTypeClassNames(blockeraUniqueClassName, clientId);
 				setAttributes({
 					...attributes,
@@ -133,7 +153,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								new RegExp('blockera-block-.*', 'gi'),
 								blockeraUniqueClassName
 						  )
-						: blockeraUniqueClassName,
+						: prefixClassName + blockeraUniqueClassName,
 				});
 			}
 			// eslint-disable-next-line
