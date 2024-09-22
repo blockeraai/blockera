@@ -125,19 +125,19 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 		$master_block_state = $args['pseudo-class'] ?? 'normal';
 		$pseudo_class       = $args['inner-pseudo-class'] ?? 'normal';
 
+		// Filters standard css pseudo classes.
+		$parent_pseudo_class = in_array(
+			$master_block_state,
+			[
+				'normal',
+				'parent-class',
+				'custom-class',
+			],
+			true
+		) ? '' : $master_block_state;
+
 		// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
 		if ( $pseudo_class && 'normal' !== $pseudo_class ) {
-
-			// Filters standard css pseudo classes.
-			$parent_pseudo_class = in_array(
-				$master_block_state,
-				[
-					'normal',
-					'parent-class',
-					'custom-class',
-				],
-				true
-			) ? '' : $master_block_state;
 
 			// Handle multiple selector where separated with comma.
 			$parsedValue = explode( ',', trim( $selector ) );
@@ -174,16 +174,6 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 
 		// inner block in normal state.
 		if ( $master_block_state ) {
-
-			$parent_pseudo_class = in_array(
-				$master_block_state,
-				[
-					'normal',
-					'parent-class',
-					'custom-class',
-				],
-				true
-			) ? '' : $master_block_state;
 
 			// Add pseudo custom css class as suffix into selectors value for current key.
 			return blockera_get_css_selector_format(
@@ -317,27 +307,6 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_selector_is_compatible_with_wp' ) ) {
-
-	/**
-	 * Check the target selector is compatible with WordPress api?
-	 *
-	 * @param string $selector   the target selector.
-	 * @param string $block_name the target block name.
-	 *
-	 * @return bool true on success, false on failure.
-	 */
-	function blockera_selector_is_compatible_with_wp( string $selector, string $block_name ): bool {
-
-		$block_name = str_replace( '/', '-', str_replace( 'core/', '', $block_name ) );
-
-		// Imagine $picked_selector is fallback css selector of WordPress block!
-		$pattern = '/\.\bwp-block-' . preg_quote( $block_name, '/' ) . '\b/';
-
-		return preg_match( $pattern, $selector );
-	}
-}
-
 if ( ! function_exists( 'blockera_process_ampersand_selector_char' ) ) {
 
 	/**
@@ -389,7 +358,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) ) {
 
-			$selector_id = blockera_get_normalized_inner_block_id( $args['block-name'] );
+			$selector_id = blockera_get_normalized_inner_block_id( $args['block-type'] );
 
 			// Rewrite block type selectors because we provide suitable selectors array of original array.
 			$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
@@ -411,6 +380,18 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 			$selector = blockera_get_master_block_state_selector( $selector ?? $args['blockera-unique-selector'] ?? '', $args );
 
 		} else {
+
+			$master_block_state = $args['pseudo-class'] ?? 'normal';
+			// Filters standard css pseudo classes.
+			$parent_pseudo_class = in_array(
+				$master_block_state,
+				[
+					'normal',
+					'parent-class',
+					'custom-class',
+				],
+				true
+			) ? '' : $master_block_state;
 
 			// Re-Generate picked css selector to handle current inner block state!
 			$selector = blockera_get_inner_block_state_selector( $selector ?? '', $args );
