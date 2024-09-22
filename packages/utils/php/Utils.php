@@ -76,16 +76,29 @@ class Utils {
 
 			// Check if the current selector contains the part (like ".wp-block-sample").
 			if ( strpos( $trimmedSel, $part ) !== false ) {
+				// Remove dot.
+				$partWithoutDot = substr( $part, 1 );
+
+				// Regular expression pattern to detecting a specific part of selector.
+				$pattern = '/\.\b' . preg_quote( $partWithoutDot, '/' ) . '\b(?!\w+|-|_)/';
+
 				// Add the prefix around the part.
-				$modifiedWithPrefix = str_replace( $part, $prefix . $part, $trimmedSel );
+				$modifiedWithPrefix = preg_replace( $pattern, $prefix . $part, $trimmedSel );
 
 				// Add the modified selector to the array with the prefix.
-				$modifiedSelectors[] = $modifiedWithPrefix;
+				if ( ! in_array( $modifiedWithPrefix, $modifiedSelectors, true ) ) {
+					$modifiedSelectors[] = $modifiedWithPrefix;
+				}
 
 				// If a suffix is provided, create a new selector and add it as a separate selector.
 				if ( ! empty( $suffix ) ) {
-					$modifiedWithSuffix  = str_replace( $part, $part . $suffix, $trimmedSel );
-					$modifiedSelectors[] = $modifiedWithSuffix;
+					$modifiedWithSuffix = preg_replace( $pattern, $part . $suffix, $trimmedSel );
+
+					// Add the modified selector to the array with the suffix.
+					if ( ! in_array( $modifiedWithSuffix, $modifiedSelectors, true ) ) {
+
+						$modifiedSelectors[] = $modifiedWithSuffix;
+					}
 				}
 			} else {
 				// If the part is not found, just add the original selector unchanged.

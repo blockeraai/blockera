@@ -39,111 +39,133 @@ class UtilsTest extends \WP_UnitTestCase {
 	/**
 	 * Test case where both prefix and suffix are provided.
 	 */
-	public function testModifySelectorWithPrefixAndSuffix()
-	{
+	public function testModifySelectorWithPrefixAndSuffix() {
+
 		$selector = '.wp-block-sample, .wp-block-sample .first-child, .wp-block-sample .second-child';
-		$part = '.wp-block-sample';
-		$args = ['prefix' => '.test-before', 'suffix' => '.test-after'];
+		$part     = '.wp-block-sample';
+		$args     = [ 'prefix' => '.test-before', 'suffix' => '.test-after' ];
 
 		$expected = '.test-before.wp-block-sample, .wp-block-sample.test-after, ' .
 					'.test-before.wp-block-sample .first-child, .wp-block-sample.test-after .first-child, ' .
 					'.test-before.wp-block-sample .second-child, .wp-block-sample.test-after .second-child';
 
-		$this->assertEquals($expected, Utils::modifySelectorPos($selector, $part, $args));
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
 
 	/**
 	 * Test case where only prefix is provided.
 	 */
-	public function testModifySelectorWithOnlyPrefix()
-	{
+	public function testModifySelectorWithOnlyPrefix() {
+
 		$selector = '.wp-block-sample, .wp-block-sample .first-child, .wp-block-sample .second-child';
-		$part = '.wp-block-sample';
-		$args = ['prefix' => '.test-before'];
+		$part     = '.wp-block-sample';
+		$args     = [ 'prefix' => '.test-before' ];
 
 		$expected = '.test-before.wp-block-sample, ' .
 					'.test-before.wp-block-sample .first-child, ' .
 					'.test-before.wp-block-sample .second-child';
 
-		$this->assertEquals($expected, Utils::modifySelectorPos($selector, $part, $args));
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
 
 	/**
 	 * Test case where only suffix is provided.
 	 */
-	public function testModifySelectorWithOnlySuffix()
-	{
+	public function testModifySelectorWithOnlySuffix() {
+
 		$selector = '.wp-block-sample, .wp-block-sample .first-child, .wp-block-sample .second-child';
-		$part = '.wp-block-sample';
-		$args = ['suffix' => '.test-after'];
+		$part     = '.wp-block-sample';
+		$args     = [ 'suffix' => '.test-after' ];
 
 		$expected = '.wp-block-sample, .wp-block-sample.test-after, ' .
 					'.wp-block-sample .first-child, .wp-block-sample.test-after .first-child, ' .
 					'.wp-block-sample .second-child, .wp-block-sample.test-after .second-child';
 
-		$this->assertEquals($expected, Utils::modifySelectorPos($selector, $part, $args));
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
 
 	/**
 	 * Test case where neither prefix nor suffix is provided.
 	 */
-	public function testModifySelectorWithoutPrefixAndSuffix()
-	{
+	public function testModifySelectorWithoutPrefixAndSuffix() {
+
 		$selector = '.wp-block-sample, .wp-block-sample .first-child, .wp-block-sample .second-child';
-		$part = '.wp-block-sample';
-		$args = [];
+		$part     = '.wp-block-sample';
+		$args     = [];
 
 		$expected = '.wp-block-sample, ' .
 					'.wp-block-sample .first-child, ' .
 					'.wp-block-sample .second-child';
 
-		$this->assertEquals($expected, Utils::modifySelectorPos($selector, $part, $args));
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
 
 	/**
 	 * Test case where the part is not found in the selector.
 	 */
-	public function testModifySelectorWithNonExistingPart()
-	{
+	public function testModifySelectorWithNonExistingPart() {
+
 		$selector = '.another-class, .another-class .child';
-		$part = '.wp-block-sample';
-		$args = ['prefix' => '.test-before', 'suffix' => '.test-after'];
+		$part     = '.wp-block-sample';
+		$args     = [ 'prefix' => '.test-before', 'suffix' => '.test-after' ];
 
 		// Expect the original selector since the part is not found
 		$expected = '.another-class, .another-class .child';
 
-		$this->assertEquals($expected, Utils::modifySelectorPos($selector, $part, $args));
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
 
 	/**
 	 * Test case where the selector is empty.
 	 */
-	public function testModifySelectorWithEmptySelector()
-	{
+	public function testModifySelectorWithEmptySelector() {
+
 		$selector = '';
-		$part = '.wp-block-sample';
-		$args = ['prefix' => '.test-before', 'suffix' => '.test-after'];
+		$part     = '.wp-block-sample';
+		$args     = [ 'prefix' => '.test-before', 'suffix' => '.test-after' ];
 
 		// Expect an empty string as the result since the selector is empty
 		$expected = '';
 
-		$this->assertEquals($expected, Utils::modifySelectorPos($selector, $part, $args));
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
 
 	/**
 	 * Test case where the part is empty.
 	 */
-	public function testModifySelectorWithEmptyPart()
-	{
+	public function testModifySelectorWithEmptyPart() {
+
 		$selector = '.wp-block-sample, .wp-block-sample .first-child, .wp-block-sample .second-child';
-		$part = '';
-		$args = ['prefix' => '.test-before', 'suffix' => '.test-after'];
+		$part     = '';
+		$args     = [ 'prefix' => '.test-before', 'suffix' => '.test-after' ];
 
 		// Expect the original selector since no part is defined for modification
 		$expected = '.wp-block-sample, ' .
 					'.wp-block-sample .first-child, ' .
 					'.wp-block-sample .second-child';
 
-		$this->assertEquals($expected, Utils::modifySelectorPos($selector, $part, $args));
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
+
+	/**
+	 * Test case where the part has multiple matches.
+	 */
+	public function testModifySelectorWithMultipleMatchesWithPart() {
+
+		$selector = '.wp-block-sample, .wp-block-sample .first-child, .wp-block-sample .second-child, .wp-block-sample-link__a';
+		$part     = '.wp-block-sample';
+		$args     = [ 'prefix' => '.test-before', 'suffix' => '.test-after' ];
+
+		// Expect the original selector since no part is defined for modification
+		$expected = '.test-before.wp-block-sample, ' .
+					'.wp-block-sample.test-after, ' .
+					'.test-before.wp-block-sample .first-child, ' .
+					'.wp-block-sample.test-after .first-child, ' .
+					'.test-before.wp-block-sample .second-child, ' .
+					'.wp-block-sample.test-after .second-child' .
+					', .wp-block-sample-link__a';
+
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
+	}
+
 }
