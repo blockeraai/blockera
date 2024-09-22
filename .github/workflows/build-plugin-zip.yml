@@ -201,46 +201,51 @@ jobs:
                   name: blockera-plugin
                   path: ./blockera.zip
 
+            - name: Find existing bot comment
+              id: find_comment
+              run: |
+                  PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+                  COMMENTS_URL="https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
+
+                  # Fetch all comments and find if one from blockerabot exists
+                  curl -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
+                       -H "Accept: application/vnd.github.v3+json" \
+                       $COMMENTS_URL | jq '.[] | select(.user.login == "blockerabot") | .id' > comment_id.txt
+
+                  # If comment ID is found, set it to environment variable
+                  if [[ -s comment_id.txt ]]; then
+                    COMMENT_ID=$(cat comment_id.txt)
+                    echo "comment_id=${COMMENT_ID}" >> $GITHUB_ENV
+                  fi
+
             - name: Post or update comment with download link
               run: |
                   PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
                   REPO_NAME="${{ github.repository }}"
                   RUN_ID="${{ github.run_id }}"
-                  TIMESTAMP=$(date -u "+%Y-%m-%d %H:%M:%S UTC")
                   DOWNLOAD_LINK="https://github.com/$REPO_NAME/suites/$RUN_ID/artifacts"
 
-                  # Create the new content with the timestamp and download link
-                  NEW_CONTENT=":package: **Plugin zip file history** (last updated: $TIMESTAMP):\n\n"
-                  NEW_ENTRY="* **Run ID:** $RUN_ID - [blockera-plugin.zip]($DOWNLOAD_LINK)"
+                  # Define the comment body following the desired structure
+                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from [blockera-plugin.zip]($DOWNLOAD_LINK)."
 
                   if [ -z "${{ env.comment_id }}" ]; then
-                      # No existing comment found, post a new one
-                      COMMENT="${NEW_CONTENT}${NEW_ENTRY}"
+                      # No existing comment found, create a new one
                       curl -X POST \
                         -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
                         -H "Accept: application/vnd.github.v3+json" \
                         https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
-                        -d "{\"body\":\"${COMMENT}\"}"
+                        -d "{\"body\":\"${COMMENT_BODY}\"}"
                   else
-                      # Existing comment found, update it with the new content
+                      # Existing comment found, update it
                       COMMENT_ID=${{ env.comment_id }}
                       COMMENT_URL="https://api.github.com/repos/${{ github.repository }}/issues/comments/$COMMENT_ID"
-
-                      # Fetch the existing comment content
-                      EXISTING_COMMENT=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                                             -H "Accept: application/vnd.github.v3+json" \
-                                             $COMMENT_URL | jq --raw-output '.body')
-
-                      # Replace the old timestamp with the new one and update the comment with the new download link
-                      UPDATED_COMMENT=$(echo "${EXISTING_COMMENT}" | sed -E "s/\(last updated: .*?\)/(last updated: $TIMESTAMP)/")
-                      UPDATED_COMMENT="${UPDATED_COMMENT}\n${NEW_ENTRY}"
 
                       # Update the existing comment with the new content
                       curl -X PATCH \
                         -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
                         -H "Accept: application/vnd.github.v3+json" \
                         $COMMENT_URL \
-                        -d "{\"body\":\"${UPDATED_COMMENT}\"}"
+                        -d "{\"body\":\"${COMMENT_BODY}\"}"
                   fi
 
             - name: Build release notes draft
