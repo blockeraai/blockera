@@ -201,6 +201,48 @@ jobs:
                   name: blockera-plugin
                   path: ./blockera.zip
 
+            - name: Post or update comment with download link
+              run: |
+                  PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+                  REPO_NAME="${{ github.repository }}"
+                  RUN_ID="${{ github.run_id }}"
+                  TIMESTAMP=$(date -u "+%Y-%m-%d %H:%M:%S UTC")
+                  DOWNLOAD_LINK="https://github.com/$REPO_NAME/suites/$RUN_ID/artifacts"
+
+                  # Create the new content with the timestamp and download link
+                  NEW_CONTENT=":package: **Plugin zip file history** (last updated: $TIMESTAMP):\n\n"
+                  NEW_ENTRY="* **Run ID:** $RUN_ID - [blockera-plugin.zip]($DOWNLOAD_LINK)"
+
+                  if [ -z "${{ env.comment_id }}" ]; then
+                      # No existing comment found, post a new one
+                      COMMENT="${NEW_CONTENT}${NEW_ENTRY}"
+                      curl -X POST \
+                        -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
+                        -H "Accept: application/vnd.github.v3+json" \
+                        https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
+                        -d "{\"body\":\"${COMMENT}\"}"
+                  else
+                      # Existing comment found, update it with the new content
+                      COMMENT_ID=${{ env.comment_id }}
+                      COMMENT_URL="https://api.github.com/repos/${{ github.repository }}/issues/comments/$COMMENT_ID"
+
+                      # Fetch the existing comment content
+                      EXISTING_COMMENT=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                                             -H "Accept: application/vnd.github.v3+json" \
+                                             $COMMENT_URL | jq --raw-output '.body')
+
+                      # Replace the old timestamp with the new one and update the comment with the new download link
+                      UPDATED_COMMENT=$(echo "${EXISTING_COMMENT}" | sed -E "s/\(last updated: .*?\)/(last updated: $TIMESTAMP)/")
+                      UPDATED_COMMENT="${UPDATED_COMMENT}\n${NEW_ENTRY}"
+
+                      # Update the existing comment with the new content
+                      curl -X PATCH \
+                        -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
+                        -H "Accept: application/vnd.github.v3+json" \
+                        $COMMENT_URL \
+                        -d "{\"body\":\"${UPDATED_COMMENT}\"}"
+                  fi
+
             - name: Build release notes draft
               if: ${{ needs.bump-version.outputs.new_version }}
               env:
