@@ -241,7 +241,7 @@ jobs:
                   RUN_ID="${{ github.run_id }}"
 
                   # Define the comment body following the desired structure
-                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from [blockera-plugin.zip](${{ env.download_id }})."
+                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from [blockera-plugin.zip](${{ env.download_link }})."
 
                   if [ -z "${{ env.comment_id }}" ]; then
                       # No existing comment found, create a new one
