@@ -204,12 +204,14 @@ final class StyleEngine {
 			return [ $css_rules ];
 		}
 
+		$this->breakpoint = $breakpoint;
+
 		// We should process any supported pseudo classes by blockera to prepare each state styles.
 		return array_filter(
 			array_map(
 				function ( string $state ) use ( $breakpoint ): array {
 
-					return $this->prepareStateStyles( $state, $breakpoint );
+					return $this->prepareStateStyles( $state );
 				},
 				$this->pseudo_classes
 			),
@@ -221,11 +223,10 @@ final class StyleEngine {
 	 * Preparing css of current state settings.
 	 *
 	 * @param string $pseudoClass The state name (as pseudo class in css).
-	 * @param string $breakpoint  The current breakpoint (device type).
 	 *
 	 * @return array The state css rules.
 	 */
-	protected function prepareStateStyles( string $pseudoClass, string $breakpoint ): array {
+	protected function prepareStateStyles( string $pseudoClass ): array {
 
 		$this->pseudo_state = $pseudoClass;
 
@@ -254,7 +255,12 @@ final class StyleEngine {
 		// get current block settings.
 		$settings = $this->getSettings();
 
-		$this->definition->flushDeclarations();
+		if ( empty( $settings ) ) {
+
+			return [];
+		}
+
+		$this->definition->resetProperties();
 		$this->configureDefinition( $this->definition );
 		$this->definition->setSettings( $settings );
 		$this->definition->setBlockType( 'master' );
@@ -303,7 +309,7 @@ final class StyleEngine {
 			return [];
 		}
 
-		$this->definition->flushDeclarations();
+		$this->definition->resetProperties();
 		$this->configureDefinition( $this->definition );
 		$this->definition->setBlockType( $blockType );
 		$this->definition->setInnerPseudoState( $pseudoState );

@@ -187,7 +187,7 @@ class AppServiceProvider extends ServiceProvider {
 		$this->app->make( Setup::class )->apply();
 		$this->app->make( EntityRegistry::class );
 
-		array_map( [ $this, 'renderBlocks' ], blockera_get_available_blocks() );
+		$this->renderBlocks();
 
 		$this->initializeFreemius();
 	}
@@ -227,23 +227,13 @@ class AppServiceProvider extends ServiceProvider {
 	/**
 	 * Rendering block type.
 	 *
-	 * @param string $block The block name.
-	 *
 	 * @throws BindingResolutionException Exception for not found bounded module.
 	 * @return void
 	 */
-	protected function renderBlocks( string $block ): void {
-
-		if ( empty( $block ) ) {
-
-			return;
-		}
+	protected function renderBlocks(): void {
 
 		$render = $this->app->make( Render::class );
 
-		$render->flushRewriteCssRules();
-
-		$render->setName( $block );
 		$render->applyHooks();
 	}
 

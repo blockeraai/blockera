@@ -73,18 +73,7 @@ if ( ! function_exists( 'blockera_block_state_validate' ) ) {
 	 */
 	function blockera_block_state_validate( array $states, string $state ): array {
 
-		if ( ! $state ) {
-
-			return [];
-		}
-
-		if ( empty( $states ) ) {
-
-			return [];
-		}
-
-		// no state found.
-		if ( empty( $states[ $state ] ) ) {
+		if ( ! $state || empty( $states ) || empty( $states[ $state ] ) ) {
 
 			return [];
 		}

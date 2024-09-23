@@ -37,3 +37,152 @@ if ( ! function_exists( 'blockera_get_block_type_property' ) ) {
 		return $registered->$property_name;
 	}
 }
+
+if ( ! function_exists( 'blockera_is_supported_block' ) ) {
+
+	/**
+	 * Block is supported by Blockera?
+	 *
+	 * @param array $block the block array.
+	 *
+	 * @return bool true on success, false on otherwise!
+	 */
+	function blockera_is_supported_block( array $block ): bool {
+
+		return ! empty( $block['attrs']['blockeraPropsId'] );
+	}
+}
+
+if ( ! function_exists( 'blockera_get_block_hash' ) ) {
+
+	/**
+	 * Get blockera block unique hash.
+	 *
+	 * @param array $block the block array.
+	 *
+	 * @return string the block hash.
+	 */
+	function blockera_get_block_hash( array $block ): string {
+
+		$block_content_raw = serialize( $block['innerHTML'] );
+		$block_name        = str_replace( [ '/', '-' ], '_', $block['blockName'] );
+
+		return 'wp_block_' . $block_name . '_' . md5( serialize( $block['attrs'] ) . $block_content_raw );
+	}
+}
+
+if ( ! function_exists( 'blockera_get_block_cache_key' ) ) {
+
+	/**
+	 * Get blockera block cache key.
+	 *
+	 * @param array $block the block array.
+	 *
+	 * @return string
+	 */
+	function blockera_get_block_cache_key( array $block ): string {
+
+		// Extract block attributes and content.
+		$attributes = $block['attrs'];
+		$block_name = str_replace( [ '/', '-' ], '_', $block['blockName'] );
+
+		// Prepare block unique classname.
+		preg_match( '/\b(blockera-block-\S+)\b/', $attributes['className'], $matches );
+
+		// Create and return a unique cache key.
+		return 'wp_block_' . $block_name . '_' . md5( $matches[0] );
+	}
+}
+
+if ( ! function_exists( 'blockera_get_block_cache' ) ) {
+
+	/**
+	 * Get block cache data,
+	 * Skip cache mechanism when application debug mode is on.
+	 *
+	 * @return array array with "css" index on success retrieved data, empty array on otherwise!
+	 */
+	function blockera_get_block_cache( $cache_key ): array {
+
+		// Check debug mode status.
+		if ( blockera_core_config( 'app.debug' ) ) {
+
+			return [];
+		}
+
+		// Preparing cache data.
+		$cache = get_transient( $cache_key );
+
+		// Validate cache data!
+		if ( ! empty( $cache ) && array_intersect( [ 'css' ], array_keys( $cache ) ) ) {
+
+			return $cache;
+		}
+
+		return [];
+	}
+}
+
+if ( ! function_exists( 'blockera_set_block_cache' ) ) {
+
+	/**
+	 * Sets blockera block data into related cache key.
+	 * merge previous cache data with new collected data.
+	 *
+	 * @param string $cache_key the cache key.
+	 * @param array  $data      the cache data.
+	 *
+	 * @return void
+	 */
+	function blockera_set_block_cache( string $cache_key, array $data ): void {
+
+		// Skip cache mechanism when application debug mode is on.
+		if ( blockera_core_config( 'app.debug' ) ) {
+
+			return;
+		}
+
+		set_transient( $cache_key, $data, HOUR_IN_SECONDS );
+	}
+}
+
+if ( ! function_exists( 'blockera_delete_block_cache' ) ) {
+
+	/**
+	 * Deleting blockera block cache data.
+	 *
+	 * @param string $cache_key the cache key.
+	 *
+	 * @return bool True if the transient was deleted, false otherwise.
+	 */
+	function blockera_delete_block_cache( string $cache_key ): bool {
+
+		return delete_transient( $cache_key );
+	}
+}
+
+if ( ! function_exists( 'blockera_add_inline_css' ) ) {
+
+	/**
+	 * Adding computed css rules into inline css handle.
+	 *
+	 * @param string $css the provided css from outside.
+	 *
+	 * @return void
+	 */
+	function blockera_add_inline_css( string $css ): void {
+
+		if ( empty( $css ) ) {
+
+			return;
+		}
+
+		add_filter(
+			'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
+			function ( string $older_css ) use ( $css ): string {
+
+				return $older_css . $css;
+			}
+		);
+	}
+}

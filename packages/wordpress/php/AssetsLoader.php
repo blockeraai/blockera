@@ -86,7 +86,7 @@ class AssetsLoader {
 		];
 		$this->id             = $args['id'] ?? 'blockera-wordpress-assets-loader';
 
-		add_action( 'wp_head', [ $this, 'enqueueBlockeraGeneratedStyles' ] );
+		add_action( 'wp_head', [ $this, 'printBlockeraGeneratedStyles' ] );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
@@ -181,11 +181,11 @@ class AssetsLoader {
 	}
 
 	/**
-	 * Enqueuing blockera requirement css styles on WordPress front page.
+	 * Printing blockera requirement css styles on WordPress front page.
 	 *
 	 * @return void
 	 */
-	public function enqueueBlockeraGeneratedStyles(): void {
+	public function printBlockeraGeneratedStyles(): void {
 
 		echo sprintf(
 			'<style id="blockera-inline-css">%s</style>',

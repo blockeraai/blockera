@@ -447,12 +447,13 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
-	 * Flush all declarations.
+	 * Resettings some properties to fresh before generate new styles.
 	 *
 	 * @return void
 	 */
-	public function flushDeclarations(): void {
+	public function resetProperties(): void {
 
+		$this->css          = [];
 		$this->declarations = [];
 	}
 
