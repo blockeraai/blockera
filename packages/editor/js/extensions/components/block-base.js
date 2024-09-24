@@ -120,61 +120,42 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		// Handling duplicate blocks of block-editor to set unique blockera classname into them.
 		useEffect(() => {
-			async function registerUniqueClassname(uniqueClassname: string) {
-				registerBlockTypeClassNames(uniqueClassname, clientId);
-			}
+			if (isEmpty(getBlockTypeClassNames(clientId))) {
+				const blockeraUniqueClassName = `blockera-block-${getSmallHash(
+					clientId
+				)}`;
 
-			async function fetchUniqueClassname() {
-				const storedClassname = getBlockTypeClassNames(clientId);
+				let prefixClassName = '';
+				const indexOfBlockeraSelector =
+					attributes?.className?.indexOf('blockera-block');
 
 				if (
-					isEmpty(storedClassname) &&
-					-1 ===
-						(attributes?.className || '').indexOf(storedClassname)
+					-1 === indexOfBlockeraSelector ||
+					'undefined' === typeof indexOfBlockeraSelector
 				) {
-					const blockeraUniqueClassName = `blockera-block-${getSmallHash(
-						clientId
-					)}`;
-
-					let prefixClassName = '';
-					const indexOfBlockeraSelector =
-						attributes?.className?.indexOf('blockera-block');
-
-					if (
+					prefixClassName =
 						-1 === indexOfBlockeraSelector ||
 						'undefined' === typeof indexOfBlockeraSelector
-					) {
-						prefixClassName = 'blockera-block';
-					} else {
-						return registerBlockTypeClassNames(
-							blockeraUniqueClassName,
-							clientId
-						);
-					}
-
-					// Concat previous classname with prefixClassName.
-					if (!isEmpty(attributes?.className || '')) {
-						prefixClassName =
-							(attributes?.className || '') +
-							' ' +
-							prefixClassName;
-					}
-
-					registerUniqueClassname(blockeraUniqueClassName);
-
-					setAttributes({
-						...attributes,
-						className: attributes?.className
-							? attributes?.className.replace(
-									new RegExp('blockera-block-.*', 'gi'),
-									blockeraUniqueClassName
-							  )
-							: prefixClassName + blockeraUniqueClassName,
-					});
+							? 'blockera-block'
+							: '';
 				}
-			}
 
-			fetchUniqueClassname();
+				prefixClassName =
+					'undefined' === typeof indexOfBlockeraSelector
+						? prefixClassName + ' '
+						: (attributes?.className || '') + ' ' + prefixClassName;
+
+				registerBlockTypeClassNames(blockeraUniqueClassName, clientId);
+				setAttributes({
+					...attributes,
+					className: attributes?.className
+						? attributes?.className.replace(
+								new RegExp('blockera-block-.*', 'gi'),
+								blockeraUniqueClassName
+						  )
+						: prefixClassName + blockeraUniqueClassName,
+				});
+			}
 			// eslint-disable-next-line
 		}, [clientId]);
 
