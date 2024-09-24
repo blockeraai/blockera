@@ -43,7 +43,6 @@ export function getExtensionConfig(
 export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 	const {
 		config,
-		getBlockTypeClassNames,
 		currentBlock = 'master',
 		currentState = 'normal',
 		currentInnerBlockState = 'normal',
@@ -54,7 +53,6 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 		const {
 			getActiveInnerState,
 			getActiveMasterState,
-			getBlockTypeClassNames,
 			getExtensionCurrentBlock,
 			getExtensionCurrentBlockStateBreakpoint,
 		} = select('blockera/extensions');
@@ -63,7 +61,6 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 
 		return {
 			currentBlock,
-			getBlockTypeClassNames,
 			config: getExtensionConfig(name, currentBlock),
 			currentState: getActiveMasterState(clientId, name),
 			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
@@ -71,19 +68,16 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 		};
 	});
 
-	const {
-		registerBlockTypeClassNames,
-		changeExtensionCurrentBlockStateBreakpoint,
-	} = dispatch('blockera/extensions');
+	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
+		'blockera/extensions'
+	);
 
 	return {
 		config,
 		currentState,
 		currentBlock,
 		currentBreakpoint,
-		getBlockTypeClassNames,
 		currentInnerBlockState,
-		registerBlockTypeClassNames,
 		setCurrentBreakpoint: changeExtensionCurrentBlockStateBreakpoint,
 	};
 };

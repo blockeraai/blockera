@@ -15,7 +15,5 @@ export type ExtensionsStoreType = {
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
 	currentBlock: string | 'master' | InnerBlockType,
-	getBlockTypeClassNames: (clientId: string) => string,
 	setCurrentBreakpoint: (breakpoint: TBreakpoint | string) => void,
-	registerBlockTypeClassNames: (classNames: string, clientId: string) => void,
 };

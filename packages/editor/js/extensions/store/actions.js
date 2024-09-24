@@ -180,14 +180,3 @@ export const registerBlockTypeAttributes = (
 		type: 'REGISTER_BLOCK_TYPE_ATTRIBUTES',
 	};
 };
-
-export const registerBlockTypeClassNames = (
-	classNames: string,
-	clientId: string
-): Object => {
-	return {
-		clientId,
-		classNames,
-		type: 'REGISTER_BLOCK_TYPE_CLASSNAMES',
-	};
-};

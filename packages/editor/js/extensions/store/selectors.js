@@ -439,20 +439,5 @@ export function getBlockTypeAttributes(
 	{ blockExtensions }: Object,
 	name: string
 ): Object {
-	return (blockExtensions?.blockTypes || {})[name] || {};
-}
-
-/**
- * Get block type className with clientId.
- *
- * @param {Object} blockExtensions the block extension details.
- * @param {string} clientId the block type clientId.
- *
- * @return {string} the block classNames as string.
- */
-export function getBlockTypeClassNames(
-	{ blockExtensions }: Object,
-	clientId: string
-): Object {
-	return (blockExtensions?.blockTypes || {})[clientId] || '';
+	return (blockExtensions?.blockTypes || {})[name]?.attributes || {};
 }

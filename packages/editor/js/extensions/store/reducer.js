@@ -137,14 +137,6 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 					[action.name]: action.attributes,
 				},
 			};
-		case 'REGISTER_BLOCK_TYPE_CLASSNAMES':
-			return {
-				...state,
-				blockTypes: {
-					...(state?.blockTypes || {}),
-					[action.clientId]: action.classNames,
-				},
-			};
 	}
 
 	return state;
