@@ -4,6 +4,7 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { doAction } from '@wordpress/hooks';
 import { memo, useEffect } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
@@ -41,7 +42,6 @@ import {
 	BlockIcon,
 	propsAreEqual,
 } from '../components';
-import { bootstrapCanvasEditor } from '../../canvas-editor';
 
 const useSharedBlockSideEffect = (): void => {
 	const {
@@ -216,7 +216,10 @@ function mergeBlockSettings(
 
 			// Bootstrap canvas editor UI on WordPress site editor.
 			if (!isLoadedPostEditor() && isLoadedSiteEditor()) {
-				bootstrapCanvasEditor('site');
+				/**
+				 * Calls the callback functions that have been added to an action hook.
+				 */
+				doAction('blockera.mergeBlockSettings.Edit.component');
 			}
 
 			return (
