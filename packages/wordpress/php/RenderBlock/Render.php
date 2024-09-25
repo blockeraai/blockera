@@ -100,13 +100,21 @@ class Render {
 			return $html;
 		}
 
+		// Extract block attributes.
+		$attributes = $block['attrs'];
 		// Calculate block hash.
 		$hash = blockera_get_block_hash( $block );
+		// Generate blockera hash identify with "blockeraId" attribute value.
+		$blockera_hash_id = blockera_get_small_random_hash( $attributes['blockeraId'] );
+		// Get blockera block unique css classname.
+		$blockera_class_name = sprintf( 'blockera-block blockera-block-%s', $blockera_hash_id );
+
 		// Get block cache key.
 		$cache_key = blockera_get_block_cache_key( $block );
 		// Prepare cache data.
-		$cache_data     = blockera_get_block_cache( $cache_key );
-		$cache_validate = ! empty( $cache_data['css'] ) && ! empty( $cache_data['hash'] );
+		$cache_data = blockera_get_block_cache( $cache_key );
+		// Get cache validate result.
+		$cache_validate = ! empty( $cache_data['css'] ) && ! empty( $cache_data['hash'] ) && ! empty( $cache_data['classname'] );
 
 		// Validate cache data.
 		if ( $cache_validate && $hash === $cache_data['hash'] ) {
@@ -116,10 +124,11 @@ class Render {
 
 			if ( ! empty( $cache_data['html'] ) ) {
 
-				return $cache_data['html'];
+				// Represent html string.
+				return $this->getUpdatedHTML( $cache_data['html'], $cache_data['classname'] );
 			}
 
-			return $html;
+			return $this->getUpdatedHTML( $html, $cache_data['classname'] );
 		}
 
 		// Delete cache data while previous cache data is existing but changed block render process data.
@@ -128,13 +137,8 @@ class Render {
 			blockera_delete_block_cache( $cache_key );
 		}
 
-		// Extract block attributes.
-		$attributes = $block['attrs'];
-		// Generate blockera hash identify with "blockeraId" attribute value.
-		$blockera_hash_id = blockera_get_small_random_hash( $attributes['blockeraId'] );
-		// Get blockera block unique css classname.
-		$blockera_class_name = sprintf( 'blockera-block blockera-block-%s', $blockera_hash_id );
-		$unique_class_name   = blockera_get_normalized_selector( $blockera_class_name );
+		// Get normalized blockera block unique css classname.
+		$unique_class_name = blockera_get_normalized_selector( $blockera_class_name );
 
 		/**
 		 * Get parser object.
@@ -157,8 +161,9 @@ class Render {
 
 		// Create new block cache data.
 		$data = [
-			'hash' => $hash,
-			'css'  => $computed_css_rules,
+			'hash'      => $hash,
+			'css'       => $computed_css_rules,
+			'classname' => $blockera_class_name,
 		];
 
 		// Sets cache data with merge previous data.
