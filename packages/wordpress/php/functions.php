@@ -49,7 +49,7 @@ if ( ! function_exists( 'blockera_is_supported_block' ) ) {
 	 */
 	function blockera_is_supported_block( array $block ): bool {
 
-		return ! empty( $block['attrs']['blockeraPropsId'] ) && ! empty( $block['attrs']['blockeraId'] );
+		return ! empty( $block['attrs']['blockeraPropsId'] ) || ! empty( $block['attrs']['blockeraId'] );
 	}
 }
 
