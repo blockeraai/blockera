@@ -130,9 +130,11 @@ class Render {
 
 		// Extract block attributes.
 		$attributes = $block['attrs'];
-
+		// Generate blockera hash identify with "blockeraId" attribute value.
+		$blockera_hash_id = blockera_get_small_random_hash( $attributes['blockeraId'] );
 		// Get blockera block unique css classname.
-		$unique_class_name = blockera_get_normalized_selector( $attributes['className'] );
+		$blockera_class_name = sprintf( 'blockera-block blockera-block-%s', $blockera_hash_id );
+		$unique_class_name   = blockera_get_normalized_selector( $blockera_class_name );
 
 		/**
 		 * Get parser object.
@@ -150,6 +152,9 @@ class Render {
 		// Render icon element.
 		$html = $this->renderIcon( $html, $parser, compact( 'block', 'unique_class_name' ) );
 
+		// Represent html string.
+		$html = $this->getUpdatedHTML( $html, $blockera_class_name );
+
 		// Create new block cache data.
 		$data = [
 			'hash' => $hash,
@@ -160,6 +165,45 @@ class Render {
 		blockera_set_block_cache( $cache_key, $data );
 
 		return $html;
+	}
+
+	/**
+	 * Returns the string representation of the HTML Tag Processor.
+	 *
+	 * @param string $html      the target html string.
+	 * @param string $classname the unique classname.
+	 *
+	 * @return string the update html.
+	 */
+	protected function getUpdatedHTML( string $html, string $classname ): string {
+
+		$processor = new \WP_HTML_Tag_Processor( $html );
+
+		if ( $processor->next_tag() ) {
+
+			// Regular Expression to detect blockera unique classname.
+			$regexp = '/\b(blockera-block-\S+)\b/';
+
+			// Get tag previous classname value.
+			$previous_class = $processor->get_attribute( 'class' );
+
+			if ( ! empty( $previous_class ) ) {
+
+				// Backward compatibility.
+				if ( preg_match( $regexp, $classname, $matches ) ) {
+
+					$final_classname = preg_replace( $regexp, $matches[0], $previous_class );
+
+				} else {
+
+					$final_classname = $previous_class . ' ' . $classname;
+				}
+			}
+
+			$processor->set_attribute( 'class', $final_classname ?? $classname );
+		}
+
+		return $processor->get_updated_html();
 	}
 
 }

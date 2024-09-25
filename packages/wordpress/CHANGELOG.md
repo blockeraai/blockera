@@ -9,3 +9,12 @@
 - Refactored inline styles to be printed in the wp_head hook for better performance and consistency.
 - Enhanced the Render class by flushing and rewriting CSS rules for better efficiency.
 - Separated the experimental icon element rendering into a distinct process for improved modularity.
+
+### New Feature
+
+- Added new helper functions in the `blockera/wordpress` package.
+
+### Automated Tests
+
+- Added new test suites to fully test the new helper functions in the `blockera/wordpress` package.
+ 

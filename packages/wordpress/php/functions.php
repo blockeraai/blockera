@@ -49,7 +49,7 @@ if ( ! function_exists( 'blockera_is_supported_block' ) ) {
 	 */
 	function blockera_is_supported_block( array $block ): bool {
 
-		return ! empty( $block['attrs']['blockeraPropsId'] );
+		return ! empty( $block['attrs']['blockeraPropsId'] ) && ! empty( $block['attrs']['blockeraId'] );
 	}
 }
 
@@ -86,11 +86,8 @@ if ( ! function_exists( 'blockera_get_block_cache_key' ) ) {
 		$attributes = $block['attrs'];
 		$block_name = str_replace( [ '/', '-' ], '_', $block['blockName'] );
 
-		// Prepare block unique classname.
-		preg_match( '/\b(blockera-block-\S+)\b/', $attributes['className'], $matches );
-
 		// Create and return a unique cache key.
-		return 'wp_block_' . $block_name . '_' . md5( $matches[0] );
+		return 'wp_block_' . $block_name . '_' . md5( $attributes['blockeraId'] );
 	}
 }
 
@@ -184,5 +181,56 @@ if ( ! function_exists( 'blockera_add_inline_css' ) ) {
 				return $older_css . $css;
 			}
 		);
+	}
+}
+
+if ( ! function_exists( 'blockera_convert_to_unique_hash' ) ) {
+
+	/**
+	 * Retrieve unique hash key.
+	 *
+	 * @param string $hash the target hash to convert unique hash.
+	 *
+	 * @throws \Random\RandomException Exception if an appropriate source of randomness cannot be found.
+	 * @return string the unique hash key.
+	 */
+	function blockera_convert_to_unique_hash( string $hash ): string {
+
+		// Generate a unique ID using uniqid (with more entropy for better uniqueness).
+		$unique_id = uniqid( '', true );
+
+		// Optionally, we can append some random data for even more uniqueness.
+		$unique_id .= bin2hex( random_bytes( 10 ) ) . $hash;
+
+		// Hash the unique ID using SHA-256 algorithm.
+		return hash( 'sha256', $unique_id );
+	}
+}
+
+if ( ! function_exists( 'blockera_get_small_random_hash' ) ) {
+
+	/**
+	 * Generates a shortened version of the given string by creating a hash and converting it to a base-36 random string.
+	 *
+	 * @param string $big_hash The input string to shorten.
+	 *
+	 * @return string The shortened string.
+	 */
+	function blockera_get_small_random_hash( string $big_hash ): string {
+
+		$hash     = 0;
+		$big_hash = blockera_convert_to_unique_hash( $big_hash );
+
+		for ( $i = 0; $i < strlen( $big_hash ); $i++ ) {
+
+			// Bitwise operations.
+			$hash = ord( $big_hash[ $i ] ) + ( ( $hash << 5 ) - $hash );
+
+			// Convert to 32bit integer.
+			$hash = $hash & 0xFFFFFFFF;
+		}
+
+		// Convert to base-36 string.
+		return base_convert( $hash, 10, 36 );
 	}
 }
