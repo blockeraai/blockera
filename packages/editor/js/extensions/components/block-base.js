@@ -226,7 +226,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const { getAttributesWithIds, handleOnChangeAttributes } =
 			useAttributes(setAttributes, {
-				className,
 				blockId: name,
 				isNormalState,
 				getAttributes,

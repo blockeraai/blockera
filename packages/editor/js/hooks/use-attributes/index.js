@@ -8,8 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { classNames } from '@blockera/classnames';
-import { getSmallHash, mergeObject } from '@blockera/utils';
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -32,7 +31,6 @@ export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
 	{
 		blockId,
-		className,
 		innerBlocks,
 		currentBlock,
 		currentState,
@@ -49,7 +47,6 @@ export const useAttributes = (
 		getActiveBlockVariation,
 	}: {
 		blockId: string,
-		className: string,
 		innerBlocks: Object,
 		currentState: TStates,
 		blockVariations: Object,
@@ -98,8 +95,7 @@ export const useAttributes = (
 	): void => {
 		const { ref, effectiveItems = {} } = options;
 		const { getSelectedBlock } = select('core/block-editor');
-		const { attributes = getAttributes(), clientId } =
-			getSelectedBlock() || {};
+		const { attributes = getAttributes() } = getSelectedBlock() || {};
 
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!
@@ -119,23 +115,6 @@ export const useAttributes = (
 		// Sets "blockeraPropsId" if it is empty.
 		if (!_attributes?.blockeraPropsId) {
 			_attributes = getAttributesWithIds(_attributes, 'blockeraPropsId');
-		}
-
-		const indexOfBlockeraSelector =
-			attributes?.className?.indexOf('blockera-block');
-
-		// Sets "className" attribute value is existing on block attributes to merge with default value.
-		if (
-			-1 === indexOfBlockeraSelector ||
-			'undefined' === typeof indexOfBlockeraSelector
-		) {
-			_attributes = {
-				..._attributes,
-				className: classNames(className, attributes.className, {
-					'blockera-block': true,
-					[`blockera-block-${getSmallHash(clientId)}`]: true,
-				}),
-			};
 		}
 
 		const attributeIsBlockStates = 'blockeraBlockStates' === attributeId;
