@@ -93,6 +93,17 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			updateAttributes(newAttributes);
 		};
 
+		// Sets the block "blockeraId" attribute value.
+		useEffect(() => {
+			if (!attributes?.blockeraId) {
+				setAttributes({
+					...attributes,
+					blockeraId: clientId,
+				});
+			}
+			// eslint-disable-next-line
+		}, [clientId]);
+
 		/**
 		 * Updating block original attributes state while changed native attributes state.
 		 */
