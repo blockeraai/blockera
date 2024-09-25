@@ -31,6 +31,7 @@ export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
 	{
 		blockId,
+		clientId,
 		innerBlocks,
 		currentBlock,
 		currentState,
@@ -47,6 +48,7 @@ export const useAttributes = (
 		getActiveBlockVariation,
 	}: {
 		blockId: string,
+		clientId: string,
 		innerBlocks: Object,
 		currentState: TStates,
 		blockVariations: Object,
@@ -114,7 +116,10 @@ export const useAttributes = (
 
 		// Sets "blockeraPropsId" if it is empty.
 		if (!_attributes?.blockeraPropsId) {
-			_attributes = getAttributesWithIds(_attributes, 'blockeraPropsId');
+			_attributes = {
+				..._attributes,
+				blockeraPropsId: clientId,
+			};
 		}
 
 		const attributeIsBlockStates = 'blockeraBlockStates' === attributeId;

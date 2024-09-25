@@ -94,7 +94,6 @@ export const BlockCompatibility: ComponentType<any> = memo(
 
 				const filteredAttributesWithoutIds = {
 					...filteredAttributes,
-					blockeraId: '',
 					blockeraPropsId: '',
 					blockeraCompatId: '',
 					...(attributes.hasOwnProperty('className')
@@ -111,11 +110,7 @@ export const BlockCompatibility: ComponentType<any> = memo(
 				if (
 					!Object.keys(added).length &&
 					!Object.keys(updated).length &&
-					isEquals(
-						// Exclude blockeraId changesets.
-						{ ...attributes, blockeraId: '' },
-						filteredAttributesWithoutIds
-					)
+					isEquals(attributes, filteredAttributesWithoutIds)
 				) {
 					return;
 				}

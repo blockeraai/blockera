@@ -49,7 +49,7 @@ if ( ! function_exists( 'blockera_is_supported_block' ) ) {
 	 */
 	function blockera_is_supported_block( array $block ): bool {
 
-		return ! empty( $block['attrs']['blockeraPropsId'] ) || ! empty( $block['attrs']['blockeraId'] );
+		return ! empty( $block['attrs']['blockeraPropsId'] );
 	}
 }
 
@@ -87,7 +87,7 @@ if ( ! function_exists( 'blockera_get_block_cache_key' ) ) {
 		$block_name = str_replace( [ '/', '-' ], '_', $block['blockName'] );
 
 		// Create and return a unique cache key.
-		return 'wp_block_' . $block_name . '_' . md5( $attributes['blockeraId'] );
+		return 'wp_block_' . $block_name . '_' . md5( $attributes['blockeraPropsId'] );
 	}
 }
 

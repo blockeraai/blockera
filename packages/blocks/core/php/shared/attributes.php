@@ -7,10 +7,6 @@
 
 return [
 	// Identifiers.
-	'blockeraId'                        => [
-		'type'    => 'string',
-		'default' => '',
-	],
 	'blockeraPropsId'                   => [
 		'type'    => 'string',
 		'default' => '',

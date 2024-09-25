@@ -104,8 +104,8 @@ class Render {
 		$attributes = $block['attrs'];
 		// Calculate block hash.
 		$hash = blockera_get_block_hash( $block );
-		// Generate blockera hash identify with "blockeraId" attribute value.
-		$blockera_hash_id = blockera_get_small_random_hash( $attributes['blockeraId'] );
+		// Generate blockera hash identify with "blockeraPropsId" attribute value.
+		$blockera_hash_id = blockera_get_small_random_hash( $attributes['blockeraPropsId'] );
 		// Get blockera block unique css classname.
 		$blockera_class_name = sprintf( 'blockera-block blockera-block-%s', $blockera_hash_id );
 
