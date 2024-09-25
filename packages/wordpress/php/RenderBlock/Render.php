@@ -196,7 +196,7 @@ class Render {
 
 				} else {
 
-					$final_classname = $previous_class . ' ' . $classname;
+					$final_classname = $classname . ' ' . $previous_class;
 				}
 			}
 
