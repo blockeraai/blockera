@@ -190,7 +190,7 @@ class Render {
 			if ( ! empty( $previous_class ) ) {
 
 				// Backward compatibility.
-				if ( preg_match( $regexp, $classname, $matches ) ) {
+				if ( preg_match( $regexp, $classname, $matches ) && preg_match( $regexp, $previous_class ) ) {
 
 					$final_classname = preg_replace( $regexp, $matches[0], $previous_class );
 
