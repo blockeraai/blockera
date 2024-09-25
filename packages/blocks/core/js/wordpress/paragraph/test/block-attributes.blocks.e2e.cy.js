@@ -25,7 +25,12 @@ describe('Testing shared default attributes value', () => {
 				// Skip WordPress core blocks attributes or current attribute was not default value!
 				if (
 					!attribute.hasOwnProperty('default') ||
-					/^(?!blockera\w+).*/i.test(name)
+					/^(?!blockera\w+).*/i.test(name) ||
+					[
+						'blockeraId',
+						'blockeraPropsId',
+						'blockeraCompatId',
+					].includes(name)
 				) {
 					continue;
 				}
