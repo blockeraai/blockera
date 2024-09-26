@@ -230,6 +230,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const { getAttributesWithIds, handleOnChangeAttributes } =
 			useAttributes(setAttributes, {
 				clientId,
+				className,
 				blockId: name,
 				isNormalState,
 				getAttributes,
