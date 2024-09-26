@@ -146,7 +146,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'gap: var(--wp--preset--spacing--30)');
 		});
@@ -300,7 +300,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'column-gap: var(--wp--preset--spacing--50)')
 				.should('include', 'row-gap: var(--wp--preset--spacing--40)');

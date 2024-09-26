@@ -16,7 +16,7 @@ import {
 	getIssueFeature,
 	getFormattedItemDescription,
 	getUniqueByUsername,
-	getChangelog,
+	getDevelopmentChangelog,
 	getContributorProps,
 	getContributorsList,
 	mapLabelsToFeatures,
@@ -476,9 +476,9 @@ describe('getFormattedItemDescription', () => {
 	});
 });
 
-describe('getChangelog', () => {
+describe('getDevelopmentChangelog', () => {
 	test('verify that the changelog is properly formatted', () => {
-		expect(getChangelog(pullRequests)).toMatchSnapshot();
+		expect(getDevelopmentChangelog(pullRequests)).toMatchSnapshot();
 	});
 });
 

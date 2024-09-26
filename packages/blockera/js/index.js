@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { dispatch } from '@wordpress/data';
-import { addFilter, applyFilters } from '@wordpress/hooks';
+import { addAction, addFilter, applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -23,6 +23,10 @@ import {
 	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
+
+addAction('blockera.mergeBlockSettings.Edit.component', 'blockera.index', () =>
+	bootstrapCanvasEditor('site')
+);
 
 /**
  * Registration blockera core block settings with internal definitions.

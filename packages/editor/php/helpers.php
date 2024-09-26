@@ -73,18 +73,7 @@ if ( ! function_exists( 'blockera_block_state_validate' ) ) {
 	 */
 	function blockera_block_state_validate( array $states, string $state ): array {
 
-		if ( ! $state ) {
-
-			return [];
-		}
-
-		if ( empty( $states ) ) {
-
-			return [];
-		}
-
-		// no state found.
-		if ( empty( $states[ $state ] ) ) {
+		if ( ! $state || empty( $states ) || empty( $states[ $state ] ) ) {
 
 			return [];
 		}
@@ -108,277 +97,169 @@ if ( ! function_exists( 'blockera_get_normalized_inner_block_id' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_get_inner_block_state_selectors' ) ) {
+if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 
 	/**
-	 * Retrieve inner block state selectors.
+	 * Retrieve inner block state suitable selector.
 	 *
-	 * @param array $selectors the recieved selectors list.
-	 * @param array $args      the extra arguments to generate unique css selectors.
+	 * @param string $selector the picked selector from WordPress api.
+	 * @param array  $args     the extra arguments to generate unique css selectors.
 	 *
 	 * @throws BaseException Exception for invalid selector.
 	 *
-	 * @return array the unique selectors list.
+	 * @return string the unique selector for current inner block state.
 	 */
-	function blockera_get_inner_block_state_selectors( array $selectors, array $args = [] ): array {
+	function blockera_get_inner_block_state_selector( string $selector, array $args = [] ): string {
 
-		// Validation: check block type name is set?
-		if ( empty( $args['block-type'] ) ) {
+		$master_block_state = $args['pseudo-class'] ?? 'normal';
+		$pseudo_class       = $args['inner-pseudo-class'] ?? 'normal';
 
-			return [];
-		}
-
-		// Provide fallback css selector to use this when $selectors is empty.
-		if ( empty( $selectors['fallback'] ) && ! empty( $args['fallback'] ) ) {
-
-			$selectors['fallback'] = $args['fallback'];
-
-			unset( $args['fallback'] );
-		}
-
-		$inner_block_id = blockera_get_normalized_inner_block_id( $args['block-type'] );
-
-		// Validate inner block type.
-		if ( empty( $selectors[ $inner_block_id ] ) ) {
-
-			return $selectors;
-		}
-
-		$innerBlockSelectors = array_merge(
+		// Filters standard css pseudo classes.
+		$parent_pseudo_class = in_array(
+			$master_block_state,
 			[
-				'fallback'   => $selectors['fallback'] ?? '',
-				'parentRoot' => $selectors['root'] ?? $selectors['fallback'] ?? '',
+				'normal',
+				'parent-class',
+				'custom-class',
 			],
-			$selectors[ $inner_block_id ],
+			true
+		) ? '' : $master_block_state;
+
+		// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
+		if ( $pseudo_class && 'normal' !== $pseudo_class ) {
+
+			// Handle multiple selector where separated with comma.
+			$parsedValue = explode( ',', trim( $selector ) );
+
+			// Assume current selector is multiple.
+			if ( count( $parsedValue ) > 1 ) {
+
+				// Add pseudo custom css class as suffix into selectors value for current key.
+				return implode(
+					', ',
+					array_map(
+						static function ( string $item ) use ( $args, $parent_pseudo_class, $pseudo_class ): string {
+
+							return blockera_get_css_selector_format(
+								$args['root'] ?? $args['blockera-unique-selector'] ?? '',
+								trim( $item ),
+								compact( 'pseudo_class', 'parent_pseudo_class' )
+							);
+						},
+						$parsedValue
+					)
+				);
+
+			} else {
+
+				// Add pseudo custom css class as suffix into selectors value for current key.
+				return blockera_get_css_selector_format(
+					$args['root'] ?? $args['blockera-unique-selector'] ?? '',
+					$selector,
+					compact( 'pseudo_class', 'parent_pseudo_class' )
+				);
+			}
+		}
+
+		// inner block in normal state.
+		if ( $master_block_state ) {
+
+			// Add pseudo custom css class as suffix into selectors value for current key.
+			return blockera_get_css_selector_format(
+				$args['root'] ?? $args['blockera-unique-selector'] ?? '',
+				$selector,
+				compact( 'parent_pseudo_class' )
+			);
+		}
+
+		return trim(
+			sprintf( '%s %s', trim( $args['root'] ?? $args['blockera-unique-selector'] ?? '', ), $selector )
 		);
-
-		$selectors[ $inner_block_id ] = blockera_get_normalized_inner_block_selectors( $innerBlockSelectors, $args );
-
-		// Delete custom fallback and parentRoot selector of inner block list.
-		unset(
-			$selectors[ $inner_block_id ]['fallback'],
-			$selectors[ $inner_block_id ]['parentRoot']
-		);
-
-		return $selectors;
 	}
 }
 
-if ( ! function_exists( 'blockera_get_block_state_selectors' ) ) {
+if ( ! function_exists( 'blockera_get_master_block_state_selector' ) ) {
 
 	/**
 	 * Retrieve block state selectors.
 	 *
-	 * @param array $selectors the recieved selectors list.
-	 * @param array $args      the extra arguments to generate unique css selectors.
+	 * @param string $selector the picked selector for master blockera from WordPress api.
+	 * @param array  $args     the extra arguments to generate unique css selectors.
 	 *
-	 * @return array the unique selectors list.
+	 * @return string the unique selector for block current state.
 	 */
-	function blockera_get_block_state_selectors( array $selectors, array $args = [] ): array {
+	function blockera_get_master_block_state_selector( string $selector, array $args = [] ): string {
 
-		[
-			'pseudo-class'   => $pseudo_class,
-			'block-settings' => $block_settings,
-		] = $args;
+		if ( empty( trim( $selector ) ) ) {
 
-		// Provide fallback css selector to use this when $selectors is empty.
-		if ( empty( $selectors['fallback'] ) && ! empty( $args['fallback'] ) ) {
-
-			$selectors['fallback'] = $args['fallback'];
-
-			unset( $args['fallback'] );
+			return $selector;
 		}
 
-		$custom_classname = $block_settings['blockeraBlockStates'][ $pseudo_class ]['css-class'] ?? null;
+		$block_settings = $args['block-settings'] ?? [];
+		$pseudo_class   = $args['pseudo-class'] ?? 'normal';
 
-		foreach ( $selectors as $key => $value ) {
+		// Imagine the $block_settings variable is not empty.
+		if ( ! empty( $block_settings ) ) {
 
-			// Excluding inner block selector.
-			if ( false !== strpos( $key, 'blockera/' ) ) {
-
-				continue;
-			}
+			$custom_classname = $block_settings['blockeraBlockStates'][ $pseudo_class ]['css-class'] ?? null;
 
 			$has_css_class = in_array( $pseudo_class, [ 'custom-class', 'parent-class' ], true );
 
 			// Overriding master block selectors with provided custom-class.
 			// Included all selectors without inner blocks selectors.
-			if ( $has_css_class && ! empty( $custom_classname ) && is_string( $value ) ) {
+			if ( $has_css_class && ! empty( $custom_classname ) ) {
 
-				$normalizedParent = blockera_get_normalized_selector( $custom_classname );
-				$normalizedParent = str_ends_with( $normalizedParent, ' ' ) ? $normalizedParent : $normalizedParent . ' ';
+				$normalized_root = blockera_get_normalized_selector( $custom_classname );
+				$normalized_root = str_ends_with( $normalized_root, ' ' ) ? $normalized_root : $normalized_root . ' ';
 
 				// Add pseudo custom css class as suffix into selectors value for current key.
-				$selectors[ $key ] = sprintf( '%s%s', $normalizedParent, $value );
-				// TODO: double check to we needs to customized supports selectors or not?
-				continue;
-			}
-
-			// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
-			// Included all selectors without inner blocks selectors.
-			if ( $pseudo_class && 'normal' !== $pseudo_class ) {
-
-				if ( is_string( $value ) ) {
-
-					$parsed = explode( ',', $value );
-
-					if ( count( $parsed ) > 1 ) {
-
-						// Add pseudo custom css class as suffix into selectors value for current key.
-						$selectors[ $key ] = implode(
-							', ',
-							array_map(
-								static function ( string $item ) use ( $pseudo_class ): string {
-
-									return sprintf( '%s:%s', trim( $item ), $pseudo_class );
-								},
-								$parsed
-							)
-						);
-
-					} else {
-
-						// Add pseudo custom css class as suffix into selectors value for current key.
-						$selectors[ $key ] = sprintf( '%s:%s', trim( $value ), $pseudo_class );
-					}
-
-					continue;
-				}
-
-				if ( is_array( $value ) ) {
-
-					$selectors[ $key ] = blockera_get_block_state_selectors( $value, $args );
-				}
+				return $normalized_root . $selector;
 			}
 		}
 
-		return $selectors;
+		// Overriding selector based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
+		if ( $pseudo_class && 'normal' !== $pseudo_class ) {
+
+			$parsed = explode( ',', $selector );
+
+			if ( count( $parsed ) > 1 ) {
+
+				// Add pseudo custom css class as suffix into selectors value for current key.
+				$selector = implode(
+					', ',
+					array_map(
+						static function ( string $item ) use ( $pseudo_class ): string {
+
+							return blockera_set_selector_pseudo_class( $item, $pseudo_class );
+						},
+						$parsed
+					)
+				);
+
+			} else {
+
+				// Add pseudo custom css class as suffix into selectors value for current key.
+				$selector = blockera_set_selector_pseudo_class( $selector, $pseudo_class );
+			}
+		}
+
+		return $selector;
 	}
 }
 
-if ( ! function_exists( 'blockera_get_normalized_inner_block_selectors' ) ) {
+if ( ! function_exists( 'blockera_set_selector_pseudo_class' ) ) {
 
 	/**
-	 * Retrieve normalized and standardized inner block state selectors.
+	 * Set pseudo class to base selector.
 	 *
-	 * @param array $selectors the recieved selectors list.
-	 * @param array $args      the extra arguments to generate unique css selectors.
+	 * @param string $selector     the base css selector.
+	 * @param string $pseudo_class the standard css pseudo class.
 	 *
-	 * @throws BaseException Exception for invalid selector.
-	 *
-	 * @return array the unique selectors list for current inner block type.
+	 * @return string
 	 */
-	function blockera_get_normalized_inner_block_selectors( array $selectors, array $args ): array {
+	function blockera_set_selector_pseudo_class( string $selector, string $pseudo_class ): string {
 
-		[
-			'pseudo-class'       => $pseudoClass,
-			'block-settings'     => $blockSettings,
-			'master-block-state' => $masterBlockState,
-		] = $args;
-
-		$custom_classname = $blockSettings['blockeraBlockStates'][ $pseudoClass ]['css-class'] ?? null;
-
-		foreach ( $selectors as $key => $value ) {
-
-			// Excluding fallback and parentRoot in overriding process.
-			if ( in_array( $key, [ 'fallback', 'parentRoot' ], true ) ) {
-
-				continue;
-			}
-
-			// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
-			if ( $pseudoClass && 'normal' !== $pseudoClass ) {
-
-				// Handle nested selectors for inner block available features.
-				if ( is_array( $value ) ) {
-
-					$selectors[ $key ] = blockera_get_normalized_inner_block_selectors(
-						array_merge(
-							[
-								'fallback'   => $selectors['fallback'] ?? '',
-								'parentRoot' => $selectors['parentRoot'] ?? $selectors['fallback'] ?? '',
-							],
-							$value,
-						),
-						$args
-					);
-
-					unset( $selectors[ $key ]['fallback'], $selectors[ $key ]['parentRoot'] );
-
-					continue;
-				}
-
-				// Filters standard css pseudo classes.
-				$parentPseudoClass = in_array(
-					$masterBlockState,
-					[
-						'normal',
-						'parent-class',
-						'custom-class',
-					],
-					true
-				) ? '' : $masterBlockState;
-
-				// Handle multiple selector where separated with comma.
-				$parsedValue = explode( ',', trim( $value ) );
-
-				// Assume current selector is multiple.
-				if ( count( $parsedValue ) > 1 ) {
-
-					// Add pseudo custom css class as suffix into selectors value for current key.
-					$selectors[ $key ] = implode(
-						', ',
-						array_map(
-							static function ( string $item ) use ( $selectors, $parentPseudoClass, $pseudoClass ): string {
-
-								return blockera_get_css_selector_format( $selectors, $item, compact( 'pseudoClass', 'parentPseudoClass' ) );
-							},
-							$parsedValue
-						)
-					);
-
-				} else {
-
-					// Add pseudo custom css class as suffix into selectors value for current key.
-					$selectors[ $key ] = blockera_get_css_selector_format(
-						$selectors,
-						$value,
-						compact( 'pseudoClass', 'parentPseudoClass' )
-					);
-				}
-				// TODO: double check to we needs to customized supports selectors or not for inner blocks?
-
-				continue;
-			}
-
-			// inner block in normal state.
-			if ( is_string( $value ) ) {
-
-				if ( $masterBlockState ) {
-
-					$parentPseudoClass = in_array(
-						$masterBlockState,
-						[
-							'normal',
-							'parent-class',
-							'custom-class',
-						],
-						true
-					) ? '' : $masterBlockState;
-
-					// Add pseudo custom css class as suffix into selectors value for current key.
-					$selectors[ $key ] = blockera_get_css_selector_format( $selectors, $value, compact( 'parentPseudoClass' ) );
-
-					continue;
-				}
-
-				$selectors[ $key ] = trim(
-					sprintf( '%s %s', trim( $selectors['parentRoot'] ?? $selectors['fallback'] ?? '' ), $value )
-				);
-			}
-		}
-
-		return $selectors;
+		return sprintf( '%s:%s', trim( $selector ), $pseudo_class );
 	}
 }
 
@@ -387,28 +268,28 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 	/**
 	 * Get css selector valid and standard format.
 	 *
-	 * @param array  $selectors       the all selectors.
+	 * @param string $root_selector   the root selector.
 	 * @param string $picked_selector the picked selector.
 	 * @param array  $args            the extra arguments to format css selector.
 	 *
 	 * @throws BaseException Exception for invalid selector.
 	 * @return string the standard formatted css selector.
 	 */
-	function blockera_get_css_selector_format( array $selectors, string $picked_selector, array $args ): string {
+	function blockera_get_css_selector_format( string $root_selector, string $picked_selector, array $args ): string {
 
 		if ( str_starts_with( $picked_selector, '&' ) && ! preg_match( '/^\.|:/', substr( $picked_selector, 1 ) ) ) {
 
 			throw new BaseException( "Invalid {$picked_selector} selector!", 500 );
 		}
 
-		$pseudo_class        = $args['pseudoClass'] ?? '';
-		$parent_pseudo_class = $args['parentPseudoClass'] ?? '';
+		$pseudo_class        = $args['pseudo_class'] ?? '';
+		$parent_pseudo_class = $args['parent_pseudo_class'] ?? '';
 
 		return sprintf(
 			'%1$s%2$s%3$s%4$s%5$s',
-			trim( $selectors['parentRoot'] ?? $selectors['fallback'] ?? '' ),
+			trim( $root_selector ),
 			! empty( $parent_pseudo_class ) ? ':' . $parent_pseudo_class : '',
-			str_starts_with( $picked_selector, '&' ) || empty( $selectors ) ? '' : ' ',
+			str_starts_with( $picked_selector, '&' ) || empty( $root_selector ) ? '' : ' ',
 			blockera_process_ampersand_selector_char( $picked_selector ),
 			empty( $pseudo_class ) ? '' : ':' . $pseudo_class
 		);
@@ -432,6 +313,21 @@ if ( ! function_exists( 'blockera_process_ampersand_selector_char' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_is_inner_block' ) ) {
+
+	/**
+	 * Check the current block is inner block?
+	 *
+	 * @param string $block_type the block type name.
+	 *
+	 * @return bool true on success, false on otherwise!
+	 */
+	function blockera_is_inner_block( string $block_type ): bool {
+
+		return 'master' !== $block_type;
+	}
+}
+
 if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 	/**
@@ -445,14 +341,17 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 	 */
 	function blockera_get_compatible_block_css_selector( array $selectors, string $feature_id, array $args ): string {
 
-		// TODO: Handle custom-class state.
+		$block_type = blockera_get_block_type( $args['block-name'] );
 
-		$block_type = blockera_get_block_type( $args['blockName'] );
+		$cloned_block_type = new WP_Block_Type( $args['block-name'], $block_type );
 
-		$cloned_block_type = new WP_Block_Type( $args['blockName'], $block_type );
+		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) ) {
 
-		// Rewrite block type selectors because we provide suitable selectors array of original array.
-		$cloned_block_type->selectors = $selectors;
+			$selector_id = blockera_get_normalized_inner_block_id( $args['block-type'] );
+
+			// Rewrite block type selectors because we provide suitable selectors array of original array.
+			$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+		}
 
 		$has_fallback = ! empty( $args['fallback'] );
 
@@ -463,18 +362,31 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 			$selector = wp_get_block_css_selector( $cloned_block_type, $args['fallback'], true );
 		}
 
+		// Imagine the current block is master!
+		if ( ! empty( $args['block-type'] ) && ! blockera_is_inner_block( $args['block-type'] ) ) {
+
+			// Re-Generate picked css selector to handle current block state!
+			$selector = blockera_get_master_block_state_selector( $selector ?? $args['blockera-unique-selector'] ?? '', $args );
+
+		} else {
+
+			// Re-Generate picked css selector to handle current inner block state!
+			$selector = blockera_get_inner_block_state_selector( $selector ?? '', $args );
+		}
+
 		// We not needs append blockera root block css selector into inners selector.
 		// Like => current $selector value is one of feature id of "elements/link" inner block selectors.
-		if ( ! $feature_id || str_starts_with( $feature_id, 'blockera/' ) || empty( $selectors['fallback'] ) ) {
+		if ( ! $feature_id || str_starts_with( $feature_id, 'blockera/' ) ) {
 
-			return $selector ?? $selectors['fallback'] ?? '';
+			return ! empty( $selector ) ? $selector : $args['blockera-unique-selector'];
 		}
 
 		return blockera_append_root_block_css_selector(
-			$selector ?? '',
-			$selectors['fallback'],
+			$selector,
+			$args['blockera-unique-selector'],
 			[
-				'blockName' => str_replace( '/', '-', str_replace( 'core/', '', $args['blockName'] ) ),
+				'block-type' => $args['block-type'],
+				'block-name' => str_replace( '/', '-', str_replace( 'core/', '', $args['block-name'] ) ),
 			]
 		);
 	}
@@ -519,7 +431,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 	 *
 	 * @param string $selector The recieved block css selector.
 	 * @param string $root     The root block css selector.
-	 * @param array  $args     The arguments {@type string $blockName The block type name}.
+	 * @param array  $args     The arguments {@type string $block -name The block type name}.
 	 *
 	 * @return string the combined block prepared css selector with root.
 	 */
@@ -531,34 +443,27 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
-		$pattern = '/\.\bwp-block-' . preg_quote( $args['blockName'], '/' ) . '\b/';
+		$preg_quote = preg_quote( $args['block-name'], '/' );
+		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
 		// Assume recieved selector is another reference to root, so we should concat together.
 		if ( preg_match( $pattern, $selector, $matches ) ) {
 
-			// Cleanup root selector from any css standard pseudo-classes in this state.
-			$root = preg_replace( '/:\w+/', '', $root );
-
-			$prefix = str_replace( $matches[0], $root . $matches[0], $selector );
-
-			$has_white_space = preg_match( '/\s/', $selector );
-
-			$suffix_regexp = sprintf(
-				'/%1$s\.\w+.(?:\w+)%2$s/',
-				preg_quote( $matches[0], '/' ),
-				$has_white_space ? '\s' : ''
+			// Appending blockera roo unique css selector into picked your selector.
+			return \Blockera\Utils\Utils::modifySelectorPos(
+				$selector,
+				$matches[0],
+				[
+					'prefix' => $root,
+					'suffix' => $root,
+				]
 			);
+		}
 
-			if ( preg_match( $suffix_regexp, $selector, $m ) ) {
+		// Imagine selector and root is same.
+		if ( $selector === $root || blockera_is_inner_block( $args['block-type'] ) ) {
 
-				$suffix = str_replace( $m, $m[0] . $root, $selector );
-
-			} else {
-
-				$suffix = str_replace( $matches[0], $matches[0] . $root, $selector );
-			}
-
-			return sprintf( '%s, %s', $prefix, $suffix );
+			return $selector;
 		}
 
 		// Assume received selector started with html tag name!

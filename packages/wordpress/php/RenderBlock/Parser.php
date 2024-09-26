@@ -7,6 +7,7 @@ use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\WordPress\RenderBlock\HTML\Icon;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class Parser after parsing block details manipulating html and css on WordPress core blocks.
@@ -44,8 +45,8 @@ class Parser {
 	public function getCss( array $params ): string {
 
 		[
-			'block'    => $block,
-			'selector' => $fallbackSelector,
+			'block'             => $block,
+			'unique_class_name' => $fallbackSelector,
 		] = $params;
 
 		/**

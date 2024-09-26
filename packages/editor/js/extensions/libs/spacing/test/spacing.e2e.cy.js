@@ -191,7 +191,7 @@ describe('Spacing Extension', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'margin-top: var(--wp--preset--spacing--10)')
 				.should(
@@ -379,7 +379,7 @@ describe('Spacing Extension', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -557,7 +557,7 @@ describe('Spacing Extension', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'padding-top: 10px')
 				.should(

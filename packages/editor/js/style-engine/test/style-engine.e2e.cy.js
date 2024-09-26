@@ -92,7 +92,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',
@@ -105,7 +105,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',
@@ -122,7 +122,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',
@@ -251,7 +251,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',
@@ -384,7 +384,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',

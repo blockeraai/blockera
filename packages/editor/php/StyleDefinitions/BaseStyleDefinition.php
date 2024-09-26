@@ -73,6 +73,39 @@ abstract class BaseStyleDefinition {
 		'is-important' => true,
 	];
 
+	/**
+	 * Store available pseudo state on blockera style engine.
+	 *
+	 * @var string $pseudo_state the pseudo state value.
+	 */
+	protected string $pseudo_state = 'normal';
+
+	/**
+	 * Store available pseudo state on blockera style engine for inner block.
+	 *
+	 * @var string $inner_pseudo_state the pseudo state value.
+	 */
+	protected string $inner_pseudo_state = 'normal';
+
+	/**
+	 * Store the block type.
+	 *
+	 * @var string $block_type the block type.
+	 */
+	protected string $block_type = '';
+
+	/**
+	 * Store blockera unique css selector.
+	 *
+	 * @var string $blockera_unique_selector the generated unique css selector for blockera block.
+	 */
+	protected string $blockera_unique_selector = '';
+
+	/**
+	 * @param array $options the options to generate css properties.
+	 *
+	 * @return void
+	 */
 	public function setOptions( array $options ): void {
 
 		$this->options = array_merge(
@@ -96,15 +129,21 @@ abstract class BaseStyleDefinition {
 	 */
 	public function setSelector( string $support ): void {
 
-		$selectors = $this->getSelectors();
 		$fallback  = $this->getFallbackSupport( $support );
+		$selectors = blockera_get_block_type_property( $this->block['blockName'], 'selectors' );
 
 		$this->selector = blockera_get_compatible_block_css_selector(
 			$selectors,
 			$support,
 			[
-				'fallback'  => $fallback,
-				'blockName' => $this->block['blockName'],
+				'fallback'                 => $fallback,
+				'block-type'               => $this->block_type,
+				'pseudo-class'             => $this->pseudo_state,
+				'block-settings'           => $this->block['attrs'],
+				'block-name'               => $this->block['blockName'],
+				'inner-pseudo-class'       => $this->inner_pseudo_state,
+				'root'                     => $selectors['root'] ?? null,
+				'blockera-unique-selector' => $this->blockera_unique_selector,
 			]
 		);
 	}
@@ -161,6 +200,46 @@ abstract class BaseStyleDefinition {
 	public function setSelectors( array $selectors ): void {
 
 		$this->selectors = $selectors;
+	}
+
+	/**
+	 * @param string $pseudo_state the available pseudo state on blockera style engine.
+	 *
+	 * @return void
+	 */
+	public function setPseudoState( string $pseudo_state ): void {
+
+		$this->pseudo_state = $pseudo_state;
+	}
+
+	/**
+	 * @param string $block_type the block type.
+	 *
+	 * @return void
+	 */
+	public function setBlockType( string $block_type ): void {
+
+		$this->block_type = $block_type;
+	}
+
+	/**
+	 * @param string $blockera_unique_selector The generated blockera unique css selector.
+	 *
+	 * @return void
+	 */
+	public function setBlockeraUniqueSelector( string $blockera_unique_selector ): void {
+
+		$this->blockera_unique_selector = $blockera_unique_selector;
+	}
+
+	/**
+	 * @param string $inner_pseudo_state the inner block pseudo state.
+	 *
+	 * @return void
+	 */
+	public function setInnerPseudoState( string $inner_pseudo_state ): void {
+
+		$this->inner_pseudo_state = $inner_pseudo_state;
 	}
 
 	/**
@@ -368,12 +447,13 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
-	 * Flush all declarations.
+	 * Resettings some properties to fresh before generate new styles.
 	 *
 	 * @return void
 	 */
-	public function flushDeclarations(): void {
+	public function resetProperties(): void {
 
+		$this->css          = [];
 		$this->declarations = [];
 	}
 

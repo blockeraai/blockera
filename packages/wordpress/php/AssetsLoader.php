@@ -86,8 +86,7 @@ class AssetsLoader {
 		];
 		$this->id             = $args['id'] ?? 'blockera-wordpress-assets-loader';
 
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueueBlockeraWPStyles' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueueBlockeraWPStyles' ] );
+		add_action( 'wp_head', [ $this, 'printBlockeraGeneratedStyles' ] );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
@@ -123,7 +122,7 @@ class AssetsLoader {
 						$asset['version']
 					);
 
-					  return;
+					return;
 				}
 
 				if ( ! $asset['script'] ) {
@@ -182,44 +181,19 @@ class AssetsLoader {
 	}
 
 	/**
-	 * Enqueuing blockera requirement css styles on WordPress admin or front environments.
+	 * Printing blockera requirement css styles on WordPress front page.
 	 *
 	 * @return void
 	 */
-	public function enqueueBlockeraWPStyles(): void {
+	public function printBlockeraGeneratedStyles(): void {
 
-		// Register empty css file to load from consumer plugin of that,
-		// use-case: when enqueue style-engine inline stylesheet for all blocks on the document.
-		// Accessibility: on front-end.
-		$file     = $this->root_info['path'] . 'assets/css/dynamic-styles.css';
-		$file_url = $this->root_info['url'] . 'assets/css/dynamic-styles.css';
-
-		if ( file_exists( $file ) && ! is_admin() ) {
-
-			$handle = 'blockera-inline-css';
-
-			wp_enqueue_style(
-				$handle,
-				$file_url,
-				[],
-				filemtime( $file )
-			);
-
-			wp_add_inline_style(
-				$handle,
-				/**
-				 * Apply filter for add inline css into empty file.
-				 *
-				 * @since 1.0.0
-				 */
-				// phpcs:disable
-				apply_filters(
-					'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
-					''
-				)
-			);
-			// phpcs:enable
-		}
+		echo sprintf(
+			'<style id="blockera-inline-css">%s</style>',
+			apply_filters(
+				'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
+				''
+			)
+		);
 	}
 
 	/**
