@@ -23,6 +23,13 @@ class Render {
 	protected Application $app;
 
 	/**
+	 * Store all block classnames.
+	 *
+	 * @var array $classnames the classnames array stack.
+	 */
+	protected array $classnames = [];
+
+	/**
 	 * Render constructor.
 	 *
 	 * @param Application $app the app instance.
@@ -109,6 +116,12 @@ class Render {
 		// Get blockera block unique css classname.
 		$blockera_class_name = sprintf( 'blockera-block blockera-block-%s', $blockera_hash_id );
 
+		// Is need to update block HTML output?
+		$need_to_update_html = $this->needToUpdateHTML( $attributes['className'] ?? '' );
+
+		// Pushing block classname into stack.
+		$this->setClassname( $attributes['className'] ?? '' );
+
 		// Get block cache key.
 		$cache_key = blockera_get_block_cache_key( $block );
 		// Prepare cache data.
@@ -122,13 +135,13 @@ class Render {
 			// Print css into inline style on "wp_head" action occur.
 			blockera_add_inline_css( $cache_data['css'] );
 
-			if ( ! empty( $cache_data['html'] ) ) {
+			if ( $need_to_update_html ) {
 
 				// Represent html string.
-				return $this->getUpdatedHTML( $cache_data['html'], $cache_data['classname'] );
+				return $this->getUpdatedHTML( $html, $cache_data['classname'] );
 			}
 
-			return $this->getUpdatedHTML( $html, $cache_data['classname'] );
+			return $html;
 		}
 
 		// Delete cache data while previous cache data is existing but changed block render process data.
@@ -138,7 +151,7 @@ class Render {
 		}
 
 		// Get normalized blockera block unique css classname.
-		$unique_class_name = blockera_get_normalized_selector( $blockera_class_name );
+		$unique_class_name = blockera_get_normalized_selector( $need_to_update_html ? $blockera_class_name : $attributes['className'] );
 
 		/**
 		 * Get parser object.
@@ -156,20 +169,48 @@ class Render {
 		// Render icon element.
 		$html = $this->renderIcon( $html, $parser, compact( 'block', 'unique_class_name' ) );
 
-		// Represent html string.
-		$html = $this->getUpdatedHTML( $html, $blockera_class_name );
+		if ( $need_to_update_html ) {
+
+			// Represent html string.
+			$html = $this->getUpdatedHTML( $html, $blockera_class_name );
+		}
 
 		// Create new block cache data.
 		$data = [
 			'hash'      => $hash,
 			'css'       => $computed_css_rules,
-			'classname' => $blockera_class_name,
+			'classname' => $need_to_update_html ? $blockera_class_name : $attributes['className'],
 		];
 
 		// Sets cache data with merge previous data.
 		blockera_set_block_cache( $cache_key, $data );
 
 		return $html;
+	}
+
+	/**
+	 * Is need to update block content?
+	 * The target of this method is prevented of avoid block unique classnames.
+	 *
+	 * @param string $block_classname the block "className" attribute value.
+	 *
+	 * @return bool true on success, false on otherwise.
+	 */
+	protected function needToUpdateHTML( string $block_classname ): bool {
+
+		// Imagine th block classname is empty, so we should update html output.
+		if ( empty( $block_classname ) ) {
+
+			return true;
+		}
+
+		// Try to detect blockera block unique classname and check it to sure not registered in classnames stack.
+		if ( preg_match( $this->getUniqueClassnameRegex(), $block_classname, $matches ) ) {
+
+			return in_array( $matches[0], $this->classnames, true );
+		}
+
+		return false;
 	}
 
 	/**
@@ -187,7 +228,7 @@ class Render {
 		if ( $processor->next_tag() ) {
 
 			// Regular Expression to detect blockera unique classname.
-			$regexp = '/\b(blockera-block-\S+)\b/';
+			$regexp = $this->getUniqueClassnameRegex();
 
 			// Get tag previous classname value.
 			$previous_class = $processor->get_attribute( 'class' );
@@ -209,6 +250,36 @@ class Render {
 		}
 
 		return $processor->get_updated_html();
+	}
+
+	/**
+	 * Push block classname into stack.
+	 *
+	 * @param string $classname the block "className" attribute value.
+	 *
+	 * @return void
+	 */
+	protected function setClassname( string $classname ): void {
+
+		if ( empty( $classname ) ) {
+
+			return;
+		}
+
+		if ( preg_match( $this->getUniqueClassnameRegex(), $classname, $matches ) ) {
+
+			$this->classnames[] = $matches[0];
+		}
+	}
+
+	/**
+	 * Retrieve regex pattern to detect unique classname.
+	 *
+	 * @return string the regular expression to detect blockera unique classname.
+	 */
+	protected function getUniqueClassnameRegex(): string {
+
+		return '/\b(blockera-block-\S+)\b/';
 	}
 
 }
