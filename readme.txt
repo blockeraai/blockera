@@ -133,7 +133,14 @@ Blockera page builder is an open-source project, and we welcome contributors to 
 
 == Screenshots ==
 
-1. Gutenberg Button Block
+1. Advanced Mode for All Core Blocks
+2. Block States for All Core Blocks (Hover, Focus, etc.)
+3. Advanced Customization Options for All Core Blocks
+4. Responsive Design Controls for All Core Blocks
+5. Inner Blocks Design Customization for All Core Blocks
+6. CSS Variables
+7. WooCommerce Blocks
+
 
 == Installation ==
 
