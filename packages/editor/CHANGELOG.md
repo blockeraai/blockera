@@ -37,3 +37,4 @@
 - Updated tests to detect real hover states more accurately.
 - Updated Blockera inline style tag ID to ensure all assertions pass successfully.
 - Added new automated tests to verify unique class names for blocks in Blockera.
+- Added tests for checking font family functionality and WordPress data compatibility.
