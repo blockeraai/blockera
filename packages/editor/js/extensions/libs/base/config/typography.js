@@ -10,6 +10,12 @@ import { __ } from '@wordpress/i18n';
  */
 import type { FeatureConfig } from '../types';
 
+const blockeraFontFamily: FeatureConfig = {
+	show: true,
+	force: true,
+	status: true,
+	label: __('Font Family', 'blockera'),
+};
 const blockeraFontSize: FeatureConfig = {
 	show: true,
 	force: true,
@@ -130,6 +136,7 @@ const blockeraWordBreak: FeatureConfig = {
 };
 
 export const typographyConfig = {
+	blockeraFontFamily,
 	blockeraFontSize,
 	blockeraLineHeight,
 	blockeraFontColor,

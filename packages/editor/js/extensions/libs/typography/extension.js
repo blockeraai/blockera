@@ -35,6 +35,7 @@ import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TTypographyProps } from './type/typography-props';
 import {
+	FontFamily,
 	FontSize,
 	FontStyle,
 	LineHeight,
@@ -58,6 +59,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		setSettings,
 		attributes,
 	}: TTypographyProps): MixedElement => {
+		const isShowFontFamily = isShowField(
+			extensionConfig.blockeraFontFamily,
+			values?.blockeraFontFamily,
+			attributes.blockeraFontFamily.default
+		);
 		const isShowFontSize = isShowField(
 			extensionConfig.blockeraFontSize,
 			values?.blockeraFontSize,
@@ -140,6 +146,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		);
 
 		if (
+			!isShowFontFamily &&
 			!isShowFontSize &&
 			!isShowLineHeight &&
 			!isShowTextAlign &&
@@ -219,6 +226,20 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						setSettings(newSettings, 'typographyConfig');
 					}}
 				/>
+
+				<EditorFeatureWrapper
+					isActive={isShowFontFamily}
+					config={extensionConfig.blockeraFontFamily}
+				>
+					<FontFamily
+						block={block}
+						onChange={handleOnChangeAttributes}
+						value={values.blockeraFontFamily}
+						defaultValue={attributes.blockeraFontFamily.default}
+						columns="columns-2"
+						{...extensionProps.blockeraFontFamily}
+					/>
+				</EditorFeatureWrapper>
 
 				{isShowFontSize && isShowLineHeight ? (
 					<BaseControl

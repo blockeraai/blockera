@@ -347,6 +347,10 @@ return [
 		'default' => [],
 	],
 	// Typography.
+	'blockeraFontFamily'                => [
+		'type'    => 'string',
+		'default' => '',
+	],
 	'blockeraFontColor'                 => [
 		'type'    => 'string',
 		'default' => '',

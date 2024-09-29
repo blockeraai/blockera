@@ -36,6 +36,7 @@ export function TypographyStyles({
 	...props
 }: StylesProps): Array<CssRule> {
 	const {
+		blockeraFontFamily,
 		blockeraFontSize,
 		blockeraLineHeight,
 		blockeraTextAlign,
@@ -73,6 +74,39 @@ export function TypographyStyles({
 	};
 
 	const styleGroup: Array<CssRule> = [];
+
+	if (isActiveField(blockeraFontFamily)) {
+		const blockeraFontFamily = blockProps.attributes.blockeraFontFamily;
+
+		if (blockeraFontFamily !== attributes.blockeraFontFamily.default) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraFontFamily',
+				support: 'blockeraFontFamily',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontFamily'
+				),
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraFontFamily: [
+							{
+								type: 'static',
+								properties: {
+									'font-family': `var(--wp--preset--font-family--${blockeraFontFamily})`,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
 
 	if (isActiveField(blockeraFontSize)) {
 		const blockeraFontSize = getValueAddonRealValue(

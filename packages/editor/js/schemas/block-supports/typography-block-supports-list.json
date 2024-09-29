@@ -4,6 +4,13 @@
 	"supports": [
 		{
 			"status": true,
+			"name": "blockeraFontFamily",
+			"css-property": "font-family",
+			"fallback": ["font-size"],
+			"description": "Support for \"blockeraFontFamily\" value."
+		},
+		{
+			"status": true,
 			"name": "blockeraTextShadow",
 			"css-property": "text-shadow",
 			"fallback": ["text-shadow"],
