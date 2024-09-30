@@ -41,3 +41,4 @@
 - Added tests to verify the functionality of the `font family` feature.
 - Added tests for checking `font family` functionality and WordPress data compatibility.
 - Added tests to verify the functionality of the `font weight` feature.
+- Added tests for checking `font weight` functionality and WordPress data compatibility.

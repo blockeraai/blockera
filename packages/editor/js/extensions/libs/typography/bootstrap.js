@@ -19,6 +19,10 @@ import {
 	fontFamilyToWPCompatibility,
 } from './compatibility/font-family';
 import {
+	fontWeightFromWPCompatibility,
+	fontWeightToWPCompatibility,
+} from './compatibility/font-weight';
+import {
 	fontSizeFromWPCompatibility,
 	fontSizeToWPCompatibility,
 } from './compatibility/font-size';
@@ -72,6 +76,13 @@ export const bootstrap = (): void => {
 			// Font Family
 			//
 			attributes = fontFamilyFromWPCompatibility({
+				attributes,
+			});
+
+			//
+			// Font Weight
+			//
+			attributes = fontWeightFromWPCompatibility({
 				attributes,
 			});
 
@@ -178,6 +189,15 @@ export const bootstrap = (): void => {
 					return mergeObject(
 						nextState,
 						fontFamilyToWPCompatibility({
+							newValue,
+							ref,
+						})
+					);
+
+				case 'blockeraFontWeight':
+					return mergeObject(
+						nextState,
+						fontWeightToWPCompatibility({
 							newValue,
 							ref,
 						})
