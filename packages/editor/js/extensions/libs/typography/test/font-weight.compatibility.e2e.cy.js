@@ -44,7 +44,7 @@ describe('Font Weight → WP Compatibility', () => {
 			// Test 2: Blockera value to WP data
 			//
 
-			cy.getParentContainer('Font Weight').within(() => {
+			cy.getParentContainer('Weight').within(() => {
 				cy.get('select').select('200');
 			});
 
@@ -64,7 +64,7 @@ describe('Font Weight → WP Compatibility', () => {
 			//
 
 			// clear value
-			cy.getParentContainer('Font Weight').within(() => {
+			cy.getParentContainer('Weight').within(() => {
 				cy.get('select').select('');
 			});
 

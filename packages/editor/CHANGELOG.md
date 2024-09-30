@@ -30,6 +30,7 @@
 - Refactored server-side style engine with cleaner code and improved support for & ampersand in selector creation.
 - Added spacer for processed selector in the client-side style engine to improved css selector normalizer.
 - Added a reset method in Layout style definition.
+- Updated the layout of typography features to enhance user experience (UX).
 
 ### Automated Tests:
 - Completed E2E tests to verify the functionality of all advanced states in Flex Layout.

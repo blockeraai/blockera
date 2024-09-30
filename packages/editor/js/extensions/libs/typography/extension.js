@@ -234,81 +234,47 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					}}
 				/>
 
-				<EditorFeatureWrapper
-					isActive={isShowFontFamily}
-					config={extensionConfig.blockeraFontFamily}
+				<BaseControl
+					columns="1fr 2.65fr"
+					label={__('Font', 'blockera')}
 				>
-					<FontFamily
-						block={block}
-						onChange={handleOnChangeAttributes}
-						value={values.blockeraFontFamily}
-						defaultValue={attributes.blockeraFontFamily.default}
-						columns="columns-2"
-						{...extensionProps.blockeraFontFamily}
-					/>
-				</EditorFeatureWrapper>
+					<Grid alignItems="center" gridTemplateColumns="1fr 1fr">
+						<EditorFeatureWrapper
+							isActive={isShowFontFamily}
+							config={extensionConfig.blockeraFontFamily}
+						>
+							<FontFamily
+								block={block}
+								onChange={handleOnChangeAttributes}
+								value={values.blockeraFontFamily}
+								defaultValue={
+									attributes.blockeraFontFamily.default
+								}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								{...extensionProps.blockeraFontFamily}
+							/>
+						</EditorFeatureWrapper>
 
-				<EditorFeatureWrapper
-					isActive={isShowFontWeight}
-					config={extensionConfig.blockeraFontWeight}
-				>
-					<FontWeight
-						block={block}
-						onChange={handleOnChangeAttributes}
-						value={values.blockeraFontWeight}
-						defaultValue={attributes.blockeraFontWeight.default}
-						columns="columns-2"
-						{...extensionProps.blockeraFontWeight}
-					/>
-				</EditorFeatureWrapper>
+						<EditorFeatureWrapper
+							isActive={isShowFontWeight}
+							config={extensionConfig.blockeraFontWeight}
+						>
+							<FontWeight
+								block={block}
+								onChange={handleOnChangeAttributes}
+								value={values.blockeraFontWeight}
+								defaultValue={
+									attributes.blockeraFontWeight.default
+								}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								{...extensionProps.blockeraFontWeight}
+							/>
+						</EditorFeatureWrapper>
 
-				{isShowFontSize && isShowLineHeight ? (
-					<BaseControl
-						columns="columns-2"
-						label={__('Size', 'blockera')}
-					>
-						<Flex alignItems="flex-start">
-							<EditorFeatureWrapper
-								isActive={isShowFontSize}
-								config={extensionConfig.blockeraFontSize}
-							>
-								<FontSize
-									block={block}
-									onChange={handleOnChangeAttributes}
-									value={values.blockeraFontSize}
-									defaultValue={
-										attributes.blockeraFontSize.default
-									}
-									columns="columns-1"
-									className="control-first label-center small-gap"
-									style={{ margin: '0px' }}
-									size="small"
-									{...extensionProps.blockeraFontSize}
-								/>
-							</EditorFeatureWrapper>
-
-							<EditorFeatureWrapper
-								isActive={isShowLineHeight}
-								config={extensionConfig.blockeraLineHeight}
-							>
-								<LineHeight
-									block={block}
-									value={values.blockeraLineHeight}
-									onChange={handleOnChangeAttributes}
-									defaultValue={
-										attributes.blockeraLineHeight.default
-									}
-									columns="columns-1"
-									className="control-first label-center small-gap"
-									style={{ margin: '0px' }}
-									size="small"
-									{...extensionProps.blockeraLineHeight}
-								/>
-							</EditorFeatureWrapper>
-						</Flex>
-					</BaseControl>
-				) : (
-					<>
 						<EditorFeatureWrapper
 							isActive={isShowFontSize}
 							config={extensionConfig.blockeraFontSize}
@@ -320,6 +286,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								defaultValue={
 									attributes.blockeraFontSize.default
 								}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								size="small"
 								{...extensionProps.blockeraFontSize}
 							/>
 						</EditorFeatureWrapper>
@@ -335,11 +305,15 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								defaultValue={
 									attributes.blockeraLineHeight.default
 								}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								size="small"
 								{...extensionProps.blockeraLineHeight}
 							/>
 						</EditorFeatureWrapper>
-					</>
-				)}
+					</Grid>
+				</BaseControl>
 
 				<EditorFeatureWrapper
 					isActive={isShowFontColor}
@@ -366,7 +340,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										</p>
 									</>
 								}
-								columns="columns-2"
+								columns="1fr 2.65fr"
 								defaultValue={
 									attributes.blockeraFontColor.default
 								}

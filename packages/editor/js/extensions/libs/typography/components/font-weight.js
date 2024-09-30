@@ -85,7 +85,7 @@ export const FontWeight = ({
 			}}
 		>
 			<SelectControl
-				label={__('Font Weight', 'blockera')}
+				label={__('Weight', 'blockera')}
 				labelDescription={
 					<>
 						<p>

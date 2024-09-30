@@ -16,7 +16,7 @@ describe('Font Weight → Functionality', () => {
 	});
 
 	it('simple value', () => {
-		cy.getParentContainer('Font Weight').within(() => {
+		cy.getParentContainer('Weight').within(() => {
 			cy.get('select').select('800');
 		});
 
