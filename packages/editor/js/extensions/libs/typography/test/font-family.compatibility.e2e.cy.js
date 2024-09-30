@@ -25,7 +25,7 @@ describe('Font Family → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
-			cy.getParentContainer('Font Family').as('container');
+			cy.getParentContainer('Family').as('container');
 
 			//
 			// Test 1: WP data to Blockera
