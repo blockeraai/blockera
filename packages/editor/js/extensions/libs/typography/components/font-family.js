@@ -2,72 +2,73 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
-import { ControlContextProvider, InputControl } from '@blockera/controls';
-import type { ControlSize } from '@blockera/controls/js/types/general-control-types';
+import { ControlContextProvider, SelectControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import { getFontFamilies } from '../utils';
 
-export const FontSize = ({
+export const FontFamily = ({
 	block,
 	value,
 	onChange,
 	defaultValue,
-	size,
 	...props
 }: {
 	block: TBlockProps,
 	value: string | void,
 	defaultValue?: string,
-	size?: ControlSize,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
 			value={{
-				name: generateExtensionId(block, 'font-size'),
+				name: generateExtensionId(block, 'font-family'),
 				value,
-				attribute: 'blockeraFontSize',
+				attribute: 'blockeraFontFamily',
 				blockName: block.blockName,
 			}}
 		>
-			<InputControl
-				label={__('Size', 'blockera')}
+			<SelectControl
+				label={__('Family', 'blockera')}
 				labelDescription={
 					<>
 						<p>
 							{__(
-								'It sets the size of the font for text content, allowing customization of text appearance for readability and aesthetic appeal in various contexts.',
+								'Allows you to set the font family for text content, giving you control over the typography style.',
 								'blockera'
 							)}
 						</p>
 						<p>
 							{__(
-								'Relative units like "em" and "rem" are recommended for responsive designs as they adjust based on parent font size or root font size, respectively.',
+								'You can choose from system fonts or custom web fonts to match your site’s branding and design aesthetic.',
+								'blockera'
+							)}
+						</p>
+						<p>
+							{__(
+								'For consistent styling across your website, it’s recommended to use fonts from your design system or predefined options.',
 								'blockera'
 							)}
 						</p>
 					</>
 				}
 				columns="columns-2"
-				unitType="essential"
-				min={0}
+				options={getFontFamilies()}
+				type="native"
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					onChange('blockeraFontSize', newValue, { ref })
+					onChange('blockeraFontFamily', newValue, { ref })
 				}
-				controlAddonTypes={['variable']}
-				variableTypes={['font-size']}
-				size={size}
 				{...props}
 			/>
 		</ControlContextProvider>

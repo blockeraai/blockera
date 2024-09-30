@@ -35,6 +35,8 @@ import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TTypographyProps } from './type/typography-props';
 import {
+	FontFamily,
+	FontWeight,
 	FontSize,
 	FontStyle,
 	LineHeight,
@@ -58,6 +60,16 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		setSettings,
 		attributes,
 	}: TTypographyProps): MixedElement => {
+		const isShowFontFamily = isShowField(
+			extensionConfig.blockeraFontFamily,
+			values?.blockeraFontFamily,
+			attributes.blockeraFontFamily.default
+		);
+		const isShowFontWeight = isShowField(
+			extensionConfig.blockeraFontWeight,
+			values?.blockeraFontWeight,
+			attributes.blockeraFontWeight.default
+		);
 		const isShowFontSize = isShowField(
 			extensionConfig.blockeraFontSize,
 			values?.blockeraFontSize,
@@ -140,6 +152,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		);
 
 		if (
+			!isShowFontFamily &&
+			!isShowFontWeight &&
 			!isShowFontSize &&
 			!isShowLineHeight &&
 			!isShowTextAlign &&
@@ -220,53 +234,47 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					}}
 				/>
 
-				{isShowFontSize && isShowLineHeight ? (
-					<BaseControl
-						columns="columns-2"
-						label={__('Size', 'blockera')}
-					>
-						<Flex alignItems="flex-start">
-							<EditorFeatureWrapper
-								isActive={isShowFontSize}
-								config={extensionConfig.blockeraFontSize}
-							>
-								<FontSize
-									block={block}
-									onChange={handleOnChangeAttributes}
-									value={values.blockeraFontSize}
-									defaultValue={
-										attributes.blockeraFontSize.default
-									}
-									columns="columns-1"
-									className="control-first label-center small-gap"
-									style={{ margin: '0px' }}
-									size="small"
-									{...extensionProps.blockeraFontSize}
-								/>
-							</EditorFeatureWrapper>
+				<BaseControl
+					columns="1fr 2.65fr"
+					label={__('Font', 'blockera')}
+				>
+					<Grid alignItems="center" gridTemplateColumns="1fr 1fr">
+						<EditorFeatureWrapper
+							isActive={isShowFontFamily}
+							config={extensionConfig.blockeraFontFamily}
+						>
+							<FontFamily
+								block={block}
+								onChange={handleOnChangeAttributes}
+								value={values.blockeraFontFamily}
+								defaultValue={
+									attributes.blockeraFontFamily.default
+								}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								{...extensionProps.blockeraFontFamily}
+							/>
+						</EditorFeatureWrapper>
 
-							<EditorFeatureWrapper
-								isActive={isShowLineHeight}
-								config={extensionConfig.blockeraLineHeight}
-							>
-								<LineHeight
-									block={block}
-									value={values.blockeraLineHeight}
-									onChange={handleOnChangeAttributes}
-									defaultValue={
-										attributes.blockeraLineHeight.default
-									}
-									columns="columns-1"
-									className="control-first label-center small-gap"
-									style={{ margin: '0px' }}
-									size="small"
-									{...extensionProps.blockeraLineHeight}
-								/>
-							</EditorFeatureWrapper>
-						</Flex>
-					</BaseControl>
-				) : (
-					<>
+						<EditorFeatureWrapper
+							isActive={isShowFontWeight}
+							config={extensionConfig.blockeraFontWeight}
+						>
+							<FontWeight
+								block={block}
+								onChange={handleOnChangeAttributes}
+								value={values.blockeraFontWeight}
+								defaultValue={
+									attributes.blockeraFontWeight.default
+								}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								{...extensionProps.blockeraFontWeight}
+							/>
+						</EditorFeatureWrapper>
+
 						<EditorFeatureWrapper
 							isActive={isShowFontSize}
 							config={extensionConfig.blockeraFontSize}
@@ -278,6 +286,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								defaultValue={
 									attributes.blockeraFontSize.default
 								}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								size="small"
 								{...extensionProps.blockeraFontSize}
 							/>
 						</EditorFeatureWrapper>
@@ -293,11 +305,15 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								defaultValue={
 									attributes.blockeraLineHeight.default
 								}
+								columns="columns-1"
+								className="control-first label-center small-gap"
+								style={{ margin: '0px' }}
+								size="small"
 								{...extensionProps.blockeraLineHeight}
 							/>
 						</EditorFeatureWrapper>
-					</>
-				)}
+					</Grid>
+				</BaseControl>
 
 				<EditorFeatureWrapper
 					isActive={isShowFontColor}
@@ -324,7 +340,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										</p>
 									</>
 								}
-								columns="columns-2"
+								columns="1fr 2.65fr"
 								defaultValue={
 									attributes.blockeraFontColor.default
 								}
@@ -641,10 +657,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																<h3>
 																	<Icon
 																		icon="direction-ltr"
-																		iconSize="22"
+																		iconSize="18"
 																	/>
 																	{__(
-																		'LTR',
+																		'Left To Right (LTR)',
 																		'blockera'
 																	)}
 																</h3>
@@ -657,10 +673,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																<h3>
 																	<Icon
 																		icon="direction-rtl"
-																		iconSize="22"
+																		iconSize="18"
 																	/>
 																	{__(
-																		'RTL',
+																		'Right To Left (RTL)',
 																		'blockera'
 																	)}
 																</h3>
@@ -891,7 +907,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												>
 													<Icon
 														icon="text-orientation-style-1"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -913,7 +929,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												>
 													<Icon
 														icon="text-orientation-style-2"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -935,7 +951,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												>
 													<Icon
 														icon="text-orientation-style-3"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -957,7 +973,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												>
 													<Icon
 														icon="text-orientation-style-4"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -980,7 +996,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													<Icon
 														library="wp"
 														icon="close-small"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -1175,7 +1191,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="break-normal"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__('Normal', 'blockera')}
 											</h3>
@@ -1188,7 +1204,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="break-all"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__(
 													'Break All Words',
@@ -1204,7 +1220,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="break-normal"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__(
 													'Keep All Words',
@@ -1220,7 +1236,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="break-all"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__('Break Word', 'blockera')}
 											</h3>
@@ -1233,7 +1249,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="inherit-circle"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__('Inherit', 'blockera')}
 											</h3>

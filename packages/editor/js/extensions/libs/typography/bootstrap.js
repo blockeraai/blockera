@@ -15,6 +15,14 @@ import { mergeObject } from '@blockera/utils';
  * Internal dependencies
  */
 import {
+	fontFamilyFromWPCompatibility,
+	fontFamilyToWPCompatibility,
+} from './compatibility/font-family';
+import {
+	fontWeightFromWPCompatibility,
+	fontWeightToWPCompatibility,
+} from './compatibility/font-weight';
+import {
 	fontSizeFromWPCompatibility,
 	fontSizeToWPCompatibility,
 } from './compatibility/font-size';
@@ -63,6 +71,20 @@ export const bootstrap = (): void => {
 			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
+
+			//
+			// Font Family
+			//
+			attributes = fontFamilyFromWPCompatibility({
+				attributes,
+			});
+
+			//
+			// Font Weight
+			//
+			attributes = fontWeightFromWPCompatibility({
+				attributes,
+			});
 
 			//
 			// Font Size
@@ -163,6 +185,24 @@ export const bootstrap = (): void => {
 			}
 
 			switch (featureId) {
+				case 'blockeraFontFamily':
+					return mergeObject(
+						nextState,
+						fontFamilyToWPCompatibility({
+							newValue,
+							ref,
+						})
+					);
+
+				case 'blockeraFontWeight':
+					return mergeObject(
+						nextState,
+						fontWeightToWPCompatibility({
+							newValue,
+							ref,
+						})
+					);
+
 				case 'blockeraFontSize':
 					return mergeObject(
 						nextState,

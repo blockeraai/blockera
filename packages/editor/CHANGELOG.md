@@ -1,5 +1,10 @@
 ## Unreleased
 
+### New Features:
+- Added the ability to change `font family` for blocks, supporting all states and breakpoints. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/font-font-appearance-support-nhEJYxOd5p9k4E1)]
+- Added the ability to change `font weight` for blocks, supporting all states and breakpoints. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/font-font-appearance-support-nhEJYxOd5p9k4E1)]
+
+
 ### Bug Fixes
 
 - Max 200 value for Gap feature [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/max-200-value-for-gap-feature-nwcVKkoyV5PVKEZ)]
@@ -25,6 +30,7 @@
 - Refactored server-side style engine with cleaner code and improved support for & ampersand in selector creation.
 - Added spacer for processed selector in the client-side style engine to improved css selector normalizer.
 - Added a reset method in Layout style definition.
+- Updated the layout of typography features to enhance user experience (UX).
 
 ### Automated Tests:
 - Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
@@ -33,3 +39,7 @@
 - Updated tests to detect real hover states more accurately.
 - Updated Blockera inline style tag ID to ensure all assertions pass successfully.
 - Added new automated tests to verify unique class names for blocks in Blockera.
+- Added tests to verify the functionality of the `font family` feature.
+- Added tests for checking `font family` functionality and WordPress data compatibility.
+- Added tests to verify the functionality of the `font weight` feature.
+- Added tests for checking `font weight` functionality and WordPress data compatibility.

@@ -4,6 +4,20 @@
 	"supports": [
 		{
 			"status": true,
+			"name": "blockeraFontFamily",
+			"css-property": "font-family",
+			"fallback": ["font-size"],
+			"description": "Support for \"blockeraFontFamily\" value."
+		},
+		{
+			"status": true,
+			"name": "blockeraFontWeight",
+			"css-property": "font-weight",
+			"fallback": ["font-size"],
+			"description": "Support for \"blockeraFontWeight\" value."
+		},
+		{
+			"status": true,
 			"name": "blockeraTextShadow",
 			"css-property": "text-shadow",
 			"fallback": ["text-shadow"],

@@ -605,7 +605,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									<h3>
 										<Icon
 											icon="overflow-visible"
-											iconSize="22"
+											iconSize="18"
 										/>
 										{__('Visible', 'blockera')}
 									</h3>
@@ -618,7 +618,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									<h3>
 										<Icon
 											icon="overflow-hidden"
-											iconSize="22"
+											iconSize="18"
 										/>
 										{__('Hidden', 'blockera')}
 									</h3>
@@ -631,7 +631,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 									<h3>
 										<Icon
 											icon="overflow-scroll"
-											iconSize="22"
+											iconSize="18"
 										/>
 										{__('Scroll', 'blockera')}
 									</h3>
