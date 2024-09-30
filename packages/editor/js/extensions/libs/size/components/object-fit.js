@@ -73,7 +73,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<Icon icon="fit-fill" iconSize="22" />
+						<Icon icon="fit-fill" iconSize="18" />
 						{__('Fill', 'blockera')}
 					</h3>
 					<p>
@@ -83,7 +83,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<Icon icon="fit-contain" iconSize="22" />
+						<Icon icon="fit-contain" iconSize="18" />
 						{__('Contain', 'blockera')}
 					</h3>
 					<p>
@@ -93,7 +93,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<Icon icon="fit-cover" iconSize="22" />
+						<Icon icon="fit-cover" iconSize="18" />
 						{__('Cover', 'blockera')}
 					</h3>
 					<p>
@@ -103,7 +103,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<Icon icon="fit-none" iconSize="22" />
+						<Icon icon="fit-none" iconSize="18" />
 						{__('None', 'blockera')}
 					</h3>
 					<p>
@@ -113,7 +113,7 @@ export default function ObjectFit({
 						)}
 					</p>
 					<h3>
-						<Icon icon="fit-scale-down" iconSize="22" />
+						<Icon icon="fit-scale-down" iconSize="18" />
 						{__('Scale Down', 'blockera')}
 					</h3>
 					<p>

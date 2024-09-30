@@ -662,10 +662,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																<h3>
 																	<Icon
 																		icon="direction-ltr"
-																		iconSize="22"
+																		iconSize="18"
 																	/>
 																	{__(
-																		'LTR',
+																		'Left To Right (LTR)',
 																		'blockera'
 																	)}
 																</h3>
@@ -678,10 +678,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																<h3>
 																	<Icon
 																		icon="direction-rtl"
-																		iconSize="22"
+																		iconSize="18"
 																	/>
 																	{__(
-																		'RTL',
+																		'Right To Left (RTL)',
 																		'blockera'
 																	)}
 																</h3>
@@ -912,7 +912,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												>
 													<Icon
 														icon="text-orientation-style-1"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -934,7 +934,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												>
 													<Icon
 														icon="text-orientation-style-2"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -956,7 +956,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												>
 													<Icon
 														icon="text-orientation-style-3"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -978,7 +978,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 												>
 													<Icon
 														icon="text-orientation-style-4"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -1001,7 +1001,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 													<Icon
 														library="wp"
 														icon="close-small"
-														iconSize="22"
+														iconSize="18"
 													/>
 												</h3>
 												<p>
@@ -1196,7 +1196,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="break-normal"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__('Normal', 'blockera')}
 											</h3>
@@ -1209,7 +1209,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="break-all"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__(
 													'Break All Words',
@@ -1225,7 +1225,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="break-normal"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__(
 													'Keep All Words',
@@ -1241,7 +1241,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="break-all"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__('Break Word', 'blockera')}
 											</h3>
@@ -1254,7 +1254,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 											<h3>
 												<Icon
 													icon="inherit-circle"
-													iconSize="22"
+													iconSize="18"
 												/>
 												{__('Inherit', 'blockera')}
 											</h3>
