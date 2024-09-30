@@ -16,6 +16,14 @@ const blockeraFontFamily: FeatureConfig = {
 	status: true,
 	label: __('Font Family', 'blockera'),
 };
+
+const blockeraFontWeight: FeatureConfig = {
+	show: true,
+	force: true,
+	status: true,
+	label: __('Font Weight', 'blockera'),
+};
+
 const blockeraFontSize: FeatureConfig = {
 	show: true,
 	force: true,
@@ -137,6 +145,7 @@ const blockeraWordBreak: FeatureConfig = {
 
 export const typographyConfig = {
 	blockeraFontFamily,
+	blockeraFontWeight,
 	blockeraFontSize,
 	blockeraLineHeight,
 	blockeraFontColor,

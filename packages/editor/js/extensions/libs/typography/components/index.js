@@ -1,5 +1,6 @@
 // @flow
 export { FontFamily } from './font-family';
+export { FontWeight } from './font-weight';
 export { FontSize } from './font-size';
 export { FontStyle } from './font-style';
 export { LineHeight } from './line-height';

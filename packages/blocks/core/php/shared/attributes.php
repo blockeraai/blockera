@@ -351,6 +351,10 @@ return [
 		'type'    => 'string',
 		'default' => '',
 	],
+	'blockeraFontWeight'                => [
+		'type'    => 'string',
+		'default' => '',
+	],
 	'blockeraFontColor'                 => [
 		'type'    => 'string',
 		'default' => '',

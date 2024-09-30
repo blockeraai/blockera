@@ -36,6 +36,7 @@ import { EditorFeatureWrapper } from '../../../';
 import type { TTypographyProps } from './type/typography-props';
 import {
 	FontFamily,
+	FontWeight,
 	FontSize,
 	FontStyle,
 	LineHeight,
@@ -63,6 +64,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 			extensionConfig.blockeraFontFamily,
 			values?.blockeraFontFamily,
 			attributes.blockeraFontFamily.default
+		);
+		const isShowFontWeight = isShowField(
+			extensionConfig.blockeraFontWeight,
+			values?.blockeraFontWeight,
+			attributes.blockeraFontWeight.default
 		);
 		const isShowFontSize = isShowField(
 			extensionConfig.blockeraFontSize,
@@ -147,6 +153,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 
 		if (
 			!isShowFontFamily &&
+			!isShowFontWeight &&
 			!isShowFontSize &&
 			!isShowLineHeight &&
 			!isShowTextAlign &&
@@ -238,6 +245,20 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						defaultValue={attributes.blockeraFontFamily.default}
 						columns="columns-2"
 						{...extensionProps.blockeraFontFamily}
+					/>
+				</EditorFeatureWrapper>
+
+				<EditorFeatureWrapper
+					isActive={isShowFontWeight}
+					config={extensionConfig.blockeraFontWeight}
+				>
+					<FontWeight
+						block={block}
+						onChange={handleOnChangeAttributes}
+						value={values.blockeraFontWeight}
+						defaultValue={attributes.blockeraFontWeight.default}
+						columns="columns-2"
+						{...extensionProps.blockeraFontWeight}
 					/>
 				</EditorFeatureWrapper>
 

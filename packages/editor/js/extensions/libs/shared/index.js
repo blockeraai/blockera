@@ -394,6 +394,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								extensionConfig={typographyConfig}
 								extensionProps={{
 									blockeraFontFamily: {},
+									blockeraFontWeight: {},
 									blockeraFontColor: {},
 									blockeraFontSize: {},
 									blockeraLineHeight: {},
@@ -414,6 +415,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								values={{
 									blockeraFontFamily:
 										currentStateAttributes?.blockeraFontFamily,
+									blockeraFontWeight:
+										currentStateAttributes?.blockeraFontWeight,
 									blockeraFontColor:
 										currentStateAttributes?.blockeraFontColor,
 									blockeraFontSize:
@@ -450,6 +453,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								attributes={{
 									blockeraFontFamily:
 										attributes?.blockeraFontFamily,
+									blockeraFontWeight:
+										attributes?.blockeraFontWeight,
 									blockeraFontColor:
 										attributes?.blockeraFontColor,
 									blockeraFontSize:
