@@ -1,0 +1,10 @@
+{
+	"name": "blockera/dev-phpunit",
+	"version": "0.9.2",
+	"description": "The development phpunit package of blockera",
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Dev\\PHPUnint\\": "php/"
+		}
+	}
+}
