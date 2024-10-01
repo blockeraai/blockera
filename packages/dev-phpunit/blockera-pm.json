@@ -1,0 +1,7 @@
+{
+	"name": "blockera/dev-phpunit",
+	"path": "packages/dev-phpunit",
+	"dependent": {
+		"repositories": ["blockera", "blockera-pro"]
+	}
+}
