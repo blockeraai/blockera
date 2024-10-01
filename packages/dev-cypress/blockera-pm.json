@@ -1,0 +1,7 @@
+{
+	"name": "blockera/dev-cypress",
+	"path": "packages/dev-cypress",
+	"dependent": {
+		"repositories": ["blockera", "blockera-pro"]
+	}
+}
