@@ -57,7 +57,12 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 			$config = $config[ $node ];
 		}
 
-		return $config;
+		/**
+		 * Filterable blockera core configuration with key string.
+		 *
+		 * @since 1.0.0
+		 */
+		return apply_filters( __FUNCTION__ . '.' . $key, $config, $args );
 	}
 }
 
