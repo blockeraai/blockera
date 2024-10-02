@@ -124,4 +124,3 @@ describe('testing use drag value hook', () => {
 		fireEvent.mouseMove(draggableElement, { clientX: 100 });
 	});
 });
-
