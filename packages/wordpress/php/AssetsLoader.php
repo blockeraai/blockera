@@ -33,6 +33,13 @@ class AssetsLoader {
 	protected array $packages_deps = [];
 
 	/**
+	 * Store assets list to dequeue
+	 *
+	 * @var array $dequeue_stack the dequeue assets stack.
+	 */
+	protected array $dequeue_stack = [];
+
+	/**
 	 * Store root directory info.
 	 *
 	 * @var array $root_info the root directory info.
@@ -247,22 +254,9 @@ class AssetsLoader {
 	 */
 	public function assetInfo( string $name ): array {
 
-		/**
-		 * Changeable directory root path from outside, because maybe current asset name provided from outside!
-		 *
-		 * @since 1.0.0
-		 */
-		$root_path = apply_filters( 'blockera.wordpress.assets-loader.' . $name . '.root.path', $this->root_info['path'] );
-		/**
-		 * Changeable directory root path from outside, because maybe current asset name provided from outside!
-		 *
-		 * @since 1.0.0
-		 */
-		$root_url = apply_filters( 'blockera.wordpress.assets-loader.' . $name . '.root.url', $this->root_info['url'] );
-		
 		$assetInfoFile = sprintf(
 			'%1$sdist/%2$s/%2$s%3$s.asset.php',
-			$root_path,
+			$this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
 		);
@@ -279,7 +273,7 @@ class AssetsLoader {
 
 		$js_file = sprintf(
 			'%1$sdist/%2$s/%2$s%3$s.js',
-			$root_path,
+			$this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
 		);
@@ -288,7 +282,7 @@ class AssetsLoader {
 
 			$script = sprintf(
 				'%1$sdist/%2$s/%2$s%3$s.js',
-				$root_url,
+				$this->root_info['url'],
 				$name,
 				$this->is_development ? '' : '.min'
 			);
@@ -299,7 +293,7 @@ class AssetsLoader {
 
 		$css_file = sprintf(
 			'%sdist/%s/style%s.css',
-			$root_path,
+			$this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
 		);
@@ -308,7 +302,7 @@ class AssetsLoader {
 
 			$style = sprintf(
 				'%sdist/%s/style%s.css',
-				$root_url,
+				$this->root_info['url'],
 				$name,
 				$this->is_development ? '' : '.min'
 			);
