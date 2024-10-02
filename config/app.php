@@ -26,12 +26,20 @@ return [
 		'controllers' => '\Blockera\Setup\Http\Controllers\\',
 	],
 	'debug'         => defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE && $env_mode,
-	'providers'     => [
-		\Blockera\Admin\Providers\AdminProvider::class,
-		\Blockera\Setup\Providers\AssetsProvider::class,
-		\Blockera\Setup\Providers\RestAPIProvider::class,
-		\Blockera\Editor\Providers\StyleProviders::class,
-		\Blockera\Setup\Providers\AppServiceProvider::class,
-		\Blockera\Admin\Providers\AdminAssetsProvider::class,
-	],
+	/**
+	 * Extendable blockera application providers by external developers.
+	 *
+	 * @since 1.0.0
+	 */
+	'providers'     => apply_filters(
+		'blockera.application.providers',
+		[
+			\Blockera\Admin\Providers\AdminProvider::class,
+			\Blockera\Setup\Providers\AssetsProvider::class,
+			\Blockera\Setup\Providers\RestAPIProvider::class,
+			\Blockera\Editor\Providers\StyleProviders::class,
+			\Blockera\Setup\Providers\AppServiceProvider::class,
+			\Blockera\Admin\Providers\AdminAssetsProvider::class,
+		]
+	),
 ];
