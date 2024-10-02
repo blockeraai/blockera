@@ -2,9 +2,7 @@
 
 namespace Blockera\Admin\Providers;
 
-use Blockera\Bootstrap\Application;
-use Blockera\WordPress\AssetsLoader;
-use Blockera\Bootstrap\ServiceProvider;
+use Blockera\Bootstrap\AssetsProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -12,50 +10,26 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  *
  * @package Blockera\Admin\Providers\AdminAssetsProvider
  */
-class AdminAssetsProvider extends ServiceProvider {
+class AdminAssetsProvider extends AssetsProvider {
 
 	/**
 	 * Store loader identifier.
 	 *
 	 * @var string $id the loader identifier.
 	 */
-	protected string $id = 'blockera-admin-assets-loader';
+	public function getId(): string {
+
+		return 'blockera-admin-assets-loader';
+	}
 
 	/**
 	 * Hold handler name.
 	 *
 	 * @var string $handler the handler name.
 	 */
-	protected string $handler = '@blockera/blockera-admin';
+	public function getHandler(): string {
 
-	/**
-	 * Register any application services.
-	 *
-	 * @return void
-	 */
-	public function register(): void {
-
-		$this->app->bind(
-			$this->id,
-			function ( Application $app, array $args = [] ) {
-
-				return new AssetsLoader(
-					$app,
-					$args['assets'],
-					array_merge(
-						[
-							'id'         => $this->id,
-							'root'       => [
-								'url'  => blockera_core_config( 'app.root_url' ),
-								'path' => blockera_core_config( 'app.root_path' ),
-							],
-							'debug-mode' => blockera_core_config( 'app.debug' ),
-						],
-						$args['extra-args']
-					)
-				);
-			}
-		);
+		return '@blockera/blockera-admin';
 	}
 
 	/**
@@ -69,16 +43,20 @@ class AdminAssetsProvider extends ServiceProvider {
 		// phpcs:ignore
 		if ( ! empty( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'blockera-settings' ) ) {
 
-			add_filter( 'blockera/wordpress/' . $this->id . '/inline-script', [ $this, 'createInlineScript' ] );
-			add_filter( 'blockera/wordpress/' . $this->id . '/handle/inline-script', [ $this, 'getHandler' ] );
+			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script', [ $this, 'createInlineScript' ] );
+			add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
 
 			$this->app->make(
-				$this->id,
+				$this->getId(),
 				[
-					'assets'     => blockera_core_config( 'assets.admin.list' ),
+					'assets'     => $this->getAssets(),
 					'extra-args' => [
+						'fallback'             => [
+							'url'  => $this->getURL(),
+							'path' => $this->getPATH(),
+						],
 						'enqueue-admin-assets' => true,
-						'id'                   => 'blockera-admin-assets-loader',
+						'id'                   => $this->getId(),
 						'packages-deps'        => blockera_core_config( 'assets.admin.with-deps' ),
 					],
 				]
@@ -86,12 +64,17 @@ class AdminAssetsProvider extends ServiceProvider {
 		}
 	}
 
+	protected function getAssets(): array {
+
+		return blockera_core_config( 'assets.admin.list' );
+	}
+
 	/**
 	 * Create inline script for blockera settings handler.
 	 *
 	 * @param string $inline_script the previous inline script.
 	 *
-	 * @hooked 'blockera/wordpress/{$this->id}/inline-script'
+	 * @hooked 'blockera/wordpress/{$this->getId(}/inline-script'
 	 *
 	 * @return string the inline script for initialize blockera some package's configuration.
 	 */
@@ -116,16 +99,6 @@ class AdminAssetsProvider extends ServiceProvider {
 				window.blockeraVersion = "' . blockera_core_config( 'app.version' ) . '";
 				window.blockeraUserRoles = ' . wp_json_encode( blockera_normalized_user_roles() ) . '
 		';
-	}
-
-	/**
-	 * Retrieve handler name.
-	 *
-	 * @return string
-	 */
-	public function getHandler(): string {
-
-		return $this->handler;
 	}
 
 }
