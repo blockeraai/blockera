@@ -74,8 +74,12 @@ class AssetsProvider extends ServiceProvider {
 		$this->app->make(
 			$this->id,
 			[
-				'assets'     => blockera_core_config( 'assets.editor.list' ),
+				'assets'     => $this->getAssets(),
 				'extra-args' => [
+					'fallback'             => [
+						'url'  => $this->getURL(),
+						'path' => $this->getPATH(),
+					],
 					'enqueue-block-assets' => true,
 					'packages-deps'        => blockera_core_config( 'assets.editor.with-deps' ),
 				],
@@ -193,6 +197,32 @@ class AssetsProvider extends ServiceProvider {
 					); 
 				}'
 		);
+	}
+
+	/**
+	 * Get all assets of blockera plugin.
+	 *
+	 * @return array the assets list to load on page.
+	 */
+	protected function getAssets(): array {
+
+		return blockera_core_config( 'assets.editor.list' );
+	}
+
+	/**
+	 * @return string the blockera plugin root URL.
+	 */
+	protected function getURL(): string {
+
+		return blockera_core_config( 'app.root_url' );
+	}
+
+	/**
+	 * @return string the blockera plugin root PATH.
+	 */
+	protected function getPATH(): string {
+
+		return blockera_core_config( 'app.root_path' );
 	}
 
 }
