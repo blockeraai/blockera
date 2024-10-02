@@ -1,0 +1,7 @@
+{
+	"name": "blockera/dev-jest",
+	"path": "packages/dev-jest",
+	"dependent": {
+		"repositories": ["blockera", "blockera-pro"]
+	}
+}
