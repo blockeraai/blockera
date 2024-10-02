@@ -1,0 +1,7 @@
+{
+	"name": "blockera/dev-storybook",
+	"path": "packages/dev-storybook",
+	"dependent": {
+		"repositories": ["blockera", "blockera-pro"]
+	}
+}

@@ -1,0 +1,7 @@
+{
+	"name": "blockera/editor",
+	"path": "packages/editor",
+	"dependent": {
+		"repositories": ["blockera"]
+	}
+}

@@ -1,0 +1,7 @@
+{
+	"name": "blockera/blockera-admin",
+	"path": "packages/blockera-admin",
+	"dependent": {
+		"repositories": ["blockera", "blockera-pro"]
+	}
+}

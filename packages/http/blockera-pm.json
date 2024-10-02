@@ -1,0 +1,7 @@
+{
+	"name": "blockera/http",
+	"path": "packages/http",
+	"dependent": {
+		"repositories": ["blockera", "blockera-pro"]
+	}
+}
