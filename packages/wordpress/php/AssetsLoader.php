@@ -33,13 +33,6 @@ class AssetsLoader {
 	protected array $packages_deps = [];
 
 	/**
-	 * Store assets list to dequeue
-	 *
-	 * @var array $dequeue_stack the dequeue assets stack.
-	 */
-	protected array $dequeue_stack = [];
-
-	/**
 	 * Store root directory info.
 	 *
 	 * @var array $root_info the root directory info.
@@ -64,6 +57,13 @@ class AssetsLoader {
 	protected Application $application;
 
 	/**
+	 * Store fallback arguments.
+	 *
+	 * @var array $fallback_args the fallback arguments.
+	 */
+	protected array $fallback_args = [];
+
+	/**
 	 * AssetsProvider constructor method,
 	 * when create new instance of current class,
 	 * fire `wp_enqueue_scripts` and `enqueue_block_editor_assets`
@@ -85,6 +85,11 @@ class AssetsLoader {
 			'url'  => '',
 		];
 		$this->id             = $args['id'] ?? 'blockera-wordpress-assets-loader';
+
+		if ( ! empty( $args['fallback'] ) && ! empty( $args['fallback']['url'] ) && ! empty( $args['fallback']['path'] ) ) {
+
+			$this->fallback_args = $args['fallback'];
+		}
 
 		add_action( 'wp_head', [ $this, 'printBlockeraGeneratedStyles' ] );
 
@@ -254,6 +259,7 @@ class AssetsLoader {
 	 */
 	public function assetInfo( string $name ): array {
 
+		$from_out_side = false;
 		$assetInfoFile = sprintf(
 			'%1$sdist/%2$s/%2$s%3$s.asset.php',
 			$this->root_info['path'],
@@ -263,7 +269,19 @@ class AssetsLoader {
 
 		if ( ! file_exists( $assetInfoFile ) ) {
 
-			return [];
+			$assetInfoFile = sprintf(
+				'%1$sdist/%2$s/%2$s%3$s.asset.php',
+				$this->fallback_args['path'] ?? '',
+				$name,
+				$this->is_development ? '' : '.min'
+			);
+
+			if ( ! file_exists( $assetInfoFile ) ) {
+
+				return [];
+			}
+
+			$from_out_side = true;
 		}
 
 		$assetInfo = include $assetInfoFile;
@@ -273,7 +291,7 @@ class AssetsLoader {
 
 		$js_file = sprintf(
 			'%1$sdist/%2$s/%2$s%3$s.js',
-			$this->root_info['path'],
+			$from_out_side ? $this->fallback_args['path'] : $this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
 		);
@@ -282,7 +300,7 @@ class AssetsLoader {
 
 			$script = sprintf(
 				'%1$sdist/%2$s/%2$s%3$s.js',
-				$this->root_info['url'],
+				$from_out_side ? $this->fallback_args['url'] : $this->root_info['url'],
 				$name,
 				$this->is_development ? '' : '.min'
 			);
@@ -293,7 +311,7 @@ class AssetsLoader {
 
 		$css_file = sprintf(
 			'%sdist/%s/style%s.css',
-			$this->root_info['path'],
+			$from_out_side ? $this->fallback_args['path'] : $this->root_info['path'],
 			$name,
 			$this->is_development ? '' : '.min'
 		);
@@ -302,7 +320,7 @@ class AssetsLoader {
 
 			$style = sprintf(
 				'%sdist/%s/style%s.css',
-				$this->root_info['url'],
+				$from_out_side ? $this->fallback_args['url'] : $this->root_info['url'],
 				$name,
 				$this->is_development ? '' : '.min'
 			);
