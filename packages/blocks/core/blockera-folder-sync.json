@@ -1,6 +1,6 @@
 {
 	"name": "blockera/blocks-core",
-	"path": "packages/blocks-core",
+	"path": "packages/blocks/core",
 	"dependent": {
 		"repositories": ["blockera"]
 	}
