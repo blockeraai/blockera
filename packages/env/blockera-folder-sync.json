@@ -2,6 +2,6 @@
 	"name": "blockera/env",
 	"path": "packages/env",
 	"dependent": {
-		"repositories": ["blockera", "blockera-pro"]
+		"repositories": ["blockera"]
 	}
 }

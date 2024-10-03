@@ -2,6 +2,6 @@
 	"name": "blockera/classnames",
 	"path": "packages/classnames",
 	"dependent": {
-		"repositories": ["blockera", "blockera-pro"]
+		"repositories": ["blockera"]
 	}
 }
