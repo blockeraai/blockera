@@ -347,7 +347,7 @@
 
 		.components-input-control__container {
 
-			& > .components-custom-select-control__button {
+			& > button {
 				padding-right: 0 !important;
 				padding-left: 0 !important;
 				height: 18px !important;
@@ -381,9 +381,10 @@
 			left: 162px;
 		}
 
-		.components-custom-select-control__menu {
+		[role="listbox"] {
 			width: 250px;
 			right: -70px;
+			position: absolute !important;
 
 			svg {
 				transform: translate(-0.5px, -0.5px);
