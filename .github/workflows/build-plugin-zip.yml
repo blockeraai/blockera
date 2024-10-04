@@ -234,14 +234,6 @@ jobs:
                     echo "comment_id=${COMMENT_ID}" >> $GITHUB_ENV
                   fi
 
-            # Step to generate a build plugin url
-            - name: Generate new URL
-              id: generate_url
-              run: |
-                  # Assuming you have a logic to generate a new URL.
-                  # For demonstration, we're using a static URL.
-                  echo "NEW_URL=https://example.com/plugin.zip" >> $GITHUB_ENV
-
             # Step to encode JSON with Base64
             - name: Encode JSON with Base64
               id: encode_json
@@ -274,7 +266,7 @@ jobs:
                   }'
 
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "$NEW_URL" '.steps[1].pluginZipFile.url = $new_url')
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = $new_url')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
@@ -300,7 +292,7 @@ jobs:
                   RUN_ID="${{ github.run_id }}"
 
                   # Define the comment body following the desired structure
-                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from:\n\n[Artifact: blockera-plugin.zip](${{ env.download_link }})\n\n[Playground: blockera-plugin.zip](${{ env.final_url }})."
+                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from [blockera-plugin.zip](${{ env.download_link }})\n\nPlayground: [blockera-plugin.zip](${{ env.final_url }})."
 
                   if [ -z "${{ env.comment_id }}" ]; then
                       # No existing comment found, create a new one
