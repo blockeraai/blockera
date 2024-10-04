@@ -75,13 +75,16 @@ while ( true ) {
 			$inside_pattern_block = true;
 
 			echo implode( PHP_EOL, array_map( function ( string $name ): string {
+
 				return sprintf(
 					'	$(find ./vendor/blockera/%1$s/ -type f \( -name "*.php" -o -name "*.json" \)) \\',
 					$name
 				);
 			}, $internal_packages ) );
 
-			echo PHP_EOL;
+			if ( ! empty( $sdks ) ) {
+				echo PHP_EOL;
+			}
 
 			echo implode(
 				PHP_EOL,
