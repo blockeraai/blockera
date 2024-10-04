@@ -2,8 +2,8 @@ name: Build Blockera Plugin Zip
 
 on:
     pull_request:
-    #    push:
-    #        branches: [master]
+    push:
+        branches: [master]
     workflow_dispatch:
         inputs:
             version:
@@ -234,6 +234,65 @@ jobs:
                     echo "comment_id=${COMMENT_ID}" >> $GITHUB_ENV
                   fi
 
+            # Step to generate a build plugin url
+            - name: Generate new URL
+              id: generate_url
+              run: |
+                  # Assuming you have a logic to generate a new URL.
+                  # For demonstration, we're using a static URL.
+                  echo "NEW_URL=https://example.com/plugin.zip" >> $GITHUB_ENV
+
+            # Step to encode JSON with Base64
+            - name: Encode JSON with Base64
+              id: encode_json
+              run: |
+                  # Define the original JSON
+                  JSON_STRING='{
+                    "meta": {
+                      "title": "Install Blockera plugin from github artifact",
+                      "author": "blockera.ai",
+                      "description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
+                      "categories": ["plugins"]
+                    },
+                    "landingPage": "/wp-admin/plugins.php",
+                    "preferredVersions": {
+                      "wp": "beta",
+                      "php": "8.0"
+                    },
+                    "steps": [
+                      {
+                        "step": "login"
+                      },
+                      {
+                        "step": "installPlugin",
+                        "pluginZipFile": {
+                          "resource": "url",
+                          "url": "URL_PLACEMENT"
+                        }
+                      }
+                    ]
+                  }'
+
+                  # Replace URL_PLACEMENT with the newly generated URL
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "$NEW_URL" '.steps[1].pluginZipFile.url = $new_url')
+
+                  # Base64 encode the updated JSON
+                  BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
+
+                  # Generate the final URL with encoded JSON appended
+                  FINAL_URL="https://playground.wordpress.net/#${BASE64_ENCODED_JSON}"
+
+                  # Save the URL as an output for later steps if needed
+                  echo "final_url=$FINAL_URL" >> $GITHUB_ENV
+
+                  # Print the URL to the GitHub workflow output
+                  echo "Encoded URL: $FINAL_URL"
+
+            # Optional: Output the final URL as a GitHub Action output
+            - name: Set output
+              run: |
+                  echo "final_url=${{ env.final_url }}" >> $GITHUB_OUTPUT
+
             - name: Post or update comment with download link
               run: |
                   PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
@@ -241,7 +300,7 @@ jobs:
                   RUN_ID="${{ github.run_id }}"
 
                   # Define the comment body following the desired structure
-                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from [blockera-plugin.zip](${{ env.download_link }})."
+                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from:\n\n[Artifact: blockera-plugin.zip](${{ env.download_link }})[Playground: blockera-plugin.zip](${{ env.final_url }})."
 
                   if [ -z "${{ env.comment_id }}" ]; then
                       # No existing comment found, create a new one
