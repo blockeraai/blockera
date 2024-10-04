@@ -3433,8 +3433,8 @@
 
             self::add_ajax_action_static( 'set_db_option', array( 'Freemius', '_set_db_option' ) );
 
-            if ( 0 == did_action( 'plugins_loaded' ) ) {
-                add_action( 'plugins_loaded', array( 'Freemius', '_load_textdomain' ), 1 );
+            if ( 0 == did_action( 'after_setup_theme' ) ) {
+                add_action( 'after_setup_theme', array( 'Freemius', '_load_textdomain' ), 1 );
             }
 
             $clone_manager = FS_Clone_Manager::instance();

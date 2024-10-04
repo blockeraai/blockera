@@ -86,9 +86,7 @@ export default function MediaImageControl({
 						data-cy="delete-bg-img"
 						className="btn-delete"
 						noBorder={true}
-						icon={
-							<Icon library="close" icon="close" iconSize="16" />
-						}
+						icon={<Icon library="ui" icon="close" iconSize="16" />}
 						onClick={() => {
 							setValue('');
 						}}
