@@ -198,7 +198,7 @@ jobs:
             - name: Upload artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: blockera-plugin
+                  name: blockera
                   path: ./blockera.zip
 
             - name: Get artifact ID
@@ -206,7 +206,7 @@ jobs:
               run: |
                   ARTIFACTS_URL="https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
                   ARTIFACT_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera-plugin") | .id')
+                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera") | .id')
                   echo "artifact_id=$ARTIFACT_ID" >> $GITHUB_ENV
 
             - name: Construct download link
@@ -233,6 +233,9 @@ jobs:
                     COMMENT_ID=$(cat comment_id.txt)
                     echo "comment_id=${COMMENT_ID}" >> $GITHUB_ENV
                   fi
+
+            - name: Upload ZIP to file.io
+              run: curl -F "file=@./blockera.zip" https://file.io > link.txt
 
             # Step to encode JSON with Base64
             - name: Encode JSON with Base64
@@ -265,8 +268,10 @@ jobs:
                     ]
                   }'
 
+                  ZIP_FILE_URL=$(cat link.txt | jq -r '.link')
+
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = $new_url')
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = $ZIP_FILE_URL')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
@@ -292,7 +297,7 @@ jobs:
                   RUN_ID="${{ github.run_id }}"
 
                   # Define the comment body following the desired structure
-                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from [blockera-plugin.zip](${{ env.download_link }})\n\nPlayground: [blockera-plugin.zip](${{ env.final_url }})."
+                  COMMENT_BODY="**Branch Links**\n\n- [**🔗 Playground Demo**](${{ env.final_url }})\n\n- [**📦 Download Zip** (Build)](${{ env.download_link }})"
 
                   if [ -z "${{ env.comment_id }}" ]; then
                       # No existing comment found, create a new one
@@ -399,7 +404,7 @@ jobs:
             - name: Download Plugin Zip Artifact
               uses: actions/download-artifact@v4
               with:
-                  name: blockera-plugin
+                  name: blockera
 
             - name: Download Release Notes Artifact
               uses: actions/download-artifact@v4
