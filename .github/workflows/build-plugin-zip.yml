@@ -199,7 +199,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: blockera-${{ github.event.pull_request.number }}
-                  path: ./blockera-${{ github.event.pull_request.number }}.zip
+                  path: ./blockera.zip
 
             - name: Get artifact ID
               id: get_artifact_id
@@ -233,13 +233,6 @@ jobs:
                     COMMENT_ID=$(cat comment_id.txt)
                     echo "comment_id=${COMMENT_ID}" >> $GITHUB_ENV
                   fi
-
-            - name: Commit blockera-${{ github.event.pull_request.number }}.zip file
-              run: |
-                  git switch ${{ github.head_ref }}
-                  git add blockera-${{ github.event.pull_request.number }}.zip
-                  git commit -m "build: blockera-${{ github.event.pull_request.number }}.zip"
-                  git push
 
             # Step to encode JSON with Base64
             - name: Encode JSON with Base64
