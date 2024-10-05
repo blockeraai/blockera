@@ -235,7 +235,10 @@ jobs:
                   fi
 
             - name: Upload ZIP to file.io
-              run: curl -F "file=@./blockera.zip" https://file.io > link.txt
+              run: |
+                  curl -F "file=@./blockera.zip" https://file.io > link.txt
+                  ZIP_FILE_URL=$(cat link.txt | jq -r '.link')
+                  echo "zip_file_url=${ZIP_FILE_URL}" >> $GITHUB_ENV
 
             # Step to encode JSON with Base64
             - name: Encode JSON with Base64
@@ -268,10 +271,8 @@ jobs:
                     ]
                   }'
 
-                  ZIP_FILE_URL=$(cat link.txt | jq -r '.link')
-
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = $ZIP_FILE_URL')
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = ${{ env.zip_file_url }}')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
