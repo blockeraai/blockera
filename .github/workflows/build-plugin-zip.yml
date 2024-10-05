@@ -198,7 +198,7 @@ jobs:
             - name: Upload artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: blockera-${{ github.event.pull_request.number }}
+                  name: blockera-${{ github.event.pull_request.number }}.zip
                   path: ./blockera.zip
 
             - name: Get artifact ID
@@ -206,7 +206,7 @@ jobs:
               run: |
                   ARTIFACTS_URL="https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
                   ARTIFACT_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera-${{ github.event.pull_request.number }}") | .id')
+                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera-${{ github.event.pull_request.number }}.zip") | .id')
                   echo "artifact_id=$ARTIFACT_ID" >> $GITHUB_ENV
 
             - name: Construct download link
@@ -216,6 +216,18 @@ jobs:
                   ARTIFACT_ID="${{ env.artifact_id }}"
                   DOWNLOAD_LINK="https://github.com/$REPO_NAME/actions/runs/$RUN_ID/artifacts/$ARTIFACT_ID"
                   echo "download_link=$DOWNLOAD_LINK" >> $GITHUB_ENV
+
+            - name: Remove "*.zip" pattern from .gitignore
+              run: |
+                  sed -i '/\*.zip/d' .gitignore
+                  cat .gitignore # To verify the change
+
+            - name: Commit blockera.zip file
+              run: |
+                  git add blockera.zip
+                  git add .gitignore
+                  git commit -m "build: blockera.zip"
+                  git push --set-upstream origin ${{ github.head_ref }}
 
             - name: Find existing bot comment
               id: find_comment
@@ -266,7 +278,7 @@ jobs:
                   }'
 
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = https://github.com/${{ github.repository }}/raw/refs/heads/${{ github.head_ref }}/blockera-${{ github.event.pull_request.number }}.zip')
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = https://github.com/${{ github.repository }}/raw/refs/heads/${{ github.head_ref }}/blockera.zip')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
@@ -399,7 +411,7 @@ jobs:
             - name: Download Plugin Zip Artifact
               uses: actions/download-artifact@v4
               with:
-                  name: blockera-${{ github.event.pull_request.number }}
+                  name: blockera-${{ github.event.pull_request.number }}.zip
 
             - name: Download Release Notes Artifact
               uses: actions/download-artifact@v4
