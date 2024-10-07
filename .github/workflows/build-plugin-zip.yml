@@ -224,7 +224,7 @@ jobs:
                   user: ${{ secrets.FTP_USERNAME }}
                   password: ${{ secrets.FTP_PASSWORD }}
                   src: blockera.zip
-                  dest: /home/cdblocke/domains/cd.blockera.ai/public_html/blockera.zip
+                  dest: /domains/cd.blockera.ai/public_html/blockera.zip
 
             - name: Echo uploaded file link
               run: |
