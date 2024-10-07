@@ -218,18 +218,17 @@ jobs:
                   echo "download_link=$DOWNLOAD_LINK" >> $GITHUB_ENV
 
             - name: Upload ZIP to FTP server
-              uses: sebastianpopp/ftp-action@releases/v2
+              uses: nerdoza/action-simple-file-upload@v2
               with:
                   host: ${{ secrets.FTP_HOST }}
                   user: ${{ secrets.FTP_USERNAME }}
                   password: ${{ secrets.FTP_PASSWORD }}
-                  localDir: blockera.zip
-                  remoteDir: /build/plugins/blockera/
-                  options: '--delete --asci'
+                  src: blockera.zip
+                  dest: archive/blockera/blockera.zip
 
             - name: Echo uploaded file link
               run: |
-                  echo "uploaded_zip_file=ftp://${{ secrets.FTP_HOST }}/build/plugins/blockera/blockera.zip" >> $GITHUB_ENV
+                  echo "uploaded_zip_file=ftp://${{ secrets.FTP_HOST }}/archive/blockera/blockera.zip" >> $GITHUB_ENV
 
             - name: Find existing bot comment
               id: find_comment
