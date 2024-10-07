@@ -218,13 +218,14 @@ jobs:
                   echo "download_link=$DOWNLOAD_LINK" >> $GITHUB_ENV
 
             - name: Upload ZIP to FTP server
-              uses: sebastianpopp/ftp-action@v1.3
+              uses: sebastianpopp/ftp-action@releases/v2
               with:
                   host: ${{ secrets.FTP_HOST }}
                   user: ${{ secrets.FTP_USERNAME }}
                   password: ${{ secrets.FTP_PASSWORD }}
-                  localFile: blockera.zip
-                  remotePath: /build/plugins/blockera/
+                  localDir: blockera.zip
+                  remoteDir: /build/plugins/blockera/
+                  options: '--delete --asci'
 
             - name: Echo uploaded file link
               run: |
