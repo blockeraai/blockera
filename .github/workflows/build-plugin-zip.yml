@@ -217,17 +217,18 @@ jobs:
                   DOWNLOAD_LINK="https://github.com/$REPO_NAME/actions/runs/$RUN_ID/artifacts/$ARTIFACT_ID"
                   echo "download_link=$DOWNLOAD_LINK" >> $GITHUB_ENV
 
-            - name: Remove "*.zip" pattern from .gitignore
-              run: |
-                  sed -i '/\*.zip/d' .gitignore
-                  cat .gitignore # To verify the change
+            - name: Upload ZIP to FTP server
+              uses: sebastianpopp/ftp-action@v1.3
+              with:
+                  host: ${{ secrets.FTP_HOST }}
+                  user: ${{ secrets.FTP_USERNAME }}
+                  password: ${{ secrets.FTP_PASSWORD }}
+                  localFile: blockera.zip
+                  remotePath: /build/plugins/blockera/
 
-            - name: Commit blockera.zip file
+            - name: Echo uploaded file link
               run: |
-                  git add blockera.zip
-                  git add .gitignore
-                  git commit -m "build: blockera.zip"
-                  git push --set-upstream origin ${{ github.head_ref }}
+                  echo "uploaded_zip_file=ftp://${{ secrets.FTP_HOST }}/build/plugins/blockera/blockera.zip" >> $GITHUB_ENV
 
             - name: Find existing bot comment
               id: find_comment
@@ -278,24 +279,24 @@ jobs:
                   }'
 
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = https://github.com/${{ github.repository }}/raw/refs/heads/${{ github.head_ref }}/blockera.zip')
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = ${{ env.uploaded_zip_file }}')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
 
                   # Generate the final URL with encoded JSON appended
-                  FINAL_URL="https://playground.wordpress.net/#${BASE64_ENCODED_JSON}"
+                  DEMO_URL="https://playground.wordpress.net/#${BASE64_ENCODED_JSON}"
 
                   # Save the URL as an output for later steps if needed
-                  echo "final_url=$FINAL_URL" >> $GITHUB_ENV
+                  echo "demo_url=$DEMO_URL" >> $GITHUB_ENV
 
                   # Print the URL to the GitHub workflow output
-                  echo "Encoded URL: $FINAL_URL"
+                  echo "Encoded URL: $DEMO_URL"
 
             # Optional: Output the final URL as a GitHub Action output
             - name: Set output
               run: |
-                  echo "final_url=${{ env.final_url }}" >> $GITHUB_OUTPUT
+                  echo "demo_url=${{ env.demo_url }}" >> $GITHUB_OUTPUT
 
             - name: Post or update comment with download link
               run: |
@@ -304,7 +305,7 @@ jobs:
                   RUN_ID="${{ github.run_id }}"
 
                   # Define the comment body following the desired structure
-                  COMMENT_BODY="**Branch Links**\n\n- [**🔗 Playground Demo**](${{ env.final_url }})\n\n- [**📦 Download Zip** (Build)](${{ env.download_link }})"
+                  COMMENT_BODY="**Branch Links**\n\n- [**🔗 Playground Demo**](${{ env.demo_url }})\n\n- [**📦 Download Zip** (Build)](${{ env.download_link }})"
 
                   if [ -z "${{ env.comment_id }}" ]; then
                       # No existing comment found, create a new one
