@@ -224,11 +224,11 @@ jobs:
                   user: ${{ secrets.FTP_USERNAME }}
                   password: ${{ secrets.FTP_PASSWORD }}
                   src: blockera.zip
-                  dest: public_html/blockeracd/blockera.zip
+                  dest: /home/cdblocke/domains/cd.blockera.ai/public_html/blockera.zip
 
             - name: Echo uploaded file link
               run: |
-                  echo "uploaded_zip_file=https://${{ secrets.FTP_HOST }}/blockeracd/blockera.zip" >> $GITHUB_ENV
+                  echo "uploaded_zip_file=https://${{ secrets.FTP_HOST }}/blockera.zip" >> $GITHUB_ENV
 
             - name: Find existing bot comment
               id: find_comment
