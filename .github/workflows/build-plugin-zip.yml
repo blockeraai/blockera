@@ -2,8 +2,8 @@ name: Build Blockera Plugin Zip
 
 on:
     pull_request:
-    #    push:
-    #        branches: [master]
+    push:
+        branches: [master]
     workflow_dispatch:
         inputs:
             version:
@@ -198,7 +198,7 @@ jobs:
             - name: Upload artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: blockera-plugin
+                  name: blockera-${{ github.event.pull_request.number }}.zip
                   path: ./blockera.zip
 
             - name: Get artifact ID
@@ -206,7 +206,7 @@ jobs:
               run: |
                   ARTIFACTS_URL="https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
                   ARTIFACT_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera-plugin") | .id')
+                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera-${{ github.event.pull_request.number }}.zip") | .id')
                   echo "artifact_id=$ARTIFACT_ID" >> $GITHUB_ENV
 
             - name: Construct download link
@@ -216,6 +216,19 @@ jobs:
                   ARTIFACT_ID="${{ env.artifact_id }}"
                   DOWNLOAD_LINK="https://github.com/$REPO_NAME/actions/runs/$RUN_ID/artifacts/$ARTIFACT_ID"
                   echo "download_link=$DOWNLOAD_LINK" >> $GITHUB_ENV
+
+            - name: Upload ZIP to FTP server
+              uses: nerdoza/action-simple-file-upload@v2
+              with:
+                  host: ${{ secrets.FTP_HOST }}
+                  user: ${{ secrets.FTP_USERNAME }}
+                  password: ${{ secrets.FTP_PASSWORD }}
+                  src: blockera.zip
+                  dest: /domains/cd.blockera.ai/public_html/blockera.zip
+
+            - name: Echo uploaded file link
+              run: |
+                  echo "uploaded_zip_file=https://${{ secrets.FTP_HOST }}/blockera.zip" >> $GITHUB_ENV
 
             - name: Find existing bot comment
               id: find_comment
@@ -234,6 +247,57 @@ jobs:
                     echo "comment_id=${COMMENT_ID}" >> $GITHUB_ENV
                   fi
 
+            # Step to encode JSON with Base64
+            - name: Encode JSON with Base64
+              id: encode_json
+              run: |
+                  # Define the original JSON
+                  JSON_STRING='{
+                    "meta": {
+                      "title": "Install Blockera plugin from github artifact",
+                      "author": "blockera.ai",
+                      "description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
+                      "categories": ["plugins"]
+                    },
+                    "landingPage": "/wp-admin/plugins.php",
+                    "preferredVersions": {
+                      "wp": "beta",
+                      "php": "8.0"
+                    },
+                    "steps": [
+                      {
+                        "step": "login"
+                      },
+                      {
+                        "step": "installPlugin",
+                        "pluginZipFile": {
+                          "resource": "url",
+                          "url": "URL_PLACEMENT"
+                        }
+                      }
+                    ]
+                  }'
+
+                  # Replace URL_PLACEMENT with the newly generated URL
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = ${{ env.uploaded_zip_file }}')
+
+                  # Base64 encode the updated JSON
+                  BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
+
+                  # Generate the final URL with encoded JSON appended
+                  DEMO_URL="https://playground.wordpress.net/#${BASE64_ENCODED_JSON}"
+
+                  # Save the URL as an output for later steps if needed
+                  echo "demo_url=$DEMO_URL" >> $GITHUB_ENV
+
+                  # Print the URL to the GitHub workflow output
+                  echo "Encoded URL: $DEMO_URL"
+
+            # Optional: Output the final URL as a GitHub Action output
+            - name: Set output
+              run: |
+                  echo "demo_url=${{ env.demo_url }}" >> $GITHUB_OUTPUT
+
             - name: Post or update comment with download link
               run: |
                   PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
@@ -241,7 +305,7 @@ jobs:
                   RUN_ID="${{ github.run_id }}"
 
                   # Define the comment body following the desired structure
-                  COMMENT_BODY="**Plugin Zip File**\n\nThe plugin zip file has been generated and can be downloaded from [blockera-plugin.zip](${{ env.download_link }})."
+                  COMMENT_BODY="**Branch Links**\n\n- [**🔗 Playground Demo**](${{ env.demo_url }})\n\n- [**📦 Download Zip** (Build)](${{ env.download_link }})"
 
                   if [ -z "${{ env.comment_id }}" ]; then
                       # No existing comment found, create a new one
@@ -348,7 +412,7 @@ jobs:
             - name: Download Plugin Zip Artifact
               uses: actions/download-artifact@v4
               with:
-                  name: blockera-plugin
+                  name: blockera-${{ github.event.pull_request.number }}.zip
 
             - name: Download Release Notes Artifact
               uses: actions/download-artifact@v4
