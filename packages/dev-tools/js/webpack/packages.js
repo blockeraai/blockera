@@ -1,6 +1,8 @@
 /**
  * External dependencies
  */
+const webpack = require('webpack');
+const dotenv = require('dotenv');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { join, resolve } = require('path');
@@ -16,6 +18,8 @@ const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extract
  * Internal dependencies
  */
 const styleDependencies = require('./packages-styles');
+
+dotenv.config();
 
 /**
  * Removes all svg rules from WordPress webpack config because it brakes the SVGR and SVGO plugins
@@ -102,6 +106,9 @@ module.exports = (env, argv) => {
 					? './dist/[name]/style.min.css'
 					: './dist/[name]/style.css',
 				ignoreOrder: true,
+			}),
+			new webpack.DefinePlugin({
+				'process.env': JSON.stringify(process.env),
 			}),
 		].filter(Boolean),
 		optimization: {

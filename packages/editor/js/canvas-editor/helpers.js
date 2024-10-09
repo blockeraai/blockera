@@ -12,6 +12,15 @@ import type { GetTarget } from './types';
 
 // Compatibility for WordPress supported versions.
 export const getTarget = (version: string): GetTarget => {
+	// Regular expression to detect wp all alpha or beta versioning pattern.
+	const regexp = /(\d+\.\d+\.\d+)-.*/gi;
+	const matches = regexp.exec(version);
+
+	if (matches && matches.length > 1) {
+		// Extract next stable version.
+		version = matches[1];
+	}
+
 	// For WordPress version equals or bigger than 6.6.1 version.
 	if (Number(version?.replace(/\./g, '')) >= 661) {
 		return {
