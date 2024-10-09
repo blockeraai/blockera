@@ -19,6 +19,7 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -265,5 +266,6 @@ export const IconExtension: ComponentType<TIconProps> = memo(
 				)}
 			</PanelBodyControl>
 		);
-	}
+	},
+	hasSameProps
 );

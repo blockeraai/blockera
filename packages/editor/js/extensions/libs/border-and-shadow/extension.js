@@ -16,6 +16,7 @@ import {
 	BoxShadowControl,
 	ControlContextProvider,
 } from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -220,5 +221,6 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 					</EditorFeatureWrapper>
 				</PanelBodyControl>
 			);
-		}
+		},
+		hasSameProps
 	);

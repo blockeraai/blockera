@@ -23,7 +23,7 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 } from '@blockera/controls';
-import { isEquals } from '@blockera/utils';
+import { hasSameProps, isEquals } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -1341,5 +1341,6 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 				)}
 			</PanelBodyControl>
 		);
-	}
+	},
+	hasSameProps
 );

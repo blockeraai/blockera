@@ -14,6 +14,7 @@ import {
 	ControlContextProvider,
 	CodeControl,
 } from '@blockera/controls';
+import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -121,5 +122,6 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 					</EditorFeatureWrapper>
 				</PanelBodyControl>
 			);
-		}
+		},
+		hasSameProps
 	);
