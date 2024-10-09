@@ -31,6 +31,8 @@
 - Added spacer for processed selector in the client-side style engine to improved css selector normalizer.
 - Added a reset method in Layout style definition.
 - Updated the layout of typography features to enhance user experience (UX).
+- Optimized performance by detecting and addressing bottlenecks. 🔥
+- Refactored memoization helpers in package/utils and updated all use cases for better efficiency.
 
 ### Automated Tests:
 - Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
@@ -43,3 +45,4 @@
 - Added tests for checking `font family` functionality and WordPress data compatibility.
 - Added tests to verify the functionality of the `font weight` feature.
 - Added tests for checking `font weight` functionality and WordPress data compatibility.
+- Added new Jest tests for the getTarget() API of the Canvas editor.
