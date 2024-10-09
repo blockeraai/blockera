@@ -19,7 +19,6 @@ import {
 	isObject,
 	isEquals,
 	isUndefined,
-	hasSameProps,
 	useLateEffect,
 } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
@@ -269,4 +268,4 @@ function IconControl({
 }
 
 // $FlowFixMe
-export default memo(IconControl, hasSameProps);
+export default memo(IconControl);

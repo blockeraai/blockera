@@ -1,7 +1,6 @@
 export const noop = () => {};
 export * from './is';
 export * from './get';
-export * from './memo';
 export * from './array';
 export * from './store';
 export * from './portal';

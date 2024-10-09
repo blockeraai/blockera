@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { hasSameProps } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -29,7 +29,7 @@ import type { BlockDetail } from './block-states/types';
  * @return {boolean} true on success, false when otherwise!
  */
 export function arrayEquals(a: Array<any>, b: Array<any>): boolean {
-	return hasSameProps(a, b);
+	return isEquals(a, b);
 }
 
 /**

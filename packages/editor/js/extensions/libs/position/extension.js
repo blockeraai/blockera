@@ -17,7 +17,6 @@ import {
 	InputControl,
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
-import { hasSameProps } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -151,6 +150,5 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = memo(
 					)}
 			</PanelBodyControl>
 		);
-	},
-	hasSameProps
+	}
 );

@@ -18,7 +18,6 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { isActiveField } from '../../api/utils';
-import { hasSameProps } from '@blockera/utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { StyleVariationsExtensionProps } from './types';
 import BlockStyles from './components/block-styles';
@@ -91,6 +90,5 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 					</EditorFeatureWrapper>
 				</PanelBodyControl>
 			);
-		},
-		hasSameProps
+		}
 	);

@@ -15,7 +15,6 @@ import {
 	InputControl,
 	ToggleSelectControl,
 } from '@blockera/controls';
-import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -463,6 +462,5 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
-	},
-	hasSameProps
+	}
 );

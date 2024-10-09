@@ -18,7 +18,6 @@ import {
 	ToggleSelectControl,
 	BaseControl,
 } from '@blockera/controls';
-import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -742,6 +741,5 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
-	},
-	hasSameProps
+	}
 );

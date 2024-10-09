@@ -19,7 +19,6 @@ import {
 	NoticeControl,
 	LayoutMatrixControl,
 } from '@blockera/controls';
-import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 import { prepare } from '@blockera/data-editor';
@@ -797,6 +796,5 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 				)}
 			</PanelBodyControl>
 		);
-	},
-	hasSameProps
+	}
 );

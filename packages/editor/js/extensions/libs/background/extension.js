@@ -18,7 +18,7 @@ import {
 	ControlContextProvider,
 	NoticeControl,
 } from '@blockera/controls';
-import { checkVisibleItemLength, hasSameProps } from '@blockera/utils';
+import { checkVisibleItemLength } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -347,6 +347,5 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
-	},
-	hasSameProps
+	}
 );

@@ -14,7 +14,6 @@ import {
 	PanelBodyControl,
 	RepeaterControl,
 } from '@blockera/controls';
-import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -81,6 +80,5 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 					</ControlContextProvider>
 				</PanelBodyControl>
 			);
-		},
-		hasSameProps
+		}
 	);

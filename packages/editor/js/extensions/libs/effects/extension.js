@@ -16,7 +16,7 @@ import {
 	PanelBodyControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { isInteger, hasSameProps } from '@blockera/utils';
+import { isInteger } from '@blockera/utils';
 import {
 	controlInnerClassNames,
 	extensionClassNames,
@@ -299,6 +299,5 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
-	},
-	hasSameProps
+	}
 );

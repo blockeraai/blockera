@@ -17,7 +17,6 @@ import {
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
 import { EditorFeatureWrapper } from '../../../';
-import { hasSameProps } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -103,6 +102,5 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 					</EditorFeatureWrapper>
 				</PanelBodyControl>
 			);
-		},
-		hasSameProps
+		}
 	);

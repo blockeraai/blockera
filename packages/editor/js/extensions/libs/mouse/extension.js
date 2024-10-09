@@ -14,7 +14,6 @@ import {
 	PanelBodyControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -232,6 +231,5 @@ export const MouseExtension: ComponentType<TMouseProps> = memo(
 				</EditorFeatureWrapper>
 			</PanelBodyControl>
 		);
-	},
-	hasSameProps
+	}
 );
