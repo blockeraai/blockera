@@ -29,6 +29,7 @@ import {
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, useBlockContext } from '../../extensions';
 import type { LabelStates, LabelChangedStates } from './types';
+import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 
 export const getStatesGraph = ({
 	controlId,
@@ -47,6 +48,7 @@ export const getStatesGraph = ({
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const { getAttributes = () => {}, currentBlock } = useBlockContext();
+	const attributes = sanitizeBlockAttributes(getAttributes());
 
 	const { getBlockType } = select('core/blocks');
 
@@ -100,7 +102,7 @@ export const getStatesGraph = ({
 
 								if (path) {
 									value =
-										prepare(path, state.attributes) ??
+										prepare(path, state.attributes) ||
 										prepare(
 											path,
 											state.attributes[controlId]
@@ -130,22 +132,20 @@ export const getStatesGraph = ({
 											prepare(
 												preparedPath,
 												defaultValue
-											) ?? defaultValue;
+											) || defaultValue;
 									} else {
 										defaultValue =
-											prepare(path, defaultValue) ??
+											prepare(path, defaultValue) ||
 											defaultValue;
 									}
 								}
 
-								const attributes = getAttributes();
-
 								const rootValue =
-									prepare(path, attributes) ??
+									prepare(path, attributes) ||
 									prepare(path, attributes[controlId]);
 
 								if (
-									(state.type !== 'normal' ||
+									('normal' !== state.type ||
 										stateGraph.type !==
 											getBaseBreakpoint()) &&
 									isEquals(value, rootValue)
