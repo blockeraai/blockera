@@ -216,21 +216,49 @@ export const memoizedBlockStates: (
 		const breakpoints =
 			blockStates[recievedState || currentState]?.breakpoints;
 
+		if (isInnerBlock(currentBlock) && !insideInnerBlock) {
+			return mergeObject(
+				currentBlockAttributes?.blockeraBlockStates || {},
+				{
+					[recievedState || currentState]: {
+						breakpoints: {
+							[currentBreakpoint]: memoizedRootBreakpoints(
+								breakpoints[currentBreakpoint],
+								action,
+								insideInnerBlock
+							),
+						},
+						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
+						// We need to address the isVisible property in the block-states repeater item,
+						// as there is currently no UI for this property in the block-states repeater item.
+						isVisible: true,
+					},
+				},
+				{
+					forceUpdated: isObject(action.newValue)
+						? [action.attributeId]
+						: [],
+				}
+			);
+		}
+
 		return mergeObject(
 			currentBlockAttributes?.blockeraBlockStates || {},
 			{
-				[recievedState || currentState]: {
-					breakpoints: {
-						[currentBreakpoint]: memoizedRootBreakpoints(
-							breakpoints[currentBreakpoint],
-							action,
-							insideInnerBlock
-						),
+				value: {
+					[recievedState || currentState]: {
+						breakpoints: {
+							[currentBreakpoint]: memoizedRootBreakpoints(
+								breakpoints[currentBreakpoint],
+								action,
+								insideInnerBlock
+							),
+						},
+						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
+						// We need to address the isVisible property in the block-states repeater item,
+						// as there is currently no UI for this property in the block-states repeater item.
+						isVisible: true,
 					},
-					// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
-					// We need to address the isVisible property in the block-states repeater item,
-					// as there is currently no UI for this property in the block-states repeater item.
-					isVisible: true,
 				},
 			},
 			{
