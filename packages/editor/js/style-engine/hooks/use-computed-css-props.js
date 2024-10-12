@@ -28,6 +28,7 @@ import type {
 import { appendBlockeraPrefix } from '../utils';
 import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
+import { sanitizeDefaultAttributes } from '../../extensions/hooks/utils';
 
 export const useComputedCssProps = ({
 	states,
@@ -44,6 +45,13 @@ export const useComputedCssProps = ({
 
 	const stylesStack = [];
 
+	const defaultAttributes = sanitizeDefaultAttributes(
+		prepareAttributesDefaultValues(
+			getBlockType(blockName)?.attributes || {}
+		),
+		{ defaultWithoutValue: true }
+	);
+
 	states.forEach((state: TStates | string): void => {
 		const calculatedProps = {
 			...params,
@@ -51,11 +59,6 @@ export const useComputedCssProps = ({
 			selectors,
 			blockName,
 		};
-
-		// eslint-disable-next-line @wordpress/no-unused-vars-before-return,react-hooks/exhaustive-deps
-		const defaultAttributes = prepareAttributesDefaultValues(
-			getBlockType(blockName)?.attributes || {}
-		);
 
 		const appendStyles = (settings: Object): void => {
 			stylesStack.push(

@@ -276,6 +276,11 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function generateCssRules( $value, string $name ): void {
 
+		if ( isset( $value['value'] ) ) {
+
+			$value = $value['value'];
+		}
+
 		$cssProperty = $this->getSupportCssProperty( $name );
 
 		if ( ! $cssProperty ) {

@@ -58,7 +58,10 @@ export const prepareAttributesDefaultValues = (
 		}
 
 		if (rootAttributes[key].default !== undefined) {
-			attributes[key] = rootAttributes[key].default;
+			attributes[key] =
+				undefined === rootAttributes[key].default?.value
+					? rootAttributes[key].default
+					: rootAttributes[key].default.value;
 
 			continue;
 		}

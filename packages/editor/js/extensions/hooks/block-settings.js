@@ -237,10 +237,19 @@ function mergeBlockSettings(
 								defaultAttributes: !settings.attributes
 									?.blockeraPropsId
 									? mergeObject(
-											settings.attributes,
-											blockeraOverrideBlockAttributes
+											sanitizeDefaultAttributes(
+												blockeraOverrideBlockAttributes,
+												{ defaultWithoutValue: true }
+											),
+											sanitizeDefaultAttributes(
+												settings.attributes,
+												{ defaultWithoutValue: true }
+											)
 									  )
-									: settings.attributes,
+									: sanitizeDefaultAttributes(
+											settings.attributes,
+											{ defaultWithoutValue: true }
+									  ),
 								name: props.name,
 								clientId: props.clientId,
 								className: props?.className,

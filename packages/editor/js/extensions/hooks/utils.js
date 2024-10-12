@@ -2,13 +2,14 @@
 /**
  * External dependencies
  */
+import memoize from 'fast-memoize';
 import { compose } from '@wordpress/compose';
 import { withSelect } from '@wordpress/data';
 
 /**
  * Blockera dependencies
  */
-import { omit, omitWithPattern } from '@blockera/utils';
+import { omit, isEmpty, omitWithPattern } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -85,19 +86,120 @@ export const sanitizedBlockAttributes = (
  * Retrieve sanitized default attributes for block registration.
  *
  * @param {Object} attributes the registration block attributes
- * @return {Object|{}} the override block registration attributes.
+ * @param {Object} args the arguments helpful in the sanitizing process.
+ *
+ * @return {Object|{}} the sanitized block registration attributes.
  */
-export const sanitizeDefaultAttributes = (attributes: Object): Object => {
-	const newAttributes = attributes || {};
+const _sanitizeDefaultAttributes = (
+	attributes: Object,
+	args?: {
+		defaultWithoutValue: boolean,
+	}
+): Object => {
+	const newAttributes: { [key: string]: Object } = {};
+	const { defaultWithoutValue = false } = args || {};
 
-	for (const name in newAttributes) {
-		const attribute = newAttributes[name];
+	for (const name in attributes) {
+		const attribute = attributes[name];
 
-		// Exception for object types with default array value!
-		if ('object' === attribute.type && Array.isArray(attribute.default)) {
-			newAttributes[name].default = {};
+		// Exception for attribute type is "object".
+		if ('object' !== attribute.type) {
+			newAttributes[name] = attribute;
+
+			continue;
 		}
+
+		// Exception for default value is array with includes index "value" is empty array!
+		if (
+			Array.isArray(attribute?.default?.value) &&
+			isEmpty(attribute?.default?.value)
+		) {
+			if (defaultWithoutValue) {
+				newAttributes[name] = {
+					...attribute,
+					default: {},
+				};
+
+				continue;
+			}
+
+			newAttributes[name] = {
+				...attribute,
+				default: {
+					value: {},
+				},
+			};
+
+			continue;
+		}
+
+		if (defaultWithoutValue) {
+			newAttributes[name] = {
+				...attribute,
+				default:
+					undefined !== attribute?.default?.value
+						? attribute.default.value
+						: attribute?.default,
+			};
+
+			continue;
+		}
+
+		newAttributes[name] = attribute;
 	}
 
 	return newAttributes;
 };
+
+/**
+ * Retrieve memoized sanitized default attributes for block registration.
+ *
+ * @param {Object} attributes the registration block attributes
+ * @param {Object} args the arguments helpful in the sanitizing process.
+ *
+ * @return {Object|{}} the memoized block registration attributes.
+ */
+export const sanitizeDefaultAttributes: (
+	attributes: Object,
+	args?: {
+		defaultWithoutValue: boolean,
+	}
+) => Object = memoize(_sanitizeDefaultAttributes);
+
+/**
+ * Retrieve sanitized block current attributes to comfortable access to values.
+ *
+ * @param {Object} attributes the block current attributes
+ * @return {Object|{}} the sanitized block current attributes.
+ */
+const _sanitizeBlockAttributes = (attributes: Object): Object => {
+	const newAttributes: { [key: string]: Object } = {};
+
+	for (const name in attributes) {
+		const attributeValue = attributes[name];
+
+		// Exception for attribute value is object with includes "value" property.
+		if (
+			'object' === typeof attributeValue &&
+			attributeValue.hasOwnProperty('value')
+		) {
+			newAttributes[name] = attributeValue.value;
+
+			continue;
+		}
+
+		newAttributes[name] = attributeValue;
+	}
+
+	return newAttributes;
+};
+
+/**
+ * Retrieve memoized sanitized block current attributes to comfortable access to values.
+ *
+ * @param {Object} attributes the block current attributes
+ * @return {Object|{}} the memoized block current attributes.
+ */
+export const sanitizeBlockAttributes: (attributes: Object) => Object = memoize(
+	_sanitizeBlockAttributes
+);
