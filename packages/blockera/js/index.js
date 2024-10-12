@@ -3,8 +3,18 @@
 /**
  * External dependencies
  */
+import React from 'react';
 import { dispatch } from '@wordpress/data';
 import { addAction, addFilter, applyFilters } from '@wordpress/hooks';
+
+// Useful to development environment, in production build process will be removed it!
+if ('development' === process.env.APP_MODE) {
+	/**
+	 * see: https://github.com/welldone-software/why-did-you-render
+	 */
+	const whyDidYouRender = require('@welldone-software/why-did-you-render');
+	whyDidYouRender(React);
+}
 
 /**
  * Blockera dependencies
