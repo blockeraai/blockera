@@ -9,12 +9,7 @@ import { withSelect } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { omit, isEmpty, omitWithPattern } from '@blockera/utils';
-
-/**
- * Internal dependencies
- */
-import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
+import { isEmpty } from '@blockera/utils';
 
 /**
  * Upper Case first character of word
@@ -50,37 +45,6 @@ export const enhance: Object = compose(
 		};
 	})
 );
-
-export const sanitizedBlockAttributes = (
-	attributes: Object,
-	availableAttributes: Object
-): Object => {
-	const omittedWPAttributes = omitWithPattern(
-		attributes,
-		ignoreDefaultBlockAttributeKeysRegExp()
-	);
-
-	const cleanupKeys = [];
-	const attributeKeys = Object.keys(omittedWPAttributes);
-	const attributeValues = Object.values(omittedWPAttributes);
-
-	attributeValues.forEach((attributeValue: Object, index: number): void => {
-		const attributeKey = attributeKeys[index];
-
-		if ('blockeraIconLink' === attributeKey) {
-			cleanupKeys.push(attributeKeys[index]);
-			return;
-		}
-
-		if (attributeValue !== availableAttributes[attributeKey]?.default) {
-			return;
-		}
-
-		cleanupKeys.push(attributeKeys[index]);
-	});
-
-	return omit(attributes, cleanupKeys);
-};
 
 /**
  * Retrieve sanitized default attributes for block registration.

@@ -34,8 +34,8 @@ import {
 } from '../../components';
 import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors } from '../../hooks';
+import { sanitizeDefaultAttributes } from './utils';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
-import { sanitizedBlockAttributes, sanitizeDefaultAttributes } from './utils';
 import { BlockBase, BlockIcon, BlockPortals } from '../components';
 
 const useSharedBlockSideEffect = (): void => {
@@ -300,21 +300,6 @@ function mergeBlockSettings(
 		},
 		variations: getVariations(),
 		edit: Edit,
-		save(props: Object): MixedElement {
-			if (!isAvailableBlock()) {
-				return settings?.save(props);
-			}
-
-			props = {
-				...props,
-				attributes: sanitizedBlockAttributes(
-					props.attributes,
-					settings?.attributes
-				),
-			};
-
-			return settings.save(props);
-		},
 		deprecated: !isAvailableBlock()
 			? settings?.deprecated
 			: [
