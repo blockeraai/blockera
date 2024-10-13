@@ -67,6 +67,10 @@ export function getSelectedBlock(data, field = '') {
 		return selectedBlock;
 	}
 
+	if (undefined !== selectedBlock.attributes[field]?.value) {
+		return selectedBlock.attributes[field].value;
+	}
+
 	return selectedBlock.attributes[field];
 }
 
