@@ -190,7 +190,7 @@ final class StyleEngine {
 	protected function getStateCssRules( string $breakpoint ): array {
 
 		// Imagine blockera block states stack is empty.
-		if ( empty( $this->settings['blockeraBlockStates'] ) ) {
+		if ( empty( $this->settings['blockeraBlockStates']['value'] ) ) {
 
 			// We should just prepare normal state styles because not exists any other states.
 			$css_rules = $this->prepareStateStyles( 'normal', blockera_get_base_breakpoint() );
@@ -270,7 +270,7 @@ final class StyleEngine {
 		$cssRules = $this->definition->getCssRules();
 
 		// Validation: Check if sets blockera inner blocks?
-		if ( ! empty( $settings['blockeraInnerBlocks'] ) ) {
+		if ( ! empty( $settings['blockeraInnerBlocks']['value'] ) ) {
 
 			// Preparing inner blocks css ...
 			$cssRules = array_merge(
@@ -281,8 +281,8 @@ final class StyleEngine {
 							$this,
 							'generateInnerBlockCss',
 						],
-						$settings['blockeraInnerBlocks'],
-						array_keys( $settings['blockeraInnerBlocks'] )
+						$settings['blockeraInnerBlocks']['value'],
+						array_keys( $settings['blockeraInnerBlocks']['value'] )
 					)
 				)
 			);
@@ -395,7 +395,7 @@ final class StyleEngine {
 			return $this->settings;
 		}
 
-		$states = $this->settings['blockeraBlockStates'] ?? [];
+		$states = $this->settings['blockeraBlockStates']['value'] ?? [];
 		$state  = blockera_block_state_validate( $states, $this->pseudo_state );
 
 		// no state found or not exists any breakpoint.
