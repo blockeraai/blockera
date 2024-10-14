@@ -53,6 +53,7 @@ export type BlockBaseProps = {
 	setAttributes: (attributes: Object) => void,
 	className: string,
 	defaultAttributes: Object,
+	originDefaultAttributes: Object,
 };
 
 export const BlockBase: ComponentType<BlockBaseProps> = memo(
@@ -65,6 +66,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		setAttributes: _setAttributes,
 		className,
 		defaultAttributes,
+		originDefaultAttributes,
 		...props
 	}: BlockBaseProps): Element<any> | null => {
 		const _attributes = useMemo(
@@ -350,12 +352,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						{...{
 							args,
 							isActive,
-							defaultAttributes,
 							setCompatibilities,
 							originalAttributes,
 							availableAttributes,
 							getAttributesWithIds,
 							attributes: blockAttributes,
+							defaultAttributes: originDefaultAttributes,
 						}}
 					/>
 					<SideEffect
