@@ -227,6 +227,13 @@ function mergeBlockSettings(
 				return attributes;
 			}, [props.attributes]);
 
+			const defaultAttributes = !settings.attributes?.blockeraPropsId
+				? mergeObject(
+						blockeraOverrideBlockAttributes,
+						settings.attributes
+				  )
+				: settings.attributes;
+
 			return (
 				<>
 					<BaseControlContext.Provider value={baseContextValue}>
@@ -234,26 +241,15 @@ function mergeBlockSettings(
 							{...{
 								attributes,
 								additional,
-								defaultAttributes: !settings.attributes
-									?.blockeraPropsId
-									? mergeObject(
-											sanitizeDefaultAttributes(
-												blockeraOverrideBlockAttributes,
-												{ defaultWithoutValue: true }
-											),
-											sanitizeDefaultAttributes(
-												settings.attributes,
-												{ defaultWithoutValue: true }
-											)
-									  )
-									: sanitizeDefaultAttributes(
-											settings.attributes,
-											{ defaultWithoutValue: true }
-									  ),
 								name: props.name,
 								clientId: props.clientId,
 								className: props?.className,
 								setAttributes: props.setAttributes,
+								originDefaultAttributes: defaultAttributes,
+								defaultAttributes: sanitizeDefaultAttributes(
+									defaultAttributes,
+									{ defaultWithoutValue: true }
+								),
 							}}
 						>
 							<SlotFillProvider>
@@ -286,6 +282,7 @@ function mergeBlockSettings(
 
 	return {
 		...settings,
+		// Sanitizing attributes to convert all array values to object.
 		attributes: !settings.attributes?.blockeraPropsId
 			? mergeObject(
 					sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
