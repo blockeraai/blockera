@@ -742,7 +742,8 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 								attributes: {
 									[attributeId]:
 										isEquals(
-											state[attributeId],
+											state[attributeId]?.value ||
+												state[attributeId],
 											newValue
 										) ||
 										(isObject(newValue) &&
