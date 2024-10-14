@@ -237,7 +237,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			blockVariations,
 			activeBlockVariation,
 			getActiveBlockVariation,
-			blockAttributes: defaultAttributes,
+			blockAttributes: originDefaultAttributes,
 			innerBlocks: additional?.blockeraInnerBlocks,
 		};
 

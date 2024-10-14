@@ -6,7 +6,7 @@ export function fontStyleFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraFontStyle?.vlaue === '' &&
+		attributes?.blockeraFontStyle?.value === '' &&
 		attributes?.style?.typography?.fontStyle !== undefined
 	) {
 		attributes.blockeraFontStyle = {
