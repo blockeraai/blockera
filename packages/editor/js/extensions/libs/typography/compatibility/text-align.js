@@ -16,18 +16,22 @@ export function textAlignFromWPCompatibility({
 	// we have to validate and make sure the value is correct and should be updated
 	if (
 		attributes[wpAlignAttrId] !== undefined &&
-		attributes?.blockeraTextAlign !== attributes[wpAlignAttrId]
+		attributes?.blockeraTextAlign?.value !== attributes[wpAlignAttrId]
 	) {
 		switch (blockId) {
 			case 'core/paragraph':
 				if (attributes[wpAlignAttrId] !== undefined) {
-					attributes.blockeraTextAlign = attributes[wpAlignAttrId];
+					attributes.blockeraTextAlign = {
+						value: attributes[wpAlignAttrId],
+					};
 				}
 				break;
 
 			default:
 				if (attributes[wpAlignAttrId] !== undefined) {
-					attributes.blockeraTextAlign = attributes?.textAlign;
+					attributes.blockeraTextAlign = {
+						value: attributes?.textAlign,
+					};
 				}
 				break;
 		}
