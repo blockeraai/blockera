@@ -22,7 +22,7 @@ export function ratioFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (attributes?.blockeraRatio?.value !== '') {
+	if (attributes?.blockeraRatio?.value?.value !== '') {
 		return attributes;
 	}
 
@@ -33,7 +33,9 @@ export function ratioFromWPCompatibility({
 				const ratio = detectWPAspectRatioValue(attributes.aspectRatio);
 
 				if (ratio?.value) {
-					attributes.blockeraRatio = ratio;
+					attributes.blockeraRatio = {
+						value: ratio,
+					};
 				}
 			}
 
@@ -46,7 +48,9 @@ export function ratioFromWPCompatibility({
 				);
 
 				if (_ratio?.value) {
-					attributes.blockeraRatio = _ratio;
+					attributes.blockeraRatio = {
+						value: _ratio,
+					};
 				}
 			}
 
