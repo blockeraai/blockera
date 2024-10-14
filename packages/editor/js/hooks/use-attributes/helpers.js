@@ -731,6 +731,12 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 		);
 	}
 
+	let currentStateValue = state[attributeId]?.value;
+
+	if ('undefined' === typeof currentStateValue) {
+		currentStateValue = state[attributeId];
+	}
+
 	return mergeObject(
 		state,
 		{
@@ -741,11 +747,7 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 							[currentBreakpoint]: {
 								attributes: {
 									[attributeId]:
-										isEquals(
-											state[attributeId]?.value ||
-												state[attributeId],
-											newValue
-										) ||
+										isEquals(currentStateValue, newValue) ||
 										(isObject(newValue) &&
 											isEmpty(newValue))
 											? undefined
