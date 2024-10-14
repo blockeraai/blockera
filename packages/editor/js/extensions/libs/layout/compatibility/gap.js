@@ -141,12 +141,12 @@ export function gapFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		isEquals(attributes?.blockeraGap, defaultGap) &&
+		isEquals(attributes?.blockeraGap?.value, defaultGap) &&
 		attributes?.style?.spacing?.blockGap
 	) {
-		const gap = convertFromValue(attributes?.style?.spacing?.blockGap);
-
-		attributes.blockeraGap = gap;
+		attributes.blockeraGap = {
+			value: convertFromValue(attributes?.style?.spacing?.blockGap),
+		};
 	}
 
 	return attributes;
