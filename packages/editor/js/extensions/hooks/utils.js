@@ -66,7 +66,7 @@ const _sanitizeDefaultAttributes = (
 	for (const name in attributes) {
 		const attribute = attributes[name];
 
-		// Exception for attribute type is "object".
+		// Exception for attribute type is not "object".
 		if ('object' !== attribute.type) {
 			newAttributes[name] = attribute;
 
