@@ -29,21 +29,26 @@ export function fontColorFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (attributes?.blockeraFontColor === '') {
+	if (attributes?.blockeraFontColor?.value === '') {
 		// textColor attribute in root always is variable
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.textColor !== undefined) {
 			const color = getColorVAFromIdString(attributes?.textColor);
 
 			if (color) {
-				attributes.blockeraFontColor = color;
+				attributes.blockeraFontColor = {
+					value: color,
+				};
+
 				return attributes;
 			}
 		}
 
 		// font color is not variable
 		if (attributes?.style?.color?.text !== undefined) {
-			attributes.blockeraFontColor = attributes?.style?.color?.text;
+			attributes.blockeraFontColor = {
+				value: attributes?.style?.color?.text,
+			};
 			return attributes;
 		}
 	}
