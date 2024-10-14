@@ -836,7 +836,7 @@ if ( ! function_exists( 'blockera_get_sanitize_block_attributes' ) ) {
 		return array_map(
 			static function ( $attribute ) {
 
-				if ( is_array( $attribute ) && ! empty( $attribute['value'] ) ) {
+				if ( is_array( $attribute ) && isset( $attribute['value'] ) ) {
 
 					return $attribute['value'];
 				}
