@@ -14,7 +14,7 @@ export function backgroundColorFromWPCompatibility({
 	blockAttributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraBackgroundColor !==
+		attributes?.blockeraBackgroundColor?.value !==
 		blockAttributes.blockeraBackgroundColor.default
 	) {
 		return attributes;
@@ -22,7 +22,7 @@ export function backgroundColorFromWPCompatibility({
 
 	// backgroundColor attribute in root always is variable
 	// it should be changed to a Value Addon (variable)
-	if (attributes?.backgroundColor !== undefined) {
+	if (attributes?.backgroundColor?.value !== undefined) {
 		const colorVar = getColor(attributes?.backgroundColor);
 
 		if (colorVar) {
