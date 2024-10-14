@@ -41,12 +41,12 @@ export const isNormalState = (selectedState: TStates | string): boolean =>
 	'normal' === selectedState;
 
 /**
- * Preparing attributes default values.
+ * Preparing blockera attributes default values.
  *
  * @param {Object} rootAttributes the root attributes of registration time.
  * @return {Object} the attributes cleaned.
  */
-export const prepareAttributesDefaultValues = (
+export const prepareBlockeraDefaultAttributesValues = (
 	rootAttributes: Object
 ): Object => {
 	// Extracting default prop of items and assigning to a new object
@@ -58,10 +58,7 @@ export const prepareAttributesDefaultValues = (
 		}
 
 		if (rootAttributes[key].default !== undefined) {
-			attributes[key] =
-				undefined === rootAttributes[key].default?.value
-					? rootAttributes[key].default
-					: rootAttributes[key].default.value;
+			attributes[key] = rootAttributes[key].default;
 
 			continue;
 		}

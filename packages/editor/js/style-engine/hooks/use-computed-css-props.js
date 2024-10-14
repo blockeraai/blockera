@@ -18,7 +18,7 @@ import {
 import { useStoreSelectors } from '../../hooks';
 import {
 	isNormalState,
-	prepareAttributesDefaultValues,
+	prepareBlockeraDefaultAttributesValues,
 } from '../../extensions/components';
 import type { CssRule } from '../types';
 import type {
@@ -46,7 +46,7 @@ export const useComputedCssProps = ({
 	const stylesStack = [];
 
 	const defaultAttributes = sanitizeDefaultAttributes(
-		prepareAttributesDefaultValues(
+		prepareBlockeraDefaultAttributesValues(
 			getBlockType(blockName)?.attributes || {}
 		),
 		{ defaultWithoutValue: true }

@@ -20,7 +20,7 @@ import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../extensions/libs/types';
 import {
 	isInnerBlock,
-	prepareAttributesDefaultValues,
+	prepareBlockeraDefaultAttributesValues,
 } from '../../extensions/components/utils';
 import type {
 	TBreakpoint,
@@ -113,7 +113,7 @@ export const useAttributes = (
 		) {
 			_attributes = mergeObject(
 				attributes,
-				prepareAttributesDefaultValues(defaultAttributes)
+				prepareBlockeraDefaultAttributesValues(defaultAttributes)
 			);
 		}
 

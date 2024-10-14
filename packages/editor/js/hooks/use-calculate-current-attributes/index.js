@@ -11,7 +11,7 @@ import { prepare } from '@blockera/data-editor';
 import type { CalculateCurrentAttributesProps } from './types';
 import {
 	isInnerBlock,
-	prepareAttributesDefaultValues,
+	prepareBlockeraDefaultAttributesValues,
 } from '../../extensions/components/utils';
 import { useExtensionsStore } from '../use-extensions-store';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
@@ -26,7 +26,7 @@ export const useCalculateCurrentAttributes = ({
 	const { currentBlock, currentState, currentBreakpoint } =
 		useExtensionsStore();
 	const blockAttributesDefaults =
-		prepareAttributesDefaultValues(blockAttributes);
+		prepareBlockeraDefaultAttributesValues(blockAttributes);
 
 	// Assume block is inner block type.
 	if (isInnerBlock(currentBlock)) {
