@@ -15,7 +15,6 @@ import {
 	TypographyStyles,
 	BorderAndShadowStyles,
 } from '../../extensions';
-import { useStoreSelectors } from '../../hooks';
 import {
 	isNormalState,
 	prepareBlockeraDefaultAttributesValues,
@@ -28,7 +27,6 @@ import type {
 import { appendBlockeraPrefix } from '../utils';
 import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
-import { sanitizeDefaultAttributes } from '../../extensions/hooks/utils';
 
 export const useComputedCssProps = ({
 	states,
@@ -39,17 +37,10 @@ export const useComputedCssProps = ({
 	currentInnerBlockState,
 	...params
 }: Object): Array<CssRule> => {
-	const {
-		blocks: { getBlockType },
-	} = useStoreSelectors();
-
 	const stylesStack = [];
 
-	const defaultAttributes = sanitizeDefaultAttributes(
-		prepareBlockeraDefaultAttributesValues(
-			getBlockType(blockName)?.attributes || {}
-		),
-		{ defaultWithoutValue: true }
+	const defaultAttributes = prepareBlockeraDefaultAttributesValues(
+		params.defaultAttributes
 	);
 
 	states.forEach((state: TStates | string): void => {
