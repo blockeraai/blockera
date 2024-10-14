@@ -14,10 +14,10 @@ import type {
 } from '../../extensions/libs/block-states/types';
 
 export type InnerBlocksInfoProps = {
-	name: string,
 	attributes: Object,
 	additional: Object,
 	currentState: TStates,
+	defaultAttributes: Object,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
 	currentBlock: 'master' | InnerBlockType | string,

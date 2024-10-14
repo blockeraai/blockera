@@ -166,11 +166,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		const { getDeviceType } = select('blockera/editor');
 
 		const { currentInnerBlock, blockeraInnerBlocks } = useInnerBlocksInfo({
-			name,
 			additional,
 			currentBlock,
 			currentState,
 			currentBreakpoint,
+			defaultAttributes,
 			currentInnerBlockState,
 			attributes: sanitizedAttributes,
 		});
