@@ -19,7 +19,13 @@ import {
 /**
  * Blockera dependencies
  */
-import { omit, isEquals, omitWithPattern, cloneObject } from '@blockera/utils';
+import {
+	omit,
+	isEquals,
+	omitWithPattern,
+	cloneObject,
+	isStartWith,
+} from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
 /**
@@ -126,7 +132,35 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		 */
 		useEffect(() => {
 			if (!isEquals(attributes, blockAttributes) && !isCompatibleWithWP) {
-				_setAttributes(attributes);
+				const newAttributes: { [key: string]: Object } = {};
+
+				for (const key in attributes) {
+					const element = attributes[key];
+
+					if (
+						!isStartWith(key, 'blockera') ||
+						['blockeraCompatId', 'blockeraPropsId'].includes(key)
+					) {
+						newAttributes[key] = element;
+						continue;
+					}
+
+					if (undefined === element?.value) {
+						newAttributes[key] = {
+							value: element,
+						};
+
+						continue;
+					}
+
+					newAttributes[key] = element;
+				}
+
+				if (isEquals(attributes, newAttributes)) {
+					return;
+				}
+
+				_setAttributes(newAttributes);
 			}
 			// eslint-disable-next-line
 		}, [attributes]);
