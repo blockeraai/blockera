@@ -15,7 +15,7 @@ export function borderFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (isBorderEmpty(attributes?.blockeraBorder)) {
+	if (isBorderEmpty(attributes?.blockeraBorder.value)) {
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor !== undefined) {
@@ -23,11 +23,13 @@ export function borderFromWPCompatibility({
 
 			if (colorVar) {
 				attributes.blockeraBorder = {
-					type: 'all',
-					all: {
-						width: attributes?.style?.border?.width ?? '',
-						color: colorVar,
-						style: attributes?.style?.border?.style ?? 'solid',
+					value: {
+						type: 'all',
+						all: {
+							width: attributes?.style?.border?.width ?? '',
+							color: colorVar,
+							style: attributes?.style?.border?.style ?? 'solid',
+						},
 					},
 				};
 			}
@@ -69,7 +71,9 @@ export function borderFromWPCompatibility({
 			border.bottom.color = getColorVAFromVarString(border.bottom.color);
 			border.left.color = getColorVAFromVarString(border.left.color);
 
-			attributes.blockeraBorder = border;
+			attributes.blockeraBorder = {
+				value: border,
+			};
 		}
 		// is all and does not use var color
 		else if (
@@ -78,11 +82,13 @@ export function borderFromWPCompatibility({
 			attributes?.style?.border?.color !== undefined
 		) {
 			attributes.blockeraBorder = {
-				type: 'all',
-				all: {
-					width: attributes?.style?.border?.width ?? '',
-					style: attributes?.style?.border?.style ?? 'solid',
-					color: attributes?.style?.border?.color ?? '',
+				value: {
+					type: 'all',
+					all: {
+						width: attributes?.style?.border?.width ?? '',
+						style: attributes?.style?.border?.style ?? 'solid',
+						color: attributes?.style?.border?.color ?? '',
+					},
 				},
 			};
 		}

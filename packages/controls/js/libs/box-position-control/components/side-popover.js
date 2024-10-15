@@ -87,14 +87,17 @@ export function SidePopover({
 						max={250}
 						//
 						defaultValue={defaultValue.position[sideId]}
-						onChange={(newValue) =>
-							setValue({
-								...value,
-								position: {
-									...value.position,
-									[sideId]: newValue,
+						onChange={(newValue, ref) =>
+							setValue(
+								{
+									...value,
+									position: {
+										...value.position,
+										[sideId]: newValue,
+									},
 								},
-							})
+								ref
+							)
 						}
 						controlAddonTypes={['variable']}
 						variableTypes={['spacing']}

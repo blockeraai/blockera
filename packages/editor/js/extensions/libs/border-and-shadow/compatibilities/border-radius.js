@@ -11,22 +11,26 @@ export function borderRadiusFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius)) {
+	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius.value)) {
 		if (attributes?.style?.border?.radius !== undefined) {
 			if (isString(attributes?.style?.border?.radius)) {
 				attributes.blockeraBorderRadius = {
-					type: 'all',
-					all: attributes?.style?.border?.radius,
+					value: {
+						type: 'all',
+						all: attributes?.style?.border?.radius,
+					},
 				};
 			} else if (isObject(attributes?.style?.border?.radius)) {
 				attributes.blockeraBorderRadius = {
-					topLeft: '',
-					topRight: '',
-					bottomLeft: '',
-					bottomRight: '',
-					...attributes?.style?.border?.radius,
-					type: 'custom',
-					all: '',
+					value: {
+						topLeft: '',
+						topRight: '',
+						bottomLeft: '',
+						bottomRight: '',
+						...attributes?.style?.border?.radius,
+						type: 'custom',
+						all: '',
+					},
 				};
 			}
 		}

@@ -12,7 +12,7 @@ export function backgroundFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (!isEmptyObject(attributes?.blockeraBackground)) {
+	if (!isEmptyObject(attributes?.blockeraBackground?.value)) {
 		return attributes;
 	}
 
@@ -74,8 +74,10 @@ export function backgroundFromWPCompatibility({
 		}
 
 		attributes.blockeraBackground = {
-			...attributes.blockeraBackground,
-			'image-0': bgImage,
+			value: {
+				...attributes.blockeraBackground.value,
+				'image-0': bgImage,
+			},
 		};
 	}
 
@@ -116,29 +118,33 @@ export function backgroundFromWPCompatibility({
 			}
 
 			attributes.blockeraBackground = {
-				...attributes.blockeraBackground,
-				'linear-gradient-0': {
-					type: gradientType,
-					'linear-gradient': gradient,
-					'linear-gradient-angel': angel,
-					'linear-gradient-repeat': 'no-repeat',
-					'linear-gradient-attachment': 'scroll',
-					isVisible: true,
-					order: 1,
+				value: {
+					...attributes.blockeraBackground.value,
+					'linear-gradient-0': {
+						type: gradientType,
+						'linear-gradient': gradient,
+						'linear-gradient-angel': angel,
+						'linear-gradient-repeat': 'no-repeat',
+						'linear-gradient-attachment': 'scroll',
+						isVisible: true,
+						order: 1,
+					},
 				},
 			};
 		} else {
 			attributes.blockeraBackground = {
-				...attributes.blockeraBackground,
-				'radial-gradient-0': {
-					type: gradientType,
-					'radial-gradient': gradient,
-					'radial-gradient-position': { top: '50%', left: '50%' },
-					'radial-gradient-size': 'farthest-corner',
-					'radial-gradient-attachment': 'scroll',
-					'radial-gradient-repeat': 'no-repeat',
-					isVisible: true,
-					order: 1,
+				value: {
+					...attributes.blockeraBackground.value,
+					'radial-gradient-0': {
+						type: gradientType,
+						'radial-gradient': gradient,
+						'radial-gradient-position': { top: '50%', left: '50%' },
+						'radial-gradient-size': 'farthest-corner',
+						'radial-gradient-attachment': 'scroll',
+						'radial-gradient-repeat': 'no-repeat',
+						isVisible: true,
+						order: 1,
+					},
 				},
 			};
 		}

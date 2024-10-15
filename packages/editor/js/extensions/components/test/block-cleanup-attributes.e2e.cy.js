@@ -42,7 +42,7 @@ describe('BlockBase testing ...', () => {
 			expect(true).to.be.equal(
 				blockAttributes?.blockeraPropsId &&
 					blockAttributes?.blockeraCompatId &&
-					'#aaaaaa' === blockAttributes?.blockeraFontColor &&
+					'#aaaaaa' === blockAttributes?.blockeraFontColor?.value &&
 					-1 !== blockAttributes?.className?.indexOf('blockera-block')
 			);
 		});

@@ -6,11 +6,12 @@ export function textDecorationFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraTextDecoration === '' &&
+		attributes?.blockeraTextDecoration?.value === '' &&
 		attributes?.style?.typography?.textDecoration !== undefined
 	) {
-		attributes.blockeraTextDecoration =
-			attributes?.style?.typography?.textDecoration;
+		attributes.blockeraTextDecoration = {
+			value: attributes?.style?.typography?.textDecoration,
+		};
 	}
 
 	return attributes;

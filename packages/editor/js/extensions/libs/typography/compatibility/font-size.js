@@ -11,7 +11,7 @@ export function fontSizeFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (attributes?.blockeraFontSize === '') {
+	if (attributes?.blockeraFontSize?.value === '') {
 		// fontSize attribute in root always is variable
 		// medium → var(--wp--preset--font-size--medium)
 		// it should be changed to a Value Addon (variable)
@@ -20,20 +20,22 @@ export function fontSizeFromWPCompatibility({
 
 			if (fontSizeVar) {
 				attributes.blockeraFontSize = {
-					settings: {
-						...fontSizeVar,
-						type: 'font-size',
-						var: generateVariableString({
-							reference: fontSizeVar?.reference || {
-								type: '',
-							},
+					value: {
+						settings: {
+							...fontSizeVar,
 							type: 'font-size',
-							id: fontSizeVar?.id || '',
-						}),
+							var: generateVariableString({
+								reference: fontSizeVar?.reference || {
+									type: '',
+								},
+								type: 'font-size',
+								id: fontSizeVar?.id || '',
+							}),
+						},
+						name: fontSizeVar?.name,
+						isValueAddon: true,
+						valueType: 'variable',
 					},
-					name: fontSizeVar?.name,
-					isValueAddon: true,
-					valueType: 'variable',
 				};
 				return attributes;
 			}
@@ -41,8 +43,10 @@ export function fontSizeFromWPCompatibility({
 
 		// font size is not variable
 		if (attributes?.style?.typography?.fontSize !== undefined) {
-			attributes.blockeraFontSize =
-				attributes?.style?.typography?.fontSize;
+			attributes.blockeraFontSize = {
+				value: attributes?.style?.typography?.fontSize,
+			};
+
 			return attributes;
 		}
 	}

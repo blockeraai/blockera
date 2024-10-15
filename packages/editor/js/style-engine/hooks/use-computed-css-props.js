@@ -15,10 +15,9 @@ import {
 	TypographyStyles,
 	BorderAndShadowStyles,
 } from '../../extensions';
-import { useStoreSelectors } from '../../hooks';
 import {
 	isNormalState,
-	prepareAttributesDefaultValues,
+	prepareBlockeraDefaultAttributesValues,
 } from '../../extensions/components';
 import type { CssRule } from '../types';
 import type {
@@ -38,11 +37,11 @@ export const useComputedCssProps = ({
 	currentInnerBlockState,
 	...params
 }: Object): Array<CssRule> => {
-	const {
-		blocks: { getBlockType },
-	} = useStoreSelectors();
-
 	const stylesStack = [];
+
+	const defaultAttributes = prepareBlockeraDefaultAttributesValues(
+		params.defaultAttributes
+	);
 
 	states.forEach((state: TStates | string): void => {
 		const calculatedProps = {
@@ -51,11 +50,6 @@ export const useComputedCssProps = ({
 			selectors,
 			blockName,
 		};
-
-		// eslint-disable-next-line @wordpress/no-unused-vars-before-return,react-hooks/exhaustive-deps
-		const defaultAttributes = prepareAttributesDefaultValues(
-			getBlockType(blockName)?.attributes || {}
-		);
 
 		const appendStyles = (settings: Object): void => {
 			stylesStack.push(

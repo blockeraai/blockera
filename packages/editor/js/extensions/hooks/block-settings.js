@@ -34,8 +34,8 @@ import {
 } from '../../components';
 import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors } from '../../hooks';
+import { sanitizeDefaultAttributes } from './utils';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
-import { sanitizedBlockAttributes, sanitizeDefaultAttributes } from './utils';
 import { BlockBase, BlockIcon, BlockPortals } from '../components';
 
 const useSharedBlockSideEffect = (): void => {
@@ -227,6 +227,13 @@ function mergeBlockSettings(
 				return attributes;
 			}, [props.attributes]);
 
+			const defaultAttributes = !settings.attributes?.blockeraPropsId
+				? mergeObject(
+						blockeraOverrideBlockAttributes,
+						settings.attributes
+				  )
+				: settings.attributes;
+
 			return (
 				<>
 					<BaseControlContext.Provider value={baseContextValue}>
@@ -234,17 +241,15 @@ function mergeBlockSettings(
 							{...{
 								attributes,
 								additional,
-								defaultAttributes: !settings.attributes
-									?.blockeraPropsId
-									? mergeObject(
-											settings.attributes,
-											blockeraOverrideBlockAttributes
-									  )
-									: settings.attributes,
 								name: props.name,
 								clientId: props.clientId,
 								className: props?.className,
 								setAttributes: props.setAttributes,
+								originDefaultAttributes: defaultAttributes,
+								defaultAttributes: sanitizeDefaultAttributes(
+									defaultAttributes,
+									{ defaultWithoutValue: true }
+								),
 							}}
 						>
 							<SlotFillProvider>
@@ -277,6 +282,7 @@ function mergeBlockSettings(
 
 	return {
 		...settings,
+		// Sanitizing attributes to convert all array values to object.
 		attributes: !settings.attributes?.blockeraPropsId
 			? mergeObject(
 					sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
@@ -291,21 +297,6 @@ function mergeBlockSettings(
 		},
 		variations: getVariations(),
 		edit: Edit,
-		save(props: Object): MixedElement {
-			if (!isAvailableBlock()) {
-				return settings?.save(props);
-			}
-
-			props = {
-				...props,
-				attributes: sanitizedBlockAttributes(
-					props.attributes,
-					settings?.attributes
-				),
-			};
-
-			return settings.save(props);
-		},
 		deprecated: !isAvailableBlock()
 			? settings?.deprecated
 			: [

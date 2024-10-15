@@ -31,7 +31,7 @@ describe('Flex Child', () => {
 
 	describe('Self Size', () => {
 		beforeEach(() => {
-			const code = `<!-- wp:group {"blockeraPropsId":"1025111558103","blockeraCompatId":"62433527647","blockeraDisplay":"flex","className":"blockera-group","layout":{"type":"flex"}} -->
+			const code = `<!-- wp:group {"blockeraPropsId":"1025111558103","blockeraCompatId":"62433527647","blockeraDisplay":{"value":"flex"},"className":"blockera-group","layout":{"type":"flex"}} -->
 <div class="wp-block-group blockera-group"><!-- wp:paragraph {"blockeraPropsId":"102511163356","blockeraCompatId":"62433349891","className":"blockera-paragraph"} -->
 <p class="blockera-paragraph">This is a test text.</p>
 <!-- /wp:paragraph --></div>
@@ -182,8 +182,8 @@ describe('Flex Child', () => {
 
 	describe('Align', () => {
 		it('Functionality', () => {
-			const code = `<!-- wp:group {"className":"blockera-group","layout":{"type":"flex"},"blockeraDisplay":"flex","blockeraPropsId":"1025111558103"} -->
-<div class="wp-block-group blockera-group"><!-- wp:paragraph {"className":"blockera-paragraph","blockeraAttributes":[],"blockeraPropsId":"102511163356"} -->
+			const code = `<!-- wp:group {"className":"blockera-group","layout":{"type":"flex"},"blockeraDisplay":{"value": "flex"},"blockeraPropsId":"1025111558103"} -->
+<div class="wp-block-group blockera-group"><!-- wp:paragraph {"className":"blockera-paragraph","blockeraPropsId":"102511163356"} -->
 <p class="blockera-paragraph">This is a test text.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->`;
@@ -313,8 +313,8 @@ describe('Flex Child', () => {
 	describe('Order', () => {
 		describe('Functionality', () => {
 			beforeEach(() => {
-				const code = `<!-- wp:group {"className":"blockera-group","layout":{"type":"flex"},"blockeraDisplay":"flex","blockeraPropsId":"1025111558103"} -->
-<div class="wp-block-group blockera-group"><!-- wp:paragraph {"className":"blockera-paragraph","blockeraAttributes":[],"blockeraPropsId":"102511163356"} -->
+				const code = `<!-- wp:group {"className":"blockera-group","layout":{"type":"flex"},"blockeraDisplay":{"value":"flex"},"blockeraPropsId":"1025111558103"} -->
+<div class="wp-block-group blockera-group"><!-- wp:paragraph {"className":"blockera-paragraph","blockeraPropsId":"102511163356"} -->
 <p class="blockera-paragraph">This is a test text.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->`;

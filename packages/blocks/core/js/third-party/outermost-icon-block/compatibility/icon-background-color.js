@@ -24,7 +24,9 @@ export function iconBackgroundColorFromWPCompatibility({
 	}
 
 	if (color) {
-		attributes.blockeraBackgroundColor = color;
+		attributes.blockeraBackgroundColor = {
+			value: color,
+		};
 	}
 
 	return attributes;

@@ -11,7 +11,7 @@ export function flexWrapFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraFlexWrap?.value !== '' ||
+		attributes?.blockeraFlexWrap?.value?.value !== '' ||
 		attributes?.layout?.flexWrap === '' ||
 		isUndefined(attributes?.layout?.flexWrap)
 	) {
@@ -19,8 +19,10 @@ export function flexWrapFromWPCompatibility({
 	}
 
 	attributes.blockeraFlexWrap = {
-		value: attributes?.layout?.flexWrap,
-		reverse: false,
+		value: {
+			value: attributes?.layout?.flexWrap,
+			reverse: false,
+		},
 	};
 
 	return attributes;

@@ -13,7 +13,7 @@ export function heightFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (attributes?.blockeraHeight !== '') {
+	if (attributes?.blockeraHeight?.value !== '') {
 		return attributes;
 	}
 
@@ -22,7 +22,9 @@ export function heightFromWPCompatibility({
 		case 'core/spacer':
 		case 'core/post-featured-image':
 			if (attributes?.height !== undefined) {
-				attributes.blockeraHeight = attributes?.height;
+				attributes.blockeraHeight = {
+					value: attributes?.height,
+				};
 			}
 	}
 

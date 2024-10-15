@@ -219,6 +219,8 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 	 */
 	public function getCustomSettings( array $settings, string $settingName, string $cssProperty ): array {
 
+		$settings = blockera_get_sanitize_block_attributes( $settings );
+
 		if ( 'custom' === $settings[ $settingName ] && 'flex' === $cssProperty ) {
 
 			$setting = [

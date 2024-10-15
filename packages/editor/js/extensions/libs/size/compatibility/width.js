@@ -17,8 +17,9 @@ export function widthFromWPCompatibility({
 				attributes?.width !== undefined &&
 				attributes?.widthUnit !== undefined
 			) {
-				attributes.blockeraWidth =
-					attributes?.width + attributes?.widthUnit;
+				attributes.blockeraWidth = {
+					value: attributes?.width + attributes?.widthUnit,
+				};
 			}
 
 			return attributes;
@@ -27,7 +28,9 @@ export function widthFromWPCompatibility({
 		// unit is %
 		case 'core/button':
 			if (attributes?.width !== undefined) {
-				attributes.blockeraWidth = attributes?.width + '%';
+				attributes.blockeraWidth = {
+					value: attributes?.width + '%',
+				};
 			}
 
 			return attributes;
@@ -37,9 +40,11 @@ export function widthFromWPCompatibility({
 		case 'core/site-logo':
 			if (
 				attributes?.width !== undefined &&
-				attributes?.blockeraWidth !== attributes?.width + 'px'
+				attributes?.blockeraWidth?.value !== attributes?.width + 'px'
 			) {
-				attributes.blockeraWidth = attributes?.width + 'px';
+				attributes.blockeraWidth = {
+					value: attributes?.width + 'px',
+				};
 			}
 
 			return attributes;
@@ -49,9 +54,11 @@ export function widthFromWPCompatibility({
 		case 'core/avatar':
 			if (
 				attributes?.size !== undefined &&
-				attributes?.blockeraWidth !== attributes?.size + 'px'
+				attributes?.blockeraWidth?.value !== attributes?.size + 'px'
 			) {
-				attributes.blockeraWidth = attributes?.size + 'px';
+				attributes.blockeraWidth = {
+					value: attributes?.size + 'px',
+				};
 			}
 
 			return attributes;
@@ -62,7 +69,9 @@ export function widthFromWPCompatibility({
 		case 'core/column':
 		case 'core/image':
 			if (attributes?.width !== undefined) {
-				attributes.blockeraWidth = attributes?.width;
+				attributes.blockeraWidth = {
+					value: attributes?.width,
+				};
 			}
 
 			return attributes;

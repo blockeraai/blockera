@@ -5,9 +5,14 @@
  */
 import { __ } from '@wordpress/i18n';
 
+/**
+ * Internal dependencies
+ */
+import type { TStatesLabel } from './types';
+
 export type BlockStateType = {
 	type: string,
-	label: string,
+	label: TStatesLabel,
 	breakpoints: Object,
 	disabled?: boolean,
 };
