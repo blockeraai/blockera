@@ -27,9 +27,11 @@ export function normalIconBackgroundColorFromWPCompatibility({
 	if (color) {
 		return {
 			blockeraInnerBlocks: {
-				'elements/item-containers': {
-					attributes: {
-						blockeraBackgroundColor: color,
+				value: {
+					'elements/item-containers': {
+						attributes: {
+							blockeraBackgroundColor: color,
+						},
 					},
 				},
 			},
