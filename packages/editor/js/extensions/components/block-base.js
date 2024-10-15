@@ -25,6 +25,7 @@ import {
 	omitWithPattern,
 	cloneObject,
 	isStartWith,
+	getSmallHash,
 } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
@@ -132,6 +133,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		 */
 		useEffect(() => {
 			if (!isEquals(attributes, blockAttributes) && !isCompatibleWithWP) {
+				const smallPropsId = getSmallHash(attributes.blockeraPropsId);
+
+				if (smallPropsId === attributes.blockeraCompatId) {
+					_setAttributes(attributes);
+					return;
+				}
+
 				const newAttributes: { [key: string]: Object } = {};
 
 				for (const key in attributes) {
@@ -158,11 +166,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 				if (isEquals(attributes, newAttributes)) {
 					_setAttributes(attributes);
-
 					return;
 				}
 
-				_setAttributes(newAttributes);
+				_setAttributes({
+					...newAttributes,
+					blockeraCompatId: smallPropsId,
+				});
 			}
 			// eslint-disable-next-line
 		}, [attributes]);
