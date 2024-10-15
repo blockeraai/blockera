@@ -157,6 +157,8 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 				}
 
 				if (isEquals(attributes, newAttributes)) {
+					_setAttributes(attributes);
+
 					return;
 				}
 
