@@ -120,8 +120,8 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 			case 'gap':
 				// Current block display (even the default).
 				$display = '';
-				if ( ! empty( $this->settings['blockeraDisplay'] ) ) {
-					$display = $this->settings['blockeraDisplay'];
+				if ( ! empty( $this->settings['blockeraDisplay']['value'] ) ) {
+					$display = $this->settings['blockeraDisplay']['value'];
 				} elseif ( ! empty( $this->default_settings['blockeraDisplay']['default'] ) ) {
 					$display = $this->default_settings['blockeraDisplay']['default'];
 				}
