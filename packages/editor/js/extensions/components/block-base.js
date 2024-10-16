@@ -153,7 +153,10 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						continue;
 					}
 
-					if (undefined === element?.value) {
+					if (
+						undefined === element?.value ||
+						['blockeraFlexWrap', 'blockeraRatio'].includes(key)
+					) {
 						newAttributes[key] = {
 							value: element,
 						};
