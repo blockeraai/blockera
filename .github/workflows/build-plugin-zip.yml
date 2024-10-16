@@ -279,7 +279,7 @@ jobs:
                   }'
 
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = ${{ env.uploaded_zip_file }}')
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = "${{ env.uploaded_zip_file }}"')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
