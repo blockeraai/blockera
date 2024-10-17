@@ -2,6 +2,6 @@
 	"name": "blockera/controls",
 	"path": "packages/controls",
 	"dependent": {
-		"repositories": ["blockera"]
+		"repositories": ["https://github.com/blockeraai/blockera.git"]
 	}
 }

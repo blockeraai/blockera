@@ -2,6 +2,6 @@
 	"name": "blockera/wordpress",
 	"path": "packages/wordpress",
 	"dependent": {
-		"repositories": ["blockera"]
+		"repositories": ["https://github.com/blockeraai/blockera.git"]
 	}
 }
