@@ -140,6 +140,7 @@ const blockeraWordBreak: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
+	isActiveOnFree: false,
 	label: __('Word Break', 'blockera'),
 };
 

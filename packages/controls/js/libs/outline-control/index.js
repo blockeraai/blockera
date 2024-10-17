@@ -9,7 +9,10 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { controlClassNames } from '@blockera/classnames';
+import {
+	controlClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -39,6 +42,9 @@ export default function OutlineControl({
 			id={id}
 			className={controlClassNames('outline', className)}
 			popoverTitle={popoverTitle}
+			popoverClassName={componentInnerClassNames(
+				'popover-outline-control'
+			)}
 			addNewButtonLabel={__('Add New Outline', 'blockera')}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}

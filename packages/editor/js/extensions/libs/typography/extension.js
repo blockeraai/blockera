@@ -744,133 +744,6 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 							</BaseControl>
 						)}
 
-						{(isShowLetterSpacing ||
-							isShowWordSpacing ||
-							isShowTextIndent) && (
-							<BaseControl
-								controlName="spacing"
-								label={__('Spacing', 'blockera')}
-								columns="columns-2"
-							>
-								<EditorFeatureWrapper
-									isActive={isShowLetterSpacing}
-									config={
-										extensionConfig.blockeraLetterSpacing
-									}
-								>
-									<LetterSpacing
-										block={block}
-										value={values.blockeraLetterSpacing}
-										onChange={handleOnChangeAttributes}
-										defaultValue={
-											attributes.blockeraLetterSpacing
-												.default
-										}
-										{...extensionProps.blockeraLetterSpacing}
-									/>
-								</EditorFeatureWrapper>
-
-								<EditorFeatureWrapper
-									isActive={isShowWordSpacing}
-									config={extensionConfig.blockeraWordSpacing}
-								>
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'word-spacing'
-											),
-											value: values.blockeraWordSpacing,
-											attribute: 'blockeraWordSpacing',
-											blockName: block.blockName,
-										}}
-									>
-										<InputControl
-											columns="2fr 2.6fr"
-											label={__('Words', 'blockera')}
-											labelPopoverTitle={__(
-												'Words Spacing',
-												'blockera'
-											)}
-											labelDescription={
-												<>
-													<p>
-														{__(
-															'It sets the space between words in text content, an essential tool for enhancing readability and typographic aesthetics, particularly in text-heavy layouts.',
-															'blockera'
-														)}
-													</p>
-												</>
-											}
-											arrows={true}
-											unitType="letter-spacing"
-											defaultValue={
-												attributes.blockeraWordSpacing
-													.default
-											}
-											onChange={(newValue, ref) =>
-												handleOnChangeAttributes(
-													'blockeraWordSpacing',
-													newValue,
-													{ ref }
-												)
-											}
-											{...extensionProps.blockeraWordSpacing}
-										/>
-									</ControlContextProvider>
-								</EditorFeatureWrapper>
-
-								<EditorFeatureWrapper
-									isActive={isShowTextIndent}
-									config={extensionConfig.blockeraTextIndent}
-								>
-									<ControlContextProvider
-										value={{
-											name: generateExtensionId(
-												block,
-												'text-indent'
-											),
-											value: values.blockeraTextIndent,
-											attribute: 'blockeraTextIndent',
-											blockName: block.blockName,
-										}}
-									>
-										<InputControl
-											columns="2fr 2.6fr"
-											label={__(
-												'Text Indent',
-												'blockera'
-											)}
-											labelDescription={
-												<>
-													<p>
-														{__(
-															'It sets the indentation of the first line in a text block, offering a stylistic tool for enhancing text layout and readability, especially in paragraphs and articles.',
-															'blockera'
-														)}
-													</p>
-												</>
-											}
-											arrows={true}
-											unitType="text-indent"
-											defaultValue={
-												attributes.blockeraTextIndent
-													.default
-											}
-											onChange={(newValue, ref) =>
-												handleOnChangeAttributes(
-													'blockeraTextIndent',
-													newValue,
-													{ ref }
-												)
-											}
-											{...extensionProps.blockeraTextIndent}
-										/>
-									</ControlContextProvider>
-								</EditorFeatureWrapper>
-							</BaseControl>
-						)}
-
 						<EditorFeatureWrapper
 							isActive={isShowTextOrientation}
 							config={extensionConfig.blockeraTextOrientation}
@@ -1093,6 +966,133 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 								/>
 							</ControlContextProvider>
 						</EditorFeatureWrapper>
+
+						{(isShowLetterSpacing ||
+							isShowWordSpacing ||
+							isShowTextIndent) && (
+							<BaseControl
+								controlName="spacing"
+								label={__('Spacing', 'blockera')}
+								columns="columns-2"
+							>
+								<EditorFeatureWrapper
+									isActive={isShowLetterSpacing}
+									config={
+										extensionConfig.blockeraLetterSpacing
+									}
+								>
+									<LetterSpacing
+										block={block}
+										value={values.blockeraLetterSpacing}
+										onChange={handleOnChangeAttributes}
+										defaultValue={
+											attributes.blockeraLetterSpacing
+												.default
+										}
+										{...extensionProps.blockeraLetterSpacing}
+									/>
+								</EditorFeatureWrapper>
+
+								<EditorFeatureWrapper
+									isActive={isShowWordSpacing}
+									config={extensionConfig.blockeraWordSpacing}
+								>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'word-spacing'
+											),
+											value: values.blockeraWordSpacing,
+											attribute: 'blockeraWordSpacing',
+											blockName: block.blockName,
+										}}
+									>
+										<InputControl
+											columns="2fr 2.6fr"
+											label={__('Words', 'blockera')}
+											labelPopoverTitle={__(
+												'Words Spacing',
+												'blockera'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'It sets the space between words in text content, an essential tool for enhancing readability and typographic aesthetics, particularly in text-heavy layouts.',
+															'blockera'
+														)}
+													</p>
+												</>
+											}
+											arrows={true}
+											unitType="letter-spacing"
+											defaultValue={
+												attributes.blockeraWordSpacing
+													.default
+											}
+											onChange={(newValue, ref) =>
+												handleOnChangeAttributes(
+													'blockeraWordSpacing',
+													newValue,
+													{ ref }
+												)
+											}
+											{...extensionProps.blockeraWordSpacing}
+										/>
+									</ControlContextProvider>
+								</EditorFeatureWrapper>
+
+								<EditorFeatureWrapper
+									isActive={isShowTextIndent}
+									config={extensionConfig.blockeraTextIndent}
+								>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'text-indent'
+											),
+											value: values.blockeraTextIndent,
+											attribute: 'blockeraTextIndent',
+											blockName: block.blockName,
+										}}
+									>
+										<InputControl
+											columns="2fr 2.6fr"
+											label={__(
+												'Text Indent',
+												'blockera'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'It sets the indentation of the first line in a text block, offering a stylistic tool for enhancing text layout and readability, especially in paragraphs and articles.',
+															'blockera'
+														)}
+													</p>
+												</>
+											}
+											arrows={true}
+											unitType="text-indent"
+											defaultValue={
+												attributes.blockeraTextIndent
+													.default
+											}
+											onChange={(newValue, ref) =>
+												handleOnChangeAttributes(
+													'blockeraTextIndent',
+													newValue,
+													{ ref }
+												)
+											}
+											{...extensionProps.blockeraTextIndent}
+										/>
+									</ControlContextProvider>
+								</EditorFeatureWrapper>
+							</BaseControl>
+						)}
 
 						<EditorFeatureWrapper
 							isActive={isShowTextColumns}
