@@ -111,6 +111,13 @@ vendor_without_blockera=$(
   find ./vendor -type f -not -path "./vendor/blockera" \
 );
 
+main_plugin_file='blockera.php'
+
+if [ -n "$MAIN_FILE_SUFFIX" ]; then
+  main_plugin_file="blockera$MAIN_FILE_SUFFIX.php"
+  cp blockera.php "$main_plugin_file"
+fi
+
 # Generate the plugin zip file.
 status "Creating archive... 🎁"
 zip -r -q blockera.zip \
@@ -119,8 +126,8 @@ zip -r -q blockera.zip \
 	assets \
 	readme.txt \
 	languages \
-	$build_files \
-	blockera.php \
+	"$build_files" \
+	"$main_plugin_file" \
 	changelog.txt \
 	composer.json \
 	experimental.config.json \

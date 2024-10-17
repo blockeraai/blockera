@@ -198,7 +198,7 @@ jobs:
             - name: Upload artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: blockera-${{ github.event.pull_request.number }}.zip
+                  name: blockera.zip
                   path: ./blockera.zip
 
             - name: Get artifact ID
@@ -206,7 +206,7 @@ jobs:
               run: |
                   ARTIFACTS_URL="https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
                   ARTIFACT_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera-${{ github.event.pull_request.number }}.zip") | .id')
+                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera.zip") | .id')
                   echo "artifact_id=$ARTIFACT_ID" >> $GITHUB_ENV
 
             - name: Construct download link
@@ -216,116 +216,6 @@ jobs:
                   ARTIFACT_ID="${{ env.artifact_id }}"
                   DOWNLOAD_LINK="https://github.com/$REPO_NAME/actions/runs/$RUN_ID/artifacts/$ARTIFACT_ID"
                   echo "download_link=$DOWNLOAD_LINK" >> $GITHUB_ENV
-
-            - name: Upload ZIP to FTP server
-              uses: nerdoza/action-simple-file-upload@v2
-              with:
-                  host: ${{ secrets.FTP_HOST }}
-                  user: ${{ secrets.FTP_USERNAME }}
-                  password: ${{ secrets.FTP_PASSWORD }}
-                  src: blockera.zip
-                  dest: /domains/cd.blockera.ai/public_html/blockera-${{ github.event.pull_request.number }}.zip
-
-            - name: Echo uploaded file link
-              run: |
-                  echo "uploaded_zip_file=https://${{ secrets.FTP_HOST }}/blockera-${{ github.event.pull_request.number }}.zip" >> $GITHUB_ENV
-
-            - name: Find existing bot comment
-              id: find_comment
-              run: |
-                  PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-                  COMMENTS_URL="https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
-
-                  # Fetch all comments and find if one from blockerabot exists
-                  curl -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
-                       -H "Accept: application/vnd.github.v3+json" \
-                       $COMMENTS_URL | jq -r '.[] | select(.user.login == "blockerabot" and (.body | test("Plugin Zip File"; "i"))) | .id' > comment_id.txt
-
-                  # If comment ID is found, set it to environment variable
-                  if [[ -s comment_id.txt ]]; then
-                    COMMENT_ID=$(cat comment_id.txt)
-                    echo "comment_id=${COMMENT_ID}" >> $GITHUB_ENV
-                  fi
-
-            # Step to encode JSON with Base64
-            - name: Encode JSON with Base64
-              id: encode_json
-              run: |
-                  # Define the original JSON
-                  JSON_STRING='{
-                    "meta": {
-                      "title": "Install Blockera plugin from github artifact",
-                      "author": "blockera.ai",
-                      "description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
-                      "categories": ["plugins"]
-                    },
-                    "landingPage": "/wp-admin/plugins.php",
-                    "preferredVersions": {
-                      "wp": "beta",
-                      "php": "8.0"
-                    },
-                    "steps": [
-                      {
-                        "step": "login"
-                      },
-                      {
-                        "step": "installPlugin",
-                        "pluginZipFile": {
-                          "resource": "url",
-                          "url": "URL_PLACEMENT"
-                        }
-                      }
-                    ]
-                  }'
-
-                  # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.download_link }}" '.steps[1].pluginZipFile.url = "${{ env.uploaded_zip_file }}"')
-
-                  # Base64 encode the updated JSON
-                  BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
-
-                  # Generate the final URL with encoded JSON appended
-                  DEMO_URL="https://playground.wordpress.net/#${BASE64_ENCODED_JSON}"
-
-                  # Save the URL as an output for later steps if needed
-                  echo "demo_url=$DEMO_URL" >> $GITHUB_ENV
-
-                  # Print the URL to the GitHub workflow output
-                  echo "Encoded URL: $DEMO_URL"
-
-            # Optional: Output the final URL as a GitHub Action output
-            - name: Set output
-              run: |
-                  echo "demo_url=${{ env.demo_url }}" >> $GITHUB_OUTPUT
-
-            - name: Post or update comment with download link
-              run: |
-                  PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-                  REPO_NAME="${{ github.repository }}"
-                  RUN_ID="${{ github.run_id }}"
-
-                  # Define the comment body following the desired structure
-                  COMMENT_BODY="**Branch Links**\n\n- [**🔗 Playground Demo**](${{ env.demo_url }})\n\n- [**📦 Download Zip From Artifact** (Build)](${{ env.download_link }})\n\n- [**📦 Download Zip From FTP** (Build)](${{ env.uploaded_zip_file }})"
-
-                  if [ -z "${{ env.comment_id }}" ]; then
-                      # No existing comment found, create a new one
-                      curl -X POST \
-                        -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
-                        -H "Accept: application/vnd.github.v3+json" \
-                        https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
-                        -d "{\"body\":\"${COMMENT_BODY}\"}"
-                  else
-                      # Existing comment found, update it
-                      COMMENT_ID=${{ env.comment_id }}
-                      COMMENT_URL="https://api.github.com/repos/${{ github.repository }}/issues/comments/$COMMENT_ID"
-
-                      # Update the existing comment with the new content
-                      curl -X PATCH \
-                        -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
-                        -H "Accept: application/vnd.github.v3+json" \
-                        $COMMENT_URL \
-                        -d "{\"body\":\"${COMMENT_BODY}\"}"
-                  fi
 
             - name: Build release notes draft
               if: ${{ needs.bump-version.outputs.new_version }}
@@ -412,7 +302,7 @@ jobs:
             - name: Download Plugin Zip Artifact
               uses: actions/download-artifact@v4
               with:
-                  name: blockera-${{ github.event.pull_request.number }}.zip
+                  name: blockera.zip
 
             - name: Download Release Notes Artifact
               uses: actions/download-artifact@v4
