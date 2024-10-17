@@ -2,6 +2,9 @@
 	"name": "blockera/icons",
 	"path": "packages/icons",
 	"dependent": {
-		"repositories": ["https://github.com/blockeraai/blockera.git"]
+		"repositories": [
+			"https://github.com/blockeraai/blockera.git",
+			"https://github.com/blockeraai/blockera-pro.git"
+		]
 	}
 }
