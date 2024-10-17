@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
     build:
-        name: Build Release Artifact
+        name: Create Demo and Attachments
         runs-on: ubuntu-latest
         if: |
             always() && (
