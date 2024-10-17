@@ -239,7 +239,7 @@ jobs:
                   # Fetch all comments and find if one from blockerabot exists
                   curl -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
                        -H "Accept: application/vnd.github.v3+json" \
-                       $COMMENTS_URL | jq '.[] | select(.user.login == "blockerabot") | .id' > comment_id.txt
+                       $COMMENTS_URL | jq -r '.[] | select(.user.login == "blockerabot" and (.body | test("Plugin Zip File"; "i"))) | .id' > comment_id.txt
 
                   # If comment ID is found, set it to environment variable
                   if [[ -s comment_id.txt ]]; then
@@ -305,7 +305,7 @@ jobs:
                   RUN_ID="${{ github.run_id }}"
 
                   # Define the comment body following the desired structure
-                  COMMENT_BODY="**Branch Links**\n\n- [**🔗 Playground Demo**](${{ env.demo_url }})\n\n- [**📦 Download Zip** (Build)](${{ env.download_link }})"
+                  COMMENT_BODY="**Branch Links**\n\n- [**🔗 Playground Demo**](${{ env.demo_url }})\n\n- [**📦 Download Zip From Artifact** (Build)](${{ env.download_link }})\n\n- [**📦 Download Zip From FTP** (Build)](${{ env.uploaded_zip_file }})"
 
                   if [ -z "${{ env.comment_id }}" ]; then
                       # No existing comment found, create a new one
