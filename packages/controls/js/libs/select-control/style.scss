@@ -144,6 +144,10 @@
 				right: 3px;
 			}
 
+			.item-icon {
+				fill: currentColor;
+			}
+
 			&.option-group {
 				pointer-events: none;
 				cursor: auto !important;
@@ -159,9 +163,9 @@
 				margin-top: 15px;
 			}
 
-			&.level-2-item.disabled {
+			&.disabled {
 				pointer-events: none;
-				color: #cccccc;
+				color: #a9a9a9;
 			}
 
 			&.level-2-item:not(.width-icon) {
