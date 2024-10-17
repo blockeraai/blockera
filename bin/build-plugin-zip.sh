@@ -126,8 +126,8 @@ zip -r -q blockera.zip \
 	assets \
 	readme.txt \
 	languages \
-	"$build_files" \
-	"$main_plugin_file" \
+	$build_files \
+	$main_plugin_file \
 	changelog.txt \
 	composer.json \
 	experimental.config.json \
