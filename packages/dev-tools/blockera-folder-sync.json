@@ -2,6 +2,9 @@
 	"name": "blockera/dev-tools",
 	"path": "packages/dev-tools",
 	"dependent": {
-		"repositories": ["blockera", "blockera-pro"]
+		"repositories": [
+			"https://github.com/blockeraai/blockera.git",
+			"https://github.com/blockeraai/blockera-pro.git"
+		]
 	}
 }
