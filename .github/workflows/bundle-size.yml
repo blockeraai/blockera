@@ -60,5 +60,5 @@ jobs:
 
             - uses: preactjs/compressed-size-action@v2
               with:
-                  repo-token: '${{ secrets.BLOCKERA_TOKEN }}'
+                  repo-token: '${{ secrets.BLOCKERABOT_PAT }}'
                   pattern: '{dist/**/*.min.js,dist/**/*.css,blockera.zip}'
