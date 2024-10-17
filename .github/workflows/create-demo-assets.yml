@@ -2,8 +2,6 @@ name: Create Demo and Attachment Files
 
 on:
     pull_request:
-    push:
-        branches: [master]
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
