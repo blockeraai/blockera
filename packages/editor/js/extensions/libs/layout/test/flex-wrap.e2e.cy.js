@@ -6,7 +6,7 @@ import {
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Children Wrap and Align Content → Functionality', () => {
+describe('Children Wrap → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
@@ -17,7 +17,7 @@ describe('Children Wrap and Align Content → Functionality', () => {
 		});
 	});
 
-	it('functionality of flex-wrap and align-content', () => {
+	it('functionality of flex-wrap', () => {
 		// activate flex wrap feature
 		cy.activateMoreSettingsItem(
 			'More Layout Settings',
@@ -28,23 +28,13 @@ describe('Children Wrap and Align Content → Functionality', () => {
 			cy.getByAriaLabel('Wrap').click();
 		});
 
-		cy.getParentContainer('Align Content').within(() => {
-			cy.getByAriaLabel('Center').click();
-		});
-
-		cy.getBlock('core/paragraph')
-			.should('have.css', 'flex-wrap', 'wrap')
-			.should('have.css', 'align-content', 'center');
+		cy.getBlock('core/paragraph').should('have.css', 'flex-wrap', 'wrap');
 
 		getWPDataObject().then((data) => {
 			expect({
 				value: 'wrap',
 				reverse: false,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
-
-			expect('center').to.be.equal(
-				getSelectedBlock(data, 'blockeraAlignContent')
-			);
 		});
 
 		// reverse
@@ -68,8 +58,10 @@ describe('Children Wrap and Align Content → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block')
-			.should('have.css', 'flex-wrap', 'wrap-reverse')
-			.should('have.css', 'align-content', 'center');
+		cy.get('.blockera-block').should(
+			'have.css',
+			'flex-wrap',
+			'wrap-reverse'
+		);
 	});
 });
