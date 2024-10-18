@@ -42,7 +42,7 @@ export const PromotionPopover = ({
 		'blockera'
 	),
 	onClose,
-	buttonURL = 'https://blockera.ai/upgrade-to-pro/',
+	buttonURL = 'https://blockera.ai/products/site-builder/upgrade/',
 	buttonText = __('Upgrade to PRO', 'blockera'),
 	isOpen: _isOpen,
 	offset = 35,
