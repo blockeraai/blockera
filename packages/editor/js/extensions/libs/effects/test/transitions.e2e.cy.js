@@ -27,11 +27,12 @@ describe('Transitions → Functionality', () => {
 				cy.getParentContainer('Type').within(() => {
 					// check disabled options
 					cy.get('select').within(() => {
+						cy.get('[value="opacity"]').should('be.disabled');
 						cy.get('[value="margin"]').should('be.disabled');
 						cy.get('[value="padding"]').should('be.disabled');
 					});
 
-					cy.get('select').select('opacity');
+					cy.get('select').select('all');
 				});
 
 				cy.getByDataTest('transition-input-duration').clear();
@@ -55,15 +56,15 @@ describe('Transitions → Functionality', () => {
 		cy.getBlock('core/paragraph').should(
 			'have.css',
 			'transition',
-			'opacity 0.2s ease-in-out 2s'
+			'all 0.2s ease-in-out 2s'
 		);
 
 		//Check store
 		getWPDataObject().then((data) => {
 			expect({
-				'opacity-0': {
+				'all-0': {
 					isVisible: true,
-					type: 'opacity',
+					type: 'all',
 					duration: '200ms',
 					timing: 'ease-in-out',
 					delay: '2000ms',
@@ -90,7 +91,7 @@ describe('Transitions → Functionality', () => {
 		cy.get('.blockera-block').should(
 			'have.css',
 			'transition',
-			'opacity 0.2s ease-in-out 2s'
+			'all 0.2s ease-in-out 2s'
 		);
 	});
 });
