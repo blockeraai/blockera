@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Blockera
- * Plugin URI: https://blockera.ai/blockera-page-builder/
+ * Plugin URI: https://blockera.ai/products/site-builder/
  * Description: The Advanced Mode for Block Editor
  * Requires at least: 6.6
  * Tested up to: 6.6
  * Requires PHP: 7.4
  * Author: Blockera AI
- * Author URI: https://blockera.ai/about-us/
+ * Author URI: https://blockera.ai/about/
  * Version: 0.9.2
  * Text Domain: blockera
  * License: GPLv3 or later

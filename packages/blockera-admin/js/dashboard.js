@@ -62,7 +62,7 @@ export const Dashboard = (): MixedElement => {
 				}}
 			>
 				<Promote
-					url={'https://blockera.ai/upgrade-to-pro/'}
+					url={'https://blockera.ai/products/site-builder/upgrade/'}
 					description={__(
 						"You're using Blockera Free. To unlock more features, consider ",
 						'blockera'
@@ -87,7 +87,9 @@ export const Dashboard = (): MixedElement => {
 								'blockera-settings-button blockera-settings-primary-button'
 							}
 							text={__('Upgrade to PRO', 'blockera')}
-							href={'https://blockera.ai/upgrade-to-pro/'}
+							href={
+								'https://blockera.ai/products/site-builder/upgrade/'
+							}
 						/>
 					</div>
 				</Header>
