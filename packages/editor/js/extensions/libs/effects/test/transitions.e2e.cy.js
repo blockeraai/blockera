@@ -52,12 +52,12 @@ describe('Transitions → Functionality', () => {
 				cy.getByDataTest('transition-input-delay').type(2000);
 			});
 
-		//Check block
-		cy.getBlock('core/paragraph').should(
-			'have.css',
-			'transition',
-			'all 0.2s ease-in-out 2s'
-		);
+		// Check block CSS
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-styles-wrapper')
+				.invoke('text')
+				.should('include', 'transition: all 200ms ease-in-out 2000ms');
+		});
 
 		//Check store
 		getWPDataObject().then((data) => {
@@ -88,10 +88,8 @@ describe('Transitions → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should(
-			'have.css',
-			'transition',
-			'all 0.2s ease-in-out 2s'
-		);
+		cy.get('style#blockera-inline-css')
+			.invoke('text')
+			.should('include', 'transition: all 200ms ease-in-out 2000ms');
 	});
 });
