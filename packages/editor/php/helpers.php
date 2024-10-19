@@ -821,3 +821,30 @@ if ( ! function_exists( 'blockera_get_block_support' ) ) {
 		return $available_support;
 	}
 }
+
+if ( ! function_exists( 'blockera_get_sanitize_block_attributes' ) ) {
+
+	/**
+	 * Retrieve sanitized block attributes.
+	 *
+	 * @param array $attributes the block attributes.
+	 *
+	 * @return array the sanitized block attributes.
+	 */
+	function blockera_get_sanitize_block_attributes( array $attributes ): array {
+
+		return array_map(
+			static function ( $attribute ) {
+
+				if ( is_array( $attribute ) && isset( $attribute['value'] ) ) {
+
+					return $attribute['value'];
+				}
+
+				return $attribute;
+
+			},
+			$attributes
+		);
+	}
+}

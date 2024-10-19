@@ -6,11 +6,12 @@ export function lineHeightFromWPCompatibility({
 	attributes: Object,
 }): Object | false {
 	if (
-		attributes?.blockeraLineHeight === '' &&
+		attributes?.blockeraLineHeight?.value === '' &&
 		attributes?.style?.typography?.lineHeight !== undefined
 	) {
-		attributes.blockeraLineHeight =
-			attributes?.style?.typography?.lineHeight;
+		attributes.blockeraLineHeight = {
+			value: attributes?.style?.typography?.lineHeight,
+		};
 	}
 
 	return attributes;

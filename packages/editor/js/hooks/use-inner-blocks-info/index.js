@@ -15,7 +15,6 @@ import { prepare } from '@blockera/data-editor';
  * Internal dependencies
  */
 import { prepareInnerBlockTypes } from '../../extensions/libs/inner-blocks';
-import { useStoreSelectors } from '../use-store-selectors';
 import type { InnerBlocksInfoProps, InnerBlocksInfo } from './types';
 import type {
 	InnerBlocks,
@@ -27,21 +26,17 @@ import { isInnerBlock } from '../../extensions/components';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
 
 export const useInnerBlocksInfo = ({
-	name,
 	additional,
 	attributes,
 	currentBlock,
 	currentState,
+	defaultAttributes,
 	currentBreakpoint,
 	currentInnerBlockState,
 }: InnerBlocksInfoProps): InnerBlocksInfo => {
-	const {
-		blocks: { getBlockType },
-	} = useStoreSelectors();
-
 	const blockeraInnerBlocks: InnerBlocks = prepareInnerBlockTypes(
 		additional?.blockeraInnerBlocks || {},
-		getBlockType(name)?.attributes || {}
+		defaultAttributes
 	);
 
 	/**

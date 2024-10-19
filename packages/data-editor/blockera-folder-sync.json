@@ -2,6 +2,6 @@
 	"name": "blockera/data-editor",
 	"path": "packages/data-editor",
 	"dependent": {
-		"repositories": ["blockera", "blockera-pro"]
+		"repositories": ["https://github.com/blockeraai/blockera.git"]
 	}
 }

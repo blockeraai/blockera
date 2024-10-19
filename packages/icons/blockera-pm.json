@@ -1,7 +1,0 @@
-{
-	"name": "blockera/icons",
-	"path": "packages/icons",
-	"dependent": {
-		"repositories": ["blockera", "blockera-pro"]
-	}
-}

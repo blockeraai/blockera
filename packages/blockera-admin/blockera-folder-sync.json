@@ -2,6 +2,6 @@
 	"name": "blockera/blockera-admin",
 	"path": "packages/blockera-admin",
 	"dependent": {
-		"repositories": ["blockera", "blockera-pro"]
+		"repositories": ["https://github.com/blockeraai/blockera.git"]
 	}
 }

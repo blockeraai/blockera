@@ -24,7 +24,9 @@ export function iconColorFromWPCompatibility({
 	}
 
 	if (color) {
-		attributes.blockeraFontColor = color;
+		attributes.blockeraFontColor = {
+			value: color,
+		};
 	}
 
 	return attributes;

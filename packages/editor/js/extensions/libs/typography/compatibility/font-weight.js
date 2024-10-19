@@ -6,11 +6,12 @@ export function fontWeightFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraFontWeight === '' &&
+		attributes?.blockeraFontWeight?.value === '' &&
 		attributes?.style?.typography?.fontWeight !== undefined
 	) {
-		attributes.blockeraFontWeight =
-			attributes?.style?.typography?.fontWeight;
+		attributes.blockeraFontWeight = {
+			value: attributes?.style?.typography?.fontWeight,
+		};
 	}
 
 	return attributes;

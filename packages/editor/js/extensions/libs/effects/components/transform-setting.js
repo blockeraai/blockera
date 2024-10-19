@@ -22,12 +22,15 @@ import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { generateExtensionId } from '../../utils';
 import { SelfPerspective } from './self-perspective';
 import { ChildPerspective } from './child-perspective';
+import type { TEffectsExtensionConfig } from '../types/effects-props';
+import { EditorFeatureWrapper } from '../../../../';
 
 export const TransformSettings = ({
 	block,
 	handleOnChangeAttributes,
 	values,
 	attributes,
+	extensionConfig,
 	setIsTransformSettingsVisible,
 }: {
 	block: TBlockProps,
@@ -59,6 +62,7 @@ export const TransformSettings = ({
 			default: any,
 		},
 	},
+	extensionConfig: TEffectsExtensionConfig,
 	setIsTransformSettingsVisible: (arg: boolean) => any,
 }): MixedElement => {
 	return (
@@ -72,96 +76,119 @@ export const TransformSettings = ({
 			}}
 			focusOnMount={false}
 		>
-			<ControlContextProvider
-				value={{
-					name: generateExtensionId(block, 'self-perspective'),
-					value: values.blockeraTransformSelfPerspective,
-					attribute: 'blockeraTransformSelfPerspective',
-					blockName: block.blockName,
-				}}
+			<EditorFeatureWrapper
+				isActive={
+					extensionConfig.blockeraTransformSelfPerspective.status
+				}
+				config={extensionConfig.blockeraTransformSelfPerspective}
 			>
-				<SelfPerspective
-					block={block}
-					handleOnChangeAttributes={handleOnChangeAttributes}
-					transform={values.blockeraTransform}
-					transformSelfOrigin={values.blockeraTransformSelfOrigin}
-					transformSelfPerspectiveDefaultValue={
-						attributes.blockeraTransformSelfPerspective.default
-					}
-					transformSelfOriginDefaultValue={
-						attributes.blockeraTransformSelfOrigin.default
-					}
-				/>
-			</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(block, 'self-perspective'),
+						value: values.blockeraTransformSelfPerspective,
+						attribute: 'blockeraTransformSelfPerspective',
+						blockName: block.blockName,
+					}}
+				>
+					<SelfPerspective
+						block={block}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						transform={values.blockeraTransform}
+						transformSelfOrigin={values.blockeraTransformSelfOrigin}
+						transformSelfPerspectiveDefaultValue={
+							attributes.blockeraTransformSelfPerspective.default
+						}
+						transformSelfOriginDefaultValue={
+							attributes.blockeraTransformSelfOrigin.default
+						}
+					/>
+				</ControlContextProvider>
+			</EditorFeatureWrapper>
 
-			<ControlContextProvider
-				value={{
-					name: generateExtensionId(block, 'backface-visibility'),
-					value: values.blockeraBackfaceVisibility,
-					attribute: 'blockeraBackfaceVisibility',
-					blockName: block.blockName,
-				}}
+			<EditorFeatureWrapper
+				isActive={extensionConfig.blockeraBackfaceVisibility.status}
+				config={extensionConfig.blockeraBackfaceVisibility}
 			>
-				<ToggleSelectControl
-					label={__('Backface Visibility', 'blockera')}
-					labelDescription={
-						<>
-							<p>
-								{__(
-									'It sets whether the backside of a transformed block is visible when turned towards the viewer.',
-									'blockera'
-								)}
-							</p>
-							<p>
-								{__(
-									"It controls the visibility of the element's reverse side during 3D transformations.",
-									'blockera'
-								)}
-							</p>
-						</>
-					}
-					columns="1fr 130px"
-					options={[
-						{
-							label: __('Visible', 'blockera'),
-							value: 'visible',
-						},
-						{
-							label: __('Hidden', 'blockera'),
-							value: 'hidden',
-						},
-					]}
-					defaultValue={attributes.blockeraBackfaceVisibility.default}
-					onChange={(newValue, ref) =>
-						handleOnChangeAttributes(
-							'blockeraBackfaceVisibility',
-							newValue,
-							{ ref }
-						)
-					}
-				/>
-			</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(block, 'backface-visibility'),
+						value: values.blockeraBackfaceVisibility,
+						attribute: 'blockeraBackfaceVisibility',
+						blockName: block.blockName,
+					}}
+				>
+					<ToggleSelectControl
+						label={__('Backface Visibility', 'blockera')}
+						labelDescription={
+							<>
+								<p>
+									{__(
+										'It sets whether the backside of a transformed block is visible when turned towards the viewer.',
+										'blockera'
+									)}
+								</p>
+								<p>
+									{__(
+										"It controls the visibility of the element's reverse side during 3D transformations.",
+										'blockera'
+									)}
+								</p>
+							</>
+						}
+						columns="1fr 130px"
+						options={[
+							{
+								label: __('Visible', 'blockera'),
+								value: 'visible',
+							},
+							{
+								label: __('Hidden', 'blockera'),
+								value: 'hidden',
+							},
+						]}
+						defaultValue={
+							attributes.blockeraBackfaceVisibility.default
+						}
+						onChange={(newValue, ref) =>
+							handleOnChangeAttributes(
+								'blockeraBackfaceVisibility',
+								newValue,
+								{ ref }
+							)
+						}
+					/>
+				</ControlContextProvider>
+			</EditorFeatureWrapper>
 
-			<ControlContextProvider
-				value={{
-					name: generateExtensionId(block, 'child-perspective'),
-					value: values.blockeraTransformChildPerspective,
-					attribute: 'blockeraTransformChildPerspective',
-					blockName: block.blockName,
-				}}
+			<EditorFeatureWrapper
+				isActive={
+					extensionConfig.blockeraTransformChildPerspective.status
+				}
+				config={extensionConfig.blockeraTransformChildPerspective}
 			>
-				<ChildPerspective
-					block={block}
-					handleOnChangeAttributes={handleOnChangeAttributes}
-					transformChildPerspectiveDefaultValue={
-						attributes.blockeraTransformChildPerspective.default
-					}
-					transformChildOrigin={values.blockeraTransformChildOrigin}
-					transformChildOriginDefaultValue={
-						attributes.blockeraTransformChildOrigin.default
-					}
-				/>
-			</ControlContextProvider>
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(block, 'child-perspective'),
+						value: values.blockeraTransformChildPerspective,
+						attribute: 'blockeraTransformChildPerspective',
+						blockName: block.blockName,
+					}}
+				>
+					<ChildPerspective
+						block={block}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						transformChildPerspectiveDefaultValue={
+							attributes.blockeraTransformChildPerspective.default
+						}
+						transformChildOrigin={
+							values.blockeraTransformChildOrigin
+						}
+						transformChildOriginDefaultValue={
+							attributes.blockeraTransformChildOrigin.default
+						}
+					/>
+				</ControlContextProvider>
+			</EditorFeatureWrapper>
 		</Popover>
 	);
 };

@@ -564,12 +564,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							/>
 
 							{directParentBlock?.innerBlocks?.length > 0 &&
-								directParentBlock?.attributes
-									.blockeraDisplay === 'flex' && (
+								directParentBlock?.attributes.blockeraDisplay
+									?.value === 'flex' && (
 									<FlexChildExtension
 										block={block}
 										extensionConfig={flexChildConfig}
 										values={{
+											blockeraFlexChildAlign:
+												currentStateAttributes.blockeraFlexChildAlign,
 											blockeraFlexChildSizing:
 												currentStateAttributes.blockeraFlexChildSizing,
 											blockeraFlexChildGrow:

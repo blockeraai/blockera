@@ -6,10 +6,12 @@ export function fontFamilyFromWPCompatibility({
 	attributes: Object,
 }): Object | false {
 	if (
-		attributes?.blockeraFontFamily === '' &&
+		attributes?.blockeraFontFamily?.value === '' &&
 		attributes?.fontFamily !== undefined
 	) {
-		attributes.blockeraFontFamily = attributes?.fontFamily;
+		attributes.blockeraFontFamily = {
+			value: attributes?.fontFamily,
+		};
 	}
 
 	return attributes;

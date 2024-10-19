@@ -1,7 +1,0 @@
-{
-	"name": "blockera/dev-tools",
-	"path": "packages/dev-tools",
-	"dependent": {
-		"repositories": ["blockera", "blockera-pro"]
-	}
-}

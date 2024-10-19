@@ -2,6 +2,6 @@
 	"name": "blockera/dev-storybook",
 	"path": "packages/dev-storybook",
 	"dependent": {
-		"repositories": ["blockera", "blockera-pro"]
+		"repositories": ["https://github.com/blockeraai/blockera.git"]
 	}
 }

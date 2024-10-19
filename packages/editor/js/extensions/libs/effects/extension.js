@@ -214,6 +214,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 									}
 									values={values}
 									attributes={attributes}
+									extensionConfig={extensionConfig}
 								/>
 							)}
 						</BaseControl>

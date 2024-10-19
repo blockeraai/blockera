@@ -18,80 +18,110 @@ return [
 	// Advanced settings.
 	'blockeraAttributes'                => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Background.
 	'blockeraBackground'                => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	'blockeraBackgroundColor'           => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraBackgroundClip'            => [
-		'type'    => 'string',
-		'default' => 'none',
+		'type'    => 'object',
+		'default' => [
+			'value' => 'none',
+		],
 	],
 	// Block states.
 	'blockeraBlockStates'               => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Border.
 	'blockeraBorder'                    => [
 		'type'    => 'object',
 		'default' => [
-			'type' => 'all',
-			'all'  => [
-				'width' => '',
-				'style' => '',
-				'color' => '',
+			'value' => [
+				'type' => 'all',
+				'all'  => [
+					'width' => '',
+					'style' => '',
+					'color' => '',
+				],
 			],
 		],
 	],
 	'blockeraBorderRadius'              => [
 		'type'    => 'object',
 		'default' => [
-			'type' => 'all',
-			'all'  => '',
+			'value' => [
+				'type' => 'all',
+				'all'  => '',
+			],
 		],
 	],
 	'blockeraBoxShadow'                 => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	'blockeraOutline'                   => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Click animation.
 	'blockeraClickAnimation'            => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Conditions.
 	'blockeraConditions'                => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Custom Style.
 	'blockeraCustomCSS'                 => [
-		'type'    => 'string',
-		'default' => ".block {\n    \n}\n",
+		'type'    => 'object',
+		'default' => [
+			'value' => ".block {\n    \n}\n",
+		],
 	],
 	// Effects.
 	'blockeraOpacity'                   => [
-		'type'    => 'string',
-		'default' => '100%',
+		'type'    => 'object',
+		'default' => [
+			'value' => '100%',
+		],
 	],
 	'blockeraTransform'                 => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	'blockeraTransformSelfPerspective'  => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTransformSelfOrigin'       => [
 		'type'    => 'object',
@@ -101,12 +131,16 @@ return [
 		],
 	],
 	'blockeraBackfaceVisibility'        => [
-		'type'    => 'string',
-		'default' => 'visible',
+		'type'    => 'object',
+		'default' => [
+			'value' => 'visible',
+		],
 	],
 	'blockeraTransformChildPerspective' => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTransformChildOrigin'      => [
 		'type'    => 'object',
@@ -117,318 +151,442 @@ return [
 	],
 	'blockeraTransition'                => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	'blockeraFilter'                    => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	'blockeraBackdropFilter'            => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	'blockeraMask'                      => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	'blockeraBlendMode'                 => [
-		'type'    => 'string',
-		'default' => 'normal',
+		'type'    => 'object',
+		'default' => [
+			'value' => 'normal',
+		],
 	],
 	'blockeraDivider'                   => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Entrance animation.
 	'blockeraEntranceAnimation'         => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Flex Child.
 	'blockeraFlexChildSizing'           => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFlexChildGrow'             => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFlexChildShrink'           => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFlexChildBasis'            => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFlexChildAlign'            => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFlexChildOrder'            => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFlexChildOrderCustom'      => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	// Icon.
 	'blockeraIcon'                      => [
 		'type'    => 'object',
 		'default' => [
-			'icon'      => '',
-			'library'   => '',
-			'uploadSVG' => '',
+			'value' => [
+				'icon'      => '',
+				'library'   => '',
+				'uploadSVG' => '',
+			],
 		],
 	],
 	'blockeraIconPosition'              => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraIconGap'                   => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraIconSize'                  => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraIconColor'                 => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraIconLink'                  => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Inner Blocks.
 	'blockeraInnerBlocks'               => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Layout.
 	'blockeraDisplay'                   => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFlexLayout'                => [
 		'type'    => 'object',
 		'default' => [
-			'direction'      => 'row',
-			'alignItems'     => '',
-			'justifyContent' => '',
+			'value' => [
+				'direction'      => 'row',
+				'alignItems'     => '',
+				'justifyContent' => '',
+			],
 		],
 	],
 	'blockeraGap'                       => [
 		'type'    => 'object',
 		'default' => [
-			'lock'    => true,
-			'gap'     => '',
-			'columns' => '',
-			'rows'    => '',
+			'value' => [
+				'lock'    => true,
+				'gap'     => '',
+				'columns' => '',
+				'rows'    => '',
+			],
 		],
 	],
 	'blockeraFlexWrap'                  => [
 		'type'    => 'object',
 		'default' => [
-			'value'   => '',
-			'reverse' => false,
+			'value' => [
+				'value'   => '',
+				'reverse' => false,
+			],
 		],
 	],
 	'blockeraAlignContent'              => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	// Mouse.
 	'blockeraCursor'                    => [
-		'type'    => 'string',
-		'default' => 'default',
+		'type'    => 'object',
+		'default' => [
+			'value' => 'default',
+		],
 	],
 	'blockeraUserSelect'                => [
-		'type'    => 'string',
-		'default' => 'auto',
+		'type'    => 'object',
+		'default' => [
+			'value' => 'auto',
+		],
 	],
 	'blockeraPointerEvents'             => [
-		'type'    => 'string',
-		'default' => 'auto',
+		'type'    => 'object',
+		'default' => [
+			'value' => 'auto',
+		],
 	],
 	// Position.
 	'blockeraPosition'                  => [
 		'type'    => 'object',
 		'default' => [
-			'type'     => 'static',
-			'position' => [
-				'top'    => '',
-				'right'  => '',
-				'bottom' => '',
-				'left'   => '',
+			'value' => [
+				'type'     => 'static',
+				'position' => [
+					'top'    => '',
+					'right'  => '',
+					'bottom' => '',
+					'left'   => '',
+				],
 			],
 		],
 	],
 	'blockeraZIndex'                    => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	// Scroll animation.
 	'blockeraScrollAnimation'           => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Size.
 	'blockeraWidth'                     => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraMinWidth'                  => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraMaxWidth'                  => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraHeight'                    => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraMinHeight'                 => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraMaxHeight'                 => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraOverflow'                  => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraRatio'                     => [
 		'type'    => 'object',
 		'default' => [
-			'value'  => '',
-			'width'  => '',
-			'height' => '',
+			'value' => [
+				'value'  => '',
+				'width'  => '',
+				'height' => '',
+			],
 		],
 	],
 	'blockeraFit'                       => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFitPosition'               => [
 		'type'    => 'object',
 		'default' => [
-			'top'  => '',
-			'left' => '',
+			'value' => [
+				'top'  => '',
+				'left' => '',
+			],
 		],
 	],
 	// Spacing.
 	'blockeraSpacing'                   => [
 		'type'    => 'object',
 		'default' => [
-			'margin'  => [
-				'top'    => '',
-				'right'  => '',
-				'bottom' => '',
-				'left'   => '',
-			],
-			'padding' => [
-				'top'    => '',
-				'right'  => '',
-				'bottom' => '',
-				'left'   => '',
+			'value' => [
+				'margin'  => [
+					'top'    => '',
+					'right'  => '',
+					'bottom' => '',
+					'left'   => '',
+				],
+				'padding' => [
+					'top'    => '',
+					'right'  => '',
+					'bottom' => '',
+					'left'   => '',
+				],
 			],
 		],
 	],
 	// Style variation.
 	'blockeraStyleVariation'            => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	// Typography.
 	'blockeraFontFamily'                => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFontWeight'                => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFontColor'                 => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFontSize'                  => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraLineHeight'                => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTextAlign'                 => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTextDecoration'            => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraFontStyle'                 => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTextTransform'             => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraDirection'                 => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTextShadow'                => [
 		'type'    => 'object',
-		'default' => [],
+		'default' => [
+			'value' => [],
+		],
 	],
 	'blockeraLetterSpacing'             => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraWordSpacing'               => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTextIndent'                => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTextOrientation'           => [
-		'type'    => 'string',
-		'default' => '',
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
 	],
 	'blockeraTextColumns'               => [
 		'type'    => 'object',
 		'default' => [
-			'columns' => '',
-			'gap'     => '2.5rem',
-			'divider' => [
-				'width' => '',
-				'color' => '',
-				'style' => 'solid',
+			'value' => [
+				'columns' => '',
+				'gap'     => '2.5rem',
+				'divider' => [
+					'width' => '',
+					'color' => '',
+					'style' => 'solid',
+				],
 			],
 		],
 	],
 	'blockeraTextStroke'                => [
 		'type'    => 'object',
 		'default' => [
-			'color' => '',
-			'width' => '1px',
+			'value' => [
+				'color' => '',
+				'width' => '1px',
+			],
 		],
 	],
 	'blockeraWordBreak'                 => [
-		'type'    => 'string',
-		'default' => 'normal',
+		'type'    => 'object',
+		'default' => [
+			'value' => 'normal',
+		],
 	],
 ];
 

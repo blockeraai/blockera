@@ -1,5 +1,10 @@
 name: 'Auto Generate build-plugin-zip.temp.sh file'
 description: 'Generating temporary bash file to use of that to create blockera.zip file.'
+inputs:
+    main-file-suffix:
+        description: 'Optional. The main plugin file name suffix.'
+        required: false
+        default: ''
 
 runs:
     using: 'composite'
@@ -18,6 +23,7 @@ runs:
               NO_CHECKS: 'true'
               NO_INSTALL_NPM: 'true'
               NO_INSTALL_COMPOSER: 'true'
+              MAIN_FILE_SUFFIX: ${{ inputs.main-file-suffix }}
           shell: bash
 
         - name: Delete Permanently Temporary File

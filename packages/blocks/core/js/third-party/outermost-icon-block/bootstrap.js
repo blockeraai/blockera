@@ -40,13 +40,13 @@ export const bootstrapOutermostIconBlock = (): void => {
 				return attributes;
 			}
 
-			if (!attributes?.blockeraFontColor) {
+			if (!attributes?.blockeraFontColor?.value) {
 				attributes = iconColorFromWPCompatibility({
 					attributes,
 				});
 			}
 
-			if (!attributes?.blockeraBackgroundColor) {
+			if (!attributes?.blockeraBackgroundColor?.value) {
 				attributes = iconBackgroundColorFromWPCompatibility({
 					attributes,
 				});

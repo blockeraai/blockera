@@ -3,18 +3,18 @@
 namespace Blockera\Setup\Tests\Providers;
 
 use Blockera\Setup\Blockera;
-use Blockera\Setup\Providers\AssetsProvider;
+use Blockera\Setup\Providers\EditorAssetsProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 class TestAssetsProvider extends \Blockera\Dev\PHPUnit\AppTestCase {
 
-	protected static ?AssetsProvider $provider = null;
+	protected static ?EditorAssetsProvider $provider = null;
 
 	public function set_up(): void {
 
 		parent::set_up();
 
-		self::$provider = new AssetsProvider( new Blockera() );
+		self::$provider = new EditorAssetsProvider( new Blockera() );
 	}
 
 	/**

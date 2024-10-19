@@ -19,30 +19,32 @@ export const registerInnerBlockExtensionsSupports = (
 	externalConfig?: Object
 ): void => {
 	/**
-	 * Filterable definitionTypes list before registration process.
+	 * Filterable innerBlocksExtensionConfig list before registration process.
 	 *
-	 * hook: `blockera.extensions.innerBlocks.definitionTypes`
+	 * hook: `blockera.extensions.innerBlocks.config`
 	 *
 	 * @since 1.0.0
 	 *
 	 * @type {Object}
 	 */
-	const filteredDefinitions = applyFilters(
-		'blockera.extensions.innerBlocks.definitionTypes',
+	const innerBlocksExtensionsConfig = applyFilters(
+		'blockera.extensions.innerBlocks.config',
 		externalConfig || config
 	);
 
 	Object.keys(innerBlockModels).forEach((definition: string): void => {
-		Object.keys(filteredDefinitions).forEach((name: string): void => {
-			const { addDefinition } = dispatch(STORE_NAME);
+		Object.keys(innerBlocksExtensionsConfig).forEach(
+			(name: string): void => {
+				const { addDefinition } = dispatch(STORE_NAME);
 
-			addDefinition({
-				name,
-				blockName,
-				definition,
-				extensions: filteredDefinitions[name],
-			});
-		});
+				addDefinition({
+					name,
+					blockName,
+					definition,
+					extensions: innerBlocksExtensionsConfig[name],
+				});
+			}
+		);
 	});
 };
 

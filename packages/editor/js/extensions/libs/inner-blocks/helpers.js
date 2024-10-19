@@ -10,7 +10,7 @@ import type { MixedElement } from 'react';
 /**
  * Internal dependencies
  */
-import { prepareAttributesDefaultValues } from '../../components';
+import { prepareBlockeraDefaultAttributesValues } from '../../components';
 import type { InnerBlocks, InnerBlockModel, InnerBlockType } from './types';
 
 /**
@@ -33,7 +33,7 @@ export function prepareInnerBlockTypes(
 	}
 
 	const getMemoizedInnerBlockAttributes = memoize(
-		prepareAttributesDefaultValues
+		prepareBlockeraDefaultAttributesValues
 	);
 
 	const innerBlockAttributes =

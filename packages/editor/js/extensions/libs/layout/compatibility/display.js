@@ -31,29 +31,39 @@ export function displayFromWPCompatibility({
 					break;
 			}
 
-			if (attributes?.blockeraDisplay === defaultValue) {
+			if (attributes?.blockeraDisplay?.value === defaultValue) {
 				return attributes;
 			}
 
 			if (attributes?.layout?.type === 'constrained') {
 				// it means the variation is switched and the value was remain from old variation and should be cleared
 				// for special display value other than `flex` and `grid` it should not cleared!
-				if (['flex', 'grid'].includes(attributes.blockeraDisplay)) {
-					attributes.blockeraDisplay = '';
+				if (
+					['flex', 'grid'].includes(
+						attributes?.blockeraDisplay?.value
+					)
+				) {
+					attributes.blockeraDisplay = {
+						value: '',
+					};
 				}
 			} else {
-				attributes.blockeraDisplay = attributes?.layout?.type;
+				attributes.blockeraDisplay = {
+					value: attributes?.layout?.type,
+				};
 			}
 
 			return attributes;
 	}
 
 	if (
-		attributes?.blockeraDisplay === defaultValue &&
+		attributes?.blockeraDisplay?.value === defaultValue &&
 		attributes?.layout?.type &&
 		!['constrained', 'default'].includes(attributes?.layout?.type)
 	) {
-		attributes.blockeraDisplay = attributes?.layout?.type;
+		attributes.blockeraDisplay = {
+			value: attributes?.layout?.type,
+		};
 	}
 
 	return attributes;

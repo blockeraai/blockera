@@ -5,7 +5,7 @@
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { doAction } from '@wordpress/hooks';
-import { memo, useEffect } from '@wordpress/element';
+import { useEffect, useMemo } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
@@ -34,14 +34,9 @@ import {
 } from '../../components';
 import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors } from '../../hooks';
+import { sanitizeDefaultAttributes } from './utils';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
-import { sanitizedBlockAttributes, sanitizeDefaultAttributes } from './utils';
-import {
-	BlockBase,
-	BlockPortals,
-	BlockIcon,
-	propsAreEqual,
-} from '../components';
+import { BlockBase, BlockIcon, BlockPortals } from '../components';
 
 const useSharedBlockSideEffect = (): void => {
 	const {
@@ -205,15 +200,18 @@ function mergeBlockSettings(
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
 
-	const Edit = memo((props: Object): MixedElement => {
-		if (isFunction(additional?.edit) && isAvailableBlock()) {
-			const baseContextValue = {
+	const Edit = (props: Object): MixedElement => {
+		const baseContextValue = useMemo(
+			() => ({
 				components: {
 					FeatureWrapper: EditorFeatureWrapper,
 					AdvancedLabelControl: EditorAdvancedLabelControl,
 				},
-			};
+			}),
+			[]
+		);
 
+		if (isFunction(additional?.edit) && isAvailableBlock()) {
 			// Bootstrap canvas editor UI on WordPress site editor.
 			if (!isLoadedPostEditor() && isLoadedSiteEditor()) {
 				/**
@@ -222,39 +220,57 @@ function mergeBlockSettings(
 				doAction('blockera.mergeBlockSettings.Edit.component');
 			}
 
+			// eslint-disable-next-line
+			const attributes = useMemo(() => {
+				const { content, ...attributes } = props.attributes;
+
+				return attributes;
+			}, [props.attributes]);
+
+			const defaultAttributes = !settings.attributes?.blockeraPropsId
+				? mergeObject(
+						blockeraOverrideBlockAttributes,
+						settings.attributes
+				  )
+				: settings.attributes;
+
 			return (
-				<BaseControlContext.Provider value={baseContextValue}>
-					<BlockBase
-						{...{
-							...props,
-							additional,
-							defaultAttributes: !settings.attributes
-								?.blockeraPropsId
-								? mergeObject(
-										settings.attributes,
-										blockeraOverrideBlockAttributes
-								  )
-								: settings.attributes,
-						}}
-					>
-						<SlotFillProvider>
-							<Slot name={'blockera-block-before'} />
+				<>
+					<BaseControlContext.Provider value={baseContextValue}>
+						<BlockBase
+							{...{
+								attributes,
+								additional,
+								name: props.name,
+								clientId: props.clientId,
+								className: props?.className,
+								setAttributes: props.setAttributes,
+								originDefaultAttributes: defaultAttributes,
+								defaultAttributes: sanitizeDefaultAttributes(
+									defaultAttributes,
+									{ defaultWithoutValue: true }
+								),
+							}}
+						>
+							<SlotFillProvider>
+								<Slot name={'blockera-block-before'} />
 
-							<BlockPortals
-								blockId={`#block-${props.clientId}`}
-								mainSlot={'blockera-block-slot'}
-								slots={
-									// slot selectors is feature on configuration block to create custom slots for anywhere.
-									// we can add slotSelectors property on block configuration to handle custom preview of block.
-									additional?.slotSelectors || {}
-								}
-							/>
+								<BlockPortals
+									blockId={`#block-${props.clientId}`}
+									mainSlot={'blockera-block-slot'}
+									slots={
+										// slot selectors is feature on configuration block to create custom slots for anywhere.
+										// we can add slotSelectors property on block configuration to handle custom preview of block.
+										additional?.slotSelectors || {}
+									}
+								/>
 
-							<Slot name={'blockera-block-after'} />
-						</SlotFillProvider>
-					</BlockBase>
+								<Slot name={'blockera-block-after'} />
+							</SlotFillProvider>
+						</BlockBase>
+					</BaseControlContext.Provider>
 					{settings.edit(props)}
-				</BaseControlContext.Provider>
+				</>
 			);
 		}
 
@@ -262,10 +278,11 @@ function mergeBlockSettings(
 		useSharedBlockSideEffect();
 
 		return settings.edit(props);
-	}, propsAreEqual);
+	};
 
 	return {
 		...settings,
+		// Sanitizing attributes to convert all array values to object.
 		attributes: !settings.attributes?.blockeraPropsId
 			? mergeObject(
 					sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
@@ -280,21 +297,6 @@ function mergeBlockSettings(
 		},
 		variations: getVariations(),
 		edit: Edit,
-		save(props: Object): MixedElement {
-			if (!isAvailableBlock()) {
-				return settings?.save(props);
-			}
-
-			props = {
-				...props,
-				attributes: sanitizedBlockAttributes(
-					props.attributes,
-					settings?.attributes
-				),
-			};
-
-			return settings.save(props);
-		},
 		deprecated: !isAvailableBlock()
 			? settings?.deprecated
 			: [
