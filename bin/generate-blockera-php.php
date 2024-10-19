@@ -57,7 +57,7 @@ while ( true ) {
 		case '### BEGIN AUTO-GENERATED FRONT CONTROLLERS':
 			$inside_defines = true;
 			echo $line;
-			echo 'require BLOCKERA_CORE_PATH . ' . "'inc/app.php';\n";
+			echo '	require BLOCKERA_CORE_PATH . ' . "'inc/app.php';\n";
 			break;
 
 		default:
