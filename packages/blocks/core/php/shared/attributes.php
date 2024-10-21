@@ -33,6 +33,10 @@ return [
 		'type'    => 'string',
 		'default' => 'none',
 	],
+	'blockeraOverlay'                   => [
+		'type'    => 'object',
+		'default' => [],
+	],
 	// Block states.
 	'blockeraBlockStates'               => [
 		'type'    => 'object',
