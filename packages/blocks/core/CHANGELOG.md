@@ -13,6 +13,7 @@
 - Enhanced inner blocks of the `List Block` for greater customization flexibility.
 - Enhanced inner blocks of the `List Item Block` for greater customization flexibility.
 - Enhanced inner blocks of the `Details Block` for greater customization flexibility.
+- Added a link inner block to all Navigation Link Blocks.
 
 ### Bug Fixes
 
