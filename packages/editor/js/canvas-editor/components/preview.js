@@ -18,7 +18,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getTarget } from '../helpers';
+import { getTargets } from '../helpers';
 import { PostPreviewButton } from './post-preview-button';
 
 export const Preview = (): MixedElement => {
@@ -48,7 +48,7 @@ export const Preview = (): MixedElement => {
 		const { getEntity } = select('blockera/data') || {};
 		const { version } = getEntity('wp');
 
-		const { previewDropdown } = getTarget(version);
+		const { previewDropdown } = getTargets(version);
 
 		return {
 			previewDropdown,
