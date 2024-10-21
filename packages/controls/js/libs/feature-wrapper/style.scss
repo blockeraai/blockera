@@ -51,6 +51,11 @@
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+
+			&.feature-wrapper__notice__text__link {
+				color: currentColor;
+				text-decoration: none;
+			}
 		}
 	}
 

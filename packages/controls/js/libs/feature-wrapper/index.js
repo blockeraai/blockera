@@ -17,6 +17,7 @@ import { Icon } from '@blockera/icons';
 export function FeatureWrapper({
 	type,
 	typeName = '',
+	upgradeLink = 'https://blockera.ai/products/site-builder/upgrade/',
 	text = '',
 	children,
 	className = '',
@@ -24,6 +25,7 @@ export function FeatureWrapper({
 	...props
 }: {
 	type: 'free' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
+	upgradeLink?: string,
 	typeName?: string,
 	text?: string | MixedElement,
 	className?: string,
@@ -31,12 +33,14 @@ export function FeatureWrapper({
 	children: MixedElement,
 }): MixedElement {
 	let icon = <Icon icon="warning" iconSize="18" />;
+	let link = '';
 
 	if (!text) {
 		switch (type) {
 			case 'free':
 				text = __('Upgrade to PRO', 'blockera');
 				icon = <Icon icon="lock" iconSize="22" />;
+				link = upgradeLink;
 				break;
 			case 'state':
 				text = typeName
@@ -83,6 +87,8 @@ export function FeatureWrapper({
 					  );
 				break;
 		}
+	} else {
+		link = upgradeLink;
 	}
 
 	return (
@@ -100,13 +106,27 @@ export function FeatureWrapper({
 			>
 				{icon}
 
-				<div
-					className={componentInnerClassNames(
-						'feature-wrapper__notice__text'
-					)}
-				>
-					{text}
-				</div>
+				{link ? (
+					<a
+						href={link}
+						target="_blank"
+						rel="noreferrer"
+						className={componentInnerClassNames(
+							'feature-wrapper__notice__text',
+							'feature-wrapper__notice__text__link'
+						)}
+					>
+						{text}
+					</a>
+				) : (
+					<div
+						className={componentInnerClassNames(
+							'feature-wrapper__notice__text'
+						)}
+					>
+						{text}
+					</div>
+				)}
 			</div>
 
 			<div
