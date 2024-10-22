@@ -66,10 +66,7 @@ export const LayoutStyles = ({
 	};
 	const styleGroup: Array<CssRule> = [];
 
-	if (
-		isActiveField(blockeraDisplay) &&
-		_attributes.blockeraDisplay !== attributes.blockeraDisplay.default
-	) {
+	if (isActiveField(blockeraDisplay) && _attributes.blockeraDisplay !== '') {
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraDisplay',
@@ -132,6 +129,22 @@ export const LayoutStyles = ({
 			});
 		}
 
+		let changeFlexInside = false;
+
+		if (
+			_attributes?.blockeraFlexLayout?.direction === 'column' &&
+			_attributes?.blockeraFlexLayout?.alignItems &&
+			_attributes?.blockeraFlexLayout?.justifyContent &&
+			['flex-start', 'center', 'flex-end'].includes(
+				_attributes?.blockeraFlexLayout?.alignItems
+			) &&
+			['flex-start', 'center', 'flex-end'].includes(
+				_attributes?.blockeraFlexLayout?.justifyContent
+			)
+		) {
+			changeFlexInside = true;
+		}
+
 		if (_attributes?.blockeraFlexLayout?.alignItems) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
@@ -142,6 +155,10 @@ export const LayoutStyles = ({
 				),
 			});
 
+			const alignProp: string = changeFlexInside
+				? 'justify-content'
+				: 'align-items';
+
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -150,7 +167,7 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									'align-items':
+									[alignProp]:
 										_attributes.blockeraFlexLayout
 											.alignItems,
 								},
@@ -172,6 +189,10 @@ export const LayoutStyles = ({
 				),
 			});
 
+			const justifyProp: string = changeFlexInside
+				? 'align-items'
+				: 'justify-content';
+
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -180,7 +201,7 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									'justify-content':
+									[justifyProp]:
 										_attributes.blockeraFlexLayout
 											.justifyContent,
 								},

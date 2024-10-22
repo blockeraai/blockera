@@ -6,15 +6,19 @@ export function textOrientationFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraTextOrientation === '' &&
+		attributes?.blockeraTextOrientation?.value === '' &&
 		attributes?.style?.typography?.writingMode !== undefined
 	) {
 		if (attributes?.style?.typography?.writingMode === 'horizontal-tb') {
-			attributes.blockeraTextOrientation = 'initial';
+			attributes.blockeraTextOrientation = {
+				value: 'initial',
+			};
 		} else if (
 			attributes?.style?.typography?.writingMode === 'vertical-rl'
 		) {
-			attributes.blockeraTextOrientation = 'style-1';
+			attributes.blockeraTextOrientation = {
+				value: 'style-1',
+			};
 		}
 	}
 

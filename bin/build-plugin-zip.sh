@@ -71,10 +71,11 @@ rm -r -f dist
 
 # Run the build.
 status "Installing dependencies... 📦"
-composer install --no-dev -o --apcu-autoloader -a
+if [ -z "$NO_INSTALL_COMPOSER" ]; then
+  composer install --no-dev -o --apcu-autoloader -a
+fi
 if [ -z "$NO_INSTALL_NPM" ]; then
-  npm cache verify
-  npm ci
+  npm i
 fi
 
 status "Generating build... 🗂"
@@ -110,6 +111,13 @@ vendor_without_blockera=$(
   find ./vendor -type f -not -path "./vendor/blockera" \
 );
 
+main_plugin_file='blockera.php'
+
+if [ -n "$MAIN_FILE_SUFFIX" ]; then
+  main_plugin_file="blockera$MAIN_FILE_SUFFIX.php"
+  cp blockera.php "$main_plugin_file"
+fi
+
 # Generate the plugin zip file.
 status "Creating archive... 🎁"
 zip -r -q blockera.zip \
@@ -119,24 +127,13 @@ zip -r -q blockera.zip \
 	readme.txt \
 	languages \
 	$build_files \
-	blockera.php \
+	$main_plugin_file \
 	changelog.txt \
 	composer.json \
 	experimental.config.json \
 	$vendor_without_blockera \
-	$(find ./vendor/blockera/blockera/ -type f \( -name "*.php" -o -name "*.json" \)) \
-	$(find ./vendor/blockera/blockera-admin/ -type f \( -name "*.php" -o -name "*.json" \)) \
-	$(find ./vendor/blockera/blocks-core/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/bootstrap/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/data/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/data-editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
-	$(find ./vendor/blockera/env/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/exceptions/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/http/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/editor/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/utils/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/wordpress/ -type f \( -name "*.php" -o -name "*.json" \)) \
-  $(find ./vendor/blockera/freemius-sdk/) \
+  ### BEGIN AUTO-GENERATED VENDOR PACKAGES PATH PATTERN
+  ### END AUTO-GENERATED VENDOR PACKAGES PATH PATTERN
   && echo "blockera.zip created successfully ✅" || echo "blockera.zip creation failed ❌"
 
 status "Cleaning up... 🧹"

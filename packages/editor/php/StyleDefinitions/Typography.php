@@ -94,17 +94,25 @@ class Typography extends BaseStyleDefinition {
 
 				break;
 
-			case 'word-break':
+			case 'font-family':
+				$declaration[ $cssProperty ] = 'var(--wp--preset--font-family--' . $propertyValue . ')';
+				break;
+
+			case 'line-height':
+			case 'text-indent':
+			case 'letter-spacing':
+			case 'word-spacing':
 			case 'direction':
 			case 'text-transform':
 			case 'font-style':
 			case 'text-decoration':
+			case 'word-break':
+			case 'font-weight':
+				$declaration[ $cssProperty ] = $propertyValue;
+				break;
+
 			case 'color':
 			case '-webkit-text-stroke-width':
-			case 'letter-spacing':
-			case 'word-spacing':
-			case 'line-height':
-			case 'text-indent':
 			case 'font-size':
 				$declaration[ $cssProperty ] = $propertyValue ? blockera_get_value_addon_real_value( $propertyValue ) : '';
 				break;

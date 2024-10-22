@@ -1,0 +1,31 @@
+name: 'Auto Generate build-plugin-zip.temp.sh file'
+description: 'Generating temporary bash file to use of that to create blockera.zip file.'
+inputs:
+    main-file-suffix:
+        description: 'Optional. The main plugin file name suffix.'
+        required: false
+        default: ''
+
+runs:
+    using: 'composite'
+    steps:
+        - name: Regenerating Bash Script
+          run: php ./bin/generate-build-plugin-zip-sh.php > ./bin/build-plugin-zip.temp.sh
+          shell: bash
+
+        - name: CHMOD
+          run: chmod +x ./bin/build-plugin-zip.temp.sh
+          shell: bash
+
+        - name: Execute Created Temporary Bash Script
+          run: ./bin/build-plugin-zip.temp.sh
+          env:
+              NO_CHECKS: 'true'
+              NO_INSTALL_NPM: 'true'
+              NO_INSTALL_COMPOSER: 'true'
+              MAIN_FILE_SUFFIX: ${{ inputs.main-file-suffix }}
+          shell: bash
+
+        - name: Delete Permanently Temporary File
+          run: rm -rf ./bin/build-plugin-zip.temp.sh
+          shell: bash

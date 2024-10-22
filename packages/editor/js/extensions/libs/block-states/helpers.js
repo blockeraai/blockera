@@ -33,7 +33,7 @@ export const isNormalStateOnBaseBreakpoint = (
 	return isNormalState(stateType) && getBaseBreakpoint() === breakpointType;
 };
 
-export const getStateInfo = (state: TStates | number): StateTypes => {
+export const getStateInfo = (state: TStates | number): Object => {
 	return 'number' === typeof state
 		? Object.values(states)[state]
 		: states[state];

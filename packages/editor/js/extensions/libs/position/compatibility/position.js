@@ -17,7 +17,7 @@ export function positionFromWPCompatibility({
 }): Object {
 	if (
 		// Blockera don't have position
-		attributes?.blockeraPosition?.type === 'static' &&
+		attributes?.blockeraPosition?.value?.type === 'static' &&
 		// WP  do have position
 		attributes?.style?.position?.type !== undefined
 	) {
@@ -46,12 +46,14 @@ export function positionFromWPCompatibility({
 		}
 
 		attributes.blockeraPosition = {
-			type: attributes?.style?.position?.type || '',
-			position: {
-				top,
-				right,
-				bottom,
-				left,
+			value: {
+				type: attributes?.style?.position?.type || '',
+				position: {
+					top,
+					right,
+					bottom,
+					left,
+				},
 			},
 		};
 	}

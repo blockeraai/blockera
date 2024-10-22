@@ -6,11 +6,12 @@ export function textTransformFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraTextTransform === '' &&
+		attributes?.blockeraTextTransform?.value === '' &&
 		attributes?.style?.typography?.textTransform !== undefined
 	) {
-		attributes.blockeraTextTransform =
-			attributes?.style?.typography?.textTransform;
+		attributes.blockeraTextTransform = {
+			value: attributes?.style?.typography?.textTransform,
+		};
 	}
 
 	return attributes;

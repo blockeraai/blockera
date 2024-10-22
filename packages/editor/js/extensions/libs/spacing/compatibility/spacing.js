@@ -21,7 +21,10 @@ export function spacingFromWPCompatibility({
 		(attributes?.style?.spacing?.padding !== undefined ||
 			attributes?.style?.spacing?.margin !== undefined) &&
 		// Blockera have not custom spacing
-		isEquals(attributes?.blockeraSpacing, boxPositionControlDefaultValue)
+		isEquals(
+			attributes?.blockeraSpacing?.value,
+			boxPositionControlDefaultValue
+		)
 	) {
 		// padding top
 		let paddingTop: ValueAddon | string = '';
@@ -88,17 +91,19 @@ export function spacingFromWPCompatibility({
 		}
 
 		attributes.blockeraSpacing = {
-			padding: {
-				top: paddingTop,
-				right: paddingRight,
-				bottom: paddingBottom,
-				left: paddingLeft,
-			},
-			margin: {
-				top: marginTop,
-				right: marginRight,
-				bottom: marginBottom,
-				left: marginLeft,
+			value: {
+				padding: {
+					top: paddingTop,
+					right: paddingRight,
+					bottom: paddingBottom,
+					left: paddingLeft,
+				},
+				margin: {
+					top: marginTop,
+					right: marginRight,
+					bottom: marginBottom,
+					left: marginLeft,
+				},
 			},
 		};
 	}

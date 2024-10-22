@@ -20,7 +20,7 @@ import actions, { type UseAttributesActions } from './actions';
 import type { THandleOnChangeAttributes } from '../../extensions/libs/types';
 import {
 	isInnerBlock,
-	prepareAttributesDefaultValues,
+	prepareBlockeraDefaultAttributesValues,
 } from '../../extensions/components/utils';
 import type {
 	TBreakpoint,
@@ -32,6 +32,7 @@ export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
 	{
 		blockId,
+		clientId,
 		className,
 		innerBlocks,
 		currentBlock,
@@ -49,6 +50,7 @@ export const useAttributes = (
 		getActiveBlockVariation,
 	}: {
 		blockId: string,
+		clientId: string,
 		className: string,
 		innerBlocks: Object,
 		currentState: TStates,
@@ -98,8 +100,7 @@ export const useAttributes = (
 	): void => {
 		const { ref, effectiveItems = {} } = options;
 		const { getSelectedBlock } = select('core/block-editor');
-		const { attributes = getAttributes(), clientId } =
-			getSelectedBlock() || {};
+		const { attributes = getAttributes() } = getSelectedBlock() || {};
 
 		// attributes => immutable - mean just read-only!
 		// _attributes => mutable - mean readable and writable constant!
@@ -112,13 +113,16 @@ export const useAttributes = (
 		) {
 			_attributes = mergeObject(
 				attributes,
-				prepareAttributesDefaultValues(defaultAttributes)
+				prepareBlockeraDefaultAttributesValues(defaultAttributes)
 			);
 		}
 
 		// Sets "blockeraPropsId" if it is empty.
 		if (!_attributes?.blockeraPropsId) {
-			_attributes = getAttributesWithIds(_attributes, 'blockeraPropsId');
+			_attributes = {
+				..._attributes,
+				blockeraPropsId: clientId,
+			};
 		}
 
 		const indexOfBlockeraSelector =

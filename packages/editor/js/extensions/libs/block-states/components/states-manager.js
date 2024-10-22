@@ -395,6 +395,7 @@ const StatesManager: ComponentType<any> = memo(
 						}
 						labelDescription={<LabelDescription />}
 						popoverTitle={__('Block State', 'blockera')}
+						popoverOffset={164}
 						className={controlInnerClassNames(
 							'block-states-repeater'
 						)}

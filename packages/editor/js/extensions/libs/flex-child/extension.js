@@ -378,7 +378,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 							columns="1fr 2.65fr"
 							label={__('Self Order', 'blockera')}
 							className={
-								'items-flex-direction-' +
+								'items-flex-gap items-flex-direction-' +
 								values.blockeraFlexDirection
 							}
 							options={[

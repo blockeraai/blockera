@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/classnames",
-	"version": "1.0.0",
+	"version": "0.9.2",
 	"description": "Css classnames generator for Blockera Core.",
 	"author": "The Blockera Contributors",
 	"license": "ISC",
@@ -12,11 +12,11 @@
 	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/classnames/README.md",
 	"repository": {
 		"type": "git",
-	  	"url": "https://github.com/blockeraai/blockera",
+		"url": "https://github.com/blockeraai/blockera",
 		"directory": "packages/classnames"
 	},
 	"bugs": {
-	  	"url": "https://github.com/blockeraai/blockera/issues"
+		"url": "https://github.com/blockeraai/blockera/issues"
 	},
 	"engines": {
 		"node": ">=12"

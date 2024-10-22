@@ -89,6 +89,7 @@ export function PaddingLeft({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset: 72,
 			},
 		});
 
@@ -103,7 +104,7 @@ export function PaddingLeft({
 		value:
 			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
 		setValue: onDragSetValue,
-		movement: 'horizontal',
+		movement: 'vertical',
 		min: 0,
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');

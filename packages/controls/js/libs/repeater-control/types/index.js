@@ -9,6 +9,7 @@ import type { MixedElement } from 'react';
  */
 import type { ControlGeneralTypes } from '../../../types';
 import type { GroupControlMode } from '../../group-control/types';
+import type { TPopoverProps } from '../../popover/types';
 
 export type RepeaterItemActionsProps = {
 	item: Object,
@@ -76,6 +77,12 @@ export type RepeaterControlProps = {
 	 * Specifies the button label for adding new repeater item.
 	 */
 	addNewButtonLabel?: string,
+	/**
+	 * Specifies custom css classes that should be added to popover
+	 *
+	 * @default true
+	 */
+	popoverProps?: TPopoverProps,
 	/**
 	 * Specifies custom css classes that should be added to popover
 	 *
@@ -193,6 +200,7 @@ export type TRepeaterDefaultStateProps = {
 	getControlPath: (controlID: string, childControlId: string) => string,
 	repeaterItemOpener?: (props: Object) => boolean | MixedElement,
 	popoverTitle: string | MixedElement,
+	popoverOffset?: number,
 };
 
 export type RepeaterItemProps = {

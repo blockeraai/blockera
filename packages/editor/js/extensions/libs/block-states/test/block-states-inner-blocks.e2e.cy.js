@@ -43,7 +43,7 @@ describe('Block States on inner blocks E2E tests', () => {
 
 	const initialSetting = () => {
 		appendBlocks(
-			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
+			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{"value": {}},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
 			<p class="blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74"><a href="http://localhost/wordpress/2023/12/16/5746/" data-type="post" data-id="5746" class="my-link">link</a></p>
 			<!-- /wp:paragraph -->`
 		);

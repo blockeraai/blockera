@@ -63,17 +63,19 @@ export function elementNormalBackgroundFromWPCompatibility({
 
 			return {
 				blockeraInnerBlocks: {
-					[innerBlock]: {
-						attributes: {
-							blockeraBackground: {
-								'linear-gradient-0': {
-									isVisible: true,
-									type: gradientType,
-									'linear-gradient': gradient,
-									'linear-gradient-angel': angel,
-									'linear-gradient-repeat': 'no-repeat',
-									'linear-gradient-attachment': 'scroll',
-									order: 1,
+					value: {
+						[innerBlock]: {
+							attributes: {
+								blockeraBackground: {
+									'linear-gradient-0': {
+										isVisible: true,
+										type: gradientType,
+										'linear-gradient': gradient,
+										'linear-gradient-angel': angel,
+										'linear-gradient-repeat': 'no-repeat',
+										'linear-gradient-attachment': 'scroll',
+										order: 1,
+									},
 								},
 							},
 						},
@@ -84,20 +86,22 @@ export function elementNormalBackgroundFromWPCompatibility({
 
 		return {
 			blockeraInnerBlocks: {
-				[innerBlock]: {
-					attributes: {
-						blockeraBackground: {
-							'radial-gradient-0': {
-								isVisible: true,
-								type: gradientType,
-								'radial-gradient': gradient,
-								'radial-gradient-position': {
-									top: '50%',
-									left: '50%',
+				value: {
+					[innerBlock]: {
+						attributes: {
+							blockeraBackground: {
+								'radial-gradient-0': {
+									isVisible: true,
+									type: gradientType,
+									'radial-gradient': gradient,
+									'radial-gradient-position': {
+										top: '50%',
+										left: '50%',
+									},
+									'radial-gradient-size': 'farthest-corner',
+									'radial-gradient-attachment': 'scroll',
+									order: 1,
 								},
-								'radial-gradient-size': 'farthest-corner',
-								'radial-gradient-attachment': 'scroll',
-								order: 1,
 							},
 						},
 					},

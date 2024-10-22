@@ -53,56 +53,15 @@ describe('Background Clip → Functionality', () => {
 		);
 	});
 
-	it('should set text clipping when block has text and background-mage', () => {
-		cy.getParentContainer('Image & Gradient').as('image-and-gradient');
-
-		cy.get('@image-and-gradient').within(() => {
-			// add bg repeater item
-			cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
-			cy.get('@bgRepeaterAddBtn').click();
-		});
-
-		// add background image
-		cy.get('.components-popover')
-			.last()
-			.within(() => {
-				cy.contains('button', /choose image/i).click();
-			});
-
-		cy.get('#menu-item-upload').click();
-		cy.get('input[type="file"]').selectFile(
-			'packages/dev-cypress/js/fixtures/bg-extension-test.jpeg',
-			{
-				force: true,
-			}
-		);
-		cy.get('.media-toolbar-primary > .button').click();
-
-		// act : selecting clip to text
+	it('Check the text clipping to be disabled', () => {
 		cy.get('@clippingContainer').within(() => {
 			cy.get('button').as('clippingBtn');
 			cy.get('@clippingBtn').click();
-			cy.contains('li', /text/i).click();
-		});
-
-		//assert data
-		getWPDataObject().then((data) => {
-			const bgClipState = getSelectedBlock(
-				data,
-				'blockeraBackgroundClip'
+			cy.contains('li', /text/i).should(
+				'have.css',
+				'pointer-events',
+				'none'
 			);
-			expect(bgClipState).to.be.equal('text');
 		});
-
-		//assert block
-		cy.getBlock('core/paragraph')
-			.should('have.css', 'background-clip', 'text')
-			.and('have.css', '-webkit-text-fill-color', 'rgba(0, 0, 0, 0)');
-
-		//assert  frontend
-		savePage();
-		redirectToFrontPage();
-
-		cy.get('.blockera-block').should('have.css', 'background-clip', 'text');
 	});
 });

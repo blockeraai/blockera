@@ -1,0 +1,21 @@
+name: Sync Packages to Other Repos
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    sync-packages:
+        name: Sync Packages to Other Repos
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Primary Repo
+              uses: actions/checkout@v4
+
+            - name: Sync packages with other dependent repositories
+              uses: blockeraai/blockera-folder-sync@v1.0.0
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  BLOCKERABOT_PAT: ${{ secrets.BLOCKERABOT_PAT }}

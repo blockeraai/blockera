@@ -22,6 +22,9 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 	 */
 	protected function css( array $setting ): array {
 
+		// Before run css method we need reset properties.
+		$this->reset();
+
 		$declaration = [];
 		$cssProperty = $setting['type'];
 
@@ -74,18 +77,32 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				break;
 
 			case 'flex-direction':
-				$item = $setting['flex-direction'];
+				$item             = $setting['flex-direction'];
+				$changeFlexInside = false;
 
 				if ( $item['direction'] ) {
 					$declaration['flex-direction'] = $item['direction'];
 				}
 
+				$normalItems = [
+					'flex-start' => true,
+					'center'     => true,
+					'flex-end'   => true,
+				];
+
+				if ( 'column' === $item['direction'] && isset( $normalItems[ $item['alignItems'] ] ) && isset( $normalItems[ $item['justifyContent'] ] )
+				) {
+					$changeFlexInside = true;
+				}
+
 				if ( $item['alignItems'] ) {
-					$declaration['align-items'] = $item['alignItems'];
+					$prop                 = $changeFlexInside ? 'justify-content' : 'align-items';
+					$declaration[ $prop ] = $item['alignItems'];
 				}
 
 				if ( $item['justifyContent'] ) {
-					$declaration['justify-content'] = $item['justifyContent'];
+					$prop                 = $changeFlexInside ? 'align-items' : 'justify-content';
+					$declaration[ $prop ] = $item['justifyContent'];
 				}
 
 				break;
@@ -103,8 +120,8 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 			case 'gap':
 				// Current block display (even the default).
 				$display = '';
-				if ( ! empty( $this->settings['blockeraDisplay'] ) ) {
-					$display = $this->settings['blockeraDisplay'];
+				if ( ! empty( $this->settings['blockeraDisplay']['value'] ) ) {
+					$display = $this->settings['blockeraDisplay']['value'];
 				} elseif ( ! empty( $this->default_settings['blockeraDisplay']['default'] ) ) {
 					$display = $this->default_settings['blockeraDisplay']['default'];
 				}
@@ -118,12 +135,12 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				// Add suffix to selector based on gap type.
 				switch ( $gapType ) {
 					case 'margin':
-						$selectorSuffix = '> * + *';
+						$selectorSuffix = ' > * + *';
 						break;
 
 					case 'gap-and-margin':
 						if ( 'flex' !== $display && 'grid' !== $display ) {
-							$selectorSuffix = '> * + *';
+							$selectorSuffix = ' > * + *';
 						}
 						break;
 				}
@@ -169,8 +186,6 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				break;
 		}
 
-		$this->setCss( $declaration );
-
 		/**
 		 * If gap type is both and the current display is flex or grid
 		 * then we use gap property to but still WP is creating gap with `margin-block-start` and we have to remove it.
@@ -184,6 +199,10 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 					'margin-block-start' => '0',
 				]
 			);
+
+		} else {
+
+			$this->setCss( $declaration );
 		}
 
 		return $this->css;
@@ -199,6 +218,8 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 	 * @return array
 	 */
 	public function getCustomSettings( array $settings, string $settingName, string $cssProperty ): array {
+
+		$settings = blockera_get_sanitize_block_attributes( $settings );
 
 		if ( 'custom' === $settings[ $settingName ] && 'flex' === $cssProperty ) {
 
@@ -252,12 +273,22 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 			parent::setSelector( 'margin-block-start' );
 
-			$this->selector .= '> * + *';
+			$this->selector = blockera_append_css_selector_suffix( $this->selector, ' > * + *' );
 
 			return;
 		}
 
 		parent::setSelector( $support );
+	}
+
+	/**
+	 * Flush properties of Layout class.
+	 *
+	 * @return void
+	 */
+	private function reset(): void {
+
+		$this->with_gap_margin_block_start = false;
 	}
 
 }

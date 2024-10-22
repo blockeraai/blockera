@@ -2,6 +2,7 @@
 
 namespace Blockera\Editor\Tests;
 
+use Blockera\Exceptions\BaseException;
 use Blockera\WordPress\RenderBlock\Setup;
 
 class TestHelpers extends \WP_UnitTestCase {
@@ -128,15 +129,17 @@ class TestHelpers extends \WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function testItShouldGetBlockeraCompatibleBlockCssSelectorWithWPAPI( string $featureId, $fallbackId, string $expected ): void {
+	public function testItShouldGetBlockeraCompatibleBlockCssSelectorWithWPAPI( string $blockType, string $featureId, $fallbackId, string $expected ): void {
 
 		register_block_type( 'core/sample' );
 
 		$this->assertEquals(
 			$expected,
 			blockera_get_compatible_block_css_selector( $this->selectors, $featureId, [
-				'blockName' => 'core/sample',
-				'fallback'  => $fallbackId,
+				'block-name'               => 'core/sample',
+				'fallback'                 => $fallbackId,
+				'block-type'               => $blockType,
+				'blockera-unique-selector' => '.blockera-block.blockera-block--phggmy',
 			] )
 		);
 	}
@@ -171,23 +174,48 @@ class TestHelpers extends \WP_UnitTestCase {
 	 * @group        blockStateSelectors
 	 * @dataProvider getBlockStateSelectorsDataProvider
 	 *
-	 * @param array $args
-	 * @param array $selectors
-	 * @param array $blockStateSelectors
+	 * @param array  $args
+	 * @param string $selectors
+	 * @param string $blockStateSelectors
 	 *
 	 * @return void
 	 */
-	public function testItShouldRetrieveBlockStateSelectors( array $args, array $selectors, array $blockStateSelectors = [] ): void {
+	public function testItShouldRetrieveBlockStateSelectors( array $args, string $selector, string $blockStateSelectors = '' ): void {
 
 		$this->assertSame(
 			$blockStateSelectors,
-			blockera_get_block_state_selectors( $selectors, $args )
+			blockera_get_master_block_state_selector( $selector, $args )
+		);
+	}
+
+	/**
+	 * @group        innerBlockStateSelectors
+	 * @dataProvider getInnerBlockStateSelectorsDataProvider
+	 *
+	 * @param array  $args
+	 * @param string $selectors
+	 * @param string $blockStateSelectors
+	 *
+	 * @throws BaseException Exception for invalid selector.
+	 *
+	 * @return void
+	 */
+	public function testItShouldRetrieveInnerBlockStateSelectors( array $args, string $selector, string $blockStateSelector = '' ): void {
+
+		$this->assertSame(
+			$blockStateSelector,
+			blockera_get_inner_block_state_selector( $selector, $args )
 		);
 	}
 
 	public function getBlockStateSelectorsDataProvider(): array {
 
 		return require __DIR__ . '/Fixtures/StyleEngine/block-state-selectors.php';
+	}
+
+	public function getInnerBlockStateSelectorsDataProvider(): array {
+
+		return require __DIR__ . '/Fixtures/StyleEngine/inner-block-state-selectors.php';
 	}
 
 	/**
@@ -289,7 +317,7 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$selector = '.wp-block-my-block';
 		$root     = '.my-root';
-		$args     = [ 'blockName' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
@@ -300,18 +328,18 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$selector = '.wp-block-my-block.other-class';
 		$root     = '.my-root';
-		$args     = [ 'blockName' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
-		$this->assertEquals( '.my-root.wp-block-my-block.other-class, .wp-block-my-block.other-class.my-root', $result );
+		$this->assertEquals( '.my-root.wp-block-my-block.other-class, .wp-block-my-block.my-root.other-class', $result );
 	}
 
 	public function testSelectorWithTagName() {
 
 		$selector = 'div';
 		$root     = '.my-root';
-		$args     = [ 'blockName' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block', 'block-type' => 'master' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
@@ -322,11 +350,134 @@ class TestHelpers extends \WP_UnitTestCase {
 
 		$selector = '.my-class';
 		$root     = '.my-root';
-		$args     = [ 'blockName' => 'my-block' ];
+		$args     = [ 'block-name' => 'my-block', 'block-type' => 'master' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
 
 		$this->assertEquals( '.my-root.my-class', $result );
+	}
+
+	/**
+	 * Test single selector with a suffix.
+	 */
+	public function testSingleSelectorWithSuffix() {
+
+		$selector = '.my-class';
+		$suffix   = '-active';
+		$expected = '.my-class-active';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test multiple selectors with a suffix.
+	 */
+	public function testMultipleSelectorsWithSuffix() {
+
+		$selector = '.my-class, #my-id';
+		$suffix   = '-hover';
+		$expected = '.my-class-hover, #my-id-hover';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test empty selector.
+	 */
+	public function testItShouldAppendSuffixIntoEmptySelector() {
+
+		$selector = '';
+		$suffix   = '-test';
+		$expected = '';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test empty suffix.
+	 */
+	public function testEmptySuffix() {
+
+		$selector = '.my-class, #my-id';
+		$suffix   = '';
+		$expected = '.my-class, #my-id';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test with whitespace in selectors.
+	 */
+	public function testWhitespaceInSelectors() {
+
+		$selector = '.my-class ,    #my-id';
+		$suffix   = '-modified';
+		$expected = '.my-class-modified, #my-id-modified';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	/**
+	 * Test complex selectors with a suffix.
+	 */
+	public function testComplexSelectorsWithSuffix() {
+
+		$selector = '.my-class > .inner-class, #my-id + .another-class';
+		$suffix   = '-active';
+		$expected = '.my-class > .inner-class-active, #my-id + .another-class-active';
+
+		$this->assertSame( $expected, blockera_append_css_selector_suffix( $selector, $suffix ) );
+	}
+
+	public function testCssSelectorFormatWithPseudoClasses() {
+
+		$picked_selector = '.element';
+		$args            = [
+			'pseudo_class'        => 'hover',
+			'parent_pseudo_class' => 'active'
+		];
+
+		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
+		$this->assertEquals( '.container:active .element:hover', $result );
+	}
+
+	public function testCssSelectorFormatWithoutPseudoClasses() {
+
+		$picked_selector = '.element';
+		$args            = [];
+
+		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
+		$this->assertEquals( '.container .element', $result );
+	}
+
+	public function testCssSelectorFormatWithAmpersandInPickedSelector() {
+
+		$picked_selector = '&.element';
+		$args            = [
+			'pseudo_class' => 'hover'
+		];
+
+		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
+		$this->assertEquals( '.container.element:hover', $result );
+	}
+
+	public function testCssSelectorFormatFallbackWhenParentRootMissing() {
+
+		$picked_selector = '.element';
+		$args            = [];
+
+		$result = blockera_get_css_selector_format( '.fallback', $picked_selector, $args );
+		$this->assertEquals( '.fallback .element', $result );
+	}
+
+	public function testCssSelectorFormatEmptySelectors() {
+
+		$selectors       = [];
+		$picked_selector = '.element';
+		$args            = [];
+
+		$result = blockera_get_css_selector_format( '', $picked_selector, $args );
+		$this->assertEquals( '.element', $result );
 	}
 
 	public function tear_down() {

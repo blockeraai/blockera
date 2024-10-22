@@ -1,8 +1,23 @@
 const { defineConfig } = require('cypress');
 
+let env = {
+	wpUsername: 'admin',
+	wpPassword: 'password',
+	testURL: 'http://localhost:8888',
+	e2e: {
+		specPattern: ['packages/**/*.e2e.cy.js'],
+		excludeSpecPattern: ['packages/**/*.build.e2e.js'],
+	},
+};
+
+try {
+	env = require('./cypress.env.json');
+} catch (error) {
+	console.log(error);
+}
+
 const setupNodeEvents = (on, config) => {
 	require('./packages/dev-cypress/js/plugins/index.js')(on, config);
-	require('@cypress/code-coverage/task')(on, config);
 
 	return config;
 };
@@ -12,14 +27,13 @@ module.exports = defineConfig({
 	defaultCommandTimeout: 15000,
 	e2e: {
 		setupNodeEvents,
-		specPattern: ['packages/**/*.e2e.cy.js'],
+		specPattern: env.e2e.specPattern,
+		excludeSpecPattern: env.e2e.excludeSpecPattern,
 		supportFile: 'packages/dev-cypress/js/support/e2e.js',
+		experimentalMemoryManagement: true,
+		numTestsKeptInMemory: 10,
 	},
-	env: {
-		wpUsername: 'admin',
-		wpPassword: 'password',
-		testURL: 'http://localhost:8888',
-	},
+	env,
 	fixturesFolder: 'packages/dev-cypress/js/fixtures',
 	pageLoadTimeout: 120000,
 	projectId: 'blockera',

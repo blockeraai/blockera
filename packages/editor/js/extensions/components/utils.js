@@ -34,19 +34,19 @@ export const isInnerBlock = (
 /**
  * is current block on normal state?
  *
- * @param {TStates} selectedState The current selected state.
+ * @param {TStates|string} selectedState The current selected state.
  * @return {boolean} true on success, false on otherwise.
  */
-export const isNormalState = (selectedState: TStates): boolean =>
+export const isNormalState = (selectedState: TStates | string): boolean =>
 	'normal' === selectedState;
 
 /**
- * Preparing attributes default values.
+ * Preparing blockera attributes default values.
  *
  * @param {Object} rootAttributes the root attributes of registration time.
  * @return {Object} the attributes cleaned.
  */
-export const prepareAttributesDefaultValues = (
+export const prepareBlockeraDefaultAttributesValues = (
 	rootAttributes: Object
 ): Object => {
 	// Extracting default prop of items and assigning to a new object

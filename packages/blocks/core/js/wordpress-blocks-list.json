@@ -2,10 +2,10 @@
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
 		"total": 93,
-		"supported": 72,
-		"soft-supported": 85,
-		"not-supported": 8,
-		"no-need-to-support": 13
+		"supported": 78,
+		"soft-supported": 92,
+		"not-supported": 1,
+		"no-need-to-support": 14
 	},
 	"supported": [
 		{
@@ -19,6 +19,10 @@
 		{
 			"name": "core/heading",
 			"title": "Heading"
+		},
+		{
+			"name": "core/home-link",
+			"title": "Home Link"
 		},
 		{
 			"name": "core/gallery",
@@ -127,10 +131,6 @@
 			"note": "@todo there is a lot of room for inner blocks."
 		},
 		{
-			"name": "core/tag-cloud",
-			"title": "Tag Cloud"
-		},
-		{
 			"name": "core/verse",
 			"title": "Verse"
 		},
@@ -189,6 +189,10 @@
 		{
 			"name": "core/post-navigation-link",
 			"title": "Post Navigation Link"
+		},
+		{
+			"name": "core/navigation-submenu",
+			"title": "Submenu"
 		},
 		{
 			"name": "core/post-terms",
@@ -298,6 +302,27 @@
 		{
 			"name": "core/latest-comments",
 			"title": "Latest Comments"
+		},
+		{
+			"name": "core/spacer",
+			"title": "Spacer",
+			"note": "@todo Advanced compatibility for responsive height needed."
+		},
+		{
+			"name": "core/navigation-link",
+			"title": "Navigation Link"
+		},
+		{
+			"name": "core/archives",
+			"title": "Archives"
+		},
+		{
+			"name": "core/calendar",
+			"title": "Calendar"
+		},
+		{
+			"name": "core/tag-cloud",
+			"title": "Tag Cloud"
 		}
 	],
 	"no-need-to-support": [
@@ -365,48 +390,18 @@
 			"name": "core/widget-group",
 			"title": "Widget Group",
 			"note": "Investigate if this block can be supported."
-		}
-	],
-	"not-supported": [
-		{
-			"name": "core/spacer",
-			"title": "Spacer",
-			"note": "Advanced compatibility for responsive height needed."
-		},
-		{
-			"name": "core/navigation",
-			"title": "Navigation",
-			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/navigation-link",
-			"title": "Custom Link",
-			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/navigation-submenu",
-			"title": "Submenu",
-			"note": "Advanced editor setting panel compatibility needed."
-		},
-		{
-			"name": "core/home-link",
-			"title": "Home Link",
-			"note": "Advanced editor setting panel compatibility needed."
 		},
 		{
 			"name": "core/page-list-item",
 			"title": "Page List Item",
-			"note": "Investigate if this block can be supported."
-		},
+			"note": "This block is not selectable and there is no ui for it for user and we do not need to support it."
+		}
+	],
+	"not-supported": [
 		{
-			"name": "core/archives",
-			"title": "Archives",
-			"note": "There is a block editor js error about attributes."
-		},
-		{
-			"name": "core/calendar",
-			"title": "Calendar",
-			"note": "There is a block editor js error about attributes."
+			"name": "core/navigation",
+			"title": "Navigation",
+			"note": "Advanced editor setting panel compatibility needed."
 		}
 	]
 }

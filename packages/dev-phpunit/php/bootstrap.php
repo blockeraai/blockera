@@ -20,7 +20,7 @@ if ( 'build' === getenv( 'LOCAL_DIR' ) ) {
 
 // Determine the tests directory (from a WP dev checkout).
 // Try the WP_TESTS_DIR environment variable first.
-$_tests_dir = blockera_core_env( 'WP_TESTS_DIR' ) ?? getenv( 'WP_TESTS_DIR' );
+$_tests_dir = $_ENV['WP_TESTS_DIR'] ?? getenv( 'WP_TESTS_DIR' );
 
 // Next, try the WP_PHPUNIT composer package if we're inside wp-env.
 if ( ! $_tests_dir && 'tests-mysql' === getenv( 'WORDPRESS_DB_HOST' ) ) {
@@ -44,9 +44,9 @@ tests_add_filter( 'muplugins_loaded', function () use ( $root_dir ) {
 
 	define( 'BLOCKERA_CORE_PATH', trailingslashit( $root_dir ) );
 	define( '__BLOCKERA_PACKAGES_DIR__', dirname( __DIR__, 2 ) );
-	define( 'BLOCKERA_CORE_VERSION', blockera_core_env( 'VERSION' ) ?? getenv( 'VERSION' ) );
+	define( 'BLOCKERA_CORE_VERSION', $_ENV['VERSION'] ?? getenv( 'VERSION' ) );
 	define( 'BLOCKERA_CORE_URI', trailingslashit(
-		plugins_url( blockera_core_env( 'BLOCKERA_DIR' ) ?? getenv( '__BLOCKERA_DIR__' ) )
+		plugins_url( $_ENV['BLOCKERA_DIR'] ?? getenv( '__BLOCKERA_DIR__' ) )
 	) );
 } );
 

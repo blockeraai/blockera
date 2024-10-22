@@ -79,3 +79,4 @@ packages/dev-cypress/js/videos
 
 # includes directory
 inc
+cypress.env.json

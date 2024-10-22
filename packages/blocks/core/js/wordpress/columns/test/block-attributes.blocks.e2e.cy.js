@@ -17,7 +17,7 @@ describe('Testing core/columns block registered default attributes value', () =>
 	it('should valid sets default blockeraDisplay attribute value', () => {
 		addBlockToPost('core/columns');
 
-		cy.getBlock('core/columns').first().click();
+		cy.getBlock('core/columns').first().click({ force: true });
 
 		getWPDataObject().then((data) => {
 			const attributes = getBlockType(data, 'core/columns').attributes;

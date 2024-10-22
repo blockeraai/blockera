@@ -1,0 +1,10 @@
+{
+	"name": "blockera/utils",
+	"path": "packages/utils",
+	"dependent": {
+		"repositories": [
+			"https://github.com/blockeraai/blockera.git",
+			"https://github.com/blockeraai/blockera-pro.git"
+		]
+	}
+}

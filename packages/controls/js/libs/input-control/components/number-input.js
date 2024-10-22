@@ -11,7 +11,13 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isNumber, isString, isUndefined, useDragValue } from '@blockera/utils';
+import {
+	isNumber,
+	isString,
+	isUndefined,
+	isEmpty,
+	useDragValue,
+} from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -57,9 +63,12 @@ export function NumberInput({
 		return {};
 	};
 
+	const minValue = getMinValue();
+	const maxValue = getMaxValue();
+
 	const handleKeyDown = (event: Object) => {
-		// supports negative values
 		const regex = new RegExp(
+			// accept 0 as a valid input and allow `-` at the beginning only
 			`${
 				value === '' ? '(^-?\\d*$)' : '(^\\d*$)'
 			}|(Backspace|Tab|Delete|ArrowLeft|ArrowRight|ArrowUp|ArrowDown${
@@ -101,14 +110,18 @@ export function NumberInput({
 			return;
 		}
 
-		// dont let user to paste value smaller than min value
-		if (getMinValue()?.min !== '' && +pastedText < getMinValue().min) {
+		// const minValue = getMinValue();
+
+		// don't let user to paste value smaller than min value
+		if (!isEmpty(minValue?.min) && +pastedText < minValue.min) {
 			event.preventDefault();
 			return;
 		}
 
-		// dont let user to paste value bigger than max value
-		if (getMaxValue()?.max !== '' && +pastedText > +getMaxValue().max) {
+		// const maxValue = getMaxValue();
+
+		// don't let user to paste value bigger than max value
+		if (!isEmpty(maxValue?.max) && +pastedText > +maxValue.max) {
 			event.preventDefault();
 		}
 	};
@@ -119,17 +132,22 @@ export function NumberInput({
 			''
 		);
 
-		if (value !== '') {
-			if (getMinValue()?.min !== '' && value < getMinValue().min) {
+		if (!isEmpty(value)) {
+			// const minValue = getMinValue();
+			// const maxValue = getMaxValue();
+
+			if (!isEmpty(minValue?.min) && value < minValue.min) {
 				value = getMinValue().min;
+			} else if (!isEmpty(maxValue?.max) && value > maxValue.max) {
+				value = maxValue.max;
 			}
 
-			if (getMaxValue()?.max !== '' && value > getMaxValue().max) {
-				value = getMaxValue().max;
-			}
+			setValue(+value);
+		} else {
+			setValue(value);
 		}
 
-		setValue(value !== '' ? +value : value);
+		// setValue(!isEmpty(value) ? +value : value);
 	};
 
 	const { onDragStart, onDragEnd } = useDragValue({
@@ -141,8 +159,8 @@ export function NumberInput({
 			setValue(newValue);
 		},
 		movement: 'vertical',
-		...getMinValue(),
-		...getMaxValue(),
+		...minValue,
+		...maxValue,
 	});
 
 	const getDragEvent: Object = () => {
@@ -166,8 +184,8 @@ export function NumberInput({
 						setValue(newValue);
 					}}
 					disabled={disabled}
-					{...getMinValue()}
-					{...getMaxValue()}
+					{...minValue}
+					{...maxValue}
 					{...props}
 				/>
 			)}
@@ -186,8 +204,8 @@ export function NumberInput({
 				)}
 				onKeyDown={handleKeyDown}
 				onPaste={handlePaste}
-				{...getMinValue()}
-				{...getMaxValue()}
+				{...minValue}
+				{...maxValue}
 				{...props}
 				onChange={handleInputChange}
 				type="number"
@@ -209,22 +227,22 @@ export function NumberInput({
 							className={controlClassNames(
 								'input-arrow',
 								'input-arrow-up',
-								getMaxValue()?.max !== '' &&
-									+value >= +getMaxValue().max
+								!isEmpty(maxValue?.max) &&
+									+value >= +maxValue.max
 									? 'is-disabled'
 									: ''
 							)}
 							onClick={() => {
-								let newValue = value !== '' ? +value : 0;
+								let newValue = !isEmpty(value) ? +value : 0;
 
 								newValue += 1;
 
 								// don't let user set value bigger than max value
 								if (
-									getMaxValue()?.max !== '' &&
-									newValue > +getMaxValue().max
+									!isEmpty(maxValue?.max) &&
+									newValue > +maxValue.max
 								) {
-									newValue = +getMaxValue().max;
+									newValue = +maxValue.max;
 								}
 
 								setValue(newValue);
@@ -238,22 +256,22 @@ export function NumberInput({
 							className={controlClassNames(
 								'input-arrow',
 								'input-arrow-down',
-								getMinValue()?.min !== '' &&
-									+value <= +getMinValue().min
+								!isEmpty(minValue?.min) &&
+									+value <= +minValue.min
 									? 'is-disabled'
 									: ''
 							)}
 							onClick={() => {
-								let newValue = value !== '' ? +value : 0;
+								let newValue = !isEmpty(value) ? +value : 0;
 
 								newValue -= 1;
 
 								// don't let user set value bigger than max value
 								if (
-									getMinValue()?.min !== '' &&
-									newValue < +getMinValue()?.min
+									!isEmpty(minValue?.min) &&
+									newValue <= +minValue?.min
 								) {
-									newValue = +getMinValue()?.min;
+									newValue = +minValue?.min;
 								}
 
 								setValue(newValue);

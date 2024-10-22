@@ -27,13 +27,13 @@ const blocks = {
 	...thirdPartyBlocks,
 };
 
-export const reregistrationBlocks = (): void => {
+export const registerBlockeraBlocks = (): void => {
 	for (const key in blocks) {
 		const currentBlock = blocks[key];
 
 		if (!currentBlock?.name && 'Shared' !== key) {
 			console.warn(
-				'Blockera Core Block validation: Block must contain name param!'
+				'Blockera Block validation: Block must contain name param!'
 			);
 			continue;
 		}
@@ -42,40 +42,43 @@ export const reregistrationBlocks = (): void => {
 	}
 };
 
-export const registerThirdPartyExtensionDefinitions = (): void => {
+/**
+ * Registration config extensions of each inner blocks.
+ *
+ * @return {void}
+ */
+export const registerConfigExtensionsOfInnerBlocks = (): void => {
 	addFilter(
-		'blockera.extensions.innerBlocks.definitionTypes',
-		'blockera.extensions.innerBlocks.definitionTypes.mergeBlockSettings',
-		(definitionTypes: Object): Object => {
-			const newDefinitionTypes = {};
-			let additionalDefinitionTypes = {};
+		'blockera.extensions.innerBlocks.config',
+		'blockera.extensions.innerBlocks.config.mergeBlockSettings',
+		(config: Object): Object => {
+			const newConfig = {};
+			let blockInnerBlocks = {};
 
 			const { getExtensions } = select('blockera/extensions/config');
 
 			Object.values(blocks).forEach((block: Object): Object => {
-				additionalDefinitionTypes = block?.blockeraInnerBlocks || {};
+				blockInnerBlocks = block?.blockeraInnerBlocks || {};
 
-				Object.values(additionalDefinitionTypes).forEach(
-					(additionalDefinitionType: Object): Object => {
+				Object.values(blockInnerBlocks).forEach(
+					(blockInnerBlock: Object): Object => {
 						if (
-							!additionalDefinitionType?.settings ||
-							!Object.values(additionalDefinitionType?.settings)
-								.length
+							!blockInnerBlock?.settings ||
+							!Object.values(blockInnerBlock?.settings).length
 						) {
 							return;
 						}
 
-						newDefinitionTypes[additionalDefinitionType?.type] =
-							mergeObjects(
-								{},
-								getExtensions(),
-								additionalDefinitionType?.settings
-							);
+						newConfig[blockInnerBlock?.name] = mergeObjects(
+							{},
+							getExtensions(),
+							blockInnerBlock?.settings
+						);
 					}
 				);
 			});
 
-			return mergeObjects({}, definitionTypes, newDefinitionTypes);
+			return mergeObjects({}, config, newConfig);
 		}
 	);
 };

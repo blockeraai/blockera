@@ -89,6 +89,7 @@ export function PaddingHorizontal({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset: 218,
 			},
 		});
 
@@ -103,7 +104,7 @@ export function PaddingHorizontal({
 		value:
 			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
 		setValue: onDragSetValue,
-		movement: 'horizontal',
+		movement: 'vertical',
 		min: 0,
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');

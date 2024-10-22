@@ -61,7 +61,7 @@ describe('Style Engine Testing ...', () => {
 
 					cy.getBlockeraStylesWrapper()
 						.invoke('text')
-						.should('include', 'transition: all 500ms ease 0ms;');
+						.should('include', 'transition: all 500ms ease 0ms');
 				}
 			);
 
@@ -79,7 +79,7 @@ describe('Style Engine Testing ...', () => {
 				);
 				cy.getBlockeraStylesWrapper()
 					.invoke('text')
-					.should('include', 'transition: all 500ms ease 0ms;');
+					.should('include', 'transition: all 500ms ease 0ms');
 			});
 
 			context('front end - check style inheritance', () => {
@@ -92,7 +92,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',
@@ -105,7 +105,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',
@@ -122,7 +122,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',
@@ -176,7 +176,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.getBlockeraStylesWrapper()
 						.invoke('text')
-						.should('include', 'transition: all 500ms ease 0ms;');
+						.should('include', 'transition: all 500ms ease 0ms');
 				}
 			);
 
@@ -251,7 +251,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',
@@ -310,7 +310,7 @@ describe('Style Engine Testing ...', () => {
 							.invoke('text')
 							.should(
 								'include',
-								'transition: all 500ms ease 0ms;'
+								'transition: all 500ms ease 0ms'
 							);
 					}
 				);
@@ -384,7 +384,7 @@ describe('Style Engine Testing ...', () => {
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
-					cy.get('style#blockera-inline-css-inline-css')
+					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
 							'include',

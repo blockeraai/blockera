@@ -1,14 +1,14 @@
 /**
+ * External dependencies
+ */
+import 'cypress-real-events';
+import '@10up/cypress-wp-utils';
+
+/**
  * Internal dependencies
  */
 import { registerCommands } from './commands';
 import { loginToSite, goTo } from '../helpers';
-
-/**
- * External dependencies
- */
-import 'cypress-real-events';
-import '@cypress/code-coverage/support';
 
 registerCommands();
 
@@ -17,7 +17,9 @@ beforeEach(function () {
 	// browser with a 720p monitor
 	cy.viewport(1280, 720);
 
-	cy.login();
+	if (!Cypress.env('isLogin')) {
+		cy.login();
+	}
 });
 
 Cypress.Commands.add('login', (user = '', pass = '') => {

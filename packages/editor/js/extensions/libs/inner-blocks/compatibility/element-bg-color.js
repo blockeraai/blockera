@@ -31,9 +31,11 @@ export function elementNormalBackgroundColorFromWPCompatibility({
 		if (color) {
 			return {
 				blockeraInnerBlocks: {
-					[innerBlock]: {
-						attributes: {
-							blockeraBackgroundColor: color,
+					value: {
+						[innerBlock]: {
+							attributes: {
+								blockeraBackgroundColor: color,
+							},
 						},
 					},
 				},

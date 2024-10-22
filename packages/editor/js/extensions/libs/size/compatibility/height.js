@@ -13,15 +13,18 @@ export function heightFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
-	if (attributes?.blockeraHeight !== '') {
+	if (attributes?.blockeraHeight?.value !== '') {
 		return attributes;
 	}
 
 	switch (blockId) {
 		case 'core/image':
+		case 'core/spacer':
 		case 'core/post-featured-image':
 			if (attributes?.height !== undefined) {
-				attributes.blockeraHeight = attributes?.height;
+				attributes.blockeraHeight = {
+					value: attributes?.height,
+				};
 			}
 	}
 
@@ -63,6 +66,7 @@ export function heightToWPCompatibility({
 			};
 
 		// A string attribute for width with unit
+		case 'core/spacer':
 		case 'core/post-featured-image':
 			if ('reset' === ref?.current?.action) {
 				return {

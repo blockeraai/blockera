@@ -216,21 +216,49 @@ export const memoizedBlockStates: (
 		const breakpoints =
 			blockStates[recievedState || currentState]?.breakpoints;
 
+		if (isInnerBlock(currentBlock) && !insideInnerBlock) {
+			return mergeObject(
+				currentBlockAttributes?.blockeraBlockStates || {},
+				{
+					[recievedState || currentState]: {
+						breakpoints: {
+							[currentBreakpoint]: memoizedRootBreakpoints(
+								breakpoints[currentBreakpoint],
+								action,
+								insideInnerBlock
+							),
+						},
+						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
+						// We need to address the isVisible property in the block-states repeater item,
+						// as there is currently no UI for this property in the block-states repeater item.
+						isVisible: true,
+					},
+				},
+				{
+					forceUpdated: isObject(action.newValue)
+						? [action.attributeId]
+						: [],
+				}
+			);
+		}
+
 		return mergeObject(
 			currentBlockAttributes?.blockeraBlockStates || {},
 			{
-				[recievedState || currentState]: {
-					breakpoints: {
-						[currentBreakpoint]: memoizedRootBreakpoints(
-							breakpoints[currentBreakpoint],
-							action,
-							insideInnerBlock
-						),
+				value: {
+					[recievedState || currentState]: {
+						breakpoints: {
+							[currentBreakpoint]: memoizedRootBreakpoints(
+								breakpoints[currentBreakpoint],
+								action,
+								insideInnerBlock
+							),
+						},
+						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
+						// We need to address the isVisible property in the block-states repeater item,
+						// as there is currently no UI for this property in the block-states repeater item.
+						isVisible: true,
 					},
-					// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
-					// We need to address the isVisible property in the block-states repeater item,
-					// as there is currently no UI for this property in the block-states repeater item.
-					isVisible: true,
 				},
 			},
 			{
@@ -245,12 +273,13 @@ export const memoizedBlockStates: (
 export const resetAllStates = (state: Object, action: Object): Object => {
 	const { attributeId, newValue, currentBlock, ref } = action;
 	let blockeraBlockStates: { [key: string]: Object } = {};
-	let blockeraInnerBlocks = state?.blockeraInnerBlocks;
+	let blockeraInnerBlocks = state?.blockeraInnerBlocks?.value || {};
 
 	if (isInnerBlock(currentBlock)) {
 		const blockStates =
-			state.blockeraInnerBlocks[currentBlock].attributes
-				?.blockeraBlockStates || {};
+			blockeraInnerBlocks[currentBlock].attributes?.blockeraBlockStates ||
+			{};
+
 		// $FlowFixMe
 		for (const stateType: TStates in blockStates) {
 			const _state = blockStates[stateType];
@@ -303,7 +332,7 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 		}
 
 		blockeraInnerBlocks = mergeObject(
-			state?.blockeraInnerBlocks || {},
+			state?.blockeraInnerBlocks?.value || {},
 			{
 				[currentBlock]: {
 					attributes: {
@@ -327,7 +356,7 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 		blockeraBlockStates = {};
 	}
 
-	const blockStates = state.blockeraBlockStates;
+	const blockStates = state.blockeraBlockStates.value;
 
 	// $FlowFixMe
 	for (const stateType: TStates in blockStates) {
@@ -492,7 +521,9 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 	return {
 		...state,
 		[attributeId]: newValue,
-		blockeraBlockStates,
+		blockeraBlockStates: {
+			value: blockeraBlockStates,
+		},
 		...(isInnerBlock(currentBlock)
 			? {
 					blockeraInnerBlocks,
@@ -562,29 +593,32 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 					state,
 					{
 						blockeraBlockStates: {
-							[currentState]: {
-								breakpoints: {
-									[currentBreakpoint]: {
-										attributes: {
-											blockeraInnerBlocks: {
-												[currentBlock]: {
-													attributes: {
-														blockeraBlockStates: {
-															[currentInnerBlockState]:
+							value: {
+								[currentState]: {
+									breakpoints: {
+										[currentBreakpoint]: {
+											attributes: {
+												blockeraInnerBlocks: {
+													[currentBlock]: {
+														attributes: {
+															blockeraBlockStates:
 																{
-																	breakpoints:
+																	[currentInnerBlockState]:
 																		{
-																			[currentBreakpoint]:
+																			breakpoints:
 																				{
-																					attributes:
+																					[currentBreakpoint]:
 																						{
-																							[attributeId]:
-																								isEquals(
-																									newValue,
-																									ref.defaultValue
-																								)
-																									? undefined
-																									: newValue,
+																							attributes:
+																								{
+																									[attributeId]:
+																										isEquals(
+																											newValue,
+																											ref.defaultValue
+																										)
+																											? undefined
+																											: newValue,
+																								},
 																						},
 																				},
 																		},
@@ -606,19 +640,21 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 				state,
 				{
 					blockeraBlockStates: {
-						[currentState]: {
-							breakpoints: {
-								[currentBreakpoint]: {
-									attributes: {
-										blockeraInnerBlocks: {
-											[currentBlock]: {
-												attributes: {
-													[attributeId]: isEquals(
-														newValue,
-														ref.defaultValue
-													)
-														? undefined
-														: newValue,
+						value: {
+							[currentState]: {
+								breakpoints: {
+									[currentBreakpoint]: {
+										attributes: {
+											blockeraInnerBlocks: {
+												[currentBlock]: {
+													attributes: {
+														[attributeId]: isEquals(
+															newValue,
+															ref.defaultValue
+														)
+															? undefined
+															: newValue,
+													},
 												},
 											},
 										},
@@ -635,19 +671,21 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 				state,
 				{
 					blockeraInnerBlocks: {
-						[currentBlock]: {
-							attributes: {
-								blockeraBlockStates: {
-									[currentInnerBlockState]: {
-										breakpoints: {
-											[currentBreakpoint]: {
-												attributes: {
-													[attributeId]: isEquals(
-														newValue,
-														ref.defaultValue
-													)
-														? undefined
-														: newValue,
+						value: {
+							[currentBlock]: {
+								attributes: {
+									blockeraBlockStates: {
+										[currentInnerBlockState]: {
+											breakpoints: {
+												[currentBreakpoint]: {
+													attributes: {
+														[attributeId]: isEquals(
+															newValue,
+															ref.defaultValue
+														)
+															? undefined
+															: newValue,
+													},
 												},
 											},
 										},
@@ -665,9 +703,11 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 			state,
 			{
 				blockeraInnerBlocks: {
-					[currentBlock]: {
-						attributes: {
-							[attributeId]: undefined,
+					value: {
+						[currentBlock]: {
+							attributes: {
+								[attributeId]: undefined,
+							},
 						},
 					},
 				},
@@ -683,25 +723,36 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 		return mergeObject(
 			state,
 			{
-				[attributeId]: newValue,
+				[attributeId]: {
+					value: newValue,
+				},
 			},
 			{ forceUpdated: [attributeId] }
 		);
+	}
+
+	let currentStateValue = state[attributeId]?.value;
+
+	if ('undefined' === typeof currentStateValue) {
+		currentStateValue = state[attributeId];
 	}
 
 	return mergeObject(
 		state,
 		{
 			blockeraBlockStates: {
-				[currentState]: {
-					breakpoints: {
-						[currentBreakpoint]: {
-							attributes: {
-								[attributeId]:
-									isEquals(state[attributeId], newValue) ||
-									(isObject(newValue) && isEmpty(newValue))
-										? undefined
-										: newValue,
+				value: {
+					[currentState]: {
+						breakpoints: {
+							[currentBreakpoint]: {
+								attributes: {
+									[attributeId]:
+										isEquals(currentStateValue, newValue) ||
+										(isObject(newValue) &&
+											isEmpty(newValue))
+											? undefined
+											: newValue,
+								},
 							},
 						},
 					},

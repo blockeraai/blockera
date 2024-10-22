@@ -162,8 +162,12 @@ export const getTransitionTypeOptions = function (): Array<Object> {
 					value: 'all',
 				},
 				{
-					label: __('Opacity', 'blockera'),
+					label:
+						__('Opacity', 'blockera') +
+						' - ' +
+						__('Upgrade to PRO', 'blockera'),
 					value: 'opacity',
+					disabled: true,
 				},
 				{
 					label:

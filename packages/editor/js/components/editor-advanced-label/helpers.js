@@ -29,6 +29,7 @@ import {
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, useBlockContext } from '../../extensions';
 import type { LabelStates, LabelChangedStates } from './types';
+import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 
 export const getStatesGraph = ({
 	controlId,
@@ -47,8 +48,10 @@ export const getStatesGraph = ({
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const { getAttributes = () => {}, currentBlock } = useBlockContext();
+	const attributes = sanitizeBlockAttributes(getAttributes());
 
 	const { getBlockType } = select('core/blocks');
+	const defaultAttributes = getBlockType(blockName)?.attributes || {};
 
 	return (
 		blockStates
@@ -99,12 +102,18 @@ export const getStatesGraph = ({
 								let value;
 
 								if (path) {
+									const preparedValueWithPath = prepare(
+										path,
+										state.attributes
+									);
 									value =
-										prepare(path, state.attributes) ??
-										prepare(
-											path,
-											state.attributes[controlId]
-										);
+										'undefined' ===
+										typeof preparedValueWithPath
+											? prepare(
+													path,
+													state.attributes[controlId]
+											  )
+											: preparedValueWithPath;
 								} else {
 									value = state.attributes[controlId];
 								}
@@ -115,9 +124,7 @@ export const getStatesGraph = ({
 
 								if (isUndefined(defaultValue)) {
 									defaultValue =
-										getBlockType(blockName)?.attributes[
-											controlId
-										]?.default;
+										defaultAttributes[controlId]?.default;
 								}
 
 								if (isObject(defaultValue)) {
@@ -130,22 +137,26 @@ export const getStatesGraph = ({
 											prepare(
 												preparedPath,
 												defaultValue
-											) ?? defaultValue;
+											) || defaultValue;
 									} else {
 										defaultValue =
-											prepare(path, defaultValue) ??
+											prepare(path, defaultValue) ||
 											defaultValue;
 									}
 								}
 
-								const attributes = getAttributes();
+								const preparedValueFromRoot = prepare(
+									path,
+									attributes
+								);
 
 								const rootValue =
-									prepare(path, attributes) ??
-									prepare(path, attributes[controlId]);
+									'undefined' === typeof preparedValueFromRoot
+										? prepare(path, attributes[controlId])
+										: preparedValueFromRoot;
 
 								if (
-									(state.type !== 'normal' ||
+									('normal' !== state.type ||
 										stateGraph.type !==
 											getBaseBreakpoint()) &&
 									isEquals(value, rootValue)

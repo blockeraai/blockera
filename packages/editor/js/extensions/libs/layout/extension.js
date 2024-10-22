@@ -153,7 +153,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									<h3>
 										<Icon
 											icon="display-block"
-											iconSize={22}
+											iconSize="18"
 										/>
 										{__('Block', 'blockera')}
 									</h3>
@@ -166,7 +166,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									<h3>
 										<Icon
 											icon="display-flex"
-											iconSize={22}
+											iconSize="18"
 										/>
 										{__('Flex', 'blockera')}
 									</h3>
@@ -179,7 +179,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									<h3>
 										<Icon
 											icon="display-grid"
-											iconSize={22}
+											iconSize="18"
 										/>
 										{__('Grid', 'blockera')}
 									</h3>
@@ -192,7 +192,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									<h3>
 										<Icon
 											icon="display-inline-block"
-											iconSize={22}
+											iconSize="18"
 										/>
 										{__('Inline Block', 'blockera')}
 									</h3>
@@ -205,7 +205,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									<h3>
 										<Icon
 											icon="display-inline"
-											iconSize={22}
+											iconSize="18"
 										/>
 										{__('Inline', 'blockera')}
 									</h3>
@@ -218,7 +218,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									<h3>
 										<Icon
 											icon="display-none"
-											iconSize={22}
+											iconSize="18"
 										/>
 										{__('None', 'blockera')}
 									</h3>
@@ -435,7 +435,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												<h3>
 													<Icon
 														icon="wrap-no"
-														iconSize={22}
+														iconSize="18"
 													/>
 													{__('No Wrap', 'blockera')}
 												</h3>
@@ -448,7 +448,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												<h3>
 													<Icon
 														icon="wrap"
-														iconSize={22}
+														iconSize="18"
 													/>
 													{__('Wrap', 'blockera')}
 												</h3>
@@ -614,7 +614,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												<h3>
 													<Icon
 														icon="align-content-flex-start"
-														iconSize={22}
+														iconSize="18"
 													/>
 													{__(
 														'Flex Start',
@@ -630,7 +630,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												<h3>
 													<Icon
 														icon="align-content-center"
-														iconSize="22"
+														iconSize="18"
 													/>
 													{__('Center', 'blockera')}
 												</h3>
@@ -643,7 +643,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												<h3>
 													<Icon
 														icon="align-content-flex-end"
-														iconSize={22}
+														iconSize="18"
 													/>
 													{__('Flex End', 'blockera')}
 												</h3>
@@ -656,7 +656,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												<h3>
 													<Icon
 														icon="align-content-space-around"
-														iconSize={22}
+														iconSize="18"
 													/>
 													{__(
 														'Space Around',
@@ -672,7 +672,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												<h3>
 													<Icon
 														icon="align-content-space-between"
-														iconSize={22}
+														iconSize="18"
 													/>
 													{__(
 														'Space Between',
@@ -688,7 +688,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												<h3>
 													<Icon
 														icon="align-content-stretch"
-														iconSize={22}
+														iconSize="18"
 													/>
 													{__('Stretch', 'blockera')}
 												</h3>

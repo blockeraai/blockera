@@ -57,7 +57,7 @@ export const TextDecoration = ({
 						<h3>
 							<Icon
 								icon="text-decoration-underline"
-								iconSize="22"
+								iconSize="18"
 							/>
 							{__('Underline', 'blockera')}
 						</h3>
@@ -70,7 +70,7 @@ export const TextDecoration = ({
 						<h3>
 							<Icon
 								icon="text-decoration-line-through"
-								iconSize="22"
+								iconSize="18"
 							/>
 							{__('Line Through', 'blockera')}
 						</h3>
@@ -83,7 +83,7 @@ export const TextDecoration = ({
 						<h3>
 							<Icon
 								icon="text-decoration-overline"
-								iconSize="22"
+								iconSize="18"
 							/>
 							{__('Overline', 'blockera')}
 						</h3>
@@ -92,7 +92,7 @@ export const TextDecoration = ({
 							<Icon
 								library="wp"
 								icon="close-small"
-								iconSize="22"
+								iconSize="18"
 							/>
 							{__('None', 'blockera')}
 						</h3>

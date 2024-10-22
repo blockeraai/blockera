@@ -81,7 +81,7 @@ describe('Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#blockera-inline-css-inline-css')
+		cy.get('style#blockera-inline-css')
 			.invoke('text')
 			.should(
 				'include',

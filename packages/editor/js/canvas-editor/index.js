@@ -30,14 +30,18 @@ export const CanvasEditor = ({
 	useEffect(() => {
 		ref.current = {
 			postPreviewElement: document.querySelector(postPreviewElement),
-			previewDropdown: document.querySelector(previewDropdown),
+			previewDropdown: document.querySelectorAll(previewDropdown),
 		};
 
 		if (ref.current.postPreviewElement) {
 			ref.current.postPreviewElement.style.display = 'none';
 		}
-		if (ref.current.previewDropdown) {
-			ref.current.previewDropdown.style.display = 'none';
+		if (ref.current.previewDropdown.length) {
+			ref.current.previewDropdown.forEach((previewElement) => {
+				if (previewElement) {
+					previewElement.style.display = 'none';
+				}
+			});
 		}
 		// eslint-disable-next-line
 	}, [selectedBlock]);

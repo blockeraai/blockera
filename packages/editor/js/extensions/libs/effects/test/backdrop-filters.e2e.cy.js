@@ -53,7 +53,7 @@ describe('Backdrop Filters → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'backdrop-filter: drop-shadow(50px 30px 40px #cccccc);'
+					'backdrop-filter: drop-shadow(50px 30px 40px #cccccc)'
 				);
 		});
 
@@ -86,7 +86,7 @@ describe('Backdrop Filters → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#blockera-inline-css-inline-css')
+		cy.get('style#blockera-inline-css')
 			.invoke('text')
 			.should(
 				'include',

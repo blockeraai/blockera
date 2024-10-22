@@ -29,7 +29,8 @@ describe('Blockera editor bootstrapper', () => {
 		cy.getBlock('woocommerce/all-products').click();
 
 		cy.getByAriaLabel(`Edit the layout of each product`).click();
-		cy.get(`[data-type="woocommerce/product-price"]`).click();
+
+		cy.getBlock('woocommerce/product-price').should('be.visible').click();
 
 		cy.getByAriaLabel('Add New Background').should('exist');
 
