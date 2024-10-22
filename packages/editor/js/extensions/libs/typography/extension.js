@@ -33,6 +33,7 @@ import { Icon } from '@blockera/icons';
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
+import { useBlockSection } from '../../components';
 import type { TTypographyProps } from './type/typography-props';
 import {
 	FontFamily,
@@ -60,6 +61,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		setSettings,
 		attributes,
 	}: TTypographyProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('typographyConfig');
 		const isShowFontFamily = isShowField(
 			extensionConfig.blockeraFontFamily,
 			values?.blockeraFontFamily,
@@ -222,7 +224,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		return (
 			<PanelBodyControl
 				title={__('Typography', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
+				onToggle={onToggle}
 				icon={<Icon icon="extension-typography" />}
 				className={extensionClassNames('typography')}
 			>
