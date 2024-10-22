@@ -191,6 +191,14 @@
 
 .block-editor-block-card {
 
+	// Fix for block card icon in Block Inspector
+	// It happens because we add extra icon inside it
+
+	.blockera-block-icon + .block-editor-block-icon {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
 	// Change description to be like our description
 
 	.block-editor-block-card__description {
