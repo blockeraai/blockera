@@ -170,3 +170,16 @@
 		}
 	}
 }
+
+// Fix for Block Card Tabs in Block Inspector
+// It's a bug from tabs component
+// It happens because tabs are hidden while
+// Blockera is active
+
+.block-editor-block-card + [data-test="blockera-availability"] {
+
+	[role="tablist"] {
+		--indicator-width: 140;
+	}
+}
+
