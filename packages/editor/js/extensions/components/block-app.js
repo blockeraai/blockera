@@ -14,7 +14,6 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
 import { setItem, getItem, updateItem } from '@blockera/storage';
 
 /**
@@ -47,7 +46,9 @@ export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
 				sections: Object.fromEntries(
 					Object.entries(sections).map(([key, value]) => [
 						key,
-						value.initialOpen,
+						{
+							initialOpen: value.initialOpen,
+						},
 					])
 				),
 				focusedSection: 'innerBlocksConfig',
@@ -92,30 +93,29 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 	const onToggle = (isOpen: boolean): void => {
 		const _sections: { [key: string]: Object } = {};
 
+		const next: { [key: string]: any } = {
+			...settings,
+			focusedSection: sectionId,
+			...(blockSections.focusMode && Object.values(_sections).length
+				? { key: key + 1 }
+				: {}),
+		};
+
 		if (isOpen) {
 			if (blockSections.focusMode && focusedSection !== sectionId) {
 				if (focusedSection) {
-					_sections[focusedSection] = {
+					next.sections[focusedSection] = {
 						...sections[focusedSection],
 						initialOpen: false,
 					};
 				}
 
-				_sections[sectionId] = {
+				next.sections[sectionId] = {
 					...sections[sectionId],
 					initialOpen: true,
 				};
 			}
 		}
-
-		const next = {
-			...settings,
-			focusedSection: sectionId,
-			sections: mergeObject(sections, _sections),
-			...(blockSections.focusMode && Object.values(_sections).length
-				? { key: key + 1 }
-				: {}),
-		};
 
 		// Updating cache ...
 		updateItem(cacheKey, next);
