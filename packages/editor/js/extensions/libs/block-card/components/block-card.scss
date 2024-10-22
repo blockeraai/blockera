@@ -52,7 +52,7 @@
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 10px;
 
 		.blockera-extension-block-card__title {
 			line-height: 16px;
@@ -111,11 +111,16 @@
 		}
 
 		.blockera-extension-block-card__description {
-			display: block;
+			display: -webkit-box;
 			margin: 0;
-			line-height: 20px;
 			font-size: 13px;
+			line-height: 1.4;
+			text-wrap: pretty;
+			font-weight: 400;
 			color: #929292;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			overflow: hidden;
 		}
 
 		.block-editor-block-variation-transforms {
@@ -183,3 +188,18 @@
 	}
 }
 
+
+.block-editor-block-card {
+
+	// Change description to be like our description
+
+	.block-editor-block-card__description {
+		color: #929292;
+		margin-top: 6px;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		display: -webkit-box;
+		overflow: hidden;
+	}
+
+}
