@@ -22,16 +22,18 @@ export const Categories: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/term-item': {
 			name: 'elements/term-item',
-			label: __('Link', 'blockera'),
-			icon: <Icon icon="link" library="wp" iconSize="20" />,
+			label: __('Terms', 'blockera'),
+			description: __('All term elements.', 'blockera'),
+			icon: <Icon icon="block-list-item" iconSize="20" />,
 			settings: {
 				force: true,
 			},
 		},
 		'elements/list-item': {
 			name: 'elements/list-item',
-			label: __('Link Parent', 'blockera'),
-			icon: <Icon icon="block-list-item" iconSize="20" />,
+			label: __('Terms Container', 'blockera'),
+			description: __('All terms container elements.', 'blockera'),
+			icon: <Icon icon="block-list-item-container" iconSize="20" />,
 			settings: {
 				force: true,
 			},

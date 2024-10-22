@@ -9,7 +9,10 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { isObject } from '@blockera/utils';
-import { controlClassNames } from '@blockera/classnames';
+import {
+	controlClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -83,6 +86,9 @@ export default function TransformControl({
 	return (
 		<RepeaterControl
 			className={controlClassNames('transform', className)}
+			popoverClassName={componentInnerClassNames(
+				'popover-transform-control'
+			)}
 			popoverTitle={popoverTitle || __('2D & 3D Transforms', 'blockera')}
 			label={label || __('2D & 3D Transforms', 'blockera')}
 			labelDescription={labelDescription || <LabelDescription />}

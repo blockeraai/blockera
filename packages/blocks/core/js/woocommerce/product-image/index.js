@@ -23,6 +23,10 @@ export const WooCommerceProductImage: BlockType = {
 		'elements/sale-badge': {
 			name: 'elements/sale-badge',
 			label: __('Sale Badge', 'blockera'),
+			description: __(
+				'The sale badge over the product image.',
+				'blockera'
+			),
 			icon: <Icon icon="block-product-image-sale" iconSize="20" />,
 			settings: {
 				force: true,

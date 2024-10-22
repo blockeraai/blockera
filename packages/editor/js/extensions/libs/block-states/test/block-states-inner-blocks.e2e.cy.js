@@ -43,7 +43,7 @@ describe('Block States on inner blocks E2E tests', () => {
 
 	const initialSetting = () => {
 		appendBlocks(
-			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
+			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{"value": {}},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
 			<p class="blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74"><a href="http://localhost/wordpress/2023/12/16/5746/" data-type="post" data-id="5746" class="my-link">link</a></p>
 			<!-- /wp:paragraph -->`
 		);
@@ -57,7 +57,7 @@ describe('Block States on inner blocks E2E tests', () => {
 
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
-				'[aria-label="Blockera Block State Container"]:first-child'
+				'.blockera-state-colors-container:last-child'
 			).should('eq', '#cc0000');
 		});
 
@@ -68,7 +68,7 @@ describe('Block States on inner blocks E2E tests', () => {
 
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
-				'[aria-label="Blockera Block State Container"]:first-child'
+				'.blockera-state-colors-container:last-child'
 			).should('eq', '#D47C14');
 		});
 
@@ -76,11 +76,11 @@ describe('Block States on inner blocks E2E tests', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 
-			cy.getByDataTest('blockera-block-state-container')
-				.first()
-				.within(() => {
-					cy.contains('Inner Block States').should('exist');
-				});
+			cy.get(
+				'.blockera-extension-block-card.block-card--inner-block'
+			).within(() => {
+				cy.contains('Inner Block States').should('exist');
+			});
 		});
 	});
 
@@ -88,7 +88,7 @@ describe('Block States on inner blocks E2E tests', () => {
 		it('Set the hidden style for WordPress block origin features when choose state (apart from normal state)', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
-			cy.getByAriaLabel('Add New State').click();
+			cy.getByAriaLabel('Add New State').last().click();
 
 			//In this assertion not available data attribute for this selector، Please don't be sensitive.
 			cy.get('button')
@@ -104,26 +104,33 @@ describe('Block States on inner blocks E2E tests', () => {
 		it('Set the current state when add new block states', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
-			checkBlockCard([
-				{
-					label: 'Link',
-					type: 'Inner Block',
-				},
-			]);
 
-			cy.getByAriaLabel('Add New State').click();
+			checkBlockCard(
+				[
+					{
+						label: 'Selected Inner Block',
+						text: 'Link',
+					},
+				],
+				'inner-block'
+			);
+
+			cy.getByAriaLabel('Add New State').last().click();
 
 			checkCurrentState('hover');
-			checkBlockCard([
-				{
-					label: 'Link',
-					type: 'Inner Block',
-				},
-				{
-					label: 'Hover',
-					type: 'State',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Selected Inner Block',
+						text: 'Link',
+					},
+					{
+						label: 'Hover State',
+						text: 'Hover',
+					},
+				],
+				'inner-block'
+			);
 		});
 	});
 
@@ -136,7 +143,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			cy.contains('Normal').should('not.exist');
 
 			context('add hover', () => {
-				cy.getByAriaLabel('Add New State').click();
+				cy.getByAriaLabel('Add New State').last().click();
 				// render normal when adding new state
 				cy.contains('Normal').should('exist');
 				cy.contains('Hover').should('exist');
@@ -204,12 +211,15 @@ describe('Block States on inner blocks E2E tests', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 			//
-			checkBlockCard([
-				{
-					label: 'Link',
-					type: 'Inner Block',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Selected Inner Block',
+						text: 'Link',
+					},
+				],
+				'inner-block'
+			);
 
 			cy.setColorControlValue('BG Color', 'cccccc');
 
@@ -279,12 +289,15 @@ describe('Block States on inner blocks E2E tests', () => {
 			setInnerBlock('elements/link');
 			setDeviceType('Tablet');
 			//
-			checkBlockCard([
-				{
-					label: 'Link',
-					type: 'Inner Block',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Selected Inner Block',
+						text: 'Link',
+					},
+				],
+				'inner-block'
+			);
 
 			// Set overflow
 			cy.setColorControlValue('BG Color', 'cccccc');
@@ -378,16 +391,19 @@ describe('Block States on inner blocks E2E tests', () => {
 			setInnerBlock('elements/link');
 			addBlockState('hover');
 			//
-			checkBlockCard([
-				{
-					label: 'Link',
-					type: 'Inner Block',
-				},
-				{
-					label: 'Hover',
-					type: 'State',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Selected Inner Block',
+						text: 'Link',
+					},
+					{
+						label: 'Hover State',
+						text: 'Hover',
+					},
+				],
+				'inner-block'
+			);
 
 			cy.setColorControlValue('BG Color', 'cccccc');
 
@@ -483,16 +499,19 @@ describe('Block States on inner blocks E2E tests', () => {
 			addBlockState('hover');
 			setDeviceType('Tablet');
 			//
-			checkBlockCard([
-				{
-					label: 'Link',
-					type: 'Inner Block',
-				},
-				{
-					label: 'Hover',
-					type: 'State',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Selected Inner Block',
+						text: 'Link',
+					},
+					{
+						label: 'Hover State',
+						text: 'Hover',
+					},
+				],
+				'inner-block'
+			);
 
 			cy.setColorControlValue('BG Color', 'cccccc');
 

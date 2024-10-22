@@ -13,7 +13,13 @@ import { arrayEquals } from '../utils';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('size');
 
 export const SizeStyles = ({
 	state,
@@ -78,11 +84,14 @@ export const SizeStyles = ({
 			value = currentBlockAttributes.width;
 		}
 
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraWidth',
 			support: 'blockeraWidth',
-			fallbackSupportId: 'width',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraWidth'
+			),
 		});
 
 		styleGroup.push({
@@ -112,11 +121,14 @@ export const SizeStyles = ({
 		);
 
 		if (minWidth !== attributes.blockeraMinWidth.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraMinWidth',
 				support: 'blockeraMinWidth',
-				fallbackSupportId: 'minWidth',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraMinWidth'
+				),
 			});
 
 			styleGroup.push({
@@ -147,11 +159,14 @@ export const SizeStyles = ({
 		);
 
 		if (maxWidth !== attributes.blockeraMaxWidth.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraMaxWidth',
 				support: 'blockeraMaxWidth',
-				fallbackSupportId: 'maxWidth',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraMaxWidth'
+				),
 			});
 
 			styleGroup.push({
@@ -193,11 +208,14 @@ export const SizeStyles = ({
 		}
 
 		if (value.trim()) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraHeight',
 				support: 'blockeraHeight',
-				fallbackSupportId: 'height',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraHeight'
+				),
 			});
 
 			styleGroup.push({
@@ -228,11 +246,14 @@ export const SizeStyles = ({
 		);
 
 		if (minHeight !== attributes.blockeraMinHeight.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraMinHeight',
 				support: 'blockeraMinHeight',
-				fallbackSupportId: 'minHeight',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraMinHeight'
+				),
 			});
 
 			styleGroup.push({
@@ -263,11 +284,14 @@ export const SizeStyles = ({
 		);
 
 		if (maxHeight !== attributes.blockeraMaxHeight.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraMaxHeight',
 				support: 'blockeraMaxHeight',
-				fallbackSupportId: 'maxHeight',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraMaxHeight'
+				),
 			});
 
 			styleGroup.push({
@@ -297,11 +321,14 @@ export const SizeStyles = ({
 			currentBlockAttributes.blockeraOverflow !==
 			attributes.blockeraOverflow.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraOverflow',
 				support: 'blockeraOverflow',
-				fallbackSupportId: 'overflow',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraOverflow'
+				),
 			});
 
 			styleGroup.push({
@@ -348,11 +375,14 @@ export const SizeStyles = ({
 					value = ratio;
 			}
 
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraRatio',
 				support: 'blockeraRatio',
-				fallbackSupportId: 'aspectRatio',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraRatio'
+				),
 			});
 
 			styleGroup.push({
@@ -379,11 +409,11 @@ export const SizeStyles = ({
 		currentBlockAttributes?.blockeraFit &&
 		currentBlockAttributes.blockeraFit !== attributes.blockeraFit.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFit',
 			support: 'blockeraFit',
-			fallbackSupportId: 'fit',
+			fallbackSupportId: getBlockSupportFallback(supports, 'blockeraFit'),
 		});
 
 		styleGroup.push({
@@ -412,11 +442,14 @@ export const SizeStyles = ({
 			attributes.blockeraFitPosition.default
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFitPosition',
 			support: 'blockeraFitPosition',
-			fallbackSupportId: 'fitPosition',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraFitPosition'
+			),
 		});
 
 		styleGroup.push({

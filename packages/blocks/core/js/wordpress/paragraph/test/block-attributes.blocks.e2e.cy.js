@@ -25,7 +25,8 @@ describe('Testing shared default attributes value', () => {
 				// Skip WordPress core blocks attributes or current attribute was not default value!
 				if (
 					!attribute.hasOwnProperty('default') ||
-					/^(?!blockera\w+).*/i.test(name)
+					/^(?!blockera\w+).*/i.test(name) ||
+					['blockeraPropsId', 'blockeraCompatId'].includes(name)
 				) {
 					continue;
 				}
@@ -35,10 +36,17 @@ describe('Testing shared default attributes value', () => {
 					attribute?.type === typeof attribute.default
 				).to.be.equal(true);
 
-				// Assertion for sync registered default attribute value with selected block attribute value.
-				expect(attribute.default).to.be.deep.equal(
-					getSelectedBlock(data, name)
-				);
+				if ('undefined' === typeof attribute.default.value) {
+					// Assertion for sync registered default attribute value with selected block attribute value.
+					expect(attribute.default).to.be.deep.equal(
+						getSelectedBlock(data, name)
+					);
+				} else {
+					// Assertion for sync registered default attribute value with selected block attribute value.
+					expect(attribute.default.value).to.be.deep.equal(
+						getSelectedBlock(data, name)
+					);
+				}
 			}
 		});
 	});

@@ -18,11 +18,17 @@ import {
 	TransitionGenerator,
 	MaskGenerator,
 } from './css-generators';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
 import {
 	AfterDividerGenerator,
 	BeforeDividerGenerator,
 } from './css-generators/divider-generator';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('effects');
 
 export const EffectsStyles = ({
 	state,
@@ -73,11 +79,14 @@ export const EffectsStyles = ({
 		blockProps.attributes.blockeraOpacity !==
 			attributes.blockeraOpacity.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraOpacity',
 			support: 'blockeraOpacity',
-			fallbackSupportId: 'opacity',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraOpacity'
+			),
 		});
 
 		styleGroup.push({
@@ -226,10 +235,14 @@ export const EffectsStyles = ({
 		}
 
 		if (transformProperties) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTransform',
 				support: 'blockeraTransform',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTransform'
+				),
 			});
 
 			styleGroup.push({
@@ -256,10 +269,14 @@ export const EffectsStyles = ({
 			blockProps.attributes.blockeraTransition
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraTransition',
 			support: 'blockeraTransition',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraTransition'
+			),
 		});
 
 		styleGroup.push({
@@ -285,10 +302,14 @@ export const EffectsStyles = ({
 			blockProps.attributes.blockeraFilter
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFilter',
 			support: 'blockeraFilter',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraFilter'
+			),
 		});
 
 		styleGroup.push({
@@ -314,10 +335,14 @@ export const EffectsStyles = ({
 			blockProps.attributes.blockeraBackdropFilter
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraBackdropFilter',
 			support: 'blockeraBackdropFilter',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBackdropFilter'
+			),
 		});
 
 		styleGroup.push({
@@ -341,10 +366,14 @@ export const EffectsStyles = ({
 		blockProps.attributes.blockeraBlendMode !==
 			attributes.blockeraBlendMode.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraBlendMode',
 			support: 'blockeraBlendMode',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBlendMode'
+			),
 		});
 
 		styleGroup.push({
@@ -374,10 +403,14 @@ export const EffectsStyles = ({
 			blockProps.attributes.blockeraDivider
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraDivider',
 			support: 'blockeraDivider',
+			fallbackSupportId: getBlockSupportFallback(
+				getBlockSupportCategory('divider'),
+				'blockeraDivider'
+			),
 		});
 
 		styleGroup.push({
@@ -399,7 +432,7 @@ export const EffectsStyles = ({
 		});
 
 		styleGroup.push({
-			selector: getCssSelector({
+			selector: getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraDivider',
 				support: 'blockeraDivider',
@@ -422,7 +455,7 @@ export const EffectsStyles = ({
 			Object.entries(blockProps.attributes?.blockeraDivider)?.length === 2
 		) {
 			styleGroup.push({
-				selector: getCssSelector({
+				selector: getCompatibleBlockCssSelector({
 					...sharedParams,
 					query: 'blockeraDivider',
 					support: 'blockeraDivider',
@@ -451,10 +484,14 @@ export const EffectsStyles = ({
 			blockProps.attributes.blockeraMask
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraMask',
 			support: 'blockeraMask',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraMask'
+			),
 		});
 
 		styleGroup.push({

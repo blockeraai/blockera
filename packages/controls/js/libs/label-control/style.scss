@@ -1,6 +1,7 @@
 .blockera-control-label {
 	font-weight: 500;
 	font-size: 12px;
+	line-height: 1;
 	display: flex;
 	align-items: center;
 	height: 20px;
@@ -297,17 +298,21 @@
 			flex-direction: row;
 			align-items: center;
 			gap: 10px;
-			padding: 0 12px;
+			padding: 0 6px 0 12px;
 			border: 1px solid var(--blockera-controls-border-color);
 			background-color: #272c31;
 			color: #ffffff;
 			border-radius: 2px;
 			font-size: 12px;
 			position: relative;
-			cursor: pointer;
+
 			transition: all 0.1s linear;
 
-			&:hover {
+			&:not(.is-current-active-item) {
+				cursor: pointer;
+			}
+
+			&:not(.is-current-active-item):hover {
 				border-color: #585b5e;
 				background-color: #2e3439;
 
@@ -328,15 +333,16 @@
 			}
 
 			.blockera-control-states-changes-item-current {
-				color: var(--blockera-controls-primary-color);
 				margin-left: auto;
-				font-style: italic;
 			}
 
 			.blockera-control-states-changes-item__edit-icon {
 				opacity: 0;
 				margin-left: auto;
 				transition: all 0.1s linear;
+				position: absolute;
+				right: 5px;
+    			top: 5px;
 			}
 		}
 	}

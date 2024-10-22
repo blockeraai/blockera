@@ -53,7 +53,7 @@ export const FontStyle = ({
 							)}
 						</p>
 						<h3>
-							<Icon icon="font-style-normal" iconSize="22" />
+							<Icon icon="font-style-normal" iconSize="18" />
 							{__('Normal', 'blockera')}
 						</h3>
 						<p>
@@ -63,7 +63,7 @@ export const FontStyle = ({
 							)}
 						</p>
 						<h3>
-							<Icon icon="font-style-italic" iconSize="22" />
+							<Icon icon="font-style-italic" iconSize="18" />
 							{__('Italic', 'blockera')}
 						</h3>
 						<p>

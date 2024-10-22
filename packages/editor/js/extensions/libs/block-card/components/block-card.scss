@@ -1,26 +1,58 @@
 .blockera-extension.blockera-extension-block-card {
 	display: flex;
+	position: relative;
 	flex-direction: column;
 	gap: 10px;
+	padding: 16px;
+	border: none;
+	border-bottom: 1px solid transparent;
+	margin-bottom: -1px;
+	min-height: 140px;
+	background-color: #ffffff;
+	transition: height 0.2s ease, box-shadow 0.075s ease;
+
+	.blockera-control-block-states-repeater {
+    	padding: 0 2px;
+	    width: 100%;
+
+		.blockera-control-repeater-items-container {
+    		padding-bottom: 5px;
+
+			.blockera-control-repeater-item:not(:first-child) {
+				--blockera-controls-primary-color: #d47c14;
+			}
+		}
+	}
 
 	.blockera-extension-block-card__inner {
 		align-items: flex-start;
 		display: flex;
+		flex-grow: 1;
 	}
 
 	.blockera-component-block-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		flex: 0 0 24px;
 		height: 24px;
 		margin-left: 0;
 		margin-right: 12px;
 		width: 24px;
+
+		svg {
+			fill: currentColor;
+			width: 100%;
+			height: auto;
+			max-width: 24px;
+		}
 	}
 
 	.blockera-extension-block-card__content {
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		gap: 10px;
 
 		.blockera-extension-block-card__title {
 			line-height: 16px;
@@ -31,15 +63,16 @@
 			display: flex;
 			align-items: center;
 			min-height: 24px;
-			gap: 2px;
+			gap: 5px;
 			flex-wrap: wrap;
 
-			svg {
+			.blockera-extension-block-card__title__separator {
+				color: #1e1e1e;
 				fill: currentColor;
 				opacity: 0.3;
 			}
 
-			.blockera-extension-block-card__title__block:not(:last-child) {
+			.blockera-extension-block-card__title__block.title-is-clickable {
 				cursor: pointer;
 			}
 
@@ -62,19 +95,37 @@
 			.blockera-extension-block-card__title__item.inner-block {
 				--blockera-controls-primary-color: #cc0000;
 			}
+
+			.blockera-extension-block-card__close {
+				position: absolute;
+				right: 12px;
+				opacity: 1;
+				cursor: pointer;
+				color: #1e1e1e;
+				fill: currentColor;
+
+				&:hover {
+					color: var(--blockera-controls-primary-color);
+				}
+			}
 		}
 
 		.blockera-extension-block-card__description {
-			display: block;
+			display: -webkit-box;
 			margin: 0;
-			line-height: 20px;
 			font-size: 13px;
+			line-height: 1.4;
+			text-wrap: pretty;
+			font-weight: 400;
 			color: #929292;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			overflow: hidden;
 		}
 
 		.block-editor-block-variation-transforms {
 			padding: 0;
-			margin: 8px 0 0;
+			margin: 5px 0 0 -4px;
 			display: flex;
 			flex-direction: row;
 			gap: 8px;
@@ -86,6 +137,7 @@
 			.components-toggle-group-control {
 				min-height: 34px;
 				height: 26px;
+				background-color: transparent;
 			}
 
 			.components-toggle-group-control-option-base {
@@ -101,4 +153,61 @@
 			}
 		}
 	}
+
+	&.inner-block-is-selected {
+		background-color: #f6f6f6;
+		height: 55px;
+		min-height: auto;
+		overflow: hidden;
+		transition: all 0.2s ease;
+
+		& + .blockera-extension-block-card {
+			box-shadow: 0 -1px 0 #cbcbcb, 0 -11px 11px -6px rgba(0, 0, 0, 0.16);
+		}
+	}
+
+	&.block-card--inner-block {
+		--blockera-controls-primary-color: #cc0000;
+
+		.blockera-extension-block-card__title,
+		.blockera-component-block-icon {
+			color: var(--blockera-controls-primary-color);
+		}
+	}
+}
+
+// Fix for Block Card Tabs in Block Inspector
+// It's a bug from tabs component
+// It happens because tabs are hidden while
+// Blockera is active
+
+.block-editor-block-card + [data-test="blockera-availability"] {
+
+	[role="tablist"] {
+		--indicator-width: 140;
+	}
+}
+
+
+.block-editor-block-card {
+
+	// Fix for block card icon in Block Inspector
+	// It happens because we add extra icon inside it
+
+	.blockera-block-icon + .block-editor-block-icon {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	// Change description to be like our description
+
+	.block-editor-block-card__description {
+		color: #929292;
+		margin-top: 6px;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		display: -webkit-box;
+		overflow: hidden;
+	}
+
 }

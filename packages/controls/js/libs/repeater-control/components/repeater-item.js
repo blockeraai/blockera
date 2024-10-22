@@ -55,7 +55,9 @@ const RepeaterItem = ({
 		valueCleanup,
 		repeaterId,
 		popoverTitle,
+		popoverOffset,
 		PromoComponent,
+		popoverProps,
 		popoverClassName,
 		repeaterItems: items,
 		repeaterItemOpener: RepeaterItemOpener,
@@ -157,7 +159,9 @@ const RepeaterItem = ({
 				}
 				toggleOpenBorder={true}
 				design={design}
+				popoverProps={popoverProps}
 				popoverTitle={popoverTitle}
+				popoverOffset={popoverOffset}
 				popoverTitleButtonsRight={
 					PopoverTitleButtonsRight && (
 						<PopoverTitleButtonsRight

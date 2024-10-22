@@ -1,8 +1,10 @@
 # Custom Dictionary Words
 ABSPATH
 autoloader
+backface
 blockera
 clsx
+freemius
 phpcs
 sprintf
 woocommerce

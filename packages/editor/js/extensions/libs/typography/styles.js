@@ -14,7 +14,13 @@ import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import { TextShadowGenerator } from './css-generators';
 import type { CssRule } from '../../../style-engine/types';
-import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
+import {
+	computedCssDeclarations,
+	getCompatibleBlockCssSelector,
+} from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('typography');
 
 export function TypographyStyles({
 	state,
@@ -30,6 +36,8 @@ export function TypographyStyles({
 	...props
 }: StylesProps): Array<CssRule> {
 	const {
+		blockeraFontFamily,
+		blockeraFontWeight,
 		blockeraFontSize,
 		blockeraLineHeight,
 		blockeraTextAlign,
@@ -68,17 +76,86 @@ export function TypographyStyles({
 
 	const styleGroup: Array<CssRule> = [];
 
+	if (isActiveField(blockeraFontFamily)) {
+		const blockeraFontFamily = blockProps.attributes.blockeraFontFamily;
+
+		if (blockeraFontFamily !== attributes.blockeraFontFamily.default) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraFontFamily',
+				support: 'blockeraFontFamily',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontFamily'
+				),
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraFontFamily: [
+							{
+								type: 'static',
+								properties: {
+									'font-family': `var(--wp--preset--font-family--${blockeraFontFamily})`,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
+	if (isActiveField(blockeraFontWeight)) {
+		const blockeraFontWeight = blockProps.attributes.blockeraFontWeight;
+
+		if (blockeraFontWeight !== attributes.blockeraFontWeight.default) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraFontWeight',
+				support: 'blockeraFontWeight',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontWeight'
+				),
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraFontWeight: [
+							{
+								type: 'static',
+								properties: {
+									'font-weight': blockeraFontWeight,
+								},
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
+	}
+
 	if (isActiveField(blockeraFontSize)) {
 		const blockeraFontSize = getValueAddonRealValue(
 			blockProps.attributes.blockeraFontSize
 		);
 
 		if (blockeraFontSize !== attributes.blockeraFontSize.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFontSize',
 				support: 'blockeraFontSize',
-				fallbackSupportId: 'font-size',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontSize'
+				),
 			});
 
 			styleGroup.push({
@@ -107,11 +184,14 @@ export function TypographyStyles({
 		);
 
 		if (blockeraLineHeight !== attributes.blockeraLineHeight.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraLineHeight',
 				support: 'blockeraLineHeight',
-				fallbackSupportId: 'line-height',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraLineHeight'
+				),
 			});
 
 			styleGroup.push({
@@ -140,11 +220,14 @@ export function TypographyStyles({
 		);
 
 		if (blockeraFontColor !== attributes.blockeraFontColor.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFontColor',
 				support: 'blockeraFontColor',
-				fallbackSupportId: 'color',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontColor'
+				),
 			});
 
 			styleGroup.push({
@@ -170,11 +253,14 @@ export function TypographyStyles({
 		const blockeraTextAlign = blockProps.attributes.blockeraTextAlign;
 
 		if (blockeraTextAlign !== attributes.blockeraTextAlign.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextAlign',
 				support: 'blockeraTextAlign',
-				fallbackSupportId: 'text-align;',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextAlign'
+				),
 			});
 
 			styleGroup.push({
@@ -203,11 +289,14 @@ export function TypographyStyles({
 		if (
 			blockeraTextDecoration !== attributes.blockeraTextDecoration.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextDecoration',
 				support: 'blockeraTextDecoration',
-				fallbackSupportId: 'text-decoration',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextDecoration'
+				),
 			});
 
 			styleGroup.push({
@@ -233,11 +322,14 @@ export function TypographyStyles({
 		const blockeraFontStyle = blockProps.attributes.blockeraFontStyle;
 
 		if (blockeraFontStyle !== attributes.blockeraFontStyle.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFontStyle',
 				support: 'blockeraFontStyle',
-				fallbackSupportId: 'font-style',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFontStyle'
+				),
 			});
 
 			styleGroup.push({
@@ -266,11 +358,14 @@ export function TypographyStyles({
 		if (
 			blockeraTextTransform !== attributes.blockeraTextTransform.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextTransform',
 				support: 'blockeraTextTransform',
-				fallbackSupportId: 'text-transform',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextTransform'
+				),
 			});
 
 			styleGroup.push({
@@ -296,11 +391,14 @@ export function TypographyStyles({
 		const blockeraDirection = blockProps.attributes.blockeraDirection;
 
 		if (blockeraDirection !== attributes.blockeraDirection.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraDirection',
 				support: 'blockeraDirection',
-				fallbackSupportId: 'direction',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraDirection'
+				),
 			});
 
 			styleGroup.push({
@@ -329,11 +427,14 @@ export function TypographyStyles({
 		if (
 			blockeraLetterSpacing !== attributes.blockeraLetterSpacing.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraLetterSpacing',
 				support: 'blockeraLetterSpacing',
-				fallbackSupportId: 'letter-spacing',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraLetterSpacing'
+				),
 			});
 
 			styleGroup.push({
@@ -359,11 +460,14 @@ export function TypographyStyles({
 		const blockeraWordSpacing = blockProps.attributes.blockeraWordSpacing;
 
 		if (blockeraWordSpacing !== attributes.blockeraWordSpacing.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraWordSpacing',
 				support: 'blockeraWordSpacing',
-				fallbackSupportId: 'word-spacing',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraWordSpacing'
+				),
 			});
 
 			styleGroup.push({
@@ -389,11 +493,14 @@ export function TypographyStyles({
 		const blockeraTextIndent = blockProps.attributes.blockeraTextIndent;
 
 		if (blockeraTextIndent !== attributes.blockeraTextIndent.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextIndent',
 				support: 'blockeraTextIndent',
-				fallbackSupportId: 'text-indent',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextIndent'
+				),
 			});
 
 			styleGroup.push({
@@ -423,11 +530,14 @@ export function TypographyStyles({
 			blockeraTextOrientation !==
 			attributes.blockeraTextOrientation.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextOrientation',
 				support: 'blockeraTextOrientation',
-				fallbackSupportId: 'text-orientation',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextOrientation'
+				),
 			});
 
 			const properties: {
@@ -485,11 +595,14 @@ export function TypographyStyles({
 				attributes.blockeraTextColumns.default
 			)
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextColumns',
 				support: 'blockeraTextColumns',
-				fallbackSupportId: 'text-columns',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextColumns'
+				),
 			});
 
 			const properties: {
@@ -553,11 +666,14 @@ export function TypographyStyles({
 		const blockeraTextStroke = blockProps.attributes.blockeraTextStroke;
 
 		if (blockeraTextStroke !== attributes.blockeraTextStroke.default) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextStroke',
 				support: 'blockeraTextStroke',
-				fallbackSupportId: 'text-stroke',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextStroke'
+				),
 			});
 
 			const textStrokeColor = getValueAddonRealValue(
@@ -595,11 +711,14 @@ export function TypographyStyles({
 			blockeraWordBreak !== attributes.blockeraWordBreak.default &&
 			blockeraWordBreak !== 'normal'
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraWordBreak',
 				support: 'blockeraWordBreak',
-				fallbackSupportId: 'word-break',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraWordBreak'
+				),
 			});
 
 			styleGroup.push({
@@ -628,11 +747,14 @@ export function TypographyStyles({
 			blockProps.attributes.blockeraTextShadow
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraTextShadow',
 			support: 'blockeraTextShadow',
-			fallbackSupportId: 'text-shadow',
+			fallbackSupportId: getBlockSupportFallback(
+				getBlockSupportCategory('textShadow'),
+				'blockeraTextShadow'
+			),
 		});
 
 		styleGroup.push({

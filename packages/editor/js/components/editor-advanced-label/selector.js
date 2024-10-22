@@ -23,6 +23,7 @@ import type {
 } from '../../extensions/libs/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import staticStates from '../../extensions/libs/block-states/states';
+import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 
 export type State = {
@@ -66,7 +67,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 	const breakpoints = getBreakpoints();
 	const normals = [];
 
-	const blockAttributes = block.attributes;
+	const blockAttributes = sanitizeBlockAttributes(block.attributes);
 	const blockeraBlockStates: { [key: TStates]: StateTypes } =
 		blockAttributes?.blockeraBlockStates;
 

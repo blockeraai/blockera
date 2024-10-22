@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/dev-storybook",
-	"version": "1.0.0",
+	"version": "0.9.2",
 	"description": "Blockera Storybook Default Modules",
 	"main": "js/index.js",
 	"keywords": [

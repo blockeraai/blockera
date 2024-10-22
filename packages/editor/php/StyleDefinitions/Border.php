@@ -26,8 +26,6 @@ class Border extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$this->setSelector( $cssProperty );
-
 		switch ( $cssProperty ) {
 			case 'border':
 				$value = $setting[ $cssProperty ];
@@ -111,32 +109,6 @@ class Border extends BaseStyleDefinition {
 		$this->setCss( $declaration );
 
 		return $this->css;
-	}
-
-	/**
-	 * Get allowed reserved properties.
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraBorder'       => 'border',
-			'blockeraBorderRadius' => 'border-radius',
-		];
-	}
-
-	/**
-	 * Calculation fallback feature id.
-	 * To be compatible with WordPress block selectors.
-	 *
-	 * @param string $cssProperty The css property key.
-	 *
-	 * @return string The path to fallback feature id.
-	 */
-	protected function calculateFallbackFeatureId( string $cssProperty ): string {
-
-		return blockera_camel_case_join( $cssProperty );
 	}
 
 }

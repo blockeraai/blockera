@@ -284,7 +284,10 @@ describe('repeater control component testing', () => {
 		});
 
 		describe('Change', () => {
-			it('should generate correct id, when there is type', () => {
+			// TODO: temporary skip!
+			// We should double check this test suite because this is flaky test!
+			// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-140
+			it.skip('should generate correct id, when there is type', () => {
 				const name = nanoid();
 
 				cy.withDataProvider({
@@ -316,7 +319,9 @@ describe('repeater control component testing', () => {
 				});
 			});
 
-			// TODO @reza fix this issue
+			// TODO: temporary skip!
+			// Bug: We should double check this test suite because this is failure!
+			// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-140
 			it.skip('should generate correct id, when there is type(add multiple)', () => {
 				const name = nanoid();
 

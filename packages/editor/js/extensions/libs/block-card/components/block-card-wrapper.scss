@@ -1,11 +1,27 @@
 .blockera-block-card-wrapper {
-	padding: 16px;
-	border: none;
-	border-bottom: 1px solid #e0e0e0;
-	margin-bottom: -1px;
-	min-height: 120px;
 
-	.blockera-control-block-states-repeater {
-		padding: 0 5px 5px;
+	&.is-sticky-active {
+		position: sticky;
+		top: 0;
+		z-index: 9999;
+		transition: box-shadow 0.075s ease;
+
+		&.is-stuck {
+			box-shadow: 0 1px 0 #cbcbcb, 0 11px 11px -6px rgba(0, 0, 0, 0.16);
+		}
 	}
+}
+
+.blockera-block-card-sticky-sentinel {
+	height: 1px; /* Minimal height so it doesn't affect layout */
+	visibility: hidden; /* Keep it invisible */
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+	pointer-events: none;
+}
+
+.interface-complementary-area-header.editor-sidebar__panel-tabs {
+	position: relative;
 }

@@ -89,6 +89,7 @@ export function MarginLeft({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset: 35,
 			},
 		});
 
@@ -103,7 +104,7 @@ export function MarginLeft({
 		value:
 			!_isSetValueAddon && sideSpace?.value !== '' ? sideSpace?.value : 0,
 		setValue: onDragSetValue,
-		movement: 'horizontal',
+		movement: 'vertical',
 		onEnd: () => {
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');

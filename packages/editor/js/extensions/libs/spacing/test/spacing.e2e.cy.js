@@ -191,7 +191,7 @@ describe('Spacing Extension', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'margin-top: var(--wp--preset--spacing--10)')
 				.should(
@@ -379,7 +379,7 @@ describe('Spacing Extension', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should(
 					'include',
@@ -557,7 +557,7 @@ describe('Spacing Extension', () => {
 
 			redirectToFrontPage();
 
-			cy.get('style#blockera-inline-css-inline-css')
+			cy.get('style#blockera-inline-css')
 				.invoke('text')
 				.should('include', 'padding-top: 10px')
 				.should(
@@ -763,7 +763,7 @@ describe('Spacing Extension', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('horizontal', 20);
+				cy.get('@SideShape').dragValue('vertical', 20);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -773,7 +773,7 @@ describe('Spacing Extension', () => {
 
 				// negative drag value change
 				// margin supports negative values
-				cy.get('@SideShape').dragValue('horizontal', -35);
+				cy.get('@SideShape').dragValue('vertical', -35);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -835,7 +835,7 @@ describe('Spacing Extension', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('horizontal', 20);
+				cy.get('@SideShape').dragValue('vertical', 20);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -844,7 +844,7 @@ describe('Spacing Extension', () => {
 					});
 
 				// negative drag value change
-				cy.get('@SideShape').dragValue('horizontal', -15);
+				cy.get('@SideShape').dragValue('vertical', -15);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -855,7 +855,7 @@ describe('Spacing Extension', () => {
 				// negative drag value change
 				// padding does not supports negative values
 				// min value is 0
-				cy.get('@SideShape').dragValue('horizontal', -15);
+				cy.get('@SideShape').dragValue('vertical', -15);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -893,7 +893,7 @@ describe('Spacing Extension', () => {
 
 				cy.get(
 					`.blockera-control-spacing-shape-side.side-horizontal.side-${item}-horizontal`
-				).dragValue('horizontal', 20);
+				).dragValue('vertical', 20);
 
 				['left', 'right'].forEach((_side) => {
 					cy.get(
@@ -1055,7 +1055,7 @@ describe('Spacing Extension', () => {
 
 				cy.get(
 					`.blockera-control-spacing-shape-side.side-horizontal.side-${item}-horizontal`
-				).dragValue('horizontal', 20);
+				).dragValue('vertical', 20);
 
 				['top', 'bottom', 'left', 'right'].forEach((_side) => {
 					cy.get(

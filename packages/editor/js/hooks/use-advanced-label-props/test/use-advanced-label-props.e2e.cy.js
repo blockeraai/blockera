@@ -11,7 +11,7 @@ function setFontSize(value) {
 
 	// Assertion for master block attributes.
 	cy.get('@typo').within(() => {
-		cy.get('[aria-label="Font Size"]')
+		cy.get('[aria-label="Size"]')
 			.parent()
 			.next()
 			.within(() => {
@@ -26,7 +26,7 @@ function getFontSizeLabelStyle(cssClass) {
 
 	// Assertion for master block attributes.
 	cy.get('@typo').within(() => {
-		cy.get('[aria-label="Font Size"]').should('have.class', cssClass);
+		cy.get('[aria-label="Size"]').should('have.class', cssClass);
 	});
 }
 

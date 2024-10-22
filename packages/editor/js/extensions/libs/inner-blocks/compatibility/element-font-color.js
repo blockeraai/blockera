@@ -29,9 +29,11 @@ export function elementNormalFontColorFromWPCompatibility({
 		if (color) {
 			return {
 				blockeraInnerBlocks: {
-					[innerBlock]: {
-						attributes: {
-							blockeraFontColor: color,
+					value: {
+						[innerBlock]: {
+							attributes: {
+								blockeraFontColor: color,
+							},
 						},
 					},
 				},
@@ -63,16 +65,18 @@ export function elementHoverFontColorFromWPCompatibility({
 		if (color) {
 			return {
 				blockeraInnerBlocks: {
-					[innerBlock]: {
-						attributes: {
-							blockeraBlockStates: {
-								hover: {
-									isVisible: true,
-									breakpoints: {
-										// $FlowFixMe
-										[getBaseBreakpoint()]: {
-											attributes: {
-												blockeraFontColor: color,
+					value: {
+						[innerBlock]: {
+							attributes: {
+								blockeraBlockStates: {
+									hover: {
+										isVisible: true,
+										breakpoints: {
+											// $FlowFixMe
+											[getBaseBreakpoint()]: {
+												attributes: {
+													blockeraFontColor: color,
+												},
 											},
 										},
 									},

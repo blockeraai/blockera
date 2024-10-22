@@ -1,0 +1,70 @@
+name: Build Blockera Plugin Tests
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+
+    workflow_dispatch:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    # The concurrency group contains the workflow name and the branch name for pull requests
+    # or the commit hash for any other events.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    build_tests:
+        name: Building and Run E2E Tests
+        runs-on: ubuntu-latest
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Install Composer dependencies
+              uses: ramsey/composer-install@v2
+              with:
+                  custom-cache-suffix: $(/bin/date -u --date='last Mon' "+%F")
+                  composer-options: '--no-dev -o --apcu-autoloader -a'
+
+            - name: Build Plugin Zip File
+              uses: ./.github/build-plugin-zip
+
+            - name: Extract blockera.zip to build directory
+              run: |
+                  mkdir build
+                  unzip blockera.zip -d ./build/blockera
+                  rm -rf blockera.zip
+
+            - name: Create Requirements
+              run: |
+                  cd ./build/blockera
+                  mkdir packages
+                  mkdir packages/blockera
+                  mkdir packages/blockera/tests
+                  touch .wp-env.json
+                  echo '{"plugins": ["."]}' >> .wp-env.json
+                  cat .wp-env.json
+                  touch cypress.env.json
+                  echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": [],"specPattern": ["packages/**/*.build.e2e.cy.js"]}}' >> cypress.env.json
+                  cat cypress.env.json
+                  cd ../..
+                  cp -r ./cypress ./build/blockera
+                  cp ./package.json ./build/blockera
+                  cp -r ./node_modules ./build/blockera
+                  cp ./cypress.config.js ./build/blockera
+                  cp -r ./packages/dev-cypress ./build/blockera/packages
+                  find ./packages/ -type f \( -name "*.build.e2e.cy.js" \) -exec cp {} ./build/blockera/packages/blockera/tests \;
+
+            - name: Setup and Run E2E tests on Blockera build
+              run: |
+                  cd ./build/blockera
+                  npx cypress install
+                  npm run env:start
+                  npm run test:e2e
+                  npm run env:stop

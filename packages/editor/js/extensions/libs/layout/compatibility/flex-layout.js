@@ -11,7 +11,7 @@ export function alignItemsFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraFlexLayout?.alignItems !== '' ||
+		attributes?.blockeraFlexLayout?.value?.alignItems !== '' ||
 		attributes?.layout?.verticalAlignment === undefined
 	) {
 		return attributes;
@@ -26,7 +26,9 @@ export function alignItemsFromWPCompatibility({
 	};
 
 	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
-		alignItems: values[attributes?.layout?.verticalAlignment] ?? '',
+		value: {
+			alignItems: values[attributes?.layout?.verticalAlignment] ?? '',
+		},
 	});
 
 	return attributes;
@@ -38,7 +40,7 @@ export function justifyContentFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraFlexLayout?.justifyContent !== '' ||
+		attributes?.blockeraFlexLayout?.value?.justifyContent !== '' ||
 		attributes?.layout?.justifyContent === undefined
 	) {
 		return attributes;
@@ -53,7 +55,9 @@ export function justifyContentFromWPCompatibility({
 	};
 
 	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
-		justifyContent: values[attributes?.layout?.justifyContent] ?? '',
+		value: {
+			justifyContent: values[attributes?.layout?.justifyContent] ?? '',
+		},
 	});
 
 	return attributes;
@@ -78,7 +82,9 @@ export function directionFromWPCompatibility({
 					attributes.blockeraFlexLayout = mergeObject(
 						attributes.blockeraFlexLayout,
 						{
-							direction: 'column',
+							value: {
+								direction: 'column',
+							},
 						}
 					);
 
@@ -88,7 +94,9 @@ export function directionFromWPCompatibility({
 					attributes.blockeraFlexLayout = mergeObject(
 						attributes.blockeraFlexLayout,
 						{
-							direction: 'row',
+							value: {
+								direction: 'row',
+							},
 						}
 					);
 
@@ -108,7 +116,9 @@ export function directionFromWPCompatibility({
 	};
 
 	attributes.blockeraFlexLayout = mergeObject(attributes.blockeraFlexLayout, {
-		direction: values[attributes?.layout?.orientation],
+		value: {
+			direction: values[attributes?.layout?.orientation],
+		},
 	});
 
 	return attributes;

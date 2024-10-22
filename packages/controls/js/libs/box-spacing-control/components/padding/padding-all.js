@@ -88,6 +88,7 @@ export function PaddingAll({
 				onShown: () => {
 					setOpenPopover('variable-picker');
 				},
+				popoverOffset: 73,
 			},
 		});
 

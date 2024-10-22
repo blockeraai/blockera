@@ -41,11 +41,13 @@ import type {
 	StateTypes,
 	TStates,
 } from '../types';
-import { isInnerBlock, isNormalState } from '../../../components';
+import { isNormalState } from '../../../components';
 import { LabelDescription } from './label-description';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { getBaseBreakpoint } from '../../../../canvas-editor';
-import StateContainer from '../../../components/state-container';
+
+const isMasterBlockStates = (id: string): boolean =>
+	'master-block-states' === id;
 
 const StatesManager: ComponentType<any> = memo(
 	({
@@ -57,6 +59,7 @@ const StatesManager: ComponentType<any> = memo(
 		availableStates,
 		currentBreakpoint,
 		currentInnerBlockState,
+		id = 'master-block-states',
 	}: StatesManagerProps): Element<any> => {
 		let states = { ...(attributes?.blockeraBlockStates || {}) };
 		const {
@@ -68,7 +71,7 @@ const StatesManager: ComponentType<any> = memo(
 		const { getBreakpoints } = select('blockera/editor');
 		const savedBlockStates = getBlockStates(
 			block?.clientId,
-			isInnerBlock(currentBlock) ? currentBlock : block?.blockName
+			!isMasterBlockStates(id) ? currentBlock : block?.blockName
 		);
 		const clonedSavedStates = { ...states };
 
@@ -102,7 +105,7 @@ const StatesManager: ComponentType<any> = memo(
 							block.clientId,
 							block.blockName
 						);
-						const isSelected = isInnerBlock(currentBlock)
+						const isSelected = !isMasterBlockStates(id)
 							? itemId === activeInnerBlockState
 							: itemId === activeMasterBlockState;
 
@@ -131,10 +134,10 @@ const StatesManager: ComponentType<any> = memo(
 				return initialValue;
 			}
 
-			if (!isInnerBlock(currentBlock) && !isNormalState(currentState)) {
+			if (isMasterBlockStates(id) && !isNormalState(currentState)) {
 				setCurrentState('normal');
 			} else if (
-				isInnerBlock(currentBlock) &&
+				!isMasterBlockStates(id) &&
 				!isNormalState(currentInnerBlockState)
 			) {
 				setInnerBlockState('normal');
@@ -260,7 +263,7 @@ const StatesManager: ComponentType<any> = memo(
 			value: calculatedValue,
 			blockName: block.blockName,
 			attribute: 'blockeraBlockStates',
-			name: generateExtensionId(block, 'block-states', false),
+			name: generateExtensionId(block, id, false),
 		};
 
 		return (
@@ -268,7 +271,14 @@ const StatesManager: ComponentType<any> = memo(
 				value={contextValue}
 				storeName={'blockera/controls/repeater'}
 			>
-				<StateContainer>
+				<div
+					data-test={'blockera-block-state-container'}
+					// className={getClassNames('state-container')}
+					aria-label={__(
+						'Blockera Block State Container',
+						'blockera'
+					)}
+				>
 					<RepeaterControl
 						{...{
 							onDelete,
@@ -340,6 +350,8 @@ const StatesManager: ComponentType<any> = memo(
 									getStateInfo,
 									getBlockStates,
 									currentInnerBlockState,
+									isMasterBlockStates:
+										isMasterBlockStates(id),
 								}),
 							//Override item when occurred clone action!
 							overrideItem: (item) => {
@@ -377,12 +389,13 @@ const StatesManager: ComponentType<any> = memo(
 						addNewButtonLabel={__('Add New State', 'blockera')}
 						label={
 							'undefined' !== typeof currentBlock &&
-							isInnerBlock(currentBlock)
+							!isMasterBlockStates(id)
 								? __('Inner Block States', 'blockera')
 								: __('Block States', 'blockera')
 						}
 						labelDescription={<LabelDescription />}
 						popoverTitle={__('Block State', 'blockera')}
+						popoverOffset={164}
 						className={controlInnerClassNames(
 							'block-states-repeater'
 						)}
@@ -417,7 +430,7 @@ const StatesManager: ComponentType<any> = memo(
 							);
 						}}
 					/>
-				</StateContainer>
+				</div>
 			</ControlContextProvider>
 		);
 	},

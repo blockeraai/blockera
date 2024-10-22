@@ -53,24 +53,31 @@
 		background: #ffffff !important;
 		border-radius: 0 0 0 2px;
 		display: none;
+
+		&:hover {
+			color: #cc1818;
+		}
 	}
 
 	.blockera-control-action-btns {
 		position: absolute;
-		bottom: 0;
+		bottom: 1px;
 		left: 0;
 		right: 0;
 		height: 30px;
 		border-top: 1px solid var(--blockera-controls-border-color);
 		background: #ffffff;
-		display: none;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		visibility: hidden;
 
 		.blockera-component-button {
 			height: 30px;
 			border-radius: 0;
+			background: #ffffff;
 
 			&.btn-media-library {
-				border-right: 1px solid rgb(148, 148, 148);
+				border-right: 1px solid rgb(148, 148, 148) !important;
 			}
 		}
 	}
@@ -83,9 +90,11 @@
 		}
 
 		.blockera-control-action-btns {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
+			visibility: visible;
 
+			.blockera-component-button:hover {
+				color: var(--blockera-controls-primary-color);
+			}
 		}
 	}
 

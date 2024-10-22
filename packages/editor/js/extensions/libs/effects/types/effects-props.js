@@ -14,6 +14,22 @@ export type TTransformCssProps = {
 	'backface-visibility'?: string,
 };
 
+export type TEffectsExtensionConfig = {
+	blockeraOpacity: FeatureConfig,
+	blockeraTransform: FeatureConfig,
+	blockeraTransformSelfPerspective: FeatureConfig,
+	blockeraTransformSelfOrigin: FeatureConfig,
+	blockeraBackfaceVisibility: FeatureConfig,
+	blockeraTransformChildPerspective: FeatureConfig,
+	blockeraTransformChildOrigin: FeatureConfig,
+	blockeraTransition: FeatureConfig,
+	blockeraFilter: FeatureConfig,
+	blockeraBackdropFilter: FeatureConfig,
+	blockeraBlendMode: FeatureConfig,
+	blockeraDivider: FeatureConfig,
+	blockeraMask: FeatureConfig,
+};
+
 export type TEffectsProps = {
 	...BaseExtensionProps,
 	values: {
@@ -37,21 +53,7 @@ export type TEffectsProps = {
 		blockeraMask: Array<Object>,
 		blockeraDivider: Array<Object>,
 	},
-	extensionConfig: {
-		blockeraOpacity: FeatureConfig,
-		blockeraTransform: FeatureConfig,
-		blockeraTransformSelfPerspective: FeatureConfig,
-		blockeraTransformSelfOrigin: FeatureConfig,
-		blockeraBackfaceVisibility: FeatureConfig,
-		blockeraTransformChildPerspective: FeatureConfig,
-		blockeraTransformChildOrigin: FeatureConfig,
-		blockeraTransition: FeatureConfig,
-		blockeraFilter: FeatureConfig,
-		blockeraBackdropFilter: FeatureConfig,
-		blockeraBlendMode: FeatureConfig,
-		blockeraDivider: FeatureConfig,
-		blockeraMask: FeatureConfig,
-	},
+	extensionConfig: TEffectsExtensionConfig,
 	extensionProps: {
 		blockeraOpacity: Object,
 		blockeraTransform: Object,

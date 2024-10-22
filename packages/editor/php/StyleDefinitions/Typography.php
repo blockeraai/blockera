@@ -10,15 +10,6 @@ namespace Blockera\Editor\StyleDefinitions;
 class Typography extends BaseStyleDefinition {
 
 	/**
-	 * Hold collection of options to generate style
-	 *
-	 * @var array
-	 */
-	protected array $options = [
-		'is-important' => true,
-	];
-
-	/**
 	 * @inheritDoc
 	 *
 	 * @param array $setting
@@ -37,32 +28,30 @@ class Typography extends BaseStyleDefinition {
 
 		$propertyValue = $setting[ $cssProperty ];
 
-		$this->setSelector( $cssProperty );
-
 		switch ( $cssProperty ) {
 
 			case 'text-orientation':
 				switch ( $propertyValue ) {
 					case 'style-1':
-						$declaration['writing-mode']     = 'vertical-lr' . $this->getImportant();
-						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-lr';
+						$declaration['text-orientation'] = 'mixed';
 						break;
 					case 'style-2':
-						$declaration['writing-mode']     = 'vertical-rl' . $this->getImportant();
-						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-rl';
+						$declaration['text-orientation'] = 'mixed';
 						break;
 					case 'style-3':
-						$declaration['writing-mode']     = 'vertical-lr' . $this->getImportant();
-						$declaration['text-orientation'] = 'upright' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-lr';
+						$declaration['text-orientation'] = 'upright';
 						break;
 					case 'style-4':
-						$declaration['writing-mode']     = 'vertical-rl' . $this->getImportant();
-						$declaration['text-orientation'] = 'upright' . $this->getImportant();
+						$declaration['writing-mode']     = 'vertical-rl';
+						$declaration['text-orientation'] = 'upright';
 						break;
 					case 'initial':
 						$declaration['writing-mode']     =
-							'horizontal-tb' . $this->getImportant();
-						$declaration['text-orientation'] = 'mixed' . $this->getImportant();
+							'horizontal-tb';
+						$declaration['text-orientation'] = 'mixed';
 				}
 				break;
 
@@ -105,17 +94,25 @@ class Typography extends BaseStyleDefinition {
 
 				break;
 
-			case 'word-break':
+			case 'font-family':
+				$declaration[ $cssProperty ] = 'var(--wp--preset--font-family--' . $propertyValue . ')';
+				break;
+
+			case 'line-height':
+			case 'text-indent':
+			case 'letter-spacing':
+			case 'word-spacing':
 			case 'direction':
 			case 'text-transform':
 			case 'font-style':
 			case 'text-decoration':
+			case 'word-break':
+			case 'font-weight':
+				$declaration[ $cssProperty ] = $propertyValue;
+				break;
+
 			case 'color':
 			case '-webkit-text-stroke-width':
-			case 'letter-spacing':
-			case 'word-spacing':
-			case 'line-height':
-			case 'text-indent':
 			case 'font-size':
 				$declaration[ $cssProperty ] = $propertyValue ? blockera_get_value_addon_real_value( $propertyValue ) : '';
 				break;
@@ -125,32 +122,6 @@ class Typography extends BaseStyleDefinition {
 		$this->setCss( $declaration );
 
 		return $this->css;
-	}
-
-	/**
-	 * @inheritDoc
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraFontColor'       => 'color',
-			'blockeraFontSize'        => 'font-size',
-			'blockeraDirection'       => 'direction',
-			'blockeraTextAlign'       => 'text-align',
-			'blockeraFontStyle'       => 'font-style',
-			'blockeraWordBreak'       => 'word-break',
-			'blockeraTextIndent'      => 'text-indent',
-			'blockeraLineHeight'      => 'line-height',
-			'blockeraWordSpacing'     => 'word-spacing',
-			'blockeraTextColumns'     => 'column-count',
-			'blockeraTextTransform'   => 'text-transform',
-			'blockeraLetterSpacing'   => 'letter-spacing',
-			'blockeraTextDecoration'  => 'text-decoration',
-			'blockeraTextOrientation' => 'text-orientation',
-			'blockeraTextStroke'      => '-webkit-text-stroke-color',
-		];
 	}
 
 }

@@ -16,6 +16,7 @@ import {
 	useControlContext,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { isObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -45,10 +46,12 @@ export default function ({
 			onChange: (newValue) =>
 				handleOnChangeAttributes(
 					attributeId,
-					{
-						...gap,
-						gap: newValue,
-					},
+					isObject(newValue)
+						? newValue
+						: {
+								...gap,
+								gap: newValue,
+						  },
 					{}
 				),
 		});
@@ -94,7 +97,6 @@ export default function ({
 							aria-label={__('Gap', 'blockera')}
 							unitType="essential"
 							min={0}
-							max={200}
 							defaultValue={defaultValue.gap}
 							id={'gap'}
 							onChange={(newValue, ref) =>
@@ -131,7 +133,6 @@ export default function ({
 							}
 							unitType="essential"
 							min={0}
-							max={200}
 							defaultValue={defaultValue.rows}
 							id={'rows'}
 							singularId={'rows'}
@@ -168,7 +169,6 @@ export default function ({
 							}
 							unitType="essential"
 							min={0}
-							max={200}
 							defaultValue={defaultValue.columns}
 							id={'columns'}
 							singularId={'columns'}

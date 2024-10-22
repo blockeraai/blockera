@@ -13,8 +13,16 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => blockera_load( 'inners.link', dirname( __DIR__ ) ),
-			]
+				'blockera/elements/link'        => [
+					'root' => 'a:not(.wp-element-button)',
+				],
+				'blockera/elements/item'        => [
+					'root' => 'li',
+				],
+				'blockera/elements/item-marker' => [
+					'root' => 'li::marker',
+				],
+			],
 		),
 	]
 );

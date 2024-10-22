@@ -164,8 +164,6 @@ class AppServiceProvider extends ServiceProvider {
 
 		parent::boot();
 
-		add_action( 'init', [ $this, 'loadTextDomain' ] );
-
 		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
 		$variableRegistry     = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
 
@@ -187,27 +185,64 @@ class AppServiceProvider extends ServiceProvider {
 		$this->app->make( Setup::class )->apply();
 		$this->app->make( EntityRegistry::class );
 
-		array_map( [ $this, 'renderBlocks' ], blockera_get_available_blocks() );
+		$this->renderBlocks();
+
+		$this->initializeFreemius();
+
+		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
+	}
+
+	/**
+	 * The after_setup_theme action hook
+	 */
+	public function after_setup_theme(): void {
+
+		add_action( 'init', [ $this, 'loadTextDomain' ] );
+
+	}
+
+	/**
+	 * Initialize Freemius
+	 */
+	public function initializeFreemius(): void {
+
+		global $blockera_fs;
+
+		if ( ! isset( $blockera_fs ) ) {
+
+			// Include Freemius SDK.
+			require_once blockera_core_config( 'app.vendor_path' ) . 'blockera/freemius-sdk/php/start.php';
+
+			$blockera_fs = fs_dynamic_init(
+				array(
+					'id'             => '16292',
+					'slug'           => 'blockera',
+					'type'           => 'plugin',
+					'public_key'     => 'pk_206b63a4865444875ff845aa3e8e9',
+					'is_premium'     => false,
+					'has_addons'     => false,
+					'has_paid_plans' => false,
+					'menu'           => array(
+						'slug'    => 'blockera-settings',
+						'account' => false,
+						'contact' => false,
+						'support' => false,
+					),
+				)
+			);
+		}
 	}
 
 	/**
 	 * Rendering block type.
 	 *
-	 * @param string $block The block name.
-	 *
 	 * @throws BindingResolutionException Exception for not found bounded module.
 	 * @return void
 	 */
-	protected function renderBlocks( string $block ): void {
-
-		if ( empty( $block ) ) {
-
-			return;
-		}
+	protected function renderBlocks(): void {
 
 		$render = $this->app->make( Render::class );
 
-		$render->setName( $block );
 		$render->applyHooks();
 	}
 

@@ -17,9 +17,9 @@ import { Tooltip } from '../../index';
 export function PoweredBy() {
 	return (
 		<div className={controlClassNames('extensions-powered-by')}>
-			<Tooltip text={__('Powered by Blockera Page Builder', 'blockera')}>
+			<Tooltip text={__('Powered by Blockera', 'blockera')}>
 				<a
-					href="https://blockera.ai/blockera-page-builder/"
+					href="https://blockera.ai/products/site-builder/"
 					target="_blank"
 					rel="noopener noreferrer"
 				>

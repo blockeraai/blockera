@@ -16,7 +16,7 @@ import { isEquals, mergeObject, omit, omitWithPattern } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { prepareAttributesDefaultValues } from './utils';
+import { prepareBlockeraDefaultAttributesValues } from './utils';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 export const BlockCompatibility: ComponentType<any> = memo(
@@ -67,7 +67,7 @@ export const BlockCompatibility: ComponentType<any> = memo(
 							availableAttributes?.blockeraPropsId
 							? mergeObject(
 									filteredAttributes,
-									prepareAttributesDefaultValues(
+									prepareBlockeraDefaultAttributesValues(
 										defaultAttributes
 									)
 							  )
@@ -81,7 +81,9 @@ export const BlockCompatibility: ComponentType<any> = memo(
 					filteredAttributes = {
 						...attributes,
 						...omitWithPattern(
-							prepareAttributesDefaultValues(defaultAttributes),
+							prepareBlockeraDefaultAttributesValues(
+								defaultAttributes
+							),
 							ignoreDefaultBlockAttributeKeysRegExp()
 						),
 					};
@@ -103,7 +105,7 @@ export const BlockCompatibility: ComponentType<any> = memo(
 
 				const { added, updated } = detailedDiff(
 					filteredAttributesWithoutIds,
-					prepareAttributesDefaultValues(defaultAttributes)
+					prepareBlockeraDefaultAttributesValues(defaultAttributes)
 				);
 
 				// Our Goal is cleanup blockera attributes of core blocks when not changed anything!

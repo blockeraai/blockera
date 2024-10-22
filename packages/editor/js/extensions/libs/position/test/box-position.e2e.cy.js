@@ -529,7 +529,7 @@ describe('Box Position → Functionality', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('horizontal', 20);
+				cy.get('@SideShape').dragValue('vertical', 20);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -539,7 +539,7 @@ describe('Box Position → Functionality', () => {
 
 				// negative drag value change
 				// margin supports negative values
-				cy.get('@SideShape').dragValue('horizontal', -35);
+				cy.get('@SideShape').dragValue('vertical', -35);
 
 				cy.get('@SideLabel')
 					.invoke('text')

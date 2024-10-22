@@ -20,29 +20,13 @@ class Mouse extends BaseStyleDefinition {
 			return [];
 		}
 
-		$this->setSelector( $cssProperty );
-
 		$this->setCss(
 			[
-				$cssProperty => $setting[ $cssProperty ] . $this->getImportant(),
+				$cssProperty => $setting[ $cssProperty ],
 			]
 		);
 
 		return $this->css;
-	}
-
-	/**
-	 * @inheritdoc
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraCursor'        => 'cursor',
-			'blockeraUserSelect'    => 'user-select',
-			'blockeraPointerEvents' => 'pointer-events',
-		];
 	}
 
 }

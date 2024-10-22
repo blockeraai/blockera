@@ -28,10 +28,11 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal Dependencies
  */
+import { StatesGraph } from './states-graph';
 import { useBlockContext } from '../../extensions';
 import { useAdvancedLabelProps } from '../../hooks';
 import type { AdvancedLabelControlProps } from './types';
-import { StatesGraph } from './states-graph';
+import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 
 export const EditorAdvancedLabelControl = ({
 	path = null,
@@ -62,7 +63,8 @@ export const EditorAdvancedLabelControl = ({
 		currentInnerBlockState,
 	} = useBlockContext();
 	const { getSelectedBlock } = select('core/block-editor') || {};
-	const { attributes } = getSelectedBlock() || {};
+	let { attributes } = getSelectedBlock() || {};
+	attributes = sanitizeBlockAttributes(attributes);
 
 	const { onChange, valueCleanup } = useContext(RepeaterContext) || {};
 

@@ -11,7 +11,13 @@ import { getValueAddonRealValue } from '@blockera/controls';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('layout');
 
 export const FlexChildStyles = ({
 	state,
@@ -95,11 +101,14 @@ export const FlexChildStyles = ({
 				break;
 		}
 
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFlexChildSizing',
 			support: 'blockeraFlexChildSizing',
-			fallbackSupportId: undefined,
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraFlexChildSizing'
+			),
 		});
 
 		styleGroup.push({
@@ -123,11 +132,14 @@ export const FlexChildStyles = ({
 		_attributes.blockeraFlexChildAlign !==
 			attributes.blockeraFlexChildAlign.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFlexChildAlign',
 			support: 'blockeraFlexChildAlign',
-			fallbackSupportId: undefined,
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraFlexChildAlign'
+			),
 		});
 
 		styleGroup.push({
@@ -175,11 +187,14 @@ export const FlexChildStyles = ({
 				break;
 		}
 
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFlexChildOrder',
 			support: 'blockeraFlexChildOrder',
-			fallbackSupportId: undefined,
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraFlexChildOrder'
+			),
 		});
 
 		styleGroup.push({

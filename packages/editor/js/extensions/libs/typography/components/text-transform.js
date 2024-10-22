@@ -54,7 +54,7 @@ export const TextTransform = ({
 						<h3>
 							<Icon
 								icon="text-transform-capitalize"
-								iconSize="22"
+								iconSize="18"
 							/>
 							{__('Capitalize', 'blockera')}
 						</h3>
@@ -67,7 +67,7 @@ export const TextTransform = ({
 						<h3>
 							<Icon
 								icon="text-transform-lowercase"
-								iconSize="22"
+								iconSize="18"
 							/>
 							{__('Lowercase', 'blockera')}
 						</h3>
@@ -80,7 +80,7 @@ export const TextTransform = ({
 						<h3>
 							<Icon
 								icon="text-transform-uppercase"
-								iconSize="22"
+								iconSize="18"
 							/>
 							{__('Uppercase', 'blockera')}
 						</h3>
@@ -94,7 +94,7 @@ export const TextTransform = ({
 							<Icon
 								library="wp"
 								icon="close-small"
-								iconSize="22"
+								iconSize="18"
 							/>
 							{__('None', 'blockera')}
 						</h3>

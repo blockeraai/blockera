@@ -97,9 +97,13 @@
 	}
 }
 
-*:not(.blockera-field):not(.blockera-component-flex) > .blockera-field + .blockera-component-feature-wrapper,
-*:not(.blockera-field):not(.blockera-component-flex) > .blockera-component-feature-wrapper + .blockera-component-feature-wrapper,
-*:not(.blockera-field):not(.blockera-component-flex) > .blockera-component-feature-wrapper + .blockera-field,
-*:not(.blockera-field):not(.blockera-component-flex) > .blockera-field + .blockera-field {
-	margin-top: 15px;
+*:not(.blockera-field):not(.blockera-component-flex):not(.blockera-component-grid) {
+
+	& > .blockera-field + .blockera-component-feature-wrapper,
+	& > .blockera-component-feature-wrapper + .blockera-component-feature-wrapper,
+	& > .blockera-control-notice + .blockera-field,
+	& > .blockera-component-feature-wrapper + .blockera-field,
+	& > .blockera-field + .blockera-field {
+		margin-top: 15px;
+	}
 }

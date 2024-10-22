@@ -6,6 +6,7 @@ use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Utils\Adapters\DomParser;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class Render filtering WordPress BlockType render process.
@@ -15,13 +16,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 class Render {
 
 	/**
-	 * Hold block name.
-	 *
-	 * @var string $name
-	 */
-	protected string $name;
-
-	/**
 	 * Hold application instance.
 	 *
 	 * @var Application
@@ -29,11 +23,11 @@ class Render {
 	protected Application $app;
 
 	/**
-	 * Store generated stylesheet for rendered blocks.
+	 * Store all block classnames.
 	 *
-	 * @var string $computed_css_rules
+	 * @var array $classnames the classnames array stack.
 	 */
-	protected string $computed_css_rules = '';
+	protected array $classnames = [];
 
 	/**
 	 * Render constructor.
@@ -46,62 +40,28 @@ class Render {
 	}
 
 	/**
-	 * Sets name property.
-	 *
-	 * @param string $name the block name.
-	 */
-	public function setName( string $name ): void {
-
-		$this->name = $name;
-	}
-
-	/**
 	 * Fire WordPress actions or filters Hooks.
-	 * Like: "render_block_core/{$blockName}"
 	 *
 	 * @return void
 	 */
 	public function applyHooks(): void {
 
-		add_filter( 'render_block_' . $this->name, [ $this, 'render' ], 10, 2 );
-
-		// phpcs:disable
-		// remove_filter( 'render_block', 'gutenberg_render_layout_support_flag', 10, 2 );
-		// add_action( 'after_setup_theme', [$this, 'after_theme_setup'] );
-		// remove_filter( 'render_block', 'wp_render_elements_support', 10, 2 );
-		// remove_filter( 'render_block', 'wp_render_elements_support_styles', 10, 2 );
-		// remove_filter( 'render_block', 'wp_render_layout_support_flag', 10, 2 );
-		// phpcs:enable
+		add_filter( 'render_block', [ $this, 'render' ], 10, 3 );
 	}
 
 	/**
-	 * After theme setup executing to customize theme supports.
+	 * Render block icon element.
 	 *
-	 * @return void
-	 */
-	public function afterThemeSetup(): void {
-
-		add_theme_support( 'disable-layout-styles' );
-	}
-
-	/**
-	 * Block parser to customize HTML template!
-	 *
-	 * @param string $html   WordPress block rendered HTML.
-	 * @param array  $block  WordPress block details.
-	 * @param int    $postId the current post id. default is "-1".
+	 * @param string $html   The block html output.
+	 * @param Parser $parser The block parser instance.
+	 * @param array  $args   The extra arguments to render block icon element.
 	 *
 	 * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
-	 * @return string block HTML.
+	 * @return string The block html include icon element if icon is existing.
 	 */
-	public function render( string $html, array $block, int $postId = -1 ): string {
+	protected function renderIcon( string $html, Parser $parser, array $args ): string {
 
-		// Just running for blockera extensions settings!
-		if ( empty( $block['attrs']['blockeraPropsId'] ) || is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-
-			return $html;
-		}
-
+		// blockera active experimental icon extension?
 		$is_enable_icon_extension = blockera_get_experimental( [ 'editor', 'extensions', 'iconExtension' ] );
 
 		// phpcs:disable
@@ -115,18 +75,83 @@ class Render {
 		}
 		// phpcs:enable
 
-		$attributes = $block['attrs'];
+		// phpcs:disable
+		// TODO: add into cache mechanism.
+		//manipulation HTML of block content
+		if ( $is_enable_icon_extension ) {
 
-		if ( ! empty( $attributes['className'] ) ) {
-			// Usage of saved class names for block element.
-			$unique_class_name = blockera_get_normalized_selector( $attributes['className'] );
-
-		} else {
-			// Fallback way to providing unique css selector for block element.
-			$unique_class_name = blockera_get_unique_classname( 'blockera-' . $block['blockName'] );
+			$parser->htmlManipulate( array_merge( $args, [ $dom ] ) );
+			//retrieve final html of block content
+			$html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
 		}
 
-		$selector = $this->getSelector( $unique_class_name );
+		// phpcs:enable
+
+		return $html;
+	}
+
+	/**
+	 * Block parser to customize HTML template!
+	 *
+	 * @param string $html  WordPress block rendered HTML.
+	 * @param array  $block WordPress block details.
+	 *
+	 * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
+	 * @return string block HTML.
+	 */
+	public function render( string $html, array $block ): string {
+
+		// Check block to is support by Blockera?
+		if ( ! blockera_is_supported_block( $block ) || is_admin() ) {
+
+			return $html;
+		}
+
+		// Extract block attributes.
+		$attributes = $block['attrs'];
+		// Calculate block hash.
+		$hash = blockera_get_block_hash( $block );
+		// Generate blockera hash identify with "blockeraPropsId" attribute value.
+		$blockera_hash_id = blockera_get_small_random_hash( $attributes['blockeraPropsId'] );
+		// Get blockera block unique css classname.
+		$blockera_class_name = sprintf( 'blockera-block blockera-block-%s', $blockera_hash_id );
+
+		// Is need to update block HTML output?
+		$need_to_update_html = $this->needToUpdateHTML( $attributes['className'] ?? '' );
+
+		// Pushing block classname into stack.
+		$this->setClassname( $attributes['className'] ?? '' );
+
+		// Get block cache key.
+		$cache_key = blockera_get_block_cache_key( $block );
+		// Prepare cache data.
+		$cache_data = blockera_get_block_cache( $cache_key );
+		// Get cache validate result.
+		$cache_validate = ! empty( $cache_data['css'] ) && ! empty( $cache_data['hash'] ) && ! empty( $cache_data['classname'] );
+
+		// Validate cache data.
+		if ( $cache_validate && $hash === $cache_data['hash'] ) {
+
+			// Print css into inline style on "wp_head" action occur.
+			blockera_add_inline_css( $cache_data['css'] );
+
+			if ( $need_to_update_html ) {
+
+				// Represent html string.
+				return $this->getUpdatedHTML( $html, $cache_data['classname'] );
+			}
+
+			return $html;
+		}
+
+		// Delete cache data while previous cache data is existing but changed block render process data.
+		if ( $cache_validate ) {
+
+			blockera_delete_block_cache( $cache_key );
+		}
+
+		// Get normalized blockera block unique css classname.
+		$unique_class_name = blockera_get_normalized_selector( $need_to_update_html ? $blockera_class_name : $attributes['className'] );
 
 		/**
 		 * Get parser object.
@@ -135,132 +160,126 @@ class Render {
 		 */
 		$parser = $this->app->make( Parser::class );
 
-		// phpcs:disable
-		// TODO: add into cache mechanism.
-		//manipulation HTML of block content
-		if ( $is_enable_icon_extension ) {
+		// Computation css rules for current block by server side style engine...
+		$computed_css_rules = $parser->getCss( compact( 'block', 'unique_class_name' ) );
 
-			$parser->htmlManipulate( compact( 'dom', 'block', 'unique_class_name' ) );
-			//retrieve final html of block content
-			$html = preg_replace( [ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html() );
-		}
-		// phpcs:enable
+		// Print css into inline style on "wp_head" action occur.
+		blockera_add_inline_css( $computed_css_rules );
 
-		// Assume miss post id.
-		if ( -1 === $postId ) {
+		// Render icon element.
+		$html = $this->renderIcon( $html, $parser, compact( 'block', 'unique_class_name' ) );
 
-			global $post;
+		if ( $need_to_update_html ) {
 
-			$postId = $post->ID;
+			// Represent html string.
+			$html = $this->getUpdatedHTML( $html, $blockera_class_name );
 		}
 
-		$cacheKey = 'blockera-inline-css-post-' . $postId;
+		// Create new block cache data.
+		$data = [
+			'hash'      => $hash,
+			'css'       => $computed_css_rules,
+			'classname' => $need_to_update_html ? $blockera_class_name : $attributes['className'],
+		];
 
-		// Get cache data.
-		if ( is_single() ) {
-
-			$cache = get_post_meta( $postId, $cacheKey, true );
-
-		} else {
-
-			$cache = get_transient( $cacheKey );
-		}
-
-		// Adding inline generated css rules with server side StyleEngine instance.
-		// Skip cache mechanism when application debug mode is on.
-		if ( ! empty( $cache ) && array_intersect( [ 'css' ], array_keys( $cache ) ) && ! blockera_core_config( 'app.debug' ) ) {
-
-			// Print css into inline style of document.
-			$this->addInlineCss( $cache['css'] );
-
-			return $html;
-		}
-
-		$this->computed_css_rules = $parser->getCss( compact( 'block', 'selector' ) );
-
-		// Print css into inline style of document.
-		$this->addInlineCss();
-
-		// set cache data with merge exists data.
-		// Skip cache mechanism when application debug mode is on.
-		if ( is_single() && ! blockera_core_config( 'app.debug' ) ) {
-
-			update_post_meta(
-				$postId,
-				$cacheKey,
-				array_merge(
-					$cache ? $cache : [],
-					[
-						'css' => $this->computed_css_rules,
-						// TODO: implements cache mechanism for html manipulating process.
-						// phpcs:disable
-						// 'html' => '',
-						// phpcs:enable
-					]
-				)
-			);
-
-		} elseif ( ! blockera_core_config( 'app.debug' ) ) {
-
-			set_transient(
-				$cacheKey,
-				array_merge(
-					$cache ? $cache : [],
-					[
-						'css' => $this->computed_css_rules,
-						// TODO: implements cache mechanism for html manipulating process.
-						// phpcs:disable
-						// 'html' => '',
-						// phpcs:enable
-					]
-				)
-			);
-		}
+		// Sets cache data with merge previous data.
+		blockera_set_block_cache( $cache_key, $data );
 
 		return $html;
 	}
 
 	/**
-	 * Adding computed css rules into inline css handle.
+	 * Is need to update block content?
+	 * The target of this method is prevented of avoid block unique classnames.
 	 *
-	 * @param string $css the provided css from outside.
+	 * @param string $block_classname the block "className" attribute value.
+	 *
+	 * @return bool true on success, false on otherwise.
+	 */
+	protected function needToUpdateHTML( string $block_classname ): bool {
+
+		// Imagine th block classname is empty, so we should update html output.
+		if ( empty( $block_classname ) ) {
+
+			return true;
+		}
+
+		// Try to detect blockera block unique classname and check it to sure not registered in classnames stack.
+		if ( preg_match( $this->getUniqueClassnameRegex(), $block_classname, $matches ) ) {
+
+			return in_array( $matches[0], $this->classnames, true );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns the string representation of the HTML Tag Processor.
+	 *
+	 * @param string $html      the target html string.
+	 * @param string $classname the unique classname.
+	 *
+	 * @return string the update html.
+	 */
+	protected function getUpdatedHTML( string $html, string $classname ): string {
+
+		$processor = new \WP_HTML_Tag_Processor( $html );
+
+		if ( $processor->next_tag() ) {
+
+			// Regular Expression to detect blockera unique classname.
+			$regexp = $this->getUniqueClassnameRegex();
+
+			// Get tag previous classname value.
+			$previous_class = $processor->get_attribute( 'class' );
+
+			if ( ! empty( $previous_class ) ) {
+
+				// Backward compatibility.
+				if ( preg_match( $regexp, $classname, $matches ) && preg_match( $regexp, $previous_class ) ) {
+
+					$final_classname = preg_replace( $regexp, $matches[0], $previous_class );
+
+				} else {
+
+					$final_classname = $classname . ' ' . $previous_class;
+				}
+			}
+
+			$processor->set_attribute( 'class', $final_classname ?? $classname );
+		}
+
+		return $processor->get_updated_html();
+	}
+
+	/**
+	 * Push block classname into stack.
+	 *
+	 * @param string $classname the block "className" attribute value.
 	 *
 	 * @return void
 	 */
-	protected function addInlineCss( string $css = '' ): void {
+	protected function setClassname( string $classname ): void {
 
-		$computed_css_rules = ! empty( $css ) ? $css : $this->getComputedCssRules();
+		if ( empty( $classname ) ) {
 
-		add_filter(
-			'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
-			function () use ( $computed_css_rules ): string {
+			return;
+		}
 
-				return $computed_css_rules;
-			}
-		);
+		if ( preg_match( $this->getUniqueClassnameRegex(), $classname, $matches ) ) {
+
+			$this->classnames[] = $matches[0];
+		}
 	}
 
 	/**
-	 * Retrieve block css selector.
-	 * in this method, we can customize selector of block element based on block name.
+	 * Retrieve regex pattern to detect unique classname.
 	 *
-	 * @param string $unique_class_name the block unique css classname.
-	 *
-	 * @return string the block css selector with unique classname.
+	 * @return string the regular expression to detect blockera unique classname.
 	 */
-	public function getSelector( string $unique_class_name = '' ): string {
+	protected function getUniqueClassnameRegex(): string {
 
-		return ! empty( $unique_class_name ) ? ( '.' !== $unique_class_name[0] ? ".{$unique_class_name}" : $unique_class_name ) : '';
-	}
-
-	/**
-	 * Retrieve computed css rules of rendering process.
-	 *
-	 * @return string the generated computed css rules for rendered blocks.
-	 */
-	public function getComputedCssRules(): string {
-
-		return $this->computed_css_rules;
+		return '/\b(blockera-block-\S+)\b/';
 	}
 
 }

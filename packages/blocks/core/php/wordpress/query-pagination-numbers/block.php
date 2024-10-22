@@ -12,9 +12,7 @@ return array_merge(
 	[
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
-			[
-				'innerBlocks' => blockera_load( 'inners.numbers', dirname( __DIR__ ) ),
-			]
+			blockera_load( 'inners.numbers', dirname( __DIR__ ) )
 		),
 	]
 );

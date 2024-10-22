@@ -19,7 +19,7 @@ import {
 /**
  * Blockera dependencies
  */
-import { omit, isEquals, omitWithPattern } from '@blockera/utils';
+import { omit, isEquals, omitWithPattern, cloneObject } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
 /**
@@ -42,6 +42,7 @@ import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
 import { BlockCompatibility } from './block-compatibility';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
+import { sanitizeBlockAttributes } from '../hooks/utils';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -52,6 +53,7 @@ export type BlockBaseProps = {
 	setAttributes: (attributes: Object) => void,
 	className: string,
 	defaultAttributes: Object,
+	originDefaultAttributes: Object,
 };
 
 export const BlockBase: ComponentType<BlockBaseProps> = memo(
@@ -60,13 +62,25 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		children,
 		name,
 		clientId,
-		attributes: _attributes,
+		attributes: blockAttributes,
 		setAttributes: _setAttributes,
 		className,
 		defaultAttributes,
+		originDefaultAttributes,
 		...props
 	}: BlockBaseProps): Element<any> | null => {
-		const [attributes, updateAttributes] = useState(_attributes);
+		const _attributes = useMemo(
+			() => sanitizeBlockAttributes(cloneObject(blockAttributes)),
+			[blockAttributes]
+		);
+
+		const [attributes, updateAttributes] = useState(blockAttributes);
+
+		const sanitizedAttributes = useMemo(
+			() => sanitizeBlockAttributes(cloneObject(attributes)),
+			[attributes]
+		);
+
 		const [currentTab, setCurrentTab] = useState(
 			additional?.activeTab || 'style'
 		);
@@ -93,11 +107,25 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			updateAttributes(newAttributes);
 		};
 
+		// Sets the block "blockeraPropsId" attribute with unique value.
+		useEffect(() => {
+			if (
+				attributes?.blockeraPropsId &&
+				attributes?.blockeraPropsId !== clientId
+			) {
+				setAttributes({
+					...attributes,
+					blockeraPropsId: clientId,
+				});
+			}
+			// eslint-disable-next-line
+		}, [clientId]);
+
 		/**
 		 * Updating block original attributes state while changed native attributes state.
 		 */
 		useEffect(() => {
-			if (!isEquals(attributes, _attributes) && !isCompatibleWithWP) {
+			if (!isEquals(attributes, blockAttributes) && !isCompatibleWithWP) {
 				_setAttributes(attributes);
 			}
 			// eslint-disable-next-line
@@ -108,31 +136,24 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentState,
 			currentBreakpoint,
 			currentInnerBlockState,
-		} = useExtensionsStore({ name, clientId, test: true });
+		} = useExtensionsStore({ name, clientId });
 
-		const {
-			selectedBlock,
-			activeVariation,
-			availableAttributes,
-			isActiveBlockExtensions,
-		} = useSelect((select) => {
-			const { isActiveBlockExtensions, getActiveBlockVariation } = select(
-				'blockera/extensions'
-			);
+		const { availableAttributes, isActiveBlockExtensions } = useSelect(
+			(select) => {
+				const { isActiveBlockExtensions, getActiveBlockVariation } =
+					select('blockera/extensions');
 
-			const { getBlockType } = select('core/blocks');
-			const { getSelectedBlock } = select('core/block-editor');
+				const { getBlockType } = select('core/blocks');
+				const { getSelectedBlock } = select('core/block-editor');
 
-			return {
-				activeVariation: getActiveBlockVariation(),
-				selectedBlock: (getSelectedBlock() || {})?.name,
-				isActiveBlockExtensions: isActiveBlockExtensions(),
-				availableAttributes: getBlockType(name)?.attributes,
-			};
-		});
-
-		const isSelectedBlock = (name: string): boolean =>
-			selectedBlock === name;
+				return {
+					activeVariation: getActiveBlockVariation(),
+					selectedBlock: (getSelectedBlock() || {})?.name,
+					isActiveBlockExtensions: isActiveBlockExtensions(),
+					availableAttributes: getBlockType(name)?.attributes,
+				};
+			}
+		);
 
 		const [isActive, setActive] = useState(isActiveBlockExtensions);
 
@@ -140,19 +161,18 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			changeExtensionCurrentBlock: setCurrentBlock,
 			changeExtensionCurrentBlockState: setCurrentState,
 			changeExtensionInnerBlockState: setInnerBlockState,
-			setExtensionsActiveBlockVariation: setActiveBlockVariation,
 		} = dispatch('blockera/extensions') || {};
 
 		const { getDeviceType } = select('blockera/editor');
 
 		const { currentInnerBlock, blockeraInnerBlocks } = useInnerBlocksInfo({
-			name,
 			additional,
-			attributes,
 			currentBlock,
 			currentState,
 			currentBreakpoint,
+			defaultAttributes,
 			currentInnerBlockState,
+			attributes: sanitizedAttributes,
 		});
 
 		const { edit: BlockEditComponent } = additional;
@@ -172,11 +192,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		};
 
 		const getAttributes = (key: string = ''): any => {
-			if (key && attributes[key]) {
-				return attributes[key];
+			if (key && sanitizedAttributes[key]) {
+				return sanitizedAttributes[key];
 			}
 
-			return attributes;
+			return sanitizedAttributes;
 		};
 
 		const {
@@ -217,12 +237,13 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			blockVariations,
 			activeBlockVariation,
 			getActiveBlockVariation,
-			blockAttributes: defaultAttributes,
+			blockAttributes: originDefaultAttributes,
 			innerBlocks: additional?.blockeraInnerBlocks,
 		};
 
 		const { getAttributesWithIds, handleOnChangeAttributes } =
 			useAttributes(setAttributes, {
+				clientId,
 				className,
 				blockId: name,
 				isNormalState,
@@ -267,9 +288,9 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 
 		const blockEditRef = useRef(null);
 		const currentAttributes = useCalculateCurrentAttributes({
-			attributes,
 			currentInnerBlock,
 			blockeraInnerBlocks,
+			attributes: sanitizedAttributes,
 			blockAttributes: defaultAttributes,
 		});
 
@@ -286,37 +307,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			},
 			[currentAttributes]
 		);
-
-		// While change active block variation, we should clean up blockeraCompatId because we need to running compatibilities again.
-		useEffect(() => {
-			// We should not try to clean up blockeraCompatId while not selected block because still not executing compatibility on current block.
-			if (!isSelectedBlock(name)) {
-				return;
-			}
-
-			// Create mutable constant to prevent directly change to immutable state constant.
-			let filteredAttributes = { ...attributes };
-
-			if (!isEquals(activeVariation, activeBlockVariation)) {
-				setActiveBlockVariation(activeBlockVariation);
-
-				filteredAttributes = {
-					...attributes,
-					blockeraCompatId: '',
-				};
-
-				// Prevent redundant set state!
-				if (isEquals(attributes, filteredAttributes)) {
-					return;
-				}
-
-				// Prevent of bad set state!
-				if (!isEquals(attributes, filteredAttributes)) {
-					updateAttributes(filteredAttributes);
-				}
-			}
-			// eslint-disable-next-line
-		}, [activeBlockVariation]);
 
 		const originalAttributes = useMemo(() => {
 			return omitWithPattern(
@@ -335,7 +325,6 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						attributes: currentAttributes,
 						storeName: 'blockera/controls',
 					},
-					attributes,
 					currentTab,
 					currentBlock,
 					currentState,
@@ -351,6 +340,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					handleOnChangeAttributes,
 					updateBlockEditorSettings,
 					BlockComponent: () => children,
+					attributes: sanitizedAttributes,
 					activeDeviceType: getDeviceType(),
 					getBlockType: () =>
 						select('core/blocks').getBlockType(name),
@@ -362,12 +352,12 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 						{...{
 							args,
 							isActive,
-							defaultAttributes,
 							setCompatibilities,
 							originalAttributes,
 							availableAttributes,
 							getAttributesWithIds,
-							attributes: _attributes,
+							attributes: blockAttributes,
+							defaultAttributes: originDefaultAttributes,
 						}}
 					/>
 					<SideEffect
@@ -404,7 +394,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 									clientId,
 									supports,
 									className,
-									attributes,
+									attributes: sanitizedAttributes,
 									setAttributes,
 									defaultAttributes,
 									currentAttributes,
@@ -437,7 +427,7 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 								clientId,
 								supports,
 								selectors,
-								attributes,
+								attributes: sanitizedAttributes,
 								blockName: name,
 								currentAttributes,
 								defaultAttributes,

@@ -145,9 +145,8 @@ export function UnitInput({
 		}
 
 		return onChange({
+			unitValue,
 			inputValue: newValue,
-			unitValue:
-				'' === newValue && unitValue?.notFound ? unitValue : unitValue,
 		});
 	};
 

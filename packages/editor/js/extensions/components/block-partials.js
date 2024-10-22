@@ -1,8 +1,8 @@
 /**
  * External dependencies
  */
-import { Slot } from '@wordpress/components';
-import { useEffect, memo } from '@wordpress/element';
+import { Slot, Fill } from '@wordpress/components';
+import { useEffect, memo, useRef } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -15,43 +15,62 @@ import { prependPortal } from '@blockera/utils';
 import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
 
 export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
-	const stylesTab = document.querySelector('[aria-label="Styles"]');
-	const blockCard = document.querySelector('.block-editor-block-card');
-	const blockVariations = document.querySelector(
-		'.block-editor-block-inspector > .block-editor-block-variation-transforms'
-	);
+	const stickyWrapperRef = useRef(null);
+	const sentinelRef = useRef(null);
 
+	// implementing block card sticky behavior
 	useEffect(() => {
-		if (blockCard) {
-			blockCard.style.display = 'none';
-		}
+		const stickyWrapper = stickyWrapperRef.current;
+		const sentinel = sentinelRef.current;
 
-		if (blockVariations) {
-			blockVariations.style.display = 'none';
-		}
-		// eslint-disable-next-line
-	}, []);
+		if (!stickyWrapper || !sentinel) return;
 
-	useEffect(() => {
-		if (!stylesTab) {
-			return;
-		}
-
-		const listener = () => {
-			if (blockCard) {
-				blockCard.style.display = 'flex';
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				// Add `is-stuck-monitoring` to prevent `is-stuck` atr first time
+				if (stickyWrapper.classList.contains('is-stuck-monitoring')) {
+					// Add `is-stuck` only when the sentinel is out of view (element has become sticky)
+					if (!entry.isIntersecting) {
+						stickyWrapper.classList.add('is-stuck');
+					} else {
+						stickyWrapper.classList.remove('is-stuck');
+					}
+				} else {
+					stickyWrapper.classList.add('is-stuck-monitoring');
+				}
+			},
+			{
+				root: null, // relative to the viewport
+				threshold: 0, // trigger when sentinel is fully out of view
 			}
-		};
+		);
 
-		stylesTab.addEventListener('click', listener);
+		observer.observe(sentinel);
 
-		return () => stylesTab.removeEventListener('click', listener);
-		// eslint-disable-next-line
+		return () => observer.disconnect();
 	}, []);
 
 	return prependPortal(
 		<>
-			<div className="blockera-block-card-wrapper">
+			<div
+				ref={sentinelRef}
+				className="blockera-block-card-sticky-sentinel"
+			></div>
+			<div
+				ref={stickyWrapperRef}
+				className="blockera-block-card-wrapper is-sticky-active"
+			>
+				<Slot name={`blockera-block-card-content-${clientId}`} />
+			</div>
+
+			<div className="blockera-block-edit-wrapper">
+				<Slot name={`blockera-block-edit-content-${clientId}`} />
+			</div>
+
+			<Fill
+				key={`${clientId}-card-menu`}
+				name={'blockera-block-card-children'}
+			>
 				<div className={'blockera-dropdown-menu'}>
 					<BlockDropdownAllMenu
 						{...{
@@ -60,12 +79,7 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 						}}
 					/>
 				</div>
-
-				<Slot name={`blockera-block-card-content-${clientId}`} />
-			</div>
-			<div className="blockera-block-edit-wrapper">
-				<Slot name={`blockera-block-edit-content-${clientId}`} />
-			</div>
+			</Fill>
 		</>,
 		document.querySelector('.block-editor-block-inspector')
 	);

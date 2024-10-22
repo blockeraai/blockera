@@ -21,11 +21,19 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => array_merge(
-					blockera_load( 'inners.link', dirname( __DIR__ ) ),
-					blockera_load( 'inners.paragraph', dirname( __DIR__ ) ),
-				),
-			]
+				'blockera/elements/title'      => [
+					'root' => 'summary',
+				],
+				'blockera/elements/title-icon' => [
+					'root' => 'summary::marker',
+				],
+				'blockera/elements/link'       => [
+					'root' => 'a:not(.wp-element-button)',
+				],
+				'blockera/core/paragraph'      => [
+					'root' => 'p',
+				],
+			],
 		),
 	]
 );

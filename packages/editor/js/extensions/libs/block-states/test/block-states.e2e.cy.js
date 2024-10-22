@@ -46,9 +46,10 @@ describe('Block State E2E Test', () => {
 
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
-				'[aria-label="Blockera Block State Container"]:first-child'
+				'.blockera-state-colors-container:last-child'
 			).should('eq', '#147EB8');
 		});
+
 		it('set the "third-party" state (Like: hover, active, etc) color on the root of the container using CSS variables.', () => {
 			initialSetting();
 
@@ -58,7 +59,34 @@ describe('Block State E2E Test', () => {
 			// assert hover(or other pseudo state) state color.
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
-				'[aria-label="Blockera Block State Container"]:first-child'
+				'.blockera-state-colors-container:last-child'
+			).should('eq', '#D47C14');
+		});
+
+		it('Switch to inner block and check normal state color to ba the color of inner block.', () => {
+			initialSetting();
+
+			setInnerBlock('elements/link');
+
+			// assert inner block normal state color to be #cc0000
+			cy.cssVar(
+				'--blockera-tab-panel-active-color',
+				'.blockera-state-colors-container:last-child'
+			).should('eq', '#cc0000');
+		});
+
+		it('Switch to inner block and check hover state color to ba the color of hover color.', () => {
+			initialSetting();
+
+			setInnerBlock('elements/link');
+
+			// add hover(or other pseudo state) state.
+			cy.getByAriaLabel('Add New State').last().click();
+
+			// assert inner block normal state color to be #cc0000
+			cy.cssVar(
+				'--blockera-tab-panel-active-color',
+				'.blockera-state-colors-container:last-child'
 			).should('eq', '#D47C14');
 		});
 	});
@@ -89,12 +117,15 @@ describe('Block State E2E Test', () => {
 
 			checkCurrentState('hover');
 			// Check block card
-			checkBlockCard([
-				{
-					label: 'Hover',
-					type: 'State',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Hover State',
+						text: 'Hover',
+					},
+				],
+				'master-block'
+			);
 		});
 
 		it('should hidden normal state after delete hover state', () => {
@@ -284,12 +315,15 @@ describe('Block State E2E Test', () => {
 
 			addBlockState('hover');
 
-			checkBlockCard([
-				{
-					label: 'Hover',
-					type: 'State',
-				},
-			]);
+			checkBlockCard(
+				[
+					{
+						label: 'Hover State',
+						text: 'Hover',
+					},
+				],
+				'master-block'
+			);
 
 			// Assert control value to testing useCalculateCurrentAttributes Hook.
 			cy.getByAriaLabel('Input Width').type(150, { force: true });
@@ -393,10 +427,7 @@ describe('Block State E2E Test', () => {
 				// Real hover.
 				cy.getIframeBody()
 					.find(`#block-${getBlockClientId(data)}`)
-					.realHover();
-
-				cy.getIframeBody()
-					.find(`#block-${getBlockClientId(data)}:hover`)
+					.realHover()
 					.should('have.css', 'width', '100px');
 
 				// to stop hover.

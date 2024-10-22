@@ -98,7 +98,10 @@ export const deletePropertyByPath = (obj: Object, path: string): Object => {
 export function mergeObject(
 	target: Object,
 	source: Object,
-	args: Object
+	args: {
+		forceUpdated: Array<string>,
+		deletedProps: Array<string>,
+	}
 ): Object {
 	if (!isObject(source)) {
 		return target;

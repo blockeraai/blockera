@@ -27,25 +27,28 @@ export function backgroundColorFromWPCompatibility({
 
 		if (colorVar) {
 			attributes.blockeraBackgroundColor = {
-				settings: {
-					...colorVar,
-					type: 'color',
-					var: generateVariableString({
-						reference: colorVar?.reference || { type: '' },
+				value: {
+					settings: {
+						...colorVar,
 						type: 'color',
-						id: colorVar?.id || '',
-					}),
+						var: generateVariableString({
+							reference: colorVar?.reference || { type: '' },
+							type: 'color',
+							id: colorVar?.id || '',
+						}),
+					},
+					name: colorVar?.name,
+					isValueAddon: true,
+					valueType: 'variable',
 				},
-				name: colorVar?.name,
-				isValueAddon: true,
-				valueType: 'variable',
 			};
 		}
 	}
 	// style.color.background is not variable
 	else if (attributes?.style?.color?.background !== undefined) {
-		attributes.blockeraBackgroundColor =
-			attributes?.style?.color?.background;
+		attributes.blockeraBackgroundColor = {
+			value: attributes?.style?.color?.background,
+		};
 	}
 
 	return attributes;

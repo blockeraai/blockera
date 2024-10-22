@@ -14,6 +14,8 @@ import type { FeatureConfig } from '../../base';
 export type TTypographyProps = {
 	...BaseExtensionProps,
 	extensionConfig: {
+		blockeraFontFamily: FeatureConfig,
+		blockeraFontWeight: FeatureConfig,
 		blockeraFontSize: FeatureConfig,
 		blockeraLineHeight: FeatureConfig,
 		blockeraFontColor: FeatureConfig,
@@ -32,6 +34,8 @@ export type TTypographyProps = {
 		blockeraWordBreak: FeatureConfig,
 	},
 	values: {
+		blockeraFontFamily: string,
+		blockeraFontWeight: string,
 		blockeraFontSize: string,
 		blockeraLineHeight: string,
 		blockeraFontColor: string,
@@ -64,6 +68,8 @@ export type TTypographyProps = {
 	display?: string,
 	backgroundClip?: string,
 	extensionProps: {
+		blockeraFontFamily: Object,
+		blockeraFontWeight: Object,
 		blockeraFontColor: Object,
 		blockeraFontSize: Object,
 		blockeraLineHeight: Object,

@@ -13,14 +13,17 @@
 .blockera-block-card-wrapper {
 
 	.blockera-dropdown-menu {
-		position: relative;
+		position: absolute;
+		top: 0;
+		right: 0;
 
 		.components-dropdown-menu {
 			position: absolute;
-			right: -8px;
+			right: 8px;
 			padding: 0;
 			margin: 0;
-			top: -6px;
+			top: 13px;
+			z-index: 1;
 
 			.components-button.has-icon {
 			    justify-content: center;
@@ -83,7 +86,7 @@
 .block-editor-inserter__panel-content {
 
 	.blockera-block-icon {
-		display: block;
+		display: block !important;
 		top: 15px;
 		right: 20px;
 		margin-right: -7px;
@@ -116,7 +119,7 @@
 
 	.blockera-block-icon.blockera-main-icon {
 		color: currentColor;
-		display: block;
+		display: block !important;
 		opacity: 0.2;
 		top: -10px;
 		right: -10px;
@@ -132,8 +135,8 @@
 .editor-block-manager__checklist .block-editor-block-icon {
 	position: relative;
 
-	.blockera-block-icon {
-		display: block;
+	.blockera-block-icon.blockera-main-icon {
+		display: block !important;
 		opacity: 0.2;
 		--icon-size: 20px;
 		top: 50%;
@@ -142,6 +145,7 @@
 		background: #ffffff;
 		border-radius: 50%;
 		border: 2px solid #ffffff;
+		color: #3c434a;
 	}
 }
 
@@ -151,7 +155,7 @@
 		position: relative;
 
 		.blockera-block-icon {
-			display: block;
+			display: block !important;
 			opacity: 0.2;
 			--icon-size: 20px;
 			top: 50%;
@@ -181,4 +185,9 @@
 			}
 		}
 	}
+}
+
+.blockera-block-inspector-controls-wrapper + .block-editor-block-card,
+ .blockera-block-inspector-controls-wrapper ~ .block-editor-block-variation-transforms {
+	display: none !important;
 }

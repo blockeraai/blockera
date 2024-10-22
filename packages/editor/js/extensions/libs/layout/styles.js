@@ -12,7 +12,13 @@ import { prepare } from '@blockera/data-editor';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('layout');
 
 export const LayoutStyles = ({
 	state,
@@ -60,15 +66,15 @@ export const LayoutStyles = ({
 	};
 	const styleGroup: Array<CssRule> = [];
 
-	if (
-		isActiveField(blockeraDisplay) &&
-		_attributes.blockeraDisplay !== attributes.blockeraDisplay.default
-	) {
-		const pickedSelector = getCssSelector({
+	if (isActiveField(blockeraDisplay) && _attributes.blockeraDisplay !== '') {
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraDisplay',
 			support: 'blockeraDisplay',
-			fallbackSupportId: 'display',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraDisplay'
+			),
 		});
 
 		styleGroup.push({
@@ -94,10 +100,13 @@ export const LayoutStyles = ({
 		_attributes?.blockeraFlexLayout !== undefined
 	) {
 		if (_attributes?.blockeraFlexLayout?.direction) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.direction',
-				fallbackSupportId: 'flexDirection',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexLayout'
+				),
 			});
 
 			styleGroup.push({
@@ -120,12 +129,35 @@ export const LayoutStyles = ({
 			});
 		}
 
+		let changeFlexInside = false;
+
+		if (
+			_attributes?.blockeraFlexLayout?.direction === 'column' &&
+			_attributes?.blockeraFlexLayout?.alignItems &&
+			_attributes?.blockeraFlexLayout?.justifyContent &&
+			['flex-start', 'center', 'flex-end'].includes(
+				_attributes?.blockeraFlexLayout?.alignItems
+			) &&
+			['flex-start', 'center', 'flex-end'].includes(
+				_attributes?.blockeraFlexLayout?.justifyContent
+			)
+		) {
+			changeFlexInside = true;
+		}
+
 		if (_attributes?.blockeraFlexLayout?.alignItems) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.alignItems',
-				fallbackSupportId: 'alignItems',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexLayout'
+				),
 			});
+
+			const alignProp: string = changeFlexInside
+				? 'justify-content'
+				: 'align-items';
 
 			styleGroup.push({
 				selector: pickedSelector,
@@ -135,7 +167,7 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									'align-items':
+									[alignProp]:
 										_attributes.blockeraFlexLayout
 											.alignItems,
 								},
@@ -148,11 +180,18 @@ export const LayoutStyles = ({
 		}
 
 		if (_attributes?.blockeraFlexLayout?.justifyContent) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraFlexLayout.justifyContent',
-				fallbackSupportId: 'justifyContent',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexLayout'
+				),
 			});
+
+			const justifyProp: string = changeFlexInside
+				? 'align-items'
+				: 'justify-content';
 
 			styleGroup.push({
 				selector: pickedSelector,
@@ -162,7 +201,7 @@ export const LayoutStyles = ({
 							{
 								...staticDefinitionParams,
 								properties: {
-									'justify-content':
+									[justifyProp]:
 										_attributes.blockeraFlexLayout
 											.justifyContent,
 								},
@@ -189,11 +228,14 @@ export const LayoutStyles = ({
 			value += '-reverse';
 		}
 
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraFlexWrap',
 			support: 'blockeraFlexWrap',
-			fallbackSupportId: 'flexWrap',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraFlexWrap'
+			),
 		});
 
 		styleGroup.push({
@@ -220,11 +262,14 @@ export const LayoutStyles = ({
 		_attributes.blockeraAlignContent !==
 			attributes.blockeraAlignContent.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraAlignContent',
 			support: 'blockeraAlignContent',
-			fallbackSupportId: 'alignContent',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraAlignContent'
+			),
 		});
 
 		styleGroup.push({
@@ -278,11 +323,14 @@ export const LayoutStyles = ({
 
 			// gap
 			if (gap) {
-				const pickedSelector = getCssSelector({
+				const pickedSelector = getCompatibleBlockCssSelector({
 					...sharedParams,
 					query: 'blockeraGap',
 					support: 'blockeraGap',
-					fallbackSupportId: 'gap',
+					fallbackSupportId: getBlockSupportFallback(
+						supports,
+						'blockeraGap'
+					),
 					...(gapSuffixClass ? { suffixClass: gapSuffixClass } : {}),
 				});
 
@@ -325,10 +373,13 @@ export const LayoutStyles = ({
 			const rows = getValueAddonRealValue(_attributes.blockeraGap?.rows);
 
 			if (rows) {
-				const pickedSelector = getCssSelector({
+				const pickedSelector = getCompatibleBlockCssSelector({
 					...sharedParams,
 					query: 'blockeraGap.rows',
-					fallbackSupportId: 'rowGap',
+					fallbackSupportId: getBlockSupportFallback(
+						supports,
+						'blockeraGap'
+					),
 					...(gapSuffixClass ? { suffixClass: gapSuffixClass } : {}),
 				});
 
@@ -374,10 +425,13 @@ export const LayoutStyles = ({
 
 			// if there is gapSuffixClass it means the gap is by margin that that does not supports columns gap
 			if (columns && !gapSuffixClass) {
-				const pickedSelector = getCssSelector({
+				const pickedSelector = getCompatibleBlockCssSelector({
 					...sharedParams,
 					query: 'blockeraGap.columns',
-					fallbackSupportId: 'columnGap',
+					fallbackSupportId: getBlockSupportFallback(
+						supports,
+						'blockeraGap'
+					),
 					...(gapSuffixClass ? { suffixClass: gapSuffixClass } : {}),
 				});
 
@@ -407,11 +461,14 @@ export const LayoutStyles = ({
 		 * This variable is false by default but it will be enabled if the style clearing is needed.
 		 */
 		if (removeMarginBlockStart) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraGap',
 				support: 'blockeraGap',
-				fallbackSupportId: 'gap',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraGap'
+				),
 				suffixClass: '> * + *',
 			});
 

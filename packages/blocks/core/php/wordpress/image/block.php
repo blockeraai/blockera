@@ -7,16 +7,22 @@
  * @package blockera/packages/blocks/js/wordpress/image
  */
 
+$sizeSelector = '.wp-block-image img, .wp-block-image .wp-block-image__crop-area, .wp-block-image .components-placeholder';
+
 return array_merge(
 	$args,
 	[
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/caption' => [
-						'root' => 'figcaption',
-					],
+				'blockeraWidth'             => $sizeSelector,
+				'blockeraMinWidth'          => $sizeSelector,
+				'blockeraMaxWidth'          => $sizeSelector,
+				'blockeraHeight'            => $sizeSelector,
+				'blockeraMinHeight'         => $sizeSelector,
+				'blockeraMaxHeight'         => $sizeSelector,
+				'blockera/elements/caption' => [
+					'root' => 'figcaption',
 				],
 			]
 		),

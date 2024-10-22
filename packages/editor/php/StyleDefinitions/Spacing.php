@@ -4,10 +4,6 @@ namespace Blockera\Editor\StyleDefinitions;
 
 class Spacing extends BaseStyleDefinition {
 
-	protected array $options = [
-		'is-important' => true,
-	];
-
 	/**
 	 * @inheritDoc
 	 *
@@ -25,16 +21,14 @@ class Spacing extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$this->setSelector( $cssProperty );
-
 		$padding = $margin = [];
 
-		if (isset($setting[$cssProperty]['padding'])) {
-			$padding = $setting[$cssProperty]['padding'];
+		if ( isset( $setting[ $cssProperty ]['padding'] ) ) {
+			$padding = $setting[ $cssProperty ]['padding'];
 		}
 
-		if (isset($setting[$cssProperty]['margin'])) {
-			$margin = $setting[$cssProperty]['margin'];
+		if ( isset( $setting[ $cssProperty ]['margin'] ) ) {
+			$margin = $setting[ $cssProperty ]['margin'];
 		}
 
 		if ( empty( $padding ) && empty( $margin ) ) {
@@ -58,25 +52,23 @@ class Spacing extends BaseStyleDefinition {
 			);
 		}
 
-		$isImportant = $this->getImportant();
-
 		$declaration = array_merge(
 			...array_map(
-				static function ( string $item, string $property ) use ( $isImportant ): array {
+			static function ( string $item, string $property ): array {
 
-					return [ "padding-{$property}" => blockera_get_value_addon_real_value( $item ) . $isImportant ];
-				},
-				$padding,
-				array_keys( $padding )
-			),
+				return [ "padding-{$property}" => blockera_get_value_addon_real_value( $item ) ];
+			},
+			$padding,
+			array_keys( $padding )
+		),
 			...array_map(
-				static function ( string $item, string $property ) use ( $isImportant ): array {
+			static function ( string $item, string $property ): array {
 
-					return [ "margin-{$property}" => blockera_get_value_addon_real_value( $item ) . $isImportant ];
-				},
-				$margin,
-				array_keys( $margin )
-			),
+				return [ "margin-{$property}" => blockera_get_value_addon_real_value( $item ) ];
+			},
+			$margin,
+			array_keys( $margin )
+		),
 		);
 
 		$this->setCss( $declaration );
@@ -87,18 +79,6 @@ class Spacing extends BaseStyleDefinition {
 	private function filteredItems( string $item ): bool {
 
 		return ! empty( $item );
-	}
-
-	/**
-	 * @inheritDoc
-	 *
-	 * @return string[]
-	 */
-	public function getAllowedProperties(): array {
-
-		return [
-			'blockeraSpacing' => 'spacing',
-		];
 	}
 
 }

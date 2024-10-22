@@ -1,0 +1,7 @@
+{
+	"name": "blockera/exceptions",
+	"path": "packages/exceptions",
+	"dependent": {
+		"repositories": ["https://github.com/blockeraai/blockera.git"]
+	}
+}

@@ -23,6 +23,7 @@ export const CommentsPaginationNumbers: BlockType = {
 		'elements/numbers': {
 			name: 'elements/numbers',
 			label: __('Numbers', 'blockera'),
+			description: __('All pagination number elements.', 'blockera'),
 			icon: <Icon icon="block-pagination-numbers" size="20" />,
 			settings: {
 				force: true,
@@ -31,6 +32,7 @@ export const CommentsPaginationNumbers: BlockType = {
 		'elements/current': {
 			name: 'elements/current',
 			label: __('Current Page', 'blockera'),
+			description: __('The current page number element.', 'blockera'),
 			icon: <Icon icon="block-pagination-numbers-current" size="20" />,
 			settings: {
 				force: true,
@@ -39,6 +41,7 @@ export const CommentsPaginationNumbers: BlockType = {
 		'elements/dots': {
 			name: 'elements/dots',
 			label: __('Dots', 'blockera'),
+			description: __('The numbers separator dotes element.', 'blockera'),
 			icon: <Icon icon="block-pagination-numbers-dots" size="20" />,
 			settings: {
 				force: true,

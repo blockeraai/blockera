@@ -249,7 +249,7 @@ describe('Border Control label testing (Border Line)', () => {
 			'changed-in-secondary-state'
 		);
 		// Assert control
-		cy.get('@border-width').type('have.value', 5);
+		cy.get('@border-width').should('have.value', 5, { force: true });
 
 		/**
 		 * Normal
@@ -264,7 +264,7 @@ describe('Border Control label testing (Border Line)', () => {
 		);
 
 		// Assert control
-		cy.get('@border-width').type('have.value', '');
+		cy.get('@border-width').should('have.value', '', { force: true });
 
 		/**
 		 * Normal (Desktop device)
@@ -279,7 +279,7 @@ describe('Border Control label testing (Border Line)', () => {
 		);
 
 		// Assert control
-		cy.get('@border-width').type('have.value', '');
+		cy.get('@border-width').should('have.value', '', { force: true });
 
 		// Assert state graph
 		cy.checkStateGraph('Border And Shadow', 'Border Line', {

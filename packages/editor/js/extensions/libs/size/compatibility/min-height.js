@@ -14,7 +14,7 @@ export function minHeightFromWPCompatibility({
 	blockId?: string,
 }): Object {
 	if (
-		attributes?.blockeraMinHeight !== '' ||
+		attributes?.blockeraMinHeight?.value !== '' ||
 		attributes?.minHeight === undefined ||
 		attributes?.minHeightUnit === undefined
 	) {
@@ -22,8 +22,9 @@ export function minHeightFromWPCompatibility({
 	}
 
 	if (blockId === 'core/cover') {
-		attributes.blockeraMinHeight =
-			attributes?.minHeight + attributes.minHeightUnit;
+		attributes.blockeraMinHeight = {
+			value: attributes?.minHeight + attributes.minHeightUnit,
+		};
 	}
 
 	return attributes;

@@ -10,18 +10,25 @@ import { dispatch } from '@wordpress/data';
  */
 import * as config from './config';
 import { STORE_NAME } from './store/constants';
+import { applyFilters } from '@wordpress/hooks';
 
 export const registerBlockExtensionsSupports = (
 	blockName: string,
 	externalConfig?: Object
 ): void => {
-	Object.keys(externalConfig || config).forEach((name: string) =>
+	Object.keys(externalConfig || config).forEach((name: string) => {
+		const targetBlock = blockName.replace(/\//g, '-');
 		dispatch(STORE_NAME).addExtension({
 			name,
 			blockName,
-			supports: (externalConfig || config)[name],
-		})
-	);
+			supports: applyFilters(
+				`blockera-${targetBlock}-extension-${name}`,
+				(externalConfig || config)[name],
+				name,
+				targetBlock
+			),
+		});
+	});
 };
 
 export * from './config';

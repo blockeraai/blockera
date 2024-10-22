@@ -53,7 +53,7 @@ describe('Filters → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'filter: drop-shadow(50px 30px 40px #cccccc);'
+					'filter: drop-shadow(50px 30px 40px #cccccc)'
 				);
 		});
 
@@ -87,8 +87,11 @@ describe('Filters → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#blockera-inline-css-inline-css')
+		cy.get('style#blockera-inline-css')
 			.invoke('text')
-			.should('include', 'filter: drop-shadow(50px 30px 40px #cccccc);');
+			.should(
+				'include',
+				'filter: drop-shadow(50px 30px 40px #cccccc) !important;'
+			);
 	});
 });

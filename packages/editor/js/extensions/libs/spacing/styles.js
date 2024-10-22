@@ -14,7 +14,13 @@ import { useBlocksStore } from '../../../hooks';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
 import type { TSpacingDefaultProps, TCssProps } from './types/spacing-props';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('spacing');
 
 function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 	const properties: TCssProps = {};
@@ -121,11 +127,11 @@ export const SpacingStyles = ({
 			? updateCssProps(_attributes.blockeraSpacing)
 			: fallbackProps;
 
-	const pickedSelector = getCssSelector({
+	const pickedSelector = getCompatibleBlockCssSelector({
 		...sharedParams,
 		query: 'blockeraSpacing',
 		support: 'blockeraSpacing',
-		fallbackSupportId: 'spacing',
+		fallbackSupportId: getBlockSupportFallback(supports, 'blockeraSpacing'),
 	});
 
 	return [

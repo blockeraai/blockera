@@ -3,17 +3,28 @@
 /**
  * External dependencies
  */
-import { addFilter, applyFilters } from '@wordpress/hooks';
+import React from 'react';
+import { dispatch } from '@wordpress/data';
+import { addAction, addFilter, applyFilters } from '@wordpress/hooks';
+
+// Useful to development environment, in production build process will be removed it!
+if ('development' === process.env.APP_MODE) {
+	/**
+	 * see: https://github.com/welldone-software/why-did-you-render
+	 */
+	const whyDidYouRender = require('@welldone-software/why-did-you-render');
+	whyDidYouRender(React);
+}
 
 /**
  * Blockera dependencies
  */
 import {
-	reregistrationBlocks,
 	blockeraBootstrapBlocks,
-	registerThirdPartyExtensionDefinitions,
+	registerBlockeraBlocks,
+	registerConfigExtensionsOfInnerBlocks,
 } from '@blockera/blocks-core';
-import { noop } from '@blockera/utils';
+import { noop, isLoadedSiteEditor, isLoadedPostEditor } from '@blockera/utils';
 import { initializer } from '@blockera/bootstrap';
 import {
 	applyHooks,
@@ -21,8 +32,11 @@ import {
 	bootstrapCanvasEditor,
 	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
-import { dispatch } from '@wordpress/data';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
+
+addAction('blockera.mergeBlockSettings.Edit.component', 'blockera.index', () =>
+	bootstrapCanvasEditor('site')
+);
 
 /**
  * Registration blockera core block settings with internal definitions.
@@ -46,8 +60,8 @@ addFilter('blockera.bootstrapper.before.domReady', 'blockera.bootstrap', () => {
 				registerBlockTypeAttributes,
 		};
 
-		reregistrationBlocks();
-		registerThirdPartyExtensionDefinitions();
+		registerBlockeraBlocks();
+		registerConfigExtensionsOfInnerBlocks();
 	});
 });
 
@@ -62,11 +76,15 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 			// Bootstrap functions for blocks.
 			blockeraBootstrapBlocks();
 
-			// Bootstrap canvas editor UI.
-			bootstrapCanvasEditor();
+			// Bootstrap canvas editor UI on WordPress post editor.
+			if (!isLoadedSiteEditor() && isLoadedPostEditor()) {
+				bootstrapCanvasEditor('post');
+			}
 
 			// Bootstrap functions for extensions.
 			blockeraExtensionsBootstrap();
+
+			applyFilters('blockera.after.bootstrap', noop)();
 		});
 	};
 });

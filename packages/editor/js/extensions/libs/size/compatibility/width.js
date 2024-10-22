@@ -17,8 +17,9 @@ export function widthFromWPCompatibility({
 				attributes?.width !== undefined &&
 				attributes?.widthUnit !== undefined
 			) {
-				attributes.blockeraWidth =
-					attributes?.width + attributes?.widthUnit;
+				attributes.blockeraWidth = {
+					value: attributes?.width + attributes?.widthUnit,
+				};
 			}
 
 			return attributes;
@@ -27,7 +28,9 @@ export function widthFromWPCompatibility({
 		// unit is %
 		case 'core/button':
 			if (attributes?.width !== undefined) {
-				attributes.blockeraWidth = attributes?.width + '%';
+				attributes.blockeraWidth = {
+					value: attributes?.width + '%',
+				};
 			}
 
 			return attributes;
@@ -37,9 +40,25 @@ export function widthFromWPCompatibility({
 		case 'core/site-logo':
 			if (
 				attributes?.width !== undefined &&
-				attributes?.blockeraWidth !== attributes?.width + 'px'
+				attributes?.blockeraWidth?.value !== attributes?.width + 'px'
 			) {
-				attributes.blockeraWidth = attributes?.width + 'px';
+				attributes.blockeraWidth = {
+					value: attributes?.width + 'px',
+				};
+			}
+
+			return attributes;
+
+		// not unit in value
+		// unit is px always
+		case 'core/avatar':
+			if (
+				attributes?.size !== undefined &&
+				attributes?.blockeraWidth?.value !== attributes?.size + 'px'
+			) {
+				attributes.blockeraWidth = {
+					value: attributes?.size + 'px',
+				};
 			}
 
 			return attributes;
@@ -50,7 +69,9 @@ export function widthFromWPCompatibility({
 		case 'core/column':
 		case 'core/image':
 			if (attributes?.width !== undefined) {
-				attributes.blockeraWidth = attributes?.width;
+				attributes.blockeraWidth = {
+					value: attributes?.width,
+				};
 			}
 
 			return attributes;
@@ -111,7 +132,7 @@ export function widthToWPCompatibility({
 				isUndefined(newValue) ||
 				isSpecialUnit(newValue) ||
 				!isString(newValue) ||
-				!newValue.endsWith('px') // only percent values
+				!newValue.endsWith('px') // only px values
 			) {
 				return {
 					width: undefined,
@@ -119,7 +140,31 @@ export function widthToWPCompatibility({
 			}
 
 			return {
-				width: +newValue.replace('px', ''), // remove % and convert to number
+				width: +newValue.replace('px', ''), // remove px and convert to number
+			};
+
+		// A number attribute for width without unit (px is unit)
+		case 'core/avatar':
+			if ('reset' === ref?.current?.action) {
+				return {
+					size: undefined,
+				};
+			}
+
+			if (
+				newValue === '' ||
+				isUndefined(newValue) ||
+				isSpecialUnit(newValue) ||
+				!isString(newValue) ||
+				!newValue.endsWith('px') // only px values
+			) {
+				return {
+					size: undefined,
+				};
+			}
+
+			return {
+				size: +newValue.replace('px', ''), // remove px and convert to number
 			};
 
 		// A number attribute for width without unit (% is unit)

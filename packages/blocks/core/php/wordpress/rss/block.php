@@ -13,22 +13,20 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'innerBlocks' => [
-					'elements/container' => [
-						'root' => '.wp-block-rss__item',
-					],
-					'elements/title'     => [
-						'root' => '.wp-block-rss__item-title',
-					],
-					'elements/date'      => [
-						'root' => '.wp-block-rss__item-publish-date',
-					],
-					'elements/author'    => [
-						'root' => '.wp-block-rss__item-author',
-					],
-					'elements/excerpt'   => [
-						'root' => '.wp-block-rss__item-excerpt',
-					],
+				'blockera/elements/container' => [
+					'root' => '.wp-block-rss__item',
+				],
+				'blockera/elements/title'     => [
+					'root' => '.wp-block-rss__item-title',
+				],
+				'blockera/elements/date'      => [
+					'root' => '.wp-block-rss__item-publish-date',
+				],
+				'blockera/elements/author'    => [
+					'root' => '.wp-block-rss__item-author',
+				],
+				'blockera/elements/excerpt'   => [
+					'root' => '.wp-block-rss__item-excerpt',
 				],
 			]
 		),

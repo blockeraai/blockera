@@ -15,7 +15,7 @@ describe('Font Size → Functionality', () => {
 	});
 
 	it('Simple value font size', () => {
-		cy.getParentContainer('Font Size').within(() => {
+		cy.getParentContainer('Size').within(() => {
 			cy.get('input[type="number"]').clear();
 			cy.get('input[type="number"]').type(10, {
 				force: true,
@@ -41,7 +41,7 @@ describe('Font Size → Functionality', () => {
 	});
 
 	it('Variable value', () => {
-		cy.getParentContainer('Font Size').within(() => {
+		cy.getParentContainer('Size').within(() => {
 			cy.openValueAddon();
 		});
 
@@ -83,7 +83,7 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('style#blockera-inline-css-inline-css')
+		cy.get('style#blockera-inline-css')
 			.invoke('text')
 			.should(
 				'include',

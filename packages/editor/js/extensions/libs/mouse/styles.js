@@ -6,7 +6,13 @@
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import { getCssSelector, computedCssDeclarations } from '../../../style-engine';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '../../../style-engine';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('mouse');
 
 export const MouseStyles = ({
 	state,
@@ -52,11 +58,14 @@ export const MouseStyles = ({
 		isActiveField(blockeraCursor) &&
 		currBlockAttributes.blockeraCursor !== attributes.blockeraCursor.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraCursor',
 			support: 'blockeraCursor',
-			fallbackSupportId: 'cursor',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraCursor'
+			),
 		});
 
 		styleGroup.push({
@@ -82,11 +91,14 @@ export const MouseStyles = ({
 		currBlockAttributes.blockeraUserSelect !==
 			attributes.blockeraUserSelect.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraUserSelect',
 			support: 'blockeraUserSelect',
-			fallbackSupportId: 'userSelect',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraUserSelect'
+			),
 		});
 
 		styleGroup.push({
@@ -113,11 +125,14 @@ export const MouseStyles = ({
 		currBlockAttributes.blockeraPointerEvents !==
 			attributes.blockeraPointerEvents.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraPointerEvents',
 			support: 'blockeraPointerEvents',
-			fallbackSupportId: 'pointerEvent',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraPointerEvents'
+			),
 		});
 
 		styleGroup.push({

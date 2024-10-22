@@ -104,15 +104,20 @@ const reducer = (state: Object = {}, action: Object): Object => {
 						state,
 						{
 							blockeraInnerBlocks: {
-								[currentBlock]: {
-									attributes: {
-										...effectiveItems,
-										...(mergedCssClasses
-											? { className: mergedCssClasses }
-											: {}),
-										[attributeId]: isEqualsWithDefault
-											? undefined
-											: newValue,
+								value: {
+									[currentBlock]: {
+										attributes: {
+											...effectiveItems,
+											...(mergedCssClasses
+												? {
+														className:
+															mergedCssClasses,
+												  }
+												: {}),
+											[attributeId]: isEqualsWithDefault
+												? undefined
+												: newValue,
+										},
 									},
 								},
 							},
@@ -135,7 +140,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 			) {
 				mergedCssClasses = prepCustomCssClasses(
 					newValue['custom-class'],
-					state[attributeId]['custom-class'],
+					state[attributeId].value['custom-class'],
 					state.className
 				);
 			}
@@ -156,7 +161,9 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					...(mergedCssClasses
 						? { className: mergedCssClasses }
 						: {}),
-					[attributeId]: newValue,
+					[attributeId]: {
+						value: newValue,
+					},
 				},
 				...hookParams
 			);
@@ -190,6 +197,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					},
 					{
 						deletedProps: [attributeId],
+						forceUpdated: isObject(newValue) ? [attributeId] : [],
 					}
 				),
 				...hookParams
@@ -210,22 +218,25 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					state,
 					{
 						blockeraInnerBlocks: {
-							[currentBlock]: {
-								attributes: {
-									blockeraBlockStates: memoizedBlockStates(
-										(
-											state.blockeraInnerBlocks[
-												currentBlock
-											] || {}
-										)?.attributes || {},
-										action,
-										{
-											currentState:
-												currentInnerBlockState,
-											insideInnerBlock: false,
-											currentBlock,
-										}
-									),
+							value: {
+								[currentBlock]: {
+									attributes: {
+										blockeraBlockStates:
+											memoizedBlockStates(
+												(
+													state.blockeraInnerBlocks[
+														currentBlock
+													] || {}
+												)?.attributes || {},
+												action,
+												{
+													currentState:
+														currentInnerBlockState,
+													insideInnerBlock: false,
+													currentBlock,
+												}
+											),
+									},
 								},
 							},
 						},

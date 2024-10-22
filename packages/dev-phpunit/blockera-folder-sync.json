@@ -1,0 +1,10 @@
+{
+	"name": "blockera/dev-phpunit",
+	"path": "packages/dev-phpunit",
+	"dependent": {
+		"repositories": [
+			"https://github.com/blockeraai/blockera.git",
+			"https://github.com/blockeraai/blockera-pro.git"
+		]
+	}
+}

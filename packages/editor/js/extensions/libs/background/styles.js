@@ -11,8 +11,14 @@ import { arrayEquals } from '../utils';
 import type { StylesProps } from '../types';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import { computedCssDeclarations, getCssSelector } from '../../../style-engine';
+import {
+	computedCssDeclarations,
+	getCompatibleBlockCssSelector,
+} from '../../../style-engine';
 import { backgroundGenerator, backgroundClipGenerator } from './css-generators';
+import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
+
+const supports = getBlockSupportCategory('background');
 
 export const BackgroundStyles = ({
 	state,
@@ -57,11 +63,14 @@ export const BackgroundStyles = ({
 			blockProps.attributes.blockeraBackground
 		)
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraBackground',
 			support: 'blockeraBackground',
-			fallbackSupportId: 'background',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBackground'
+			),
 		});
 
 		styleGroup.push({
@@ -89,11 +98,14 @@ export const BackgroundStyles = ({
 			blockeraBackgroundColor !==
 			attributes.blockeraBackgroundColor.default
 		) {
-			const pickedSelector = getCssSelector({
+			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraBackgroundColor',
 				support: 'blockeraBackgroundColor',
-				fallbackSupportId: 'backgroundColor',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraBackgroundColor'
+				),
 			});
 
 			styleGroup.push({
@@ -121,11 +133,14 @@ export const BackgroundStyles = ({
 		blockProps.attributes.blockeraBackgroundClip !==
 			attributes.blockeraBackgroundClip.default
 	) {
-		const pickedSelector = getCssSelector({
+		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraBackgroundClip',
 			support: 'blockeraBackgroundClip',
-			fallbackSupportId: 'backgroundClip',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBackgroundClip'
+			),
 		});
 
 		styleGroup.push({
