@@ -13,6 +13,7 @@ import {
 	useMemo,
 	useState,
 	useEffect,
+	useCallback,
 	// StrictMode,
 } from '@wordpress/element';
 
@@ -25,8 +26,7 @@ import { experimental } from '@blockera/env';
 /**
  * Internal dependencies
  */
-import { BlockStyle, StylesWrapper } from '../../style-engine';
-import { BlockEditContextProvider } from '../hooks';
+import { BlockApp } from './block-app';
 import {
 	useIconEffect,
 	useAttributes,
@@ -35,14 +35,16 @@ import {
 } from '../../hooks';
 import { SideEffect } from '../libs/base';
 import { BlockPartials } from './block-partials';
+import { BlockEditContextProvider } from '../hooks';
 import { isInnerBlock, propsAreEqual } from './utils';
 import { isBaseBreakpoint } from '../../canvas-editor';
-import { BlockFillPartials } from './block-fill-partials';
-import type { UpdateBlockEditorSettings } from '../libs/types';
-import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
-import { BlockCompatibility } from './block-compatibility';
-import { useExtensionsStore } from '../../hooks/use-extensions-store';
 import { sanitizeBlockAttributes } from '../hooks/utils';
+import { BlockFillPartials } from './block-fill-partials';
+import { BlockCompatibility } from './block-compatibility';
+import type { UpdateBlockEditorSettings } from '../libs/types';
+import { BlockStyle, StylesWrapper } from '../../style-engine';
+import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -138,24 +140,32 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentInnerBlockState,
 		} = useExtensionsStore({ name, clientId });
 
-		const { availableAttributes, isActiveBlockExtensions } = useSelect(
-			(select) => {
-				const { isActiveBlockExtensions, getActiveBlockVariation } =
-					select('blockera/extensions');
+		const { availableAttributes } = useSelect((select) => {
+			const { getActiveBlockVariation } = select('blockera/extensions');
 
-				const { getBlockType } = select('core/blocks');
-				const { getSelectedBlock } = select('core/block-editor');
+			const { getBlockType } = select('core/blocks');
+			const { getSelectedBlock } = select('core/block-editor');
 
-				return {
-					activeVariation: getActiveBlockVariation(),
-					selectedBlock: (getSelectedBlock() || {})?.name,
-					isActiveBlockExtensions: isActiveBlockExtensions(),
-					availableAttributes: getBlockType(name)?.attributes,
-				};
-			}
+			return {
+				activeVariation: getActiveBlockVariation(),
+				selectedBlock: (getSelectedBlock() || {})?.name,
+				availableAttributes: getBlockType(name)?.attributes,
+			};
+		});
+
+		const initialBlockeraMode = 'advanced' === attributes?.blockeraMode;
+		const [isBlockeraAdvancedMode, updateBlockMode] =
+			useState(initialBlockeraMode);
+		const setBlockMode = useCallback(
+			(blockeraMode: 'advanced' | 'basic'): void => {
+				updateBlockMode(blockeraMode);
+				setAttributes({
+					...attributes,
+					blockeraMode,
+				});
+			},
+			[attributes]
 		);
-
-		const [isActive, setActive] = useState(isActiveBlockExtensions);
 
 		const {
 			changeExtensionCurrentBlock: setCurrentBlock,
@@ -351,11 +361,11 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 					<BlockCompatibility
 						{...{
 							args,
-							isActive,
 							setCompatibilities,
 							originalAttributes,
 							availableAttributes,
 							getAttributesWithIds,
+							isBlockeraAdvancedMode,
 							attributes: blockAttributes,
 							defaultAttributes: originDefaultAttributes,
 						}}
@@ -366,54 +376,57 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							currentState: isInnerBlock(currentBlock)
 								? currentInnerBlockState
 								: currentState,
-							isActive,
+							isBlockeraAdvancedMode,
 						}}
 					/>
 					<SlotFillProvider>
-						<BlockPartials
-							clientId={clientId}
-							isActive={isActive}
-							setActive={setActive}
-						/>
-						<BlockFillPartials
-							{...{
-								clientId,
-								isActive,
-								currentState,
-								currentBlock,
-								currentInnerBlock,
-								BlockEditComponent,
-								currentBreakpoint,
-								blockeraInnerBlocks,
-								currentInnerBlockState,
-								updateBlockEditorSettings,
-								blockProps: {
-									// Sending props like exactly "edit" function props of WordPress Block.
-									// Because needs total block props in outside overriding component like "blockera" in overriding process.
-									name,
+						<BlockApp onClick={() => {}}>
+							<BlockPartials
+								clientId={clientId}
+								setBlockMode={setBlockMode}
+								isBlockeraAdvancedMode={isBlockeraAdvancedMode}
+							/>
+							<BlockFillPartials
+								{...{
 									clientId,
-									supports,
-									className,
-									attributes: sanitizedAttributes,
-									setAttributes,
-									defaultAttributes,
-									currentAttributes,
-									controllerProps: {
-										currentTab,
-										currentBlock,
-										currentState,
-										currentBreakpoint,
-										blockeraInnerBlocks,
-										currentInnerBlockState,
-										handleOnChangeAttributes,
+									currentState,
+									currentBlock,
+									currentInnerBlock,
+									currentBreakpoint,
+									BlockEditComponent,
+									blockeraInnerBlocks,
+									currentInnerBlockState,
+									isBlockeraAdvancedMode,
+									updateBlockEditorSettings,
+									blockProps: {
+										// Sending props like exactly "edit" function props of WordPress Block.
+										// Because needs total block props in outside overriding component like "blockera" in overriding process.
+										name,
+										clientId,
+										supports,
+										className,
+										attributes: sanitizedAttributes,
+										setAttributes,
+										defaultAttributes,
+										currentAttributes,
+										controllerProps: {
+											currentTab,
+											currentBlock,
+											currentState,
+											currentBreakpoint,
+											blockeraInnerBlocks,
+											currentInnerBlockState,
+											handleOnChangeAttributes,
+										},
+										availableBlockStates:
+											additional.availableBlockStates,
+										currentStateAttributes:
+											currentAttributes,
+										...props,
 									},
-									availableBlockStates:
-										additional.availableBlockStates,
-									currentStateAttributes: currentAttributes,
-									...props,
-								},
-							}}
-						/>
+								}}
+							/>
+						</BlockApp>
 					</SlotFillProvider>
 				</InspectorControls>
 				{experimental().get('editor.extensions.iconExtension') && (

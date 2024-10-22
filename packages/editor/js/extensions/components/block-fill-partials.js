@@ -25,16 +25,14 @@ const excludedControls = ['canvas-editor'];
 export const BlockFillPartials: ComponentType<any> = memo(
 	({
 		clientId,
-		isActive,
 		blockProps,
 		currentBlock,
 		currentInnerBlock,
 		BlockEditComponent,
 		blockeraInnerBlocks,
+		isBlockeraAdvancedMode,
 		updateBlockEditorSettings,
 	}): Element<any> => {
-		const { isActiveBlockExtensions } = select('blockera/extensions');
-
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
 			const others = select('blockera/controls').getControls();
@@ -56,7 +54,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 				getMemoizedControlNames(repeaters),
 				'blockera/controls/repeater'
 			);
-		}, [isActive]);
+		}, [isBlockeraAdvancedMode]);
 
 		return (
 			<>
@@ -79,7 +77,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						/>
 					)}
 				</Fill>
-				{isActiveBlockExtensions() && (
+				{isBlockeraAdvancedMode && (
 					<Fill name={`blockera-block-edit-content-${clientId}`}>
 						<BlockEditComponent {...blockProps} />
 					</Fill>

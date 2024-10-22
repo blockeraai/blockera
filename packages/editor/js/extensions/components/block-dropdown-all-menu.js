@@ -6,7 +6,6 @@
 import { __ } from '@wordpress/i18n';
 import { check } from '@wordpress/icons';
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
 import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
 
 /**
@@ -22,16 +21,14 @@ import { classNames } from '@blockera/classnames';
 import { useBlockSections } from './block-app';
 
 export const BlockDropdownAllMenu = ({
-	isActive,
-	setActive,
+	setBlockMode,
+	isBlockeraAdvancedMode,
 }: {
-	isActive: boolean,
-	setActive: (isActive: boolean) => void,
+	isBlockeraAdvancedMode: boolean,
+	setBlockMode: (blockeraMode: 'advanced' | 'basic') => void,
 }): MixedElement => {
 	const { blockSections, updateBlockSections } = useBlockSections();
 	const { expandAll, collapseAll, focusMode } = blockSections;
-
-	const { setBlockExtensionsStatus } = dispatch('blockera/extensions');
 
 	return (
 		<DropdownMenu
@@ -49,16 +46,15 @@ export const BlockDropdownAllMenu = ({
 						<MenuGroup label={__('Block Settings', 'blockera')}>
 							<MenuItem
 								data-test={'Blockera Block'}
-								icon={isActive ? check : ''}
+								icon={isBlockeraAdvancedMode ? check : ''}
 								onClick={() => {
-									setBlockExtensionsStatus(!isActive);
-									setActive(!isActive);
+									setBlockMode('advanced');
 									onClose();
 								}}
 								className={classNames({
 									'blockera-block-menu-item': true,
 									'blockera-block-menu-item-selected':
-										isActive,
+										isBlockeraAdvancedMode,
 								})}
 							>
 								<Flex alignItems="center" gap="10px">
@@ -67,22 +63,21 @@ export const BlockDropdownAllMenu = ({
 										icon="blockera"
 										iconSize="18"
 									/>
-									{'Blockera ' + __('Block', 'blockera')}
+									{__('Advanced Mode', 'blockera')}
 								</Flex>
 							</MenuItem>
 
 							<MenuItem
 								data-test={'Gutenberg Block'}
-								icon={isActive ? '' : check}
+								icon={isBlockeraAdvancedMode ? '' : check}
 								onClick={() => {
-									setBlockExtensionsStatus(!isActive);
-									setActive(!isActive);
+									setBlockMode('basic');
 									onClose();
 								}}
 								className={classNames({
 									'blockera-block-menu-item': true,
 									'blockera-block-menu-item-selected':
-										!isActive,
+										!isBlockeraAdvancedMode,
 								})}
 							>
 								<Flex alignItems="center" gap="10px">
@@ -91,7 +86,7 @@ export const BlockDropdownAllMenu = ({
 										icon="wordpress"
 										iconSize="18"
 									/>
-									{__('WordPress Core Block', 'blockera')}
+									{__('Basic Mode', 'blockera')}
 								</Flex>
 							</MenuItem>
 						</MenuGroup>
@@ -105,7 +100,6 @@ export const BlockDropdownAllMenu = ({
 										collapseAll: false,
 										expandAll: !expandAll,
 									});
-									setActive(!expandAll);
 									onClose();
 								}}
 								className={classNames({
@@ -132,7 +126,6 @@ export const BlockDropdownAllMenu = ({
 										focusMode: false,
 										collapseAll: !collapseAll,
 									});
-									setActive(!collapseAll);
 									onClose();
 								}}
 								className={classNames({
@@ -159,7 +152,6 @@ export const BlockDropdownAllMenu = ({
 										collapseAll: false,
 										focusMode: !focusMode,
 									});
-									setActive(!focusMode);
 									onClose();
 								}}
 								className={classNames({

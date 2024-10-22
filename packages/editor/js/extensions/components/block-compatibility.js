@@ -22,20 +22,20 @@ import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 export const BlockCompatibility: ComponentType<any> = memo(
 	({
 		args,
-		isActive,
 		attributes,
 		defaultAttributes,
 		setCompatibilities,
 		originalAttributes,
 		availableAttributes,
 		getAttributesWithIds,
+		isBlockeraAdvancedMode,
 	}: {
 		args: Object,
-		isActive: boolean,
 		attributes: Object,
 		defaultAttributes: Object,
 		originalAttributes: Object,
 		availableAttributes: Object,
+		isBlockeraAdvancedMode: boolean,
 		setCompatibilities: (attributes: Object) => void,
 		getAttributesWithIds: (attributes: Object, id: string) => Object,
 	}): MixedElement => {
@@ -77,7 +77,7 @@ export const BlockCompatibility: ComponentType<any> = memo(
 				}
 
 				// Assume disabled blockera panel, so filtering attributes to clean up all blockera attributes.
-				if (!isActive && hasCompatId && hasPropsId) {
+				if (!isBlockeraAdvancedMode && hasCompatId && hasPropsId) {
 					filteredAttributes = {
 						...attributes,
 						...omitWithPattern(
@@ -127,7 +127,7 @@ export const BlockCompatibility: ComponentType<any> = memo(
 				setCompatibilities(filteredAttributes);
 			},
 			// eslint-disable-next-line
-			[isActive, originalAttributes]
+			[isBlockeraAdvancedMode, originalAttributes]
 		);
 
 		return <></>;
