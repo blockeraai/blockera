@@ -20,7 +20,7 @@ import { isLoadedPostEditor, isLoadedSiteEditor } from '@blockera/utils';
  */
 import { Observer } from '../observer';
 import { CanvasEditor } from './index';
-import { getTarget } from './helpers';
+import { getTargets } from './helpers';
 
 const allowedContexts = ['post', 'site'];
 
@@ -38,7 +38,7 @@ export const bootstrapCanvasEditor = (context: string): void | Object => {
 	const editSitePlugin = 'blockera-site-canvas-editor-top-bar';
 
 	const { version } = getEntity('wp');
-	const { header, previewDropdown, postPreviewElement } = getTarget(version);
+	const { header, previewDropdown, postPreviewElement } = getTargets(version);
 
 	// Executing on site editor. to ensure of rendering canvas editor at the WordPress top bar.
 	if (isLoadedSiteEditor() && !getPageQueryString().length) {

@@ -164,8 +164,6 @@ class AppServiceProvider extends ServiceProvider {
 
 		parent::boot();
 
-		add_action( 'init', [ $this, 'loadTextDomain' ] );
-
 		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
 		$variableRegistry     = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
 
@@ -190,6 +188,17 @@ class AppServiceProvider extends ServiceProvider {
 		$this->renderBlocks();
 
 		$this->initializeFreemius();
+
+		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
+	}
+
+	/**
+	 * The after_setup_theme action hook
+	 */
+	public function after_setup_theme(): void {
+
+		add_action( 'init', [ $this, 'loadTextDomain' ] );
+
 	}
 
 	/**
