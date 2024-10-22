@@ -13,7 +13,7 @@
 			overflow: hidden;
 			text-overflow: ellipsis;
 			font-size: 11px;
-			color: var(--blockera-controls-placeholder-color);
+			color: var(--blockera-controls-primary-color);
 			font-weight: 500;
 			padding: 0 5px 0 0;
 			text-align: center;
@@ -21,7 +21,7 @@
 			line-height: 28px;
 			border-radius: 0 2px 2px 0;
 			transition: box-shadow 0.1s linear, border 0.1s linear;
-			margin: 1px 0 0;
+			margin: 0;
 
 			&:not(:disabled) {
 				cursor: pointer;
@@ -30,12 +30,12 @@
 			&:focus {
 				border-color: var(--blockera-controls-primary-color);
 				box-shadow: 0 0 0 2px var(--blockera-controls-primary-color);
-				color: var(--blockera-controls-color);
+				color: var(--blockera-controls-primary-color-darker-20);
 			}
 
 			&:hover {
 				border-color: var(--blockera-controls-border-color-hover);
-				color: var(--blockera-controls-color);
+				color: var(--blockera-controls-primary-color-darker-20);
 			}
 
 			&.hide-arrow {
