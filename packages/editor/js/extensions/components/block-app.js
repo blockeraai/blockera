@@ -27,8 +27,9 @@ const cacheKey = 'BLOCKERA_DATA';
 const defaultValue = {
 	key: 0,
 	blockSections: {
-		expandAll: true,
+		expandAll: false,
 		focusMode: false,
+		defaultMode: true,
 		collapseAll: false,
 	},
 	sections: {},
@@ -51,7 +52,7 @@ export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
 						},
 					])
 				),
-				focusedSection: 'innerBlocksConfig',
+				focusedSection: 'spacingConfig',
 		  };
 
 	// Create storage space, to caching native state on local storage.
@@ -109,13 +110,13 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 						initialOpen: false,
 					};
 				}
-
-				next.sections[sectionId] = {
-					...sections[sectionId],
-					initialOpen: true,
-				};
 			}
 		}
+
+		next.sections[sectionId] = {
+			...sections[sectionId],
+			initialOpen: true,
+		};
 
 		// Updating cache ...
 		updateItem(cacheKey, next);
@@ -136,7 +137,8 @@ export const useBlockSections = (): BlockSections => {
 	return {
 		blockSections,
 		updateBlockSections: (blockSections: Object) => {
-			const { expandAll, collapseAll, focusMode } = blockSections;
+			const { expandAll, collapseAll, focusMode, defaultMode } =
+				blockSections;
 
 			const _sections: { [key: string]: Object } = {};
 
@@ -167,13 +169,24 @@ export const useBlockSections = (): BlockSections => {
 						// Get focused section store api to exclude it form updating process.
 						initialOpen: focusedSection === key,
 					};
+
+					continue;
+				}
+
+				if (defaultMode) {
+					_sections[key] = section;
 				}
 			}
 
 			const next = {
 				...settings,
-				blockSections,
-				sections: _sections,
+				blockSections: {
+					...defaultValue.blockSections,
+					focusMode,
+				},
+				sections: !Object.values(_sections).length
+					? settings.sections
+					: _sections,
 				key: settings.key + 1,
 			};
 
