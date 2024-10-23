@@ -95,7 +95,7 @@ export const BlockDropdownAllMenu = ({
 								</Flex>
 							</MenuItem>
 						</MenuGroup>
-						{isBlockeraAdvancedMode && (
+						{isActive && (
 							<MenuGroup label={__('Block Sections', 'blockera')}>
 								<MenuItem
 									data-test={'Expand All'}
