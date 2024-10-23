@@ -237,7 +237,7 @@ function mergeBlockSettings(
 			return (
 				<>
 					<BaseControlContext.Provider value={baseContextValue}>
-						<BlockApp onClick={() => {}}>
+						<BlockApp>
 							<BlockBase
 								{...{
 									attributes,
