@@ -1,8 +1,10 @@
 import {
-	openInserterInnerBlock,
-	setBoxSpacingSide,
-	appendBlocks,
 	createPost,
+	appendBlocks,
+	setInnerBlock,
+	setBoxSpacingSide,
+	openSettingsPanel,
+	openInserterInnerBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Block Sections Manager Testing', () => {
@@ -70,7 +72,7 @@ describe('Block Sections Manager Testing', () => {
 		cy.get(`[aria-label="Family"]`).should('not.exist');
 	});
 
-	it.only('should applied focus mode of block sections', () => {
+	it('should applied focus mode of block sections', () => {
 		cy.getByAriaLabel('Block Settings').click();
 
 		cy.getByDataTest('Focus Mode').click();
@@ -106,5 +108,38 @@ describe('Block Sections Manager Testing', () => {
 		// Check for opened Typography section
 		cy.get('.components-panel__body').contains('Typography').click();
 		cy.get(`[aria-label="Width"]`).should('not.exist');
+	});
+
+	it('should opened inner blocks while applied focus mode of block sections with navigate between inners and master', () => {
+		cy.getByAriaLabel('Block Settings').click();
+
+		cy.getByDataTest('Focus Mode').click();
+
+		// Open inner blocks
+		setInnerBlock('elements/link');
+
+		// Open Background
+		openSettingsPanel('Background');
+
+		cy.getByDataTest('Close Inner Block').click();
+
+		// Should open the inner blocks section on master block.
+		cy.get('button').contains('Add Inner Block').should('exist');
+
+		cy.getByAriaLabel('Block Settings').click();
+		cy.getByDataTest('Focus Mode').click();
+		cy.getByAriaLabel('Block Settings').click();
+		cy.getByDataTest('Expand All').click();
+
+		// Open inner blocks
+		setInnerBlock('elements/link');
+
+		// Open Background
+		openSettingsPanel('Background');
+
+		cy.getByDataTest('Close Inner Block').click();
+
+		// Should open the inner blocks section on master block.
+		cy.get('button').contains('Add Inner Block').should('exist');
 	});
 });

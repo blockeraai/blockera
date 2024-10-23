@@ -110,6 +110,7 @@ export function InnerBlockCard({
 								library="wp"
 								icon="close-small"
 								iconSize="24"
+								data-test={'Close Inner Block'}
 								onClick={() => {
 									onToggle(true);
 									handleOnClick('current-block', 'master');
