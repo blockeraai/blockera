@@ -4,6 +4,7 @@
  * External dependencies
  */
 import {
+	useMemo,
 	useState,
 	useEffect,
 	useContext,
@@ -38,7 +39,7 @@ const defaultValue = {
 const BlockAppContext = createContext(defaultValue);
 
 export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
-	const cacheData = getItem(cacheKey);
+	const cacheData = useMemo(() => getItem(cacheKey), []);
 
 	const initialState = cacheData
 		? cacheData
@@ -56,7 +57,7 @@ export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
 		  };
 
 	// Create storage space, to caching native state on local storage.
-	if (!getItem(cacheKey)) {
+	if (!cacheData) {
 		setItem(cacheKey, initialState);
 	}
 
