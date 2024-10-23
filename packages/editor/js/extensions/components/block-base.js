@@ -13,6 +13,7 @@ import {
 	useMemo,
 	useState,
 	useEffect,
+	useCallback,
 	// StrictMode,
 } from '@wordpress/element';
 
@@ -138,24 +139,33 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 			currentInnerBlockState,
 		} = useExtensionsStore({ name, clientId });
 
-		const { availableAttributes, isActiveBlockExtensions } = useSelect(
-			(select) => {
-				const { isActiveBlockExtensions, getActiveBlockVariation } =
-					select('blockera/extensions');
+		const { availableAttributes } = useSelect((select) => {
+			const { getActiveBlockVariation } = select('blockera/extensions');
 
-				const { getBlockType } = select('core/blocks');
-				const { getSelectedBlock } = select('core/block-editor');
+			const { getBlockType } = select('core/blocks');
+			const { getSelectedBlock } = select('core/block-editor');
 
-				return {
-					activeVariation: getActiveBlockVariation(),
-					selectedBlock: (getSelectedBlock() || {})?.name,
-					isActiveBlockExtensions: isActiveBlockExtensions(),
-					availableAttributes: getBlockType(name)?.attributes,
-				};
-			}
+			return {
+				activeVariation: getActiveBlockVariation(),
+				selectedBlock: (getSelectedBlock() || {})?.name,
+				availableAttributes: getBlockType(name)?.attributes,
+			};
+		});
+
+		const [isActive, _setActive] = useState(
+			'advanced' === attributes.blockeraMode
 		);
-
-		const [isActive, setActive] = useState(isActiveBlockExtensions);
+		const setActive = useCallback(
+			(blockeraMode: 'advanced' | 'basic'): void => {
+				_setActive('advanced' === blockeraMode);
+				setAttributes({
+					...attributes,
+					blockeraMode,
+				});
+			},
+			// eslint-disable-next-line
+			[]
+		);
 
 		const {
 			changeExtensionCurrentBlock: setCurrentBlock,
