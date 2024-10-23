@@ -27,6 +27,7 @@ import { default as BlockIcon } from './block-icon';
 import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 import StateContainer from '../../../components/state-container';
+import { useBlockSection } from '../../../components';
 
 export function InnerBlockCard({
 	clientId,
@@ -64,6 +65,7 @@ export function InnerBlockCard({
 	};
 
 	const blockInformation = getInnerBlockDetails();
+	const { onToggle } = useBlockSection('innerBlocksConfig');
 
 	return (
 		<div
@@ -108,9 +110,10 @@ export function InnerBlockCard({
 								library="wp"
 								icon="close-small"
 								iconSize="24"
-								onClick={() =>
-									handleOnClick('current-block', 'master')
-								}
+								onClick={() => {
+									onToggle(true);
+									handleOnClick('current-block', 'master');
+								}}
 							/>
 						</Tooltip>
 					</h2>
