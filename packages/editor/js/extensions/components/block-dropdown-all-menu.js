@@ -95,89 +95,106 @@ export const BlockDropdownAllMenu = ({
 								</Flex>
 							</MenuItem>
 						</MenuGroup>
-						<MenuGroup label={__('Block Sections', 'blockera')}>
-							<MenuItem
-								data-test={'Expand All'}
-								icon={expandAll ? check : ''}
-								onClick={() => {
-									updateBlockSections({
-										focusMode: false,
-										collapseAll: false,
-										expandAll: !expandAll,
-									});
-									setActive(!expandAll);
-									onClose();
-								}}
-								className={classNames({
-									'blockera-block-menu-item': true,
-									'blockera-block-menu-item-selected':
-										expandAll,
-								})}
-							>
-								<Flex alignItems="center" gap="10px">
-									<Icon
-										library="ui"
-										icon="expand-all"
-										iconSize="18"
-									/>
-									{__('Expand All', 'blockera')}
-								</Flex>
-							</MenuItem>
-							<MenuItem
-								data-test={'Collapse All'}
-								icon={collapseAll ? check : ''}
-								onClick={() => {
-									updateBlockSections({
-										expandAll: false,
-										focusMode: false,
-										collapseAll: !collapseAll,
-									});
-									setActive(!collapseAll);
-									onClose();
-								}}
-								className={classNames({
-									'blockera-block-menu-item': true,
-									'blockera-block-menu-item-selected':
-										collapseAll,
-								})}
-							>
-								<Flex alignItems="center" gap="10px">
-									<Icon
-										library="ui"
-										icon="collapse-all"
-										iconSize="18"
-									/>
-									{__('Collapse All', 'blockera')}
-								</Flex>
-							</MenuItem>
-							<MenuItem
-								data-test={'Focus Mode'}
-								icon={focusMode ? check : ''}
-								onClick={() => {
-									updateBlockSections({
-										expandAll: false,
-										collapseAll: false,
-										focusMode: !focusMode,
-									});
-									setActive(!focusMode);
-									onClose();
-								}}
-								className={classNames({
-									'blockera-block-menu-item': true,
-									'blockera-block-menu-item-selected':
-										focusMode,
-								})}
-							>
-								<Flex alignItems="center" gap="10px">
-									<Icon
-										library="ui"
-										icon="focus-mode"
-										iconSize="18"
-									/>
-									{__('Focus Mode', 'blockera')}
-								</Flex>
-							</MenuItem>
-						</MenuGroup>
+						{isBlockeraAdvancedMode && (
+							<MenuGroup label={__('Block Sections', 'blockera')}>
+								<MenuItem
+									data-test={'Expand All'}
+									icon={expandAll ? check : ''}
+									onClick={() => {
+										if (focusMode) {
+											return;
+										}
+										updateBlockSections({
+											focusMode: false,
+											collapseAll: false,
+											defaultMode: false,
+											expandAll: !expandAll,
+										});
+									}}
+									className={classNames({
+										'blockera-block-menu-item': true,
+										'blockera-block-menu-item-selected':
+											expandAll,
+										'blockera-not-allowed': focusMode,
+									})}
+								>
+									<Flex alignItems="center" gap="10px">
+										<Icon
+											library="ui"
+											icon="expand-all"
+											iconSize="18"
+										/>
+										{__('Expand All', 'blockera')}
+									</Flex>
+								</MenuItem>
+								<MenuItem
+									data-test={'Collapse All'}
+									icon={collapseAll ? check : ''}
+									onClick={() => {
+										if (focusMode) {
+											return;
+										}
+
+										updateBlockSections({
+											expandAll: false,
+											focusMode: false,
+											defaultMode: false,
+											collapseAll: !collapseAll,
+										});
+									}}
+									className={classNames({
+										'blockera-block-menu-item': true,
+										'blockera-block-menu-item-selected':
+											collapseAll,
+										'blockera-not-allowed': focusMode,
+									})}
+								>
+									<Flex alignItems="center" gap="10px">
+										<Icon
+											library="ui"
+											icon="collapse-all"
+											iconSize="18"
+										/>
+										{__('Collapse All', 'blockera')}
+									</Flex>
+								</MenuItem>
+								<MenuItem
+									data-test={'Focus Mode'}
+									icon={focusMode ? check : ''}
+									onClick={() => {
+										if (focusMode) {
+											return updateBlockSections({
+												expandAll: false,
+												focusMode: false,
+												defaultMode: true,
+												collapseAll: false,
+											});
+										}
+
+										updateBlockSections({
+											expandAll: false,
+											collapseAll: false,
+											defaultMode: false,
+											focusMode: !focusMode,
+										});
+									}}
+									className={classNames({
+										'blockera-block-menu-item': true,
+										'blockera-block-menu-item-selected':
+											focusMode,
+									})}
+								>
+									<Flex alignItems="center" gap="10px">
+										<Icon
+											library="ui"
+											icon="focus-mode"
+											iconSize="18"
+										/>
+										{__('Focus Mode', 'blockera')}
+									</Flex>
+								</MenuItem>
+							</MenuGroup>
+						)}
 					</>
 				);
 			}}
