@@ -8,6 +8,7 @@ import {
 	useState,
 	useEffect,
 	useContext,
+	useCallback,
 	createContext,
 } from '@wordpress/element';
 import type { MixedElement } from 'react';
@@ -92,38 +93,42 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 		initialOpen = false;
 	}
 
-	const onToggle = (isOpen: boolean): void => {
-		const _sections: { [key: string]: Object } = {};
+	const onToggle = useCallback(
+		(isOpen: boolean): void => {
+			const _sections: { [key: string]: Object } = {};
 
-		const next: { [key: string]: any } = {
-			...settings,
-			focusedSection: sectionId,
-			...(blockSections.focusMode && Object.values(_sections).length
-				? { key: key + 1 }
-				: {}),
-		};
+			const next: { [key: string]: any } = {
+				...settings,
+				focusedSection: sectionId,
+				...(blockSections.focusMode && Object.values(_sections).length
+					? { key: key + 1 }
+					: {}),
+			};
 
-		if (isOpen) {
-			if (blockSections.focusMode && focusedSection !== sectionId) {
-				if (focusedSection) {
-					next.sections[focusedSection] = {
-						...sections[focusedSection],
-						initialOpen: false,
-					};
+			if (isOpen) {
+				if (blockSections.focusMode && focusedSection !== sectionId) {
+					if (focusedSection) {
+						next.sections[focusedSection] = {
+							...sections[focusedSection],
+							initialOpen: false,
+						};
+					}
 				}
 			}
-		}
 
-		next.sections[sectionId] = {
-			...sections[sectionId],
-			initialOpen: true,
-		};
+			next.sections[sectionId] = {
+				...sections[sectionId],
+				initialOpen: true,
+			};
 
-		// Updating cache ...
-		updateItem(cacheKey, next);
+			// Updating cache ...
+			updateItem(cacheKey, next);
 
-		setSettings(next);
-	};
+			setSettings(next);
+		},
+		// eslint-disable-next-line
+		[sectionId, settings]
+	);
 
 	return {
 		onToggle,
@@ -137,66 +142,70 @@ export const useBlockSections = (): BlockSections => {
 
 	return {
 		blockSections,
-		updateBlockSections: (blockSections: Object) => {
-			const { expandAll, collapseAll, focusMode, defaultMode } =
-				blockSections;
+		updateBlockSections: useCallback(
+			(blockSections: Object) => {
+				const { expandAll, collapseAll, focusMode, defaultMode } =
+					blockSections;
 
-			const _sections: { [key: string]: Object } = {};
+				const _sections: { [key: string]: Object } = {};
 
-			for (const key in sections) {
-				const section = sections[key];
+				for (const key in sections) {
+					const section = sections[key];
 
-				if (expandAll) {
-					_sections[key] = {
-						...section,
-						initialOpen: true,
-					};
+					if (expandAll) {
+						_sections[key] = {
+							...section,
+							initialOpen: true,
+						};
 
-					continue;
+						continue;
+					}
+
+					if (collapseAll) {
+						_sections[key] = {
+							...section,
+							initialOpen: false,
+						};
+
+						continue;
+					}
+
+					if (focusMode) {
+						_sections[key] = {
+							...section,
+							// Get focused section store api to exclude it form updating process.
+							initialOpen: focusedSection === key,
+						};
+
+						continue;
+					}
+
+					if (defaultMode) {
+						_sections[key] = section;
+					}
 				}
 
-				if (collapseAll) {
-					_sections[key] = {
-						...section,
-						initialOpen: false,
-					};
+				const next = {
+					...settings,
+					blockSections: {
+						...defaultValue.blockSections,
+						focusMode,
+					},
+					sections: !Object.values(_sections).length
+						? settings.sections
+						: _sections,
+					key: settings.key + 1,
+				};
 
-					continue;
-				}
+				// Updating cache ...
+				updateItem(cacheKey, next);
 
-				if (focusMode) {
-					_sections[key] = {
-						...section,
-						// Get focused section store api to exclude it form updating process.
-						initialOpen: focusedSection === key,
-					};
-
-					continue;
-				}
-
-				if (defaultMode) {
-					_sections[key] = section;
-				}
-			}
-
-			const next = {
-				...settings,
-				blockSections: {
-					...defaultValue.blockSections,
-					focusMode,
-				},
-				sections: !Object.values(_sections).length
-					? settings.sections
-					: _sections,
-				key: settings.key + 1,
-			};
-
-			// Updating cache ...
-			updateItem(cacheKey, next);
-
-			// Update native state of BlockAppContextProvider component.
-			setSettings(next);
-		},
+				// Update native state of BlockAppContextProvider component.
+				setSettings(next);
+			},
+			// eslint-disable-next-line
+			[settings]
+		),
 	};
 };
 
