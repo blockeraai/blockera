@@ -31,6 +31,7 @@ import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
+import { useBlockSection } from '../../../components';
 
 export function BlockCard({
 	clientId,
@@ -83,6 +84,7 @@ export function BlockCard({
 		};
 	}, []);
 	const { selectBlock } = useDispatch(blockEditorStore);
+	const { onToggle } = useBlockSection('innerBlocksConfig');
 
 	return (
 		<div
@@ -160,6 +162,7 @@ export function BlockCard({
 											'current-block',
 											'master'
 										);
+										onToggle(true);
 									}
 								}}
 								aria-label={__('Selected Block', 'blockera')}

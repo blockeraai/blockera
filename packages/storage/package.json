@@ -1,0 +1,24 @@
+{
+	"name": "@blockera/storage",
+	"version": "1.0.0",
+	"description": "Core storage module intended to simplify CRUD operations in Blockera database.",
+	"author": "The  Contributors",
+	"license": "ISC",
+	"keywords": [
+		"blockera",
+		"storage"
+	],
+	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/storage/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/blockeraai/blockera",
+		"directory": "packages/storage"
+	},
+	"bugs": {
+		"url": "https://github.com/blockeraai/blockera/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "js/index.js"
+}

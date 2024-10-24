@@ -27,8 +27,9 @@ import { isShowField } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
 import { Border, BorderRadius } from './components';
 import { generateExtensionId } from '../utils';
-import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
 import { ExtensionSettings } from '../settings';
+import { useBlockSection } from '../../components';
+import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
 
 export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 	memo(
@@ -41,6 +42,9 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 			extensionProps,
 			setSettings,
 		}: TBorderAndShadowProps): MixedElement => {
+			const { initialOpen, onToggle } = useBlockSection(
+				'borderAndShadowConfig'
+			);
 			const isShownBorder = isShowField(
 				extensionConfig.blockeraBorder,
 				values?.blockeraBorder,
@@ -74,8 +78,9 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> =
 
 			return (
 				<PanelBodyControl
+					onToggle={onToggle}
 					title={__('Border And Shadow', 'blockera')}
-					initialOpen={true}
+					initialOpen={initialOpen}
 					icon={<Icon icon="extension-border" />}
 					className={extensionClassNames('border-and-shadow')}
 				>

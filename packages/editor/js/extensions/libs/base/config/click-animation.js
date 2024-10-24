@@ -18,5 +18,6 @@ const blockeraClickAnimation: FeatureConfig = {
 };
 
 export const clickAnimationConfig = {
+	initialOpen: true,
 	blockeraClickAnimation,
 };

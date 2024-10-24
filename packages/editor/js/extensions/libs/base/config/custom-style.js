@@ -22,5 +22,6 @@ const blockeraCustomCSS: FeatureConfig = {
 };
 
 export const customStyleConfig = {
+	initialOpen: false,
 	blockeraCustomCSS,
 };

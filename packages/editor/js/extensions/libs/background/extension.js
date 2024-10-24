@@ -27,9 +27,10 @@ import { Icon } from '@blockera/icons';
  */
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
-import { EditorFeatureWrapper } from '../../../';
-import type { TBackgroundProps } from './types/background-props';
 import { ExtensionSettings } from '../settings';
+import { EditorFeatureWrapper } from '../../../';
+import { useBlockSection } from '../../components';
+import type { TBackgroundProps } from './types/background-props';
 
 export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 	({
@@ -41,6 +42,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 		extensionProps,
 		setSettings,
 	}: TBackgroundProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('backgroundConfig');
 		const {
 			blockeraBackground,
 			blockeraBackgroundColor,
@@ -74,9 +76,10 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 		return (
 			<PanelBodyControl
 				title={__('Background', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-background" />}
 				className={extensionClassNames('background')}
+				onToggle={onToggle}
 			>
 				<ExtensionSettings
 					buttonLabel={__('More Background Settings', 'blockera')}

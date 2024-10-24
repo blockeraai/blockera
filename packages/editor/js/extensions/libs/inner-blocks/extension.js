@@ -27,10 +27,10 @@ import { mergeObject } from '@blockera/utils';
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
-import { isInnerBlock } from '../../components';
 import type { InnerBlocksProps } from './types';
 import { Inserter } from './components/inserter';
 import ItemHeader from './components/item-header';
+import { isInnerBlock, useBlockSection } from '../../components';
 import { useAvailableItems, useMemoizedInnerBlocks } from './hooks';
 import { AvailableBlocksAndElements } from './components/available-blocks-and-elements';
 
@@ -41,6 +41,8 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		onChange,
 		innerBlocks,
 	}: InnerBlocksProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('innerBlocksConfig');
+
 		// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
 		const { currentBlock = 'master', getBlockInners } = useSelect(
 			(select) => {
@@ -110,8 +112,9 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Inner Blocks', 'blockera')}
-				initialOpen={false}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-inner-blocks" />}
 				className={extensionClassNames('inner-blocks')}
 			>

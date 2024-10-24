@@ -43,8 +43,6 @@
 }
 
 .blockera-block-menu-item-selected {
-	cursor: none;
-	pointer-events: none;
 	color: var(--blockera-controls-primary-color);
 
 	&:hover {

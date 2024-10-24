@@ -23,10 +23,11 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { isShowField } from '../../api/utils';
-import { EditorFeatureWrapper } from '../../../';
 import { generateExtensionId } from '../utils';
-import type { TFlexChildProps } from './types/flex-child-props';
 import { ExtensionSettings } from '../settings';
+import { EditorFeatureWrapper } from '../../../';
+import { useBlockSection } from '../../components';
+import type { TFlexChildProps } from './types/flex-child-props';
 
 export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 	({
@@ -38,6 +39,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 		setSettings,
 		attributes,
 	}: TFlexChildProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('flexChildConfig');
 		const isShowFlexChildSizing = isShowField(
 			extensionConfig.blockeraFlexChildSizing,
 			values?.blockeraFlexChildSizing,
@@ -64,8 +66,9 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Flex Child', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-flex-child" />}
 				className={extensionClassNames('flex-child')}
 			>

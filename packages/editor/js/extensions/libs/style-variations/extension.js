@@ -10,20 +10,20 @@ import { useSelect } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { extensionClassNames } from '@blockera/classnames';
-import { PanelBodyControl } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { hasSameProps } from '@blockera/utils';
+import { PanelBodyControl } from '@blockera/controls';
+import { extensionClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { isActiveField } from '../../api/utils';
-import { hasSameProps } from '@blockera/utils';
-import { EditorFeatureWrapper } from '../../../';
-import type { StyleVariationsExtensionProps } from './types';
-import BlockStyles from './components/block-styles';
 import { useStylesForBlocks } from './utils';
-import { isInnerBlock } from '../../components';
+import { isActiveField } from '../../api/utils';
+import { EditorFeatureWrapper } from '../../../';
+import BlockStyles from './components/block-styles';
+import type { StyleVariationsExtensionProps } from './types';
+import { isInnerBlock, useBlockSection } from '../../components';
 
 export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionProps> =
 	memo(
@@ -31,6 +31,9 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 			block,
 			extensionConfig,
 		}: StyleVariationsExtensionProps): MixedElement => {
+			const { initialOpen, onToggle } = useBlockSection(
+				'styleVariationsConfig'
+			);
 			const { currentBlock = 'master' } = useSelect((select) => {
 				const { getExtensionCurrentBlock } = select(
 					'blockera/extensions'
@@ -70,8 +73,9 @@ export const StyleVariationsExtension: ComponentType<StyleVariationsExtensionPro
 
 			return (
 				<PanelBodyControl
+					onToggle={onToggle}
 					title={__('Style Variations', 'blockera')}
-					initialOpen={true}
+					initialOpen={initialOpen}
 					icon={<Icon icon="extension-style-variations" />}
 					className={extensionClassNames('style-variations')}
 				>

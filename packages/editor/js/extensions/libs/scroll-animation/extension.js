@@ -22,8 +22,9 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
-import type { ScrollExtensionProps } from './types/props';
 import { isActiveField } from '../../api/utils';
+import { useBlockSection } from '../../components';
+import type { ScrollExtensionProps } from './types/props';
 
 export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 	memo(
@@ -32,14 +33,19 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> =
 			block,
 			extensionConfig,
 		}: ScrollExtensionProps): MixedElement => {
+			const { initialOpen, onToggle } = useBlockSection(
+				'scrollAnimationConfig'
+			);
+
 			if (!isActiveField(extensionConfig.blockeraScrollAnimation)) {
 				return <></>;
 			}
 
 			return (
 				<PanelBodyControl
+					onToggle={onToggle}
 					title={__('On Scroll', 'blockera')}
-					initialOpen={true}
+					initialOpen={initialOpen}
 					icon={<Icon icon="extension-scroll-animation" />}
 					className={extensionClassNames('scroll-animation')}
 				>
