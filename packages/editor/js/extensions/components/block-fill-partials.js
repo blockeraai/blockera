@@ -33,8 +33,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		blockeraInnerBlocks,
 		updateBlockEditorSettings,
 	}): Element<any> => {
-		const { isActiveBlockExtensions } = select('blockera/extensions');
-
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
 			const others = select('blockera/controls').getControls();
@@ -79,7 +77,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						/>
 					)}
 				</Fill>
-				{isActiveBlockExtensions() && (
+				{isActive && (
 					<Fill name={`blockera-block-edit-content-${clientId}`}>
 						<BlockEditComponent {...blockProps} />
 					</Fill>
