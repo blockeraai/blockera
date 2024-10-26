@@ -21,9 +21,11 @@ describe('Block Sections Manager Testing', () => {
 	});
 
 	it('should applied expand all of block sections', () => {
-		cy.getByAriaLabel('Block Settings').click();
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		cy.getByDataTest('Expand All').click();
+
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		// Check for opened background section
 		cy.getByAriaLabel('Add New Background').should('exist');
@@ -46,9 +48,11 @@ describe('Block Sections Manager Testing', () => {
 	});
 
 	it('should applied collapse all of block sections', () => {
-		cy.getByAriaLabel('Block Settings').click();
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		cy.getByDataTest('Collapse All').click();
+
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		// Check for opened background section
 		cy.getByAriaLabel('Add New Background').should('not.exist');
@@ -73,9 +77,11 @@ describe('Block Sections Manager Testing', () => {
 	});
 
 	it('should applied focus mode of block sections', () => {
-		cy.getByAriaLabel('Block Settings').click();
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		cy.getByDataTest('Focus Mode').click();
+
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		// Check for opened Spacing section by default!
 		cy.get(
@@ -111,9 +117,11 @@ describe('Block Sections Manager Testing', () => {
 	});
 
 	it('should opened inner blocks while applied focus mode of block sections with navigate between inners and master', () => {
-		cy.getByAriaLabel('Block Settings').click();
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		cy.getByDataTest('Focus Mode').click();
+
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		// Open inner blocks
 		setInnerBlock('elements/link');
@@ -126,10 +134,9 @@ describe('Block Sections Manager Testing', () => {
 		// Should open the inner blocks section on master block.
 		cy.get('button').contains('Add Inner Block').should('exist');
 
-		cy.getByAriaLabel('Block Settings').click();
+		cy.get('button[aria-label="Block Settings"]').click();
 		cy.getByDataTest('Focus Mode').click();
-		cy.getByAriaLabel('Block Settings').click();
-		cy.getByDataTest('Expand All').click();
+		cy.get('button[aria-label="Block Settings"]').click();
 
 		// Open inner blocks
 		setInnerBlock('elements/link');
