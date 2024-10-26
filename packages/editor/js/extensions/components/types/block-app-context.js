@@ -2,7 +2,6 @@
 
 export type BlockAppContextType = {
 	settings: {
-		key: number,
 		blockSections: {
 			expandAll: boolean,
 			focusMode: boolean,

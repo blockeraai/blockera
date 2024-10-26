@@ -6,7 +6,6 @@
 import {
 	useMemo,
 	useState,
-	useEffect,
 	useContext,
 	useCallback,
 	createContext,
@@ -27,7 +26,6 @@ import type { BlockSections, BlockSection, BlockAppContextType } from './types';
 const cacheKey = 'BLOCKERA_DATA';
 
 const defaultValue = {
-	key: 0,
 	blockSections: {
 		expandAll: false,
 		focusMode: false,
@@ -41,19 +39,23 @@ const BlockAppContext = createContext(defaultValue);
 
 export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
 	const cacheData = useMemo(() => getItem(cacheKey), []);
-
+	const calculatedSections = useMemo(
+		() =>
+			Object.fromEntries(
+				Object.entries(sections).map(([key, value]) => [
+					key,
+					{
+						initialOpen: value.initialOpen,
+					},
+				])
+			),
+		[]
+	);
 	const initialState = cacheData
 		? cacheData
 		: {
 				...defaultValue,
-				sections: Object.fromEntries(
-					Object.entries(sections).map(([key, value]) => [
-						key,
-						{
-							initialOpen: value.initialOpen,
-						},
-					])
-				),
+				sections: calculatedSections,
 				focusedSection: 'spacingConfig',
 		  };
 
@@ -66,7 +68,6 @@ export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
 
 	return (
 		<BlockAppContext.Provider
-			key={settings.key}
 			value={{
 				settings,
 				setSettings,
@@ -82,7 +83,7 @@ export const useBlockAppContext = (): BlockAppContextType =>
 
 export const useBlockSection = (sectionId: string): BlockSection => {
 	const { settings, setSettings } = useBlockAppContext();
-	const { key, blockSections, sections, focusedSection } = settings;
+	const { blockSections, sections, focusedSection } = settings;
 	const { collapseAll, focusMode } = blockSections;
 	const section = settings.sections[sectionId];
 	let { initialOpen } = section;
@@ -95,14 +96,9 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 
 	const onToggle = useCallback(
 		(isOpen: boolean): void => {
-			const _sections: { [key: string]: Object } = {};
-
 			const next: { [key: string]: any } = {
 				...settings,
 				focusedSection: sectionId,
-				...(blockSections.focusMode && Object.values(_sections).length
-					? { key: key + 1 }
-					: {}),
 			};
 
 			if (isOpen) {
@@ -194,7 +190,6 @@ export const useBlockSections = (): BlockSections => {
 					sections: !Object.values(_sections).length
 						? settings.sections
 						: _sections,
-					key: settings.key + 1,
 				};
 
 				// Updating cache ...
@@ -209,16 +204,6 @@ export const useBlockSections = (): BlockSections => {
 	};
 };
 
-export const BlockApp = ({ onClick, children }: Object): MixedElement => {
-	useEffect(() => {
-		// Add event listener to the document
-		document.addEventListener('click', onClick);
-
-		// Clean up the event listener on unmount
-		return () => {
-			document.removeEventListener('click', onClick);
-		};
-	}, [onClick]);
-
+export const BlockApp = ({ children }: Object): MixedElement => {
 	return <BlockAppContextProvider>{children}</BlockAppContextProvider>;
 };
