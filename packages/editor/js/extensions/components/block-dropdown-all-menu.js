@@ -6,7 +6,6 @@
 import { __ } from '@wordpress/i18n';
 import { check } from '@wordpress/icons';
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
 import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
 
 /**
@@ -30,9 +29,6 @@ export const BlockDropdownAllMenu = ({
 }): MixedElement => {
 	const { blockSections, updateBlockSections } = useBlockSections();
 	const { expandAll, collapseAll, focusMode } = blockSections;
-
-	const { setBlockExtensionsStatus } = dispatch('blockera/extensions');
-
 	return (
 		<DropdownMenu
 			icon={<Icon icon="more-vertical" iconSize="24" />}
@@ -51,7 +47,6 @@ export const BlockDropdownAllMenu = ({
 								data-test={'advanced-mode-block'}
 								icon={isActive ? check : ''}
 								onClick={() => {
-									setBlockExtensionsStatus(!isActive);
 									setActive(!isActive);
 									onClose();
 								}}
@@ -75,7 +70,6 @@ export const BlockDropdownAllMenu = ({
 								data-test={'basic-mode-block'}
 								icon={isActive ? '' : check}
 								onClick={() => {
-									setBlockExtensionsStatus(!isActive);
 									setActive(!isActive);
 									onClose();
 								}}
