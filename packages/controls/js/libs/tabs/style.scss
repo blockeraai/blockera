@@ -5,10 +5,32 @@
 
 .blockera-component-tabs {
 
-	.blockera-component-tabs__list {
-		justify-content: flex-start;
+	&[aria-orientation="horizontal"] {
 		display: flex;
 		flex-direction: row;
+		justify-content: flex-start;
+		align-items: flex-start;
+		gap: 0;
+		width: 100%;
+	}
+
+	.blockera-component-tabs__heading {
+		font-size: 13px;
+		text-transform: uppercase;
+		font-weight: 500;
+		color: #a3a3a3;
+		height: 30px;
+		padding: 5px 12px 5px 16px;
+		box-sizing: border-box;
+		display: flex;
+		width: 100%;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		user-select: none;
+	}
+
+	.blockera-component-tabs__list {
 		gap: 0;
 		overflow: hidden;
 
@@ -50,6 +72,15 @@
 				&::before {
 					display: block;
 				}
+
+			}
+
+			.blockera-component-active-icon {
+				margin-left: auto;
+				color: #b3b3b3;
+				display: flex;
+				justify-content: center;
+				align-items: center;
 			}
 		}
 	}
@@ -61,6 +92,15 @@
 		background-color: #f8f9fc;
 		justify-content: space-between;
 		gap: 0;
+
+		&[aria-orientation="horizontal"] {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: flex-start;
+			gap: 0;
+			width: 100%;
+		}
 
 		.blockera-component-tabs__list__item {
 			background-color: #f6f6f6;

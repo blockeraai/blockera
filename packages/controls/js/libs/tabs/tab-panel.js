@@ -30,7 +30,10 @@ export default function TabPanel({
 	design = 'clean',
 	orientation = 'horizontal',
 	activeClass = 'is-active-tab',
+	activeIcon,
 	initialTabName,
+	injectMenuEnd,
+	heading,
 }: TTabPanelProps): Element<any> {
 	const instanceId = useInstanceId(TabPanel, 'tab-panel');
 	const [selected, setSelected] = useState(null);
@@ -61,6 +64,12 @@ export default function TabPanel({
 			onNavigate={onNavigate}
 			className={componentClassNames('tabs__list')}
 		>
+			{heading && (
+				<div className={componentInnerClassNames('tabs__heading')}>
+					{heading}
+				</div>
+			)}
+
 			{tabs.map((tab) => (
 				<ConditionalWrapper
 					key={tab.name}
@@ -89,9 +98,21 @@ export default function TabPanel({
 						{tab.icon}
 
 						{tab.title}
+
+						{activeIcon && tab.name === selected && (
+							<span
+								className={componentInnerClassNames(
+									'active-icon'
+								)}
+							>
+								{activeIcon}
+							</span>
+						)}
 					</Button>
 				</ConditionalWrapper>
 			))}
+
+			{injectMenuEnd && <>{injectMenuEnd}</>}
 		</NavigableMenu>
 	);
 
