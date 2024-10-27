@@ -480,7 +480,8 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 				const preparedPathValue = update(
 					dataset,
 					ref.path,
-					-1 !== ref.path.indexOf(attributeId)
+					new RegExp(attributeId + '.', 'ig').test(ref.path) &&
+						isObject(ref.defaultValue)
 						? prepare(
 								ref.path.replace(attributeId + '.', ''),
 								ref.defaultValue
