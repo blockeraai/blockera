@@ -152,16 +152,18 @@ export const Update = ({
 					</span>
 				),
 			]}
+
 			{'saving' !== status.name && (
 				<Button
 					data-test={'reset-settings'}
 					className="reset-settings__save-button"
 					onClick={() => setResetModalOpen(true)}
-					isTertiary
+					variant={'tertiary-on-hover'}
 				>
 					{__('Reset Settings', 'blockera')}
 				</Button>
 			)}
+
 			<Button
 				variant={'primary'}
 				className={classNames('save-settings__save-button', {
@@ -175,6 +177,7 @@ export const Update = ({
 			>
 				{updateButton}
 			</Button>
+
 			{resetModalOpen && (
 				<Modal
 					className="blockera-settings-reset-modal"

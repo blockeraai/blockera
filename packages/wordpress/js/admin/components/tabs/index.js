@@ -5,11 +5,13 @@
  */
 import type { MixedElement } from 'react';
 import { useState, createContext } from '@wordpress/element';
+import { isRTL } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
 import { TabPanel } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -36,13 +38,17 @@ export const Tabs = ({
 	onSelect,
 	activeTab,
 	setSettings,
+	injectMenuEnd,
+	heading,
 }: {
 	settings: Object,
 	activeTab: string,
+	heading?: string,
 	items: Array<TabsProps>,
 	onSelect: (tabKey: string) => void,
 	getPanel: (tab: TabsProps) => MixedElement,
 	setSettings: (newSettings: Object) => void,
+	injectMenuEnd?: any,
 }): MixedElement => {
 	const [hasUpdate, setHasUpdates] = useState(false);
 
@@ -54,8 +60,18 @@ export const Tabs = ({
 				tabs={items}
 				className={'blockera-settings-tabs'}
 				initialTabName={activeTab}
+				injectMenuEnd={injectMenuEnd}
+				heading={heading}
 				onSelect={onSelect}
 				design="default"
+				orientation="vertical"
+				activeIcon={
+					<Icon
+						icon={isRTL() ? 'chevron-left' : 'chevron-right'}
+						library="wp"
+						iconSize="18"
+					/>
+				}
 			>
 				{(tab) => getPanel(tab)}
 			</TabPanel>

@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
+import { NavigableMenu, Button as WPButton } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -14,12 +15,15 @@ import { applyFilters } from '@wordpress/hooks';
 import {
 	Tabs,
 	Header,
-	Promote,
 	SettingsContext,
 	handleCurrentActiveMenuPage,
 } from '@blockera/wordpress';
 import { Button } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import {
+	componentClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -61,20 +65,12 @@ export const Dashboard = (): MixedElement => {
 					defaultSettings: blockeraDefaultSettings,
 				}}
 			>
-				<Promote
-					url={'https://blockera.ai/products/site-builder/upgrade/'}
-					description={__(
-						"You're using Blockera Free. To unlock more features, consider ",
-						'blockera'
-					)}
-				/>
-
 				<Header
 					icon={
 						<Icon
 							library={'blockera'}
 							icon={'blockera'}
-							iconSize={40}
+							iconSize={32}
 						/>
 					}
 					version={`v${blockeraVersion}`}
@@ -82,14 +78,35 @@ export const Dashboard = (): MixedElement => {
 				>
 					<div className={'blockera-settings-header-links'}>
 						<Button
-							variant={'link'}
-							className={
-								'blockera-settings-button blockera-settings-primary-button'
+							variant="secondary-on-hover"
+							icon={
+								<Icon
+									library={'ui'}
+									icon={'crown'}
+									iconSize={22}
+								/>
 							}
 							text={__('Upgrade to PRO', 'blockera')}
 							href={
 								'https://blockera.ai/products/site-builder/upgrade/'
 							}
+							target="_blank"
+						/>
+
+						<Button
+							variant="tertiary-on-hover"
+							icon={
+								<Icon
+									library={'ui'}
+									icon={'changelog'}
+									iconSize={22}
+								/>
+							}
+							text={__('Changelog', 'blockera')}
+							href={
+								'https://community.blockera.ai/changelog-9l8hbrv0'
+							}
+							target="_blank"
 						/>
 					</div>
 				</Header>
@@ -116,6 +133,94 @@ export const Dashboard = (): MixedElement => {
 						},
 					]}
 					getPanel={Panel}
+					heading={__('Main Menu', 'blockera')}
+					injectMenuEnd={
+						<NavigableMenu
+							orientation={'vertical'}
+							className={componentClassNames('tabs__list')}
+						>
+							<div
+								className={componentInnerClassNames(
+									'tabs__heading'
+								)}
+							>
+								{__('Resources', 'blockera')}
+							</div>
+
+							<WPButton
+								className={componentInnerClassNames(
+									'tabs__list__item',
+									'tab-item-button'
+								)}
+								target="_blank"
+								href={
+									'https://blockera.ai/products/site-builder/upgrade/'
+								}
+							>
+								{__('Community', 'blockera')}
+
+								<span
+									className={componentInnerClassNames(
+										'active-icon'
+									)}
+								>
+									<Icon
+										library={'ui'}
+										icon={'arrow-new-tab'}
+										iconSize={22}
+									/>
+								</span>
+							</WPButton>
+
+							<WPButton
+								className={componentInnerClassNames(
+									'tabs__list__item',
+									'tab-item-button'
+								)}
+								target="_blank"
+								href={'https://community.blockera.ai/roadmap'}
+							>
+								{__('Roadmap', 'blockera')}
+
+								<span
+									className={componentInnerClassNames(
+										'active-icon'
+									)}
+								>
+									<Icon
+										library={'ui'}
+										icon={'arrow-new-tab'}
+										iconSize={22}
+									/>
+								</span>
+							</WPButton>
+
+							<WPButton
+								className={componentInnerClassNames(
+									'tabs__list__item',
+									'tab-item-button'
+								)}
+								target="_blank"
+								href={
+									'https://community.blockera.ai/feature-request-1rsjg2ck'
+								}
+							>
+								{__('Feature Request', 'blockera')}
+
+								<span
+									className={componentInnerClassNames(
+										'active-icon'
+									)}
+								>
+									<Icon
+										library={'ui'}
+										icon={'arrow-new-tab'}
+										iconSize={22}
+									/>
+								</span>
+							</WPButton>
+						</NavigableMenu>
+					}
 				/>
 			</SettingsContext.Provider>
 		</div>

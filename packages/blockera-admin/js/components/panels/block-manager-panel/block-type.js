@@ -41,6 +41,7 @@ export default function BlockType(props: Object): MixedElement {
 					</span>
 					<h4 className={'blockera-block-type'}>{blockType.title}</h4>
 				</div>
+
 				<div className={'blockera-block-control'}>
 					<ControlContextProvider
 						value={{

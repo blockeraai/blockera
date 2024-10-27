@@ -180,6 +180,7 @@ export const GeneralPanel = (): MixedElement => {
 		<Flex
 			direction={'column'}
 			className={'blockera-settings-panel-container'}
+			gap={40}
 		>
 			<BlockVisibility
 				isChecked={generalSettings.disableRestrictBlockVisibility}

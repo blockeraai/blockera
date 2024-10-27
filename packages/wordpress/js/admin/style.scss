@@ -6,22 +6,24 @@
 	--blockera-settings-border-color-parimary: #e0e0e0;
 }
 
+body.wp-admin[class*="blockera_page_"] {
+	background-color: #eaecee;
+}
+
+#blockera-admin-settings-container {
+    font-size: 16px;
+    margin: 0;
+    padding: 20px 20px 20px 0;
+    width: 100%;
+    max-width: 1140px;
+}
+
 .blockera-settings-button {
 	border: none;
 	padding: 10px !important;
 	cursor: pointer;
 	transition: all 0.1s;
 	height: 40px !important;
-}
-
-.blockera-settings-primary-button {
-	color: #ffffff !important;
-	background-color: var(--blockera-settings-primary-color) !important;
-}
-
-.blockera-settings-primary-button:hover {
-	color: #ffffff !important;
-	background-color: rgba(34, 113, 177, 0.82);
 }
 
 .blockera-disable-first-item .wp-first-item{

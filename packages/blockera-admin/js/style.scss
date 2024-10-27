@@ -10,23 +10,6 @@
 
 
 #blockera-admin-settings-container {
-	font-size: 14px;
-	margin: 10px auto;
-	width: 100%;
-	max-width: 1140px;
-
-	.blockera-settings-header {
-
-		.blockera-settings-header-links {
-			margin-top: 12px;
-
-			.blockera-settings-knowledge-button {
-				margin-right: 10px;
-				background-color: #ffffff;
-				border: solid 1px var(--blockera-settings-border-color-parimary);
-			}
-		}
-	}
 
 	.blockera-settings-tabs {
 
@@ -35,12 +18,15 @@
 			width: 80%;
 			min-width: 0;
 			align-self: flex-start;
+			background: #FFFFFF;
+			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
+			border-radius: 8px;
+			padding: 30px;
+			min-height: 400px;
 
 			.blockera-settings-panel-container {
 
 				.blockera-settings-general.section {
-					background-color: #ffffff;
-					padding: 30px;
 
 					.section-title {
 						margin: 0 0 20px 0;
@@ -63,6 +49,21 @@
 				}
 
 				.blockera-block-category {
+
+					.blockera-block-category-name {
+						display: flex;
+						margin: 0;
+						color: var(--blockera-controls-primary-color);
+						font-size: 15px;
+						font-weight: 500;
+						justify-content: flex-start;
+						align-items: center;
+						gap: 10px;
+
+						svg {
+							fill: currentColor;
+						}
+					}
 
 					.blockera-component-block-category-buttons {
 						display: flex;
@@ -91,8 +92,10 @@
 						flex: auto;
 						width: 40%;
 						min-width: 0;
-						padding: 12px 13px;
+						padding: 12px 3px 12px 13px;
 						background-color: #ffffff;
+						border: 1px solid #dadada;
+						border-radius: 8px;
 
 						.blockera-block {
 							display: flex;
@@ -112,6 +115,8 @@
 							.blockera-block-type {
 								margin: 0;
 								display: flex;
+								font-size: 14px;
+								font-weight: 500;
 							}
 						}
 
