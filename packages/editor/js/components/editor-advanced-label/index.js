@@ -89,13 +89,6 @@ export const EditorAdvancedLabelControl = ({
 		200
 	);
 
-	// Assume singularId is set and path include attribute so,
-	// attribute is object has nested props therefore we can exclude attribute from recieved path,
-	// so that we can prepare path to reset actions!
-	if (path && -1 !== path.indexOf(attribute) && singularId && isRepeater) {
-		path = path.replace(`${attribute}.`, '');
-	}
-
 	const isChangedValue =
 		(isChanged && isChangedOnCurrentState) ||
 		isChangedNormalStateOnBaseBreakpoint ||
@@ -304,6 +297,7 @@ export const EditorAdvancedLabelControl = ({
 													resetToDefault({
 														path,
 														onChange,
+														attribute,
 														isRepeater,
 														attributes,
 														repeaterItem,
@@ -361,6 +355,7 @@ export const EditorAdvancedLabelControl = ({
 												resetToDefault({
 													path,
 													onChange,
+													attribute,
 													isRepeater,
 													attributes,
 													repeaterItem,

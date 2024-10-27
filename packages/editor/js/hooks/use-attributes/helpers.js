@@ -480,7 +480,12 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 				const preparedPathValue = update(
 					dataset,
 					ref.path,
-					ref.defaultValue
+					-1 !== ref.path.indexOf(attributeId)
+						? prepare(
+								ref.path.replace(attributeId + '.', ''),
+								ref.defaultValue
+						  )
+						: ref.defaultValue
 				);
 
 				stateBreakpoints[breakpointType] = mergeObject(
@@ -520,7 +525,9 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 
 	return {
 		...state,
-		[attributeId]: newValue,
+		[attributeId]: {
+			value: newValue,
+		},
 		blockeraBlockStates: {
 			value: blockeraBlockStates,
 		},
@@ -735,6 +742,18 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 
 	if ('undefined' === typeof currentStateValue) {
 		currentStateValue = state[attributeId];
+	}
+
+	if (ref?.path) {
+		const path = ref.path.replace(attributeId + '.', '');
+
+		args.deletedProps.push(path);
+
+		if (isObject(newValue) && !newValue.hasOwnProperty(attributeId)) {
+			if (isEquals(ref?.defaultValue, state[attributeId])) {
+				newValue[path] = undefined;
+			}
+		}
 	}
 
 	return mergeObject(

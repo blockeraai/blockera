@@ -1247,12 +1247,7 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 
 					// assert sides label
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						// TODO - @reza - fix this - by resetting a type (margin or padding) all sides should be removed and value of side should be 20 (normal on desktop)
-						// cy.checkBoxSpacingLabelContent(
-						// 	type,
-						// 	side,
-						// 	'30'
-						// );
+						cy.checkBoxSpacingLabelContent(type, side, '20');
 
 						cy.checkBoxSpacingLabelClassName(
 							type,
@@ -1264,10 +1259,7 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 						cy.checkBoxSpacingLabelClassName(
 							type,
 							side,
-							[
-								'changed-in-other-state',
-								'changed-in-secondary-state',
-							],
+							['changed-in-secondary-state'],
 							'not-have'
 						);
 					});
@@ -1282,10 +1274,7 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 					cy.checkBoxSpacingLabelClassName(
 						type,
 						'',
-						[
-							'changed-in-other-state',
-							'changed-in-secondary-state',
-						],
+						['changed-in-secondary-state'],
 						'not-have'
 					);
 				});

@@ -360,7 +360,7 @@ export const useAdvancedLabelProps = (
 					const preparedPath = path.substring(path.indexOf('.') + 1);
 
 					const _clonedDefaultValue =
-						prepare(preparedPath, clonedDefaultValue) ??
+						prepare(preparedPath, clonedDefaultValue) ||
 						clonedDefaultValue;
 
 					// Compare with rootValue
