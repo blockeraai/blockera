@@ -133,7 +133,6 @@ export const Dashboard = (): MixedElement => {
 						},
 					]}
 					getPanel={Panel}
-					heading={__('Main Menu', 'blockera')}
 					injectMenuEnd={
 						<NavigableMenu
 							orientation={'vertical'}
