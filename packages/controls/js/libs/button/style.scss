@@ -124,6 +124,31 @@
 		}
 	}
 
+	&.variant-secondary-on-hover {
+		color: var(--blockera-controls-primary-color);
+
+		&:hover:not(:disabled, .no-border) {
+			outline: 3px solid transparent;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff);
+		}
+
+		&.is-focus:not(:disabled),
+		&:focus:not(:disabled, .no-border) {
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color, #ffffff), 0 0 0 1px var(--blockera-controls-background-color), 0 0 0 2.5px var(--blockera-controls-primary-color) !important;
+		}
+
+		&:disabled,
+		&[aria-disabled="true"],
+		&[aria-disabled="true"]:hover {
+			opacity: 0.5;
+			outline: none;
+			transform: none;
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
+			color: var(--blockera-controls-primary-color);
+		}
+	}
+
 	&.is-tertiary {
 		color: var(--blockera-controls-color);
 		--wp-components-color-accent: var(--blockera-controls-border-color);
@@ -142,6 +167,37 @@
 			background: var(--blockera-controls-background-color);
 			color: var(--blockera-controls-color);
 			--blockera-controls-border-color: var(--blockera-controls-border-color-hover);
+		}
+
+		&.is-focus:not(.no-border) {
+			background: var(--blockera-controls-background-color);
+		}
+
+		&.is-focus:not(:disabled),
+		&:focus:not(:disabled, .no-border, .toggle-focus) {
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 1px var(--blockera-controls-primary-color) !important;
+			outline: 2px solid transparent !important;
+		}
+
+		&:disabled,
+		&[aria-disabled="true"],
+		&[aria-disabled="true"]:hover {
+			opacity: 0.5;
+			outline: none;
+			transform: none;
+		}
+	}
+
+	&.variant-tertiary-on-hover {
+		color: var(--blockera-controls-color);
+		--wp-components-color-accent: var(--blockera-controls-border-color);
+		background: transparent;
+
+		&:hover:not(:disabled, [aria-disabled="true"], .no-border) {
+			background: var(--blockera-controls-background-color);
+			color: var(--blockera-controls-color);
+			--blockera-controls-border-color: var(--blockera-controls-border-color-hover);
+			box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color);
 		}
 
 		&.is-focus:not(.no-border) {
