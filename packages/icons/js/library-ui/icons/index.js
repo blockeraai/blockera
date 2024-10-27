@@ -6,6 +6,7 @@ export { default as AlignContentSpaceBetween } from './align-content-space-betwe
 export { default as AlignContentStretch } from './align-content-stretch.svg';
 export { default as Animations } from './animations.svg';
 export { default as AriaLabel } from './aria-label.svg';
+export { default as ArrowNewTab } from './arrow-new-tab.svg';
 export { default as Asterisk } from './asterisk.svg';
 export { default as BackgroundImage } from './background-image.svg';
 export { default as BackgroundLinearGradient } from './background-linear-gradient';
@@ -70,6 +71,7 @@ export { default as BorderStyleVerticalSolid } from './border-style-vertical-sol
 export { default as Border } from './border.svg';
 export { default as BreakAll } from './break-all.svg';
 export { default as BreakNormal } from './break-normal.svg';
+export { default as Changelog } from './changelog.svg';
 export { default as Check } from './check.svg';
 export { default as ClickAnimation } from './click-animation.svg';
 export { default as ClipContent } from './clip-content.svg';
@@ -85,6 +87,7 @@ export { default as CoordinateRotateZ } from './coordinate-rotate-z.svg';
 export { default as CoordinateX } from './coordinate-x.svg';
 export { default as CoordinateY } from './coordinate-y.svg';
 export { default as CoordinateZ } from './coordinate-z.svg';
+export { default as Crown } from './crown.svg';
 export { default as Css3 } from './css3.svg';
 export { default as DataAttribute } from './data-attribute.svg';
 export { default as DeviceLDesktop } from './device-l-desktop.svg';
