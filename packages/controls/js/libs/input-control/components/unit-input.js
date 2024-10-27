@@ -246,7 +246,10 @@ export function UnitInput({
 
 								<NoticeControl
 									type="information"
-									style={{ marginTop: '10px' }}
+									style={{
+										marginTop: '10px',
+										marginBottom: '18px',
+									}}
 								>
 									{__(
 										'You can use CSS functions like calc, min, max, etc., and also CSS variables.',
