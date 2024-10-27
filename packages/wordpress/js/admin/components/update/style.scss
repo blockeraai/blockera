@@ -10,6 +10,20 @@
 			display: block;
 			margin-right: 8px;
 			border-radius: 5px;
+    		animation: saveButtonUpdateAnimation 1300ms infinite;
+			animation-delay: 500ms;
 		}
+	}
+}
+
+@keyframes saveButtonUpdateAnimation {
+	0% {
+		opacity:1;
+	}
+	50%{
+		opacity:0;
+	}
+	100% {
+		opacity:1;
 	}
 }
