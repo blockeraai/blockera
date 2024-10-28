@@ -14,7 +14,7 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
 import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 import { TabsContext, PanelHeader } from '@blockera/wordpress';
 
-import { GeneralPanel, BlockManagerPanel } from './components';
+import { GeneralPanel, BlockManagerPanel, DashboardPanel } from './components';
 
 export const Panel = (tab: {
 	...TTabProps,
@@ -22,9 +22,15 @@ export const Panel = (tab: {
 }): MixedElement => {
 	let description: Element<any> = <></>;
 	let activePanel: any = <></>;
+	let panelHeader: boolean = true;
 	const { settings } = useContext(TabsContext);
 
 	switch (tab.name) {
+		case 'dashboard':
+			panelHeader = false;
+			activePanel = <DashboardPanel />;
+			break;
+
 		case 'general-settings':
 			activePanel = <GeneralPanel />;
 			description = (
@@ -36,6 +42,7 @@ export const Panel = (tab: {
 				</p>
 			);
 			break;
+
 		case 'block-manager':
 			activePanel = <BlockManagerPanel />;
 			description = (
@@ -56,13 +63,15 @@ export const Panel = (tab: {
 			gap="20"
 		>
 			<div className={'blockera-settings-active-panel'}>
-				<PanelHeader
-					tab={tab}
-					name={'settings'}
-					kind={'blockera/v1'}
-					description={description}
-					tabSettings={settings[tab.settingSlug]}
-				/>
+				{panelHeader && (
+					<PanelHeader
+						tab={tab}
+						name={'settings'}
+						kind={'blockera/v1'}
+						description={description}
+						tabSettings={settings[tab.settingSlug]}
+					/>
+				)}
 
 				{activePanel}
 			</div>

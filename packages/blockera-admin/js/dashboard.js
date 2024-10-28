@@ -33,7 +33,7 @@ import { config as optionsConfig } from './config';
 
 const getCurrentPage = (): string => {
 	const location = window.location;
-	const pages = ['general-settings', 'block-manager', 'license-manager'];
+	const pages = ['dashboard', 'general-settings', 'block-manager'];
 
 	for (const page of pages) {
 		if (-1 === location.search.indexOf(page)) {
@@ -43,7 +43,7 @@ const getCurrentPage = (): string => {
 		return page;
 	}
 
-	return 'general-settings';
+	return 'dashboard';
 };
 
 export const Dashboard = (): MixedElement => {
@@ -86,7 +86,7 @@ export const Dashboard = (): MixedElement => {
 									iconSize={22}
 								/>
 							}
-							text={__('Upgrade to PRO', 'blockera')}
+							text={__('Upgrade to Pro', 'blockera')}
 							href={
 								'https://blockera.ai/products/site-builder/upgrade/'
 							}
@@ -120,6 +120,12 @@ export const Dashboard = (): MixedElement => {
 					settings={settings}
 					items={[
 						{
+							settingSlug: 'dashboard',
+							name: 'dashboard',
+							className: 'dashboard-settings-tab',
+							title: __('Dashboard', 'blockera'),
+						},
+						{
 							settingSlug: 'general',
 							name: 'general-settings',
 							className: 'general-settings-tab',
@@ -152,9 +158,7 @@ export const Dashboard = (): MixedElement => {
 									'tab-item-button'
 								)}
 								target="_blank"
-								href={
-									'https://blockera.ai/products/site-builder/upgrade/'
-								}
+								href={'https://community.blockera.ai/'}
 							>
 								{__('Community', 'blockera')}
 

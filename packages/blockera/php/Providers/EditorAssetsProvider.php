@@ -161,6 +161,15 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 					); 
 				}'
 		);
+
+		wp_add_inline_script(
+			'wp-blocks',
+			'var blockeraPluginData = ' . wp_json_encode(
+				[
+					'pluginURI' => blockera_core_config( 'app.root_url' ),
+				]
+			)
+		);
 	}
 
 	/**

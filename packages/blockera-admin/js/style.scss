@@ -20,7 +20,7 @@
 			align-self: flex-start;
 			background: #FFFFFF;
 			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
-			border-radius: 8px;
+			border-radius: 5px;
 			padding: 30px;
 			min-height: 400px;
 
@@ -28,7 +28,7 @@
 
 				.blockera-settings-section {
 					border: 1px solid #dadada;
-					border-radius: 8px;
+					border-radius: 5px;
 					padding: 25px;
 
 					.section-title {
@@ -98,7 +98,7 @@
 						padding: 12px 3px 12px 13px;
 						background-color: #ffffff;
 						border: 1px solid #dadada;
-						border-radius: 8px;
+						border-radius: 5px;
 
 						.blockera-block {
 							display: flex;
@@ -130,5 +130,35 @@
 				}
 			}
 		}
+	}
+}
+
+.blockera-dashboard-preview-video-btn {
+	box-sizing: border-box;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 71, 235, 0.38);
+    box-shadow: 0px 0px 39px rgba(0, 71, 235, 0.38);
+    backdrop-filter: blur(1px);
+    border-radius: 90px;
+    color: var(--blockera-controls-primary-color);
+    z-index: 1;
+    transition: var(--blockera-controls-transition);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	svg {
+		fill: currentColor;
+		margin-right: -3px;
+	}
+
+	&:hover {
+		color: var(--blockera-controls-primary-color);
+		background: rgba(0, 71, 235, 0.4);
 	}
 }
