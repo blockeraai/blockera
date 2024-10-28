@@ -60,6 +60,7 @@ module.exports = {
 				endOfLine: 'auto',
 			},
 		],
+		'ft-flow/space-after-type-colon': 'off',
 		'@wordpress/i18n-no-collapsible-whitespace': 'off',
 		'import/no-extraneous-dependencies': 'off',
 		'@wordpress/no-unsafe-wp-apis': 'off',
