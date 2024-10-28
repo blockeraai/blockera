@@ -12,7 +12,9 @@ import { resetPanelSettings } from '@blockera/dev-cypress/js/helpers';
 
 describe('Block Manager Settings Testing ...', () => {
 	beforeEach(() => {
-		goTo('/wp-admin/admin.php?page=blockera-settings').then(() => {
+		goTo(
+			'/wp-admin/admin.php?page=blockera-settings-general-settings'
+		).then(() => {
 			if (Cypress.$('#skip_activation').length) {
 				cy.get('#skip_activation').click();
 			}
