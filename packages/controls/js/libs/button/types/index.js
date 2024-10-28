@@ -14,7 +14,13 @@ export type ButtonProps = {
 	 * Sets the style of button, `primary` is the style with
 	 * background and `secondary` is outlined button style.
 	 */
-	variant?: 'primary' | 'secondary' | 'secondary-on-hover' | 'tertiary' | 'tertiary-on-hover' | 'link',
+	variant?:
+		| 'primary'
+		| 'secondary'
+		| 'secondary-on-hover'
+		| 'tertiary'
+		| 'tertiary-on-hover'
+		| 'link',
 	/**
 	 * Sets the size of button.
 	 */
