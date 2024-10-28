@@ -8,7 +8,7 @@ describe('Freemius → Opt-in Form After Plugin Activation', () => {
 		//
 		// Assert the opt-in form on the settings page
 		//
-		goTo('/wp-admin/admin.php?page=blockera-settings-general-settings');
+		goTo('/wp-admin/admin.php?page=page=blockera-settings-dashboard');
 
 		cy.get('button[type="submit"]').contains('Allow & Continue');
 
