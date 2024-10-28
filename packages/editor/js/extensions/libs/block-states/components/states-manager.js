@@ -298,32 +298,11 @@ const StatesManager: ComponentType<any> = memo(
 								statesCount: number,
 								defaultRepeaterItemValue: Object
 							): Object => {
-								let defaultItem = {
+								const defaultItem = {
 									...defaultRepeaterItemValue,
 									...getStateInfo(statesCount),
 									display: true,
 								};
-
-								// Recalculate states count if deleted state re added.
-								if (
-									Object.keys(calculatedValue).indexOf(
-										defaultItem.type
-									) !== -1
-								) {
-									const newStatesCount = Object.values(
-										preparedStates
-									).findIndex(
-										(item) =>
-											!Object.keys(
-												calculatedValue
-											).includes(item.type)
-									);
-
-									defaultItem = {
-										...defaultItem,
-										...getStateInfo(newStatesCount),
-									};
-								}
 
 								if (
 									['custom-class', 'parent-class'].includes(
