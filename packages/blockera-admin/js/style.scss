@@ -93,14 +93,17 @@
 
 					.blockera-block-category-item {
 						min-width: 0;
-						padding: 12px 3px 12px 13px;
+						padding: 0px 3px 0px 11px;
 						background-color: #ffffff;
 						border: 1px solid #dadada;
 						border-radius: 5px;
+						min-height: 40px;
+						display: flex;
+						align-items: center;
 
 						.blockera-block {
 							display: flex;
-							gap: 10px;
+							gap: 8px;
 							align-items: center;
 							justify-content: center;
 
@@ -118,6 +121,7 @@
 								display: flex;
 								font-size: 13px;
 								font-weight: 500;
+								line-height: 1.1;
 							}
 						}
 
@@ -159,5 +163,8 @@
 	&:hover {
 		color: #ffffff;
 		background: rgba(0, 71, 235, 0.65);
+		width: 70px;
+		height: 70px;
+		outline: none;
 	}
 }

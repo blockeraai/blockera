@@ -36,9 +36,12 @@ export default function BlockType(props: Object): MixedElement {
 			data-test={`item-${blockType.name.replace('/', '_')}`}
 		>
 			<Flex
-				alignItems={'flex-start'}
+				alignItems={'center'}
 				justifyContent={'space-between'}
 				className={'blockera-block-manage'}
+				style={{
+					flexGrow: 1,
+				}}
 			>
 				<div className={'blockera-block'}>
 					{!isString(blockType.icon.src) && (
