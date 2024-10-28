@@ -28,9 +28,21 @@ export type TTabPanelProps = {
 	 */
 	activeClass?: string,
 	/**
+	 * Icon for active item
+	 */
+	activeIcon?: Element<any>,
+	/**
 	 * Design of the tab.
 	 *
 	 * @default 'modern'
 	 */
 	design?: 'default' | 'modern',
+	/**
+	 * Inject items to end of the menu
+	 */
+	injectMenuEnd?: any,
+	/**
+	 * Heading for navigation
+	 */
+	heading?: string,
 };

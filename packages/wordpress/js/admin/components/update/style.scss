@@ -1,16 +1,29 @@
-.blockera-settings-has-update {
-	position: relative;
-	width: 110px;
-	transition: all 0.25s;
-	
-	
-	&:before {
-		content: '';
-		background: #ffffff;
-		width: 5px;
-		height: 5px;
-		position: absolute;
-		top: 45%;
-		left: 10%;
+.save-settings__save-button {
+
+	&.blockera-settings-has-update {
+
+		&:before {
+			content: '';
+			background: #ffffff;
+			width: 5px;
+			height: 5px;
+			display: block;
+			margin-right: 8px;
+			border-radius: 5px;
+    		animation: saveButtonUpdateAnimation 1300ms infinite;
+			animation-delay: 500ms;
+		}
+	}
+}
+
+@keyframes saveButtonUpdateAnimation {
+	0% {
+		opacity:1;
+	}
+	50%{
+		opacity:0;
+	}
+	100% {
+		opacity:1;
 	}
 }

@@ -152,16 +152,18 @@ export const Update = ({
 					</span>
 				),
 			]}
+
 			{'saving' !== status.name && (
 				<Button
 					data-test={'reset-settings'}
 					className="reset-settings__save-button"
 					onClick={() => setResetModalOpen(true)}
-					isTertiary
+					variant={'tertiary-on-hover'}
 				>
 					{__('Reset Settings', 'blockera')}
 				</Button>
 			)}
+
 			<Button
 				variant={'primary'}
 				className={classNames('save-settings__save-button', {
@@ -175,10 +177,12 @@ export const Update = ({
 			>
 				{updateButton}
 			</Button>
+
 			{resetModalOpen && (
 				<Modal
 					className="blockera-settings-reset-modal"
-					title={__('Reset Settings', 'blockera')}
+					headerTitle={__('Reset Settings', 'blockera')}
+					size="small"
 					onRequestClose={() => setResetModalOpen(false)}
 				>
 					<p>
@@ -186,14 +190,20 @@ export const Update = ({
 							'Resetting will restore all configured settings on the current tab to their default values.',
 							'blockera'
 						)}
-						<strong>
-							{__(
-								'To restore all plugin settings, choose Reset All.',
-								'blockera'
-							)}
-						</strong>
 					</p>
-					<Flex direction={'row'} justifyContent={'space-between'}>
+
+					<p>
+						{__(
+							'To restore all plugin settings, choose Reset All.',
+							'blockera'
+						)}
+					</p>
+
+					<Flex
+						direction={'row'}
+						justifyContent={'space-between'}
+						style={{ marginTop: '40px' }}
+					>
 						<Flex
 							direction={'row'}
 							justifyContent={'space-between'}
@@ -230,8 +240,12 @@ export const Update = ({
 							</Button>
 						</Flex>
 					</Flex>
+
 					{'error' === status.name && (
-						<div className="message update-failed">
+						<div
+							className="message update-failed"
+							style={{ marginTop: '40px' }}
+						>
 							{status.label}
 						</div>
 					)}

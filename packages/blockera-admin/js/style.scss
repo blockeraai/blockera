@@ -10,23 +10,6 @@
 
 
 #blockera-admin-settings-container {
-	font-size: 14px;
-	margin: 10px auto;
-	width: 100%;
-	max-width: 1140px;
-
-	.blockera-settings-header {
-
-		.blockera-settings-header-links {
-			margin-top: 12px;
-
-			.blockera-settings-knowledge-button {
-				margin-right: 10px;
-				background-color: #ffffff;
-				border: solid 1px var(--blockera-settings-border-color-parimary);
-			}
-		}
-	}
 
 	.blockera-settings-tabs {
 
@@ -35,12 +18,18 @@
 			width: 80%;
 			min-width: 0;
 			align-self: flex-start;
+			background: #FFFFFF;
+			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
+			border-radius: 5px;
+			padding: 30px;
+			min-height: 400px;
 
 			.blockera-settings-panel-container {
 
-				.blockera-settings-general.section {
-					background-color: #ffffff;
-					padding: 30px;
+				.blockera-settings-section {
+					border: 1px solid #dadada;
+					border-radius: 5px;
+					padding: 25px;
 
 					.section-title {
 						margin: 0 0 20px 0;
@@ -48,7 +37,7 @@
 					}
 
 					.section-desc {
-						margin: -10px 0 20px 0;
+						margin: -10px 0 10px 0;
 					}
 				}
 
@@ -63,6 +52,21 @@
 				}
 
 				.blockera-block-category {
+
+					.blockera-block-category-name {
+						display: flex;
+						margin: 0;
+						color: var(--blockera-controls-primary-color);
+						font-size: 15px;
+						font-weight: 500;
+						justify-content: flex-start;
+						align-items: center;
+						gap: 10px;
+
+						svg {
+							fill: currentColor;
+						}
+					}
 
 					.blockera-component-block-category-buttons {
 						display: flex;
@@ -85,18 +89,21 @@
 					gap: 15px;
 					flex-wrap: wrap;
 					resize: horizontal;
-					margin: 0 0 15px 0;
+					margin: 0 0 25px 0;
 
 					.blockera-block-category-item {
-						flex: auto;
-						width: 40%;
 						min-width: 0;
-						padding: 12px 13px;
+						padding: 0px 3px 0px 11px;
 						background-color: #ffffff;
+						border: 1px solid #dadada;
+						border-radius: 5px;
+						min-height: 40px;
+						display: flex;
+						align-items: center;
 
 						.blockera-block {
 							display: flex;
-							gap: 10px;
+							gap: 8px;
 							align-items: center;
 							justify-content: center;
 
@@ -112,6 +119,9 @@
 							.blockera-block-type {
 								margin: 0;
 								display: flex;
+								font-size: 13px;
+								font-weight: 500;
+								line-height: 1.1;
 							}
 						}
 
@@ -122,5 +132,39 @@
 				}
 			}
 		}
+	}
+}
+
+.blockera-dashboard-preview-video-btn {
+	box-sizing: border-box;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 71, 235, 0.38);
+    box-shadow: 0px 0px 39px rgba(0, 71, 235, 0.38);
+    backdrop-filter: blur(1px);
+    border-radius: 90px;
+    color: var(--blockera-controls-primary-color);
+    z-index: 1;
+    transition: var(--blockera-controls-transition);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	svg {
+		fill: currentColor;
+		margin-right: -3px;
+	}
+
+	&:focus,
+	&:hover {
+		color: #ffffff;
+		background: rgba(0, 71, 235, 0.65);
+		width: 70px;
+		height: 70px;
+		outline: none;
 	}
 }

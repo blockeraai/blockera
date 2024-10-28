@@ -1,11 +1,14 @@
 .blockera-settings-header {
-	height: 150px;
-	padding: 0 40px;
-	margin-top: 20px;
-	line-height: 120px;
+	height: 76px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 14px 16px;
+	gap: 12px;
+	background: #FFFFFF;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
 	box-sizing: border-box;
-	background-color: #ffffff;
-	border-top: 3px solid var(--blockera-settings-primary-color);
 
 	.blockera-settings-heading {
 		font-size: 18px;
@@ -13,10 +16,11 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		gap: 10px;
+		gap: 8px;
+		margin: 0;
+		color: var(--blockera-controls-primary-color);
 		
 		svg {
-			color: var(--blockera-controls-primary-color);
 			fill: currentColor;
 		}
 
@@ -25,4 +29,19 @@
 			color: rgba(0, 0, 0, 0.25);
 		}
 	}
+
+	.blockera-settings-header-links {
+		margin: 0;
+		flex-grow: 1;
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+
+		.blockera-settings-knowledge-button {
+			margin-right: 10px;
+			background-color: #ffffff;
+			border: solid 1px var(--blockera-settings-border-color-parimary);
+		}
+	}
+
 }

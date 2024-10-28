@@ -3,16 +3,16 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { __experimentalHStack as HStack } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
 import { without } from '@blockera/utils';
-import { Button } from '@blockera/controls';
+import { Button, Flex, Grid } from '@blockera/controls';
 import { componentInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -62,29 +62,64 @@ export default function BlockCategory(props: {
 	const checkedBlockNames = without(blockNames, disabledBlocks);
 	const isAllChecked = checkedBlockNames.length === blockNames.length;
 
+	function getCategoryIcon(id: string): MixedElement {
+		switch (id) {
+			case 'text':
+				return (
+					<Icon
+						library="ui"
+						icon="extension-typography"
+						iconSize="24"
+					/>
+				);
+
+			case 'media':
+				return (
+					<Icon
+						library="ui"
+						icon="extension-background"
+						iconSize="24"
+					/>
+				);
+
+			case 'design':
+				return (
+					<Icon library="ui" icon="extension-effects" iconSize="24" />
+				);
+
+			default:
+				return (
+					<Icon
+						library="ui"
+						icon="extension-advanced"
+						iconSize="24"
+					/>
+				);
+		}
+	}
+
 	return (
 		<>
-			<HStack
+			<Flex
 				key={category.slug}
+				alignItems={'flex-start'}
 				justifyContent={'space-between'}
 				className={'blockera-block-category'}
 			>
-				<div
-					className={
-						'blockera-block-category blockera-block-category'
-					}
-				>
+				<div className={'blockera-block-category'}>
 					<h4 className={'blockera-block-category-name'}>
+						{getCategoryIcon(category.slug)}
+
 						{category.title}
 					</h4>
 				</div>
+
 				<div
 					className={componentInnerClassNames(
 						'block-category-buttons'
 					)}
 				>
 					<Button
-						noBorder={true}
 						className={componentInnerClassNames(
 							'block-category-button',
 							{
@@ -94,9 +129,10 @@ export default function BlockCategory(props: {
 						data-test={`${category.slug}-category=disable`}
 						text={__('Disable All', 'blockera')}
 						onClick={() => onBlockCategoryChange(false)}
+						variant={'tertiary-on-hover'}
 					/>
+
 					<Button
-						noBorder={true}
 						className={componentInnerClassNames(
 							'block-category-button',
 							{
@@ -106,10 +142,13 @@ export default function BlockCategory(props: {
 						data-test={`${category.slug}-category=enable`}
 						text={__('Enable All', 'blockera')}
 						onClick={() => onBlockCategoryChange(true)}
+						variant={'tertiary-on-hover'}
 					/>
 				</div>
-			</HStack>
-			<HStack
+			</Flex>
+
+			<Grid
+				gridTemplateColumns={'repeat(3, 1fr)'}
 				justifyContent={'space-between'}
 				className={'blockera-block-category-items'}
 			>
@@ -123,7 +162,7 @@ export default function BlockCategory(props: {
 						/>
 					);
 				})}
-			</HStack>
+			</Grid>
 		</>
 	);
 }

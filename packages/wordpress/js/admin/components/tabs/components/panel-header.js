@@ -30,11 +30,13 @@ export const PanelHeader = ({
 	description: any,
 }): MixedElement => {
 	return (
-		<Flex direction={'column'}>
-			<Flex direction={'row'} justifyContent={'space-between'}>
-				<h3 className={'blockera-settings-panel panel-title'}>
-					{tab.title}
-				</h3>
+		<Flex direction={'column'} className={'blockera-settings-panel-header'}>
+			<Flex
+				direction={'row'}
+				justifyContent={'space-between'}
+				alignItems={'center'}
+			>
+				<h3 className={'blockera-settings-panel-title'}>{tab.title}</h3>
 
 				<Flex direction={'row'} justifyContent={'space-between'}>
 					<Update

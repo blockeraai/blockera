@@ -1,9 +1,21 @@
+//@flow
+
 /**
- * WordPress dependencies
+ * External dependencies
  */
+import type { MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import { Modal as WPModal } from '@wordpress/components';
+
+/**
+ * Blockera dependencies
+ */
 import { componentClassNames } from '@blockera/classnames';
+
+/**
+ * Internal dependencies
+ */
+import type { ModalProps } from './type';
 
 export default function Modal({
 	children,
@@ -11,7 +23,7 @@ export default function Modal({
 	headerTitle,
 	className,
 	...props
-}) {
+}: ModalProps): MixedElement {
 	return (
 		<WPModal
 			className={componentClassNames('modal', className)}

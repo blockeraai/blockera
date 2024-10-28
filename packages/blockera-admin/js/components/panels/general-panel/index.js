@@ -39,10 +39,7 @@ export const GeneralPanel = (): MixedElement => {
 	} = window;
 
 	const BlockVisibility = ({ isChecked }: Object): MixedElement => (
-		<Flex
-			direction={'column'}
-			className={'blockera-settings-general section'}
-		>
+		<Flex direction={'column'} className={'blockera-settings-section'}>
 			<h3 className={'blockera-settings-general section-title'}>
 				🚫 {__('Restricts Blocks by User Roles', 'blockera')}
 			</h3>
@@ -180,15 +177,13 @@ export const GeneralPanel = (): MixedElement => {
 		<Flex
 			direction={'column'}
 			className={'blockera-settings-panel-container'}
+			gap={40}
 		>
 			<BlockVisibility
 				isChecked={generalSettings.disableRestrictBlockVisibility}
 			/>
 
-			<Flex
-				direction={'column'}
-				className={'blockera-settings-general section'}
-			>
+			<Flex direction={'column'} className={'blockera-settings-section'}>
 				<h3 className={'blockera-settings-general section-title'}>
 					⚙️ {__('Other Settings', 'blockera')}
 				</h3>
