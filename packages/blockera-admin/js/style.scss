@@ -89,11 +89,9 @@
 					gap: 15px;
 					flex-wrap: wrap;
 					resize: horizontal;
-					margin: 0 0 15px 0;
+					margin: 0 0 25px 0;
 
 					.blockera-block-category-item {
-						flex: auto;
-						width: 40%;
 						min-width: 0;
 						padding: 12px 3px 12px 13px;
 						background-color: #ffffff;
@@ -118,7 +116,7 @@
 							.blockera-block-type {
 								margin: 0;
 								display: flex;
-								font-size: 14px;
+								font-size: 13px;
 								font-weight: 500;
 							}
 						}

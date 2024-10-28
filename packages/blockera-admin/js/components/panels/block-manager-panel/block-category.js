@@ -3,15 +3,14 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { __experimentalHStack as HStack } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
 import { without } from '@blockera/utils';
-import { Button } from '@blockera/controls';
+import { Button, Flex, Grid } from '@blockera/controls';
 import { componentInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -101,8 +100,9 @@ export default function BlockCategory(props: {
 
 	return (
 		<>
-			<HStack
+			<Flex
 				key={category.slug}
+				alignItems={'flex-start'}
 				justifyContent={'space-between'}
 				className={'blockera-block-category'}
 			>
@@ -113,6 +113,7 @@ export default function BlockCategory(props: {
 						{category.title}
 					</h4>
 				</div>
+
 				<div
 					className={componentInnerClassNames(
 						'block-category-buttons'
@@ -144,9 +145,10 @@ export default function BlockCategory(props: {
 						variant={'tertiary-on-hover'}
 					/>
 				</div>
-			</HStack>
+			</Flex>
 
-			<HStack
+			<Grid
+				gridTemplateColumns={'repeat(3, 1fr)'}
 				justifyContent={'space-between'}
 				className={'blockera-block-category-items'}
 			>
@@ -160,7 +162,7 @@ export default function BlockCategory(props: {
 						/>
 					);
 				})}
-			</HStack>
+			</Grid>
 		</>
 	);
 }

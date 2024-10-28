@@ -4,12 +4,16 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __experimentalHStack as HStack } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
-import { ControlContextProvider, ToggleControl } from '@blockera/controls';
+import {
+	ControlContextProvider,
+	ToggleControl,
+	Flex,
+} from '@blockera/controls';
+import { isString } from '@blockera/utils';
 
 /**
  * Renders an individual list item and checkbox control for a given block type
@@ -31,14 +35,18 @@ export default function BlockType(props: Object): MixedElement {
 			className={'blockera-block-category-item'}
 			data-test={`item-${blockType.name.replace('/', '_')}`}
 		>
-			<HStack
+			<Flex
+				alignItems={'flex-start'}
 				justifyContent={'space-between'}
 				className={'blockera-block-manage'}
 			>
 				<div className={'blockera-block'}>
-					<span className={'blockera-block-icon'}>
-						{blockType.icon.src}
-					</span>
+					{!isString(blockType.icon.src) && (
+						<span className={'blockera-block-icon'}>
+							{blockType.icon.src}
+						</span>
+					)}
+
 					<h4 className={'blockera-block-type'}>{blockType.title}</h4>
 				</div>
 
@@ -58,7 +66,7 @@ export default function BlockType(props: Object): MixedElement {
 						/>
 					</ControlContextProvider>
 				</div>
-			</HStack>
+			</Flex>
 		</div>
 	);
 }
