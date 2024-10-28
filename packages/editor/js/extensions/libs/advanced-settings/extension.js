@@ -25,8 +25,9 @@ import { Icon } from '@blockera/icons';
  */
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
-import type { TAdvancedSettingsProps } from './types/advanced-props';
 import { ExtensionSettings } from '../settings';
+import { useBlockSection } from '../../components';
+import type { TAdvancedSettingsProps } from './types/advanced-props';
 
 export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 	memo(
@@ -39,6 +40,9 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 			extensionProps,
 			setSettings,
 		}: TAdvancedSettingsProps): MixedElement => {
+			const { initialOpen, onToggle } = useBlockSection(
+				'advancedSettingsConfig'
+			);
 			const isShowAttributes = isShowField(
 				extensionConfig.blockeraAttributes,
 				values?.blockeraAttributes,
@@ -51,8 +55,9 @@ export const AdvancedSettingsExtension: ComponentType<TAdvancedSettingsProps> =
 
 			return (
 				<PanelBodyControl
+					onToggle={onToggle}
 					title={__('Advanced', 'blockera')}
-					initialOpen={true}
+					initialOpen={initialOpen}
 					icon={<Icon icon="extension-advanced" />}
 					className={extensionClassNames('advanced-settings')}
 				>

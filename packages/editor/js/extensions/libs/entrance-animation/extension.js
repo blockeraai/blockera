@@ -22,8 +22,9 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
-import type { EntranceExtensionProps } from './types/props';
 import { isActiveField } from '../../api/utils';
+import { useBlockSection } from '../../components';
+import type { EntranceExtensionProps } from './types/props';
 
 export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 	memo(
@@ -32,14 +33,19 @@ export const EntranceAnimationExtension: ComponentType<EntranceExtensionProps> =
 			block,
 			extensionConfig,
 		}: EntranceExtensionProps): MixedElement => {
+			const { initialOpen, onToggle } = useBlockSection(
+				'entranceAnimationConfig'
+			);
+
 			if (!isActiveField(extensionConfig.blockeraEntranceAnimation)) {
 				return <></>;
 			}
 
 			return (
 				<PanelBodyControl
+					onToggle={onToggle}
 					title={__('On Entrance', 'blockera')}
-					initialOpen={true}
+					initialOpen={initialOpen}
 					icon={<Icon icon="extension-entrance-animation" />}
 					className={extensionClassNames('entrance-animation')}
 				>

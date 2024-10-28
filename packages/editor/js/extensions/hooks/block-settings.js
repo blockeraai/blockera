@@ -36,7 +36,7 @@ import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors } from '../../hooks';
 import { sanitizeDefaultAttributes } from './utils';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
-import { BlockBase, BlockIcon, BlockPortals } from '../components';
+import { BlockApp, BlockBase, BlockIcon, BlockPortals } from '../components';
 
 const useSharedBlockSideEffect = (): void => {
 	const {
@@ -237,37 +237,40 @@ function mergeBlockSettings(
 			return (
 				<>
 					<BaseControlContext.Provider value={baseContextValue}>
-						<BlockBase
-							{...{
-								attributes,
-								additional,
-								name: props.name,
-								clientId: props.clientId,
-								className: props?.className,
-								setAttributes: props.setAttributes,
-								originDefaultAttributes: defaultAttributes,
-								defaultAttributes: sanitizeDefaultAttributes(
-									defaultAttributes,
-									{ defaultWithoutValue: true }
-								),
-							}}
-						>
-							<SlotFillProvider>
-								<Slot name={'blockera-block-before'} />
+						<BlockApp>
+							<BlockBase
+								{...{
+									attributes,
+									additional,
+									name: props.name,
+									clientId: props.clientId,
+									className: props?.className,
+									setAttributes: props.setAttributes,
+									originDefaultAttributes: defaultAttributes,
+									defaultAttributes:
+										sanitizeDefaultAttributes(
+											defaultAttributes,
+											{ defaultWithoutValue: true }
+										),
+								}}
+							>
+								<SlotFillProvider>
+									<Slot name={'blockera-block-before'} />
 
-								<BlockPortals
-									blockId={`#block-${props.clientId}`}
-									mainSlot={'blockera-block-slot'}
-									slots={
-										// slot selectors is feature on configuration block to create custom slots for anywhere.
-										// we can add slotSelectors property on block configuration to handle custom preview of block.
-										additional?.slotSelectors || {}
-									}
-								/>
+									<BlockPortals
+										blockId={`#block-${props.clientId}`}
+										mainSlot={'blockera-block-slot'}
+										slots={
+											// slot selectors is feature on configuration block to create custom slots for anywhere.
+											// we can add slotSelectors property on block configuration to handle custom preview of block.
+											additional?.slotSelectors || {}
+										}
+									/>
 
-								<Slot name={'blockera-block-after'} />
-							</SlotFillProvider>
-						</BlockBase>
+									<Slot name={'blockera-block-after'} />
+								</SlotFillProvider>
+							</BlockBase>
+						</BlockApp>
 					</BaseControlContext.Provider>
 					{settings.edit(props)}
 				</>

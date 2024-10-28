@@ -6,16 +6,25 @@ import { __ } from '@wordpress/i18n';
 import { Fill } from '@wordpress/components';
 import { select, useDispatch } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
-import { memo, useEffect, useState, Fragment } from '@wordpress/element';
+import {
+	memo,
+	useMemo,
+	useState,
+	Fragment,
+	useEffect,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { isEquals, kebabCase } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 import { Tabs, type TTabProps } from '@blockera/controls';
+import { isEquals, kebabCase, isObject } from '@blockera/utils';
+import { getItem, setItem, updateItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
+
+const cacheKey = 'BLOCKERA_SUPPORTS_CONFIG';
 
 /**
  * Internal dependencies
@@ -128,7 +137,35 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			useDispatch(STORE_NAME);
 		const { getExtensions, getDefinition } = select(STORE_NAME);
 
-		const supports = getExtensions(props.name);
+		const cacheData = useMemo(() => getItem(cacheKey), []);
+		const supports = useMemo(() => {
+			const extensions = getExtensions(props.name);
+
+			if (!cacheData) {
+				setItem(cacheKey, extensions);
+				return extensions;
+			}
+
+			return Object.fromEntries(
+				Object.entries(cacheData).map(([support, settings]) => [
+					support,
+					Object.fromEntries(
+						Object.entries(settings).map(([key, value]) => {
+							if (
+								null !== value &&
+								isObject(value) &&
+								value.hasOwnProperty('config')
+							) {
+								value.config = extensions[support][key].config;
+							}
+
+							return [key, value];
+						})
+					),
+				])
+			);
+			// eslint-disable-next-line
+		}, [props.name, cacheData]);
 
 		const [settings, setSettings] = useState(supports);
 
@@ -151,7 +188,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					!isEquals(innerBlockDefinition, settings)
 				) {
 					setSettings(innerBlockDefinition);
-
+					updateItem(cacheKey, innerBlockDefinition);
 					return;
 				}
 			}
@@ -161,6 +198,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			}
 
 			setSettings(supports);
+			updateItem(cacheKey, supports);
 			// eslint-disable-next-line
 		}, [currentBlock]);
 
@@ -168,13 +206,16 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			newSupports: Object,
 			name: string
 		): void => {
-			setSettings({
+			const newSettings = {
 				...settings,
 				[name]: {
 					...settings[name],
 					...newSupports,
 				},
-			});
+			};
+
+			setSettings(newSettings);
+			updateItem(cacheKey, newSettings);
 
 			if (isInnerBlock(currentBlock)) {
 				updateDefinitionExtensionSupport({

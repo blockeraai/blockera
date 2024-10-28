@@ -292,3 +292,6 @@ export { default as Variable } from './variable.svg';
 export { default as Warning } from './warning.svg';
 export { default as WrapNo } from './wrap-no.svg';
 export { default as Wrap } from './wrap.svg';
+export { default as ExpandAll } from './expand-all.svg';
+export { default as CollapseAll } from './collapse-all.svg';
+export { default as FocusMode } from './focus-mode.svg';

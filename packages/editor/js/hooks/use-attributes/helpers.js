@@ -477,10 +477,20 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 			const preparedRefPath = prepare(ref.path || '', dataset);
 
 			if (ref.path && ref.path !== attributeId && preparedRefPath) {
+				const absolutePathPattern = new RegExp(
+					`${attributeId}\.`,
+					'ig'
+				);
 				const preparedPathValue = update(
 					dataset,
 					ref.path,
-					ref.defaultValue
+					absolutePathPattern.test(ref.path) &&
+						isObject(ref.defaultValue)
+						? prepare(
+								ref.path.replace(absolutePathPattern, ''),
+								ref.defaultValue
+						  ) || ref.defaultValue
+						: ref.defaultValue
 				);
 
 				stateBreakpoints[breakpointType] = mergeObject(
@@ -520,7 +530,9 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 
 	return {
 		...state,
-		[attributeId]: newValue,
+		[attributeId]: {
+			value: newValue,
+		},
 		blockeraBlockStates: {
 			value: blockeraBlockStates,
 		},
@@ -735,6 +747,18 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 
 	if ('undefined' === typeof currentStateValue) {
 		currentStateValue = state[attributeId];
+	}
+
+	if (ref?.path) {
+		const path = ref.path.replace(attributeId + '.', '');
+
+		args.deletedProps.push(path);
+
+		if (isObject(newValue) && !newValue.hasOwnProperty(attributeId)) {
+			if (isEquals(ref?.defaultValue, state[attributeId])) {
+				newValue[path] = undefined;
+			}
+		}
 	}
 
 	return mergeObject(

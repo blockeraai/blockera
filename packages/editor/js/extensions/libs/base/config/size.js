@@ -74,6 +74,7 @@ const blockeraFit: FeatureConfig = {
 };
 
 export const sizeConfig = {
+	initialOpen: true,
 	blockeraWidth,
 	blockeraMinWidth,
 	blockeraMaxWidth,

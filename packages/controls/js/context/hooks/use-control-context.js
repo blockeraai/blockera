@@ -502,7 +502,13 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				return reset(dataset);
 			}
 
-			const preparedValue = prepare(args?.path, dataset);
+			let { path } = args;
+
+			if (['RESET_TO_DEFAULT', 'RESET_ALL'].includes(args?.action)) {
+				path = args?.path.replace(args?.attribute + '.', '');
+			}
+
+			const preparedValue = prepare(path, dataset);
 
 			return reset(
 				calculatedValueBasedOnSavedValue(

@@ -21,5 +21,6 @@ const blockeraStyleVariation: FeatureConfig = {
 };
 
 export const styleVariationsConfig = {
+	initialOpen: true,
 	blockeraStyleVariation,
 };

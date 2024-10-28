@@ -164,7 +164,10 @@ export const getStatesGraph = ({
 									return null;
 								}
 
-								if (isEquals(value, defaultValue)) {
+								if (
+									isEquals(value, defaultValue) ||
+									undefined === value
+								) {
 									return null;
 								}
 

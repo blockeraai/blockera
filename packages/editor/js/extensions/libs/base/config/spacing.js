@@ -18,5 +18,6 @@ const blockeraSpacing: FeatureConfig = {
 };
 
 export const spacingConfig = {
+	initialOpen: true,
 	blockeraSpacing,
 };

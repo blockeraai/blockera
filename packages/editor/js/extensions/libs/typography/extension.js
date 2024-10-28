@@ -47,6 +47,7 @@ import {
 	TextStroke,
 } from './components';
 import { ExtensionSettings } from '../settings';
+import { useBlockSection } from '../../components';
 
 export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 	({
@@ -60,6 +61,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		setSettings,
 		attributes,
 	}: TTypographyProps): MixedElement => {
+		const { initialOpen, onToggle } = useBlockSection('typographyConfig');
 		const isShowFontFamily = isShowField(
 			extensionConfig.blockeraFontFamily,
 			values?.blockeraFontFamily,
@@ -221,8 +223,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 
 		return (
 			<PanelBodyControl
+				onToggle={onToggle}
 				title={__('Typography', 'blockera')}
-				initialOpen={true}
+				initialOpen={initialOpen}
 				icon={<Icon icon="extension-typography" />}
 				className={extensionClassNames('typography')}
 			>
