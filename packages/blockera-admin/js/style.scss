@@ -157,8 +157,9 @@
 		margin-right: -3px;
 	}
 
+	&:focus,
 	&:hover {
-		color: var(--blockera-controls-primary-color);
-		background: rgba(0, 71, 235, 0.4);
+		color: #ffffff;
+		background: rgba(0, 71, 235, 0.65);
 	}
 }

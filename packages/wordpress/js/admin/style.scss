@@ -14,7 +14,7 @@ body.wp-admin[class*="blockera_page_"] {
     font-size: 16px;
     margin: 0;
     padding: 20px 20px 20px 0;
-    width: 100%;
+    width: calc(100% - 20px);
     max-width: 1140px;
 }
 
