@@ -223,7 +223,7 @@ class AppServiceProvider extends ServiceProvider {
 					'has_addons'     => false,
 					'has_paid_plans' => false,
 					'menu'           => array(
-						'slug'    => 'blockera-settings',
+						'slug'    => 'blockera-settings-dashboard',
 						'account' => false,
 						'contact' => false,
 						'support' => false,
