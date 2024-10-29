@@ -22,6 +22,7 @@ export default function Modal({
 	headerIcon,
 	headerTitle,
 	className,
+	isDismissible = true,
 	...props
 }: ModalProps): MixedElement {
 	return (
@@ -33,6 +34,7 @@ export default function Modal({
 					{headerTitle || __('Blockera Modal Component', 'blockera')}
 				</>
 			}
+			isDismissible={isDismissible}
 			{...props}
 		>
 			{children}

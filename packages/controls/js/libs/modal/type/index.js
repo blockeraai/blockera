@@ -9,4 +9,5 @@ export type ModalProps = {
 	headerTitle?: string,
 	className?: string,
 	size?: 'small' | 'medium' | 'large' | 'fill',
+	isDismissible?: boolean,
 };
