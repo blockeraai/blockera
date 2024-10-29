@@ -7,5 +7,5 @@ import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 
 export type TabsProps = {
 	...TTabProps,
-	settingSlug: string,
+	settingSlug?: string,
 };
