@@ -3,6 +3,7 @@
 namespace Blockera\Http;
 
 use Blockera\Bootstrap\Application;
+use Blockera\WordPress\Sender;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -34,13 +35,20 @@ class Routes {
 	public static string $version = '/v1';
 
 	/**
+	 * @var Sender $sender the instance of \Blockera\WordPress\Sender class.
+	 */
+	protected static Sender $sender;
+
+	/**
 	 * The Routes constructor.
 	 *
-	 * @param Application $app the application container.
+	 * @param Application $app    the application container.
+	 * @param Sender      $sender the instance of Sender.
 	 */
-	public function __construct( Application $app ) {
+	public function __construct( Application $app, Sender $sender ) {
 
-		self::$app = $app;
+		self::$app    = $app;
+		self::$sender = $sender;
 	}
 
 	/**
@@ -64,11 +72,11 @@ class Routes {
 
 		try {
 
-			$controller = self::$app->make( $controller, [ self::$app, $route ] );
+			$controller = self::$app->make( $controller, [ self::$app, self::$sender, $route ] );
 
 		} catch ( \Exception $exception ) {
 
-			$controller = new $controller( self::$app );
+			$controller = new $controller( self::$app, self::$sender );
 		}
 
 		if ( ! $controller instanceof RestController ) {

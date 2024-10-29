@@ -2,6 +2,7 @@
 // phpcs:disable
 namespace Blockera\Http;
 
+use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
 
 abstract class RestController {
@@ -17,22 +18,28 @@ abstract class RestController {
 	protected Application $app;
 
 	/**
-	 * @var string $method the http method of controller
+	 * @var string $method the http method of controller.
 	 */
 	private string $method = 'GET';
 
 	/**
-	 * @var string $route the route of controller
+	 * @var string $route the route of controller.
 	 */
 	protected string $route;
 
 	/**
+	 * @var Sender $sender the instance of \Blockera\WordPress\Sender class.
+	 */
+	protected Sender $sender;
+
+	/**
 	 * Rest Controller Constructor.
 	 */
-	public function __construct( Application $app, string $route = '/' ) {
+	public function __construct( Application $app, Sender $sender, string $route = '/' ) {
 
 		$this->app   = $app;
 		$this->route = $route;
+		$this->sender = $sender;
 	}
 
 	/**

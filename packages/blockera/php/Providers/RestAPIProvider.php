@@ -3,10 +3,9 @@
 namespace Blockera\Setup\Providers;
 
 use Blockera\Http\Routes;
+use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
 use Blockera\Bootstrap\ServiceProvider;
-use Blockera\Admin\Http\Controllers\SettingsController;
-use Blockera\Setup\Http\Controllers\DynamicValuesController;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -27,16 +26,9 @@ class RestAPIProvider extends ServiceProvider {
 			Routes::class,
 			function ( Application $app ) {
 
-				return new Routes( $app );
+				return new Routes( $app, $this->app->make( Sender::class ) );
 			}
 		);
-
-		$this->app->singleton( SettingsController::class );
-
-		if ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ) {
-
-			$this->app->singleton( DynamicValuesController::class );
-		}
 	}
 
 	/**
