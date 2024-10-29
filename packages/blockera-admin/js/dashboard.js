@@ -30,6 +30,7 @@ import {
  */
 import { Panel } from './panel';
 import { config as optionsConfig } from './config';
+import { OptInModal } from '@blockera/data-stream';
 
 const getCurrentPage = (): string => {
 	const location = window.location;
@@ -58,6 +59,7 @@ export const Dashboard = (): MixedElement => {
 
 	return (
 		<div className={'blockera-settings-dashboard'}>
+			<OptInModal kind={'blockera/v1'} name={'opt-in'} />
 			<SettingsContext.Provider
 				value={{
 					config,

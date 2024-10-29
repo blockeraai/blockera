@@ -2,7 +2,9 @@
 
 namespace Blockera\Setup\Providers;
 
+use Blockera\DataStream\Config;
 use Blockera\Setup\Blockera;
+use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
 use Blockera\WordPress\RenderBlock\{
 	Parser,
@@ -148,6 +150,8 @@ class AppServiceProvider extends ServiceProvider {
 				}
 			);
 
+			$this->app->singleton( Sender::class );
+
 		} catch ( BaseException $handler ) {
 
 			throw new BaseException( esc_html( 'Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage() ) );
@@ -187,7 +191,15 @@ class AppServiceProvider extends ServiceProvider {
 
 		$this->renderBlocks();
 
-		$this->initializeFreemius();
+		Config::setRestParams(
+			array_merge(
+				blockera_core_config( 'dataStream.rest_params' ),
+				[ 'root_path' => blockera_core_config( 'app.root_path' ) ]
+			)
+		);
+		Config::setOptionKeys( blockera_core_config( 'dataStream.options' ) );
+		Config::setServerURL( blockera_core_config( 'dataStream.server_url' ) );
+		Config::setHookPrefix( blockera_core_config( 'dataStream.hook_prefix' ) );
 
 		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
 	}
@@ -199,38 +211,6 @@ class AppServiceProvider extends ServiceProvider {
 
 		add_action( 'init', [ $this, 'loadTextDomain' ] );
 
-	}
-
-	/**
-	 * Initialize Freemius
-	 */
-	public function initializeFreemius(): void {
-
-		global $blockera_fs;
-
-		if ( ! isset( $blockera_fs ) ) {
-
-			// Include Freemius SDK.
-			require_once blockera_core_config( 'app.vendor_path' ) . 'blockera/freemius-sdk/php/start.php';
-
-			$blockera_fs = fs_dynamic_init(
-				array(
-					'id'             => '16292',
-					'slug'           => 'blockera',
-					'type'           => 'plugin',
-					'public_key'     => 'pk_206b63a4865444875ff845aa3e8e9',
-					'is_premium'     => false,
-					'has_addons'     => false,
-					'has_paid_plans' => false,
-					'menu'           => array(
-						'slug'    => 'blockera-settings-dashboard',
-						'account' => false,
-						'contact' => false,
-						'support' => false,
-					),
-				)
-			);
-		}
 	}
 
 	/**

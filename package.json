@@ -27,6 +27,7 @@
 	},
 	"dependencies": {
 		"@blockera/storage": "file:packages/storage",
+		"@blockera/data-stream": "file:packages/data-stream",
 		"@blockera/blockera": "file:packages/blockera",
 		"@blockera/blockera-admin": "file:packages/blockera-admin",
 		"@blockera/blocks-core": "file:packages/blocks/core",

@@ -91,7 +91,11 @@ class AdminAssetsProvider extends AssetsProvider {
 			$block_categories = get_block_categories( get_post() );
 		}
 
-		return 'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
+		return 'window.blockeraTermsOfServicesLink = "' . blockera_core_config( 'dataStream.terms_of_services_link' ) . '";
+				window.blockeraOptInStatus = "' . get_option( blockera_core_config( 'dataStream.options.opt_in_status' ), null ) . '";
+				window.blockeraPrivacyAndPolicyLink = "' . blockera_core_config( 'dataStream.privacy_and_policy_link' ) . '";
+				window.blockeraOptInDescription = "' . blockera_core_config( 'dataStream.opt_in_description' ) . '";
+				window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
 				wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
 				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( blockera_get_available_blocks() ) . ';
 				window.blockeraDefaultSettings = ' . wp_json_encode( blockera_core_config( 'panel.std' ) ) . ';
