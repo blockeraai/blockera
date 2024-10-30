@@ -24,6 +24,7 @@ export const OptInModal = ({
 	kind: string,
 	name: string,
 }): MixedElement => {
+	const [response, setResponse] = useState(null);
 	const [isOpen, setOpen] = useState(true);
 	const [allowButtonTitle, setAllowButton] = useState(
 		__('Allow & Continue', 'blockera')
@@ -59,7 +60,9 @@ export const OptInModal = ({
 			return setTimeout(() => setVariant('primary'), 1500);
 		}
 
-		closeModal();
+		setResponse(response);
+
+		setTimeout(() => closeModal(), 3000);
 	};
 
 	return (
@@ -68,32 +71,47 @@ export const OptInModal = ({
 			size={'medium'}
 			isDismissible={false}
 		>
-			<Flex direction={'column'} justifyContent={'space-between'}>
-				<h1>{__('Thank You for Choosing Blockera!', 'blockera')}</h1>
-				<p className={classNames('blockera-opt-in-text')}>
-					{window.blockeraOptInDescription}
-					<a href={window.blockeraTermsOfServicesLink}>
-						{__('Terms of service', 'blockera')}
-					</a>
-					<a href={window.blockeraPrivacyAndPolicyLink}>
-						{__('Privacy Policy', 'blockera')}
-					</a>
-				</p>
-			</Flex>
-			<Flex direction={'row'} justifyContent={'flex-start'}>
-				<Button
-					variant={variant}
-					onClick={() => allowAndContinue('ALLOW')}
-				>
-					{allowButtonTitle}
-				</Button>
-				<Button
-					variant={'secondary'}
-					onClick={() => allowAndContinue('SKIP')}
-				>
-					{__('Skip', 'blockera')}
-				</Button>
-			</Flex>
+			{null !== response && (
+				<>
+					<Flex direction={'column'} justifyContent={'space-between'}>
+						<h1 style={{ lineHeight: '45px' }}>
+							{response?.data?.message}
+						</h1>
+					</Flex>
+				</>
+			)}
+			{null === response && (
+				<>
+					<Flex direction={'column'} justifyContent={'space-between'}>
+						<h1>
+							{__('Thank You for Choosing Blockera!', 'blockera')}
+						</h1>
+						<p className={classNames('blockera-opt-in-text')}>
+							{window.blockeraOptInDescription}
+							<a href={window.blockeraTermsOfServicesLink}>
+								{__('Terms of service', 'blockera')}
+							</a>
+							<a href={window.blockeraPrivacyAndPolicyLink}>
+								{__('Privacy Policy', 'blockera')}
+							</a>
+						</p>
+					</Flex>
+					<Flex direction={'row'} justifyContent={'flex-start'}>
+						<Button
+							variant={variant}
+							onClick={() => allowAndContinue('ALLOW')}
+						>
+							{allowButtonTitle}
+						</Button>
+						<Button
+							variant={'secondary'}
+							onClick={() => allowAndContinue('SKIP')}
+						>
+							{__('Skip', 'blockera')}
+						</Button>
+					</Flex>
+				</>
+			)}
 		</Modal>
 	);
 };
