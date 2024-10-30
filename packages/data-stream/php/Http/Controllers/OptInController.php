@@ -3,6 +3,7 @@
 namespace Blockera\DataStream\Http\Controllers;
 
 use Blockera\DataStream\Config;
+use Blockera\DataStream\DataProviders\DebugDataProvider;
 use Blockera\Http\RestController;
 
 /**
@@ -50,7 +51,8 @@ class OptInController extends RestController {
 			);
 		}
 
-		$option_key = Config::getOptionKeys( 'opt_in_status' );
+		$token_option_key = Config::getOptionKeys( 'token' );
+		$option_key       = Config::getOptionKeys( 'opt_in_status' );
 
 		// We're not attempting a data-stream action or the user did not respond to the opt-in modal.
 		if ( isset( $params['action'] ) && $option_key !== $params['action'] || ! isset( $params['opt-in-agreed'] ) ) {
@@ -86,7 +88,57 @@ class OptInController extends RestController {
 		}
 
 		// Send to https://api.blockera.ai.
-		$result = $this->sender->post( Config::getServerURL(), $this->getUserDetails() );
+		$result = $this->sender->post(
+			Config::getServerURL( '/user/register' ),
+			[
+				'headers' => [
+					'Accept' => 'application/json',
+				],
+				'body'    => $this->getUserDetails(),
+			]
+		);
+
+		// Server error respond!
+		if ( is_wp_error( $result ) ) {
+
+			return new \WP_REST_Response(
+				[
+					'code'    => $result->get_error_code(),
+					'success' => false,
+					'data'    => [
+						'message' => $result->get_error_message(),
+					],
+				],
+				$result->get_error_code()
+			);
+		}
+
+		$response    = $this->sender->getResponseBody( $result );
+		$token       = $response['data']['token'];
+		$user_id     = $response['data']['user_id'];
+		$name        = get_bloginfo( 'name', 'display' );
+		$description = get_bloginfo( 'description', 'display' );
+
+		/**
+		 * @var DebugDataProvider $debug_data_provider the instance of DebugDataProvider class.
+		 */
+		$debug_data_provider = $this->app->make( DebugDataProvider::class );
+		$metadata            = $debug_data_provider->getSiteData();
+		$fields              = $metadata['wp-core']['fields'];
+		$url                 = $fields['site_url']['value'];
+
+		update_option( $token_option_key, $token );
+
+		$result = $this->sender->post(
+			Config::getServerURL( '/sites' ),
+			[
+				'headers' => [
+					'Accept'        => 'application/json',
+					'Authorization' => 'Bearer ' . $token,
+				],
+				'body'    => compact( 'user_id', 'metadata', 'url', 'name', 'description' ),
+			]
+		);
 
 		// Server error respond!
 		if ( is_wp_error( $result ) ) {
@@ -113,7 +165,8 @@ class OptInController extends RestController {
 					'code'    => 500,
 					'success' => false,
 					'data'    => [
-						'message' => __( 'Failed update process.', 'blockera' ),
+						'body'    => json_decode( $result['body'], true ),
+						'message' => __( 'Failed update opt-in process.', 'blockera' ),
 					],
 				],
 				500
@@ -125,13 +178,12 @@ class OptInController extends RestController {
 				'code'    => 200,
 				'success' => true,
 				'data'    => [
-					'message' => __( 'congratulation 🎉', 'blockera' ),
+					'message' => __( 'Congratulation 🎉', 'blockera' ),
 				],
 			],
 			200
 		);
 	}
-
 
 	/**
 	 * Gets the current user's details.
@@ -146,9 +198,9 @@ class OptInController extends RestController {
 		$user = wp_get_current_user();
 
 		return [
-			'email'        => $user->user_email,
-			'name'         => $user->display_name,
-			'product_slug' => Config::getRestParams( 'slug' ),
+			'email' => $user->user_email,
+			'name'  => $user->display_name,
+			// 'product_slug' => Config::getRestParams( 'slug' ),
 		];
 	}
 
