@@ -43,11 +43,13 @@ class Config {
 	}
 
 	/**
+	 * @param string $suffix the url suffix to access server endpoint.
+	 *
 	 * @return string the server base url to connect it.
 	 */
-	public static function getServerURL(): string {
+	public static function getServerURL( string $suffix = '/' ): string {
 
-		return self::$server_url;
+		return self::$server_url . $suffix;
 	}
 
 	/**
