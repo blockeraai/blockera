@@ -35,6 +35,10 @@ return [
 		 * The option name to save opt_in_status
 		 */
 		'opt_in_status' => 'data-stream-opt-in-status',
+		/**
+		 * The option name to save recieved token after opt-in.
+		 */
+		'token'         => 'data-stream-token',
 	],
 	'opt_in_description'      => __(
 		"We have introduced this opt-in so you never miss an important update and help us make the plugin more compatible with your site and better at doing what you need it to. Opt in to get email notifications for security & feature updates, and to share some basic WordPress environment info. If you skip this, that's okay! Blockera will still work just fine. What permission are being granted?",
@@ -53,7 +57,7 @@ return [
 	 */
 	'hook_prefix'             => 'blockera',
 	/**
-	 * The url of the Blockera API server.
+	 * The url of the Blockera API server. Production value must be: 'https://api.blockera.ai/v1'.
 	 */
-	'server_url'              => 'https://api.blockera.ai/v1',
+	'server_url'              => 'http://127.0.0.1:8000/api/v1',
 ];
