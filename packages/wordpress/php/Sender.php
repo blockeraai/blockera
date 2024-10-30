@@ -30,4 +30,16 @@ class Sender {
 		return wp_remote_get( $endpoint, $args );
 	}
 
+	/**
+	 * Retrieve the remote response body as array.
+	 *
+	 * @param array $response the response of remote.
+	 *
+	 * @return array
+	 */
+	public function getResponseBody( array $response ): array {
+
+		return json_decode( wp_remote_retrieve_body( $response ), true );
+	}
+
 }
