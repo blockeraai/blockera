@@ -154,7 +154,7 @@ class Jobs {
 	 *
 	 * @return void
 	 */
-	function activationHook(): void {
+	public function activationHook(): void {
 
 		if ( ! wp_next_scheduled( 'blockera_each_six_days' ) ) {
 
@@ -164,6 +164,8 @@ class Jobs {
 
 			wp_schedule_event( time(), '7_days', 'blockera_each_seven_days' );
 		}
+
+		add_option( $this->config['rest_params']['slug'] . '_do_activation_redirect', true );
 	}
 
 	/**
@@ -171,9 +173,32 @@ class Jobs {
 	 *
 	 * @return void
 	 */
-	function deactivationHook(): void {
+	public function deactivationHook(): void {
 
 		wp_clear_scheduled_hook( 'blockera_each_six_days' );
+	}
+
+	/**
+	 * Redirecting your WordPress admin to your plugin dashboard page after activation it.
+	 *
+	 * @return void
+	 */
+	public function redirectToDashboard(): void {
+
+		$option = $this->config['rest_params']['slug'] . '_do_activation_redirect';
+
+		// Check if the redirect flag is set and the user has sufficient permissions.
+		if ( get_option( $option, false ) ) {
+
+			delete_option( $option );
+
+			if ( is_admin() && current_user_can( 'manage_options' ) ) {
+
+				// Redirect to plugin dashboard or settings page.
+				wp_redirect( admin_url( 'admin.php?page=' . $this->config['dashboard_page'] ) );
+				exit;
+			}
+		}
 	}
 
 }

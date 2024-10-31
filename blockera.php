@@ -43,7 +43,18 @@ if ( ! function_exists( 'get_plugin_data' ) ) {
 define( 'BLOCKERA_VERSION', get_plugin_data( __FILE__, false, false )['Version'] );
 ### END AUTO-GENERATED DEFINES
 
-new \Blockera\DataStream\Jobs( new \Blockera\WordPress\Sender(), __FILE__, blockera_core_config( 'dataStream' ) );
+$dashboard_page = blockera_core_config( 'app.dashboard_page' );
+
+$jobs = new \Blockera\DataStream\Jobs(
+	new \Blockera\WordPress\Sender(),
+	__FILE__,
+	array_merge(
+		blockera_core_config( 'dataStream' ),
+		compact( 'dashboard_page' )
+	)
+);
+
+add_action( 'admin_init', [ $jobs, 'redirectToDashboard' ] );
 
 add_action( 'plugins_loaded', 'blockera_init', 10 );
 
