@@ -43,9 +43,11 @@ if ( ! function_exists( 'get_plugin_data' ) ) {
 define( 'BLOCKERA_VERSION', get_plugin_data( __FILE__, false, false )['Version'] );
 ### END AUTO-GENERATED DEFINES
 
+new \Blockera\DataStream\Jobs( new \Blockera\WordPress\Sender(), __FILE__, blockera_core_config( 'dataStream' ) );
+
 add_action( 'plugins_loaded', 'blockera_init', 10 );
 
-function blockera_init() {
+function blockera_init(): void {
 
 	/**
 	 * This hook for extendable setup process from internal or third-party developers.
