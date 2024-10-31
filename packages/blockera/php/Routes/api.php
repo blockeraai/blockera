@@ -24,7 +24,10 @@ try {
 	$routes->get( 'settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'index' ] );
 	$routes->update( 'settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'response' ] );
 
-	$routes->post( 'opt-in', [ Blockera\DataStream\Http\Controllers\OptInController::class, 'optIn' ] );
+	if ( ! blockera_ds_is_off() ) {
+
+		$routes->post( 'opt-in', [ Blockera\DataStream\Http\Controllers\OptInController::class, 'optIn' ] );
+	}
 
 } catch ( Exception $exception ) {
 

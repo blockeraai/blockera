@@ -25,15 +25,18 @@ class Jobs {
 	 */
 	public function __construct( Sender $sender, string $plugin_file, array $config ) {
 
-		$this->sender = $sender;
-		$this->config = $config;
+		if ( ! blockera_ds_is_off() ) {
 
-		add_filter( 'cron_schedules', [ $this, 'addCronInterval' ] );
-		add_action( 'blockera_each_six_days', [ $this, 'doRefreshToken' ] );
-		add_action( 'blockera_each_seven_days', [ $this, 'doUpdateRegisteredData' ] );
+			$this->sender = $sender;
+			$this->config = $config;
 
-		register_activation_hook( $plugin_file, [ $this, 'activationHook' ] );
-		register_deactivation_hook( $plugin_file, [ $this, 'deactivationHook' ] );
+			add_filter( 'cron_schedules', [ $this, 'addCronInterval' ] );
+			add_action( 'blockera_each_six_days', [ $this, 'doRefreshToken' ] );
+			add_action( 'blockera_each_seven_days', [ $this, 'doUpdateRegisteredData' ] );
+
+			register_activation_hook( $plugin_file, [ $this, 'activationHook' ] );
+			register_deactivation_hook( $plugin_file, [ $this, 'deactivationHook' ] );
+		}
 	}
 
 	/**

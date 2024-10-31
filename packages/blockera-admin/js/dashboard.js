@@ -59,7 +59,9 @@ export const Dashboard = (): MixedElement => {
 
 	return (
 		<div className={'blockera-settings-dashboard'}>
-			<OptInModal kind={'blockera/v1'} name={'opt-in'} />
+			{'1' === window.blockeraDataStreamIsOff && (
+				<OptInModal kind={'blockera/v1'} name={'opt-in'} />
+			)}
 			<SettingsContext.Provider
 				value={{
 					config,

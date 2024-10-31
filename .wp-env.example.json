@@ -6,6 +6,6 @@
 		"https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"
 	],
 	"config": {
-		"WP_FS__SIMULATE_FREEMIUS_OFF": true
+		"BLOCKERA_DATA_STREAM_OFF": true
 	}
 }

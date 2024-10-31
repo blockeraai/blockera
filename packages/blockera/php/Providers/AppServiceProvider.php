@@ -191,15 +191,18 @@ class AppServiceProvider extends ServiceProvider {
 
 		$this->renderBlocks();
 
-		Config::setRestParams(
-			array_merge(
-				blockera_core_config( 'dataStream.rest_params' ),
-				[ 'root_path' => blockera_core_config( 'app.root_path' ) ]
-			)
-		);
-		Config::setOptionKeys( blockera_core_config( 'dataStream.options' ) );
-		Config::setServerURL( blockera_core_config( 'dataStream.server_url' ) );
-		Config::setHookPrefix( blockera_core_config( 'dataStream.hook_prefix' ) );
+		if ( ! blockera_ds_is_off() ) {
+
+			Config::setRestParams(
+				array_merge(
+					blockera_core_config( 'dataStream.rest_params' ),
+					[ 'root_path' => blockera_core_config( 'app.root_path' ) ]
+				)
+			);
+			Config::setOptionKeys( blockera_core_config( 'dataStream.options' ) );
+			Config::setServerURL( blockera_core_config( 'dataStream.server_url' ) );
+			Config::setHookPrefix( blockera_core_config( 'dataStream.hook_prefix' ) );
+		}
 
 		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
 	}

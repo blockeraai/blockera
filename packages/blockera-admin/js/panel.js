@@ -18,7 +18,7 @@ import { GeneralPanel, BlockManagerPanel, DashboardPanel } from './components';
 
 export const Panel = (tab: {
 	...TTabProps,
-	settingSlug: string,
+	settingSlug?: string,
 }): MixedElement => {
 	let description: Element<any> = <></>;
 	let activePanel: any = <></>;

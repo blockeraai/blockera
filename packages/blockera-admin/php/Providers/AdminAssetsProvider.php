@@ -92,6 +92,7 @@ class AdminAssetsProvider extends AssetsProvider {
 		}
 
 		return 'window.blockeraTermsOfServicesLink = "' . blockera_core_config( 'dataStream.terms_of_services_link' ) . '";
+				window.blockeraDataStreamIsOff = "' . ! blockera_ds_is_off() . '";
 				window.blockeraOptInStatus = "' . get_option( blockera_core_config( 'dataStream.options.opt_in_status' ), null ) . '";
 				window.blockeraPrivacyAndPolicyLink = "' . blockera_core_config( 'dataStream.privacy_and_policy_link' ) . '";
 				window.blockeraOptInDescription = "' . blockera_core_config( 'dataStream.opt_in_description' ) . '";
