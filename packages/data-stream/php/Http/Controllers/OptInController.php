@@ -51,8 +51,7 @@ class OptInController extends RestController {
 			);
 		}
 
-		$token_option_key = Config::getOptionKeys( 'token' );
-		$option_key       = Config::getOptionKeys( 'opt_in_status' );
+		$option_key = Config::getOptionKeys( 'opt_in_status' );
 
 		// We're not attempting a data-stream action or the user did not respond to the opt-in modal.
 		if ( isset( $params['action'] ) && $option_key !== $params['action'] || ! isset( $params['opt-in-agreed'] ) ) {
@@ -116,7 +115,7 @@ class OptInController extends RestController {
 		$response    = $this->sender->getResponseBody( $result );
 		$token       = $response['data']['token'];
 		$user_id     = $response['data']['user_id'];
-		$name        = get_bloginfo( 'name', 'display' );
+		$name        = Config::getRestParams( 'slug' );
 		$description = get_bloginfo( 'description', 'display' );
 
 		/**
@@ -127,7 +126,8 @@ class OptInController extends RestController {
 		$fields              = $metadata['wp-core']['fields'];
 		$url                 = $fields['site_url']['value'];
 
-		update_option( $token_option_key, $token );
+		update_option( Config::getOptionKeys( 'token' ), $token );
+		update_option( Config::getOptionKeys( 'user_id' ), $user_id );
 
 		$result = $this->sender->post(
 			Config::getServerURL( '/sites' ),
@@ -155,17 +155,35 @@ class OptInController extends RestController {
 			);
 		}
 
-		// Don't show the opt-in modal again.
-		$updated = update_option( $option_key, 'ALLOW' );
+		$response = $this->sender->getResponseBody( $result );
+		$site_id  = $response['data']['site_id'];
 
-		if ( ! $updated ) {
+		$updated_site_id = update_option( Config::getOptionKeys( 'site_id' ), $site_id );
+
+		if ( ! $updated_site_id ) {
 
 			return new \WP_REST_Response(
 				[
 					'code'    => 500,
 					'success' => false,
 					'data'    => [
-						'body'    => json_decode( $result['body'], true ),
+						'message' => __( 'Not registered site information.', 'blockera' ),
+					],
+				],
+				500
+			);
+		}
+
+		// Don't show the opt-in modal again.
+		$updated_opt_in_status = update_option( $option_key, 'ALLOW' );
+
+		if ( ! $updated_opt_in_status ) {
+
+			return new \WP_REST_Response(
+				[
+					'code'    => 500,
+					'success' => false,
+					'data'    => [
 						'message' => __( 'Failed update opt-in process.', 'blockera' ),
 					],
 				],
@@ -200,7 +218,6 @@ class OptInController extends RestController {
 		return [
 			'email' => $user->user_email,
 			'name'  => $user->display_name,
-			// 'product_slug' => Config::getRestParams( 'slug' ),
 		];
 	}
 
