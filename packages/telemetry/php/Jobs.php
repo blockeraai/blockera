@@ -1,10 +1,10 @@
 <?php
 
-namespace Blockera\DataStream;
+namespace Blockera\Telemetry;
 
-use Blockera\DataStream\DataProviders\DataProvider;
+use Blockera\Telemetry\DataProviders\DataProvider;
 use Blockera\WordPress\Sender;
-use Blockera\DataStream\DataProviders\DebugDataProvider;
+use Blockera\Telemetry\DataProviders\DebugDataProvider;
 
 class Jobs {
 
@@ -25,7 +25,7 @@ class Jobs {
 	 */
 	public function __construct( Sender $sender, string $plugin_file, array $config ) {
 
-		if ( ! blockera_ds_is_off() ) {
+		if ( ! blockera_telemetry_is_off() ) {
 
 			$this->sender = $sender;
 			$this->config = $config;

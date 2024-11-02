@@ -36,7 +36,7 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 			'entities'    => $config_dir . '/config/entities.php',
 			'breakpoints' => $config_dir . '/config/breakpoints.php',
 			'valueAddon'  => $config_dir . '/config/value-addon.php',
-			'dataStream'  => $config_dir . '/config/data-stream.php',
+			'telemetry'   => $config_dir . '/config/telemetry.php',
 		);
 
 		$firstNode = array_shift( $keyNodes );

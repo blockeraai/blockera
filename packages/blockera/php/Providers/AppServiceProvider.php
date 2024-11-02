@@ -2,7 +2,7 @@
 
 namespace Blockera\Setup\Providers;
 
-use Blockera\DataStream\Config;
+use Blockera\Telemetry\Config;
 use Blockera\Setup\Blockera;
 use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
@@ -191,17 +191,17 @@ class AppServiceProvider extends ServiceProvider {
 
 		$this->renderBlocks();
 
-		if ( ! blockera_ds_is_off() ) {
+		if ( ! blockera_telemetry_is_off() ) {
 
 			Config::setRestParams(
 				array_merge(
-					blockera_core_config( 'dataStream.rest_params' ),
+					blockera_core_config( 'telemetry.rest_params' ),
 					[ 'root_path' => blockera_core_config( 'app.root_path' ) ]
 				)
 			);
-			Config::setOptionKeys( blockera_core_config( 'dataStream.options' ) );
-			Config::setServerURL( blockera_core_config( 'dataStream.server_url' ) );
-			Config::setHookPrefix( blockera_core_config( 'dataStream.hook_prefix' ) );
+			Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
+			Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
+			Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
 		}
 
 		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );

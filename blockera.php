@@ -45,11 +45,11 @@ define( 'BLOCKERA_VERSION', get_plugin_data( __FILE__, false, false )['Version']
 
 $dashboard_page = blockera_core_config( 'app.dashboard_page' );
 
-$jobs = new \Blockera\DataStream\Jobs(
+$jobs = new \Blockera\Telemetry\Jobs(
 	new \Blockera\WordPress\Sender(),
 	__FILE__,
 	array_merge(
-		blockera_core_config( 'dataStream' ),
+		blockera_core_config( 'telemetry' ),
 		compact( 'dashboard_page' )
 	)
 );

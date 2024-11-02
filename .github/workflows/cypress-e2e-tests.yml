@@ -62,16 +62,16 @@ jobs:
               run: |
                   case "${{ matrix.category }}" in
                     "woocommerce")
-                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"], "config": {"BLOCKERA_DATA_STREAM_OFF": true}}' >> .wp-env.json
+                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OFF": true}}' >> .wp-env.json
                       ;;
                     "freemius")
                       echo '{"plugins": ["."]}' >> .wp-env.json
                       ;;
                     "plugins")
-                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"], "config": {"BLOCKERA_DATA_STREAM_OFF": true}}' >> .wp-env.json
+                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OFF": true}}' >> .wp-env.json
                       ;;
                     *)
-                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"], "config": {"BLOCKERA_DATA_STREAM_OFF": true}}' >> .wp-env.json
+                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OFF": true}}' >> .wp-env.json
                       ;;
                   esac
                   cat .wp-env.json

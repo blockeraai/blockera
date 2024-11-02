@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\DataStream;
+namespace Blockera\Telemetry;
 
 class Config {
 
@@ -81,6 +81,13 @@ class Config {
 		self::$rest_params = $rest_params;
 	}
 
+	/**
+	 * Retrieve option value by key.
+	 *
+	 * @param string $key the option key.
+	 *
+	 * @return array|mixed
+	 */
 	public static function getOptionKeys( string $key = '' ) {
 
 		if ( empty( self::$option_keys[ $key ] ) ) {

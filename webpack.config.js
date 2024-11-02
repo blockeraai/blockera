@@ -96,8 +96,8 @@ module.exports = (env, argv) => {
 			// Externalize the local packages.
 			'@blockera/icons': 'blockeraIcons',
 			'@blockera/env': 'blockeraEnv_' + blockeraPackagesVersion.env,
-			'@blockera/data-stream':
-				'blockeraDataStream_' + blockeraPackagesVersion['data-stream'],
+			'@blockera/telemetry':
+				'blockeraTelemetry_' + blockeraPackagesVersion.telemetry,
 			'@blockera/storage':
 				'blockeraStorage_' + blockeraPackagesVersion.storage,
 			'@blockera/data': 'blockeraData_' + blockeraPackagesVersion.data,

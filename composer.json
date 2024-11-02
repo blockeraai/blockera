@@ -58,7 +58,7 @@
 		},
 		{
 			"type": "path",
-			"url": "packages/data-stream"
+			"url": "packages/telemetry"
 		}
 	],
 	"authors": [
@@ -82,7 +82,7 @@
 		"blockera/data": "*",
 		"blockera/data-editor": "*",
 		"blockera/http": "*",
-		"blockera/data-stream": "*",
+		"blockera/telemetry": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
 		"illuminate/container": "8.x-dev"
 	},

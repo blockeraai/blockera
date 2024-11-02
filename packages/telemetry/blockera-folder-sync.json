@@ -1,6 +1,6 @@
 {
-	"name": "blockera/data-stream",
-	"path": "packages/data-stream",
+	"name": "blockera/telemetry",
+	"path": "packages/telemetry",
 	"dependent": {
 		"repositories": ["https://github.com/blockeraai/blockera.git"]
 	}

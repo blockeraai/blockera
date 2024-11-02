@@ -30,7 +30,7 @@ return [
 		/**
 		 * The nonce security field.
 		 */
-		'nonce' => wp_create_nonce( 'blockera-data-stream-nonce' ),
+		'nonce' => wp_create_nonce( 'blockera-telemetry-nonce' ),
 	],
 	/**
 	 * Declare option keys to store data in your database.
@@ -39,19 +39,19 @@ return [
 		/**
 		 * The option name to save opt_in_status
 		 */
-		'opt_in_status' => 'data-stream-opt-in-status',
+		'opt_in_status' => 'telemetry-opt-in-status',
 		/**
 		 * The option name to save recieved token after opt-in.
 		 */
-		'token'         => 'data-stream-token',
+		'token'         => 'telemetry-token',
 		/**
 		 * The option name to save user_id after opt-in.
 		 */
-		'user_id'       => 'data-stream-user-id',
+		'user_id'       => 'telemetry-user-id',
 		/**
 		 * The option name to save site_id after opt-in.
 		 */
-		'site_id'       => 'data-stream-site-id',
+		'site_id'       => 'telemetry-site-id',
 	],
 	'opt_in_description'      => __(
 		"We have introduced this opt-in so you never miss an important update and help us make the plugin more compatible with your site and better at doing what you need it to. Opt in to get email notifications for security & feature updates, and to share some basic WordPress environment info. If you skip this, that's okay! Blockera will still work just fine. What permission are being granted?",
@@ -72,5 +72,5 @@ return [
 	/**
 	 * The url of the Blockera API server.
 	 */
-	'server_url'              => blockera_core_env( 'DATA_STREAM_SERVER_URL', 'https://api.blockera.ai/v1' ),
+	'server_url'              => blockera_core_env( 'TELEMETRY_SERVER_URL', 'https://api.blockera.ai/v1/telemetry' ),
 ];

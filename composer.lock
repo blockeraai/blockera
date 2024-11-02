@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20b5aee7b41e3d6195cfb076a87bd1a9",
+    "content-hash": "c0eaa73063937a0557d1a9a442aa3e4c",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -135,33 +135,6 @@
             }
         },
         {
-            "name": "blockera/data-stream",
-            "version": "0.9.2",
-            "dist": {
-                "type": "path",
-                "url": "packages/data-stream",
-                "reference": "a36bb02c5146d14c872fe27896e091bc19c769bc"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\DataStream\\": "php/"
-                },
-                "files": [
-                    "php/functions.php"
-                ]
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Blockera\\DataStream\\Test\\": "php/tests/"
-                }
-            },
-            "description": "The data-stream system for blockera products by collecting necessary data of user and website to connect with Blockera API.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "blockera/dev-phpunit",
             "version": "0.9.2",
             "dist": {
@@ -263,6 +236,33 @@
                 }
             },
             "description": "The blockera http abstraction package.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/telemetry",
+            "version": "0.9.2",
+            "dist": {
+                "type": "path",
+                "url": "packages/telemetry",
+                "reference": "0bafe7cccafbd9520ff45bb9669947728346f31b"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Telemetry\\": "php/"
+                },
+                "files": [
+                    "php/functions.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Blockera\\Telemetry\\Test\\": "php/tests/"
+                }
+            },
+            "description": "The telemetry system for blockera products by collecting necessary data of user and website to connect with Blockera API.",
             "transport-options": {
                 "relative": true
             }
@@ -1141,12 +1141,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "e02f7ba58b3f6428d146f0d6eec51468d22da9b7"
+                "reference": "5a75d3241418c47128647c9d55e599dec492d406"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/e02f7ba58b3f6428d146f0d6eec51468d22da9b7",
-                "reference": "e02f7ba58b3f6428d146f0d6eec51468d22da9b7",
+                "url": "https://api.github.com/repos/composer/composer/zipball/5a75d3241418c47128647c9d55e599dec492d406",
+                "reference": "5a75d3241418c47128647c9d55e599dec492d406",
                 "shasum": ""
             },
             "require": {
@@ -1248,7 +1248,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-28T20:58:03+00:00"
+            "time": "2024-10-29T15:12:11+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -2716,12 +2716,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "85402a822d1ecf1db1096959413d35e1c37cf1a5"
+                "reference": "0448d60087a382392a1b2a1abe434466e03dcc87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/85402a822d1ecf1db1096959413d35e1c37cf1a5",
-                "reference": "85402a822d1ecf1db1096959413d35e1c37cf1a5",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0448d60087a382392a1b2a1abe434466e03dcc87",
+                "reference": "0448d60087a382392a1b2a1abe434466e03dcc87",
                 "shasum": ""
             },
             "require": {
@@ -2778,7 +2778,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.32"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2"
             },
             "funding": [
                 {
@@ -2786,7 +2786,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-08-22T04:23:01+00:00"
+            "time": "2024-10-31T05:58:25+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3035,12 +3035,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fcd1efebc9510d2e1cff8fcf1b13ad2a7827d675"
+                "reference": "7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fcd1efebc9510d2e1cff8fcf1b13ad2a7827d675",
-                "reference": "fcd1efebc9510d2e1cff8fcf1b13ad2a7827d675",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a",
+                "reference": "7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a",
                 "shasum": ""
             },
             "require": {
@@ -3130,7 +3130,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-19T09:36:22+00:00"
+            "time": "2024-10-31T05:51:17+00:00"
         },
         {
             "name": "psr/log",
@@ -4400,12 +4400,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "0f5680ac2c81a757b4a62059fd6235db7a92e625"
+                "reference": "a22a1cbc1e9ebdd5c9cc1068a9dfb89e078f9aa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/0f5680ac2c81a757b4a62059fd6235db7a92e625",
-                "reference": "0f5680ac2c81a757b4a62059fd6235db7a92e625",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/a22a1cbc1e9ebdd5c9cc1068a9dfb89e078f9aa6",
+                "reference": "a22a1cbc1e9ebdd5c9cc1068a9dfb89e078f9aa6",
                 "shasum": ""
             },
             "require": {
@@ -4473,7 +4473,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-10-28T00:22:17+00:00"
+            "time": "2024-11-02T08:02:22+00:00"
         },
         {
             "name": "symfony/console",
@@ -5233,12 +5233,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "95f3f19d0f8f06e4253c66a0828ddb69f8b8ede4"
+                "reference": "32dfba3c124e9c0e9881be154d2becace258f4ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/95f3f19d0f8f06e4253c66a0828ddb69f8b8ede4",
-                "reference": "95f3f19d0f8f06e4253c66a0828ddb69f8b8ede4",
+                "url": "https://api.github.com/repos/symfony/process/zipball/32dfba3c124e9c0e9881be154d2becace258f4ac",
+                "reference": "32dfba3c124e9c0e9881be154d2becace258f4ac",
                 "shasum": ""
             },
             "require": {
@@ -5287,7 +5287,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:11:13+00:00"
+            "time": "2024-10-31T07:31:31+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -5761,12 +5761,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/checksum-command.git",
-                "reference": "bc82cfb0b1e24eec99cd1bfa515a62c63bd46936"
+                "reference": "d3d4a8c55aec7017abec07623fa5bccaedfa6813"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/checksum-command/zipball/bc82cfb0b1e24eec99cd1bfa515a62c63bd46936",
-                "reference": "bc82cfb0b1e24eec99cd1bfa515a62c63bd46936",
+                "url": "https://api.github.com/repos/wp-cli/checksum-command/zipball/d3d4a8c55aec7017abec07623fa5bccaedfa6813",
+                "reference": "d3d4a8c55aec7017abec07623fa5bccaedfa6813",
                 "shasum": ""
             },
             "require": {
@@ -5811,9 +5811,9 @@
             "homepage": "https://github.com/wp-cli/checksum-command",
             "support": {
                 "issues": "https://github.com/wp-cli/checksum-command/issues",
-                "source": "https://github.com/wp-cli/checksum-command/tree/v2.3.0"
+                "source": "https://github.com/wp-cli/checksum-command/tree/main"
             },
-            "time": "2024-10-01T21:53:46+00:00"
+            "time": "2024-11-01T08:22:49+00:00"
         },
         {
             "name": "wp-cli/config-command",
@@ -5821,12 +5821,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/config-command.git",
-                "reference": "effb7898bc6ffdaf8a0666432f3c8e35b715858e"
+                "reference": "7f022d10e5d68af6c58f78c8cf521976d5ec7196"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/config-command/zipball/effb7898bc6ffdaf8a0666432f3c8e35b715858e",
-                "reference": "effb7898bc6ffdaf8a0666432f3c8e35b715858e",
+                "url": "https://api.github.com/repos/wp-cli/config-command/zipball/7f022d10e5d68af6c58f78c8cf521976d5ec7196",
+                "reference": "7f022d10e5d68af6c58f78c8cf521976d5ec7196",
                 "shasum": ""
             },
             "require": {
@@ -5886,9 +5886,9 @@
             "homepage": "https://github.com/wp-cli/config-command",
             "support": {
                 "issues": "https://github.com/wp-cli/config-command/issues",
-                "source": "https://github.com/wp-cli/config-command/tree/v2.3.7"
+                "source": "https://github.com/wp-cli/config-command/tree/main"
             },
-            "time": "2024-10-01T10:19:18+00:00"
+            "time": "2024-11-01T08:38:48+00:00"
         },
         {
             "name": "wp-cli/core-command",

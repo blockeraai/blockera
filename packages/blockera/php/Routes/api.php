@@ -24,9 +24,9 @@ try {
 	$routes->get( 'settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'index' ] );
 	$routes->update( 'settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'response' ] );
 
-	if ( ! blockera_ds_is_off() ) {
+	if ( ! blockera_telemetry_is_off() ) {
 
-		$routes->post( 'opt-in', [ Blockera\DataStream\Http\Controllers\OptInController::class, 'optIn' ] );
+		$routes->post( 'telemetry/opt-in', [ Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn' ] );
 	}
 
 } catch ( Exception $exception ) {

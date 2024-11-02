@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\DataStream\DataProviders;
+namespace Blockera\Telemetry\DataProviders;
 
 interface DataProvider {
 
