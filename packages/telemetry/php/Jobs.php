@@ -48,11 +48,11 @@ class Jobs {
 	 */
 	public function addCronInterval( array $schedules ): array {
 
-		$schedules['6_days'] = array(
+		$schedules['blockera_6_days'] = array(
 			'interval' => 60 * 60 * 24 * 6,
 			'display'  => esc_html__( 'Every 6 Days', 'blockera' ),
 		);
-		$schedules['7_days'] = array(
+		$schedules['blockera_7_days'] = array(
 			'interval' => 60 * 60 * 24 * 7,
 			'display'  => esc_html__( 'Every 7 Days', 'blockera' ),
 		);
@@ -64,6 +64,20 @@ class Jobs {
 	 * @return string the stored option or empty from database.
 	 */
 	protected function getOption( string $key ): string {
+
+		$built_in_key = Config::getOptionKeys( $key );
+
+		if ( is_string( $built_in_key ) && ! empty( $built_in_key ) ) {
+
+			$value = get_option( $built_in_key );
+
+			if ( ! $value ) {
+
+				return '';
+			}
+
+			return $value;
+		}
 
 		if ( empty( $this->config['options'][ $key ] ) ) {
 
@@ -133,7 +147,7 @@ class Jobs {
 			$fields        = $metadata['wp-core']['fields'];
 			$url           = $fields['site_url']['value'];
 
-			$response = $this->sender->post(
+			$this->sender->post(
 				Config::getServerURL( '/sites/' . $site_id ),
 				[
 					'method'  => 'PUT',
@@ -144,8 +158,6 @@ class Jobs {
 					'body'    => compact( 'user_id', 'metadata', 'url', 'name', 'description' ),
 				]
 			);
-
-			dd( $this->sender->getResponseBody( $response ) );
 		}
 	}
 
@@ -158,11 +170,11 @@ class Jobs {
 
 		if ( ! wp_next_scheduled( 'blockera_each_six_days' ) ) {
 
-			wp_schedule_event( time(), '6_days', 'blockera_each_six_days' );
+			wp_schedule_event( time(), 'blockera_6_days', 'blockera_each_six_days' );
 		}
 		if ( ! wp_next_scheduled( 'blockera_each_seven_days' ) ) {
 
-			wp_schedule_event( time(), '7_days', 'blockera_each_seven_days' );
+			wp_schedule_event( time(), 'blockera_7_days', 'blockera_each_seven_days' );
 		}
 
 		add_option( $this->config['rest_params']['slug'] . '_do_activation_redirect', true );
@@ -176,6 +188,7 @@ class Jobs {
 	public function deactivationHook(): void {
 
 		wp_clear_scheduled_hook( 'blockera_each_six_days' );
+		wp_clear_scheduled_hook( 'blockera_each_seven_days' );
 	}
 
 	/**
@@ -192,7 +205,7 @@ class Jobs {
 
 			delete_option( $option );
 
-			if ( is_admin() && current_user_can( 'manage_options' ) ) {
+			if ( is_admin() && current_user_can( 'activate_plugins' ) ) {
 
 				// Redirect to plugin dashboard or settings page.
 				wp_redirect( admin_url( 'admin.php?page=' . $this->config['dashboard_page'] ) );
