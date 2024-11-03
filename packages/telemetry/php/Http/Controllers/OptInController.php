@@ -143,7 +143,7 @@ class OptInController extends RestController {
 
 		// Send to https://api.blockera.ai.
 		$result = $this->sender->post(
-			Config::getServerURL( '/user/register' ),
+			Config::getServerURL( '/auth/register' ),
 			[
 				'headers' => [
 					'Accept' => 'application/json',

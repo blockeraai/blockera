@@ -105,8 +105,8 @@ class Jobs {
 
 		if ( $token ) {
 
-			$response = $this->sender->get(
-				Config::getServerURL( '/refresh-token' ),
+			$response = $this->sender->post(
+				Config::getServerURL( '/auth/refresh-token' ),
 				[
 					'headers' => [
 						'Accept'        => 'application/json',
@@ -119,8 +119,11 @@ class Jobs {
 
 				$response = $this->sender->getResponseBody( $response );
 
-				// Update the token recieved from server.
-				echo update_option( $this->config['options']['token'], $response['data']['token'] );
+				if ( isset( $response['data']['token'] ) ) {
+
+					// Update the token recieved from server.
+					update_option( Config::getOptionKeys( 'token' ), $response['data']['token'] );
+				}
 			}
 		}
 	}
