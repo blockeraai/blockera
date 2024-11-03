@@ -2,10 +2,10 @@
 
 namespace Blockera\Telemetry\Http\Controllers;
 
-use Blockera\Exceptions\BaseException;
 use Blockera\Telemetry\Config;
-use Blockera\Telemetry\DataProviders\DebugDataProvider;
 use Blockera\Http\RestController;
+use Blockera\Exceptions\BaseException;
+use Blockera\Telemetry\DataProviders\DebugDataProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -24,7 +24,7 @@ class OptInController extends RestController {
 	 */
 	public function permission( \WP_REST_Request $request ): bool {
 
-		return current_user_can( 'activate_plugins' );
+		return current_user_can( 'manage_options' );
 	}
 
 	/**
@@ -40,33 +40,24 @@ class OptInController extends RestController {
 
 		$params     = $request->get_params();
 		$option_key = Config::getOptionKeys( 'opt_in_status' );
+		try {
 
-		$this->validate( $params, $option_key );
+			$this->validate( $params, $option_key );
 
-		// We're being sure of user agreed to opt-in https://api.blockera.ai.
-		if ( 'SKIP' === $params['opt-in-agreed'] ) {
+			// We're being sure of user agreed to opt-in https://api.blockera.ai.
+			if ( 'SKIP' === $params['opt-in-agreed'] ) {
 
-			// Don't show the opt-in modal again.
-			$updated = update_option( $option_key, $params['opt-in-agreed'] );
+				// Don't show the opt-in modal again.
+				$updated = update_option( $option_key, $params['opt-in-agreed'] );
 
-			if ( ! $updated ) {
+				if ( ! $updated ) {
 
-				throw new BaseException( __( 'Server Error, please try again.', 'blockera' ), 500 );
+					throw new BaseException( __( 'Server Error, please try again.', 'blockera' ), 500 );
+				}
+
+				throw new BaseException( __( 'Your successfully skipped opt-in to Blockera Info!', 'blockera' ), 200 );
 			}
 
-			return new \WP_REST_Response(
-				[
-					'code'    => 200,
-					'success' => true,
-					'data'    => [
-						'message' => __( 'Your successfully skipped opt-in to Blockera Info!', 'blockera' ),
-					],
-				],
-				200
-			);
-		}
-
-		try {
 			return $this->register( $option_key );
 
 		} catch ( BaseException $exception ) {
@@ -120,9 +111,14 @@ class OptInController extends RestController {
 		}
 
 		// We're not attempting a telemetry action or the user did not respond to the opt-in modal.
-		if ( isset( $params['action'] ) && $option_key !== $params['action'] || ! isset( $params['opt-in-agreed'] ) ) {
+		if ( isset( $params['action'] ) && 'telemetry-opt-in-status' !== $params['action'] || ! isset( $params['opt-in-agreed'] ) ) {
 
 			throw new BaseException( __( 'Bad Request!', 'blockera' ), 400 );
+		}
+
+		if ( in_array( get_option( $option_key ), [ 'ALLOW', 'SKIP' ], true ) ) {
+
+			throw new BaseException( __( "You're already opted in! Thanks for staying with us. If there's anything you need, feel free to reach out!", 'blockera' ), 200 );
 		}
 	}
 
@@ -136,6 +132,14 @@ class OptInController extends RestController {
 	 * @return \WP_REST_Response the instance of \WP_REST_Response.
 	 */
 	protected function register( string $option_key ): \WP_REST_Response {
+
+		$user_id = get_option( Config::getOptionKeys( 'user_id' ) );
+		$token   = get_option( Config::getOptionKeys( 'token' ) );
+
+		if ( $user_id && $token ) {
+
+			return $this->updateOptIn();
+		}
 
 		// Send to https://api.blockera.ai.
 		$result = $this->sender->post(
@@ -156,14 +160,16 @@ class OptInController extends RestController {
 
 		$response = $this->sender->getResponseBody( $result );
 
-		if ( isset( $response['errors'] ) ) {
+		$this->handleServerError( $response );
 
-			return $this->handleServerError( $response );
-		}
+		$token   = $response['data']['token'];
+		$user_id = $response['data']['user_id'];
 
-		$token       = $response['data']['token'];
-		$user_id     = $response['data']['user_id'];
-		$name        = Config::getRestParams( 'slug' );
+		// Store ...
+		update_option( Config::getOptionKeys( 'token' ), $token );
+		update_option( Config::getOptionKeys( 'user_id' ), $user_id );
+
+		$name        = get_bloginfo( 'name', 'display' );
 		$description = get_bloginfo( 'description', 'display' );
 
 		/**
@@ -171,11 +177,11 @@ class OptInController extends RestController {
 		 */
 		$debug_data_provider = $this->app->make( DebugDataProvider::class );
 		$metadata            = $debug_data_provider->getSiteData();
-		$fields              = $metadata['wp-core']['fields'];
-		$url                 = $fields['site_url']['value'];
 
-		update_option( Config::getOptionKeys( 'token' ), $token );
-		update_option( Config::getOptionKeys( 'user_id' ), $user_id );
+		$metadata['product-slugs'][] = Config::getRestParams( 'slug' );
+
+		$fields = $metadata['wp-core']['fields'];
+		$url    = $fields['site_url']['value'];
 
 		$result = $this->sender->post(
 			Config::getServerURL( '/sites' ),
@@ -196,10 +202,7 @@ class OptInController extends RestController {
 
 		$response = $this->sender->getResponseBody( $result );
 
-		if ( isset( $response['errors'] ) ) {
-
-			return $this->handleServerError( $response );
-		}
+		$this->handleServerError( $response );
 
 		$site_id = $response['data']['site_id'];
 
@@ -231,19 +234,19 @@ class OptInController extends RestController {
 	/**
 	 * Handling server error.
 	 *
-	 * @param array $response the server repsonse.
+	 * @param array $response the server response.
 	 *
-	 * @return \WP_REST_Response the instance of WP_REST_Response.
+	 * @throws BaseException The exception fired while recieved the server errors.
+	 * @return void
 	 */
-	protected function handleServerError( array $response ): \WP_REST_Response {
+	protected function handleServerError( array $response ): void {
 
-		$last_error = array_key_last( $response['errors'] );
+		if ( isset( $response['errors'] ) ) {
 
-		return new \WP_REST_Response(
-			[
-				'code'    => $response['code'],
-				'success' => false,
-				'data'    => implode(
+			$last_error = array_key_last( $response['errors'] );
+
+			throw new BaseException(
+				$response['errors']['message'] ?? implode(
 					', ',
 					array_map(
 						static function ( array $item, $key ) use ( $last_error ): string {
@@ -254,9 +257,79 @@ class OptInController extends RestController {
 						array_keys( $response['errors'] )
 					)
 				),
-			],
-			$response['code']
-		);
+				$response['code']
+			);
+
+		} elseif ( isset( $response['message'] ) && 'Unauthenticated.' === $response['message'] ) {
+
+			throw new BaseException( $response['message'], 401 );
+		}
+	}
+
+	/**
+	 *
+	 * @throws BindingResolutionException|BaseException The exception fired while occurred errors or update process fails.
+	 * @return \WP_REST_Response the instance of WP_REST_Response.
+	 */
+	protected function updateOptIn(): \WP_REST_Response {
+
+		$token   = get_option( Config::getOptionKeys( 'token' ) );
+		$user_id = get_option( Config::getOptionKeys( 'user_id' ) );
+		$site_id = get_option( Config::getOptionKeys( 'site_id' ) );
+
+		if ( $token && $user_id ) {
+
+			$name        = get_bloginfo( 'name', 'display' );
+			$description = get_bloginfo( 'description', 'display' );
+
+			/**
+			 * @var DebugDataProvider $debug_data_provider the instance of DebugDataProvider class.
+			 */
+			$data_provider = $this->app->make( DebugDataProvider::class );
+			$metadata      = $data_provider->getSiteData();
+
+			$metadata['product-slugs'][] = Config::getRestParams( 'slug' );
+
+			$url = $metadata['wp-core']['fields']['site_url']['value'];
+
+			$result = $this->sender->post(
+				Config::getServerURL( '/sites/' . $site_id ),
+				[
+					'method'  => 'PUT',
+					'headers' => [
+						'Accept'        => 'application/json',
+						'Authorization' => 'Bearer ' . $token,
+					],
+					'body'    => compact( 'user_id', 'metadata', 'url', 'name', 'description' ),
+				]
+			);
+
+			// Server error respond!
+			if ( is_wp_error( $result ) ) {
+
+				throw new BaseException( $result->get_error_message(), 500 );
+			}
+
+			$response = $this->sender->getResponseBody( $result );
+
+			$this->handleServerError( $response );
+
+			// User opted-in.
+			update_option( Config::getOptionKeys( 'opt_in_status' ), 'ALLOW' );
+
+			return new \WP_REST_Response(
+				[
+					'code'    => 200,
+					'success' => true,
+					'data'    => [
+						'message' => __( 'Congratulation 🎉', 'blockera' ),
+					],
+				],
+				200
+			);
+		}
+
+		throw new BaseException( __( 'Token or User ID was not exists!', 'blockera' ), 500 );
 	}
 
 }
