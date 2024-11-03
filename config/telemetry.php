@@ -39,19 +39,7 @@ return [
 		/**
 		 * The option name to save opt_in_status
 		 */
-		'opt_in_status' => 'telemetry-opt-in-status',
-		/**
-		 * The option name to save recieved token after opt-in.
-		 */
-		'token'         => 'telemetry-token',
-		/**
-		 * The option name to save user_id after opt-in.
-		 */
-		'user_id'       => 'telemetry-user-id',
-		/**
-		 * The option name to save site_id after opt-in.
-		 */
-		'site_id'       => 'telemetry-site-id',
+		'opt_in_status' => 'blockera-opt-in-status',
 	],
 	'opt_in_description'      => __(
 		"We have introduced this opt-in so you never miss an important update and help us make the plugin more compatible with your site and better at doing what you need it to. Opt in to get email notifications for security & feature updates, and to share some basic WordPress environment info. If you skip this, that's okay! Blockera will still work just fine. What permission are being granted?",

@@ -90,11 +90,25 @@ class Config {
 	 */
 	public static function getOptionKeys( string $key = '' ) {
 
+		// Built-in keys.
+		switch ( $key ) {
+			case 'token':
+				self::$option_keys[ $key ] = 'telemetry-token';
+				break;
+			case 'site_id':
+				self::$option_keys[ $key ] = 'telemetry-site-id';
+				break;
+			case 'user_id':
+				self::$option_keys[ $key ] = 'telemetry-user-id';
+				break;
+		}
+
 		if ( empty( self::$option_keys[ $key ] ) ) {
 
 			return self::$option_keys;
 		}
 
+		// Customize keys.
 		return self::$option_keys[ $key ];
 	}
 
