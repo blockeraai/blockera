@@ -990,12 +990,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "66457b8698063a414b782c859b6d3bac3dc357b3"
+                "reference": "3b1fc3f0be055baa7c6258b1467849c3e8204eb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/66457b8698063a414b782c859b6d3bac3dc357b3",
-                "reference": "66457b8698063a414b782c859b6d3bac3dc357b3",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/3b1fc3f0be055baa7c6258b1467849c3e8204eb2",
+                "reference": "3b1fc3f0be055baa7c6258b1467849c3e8204eb2",
                 "shasum": ""
             },
             "require": {
@@ -1043,7 +1043,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/main"
+                "source": "https://github.com/composer/ca-bundle/tree/1.5.3"
             },
             "funding": [
                 {
@@ -1059,7 +1059,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-02T10:54:27+00:00"
+            "time": "2024-11-04T10:15:26+00:00"
         },
         {
             "name": "composer/class-map-generator",
@@ -4400,12 +4400,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "a22a1cbc1e9ebdd5c9cc1068a9dfb89e078f9aa6"
+                "reference": "c2b6235e5ba1c2665c520564c5f978f393a3b382"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/a22a1cbc1e9ebdd5c9cc1068a9dfb89e078f9aa6",
-                "reference": "a22a1cbc1e9ebdd5c9cc1068a9dfb89e078f9aa6",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/c2b6235e5ba1c2665c520564c5f978f393a3b382",
+                "reference": "c2b6235e5ba1c2665c520564c5f978f393a3b382",
                 "shasum": ""
             },
             "require": {
@@ -4473,7 +4473,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-11-02T08:02:22+00:00"
+            "time": "2024-11-02T09:58:19+00:00"
         },
         {
             "name": "symfony/console",
@@ -5233,12 +5233,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "32dfba3c124e9c0e9881be154d2becace258f4ac"
+                "reference": "d94dda5a49f8e43523d6966ab705a754001d42fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/32dfba3c124e9c0e9881be154d2becace258f4ac",
-                "reference": "32dfba3c124e9c0e9881be154d2becace258f4ac",
+                "url": "https://api.github.com/repos/symfony/process/zipball/d94dda5a49f8e43523d6966ab705a754001d42fe",
+                "reference": "d94dda5a49f8e43523d6966ab705a754001d42fe",
                 "shasum": ""
             },
             "require": {
@@ -5287,7 +5287,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-31T07:31:31+00:00"
+            "time": "2024-11-04T10:57:54+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -8019,21 +8019,21 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "vlucas/phpdotenv": 20,
         "illuminate/container": 20,
-        "symfony/dom-crawler": 20,
         "symfony/css-selector": 20,
+        "symfony/dom-crawler": 20,
+        "symfony/var-dumper": 20,
+        "vlucas/phpdotenv": 20,
         "voku/simple_html_dom": 20,
         "wp-phpunit/wp-phpunit": 20,
-        "yoast/phpunit-polyfills": 20,
-        "symfony/var-dumper": 20
+        "yoast/phpunit-polyfills": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.4"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "7.4"
     },
