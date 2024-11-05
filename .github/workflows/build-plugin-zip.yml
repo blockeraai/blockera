@@ -201,22 +201,6 @@ jobs:
                   name: blockera
                   path: ./blockera.zip
 
-            - name: Get artifact ID
-              id: get_artifact_id
-              run: |
-                  ARTIFACTS_URL="https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
-                  ARTIFACT_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                  $ARTIFACTS_URL | jq '.artifacts[] | select(.name == "blockera.zip") | .id')
-                  echo "artifact_id=$ARTIFACT_ID" >> $GITHUB_ENV
-
-            - name: Construct download link
-              run: |
-                  REPO_NAME="${{ github.repository }}"
-                  RUN_ID="${{ github.run_id }}"
-                  ARTIFACT_ID="${{ env.artifact_id }}"
-                  DOWNLOAD_LINK="https://github.com/$REPO_NAME/actions/runs/$RUN_ID/artifacts/$ARTIFACT_ID"
-                  echo "download_link=$DOWNLOAD_LINK" >> $GITHUB_ENV
-
             - name: Build release notes draft
               if: ${{ needs.bump-version.outputs.new_version }}
               env:
@@ -302,7 +286,7 @@ jobs:
             - name: Download Plugin Zip Artifact
               uses: actions/download-artifact@v4
               with:
-                  name: blockera.zip
+                  name: blockera
 
             - name: Download Release Notes Artifact
               uses: actions/download-artifact@v4
