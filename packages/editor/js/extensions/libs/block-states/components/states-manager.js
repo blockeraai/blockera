@@ -46,6 +46,9 @@ import { LabelDescription } from './label-description';
 import { PopoverTitleButtons } from './popover-title-buttons';
 import { getBaseBreakpoint } from '../../../../canvas-editor';
 
+// the instance of in-memory cache.
+const deletedCache: Object = new Map();
+
 const isMasterBlockStates = (id: string): boolean =>
 	'master-block-states' === id;
 
@@ -171,6 +174,9 @@ const StatesManager: ComponentType<any> = memo(
 				[key: TStates]: Object,
 			}
 		): Object => {
+			// add the latest-deleted item in cache.
+			deletedCache.set('latest-deleted', itemId);
+
 			const filteredStates: {
 				[key: TStates]: Object,
 			} = {};
@@ -300,9 +306,18 @@ const StatesManager: ComponentType<any> = memo(
 							): Object => {
 								const defaultItem = {
 									...defaultRepeaterItemValue,
-									...getStateInfo(statesCount),
+									...getStateInfo(
+										// try to read latest-deleted key value from cache.
+										deletedCache.get('latest-deleted') ||
+											statesCount
+									),
 									display: true,
 								};
+
+								// while the exits latest-deleted in-memory data we should be removed it.
+								if (deletedCache.get('latest-deleted')) {
+									deletedCache.delete('latest-deleted');
+								}
 
 								if (
 									['custom-class', 'parent-class'].includes(
