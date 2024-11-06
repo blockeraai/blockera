@@ -4,7 +4,7 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -24,8 +24,6 @@ import states from '../states';
 import type { TStates } from '../types';
 import { getStateInfo } from '../helpers';
 import { LabelDescription } from './label-description';
-import { isNormalState } from '../../../components/utils';
-import { getBaseBreakpoint } from '../../../../canvas-editor';
 
 const ItemBody = ({
 	item,
@@ -49,11 +47,11 @@ const ItemBody = ({
 		useContext(RepeaterContext);
 
 	// clone options
-	const options = { ...states };
+	const options = applyFilters(
+		'blockera.editor.extensions.blockStates.availableStates',
+		{ ...states }
+	);
 	delete options.normal;
-
-	const { getBreakpoints } = select('blockera/editor');
-	const breakpoints = getBreakpoints();
 
 	return (
 		<>
@@ -74,17 +72,9 @@ const ItemBody = ({
 				onChange={(newValue: TStates): void => {
 					const dynamicValue = getStateInfo(newValue);
 
-					if (isNormalState(newValue)) {
-						delete breakpoints[getBaseBreakpoint()]?.attributes;
-					}
-
 					let value = {
 						...item,
 						...dynamicValue,
-						breakpoints:
-							item?.breakpoints?.length > 1
-								? item.breakpoints
-								: breakpoints,
 						isSelected: true,
 					};
 
@@ -101,6 +91,7 @@ const ItemBody = ({
 						onChange,
 						controlId,
 						valueCleanup,
+						staticType: newValue,
 						getId: (): TStates => newValue,
 					});
 				}}
