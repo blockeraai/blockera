@@ -47,7 +47,7 @@ import { PopoverTitleButtons } from './popover-title-buttons';
 import { getBaseBreakpoint } from '../../../../canvas-editor';
 
 // the instance of in-memory cache.
-const deletedCache: Object = new Map();
+const deleteCacheData: Object = new Map();
 
 const isMasterBlockStates = (id: string): boolean =>
 	'master-block-states' === id;
@@ -162,102 +162,6 @@ const StatesManager: ComponentType<any> = memo(
 			// eslint-disable-next-line
 		}, [currentBlock, states, currentBreakpoint]);
 
-		const valueCleanup = useCallback(
-			blockStatesValueCleanup,
-			// eslint-disable-next-line
-			[]
-		);
-
-		const onDelete = (
-			itemId: TStates,
-			items: {
-				[key: TStates]: Object,
-			}
-		): Object => {
-			// add the latest-deleted item in cache.
-			deletedCache.set('latest-deleted', itemId);
-
-			const filteredStates: {
-				[key: TStates]: Object,
-			} = {};
-			const itemsCount = Object.keys(items).length;
-
-			Object.entries(items).forEach(
-				([_itemId, _item]: [
-					TStates,
-					{ ...StateTypes, isSelected: boolean }
-				]): void => {
-					if (_itemId === itemId) {
-						return;
-					}
-
-					if (itemsCount < 3) {
-						filteredStates[_itemId] = {
-							..._item,
-							display: false,
-						};
-
-						return;
-					}
-
-					if ('normal' === _itemId) {
-						if (items[itemId].isSelected) {
-							// Assume deleted item was selected item
-							filteredStates[_itemId] = {
-								..._item,
-								isSelected: true,
-							};
-
-							return;
-						}
-
-						filteredStates[_itemId] = {
-							..._item,
-						};
-
-						return;
-					}
-
-					filteredStates[_itemId] = _item;
-				}
-			);
-
-			let isDeletedItem: boolean = false;
-
-			// $FlowFixMe
-			for (const stateType: TStates in clonedSavedStates) {
-				if (!filteredStates[stateType]) {
-					isDeletedItem = true;
-					delete clonedSavedStates[stateType];
-				}
-			}
-
-			if (isDeletedItem) {
-				// Remove base breakpoint of normal state.
-				delete clonedSavedStates?.normal?.breakpoints[
-					getBaseBreakpoint()
-				];
-
-				// Remove normal state while not exists any breakpoints.
-				if (
-					!Object.keys(clonedSavedStates?.normal?.breakpoints || {})
-						.length
-				) {
-					delete clonedSavedStates?.normal;
-				}
-
-				onChange(
-					'blockeraBlockStates',
-					!Object.keys(clonedSavedStates).length
-						? {}
-						: clonedSavedStates,
-					{}
-				);
-			}
-
-			return filteredStates;
-		};
-
 		const defaultRepeaterItemValue = {
 			deletable: true,
 			selectable: true,
@@ -271,6 +175,188 @@ const StatesManager: ComponentType<any> = memo(
 			attribute: 'blockeraBlockStates',
 			name: generateExtensionId(block, id, false),
 		};
+
+		const valueCleanup = useCallback(
+			blockStatesValueCleanup,
+			// eslint-disable-next-line
+			[]
+		);
+		const onDelete = useCallback(
+			(
+				itemId: TStates,
+				items: {
+					[key: TStates]: Object,
+				}
+			): Object => {
+				// add the latest-deleted item in cache.
+				deleteCacheData.set('deleted-items', [
+					...(deleteCacheData.get('deleted-items') || []),
+					itemId,
+				]);
+
+				const filteredStates: {
+					[key: TStates]: Object,
+				} = {};
+				const itemsCount = Object.keys(items).length;
+
+				Object.entries(items).forEach(
+					([_itemId, _item]: [
+						TStates,
+						{ ...StateTypes, isSelected: boolean }
+					]): void => {
+						if (_itemId === itemId) {
+							return;
+						}
+
+						if (itemsCount < 3) {
+							filteredStates[_itemId] = {
+								..._item,
+								display: false,
+							};
+
+							return;
+						}
+
+						if ('normal' === _itemId) {
+							if (items[itemId].isSelected) {
+								// Assume deleted item was selected item
+								filteredStates[_itemId] = {
+									..._item,
+									isSelected: true,
+								};
+
+								return;
+							}
+
+							filteredStates[_itemId] = {
+								..._item,
+							};
+
+							return;
+						}
+
+						filteredStates[_itemId] = _item;
+					}
+				);
+
+				let isDeletedItem: boolean = false;
+
+				// $FlowFixMe
+				for (const stateType: TStates in clonedSavedStates) {
+					if (!filteredStates[stateType]) {
+						isDeletedItem = true;
+						delete clonedSavedStates[stateType];
+					}
+				}
+
+				if (isDeletedItem) {
+					// Remove base breakpoint of normal state.
+					delete clonedSavedStates?.normal?.breakpoints[
+						getBaseBreakpoint()
+					];
+
+					// Remove normal state while not exists any breakpoints.
+					if (
+						!Object.keys(
+							clonedSavedStates?.normal?.breakpoints || {}
+						).length
+					) {
+						delete clonedSavedStates?.normal;
+					}
+
+					onChange(
+						'blockeraBlockStates',
+						!Object.keys(clonedSavedStates).length
+							? {}
+							: clonedSavedStates,
+						{}
+					);
+				}
+
+				return filteredStates;
+			},
+			// eslint-disable-next-line
+			[clonedSavedStates]
+		);
+		/**
+		 * Retrieve dynamic default value for repeater items.
+		 *
+		 * @param {number} statesCount the states counter.
+		 * @param {Object} defaultRepeaterItemValue the state item default value.
+		 * @return {{settings: {max: number, min: number, color: string, cssSelector?: string}, force: boolean, label: string, breakpoints: Array<Object>, type: TStates}} the
+		 * state item with dynamic default value.
+		 */
+		const getDynamicDefaultRepeaterItem = useCallback(
+			(statesCount: number, defaultRepeaterItemValue: Object): Object => {
+				const deletedItems = deleteCacheData.get('deleted-items');
+				const defaultItem = {
+					...defaultRepeaterItemValue,
+					...getStateInfo(
+						// If deletedItems has items try to add first index of that else add suitable items for statesCount value.
+						deletedItems?.length ? deletedItems[0] : statesCount
+					),
+					display: true,
+				};
+
+				// If deletedItems has items try to update in-memory cache.
+				if (deletedItems?.length) {
+					deletedItems.splice(0, 1);
+
+					deleteCacheData.set('deleted-items', deletedItems);
+				}
+
+				if (
+					['custom-class', 'parent-class'].includes(defaultItem.type)
+				) {
+					defaultItem['css-class'] = '';
+				}
+
+				defaultItem.breakpoints = getBreakpoints(defaultItem.type);
+
+				return defaultItem;
+			},
+			// eslint-disable-next-line
+			[]
+		);
+		const handleOnChange = useCallback(
+			(newValue: Object) =>
+				onChangeBlockStates(newValue, {
+					states,
+					onChange,
+					currentState,
+					currentBlock,
+					valueCleanup,
+					getStateInfo,
+					getBlockStates,
+					currentInnerBlockState,
+					isMasterBlockStates: isMasterBlockStates(id),
+				}),
+			// eslint-disable-next-line
+			[currentBlock, currentInnerBlockState, currentState, id, states]
+		);
+		//Override item when occurred clone action!
+		const overrideItem = useCallback((item) => {
+			if ('normal' === item.type) {
+				return {
+					deletable: true,
+					visibilitySupport: true,
+					breakpoints: item?.breakpoints?.map(
+						(b: BreakpointTypes): BreakpointTypes => {
+							if (getBaseBreakpoint() === b.type) {
+								return {
+									...b,
+									attributes: {},
+								};
+							}
+
+							return b;
+						}
+					),
+				};
+			}
+
+			return {};
+		}, []);
 
 		return (
 			<ControlContextProvider
@@ -292,89 +378,10 @@ const StatesManager: ComponentType<any> = memo(
 							maxItems: Object.keys(preparedStates).length,
 							valueCleanup: (value) => value,
 							selectable: true,
-							/**
-							 * Retrieve dynamic default value for repeater items.
-							 *
-							 * @param {number} statesCount the states counter.
-							 * @param {Object} defaultRepeaterItemValue the state item default value.
-							 * @return {{settings: {max: number, min: number, color: string, cssSelector?: string}, force: boolean, label: string, breakpoints: Array<Object>, type: TStates}} the
-							 * state item with dynamic default value.
-							 */
-							getDynamicDefaultRepeaterItem: (
-								statesCount: number,
-								defaultRepeaterItemValue: Object
-							): Object => {
-								const defaultItem = {
-									...defaultRepeaterItemValue,
-									...getStateInfo(
-										// try to read latest-deleted key value from cache.
-										deletedCache.get('latest-deleted') ||
-											statesCount
-									),
-									display: true,
-								};
-
-								// while the exits latest-deleted in-memory data we should be removed it.
-								if (deletedCache.get('latest-deleted')) {
-									deletedCache.delete('latest-deleted');
-								}
-
-								if (
-									['custom-class', 'parent-class'].includes(
-										defaultItem.type
-									)
-								) {
-									defaultItem['css-class'] = '';
-								}
-
-								defaultItem.breakpoints = getBreakpoints(
-									defaultItem.type
-								);
-
-								return defaultItem;
-							},
+							getDynamicDefaultRepeaterItem,
 							defaultRepeaterItemValue,
-							onChange: (newValue: Object) =>
-								onChangeBlockStates(newValue, {
-									states,
-									onChange,
-									currentState,
-									currentBlock,
-									valueCleanup,
-									getStateInfo,
-									getBlockStates,
-									currentInnerBlockState,
-									isMasterBlockStates:
-										isMasterBlockStates(id),
-								}),
-							//Override item when occurred clone action!
-							overrideItem: (item) => {
-								if ('normal' === item.type) {
-									return {
-										deletable: true,
-										visibilitySupport: true,
-										breakpoints: item?.breakpoints?.map(
-											(
-												b: BreakpointTypes
-											): BreakpointTypes => {
-												if (
-													getBaseBreakpoint() ===
-													b.type
-												) {
-													return {
-														...b,
-														attributes: {},
-													};
-												}
-
-												return b;
-											}
-										),
-									};
-								}
-
-								return {};
-							},
+							onChange: handleOnChange,
+							overrideItem,
 							repeaterItemHeader: ItemHeader,
 							repeaterItemOpener: ItemOpener,
 							repeaterItemChildren: ItemBody,
