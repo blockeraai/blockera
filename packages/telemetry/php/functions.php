@@ -13,16 +13,16 @@ if ( ! function_exists( 'blockera_telemetry_opt_in_is_off' ) ) {
 
 		$is_disabled = in_array( get_option( "$slug-opt-in-status" ), [ 'SKIP', 'ALLOW' ], true );
 
-		if ( isset( $_ENV['BLOCKERA_TELEMETRY_OPT_IN_OFF'] ) && 'false' !== $_ENV['BLOCKERA_TELEMETRY_OPT_IN_OFF'] ) {
+		if ( isset( $_ENV['BLOCKERA_TELEMETRY_OPT_IN_OFF'] ) ) {
 
-			return $is_disabled;
+			return ! ( 'false' === $_ENV['BLOCKERA_TELEMETRY_OPT_IN_OFF'] );
 		}
 
-		if ( ! defined( 'BLOCKERA_TELEMETRY_OPT_IN_OFF' ) ) {
+		if ( defined( 'BLOCKERA_TELEMETRY_OPT_IN_OFF' ) ) {
 
-			return $is_disabled;
+			return BLOCKERA_TELEMETRY_OPT_IN_OFF;
 		}
 
-		return BLOCKERA_TELEMETRY_OPT_IN_OFF && $is_disabled;
+		return $is_disabled;
 	}
 }
