@@ -42,13 +42,20 @@ class AdminAssetsProvider extends AssetsProvider {
 
 		$assets = $this->getAssets();
 
+		// By default, we skip boot method of AdminAssetsProvider.
+		$skip = true;
+
 		// phpcs:ignore
 		if ( ! empty( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'blockera-settings' ) ) {
+
+			$skip = false;
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script', [ $this, 'createInlineScript' ] );
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
 
-		} elseif ( ! blockera_telemetry_is_off() ) {
+		} elseif ( ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
+
+			$skip = false;
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script', [ $this, 'telemetryInlineScripts' ] );
 
@@ -61,6 +68,12 @@ class AdminAssetsProvider extends AssetsProvider {
 			);
 
 			unset( $assets[ array_search( 'blockera-admin', $assets, true ) ] );
+		}
+
+		// Skip process while current page was not valid or telemetry process is disabled!
+		if ( $skip ) {
+
+			return;
 		}
 
 		$this->app->make(
@@ -123,7 +136,7 @@ class AdminAssetsProvider extends AssetsProvider {
 	public function telemetryInlineScripts(): string {
 
 		return 'window.blockeraTermsOfServicesLink = "' . blockera_core_config( 'telemetry.terms_of_services_link' ) . '";
-				window.blockeraTelemetryIsOff = "' . ! blockera_telemetry_is_off() . '";
+				window.blockeraTelemetryIsOff = "' . ! blockera_telemetry_opt_in_is_off( 'blockera' ) . '";
 				window.blockeraOptInStatus = "' . get_option( blockera_core_config( 'telemetry.options.opt_in_status' ), null ) . '";
 				window.blockeraPrivacyAndPolicyLink = "' . blockera_core_config( 'telemetry.privacy_and_policy_link' ) . '";
 				window.blockeraOptInDescription = "' . blockera_core_config( 'telemetry.opt_in_description' ) . '";';

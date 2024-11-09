@@ -25,7 +25,7 @@ class Jobs {
 	 */
 	public function __construct( Sender $sender, string $plugin_file, array $config ) {
 
-		if ( ! blockera_telemetry_is_off() ) {
+		if ( ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
 
 			$this->sender = $sender;
 			$this->config = $config;
@@ -201,7 +201,7 @@ class Jobs {
 	 */
 	public function redirectToDashboard(): void {
 
-		if ( blockera_telemetry_is_off() ) {
+		if ( blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
 
 			return;
 		}

@@ -8,11 +8,11 @@
     "packages": [
         {
             "name": "blockera/blockera",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/blockera",
-                "reference": "70c2603f886fb91a834bb26c410b31bd4b546409"
+                "reference": "5b189a2505c550844a0a9a707d8d1128a9dbac37"
             },
             "type": "library",
             "autoload": {
@@ -35,11 +35,11 @@
         },
         {
             "name": "blockera/blockera-admin",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/blockera-admin",
-                "reference": "e5b85be465ccb52cfb0b1e70bafb691a9a083670"
+                "reference": "efb31727d6fb81e43093dd8d2c2a6c5c2acf4065"
             },
             "type": "library",
             "autoload": {
@@ -57,11 +57,11 @@
         },
         {
             "name": "blockera/blocks-core",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/blocks/core",
-                "reference": "7d8c0de8c4e8f4b6f926a0a10b02bc0c64d54a0f"
+                "reference": "10b563682e6fe4588d10809ac210d5113d0f9a66"
             },
             "type": "library",
             "autoload": {
@@ -79,11 +79,11 @@
         },
         {
             "name": "blockera/bootstrap",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/bootstrap",
-                "reference": "6c600d291848d5e95d4c894a9ade9c27ebdb079c"
+                "reference": "846e0e79e6aaba6b1865932091f5c92d0918729a"
             },
             "type": "library",
             "autoload": {
@@ -98,11 +98,11 @@
         },
         {
             "name": "blockera/data",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/data",
-                "reference": "a6ffe882e4f7520b6c5b4908ee2bec1bfb653dd5"
+                "reference": "c110e8cb0330f5c55c6efc2e0f013ddacfa58439"
             },
             "type": "library",
             "autoload": {
@@ -117,11 +117,11 @@
         },
         {
             "name": "blockera/data-editor",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/data-editor",
-                "reference": "01546c294a61d39bebeedece9abdb08b1e4aa3c5"
+                "reference": "b7fc5f5dceb989ba71288002d42ffd371ecc6fae"
             },
             "type": "library",
             "autoload": {
@@ -136,11 +136,11 @@
         },
         {
             "name": "blockera/dev-phpunit",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/dev-phpunit",
-                "reference": "b5c08d818b5ad7a418aeae4ef3ba5d99d95ed2ff"
+                "reference": "1c0c9df0767eb4e9a3537618a7dc7e06d8ed28d5"
             },
             "type": "library",
             "autoload-dev": {
@@ -155,11 +155,11 @@
         },
         {
             "name": "blockera/editor",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/editor",
-                "reference": "9fa0a2526ec1b70e524e502bbd7044a1ac75a038"
+                "reference": "11565f19a4bb96d88f233085149668023ed01793"
             },
             "type": "library",
             "autoload": {
@@ -182,11 +182,11 @@
         },
         {
             "name": "blockera/env",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/env",
-                "reference": "72b723a27b1cc06f5ae735be6c99c30b08fbf4bc"
+                "reference": "9e78bd120c211f116b3fcb8df02665e949c38f6d"
             },
             "type": "library",
             "autoload": {
@@ -204,11 +204,11 @@
         },
         {
             "name": "blockera/exceptions",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/exceptions",
-                "reference": "bcc9806b69010c828af345026d9873058569cc37"
+                "reference": "1582e294ef2e373f8f0ce86a79edf7490e5c22d0"
             },
             "type": "library",
             "autoload": {
@@ -223,11 +223,11 @@
         },
         {
             "name": "blockera/http",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/http",
-                "reference": "533a60e2c380f0a8528b299aaf28cae87c5975f5"
+                "reference": "0ce85c7626718a9422a77b7ea408fde28342455a"
             },
             "type": "library",
             "autoload": {
@@ -269,11 +269,11 @@
         },
         {
             "name": "blockera/utils",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/utils",
-                "reference": "eb5bd0e727652a89d475970de550d339350c3305"
+                "reference": "3acb9772d2949b4b112ac6772ebecc0c7e067c64"
             },
             "type": "library",
             "autoload": {
@@ -293,11 +293,11 @@
         },
         {
             "name": "blockera/wordpress",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/wordpress",
-                "reference": "1951416cd385e684da9190d4742362273b7fd826"
+                "reference": "cb71cbe63840dc2129b681e8b50982c2ad35b025"
             },
             "type": "library",
             "autoload": {
@@ -1141,12 +1141,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "5a75d3241418c47128647c9d55e599dec492d406"
+                "reference": "3dc279cf66c9329bf84bb31086e90a32cb2c8628"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/5a75d3241418c47128647c9d55e599dec492d406",
-                "reference": "5a75d3241418c47128647c9d55e599dec492d406",
+                "url": "https://api.github.com/repos/composer/composer/zipball/3dc279cf66c9329bf84bb31086e90a32cb2c8628",
+                "reference": "3dc279cf66c9329bf84bb31086e90a32cb2c8628",
                 "shasum": ""
             },
             "require": {
@@ -1248,7 +1248,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-29T15:12:11+00:00"
+            "time": "2024-11-06T12:49:06+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -2229,12 +2229,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c"
+                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c",
-                "reference": "3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/123267b2c49fbf30d78a7b2d333f6be754b94845",
+                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845",
                 "shasum": ""
             },
             "require": {
@@ -2274,7 +2274,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.12.0"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.12.1"
             },
             "funding": [
                 {
@@ -2282,7 +2282,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-12T14:39:25+00:00"
+            "time": "2024-11-08T17:47:46+00:00"
         },
         {
             "name": "nb/oxymel",
@@ -4481,12 +4481,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "108d436c2af470858bdaba3257baab3a74172017"
+                "reference": "c4ba980ca61a9eb18ee6bcc73f28e475852bb1ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/108d436c2af470858bdaba3257baab3a74172017",
-                "reference": "108d436c2af470858bdaba3257baab3a74172017",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c4ba980ca61a9eb18ee6bcc73f28e475852bb1ed",
+                "reference": "c4ba980ca61a9eb18ee6bcc73f28e475852bb1ed",
                 "shasum": ""
             },
             "require": {
@@ -4572,7 +4572,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-08T07:27:17+00:00"
+            "time": "2024-11-06T11:30:55+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -5233,12 +5233,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "d94dda5a49f8e43523d6966ab705a754001d42fe"
+                "reference": "5d1662fb32ebc94f17ddb8d635454a776066733d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/d94dda5a49f8e43523d6966ab705a754001d42fe",
-                "reference": "d94dda5a49f8e43523d6966ab705a754001d42fe",
+                "url": "https://api.github.com/repos/symfony/process/zipball/5d1662fb32ebc94f17ddb8d635454a776066733d",
+                "reference": "5d1662fb32ebc94f17ddb8d635454a776066733d",
                 "shasum": ""
             },
             "require": {
@@ -5287,7 +5287,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-11-04T10:57:54+00:00"
+            "time": "2024-11-06T11:36:42+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -5464,12 +5464,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "c4a5a08fe8d836a1aeec59eeee9697457fd28723"
+                "reference": "e13e8dfa8eaab2b0536ef365beddc2af723a9ac0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/c4a5a08fe8d836a1aeec59eeee9697457fd28723",
-                "reference": "c4a5a08fe8d836a1aeec59eeee9697457fd28723",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/e13e8dfa8eaab2b0536ef365beddc2af723a9ac0",
+                "reference": "e13e8dfa8eaab2b0536ef365beddc2af723a9ac0",
                 "shasum": ""
             },
             "require": {
@@ -5545,7 +5545,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:11:13+00:00"
+            "time": "2024-11-08T15:21:10+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -7958,12 +7958,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast/PHPUnit-Polyfills.git",
-                "reference": "c4de047119d847b5ba5cdb4b17613466cc856cba"
+                "reference": "fdc013245989ee4442ffb349f21269223f2d9545"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/c4de047119d847b5ba5cdb4b17613466cc856cba",
-                "reference": "c4de047119d847b5ba5cdb4b17613466cc856cba",
+                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/fdc013245989ee4442ffb349f21269223f2d9545",
+                "reference": "fdc013245989ee4442ffb349f21269223f2d9545",
                 "shasum": ""
             },
             "require": {
@@ -8013,7 +8013,7 @@
                 "security": "https://github.com/Yoast/PHPUnit-Polyfills/security/policy",
                 "source": "https://github.com/Yoast/PHPUnit-Polyfills"
             },
-            "time": "2024-10-13T18:36:01+00:00"
+            "time": "2024-11-08T12:43:17+00:00"
         }
     ],
     "aliases": [],

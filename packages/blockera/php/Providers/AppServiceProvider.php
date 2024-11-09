@@ -191,7 +191,7 @@ class AppServiceProvider extends ServiceProvider {
 
 		$this->renderBlocks();
 
-		if ( ! blockera_telemetry_is_off() ) {
+		if ( ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
 
 			Config::setConsumerConfig( blockera_core_config( 'app' ) );
 			Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
