@@ -48,7 +48,7 @@ class AdminAssetsProvider extends AssetsProvider {
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script', [ $this, 'createInlineScript' ] );
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
 
-		} else {
+		} elseif ( ! blockera_telemetry_is_off() ) {
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script', [ $this, 'telemetryInlineScripts' ] );
 
