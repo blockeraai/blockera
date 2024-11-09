@@ -193,14 +193,10 @@ class AppServiceProvider extends ServiceProvider {
 
 		if ( ! blockera_telemetry_is_off() ) {
 
-			Config::setRestParams(
-				array_merge(
-					blockera_core_config( 'telemetry.rest_params' ),
-					[ 'root_path' => blockera_core_config( 'app.root_path' ) ]
-				)
-			);
+			Config::setConsumerConfig( blockera_core_config( 'app' ) );
 			Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
 			Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
+			Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
 			Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
 		}
 

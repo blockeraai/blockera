@@ -30,7 +30,6 @@ import {
  */
 import { Panel } from './panel';
 import { config as optionsConfig } from './config';
-import { OptInModal } from '@blockera/telemetry';
 
 const getCurrentPage = (): string => {
 	const location = window.location;
@@ -59,9 +58,6 @@ export const Dashboard = (): MixedElement => {
 
 	return (
 		<div className={'blockera-settings-dashboard'}>
-			{'1' === window.blockeraTelemetryIsOff && (
-				<OptInModal kind={'blockera/v1'} name={'telemetry/opt-in'} />
-			)}
 			<SettingsContext.Provider
 				value={{
 					config,

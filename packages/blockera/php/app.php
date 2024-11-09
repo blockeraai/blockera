@@ -22,6 +22,9 @@ if ( ! defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ) {
 	blockera_load( 'hooks', __DIR__ );
 }
 
-blockera_load( 'wordpress.php.Admin.Menu.hooks', dirname( __DIR__, 2 ) );
+$external_dir = dirname( __DIR__, 2 );
+
+blockera_load( 'wordpress.php.Admin.Menu.hooks', $external_dir );
+blockera_load( 'telemetry.php.hooks', $external_dir );
 
 $blockera->bootstrap();

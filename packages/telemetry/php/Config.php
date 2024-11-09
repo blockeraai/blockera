@@ -25,6 +25,11 @@ class Config {
 	public static array $option_keys;
 
 	/**
+	 * @var array $consumer_config the consumer config;
+	 */
+	public static array $consumer_config;
+
+	/**
 	 * Retrieve hook prefix.
 	 *
 	 * @return string the hook prefix.
@@ -78,7 +83,10 @@ class Config {
 	 */
 	public static function setRestParams( array $rest_params ): void {
 
-		self::$rest_params = $rest_params;
+		self::$rest_params = array_merge(
+			$rest_params,
+			[ 'root_path' => self::getConsumerConfig( 'root_path' ) ]
+		);
 	}
 
 	/**
@@ -120,6 +128,26 @@ class Config {
 	public static function setOptionKeys( array $option_keys ): void {
 
 		self::$option_keys = $option_keys;
+	}
+
+	/**
+	 * @param string $key the key of consumer config.
+	 *
+	 * @return mixed
+	 */
+	public static function getConsumerConfig( string $key = '' ) {
+
+		if ( ! empty( $key ) ) {
+
+			return self::$consumer_config[ $key ];
+		}
+
+		return self::$consumer_config;
+	}
+
+	public static function setConsumerConfig( array $consumer_config ): void {
+
+		self::$consumer_config = $consumer_config;
 	}
 
 }
