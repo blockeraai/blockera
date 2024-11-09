@@ -201,6 +201,11 @@ class Jobs {
 	 */
 	public function redirectToDashboard(): void {
 
+		if ( blockera_telemetry_is_off() ) {
+
+			return;
+		}
+
 		$option = $this->config['rest_params']['slug'] . '_do_activation_redirect';
 
 		// Check if the redirect flag is set and the user has sufficient permissions.
