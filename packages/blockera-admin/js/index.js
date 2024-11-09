@@ -50,15 +50,6 @@ const initializeBlockeraAdmin = (): (() => void) => {
 				},
 			]);
 
-			addEntities([
-				{
-					label: __('Blockera Opt-In', 'blockera'),
-					kind: 'blockera/v1',
-					name: 'telemetry/opt-in',
-					baseURL: '/blockera/v1/telemetry/opt-in',
-				},
-			]);
-
 			root.render(<Dashboard />);
 		});
 	};

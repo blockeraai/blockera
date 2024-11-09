@@ -5,11 +5,15 @@
  */
 import type { MixedElement } from 'react';
 import { createRoot } from '@wordpress/element';
+import domReady from '@wordpress/dom-ready';
+import { store as coreDataStore } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
  */
 import { OptInModal } from './components/opt-in';
+import { dispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 const App = (): MixedElement => {
 	if ('1' !== window.blockeraTelemetryIsOff) {
@@ -20,8 +24,23 @@ const App = (): MixedElement => {
 };
 
 window.onload = () => {
-	const rootElement = document.querySelector('#blockera-telemetry-container');
-	const root = createRoot(rootElement);
+	domReady(() => {
+		const { addEntities } = dispatch(coreDataStore);
 
-	root.render(<App />);
+		addEntities([
+			{
+				label: __('Blockera Opt-In', 'blockera'),
+				kind: 'blockera/v1',
+				name: 'telemetry/opt-in',
+				baseURL: '/blockera/v1/telemetry/opt-in',
+			},
+		]);
+
+		const rootElement = document.querySelector(
+			'#blockera-telemetry-container'
+		);
+		const root = createRoot(rootElement);
+
+		root.render(<App />);
+	});
 };
