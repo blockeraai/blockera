@@ -93,13 +93,13 @@ class Config {
 		// Built-in keys.
 		switch ( $key ) {
 			case 'token':
-				self::$option_keys[ $key ] = 'telemetry-token';
+				self::$option_keys[ $key ] = 'blockera-telemetry-token';
 				break;
 			case 'site_id':
-				self::$option_keys[ $key ] = 'telemetry-site-id';
+				self::$option_keys[ $key ] = 'blockera-telemetry-site-id';
 				break;
 			case 'user_id':
-				self::$option_keys[ $key ] = 'telemetry-user-id';
+				self::$option_keys[ $key ] = 'blockera-telemetry-user-id';
 				break;
 		}
 
