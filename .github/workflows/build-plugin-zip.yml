@@ -209,9 +209,7 @@ jobs:
               run: |
                   IFS='.' read -r -a VERSION_ARRAY <<< "${VERSION}"
                   MILESTONE="Blockera ${VERSION_ARRAY[0]}.${VERSION_ARRAY[1]}"
-                  cat <<EOF > release-note.txt
-                    ${{ needs.bump-version.outputs.changelog }}
-                  EOF
+                  echo "${{ needs.bump-version.outputs.changelog }}" | sed 's/\\n/\n/g' > release-note.txt
 
                   # Continue to creating release notes with preparing other changelogs
                   npm run other:changelog -- --milestone="$MILESTONE" --unreleased --file="release-note.txt" --version="${{ needs.bump-version.outputs.new_version }}" > release-notes.txt
