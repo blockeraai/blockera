@@ -61,6 +61,7 @@ jobs:
               )
             )
         outputs:
+            changelog: ${{ steps.update_packages.changelog }}
             old_version: ${{ steps.get_version.outputs.old_version }}
             new_version: ${{ steps.get_version.outputs.new_version }}
             release_branch: ${{ steps.get_version.outputs.release_branch }}
@@ -208,7 +209,7 @@ jobs:
               run: |
                   IFS='.' read -r -a VERSION_ARRAY <<< "${VERSION}"
                   MILESTONE="Blockera ${VERSION_ARRAY[0]}.${VERSION_ARRAY[1]}"
-                  echo ${{needs.update_packages.outputs.changelog}} >> release-note.txt
+                  echo ${{needs.bump-version.outputs.changelog}} >> release-note.txt
                   npm run other:changelog -- --milestone="$MILESTONE" --unreleased --file="release-note.txt" --version="${{ needs.bump-version.outputs.new_version }}" > release-notes.txt
                   sed -ie '1,6d' release-notes.txt
                   if [[ ${{ needs.bump-version.outputs.new_version }} != *"rc"* ]]; then
