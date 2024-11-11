@@ -80,7 +80,7 @@ const RepeaterItemHeader: HeaderItem = memo<HeaderItem>(
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item
-					__('Item %d', 'blockera'),
+					__('Item %s', 'blockera'),
 					itemId + 1
 				)}
 			>
