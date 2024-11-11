@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import type { TStatesLabel } from './types';
+import { applyFilters } from '@wordpress/hooks';
 
 export type BlockStateType = {
 	type: string,
@@ -19,7 +20,7 @@ export type BlockStateType = {
 
 const sharedBlockStates: {
 	[key: string]: BlockStateType,
-} = {
+} = applyFilters('blockera.editor.extensions.blockStates.availableStates', {
 	normal: {
 		type: 'normal',
 		label: 'Normal',
@@ -94,6 +95,6 @@ const sharedBlockStates: {
 		breakpoints: {},
 		disabled: true,
 	},
-};
+});
 
 export default sharedBlockStates;

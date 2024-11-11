@@ -4,7 +4,6 @@
  */
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
-import { applyFilters } from '@wordpress/hooks';
 import { useContext } from '@wordpress/element';
 
 /**
@@ -47,10 +46,7 @@ const ItemBody = ({
 		useContext(RepeaterContext);
 
 	// clone options
-	const options = applyFilters(
-		'blockera.editor.extensions.blockStates.availableStates',
-		{ ...states }
-	);
+	const options = { ...states };
 	delete options.normal;
 
 	return (
