@@ -42,17 +42,21 @@ return [
 		'opt_in_status' => 'blockera-opt-in-status',
 	],
 	'opt_in_description'      => __(
-		"We have introduced this opt-in so you never miss an important update and help us make the plugin more compatible with your site and better at doing what you need it to. Opt in to get email notifications for security & feature updates, and to share some basic WordPress environment info. If you skip this, that's okay! Blockera will still work just fine. What permission are being granted?",
+		"We have introduced this opt-in so you never miss an important update and help us make the plugin more compatible with your site and better at doing what you need it to. Opt in to get email notifications for security & feature updates, and to share some basic WordPress environment info. If you skip this, that's okay! Blockera will still work just fine.",
 		'blockera'
 	),
 	/**
 	 * The terms of services link
 	 */
-	'terms_of_services_link'  => '#',
+	'terms_of_services_link'  => 'https://blockera.ai/terms-and-conditions-of-use/',
 	/**
 	 * The privacy and policy link.
 	 */
-	'privacy_and_policy_link' => '#',
+	'privacy_and_policy_link' => 'https://blockera.ai/privacy-policy/',
+	/**
+	 * The permissions use link.
+	 */
+	'permissions_link'        => 'https://blockera.ai/telemetry/',
 	/**
 	 * Prefix for hook names.
 	 */

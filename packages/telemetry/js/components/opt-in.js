@@ -44,35 +44,62 @@ export const OptInModal = ({
 
 	return (
 		<Modal
-			headerTitle={__('Hello 🖐', 'blockera')}
+			headerTitle={__('Hello 👋', 'blockera')}
 			size={'medium'}
 			isDismissible={false}
 		>
 			<>
-				<Flex direction={'column'} justifyContent={'space-between'}>
-					<h1>
+				<Flex
+					direction={'column'}
+					gap="10px"
+					justifyContent={'space-between'}
+				>
+					<h1
+						style={{
+							fontSize: '22px',
+							margin: '20px 0 10px',
+						}}
+					>
 						{__('Thank You for Choosing Blockera!', 'blockera')}
 					</h1>
+
 					<p className={classNames('blockera-opt-in-text')}>
 						{window.blockeraOptInDescription}
+					</p>
+
+					<Flex
+						direction="row"
+						gap="15px"
+						className={classNames('blockera-opt-in-text')}
+					>
 						<a href={window.blockeraTermsOfServicesLink}>
 							{__('Terms of service', 'blockera')}
 						</a>
+
+						<a href={window.blockeraPermissionsLink}>
+							{__('Permissions', 'blockera')}
+						</a>
+
 						<a href={window.blockeraPrivacyAndPolicyLink}>
 							{__('Privacy Policy', 'blockera')}
 						</a>
-					</p>
+					</Flex>
 				</Flex>
-				<Flex direction={'row'} justifyContent={'flex-start'}>
+
+				<Flex direction={'row'} justifyContent={'space-between'}>
 					<Button
 						variant={'primary'}
 						onClick={() => allowAndContinue('ALLOW')}
 					>
 						{__('Allow & Continue', 'blockera')}
 					</Button>
+
 					<Button
-						variant={'secondary'}
+						variant={'tertiary-on-hover'}
 						onClick={() => allowAndContinue('SKIP')}
+						style={{
+							color: '#959595',
+						}}
 					>
 						{__('Skip', 'blockera')}
 					</Button>

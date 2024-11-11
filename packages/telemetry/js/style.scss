@@ -1,10 +1,13 @@
 .blockera-opt-in-text {
 	line-height: 25px;
 	font-size: 13px;
-	margin-bottom: 30px;
+	margin: 0;
+
+	&:last-child {
+		margin-bottom: 30px;
+	}
 
 	a {
-		display: inline-block;
-		margin-left: 10px;
+		text-decoration: none;
 	}
 }
