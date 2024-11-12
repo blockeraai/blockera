@@ -53,5 +53,5 @@ export type ColorPalletProps = {
 	/**
 	 * event that will be fired on color change
 	 */
-	onChangeComplete: (color: string) => void,
+	onChange: (color: string) => void,
 };
