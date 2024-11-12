@@ -177,8 +177,15 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			apply_filters( 'blockera/assets/provider/inline-script/register/3rd-party-blocks/attributes', [] )
 		);
 
-		return implode( ";\n", $blocks_attributes_scripts ) . '
+		$script = implode( ";\n", $blocks_attributes_scripts ) . '
 				' . $editor_object . '.editor.unstableRegistrationSharedBlockAttributes(' . wp_json_encode( $shared_block_attributes ) . ');';
+
+		if ( false !== strpos( $inline_script, $script ) ) {
+
+			return $inline_script;
+		}
+
+		return sprintf( '%s%s', $inline_script . PHP_EOL, $script );
 	}
 
 	/**
