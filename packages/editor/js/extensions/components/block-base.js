@@ -44,6 +44,7 @@ import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
 import { BlockCompatibility } from './block-compatibility';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 import { sanitizeBlockAttributes } from '../hooks/utils';
+import { BlockApp } from './block-app';
 
 export type BlockBaseProps = {
 	additional: Object,
@@ -326,130 +327,133 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 		}, [_attributes]);
 
 		return (
-			<BlockEditContextProvider
-				{...{
-					block: {
-						blockName: name,
-						clientId,
+			<BlockApp>
+				<BlockEditContextProvider
+					{...{
+						block: {
+							blockName: name,
+							clientId,
+							handleOnChangeAttributes,
+							attributes: currentAttributes,
+							storeName: 'blockera/controls',
+						},
+						currentTab,
+						currentBlock,
+						currentState,
+						setCurrentTab,
+						isNormalState,
+						setAttributes,
+						getAttributes,
+						currentBreakpoint,
+						currentInnerBlock,
+						masterIsNormalState,
+						blockeraInnerBlocks,
+						currentInnerBlockState,
 						handleOnChangeAttributes,
-						attributes: currentAttributes,
-						storeName: 'blockera/controls',
-					},
-					currentTab,
-					currentBlock,
-					currentState,
-					setCurrentTab,
-					isNormalState,
-					setAttributes,
-					getAttributes,
-					currentBreakpoint,
-					currentInnerBlock,
-					masterIsNormalState,
-					blockeraInnerBlocks,
-					currentInnerBlockState,
-					handleOnChangeAttributes,
-					updateBlockEditorSettings,
-					BlockComponent: () => children,
-					attributes: sanitizedAttributes,
-					activeDeviceType: getDeviceType(),
-					getBlockType: () =>
-						select('core/blocks').getBlockType(name),
-				}}
-			>
-				{/*<StrictMode>*/}
-				<InspectorControls>
-					<BlockCompatibility
-						{...{
-							args,
-							isActive,
-							setCompatibilities,
-							originalAttributes,
-							availableAttributes,
-							getAttributesWithIds,
-							attributes: blockAttributes,
-							defaultAttributes: originDefaultAttributes,
-						}}
-					/>
-					<SideEffect
-						{...{
-							currentTab,
-							currentState: isInnerBlock(currentBlock)
-								? currentInnerBlockState
-								: currentState,
-							isActive,
-						}}
-					/>
-					<SlotFillProvider>
-						<BlockPartials
-							clientId={clientId}
-							isActive={isActive}
-							setActive={setActive}
-						/>
-						<BlockFillPartials
+						updateBlockEditorSettings,
+						BlockComponent: () => children,
+						attributes: sanitizedAttributes,
+						activeDeviceType: getDeviceType(),
+						getBlockType: () =>
+							select('core/blocks').getBlockType(name),
+					}}
+				>
+					{/*<StrictMode>*/}
+					<InspectorControls>
+						<BlockCompatibility
 							{...{
-								clientId,
+								args,
 								isActive,
-								currentState,
-								currentBlock,
-								currentInnerBlock,
-								BlockEditComponent,
-								currentBreakpoint,
-								blockeraInnerBlocks,
-								currentInnerBlockState,
-								updateBlockEditorSettings,
-								blockProps: {
-									// Sending props like exactly "edit" function props of WordPress Block.
-									// Because needs total block props in outside overriding component like "blockera" in overriding process.
-									name,
+								setCompatibilities,
+								originalAttributes,
+								availableAttributes,
+								getAttributesWithIds,
+								attributes: blockAttributes,
+								defaultAttributes: originDefaultAttributes,
+							}}
+						/>
+						<SideEffect
+							{...{
+								currentTab,
+								currentState: isInnerBlock(currentBlock)
+									? currentInnerBlockState
+									: currentState,
+								isActive,
+							}}
+						/>
+						<SlotFillProvider>
+							<BlockPartials
+								clientId={clientId}
+								isActive={isActive}
+								setActive={setActive}
+							/>
+							<BlockFillPartials
+								{...{
+									clientId,
+									isActive,
+									currentState,
+									currentBlock,
+									currentInnerBlock,
+									BlockEditComponent,
+									currentBreakpoint,
+									blockeraInnerBlocks,
+									currentInnerBlockState,
+									updateBlockEditorSettings,
+									blockProps: {
+										// Sending props like exactly "edit" function props of WordPress Block.
+										// Because needs total block props in outside overriding component like "blockera" in overriding process.
+										name,
+										clientId,
+										supports,
+										className,
+										attributes: sanitizedAttributes,
+										setAttributes,
+										defaultAttributes,
+										currentAttributes,
+										controllerProps: {
+											currentTab,
+											currentBlock,
+											currentState,
+											currentBreakpoint,
+											blockeraInnerBlocks,
+											currentInnerBlockState,
+											handleOnChangeAttributes,
+										},
+										availableBlockStates:
+											additional.availableBlockStates,
+										currentStateAttributes:
+											currentAttributes,
+										...props,
+									},
+								}}
+							/>
+						</SlotFillProvider>
+					</InspectorControls>
+					{experimental().get('editor.extensions.iconExtension') && (
+						<div ref={blockEditRef} />
+					)}
+
+					<StylesWrapper clientId={clientId}>
+						<Fill name={'blockera-styles-wrapper-' + clientId}>
+							<BlockStyle
+								{...{
 									clientId,
 									supports,
-									className,
+									selectors,
 									attributes: sanitizedAttributes,
-									setAttributes,
-									defaultAttributes,
+									blockName: name,
 									currentAttributes,
-									controllerProps: {
-										currentTab,
-										currentBlock,
-										currentState,
-										currentBreakpoint,
-										blockeraInnerBlocks,
-										currentInnerBlockState,
-										handleOnChangeAttributes,
-									},
-									availableBlockStates:
-										additional.availableBlockStates,
-									currentStateAttributes: currentAttributes,
-									...props,
-								},
-							}}
-						/>
-					</SlotFillProvider>
-				</InspectorControls>
-				{experimental().get('editor.extensions.iconExtension') && (
-					<div ref={blockEditRef} />
-				)}
+									defaultAttributes,
+									activeDeviceType: getDeviceType(),
+								}}
+							/>
+						</Fill>
+					</StylesWrapper>
+					{/*</StrictMode>*/}
 
-				<StylesWrapper clientId={clientId}>
-					<Fill name={'blockera-styles-wrapper-' + clientId}>
-						<BlockStyle
-							{...{
-								clientId,
-								supports,
-								selectors,
-								attributes: sanitizedAttributes,
-								blockName: name,
-								currentAttributes,
-								defaultAttributes,
-								activeDeviceType: getDeviceType(),
-							}}
-						/>
-					</Fill>
-				</StylesWrapper>
-				{/*</StrictMode>*/}
-
-				{children}
-			</BlockEditContextProvider>
+					{children}
+				</BlockEditContextProvider>
+			</BlockApp>
 		);
 	},
 	propsAreEqual
