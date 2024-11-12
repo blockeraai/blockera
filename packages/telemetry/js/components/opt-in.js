@@ -5,9 +5,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
+import apiFetch from '@wordpress/api-fetch';
 import { useState } from '@wordpress/element';
-import { store as coreStore } from '@wordpress/core-data';
 
 /**
  * Blockera dependencies
@@ -15,13 +14,7 @@ import { store as coreStore } from '@wordpress/core-data';
 import { classNames } from '@blockera/classnames';
 import { Modal, Flex, Button } from '@blockera/controls';
 
-export const OptInModal = ({
-	kind,
-	name,
-}: {
-	kind: string,
-	name: string,
-}): MixedElement => {
+export const OptInModal = ({ path }: { path: string }): MixedElement => {
 	const [isOpen, setOpen] = useState(true);
 	const closeModal = () => setOpen(false);
 
@@ -29,15 +22,20 @@ export const OptInModal = ({
 		return <></>;
 	}
 
-	const { saveEntityRecord } = dispatch(coreStore);
 	const allowAndContinue = (prompt: 'ALLOW' | 'SKIP') => {
-		const record = {
+		const data = {
 			'opt-in-agreed': prompt,
 			action: 'telemetry-opt-in-status',
-			nonce: window.blockeraNonceField,
 		};
 
-		saveEntityRecord(kind, name, record);
+		apiFetch.use(apiFetch.createNonceMiddleware(window.blockeraNonceField));
+		apiFetch({
+			path,
+			data,
+			method: 'POST',
+		}).then((response) => {
+			console.log(response);
+		});
 
 		closeModal();
 	};
