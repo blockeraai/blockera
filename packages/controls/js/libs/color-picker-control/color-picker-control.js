@@ -158,9 +158,9 @@ export default function ColorPickerControl({
 						<ColorPallet
 							enableAlpha={true}
 							color={value}
-							onChange={(color: Object) => {
-								setValue(color.hex);
-							}}
+							onChangeComplete={(color: Object) =>
+								setValue(color.hex)
+							}
 						/>
 
 						{children}
@@ -181,7 +181,7 @@ export default function ColorPickerControl({
 			<ColorPallet
 				enableAlpha={false}
 				color={value}
-				onChange={(color: Object) => setValue(color.hex)}
+				onChangeComplete={(color: Object) => setValue(color.hex)}
 			/>
 
 			{children}
