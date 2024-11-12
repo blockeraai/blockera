@@ -6,7 +6,7 @@
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { applyFilters } from '@wordpress/hooks';
-import { useId, useMemo, useState, useEffect } from '@wordpress/element';
+import { useId, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -80,24 +80,7 @@ export const StateStyle = (
 	);
 
 	const { getBreakpoints } = select('blockera/editor');
-
-	const [breakpoints, setBreakpoints] = useState([]);
-
-	// Because we registering breakpoints after loaded all assets in front-end pages,
-	// We should in each interval time, try to set breakpoints into native state.
-	// FIXME: in this useEffect is performance bottleneck! please implements infrastructure to able remove it.
-	useEffect(() => {
-		const intervalId = setInterval(() => {
-			if (!breakpoints.length) {
-				setBreakpoints(getBreakpoints());
-			}
-		}, 1000);
-
-		return () => {
-			clearInterval(intervalId);
-		};
-		// eslint-disable-next-line
-	}, []);
+	const breakpoints = getBreakpoints();
 
 	return Object.entries(breakpoints).map(
 		([, breakpoint]: [string, BreakpointTypes], index: number): any => {
