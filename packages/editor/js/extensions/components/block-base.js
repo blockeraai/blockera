@@ -382,51 +382,53 @@ export const BlockBase: ComponentType<BlockBaseProps> = memo(
 							}}
 						/>
 						<SlotFillProvider>
-							<BlockPartials
-								clientId={clientId}
-								isActive={isActive}
-								setActive={setActive}
-							/>
-							<BlockFillPartials
-								{...{
-									clientId,
-									isActive,
-									currentState,
-									currentBlock,
-									currentInnerBlock,
-									BlockEditComponent,
-									currentBreakpoint,
-									blockeraInnerBlocks,
-									currentInnerBlockState,
-									updateBlockEditorSettings,
-									blockProps: {
-										// Sending props like exactly "edit" function props of WordPress Block.
-										// Because needs total block props in outside overriding component like "blockera" in overriding process.
-										name,
+							<BlockApp>
+								<BlockPartials
+									clientId={clientId}
+									isActive={isActive}
+									setActive={setActive}
+								/>
+								<BlockFillPartials
+									{...{
 										clientId,
-										supports,
-										className,
-										attributes: sanitizedAttributes,
-										setAttributes,
-										defaultAttributes,
-										currentAttributes,
-										controllerProps: {
-											currentTab,
-											currentBlock,
-											currentState,
-											currentBreakpoint,
-											blockeraInnerBlocks,
-											currentInnerBlockState,
-											handleOnChangeAttributes,
-										},
-										availableBlockStates:
-											additional.availableBlockStates,
-										currentStateAttributes:
+										isActive,
+										currentState,
+										currentBlock,
+										currentInnerBlock,
+										BlockEditComponent,
+										currentBreakpoint,
+										blockeraInnerBlocks,
+										currentInnerBlockState,
+										updateBlockEditorSettings,
+										blockProps: {
+											// Sending props like exactly "edit" function props of WordPress Block.
+											// Because needs total block props in outside overriding component like "blockera" in overriding process.
+											name,
+											clientId,
+											supports,
+											className,
+											attributes: sanitizedAttributes,
+											setAttributes,
+											defaultAttributes,
 											currentAttributes,
-										...props,
-									},
-								}}
-							/>
+											controllerProps: {
+												currentTab,
+												currentBlock,
+												currentState,
+												currentBreakpoint,
+												blockeraInnerBlocks,
+												currentInnerBlockState,
+												handleOnChangeAttributes,
+											},
+											availableBlockStates:
+												additional.availableBlockStates,
+											currentStateAttributes:
+												currentAttributes,
+											...props,
+										},
+									}}
+								/>
+							</BlockApp>
 						</SlotFillProvider>
 					</InspectorControls>
 					{experimental().get('editor.extensions.iconExtension') && (
