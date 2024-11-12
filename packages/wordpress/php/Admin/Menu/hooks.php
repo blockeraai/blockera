@@ -12,7 +12,7 @@ if ( ! function_exists( 'blockera_add_custom_css_class_to_admin_menu' ) ) {
 	function blockera_add_custom_css_class_to_admin_menu( array $menu ): array {
 
 		// Specify the slug of the menu item you want to target.
-		$menu_slug = 'blockera-settings';
+		$menu_slug = 'blockera-settings-dashboard';
 
 		// Specify the CSS class you want to add.
 		$custom_class = 'blockera-disable-first-item';

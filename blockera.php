@@ -43,9 +43,22 @@ if ( ! function_exists( 'get_plugin_data' ) ) {
 define( 'BLOCKERA_VERSION', get_plugin_data( __FILE__, false, false )['Version'] );
 ### END AUTO-GENERATED DEFINES
 
+$dashboard_page = blockera_core_config( 'app.dashboard_page' );
+
+$jobs = new \Blockera\Telemetry\Jobs(
+	new \Blockera\WordPress\Sender(),
+	__FILE__,
+	array_merge(
+		blockera_core_config( 'telemetry' ),
+		compact( 'dashboard_page' )
+	)
+);
+
+add_action( 'admin_init', [ $jobs, 'redirectToDashboard' ] );
+
 add_action( 'plugins_loaded', 'blockera_init', 10 );
 
-function blockera_init() {
+function blockera_init(): void {
 
 	/**
 	 * This hook for extendable setup process from internal or third-party developers.

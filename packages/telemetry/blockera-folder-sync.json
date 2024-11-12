@@ -1,0 +1,7 @@
+{
+	"name": "blockera/telemetry",
+	"path": "packages/telemetry",
+	"dependent": {
+		"repositories": ["https://github.com/blockeraai/blockera.git"]
+	}
+}
