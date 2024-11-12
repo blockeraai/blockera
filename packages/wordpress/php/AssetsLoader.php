@@ -157,12 +157,20 @@ class AssetsLoader {
 		);
 
 		/**
-		 * This filter for extendable inline script from internal or third-party developers.
+		 * This filter for extendable before inline script from internal or third-party developers.
 		 *
-		 * @hook  'blockera/wordpress/{$this->id}/inline-script'
+		 * @hook  'blockera/wordpress/{$this->id}/inline-script/before'
 		 * @since 1.0.0
 		 */
-		$inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/inline-script', '' );
+		$before_inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/inline-script/before', '' );
+
+		/**
+		 * This filter for extendable after inline script from internal or third-party developers.
+		 *
+		 * @hook  'blockera/wordpress/{$this->id}/inline-script/after'
+		 * @since 1.0.0
+		 */
+		$after_inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/inline-script/after', '' );
 
 		/**
 		 * This filter for change handle name for inline script from internal or third-party developers.
@@ -172,17 +180,24 @@ class AssetsLoader {
 		 */
 		$handle_inline_script = apply_filters( 'blockera/wordpress/' . $this->id . '/handle/inline-script', '' );
 
-		if ( empty( $inline_script ) || empty( $handle_inline_script ) ) {
+		if ( !empty( $before_inline_script ) && !empty( $handle_inline_script ) ) {
 
-			return;
+			// blockera server side before scripts.
+			wp_add_inline_script(
+				$handle_inline_script,
+				$before_inline_script,
+				'before'
+			);
 		}
 
-		// blockera server side definitions.
-		wp_add_inline_script(
-			$handle_inline_script,
-			$inline_script,
-			'after'
-		);
+		if ( !empty( $after_inline_script ) && !empty( $handle_inline_script ) ) {
+
+			// blockera server side before scripts.
+			wp_add_inline_script(
+				$handle_inline_script,
+				$after_inline_script,
+			);
+		}
 	}
 
 	/**
