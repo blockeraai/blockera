@@ -56,7 +56,8 @@ export function changeItem(state = {}, action) {
 
 	if (
 		action.value?.type &&
-		!new RegExp(`^${action.value?.type}`, 'i').test(action.itemId)
+		!new RegExp(`^${action.value?.type}`, 'i').test(action.itemId) &&
+		!action?.staticType
 	) {
 		delete clonedPrevValue[action.itemId];
 
@@ -101,6 +102,11 @@ export function changeItem(state = {}, action) {
 
 	if (isEquals(action.value, clonedPrevValue[action.itemId])) {
 		return state;
+	}
+
+	if (action?.staticType) {
+		delete clonedPrevValue[action.itemId];
+		action.itemId = action.staticType;
 	}
 
 	repeaterOnChange(
