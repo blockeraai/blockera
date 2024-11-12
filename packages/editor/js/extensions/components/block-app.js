@@ -4,13 +4,14 @@
  * External dependencies
  */
 import {
+	memo,
 	useMemo,
 	useState,
 	useContext,
 	useCallback,
 	createContext,
 } from '@wordpress/element';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Blockera dependencies
@@ -204,6 +205,9 @@ export const useBlockSections = (): BlockSections => {
 	};
 };
 
-export const BlockApp = ({ children }: Object): MixedElement => {
-	return <BlockAppContextProvider>{children}</BlockAppContextProvider>;
-};
+export const BlockApp: ComponentType<any> = memo(
+	({ children }: Object): MixedElement => {
+		return <BlockAppContextProvider>{children}</BlockAppContextProvider>;
+	},
+	() => true
+);
