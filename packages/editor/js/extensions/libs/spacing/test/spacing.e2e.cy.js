@@ -481,7 +481,7 @@ describe('Spacing Extension', () => {
 						top: '20px',
 						right: {
 							settings: {
-								name: '3',
+								name: 'X-Small',
 								id: '30',
 								value: 'min(2.5rem, 3vw)',
 								reference: {
@@ -498,7 +498,7 @@ describe('Spacing Extension', () => {
 						bottom: '40px',
 						left: {
 							settings: {
-								name: '5',
+								name: 'Regular',
 								id: '50',
 								value: 'min(6.5rem, 8vw)',
 								reference: {
@@ -517,7 +517,7 @@ describe('Spacing Extension', () => {
 						top: '10px',
 						right: {
 							settings: {
-								name: '2',
+								name: 'Tiny',
 								id: '20',
 								value: 'min(1.5rem, 2vw)',
 								reference: {
@@ -534,7 +534,7 @@ describe('Spacing Extension', () => {
 						bottom: '30px',
 						left: {
 							settings: {
-								name: '4',
+								name: 'Small',
 								id: '40',
 								value: 'min(4rem, 5vw)',
 								reference: {
