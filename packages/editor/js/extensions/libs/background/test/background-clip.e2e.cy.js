@@ -25,7 +25,7 @@ describe('Background Clip → Functionality', () => {
 			cy.get('@clippingBtn').click();
 
 			// select corresponding option
-			cy.contains('li', 'Clip to Padding').click();
+			cy.contains('div', 'Clip to Padding').click();
 		});
 
 		//assert data
@@ -57,7 +57,7 @@ describe('Background Clip → Functionality', () => {
 		cy.get('@clippingContainer').within(() => {
 			cy.get('button').as('clippingBtn');
 			cy.get('@clippingBtn').click();
-			cy.contains('li', /text/i).should(
+			cy.contains('div', /text/i).should(
 				'have.css',
 				'pointer-events',
 				'none'
