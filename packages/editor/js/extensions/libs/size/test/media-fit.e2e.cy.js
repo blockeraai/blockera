@@ -25,7 +25,7 @@ describe('Media Fit → Functionality', () => {
 
 		cy.get('@mediaFit').within(() => {
 			cy.get('[aria-haspopup="listbox"]').trigger('click');
-			cy.get('div').eq(2).trigger('click'); // contain
+			cy.get('div[aria-selected="false"] span').eq(2).trigger('click'); // contain
 		});
 
 		//Check block
