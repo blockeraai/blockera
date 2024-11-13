@@ -21,8 +21,14 @@ import { setItem, getItem, updateItem } from '@blockera/storage';
 /**
  * Internal dependencies
  */
+import { propsAreEqual } from './utils';
 import * as sections from '../libs/base/config';
-import type { BlockSections, BlockSection, BlockAppContextType } from './types';
+import type {
+	BlockSection,
+	BlockSections,
+	BlockBaseProps,
+	BlockAppContextType,
+} from './types';
 
 const cacheKey = 'BLOCKERA_DATA';
 
@@ -38,7 +44,10 @@ const defaultValue = {
 
 const BlockAppContext = createContext(defaultValue);
 
-export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
+export const BlockAppContextProvider = ({
+	children,
+	...props
+}: Object): MixedElement => {
 	const cacheData = useMemo(() => getItem(cacheKey), []);
 	const calculatedSections = useMemo(
 		() =>
@@ -70,6 +79,7 @@ export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
 	return (
 		<BlockAppContext.Provider
 			value={{
+				props,
 				settings,
 				setSettings,
 			}}
@@ -206,8 +216,12 @@ export const useBlockSections = (): BlockSections => {
 };
 
 export const BlockApp: ComponentType<any> = memo(
-	({ children }: Object): MixedElement => {
-		return <BlockAppContextProvider>{children}</BlockAppContextProvider>;
+	({ children, ...props }: BlockBaseProps): MixedElement => {
+		return (
+			<BlockAppContextProvider {...props}>
+				{children}
+			</BlockAppContextProvider>
+		);
 	},
-	() => true
+	propsAreEqual
 );

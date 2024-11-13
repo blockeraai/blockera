@@ -1,6 +1,12 @@
 // @flow
 
+/**
+ * Internal dependencies
+ */
+import type { BlockBaseProps } from './';
+
 export type BlockAppContextType = {
+	props: BlockBaseProps,
 	settings: {
 		blockSections: {
 			expandAll: boolean,
