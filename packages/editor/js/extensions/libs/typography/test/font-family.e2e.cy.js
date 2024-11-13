@@ -34,7 +34,7 @@ describe('Font Family → Functionality', () => {
 
 		//Check store
 		getWPDataObject().then((data) => {
-			expect('system-sans-serif').to.be.equal(
+			expect('fira-code').to.be.equal(
 				getSelectedBlock(data, 'blockeraFontFamily')
 			);
 		});
