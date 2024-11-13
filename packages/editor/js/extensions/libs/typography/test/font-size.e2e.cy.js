@@ -67,7 +67,7 @@ describe('Font Size → Functionality', () => {
 					fluid: null,
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'font-size',
 					var: '--wp--preset--font-size--small',
