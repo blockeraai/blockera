@@ -246,9 +246,9 @@ describe('Gap → Functionality (Type: gap)', () => {
 					lock: false,
 					gap: {
 						settings: {
-							name: '3',
+							name: 'X-Small',
 							id: '30',
-							value: 'min(2.5rem, 3vw)',
+							value: '20px',
 							reference: {
 								type: 'theme',
 								theme: 'Twenty Twenty-Four',
@@ -256,15 +256,15 @@ describe('Gap → Functionality (Type: gap)', () => {
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
 						},
-						name: '3',
+						name: 'X-Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
 					columns: {
 						settings: {
-							name: '5',
+							name: 'Regular',
 							id: '50',
-							value: 'min(6.5rem, 8vw)',
+							value: 'clamp(30px, 5vw, 50px)',
 							reference: {
 								type: 'theme',
 								theme: 'Twenty Twenty-Four',
@@ -272,15 +272,15 @@ describe('Gap → Functionality (Type: gap)', () => {
 							type: 'spacing',
 							var: '--wp--preset--spacing--50',
 						},
-						name: '5',
+						name: 'Regular',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
 					rows: {
 						settings: {
-							name: '4',
+							name: 'Small',
 							id: '40',
-							value: 'min(4rem, 5vw)',
+							value: '30px',
 							reference: {
 								type: 'theme',
 								theme: 'Twenty Twenty-Four',
@@ -288,7 +288,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 							type: 'spacing',
 							var: '--wp--preset--spacing--40',
 						},
-						name: '4',
+						name: 'Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
