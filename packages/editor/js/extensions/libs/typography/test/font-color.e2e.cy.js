@@ -73,7 +73,7 @@ describe('Font Color → Functionality', () => {
 					value: '#111111',
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'color',
 					var: '--wp--preset--color--contrast',
