@@ -33,7 +33,7 @@ describe('Border → Functionality', () => {
 
 		cy.get('@container').within(() => {
 			cy.get('[aria-haspopup="listbox"]').click();
-			cy.get('li').eq(1).click();
+			cy.get('div').eq(1).click();
 		});
 
 		//Check block
@@ -128,7 +128,7 @@ describe('Border → Functionality', () => {
 					});
 
 					cy.get('[aria-haspopup="listbox"]').trigger('click');
-					cy.get('li').eq(0).trigger('click');
+					cy.get('div').eq(0).trigger('click');
 
 					cy.getByDataTest('border-control-color').click();
 				});
