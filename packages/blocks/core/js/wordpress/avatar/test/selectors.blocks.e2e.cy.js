@@ -129,7 +129,7 @@ describe('Avatar Block → Selectors test', () => {
 
 		cy.get('@borderContainer').within(() => {
 			cy.get('[aria-haspopup="listbox"]').click();
-			cy.get('li').eq(1).click();
+			cy.get('div').eq(1).click();
 		});
 		cy.getBlock('core/avatar')
 			.first()
