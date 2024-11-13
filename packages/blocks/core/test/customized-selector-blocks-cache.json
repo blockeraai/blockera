@@ -6,6 +6,13 @@
 			"duotone": ".wp-block-image img, .wp-block-image .components-placeholder"
 		}
 	},
+	"core/list": {
+		"border": ".wp-block-list:not(.wp-block-list .wp-block-list)"
+	},
+	"core/list-item": {
+		"root": ".wp-block-list > li",
+		"border": ".wp-block-list:not(.wp-block-list .wp-block-list) > li"
+	},
 	"core/quote": {
 		"heading1": {
 			"root": "h1.wp-block-heading"
