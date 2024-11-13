@@ -530,9 +530,9 @@ describe('Flex Layout → Functionality', () => {
 							cy.get('button[aria-haspopup="listbox"]')
 								.eq(1)
 								.click();
-							cy.get('ul[aria-hidden="false"]').within(() => {
-								cy.contains('Space Around').click();
-							});
+							cy.get('div[aria-selected="false"] span')
+								.contains('Space Around')
+								.click();
 						});
 
 						cy.getBlock('core/paragraph').should(
@@ -589,9 +589,9 @@ describe('Flex Layout → Functionality', () => {
 							cy.get('button[aria-haspopup="listbox"]')
 								.eq(1)
 								.click();
-							cy.get('ul[aria-hidden="false"]').within(() => {
-								cy.contains('Space Between').click();
-							});
+							cy.get('div[aria-selected="false"] span')
+								.contains('Space Between')
+								.click();
 						});
 
 						cy.getBlock('core/paragraph').should(
@@ -648,9 +648,9 @@ describe('Flex Layout → Functionality', () => {
 							cy.get('button[aria-haspopup="listbox"]')
 								.eq(0)
 								.click();
-							cy.get('ul[aria-hidden="false"]').within(() => {
-								cy.contains('Stretch').click();
-							});
+							cy.get('div[aria-selected="false"] span')
+								.contains('Stretch')
+								.click();
 						});
 
 						cy.getBlock('core/paragraph').should(
