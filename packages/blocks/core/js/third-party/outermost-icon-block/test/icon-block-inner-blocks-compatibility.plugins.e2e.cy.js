@@ -276,7 +276,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 						value: '#111111',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
 						var: '--wp--preset--color--contrast',
@@ -327,7 +327,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 						value: '#ffffff',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
 						var: '--wp--preset--color--base-2',
@@ -355,7 +355,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 						value: '#636363',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
 						var: '--wp--preset--color--contrast-2',
