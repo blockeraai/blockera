@@ -71,17 +71,17 @@ describe('Background Color → Functionality', () => {
 		getWPDataObject().then((data) => {
 			expect({
 				settings: {
-					name: 'Accent / Four',
+					name: 'Accent 4',
 					id: 'accent-4',
-					value: '#b1c5a4',
+					value: '#686868',
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'color',
 					var: '--wp--preset--color--accent-4',
 				},
-				name: 'Accent / Four',
+				name: 'Accent 4',
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
