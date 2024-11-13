@@ -245,10 +245,10 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 					settings: {
 						name: 'Base',
 						id: 'base',
-						value: '#f9f9f9',
+						value: '#FFFFFF',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
 						var: '--wp--preset--color--base',
