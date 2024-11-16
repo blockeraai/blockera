@@ -4,7 +4,6 @@ export * from './get';
 export * from './memo';
 export * from './array';
 export * from './store';
-export * from './color';
 export * from './portal';
 export * from './object';
 export * from './string';
