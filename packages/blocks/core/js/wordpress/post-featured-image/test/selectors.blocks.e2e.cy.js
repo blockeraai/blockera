@@ -60,7 +60,7 @@ describe('Featured Image Block → Selectors test', () => {
 
 		cy.get('@borderContainer').within(() => {
 			cy.get('[aria-haspopup="listbox"]').click();
-			cy.get('div').eq(1).click();
+			cy.get('div[aria-selected="false"]').eq(1).click();
 		});
 		cy.getBlock('core/post-featured-image')
 			.first()

@@ -45,7 +45,7 @@ describe('Media Fit → Functionality', () => {
 		/* Scale Down */
 		cy.get('@mediaFit').within(() => {
 			cy.get('[aria-haspopup="listbox"]').trigger('click');
-			cy.get('div').eq(5).trigger('click'); // scale-down
+			cy.get('div[aria-selected="false"]').eq(5).trigger('click'); // scale-down
 		});
 
 		//Check block
