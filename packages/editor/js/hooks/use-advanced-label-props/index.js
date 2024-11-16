@@ -179,10 +179,12 @@ export const useAdvancedLabelProps = (
 					.map((item) =>
 						Object.values(item?.breakpoints)
 							.map((_item) => {
-								const rootValue =
-									_item?.attributes?.blockeraInnerBlocks[
+								const rootValue = ((
+									((_item?.attributes || {})
+										?.blockeraInnerBlocks || {})[
 										currentBlock
-									]?.attributes[attribute];
+									] || {}
+								)?.attributes || {})[attribute];
 
 								return (
 									!!rootValue ||
