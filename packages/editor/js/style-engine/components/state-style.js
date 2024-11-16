@@ -6,15 +6,16 @@
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { applyFilters } from '@wordpress/hooks';
-import { useId, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import type {
-	BreakpointTypes,
 	TStates,
+	TBreakpoint,
 } from '../../extensions/libs/block-states/types';
+import { mergeObject } from '@blockera/utils';
+import { getComputedCssProps } from '../get-computed-css-props';
 import { default as blockStates } from '../../extensions/libs/block-states/states';
 
 /**
@@ -24,50 +25,10 @@ import { Style } from './style';
 import { MediaQuery } from './media-query';
 import type { StateStyleProps } from './types';
 import { combineDeclarations } from '../utils';
-import { useComputedCssProps } from '../hooks';
-
-const Stylesheet = ({
-	states,
-	selectors,
-	currentBlock,
-	currentState,
-	currentBreakpoint,
-	currentInnerBlockState,
-	...props
-}: {
-	...StateStyleProps,
-	states: Array<TStates | string>,
-}): any => {
-	const id = useId();
-	const styles = useComputedCssProps({
-		...props,
-		states,
-		selectors,
-		currentBlock,
-		currentState,
-		currentBreakpoint,
-		currentInnerBlockState,
-	});
-
-	const combinedDeclaration = useMemo(
-		() => combineDeclarations(styles),
-		[styles]
-	);
-
-	return combinedDeclaration.map(
-		({ selector, declarations }: Object, index: number): MixedElement => (
-			<MediaQuery key={index + id} breakpoint={currentBreakpoint}>
-				<Style selector={selector} cssDeclaration={declarations} />
-			</MediaQuery>
-		)
-	);
-};
 
 export const StateStyle = (
 	props: StateStyleProps
 ): Array<MixedElement> | MixedElement => {
-	const id = useId();
-
 	// Filtered allowed states to generate stylesheet.
 	// in free version allowed just "normal" and "hover".
 	const allowedStates = ['normal', 'hover'];
@@ -82,15 +43,56 @@ export const StateStyle = (
 	const { getBreakpoints } = select('blockera/editor');
 	const breakpoints = getBreakpoints();
 
-	return Object.entries(breakpoints).map(
-		([, breakpoint]: [string, BreakpointTypes], index: number): any => {
-			const { type } = breakpoint;
+	const devicesCssStyles: { [key: TBreakpoint]: Array<MixedElement> } = {};
 
-			return (
-				<Stylesheet
-					key={index + id}
-					{...{ ...props, states, currentBreakpoint: type }}
+	for (const name in breakpoints) {
+		const breakpoint = breakpoints[name];
+		const { type } = breakpoint;
+
+		const stylesheet = combineDeclarations(
+			getComputedCssProps({
+				...props,
+				states,
+				currentBreakpoint: type,
+			})
+		).map(
+			(
+				{ selector, declarations }: Object,
+				index: number
+			): MixedElement => (
+				<Style
+					key={`${type}-${index}-style`}
+					selector={selector}
+					cssDeclaration={declarations}
 				/>
+			)
+		);
+
+		if (!stylesheet.length) {
+			continue;
+		}
+
+		if (devicesCssStyles[type]) {
+			devicesCssStyles[type] = mergeObject(
+				devicesCssStyles[type],
+				stylesheet
+			);
+
+			continue;
+		}
+
+		devicesCssStyles[type] = stylesheet;
+	}
+
+	return Object.entries(devicesCssStyles).map(
+		(
+			[type, stylesheet]: [TBreakpoint, Array<MixedElement>],
+			i: number
+		): MixedElement => {
+			return (
+				<MediaQuery key={`${type}-${i}-media-query`} breakpoint={type}>
+					{stylesheet}
+				</MediaQuery>
 			);
 		}
 	);
