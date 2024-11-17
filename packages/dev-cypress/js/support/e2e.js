@@ -44,15 +44,19 @@ Cypress.Commands.add('logout', () => {
 });
 
 Cypress.Commands.add('addNewUser', (user, pass, role) => {
-	goTo('/wp-admin/users.php').then(() => {
-		cy.get('a').contains('Add New User').as('@addUser');
+	goTo('/wp-admin/users.php', true).then(() => {
+		cy.get('a').contains('Add New User').as('addUser');
 		cy.get('@addUser').then(() => {
 			cy.get('@addUser').click();
 			cy.wait(1000);
 
+			cy.get('input[name="user_login"').clear();
 			cy.get('input[name="user_login"').type(user);
+			cy.get('input[name="email"').clear();
 			cy.get('input[name="email"').type(user + '@' + user + '.com');
+			cy.get('input[aria-describedby="pass-strength-result"]').clear();
 			cy.get('input[aria-describedby="pass-strength-result"]').type(pass);
+			cy.get('label').contains('Confirm use of weak password').click();
 			cy.get('label')
 				.contains('Send the new user an email about their account')
 				.click();
