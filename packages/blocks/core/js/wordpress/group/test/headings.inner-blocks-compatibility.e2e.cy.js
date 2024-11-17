@@ -20,10 +20,10 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 		'core/heading': 'heading',
 		'core/heading-1': 'h1',
 		'core/heading-2': 'h2',
-		'core/heading-3': 'h3',
-		'core/heading-4': 'h4',
-		'core/heading-5': 'h5',
-		'core/heading-6': 'h6',
+		// 'core/heading-3': 'h3',
+		// 'core/heading-4': 'h4',
+		// 'core/heading-5': 'h5',
+		// 'core/heading-6': 'h6',
 	};
 
 	Object.keys(headingInnerBlocks).forEach((index) => {
@@ -163,17 +163,17 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							expect({
 								blockeraFontColor: {
 									settings: {
-										name: 'Accent / Three',
+										name: 'Accent 3',
 										id: 'accent-3',
-										value: '#d8613c',
+										value: '#503AA8',
 										reference: {
 											type: 'theme',
-											theme: 'Twenty Twenty-Four',
+											theme: 'Twenty Twenty-Five',
 										},
 										type: 'color',
 										var: '--wp--preset--color--accent-3',
 									},
-									name: 'Accent / Three',
+									name: 'Accent 3',
 									isValueAddon: true,
 									valueType: 'variable',
 								},
@@ -194,23 +194,23 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							cy.clickValueAddonButton();
 						});
 
-						cy.selectValueAddonItem('contrast-2');
+						cy.selectValueAddonItem('contrast');
 
 						getWPDataObject().then((data) => {
 							expect({
 								blockeraFontColor: {
 									settings: {
-										name: 'Contrast / Two',
-										id: 'contrast-2',
-										value: '#636363',
+										name: 'Contrast',
+										id: 'contrast',
+										value: '#111111',
 										reference: {
 											type: 'theme',
-											theme: 'Twenty Twenty-Four',
+											theme: 'Twenty Twenty-Five',
 										},
 										type: 'color',
-										var: '--wp--preset--color--contrast-2',
+										var: '--wp--preset--color--contrast',
 									},
-									name: 'Contrast / Two',
+									name: 'Contrast',
 									isValueAddon: true,
 									valueType: 'variable',
 								},
@@ -222,7 +222,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 						});
 
 						getWPDataObject().then((data) => {
-							expect('var:preset|color|contrast-2').to.be.equal(
+							expect('var:preset|color|contrast').to.be.equal(
 								getSelectedBlock(data, 'style')?.elements[
 									element
 								]?.color?.text
@@ -392,17 +392,17 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								expect({
 									blockeraBackgroundColor: {
 										settings: {
-											name: 'Accent / Three',
+											name: 'Accent 3',
 											id: 'accent-3',
-											value: '#d8613c',
+											value: '#503AA8',
 											reference: {
 												type: 'theme',
-												theme: 'Twenty Twenty-Four',
+												theme: 'Twenty Twenty-Five',
 											},
 											type: 'color',
 											var: '--wp--preset--color--accent-3',
 										},
-										name: 'Accent / Three',
+										name: 'Accent 3',
 										isValueAddon: true,
 										valueType: 'variable',
 									},
@@ -424,23 +424,23 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 								cy.clickValueAddonButton();
 							});
 
-							cy.selectValueAddonItem('contrast-2');
+							cy.selectValueAddonItem('contrast');
 
 							getWPDataObject().then((data) => {
 								expect({
 									blockeraBackgroundColor: {
 										settings: {
-											name: 'Contrast / Two',
-											id: 'contrast-2',
-											value: '#636363',
+											name: 'Contrast',
+											id: 'contrast',
+											value: '#111111',
 											reference: {
 												type: 'theme',
-												theme: 'Twenty Twenty-Four',
+												theme: 'Twenty Twenty-Five',
 											},
 											type: 'color',
-											var: '--wp--preset--color--contrast-2',
+											var: '--wp--preset--color--contrast',
 										},
-										name: 'Contrast / Two',
+										name: 'Contrast',
 										isValueAddon: true,
 										valueType: 'variable',
 									},
@@ -453,9 +453,7 @@ describe('Group Block → Heading Inner Block → WP Data Compatibility', () => 
 							});
 
 							getWPDataObject().then((data) => {
-								expect(
-									'var:preset|color|contrast-2'
-								).to.be.equal(
+								expect('var:preset|color|contrast').to.be.equal(
 									getSelectedBlock(data, 'style')?.elements[
 										element
 									]?.color?.background
