@@ -34,18 +34,25 @@ export const getLinearGradients: () => Array<VariableItem> = memoize(
 				theme: themeName,
 			};
 
-			return getBlockEditorSettings()
-				?.__experimentalFeatures?.color?.gradients?.theme.filter(
-					(item) => item.gradient.startsWith('linear-gradient')
+			if (
+				!isUndefined(
+					getBlockEditorSettings()?.__experimentalFeatures?.color
+						?.gradients?.theme
 				)
-				.map((item) => {
-					return {
-						name: item.name,
-						id: item.slug,
-						value: item.gradient,
-						reference,
-					};
-				});
+			) {
+				return getBlockEditorSettings()
+					?.__experimentalFeatures?.color?.gradients?.theme.filter(
+						(item) => item.gradient.startsWith('linear-gradient')
+					)
+					.map((item) => {
+						return {
+							name: item.name,
+							id: item.slug,
+							value: item.gradient,
+							reference,
+						};
+					});
+			}
 		}
 
 		if (

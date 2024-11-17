@@ -35,18 +35,25 @@ export const getRadialGradients: () => Array<VariableItem> = memoize(
 				theme: themeName,
 			};
 
-			return getBlockEditorSettings()
-				?.__experimentalFeatures?.color?.gradients?.theme.filter(
-					(item) => item.gradient.startsWith('radial-gradient')
+			if (
+				!isUndefined(
+					getBlockEditorSettings()?.__experimentalFeatures?.color
+						?.gradients?.theme
 				)
-				.map((item) => {
-					return {
-						name: item.name,
-						id: item.slug,
-						value: item.gradient,
-						reference,
-					};
-				});
+			) {
+				return getBlockEditorSettings()
+					?.__experimentalFeatures?.color?.gradients?.theme.filter(
+						(item) => item.gradient.startsWith('radial-gradient')
+					)
+					.map((item) => {
+						return {
+							name: item.name,
+							id: item.slug,
+							value: item.gradient,
+							reference,
+						};
+					});
+			}
 		}
 
 		if (
