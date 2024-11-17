@@ -196,17 +196,17 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			expect({
 				blockeraFontColor: {
 					settings: {
-						name: 'Accent / Three',
+						name: 'Accent 3',
 						id: 'accent-3',
-						value: '#d8613c',
+						value: '#503AA8',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
 						var: '--wp--preset--color--accent-3',
 					},
-					name: 'Accent / Three',
+					name: 'Accent 3',
 					isValueAddon: true,
 					valueType: 'variable',
 				},
@@ -218,17 +218,17 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 								attributes: {
 									blockeraFontColor: {
 										settings: {
-											name: 'Accent / Four',
+											name: 'Accent 4',
 											id: 'accent-4',
-											value: '#b1c5a4',
+											value: '#686868',
 											reference: {
 												type: 'theme',
-												theme: 'Twenty Twenty-Four',
+												theme: 'Twenty Twenty-Five',
 											},
 											type: 'color',
 											var: '--wp--preset--color--accent-4',
 										},
-										name: 'Accent / Four',
+										name: 'Accent 4',
 										isValueAddon: true,
 										valueType: 'variable',
 									},
@@ -259,7 +259,7 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			cy.clickValueAddonButton();
 		});
 
-		cy.selectValueAddonItem('contrast-2');
+		cy.selectValueAddonItem('contrast');
 
 		//
 		// Hover → Text Color
@@ -270,23 +270,23 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 			cy.clickValueAddonButton();
 		});
 
-		cy.selectValueAddonItem('accent');
+		cy.selectValueAddonItem('accent-1');
 
 		getWPDataObject().then((data) => {
 			expect({
 				blockeraFontColor: {
 					settings: {
-						name: 'Contrast / Two',
-						id: 'contrast-2',
-						value: '#636363',
+						name: 'Contrast',
+						id: 'contrast',
+						value: '#111111',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
-						var: '--wp--preset--color--contrast-2',
+						var: '--wp--preset--color--contrast',
 					},
-					name: 'Contrast / Two',
+					name: 'Contrast',
 					isValueAddon: true,
 					valueType: 'variable',
 				},
@@ -298,17 +298,17 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 								attributes: {
 									blockeraFontColor: {
 										settings: {
-											name: 'Accent',
-											id: 'accent',
-											value: '#cfcabe',
+											name: 'Accent 1',
+											id: 'accent-1',
+											value: '#FFEE58',
 											reference: {
 												type: 'theme',
-												theme: 'Twenty Twenty-Four',
+												theme: 'Twenty Twenty-Five',
 											},
 											type: 'color',
-											var: '--wp--preset--color--accent',
+											var: '--wp--preset--color--accent-1',
 										},
-										name: 'Accent',
+										name: 'Accent 1',
 										isValueAddon: true,
 										valueType: 'variable',
 									},
@@ -324,13 +324,13 @@ describe('Group Block → Link Inner Block → WP Data Compatibility', () => {
 		});
 
 		getWPDataObject().then((data) => {
-			expect('var:preset|color|contrast-2').to.be.equal(
+			expect('var:preset|color|contrast').to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link?.color?.text
 			);
 		});
 
 		getWPDataObject().then((data) => {
-			expect('var:preset|color|accent').to.be.equal(
+			expect('var:preset|color|accent-1').to.be.equal(
 				getSelectedBlock(data, 'style')?.elements?.link[':hover']?.color
 					?.text
 			);
