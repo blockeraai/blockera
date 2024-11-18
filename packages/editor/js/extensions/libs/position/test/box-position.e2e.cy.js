@@ -468,13 +468,13 @@ describe('Box Position → Functionality', () => {
 					.last()
 					.within(() => {
 						cy.openValueAddon();
-						cy.selectValueAddonItem('10');
+						cy.selectValueAddonItem('20');
 					});
 
 				cy.get('@Position')
 					.invoke('text')
 					.then((text) => {
-						expect(text.trim().replace(item, '')).to.eq('1');
+						expect(text.trim().replace(item, '')).to.eq('Tiny');
 					});
 			});
 		});
