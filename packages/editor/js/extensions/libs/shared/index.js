@@ -326,36 +326,36 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							{experimental().get(
 								'editor.extensions.iconExtension'
 							) && (
-								<IconExtension
-									{...{
-										iconConfig,
-										block,
-										values: {
-											blockeraIcon:
-												currentStateAttributes.blockeraIcon,
-											blockeraIconGap:
-												currentStateAttributes.blockeraIconGap,
-											blockeraIconSize:
-												currentStateAttributes.blockeraIconSize,
-											blockeraIconLink:
-												currentStateAttributes.blockeraIconLink,
-											blockeraIconColor:
-												currentStateAttributes.blockeraIconColor,
-											blockeraIconPosition:
-												currentStateAttributes.blockeraIconPosition,
-										},
-										extensionProps: {
-											blockeraIcon: {},
-											blockeraIconPosition: {},
-											blockeraIconGap: {},
-											blockeraIconSize: {},
-											blockeraIconColor: {},
-											blockeraIconLink: {},
-										},
-										handleOnChangeAttributes,
-									}}
-								/>
-							)}
+									<IconExtension
+										{...{
+											iconConfig,
+											block,
+											values: {
+												blockeraIcon:
+													currentStateAttributes.blockeraIcon,
+												blockeraIconGap:
+													currentStateAttributes.blockeraIconGap,
+												blockeraIconSize:
+													currentStateAttributes.blockeraIconSize,
+												blockeraIconLink:
+													currentStateAttributes.blockeraIconLink,
+												blockeraIconColor:
+													currentStateAttributes.blockeraIconColor,
+												blockeraIconPosition:
+													currentStateAttributes.blockeraIconPosition,
+											},
+											extensionProps: {
+												blockeraIcon: {},
+												blockeraIconPosition: {},
+												blockeraIconGap: {},
+												blockeraIconSize: {},
+												blockeraIconColor: {},
+												blockeraIconLink: {},
+											},
+											handleOnChangeAttributes,
+										}}
+									/>
+								)}
 
 							<ConditionsExtension
 								block={block}
@@ -435,13 +435,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								extensionConfig={typographyConfig}
 								extensionProps={{
 									blockeraFontFamily: {},
-									blockeraFontWeight: {},
+									blockeraFontAppearance: {},
 									blockeraFontColor: {},
 									blockeraFontSize: {},
 									blockeraLineHeight: {},
 									blockeraTextAlign: {},
 									blockeraTextDecoration: {},
-									blockeraFontStyle: {},
 									blockeraTextTransform: {},
 									blockeraDirection: {},
 									blockeraTextShadow: {},
@@ -456,8 +455,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								values={{
 									blockeraFontFamily:
 										currentStateAttributes?.blockeraFontFamily,
-									blockeraFontWeight:
-										currentStateAttributes?.blockeraFontWeight,
+									blockeraFontAppearance:
+										currentStateAttributes?.blockeraFontAppearance,
 									blockeraFontColor:
 										currentStateAttributes?.blockeraFontColor,
 									blockeraFontSize:
@@ -468,8 +467,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										currentStateAttributes?.blockeraTextAlign,
 									blockeraTextDecoration:
 										currentStateAttributes?.blockeraTextDecoration,
-									blockeraFontStyle:
-										currentStateAttributes?.blockeraFontStyle,
 									blockeraTextTransform:
 										currentStateAttributes?.blockeraTextTransform,
 									blockeraDirection:
@@ -494,8 +491,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								attributes={{
 									blockeraFontFamily:
 										attributes?.blockeraFontFamily,
-									blockeraFontWeight:
-										attributes?.blockeraFontWeight,
+									blockeraFontAppearance:
+										attributes?.blockeraFontAppearance,
 									blockeraFontColor:
 										attributes?.blockeraFontColor,
 									blockeraFontSize:
@@ -506,8 +503,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										attributes?.blockeraTextAlign,
 									blockeraTextDecoration:
 										attributes?.blockeraTextDecoration,
-									blockeraFontStyle:
-										attributes?.blockeraFontStyle,
 									blockeraTextTransform:
 										attributes?.blockeraTextTransform,
 									blockeraDirection:

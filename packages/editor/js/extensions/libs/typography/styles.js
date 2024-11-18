@@ -37,14 +37,13 @@ export function TypographyStyles({
 }: StylesProps): Array<CssRule> {
 	const {
 		blockeraFontFamily,
-		blockeraFontWeight,
+		blockeraFontAppearance,
 		blockeraFontSize,
 		blockeraLineHeight,
 		blockeraTextAlign,
 		blockeraFontColor,
 		blockeraTextDecoration,
 		blockeraTextShadow,
-		blockeraFontStyle,
 		blockeraTextTransform,
 		blockeraDirection,
 		blockeraLetterSpacing,
@@ -109,17 +108,20 @@ export function TypographyStyles({
 		}
 	}
 
-	if (isActiveField(blockeraFontWeight)) {
-		const blockeraFontWeight = blockProps.attributes.blockeraFontWeight;
+	if (isActiveField(blockeraFontAppearance)) {
+		const blockeraFontAppearance =
+			blockProps.attributes.blockeraFontAppearance;
 
-		if (blockeraFontWeight !== attributes.blockeraFontWeight.default) {
+		if (
+			blockeraFontAppearance !== attributes.blockeraFontAppearance.default
+		) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
-				query: 'blockeraFontWeight',
-				support: 'blockeraFontWeight',
+				query: 'blockeraFontAppearance',
+				support: 'blockeraFontAppearance',
 				fallbackSupportId: getBlockSupportFallback(
 					supports,
-					'blockeraFontWeight'
+					'blockeraFontAppearance'
 				),
 			});
 
@@ -127,11 +129,13 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						blockeraFontWeight: [
+						blockeraFontAppearance: [
 							{
 								type: 'static',
 								properties: {
-									'font-weight': blockeraFontWeight,
+									'font-weight':
+										blockeraFontAppearance.weight,
+									'font-style': blockeraFontAppearance.style,
 								},
 							},
 						],
@@ -308,39 +312,6 @@ export function TypographyStyles({
 								type: 'static',
 								properties: {
 									'text-decoration': blockeraTextDecoration,
-								},
-							},
-						],
-					},
-					blockProps
-				),
-			});
-		}
-	}
-
-	if (isActiveField(blockeraFontStyle)) {
-		const blockeraFontStyle = blockProps.attributes.blockeraFontStyle;
-
-		if (blockeraFontStyle !== attributes.blockeraFontStyle.default) {
-			const pickedSelector = getCompatibleBlockCssSelector({
-				...sharedParams,
-				query: 'blockeraFontStyle',
-				support: 'blockeraFontStyle',
-				fallbackSupportId: getBlockSupportFallback(
-					supports,
-					'blockeraFontStyle'
-				),
-			});
-
-			styleGroup.push({
-				selector: pickedSelector,
-				declarations: computedCssDeclarations(
-					{
-						blockeraFontStyle: [
-							{
-								type: 'static',
-								properties: {
-									'font-style': blockeraFontStyle,
 								},
 							},
 						],

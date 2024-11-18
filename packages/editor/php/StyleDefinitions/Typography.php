@@ -98,19 +98,24 @@ class Typography extends BaseStyleDefinition {
 				$declaration[ $cssProperty ] = 'var(--wp--preset--font-family--' . $propertyValue . ')';
 				break;
 
+			case 'font-weight':
+				if ( ! empty( $propertyValue['weight'] ) ) {
+					$declaration[ $cssProperty ] = $propertyValue['weight'];
+				}
+
+				if ( ! empty( $propertyValue['style'] ) ) {
+					$declaration['font-style'] = $propertyValue['style'];
+				}
+				break;
+
 			case 'line-height':
 			case 'text-indent':
 			case 'letter-spacing':
 			case 'word-spacing':
 			case 'direction':
 			case 'text-transform':
-			case 'font-style':
 			case 'text-decoration':
 			case 'word-break':
-			case 'font-weight':
-				$declaration[ $cssProperty ] = $propertyValue;
-				break;
-
 			case 'color':
 			case '-webkit-text-stroke-width':
 			case 'font-size':

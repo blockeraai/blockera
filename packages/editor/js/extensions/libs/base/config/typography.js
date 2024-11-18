@@ -17,11 +17,11 @@ const blockeraFontFamily: FeatureConfig = {
 	label: __('Font Family', 'blockera'),
 };
 
-const blockeraFontWeight: FeatureConfig = {
+const blockeraFontAppearance: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	label: __('Font Weight', 'blockera'),
+	label: __('Font Appearance', 'blockera'),
 };
 
 const blockeraFontSize: FeatureConfig = {
@@ -67,13 +67,6 @@ const blockeraTextDecoration: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Text Decoration', 'blockera'),
-};
-
-const blockeraFontStyle: FeatureConfig = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Font Style', 'blockera'),
 };
 
 const blockeraTextTransform: FeatureConfig = {
@@ -146,14 +139,13 @@ const blockeraWordBreak: FeatureConfig = {
 
 export const typographyConfig = {
 	blockeraFontFamily,
-	blockeraFontWeight,
+	blockeraFontAppearance,
 	blockeraFontSize,
 	blockeraLineHeight,
 	blockeraFontColor,
 	blockeraTextShadow,
 	blockeraTextAlign,
 	blockeraTextDecoration,
-	blockeraFontStyle,
 	blockeraTextTransform,
 	blockeraDirection,
 	blockeraLetterSpacing,

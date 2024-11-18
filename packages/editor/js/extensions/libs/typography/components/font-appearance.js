@@ -3,7 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __, _x } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -15,55 +15,13 @@ import { ControlContextProvider, SelectControl } from '@blockera/controls';
  */
 import { generateExtensionId } from '../../utils';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import {
+	getFontAppearanceObject,
+	getFontAppearanceId,
+	fontAppearancesOptions,
+} from '../utils';
 
-const FONT_WEIGHTS = [
-	{
-		label: __('Default', 'blockera'),
-		value: '',
-	},
-	{
-		label: _x('100 - Thin', 'font weight', 'blockera'),
-		value: '100',
-	},
-	{
-		label: _x('200 - Extra Light', 'font weight', 'blockera'),
-		value: '200',
-	},
-	{
-		label: _x('300 - Light', 'font weight', 'blockera'),
-		value: '300',
-	},
-	{
-		label: _x('400 - Regular', 'font weight', 'blockera'),
-		value: '400',
-	},
-	{
-		label: _x('500 - Medium', 'font weight', 'blockera'),
-		value: '500',
-	},
-	{
-		label: _x('600 - Semi Bold', 'font weight', 'blockera'),
-		value: '600',
-	},
-	{
-		label: _x('700 - Bold', 'font weight', 'blockera'),
-		value: '700',
-	},
-	{
-		label: _x('800 - Extra Bold', 'font weight', 'blockera'),
-		value: '800',
-	},
-	{
-		label: _x('900 - Black', 'font weight', 'blockera'),
-		value: '900',
-	},
-	{
-		label: _x('1000 - Extra Black', 'font weight', 'blockera'),
-		value: '1000',
-	},
-];
-
-export const FontWeight = ({
+export const FontAppearance = ({
 	block,
 	value,
 	onChange,
@@ -71,21 +29,21 @@ export const FontWeight = ({
 	...props
 }: {
 	block: TBlockProps,
-	value: string | void,
+	value: Object | void,
 	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
 			value={{
-				name: generateExtensionId(block, 'font-weight'),
-				value,
-				attribute: 'blockeraFontWeight',
+				name: generateExtensionId(block, 'font-appearance'),
+				value: getFontAppearanceId(value),
+				attribute: 'blockeraFontAppearance',
 				blockName: block.blockName,
 			}}
 		>
 			<SelectControl
-				label={__('Weight', 'blockera')}
+				label={__('Appearance', 'blockera')}
 				labelDescription={
 					<>
 						<p>
@@ -109,11 +67,15 @@ export const FontWeight = ({
 					</>
 				}
 				columns="columns-2"
-				options={FONT_WEIGHTS}
+				options={fontAppearancesOptions}
 				type="native"
 				defaultValue={defaultValue}
 				onChange={(newValue, ref) =>
-					onChange('blockeraFontWeight', newValue, { ref })
+					onChange(
+						'blockeraFontAppearance',
+						getFontAppearanceObject(newValue),
+						{ ref }
+					)
 				}
 				{...props}
 			/>
