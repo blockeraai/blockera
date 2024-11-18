@@ -251,7 +251,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 							value: '20px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
@@ -267,7 +267,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 							value: 'clamp(30px, 5vw, 50px)',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--50',
@@ -283,7 +283,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 							value: '30px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--40',
