@@ -326,36 +326,36 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							{experimental().get(
 								'editor.extensions.iconExtension'
 							) && (
-									<IconExtension
-										{...{
-											iconConfig,
-											block,
-											values: {
-												blockeraIcon:
-													currentStateAttributes.blockeraIcon,
-												blockeraIconGap:
-													currentStateAttributes.blockeraIconGap,
-												blockeraIconSize:
-													currentStateAttributes.blockeraIconSize,
-												blockeraIconLink:
-													currentStateAttributes.blockeraIconLink,
-												blockeraIconColor:
-													currentStateAttributes.blockeraIconColor,
-												blockeraIconPosition:
-													currentStateAttributes.blockeraIconPosition,
-											},
-											extensionProps: {
-												blockeraIcon: {},
-												blockeraIconPosition: {},
-												blockeraIconGap: {},
-												blockeraIconSize: {},
-												blockeraIconColor: {},
-												blockeraIconLink: {},
-											},
-											handleOnChangeAttributes,
-										}}
-									/>
-								)}
+								<IconExtension
+									{...{
+										iconConfig,
+										block,
+										values: {
+											blockeraIcon:
+												currentStateAttributes.blockeraIcon,
+											blockeraIconGap:
+												currentStateAttributes.blockeraIconGap,
+											blockeraIconSize:
+												currentStateAttributes.blockeraIconSize,
+											blockeraIconLink:
+												currentStateAttributes.blockeraIconLink,
+											blockeraIconColor:
+												currentStateAttributes.blockeraIconColor,
+											blockeraIconPosition:
+												currentStateAttributes.blockeraIconPosition,
+										},
+										extensionProps: {
+											blockeraIcon: {},
+											blockeraIconPosition: {},
+											blockeraIconGap: {},
+											blockeraIconSize: {},
+											blockeraIconColor: {},
+											blockeraIconLink: {},
+										},
+										handleOnChangeAttributes,
+									}}
+								/>
+							)}
 
 							<ConditionsExtension
 								block={block}
