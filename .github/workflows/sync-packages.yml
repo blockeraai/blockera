@@ -17,5 +17,6 @@ jobs:
             - name: Sync packages with other dependent repositories
               uses: blockeraai/blockera-folder-sync@v1.0.0
               with:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  BLOCKERABOT_PAT: ${{ secrets.BLOCKERABOT_PAT }}
+                  TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
+                  USERNAME: ${{ secrets.BLOCKERABOT_USERNAME }}
+                  EMAIL: ${{ secrets.BLOCKERABOT_EMAIL }}
