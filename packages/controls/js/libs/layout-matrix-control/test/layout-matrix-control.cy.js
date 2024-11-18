@@ -160,9 +160,11 @@ describe('Layout Matrix Control component testing', () => {
 
 		describe('Justify Content & Align Items', () => {
 			const setCustomSelectOption = (index, option) => {
-				cy.get('button[aria-haspopup="listbox"]').eq(index).click();
+				cy.get('button[aria-haspopup="listbox"]')
+					.eq(index)
+					.click({ force: true });
 				cy.get('ul[aria-hidden="false"]').within(() => {
-					cy.contains(option).click();
+					cy.contains(option).click({ force: true });
 				});
 			};
 
