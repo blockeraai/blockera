@@ -24,10 +24,7 @@ describe('Media Fit → Functionality', () => {
 		cy.getParentContainer('Media Fit').as('mediaFit');
 
 		cy.get('@mediaFit').within(() => {
-			cy.get('[aria-haspopup="listbox"]').trigger('click');
-			cy.get('div[aria-selected="false"] span')
-				.eq(2)
-				.trigger('click', { force: true }); // contain
+			cy.customSelect('Fill', 'Media Fit');
 		});
 
 		//Check block
@@ -35,17 +32,12 @@ describe('Media Fit → Functionality', () => {
 
 		//Check store
 		getWPDataObject().then((data) => {
-			expect('fill').to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraFit')?.value
-			);
+			expect('fill').to.be.equal(getSelectedBlock(data, 'blockeraFit'));
 		});
 
 		/* Scale Down */
 		cy.get('@mediaFit').within(() => {
-			cy.get('[aria-haspopup="listbox"]').trigger('click');
-			cy.get('div[aria-selected="false"]')
-				.eq(5)
-				.trigger('click', { force: true }); // scale-down
+			cy.customSelect('Scale Down', 'Media Fit');
 		});
 
 		//Check block
@@ -58,7 +50,7 @@ describe('Media Fit → Functionality', () => {
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('scale-down').to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraFit')?.value
+				getSelectedBlock(data, 'blockeraFit')
 			);
 		});
 
