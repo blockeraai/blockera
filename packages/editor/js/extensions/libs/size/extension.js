@@ -29,8 +29,7 @@ import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TSizeProps } from './types/size-props';
-import { ObjectFit } from './components';
-import AspectRatio from './components/aspect-ratio';
+import { ObjectFit, AspectRatio } from './components';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
 

@@ -1,2 +1,3 @@
 // @flow
-export { default as ObjectFit } from './object-fit';
+export { ObjectFit } from './object-fit';
+export { AspectRatio } from './aspect-ratio';
