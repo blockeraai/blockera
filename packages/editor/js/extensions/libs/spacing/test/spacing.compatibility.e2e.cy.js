@@ -293,8 +293,8 @@ describe('Box Spacing → WP Compatibility', () => {
 
 		it('Variable Value', () => {
 			appendBlocks(
-				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","right":"var:preset|spacing|40","bottom":"var:preset|spacing|20","left":"var:preset|spacing|40"},"margin":{"top":"var:preset|spacing|10","right":"var:preset|spacing|20","bottom":"var:preset|spacing|10","left":"var:preset|spacing|20"}}}} -->
-<p style="margin-top:var(--wp--preset--spacing--10);margin-right:var(--wp--preset--spacing--20);margin-bottom:var(--wp--preset--spacing--10);margin-left:var(--wp--preset--spacing--20);padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--40)">Test paragraph...</p>
+				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","right":"var:preset|spacing|40","bottom":"var:preset|spacing|20","left":"var:preset|spacing|40"},"margin":{"top":"var:preset|spacing|20","right":"var:preset|spacing|30","bottom":"var:preset|spacing|20","left":"var:preset|spacing|30"}}}} -->
+<p style="margin-top:var(--wp--preset--spacing--20);margin-right:var(--wp--preset--spacing--30);margin-bottom:var(--wp--preset--spacing--20);margin-left:var(--wp--preset--spacing--30);padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--40)">Test paragraph...</p>
 <!-- /wp:paragraph -->`
 			);
 
@@ -305,10 +305,10 @@ describe('Box Spacing → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					margin: {
-						top: 'var:preset|spacing|10',
-						right: 'var:preset|spacing|20',
-						bottom: 'var:preset|spacing|10',
-						left: 'var:preset|spacing|20',
+						top: 'var:preset|spacing|20',
+						right: 'var:preset|spacing|30',
+						bottom: 'var:preset|spacing|20',
+						left: 'var:preset|spacing|30',
 					},
 					padding: {
 						top: 'var:preset|spacing|20',
@@ -329,65 +329,65 @@ describe('Box Spacing → WP Compatibility', () => {
 					padding: {
 						top: {
 							settings: {
-								name: '2',
+								name: 'Tiny',
 								id: '20',
-								value: 'min(1.5rem, 2vw)',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--20',
 							},
-							name: '2',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						right: {
 							settings: {
-								name: '4',
+								name: 'Small',
 								id: '40',
-								value: 'min(4rem, 5vw)',
+								value: '30px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--40',
 							},
-							name: '4',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: {
 							settings: {
-								name: '2',
+								name: 'Tiny',
 								id: '20',
-								value: 'min(1.5rem, 2vw)',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--20',
 							},
-							name: '2',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						left: {
 							settings: {
-								name: '4',
+								name: 'Small',
 								id: '40',
-								value: 'min(4rem, 5vw)',
+								value: '30px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--40',
 							},
-							name: '4',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -395,65 +395,65 @@ describe('Box Spacing → WP Compatibility', () => {
 					margin: {
 						top: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						right: {
 							settings: {
-								name: '2',
-								id: '20',
-								value: 'min(1.5rem, 2vw)',
+								name: 'X-Small',
+								id: '30',
+								value: '20px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--20',
+								var: '--wp--preset--spacing--30',
 							},
-							name: '2',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						left: {
 							settings: {
-								name: '2',
-								id: '20',
-								value: 'min(1.5rem, 2vw)',
+								name: 'X-Small',
+								id: '30',
+								value: '20px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--20',
+								var: '--wp--preset--spacing--30',
 							},
-							name: '2',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -507,7 +507,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('10');
+					cy.selectValueAddonItem('20');
 				});
 
 			// change right padding
@@ -516,7 +516,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('20');
+					cy.selectValueAddonItem('30');
 				});
 
 			// change bottom padding
@@ -525,7 +525,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('30');
+					cy.selectValueAddonItem('40');
 				});
 
 			// change left padding
@@ -534,7 +534,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('40');
+					cy.selectValueAddonItem('50');
 				});
 
 			// Assert Blockera value
@@ -543,65 +543,65 @@ describe('Box Spacing → WP Compatibility', () => {
 					margin: {
 						top: {
 							settings: {
-								name: '3',
+								name: 'X-Small',
 								id: '30',
-								value: 'min(2.5rem, 3vw)',
+								value: '20px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--30',
 							},
-							name: '3',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						right: {
 							settings: {
-								name: '4',
+								name: 'Small',
 								id: '40',
-								value: 'min(4rem, 5vw)',
+								value: '30px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--40',
 							},
-							name: '4',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: {
 							settings: {
-								name: '5',
+								name: 'Regular',
 								id: '50',
-								value: 'min(6.5rem, 8vw)',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--50',
 							},
-							name: '5',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						left: {
 							settings: {
-								name: '6',
+								name: 'Large',
 								id: '60',
-								value: 'min(10.5rem, 13vw)',
+								value: 'clamp(30px, 7vw, 70px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--60',
 							},
-							name: '6',
+							name: 'Large',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -609,65 +609,65 @@ describe('Box Spacing → WP Compatibility', () => {
 					padding: {
 						top: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						right: {
 							settings: {
-								name: '2',
-								id: '20',
-								value: 'min(1.5rem, 2vw)',
+								name: 'X-Small',
+								id: '30',
+								value: '20px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--20',
+								var: '--wp--preset--spacing--30',
 							},
-							name: '2',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: {
 							settings: {
-								name: '3',
-								id: '30',
-								value: 'min(2.5rem, 3vw)',
+								name: 'Small',
+								id: '40',
+								value: '30px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--30',
+								var: '--wp--preset--spacing--40',
 							},
-							name: '3',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						left: {
 							settings: {
-								name: '4',
-								id: '40',
-								value: 'min(4rem, 5vw)',
+								name: 'Regular',
+								id: '50',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--40',
+								var: '--wp--preset--spacing--50',
 							},
-							name: '4',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -685,10 +685,10 @@ describe('Box Spacing → WP Compatibility', () => {
 						left: 'var:preset|spacing|60',
 					},
 					padding: {
-						top: 'var:preset|spacing|10',
-						right: 'var:preset|spacing|20',
-						bottom: 'var:preset|spacing|30',
-						left: 'var:preset|spacing|40',
+						top: 'var:preset|spacing|20',
+						right: 'var:preset|spacing|30',
+						bottom: 'var:preset|spacing|40',
+						left: 'var:preset|spacing|50',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
@@ -741,8 +741,8 @@ describe('Box Spacing → WP Compatibility', () => {
 
 		it('Both (Variable and simple values)', () => {
 			appendBlocks(
-				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"100px","bottom":"100px","left":"var:preset|spacing|10","right":"var:preset|spacing|10"},"margin":{"top":"var:preset|spacing|10","bottom":"var:preset|spacing|10","left":"100px","right":"100px"}}}} -->
-<p style="margin-top:var(--wp--preset--spacing--10);margin-right:100px;margin-bottom:var(--wp--preset--spacing--10);margin-left:100px;padding-top:100px;padding-right:var(--wp--preset--spacing--10);padding-bottom:100px;padding-left:var(--wp--preset--spacing--10)">Test paragraph...</p>
+				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"100px","bottom":"100px","left":"var:preset|spacing|20","right":"var:preset|spacing|20"},"margin":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"100px","right":"100px"}}}} -->
+<p style="margin-top:var(--wp--preset--spacing--20);margin-right:100px;margin-bottom:var(--wp--preset--spacing--20);margin-left:100px;padding-top:100px;padding-right:var(--wp--preset--spacing--20);padding-bottom:100px;padding-left:var(--wp--preset--spacing--20)">Test paragraph...</p>
 <!-- /wp:paragraph -->`
 			);
 
@@ -753,16 +753,16 @@ describe('Box Spacing → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					margin: {
-						top: 'var:preset|spacing|10',
+						top: 'var:preset|spacing|20',
 						right: '100px',
-						bottom: 'var:preset|spacing|10',
+						bottom: 'var:preset|spacing|20',
 						left: '100px',
 					},
 					padding: {
 						top: '100px',
-						right: 'var:preset|spacing|10',
+						right: 'var:preset|spacing|20',
 						bottom: '100px',
-						left: 'var:preset|spacing|10',
+						left: 'var:preset|spacing|20',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
@@ -778,34 +778,34 @@ describe('Box Spacing → WP Compatibility', () => {
 						top: '100px',
 						right: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: '100px',
 						left: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -813,34 +813,34 @@ describe('Box Spacing → WP Compatibility', () => {
 					margin: {
 						top: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						right: '100px',
 						bottom: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -905,75 +905,75 @@ describe('Box Spacing → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					margin: {
+						top: '50px',
 						right: {
 							settings: {
-								name: '5',
+								name: 'Regular',
 								id: '50',
-								value: 'min(6.5rem, 8vw)',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--50',
 							},
-							name: '5',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
+						bottom: '50px',
 						left: {
 							settings: {
-								name: '5',
+								name: 'Regular',
 								id: '50',
-								value: 'min(6.5rem, 8vw)',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--50',
 							},
-							name: '5',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
-						top: '50px',
-						bottom: '50px',
 					},
 					padding: {
 						top: {
 							settings: {
-								name: '5',
+								name: 'Regular',
 								id: '50',
-								value: 'min(6.5rem, 8vw)',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--50',
 							},
-							name: '5',
-							isValueAddon: true,
-							valueType: 'variable',
-						},
-						bottom: {
-							settings: {
-								name: '5',
-								id: '50',
-								value: 'min(6.5rem, 8vw)',
-								reference: {
-									type: 'theme',
-									theme: 'Twenty Twenty-Four',
-								},
-								type: 'spacing',
-								var: '--wp--preset--spacing--50',
-							},
-							name: '5',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						right: '50px',
+						bottom: {
+							settings: {
+								name: 'Regular',
+								id: '50',
+								value: 'clamp(30px, 5vw, 50px)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Five',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--50',
+							},
+							name: 'Regular',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
 						left: '50px',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraSpacing'));
