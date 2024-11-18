@@ -108,11 +108,11 @@ describe('Font Size → WP Compatibility', () => {
 					settings: {
 						name: 'Small',
 						id: 'small',
-						value: '0.9rem',
+						value: '0.875rem',
 						fluid: null,
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'font-size',
 						var: '--wp--preset--font-size--small',
@@ -147,14 +147,14 @@ describe('Font Size → WP Compatibility', () => {
 					settings: {
 						name: 'Large',
 						id: 'large',
-						value: '1.85rem',
+						value: '1.38rem',
 						fluid: {
-							min: '1.39rem',
-							max: '1.85rem',
+							max: '1.375rem',
+							min: '1.125rem',
 						},
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'font-size',
 						var: '--wp--preset--font-size--large',
