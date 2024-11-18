@@ -101,16 +101,17 @@
 
 	.blockera-control-select.custom {
 
-		.components-custom-select-control__menu {
+		[role="listbox"] {
 			width: 150px;
-			right: 0;
+			right: 120px;
+			left: initial;
 
 			li:first-child {
 				display: none;
 			}
 		}
 
-		.components-custom-select-control__button {
+		button {
 			padding: 2px 4px !important;
 			height: 30px;
 			width: 30px;
