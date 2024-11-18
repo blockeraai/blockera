@@ -17,7 +17,7 @@ describe('All Features Together → WP Compatibility', () => {
 	describe('Paragraph Block', () => {
 		it('Simple value', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"style":{"typography":{"textTransform":"uppercase","fontSize":"20px","fontStyle":"italic","fontWeight":"400","lineHeight":"2","textDecoration":"underline","letterSpacing":"2px","writingMode":"vertical-rl"}}} -->\n' +
+				'<!-- wp:paragraph {"style":{"typography":{"textTransform":"uppercase","fontSize":"20px","fontStyle":"italic","fontWeight":"600","lineHeight":"2","textDecoration":"underline","letterSpacing":"2px","writingMode":"vertical-rl"}}} -->\n' +
 					'<p style="font-size:20px;font-style:normal;font-weight:400;letter-spacing:2px;line-height:2;text-decoration:underline;text-transform:uppercase;writing-mode:vertical-rl">Test paragraph</p>\n' +
 					'<!-- /wp:paragraph --> '
 			);
@@ -54,14 +54,22 @@ describe('All Features Together → WP Compatibility', () => {
 				);
 
 				//
-				// Font Style
+				// Font Appearance
 				//
 				expect('italic').to.be.equal(
-					getSelectedBlock(data, 'blockeraFontStyle')
+					getSelectedBlock(data, 'blockeraFontAppearance')?.style
 				);
 
 				expect('italic').to.be.equal(
 					getSelectedBlock(data, 'style')?.typography?.fontStyle
+				);
+
+				expect('600').to.be.equal(
+					getSelectedBlock(data, 'blockeraFontAppearance')?.weight
+				);
+
+				expect('600').to.be.equal(
+					getSelectedBlock(data, 'style')?.typography?.fontWeight
 				);
 
 				//
