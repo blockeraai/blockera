@@ -106,10 +106,9 @@ describe('media-image', () => {
 
 			cy.get('.media-modal').should('be.visible');
 
-			// there should be 3 tag on document because of how wp works and we opened media uploader 3 times
 			cy.get('[aria-labelledby="media-frame-title"]').should(
 				'have.length',
-				2
+				1
 			);
 		});
 	});
