@@ -45,7 +45,7 @@ const blockeraFontColor: FeatureConfig = {
 	isActiveOnStatesOnFree: true,
 	isActiveOnBreakpointsOnFree: true,
 	isActiveOnInnerBlocksOnFree: true,
-	label: __('Font Color', 'blockera'),
+	label: __('Text Color', 'blockera'),
 };
 
 const blockeraTextShadow: FeatureConfig = {
@@ -62,18 +62,18 @@ const blockeraTextAlign: FeatureConfig = {
 	label: __('Text Align', 'blockera'),
 };
 
-const blockeraTextDecoration: FeatureConfig = {
-	show: true,
-	force: false,
-	status: true,
-	label: __('Text Decoration', 'blockera'),
-};
-
 const blockeraTextTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
 	label: __('Text Transform', 'blockera'),
+};
+
+const blockeraTextDecoration: FeatureConfig = {
+	show: true,
+	force: false,
+	status: true,
+	label: __('Text Decoration', 'blockera'),
 };
 
 const blockeraDirection: FeatureConfig = {
