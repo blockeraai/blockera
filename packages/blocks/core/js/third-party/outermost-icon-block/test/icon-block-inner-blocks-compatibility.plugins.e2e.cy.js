@@ -245,10 +245,10 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 					settings: {
 						name: 'Base',
 						id: 'base',
-						value: '#f9f9f9',
+						value: '#FFFFFF',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
 						var: '--wp--preset--color--base',
@@ -276,7 +276,7 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 						value: '#111111',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
 						var: '--wp--preset--color--contrast',
@@ -298,69 +298,69 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 			});
 
 			// change variable
-			cy.selectValueAddonItem('contrast-2');
+			cy.selectValueAddonItem('accent-1');
 
 			cy.getParentContainer('Text Color').within(() => {
 				cy.clickValueAddonButton();
 			});
 
 			// change variable
-			cy.selectValueAddonItem('base-2');
+			cy.selectValueAddonItem('accent-5');
 
 			//
 			// Check
 			//
 			getWPDataObject().then((data) => {
-				expect('base-2').to.be.equal(
+				expect('accent-5').to.be.equal(
 					getSelectedBlock(data, 'iconColor')
 				);
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'customIconColor')
 				);
-				expect('#ffffff').to.be.equal(
+				expect('#FBFAF3').to.be.equal(
 					getSelectedBlock(data, 'iconColorValue')
 				);
 				expect({
 					settings: {
-						name: 'Base / Two',
-						id: 'base-2',
-						value: '#ffffff',
+						name: 'Accent 5',
+						id: 'accent-5',
+						value: '#FBFAF3',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
-						var: '--wp--preset--color--base-2',
+						var: '--wp--preset--color--accent-5',
 					},
-					name: 'Base / Two',
+					name: 'Accent 5',
 					isValueAddon: true,
 					valueType: 'variable',
 				}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraFontColor')
 				);
 
-				expect('contrast-2').to.be.equal(
+				expect('accent-1').to.be.equal(
 					getSelectedBlock(data, 'iconBackgroundColor')
 				);
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'customIconBackgroundColor')
 				);
-				expect('#636363').to.be.equal(
+				expect('#FFEE58').to.be.equal(
 					getSelectedBlock(data, 'iconBackgroundColorValue')
 				);
 				expect({
 					settings: {
-						name: 'Contrast / Two',
-						id: 'contrast-2',
-						value: '#636363',
+						name: 'Accent 1',
+						id: 'accent-1',
+						value: '#FFEE58',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
-						var: '--wp--preset--color--contrast-2',
+						var: '--wp--preset--color--accent-1',
 					},
-					name: 'Contrast / Two',
+					name: 'Accent 1',
 					isValueAddon: true,
 					valueType: 'variable',
 				}).to.be.deep.equal(

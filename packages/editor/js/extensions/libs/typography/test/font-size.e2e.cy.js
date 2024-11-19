@@ -63,11 +63,11 @@ describe('Font Size → Functionality', () => {
 				settings: {
 					name: 'Small',
 					id: 'small',
-					value: '0.9rem',
+					value: '0.875rem',
 					fluid: null,
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'font-size',
 					var: '--wp--preset--font-size--small',

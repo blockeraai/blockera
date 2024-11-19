@@ -312,24 +312,24 @@ describe('Background Image → Functionality', () => {
 					});
 
 				// select variable
-				cy.selectValueAddonItem('gradient-3');
+				cy.selectValueAddonItem('vivid-cyan-blue-to-vivid-purple');
 			});
 
 			// assert data
 			getWPDataObject().then((data) => {
 				expect({
 					settings: {
-						name: 'Vertical soft rust to white',
-						id: 'gradient-3',
-						value: 'linear-gradient(to bottom, #D8613C 0%, #F9F9F9 100%)',
+						name: 'Vivid cyan blue to vivid purple',
+						id: 'vivid-cyan-blue-to-vivid-purple',
+						value: 'linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'linear-gradient',
-						var: '--wp--preset--gradient--gradient-3',
+						var: '--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple',
 					},
-					name: 'Vertical soft rust to white',
+					name: 'Vivid cyan blue to vivid purple',
 					isValueAddon: true,
 					valueType: 'variable',
 				}).to.be.deep.equal(
@@ -342,7 +342,7 @@ describe('Background Image → Functionality', () => {
 			// assert editor
 			cy.getBlock('core/paragraph').should(($block) => {
 				expect($block.css('background-image')).to.be.equal(
-					'linear-gradient(rgb(216, 97, 60) 0%, rgb(249, 249, 249) 100%)'
+					'linear-gradient(135deg, rgb(6, 147, 227) 0%, rgb(155, 81, 224) 100%)'
 				);
 			});
 
@@ -351,7 +351,7 @@ describe('Background Image → Functionality', () => {
 			redirectToFrontPage();
 			cy.get('.blockera-block').should(($block) => {
 				expect($block.css('background-image')).to.be.equal(
-					'linear-gradient(rgb(216, 97, 60) 0%, rgb(249, 249, 249) 100%)'
+					'linear-gradient(135deg, rgb(6, 147, 227) 0%, rgb(155, 81, 224) 100%)'
 				);
 			});
 		});

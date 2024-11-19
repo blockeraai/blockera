@@ -19,7 +19,7 @@ describe('Font Family → Functionality', () => {
 		cy.getParentContainer('Family').as('container');
 
 		cy.get('@container').within(() => {
-			cy.get('select').select('system-sans-serif');
+			cy.get('select').select('fira-code');
 		});
 
 		// Check block
@@ -28,13 +28,13 @@ describe('Font Family → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'font-family: var(--wp--preset--font-family--system-sans-serif)'
+					'font-family: var(--wp--preset--font-family--fira-code)'
 				);
 		});
 
 		//Check store
 		getWPDataObject().then((data) => {
-			expect('system-sans-serif').to.be.equal(
+			expect('fira-code').to.be.equal(
 				getSelectedBlock(data, 'blockeraFontFamily')
 			);
 		});
@@ -48,7 +48,7 @@ describe('Font Family → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'font-family: var(--wp--preset--font-family--system-sans-serif)'
+				'font-family: var(--wp--preset--font-family--fira-code)'
 			);
 	});
 });

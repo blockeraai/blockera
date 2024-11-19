@@ -479,10 +479,13 @@ return [
 			'value' => '',
 		],
 	],
-	'blockeraFontWeight'                => [
+	'blockeraFontAppearance'            => [
 		'type'    => 'object',
 		'default' => [
-			'value' => '',
+			'value' => [
+				'weight' => '',
+				'style'  => '',
+			],
 		],
 	],
 	'blockeraFontColor'                 => [
@@ -510,12 +513,6 @@ return [
 		],
 	],
 	'blockeraTextDecoration'            => [
-		'type'    => 'object',
-		'default' => [
-			'value' => '',
-		],
-	],
-	'blockeraFontStyle'                 => [
 		'type'    => 'object',
 		'default' => [
 			'value' => '',

@@ -259,7 +259,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		});
 	});
 
-	it('Variable Value', () => {
+	it.only('Variable Value', () => {
 		appendBlocks(
 			`<!-- wp:social-links {"iconColor":"base","iconColorValue":"#ffffff","iconBackgroundColor":"contrast","iconBackgroundColorValue":"#111111","showLabels":true,"size":"has-normal-icon-size","className":"is-style-default","layout":{"type":"flex","justifyContent":"left","flexWrap":"nowrap"}} -->
 <ul class="wp-block-social-links has-normal-icon-size has-visible-labels has-icon-color has-icon-background-color is-style-default"><!-- wp:social-link {"url":"#test","service":"wordpress"} /-->
@@ -305,10 +305,10 @@ describe('Social Links Block → WP Compatibility', () => {
 				settings: {
 					name: 'Base',
 					id: 'base',
-					value: '#f9f9f9',
+					value: '#FFFFFF',
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'color',
 					var: '--wp--preset--color--base',
@@ -325,10 +325,10 @@ describe('Social Links Block → WP Compatibility', () => {
 				settings: {
 					name: 'Base',
 					id: 'base',
-					value: '#f9f9f9',
+					value: '#FFFFFF',
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'color',
 					var: '--wp--preset--color--base',
@@ -348,7 +348,7 @@ describe('Social Links Block → WP Compatibility', () => {
 					value: '#111111',
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'color',
 					var: '--wp--preset--color--contrast',
@@ -377,7 +377,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		});
 
 		// change variable
-		cy.selectValueAddonItem('contrast-2');
+		cy.selectValueAddonItem('contrast');
 
 		//
 		// Buttons Icons inner block
@@ -390,7 +390,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		});
 
 		// change variable
-		cy.selectValueAddonItem('base-2');
+		cy.selectValueAddonItem('accent-1');
 
 		//
 		// Buttons Names inner block
@@ -409,37 +409,37 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Check
 		//
 		getWPDataObject().then((data) => {
-			expect('base-2').to.be.equal(getSelectedBlock(data, 'iconColor'));
+			expect('accent-1').to.be.equal(getSelectedBlock(data, 'iconColor'));
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'customIconColor')
 			);
-			expect('#ffffff').to.be.equal(
+			expect('#FFEE58').to.be.equal(
 				getSelectedBlock(data, 'iconColorValue')
 			);
 
-			expect('contrast-2').to.be.equal(
+			expect('contrast').to.be.equal(
 				getSelectedBlock(data, 'iconBackgroundColor')
 			);
 			expect(undefined).to.be.equal(
 				getSelectedBlock(data, 'customIconBackgroundColor')
 			);
-			expect('#636363').to.be.equal(
+			expect('#111111').to.be.equal(
 				getSelectedBlock(data, 'iconBackgroundColorValue')
 			);
 
 			expect({
 				settings: {
-					name: 'Base / Two',
-					id: 'base-2',
-					value: '#ffffff',
+					name: 'Accent 1',
+					id: 'accent-1',
+					value: '#FFEE58',
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'color',
-					var: '--wp--preset--color--base-2',
+					var: '--wp--preset--color--accent-1',
 				},
-				name: 'Base / Two',
+				name: 'Accent 1',
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
@@ -449,17 +449,17 @@ describe('Social Links Block → WP Compatibility', () => {
 			);
 			expect({
 				settings: {
-					name: 'Accent / Two',
+					name: 'Accent 2',
 					id: 'accent-2',
-					value: '#c2a990',
+					value: '#F6CFF4',
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'color',
 					var: '--wp--preset--color--accent-2',
 				},
-				name: 'Accent / Two',
+				name: 'Accent 2',
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(
@@ -469,17 +469,17 @@ describe('Social Links Block → WP Compatibility', () => {
 			);
 			expect({
 				settings: {
-					name: 'Contrast / Two',
-					id: 'contrast-2',
-					value: '#636363',
+					name: 'Contrast',
+					id: 'contrast',
+					value: '#111111',
 					reference: {
 						type: 'theme',
-						theme: 'Twenty Twenty-Four',
+						theme: 'Twenty Twenty-Five',
 					},
 					type: 'color',
-					var: '--wp--preset--color--contrast-2',
+					var: '--wp--preset--color--contrast',
 				},
-				name: 'Contrast / Two',
+				name: 'Contrast',
 				isValueAddon: true,
 				valueType: 'variable',
 			}).to.be.deep.equal(

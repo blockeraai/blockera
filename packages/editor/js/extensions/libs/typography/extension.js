@@ -36,9 +36,8 @@ import { EditorFeatureWrapper } from '../../../';
 import type { TTypographyProps } from './type/typography-props';
 import {
 	FontFamily,
-	FontWeight,
+	FontAppearance,
 	FontSize,
-	FontStyle,
 	LineHeight,
 	TextTransform,
 	TextDecoration,
@@ -67,10 +66,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 			values?.blockeraFontFamily,
 			attributes.blockeraFontFamily.default
 		);
-		const isShowFontWeight = isShowField(
-			extensionConfig.blockeraFontWeight,
-			values?.blockeraFontWeight,
-			attributes.blockeraFontWeight.default
+		const isShowFontAppearance = isShowField(
+			extensionConfig.blockeraFontAppearance,
+			values?.blockeraFontAppearance,
+			attributes.blockeraFontAppearance.default
 		);
 		const isShowFontSize = isShowField(
 			extensionConfig.blockeraFontSize,
@@ -91,11 +90,6 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 			extensionConfig.blockeraTextDecoration,
 			values?.blockeraTextDecoration,
 			attributes.blockeraTextDecoration.default
-		);
-		const isShowFontStyle = isShowField(
-			extensionConfig.blockeraFontStyle,
-			values?.blockeraFontStyle,
-			attributes.blockeraFontStyle.default
 		);
 		const isShowTextTransform = isShowField(
 			extensionConfig.blockeraTextTransform,
@@ -155,12 +149,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 
 		if (
 			!isShowFontFamily &&
-			!isShowFontWeight &&
+			!isShowFontAppearance &&
 			!isShowFontSize &&
 			!isShowLineHeight &&
 			!isShowTextAlign &&
 			!isShowTextDecoration &&
-			!isShowFontStyle &&
 			!isShowTextTransform &&
 			!isShowDirection &&
 			!isShowLetterSpacing &&
@@ -179,7 +172,6 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 		const isShowAdvanced =
 			isShowTextAlign ||
 			isShowTextDecoration ||
-			isShowFontStyle ||
 			isShowTextTransform ||
 			isShowDirection ||
 			isShowLetterSpacing ||
@@ -197,8 +189,6 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					attributes.blockeraTextAlign.default ||
 				values?.blockeraTextDecoration !==
 					attributes.blockeraTextDecoration.default ||
-				values?.blockeraFontStyle !==
-					attributes.blockeraFontStyle.default ||
 				values?.blockeraTextTransform !==
 					attributes.blockeraTextTransform.default ||
 				values?.blockeraDirection !==
@@ -261,20 +251,20 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 						</EditorFeatureWrapper>
 
 						<EditorFeatureWrapper
-							isActive={isShowFontWeight}
-							config={extensionConfig.blockeraFontWeight}
+							isActive={isShowFontAppearance}
+							config={extensionConfig.blockeraFontAppearance}
 						>
-							<FontWeight
+							<FontAppearance
 								block={block}
 								onChange={handleOnChangeAttributes}
-								value={values.blockeraFontWeight}
+								value={values.blockeraFontAppearance}
 								defaultValue={
-									attributes.blockeraFontWeight.default
+									attributes.blockeraFontAppearance.default
 								}
 								columns="columns-1"
 								className="control-first label-center small-gap"
 								style={{ margin: '0px' }}
-								{...extensionProps.blockeraFontWeight}
+								{...extensionProps.blockeraFontAppearance}
 							/>
 						</EditorFeatureWrapper>
 
@@ -418,7 +408,6 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					>
 						{(isShowTextAlign ||
 							isShowTextDecoration ||
-							isShowFontStyle ||
 							isShowTextTransform ||
 							isShowDirection) && (
 							<BaseControl
@@ -539,6 +528,26 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 									</ControlContextProvider>
 								</EditorFeatureWrapper>
 
+								{isShowTextTransform && (
+									<EditorFeatureWrapper
+										isActive={isShowTextTransform}
+										config={
+											extensionConfig.blockeraTextTransform
+										}
+									>
+										<TextTransform
+											block={block}
+											value={values.blockeraTextTransform}
+											defaultValue={
+												attributes.blockeraTextTransform
+													.default
+											}
+											onChange={handleOnChangeAttributes}
+											{...extensionProps.blockeraTextTransform}
+										/>
+									</EditorFeatureWrapper>
+								)}
+
 								{(isShowTextDecoration || isShowDirection) && (
 									<Flex direction="row" gap="10px">
 										<div style={{ width: '70%' }}>
@@ -562,60 +571,6 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 														handleOnChangeAttributes
 													}
 													{...extensionProps.blockeraTextDecoration}
-												/>
-											</EditorFeatureWrapper>
-										</div>
-
-										<div style={{ width: '40%' }}>
-											<EditorFeatureWrapper
-												isActive={isShowFontStyle}
-												config={
-													extensionConfig.blockeraFontStyle
-												}
-											>
-												<FontStyle
-													block={block}
-													value={
-														values.blockeraFontStyle
-													}
-													onChange={
-														handleOnChangeAttributes
-													}
-													defaultValue={
-														attributes
-															.blockeraFontStyle
-															.default
-													}
-													{...extensionProps.blockeraFontStyle}
-												/>
-											</EditorFeatureWrapper>
-										</div>
-									</Flex>
-								)}
-
-								{(isShowTextTransform || isShowDirection) && (
-									<Flex direction="row" gap="10px">
-										<div style={{ width: '70%' }}>
-											<EditorFeatureWrapper
-												isActive={isShowTextTransform}
-												config={
-													extensionConfig.blockeraTextTransform
-												}
-											>
-												<TextTransform
-													block={block}
-													value={
-														values.blockeraTextTransform
-													}
-													defaultValue={
-														attributes
-															.blockeraTextTransform
-															.default
-													}
-													onChange={
-														handleOnChangeAttributes
-													}
-													{...extensionProps.blockeraTextTransform}
 												/>
 											</EditorFeatureWrapper>
 										</div>
@@ -716,7 +671,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 																icon: (
 																	<Icon
 																		icon="direction-rtl"
-																		iconSize="22"
+																		iconSize="18"
 																	/>
 																),
 															},

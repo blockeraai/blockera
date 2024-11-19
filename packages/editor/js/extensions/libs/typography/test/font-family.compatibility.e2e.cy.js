@@ -17,8 +17,8 @@ describe('Font Family → WP Compatibility', () => {
 	describe('All Blocks', () => {
 		it('the WP attribute is fontFamily in all blocks', () => {
 			appendBlocks(
-				`<!-- wp:paragraph {"fontFamily":"cardo"} -->
-<p class="has-cardo-font-family">Test paragraph...</p>
+				`<!-- wp:paragraph {"fontFamily":"manrope"} -->
+<p class="has-manrope-font-family">Test paragraph...</p>
 <!-- /wp:paragraph -->`
 			);
 
@@ -33,11 +33,11 @@ describe('Font Family → WP Compatibility', () => {
 
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
-				expect('cardo').to.be.equal(
+				expect('manrope').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontFamily')
 				);
 
-				expect('cardo').to.be.equal(
+				expect('manrope').to.be.equal(
 					getSelectedBlock(data, 'fontFamily')
 				);
 			});
@@ -47,16 +47,16 @@ describe('Font Family → WP Compatibility', () => {
 			//
 
 			cy.get('@container').within(() => {
-				cy.get('select').select('system-sans-serif');
+				cy.get('select').select('fira-code');
 			});
 
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
-				expect('system-sans-serif').to.be.equal(
+				expect('fira-code').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontFamily')
 				);
 
-				expect('system-sans-serif').to.be.equal(
+				expect('fira-code').to.be.equal(
 					getSelectedBlock(data, 'fontFamily')
 				);
 			});

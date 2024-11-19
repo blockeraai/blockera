@@ -237,23 +237,22 @@ function mergeBlockSettings(
 			return (
 				<>
 					<BaseControlContext.Provider value={baseContextValue}>
-						<BlockApp>
-							<BlockBase
-								{...{
-									attributes,
-									additional,
-									name: props.name,
-									clientId: props.clientId,
-									className: props?.className,
-									setAttributes: props.setAttributes,
-									originDefaultAttributes: defaultAttributes,
-									defaultAttributes:
-										sanitizeDefaultAttributes(
-											defaultAttributes,
-											{ defaultWithoutValue: true }
-										),
-								}}
-							>
+						<BlockApp
+							{...{
+								attributes,
+								additional,
+								name: props.name,
+								clientId: props.clientId,
+								className: props?.className,
+								setAttributes: props.setAttributes,
+								originDefaultAttributes: defaultAttributes,
+								defaultAttributes: sanitizeDefaultAttributes(
+									defaultAttributes,
+									{ defaultWithoutValue: true }
+								),
+							}}
+						>
+							<BlockBase>
 								<SlotFillProvider>
 									<Slot name={'blockera-block-before'} />
 

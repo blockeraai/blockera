@@ -32,8 +32,7 @@ export default function ({
 	updateBlock,
 	updaterDeviceIndicator,
 }: PickedBreakpointsComponentProps): MixedElement {
-	const { __experimentalSetPreviewDeviceType } =
-		dispatch('core/edit-post') || dispatch('core/edit-site') || {};
+	const { setDeviceType } = dispatch('core/editor');
 	const { getBreakpoints } = select('blockera/editor');
 	const { setCurrentBreakpoint } = useExtensionsStore();
 	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } =
@@ -49,8 +48,8 @@ export default function ({
 		// because if registered one block type with apiVersion < 3, block-editor try to rendering blocks out of iframe element,
 		// so we need to set "previewDeviceType" to rendering blocks inside iframe element and we inject css generated style into iframe,
 		// for responsive reasons.
-		if ('function' === typeof __experimentalSetPreviewDeviceType) {
-			__experimentalSetPreviewDeviceType(pascalCase(itemId));
+		if ('function' === typeof setDeviceType) {
+			setDeviceType(pascalCase(itemId));
 		}
 	};
 

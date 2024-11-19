@@ -65,7 +65,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.openValueAddon();
-					cy.selectValueAddonItem('10');
+					cy.selectValueAddonItem('20');
 				});
 
 			openBoxSpacingSide('margin-right');
@@ -73,7 +73,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.openValueAddon();
-					cy.selectValueAddonItem('20');
+					cy.selectValueAddonItem('30');
 				});
 
 			openBoxSpacingSide('margin-bottom');
@@ -81,7 +81,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.openValueAddon();
-					cy.selectValueAddonItem('30');
+					cy.selectValueAddonItem('40');
 				});
 
 			openBoxSpacingSide('margin-left');
@@ -89,7 +89,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.openValueAddon();
-					cy.selectValueAddonItem('40');
+					cy.selectValueAddonItem('50');
 				});
 
 			// Check block style
@@ -98,19 +98,19 @@ describe('Spacing Extension', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'margin-top: var(--wp--preset--spacing--10)'
+						'margin-top: var(--wp--preset--spacing--20)'
 					)
 					.should(
 						'include',
-						'margin-right: var(--wp--preset--spacing--20)'
+						'margin-right: var(--wp--preset--spacing--30)'
 					)
 					.should(
 						'include',
-						'margin-bottom: var(--wp--preset--spacing--30)'
+						'margin-bottom: var(--wp--preset--spacing--40)'
 					)
 					.should(
 						'include',
-						'margin-left: var(--wp--preset--spacing--40)'
+						'margin-left: var(--wp--preset--spacing--50)'
 					);
 			});
 
@@ -120,65 +120,65 @@ describe('Spacing Extension', () => {
 					margin: {
 						top: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						right: {
 							settings: {
-								name: '2',
-								id: '20',
-								value: 'min(1.5rem, 2vw)',
+								name: 'X-Small',
+								id: '30',
+								value: '20px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--20',
+								var: '--wp--preset--spacing--30',
 							},
-							name: '2',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: {
 							settings: {
-								name: '3',
-								id: '30',
-								value: 'min(2.5rem, 3vw)',
+								name: 'Small',
+								id: '40',
+								value: '30px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--30',
+								var: '--wp--preset--spacing--40',
 							},
-							name: '3',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						left: {
 							settings: {
-								name: '4',
-								id: '40',
-								value: 'min(4rem, 5vw)',
+								name: 'Regular',
+								id: '50',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--40',
+								var: '--wp--preset--spacing--50',
 							},
-							name: '4',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -193,18 +193,18 @@ describe('Spacing Extension', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
-				.should('include', 'margin-top: var(--wp--preset--spacing--10)')
+				.should('include', 'margin-top: var(--wp--preset--spacing--20)')
 				.should(
 					'include',
-					'margin-right: var(--wp--preset--spacing--20)'
+					'margin-right: var(--wp--preset--spacing--30)'
 				)
 				.should(
 					'include',
-					'margin-bottom: var(--wp--preset--spacing--30)'
+					'margin-bottom: var(--wp--preset--spacing--40)'
 				)
 				.should(
 					'include',
-					'margin-left: var(--wp--preset--spacing--40)'
+					'margin-left: var(--wp--preset--spacing--50)'
 				);
 		});
 	});
@@ -253,7 +253,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.openValueAddon();
-					cy.selectValueAddonItem('10');
+					cy.selectValueAddonItem('20');
 				});
 
 			openBoxSpacingSide('padding-right');
@@ -261,7 +261,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.openValueAddon();
-					cy.selectValueAddonItem('20');
+					cy.selectValueAddonItem('30');
 				});
 
 			openBoxSpacingSide('padding-bottom');
@@ -269,7 +269,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.openValueAddon();
-					cy.selectValueAddonItem('30');
+					cy.selectValueAddonItem('40');
 				});
 
 			openBoxSpacingSide('padding-left');
@@ -277,7 +277,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.openValueAddon();
-					cy.selectValueAddonItem('40');
+					cy.selectValueAddonItem('50');
 				});
 
 			// Check block style
@@ -286,19 +286,19 @@ describe('Spacing Extension', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'padding-top: var(--wp--preset--spacing--10)'
+						'padding-top: var(--wp--preset--spacing--20)'
 					)
 					.should(
 						'include',
-						'padding-right: var(--wp--preset--spacing--20)'
+						'padding-right: var(--wp--preset--spacing--30)'
 					)
 					.should(
 						'include',
-						'padding-bottom: var(--wp--preset--spacing--30)'
+						'padding-bottom: var(--wp--preset--spacing--40)'
 					)
 					.should(
 						'include',
-						'padding-left: var(--wp--preset--spacing--40)'
+						'padding-left: var(--wp--preset--spacing--50)'
 					);
 			});
 
@@ -308,65 +308,65 @@ describe('Spacing Extension', () => {
 					padding: {
 						top: {
 							settings: {
-								name: '1',
-								id: '10',
-								value: '1rem',
+								name: 'Tiny',
+								id: '20',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--10',
+								var: '--wp--preset--spacing--20',
 							},
-							name: '1',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						right: {
 							settings: {
-								name: '2',
-								id: '20',
-								value: 'min(1.5rem, 2vw)',
+								name: 'X-Small',
+								id: '30',
+								value: '20px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--20',
+								var: '--wp--preset--spacing--30',
 							},
-							name: '2',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: {
 							settings: {
-								name: '3',
-								id: '30',
-								value: 'min(2.5rem, 3vw)',
+								name: 'Small',
+								id: '40',
+								value: '30px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--30',
+								var: '--wp--preset--spacing--40',
 							},
-							name: '3',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						left: {
 							settings: {
-								name: '4',
-								id: '40',
-								value: 'min(4rem, 5vw)',
+								name: 'Regular',
+								id: '50',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--40',
+								var: '--wp--preset--spacing--50',
 							},
-							name: '4',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -383,19 +383,19 @@ describe('Spacing Extension', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'padding-top: var(--wp--preset--spacing--10)'
+					'padding-top: var(--wp--preset--spacing--20)'
 				)
 				.should(
 					'include',
-					'padding-right: var(--wp--preset--spacing--20)'
+					'padding-right: var(--wp--preset--spacing--30)'
 				)
 				.should(
 					'include',
-					'padding-bottom: var(--wp--preset--spacing--30)'
+					'padding-bottom: var(--wp--preset--spacing--40)'
 				)
 				.should(
 					'include',
-					'padding-left: var(--wp--preset--spacing--40)'
+					'padding-left: var(--wp--preset--spacing--50)'
 				);
 		});
 	});
@@ -481,34 +481,34 @@ describe('Spacing Extension', () => {
 						top: '20px',
 						right: {
 							settings: {
-								name: '3',
+								name: 'X-Small',
 								id: '30',
-								value: 'min(2.5rem, 3vw)',
+								value: '20px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--30',
 							},
-							name: '3',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: '40px',
 						left: {
 							settings: {
-								name: '5',
+								name: 'Regular',
 								id: '50',
-								value: 'min(6.5rem, 8vw)',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--50',
 							},
-							name: '5',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -517,34 +517,34 @@ describe('Spacing Extension', () => {
 						top: '10px',
 						right: {
 							settings: {
-								name: '2',
+								name: 'Tiny',
 								id: '20',
-								value: 'min(1.5rem, 2vw)',
+								value: '10px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--20',
 							},
-							name: '2',
+							name: 'Tiny',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: '30px',
 						left: {
 							settings: {
-								name: '4',
+								name: 'Small',
 								id: '40',
-								value: 'min(4rem, 5vw)',
+								value: '30px',
 								reference: {
 									type: 'theme',
-									theme: 'Twenty Twenty-Four',
+									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
 								var: '--wp--preset--spacing--40',
 							},
-							name: '4',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -706,13 +706,13 @@ describe('Spacing Extension', () => {
 					.last()
 					.within(() => {
 						cy.openValueAddon();
-						cy.selectValueAddonItem('10');
+						cy.selectValueAddonItem('20');
 					});
 
 				cy.get('@Position')
 					.invoke('text')
 					.then((text) => {
-						expect(text.trim().replace(item, '')).to.eq('1');
+						expect(text.trim().replace(item, '')).to.eq('Tiny');
 					});
 			});
 		});

@@ -71,7 +71,7 @@ describe('Max Height → Functionality', () => {
 				settings: {
 					name: 'Content Width',
 					id: 'contentSize',
-					value: '620px',
+					value: '645px',
 					reference: {
 						type: 'preset',
 					},

@@ -4,7 +4,7 @@
  * Plugin URI: https://blockera.ai/products/site-builder/
  * Description: The Advanced Mode for Block Editor
  * Requires at least: 6.6
- * Tested up to: 6.6
+ * Tested up to: 6.7
  * Requires PHP: 7.4
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about/

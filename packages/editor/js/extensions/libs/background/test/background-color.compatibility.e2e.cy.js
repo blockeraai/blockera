@@ -110,17 +110,17 @@ describe('Background Color → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					settings: {
-						name: 'Accent / Three',
+						name: 'Accent 3',
 						id: 'accent-3',
-						value: '#d8613c',
+						value: '#503AA8',
 						reference: {
 							type: 'theme',
-							theme: 'Twenty Twenty-Four',
+							theme: 'Twenty Twenty-Five',
 						},
 						type: 'color',
 						var: '--wp--preset--color--accent-3',
 					},
-					name: 'Accent / Three',
+					name: 'Accent 3',
 					isValueAddon: true,
 					valueType: 'variable',
 				}).to.be.deep.equal(

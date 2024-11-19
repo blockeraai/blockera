@@ -19,10 +19,6 @@ import {
 	fontFamilyToWPCompatibility,
 } from './compatibility/font-family';
 import {
-	fontWeightFromWPCompatibility,
-	fontWeightToWPCompatibility,
-} from './compatibility/font-weight';
-import {
 	fontSizeFromWPCompatibility,
 	fontSizeToWPCompatibility,
 } from './compatibility/font-size';
@@ -39,9 +35,9 @@ import {
 	textDecorationToWPCompatibility,
 } from './compatibility/text-decoration';
 import {
-	fontStyleFromWPCompatibility,
-	fontStyleToWPCompatibility,
-} from './compatibility/font-style';
+	fontAppearanceFromWPCompatibility,
+	fontAppearanceToWPCompatibility,
+} from './compatibility/font-appearance';
 import {
 	textTransformFromWPCompatibility,
 	textTransformToWPCompatibility,
@@ -80,13 +76,6 @@ export const bootstrap = (): void => {
 			});
 
 			//
-			// Font Weight
-			//
-			attributes = fontWeightFromWPCompatibility({
-				attributes,
-			});
-
-			//
 			// Font Size
 			//
 			attributes = fontSizeFromWPCompatibility({
@@ -116,9 +105,9 @@ export const bootstrap = (): void => {
 			});
 
 			//
-			// Font Style
+			// Font Appearance
 			//
-			attributes = fontStyleFromWPCompatibility({
+			attributes = fontAppearanceFromWPCompatibility({
 				attributes,
 			});
 
@@ -194,10 +183,10 @@ export const bootstrap = (): void => {
 						})
 					);
 
-				case 'blockeraFontWeight':
+				case 'blockeraFontAppearance':
 					return mergeObject(
 						nextState,
-						fontWeightToWPCompatibility({
+						fontAppearanceToWPCompatibility({
 							newValue,
 							ref,
 						})
@@ -235,15 +224,6 @@ export const bootstrap = (): void => {
 					return mergeObject(
 						nextState,
 						textDecorationToWPCompatibility({
-							newValue,
-							ref,
-						})
-					);
-
-				case 'blockeraFontStyle':
-					return mergeObject(
-						nextState,
-						fontStyleToWPCompatibility({
 							newValue,
 							ref,
 						})

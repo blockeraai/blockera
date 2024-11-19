@@ -14,21 +14,21 @@ import {
 	BackgroundStyles,
 	TypographyStyles,
 	BorderAndShadowStyles,
-} from '../../extensions';
+} from '../extensions';
 import {
 	isNormalState,
 	prepareBlockeraDefaultAttributesValues,
-} from '../../extensions/components';
-import type { CssRule } from '../types';
+} from '../extensions/components';
+import type { CssRule } from './types';
 import type {
 	TBreakpoint,
 	TStates,
-} from '../../extensions/libs/block-states/types';
-import { appendBlockeraPrefix } from '../utils';
-import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
-import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
+} from '../extensions/libs/block-states/types';
+import { appendBlockeraPrefix } from './utils';
+import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
+import { getBaseBreakpoint, isBaseBreakpoint } from '../canvas-editor';
 
-export const useComputedCssProps = ({
+export const getComputedCssProps = ({
 	states,
 	selectors,
 	blockName,

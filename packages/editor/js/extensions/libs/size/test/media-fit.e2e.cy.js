@@ -24,28 +24,20 @@ describe('Media Fit → Functionality', () => {
 		cy.getParentContainer('Media Fit').as('mediaFit');
 
 		cy.get('@mediaFit').within(() => {
-			cy.get('[aria-haspopup="listbox"]').trigger('click');
-			cy.get('li').eq(2).trigger('click'); // contain
+			cy.customSelect('Fill', 'Media Fit');
 		});
 
 		//Check block
-		cy.getBlock('core/paragraph').should(
-			'have.css',
-			'object-fit',
-			'contain'
-		);
+		cy.getBlock('core/paragraph').should('have.css', 'object-fit', 'fill');
 
 		//Check store
 		getWPDataObject().then((data) => {
-			expect('contain').to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraFit')
-			);
+			expect('fill').to.be.equal(getSelectedBlock(data, 'blockeraFit'));
 		});
 
 		/* Scale Down */
 		cy.get('@mediaFit').within(() => {
-			cy.get('[aria-haspopup="listbox"]').trigger('click');
-			cy.get('li').eq(5).trigger('click'); // scale-down
+			cy.customSelect('Scale Down', 'Media Fit');
 		});
 
 		//Check block

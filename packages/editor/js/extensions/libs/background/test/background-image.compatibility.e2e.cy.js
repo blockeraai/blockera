@@ -100,9 +100,9 @@ describe('Background → WP Compatibility', () => {
 
 			it('Variable', () => {
 				appendBlocks(
-					'<!-- wp:paragraph {"gradient":"gradient-4"} -->\n' +
-						'<p class="has-gradient-4-gradient-background has-background">Paragraph with linear gradient background (variable)</p>\n' +
-						'<!-- /wp:paragraph -->'
+					`<!-- wp:paragraph {"gradient":"vivid-cyan-blue-to-vivid-purple"} -->
+<p class="has-vivid-cyan-blue-to-vivid-purple-gradient-background has-background">Paragraph with linear gradient background (variable)</p>
+<!-- /wp:paragraph -->`
 				);
 
 				// Select target block
@@ -119,27 +119,27 @@ describe('Background → WP Compatibility', () => {
 				getWPDataObject().then((data) => {
 					expect({
 						'linear-gradient-0': {
-							isVisible: true,
 							type: 'linear-gradient',
 							'linear-gradient': {
 								settings: {
-									name: 'Vertical soft sage to white',
-									id: 'gradient-4',
-									value: 'linear-gradient(to bottom, #B1C5A4 0%, #F9F9F9 100%)',
+									name: 'Vivid cyan blue to vivid purple',
+									id: 'vivid-cyan-blue-to-vivid-purple',
+									value: 'linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
 									reference: {
 										type: 'theme',
-										theme: 'Twenty Twenty-Four',
+										theme: 'Twenty Twenty-Five',
 									},
 									type: 'linear-gradient',
-									var: '--wp--preset--gradient--gradient-4',
+									var: '--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple',
 								},
-								name: 'Vertical soft sage to white',
+								name: 'Vivid cyan blue to vivid purple',
 								isValueAddon: true,
 								valueType: 'variable',
 							},
 							'linear-gradient-angel': '',
 							'linear-gradient-repeat': 'no-repeat',
 							'linear-gradient-attachment': 'scroll',
+							isVisible: true,
 							order: 1,
 						},
 					}).to.be.deep.equal(
@@ -170,12 +170,14 @@ describe('Background → WP Compatibility', () => {
 				cy.get(
 					'.components-popover.blockera-control-popover-variables'
 				).within(() => {
-					cy.selectValueAddonItem('gradient-2');
+					cy.selectValueAddonItem(
+						'light-green-cyan-to-vivid-green-cyan'
+					);
 				});
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
-					expect('gradient-2').to.be.equal(
+					expect('light-green-cyan-to-vivid-green-cyan').to.be.equal(
 						getSelectedBlock(data, 'gradient')
 					);
 				});

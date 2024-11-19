@@ -7,7 +7,7 @@ import {
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Font Weight → Functionality', () => {
+describe('Font Appearance → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 
@@ -16,17 +16,22 @@ describe('Font Weight → Functionality', () => {
 	});
 
 	it('simple value', () => {
-		cy.getParentContainer('Weight').within(() => {
-			cy.get('select').select('800');
+		cy.getParentContainer('Appearance').within(() => {
+			cy.get('select').select('800-normal');
 		});
 
 		//Check block
 		cy.getBlock('core/paragraph').should('have.css', 'font-weight', '800');
+		cy.getBlock('core/paragraph').should('have.css', 'font-style', 'normal');
 
 		//Check store
 		getWPDataObject().then((data) => {
 			expect('800').to.be.equal(
-				getSelectedBlock(data, 'blockeraFontWeight')
+				getSelectedBlock(data, 'blockeraFontAppearance')?.weight
+			);
+
+			expect('normal').to.be.equal(
+				getSelectedBlock(data, 'blockeraFontAppearance')?.style
 			);
 		});
 
@@ -36,5 +41,6 @@ describe('Font Weight → Functionality', () => {
 		redirectToFrontPage();
 
 		cy.get('.blockera-block').should('have.css', 'font-weight', '800');
+		cy.get('.blockera-block').should('have.css', 'font-style', 'normal');
 	});
 });

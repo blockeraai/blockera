@@ -1,8 +1,7 @@
 // @flow
 export { FontFamily } from './font-family';
-export { FontWeight } from './font-weight';
+export { FontAppearance } from './font-appearance';
 export { FontSize } from './font-size';
-export { FontStyle } from './font-style';
 export { LineHeight } from './line-height';
 export { LetterSpacing } from './letter-spacing';
 export { TextTransform } from './text-transform';

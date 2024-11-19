@@ -466,17 +466,17 @@ describe('Gallery Block → Gap → Compatibility', () => {
 					lock: true,
 					gap: {
 						settings: {
-							name: '2',
+							name: 'Tiny',
 							id: '20',
-							value: 'min(1.5rem, 2vw)',
+							value: '10px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--20',
 						},
-						name: '2',
+						name: 'Tiny',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
@@ -510,17 +510,17 @@ describe('Gallery Block → Gap → Compatibility', () => {
 					lock: true,
 					gap: {
 						settings: {
-							name: '3',
+							name: 'X-Small',
 							id: '30',
-							value: 'min(2.5rem, 3vw)',
+							value: '20px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
 						},
-						name: '3',
+						name: 'X-Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
@@ -560,49 +560,49 @@ describe('Gallery Block → Gap → Compatibility', () => {
 					lock: false,
 					gap: {
 						settings: {
-							name: '3',
+							name: 'X-Small',
 							id: '30',
-							value: 'min(2.5rem, 3vw)',
+							value: '20px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
 						},
-						name: '3',
+						name: 'X-Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
 					columns: {
 						settings: {
-							name: '5',
+							name: 'Regular',
 							id: '50',
-							value: 'min(6.5rem, 8vw)',
+							value: 'clamp(30px, 5vw, 50px)',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--50',
 						},
-						name: '5',
+						name: 'Regular',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
 					rows: {
 						settings: {
-							name: '4',
+							name: 'Small',
 							id: '40',
-							value: 'min(4rem, 5vw)',
+							value: '30px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--40',
 						},
-						name: '4',
+						name: 'Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
@@ -628,33 +628,33 @@ describe('Gallery Block → Gap → Compatibility', () => {
 					lock: false,
 					gap: {
 						settings: {
-							name: '3',
+							name: 'X-Small',
 							id: '30',
-							value: 'min(2.5rem, 3vw)',
+							value: '20px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
 						},
-						name: '3',
+						name: 'X-Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
 					columns: {
 						settings: {
-							name: '5',
+							name: 'Regular',
 							id: '50',
-							value: 'min(6.5rem, 8vw)',
+							value: 'clamp(30px, 5vw, 50px)',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--50',
 						},
-						name: '5',
+						name: 'Regular',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
@@ -678,17 +678,17 @@ describe('Gallery Block → Gap → Compatibility', () => {
 					lock: false,
 					gap: {
 						settings: {
-							name: '3',
+							name: 'X-Small',
 							id: '30',
-							value: 'min(2.5rem, 3vw)',
+							value: '20px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
 						},
-						name: '3',
+						name: 'X-Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
@@ -706,12 +706,12 @@ describe('Gallery Block → Gap → Compatibility', () => {
 				cy.clickValueAddonButton();
 			});
 
-			cy.selectValueAddonItem('10');
+			cy.selectValueAddonItem('20');
 
 			getWPDataObject().then((data) => {
 				expect({
-					top: 'var:preset|spacing|10',
-					left: 'var:preset|spacing|10',
+					top: 'var:preset|spacing|20',
+					left: 'var:preset|spacing|20',
 				}).to.be.deep.equal(
 					getSelectedBlock(data, 'style')?.spacing?.blockGap
 				);
@@ -720,17 +720,17 @@ describe('Gallery Block → Gap → Compatibility', () => {
 					lock: true,
 					gap: {
 						settings: {
-							name: '1',
-							id: '10',
-							value: '1rem',
+							name: 'Tiny',
+							id: '20',
+							value: '10px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
-							var: '--wp--preset--spacing--10',
+							var: '--wp--preset--spacing--20',
 						},
-						name: '1',
+						name: 'Tiny',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
@@ -799,33 +799,33 @@ describe('Gallery Block → Gap → Compatibility', () => {
 					gap: '',
 					columns: {
 						settings: {
-							name: '3',
+							name: 'X-Small',
 							id: '30',
-							value: 'min(2.5rem, 3vw)',
+							value: '20px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
 						},
-						name: '3',
+						name: 'X-Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
 					rows: {
 						settings: {
-							name: '2',
+							name: 'Tiny',
 							id: '20',
-							value: 'min(1.5rem, 2vw)',
+							value: '10px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--20',
 						},
-						name: '2',
+						name: 'Tiny',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
@@ -858,33 +858,33 @@ describe('Gallery Block → Gap → Compatibility', () => {
 					gap: '',
 					columns: {
 						settings: {
-							name: '3',
+							name: 'X-Small',
 							id: '30',
-							value: 'min(2.5rem, 3vw)',
+							value: '20px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
 						},
-						name: '3',
+						name: 'X-Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},
 					rows: {
 						settings: {
-							name: '3',
+							name: 'X-Small',
 							id: '30',
-							value: 'min(2.5rem, 3vw)',
+							value: '20px',
 							reference: {
 								type: 'theme',
-								theme: 'Twenty Twenty-Four',
+								theme: 'Twenty Twenty-Five',
 							},
 							type: 'spacing',
 							var: '--wp--preset--spacing--30',
 						},
-						name: '3',
+						name: 'X-Small',
 						isValueAddon: true,
 						valueType: 'variable',
 					},

@@ -33,7 +33,7 @@ describe('Border → Functionality', () => {
 
 		cy.get('@container').within(() => {
 			cy.get('[aria-haspopup="listbox"]').click();
-			cy.get('li').eq(1).click();
+			cy.get('div[aria-selected="false"]').eq(1).click();
 		});
 
 		//Check block
@@ -128,7 +128,7 @@ describe('Border → Functionality', () => {
 					});
 
 					cy.get('[aria-haspopup="listbox"]').trigger('click');
-					cy.get('li').eq(0).trigger('click');
+					cy.get('div').eq(0).trigger('click');
 
 					cy.getByDataTest('border-control-color').click();
 				});
@@ -157,7 +157,7 @@ describe('Border → Functionality', () => {
 				bottom: { color: '', style: '', width: '' },
 				top: {
 					color: '#73ddab',
-					style: 'solid',
+					style: '',
 					width: '1px',
 				},
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
@@ -178,7 +178,7 @@ describe('Border → Functionality', () => {
 					});
 
 					cy.get('[aria-haspopup="listbox"]').trigger('click');
-					cy.get('li').eq(1).trigger('click');
+					cy.get('div[aria-selected="false"]').eq(1).trigger('click');
 
 					cy.getByDataTest('border-control-color').click();
 				});
@@ -211,7 +211,7 @@ describe('Border → Functionality', () => {
 				bottom: { color: '', style: '', width: '' },
 				top: {
 					color: '#73ddab',
-					style: 'solid',
+					style: '',
 					width: '1px',
 				},
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
@@ -232,7 +232,7 @@ describe('Border → Functionality', () => {
 					});
 
 					cy.get('[aria-haspopup="listbox"]').trigger('click');
-					cy.get('li').eq(2).trigger('click');
+					cy.get('div[aria-selected="false"]').eq(2).trigger('click');
 
 					cy.getByDataTest('border-control-color').click();
 				});
@@ -269,7 +269,7 @@ describe('Border → Functionality', () => {
 				},
 				top: {
 					color: '#73ddab',
-					style: 'solid',
+					style: '',
 					width: '1px',
 				},
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));
@@ -290,7 +290,7 @@ describe('Border → Functionality', () => {
 					});
 
 					cy.get('[aria-haspopup="listbox"]').trigger('click');
-					cy.get('li').eq(3).trigger('click');
+					cy.get('div[aria-selected="false"]').eq(3).trigger('click');
 
 					cy.getByDataTest('border-control-color').click();
 				});
@@ -331,7 +331,7 @@ describe('Border → Functionality', () => {
 				},
 				top: {
 					color: '#73ddab',
-					style: 'solid',
+					style: '',
 					width: '1px',
 				},
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraBorder'));

@@ -21,7 +21,7 @@ describe('Query Pagination Block → Inner Blocks', () => {
 		appendBlocks(testContent);
 
 		// Select target block
-		cy.getBlock('core/query-pagination').click();
+		cy.getBlock('core/query-pagination-numbers').click();
 
 		// Switch to parent block
 		cy.getByAriaLabel('Select Pagination').click();

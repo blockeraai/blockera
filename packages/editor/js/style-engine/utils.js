@@ -275,7 +275,18 @@ export const combineDeclarations = (
 		}
 	});
 
-	return Object.values(combinedObjects);
+	return Object.values(combinedObjects).sort(
+		(a: CssRule, b: CssRule): number => {
+			if (
+				-1 !== a.selector.indexOf(',') &&
+				-1 === b.selector.indexOf(',')
+			) {
+				return 1;
+			}
+
+			return -1;
+		}
+	);
 };
 
 /**

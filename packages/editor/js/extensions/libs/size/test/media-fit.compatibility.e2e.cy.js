@@ -46,7 +46,9 @@ describe('Media Fit → WP Compatibility', () => {
 			// change value
 			cy.get('@container').within(() => {
 				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('ul').get('li').contains('Contain').click();
+				cy.get('div[aria-selected="false"]')
+					.contains('Contain')
+					.click();
 			});
 
 			// Blockera value should be moved to WP data
@@ -61,7 +63,9 @@ describe('Media Fit → WP Compatibility', () => {
 			// clear
 			cy.get('@container').within(() => {
 				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('ul').get('li').contains('Default').click();
+				cy.get('div[aria-selected="false"]')
+					.contains('Default')
+					.click();
 			});
 
 			// WP data should be removed too
@@ -100,7 +104,7 @@ describe('Media Fit → WP Compatibility', () => {
 			// change value
 			cy.get('@container').within(() => {
 				cy.get('[aria-haspopup="listbox"]').click();
-				cy.get('ul').get('li').contains('None').click();
+				cy.get('div[aria-selected="false"]').contains('None').click();
 			});
 
 			// Blockera value should be moved to WP data
