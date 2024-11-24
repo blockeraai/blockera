@@ -24,6 +24,9 @@ return array_merge(
 				'blockera/elements/caption' => [
 					'root' => 'figcaption',
 				],
+				'blockera/elements/link'    => [
+					'root' => 'a',
+				],
 			]
 		),
 	]
