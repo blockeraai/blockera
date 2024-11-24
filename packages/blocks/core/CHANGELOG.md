@@ -31,6 +31,7 @@
 - Added automated test for `List Block` to check its inner blocks work correctly.
 - Added automated test for `List Item Block` to check its inner blocks work correctly.
 - Added automated test for `Details Block` to check its inner blocks work correctly.
+- Added automated test for `Image Block` to check its inner blocks work correctly.
 
 ### Miscellaneous
 
