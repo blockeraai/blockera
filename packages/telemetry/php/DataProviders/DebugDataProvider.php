@@ -12,6 +12,7 @@ class DebugDataProvider implements DataProvider {
 		if ( ! class_exists( 'WP_Debug_Data' ) ) {
 
 			require_once ABSPATH . 'wp-admin/includes/misc.php';
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			require_once ABSPATH . 'wp-admin/includes/update.php';
 			require_once ABSPATH . 'wp-admin/includes/class-wp-debug-data.php';
 		}
