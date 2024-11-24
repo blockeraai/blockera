@@ -15,6 +15,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import type { BlockType } from '../../type';
+import sharedInnerBlocks from '../inners/shared';
 
 export const Image: BlockType = {
 	name: 'blockeraImage',
@@ -32,6 +33,7 @@ export const Image: BlockType = {
 				force: true,
 			},
 		},
+		'elements/link': sharedInnerBlocks['elements/link'],
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

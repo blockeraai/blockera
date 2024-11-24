@@ -14,6 +14,7 @@
 - Enhanced inner blocks of the `List Item Block` for greater customization flexibility.
 - Enhanced inner blocks of the `Details Block` for greater customization flexibility.
 - Added a link inner block to all Navigation Link Blocks.
+- Added a link inner block to the `Image Block`.
 
 ### Bug Fixes
 
@@ -30,6 +31,7 @@
 - Added automated test for `List Block` to check its inner blocks work correctly.
 - Added automated test for `List Item Block` to check its inner blocks work correctly.
 - Added automated test for `Details Block` to check its inner blocks work correctly.
+- Added automated test for `Image Block` to check its inner blocks work correctly.
 
 ### Miscellaneous
 
