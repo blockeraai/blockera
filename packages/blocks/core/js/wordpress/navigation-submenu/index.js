@@ -15,11 +15,21 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import type { BlockType } from '../../type';
+import sharedInnerBlocks from '../inners/shared';
 
 export const NavigationSubmenu: BlockType = {
 	name: 'blockeraNavigationSubmenu',
 	targetBlock: 'core/navigation-submenu',
 	blockeraInnerBlocks: {
+		'elements/link': {
+			name: 'elements/link',
+			label: __('Parent Menu Link', 'blockera'),
+			description: __('Parent menu link element.', 'blockera'),
+			icon: <Icon icon="link" library="wp" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
 		'elements/submenu-container': {
 			name: 'elements/submenu-container',
 			type: 'title',

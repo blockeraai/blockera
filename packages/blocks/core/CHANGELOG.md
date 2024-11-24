@@ -15,6 +15,7 @@
 - Enhanced inner blocks of the `Details Block` for greater customization flexibility.
 - Added a link inner block to all Navigation Link Blocks.
 - Added a link inner block to the `Image Block`.
+- Added `Parent Menu Link` inner block to the `Submenu Block`.
 
 ### Bug Fixes
 

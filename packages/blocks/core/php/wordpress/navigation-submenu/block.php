@@ -14,6 +14,9 @@ return array_merge(
 			$args['selectors'] ?? [],
 			(array) array_merge(
 				[
+					'blockera/elements/link'              => [
+						'root' => '> .wp-block-navigation-item__content',
+					],
 					'blockera/elements/submenu-container' => [
 						'root' => '.wp-block-navigation__submenu-container',
 					],
