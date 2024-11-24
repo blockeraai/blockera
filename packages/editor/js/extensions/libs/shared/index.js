@@ -133,8 +133,11 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			parentClientIds[parentClientIds.length - 1]
 		);
 
-		const { updateExtension, updateDefinitionExtensionSupport } =
-			useDispatch(STORE_NAME);
+		const {
+			addDefinition,
+			updateExtension,
+			updateDefinitionExtensionSupport,
+		} = useDispatch(STORE_NAME);
 		const { getExtensions, getDefinition } = select(STORE_NAME);
 
 		const cacheData = useMemo(() => getItem(cacheKey), []);
@@ -218,12 +221,23 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			updateItem(cacheKey, newSettings);
 
 			if (isInnerBlock(currentBlock)) {
-				updateDefinitionExtensionSupport({
-					name,
-					newSupports,
-					blockName: props.name,
-					definitionName: currentBlock,
-				});
+				if (!getDefinition(name, props.name)) {
+					addDefinition({
+						extensions: {
+							...settings,
+							...newSupports,
+						},
+						blockName: props.name,
+						definition: currentBlock,
+					});
+				} else {
+					updateDefinitionExtensionSupport({
+						name,
+						newSupports,
+						blockName: props.name,
+						definitionName: currentBlock,
+					});
+				}
 
 				return;
 			}

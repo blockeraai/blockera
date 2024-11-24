@@ -34,7 +34,11 @@ export function getExtensionConfig(
 	// Assume current block is one of inner block types,
 	// in this case we should override extensions configuration order by current block identifier and selected block name.
 	if (isInnerBlock(currentBlock)) {
-		config = getDefinition(currentBlock, blockName);
+		const innerBlockConfig = getDefinition(currentBlock, blockName);
+
+		if (innerBlockConfig) {
+			config = innerBlockConfig;
+		}
 	}
 
 	return config;

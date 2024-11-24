@@ -34,6 +34,16 @@ const CustomConfigDefinitions = (
 ): Object => {
 	switch (action.type) {
 		case 'ADD_DEFINITION':
+			if (!action?.name) {
+				return {
+					...state,
+					[action.blockName]: {
+						...(state[action.blockName] || {}),
+						[action.definition]: action.extensions,
+					},
+				};
+			}
+
 			return {
 				...state,
 				[action.blockName]: {
