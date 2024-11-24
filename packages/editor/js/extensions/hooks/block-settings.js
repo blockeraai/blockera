@@ -17,7 +17,6 @@ import {
 	isObject,
 	isFunction,
 	mergeObject,
-	isLoadedPostEditor,
 	isLoadedSiteEditor,
 } from '@blockera/utils';
 
@@ -213,7 +212,7 @@ function mergeBlockSettings(
 
 		if (isFunction(additional?.edit) && isAvailableBlock()) {
 			// Bootstrap canvas editor UI on WordPress site editor.
-			if (!isLoadedPostEditor() && isLoadedSiteEditor()) {
+			if (isLoadedSiteEditor()) {
 				/**
 				 * Calls the callback functions that have been added to an action hook.
 				 */
