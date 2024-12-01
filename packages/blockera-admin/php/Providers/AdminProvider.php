@@ -2,6 +2,7 @@
 
 namespace Blockera\Admin\Providers;
 
+use Blockera\Auth\Client;
 use Blockera\Bootstrap\Application;
 use Blockera\Bootstrap\ServiceProvider;
 use Blockera\WordPress\Admin\Menu\Factory;
@@ -26,6 +27,14 @@ class AdminProvider extends ServiceProvider {
 			static function ( Application $app, array $args = [] ) {
 
 				return new Factory( $args );
+			}
+		);
+
+		$this->app->singleton(
+			Client::class,
+			static function ( Application $app, array $args = [] ) {
+
+				return new Client( $args );
 			}
 		);
 	}

@@ -21,15 +21,18 @@ try {
 		//$routes->get( 'dynamic/values/', [ \Blockera\Setup\Http\Controllers\DynamicValuesController::class, 'response' ] );
 	}
 
-	$routes->get( 'settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'index' ] );
-	$routes->update( 'settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'response' ] );
+	$routes->get('settings', [Blockera\Admin\Http\Controllers\SettingsController::class, 'index']);
+	$routes->update('settings', [Blockera\Admin\Http\Controllers\SettingsController::class, 'response']);
 
-	if ( ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
+	if (! blockera_telemetry_opt_in_is_off('blockera')) {
 
-		$routes->post( 'telemetry/opt-in', [ Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn' ] );
+		$routes->post('telemetry/opt-in', [Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn']);
 	}
 
-} catch ( Exception $exception ) {
+	if (blockera_is_connected()) {
+		$routes->post('auth/is-connected', [Blockera\Auth\Http\Controllers\ConnectToBlockeraAIController::class, 'isConnected']);
+	}
+} catch (Exception $exception) {
 
 	return $exception->getMessage();
 }
