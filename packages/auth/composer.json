@@ -1,0 +1,18 @@
+{
+	"name": "blockera/auth",
+	"version": "1.0.0",
+	"description": "OAuth 2.0 client functionality implementation for authentication and subscription management",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Auth\\": "php/"
+		},
+		"files": [
+			"php/functions.php"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Auth\\Tests\\": "php/tests/"
+		}
+	}
+}
