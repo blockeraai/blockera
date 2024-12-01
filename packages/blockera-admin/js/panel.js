@@ -11,10 +11,14 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
+import { ConnectWithBlockera } from '@blockera/auth';
 import { TabsContext, PanelHeader } from '@blockera/wordpress';
+import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 
-import { GeneralPanel, BlockManagerPanel, DashboardPanel } from './components';
+/**
+ * Internal dependencies
+ */
+import { GeneralPanel, DashboardPanel, BlockManagerPanel } from './components';
 
 export const Panel = (tab: {
 	...TTabProps,
@@ -54,6 +58,23 @@ export const Panel = (tab: {
 				</p>
 			);
 			break;
+		case 'connect-with-account':
+			const urlParams = new URLSearchParams(window.location.search);
+			const { connectedWithYourAccount } = Object.fromEntries(
+				urlParams.entries()
+			);
+			activePanel = (
+				// $FlowFixMe
+				<ConnectWithBlockera isConnected={connectedWithYourAccount} />
+			);
+			description = connectedWithYourAccount ? (
+				<></>
+			) : (
+				<p>
+					{__('Lets connect Blockera with your account.', 'blockera')}
+				</p>
+			);
+			break;
 	}
 
 	return (
@@ -70,6 +91,7 @@ export const Panel = (tab: {
 						kind={'blockera/v1'}
 						description={description}
 						tabSettings={settings[tab.settingSlug]}
+						showButtons={'connect-with-account' !== tab.name}
 					/>
 				)}
 

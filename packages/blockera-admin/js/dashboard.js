@@ -32,8 +32,8 @@ import { Panel } from './panel';
 import { config as optionsConfig } from './config';
 
 const getCurrentPage = (): string => {
-	const location = window.location;
-	const pages = ['dashboard', 'general-settings', 'block-manager'];
+	const { location, blockeraAdminPanels } = window;
+	const pages = blockeraAdminPanels;
 
 	for (const page of pages) {
 		if (-1 === location.search.indexOf(page)) {
@@ -136,6 +136,12 @@ export const Dashboard = (): MixedElement => {
 							settingSlug: 'disabledBlocks',
 							className: 'block-manager-tab',
 							title: __('Block Manager', 'blockera'),
+						},
+						{
+							name: 'connect-with-account',
+							settingSlug: 'connect-with-account',
+							className: 'connect-with-account-tab',
+							title: __('Connect with your account', 'blockera'),
 						},
 					]}
 					getPanel={Panel}
