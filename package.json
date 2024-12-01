@@ -26,6 +26,7 @@
 		"ALLOW_EXPERIMENT_REREGISTRATION": true
 	},
 	"dependencies": {
+		"@blockera/auth": "file:packages/auth",
 		"@blockera/storage": "file:packages/storage",
 		"@blockera/telemetry": "file:packages/telemetry",
 		"@blockera/blockera": "file:packages/blockera",

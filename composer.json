@@ -59,6 +59,10 @@
 		{
 			"type": "path",
 			"url": "packages/telemetry"
+		},
+		{
+			"type": "path",
+			"url": "packages/auth"
 		}
 	],
 	"authors": [
@@ -70,6 +74,7 @@
 	"require": {
 		"php": ">=7.4",
 		"blockera/blockera": "*",
+		"blockera/auth": "*",
 		"blockera/blockera-admin": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
@@ -84,7 +89,8 @@
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
-		"illuminate/container": "8.x-dev"
+		"illuminate/container": "8.x-dev",
+		"league/oauth2-client": "dev-master"
 	},
 	"require-dev": {
 		"symfony/dom-crawler": "5.4.x-dev",
