@@ -18,8 +18,6 @@ export const DashboardPanel = (): MixedElement => {
 		blockeraPluginData: { pluginURI },
 	} = window;
 
-	const videoUrl = '#';
-
 	return (
 		<Flex
 			direction={'column'}
@@ -77,7 +75,9 @@ export const DashboardPanel = (): MixedElement => {
 						</Button>
 
 						<Button
-							href={videoUrl}
+							href="https://blockera.ai/introduction-video/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=introduction-video-page&utm_content=cta-link"
+							target="_blank"
+							rel="noreferrer"
 							variant="secondary"
 							style={{ gap: '4px' }}
 						>
@@ -103,7 +103,7 @@ export const DashboardPanel = (): MixedElement => {
 				>
 					<a
 						className={'blockera-dashboard-preview-video-btn'}
-						href={videoUrl}
+						href="https://blockera.ai/introduction-video/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=introduction-video-page&utm_content=cta-link"
 						target="_blank"
 						rel="noreferrer"
 					>
