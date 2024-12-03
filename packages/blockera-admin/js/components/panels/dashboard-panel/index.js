@@ -18,8 +18,6 @@ export const DashboardPanel = (): MixedElement => {
 		blockeraPluginData: { pluginURI },
 	} = window;
 
-	const videoUrl = '#';
-
 	return (
 		<Flex
 			direction={'column'}
@@ -77,7 +75,9 @@ export const DashboardPanel = (): MixedElement => {
 						</Button>
 
 						<Button
-							href={videoUrl}
+							href="https://blockera.ai/introduction-video/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=introduction-video-page&utm_content=cta-link"
+							target="_blank"
+							rel="noreferrer"
 							variant="secondary"
 							style={{ gap: '4px' }}
 						>
@@ -103,7 +103,7 @@ export const DashboardPanel = (): MixedElement => {
 				>
 					<a
 						className={'blockera-dashboard-preview-video-btn'}
-						href={videoUrl}
+						href="https://blockera.ai/introduction-video/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=introduction-video-page&utm_content=cta-link"
 						target="_blank"
 						rel="noreferrer"
 					>
@@ -174,7 +174,9 @@ export const DashboardPanel = (): MixedElement => {
 
 					<Buttons>
 						<Button
-							href="https://blockera.ai/resources/"
+							href="https://blockera.ai/resources/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=resources-page&utm_content=cta-link"
+							target="_blank"
+							rel="noreferrer"
 							variant="secondary"
 						>
 							{__('Explore Tutorials', 'blockera')}
@@ -229,7 +231,12 @@ export const DashboardPanel = (): MixedElement => {
 					</p>
 
 					<Buttons>
-						<Button href="#1" variant="secondary">
+						<Button
+							href="https://blockera.ai/support/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=support-page&utm_content=cta-link"
+							target="_blank"
+							rel="noreferrer"
+							variant="secondary"
+						>
 							{__('Get Support', 'blockera')}
 
 							<Icon
@@ -283,7 +290,9 @@ export const DashboardPanel = (): MixedElement => {
 
 					<Buttons>
 						<Button
-							href="https://community.blockera.ai/"
+							href="https://community.blockera.ai/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=community-page&utm_content=cta-link"
+							target="_blank"
+							rel="noreferrer"
 							variant="secondary"
 						>
 							{__('Join Now', 'blockera')}
@@ -338,7 +347,9 @@ export const DashboardPanel = (): MixedElement => {
 
 					<Buttons>
 						<Button
-							href="https://community.blockera.ai/feature-request-1rsjg2ck"
+							href="https://community.blockera.ai/feature-request-1rsjg2ck?utm_source=blockera-admin&utm_medium=referral&utm_campaign=feature-request-page&utm_content=cta-link"
+							target="_blank"
+							rel="noreferrer"
 							variant="secondary"
 						>
 							{__('Request Feature', 'blockera')}
