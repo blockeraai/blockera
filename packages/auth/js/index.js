@@ -167,7 +167,7 @@ export const ConnectWithBlockera = ({
 				<Button
 					variant="primary"
 					onClick={() =>
-						window.open(blockeraConnectAccountLink, '_blank')
+						(window.location.href = blockeraConnectAccountLink)
 					}
 				>
 					{__('Connect to Subscription', 'blockera')}
@@ -175,7 +175,7 @@ export const ConnectWithBlockera = ({
 				<Button
 					variant="secondary"
 					onClick={() =>
-						window.open(blockeraCreateAccountLink, '_blank')
+						(window.location.href = blockeraCreateAccountLink)
 					}
 				>
 					{__('Buy Subscription', 'blockera')}
