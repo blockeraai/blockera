@@ -17,7 +17,7 @@ import { Icon } from '@blockera/icons';
 export function FeatureWrapper({
 	type,
 	typeName = '',
-	upgradeLink = 'https://blockera.ai/products/site-builder/upgrade/',
+	upgradeLink = 'https://blockera.ai/products/site-builder/upgrade/?utm_source=feature-wrapper&utm_medium=referral&utm_campaign=upgrade-feature-wrapper&utm_content=cta-link',
 	text = '',
 	children,
 	className = '',

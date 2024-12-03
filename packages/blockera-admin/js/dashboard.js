@@ -88,7 +88,7 @@ export const Dashboard = (): MixedElement => {
 							}
 							text={__('Upgrade to Pro', 'blockera')}
 							href={
-								'https://blockera.ai/products/site-builder/upgrade/'
+								'https://blockera.ai/products/site-builder/upgrade/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=upgrade-page&utm_content=cta-link'
 							}
 							target="_blank"
 						/>
@@ -104,7 +104,7 @@ export const Dashboard = (): MixedElement => {
 							}
 							text={__('Changelog', 'blockera')}
 							href={
-								'https://community.blockera.ai/changelog-9l8hbrv0'
+								'https://community.blockera.ai/changelog-9l8hbrv0?utm_source=blockera-admin&utm_medium=referral&utm_campaign=changelog-page&utm_content=cta-link'
 							}
 							target="_blank"
 						/>
@@ -158,7 +158,9 @@ export const Dashboard = (): MixedElement => {
 									'tab-item-button'
 								)}
 								target="_blank"
-								href={'https://community.blockera.ai/'}
+								href={
+									'https://community.blockera.ai/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=community-page&utm_content=cta-link'
+								}
 							>
 								{__('Community', 'blockera')}
 
@@ -181,7 +183,9 @@ export const Dashboard = (): MixedElement => {
 									'tab-item-button'
 								)}
 								target="_blank"
-								href={'https://community.blockera.ai/roadmap'}
+								href={
+									'https://community.blockera.ai/roadmap?utm_source=blockera-admin&utm_medium=referral&utm_campaign=roadmap-page&utm_content=cta-link'
+								}
 							>
 								{__('Roadmap', 'blockera')}
 
@@ -205,7 +209,7 @@ export const Dashboard = (): MixedElement => {
 								)}
 								target="_blank"
 								href={
-									'https://community.blockera.ai/feature-request-1rsjg2ck'
+									'https://community.blockera.ai/feature-request-1rsjg2ck?utm_source=blockera-admin&utm_medium=referral&utm_campaign=feature-request-page&utm_content=cta-link'
 								}
 							>
 								{__('Feature Request', 'blockera')}
