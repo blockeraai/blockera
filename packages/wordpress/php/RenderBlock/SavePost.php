@@ -80,24 +80,6 @@ class SavePost {
 			return;
 		}
 
-		// Get cache key.
-		$cache_key = blockera_get_block_cache_key( $block );
-		// Get cache data.
-		$cache_data     = blockera_get_block_cache( $cache_key );
-		$cache_validate = ! empty( $cache_data['hash'] ) || ! empty( $cache_data['css'] );
-
-		// Validate cache data.
-		if ( $cache_validate && blockera_get_block_hash( $block ) === $cache_data['hash'] ) {
-
-			return;
-		}
-
-		// Delete cache data while previous cache data is existing but changed block render process data.
-		if ( $cache_validate ) {
-
-			blockera_delete_block_cache( $cache_key );
-		}
-
 		$this->render->render( $block['innerHTML'], $block );
 	}
 
