@@ -278,9 +278,9 @@ export const registerCommands = () => {
 	Cypress.Commands.add('customSelect', (item) => {
 		cy.get('button[aria-haspopup="listbox"]').click({ force: true });
 
-		cy.get('div[aria-selected="false"]')
-			.contains(item)
-			.click({ force: true });
+		cy.get('[role="listbox"]').within(() => {
+			cy.contains(item).click({ force: true });
+		});
 	});
 
 	Cypress.Commands.add('openAccordion', (accordionHeading) =>
