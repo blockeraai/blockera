@@ -278,7 +278,7 @@ export const registerCommands = () => {
 	Cypress.Commands.add('customSelect', (item) => {
 		cy.get('button[aria-haspopup="listbox"]').click({ force: true });
 
-		cy.get('ul').within(() => {
+		cy.get('[role="listbox"]').within(() => {
 			cy.contains(item).click({ force: true });
 		});
 	});
