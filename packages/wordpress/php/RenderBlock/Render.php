@@ -117,7 +117,7 @@ class Render {
 		$blockera_class_name = sprintf( 'blockera-block blockera-block-%s', $blockera_hash_id );
 
 		// Is need to update block HTML output?
-		$need_to_update_html = $this->needToUpdateHTML( $attributes['className'] ?? '' );
+		$need_to_update_html = $this->needToUpdateHTML( $attributes['className'] ?? '', $block['innerHTML'] );
 
 		// Pushing block classname into stack.
 		$this->setClassname( $attributes['className'] ?? '' );
@@ -193,10 +193,11 @@ class Render {
 	 * The target of this method is prevented of avoid block unique classnames.
 	 *
 	 * @param string $block_classname the block "className" attribute value.
+	 * @param string $inner_html The block inner html output.
 	 *
 	 * @return bool true on success, false on otherwise.
 	 */
-	protected function needToUpdateHTML( string $block_classname ): bool {
+	protected function needToUpdateHTML( string $block_classname, string $inner_html ): bool {
 
 		// Imagine th block classname is empty, so we should update html output.
 		if ( empty( $block_classname ) ) {
@@ -206,6 +207,12 @@ class Render {
 
 		// Try to detect blockera block unique classname and check it to sure not registered in classnames stack.
 		if ( preg_match( $this->getUniqueClassnameRegex(), $block_classname, $matches ) ) {
+
+			// If inner html is empty, we should update html output.
+			if ( empty( $inner_html ) ) {
+
+				return true;
+			}
 
 			return in_array( $matches[0], $this->classnames, true );
 		}
