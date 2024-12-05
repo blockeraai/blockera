@@ -13,7 +13,7 @@ Short Description: ### AUTO-GENERATED
 == Description ==
 
 <h3>Checkout a quick overview of Blockera</h3>
-https://www.youtube.com/watch?v=WcS2Vi4IOYw
+https://www.youtube.com/watch?v=H_oJZ2Cv7a0
 
 <h3>Tired of Gutenberg's limitations?</h3>
 
