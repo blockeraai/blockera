@@ -1,5 +1,5 @@
 === Blockera ===
-Contributors: blockeraai
+Contributors: blockeraai, aliaghdam
 Tags: gutenberg blocks, wordPress blocks, site editor, block Editor, page Builder
 Requires at least: ### AUTO-GENERATED
 Tested up to: ### AUTO-GENERATED
@@ -12,6 +12,9 @@ Short Description: ### AUTO-GENERATED
 
 == Description ==
 
+<h3>Checkout a quick overview of Blockera</h3>
+https://www.youtube.com/watch?v=WcS2Vi4IOYw
+
 <h3>Tired of Gutenberg's limitations?</h3>
 
 **🧐 Imagine this:** All the familiarity of Gutenberg, same core blocks but **supercharged** with **advanced options** and **responsive controls**. 
@@ -21,6 +24,12 @@ That's **Blockera**, It's the Block Era 😎.
 Blockera transforms block editor (Gutenberg) into a powerful page builder, by enhancing all core blocks. It's the ADVANCED MODE for Gutenberg.
 
 This unique approach ensures a seamless transition and empowers you to create stunning, responsive websites with advanced design capabilities and animations.
+
+## Quick Links 🔗
+- [Introduction Video](https://www.youtube.com/watch?v=H_oJZ2Cv7a0)
+- [Blockera Site Builder](https://blockera.ai/products/site-builder/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
+- [Blockera Community](https://community.blockera.ai/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
+- [Try Live Demo](https://blockera.ai/products/site-builder/try/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
 
 <h3>Who Is Blockera For? 🎯</h3>
 
@@ -113,13 +122,13 @@ Also, we optimize core blocks to render and load faster. Blockera is compatible 
 
 
 #### Notes:
-1- Currently 78 of 93 core blocks are supported. We are working rapidly on the [rest to add support soon](https://raw.githubusercontent.com/blockeraai/blockera/master/packages/blocks/core/js/wordpress-blocks-list.json).
+1- Currently 92 of 93 core blocks are supported. We are working rapidly on the [rest to add support soon](https://raw.githubusercontent.com/blockeraai/blockera/master/packages/blocks/core/js/wordpress-blocks-list.json).
 
 2- All block states are supported in Pro version and in the free version `Normal` and `Hover` is available for all blocks.
 
 3- Custom CSS per block is supported in Pro version.
 
-4- Currently 20 of 103 WooCommerce blocks are supported. We are working rapidly on the [rest to add support soon](https://raw.githubusercontent.com/blockeraai/blockera/master/packages/blocks/core/js/woocommerce-blocks-list.json).
+4- Currently 103 of 131 WooCommerce blocks are supported. We are working rapidly on the [rest to add support soon](https://raw.githubusercontent.com/blockeraai/blockera/master/packages/blocks/core/js/woocommerce-blocks-list.json).
 
 ---
 
@@ -164,7 +173,7 @@ To download and install the Blockera plugin, make sure you follow the steps belo
 
 = Is Blockera free? =
 
-Blockera comes in both free and premium versions. The [premium version](https://blockera.ai/) offers a wider variety of blocks and multiple options to customize them, [compared to the free version](https://blockera.ai/).
+Blockera comes in both free and premium versions. The [premium version](https://blockera.ai/products/site-builder/pricing/) offers a wider variety of blocks and multiple options to customize them, [compared to the free version](https://blockera.ai/products/site-builder/).
 
 == Changelog ==
 
