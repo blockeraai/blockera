@@ -57,7 +57,7 @@ class AdminAssetsProvider extends AssetsProvider {
 
 			$skip = false;
 
-			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script', [ $this, 'telemetryInlineScripts' ] );
+			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'telemetryInlineScripts' ] );
 
 			add_filter(
 				'blockera/wordpress/' . $this->getId() . '/handle/inline-script',
