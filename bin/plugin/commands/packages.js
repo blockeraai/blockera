@@ -162,10 +162,14 @@ async function updatePackages(config) {
 				jsonData = readJSONFile(composerJSONPath);
 			}
 
+			let nextVersion = null;
 			const { version } = jsonData;
 
-			const nextVersion =
-				versionBump !== null ? semverInc(version, versionBump) : null;
+			if ('0' === version[0] || '9' === version.split('.')[1]) {
+				nextVersion = semverInc(version, 'major');
+			} else if (versionBump !== null) {
+				nextVersion = semverInc(version, versionBump);
+			}
 
 			return {
 				version,
