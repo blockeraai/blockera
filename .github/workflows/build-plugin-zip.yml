@@ -91,7 +91,16 @@ jobs:
                   OLD_VERSION=$(jq --raw-output '.version' package.json)
                   echo "old_version=${OLD_VERSION}" >> $GITHUB_OUTPUT
                   if [[ ${{ github.event.inputs.version }} == 'stable' ]]; then
-                    NEW_VERSION=$(npx semver $OLD_VERSION -i patch)
+                    IFS='.' read -r -a OLD_VERSION_ARRAY <<< "$OLD_VERSION"
+                    if [[ ${OLD_VERSION_ARRAY[1]} == "9" ]]; then
+                      NEW_VERSION=$(npx semver $OLD_VERSION -i major)
+                    else
+                      if [[ ${OLD_VERSION_ARRAY[2]} == "9" ]]; then
+                        NEW_VERSION=$(npx semver $OLD_VERSION -i minor)
+                      else
+                        NEW_VERSION=$(npx semver $OLD_VERSION -i patch)
+                      fi
+                    fi
                   else
                     if [[ $OLD_VERSION == *"rc"* ]]; then
                       NEW_VERSION=$(npx semver $OLD_VERSION -i prerelease)
