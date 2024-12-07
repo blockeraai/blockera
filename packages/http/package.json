@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/http",
-	"version": "1.0.0",
+	"version": "0.9.2",
 	"description": "Blockera http package.",
 	"author": "The Blockera Core Contributors",
 	"license": "ISC",

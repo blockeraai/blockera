@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/controls",
-	"version": "1.0.0",
+	"version": "0.9.2",
 	"description": "UI react.js components as controls for Blockera Core.",
 	"author": "The  Contributors",
 	"license": "ISC",

@@ -1,6 +1,6 @@
 {
 	"name": "blockera/utils",
-	"version": "1.0.0",
+	"version": "0.9.2",
 	"description": "The utilities for JavaScript and PHP blockera applications.",
 	"autoload": {
 		"psr-4": {

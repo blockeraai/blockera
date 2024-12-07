@@ -1,6 +1,6 @@
 {
 	"name": "blockera/data-editor",
-	"version": "1.0.0",
+	"version": "0.9.2",
 	"description": "Blockera Data Editor package to access all property value with tokenized string.",
 	"autoload": {
 		"psr-4": {
