@@ -45,7 +45,7 @@ jobs:
 
                   echo "current_stable_branch=release/${MAJOR}.${MINOR}" >> $GITHUB_OUTPUT
 
-                  if [[ $MINOR_INT -eq 9 ]]; then
+                  if [[ $MINOR_INT -eq 9 || $MAJOR_INT -eq 0 ]]; then
                     NEXT_MAJOR=$((MAJOR_INT + 1))
                     echo "next_stable_branch=release/${NEXT_MAJOR}.0" >> $GITHUB_OUTPUT
                   else
