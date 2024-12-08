@@ -51,7 +51,21 @@ jobs:
               run: |
                   echo "uploaded_zip_file=https://${{ secrets.FTP_HOST }}/blockera-${{ github.event.pull_request.number }}.zip" >> $GITHUB_ENV
 
+            - name: Check if the exists any comments
+              id: check_comments
+              run: |
+                  curl -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
+                       -H "Accept: application/vnd.github.v3+json" \
+                       $COMMENTS_URL > comments.json
+
+                  if [ ! -s comments.json ] || [ "$(jq 'length' comments.json)" = "0" ]; then
+                    echo "comments_exist=false" >> $GITHUB_ENV
+                  else
+                    echo "comments_exist=true" >> $GITHUB_ENV
+                  fi
+
             - name: Find existing bot comment
+              if: steps.check_comments.outputs.comments_exist == 'true'
               id: find_comment
               run: |
                   PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
