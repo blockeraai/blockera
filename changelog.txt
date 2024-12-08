@@ -1,96 +1,12 @@
 == Changelog ==
 
-= 1.0.0 =
-
-### New Features
-- Build: Implemented the CI/CD workflow for the Blockera plugin [[Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/ci-cd-pipeline-for-faster-and-better-development-O0jDtppwUbpRre0)]
-- Build: Implemented the `release` workflow in GitHub for fast and secure future releases.
-- Build: Added automatic VirusTotal checks during the Blockera plugin build.
-- Build: Added automatic PHP security checks during the Blockera plugin build.
-- Build: Added an automatic file size check to monitor for unusual changes during the Blockera plugin build.
-- Build: Added an automatic plugin final file size check to monitor for unusual changes during the Blockera plugin build.
-- Build: Added the [Plugin Check (PCP)](https://wordpress.org/plugins/plugin-check/) automated tests to ensure compliance with WordPress plugin guidelines during the Blockera plugin build.
-- Build: Automated changelog creation during the Blockera plugin build.
-- Build: Ensured all E2E, JS, and PHP tests pass during the Blockera plugin build.
-- Build: Ensured all JS and PHP files are error-free and adhere to coding standards during the Blockera plugin build.
-- Build: Automated the building and attachment of the plugin zip file to GitHub pull requests.
-- New automated test to recheck final plugin zip file in another WP setup to make sure zip and functionality are correct.
+= 1.0.1 =
 
 ### Improvements
-- Features history graph to show current state and also some design polish. 
-- Implemented shared and unstable registration for block type attributes.
-- Initialized the Bootstrap canvas editor when the WordPress site editor loads.
-- Various code improvements and refactoring.
-- Change repository branching architecture to have only one master branch (Trunk based).
-- Typography sections more feature control design improvements.
-- Box Spacing & Box Position features design improvements.
-- Created javascriptJavaScript initializer on inside and outside of WordPress domReady.
-- Created abstract application container on server side.
-- Created abstract service provider on server side.
-- Created abstract entity registry on server side.
-- Improve transform controls popover design.
-- Notice control design improvement.
-- Design of post preview link in header improved.
-- Enhanced the getNormalizedSelector API for better performance and functionality.
-- Refactored server-side style engine with cleaner code and improved support for & ampersand in selector creation.
-- Added spacer for processed selector in the client-side style engine to improved css selector normalizer.
-- Added a reset method in Layout style definition.
-- Updated the layout of typography features to enhance user experience (UX).
-- Optimized performance by detecting and addressing bottlenecks. 🔥
-- Refactored memoization helpers in package/utils and updated all use cases for better efficiency.
-
-### Bug Fixes
-- Blockera bootstrapper problems while domReady!
-- The automatic `readme.txt` file generator fix.
-- The preview button link issue.
-- By clicking on items in feature history graph the breakpoint not changes.
-- Prevent of generated duplicate css props
-- Background feature CSS generator issues.
-- Some PHP warnings and errors.
-- Fix: editor bootstrapper e2e test problems.
-- Gap feature design issue [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/gap-feature-design-issue-oF3n51EmkszId4T)]
-- Extra horizontal scroll in block inspector [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/horizontal-scroll-in-block-inspectror-gKJ6oUo3qLdRo9Y)]
-- Refactor input control to improve performance and fix issues.
-- Fixed an issue where the input control was not accepting a value of 0 [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/the-width-feature-does-not-accepts-0-value-74lCJXSXBziXaqU)]
-- Max 200 value for Gap feature [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/max-200-value-for-gap-feature-nwcVKkoyV5PVKEZ)]
-- JS error while resetting the gap feature [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/js-error-while-resetting-the-gap-feature-DMkePSiXbnwyPSE)]
-- CSS Display property always should be printed to prevent bugs [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/display-feature-always-not-priting-aKA5Jr0gnb6N6Yu)]
-- Flex layout align items and justify content not working properly for column direction [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/flex-layout-bug-aZ0Z3LqgOT8aApK)]
-- Text align feature change from block toolbar not update Typography block section control [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/changing-text-aling-not-affects-inside-blockera-typography-section-kjKfo0aGpFIJSre)]
-- Heading block text align compatibility 
-- Layout Section → Flex Child → Self order icon is wrong [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/flex-chlild-order-icon-is-wrong-uVCroH9QzuZSWsf)]
-- Extra Blockera logo is showing in blocks preview section [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/extra-logo-on-blocks-fFacaGcdbdRHS3M)]
-- Strange "0" character after Layout block section [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/strange-0-after-layout-block-section-tXhcZXMGMn631EH)]
-- Strange bug of flex layout that makes issue for inner blocks flex layout.
-- Wrong style generation for blocks in gap feature [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/wrong-style-generation-for-blocks-in-gap-feature-nkRSbYvjaK226Rh)]
-- Refactored BlockBase component to fix compatibility with WordPress problems. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/group-block-variation-control-bug-with-updating-layout-section---flex-MSd1lhFdxAGDd2c)]
-- Fixed an issue where advanced values of the Flex Layout (e.g., `space-between`, `space-around`) were not working properly. [[🔗 Link](https://community.blockera.ai/bugs-mdhyb8nc/post/advanced-values-of-flex-layout-not-working-properly-wTCfgyDW4w1EoVK)]
-- Fixed a style issue when the selected block is unsupported. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/style-issue-if-current-selected-block-is-a-not-supported-block-9VjcCa2CSA7FPpl)]
-- Fixed an issue that caused duplicate block cards to be displayed. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/extra-block-card-in-the-settings-tab-0C3lR6niX6ygYir)]
-
-### Fixed
-- Fixed an issue where theme gradients could result in undefined behavior.
-
-### New Features:
-- Added the ability to change `font family` for blocks, supporting all states and breakpoints. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/font-font-appearance-support-nhEJYxOd5p9k4E1)]
-- Added the ability to change `font weight` for blocks, supporting all states and breakpoints. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/font-font-appearance-support-nhEJYxOd5p9k4E1)]
-- Added an opt-in template implementing OptInComponent in React.js.
-- Added DebugDataProvider for enhanced telemetry processing capabilities.
-- Added HTTP OptInController to handle requests from the React.js application.
-- Added Jobs module to manage and execute scheduled tasks for product consumers.
-
-### Automated Tests:
-- Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
-- Conducted WP data compatibility test for the Spacer Block to ensure correct functionality.
-- Added new test suites to ensure the robustness of the getNormalizedSelector API.
-- Updated tests to detect real hover states more accurately.
-- Updated Blockera inline style tag ID to ensure all assertions pass successfully.
-- Added new automated tests to verify unique class names for blocks in Blockera.
-- Added tests to verify the functionality of the `font family` feature.
-- Added tests for checking `font family` functionality and WordPress data compatibility.
-- Added tests to verify the functionality of the `font weight` feature.
-- Added tests for checking `font weight` functionality and WordPress data compatibility.
-- Added new Jest tests for the getTarget() API of the Canvas editor.
+- Updated the plugin name.
+- Updated the contributors list.
+- Updated the readme file.
+- Updated the plugin description.
 
 ## More
 

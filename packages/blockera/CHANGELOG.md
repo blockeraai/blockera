@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.1 (2024-12-08)
+
 ### Improvements
 
 - Updated the plugin name.

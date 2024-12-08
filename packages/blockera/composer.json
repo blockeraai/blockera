@@ -1,6 +1,6 @@
 {
 	"name": "blockera/blockera",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "The bootstrapper for blockera php application for WordPress in admin and front-end sides.",
 	"autoload": {
 		"psr-4": {
