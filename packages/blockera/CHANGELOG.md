@@ -4,6 +4,7 @@
 
 - Updated the plugin name.
 - Updated the contributors list.
+- Updated the readme file.
 
 ## 1.0.0 (2024-12-08)
 

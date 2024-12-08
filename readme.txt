@@ -15,6 +15,14 @@ Short Description: ### AUTO-GENERATED
 <h3>Checkout a quick overview of Blockera</h3>
 https://www.youtube.com/watch?v=H_oJZ2Cv7a0
 
+## Quick Links 🔗
+- [Blockera Site Builder](https://blockera.ai/products/site-builder/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
+- [Try Live Demo](https://blockera.ai/products/site-builder/try/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
+- [Feature Requests](https://community.blockera.ai/feature-request-1rsjg2ck?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
+- [Roadmap](https://community.blockera.ai/roadmap?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
+- [Blockera Community](https://community.blockera.ai/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
+- [Introduction Video](https://www.youtube.com/watch?v=H_oJZ2Cv7a0)
+
 <h3>Tired of Gutenberg's limitations?</h3>
 
 **🧐 Imagine this:** All the familiarity of Gutenberg, same core blocks but **supercharged** with **advanced options** and **responsive controls**. 
@@ -24,12 +32,6 @@ That's **Blockera**, It's the Block Era 😎.
 Blockera transforms block editor (Gutenberg) into a powerful page builder, by enhancing all core blocks. It's the ADVANCED MODE for Gutenberg.
 
 This unique approach ensures a seamless transition and empowers you to create stunning, responsive websites with advanced design capabilities and animations.
-
-## Quick Links 🔗
-- [Introduction Video](https://www.youtube.com/watch?v=H_oJZ2Cv7a0)
-- [Blockera Site Builder](https://blockera.ai/products/site-builder/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
-- [Blockera Community](https://community.blockera.ai/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
-- [Try Live Demo](https://blockera.ai/products/site-builder/try/?utm_source=wpadmin&utm_medium=readme&utm_campaign=blockera-site-builder)
 
 <h3>Who Is Blockera For? 🎯</h3>
 
