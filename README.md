@@ -2,7 +2,7 @@
 <img src="./.wordpress-org/icon-256x256.png" alt="Blockera" width="110">
 </p>
 
-<h1 align="center">Blockera</h1>
+<h1 align="center">Blockera Site Builder</h1>
 <h3 align="center">The Advanced Mode for Block Editor</h3>
 
 <p align="center">
