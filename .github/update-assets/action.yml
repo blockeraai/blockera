@@ -1,0 +1,25 @@
+name: 'Update WordPress.org Blockera plugin assets and readme'
+description: 'Updates the WordPress.org plugin repository assets and readme for Blockera'
+
+inputs:
+    svn-username:
+        description: 'WordPress.org SVN username'
+        required: true
+    svn-password:
+        description: 'WordPress.org SVN password'
+        required: true
+
+runs:
+    using: 'composite'
+    steps:
+        - name: Install SVN
+          shell: bash
+          run: |
+              sudo apt-get update
+              sudo apt-get install subversion
+
+        - name: Update WordPress.org assets
+          uses: 10up/action-wordpress-plugin-asset-update@stable
+          env:
+              SVN_PASSWORD: ${{ inputs.svn-password }}
+              SVN_USERNAME: ${{ inputs.svn-username }}
