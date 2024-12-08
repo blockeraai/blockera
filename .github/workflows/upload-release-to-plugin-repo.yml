@@ -83,8 +83,7 @@ jobs:
         runs-on: ubuntu-latest
         environment: wp.org plugin
         needs: [compute-should-update-trunk]
-        if: |
-            needs.compute-should-update-trunk.outputs.should_update_trunk == 'true' && github.event.release.assets[0]
+        if: ${{ !github.event.release.prerelease && github.event.release.assets[0] }}
         env:
             PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/blockera'
             STABLE_VERSION_REGEX: '[0-9]\+\.[0-9]\+\.[0-9]\+\s*'
@@ -120,8 +119,7 @@ jobs:
                   svn st | grep '^?' | awk '{print $2}' | xargs -r svn add
                   svn st | grep '^!' | awk '{print $2}' | xargs -r svn rm
                   svn commit -m "Committing version $VERSION" \
-                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD" \
-                   --config-option=servers:global:http-timeout=300
+                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
             - name: Create the SVN tag
               working-directory: ./trunk
@@ -136,45 +134,20 @@ jobs:
                   svn commit -m "Releasing version $VERSION" \
                    --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
-    upload-tag:
-        name: Publish as tag
+    update-assets:
+        name: Update assets/readme
         runs-on: ubuntu-latest
         environment: wp.org plugin
         needs: [compute-should-update-trunk]
-        if: |
-            needs.compute-should-update-trunk.outputs.should_update_trunk == 'false' && github.event.release.assets[0]
         env:
             PLUGIN_REPO_URL: 'https://plugins.svn.wordpress.org/blockera'
             STABLE_VERSION_REGEX: '[0-9]\+\.[0-9]\+\.[0-9]\+\s*'
-            SVN_USERNAME: ${{ secrets.svn_username }}
-            SVN_PASSWORD: ${{ secrets.svn_password }}
+            SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+            SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
             VERSION: ${{ github.event.release.name }}
-
         steps:
-            - name: Download and unzip Blockera plugin asset into tags folder
-              env:
-                  PLUGIN_URL: ${{ github.event.release.assets[0].browser_download_url }}
-              run: |
-                  # do the magic here
-                  curl -L -o blockera.zip $PLUGIN_URL
-                  unzip blockera.zip -d "$VERSION"
-                  rm blockera.zip
-
-            - name: Replace the stable tag placeholder with the existing stable tag on the SVN repository
-              env:
-                  STABLE_TAG_PLACEHOLDER: 'Stable tag: V\.V\.V'
-              run: |
-                  sed -i "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" "$VERSION/readme.txt"
-
-            - name: Add the new version directory and commit changes to the SVN repository
-              run: |
-                  svn import "$VERSION" "$PLUGIN_REPO_URL/tags/$VERSION" -m "Committing version $VERSION" \
-                  --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD" \
-                  --config-option=servers:global:http-timeout=300
-
-    update-assets:
-        name: Update assets/readme
-        uses: ./.github/update-assets
-        with:
-            svn-username: ${{ secrets.SVN_USERNAME }}
-            svn-password: ${{ secrets.SVN_PASSWORD }}
+            - name: Update assets/readme
+              uses: ./.github/update-assets
+              with:
+                  svn-username: ${{ secrets.SVN_USERNAME }}
+                  svn-password: ${{ secrets.SVN_PASSWORD }}
