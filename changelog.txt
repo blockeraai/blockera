@@ -1,160 +1,97 @@
 == Changelog ==
 
-= 0.9.2 =
+= 1.0.0 =
 
--   Tweak: Optimized the style generator for faster processing.
--   Tweak: General improvements across various functionalities.
--   Tweak: Updated breakpoint handling to ensure full compatibility with WordPress 6.5.2 and later versions.
+### New Features
+- Build: Implemented the CI/CD workflow for the Blockera plugin [[Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/ci-cd-pipeline-for-faster-and-better-development-O0jDtppwUbpRre0)]
+- Build: Implemented the `release` workflow in GitHub for fast and secure future releases.
+- Build: Added automatic VirusTotal checks during the Blockera plugin build.
+- Build: Added automatic PHP security checks during the Blockera plugin build.
+- Build: Added an automatic file size check to monitor for unusual changes during the Blockera plugin build.
+- Build: Added an automatic plugin final file size check to monitor for unusual changes during the Blockera plugin build.
+- Build: Added the [Plugin Check (PCP)](https://wordpress.org/plugins/plugin-check/) automated tests to ensure compliance with WordPress plugin guidelines during the Blockera plugin build.
+- Build: Automated changelog creation during the Blockera plugin build.
+- Build: Ensured all E2E, JS, and PHP tests pass during the Blockera plugin build.
+- Build: Ensured all JS and PHP files are error-free and adhere to coding standards during the Blockera plugin build.
+- Build: Automated the building and attachment of the plugin zip file to GitHub pull requests.
+- New automated test to recheck final plugin zip file in another WP setup to make sure zip and functionality are correct.
 
--   Fix: Resolved an issue where breakpoint styles were not being generated correctly in the Site Editor.
+### Improvements
+- Features history graph to show current state and also some design polish. 
+- Implemented shared and unstable registration for block type attributes.
+- Initialized the Bootstrap canvas editor when the WordPress site editor loads.
+- Various code improvements and refactoring.
+- Change repository branching architecture to have only one master branch (Trunk based).
+- Typography sections more feature control design improvements.
+- Box Spacing & Box Position features design improvements.
+- Created javascriptJavaScript initializer on inside and outside of WordPress domReady.
+- Created abstract application container on server side.
+- Created abstract service provider on server side.
+- Created abstract entity registry on server side.
+- Improve transform controls popover design.
+- Notice control design improvement.
+- Design of post preview link in header improved.
+- Enhanced the getNormalizedSelector API for better performance and functionality.
+- Refactored server-side style engine with cleaner code and improved support for & ampersand in selector creation.
+- Added spacer for processed selector in the client-side style engine to improved css selector normalizer.
+- Added a reset method in Layout style definition.
+- Updated the layout of typography features to enhance user experience (UX).
+- Optimized performance by detecting and addressing bottlenecks. 🔥
+- Refactored memoization helpers in package/utils and updated all use cases for better efficiency.
 
+### Bug Fixes
+- Blockera bootstrapper problems while domReady!
+- The automatic `readme.txt` file generator fix.
+- The preview button link issue.
+- By clicking on items in feature history graph the breakpoint not changes.
+- Prevent of generated duplicate css props
+- Background feature CSS generator issues.
+- Some PHP warnings and errors.
+- Fix: editor bootstrapper e2e test problems.
+- Gap feature design issue [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/gap-feature-design-issue-oF3n51EmkszId4T)]
+- Extra horizontal scroll in block inspector [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/horizontal-scroll-in-block-inspectror-gKJ6oUo3qLdRo9Y)]
+- Refactor input control to improve performance and fix issues.
+- Fixed an issue where the input control was not accepting a value of 0 [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/the-width-feature-does-not-accepts-0-value-74lCJXSXBziXaqU)]
+- Max 200 value for Gap feature [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/max-200-value-for-gap-feature-nwcVKkoyV5PVKEZ)]
+- JS error while resetting the gap feature [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/js-error-while-resetting-the-gap-feature-DMkePSiXbnwyPSE)]
+- CSS Display property always should be printed to prevent bugs [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/display-feature-always-not-priting-aKA5Jr0gnb6N6Yu)]
+- Flex layout align items and justify content not working properly for column direction [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/flex-layout-bug-aZ0Z3LqgOT8aApK)]
+- Text align feature change from block toolbar not update Typography block section control [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/changing-text-aling-not-affects-inside-blockera-typography-section-kjKfo0aGpFIJSre)]
+- Heading block text align compatibility 
+- Layout Section → Flex Child → Self order icon is wrong [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/flex-chlild-order-icon-is-wrong-uVCroH9QzuZSWsf)]
+- Extra Blockera logo is showing in blocks preview section [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/extra-logo-on-blocks-fFacaGcdbdRHS3M)]
+- Strange "0" character after Layout block section [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/strange-0-after-layout-block-section-tXhcZXMGMn631EH)]
+- Strange bug of flex layout that makes issue for inner blocks flex layout.
+- Wrong style generation for blocks in gap feature [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/wrong-style-generation-for-blocks-in-gap-feature-nkRSbYvjaK226Rh)]
+- Refactored BlockBase component to fix compatibility with WordPress problems. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/group-block-variation-control-bug-with-updating-layout-section---flex-MSd1lhFdxAGDd2c)]
+- Fixed an issue where advanced values of the Flex Layout (e.g., `space-between`, `space-around`) were not working properly. [[🔗 Link](https://community.blockera.ai/bugs-mdhyb8nc/post/advanced-values-of-flex-layout-not-working-properly-wTCfgyDW4w1EoVK)]
+- Fixed a style issue when the selected block is unsupported. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/style-issue-if-current-selected-block-is-a-not-supported-block-9VjcCa2CSA7FPpl)]
+- Fixed an issue that caused duplicate block cards to be displayed. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/extra-block-card-in-the-settings-tab-0C3lR6niX6ygYir)]
 
-= 0.9.1 =
+### Fixed
+- Fixed an issue where theme gradients could result in undefined behavior.
 
--   Fix: Breakpoints not showing in Site Editor.
+### New Features:
+- Added the ability to change `font family` for blocks, supporting all states and breakpoints. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/font-font-appearance-support-nhEJYxOd5p9k4E1)]
+- Added the ability to change `font weight` for blocks, supporting all states and breakpoints. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/font-font-appearance-support-nhEJYxOd5p9k4E1)]
+- Added an opt-in template implementing OptInComponent in React.js.
+- Added DebugDataProvider for enhanced telemetry processing capabilities.
+- Added HTTP OptInController to handle requests from the React.js application.
+- Added Jobs module to manage and execute scheduled tasks for product consumers.
 
+### Automated Tests:
+- Completed E2E tests to verify the functionality of all advanced states in Flex Layout.
+- Conducted WP data compatibility test for the Spacer Block to ensure correct functionality.
+- Added new test suites to ensure the robustness of the getNormalizedSelector API.
+- Updated tests to detect real hover states more accurately.
+- Updated Blockera inline style tag ID to ensure all assertions pass successfully.
+- Added new automated tests to verify unique class names for blocks in Blockera.
+- Added tests to verify the functionality of the `font family` feature.
+- Added tests for checking `font family` functionality and WordPress data compatibility.
+- Added tests to verify the functionality of the `font weight` feature.
+- Added tests for checking `font weight` functionality and WordPress data compatibility.
+- Added new Jest tests for the getTarget() API of the Canvas editor.
 
-= 0.9.0 =
+## More
 
--   Public beta 1 release.
-
-
-= 0.8 =
-
--   Tweak: Add more E2E, component, and PHP unit tests.
--   Tweak: Design improvements.
--   Tweak: Border feature functionality + WP data compatibility.
--   Tweak: Border radius feature functionality + WP data compatibility.
--   Tweak: Block style variation design.
--   Tweak: Various improvements.
-
--   Fix: drop license manager because it's non compliant with WP guidelines on free plugin.
-
-
-= 0.7 =
-
--   Tweak: PHP requirement decreased to PHP v7.4.
--   Tweak: WP requirement decreased to v6.4.5.
--   Tweak: Custom aspect ratio compatibility in WP 6.6 Data.
--   Tweak: Box spacing feature WP Data compatibility improvement.
--   Tweak: Border feature WP Data compatibility improvement.
--   Tweak: Background image feature WP Data compatibility improvement.
--   Tweak: Add more E2E, component, and PHP unit tests.
--   Tweak: Various performance improvements.
--   Tweak: Update Storybook and Cypress to the latest versions.
--   Tweak: Experimental features are on the main branch of the plugin.
--   Tweak: Design improvements in some block features.
-
--   Fix: Blocks and admin panel not working if WP debug is true.
--   Fix: PHPCS errors and warnings.
--   Fix: Bugs in repeater features.
--   Fix: Address various bugs.
-
-
-= 0.6 =
-
--   New:  Experimental feature infrastructure is being developed to enable the shipment of
-		  experimental features in upcoming updates.
-
-		  This infrastructure will allow us to release features as beta features in production
-		  releases before making them available to all users.
-
-		  - Experimental features panel will be added in future.
-
--   Tweak: 🔥 Reduce the final plugin package file size from 1.4MB to 801KB
--   Tweak: Adjustments made to the package build script.
-
--   Fix: Resolved all Plugin Check (PCP) errors and warnings.
--   Fix: Addressed issues related to repeater controls actions.
--   Fix: Fixed repeater tests.
-
-= 0.5 =
-
--   Tweak: 🔥 Reduce the final plugin package file size from 4MB to 1.4MB.
--   Tweak: Refactor, redesign, and compress all icons.
--   Tweak: Enhance the design.
--   Tweak: Admin panel Loading animation.
-
--   Fix: Resolve the issue with Storybook not loading.
--   Fix: Update Storybook to the latest version.
--   Fix: Background mesh gradient error.
--   Fix: Block states error encountered while editing and saving.
--   Fix: Address various bugs.
-
-
-= 0.4 =
-
--   Tweak: 🔥 Reduce 50% of the final package.
--   Tweak: Improve build script.
--   Tweak: Add more E2E tests.
--   Tweak: Refactor input control to enhance performance and resolve bugs.
-
--   Fix: Admin panel is loading slowly.
--   Fix: Address various bugs.
--   Fix: Resolve control label bugs.
--   Fix: Fix responsive breakpoint bugs.
-
-
-= 0.3 =
-
--   New: add Github repository link to readme.txt
--   New: add composer.json to build zip because the WP.org review team asked
-
--   Tweak: More E2E tests.
-
--   Fix: Various bugs in block states and block responsive settings.
--   Fix: readme.txt file header.
--   Fix: Direct access to php files that has return or execution
--   Fix: monaco-editor to load from local package and not CDN
--   Fix: Reset and reset all for features.
--   Fix: Various bugs in controls label.
--   Fix: Border feature.
-
-
-= 0.2.2 =
-
--   New: Indicator for current responsive breakpoint.
-
--   Tweak: Blocks and admin panel design improvement.
--   Tweak: Various bug fixes.
--   Tweak: A lot code refactor and improvement.
--   Tweak: More E2E tests.
--   Tweak: Blockera logos.
-
--   Fix: Various bugs in block states.
--   Fix: Typos.
-
-
-= 0.2.1 =
-
--   New: Option to disable Blockera power up for user roles (Pro Version).
--   New: Advanced option panel reset functionality.
-
--   Tweak: Improve admin panel design.
--   Tweak: E2E tests for admin panel.
--   Tweak: Various bug fixes.
--   Tweak: A lot code refactor and improvement.
-
--   Fix: Losing Blockera attributes on disabled blocks.
--   Fix: Disable repeater add button if "Pro hints" is disabled.
--   Fix: Storybook styles loading.
-
-
-= 0.2 =
-
--   New: Settings panel to change Blockera behaviors.
--   New: Block Manager panel to enable/disable Blockera blocks power up on blocks.
--   New: Setting for disabling Pro version hints in setting panel.
-
--   Fix: Minor bugs and errors.
-
-
-= 0.1.1 =
-
--   Tweak: Smaller build version size (Assets and packages size).
--   Tweak: Block inspector control compatibility.
-
-
-= 0.1 =
-
--   Initial version for WP.org review
+To read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].

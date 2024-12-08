@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.0 (2024-12-08)
+
 ### Improvements
 
 - Created javascriptJavaScript initializer on inside and outside of WordPress domReady.
