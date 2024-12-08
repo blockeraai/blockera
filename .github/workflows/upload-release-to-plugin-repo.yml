@@ -114,12 +114,6 @@ jobs:
               run: |
                   sed -i "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" ./trunk/readme.txt
 
-            - name: Download Changelog Artifact
-              uses: actions/download-artifact@v4
-              with:
-                  name: changelog trunk
-                  path: trunk
-
             - name: Commit the content changes
               working-directory: ./trunk
               run: |
@@ -171,12 +165,6 @@ jobs:
                   STABLE_TAG_PLACEHOLDER: 'Stable tag: V\.V\.V'
               run: |
                   sed -i "s/$STABLE_TAG_PLACEHOLDER/Stable tag: $VERSION/g" "$VERSION/readme.txt"
-
-            - name: Download Changelog Artifact
-              uses: actions/download-artifact@v4
-              with:
-                  name: changelog trunk
-                  path: ${{ github.event.release.name }}
 
             - name: Add the new version directory and commit changes to the SVN repository
               run: |
