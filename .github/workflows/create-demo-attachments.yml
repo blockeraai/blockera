@@ -61,7 +61,7 @@ jobs:
                        -H "Accept: application/vnd.github.v3+json" \
                        $COMMENTS_URL > comments.json
 
-                  if [ -s comments.json ] && [ "$(jq 'length' comments.json)" != "0" ]; then
+                  if [ -s comments.json ] && [ "$(jq 'type' comments.json)" = "array" ] && [ "$(jq 'length' comments.json)" != "0" ]; then
                     cat comments.json | jq -r '.[] | select(.user.login == "blockerabot" and (.body | test("Branch Links"; "i"))) | .id' > comment_id.txt
                   fi
 
