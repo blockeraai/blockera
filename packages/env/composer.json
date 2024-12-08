@@ -1,6 +1,6 @@
 {
 	"name": "blockera/env",
-	"version": "0.9.2",
+	"version": "1.0.0",
 	"description": "The env package to read environment variables of json related files at the root of any project.",
 	"autoload": {
 		"psr-4": {

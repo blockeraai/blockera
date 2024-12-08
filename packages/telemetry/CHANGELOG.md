@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.0 (2024-12-08)
+
 ### New Features:
 - Added an opt-in template implementing OptInComponent in React.js.
 - Added DebugDataProvider for enhanced telemetry processing capabilities.

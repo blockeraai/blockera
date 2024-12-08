@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/dev-jest",
-	"version": "0.9.2",
+	"version": "1.0.0",
 	"description": "Blockera Jest config and mocks",
 	"main": "js/index.js",
 	"keywords": [

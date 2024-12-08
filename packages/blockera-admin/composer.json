@@ -1,6 +1,6 @@
 {
 	"name": "blockera/blockera-admin",
-	"version": "0.9.2",
+	"version": "1.0.0",
 	"description": "The blockera admin menus on WordPress admin dashboard.",
 	"autoload": {
 		"psr-4": {

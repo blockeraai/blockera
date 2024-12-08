@@ -1,6 +1,6 @@
 {
 	"name": "blockera/http",
-	"version": "0.9.2",
+	"version": "1.0.0",
 	"description": "The blockera http abstraction package.",
 	"autoload": {
 		"psr-4": {
