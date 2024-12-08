@@ -1,5 +1,5 @@
 === Blockera ===
-Contributors: blockeraai, aliaghdam
+Contributors: blockeraai, aliaghdam, rezaelahidev
 Tags: gutenberg blocks, wordPress blocks, site editor, block Editor, page Builder
 Requires at least: ### AUTO-GENERATED
 Tested up to: ### AUTO-GENERATED
