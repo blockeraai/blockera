@@ -1,5 +1,10 @@
 ## Unreleased
 
+### Improvements
+
+- Updated the plugin name.
+- Updated the contributors list.
+
 ## 1.0.0 (2024-12-08)
 
 ### Bug Fixes

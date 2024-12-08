@@ -1,4 +1,4 @@
-=== Blockera ===
+=== Blockera Site Builder - The Advanced Mode for Block Editor (Gutenberg) ===
 Contributors: blockeraai, aliaghdam, rezaelahidev
 Tags: gutenberg blocks, wordPress blocks, site editor, block Editor, page Builder
 Requires at least: ### AUTO-GENERATED
