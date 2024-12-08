@@ -171,3 +171,10 @@ jobs:
                   svn import "$VERSION" "$PLUGIN_REPO_URL/tags/$VERSION" -m "Committing version $VERSION" \
                   --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD" \
                   --config-option=servers:global:http-timeout=300
+
+    update-assets:
+        name: Update assets/readme
+        uses: ./.github/update-assets
+        with:
+            svn-username: ${{ secrets.SVN_USERNAME }}
+            svn-password: ${{ secrets.SVN_PASSWORD }}
