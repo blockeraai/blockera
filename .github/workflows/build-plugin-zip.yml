@@ -7,10 +7,14 @@ on:
     workflow_dispatch:
         inputs:
             release_type:
-                description: 'rc or stable?'
+                description: 'Your release type?'
                 required: true
+                type: 'choice'
+                options:
+                    - 'rc'
+                    - 'stable'
             version_type:
-                description: 'major, minor, or patch?'
+                description: 'Your version type?'
                 required: true
                 default: 'patch'
                 type: 'choice'
