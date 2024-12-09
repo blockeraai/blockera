@@ -43,9 +43,10 @@ jobs:
               run: |
                   LATEST_STABLE_TAG=$(git tag --list 'v*' | sort -V | tail -n 1)
                   IFS='.' read LATEST_STABLE_MAJOR LATEST_STABLE_MINOR LATEST_STABLE_PATCH <<< "${LATEST_STABLE_TAG#v}"
-                  if [[ ${github.event.inputs.version_type} == "major" ]]; then
+                  VERSION_TYPE="${{ github.event.inputs.version_type }}"
+                  if [[ $VERSION_TYPE == "major" ]]; then
                     echo "next_stable_branch=release/$((LATEST_STABLE_MAJOR + 1)).0" >> $GITHUB_OUTPUT
-                  elif [[ ${github.event.inputs.version_type} == "minor" ]]; then
+                  elif [[ $VERSION_TYPE == "minor" ]]; then
                     echo "next_stable_branch=release/${LATEST_STABLE_MAJOR}.$((LATEST_STABLE_MINOR + 1))" >> $GITHUB_OUTPUT
                   else
                     echo "next_stable_branch=release/${LATEST_STABLE_MAJOR}.${LATEST_STABLE_MINOR}.$((LATEST_STABLE_PATCH + 1))" >> $GITHUB_OUTPUT
@@ -90,9 +91,9 @@ jobs:
                   echo "old_version=${OLD_VERSION}" >> $GITHUB_OUTPUT
                   if [[ ${{ github.event.inputs.release_type }} == 'stable' ]]; then
                     IFS='.' read -r -a OLD_VERSION_ARRAY <<< "$OLD_VERSION"
-                    if [[ ${github.event.inputs.version_type} == "major" ]]; then
+                    if [[ ${{ github.event.inputs.version_type }} == "major" ]]; then
                       NEW_VERSION=$(npx semver $OLD_VERSION -i major)
-                    elif [[ ${github.event.inputs.version_type} == "minor" ]]; then
+                    elif [[ ${{ github.event.inputs.version_type }} == "minor" ]]; then
                       NEW_VERSION=$(npx semver $OLD_VERSION -i minor)
                     else
                       NEW_VERSION=$(npx semver $OLD_VERSION -i patch)
@@ -101,9 +102,9 @@ jobs:
                     if [[ $OLD_VERSION == *"rc"* ]]; then
                       NEW_VERSION=$(npx semver $OLD_VERSION -i prerelease)
                     else
-                      if [[ ${github.event.inputs.version_type} == "major" ]]; then
+                      if [[ ${{ github.event.inputs.version_type }} == "major" ]]; then
                         NEW_VERSION="$(npx semver $OLD_VERSION -i major)-rc.1"
-                      elif [[ ${github.event.inputs.version_type} == "minor" ]]; then
+                      elif [[ ${{ github.event.inputs.version_type }} == "minor" ]]; then
                         NEW_VERSION="$(npx semver $OLD_VERSION -i minor)-rc.1"
                       else
                         NEW_VERSION="$(npx semver $OLD_VERSION -i patch)-rc.1"
