@@ -76,6 +76,9 @@ jobs:
                   svn commit -m "Releasing version $VERSION" \
                    --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
+            - name: Checkout code
+              uses: actions/checkout@v4
+
             - name: Update assets/readme
               uses: ./.github/update-assets
               with:
