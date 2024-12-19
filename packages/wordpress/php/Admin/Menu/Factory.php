@@ -47,7 +47,14 @@ class Factory {
 		// Remove redundant keys.
 		unset( $menu['submenus'] );
 
-		add_menu_page( ...$menu );
+		add_menu_page(
+			$menu['page_title'] ?? '',
+			$menu['menu_title'] ?? '',
+			$menu['capability'] ?? '',
+			$menu['menu_slug'] ?? '',
+			$menu['callback'] ?? '',
+			$menu['icon_url'] ?? '',
+		);
 
 		if ( ! empty( $this->menu['submenus'] ) ) {
 
@@ -69,7 +76,14 @@ class Factory {
 			return;
 		}
 
-		add_submenu_page( $this->menu['menu_slug'], ...$menu );
+		add_submenu_page(
+			$this->menu['menu_slug'],
+			$menu['page_title'] ?? '',
+			$menu['menu_title'] ?? '',
+			$menu['capability'] ?? '',
+			$menu['menu_slug'] ?? '',
+			$menu['callback'] ?? '',
+		);
 	}
 
 	/**
