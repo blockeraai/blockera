@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Blockera Site Builder - The Advanced Mode for Block Editor
  * Plugin URI: https://blockera.ai/products/site-builder/
- * Description: Blockera Site Builder is the advanced mode for the WP block editor, transforming it into a powerful page builder by enhancing the functionality of all core blocks.
+ * Description: Blockera Site Builder is the advanced mode for the WP block editor, transforming it into a powerful page builder by enhancing all core blocks.
  * Requires at least: 6.6
  * Tested up to: 6.7
  * Requires PHP: 7.4

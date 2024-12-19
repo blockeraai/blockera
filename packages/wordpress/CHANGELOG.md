@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed the current identifier of the Blockera admin page menu in the WordPress dashboard.
+- Resolved compatibility issues with PHP 7.4.
+
 ## 1.0.0 (2024-12-08)
 
 ### Bug Fixes
