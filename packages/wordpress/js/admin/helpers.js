@@ -11,14 +11,14 @@ export const handleCurrentActiveMenuPage = (page: string): void => {
 	);
 
 	const current = document.querySelector(
-		'li#toplevel_page_blockera-settings ul li.current'
+		'li#toplevel_page_blockera-settings-dashboard ul li.current'
 	);
 
 	if (current) {
 		current.classList.remove('current');
 
 		const items = document.querySelectorAll(
-			'li#toplevel_page_blockera-settings ul li'
+			'li#toplevel_page_blockera-settings-dashboard ul li'
 		);
 
 		items.forEach((item) => {
