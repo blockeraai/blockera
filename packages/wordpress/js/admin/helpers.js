@@ -22,10 +22,6 @@ export const handleCurrentActiveMenuPage = (page: string): void => {
 		);
 
 		items.forEach((item) => {
-			if (item.classList.contains('blockera-disable-first-item')) {
-				item.style.display = 'none';
-			}
-
 			if (-1 === item.innerHTML.indexOf(page)) {
 				return;
 			}
