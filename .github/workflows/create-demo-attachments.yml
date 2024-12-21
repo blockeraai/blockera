@@ -57,20 +57,15 @@ jobs:
                   PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
                   COMMENTS_URL="https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
 
-                  # Get the most recent bot comment that contains "Branch Links"
+                  # Fetch all comments and find if one from blockerabot exists
                   curl -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
                        -H "Accept: application/vnd.github.v3+json" \
-                       $COMMENTS_URL > comments.json
+                       $COMMENTS_URL | jq -r '.[] | select(.user.login == "blockerabot" and (.body | test("Branch Links"; "i"))) | .id' > comment_id.txt
 
-                  # Extract the most recent comment ID from blockerabot that contains "Branch Links"
-                  if [ -s comments.json ] && [ "$(jq 'type' comments.json)" = "array" ]; then
-                    COMMENT_ID=$(jq -r 'map(select(.user.login == "blockerabot" and contains(.body, "Branch Links"))) | last | .id' comments.json)
-                    if [ "$COMMENT_ID" != "null" ] && [ ! -z "$COMMENT_ID" ]; then
-                      echo "comment_id=$COMMENT_ID" >> $GITHUB_ENV
-                      echo "Found existing comment ID: $COMMENT_ID"
-                    else
-                      echo "No existing comment found"
-                    fi
+                  # If comment ID is found, set it to environment variable
+                  if [[ -s comment_id.txt ]]; then
+                    COMMENT_ID=$(cat comment_id.txt)
+                    echo "comment_id=${COMMENT_ID}" >> $GITHUB_ENV
                   fi
 
             # Step to encode JSON with Base64
