@@ -57,13 +57,10 @@ jobs:
                   PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
                   COMMENTS_URL="https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
 
+                  # Fetch all comments and find if one from blockerabot exists
                   curl -H "Authorization: token ${{ secrets.BLOCKERABOT_PAT }}" \
                        -H "Accept: application/vnd.github.v3+json" \
-                       $COMMENTS_URL > comments.json
-
-                  if [ -s comments.json ] && [ "$(jq 'type' comments.json)" = "array" ] && [ "$(jq 'length' comments.json)" != "0" ]; then
-                    cat comments.json | jq -r '.[] | select(.user.login == "blockerabot" and (.body | test("Branch Links"; "i"))) | .id' > comment_id.txt
-                  fi
+                       $COMMENTS_URL | jq -r '.[] | select(.user.login == "blockerabot" and (.body | test("Branch Links"; "i"))) | .id' > comment_id.txt
 
                   # If comment ID is found, set it to environment variable
                   if [[ -s comment_id.txt ]]; then
