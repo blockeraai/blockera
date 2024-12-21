@@ -120,9 +120,7 @@ class AppServiceProvider extends ServiceProvider {
 						$app->make( Typography::class ),
 					];
 
-					$params = array_merge( $params, compact( 'styleDefinitions' ) );
-
-					return new StyleEngine( ...$params );
+					return new StyleEngine( $params['block'], $params['fallbackSelector'], $styleDefinitions );
 				}
 			);
 
