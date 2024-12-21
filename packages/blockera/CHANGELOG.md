@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.2 (2024-12-21)
+
 ### Bug Fixes
 
 - Fixed WooCommerce E2E tests for checking WooCommerce blocks support.
