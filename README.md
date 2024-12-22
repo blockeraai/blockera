@@ -92,7 +92,7 @@ Need help? This is a developer's portal for Blockera and should not be used for 
 
 
 ## Change log and Releases 📝
-Complete list of updates and releases is available in [changelog](./changelog.txt).
+Complete list of updates and releases is available in [changelog](https://community.blockera.ai/changelog-9l8hbrv0).
 
 
 ## Contributors 😎
