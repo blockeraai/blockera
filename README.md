@@ -88,7 +88,7 @@ Currently we are working on the following features to add in Blockera:
 
 ## Support 👋
 
-Need help? This is a developer's portal for Blockera and should not be used for general support and queries. Please visit the [Blockera support forum on WordPress.org](https://wordpress.org/support/plugin/blockera) for assistance.
+Need help? This is a developer's portal for Blockera and should not be used for general support and queries. Please visit the [Blockera community](https://community.blockera.ai/) for assistance.
 
 
 ## Change log and Releases 📝
