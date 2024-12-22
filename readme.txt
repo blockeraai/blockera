@@ -57,8 +57,6 @@ Install Blockera today and unlock the true potential of Gutenberg for creating p
 
 All of these features are available in Blockera already. So what's the future of Blockera?
 
-All of these features are available in Blockera already. So what's the future of Blockera?
-
 <h3>Upcoming Features of Blockera 🔥🔥🔥</h3>
 
 Currently we are working on the following features to add in Blockera:
