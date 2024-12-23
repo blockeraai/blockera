@@ -98,6 +98,7 @@ module.exports = (env, argv) => {
 			'@blockera/env': 'blockeraEnv_' + blockeraPackagesVersion.env,
 			'@blockera/telemetry':
 				'blockeraTelemetry_' + blockeraPackagesVersion.telemetry,
+			'@blockera/auth': 'blockeraAuth_' + blockeraPackagesVersion.auth,
 			'@blockera/storage':
 				'blockeraStorage_' + blockeraPackagesVersion.storage,
 			'@blockera/data': 'blockeraData_' + blockeraPackagesVersion.data,
