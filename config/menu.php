@@ -53,28 +53,10 @@ return [
 			'menu_title' => __('Connect with account', 'blockera'),
 			'capability' => 'manage_options',
 			'menu_slug'  => 'blockera-settings-connect-with-account',
-			'callback'   => function () {
+			'callback'   => function(){
 				global $blockera;
-
-				$client = $blockera->make(Client::class, [
-					'clientId' => get_option('blockera-client-id', ''),
-					'clientSecret' => get_option('blockera-client-secret', ''),
-					'urlAuthorize' => blockera_core_config('auth.connectAccount'),
-					'urlAccessToken' => blockera_core_config('auth.getAccessToken'),
-					'urlResourceOwnerDetails' => blockera_core_config('auth.getSubscription'),
-					'redirectUri' => admin_url('admin.php?page=blockera-settings-connect-with-account'),
-				]);
-
-				echo '<script>
-					window.blockeraIsConnectedWithAccount = ' . (blockera_is_connected() ? 'true' : 'false') . ';
-					window.blockeraConnectActionNonce = "' . wp_create_nonce('blockera-connect-with-your-account') . '";
-					window.blockeraCreateAccountLink = "' . blockera_core_config('auth.createAccount') . '";
-					window.blockeraConnectAccountLink = "' . $client->getProvider()->getAuthorizationUrl() . '";
-				</script>';
-
-				$authorization_callback = [$client, 'auth'];
-
-				blockera_connect_with_account('blockera_settings_page_template', $authorization_callback);
+				
+				blockera_oauth_menu_callback($blockera, blockera_core_config('auth'), 'blockera_settings_page_template');
 			},
 		],
 	],
