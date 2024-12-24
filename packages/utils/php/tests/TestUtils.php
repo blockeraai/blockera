@@ -168,4 +168,63 @@ class UtilsTest extends \WP_UnitTestCase {
 		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
 
+	/**
+	 * Test snake case conversion with various input strings
+	 *
+	 * @dataProvider snakeCaseProvider
+	 */
+	public function testSnakeCase(string $input, string $expected): void
+	{
+		$result = Utils::snakeCase($input);
+		$this->assertEquals($expected, $result);
+	}
+
+	/**
+	 * Data provider for snake case test cases
+	 */
+	public function snakeCaseProvider(): array
+	{
+		return [
+			'empty string' => [
+				'input' => '',
+				'expected' => '',
+			],
+			'simple camelCase' => [
+				'input' => 'camelCase',
+				'expected' => 'camel_case',
+			],
+			'PascalCase' => [
+				'input' => 'PascalCase',
+				'expected' => 'pascal_case',
+			],
+			'multiple uppercase letters' => [
+				'input' => 'convertXMLToJSON',
+				'expected' => 'convert_x_m_l_to_j_s_o_n',
+			],
+			'already snake_case' => [
+				'input' => 'already_snake_case',
+				'expected' => 'already_snake_case',
+			],
+			'with numbers' => [
+				'input' => 'user123Name',
+				'expected' => 'user123_name',
+			],
+			'with special characters' => [
+				'input' => 'special@#$Case',
+				'expected' => 'special_case',
+			],
+			'with spaces' => [
+				'input' => 'Convert This String',
+				'expected' => 'convert_this_string',
+			],
+			'with multiple special chars' => [
+				'input' => 'multiple---special___chars',
+				'expected' => 'multiple_special_chars',
+			],
+			'with leading/trailing special chars' => [
+				'input' => '--testString--',
+				'expected' => 'test_string',
+			],
+		];
+	}
 }

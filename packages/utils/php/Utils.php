@@ -27,6 +27,35 @@ class Utils {
 	}
 
 	/**
+	 * Convert a string to snake case.
+	 *
+	 * @param string $string The string to convert to snake case.
+	 *
+	 * @return string The snake case string.
+	 */
+	public static function snakeCase( string $string ): string {
+
+		// Handle empty strings.
+		if ( empty( $string ) ) {
+			return '';
+		}
+
+		// Convert camelCase to snake_case.
+		$pattern     = '/(?<!^)[A-Z]/';
+		$replacement = '_$0';
+		$string      = preg_replace( $pattern, $replacement, $string );
+
+		// Convert to lowercase.
+		$string = strtolower( $string );
+
+		// Replace any remaining non-alphanumeric characters with underscores.
+		$string = preg_replace( '/[^a-z0-9]+/', '_', $string );
+
+		// Remove leading/trailing underscores.
+		return trim( $string, '_' );
+	}
+
+	/**
 	 * Modifies a CSS selector by adding a prefix and/or replacing the suffix for a specific part of the selector.
 	 *
 	 * This function allows you to prepend (prefix) and replace the suffix of a specific part of a CSS selector.

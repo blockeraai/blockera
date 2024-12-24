@@ -36,3 +36,17 @@ export const getIframeTag = (selector: string): HTMLElement | void => {
 	// $FlowFixMe
 	return getIframe()?.contentDocument?.querySelector(selector);
 };
+
+/**
+ * Retrieve url params value.
+ *
+ * @param {string} param the url param name.
+ *
+ * @return {string|void} the url param value.
+ */
+export const getUrlParams = (param: string): string | void => {
+	const urlParams = new URLSearchParams(window.location.search);
+	const { [param]: value } = Object.fromEntries(urlParams.entries());
+
+	return value;
+};
