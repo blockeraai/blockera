@@ -47,8 +47,12 @@ const getCurrentPage = (): string => {
 };
 
 export const Dashboard = (): MixedElement => {
-	const { blockeraVersion, blockeraSettings, blockeraDefaultSettings } =
-		window;
+	const {
+		blockeraVersion,
+		blockeraSettings,
+		blockeraDefaultSettings,
+		blockeraSubscription,
+	} = window;
 	const [settings, setSettings] = useState(blockeraSettings);
 	const currentPage = getCurrentPage();
 	const config = applyFilters(
@@ -141,7 +145,9 @@ export const Dashboard = (): MixedElement => {
 							name: 'connect-with-account',
 							settingSlug: 'connect-with-account',
 							className: 'connect-with-account-tab',
-							title: __('Connect with your account', 'blockera'),
+							title: blockeraSubscription?.email
+								? __('Account Info', 'blockera')
+								: __('Connect with your account', 'blockera'),
 						},
 					]}
 					getPanel={Panel}

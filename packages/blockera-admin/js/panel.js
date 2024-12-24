@@ -11,6 +11,7 @@ import { __experimentalHStack as HStack } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
+import { getUrlParams } from '@blockera/utils';
 import { ConnectWithBlockera } from '@blockera/auth';
 import { TabsContext, PanelHeader } from '@blockera/wordpress';
 import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
@@ -59,15 +60,13 @@ export const Panel = (tab: {
 			);
 			break;
 		case 'connect-with-account':
-			const urlParams = new URLSearchParams(window.location.search);
-			const { connectedWithYourAccount } = Object.fromEntries(
-				urlParams.entries()
-			);
+			const isConnected = getUrlParams('connectedWithYourAccount');
+
 			activePanel = (
 				// $FlowFixMe
-				<ConnectWithBlockera isConnected={connectedWithYourAccount} />
+				<ConnectWithBlockera isConnected={isConnected} />
 			);
-			description = connectedWithYourAccount ? (
+			description = isConnected ? (
 				<></>
 			) : (
 				<p>
