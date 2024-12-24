@@ -4,7 +4,7 @@ use Blockera\Http\RestfullAPI;
 use Blockera\Http\Routes;
 
 // direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
@@ -13,9 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var Routes|RestfullAPI $routes
  */
 
-try {
-
-	{ // Dynamic Values
+try { { // Dynamic Values
 
 		// TODO: fire up rest api controllers
 		//$routes->get( 'dynamic/values/', [ \Blockera\Setup\Http\Controllers\DynamicValuesController::class, 'response' ] );
@@ -29,9 +27,12 @@ try {
 		$routes->post('telemetry/opt-in', [Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn']);
 	}
 
-	if (blockera_is_connected()) {
-		$routes->post('auth/is-connected', [Blockera\Auth\Http\Controllers\ConnectToBlockeraAIController::class, 'isConnected']);
-	}
+	$routes->post('auth/unsubscribe', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'unsubscribe']);
+	$routes->post('auth/is-connected', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'isConnected']);
+	$routes->post('auth/create-account', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'createAccount']);
+	$routes->post('auth/subscriptions', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'getSubscriptions']);
+	$routes->post('auth/connect-account', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'connectAccount']);
+	
 } catch (Exception $exception) {
 
 	return $exception->getMessage();
