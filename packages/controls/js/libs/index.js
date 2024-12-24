@@ -1,4 +1,5 @@
 // @flow
+export * from './avatar';
 export * from './feature-wrapper';
 export { Switch } from './switch';
 export { default as Flex } from './flex';
