@@ -25,6 +25,9 @@
     <rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
         <exclude-pattern>*</exclude-pattern>
     </rule>
+    <rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine">
         <exclude-pattern>*</exclude-pattern>
     </rule>
