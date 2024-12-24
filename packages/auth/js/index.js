@@ -5,31 +5,42 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
+import { useEffect, useState, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { Button, Flex } from '@blockera/controls';
+import { getUrlParams } from '@blockera/utils';
+import { Button, Flex, LoadingComponent } from '@blockera/controls';
+
+/**
+ * Internal dependencies
+ */
+import { Subscriptions } from './subscriptions';
 
 export const ConnectWithBlockera = ({
 	isConnected: _isConnected,
 }: {
 	isConnected: boolean,
 }): MixedElement => {
+	const [isUnsubscribed, setIsUnsubscribed] = useState(
+		getUrlParams('unsubscribed')
+	);
 	const [isConnected, setIsConnected] = useState(false);
 	const [isConnecting, setIsConnecting] = useState(_isConnected);
 	const {
 		blockeraVersion,
+		blockeraAIAccount,
 		blockeraCreateAccountLink,
 		blockeraConnectAccountLink,
 		blockeraConnectActionNonce,
 		blockeraIsConnectedWithAccount,
 		blockeraPluginData: { pluginURI },
 	} = window;
+	const [accountInfo, setAccountInfo] = useState(blockeraAIAccount);
 
-	const doConnect = () => {
+	const doConnect = useCallback(() => {
 		if (blockeraIsConnectedWithAccount) {
 			return;
 		}
@@ -37,7 +48,7 @@ export const ConnectWithBlockera = ({
 			path: '/blockera/v1/auth/is-connected',
 			data: {
 				action: 'is_connected',
-				'is-connected': _isConnected,
+				is_connected: _isConnected,
 			},
 			method: 'POST',
 			headers: {
@@ -60,50 +71,61 @@ export const ConnectWithBlockera = ({
 				setIsConnected(false);
 				setIsConnecting(false);
 			});
-	};
+	}, [
+		_isConnected,
+		blockeraConnectActionNonce,
+		blockeraIsConnectedWithAccount,
+	]);
+
+	useEffect(() => {
+		const fetchSubscription = async () => {
+			apiFetch({
+				method: 'POST',
+				path: '/blockera/v1/auth/subscriptions',
+				headers: {
+					'X-Blockera-Nonce': blockeraConnectActionNonce,
+				},
+				data: {
+					action: 'subscriptions',
+				},
+			})
+				.then((response) => {
+					if (response.success) {
+						setAccountInfo(response.data);
+						setIsUnsubscribed(false);
+					} else {
+						setIsUnsubscribed(true);
+						setAccountInfo(blockeraAIAccount);
+					}
+				})
+				.catch(() => {
+					setAccountInfo(blockeraAIAccount);
+				});
+		};
+
+		if (!blockeraAIAccount?.subscriptions?.length) {
+			fetchSubscription();
+		}
+	}, [blockeraConnectActionNonce, blockeraAIAccount]);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(doConnect, [blockeraConnectActionNonce]);
 
-	if (blockeraIsConnectedWithAccount) {
-		return (
-			<div style={{ textAlign: 'center', padding: '50px 0' }}>
-				<h1>{__('🎉 Congratulations!', 'blockera')}</h1>
-				<p>
-					{__(
-						'You are connected with your bought subscription.',
-						'blockera'
-					)}
-				</p>
-			</div>
-		);
+	if (accountInfo?.subscriptions?.length) {
+		return <Subscriptions accountInfo={accountInfo} />;
 	}
 
-	if ('undefined' !== typeof _isConnected && !isConnected && isConnecting) {
+	if (
+		'undefined' !== typeof _isConnected &&
+		!isConnected &&
+		isConnecting &&
+		accountInfo?.email &&
+		!isUnsubscribed
+	) {
 		return (
-			<div style={{ textAlign: 'center', padding: '50px 0' }}>
-				<h1>{__('Connecting …', 'blockera')}</h1>
-				<div
-					className="blockera-loading-circle"
-					style={{
-						width: '40px',
-						height: '40px',
-						margin: '20px auto',
-						border: '4px solid #f3f3f3',
-						borderTop: '4px solid #3498db',
-						borderRadius: '50%',
-						animation: 'blockera-spin 1s linear infinite',
-					}}
-				/>
-				<style>
-					{`
-						@keyframes blockera-spin {
-							0% { transform: rotate(0deg); }
-							100% { transform: rotate(360deg); }
-						}
-					`}
-				</style>
-			</div>
+			<LoadingComponent
+				loadingDescription={__('Connecting …', 'blockera')}
+			/>
 		);
 	} else if (
 		'undefined' !== typeof _isConnected &&
@@ -133,7 +155,7 @@ export const ConnectWithBlockera = ({
 					<Button
 						variant="primary"
 						onClick={() =>
-							window.open(blockeraConnectAccountLink, '_blank')
+							(window.location.href = blockeraConnectAccountLink)
 						}
 					>
 						{__('Connect to Subscription', 'blockera')}
@@ -141,7 +163,7 @@ export const ConnectWithBlockera = ({
 					<Button
 						variant="primary"
 						onClick={() =>
-							window.open(blockeraCreateAccountLink, '_blank')
+							(window.location.href = blockeraCreateAccountLink)
 						}
 					>
 						{__('Buy Subscription', 'blockera')}
@@ -170,7 +192,7 @@ export const ConnectWithBlockera = ({
 						(window.location.href = blockeraConnectAccountLink)
 					}
 				>
-					{__('Connect to Subscription', 'blockera')}
+					{__('Choose Subscription', 'blockera')}
 				</Button>
 				<Button
 					variant="secondary"
