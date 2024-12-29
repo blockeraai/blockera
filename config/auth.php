@@ -1,7 +1,17 @@
 <?php
 
 return [
-	
+
+	/*
+    |--------------------------------------------------------------------------
+    | Prefix Transient Key
+    |--------------------------------------------------------------------------
+    |
+    | This value represents the prefix for the transient key for subscription temporary data.
+    |
+    */
+	'prefixTransientKey' => 'blockera-subscription__',
+
 	/*
     |--------------------------------------------------------------------------
     | WordPress Option Key
@@ -16,15 +26,25 @@ return [
 
 	/*
     |--------------------------------------------------------------------------
+    | Plugin URL
+    |--------------------------------------------------------------------------
+    |
+    | This value represents the URL of the Blockera Pro plugin.
+    |
+    */
+	'pluginUrl' => blockera_core_env('PLUGIN_URL', 'https://blockera.ai/products/site-builder'),
+
+	/*
+    |--------------------------------------------------------------------------
     | Product ID
     |--------------------------------------------------------------------------
     |
-    | This value represents the unique identifier for the Blockera product being
-    | used. It is used when making API requests and managing subscriptions to
-    | properly identify which product features and capabilities are available.
+    | This value represents the unique identifier for the Blockera Pro plugin
+    | (blockera-pro). It is used when making API requests and managing subscriptions
+    | to properly identify the Pro plugin for updates and license verification.
     |
     */
-	'productId' => blockera_core_env('PRODUCT_ID', 'blockera-site-builder'),
+	'productId' => blockera_core_env('PRODUCT_ID', 'blockera-pro'),
 
 	/*
     |--------------------------------------------------------------------------
@@ -70,7 +90,18 @@ return [
     | about the user's account, including subscription status and other relevant data.
     |
     */
-	'getAccountInfoLink' => blockera_core_env('ACCOUNT_INFO_URL', 'https://blockera.ai/auth/v1/client'),
+	'getAccountInfoLink' => blockera_core_env('ACCOUNT_INFO_URL', 'https://blockera.ai/wp-json/auth/v1/licenses'),
+
+
+	/*
+    |--------------------------------------------------------------------------
+    | Get Allowed Plans
+    |--------------------------------------------------------------------------
+    |
+    | The get allowed plans endpoint is used to retrieve the allowed plans for the user.
+    |
+    */
+	'getAllowedPlansLink' => blockera_core_env('ALLOWED_PLANS_URL', 'https://blockera.ai/wp-json/auth/v1/products/allowed-plans'),
 
 	/*
     |--------------------------------------------------------------------------
@@ -94,16 +125,6 @@ return [
 
 	/*
     |--------------------------------------------------------------------------
-    | Get Zip File
-    |--------------------------------------------------------------------------
-    |
-    | The get zip file endpoint is used to get the zip file for the user.
-    |
-    */
-	'getZipFileUrl' => blockera_core_env('GET_ZIP_FILE_URL', 'https://api.blockera.ai/license-manager/v1/get-zip-file'),
-
-	/*
-    |--------------------------------------------------------------------------
     | Resource Owner Details
     |--------------------------------------------------------------------------
     |
@@ -111,5 +132,5 @@ return [
     | about the user's account, including subscription status and other relevant data.
     |
     */
-	'resourceOwnerDetailsUrl' => blockera_core_env('RESOURCE_OWNER_DETAILS_URL', 'https://api.blockera.ai/license-manager/v1/get-zip-file'),
+	'resourceOwnerDetailsUrl' => blockera_core_env('RESOURCE_OWNER_DETAILS_URL', 'https://api.blockera.ai/downloads-manager/v1/download'),
 ];
