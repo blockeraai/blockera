@@ -28,6 +28,9 @@
     <rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
         <exclude-pattern>*</exclude-pattern>
     </rule>
+    <rule ref="WordPress.WhiteSpace.PrecisionAlignment.Found">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine">
         <exclude-pattern>*</exclude-pattern>
     </rule>

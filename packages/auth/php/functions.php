@@ -77,6 +77,7 @@ if ( ! function_exists( 'blockera_oauth_menu_callback' ) ) {
 				'name'   => $client_info['name'] ?? '',
 				'email'  => $client_info['email'] ?? '',
 				'avatar' => $client_info['avatar'] ?? '',
+				'product_id' => $config['productId'],
 			]
 		);
 

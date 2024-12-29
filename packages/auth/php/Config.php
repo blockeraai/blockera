@@ -49,6 +49,55 @@ class Config {
 	protected static string $api_base_url;
 
 	/**
+	 * The allowed plans link.
+	 *
+	 * @var string $get_allowed_plans_link The allowed plans link.
+	 */
+	protected static string $get_allowed_plans_link;
+
+	/**
+	 * The product identifier.
+	 *
+	 * @var string $product_identifier The product identifier.
+	 */
+	protected static string $product_identifier;
+
+	/**
+	 * The is dev flag.
+	 *
+	 * @var bool $is_dev The is dev flag.
+	 */
+	protected static bool $is_dev;
+
+	/**
+	 * The plugin URL.
+	 *
+	 * @var string $plugin_url The plugin URL.
+	 */
+	protected static string $plugin_url;
+
+	/**
+	 * The plugin icons.
+	 *
+	 * @var array $plugin_icons The plugin icons.
+	 */
+	protected static array $plugin_icons;
+
+	/**
+	 * The resource owner details URL.
+	 *
+	 * @var string $resource_owner_details_url The resource owner details URL.
+	 */
+	protected static string $resource_owner_details_url;
+
+	/**
+	 * The prefix transient key.
+	 *
+	 * @var string $prefix_transient_key The prefix transient key.
+	 */
+	protected static string $prefix_transient_key;
+
+	/**
 	 * The constructor.
 	 *
 	 * @param array $config The config.
@@ -69,6 +118,42 @@ class Config {
 		if ( property_exists( $this, $snake_case_key ) ) {
 			self::$$snake_case_key = $value;
 		}
+	}
+
+	/**
+	 * Get the prefix transient key.
+	 *
+	 * @return string The prefix transient key.
+	 */
+	public static function getPrefixTransientKey(): string {
+		return self::$prefix_transient_key;
+	}
+
+	/**
+	 * Get the allowed plans link.
+	 *
+	 * @return string The allowed plans link.
+	 */
+	public static function getAllowedPlansLink(): string {
+		return self::$get_allowed_plans_link;
+	}
+
+	/**
+	 * Set the product identifier.
+	 *
+	 * @param string $product_identifier The product identifier.
+	 */
+	public function setProductIdentifier( string $product_identifier ): void {
+		self::$product_identifier = $product_identifier;
+	}
+
+	/**
+	 * Get the product identifier.
+	 *
+	 * @return string The product identifier.
+	 */
+	public static function getProductIdentifier(): string {
+		return self::$product_identifier;
 	}
 
 	/**
@@ -139,10 +224,10 @@ class Config {
 	 *
 	 * @return array The subscription.
 	 */
-	public static function getSubscription(): array {
+	public static function getSubscriptions(): array {
 		$client_info = get_option( self::$option_key );
 
-		return $client_info['subscription'] ?? [];
+		return $client_info['subscriptions'] ?? [];
 	}
 
 	/**
@@ -172,5 +257,59 @@ class Config {
 	 */
 	public static function getZipFileURL(): string {
 		return self::$get_zip_file_url;
+	}
+
+	/**
+	 * Set the is dev flag.
+	 *
+	 * @param bool $is_dev The is dev flag.
+	 */
+	public static function setIsDev( bool $is_dev ): void {
+		self::$is_dev = $is_dev;
+	}
+
+	/**
+	 * Check if the plugin is in development mode.
+	 *
+	 * @return bool True if the plugin is in development mode, false otherwise.
+	 */
+	public static function isDev(): bool {
+		return self::$is_dev;
+	}
+
+	/**
+	 * Get the plugin URL.
+	 *
+	 * @return string The plugin URL.
+	 */
+	public static function getPluginUrl(): string {
+		return self::$plugin_url;
+	}
+
+	/**
+	 * Set the plugin icons.
+	 *
+	 * @param array $icons The plugin icons.
+	 */
+	public static function setIcons( array $icons ): void {
+		self::$plugin_icons = $icons;
+	}
+
+	/**
+	 * Get the plugin icons.
+	 *
+	 * @return array The plugin icons.
+	 */
+	public static function getIcons(): array {
+		return self::$plugin_icons;
+	}
+
+	/**
+	 * Get the resource owner details URL.
+	 *
+	 * @return string The resource owner details URL.
+	 */
+	public static function getResourceOwnerDetailsUrl(): string {
+		return self::$resource_owner_details_url;
 	}
 }

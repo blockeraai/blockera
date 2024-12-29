@@ -4,8 +4,10 @@ namespace Blockera\Auth\Http\Controllers;
 
 use Blockera\Auth\Config;
 use Blockera\Http\RestController;
+use Blockera\Utils\Utils;
 
 class ConnectionController extends RestController {
+
 
 	/**
 	 * Store validation errors.
@@ -25,7 +27,7 @@ class ConnectionController extends RestController {
 	 * The constructor.
 	 */
 	public function __construct() {
-		$this->option_key = Config::getOptionKey();
+         $this->option_key = Config::getOptionKey();
 	}
 
 	/**
@@ -34,30 +36,30 @@ class ConnectionController extends RestController {
 	 * @param \WP_REST_Request $request The request object.
 	 * @return bool Whether the user has permission.
 	 */
-	public function permission( \WP_REST_Request $request ): bool {
-		$referer = $request->get_header( 'Referer' );
+	public function permission( \WP_REST_Request $request): bool {
+		$referer = $request->get_header('Referer');
 
 		// Validate URLs if present.
-		if ( ! empty( $referer ) && ! str_starts_with( $referer, home_url() ) ) {
-			if ( ! filter_var( $referer, FILTER_VALIDATE_URL ) ) {
-				$this->errors['invalid_referer'] = __( 'Invalid Referer URL.', 'blockera' );
+		if (! empty($referer) && ! str_starts_with($referer, home_url())) {
+			if (! filter_var($referer, FILTER_VALIDATE_URL)) {
+				$this->errors['invalid_referer'] = __('Invalid Referer URL.', 'blockera');
 			}
 			// Only allow redirects to allowed domains.
-			$allowed_domains = [ parse_url( Config::getApiBaseUrl(), PHP_URL_HOST ) ];
-			$referer_host    = parse_url( $referer, PHP_URL_HOST );
+			$allowed_domains = [ parse_url(Config::getApiBaseUrl(), PHP_URL_HOST) ];
+			$referer_host    = parse_url($referer, PHP_URL_HOST);
 
-			if ( ! in_array( $referer_host, $allowed_domains, true ) ) {
+			if (! in_array($referer_host, $allowed_domains, true)) {
 				return false;
 			}
 
 			return true;
 		}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if (! current_user_can('manage_options')) {
 			return false;
 		}
 
-		return wp_verify_nonce( $request->get_header( 'X-Blockera-Nonce' ), 'blockera-connect-with-your-account' );
+		return wp_verify_nonce($request->get_header('X-Blockera-Nonce'), 'blockera-connect-with-your-account');
 	}
 
 	/**
@@ -66,10 +68,10 @@ class ConnectionController extends RestController {
 	 * @param \WP_REST_Request $request The request object.
 	 * @return \WP_REST_Response The response object.
 	 */
-	public function connectAccount( \WP_REST_Request $request ): \WP_REST_Response {
-		$this->validate( $request->get_params() );
+	public function connectAccount( \WP_REST_Request $request): \WP_REST_Response {
+		$this->validate($request->get_params());
 
-		if ( count( $this->errors ) > 0 ) {
+		if (count($this->errors) > 0) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 400,
@@ -80,38 +82,38 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		$client_info = get_option( $this->option_key );
+		$client_info = get_option($this->option_key);
 
-		if ( ! $client_info ) {
+		if (! $client_info) {
 
 			$info = [
-				'expires'       => $request->get_param( 'expires' ),
-				'access_token'  => $request->get_param( 'token' ),
-				'has_expired'   => $request->get_param( 'has_expired' ),
-				'refresh_token' => $request->get_param( 'refresh_token' ),
+				'expires'       => $request->get_param('expires'),
+				'access_token'  => $request->get_param('token'),
+				'has_expired'   => $request->get_param('has_expired'),
+				'refresh_token' => $request->get_param('refresh_token'),
 			];
 		} else {
 
 			$info = array_merge(
 				$client_info,
 				[
-					'expires'       => $request->get_param( 'expires' ),
-					'access_token'  => $request->get_param( 'token' ),
-					'has_expired'   => $request->get_param( 'has_expired' ),
-					'refresh_token' => $request->get_param( 'refresh_token' ),
+					'expires'       => $request->get_param('expires'),
+					'access_token'  => $request->get_param('token'),
+					'has_expired'   => $request->get_param('has_expired'),
+					'refresh_token' => $request->get_param('refresh_token'),
 				]
 			);
 		}
 
-		$updated = update_option( $this->option_key, $info );
+		$updated = update_option($this->option_key, $info);
 
-		if ( ! $updated && $info === $client_info ) {
+		if (! $updated && $info === $client_info) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 500,
 					'success' => false,
 					'errors'  => [
-						__( 'Failed to connect to Blockera AI.', 'blockera' ),
+						__('Failed to connect to Blockera AI.', 'blockera'),
 					],
 				],
 				500
@@ -123,7 +125,7 @@ class ConnectionController extends RestController {
 				'code'    => 200,
 				'success' => true,
 				'data'    => [
-					'message' => __( 'Connected to Blockera AI successfully.', 'blockera' ),
+					'message' => __('Connected to Blockera AI successfully.', 'blockera'),
 				],
 			]
 		);
@@ -135,10 +137,10 @@ class ConnectionController extends RestController {
 	 * @param \WP_REST_Request $request The request object.
 	 * @return \WP_REST_Response The response object.
 	 */
-	public function createAccount( \WP_REST_Request $request ): \WP_REST_Response {
-		$this->validate( $request->get_params() );
+	public function createAccount( \WP_REST_Request $request): \WP_REST_Response {
+		$this->validate($request->get_params());
 
-		if ( count( $this->errors ) > 0 ) {
+		if (count($this->errors) > 0) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 400,
@@ -149,36 +151,36 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		$client_info = get_option( $this->option_key );
+		$client_info = get_option($this->option_key);
 
-		if ( ! $client_info ) {
+		if (! $client_info) {
 
 			$info = [
-				'authorization_code' => $request->get_param( 'code' ),
-				'client_id'          => $request->get_param( 'client_id' ),
-				'client_secret'      => $request->get_param( 'client_secret' ),
+				'authorization_code' => $request->get_param('code'),
+				'client_id'          => $request->get_param('client_id'),
+				'client_secret'      => $request->get_param('client_secret'),
 			];
 		} else {
 
 			$info = array_merge(
 				$client_info,
 				[
-					'authorization_code' => $request->get_param( 'code' ),
-					'client_id'          => $request->get_param( 'client_id' ),
-					'client_secret'      => $request->get_param( 'client_secret' ),
+					'authorization_code' => $request->get_param('code'),
+					'client_id'          => $request->get_param('client_id'),
+					'client_secret'      => $request->get_param('client_secret'),
 				]
 			);
 		}
 
-		$updated = update_option( $this->option_key, $info );
+		$updated = update_option($this->option_key, $info);
 
-		if ( ! $updated && $client_info !== $info ) {
+		if (! $updated && $client_info !== $info) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 500,
 					'success' => false,
 					'errors'  => [
-						__( 'Failed to create client info.', 'blockera' ),
+						__('Failed to create client info.', 'blockera'),
 					],
 				],
 				500
@@ -190,7 +192,7 @@ class ConnectionController extends RestController {
 				'code'    => 201,
 				'success' => true,
 				'data'    => [
-					'message' => __( 'Client info created successfully.', 'blockera' ),
+					'message' => __('Client info created successfully.', 'blockera'),
 				],
 			],
 			201
@@ -203,20 +205,20 @@ class ConnectionController extends RestController {
 	 * @param \WP_REST_Request $request The request object.
 	 * @return \WP_REST_Response The response object.
 	 */
-	public function isConnected( \WP_REST_Request $request ): \WP_REST_Response {
-		$this->validate( $request->get_params() );
+	public function isConnected( \WP_REST_Request $request): \WP_REST_Response {
+		$this->validate($request->get_params());
 
-		$client_info = get_option( $this->option_key );
+		$client_info = get_option($this->option_key);
 
-		if ( empty( $client_info['access_token'] ) ) {
+		if (empty($client_info['access_token'])) {
 
-			$this->errors['access_token'] = __( 'Access token is required.', 'blockera' );
-		} elseif ( time() > $client_info['expires'] ) {
+			$this->errors['access_token'] = __('Access token is required.', 'blockera');
+		} elseif (time() > $client_info['expires']) {
 
-			$this->errors['access_token'] = __( 'Access token has expired.', 'blockera' );
+			$this->errors['access_token'] = __('Access token has expired.', 'blockera');
 		}
 
-		if ( count( $this->errors ) > 0 ) {
+		if (count($this->errors) > 0) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 400,
@@ -227,25 +229,25 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		if ( ! $client_info ) {
+		if (! $client_info) {
 
 			$info = [
-				'is_connected' => (bool) $request->get_param( 'is_connected' ),
+				'is_connected' => (bool) $request->get_param('is_connected'),
 			];
 		} else {
 
 			$info = array_merge(
 				$client_info,
 				[
-					'is_connected' => (bool) $request->get_param( 'is_connected' ),
+					'is_connected' => (bool) $request->get_param('is_connected'),
 				]
 			);
 		}
 
-		$updated = update_option( $this->option_key, $info );
+		$updated = update_option($this->option_key, $info);
 
-		if ( ! $updated && $client_info !== $info ) {
-			$this->errors['update_failed'] = __( 'Failed to update connection status.', 'blockera' );
+		if (! $updated && $client_info !== $info) {
+			$this->errors['update_failed'] = __('Failed to update connection status.', 'blockera');
 
 			return new \WP_REST_Response(
 				[
@@ -275,14 +277,14 @@ class ConnectionController extends RestController {
 	 *
 	 * @return \WP_REST_Response The response object.
 	 */
-	public function getSubscriptions( \WP_REST_Request $request ): \WP_REST_Response {
-		if ( 'subscriptions' !== $request->get_param( 'action' ) ) {
-			$this->errors['invalid_action'] = __( 'Invalid action.', 'blockera' );
+	public function getSubscriptions( \WP_REST_Request $request): \WP_REST_Response {
+		if ('subscriptions' !== $request->get_param('action')) {
+			$this->errors['invalid_action'] = __('Invalid action.', 'blockera');
 		}
 
-		$this->validate( $request->get_params() );
+		$this->validate($request->get_params());
 
-		if ( count( $this->errors ) > 0 ) {
+		if (count($this->errors) > 0) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 400,
@@ -293,9 +295,9 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		$client_info = get_option( $this->option_key );
+		$client_info = get_option($this->option_key);
 
-		if ( ! empty( $client_info['subscriptions'] ) ) {
+		if (! empty($client_info['subscriptions']) && empty($request->get_param('force'))) {
 			$account_info = array_merge(
 				[
 					'subscriptions' => $client_info['subscriptions'] ?? [],
@@ -316,13 +318,13 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		if ( empty( $client_info['access_token'] ) ) {
+		if (empty($client_info['access_token'])) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 400,
 					'success' => false,
 					'errors'  => [
-						'access_token' => __( 'Access token is required.', 'blockera' ),
+						'access_token' => __('Access token is required.', 'blockera'),
 					],
 				],
 				400
@@ -346,9 +348,9 @@ class ConnectionController extends RestController {
 			],
 		];
 
-		$response = wp_remote_get( Config::getAccountInfoLink(), $args );
+		$response = wp_remote_get(Config::getAccountInfoLink(), $args);
 
-		if ( is_wp_error( $response ) ) {
+		if (is_wp_error($response)) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 500,
@@ -361,9 +363,9 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		$response_body = json_decode( wp_remote_retrieve_body( $response ), true );
+		$response_body = json_decode(wp_remote_retrieve_body($response), true);
 
-		if ( ! empty( $response_body['data']['success'] ) && false === $response_body['data']['success'] ) {
+		if (! empty($response_body['data']['success']) && false === $response_body['data']['success']) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 500,
@@ -374,36 +376,43 @@ class ConnectionController extends RestController {
 			);
 		}
 
+		// Create a transient key to store the subscription temporary data.
+		$prefix_transient_key = Config::getPrefixTransientKey();
+
 		$subscriptions = array_map(
-			function ( $subscription ) {
-				$subscription['product_id'] = Config::getProductId();
+			function ( $subscription) use ( $prefix_transient_key) {
+				$transient_key = $prefix_transient_key . Utils::snakeCase(explode('- ', $subscription['subscription_name'])[2]);
+
+				set_transient($transient_key, $subscription['versionId'], 60 * 60 * 3); // Available for 3 hours.
+
+				unset($subscription['versionId']);
 
 				return $subscription;
 			},
 			$response_body['data']['subscriptions']
 		);
 
-		unset( $response_body['data']['subscriptions'] );
+		unset($response_body['data']['subscriptions']);
 
-		if ( ! $client_info ) {
+		if (! $client_info) {
 
 			$info                  = $response_body['data'];
 			$info['subscriptions'] = $subscriptions;
 		} else {
 
-			$info                  = array_merge( $client_info, $response_body['data'] );
+			$info                  = array_merge($client_info, $response_body['data']);
 			$info['subscriptions'] = $subscriptions;
 		}
 
-		$updated = update_option( $this->option_key, $info );
+		$updated = update_option($this->option_key, $info);
 
-		if ( ! $updated && $client_info !== $info ) {
+		if (! $updated && $client_info !== $info) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 500,
 					'success' => false,
 					'errors'  => [
-						'subscription_not_found' => __( 'Failed to updating or creating subscription info proccess.', 'blockera' ),
+						'subscription_not_found' => __('Failed to updating or creating subscription info proccess.', 'blockera'),
 					],
 				],
 				500
@@ -412,7 +421,7 @@ class ConnectionController extends RestController {
 
 		$response_body['data']['subscriptions'] = $subscriptions;
 
-		return new \WP_REST_Response( $response_body );
+		return new \WP_REST_Response($response_body);
 	}
 
 	/**
@@ -422,10 +431,10 @@ class ConnectionController extends RestController {
 	 *
 	 * @return \WP_REST_Response The response object.
 	 */
-	public function unsubscribe( \WP_REST_Request $request ): \WP_REST_Response {
-		$this->validate( $request->get_params() );
+	public function unsubscribe( \WP_REST_Request $request): \WP_REST_Response {
+		$this->validate($request->get_params());
 
-		if ( count( $this->errors ) > 0 ) {
+		if (count($this->errors) > 0) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 400,
@@ -436,15 +445,15 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		$client_info = get_option( $this->option_key );
+		$client_info = get_option($this->option_key);
 
-		if ( empty( $client_info['subscription'] ) ) {
+		if (empty($client_info['subscriptions'])) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 400,
 					'success' => false,
 					'errors'  => [
-						'subscription_not_exists' => __( 'Subscription not found.', 'blockera' ),
+						'subscription_not_exists' => __('Subscription not found.', 'blockera'),
 					],
 				],
 				400
@@ -461,7 +470,7 @@ class ConnectionController extends RestController {
 				'headers'     => [
 					'Referer'          => home_url(),
 					'Authorization'    => 'Bearer ' . $client_info['access_token'],
-					'X-Blockera-Nonce' => wp_create_nonce( 'blockera-site-toolkit' ),
+					'X-Blockera-Nonce' => wp_create_nonce('blockera-site-toolkit'),
 				],
 				'body'        => [
 					'client_id' => $client_info['client_id'],
@@ -469,7 +478,7 @@ class ConnectionController extends RestController {
 			]
 		);
 
-		if ( is_wp_error( $response ) ) {
+		if (is_wp_error($response)) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 500,
@@ -482,17 +491,17 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		unset( $client_info['subscription'] );
+		unset($client_info['subscriptions']);
 
-		$isUpdated = update_option( $this->option_key, $client_info );
+		$isUpdated = update_option($this->option_key, $client_info);
 
-		if ( ! $isUpdated ) {
+		if (! $isUpdated) {
 			return new \WP_REST_Response(
 				[
 					'code'    => 500,
 					'success' => false,
 					'errors'  => [
-						'unsubscribe_failed' => __( 'Failed to unsubscribe from Blockera AI.', 'blockera' ),
+						'unsubscribe_failed' => __('Failed to unsubscribe from Blockera AI.', 'blockera'),
 					],
 				],
 				500
@@ -504,7 +513,7 @@ class ConnectionController extends RestController {
 				'code'    => 200,
 				'success' => true,
 				'data'    => [
-					'message' => __( 'Unsubscribed from Blockera AI successfully.', 'blockera' ),
+					'message' => __('Unsubscribed from Blockera AI successfully.', 'blockera'),
 				],
 			]
 		);
@@ -517,28 +526,28 @@ class ConnectionController extends RestController {
 	 *
 	 * @return void
 	 */
-	protected function validate( array $params ): void {
-		if ( empty( $params['action'] ) ) {
-			$this->errors['action'] = __( 'Action Field is required.', 'blockera' );
+	protected function validate( array $params): void {
+		if (empty($params['action'])) {
+			$this->errors['action'] = __('Action Field is required.', 'blockera');
 
 			return;
 		}
 
-		$action = sanitize_text_field( $params['action'] );
+		$action = sanitize_text_field($params['action']);
 
 		$required_params = [
-			'action' => __( 'Action Field is required.', 'blockera' ),
+			'action' => __('Action Field is required.', 'blockera'),
 		];
 
-		if ( 'create_account' === $action ) {
-			$required_params['client_id']     = __( 'Client ID Field is required.', 'blockera' );
-			$required_params['code']          = __( 'Authorization Code Field is required.', 'blockera' );
-			$required_params['client_secret'] = __( 'Client Secret Field is required.', 'blockera' );
-		} elseif ( 'connect_account' === $action ) {
-			$required_params['token']         = __( 'Access Token Field is required.', 'blockera' );
-			$required_params['expires']       = __( 'Expires Field is required.', 'blockera' );
-			$required_params['has_expired']   = __( 'Has Expired Field is required.', 'blockera' );
-			$required_params['refresh_token'] = __( 'Refresh Access Token Field is required.', 'blockera' );
+		if ('create_account' === $action) {
+			$required_params['client_id']     = __('Client ID Field is required.', 'blockera');
+			$required_params['code']          = __('Authorization Code Field is required.', 'blockera');
+			$required_params['client_secret'] = __('Client Secret Field is required.', 'blockera');
+		} elseif ('connect_account' === $action) {
+			$required_params['token']         = __('Access Token Field is required.', 'blockera');
+			$required_params['expires']       = __('Expires Field is required.', 'blockera');
+			$required_params['has_expired']   = __('Has Expired Field is required.', 'blockera');
+			$required_params['refresh_token'] = __('Refresh Access Token Field is required.', 'blockera');
 		}
 
 		$available_actions = [
@@ -549,28 +558,28 @@ class ConnectionController extends RestController {
 			'connect_account',
 		];
 
-		if ( ! in_array( $action, $available_actions, true ) ) {
-			$this->errors['invalid_action'] = __( 'Invalid action.', 'blockera' );
+		if (! in_array($action, $available_actions, true)) {
+			$this->errors['invalid_action'] = __('Invalid action.', 'blockera');
 		}
 
 		// Validate and sanitize parameters.
-		foreach ( $params as $key => $value ) {
-			if ( is_string( $value ) ) {
-				$params[ $key ] = sanitize_text_field( $value );
+		foreach ($params as $key => $value) {
+			if (is_string($value)) {
+				$params[ $key ] = sanitize_text_field($value);
 			}
 		}
 
 		array_map(
-			function ( $message, $param ) use ( $params ) {
-				if ( 'has_expired' === $param && false === $params[ $param ] ) {
+			function ( $message, $param) use ( $params) {
+				if ('has_expired' === $param && false === $params[ $param ]) {
 					return;
 				}
-				if ( empty( $params[ $param ] ) ) {
+				if (empty($params[ $param ])) {
 					$this->errors[ $param ] = $message;
 				}
 			},
 			$required_params,
-			array_keys( $required_params )
+			array_keys($required_params)
 		);
 	}
 }

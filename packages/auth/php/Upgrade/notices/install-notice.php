@@ -1,18 +1,32 @@
 <div class="notice notice-info is-dismissible">
 	<p>
-		<?php _e( 'Blockera Pro is available now, Install the plugin to get the full experience.', 'blockera' ); ?>
-		<a href="
 		<?php
-		echo wp_nonce_url(
-			add_query_arg(
-				[ 'install_plugin' => 'blockera-pro' ],
-				admin_url( 'admin.php' )
-			),
-			'install-plugin_blockera-pro'
+		// phpcs:disable
+		/* translators: %s: Plugin name */
+		printf(
+			__('The %s plugin is required. Please install and activate it.', 'blockera'),
+			'<strong>' . esc_html($plugin['name']) . '</strong>'
 		);
 		?>
-					" class="button">
-			<?php _e( 'Install and Activate Blockera PRO', 'blockera' ); ?>
+	</p>
+	<p>
+		<a href="
+					<?php
+					echo esc_url(
+						wp_nonce_url(
+							add_query_arg(
+								array(
+									'action' => 'install-plugin',
+									'plugin' => $plugin['slug'],
+								),
+								admin_url('update.php')
+							),
+							'install-plugin_' . $plugin['slug']
+						)
+					);
+					?>
+								" class="button button-primary">
+			<?php _e('Install Now', 'blockera'); ?>
 		</a>
 	</p>
 </div>

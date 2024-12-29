@@ -2,8 +2,13 @@
 
 namespace Blockera\Setup\Providers;
 
-use Blockera\Telemetry\Config;
+use Blockera\Telemetry\Config as TelemetryConfig;
+use Blockera\Auth\Config as AuthConfig;
+use Blockera\Auth\Validator;
 use Blockera\Setup\Blockera;
+use Blockera\Auth\Upgrade\Upgrade;
+use Blockera\Auth\Upgrade\ProPlugin;
+use Blockera\Auth\Upgrade\NoticeIssuer;
 use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
 use Blockera\WordPress\RenderBlock\{
@@ -150,6 +155,52 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton( Sender::class );
 
+			$this->app->singleton(
+				AuthConfig::class,
+				function ( Application $app, array $config ): AuthConfig {
+
+					return new AuthConfig($config );
+				}
+			);
+
+			$this->app->singleton(
+				Validator::class,
+				function ( Application $app, array $args ) {
+					return new Validator( $app, $args );
+				}
+			);
+
+			$this->app->singleton(
+				NoticeIssuer::class,
+				function ( Application $app, array $args ) {
+					return new NoticeIssuer( $app, $args );
+				}
+			);
+
+			$this->app->singleton(
+				ProPlugin::class,
+				function ( Application $app, array $args ): ProPlugin {
+					$plugin = array_intersect_key($args, array_flip([ 'name', 'slug' ]));
+
+					$auth_config = $app->make( AuthConfig::class, $args['config'] ?? [] );
+					$auth_config->setProductIdentifier($args['subscription']['productId']);
+					$auth_config->setIsDev(blockera_core_config('app.debug'));
+
+					$noticeIssuer = $app->make(
+						NoticeIssuer::class,
+						[
+							'plugin' => $plugin,
+							'subscription' => $args['subscription']['subscription_name'] ?? '',
+						]
+					);
+
+					unset($args['config']);
+					$args['id'] = $args['subscription']['id'];
+
+					return new ProPlugin($app, $args);
+				}
+			);
+
 		} catch ( BaseException $handler ) {
 
 			throw new BaseException( esc_html( 'Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage() ) );
@@ -165,6 +216,44 @@ class AppServiceProvider extends ServiceProvider {
 	public function boot(): void {
 
 		parent::boot();
+
+		$auth_config_array = blockera_core_config( 'auth' );
+		$client_info = get_option($auth_config_array['optionKey']);
+		$config = $this->app->make( AuthConfig::class, $auth_config_array );
+		
+		// FIXME: This is a temporary solution to set the plugin icon.
+		$config->setIcons([ blockera_core_config('app.root_url') . '/.wordpress-org/icon-256x256.png' ]);
+
+		try {
+			if ( is_admin() && current_user_can( 'manage_options' ) && ! empty( $client_info['subscriptions'] ) ) {
+				$subscriptions = $client_info['subscriptions'];
+				$product_subscriptions = array_column($subscriptions, 'product_id');
+				$subscription_index = array_search($auth_config_array['productId'], $product_subscriptions, true);
+				$subscription = $subscriptions[ $subscription_index ];
+
+				$this->app->make(
+					ProPlugin::class,
+					[
+						'slug'    => 'blockera-pro',
+						'config' => $auth_config_array,
+						'subscription' => $subscription,
+						'name'    => __( 'Blockera Pro', 'blockera' ),
+					]
+				)->applyHooks();
+			}
+		} catch ( \Exception $e ) {
+			wp_die(
+                implode(
+                    ', ',
+                    [
+						'message' => $e->getMessage(),
+						'code' => $e->getCode(),
+						'file' => $e->getFile(),
+						'line' => $e->getLine(),
+					]
+                ) 
+            );
+		}
 
 		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
 		$variableRegistry     = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
@@ -191,11 +280,11 @@ class AppServiceProvider extends ServiceProvider {
 
 		if ( ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
 
-			Config::setConsumerConfig( blockera_core_config( 'app' ) );
-			Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
-			Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
-			Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
-			Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
+			TelemetryConfig::setConsumerConfig( blockera_core_config( 'app' ) );
+			TelemetryConfig::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
+			TelemetryConfig::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
+			TelemetryConfig::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
+			TelemetryConfig::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
 		}
 
 		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
