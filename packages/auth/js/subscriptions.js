@@ -24,12 +24,12 @@ export const Subscriptions = ({
 		subscriptions: Array<{
 			id: string,
 			// end_date: string,
-			product_id: string,
 			start_date: string,
 			subscription_name: string,
 			subscription_status: string,
 			next_payment_due_date: string,
 		}>,
+		product_id: string,
 		name: string,
 		email: string,
 		avatar: string,
@@ -90,18 +90,11 @@ export const Subscriptions = ({
 				({
 					id,
 					product_id: productId,
-					start_date: startDate,
 					subscription_name: subscriptionName,
 					subscription_status: subscriptionStatus,
+					start_date: startDate,
 					next_payment_due_date: nextPaymentDueDate,
-				}: {
-					id: string,
-					product_id: string,
-					subscription_name: string,
-					subscription_status: string,
-					start_date: string,
-					next_payment_due_date: string,
-				}) => {
+				}: Object) => {
 					const isExpired = new Date(nextPaymentDueDate) < new Date();
 
 					return (
@@ -217,28 +210,27 @@ export const Subscriptions = ({
 										{nextPaymentDueDate}
 									</span>
 								</Flex>
-							</Flex>
-
-							<Flex
-								className={classNames(
-									'blockera-subscription-actions'
-								)}
-								justifyContent="flex-start"
-								gap="30"
-							>
-								<Button
-									disabled={!id}
-									variant="primary"
-									onClick={renew}
+								<Flex
+									className={classNames(
+										'blockera-subscription-actions'
+									)}
+									justifyContent="flex-start"
+									gap="30"
 								>
-									{__('Renew', 'blockera')}
-								</Button>
-								<Button
-									variant="secondary"
-									onClick={() => unsubscribe(id)}
-								>
-									{__('Unsubscribe', 'blockera')}
-								</Button>
+									<Button
+										disabled={!id}
+										variant="primary"
+										onClick={renew}
+									>
+										{__('Renew', 'blockera')}
+									</Button>
+									<Button
+										variant="secondary"
+										onClick={() => unsubscribe(id)}
+									>
+										{__('Unsubscribe', 'blockera')}
+									</Button>
+								</Flex>
 							</Flex>
 						</Flex>
 					);
