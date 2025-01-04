@@ -5,7 +5,7 @@
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { doAction } from '@wordpress/hooks';
-import { useEffect, useMemo } from '@wordpress/element';
+import { useEffect, useMemo, createElement } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
@@ -73,6 +73,14 @@ const EdiBlockWithoutExtensions = ({
 	...props
 }: Object): MixedElement => {
 	useSharedBlockSideEffect();
+
+	// This approach ensures compatibility with React's rendering pipeline.
+	if (
+		typeof settings.edit === 'function' &&
+		/^class\s/.test(Function.prototype?.toString?.call(settings.edit))
+	) {
+		return createElement(settings.edit, props);
+	}
 
 	return settings.edit(props);
 };

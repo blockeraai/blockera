@@ -1,5 +1,8 @@
 ## Unreleased
 
+## Bug Fixes
+- Ensured compatibility with the React.js rendering pipeline.[[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/single-product-block-error-bXDiO88g7LsP0hV)]
+
 ## 1.0.0 (2024-12-08)
 
 ### New Features:
