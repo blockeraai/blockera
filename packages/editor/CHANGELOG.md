@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- Updated block sections to remove the "Powered by Blockera" icon from the bottom. Instead, an indicator was added at the top of the block to show whether it is in advanced mode, displayed only once per block. (Based on users feedback)
+
+
 ## 1.0.0 (2024-12-08)
 
 ### New Features:
