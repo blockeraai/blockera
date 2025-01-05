@@ -22,7 +22,7 @@
 			top: 17px;
 			right: 34px;
 			z-index: 2;
-			color: #bdbdbd;
+			color: #1e1e1e;
 			fill: currentColor;
 			display: flex;
 			width: 24px;
@@ -31,8 +31,10 @@
 			justify-content: center;
 			transition: var(--blockera-controls-transition);
 			border-radius: 2px;
+			opacity: 0.2;
 
 			&:hover {
+				opacity: 1;
 				color: var(--blockera-controls-primary-color);
 			}
 		}
