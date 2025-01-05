@@ -84,7 +84,8 @@
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
-		"illuminate/container": "8.x-dev"
+		"illuminate/container": "8.x-dev",
+		"psr/container": "1.x-dev"
 	},
 	"require-dev": {
 		"symfony/dom-crawler": "5.4.x-dev",
