@@ -4,6 +4,9 @@
 - Ensured compatibility with the React.js rendering pipeline [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/single-product-block-error-bXDiO88g7LsP0hV)].
 - Fixed the block mode callback handler to improve functionality and reliability [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/block-mode-switch-not-works-FsR1uwRuIcCakWp)].
 
+### Improvements
+- Updated block sections to remove the "Powered by Blockera" icon from the bottom. Instead, an indicator was added at the top of the block to show whether it is in advanced mode, displayed only once per block. (Based on users feedback)
+
 ## 1.0.0 (2024-12-08)
 
 ### New Features:

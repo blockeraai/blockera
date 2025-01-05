@@ -17,6 +17,28 @@
 		top: 0;
 		right: 0;
 
+		.blockera-powered-by-icon {
+			position: absolute;
+			top: 17px;
+			right: 34px;
+			z-index: 2;
+			color: #1e1e1e;
+			fill: currentColor;
+			display: flex;
+			width: 24px;
+			height: 24px;
+			align-items: center;
+			justify-content: center;
+			transition: var(--blockera-controls-transition);
+			border-radius: 2px;
+			opacity: 0.2;
+
+			&:hover {
+				opacity: 1;
+				color: var(--blockera-controls-primary-color);
+			}
+		}
+
 		.components-dropdown-menu {
 			position: absolute;
 			right: 8px;

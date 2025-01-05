@@ -37,7 +37,7 @@ const PanelBodyControl: ComponentType<PanelBodyControlProps> = forwardRef(
 			children,
 			onToggle,
 			scrollAfterOpen = false,
-			showPoweredBy = true,
+			showPoweredBy = false,
 			...props
 		}: PanelBodyControlProps,
 		ref: Object
