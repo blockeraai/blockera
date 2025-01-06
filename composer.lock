@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0eaa73063937a0557d1a9a442aa3e4c",
+    "content-hash": "4f48fe7e2b627bcf2f51d29bce652e99",
     "packages": [
         {
             "name": "blockera/blockera",
-            "version": "0.9.2",
+            "version": "1.0.2",
             "dist": {
                 "type": "path",
                 "url": "packages/blockera",
-                "reference": "70c2603f886fb91a834bb26c410b31bd4b546409"
+                "reference": "a67917233ad671e08d663ab49032a8492b21ee83"
             },
             "type": "library",
             "autoload": {
@@ -35,11 +35,11 @@
         },
         {
             "name": "blockera/blockera-admin",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/blockera-admin",
-                "reference": "e5b85be465ccb52cfb0b1e70bafb691a9a083670"
+                "reference": "efb31727d6fb81e43093dd8d2c2a6c5c2acf4065"
             },
             "type": "library",
             "autoload": {
@@ -79,11 +79,11 @@
         },
         {
             "name": "blockera/bootstrap",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/bootstrap",
-                "reference": "6c600d291848d5e95d4c894a9ade9c27ebdb079c"
+                "reference": "846e0e79e6aaba6b1865932091f5c92d0918729a"
             },
             "type": "library",
             "autoload": {
@@ -98,11 +98,11 @@
         },
         {
             "name": "blockera/data",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/data",
-                "reference": "a6ffe882e4f7520b6c5b4908ee2bec1bfb653dd5"
+                "reference": "c110e8cb0330f5c55c6efc2e0f013ddacfa58439"
             },
             "type": "library",
             "autoload": {
@@ -117,11 +117,11 @@
         },
         {
             "name": "blockera/data-editor",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/data-editor",
-                "reference": "01546c294a61d39bebeedece9abdb08b1e4aa3c5"
+                "reference": "b7fc5f5dceb989ba71288002d42ffd371ecc6fae"
             },
             "type": "library",
             "autoload": {
@@ -136,11 +136,11 @@
         },
         {
             "name": "blockera/dev-phpunit",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/dev-phpunit",
-                "reference": "b5c08d818b5ad7a418aeae4ef3ba5d99d95ed2ff"
+                "reference": "1c0c9df0767eb4e9a3537618a7dc7e06d8ed28d5"
             },
             "type": "library",
             "autoload-dev": {
@@ -155,11 +155,11 @@
         },
         {
             "name": "blockera/editor",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/editor",
-                "reference": "9fa0a2526ec1b70e524e502bbd7044a1ac75a038"
+                "reference": "11565f19a4bb96d88f233085149668023ed01793"
             },
             "type": "library",
             "autoload": {
@@ -182,11 +182,11 @@
         },
         {
             "name": "blockera/env",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/env",
-                "reference": "72b723a27b1cc06f5ae735be6c99c30b08fbf4bc"
+                "reference": "9e78bd120c211f116b3fcb8df02665e949c38f6d"
             },
             "type": "library",
             "autoload": {
@@ -204,11 +204,11 @@
         },
         {
             "name": "blockera/exceptions",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/exceptions",
-                "reference": "bcc9806b69010c828af345026d9873058569cc37"
+                "reference": "1582e294ef2e373f8f0ce86a79edf7490e5c22d0"
             },
             "type": "library",
             "autoload": {
@@ -223,11 +223,11 @@
         },
         {
             "name": "blockera/http",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/http",
-                "reference": "533a60e2c380f0a8528b299aaf28cae87c5975f5"
+                "reference": "0ce85c7626718a9422a77b7ea408fde28342455a"
             },
             "type": "library",
             "autoload": {
@@ -242,11 +242,11 @@
         },
         {
             "name": "blockera/telemetry",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/telemetry",
-                "reference": "0bafe7cccafbd9520ff45bb9669947728346f31b"
+                "reference": "fb31d16b3479c13598a24743f7019e258d6fe318"
             },
             "type": "library",
             "autoload": {
@@ -269,11 +269,11 @@
         },
         {
             "name": "blockera/utils",
-            "version": "0.9.2",
+            "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/utils",
-                "reference": "eb5bd0e727652a89d475970de550d339350c3305"
+                "reference": "3acb9772d2949b4b112ac6772ebecc0c7e067c64"
             },
             "type": "library",
             "autoload": {
@@ -293,11 +293,11 @@
         },
         {
             "name": "blockera/wordpress",
-            "version": "0.9.2",
+            "version": "1.0.1",
             "dist": {
                 "type": "path",
                 "url": "packages/wordpress",
-                "reference": "1951416cd385e684da9190d4742362273b7fd826"
+                "reference": "dda60374747823256e14c7bd3f17b940f05edb11"
             },
             "type": "library",
             "autoload": {
@@ -8020,6 +8020,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "illuminate/container": 20,
+        "psr/container": 20,
         "symfony/css-selector": 20,
         "symfony/dom-crawler": 20,
         "symfony/var-dumper": 20,

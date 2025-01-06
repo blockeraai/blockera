@@ -134,10 +134,10 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	);
 	const setActive = useCallback(
 		(blockeraMode: 'advanced' | 'basic'): void => {
-			_setActive('advanced' === blockeraMode);
+			_setActive(blockeraMode);
 			setAttributes({
 				...attributes,
-				blockeraMode,
+				blockeraMode: blockeraMode ? 'advanced' : 'basic',
 			});
 		},
 		// eslint-disable-next-line
