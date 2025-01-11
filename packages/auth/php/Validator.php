@@ -5,7 +5,8 @@ namespace Blockera\Auth;
 use Blockera\Auth\Config;
 use Blockera\Bootstrap\Application;
 
-class Validator {
+class Validator
+{
 
 	/**
 	 * Store the auth module identifier.
@@ -46,7 +47,7 @@ class Validator {
 	 * Store the start date.
 	 *
 	 * @var string $start The start date.
-	 */ 
+	 */
 	protected string $start;
 
 	/**
@@ -68,8 +69,23 @@ class Validator {
 	 *
 	 * @param Application $app The application instance.
 	 */
-	public function __construct( Application $app) {
+	public function __construct(Application $app)
+	{
 		$this->app = $app;
+	}
+
+	/**
+	 * Set the properties.
+	 *
+	 * @param array $args The arguments.
+	 *
+	 * @return void
+	 */
+	public function __call(string $name, array $arguments): void
+	{
+		if (property_exists($this, $name)) {
+			$this->$name = $arguments[0];
+		}
 	}
 
 	/**
@@ -79,9 +95,10 @@ class Validator {
 	 *
 	 * @return array The result.
 	 */
-	public function updateCheck( string $id): array {
+	public function updateCheck(string $id): array
+	{
 		$config = $this->app->make(Config::class);
-		$data = get_plugin_data(WP_PLUGIN_DIR . '/' . $config->getProductId() . '/' . $config->getProductId() . '.php');
+		$data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->name . '/' . $this->name . '.php');
 
 		if (empty($data)) {
 			return [];
@@ -104,7 +121,7 @@ class Validator {
 				'redirection' => 5,
 				'httpversion' => '1.1',
 				// Disable SSL verification.
-				'sslverify'   => false,
+				'sslverify'   => Config::isDev(),
 				'headers'     => [
 					'Authorization'    => 'Bearer ' . $config->getToken(),
 				],
@@ -122,7 +139,7 @@ class Validator {
 
 		$responseBody = json_decode(wp_remote_retrieve_body($response), true);
 
-		if ( empty($responseBody['success']) || true !== $responseBody['success']) {
+		if (empty($responseBody['success']) || true !== $responseBody['success']) {
 			return [];
 		}
 
@@ -139,16 +156,17 @@ class Validator {
 	 *
 	 * @return bool True if the plan is allowed, false otherwise.
 	 */
-	public function isAllowedPlan( string $plan): bool {
+	public function isAllowedPlan(string $plan): bool
+	{
 		if (empty($plan)) {
 			return false;
 		}
 
 		$config = $this->app->make(Config::class);
 
-		$option_key = $config->getOptionKey() . '__allowed_plans';
+		$transient_key = $config->getOptionKey() . '__allowed_plans';
 
-		$allowed_plans = get_option($option_key);
+		$allowed_plans = get_transient($transient_key);
 
 		if (! empty($allowed_plans)) {
 			return in_array($plan, $allowed_plans, true);
@@ -179,7 +197,7 @@ class Validator {
 			return false;
 		}
 
-		update_option($option_key, $allowed_plans);
+		set_transient($transient_key, $allowed_plans, 60 * 60 * 24 * 30);
 
 		return in_array($plan, $allowed_plans, true);
 	}

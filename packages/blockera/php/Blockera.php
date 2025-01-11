@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Blockera to contains all services and entities.
  *
@@ -15,7 +16,8 @@ use Blockera\Setup\Contracts\ContainerInterface;
  *
  * @package Blockera\Setup\Blockera
  */
-class Blockera extends Application implements ContainerInterface {
+class Blockera extends Application implements ContainerInterface
+{
 
 	/**
 	 * Holds the registered values.
@@ -25,9 +27,17 @@ class Blockera extends Application implements ContainerInterface {
 	protected array $registered_value_addons = [];
 
 	/**
+	 * Holds the license.
+	 *
+	 * @var array $license the license.
+	 */
+	protected array $license = [];
+
+	/**
 	 * Blockera constructor.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 
 		/**
 		 * This hook for extendable service providers list from internal or third-party developers.
@@ -35,16 +45,16 @@ class Blockera extends Application implements ContainerInterface {
 		 * @hook  'blockera/service/providers'
 		 * @since 1.0.0
 		 */
-		$this->service_providers = apply_filters( 'blockera/service/providers', blockera_core_config( 'app.providers' ) );
+		$this->service_providers = apply_filters('blockera/service/providers', blockera_core_config('app.providers'));
 
 		// Keep parent functionalities.
 		parent::__construct();
 
 		$this->setEntities(
 			array_merge(
-				blockera_core_config( 'entities' ),
+				blockera_core_config('entities'),
 				[
-					'breakpoints' => blockera_core_config( 'breakpoints.list' ),
+					'breakpoints' => blockera_core_config('breakpoints.list'),
 				]
 			)
 		);
@@ -60,26 +70,27 @@ class Blockera extends Application implements ContainerInterface {
 	 *
 	 * @return array the registered value addon with recieved key.
 	 */
-	public function getRegisteredValueAddons( string $key = '', bool $includeContext = true ): array {
+	public function getRegisteredValueAddons(string $key = '', bool $includeContext = true): array
+	{
 
-		if ( empty( $key ) || empty( $this->registered_value_addons[ $key ] ) ) {
+		if (empty($key) || empty($this->registered_value_addons[$key])) {
 
 			return [];
 		}
 
-		if ( $includeContext ) {
+		if ($includeContext) {
 
-			return $this->registered_value_addons[ $key ] ?? [];
+			return $this->registered_value_addons[$key] ?? [];
 		}
 
 		return array_map(
-			static function ( array $valueAddonGroup ): array {
+			static function (array $valueAddonGroup): array {
 
 				return array_merge(
 					$valueAddonGroup,
 					[
 						'items' => array_map(
-							static function ( $items ): array {
+							static function ($items): array {
 
 								return $items['properties'] ?? [];
 							},
@@ -88,7 +99,7 @@ class Blockera extends Application implements ContainerInterface {
 					]
 				);
 			},
-			$this->registered_value_addons[ $key ]
+			$this->registered_value_addons[$key]
 		);
 	}
 
@@ -97,9 +108,29 @@ class Blockera extends Application implements ContainerInterface {
 	 *
 	 * @param array $value_addons the recieved value addons stack to register.
 	 */
-	public function setRegisteredValueAddons( array $value_addons = [] ): void {
+	public function setRegisteredValueAddons(array $value_addons = []): void
+	{
 
 		$this->registered_value_addons = $value_addons;
 	}
 
+	/**
+	 * Set the license.
+	 *
+	 * @param array $license the license.
+	 */
+	public function setLicense(array $license): void
+	{
+		$this->license = $license;
+	}
+
+	/**
+	 * Get the license.
+	 *
+	 * @return array The license.
+	 */
+	public function getLicense(): array
+	{
+		return $this->license;
+	}
 }

@@ -6,7 +6,6 @@ use Blockera\Telemetry\Config as TelemetryConfig;
 use Blockera\Auth\Config as AuthConfig;
 use Blockera\Auth\Validator;
 use Blockera\Setup\Blockera;
-use Blockera\Auth\Upgrade\Upgrade;
 use Blockera\Auth\Upgrade\ProPlugin;
 use Blockera\Auth\Upgrade\NoticeIssuer;
 use Blockera\WordPress\Sender;
@@ -180,22 +179,24 @@ class AppServiceProvider extends ServiceProvider {
 			$this->app->singleton(
 				ProPlugin::class,
 				function ( Application $app, array $args ): ProPlugin {
-					$plugin = array_intersect_key($args, array_flip([ 'name', 'slug' ]));
+					$plugin = array_intersect_key($args['config'], array_flip([ 'productName', 'pluginSlug' ]));
 
 					$auth_config = $app->make( AuthConfig::class, $args['config'] ?? [] );
-					$auth_config->setProductIdentifier($args['subscription']['productId']);
+					$auth_config->setProductIdentifier($args['license']['productId']);
 					$auth_config->setIsDev(blockera_core_config('app.debug'));
 
-					$noticeIssuer = $app->make(
+					$app->make(
 						NoticeIssuer::class,
 						[
 							'plugin' => $plugin,
-							'subscription' => $args['subscription']['subscription_name'] ?? '',
+							'subscription' => $args['license']['name'] ?? '',
 						]
 					);
 
 					unset($args['config']);
-					$args['id'] = $args['subscription']['id'];
+					$args['slug'] = $auth_config->getPluginSlug();
+					$args['name'] = $auth_config->getPluginName();
+					$args['id'] = $args['license']['id'];
 
 					return new ProPlugin($app, $args);
 				}
@@ -218,28 +219,34 @@ class AppServiceProvider extends ServiceProvider {
 		parent::boot();
 
 		$auth_config_array = blockera_core_config( 'auth' );
-		$client_info = get_option($auth_config_array['optionKey']);
+		$client_info = get_option(AuthConfig::getOptionKey());
 		$config = $this->app->make( AuthConfig::class, $auth_config_array );
 		
 		// FIXME: This is a temporary solution to set the plugin icon.
 		$config->setIcons([ blockera_core_config('app.root_url') . '/.wordpress-org/icon-256x256.png' ]);
 
 		try {
-			if ( is_admin() && current_user_can( 'manage_options' ) && ! empty( $client_info['subscriptions'] ) ) {
-				$subscriptions = $client_info['subscriptions'];
-				$product_subscriptions = array_column($subscriptions, 'product_id');
-				$subscription_index = array_search($auth_config_array['productId'], $product_subscriptions, true);
-				$subscription = $subscriptions[ $subscription_index ];
+			if ( is_admin() && current_user_can( 'manage_options' ) && ! empty( $client_info['licenses'] ) ) {
+				$licenses = $client_info['licenses'];
+				$products_licenses = array_column($licenses, 'productName');
+				$license_index = array_search($auth_config_array['productName'], $products_licenses, true);
+				$license = $licenses[ $license_index ];
 
-				$this->app->make(
-					ProPlugin::class,
-					[
-						'slug'    => 'blockera-pro',
-						'config' => $auth_config_array,
-						'subscription' => $subscription,
-						'name'    => __( 'Blockera Pro', 'blockera' ),
-					]
-				)->applyHooks();
+				if($license){
+					$pro_plugin = $this->app->make(
+						ProPlugin::class,
+						[
+							'config' => $auth_config_array,
+							'license' => $license,
+						]
+					);
+
+					if ($this->app instanceof Blockera) {
+						$this->app->setLicense($license);
+					}
+
+					$pro_plugin->applyHooks();
+				}
 			}
 		} catch ( \Exception $e ) {
 			wp_die(

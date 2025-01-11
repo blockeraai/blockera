@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
@@ -18,17 +19,18 @@ import {
 	SettingsContext,
 	handleCurrentActiveMenuPage,
 } from '@blockera/wordpress';
-import { Button } from '@blockera/controls';
+import { Button, Flex, Avatar } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
-
+import { getUrlParams } from '@blockera/utils';
 /**
  * Internal dependencies
  */
 import { Panel } from './panel';
+import ProIcon from './pro-icon.svg';
 import { config as optionsConfig } from './config';
 
 const getCurrentPage = (): string => {
@@ -50,8 +52,11 @@ export const Dashboard = (): MixedElement => {
 	const {
 		blockeraVersion,
 		blockeraSettings,
+		blockeraAIAccount,
+		blockeraAIMyAccountUrl,
+		blockeraPROIsActivated,
+		blockeraPROIsInstalled,
 		blockeraDefaultSettings,
-		blockeraSubscription,
 	} = window;
 	const [settings, setSettings] = useState(blockeraSettings);
 	const currentPage = getCurrentPage();
@@ -59,6 +64,7 @@ export const Dashboard = (): MixedElement => {
 		'blockera.admin.panel.settings.config',
 		optionsConfig
 	);
+	const isConnected = getUrlParams('connectedWithYourAccount');
 
 	return (
 		<div className={'blockera-settings-dashboard'}>
@@ -81,21 +87,40 @@ export const Dashboard = (): MixedElement => {
 					name={__('Blockera', 'blockera')}
 				>
 					<div className={'blockera-settings-header-links'}>
-						<Button
-							variant="secondary-on-hover"
-							icon={
-								<Icon
-									library={'ui'}
-									icon={'crown'}
-									iconSize={22}
-								/>
-							}
-							text={__('Upgrade to Pro', 'blockera')}
-							href={
-								'https://blockera.ai/products/site-builder/upgrade/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=upgrade-page&utm_content=cta-link'
-							}
-							target="_blank"
-						/>
+						{!blockeraPROIsInstalled && (
+							<Button
+								variant="secondary-on-hover"
+								icon={
+									<Icon
+										library={'ui'}
+										icon={'crown'}
+										iconSize={22}
+									/>
+								}
+								text={__('Upgrade to Pro', 'blockera')}
+								href={
+									'https://blockera.ai/products/site-builder/upgrade/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=upgrade-page&utm_content=cta-link'
+								}
+								target="_blank"
+							/>
+						)}
+						{!blockeraPROIsActivated && (
+							<Button
+								variant="secondary-on-hover"
+								icon={
+									<Icon
+										library={'ui'}
+										icon={'crown'}
+										iconSize={22}
+									/>
+								}
+								text={__('Activate Pro License', 'blockera')}
+								href={
+									'https://blockera.ai/products/site-builder/upgrade/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=upgrade-page&utm_content=cta-link'
+								}
+								target="_blank"
+							/>
+						)}
 
 						<Button
 							variant="tertiary-on-hover"
@@ -142,12 +167,10 @@ export const Dashboard = (): MixedElement => {
 							title: __('Block Manager', 'blockera'),
 						},
 						{
-							name: 'connect-with-account',
-							settingSlug: 'connect-with-account',
-							className: 'connect-with-account-tab',
-							title: blockeraSubscription?.email
-								? __('Account Info', 'blockera')
-								: __('Connect with your account', 'blockera'),
+							name: 'account',
+							settingSlug: 'account',
+							className: 'account-tab',
+							title: __('Account & License', 'blockera'),
 						},
 					]}
 					getPanel={Panel}
@@ -238,6 +261,110 @@ export const Dashboard = (): MixedElement => {
 									/>
 								</span>
 							</WPButton>
+
+							{(!blockeraPROIsInstalled ||
+								!blockeraPROIsActivated) &&
+								!isConnected &&
+								!blockeraAIAccount?.client_id && (
+									<Flex
+										direction="column"
+										className={componentClassNames(
+											'promotion'
+										)}
+									>
+										<ProIcon />
+										<ul>
+											<li>
+												<span className="align-center">
+													<Icon
+														icon={'check'}
+														library="wp"
+														iconSize={22}
+													/>
+													{__(
+														'Multiple Transitions',
+														'blockera'
+													)}
+												</span>
+											</li>
+											<li>
+												<span className="align-center">
+													<Icon
+														icon={'check'}
+														library="wp"
+														iconSize={22}
+													/>
+													{__(
+														'Advanced Transition Types',
+														'blockera'
+													)}
+												</span>
+											</li>
+											<li>
+												<span className="align-center">
+													<Icon
+														icon={'check'}
+														library="wp"
+														iconSize={22}
+													/>
+													{__(
+														'Adjust Transition Delay',
+														'blockera'
+													)}
+												</span>
+											</li>
+										</ul>
+										<Button
+											variant="primary"
+											className={componentInnerClassNames(
+												'pro-license-button'
+											)}
+										>
+											{__(
+												'Activate Pro License',
+												'blockera'
+											)}
+										</Button>
+									</Flex>
+								)}
+							{blockeraAIAccount?.licenses?.length > 0 && (
+								<Flex
+									justifyContent="space-between"
+									alignItems="center"
+									className="profile-container"
+									onClick={() =>
+										window.open(
+											blockeraAIMyAccountUrl,
+											'_blank'
+										)
+									}
+								>
+									<Flex
+										gap="16"
+										alignItems="center"
+										justifyContent="space-between"
+									>
+										<Avatar
+											src={blockeraAIAccount?.avatar}
+											alt={blockeraAIAccount?.name}
+											className="account-avatar"
+										/>
+										<Flex direction="column" gap="4">
+											<h3 style={{ margin: 0 }}>
+												{blockeraAIAccount?.name}
+											</h3>
+											<p style={{ margin: 0 }}>
+												{blockeraAIAccount?.email}
+											</p>
+										</Flex>
+									</Flex>
+									<Icon
+										icon={'chevron-right'}
+										library="wp"
+										iconSize={22}
+									/>
+								</Flex>
+							)}
 						</NavigableMenu>
 					}
 				/>

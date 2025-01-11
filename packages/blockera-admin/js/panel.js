@@ -59,7 +59,7 @@ export const Panel = (tab: {
 				</p>
 			);
 			break;
-		case 'connect-with-account':
+		case 'account':
 			const isConnected = getUrlParams('connectedWithYourAccount');
 
 			activePanel = (

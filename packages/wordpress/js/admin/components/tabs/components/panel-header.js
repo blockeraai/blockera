@@ -16,6 +16,8 @@ import { Flex } from '@blockera/controls';
 import { Update } from '../../';
 import type { TabsProps } from '../types';
 
+const ignoredTabs: Array<string> = ['account'];
+
 export const PanelHeader = ({
 	tab,
 	kind,
@@ -30,7 +32,11 @@ export const PanelHeader = ({
 	tabSettings: any,
 	description: any,
 	showButtons: boolean,
-}): MixedElement => {
+}): MixedElement | null => {
+	if (ignoredTabs.includes(tab.name)) {
+		return null;
+	}
+
 	return (
 		<Flex direction={'column'} className={'blockera-settings-panel-header'}>
 			<Flex

@@ -3,6 +3,7 @@
 namespace Blockera\Auth\Upgrade;
 
 use Blockera\Auth\Config;
+use Blockera\Utils\Utils;
 use Blockera\Auth\Validator;
 use Blockera\Bootstrap\Application;
 
@@ -56,7 +57,7 @@ class NoticeIssuer {
 		$this->validator = $app->make(Validator::class);
 
 		$parsed_subscription = explode(' - ', $this->subscription);
-		$plan = $parsed_subscription[ array_key_last($parsed_subscription) ];
+		$plan = ($parsed_subscription[2] ?? '') . ' - '. $parsed_subscription[ array_key_last($parsed_subscription) ];
 
 		if ($this->validator->isAllowedPlan($plan)) {
 			// Initialize required plugins.
@@ -64,19 +65,6 @@ class NoticeIssuer {
 
 			add_action('admin_notices', array( $this, 'addInstallNotice' ));
 		}
-	}
-
-	/**
-	 * Check if plugin is installed.
-	 *
-	 * @param string $plugin_slug The slug of the plugin.
-	 *
-	 * @return bool true if the plugin is installed, false otherwise.
-	 */
-	public static function isPluginInstalled( string $plugin_slug): bool {
-		$installed_plugins = get_plugins();
-
-		return isset($installed_plugins[ $plugin_slug . '/' . $plugin_slug . '.php' ]);
 	}
 
 	/**
@@ -91,10 +79,10 @@ class NoticeIssuer {
 
 		$plugin = $this->plugin;
 
-		if ($this->config::isDev() || ! self::isPluginInstalled($plugin['slug'])) {
+		if ($this->config::isDev() || ! Utils::isPluginInstalled($plugin['slug'])) {
 			ob_start();
 
-			include __DIR__ . '/notices/install-notice.php';
+			include __DIR__ . '/notices/blockera-activation-notice.php';
 
 			echo ob_get_clean();
 		}

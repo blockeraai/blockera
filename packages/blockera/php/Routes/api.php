@@ -27,10 +27,10 @@ try { { // Dynamic Values
 		$routes->post('telemetry/opt-in', [Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn']);
 	}
 
+	$routes->post('auth/licenses', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'getLicenses']);
 	$routes->post('auth/unsubscribe', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'unsubscribe']);
 	$routes->post('auth/is-connected', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'isConnected']);
 	$routes->post('auth/create-account', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'createAccount']);
-	$routes->post('auth/subscriptions', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'getSubscriptions']);
 	$routes->post('auth/connect-account', [Blockera\Auth\Http\Controllers\ConnectionController::class, 'connectAccount']);
 	
 } catch (Exception $exception) {

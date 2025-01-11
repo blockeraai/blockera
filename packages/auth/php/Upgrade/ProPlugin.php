@@ -2,10 +2,12 @@
 
 namespace Blockera\Auth\Upgrade;
 
+use Blockera\Auth\Config;
 use Blockera\Utils\Utils;
 use Blockera\Auth\DynamicPropertyTrait;
 
-class ProPlugin {
+class ProPlugin
+{
 
 	/**
 	 * Use the dynamic property trait.
@@ -41,20 +43,21 @@ class ProPlugin {
 	private string $version;
 
 	/**
-	 * The subscription of the pro plugin.
+	 * The license of the pro plugin.
 	 *
-	 * @var array $subscription The subscription of the plugin.
+	 * @var array $license The license of the plugin.
 	 */
-	private array $subscription;
+	private array $license;
 
 	/**
 	 * Apply the hooks.
 	 *
 	 * @return void
 	 */
-	public function applyHooks(): void {
-		add_filter('pre_set_site_transient_update_plugins', [ $this, 'checkForPluginUpdate' ]);
-		add_filter('plugins_api', [ $this, 'pluginApiCall' ], 10, 3);
+	public function applyHooks(): void
+	{
+		add_filter('pre_set_site_transient_update_plugins', [$this, 'checkForPluginUpdate']);
+		add_filter('plugins_api', [$this, 'pluginApiCall'], 10, 3);
 	}
 
 	/**
@@ -64,7 +67,8 @@ class ProPlugin {
 	 *
 	 * @return void
 	 */
-	public function setLink( string $downloadLink): void {
+	public function setLink(string $downloadLink): void
+	{
 		$this->link = $downloadLink;
 	}
 
@@ -75,13 +79,16 @@ class ProPlugin {
 	 *
 	 * @return \stdClass The transient object.
 	 */
-	public function checkForPluginUpdate( \stdClass $transient): \stdClass {
+	public function checkForPluginUpdate(\stdClass $transient): \stdClass
+	{
 		$id = $this->slug . '/' . $this->slug . '.php';
 
 		// Check if pro version is not activated.
 		if (! is_plugin_active($id)) {
 			return $transient;
 		}
+
+		$this->validator->name($this->slug);
 
 		$result = $this->validator->updateCheck($this->config->getProductIdentifier());
 
@@ -95,7 +102,7 @@ class ProPlugin {
 			$plugin_info->new_version = $result['new_version'];
 			$plugin_info->url = $this->config->getPluginUrl();
 
-			$transient->response[ $plugin_info->plugin ] = $plugin_info;
+			$transient->response[$plugin_info->plugin] = $plugin_info;
 		} else {
 			$plugin_info = get_plugin_data(WP_PLUGIN_DIR . '/' . $id);
 
@@ -114,7 +121,7 @@ class ProPlugin {
 				'compatibility' => new \stdClass(),
 			);
 
-			$transient->no_update[ $id ] = $item;
+			$transient->no_update[$id] = $item;
 		}
 
 		return $transient;
@@ -129,7 +136,8 @@ class ProPlugin {
 	 *
 	 * @return mixed The result \stdClass.
 	 */
-	public function pluginApiCall( $result, $action, $args) {
+	public function pluginApiCall($result, $action, $args)
+	{
 		$file_url = $this->getProPluginFileUrl();
 
 		if (empty($file_url)) {
@@ -149,7 +157,7 @@ class ProPlugin {
 		$plugin_info          = new \stdClass();
 		$plugin_info->name    = $this->name;
 		$plugin_info->slug    = $this->slug;
-		$plugin_info->version = str_replace('v', '', $this->subscription['productVersion']);
+		$plugin_info->version = str_replace('v', '', $this->license['productVersion']);
 		$plugin_info->author  = 'blockera.ai';
 		// Minimum WP version.
 		$plugin_info->requires = '6.6';
@@ -173,14 +181,14 @@ class ProPlugin {
 	 */
 	private function getProPluginFileUrl(): string
 	{
-		// Create a transient key to store the subscription temporary data.
-		$transient_key = $this->config->getPrefixTransientKey() . Utils::snakeCase(explode('- ', $this->subscription['subscription_name'])[2]);
+		// Create a transient key to store the license temporary data.
+		$transient_key = $this->config->getPrefixTransientKey() . Utils::snakeCase(explode('- ', $this->license['name'])[2]);
 		$transient = get_transient($transient_key);
 
 		if (empty($transient)) {
-			$request = new \WP_REST_Request('POST', '/blockera/v1/auth/subscriptions');
+			$request = new \WP_REST_Request('POST', '/blockera/v1/auth/licenses');
 			$request->set_param('force', true);
-			$request->set_param('action', 'subscriptions');
+			$request->set_param('action', 'licenses');
 			$request->set_header('X-Blockera-Nonce', wp_create_nonce('blockera-connect-with-your-account'));
 
 			$response = rest_do_request($request);
@@ -190,8 +198,8 @@ class ProPlugin {
 				return '';
 			}
 
-			// Create a transient key to store the subscription temporary data.
-			$transient_key = $this->config->getPrefixTransientKey() . Utils::snakeCase(explode('- ', $this->subscription['subscription_name'])[2]);
+			// Create a transient key to store the license temporary data.
+			$transient_key = $this->config->getPrefixTransientKey() . Utils::snakeCase(explode('- ', $this->license['name'])[2]);
 			$transient = get_transient($transient_key);
 
 			if (empty($transient)) {
@@ -201,13 +209,13 @@ class ProPlugin {
 
 		$response = wp_remote_get($this->config->getResourceOwnerDetailsUrl() . '/' . $transient, [
 			'timeout' => 30,
-			'sslverify' => false,
+			'sslverify' => Config::isDev(),
 			'headers' => [
 				'Authorization' => 'Bearer ' . $this->config->getToken(),
 			],
 			'body' => [
 				'domain' => get_site_url(),
-				'license_id' => $this->subscription['id']
+				'license_id' => $this->license['id']
 			],
 		]);
 

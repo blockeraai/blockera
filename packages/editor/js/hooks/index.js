@@ -6,6 +6,7 @@ export { useTraceUpdate } from './use-trace-update';
 export { useBlocksStore } from './use-blocks-store';
 export { useStoreSelectors } from './use-store-selectors';
 export { useBlockExtensions } from './use-block-extensions';
+export { useExtensionsStore } from './use-extensions-store';
 export { useInnerBlocksInfo } from './use-inner-blocks-info';
 export { useStoreDispatchers } from './use-store-dispatchers';
 export { useBlockSideEffects } from './use-block-side-effects';

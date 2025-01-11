@@ -1,34 +1,53 @@
 <?php
 
-if ( ! function_exists( 'blockera_add_custom_css_class_to_admin_menu' ) ) {
+if (! function_exists('blockera_add_custom_css_class_to_admin_menu')) {
 
-	/**
-	 * Adding css class into WordPress admin menu link.
-	 *
-	 * @param array $menu the menu item.
-	 *
-	 * @return array the menu item.
-	 */
-	function blockera_add_custom_css_class_to_admin_menu( array $menu ): array {
+    /**
+     * Adding css class into WordPress admin menu link.
+     *
+     * @param array $menu the menu item.
+     *
+     * @return array the menu item.
+     */
+    function blockera_add_custom_css_class_to_admin_menu(array $menu): array
+    {
+        // Check if the current menu item matches the specified slug.
+        foreach ($menu as $key => $item) {
 
-		// Specify the slug of the menu item you want to target.
-		$menu_slug = 'blockera-settings-dashboard';
+            if ('blockera-settings-dashboard' === $item[2]) {
 
-		// Specify the CSS class you want to add.
-		$custom_class = 'blockera-disable-first-item';
+                // Add the custom CSS class to the menu item.
+                $menu[ $key ][4] .= ' ' . 'blockera-disable-first-item';
 
-		// Check if the current menu item matches the specified slug.
-		foreach ( $menu as $key => $item ) {
+                continue;
+            }
+        }
 
-			if ( $item[2] === $menu_slug ) {
-
-				// Add the custom CSS class to the menu item.
-				$menu[ $key ][4] .= ' ' . $custom_class;
-			}
-		}
-
-		return $menu;
-	}
+        return $menu;
+    }
 }
 
-add_filter( 'add_menu_classes', 'blockera_add_custom_css_class_to_admin_menu' );
+function add_custom_classes_to_menu()
+{
+    global $submenu;
+
+    // Add custom classes to the submenu items.
+    if (isset($submenu['blockera-settings-dashboard'])) {
+        
+        foreach ($submenu['blockera-settings-dashboard'] as $key => $submenu_item) {
+            if (!in_array($submenu['blockera-settings-dashboard'][$key][2], ['blockera-settings-activate-pro-license', 'blockera-settings-upgrade-to-pro'], true)) {
+                continue;
+            }
+            $submenu['blockera-settings-dashboard'][$key][4] = 'blockera-pro-submenu';
+        }
+    }
+}
+
+
+add_filter('add_submenu_classes', 'blockera_add_custom_css_class_to_admin_submenu');
+
+add_action('admin_menu', function () {
+
+    add_action('admin_head', 'add_custom_classes_to_menu');
+
+});

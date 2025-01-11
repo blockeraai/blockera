@@ -139,4 +139,18 @@ class Utils {
 		return implode( ', ', $modifiedSelectors );
 	}
 
+	/**
+	 * Check if plugin is installed.
+	 *
+	 * @param string $plugin_slug The slug of the plugin.
+	 *
+	 * @return bool true if the plugin is installed, false otherwise.
+	 */
+	public static function isPluginInstalled( string $plugin_slug): bool {
+		
+		$installed_plugins = get_plugins();
+
+		return isset($installed_plugins[ $plugin_slug . '/' . $plugin_slug . '.php' ]);
+	}
+
 }

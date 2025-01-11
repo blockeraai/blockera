@@ -1,40 +1,162 @@
-.blockera-subscription-field {
-	background-color: #f6f6f6;
-	border: solid 1px #e9e9e9;
-	padding: 10px;
-	border-radius: 4px;
-	font-size: 14px;
-}
+.blockera-auth-container {
+	text-align: center;
 
-.blockera-subscription-value {
-	border: solid 1px #e9e9e9;
-	padding: 10px;
-	border-radius: 4px;
-	font-size: 14px;
+	.title {
+		margin-bottom: 20px;
+	}
 
-	&-expired {
-		background-color: #f52d2d;
+	.description {
+		font-size: 16px;
+		margin-bottom: 50px;
+	}
+
+	.domain {
+		gap: 5px;
+		font-size: 14px;
+		width: 165px;
+		height: 29px;
 		color: #ffffff;
-	}
-
-	&-valid {
-		background-color: #2d8736;
+		background-color: var(--blockera-controls-primary-color);
+		margin: 1rem auto 6rem auto;
+		line-height: 29px;
 		color: #ffffff;
+		border: none;
+		border-radius: 3px;
+		padding: 5px 10px;
+		font-weight: bold;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		
+		span {
+			color: #80ADFF !important;
+		}
 	}
 
-	&-status {
-		text-align: center;
+	.activate-call-to-action {
+		width: 390px;
+		height: 45px;
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		margin: 0 auto 1rem auto;
+	}
+
+	.how-to {
+		display: flex;
+		flex-wrap: wrap;
+		font-size: 14px;
+		margin-top: 20px;
+		color: #8A8A8A;
+		gap: 5px;
+		width: 72%;
+		margin: 0 auto;
+		justify-content: center;
+
+		a {
+			color: var(--blockera-controls-primary-color);
+			text-decoration: underline;
+		}
+	}
+
+	.blockera-auth-congratulations {
+		line-height: 2;
+	}
+
+	p {
+		font-size: 16px;
+	}
+
+	.blockera-auth-success-buttons {
+		width: 50%;
+		margin: 100px auto 0 auto;
+		justify-content: center;
+
+		.create-page, .manage-licenses {
+			border-radius: 5px;
+		}
 	}
 }
 
-.blockera-control-account-avatar {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	padding: 3px;
-	border: solid 1px #474747;
-}
+.blockera-component-blockera-license-container {
 
-.blockera-subscription-actions {
-	margin-top: 40px;
+	.account-info {
+	
+		.blockera-control-account-avatar {
+			width: 50px !important;
+			height: 50px !important;
+		}
+	
+		h3 {
+			font-size: 14px;
+		}
+	
+		p {
+			font-size: 13px;
+			color: #A3A3A3;
+		}
+	}
+
+	.blockera-licenses-subtitle {
+		font-size: 14px;
+		color: #6C6C6C;
+		font-weight: 500;
+		margin-bottom: 0;
+		text-transform: uppercase;
+
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
+	.blockera-component-license {
+		background-color: #ffffff;
+		border: solid 1px transparent;
+		border-radius: 3px;
+		padding: 2px 15px;
+		height: 90px;
+		flex:1;
+		position: relative;
+
+		&.active {
+			border-color: #CFE0FF;
+		}
+
+		&.is-expired {
+			border-color: #E60000;
+		}
+
+		.product-title {
+			margin: 0;
+			padding: 0;
+			text-align: left;
+			font-size: 16px;
+		}
+			
+		.product-details {
+			padding: 0;
+			margin: 0;
+			font-size: 14px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			color: #6C6C6C;
+			font-weight: 400;
+		}
+
+		.product-status {
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			background-color: #17C20033;
+			position: absolute;
+			right: 10px;
+			line-height: 32px;
+			text-align: center;
+			
+			svg {
+				fill: #17C200;
+			}
+		}
+	}
 }

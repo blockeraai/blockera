@@ -3,6 +3,7 @@
 namespace Blockera\Admin\Providers;
 
 use Blockera\Bootstrap\AssetsProvider;
+use Blockera\Utils\Utils;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -120,13 +121,19 @@ class AdminAssetsProvider extends AssetsProvider {
 			$block_categories = get_block_categories( get_post() );
 		}
 
-		return $this->telemetryInlineScripts() . 'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
+		$blockera_pro_is_active = is_plugin_active('blockera-pro/blockera-pro.php') && empty(\Blockera\Auth\Config::getClientInfo());
+		$assigned_blockera_pro_is_active = 'window.blockeraPROIsActivated = ' . ($blockera_pro_is_active ? 'true' : 'false') . ';
+		window.blockeraPROIsInstalled = ' . (Utils::isPluginInstalled('blockera-pro') ? 'true' : 'false') . ';
+		window.wpCreatePageUrl = "' . admin_url( '/post-new.php?post_type=page' ) . '";
+		window.blockeraAIMyAccountUrl = "' . home_url( '/my-account' ) . '";';
+
+		return $inline_script . $this->telemetryInlineScripts() . $assigned_blockera_pro_is_active .  'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
 				wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
 				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( blockera_get_available_blocks() ) . ';
 				window.blockeraDefaultSettings = ' . wp_json_encode( blockera_core_config( 'panel.std' ) ) . ';
 				window.blockeraSettings = ' . wp_json_encode( blockera_get_admin_options() ) . ';
 				window.blockeraVersion = "' . blockera_core_config( 'app.version' ) . '";
-				window.blockeraUserRoles = ' . wp_json_encode( blockera_normalized_user_roles() ) . '
+				window.blockeraUserRoles = ' . wp_json_encode( blockera_normalized_user_roles() ) . ';
 				window.blockeraAdminPanels = ' . wp_json_encode( array_keys( blockera_core_config( 'menu.submenus' ) ) ) . ';
 		';
 	}

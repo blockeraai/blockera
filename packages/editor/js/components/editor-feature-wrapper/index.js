@@ -3,7 +3,6 @@
  * External dependencies
  */
 import type { Node } from 'react';
-import { useSelect } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -32,15 +31,26 @@ export default function EditorFeatureWrapper({
 		currentBreakpoint,
 		currentInnerBlockState,
 	} = useExtensionsStore();
+
+	const {
+		blockeraFeatureManager_1_0_0: { EditorFeatureWrapper: Wrapper },
+	} = window;
+
+	if (Wrapper) {
+		return (
+			<Wrapper
+				{...{
+					config,
+					isActive,
+					children,
+					...props,
+				}}
+			/>
+		);
+	}
+
 	const getCurrentState = (): TStates =>
 		isInnerBlock(currentBlock) ? currentInnerBlockState : currentState;
-	const { blockera } = useSelect((select) => {
-		const { getEntity } = select('blockera/data');
-
-		return {
-			blockera: getEntity('blockera'),
-		};
-	});
 
 	const feature = {
 		isActiveOnFree: true,
@@ -57,9 +67,7 @@ export default function EditorFeatureWrapper({
 		return <></>;
 	}
 
-	const isLocked = /\w+-[orp]+/i.exec(blockera?.locked || '');
-
-	if (!isLocked && !feature.isActiveOnFree) {
+	if (!feature.isActiveOnFree) {
 		return (
 			<FeatureWrapper type="free" {...props}>
 				{children}
@@ -89,7 +97,7 @@ export default function EditorFeatureWrapper({
 			);
 		}
 
-		if (!isLocked && !feature.isActiveOnInnerBlocksOnFree) {
+		if (!feature.isActiveOnInnerBlocksOnFree) {
 			return (
 				<FeatureWrapper type="free" {...props}>
 					{children}
@@ -117,7 +125,7 @@ export default function EditorFeatureWrapper({
 			);
 		}
 
-		if (!isLocked && !feature.isActiveOnStatesOnFree) {
+		if (!feature.isActiveOnStatesOnFree) {
 			return (
 				<FeatureWrapper type="free" {...props}>
 					{children}
@@ -156,7 +164,7 @@ export default function EditorFeatureWrapper({
 			);
 		}
 
-		if (!isLocked && !feature.isActiveOnBreakpointsOnFree) {
+		if (!feature.isActiveOnBreakpointsOnFree) {
 			return (
 				<FeatureWrapper type="free" {...props}>
 					{children}

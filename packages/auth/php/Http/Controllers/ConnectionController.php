@@ -37,24 +37,6 @@ class ConnectionController extends RestController {
 	 * @return bool Whether the user has permission.
 	 */
 	public function permission( \WP_REST_Request $request): bool {
-		$referer = $request->get_header('Referer');
-
-		// Validate URLs if present.
-		if (! empty($referer) && ! str_starts_with($referer, home_url())) {
-			if (! filter_var($referer, FILTER_VALIDATE_URL)) {
-				$this->errors['invalid_referer'] = __('Invalid Referer URL.', 'blockera');
-			}
-			// Only allow redirects to allowed domains.
-			$allowed_domains = [ parse_url(Config::getApiBaseUrl(), PHP_URL_HOST) ];
-			$referer_host    = parse_url($referer, PHP_URL_HOST);
-
-			if (! in_array($referer_host, $allowed_domains, true)) {
-				return false;
-			}
-
-			return true;
-		}
-
 		if (! current_user_can('manage_options')) {
 			return false;
 		}
@@ -271,14 +253,15 @@ class ConnectionController extends RestController {
 	}
 
 	/**
-	 * Get the subscription information.
+	 * Get the licenses information.
 	 *
 	 * @param \WP_REST_Request $request The request object.
 	 *
 	 * @return \WP_REST_Response The response object.
 	 */
-	public function getSubscriptions( \WP_REST_Request $request): \WP_REST_Response {
-		if ('subscriptions' !== $request->get_param('action')) {
+	public function getLicenses( \WP_REST_Request $request): \WP_REST_Response {
+
+		if ('licenses' !== $request->get_param('action')) {
 			$this->errors['invalid_action'] = __('Invalid action.', 'blockera');
 		}
 
@@ -297,10 +280,10 @@ class ConnectionController extends RestController {
 
 		$client_info = get_option($this->option_key);
 
-		if (! empty($client_info['subscriptions']) && empty($request->get_param('force'))) {
+		if (! empty($client_info['licenses']) && empty($request->get_param('force'))) {
 			$account_info = array_merge(
 				[
-					'subscriptions' => $client_info['subscriptions'] ?? [],
+					'licenses' => $client_info['licenses'] ?? [],
 				],
 				[
 					'name'   => $client_info['name'] ?? '',
@@ -379,29 +362,29 @@ class ConnectionController extends RestController {
 		// Create a transient key to store the subscription temporary data.
 		$prefix_transient_key = Config::getPrefixTransientKey();
 
-		$subscriptions = array_map(
-			function ( $subscription) use ( $prefix_transient_key) {
-				$transient_key = $prefix_transient_key . Utils::snakeCase(explode('- ', $subscription['subscription_name'])[2]);
+		$licenses = array_map(
+			function ( $license) use ( $prefix_transient_key) {
+				$transient_key = $prefix_transient_key . Utils::snakeCase(explode('- ', $license['name'])[2]);
 
-				set_transient($transient_key, $subscription['versionId'], 60 * 60 * 3); // Available for 3 hours.
+				set_transient($transient_key, $license['versionId'], 60 * 60 * 3); // Available for 3 hours.
 
-				unset($subscription['versionId']);
+				unset($license['versionId']);
 
-				return $subscription;
+				return $license;
 			},
-			$response_body['data']['subscriptions']
+			$response_body['data']['licenses']
 		);
 
-		unset($response_body['data']['subscriptions']);
+		unset($response_body['data']['licenses']);
 
 		if (! $client_info) {
 
 			$info                  = $response_body['data'];
-			$info['subscriptions'] = $subscriptions;
+			$info['licenses'] = $licenses;
 		} else {
 
 			$info                  = array_merge($client_info, $response_body['data']);
-			$info['subscriptions'] = $subscriptions;
+			$info['licenses'] = $licenses;
 		}
 
 		$updated = update_option($this->option_key, $info);
@@ -419,104 +402,9 @@ class ConnectionController extends RestController {
 			);
 		}
 
-		$response_body['data']['subscriptions'] = $subscriptions;
+		$response_body['data']['licenses'] = $licenses;
 
 		return new \WP_REST_Response($response_body);
-	}
-
-	/**
-	 * Unsubscribe from Blockera AI.
-	 *
-	 * @param \WP_REST_Request $request The request object.
-	 *
-	 * @return \WP_REST_Response The response object.
-	 */
-	public function unsubscribe( \WP_REST_Request $request): \WP_REST_Response {
-		$this->validate($request->get_params());
-
-		if (count($this->errors) > 0) {
-			return new \WP_REST_Response(
-				[
-					'code'    => 400,
-					'success' => false,
-					'errors'  => $this->errors,
-				],
-				400
-			);
-		}
-
-		$client_info = get_option($this->option_key);
-
-		if (empty($client_info['subscriptions'])) {
-			return new \WP_REST_Response(
-				[
-					'code'    => 400,
-					'success' => false,
-					'errors'  => [
-						'subscription_not_exists' => __('Subscription not found.', 'blockera'),
-					],
-				],
-				400
-			);
-		}
-
-		$response = wp_remote_post(
-			Config::getUnsubscribeURL(),
-			[
-				'timeout'     => 30,
-				'redirection' => 5,
-				'httpversion' => '1.1',
-				'sslverify'   => false,
-				'headers'     => [
-					'Referer'          => home_url(),
-					'Authorization'    => 'Bearer ' . $client_info['access_token'],
-					'X-Blockera-Nonce' => wp_create_nonce('blockera-site-toolkit'),
-				],
-				'body'        => [
-					'client_id' => $client_info['client_id'],
-				],
-			]
-		);
-
-		if (is_wp_error($response)) {
-			return new \WP_REST_Response(
-				[
-					'code'    => 500,
-					'success' => false,
-					'errors'  => [
-						'unsubscribe_failed' => $response->get_error_message(),
-					],
-				],
-				500
-			);
-		}
-
-		unset($client_info['subscriptions']);
-
-		$isUpdated = update_option($this->option_key, $client_info);
-
-		if (! $isUpdated) {
-			return new \WP_REST_Response(
-				[
-					'code'    => 500,
-					'success' => false,
-					'errors'  => [
-						'unsubscribe_failed' => __('Failed to unsubscribe from Blockera AI.', 'blockera'),
-					],
-				],
-				500
-			);
-		}
-
-		return new \WP_REST_Response(
-			[
-				'code'    => 200,
-				'success' => true,
-				'data'    => [
-					'message' => __('Unsubscribed from Blockera AI successfully.', 'blockera'),
-				],
-			]
-		);
 	}
 
 	/**
@@ -551,9 +439,9 @@ class ConnectionController extends RestController {
 		}
 
 		$available_actions = [
+			'licenses',
 			'unsubscribe',
 			'is_connected',
-			'subscriptions',
 			'create_account',
 			'connect_account',
 		];
