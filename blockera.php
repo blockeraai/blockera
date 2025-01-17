@@ -8,7 +8,7 @@
  * Requires PHP: 7.4
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about/
- * Version: 1.2.0
+ * Version: 1.2.1
  * Text Domain: blockera
  * License: GPLv3 or later
  *
@@ -64,7 +64,7 @@ function blockera_init(): void {
 	 * This hook for extendable setup process from internal or third-party developers.
 	 *
 	 * @hook  'blockera/before/setup'
-	 * @since 1.2.0
+	 * @since 1.2.1
 	 */
 	do_action( 'blockera/before/setup' );
 
@@ -94,7 +94,7 @@ function blockera_init(): void {
 	 * This hook for extendable setup process from internal or third-party developers.
 	 *
 	 * @hook  'blockera/after/setup'
-	 * @since 1.2.0
+	 * @since 1.2.1
 	 */
 	do_action( 'blockera/after/setup' );
 }
