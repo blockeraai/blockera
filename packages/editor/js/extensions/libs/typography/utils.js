@@ -22,7 +22,7 @@ export const getFontFamilies = function (): Array<TNativeOption> {
 		},
 	];
 
-	if (!isUndefined(editorFontFamilies.theme)) {
+	if (!isUndefined(editorFontFamilies?.theme)) {
 		fontFamilies.push({
 			type: 'optgroup',
 			label: __('Theme Fonts', 'blockera'),
@@ -35,7 +35,7 @@ export const getFontFamilies = function (): Array<TNativeOption> {
 		});
 	}
 
-	if (!isUndefined(editorFontFamilies.custom)) {
+	if (!isUndefined(editorFontFamilies?.custom)) {
 		fontFamilies.push({
 			type: 'optgroup',
 			label: __('Custom Fonts', 'blockera'),

@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed an issue causing compatibility errors with the Blocksy theme.
+
+
 ## 1.0.1 (2025-01-06)
 
 ### Bug Fixes
