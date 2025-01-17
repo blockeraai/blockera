@@ -22,7 +22,7 @@ export const getFontFamilies = function (): Array<TNativeOption> {
 		},
 	];
 
-	if (!isUndefined(editorFontFamilies.theme)) {
+	if (!isUndefined(editorFontFamilies?.theme)) {
 		fontFamilies.push({
 			type: 'optgroup',
 			label: __('Theme Fonts', 'blockera'),
