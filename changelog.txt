@@ -1,9 +1,8 @@
 == Changelog ==
 
-= 1.2.1 =
+= 1.2.2 =
 
-### Bug Fixes
-- Fixed an issue causing compatibility errors with the Blocksy theme.
+
 
 ## More
 
