@@ -21,6 +21,7 @@ export const getWidthSizes: () => Array<VariableItem> | [] = memoize(
 		const reference = {
 			type: 'preset',
 		};
+
 		const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
 
 		if (isUndefined(layout)) {
