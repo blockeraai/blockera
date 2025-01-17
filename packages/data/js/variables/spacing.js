@@ -36,16 +36,23 @@ export const getSpacings: () => Array<VariableItem> = memoize(
 				theme: themeName,
 			};
 
-			return getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes?.theme.map(
-				(item) => {
-					return {
-						name: item.name,
-						id: item.slug,
-						value: item.size,
-						reference,
-					};
-				}
-			);
+			if (
+				!isUndefined(
+					getBlockEditorSettings()?.__experimentalFeatures?.spacing
+						?.spacingSizes?.theme
+				)
+			) {
+				return getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes?.theme.map(
+					(item) => {
+						return {
+							name: item.name,
+							id: item.slug,
+							value: item.size,
+							reference,
+						};
+					}
+				);
+			}
 		}
 
 		const spaces =

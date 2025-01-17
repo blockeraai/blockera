@@ -35,16 +35,23 @@ export const getColors: () => Array<VariableItem> = memoize(
 				theme: themeName,
 			};
 
-			return getBlockEditorSettings()?.__experimentalFeatures?.color?.palette?.theme.map(
-				(item) => {
-					return {
-						name: item.name,
-						id: item.slug,
-						value: item.color,
-						reference,
-					};
-				}
-			);
+			if (
+				!isUndefined(
+					getBlockEditorSettings()?.__experimentalFeatures?.color
+						?.palette?.theme
+				)
+			) {
+				return getBlockEditorSettings()?.__experimentalFeatures?.color?.palette?.theme.map(
+					(item) => {
+						return {
+							name: item.name,
+							id: item.slug,
+							value: item.color,
+							reference,
+						};
+					}
+				);
+			}
 		}
 
 		if (
