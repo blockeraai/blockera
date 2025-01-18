@@ -27,6 +27,7 @@ return [
 		'controllers' => '\Blockera\Setup\Http\Controllers\\',
 	],
 	'debug'          => defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE && $env_mode,
+	'upgrade_url' 	 => 'https://blockera.ai/products/site-builder/upgrade/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=upgrade-page&utm_content=cta-link',
 	/**
 	 * Extendable blockera application providers by external developers.
 	 *
