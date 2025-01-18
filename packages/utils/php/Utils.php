@@ -164,12 +164,14 @@ class Utils {
 
 		$parsed_string = explode( '-', $string );
 
-		return implode('',array_map(
-				function( string $item ):string {
-					return ucfirst( $item );
-				},
-				$parsed_string
-			)
+		return implode(
+            '', 
+            array_map(
+                function( string $item ):string {
+                    return ucfirst( $item );
+                },
+                $parsed_string
+            )
 		);
 	}
 
