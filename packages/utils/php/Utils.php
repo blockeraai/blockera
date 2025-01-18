@@ -110,4 +110,74 @@ class Utils {
 		return implode( ', ', $modifiedSelectors );
 	}
 
+	/**
+	 * Convert a string to snake case.
+	 *
+	 * @param string $string The string to convert to snake case.
+	 *
+	 * @return string The snake case string.
+	 */
+	public static function snakeCase( string $string ): string {
+
+		// Handle empty strings.
+		if ( empty( $string ) ) {
+			return '';
+		}
+
+		// Convert camelCase to snake_case.
+		$pattern     = '/(?<!^)[A-Z]/';
+		$replacement = '_$0';
+		$string      = preg_replace( $pattern, $replacement, $string );
+
+		// Convert to lowercase.
+		$string = strtolower( $string );
+
+		// Replace any remaining non-alphanumeric characters with underscores.
+		$string = preg_replace( '/[^a-z0-9]+/', '_', $string );
+
+		// Remove leading/trailing underscores.
+		return trim( $string, '_' );
+	}
+
+	/**
+	 * Check if plugin is installed.
+	 *
+	 * @param string $plugin_slug The slug of the plugin.
+	 *
+	 * @return bool true if the plugin is installed, false otherwise.
+	 */
+	public static function isPluginInstalled( string $plugin_slug): bool {
+
+		$installed_plugins = get_plugins();
+
+		return isset($installed_plugins[ $plugin_slug . '/' . $plugin_slug . '.php' ]);
+	}
+
+	/**
+	 * Convert a string to pascal case.
+	 *
+	 * @param string $string The string to convert to pascal case.
+	 *
+	 * @return string The pascal case string.
+	 */
+	public static function pascalCase( string $string ): string {
+
+		$parsed_string = explode('-', $string);
+
+		return implode('', array_map(function(string $item):string{
+			return ucfirst($item);
+		}, $parsed_string));
+	}
+
+	/**
+	 * Convert a string to camel case.
+	 *
+	 * @param string $string The string to convert to camel case.
+	 *
+	 * @return string The camel case string.
+	 */
+	public static function camelCase( string $string ): string {
+
+		return lcfirst(self::pascalCase($string));
+	}
 }
