@@ -146,11 +146,11 @@ class Utils {
 	 *
 	 * @return bool true if the plugin is installed, false otherwise.
 	 */
-	public static function isPluginInstalled( string $plugin_slug): bool {
+	public static function isPluginInstalled( string $plugin_slug ): bool {
 
 		$installed_plugins = get_plugins();
 
-		return isset($installed_plugins[ $plugin_slug . '/' . $plugin_slug . '.php' ]);
+		return isset( $installed_plugins[ $plugin_slug . '/' . $plugin_slug . '.php' ] );
 	}
 
 	/**
@@ -162,11 +162,15 @@ class Utils {
 	 */
 	public static function pascalCase( string $string ): string {
 
-		$parsed_string = explode('-', $string);
+		$parsed_string = explode( '-', $string );
 
-		return implode('', array_map(function(string $item):string{
-			return ucfirst($item);
-		}, $parsed_string));
+		return implode('',array_map(
+				function( string $item ):string {
+					return ucfirst( $item );
+				},
+				$parsed_string
+			)
+		);
 	}
 
 	/**
@@ -178,6 +182,6 @@ class Utils {
 	 */
 	public static function camelCase( string $string ): string {
 
-		return lcfirst(self::pascalCase($string));
+		return lcfirst( self::pascalCase( $string ) );
 	}
 }
