@@ -5,15 +5,20 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 import type { MixedElement, Element } from 'react';
 import { __experimentalHStack as HStack } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
-import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
+import { noop } from '@blockera/utils';
 import { TabsContext, PanelHeader } from '@blockera/wordpress';
+import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 
+/**
+ * Internal dependencies
+ */
 import { GeneralPanel, BlockManagerPanel, DashboardPanel } from './components';
 
 export const Panel = (tab: {
@@ -23,6 +28,7 @@ export const Panel = (tab: {
 	let description: Element<any> = <></>;
 	let activePanel: any = <></>;
 	let panelHeader: boolean = true;
+	let showButtons: boolean = true;
 	const { settings } = useContext(TabsContext);
 
 	switch (tab.name) {
@@ -54,6 +60,40 @@ export const Panel = (tab: {
 				</p>
 			);
 			break;
+
+		default:
+			/**
+			 * Developer can add new tabs to panel dashboard by using this filter powered by WordPress Hooks API.
+			 *
+			 * @since 1.0.0
+			 */
+			const panels = applyFilters('blockera.admin.panels', []);
+
+			for (let index = 0; index < panels.length; index++) {
+				const panel = panels[index];
+
+				if (tab.name === panel) {
+					panelHeader = applyFilters(
+						'blockera.admin.panel.' + panel + '.hasHeader',
+						true
+					);
+					activePanel = applyFilters(
+						'blockera.admin.panel.' +
+							panel +
+							'.activePanelComponent',
+						noop
+					);
+					description = applyFilters(
+						'blockera.admin.panel.' + panel + '.description',
+						noop
+					);
+					showButtons = applyFilters(
+						'blockera.admin.panel.' + panel + '.showButtons',
+						true
+					);
+				}
+			}
+			break;
 	}
 
 	return (
@@ -70,6 +110,7 @@ export const Panel = (tab: {
 						kind={'blockera/v1'}
 						description={description}
 						tabSettings={settings[tab.settingSlug]}
+						showButtons={showButtons}
 					/>
 				)}
 

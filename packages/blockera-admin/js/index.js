@@ -65,3 +65,5 @@ addFilter(
 );
 
 initializer();
+
+export * from './helpers';

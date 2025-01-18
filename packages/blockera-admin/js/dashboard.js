@@ -18,42 +18,146 @@ import {
 	SettingsContext,
 	handleCurrentActiveMenuPage,
 } from '@blockera/wordpress';
-import { Button } from '@blockera/controls';
+import { Button, Flex } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
+import { getUrlParams } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { Panel } from './panel';
+import ProIcon from './pro-icon.svg';
+import { getCurrentPage } from './helpers';
 import { config as optionsConfig } from './config';
 
-const getCurrentPage = (): string => {
-	const location = window.location;
-	const pages = ['dashboard', 'general-settings', 'block-manager'];
-
-	for (const page of pages) {
-		if (-1 === location.search.indexOf(page)) {
-			continue;
-		}
-
-		return page;
-	}
-
-	return 'dashboard';
-};
-
 export const Dashboard = (): MixedElement => {
-	const { blockeraVersion, blockeraSettings, blockeraDefaultSettings } =
-		window;
+	const {
+		blockeraVersion,
+		blockeraSettings,
+		blockeraAIAccount,
+		blockeraPROIsActivated,
+		blockeraDefaultSettings,
+	} = window;
 	const [settings, setSettings] = useState(blockeraSettings);
-	const currentPage = getCurrentPage();
+	const currentPage = getCurrentPage(
+		applyFilters('blockera.admin.dashboard.availablePages', [
+			'dashboard',
+			'general-settings',
+			'block-manager',
+		])
+	);
 	const config = applyFilters(
 		'blockera.admin.panel.settings.config',
 		optionsConfig
+	);
+	const isConnected: boolean = Boolean(
+		getUrlParams('connectedWithYourAccount')
+	);
+	const ProCallToActions: MixedElement = applyFilters(
+		'blockera.admin.dashboard.pro.call.to.actions',
+		() => (
+			<Button
+				variant="secondary-on-hover"
+				icon={<Icon library={'ui'} icon={'crown'} iconSize={22} />}
+				text={__('Upgrade to Pro', 'blockera')}
+				href={window.blockeraUpgradeUrl}
+				target="_blank"
+			/>
+		)
+	);
+	const promotionComponent: MixedElement = applyFilters(
+		'blockera.admin.dashboard.promotion.component',
+		() => (
+			<>
+				{!blockeraPROIsActivated &&
+					!isConnected &&
+					!blockeraAIAccount?.client_id && (
+						<Flex
+							direction="column"
+							className={componentClassNames('promotion')}
+						>
+							<ProIcon />
+							<ul>
+								<li>
+									<span className="align-center">
+										<Icon
+											icon={'check'}
+											library="wp"
+											iconSize={22}
+										/>
+										{__('Multiple Transitions', 'blockera')}
+									</span>
+								</li>
+								<li>
+									<span className="align-center">
+										<Icon
+											icon={'check'}
+											library="wp"
+											iconSize={22}
+										/>
+										{__(
+											'Advanced Transition Types',
+											'blockera'
+										)}
+									</span>
+								</li>
+								<li>
+									<span className="align-center">
+										<Icon
+											icon={'check'}
+											library="wp"
+											iconSize={22}
+										/>
+										{__(
+											'Adjust Transition Delay',
+											'blockera'
+										)}
+									</span>
+								</li>
+							</ul>
+							<Button
+								variant="primary"
+								className={componentInnerClassNames(
+									'pro-license-button'
+								)}
+							>
+								{__('Activate Pro License', 'blockera')}
+							</Button>
+						</Flex>
+					)}
+			</>
+		)
+	);
+	const profileComponent: MixedElement = applyFilters(
+		'blockera.admin.dashboard.profile.component',
+		<></>
+	);
+	const tabItems: Array<Object> = applyFilters(
+		'blockera.admin.dashboard.tabs',
+		[
+			{
+				settingSlug: 'dashboard',
+				name: 'dashboard',
+				className: 'dashboard-settings-tab',
+				title: __('Dashboard', 'blockera'),
+			},
+			{
+				settingSlug: 'general',
+				name: 'general-settings',
+				className: 'general-settings-tab',
+				title: __('General Settings', 'blockera'),
+			},
+			{
+				name: 'block-manager',
+				settingSlug: 'disabledBlocks',
+				className: 'block-manager-tab',
+				title: __('Block Manager', 'blockera'),
+			},
+		]
 	);
 
 	return (
@@ -77,21 +181,7 @@ export const Dashboard = (): MixedElement => {
 					name={__('Blockera', 'blockera')}
 				>
 					<div className={'blockera-settings-header-links'}>
-						<Button
-							variant="secondary-on-hover"
-							icon={
-								<Icon
-									library={'ui'}
-									icon={'crown'}
-									iconSize={22}
-								/>
-							}
-							text={__('Upgrade to Pro', 'blockera')}
-							href={
-								'https://blockera.ai/products/site-builder/upgrade/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=upgrade-page&utm_content=cta-link'
-							}
-							target="_blank"
-						/>
+						<ProCallToActions />
 
 						<Button
 							variant="tertiary-on-hover"
@@ -118,26 +208,7 @@ export const Dashboard = (): MixedElement => {
 					activeTab={currentPage}
 					setSettings={setSettings}
 					settings={settings}
-					items={[
-						{
-							settingSlug: 'dashboard',
-							name: 'dashboard',
-							className: 'dashboard-settings-tab',
-							title: __('Dashboard', 'blockera'),
-						},
-						{
-							settingSlug: 'general',
-							name: 'general-settings',
-							className: 'general-settings-tab',
-							title: __('General Settings', 'blockera'),
-						},
-						{
-							name: 'block-manager',
-							settingSlug: 'disabledBlocks',
-							className: 'block-manager-tab',
-							title: __('Block Manager', 'blockera'),
-						},
-					]}
+					items={tabItems}
 					getPanel={Panel}
 					injectMenuEnd={
 						<NavigableMenu
@@ -226,6 +297,9 @@ export const Dashboard = (): MixedElement => {
 									/>
 								</span>
 							</WPButton>
+
+							{promotionComponent}
+							{profileComponent}
 						</NavigableMenu>
 					}
 				/>
