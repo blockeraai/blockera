@@ -4,6 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -22,13 +23,23 @@ export const PanelHeader = ({
 	name,
 	tabSettings,
 	description,
+	showButtons,
 }: {
 	kind: string,
 	name: string,
 	tab: TabsProps,
 	tabSettings: any,
 	description: any,
-}): MixedElement => {
+	showButtons: boolean,
+}): MixedElement | null => {
+	if (
+		applyFilters('blockera.admin.panelHeader.ignoredTabs', []).includes(
+			tab.name
+		)
+	) {
+		return null;
+	}
+
 	return (
 		<Flex direction={'column'} className={'blockera-settings-panel-header'}>
 			<Flex
@@ -38,14 +49,16 @@ export const PanelHeader = ({
 			>
 				<h3 className={'blockera-settings-panel-title'}>{tab.title}</h3>
 
-				<Flex direction={'row'} justifyContent={'space-between'}>
-					<Update
-						tab={tab}
-						kind={kind}
-						name={name}
-						slugSettings={tabSettings}
-					/>
-				</Flex>
+				{showButtons && (
+					<Flex direction={'row'} justifyContent={'space-between'}>
+						<Update
+							tab={tab}
+							kind={kind}
+							name={name}
+							slugSettings={tabSettings}
+						/>
+					</Flex>
+				)}
 			</Flex>
 			<div className={'blockera-settings-panel-desc'}>{description}</div>
 		</Flex>

@@ -132,6 +132,48 @@
 				}
 			}
 		}
+
+		.blockera-component-promotion {
+			background-color: var(--blockera-controls-primary-color);
+			color: #ffffff;
+			padding: 10px;
+			border-radius: 8px;
+			justify-content: center;
+			width: 310px;
+			height: 260.55px;
+			margin-top: 300px;
+
+
+			>svg {
+				margin: 0 auto;
+			}
+
+			.blockera-component-pro-license-button {
+				background-color: #fed35e;
+				color: #654a00;
+				width: 182px;
+				height: 36px;
+				margin: 20px auto 0 auto;
+			}
+
+			ul {
+
+				li {
+					font-size: 12px;
+
+					.align-center {
+						display: flex;
+						align-items: center;
+						margin: 0 auto;
+						width: 57%;
+					}
+
+					svg {
+						fill: #ffffff;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -166,5 +208,14 @@
 		width: 70px;
 		height: 70px;
 		outline: none;
+	}
+}
+
+a.blockera-pro-submenu {
+	text-align: center;
+	background-color: rgba(0, 71, 235, 0.65);
+
+	&:hover {
+		background-color: rgba(0, 71, 235, 0.65) !important;
 	}
 }

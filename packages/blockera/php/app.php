@@ -16,7 +16,7 @@ global $blockera;
 $blockera = new \Blockera\Setup\Blockera();
 
 // LOADING: other bootstrap files ...
-if ( ! defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ) {
+if ( defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ) {
 
 	// Experimental filter for variables.
 	blockera_load( 'hooks', __DIR__ );
@@ -24,6 +24,7 @@ if ( ! defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ) {
 
 $external_dir = blockera_core_config( 'app.vendor_path' ) . 'blockera/';
 
+blockera_load('blockera-admin.php.hooks', $external_dir);
 blockera_load( 'wordpress.php.Admin.Menu.hooks', $external_dir );
 blockera_load( 'telemetry.php.hooks', $external_dir );
 

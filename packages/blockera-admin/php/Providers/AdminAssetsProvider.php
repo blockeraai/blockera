@@ -127,6 +127,7 @@ class AdminAssetsProvider extends AssetsProvider {
 				window.blockeraSettings = ' . wp_json_encode( blockera_get_admin_options() ) . ';
 				window.blockeraVersion = "' . blockera_core_config( 'app.version' ) . '";
 				window.blockeraUserRoles = ' . wp_json_encode( blockera_normalized_user_roles() ) . '
+				window.blockeraUpgradeUrl = "' . blockera_core_config( 'app.upgrade_url' ) . '";
 		';
 	}
 
@@ -142,5 +143,4 @@ class AdminAssetsProvider extends AssetsProvider {
 				window.blockeraPermissionsLink = "' . blockera_core_config( 'telemetry.permissions_link' ) . '";
 				window.blockeraOptInDescription = "' . blockera_core_config( 'telemetry.opt_in_description' ) . '";';
 	}
-
 }

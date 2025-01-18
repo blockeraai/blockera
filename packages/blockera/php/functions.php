@@ -6,6 +6,7 @@
  */
 
 use Blockera\Utils\Env;
+use Blockera\Utils\Utils;
 
 if ( ! function_exists( 'blockera_core_config' ) ) {
 
@@ -26,27 +27,25 @@ if ( ! function_exists( 'blockera_core_config' ) ) {
 
 		$keyNodes = explode( '.', $key );
 
-		$config_dir = ! empty( $args['root'] ) && file_exists( $args['root'] ) ? $args['root'] : BLOCKERA_CORE_PATH;
-
-		$configIncludes = array(
-			'app'         => $config_dir . '/config/app.php',
-			'menu'        => $config_dir . '/config/menu.php',
-			'panel'       => $config_dir . '/config/panel.php',
-			'assets'      => $config_dir . '/config/assets.php',
-			'entities'    => $config_dir . '/config/entities.php',
-			'breakpoints' => $config_dir . '/config/breakpoints.php',
-			'valueAddon'  => $config_dir . '/config/value-addon.php',
-			'telemetry'   => $config_dir . '/config/telemetry.php',
+		$config_dir   = ! empty( $args['root'] ) && file_exists( $args['root'] ) ? $args['root'] : BLOCKERA_CORE_PATH;
+		$config_files = glob( $config_dir . '/config/*.php' );
+		$config_keys  = array_map(
+			function ( string $file ): string {
+				return Utils::camelCase( str_replace( '.php', '', basename( $file ) ) );
+			},
+			$config_files
 		);
+
+		$mapped_config = array_combine( $config_keys, $config_files );
 
 		$firstNode = array_shift( $keyNodes );
 
-		if ( ! $configIncludes[ $firstNode ] ) {
+		if ( ! $mapped_config[ $firstNode ] ) {
 
 			return false;
 		}
 
-		$config = require $configIncludes[ $firstNode ];
+		$config = require $mapped_config[ $firstNode ];
 
 		foreach ( $keyNodes as $node ) {
 
@@ -105,8 +104,8 @@ if ( ! function_exists( 'blockera_load' ) ) {
 			return false;
 		}
 
-		// phpcs:ignore
-		extract( $params );
+        // phpcs:ignore
+        extract($params);
 
 		return include $filename;
 	}
