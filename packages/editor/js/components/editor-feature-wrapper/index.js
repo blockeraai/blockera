@@ -32,9 +32,14 @@ export default function EditorFeatureWrapper({
 		currentInnerBlockState,
 	} = useExtensionsStore();
 
-	const {
-		blockeraFeatureManager_1_0_0: { EditorFeatureWrapper: Wrapper },
-	} = window;
+	const { blockeraFeatureManager_1_0_0: featureManager } = {
+		...window,
+		blockeraFeatureManager_1_0_0: {
+			EditorFeatureWrapper: null,
+		},
+	};
+
+	const { EditorFeatureWrapper: Wrapper } = featureManager;
 
 	if (Wrapper) {
 		return (
