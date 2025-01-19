@@ -1,6 +1,6 @@
-=== Blockera Site Builder - The Advanced Mode for Block Editor (Gutenberg) ===
+=== Blockera Site Builder - Responsive Blocks, Block States, and everything Gutenberg is missing ===
 Contributors: blockeraai, aliaghdam, rezaelahidev
-Tags: gutenberg blocks, wordPress blocks, site editor, block Editor, page Builder
+Tags: responsive blocks, block states, responsive controls, gutenberg blocks, page builder
 Requires at least: ### AUTO-GENERATED
 Tested up to: ### AUTO-GENERATED
 Requires PHP: ### AUTO-GENERATED
@@ -41,7 +41,7 @@ Install Blockera today and unlock the true potential of Gutenberg for creating p
 
 <h3>7️⃣ Key Missing Features of Gutenberg that Blockera Adds 🏆</h3>
 
-- 1️⃣ **Responsive Design Controls**: Allows you to customize **all style settings** for **all screen sizes** easily, ensuring your site looks perfect on all devices. This feature is not just advanced but also unique to Blockera.
+- 1️⃣ **Responsive Blocks and Controls**: Allows you to customize **all style settings** for **all screen sizes** easily, ensuring your site looks perfect on all devices. This feature is not just advanced but also unique to Blockera.
 
 - 2️⃣ **Advanced Style Customization Options**: Blockera offers all CSS style customization options for all blocks, making it easy to achieve any design you can imagine. With an intuitive UX, even complex CSS adjustments are a breeze.
 
@@ -145,7 +145,7 @@ Blockera page builder is an open-source project, and we welcome contributors to 
 1. Advanced Mode for All Core Blocks
 2. Block States for All Core Blocks (Hover, Focus, etc.)
 3. Advanced Customization Options for All Core Blocks
-4. Responsive Design Controls for All Core Blocks
+4. Responsive Blocks and Responsive Controls
 5. Inner Blocks Design Customization for All Core Blocks
 6. CSS Variables
 7. WooCommerce Blocks
@@ -174,6 +174,22 @@ To download and install the Blockera plugin, make sure you follow the steps belo
 = Is Blockera free? =
 
 Blockera comes in both free and premium versions. The [premium version](https://blockera.ai/products/site-builder/pricing/) offers a wider variety of blocks and multiple options to customize them, [compared to the free version](https://blockera.ai/products/site-builder/).
+
+= Does Blockera adds responsive controls to Gutenberg? =
+
+Yes, Blockera adds responsive breakpoints to all core blocks. You can customize all style settings for all responsive breakpoints easily, ensuring your site looks perfect on all devices.
+
+= Does Blockera adds block states to Gutenberg? =
+
+Yes, Blockera adds block states like hover, focus, and more to all core blocks.
+
+= Does Blockera adds custom CSS to Gutenberg? =
+
+Yes, Blockera adds custom CSS to all core blocks.
+
+= Does Blockera adds new blocks? =
+
+No, Blockera doesn't add new blocks. It enhances all existing core blocks with advanced options.
 
 == Changelog ==
 
