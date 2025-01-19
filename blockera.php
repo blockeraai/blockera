@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Blockera Site Builder - The Advanced Mode for Block Editor
+ * Plugin Name: Blockera Site Builder – Responsive blocks, block states, and more...
  * Plugin URI: https://blockera.ai/products/site-builder/
- * Description: Blockera Site Builder is the advanced mode for the WP block editor, transforming it into a powerful page builder by enhancing all core blocks.
+ * Description: Blockera Site Builder is transforming the block editor into a powerful page builder by adding responsive blocks, block states, and more.
  * Requires at least: 6.6
  * Tested up to: 6.7
  * Requires PHP: 7.4
