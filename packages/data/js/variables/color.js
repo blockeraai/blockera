@@ -37,10 +37,8 @@ export const getColors: () => Array<VariableItem> = memoize(
 			};
 
 			if (
-				!isUndefined(
-					getBlockEditorSettings()?.__experimentalFeatures?.color
-						?.palette?.theme
-				)
+				getBlockEditorSettings()?.__experimentalFeatures?.color?.palette
+					?.theme !== undefined
 			) {
 				return getBlockEditorSettings()?.__experimentalFeatures?.color?.palette?.theme.map(
 					(item) => {
