@@ -390,7 +390,7 @@ describe('Helper Functions', () => {
 			const category = getVariableCategory('width-size');
 
 			expect(category.label).toBe(
-				__('Theme Width & Height Sizes', 'blockera')
+				__('Editor Width & Height Sizes', 'blockera')
 			);
 		});
 
