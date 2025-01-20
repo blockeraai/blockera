@@ -1,5 +1,9 @@
 ## Unreleased
 
+## Bug Fixes
+- Fixed an issue where variable colors appeared lighter in Blockera Variables than in the original variables  [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/showing-theme-colors-as-they-are-4VjzJz6qKKL9HdQ)]
+
+
 ## 1.0.0 (2024-12-08)
 
 ### Bug Fixes
