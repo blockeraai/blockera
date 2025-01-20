@@ -4,6 +4,7 @@
  */
 import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -75,6 +76,21 @@ export const getColors: () => Array<VariableItem> = memoize(
 		);
 	}
 );
+
+export const getColorsTitle: () => string = memoize(function (): string {
+	if (isBlockTheme()) {
+		if (
+			!isUndefined(
+				getBlockEditorSettings()?.__experimentalFeatures?.color?.palette
+					?.theme
+			)
+		) {
+			return __('Theme Colors', 'blockera');
+		}
+	}
+
+	return __('Editor Colors', 'blockera');
+});
 
 export const getColor: (id: string) => ?VariableItem = memoize(function (
 	id: string

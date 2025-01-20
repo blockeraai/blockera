@@ -17,12 +17,17 @@ import {
 	getPostDynamicValueItemsBy,
 	getSiteDynamicValueItemsBy,
 	getUserDynamicValueItemsBy,
+	getColorsTitle,
 	getColors,
 	getFontSizes,
+	getLinearGradientsTitle,
 	getLinearGradients,
+	getRadialGradientsTitle,
 	getRadialGradients,
 	getSpacings,
+	getSpacingsTitle,
 	getVariable,
+	getWidthSizesTitle,
 	getWidthSizes,
 	type VariableCategory,
 } from '@blockera/data';
@@ -265,41 +270,31 @@ export function getVariableCategory(
 
 		case 'linear-gradient':
 			return {
-				label: isBlockTheme()
-					? __('Theme Linear Gradients', 'blockera')
-					: __('Editor Linear Gradients', 'blockera'),
+				label: getLinearGradientsTitle(),
 				items: getLinearGradients(),
 			};
 
 		case 'radial-gradient':
 			return {
-				label: isBlockTheme()
-					? __('Theme Radial Gradients', 'blockera')
-					: __('Editor Radial Gradients', 'blockera'),
+				label: getRadialGradientsTitle(),
 				items: getRadialGradients(),
 			};
 
 		case 'width-size':
 			return {
-				label: isBlockTheme()
-					? __('Theme Width & Height Sizes', 'blockera')
-					: __('Width & Height Sizes', 'blockera'),
+				label: getWidthSizesTitle(),
 				items: getWidthSizes(),
 			};
 
 		case 'spacing':
 			return {
-				label: isBlockTheme()
-					? __('Theme Spacing Sizes', 'blockera')
-					: __('Editor Spacing Sizes', 'blockera'),
+				label: getSpacingsTitle(),
 				items: getSpacings(),
 			};
 
 		case 'color':
 			return {
-				label: isBlockTheme()
-					? __('Theme Colors', 'blockera')
-					: __('Editor Colors', 'blockera'),
+				label: getColorsTitle(),
 				items: getColors(),
 			};
 	}
