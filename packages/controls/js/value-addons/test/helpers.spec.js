@@ -389,7 +389,9 @@ describe('Helper Functions', () => {
 		test('width-size', () => {
 			const category = getVariableCategory('width-size');
 
-			expect(category.label).toBe(__('Width & Height Sizes', 'blockera'));
+			expect(category.label).toBe(
+				__('Editor Width & Height Sizes', 'blockera')
+			);
 		});
 
 		test('spacing', () => {
