@@ -7,6 +7,7 @@ import type { MixedElement } from 'react';
 import { doAction } from '@wordpress/hooks';
 import { useEffect, useMemo, createElement } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
+import { ErrorBoundary } from 'react-error-boundary';
 
 /**
  * Blockera dependencies
@@ -74,15 +75,15 @@ const EdiBlockWithoutExtensions = ({
 }: Object): MixedElement => {
 	useSharedBlockSideEffect();
 
-	// This approach ensures compatibility with React's rendering pipeline.
-	if (
-		typeof settings.edit === 'function' &&
-		/^class\s/.test(Function.prototype?.toString?.call(settings.edit))
-	) {
-		return createElement(settings.edit, props);
-	}
+	const Edit = () => settings.edit(props);
 
-	return settings.edit(props);
+	return (
+		<ErrorBoundary
+			fallbackRender={() => createElement(settings.edit, props)}
+		>
+			<Edit />
+		</ErrorBoundary>
+	);
 };
 
 type extraArguments = {
@@ -242,7 +243,9 @@ function mergeBlockSettings(
 				: settings.attributes;
 
 			return (
-				<>
+				<ErrorBoundary
+					fallbackRender={() => createElement(settings.edit, props)}
+				>
 					<BaseControlContext.Provider value={baseContextValue}>
 						<BlockApp
 							{...{
@@ -279,7 +282,7 @@ function mergeBlockSettings(
 						</BlockApp>
 					</BaseControlContext.Provider>
 					{settings.edit(props)}
-				</>
+				</ErrorBoundary>
 			);
 		}
 
