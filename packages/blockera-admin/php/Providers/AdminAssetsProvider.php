@@ -120,6 +120,8 @@ class AdminAssetsProvider extends AssetsProvider {
 			$block_categories = get_block_categories( get_post() );
 		}
 
+		array_map('blockera_load_script_translations', blockera_core_config('assets.admin.list'));
+
 		return $this->telemetryInlineScripts() . 'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
 				wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
 				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( blockera_get_available_blocks() ) . ';

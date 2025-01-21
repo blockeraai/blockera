@@ -315,3 +315,20 @@ if ( ! function_exists( 'blockera_get_dist_assets' ) ) {
 		);
 	}
 }
+
+
+if (! function_exists('blockera_load_script_translations')) {
+    /**
+     * Load script translations.
+     *
+     * @param string $script The script name.
+     * @return void
+     */
+    function blockera_load_script_translations( string $script): void {
+        if (str_ends_with($script, '-styles')) {
+            return;
+        }
+
+        wp_set_script_translations("@blockera/{$script}", 'blockera', dirname(plugin_basename(BLOCKERA_CORE_FILE)) . '/languages');
+    }
+}
