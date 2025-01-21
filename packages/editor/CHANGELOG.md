@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- Enhanced the CSS style generator for typography features to improve design flexibility and customization.
+
+
 ## 1.0.2 (2025-01-17)
 
 ### Bug Fixes
