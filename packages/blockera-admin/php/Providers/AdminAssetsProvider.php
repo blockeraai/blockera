@@ -73,6 +73,27 @@ class AdminAssetsProvider extends AssetsProvider {
 		// Skip process while current page was not valid or telemetry process is disabled!
 		if ( $skip ) {
 
+			$this->app->make(
+				$this->getId(),
+				[
+					'assets'     => array_filter(
+                        $assets, 
+                        function( string $asset):bool{
+							return str_ends_with($asset, '-styles');
+						}
+                    ),
+					'extra-args' => [
+						'fallback'             => [
+							'url'  => $this->getURL(),
+							'path' => $this->getPATH(),
+						],
+						'enqueue-admin-assets' => true,
+						'id'                   => $this->getId(),
+						'packages-deps'        => blockera_core_config( 'assets.admin.with-deps' ),
+					],
+				]
+			);
+
 			return;
 		}
 
