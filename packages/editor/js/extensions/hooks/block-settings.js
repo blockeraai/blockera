@@ -75,15 +75,7 @@ const EdiBlockWithoutExtensions = ({
 }: Object): MixedElement => {
 	useSharedBlockSideEffect();
 
-	const Edit = () => settings.edit(props);
-
-	return (
-		<ErrorBoundary
-			fallbackRender={() => createElement(settings.edit, props)}
-		>
-			<Edit />
-		</ErrorBoundary>
-	);
+	return createElement(settings.edit, props);
 };
 
 type extraArguments = {
