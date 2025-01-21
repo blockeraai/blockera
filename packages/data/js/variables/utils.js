@@ -48,6 +48,13 @@ export function generateVariableString({
 		case 'plugin':
 		case 'core':
 		case 'core-pro':
+			_reference = 'preset';
+			break;
+
+		case 'style':
+			_reference = 'style';
+			break;
+
 		default:
 			_reference = 'preset';
 			break;
