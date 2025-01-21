@@ -113,7 +113,10 @@ export function TypographyStyles({
 			blockProps.attributes.blockeraFontAppearance;
 
 		if (
-			blockeraFontAppearance !== attributes.blockeraFontAppearance.default
+			!isEquals(
+				blockeraFontAppearance,
+				attributes.blockeraFontAppearance.default
+			)
 		) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
@@ -125,6 +128,19 @@ export function TypographyStyles({
 				),
 			});
 
+			const properties: {
+				'font-weight'?: string,
+				'font-style'?: string,
+			} = {};
+
+			if (blockeraFontAppearance.weight !== '') {
+				properties['font-weight'] = blockeraFontAppearance.weight;
+			}
+
+			if (blockeraFontAppearance.style !== '') {
+				properties['font-style'] = blockeraFontAppearance.style;
+			}
+
 			styleGroup.push({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
@@ -132,11 +148,7 @@ export function TypographyStyles({
 						blockeraFontAppearance: [
 							{
 								type: 'static',
-								properties: {
-									'font-weight':
-										blockeraFontAppearance.weight,
-									'font-style': blockeraFontAppearance.style,
-								},
+								properties,
 							},
 						],
 					},

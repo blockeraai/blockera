@@ -50,6 +50,14 @@ export function generateVariableString({
 		case 'core-pro':
 			_reference = 'preset';
 			break;
+
+		case 'style':
+			_reference = 'style';
+			break;
+
+		default:
+			_reference = 'preset';
+			break;
 	}
 
 	return `--wp--${_reference}--${_type}--${id}`;

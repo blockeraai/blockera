@@ -38,10 +38,8 @@ export const getSpacings: () => Array<VariableItem> = memoize(
 			};
 
 			if (
-				!isUndefined(
-					getBlockEditorSettings()?.__experimentalFeatures?.spacing
-						?.spacingSizes?.theme
-				)
+				getBlockEditorSettings()?.__experimentalFeatures?.spacing
+					?.spacingSizes?.theme !== undefined
 			) {
 				return getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes?.theme.map(
 					(item) => {
