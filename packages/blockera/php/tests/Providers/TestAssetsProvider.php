@@ -20,7 +20,7 @@ class TestAssetsProvider extends \Blockera\Dev\PHPUnit\AppTestCase {
 	/**
 	 * @dataProvider dataProvider
 	 *
-	 * @param array $asset
+	 * @param string $asset
 	 *
 	 * @throws BindingResolutionException
 	 * @return void
