@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed a TypeError caused by calling a class as a function.
+- Wrapped the block edit component in an ErrorBoundary to enhance error handling.
+
 ## 1.0.2 (2025-01-17)
 
 ### Bug Fixes
