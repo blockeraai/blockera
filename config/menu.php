@@ -52,11 +52,7 @@ return apply_filters(
 				'page_title' => __('Upgrade to Pro', 'blockera'),
 				'menu_title' => __('Upgrade to Pro', 'blockera'),
 				'capability' => 'manage_options',
-				'menu_slug'  => 'blockera-settings-upgrade-to-pro',
-				'callback'   => function () {
-					wp_safe_redirect(blockera_core_config('app.upgrade_url'));
-					exit;
-				},
+				'menu_slug'  => blockera_core_config('app.upgrade_url'),
         	],
         ],
     ]
