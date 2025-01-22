@@ -3,11 +3,12 @@
 
 ### Improvements
 - Enhanced the CSS style generator for typography features to improve design flexibility and customization.
+- Enhanced the style engine server-side implementation with improved APIs for better developer experience and extensibility.
 
 ### Bug Fixes
 - Fixed a TypeError caused by calling a class as a function.
 - Wrapped the block edit component in an ErrorBoundary to enhance error handling.
-
+- Fixed an issue with the blockeraGap feature in the style engine causing incorrect gap values.
 
 ## 1.0.2 (2025-01-17)
 
