@@ -3,6 +3,7 @@
 namespace Blockera\Editor\StyleDefinitions;
 
 use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
+use Symfony\Component\VarDumper\VarDumper;
 
 class Layout extends BaseStyleDefinition implements CustomStyle {
 
@@ -25,8 +26,9 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 		// Before run css method we need reset properties.
 		$this->reset();
 
-		$declaration = [];
-		$cssProperty = $setting['type'];
+		$declaration    = [];
+		$selectorSuffix = '';
+		$cssProperty    = $setting['type'];
 
 		if ( empty( $cssProperty ) ) {
 
@@ -139,7 +141,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 						break;
 
 					case 'gap-and-margin':
-						if ( 'flex' !== $display && 'grid' !== $display ) {
+						if ( 'flex' === $display && 'grid' === $display ) {
 							$selectorSuffix = ' > * + *';
 						}
 						break;
@@ -149,7 +151,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 				if ( $gap['lock'] ) {
 
-					$cssProperty = isset( $selectorSuffix ) ? 'margin-block-start' : 'gap';
+					$cssProperty = $selectorSuffix ? 'margin-block-start' : 'gap';
 
 					if ( $gap['gap'] ) {
 						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['gap'] );
@@ -157,13 +159,13 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				} else {
 
 					if ( $gap['rows'] ) {
-						$cssProperty = isset( $selectorSuffix ) ? 'margin-block-start' : 'row-gap';
+						$cssProperty = $selectorSuffix ? 'margin-block-start' : 'row-gap';
 
 						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['rows'] );
 					}
 
 					if ( $gap['columns'] ) {
-						$cssProperty = isset( $selectorSuffix ) ? 'margin-block-start' : 'column-gap';
+						$cssProperty = $selectorSuffix ? 'margin-block-start' : 'column-gap';
 
 						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['columns'] );
 					}
@@ -177,33 +179,23 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 					'gap-and-margin' === $gapType &&
 					( 'flex' === $display || 'grid' === $display )
 				) {
-					$this->with_gap_margin_block_start = true;
-				}
 
+					$this->setCss(
+						[
+							'margin-block-start' => '0',
+						],
+						'margin-block-start',
+						' > * + *'
+					);
+				}
 				break;
+
 			default:
 				$declaration[ $cssProperty ] = $setting[ $cssProperty ];
 				break;
 		}
 
-		/**
-		 * If gap type is both and the current display is flex or grid
-		 * then we use gap property to but still WP is creating gap with `margin-block-start` and we have to remove it.
-		 *
-		 * This variable is false by default, but it will be enabled if the style clearing is needed.
-		 */
-		if ( $this->with_gap_margin_block_start ) {
-
-			$this->setCss(
-				[
-					'margin-block-start' => '0',
-				]
-			);
-
-		} else {
-
-			$this->setCss( $declaration );
-		}
+		$this->setCss( $declaration );
 
 		return $this->css;
 	}
@@ -259,26 +251,6 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 		}
 
 		return $setting;
-	}
-
-	public function setSelector( string $support ): void {
-
-		/**
-		 * If gap type is both and the current display is flex or grid
-		 * then we use gap property to but still WP is creating gap with `margin-block-start` and we have to remove it.
-		 *
-		 * This variable is false by default, but it will be enabled if the style clearing is needed.
-		 */
-		if ( $this->with_gap_margin_block_start ) {
-
-			parent::setSelector( 'margin-block-start' );
-
-			$this->selector = blockera_append_css_selector_suffix( $this->selector, ' > * + *' );
-
-			return;
-		}
-
-		parent::setSelector( $support );
 	}
 
 	/**
