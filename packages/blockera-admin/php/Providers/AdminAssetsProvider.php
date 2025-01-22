@@ -74,12 +74,25 @@ class AdminAssetsProvider extends AssetsProvider {
             'admin_head',
             function(){
 				echo '<style>
+				.wp-not-current-submenu li.blockera-pro-submenu {
+					margin-top: 8px !important;
+					padding: 3px 8px 3px 3px !important;
+				}
+				.wp-has-current-submenu li.blockera-pro-submenu {
+					margin-top: 8px !important;
+					padding: 3px 8px !important;
+				}
 				a.blockera-pro-submenu {
-					text-align: center;
-					background-color: rgba(0, 71, 235, 0.65);
+					background-color: #0048eb !important;
+					border-radius: 4px !important;
+					color: #fff !important;
+					padding: 3px 10px !important;
+					line-height: 1.9 !important;
+					font-size: 12px !important;
 				}
 				a.blockera-pro-submenu:hover {
-					background-color: rgba(0, 71, 235, 0.65) !important;
+					background-color: #003bc1 !important;
+					box-shadow: none !important;
 				}
 			</style>';
 			}
