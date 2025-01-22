@@ -25,7 +25,7 @@ const _getVariableType = (
 	group: string,
 	name: string
 ): DynamicVariableType | void => {
-	return Object.values(variables[group].items).find(
+	return Object.values(variables[group]?.items || {}).find(
 		(i: { ...Object, name: string }) => i.name === name
 	);
 };
