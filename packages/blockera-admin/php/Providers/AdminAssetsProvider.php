@@ -70,29 +70,23 @@ class AdminAssetsProvider extends AssetsProvider {
 			unset( $assets[ array_search( 'blockera-admin', $assets, true ) ] );
 		}
 
+		add_action(
+            'admin_head',
+            function(){
+				echo '<style>
+				a.blockera-pro-submenu {
+					text-align: center;
+					background-color: rgba(0, 71, 235, 0.65);
+				}
+				a.blockera-pro-submenu:hover {
+					background-color: rgba(0, 71, 235, 0.65) !important;
+				}
+			</style>';
+			}
+        );
+
 		// Skip process while current page was not valid or telemetry process is disabled!
 		if ( $skip ) {
-
-			$this->app->make(
-				$this->getId(),
-				[
-					'assets'     => array_filter(
-                        $assets, 
-                        function( string $asset):bool{
-							return str_ends_with($asset, '-styles');
-						}
-                    ),
-					'extra-args' => [
-						'fallback'             => [
-							'url'  => $this->getURL(),
-							'path' => $this->getPATH(),
-						],
-						'enqueue-admin-assets' => true,
-						'id'                   => $this->getId(),
-						'packages-deps'        => blockera_core_config( 'assets.admin.with-deps' ),
-					],
-				]
-			);
 
 			return;
 		}
