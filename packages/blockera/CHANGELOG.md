@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.3 (2025-01-22)
+
 ### Bug Fixes
 
 - Fixed the language issue.
