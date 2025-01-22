@@ -1,5 +1,10 @@
 ## Unreleased
 
+### Bug Fixes
+
+- Fixed the language issue.
+- Fixed missing translation strings for Blockera plugin text domain [[Bug Report](https://community.blockera.ai/bugs-mdhyb8nc/post/missing-translation-string-for-blockera-iBEIfdKXdbBkpn1)]
+
 ## 1.0.2 (2024-12-21)
 
 ### Bug Fixes

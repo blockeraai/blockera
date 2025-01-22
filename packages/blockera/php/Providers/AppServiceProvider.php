@@ -232,7 +232,14 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function loadTextDomain(): void {
 
-		load_plugin_textdomain( 'blockera', false, dirname( plugin_basename( BLOCKERA_CORE_FILE ) ) . '/languages' );
-	}
+	    $locale = get_locale();
 
+        $mo_file = WP_LANG_DIR . '/plugins/blockera-' . $locale . '.mo';
+
+        if (file_exists($mo_file)) {
+            load_textdomain('blockera', $mo_file);
+        }
+
+        load_plugin_textdomain('blockera', false, dirname(plugin_basename(BLOCKERA_CORE_FILE)) . '/languages');
+	}
 }

@@ -217,6 +217,8 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 				]
 			)
 		);
+
+		array_map('blockera_load_script_translations', blockera_core_config('assets.editor.list'));
 	}
 
 	/**
@@ -228,5 +230,4 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 
 		return blockera_core_config( 'assets.editor.list' );
 	}
-
 }
