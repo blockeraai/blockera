@@ -298,7 +298,8 @@ abstract class BaseStyleDefinition {
 
 		$cssProperty = $this->getSupportCssProperty( $name );
 
-		if ( ! $cssProperty ) {
+		// Exclude empty $cssProperty variable or deactivate this property on experimental configuration for effectExtension.
+		if ( ! $cssProperty || ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
 
 			return;
 		}
