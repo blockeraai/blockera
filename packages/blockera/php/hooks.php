@@ -16,12 +16,12 @@ add_filter(
 		return array_merge(
 			$groups,
 			[
-				'astra-spacing'   => [
-					'label' => __( 'Astra Spacing Sizes', 'blockera' ),
+				'blockera-one-spacing'   => [
+					'label' => __( 'Blockera One Spacing Sizes', 'blockera' ),
 					'type'  => 'spacing',
 				],
-				'astra-font-size' => [
-					'label' => __( 'Astra Font Sizes', 'blockera' ),
+				'blockera-one-font-size' => [
+					'label' => __( 'Blockera One Font Sizes', 'blockera' ),
 					'type'  => 'font-size',
 				],
 			],
@@ -34,7 +34,7 @@ add_filter(
  * TODO: This is just an example of registration variable groups.
  */
 add_filter(
-	'blockera/variable/groups/astra-spacing/items/registry',
+	'blockera/variable/groups/blockera-one-spacing/items/registry',
 	static function ( array $values ): array {
 
 		return array_merge(
@@ -42,11 +42,11 @@ add_filter(
 			[
 				[
 					'value'     => '60px',
-					'name'      => 'astra-spacing-60',
+					'name'      => 'blockera-one-spacing-60',
 					'id'        => 'var:preset|spacing|60',
 					'type'      => 'spacing',
-					'group'     => 'astra-spacing',
-					'var'       => '--astra-spacing-preset-60',
+					'group'     => 'blockera-one-spacing',
+					'var'       => '--blockera-one-spacing-preset-60',
 					'label'     => __( '60', 'blockera' ),
 					'reference' => [
 						'type' => 'core',

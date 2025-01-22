@@ -16,7 +16,7 @@ global $blockera;
 $blockera = new \Blockera\Setup\Blockera();
 
 // LOADING: other bootstrap files ...
-if ( defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE ) {
+if ( defined( 'BLOCKERA_APP_MODE' ) && 'development' === BLOCKERA_APP_MODE && blockera_get_experimental(['data', 'variable', 'registryHooks']) ) {
 
 	// Experimental filter for variables.
 	blockera_load( 'hooks', __DIR__ );
