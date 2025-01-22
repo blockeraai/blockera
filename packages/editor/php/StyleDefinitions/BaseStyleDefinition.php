@@ -3,7 +3,7 @@
 namespace Blockera\Editor\StyleDefinitions;
 
 use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
-use Blockera\Utils\Utils;
+use Symfony\Component\VarDumper\VarDumper;
 
 abstract class BaseStyleDefinition {
 
@@ -102,6 +102,15 @@ abstract class BaseStyleDefinition {
 	protected string $blockera_unique_selector = '';
 
 	/**
+	 * Store the current feature identifier being processed.
+	 * This is used to track which block support feature (like layout, typography, etc.)
+	 * is currently being processed during style generation.
+	 *
+	 * @var string
+	 */
+	protected string $current_feature_id;
+
+	/**
 	 * @param array $options the options to generate css properties.
 	 *
 	 * @return void
@@ -128,6 +137,12 @@ abstract class BaseStyleDefinition {
 	 * @param string $support The feature identifier.
 	 */
 	public function setSelector( string $support ): void {
+
+		if (empty($support)) {
+			$this->selector = $support;
+
+			return;
+		}
 
 		$fallback  = $this->getFallbackSupport( $support );
 		$selectors = blockera_get_block_type_property( $this->block['blockName'], 'selectors' );
@@ -283,7 +298,14 @@ abstract class BaseStyleDefinition {
 
 		$cssProperty = $this->getSupportCssProperty( $name );
 
-		if ( ! $cssProperty ) {
+		// Skip if no CSS property is defined.
+		if ( ! $cssProperty) {
+			
+			return;
+		}
+
+		// Skip processing mask and divider properties if they are not enabled in experimental features.
+		if ( in_array($cssProperty, [ 'divider', 'mask' ], true) && ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
 
 			return;
 		}
@@ -311,11 +333,33 @@ abstract class BaseStyleDefinition {
 					return;
 				}
 
-				$this->setSelector( $name );
+				$this->setCurrentFeatureId($name);
 				$this->css( $setting );
 			},
 			$settings
 		);
+	}
+
+	/**
+	 * Sets the current feature identifier.
+	 * This is used to track which feature is currently being processed.
+	 *
+	 * @param string $id
+	 * @return void
+	 */
+	protected function setCurrentFeatureId( string $id):void{
+		
+		$this->current_feature_id = $id;
+	}
+
+	/**
+	 * Get current feature id to track that.
+	 *
+	 * @return string the current feature identifier.
+	 */
+	protected function getCurrentFeatureId():string {
+
+		return $this->current_feature_id;
 	}
 
 	/**
@@ -331,9 +375,11 @@ abstract class BaseStyleDefinition {
 	/**
 	 * Sets css declaration into current selector.
 	 *
-	 * @param array $declaration the generated css declarations array.
+	 * @param array  $declaration the generated css declarations array.
+	 * @param string $customSupportId the customized support identifier.
+	 * @param string $selectorSuffix the css selector suffix.
 	 */
-	public function setCss( array $declaration ): void {
+	public function setCss( array $declaration, string $customSupportId = '', string $selectorSuffix = '' ): void {
 
 		if ( $this->isImportant() ) {
 
@@ -346,6 +392,16 @@ abstract class BaseStyleDefinition {
 			);
 		}
 
+		if (! empty($selectorSuffix) && ! empty($customSupportId)) {
+
+			$this->setSelector($customSupportId);
+			$this->selector = blockera_append_css_selector_suffix($this->selector, $selectorSuffix);
+
+		} else {
+
+			$this->setSelector($this->getCurrentFeatureId());
+		}
+
 		if ( isset( $this->css[ $this->getSelector() ] ) ) {
 
 			$this->css[ $this->getSelector() ] = array_merge( $this->css[ $this->getSelector() ], $declaration );
@@ -354,6 +410,9 @@ abstract class BaseStyleDefinition {
 		}
 
 		$this->css[ $this->getSelector() ] = $declaration;
+
+		// Reset selector.
+		$this->setSelector('');
 	}
 
 	/**
