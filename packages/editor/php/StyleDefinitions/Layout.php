@@ -141,7 +141,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 						break;
 
 					case 'gap-and-margin':
-						if ( 'flex' === $display && 'grid' === $display ) {
+						if ( 'flex' !== $display && 'grid' !== $display ) {
 							$selectorSuffix = ' > * + *';
 						}
 						break;
