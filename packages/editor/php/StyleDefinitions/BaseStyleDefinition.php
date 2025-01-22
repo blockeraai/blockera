@@ -298,8 +298,14 @@ abstract class BaseStyleDefinition {
 
 		$cssProperty = $this->getSupportCssProperty( $name );
 
-		// Exclude empty $cssProperty variable or deactivate this property on experimental configuration for effectExtension.
-		if ( ! $cssProperty || ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
+		// Skip if no CSS property is defined.
+		if ( ! $cssProperty) {
+			
+			return;
+		}
+
+		// Skip processing mask and divider properties if they are not enabled in experimental features.
+		if ( in_array($cssProperty, [ 'divider', 'mask' ], true) && ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
 
 			return;
 		}
