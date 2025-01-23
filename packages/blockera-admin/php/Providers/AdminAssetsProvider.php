@@ -98,6 +98,19 @@ class AdminAssetsProvider extends AssetsProvider {
 			}
         );
 
+		add_action(
+            'admin_enqueue_scripts',
+            function(){
+				$js = "
+					jQuery(document).ready(function($) {
+						$( 'li.blockera-pro-submenu a.blockera-pro-submenu' ) . attr('target', '_blank');
+					});
+				";
+
+				wp_add_inline_script( 'jquery', $js );
+			}
+        );
+
 		// Skip process while current page was not valid or telemetry process is disabled!
 		if ( $skip ) {
 
