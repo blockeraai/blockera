@@ -3,6 +3,7 @@
 namespace Blockera\Setup\Providers;
 
 use Blockera\Setup\Blockera;
+use Blockera\Telemetry\Config;
 use Blockera\WordPress\RenderBlock\Setup;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -121,7 +122,23 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			return $inline_script;
 		}
 
-		return sprintf( '%s%s', $inline_script . PHP_EOL, $script );
+		$telemetry_debug_data = [
+			'php_version' => phpversion(),
+			'wordpress_version' => get_bloginfo('version'),
+			'product_slug' => Config::getConsumerConfig('name'),
+			'product_version' => Config::getConsumerConfig('version'),
+		];
+
+		return sprintf(
+			'%s%s
+			window.blockeraOptInStatus = "' . get_option( blockera_core_config( 'telemetry.options.opt_in_status' ), null ) . '";
+			window.blockeraCommunityUrl = "' . blockera_core_config( 'telemetry.community_url' ) . '";
+			window.blockeraTelemetryPrivacyPolicyUrl = "' . blockera_core_config( 'telemetry.privacy_and_policy_link' ) . '";
+			window.blockeraTelemetryDebugLoggerIsOff = ' . ( ! blockera_telemetry_debug_logger_is_off() ? 'true': 'false' ) . ';
+			window.blockeraTelemetryDebugData = ' . wp_json_encode( $telemetry_debug_data ) . ';',
+			$inline_script . PHP_EOL,
+			$script
+		);
 	}
 
 	/**
