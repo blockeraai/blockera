@@ -97,7 +97,7 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 	const { blockSections, sections, focusedSection } = settings;
 	const { collapseAll, focusMode } = blockSections;
 	const section = settings.sections[sectionId];
-	let { initialOpen } = section;
+	let { initialOpen = true } = section || {};
 
 	if (collapseAll) {
 		initialOpen = false;

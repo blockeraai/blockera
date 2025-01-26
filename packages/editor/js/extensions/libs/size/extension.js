@@ -89,7 +89,7 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 			values?.blockeraFit,
 			attributes?.blockeraFit?.default
 		);
-
+		console.log(_props.callback());
 		// Extension is not active
 		if (
 			!isShowWidth &&

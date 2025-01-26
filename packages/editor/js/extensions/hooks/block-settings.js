@@ -3,9 +3,15 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 import { doAction } from '@wordpress/hooks';
-import { useEffect, useMemo, createElement } from '@wordpress/element';
+import {
+	memo,
+	useMemo,
+	useState,
+	useEffect,
+	createElement,
+} from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -20,10 +26,12 @@ import {
 	mergeObject,
 	isLoadedSiteEditor,
 } from '@blockera/utils';
+import { useDebugLogger } from '@blockera/telemetry';
 
 /**
  * Internal dependencies
  */
+import { FallbackUI } from '../fallback-ui';
 import {
 	registerBlockExtensionsSupports,
 	registerInnerBlockExtensionsSupports,
@@ -126,6 +134,35 @@ export default function withBlockSettings(
 		),
 	};
 }
+
+export const ErrorBoundaryFallback: ComponentType<Object> = memo(
+	({
+		error,
+		from,
+		setNotice,
+		fallbackComponent,
+		props,
+		...rest
+	}: Object): MixedElement => {
+		const { blockeraOptInStatus } = window;
+		useDebugLogger({
+			error,
+			...rest,
+		});
+
+		return (
+			<FallbackUI
+				{...rest}
+				error={error}
+				setNotice={setNotice}
+				isReported={rest?.isReported && blockeraOptInStatus === 'ALLOW'}
+				from={from}
+				fallbackComponent={fallbackComponent}
+				fallbackComponentProps={props}
+			/>
+		);
+	}
+);
 
 /**
  * Merge settings of block type.
@@ -234,9 +271,27 @@ function mergeBlockSettings(
 				  )
 				: settings.attributes;
 
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const [isReported, setIsReported] = useState(false);
+
 			return (
 				<ErrorBoundary
-					fallbackRender={() => createElement(settings.edit, props)}
+					fallbackRender={
+						window?.blockeraTelemetryDebugLoggerIsOff
+							? () => createElement(settings.edit, props)
+							: ({ error }) => (
+									<ErrorBoundaryFallback
+										{...{
+											props,
+											error,
+											isReported,
+											from: 'root',
+											setIsReported,
+											fallbackComponent: settings.edit,
+										}}
+									/>
+							  )
+					}
 				>
 					<BaseControlContext.Provider value={baseContextValue}>
 						<BlockApp

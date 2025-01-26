@@ -3,8 +3,10 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
+import { ErrorBoundary } from 'react-error-boundary';
 import { SlotFillProvider, Fill } from '@wordpress/components';
-import type { Element, ComponentType } from 'react';
+import type { Element, ComponentType, MixedElement } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
@@ -20,6 +22,7 @@ import {
 /**
  * Blockera dependencies
  */
+import { NoticeControl, Flex } from '@blockera/controls';
 import { omit, isEquals, omitWithPattern, cloneObject } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
@@ -36,15 +39,31 @@ import {
 } from '../../hooks';
 import { isInnerBlock } from './utils';
 import { SideEffect } from '../libs/base';
+// import { BlockPortals } from './block-portals';
 import { BlockPartials } from './block-partials';
-import { isBaseBreakpoint } from '../../canvas-editor';
-import { BlockFillPartials } from './block-fill-partials';
-import type { UpdateBlockEditorSettings } from '../libs/types';
-import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
-import { BlockCompatibility } from './block-compatibility';
-import { useExtensionsStore } from '../../hooks/use-extensions-store';
-import { sanitizeBlockAttributes } from '../hooks/utils';
 import { useBlockAppContext } from './block-app';
+import { isBaseBreakpoint } from '../../canvas-editor';
+import { sanitizeBlockAttributes } from '../hooks/utils';
+import { BlockFillPartials } from './block-fill-partials';
+import { BlockCompatibility } from './block-compatibility';
+import type { UpdateBlockEditorSettings } from '../libs/types';
+import { ErrorBoundaryFallback } from '../hooks/block-settings';
+import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
+
+const fallbackErrorBoundaryMessage = (
+	<NoticeControl type="error" style={{ marginTop: '10px' }}>
+		<Flex direction={'column'} gap="10px">
+			<h3>{__('Whoops! An error occurred', 'blockera')}</h3>
+			<p>
+				{__(
+					'Blockera has encountered an unexpected error, which may cause some functionality to behave incorrectly.',
+					'blockera'
+				)}
+			</p>
+		</Flex>
+	</NoticeControl>
+);
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const { props: _props } = useBlockAppContext();
@@ -73,6 +92,8 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		[attributes]
 	);
 
+	const [notice, setNotice] = useState(null);
+	const [isReported, setIsReported] = useState(false);
 	const [currentTab, setCurrentTab] = useState(
 		additional?.activeTab || 'style'
 	);
@@ -301,6 +322,17 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		);
 	}, [_attributes]);
 
+	const blockStyleProps = {
+		clientId,
+		supports,
+		selectors,
+		attributes: sanitizedAttributes,
+		blockName: name,
+		currentAttributes,
+		defaultAttributes,
+		activeDeviceType: getDeviceType(),
+	};
+
 	return (
 		<BlockEditContextProvider
 			{...{
@@ -362,6 +394,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 					/>
 					<BlockFillPartials
 						{...{
+							notice,
 							clientId,
 							isActive,
 							currentState,
@@ -405,22 +438,32 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				<div ref={blockEditRef} />
 			)}
 
-			<StylesWrapper clientId={clientId}>
-				<Fill name={'blockera-styles-wrapper-' + clientId}>
-					<BlockStyle
-						{...{
-							clientId,
-							supports,
-							selectors,
-							attributes: sanitizedAttributes,
-							blockName: name,
-							currentAttributes,
-							defaultAttributes,
-							activeDeviceType: getDeviceType(),
-						}}
-					/>
-				</Fill>
-			</StylesWrapper>
+			<ErrorBoundary
+				fallbackRender={
+					window?.blockeraTelemetryDebugLoggerIsOff
+						? () => fallbackErrorBoundaryMessage
+						: ({ error }): MixedElement => (
+								<ErrorBoundaryFallback
+									{...{
+										error,
+										notice,
+										setNotice,
+										isReported,
+										setIsReported,
+										from: 'style-wrapper',
+										props: blockStyleProps,
+										fallbackComponent: BlockStyle,
+									}}
+								/>
+						  )
+				}
+			>
+				<StylesWrapper clientId={clientId}>
+					<Fill name={'blockera-styles-wrapper-' + clientId}>
+						<BlockStyle {...blockStyleProps} />
+					</Fill>
+				</StylesWrapper>
+			</ErrorBoundary>
 			{/*</StrictMode>*/}
 
 			{children}
