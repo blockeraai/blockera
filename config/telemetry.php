@@ -58,6 +58,10 @@ return [
 	 */
 	'permissions_link'        => 'https://blockera.ai/telemetry/',
 	/**
+	 * The community url.
+	 */
+	'community_url'           => 'https://community.blockera.ai/',
+	/**
 	 * Prefix for hook names.
 	 */
 	'hook_prefix'             => 'blockera',
@@ -65,4 +69,8 @@ return [
 	 * The url of the Blockera API server.
 	 */
 	'server_url'              => blockera_core_env( 'TELEMETRY_SERVER_URL', 'https://api.blockera.ai/v1/telemetry' ),
+	/**
+	 * The url of the Blockera API server for debug logger.
+	 */
+	'debug_logger_url'        => blockera_core_env( 'TELEMETRY_DEBUG_LOGGER_URL', 'https://api.blockera.ai/v1/telemetry/log-error' ),
 ];
