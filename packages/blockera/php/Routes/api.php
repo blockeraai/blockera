@@ -29,6 +29,11 @@ try {
 		$routes->post( 'telemetry/opt-in', [ Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn' ] );
 	}
 
+	if ( ! blockera_telemetry_debug_logger_is_off() ) {
+
+		$routes->post( 'telemetry/log-error', [ Blockera\Telemetry\Http\Controllers\DebugLoggerController::class, 'log' ] );
+	}
+
 } catch ( Exception $exception ) {
 
 	return $exception->getMessage();
