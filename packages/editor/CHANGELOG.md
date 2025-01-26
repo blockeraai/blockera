@@ -1,5 +1,11 @@
 ## Unreleased
 
+### New Features:
+- Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.
+
+### Automated Tests:
+- Added E2E tests for the Box Sizing feature to verify its functionality in both the editor and front end.
+
 ## 1.0.3 (2025-01-22)
 
 

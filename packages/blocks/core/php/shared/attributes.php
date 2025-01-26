@@ -436,6 +436,12 @@ return [
 			'value' => '',
 		],
 	],
+	'blockeraBoxSizing'                 => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
 	'blockeraFitPosition'               => [
 		'type'    => 'object',
 		'default' => [

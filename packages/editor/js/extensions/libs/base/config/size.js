@@ -73,6 +73,13 @@ const blockeraFit: FeatureConfig = {
 	label: __('Media Fit', 'blockera'),
 };
 
+const blockeraBoxSizing: FeatureConfig = {
+	show: false,
+	force: false,
+	status: true,
+	label: __('Box Sizing', 'blockera'),
+};
+
 export const sizeConfig = {
 	initialOpen: true,
 	blockeraWidth,
@@ -84,4 +91,5 @@ export const sizeConfig = {
 	blockeraOverflow,
 	blockeraRatio,
 	blockeraFit,
+	blockeraBoxSizing,
 };

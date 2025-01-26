@@ -93,6 +93,13 @@
 			"css-property": "object-position",
 			"fallback": ["object-position", "dimensions"],
 			"description": "Support for \"blockeraFitPosition\" value, this is mirror for WordPress block core \"object-position\" support."
+		},
+		{
+			"status": true,
+			"name": "blockeraBoxSizing",
+			"css-property": "box-sizing",
+			"fallback": ["box-sizing", "dimensions"],
+			"description": "Support for \"blockeraBoxSizing\" value."
 		}
 	]
 }
