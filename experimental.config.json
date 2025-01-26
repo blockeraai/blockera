@@ -16,5 +16,8 @@
 		"variable": {
 			"registryHooks": false
 		}
+	},
+	"telemetry": {
+		"debugLogger": true
 	}
 }
