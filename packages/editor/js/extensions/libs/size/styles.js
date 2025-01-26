@@ -44,6 +44,7 @@ export const SizeStyles = ({
 		blockeraOverflow,
 		blockeraRatio,
 		blockeraFit,
+		blockeraBoxSizing,
 	} = config.sizeConfig;
 	const blockProps = {
 		clientId,
@@ -474,6 +475,44 @@ export const SizeStyles = ({
 				blockProps
 			),
 		});
+	}
+
+	if (
+		isActiveField(blockeraBoxSizing) &&
+		currentBlockAttributes?.blockeraBoxSizing
+	) {
+		if (
+			currentBlockAttributes.blockeraBoxSizing !==
+			attributes.blockeraBoxSizing.default
+		) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraBoxSizing',
+				support: 'blockeraBoxSizing',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraBoxSizing'
+				),
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraBoxSizing: [
+							{
+								properties: {
+									'box-sizing':
+										currentBlockAttributes.blockeraBoxSizing,
+								},
+								...staticDefinitionParams,
+							},
+						],
+					},
+					blockProps
+				),
+			});
+		}
 	}
 
 	return styleGroup;

@@ -16,6 +16,7 @@ import {
 	ControlContextProvider,
 	InputControl,
 	ToggleSelectControl,
+	SelectControl,
 	BaseControl,
 } from '@blockera/controls';
 import { hasSameProps } from '@blockera/utils';
@@ -89,6 +90,11 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 			values?.blockeraFit,
 			attributes?.blockeraFit?.default
 		);
+		const isShowBoxSizing = isShowField(
+			extensionConfig.blockeraBoxSizing,
+			values?.blockeraBoxSizing,
+			attributes?.blockeraBoxSizing?.default
+		);
 
 		// Extension is not active
 		if (
@@ -100,7 +106,8 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 			!isShowMaxHeight &&
 			!isShowOverflow &&
 			!isShowRatio &&
-			!isShowFit
+			!isShowFit &&
+			!isShowBoxSizing
 		) {
 			return <></>;
 		}
@@ -739,6 +746,56 @@ export const SizeExtension: ComponentType<TSizeProps> = memo(
 							}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							{...extensionProps.blockeraFit}
+						/>
+					</ControlContextProvider>
+				</EditorFeatureWrapper>
+
+				<EditorFeatureWrapper
+					isActive={isShowBoxSizing}
+					config={extensionConfig.blockeraBoxSizing}
+				>
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'box-sizing'),
+							value: values.blockeraBoxSizing,
+							attribute: 'blockeraBoxSizing',
+							blockName: block.blockName,
+						}}
+					>
+						<SelectControl
+							label={__('Box Sizing', 'blockera')}
+							labelDescription={
+								<p>
+									{__(
+										'The box-sizing CSS property sets how the total width and height of an element is calculated.',
+										'blockera'
+									)}
+								</p>
+							}
+							columns="columns-2"
+							options={[
+								{
+									label: __('Default', 'blockera'),
+									value: '',
+								},
+								{
+									label: __('Border Box', 'blockera'),
+									value: 'border-box',
+								},
+								{
+									label: __('Content Box', 'blockera'),
+									value: 'content-box',
+								},
+							]}
+							defaultValue={attributes.blockeraBoxSizing.default}
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									'blockeraBoxSizing',
+									newValue,
+									{ ref }
+								)
+							}
+							{...extensionProps.blockeraBoxSizing}
 						/>
 					</ControlContextProvider>
 				</EditorFeatureWrapper>

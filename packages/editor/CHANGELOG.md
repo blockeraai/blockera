@@ -1,5 +1,9 @@
 ## Unreleased
 
+### New Features:
+- Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.
+
+
 ## 1.0.3 (2025-01-22)
 
 
