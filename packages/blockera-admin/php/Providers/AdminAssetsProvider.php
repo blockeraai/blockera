@@ -42,20 +42,29 @@ class AdminAssetsProvider extends AssetsProvider {
 
 		$assets = $this->getAssets();
 
-		// By default, we skip boot method of AdminAssetsProvider.
-		$skip = true;
-
 		// phpcs:ignore
 		if ( ! empty( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'blockera-settings' ) ) {
-
-			$skip = false;
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'createInlineScript' ] );
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
 
-		} elseif ( ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
+			$this->app->make(
+				$this->getId(),
+				[
+					'assets'     => $assets,
+					'extra-args' => [
+						'fallback'             => [
+							'url'  => $this->getURL(),
+							'path' => $this->getPATH(),
+						],
+						'enqueue-admin-assets' => true,
+						'id'                   => $this->getId(),
+						'packages-deps'        => blockera_core_config( 'assets.admin.with-deps' ),
+					],
+				]
+			);
 
-			$skip = false;
+		} elseif ( 'post.php' !== $GLOBALS['pagenow'] && ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'telemetryInlineScripts' ] );
 
@@ -68,6 +77,22 @@ class AdminAssetsProvider extends AssetsProvider {
 			);
 
 			unset( $assets[ array_search( 'blockera-admin', $assets, true ) ] );
+
+			$this->app->make(
+				$this->getId(),
+				[
+					'assets'     => $assets,
+					'extra-args' => [
+						'fallback'             => [
+							'url'  => $this->getURL(),
+							'path' => $this->getPATH(),
+						],
+						'enqueue-admin-assets' => true,
+						'id'                   => $this->getId(),
+						'packages-deps'        => blockera_core_config( 'assets.admin.with-deps' ),
+					],
+				]
+			);
 		}
 
 		add_action(
@@ -110,28 +135,6 @@ class AdminAssetsProvider extends AssetsProvider {
 				wp_add_inline_script( 'jquery', $js );
 			}
         );
-
-		// Skip process while current page was not valid or telemetry process is disabled!
-		if ( $skip ) {
-
-			return;
-		}
-
-		$this->app->make(
-			$this->getId(),
-			[
-				'assets'     => $assets,
-				'extra-args' => [
-					'fallback'             => [
-						'url'  => $this->getURL(),
-						'path' => $this->getPATH(),
-					],
-					'enqueue-admin-assets' => true,
-					'id'                   => $this->getId(),
-					'packages-deps'        => blockera_core_config( 'assets.admin.with-deps' ),
-				],
-			]
-		);
 	}
 
 	protected function getAssets(): array {
@@ -175,15 +178,47 @@ class AdminAssetsProvider extends AssetsProvider {
 	}
 
 	/**
+	 * Enqueue telemetry styles and scripts.
+	 *
+	 * @return void
+	 */
+	public function enqueueTelemetry(): void {
+
+		$is_dev = blockera_core_config('app.debug');
+		$min    = $is_dev ? '' : '.min';
+
+		$telemetry_styles_file = blockera_core_config('app.dist_path') . 'telemetry-styles/style' . $min . '.css';
+
+		if (file_exists($telemetry_styles_file)) {
+		
+			wp_enqueue_style('@blockera/telemetry', blockera_core_config('app.dist_url') . 'telemetry-styles/style' . $min . '.css', [], filemtime($telemetry_styles_file));
+		}
+
+		$telemetry_script_file = blockera_core_config('app.dist_path') . 'telemetry/telemetry' . $min . '.js';
+
+		if (file_exists($telemetry_script_file)) {
+			
+			wp_enqueue_script('@blockera/telemetry', blockera_core_config('app.dist_url') . 'telemetry/telemetry' . $min . '.js', [], filemtime($telemetry_script_file), true);
+
+			wp_add_inline_script('@blockera/telemetry', $this->telemetryInlineScripts());
+		}
+	}
+
+	/**
 	 * @return string the telemetry inline scripts as a string.
 	 */
 	public function telemetryInlineScripts(): string {
+
+		$package_file = blockera_core_config('app.root_path') . '/packages/telemetry/package.json';
+		$filesystem   = blockera_get_filesystem();
+		$version      = str_replace('.', '_', json_decode($filesystem->get_contents($package_file))->version);
 
 		return 'window.blockeraTermsOfServicesLink = "' . blockera_core_config( 'telemetry.terms_of_services_link' ) . '";
 				window.blockeraTelemetryIsOff = "' . ! blockera_telemetry_opt_in_is_off( 'blockera' ) . '";
 				window.blockeraOptInStatus = "' . get_option( blockera_core_config( 'telemetry.options.opt_in_status' ), null ) . '";
 				window.blockeraPrivacyAndPolicyLink = "' . blockera_core_config( 'telemetry.privacy_and_policy_link' ) . '";
 				window.blockeraPermissionsLink = "' . blockera_core_config( 'telemetry.permissions_link' ) . '";
-				window.blockeraOptInDescription = "' . blockera_core_config( 'telemetry.opt_in_description' ) . '";';
+				window.blockeraOptInDescription = "' . blockera_core_config( 'telemetry.opt_in_description' ) . '";
+				blockeraTelemetry_' . $version . '?.initializeTelemetryOptInSystem();';
 	}
 }
