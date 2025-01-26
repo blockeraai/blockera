@@ -40,8 +40,8 @@ class OptInController extends RestController {
 
 		$params     = $request->get_params();
 		$option_key = Config::getOptionKeys( 'opt_in_status' );
-		try {
 
+		try {
 			$this->validate( $params, $option_key );
 
 			// We're being sure of user agreed to opt-in https://api.blockera.ai.
@@ -145,6 +145,7 @@ class OptInController extends RestController {
 		$result = $this->sender->post(
 			Config::getServerURL( '/auth/register' ),
 			[
+				'sslverify' => false,
 				'headers' => [
 					'Accept' => 'application/json',
 				],
@@ -186,6 +187,7 @@ class OptInController extends RestController {
 		$result = $this->sender->post(
 			Config::getServerURL( '/sites' ),
 			[
+				'sslverify' => false,
 				'headers' => [
 					'Accept'        => 'application/json',
 					'Authorization' => 'Bearer ' . $token,

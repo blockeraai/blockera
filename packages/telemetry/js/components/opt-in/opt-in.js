@@ -5,7 +5,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import apiFetch from '@wordpress/api-fetch';
 import { useState } from '@wordpress/element';
 
 /**
@@ -14,7 +13,12 @@ import { useState } from '@wordpress/element';
 import { classNames } from '@blockera/classnames';
 import { Modal, Flex, Button } from '@blockera/controls';
 
-export const OptInModal = ({ path }: { path: string }): MixedElement => {
+/**
+ * Internal dependencies
+ */
+import { sender } from './sender';
+
+export const OptInModal = (): MixedElement => {
 	const [isOpen, setOpen] = useState(true);
 	const closeModal = () => setOpen(false);
 
@@ -23,19 +27,7 @@ export const OptInModal = ({ path }: { path: string }): MixedElement => {
 	}
 
 	const allowAndContinue = (prompt: 'ALLOW' | 'SKIP') => {
-		const data = {
-			'opt-in-agreed': prompt,
-			action: 'telemetry-opt-in-status',
-		};
-
-		apiFetch.use(apiFetch.createNonceMiddleware(window.blockeraNonceField));
-		apiFetch({
-			path,
-			data,
-			method: 'POST',
-		}).then((response) => {
-			console.log(response);
-		});
+		sender(prompt);
 
 		closeModal();
 	};

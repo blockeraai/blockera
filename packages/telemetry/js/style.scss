@@ -11,3 +11,109 @@
 		text-decoration: none;
 	}
 }
+
+.blockera-component-report-bug {
+	background-color: #cc3333 !important;
+	border-color: #cc3333;
+	border-radius: 2px;
+	width: 66px;
+	height: 21px;
+	line-height: 21px;
+	font-size: 11px !important;
+	text-align: center;
+	cursor: pointer;
+}
+
+.components-modal__content {
+	--blockera-debug-border-color: #b2b2b2;
+	width: 550px;
+
+	.components-modal__header h1 {
+		font-size: 26px;
+
+		svg {
+			width: 40px;
+			height: 40px;
+			display: block;
+		}
+	}
+
+	p {
+		color: #b2b2b2;
+	}
+
+	.link {
+		color: #b2b2b2;
+	}
+
+	.blockera-component-code-block {
+		background-color: #f5f5f5;
+		cursor: pointer;
+		height: 200px;
+		overflow: scroll;
+		border-radius: 4px;
+		padding: 10px;
+		border: solid 1px var(--blockera-debug-border-color);
+	}
+
+	button {
+		box-shadow: none !important;
+		font-size: 13px !important;
+		height: 36px;
+		line-height: 36px;
+		text-align: center;
+		cursor: pointer;
+		border-radius: 5px !important;
+	}
+
+	strong {
+		color: #cc3333;
+	}
+
+	.blockera-component-manually-report-step {
+		color: #222222;
+		font-weight: 600;
+
+		a {
+			color: #cc3333;
+		}
+	}
+
+	.blockera-component-close-button {
+		background-color: #00a20b !important;
+		border: solid 1px #00a20b !important;
+		color: #ffffff !important;
+		width: 63px;
+	}
+
+	.blockera-component-report-automatically {
+		background-color: #cc3333 !important;
+		border-color: #cc3333;
+		color: #ffffff !important;
+		width: 186px;
+	}
+
+	.secondary-button {
+		color: #b2b2b2 !important;
+		background-color: #ffffff !important;
+		border-color: var(--blockera-debug-border-color);
+	}
+
+	.blockera-component-cancel-button {
+		width: 70px;
+		height: 36px;
+		line-height: 36px;
+		border: solid 1px var(--blockera-debug-border-color) !important;
+	}
+
+	.blockera-component-manually-report {
+		border: solid 1px var(--blockera-debug-border-color) !important;
+		width: 126px;
+		text-decoration: none;
+		color: var(--blockera-debug-border-color) !important;
+
+		&.automatically-reported {
+			width: 158px;
+		}
+	}
+}
