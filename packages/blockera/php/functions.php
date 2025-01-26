@@ -336,3 +336,22 @@ if (! function_exists('blockera_load_script_translations')) {
         wp_set_script_translations("@blockera/{$script}", 'blockera', dirname(plugin_basename(BLOCKERA_CORE_FILE)) . '/languages');
     }
 }
+
+if (! function_exists('blockera_get_filesystem')) {
+	/**
+	 * Get the WordPress file system. 
+	 *
+	 * @return WP_Filesystem_Base|null
+	 */
+	function blockera_get_filesystem(): ?WP_Filesystem_Base{
+		global $wp_filesystem;
+
+		if (! $wp_filesystem) {
+			require_once(ABSPATH . '/wp-admin/includes/file.php');
+
+			WP_Filesystem();
+		}
+
+		return $wp_filesystem;
+	}
+}
