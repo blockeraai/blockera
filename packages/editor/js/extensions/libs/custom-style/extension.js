@@ -40,7 +40,7 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 			handleOnChangeAttributes,
 		}: CustomStyleExtensionProps): MixedElement => {
 			const { initialOpen, onToggle } =
-				useBlockSection('conditionsConfig');
+				useBlockSection('customStyleConfig');
 			const {
 				getCurrentState = () => 'normal',
 				getBreakpoint = () => getBaseBreakpoint(),
