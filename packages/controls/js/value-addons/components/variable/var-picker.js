@@ -226,9 +226,9 @@ export default function ({
 			}
 		>
 			<Flex direction="column" gap="25px">
-				<CustomVariables />
-
 				<Variables />
+
+				<CustomVariables />
 			</Flex>
 		</Popover>
 	);

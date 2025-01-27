@@ -43,7 +43,7 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 			return (
 				<PanelBodyControl
 					onToggle={onToggle}
-					title={__('On Click', 'blockera')}
+					title={__('Animations', 'blockera')}
 					initialOpen={initialOpen}
 					icon={<Icon icon="extension-click-animation" />}
 					className={extensionClassNames('click-animation')}
@@ -63,19 +63,23 @@ export const ClickAnimationExtension: ComponentType<ClickAnimationExtensionProps
 							design="large"
 							icon={<Icon icon="click-animation" iconSize="26" />}
 							description={__(
-								'Clicking on the block will trigger the animation.',
+								// 'Clicking on the block will trigger the animation.',
+								'Entrance, Scroll, Click, Hover, and more animations.',
 								'blockera'
 							)}
 							actionButtonAdd={false}
 							injectHeaderButtonsStart={
-								<span
+								<a
+									href="https://community.blockera.ai/feature-request-1rsjg2ck/post/animation-for-blocks-S9na16eV4Z5IBU1/?utm_source=block-section-animations&utm_medium=referral&utm_campaign=coming-soon-feature&utm_content=cta-link"
+									target="_blank"
 									style={{
 										color: 'var(--blockera-controls-primary-color)',
 										fontStyle: 'italic',
 									}}
+									rel="noreferrer"
 								>
 									{__('Coming soon…', 'blockera')}
-								</span>
+								</a>
 							}
 						/>
 					</ControlContextProvider>
