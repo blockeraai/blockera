@@ -95,7 +95,7 @@ class TestFunctions extends \Blockera\Dev\PHPUnit\AppTestCase {
 
 	public function coreConfigDataProvider(): array {
 
-		$rootDir = trailingslashit( dirname( __BLOCKERA_PACKAGES_DIR__ ) );
+		$rootDir = trailingslashit( dirname( __PACKAGES_DIR__ ) );
 		$theme   = wp_get_theme();
 		$home    = trailingslashit( home_url() );
 

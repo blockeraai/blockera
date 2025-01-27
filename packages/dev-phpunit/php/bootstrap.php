@@ -42,12 +42,9 @@ require_once $_tests_dir . '/includes/functions.php';
 
 tests_add_filter( 'muplugins_loaded', function () use ( $root_dir ) {
 
-	define( 'BLOCKERA_CORE_PATH', trailingslashit( $root_dir ) );
-	define( '__BLOCKERA_PACKAGES_DIR__', dirname( __DIR__, 2 ) );
-	define( 'BLOCKERA_CORE_VERSION', $_ENV['VERSION'] ?? getenv( 'VERSION' ) );
-	define( 'BLOCKERA_CORE_URI', trailingslashit(
-		plugins_url( $_ENV['BLOCKERA_DIR'] ?? getenv( '__BLOCKERA_DIR__' ) )
-	) );
+	define( '__PACKAGES_DIR__', dirname( __DIR__, 2 ) );
+
+	include trailingslashit($root_dir) . 'tests/phpunit/bootstrap.php';
 } );
 
 // Start up the WP testing environment.
