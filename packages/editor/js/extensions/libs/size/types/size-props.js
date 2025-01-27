@@ -32,6 +32,7 @@ export type TSizeProps = {
 		blockeraRatio: FeatureConfig,
 		blockeraFit: FeatureConfig,
 		blockeraFitPosition: FeatureConfig,
+		blockeraBoxSizing: FeatureConfig,
 	},
 	values: {
 		blockeraWidth: string,
@@ -44,6 +45,7 @@ export type TSizeProps = {
 		blockeraRatio: { value: string, width: string, height: string },
 		blockeraFit: string,
 		blockeraFitPosition: { top: string, left: string },
+		blockeraBoxSizing: string,
 	},
 	extensionProps: {
 		blockeraWidth: Object,
@@ -56,5 +58,6 @@ export type TSizeProps = {
 		blockeraRatio: Object,
 		blockeraFit: Object,
 		blockeraFitPosition: Object,
+		blockeraBoxSizing: Object,
 	},
 };

@@ -1048,6 +1048,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 											currentStateAttributes.blockeraFit,
 										blockeraFitPosition:
 											currentStateAttributes.blockeraFitPosition,
+										blockeraBoxSizing:
+											currentStateAttributes.blockeraBoxSizing,
 									}}
 									attributes={{
 										blockeraWidth: attributes.blockeraWidth,
@@ -1067,6 +1069,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										blockeraFit: attributes.blockeraFit,
 										blockeraFitPosition:
 											attributes.blockeraFitPosition,
+										blockeraBoxSizing:
+											attributes.blockeraBoxSizing,
 									}}
 									extensionProps={{
 										blockeraWidth: {},
@@ -1079,6 +1083,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										blockeraRatio: {},
 										blockeraFit: {},
 										blockeraFitPosition: {},
+										blockeraBoxSizing: {},
 									}}
 									handleOnChangeAttributes={
 										handleOnChangeAttributes
