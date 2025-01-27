@@ -42,8 +42,8 @@ import { FlexChildExtension } from '../flex-child';
 import { CustomStyleExtension } from '../custom-style';
 import { MouseExtension } from '../mouse';
 import { StyleVariationsExtension } from '../style-variations';
-import { EntranceAnimationExtension } from '../entrance-animation';
-import { ScrollAnimationExtension } from '../scroll-animation';
+// import { EntranceAnimationExtension } from '../entrance-animation';
+// import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
 import { ConditionsExtension } from '../conditions';
 import { AdvancedSettingsExtension } from '../advanced-settings';
@@ -262,8 +262,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			backgroundConfig,
 			typographyConfig,
 			borderAndShadowConfig,
-			entranceAnimationConfig,
-			scrollAnimationConfig,
+			// entranceAnimationConfig,
+			// scrollAnimationConfig,
 			clickAnimationConfig,
 			conditionsConfig,
 			advancedSettingsConfig,
@@ -899,36 +899,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'interactions':
 					activePanel.push(
 						<Fragment key={`${props.clientId}-interactions-panel`}>
-							<EntranceAnimationExtension
-								block={block}
-								extensionConfig={entranceAnimationConfig}
-								extensionProps={{}}
-								values={{}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-							/>
-
-							<ScrollAnimationExtension
-								block={block}
-								extensionConfig={scrollAnimationConfig}
-								extensionProps={{}}
-								values={{}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-							/>
-
-							<ClickAnimationExtension
-								block={block}
-								extensionConfig={clickAnimationConfig}
-								extensionProps={{}}
-								values={{}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-							/>
-
 							<MouseExtension
 								block={block}
 								mouseConfig={mouseConfig}
@@ -955,6 +925,36 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									handleOnChangeAttributes
 								}
 								setSettings={handleOnChangeSettings}
+							/>
+
+							{/* <EntranceAnimationExtension
+								block={block}
+								extensionConfig={entranceAnimationConfig}
+								extensionProps={{}}
+								values={{}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/>
+
+							<ScrollAnimationExtension
+								block={block}
+								extensionConfig={scrollAnimationConfig}
+								extensionProps={{}}
+								values={{}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+							/> */}
+
+							<ClickAnimationExtension
+								block={block}
+								extensionConfig={clickAnimationConfig}
+								extensionProps={{}}
+								values={{}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
 							/>
 						</Fragment>
 					);
