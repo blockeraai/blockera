@@ -149,24 +149,48 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				return extensions;
 			}
 
-			return Object.fromEntries(
-				Object.entries(cacheData).map(([support, settings]) => [
+			const mergedEntries = new Map<string, Object>();
+
+			// First add all entries from cacheData
+			Object.entries(cacheData).forEach(([support, settings]) => {
+				mergedEntries.set(
 					support,
 					Object.fromEntries(
 						Object.entries(settings).map(([key, value]) => {
 							if (
 								null !== value &&
 								isObject(value) &&
-								value.hasOwnProperty('config')
+								value.hasOwnProperty('config') &&
+								extensions[support]?.[key]?.config
 							) {
 								value.config = extensions[support][key].config;
 							}
-
 							return [key, value];
 						})
-					),
-				])
-			);
+					)
+				);
+			});
+
+			// Add entries from extensions that don't exist in cacheData
+			Object.entries(extensions).forEach(([support, settings]) => {
+				if (!mergedEntries.has(support)) {
+					mergedEntries.set(support, settings);
+
+					return;
+				}
+
+				// Check if internal items from settings exist in support
+				Object.entries(settings).forEach(([key, value]) => {
+					if (!mergedEntries.get(support)?.[key]) {
+						mergedEntries.set(support, {
+							...mergedEntries.get(support),
+							[key]: value,
+						});
+					}
+				});
+			});
+
+			return Object.fromEntries(mergedEntries);
 			// eslint-disable-next-line
 		}, [props.name, cacheData]);
 
