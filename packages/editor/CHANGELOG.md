@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- The overall design of the block settings has been improved to boost the UX (based on user feedback and user researches).
+
 ### New Features:
 - Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.
 
