@@ -64,7 +64,7 @@ class AdminAssetsProvider extends AssetsProvider {
 				]
 			);
 
-		} elseif ( 'post.php' !== $GLOBALS['pagenow'] && ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
+		} elseif ( ! in_array($GLOBALS['pagenow'], [ 'post.php', 'post-new.php' ], true) ) {
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'telemetryInlineScripts' ] );
 
