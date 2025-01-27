@@ -9,6 +9,9 @@
 ### Automated Tests:
 - Added E2E tests for the Box Sizing feature to verify its functionality in both the editor and front end.
 
+### Bug Fixes
+- Fixed an issue where features configurations and cached data caused problems when adding new features options.
+
 ## 1.0.3 (2025-01-22)
 
 
