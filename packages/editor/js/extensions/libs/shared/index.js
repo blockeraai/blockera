@@ -45,7 +45,7 @@ import { StyleVariationsExtension } from '../style-variations';
 // import { EntranceAnimationExtension } from '../entrance-animation';
 // import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
-import { ConditionsExtension } from '../conditions';
+// import { ConditionsExtension } from '../conditions';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import {
 	isInnerBlock,
@@ -265,7 +265,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			// entranceAnimationConfig,
 			// scrollAnimationConfig,
 			clickAnimationConfig,
-			conditionsConfig,
+			// conditionsConfig,
 			advancedSettingsConfig,
 			styleVariationsConfig,
 		} = settings;
@@ -371,7 +371,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								/>
 							)}
 
-							<ConditionsExtension
+							{/* <ConditionsExtension
 								block={block}
 								extensionConfig={conditionsConfig}
 								extensionProps={{}}
@@ -379,7 +379,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								handleOnChangeAttributes={
 									handleOnChangeAttributes
 								}
-							/>
+							/> */}
 
 							<AdvancedSettingsExtension
 								block={block}
