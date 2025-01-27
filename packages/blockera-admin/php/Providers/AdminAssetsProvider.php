@@ -209,7 +209,7 @@ class AdminAssetsProvider extends AssetsProvider {
 	 */
 	public function telemetryInlineScripts(): string {
 
-		$package_file = blockera_core_config('app.root_path') . '/packages/telemetry/package.json';
+		$package_file = blockera_core_config('app.vendor_path') . '/blockera/telemetry/package.json';
 		$filesystem   = blockera_get_filesystem();
 		$version      = str_replace('.', '_', json_decode($filesystem->get_contents($package_file))->version);
 
