@@ -277,7 +277,7 @@ function mergeBlockSettings(
 			return (
 				<ErrorBoundary
 					fallbackRender={
-						window?.blockeraTelemetryDebugLoggerIsOff
+						window?.blockeraTelemetryBugDetectorLoggerIsOff
 							? () => createElement(settings.edit, props)
 							: ({ error }) => (
 									<ErrorBoundaryFallback

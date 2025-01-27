@@ -440,7 +440,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 
 			<ErrorBoundary
 				fallbackRender={
-					window?.blockeraTelemetryDebugLoggerIsOff
+					window?.blockeraTelemetryBugDetectorLoggerIsOff
 						? () => fallbackErrorBoundaryMessage
 						: ({ error }): MixedElement => (
 								<ErrorBoundaryFallback

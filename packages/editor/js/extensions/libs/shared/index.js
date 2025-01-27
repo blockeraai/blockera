@@ -389,7 +389,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							)}
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }): MixedElement => (
 												<ErrorBoundaryFallback
@@ -423,7 +423,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -478,7 +478,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						<Fragment key={`${props.clientId}-style-panel`}>
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -510,7 +510,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -549,7 +549,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -596,7 +596,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -729,7 +729,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -786,7 +786,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -851,7 +851,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									?.value === 'flex' && (
 									<ErrorBoundary
 										fallbackRender={
-											window?.blockeraTelemetryDebugLoggerIsOff
+											window?.blockeraTelemetryBugDetectorLoggerIsOff
 												? () =>
 														fallbackErrorBoundaryMessage
 												: ({ error }) => (
@@ -938,7 +938,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -1002,7 +1002,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -1094,7 +1094,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -1144,7 +1144,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -1248,7 +1248,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -1301,7 +1301,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 						<Fragment key={`${props.clientId}-interactions-panel`}>
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -1338,7 +1338,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -1375,7 +1375,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
@@ -1412,7 +1412,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 							<ErrorBoundary
 								fallbackRender={
-									window?.blockeraTelemetryDebugLoggerIsOff
+									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
