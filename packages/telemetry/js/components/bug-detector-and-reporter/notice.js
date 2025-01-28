@@ -30,6 +30,7 @@ export const Notice = ({
 				<h3>{__('Whoops! An error occurred', 'blockera')}</h3>
 				<p>{description}</p>
 				<Button
+					data-test="report-bug"
 					variant={'primary'}
 					size={'small'}
 					onClick={onClick}

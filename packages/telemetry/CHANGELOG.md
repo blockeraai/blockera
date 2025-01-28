@@ -10,3 +10,4 @@
 
 ### Tests:
 - Added end-to-end tests for opt-in system, including verification of modal display, allow/skip button functionality, and proper state management.
+- Added end-to-end tests for bug detector and reporter system, including verification of modal display, opt-in checkbox, and report submission.

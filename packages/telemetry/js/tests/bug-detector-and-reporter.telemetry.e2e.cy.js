@@ -1,0 +1,49 @@
+import { createPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
+
+describe('Bug Detector and Reporter', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
+	it('should display bug detector notice on size block section and click to report bug button to show report bug modal with opt-in checkbox', () => {
+		appendBlocks(`<!-- wp:heading {"blockeraPropsId":"23bc4b3e-91cf-4bed-860e-a40e8ded86dc","blockeraCompatId":"028212413535","blockeraInnerBlocks":{"value":{"elements/link":{"attributes":{"blockeraFontColor":"#ff5252"}}}},"blockeraFontColor":{"value": {"akbar": true}},"className":"blockera-block blockera-block-was3wx","style":{"color":{"text":"#ff5252"},"elements":{"link":{"color":{"text":"#ff5252"}}}}} -->
+<h2 class="wp-block-heading blockera-block blockera-block-was3wx has-text-color has-link-color" style="color:#ff5252">Bug Detector And Bug Reporter System</h2>
+<!-- /wp:heading -->`);
+
+		cy.getBlock('core/heading').first().click();
+
+		cy.get('button', { timeout: 20000 })
+			.contains('Typography')
+			.closest('.is-opened')
+			.as('reportBugContainer');
+
+		cy.get('@reportBugContainer').within(() => {
+			cy.getByDataTest('report-bug').click();
+		});
+
+		cy.getByDataTest('bug-detector-and-reporter-popup').should(
+			'be.visible'
+		);
+
+		cy.getByDataTest('bug-detector-and-reporter-popup')
+			.get('input[type="checkbox"]')
+			.as('checkbox');
+
+		cy.get('@checkbox').should('be.checked');
+
+		// Submit report
+		cy.getByDataTest('send-report-automatically').should('not.be.disabled');
+
+		cy.get('@checkbox').click({ multiple: true, force: true });
+
+		cy.getByDataTest('send-report-automatically').should('be.disabled');
+
+		cy.get('@checkbox').click({ multiple: true, force: true });
+
+		cy.getByDataTest('send-report-automatically').click();
+
+		cy.getByDataTest('blockera-loading-text').should('be.visible');
+
+		// TODO: @ali add test for success state ...
+	});
+});

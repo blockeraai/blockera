@@ -97,6 +97,7 @@ export const Popup = ({
 	if (optInStatus === 'ALLOW') {
 		body = (
 			<Flex
+				data-test="bug-detector-and-reporter-popup"
 				direction={'column'}
 				gap={40}
 				style={{
@@ -180,6 +181,7 @@ export const Popup = ({
 	} else {
 		body = (
 			<Flex
+				data-test="bug-detector-and-reporter-popup"
 				direction={'column'}
 				gap={40}
 				style={{
@@ -225,6 +227,7 @@ export const Popup = ({
 								}}
 							>
 								<ToggleControl
+									data-test="agree-to-opting-in-and-report"
 									label={__(
 										'I agree to share the bug and site diagnostic data for troubleshooting.',
 										'blockera'
@@ -265,6 +268,7 @@ export const Popup = ({
 				<Flex justifyContent={'space-between'}>
 					<Flex>
 						<Button
+							data-test="send-report-automatically"
 							variant={'primary'}
 							disabled={!isChecked}
 							onClick={() => {
@@ -334,6 +338,7 @@ export const Popup = ({
 
 		body = (
 			<Flex
+				data-test="bug-detector-and-reporter-popup"
 				direction={'column'}
 				gap={40}
 				style={{

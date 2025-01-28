@@ -98,7 +98,12 @@ export const BlockeraLoading = ({
 							/>
 						</svg>
 
-						<div className="blockera-loading-text">{text}</div>
+						<div
+							data-test="blockera-loading-text"
+							className="blockera-loading-text"
+						>
+							{text}
+						</div>
 					</div>
 				</div>
 			</div>
