@@ -7,25 +7,25 @@ use Blockera\Setup\Blockera;
 use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
 use Blockera\WordPress\RenderBlock\{
-	Parser,
-	Render,
-	SavePost,
-	Setup,
+    Parser,
+    Render,
+    SavePost,
+    Setup,
 };
 use Blockera\Editor\{
-	StyleDefinitions\Background,
-	StyleDefinitions\Border,
-	StyleDefinitions\BoxShadow,
-	StyleDefinitions\Effects,
-	StyleDefinitions\Layout,
-	StyleDefinitions\Mouse,
-	StyleDefinitions\Outline,
-	StyleDefinitions\Position,
-	StyleDefinitions\Size,
-	StyleDefinitions\Spacing,
-	StyleDefinitions\TextShadow,
-	StyleDefinitions\Typography,
-	StyleEngine,
+    StyleDefinitions\Background,
+    StyleDefinitions\Border,
+    StyleDefinitions\BoxShadow,
+    StyleDefinitions\Effects,
+    StyleDefinitions\Layout,
+    StyleDefinitions\Mouse,
+    StyleDefinitions\Outline,
+    StyleDefinitions\Position,
+    StyleDefinitions\Size,
+    StyleDefinitions\Spacing,
+    StyleDefinitions\TextShadow,
+    StyleDefinitions\Typography,
+    StyleEngine,
 };
 use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
@@ -43,196 +43,196 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 class AppServiceProvider extends ServiceProvider {
 
-	/**
-	 * Registering services classes.
-	 *
-	 * @throws BaseException Exception for any occurred errors.
-	 *
-	 * @return void
-	 */
-	public function register(): void {
+    /**
+     * Registering services classes.
+     *
+     * @throws BaseException Exception for any occurred errors.
+     *
+     * @return void
+     */
+    public function register(): void {
 
-		parent::register();
+        parent::register();
 
-		try {
+        try {
 
-			$this->app->singleton( Setup::class );
+            $this->app->singleton(Setup::class);
 
-			$this->app->singleton(
-				SavePost::class,
-				function ( Application $app ) {
+            $this->app->singleton(
+                SavePost::class,
+                function ( Application $app) {
 
-					return new SavePost( $app, new Render( $app ) );
-				}
-			);
+                    return new SavePost($app, new Render($app));
+                }
+            );
 
-			$this->app->singleton(
-				VariableType::class,
-				static function ( Application $app ): VariableType {
+            $this->app->singleton(
+                VariableType::class,
+                static function ( Application $app): VariableType {
 
-					return new VariableType( $app );
-				}
-			);
+                    return new VariableType($app);
+                }
+            );
 
-			if ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ) {
+            if (blockera_get_experimental([ 'data', 'dynamicValue' ])) {
 
-				$this->app->singleton(
-					DynamicValueType::class,
-					static function ( Application $app ): DynamicValueType {
+                $this->app->singleton(
+                    DynamicValueType::class,
+                    static function ( Application $app): DynamicValueType {
 
-						return new DynamicValueType( $app );
-					}
-				);
-			}
+                        return new DynamicValueType($app);
+                    }
+                );
+            }
 
-			$this->app->singleton(
-				ValueAddonRegistry::class,
-				static function ( Application $app, array $params = [] ): ValueAddonRegistry {
+            $this->app->singleton(
+                ValueAddonRegistry::class,
+                static function ( Application $app, array $params = []): ValueAddonRegistry {
 
-					return new ValueAddonRegistry( $app, ...$params );
-				}
-			);
+                    return new ValueAddonRegistry($app, ...$params);
+                }
+            );
 
-			$this->app->singleton(
-				EntityRegistry::class,
-				static function ( Application $app ) {
+            $this->app->singleton(
+                EntityRegistry::class,
+                static function ( Application $app) {
 
-					return new EntityRegistry( $app );
-				}
-			);
+                    return new EntityRegistry($app);
+                }
+            );
 
-			$this->app->bind(
-				StyleEngine::class,
-				static function ( Application $app, array $params ) {
+            $this->app->bind(
+                StyleEngine::class,
+                static function ( Application $app, array $params) {
 
-					$styleDefinitions = [
-						$app->make( Size::class ),
-						$app->make( Mouse::class ),
-						$app->make( Layout::class ),
-						$app->make( Border::class ),
-						$app->make( Effects::class ),
-						$app->make( Outline::class ),
-						$app->make( Spacing::class ),
-						$app->make( Position::class ),
-						$app->make( BoxShadow::class ),
-						$app->make( TextShadow::class ),
-						$app->make( Background::class ),
-						$app->make( Typography::class ),
-					];
+                    $styleDefinitions = [
+                        $app->make(Size::class),
+                        $app->make(Mouse::class),
+                        $app->make(Layout::class),
+                        $app->make(Border::class),
+                        $app->make(Effects::class),
+                        $app->make(Outline::class),
+                        $app->make(Spacing::class),
+                        $app->make(Position::class),
+                        $app->make(BoxShadow::class),
+                        $app->make(TextShadow::class),
+                        $app->make(Background::class),
+                        $app->make(Typography::class),
+                    ];
 
-					return new StyleEngine( $params['block'], $params['fallbackSelector'], $styleDefinitions );
-				}
-			);
+                    return new StyleEngine($params['block'], $params['fallbackSelector'], $styleDefinitions);
+                }
+            );
 
-			$this->app->singleton(
-				DomParser::class,
-				static function () {
+            $this->app->singleton(
+                DomParser::class,
+                static function () {
 
-					return new DomParser();
-				}
-			);
+                    return new DomParser();
+                }
+            );
 
-			$this->app->singleton(
-				Parser::class,
-				static function ( Application $app ) {
+            $this->app->singleton(
+                Parser::class,
+                static function ( Application $app) {
 
-					return new Parser( $app );
-				}
-			);
+                    return new Parser($app);
+                }
+            );
 
-			$this->app->bind(
-				Render::class,
-				static function ( Application $app ): Render {
+            $this->app->bind(
+                Render::class,
+                static function ( Application $app): Render {
 
-					return new Render( $app );
-				}
-			);
+                    return new Render($app);
+                }
+            );
 
-			$this->app->singleton( Sender::class );
+            $this->app->singleton(Sender::class);
 
-		} catch ( BaseException $handler ) {
+        } catch (BaseException $handler) {
 
-			throw new BaseException( esc_html( 'Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage() ) );
-		}
-	}
+            throw new BaseException(esc_html('Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage()));
+        }
+    }
 
-	/**
-	 * Bootstrap services.
-	 *
-	 * @throws BindingResolutionException Exception for missed bounded services.
-	 * @return void
-	 */
-	public function boot(): void {
+    /**
+     * Bootstrap services.
+     *
+     * @throws BindingResolutionException Exception for missed bounded services.
+     * @return void
+     */
+    public function boot(): void {
 
-		parent::boot();
+        parent::boot();
 
-		$dynamicValueRegistry = $this->app->make( ValueAddonRegistry::class, [ DynamicValueType::class ] );
-		$variableRegistry     = $this->app->make( ValueAddonRegistry::class, [ VariableType::class ] );
+        $dynamicValueRegistry = $this->app->make(ValueAddonRegistry::class, [ DynamicValueType::class ]);
+        $variableRegistry     = $this->app->make(ValueAddonRegistry::class, [ VariableType::class ]);
 
-		if ( $this->app instanceof Blockera ) {
+        if ($this->app instanceof Blockera) {
 
-			$this->app->setRegisteredValueAddons(
-				array_merge(
-					[
-						'variable' => $variableRegistry->getRegistered(),
-					],
-					blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? [
-						'dynamic-value' => $dynamicValueRegistry->getRegistered(),
-					] : [],
-				)
-			);
-		}
+            $this->app->setRegisteredValueAddons(
+                array_merge(
+                    [
+                        'variable' => $variableRegistry->getRegistered(),
+                    ],
+                    blockera_get_experimental([ 'data', 'dynamicValue' ]) ? [
+                        'dynamic-value' => $dynamicValueRegistry->getRegistered(),
+                    ] : [],
+                )
+            );
+        }
 
-		$this->app->make( SavePost::class );
-		$this->app->make( Setup::class )->apply();
-		$this->app->make( EntityRegistry::class );
+        $this->app->make(SavePost::class);
+        $this->app->make(Setup::class)->apply();
+        $this->app->make(EntityRegistry::class);
 
-		$this->renderBlocks();
+        $this->renderBlocks();
 
-		if ( ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
+        if (! blockera_telemetry_opt_in_is_off('blockera')) {
 
-			Config::setConsumerConfig( blockera_core_config( 'app' ) );
-			Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
-			Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
-			Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
-			Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
-		}
+            Config::setConsumerConfig(blockera_core_config('app'));
+            Config::setOptionKeys(blockera_core_config('telemetry.options'));
+            Config::setServerURL(blockera_core_config('telemetry.server_url'));
+            Config::setRestParams(blockera_core_config('telemetry.rest_params'));
+            Config::setHookPrefix(blockera_core_config('telemetry.hook_prefix'));
+        }
 
-		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
-	}
+        add_action('after_setup_theme', [ $this, 'after_setup_theme' ]);
+    }
 
-	/**
-	 * The after_setup_theme action hook
-	 */
-	public function after_setup_theme(): void {
+    /**
+     * The after_setup_theme action hook
+     */
+    public function after_setup_theme(): void {
 
-		add_action( 'init', [ $this, 'loadTextDomain' ] );
+        add_action('init', [ $this, 'loadTextDomain' ]);
 
-	}
+    }
 
-	/**
-	 * Rendering block type.
-	 *
-	 * @throws BindingResolutionException Exception for not found bounded module.
-	 * @return void
-	 */
-	protected function renderBlocks(): void {
+    /**
+     * Rendering block type.
+     *
+     * @throws BindingResolutionException Exception for not found bounded module.
+     * @return void
+     */
+    protected function renderBlocks(): void {
 
-		$render = $this->app->make( Render::class );
+        $render = $this->app->make(Render::class);
 
-		$render->applyHooks();
-	}
+        $render->applyHooks();
+    }
 
-	/**
-	 * Loading text domain.
-	 *
-	 * @hooked `init`
-	 *
-	 * @return void
-	 */
-	public function loadTextDomain(): void {
+    /**
+     * Loading text domain.
+     *
+     * @hooked `init`
+     *
+     * @return void
+     */
+    public function loadTextDomain(): void {
 
-	    $locale = get_locale();
+        $locale = get_locale();
 
         $mo_file = WP_LANG_DIR . '/plugins/blockera-' . $locale . '.mo';
 
@@ -240,6 +240,6 @@ class AppServiceProvider extends ServiceProvider {
             load_textdomain('blockera', $mo_file);
         }
 
-        load_plugin_textdomain('blockera', false, dirname(plugin_basename(BLOCKERA_CORE_FILE)) . '/languages');
-	}
+        load_plugin_textdomain('blockera', false, dirname(plugin_basename(BLOCKERA_SB_FILE)) . '/languages');
+    }
 }
