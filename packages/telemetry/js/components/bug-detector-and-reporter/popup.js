@@ -7,7 +7,7 @@ import { __, isRTL } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { serialize } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+import { useState, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -28,10 +28,11 @@ import { sender } from '../opt-in/sender';
 export const Popup = ({
 	id,
 	error,
-	setIsOpenPopup,
+	state,
+	setState,
 	handleReport,
-	state: { isLoading, isOpenPopup, isReported, reportedCount },
 }: {
+	id: string,
 	error: Object,
 	handleReport: () => void,
 	state: {
@@ -40,8 +41,24 @@ export const Popup = ({
 		isReported: boolean,
 		reportedCount: number,
 	},
-	setIsOpenPopup: (isOpenPopup: boolean) => void,
+	setState: (state: {
+		isLoading: boolean,
+		isOpenPopup: boolean,
+		isReported: boolean,
+		reportedCount: number,
+	}) => void,
 }): ?MixedElement => {
+	const { isLoading, isOpenPopup, isReported, reportedCount } = state;
+	const setIsOpenPopup = useCallback(
+		(isOpen: boolean) => {
+			setState({
+				...state,
+				isOpenPopup: isOpen,
+			});
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[state]
+	);
 	const {
 		blockeraOptInStatus,
 		blockeraCommunityUrl,
@@ -251,9 +268,23 @@ export const Popup = ({
 							variant={'primary'}
 							disabled={!isChecked}
 							onClick={() => {
+								setState({
+									...state,
+									isLoading: true,
+								});
 								sender('ALLOW', 'debug', {
 									handleReport,
-									setOptInStatus,
+									setOptInStatus: (
+										status: 'ALLOW' | 'SKIP'
+									): void => {
+										setOptInStatus(status);
+										if ('ALLOW' === status) {
+											setState({
+												...state,
+												isReported: true,
+											});
+										}
+									},
 								});
 							}}
 							style={{

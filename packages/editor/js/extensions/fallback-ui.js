@@ -54,6 +54,12 @@ export const FallbackUI = ({
 	icon?: MixedElement,
 	isReported?: boolean,
 }): MixedElement => {
+	const [state, setState] = useState({
+		reportedCount: 0,
+		isLoading: false,
+		isReported: false,
+		isOpenPopup: false,
+	});
 	const isFromExtension = useCallback(() => 'extension' === from, [from]);
 	let {
 		initialOpen,
@@ -66,7 +72,16 @@ export const FallbackUI = ({
 	const { getSelectedBlock } = select('core/block-editor');
 	const handleAllowReport = useCallback(() => {
 		if (window.blockeraOptInStatus === 'ALLOW') {
-			sender(error, serialize(getSelectedBlock()));
+			sender(error, serialize(getSelectedBlock()), (response: Object) => {
+				if (response.success) {
+					setState({
+						isLoading: false,
+						isReported: true,
+						isOpenPopup: true,
+						reportedCount: state.reportedCount + 1,
+					});
+				}
+			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isReported, error]);
@@ -77,13 +92,6 @@ export const FallbackUI = ({
 		initialOpen = blockSection.initialOpen;
 		onToggle = blockSection.onToggle;
 	}
-
-	const [state, setState] = useState({
-		reportedCount: 0,
-		isLoading: false,
-		isReported: false,
-		isOpenPopup: false,
-	});
 
 	const noticeComponentProps = {
 		state,
@@ -163,12 +171,7 @@ export const FallbackUI = ({
 					error={error}
 					state={state}
 					handleReport={handleAllowReport}
-					setIsOpenPopup={(isOpen: boolean) => {
-						setState({
-							...state,
-							isOpenPopup: isOpen,
-						});
-					}}
+					setState={setState}
 				/>
 				<InspectorControls>
 					<Notice
@@ -211,12 +214,7 @@ export const FallbackUI = ({
 					error={error}
 					state={state}
 					handleReport={handleAllowReport}
-					setIsOpenPopup={(isOpen: boolean) => {
-						setState({
-							...state,
-							isOpenPopup: isOpen,
-						});
-					}}
+					setState={setState}
 				/>
 				{createElement(fallbackComponent, {
 					...fallbackComponentProps,
@@ -233,12 +231,7 @@ export const FallbackUI = ({
 				error={error}
 				state={state}
 				handleReport={handleAllowReport}
-				setIsOpenPopup={(isOpen: boolean) => {
-					setState({
-						...state,
-						isOpenPopup: isOpen,
-					});
-				}}
+				setState={setState}
 			/>
 			<PanelBodyControl
 				onToggle={onToggle}

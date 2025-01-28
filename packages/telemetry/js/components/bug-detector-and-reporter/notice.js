@@ -17,7 +17,6 @@ import { componentClassNames } from '@blockera/classnames';
 import { Flex, Button, NoticeControl } from '@blockera/controls';
 
 export const Notice = ({
-	state,
 	description,
 	onClick,
 }: {
@@ -33,7 +32,6 @@ export const Notice = ({
 				<Button
 					variant={'primary'}
 					size={'small'}
-					disabled={state.isOpenPopup || state.isReported}
 					onClick={onClick}
 					type={'button'}
 					className={componentClassNames('report-bug')}

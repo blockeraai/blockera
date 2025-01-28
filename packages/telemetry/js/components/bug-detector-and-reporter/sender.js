@@ -5,7 +5,11 @@
  */
 import apiFetch from '@wordpress/api-fetch';
 
-export const sender = (error: Object, blockCode: string): void => {
+export const sender = (
+	error: Object,
+	blockCode: string,
+	setResponse: (response: any) => void
+): void => {
 	checkReporterStatus({ error, blockCode }, (response) => {
 		if (response.success) {
 			if (response.data.isReported) {
@@ -23,9 +27,7 @@ export const sender = (error: Object, blockCode: string): void => {
 					...prepareData(error, blockCode),
 				},
 			})
-				.then((response) => {
-					console.warn(response);
-				})
+				.then(setResponse)
 				.catch(console.error);
 		}
 	});
