@@ -103,7 +103,7 @@ class AdminAssetsProvider extends AssetsProvider {
             function(){
 				$js = "
 					jQuery(document).ready(function($) {
-						$( 'li.blockera-pro-submenu a.blockera-pro-submenu' ) . attr('target', '_blank');
+						$('li.blockera-pro-submenu a.blockera-pro-submenu[href^=\"https://blockera.ai/products/site-builder/upgrade/\"]').attr('target', '_blank');
 					});
 				";
 

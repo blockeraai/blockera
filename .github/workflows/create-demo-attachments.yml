@@ -80,18 +80,27 @@ jobs:
                       "description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
                       "categories": ["plugins"]
                     },
-                    "landingPage": "/wp-admin/plugins.php",
+                    "landingPage": "/wp-admin/admin.php?page=blockera-settings-dashboard",
                     "preferredVersions": {
                       "wp": "beta",
                       "php": "8.0"
+                    },
+                    "features": {
+                      "networking": true
                     },
                     "steps": [
                       {
                         "step": "login"
                       },
                       {
+                        "step": "defineWpConfigConsts",
+                        "consts": {
+                         "BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+                        }
+                      },
+                      {
                         "step": "installPlugin",
-                        "pluginZipFile": {
+                        "pluginData": {
                           "resource": "url",
                           "url": "URL_PLACEMENT"
                         }
@@ -100,7 +109,7 @@ jobs:
                   }'
 
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[1].pluginZipFile.url = "${{ env.uploaded_zip_file }}"')
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = "${{ env.uploaded_zip_file }}"')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
