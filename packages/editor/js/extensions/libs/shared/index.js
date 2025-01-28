@@ -44,10 +44,10 @@ import { FlexChildExtension } from '../flex-child';
 import { CustomStyleExtension } from '../custom-style';
 import { MouseExtension } from '../mouse';
 import { StyleVariationsExtension } from '../style-variations';
-import { EntranceAnimationExtension } from '../entrance-animation';
-import { ScrollAnimationExtension } from '../scroll-animation';
+// import { EntranceAnimationExtension } from '../entrance-animation';
+// import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
-import { ConditionsExtension } from '../conditions';
+// import { ConditionsExtension } from '../conditions';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import {
 	isInnerBlock,
@@ -152,24 +152,48 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				return extensions;
 			}
 
-			return Object.fromEntries(
-				Object.entries(cacheData).map(([support, settings]) => [
+			const mergedEntries = new Map<string, Object>();
+
+			// First add all entries from cacheData
+			Object.entries(cacheData).forEach(([support, settings]) => {
+				mergedEntries.set(
 					support,
 					Object.fromEntries(
 						Object.entries(settings).map(([key, value]) => {
 							if (
 								null !== value &&
 								isObject(value) &&
-								value.hasOwnProperty('config')
+								value.hasOwnProperty('config') &&
+								extensions[support]?.[key]?.config
 							) {
 								value.config = extensions[support][key].config;
 							}
-
 							return [key, value];
 						})
-					),
-				])
-			);
+					)
+				);
+			});
+
+			// Add entries from extensions that don't exist in cacheData
+			Object.entries(extensions).forEach(([support, settings]) => {
+				if (!mergedEntries.has(support)) {
+					mergedEntries.set(support, settings);
+
+					return;
+				}
+
+				// Check if internal items from settings exist in support
+				Object.entries(settings).forEach(([key, value]) => {
+					if (!mergedEntries.get(support)?.[key]) {
+						mergedEntries.set(support, {
+							...mergedEntries.get(support),
+							[key]: value,
+						});
+					}
+				});
+			});
+
+			return Object.fromEntries(mergedEntries);
 			// eslint-disable-next-line
 		}, [props.name, cacheData]);
 
@@ -265,10 +289,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			backgroundConfig,
 			typographyConfig,
 			borderAndShadowConfig,
-			entranceAnimationConfig,
-			scrollAnimationConfig,
+			// entranceAnimationConfig,
+			// scrollAnimationConfig,
 			clickAnimationConfig,
-			conditionsConfig,
+			// conditionsConfig,
 			advancedSettingsConfig,
 			styleVariationsConfig,
 		} = settings;
@@ -387,6 +411,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									}}
 								/>
 							)}
+
 							<ErrorBoundary
 								fallbackRender={
 									window?.blockeraTelemetryBugDetectorLoggerIsOff
@@ -1299,7 +1324,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'interactions':
 					activePanel.push(
 						<Fragment key={`${props.clientId}-interactions-panel`}>
-							<ErrorBoundary
+							{/* <ErrorBoundary
 								fallbackRender={
 									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
@@ -1334,9 +1359,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										handleOnChangeAttributes
 									}
 								/>
-							</ErrorBoundary>
+							</ErrorBoundary> */}
 
-							<ErrorBoundary
+							{/* <ErrorBoundary
 								fallbackRender={
 									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
@@ -1371,7 +1396,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										handleOnChangeAttributes
 									}
 								/>
-							</ErrorBoundary>
+							</ErrorBoundary> */}
 
 							<ErrorBoundary
 								fallbackRender={
@@ -1474,8 +1499,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const tabs = [
 			{
 				name: 'settings',
-				title: __('Settings', 'blockera'),
-				tooltip: __('Block Settings', 'blockera'),
+				title: __('General', 'blockera'),
+				tooltip: __('General Block Settings', 'blockera'),
 				className: 'settings-tab',
 				icon: <Icon icon="gear" iconSize="20" />,
 			},

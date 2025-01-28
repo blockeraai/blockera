@@ -1,10 +1,17 @@
 ## Unreleased
 
+### Improvements
+- The overall design of the block settings has been improved to boost the UX (based on user feedback and user researches).
+
 ### New Features:
 - Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.
 
 ### Automated Tests:
 - Added E2E tests for the Box Sizing feature to verify its functionality in both the editor and front end.
+
+### Bug Fixes
+- Fixed an issue where features configurations and cached data caused problems when adding new features options.
+- Fixed an issue in the custom style section where this is by default closed, but the section remained open.
 
 ## 1.0.3 (2025-01-22)
 
