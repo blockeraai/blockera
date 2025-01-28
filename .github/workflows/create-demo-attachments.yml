@@ -126,7 +126,7 @@ jobs:
                   RUN_ID="${{ github.run_id }}"
 
                   # Define the comment body following the desired structure
-                  COMMENT_BODY="**Branch Links**\n\n- [**🔗 Playground Demo**](${{ env.demo_url }})\n\n- [**📦 Download Zip** (Build)](${{ env.uploaded_zip_file }})"
+                  COMMENT_BODY="**Branch Links**\n\n- <a href="${{ env.demo_url }}" target="_blank">**🔗 Playground Demo**</a>\n\n- [**📦 Download Zip** (Build)](${{ env.uploaded_zip_file }})"
 
                   if [ -z "${{ env.comment_id }}" ]; then
                       # No existing comment found, create a new one
