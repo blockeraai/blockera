@@ -93,6 +93,10 @@ jobs:
                         "step": "login"
                       },
                       {
+                        "step": "runPHP",
+                        "code": "<?php if (!defined('BLOCKERA_TELEMETRY_OPT_IN_OFF')) { define('BLOCKERA_TELEMETRY_OPT_IN_OFF', true); } "
+                      },
+                      {
                         "step": "installPlugin",
                         "pluginZipFile": {
                           "resource": "url",
