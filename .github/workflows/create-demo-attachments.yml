@@ -90,6 +90,12 @@ jobs:
                         "step": "login"
                       },
                       {
+                        "step": "defineWpConfigConsts",
+                        "consts": {
+                         "BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+                        }
+                      },
+                      {
                         "step": "installPlugin",
                         "pluginData": {
                           "resource": "url",
@@ -100,7 +106,7 @@ jobs:
                   }'
 
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[1].pluginZipFile.url = "${{ env.uploaded_zip_file }}"')
+                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = "${{ env.uploaded_zip_file }}"')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
