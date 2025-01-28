@@ -96,7 +96,7 @@ jobs:
                       }, 
                       {
                         "step": "installPlugin",
-                        "pluginZipFile": {
+                        "pluginData": {
                           "resource": "url",
                           "url": "URL_PLACEMENT"
                         }
