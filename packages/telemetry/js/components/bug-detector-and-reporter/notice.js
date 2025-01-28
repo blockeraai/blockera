@@ -32,6 +32,7 @@ export const Notice = ({
 				<p>{description}</p>
 				<Button
 					variant={'primary'}
+					size={'small'}
 					disabled={state.isOpenPopup || state.isReported}
 					onClick={onClick}
 					type={'button'}

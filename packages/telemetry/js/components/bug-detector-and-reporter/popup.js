@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { serialize } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
@@ -45,7 +45,7 @@ export const Popup = ({
 	const {
 		blockeraOptInStatus,
 		blockeraCommunityUrl,
-		blockeraTelemetryPrivacyPolicyUrl,
+		blockeraPermissionsLink,
 	} = window;
 	const [optInStatus, setOptInStatus] = useState(blockeraOptInStatus);
 	const selectedBlock = select('core/block-editor').getSelectedBlock();
@@ -67,8 +67,8 @@ export const Popup = ({
 						isReported &&
 						0 === reportedCount &&
 						!window[id]?.isReported
-							? __('Reporting …', 'blockera')
-							: __('Loading …', 'blockera')
+							? __('Reporting…', 'blockera')
+							: __('Loading…', 'blockera')
 					}
 				/>
 			</Modal>
@@ -76,17 +76,45 @@ export const Popup = ({
 	}
 
 	let body: MixedElement = <></>;
-	let headerTitle: string = '';
-	let headerIcon: MixedElement = <></>;
 
 	if (optInStatus === 'ALLOW') {
-		headerTitle =
-			0 === reportedCount || !window[id]?.isReported
-				? __('Bug reported automatically', 'blockera')
-				: __('Bug already reported!', 'blockera');
-		headerIcon = <Icon icon={'check'} />;
 		body = (
-			<Flex direction={'column'} gap={40}>
+			<Flex
+				direction={'column'}
+				gap={40}
+				style={{
+					'--blockera-controls-primary-color': '#e20b0b',
+					'--blockera-controls-primary-color-darker-20': '#b30808',
+				}}
+			>
+				<Flex direction="column" gap={15}>
+					<Icon
+						icon={'check'}
+						iconSize={50}
+						style={{
+							fill: '#e20b0b',
+						}}
+					/>
+
+					<h3
+						style={{
+							fontSize: 26,
+							fontWeight: 600,
+							lineHeight: 1.5,
+							margin: 0,
+						}}
+					>
+						headerTitle
+					</h3>
+
+					<p style={{ margin: 0 }}>
+						{__(
+							'We’ve detected an error and need your help to resolve it. Would you like to send us the report automatically or handle it yourself?',
+							'blockera'
+						)}
+					</p>
+				</Flex>
+
 				<Flex direction={'column'} gap={10}>
 					<p>
 						{0 === reportedCount || !window[id]?.isReported
@@ -111,24 +139,20 @@ export const Popup = ({
 							  )}
 					</p>
 				</Flex>
+
 				<Flex justifyContent={'space-between'}>
 					<Flex>
 						<Button
-							variant={'secondary'}
+							variant={'tertiary'}
 							onClick={() => setIsOpenPopup(false)}
-							className={componentClassNames('close-button')}
 						>
 							{__('Close', 'blockera')}
 						</Button>
+
 						<Button
 							onClick={() => setIsEnabledManuallyReporting(true)}
-							variant={'link'}
+							variant={'secondary-on-hover'}
 							target={blockeraCommunityUrl}
-							className={componentClassNames(
-								'manually-report',
-								'secondary-button',
-								'automatically-reported'
-							)}
 						>
 							{__('Also, Report Manually', 'blockera')}
 						</Button>
@@ -137,55 +161,94 @@ export const Popup = ({
 			</Flex>
 		);
 	} else {
-		headerTitle = isChecked
-			? __('Error reporting', 'blockera')
-			: __('Help us fix this issue', 'blockera');
-		headerIcon = <Icon icon={'tools'} />;
 		body = (
-			<Flex direction={'column'} gap={40}>
-				<Flex direction={'column'} gap={10}>
-					<p>
-						{isChecked
-							? __(
-									'We’ve detected an error and need your help to resolve it. Would you like to send us the report automatically or handle it yourself?',
-									'blockera'
-							  )
-							: __(
-									'An issue has been detected. Please tell us how you’d like to report it. Either send the data automatically or manually submit the report—your feedback is essential for us to fix the bug.',
-									'blockera'
-							  )}
-					</p>
-					<Flex alignItems={'center'}>
-						<ControlContextProvider
-							value={{
-								name: `agree-to-report`,
-								value: isChecked,
+			<Flex
+				direction={'column'}
+				gap={40}
+				style={{
+					'--blockera-controls-primary-color': '#e20b0b',
+					'--blockera-controls-primary-color-darker-20': '#b30808',
+				}}
+			>
+				<Flex direction="column" gap={30}>
+					<Flex direction="column" gap={15}>
+						<Icon
+							icon={'flag'}
+							iconSize={50}
+							style={{
+								fill: '#e20b0b',
+							}}
+						/>
+
+						<h3
+							style={{
+								fontSize: 26,
+								fontWeight: 600,
+								lineHeight: 1.5,
+								margin: 0,
 							}}
 						>
-							<ToggleControl
-								label={__(
-									'I agree to share bug and site diagnostic data for troubleshooting',
+							{__('Help us fix this issue', 'blockera')}
+						</h3>
+
+						<p style={{ margin: 0 }}>
+							{__(
+								'We’ve detected an error and need your help to resolve it. Would you like to send us the report automatically or handle it yourself?',
+								'blockera'
+							)}
+						</p>
+					</Flex>
+
+					<Flex direction={'column'} gap={5}>
+						<Flex alignItems={'center'}>
+							<ControlContextProvider
+								value={{
+									name: `agree-to-report`,
+									value: isChecked,
+								}}
+							>
+								<ToggleControl
+									label={__(
+										'I agree to share the bug and site diagnostic data for troubleshooting.',
+										'blockera'
+									)}
+									labelType={'self'}
+									id={`agree-to-report`}
+									defaultValue={isChecked}
+									onChange={setIsChecked}
+								/>
+							</ControlContextProvider>
+						</Flex>
+
+						<Flex
+							style={{
+								paddingLeft: isRTL() ? '0' : '42px',
+								paddingRight: isRTL() ? '42px' : '0',
+							}}
+						>
+							<a
+								href={blockeraPermissionsLink}
+								target="_blank"
+								rel="noreferrer"
+								style={{
+									color: '#989898',
+									fontSize: 13,
+									display: 'inline',
+								}}
+							>
+								{__(
+									'What permission are being granted?',
 									'blockera'
 								)}
-								labelType={'self'}
-								id={`agree-to-report`}
-								defaultValue={isChecked}
-								onChange={setIsChecked}
-							/>
-						</ControlContextProvider>
+							</a>
+						</Flex>
 					</Flex>
-					<a
-						className={'link'}
-						href={blockeraTelemetryPrivacyPolicyUrl}
-						target="_blank"
-						rel="noreferrer"
-					>
-						{__('What permission are being granted?', 'blockera')}
-					</a>
 				</Flex>
+
 				<Flex justifyContent={'space-between'}>
 					<Flex>
 						<Button
+							variant={'primary'}
 							disabled={!isChecked}
 							onClick={() => {
 								sender('ALLOW', 'debug', {
@@ -193,35 +256,27 @@ export const Popup = ({
 									setOptInStatus,
 								});
 							}}
-							className={componentClassNames(
-								'report-automatically',
-								'send-button',
-								'primary-button'
-							)}
+							style={{
+								opacity: isChecked ? '1' : '0.3',
+							}}
 						>
 							{__('Send Report Automatically', 'blockera')}
 						</Button>
+
 						<Button
+							variant={'secondary'}
 							onClick={() => setIsEnabledManuallyReporting(true)}
-							variant={'link'}
 							target={blockeraCommunityUrl}
-							className={componentClassNames(
-								'manually-report',
-								'secondary-button'
-							)}
 						>
 							{__('Report Manually', 'blockera')}
 						</Button>
 					</Flex>
+
 					<Button
-						variant={'secondary'}
+						variant={'tertiary'}
 						onClick={() => setIsOpenPopup(false)}
-						className={componentClassNames(
-							'cancel-button',
-							'secondary-button'
-						)}
 					>
-						{__('Cancel', 'blockera')}
+						{__('Close', 'blockera')}
 					</Button>
 				</Flex>
 			</Flex>
@@ -229,8 +284,6 @@ export const Popup = ({
 	}
 
 	if (isEnabledManuallyReporting) {
-		headerTitle = __('Report bug manually', 'blockera');
-		headerIcon = <Icon icon={'check'} />;
 		const errorLog = {
 			error_details: {
 				block_code: blockCode,
@@ -249,110 +302,225 @@ export const Popup = ({
 		};
 
 		body = (
-			<Flex direction={'column'} gap={40}>
-				<Flex direction={'column'} gap={10}>
-					<p>
-						{__(
-							'If you’d prefer not to send the data automatically, please submit a manual report by following these steps:',
-							'blockera'
-						)}
-					</p>
-					<strong>{__('Steps:', 'blockera')}</strong>
-					<p className={componentClassNames('manually-report-step')}>
-						<strong>{__('1.', 'blockera')}</strong>
-						{__(' Copy the bug details', 'blockera')}
-					</p>
-					{false === canNotCopyToClipboard && (
-						<div style={{ color: '#cc3333' }}>
+			<Flex
+				direction={'column'}
+				gap={40}
+				style={{
+					'--blockera-controls-primary-color': '#e20b0b',
+					'--blockera-controls-primary-color-darker-20': '#b30808',
+				}}
+			>
+				<Flex direction="column" gap={30}>
+					<Flex direction="column" gap={15}>
+						<Icon
+							icon={'tools'}
+							iconSize={50}
+							style={{
+								fill: '#e20b0b',
+							}}
+						/>
+
+						<h3
+							style={{
+								fontSize: 26,
+								fontWeight: 600,
+								lineHeight: 1.5,
+								margin: 0,
+							}}
+						>
+							{__('Report bug manually', 'blockera')}
+						</h3>
+
+						<p style={{ margin: 0 }}>
 							{__(
-								'Failed to copy text. Please try selecting and copying manually.',
+								'If you’d prefer not to send the data automatically, please submit a manual report by following these steps:',
 								'blockera'
 							)}
-						</div>
-					)}
-					{true === canNotCopyToClipboard && (
-						<div style={{ color: '#00a20b' }}>
-							{__('Code copied to clipboard!', 'blockera')}
-						</div>
-					)}
-					<div
-						className={componentClassNames('code-block')}
-						onClick={() => {
-							try {
-								// Modern browsers
-								if (
-									navigator.clipboard &&
-									// $FlowFixMe
-									navigator.clipboard.writeText
-								) {
-									// $FlowFixMe
-									navigator.clipboard.writeText(
-										JSON.stringify(errorLog)
-									);
-								}
-								// Fallback for older browsers
-								else if (document.body) {
-									const textArea =
-										document.createElement('textarea');
-									textArea.value = JSON.stringify(errorLog);
-									// $FlowFixMe
-									document.body.appendChild(textArea);
-									textArea.select();
-									document.execCommand('copy');
-									// $FlowFixMe
-									document.body.removeChild(textArea);
-								}
+						</p>
+					</Flex>
 
-								setCanNotCopyToClipboard(true);
-							} catch (err) {
-								setCanNotCopyToClipboard(true);
-							}
-						}}
-						onKeyDown={(e) => {
-							if (e.key === 'Enter' || e.key === ' ') {
-								e.preventDefault();
-								e.currentTarget.click();
-							}
-						}}
-					>
-						{JSON.stringify(errorLog)}
-					</div>
-					<p className={componentClassNames('manually-report-step')}>
-						<strong>{__('2.', 'blockera')}</strong>
-						{__(' Send en email to ', 'blockera')}
-						<a href="mailto:support@blockera.ai">
-							{__('support@blockera.ai', 'blockera')}
-						</a>
-						{__(' or ', 'blockera')}
-						<a
-							href={blockeraCommunityUrl}
-							target="_blank"
-							rel="noreferrer"
+					<Flex direction={'column'} gap={20}>
+						<p
+							style={{
+								color: 'var(--blockera-controls-primary-color)',
+								fontSize: 16,
+								fontWeight: 600,
+								lineHeight: 1.5,
+								margin: 0,
+							}}
 						>
-							{__('create a bug ticket', 'blockera')}
-						</a>
-					</p>
-					<p className={componentClassNames('manually-report-step')}>
-						<strong>{__('3.', 'blockera')}</strong>
-						{__(
-							' Stay tuned. We’ll review your report and reach out if we need more information.',
-							'blockera'
-						)}
-					</p>
+							{__('Steps:', 'blockera')}
+						</p>
+
+						<Flex direction={'column'} gap={8}>
+							<Flex direction={'row'} gap={8}>
+								<p style={{ margin: 0 }}>
+									<strong
+										style={{
+											color: 'var(--blockera-controls-primary-color)',
+											fontWeight: 600,
+										}}
+									>
+										{__('1.', 'blockera')}
+									</strong>
+									{__(' Copy the bug details', 'blockera')}
+								</p>
+
+								{false === canNotCopyToClipboard && (
+									<div
+										style={{
+											color: 'var(--blockera-controls-primary-color)',
+											margin: !isRTL()
+												? '0 0 0 auto'
+												: '0 auto 0 0',
+											textAlign: isRTL()
+												? 'right'
+												: 'left',
+											fontWeight: 600,
+										}}
+									>
+										{__(
+											'Failed to copy text. Please try selecting and copying manually.',
+											'blockera'
+										)}
+									</div>
+								)}
+
+								{true === canNotCopyToClipboard && (
+									<p
+										style={{
+											color: 'var(--blockera-controls-primary-color)',
+											margin: !isRTL()
+												? '0 0 0 auto'
+												: '0 auto 0 0',
+											fontWeight: 600,
+											textAlign: isRTL()
+												? 'right'
+												: 'left',
+										}}
+									>
+										{__(
+											'Debug data copied to clipboard!',
+											'blockera'
+										)}
+									</p>
+								)}
+							</Flex>
+
+							<div
+								className={componentClassNames('code-block')}
+								onClick={() => {
+									try {
+										// Modern browsers
+										if (
+											navigator.clipboard &&
+											// $FlowFixMe
+											navigator.clipboard.writeText
+										) {
+											// $FlowFixMe
+											navigator.clipboard.writeText(
+												JSON.stringify(errorLog)
+											);
+										}
+										// Fallback for older browsers
+										else if (document.body) {
+											const textArea =
+												document.createElement(
+													'textarea'
+												);
+											textArea.value =
+												JSON.stringify(errorLog);
+											// $FlowFixMe
+											document.body.appendChild(textArea);
+											textArea.select();
+											document.execCommand('copy');
+											// $FlowFixMe
+											document.body.removeChild(textArea);
+										}
+
+										setCanNotCopyToClipboard(true);
+									} catch (err) {
+										setCanNotCopyToClipboard(true);
+									}
+								}}
+								onKeyDown={(e) => {
+									if (e.key === 'Enter' || e.key === ' ') {
+										e.preventDefault();
+										e.currentTarget.click();
+									}
+								}}
+							>
+								{JSON.stringify(errorLog)}
+							</div>
+						</Flex>
+
+						<p
+							style={{
+								margin: 0,
+							}}
+						>
+							<strong
+								style={{
+									color: 'var(--blockera-controls-primary-color)',
+									fontWeight: 600,
+								}}
+							>
+								{__('2.', 'blockera')}
+							</strong>
+
+							{__(' Send en email to ', 'blockera')}
+
+							<a
+								href="mailto:support@blockera.ai"
+								style={{
+									color: 'var(--blockera-controls-primary-color)',
+								}}
+							>
+								{__('support@blockera.ai', 'blockera')}
+							</a>
+							{__(' or ', 'blockera')}
+							<a
+								href={blockeraCommunityUrl}
+								target="_blank"
+								rel="noreferrer"
+								style={{
+									color: 'var(--blockera-controls-primary-color)',
+								}}
+							>
+								{__('create a bug ticket', 'blockera')}
+							</a>
+						</p>
+
+						<p
+							style={{
+								margin: 0,
+							}}
+						>
+							<strong
+								style={{
+									color: 'var(--blockera-controls-primary-color)',
+									fontWeight: 600,
+								}}
+							>
+								{__('3.', 'blockera')}
+							</strong>
+							{__(
+								' Stay tuned. We’ll review your report and reach out if we need more information.',
+								'blockera'
+							)}
+						</p>
+					</Flex>
 				</Flex>
+
 				<Flex justifyContent={'space-between'}>
 					<Button
-						variant={'secondary'}
+						variant={'tertiary'}
 						onClick={() => {
 							setIsOpenPopup(false);
 							setIsEnabledManuallyReporting(false);
 						}}
-						className={componentClassNames(
-							'cancel-button',
-							'secondary-button'
-						)}
 					>
-						{__('Cancel', 'blockera')}
+						{__('Close', 'blockera')}
 					</Button>
 				</Flex>
 			</Flex>
@@ -363,13 +531,5 @@ export const Popup = ({
 		return <></>;
 	}
 
-	return (
-		<Modal
-			isDismissible={false}
-			headerIcon={headerIcon}
-			headerTitle={headerTitle}
-		>
-			{body}
-		</Modal>
-	);
+	return <Modal isDismissible={false}>{body}</Modal>;
 };
