@@ -85,6 +85,9 @@ jobs:
                       "wp": "beta",
                       "php": "8.0"
                     },
+                    "features": {
+                      "networking": true
+                    },
                     "steps": [
                       {
                         "step": "login"
