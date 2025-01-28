@@ -90,10 +90,11 @@ jobs:
                         "step": "login"
                       },
                       {
-                        "step": "writeFile",
-                        "path": "/wordpress/wp-content/mu-plugins/blockera-fixes.php",
-                        "data": "<?php if (!defined('BLOCKERA_TELEMETRY_OPT_IN_OFF')) { define('BLOCKERA_TELEMETRY_OPT_IN_OFF', true); }"
-                      }, 
+                        "step": "defineWpConfigConsts",
+                        "consts": {
+                         "BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+                        }
+                      },
                       {
                         "step": "installPlugin",
                         "pluginData": {
