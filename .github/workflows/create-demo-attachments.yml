@@ -80,6 +80,9 @@ jobs:
                       "description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
                       "categories": ["plugins"]
                     },
+                    "features": {
+                      "networking": true
+                    },
                     "landingPage": "/wp-admin/plugins.php",
                     "preferredVersions": {
                       "wp": "beta",
