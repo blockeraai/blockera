@@ -147,6 +147,7 @@ export { default as FitFill } from './fit-fill.svg';
 export { default as FitNone } from './fit-none.svg';
 export { default as FitNormal } from './fit-normal.svg';
 export { default as FitScaleDown } from './fit-scale-down.svg';
+export { default as Flag } from './flag.svg';
 export { default as FlexAlignBaseline } from './flex-align-baseline.svg';
 export { default as FlexAlignCenter } from './flex-align-center.svg';
 export { default as FlexAlignEmpty } from './flex-align-empty.svg';
@@ -282,6 +283,7 @@ export { default as TextOrientationStyle4 } from './text-orientation-style-4.svg
 export { default as TextTransformCapitalize } from './text-transform-capitalize.svg';
 export { default as TextTransformLowercase } from './text-transform-lowercase.svg';
 export { default as TextTransformUppercase } from './text-transform-uppercase.svg';
+export { default as Tools } from './tools.svg';
 export { default as TransformMove } from './transform-move.svg';
 export { default as TransformRotate } from './transform-rotate.svg';
 export { default as TransformScale } from './transform-scale.svg';
