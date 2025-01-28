@@ -64,7 +64,7 @@ jobs:
                     "woocommerce")
                       echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}}' >> .wp-env.json
                       ;;
-                    "freemius")
+                    "telemetry")
                       echo '{"plugins": ["."]}' >> .wp-env.json
                       ;;
                     "plugins")

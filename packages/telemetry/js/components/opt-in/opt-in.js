@@ -45,6 +45,7 @@ export const OptInModal = (): MixedElement => {
 					justifyContent={'space-between'}
 				>
 					<h1
+						data-test="thank-you-heading"
 						style={{
 							fontSize: '22px',
 							margin: '20px 0 10px',
@@ -78,6 +79,7 @@ export const OptInModal = (): MixedElement => {
 
 				<Flex direction={'row'} justifyContent={'space-between'}>
 					<Button
+						data-test="allow-and-continue"
 						variant={'primary'}
 						onClick={() => allowAndContinue('ALLOW')}
 					>
@@ -85,6 +87,7 @@ export const OptInModal = (): MixedElement => {
 					</Button>
 
 					<Button
+						data-test="skip-and-continue"
 						variant={'tertiary-on-hover'}
 						onClick={() => allowAndContinue('SKIP')}
 						style={{
