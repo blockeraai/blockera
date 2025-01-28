@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Open the "Upgrade to Pro" menu in a new tab and "Activate Pro License" menu in the same tab.
+
 ### Bug Fixes  
 - Fixed an issue where the "Upgrade to Pro" menu did not open in a new tab.
 
