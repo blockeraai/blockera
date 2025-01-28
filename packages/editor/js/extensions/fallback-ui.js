@@ -89,11 +89,18 @@ export const FallbackUI = ({
 		state,
 		setState,
 		onClick: () => {
-			setState({
-				...state,
-				isLoading: true,
-				isReported: true,
-			});
+			if ('ALLOW' === window?.blockeraOptInStatus) {
+				setState({
+					...state,
+					isLoading: true,
+					isReported: true,
+				});
+			} else {
+				setState({
+					...state,
+					isOpenPopup: true,
+				});
+			}
 
 			if (state.reportedCount >= 1) {
 				checkReporterStatus(
@@ -118,7 +125,7 @@ export const FallbackUI = ({
 						}
 					}
 				);
-			} else {
+			} else if ('ALLOW' === window?.blockeraOptInStatus) {
 				setTimeout(() => {
 					setState({
 						...state,
