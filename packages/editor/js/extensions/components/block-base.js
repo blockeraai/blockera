@@ -447,6 +447,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 									{...{
 										error,
 										notice,
+										clientId,
 										setNotice,
 										isReported,
 										setIsReported,

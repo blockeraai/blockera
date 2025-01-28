@@ -63,7 +63,11 @@ const css = `
 }
 `;
 
-export const BlockeraLoading = (): MixedElement => {
+export const BlockeraLoading = ({
+	text = __('Loading…', 'blockera'),
+}: {
+	text: string,
+}): MixedElement => {
 	return (
 		<>
 			<div id="blockera-admin-settings-container">
@@ -94,9 +98,7 @@ export const BlockeraLoading = (): MixedElement => {
 							/>
 						</svg>
 
-						<div className="blockera-loading-text">
-							{__('Loading…', 'blockera')}
-						</div>
+						<div className="blockera-loading-text">{text}</div>
 					</div>
 				</div>
 			</div>

@@ -12,7 +12,7 @@ import { useEffect } from '@wordpress/element';
  */
 import { sender } from '../sender';
 
-export const useDebugLogger = ({
+export const useBugReporter = ({
 	error,
 	isReported,
 	setIsReported,
@@ -26,7 +26,7 @@ export const useDebugLogger = ({
 	const selectedBlock = getSelectedBlock();
 
 	useEffect(() => {
-		if (blockeraOptInStatus === 'ALLOW') {
+		if ('ALLOW' === blockeraOptInStatus) {
 			if (selectedBlock && !isReported) {
 				sender(error, serialize(selectedBlock));
 				setIsReported(true);

@@ -5,6 +5,7 @@
 
 ### New Features:
 - Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.
+- Added a new fallback UI for the block editor to improve the user experience when an error occurs. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/bug-detector-and-reporter-inside-wp-admin-JNHwQhKzYqrEjK6)]
 
 ### Automated Tests:
 - Added E2E tests for the Box Sizing feature to verify its functionality in both the editor and front end.

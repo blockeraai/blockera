@@ -26,7 +26,7 @@ import {
 	mergeObject,
 	isLoadedSiteEditor,
 } from '@blockera/utils';
-import { useDebugLogger } from '@blockera/telemetry';
+import { useBugReporter } from '@blockera/telemetry';
 
 /**
  * Internal dependencies
@@ -142,10 +142,11 @@ export const ErrorBoundaryFallback: ComponentType<Object> = memo(
 		setNotice,
 		fallbackComponent,
 		props,
+		clientId,
 		...rest
 	}: Object): MixedElement => {
 		const { blockeraOptInStatus } = window;
-		useDebugLogger({
+		useBugReporter({
 			error,
 			...rest,
 		});
@@ -153,6 +154,7 @@ export const ErrorBoundaryFallback: ComponentType<Object> = memo(
 		return (
 			<FallbackUI
 				{...rest}
+				id={clientId}
 				error={error}
 				setNotice={setNotice}
 				isReported={rest?.isReported && blockeraOptInStatus === 'ALLOW'}
@@ -287,6 +289,7 @@ function mergeBlockSettings(
 											isReported,
 											from: 'root',
 											setIsReported,
+											clientId: props.clientId,
 											fallbackComponent: settings.edit,
 										}}
 									/>

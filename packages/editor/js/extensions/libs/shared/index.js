@@ -412,13 +412,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								/>
 							)}
 
-							<ErrorBoundary
+							{/* <ErrorBoundary
 								fallbackRender={
 									window?.blockeraTelemetryBugDetectorLoggerIsOff
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }): MixedElement => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -445,7 +446,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										handleOnChangeAttributes
 									}
 								/>
-							</ErrorBoundary>
+							</ErrorBoundary> */}
 							<ErrorBoundary
 								fallbackRender={
 									window?.blockeraTelemetryBugDetectorLoggerIsOff
@@ -453,6 +454,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -508,6 +510,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -540,6 +543,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -579,6 +583,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -626,6 +631,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -759,6 +765,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -816,6 +823,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -968,6 +976,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -1032,6 +1041,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -1124,6 +1134,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -1174,6 +1185,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -1278,6 +1290,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -1331,6 +1344,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -1368,6 +1382,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -1405,6 +1420,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}
@@ -1442,6 +1458,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										: ({ error }) => (
 												<ErrorBoundaryFallback
 													isReported={isReported}
+													clientId={props.clientId}
 													setIsReported={
 														setIsReported
 													}

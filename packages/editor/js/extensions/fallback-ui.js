@@ -18,7 +18,12 @@ import {
 /**
  * Blockera dependencies
  */
-import { sender, Popup, Notice } from '@blockera/telemetry';
+import {
+	Popup,
+	sender,
+	Notice,
+	checkReporterStatus,
+} from '@blockera/telemetry';
 import { PanelBodyControl } from '@blockera/controls';
 
 /**
@@ -27,6 +32,7 @@ import { PanelBodyControl } from '@blockera/controls';
 import { useBlockSection } from './components/block-app';
 
 export const FallbackUI = ({
+	id,
 	error,
 	configId,
 	title,
@@ -37,6 +43,7 @@ export const FallbackUI = ({
 	fallbackComponent,
 	fallbackComponentProps,
 }: {
+	id: string,
 	error: Object,
 	setNotice?: (notice: MixedElement) => void,
 	fallbackComponent?: ComponentType<any>,
@@ -72,6 +79,7 @@ export const FallbackUI = ({
 	}
 
 	const [state, setState] = useState({
+		reportedCount: 0,
 		isLoading: false,
 		isReported: false,
 		isOpenPopup: false,
@@ -86,13 +94,40 @@ export const FallbackUI = ({
 				isLoading: true,
 				isReported: true,
 			});
-			setTimeout(() => {
-				setState({
-					...state,
-					isOpenPopup: true,
-					isLoading: false,
-				});
-			}, 2000);
+
+			if (state.reportedCount >= 1) {
+				checkReporterStatus(
+					{
+						error,
+						blockCode: serialize(getSelectedBlock()),
+					},
+					(response) => {
+						if (response.success) {
+							window[id] = {
+								isReported: response.data.isReported,
+							};
+
+							setState({
+								...state,
+								isLoading: false,
+								isOpenPopup: true,
+								...(response.data.isReported
+									? { reportedCount: state.reportedCount + 1 }
+									: {}),
+							});
+						}
+					}
+				);
+			} else {
+				setTimeout(() => {
+					setState({
+						...state,
+						isOpenPopup: true,
+						isLoading: false,
+						reportedCount: state.reportedCount + 1,
+					});
+				}, 2000); // to fake loading ...
+			}
 		},
 	};
 
@@ -117,6 +152,7 @@ export const FallbackUI = ({
 		return (
 			<>
 				<Popup
+					id={id}
 					error={error}
 					state={state}
 					handleReport={handleAllowReport}
@@ -164,6 +200,7 @@ export const FallbackUI = ({
 		return (
 			<>
 				<Popup
+					id={id}
 					error={error}
 					state={state}
 					handleReport={handleAllowReport}
@@ -185,6 +222,7 @@ export const FallbackUI = ({
 	return (
 		<>
 			<Popup
+				id={id}
 				error={error}
 				state={state}
 				handleReport={handleAllowReport}

@@ -26,14 +26,20 @@ import { componentClassNames } from '@blockera/classnames';
 import { sender } from '../opt-in/sender';
 
 export const Popup = ({
+	id,
 	error,
 	setIsOpenPopup,
 	handleReport,
-	state: { isLoading, isOpenPopup },
+	state: { isLoading, isOpenPopup, isReported, reportedCount },
 }: {
 	error: Object,
 	handleReport: () => void,
-	state: { isLoading: boolean, isOpenPopup: boolean },
+	state: {
+		isLoading: boolean,
+		isOpenPopup: boolean,
+		isReported: boolean,
+		reportedCount: number,
+	},
 	setIsOpenPopup: (isOpenPopup: boolean) => void,
 }): ?MixedElement => {
 	const {
@@ -56,7 +62,15 @@ export const Popup = ({
 	if (isLoading) {
 		return (
 			<Modal isDismissible={false} headerTitle=" ">
-				<BlockeraLoading />
+				<BlockeraLoading
+					text={
+						isReported &&
+						0 === reportedCount &&
+						!window[id]?.isReported
+							? __('Reporting …', 'blockera')
+							: __('Loading …', 'blockera')
+					}
+				/>
 			</Modal>
 		);
 	}
@@ -66,22 +80,35 @@ export const Popup = ({
 	let headerIcon: MixedElement = <></>;
 
 	if (optInStatus === 'ALLOW') {
-		headerTitle = __('Bug reported automatically', 'blockera');
+		headerTitle =
+			0 === reportedCount || !window[id]?.isReported
+				? __('Bug reported automatically', 'blockera')
+				: __('Bug already reported!', 'blockera');
 		headerIcon = <Icon icon={'check'} />;
 		body = (
 			<Flex direction={'column'} gap={40}>
 				<Flex direction={'column'} gap={10}>
 					<p>
-						{__(
-							'You’re already enrolled in our bug reporting program, so we’ve automatically logged this issue.',
-							'blockera'
-						)}
+						{0 === reportedCount || !window[id]?.isReported
+							? __(
+									'You’re already enrolled in our bug reporting program, so we’ve automatically logged this issue.',
+									'blockera'
+							  )
+							: __(
+									'It looks like this issue has been reported before.',
+									'blockera'
+							  )}
 					</p>
 					<p>
-						{__(
-							'We’ll review it and get in touch if we need any additional details.',
-							'blockera'
-						)}
+						{0 === reportedCount || !window[id]?.isReported
+							? __(
+									'We’ll review it and get in touch if we need any additional details.',
+									'blockera'
+							  )
+							: __(
+									'No further action is needed. We’ll keep you updated if we have any new information.',
+									'blockera'
+							  )}
 					</p>
 				</Flex>
 				<Flex justifyContent={'space-between'}>
@@ -316,7 +343,10 @@ export const Popup = ({
 				<Flex justifyContent={'space-between'}>
 					<Button
 						variant={'secondary'}
-						onClick={() => setIsOpenPopup(false)}
+						onClick={() => {
+							setIsOpenPopup(false);
+							setIsEnabledManuallyReporting(false);
+						}}
 						className={componentClassNames(
 							'cancel-button',
 							'secondary-button'

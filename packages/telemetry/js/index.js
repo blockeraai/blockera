@@ -1,2 +1,2 @@
 export * from './components/opt-in';
-export * from './components/debug';
+export * from './components/bug-detector-and-reporter';
