@@ -25,10 +25,7 @@ try {
     $routes->get('settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'index' ]);
     $routes->update('settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'response' ]);
 
-    if (! blockera_telemetry_opt_in_is_off('blockera')) {
-
-        $routes->post('telemetry/opt-in', [ Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn' ]);
-    }
+	$routes->post('telemetry/opt-in', [ Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn' ]);
 
     if (blockera_telemetry_bug_detector_logger_is_off()) {
 
