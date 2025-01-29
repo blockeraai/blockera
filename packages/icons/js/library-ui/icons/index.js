@@ -74,6 +74,7 @@ export { default as BreakAll } from './break-all.svg';
 export { default as BreakNormal } from './break-normal.svg';
 export { default as Changelog } from './changelog.svg';
 export { default as Check } from './check.svg';
+export { default as CheckCircle } from './check-circle.svg';
 export { default as ClickAnimation } from './click-animation.svg';
 export { default as ClipContent } from './clip-content.svg';
 export { default as ClipPadding } from './clip-padding.svg';
