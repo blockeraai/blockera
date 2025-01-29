@@ -32,10 +32,11 @@ export const Popup = ({
 	setState,
 	handleReport,
 	isReportingErrorCompleted,
+	setIsReportingErrorCompleted,
 }: {
 	id: string,
 	error: Object,
-	handleReport: () => void,
+	handleReport: (failedCallback: any) => void,
 	state: {
 		isLoading: boolean,
 		isOpenPopup: boolean,
@@ -49,6 +50,7 @@ export const Popup = ({
 		reportedCount: number,
 	}) => void,
 	isReportingErrorCompleted: boolean,
+	setIsReportingErrorCompleted: (isReportingErrorCompleted: boolean) => void,
 }): ?MixedElement => {
 	const { isLoading, isOpenPopup, isReported, reportedCount } = state;
 	const setIsOpenPopup = useCallback(
@@ -126,6 +128,7 @@ export const Popup = ({
 					/>
 
 					<h3
+						data-test="successfully-reported-bug"
 						style={{
 							fontSize: 26,
 							fontWeight: 600,
@@ -206,6 +209,7 @@ export const Popup = ({
 						/>
 
 						<h3
+							data-test="opting-in-and-reporting-bug"
 							style={{
 								fontSize: 26,
 								fontWeight: 600,
@@ -282,18 +286,57 @@ export const Popup = ({
 									...state,
 									isLoading: true,
 								});
-								sender('ALLOW', 'debug', {
-									handleReport,
-									setOptInStatus: (
-										status: 'ALLOW' | 'SKIP'
-									): void => {
-										setOptInStatus(status);
-										if ('ALLOW' === status) {
+								sender('ALLOW', {
+									handleResponse: (response) => {
+										window.blockeraOptInStatus =
+											response.success ? 'ALLOW' : '';
+										if (response.success) {
+											if (
+												'function' ===
+												typeof handleReport
+											) {
+												handleReport(() => {
+													setOptInStatus('');
+													setIsEnabledManuallyReporting(
+														true
+													);
+												});
+												// if (
+												// 	'function' ===
+												// 	typeof setOptInStatus
+												// ) {
+												// 	setState({
+												// 		...state,
+												// 		isReported: true,
+												// 	});
+												// 	setIsReportingErrorCompleted(
+												// 		true
+												// 	);
+												// }
+											}
+										} else {
 											setState({
 												...state,
 												isReported: true,
+												isLoading: false,
 											});
+
+											setIsReportingErrorCompleted(false);
 										}
+									},
+									handleError: () => {
+										window.blockeraOptInStatus = '';
+										setOptInStatus('');
+
+										setIsOpenPopup(false);
+										setState({
+											...state,
+											isReported: true,
+											isLoading: false,
+										});
+
+										setIsReportingErrorCompleted(false);
+										setIsEnabledManuallyReporting(true);
 									},
 								});
 							}}
@@ -363,6 +406,7 @@ export const Popup = ({
 						/>
 
 						<h3
+							data-test="manually-reporting-bug"
 							style={{
 								fontSize: 26,
 								fontWeight: 600,

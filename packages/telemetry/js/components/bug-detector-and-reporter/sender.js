@@ -8,8 +8,20 @@ import apiFetch from '@wordpress/api-fetch';
 export const sender = (
 	error: Object,
 	blockCode: string,
-	setResponse: (response: any) => void
+	callbacks: {
+		setError: (error: any) => void,
+		setResponse: (response: any) => void,
+	}
 ): void => {
+	const {
+		setError = (error) => {
+			console.error(error);
+		},
+		setResponse = (response) => {
+			console.info(response);
+		},
+	} = callbacks;
+
 	checkReporterStatus({ error, blockCode }, (response) => {
 		if (response.success) {
 			apiFetch({
@@ -24,7 +36,7 @@ export const sender = (
 				},
 			})
 				.then(setResponse)
-				.catch(console.error);
+				.catch(setError);
 		}
 	});
 };

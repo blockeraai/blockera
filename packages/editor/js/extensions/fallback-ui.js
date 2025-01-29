@@ -72,22 +72,40 @@ export const FallbackUI = ({
 	};
 
 	const { getSelectedBlock } = select('core/block-editor');
-	const handleAllowReport = useCallback(() => {
-		if (window.blockeraOptInStatus === 'ALLOW') {
-			sender(error, serialize(getSelectedBlock()), (response: Object) => {
-				if (response.success) {
-					setState({
-						isLoading: false,
-						isReported: true,
-						isOpenPopup: true,
-						reportedCount: state.reportedCount + 1,
-					});
-					setIsReportingErrorCompleted(true);
-				}
-			});
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isReportingErrorCompleted, error]);
+	const handleAllowReport = useCallback(
+		(failedCallback: any) => {
+			if (window.blockeraOptInStatus === 'ALLOW') {
+				sender(error, serialize(getSelectedBlock()), {
+					setResponse: (response: Object) => {
+						setState({
+							isLoading: false,
+							isReported: true,
+							isOpenPopup: true,
+							reportedCount: state.reportedCount + 1,
+						});
+						if (response.success) {
+							setIsReportingErrorCompleted(true);
+						} else {
+							failedCallback();
+							setIsReportingErrorCompleted(false);
+						}
+					},
+					setError: () => {
+						failedCallback();
+						setState({
+							isLoading: false,
+							isReported: true,
+							isOpenPopup: true,
+							reportedCount: state.reportedCount + 1,
+						});
+						setIsReportingErrorCompleted(false);
+					},
+				});
+			}
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		[isReportingErrorCompleted, error]
+	);
 
 	if (isFromExtension()) {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -180,6 +198,7 @@ export const FallbackUI = ({
 					setState={setState}
 					handleReport={handleAllowReport}
 					isReportingErrorCompleted={isReportingErrorCompleted}
+					setIsReportingErrorCompleted={setIsReportingErrorCompleted}
 				/>
 				<InspectorControls>
 					<Notice
@@ -224,6 +243,7 @@ export const FallbackUI = ({
 					setState={setState}
 					handleReport={handleAllowReport}
 					isReportingErrorCompleted={isReportingErrorCompleted}
+					setIsReportingErrorCompleted={setIsReportingErrorCompleted}
 				/>
 				{createElement(fallbackComponent, {
 					...fallbackComponentProps,
@@ -242,6 +262,7 @@ export const FallbackUI = ({
 				setState={setState}
 				handleReport={handleAllowReport}
 				isReportingErrorCompleted={isReportingErrorCompleted}
+				setIsReportingErrorCompleted={setIsReportingErrorCompleted}
 			/>
 			<PanelBodyControl
 				icon={icon}

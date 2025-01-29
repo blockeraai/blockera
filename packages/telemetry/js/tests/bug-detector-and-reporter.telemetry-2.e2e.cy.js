@@ -44,6 +44,6 @@ describe('Bug Detector and Reporter', () => {
 
 		cy.getByDataTest('blockera-loading-text').should('be.visible');
 
-		// TODO: @ali add test for success state ...
+		cy.getByDataTest('manually-reporting-bug').should('not.be.visible');
 	});
 });
