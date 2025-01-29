@@ -110,7 +110,7 @@ class TestFunctions extends \Blockera\Dev\PHPUnit\AppTestCase {
 			],
 			[
 				'path'     => 'app.version',
-				'expected' => BLOCKERA_CORE_VERSION,
+				'expected' => BLOCKERA_SB_VERSION,
 			],
 			[
 				'path'     => 'app.namespaces.controllers',
