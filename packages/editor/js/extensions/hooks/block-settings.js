@@ -145,7 +145,6 @@ export const ErrorBoundaryFallback: ComponentType<Object> = memo(
 		clientId,
 		...rest
 	}: Object): MixedElement => {
-		const { blockeraOptInStatus } = window;
 		useBugReporter({
 			error,
 			...rest,
@@ -154,13 +153,12 @@ export const ErrorBoundaryFallback: ComponentType<Object> = memo(
 		return (
 			<FallbackUI
 				{...rest}
+				from={from}
 				id={clientId}
 				error={error}
 				setNotice={setNotice}
-				isReported={rest?.isReported && blockeraOptInStatus === 'ALLOW'}
-				from={from}
-				fallbackComponent={fallbackComponent}
 				fallbackComponentProps={props}
+				fallbackComponent={fallbackComponent}
 			/>
 		);
 	}
@@ -273,8 +271,9 @@ function mergeBlockSettings(
 				  )
 				: settings.attributes;
 
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			const [isReported, setIsReported] = useState(false);
+			const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				useState(false);
 
 			return (
 				<ErrorBoundary
@@ -286,10 +285,10 @@ function mergeBlockSettings(
 										{...{
 											props,
 											error,
-											isReported,
 											from: 'root',
-											setIsReported,
 											clientId: props.clientId,
+											isReportingErrorCompleted,
+											setIsReportingErrorCompleted,
 											fallbackComponent: settings.edit,
 										}}
 									/>

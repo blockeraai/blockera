@@ -14,26 +14,29 @@ import { sender } from '../sender';
 
 export const useBugReporter = ({
 	error,
-	isReported,
-	setIsReported,
+	isReportingErrorCompleted,
+	setIsReportingErrorCompleted,
 }: {
 	error: Object,
-	isReported: boolean,
-	setIsReported: (isReported: boolean) => void,
-}) => {
+	isReportingErrorCompleted: boolean,
+	setIsReportingErrorCompleted: (isReportingErrorCompleted: boolean) => void,
+}): boolean => {
 	const { blockeraOptInStatus } = window;
 	const { getSelectedBlock } = select('core/block-editor');
 	const selectedBlock = getSelectedBlock();
 
 	useEffect(() => {
 		if ('ALLOW' === blockeraOptInStatus) {
-			if (selectedBlock && !isReported) {
-				sender(error, serialize(selectedBlock));
-				setIsReported(true);
+			if (selectedBlock && !isReportingErrorCompleted) {
+				sender(error, serialize(selectedBlock), (response) => {
+					setIsReportingErrorCompleted(
+						response?.success ? true : false
+					);
+				});
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [error, selectedBlock]);
 
-	return isReported;
+	return isReportingErrorCompleted;
 };

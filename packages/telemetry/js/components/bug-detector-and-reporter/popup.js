@@ -7,7 +7,7 @@ import { __, isRTL } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { serialize } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
-import { useState, useCallback } from '@wordpress/element';
+import { useState, useEffect, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -31,6 +31,7 @@ export const Popup = ({
 	state,
 	setState,
 	handleReport,
+	isReportingErrorCompleted,
 }: {
 	id: string,
 	error: Object,
@@ -47,6 +48,7 @@ export const Popup = ({
 		isReported: boolean,
 		reportedCount: number,
 	}) => void,
+	isReportingErrorCompleted: boolean,
 }): ?MixedElement => {
 	const { isLoading, isOpenPopup, isReported, reportedCount } = state;
 	const setIsOpenPopup = useCallback(
@@ -74,16 +76,25 @@ export const Popup = ({
 	const [canNotCopyToClipboard, setCanNotCopyToClipboard] = useState(null);
 	const [isChecked, setIsChecked] = useState(true);
 	const [isEnabledManuallyReporting, setIsEnabledManuallyReporting] =
-		useState(false);
+		useState(
+			!isReportingErrorCompleted && !['', 'SKIP'].includes(optInStatus)
+		);
+
+	useEffect(() => {
+		if (isReportingErrorCompleted) {
+			setIsEnabledManuallyReporting(false);
+		}
+	}, [isReportingErrorCompleted]);
 
 	if (isLoading) {
 		return (
 			<Modal isDismissible={false} headerTitle=" ">
 				<BlockeraLoading
 					text={
-						isReported &&
-						0 === reportedCount &&
-						!window[id]?.isReported
+						(isReported &&
+							0 === reportedCount &&
+							!window[id]?.isReported) ||
+						isReportingErrorCompleted
 							? __('Reporting…', 'blockera')
 							: __('Loading…', 'blockera')
 					}
@@ -173,7 +184,7 @@ export const Popup = ({
 				</Flex>
 			</Flex>
 		);
-	} else {
+	} else if (['', 'SKIP'].includes(optInStatus)) {
 		body = (
 			<Flex
 				data-test="bug-detector-and-reporter-popup"
@@ -359,14 +370,24 @@ export const Popup = ({
 								margin: 0,
 							}}
 						>
-							{__('Report bug manually', 'blockera')}
+							{!isReportingErrorCompleted
+								? __(
+										'Oops! Report submission failed!',
+										'blockera'
+								  )
+								: __('Report bug manually', 'blockera')}
 						</h3>
 
 						<p style={{ margin: 0 }}>
-							{__(
-								'If you’d prefer not to send the data automatically, please submit a manual report by following these steps:',
-								'blockera'
-							)}
+							{!isReportingErrorCompleted
+								? __(
+										'Something went wrong when trying to log your bug. Follow the manual submission process below to share the necessary info.',
+										'blockera'
+								  )
+								: __(
+										'If you’d prefer not to send the data automatically, please submit a manual report by following these steps:',
+										'blockera'
+								  )}
 						</p>
 					</Flex>
 
@@ -548,7 +569,9 @@ export const Popup = ({
 						variant={'primary'}
 						onClick={() => {
 							setIsOpenPopup(false);
-							setIsEnabledManuallyReporting(false);
+							if (isReportingErrorCompleted) {
+								setIsEnabledManuallyReporting(false);
+							}
 						}}
 					>
 						{__('Close', 'blockera')}

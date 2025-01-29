@@ -59,6 +59,8 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = memo(
 			values.blockeraBackgroundColor,
 			attributes.blockeraBackgroundColor.default
 		);
+		console.log(attributes.callback());
+
 		const isShowBackgroundClip = isShowField(
 			extensionConfig.blockeraBackgroundClip,
 			values.blockeraBackgroundClip,

@@ -109,7 +109,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		},
 		...props
 	}: Props): MixedElement => {
-		const [isReported, setIsReported] = useState(false);
+		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+			useState(false);
 		useEffect(() => {
 			// When component unmount!
 			return () => {
@@ -418,10 +419,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }): MixedElement => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={isReportingErrorCompleted}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													configId={'extensionConfig'}
@@ -453,10 +454,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													configId={
@@ -509,10 +512,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -542,10 +547,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -582,10 +589,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -630,10 +639,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -764,10 +775,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													title={__(
@@ -822,10 +835,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -889,11 +904,11 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 														fallbackErrorBoundaryMessage
 												: ({ error }) => (
 														<ErrorBoundaryFallback
-															isReported={
-																isReported
+															isReportingErrorCompleted={
+																isReportingErrorCompleted
 															}
-															setIsReported={
-																setIsReported
+															setIsReportingErrorCompleted={
+																setIsReportingErrorCompleted
 															}
 															from={'extension'}
 															error={error}
@@ -975,10 +990,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -1040,10 +1057,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -1133,10 +1152,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -1184,10 +1205,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													error={error}
 													from={'extension'}
@@ -1289,10 +1312,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -1343,10 +1368,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={isReportingErrorCompleted}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -1381,10 +1406,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={isReportingErrorCompleted}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -1419,10 +1444,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}
@@ -1457,10 +1484,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										? () => fallbackErrorBoundaryMessage
 										: ({ error }) => (
 												<ErrorBoundaryFallback
-													isReported={isReported}
+													isReportingErrorCompleted={
+														isReportingErrorCompleted
+													}
 													clientId={props.clientId}
-													setIsReported={
-														setIsReported
+													setIsReportingErrorCompleted={
+														setIsReportingErrorCompleted
 													}
 													from={'extension'}
 													error={error}

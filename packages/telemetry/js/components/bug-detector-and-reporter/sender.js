@@ -12,10 +12,6 @@ export const sender = (
 ): void => {
 	checkReporterStatus({ error, blockCode }, (response) => {
 		if (response.success) {
-			if (response.data.isReported) {
-				return;
-			}
-
 			apiFetch({
 				path: 'blockera/v1/telemetry/log-error',
 				method: 'POST',

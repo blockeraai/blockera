@@ -33,26 +33,28 @@ import { useBlockSection } from './components/block-app';
 
 export const FallbackUI = ({
 	id,
-	error,
-	configId,
-	title,
 	icon,
-	isReported,
+	error,
+	title,
+	configId,
 	from = '',
 	setNotice,
 	fallbackComponent,
 	fallbackComponentProps,
+	isReportingErrorCompleted,
+	setIsReportingErrorCompleted,
 }: {
 	id: string,
 	error: Object,
-	setNotice?: (notice: MixedElement) => void,
-	fallbackComponent?: ComponentType<any>,
-	fallbackComponentProps?: Object,
-	configId?: string,
 	title?: string,
-	from?: 'root' | 'extension' | 'style-wrapper' | '',
+	configId?: string,
 	icon?: MixedElement,
-	isReported?: boolean,
+	fallbackComponentProps?: Object,
+	isReportingErrorCompleted?: boolean,
+	fallbackComponent?: ComponentType<any>,
+	setNotice?: (notice: MixedElement) => void,
+	from?: 'root' | 'extension' | 'style-wrapper' | '',
+	setIsReportingErrorCompleted: (isReportingErrorCompleted: boolean) => void,
 }): MixedElement => {
 	const [state, setState] = useState({
 		reportedCount: 0,
@@ -80,11 +82,12 @@ export const FallbackUI = ({
 						isOpenPopup: true,
 						reportedCount: state.reportedCount + 1,
 					});
+					setIsReportingErrorCompleted(true);
 				}
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isReported, error]);
+	}, [isReportingErrorCompleted, error]);
 
 	if (isFromExtension()) {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -97,11 +100,12 @@ export const FallbackUI = ({
 		state,
 		setState,
 		onClick: () => {
-			if ('ALLOW' === window?.blockeraOptInStatus) {
+			if (isReportingErrorCompleted) {
 				setState({
 					...state,
 					isLoading: true,
 					isReported: true,
+					isOpenPopup: true,
 				});
 			} else {
 				setState({
@@ -127,13 +131,16 @@ export const FallbackUI = ({
 								isLoading: false,
 								isOpenPopup: true,
 								...(response.data.isReported
-									? { reportedCount: state.reportedCount + 1 }
+									? {
+											reportedCount:
+												state.reportedCount + 1,
+									  }
 									: {}),
 							});
 						}
 					}
 				);
-			} else if ('ALLOW' === window?.blockeraOptInStatus) {
+			} else if (isReportingErrorCompleted) {
 				setTimeout(() => {
 					setState({
 						...state,
@@ -170,8 +177,9 @@ export const FallbackUI = ({
 					id={id}
 					error={error}
 					state={state}
-					handleReport={handleAllowReport}
 					setState={setState}
+					handleReport={handleAllowReport}
+					isReportingErrorCompleted={isReportingErrorCompleted}
 				/>
 				<InspectorControls>
 					<Notice
@@ -213,8 +221,9 @@ export const FallbackUI = ({
 					id={id}
 					error={error}
 					state={state}
-					handleReport={handleAllowReport}
 					setState={setState}
+					handleReport={handleAllowReport}
+					isReportingErrorCompleted={isReportingErrorCompleted}
 				/>
 				{createElement(fallbackComponent, {
 					...fallbackComponentProps,
@@ -230,13 +239,14 @@ export const FallbackUI = ({
 				id={id}
 				error={error}
 				state={state}
-				handleReport={handleAllowReport}
 				setState={setState}
+				handleReport={handleAllowReport}
+				isReportingErrorCompleted={isReportingErrorCompleted}
 			/>
 			<PanelBodyControl
+				icon={icon}
 				onToggle={onToggle}
 				title={title || ''}
-				icon={icon}
 				initialOpen={initialOpen}
 			>
 				<Notice

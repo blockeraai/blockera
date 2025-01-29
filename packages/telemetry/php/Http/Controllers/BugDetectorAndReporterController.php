@@ -157,15 +157,15 @@ class BugDetectorAndReporterController extends RestController {
         $block_code = $request->get_param('block_code');
         $error_type = $request->get_param('error_type');
         $browser    = $request->get_param('browser');
-		$action     = $request->get_param('action');
+        $action     = $request->get_param('action');
 
         if (empty($error) || empty($block_code) || empty($error_type) || empty($browser)) {
             throw new BaseException(__('Invalid request.', 'blockera'), 400);
         }
 
-		if (empty($action) || ! in_array($action, [ 'blockera_log_error_status', 'blockera_log_error' ], true)) {
-			throw new BaseException(__('Invalid request.', 'blockera'), 400);
-		}
+        if (empty($action) || ! in_array($action, [ 'blockera_log_error_status', 'blockera_log_error' ], true)) {
+            throw new BaseException(__('Invalid request.', 'blockera'), 400);
+        }
 
         return compact('error', 'block_code', 'error_type', 'browser');
     }
@@ -233,11 +233,11 @@ class BugDetectorAndReporterController extends RestController {
      * @return string The transient key.
      */
     protected function getTransientKey( array $body): string {
-		$_body = $body;
+        $_body = $body;
 
-		// Because the block_code has blockeraPropsId and blockeraCompatId, these are changed every time the block is serialized.
-		unset($_body['error_details']['block_code']);
-		
+        // Because the block_code has blockeraPropsId and blockeraCompatId, these are changed every time the block is serialized.
+        unset($_body['error_details']['block_code']);
+
         // Create hash from body array for uniqueness.
         $body_hash = md5(serialize($_body));
 

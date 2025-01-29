@@ -93,7 +93,8 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	);
 
 	const [notice, setNotice] = useState(null);
-	const [isReported, setIsReported] = useState(false);
+	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+		useState(false);
 	const [currentTab, setCurrentTab] = useState(
 		additional?.activeTab || 'style'
 	);
@@ -449,10 +450,10 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 										notice,
 										clientId,
 										setNotice,
-										isReported,
-										setIsReported,
 										from: 'style-wrapper',
 										props: blockStyleProps,
+										isReportingErrorCompleted,
+										setIsReportingErrorCompleted,
 										fallbackComponent: BlockStyle,
 									}}
 								/>
