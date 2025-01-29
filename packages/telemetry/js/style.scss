@@ -3,10 +3,6 @@
 	font-size: 13px;
 	margin: 0;
 
-	&:last-child {
-		margin-bottom: 30px;
-	}
-
 	a {
 		text-decoration: none;
 	}
@@ -15,10 +11,6 @@
 .components-modal__content {
 	--blockera-debug-border-color: #b2b2b2;
 	width: 550px;
-
-	p {
-		color: 707070;
-	}
 
 	.blockera-component-code-block {
 		background-color: #f5f5f5;

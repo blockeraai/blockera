@@ -11,6 +11,7 @@ import { useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import { classNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 import { Modal, Flex, Button } from '@blockera/controls';
 
 /**
@@ -33,28 +34,53 @@ export const OptInModal = (): MixedElement => {
 	};
 
 	return (
-		<Modal
-			headerTitle={__('Hello 👋', 'blockera')}
-			size={'medium'}
-			isDismissible={false}
-		>
-			<>
+		<Modal size={'medium'} isDismissible={false}>
+			<Flex direction="column" gap={25}>
+				<Flex direction="column" gap={15}>
+					<Icon
+						icon={'blockera'}
+						library={'blockera'}
+						iconSize={36}
+						style={{
+							fill: 'var(--blockera-controls-primary-color)',
+						}}
+					/>
+
+					<p
+						style={{
+							margin: 0,
+							fontSize: 24,
+							fontWeight: 600,
+							color: '#1d2327',
+						}}
+					>
+						{__('Hello 👋', 'blockera')}
+					</p>
+
+					<h1
+						data-test="thank-you-heading"
+						style={{
+							fontSize: '22px',
+							margin: '0',
+							color: '#1d2327',
+						}}
+					>
+						{__('Thank you for choosing Blockera!', 'blockera')}
+					</h1>
+				</Flex>
+
 				<Flex
 					direction={'column'}
 					gap="10px"
 					justifyContent={'space-between'}
 				>
-					<h1
-						data-test="thank-you-heading"
+					<p
 						style={{
-							fontSize: '22px',
-							margin: '20px 0 10px',
+							color: '#707070',
+							margin: 0,
+							fontSize: 14,
 						}}
 					>
-						{__('Thank You for Choosing Blockera!', 'blockera')}
-					</h1>
-
-					<p className={classNames('blockera-opt-in-text')}>
 						{window.blockeraOptInDescription}
 					</p>
 
@@ -88,7 +114,7 @@ export const OptInModal = (): MixedElement => {
 
 					<Button
 						data-test="skip-and-continue"
-						variant={'tertiary-on-hover'}
+						variant={'tertiary'}
 						onClick={() => allowAndContinue('SKIP')}
 						style={{
 							color: '#959595',
@@ -97,7 +123,7 @@ export const OptInModal = (): MixedElement => {
 						{__('Skip', 'blockera')}
 					</Button>
 				</Flex>
-			</>
+			</Flex>
 		</Modal>
 	);
 };
