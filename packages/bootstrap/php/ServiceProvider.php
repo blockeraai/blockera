@@ -13,16 +13,16 @@ class ServiceProvider {
 	/**
 	 * Store application container.
 	 *
-	 * @var Container $app the instance of application container.
+	 * @var Application $app the instance of application container.
 	 */
-	protected Container $app;
+	protected Application $app;
 
 	/**
 	 * ServiceProvider constructor.
 	 *
-	 * @param Container $app the instance of application container.
+	 * @param Application $app the instance of application container.
 	 */
-	public function __construct( Container $app ) {
+	public function __construct( Application $app ) {
 
 		$this->app = $app;
 	}
