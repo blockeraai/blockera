@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Enhanced the Opt-in validation process to compatible with bug detector and reporter system.
+
 ## 1.0.0 (2024-12-08)
 
 ### New Features:

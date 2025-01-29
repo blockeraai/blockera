@@ -115,11 +115,6 @@ class OptInController extends RestController {
 
 			throw new BaseException( __( 'Bad Request!', 'blockera' ), 400 );
 		}
-
-		if ( in_array( get_option( $option_key ), [ 'ALLOW', 'SKIP' ], true ) ) {
-
-			throw new BaseException( __( "You're already opted in! Thanks for staying with us. If there's anything you need, feel free to reach out!", 'blockera' ), 200 );
-		}
 	}
 
 	/**
