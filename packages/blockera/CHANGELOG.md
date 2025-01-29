@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Renamed the constants to avoid conflicts with other plugins. [[Bug Report](https://community.blockera.ai/bugs-mdhyb8nc/post/warning-constant-blockera-version-already-defined-uvTMUjomFS8fELi)]
+
 ## 1.0.3 (2025-01-22)
 
 ### Bug Fixes

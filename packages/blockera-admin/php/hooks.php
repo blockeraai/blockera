@@ -14,8 +14,7 @@ if (! function_exists('blockera_pro_add_custom_classes_to_menu')) {
         if (isset($submenu['blockera-settings-dashboard'])) {
 
             foreach ($submenu['blockera-settings-dashboard'] as $key => $submenu_item) {
-
-                if ( in_array($submenu_item[3], [ 'Upgrade to Pro', 'Activate Pro License' ], true) || 'blockera-settings-account' === $submenu['blockera-settings-dashboard'][ $key ][2]) {
+                if (strpos($submenu_item[2], 'https://blockera.ai/products/site-builder/upgrade/') === 0 || 'blockera-settings-account' === $submenu['blockera-settings-dashboard'][ $key ][2]) {
                     $submenu['blockera-settings-dashboard'][ $key ][4] = 'blockera-pro-submenu';
                 }
             }

@@ -8,3 +8,4 @@
 - Created abstract application container on server side.
 - Created abstract service provider on server side.
 - Created abstract entity registry on server side.
+- Implemented native application container on server side to remove dependency on any external packages.

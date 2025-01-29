@@ -5,13 +5,13 @@
  * @package config/optin.php
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! defined('ABSPATH')) {
+    exit;
 }
 
-if ( ! function_exists( 'wp_create_nonce' ) ) {
+if (! function_exists('wp_create_nonce')) {
 
-	require ABSPATH . '/wp-includes/pluggable.php';
+    require ABSPATH . '/wp-includes/pluggable.php';
 }
 
 return [
@@ -26,7 +26,7 @@ return [
 		/**
 		 * The main script file absolute path of product.
 		 */
-		'main'  => BLOCKERA_CORE_FILE,
+		'main'  => BLOCKERA_SB_FILE,
 		/**
 		 * The nonce security field.
 		 */

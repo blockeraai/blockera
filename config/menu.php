@@ -12,7 +12,7 @@ if (! defined('ABSPATH')) {
 
 ob_start();
 
-include BLOCKERA_CORE_PATH . 'assets/menu-logo.svg';
+include BLOCKERA_SB_PATH . 'assets/menu-logo.svg';
 
 $logo = ob_get_clean();
 $logo = base64_encode($logo);
@@ -48,12 +48,12 @@ return apply_filters(
                 'menu_slug'  => 'blockera-settings-block-manager',
                 'callback'   => 'blockera_settings_page_template',
             ],
-			'upgrade-to-pro' => [
-				'page_title' => __('Upgrade to Pro', 'blockera'),
-				'menu_title' => __('Upgrade to Pro', 'blockera'),
-				'capability' => 'manage_options',
-				'menu_slug'  => blockera_core_config('app.upgrade_url'),
-        	],
+            'upgrade-to-pro' => [
+                'page_title' => __('Upgrade to Pro', 'blockera'),
+                'menu_title' => __('Upgrade to Pro', 'blockera'),
+                'capability' => 'manage_options',
+                'menu_slug'  => blockera_core_config('app.upgrade_url'),
+            ],
         ],
     ]
 );
