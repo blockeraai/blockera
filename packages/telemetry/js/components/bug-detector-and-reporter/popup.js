@@ -164,10 +164,10 @@ export const Popup = ({
 
 						<Button
 							onClick={() => setIsEnabledManuallyReporting(true)}
-							variant={'tertiary-on-hover'}
+							variant={'tertiary'}
 							target={blockeraCommunityUrl}
 						>
-							{__('Also, Report Manually', 'blockera')}
+							{__('Also, Report manually', 'blockera')}
 						</Button>
 					</Flex>
 				</Flex>
@@ -420,7 +420,7 @@ export const Popup = ({
 								{true === canNotCopyToClipboard && (
 									<p
 										style={{
-											color: 'var(--blockera-controls-primary-color)',
+											color: '#00A20B',
 											margin: !isRTL()
 												? '0 0 0 auto'
 												: '0 auto 0 0',
@@ -545,7 +545,7 @@ export const Popup = ({
 
 				<Flex justifyContent={'space-between'}>
 					<Button
-						variant={'tertiary'}
+						variant={'primary'}
 						onClick={() => {
 							setIsOpenPopup(false);
 							setIsEnabledManuallyReporting(false);
