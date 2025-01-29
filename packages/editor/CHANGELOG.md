@@ -12,6 +12,7 @@
 ### Bug Fixes
 - Fixed an issue where features configurations and cached data caused problems when adding new features options.
 - Fixed an issue in the custom style section where this is by default closed, but the section remained open.
+- Fixed an issue where the navigation block were not correctly working with flex wrap and aspect ratio features. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/bug-in-navigation-block-WQZsA8IAhFcPNxR)]
 
 ## 1.0.3 (2025-01-22)
 
