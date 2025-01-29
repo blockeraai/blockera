@@ -29,7 +29,10 @@ class Size extends BaseStyleDefinition {
 		switch ( $cssProperty ) {
 
 			case 'aspect-ratio':
-				if ( 'custom' === $setting[ $cssProperty ]['value'] ) {
+				// Backward compatibility for aspect-ratio value, because aspect-ratio changed from value to val in the new version.
+				$value = $setting[ $cssProperty ]['val'] ?? $setting[ $cssProperty ]['value'];
+
+				if ( 'custom' === $value ) {
 
 					$declaration[ $cssProperty ] = sprintf(
 						'%1$s%2$s%3$s',
@@ -40,7 +43,7 @@ class Size extends BaseStyleDefinition {
 
 				} else {
 
-					$declaration[ $cssProperty ] = $setting[ $cssProperty ]['value'];
+					$declaration[ $cssProperty ] = $value;
 				}
 
 				$this->setCss( $declaration );

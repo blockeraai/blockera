@@ -36,7 +36,7 @@ describe('Aspect Ratio → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect({
-				value: '1',
+				val: '1',
 				width: '',
 				height: '',
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -59,7 +59,7 @@ describe('Aspect Ratio → Functionality', () => {
 		// Check store
 		getWPDataObject().then((data) => {
 			expect({
-				value: 'custom',
+				val: 'custom',
 				width: 2,
 				height: 5,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));

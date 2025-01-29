@@ -11,7 +11,7 @@ export function flexWrapFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraFlexWrap?.value?.value !== '' ||
+		attributes?.blockeraFlexWrap?.value?.val !== '' ||
 		attributes?.layout?.flexWrap === '' ||
 		isUndefined(attributes?.layout?.flexWrap)
 	) {
@@ -20,7 +20,7 @@ export function flexWrapFromWPCompatibility({
 
 	attributes.blockeraFlexWrap = {
 		value: {
-			value: attributes?.layout?.flexWrap,
+			val: attributes?.layout?.flexWrap,
 			reverse: false,
 		},
 	};
@@ -38,7 +38,7 @@ export function flexWrapToWPCompatibility({
 	if (
 		'reset' === ref?.current?.action ||
 		newValue === '' ||
-		newValue?.value === ''
+		newValue?.val === ''
 	) {
 		return {
 			layout: {
@@ -49,7 +49,7 @@ export function flexWrapToWPCompatibility({
 
 	return {
 		layout: {
-			flexWrap: newValue?.value,
+			flexWrap: newValue?.val,
 		},
 	};
 }

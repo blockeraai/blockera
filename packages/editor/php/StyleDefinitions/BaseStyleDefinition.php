@@ -290,7 +290,7 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function generateCssRules( $value, string $name ): void {
 
-		if ( isset( $value['value'] ) ) {
+		if ( isset( $value['value'] ) && 1 === count($value) ) {
 
 			$value = $value['value'];
 		}
