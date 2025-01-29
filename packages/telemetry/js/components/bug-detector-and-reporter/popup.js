@@ -99,18 +99,18 @@ export const Popup = ({
 			<Flex
 				data-test="bug-detector-and-reporter-popup"
 				direction={'column'}
-				gap={40}
+				gap={30}
 				style={{
-					'--blockera-controls-primary-color': '#e20b0b',
-					'--blockera-controls-primary-color-darker-20': '#b30808',
+					'--blockera-controls-primary-color': '#00A20B',
+					'--blockera-controls-primary-color-darker-20': '#008F0A',
 				}}
 			>
 				<Flex direction="column" gap={15}>
 					<Icon
-						icon={'check'}
+						icon={'check-circle'}
 						iconSize={50}
 						style={{
-							fill: '#e20b0b',
+							fill: 'var(--blockera-controls-primary-color)',
 						}}
 					/>
 
@@ -122,19 +122,14 @@ export const Popup = ({
 							margin: 0,
 						}}
 					>
-						headerTitle
+						{0 === reportedCount || !window[id]?.isReported
+							? __('Bug reported automatically', 'blockera')
+							: __('Bug already reported!', 'blockera')}
 					</h3>
-
-					<p style={{ margin: 0 }}>
-						{__(
-							'We’ve detected an error and need your help to resolve it. Would you like to send us the report automatically or handle it yourself?',
-							'blockera'
-						)}
-					</p>
 				</Flex>
 
 				<Flex direction={'column'} gap={10}>
-					<p>
+					<p style={{ margin: 0 }}>
 						{0 === reportedCount || !window[id]?.isReported
 							? __(
 									'You’re already enrolled in our bug reporting program, so we’ve automatically logged this issue.',
@@ -145,7 +140,7 @@ export const Popup = ({
 									'blockera'
 							  )}
 					</p>
-					<p>
+					<p style={{ margin: 0 }}>
 						{0 === reportedCount || !window[id]?.isReported
 							? __(
 									'We’ll review it and get in touch if we need any additional details.',
@@ -161,7 +156,7 @@ export const Popup = ({
 				<Flex justifyContent={'space-between'}>
 					<Flex>
 						<Button
-							variant={'tertiary'}
+							variant={'primary'}
 							onClick={() => setIsOpenPopup(false)}
 						>
 							{__('Close', 'blockera')}
@@ -169,7 +164,7 @@ export const Popup = ({
 
 						<Button
 							onClick={() => setIsEnabledManuallyReporting(true)}
-							variant={'secondary-on-hover'}
+							variant={'tertiary-on-hover'}
 							target={blockeraCommunityUrl}
 						>
 							{__('Also, Report Manually', 'blockera')}
