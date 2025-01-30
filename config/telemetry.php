@@ -68,7 +68,7 @@ return [
 	/**
 	 * The url of the Blockera API server.
 	 */
-	'server_url'              => blockera_core_env( 'TELEMETRY_SERVER_URL', 'https://api.blockera.ai/v1/telemetry' ),
+	'server_url'              => blockera_core_env( 'TELEMETRY_SERVER_URL', 'https://api.blockera.ai/telemetry/v1' ),
 	/**
 	 * The url of the Blockera API server for debug logger.
 	 */

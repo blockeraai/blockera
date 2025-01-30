@@ -295,24 +295,18 @@ export const Popup = ({
 												'function' ===
 												typeof handleReport
 											) {
-												handleReport(() => {
-													setOptInStatus('');
+												handleReport((status) => {
+													setOptInStatus(
+														'ALLOW' === status
+															? 'ALLOW'
+															: ''
+													);
 													setIsEnabledManuallyReporting(
-														true
+														'ALLOW' === status
+															? false
+															: true
 													);
 												});
-												// if (
-												// 	'function' ===
-												// 	typeof setOptInStatus
-												// ) {
-												// 	setState({
-												// 		...state,
-												// 		isReported: true,
-												// 	});
-												// 	setIsReportingErrorCompleted(
-												// 		true
-												// 	);
-												// }
 											}
 										} else {
 											setState({

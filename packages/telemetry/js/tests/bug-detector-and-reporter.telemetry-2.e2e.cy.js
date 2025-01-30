@@ -5,7 +5,7 @@ describe('Bug Detector and Reporter', () => {
 		createPost();
 	});
 
-	it('should display bug detector notice on size block section and click to report bug button to show report bug modal with opt-in checkbox', () => {
+	it('should display notice on size block section and it can be reporting automatically error', () => {
 		appendBlocks(`<!-- wp:heading {"blockeraPropsId":"23bc4b3e-91cf-4bed-860e-a40e8ded86dc","blockeraCompatId":"028212413535","blockeraInnerBlocks":{"value":{"elements/link":{"attributes":{"blockeraFontColor":"#ff5252"}}}},"blockeraFontColor":{"value": {"akbar": true}},"className":"blockera-block blockera-block-was3wx","style":{"color":{"text":"#ff5252"},"elements":{"link":{"color":{"text":"#ff5252"}}}}} -->
 <h2 class="wp-block-heading blockera-block blockera-block-was3wx has-text-color has-link-color" style="color:#ff5252">Bug Detector And Bug Reporter System</h2>
 <!-- /wp:heading -->`);
@@ -44,6 +44,6 @@ describe('Bug Detector and Reporter', () => {
 
 		cy.getByDataTest('blockera-loading-text').should('be.visible');
 
-		cy.getByDataTest('manually-reporting-bug').should('not.be.visible');
+		cy.getByDataTest('manually-reporting-bug').should('be.visible');
 	});
 });

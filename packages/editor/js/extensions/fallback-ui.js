@@ -84,6 +84,7 @@ export const FallbackUI = ({
 							reportedCount: state.reportedCount + 1,
 						});
 						if (response.success) {
+							failedCallback('ALLOW');
 							setIsReportingErrorCompleted(true);
 						} else {
 							failedCallback();
