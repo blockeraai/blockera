@@ -329,7 +329,7 @@ if (! function_exists('blockera_load_script_translations')) {
             return;
         }
 
-        wp_set_script_translations("@blockera/{$script}", 'blockera', dirname(plugin_basename(BLOCKERA_SB_FILE)) . '/languages');
+        wp_set_script_translations( "@blockera/{$script}", 'blockera', BLOCKERA_SB_PATH . '/languages' );
     }
 }
 
