@@ -213,8 +213,11 @@ class BugDetectorAndReporterController extends RestController {
     protected function loggedBugReporterStatus( array $body): void {
         $transient_key = $this->getTransientKey($body);
 
-        // Store in WordPress transients for 1 month.
-        set_transient($transient_key, $body, MONTH_IN_SECONDS);
+		if (! defined('BLOCKERA_TELEMETRY_NOT_STORE_DATA') || ! BLOCKERA_TELEMETRY_NOT_STORE_DATA) {
+			
+			// Store in WordPress transients for 1 month.
+			set_transient($transient_key, $body, MONTH_IN_SECONDS);
+		}
     }
 
     /**

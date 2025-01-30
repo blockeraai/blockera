@@ -47,12 +47,15 @@ class OptInController extends RestController {
 			// We're being sure of user agreed to opt-in https://api.blockera.ai.
 			if ( 'SKIP' === $params['opt-in-agreed'] ) {
 
-				// Don't show the opt-in modal again.
-				$updated = update_option( $option_key, $params['opt-in-agreed'] );
+				if (! defined('BLOCKERA_TELEMETRY_NOT_STORE_DATA') || ! BLOCKERA_TELEMETRY_NOT_STORE_DATA) {
+				
+					// Don't show the opt-in modal again.
+					$updated = update_option( $option_key, $params['opt-in-agreed'] );
 
-				if ( ! $updated ) {
+					if ( ! $updated ) {
 
-					throw new BaseException( __( 'Server Error, please try again.', 'blockera' ), 500 );
+						throw new BaseException( __( 'Server Error, please try again.', 'blockera' ), 500 );
+					}
 				}
 
 				throw new BaseException( __( 'Your successfully skipped opt-in to Blockera Info!', 'blockera' ), 200 );
@@ -167,8 +170,11 @@ class OptInController extends RestController {
 		$user_id = $response['data']['user_id'];
 
 		// Store ...
-		update_option( Config::getOptionKeys( 'token' ), $token );
-		update_option( Config::getOptionKeys( 'user_id' ), $user_id );
+		if (! defined('BLOCKERA_TELEMETRY_NOT_STORE_DATA') || ! BLOCKERA_TELEMETRY_NOT_STORE_DATA) {
+
+			update_option( Config::getOptionKeys( 'token' ), $token );
+			update_option( Config::getOptionKeys( 'user_id' ), $user_id );
+		}
 
 		$name        = get_bloginfo( 'name', 'display' );
 		$description = get_bloginfo( 'description', 'display' );
@@ -213,17 +219,20 @@ class OptInController extends RestController {
 
 		$site_id = $response['data']['site_id'];
 
-		$updated_site_id       = update_option( Config::getOptionKeys( 'site_id' ), $site_id );
-		$updated_opt_in_status = update_option( $option_key, 'ALLOW' ); // Don't show the opt-in modal again.
+		if (! defined('BLOCKERA_TELEMETRY_NOT_STORE_DATA') || ! BLOCKERA_TELEMETRY_NOT_STORE_DATA) {
 
-		if ( ! $updated_site_id ) {
+			$updated_site_id       = update_option( Config::getOptionKeys( 'site_id' ), $site_id );
+			$updated_opt_in_status = update_option( $option_key, 'ALLOW' ); // Don't show the opt-in modal again.
 
-			throw new BaseException( __( 'Not registered site information.', 'blockera' ), 500 );
-		}
+			if ( ! $updated_site_id ) {
 
-		if ( ! $updated_opt_in_status ) {
+				throw new BaseException( __( 'Not registered site information.', 'blockera' ), 500 );
+			}
 
-			throw new BaseException( __( 'Failed update opt-in status.', 'blockera' ), 500 );
+			if ( ! $updated_opt_in_status ) {
+
+				throw new BaseException( __( 'Failed update opt-in status.', 'blockera' ), 500 );
+			}
 		}
 
 		return new \WP_REST_Response(
@@ -327,8 +336,11 @@ class OptInController extends RestController {
 
 			$this->handleServerError( $response );
 
-			// User opted-in.
-			update_option( Config::getOptionKeys( 'opt_in_status' ), 'ALLOW' );
+			if (! defined('BLOCKERA_TELEMETRY_NOT_STORE_DATA') || ! BLOCKERA_TELEMETRY_NOT_STORE_DATA) {
+				
+				// User opted-in.
+				update_option( Config::getOptionKeys( 'opt_in_status' ), 'ALLOW' );
+			}
 
 			return new \WP_REST_Response(
 				[

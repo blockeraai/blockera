@@ -3,9 +3,10 @@ import { goTo } from '@blockera/dev-cypress/js/helpers';
 describe('Opt-in Telemetry', () => {
 	beforeEach(() => {
 		goTo('/wp-admin/admin.php?page=blockera-settings-dashboard');
-		cy.window().then((win) => {
-			win.blockeraOptInStatus = undefined;
-		});
+		// Wait for page to fully load
+		cy.window()
+			.should('have.property', 'document')
+			.should('have.property', 'readyState', 'complete');
 	});
 
 	it('should show opt-in popup while after dashboard page is loaded', () => {
