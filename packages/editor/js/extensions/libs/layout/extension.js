@@ -414,7 +414,13 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							<BaseControl columns="columns-1">
 								<Flex>
 									<ToggleSelectControl
-										id={'value'}
+										id={
+											values.blockeraFlexWrap?.hasOwnProperty(
+												'value'
+											)
+												? 'value'
+												: 'val'
+										}
 										columns="80px 120px"
 										label={__('Children Wrap', 'blockera')}
 										labelDescription={

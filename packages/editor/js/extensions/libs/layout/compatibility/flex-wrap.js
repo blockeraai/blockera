@@ -10,7 +10,10 @@ export function flexWrapFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
+	// Backward Compatibility to support blockeraFlexWrap value structure.
 	if (
+		(attributes?.blockeraFlexWrap?.hasOwnProperty('value') &&
+			attributes?.blockeraFlexWrap?.value?.value !== '') ||
 		attributes?.blockeraFlexWrap?.value?.val !== '' ||
 		attributes?.layout?.flexWrap === '' ||
 		isUndefined(attributes?.layout?.flexWrap)
@@ -38,6 +41,8 @@ export function flexWrapToWPCompatibility({
 	if (
 		'reset' === ref?.current?.action ||
 		newValue === '' ||
+		// Backward Compatibility to support blockeraFlexWrap value structure.
+		(newValue?.hasOwnProperty('value') && newValue?.value === '') ||
 		newValue?.val === ''
 	) {
 		return {
@@ -49,7 +54,10 @@ export function flexWrapToWPCompatibility({
 
 	return {
 		layout: {
-			flexWrap: newValue?.val,
+			// Backward Compatibility to support blockeraFlexWrap value structure.
+			flexWrap: newValue?.hasOwnProperty('value')
+				? newValue?.value
+				: newValue?.val,
 		},
 	};
 }
