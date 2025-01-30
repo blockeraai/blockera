@@ -40,18 +40,17 @@ describe('Bug Detector and Reporter', () => {
 
 		cy.get('@checkbox').click({ multiple: true, force: true });
 
-		cy.getByDataTest('send-report-automatically').click();
-
-		cy.getByDataTest('blockera-loading-text').should('be.visible');
-
 		cy.intercept('POST', '**/telemetry/opt-in').as('register');
 		cy.intercept('POST', '**/telemetry/log-error/status').as(
 			'reportStatus'
 		);
 		cy.intercept('POST', '**/telemetry/log-error').as('report');
-		cy.wait(['@register', '@reportStatus', '@report'], {
-			timeout: 50000,
-		}).then(() => {
+
+		cy.getByDataTest('send-report-automatically').click();
+
+		cy.getByDataTest('blockera-loading-text').should('be.visible');
+
+		cy.wait(['@register', '@reportStatus', '@report']).then(() => {
 			cy.getByDataTest('successfully-reported-bug').should('be.visible');
 		});
 	});
