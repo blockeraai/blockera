@@ -64,7 +64,12 @@ class BugDetectorAndReporterController extends RestController {
         $response = wp_remote_post(
             Config::getServerURL('/debug'),
             [
-                'sslverify' => false,
+                'sslverify' => true,
+				'stream_context' => [
+					'ssl' => [
+						'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+					],
+				],
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . get_option(Config::getOptionKeys('token')),

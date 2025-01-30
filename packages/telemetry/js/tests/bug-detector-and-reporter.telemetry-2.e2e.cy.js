@@ -44,6 +44,15 @@ describe('Bug Detector and Reporter', () => {
 
 		cy.getByDataTest('blockera-loading-text').should('be.visible');
 
-		cy.getByDataTest('manually-reporting-bug').should('be.visible');
+		cy.intercept('POST', '**/telemetry/opt-in').as('register');
+		cy.intercept('POST', '**/telemetry/log-error/status').as(
+			'reportStatus'
+		);
+		cy.intercept('POST', '**/telemetry/log-error').as('report');
+		cy.wait(['@register', '@reportStatus', '@report'], {
+			timeout: 50000,
+		}).then(() => {
+			cy.getByDataTest('successfully-reported-bug').should('be.visible');
+		});
 	});
 });
