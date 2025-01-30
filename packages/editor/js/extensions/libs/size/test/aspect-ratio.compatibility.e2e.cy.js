@@ -41,7 +41,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '4/3',
+					val: '4/3',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
