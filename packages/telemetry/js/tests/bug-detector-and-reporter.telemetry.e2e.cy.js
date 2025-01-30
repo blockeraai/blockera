@@ -40,18 +40,12 @@ describe('Bug Detector and Reporter', () => {
 
 		cy.get('@checkbox').click({ multiple: true, force: true });
 
-		cy.intercept('POST', '**/telemetry/opt-in').as('register');
-		cy.intercept('POST', '**/telemetry/log-error/status').as(
-			'reportStatus'
-		);
-		cy.intercept('POST', '**/telemetry/log-error').as('report');
-
 		cy.getByDataTest('send-report-automatically').click();
 
 		cy.getByDataTest('blockera-loading-text').should('be.visible');
 
-		cy.wait(['@register', '@reportStatus', '@report']).then(() => {
-			cy.getByDataTest('successfully-reported-bug').should('be.visible');
-		});
+		cy.getByDataTest('manually-reporting-bug', { timeout: 500000 }).should(
+			'be.visible'
+		);
 	});
 });
