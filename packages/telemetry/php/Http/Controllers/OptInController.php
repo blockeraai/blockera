@@ -140,7 +140,12 @@ class OptInController extends RestController {
 		$result = $this->sender->post(
 			Config::getServerURL( '/auth/register' ),
 			[
-				'sslverify' => false,
+				'sslverify' => true,
+				'stream_context' => [
+					'ssl' => [
+						'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+					],
+				],
 				'headers' => [
 					'Accept' => 'application/json',
 				],
@@ -182,7 +187,12 @@ class OptInController extends RestController {
 		$result = $this->sender->post(
 			Config::getServerURL( '/sites' ),
 			[
-				'sslverify' => false,
+				'sslverify' => true,
+				'stream_context' => [
+					'ssl' => [
+						'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+					],
+				],
 				'headers' => [
 					'Accept'        => 'application/json',
 					'Authorization' => 'Bearer ' . $token,
@@ -292,6 +302,12 @@ class OptInController extends RestController {
 			$result = $this->sender->post(
 				Config::getServerURL( '/sites/' . $site_id ),
 				[
+					'sslverify' => true,
+					'stream_context' => [
+						'ssl' => [
+							'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+						],
+					],
 					'method'  => 'PUT',
 					'headers' => [
 						'Accept'        => 'application/json',
