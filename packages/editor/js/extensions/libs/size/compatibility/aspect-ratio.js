@@ -22,6 +22,14 @@ export function ratioFromWPCompatibility({
 	attributes: Object,
 	blockId?: string,
 }): Object {
+	// Backward Compatibility to support blockeraRatio value structure.
+	if (
+		attributes?.blockeraRatio?.value?.hasOwnProperty('value') &&
+		attributes?.blockeraRatio?.value?.value !== ''
+	) {
+		return attributes;
+	}
+
 	if (attributes?.blockeraRatio?.value?.val !== '') {
 		return attributes;
 	}
@@ -80,7 +88,9 @@ export function ratioToWPCompatibility({
 			if (
 				newValue === undefined ||
 				newValue === '' ||
-				newValue?.value === ''
+				// Backward Compatibility to support blockeraRatio value structure.
+				(newValue?.hasOwnProperty('value') && newValue?.value === '') ||
+				newValue?.val === ''
 			) {
 				return {
 					style: { dimensions: { aspectRatio: undefined } },
@@ -110,7 +120,9 @@ export function ratioToWPCompatibility({
 			if (
 				newValue === undefined ||
 				newValue === '' ||
-				newValue?.value === ''
+				// Backward Compatibility to support blockeraRatio value structure.
+				(newValue?.hasOwnProperty('value') && newValue?.value === '') ||
+				newValue?.val === ''
 			) {
 				return {
 					aspectRatio: undefined,
@@ -177,10 +189,24 @@ export function detectWPAspectRatioValue(aspectRatio: string): {
 
 export function convertAspectRatioValueToWP(aspectRatio: {
 	val: string,
+	value?: string,
 	width: '' | string,
 	height: '' | string,
 }): string {
+	// Backward Compatibility to support blockeraRatio value structure.
+	if (aspectRatio?.hasOwnProperty('value') && !aspectRatio?.value) {
+		return '';
+	}
+
 	if (!aspectRatio?.val) {
+		return '';
+	}
+
+	// Backward Compatibility to support blockeraRatio value structure.
+	if (
+		aspectRatio?.hasOwnProperty('value') &&
+		aspectRatio?.value !== 'custom'
+	) {
 		return '';
 	}
 

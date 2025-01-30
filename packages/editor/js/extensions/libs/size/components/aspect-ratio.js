@@ -102,8 +102,10 @@ export const AspectRatio: ComponentType<any> = memo(
 				{...labelProps}
 			>
 				<SelectControl
-					id="value"
-					singularId={'value'}
+					// Backward Compatibility to support blockeraRatio value structure.
+					id={ratio?.hasOwnProperty('value') ? 'value' : 'val'}
+					// Backward Compatibility to support blockeraRatio value structure.
+					singularId={ratio?.hasOwnProperty('value') ? '' : 'val'}
 					aria-label={__('Ratio', 'blockera')}
 					options={[
 						{
