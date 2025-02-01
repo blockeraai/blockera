@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Showing color palette of the current non-block theme in the colors variable picker (for Blocksy theme compatibility).
+
 ### Bug Fixes
 - Fix a bug for when the variable items from theme has not name information.
 
