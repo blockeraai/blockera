@@ -64,8 +64,8 @@ jobs:
                     "woocommerce")
                       echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}}' >> .wp-env.json
                       ;;
-                    "freemius")
-                      echo '{"plugins": ["."]}' >> .wp-env.json
+                    "telemetry")
+                      echo '{"plugins": ["."], "config": {"BLOCKERA_TELEMETRY_NOT_STORE_DATA": true}}' >> .wp-env.json
                       ;;
                     "plugins")
                       echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}}' >> .wp-env.json

@@ -189,14 +189,11 @@ class AppServiceProvider extends ServiceProvider {
 
         $this->renderBlocks();
 
-        if (! blockera_telemetry_opt_in_is_off('blockera')) {
-
-            Config::setConsumerConfig(blockera_core_config('app'));
-            Config::setOptionKeys(blockera_core_config('telemetry.options'));
-            Config::setServerURL(blockera_core_config('telemetry.server_url'));
-            Config::setRestParams(blockera_core_config('telemetry.rest_params'));
-            Config::setHookPrefix(blockera_core_config('telemetry.hook_prefix'));
-        }
+		Config::setConsumerConfig( blockera_core_config( 'app' ) );
+		Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
+		Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
+		Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
+		Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
 
         add_action('after_setup_theme', [ $this, 'after_setup_theme' ]);
     }

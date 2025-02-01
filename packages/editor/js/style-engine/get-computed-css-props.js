@@ -33,6 +33,7 @@ export const getComputedCssProps = ({
 	selectors,
 	blockName,
 	currentBlock,
+	disabledStyles = [],
 	currentBreakpoint,
 	currentInnerBlockState,
 	...params
@@ -52,21 +53,24 @@ export const getComputedCssProps = ({
 		};
 
 		const appendStyles = (settings: Object): void => {
-			stylesStack.push(
-				[
-					...SizeStyles(settings),
-					...MouseStyles(settings),
-					...LayoutStyles(settings),
-					...SpacingStyles(settings),
-					...EffectsStyles(settings),
-					...PositionStyles(settings),
-					...FlexChildStyles(settings),
-					...TypographyStyles(settings),
-					...BackgroundStyles(settings),
-					// ...CustomStyleStyles(settings),
-					...BorderAndShadowStyles(settings),
-				].flat()
-			);
+			const styleGenerators = {
+				SizeStyles,
+				MouseStyles,
+				LayoutStyles,
+				SpacingStyles,
+				EffectsStyles,
+				PositionStyles,
+				FlexChildStyles,
+				TypographyStyles,
+				BackgroundStyles,
+				BorderAndShadowStyles,
+			};
+
+			const enabledStyles = Object.entries(styleGenerators)
+				.filter(([name]) => !disabledStyles?.includes(name))
+				.map(([, generator]: [any, Function]) => generator(settings));
+
+			stylesStack.push(enabledStyles.flat());
 		};
 		const validateBlockStates = (state: Object): boolean => {
 			return state?.isVisible && !!state?.breakpoints;

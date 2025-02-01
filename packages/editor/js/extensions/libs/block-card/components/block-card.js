@@ -34,6 +34,7 @@ import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
 import { useBlockSection } from '../../../components';
 
 export function BlockCard({
+	notice,
 	clientId,
 	children,
 	blockName,
@@ -42,6 +43,7 @@ export function BlockCard({
 }: {
 	clientId: string,
 	blockName: string,
+	notice: MixedElement,
 	children?: MixedElement,
 	currentInnerBlock: InnerBlockModel,
 	handleOnClick: UpdateBlockEditorSettings,
@@ -87,109 +89,125 @@ export function BlockCard({
 	const { onToggle } = useBlockSection('innerBlocksConfig');
 
 	return (
-		<div
-			ref={contentRef}
-			className={extensionClassNames('block-card', {
-				'master-block-card': true,
-				'inner-block-is-selected': currentInnerBlock !== null,
-			})}
-			data-test={'blockera-block-card'}
-			onMouseEnter={() => {
-				setIsHovered(true);
-			}}
-			onMouseLeave={() => {
-				setIsHovered(false);
-			}}
-			style={{
-				height,
-			}}
-		>
-			<div className={extensionInnerClassNames('block-card__inner')}>
-				{parentNavBlockClientId && ( // This is only used by the Navigation block for now. It's not ideal having Navigation block specific code here.
-					<Button
-						onClick={() => selectBlock(parentNavBlockClientId)}
-						label={__('Go to parent Navigation block', 'blockera')}
-						style={{ minWidth: 24, padding: 0, height: 24 }}
-						icon={
-							<Icon
-								library="wp"
-								icon={
-									isRTL() ? 'chevron-right' : 'chevron-left'
-								}
-								size={16}
-							/>
-						}
-						size="small"
-						className="no-border"
-						data-test="back-to-parent-navigation"
-					/>
-				)}
+		<>
+			{notice}
+			<div
+				ref={contentRef}
+				className={extensionClassNames('block-card', {
+					'master-block-card': true,
+					'inner-block-is-selected': currentInnerBlock !== null,
+				})}
+				data-test={'blockera-block-card'}
+				onMouseEnter={() => {
+					setIsHovered(true);
+				}}
+				onMouseLeave={() => {
+					setIsHovered(false);
+				}}
+				style={{
+					height,
+				}}
+			>
+				<div className={extensionInnerClassNames('block-card__inner')}>
+					{parentNavBlockClientId && ( // This is only used by the Navigation block for now. It's not ideal having Navigation block specific code here.
+						<Button
+							onClick={() => selectBlock(parentNavBlockClientId)}
+							label={__(
+								'Go to parent Navigation block',
+								'blockera'
+							)}
+							style={{ minWidth: 24, padding: 0, height: 24 }}
+							icon={
+								<Icon
+									library="wp"
+									icon={
+										isRTL()
+											? 'chevron-right'
+											: 'chevron-left'
+									}
+									size={16}
+								/>
+							}
+							size="small"
+							className="no-border"
+							data-test="back-to-parent-navigation"
+						/>
+					)}
 
-				<BlockIcon icon={blockInformation.icon} />
+					<BlockIcon icon={blockInformation.icon} />
 
-				<div
-					className={extensionInnerClassNames('block-card__content')}
-				>
-					<h2
+					<div
 						className={extensionInnerClassNames(
-							'block-card__title'
+							'block-card__content'
 						)}
 					>
-						<ConditionalWrapper
-							condition={currentInnerBlock !== null}
-							wrapper={(children) => (
-								<Tooltip
-									text={__(
-										'Switch to parent block',
+						<h2
+							className={extensionInnerClassNames(
+								'block-card__title'
+							)}
+						>
+							<ConditionalWrapper
+								condition={currentInnerBlock !== null}
+								wrapper={(children) => (
+									<Tooltip
+										text={__(
+											'Switch to parent block',
+											'blockera'
+										)}
+									>
+										{children}
+									</Tooltip>
+								)}
+							>
+								<span
+									className={extensionInnerClassNames(
+										'block-card__title__block',
+										{
+											'title-is-clickable':
+												currentInnerBlock !== null,
+										}
+									)}
+									onClick={() => {
+										if (currentInnerBlock !== null) {
+											handleOnClick(
+												'current-block',
+												'master'
+											);
+											onToggle(true);
+										}
+									}}
+									aria-label={__(
+										'Selected Block',
 										'blockera'
 									)}
 								>
-									{children}
-								</Tooltip>
-							)}
-						>
+									{blockInformation.title}
+								</span>
+							</ConditionalWrapper>
+
+							<Breadcrumb
+								clientId={clientId}
+								blockName={blockName}
+							/>
+						</h2>
+
+						{blockInformation?.description && (
 							<span
 								className={extensionInnerClassNames(
-									'block-card__title__block',
-									{
-										'title-is-clickable':
-											currentInnerBlock !== null,
-									}
+									'block-card__description'
 								)}
-								onClick={() => {
-									if (currentInnerBlock !== null) {
-										handleOnClick(
-											'current-block',
-											'master'
-										);
-										onToggle(true);
-									}
-								}}
-								aria-label={__('Selected Block', 'blockera')}
 							>
-								{blockInformation.title}
+								{blockInformation.description}
 							</span>
-						</ConditionalWrapper>
+						)}
 
-						<Breadcrumb clientId={clientId} blockName={blockName} />
-					</h2>
-
-					{blockInformation?.description && (
-						<span
-							className={extensionInnerClassNames(
-								'block-card__description'
-							)}
-						>
-							{blockInformation.description}
-						</span>
-					)}
-
-					<BlockVariationTransforms blockClientId={clientId} />
+						<BlockVariationTransforms blockClientId={clientId} />
+					</div>
 				</div>
-			</div>
 
-			<Slot name={'blockera-block-card-children'} />
-			{children}
-		</div>
+				<Slot name={'blockera-block-card-children'} />
+				{children}
+			</div>
+		</>
 	);
 }

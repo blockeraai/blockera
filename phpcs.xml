@@ -110,6 +110,7 @@
     <exclude-pattern>./packages/dev-phpunit/*</exclude-pattern>
     <exclude-pattern>./packages/bootstrap/*</exclude-pattern>
     <exclude-pattern>.patch/*</exclude-pattern>
+    <exclude-pattern>./tests/*</exclude-pattern>
 
     <!-- Exclude third party libraries -->
     <exclude-pattern>./vendor/*</exclude-pattern>

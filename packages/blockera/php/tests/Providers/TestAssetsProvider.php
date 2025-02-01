@@ -3,6 +3,7 @@
 namespace Blockera\Setup\Tests\Providers;
 
 use Blockera\Setup\Blockera;
+use Blockera\Setup\Providers\AppServiceProvider;
 use Blockera\Setup\Providers\EditorAssetsProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -14,7 +15,10 @@ class TestAssetsProvider extends \Blockera\Dev\PHPUnit\AppTestCase {
 
 		parent::set_up();
 
-		self::$provider = new EditorAssetsProvider( new Blockera() );
+		$app = new Blockera();
+		$appProvider = new AppServiceProvider($app);
+		$appProvider->boot();
+		self::$provider = new EditorAssetsProvider( $app );
 	}
 
 	/**

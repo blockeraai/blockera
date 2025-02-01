@@ -14,3 +14,11 @@
 		}
 	}
 }
+
+.blockera-control.blockera-control-toggle {
+
+	.components-form-toggle.is-checked .components-form-toggle__track {
+		background-color: var(--blockera-controls-primary-color);
+		border-color: var(--blockera-controls-primary-color);
+	}
+}
