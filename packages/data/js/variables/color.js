@@ -107,15 +107,15 @@ export const getColorsTitle: () => string = memoize(function (): string {
 	} else if (!isUndefined(getBlockEditorSettings()?.colors)) {
 		const { getCurrentTheme } = select('blockera/data');
 
-		const {
-			name: { rendered: themeName },
-		} = getCurrentTheme();
+		const theme = getCurrentTheme();
 
-		return sprintf(
-			// translators: it's the product name (a theme or plugin name)
-			__('%s Colors', 'blockera'),
-			themeName
-		);
+		if (!isUndefined(theme?.name?.rendered)) {
+			return sprintf(
+				// translators: it's the product name (a theme or plugin name)
+				__('%s Colors', 'blockera'),
+				theme?.name?.rendered
+			);
+		}
 	}
 
 	return __('Editor Colors', 'blockera');
