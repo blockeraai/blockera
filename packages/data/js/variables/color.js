@@ -43,7 +43,7 @@ export const getColors: () => Array<VariableItem> = memoize(
 				return getBlockEditorSettings()?.__experimentalFeatures?.color?.palette?.theme.map(
 					(item) => {
 						return {
-							name: item.name,
+							name: item?.name || item.slug,
 							id: item.slug,
 							value: item.color,
 							reference,
@@ -65,7 +65,7 @@ export const getColors: () => Array<VariableItem> = memoize(
 		return getBlockEditorSettings()?.__experimentalFeatures?.color?.palette?.default.map(
 			(item) => {
 				return {
-					name: item.name,
+					name: item?.name || item.slug,
 					id: item.slug,
 					value: item.color,
 					reference,

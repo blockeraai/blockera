@@ -47,7 +47,7 @@ export const getLinearGradients: () => Array<VariableItem> = memoize(
 					)
 					.map((item) => {
 						return {
-							name: item.name,
+							name: item?.name || item.slug,
 							id: item.slug,
 							value: item.gradient,
 							reference,
@@ -71,7 +71,7 @@ export const getLinearGradients: () => Array<VariableItem> = memoize(
 			)
 			.map((item) => {
 				return {
-					name: item.name,
+					name: item?.name || item.slug,
 					id: item.slug,
 					value: item.gradient,
 					reference,

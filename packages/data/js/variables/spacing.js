@@ -44,7 +44,7 @@ export const getSpacings: () => Array<VariableItem> = memoize(
 				return getBlockEditorSettings()?.__experimentalFeatures?.spacing?.spacingSizes?.theme.map(
 					(item) => {
 						return {
-							name: item.name,
+							name: item?.name || item.slug,
 							id: item.slug,
 							value: item.size,
 							reference,
@@ -64,7 +64,7 @@ export const getSpacings: () => Array<VariableItem> = memoize(
 
 		return spaces.map((item) => {
 			return {
-				name: item.name,
+				name: item?.name || item.slug,
 				id: item.slug,
 				value: item.size,
 			};

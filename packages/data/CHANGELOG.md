@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Bug Fixes
+- Fix a bug for when the variable items from theme has not name information.
+
+
 ## 1.0.1 (2025-01-22)
 
 ### Bug Fixes

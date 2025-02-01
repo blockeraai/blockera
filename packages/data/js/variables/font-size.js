@@ -37,7 +37,7 @@ export const getFontSizes: () => Array<VariableItem> = memoize(
 
 		return getBlockEditorSettings().fontSizes.map((item) => {
 			return {
-				name: item.name,
+				name: item?.name || item.slug,
 				id: item.slug,
 				value: item.size,
 				fluid: item?.fluid || null,

@@ -48,7 +48,7 @@ export const getRadialGradients: () => Array<VariableItem> = memoize(
 					)
 					.map((item) => {
 						return {
-							name: item.name,
+							name: item?.name || item.slug,
 							id: item.slug,
 							value: item.gradient,
 							reference,
@@ -72,7 +72,7 @@ export const getRadialGradients: () => Array<VariableItem> = memoize(
 			)
 			.map((item) => {
 				return {
-					name: item.name,
+					name: item?.name || item.slug,
 					id: item.slug,
 					value: item.gradient,
 					reference,
