@@ -353,8 +353,10 @@ export const SizeStyles = ({
 	}
 
 	if (isActiveField(blockeraRatio) && currentBlockAttributes?.blockeraRatio) {
-		const ratio = currentBlockAttributes.blockeraRatio.value;
-		if (ratio !== attributes.blockeraRatio.default.value) {
+		const ratio =
+			currentBlockAttributes.blockeraRatio.value ||
+			currentBlockAttributes.blockeraRatio.val;
+		if (ratio !== attributes.blockeraRatio.default.val) {
 			let value = '';
 
 			switch (ratio) {
