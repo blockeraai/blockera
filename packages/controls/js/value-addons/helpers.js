@@ -266,42 +266,49 @@ export function getVariableCategory(
 					? __('Theme Font Sizes', 'blockera')
 					: __('Editor Font Sizes', 'blockera'),
 				items: getFontSizes(),
+				type: 'font-size',
 			};
 
 		case 'linear-gradient':
 			return {
 				label: getLinearGradientsTitle(),
 				items: getLinearGradients(),
+				type: 'linear-gradient',
 			};
 
 		case 'radial-gradient':
 			return {
 				label: getRadialGradientsTitle(),
 				items: getRadialGradients(),
+				type: 'radial-gradient',
 			};
 
 		case 'width-size':
 			return {
 				label: getWidthSizesTitle(),
 				items: getWidthSizes(),
+				type: 'width-size',
 			};
 
 		case 'spacing':
 			return {
 				label: getSpacingsTitle(),
 				items: getSpacings(),
+				type: 'spacing',
 			};
 
 		case 'color':
 			return {
 				label: getColorsTitle(),
 				items: getColors(),
+				type: 'color',
 			};
 	}
 
 	return {
 		label: '',
 		items: [],
+		type: '',
 		notFound: true,
 	};
 }

@@ -137,14 +137,15 @@ export default function ({
 						).map((variable, _index) => {
 							const itemData = {
 								...variable,
-								type,
+								type: data?.type || type,
 								var: generateVariableString({
 									reference: variable.reference,
-									type,
+									type: data?.type || type,
 									id: variable.id,
 								}),
 							};
 
+							console.log('variable', variable);
 							return (
 								<PickerValueItem
 									showValue={
@@ -154,19 +155,21 @@ export default function ({
 									value={controlProps.value}
 									data={itemData}
 									onClick={controlProps.handleOnClickVar}
-									key={`${type}-${_index}-value-type`}
+									key={`${
+										data?.type || type
+									}-${_index}-value-type`}
 									name={variable.name}
-									type={type}
+									type={data?.type || type}
 									valueType="variable"
 									isCurrent={
 										isValid(controlProps.value) &&
 										controlProps.value.settings.type ===
-											type &&
+											(data?.type || type) &&
 										controlProps.value.settings.id ===
 											itemData.id
 									}
 									icon={getVariableIcon({
-										type,
+										type: data?.type || type,
 										value: variable.value,
 									})}
 									status="active"
