@@ -99,7 +99,7 @@ class BugDetectorAndReporterController extends RestController {
                     'code'    => 500,
                     'success' => false,
                     'errors'    => [
-                        'failed_debug_log' => $body,
+                        'failed_debug_log' => 500 === ( $body['code'] ?? 200 ) || false === ( $body['success'] ?? true ) ? $body['errors'] : $body,
                     ],
                 ],
                 500
