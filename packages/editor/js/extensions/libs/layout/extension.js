@@ -585,7 +585,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							</BaseControl>
 						</ControlContextProvider>
 
-						{values.blockeraFlexWrap?.value === 'wrap' && (
+						{values.blockeraFlexWrap?.val === 'wrap' && (
 							<EditorFeatureWrapper
 								isActive={isShowAlignContent}
 								config={extensionConfig.blockeraAlignContent}

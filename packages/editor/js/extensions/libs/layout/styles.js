@@ -219,10 +219,13 @@ export const LayoutStyles = ({
 		isActiveField(blockeraFlexWrap) &&
 		_attributes.blockeraFlexWrap !== attributes.blockeraFlexWrap.default
 	) {
-		let value = _attributes.blockeraFlexWrap?.value;
+		let value =
+			_attributes.blockeraFlexWrap?.value ??
+			_attributes.blockeraFlexWrap?.val;
 
 		if (
-			_attributes.blockeraFlexWrap?.value === 'wrap' &&
+			(_attributes.blockeraFlexWrap?.value === 'wrap' ||
+				_attributes.blockeraFlexWrap?.val === 'wrap') &&
 			_attributes.blockeraFlexWrap?.reverse
 		) {
 			value += '-reverse';

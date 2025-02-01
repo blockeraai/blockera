@@ -110,11 +110,12 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				break;
 
 			case 'flex-wrap':
-				$flexDirection = $setting['flex-wrap'];
+				// Backward compatibility for flex-wrap value, because flex-wrap changed from value to val in the new version.
+				$flexWrap = $setting['flex-wrap'];
 
-				if ( ! empty( $flexDirection['value'] ) ) {
+				if ( ! empty( $flexWrap['value'] ) || ! empty( $flexWrap['val'] ) ) {
 
-					$declaration['flex-wrap'] = $flexDirection['value'] . ( $flexDirection['reverse'] && 'wrap' === $flexDirection['value'] ? '-reverse' : '' );
+					$declaration['flex-wrap'] = ( $flexWrap['value'] ?? $flexWrap['val'] ) . ( $flexWrap['reverse'] && 'wrap' === ( $flexWrap['value'] ?? $flexWrap['val'] ) ? '-reverse' : '' );
 				}
 
 				break;

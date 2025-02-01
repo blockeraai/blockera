@@ -11,10 +11,11 @@ export function flexWrapFromWPCompatibility({
 	attributes: Object,
 }): Object {
 	// Backward Compatibility to support blockeraFlexWrap value structure.
+	const flexWrapValue =
+		attributes?.blockeraFlexWrap?.value?.value ||
+		attributes?.blockeraFlexWrap?.value?.val;
 	if (
-		(attributes?.blockeraFlexWrap?.hasOwnProperty('value') &&
-			attributes?.blockeraFlexWrap?.value?.value !== '') ||
-		attributes?.blockeraFlexWrap?.value?.val !== '' ||
+		flexWrapValue !== '' ||
 		attributes?.layout?.flexWrap === '' ||
 		isUndefined(attributes?.layout?.flexWrap)
 	) {
