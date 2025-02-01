@@ -24,18 +24,18 @@ export const getColors: () => Array<VariableItem> = memoize(
 			type: 'preset',
 		};
 
-		const { getCurrentTheme } = select('blockera/data');
-
-		const {
-			name: { rendered: themeName },
-		} = getCurrentTheme();
-
-		reference = {
-			type: 'theme',
-			theme: themeName,
-		};
-
 		if (isBlockTheme()) {
+			const { getCurrentTheme } = select('blockera/data');
+
+			const {
+				name: { rendered: themeName },
+			} = getCurrentTheme();
+
+			reference = {
+				type: 'theme',
+				theme: themeName,
+			};
+
 			if (
 				getBlockEditorSettings()?.__experimentalFeatures?.color?.palette
 					?.theme !== undefined
@@ -52,6 +52,17 @@ export const getColors: () => Array<VariableItem> = memoize(
 				);
 			}
 		} else if (!isUndefined(getBlockEditorSettings()?.colors)) {
+			const { getCurrentTheme } = select('blockera/data');
+
+			const {
+				name: { rendered: themeName },
+			} = getCurrentTheme();
+
+			reference = {
+				type: 'theme',
+				theme: themeName,
+			};
+
 			return getBlockEditorSettings()?.colors.map((item) => {
 				return {
 					name: item?.name || item.slug,
