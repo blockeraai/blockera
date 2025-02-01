@@ -70,7 +70,7 @@ $jobs = new \Blockera\Telemetry\Jobs(
 
 add_action('admin_init', [ $jobs, 'redirectToDashboard' ]);
 
-add_action('plugins_loaded', 'blockera_init', 10);
+add_action('after_setup_theme', 'blockera_init', 10);
 
 function blockera_init(): void {
 

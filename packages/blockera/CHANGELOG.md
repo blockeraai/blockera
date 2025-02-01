@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Blocky theme compatibility [[Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/blockera-compatibility-with-the-blocksy-theme-coNZ62pejloObdo)]
+
 ### Bug Fixes
 - Renamed the constants to avoid conflicts with other plugins. [[Bug Report](https://community.blockera.ai/bugs-mdhyb8nc/post/warning-constant-blockera-version-already-defined-uvTMUjomFS8fELi)]
 
