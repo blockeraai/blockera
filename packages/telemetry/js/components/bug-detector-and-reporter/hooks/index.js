@@ -28,10 +28,15 @@ export const useBugReporter = ({
 	useEffect(() => {
 		if ('ALLOW' === blockeraOptInStatus) {
 			if (selectedBlock && !isReportingErrorCompleted) {
-				sender(error, serialize(selectedBlock), (response) => {
-					setIsReportingErrorCompleted(
-						response?.success ? true : false
-					);
+				sender(error, serialize(selectedBlock), {
+					setResponse: (response) => {
+						setIsReportingErrorCompleted(
+							response?.success ? true : false
+						);
+					},
+					setError: () => {
+						setIsReportingErrorCompleted(false);
+					},
 				});
 			}
 		}
