@@ -4,7 +4,7 @@
  */
 import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -92,10 +92,30 @@ export const getColorsTitle: () => string = memoize(function (): string {
 					?.theme
 			)
 		) {
-			return __('Theme Colors', 'blockera');
+			const { getCurrentTheme } = select('blockera/data');
+
+			const {
+				name: { rendered: themeName },
+			} = getCurrentTheme();
+
+			return sprintf(
+				// translators: it's the product name (a theme or plugin name)
+				__('%s Colors', 'blockera'),
+				themeName
+			);
 		}
 	} else if (!isUndefined(getBlockEditorSettings()?.colors)) {
-		return __('Color Palette', 'blockera');
+		const { getCurrentTheme } = select('blockera/data');
+
+		const {
+			name: { rendered: themeName },
+		} = getCurrentTheme();
+
+		return sprintf(
+			// translators: it's the product name (a theme or plugin name)
+			__('%s Colors', 'blockera'),
+			themeName
+		);
 	}
 
 	return __('Editor Colors', 'blockera');
