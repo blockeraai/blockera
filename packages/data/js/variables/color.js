@@ -54,13 +54,11 @@ export const getColors: () => Array<VariableItem> = memoize(
 		} else if (!isUndefined(getBlockEditorSettings()?.colors)) {
 			const { getCurrentTheme } = select('blockera/data');
 
-			const {
-				name: { rendered: themeName },
-			} = getCurrentTheme();
+			const theme = getCurrentTheme();
 
 			reference = {
 				type: 'theme',
-				theme: themeName,
+				theme: theme?.name?.rendered || '',
 			};
 
 			return getBlockEditorSettings()?.colors.map((item) => {
