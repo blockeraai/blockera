@@ -177,7 +177,10 @@ export const Popup = ({
 						</Button>
 
 						<Button
-							onClick={() => setIsEnabledManuallyReporting(true)}
+							onClick={() => {
+								setIsReportingErrorCompleted(false);
+								setIsEnabledManuallyReporting(true);
+							}}
 							variant={'tertiary'}
 							target={blockeraCommunityUrl}
 						>
@@ -343,7 +346,10 @@ export const Popup = ({
 
 						<Button
 							variant={'secondary'}
-							onClick={() => setIsEnabledManuallyReporting(true)}
+							onClick={() => {
+								setIsReportingErrorCompleted(false);
+								setIsEnabledManuallyReporting(true);
+							}}
 							target={blockeraCommunityUrl}
 						>
 							{__('Report Manually', 'blockera')}
@@ -408,7 +414,7 @@ export const Popup = ({
 								margin: 0,
 							}}
 						>
-							{!isReportingErrorCompleted
+							{isReportingErrorCompleted
 								? __(
 										'Oops! Report submission failed!',
 										'blockera'
@@ -417,7 +423,7 @@ export const Popup = ({
 						</h3>
 
 						<p style={{ margin: 0 }}>
-							{!isReportingErrorCompleted
+							{isReportingErrorCompleted
 								? __(
 										'Something went wrong when trying to log your bug. Follow the manual submission process below to share the necessary info.',
 										'blockera'
