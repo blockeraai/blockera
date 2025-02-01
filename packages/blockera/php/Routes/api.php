@@ -25,13 +25,9 @@ try {
     $routes->get('settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'index' ]);
     $routes->update('settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'response' ]);
 
-	$routes->post('telemetry/opt-in', [ Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn' ]);
-
-    if (blockera_telemetry_bug_detector_logger_is_off()) {
-
-        $routes->post('telemetry/log-error', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'log' ]);
-        $routes->post('telemetry/log-error/status', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'status' ]);
-    }
+    $routes->post('telemetry/opt-in', [ Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn' ]);
+    $routes->post('telemetry/log-error', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'log' ]);
+    $routes->post('telemetry/log-error/status', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'status' ]);
 
 } catch (Exception $exception) {
 

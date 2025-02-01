@@ -20,7 +20,7 @@ import {
  */
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
-import { Tabs, type TTabProps, NoticeControl, Flex } from '@blockera/controls';
+import { Tabs, type TTabProps } from '@blockera/controls';
 import { isEquals, kebabCase, isObject } from '@blockera/utils';
 import { getItem, setItem, updateItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
@@ -308,20 +308,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			clientId: props.clientId,
 		};
 
-		const fallbackErrorBoundaryMessage = (
-			<NoticeControl type="error" style={{ marginTop: '10px' }}>
-				<Flex direction={'column'} gap="10px">
-					<h3>{__('Whoops! An error occurred', 'blockera')}</h3>
-					<p>
-						{__(
-							'Blockera detected an error and has disabled this block section.',
-							'blockera'
-						)}
-					</p>
-				</Flex>
-			</NoticeControl>
-		);
-
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
 			const activePanel = [
 				<Fill
@@ -414,10 +400,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							)}
 
 							{/* <ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }): MixedElement => (
+								fallbackRender={({ error }): MixedElement => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
 													clientId={props.clientId}
@@ -435,8 +418,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 													}
 													error={error}
 												/>
-										  )
-								}
+										  )}
 							>
 								<ConditionsExtension
 									block={block}
@@ -449,33 +431,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								/>
 							</ErrorBoundary> */}
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													configId={
-														'advancedSettingsConfig'
-													}
-													title={__(
-														'Advanced',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-advanced" />
-													}
-													error={error}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										configId={'advancedSettingsConfig'}
+										title={__('Advanced', 'blockera')}
+										icon={
+											<Icon icon="extension-advanced" />
+										}
+										error={error}
+									/>
+								)}
 							>
 								<AdvancedSettingsExtension
 									block={block}
@@ -507,33 +480,27 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					activePanel.push(
 						<Fragment key={`${props.clientId}-style-panel`}>
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'styleVariationsConfig'
-													}
-													title={__(
-														'Style Variations',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-style-variations" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'styleVariationsConfig'}
+										title={__(
+											'Style Variations',
+											'blockera'
+										)}
+										icon={
+											<Icon icon="extension-style-variations" />
+										}
+									/>
+								)}
 							>
 								<StyleVariationsExtension
 									block={block}
@@ -542,33 +509,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'innerBlocksConfig'
-													}
-													title={__(
-														'Inner Blocks',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-inner-blocks" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'innerBlocksConfig'}
+										title={__('Inner Blocks', 'blockera')}
+										icon={
+											<Icon icon="extension-inner-blocks" />
+										}
+									/>
+								)}
 							>
 								<InnerBlocksExtension
 									values={blockAttributes.blockeraInnerBlocks}
@@ -584,35 +542,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={'spacingConfig'}
-													title={__(
-														'Spacing',
-														'blockera'
-													)}
-													icon={
-														<Icon
-															icon={
-																'extension-spacing'
-															}
-														/>
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'spacingConfig'}
+										title={__('Spacing', 'blockera')}
+										icon={
+											<Icon icon={'extension-spacing'} />
+										}
+									/>
+								)}
 							>
 								<SpacingExtension
 									block={block}
@@ -634,33 +581,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								/>
 							</ErrorBoundary>
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'typographyConfig'
-													}
-													title={__(
-														'Typography',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-typography" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'typographyConfig'}
+										title={__('Typography', 'blockera')}
+										icon={
+											<Icon icon="extension-typography" />
+										}
+									/>
+								)}
 							>
 								<TypographyExtension
 									block={block}
@@ -770,33 +708,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													title={__(
-														'Background',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-background" />
-													}
-													configId={
-														'backgroundConfig'
-													}
-													error={error}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										title={__('Background', 'blockera')}
+										icon={
+											<Icon icon="extension-background" />
+										}
+										configId={'backgroundConfig'}
+										error={error}
+									/>
+								)}
 							>
 								<BackgroundExtension
 									block={block}
@@ -830,33 +759,25 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'borderAndShadowConfig'
-													}
-													title={__(
-														'Border And Shadow',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-border" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'borderAndShadowConfig'}
+										title={__(
+											'Border And Shadow',
+											'blockera'
+										)}
+										icon={<Icon icon="extension-border" />}
+									/>
+								)}
 							>
 								<BorderAndShadowExtension
 									block={block}
@@ -898,33 +819,26 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								directParentBlock?.attributes.blockeraDisplay
 									?.value === 'flex' && (
 									<ErrorBoundary
-										fallbackRender={
-											window?.blockeraTelemetryBugDetectorLoggerIsOff
-												? () =>
-														fallbackErrorBoundaryMessage
-												: ({ error }) => (
-														<ErrorBoundaryFallback
-															isReportingErrorCompleted={
-																isReportingErrorCompleted
-															}
-															setIsReportingErrorCompleted={
-																setIsReportingErrorCompleted
-															}
-															from={'extension'}
-															error={error}
-															configId={
-																'flexChildConfig'
-															}
-															title={__(
-																'Flex Child',
-																'blockera'
-															)}
-															icon={
-																<Icon icon="extension-flex-child" />
-															}
-														/>
-												  )
-										}
+										fallbackRender={({ error }) => (
+											<ErrorBoundaryFallback
+												isReportingErrorCompleted={
+													isReportingErrorCompleted
+												}
+												setIsReportingErrorCompleted={
+													setIsReportingErrorCompleted
+												}
+												from={'extension'}
+												error={error}
+												configId={'flexChildConfig'}
+												title={__(
+													'Flex Child',
+													'blockera'
+												)}
+												icon={
+													<Icon icon="extension-flex-child" />
+												}
+											/>
+										)}
 									>
 										<FlexChildExtension
 											block={block}
@@ -985,31 +899,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								)}
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={'layoutConfig'}
-													title={__(
-														'Layout',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-layout" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'layoutConfig'}
+										title={__('Layout', 'blockera')}
+										icon={<Icon icon="extension-layout" />}
+									/>
+								)}
 							>
 								<LayoutExtension
 									block={block}
@@ -1052,31 +957,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={'sizeConfig'}
-													title={__(
-														'Size',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-size" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'sizeConfig'}
+										title={__('Size', 'blockera')}
+										icon={<Icon icon="extension-size" />}
+									/>
+								)}
 							>
 								<SizeExtension
 									block={block}
@@ -1147,31 +1043,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={'positionConfig'}
-													title={__(
-														'Position',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-position" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'positionConfig'}
+										title={__('Position', 'blockera')}
+										icon={
+											<Icon icon="extension-position" />
+										}
+									/>
+								)}
 							>
 								<PositionExtension
 									block={block}
@@ -1200,31 +1089,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													error={error}
-													from={'extension'}
-													configId={'effectsConfig'}
-													title={__(
-														'Effects',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-effects" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										error={error}
+										from={'extension'}
+										configId={'effectsConfig'}
+										title={__('Effects', 'blockera')}
+										icon={<Icon icon="extension-effects" />}
+									/>
+								)}
 							>
 								<EffectsExtension
 									block={block}
@@ -1307,33 +1187,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'customStyleConfig'
-													}
-													title={__(
-														'Custom CSS',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-custom-style" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'customStyleConfig'}
+										title={__('Custom CSS', 'blockera')}
+										icon={
+											<Icon icon="extension-custom-style" />
+										}
+									/>
+								)}
 							>
 								<CustomStyleExtension
 									block={block}
@@ -1363,10 +1234,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					activePanel.push(
 						<Fragment key={`${props.clientId}-interactions-panel`}>
 							{/* <ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
+								fallbackRender={({ error }) => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
 													clientId={props.clientId}
@@ -1386,8 +1254,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 														<Icon icon="extension-entrance-animation" />
 													}
 												/>
-										  )
-								}
+										  )}
 							>
 								<EntranceAnimationExtension
 									block={block}
@@ -1401,10 +1268,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary> */}
 
 							{/* <ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
+								fallbackRender={({ error }) => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
 													clientId={props.clientId}
@@ -1424,8 +1288,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 														<Icon icon="extension-scroll-animation" />
 													}
 												/>
-										  )
-								}
+										  )}
 							>
 								<ScrollAnimationExtension
 									block={block}
@@ -1439,33 +1302,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary> */}
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={
-														'clickAnimationConfig'
-													}
-													title={__(
-														'On Click',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-click-animation" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'clickAnimationConfig'}
+										title={__('On Click', 'blockera')}
+										icon={
+											<Icon icon="extension-click-animation" />
+										}
+									/>
+								)}
 							>
 								<ClickAnimationExtension
 									block={block}
@@ -1479,31 +1333,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							</ErrorBoundary>
 
 							<ErrorBoundary
-								fallbackRender={
-									window?.blockeraTelemetryBugDetectorLoggerIsOff
-										? () => fallbackErrorBoundaryMessage
-										: ({ error }) => (
-												<ErrorBoundaryFallback
-													isReportingErrorCompleted={
-														isReportingErrorCompleted
-													}
-													clientId={props.clientId}
-													setIsReportingErrorCompleted={
-														setIsReportingErrorCompleted
-													}
-													from={'extension'}
-													error={error}
-													configId={'mouseConfig'}
-													title={__(
-														'Mouse',
-														'blockera'
-													)}
-													icon={
-														<Icon icon="extension-mouse" />
-													}
-												/>
-										  )
-								}
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'mouseConfig'}
+										title={__('Mouse', 'blockera')}
+										icon={<Icon icon="extension-mouse" />}
+									/>
+								)}
 							>
 								<MouseExtension
 									block={block}

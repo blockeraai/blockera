@@ -134,7 +134,6 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			window.blockeraOptInStatus = "' . get_option( blockera_core_config( 'telemetry.options.opt_in_status' ), null ) . '";
 			window.blockeraCommunityUrl = "' . blockera_core_config( 'telemetry.community_url' ) . '";
 			window.blockeraPermissionsLink = "' . blockera_core_config( 'telemetry.permissions_link' ) . '";
-			window.blockeraTelemetryBugDetectorLoggerIsOff = ' . ( ! blockera_telemetry_bug_detector_logger_is_off() ? 'true': 'false' ) . ';
 			window.blockeraTelemetryDebugData = ' . wp_json_encode( $telemetry_debug_data ) . ';',
 			$inline_script . PHP_EOL,
 			$script

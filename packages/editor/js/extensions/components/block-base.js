@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import { ErrorBoundary } from 'react-error-boundary';
 import { SlotFillProvider, Fill } from '@wordpress/components';
 import type { Element, ComponentType, MixedElement } from 'react';
@@ -22,7 +21,6 @@ import {
 /**
  * Blockera dependencies
  */
-import { NoticeControl, Flex } from '@blockera/controls';
 import { omit, isEquals, omitWithPattern, cloneObject } from '@blockera/utils';
 import { experimental } from '@blockera/env';
 
@@ -50,20 +48,6 @@ import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
-
-const fallbackErrorBoundaryMessage = (
-	<NoticeControl type="error" style={{ marginTop: '10px' }}>
-		<Flex direction={'column'} gap="10px">
-			<h3>{__('Whoops! An error occurred', 'blockera')}</h3>
-			<p>
-				{__(
-					'Blockera has encountered an unexpected error, which may cause some functionality to behave incorrectly.',
-					'blockera'
-				)}
-			</p>
-		</Flex>
-	</NoticeControl>
-);
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const { props: _props } = useBlockAppContext();
@@ -440,25 +424,21 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			)}
 
 			<ErrorBoundary
-				fallbackRender={
-					window?.blockeraTelemetryBugDetectorLoggerIsOff
-						? () => fallbackErrorBoundaryMessage
-						: ({ error }): MixedElement => (
-								<ErrorBoundaryFallback
-									{...{
-										error,
-										notice,
-										clientId,
-										setNotice,
-										from: 'style-wrapper',
-										props: blockStyleProps,
-										isReportingErrorCompleted,
-										setIsReportingErrorCompleted,
-										fallbackComponent: BlockStyle,
-									}}
-								/>
-						  )
-				}
+				fallbackRender={({ error }): MixedElement => (
+					<ErrorBoundaryFallback
+						{...{
+							error,
+							notice,
+							clientId,
+							setNotice,
+							from: 'style-wrapper',
+							props: blockStyleProps,
+							isReportingErrorCompleted,
+							setIsReportingErrorCompleted,
+							fallbackComponent: BlockStyle,
+						}}
+					/>
+				)}
 			>
 				<StylesWrapper clientId={clientId}>
 					<Fill name={'blockera-styles-wrapper-' + clientId}>

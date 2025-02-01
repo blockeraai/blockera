@@ -277,23 +277,19 @@ function mergeBlockSettings(
 
 			return (
 				<ErrorBoundary
-					fallbackRender={
-						window?.blockeraTelemetryBugDetectorLoggerIsOff
-							? () => createElement(settings.edit, props)
-							: ({ error }) => (
-									<ErrorBoundaryFallback
-										{...{
-											props,
-											error,
-											from: 'root',
-											clientId: props.clientId,
-											isReportingErrorCompleted,
-											setIsReportingErrorCompleted,
-											fallbackComponent: settings.edit,
-										}}
-									/>
-							  )
-					}
+					fallbackRender={({ error }) => (
+						<ErrorBoundaryFallback
+							{...{
+								props,
+								error,
+								from: 'root',
+								clientId: props.clientId,
+								isReportingErrorCompleted,
+								setIsReportingErrorCompleted,
+								fallbackComponent: settings.edit,
+							}}
+						/>
+					)}
 				>
 					<BaseControlContext.Provider value={baseContextValue}>
 						<BlockApp

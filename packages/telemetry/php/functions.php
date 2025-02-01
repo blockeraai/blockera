@@ -26,17 +26,3 @@ if ( ! function_exists( 'blockera_telemetry_opt_in_is_off' ) ) {
 		return $is_disabled;
 	}
 }
-
-
-if (! function_exists('blockera_telemetry_bug_detector_logger_is_off')) {
-
-    /**
-     * Check the blockera telemetry debug logger system is off?
-     *
-     * @return bool true on success, false on otherwise!
-     */
-    function blockera_telemetry_bug_detector_logger_is_off(): bool {
-
-        return blockera_get_experimental([ 'telemetry', 'bugDetectorAndBugLogger' ]);
-    }
-}
