@@ -121,7 +121,7 @@ export const getColorsTitle: () => string = memoize(function (): string {
 		if (!isUndefined(theme?.name?.rendered)) {
 			return sprintf(
 				// translators: it's the product name (a theme or plugin name)
-				__('%s Colors', 'blockera'),
+				__('%s Color Palette', 'blockera'),
 				theme?.name?.rendered
 			);
 		}
