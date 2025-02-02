@@ -6,6 +6,7 @@
 ### Development Features
 - Added automated test pipeline for checking Blocky theme compatibility.
 - Added automated test for checking Blocky theme color variables compatibility.
+- Added automated test for checking Blocky theme width size variables compatibility.
 
 
 ### Bug Fixes
