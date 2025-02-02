@@ -250,7 +250,7 @@ export function TypographyStyles({
 				selector: pickedSelector,
 				declarations: computedCssDeclarations(
 					{
-						blockeraBackgroundColor: [
+						blockeraFontColor: [
 							{
 								type: 'static',
 								properties: {
