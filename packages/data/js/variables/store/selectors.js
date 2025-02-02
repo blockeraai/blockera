@@ -21,11 +21,18 @@ export const getVariableGroup: DynamicVariableGroup =
 	memoize(_getVariableGroup);
 
 const _getVariableType = (
-	{ variables }: Object,
+	store: Object,
 	group: string,
 	name: string
 ): DynamicVariableType | void => {
-	return Object.values(variables[group]?.items || {}).find(
+	if (
+		store?.variables === undefined ||
+		store?.variables[group] === undefined
+	) {
+		return;
+	}
+
+	return Object.values(store?.variables[group]?.items || {}).find(
 		(i: { ...Object, name: string }) => i.name === name
 	);
 };
