@@ -138,11 +138,13 @@ export default function ({
 							const itemData = {
 								...variable,
 								type: data?.type || type,
-								var: generateVariableString({
-									reference: variable.reference,
-									type: data?.type || type,
-									id: variable.id,
-								}),
+								var:
+									variable?.var ||
+									generateVariableString({
+										reference: variable.reference,
+										type: data?.type || type,
+										id: variable.id,
+									}),
 							};
 
 							return (
