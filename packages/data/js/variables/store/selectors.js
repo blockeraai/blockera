@@ -40,3 +40,28 @@ const _getVariableGroups = ({
 
 export const getVariableGroups: Array<DynamicVariableGroup> =
 	memoize(_getVariableGroups);
+
+const _getVariableGroupItems = (
+	{ variables }: Object,
+	group: string,
+	type: string
+): DynamicVariableType | void => {
+	// If group is not specified, search in all groups
+	if (!group) {
+		const allGroups = Object.values(variables || {});
+
+		return allGroups
+			.map((group) => Object.values(group?.items || {}))
+			.flat()
+			.filter((i: { ...Object, type: string }) => i?.type === type);
+	}
+
+	// If group is specified, search in the specified group
+	return Object.values(variables[group]?.items || {}).filter(
+		(i: { ...Object, type: string }) => i?.type === type
+	);
+};
+
+export const getVariableGroupItems: DynamicVariableType = memoize(
+	_getVariableGroupItems
+);
