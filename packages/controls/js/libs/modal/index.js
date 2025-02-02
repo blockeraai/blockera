@@ -4,7 +4,6 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __ } from '@wordpress/i18n';
 import { Modal as WPModal } from '@wordpress/components';
 
 /**
@@ -30,8 +29,8 @@ export default function Modal({
 			className={componentClassNames('modal', className)}
 			title={
 				<>
-					{headerIcon && headerIcon}
-					{headerTitle || __('Blockera Modal Component', 'blockera')}
+					{headerIcon}
+					{headerTitle}
 				</>
 			}
 			isDismissible={isDismissible}

@@ -3,8 +3,9 @@
 /**
  * External dependencies
  */
+import { ErrorBoundary } from 'react-error-boundary';
 import { SlotFillProvider, Fill } from '@wordpress/components';
-import type { Element, ComponentType } from 'react';
+import type { Element, ComponentType, MixedElement } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
@@ -36,15 +37,17 @@ import {
 } from '../../hooks';
 import { isInnerBlock } from './utils';
 import { SideEffect } from '../libs/base';
+// import { BlockPortals } from './block-portals';
 import { BlockPartials } from './block-partials';
-import { isBaseBreakpoint } from '../../canvas-editor';
-import { BlockFillPartials } from './block-fill-partials';
-import type { UpdateBlockEditorSettings } from '../libs/types';
-import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
-import { BlockCompatibility } from './block-compatibility';
-import { useExtensionsStore } from '../../hooks/use-extensions-store';
-import { sanitizeBlockAttributes } from '../hooks/utils';
 import { useBlockAppContext } from './block-app';
+import { isBaseBreakpoint } from '../../canvas-editor';
+import { sanitizeBlockAttributes } from '../hooks/utils';
+import { BlockFillPartials } from './block-fill-partials';
+import { BlockCompatibility } from './block-compatibility';
+import type { UpdateBlockEditorSettings } from '../libs/types';
+import { ErrorBoundaryFallback } from '../hooks/block-settings';
+import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const { props: _props } = useBlockAppContext();
@@ -73,6 +76,9 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		[attributes]
 	);
 
+	const [notice, setNotice] = useState(null);
+	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+		useState(false);
 	const [currentTab, setCurrentTab] = useState(
 		additional?.activeTab || 'style'
 	);
@@ -301,6 +307,17 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		);
 	}, [_attributes]);
 
+	const blockStyleProps = {
+		clientId,
+		supports,
+		selectors,
+		attributes: sanitizedAttributes,
+		blockName: name,
+		currentAttributes,
+		defaultAttributes,
+		activeDeviceType: getDeviceType(),
+	};
+
 	return (
 		<BlockEditContextProvider
 			{...{
@@ -362,6 +379,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 					/>
 					<BlockFillPartials
 						{...{
+							notice,
 							clientId,
 							isActive,
 							currentState,
@@ -405,22 +423,29 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				<div ref={blockEditRef} />
 			)}
 
-			<StylesWrapper clientId={clientId}>
-				<Fill name={'blockera-styles-wrapper-' + clientId}>
-					<BlockStyle
+			<ErrorBoundary
+				fallbackRender={({ error }): MixedElement => (
+					<ErrorBoundaryFallback
 						{...{
+							error,
+							notice,
 							clientId,
-							supports,
-							selectors,
-							attributes: sanitizedAttributes,
-							blockName: name,
-							currentAttributes,
-							defaultAttributes,
-							activeDeviceType: getDeviceType(),
+							setNotice,
+							from: 'style-wrapper',
+							props: blockStyleProps,
+							isReportingErrorCompleted,
+							setIsReportingErrorCompleted,
+							fallbackComponent: BlockStyle,
 						}}
 					/>
-				</Fill>
-			</StylesWrapper>
+				)}
+			>
+				<StylesWrapper clientId={clientId}>
+					<Fill name={'blockera-styles-wrapper-' + clientId}>
+						<BlockStyle {...blockStyleProps} />
+					</Fill>
+				</StylesWrapper>
+			</ErrorBoundary>
 			{/*</StrictMode>*/}
 
 			{children}

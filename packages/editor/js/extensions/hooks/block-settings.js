@@ -3,9 +3,15 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 import { doAction } from '@wordpress/hooks';
-import { useEffect, useMemo, createElement } from '@wordpress/element';
+import {
+	memo,
+	useMemo,
+	useState,
+	useEffect,
+	createElement,
+} from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -20,10 +26,12 @@ import {
 	mergeObject,
 	isLoadedSiteEditor,
 } from '@blockera/utils';
+import { useBugReporter } from '@blockera/telemetry';
 
 /**
  * Internal dependencies
  */
+import { FallbackUI } from '../fallback-ui';
 import {
 	registerBlockExtensionsSupports,
 	registerInnerBlockExtensionsSupports,
@@ -126,6 +134,35 @@ export default function withBlockSettings(
 		),
 	};
 }
+
+export const ErrorBoundaryFallback: ComponentType<Object> = memo(
+	({
+		error,
+		from,
+		setNotice,
+		fallbackComponent,
+		props,
+		clientId,
+		...rest
+	}: Object): MixedElement => {
+		useBugReporter({
+			error,
+			...rest,
+		});
+
+		return (
+			<FallbackUI
+				{...rest}
+				from={from}
+				id={clientId}
+				error={error}
+				setNotice={setNotice}
+				fallbackComponentProps={props}
+				fallbackComponent={fallbackComponent}
+			/>
+		);
+	}
+);
 
 /**
  * Merge settings of block type.
@@ -234,9 +271,25 @@ function mergeBlockSettings(
 				  )
 				: settings.attributes;
 
+			const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				useState(false);
+
 			return (
 				<ErrorBoundary
-					fallbackRender={() => createElement(settings.edit, props)}
+					fallbackRender={({ error }) => (
+						<ErrorBoundaryFallback
+							{...{
+								props,
+								error,
+								from: 'root',
+								clientId: props.clientId,
+								isReportingErrorCompleted,
+								setIsReportingErrorCompleted,
+								fallbackComponent: settings.edit,
+							}}
+						/>
+					)}
 				>
 					<BaseControlContext.Provider value={baseContextValue}>
 						<BlockApp
