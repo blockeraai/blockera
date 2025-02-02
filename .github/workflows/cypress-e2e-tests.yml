@@ -65,7 +65,7 @@ jobs:
                       echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}}' >> .wp-env.json
                       ;;  
                     "blocksy")
-                      echo '{"plugins": ["."], "themes": ["https://downloads.wordpress.org/theme/blocksy.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}}' >> .wp-env.json
+                      echo '{"plugins": ["."], "themes": ["https://downloads.wordpress.org/theme/blocksy.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}, "lifecycleScripts": {"afterStart": "wp-env run cli wp theme activate blocksy"}}' >> .wp-env.json
                       ;;
                     "telemetry")
                       echo '{"plugins": ["."], "config": {"BLOCKERA_TELEMETRY_NOT_STORE_DATA": true}}' >> .wp-env.json
