@@ -104,15 +104,15 @@ export const getFontSizesTitle: () => string = memoize(function (): string {
 
 	if (!isDefaultSizes) {
 		const { getCurrentTheme } = select('blockera/data');
-		const {
-			name: { rendered: themeName },
-		} = getCurrentTheme();
+		const theme = getCurrentTheme();
 
-		return sprintf(
-			// translators: it's the product name (a theme or plugin name)
-			__('%s Font Sizes', 'blockera'),
-			themeName
-		);
+		if (theme?.name?.rendered) {
+			return sprintf(
+				// translators: it's the product name (a theme or plugin name)
+				__('%s Font Sizes', 'blockera'),
+				theme.name.rendered
+			);
+		}
 	}
 
 	return __('Editor Font Sizes', 'blockera');
