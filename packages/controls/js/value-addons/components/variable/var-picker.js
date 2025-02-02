@@ -145,7 +145,6 @@ export default function ({
 								}),
 							};
 
-							console.log('variable', variable);
 							return (
 								<PickerValueItem
 									showValue={
