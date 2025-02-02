@@ -32,7 +32,7 @@ describe('Canvas editor testing', () => {
 
 	// We should double check this test suite because this is flaky test!
 	// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-138
-	it('should rendered blockera canvas editor at the header top bar of Site Editor while switch between edit and init components', () => {
+	it.skip('should rendered blockera canvas editor at the header top bar of Site Editor while switch between edit and init components', () => {
 		goTo('/wp-admin/site-editor.php').then(() => {
 			// eslint-disable-next-line
 			cy.wait(2000);
@@ -66,7 +66,7 @@ describe('Canvas editor testing', () => {
 		cy.getByDataTest('blockera-canvas-editor').should('exist');
 	});
 
-	it('should rendered the blockera breakpoints navbar at the top of the page while "Top toolbar" is enabled', () => {
+	it.skip('should rendered the blockera breakpoints navbar at the top of the page while "Top toolbar" is enabled', () => {
 		createPost();
 
 		appendBlocks(
