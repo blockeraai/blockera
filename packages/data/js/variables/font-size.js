@@ -4,8 +4,7 @@
  */
 import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
-
-import { STORE_NAME } from '../store';
+import { sprintf, __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -15,6 +14,7 @@ import { isBlockTheme, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { STORE_NAME } from '../store';
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 
@@ -70,3 +70,50 @@ export const getFontSizeBy: (field: string, value: any) => ?VariableItem =
 	memoize(function (field: string, value: any): ?VariableItem {
 		return getFontSizes().find((item) => item[field] === value);
 	});
+
+export const getFontSizesTitle: () => string = memoize(function (): string {
+	const defaultFontSizes = [
+		{
+			slug: 'small',
+			size: '13px',
+		},
+		{
+			slug: 'medium',
+			size: '20px',
+		},
+		{
+			slug: 'large',
+			size: '36px',
+		},
+		{
+			slug: 'x-large',
+			size: '42px',
+		},
+	];
+
+	const currentFontSizes = getBlockEditorSettings().fontSizes;
+
+	// Check if current sizes match default sizes (ignoring the name property)
+	const isDefaultSizes = defaultFontSizes.every((defaultSize) =>
+		currentFontSizes.some(
+			(currentSize) =>
+				defaultSize.slug === currentSize.slug &&
+				defaultSize.size === currentSize.size
+		)
+	);
+
+	if (!isDefaultSizes) {
+		const { getCurrentTheme } = select('blockera/data');
+		const {
+			name: { rendered: themeName },
+		} = getCurrentTheme();
+
+		return sprintf(
+			// translators: it's the product name (a theme or plugin name)
+			__('%s Font Sizes', 'blockera'),
+			themeName
+		);
+	}
+
+	return __('Editor Font Sizes', 'blockera');
+});

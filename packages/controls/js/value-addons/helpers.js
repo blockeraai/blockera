@@ -20,6 +20,7 @@ import {
 	getColorsTitle,
 	getColors,
 	getFontSizes,
+	getFontSizesTitle,
 	getLinearGradientsTitle,
 	getLinearGradients,
 	getRadialGradientsTitle,
@@ -31,7 +32,7 @@ import {
 	getWidthSizes,
 	type VariableCategory,
 } from '@blockera/data';
-import { isBlockTheme, isObject, isUndefined } from '@blockera/utils';
+import { isObject, isUndefined } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -262,9 +263,7 @@ export function getVariableCategory(
 	switch (category) {
 		case 'font-size':
 			return {
-				label: isBlockTheme()
-					? __('Theme Font Sizes', 'blockera')
-					: __('Editor Font Sizes', 'blockera'),
+				label: getFontSizesTitle(),
 				items: getFontSizes(),
 				type: 'font-size',
 			};
