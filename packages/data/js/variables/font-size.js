@@ -5,10 +5,12 @@
 import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
 
+import { STORE_NAME } from '../store';
+
 /**
  * Blockera dependencies
  */
-import { isBlockTheme } from '@blockera/utils';
+import { isBlockTheme, isUndefined } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -50,7 +52,18 @@ export const getFontSizes: () => Array<VariableItem> = memoize(
 export const getFontSize: (id: string) => ?VariableItem = memoize(function (
 	id: string
 ): ?VariableItem {
-	return getFontSizes().find((item) => item.id === id);
+	let fontSize = getFontSizes().find((item) => item.id === id);
+
+	// If not, check if the font size is in the custom font sizes
+	if (isUndefined(fontSize?.value)) {
+		const { getVariableGroupItems } = select(STORE_NAME);
+
+		fontSize = getVariableGroupItems('', 'font-size').find(
+			(item) => item.id === id
+		);
+	}
+
+	return fontSize;
 });
 
 export const getFontSizeBy: (field: string, value: any) => ?VariableItem =
