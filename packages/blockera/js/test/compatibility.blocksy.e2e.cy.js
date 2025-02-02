@@ -59,16 +59,13 @@ describe('Compatibility with Blocksy Theme', () => {
 		});
 
 		//Check frontend
-		// savePage();
+		savePage();
 
-		// redirectToFrontPage();
+		redirectToFrontPage();
 
-		// cy.get('style#blockera-inline-css')
-		// 	.invoke('text')
-		// 	.should(
-		// 		'include',
-		// 		'color: var(--theme-link-initial-color)'
-		// 	);
+		cy.get('style#blockera-inline-css')
+			.invoke('text')
+			.should('include', 'color: var(--theme-link-initial-color)');
 	});
 
 	it('Width Size variables', () => {
@@ -116,16 +113,16 @@ describe('Compatibility with Blocksy Theme', () => {
 			});
 
 			//Check frontend
-			// savePage();
+			savePage();
 
-			// redirectToFrontPage();
+			redirectToFrontPage();
 
-			// cy.get('style#blockera-inline-css')
-			// 	.invoke('text')
-			// 	.should(
-			// 		'include',
-			// 		'width: var(--theme-normal-container-max-width)'
-			// 	);
+			cy.get('style#blockera-inline-css')
+				.invoke('text')
+				.should(
+					'include',
+					'width: var(--theme-normal-container-max-width)'
+				);
 		});
 	});
 });
