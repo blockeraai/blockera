@@ -5,7 +5,7 @@
  */
 import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -80,7 +80,17 @@ export const getSpacingsTitle: () => string = memoize(function (): string {
 					?.spacingSizes?.theme
 			)
 		) {
-			return __('Theme Spacing Sizes', 'blockera');
+			const { getCurrentTheme } = select('blockera/data');
+
+			const theme = getCurrentTheme();
+
+			if (!isUndefined(theme?.name?.rendered)) {
+				return sprintf(
+					// translators: it's the product name (a theme or plugin name)
+					__('%s Spacing Sizes', 'blockera'),
+					theme?.name?.rendered
+				);
+			}
 		}
 	}
 
