@@ -1,24 +1,40 @@
 == Changelog ==
 
-= 1.3.0 =
+= 1.4.0 = 2025-02-03
+
+### New Features
+- Blocky theme compatibility (Level 1) [[Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/blockera-compatibility-with-the-blocksy-theme-coNZ62pejloObdo)]
 
 ### Improvements
-- Improved variable picker to display accurate title indicating whether the variable is sourced from the block theme or block editor.
-- Enhanced the CSS style generator for typography features to improve design flexibility and customization.
-- Enhanced the style engine server-side implementation with improved APIs for better developer experience and extensibility.
+- Open the "Upgrade to Pro" menu in a new tab and "Activate Pro License" menu in the same tab.
+- Showing color palette of the current non-block theme in the colors variable picker (for Blocksy theme compatibility).
+- Updated the variable picker to display external product variables before theme variables.
+- The overall design of the block settings has been improved to boost the UX (based on user feedback and user researches).
+- Enhanced the Opt-in validation process to compatible with bug detector and reporter system.
 
 ### Bug Fixes
-- Fixed the language issue.
-- Fixed missing translation strings for Blockera plugin text domain [[Bug Report](https://community.blockera.ai/bugs-mdhyb8nc/post/missing-translation-string-for-blockera-iBEIfdKXdbBkpn1)]
-- Fixed an issue where variable colors appeared lighter in Blockera Variables than in the original variables  [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/showing-theme-colors-as-they-are-4VjzJz6qKKL9HdQ)]
-- Fixed an issue where block themes without variable settings for Spacing and Color would cause errors. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/theme-defined-spacing-does-not-fall-back-to-wordpress-defaults-Ft6gpFAjwsMoNA8)]
-- Fixed JavaScript undefined errors when accessing theme variables and settings.
-- Fixed a TypeError caused by calling a class as a function.
-- Wrapped the block edit component in an ErrorBoundary to enhance error handling.
-- Fixed an issue with the blockeraGap feature in the style engine causing incorrect gap values.
+- Renamed the constants to avoid conflicts with other plugins. [[Bug Report](https://community.blockera.ai/bugs-mdhyb8nc/post/warning-constant-blockera-version-already-defined-uvTMUjomFS8fELi)]
+- Fix a bug for when the variable items from theme has not name information.
+- Fixed an issue where features configurations and cached data caused problems when adding new features options.
+- Fixed an issue in the custom style section where this is by default closed, but the section remained open.
+- Fixed an issue where the navigation block were not correctly working with flex wrap and aspect ratio features. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/bug-in-navigation-block-WQZsA8IAhFcPNxR)]
+- Fixed an issue where the breakpoints navbar disappear when the 'Top Toolbar' setting is selected. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/blockers-top-toolbar-disappears-if-you-select-top-toolbar-setting-sldgztD8JG2lVeC)]
 
-### Bugs
-- Fixed Pro submenu items were not linked and styled correctly.
+### Development Features
+- Added automated test pipeline for checking Blocky theme compatibility.
+- Added automated test for checking Blocky theme color variables compatibility.
+- Added automated test for checking Blocky theme width size variables compatibility.
+
+### Bug Fixes  
+- Fixed an issue where the "Upgrade to Pro" menu did not open in a new tab.
+- Fixed the "Upgrade to Pro" menu item was not styled correctly in translated languages.
+
+### New Features:
+- Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.
+- Added a new fallback UI for the block editor to improve the user experience when an error occurs. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/bug-detector-and-reporter-inside-wp-admin-JNHwQhKzYqrEjK6)]
+
+### Automated Tests:
+- Added E2E tests for the Box Sizing feature to verify its functionality in both the editor and front end.
 
 ## More
 

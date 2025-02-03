@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.0 (2025-02-03)
+
 ### Improvements
 - The overall design of the block settings has been improved to boost the UX (based on user feedback and user researches).
 
