@@ -91,15 +91,13 @@ describe('Canvas editor testing', () => {
 		cy.getByAriaLabel('Hide block tools').click();
 		cy.getByAriaLabel('Desktop').should('be.visible');
 
-		cy.get('[aria-label="Options"]').first().click();
+		cy.get('[aria-label="Options"]').eq(1).click();
 
 		// We should disable top toolbar to ensure of rendering canvas editor at the header top bar for remaining other tests.
 		cy.get('button')
 			.contains('Top toolbar')
 			.then(($button) => {
-				if ($button.attr('aria-checked') === 'true') {
-					$button.click();
-				}
+				$button.click();
 			});
 	});
 });
