@@ -15,9 +15,6 @@ global $blockera;
 
 $blockera = new \Blockera\Setup\Blockera();
 
-// Load compatibility for third party themes and plugins.
-$compatibility = new \Blockera\Setup\Compatibility\Compatibility();
-
 $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
 blockera_load('blockera-admin.php.hooks', $external_dir);
