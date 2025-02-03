@@ -1,7 +1,7 @@
 ## Unreleased
 
 ### New Features
-- Blocky theme compatibility [[Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/blockera-compatibility-with-the-blocksy-theme-coNZ62pejloObdo)]
+- Blocky theme compatibility (Level 1) [[Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/blockera-compatibility-with-the-blocksy-theme-coNZ62pejloObdo)]
 
 ### Development Features
 - Added automated test pipeline for checking Blocky theme compatibility.
