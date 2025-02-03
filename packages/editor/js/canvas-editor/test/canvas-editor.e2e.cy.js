@@ -66,7 +66,7 @@ describe('Canvas editor testing', () => {
 		cy.getByDataTest('blockera-canvas-editor').should('exist');
 	});
 
-	it.skip('should rendered the blockera breakpoints navbar at the top of the page while "Top toolbar" is enabled', () => {
+	it('should rendered the blockera breakpoints navbar at the top of the page while "Top toolbar" is enabled', () => {
 		createPost();
 
 		appendBlocks(
@@ -90,5 +90,16 @@ describe('Canvas editor testing', () => {
 		cy.getByAriaLabel('Desktop').should('be.visible');
 		cy.getByAriaLabel('Hide block tools').click();
 		cy.getByAriaLabel('Desktop').should('be.visible');
+
+		cy.get('[aria-label="Options"]').first().click();
+
+		// We should disable top toolbar to ensure of rendering canvas editor at the header top bar for remaining other tests.
+		cy.get('button')
+			.contains('Top toolbar')
+			.then(($button) => {
+				if ($button.attr('aria-checked') === 'true') {
+					$button.click();
+				}
+			});
 	});
 });

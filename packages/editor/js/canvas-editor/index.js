@@ -13,13 +13,13 @@ import { useRef, useEffect, createPortal } from '@wordpress/element';
 import { Breakpoints } from './components';
 
 export const CanvasEditor = ({
-	entry,
+	target,
 	previewDropdown,
 	postPreviewElement,
 }: {
 	previewDropdown: string,
 	postPreviewElement: string,
-	entry: IntersectionObserverEntry,
+	target: HTMLElement | null,
 }): MixedElement => {
 	const ref = useRef(null);
 	const { getSelectedBlock } = select('core/block-editor');
@@ -46,7 +46,11 @@ export const CanvasEditor = ({
 		// eslint-disable-next-line
 	}, [selectedBlock]);
 
-	return createPortal(<Breakpoints className={className} />, entry.target);
+	if (!target) {
+		return <></>;
+	}
+
+	return createPortal(<Breakpoints className={className} />, target);
 };
 
 export * from './components';
