@@ -31,6 +31,7 @@ use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Exceptions\BaseException;
 use Blockera\Bootstrap\ServiceProvider;
+use Blockera\Setup\Compatibility\Compatibility;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;
 use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
@@ -166,7 +167,31 @@ class AppServiceProvider extends ServiceProvider {
 
         parent::boot();
 
-        $dynamicValueRegistry = $this->app->make(ValueAddonRegistry::class, [ DynamicValueType::class ]);
+        $this->app->make(SavePost::class);
+        $this->app->make(Setup::class)->apply();
+        $this->app->make(EntityRegistry::class);
+
+        $this->renderBlocks();
+
+		Config::setConsumerConfig( blockera_core_config( 'app' ) );
+		Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
+		Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
+		Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
+		Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
+
+        add_action('after_setup_theme', [ $this, 'after_setup_theme' ]);
+    }
+
+    /**
+     * The after_setup_theme action hook
+     */
+    public function after_setup_theme(): void {
+
+        add_action('init', [ $this, 'loadTextDomain' ]);
+
+		$this->app->make(Compatibility::class);
+
+		$dynamicValueRegistry = $this->app->make(ValueAddonRegistry::class, [ DynamicValueType::class ]);
         $variableRegistry     = $this->app->make(ValueAddonRegistry::class, [ VariableType::class ]);
 
         if ($this->app instanceof Blockera) {
@@ -182,32 +207,6 @@ class AppServiceProvider extends ServiceProvider {
                 )
             );
         }
-
-        $this->app->make(SavePost::class);
-        $this->app->make(Setup::class)->apply();
-        $this->app->make(EntityRegistry::class);
-
-        $this->renderBlocks();
-
-        if (! blockera_telemetry_opt_in_is_off('blockera')) {
-
-            Config::setConsumerConfig(blockera_core_config('app'));
-            Config::setOptionKeys(blockera_core_config('telemetry.options'));
-            Config::setServerURL(blockera_core_config('telemetry.server_url'));
-            Config::setRestParams(blockera_core_config('telemetry.rest_params'));
-            Config::setHookPrefix(blockera_core_config('telemetry.hook_prefix'));
-        }
-
-        add_action('after_setup_theme', [ $this, 'after_setup_theme' ]);
-    }
-
-    /**
-     * The after_setup_theme action hook
-     */
-    public function after_setup_theme(): void {
-
-        add_action('init', [ $this, 'loadTextDomain' ]);
-
     }
 
     /**

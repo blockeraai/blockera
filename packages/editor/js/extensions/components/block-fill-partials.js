@@ -24,6 +24,7 @@ const excludedControls = ['canvas-editor'];
 
 export const BlockFillPartials: ComponentType<any> = memo(
 	({
+		notice,
 		clientId,
 		isActive,
 		blockProps,
@@ -60,6 +61,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			<>
 				<Fill name={`blockera-block-card-content-${clientId}`}>
 					<BlockCard
+						notice={notice}
 						clientId={clientId}
 						blockName={blockProps.name}
 						innerBlocks={blockeraInnerBlocks}

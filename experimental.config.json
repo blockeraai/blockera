@@ -12,9 +12,6 @@
 		}
 	},
 	"data": {
-		"dynamicValue": false,
-		"variable": {
-			"registryHooks": false
-		}
+		"dynamicValue": false
 	}
 }

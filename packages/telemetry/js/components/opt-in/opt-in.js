@@ -5,16 +5,21 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import apiFetch from '@wordpress/api-fetch';
 import { useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { classNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 import { Modal, Flex, Button } from '@blockera/controls';
 
-export const OptInModal = ({ path }: { path: string }): MixedElement => {
+/**
+ * Internal dependencies
+ */
+import { sender } from './sender';
+
+export const OptInModal = (): MixedElement => {
 	const [isOpen, setOpen] = useState(true);
 	const closeModal = () => setOpen(false);
 
@@ -23,45 +28,59 @@ export const OptInModal = ({ path }: { path: string }): MixedElement => {
 	}
 
 	const allowAndContinue = (prompt: 'ALLOW' | 'SKIP') => {
-		const data = {
-			'opt-in-agreed': prompt,
-			action: 'telemetry-opt-in-status',
-		};
-
-		apiFetch.use(apiFetch.createNonceMiddleware(window.blockeraNonceField));
-		apiFetch({
-			path,
-			data,
-			method: 'POST',
-		}).then((response) => {
-			console.log(response);
-		});
+		sender(prompt);
 
 		closeModal();
 	};
 
 	return (
-		<Modal
-			headerTitle={__('Hello 👋', 'blockera')}
-			size={'medium'}
-			isDismissible={false}
-		>
-			<>
+		<Modal size={'medium'} isDismissible={false}>
+			<Flex direction="column" gap={25}>
+				<Flex direction="column" gap={15}>
+					<Icon
+						icon={'blockera'}
+						library={'blockera'}
+						iconSize={36}
+						style={{
+							fill: 'var(--blockera-controls-primary-color)',
+						}}
+					/>
+
+					<p
+						style={{
+							margin: 0,
+							fontSize: 24,
+							fontWeight: 600,
+							color: '#1d2327',
+						}}
+					>
+						{__('Hello 👋', 'blockera')}
+					</p>
+
+					<h1
+						data-test="thank-you-heading"
+						style={{
+							fontSize: '22px',
+							margin: '0',
+							color: '#1d2327',
+						}}
+					>
+						{__('Thank you for choosing Blockera!', 'blockera')}
+					</h1>
+				</Flex>
+
 				<Flex
 					direction={'column'}
 					gap="10px"
 					justifyContent={'space-between'}
 				>
-					<h1
+					<p
 						style={{
-							fontSize: '22px',
-							margin: '20px 0 10px',
+							color: '#707070',
+							margin: 0,
+							fontSize: 14,
 						}}
 					>
-						{__('Thank You for Choosing Blockera!', 'blockera')}
-					</h1>
-
-					<p className={classNames('blockera-opt-in-text')}>
 						{window.blockeraOptInDescription}
 					</p>
 
@@ -86,6 +105,7 @@ export const OptInModal = ({ path }: { path: string }): MixedElement => {
 
 				<Flex direction={'row'} justifyContent={'space-between'}>
 					<Button
+						data-test="allow-and-continue"
 						variant={'primary'}
 						onClick={() => allowAndContinue('ALLOW')}
 					>
@@ -93,7 +113,8 @@ export const OptInModal = ({ path }: { path: string }): MixedElement => {
 					</Button>
 
 					<Button
-						variant={'tertiary-on-hover'}
+						data-test="skip-and-continue"
+						variant={'tertiary'}
 						onClick={() => allowAndContinue('SKIP')}
 						style={{
 							color: '#959595',
@@ -102,7 +123,7 @@ export const OptInModal = ({ path }: { path: string }): MixedElement => {
 						{__('Skip', 'blockera')}
 					</Button>
 				</Flex>
-			</>
+			</Flex>
 		</Modal>
 	);
 };

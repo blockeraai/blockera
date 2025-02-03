@@ -29,7 +29,12 @@ export {
 	getGradientVAFromIdString,
 	getGradientType,
 } from './gradient';
-export { getFontSizes, getFontSizeBy, getFontSize } from './font-size';
+export {
+	getFontSizes,
+	getFontSizeBy,
+	getFontSize,
+	getFontSizesTitle,
+} from './font-size';
 export {
 	getSpacingsTitle,
 	getSpacings,

@@ -74,8 +74,8 @@ export default function ({
 		const { getVariableGroups } = select(STORE_NAME);
 
 		return [
-			...controlProps.variableTypes,
 			...Object.keys(getVariableGroups()),
+			...controlProps.variableTypes,
 		].map((type, index) => {
 			let data: DynamicVariableGroup | VariableCategoryDetail =
 				getVariableCategory(type);
@@ -137,12 +137,14 @@ export default function ({
 						).map((variable, _index) => {
 							const itemData = {
 								...variable,
-								type,
-								var: generateVariableString({
-									reference: variable.reference,
-									type,
-									id: variable.id,
-								}),
+								type: data?.type || type,
+								var:
+									variable?.var ||
+									generateVariableString({
+										reference: variable.reference,
+										type: data?.type || type,
+										id: variable.id,
+									}),
 							};
 
 							return (
@@ -154,19 +156,21 @@ export default function ({
 									value={controlProps.value}
 									data={itemData}
 									onClick={controlProps.handleOnClickVar}
-									key={`${type}-${_index}-value-type`}
+									key={`${
+										data?.type || type
+									}-${_index}-value-type`}
 									name={variable.name}
-									type={type}
+									type={data?.type || type}
 									valueType="variable"
 									isCurrent={
 										isValid(controlProps.value) &&
 										controlProps.value.settings.type ===
-											type &&
+											(data?.type || type) &&
 										controlProps.value.settings.id ===
 											itemData.id
 									}
 									icon={getVariableIcon({
-										type,
+										type: data?.type || type,
 										value: variable.value,
 									})}
 									status="active"

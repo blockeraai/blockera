@@ -15,13 +15,6 @@ global $blockera;
 
 $blockera = new \Blockera\Setup\Blockera();
 
-// LOADING: other bootstrap files ...
-if (defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && blockera_get_experimental(['data', 'variable', 'registryHooks'])) {
-
-    // Experimental filter for variables.
-    blockera_load('hooks', __DIR__);
-}
-
 $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
 blockera_load('blockera-admin.php.hooks', $external_dir);

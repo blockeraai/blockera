@@ -38,6 +38,7 @@ export type ValueAddon = {
 
 export type VariableCategoryDetail = {
 	label?: string,
+	type?: string,
 	items: Array<VariableItem> | [],
 	notFound?: boolean,
 };

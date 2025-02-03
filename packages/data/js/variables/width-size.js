@@ -4,6 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { default as memoize } from 'fast-memoize';
+import { select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -13,6 +14,7 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { STORE_NAME } from '../store';
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 
@@ -65,7 +67,18 @@ export const getWidthSizesTitle: () => string = memoize(function (): string {
 export const getWidthSize: (id: string) => ?VariableItem = memoize(function (
 	id: string
 ): ?VariableItem {
-	return getWidthSizes().find((item) => item.id === id);
+	let widthSize = getWidthSizes().find((item) => item.id === id);
+
+	// If not, check if the color is in the custom colors
+	if (isUndefined(widthSize?.value)) {
+		const { getVariableGroupItems } = select(STORE_NAME);
+
+		widthSize = getVariableGroupItems('', 'width-size').find(
+			(item) => item.id === id
+		);
+	}
+
+	return widthSize;
 });
 
 export const getWidthSizeBy: (field: string, value: any) => ?VariableItem =
