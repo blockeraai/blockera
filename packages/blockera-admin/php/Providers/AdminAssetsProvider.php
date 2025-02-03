@@ -45,7 +45,7 @@ class AdminAssetsProvider extends AssetsProvider {
 		$assets = $this->getAssets();
 
 		// phpcs:ignore
-		if ( ! empty( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'blockera-settings' ) ) {
+		if ( ! empty( $_GET['page'] ) && false !== strpos( $_GET['page'], 'blockera-settings' ) ) {
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'createInlineScript' ] );
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
