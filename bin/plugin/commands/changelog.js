@@ -795,8 +795,9 @@ function getMainChangelog(changelogPath, version = '') {
  *
  * @return {string} The formatted changelog string.
  */
-function updateChangelog(changelogs, version) {
-	const start = '== Changelog ==\n\n= ' + version.trim() + ' =\n\n';
+function updateChangelog(changelogs, version, publishDate) {
+	const start =
+		'== Changelog ==\n\n= ' + version.trim() + ' = ' + publishDate + '\n\n';
 	let changelog = '';
 	const end =
 		'\n\n## More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';

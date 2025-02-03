@@ -115,7 +115,10 @@ async function updatePackages(config) {
 		path.resolve(process.cwd(), 'packages/*/CHANGELOG.md')
 	);
 
-	updateChangelog(changelogFiles, version);
+	// e.g. "2022-11-01T00:13:26.102Z" -> "2022-11-01"
+	const publishDate = new Date().toISOString().split('T')[0];
+
+	updateChangelog(changelogFiles, version, publishDate);
 
 	const processedPackages = await Promise.all(
 		changelogFiles.map(async (changelogPath) => {
@@ -195,8 +198,6 @@ async function updatePackages(config) {
 		'>> Recommended version bumps based on the changes detected in CHANGELOG files:'
 	);
 
-	// e.g. "2022-11-01T00:13:26.102Z" -> "2022-11-01"
-	const publishDate = new Date().toISOString().split('T')[0];
 	await Promise.all(
 		packagesToUpdate.map(
 			async ({
