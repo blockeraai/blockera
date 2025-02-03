@@ -39,6 +39,8 @@ class AdminAssetsProvider extends AssetsProvider {
 	 * @return void
 	 */
 	public function boot(): void {
+		
+		global $pagenow;
 
 		$assets = $this->getAssets();
 
@@ -64,7 +66,7 @@ class AdminAssetsProvider extends AssetsProvider {
 				]
 			);
 
-		} elseif ( ! in_array($GLOBALS['pagenow'], [ 'post.php', 'post-new.php' ], true) ) {
+		} elseif ( ! in_array($pagenow, [ 'post.php', 'post-new.php', 'site-editor.php' ], true) ) {
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'telemetryInlineScripts' ] );
 
