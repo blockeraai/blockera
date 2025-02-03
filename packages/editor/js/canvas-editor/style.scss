@@ -9,6 +9,17 @@
 	}
 }
 
+.editor-header__center {
+
+	&.is-collapsed {
+		display: flex !important;
+
+		.editor-document-bar {
+			display: none;
+		}
+	}
+}
+
 .blockera-canvas-breakpoints {
 	max-width: 330px;
 	height: 32px;

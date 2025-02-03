@@ -7,7 +7,7 @@ import {
 describe('detectWPAspectRatioValue', () => {
 	test('empty', () => {
 		expect(detectWPAspectRatioValue('')).toEqual({
-			value: '',
+			val: '',
 			width: '',
 			height: '',
 		});
@@ -15,7 +15,7 @@ describe('detectWPAspectRatioValue', () => {
 
 	test('auto means original in Blockera', () => {
 		expect(detectWPAspectRatioValue('auto')).toEqual({
-			value: '',
+			val: '',
 			width: '',
 			height: '',
 		});
@@ -24,7 +24,7 @@ describe('detectWPAspectRatioValue', () => {
 	test('WP core values', () => {
 		coreWPAspectRatioValues.forEach((item) => {
 			expect(detectWPAspectRatioValue(item)).toEqual({
-				value: item,
+				val: item,
 				width: '',
 				height: '',
 			});
@@ -33,7 +33,7 @@ describe('detectWPAspectRatioValue', () => {
 
 	test('custom value - both width and height', () => {
 		expect(detectWPAspectRatioValue('1/5')).toEqual({
-			value: 'custom',
+			val: 'custom',
 			width: '1',
 			height: '5',
 		});
@@ -41,7 +41,7 @@ describe('detectWPAspectRatioValue', () => {
 
 	test('custom value - only one dimension', () => {
 		expect(detectWPAspectRatioValue('10')).toEqual({
-			value: 'custom',
+			val: 'custom',
 			width: '10',
 			height: '10',
 		});
@@ -57,7 +57,7 @@ describe('convertAspectRatioValueToWP', () => {
 		coreWPAspectRatioValues.forEach((item) => {
 			expect(
 				convertAspectRatioValueToWP({
-					value: item,
+					val: item,
 					width: '',
 					height: '',
 				})
@@ -68,7 +68,7 @@ describe('convertAspectRatioValueToWP', () => {
 	test('custom value - both width and height', () => {
 		expect(
 			convertAspectRatioValueToWP({
-				value: 'custom',
+				val: 'custom',
 				width: '1',
 				height: '5',
 			})
@@ -78,7 +78,7 @@ describe('convertAspectRatioValueToWP', () => {
 	test('custom value - only one dimension', () => {
 		expect(
 			convertAspectRatioValueToWP({
-				value: 'custom',
+				val: 'custom',
 				width: '10',
 				height: '10',
 			})

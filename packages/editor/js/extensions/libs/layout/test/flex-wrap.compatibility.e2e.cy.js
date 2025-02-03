@@ -39,7 +39,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			);
 
 			expect({
-				value: '',
+				val: '',
 				reverse: false,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
@@ -69,7 +69,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			);
 
 			expect({
-				value: 'wrap',
+				val: 'wrap',
 				reverse: false,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
@@ -84,7 +84,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			);
 
 			expect({
-				value: 'nowrap',
+				val: 'nowrap',
 				reverse: false,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
@@ -105,7 +105,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			);
 
 			expect({
-				value: '',
+				val: '',
 				reverse: false,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
@@ -137,7 +137,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			);
 
 			expect({
-				value: 'nowrap',
+				val: 'nowrap',
 				reverse: false,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
@@ -156,7 +156,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			);
 
 			expect({
-				value: 'wrap',
+				val: 'wrap',
 				reverse: false,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
@@ -176,7 +176,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			);
 
 			expect({
-				value: '',
+				val: '',
 				reverse: false,
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});

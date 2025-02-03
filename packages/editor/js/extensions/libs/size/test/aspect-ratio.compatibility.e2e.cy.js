@@ -41,7 +41,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '4/3',
+					val: '4/3',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -64,7 +64,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '16/9',
+					val: '16/9',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -86,7 +86,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '',
+					val: '',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -114,7 +114,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '4/3',
+					val: '4/3',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -142,7 +142,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: 'custom',
+					val: 'custom',
 					width: 2,
 					height: 3,
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -166,7 +166,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '',
+					val: '',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -206,7 +206,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '3/2',
+					val: '3/2',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -227,7 +227,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '16/9',
+					val: '16/9',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -249,7 +249,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '',
+					val: '',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -284,7 +284,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '3/2',
+					val: '3/2',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -312,7 +312,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: 'custom',
+					val: 'custom',
 					width: 2,
 					height: 3,
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));
@@ -336,7 +336,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				);
 
 				expect({
-					value: '',
+					val: '',
 					width: '',
 					height: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraRatio'));

@@ -41,7 +41,7 @@ export type TLayoutProps = {
 			columns: string,
 			rows: string,
 		},
-		blockeraFlexWrap: { value: string, reverse: boolean },
+		blockeraFlexWrap: { val: string, reverse: boolean },
 		blockeraAlignContent: string,
 	},
 	extensionConfig: {

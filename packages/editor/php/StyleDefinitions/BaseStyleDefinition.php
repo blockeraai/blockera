@@ -3,7 +3,6 @@
 namespace Blockera\Editor\StyleDefinitions;
 
 use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
-use Symfony\Component\VarDumper\VarDumper;
 
 abstract class BaseStyleDefinition {
 
@@ -291,7 +290,7 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function generateCssRules( $value, string $name ): void {
 
-		if ( isset( $value['value'] ) ) {
+		if ( isset( $value['value'] ) && 1 === count($value) ) {
 
 			$value = $value['value'];
 		}
@@ -306,6 +305,12 @@ abstract class BaseStyleDefinition {
 
 		// Skip processing mask and divider properties if they are not enabled in experimental features.
 		if ( in_array($cssProperty, [ 'divider', 'mask' ], true) && ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
+
+			return;
+		}
+
+		// Skip processing for properties with default value.
+		if ( isset($this->default_settings[ $name ]['default']['value']) && $value === $this->default_settings[ $name ]['default']['value'] ) {
 
 			return;
 		}

@@ -29,15 +29,15 @@ export const AspectRatio: ComponentType<any> = memo(
 		ratio,
 		handleOnChangeAttributes,
 		defaultValue = {
-			value: '',
+			val: '',
 			width: '',
 			height: '',
 		},
 		...props
 	}: {
 		block: TBlockProps,
-		ratio: { value: string, width: string, height: string },
-		defaultValue: { value: string, width: string, height: string },
+		ratio: { val: string, width: string, height: string },
+		defaultValue: { val: string, width: string, height: string },
 		handleOnChangeAttributes: THandleOnChangeAttributes,
 	}): MixedElement => {
 		const { value, attribute, blockName, resetToDefault } =
@@ -49,10 +49,7 @@ export const AspectRatio: ComponentType<any> = memo(
 				defaultValue,
 				mergeInitialAndDefault: true,
 				valueCleanup: (newValue) => {
-					if (
-						newValue?.value === undefined ||
-						newValue?.value === ''
-					) {
+					if (newValue?.val === undefined || newValue?.val === '') {
 						return defaultValue;
 					}
 
@@ -105,8 +102,10 @@ export const AspectRatio: ComponentType<any> = memo(
 				{...labelProps}
 			>
 				<SelectControl
-					id="value"
-					singularId={'value'}
+					// Backward Compatibility to support blockeraRatio value structure.
+					id={ratio?.hasOwnProperty('value') ? 'value' : 'val'}
+					// Backward Compatibility to support blockeraRatio value structure.
+					singularId={ratio?.hasOwnProperty('value') ? '' : 'val'}
 					aria-label={__('Ratio', 'blockera')}
 					options={[
 						{
@@ -147,7 +146,7 @@ export const AspectRatio: ComponentType<any> = memo(
 						},
 					]}
 					type="native"
-					defaultValue={defaultValue.value}
+					defaultValue={defaultValue.val}
 					onChange={(newValue, ref) => {
 						if (newValue === '') {
 							handleOnChangeAttributes(
@@ -162,7 +161,7 @@ export const AspectRatio: ComponentType<any> = memo(
 								'blockeraRatio',
 								{
 									...ratio,
-									value: newValue,
+									val: newValue,
 								},
 								{ ref }
 							);
@@ -171,7 +170,7 @@ export const AspectRatio: ComponentType<any> = memo(
 					{...props}
 				/>
 
-				{ratio?.value === 'custom' && (
+				{ratio?.val === 'custom' && (
 					<Flex alignItems="flex-start">
 						<InputControl
 							id="width"

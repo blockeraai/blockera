@@ -414,7 +414,13 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							<BaseControl columns="columns-1">
 								<Flex>
 									<ToggleSelectControl
-										id={'value'}
+										id={
+											values.blockeraFlexWrap?.hasOwnProperty(
+												'value'
+											)
+												? 'value'
+												: 'val'
+										}
 										columns="80px 120px"
 										label={__('Children Wrap', 'blockera')}
 										labelDescription={
@@ -505,7 +511,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										//
 										defaultValue={
 											attributes.blockeraFlexWrap.default
-												.value
+												.val
 										}
 										onChange={(newValue, ref) => {
 											if (newValue === '') {
@@ -519,7 +525,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 												handleOnChangeAttributes(
 													'blockeraFlexWrap',
 													{
-														value: newValue,
+														val: newValue,
 														reverse: false,
 													},
 													{ ref }
@@ -529,7 +535,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 													'blockeraFlexWrap',
 													{
 														...values.blockeraFlexWrap,
-														value: 'wrap',
+														val: 'wrap',
 													},
 													{ ref }
 												);
@@ -555,7 +561,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 											padding: '6px',
 										}}
 										disabled={
-											values.blockeraFlexWrap.value ===
+											values.blockeraFlexWrap.val ===
 												'nowrap' || ''
 										}
 										onClick={() => {
@@ -579,7 +585,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							</BaseControl>
 						</ControlContextProvider>
 
-						{values.blockeraFlexWrap?.value === 'wrap' && (
+						{values.blockeraFlexWrap?.val === 'wrap' && (
 							<EditorFeatureWrapper
 								isActive={isShowAlignContent}
 								config={extensionConfig.blockeraAlignContent}

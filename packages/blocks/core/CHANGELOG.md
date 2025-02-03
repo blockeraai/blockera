@@ -18,8 +18,8 @@
 - Added `Parent Menu Link` inner block to the `Submenu Block`.
 
 ### Bug Fixes
-
 - Fixed an issue with test assertions.
+- Fixed a conflicts with the blockeraRatio and blockeraFlexWrap features data structure with WordPress block editor saving process. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/bug-in-navigation-block-WQZsA8IAhFcPNxR)]
 
 ### Automated Tests:
 - Tests for the `Spacer Block` to ensure is supported by Blockera.

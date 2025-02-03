@@ -3,9 +3,8 @@
  */
 import {
 	createPost,
-	disableGutenbergFeatures,
 	goTo,
-	setAbsoluteBlockToolbar,
+	appendBlocks,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -31,7 +30,6 @@ describe('Canvas editor testing', () => {
 		cy.getByDataTest('blockera-canvas-editor').should('exist');
 	});
 
-	// TODO: temporary skip!
 	// We should double check this test suite because this is flaky test!
 	// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-138
 	it.skip('should rendered blockera canvas editor at the header top bar of Site Editor while switch between edit and init components', () => {
@@ -66,5 +64,40 @@ describe('Canvas editor testing', () => {
 		});
 
 		cy.getByDataTest('blockera-canvas-editor').should('exist');
+	});
+
+	it('should rendered the blockera breakpoints navbar at the top of the page while "Top toolbar" is enabled', () => {
+		createPost();
+
+		appendBlocks(
+			'<!-- wp:paragraph -->\n' +
+				'<p>test</p>\n' +
+				'<!-- /wp:paragraph -->'
+		);
+
+		cy.getBlock('core/paragraph').click();
+
+		cy.get('[aria-label="Options"]').first().click();
+
+		cy.get('button')
+			.contains('Top toolbar')
+			.then(($button) => {
+				if ($button.attr('aria-checked') !== 'true') {
+					$button.click();
+				}
+			});
+
+		cy.getByAriaLabel('Desktop').should('be.visible');
+		cy.getByAriaLabel('Hide block tools').click();
+		cy.getByAriaLabel('Desktop').should('be.visible');
+
+		cy.get('[aria-label="Options"]').eq(1).click();
+
+		// We should disable top toolbar to ensure of rendering canvas editor at the header top bar for remaining other tests.
+		cy.get('button')
+			.contains('Top toolbar')
+			.then(($button) => {
+				$button.click();
+			});
 	});
 });

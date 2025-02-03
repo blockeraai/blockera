@@ -319,7 +319,7 @@ return [
 		'type'    => 'object',
 		'default' => [
 			'value' => [
-				'value'   => '',
+				'val'   => '',
 				'reverse' => false,
 			],
 		],
@@ -424,7 +424,7 @@ return [
 		'type'    => 'object',
 		'default' => [
 			'value' => [
-				'value'  => '',
+				'val'  => '',
 				'width'  => '',
 				'height' => '',
 			],
