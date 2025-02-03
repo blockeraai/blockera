@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Updated the variable picker to display external product variables before theme variables.
+
 ## 1.0.1 (2025-01-22)
 
 ### Bug Fixes

@@ -91,7 +91,7 @@ class AssetsLoader {
 			$this->fallback_args = $args['fallback'];
 		}
 
-		add_action( 'wp_head', [ $this, 'printBlockeraGeneratedStyles' ] );
+		add_action( 'wp_footer', [ $this, 'printBlockeraGeneratedStyles' ] );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 

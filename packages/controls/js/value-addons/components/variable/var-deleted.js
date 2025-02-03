@@ -35,7 +35,7 @@ export default function ({
 			onClose={() => controlProps.setOpen('')}
 			className={controlInnerClassNames('popover-value-addon-deleted')}
 		>
-			<Flex direction="column" gap={10} style={{ paddingBottom: '0' }}>
+			<Flex direction="column" gap={10}>
 				{deletedItem.before !== '' && (
 					<p style={{ fontSize: '12px', margin: 0 }}>
 						{deletedItem.before}

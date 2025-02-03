@@ -1,5 +1,14 @@
 ## Unreleased
 
+### New Features
+- Blocky theme compatibility (Level 1) [[Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/blockera-compatibility-with-the-blocksy-theme-coNZ62pejloObdo)]
+
+### Development Features
+- Added automated test pipeline for checking Blocky theme compatibility.
+- Added automated test for checking Blocky theme color variables compatibility.
+- Added automated test for checking Blocky theme width size variables compatibility.
+
+
 ### Bug Fixes
 - Renamed the constants to avoid conflicts with other plugins. [[Bug Report](https://community.blockera.ai/bugs-mdhyb8nc/post/warning-constant-blockera-version-already-defined-uvTMUjomFS8fELi)]
 

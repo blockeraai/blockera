@@ -31,6 +31,7 @@ use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Exceptions\BaseException;
 use Blockera\Bootstrap\ServiceProvider;
+use Blockera\Setup\Compatibility\Compatibility;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;
 use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
@@ -166,23 +167,6 @@ class AppServiceProvider extends ServiceProvider {
 
         parent::boot();
 
-        $dynamicValueRegistry = $this->app->make(ValueAddonRegistry::class, [ DynamicValueType::class ]);
-        $variableRegistry     = $this->app->make(ValueAddonRegistry::class, [ VariableType::class ]);
-
-        if ($this->app instanceof Blockera) {
-
-            $this->app->setRegisteredValueAddons(
-                array_merge(
-                    [
-                        'variable' => $variableRegistry->getRegistered(),
-                    ],
-                    blockera_get_experimental([ 'data', 'dynamicValue' ]) ? [
-                        'dynamic-value' => $dynamicValueRegistry->getRegistered(),
-                    ] : [],
-                )
-            );
-        }
-
         $this->app->make(SavePost::class);
         $this->app->make(Setup::class)->apply();
         $this->app->make(EntityRegistry::class);
@@ -205,6 +189,24 @@ class AppServiceProvider extends ServiceProvider {
 
         add_action('init', [ $this, 'loadTextDomain' ]);
 
+		$this->app->make(Compatibility::class);
+
+		$dynamicValueRegistry = $this->app->make(ValueAddonRegistry::class, [ DynamicValueType::class ]);
+        $variableRegistry     = $this->app->make(ValueAddonRegistry::class, [ VariableType::class ]);
+
+        if ($this->app instanceof Blockera) {
+
+            $this->app->setRegisteredValueAddons(
+                array_merge(
+                    [
+                        'variable' => $variableRegistry->getRegistered(),
+                    ],
+                    blockera_get_experimental([ 'data', 'dynamicValue' ]) ? [
+                        'dynamic-value' => $dynamicValueRegistry->getRegistered(),
+                    ] : [],
+                )
+            );
+        }
     }
 
     /**

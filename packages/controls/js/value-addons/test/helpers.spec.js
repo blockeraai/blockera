@@ -361,6 +361,7 @@ describe('Helper Functions', () => {
 				label: '',
 				items: [],
 				notFound: true,
+				type: '',
 			});
 		});
 

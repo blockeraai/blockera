@@ -21,11 +21,18 @@ export const getVariableGroup: DynamicVariableGroup =
 	memoize(_getVariableGroup);
 
 const _getVariableType = (
-	{ variables }: Object,
+	store: Object,
 	group: string,
 	name: string
 ): DynamicVariableType | void => {
-	return Object.values(variables[group]?.items || {}).find(
+	if (
+		store?.variables === undefined ||
+		store?.variables[group] === undefined
+	) {
+		return;
+	}
+
+	return Object.values(store?.variables[group]?.items || {}).find(
 		(i: { ...Object, name: string }) => i.name === name
 	);
 };
@@ -40,3 +47,28 @@ const _getVariableGroups = ({
 
 export const getVariableGroups: Array<DynamicVariableGroup> =
 	memoize(_getVariableGroups);
+
+const _getVariableGroupItems = (
+	store: Object,
+	group: string,
+	type: string
+): DynamicVariableType | void => {
+	// If group is not specified, search in all groups
+	if (!group) {
+		const allGroups = Object.values(store?.variables || {});
+
+		return allGroups
+			.map((group) => Object.values(group?.items || {}))
+			.flat()
+			.filter((i: { ...Object, type: string }) => i?.type === type);
+	}
+
+	// If group is specified, search in the specified group
+	return Object.values(store?.variables[group]?.items || {}).filter(
+		(i: { ...Object, type: string }) => i?.type === type
+	);
+};
+
+export const getVariableGroupItems: DynamicVariableType = memoize(
+	_getVariableGroupItems
+);
