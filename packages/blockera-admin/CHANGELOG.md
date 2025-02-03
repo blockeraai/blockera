@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.2 (2025-02-03)
+
 ### Improvements
 - Open the "Upgrade to Pro" menu in a new tab and "Activate Pro License" menu in the same tab.
 

@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.0 (2025-02-03)
+
 ### New Features
 - Blocky theme compatibility (Level 1) [[Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/blockera-compatibility-with-the-blocksy-theme-coNZ62pejloObdo)]
 

@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.2 (2025-02-03)
+
 ### Improvements
 - Showing color palette of the current non-block theme in the colors variable picker (for Blocksy theme compatibility).
 
