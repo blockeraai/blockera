@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { dispatch } from '@wordpress/data';
-import { addAction, addFilter, applyFilters } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 
 // Useful to development environment, in production build process will be removed it!
 if ('development' === process.env.APP_MODE) {
@@ -24,7 +24,7 @@ import {
 	registerBlockeraBlocks,
 	registerConfigExtensionsOfInnerBlocks,
 } from '@blockera/blocks-core';
-import { noop, isLoadedSiteEditor, isLoadedPostEditor } from '@blockera/utils';
+import { noop } from '@blockera/utils';
 import { initializer } from '@blockera/bootstrap';
 import {
 	applyHooks,
@@ -33,10 +33,6 @@ import {
 	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
-
-addAction('blockera.mergeBlockSettings.Edit.component', 'blockera.index', () =>
-	bootstrapCanvasEditor('site')
-);
 
 /**
  * Registration blockera core block settings with internal definitions.
@@ -76,10 +72,8 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 			// Bootstrap functions for blocks.
 			blockeraBootstrapBlocks();
 
-			// Bootstrap canvas editor UI on WordPress post editor.
-			if (!isLoadedSiteEditor() && isLoadedPostEditor()) {
-				bootstrapCanvasEditor('post');
-			}
+			// Bootstrap canvas editor UI on WordPress block editor.
+			bootstrapCanvasEditor();
 
 			// Bootstrap functions for extensions.
 			blockeraExtensionsBootstrap();

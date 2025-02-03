@@ -4,7 +4,6 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
-import { doAction } from '@wordpress/hooks';
 import {
 	memo,
 	useMemo,
@@ -18,15 +17,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 /**
  * Blockera dependencies
  */
-import { BaseControlContext } from '@blockera/controls';
-import {
-	isEmpty,
-	isObject,
-	isFunction,
-	mergeObject,
-	isLoadedSiteEditor,
-} from '@blockera/utils';
 import { useBugReporter } from '@blockera/telemetry';
+import { BaseControlContext } from '@blockera/controls';
+import { isEmpty, isObject, isFunction, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -249,14 +242,6 @@ function mergeBlockSettings(
 		);
 
 		if (isFunction(additional?.edit) && isAvailableBlock()) {
-			// Bootstrap canvas editor UI on WordPress site editor.
-			if (isLoadedSiteEditor()) {
-				/**
-				 * Calls the callback functions that have been added to an action hook.
-				 */
-				doAction('blockera.mergeBlockSettings.Edit.component');
-			}
-
 			// eslint-disable-next-line
 			const attributes = useMemo(() => {
 				const { content, ...attributes } = props.attributes;
