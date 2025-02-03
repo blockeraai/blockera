@@ -39,11 +39,13 @@ class AdminAssetsProvider extends AssetsProvider {
 	 * @return void
 	 */
 	public function boot(): void {
+		
+		global $pagenow;
 
 		$assets = $this->getAssets();
 
 		// phpcs:ignore
-		if ( ! empty( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'blockera-settings' ) ) {
+		if ( ! empty( $_GET['page'] ) && false !== strpos( $_GET['page'], 'blockera-settings' ) ) {
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'createInlineScript' ] );
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
@@ -64,7 +66,7 @@ class AdminAssetsProvider extends AssetsProvider {
 				]
 			);
 
-		} elseif ( ! in_array($GLOBALS['pagenow'], [ 'post.php', 'post-new.php' ], true) ) {
+		} elseif ( ! in_array($pagenow, [ 'post.php', 'post-new.php', 'site-editor.php' ], true) ) {
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'telemetryInlineScripts' ] );
 
