@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.1 (2025-02-04)
+
 ### Bug Fixes
 - Fixed an issue where too many renders occurred in the canvas editor.
 

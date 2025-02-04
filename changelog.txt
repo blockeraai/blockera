@@ -1,8 +1,13 @@
 == Changelog ==
 
-= 1.4.1 = 2025-02-03
+= 1.4.2 = 2025-02-04
 
+### Improvements
+- Refactored initialization Blockera application to improved performance and stability.
+- Optimized performance by detecting and addressing bottlenecks. 🔥
 
+### Bug Fixes
+- Fixed an issue where too many renders occurred in the canvas editor.
 
 ## More
 
