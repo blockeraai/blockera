@@ -848,3 +848,28 @@ if ( ! function_exists( 'blockera_get_sanitize_block_attributes' ) ) {
 		);
 	}
 }
+
+if ( ! function_exists( 'blockera_find_selector_declarations' ) ) {
+
+	/**
+	 * FIXME: refactor this helper to get better performance, readability, maintainability and working with selector hash identifier.
+	 * Get the target selector declarations.
+	 *
+	 * @param string $selector the selector.
+	 * @param array  $styles the styles.
+	 *
+	 * @return array the target selector declarations.
+	 */
+	function blockera_find_selector_declarations( string $selector, array $styles): array {
+
+		foreach ($styles as $_selector => $declarations) {
+			if (strpos($_selector, $selector) !== false) {
+				continue;
+			}
+
+			return $declarations;
+		}
+
+		return [];
+	}
+}

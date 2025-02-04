@@ -110,6 +110,54 @@ abstract class BaseStyleDefinition {
 	protected string $current_feature_id;
 
 	/**
+	 * Store inline styles.
+	 *
+	 * @var array
+	 */
+	protected array $inline_styles = [];
+
+	/**
+	 * Store the current breakpoint.
+	 *
+	 * @var string $breakpoint the current breakpoint.
+	 */
+	protected string $breakpoint;
+
+	/**
+	 * Set the current breakpoint.
+	 *
+	 * @param string $breakpoint the current breakpoint.
+	 *
+	 * @return void
+	 */
+	public function setBreakpoint( string $breakpoint): void {
+
+		$this->breakpoint = $breakpoint;
+	}
+
+	/**
+	 * Set inline styles.
+	 *
+	 * @param array $inline_styles The inline styles.
+	 *
+	 * @return void
+	 */
+	public function setInlineStyles( array $inline_styles): void {
+
+		$this->inline_styles = $inline_styles;
+	}
+
+	/**
+	 * Get inline styles.
+	 *
+	 * @return array
+	 */
+	public function getInlineStyles(): array {
+
+		return $this->inline_styles;
+	}
+
+	/**
 	 * @param array $options the options to generate css properties.
 	 *
 	 * @return void
@@ -386,6 +434,10 @@ abstract class BaseStyleDefinition {
 	 */
 	public function setCss( array $declaration, string $customSupportId = '', string $selectorSuffix = '' ): void {
 
+		if (empty($declaration)) {
+			return;
+		}
+
 		if ( $this->isImportant() ) {
 
 			$declaration = array_map(
@@ -414,7 +466,22 @@ abstract class BaseStyleDefinition {
 			return;
 		}
 
-		$this->css[ $this->getSelector() ] = $declaration;
+		$is_normal_on_base_breakpoint = blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint);
+
+		if ($is_normal_on_base_breakpoint) {
+
+			$selector_inline_styles = blockera_find_selector_declarations($this->getSelector(), $this->inline_styles);
+
+			if (! empty($selector_inline_styles)) {
+
+				$this->css[ $this->getSelector() ] = array_merge($declaration, $selector_inline_styles);
+			} else {
+				$this->css[ $this->getSelector() ] = $declaration;
+			}		
+		} else {
+
+			$this->css[ $this->getSelector() ] = $declaration;
+		}
 
 		// Reset selector.
 		$this->setSelector('');

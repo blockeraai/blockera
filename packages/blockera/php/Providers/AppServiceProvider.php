@@ -6,12 +6,20 @@ use Blockera\Telemetry\Config;
 use Blockera\Setup\Blockera;
 use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
-use Blockera\WordPress\RenderBlock\{
+use Blockera\WordPress\RenderBlock\V1\{
     Parser,
     Render,
     SavePost,
     Setup,
 };
+
+use Blockera\WordPress\RenderBlock\V2\{
+    Parser as V2Parser,
+    Render as V2Render,
+    SavePost as V2SavePost,
+    Setup as V2Setup,
+};
+
 use Blockera\Editor\{
     StyleDefinitions\Background,
     StyleDefinitions\Border,
@@ -57,15 +65,29 @@ class AppServiceProvider extends ServiceProvider {
 
         try {
 
-            $this->app->singleton(Setup::class);
+            if (blockera_get_admin_options([ 'labAndExperimental', 'disableCleanupStyles' ])) {
 
-            $this->app->singleton(
-                SavePost::class,
-                function ( Application $app) {
+				$this->app->singleton(V2Setup::class);
 
-                    return new SavePost($app, new Render($app));
-                }
-            );
+				$this->app->singleton(
+					V2SavePost::class,
+					function ( Application $app) {
+
+						return new V2SavePost($app, new V2Render($app));
+					}
+				);
+			} else {
+
+				$this->app->singleton(Setup::class);
+
+				$this->app->singleton(
+					SavePost::class,
+					function ( Application $app) {
+
+						return new SavePost($app, new Render($app));
+					}
+				);
+			}
 
             $this->app->singleton(
                 VariableType::class,
@@ -133,21 +155,42 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            $this->app->singleton(
-                Parser::class,
-                static function ( Application $app) {
+            if ( blockera_get_admin_options( [ 'labAndExperimental', 'disableCleanupStyles' ] ) ) {
 
-                    return new Parser($app);
-                }
-            );
+				$this->app->singleton(
+					V2Parser::class,
+					static function ( Application $app) {
 
-            $this->app->bind(
-                Render::class,
-                static function ( Application $app): Render {
+						return new V2Parser($app);
+					}
+				);
 
-                    return new Render($app);
-                }
-            );
+				$this->app->bind(
+					V2Render::class,
+					static function ( Application $app): V2Render {
+
+						return new V2Render($app);
+					}
+				);
+
+			} else {
+
+				$this->app->singleton(
+					Parser::class,
+					static function ( Application $app) {
+
+						return new Parser($app);
+					}
+				);
+
+				$this->app->bind(
+					Render::class,
+					static function ( Application $app): Render {
+
+						return new Render($app);
+					}
+				);
+			}
 
             $this->app->singleton(Sender::class);
 
@@ -167,8 +210,17 @@ class AppServiceProvider extends ServiceProvider {
 
         parent::boot();
 
-        $this->app->make(SavePost::class);
-        $this->app->make(Setup::class)->apply();
+        if (blockera_get_admin_options([ 'labAndExperimental', 'disableCleanupStyles' ])) {
+
+            $this->app->make(V2SavePost::class);
+            $this->app->make(V2Setup::class)->apply();
+
+        } else {
+
+            $this->app->make(SavePost::class);
+        	$this->app->make(Setup::class)->apply();
+        }
+
         $this->app->make(EntityRegistry::class);
 
         $this->renderBlocks();
@@ -217,7 +269,7 @@ class AppServiceProvider extends ServiceProvider {
      */
     protected function renderBlocks(): void {
 
-        $render = $this->app->make(Render::class);
+        $render = blockera_get_admin_options( [ 'labAndExperimental', 'disableCleanupStyles' ] ) ? $this->app->make(V2Render::class) : $this->app->make(Render::class);
 
         $render->applyHooks();
     }

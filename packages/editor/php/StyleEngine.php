@@ -84,6 +84,13 @@ final class StyleEngine {
 	protected string $breakpoint;
 
 	/**
+	 * Store the inline styles.
+	 *
+	 * @var array $inline_styles
+	 */
+	protected array $inline_styles = [];
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array  $block            The current block.
@@ -106,16 +113,30 @@ final class StyleEngine {
 	}
 
 	/**
+	 * Set inline styles.
+	 *
+	 * @param array $inline_styles The inline styles.
+	 *
+	 * @return void
+	 */
+	public function setInlineStyles( array $inline_styles): void {
+
+		$this->inline_styles = $inline_styles;
+	}
+
+	/**
 	 * Get css stylesheet for current block.
 	 *
+	 * @param array $prepared_inline_styles The prepared inline styles.
+	 * 
 	 * @return string
 	 */
-	public function getStylesheet(): string {
+	public function getStylesheet( array $prepared_inline_styles = []): string {
 
 		// Validation: check sets anything ...
 		if ( empty( $this->getSettings() ) ) {
 
-			return '';
+			return $prepared_inline_styles;
 		}
 
 		$breakpointsCssRules = array_filter(
@@ -172,7 +193,7 @@ final class StyleEngine {
 			return $styles;
 		}
 
-		// Concatenate generated css media query includes all css rules for current recieved breakpoint type.
+		// Concatenate generated css media query includes all css rules for current received breakpoint type.
 		return sprintf(
 			'%1$s{%2$s}',
 			$mediaQueries[ $breakpoint['type'] ],
@@ -263,6 +284,7 @@ final class StyleEngine {
 		$this->definition->resetProperties();
 		$this->configureDefinition( $this->definition );
 		$this->definition->setSettings( $settings );
+		$this->definition->setBreakpoint( $this->breakpoint );
 		$this->definition->setBlockType( 'master' );
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
@@ -315,6 +337,7 @@ final class StyleEngine {
 		$this->definition->resetProperties();
 		$this->configureDefinition( $this->definition );
 		$this->definition->setBlockType( $blockType );
+		$this->definition->setBreakpoint( $this->breakpoint );
 		$this->definition->setInnerPseudoState( $pseudoState );
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setSettings( $settings['attributes'] );
@@ -448,6 +471,8 @@ final class StyleEngine {
 				'attributes'
 			)
 		);
+
+		$definition->setInlineStyles($this->inline_styles);
 	}
 
 }

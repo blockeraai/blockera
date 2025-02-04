@@ -139,7 +139,7 @@ if ( ! function_exists( 'blockera_set_block_cache' ) ) {
 			return;
 		}
 
-		set_transient( $cache_key, $data, HOUR_IN_SECONDS );
+		set_transient( $cache_key, $data );
 	}
 }
 
@@ -232,5 +232,18 @@ if ( ! function_exists( 'blockera_get_small_random_hash' ) ) {
 
 		// Convert to base-36 string.
 		return base_convert( $hash, 10, 36 );
+	}
+}
+
+if ( ! function_exists( 'blockera_get_unique_class_name' ) ) {
+
+	/**
+	 * Retrieve regex pattern to detect unique classname.
+	 *
+	 * @return string the regular expression to detect blockera unique classname.
+	 */
+	function blockera_get_unique_class_name_regex(): string {
+
+		return '/\b(blockera-block-\S+)\b/';
 	}
 }
