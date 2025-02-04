@@ -3,9 +3,14 @@
 ### New Features
 - Added support for the `Blocksy Breadcrumbs Block` by Blockera.
 - Added support for the `Blocksy Breadcrumbs` text inner element by Blockera.
+- Added support for the `Blocksy Breadcrumbs` link inner element by Blockera.
+- Added support for the `Blocksy Breadcrumbs` separator inner element by Blockera.
 
 ### Automated Tests
 - Added E2E tests for the `Blocksy Breadcrumbs Block` text inner element.
+- Added E2E tests for the `Blocksy Breadcrumbs Block` link inner element.
+- Added E2E tests for the `Blocksy Breadcrumbs Block` separator inner element.
+
 
 ## 1.0.0 (2024-12-08)
 

@@ -9,6 +9,7 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
+import { getBaseBreakpoint } from '@blockera/editor';
 import { isBlockNotOriginalState } from '@blockera/editor/js/extensions/libs/utils';
 import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-states/types';
 import type { ControlContextRef } from '@blockera/controls';
@@ -20,6 +21,14 @@ import {
 	textColorFromWPCompatibility,
 	textColorToWPCompatibility,
 } from './compatibility/text-color';
+import {
+	linkColorFromWPCompatibility,
+	linkColorToWPCompatibility,
+} from './compatibility/link-color';
+import {
+	linkColorHoverFromWPCompatibility,
+	linkColorHoverToWPCompatibility,
+} from './compatibility/link-hover-color';
 
 export const bootstrapBlocksyBreadcrumbs = (): void => {
 	addFilter(
@@ -35,8 +44,41 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 				return attributes;
 			}
 
-			if (!attributes?.blockeraFontColor?.value) {
+			//
+			// Text color only on base device and normal state
+			//
+			if (
+				!isBlockNotOriginalState(blockDetail) &&
+				!attributes?.blockeraFontColor?.value
+			) {
 				attributes = textColorFromWPCompatibility({
+					attributes,
+				});
+			}
+
+			//
+			// Link color only on base device and normal state
+			//
+			if (
+				// currentBlock === 'elements/links' &&
+				!attributes?.blockeraInnerBlocks['elements/links']?.attributes
+					?.blockeraFontColor
+			) {
+				attributes = linkColorFromWPCompatibility({
+					attributes,
+				});
+			}
+
+			//
+			// Link hover color only on base device and hover state
+			//
+			if (
+				!attributes?.blockeraInnerBlocks['elements/links']?.attributes
+					?.blockeraBlockStates?.hover?.breakpoints[
+					getBaseBreakpoint()
+				]?.attributes?.blockeraFontColor
+			) {
+				attributes = linkColorHoverFromWPCompatibility({
 					attributes,
 				});
 			}
@@ -70,9 +112,10 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, isBaseBreakpoint, currentBlock } = blockDetail;
+			const { blockId, isBaseBreakpoint, currentBlock, currentState } =
+				blockDetail;
 
-			if (blockId !== 'blocksy/breadcrumbs' || !isBaseBreakpoint) {
+			if (blockId !== 'blocksy/breadcrumbs') {
 				return nextState;
 			}
 
@@ -81,12 +124,49 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			// only in elements/text inner block
 			//
 			if (
+				isBaseBreakpoint &&
 				currentBlock === 'elements/text' &&
 				featureId === 'blockeraFontColor'
 			) {
 				return mergeObject(
 					nextState,
 					textColorToWPCompatibility({
+						newValue,
+						ref,
+					})
+				);
+			}
+
+			//
+			// Link color in normal state state
+			//
+			if (
+				isBaseBreakpoint &&
+				currentState === 'normal' &&
+				currentBlock === 'elements/links' &&
+				featureId === 'blockeraFontColor'
+			) {
+				return mergeObject(
+					nextState,
+					linkColorToWPCompatibility({
+						newValue,
+						ref,
+					})
+				);
+			}
+
+			//
+			// Link color in hover state
+			//
+			if (
+				isBaseBreakpoint &&
+				currentState === 'hover' &&
+				currentBlock === 'elements/links' &&
+				featureId === 'blockeraFontColor'
+			) {
+				return mergeObject(
+					nextState,
+					linkColorHoverToWPCompatibility({
 						newValue,
 						ref,
 					})
