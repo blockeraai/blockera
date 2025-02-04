@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 2,
-		"supported": 2,
-		"soft-supported": 2,
+		"total": 3,
+		"supported": 3,
+		"soft-supported": 3,
 		"not-supported": 0,
 		"no-need-to-support": 0
 	},
@@ -25,6 +25,16 @@
 				"author": "CreativeThemes",
 				"link": "https://wordpress.org/plugins/blocksy-companion/"
 			}
+		},
+		{
+			"name": "blocksy/query",
+			"title": "Advanced Posts",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			},
+			"note": "We can add support for slider arrow and also pagination items as inner blocks if users request it."
 		}
 	],
 	"no-need-to-support": [],
