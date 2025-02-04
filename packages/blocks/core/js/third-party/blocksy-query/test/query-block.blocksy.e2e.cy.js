@@ -6,6 +6,8 @@ import {
 	createPost,
 	openInnerBlocksExtension,
 	openMoreFeaturesControl,
+	savePage,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Blocksy → Advanced Posts (Query) Block → Block support', () => {
@@ -42,5 +44,30 @@ describe('Blocksy → Advanced Posts (Query) Block → Block support', () => {
 		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
 			'not.exist'
 		);
+
+		//
+		// 1. Edit Blocks
+		//
+
+		//
+		// 1.0. Block BG
+		//
+		cy.setColorControlValue('BG Color', '#dcffdc');
+
+		cy.getBlock('blocksy/query').should(
+			'have.css',
+			'background-color',
+			'rgb(220, 255, 220)'
+		);
+
+		//
+		// 2. Assert styles in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block')
+			.first()
+			.should('have.css', 'background-color', 'rgb(220, 255, 220)');
 	});
 });
