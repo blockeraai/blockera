@@ -492,4 +492,119 @@ class TestHelpers extends \WP_UnitTestCase {
 		}
 	}
 
+	/**
+     * Test basic selector formatting without pseudo classes
+     */
+    public function testBasicSelectorFormatting() {
+        $cases = [
+            // [root, picked, args, expected]
+            ['.block', '.item', [], '.block .item'],
+            ['', '.item', [], '.item'],
+            ['.block', '.item, .other', [], '.block .item, .block .other'],
+        ];
+
+        foreach ($cases as [$root, $picked, $args, $expected]) {
+            $result = blockera_get_css_selector_format($root, $picked, $args);
+            $this->assertEquals($expected, $result, "Failed formatting for root: $root, picked: $picked");
+        }
+    }
+
+    /**
+     * Test selector formatting with pseudo classes
+     */
+    public function testSelectorWithPseudoClasses() {
+        $cases = [
+            // [root, picked, args, expected]
+            [
+                '.block', 
+                '.item', 
+                ['pseudo_class' => 'hover'], 
+                '.block .item:hover'
+            ],
+            [
+                '.block', 
+                '.blockera__item, .blockera__other', 
+                ['pseudo_class' => 'active'], 
+                '.block .blockera__item:active, .block .blockera__other:active'
+            ],
+        ];
+
+        foreach ($cases as [$root, $picked, $args, $expected]) {
+            $result = blockera_get_css_selector_format($root, $picked, $args);
+            $this->assertEquals($expected, $result, "Failed formatting with pseudo class for root: $root, picked: $picked");
+        }
+    }
+
+    /**
+     * Test selector formatting with parent pseudo classes
+     */
+    public function testSelectorWithParentPseudoClasses() {
+        $cases = [
+            // [root, picked, args, expected]
+            [
+                '.block', 
+                '.item', 
+                ['parent_pseudo_class' => 'hover'], 
+                '.block:hover .item'
+            ],
+            [
+                '.block', 
+                '.blockera-item', 
+                ['parent_pseudo_class' => 'focus'], 
+                '.block:focus .blockera-item'
+            ],
+            [
+                '.block', 
+                '.blockera__item, .blockera__other', 
+                ['parent_pseudo_class' => 'active'], 
+                '.block:active .blockera__item, .block:active .blockera__other'
+            ],
+        ];
+
+        foreach ($cases as [$root, $picked, $args, $expected]) {
+            $result = blockera_get_css_selector_format($root, $picked, $args);
+            $this->assertEquals($expected, $result, "Failed formatting with parent pseudo class for root: $root, picked: $picked");
+        }
+    }
+
+    /**
+     * Test selector formatting with both pseudo and parent pseudo classes
+     */
+    public function testSelectorWithBothPseudoClasses() {
+        $cases = [
+            // [root, picked, args, expected]
+            [
+                '.block', 
+                '.item', 
+                [
+                    'pseudo_class' => 'focus',
+                    'parent_pseudo_class' => 'hover'
+                ], 
+                '.block:hover .item:focus'
+            ],
+            [
+                '.block', 
+                '.blockera-item', 
+                [
+                    'pseudo_class' => 'active',
+                    'parent_pseudo_class' => 'focus'
+                ], 
+                '.block:focus .blockera-item:active'
+            ],
+        ];
+
+        foreach ($cases as [$root, $picked, $args, $expected]) {
+            $result = blockera_get_css_selector_format($root, $picked, $args);
+            $this->assertEquals($expected, $result, "Failed formatting with both pseudo classes for root: $root, picked: $picked");
+        }
+    }
+
+    /**
+     * Test invalid selector cases
+     */
+    public function testInvalidSelectors() {
+        $this->expectException(BaseException::class);
+        $this->expectExceptionMessage('Invalid &item selector!');
+        blockera_get_css_selector_format('.block', '&item', []);
+    }
 }
