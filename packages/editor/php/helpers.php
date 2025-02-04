@@ -285,14 +285,24 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 		$pseudo_class        = $args['pseudo_class'] ?? '';
 		$parent_pseudo_class = $args['parent_pseudo_class'] ?? '';
 
-		return sprintf(
-			'%1$s%2$s%3$s%4$s%5$s',
-			trim( $root_selector ),
-			! empty( $parent_pseudo_class ) ? ':' . $parent_pseudo_class : '',
-			str_starts_with( $picked_selector, '&' ) || empty( $root_selector ) ? '' : ' ',
-			blockera_process_ampersand_selector_char( $picked_selector ),
-			empty( $pseudo_class ) ? '' : ':' . $pseudo_class
-		);
+		// Pre-calculate reused values.
+		$has_parent_pseudo = ! empty( $parent_pseudo_class );
+		$has_pseudo        = ! empty( $pseudo_class );
+		$root              = trim( $root_selector );
+		
+		$formatted_selectors = [];
+		foreach (explode( ', ', $picked_selector ) as $selector) {
+			$selector    = trim($selector);
+			$needs_space = ! str_starts_with($selector, '&') && ! empty($root);
+			
+			$formatted_selectors[] = $root . 
+				( $has_parent_pseudo ? ':' . $parent_pseudo_class : '' ) .
+				( $needs_space ? ' ' : '' ) .
+				blockera_process_ampersand_selector_char($selector) .
+				( $has_pseudo ? ':' . $pseudo_class : '' );
+		}
+
+		return implode(', ', $formatted_selectors);
 	}
 }
 
@@ -437,7 +447,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 	 */
 	function blockera_append_root_block_css_selector( string $selector, string $root, array $args = [] ): string {
 
-		// Assume recieved selector is invalid.
+		// Assume received selector is invalid.
 		if ( empty( trim( $selector ) ) ) {
 
 			return $root;
@@ -446,7 +456,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		$preg_quote = preg_quote( $args['block-name'], '/' );
 		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
-		// Assume recieved selector is another reference to root, so we should concat together.
+		// Assume received selector is another reference to root, so we should concat together.
 		if ( preg_match( $pattern, $selector, $matches ) ) {
 
 			// Appending blockera roo unique css selector into picked your selector.
