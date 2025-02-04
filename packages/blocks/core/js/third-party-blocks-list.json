@@ -53,6 +53,15 @@
 				"author": "CreativeThemes",
 				"link": "https://wordpress.org/plugins/blocksy-companion/"
 			}
+		},
+		{
+			"name": "blocksy/tax-template",
+			"title": "Tax Template",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
 		}
 	],
 	"no-need-to-support": [],
