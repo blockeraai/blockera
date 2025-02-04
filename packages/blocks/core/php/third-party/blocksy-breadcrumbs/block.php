@@ -14,13 +14,13 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'blockera/elements/links' => [
-					'root' => 'span > span, a',
+					'root' => 'span > span, a > span',
 				],
 				'blockera/elements/separator' => [
 					'root' => 'svg',
 				],
 				'blockera/elements/text'   => [
-					'root' => '> span, span[itemprop="name"]',
+					'root' => '> span:last-child, > span > span[itemprop="name"]',
 				],
 			]
 		),
