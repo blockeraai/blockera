@@ -3,10 +3,11 @@ name: Compressed Size
 on:
     pull_request:
         paths:
-            # Any change to a CSS, Sass, or JavaScript file should run checks.
+            # Any change to a CSS, Sass, JavaScript, and PHP files should run checks.
             - '**.js'
             - '**.css'
             - '**.scss'
+            - 'packages/**/*.php'
             # Changes to any NPM related files could affect the outcome.
             - '**package*.json'
             # These files configures ESLint. Changes could affect the outcome.
