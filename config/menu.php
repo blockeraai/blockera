@@ -48,6 +48,13 @@ return apply_filters(
                 'menu_slug'  => 'blockera-settings-block-manager',
                 'callback'   => 'blockera_settings_page_template',
             ],
+            'experimental-settings' => [
+                'page_title' => __('Blockera Beta Tester', 'blockera'),
+                'menu_title' => __('Beta Tester', 'blockera'),
+                'capability' => 'manage_options',
+                'menu_slug'  => 'blockera-settings-beta-tester',
+                'callback'   => 'blockera_settings_page_template',
+            ],
             'upgrade-to-pro' => [
                 'page_title' => __('Upgrade to Pro', 'blockera'),
                 'menu_title' => __('Upgrade to Pro', 'blockera'),

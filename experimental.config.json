@@ -13,5 +13,8 @@
 	},
 	"data": {
 		"dynamicValue": false
+	},
+	"general": {
+		"disableCleanupStyles": false
 	}
 }
