@@ -11,6 +11,7 @@
 - Added E2E tests for the `Blocksy Breadcrumbs Block` text inner element.
 - Added E2E tests for the `Blocksy Breadcrumbs Block` link inner element.
 - Added E2E tests for the `Blocksy Breadcrumbs Block` separator inner element.
+- Added E2E tests for the `Blocksy Advanced Posts Block` support by Blockera.
 
 
 ## 1.0.0 (2024-12-08)
