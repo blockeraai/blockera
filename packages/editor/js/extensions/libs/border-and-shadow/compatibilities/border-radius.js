@@ -11,7 +11,7 @@ export function borderRadiusFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius.value)) {
+	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius?.value)) {
 		if (attributes?.style?.border?.radius !== undefined) {
 			if (isString(attributes?.style?.border?.radius)) {
 				attributes.blockeraBorderRadius = {

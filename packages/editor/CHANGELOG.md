@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Bug Fixes
+- Various bug fixes.
+
+
 ## 1.1.1 (2025-02-04)
 
 ### Bug Fixes
