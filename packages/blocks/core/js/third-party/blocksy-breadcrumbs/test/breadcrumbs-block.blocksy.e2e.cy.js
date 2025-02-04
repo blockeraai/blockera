@@ -621,6 +621,15 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		//
 
 		//
+		// 1.0. Block BG
+		//
+		cy.setColorControlValue('BG Color', '#dcffdc');
+
+		cy.getBlock('blocksy/breadcrumbs')
+			.first()
+			.should('have.css', 'background-color', 'rgb(220, 255, 220)');
+
+		//
 		// 1.1. Text inner block
 		//
 		setInnerBlock('elements/text');
@@ -723,6 +732,10 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		//
 		savePage();
 		redirectToFrontPage();
+
+		cy.get('.blockera-block')
+			.first()
+			.should('have.css', 'background-color', 'rgb(220, 255, 220)');
 
 		cy.get('.blockera-block').within(() => {
 			cy.get('> span:last-child').should(
