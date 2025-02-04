@@ -393,7 +393,7 @@ abstract class BaseStyleDefinition {
 
 					return $declaration_item . $this->getImportant();
 				},
-				$declaration
+				array_filter($declaration, 'is_string')
 			);
 		}
 

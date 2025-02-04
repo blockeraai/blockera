@@ -191,6 +191,4 @@ Yes, Blockera adds custom CSS to all core blocks.
 
 No, Blockera doesn't add new blocks. It enhances all existing core blocks with advanced options.
 
-== Changelog ==
-
 ### AUTO-GENERATED CHANGELOG
