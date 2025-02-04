@@ -1,6 +1,13 @@
 ## Unreleased
 
-### New Features:
+### New Features
+- Added support for the `Blocksy Breadcrumbs Block` by Blockera.
+- Added support for the `Blocksy Breadcrumbs` text inner element by Blockera.
+
+
+## 1.0.0 (2024-12-08)
+
+### New Features
 - Added `Spacer Block` support by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/spacer-block-support-pritFhuc8gbsXko)]
 - Added support for the `Navigation Link Block` by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
 - Added support for the `Home Link Block` by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
