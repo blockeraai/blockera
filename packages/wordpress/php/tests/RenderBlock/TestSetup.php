@@ -2,7 +2,7 @@
 
 namespace Blockera\WordPress\Tests\RenderBlock;
 
-use Blockera\WordPress\RenderBlock\Setup;
+use Blockera\WordPress\RenderBlock\V1\Setup;
 
 class TestSetup extends \WP_UnitTestCase {
 
