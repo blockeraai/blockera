@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Refactored initialization Blockera application to improved performance and stability.
+
 ## 1.1.0 (2025-02-03)
 
 ### New Features
