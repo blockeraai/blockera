@@ -6,6 +6,7 @@
 - Added support for the `Blocksy Breadcrumbs` link inner element by Blockera.
 - Added support for the `Blocksy Breadcrumbs` separator inner element by Blockera.
 - Added support for the `Blocksy Advanced Posts Block` by Blockera.
+- Added support for the `Blocksy Post Template Block` by Blockera.
 
 ### Automated Tests
 - Added E2E tests for the `Blocksy Breadcrumbs Block` text inner element.
