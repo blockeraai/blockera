@@ -4,6 +4,8 @@
 - Added support for the `Blocksy Breadcrumbs Block` by Blockera.
 - Added support for the `Blocksy Breadcrumbs` text inner element by Blockera.
 
+### Automated Tests
+- Added E2E tests for the `Blocksy Breadcrumbs Block` text inner element.
 
 ## 1.0.0 (2024-12-08)
 
