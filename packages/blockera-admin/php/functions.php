@@ -48,12 +48,21 @@ if ( ! function_exists( 'blockera_get_admin_options' ) ) {
 	/**
 	 * Get blockera admin options value.
 	 *
-	 * @return array the options value.
+	 * @param array $path the path to access the options value.
+	 *
+	 * @return mixed the options value.
 	 */
-	function blockera_get_admin_options(): array {
+	function blockera_get_admin_options( array $path = []) {
 
 		$default_settings = blockera_core_config( 'panel.std' );
 
-		return blockera_get_array_deep_merge( $default_settings, get_option( 'blockera_settings', $default_settings ) );
+		$options = blockera_get_array_deep_merge($default_settings, get_option('blockera_settings', $default_settings));
+
+		if (empty($path)) {
+
+			return $options;
+		}
+
+		return \Blockera\DataEditor\Utility::arrayGet($options, $path);
 	}
 }

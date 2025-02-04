@@ -22,8 +22,8 @@ import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 import {
 	GeneralPanel,
 	DashboardPanel,
-	BetaTesterPanel,
 	BlockManagerPanel,
+	LabAndExperimentalPanel,
 } from './components';
 
 export const Panel = (tab: {
@@ -66,12 +66,12 @@ export const Panel = (tab: {
 			);
 			break;
 
-		case 'beta-tester':
-			activePanel = <BetaTesterPanel />;
+		case 'lab-experimental':
+			activePanel = <LabAndExperimentalPanel />;
 			description = (
 				<p>
 					{__(
-						'In the Beta Tester Panel, you can customize your Blockera settings. These settings are used to customize the design and functionality of Blockera.',
+						'In the Lab & Experimental Panel, you can customize your Blockera settings. These settings are used to customize the design and functionality of Blockera.',
 						'blockera'
 					)}
 				</p>

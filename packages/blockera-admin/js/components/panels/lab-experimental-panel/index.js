@@ -19,24 +19,26 @@ import {
 
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
-	general: {
+	labAndExperimental: {
 		disableCleanupStyles: false,
 	},
 };
 
-export const BetaTesterPanel = (): MixedElement => {
+export const LabAndExperimentalPanel = (): MixedElement => {
 	const {
 		defaultSettings,
 		//  config
 	} = useContext(SettingsContext);
 	const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
-	const betaTesterSettings =
-		settings?.betaTester ||
-		defaultSettings?.betaTester ||
+	const labAndExperimentalSettings =
+		settings?.labAndExperimental ||
+		defaultSettings?.labAndExperimental ||
 		fallbackDefaultValue;
 
 	const {
-		blockeraSettings: { betaTester: savedBetaTesterSettings },
+		blockeraSettings: {
+			labAndExperimental: savedLabAndExperimentalSettings,
+		},
 	} = window;
 
 	return (
@@ -64,8 +66,7 @@ export const BetaTesterPanel = (): MixedElement => {
 					<ControlContextProvider
 						value={{
 							name: 'toggleCleanupStyles',
-							value: betaTesterSettings.general
-								.disableCleanupStyles,
+							value: labAndExperimentalSettings.disableCleanupStyles,
 						}}
 					>
 						<ToggleControl
@@ -74,23 +75,19 @@ export const BetaTesterPanel = (): MixedElement => {
 							id={'toggleCleanupStyles'}
 							className={'blockera-settings-general control'}
 							defaultValue={
-								betaTesterSettings.general.disableCleanupStyles
+								labAndExperimentalSettings.disableCleanupStyles
 							}
 							onChange={(checked: boolean) => {
 								setHasUpdates(
 									checked !==
-										savedBetaTesterSettings.general
-											.disableCleanupStyles
+										savedLabAndExperimentalSettings.disableCleanupStyles
 								);
 
 								setSettings({
 									...settings,
-									betaTester: {
-										...betaTesterSettings,
-										general: {
-											...betaTesterSettings.general,
-											disableCleanupStyles: checked,
-										},
+									labAndExperimental: {
+										...labAndExperimentalSettings,
+										disableCleanupStyles: checked,
 									},
 								});
 							}}
