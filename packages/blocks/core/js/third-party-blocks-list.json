@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 4,
-		"supported": 4,
-		"soft-supported": 4,
+		"total": 5,
+		"supported": 5,
+		"soft-supported": 5,
 		"not-supported": 0,
 		"no-need-to-support": 0
 	},
@@ -39,6 +39,15 @@
 		{
 			"name": "blocksy/post-template",
 			"title": "Post Template",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/tax-query",
+			"title": "Advanced Taxonomies",
 			"product": {
 				"name": "Blocksy Companion",
 				"author": "CreativeThemes",
