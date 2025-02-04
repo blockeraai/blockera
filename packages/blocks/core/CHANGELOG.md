@@ -7,6 +7,7 @@
 - Added support for the `Blocksy Breadcrumbs` separator inner element by Blockera.
 - Added support for the `Blocksy Advanced Posts Block` by Blockera.
 - Added support for the `Blocksy Post Template Block` by Blockera.
+- Added support for the `Blocksy Advanced Taxonomies Block` by Blockera.
 
 ### Automated Tests
 - Added E2E tests for the `Blocksy Breadcrumbs Block` text inner element.
@@ -14,6 +15,7 @@
 - Added E2E tests for the `Blocksy Breadcrumbs Block` separator inner element.
 - Added E2E tests for the `Blocksy Advanced Posts Block` support by Blockera.
 - Added E2E tests for the `Blocksy Post Template Block` support by Blockera.
+- Added E2E tests for the `Blocksy Advanced Taxonomies Block` support by Blockera.
 
 
 ## 1.0.0 (2024-12-08)
