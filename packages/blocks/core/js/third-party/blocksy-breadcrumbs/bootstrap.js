@@ -60,7 +60,6 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			// Link color only on base device and normal state
 			//
 			if (
-				// currentBlock === 'elements/links' &&
 				!attributes?.blockeraInnerBlocks['elements/links']?.attributes
 					?.blockeraFontColor
 			) {
