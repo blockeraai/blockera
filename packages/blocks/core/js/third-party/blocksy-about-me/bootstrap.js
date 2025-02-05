@@ -23,6 +23,14 @@ import {
 	textColorHoverFromWPCompatibility,
 	textColorHoverToWPCompatibility,
 } from './compatibility/text-hover-color';
+import {
+	iconsColorFromWPCompatibility,
+	iconsColorToWPCompatibility,
+} from './compatibility/icons-color';
+import {
+	iconsColorHoverFromWPCompatibility,
+	iconsColorHoverToWPCompatibility,
+} from './compatibility/icons-hover-color';
 
 export const bootstrapBlocksyAboutMe = (): void => {
 	addFilter(
@@ -52,6 +60,30 @@ export const bootstrapBlocksyAboutMe = (): void => {
 					?.blockeraFontColor
 			) {
 				attributes = textColorHoverFromWPCompatibility({
+					attributes,
+				});
+			}
+
+			//
+			// Icons color only
+			//
+			if (
+				!attributes?.blockeraInnerBlocks['elements/icons']?.attributes
+					?.blockeraFontColor
+			) {
+				attributes = iconsColorFromWPCompatibility({
+					attributes,
+				});
+			}
+
+			//
+			// Icons hover color only
+			//
+			if (
+				!attributes?.blockeraInnerBlocks['elements/icons']?.attributes
+					?.blockeraBlockStates?.hover?.attributes?.blockeraFontColor
+			) {
+				attributes = iconsColorHoverFromWPCompatibility({
 					attributes,
 				});
 			}
@@ -124,6 +156,44 @@ export const bootstrapBlocksyAboutMe = (): void => {
 				return mergeObject(
 					nextState,
 					textColorHoverToWPCompatibility({
+						newValue,
+						ref,
+					})
+				);
+			}
+
+			//
+			// icons color
+			// only in elements/icons inner block
+			//
+			if (
+				isBaseBreakpoint &&
+				currentState === 'normal' &&
+				currentBlock === 'elements/icons' &&
+				featureId === 'blockeraFontColor'
+			) {
+				return mergeObject(
+					nextState,
+					iconsColorToWPCompatibility({
+						newValue,
+						ref,
+					})
+				);
+			}
+
+			//
+			// icons hover color
+			// only in elements/icons inner block
+			//
+			if (
+				isBaseBreakpoint &&
+				currentState === 'hover' &&
+				currentBlock === 'elements/icons' &&
+				featureId === 'blockeraFontColor'
+			) {
+				return mergeObject(
+					nextState,
+					iconsColorHoverToWPCompatibility({
 						newValue,
 						ref,
 					})

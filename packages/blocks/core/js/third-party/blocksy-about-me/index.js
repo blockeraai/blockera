@@ -32,6 +32,18 @@ export const BlocksyAboutMe: BlockType = {
 				force: true,
 			},
 		},
+		'elements/icons': {
+			name: 'elements/icons',
+			label: __('Icons', 'blockera'),
+			description: __(
+				'All social media icons inside the about me block.',
+				'blockera'
+			),
+			icon: <Icon icon="block-blocksy-about-icons" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

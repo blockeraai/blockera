@@ -16,6 +16,9 @@ return array_merge(
 				'blockera/elements/text'   => [
 					'root' => '.ct-about-me-name span, .ct-about-me-name a',
 				],
+				'blockera/elements/icons'   => [
+					'root' => '.ct-icon-container',
+				],
 			]
 		),
 	]
