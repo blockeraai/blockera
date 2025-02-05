@@ -26,6 +26,7 @@
 - Added E2E tests for the `Blocksy Widgets Wrapper Block` support by Blockera.
 - Added E2E tests for the `Blocksy About Me Block` support by Blockera.
 - Added E2E tests for the `Blocksy About Me Block` text inner block.
+- Added E2E tests for the `Blocksy About Me Block` icons inner block.
 
 
 ## 1.0.0 (2024-12-08)
