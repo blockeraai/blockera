@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 5,
-		"supported": 5,
-		"soft-supported": 5,
+		"total": 7,
+		"supported": 7,
+		"soft-supported": 7,
 		"not-supported": 0,
 		"no-need-to-support": 0
 	},
@@ -57,6 +57,15 @@
 		{
 			"name": "blocksy/tax-template",
 			"title": "Tax Template",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/widgets-wrapper",
+			"title": "Widgets Wrapper",
 			"product": {
 				"name": "Blocksy Companion",
 				"author": "CreativeThemes",
