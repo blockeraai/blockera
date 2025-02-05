@@ -7,3 +7,4 @@ export * from './blocksy-post-template';
 export * from './blocksy-tax-query';
 export * from './blocksy-tax-template';
 export * from './blocksy-widgets-wrapper';
+export * from './blocksy-about-me';
