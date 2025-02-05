@@ -18,7 +18,8 @@
 - Added E2E tests for the `Blocksy Advanced Posts Block` support by Blockera.
 - Added E2E tests for the `Blocksy Post Template Block` support by Blockera.
 - Added E2E tests for the `Blocksy Advanced Taxonomies Block` support by Blockera.
-
+- Added E2E tests for the `Blocksy Tax Template Block` support by Blockera.
+- Added E2E tests for the `Blocksy Widgets Wrapper Block` support by Blockera.
 
 ## 1.0.0 (2024-12-08)
 
