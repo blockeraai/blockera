@@ -71,6 +71,15 @@
 				"author": "CreativeThemes",
 				"link": "https://wordpress.org/plugins/blocksy-companion/"
 			}
+		},
+		{
+			"name": "blocksy/about-me",
+			"title": "About Me Controls",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
 		}
 	],
 	"no-need-to-support": [],

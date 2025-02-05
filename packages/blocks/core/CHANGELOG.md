@@ -10,6 +10,9 @@
 - Added support for the `Blocksy Advanced Taxonomies Block` by Blockera.
 - Added support for the `Blocksy Tax Template Block` by Blockera.
 - Added support for the `Blocksy Widgets Wrapper Block` by Blockera.
+- Added support for the `Blocksy About Me Block` by Blockera.
+- Added support for the `Blocksy About Me Block` text inner block by Blockera.
+
 
 ### Automated Tests
 - Added E2E tests for the `Blocksy Breadcrumbs Block` text inner element.
