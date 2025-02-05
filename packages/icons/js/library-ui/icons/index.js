@@ -15,6 +15,7 @@ export { default as BackgroundRadialGradient } from './background-radial-gradien
 export { default as BackgroundSlideshow } from './background-slideshow.svg';
 export { default as BackgroundVideo } from './background-video.svg';
 export { default as Blending } from './blending.svg';
+export { default as BlockBlocksyAboutTexts } from './block-blocksy-about-texts.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';
