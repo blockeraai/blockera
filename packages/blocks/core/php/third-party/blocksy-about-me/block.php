@@ -22,6 +22,9 @@ return array_merge(
 				'blockera/elements/avatar' => [
 					'root' => 'figure img',
 				],
+				'blockera/elements/name' => [
+					'root' => '.ct-about-me-name span',
+				],
 			]
 		),
 	]

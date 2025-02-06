@@ -32,14 +32,14 @@ export const BlocksyAboutMe: BlockType = {
 				force: true,
 			},
 		},
-		'elements/text': {
-			name: 'elements/text',
-			label: __('All Texts', 'blockera'),
+		'elements/name': {
+			name: 'elements/name',
+			label: __('Name', 'blockera'),
 			description: __(
-				'All text elements inside the about me block.',
+				'The user name inside the about me block.',
 				'blockera'
 			),
-			icon: <Icon icon="block-blocksy-about-texts" iconSize="20" />,
+			icon: <Icon icon="block-blocksy-about-name" iconSize="20" />,
 			settings: {
 				force: true,
 			},
@@ -52,6 +52,18 @@ export const BlocksyAboutMe: BlockType = {
 				'blockera'
 			),
 			icon: <Icon icon="block-blocksy-about-icons" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+		'elements/text': {
+			name: 'elements/text',
+			label: __('All Texts', 'blockera'),
+			description: __(
+				'All text elements inside the about me block.',
+				'blockera'
+			),
+			icon: <Icon icon="block-blocksy-about-texts" iconSize="20" />,
 			settings: {
 				force: true,
 			},
