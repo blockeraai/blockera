@@ -980,4 +980,123 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 			});
 		});
 	});
+
+	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+		appendBlocks(`<!-- wp:blocksy/widgets-wrapper {"heading":"About Me","block":"blocksy/about-me"} -->
+<!-- wp:heading {"level":3,"className":"","fontSize":"medium"} -->
+<h3 class="wp-block-heading has-medium-font-size">About Me</h3>
+<!-- /wp:heading -->
+
+<!-- wp:blocksy/about-me {"blockeraPropsId":"27e00124-6f09-4d2c-91db-3250f518cc87","blockeraCompatId":"16142144350","blockeraBackgroundColor":{"value":"#fae8e8"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.5)"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}}}}}}},"blockeraBackgroundColor":"#ff5b5b"}},"elements/avatar":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"4px","style":"","color":"#ff0000"}}}},"elements/name":{"attributes":{"blockeraBackgroundColor":"#ffcdcd"}},"elements/profile-link":{"attributes":{"blockeraBackgroundColor":"#ff9a9a"}},"elements/text":{"attributes":{"blockeraFontColor":"#00a95a"}}}},"customTextColor":"#00a95a","lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002dwslmq4"} -->
+<div>Blocksy: About Me</div>
+<!-- /wp:blocksy/about-me -->
+<!-- /wp:blocksy/widgets-wrapper -->`);
+
+		cy.getBlock('blocksy/about-me').first().click();
+
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		//
+		// 1. Assert inner blocks selectors in editor
+		//
+		cy.getBlock('blocksy/about-me').should(
+			'have.css',
+			'background-color',
+			'rgb(250, 232, 232)'
+		);
+
+		cy.getBlock('blocksy/about-me')
+			.first()
+			.within(() => {
+				// color inner block
+				cy.get('.ct-about-me-name span').should(
+					'have.css',
+					'color',
+					'rgb(0, 169, 90)'
+				);
+				cy.get('.ct-about-me-name a').should(
+					'have.css',
+					'color',
+					'rgb(0, 169, 90)'
+				);
+
+				// icons inner block
+				cy.get('.ct-icon-container')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 91, 91)');
+
+				// avatar inner block
+				cy.get('figure img').should(
+					'have.css',
+					'border-color',
+					'rgb(255, 0, 0)'
+				);
+
+				// name inner block
+				cy.get('.ct-about-me-name span').should(
+					'have.css',
+					'background-color',
+					'rgb(255, 205, 205)'
+				);
+
+				// profile link inner block
+				cy.get('.ct-about-me-name a').should(
+					'have.css',
+					'background-color',
+					'rgb(255, 154, 154)'
+				);
+			});
+
+		//
+		// 2. Assert inner blocks selectors in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.getBlock('blocksy/about-me').should(
+			'have.css',
+			'background-color',
+			'rgb(250, 232, 232)'
+		);
+
+		cy.get('.blockera-block').within(() => {
+			// color inner block
+			cy.get('.ct-about-me-name span').should(
+				'have.css',
+				'color',
+				'rgb(0, 169, 90)'
+			);
+			cy.get('.ct-about-me-name a').should(
+				'have.css',
+				'color',
+				'rgb(0, 169, 90)'
+			);
+
+			// icons inner block
+			cy.get('.ct-icon-container')
+				.first()
+				.should('have.css', 'background-color', 'rgb(255, 91, 91)');
+
+			// avatar inner block
+			cy.get('figure img').should(
+				'have.css',
+				'border-color',
+				'rgb(255, 0, 0)'
+			);
+
+			// name inner block
+			cy.get('.ct-about-me-name span').should(
+				'have.css',
+				'background-color',
+				'rgb(255, 205, 205)'
+			);
+
+			// profile link inner block
+			cy.get('.ct-about-me-name a').should(
+				'have.css',
+				'background-color',
+				'rgb(255, 154, 154)'
+			);
+		});
+	});
 });
