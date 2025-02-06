@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 7,
-		"supported": 7,
-		"soft-supported": 7,
+		"total": 9,
+		"supported": 9,
+		"soft-supported": 9,
 		"not-supported": 0,
 		"no-need-to-support": 0
 	},
@@ -75,6 +75,15 @@
 		{
 			"name": "blocksy/about-me",
 			"title": "About Me Controls",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/contact-info",
+			"title": "Contact Info",
 			"product": {
 				"name": "Blocksy Companion",
 				"author": "CreativeThemes",

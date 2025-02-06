@@ -1,22 +1,28 @@
 ## Unreleased
 
 ### New Features
-- Added support for the `Blocksy Breadcrumbs Block` by Blockera.
-- Added support for the `Blocksy Breadcrumbs` text inner element by Blockera.
-- Added support for the `Blocksy Breadcrumbs` link inner element by Blockera.
-- Added support for the `Blocksy Breadcrumbs` separator inner element by Blockera.
-- Added support for the `Blocksy Advanced Posts Block` by Blockera.
-- Added support for the `Blocksy Post Template Block` by Blockera.
-- Added support for the `Blocksy Advanced Taxonomies Block` by Blockera.
-- Added support for the `Blocksy Tax Template Block` by Blockera.
-- Added support for the `Blocksy Widgets Wrapper Block` by Blockera.
-- Added support for the `Blocksy About Me Block` by Blockera.
-- Added support for the `Blocksy About Me Block` text inner block by Blockera.
-- Added support for the `Blocksy About Me Block` icons inner block by Blockera.
-- Added support for the `Blocksy About Me Block` icons border color by Blockera.
-- Added support for the `Blocksy About Me Block` avatar inner block by Blockera.
-- Added support for the `Blocksy About Me Block` name inner block by Blockera.
-- Added support for the `Blocksy About Me Block` profile link inner block by Blockera.
+- Added support for the Blocksy `Breadcrumbs` block by Blockera.
+- Added support for the Blocksy `Breadcrumbs → Text` inner element by Blockera.
+- Added support for the Blocksy `Breadcrumbs → Link` inner element by Blockera.
+- Added support for the Blocksy `Breadcrumbs → Separator` inner element by Blockera.
+- Added support for the Blocksy `Advanced Posts` block by Blockera.
+- Added support for the Blocksy `Post Template` block by Blockera.
+- Added support for the Blocksy `Advanced Taxonomies` block by Blockera.
+- Added support for the Blocksy `Tax Template` block by Blockera.
+- Added support for the Blocksy `Widgets Wrapper` block by Blockera.
+- Added support for the Blocksy `About Me` block by Blockera.
+- Added support for the Blocksy `About Me → Text` inner block by Blockera.
+- Added support for the Blocksy `About Me → Icons` inner block by Blockera.
+- Added support for the Blocksy `About Me → Icons Border Color` by Blockera.
+- Added support for the Blocksy `About Me → Avatar` inner block by Blockera.
+- Added support for the Blocksy `About Me → Name` inner block by Blockera.
+- Added support for the Blocksy `About Me → Profile Link` inner block by Blockera.
+- Added support for the Blocksy `Contact Info` block by Blockera.
+- Added support for the Blocksy `Contact Info → Titles` inner block by Blockera.
+- Added support for the Blocksy `Contact Info → Contents` inner block by Blockera.
+- Added support for the Blocksy `Contact Info → Icons` inner block by Blockera.
+- Added support for the Blocksy `Contact Info → Texts` inner block by Blockera.
+- Added support for the Blocksy `Contact Info → Links` inner block by Blockera.a.
 
 
 ### Automated Tests
