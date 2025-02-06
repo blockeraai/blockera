@@ -18,6 +18,7 @@ export { default as Blending } from './blending.svg';
 export { default as BlockBlocksyAboutTexts } from './block-blocksy-about-texts.svg';
 export { default as BlockBlocksyAboutIcons } from './block-blocksy-about-icons.svg';
 export { default as BlockBlocksyAboutAvatar } from './block-blocksy-about-avatar.svg';
+export { default as BlockBlocksyAboutName } from './block-blocksy-about-name.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';
