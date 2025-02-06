@@ -28,7 +28,7 @@
 - Added E2E tests for the `Blocksy About Me Block` support by Blockera.
 - Added E2E tests for the `Blocksy About Me Block` text inner block.
 - Added E2E tests for the `Blocksy About Me Block` icons inner block.
-
+- Added E2E tests for the `Blocksy About Me Block` icons border color.
 
 ## 1.0.0 (2024-12-08)
 
