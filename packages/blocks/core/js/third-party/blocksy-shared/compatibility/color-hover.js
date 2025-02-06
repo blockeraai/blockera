@@ -5,25 +5,31 @@
  */
 import { getBaseBreakpoint } from '@blockera/editor';
 import { mergeObject, isEmpty, isUndefined } from '@blockera/utils';
+import { isValid } from '@blockera/controls';
 import { getColorVAFromIdString } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
-import { isValid } from '@blockera/controls';
 
-export function borderHoverColorFromWPCompatibility({
+export function colorHoverFromWPCompatibility({
 	attributes,
-	element = 'elements/icons',
+	element,
+	property,
+	propertyCustom,
+	blockeraProperty,
 }: {
 	attributes: Object,
 	element: string,
+	property: string,
+	propertyCustom: string,
+	blockeraProperty: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (attributes?.customBorderHoverColor !== undefined) {
-		color = attributes?.customBorderHoverColor;
+	if (attributes?.[property] !== undefined) {
+		color = getColorVAFromIdString(attributes?.[property]);
 	}
 
-	if (!color && attributes?.borderHoverColor !== undefined) {
-		color = getColorVAFromIdString(attributes?.borderHoverColor);
+	if (!color) {
+		color = attributes?.[propertyCustom];
 	}
 
 	if (color) {
@@ -39,14 +45,7 @@ export function borderHoverColorFromWPCompatibility({
 										// $FlowFixMe
 										[getBaseBreakpoint()]: {
 											attributes: {
-												blockeraBorder: {
-													type: 'all',
-													all: {
-														width: '1px',
-														style: 'solid',
-														color,
-													},
-												},
+												[blockeraProperty]: color,
 											},
 										},
 									},
@@ -62,37 +61,39 @@ export function borderHoverColorFromWPCompatibility({
 	return attributes;
 }
 
-export function borderHoverColorToWPCompatibility({
+export function colorHoverToWPCompatibility({
 	newValue,
 	ref,
+	property,
+	propertyCustom,
 }: {
 	newValue: Object,
 	ref?: Object,
+	property: string,
+	propertyCustom: string,
 }): Object {
+	console.log('colorHoverToWPCompatibility', newValue);
+
 	if (
 		'reset' === ref?.current?.action ||
 		isEmpty(newValue) ||
 		isUndefined(newValue)
 	) {
 		return {
-			borderHoverColor: undefined,
-			customBorderHoverColor: undefined,
+			[property]: undefined,
+			[propertyCustom]: undefined,
 		};
 	}
 
-	if (newValue?.type === 'all') {
-		if (isValid(newValue?.all)) {
-			return {
-				borderHoverColor: newValue?.all?.color?.settings?.id,
-				customBorderHoverColor: undefined,
-			};
-		}
-
+	if (isValid(newValue)) {
 		return {
-			borderHoverColor: undefined,
-			customBorderHoverColor: newValue?.all?.color,
+			[property]: newValue?.settings?.id,
+			[propertyCustom]: undefined,
 		};
 	}
 
-	return {};
+	return {
+		[property]: undefined,
+		[propertyCustom]: newValue,
+	};
 }

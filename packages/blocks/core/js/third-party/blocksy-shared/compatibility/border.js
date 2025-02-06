@@ -8,21 +8,27 @@ import { getColorVAFromIdString } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 import { isValid } from '@blockera/controls';
 
-export function borderColorFromWPCompatibility({
+export function borderFromWPCompatibility({
 	attributes,
-	element = 'elements/icons',
+	element,
+	property,
+	propertyCustom,
+	blockeraProperty,
 }: {
 	attributes: Object,
 	element: string,
+	property: string,
+	propertyCustom: string,
+	blockeraProperty: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (attributes?.customBorderColor !== undefined) {
-		color = attributes?.customBorderColor;
+	if (attributes?.[propertyCustom] !== undefined) {
+		color = attributes?.[propertyCustom];
 	}
 
-	if (!color && attributes?.borderColor !== undefined) {
-		color = getColorVAFromIdString(attributes?.borderColor);
+	if (!color && attributes?.[property] !== undefined) {
+		color = getColorVAFromIdString(attributes?.[property]);
 	}
 
 	if (color) {
@@ -31,7 +37,7 @@ export function borderColorFromWPCompatibility({
 				value: {
 					[element]: {
 						attributes: {
-							blockeraBorder: {
+							[blockeraProperty]: {
 								type: 'all',
 								all: {
 									width: '1px',
@@ -49,12 +55,16 @@ export function borderColorFromWPCompatibility({
 	return attributes;
 }
 
-export function borderColorToWPCompatibility({
+export function borderToWPCompatibility({
 	newValue,
 	ref,
+	property,
+	propertyCustom,
 }: {
 	newValue: Object,
 	ref?: Object,
+	property: string,
+	propertyCustom: string,
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
@@ -62,22 +72,22 @@ export function borderColorToWPCompatibility({
 		isUndefined(newValue)
 	) {
 		return {
-			borderColor: undefined,
-			customBorderColor: undefined,
+			[property]: undefined,
+			[propertyCustom]: undefined,
 		};
 	}
 
 	if (newValue?.type === 'all') {
 		if (isValid(newValue?.all)) {
 			return {
-				borderColor: newValue?.all?.color?.settings?.id,
-				customBorderColor: undefined,
+				[property]: newValue?.all?.color?.settings?.id,
+				[propertyCustom]: undefined,
 			};
 		}
 
 		return {
-			borderColor: undefined,
-			customBorderColor: newValue?.all?.color,
+			[property]: undefined,
+			[propertyCustom]: newValue?.all?.color,
 		};
 	}
 

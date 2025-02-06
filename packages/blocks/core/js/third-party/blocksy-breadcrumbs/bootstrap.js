@@ -18,17 +18,13 @@ import type { ControlContextRef } from '@blockera/controls';
  * Internal dependencies
  */
 import {
-	textColorFromWPCompatibility,
-	textColorToWPCompatibility,
-} from '../blocksy-shared/compatibility/text-color';
+	colorFromWPCompatibility,
+	colorToWPCompatibility,
+} from '../blocksy-shared/compatibility/color';
 import {
-	linkColorFromWPCompatibility,
-	linkColorToWPCompatibility,
-} from '../blocksy-shared/compatibility/link-color';
-import {
-	linkColorHoverFromWPCompatibility,
-	linkColorHoverToWPCompatibility,
-} from '../blocksy-shared/compatibility/link-hover-color';
+	colorHoverFromWPCompatibility,
+	colorHoverToWPCompatibility,
+} from '../blocksy-shared/compatibility/color-hover';
 
 export const bootstrapBlocksyBreadcrumbs = (): void => {
 	addFilter(
@@ -51,9 +47,12 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 				!isBlockNotOriginalState(blockDetail) &&
 				!attributes?.blockeraFontColor?.value
 			) {
-				attributes = textColorFromWPCompatibility({
+				attributes = colorFromWPCompatibility({
 					attributes,
 					element: 'elements/text',
+					property: 'textColor',
+					propertyCustom: 'customTextColor',
+					blockeraProperty: 'blockeraFontColor',
 				});
 			}
 
@@ -64,9 +63,12 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 				!attributes?.blockeraInnerBlocks['elements/links']?.attributes
 					?.blockeraFontColor
 			) {
-				attributes = linkColorFromWPCompatibility({
+				attributes = colorFromWPCompatibility({
 					attributes,
 					element: 'elements/links',
+					property: 'linkColor',
+					propertyCustom: 'customLinkColor',
+					blockeraProperty: 'blockeraFontColor',
 				});
 			}
 
@@ -79,9 +81,12 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 					getBaseBreakpoint()
 				]?.attributes?.blockeraFontColor
 			) {
-				attributes = linkColorHoverFromWPCompatibility({
+				attributes = colorHoverFromWPCompatibility({
 					attributes,
 					element: 'elements/links',
+					property: 'linkHoverColor',
+					propertyCustom: 'customLinkHoverColor',
+					blockeraProperty: 'blockeraFontColor',
 				});
 			}
 
@@ -132,9 +137,11 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					textColorToWPCompatibility({
+					colorToWPCompatibility({
 						newValue,
 						ref,
+						property: 'textColor',
+						propertyCustom: 'customTextColor',
 					})
 				);
 			}
@@ -150,9 +157,11 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					linkColorToWPCompatibility({
+					colorToWPCompatibility({
 						newValue,
 						ref,
+						property: 'linkColor',
+						propertyCustom: 'customLinkColor',
 					})
 				);
 			}
@@ -168,9 +177,11 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					linkColorHoverToWPCompatibility({
+					colorHoverToWPCompatibility({
 						newValue,
 						ref,
+						property: 'linkHoverColor',
+						propertyCustom: 'customLinkHoverColor',
 					})
 				);
 			}
