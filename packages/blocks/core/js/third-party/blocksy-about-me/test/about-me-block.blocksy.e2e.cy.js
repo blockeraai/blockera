@@ -948,7 +948,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.getBlock('blocksy/about-me').should(
+		cy.get('.blockera-block').should(
 			'have.css',
 			'background-color',
 			'rgb(250, 232, 232)'
