@@ -20,6 +20,18 @@ export const BlocksyAboutMe: BlockType = {
 	name: 'blockeraBlocksyAboutMe',
 	targetBlock: 'blocksy/about-me',
 	blockeraInnerBlocks: {
+		'elements/avatar': {
+			name: 'elements/avatar',
+			label: __('Avatar', 'blockera'),
+			description: __(
+				'The avatar image inside the about me block.',
+				'blockera'
+			),
+			icon: <Icon icon="block-blocksy-about-avatar" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
 		'elements/text': {
 			name: 'elements/text',
 			label: __('All Texts', 'blockera'),

@@ -19,6 +19,9 @@ return array_merge(
 				'blockera/elements/icons'   => [
 					'root' => '.ct-icon-container',
 				],
+				'blockera/elements/avatar' => [
+					'root' => 'figure img',
+				],
 			]
 		),
 	]
