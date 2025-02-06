@@ -25,6 +25,9 @@ return array_merge(
 				'blockera/elements/name' => [
 					'root' => '.ct-about-me-name span',
 				],
+				'blockera/elements/profile-link' => [
+					'root' => '.ct-about-me-name a',
+				],
 			]
 		),
 	]

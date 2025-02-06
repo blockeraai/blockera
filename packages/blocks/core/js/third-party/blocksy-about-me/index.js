@@ -44,6 +44,18 @@ export const BlocksyAboutMe: BlockType = {
 				force: true,
 			},
 		},
+		'elements/profile-link': {
+			name: 'elements/profile-link',
+			label: __('Profile Link', 'blockera'),
+			description: __(
+				'The view profile link inside the about me block.',
+				'blockera'
+			),
+			icon: <Icon icon="block-blocksy-about-link" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
 		'elements/icons': {
 			name: 'elements/icons',
 			label: __('Icons', 'blockera'),

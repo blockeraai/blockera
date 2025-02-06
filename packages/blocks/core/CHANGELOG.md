@@ -16,6 +16,7 @@
 - Added support for the `Blocksy About Me Block` icons border color by Blockera.
 - Added support for the `Blocksy About Me Block` avatar inner block by Blockera.
 - Added support for the `Blocksy About Me Block` name inner block by Blockera.
+- Added support for the `Blocksy About Me Block` profile link inner block by Blockera.
 
 
 ### Automated Tests
