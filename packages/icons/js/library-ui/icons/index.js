@@ -20,6 +20,11 @@ export { default as BlockBlocksyAboutIcons } from './block-blocksy-about-icons.s
 export { default as BlockBlocksyAboutAvatar } from './block-blocksy-about-avatar.svg';
 export { default as BlockBlocksyAboutName } from './block-blocksy-about-name.svg';
 export { default as BlockBlocksyAboutLink } from './block-blocksy-about-link.svg';
+export { default as BlockBlocksyContactInfoTexts } from './block-blocksy-contact-info-texts.svg';
+export { default as BlockBlocksyContactInfoLink } from './block-blocksy-contact-info-link.svg';
+export { default as BlockBlocksyContactInfoIcons } from './block-blocksy-contact-info-icons.svg';
+export { default as BlockBlocksyContactInfoTitles } from './block-blocksy-contact-info-titles.svg';
+export { default as BlockBlocksyContactInfoContents } from './block-blocksy-contact-info-contents.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';
