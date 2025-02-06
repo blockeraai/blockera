@@ -26,18 +26,28 @@
 
 
 ### Automated Tests
-- Added E2E tests for the `Blocksy Breadcrumbs Block` text inner element.
-- Added E2E tests for the `Blocksy Breadcrumbs Block` link inner element.
-- Added E2E tests for the `Blocksy Breadcrumbs Block` separator inner element.
-- Added E2E tests for the `Blocksy Advanced Posts Block` support by Blockera.
-- Added E2E tests for the `Blocksy Post Template Block` support by Blockera.
-- Added E2E tests for the `Blocksy Advanced Taxonomies Block` support by Blockera.
-- Added E2E tests for the `Blocksy Tax Template Block` support by Blockera.
-- Added E2E tests for the `Blocksy Widgets Wrapper Block` support by Blockera.
-- Added E2E tests for the `Blocksy About Me Block` support by Blockera.
-- Added E2E tests for the `Blocksy About Me Block` text inner block.
-- Added E2E tests for the `Blocksy About Me Block` icons inner block.
-- Added E2E tests for the `Blocksy About Me Block` icons border color.
+- Added E2E tests for the Blocksy `Breadcrumbs` block text inner element.
+- Added E2E tests for the Blocksy `Breadcrumbs` block link inner element.
+- Added E2E tests for the Blocksy `Breadcrumbs` block separator inner element.
+- Added E2E tests for the Blocksy `Advanced Posts` block support by Blockera.
+- Added E2E tests for the Blocksy `Post Template` block support by Blockera.
+- Added E2E tests for the Blocksy `Advanced Taxonomies` block support by Blockera.
+- Added E2E tests for the Blocksy `Tax Template` block support by Blockera.
+- Added E2E tests for the Blocksy `Widgets Wrapper` block support by Blockera.
+- Added E2E tests for the Blocksy `About Me` block support by Blockera.
+- Added E2E tests for the Blocksy `About Me → Text` inner block.
+- Added E2E tests for the Blocksy `About Me → Icons` inner block.
+- Added E2E tests for the Blocksy `About Me → Icons Border Color` inner block.
+- Added E2E tests for the Blocksy `About Me → Avatar` inner block.
+- Added E2E tests for the Blocksy `About Me → Name` inner block.
+- Added E2E tests for the Blocksy `About Me → Profile Link` inner block.
+- Added E2E tests for the Blocksy `Contact Info` block support by Blockera.
+- Added E2E tests for the Blocksy `Contact Info → Titles` inner block.
+- Added E2E tests for the Blocksy `Contact Info → Contents` inner block.
+- Added E2E tests for the Blocksy `Contact Info → Icons` inner block.
+- Added E2E tests for the Blocksy `Contact Info → Texts` inner block.
+- Added E2E tests for the Blocksy `Contact Info → Links` inner block.
+
 
 ## 1.0.0 (2024-12-08)
 
