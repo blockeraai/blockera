@@ -22,7 +22,7 @@ export const BlocksyAboutMe: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/text': {
 			name: 'elements/text',
-			label: __('Texts', 'blockera'),
+			label: __('All Texts', 'blockera'),
 			description: __(
 				'All text elements inside the about me block.',
 				'blockera'
