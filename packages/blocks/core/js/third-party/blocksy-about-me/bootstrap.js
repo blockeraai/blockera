@@ -19,27 +19,27 @@ import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-stat
 import {
 	textColorFromWPCompatibility,
 	textColorToWPCompatibility,
-} from './compatibility/text-color';
+} from '../blocksy-shared/compatibility/text-color';
 import {
 	textColorHoverFromWPCompatibility,
 	textColorHoverToWPCompatibility,
-} from './compatibility/text-hover-color';
+} from '../blocksy-shared/compatibility/text-hover-color';
 import {
 	iconsColorFromWPCompatibility,
 	iconsColorToWPCompatibility,
-} from './compatibility/icons-color';
+} from '../blocksy-shared/compatibility/icons-color';
 import {
 	iconsColorHoverFromWPCompatibility,
 	iconsColorHoverToWPCompatibility,
-} from './compatibility/icons-hover-color';
+} from '../blocksy-shared/compatibility/icons-hover-color';
 import {
 	borderColorFromWPCompatibility,
 	borderColorToWPCompatibility,
-} from './compatibility/border-color';
+} from '../blocksy-shared/compatibility/border-color';
 import {
 	borderHoverColorFromWPCompatibility,
 	borderHoverColorToWPCompatibility,
-} from './compatibility/border-hover-color';
+} from '../blocksy-shared/compatibility/border-hover-color';
 
 export const bootstrapBlocksyAboutMe = (): void => {
 	addFilter(
@@ -58,6 +58,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			if (!attributes?.blockeraFontColor?.value) {
 				attributes = textColorFromWPCompatibility({
 					attributes,
+					element: 'elements/text',
 				});
 			}
 
@@ -70,6 +71,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			) {
 				attributes = textColorHoverFromWPCompatibility({
 					attributes,
+					element: 'elements/text',
 				});
 			}
 
@@ -82,6 +84,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			) {
 				attributes = iconsColorFromWPCompatibility({
 					attributes,
+					element: 'elements/icons',
 				});
 			}
 
@@ -94,6 +97,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			) {
 				attributes = iconsColorHoverFromWPCompatibility({
 					attributes,
+					element: 'elements/icons',
 				});
 			}
 
@@ -110,6 +114,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			) {
 				attributes = borderColorFromWPCompatibility({
 					attributes,
+					element: 'elements/icons',
 				});
 			}
 
@@ -130,6 +135,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			) {
 				attributes = borderHoverColorFromWPCompatibility({
 					attributes,
+					element: 'elements/icons',
 				});
 			}
 

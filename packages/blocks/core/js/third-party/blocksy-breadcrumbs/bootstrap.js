@@ -20,15 +20,15 @@ import type { ControlContextRef } from '@blockera/controls';
 import {
 	textColorFromWPCompatibility,
 	textColorToWPCompatibility,
-} from './compatibility/text-color';
+} from '../blocksy-shared/compatibility/text-color';
 import {
 	linkColorFromWPCompatibility,
 	linkColorToWPCompatibility,
-} from './compatibility/link-color';
+} from '../blocksy-shared/compatibility/link-color';
 import {
 	linkColorHoverFromWPCompatibility,
 	linkColorHoverToWPCompatibility,
-} from './compatibility/link-hover-color';
+} from '../blocksy-shared/compatibility/link-hover-color';
 
 export const bootstrapBlocksyBreadcrumbs = (): void => {
 	addFilter(
@@ -53,6 +53,7 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			) {
 				attributes = textColorFromWPCompatibility({
 					attributes,
+					element: 'elements/text',
 				});
 			}
 
@@ -65,6 +66,7 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			) {
 				attributes = linkColorFromWPCompatibility({
 					attributes,
+					element: 'elements/links',
 				});
 			}
 
@@ -79,6 +81,7 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			) {
 				attributes = linkColorHoverFromWPCompatibility({
 					attributes,
+					element: 'elements/links',
 				});
 			}
 

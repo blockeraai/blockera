@@ -19,7 +19,7 @@ import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-stat
 import {
 	textColorFromWPCompatibility,
 	textColorToWPCompatibility,
-} from './compatibility/text-color';
+} from '../blocksy-shared/compatibility/text-color';
 import {
 	linkColorFromWPCompatibility,
 	linkColorToWPCompatibility,
@@ -28,22 +28,23 @@ import {
 	linkColorHoverFromWPCompatibility,
 	linkColorHoverToWPCompatibility,
 } from './compatibility/link-hover-color';
+
 import {
 	iconsColorFromWPCompatibility,
 	iconsColorToWPCompatibility,
-} from './compatibility/icons-color';
+} from '../blocksy-shared/compatibility/icons-color';
 import {
 	iconsColorHoverFromWPCompatibility,
 	iconsColorHoverToWPCompatibility,
-} from './compatibility/icons-hover-color';
+} from '../blocksy-shared/compatibility/icons-hover-color';
 import {
 	borderColorFromWPCompatibility,
 	borderColorToWPCompatibility,
-} from './compatibility/icon-border-color';
+} from '../blocksy-shared/compatibility/border-color';
 import {
 	borderHoverColorFromWPCompatibility,
 	borderHoverColorToWPCompatibility,
-} from './compatibility/icon-border-hover-color';
+} from '../blocksy-shared/compatibility/border-hover-color';
 
 export const bootstrapBlocksyContactInfo = (): void => {
 	addFilter(
@@ -62,6 +63,7 @@ export const bootstrapBlocksyContactInfo = (): void => {
 			if (!attributes?.blockeraFontColor?.value) {
 				attributes = textColorFromWPCompatibility({
 					attributes,
+					element: 'elements/text',
 				});
 			}
 
@@ -98,6 +100,7 @@ export const bootstrapBlocksyContactInfo = (): void => {
 			) {
 				attributes = iconsColorFromWPCompatibility({
 					attributes,
+					element: 'elements/icons',
 				});
 			}
 
@@ -110,6 +113,7 @@ export const bootstrapBlocksyContactInfo = (): void => {
 			) {
 				attributes = iconsColorHoverFromWPCompatibility({
 					attributes,
+					element: 'elements/icons',
 				});
 			}
 
@@ -126,6 +130,7 @@ export const bootstrapBlocksyContactInfo = (): void => {
 			) {
 				attributes = borderColorFromWPCompatibility({
 					attributes,
+					element: 'elements/icons',
 				});
 			}
 
@@ -146,6 +151,7 @@ export const bootstrapBlocksyContactInfo = (): void => {
 			) {
 				attributes = borderHoverColorFromWPCompatibility({
 					attributes,
+					element: 'elements/icons',
 				});
 			}
 

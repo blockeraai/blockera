@@ -5,30 +5,32 @@
  */
 import { getBaseBreakpoint } from '@blockera/editor';
 import { mergeObject, isEmpty, isUndefined } from '@blockera/utils';
-import { isValid } from '@blockera/controls';
 import { getColorVAFromIdString } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+import { isValid } from '@blockera/controls';
 
-export function linkColorHoverFromWPCompatibility({
+export function borderHoverColorFromWPCompatibility({
 	attributes,
+	element = 'elements/icons',
 }: {
 	attributes: Object,
+	element: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (attributes?.linkHoverColor !== undefined) {
-		color = getColorVAFromIdString(attributes?.linkHoverColor);
+	if (attributes?.customBorderHoverColor !== undefined) {
+		color = attributes?.customBorderHoverColor;
 	}
 
-	if (!color) {
-		color = attributes?.customLinkHoverColor;
+	if (!color && attributes?.borderHoverColor !== undefined) {
+		color = getColorVAFromIdString(attributes?.borderHoverColor);
 	}
 
 	if (color) {
 		return mergeObject(attributes, {
 			blockeraInnerBlocks: {
 				value: {
-					'elements/links': {
+					[element]: {
 						attributes: {
 							blockeraBlockStates: {
 								hover: {
@@ -37,7 +39,14 @@ export function linkColorHoverFromWPCompatibility({
 										// $FlowFixMe
 										[getBaseBreakpoint()]: {
 											attributes: {
-												blockeraFontColor: color,
+												blockeraBorder: {
+													type: 'all',
+													all: {
+														width: '1px',
+														style: 'solid',
+														color,
+													},
+												},
 											},
 										},
 									},
@@ -53,7 +62,7 @@ export function linkColorHoverFromWPCompatibility({
 	return attributes;
 }
 
-export function linkColorHoverToWPCompatibility({
+export function borderHoverColorToWPCompatibility({
 	newValue,
 	ref,
 }: {
@@ -66,20 +75,24 @@ export function linkColorHoverToWPCompatibility({
 		isUndefined(newValue)
 	) {
 		return {
-			linkHoverColor: undefined,
-			customLinkHoverColor: undefined,
+			borderHoverColor: undefined,
+			customBorderHoverColor: undefined,
 		};
 	}
 
-	if (isValid(newValue)) {
+	if (newValue?.type === 'all') {
+		if (isValid(newValue?.all)) {
+			return {
+				borderHoverColor: newValue?.all?.color?.settings?.id,
+				customBorderHoverColor: undefined,
+			};
+		}
+
 		return {
-			linkHoverColor: newValue?.settings?.id,
-			customLinkHoverColor: undefined,
+			borderHoverColor: undefined,
+			customBorderHoverColor: newValue?.all?.color,
 		};
 	}
 
-	return {
-		linkHoverColor: undefined,
-		customLinkHoverColor: newValue,
-	};
+	return {};
 }

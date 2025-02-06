@@ -10,8 +10,10 @@ import { isValid } from '@blockera/controls';
 
 export function borderColorFromWPCompatibility({
 	attributes,
+	element = 'elements/icons',
 }: {
 	attributes: Object,
+	element: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
@@ -27,7 +29,7 @@ export function borderColorFromWPCompatibility({
 		return mergeObject(attributes, {
 			blockeraInnerBlocks: {
 				value: {
-					'elements/icons': {
+					[element]: {
 						attributes: {
 							blockeraBorder: {
 								type: 'all',

@@ -8,26 +8,28 @@ import { isValid } from '@blockera/controls';
 import { getColorVAFromIdString } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
-export function iconsColorFromWPCompatibility({
+export function linkColorFromWPCompatibility({
 	attributes,
+	element = 'elements/links',
 }: {
 	attributes: Object,
+	element: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (attributes?.iconsColor !== undefined) {
-		color = getColorVAFromIdString(attributes?.iconsColor);
+	if (attributes?.linkColor !== undefined) {
+		color = getColorVAFromIdString(attributes?.linkColor);
 	}
 
 	if (!color) {
-		color = attributes?.customIconsColor;
+		color = attributes?.customLinkColor;
 	}
 
 	if (color) {
 		return mergeObject(attributes, {
 			blockeraInnerBlocks: {
 				value: {
-					'elements/icons': {
+					[element]: {
 						attributes: {
 							blockeraFontColor: color,
 						},
@@ -40,7 +42,7 @@ export function iconsColorFromWPCompatibility({
 	return attributes;
 }
 
-export function iconsColorToWPCompatibility({
+export function linkColorToWPCompatibility({
 	newValue,
 	ref,
 }: {
@@ -53,20 +55,20 @@ export function iconsColorToWPCompatibility({
 		isUndefined(newValue)
 	) {
 		return {
-			iconsColor: undefined,
-			customIconsColor: undefined,
+			linkColor: undefined,
+			customLinkColor: undefined,
 		};
 	}
 
 	if (isValid(newValue)) {
 		return {
-			iconsColor: newValue?.settings?.id,
-			customIconsColor: undefined,
+			linkColor: newValue?.settings?.id,
+			customLinkColor: undefined,
 		};
 	}
 
 	return {
-		iconsColor: undefined,
-		customIconsColor: newValue,
+		linkColor: undefined,
+		customLinkColor: newValue,
 	};
 }

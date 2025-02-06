@@ -5,30 +5,32 @@
  */
 import { getBaseBreakpoint } from '@blockera/editor';
 import { mergeObject, isEmpty, isUndefined } from '@blockera/utils';
+import { isValid } from '@blockera/controls';
 import { getColorVAFromIdString } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
-import { isValid } from '@blockera/controls';
 
-export function borderHoverColorFromWPCompatibility({
+export function textColorHoverFromWPCompatibility({
 	attributes,
+	element = 'elements/text',
 }: {
 	attributes: Object,
+	element: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (attributes?.customBorderHoverColor !== undefined) {
-		color = attributes?.customBorderHoverColor;
+	if (attributes?.textHoverColor !== undefined) {
+		color = getColorVAFromIdString(attributes?.textHoverColor);
 	}
 
-	if (!color && attributes?.borderHoverColor !== undefined) {
-		color = getColorVAFromIdString(attributes?.borderHoverColor);
+	if (!color) {
+		color = attributes?.customTextHoverColor;
 	}
 
 	if (color) {
 		return mergeObject(attributes, {
 			blockeraInnerBlocks: {
 				value: {
-					'elements/icons': {
+					[element]: {
 						attributes: {
 							blockeraBlockStates: {
 								hover: {
@@ -37,14 +39,7 @@ export function borderHoverColorFromWPCompatibility({
 										// $FlowFixMe
 										[getBaseBreakpoint()]: {
 											attributes: {
-												blockeraBorder: {
-													type: 'all',
-													all: {
-														width: '1px',
-														style: 'solid',
-														color,
-													},
-												},
+												blockeraFontColor: color,
 											},
 										},
 									},
@@ -60,7 +55,7 @@ export function borderHoverColorFromWPCompatibility({
 	return attributes;
 }
 
-export function borderHoverColorToWPCompatibility({
+export function textColorHoverToWPCompatibility({
 	newValue,
 	ref,
 }: {
@@ -73,24 +68,20 @@ export function borderHoverColorToWPCompatibility({
 		isUndefined(newValue)
 	) {
 		return {
-			borderHoverColor: undefined,
-			customBorderHoverColor: undefined,
+			textHoverColor: undefined,
+			customTextHoverColor: undefined,
 		};
 	}
 
-	if (newValue?.type === 'all') {
-		if (isValid(newValue?.all)) {
-			return {
-				borderHoverColor: newValue?.all?.color?.settings?.id,
-				customBorderHoverColor: undefined,
-			};
-		}
-
+	if (isValid(newValue)) {
 		return {
-			borderHoverColor: undefined,
-			customBorderHoverColor: newValue?.all?.color,
+			textHoverColor: newValue?.settings?.id,
+			customTextHoverColor: undefined,
 		};
 	}
 
-	return {};
+	return {
+		textHoverColor: undefined,
+		customTextHoverColor: newValue,
+	};
 }

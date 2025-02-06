@@ -10,8 +10,10 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 export function textColorFromWPCompatibility({
 	attributes,
+	element = 'elements/text',
 }: {
 	attributes: Object,
+	element: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
@@ -27,7 +29,7 @@ export function textColorFromWPCompatibility({
 		return mergeObject(attributes, {
 			blockeraInnerBlocks: {
 				value: {
-					'elements/text': {
+					[element]: {
 						attributes: {
 							blockeraFontColor: color,
 						},
