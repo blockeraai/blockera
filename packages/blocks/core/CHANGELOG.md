@@ -13,6 +13,7 @@
 - Added support for the `Blocksy About Me Block` by Blockera.
 - Added support for the `Blocksy About Me Block` text inner block by Blockera.
 - Added support for the `Blocksy About Me Block` icons inner block by Blockera.
+- Added support for the `Blocksy About Me Block` icons border color by Blockera.
 
 
 ### Automated Tests

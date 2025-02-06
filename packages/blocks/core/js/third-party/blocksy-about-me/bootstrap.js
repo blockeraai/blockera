@@ -9,8 +9,8 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
+import { isBorderEmpty, type ControlContextRef } from '@blockera/controls';
 import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-states/types';
-import type { ControlContextRef } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -31,6 +31,10 @@ import {
 	iconsColorHoverFromWPCompatibility,
 	iconsColorHoverToWPCompatibility,
 } from './compatibility/icons-hover-color';
+import {
+	borderColorFromWPCompatibility,
+	borderColorToWPCompatibility,
+} from './compatibility/border-color';
 
 export const bootstrapBlocksyAboutMe = (): void => {
 	addFilter(
@@ -84,6 +88,22 @@ export const bootstrapBlocksyAboutMe = (): void => {
 					?.blockeraBlockStates?.hover?.attributes?.blockeraFontColor
 			) {
 				attributes = iconsColorHoverFromWPCompatibility({
+					attributes,
+				});
+			}
+
+			//
+			// Border color only
+			//
+			if (
+				attributes?.blockeraInnerBlocks['elements/icons']?.attributes
+					?.blockeraBorder === undefined ||
+				isBorderEmpty(
+					attributes?.blockeraInnerBlocks['elements/icons']
+						?.attributes?.blockeraBorder
+				)
+			) {
+				attributes = borderColorFromWPCompatibility({
 					attributes,
 				});
 			}
@@ -194,6 +214,25 @@ export const bootstrapBlocksyAboutMe = (): void => {
 				return mergeObject(
 					nextState,
 					iconsColorHoverToWPCompatibility({
+						newValue,
+						ref,
+					})
+				);
+			}
+
+			//
+			// border color
+			// only in elements/icons inner block
+			//
+			if (
+				isBaseBreakpoint &&
+				currentState === 'normal' &&
+				currentBlock === 'elements/icons' &&
+				featureId === 'blockeraBorder'
+			) {
+				return mergeObject(
+					nextState,
+					borderColorToWPCompatibility({
 						newValue,
 						ref,
 					})
