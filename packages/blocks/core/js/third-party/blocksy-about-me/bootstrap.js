@@ -8,6 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Blockera dependencies
  */
+import { getBaseBreakpoint } from '@blockera/editor';
 import { mergeObject } from '@blockera/utils';
 import { isBorderEmpty, type ControlContextRef } from '@blockera/controls';
 import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-states/types';
@@ -35,6 +36,10 @@ import {
 	borderColorFromWPCompatibility,
 	borderColorToWPCompatibility,
 } from './compatibility/border-color';
+import {
+	borderHoverColorFromWPCompatibility,
+	borderHoverColorToWPCompatibility,
+} from './compatibility/border-hover-color';
 
 export const bootstrapBlocksyAboutMe = (): void => {
 	addFilter(
@@ -104,6 +109,26 @@ export const bootstrapBlocksyAboutMe = (): void => {
 				)
 			) {
 				attributes = borderColorFromWPCompatibility({
+					attributes,
+				});
+			}
+
+			//
+			// Border color only
+			//
+			if (
+				attributes?.blockeraInnerBlocks['elements/icons']?.attributes
+					?.blockeraBlockStates?.hover?.breakpoints[
+					getBaseBreakpoint()
+				]?.attributes?.blockeraBorder === undefined ||
+				isBorderEmpty(
+					attributes?.blockeraInnerBlocks['elements/icons']
+						?.attributes?.blockeraBlockStates?.hover?.breakpoints[
+						getBaseBreakpoint()
+					]?.attributes?.blockeraBorder
+				)
+			) {
+				attributes = borderHoverColorFromWPCompatibility({
 					attributes,
 				});
 			}
@@ -233,6 +258,25 @@ export const bootstrapBlocksyAboutMe = (): void => {
 				return mergeObject(
 					nextState,
 					borderColorToWPCompatibility({
+						newValue,
+						ref,
+					})
+				);
+			}
+
+			//
+			// border hover color
+			// only in elements/icons inner block
+			//
+			if (
+				isBaseBreakpoint &&
+				currentState === 'hover' &&
+				currentBlock === 'elements/icons' &&
+				featureId === 'blockeraBorder'
+			) {
+				return mergeObject(
+					nextState,
+					borderHoverColorToWPCompatibility({
 						newValue,
 						ref,
 					})
