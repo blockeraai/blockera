@@ -19,6 +19,7 @@ export { default as BlockBlocksyAboutTexts } from './block-blocksy-about-texts.s
 export { default as BlockBlocksyAboutIcons } from './block-blocksy-about-icons.svg';
 export { default as BlockBlocksyAboutAvatar } from './block-blocksy-about-avatar.svg';
 export { default as BlockBlocksyAboutName } from './block-blocksy-about-name.svg';
+export { default as BlockBlocksyAboutLink } from './block-blocksy-about-link.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';
