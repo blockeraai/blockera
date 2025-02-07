@@ -22,7 +22,9 @@
 - Added support for the Blocksy `Contact Info → Contents` inner block by Blockera.
 - Added support for the Blocksy `Contact Info → Icons` inner block by Blockera.
 - Added support for the Blocksy `Contact Info → Texts` inner block by Blockera.
-- Added support for the Blocksy `Contact Info → Links` inner block by Blockera.a.
+- Added support for the Blocksy `Contact Info → Links` inner block by Blockera.
+- Added support for the Blocksy `Socials` block by Blockera.
+- Added support for the Blocksy `Socials → Icons` inner block by Blockera.
 
 
 ### Automated Tests
@@ -47,6 +49,8 @@
 - Added E2E tests for the Blocksy `Contact Info → Icons` inner block.
 - Added E2E tests for the Blocksy `Contact Info → Texts` inner block.
 - Added E2E tests for the Blocksy `Contact Info → Links` inner block.
+- Added E2E tests for the Blocksy `Socials` block support by Blockera.
+- Added E2E tests for the Blocksy `Socials → Icons` inner block.
 
 
 ## 1.0.0 (2024-12-08)
