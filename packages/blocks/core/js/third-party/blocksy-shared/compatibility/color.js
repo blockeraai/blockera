@@ -14,21 +14,23 @@ export function colorFromWPCompatibility({
 	property,
 	propertyCustom,
 	blockeraProperty,
+	defaultValue,
 }: {
 	attributes: Object,
 	element: string,
 	property: string,
 	propertyCustom: string,
 	blockeraProperty: string,
+	defaultValue?: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (attributes?.[property] !== undefined) {
-		color = getColorVAFromIdString(attributes?.[property]);
+	if (attributes?.[propertyCustom] !== defaultValue) {
+		color = attributes?.[propertyCustom];
 	}
 
-	if (!color) {
-		color = attributes?.[propertyCustom];
+	if (!color && attributes?.[property] !== defaultValue) {
+		color = getColorVAFromIdString(attributes?.[property]);
 	}
 
 	if (color) {
