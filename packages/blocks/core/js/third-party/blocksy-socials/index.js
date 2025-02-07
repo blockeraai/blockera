@@ -27,7 +27,7 @@ export const BlocksySocials: BlockType = {
 				'All social media icons inside the socials block.',
 				'blockera'
 			),
-			icon: <Icon icon="share" library="wp" iconSize="20" />,
+			icon: <Icon icon="share" iconSize="20" />,
 			settings: {
 				force: true,
 			},

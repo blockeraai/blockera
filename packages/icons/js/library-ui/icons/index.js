@@ -272,6 +272,7 @@ export { default as RotateAntiClockwise } from './rotate-anti-clockwise.svg';
 export { default as RotateClockwise } from './rotate-clockwise.svg';
 export { default as ScrollAnimation } from './scroll-animation.svg';
 export { default as Search } from './search.svg';
+export { default as Share } from './share.svg';
 export { default as ShieldChecked } from './shield-checked.svg';
 export { default as Shortcut } from './shortcut.svg';
 export { default as SideLockAll } from './side-lock-all.svg';
