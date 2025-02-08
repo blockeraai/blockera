@@ -63,8 +63,9 @@ export const getBlockSupportCategory = (name: string): Object => {
 };
 
 /**
+ * Get block support fallback with support name.
  *
- * @param {Object} supports the block supports list of support category.
+ * @param {Object} supports the block support list of support category.
  * @param {string} support the support name.
  *
  * @return {Object} the support details.
@@ -73,6 +74,80 @@ export const getBlockSupportFallback = (
 	supports: Object,
 	support: string
 ): Object => {
-	return supports?.find((_support): boolean => _support?.name === support)
-		?.fallback;
+	return supports[support]?.fallback;
+};
+
+/**
+ * Get block support styleEngineConfig with support name.
+ *
+ * @param {Object} supports the block support list of support category.
+ * @param {string} support the support name.
+ *
+ * @return {Object} the support styleEngineConfig.
+ */
+export const getBlockSupportStyleEngineConfig = (
+	supports: Object,
+	support: string
+): Object => {
+	return supports[support]?.['style-engine-config'];
+};
+
+/**
+ * Get block support note with support name.
+ *
+ * @param {Object} supports the block support list of support category.
+ * @param {string} support the support name.
+ *
+ * @return {Object} the support note.
+ */
+export const getBlockSupportNote = (
+	supports: Object,
+	support: string
+): Object => {
+	return supports[support]?.note;
+};
+
+/**
+ * Get block support css property with support name.
+ *
+ * @param {Object} supports the block support list of support category.
+ * @param {string} support the support name.
+ *
+ * @return {Object} the support css property.
+ */
+export const getBlockSupportCssProperty = (
+	supports: Object,
+	support: string
+): Object => {
+	return supports[support]?.['css-property'];
+};
+
+/**
+ * Get block support status with support name.
+ *
+ * @param {Object} supports the block support list of support category.
+ * @param {string} support the support name.
+ *
+ * @return {Object} the support status.
+ */
+export const getBlockSupportStatus = (
+	supports: Object,
+	support: string
+): Object => {
+	return supports[support]?.status;
+};
+
+/**
+ * Get block support description with support name.
+ *
+ * @param {Object} supports the block support list of support category.
+ * @param {string} support the support name.
+ *
+ * @return {Object} the support description.
+ */
+export const getBlockSupportDescription = (
+	supports: Object,
+	support: string
+): Object => {
+	return supports[support]?.description;
 };

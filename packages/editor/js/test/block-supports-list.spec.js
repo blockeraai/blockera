@@ -38,47 +38,49 @@ const ajv = new Ajv({ allowUnionTypes: true });
 	'textShadow',
 	'typography',
 ].forEach((support) => {
+	let supports;
+
 	switch (support) {
 		case 'background':
-			var supports = background;
+			supports = background;
 			break;
 
 		case 'border':
-			var supports = border;
+			supports = border;
 			break;
 
 		case 'boxShadow':
-			var supports = boxShadow;
+			supports = boxShadow;
 			break;
 		case 'divider':
-			var supports = divider;
+			supports = divider;
 			break;
 		case 'effects':
-			var supports = effects;
+			supports = effects;
 			break;
 		case 'layout':
-			var supports = layout;
+			supports = layout;
 			break;
 		case 'mouse':
-			var supports = mouse;
+			supports = mouse;
 			break;
 		case 'outline':
-			var supports = outline;
+			supports = outline;
 			break;
 		case 'position':
-			var supports = position;
+			supports = position;
 			break;
 		case 'size':
-			var supports = size;
+			supports = size;
 			break;
 		case 'spacing':
-			var supports = spacing;
+			supports = spacing;
 			break;
 		case 'textShadow':
-			var supports = textShadow;
+			supports = textShadow;
 			break;
 		case 'typography':
-			var supports = typography;
+			supports = typography;
 			break;
 	}
 	describe(`Validate blockera ${support} supports of Block Supports JSON`, () => {

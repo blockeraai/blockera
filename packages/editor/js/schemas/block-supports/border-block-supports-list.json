@@ -1,20 +1,18 @@
 {
 	"$schema": "../block.supports.schema.json",
 	"title": "border",
-	"supports": [
-		{
+	"supports": {
+		"blockeraBorder": {
 			"status": true,
-			"name": "blockeraBorder",
 			"css-property": "border",
 			"fallback": ["border.color", "border"],
 			"description": "Support for \"blockeraBorder\" value, this is mirror for WordPress block core \"border\" support"
 		},
-		{
+		"blockeraBorderRadius": {
 			"status": true,
-			"name": "blockeraBorderRadius",
 			"css-property": "border-radius",
 			"fallback": ["border.radius", "border.color", "border"],
 			"description": "Support for \"blockeraBorder\" value, this is mirror for WordPress block core \"border-radius\" support"
 		}
-	]
+	}
 }
