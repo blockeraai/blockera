@@ -25,6 +25,9 @@ return array_merge(
 				'blockera/elements/result-link'   => [
 					'root' => '.ct-search-form .ct-search-results .ct-search-item',
 				],
+				'blockera/elements/filter'   => [
+					'root' => '.ct-search-form .ct-fake-select-container .ct-fake-select',
+				],
 			]
 		),
 	]

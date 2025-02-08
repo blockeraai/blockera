@@ -44,6 +44,18 @@ export const BlocksySearch: BlockType = {
 				force: true,
 			},
 		},
+		'elements/filter': {
+			name: 'elements/filter',
+			label: __('Taxonomy Filter', 'blockera'),
+			description: __(
+				'The taxonomy filter inside the search block.',
+				'blockera'
+			),
+			icon: <Icon icon="block-blocksy-search-filter" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
 		'elements/result-dropdown': {
 			name: 'elements/result-dropdown',
 			label: __('Result Dropdown', 'blockera'),

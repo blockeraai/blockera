@@ -29,6 +29,7 @@ export { default as BlockBlocksySearchResultLink } from './block-blocksy-search-
 export { default as BlockBlocksySearchResultDropdown } from './block-blocksy-search-result-dropdown.svg';
 export { default as BlockBlocksySearchButton } from './block-blocksy-search-button.svg';
 export { default as BlockBlocksySearchInput } from './block-blocksy-search-input.svg';
+export { default as BlockBlocksySearchFilter } from './block-blocksy-search-filter.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';
