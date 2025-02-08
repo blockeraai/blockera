@@ -9,21 +9,31 @@ import { isValid } from '@blockera/controls';
 import { getColorVAFromIdString } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
-export function textColorHoverFromWPCompatibility({
+export function colorStateFromWPCompatibility({
 	attributes,
-	element = 'elements/text',
+	element,
+	property,
+	propertyCustom,
+	blockeraProperty,
+	defaultValue,
+	state,
 }: {
 	attributes: Object,
 	element: string,
+	property: string,
+	propertyCustom: string,
+	blockeraProperty: string,
+	defaultValue?: string,
+	state: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (attributes?.textHoverColor !== undefined) {
-		color = getColorVAFromIdString(attributes?.textHoverColor);
+	if (attributes?.[propertyCustom] !== defaultValue) {
+		color = attributes?.[propertyCustom];
 	}
 
-	if (!color) {
-		color = attributes?.customTextHoverColor;
+	if (!color && attributes?.[property] !== defaultValue) {
+		color = getColorVAFromIdString(attributes?.[property]);
 	}
 
 	if (color) {
@@ -33,13 +43,13 @@ export function textColorHoverFromWPCompatibility({
 					[element]: {
 						attributes: {
 							blockeraBlockStates: {
-								hover: {
+								[state]: {
 									isVisible: true,
 									breakpoints: {
 										// $FlowFixMe
 										[getBaseBreakpoint()]: {
 											attributes: {
-												blockeraFontColor: color,
+												[blockeraProperty]: color,
 											},
 										},
 									},
@@ -55,12 +65,16 @@ export function textColorHoverFromWPCompatibility({
 	return attributes;
 }
 
-export function textColorHoverToWPCompatibility({
+export function colorStateToWPCompatibility({
 	newValue,
 	ref,
+	property,
+	propertyCustom,
 }: {
 	newValue: Object,
 	ref?: Object,
+	property: string,
+	propertyCustom: string,
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
@@ -68,20 +82,20 @@ export function textColorHoverToWPCompatibility({
 		isUndefined(newValue)
 	) {
 		return {
-			textHoverColor: undefined,
-			customTextHoverColor: undefined,
+			[property]: undefined,
+			[propertyCustom]: undefined,
 		};
 	}
 
 	if (isValid(newValue)) {
 		return {
-			textHoverColor: newValue?.settings?.id,
-			customTextHoverColor: undefined,
+			[property]: newValue?.settings?.id,
+			[propertyCustom]: undefined,
 		};
 	}
 
 	return {
-		textHoverColor: undefined,
-		customTextHoverColor: newValue,
+		[property]: undefined,
+		[propertyCustom]: newValue,
 	};
 }

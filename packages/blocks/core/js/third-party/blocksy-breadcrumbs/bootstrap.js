@@ -22,9 +22,9 @@ import {
 	colorToWPCompatibility,
 } from '../blocksy-shared/compatibility/color';
 import {
-	colorHoverFromWPCompatibility,
-	colorHoverToWPCompatibility,
-} from '../blocksy-shared/compatibility/color-hover';
+	colorStateFromWPCompatibility,
+	colorStateToWPCompatibility,
+} from '../blocksy-shared/compatibility/color-state';
 
 export const bootstrapBlocksyBreadcrumbs = (): void => {
 	addFilter(
@@ -81,12 +81,13 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 					getBaseBreakpoint()
 				]?.attributes?.blockeraFontColor
 			) {
-				attributes = colorHoverFromWPCompatibility({
+				attributes = colorStateFromWPCompatibility({
 					attributes,
 					element: 'elements/links',
 					property: 'linkHoverColor',
 					propertyCustom: 'customLinkHoverColor',
 					blockeraProperty: 'blockeraFontColor',
+					state: 'hover',
 				});
 			}
 
@@ -177,7 +178,7 @@ export const bootstrapBlocksyBreadcrumbs = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					colorHoverToWPCompatibility({
+					colorStateToWPCompatibility({
 						newValue,
 						ref,
 						property: 'linkHoverColor',

@@ -21,17 +21,17 @@ import {
 	colorToWPCompatibility,
 } from '../blocksy-shared/compatibility/color';
 import {
-	colorHoverFromWPCompatibility,
-	colorHoverToWPCompatibility,
-} from '../blocksy-shared/compatibility/color-hover';
+	colorStateFromWPCompatibility,
+	colorStateToWPCompatibility,
+} from '../blocksy-shared/compatibility/color-state';
 import {
 	borderFromWPCompatibility,
 	borderToWPCompatibility,
 } from '../blocksy-shared/compatibility/border';
 import {
-	borderHoverFromWPCompatibility,
-	borderHoverToWPCompatibility,
-} from '../blocksy-shared/compatibility/border-hover';
+	borderStateFromWPCompatibility,
+	borderStateToWPCompatibility,
+} from '../blocksy-shared/compatibility/border-state';
 
 export const bootstrapBlocksyAboutMe = (): void => {
 	addFilter(
@@ -64,12 +64,13 @@ export const bootstrapBlocksyAboutMe = (): void => {
 				!attributes?.blockeraInnerBlocks['elements/text']?.attributes
 					?.blockeraBlockStates?.hover?.attributes?.blockeraFontColor
 			) {
-				attributes = colorHoverFromWPCompatibility({
+				attributes = colorStateFromWPCompatibility({
 					attributes,
 					element: 'elements/text',
 					property: 'textHoverColor',
 					propertyCustom: 'customTextHoverColor',
 					blockeraProperty: 'blockeraFontColor',
+					state: 'hover',
 				});
 			}
 
@@ -96,12 +97,13 @@ export const bootstrapBlocksyAboutMe = (): void => {
 				!attributes?.blockeraInnerBlocks['elements/icons']?.attributes
 					?.blockeraBlockStates?.hover?.attributes?.blockeraFontColor
 			) {
-				attributes = colorHoverFromWPCompatibility({
+				attributes = colorStateFromWPCompatibility({
 					attributes,
 					element: 'elements/icons',
 					property: 'iconsHoverColor',
 					propertyCustom: 'customIconsHoverColor',
 					blockeraProperty: 'blockeraFontColor',
+					state: 'hover',
 				});
 			}
 
@@ -140,12 +142,13 @@ export const bootstrapBlocksyAboutMe = (): void => {
 					]?.attributes?.blockeraBorder
 				)
 			) {
-				attributes = borderHoverFromWPCompatibility({
+				attributes = borderStateFromWPCompatibility({
 					attributes,
 					element: 'elements/icons',
 					property: 'borderHoverColor',
 					propertyCustom: 'customBorderHoverColor',
 					blockeraProperty: 'blockeraBorder',
+					state: 'hover',
 				});
 			}
 
@@ -218,7 +221,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					colorHoverToWPCompatibility({
+					colorStateToWPCompatibility({
 						newValue,
 						ref,
 						property: 'textHoverColor',
@@ -260,7 +263,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					colorHoverToWPCompatibility({
+					colorStateToWPCompatibility({
 						newValue,
 						ref,
 						property: 'iconsHoverColor',
@@ -302,7 +305,7 @@ export const bootstrapBlocksyAboutMe = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					borderHoverToWPCompatibility({
+					borderStateToWPCompatibility({
 						newValue,
 						ref,
 						property: 'borderHoverColor',

@@ -21,19 +21,19 @@ import {
 	colorToWPCompatibility,
 } from '../blocksy-shared/compatibility/color';
 import {
-	colorHoverFromWPCompatibility,
-	colorHoverToWPCompatibility,
-} from '../blocksy-shared/compatibility/color-hover';
+	colorStateFromWPCompatibility,
+	colorStateToWPCompatibility,
+} from '../blocksy-shared/compatibility/color-state';
 import {
 	borderFromWPCompatibility,
 	borderToWPCompatibility,
 } from '../blocksy-shared/compatibility/border';
 import {
-	borderHoverFromWPCompatibility,
-	borderHoverToWPCompatibility,
-} from '../blocksy-shared/compatibility/border-hover';
+	borderStateFromWPCompatibility,
+	borderStateToWPCompatibility,
+} from '../blocksy-shared/compatibility/border-state';
 import { bgColorFromWPCompatibility } from '../blocksy-shared/compatibility/bg-color';
-import { bgColorHoverFromWPCompatibility } from '../blocksy-shared/compatibility/bg-color-hover';
+import { bgColorStateFromWPCompatibility } from '../blocksy-shared/compatibility/bg-color-state';
 
 export const bootstrapBlocksySocials = (): void => {
 	addFilter(
@@ -68,13 +68,14 @@ export const bootstrapBlocksySocials = (): void => {
 					?.blockeraBlockStates?.hover?.attributes
 					?.blockeraBackgroundColor
 			) {
-				attributes = bgColorHoverFromWPCompatibility({
+				attributes = bgColorStateFromWPCompatibility({
 					attributes,
 					element: 'elements/icons',
 					property: 'backgroundHoverColor',
 					propertyCustom: 'customBackgroundHoverColor',
 					blockeraProperty: 'blockeraBackgroundColor',
 					defaultValue: 'rgba(218, 222, 228, 0.7)',
+					state: 'hover',
 				});
 			}
 
@@ -101,12 +102,13 @@ export const bootstrapBlocksySocials = (): void => {
 				!attributes?.blockeraInnerBlocks['elements/icons']?.attributes
 					?.blockeraBlockStates?.hover?.attributes?.blockeraFontColor
 			) {
-				attributes = colorHoverFromWPCompatibility({
+				attributes = colorStateFromWPCompatibility({
 					attributes,
 					element: 'elements/icons',
 					property: 'hoverColor',
 					propertyCustom: 'customHoverColor',
 					blockeraProperty: 'blockeraFontColor',
+					state: 'hover',
 				});
 			}
 
@@ -145,12 +147,13 @@ export const bootstrapBlocksySocials = (): void => {
 					]?.attributes?.blockeraBorder
 				)
 			) {
-				attributes = borderHoverFromWPCompatibility({
+				attributes = borderStateFromWPCompatibility({
 					attributes,
 					element: 'elements/icons',
 					property: 'borderHoverColor',
 					propertyCustom: 'customBorderHoverColor',
 					blockeraProperty: 'blockeraBorder',
+					state: 'hover',
 				});
 			}
 
@@ -223,7 +226,7 @@ export const bootstrapBlocksySocials = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					colorHoverToWPCompatibility({
+					colorStateToWPCompatibility({
 						newValue,
 						ref,
 						property: 'hoverColor',
@@ -265,7 +268,7 @@ export const bootstrapBlocksySocials = (): void => {
 			) {
 				return mergeObject(
 					nextState,
-					borderHoverToWPCompatibility({
+					borderStateToWPCompatibility({
 						newValue,
 						ref,
 						property: 'borderHoverColor',
