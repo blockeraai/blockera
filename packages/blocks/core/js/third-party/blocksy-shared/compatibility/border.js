@@ -14,20 +14,22 @@ export function borderFromWPCompatibility({
 	property,
 	propertyCustom,
 	blockeraProperty,
+	defaultValue,
 }: {
 	attributes: Object,
 	element: string,
 	property: string,
 	propertyCustom: string,
 	blockeraProperty: string,
+	defaultValue?: string,
 }): Object {
 	let color: ValueAddon | string | false = false;
 
-	if (attributes?.[propertyCustom] !== undefined) {
+	if (attributes?.[propertyCustom] !== defaultValue) {
 		color = attributes?.[propertyCustom];
 	}
 
-	if (!color && attributes?.[property] !== undefined) {
+	if (!color && attributes?.[property] !== defaultValue) {
 		color = getColorVAFromIdString(attributes?.[property]);
 	}
 
