@@ -74,8 +74,6 @@ export function colorHoverToWPCompatibility({
 	property: string,
 	propertyCustom: string,
 }): Object {
-	console.log('colorHoverToWPCompatibility', newValue);
-
 	if (
 		'reset' === ref?.current?.action ||
 		isEmpty(newValue) ||
