@@ -82,14 +82,16 @@ export const getBlockSupportFallback = (
  *
  * @param {Object} supports the block support list of support category.
  * @param {string} support the support name.
+ * @param {string} property the property name.
  *
  * @return {Object} the support styleEngineConfig.
  */
 export const getBlockSupportStyleEngineConfig = (
 	supports: Object,
-	support: string
+	support: string,
+	property: string
 ): Object => {
-	return supports[support]?.['style-engine-config'];
+	return supports[support]?.['style-engine-config']?.[property];
 };
 
 /**

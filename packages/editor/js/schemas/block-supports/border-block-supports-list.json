@@ -11,6 +11,13 @@
 		"blockeraBorderRadius": {
 			"status": true,
 			"css-property": "border-radius",
+			"style-engine-config": {
+				"all": "border-radius",
+				"topLeft": "border-top-left-radius",
+				"topRight": "border-top-right-radius",
+				"bottomLeft": "border-bottom-left-radius",
+				"bottomRight": "border-bottom-right-radius"
+			},
 			"fallback": ["border.radius", "border.color", "border"],
 			"description": "Support for \"blockeraBorder\" value, this is mirror for WordPress block core \"border-radius\" support"
 		}

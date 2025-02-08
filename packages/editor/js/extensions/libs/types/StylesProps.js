@@ -13,7 +13,7 @@ export type StylesProps = {
 	clientId: string,
 	blockName: string,
 	selectors: Object,
-	// supports?: Object,
+	supports: Object,
 	attributes: Object,
 	masterState: TStates,
 	defaultAttributes: Object,
