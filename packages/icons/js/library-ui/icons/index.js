@@ -25,6 +25,10 @@ export { default as BlockBlocksyContactInfoLink } from './block-blocksy-contact-
 export { default as BlockBlocksyContactInfoIcons } from './block-blocksy-contact-info-icons.svg';
 export { default as BlockBlocksyContactInfoTitles } from './block-blocksy-contact-info-titles.svg';
 export { default as BlockBlocksyContactInfoContents } from './block-blocksy-contact-info-contents.svg';
+export { default as BlockBlocksySearchResultLink } from './block-blocksy-search-result-link.svg';
+export { default as BlockBlocksySearchResultDropdown } from './block-blocksy-search-result-dropdown.svg';
+export { default as BlockBlocksySearchButton } from './block-blocksy-search-button.svg';
+export { default as BlockBlocksySearchInput } from './block-blocksy-search-input.svg';
 export { default as BlockCommentsFormButton } from './block-comments-form-button.svg';
 export { default as BlockCommentsFormContainer } from './block-comments-form-container.svg';
 export { default as BlockCommentsFormCookieConsent } from './block-comments-form-cookie-consent.svg';

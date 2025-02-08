@@ -5,6 +5,7 @@ import {
 	bootstrapBlocksyContactInfo,
 	bootstrapBlocksySocials,
 	bootstrapBlocksyShareBox,
+	bootstrapBlocksySearch,
 } from './third-party/bootstraps';
 import { bootstrapSocialLinksCoreBlock } from './wordpress/bootstraps';
 
@@ -16,4 +17,5 @@ export function blockeraBootstrapBlocks() {
 	bootstrapBlocksyContactInfo();
 	bootstrapBlocksySocials();
 	bootstrapBlocksyShareBox();
+	bootstrapBlocksySearch();
 }

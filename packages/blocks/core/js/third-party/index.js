@@ -11,3 +11,4 @@ export * from './blocksy-about-me';
 export * from './blocksy-contact-info';
 export * from './blocksy-socials';
 export * from './blocksy-share-box';
+export * from './blocksy-search';

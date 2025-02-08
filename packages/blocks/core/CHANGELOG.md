@@ -33,6 +33,11 @@
 - Added support for the Blocksy `Share Box → Icons Border Hover Color` inner block by Blockera.
 - Added support for the Blocksy `Share Box → Icons Background Color` inner block by Blockera.
 - Added support for the Blocksy `Share Box → Icons Background Hover Color` inner block by Blockera.
+- Added support for the Blocksy `Search` block by Blockera.
+- Added support for the Blocksy `Search → Input` inner block by Blockera.
+- Added support for the Blocksy `Search → Button` inner block by Blockera.
+- Added support for the Blocksy `Search → Result Dropdown` inner block by Blockera.
+- Added support for the Blocksy `Search → Result Link` inner block by Blockera.
 
 ### Improvements
 - Core search block inner block icons improved to be more consistent and user-friendly.
