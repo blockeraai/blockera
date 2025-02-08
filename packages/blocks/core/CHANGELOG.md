@@ -59,6 +59,14 @@
 - Added E2E tests for the Blocksy `Contact Info → Links` inner block.
 - Added E2E tests for the Blocksy `Socials` block support by Blockera.
 - Added E2E tests for the Blocksy `Socials → Icons` inner block.
+- Added E2E tests for the Blocksy `Share Box` block support by Blockera.
+- Added E2E tests for the Blocksy `Share Box → Icons` inner block.
+- Added E2E tests for the Blocksy `Share Box → Icons Color` inner block.
+- Added E2E tests for the Blocksy `Share Box → Icons Hover Color` inner block.
+- Added E2E tests for the Blocksy `Share Box → Icons Border Color` inner block.
+- Added E2E tests for the Blocksy `Share Box → Icons Border Hover Color` inner block.
+- Added E2E tests for the Blocksy `Share Box → Icons Background Color` inner block.
+- Added E2E tests for the Blocksy `Share Box → Icons Background Hover Color` inner block.
 
 
 ## 1.0.0 (2024-12-08)
