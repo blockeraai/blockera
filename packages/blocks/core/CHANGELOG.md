@@ -25,6 +25,14 @@
 - Added support for the Blocksy `Contact Info → Links` inner block by Blockera.
 - Added support for the Blocksy `Socials` block by Blockera.
 - Added support for the Blocksy `Socials → Icons` inner block by Blockera.
+- Added support for the Blocksy `Share Box` block by Blockera.
+- Added support for the Blocksy `Share Box → Icons` inner block by Blockera.
+- Added support for the Blocksy `Share Box → Icons Color` inner block by Blockera.
+- Added support for the Blocksy `Share Box → Icons Hover Color` inner block by Blockera.
+- Added support for the Blocksy `Share Box → Icons Border Color` inner block by Blockera.
+- Added support for the Blocksy `Share Box → Icons Border Hover Color` inner block by Blockera.
+- Added support for the Blocksy `Share Box → Icons Background Color` inner block by Blockera.
+- Added support for the Blocksy `Share Box → Icons Background Hover Color` inner block by Blockera.
 
 
 ### Automated Tests

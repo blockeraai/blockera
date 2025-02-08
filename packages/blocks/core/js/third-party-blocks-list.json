@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 10,
-		"supported": 10,
-		"soft-supported": 10,
+		"total": 11,
+		"supported": 11,
+		"soft-supported": 11,
 		"not-supported": 0,
 		"no-need-to-support": 0
 	},
@@ -93,6 +93,15 @@
 		{
 			"name": "blocksy/socials",
 			"title": "Socials",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/share-box",
+			"title": "Share Box",
 			"product": {
 				"name": "Blocksy Companion",
 				"author": "CreativeThemes",
