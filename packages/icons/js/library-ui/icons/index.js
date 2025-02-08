@@ -66,6 +66,9 @@ export { default as BlockProductPriceCurrencySymbol } from './block-product-pric
 export { default as BlockProductPriceDiscount } from './block-product-price-discount.svg';
 export { default as BlockProductPriceNormal } from './block-product-price-normal.svg';
 export { default as BlockPostTermsTerm } from './block-post-terms-term.svg';
+export { default as BlockSearchButton } from './block-search-button.svg';
+export { default as BlockSearchInput } from './block-search-input.svg';
+export { default as BlockSearchLabel } from './block-search-label.svg';
 export { default as BlockSocialLinkContainer } from './block-social-link-container.svg';
 export { default as BlockSocialLinkIcon } from './block-social-link-icon.svg';
 export { default as BlockSocialLinkName } from './block-social-link-name.svg';

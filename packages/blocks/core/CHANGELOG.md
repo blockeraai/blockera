@@ -34,6 +34,9 @@
 - Added support for the Blocksy `Share Box → Icons Background Color` inner block by Blockera.
 - Added support for the Blocksy `Share Box → Icons Background Hover Color` inner block by Blockera.
 
+### Improvements
+- Core search block inner block icons improved to be more consistent and user-friendly.
+
 
 ### Automated Tests
 - Added E2E tests for the Blocksy `Breadcrumbs` block text inner element.
