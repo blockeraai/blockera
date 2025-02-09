@@ -14,6 +14,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
+import supports from './supports.json';
 import type { BlockType } from '../../type';
 
 export const BlocksySearch: BlockType = {
@@ -91,4 +92,5 @@ export const BlocksySearch: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	supports,
 };
