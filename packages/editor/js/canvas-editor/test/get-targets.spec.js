@@ -7,7 +7,7 @@ describe('getTargets api testing', () => {
 			header: '.editor-header__center',
 			previewDropdown:
 				'.editor-preview-dropdown, a.components-button[aria-label="View Post"], a.components-button[aria-label="View Page"]',
-			postPreviewElement: 'a[aria-label="View Post"]',
+			postPreviewElement: '.editor-header__post-preview-button + a',
 		}).toStrictEqual(getTargets('6.6.1'));
 	});
 	it('should be retrieve targets object for wp 6.6.3-alpha-59007 version', () => {
@@ -15,7 +15,7 @@ describe('getTargets api testing', () => {
 			header: '.editor-header__center',
 			previewDropdown:
 				'.editor-preview-dropdown, a.components-button[aria-label="View Post"], a.components-button[aria-label="View Page"]',
-			postPreviewElement: 'a[aria-label="View Post"]',
+			postPreviewElement: '.editor-header__post-preview-button + a',
 		}).toStrictEqual(getTargets('6.6.3-alpha-59007'));
 	});
 
@@ -24,7 +24,7 @@ describe('getTargets api testing', () => {
 			header: '.editor-header__center',
 			previewDropdown:
 				'.editor-preview-dropdown, a.components-button[aria-label="View Post"], a.components-button[aria-label="View Page"]',
-			postPreviewElement: 'a[aria-label="View Post"]',
+			postPreviewElement: '.editor-header__post-preview-button + a',
 		}).toStrictEqual(getTargets('6.7.3-beta-12345'));
 	});
 
