@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 12,
-		"supported": 12,
-		"soft-supported": 12,
+		"total": 13,
+		"supported": 13,
+		"soft-supported": 13,
 		"not-supported": 0,
 		"no-need-to-support": 0
 	},
@@ -111,6 +111,15 @@
 		{
 			"name": "blocksy/search",
 			"title": "Search",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/dynamic-data",
+			"title": "Dynamic Data",
 			"product": {
 				"name": "Blocksy Companion",
 				"author": "CreativeThemes",

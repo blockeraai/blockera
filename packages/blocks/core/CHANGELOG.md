@@ -39,6 +39,9 @@
 - Added support for the Blocksy `Search → Result Dropdown` inner block by Blockera.
 - Added support for the Blocksy `Search → Result Link` inner block by Blockera.
 - Added support for the Blocksy `Search → Taxonomy Filter` inner block by Blockera.
+- Added support for the Blocksy `Dynamic Data` block by Blockera.
+- Added support for the Blocksy `Dynamic Data → Link` inner block by Blockera.
+- Added support for the Blocksy `Dynamic Data → Image` inner block by Blockera.
 
 ### Improvements
 - Core search block inner block icons improved to be more consistent and user-friendly.
