@@ -114,7 +114,7 @@ export const OptInModal = (): MixedElement => {
 
 					<Button
 						data-test="skip-and-continue"
-						variant={'tertiary'}
+						variant={'tertiary-on-hover'}
 						onClick={() => allowAndContinue('SKIP')}
 						style={{
 							color: '#959595',
