@@ -84,6 +84,9 @@
 - Added E2E tests for the Blocksy `Search → Button` inner block.
 - Added E2E tests for the Blocksy `Search → Result Dropdown` inner block.
 - Added E2E tests for the Blocksy `Search → Result Link` inner block.
+- Added E2E tests for the Blocksy `Dynamic Data` block support by Blockera.
+- Added E2E tests for the Blocksy `Dynamic Data → Link` inner block.
+- Added E2E tests for the Blocksy `Dynamic Data → Image` inner block.
 
 
 ## 1.0.0 (2024-12-08)
