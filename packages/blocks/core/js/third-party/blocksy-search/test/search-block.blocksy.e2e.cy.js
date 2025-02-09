@@ -2394,11 +2394,13 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 		//
 		//  1. Assert inner blocks selectors in editor
 		//
-		cy.getBlock('blocksy/search').should(
-			'have.css',
-			'background-color',
-			'rgb(196, 206, 255)'
-		);
+		cy.getBlock('blocksy/search').within(() => {
+			cy.get('.ct-search-form').should(
+				'have.css',
+				'background-color',
+				'rgb(196, 206, 255)'
+			);
+		});
 
 		cy.getBlock('blocksy/search')
 			.first()
@@ -2416,7 +2418,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should(
+		cy.get('.blockera-block .ct-search-form').should(
 			'have.css',
 			'background-color',
 			'rgb(196, 206, 255)'

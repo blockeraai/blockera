@@ -13,6 +13,7 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'root' => ' .ct-search-form',
 				'blockera/elements/input'   => [
 					'root' => '.ct-search-form input',
 				],
