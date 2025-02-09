@@ -200,7 +200,7 @@ class Render {
 	protected function needToUpdateHTML( string $block_classname, string $inner_html ): bool {
 
 		// Imagine th block classname is empty, so we should update html output.
-		if ( empty( $block_classname ) ) {
+		if ( empty( $block_classname ) || empty( $this->classnames ) ) {
 
 			return true;
 		}
