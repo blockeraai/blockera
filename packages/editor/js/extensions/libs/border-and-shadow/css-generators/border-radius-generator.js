@@ -1,13 +1,14 @@
 /**
  * Blockera dependencies
  */
+import { cloneObject } from '@blockera/utils';
 import { getValueAddonRealValue } from '@blockera/controls';
+
 /**
  * Internal dependencies
  */
 import { createCssDeclarations } from '../../../../style-engine';
 import { getBlockSupportStyleEngineConfig } from '../../../utils';
-
 export function BorderRadiusGenerator(id, props) {
 	const { attributes, supports, blockeraStyleEngineConfig } = props;
 
@@ -15,8 +16,11 @@ export function BorderRadiusGenerator(id, props) {
 		return '';
 	}
 
+	// We should not change the original supports object.
+	const clonedSupports = cloneObject(supports);
+
 	if (blockeraStyleEngineConfig?.blockeraBorderRadius) {
-		supports.blockeraBorderRadius['style-engine-config'] =
+		clonedSupports.blockeraBorderRadius['style-engine-config'] =
 			blockeraStyleEngineConfig.blockeraBorderRadius;
 	}
 
@@ -25,7 +29,7 @@ export function BorderRadiusGenerator(id, props) {
 	if (attributes?.blockeraBorderRadius?.type === 'all') {
 		properties[
 			getBlockSupportStyleEngineConfig(
-				supports,
+				clonedSupports,
 				'blockeraBorderRadius',
 				'all'
 			)
@@ -33,28 +37,28 @@ export function BorderRadiusGenerator(id, props) {
 	} else {
 		properties[
 			getBlockSupportStyleEngineConfig(
-				supports,
+				clonedSupports,
 				'blockeraBorderRadius',
 				'topLeft'
 			)
 		] = getValueAddonRealValue(attributes.blockeraBorderRadius.topLeft);
 		properties[
 			getBlockSupportStyleEngineConfig(
-				supports,
+				clonedSupports,
 				'blockeraBorderRadius',
 				'topRight'
 			)
 		] = getValueAddonRealValue(attributes.blockeraBorderRadius.topRight);
 		properties[
 			getBlockSupportStyleEngineConfig(
-				supports,
+				clonedSupports,
 				'blockeraBorderRadius',
 				'bottomLeft'
 			)
 		] = getValueAddonRealValue(attributes.blockeraBorderRadius.bottomLeft);
 		properties[
 			getBlockSupportStyleEngineConfig(
-				supports,
+				clonedSupports,
 				'blockeraBorderRadius',
 				'bottomRight'
 			)
