@@ -623,7 +623,7 @@ if ( ! function_exists( 'blockera_convert_css_declarations_to_css_valid_rules' )
 
 			foreach ( $declaration as $property => $value ) {
 
-				if ( is_array( $value ) && empty( $value ) ) {
+				if ( is_array( $value ) || empty( $value ) || is_array( $property ) || empty( $property ) ) {
 
 					continue;
 				}
@@ -636,7 +636,7 @@ if ( ! function_exists( 'blockera_convert_css_declarations_to_css_valid_rules' )
 				}
 
 				// value validating ...
-				if ( is_array( $validCssRules[ $selector ] ) || is_array( $property ) || is_array( $value ) ) {
+				if ( is_array( $validCssRules[ $selector ] ) ) {
 
 					continue;
 				}
