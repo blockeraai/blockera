@@ -34,6 +34,7 @@ export const BorderAndShadowStyles = ({
 	masterState,
 	currentBlock,
 	activeDeviceType,
+	supports: blockSupports,
 	selectors: blockSelectors,
 	defaultAttributes: attributes,
 	attributes: currentBlockAttributes,
@@ -48,8 +49,10 @@ export const BorderAndShadowStyles = ({
 
 	const blockProps = {
 		clientId,
+		supports,
 		blockName,
 		attributes: currentBlockAttributes,
+		blockeraStyleEngineConfig: blockSupports?.blockeraStyleEngineConfig,
 	};
 
 	const sharedParams = {

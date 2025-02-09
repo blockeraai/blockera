@@ -1,20 +1,18 @@
 {
 	"$schema": "../block.supports.schema.json",
 	"title": "position",
-	"supports": [
-		{
+	"supports": {
+		"blockeraPosition": {
 			"status": true,
-			"name": "blockeraPosition",
 			"css-property": "position",
 			"fallback": ["position"],
 			"description": "Support for \"blockeraPosition\" value."
 		},
-		{
+		"blockeraZIndex": {
 			"status": true,
-			"name": "blockeraZIndex",
 			"css-property": "z-index",
 			"fallback": ["z-index"],
 			"description": "Support for \"blockeraZIndex\" value."
 		}
-	]
+	}
 }

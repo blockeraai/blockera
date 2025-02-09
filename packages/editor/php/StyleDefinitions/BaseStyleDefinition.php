@@ -516,6 +516,25 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
+	 * Get supports.
+	 *
+	 * @return array
+	 */
+	protected function getStyleEngineConfig( string $support): array {
+
+		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( $this->block['blockName'] );
+
+		$default_style_engine_config = blockera_get_block_support( $this->getId(), $support, 'style-engine-config' ) ?? [];
+
+		if (! $block_type) {
+
+			return $default_style_engine_config;
+		}
+
+		return  array_merge($default_style_engine_config, $block_type->supports['blockeraStyleEngineConfig'][ $support ] ?? []);
+	}
+
+	/**
 	 * Resettings some properties to fresh before generate new styles.
 	 *
 	 * @return void
@@ -525,5 +544,4 @@ abstract class BaseStyleDefinition {
 		$this->css          = [];
 		$this->declarations = [];
 	}
-
 }

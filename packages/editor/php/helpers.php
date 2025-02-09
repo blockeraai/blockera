@@ -759,11 +759,11 @@ if ( ! function_exists( 'blockera_get_available_block_supports' ) ) {
 	 * @see: ../js/schemas/blockera-block-supports-list.json
 	 *
 	 * @param string $support_category the support category name.
+	 * @param string $support the support name.
 	 *
 	 * @return array The available block supports list for support category or all categories.
 	 */
-	function blockera_get_available_block_supports( string $support_category = '' ): array {
-
+	function blockera_get_available_block_supports( string $support_category = '', string $support = '' ): array {
 		$supports = [];
 		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
 
@@ -775,25 +775,12 @@ if ( ! function_exists( 'blockera_get_available_block_supports' ) ) {
 
 			$support_config = json_decode( ob_get_clean(), true );
 
-			if ( empty( $support_config['supports'] ) || ( ! empty( trim( $support_category ) ) && $support_config['title'] !== $support_category ) ) {
+			if ( empty( $support_config['supports'] ) || ( ! empty( trim( $support_category ) ) && $support_config['title'] !== $support_category ) || ! isset($support_config['supports'][ $support ]) ) {
 
 				continue;
 			}
 
-			$supports = array_merge(
-				$supports,
-				blockera_array_flat(
-					array_map(
-						function ( array $support ): array {
-
-							return [
-								$support['name'] => $support,
-							];
-						},
-						$support_config['supports']
-					)
-				)
-			);
+			$supports[ $support ] = $support_config['supports'][ $support ];
 		}
 
 		return $supports;
@@ -814,7 +801,7 @@ if ( ! function_exists( 'blockera_get_block_support' ) ) {
 	function blockera_get_block_support( string $support_category, string $name, string $property = '' ) {
 
 		$support_category = \Blockera\Utils\Utils::kebabCase( $support_category );
-		$supports         = blockera_get_available_block_supports( $support_category );
+		$supports         = blockera_get_available_block_supports( $support_category, $name );
 
 		if ( empty( $supports ) || empty( $supports[ $name ] ) ) {
 

@@ -1,13 +1,12 @@
 {
 	"$schema": "../block.supports.schema.json",
 	"title": "box-shadow",
-	"supports": [
-		{
+	"supports": {
+		"blockeraBoxShadow": {
 			"status": true,
-			"name": "blockeraBoxShadow",
 			"css-property": "box-shadow",
 			"fallback": "shadow",
 			"description": "Support for \"blockeraBoxShadow\" value."
 		}
-	]
+	}
 }

@@ -7,7 +7,7 @@ on:
             - '**.js'
             - '**.css'
             - '**.scss'
-            - 'packages/**/*.php'
+            - '**.php'
             # Changes to any NPM related files could affect the outcome.
             - '**package*.json'
             # These files configures ESLint. Changes could affect the outcome.
@@ -62,4 +62,4 @@ jobs:
             - uses: preactjs/compressed-size-action@v2
               with:
                   repo-token: '${{ secrets.BLOCKERABOT_PAT }}'
-                  pattern: '{dist/**/*.min.js,dist/**/*.css,blockera.zip}'
+                  pattern: '{dist/**/*.min.js,dist/**/*.min.css,blockera.zip,packages/**/*.php,!**/test/**,!**/tests/**}'
