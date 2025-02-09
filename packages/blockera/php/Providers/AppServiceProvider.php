@@ -5,6 +5,8 @@ namespace Blockera\Setup\Providers;
 use Blockera\Telemetry\Config;
 use Blockera\Setup\Blockera;
 use Blockera\WordPress\Sender;
+use Blockera\Data\Cache\Cache;
+use Blockera\Data\Cache\Version;
 use Blockera\Bootstrap\Application;
 use Blockera\WordPress\RenderBlock\V1\{
     Parser,
@@ -64,6 +66,20 @@ class AppServiceProvider extends ServiceProvider {
         parent::register();
 
         try {
+
+			$this->app->singleton(
+                Cache::class,
+                function ( Application $app, array $params = []) {
+					return new Cache($app, $params);
+				}
+            );
+
+			$this->app->singleton(
+                Version::class,
+                function ( Application $app, array $params = []) {
+					return new Version($app, $params);
+				}
+            );
 
             if (blockera_get_admin_options([ 'labAndExperimental', 'disableCleanupStyles' ])) {
 
@@ -209,6 +225,19 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
 
         parent::boot();
+
+		$cache = $this->app->make(Version::class, [ 'product_id' => 'blockera' ]);
+
+		$validate_cache = $cache->validate(BLOCKERA_SB_VERSION);
+
+		if (! $validate_cache) {
+			$cache->clear();
+			$validate_cache = $cache->store(BLOCKERA_SB_VERSION);
+		}
+
+		if ($this->app instanceof Blockera) {
+			$this->app->setIsValidateCache($validate_cache);
+		}
 
         if (blockera_get_admin_options([ 'labAndExperimental', 'disableCleanupStyles' ])) {
 
