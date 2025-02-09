@@ -178,6 +178,10 @@ if ( ! function_exists( 'blockera_add_inline_css' ) ) {
 			'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
 			function ( string $older_css ) use ( $css ): string {
 
+				if (false !== strpos($older_css, $css)) {
+					return $older_css;
+				}
+
 				return $older_css . $css;
 			}
 		);
