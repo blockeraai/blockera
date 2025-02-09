@@ -33,7 +33,18 @@ return array_merge(
 		),
 		'supports'  => array_merge(
             $args['supports'] ?? [],
-            json_decode(blockera_get_filesystem()->get_contents(dirname(__DIR__, 3) . '/js/third-party/blocksy-search/supports.json'), true),
+            [
+				'blockeraStyleEngineConfig' => [
+					'blockeraBorderRadius' => [
+						'all' => '--theme-form-field-border-radius',
+						'topLeft' => '--border-top-left-radius',
+						'topRight' => '--border-top-right-radius',
+						'bottomLeft' => '--border-bottom-left-radius',
+						'bottomRight' => '--border-bottom-right-radius',
+						'for' => 'master',
+					],
+				],
+			],
         ),
 	]
 );

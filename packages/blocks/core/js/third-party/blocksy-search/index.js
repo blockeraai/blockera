@@ -14,7 +14,6 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import supports from './supports.json';
 import type { BlockType } from '../../type';
 
 export const BlocksySearch: BlockType = {
@@ -92,5 +91,16 @@ export const BlocksySearch: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
-	supports,
+	supports: {
+		blockeraStyleEngineConfig: {
+			blockeraBorderRadius: {
+				all: '--theme-form-field-border-radius',
+				topLeft: '--border-top-left-radius',
+				topRight: '--border-top-right-radius',
+				bottomLeft: '--border-bottom-left-radius',
+				bottomRight: '--border-bottom-right-radius',
+				for: 'master',
+			},
+		},
+	},
 };
