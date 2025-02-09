@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Double preview button in header in translated languages. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/missing-translation-string-for-blockera-iBEIfdKXdbBkpn1?highlight=mIwhJxxt63eUix5)]
+
 ## 1.1.1 (2025-02-04)
 
 ### Bug Fixes
