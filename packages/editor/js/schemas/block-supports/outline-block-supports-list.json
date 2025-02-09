@@ -1,20 +1,18 @@
 {
 	"$schema": "../block.supports.schema.json",
 	"title": "outline",
-	"supports": [
-		{
+	"supports": {
+		"blockeraOutline": {
 			"status": true,
-			"name": "blockeraOutline",
 			"css-property": "outline",
 			"fallback": ["outline.color", "outline"],
 			"description": "Support for \"blockeraOutline\" value."
 		},
-		{
+		"blockeraOffset": {
 			"status": true,
-			"name": "blockeraOffset",
 			"css-property": "outline-offset",
 			"fallback": ["outline.offset", "outline"],
 			"description": "Support for \"blockeraOffset\" value."
 		}
-	]
+	}
 }

@@ -56,6 +56,8 @@ export const computedCssDeclarations = (
 		clientId: string,
 		attributes: Object,
 		blockName: string,
+		supports: Object,
+		blockeraStyleEngineConfig: Object,
 	}
 ): Array<string> => {
 	const output = [];
