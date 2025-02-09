@@ -31,5 +31,19 @@ return array_merge(
 				],
 			]
 		),
+		'supports'  => array_merge(
+            $args['supports'] ?? [],
+            [
+				'blockeraStyleEngineConfig' => [
+					'blockeraBorderRadius'   => [
+						'all' => '--theme-form-field-border-radius',
+						'topLeft' => '--border-top-left-radius',
+						'topRight' => '--border-top-right-radius',
+						'bottomLeft' => '--border-bottom-left-radius',
+						'bottomRight' => '--border-bottom-right-radius',
+					],
+				],
+            ]
+        ),
 	]
 );
