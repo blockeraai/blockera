@@ -158,36 +158,6 @@ if ( ! function_exists( 'blockera_delete_block_cache' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_add_inline_css' ) ) {
-
-	/**
-	 * Adding computed css rules into inline css handle.
-	 *
-	 * @param string $css the provided css from outside.
-	 *
-	 * @return void
-	 */
-	function blockera_add_inline_css( string $css ): void {
-
-		if ( empty( $css ) ) {
-
-			return;
-		}
-
-		add_filter(
-			'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
-			function ( string $older_css ) use ( $css ): string {
-
-				if (false !== strpos($older_css, $css)) {
-					return $older_css;
-				}
-
-				return $older_css . $css;
-			}
-		);
-	}
-}
-
 if ( ! function_exists( 'blockera_convert_to_unique_hash' ) ) {
 
 	/**

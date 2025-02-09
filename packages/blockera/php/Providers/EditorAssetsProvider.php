@@ -42,6 +42,8 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 	 */
 	public function boot(): void {
 
+		add_action( 'wp_footer', [ $this, 'printBlockeraGeneratedStyles' ] );
+
 		add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
 		add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/before', [ $this, 'beforeInlineScript' ] );
 		add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'afterInlineScript' ] );
@@ -62,6 +64,22 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		);
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'l10n' ] );
+	}
+
+	/**
+	 * Printing blockera requirement css styles on WordPress front page.
+	 *
+	 * @return void
+	 */
+	public function printBlockeraGeneratedStyles(): void {
+
+		echo sprintf(
+			'<style id="blockera-inline-css">%s</style>',
+			apply_filters(
+				'blockera/front-page/print-inline-css-styles',
+				''
+			)
+		);
 	}
 
 	/**
