@@ -31,7 +31,9 @@ export function BorderRadiusGenerator(id, props) {
 			getBlockSupportStyleEngineConfig(
 				clonedSupports,
 				'blockeraBorderRadius',
-				'all'
+				'all',
+				props.currentBlock,
+				'border-radius'
 			)
 		] = getValueAddonRealValue(attributes.blockeraBorderRadius.all);
 	} else {
@@ -39,28 +41,39 @@ export function BorderRadiusGenerator(id, props) {
 			getBlockSupportStyleEngineConfig(
 				clonedSupports,
 				'blockeraBorderRadius',
-				'topLeft'
+				'topLeft',
+				props.currentBlock,
+				'border-top-left-radius'
 			)
 		] = getValueAddonRealValue(attributes.blockeraBorderRadius.topLeft);
+
 		properties[
 			getBlockSupportStyleEngineConfig(
 				clonedSupports,
 				'blockeraBorderRadius',
-				'topRight'
+				'topRight',
+				props.currentBlock,
+				'border-top-right-radius'
 			)
 		] = getValueAddonRealValue(attributes.blockeraBorderRadius.topRight);
+
 		properties[
 			getBlockSupportStyleEngineConfig(
 				clonedSupports,
 				'blockeraBorderRadius',
-				'bottomLeft'
+				'bottomLeft',
+				props.currentBlock,
+				'border-bottom-left-radius'
 			)
 		] = getValueAddonRealValue(attributes.blockeraBorderRadius.bottomLeft);
+
 		properties[
 			getBlockSupportStyleEngineConfig(
 				clonedSupports,
 				'blockeraBorderRadius',
-				'bottomRight'
+				'bottomRight',
+				props.currentBlock,
+				'border-bottom-right-radius'
 			)
 		] = getValueAddonRealValue(attributes.blockeraBorderRadius.bottomRight);
 	}
