@@ -47,6 +47,7 @@ import { BlockCompatibility } from './block-compatibility';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
+import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
@@ -122,7 +123,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		currentInnerBlockState,
 	} = useExtensionsStore({ name, clientId });
 
-	const { availableAttributes } = useSelect((select) => {
+	const { availableAttributes, selectedBlock } = useSelect((select) => {
 		const { getActiveBlockVariation } = select('blockera/extensions');
 
 		const { getBlockType } = select('core/blocks');
@@ -300,6 +301,8 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		[currentAttributes]
 	);
 
+	const inlineStyles = useCleanupStyles({ clientId }, [selectedBlock]);
+
 	const originalAttributes = useMemo(() => {
 		return omitWithPattern(
 			omit(_attributes, ['content']),
@@ -311,6 +314,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		clientId,
 		supports,
 		selectors,
+		inlineStyles,
 		attributes: sanitizedAttributes,
 		blockName: name,
 		currentAttributes,
