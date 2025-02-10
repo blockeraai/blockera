@@ -3,8 +3,6 @@
 namespace Blockera\WordPress\RenderBlock\V2;
 
 use Blockera\Bootstrap\Application;
-use Blockera\Exceptions\BaseException;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * Class SavePost to cache styles for current post published.
@@ -38,6 +36,8 @@ class SavePost {
         $this->render = $render;
 
         add_action('save_post', [ $this, 'save' ], 9e8, 2);
+
+        add_filter('rest_pre_insert_wp_template', [ $this, 'insertWPTemplate' ], 10, 2);
     }
 
     /**
@@ -50,6 +50,11 @@ class SavePost {
      * @return void
      */
     public function save( int $postId, \WP_Post $post): void {
+		// We should not cache post content for wp_template post type.
+		if ('wp_template' === $post->post_type) {
+			return;
+		}
+
         $parsed_blocks = parse_blocks($post->post_content);
 
         // Excluding empty post content.
@@ -58,26 +63,30 @@ class SavePost {
             return;
         }
 
-        array_map([ $this, 'parser' ], $parsed_blocks);
+        // Get the updated blocks after cleanup.
+		$this->app->make(Parser::class)->cleanupInlineStyles($parsed_blocks, $postId);
     }
 
-    /**
-     * Parsing block data to cache css and html manipulated results.
-     *
-     * @param array $block the block array.
-     *
-     * @throws BaseException | BindingResolutionException Exception for binding Parser class into app container problems.
-     *
-     * @return void
-     */
-    protected function parser( array $block): void {
-        // Check block is supported by Blockera?
-        if (! blockera_is_supported_block($block)) {
+	/**
+	 * Insert wp_template post type.
+	 *
+	 * @param \stdClass        $prepared_post The instance of stdClass class.
+	 * @param \WP_REST_Request $request The instance of WP_REST_Request class.
+	 *
+	 * @return void
+	 */
+    public function insertWPTemplate( \stdClass $prepared_post, \WP_REST_Request $request) {
+        $parsed_blocks = parse_blocks($prepared_post->post_content);
+
+        // Excluding empty post content.
+        if (empty($parsed_blocks)) {
 
             return;
         }
 
-        $this->render->render($block['innerHTML'], $block);
-    }
+        // Get the updated blocks after cleanup.
+        $this->app->make(Parser::class)->cleanupInlineStyles($parsed_blocks, property_exists($prepared_post, 'ID') ? $prepared_post->ID : 0);
 
+        return $prepared_post;
+    }
 }
