@@ -72,41 +72,13 @@ jobs:
             - name: Encode JSON with Base64
               id: encode_json
               run: |
-                  # Define the original JSON
-                  JSON_STRING='{
-                    "meta": {
-                      "title": "Install Blockera plugin from github artifact",
-                      "author": "blockera.ai",
-                      "description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
-                      "categories": ["plugins"]
-                    },
-                    "landingPage": "/wp-admin/admin.php?page=blockera-settings-dashboard",
-                    "preferredVersions": {
-                      "wp": "beta",
-                      "php": "8.0"
-                    },
-                    "features": {
-                      "networking": true
-                    },
-                    "steps": [
-                      {
-                        "step": "login"
-                      },
-                      {
-                        "step": "defineWpConfigConsts",
-                        "consts": {
-                         "BLOCKERA_TELEMETRY_OPT_IN_OFF": true
-                        }
-                      },
-                      {
-                        "step": "installPlugin",
-                        "pluginData": {
-                          "resource": "url",
-                          "url": "URL_PLACEMENT"
-                        }
-                      }
-                    ]
-                  }'
+                  # Load the base JSON configuration from file
+                  if [ -f ".github-playground.json" ]; then
+                    JSON_STRING=$(cat .github-playground.json)
+                  else
+                    echo "Error: .github-playground.json file not found"
+                    exit 1
+                  fi
 
                   # Check if .pr-playground.json exists and merge it with JSON_STRING
                   if [ -f ".pr-playground.json" ]; then
