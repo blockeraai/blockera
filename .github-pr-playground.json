@@ -43,7 +43,6 @@
 		},
 		{
 			"step": "wp-cli",
-			"description": "Redirect to post edit page (not to plugin landing)",
 			"command": "wp eval 'wp_redirect( admin_url(\"post.php?post=4&action=edit\") ); exit;'"
 		}
 	]
