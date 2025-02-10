@@ -72,44 +72,33 @@ jobs:
             - name: Encode JSON with Base64
               id: encode_json
               run: |
-                  # Define the original JSON
-                  JSON_STRING='{
-                    "meta": {
-                      "title": "Install Blockera plugin from github artifact",
-                      "author": "blockera.ai",
-                      "description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
-                      "categories": ["plugins"]
-                    },
-                    "landingPage": "/wp-admin/admin.php?page=blockera-settings-dashboard",
-                    "preferredVersions": {
-                      "wp": "beta",
-                      "php": "8.0"
-                    },
-                    "features": {
-                      "networking": true
-                    },
-                    "steps": [
-                      {
-                        "step": "login"
-                      },
-                      {
-                        "step": "defineWpConfigConsts",
-                        "consts": {
-                         "BLOCKERA_TELEMETRY_OPT_IN_OFF": true
-                        }
-                      },
-                      {
-                        "step": "installPlugin",
-                        "pluginData": {
-                          "resource": "url",
-                          "url": "URL_PLACEMENT"
-                        }
-                      }
-                    ]
-                  }'
+                  # Load the base JSON configuration from file
+                  if [ -f ".github-playground.json" ]; then
+                    JSON_STRING=$(cat .github-playground.json)
+                  else
+                    echo "Error: .github-playground.json file not found"
+                    exit 1
+                  fi
+
+                  # Check if .github-pr-playground.json exists and merge it with JSON_STRING
+                  if [ -f ".github-pr-playground.json" ]; then
+                    # Read PR playground JSON
+                    PR_JSON=$(cat .github-pr-playground.json)
+                    
+                    # If PR JSON has steps, use them to completely replace base steps
+                    if echo "$PR_JSON" | jq -e 'has("steps")' > /dev/null; then
+                      MERGED_JSON=$(echo "$JSON_STRING" | jq --argjson pr "$PR_JSON" '. * ($pr | del(.steps)) + {steps: $pr.steps}')
+                    else
+                      # Regular merge without steps replacement
+                      MERGED_JSON=$(echo "$JSON_STRING" | jq --argjson pr "$PR_JSON" '. * $pr')
+                    fi
+                    FINAL_JSON="$MERGED_JSON"
+                  else
+                    FINAL_JSON="$JSON_STRING"
+                  fi
 
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = "${{ env.uploaded_zip_file }}"')
+                  ENCODED_JSON=$(echo "$FINAL_JSON" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = "${{ env.uploaded_zip_file }}"')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)

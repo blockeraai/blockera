@@ -1,0 +1,34 @@
+{
+	"meta": {
+		"title": "Install Blockera plugin from github artifact",
+		"author": "blockera.ai",
+		"description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
+		"categories": ["plugins"]
+	},
+	"landingPage": "/wp-admin/admin.php?page=blockera-settings-dashboard",
+	"preferredVersions": {
+		"wp": "beta",
+		"php": "8.0"
+	},
+	"features": {
+		"networking": true
+	},
+	"steps": [
+		{
+			"step": "login"
+		},
+		{
+			"step": "defineWpConfigConsts",
+			"consts": {
+				"BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "url",
+				"url": "URL_PLACEMENT"
+			}
+		}
+	]
+}
