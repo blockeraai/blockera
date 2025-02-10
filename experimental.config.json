@@ -15,6 +15,6 @@
 		"dynamicValue": false
 	},
 	"labAndExperimental": {
-		"disableCleanupStyles": false
+		"enableCleanupStyles": false
 	}
 }

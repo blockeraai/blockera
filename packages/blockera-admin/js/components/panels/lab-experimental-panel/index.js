@@ -20,7 +20,7 @@ import {
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
 	labAndExperimental: {
-		disableCleanupStyles: false,
+		enableCleanupStyles: false,
 	},
 };
 
@@ -66,7 +66,7 @@ export const LabAndExperimentalPanel = (): MixedElement => {
 					<ControlContextProvider
 						value={{
 							name: 'toggleCleanupStyles',
-							value: labAndExperimentalSettings.disableCleanupStyles,
+							value: labAndExperimentalSettings.enableCleanupStyles,
 						}}
 					>
 						<ToggleControl
@@ -75,19 +75,19 @@ export const LabAndExperimentalPanel = (): MixedElement => {
 							id={'toggleCleanupStyles'}
 							className={'blockera-settings-general control'}
 							defaultValue={
-								labAndExperimentalSettings.disableCleanupStyles
+								labAndExperimentalSettings.enableCleanupStyles
 							}
 							onChange={(checked: boolean) => {
 								setHasUpdates(
 									checked !==
-										savedLabAndExperimentalSettings.disableCleanupStyles
+										savedLabAndExperimentalSettings.enableCleanupStyles
 								);
 
 								setSettings({
 									...settings,
 									labAndExperimental: {
 										...labAndExperimentalSettings,
-										disableCleanupStyles: checked,
+										enableCleanupStyles: checked,
 									},
 								});
 							}}
