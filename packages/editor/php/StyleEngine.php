@@ -126,18 +126,10 @@ final class StyleEngine {
 
 	/**
 	 * Get css stylesheet for current block.
-	 *
-	 * @param array $prepared_inline_styles The prepared inline styles.
 	 * 
 	 * @return string
 	 */
-	public function getStylesheet( array $prepared_inline_styles = []): string {
-
-		// Validation: check sets anything ...
-		if ( empty( $this->getSettings() ) ) {
-
-			return $prepared_inline_styles;
-		}
+	public function getStylesheet(): string {
 
 		$breakpointsCssRules = array_filter(
 			array_map( [ $this, 'prepareBreakpointStyles' ], blockera_core_config( 'breakpoints.list' ) ),

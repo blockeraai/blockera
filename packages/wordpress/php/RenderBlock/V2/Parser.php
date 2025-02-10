@@ -260,8 +260,8 @@ class Parser {
 					'fallbackSelector' => $args['unique_class_name'],
 				]
             );
-
-			$computed_css_rules = $this->style_engine->getStylesheet($inline_styles);
+			$this->style_engine->setInlineStyles($inline_styles);
+			$computed_css_rules = $this->style_engine->getStylesheet();
 
 			if (in_array($computed_css_rules, $this->styles, true)) {
 				continue;
