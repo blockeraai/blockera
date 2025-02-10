@@ -1,0 +1,39 @@
+name: Remove PR Config Files
+
+# Trigger on push to master (this will happen after a pull request is merged)
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    update-file:
+        runs-on: ubuntu-latest
+
+        steps:
+            # Step 1: Checkout the repository
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Remove .pr-env.json file
+              run: rm -rf .pr-env.json
+
+            - name: Remove .github-pr-playground.json file
+              run: rm -rf .github-pr-playground.json
+
+            # Step 3: Configure Git (required for committing changes)
+            - name: Set up Git
+              run: |
+                  git config user.name "blockerabot"
+                  git config user.email blockeraai+githubbot@gmail.com
+
+            # Step 4: Commit and push changes
+            - name: Commit and push changes
+              run: |
+                  if [ -f ".pr-env.json" ]; then
+                      git add .
+                      git commit -m "chore: remove PR config files"
+                      git push origin master
+                  else
+                      echo "No PR config files found to remove and It is OK ✅"
+                  fi
