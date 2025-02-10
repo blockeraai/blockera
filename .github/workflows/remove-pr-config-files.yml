@@ -30,7 +30,7 @@ jobs:
             # Step 4: Commit and push changes
             - name: Commit and push changes
               run: |
-                  if [ -f ".pr-env.json" ]; then
+                  if [ -f ".pr-env.json" ] || [ -f ".github-pr-playground.json" ]; then
                       git add .
                       git commit -m "chore: remove PR config files"
                       git push origin master
