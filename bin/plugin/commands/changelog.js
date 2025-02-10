@@ -797,10 +797,14 @@ function getMainChangelog(changelogPath, version = '') {
  */
 function updateChangelog(changelogs, version, publishDate) {
 	const start =
-		'== Changelog ==\n\n= ' + version.trim() + ' = ' + publishDate + '\n\n';
+		'== Changelog ==\n\n### Version ' +
+		version.trim() +
+		' - ' +
+		publishDate +
+		'\n\n';
 	let changelog = '';
 	const end =
-		'\n\n## More\n\nTo read the changelog for older Blockera releases, please navigate to the [[release page](https://community.blockera.ai/changelog-9l8hbrv0)].';
+		'\n\n### More\n\nTo read the changelog for older Blockera releases, please navigate to the [releases page](https://community.blockera.ai/changelog-9l8hbrv0).';
 
 	for (const changelogPath of changelogs) {
 		// Read the changelog file

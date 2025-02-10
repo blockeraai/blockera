@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/editor",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "A editor package to includes high level components inside WordPress Block Editor.",
 	"author": "The Blockera Contributors",
 	"license": "ISC",

@@ -112,7 +112,7 @@ async function updatePackages(config) {
 	const { minimumVersionBump, releaseType, version } = config;
 
 	const changelogFiles = await glob(
-		path.resolve(process.cwd(), 'packages/*/CHANGELOG.md')
+		path.resolve(process.cwd(), 'packages/(*|**/*)/CHANGELOG.md')
 	);
 
 	// e.g. "2022-11-01T00:13:26.102Z" -> "2022-11-01"

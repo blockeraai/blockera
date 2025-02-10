@@ -3,10 +3,11 @@ name: Compressed Size
 on:
     pull_request:
         paths:
-            # Any change to a CSS, Sass, or JavaScript file should run checks.
+            # Any change to a CSS, Sass, JavaScript, and PHP files should run checks.
             - '**.js'
             - '**.css'
             - '**.scss'
+            - '**.php'
             # Changes to any NPM related files could affect the outcome.
             - '**package*.json'
             # These files configures ESLint. Changes could affect the outcome.
@@ -61,4 +62,4 @@ jobs:
             - uses: preactjs/compressed-size-action@v2
               with:
                   repo-token: '${{ secrets.BLOCKERABOT_PAT }}'
-                  pattern: '{dist/**/*.min.js,dist/**/*.css,blockera.zip}'
+                  pattern: '{dist/**/*.min.js,dist/**/*.min.css,blockera.zip,packages/**/*.php,!**/test/**,!**/tests/**}'
