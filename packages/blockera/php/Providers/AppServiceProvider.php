@@ -18,6 +18,7 @@ use Blockera\WordPress\RenderBlock\V1\{
 use Blockera\WordPress\RenderBlock\V2\{
     Parser as V2Parser,
     Render as V2Render,
+	RenderContent as V2RenderContent,
     SavePost as V2SavePost,
     Setup as V2Setup,
 };
@@ -189,6 +190,14 @@ class AppServiceProvider extends ServiceProvider {
 					}
 				);
 
+				$this->app->bind(
+					V2RenderContent::class,
+					static function ( Application $app): V2RenderContent {
+
+						return new V2RenderContent($app);
+					}
+				);
+
 			} else {
 
 				$this->app->singleton(
@@ -298,7 +307,7 @@ class AppServiceProvider extends ServiceProvider {
      */
     protected function renderBlocks(): void {
 
-        $render = blockera_get_admin_options( [ 'labAndExperimental', 'disableCleanupStyles' ] ) ? $this->app->make(V2Render::class) : $this->app->make(Render::class);
+        $render = blockera_get_admin_options( [ 'labAndExperimental', 'disableCleanupStyles' ] ) ? $this->app->make(V2RenderContent::class) : $this->app->make(Render::class);
 
         $render->applyHooks();
     }
