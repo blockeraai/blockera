@@ -37,10 +37,8 @@
 			}
 		},
 		{
-			"step": "setSiteOptions",
-			"options": {
-				"dismissed-blocksy_plugin_notice": 1
-			}
+			"step": "runPHP",
+			"code": "<?php require '/wordpress/wp-load.php'; delete_option( 'blc_activation_redirect' );"
 		}
 	]
 }
