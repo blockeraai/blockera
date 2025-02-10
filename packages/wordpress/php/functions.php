@@ -209,7 +209,7 @@ if ( ! function_exists( 'blockera_get_small_random_hash' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_get_unique_class_name' ) ) {
+if ( ! function_exists( 'blockera_get_unique_class_name_regex' ) ) {
 
 	/**
 	 * Retrieve regex pattern to detect unique classname.
@@ -219,5 +219,41 @@ if ( ! function_exists( 'blockera_get_unique_class_name' ) ) {
 	function blockera_get_unique_class_name_regex(): string {
 
 		return '/\b(blockera-block-\S+)\b/';
+	}
+}
+
+if ( ! function_exists( 'blockera_is_force_update_classname' ) ) {
+	
+	/**
+     * Is need to update block classname?
+     * The target of this method is prevented of duplicate block classnames.
+     *
+     * @param string $block_classname the block "className" attribute value.
+     * @param string $inner_html The block inner html output.
+     * @param array  $classnames The classnames stack.
+     *
+     * @return bool true on success, false on otherwise.
+     */
+	function blockera_is_force_update_classname( string $block_classname, string $inner_html, array $classnames): bool {
+
+		// Imagine th block classname is empty, so we should update html output.
+		if (empty($block_classname)) {
+
+			return true;
+		}
+
+		// Try to detect blockera block unique classname and check it to sure not registered in classnames stack.
+		if (preg_match(blockera_get_unique_class_name_regex(), $block_classname, $matches)) {
+
+			// If inner html is empty, we should update html output.
+			if (empty($inner_html)) {
+
+				return true;
+			}
+
+			return in_array($matches[0], $classnames, true);
+		}
+
+		return false;
 	}
 }
