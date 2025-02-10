@@ -1,0 +1,44 @@
+{
+	"steps": [
+		{
+			"step": "login"
+		},
+		{
+			"step": "defineWpConfigConsts",
+			"consts": {
+				"BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "url",
+				"url": "URL_PLACEMENT"
+			}
+		},
+		{
+			"step": "installTheme",
+			"themeData": {
+				"resource": "wordpress.org/themes",
+				"slug": "blocksy"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "blocksy-companion"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"type": "redirect",
+			"url": "/wp-admin/post.php?post=4&action=edit"
+		}
+	]
+}
