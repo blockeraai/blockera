@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added Labs & Experimental menu to the Blockera admin panel, allowing beta testers and developers to enable/disable experimental features.
+
 ## 1.0.2 (2025-02-03)
 
 ### Improvements
