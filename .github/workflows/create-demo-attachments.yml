@@ -108,8 +108,17 @@ jobs:
                     ]
                   }'
 
+                  # Check if .pr-playground.json exists and merge it with JSON_STRING
+                  if [ -f ".pr-playground.json" ]; then
+                    # Read and merge the custom configuration
+                    MERGED_JSON=$(echo "$JSON_STRING" | jq --slurpfile custom .pr-playground.json '. * $custom[0]')
+                    FINAL_JSON="$MERGED_JSON"
+                  else
+                    FINAL_JSON="$JSON_STRING"
+                  fi
+
                   # Replace URL_PLACEMENT with the newly generated URL
-                  ENCODED_JSON=$(echo "$JSON_STRING" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = "${{ env.uploaded_zip_file }}"')
+                  ENCODED_JSON=$(echo "$FINAL_JSON" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = "${{ env.uploaded_zip_file }}"')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
