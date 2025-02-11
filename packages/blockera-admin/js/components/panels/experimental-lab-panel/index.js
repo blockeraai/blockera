@@ -24,7 +24,7 @@ const fallbackDefaultValue = {
 	},
 };
 
-export const LabAndExperimentalPanel = (): MixedElement => {
+export const ExperimentalLabPanel = (): MixedElement => {
 	const {
 		defaultSettings,
 		//  config

@@ -23,7 +23,7 @@ import {
 	GeneralPanel,
 	DashboardPanel,
 	BlockManagerPanel,
-	LabAndExperimentalPanel,
+	ExperimentalLabPanel,
 } from './components';
 
 export const Panel = (tab: {
@@ -66,12 +66,12 @@ export const Panel = (tab: {
 			);
 			break;
 
-		case 'lab-experimental':
-			activePanel = <LabAndExperimentalPanel />;
+		case 'experimental-lab':
+			activePanel = <ExperimentalLabPanel />;
 			description = (
 				<p>
 					{__(
-						'In the Lab & Experimental Panel, you can customize your Blockera settings. These settings are used to customize the design and functionality of Blockera.',
+						'Discover and test early features that are still in development. Help us refine and improve them before they go live for everyone.',
 						'blockera'
 					)}
 				</p>
