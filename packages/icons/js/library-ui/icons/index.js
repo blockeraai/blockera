@@ -306,3 +306,4 @@ export { default as Wrap } from './wrap.svg';
 export { default as ExpandAll } from './expand-all.svg';
 export { default as CollapseAll } from './collapse-all.svg';
 export { default as FocusMode } from './focus-mode.svg';
+export { default as ZapFast } from './zap-fast.svg';
