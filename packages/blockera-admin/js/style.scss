@@ -31,6 +31,10 @@
 					border-radius: 5px;
 					padding: 25px;
 
+					a {
+						color: var(--blockera-controls-primary-color);
+					}
+
 					.section-title {
 						margin: 0 0 20px 0;
 						padding: 0;
@@ -42,6 +46,28 @@
 						svg {
 							fill: currentColor;
 						}
+
+						.section-title-badge {
+							padding: 2px 5px;
+							border-radius: 3px;
+							font-size: 12px;
+							
+							&.alpha-badge {
+								background-color: rgb(221 227 255);
+								color: var(--blockera-controls-primary-color);
+							}
+
+							&.beta-badge {
+								background-color: rgb(199 239 225);
+								color: rgb(0 113 74);
+							}
+
+							&.pre-release-badge {
+								background-color: rgb(0 180 118);
+								color: rgb(255 255 255);
+							}
+						}
+
 					}
 
 					.section-desc {

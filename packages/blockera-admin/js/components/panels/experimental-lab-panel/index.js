@@ -58,13 +58,26 @@ export const ExperimentalLabPanel = (): MixedElement => {
 						}}
 					/>
 					{__('Optimized Style Generation', 'blockera')}
+
+					<span className={'section-title-badge alpha-badge'}>
+						{__('Alpha Feature', 'blockera')}
+					</span>
 				</h3>
 
 				<p className={'blockera-settings-general section-desc'}>
 					{__(
 						'Optimize the style generation process to remove unnecessary inline CSS codes, drop important styles, and improve the performance of your website.',
 						'blockera'
-					)}
+					)}{' '}
+					<a
+						href={
+							'https://community.blockera.ai/feature-request-1rsjg2ck/post/optimize-style-generator-on-front-end-editor-y5IVNlZ6nSkzSXD?utm_source=blockera-settings&utm_medium=experimental-lab-panel&utm_campaign=experimental-lab-panel'
+						}
+						target={'_blank'}
+						rel={'noopener noreferrer'}
+					>
+						{__('Learn more', 'blockera')}
+					</a>
 				</p>
 
 				<div className={'blockera-settings-general control-wrapper'}>
