@@ -16,6 +16,7 @@ import {
 	ToggleControl,
 	ControlContextProvider,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
@@ -49,20 +50,24 @@ export const ExperimentalLabPanel = (): MixedElement => {
 		>
 			<Flex direction={'column'} className={'blockera-settings-section'}>
 				<h3 className={'blockera-settings-general section-title'}>
-					🧹 {__('Cleanup Styles', 'blockera')}
+					<Icon
+						icon={'zap-fast'}
+						iconSize={24}
+						style={{
+							color: 'var(--blockera-controls-primary-color)',
+						}}
+					/>
+					{__('Optimized Style Generation', 'blockera')}
 				</h3>
 
 				<p className={'blockera-settings-general section-desc'}>
 					{__(
-						'Cleanup styles from the editor to remove important styles, avoid conflicts, and improve blocks css classnames.',
+						'Optimize the style generation process to remove unnecessary inline CSS codes, drop important styles, and improve the performance of your website.',
 						'blockera'
 					)}
 				</p>
 
-				<div
-					className={'blockera-settings-general control-wrapper'}
-					aria-label={'Opt out of PRO hints and promotions'}
-				>
+				<div className={'blockera-settings-general control-wrapper'}>
 					<ControlContextProvider
 						value={{
 							name: 'toggleCleanupStyles',
@@ -98,7 +103,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 									}
 								>
 									{__(
-										'Cleanup styles from the editor',
+										'Optimize the style generation process',
 										'blockera'
 									)}
 								</strong>
