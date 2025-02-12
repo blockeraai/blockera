@@ -16,8 +16,7 @@ use Blockera\WordPress\RenderBlock\V1\{
 };
 
 use Blockera\WordPress\RenderBlock\V2\{
-    Parser as V2Parser,
-    Render as V2Render,
+    Transpiler,
 	RenderContent as V2RenderContent,
     SavePost as V2SavePost,
     Setup as V2Setup,
@@ -90,7 +89,7 @@ class AppServiceProvider extends ServiceProvider {
 					V2SavePost::class,
 					function ( Application $app) {
 
-						return new V2SavePost($app, new V2Render($app));
+						return new V2SavePost($app);
 					}
 				);
 			} else {
@@ -175,18 +174,10 @@ class AppServiceProvider extends ServiceProvider {
             if ( blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
 
 				$this->app->singleton(
-					V2Parser::class,
+					Transpiler::class,
 					static function ( Application $app) {
 
-						return new V2Parser($app);
-					}
-				);
-
-				$this->app->bind(
-					V2Render::class,
-					static function ( Application $app): V2Render {
-
-						return new V2Render($app);
+						return new Transpiler($app);
 					}
 				);
 

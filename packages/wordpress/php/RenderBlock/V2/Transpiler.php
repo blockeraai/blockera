@@ -6,7 +6,7 @@ use Blockera\Data\Cache\Cache;
 use Blockera\Editor\StyleEngine;
 use Blockera\Bootstrap\Application;
 
-class Parser {
+class Transpiler {
 
     /**
      * Hold the Application class instance.
@@ -28,20 +28,6 @@ class Parser {
      * @var array
      */
     protected array $parsed_blocks = [];
-
-    /**
-     * Store current block.
-     *
-     * @var array
-     */
-    protected array $current_block = [];
-
-    /**
-     * Store classnames.
-     *
-     * @var array
-     */
-    protected array $classnames = [];
 
     /**
      * Cache instance.
@@ -104,8 +90,8 @@ class Parser {
 
 		$data = [
             'parsed_blocks' => $this->parsed_blocks,
-            'generated_css_styles' => $this->styles,
             'serialized_blocks' => $serialized_blocks,
+            'generated_css_styles' => array_unique($this->styles),
         ];
 
         // Cache the results.
@@ -131,7 +117,6 @@ class Parser {
                 	continue;
                 }
 
-                $this->current_block = $block;
                 $this->processBlockContent($key, $block);
             }
 
@@ -161,43 +146,28 @@ class Parser {
      * @return void
      */
     protected function processBlockContent( int $key, array $block, array $args = []): void {
-        $contents   = [];
         $attributes = $block['attrs'] ?? [];
         
         // Pre-calculate common values.
-        $blockera_hash_id          = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
-        $blockera_class_name       = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
-        $is_force_update_classname = blockera_is_force_update_classname($blockera_class_name, $block['innerHTML'] ?? '', $this->classnames);
-        
-        // Set classname once.
-        $this->setClassname($attributes['className'] ?? '');
-        $unique_class_name = blockera_get_normalized_selector($is_force_update_classname ? $blockera_class_name : ( $attributes['className'] ?? '' ));
+        $blockera_hash_id    = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
+        $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
+        $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
         foreach ($block['innerContent'] as $_key => $innerContent) {
             if (empty($innerContent)) {
                 continue;
             }
 
-            $contents[] = [
-                'content' => $innerContent,
-                'id' => $_key,
-                'args' => [
+			$this->cleanupProcess(
+                $innerContent,
+                $_key,
+                [
                     'block' => $block,
                     'block_id' => $key,
                     'block_path' => $args['block_path'] ?? [],
                     'unique_class_name' => $unique_class_name,
                     'blockera_class_name' => $blockera_class_name,
-                    'force_update_classname' => $is_force_update_classname,
-                ],
-            ];
-        }
-
-        // Process contents in parallel if possible.
-        foreach ($contents as $item) {
-            $this->cleanupProcess(
-                $item['content'],
-                $item['id'],
-                $item['args']
+                ]
             );
         }
 
@@ -235,40 +205,66 @@ class Parser {
     public function cleanupProcess( string $content, int $id, array $args = []): void {
         $processor = new \WP_HTML_Tag_Processor($content);
         
+		// Inline styles stack.
+		$inline_styles = [];
+
+		// The counter is used to determine if the current tag is the first tag in the block.
+		$counter = 0;
+
         // Process in a single pass.
         while ($processor->next_tag()) {
-            $style = $processor->get_attribute('style');
-
+			$id_attribute = $processor->get_attribute('id');
+            $style        = $processor->get_attribute('style');
+			$class        = $processor->get_attribute('class');
             $processor->remove_attribute('style');
 
-			if ($args['force_update_classname']) {
-                $this->updateClassname($processor, $args['blockera_class_name']);
-            }
+			if (! empty(trim($class ?? '')) && ( false !== strpos($class, 'wp-elements') || false !== strpos($class, 'wp-block') ) || 0 === $counter) {
+				$this->updateClassname($processor, $args['blockera_class_name']);
+			}
+
+			++$counter;
 			
-			$inline_styles = [];
-			$declarations  = is_string($style) ? explode(';', $style) : [];
+			$declarations = is_string($style) ? explode(';', $style) : [];
 
 			foreach ($declarations as $declaration) {
+
+				if (0 < $counter) {
+					
+					if (! empty(trim($id_attribute ?? ''))) {
+						
+						$inline_styles[ $args['unique_class_name'] ][ $args['unique_class_name'] . ' #' . $id_attribute ][] = $declaration;
+
+						unset($id_attribute);
+						
+						continue;
+					} elseif (! empty(trim($class ?? '')) && ( false === strpos($class, 'wp-elements') || false === strpos($class, 'wp-block') )) {
+						
+						$inline_styles[ $args['unique_class_name'] ][ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ][] = $declaration;
+
+						unset($class);
+
+						continue;
+					}
+				}
+
 				$inline_styles[ $args['unique_class_name'] ][] = $declaration;
 			}
-
-			// Generate styles once.
-			$this->style_engine = $this->app->make(
-                StyleEngine::class,
-                [
-					'block' => $args['block'],
-					'fallbackSelector' => $args['unique_class_name'],
-				]
-            );
-			$this->style_engine->setInlineStyles($inline_styles);
-			$computed_css_rules = $this->style_engine->getStylesheet();
-
-			if (in_array($computed_css_rules, $this->styles, true)) {
-				continue;
-			}
-
-			$this->styles[] = $computed_css_rules;
         }
+
+		// Generate styles once.
+		$this->style_engine = $this->app->make(
+			StyleEngine::class,
+			[
+				'block' => $args['block'],
+				'fallbackSelector' => $args['unique_class_name'],
+			]
+		);
+		$this->style_engine->setInlineStyles($inline_styles);
+		$computed_css_rules = $this->style_engine->getStylesheet();
+
+		if (! in_array($computed_css_rules, $this->styles, true)) {
+			$this->styles[] = $computed_css_rules;
+		}
 
         // Update block content.
         $this->updateBlockContent($processor, $id, $args);
@@ -290,6 +286,7 @@ class Parser {
             $this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
             $this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
             $this->parsed_blocks[ $args['block_id'] ]['innerContent'][ $id ]        = $updated_html;
+
             return;
         }
 
@@ -316,27 +313,39 @@ class Parser {
         $regexp         = blockera_get_unique_class_name_regex();
 
         if (! empty($previous_class)) {
+
             if (preg_match($regexp, $classname, $matches) && preg_match($regexp, $previous_class)) {
+
                 $final_classname = preg_replace($regexp, $matches[0], $previous_class);
             } else {
+
                 $final_classname = $classname . ' ' . $previous_class;
             }
+
             $processor->set_attribute('class', $final_classname);
+
         } else {
+
             $processor->set_attribute('class', $classname);
         }
     }
 
     /**
-     * Push block classname into stack.
-     *
-     * @param string $classname the block "className" attribute value.
+     * Clean up resources and reset state.
      *
      * @return void
      */
-    protected function setClassname( string $classname): void {
-        if (! empty($classname) && preg_match(blockera_get_unique_class_name_regex(), $classname, $matches)) {
-            $this->classnames[] = $matches[0];
-        }
+    public function __destruct() {
+        // Clear arrays.
+        $this->styles        = [];
+        $this->parsed_blocks = [];
+
+        // Clear object references.
+        unset($this->app);
+        unset($this->cache);
+        unset($this->style_engine);
+
+        // Force garbage collection.
+        gc_collect_cycles();
     }
 }

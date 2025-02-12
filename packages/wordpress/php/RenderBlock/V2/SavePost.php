@@ -12,13 +12,6 @@ use Blockera\Bootstrap\Application;
 class SavePost {
 
     /**
-     * Store instance of Render class
-     *
-     * @var Render
-     */
-    protected Render $render;
-
-    /**
      * Store instance of app container.
      *
      * @var Application
@@ -29,11 +22,9 @@ class SavePost {
      * Constructor of SavePost class.
      *
      * @param Application $app    the instance of Application container.
-     * @param Render      $render The instance of Render class to manage dependency injection fany phrase.
      */
-    public function __construct( Application $app, Render $render) {
+    public function __construct( Application $app) {
         $this->app    = $app;
-        $this->render = $render;
 
         add_action('save_post', [ $this, 'save' ], 9e8, 2);
 
@@ -64,7 +55,7 @@ class SavePost {
         }
 
         // Get the updated blocks after cleanup.
-		$this->app->make(Parser::class)->cleanupInlineStyles($parsed_blocks, $postId);
+		$this->app->make(Transpiler::class)->cleanupInlineStyles($parsed_blocks, $postId);
     }
 
 	/**
@@ -85,7 +76,7 @@ class SavePost {
         }
 
         // Get the updated blocks after cleanup.
-        $this->app->make(Parser::class)->cleanupInlineStyles($parsed_blocks, property_exists($prepared_post, 'ID') ? $prepared_post->ID : 0);
+        $this->app->make(Transpiler::class)->cleanupInlineStyles($parsed_blocks, property_exists($prepared_post, 'ID') ? $prepared_post->ID : 0);
 
         return $prepared_post;
     }
