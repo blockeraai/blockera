@@ -33,16 +33,10 @@ describe('Testing core/comments-pagination block registered default attributes v
 				'core/comments-pagination'
 			).attributes;
 
-			// Assertion for sync registered default "blockeraDisplay" value with type!
-			expect(
-				attributes?.blockeraDisplay?.type ===
-					typeof attributes?.blockeraDisplay?.default
-			).to.be.equal(true);
-
 			// Assertion for sync registered default "blockeraDisplay" value with selected block "blockeraDisplay" value.
-			expect(attributes?.blockeraDisplay?.default).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraDisplay')
-			);
+			expect(
+				attributes?.blockeraDisplay?.default?.value
+			).to.be.deep.equal(getSelectedBlock(data, 'blockeraDisplay'));
 		});
 	});
 });
