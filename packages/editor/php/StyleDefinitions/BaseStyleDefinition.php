@@ -474,7 +474,22 @@ abstract class BaseStyleDefinition {
 
 			if (! empty($selector_inline_styles)) {
 
-				$this->css[ $this->getSelector() ] = array_merge($declaration, $selector_inline_styles);
+				$prepared_inline_styles = [];
+
+				foreach ($selector_inline_styles as $selector => $inline_styles) {
+					if (is_int($selector) || ! is_array($inline_styles)) {
+						$prepared_inline_styles[] = $inline_styles;
+
+						continue;
+					}
+
+					$this->css[ $selector ] = array_merge($declaration, $inline_styles);
+				}
+
+				$this->css[ $this->getSelector() ] = array_merge($declaration, $prepared_inline_styles);
+
+				// Unset prepared inline styles to free memory.
+				unset($prepared_inline_styles);
 			} else {
 				$this->css[ $this->getSelector() ] = $declaration;
 			}		
