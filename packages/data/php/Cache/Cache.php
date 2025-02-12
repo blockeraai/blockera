@@ -50,7 +50,7 @@ class Cache {
      * @return string
      */
     public function getCacheKey( string $key = ''): string {
-        return $this->product_id . '_data_' . $key;
+        return 'blockera_' . $this->product_id . '_product_data_' . $key;
     }
 
     /**
