@@ -20,7 +20,7 @@ import { Icon } from '@blockera/icons';
 
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
-	labAndExperimental: {
+	earlyAccessLab: {
 		optimizeStyleGeneration: false,
 	},
 };
@@ -31,15 +31,13 @@ export const ExperimentalLabPanel = (): MixedElement => {
 		//  config
 	} = useContext(SettingsContext);
 	const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
-	const labAndExperimentalSettings =
-		settings?.labAndExperimental ||
-		defaultSettings?.labAndExperimental ||
+	const earlyAccessLabSettings =
+		settings?.earlyAccessLab ||
+		defaultSettings?.earlyAccessLab ||
 		fallbackDefaultValue;
 
 	const {
-		blockeraSettings: {
-			labAndExperimental: savedLabAndExperimentalSettings,
-		},
+		blockeraSettings: { earlyAccessLab: savedearlyAccessLabSettings },
 	} = window;
 
 	return (
@@ -84,7 +82,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 					<ControlContextProvider
 						value={{
 							name: 'toggleCleanupStyles',
-							value: labAndExperimentalSettings.optimizeStyleGeneration,
+							value: earlyAccessLabSettings.optimizeStyleGeneration,
 						}}
 					>
 						<ToggleControl
@@ -93,18 +91,18 @@ export const ExperimentalLabPanel = (): MixedElement => {
 							id={'toggleCleanupStyles'}
 							className={'blockera-settings-general control'}
 							defaultValue={
-								labAndExperimentalSettings.optimizeStyleGeneration
+								earlyAccessLabSettings.optimizeStyleGeneration
 							}
 							onChange={(checked: boolean) => {
 								setHasUpdates(
 									checked !==
-										savedLabAndExperimentalSettings.optimizeStyleGeneration
+										savedearlyAccessLabSettings.optimizeStyleGeneration
 								);
 
 								setSettings({
 									...settings,
-									labAndExperimental: {
-										...labAndExperimentalSettings,
+									earlyAccessLab: {
+										...earlyAccessLabSettings,
 										optimizeStyleGeneration: checked,
 									},
 								});

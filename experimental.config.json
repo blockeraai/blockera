@@ -14,7 +14,7 @@
 	"data": {
 		"dynamicValue": false
 	},
-	"labAndExperimental": {
+	"earlyAccessLab": {
 		"optimizeStyleGeneration": true
 	}
 }

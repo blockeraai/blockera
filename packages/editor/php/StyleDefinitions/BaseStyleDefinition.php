@@ -494,7 +494,7 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function isImportant(): bool {
 
-		return $this->options['is-important'] && ! blockera_get_admin_options( [ 'labAndExperimental', 'optimizeStyleGeneration' ] );
+		return $this->options['is-important'] && ! blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] );
 	}
 
 	/**

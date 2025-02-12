@@ -18,7 +18,7 @@ export const useCleanupStyles = (
 	const [inlineStyles, setInlineStyles] = useState({});
 	const {
 		blockeraSettings: {
-			labAndExperimental: { optimizeStyleGeneration },
+			earlyAccessLab: { optimizeStyleGeneration },
 		},
 	} = window;
 

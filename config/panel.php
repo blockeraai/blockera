@@ -21,7 +21,7 @@ $std = [
         'disableRestrictBlockVisibility' => false,
         'allowedUserRoles'               => blockera_normalized_user_roles(),
     ],
-	'labAndExperimental' => json_decode($json, true)['labAndExperimental'] ?? [],
+	'earlyAccessLab' => json_decode($json, true)['earlyAccessLab'] ?? [],
 ];
 
 return compact('std');
