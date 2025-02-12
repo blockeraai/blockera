@@ -18,10 +18,17 @@ import {
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 
+/**
+ * Internal dependencies
+ */
+import FeatureLabel from './components/feature-label';
+import FeatureDesc from './components/feature-desc';
+
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
 	earlyAccessLab: {
 		optimizeStyleGeneration: false,
+		optimizeStyleGenerationStatus: 'alpha',
 	},
 };
 
@@ -57,9 +64,11 @@ export const ExperimentalLabPanel = (): MixedElement => {
 					/>
 					{__('Optimized Style Generation', 'blockera')}
 
-					<span className={'section-title-badge alpha-badge'}>
-						{__('Alpha Feature', 'blockera')}
-					</span>
+					<FeatureLabel
+						status={
+							earlyAccessLabSettings.optimizeStyleGenerationStatus
+						}
+					/>
 				</h3>
 
 				<p className={'blockera-settings-general section-desc'}>
@@ -122,6 +131,12 @@ export const ExperimentalLabPanel = (): MixedElement => {
 						/>
 					</ControlContextProvider>
 				</div>
+
+				<FeatureDesc
+					status={
+						earlyAccessLabSettings.optimizeStyleGenerationStatus
+					}
+				/>
 			</Flex>
 		</Flex>
 	);

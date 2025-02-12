@@ -15,6 +15,7 @@
 		"dynamicValue": false
 	},
 	"earlyAccessLab": {
-		"optimizeStyleGeneration": false
+		"optimizeStyleGeneration": false,
+		"optimizeStyleGenerationStatus": "alpha"
 	}
 }
