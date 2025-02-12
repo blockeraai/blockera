@@ -18,12 +18,12 @@ export const useCleanupStyles = (
 	const [inlineStyles, setInlineStyles] = useState({});
 	const {
 		blockeraSettings: {
-			labAndExperimental: { enableCleanupStyles },
+			labAndExperimental: { optimizeStyleGeneration },
 		},
 	} = window;
 
 	useEffect(() => {
-		if (!enableCleanupStyles) {
+		if (!optimizeStyleGeneration) {
 			return;
 		}
 

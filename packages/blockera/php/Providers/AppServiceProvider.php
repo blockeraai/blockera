@@ -82,7 +82,7 @@ class AppServiceProvider extends ServiceProvider {
 				}
             );
 
-            if (blockera_get_admin_options([ 'labAndExperimental', 'enableCleanupStyles' ])) {
+            if (blockera_get_admin_options([ 'labAndExperimental', 'optimizeStyleGeneration' ])) {
 
 				$this->app->singleton(V2Setup::class);
 
@@ -172,7 +172,7 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            if ( blockera_get_admin_options( [ 'labAndExperimental', 'enableCleanupStyles' ] ) ) {
+            if ( blockera_get_admin_options( [ 'labAndExperimental', 'optimizeStyleGeneration' ] ) ) {
 
 				$this->app->singleton(
 					V2Parser::class,
@@ -248,7 +248,7 @@ class AppServiceProvider extends ServiceProvider {
 			$this->app->setIsValidateCache($validate_cache);
 		}
 
-        if (blockera_get_admin_options([ 'labAndExperimental', 'enableCleanupStyles' ])) {
+        if (blockera_get_admin_options([ 'labAndExperimental', 'optimizeStyleGeneration' ])) {
 
             $this->app->make(V2SavePost::class);
             $this->app->make(V2Setup::class)->apply();
@@ -307,7 +307,7 @@ class AppServiceProvider extends ServiceProvider {
      */
     protected function renderBlocks(): void {
 
-        $render = blockera_get_admin_options( [ 'labAndExperimental', 'enableCleanupStyles' ] ) ? $this->app->make(V2RenderContent::class) : $this->app->make(Render::class);
+        $render = blockera_get_admin_options( [ 'labAndExperimental', 'optimizeStyleGeneration' ] ) ? $this->app->make(V2RenderContent::class) : $this->app->make(Render::class);
 
         $render->applyHooks();
     }
