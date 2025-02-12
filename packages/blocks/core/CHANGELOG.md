@@ -1,6 +1,12 @@
 ## Unreleased
 
-### New Features:
+### Bug Fixes
+- Flex child block section not showing for child blocks of 9 blocks (e.g. `Columns`, `Buttons`, `Social Links` and etc.).
+
+
+## 1.0.0 (2024-12-08)
+
+### New Features
 - Added `Spacer Block` support by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/spacer-block-support-pritFhuc8gbsXko)]
 - Added support for the `Navigation Link Block` by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
 - Added support for the `Home Link Block` by Blockera. [[🔗 Link](https://community.blockera.ai/feature-request-1rsjg2ck/post/supporting-blocks-inside-navigation-block-MIcY979kIVCxkvU)]
