@@ -17,7 +17,7 @@
 			}
 		},
 		{
-			"step": "siteOptions",
+			"step": "setSiteOptions",
 			"siteOptions": {
 				"blogname": "Blockera Demo (PR)"
 			}
