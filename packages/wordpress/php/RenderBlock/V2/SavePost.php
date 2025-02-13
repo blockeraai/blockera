@@ -24,7 +24,7 @@ class SavePost {
      * @param Application $app    the instance of Application container.
      */
     public function __construct( Application $app) {
-        $this->app    = $app;
+        $this->app = $app;
 
         add_action('save_post', [ $this, 'save' ], 9e8, 2);
 
