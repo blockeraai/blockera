@@ -483,12 +483,13 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $selector;
 		}
 
-		// Assume received selector started with html tag name!
-		if ( '.' !== $selector[0] ) {
+		if ( '.' !== $selector[0] && ! str_starts_with($selector, ' ')) {
 
+			// If selector started with html tag name, we imagine it's html tag name of root.
 			return "{$selector}{$root}";
 		}
 
+		// If selector started with dot, we imagine it's other classname of root.
 		return "{$root}{$selector}";
 	}
 }
