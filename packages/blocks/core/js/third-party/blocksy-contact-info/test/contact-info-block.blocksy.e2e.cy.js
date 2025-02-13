@@ -1094,7 +1094,7 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 <h3 class="wp-block-heading has-medium-font-size">Contact Info</h3>
 <!-- /wp:heading -->
 
-<!-- wp:blocksy/contact-info {"blockeraPropsId":"1328e472-bfca-4af4-82db-19f2dcc1ba06","blockeraCompatId":"16183445239","blockeraBackgroundColor":{"value":"#ffc1c1"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.5)"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}}}}}}},"blockeraBackgroundColor":"#ff7878"}},"elements/titles":{"attributes":{"blockeraFontColor":"#38ffb3"}},"elements/contents":{"attributes":{"blockeraFontColor":"#1500ff"}}}},"lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002dt97zuv","style":{"color":{"background":"#ffc1c1"}}} -->
+<!-- wp:blocksy/contact-info {"blockeraPropsId":"1328e472-bfca-4af4-82db-19f2dcc1ba06","blockeraCompatId":"16183445239","blockeraBackgroundColor":{"value":"#ffc1c1"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.5)"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}}}}}}},"blockeraBackgroundColor":"#ff7878"}},"elements/titles":{"attributes":{"blockeraFontColor":"#38ffb3"}},"elements/contents":{"attributes":{"blockeraFontColor":"#1500ff"}}}},"lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002dt97zuv","style":{"color":{"background":"#ffc1c1"}}} -->
 <div>Blocksy: Contact Info</div>
 <!-- /wp:blocksy/contact-info -->
 <!-- /wp:blocksy/widgets-wrapper -->`);
@@ -1108,8 +1108,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 			//
 			cy.getBlock('blocksy/contact-info').should(
 				'have.css',
-				'background-color',
-				'rgb(255, 193, 193)'
+				'background-clip',
+				'padding-box'
 			);
 
 			cy.getBlock('blocksy/contact-info')
@@ -1142,8 +1142,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 
 			cy.get('.blockera-block').should(
 				'have.css',
-				'background-color',
-				'rgb(255, 193, 193)'
+				'background-clip',
+				'padding-box'
 			);
 
 			cy.get('.blockera-block').within(() => {
