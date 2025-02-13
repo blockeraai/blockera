@@ -489,7 +489,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return "{$selector}{$root}";
 		}
 
-		// If selector started with dot, we imagine it's other classname of root.
+		// If selector started with dot or any other classname of child elements, we imagine it's other classname of root or child of root.
 		return "{$root}{$selector}";
 	}
 }
