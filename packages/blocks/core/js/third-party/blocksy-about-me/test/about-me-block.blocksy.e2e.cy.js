@@ -882,7 +882,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 <h3 class="wp-block-heading has-medium-font-size">About Me</h3>
 <!-- /wp:heading -->
 
-<!-- wp:blocksy/about-me {"blockeraPropsId":"27e00124-6f09-4d2c-91db-3250f518cc87","blockeraCompatId":"16142144350","blockeraBackgroundColor":{"value":"#fae8e8"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.5)"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}}}}}}},"blockeraBackgroundColor":"#ff5b5b"}},"elements/avatar":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"4px","style":"","color":"#ff0000"}}}},"elements/name":{"attributes":{"blockeraBackgroundColor":"#ffcdcd"}},"elements/profile-link":{"attributes":{"blockeraBackgroundColor":"#ff9a9a"}},"elements/text":{"attributes":{"blockeraFontColor":"#00a95a"}}}},"customTextColor":"#00a95a","lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002dwslmq4"} -->
+<!-- wp:blocksy/about-me {"blockeraPropsId":"27e00124-6f09-4d2c-91db-3250f518cc87","blockeraCompatId":"16142144350","blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.5)"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}}}}}}},"blockeraBackgroundColor":"#ff5b5b"}},"elements/avatar":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"4px","style":"","color":"#ff0000"}}}},"elements/name":{"attributes":{"blockeraBackgroundColor":"#ffcdcd"}},"elements/profile-link":{"attributes":{"blockeraBackgroundColor":"#ff9a9a"}},"elements/text":{"attributes":{"blockeraFontColor":"#00a95a"}}}},"customTextColor":"#00a95a","lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002dwslmq4"} -->
 <div>Blocksy: About Me</div>
 <!-- /wp:blocksy/about-me -->
 <!-- /wp:blocksy/widgets-wrapper -->`);
@@ -896,8 +896,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 		//
 		cy.getBlock('blocksy/about-me').should(
 			'have.css',
-			'background-color',
-			'rgb(250, 232, 232)'
+			'background-clip',
+			'padding-box'
 		);
 
 		cy.getBlock('blocksy/about-me')
@@ -950,8 +950,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 		cy.get('.blockera-block').should(
 			'have.css',
-			'background-color',
-			'rgb(250, 232, 232)'
+			'background-clip',
+			'padding-box'
 		);
 
 		cy.get('.blockera-block').within(() => {
