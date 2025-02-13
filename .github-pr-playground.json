@@ -18,6 +18,12 @@
 			}
 		},
 		{
+			"step": "setSiteOptions",
+			"options": {
+				"blogname": "Blockera + Blocksy Demo"
+			}
+		},
+		{
 			"step": "installTheme",
 			"themeData": {
 				"resource": "wordpress.org/themes",
