@@ -32,7 +32,7 @@
 		},
 		{
 			"step": "setSiteOptions",
-			"siteOptions": {
+			"options": {
 				"blogname": "Blockera Demo"
 			}
 		}
