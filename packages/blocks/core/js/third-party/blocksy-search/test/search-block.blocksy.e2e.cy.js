@@ -2284,7 +2284,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 	});
 
 	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
-		appendBlocks(`<!-- wp:blocksy/search {"blockeraPropsId":"dfee254f-5b83-4635-a1cb-24d74b99f8eb","blockeraCompatId":"1819181054","blockeraBackgroundColor":{"value":"#c4ceff"},"blockeraInnerBlocks":{"value":{"elements/input":{"attributes":{"blockeraBackgroundColor":"#ffc6c6"}},"elements/button":{"attributes":{"blockeraBackgroundColor":"#ff5757"}}}},"blockeraSpacing":{"value":{"padding":{"top":"27px","bottom":"27px"}}},"className":"blockera-block blockera-block\u002d\u002domykq2","style":{"color":{"background":"#c4ceff"},"spacing":{"padding":{"top":"27px","right":"","bottom":"27px","left":""}}}} -->
+		appendBlocks(`<!-- wp:blocksy/search {"blockeraPropsId":"dfee254f-5b83-4635-a1cb-24d74b99f8eb","blockeraCompatId":"1819181054","blockeraBackgroundColor":{"value":"#c4ceff"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraInnerBlocks":{"value":{"elements/input":{"attributes":{"blockeraBackgroundColor":"#ffc6c6"}},"elements/button":{"attributes":{"blockeraBackgroundColor":"#ff5757"}}}},"blockeraSpacing":{"value":{"padding":{"top":"27px","bottom":"27px"}}},"className":"blockera-block blockera-block\u002d\u002domykq2","style":{"color":{"background":"#c4ceff"},"spacing":{"padding":{"top":"27px","right":"","bottom":"27px","left":""}}}} -->
 <div>Blocksy: Search Block</div>
 <!-- /wp:blocksy/search -->`);
 
@@ -2298,8 +2298,8 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 		cy.getBlock('blocksy/search').within(() => {
 			cy.get('.ct-search-form').should(
 				'have.css',
-				'background-color',
-				'rgb(196, 206, 255)'
+				'background-clip',
+				'padding-box'
 			);
 		});
 
@@ -2321,8 +2321,8 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 		cy.get('.blockera-block .ct-search-form').should(
 			'have.css',
-			'background-color',
-			'rgb(196, 206, 255)'
+			'background-clip',
+			'padding-box'
 		);
 
 		cy.get('.blockera-block').within(() => {
