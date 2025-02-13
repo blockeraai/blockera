@@ -1,7 +1,7 @@
 {
 	"meta": {
 		"title": "Install Blockera plugin from github artifact",
-		"author": "blockera.ai",
+		"author": "https://blockera.ai/",
 		"description": "Install and activate a WordPress Blockera plugin from a .php file stored in a github artifact.",
 		"categories": ["plugins"]
 	},
@@ -28,6 +28,12 @@
 			"pluginData": {
 				"resource": "url",
 				"url": "URL_PLACEMENT"
+			}
+		},
+		{
+			"step": "siteOptions",
+			"siteOptions": {
+				"blogname": "Blockera Demo (PR)"
 			}
 		}
 	]
