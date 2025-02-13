@@ -10,12 +10,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Columns Block → Inner Blocks', () => {
+describe('Columns Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
@@ -97,9 +97,30 @@ describe('Columns Block → Inner Blocks', () => {
 		cy.getByAriaLabel('Select Column').click();
 		cy.getByAriaLabel('Select Columns').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/columns').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. Paragraph inner block
@@ -287,7 +308,13 @@ describe('Columns Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.wp-block-columns').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.blockera-block.wp-block-columns').within(() => {
 			// paragraph inner block
 			cy.get('p')
 				.first()
