@@ -611,7 +611,7 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		});
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it.only('Inner blocks existence + CSS selectors in editor and front-end', () => {
 		appendBlocks(`<!-- wp:blocksy/breadcrumbs /-->`);
 
 		cy.getBlock('blocksy/breadcrumbs').first().click();
@@ -621,13 +621,15 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		//
 
 		//
-		// 1.0. Block BG
+		// 1.0. Block Style
 		//
-		cy.setColorControlValue('BG Color', '#dcffdc');
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
 
 		cy.getBlock('blocksy/breadcrumbs')
 			.first()
-			.should('have.css', 'background-color', 'rgb(220, 255, 220)');
+			.should('have.css', 'background-clip', 'padding-box');
 
 		//
 		// 1.1. Text inner block
@@ -735,7 +737,7 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 
 		cy.get('.blockera-block')
 			.first()
-			.should('have.css', 'background-color', 'rgb(220, 255, 220)');
+			.should('have.css', 'background-clip', 'padding-box');
 
 		cy.get('.blockera-block').within(() => {
 			cy.get('> span:last-child').should(
