@@ -50,14 +50,16 @@ describe('Blocksy → Advanced Posts (Query) Block → Block support', () => {
 		//
 
 		//
-		// 1.0. Block BG
+		// 1.0. Block Style
 		//
-		cy.setColorControlValue('BG Color', '#dcffdc');
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
 
 		cy.getBlock('blocksy/query').should(
 			'have.css',
-			'background-color',
-			'rgb(220, 255, 220)'
+			'background-clip',
+			'padding-box'
 		);
 
 		//
@@ -68,6 +70,6 @@ describe('Blocksy → Advanced Posts (Query) Block → Block support', () => {
 
 		cy.get('.blockera-block')
 			.first()
-			.should('have.css', 'background-color', 'rgb(220, 255, 220)');
+			.should('have.css', 'background-clip', 'padding-box');
 	});
 });
