@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed an issue where the Widgets page was not functioning properly in classic themes.
+
 ## 1.0.2 (2025-02-03)
 
 ### Improvements
