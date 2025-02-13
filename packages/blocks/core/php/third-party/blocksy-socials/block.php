@@ -13,6 +13,7 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'root' => '.ct-socials-block',
 				'blockera/elements/icons'   => [
 					'root' => '.ct-icon-container',
 				],

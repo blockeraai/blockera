@@ -1,6 +1,7 @@
 <?php
 
 use Blockera\Exceptions\BaseException;
+use Symfony\Component\VarDumper\VarDumper;
 
 if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	/**
@@ -295,7 +296,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 			$selector    = trim($selector);
 			$needs_space = ! str_starts_with($selector, '&') && ! empty($root);
 			
-			$formatted_selectors[] = $root . 
+			$formatted_selectors[] = ( false === strpos($selector, $root) ? trim($root): '' ) . 
 				( $has_parent_pseudo ? ':' . $parent_pseudo_class : '' ) .
 				( $needs_space ? ' ' : '' ) .
 				blockera_process_ampersand_selector_char($selector) .
@@ -352,10 +353,13 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 	function blockera_get_compatible_block_css_selector( array $selectors, string $feature_id, array $args ): string {
 
 		$block_type = blockera_get_block_type( $args['block-name'] );
+		
+		if ($block_type) {
 
-		$cloned_block_type = new WP_Block_Type( $args['block-name'], $block_type );
+			$cloned_block_type = clone $block_type;
+		}
 
-		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) ) {
+		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) && isset($cloned_block_type) ) {
 
 			$selector_id = blockera_get_normalized_inner_block_id( $args['block-type'] );
 
@@ -364,12 +368,16 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 		}
 
 		$has_fallback = ! empty( $args['fallback'] );
+		
+		// If block type is not null, we can get the selector.
+		if (isset($cloned_block_type)) {
 
-		$selector = wp_get_block_css_selector( $cloned_block_type, $feature_id, ! $has_fallback );
+			$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, ! $has_fallback);
 
-		if ( ! $selector && $has_fallback ) {
+			if (! $selector && $has_fallback) {
 
-			$selector = wp_get_block_css_selector( $cloned_block_type, $args['fallback'], true );
+				$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
+			}
 		}
 
 		// Imagine the current block is master!
@@ -440,7 +448,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 	 * Appending blockera block root css selector inside recieved selector.
 	 *
 	 * @param string $selector The recieved block css selector.
-	 * @param string $root     The root block css selector.
+	 * @param string $root     The root block css selector (.blockera-block).
 	 * @param array  $args     The arguments {@type string $block -name The block type name}.
 	 *
 	 * @return string the combined block prepared css selector with root.
@@ -479,9 +487,17 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		// Assume received selector started with html tag name!
 		if ( '.' !== $selector[0] ) {
 
+			// If selector started with space, we imagine it's a child of root.
+			if (' ' === $selector[0]) {
+
+				return "{$root}{$selector}";
+			}
+
+			// If selector started with html tag name, we imagine it's html tag name of root.
 			return "{$selector}{$root}";
 		}
 
+		// If selector started with dot, we imagine it's other classname of root.
 		return "{$root}{$selector}";
 	}
 }
