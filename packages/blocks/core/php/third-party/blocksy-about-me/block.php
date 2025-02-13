@@ -13,7 +13,6 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'root' => '.ct-about-me-block',
 				'blockera/elements/text'   => [
 					'root' => '.ct-about-me-name span, .ct-about-me-name a',
 				],
