@@ -10,12 +10,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Column Block → Inner Blocks', () => {
+describe('Column Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
@@ -66,9 +66,28 @@ describe('Column Block → Inner Blocks', () => {
 		// Switch to parent block
 		cy.getByAriaLabel('Select Column').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/column')
+			.first()
+			.should('have.css', 'background-clip', 'padding-box');
 
 		//
 		// 1.1. Paragraph inner block
@@ -256,64 +275,86 @@ describe('Column Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
-			// paragraph inner block
-			cy.get('p')
-				.first()
-				.should('have.css', 'background-color', 'rgb(204, 204, 204)');
+		cy.get('.blockera-block.wp-block-column')
+			.first()
+			.should('have.css', 'background-clip', 'padding-box');
 
-			// link inner block
-			cy.get('p')
-				.first()
-				.within(() => {
-					cy.get('a').should(
+		cy.get('.blockera-block.wp-block-column')
+			.first()
+			.within(() => {
+				// paragraph inner block
+				cy.get('p')
+					.first()
+					.should(
+						'have.css',
+						'background-color',
+						'rgb(204, 204, 204)'
+					);
+
+				// link inner block
+				cy.get('p')
+					.first()
+					.within(() => {
+						cy.get('a').should(
+							'have.css',
+							'background-color',
+							'rgb(238, 238, 238)'
+						);
+					});
+
+				// heading inner block
+				['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
+					cy.get(tag)
+						.first()
+						.should('have.css', 'color', 'rgb(238, 238, 238)');
+				});
+
+				// h1 inner block
+				cy.get('h1')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+
+				// h2 inner block
+				cy.get('h2')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 32, 32)');
+
+				// h3 inner block
+				cy.get('h3')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 64, 64)');
+
+				// h4 inner block
+				cy.get('h4')
+					.first()
+					.should('have.css', 'background-color', 'rgb(255, 96, 96)');
+
+				// h5 inner block
+				cy.get('h5')
+					.first()
+					.should(
+						'have.css',
+						'background-color',
+						'rgb(255, 128, 128)'
+					);
+
+				// h6 inner block
+				cy.get('h6')
+					.first()
+					.should(
+						'have.css',
+						'background-color',
+						'rgb(255, 170, 170)'
+					);
+
+				// button inner block
+				cy.get('.wp-element-button')
+					.first()
+					.should(
 						'have.css',
 						'background-color',
 						'rgb(238, 238, 238)'
 					);
-				});
-
-			// heading inner block
-			['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach((tag) => {
-				cy.get(tag)
-					.first()
-					.should('have.css', 'color', 'rgb(238, 238, 238)');
 			});
-
-			// h1 inner block
-			cy.get('h1')
-				.first()
-				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
-
-			// h2 inner block
-			cy.get('h2')
-				.first()
-				.should('have.css', 'background-color', 'rgb(255, 32, 32)');
-
-			// h3 inner block
-			cy.get('h3')
-				.first()
-				.should('have.css', 'background-color', 'rgb(255, 64, 64)');
-
-			// h4 inner block
-			cy.get('h4')
-				.first()
-				.should('have.css', 'background-color', 'rgb(255, 96, 96)');
-
-			// h5 inner block
-			cy.get('h5')
-				.first()
-				.should('have.css', 'background-color', 'rgb(255, 128, 128)');
-
-			// h6 inner block
-			cy.get('h6')
-				.first()
-				.should('have.css', 'background-color', 'rgb(255, 170, 170)');
-
-			// button inner block
-			cy.get('.wp-element-button')
-				.first()
-				.should('have.css', 'background-color', 'rgb(238, 238, 238)');
-		});
 	});
 });
