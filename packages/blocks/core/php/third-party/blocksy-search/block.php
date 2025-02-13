@@ -15,19 +15,19 @@ return array_merge(
 			[
 				'root' => ' .ct-search-form',
 				'blockera/elements/input'   => [
-					'root' => '.ct-search-form input',
+					'root' => 'input',
 				],
 				'blockera/elements/button'   => [
-					'root' => '.ct-search-form .ct-search-form-controls .wp-element-button',
+					'root' => '.ct-search-form-controls .wp-element-button',
 				],
 				'blockera/elements/result-dropdown'   => [
-					'root' => '.ct-search-form .ct-search-results',
+					'root' => '.ct-search-results',
 				],
 				'blockera/elements/result-link'   => [
-					'root' => '.ct-search-form .ct-search-results .ct-search-item',
+					'root' => '.ct-search-results .ct-search-item',
 				],
 				'blockera/elements/filter'   => [
-					'root' => '.ct-search-form .ct-fake-select-container .ct-fake-select',
+					'root' => '.ct-fake-select-container .ct-fake-select',
 				],
 			]
 		),
