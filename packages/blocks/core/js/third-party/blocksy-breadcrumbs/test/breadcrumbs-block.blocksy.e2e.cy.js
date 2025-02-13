@@ -611,7 +611,7 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		});
 	});
 
-	it.only('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
 		appendBlocks(`<!-- wp:blocksy/breadcrumbs /-->`);
 
 		cy.getBlock('blocksy/breadcrumbs').first().click();
