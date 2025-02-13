@@ -9,14 +9,13 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Avatar Block → Selectors test', () => {
+describe('Calendar Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Check Attributes CSS selectors customization to work in editor and front-end', () => {
-		appendBlocks(`<!-- wp:avatar {"size":70} /-->
-		`);
+	it('Functionality + Inner blocks', () => {
+		appendBlocks(`<!-- wp:avatar {"size":70} /-->`);
 
 		// Select target block
 		cy.getBlock('core/avatar').click();

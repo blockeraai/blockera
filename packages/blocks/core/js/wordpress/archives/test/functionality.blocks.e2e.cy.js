@@ -11,12 +11,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Archives Block → Inner Blocks', () => {
+describe('Archives Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in block editor and front-end', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:archives /-->\n `);
 
 		// Select target block
