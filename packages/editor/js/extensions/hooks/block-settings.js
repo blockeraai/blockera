@@ -198,15 +198,12 @@ function mergeBlockSettings(
 			return settings?.variations;
 		}
 
-		const variations = getBlockVariations(settings.name);
-
-		// Unregister existing variations.
-		variations?.forEach((variation) => {
-			unregisterBlockVariation(settings.name, variation.name);
-		});
-
 		// Re-register the block variations with blockera icon.
-		variations?.forEach((variation) => {
+		getBlockVariations(settings.name)?.forEach((variation) => {
+			if (variation?.icon?.props?.defaultIcon) {
+				return;
+			}
+			unregisterBlockVariation(settings.name, variation.name);
 			registerBlockVariation(settings.name, {
 				...variation,
 				icon: (
