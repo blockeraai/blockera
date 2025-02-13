@@ -353,9 +353,12 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		$block_type = blockera_get_block_type( $args['block-name'] );
 
-		$cloned_block_type = new WP_Block_Type( $args['block-name'], $block_type );
+		if ($block_type) {
+			// Clone block type to avoid mutating the original block type.
+			$cloned_block_type = clone $block_type;
+		}
 
-		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) ) {
+		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) && isset($cloned_block_type) ) {
 
 			$selector_id = blockera_get_normalized_inner_block_id( $args['block-type'] );
 
@@ -365,11 +368,15 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		$has_fallback = ! empty( $args['fallback'] );
 
-		$selector = wp_get_block_css_selector( $cloned_block_type, $feature_id, ! $has_fallback );
+		// Ensure the block type is not null and the block type name starts with 'core/'.
+		if (isset($cloned_block_type) && ( str_starts_with($block_type->name, 'core/') || isset($cloned_block_type->selectors['root']) )) {
 
-		if ( ! $selector && $has_fallback ) {
+			$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, ! $has_fallback);
 
-			$selector = wp_get_block_css_selector( $cloned_block_type, $args['fallback'], true );
+			if (! $selector && $has_fallback) {
+
+				$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
+			}
 		}
 
 		// Imagine the current block is master!
