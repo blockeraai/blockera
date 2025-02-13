@@ -2,6 +2,11 @@
 /**
  * External dependencies
  */
+import {
+	getBlockVariations,
+	registerBlockVariation,
+	unregisterBlockVariation,
+} from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
 import {
@@ -192,6 +197,23 @@ function mergeBlockSettings(
 		if (!isAvailableBlock()) {
 			return settings?.variations;
 		}
+
+		// Re-register the block variations with blockera icon.
+		getBlockVariations(settings.name)?.forEach((variation) => {
+			if (variation?.icon?.props?.defaultIcon) {
+				return;
+			}
+			unregisterBlockVariation(settings.name, variation.name);
+			registerBlockVariation(settings.name, {
+				...variation,
+				icon: (
+					<BlockIcon
+						defaultIcon={variation?.icon || settings?.icon}
+						name={settings.name}
+					/>
+				),
+			});
+		});
 
 		return [
 			...(settings?.variations || []),

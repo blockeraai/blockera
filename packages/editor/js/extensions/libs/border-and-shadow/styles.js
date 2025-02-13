@@ -53,6 +53,7 @@ export const BorderAndShadowStyles = ({
 		blockName,
 		attributes: currentBlockAttributes,
 		blockeraStyleEngineConfig: blockSupports?.blockeraStyleEngineConfig,
+		currentBlock,
 	};
 
 	const sharedParams = {

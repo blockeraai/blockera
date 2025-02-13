@@ -17,6 +17,12 @@
 			}
 		},
 		{
+			"step": "setSiteOptions",
+			"options": {
+				"blogname": "Blockera Demo"
+			}
+		},
+		{
 			"step": "installTheme",
 			"themeData": {
 				"resource": "wordpress.org/themes",

@@ -83,15 +83,27 @@ export const getBlockSupportFallback = (
  * @param {Object} supports the block support list of support category.
  * @param {string} support the support name.
  * @param {string} property the property name.
+ * @param {string} currentBlock the current block name.
+ * @param {string} fallback the fallback value.
  *
  * @return {Object} the support styleEngineConfig.
  */
 export const getBlockSupportStyleEngineConfig = (
 	supports: Object,
 	support: string,
-	property: string
+	property: string,
+	currentBlock: string,
+	fallback: string
 ): Object => {
-	return supports[support]?.['style-engine-config']?.[property];
+	if (supports[support]?.['style-engine-config']?.for) {
+		if (supports[support]?.['style-engine-config']?.for === currentBlock) {
+			return supports[support]?.['style-engine-config']?.[property];
+		}
+
+		return fallback;
+	}
+
+	return supports[support]?.['style-engine-config']?.[property] ?? fallback;
 };
 
 /**

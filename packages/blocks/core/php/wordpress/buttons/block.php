@@ -15,7 +15,9 @@ return array_merge(
 			[
 				'blockeraDisplay' => [
 					'type'    => 'string',
-					'default' => 'flex',
+					'default' => [
+						'value' => 'flex',
+					],
 				],
 			]
 		),
