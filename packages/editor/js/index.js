@@ -41,6 +41,7 @@ export * from './extensions';
 export { Observer } from './observer';
 export {
 	CanvasEditor,
+	getBaseBreakpoint,
 	isBaseBreakpoint,
 	bootstrapCanvasEditor,
 } from './canvas-editor';

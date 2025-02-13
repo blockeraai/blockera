@@ -3,6 +3,7 @@ ABSPATH
 autoloader
 backface
 blockera
+Blocksy
 clsx
 freemius
 phpcs

@@ -285,14 +285,24 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 		$pseudo_class        = $args['pseudo_class'] ?? '';
 		$parent_pseudo_class = $args['parent_pseudo_class'] ?? '';
 
-		return sprintf(
-			'%1$s%2$s%3$s%4$s%5$s',
-			trim( $root_selector ),
-			! empty( $parent_pseudo_class ) ? ':' . $parent_pseudo_class : '',
-			str_starts_with( $picked_selector, '&' ) || empty( $root_selector ) ? '' : ' ',
-			blockera_process_ampersand_selector_char( $picked_selector ),
-			empty( $pseudo_class ) ? '' : ':' . $pseudo_class
-		);
+		// Pre-calculate reused values.
+		$has_parent_pseudo = ! empty( $parent_pseudo_class );
+		$has_pseudo        = ! empty( $pseudo_class );
+		$root              = trim( $root_selector );
+		
+		$formatted_selectors = [];
+		foreach (explode( ', ', $picked_selector ) as $selector) {
+			$selector    = trim($selector);
+			$needs_space = ! str_starts_with($selector, '&') && ! empty($root);
+			
+			$formatted_selectors[] = $root . 
+				( $has_parent_pseudo ? ':' . $parent_pseudo_class : '' ) .
+				( $needs_space ? ' ' : '' ) .
+				blockera_process_ampersand_selector_char($selector) .
+				( $has_pseudo ? ':' . $pseudo_class : '' );
+		}
+
+		return implode(', ', $formatted_selectors);
 	}
 }
 
@@ -343,9 +353,12 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		$block_type = blockera_get_block_type( $args['block-name'] );
 
-		$cloned_block_type = new WP_Block_Type( $args['block-name'], $block_type );
+		if ($block_type) {
+			// Clone block type to avoid mutating the original block type.
+			$cloned_block_type = clone $block_type;
+		}
 
-		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) ) {
+		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) && isset($cloned_block_type) ) {
 
 			$selector_id = blockera_get_normalized_inner_block_id( $args['block-type'] );
 
@@ -355,11 +368,15 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		$has_fallback = ! empty( $args['fallback'] );
 
-		$selector = wp_get_block_css_selector( $cloned_block_type, $feature_id, ! $has_fallback );
+		// Ensure the block type is not null and the block type name starts with 'core/'.
+		if (isset($cloned_block_type) && ( str_starts_with($block_type->name, 'core/') || isset($cloned_block_type->selectors['root']) )) {
 
-		if ( ! $selector && $has_fallback ) {
+			$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, ! $has_fallback);
 
-			$selector = wp_get_block_css_selector( $cloned_block_type, $args['fallback'], true );
+			if (! $selector && $has_fallback) {
+
+				$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
+			}
 		}
 
 		// Imagine the current block is master!
@@ -437,7 +454,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 	 */
 	function blockera_append_root_block_css_selector( string $selector, string $root, array $args = [] ): string {
 
-		// Assume recieved selector is invalid.
+		// Assume received selector is invalid.
 		if ( empty( trim( $selector ) ) ) {
 
 			return $root;
@@ -446,7 +463,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		$preg_quote = preg_quote( $args['block-name'], '/' );
 		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
-		// Assume recieved selector is another reference to root, so we should concat together.
+		// Assume received selector is another reference to root, so we should concat together.
 		if ( preg_match( $pattern, $selector, $matches ) ) {
 
 			// Appending blockera roo unique css selector into picked your selector.
@@ -466,12 +483,13 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $selector;
 		}
 
-		// Assume received selector started with html tag name!
-		if ( '.' !== $selector[0] ) {
+		if ( '.' !== $selector[0] && ! str_starts_with($selector, ' ')) {
 
+			// If selector started with html tag name, we imagine it's html tag name of root.
 			return "{$selector}{$root}";
 		}
 
+		// If selector started with dot or any other classname of child elements, we imagine it's other classname of root or child of root.
 		return "{$root}{$selector}";
 	}
 }

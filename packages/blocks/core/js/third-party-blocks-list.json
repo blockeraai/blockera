@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 1,
-		"supported": 1,
-		"soft-supported": 1,
+		"total": 13,
+		"supported": 13,
+		"soft-supported": 13,
 		"not-supported": 0,
 		"no-need-to-support": 0
 	},
@@ -15,6 +15,115 @@
 				"name": "The Icon Block",
 				"author": "Nick Diego",
 				"link": "https://wordpress.org/plugins/icon-block/"
+			}
+		},
+		{
+			"name": "blocksy/breadcrumbs",
+			"title": "Breadcrumbs",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/query",
+			"title": "Advanced Posts",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			},
+			"note": "We can add support for slider arrow and also pagination items as inner blocks if users request it."
+		},
+		{
+			"name": "blocksy/post-template",
+			"title": "Post Template",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/tax-query",
+			"title": "Advanced Taxonomies",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/tax-template",
+			"title": "Tax Template",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/widgets-wrapper",
+			"title": "Widgets Wrapper",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/about-me",
+			"title": "About Me Controls",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/contact-info",
+			"title": "Contact Info",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/socials",
+			"title": "Socials",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/share-box",
+			"title": "Share Box",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/search",
+			"title": "Search",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
+			}
+		},
+		{
+			"name": "blocksy/dynamic-data",
+			"title": "Dynamic Data",
+			"product": {
+				"name": "Blocksy Companion",
+				"author": "CreativeThemes",
+				"link": "https://wordpress.org/plugins/blocksy-companion/"
 			}
 		}
 	],
