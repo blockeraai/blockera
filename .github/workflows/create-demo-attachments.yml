@@ -100,8 +100,8 @@ jobs:
                   # Replace URL_PLACEMENT with the newly generated URL
                   ENCODED_JSON=$(echo "$FINAL_JSON" | jq --arg new_url "${{ env.uploaded_zip_file }}" '.steps[2].pluginData.url = "${{ env.uploaded_zip_file }}"')
 
-                  # Update the blogname to include PR number
-                  ENCODED_JSON=$(echo "$ENCODED_JSON" | jq --arg pr_num "${{ github.event.pull_request.number }}" '.steps[3].siteOptions.blogname = "Blockera Demo (PR \($pr_num))"')
+                  # Update the blogname to append PR number
+                  ENCODED_JSON=$(echo "$ENCODED_JSON" | jq --arg pr_num "${{ github.event.pull_request.number }}" '.steps[3].siteOptions.blogname += " (PR \($pr_num))"')
 
                   # Base64 encode the updated JSON
                   BASE64_ENCODED_JSON=$(echo "$ENCODED_JSON" | base64 -w 0)
