@@ -22,16 +22,10 @@ describe('Testing core/columns block registered default attributes value', () =>
 		getWPDataObject().then((data) => {
 			const attributes = getBlockType(data, 'core/columns').attributes;
 
-			// Assertion for sync registered default "blockeraDisplay" value with type!
-			expect(
-				attributes?.blockeraDisplay?.type ===
-					typeof attributes?.blockeraDisplay?.default
-			).to.be.equal(true);
-
 			// Assertion for sync registered default "blockeraDisplay" value with selected block "blockeraDisplay" value.
-			expect(attributes?.blockeraDisplay?.default).to.be.deep.equal(
-				getSelectedBlock(data, 'blockeraDisplay')
-			);
+			expect(
+				attributes?.blockeraDisplay?.default?.value
+			).to.be.deep.equal(getSelectedBlock(data, 'blockeraDisplay'));
 		});
 	});
 });
