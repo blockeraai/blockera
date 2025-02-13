@@ -22,9 +22,30 @@ describe('Archives Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/archives').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/archives').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/item
@@ -97,6 +118,12 @@ describe('Archives Block → Inner Blocks', () => {
 		//
 		savePage();
 		redirectToFrontPage();
+
+		cy.get('.blockera-block.wp-block-archives').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		cy.get('.blockera-block.wp-block-archives').within(() => {
 			// elements/item
