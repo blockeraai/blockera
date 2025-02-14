@@ -244,16 +244,25 @@ export function addNewGroupToPost() {
  * From inside the WordPress editor open the blockera Gutenberg editor panel
  */
 export function savePage() {
-	cy.get(
-		'.editor-header__settings button.is-primary,.edit-post-header__settings button.is-primary'
-	).click();
+	cy.get('.editor-post-publish-button').click();
 
-	cy.get('.components-editor-notices__snackbar', { timeout: 120000 }).should(
-		'not.be.empty'
+	// Check for snackbar and click primary button if it exists
+	cy.get('body').then(($body) => {
+		if (
+			$body.find(
+				'.entities-saved-states__panel .editor-entities-saved-states__save-button'
+			).length
+		) {
+			cy.get(
+				'.entities-saved-states__panel .editor-entities-saved-states__save-button'
+			).click();
+		}
+	});
+
+	// Check for success notification
+	cy.get('.components-snackbar, .components-notice.is-success').should(
+		'be.visible'
 	);
-
-	// Reload the page to ensure that we're not hitting any block errors
-	// cy.reload();
 }
 
 export function appendBlocks(blocksCode) {
@@ -278,7 +287,7 @@ export function appendBlocks(blocksCode) {
  * Redirect to front end page from current published post.
  */
 export function redirectToFrontPage() {
-	cy.get('[aria-label="View Post"]')
+	cy.get('.blockera-control-canvas-editor-preview-link a')
 		.invoke('attr', 'href')
 		.then((href) => {
 			cy.visit(href);
