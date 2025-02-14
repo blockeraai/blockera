@@ -13,20 +13,41 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comments Pagination Numbers Block → Inner Blocks', () => {
+describe('Comments Pagination Numbers Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(testContent);
 
 		// Select target block
 		cy.getBlock('core/comments-pagination-numbers').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/comments-pagination-numbers').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/numbers inner block
@@ -89,5 +110,7 @@ describe('Comments Pagination Numbers Block → Inner Blocks', () => {
 					'rgb(255, 64, 64)'
 				);
 			});
+
+		// todo we can not assert front end here, because we do not have enough comments on CI and needs to be fixed to test this
 	});
 });
