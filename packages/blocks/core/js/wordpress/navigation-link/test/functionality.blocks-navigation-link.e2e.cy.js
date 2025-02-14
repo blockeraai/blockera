@@ -5,6 +5,9 @@ import {
 	createPost,
 	appendBlocks,
 	openInnerBlocksExtension,
+	setInnerBlock,
+	savePage,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe(
@@ -17,7 +20,7 @@ describe(
 			createPost();
 		});
 
-		it('Inner blocks existence', () => {
+		it('Functionality + Inner blocks', () => {
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
@@ -44,7 +47,7 @@ describe(
 			cy.get('input[type="text"]:focus').type('#test{enter}');
 
 			// switch to target block
-			cy.getBlock('core/navigation-link').first().click();
+			cy.getBlock('core/navigation-link').last().click({ force: true });
 
 			// assert block card
 			cy.get('.blockera-extension-block-card.master-block-card').should(
@@ -66,6 +69,62 @@ describe(
 				// no other item
 				cy.getByDataTest('core/paragraph').should('not.exist');
 			});
+
+			//
+			// 2. Edit Block
+			//
+
+			//
+			// 2.0. Block Styles
+			//
+			cy.getBlock('core/navigation-link')
+				.last()
+				.should('not.have.css', 'background-clip', 'padding-box');
+
+			cy.getParentContainer('Clipping').within(() => {
+				cy.customSelect('Clip to Padding');
+			});
+
+			cy.getBlock('core/navigation-link')
+				.last()
+				.should('have.css', 'background-clip', 'padding-box');
+
+			//
+			// 2.1. elements/link inner block
+			//
+			setInnerBlock('elements/link');
+
+			cy.setColorControlValue('BG Color', 'ff0000');
+
+			cy.getBlock('core/navigation-link')
+				.last()
+				.within(() => {
+					cy.get('a').should(
+						'have.css',
+						'background-color',
+						'rgb(255, 0, 0)'
+					);
+				});
+
+			//
+			// 2. Assert inner blocks selectors in front end
+			//
+			savePage();
+			redirectToFrontPage();
+
+			cy.get('.blockera-block.wp-block-navigation-link')
+				.last()
+				.should('have.css', 'background-clip', 'padding-box');
+
+			cy.get('.blockera-block.wp-block-navigation-link')
+				.last()
+				.within(() => {
+					cy.get('a').should(
+						'have.css',
+						'background-color',
+						'rgb(255, 0, 0)'
+					);
+				});
 		});
 
 		it('Block should be supported + switch to parent should work', () => {
@@ -95,7 +154,7 @@ describe(
 			cy.get('input[type="text"]:focus').type('#test{enter}');
 
 			// switch to target block
-			cy.getBlock('core/navigation-link').first().click();
+			cy.getBlock('core/navigation-link').last().click({ force: true });
 
 			// assert block card
 			cy.get('.blockera-extension-block-card.master-block-card').should(
