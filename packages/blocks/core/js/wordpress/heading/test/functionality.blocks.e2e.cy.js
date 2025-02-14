@@ -31,7 +31,7 @@ describe('Heading Block → Functionality + Inner blocks', () => {
 		);
 
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
 
 		//
