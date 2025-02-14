@@ -5,6 +5,9 @@ import {
 	createPost,
 	appendBlocks,
 	openInnerBlocksExtension,
+	setInnerBlock,
+	savePage,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe(
@@ -17,7 +20,7 @@ describe(
 			createPost();
 		});
 
-		it('Inner blocks existence', () => {
+		it('Functionality + Inner blocks', () => {
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
@@ -39,12 +42,15 @@ describe(
 			cy.get('button.editor-block-list-item-home-link').last().click();
 
 			// switch to target block
-			cy.getBlock('core/home-link').first().click();
+			cy.getBlock('core/home-link').last().click();
 
-			// assert block card
-			cy.get('.blockera-extension-block-card.master-block-card').should(
-				'exist'
-			);
+			// Block supported is active
+			cy.get('.blockera-extension-block-card').should('be.visible');
+
+			// Has inner blocks
+			cy.get(
+				'.blockera-extension.blockera-extension-inner-blocks'
+			).should('exist');
 
 			//
 			// 1. Inner blocks existence
@@ -61,6 +67,62 @@ describe(
 				// no other item
 				cy.getByDataTest('core/paragraph').should('not.exist');
 			});
+
+			//
+			// 1. Edit Block
+			//
+
+			//
+			// 1.0. Block Styles
+			//
+			cy.getBlock('core/home-link')
+				.last()
+				.should('not.have.css', 'background-clip', 'padding-box');
+
+			cy.getParentContainer('Clipping').within(() => {
+				cy.customSelect('Clip to Padding');
+			});
+
+			cy.getBlock('core/home-link')
+				.last()
+				.should('have.css', 'background-clip', 'padding-box');
+
+			//
+			// 1.1. Inner blocks
+			//
+			setInnerBlock('elements/link');
+
+			cy.setColorControlValue('BG Color', 'ff0000');
+
+			cy.getBlock('core/home-link')
+				.last()
+				.within(() => {
+					cy.get('a').should(
+						'have.css',
+						'background-color',
+						'rgb(255, 0, 0)'
+					);
+				});
+
+			//
+			// 2. Assert inner blocks selectors in front end
+			//
+			savePage();
+			redirectToFrontPage();
+
+			cy.get('.blockera-block.wp-block-home-link')
+				.last()
+				.should('have.css', 'background-clip', 'padding-box');
+
+			cy.get('.blockera-block.wp-block-home-link')
+				.last()
+				.within(() => {
+					cy.get('a').should(
+						'have.css',
+						'background-color',
+						'rgb(255, 0, 0)'
+					);
+				});
 		});
 
 		it('Block should be supported + switch to parent should work', () => {
