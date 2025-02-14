@@ -272,7 +272,7 @@ export function appendBlocks(blocksCode) {
 	cy.get('.editor-post-text-editor')
 		.focus()
 		.invoke('val', blocksCode)
-		.trigger('change')
+		.trigger('change', { force: true })
 		.then(() => {
 			// type a space to make sure the value is updated in the editor
 			cy.get('.editor-post-text-editor').type(' ', { force: true });
