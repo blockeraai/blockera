@@ -36,6 +36,12 @@ describe('Audio Block → Inner Blocks', () => {
 		//
 		// 1.0. Block Styles
 		//
+		cy.getBlock('core/audio').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});

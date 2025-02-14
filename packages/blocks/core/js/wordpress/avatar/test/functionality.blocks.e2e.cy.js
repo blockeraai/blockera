@@ -9,7 +9,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Calendar Block → Functionality + Inner blocks', () => {
+describe('Avatar Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -31,6 +31,11 @@ describe('Calendar Block → Functionality + Inner blocks', () => {
 		//
 		// 1.0. Block Styles
 		//
+		cy.getBlock('core/avatar').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');

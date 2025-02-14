@@ -36,6 +36,12 @@ describe('Comment Content Block → Functionality + Inner blocks', () => {
 		//
 		// 1.0. Block Styles
 		//
+		cy.getBlock('core/comment-content').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});

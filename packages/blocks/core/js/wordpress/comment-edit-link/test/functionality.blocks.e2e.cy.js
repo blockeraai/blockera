@@ -36,6 +36,12 @@ describe('Comment Edit Link Block → Functionality + Inner blocks', () => {
 		//
 		// 1.0. Block Styles
 		//
+		cy.getBlock('core/comment-edit-link').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});
