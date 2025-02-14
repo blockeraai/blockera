@@ -15,7 +15,7 @@ export function borderFromWPCompatibility({
 }: {
 	attributes: Object,
 }): Object {
-	if (isBorderEmpty(attributes?.blockeraBorder.value)) {
+	if (isBorderEmpty(attributes?.blockeraBorder?.value)) {
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor !== undefined) {

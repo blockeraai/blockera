@@ -118,6 +118,9 @@ class Setup {
 			case 'woocommerce':
 				$this->block_dir_path = sprintf( 'woocommerce/%s', $parsedName[1] );
 				break;
+			case 'blocksy':
+				$this->block_dir_path = sprintf( 'third-party/%s', str_replace( '/', '-', $blockType ) );
+				break;
 			// TODO: Implements other blocks in this here ...
 		}
 	}
