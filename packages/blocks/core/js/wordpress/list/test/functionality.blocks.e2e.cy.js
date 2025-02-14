@@ -10,12 +10,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('List Block → Inner Blocks', () => {
+describe('List Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in block editor and front-end', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:list -->
 <ul><!-- wp:list-item -->
 <li>item 1 <a href="#">link is here</a></li>
@@ -36,9 +36,36 @@ describe('List Block → Inner Blocks', () => {
 		// Switch to parent block
 		cy.getByAriaLabel('Select List').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/list').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/list').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/item
@@ -111,6 +138,12 @@ describe('List Block → Inner Blocks', () => {
 		//
 		savePage();
 		redirectToFrontPage();
+
+		cy.get('.blockera-block.wp-block-list').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		cy.get('.blockera-block.wp-block-list').within(() => {
 			// elements/item
