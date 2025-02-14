@@ -10,12 +10,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Details Block → Inner Blocks', () => {
+describe('Details Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:details -->
 <details class="wp-block-details"><summary>test title</summary><!-- wp:paragraph {"placeholder":"Type / to add a hidden block"} -->
 <p>Paragraph text...</p>
@@ -25,9 +25,36 @@ describe('Details Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/details').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/details').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/details').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/item
@@ -81,6 +108,12 @@ describe('Details Block → Inner Blocks', () => {
 		//
 		savePage();
 		redirectToFrontPage();
+
+		cy.get('.blockera-block.wp-block-details').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		cy.get('.blockera-block.wp-block-details').within(() => {
 			// elements/title
