@@ -4,7 +4,9 @@
 import {
 	editPost,
 	appendBlocks,
-	openInnerBlocksExtension,
+	savePage,
+	redirectToFrontPage,
+	setInnerBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -12,27 +14,79 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comment Date Block → Inner Blocks', () => {
+describe('Comment Date Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		editPost({ postID: 1 });
 	});
 
-	it('Inner blocks existence', () => {
-		appendBlocks(testContent);
+	it('Functionality + Inner blocks', () => {
+		appendBlocks(testContent + ' comment date block ' + Math.random());
 
 		// Select target block
 		cy.getBlock('core/comment-date').first().click();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/paragraph').should('not.exist');
-			}
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
 		);
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/comment-date').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		//
+		// 1.1. Inner blocks
+		//
+		setInnerBlock('elements/link');
+
+		cy.setColorControlValue('BG Color', 'ffdbdb');
+
+		cy.getBlock('core/comment-date')
+			.first()
+			.within(() => {
+				cy.get('a')
+					.first()
+					.should(
+						'have.css',
+						'background-color',
+						'rgb(255, 219, 219)'
+					);
+			});
+
+		//
+		// 2. Assert front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block.wp-block-comment-date').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.blockera-block.wp-block-comment-date')
+			.first()
+			.within(() => {
+				cy.get('a')
+					.first()
+					.should(
+						'have.css',
+						'background-color',
+						'rgb(255, 219, 219)'
+					);
+			});
 	});
 });
