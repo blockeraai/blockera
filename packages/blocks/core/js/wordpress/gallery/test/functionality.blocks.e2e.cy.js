@@ -10,12 +10,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Gallery Block → Inner Blocks', () => {
+describe('Gallery Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(
 			`<!-- wp:gallery {"linkTo":"none"} -->
 <figure class="wp-block-gallery has-nested-images columns-default is-cropped"><!-- wp:image {"id":7144,"sizeSlug":"large","linkDestination":"none"} -->
@@ -38,9 +38,36 @@ describe('Gallery Block → Inner Blocks', () => {
 
 		cy.getByAriaLabel('Select Gallery').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/gallery').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/gallery').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. Image inner block
@@ -104,7 +131,13 @@ describe('Gallery Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.wp-block-gallery').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.blockera-block.wp-block-gallery').within(() => {
 			// image inner block
 			cy.get('.wp-block-image img')
 				.first()
