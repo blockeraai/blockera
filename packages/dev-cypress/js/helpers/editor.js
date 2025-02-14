@@ -287,6 +287,11 @@ export function appendBlocks(blocksCode) {
  * Redirect to front end page from current published post.
  */
 export function redirectToFrontPage() {
+	// Abort any pending requests before navigation
+	cy.window().then((win) => {
+		win.stop();
+	});
+
 	cy.get('.blockera-control-canvas-editor-preview-link a')
 		.invoke('attr', 'href')
 		.then((href) => {
