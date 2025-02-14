@@ -10,7 +10,7 @@ import {
 	setParentBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('File Block → Functionality + Inner blocks', () => {
+describe('File Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -32,7 +32,7 @@ describe('File Block → Functionality + Inner blocks', () => {
 		);
 
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
 
 		//

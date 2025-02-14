@@ -8,7 +8,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Embed Block → Functionality + Inner blocks', () => {
+describe('Embed Block', () => {
 	beforeEach(() => {
 		createPost();
 	});

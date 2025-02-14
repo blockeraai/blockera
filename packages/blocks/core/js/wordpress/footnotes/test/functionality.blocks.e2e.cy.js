@@ -9,7 +9,7 @@ import {
 	setInnerBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Footnotes Block → Functionality + Inner blocks', () => {
+describe('Footnotes Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -41,7 +41,7 @@ describe('Footnotes Block → Functionality + Inner blocks', () => {
 		);
 
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
 
 		//

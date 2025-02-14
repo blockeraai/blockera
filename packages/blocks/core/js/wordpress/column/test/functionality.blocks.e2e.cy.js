@@ -10,7 +10,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Column Block → Functionality + Inner blocks', () => {
+describe('Column Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -75,7 +75,7 @@ describe('Column Block → Functionality + Inner blocks', () => {
 		);
 
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
 
 		//

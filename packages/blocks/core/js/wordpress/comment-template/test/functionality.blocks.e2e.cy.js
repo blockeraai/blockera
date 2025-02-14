@@ -13,7 +13,7 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comment Template Block → Functionality + Inner blocks', () => {
+describe('Comment Template Block', () => {
 	beforeEach(() => {
 		editPost({ postID: 1 });
 	});

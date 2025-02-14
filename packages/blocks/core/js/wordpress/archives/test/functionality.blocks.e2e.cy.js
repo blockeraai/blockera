@@ -11,7 +11,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Archives Block → Functionality + Inner blocks', () => {
+describe('Archives Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -31,7 +31,7 @@ describe('Archives Block → Functionality + Inner blocks', () => {
 		);
 
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
 
 		//

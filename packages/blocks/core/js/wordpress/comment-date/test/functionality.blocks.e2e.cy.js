@@ -14,7 +14,7 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comment Date Block → Functionality + Inner blocks', () => {
+describe('Comment Date Block', () => {
 	beforeEach(() => {
 		editPost({ postID: 1 });
 	});

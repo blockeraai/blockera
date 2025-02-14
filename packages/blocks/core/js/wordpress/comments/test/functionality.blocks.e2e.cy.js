@@ -14,7 +14,7 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comments Block → Functionality + Inner blocks', () => {
+describe('Comments Block', () => {
 	beforeEach(() => {
 		editPost({ postID: 1 });
 	});

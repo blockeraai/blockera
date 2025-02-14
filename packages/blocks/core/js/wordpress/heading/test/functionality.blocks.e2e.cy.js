@@ -9,7 +9,7 @@ import {
 	setInnerBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Heading Block → Functionality + Inner blocks', () => {
+describe('Heading Block', () => {
 	beforeEach(() => {
 		createPost();
 	});

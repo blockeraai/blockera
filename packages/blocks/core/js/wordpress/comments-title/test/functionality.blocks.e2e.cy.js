@@ -13,7 +13,7 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comments Title Block → Functionality + Inner blocks', () => {
+describe('Comments Title Block', () => {
 	beforeEach(() => {
 		editPost({ postID: 1 });
 	});

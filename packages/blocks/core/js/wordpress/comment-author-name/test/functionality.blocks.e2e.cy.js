@@ -14,7 +14,7 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comment Author Name Block → Functionality + Inner blocks', () => {
+describe('Comment Author Name Block', () => {
 	beforeEach(() => {
 		editPost({ postID: 1 });
 	});

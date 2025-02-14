@@ -9,7 +9,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Avatar Block → Functionality + Inner blocks', () => {
+describe('Avatar Block', () => {
 	beforeEach(() => {
 		createPost();
 	});

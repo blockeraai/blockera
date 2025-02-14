@@ -8,7 +8,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Code Block → Functionality + Inner blocks', () => {
+describe('Code Block', () => {
 	beforeEach(() => {
 		createPost();
 	});

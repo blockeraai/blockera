@@ -12,7 +12,7 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comments Pagination Block → Functionality + Inner blocks', () => {
+describe('Comments Pagination Block', () => {
 	beforeEach(() => {
 		createPost();
 	});

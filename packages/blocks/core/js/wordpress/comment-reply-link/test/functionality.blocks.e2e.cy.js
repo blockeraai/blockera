@@ -14,7 +14,7 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comment Reply Link Block → Functionality + Inner blocks', () => {
+describe('Comment Reply Link Block', () => {
 	beforeEach(() => {
 		editPost({ postID: 1 });
 	});

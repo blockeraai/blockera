@@ -9,7 +9,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Calendar Block → Functionality + Inner blocks', () => {
+describe('Calendar Block', () => {
 	beforeEach(() => {
 		createPost();
 	});

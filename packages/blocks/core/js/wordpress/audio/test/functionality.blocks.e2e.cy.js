@@ -8,7 +8,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Audio Block → Inner Blocks', () => {
+describe('Audio Block', () => {
 	beforeEach(() => {
 		createPost();
 	});

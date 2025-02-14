@@ -10,7 +10,7 @@ import {
 	setInnerBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Cover Block → Functionality + Inner blocks', () => {
+describe('Cover Block', () => {
 	beforeEach(() => {
 		createPost();
 	});

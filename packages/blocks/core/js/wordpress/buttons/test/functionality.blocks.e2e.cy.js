@@ -9,7 +9,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Buttons Block → Functionality + Inner blocks', () => {
+describe('Buttons Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
@@ -38,7 +38,7 @@ describe('Buttons Block → Functionality + Inner blocks', () => {
 		);
 
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
 
 		//

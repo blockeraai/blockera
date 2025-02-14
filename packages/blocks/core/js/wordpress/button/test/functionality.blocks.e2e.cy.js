@@ -8,7 +8,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Button Block → Functionality + Inner blocks', () => {
+describe('Button Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
