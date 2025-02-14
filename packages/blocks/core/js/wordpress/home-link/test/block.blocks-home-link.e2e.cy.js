@@ -20,6 +20,13 @@ describe(
 			createPost();
 		});
 
+		afterEach(() => {
+			// to prevent any pending requests from interfering with the next test
+			cy.window().then((win) => {
+				win.stop();
+			});
+		});
+
 		it('Functionality + Inner blocks', () => {
 			appendBlocks('<!-- wp:navigation /-->');
 
