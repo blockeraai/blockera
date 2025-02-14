@@ -10,19 +10,46 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Loginout Block → Inner Blocks', () => {
+describe('Loginout Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors on front-end', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:loginout {"displayLoginAsForm":true} /-->  `);
 
 		cy.getBlock('core/loginout').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/loginout').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/loginout').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/form inner block
@@ -30,6 +57,8 @@ describe('Loginout Block → Inner Blocks', () => {
 		setInnerBlock('elements/form');
 
 		cy.setColorControlValue('BG Color', 'ff0000');
+
+		// while WP not shows form here, we can not assert functionality and not needed
 
 		//
 		// 1.2. elements/input-label inner block
@@ -39,6 +68,8 @@ describe('Loginout Block → Inner Blocks', () => {
 
 		cy.setColorControlValue('BG Color', 'ff2020');
 
+		// while WP not shows form here, we can not assert functionality and not needed
+
 		//
 		// 1.3. elements/input inner block
 		//
@@ -46,6 +77,8 @@ describe('Loginout Block → Inner Blocks', () => {
 		setInnerBlock('elements/input');
 
 		cy.setColorControlValue('BG Color', 'ff4040');
+
+		// while WP not shows form here, we can not assert functionality and not needed
 
 		//
 		// 1.4. elements/remember inner block
@@ -55,6 +88,8 @@ describe('Loginout Block → Inner Blocks', () => {
 
 		cy.setColorControlValue('BG Color', 'ff6060');
 
+		// while WP not shows form here, we can not assert functionality and not needed
+
 		//
 		// 1.5. core/button inner block
 		//
@@ -62,6 +97,8 @@ describe('Loginout Block → Inner Blocks', () => {
 		setInnerBlock('core/button');
 
 		cy.setColorControlValue('BG Color', 'ff8080');
+
+		// while WP not shows form here, we can not assert functionality and not needed
 
 		//
 		// 2. Assert inner blocks selectors in front end
@@ -72,7 +109,13 @@ describe('Loginout Block → Inner Blocks', () => {
 		// logout to see form login elements
 		cy.get('.logged-in.blockera-block a').click();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.logged-out.blockera-block').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.logged-out.blockera-block').within(() => {
 			// elements/form inner block
 			cy.get('form')
 				.first()
