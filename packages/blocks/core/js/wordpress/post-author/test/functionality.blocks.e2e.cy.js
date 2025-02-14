@@ -10,26 +10,56 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Post Author Block → Inner Blocks', () => {
+describe('Post Author Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks('<!-- wp:post-author {"byline":"Author"} /--> ');
 
 		// Select target block
 		cy.getBlock('core/post-author').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/post-author').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/post-author').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. core/avatar inner block
 		//
 		setInnerBlock('core/avatar');
 
+		//
+		// 1.1.1. BG color
+		//
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		cy.getBlock('core/post-author')
@@ -78,7 +108,13 @@ describe('Post Author Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.wp-block-post-author').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.blockera-block.wp-block-post-author').within(() => {
 			// core/avatar inner block
 			cy.get('.wp-block-post-author__avatar > img')
 				.first()
