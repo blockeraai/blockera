@@ -12,21 +12,41 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Comments Pagination Previous Block → Inner Blocks', () => {
+describe('Comments Pagination Previous Block → Functionality + Inner blocks', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	// We didn't check it in front end because it needs pagination
-	it('Inner blocks existence + CSS selectors in editor', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(testContent);
 
 		// Select target block
 		cy.getBlock('core/comments-pagination-previous').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/comments-pagination-previous').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. Arrow inner block
@@ -47,5 +67,7 @@ describe('Comments Pagination Previous Block → Inner Blocks', () => {
 					'rgb(204, 204, 204)'
 				);
 			});
+
+		// todo we can not assert front end here, because we do not have enough comments on CI and needs to be fixed to test this
 	});
 });
