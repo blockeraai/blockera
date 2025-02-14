@@ -12,20 +12,47 @@ import {
 
 import { testContent } from './test-content';
 
-describe('Post Comments Form Block → Inner Blocks', () => {
+describe('Post Comments Form Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Should add all inner blocks to block settings', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(testContent);
 
 		// Select target block
 		cy.getBlock('core/post-comments-form').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/post-comments-form').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/post-comments-form').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/form inner block
@@ -96,11 +123,17 @@ describe('Post Comments Form Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.wp-block-post-comments-form.blockera-block').within(() => {
 			cy.get('a').contains('Log out?').click();
 		});
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.wp-block-post-comments-form.blockera-block').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.wp-block-post-comments-form.blockera-block').within(() => {
 			// elements/title
 			cy.get('.comment-reply-title')
 				.first()
@@ -125,10 +158,12 @@ describe('Post Comments Form Block → Inner Blocks', () => {
 			cy.get('input[type="text"]')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 128, 128)');
-			cy.get('input[type="url"]')
+
+			cy.get('input[name="url"], input[type="url"]')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 128, 128)');
-			cy.get('input[type="email"]')
+
+			cy.get('input[name="email"], input[type="email"]')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 128, 128)');
 
@@ -143,7 +178,7 @@ describe('Post Comments Form Block → Inner Blocks', () => {
 				.should('have.css', 'background-color', 'rgb(255, 187, 187)');
 
 			// core/button
-			cy.get('.wp-block-button > .wp-element-button')
+			cy.get('.wp-block-button > .wp-element-button, [type="submit"]')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 204, 204)');
 		});
