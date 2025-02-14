@@ -19,4 +19,5 @@ export type BlockType = {
 		[key: string]: BlockStateType,
 	},
 	registerExtensions?: (blockName: string) => void,
+	supports?: Object,
 };

@@ -62,4 +62,4 @@ jobs:
             - uses: preactjs/compressed-size-action@v2
               with:
                   repo-token: '${{ secrets.BLOCKERABOT_PAT }}'
-                  pattern: '{dist/**/*.min.js,dist/**/*.min.css,blockera.zip,packages/**/*.php,!**/test/**,!**/tests/**}'
+                  pattern: '{dist/**/*.min.js,dist/**/*.min.css,blockera.zip,packages/**/*.php,!**/test/**,!**/tests/**,packages/php/**/*.json,packages/js/**/*.json,packages/**/*.svg}'

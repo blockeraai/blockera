@@ -66,7 +66,7 @@ class AdminAssetsProvider extends AssetsProvider {
 				]
 			);
 
-		} elseif ( ! in_array($pagenow, [ 'post.php', 'post-new.php', 'site-editor.php' ], true) ) {
+		} elseif ( ! in_array($pagenow, [ 'post.php', 'post-new.php', 'site-editor.php', 'widgets.php' ], true) ) {
 
 			add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/after', [ $this, 'telemetryInlineScripts' ] );
 
