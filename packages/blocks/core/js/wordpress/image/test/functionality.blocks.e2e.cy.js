@@ -10,12 +10,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Image Block → Inner Blocks', () => {
+describe('Image Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:image {"id":7139,"width":"706px","height":"auto","aspectRatio":"1","sizeSlug":"full","linkDestination":"custom"} -->
 <figure class="wp-block-image size-full is-resized"><a href="https://placehold.co/600x400"><img src="https://placehold.co/600x400" alt="this is the test
 " class="wp-image-7139" style="aspect-ratio:1;width:706px;height:auto"/></a><figcaption class="wp-element-caption">Image caption is here...</figcaption></figure>
@@ -25,9 +25,36 @@ describe('Image Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/image').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/image').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/image').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. Image caption inner block
@@ -76,7 +103,11 @@ describe('Image Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.wp-block-image')
+			.first()
+			.should('have.css', 'background-clip', 'padding-box');
+
+		cy.get('.blockera-block.wp-block-image').within(() => {
 			// caption inner block
 			cy.get('figcaption')
 				.first()
