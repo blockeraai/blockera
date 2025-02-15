@@ -12,14 +12,12 @@ use Blockera\WordPress\RenderBlock\V1\{
     Parser,
     Render,
     SavePost,
-    Setup,
 };
-
+use Blockera\WordPress\RenderBlock\Setup;
 use Blockera\WordPress\RenderBlock\V2\{
     Transpiler,
 	RenderContent as V2RenderContent,
     SavePost as V2SavePost,
-    Setup as V2Setup,
 };
 
 use Blockera\Editor\{
@@ -83,8 +81,6 @@ class AppServiceProvider extends ServiceProvider {
 
             if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
 
-				$this->app->singleton(V2Setup::class);
-
 				$this->app->singleton(
 					V2SavePost::class,
 					function ( Application $app) {
@@ -94,8 +90,6 @@ class AppServiceProvider extends ServiceProvider {
 				);
 			} else {
 
-				$this->app->singleton(Setup::class);
-
 				$this->app->singleton(
 					SavePost::class,
 					function ( Application $app) {
@@ -104,6 +98,8 @@ class AppServiceProvider extends ServiceProvider {
 					}
 				);
 			}
+
+			$this->app->singleton(Setup::class);
 
             $this->app->singleton(
                 VariableType::class,
@@ -242,13 +238,13 @@ class AppServiceProvider extends ServiceProvider {
         if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
 
             $this->app->make(V2SavePost::class);
-            $this->app->make(V2Setup::class)->apply();
 
         } else {
 
             $this->app->make(SavePost::class);
-        	$this->app->make(Setup::class)->apply();
         }
+
+		$this->app->make(Setup::class)->apply();
 
         $this->app->make(EntityRegistry::class);
 

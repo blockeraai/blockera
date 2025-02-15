@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\WordPress\RenderBlock\V2;
+namespace Blockera\WordPress\RenderBlock;
 
 /**
  * Class Setup to sets block arguments and any other configuration related with gutenberg blocks.
@@ -22,6 +22,7 @@ class Setup {
      * @return void
      */
     public function apply(): void {
+
         add_filter('register_block_type_args', [ $this, 'register_block' ], 9e2, 2);
     }
 
@@ -34,6 +35,7 @@ class Setup {
      * @return array the registered block arguments.
      */
     public function register_block( array $args, string $block_type): array {
+
         if (! in_array($block_type, blockera_get_available_blocks(), true)) {
 
             return $args;
@@ -62,6 +64,7 @@ class Setup {
      * @return array the customized block type arguments.
      */
     public function getCustomizedBlock( string $block_type, array $args): array {
+
         $this->setBlockDirectoryPath($block_type);
 
         $blockFile = sprintf(
@@ -84,6 +87,7 @@ class Setup {
      * @return string the block directory relative path includes in packages/blocks/
      */
     public function getBlockDirectoryPath(): string {
+
         return $this->block_dir_path;
     }
 
@@ -95,6 +99,7 @@ class Setup {
      * @return void
      */
     public function setBlockDirectoryPath( string $blockType): void {
+
         $parsedName = explode('/', $blockType);
 
         if (count($parsedName) < 2) {
@@ -113,6 +118,9 @@ class Setup {
             case 'woocommerce':
                 $this->block_dir_path = sprintf('woocommerce/%s', $parsedName[1]);
                 break;
+			case 'blocksy':
+				$this->block_dir_path = sprintf( 'third-party/%s', str_replace( '/', '-', $blockType ) );
+				break;
                 // TODO: Implements other blocks in this here ...
         }
     }
