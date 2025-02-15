@@ -50,6 +50,12 @@ describe('Blocksy → Advanced Taxonomies (Tax Query) Block → Block support', 
 		//
 		// 1.0. Block Style
 		//
+		cy.getBlock('blocksy/tax-query').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});
