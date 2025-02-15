@@ -12,7 +12,6 @@ type Props = {
 };
 
 const FeatureDesc = ({ status }: Props): React$Element<'p'> => {
-	console.log('status', status);
 	const getDescText = () => {
 		switch (status) {
 			case 'alpha':
