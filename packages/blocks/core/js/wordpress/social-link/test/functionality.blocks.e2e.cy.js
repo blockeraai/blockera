@@ -15,28 +15,55 @@ import {
  */
 import { testContent } from './test-content';
 
-describe('Social Link Block → Inner Blocks', () => {
+describe('Social Link Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Functionality + inner blocks', () => {
 		appendBlocks(testContent);
 
 		// Select target block
 		cy.getBlock('core/social-link').first().click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
 
 		//
-		// 1.1. elements/item-icon
+		// 1.1. Block styles
+		//
+		cy.getBlock('core/social-link').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/social-link').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		//
+		// 1.2. elements/item-icon
 		//
 		setInnerBlock('elements/item-icon');
 
 		//
-		// 1.1.1. BG color
+		// 1.2.1. BG color
 		//
 		cy.setColorControlValue('BG Color', 'ff0000');
 
@@ -73,7 +100,13 @@ describe('Social Link Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.wp-block-social-link').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.blockera-block.wp-block-social-link').within(() => {
 			// elements/item-icon
 			cy.get('svg')
 				.first()
