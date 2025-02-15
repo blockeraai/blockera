@@ -11,12 +11,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('RSS Block → Inner Blocks', () => {
+describe('RSS Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in block editor and front-end', () => {
+	it('Functionality + inner blocks', () => {
 		appendBlocks(
 			`<!-- wp:rss {"feedURL":"http://betterstudio.com/feed/","displayExcerpt":true,"displayAuthor":true,"displayDate":true} /-->`
 		);
@@ -24,9 +24,37 @@ describe('RSS Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/rss').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.0. Block styles
+		//
+
+		cy.getBlock('core/rss').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/rss').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/container
@@ -133,7 +161,13 @@ describe('RSS Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.wp-block-rss').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.blockera-block.wp-block-rss').within(() => {
 			// elements/container
 			cy.get('.wp-block-rss__item')
 				.first()
