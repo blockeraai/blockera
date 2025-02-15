@@ -42,7 +42,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 	 */
 	public function boot(): void {
 
-		add_action( 'wp_footer', [ $this, 'printBlockeraGeneratedStyles' ] );
+		add_action( 'wp_head', [ $this, 'printBlockeraGeneratedStyles' ] );
 
 		add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
 		add_filter( 'blockera/wordpress/' . $this->getId() . '/inline-script/before', [ $this, 'beforeInlineScript' ] );
