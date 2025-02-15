@@ -10,12 +10,12 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Search Block → Inner Blocks', () => {
+describe('Search Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Functionality + inner blocks', () => {
 		appendBlocks(
 			'<!-- wp:search {"label":"Search Title","buttonText":"Search"} /-->\n '
 		);
@@ -23,9 +23,36 @@ describe('Search Block → Inner Blocks', () => {
 		// Select target block
 		cy.getBlock('core/search').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
 		// 1. Edit Inner Blocks
 		//
+
+		//
+		// 1.1. Block styles
+		//
+		cy.getBlock('core/search').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/search').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		//
 		// 1.1. elements/label
@@ -89,7 +116,13 @@ describe('Search Block → Inner Blocks', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.wp-block-search').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		cy.get('.blockera-block.wp-block-search').within(() => {
 			// elements/label
 			cy.get('.wp-block-search__label')
 				.first()
