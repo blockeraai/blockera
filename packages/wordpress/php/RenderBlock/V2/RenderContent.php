@@ -76,8 +76,8 @@ class RenderContent {
 				continue;
 			}
 
-			// Skip front page while post type is not wp_template.
-			if (is_front_page() && 'wp_template' !== $post->post_type) {
+			// Skip posts while in the front page and current post type is not wp_template or wp_template_part.
+			if (is_front_page() && ! in_array($post->post_type, [ 'wp_template', 'wp_template_part' ], true)) {
 				continue;
 			}
 
