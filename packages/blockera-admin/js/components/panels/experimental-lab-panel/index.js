@@ -44,7 +44,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 		fallbackDefaultValue;
 
 	const {
-		blockeraSettings: { earlyAccessLab: savedearlyAccessLabSettings },
+		blockeraSettings: { earlyAccessLab: savedEarlyAccessLabSettings },
 	} = window;
 
 	return (
@@ -105,7 +105,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 							onChange={(checked: boolean) => {
 								setHasUpdates(
 									checked !==
-										savedearlyAccessLabSettings.optimizeStyleGeneration
+										savedEarlyAccessLabSettings.optimizeStyleGeneration
 								);
 
 								setSettings({
