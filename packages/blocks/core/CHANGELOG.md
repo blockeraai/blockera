@@ -91,6 +91,7 @@
 ### Bug Fixes
 - Flex child block section not showing for child blocks of 9 blocks (e.g. `Columns`, `Buttons`, `Social Links` and etc.).
 - `Post Comments Form` block inner blocks not working in non-block themes.
+- The `Separator` inner block of the `Post Terms` not working properly.
 
 ## 1.0.0 (2024-12-08)
 
