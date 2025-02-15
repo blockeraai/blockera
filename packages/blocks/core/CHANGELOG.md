@@ -48,6 +48,7 @@
 
 
 ### Automated Tests
+- Added E2E tests for all core blocks to test block functionality + inner blocks functionality. 🔥🔥
 - Added E2E tests for the Blocksy `Breadcrumbs` block text inner element.
 - Added E2E tests for the Blocksy `Breadcrumbs` block link inner element.
 - Added E2E tests for the Blocksy `Breadcrumbs` block separator inner element.
