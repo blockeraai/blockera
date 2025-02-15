@@ -10,28 +10,55 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Tag Cloud Block → Inner Blocks', () => {
+describe('Tag Cloud Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Functionality + Inner blocks existence', () => {
 		appendBlocks('<!-- wp:tag-cloud {"taxonomy":"category"} /-->\n ');
 
 		// Select target block
 		cy.getBlock('core/tag-cloud').click();
 
+		// Block supported is active
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Has inner blocks
+		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
+			'exist'
+		);
+
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Block
 		//
 
 		//
-		// 1.1. elements/tag-link
+		// 1.1. Block styles
+		//
+		cy.getBlock('core/tag-cloud').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('core/tag-cloud').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		//
+		// 1.2. elements/tag-link
 		//
 		setInnerBlock('elements/tag-link');
 
 		//
-		// 1.1.1. BG color
+		// 1.2.1. BG color
 		//
 		cy.setColorControlValue('BG Color', 'ff0000');
 
@@ -48,6 +75,12 @@ describe('Tag Cloud Block → Inner Blocks', () => {
 		//
 		savePage();
 		redirectToFrontPage();
+
+		cy.get('.blockera-block.wp-block-tag-cloud').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
 
 		cy.get('.blockera-block.wp-block-tag-cloud').within(() => {
 			// elements/tag-link
