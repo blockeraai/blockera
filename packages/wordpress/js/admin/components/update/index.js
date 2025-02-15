@@ -120,6 +120,11 @@ export const Update = ({
 				setStatus(statuses.saved);
 			}
 
+			window.blockeraSettings = {
+				...window.blockeraSettings,
+				...record,
+			};
+
 			setHasUpdates(!hasUpdate);
 		} else {
 			setStatus(statuses.error);
