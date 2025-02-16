@@ -490,7 +490,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		if ( $selector === $root || blockera_is_inner_block( $args['block-type'] ) ) {
 
 			// If a custom root is provided in args, replace it with the combined root selectors.
-			if (isset($args['root'])) {
+			if (isset($args['root']) && ! str_starts_with($selector, ' ')) {
 
 				// Replace the custom root with itself plus the standard root selector.
 				return str_replace($args['root'], "{$args['root']}{$root}", $selector);
