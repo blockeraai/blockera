@@ -402,6 +402,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 			$selector,
 			$args['blockera-unique-selector'],
 			[
+				'root'=> $args['root'] ?? '',
 				'block-type' => $args['block-type'],
 				'block-name' => str_replace( '/', '-', str_replace( 'core/', '', $args['block-name'] ) ),
 			]
@@ -485,9 +486,17 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			);
 		}
 
-		// Imagine selector and root is same.
+		// Handle cases where selector and root are identical or when dealing with inner blocks.
 		if ( $selector === $root || blockera_is_inner_block( $args['block-type'] ) ) {
 
+			// If a custom root is provided in args, replace it with the combined root selectors.
+			if (isset($args['root'])) {
+
+				// Replace the custom root with itself plus the standard root selector.
+				return str_replace($args['root'], "{$args['root']}{$root}", $selector);
+			}
+
+			// Return selector unchanged if no custom root.
 			return $selector;
 		}
 
