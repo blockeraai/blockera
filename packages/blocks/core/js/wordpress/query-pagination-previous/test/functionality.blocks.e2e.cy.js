@@ -80,12 +80,13 @@ describe('Query Pagination Previous Block', () => {
 		//
 		// 2. Assert inner blocks selectors in front end
 		//
-
 		savePage();
 		redirectToFrontPage();
 
 		// Click on next page to enable the previous button
-		cy.get('a[href="?query-48-page=2"]').should('be.visible').click();
+		cy.get('.wp-block-query-pagination').within(() => {
+			cy.get('a[href*="page=2"]').first().should('be.visible').click();
+		});
 
 		cy.get('.blockera-block.wp-block-query-pagination-previous').should(
 			'have.css',
