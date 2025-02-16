@@ -116,6 +116,7 @@ class AdminAssetsProvider extends AssetsProvider {
 					padding: 3px 10px !important;
 					line-height: 1.9 !important;
 					font-size: 12px !important;
+					text-align: center !important;
 				}
 				a.blockera-pro-submenu:hover {
 					background-color: #003bc1 !important;

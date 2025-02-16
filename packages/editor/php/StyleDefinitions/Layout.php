@@ -82,7 +82,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				$item             = $setting['flex-direction'];
 				$changeFlexInside = false;
 
-				if ( $item['direction'] ) {
+				if ( isset($item['alignItems']) && $item['direction'] ) {
 					$declaration['flex-direction'] = $item['direction'];
 				}
 
@@ -92,17 +92,17 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 					'flex-end'   => true,
 				];
 
-				if ( 'column' === $item['direction'] && isset( $normalItems[ $item['alignItems'] ] ) && isset( $normalItems[ $item['justifyContent'] ] )
+				if ( isset($item['alignItems'], $item['direction'], $item['justifyContent']) && 'column' === $item['direction'] && isset( $normalItems[ $item['alignItems'] ] ) && isset( $normalItems[ $item['justifyContent'] ] )
 				) {
 					$changeFlexInside = true;
 				}
 
-				if ( $item['alignItems'] ) {
+				if ( isset($item['alignItems']) && $item['alignItems'] ) {
 					$prop                 = $changeFlexInside ? 'justify-content' : 'align-items';
 					$declaration[ $prop ] = $item['alignItems'];
 				}
 
-				if ( $item['justifyContent'] ) {
+				if ( isset($item['justifyContent']) && $item['justifyContent'] ) {
 					$prop                 = $changeFlexInside ? 'align-items' : 'justify-content';
 					$declaration[ $prop ] = $item['justifyContent'];
 				}

@@ -23,7 +23,7 @@ import {
 	CheckboxControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-
+import { Icon } from '@blockera/icons';
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
 	disableProHints: false,
@@ -41,7 +41,14 @@ export const GeneralPanel = (): MixedElement => {
 	const BlockVisibility = ({ isChecked }: Object): MixedElement => (
 		<Flex direction={'column'} className={'blockera-settings-section'}>
 			<h3 className={'blockera-settings-general section-title'}>
-				🚫 {__('Restricts Blocks by User Roles', 'blockera')}
+				<Icon
+					icon={'slash-circle'}
+					iconSize={24}
+					style={{
+						color: '#ff0c0c',
+					}}
+				/>
+				{__('Restricts Blocks by User Roles', 'blockera')}
 			</h3>
 
 			<p className={'blockera-settings-general section-desc'}>
@@ -185,7 +192,16 @@ export const GeneralPanel = (): MixedElement => {
 
 			<Flex direction={'column'} className={'blockera-settings-section'}>
 				<h3 className={'blockera-settings-general section-title'}>
-					⚙️ {__('Other Settings', 'blockera')}
+					<Icon
+						icon={'globe'}
+						library={'wp'}
+						iconSize={24}
+						style={{
+							color: 'var(--blockera-controls-primary-color)',
+						}}
+					/>
+
+					{__('Other Settings', 'blockera')}
 				</h3>
 
 				<p className={'blockera-settings-general section-desc'}>

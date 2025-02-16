@@ -3,6 +3,7 @@
 namespace Blockera\WordPress;
 
 use Blockera\Bootstrap\Application;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class AssetsLoader registering all blockera core assets into WordPress CMS.
@@ -90,8 +91,6 @@ class AssetsLoader {
 
 			$this->fallback_args = $args['fallback'];
 		}
-
-		add_action( 'wp_footer', [ $this, 'printBlockeraGeneratedStyles' ] );
 
 		if ( ! empty( $args['enqueue-block-assets'] ) ) {
 
@@ -198,22 +197,6 @@ class AssetsLoader {
 				$after_inline_script,
 			);
 		}
-	}
-
-	/**
-	 * Printing blockera requirement css styles on WordPress front page.
-	 *
-	 * @return void
-	 */
-	public function printBlockeraGeneratedStyles(): void {
-
-		echo sprintf(
-			'<style id="blockera-inline-css">%s</style>',
-			apply_filters(
-				'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
-				''
-			)
-		);
 	}
 
 	/**

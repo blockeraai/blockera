@@ -48,6 +48,13 @@ return apply_filters(
                 'menu_slug'  => 'blockera-settings-block-manager',
                 'callback'   => 'blockera_settings_page_template',
             ],
+            'experimental-lab' => [
+                'page_title' => __('Early Access Lab', 'blockera'),
+                'menu_title' => __('Early Access Lab', 'blockera'),
+                'capability' => 'manage_options',
+                'menu_slug'  => 'blockera-settings-experimental-lab',
+                'callback'   => 'blockera_settings_page_template',
+            ],
             'upgrade-to-pro' => [
                 'page_title' => __('Upgrade to Pro', 'blockera'),
                 'menu_title' => __('Upgrade to Pro', 'blockera'),

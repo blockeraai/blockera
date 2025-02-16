@@ -25,7 +25,7 @@ export const StylesWrapper = ({
 	children: MixedElement,
 }): Object => {
 	const slotName = 'blockera-styles-wrapper';
-	const blockId = 'block-' + clientId;
+	const blockId = 'block-styles-' + clientId;
 
 	const [entry, setEntry] = useState(null);
 

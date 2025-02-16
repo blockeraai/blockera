@@ -649,7 +649,7 @@ if ( ! function_exists( 'blockera_convert_css_declarations_to_css_valid_rules' )
 
 			foreach ( $declaration as $property => $value ) {
 
-				if ( is_array( $value ) && empty( $value ) ) {
+				if ( is_array( $value ) || empty( $value ) || is_array( $property ) || empty( $property ) ) {
 
 					continue;
 				}
@@ -662,7 +662,7 @@ if ( ! function_exists( 'blockera_convert_css_declarations_to_css_valid_rules' )
 				}
 
 				// value validating ...
-				if ( is_array( $validCssRules[ $selector ] ) || is_array( $property ) || is_array( $value ) ) {
+				if ( is_array( $validCssRules[ $selector ] ) ) {
 
 					continue;
 				}
@@ -859,5 +859,30 @@ if ( ! function_exists( 'blockera_get_sanitize_block_attributes' ) ) {
 			},
 			$attributes
 		);
+	}
+}
+
+if ( ! function_exists( 'blockera_find_selector_declarations' ) ) {
+
+	/**
+	 * FIXME: refactor this helper to get better performance, readability, maintainability and working with selector hash identifier.
+	 * Get the target selector declarations.
+	 *
+	 * @param string $selector the selector.
+	 * @param array  $styles the styles.
+	 *
+	 * @return array the target selector declarations.
+	 */
+	function blockera_find_selector_declarations( string $selector, array $styles): array {
+
+		foreach ($styles as $_selector => $declarations) {
+			if (strpos($_selector, $selector) !== false) {
+				continue;
+			}
+
+			return $declarations;
+		}
+
+		return [];
 	}
 }

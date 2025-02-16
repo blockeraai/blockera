@@ -20,6 +20,7 @@ export type BlockStyleProps = {
 	blockName: string,
 	selectors: Object,
 	attributes: Object,
+	inlineStyles: Object,
 	defaultAttributes: Object,
 	currentAttributes: Object,
 	activeDeviceType: TStates,

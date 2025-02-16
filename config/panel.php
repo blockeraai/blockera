@@ -1,15 +1,27 @@
 <?php
+/**
+ * Blockera panel config.
+ *
+ * @package Blockera
+ */
 
 // direct access is not allowed.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if (! defined('ABSPATH')) {
+    exit;
+}
 
-return [
-	'std' => [
-		'disabledBlocks' => [],
-		'general'        => [
-			'disableProHints'                => false,
-			'disableRestrictBlockVisibility' => false,
-			'allowedUserRoles'               => blockera_normalized_user_roles(),
-		],
-	],
+ob_start();
+include BLOCKERA_SB_PATH . 'experimental.config.json';
+$json = ob_get_clean();
+
+$std = [
+    'disabledBlocks' => [],
+    'general'        => [
+        'disableProHints'                => false,
+        'disableRestrictBlockVisibility' => false,
+        'allowedUserRoles'               => blockera_normalized_user_roles(),
+    ],
+	'earlyAccessLab' => json_decode($json, true)['earlyAccessLab'] ?? [],
 ];
+
+return compact('std');
