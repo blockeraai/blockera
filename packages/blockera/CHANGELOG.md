@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added support for enabling/disabling the inline styles cleanup feature in block elements.
+
 ## 1.1.1 (2025-02-04)
 
 ### Improvements

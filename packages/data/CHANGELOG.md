@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added a new cache mechanism to increase speed of rendering blocks on front end pages and ensure that the blockera site editor outputs are always up to date.
+
 ## 1.0.2 (2025-02-03)
 
 ### Improvements

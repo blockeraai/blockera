@@ -139,7 +139,7 @@ if ( ! function_exists( 'blockera_set_block_cache' ) ) {
 			return;
 		}
 
-		set_transient( $cache_key, $data, HOUR_IN_SECONDS );
+		set_transient( $cache_key, $data );
 	}
 }
 
@@ -155,32 +155,6 @@ if ( ! function_exists( 'blockera_delete_block_cache' ) ) {
 	function blockera_delete_block_cache( string $cache_key ): bool {
 
 		return delete_transient( $cache_key );
-	}
-}
-
-if ( ! function_exists( 'blockera_add_inline_css' ) ) {
-
-	/**
-	 * Adding computed css rules into inline css handle.
-	 *
-	 * @param string $css the provided css from outside.
-	 *
-	 * @return void
-	 */
-	function blockera_add_inline_css( string $css ): void {
-
-		if ( empty( $css ) ) {
-
-			return;
-		}
-
-		add_filter(
-			'blockera/wordpress/register-block-editor-assets/add-inline-css-styles',
-			function ( string $older_css ) use ( $css ): string {
-
-				return $older_css . $css;
-			}
-		);
 	}
 }
 
@@ -232,5 +206,18 @@ if ( ! function_exists( 'blockera_get_small_random_hash' ) ) {
 
 		// Convert to base-36 string.
 		return base_convert( $hash, 10, 36 );
+	}
+}
+
+if ( ! function_exists( 'blockera_get_unique_class_name_regex' ) ) {
+
+	/**
+	 * Retrieve regex pattern to detect unique classname.
+	 *
+	 * @return string the regular expression to detect blockera unique classname.
+	 */
+	function blockera_get_unique_class_name_regex(): string {
+
+		return '/\b(blockera-block-\S+)\b/';
 	}
 }

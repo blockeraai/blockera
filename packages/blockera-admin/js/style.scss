@@ -31,13 +31,72 @@
 					border-radius: 5px;
 					padding: 25px;
 
+					a {
+						color: var(--blockera-controls-primary-color);
+					}
+
 					.section-title {
 						margin: 0 0 20px 0;
 						padding: 0;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						gap: 10px;
+
+						svg {
+							fill: currentColor;
+						}
+
+						.section-title-badge {
+							padding: 2px 5px;
+							border-radius: 3px;
+							font-size: 12px;
+							font-weight: 500;
+
+							&.alpha-badge {
+								background-color: rgb(255 226 226);
+							}
+
+							&.beta-badge {
+								background-color: rgb(221 227 255);
+								color: var(--blockera-controls-primary-color);
+							}
+
+							&.stable-badge,
+							&.pre-release-badge {
+								background-color: rgb(201 237 214);
+								color: rgb(14 100 45);
+							}
+						}
+
 					}
 
 					.section-desc {
 						margin: -10px 0 10px 0;
+
+						&.section-desc-status {
+							padding: 2px 5px;
+							border-radius: 3px;
+							font-size: 13px;
+							width: max-content;
+							display: inline-flex;
+    						margin: 10px 0 5px 0;
+
+							&.alpha-status {
+								background-color: rgb(255 226 226);
+							}
+
+							&.beta-status {
+								background-color: rgb(221 227 255);
+								color: var(--blockera-controls-primary-color);
+							}
+
+							&.stable-status,
+							&.pre-release-status {
+								background-color: rgb(201 237 214);
+								color: rgb(14 100 45);
+							}
+						}
 					}
 				}
 

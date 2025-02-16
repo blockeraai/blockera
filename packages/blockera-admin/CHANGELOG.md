@@ -1,5 +1,11 @@
 ## Unreleased
 
+### New Features
+- Added Labs & Experimental menu to the Blockera admin panel, allowing beta testers and developers to enable/disable experimental features.
+
+### Improvements
+- Overall design polish and enhancements.
+
 ### Bug Fixes
 - Fixed an issue where the Widgets page was not functioning properly in classic themes.
 

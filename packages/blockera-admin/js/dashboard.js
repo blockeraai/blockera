@@ -48,6 +48,7 @@ export const Dashboard = (): MixedElement => {
 			'dashboard',
 			'general-settings',
 			'block-manager',
+			'experimental-lab',
 		])
 	);
 	const config = applyFilters(
@@ -156,6 +157,12 @@ export const Dashboard = (): MixedElement => {
 				settingSlug: 'disabledBlocks',
 				className: 'block-manager-tab',
 				title: __('Block Manager', 'blockera'),
+			},
+			{
+				name: 'experimental-lab',
+				settingSlug: 'experimentalLab',
+				className: 'experimental-lab-tab',
+				title: __('Early Access Lab', 'blockera'),
 			},
 		]
 	);

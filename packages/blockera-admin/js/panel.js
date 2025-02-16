@@ -19,7 +19,12 @@ import type { TTabProps } from '@blockera/controls/js/libs/tabs/types';
 /**
  * Internal dependencies
  */
-import { GeneralPanel, BlockManagerPanel, DashboardPanel } from './components';
+import {
+	GeneralPanel,
+	DashboardPanel,
+	BlockManagerPanel,
+	ExperimentalLabPanel,
+} from './components';
 
 export const Panel = (tab: {
 	...TTabProps,
@@ -55,6 +60,18 @@ export const Panel = (tab: {
 				<p>
 					{__(
 						"In the Block Manager Panel, you have full control over both supported  and custom blocks offered by Blockera. If a block isn't listed, it's  because it's not currently supported.",
+						'blockera'
+					)}
+				</p>
+			);
+			break;
+
+		case 'experimental-lab':
+			activePanel = <ExperimentalLabPanel />;
+			description = (
+				<p>
+					{__(
+						'Discover and test early features that are still in development. Help us refine and improve them before they go live for everyone.',
 						'blockera'
 					)}
 				</p>

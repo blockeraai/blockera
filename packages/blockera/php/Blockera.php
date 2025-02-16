@@ -9,13 +9,14 @@ namespace Blockera\Setup;
 
 use Blockera\Bootstrap\Application;
 use Blockera\Setup\Contracts\ContainerInterface;
+use Blockera\Data\Cache\Contracts\ApplicationCacheStatus;
 
 /**
  * A Blockera class for setup service providers others ...
  *
  * @package Blockera\Setup\Blockera
  */
-class Blockera extends Application implements ContainerInterface {
+class Blockera extends Application implements ContainerInterface, ApplicationCacheStatus {
 
 	/**
 	 * Holds the registered values.
@@ -23,6 +24,13 @@ class Blockera extends Application implements ContainerInterface {
 	 * @var array $registered_value_addons the registered values.
 	 */
 	protected array $registered_value_addons = [];
+
+	/**
+	 * Holds the is validated cache.
+	 *
+	 * @var bool $is_validated the is validated cache.
+	 */
+	protected bool $is_validated = false;
 
 	/**
 	 * Blockera constructor.
@@ -102,4 +110,25 @@ class Blockera extends Application implements ContainerInterface {
 		$this->registered_value_addons = $value_addons;
 	}
 
+	/**
+	 * Set the $is_validate_cache property.
+	 *
+	 * @param bool $is_validated true if the is validate, false otherwise.
+	 *
+	 * @return void
+	 */
+	public function setIsValidateCache( bool $is_validated = false): void {
+
+		$this->is_validated = $is_validated;
+	}
+
+	/**
+	 * Get the is validate cache.
+	 *
+	 * @return bool true if the is validate, false otherwise.
+	 */
+	public function getIsValidateCache(): bool {
+
+		return $this->is_validated;
+	}
 }

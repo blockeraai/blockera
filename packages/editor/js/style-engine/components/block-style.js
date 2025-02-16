@@ -31,6 +31,9 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 
 	return (
 		<style>
+			{Object.entries(props.inlineStyles || {})?.map(([key, value]) => {
+				return `${key} { ${value} }`;
+			})}
 			<StateStyle
 				{...{
 					...props,

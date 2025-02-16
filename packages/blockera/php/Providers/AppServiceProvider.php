@@ -5,13 +5,21 @@ namespace Blockera\Setup\Providers;
 use Blockera\Telemetry\Config;
 use Blockera\Setup\Blockera;
 use Blockera\WordPress\Sender;
+use Blockera\Data\Cache\Cache;
+use Blockera\Data\Cache\Version;
 use Blockera\Bootstrap\Application;
-use Blockera\WordPress\RenderBlock\{
+use Blockera\WordPress\RenderBlock\V1\{
     Parser,
     Render,
     SavePost,
-    Setup,
 };
+use Blockera\WordPress\RenderBlock\Setup;
+use Blockera\WordPress\RenderBlock\V2\{
+    Transpiler,
+	RenderContent as V2RenderContent,
+    SavePost as V2SavePost,
+};
+
 use Blockera\Editor\{
     StyleDefinitions\Background,
     StyleDefinitions\Border,
@@ -57,15 +65,41 @@ class AppServiceProvider extends ServiceProvider {
 
         try {
 
-            $this->app->singleton(Setup::class);
-
-            $this->app->singleton(
-                SavePost::class,
-                function ( Application $app) {
-
-                    return new SavePost($app, new Render($app));
-                }
+			$this->app->singleton(
+                Cache::class,
+                function ( Application $app, array $params = []) {
+					return new Cache($app, $params);
+				}
             );
+
+			$this->app->singleton(
+                Version::class,
+                function ( Application $app, array $params = []) {
+					return new Version($app, $params);
+				}
+            );
+
+            if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
+
+				$this->app->singleton(
+					V2SavePost::class,
+					function ( Application $app) {
+
+						return new V2SavePost($app);
+					}
+				);
+			} else {
+
+				$this->app->singleton(
+					SavePost::class,
+					function ( Application $app) {
+
+						return new SavePost($app, new Render($app));
+					}
+				);
+			}
+
+			$this->app->singleton(Setup::class);
 
             $this->app->singleton(
                 VariableType::class,
@@ -133,21 +167,42 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            $this->app->singleton(
-                Parser::class,
-                static function ( Application $app) {
+            if ( blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
 
-                    return new Parser($app);
-                }
-            );
+				$this->app->singleton(
+					Transpiler::class,
+					static function ( Application $app) {
 
-            $this->app->bind(
-                Render::class,
-                static function ( Application $app): Render {
+						return new Transpiler($app);
+					}
+				);
 
-                    return new Render($app);
-                }
-            );
+				$this->app->bind(
+					V2RenderContent::class,
+					static function ( Application $app): V2RenderContent {
+
+						return new V2RenderContent($app);
+					}
+				);
+
+			} else {
+
+				$this->app->singleton(
+					Parser::class,
+					static function ( Application $app) {
+
+						return new Parser($app);
+					}
+				);
+
+				$this->app->bind(
+					Render::class,
+					static function ( Application $app): Render {
+
+						return new Render($app);
+					}
+				);
+			}
 
             $this->app->singleton(Sender::class);
 
@@ -167,8 +222,30 @@ class AppServiceProvider extends ServiceProvider {
 
         parent::boot();
 
-        $this->app->make(SavePost::class);
-        $this->app->make(Setup::class)->apply();
+		$cache = $this->app->make(Version::class, [ 'product_id' => 'blockera' ]);
+
+		$validate_cache = $cache->validate(BLOCKERA_SB_VERSION);
+
+		if (! $validate_cache) {
+			$cache->clear();
+			$validate_cache = $cache->store(BLOCKERA_SB_VERSION);
+		}
+
+		if ($this->app instanceof Blockera) {
+			$this->app->setIsValidateCache($validate_cache);
+		}
+
+        if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
+
+            $this->app->make(V2SavePost::class);
+
+        } else {
+
+            $this->app->make(SavePost::class);
+        }
+
+		$this->app->make(Setup::class)->apply();
+
         $this->app->make(EntityRegistry::class);
 
         $this->renderBlocks();
@@ -217,7 +294,7 @@ class AppServiceProvider extends ServiceProvider {
      */
     protected function renderBlocks(): void {
 
-        $render = $this->app->make(Render::class);
+        $render = blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ? $this->app->make(V2RenderContent::class) : $this->app->make(Render::class);
 
         $render->applyHooks();
     }

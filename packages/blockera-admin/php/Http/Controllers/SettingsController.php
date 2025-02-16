@@ -88,6 +88,11 @@ class SettingsController extends RestController {
 			return $this->reset( $default, $reset );
 		}
 
+		// If the optimizeStyleGeneration is set to default value, we need to unset the earlyAccessLab.
+		if (isset($settings['earlyAccessLab']['optimizeStyleGeneration']) && blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]) === $settings['earlyAccessLab']['optimizeStyleGeneration']) {
+			unset($settings['earlyAccessLab']);
+		}
+
 		// We are not resettings, so just update the settings and return.
 		// the updated settings.
 		$updated = update_option( $this->option_key, $settings );
