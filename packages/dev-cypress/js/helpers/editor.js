@@ -512,7 +512,9 @@ export const setCategoriesBySlug = (categorySlugs) => {
 	}
 
 	cy.request(
-		`/wp-json/wp/v2/categories?slug=${categorySlugs.join(',')}`
+		`${Cypress.env(
+			'testURL'
+		)}/wp-json/wp/v2/categories?slug=${categorySlugs.join(',')}`
 	).then((response) => {
 		const categoryIds = response.body.map((cat) => cat.id);
 		expect(categoryIds.length).to.be.greaterThan(0);
