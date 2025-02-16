@@ -2,9 +2,11 @@
  * Blockera dependencies
  */
 import {
-	editPost,
-	appendBlocks,
 	savePage,
+	editPost,
+	selectBlock,
+	appendBlocks,
+	openBlockNavigator,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -23,6 +25,12 @@ describe('Comment Template Block', () => {
 
 		// Select target block
 		cy.getBlock('core/comment-template').first().click();
+
+		// Open block navigator
+		openBlockNavigator();
+
+		// Select target block
+		selectBlock('Comment Template');
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
