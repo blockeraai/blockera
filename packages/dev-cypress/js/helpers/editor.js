@@ -500,21 +500,3 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
 	// reselect block
 	cy.getIframeBody().find(`[data-type="${blockType}"]`).first().click();
 };
-
-/**
- * Set categories by slug
- *
- * @param {string[]} categorySlugs The slugs of the categories to set
- */
-export const setCategoriesByID = (categoryIds) => {
-	if (!categoryIds || !categoryIds.length) {
-		return;
-	}
-
-	// Apply categories using wp.data
-	cy.window().then((win) => {
-		win.wp.data
-			.dispatch('core/editor')
-			.editPost({ categories: categoryIds });
-	});
-};

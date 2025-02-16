@@ -9,7 +9,6 @@ import {
 	setInnerBlock,
 	setParentBlock,
 	redirectToFrontPage,
-	setCategoriesByID,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Post Terms Block', () => {
@@ -23,17 +22,22 @@ describe('Post Terms Block', () => {
 		//
 		// Create post
 		//
-		createPost();
-
-		//
-		// Set categories by slug
-		// The 2 and 3 are the IDs of the categories created above or available currently
-		// the IDs are not important here, we just need to make sure some categories are set
-		//
-		setCategoriesByID([2, 3]);
+		createPost({
+			post_title: 'Post with categories',
+		});
 	});
 
 	it('Functionality + Inner blocks', () => {
+		//
+		// Set categories
+		//
+		cy.openDocumentSettingsPanel('Categories', 'Page');
+		cy.get('label').contains('Category 1').click();
+		cy.get('label').contains('Category 2').click();
+
+		//
+		// Append block
+		//
 		appendBlocks(
 			'<!-- wp:post-terms {"term":"category","prefix":"prefix text","suffix":"suffix text"} /-->'
 		);
