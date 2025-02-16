@@ -460,19 +460,27 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
+		$selector_is_child = false;
+
+		if ( preg_match( '/[\s>+~]/', $selector ) ) {
+
+			$selector_is_child = true;
+		}
+
 		$preg_quote = preg_quote( $args['block-name'], '/' );
 		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
 		// Assume received selector is another reference to root, so we should concat together.
 		if ( preg_match( $pattern, $selector, $matches ) ) {
 
-			// Appending blockera roo unique css selector into picked your selector.
+			// Appending blockera root unique css selector into picked your selector.
 			return \Blockera\Utils\Utils::modifySelectorPos(
 				$selector,
 				$matches[0],
 				[
 					'prefix' => $root,
 					'suffix' => $root,
+					'is_child' => $selector_is_child,
 				]
 			);
 		}
@@ -483,9 +491,9 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $selector;
 		}
 
-		if ( '.' !== $selector[0] && ! str_starts_with($selector, ' ')) {
+		if ($selector_is_child) {
 
-			// If selector started with html tag name, we imagine it's html tag name of root.
+			// If selector contains combinators (space, >, +, ~), append root after the selector.
 			return "{$selector}{$root}";
 		}
 
