@@ -59,12 +59,6 @@ class Utils {
 			return $selector;
 		}
 
-		if ( isset( $args['is_child'] ) && $args['is_child'] ) {
-
-			// If selector is a child, append root after the selector.
-			return "{$selector}{$part}";
-		}
-
 		// Extract prefix and suffix from $args array, default to empty strings if not provided.
 		$prefix = $args['prefix'] ?? '';
 		$suffix = $args['suffix'] ?? '';

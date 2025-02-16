@@ -462,7 +462,8 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 
 		$selector_is_child = false;
 
-		if ( preg_match( '/[\s>+~]/', $selector ) ) {
+		// Check if selector is a child of root or a tag name.
+		if ( preg_match( '/[\s>+~]/', $selector ) || preg_match( '/^[a-z]+$/', $selector ) ) {
 
 			$selector_is_child = true;
 		}
@@ -480,7 +481,6 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 				[
 					'prefix' => $root,
 					'suffix' => $root,
-					'is_child' => $selector_is_child,
 				]
 			);
 		}
