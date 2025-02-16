@@ -60,9 +60,10 @@ export function createPost({ postType = 'post', postTitle = '' } = {}) {
 		}
 
 		if (postTitle) {
-			cy.get(
-				'h1.wp-block.wp-block-post-title, textarea[placeholder="Add title"]'
-			)
+			cy.getIframeBody()
+				.find(
+					'h1.wp-block.wp-block-post-title, textarea[placeholder="Add title"]'
+				)
 				.click()
 				.type(postTitle);
 		}
