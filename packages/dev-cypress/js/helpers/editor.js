@@ -506,24 +506,15 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
  *
  * @param {string[]} categorySlugs The slugs of the categories to set
  */
-export const setCategoriesBySlug = (categorySlugs) => {
-	if (!categorySlugs || !categorySlugs.length) {
+export const setCategoriesByID = (categoryIds) => {
+	if (!categoryIds || !categoryIds.length) {
 		return;
 	}
 
-	cy.request(
-		`${Cypress.env(
-			'testURL'
-		)}/wp-json/wp/v2/categories?slug=${categorySlugs.join(',')}`
-	).then((response) => {
-		const categoryIds = response.body.map((cat) => cat.id);
-		expect(categoryIds.length).to.be.greaterThan(0);
-
-		// Apply categories using wp.data
-		cy.window().then((win) => {
-			win.wp.data
-				.dispatch('core/editor')
-				.editPost({ categories: categoryIds });
-		});
+	// Apply categories using wp.data
+	cy.window().then((win) => {
+		win.wp.data
+			.dispatch('core/editor')
+			.editPost({ categories: categoryIds });
 	});
 };

@@ -9,7 +9,7 @@ import {
 	setInnerBlock,
 	setParentBlock,
 	redirectToFrontPage,
-	setCategoriesBySlug,
+	setCategoriesByID,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Post Terms Block', () => {
@@ -27,8 +27,10 @@ describe('Post Terms Block', () => {
 
 		//
 		// Set categories by slug
+		// The 2 and 3 are the IDs of the categories created above or available currently
+		// the IDs are not important here, we just need to make sure some categories are set
 		//
-		setCategoriesBySlug(['category-1', 'category-2']);
+		setCategoriesByID([2, 3]);
 	});
 
 	it('Functionality + Inner blocks', () => {
