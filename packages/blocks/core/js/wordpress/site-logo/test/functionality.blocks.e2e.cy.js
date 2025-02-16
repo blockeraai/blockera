@@ -18,6 +18,32 @@ describe('Site Logo Block', () => {
 
 		cy.getBlock('core/site-logo').click();
 
+		//
+		// Set logo
+		//
+		// cy.getIframeBody().within(() => {
+		cy.wait(5000);
+
+		cy.getBlock('core/site-logo').then(($body) => {
+			if ($body.find('button[aria-label="Choose logo"]').length) {
+				$body.find('button[aria-label="Choose logo"]').click();
+			}
+		});
+
+		cy.get('body').then(($body) => {
+			if ($body.find('#menu-item-upload').length) {
+				$body.find('#menu-item-upload').click();
+
+				cy.get('input[type="file"]').selectFile(
+					'packages/dev-cypress/js/fixtures/test.jpg',
+					{
+						force: true,
+					}
+				);
+				cy.get('.media-toolbar-primary > .button').click();
+			}
+		});
+
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
