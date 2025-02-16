@@ -4,8 +4,6 @@ import {
 } from '@blockera/dev-cypress/js/helpers/site-navigation';
 import {
 	appendBlocks,
-	getBlockeraEntity,
-	getWPDataObject,
 	getBlockInserter,
 } from '@blockera/dev-cypress/js/helpers/editor';
 import { resetPanelSettings } from '@blockera/dev-cypress/js/helpers';
