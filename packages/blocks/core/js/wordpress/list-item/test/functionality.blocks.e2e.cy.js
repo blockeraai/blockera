@@ -23,10 +23,6 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 
 <!-- wp:list-item -->
 <li>item 2 <a href="#">link is here</a></li>
-<!-- /wp:list-item -->
-
-<!-- wp:list-item -->
-<li>item 3</li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->`);
 
@@ -88,6 +84,24 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 							expect(markerColor).to.equal('rgb(0, 255, 223)');
 						});
 					});
+
+				cy.get('li')
+					.last()
+					.within(($el) => {
+						cy.wait(2000);
+
+						cy.window().then((win) => {
+							const marker = win.getComputedStyle(
+								$el[0],
+								'::marker'
+							);
+							const markerColor =
+								marker.getPropertyValue('color');
+							expect(markerColor).not.to.equal(
+								'rgb(0, 255, 223)'
+							);
+						});
+					});
 			});
 
 		//
@@ -133,18 +147,26 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 			.first()
 			.within(() => {
 				// first link should have background color
-				cy.get('li.blockera-block a')
+				cy.get('li.blockera-block')
 					.first()
-					.should('have.css', 'background-color', 'rgb(255, 32, 32)');
+					.within(() => {
+						cy.get('a').should(
+							'have.css',
+							'background-color',
+							'rgb(255, 32, 32)'
+						);
+					});
 
 				// last link should not have background color
-				cy.get('li.blockera-block a')
+				cy.get('li')
 					.last()
-					.should(
-						'not.have.css',
-						'background-color',
-						'rgb(255, 32, 32)'
-					);
+					.within(() => {
+						cy.get('a').should(
+							'not.have.css',
+							'background-color',
+							'rgb(255, 32, 32)'
+						);
+					});
 
 				// elements/item-marker
 				cy.get('li.blockera-block')
@@ -158,6 +180,22 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 							const markerColor =
 								marker.getPropertyValue('color');
 							expect(markerColor).to.equal('rgb(0, 255, 223)');
+						});
+					});
+
+				cy.get('li')
+					.last()
+					.within(($el) => {
+						cy.window().then((win) => {
+							const marker = win.getComputedStyle(
+								$el[0],
+								'::marker'
+							);
+							const markerColor =
+								marker.getPropertyValue('color');
+							expect(markerColor).not.to.equal(
+								'rgb(0, 255, 223)'
+							);
 						});
 					});
 			});
