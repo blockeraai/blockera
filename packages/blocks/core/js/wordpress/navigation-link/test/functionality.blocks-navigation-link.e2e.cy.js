@@ -2,12 +2,12 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
 	setInnerBlock,
-	savePage,
 	redirectToFrontPage,
+	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe(
@@ -84,7 +84,7 @@ describe(
 			//
 			// 2.0. Block Styles
 			//
-			cy.getBlock('core/navigation-link')
+			cy.getSelectedBlock()
 				.last()
 				.should('not.have.css', 'background-clip', 'padding-box');
 
@@ -92,9 +92,11 @@ describe(
 				cy.customSelect('Clip to Padding');
 			});
 
-			cy.getBlock('core/navigation-link')
-				.last()
-				.should('have.css', 'background-clip', 'padding-box');
+			cy.getSelectedBlock().should(
+				'have.css',
+				'background-clip',
+				'padding-box'
+			);
 
 			//
 			// 2.1. elements/link inner block
@@ -103,7 +105,7 @@ describe(
 
 			cy.setColorControlValue('BG Color', 'ff0000');
 
-			cy.getBlock('core/navigation-link')
+			cy.getSelectedBlock()
 				.last()
 				.within(() => {
 					cy.get('a').should(

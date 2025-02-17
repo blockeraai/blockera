@@ -2,11 +2,10 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
 	setInnerBlock,
-	savePage,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -138,7 +137,7 @@ describe(
 			//
 			// 1. Edit Block
 			//
-			cy.getBlock('core/navigation-submenu')
+			cy.getSelectedBlock()
 				.last()
 				.should('not.have.css', 'background-clip', 'padding-box');
 
@@ -146,7 +145,7 @@ describe(
 				cy.customSelect('Clip to Padding');
 			});
 
-			cy.getBlock('core/navigation-submenu')
+			cy.getSelectedBlock()
 				.last()
 				.should('have.css', 'background-clip', 'padding-box');
 
@@ -160,7 +159,7 @@ describe(
 			//
 			cy.setColorControlValue('BG Color', 'cccccc');
 
-			cy.getBlock('core/navigation-submenu')
+			cy.getSelectedBlock()
 				.last()
 				.within(() => {
 					cy.get('.wp-block-navigation__submenu-container').should(
