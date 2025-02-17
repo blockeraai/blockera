@@ -10,8 +10,16 @@ let env = {
 	},
 };
 
+// This is a workaround for localization of the cypress env file.
 try {
 	env = require('./cypress.env.json');
+} catch (error) {
+	console.log(error);
+}
+
+// This is a workaround for pull request cypress env file.
+try {
+	env = require('./.pr-cypress.env.json');
 } catch (error) {
 	console.log(error);
 }
