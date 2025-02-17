@@ -36,20 +36,27 @@ jobs:
             - name: List test categories
               id: set_categories
               run: |
+                  # Get all spec patterns from the .pr-cypress.env.json if it exists
                   categories=$(node .github/scripts/list-e2e-test-categories.js)
-                  categories_json=$(echo $categories | jq -c '.')
 
                   if [ "${{ env.env_file }}" == "true" ]; then
                     # Load spec patterns from .pr-cypress.env.json
                     spec_patterns=$(cat .pr-cypress.env.json | jq -r '.e2e.specPattern[]')
-                    # Filter categories based on specPattern
-                    filtered_categories=$(echo "$spec_patterns" | awk -F '/' '{print $2}' | sort -u)
-                    
-                    # Convert filtered categories to JSON array
+
+                    # Extract category based on the first part of the filename (before the first dot) and remove ".e2e.cy.js"
+                    filtered_categories=$(echo "$spec_patterns" | \
+                      sed -E 's|.*/([^/]+)\..*|\1|' | \
+                      sed -E 's|^[^.]*\.||' | \
+                      sed -E 's|\.e2e\.cy$||' | \
+                      sort -u)
+
+                    # Convert filtered categories to JSON array and output
                     filtered_categories_json=$(echo "$filtered_categories" | jq -R -s -c 'split("\n")[:-1] | tojson')
                     echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
                     echo "Filtered categories: $filtered_categories"
                   else
+                    # If no env file, use the original categories
+                    categories_json=$(echo $categories | jq -c '.')
                     echo "categories=$categories_json" >> $GITHUB_OUTPUT
                   fi
 
@@ -129,9 +136,9 @@ jobs:
                     categories_json=$(cat .pr-cypress.env.json)
                     spec_patterns=$(echo "$categories_json" | jq -r '.e2e.specPattern[]')
 
-                    # Filter based on the spec patterns
-                    filtered_categories=$(echo "$spec_patterns" | awk -F '/' '{print $2}' | sort -u)
-                    
+                    # Extract the first part of each spec pattern filename before the first dot and remove ".e2e.cy.js"
+                    filtered_categories=$(echo "$spec_patterns" | sed -E 's|.*/([^/]+)\..*|\1|' | sed -E 's|\.e2e\.cy$||' | sort -u)
+
                     # Only run tests for filtered categories
                     echo "Filtered categories: $filtered_categories"
 
