@@ -81,3 +81,4 @@ packages/dev-cypress/js/videos
 inc
 cypress.env.json
 .pr-github-playground.example.json
+.pr-cypress.env.exanple.json
