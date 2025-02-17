@@ -25,6 +25,16 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Check if .pr-cypress.env.json exists
+              id: check_env_file
+              run: |
+                  if [ -f ".pr-cypress.env.json" ]; then
+                    echo "Found .pr-cypress.env.json"
+                    echo "env_file=true" >> $GITHUB_ENV
+                  else
+                    echo "env_file=false" >> $GITHUB_ENV
+                  fi
+
             - name: List test categories
               id: set_categories
               run: |
@@ -101,6 +111,27 @@ jobs:
                     spec_pattern=$(find packages -type f -name "*.e2e.cy.js" ! -name "*.*.e2e.cy.js" | tr '\n' ',')
                     spec_pattern="${spec_pattern%,}" # Remove trailing comma
                   fi
+
+                  # If the env file exists, filter spec patterns based on .pr-cypress.env.json
+                  if [ "${{ env.env_file }}" == "true" ]; then
+                    # Load categories from the .pr-cypress.env.json
+                    categories_json=$(cat .pr-cypress.env.json)
+                    spec_patterns=$(echo "$categories_json" | jq -r '.e2e.specPattern[]')
+
+                    # Filter based on the spec patterns
+                    filtered_categories=$(echo "$spec_patterns" | awk -F '/' '{print $2}' | sort -u)
+                    
+                    # Only run tests for filtered categories
+                    echo "Filtered categories: $filtered_categories"
+
+                    # Generate spec pattern based on filtered categories
+                    for category in $filtered_categories; do
+                      if [ "${{ matrix.category }}" == "$category" ]; then
+                        spec_pattern="packages/**/*.${{ matrix.category }}.e2e.cy.js"
+                      fi
+                    done
+                  fi
+
                   npm run test:e2e -- --spec "$spec_pattern"
 
             - name: Stop WordPress Environment
