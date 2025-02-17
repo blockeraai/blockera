@@ -51,7 +51,7 @@ jobs:
                       sort -u)
 
                     # Convert filtered categories to JSON array and output
-                    filtered_categories_json=$(echo "$filtered_categories" | jq -R -s -c 'split("\n")[:-1] | tojson')
+                    filtered_categories_json=$(echo "$filtered_categories" | tr ' ' '\n' | jq -R -n '[inputs]' | jq -c '.')
                     echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
                     echo "Filtered categories: $filtered_categories"
                   else
