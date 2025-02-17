@@ -7,8 +7,6 @@ on:
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
@@ -41,6 +39,16 @@ jobs:
                   categories=$(node .github/scripts/list-e2e-test-categories.js)
                   categories_json=$(echo $categories | jq -c '.')
                   echo "categories=$categories_json" >> $GITHUB_OUTPUT
+
+                  if [ "${{ env.env_file }}" == "true" ]; then
+                    # Load spec patterns from .pr-cypress.env.json
+                    spec_patterns=$(cat .pr-cypress.env.json | jq -r '.e2e.specPattern[]')
+                    # Filter categories based on specPattern
+                    filtered_categories=$(echo "$spec_patterns" | awk -F '/' '{print $2}' | sort -u)
+
+                    echo "Filtered categories: $filtered_categories"
+                    echo "::set-output name=categories::[$(echo $filtered_categories | sed 's/ /,/g')]"
+                  fi
 
             - name: Print categories output
               run: |
