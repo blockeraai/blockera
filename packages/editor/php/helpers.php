@@ -461,13 +461,12 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
-		$selector_is_child = false;
-		$isForceChild      = str_starts_with($selector, ' ');
+		$is_child_selector = false;
 
-		// Check if selector is a child of root or a tag name.
-		if ( preg_match( '/[\s>+~]/', $selector ) || preg_match( '/^[a-z]+$/', $selector ) ) {
+		// Check if selector is a child of root.
+		if ( preg_match( '/^\s|[\s>+~]/', $selector ) ) {
 
-			$selector_is_child = true;
+			$is_child_selector = true;
 		}
 
 		$preg_quote = preg_quote( $args['block-name'], '/' );
@@ -491,7 +490,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		if ( $selector === $root || blockera_is_inner_block( $args['block-type'] ) ) {
 
 			// If a custom root is provided in args, replace it with the combined root selectors.
-			if (isset($args['root']) && $isForceChild) {
+			if (isset($args['root']) && ! str_starts_with($args['root'], ' ')) {
 
 				// Replace the custom root with itself plus the standard root selector.
 				return str_replace($args['root'], "{$args['root']}{$root}", $selector);
@@ -501,8 +500,8 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $selector;
 		}
 
-		// If selector is a child of root and should not start with a space!
-		if ($selector_is_child && ! $isForceChild) {
+		// If selector is a child of root or starts with a tag name.
+		if ($is_child_selector || preg_match( '/^[a-z]/', $selector )) {
 
 			// If selector contains combinators (space, >, +, ~), append root after the selector.
 			return "{$selector}{$root}";
