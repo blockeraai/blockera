@@ -19,7 +19,10 @@ try {
 
 // This is a workaround for pull request cypress env file.
 try {
-	env = require('./.pr-cypress.env.json');
+	env = {
+		...env,
+		...require('./.pr-cypress.env.json'),
+	};
 } catch (error) {
 	console.log(error);
 }
