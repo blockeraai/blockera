@@ -80,3 +80,4 @@ packages/dev-cypress/js/videos
 # includes directory
 inc
 cypress.env.json
+.pr-github-playground.example.json
