@@ -38,16 +38,19 @@ jobs:
               run: |
                   categories=$(node .github/scripts/list-e2e-test-categories.js)
                   categories_json=$(echo $categories | jq -c '.')
-                  echo "categories=$categories_json" >> $GITHUB_OUTPUT
 
                   if [ "${{ env.env_file }}" == "true" ]; then
                     # Load spec patterns from .pr-cypress.env.json
                     spec_patterns=$(cat .pr-cypress.env.json | jq -r '.e2e.specPattern[]')
                     # Filter categories based on specPattern
                     filtered_categories=$(echo "$spec_patterns" | awk -F '/' '{print $2}' | sort -u)
-
+                    
+                    # Convert filtered categories to JSON array
+                    filtered_categories_json=$(echo "$filtered_categories" | jq -R -s -c 'split("\n")[:-1] | tojson')
+                    echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
                     echo "Filtered categories: $filtered_categories"
-                    echo "::set-output name=categories::[$(echo $filtered_categories | sed 's/ /,/g')]"
+                  else
+                    echo "categories=$categories_json" >> $GITHUB_OUTPUT
                   fi
 
             - name: Print categories output
