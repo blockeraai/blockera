@@ -173,12 +173,14 @@ describe(
 			savePage();
 			redirectToFrontPage();
 
-			cy.get('.entry-content .blockera-block.wp-block-navigation-submenu')
+			cy.get(
+				'.entry-content li.blockera-block.wp-block-navigation-submenu'
+			)
 				.last()
 				.should('have.css', 'background-clip', 'padding-box');
 
 			cy.get(
-				'.entry-content .blockera-block.wp-block-navigation-submenu > ul'
+				'.entry-content li.blockera-block.wp-block-navigation-submenu > ul'
 			).should('have.css', 'background-color', 'rgb(204, 204, 204)');
 		});
 	}
