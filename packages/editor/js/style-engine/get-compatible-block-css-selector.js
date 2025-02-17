@@ -469,7 +469,7 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 
 	// Assume received selector is another reference to root, so we should concat together.
 	if (/(wp-block[a-z-_A-Z]+)/g.test(selector)) {
-		return `${root}${selector}`;
+		return `${root}${selector}, ${selector}${root}`;
 	}
 
 	// If selector has combinators (space, >, +, ~),
