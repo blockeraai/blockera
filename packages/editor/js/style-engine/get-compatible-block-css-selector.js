@@ -475,7 +475,10 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 	// If selector has combinators (space, >, +, ~),
 	// append root after the selector,
 	// Assume received selector is html tag name!
-	if (/[\s>+~]/.test(selector) || /^[a-z]/.test(selector)) {
+	if (
+		!selector.startsWith(' ') &&
+		(/[\s>+~]/.test(selector) || /^[a-z]/.test(selector))
+	) {
 		return `${selector}${root}`;
 	}
 
