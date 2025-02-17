@@ -1,6 +1,7 @@
 <?php
 
 use Blockera\Exceptions\BaseException;
+use Symfony\Component\VarDumper\VarDumper;
 
 if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	/**
@@ -489,7 +490,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		// Handle cases where selector and root are identical or when dealing with inner blocks.
 		if ( $selector === $root || blockera_is_inner_block( $args['block-type'] ) ) {
 
-			// If a custom root is provided in args, replace it with the combined root selectors.
+			// If a custom root is provided in args, replace it with the combined root selectors and should not start with a space because it's a child selector and we should not add it before the root.
 			if (isset($args['root']) && ! str_starts_with($args['root'], ' ')) {
 
 				// Replace the custom root with itself plus the standard root selector.
@@ -500,8 +501,8 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $selector;
 		}
 
-		// If selector is a child of root or starts with a tag name.
-		if ($is_child_selector || preg_match( '/^[a-z]/', $selector )) {
+		// If selector is a child of root or starts with a tag name and should not start with a space because it's a child selector and we should not add it before the root.
+		if (! str_starts_with($selector, ' ') && ( $is_child_selector || preg_match( '/^[a-z]/', $selector ) )) {
 
 			// If selector contains combinators (space, >, +, ~), append root after the selector.
 			return "{$selector}{$root}";
