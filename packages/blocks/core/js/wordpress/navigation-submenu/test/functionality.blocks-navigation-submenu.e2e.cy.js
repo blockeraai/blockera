@@ -159,15 +159,13 @@ describe(
 			//
 			cy.setColorControlValue('BG Color', 'cccccc');
 
-			cy.getSelectedBlock()
-				.last()
-				.within(() => {
-					cy.get('.wp-block-navigation__submenu-container').should(
-						'have.css',
-						'background-color',
-						'rgb(204, 204, 204)'
-					);
-				});
+			cy.getSelectedBlock().within(() => {
+				cy.get('.wp-block-navigation__submenu-container').should(
+					'have.css',
+					'background-color',
+					'rgb(204, 204, 204)'
+				);
+			});
 
 			//
 			// 2. Assert front end
