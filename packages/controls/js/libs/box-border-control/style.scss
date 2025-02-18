@@ -24,10 +24,10 @@
 	}
 
 	.blockera-control-border-corners {
-		height: 140px;
+		height: 130px;
 		position: relative;
-		padding-top: 10px;
-		padding-bottom: 10px;
+		padding-top: 0;
+		padding-bottom: 0;
 	}
 
 	.blockera-control-border-corners-preview {
@@ -35,7 +35,6 @@
 		position: relative;
 		width: 158px;
 		margin: 15px auto;
-
 
 		&::after {
 			position: absolute;
