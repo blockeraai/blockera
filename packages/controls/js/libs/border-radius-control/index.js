@@ -219,7 +219,6 @@ export default function BorderRadiusControl({
 							className={controlInnerClassNames(
 								'border-corner-top-left'
 							)}
-							noBorder={true}
 							defaultValue={value.topLeft || ''}
 							placeholder="0"
 							onChange={(newValue) => {
@@ -244,7 +243,6 @@ export default function BorderRadiusControl({
 							className={controlInnerClassNames(
 								'border-corner-top-right'
 							)}
-							noBorder={true}
 							defaultValue={value.topRight || ''}
 							placeholder="0"
 							onChange={(newValue) => {
@@ -269,7 +267,6 @@ export default function BorderRadiusControl({
 							className={controlInnerClassNames(
 								'border-corner-bottom-left'
 							)}
-							noBorder={true}
 							defaultValue={value.bottomLeft || ''}
 							placeholder="0"
 							onChange={(newValue) => {
@@ -294,7 +291,6 @@ export default function BorderRadiusControl({
 							className={controlInnerClassNames(
 								'border-corner-bottom-right'
 							)}
-							noBorder={true}
 							defaultValue={value.bottomRight || ''}
 							placeholder="0"
 							onChange={(newValue) => {

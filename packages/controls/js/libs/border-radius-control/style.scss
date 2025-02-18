@@ -16,68 +16,42 @@
 	}
 
 	.blockera-control-input {
-		width: 81px;
+		width: 80px;
+		box-shadow: 0 0 0 2px #ffffff;
+		border-radius: 2px;
 
 		.components-input-control__container {
 			background: transparent !important;
 		}
 
-		.blockera-control-unit-select {
-			border-radius: 0 var(--pb-all, 2px) var(--pb-all, 2px) 0 !important;
-		}
-
 		.blockera-control-input-tag {
 			border-radius: var(--pb-all, 2px) !important;
+			margin: 0 !important;
 		}
 
 		&.blockera-control-border-corner-top-left {
 			position: absolute;
-			top: 20px;
-			left: 30px;
+			top: 15px;
+			left: 15px;
 		}
 
 		&.blockera-control-border-corner-bottom-right,
 		&.blockera-control-border-corner-top-right {
 			position: absolute;
-			right: 30px;
-			top: 20px;
-
-			.blockera-control-input-tag {
-				text-align: right;
-				padding-left: 35px;
-				padding-right: 5px !important;
-
-				&.input-tag-placeholder {
-					justify-content: flex-end;
-
-					svg {
-						order: 100;
-					}
-				}
-			}
-
-			.blockera-control-input-actions {
-
-				right: initial;
-				left: 0;
-
-				.blockera-control-unit-select {
-					padding-right: 0;
-					padding-left: 5px;
-				}
-			}
+			right: 15px;
+			top: 15px;
 		}
 
 		&.blockera-control-input.blockera-control-border-corner-bottom-left {
 			position: absolute;
-			bottom: 20px;
-			left: 30px;
+			bottom: 15px;
+			left: 15px;
 		}
 
 		&.blockera-control-input.blockera-control-border-corner-bottom-right {
 			position: absolute;
-			right: 30px;
-			bottom: 20px;
+			right: 15px;
+			bottom: 15px;
 			top: initial;
 		}
 	}
@@ -111,21 +85,11 @@
 	}
 
 	.blockera-control-border-corners-preview {
-
 		height: 110px;
 		position: relative;
 
 		.blockera-control-input {
-
 			width: 80px;
-
-			.blockera-control-unit-select {
-				border-radius: 3px !important;
-			}
-
-			.blockera-control-input-tag {
-				border-radius: 0 !important;
-			}
 		}
 
 		&::after {
@@ -137,12 +101,11 @@
 			display: block;
 			content: "";
 			z-index: -1;
-			border: 1px solid var(--blockera-controls-border-color) !important;
+			border: 1px solid #e2e2e2 !important;
 			border-top-right-radius: var(--pb-top-right, 0);
 			border-top-left-radius: var(--pb-top-left, 0);
 			border-bottom-right-radius: var(--pb-bottom-right, 0);
 			border-bottom-left-radius: var(--pb-bottom-left, 0);
 		}
 	}
-
 }
