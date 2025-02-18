@@ -706,7 +706,7 @@ describe('Block State E2E Test', () => {
 					});
 				});
 
-				it.only('should control value and attributes be correct, when navigate between states and devices', () => {
+				it('should control value and attributes be correct, when navigate between states and devices', () => {
 					// Normal / Desktop
 					setDeviceType('Desktop');
 					setBlockState('Normal');
