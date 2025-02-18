@@ -16,4 +16,14 @@ module.exports = (on, config) => {
 		on,
 		(type, event) => event.level === 'error' || event.type === 'error'
 	);
+
+	on('before:browser:launch', (browser = {}, launchOptions) => {
+		if (browser.family === 'chromium' && browser.name !== 'electron') {
+			// Disable GPU acceleration which can help in some CI environments
+			launchOptions.args.push('--disable-gpu');
+			// Increase shared memory usage in Docker or constrained environments
+			launchOptions.args.push('--disable-dev-shm-usage');
+		}
+		return launchOptions;
+	});
 };
