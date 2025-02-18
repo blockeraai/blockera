@@ -27,7 +27,7 @@ describe(
 			});
 		});
 
-		it.only('Functionality + Inner blocks', () => {
+		it('Functionality + Inner blocks', () => {
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();

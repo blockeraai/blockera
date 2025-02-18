@@ -7,6 +7,7 @@ let env = {
 	e2e: {
 		specPattern: ['packages/**/*.e2e.cy.js'],
 		excludeSpecPattern: ['packages/**/*.build.e2e.js'],
+		numTestsKeptInMemory: 25,
 	},
 };
 
