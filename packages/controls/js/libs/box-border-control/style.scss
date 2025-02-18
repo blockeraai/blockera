@@ -17,9 +17,9 @@
 	}
 
 	.blockera-control-border {
-		width: 91px;
-		max-width: 91px;
-		min-width: 91px;
+		width: 100px;
+		max-width: 100px;
+		min-width: 100px;
 		outline: 2px solid #ffffff;
 	}
 
@@ -46,10 +46,10 @@
 			display: block;
 			content: "";
 
-			border-top: var(--pb-top-width, inherit) var(--pb-top-style, inherit) var(--pb-top-color, currentColor);
-			border-right: var(--pb-right-width, inherit) var(--pb-right-style, inherit) var(--pb-right-color, currentColor);
-			border-bottom: var(--pb-bottom-width, inherit) var(--pb-bottom-style, inherit) var(--pb-bottom-color, currentColor);
-			border-left: var(--pb-left-width, inherit) var(--pb-left-style, inherit) var(--pb-left-color, currentColor);
+			border-top: var(--pb-top-width, 1px) var(--pb-top-style, dashed) var(--pb-top-color, #eaeaea);
+			border-right: var(--pb-right-width, 1px) var(--pb-right-style, dashed) var(--pb-right-color, #eaeaea);
+			border-bottom: var(--pb-bottom-width, 1px) var(--pb-bottom-style, dashed) var(--pb-bottom-color, #eaeaea);
+			border-left: var(--pb-left-width, 1px) var(--pb-left-style, dashed) var(--pb-left-color, #eaeaea);
 			z-index: -1;
 		}
 	}
