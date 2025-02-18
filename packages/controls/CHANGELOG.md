@@ -1,5 +1,13 @@
 ## Unreleased
 
+### Improvements
+- Update border radius control to improve the user experience (UX).
+- Update border control to improve the user experience (UX).
+- Update color control to improve the user experience (UX).
+
+### Bug Fixes
+- Fixed an issue where the select control style is not correct when the control is focused or opened.
+
 ## 1.0.2 (2025-02-03)
 
 ### Improvements

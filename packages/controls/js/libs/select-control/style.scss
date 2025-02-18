@@ -46,7 +46,7 @@
 	button {
 		display: flex !important;
 		align-items: center;
-		gap: 8px;
+		gap: 10px;
 		padding-left: 10px !important;
 		font-size: 12px !important;
 		height: 30px !important;
@@ -117,7 +117,8 @@
 
 	&.is-hovered:hover .components-input-control__backdrop,
 	&.is-focused .components-input-control__backdrop,
-	button[aria-expanded="true"] + .components-input-control__suffix + .components-input-control__backdrop {
+	button[aria-expanded="true"] + .components-input-control__suffix + .components-input-control__backdrop,
+	button[aria-expanded="true"] + div + .components-input-control__suffix + .components-input-control__backdrop {
 		border: 1px solid var(--blockera-controls-primary-color) !important;
 		--blockera-border-color: var(--blockera-controls-primary-color);
 	}

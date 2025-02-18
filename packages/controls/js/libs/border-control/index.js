@@ -101,18 +101,16 @@ export default function BorderControl({
 						'input',
 						__isWidthFocused && 'is-focused'
 					)}
-					noBorder={true}
 					onChange={(newValue) => {
 						setValue({ ...value, width: newValue });
 					}}
 					data-test="border-control-width"
-					placeholder="-"
+					placeholder="0"
 				/>
 
 				<ColorControl
 					id={getId(id, 'color')}
 					type="minimal"
-					noBorder={true}
 					onChange={(newValue) => {
 						setValue({ ...value, color: newValue });
 					}}
@@ -129,7 +127,6 @@ export default function BorderControl({
 					customInputCenterContent={true}
 					customHideInputCaret={true}
 					customHideInputLabel={true}
-					noBorder={true}
 					options={[
 						{
 							label: '',

@@ -65,10 +65,6 @@ export default function ColorIndicator({
 				customStyle.backgroundImage = `url(${value})`;
 				styleClassName = 'image-custom';
 			} else {
-				customStyle.backgroundImage =
-					'repeating-conic-gradient(#c7c7c7 0%, #c7c7c7 25%, transparent 0%, transparent 50%)'; // transparent image
-				customStyle.backgroundPosition = '50% center';
-				customStyle.backgroundSize = '10px 10px';
 				styleClassName = 'image-none';
 			}
 			break;

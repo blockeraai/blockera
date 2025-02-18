@@ -147,9 +147,9 @@ export default function ColorControl({
 					value ? 'is-not-empty' : 'is-empty',
 					className + ' ' + valueAddonClassNames
 				)}
-				noBorder={noBorder || type === 'minimal'}
+				noBorder={noBorder}
 				isFocus={isOpen}
-				contentAlign={type === 'minimal' ? 'center' : contentAlign}
+				contentAlign={contentAlign}
 				onClick={() => setOpen(!isOpen)}
 				style={{
 					...style,
