@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- Update border radius control to improve the user experience (UX).
+
+
 ## 1.0.2 (2025-02-03)
 
 ### Improvements
