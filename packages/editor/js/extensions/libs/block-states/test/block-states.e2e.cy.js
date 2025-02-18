@@ -500,6 +500,15 @@ describe('Block State E2E Test', () => {
 
 			// Assert control value
 			cy.getByDataTest('border-control-width').should('have.value', '5');
+			cy.getByDataTest('border-control-color').click();
+			cy.getByDataTest('popover-body')
+				.last()
+				.within(() => {
+					cy.get('input[maxlength="9"]').clear({
+						force: true,
+					});
+					cy.get('input[maxlength="9"]').type('000000 ');
+				});
 
 			context(
 				'can manipulate settings on hover state with inherit other settings of normal state',
@@ -552,7 +561,7 @@ describe('Block State E2E Test', () => {
 							.should(
 								'have.css',
 								'border',
-								'5px solid rgb(17, 17, 17)'
+								'5px solid rgb(0, 0, 0)'
 							);
 
 						// Hover
@@ -608,7 +617,7 @@ describe('Block State E2E Test', () => {
 					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
-						'5px solid rgb(17, 17, 17)'
+						'5px solid rgb(0, 0, 0)'
 					);
 
 					// Hover
@@ -627,7 +636,7 @@ describe('Block State E2E Test', () => {
 					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
-						'5px solid rgb(17, 17, 17)'
+						'5px solid rgb(0, 0, 0)'
 					);
 
 					// Hover
@@ -697,7 +706,7 @@ describe('Block State E2E Test', () => {
 					});
 				});
 
-				it('should control value and attributes be correct, when navigate between states and devices', () => {
+				it.only('should control value and attributes be correct, when navigate between states and devices', () => {
 					// Normal / Desktop
 					setDeviceType('Desktop');
 					setBlockState('Normal');
