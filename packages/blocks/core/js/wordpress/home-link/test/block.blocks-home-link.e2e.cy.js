@@ -73,7 +73,7 @@ describe(
 				() => {
 					cy.get(
 						'button[data-test="back-to-parent-navigation"]'
-					).should('exist');
+					).should('be.visible');
 				}
 			);
 

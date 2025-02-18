@@ -61,6 +61,15 @@ describe(
 				'exist'
 			);
 
+			// switch to parent navigation button should be visible
+			cy.get('.blockera-extension-block-card.master-block-card').within(
+				() => {
+					cy.get(
+						'button[data-test="back-to-parent-navigation"]'
+					).should('be.visible');
+				}
+			);
+
 			//
 			// 1. Inner blocks existence
 			//
