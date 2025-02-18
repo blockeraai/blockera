@@ -27,17 +27,24 @@ try {
 	console.log(error);
 }
 
-const setupNodeEvents = (on, config) => {
-	require('./packages/dev-cypress/js/plugins/index.js')(on, config);
-
-	return config;
-};
-
 module.exports = defineConfig({
 	chromeWebSecurity: false,
 	defaultCommandTimeout: 15000,
 	e2e: {
-		setupNodeEvents,
+		setupNodeEvents: (on, config) => {
+			require('./packages/dev-cypress/js/plugins/index.js')(on, config);
+
+			// Add browser launch configuration
+			on('before:browser:launch', (browser = {}, args) => {
+				if (browser.family === 'chrome') {
+					console.log('Adding --disable-dev-shm-usage...');
+					args.push('--disable-dev-shm-usage');
+				}
+				return args;
+			});
+
+			return config;
+		},
 		specPattern: env.e2e.specPattern,
 		excludeSpecPattern: env.e2e.excludeSpecPattern,
 		supportFile: 'packages/dev-cypress/js/support/e2e.js',
