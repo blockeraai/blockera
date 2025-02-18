@@ -10,14 +10,6 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-const clearCache = () => {
-	cy.wrap(
-		Cypress.automation('remote:debugger:protocol', {
-			command: 'Network.clearBrowserCache',
-		})
-	);
-};
-
 describe(
 	'Home Link Block',
 	{
@@ -25,7 +17,6 @@ describe(
 	},
 	() => {
 		beforeEach(() => {
-			clearCache();
 			createPost();
 		});
 
