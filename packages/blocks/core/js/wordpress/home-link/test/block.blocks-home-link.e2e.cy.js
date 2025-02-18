@@ -27,7 +27,7 @@ describe(
 			});
 		});
 
-		it('Functionality + Inner blocks', () => {
+		it.only('Functionality + Inner blocks', () => {
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
@@ -132,7 +132,7 @@ describe(
 				});
 		});
 
-		it.only('Block should be supported + switch to parent should work', () => {
+		it('Block should be supported + switch to parent should work', () => {
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
