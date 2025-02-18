@@ -84,7 +84,8 @@ export const BackgroundStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -122,7 +123,8 @@ export const BackgroundStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -154,7 +156,8 @@ export const BackgroundStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}

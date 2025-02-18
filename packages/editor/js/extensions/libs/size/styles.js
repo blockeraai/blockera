@@ -108,7 +108,8 @@ export const SizeStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -145,7 +146,8 @@ export const SizeStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -183,7 +185,8 @@ export const SizeStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -232,7 +235,8 @@ export const SizeStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -270,7 +274,8 @@ export const SizeStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -308,7 +313,8 @@ export const SizeStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -346,7 +352,8 @@ export const SizeStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -401,7 +408,8 @@ export const SizeStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -433,7 +441,8 @@ export const SizeStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -474,7 +483,8 @@ export const SizeStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -511,7 +521,8 @@ export const SizeStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}

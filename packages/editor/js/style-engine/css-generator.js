@@ -1,23 +1,30 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
+/**
  * Internal dependencies
  */
 import { createCssDeclarations } from './utils';
 import type { DynamicStyleFunction } from './types';
-
+import { isInnerBlock, isNormalState } from '../extensions/components/utils';
 export default class CssGenerator {
 	name: string = '';
 	options: Object = {};
 	type: 'static' | 'dynamic' = 'static';
 	properties: Object = {};
 	blockProps: Object = {};
+	pickedSelector: string = '';
 	function: DynamicStyleFunction = (): void => {};
 
 	constructor(
 		name: string,
 		{ type, options, properties, function: callback }: Object,
-		blockProps: Object
+		blockProps: Object,
+		pickedSelector: string
 	) {
 		this.name = name;
 		this.type = type;
@@ -25,6 +32,7 @@ export default class CssGenerator {
 		this.properties = properties;
 		this.blockProps = blockProps;
 		this.options = options || { important: false };
+		this.pickedSelector = pickedSelector;
 	}
 
 	getPropValue(attributeName: string): string {
@@ -44,6 +52,8 @@ export default class CssGenerator {
 		if (!this[addRule]) {
 			return '';
 		}
+
+		this.setupStyleEngineOptions();
 
 		// $FlowFixMe
 		return this[addRule]();
@@ -72,5 +82,42 @@ export default class CssGenerator {
 
 		// $FlowFixMe
 		return this.function(this.name, this.blockProps, this);
+	}
+
+	setupStyleEngineOptions(): void {
+		const { blockName: name, clientId } = this.blockProps;
+		const {
+			getActiveInnerState,
+			getActiveMasterState,
+			getExtensionCurrentBlock,
+			getExtensionInnerBlockState,
+			getExtensionCurrentBlockState,
+		} = select('blockera/extensions');
+
+		const currentBlock = getExtensionCurrentBlock();
+		const innerState = getActiveInnerState(clientId, currentBlock);
+		const masterState = getActiveMasterState(clientId, name);
+
+		if (
+			!isNormalState(masterState) &&
+			!isInnerBlock(currentBlock) &&
+			!this.pickedSelector.includes(masterState) &&
+			getExtensionCurrentBlockState() !== masterState
+		) {
+			window.blockeraStyleEngineOptions = {
+				importantMark: false,
+			};
+		}
+
+		if (
+			isNormalState(innerState) &&
+			isInnerBlock(currentBlock) &&
+			!this.pickedSelector.includes(innerState) &&
+			getExtensionInnerBlockState() !== innerState
+		) {
+			window.blockeraStyleEngineOptions = {
+				importantMark: false,
+			};
+		}
 	}
 }

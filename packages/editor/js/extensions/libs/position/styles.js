@@ -86,7 +86,8 @@ export const PositionStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 
@@ -116,7 +117,8 @@ export const PositionStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -147,7 +149,8 @@ export const PositionStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -178,7 +181,8 @@ export const PositionStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -209,7 +213,8 @@ export const PositionStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -241,7 +246,8 @@ export const PositionStyles = ({
 								},
 							],
 						},
-						blockProps
+						blockProps,
+						pickedSelector
 					),
 				});
 			}

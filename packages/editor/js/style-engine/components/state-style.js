@@ -57,20 +57,18 @@ export const StateStyle = (
 			})
 		);
 
-		const stylesheet = combinedDeclarations
-			.reverse()
-			.map(
-				(
-					{ selector, declarations }: Object,
-					index: number
-				): MixedElement => (
-					<Style
-						key={`${type}-${index}-style`}
-						selector={selector}
-						cssDeclaration={declarations}
-					/>
-				)
-			);
+		const stylesheet = combinedDeclarations.map(
+			(
+				{ selector, declarations }: Object,
+				index: number
+			): MixedElement => (
+				<Style
+					key={`${type}-${index}-style`}
+					selector={selector}
+					cssDeclaration={declarations}
+				/>
+			)
+		);
 
 		if (!stylesheet.length) {
 			continue;

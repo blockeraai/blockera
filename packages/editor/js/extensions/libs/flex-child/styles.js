@@ -122,7 +122,8 @@ export const FlexChildStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -156,7 +157,8 @@ export const FlexChildStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -208,7 +210,8 @@ export const FlexChildStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}

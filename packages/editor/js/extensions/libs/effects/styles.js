@@ -102,7 +102,8 @@ export const EffectsStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -256,7 +257,8 @@ export const EffectsStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -290,7 +292,8 @@ export const EffectsStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -323,7 +326,8 @@ export const EffectsStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -356,7 +360,8 @@ export const EffectsStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -390,7 +395,8 @@ export const EffectsStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -427,7 +433,8 @@ export const EffectsStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 
@@ -447,7 +454,8 @@ export const EffectsStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 
@@ -470,7 +478,8 @@ export const EffectsStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -505,7 +514,8 @@ export const EffectsStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}

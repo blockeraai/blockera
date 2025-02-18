@@ -146,7 +146,8 @@ export const SpacingStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		},
 	];

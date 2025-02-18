@@ -90,7 +90,8 @@ export const LayoutStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -124,7 +125,8 @@ export const LayoutStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -174,7 +176,8 @@ export const LayoutStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -208,7 +211,8 @@ export const LayoutStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -254,7 +258,8 @@ export const LayoutStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -289,7 +294,8 @@ export const LayoutStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -403,7 +409,8 @@ export const LayoutStyles = ({
 								},
 							],
 						},
-						blockProps
+						blockProps,
+						pickedSelector
 					),
 				});
 
@@ -451,7 +458,8 @@ export const LayoutStyles = ({
 								},
 							],
 						},
-						blockProps
+						blockProps,
+						pickedSelector
 					),
 				});
 			}
@@ -488,7 +496,8 @@ export const LayoutStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
