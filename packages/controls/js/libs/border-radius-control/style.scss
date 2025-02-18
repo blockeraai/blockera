@@ -59,7 +59,6 @@
 	.blockera-control-border-corners {
 		height: 110px;
 		position: relative;
-		margin-top: 5px;
 
 		&::before {
 			display: block;
@@ -89,7 +88,7 @@
 		position: relative;
 
 		.blockera-control-input {
-			width: 80px;
+			width: 95px;
 		}
 
 		&::after {
