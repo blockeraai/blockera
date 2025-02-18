@@ -3,7 +3,7 @@
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function backgroundClipGenerator(id, props) {
+export function backgroundClipGenerator(id, props, options) {
 	const { attributes } = props;
 
 	const value = attributes.blockeraBackgroundClip;
@@ -14,6 +14,7 @@ export function backgroundClipGenerator(id, props) {
 
 	if (value === 'text') {
 		return createCssDeclarations({
+			options,
 			properties: {
 				'background-clip': 'text !important',
 				'-webkit-background-clip': 'text !important',
@@ -23,6 +24,7 @@ export function backgroundClipGenerator(id, props) {
 	}
 
 	return createCssDeclarations({
+		options,
 		properties: {
 			'background-clip': value,
 			'-webkit-background-clip': value,

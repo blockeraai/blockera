@@ -48,6 +48,7 @@ export const BorderAndShadowStyles = ({
 	} = config.borderAndShadowConfig;
 
 	const blockProps = {
+		state,
 		clientId,
 		supports,
 		blockName,

@@ -9,7 +9,7 @@ import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function FilterGenerator(id, props) {
+export function FilterGenerator(id, props, options) {
 	const isBackdrop = 'blockeraBackdropFilter' === id;
 	const property = isBackdrop ? 'backdrop-filter' : 'filter';
 	const { attributes } = props;
@@ -43,6 +43,7 @@ export function FilterGenerator(id, props) {
 		?.filter((item) => null !== item);
 
 	return createCssDeclarations({
+		options,
 		properties: {
 			[property]: value?.join(' '),
 		},

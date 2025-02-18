@@ -30,6 +30,7 @@ export const MouseStyles = ({
 	const { blockeraCursor, blockeraUserSelect, blockeraPointerEvents } =
 		config.mouseConfig;
 	const blockProps = {
+		state,
 		attributes: currentBlockAttributes,
 		clientId,
 		blockName,

@@ -55,6 +55,7 @@ export const EffectsStyles = ({
 	} = config.effectsConfig;
 
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,

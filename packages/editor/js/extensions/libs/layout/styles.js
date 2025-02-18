@@ -42,6 +42,7 @@ export const LayoutStyles = ({
 	} = config.layoutConfig;
 
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,

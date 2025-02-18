@@ -39,6 +39,7 @@ export const BackgroundStyles = ({
 		blockeraBackgroundClip,
 	} = config.backgroundConfig;
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,

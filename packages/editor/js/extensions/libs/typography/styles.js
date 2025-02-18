@@ -56,6 +56,7 @@ export function TypographyStyles({
 	} = config.typographyConfig;
 
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,

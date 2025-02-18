@@ -38,6 +38,7 @@ export const FlexChildStyles = ({
 		blockeraFlexChildOrder,
 	} = config.flexChildConfig;
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,

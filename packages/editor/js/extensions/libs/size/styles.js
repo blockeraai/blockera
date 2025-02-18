@@ -47,6 +47,7 @@ export const SizeStyles = ({
 		blockeraBoxSizing,
 	} = config.sizeConfig;
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,

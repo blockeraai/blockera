@@ -93,6 +93,7 @@ export const SpacingStyles = ({
 }: StylesProps): Array<CssRule> => {
 	const { blockeraSpacing } = config.spacingConfig;
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,

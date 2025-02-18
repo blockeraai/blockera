@@ -34,6 +34,7 @@ export const PositionStyles = ({
 }: StylesProps): Array<CssRule> => {
 	const { blockeraPosition, blockeraZIndex } = config.positionConfig;
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,
