@@ -125,17 +125,11 @@ export const createCssDeclarations = (
 		);
 		return '';
 	}
-	const { blockeraStyleEngineOptions } = window;
-	const { importantMark = true } = blockeraStyleEngineOptions || {};
-	const {
-		properties: _props,
-		// TODO: remove hard codes.
-		// options = { important: true }
-	} = declaration;
+
+	const { properties: _props, options } = declaration;
 
 	return getProperties({
-		// TODO: remove hard codes.
-		options: { important: importantMark },
+		options,
 		properties: _props,
 	}).join('\n');
 };

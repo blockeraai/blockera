@@ -10,7 +10,8 @@ import { select } from '@wordpress/data';
  */
 import { createCssDeclarations } from './utils';
 import type { DynamicStyleFunction } from './types';
-import { isInnerBlock, isNormalState } from '../extensions/components/utils';
+import { isNormalState } from '../extensions/components/utils';
+
 export default class CssGenerator {
 	name: string = '';
 	options: Object = {};
@@ -53,10 +54,30 @@ export default class CssGenerator {
 			return '';
 		}
 
-		this.setupStyleEngineOptions();
+		const { blockName: name, clientId, state } = this.blockProps;
+		const {
+			getActiveInnerState,
+			getActiveMasterState,
+			getExtensionCurrentBlock,
+		} = select('blockera/extensions');
+
+		const currentBlock = getExtensionCurrentBlock();
+		const innerState = getActiveInnerState(clientId, currentBlock);
+		const masterState = getActiveMasterState(clientId, name);
+
+		const options = {
+			important: true,
+		};
+
+		if (
+			isNormalState(state) &&
+			(!isNormalState(masterState) || !isNormalState(innerState))
+		) {
+			options.important = this.pickedSelector.includes(`:${state}`);
+		}
 
 		// $FlowFixMe
-		return this[addRule]();
+		return this[addRule](options);
 	}
 
 	convertToCssSelector(cssClasses: string): string {
@@ -67,57 +88,20 @@ export default class CssGenerator {
 		return `.${cssClasses.replace(/\s+/g, '.')}`;
 	}
 
-	addStaticRule(): string {
+	addStaticRule(options: Object): string {
 		// $FlowFixMe
 		return createCssDeclarations({
-			options: this.options,
+			options,
 			properties: this.properties,
 		});
 	}
 
-	addFunctionRule(): string | void {
+	addFunctionRule(options: Object): string | void {
 		if (!this.getPropValue(this.name)) {
 			return '';
 		}
 
 		// $FlowFixMe
-		return this.function(this.name, this.blockProps, this);
-	}
-
-	setupStyleEngineOptions(): void {
-		const { blockName: name, clientId } = this.blockProps;
-		const {
-			getActiveInnerState,
-			getActiveMasterState,
-			getExtensionCurrentBlock,
-			getExtensionInnerBlockState,
-			getExtensionCurrentBlockState,
-		} = select('blockera/extensions');
-
-		const currentBlock = getExtensionCurrentBlock();
-		const innerState = getActiveInnerState(clientId, currentBlock);
-		const masterState = getActiveMasterState(clientId, name);
-
-		if (
-			!isNormalState(masterState) &&
-			!isInnerBlock(currentBlock) &&
-			!this.pickedSelector.includes(masterState) &&
-			getExtensionCurrentBlockState() !== masterState
-		) {
-			window.blockeraStyleEngineOptions = {
-				importantMark: false,
-			};
-		}
-
-		if (
-			isNormalState(innerState) &&
-			isInnerBlock(currentBlock) &&
-			!this.pickedSelector.includes(innerState) &&
-			getExtensionInnerBlockState() !== innerState
-		) {
-			window.blockeraStyleEngineOptions = {
-				importantMark: false,
-			};
-		}
+		return this.function(this.name, this.blockProps, options);
 	}
 }
