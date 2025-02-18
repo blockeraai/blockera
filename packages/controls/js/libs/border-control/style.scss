@@ -25,7 +25,7 @@
 		z-index: 2;
 
 		.blockera-control-input-tag {
-
+			margin: 0;
 			border-radius: 2px 0 0 2px !important;
 			z-index: 1;
 			padding: 6px 0 !important;
@@ -49,6 +49,7 @@
 		justify-content: center !important;
 		gap: 0 !important;
 		margin-right: -1px !important;
+		margin-left: -1px !important;
 		padding: 2px 5px 2px 5px !important;
 
 		&.is-focus,
