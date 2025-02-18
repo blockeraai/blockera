@@ -18,10 +18,6 @@ const clearCache = () => {
 	);
 };
 
-const clearCookies = () => {
-	cy.clearCookies();
-};
-
 describe(
 	'Home Link Block',
 	{
@@ -30,7 +26,6 @@ describe(
 	() => {
 		beforeEach(() => {
 			clearCache();
-			clearCookies();
 			createPost();
 		});
 
