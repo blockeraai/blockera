@@ -110,6 +110,7 @@ export default function BorderControl({
 
 				<ColorControl
 					id={getId(id, 'color')}
+					type="minimal"
 					onChange={(newValue) => {
 						setValue({ ...value, color: newValue });
 					}}
