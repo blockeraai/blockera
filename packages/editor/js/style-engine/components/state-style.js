@@ -49,24 +49,28 @@ export const StateStyle = (
 		const breakpoint = breakpoints[name];
 		const { type } = breakpoint;
 
-		const stylesheet = combineDeclarations(
+		const combinedDeclarations = combineDeclarations(
 			getComputedCssProps({
 				...props,
 				states,
 				currentBreakpoint: type,
 			})
-		).map(
-			(
-				{ selector, declarations }: Object,
-				index: number
-			): MixedElement => (
-				<Style
-					key={`${type}-${index}-style`}
-					selector={selector}
-					cssDeclaration={declarations}
-				/>
-			)
 		);
+
+		const stylesheet = combinedDeclarations
+			.reverse()
+			.map(
+				(
+					{ selector, declarations }: Object,
+					index: number
+				): MixedElement => (
+					<Style
+						key={`${type}-${index}-style`}
+						selector={selector}
+						cssDeclaration={declarations}
+					/>
+				)
+			);
 
 		if (!stylesheet.length) {
 			continue;
