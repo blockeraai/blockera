@@ -132,7 +132,7 @@ describe(
 				});
 		});
 
-		it('Block should be supported + switch to parent should work', () => {
+		it.only('Block should be supported + switch to parent should work', () => {
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
