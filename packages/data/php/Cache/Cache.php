@@ -119,9 +119,18 @@ class Cache {
     public function clear(): void {
         global $wpdb;
 
+		// Deleting all options related with the blockera product id.
         $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+                $this->getCacheKey() . '%'
+            )
+        );
+
+		// Deleting all post meta data related with the blockera product id.
+        $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s",
                 $this->getCacheKey() . '%'
             )
         );
