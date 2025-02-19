@@ -80,10 +80,10 @@ jobs:
                     exit 1
                   fi
 
-                  # Check if .github-pr-playground.json exists and merge it with JSON_STRING
-                  if [ -f ".github-pr-playground.json" ]; then
+                  # Check if .pr-github-playground.json exists and merge it with JSON_STRING
+                  if [ -f ".pr-github-playground.json" ]; then
                     # Read PR playground JSON
-                    PR_JSON=$(cat .github-pr-playground.json)
+                    PR_JSON=$(cat .pr-github-playground.json)
                     
                     # If PR JSON has steps, use them to completely replace base steps
                     if echo "$PR_JSON" | jq -e 'has("steps")' > /dev/null; then

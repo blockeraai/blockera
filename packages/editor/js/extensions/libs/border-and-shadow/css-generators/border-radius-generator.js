@@ -9,7 +9,7 @@ import { getValueAddonRealValue } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 import { getBlockSupportStyleEngineConfig } from '../../../utils';
-export function BorderRadiusGenerator(id, props) {
+export function BorderRadiusGenerator(id, props, options) {
 	const { attributes, supports, blockeraStyleEngineConfig } = props;
 
 	if (!attributes?.blockeraBorderRadius) {
@@ -83,6 +83,7 @@ export function BorderRadiusGenerator(id, props) {
 	}
 
 	return createCssDeclarations({
+		options,
 		properties,
 	});
 }

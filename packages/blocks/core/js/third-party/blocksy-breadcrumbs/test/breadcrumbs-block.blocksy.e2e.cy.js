@@ -623,6 +623,12 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		//
 		// 1.0. Block Style
 		//
+		cy.getBlock('blocksy/breadcrumbs').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});

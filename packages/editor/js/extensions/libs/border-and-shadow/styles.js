@@ -48,6 +48,7 @@ export const BorderAndShadowStyles = ({
 	} = config.borderAndShadowConfig;
 
 	const blockProps = {
+		state,
 		clientId,
 		supports,
 		blockName,
@@ -98,7 +99,8 @@ export const BorderAndShadowStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -128,7 +130,8 @@ export const BorderAndShadowStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -159,7 +162,8 @@ export const BorderAndShadowStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -195,7 +199,8 @@ export const BorderAndShadowStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}

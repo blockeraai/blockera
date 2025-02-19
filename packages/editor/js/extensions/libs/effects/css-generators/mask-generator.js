@@ -3,7 +3,7 @@
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function MaskGenerator(id, props) {
+export function MaskGenerator(id, props, options) {
 	const { attributes } = props;
 
 	if (!Object.keys(attributes?.blockeraMask)?.length) {
@@ -33,6 +33,7 @@ export function MaskGenerator(id, props) {
 	}
 
 	return createCssDeclarations({
+		options,
 		properties,
 	});
 }

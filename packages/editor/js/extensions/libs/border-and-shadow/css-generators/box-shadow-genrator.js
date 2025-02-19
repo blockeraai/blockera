@@ -8,7 +8,7 @@ import { getValueAddonRealValue } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function BoxShadowGenerator(id, props) {
+export function BoxShadowGenerator(id, props, options) {
 	const { attributes } = props;
 
 	if (!Object.values(attributes?.blockeraBoxShadow)?.length) {
@@ -47,6 +47,7 @@ export function BoxShadowGenerator(id, props) {
 			: {};
 
 	return createCssDeclarations({
+		options,
 		properties: toReturnProperties,
 	});
 }

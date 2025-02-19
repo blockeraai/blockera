@@ -8,3 +8,4 @@ export * from './helpers/controls-box-spacing';
 export * from './helpers/controls';
 export * from './helpers/other';
 export * from './helpers/admin';
+export * from './helpers/create-term';

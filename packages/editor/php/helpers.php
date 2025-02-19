@@ -1,6 +1,7 @@
 <?php
 
 use Blockera\Exceptions\BaseException;
+use Symfony\Component\VarDumper\VarDumper;
 
 if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	/**
@@ -402,6 +403,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 			$selector,
 			$args['blockera-unique-selector'],
 			[
+				'root'=> $args['root'] ?? '',
 				'block-type' => $args['block-type'],
 				'block-name' => str_replace( '/', '-', str_replace( 'core/', '', $args['block-name'] ) ),
 			]
@@ -460,13 +462,21 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
+		$is_child_selector = false;
+
+		// Check if selector is a child of root.
+		if ( preg_match( '/^\s|[\s>+~]/', $selector ) ) {
+
+			$is_child_selector = true;
+		}
+
 		$preg_quote = preg_quote( $args['block-name'], '/' );
 		$pattern    = '/\.\bwp-block-' . $preg_quote . '\b/';
 
 		// Assume received selector is another reference to root, so we should concat together.
 		if ( preg_match( $pattern, $selector, $matches ) ) {
 
-			// Appending blockera roo unique css selector into picked your selector.
+			// Appending blockera root unique css selector into picked your selector.
 			return \Blockera\Utils\Utils::modifySelectorPos(
 				$selector,
 				$matches[0],
@@ -477,15 +487,24 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			);
 		}
 
-		// Imagine selector and root is same.
+		// Handle cases where selector and root are identical or when dealing with inner blocks.
 		if ( $selector === $root || blockera_is_inner_block( $args['block-type'] ) ) {
 
+			// If a custom root is provided in args, replace it with the combined root selectors and should not start with a space because it's a child selector and we should not add it before the root.
+			if (isset($args['root']) && ! str_starts_with($args['root'], ' ')) {
+
+				// Replace the custom root with itself plus the standard root selector.
+				return str_replace($args['root'], "{$args['root']}{$root}", $selector);
+			}
+
+			// Return selector unchanged if no custom root.
 			return $selector;
 		}
 
-		if ( '.' !== $selector[0] && ! str_starts_with($selector, ' ')) {
+		// If selector is a child of root or starts with a tag name and should not start with a space because it's a child selector and we should not add it before the root.
+		if (! str_starts_with($selector, ' ') && ( $is_child_selector || preg_match( '/^[a-z]/', $selector ) )) {
 
-			// If selector started with html tag name, we imagine it's html tag name of root.
+			// If selector contains combinators (space, >, +, ~), append root after the selector.
 			return "{$selector}{$root}";
 		}
 

@@ -7,8 +7,6 @@ on:
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-    # The concurrency group contains the workflow name and the branch name for pull requests
-    # or the commit hash for any other events.
     group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
     cancel-in-progress: true
 
@@ -25,12 +23,42 @@ jobs:
             - name: Setup Node.js and install dependencies
               uses: ./.github/setup-node
 
+            - name: Check if .pr-cypress.env.json exists
+              id: check_env_file
+              run: |
+                  if [ -f ".pr-cypress.env.json" ]; then
+                    echo "Found .pr-cypress.env.json"
+                    echo "env_file=true" >> $GITHUB_ENV
+                  else
+                    echo "env_file=false" >> $GITHUB_ENV
+                  fi
+
             - name: List test categories
               id: set_categories
               run: |
+                  # Get all spec patterns from the .pr-cypress.env.json if it exists
                   categories=$(node .github/scripts/list-e2e-test-categories.js)
-                  categories_json=$(echo $categories | jq -c '.')
-                  echo "categories=$categories_json" >> $GITHUB_OUTPUT
+
+                  if [ "${{ env.env_file }}" == "true" ]; then
+                    # Load spec patterns from .pr-cypress.env.json
+                    spec_patterns=$(cat .pr-cypress.env.json | jq -r '.e2e.specPattern[]')
+
+                    # Extract category based on the first part of the filename (before the first dot) and remove ".e2e.cy.js"
+                    filtered_categories=$(echo "$spec_patterns" | \
+                      sed -E 's|.*/([^/]+)\..*|\1|' | \
+                      sed -E 's|^[^.]*\.||' | \
+                      sed -E 's|\.e2e\.cy$||' | \
+                      sort -u)
+
+                    # Convert filtered categories to JSON array and output
+                    filtered_categories_json=$(echo "$filtered_categories" | tr ' ' '\n' | jq -R -n '[inputs]' | jq -c '.')
+                    echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
+                    echo "Filtered categories: $filtered_categories"
+                  else
+                    # If no env file, use the original categories
+                    categories_json=$(echo $categories | jq -c '.')
+                    echo "categories=$categories_json" >> $GITHUB_OUTPUT
+                  fi
 
             - name: Print categories output
               run: |
@@ -101,6 +129,27 @@ jobs:
                     spec_pattern=$(find packages -type f -name "*.e2e.cy.js" ! -name "*.*.e2e.cy.js" | tr '\n' ',')
                     spec_pattern="${spec_pattern%,}" # Remove trailing comma
                   fi
+
+                  # If the env file exists, filter spec patterns based on .pr-cypress.env.json
+                  if [ "${{ env.env_file }}" == "true" ]; then
+                    # Load categories from the .pr-cypress.env.json
+                    categories_json=$(cat .pr-cypress.env.json)
+                    spec_patterns=$(echo "$categories_json" | jq -r '.e2e.specPattern[]')
+
+                    # Extract the first part of each spec pattern filename before the first dot and remove ".e2e.cy.js"
+                    filtered_categories=$(echo "$spec_patterns" | sed -E 's|.*/([^/]+)\..*|\1|' | sed -E 's|\.e2e\.cy$||' | sort -u)
+
+                    # Only run tests for filtered categories
+                    echo "Filtered categories: $filtered_categories"
+
+                    # Generate spec pattern based on filtered categories
+                    for category in $filtered_categories; do
+                      if [ "${{ matrix.category }}" == "$category" ]; then
+                        spec_pattern="packages/**/*.${{ matrix.category }}.e2e.cy.js"
+                      fi
+                    done
+                  fi
+
                   npm run test:e2e -- --spec "$spec_pattern"
 
             - name: Stop WordPress Environment

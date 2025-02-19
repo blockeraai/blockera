@@ -39,6 +39,7 @@ export const BackgroundStyles = ({
 		blockeraBackgroundClip,
 	} = config.backgroundConfig;
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,
@@ -84,7 +85,8 @@ export const BackgroundStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -122,7 +124,8 @@ export const BackgroundStyles = ({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -154,7 +157,8 @@ export const BackgroundStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}

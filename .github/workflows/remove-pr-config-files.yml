@@ -15,11 +15,8 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
 
-            - name: Remove .pr-env.json file
-              run: rm -rf .pr-env.json
-
-            - name: Remove .github-pr-playground.json file
-              run: rm -rf .github-pr-playground.json
+            - name: Remove Pull Request env files
+              run: rm -rf .pr-* ! -name "*.example"
 
             # Step 3: Configure Git (required for committing changes)
             - name: Set up Git
@@ -30,7 +27,7 @@ jobs:
             # Step 4: Commit and push changes
             - name: Commit and push changes
               run: |
-                  if [ -f ".pr-env.json" ] || [ -f ".github-pr-playground.json" ]; then
+                  if [ -n "$(git status --porcelain)" ]; then
                       git add .
                       git commit -m "chore: remove PR config files"
                       git push origin master

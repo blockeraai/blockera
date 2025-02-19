@@ -26,8 +26,8 @@ export const PostTerms: BlockType = {
 			label: __('Term', 'blockera'),
 			description: __('All term elements.', 'blockera'),
 		},
-		'core/separator': {
-			name: 'core/separator',
+		'elements/separator': {
+			name: 'elements/separator',
 			label: __('Separator', 'blockera'),
 			description: __('The terms separator element.', 'blockera'),
 			icon: <Icon icon="block-post-terms-separator" iconSize="20" />,

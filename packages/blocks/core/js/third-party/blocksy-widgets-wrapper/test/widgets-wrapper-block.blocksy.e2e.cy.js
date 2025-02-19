@@ -44,6 +44,12 @@ describe('Blocksy → Widgets Wrapper Block → Block support', () => {
 		//
 		// 1.0. Block Style
 		//
+		cy.getBlock('blocksy/widgets-wrapper').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});

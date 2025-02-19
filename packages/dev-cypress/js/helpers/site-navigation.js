@@ -47,8 +47,9 @@ export function goTo(path = '/wp-admin', login = false) {
  * Creates new post
  *
  * @param {postType} string WP post type slug
+ * @param {postTitle} string WP post title
  */
-export function createPost({ postType = 'post' } = {}) {
+export function createPost({ postType = 'post', postTitle = '' } = {}) {
 	goTo('/wp-admin/post-new.php?post_type=' + postType).then(() => {
 		// eslint-disable-next-line
 		cy.wait(2000);
@@ -56,6 +57,15 @@ export function createPost({ postType = 'post' } = {}) {
 		if (['post', 'page'].includes(postType)) {
 			disableGutenbergFeatures();
 			setAbsoluteBlockToolbar();
+		}
+
+		if (postTitle) {
+			cy.getIframeBody()
+				.find(
+					'h1.wp-block.wp-block-post-title, textarea[placeholder="Add title"]'
+				)
+				.click()
+				.type(postTitle);
 		}
 	});
 }

@@ -52,6 +52,12 @@ describe('Blocksy → Advanced Posts (Query) Block → Block support', () => {
 		//
 		// 1.0. Block Style
 		//
+		cy.getBlock('blocksy/query').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});

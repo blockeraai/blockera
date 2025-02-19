@@ -8,7 +8,7 @@ import { getValueAddonRealValue } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function BoxBorderGenerator(id, props) {
+export function BoxBorderGenerator(id, props, options) {
 	const { attributes } = props;
 
 	if (!attributes?.blockeraBorder) {
@@ -61,9 +61,7 @@ export function BoxBorderGenerator(id, props) {
 	}
 
 	return createCssDeclarations({
+		options,
 		properties,
-		options: {
-			important: true,
-		},
 	});
 }
