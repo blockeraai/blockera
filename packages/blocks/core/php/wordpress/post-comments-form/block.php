@@ -27,7 +27,7 @@ return array_merge(
 						'root' => 'label',
 					],
 					'blockera/elements/input'          => [
-						'root' => 'input[type="text"],input[type="url"],input[type="email"]',
+						'root' => 'input[type="text"],input[type="url"],input[type="email"], input[name="url"], input[name="email"]',
 					],
 					'blockera/elements/textarea'       => [
 						'root' => 'textarea',
@@ -35,9 +35,11 @@ return array_merge(
 					'blockera/elements/cookie-consent' => [
 						'root' => '.comment-form-cookies-consent',
 					],
+					'blockera/core/button' => [
+						'root' => '.wp-block-button > .wp-element-button, button[type="submit"]',
+					],
 				],
 				blockera_load( 'inners.link', dirname( __DIR__ ) ),
-				blockera_load( 'inners.button', dirname( __DIR__ ) ),
 				blockera_load( 'inners.headings', dirname( __DIR__ ) ),
 			)
 		),

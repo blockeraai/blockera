@@ -56,6 +56,7 @@ export function TypographyStyles({
 	} = config.typographyConfig;
 
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,
@@ -102,7 +103,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -152,7 +154,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -188,7 +191,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -224,7 +228,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -259,7 +264,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -292,7 +298,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -328,7 +335,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -364,7 +372,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -397,7 +406,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -433,7 +443,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -466,7 +477,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -499,7 +511,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -563,7 +576,8 @@ export function TypographyStyles({
 								},
 							],
 						},
-						blockProps
+						blockProps,
+						pickedSelector
 					),
 				});
 		}
@@ -639,7 +653,8 @@ export function TypographyStyles({
 								},
 							],
 						},
-						blockProps
+						blockProps,
+						pickedSelector
 					),
 				});
 		}
@@ -680,7 +695,8 @@ export function TypographyStyles({
 								},
 							],
 						},
-						blockProps
+						blockProps,
+						pickedSelector
 					),
 				});
 			}
@@ -717,7 +733,8 @@ export function TypographyStyles({
 							},
 						],
 					},
-					blockProps
+					blockProps,
+					pickedSelector
 				),
 			});
 		}
@@ -751,7 +768,8 @@ export function TypographyStyles({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}

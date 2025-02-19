@@ -259,7 +259,7 @@ describe('Social Links Block → WP Compatibility', () => {
 		});
 	});
 
-	it.only('Variable Value', () => {
+	it('Variable Value', () => {
 		appendBlocks(
 			`<!-- wp:social-links {"iconColor":"base","iconColorValue":"#ffffff","iconBackgroundColor":"contrast","iconBackgroundColorValue":"#111111","showLabels":true,"size":"has-normal-icon-size","className":"is-style-default","layout":{"type":"flex","justifyContent":"left","flexWrap":"nowrap"}} -->
 <ul class="wp-block-social-links has-normal-icon-size has-visible-labels has-icon-color has-icon-background-color is-style-default"><!-- wp:social-link {"url":"#test","service":"wordpress"} /-->

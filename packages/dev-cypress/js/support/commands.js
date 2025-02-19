@@ -143,6 +143,10 @@ export const registerCommands = () => {
 		}
 	});
 
+	Cypress.Commands.add('getSelectedBlock', () => {
+		return cy.getIframeBody().find('.wp-block.is-selected');
+	});
+
 	// Click Value Addon Button to Open Popover
 	Cypress.Commands.add('clickValueAddonButton', () => {
 		cy.getByDataCy('value-addon-btn').click({

@@ -8,7 +8,7 @@ import { getValueAddonRealValue } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function BeforeDividerGenerator(id, props) {
+export function BeforeDividerGenerator(id, props, options) {
 	const { attributes } = props;
 
 	if (!Object.keys(attributes?.blockeraDivider)?.length) {
@@ -18,11 +18,12 @@ export function BeforeDividerGenerator(id, props) {
 	const value = DividerGenerator(attributes);
 
 	return createCssDeclarations({
+		options,
 		properties: value[0],
 	});
 }
 
-export function AfterDividerGenerator(id, props) {
+export function AfterDividerGenerator(id, props, options) {
 	const { attributes } = props;
 
 	if (!Object.keys(attributes?.blockeraDivider)?.length) {
@@ -32,6 +33,7 @@ export function AfterDividerGenerator(id, props) {
 	const value = DividerGenerator(attributes);
 
 	return createCssDeclarations({
+		options,
 		properties: value[1],
 	});
 }

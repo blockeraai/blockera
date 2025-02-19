@@ -9,7 +9,7 @@ import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function TransitionGenerator(id, props) {
+export function TransitionGenerator(id, props, options) {
 	const { attributes } = props;
 
 	if (!Object.keys(attributes?.blockeraTransition)?.length) {
@@ -31,6 +31,7 @@ export function TransitionGenerator(id, props) {
 		?.filter((item) => null !== item);
 
 	return createCssDeclarations({
+		options,
 		properties: {
 			transition: value?.join(', '),
 		},

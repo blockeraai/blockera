@@ -8,7 +8,7 @@ import { getValueAddonRealValue } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function TextShadowGenerator(id, props) {
+export function TextShadowGenerator(id, props, options) {
 	const { attributes } = props;
 
 	if (!Object.values(attributes?.blockeraTextShadow)?.length) {
@@ -34,6 +34,7 @@ export function TextShadowGenerator(id, props) {
 	});
 
 	return createCssDeclarations({
+		options,
 		properties: { 'text-shadow': shadows.join(',') },
 	});
 }

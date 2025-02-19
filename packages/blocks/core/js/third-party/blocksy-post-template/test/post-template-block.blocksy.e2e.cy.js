@@ -50,6 +50,12 @@ describe('Blocksy → Post Template Block → Block support', () => {
 		//
 		// 1.0. Block Style
 		//
+		cy.getBlock('blocksy/post-template').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
 		cy.getParentContainer('Clipping').within(() => {
 			cy.customSelect('Clip to Padding');
 		});

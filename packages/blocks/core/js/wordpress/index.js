@@ -1,15 +1,15 @@
 // @flow
 
+export * from './archives';
 export * from './audio';
 export * from './avatar';
 export * from './button';
-export * from './archives';
 export * from './buttons';
+export * from './calendar';
 export * from './categories';
 export * from './code';
-export * from './columns';
 export * from './column';
-export * from './calendar';
+export * from './columns';
 export * from './comment-author-name';
 export * from './comment-content';
 export * from './comment-date';
@@ -67,6 +67,7 @@ export * from './read-more';
 export * from './rss';
 export * from './search';
 export * from './separator';
+export * from './shared';
 export * from './site-logo';
 export * from './site-tagline';
 export * from './site-title';
@@ -78,4 +79,3 @@ export * from './tag-cloud';
 export * from './term-description';
 export * from './verse';
 export * from './video';
-export * from './shared';

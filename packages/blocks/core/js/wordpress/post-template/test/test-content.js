@@ -10,7 +10,7 @@ export const testContent = `
 	<div class="wp-block-columns alignwide are-vertically-aligned-center">
 		<!-- wp:column {"verticalAlignment":"center","width":"20%"} -->
 		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:20%">
-			<!-- wp:post-date {"style":{"color":{"text":"#ffffff"}},"fontSize":"extra-small"} /--></div>
+			<!-- wp:post-date {"style":{"color":{"text":"#ffffff"}},"fontSize":"extra-small","isLink":true} /--></div>
 		<!-- /wp:column -->
 
 		<!-- wp:column {"verticalAlignment":"center","width":"80%"} -->

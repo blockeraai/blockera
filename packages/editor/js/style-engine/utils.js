@@ -58,7 +58,8 @@ export const computedCssDeclarations = (
 		blockName: string,
 		supports: Object,
 		blockeraStyleEngineConfig: Object,
-	}
+	},
+	pickedSelector: string
 ): Array<string> => {
 	const output = [];
 
@@ -80,7 +81,8 @@ export const computedCssDeclarations = (
 				const cssGenerator = new CssGenerators(
 					styleKey,
 					definition,
-					blockProps
+					blockProps,
+					pickedSelector
 				);
 
 				const rules = cssGenerator.rules();
@@ -124,15 +126,10 @@ export const createCssDeclarations = (
 		return '';
 	}
 
-	const {
-		properties: _props,
-		// TODO: remove hard codes.
-		// options = { important: true }
-	} = declaration;
+	const { properties: _props, options } = declaration;
 
 	return getProperties({
-		// TODO: remove hard codes.
-		options: { important: true },
+		options,
 		properties: _props,
 	}).join('\n');
 };

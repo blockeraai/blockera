@@ -101,7 +101,7 @@ class Render {
     public function render( string $html, array $block): string {
 
         // Check block to is support by Blockera?
-        if (! blockera_is_supported_block($block) || is_admin()) {
+        if (! blockera_is_supported_block($block) || is_admin() || defined('REST_REQUEST') && REST_REQUEST) {
 
             return $html;
         }

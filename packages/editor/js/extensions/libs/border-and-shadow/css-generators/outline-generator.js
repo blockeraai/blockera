@@ -8,7 +8,7 @@ import { getValueAddonRealValue } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
-export function OutlineGenerator(id, props) {
+export function OutlineGenerator(id, props, options) {
 	const { attributes } = props;
 
 	if (!Object.values(attributes?.blockeraOutline)?.length) {
@@ -36,6 +36,7 @@ export function OutlineGenerator(id, props) {
 	});
 
 	return createCssDeclarations({
+		options,
 		properties: {
 			outline: properties.outlines?.join(', '),
 			'outline-offset': properties.offset?.join(', '),

@@ -49,13 +49,15 @@ export const StateStyle = (
 		const breakpoint = breakpoints[name];
 		const { type } = breakpoint;
 
-		const stylesheet = combineDeclarations(
+		const combinedDeclarations = combineDeclarations(
 			getComputedCssProps({
 				...props,
 				states,
 				currentBreakpoint: type,
 			})
-		).map(
+		);
+
+		const stylesheet = combinedDeclarations.map(
 			(
 				{ selector, declarations }: Object,
 				index: number

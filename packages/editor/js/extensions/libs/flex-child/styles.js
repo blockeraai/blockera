@@ -38,6 +38,7 @@ export const FlexChildStyles = ({
 		blockeraFlexChildOrder,
 	} = config.flexChildConfig;
 	const blockProps = {
+		state,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,
@@ -122,7 +123,8 @@ export const FlexChildStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -156,7 +158,8 @@ export const FlexChildStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
@@ -208,7 +211,8 @@ export const FlexChildStyles = ({
 						},
 					],
 				},
-				blockProps
+				blockProps,
+				pickedSelector
 			),
 		});
 	}
