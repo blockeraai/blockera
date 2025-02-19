@@ -69,17 +69,23 @@ class Transpiler {
     public function cleanupInlineStyles( string $content, int $post_id = 0): array {
 
         $this->parsed_blocks = parse_blocks($content);
+		
+		$data = [ 
+			'parsed_blocks'        => [],
+			'serialized_blocks'    => '',
+			'generated_css_styles' => [],
+		];
 
         // Early return if no blocks.
         if (empty($this->parsed_blocks)) {
-            return [
-                'parsed_blocks' => [],
-                'serialized_blocks' => '',
-                'generated_css_styles' => [],
-            ];
+            return $data;
         }
 
         $this->processBlocksInBatches();
+
+		if (empty($this->styles)) {
+			return $data;
+		}
 
         // FIXME: we should not filter out empty blocks before serializing, because this is not the valid way to serialize blocks and maybe missed some blocks.
         // Filter out empty blocks before serializing.
@@ -118,10 +124,6 @@ class Transpiler {
             $batch = array_slice($this->parsed_blocks, $i, $batch_size, true);
 
             foreach ($batch as $key => $block) {
-                if (! blockera_is_supported_block($block) || ! $this->isValidBlock($block)) {
-                	continue;
-                }
-
                 $this->processBlockContent($key, $block);
             }
 
@@ -145,10 +147,6 @@ class Transpiler {
         }
 		
 		foreach ($block['innerBlocks'] as $inner_key => $inner_block) {
-			if (! blockera_is_supported_block($inner_block) || ! $this->isValidBlock($inner_block)) {
-				continue;
-			}
-
 			// Process inner block content.
 			$this->processBlockContent(
 				$inner_key,
@@ -195,23 +193,26 @@ class Transpiler {
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
-        foreach ($block['innerContent'] as $_key => $innerContent) {
-            if (empty($innerContent)) {
-                continue;
-            }
+		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block)) {
+			
+			foreach ($block['innerContent'] as $_key => $innerContent) {
+				if (empty($innerContent)) {
+					continue;
+				}
 
-            $this->cleanupProcess(
-                $innerContent,
-                $_key,
-                [
-                    'block' => $block,
-                    'block_id' => $key,
-                    'block_path' => $args['block_path'] ?? [],
-                    'unique_class_name' => $unique_class_name,
-                    'blockera_class_name' => $blockera_class_name,
-                ]
-            );
-        }
+				$this->cleanupProcess(
+					$innerContent,
+					$_key,
+					[
+						'block' => $block,
+						'block_id' => $key,
+						'block_path' => $args['block_path'] ?? [],
+						'unique_class_name' => $unique_class_name,
+						'blockera_class_name' => $blockera_class_name,
+					]
+				);
+			}
+		}
 
         // Process inner blocks recursively.
         $this->processInnerBlocks($block['innerBlocks'], $key);
