@@ -169,17 +169,9 @@ class RenderContent {
 				]
             );
 		}
-		
-		// Parse blocks from post content.
-		$parsed_blocks = parse_blocks($post->post_content);
-
-		// Skip empty parsed blocks.
-		if (empty($parsed_blocks)) {
-			return $post;
-		}
 
 		// Get the updated blocks after cleanup.
-		$data = $this->transpiler->cleanupInlineStyles($parsed_blocks, $post->ID);
+		$data = $this->transpiler->cleanupInlineStyles($post->post_content, $post->ID);
 
 		// Prepare post content.
 		return $this->prepareCleanupContent(
