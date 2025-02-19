@@ -155,13 +155,13 @@ class RenderContent {
 	protected function cleanup( \WP_Post $post): string {
 
 		// Get cache data.
-		$cached_post_content = $this->cache->getCache($post->ID, 'post_content');
+		$cache = $this->cache->getCache($post->ID, 'post_content');
 
-		if (! empty($cached_post_content)) {
+		if (! empty($cache) || ( isset($cache['hash']) && md5($post->post_content) === $cache['hash'] )) {
 
 			// Prepare post content.
 			return $this->prepareCleanupContent(
-                $cached_post_content,
+                $cache,
                 [
 					'post_id' => $post->ID,
 					'type' => 'post_content',
