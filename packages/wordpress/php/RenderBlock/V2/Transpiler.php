@@ -135,18 +135,18 @@ class Transpiler {
     /**
      * Process inner blocks content.
      *
-     * @param array $block The block to process.
+     * @param array $blocks The blocks to process.
      * @param int   $key   The block key.
      *
      * @return void
      */
-    protected function processInnerBlocks( array $block, int $key): void {
+    protected function processInnerBlocks( array $blocks, int $key): void {
         // Process inner blocks content.
-        if (empty($block['innerBlocks'])) {
+        if (empty($blocks)) {
             return;
         }
 		
-		foreach ($block['innerBlocks'] as $inner_key => $inner_block) {
+		foreach ($blocks as $inner_key => $inner_block) {
 			// Process inner block content.
 			$this->processBlockContent(
 				$inner_key,
