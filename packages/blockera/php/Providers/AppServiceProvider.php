@@ -181,7 +181,7 @@ class AppServiceProvider extends ServiceProvider {
 					V2RenderContent::class,
 					static function ( Application $app): V2RenderContent {
 
-						return new V2RenderContent($app);
+						return new V2RenderContent($app, $app->make(Transpiler::class), $app->make(Cache::class, [ 'product_id' => 'blockera' ]));
 					}
 				);
 

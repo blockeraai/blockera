@@ -37,11 +37,13 @@ class RenderContent {
      * Render constructor.
      *
      * @param Application $app the app instance.
+	 * @param Transpiler  $transpiler the transpiler instance.
+	 * @param Cache       $cache the cache instance.
      */
-    public function __construct( Application $app) {
+    public function __construct( Application $app, Transpiler $transpiler, Cache $cache) {
         $this->app        = $app;
-        $this->transpiler = $app->make(Transpiler::class);
-		$this->cache      = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+		$this->cache      = $cache;
+        $this->transpiler = $transpiler;
     }
 
     /**
