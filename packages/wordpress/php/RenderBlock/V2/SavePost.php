@@ -2,6 +2,7 @@
 
 namespace Blockera\WordPress\RenderBlock\V2;
 
+use Blockera\Data\Cache\Cache;
 use Blockera\Bootstrap\Application;
 
 /**
@@ -10,6 +11,13 @@ use Blockera\Bootstrap\Application;
  * @package SavePost
  */
 class SavePost {
+
+	/**
+	 * The cache instance.
+	 *
+	 * @var Cache
+	 */
+	protected Cache $cache;
 
     /**
      * Store instance of app container.
@@ -22,13 +30,15 @@ class SavePost {
      * Constructor of SavePost class.
      *
      * @param Application $app    the instance of Application container.
+     * @param Cache       $cache the cache instance.
      */
-    public function __construct( Application $app) {
-        $this->app = $app;
+    public function __construct( Application $app, Cache $cache) {
+        $this->app   = $app;
+		$this->cache = $cache;
 
         add_action('save_post', [ $this, 'save' ], 9e8, 2);
 
-        add_filter('rest_pre_insert_wp_template', [ $this, 'insertWPTemplate' ], 10, 2);
+        add_filter('rest_pre_insert_wp_template', [ $this, 'insertWPTemplate' ], 10);
     }
 
     /**
@@ -46,37 +56,48 @@ class SavePost {
 			return;
 		}
 
-        $parsed_blocks = parse_blocks($post->post_content);
+		if (empty($post->post_content)) {
+			return;
+		}
 
-        // Excluding empty post content.
-        if (empty($parsed_blocks)) {
+		$cache = $this->cache->getCache($postId, 'post_content');
 
-            return;
-        }
+		// If cache found, return.
+		if (empty($cache) || ( isset($cache['hash']) && md5($post->post_content) === $cache['hash'] )) {
+			return;
+		}
 
         // Get the updated blocks after cleanup.
-		$this->app->make(Transpiler::class)->cleanupInlineStyles($parsed_blocks, $postId);
+		$this->app->make(Transpiler::class)->cleanupInlineStyles($post->post_content, $postId);
     }
 
 	/**
-	 * Insert wp_template post type.
+	 * Insert wp_template or wp_template_part post type.
 	 *
-	 * @param \stdClass        $prepared_post The instance of stdClass class.
-	 * @param \WP_REST_Request $request The instance of WP_REST_Request class.
+	 * @param \stdClass $prepared_post The instance of stdClass class.
 	 *
 	 * @return void
 	 */
-    public function insertWPTemplate( \stdClass $prepared_post, \WP_REST_Request $request) {
-        $parsed_blocks = parse_blocks($prepared_post->post_content);
+    public function insertWPTemplate( \stdClass $prepared_post) {
+		if (empty($prepared_post) || ! property_exists($prepared_post, 'post_content') || empty($prepared_post->post_content)) {
+			return;
+		}
 
-        // Excluding empty post content.
-        if (empty($parsed_blocks)) {
+		$post_id = property_exists($prepared_post, 'ID') ? $prepared_post->ID : 0;
 
-            return;
-        }
+		if (! $post_id) {
+			$key = 'post_content' . '_' . md5($prepared_post->post_content);
+		}
+
+		$cache = $this->cache->getCache($post_id, isset($key) ? $key : 'post_content');
+
+		// If cache found, return.
+		if (empty($cache) || ( isset($cache['hash']) && md5($prepared_post->post_content) === $cache['hash'] )) {
+			return;
+		}
 
         // Get the updated blocks after cleanup.
-        $this->app->make(Transpiler::class)->cleanupInlineStyles($parsed_blocks, property_exists($prepared_post, 'ID') ? $prepared_post->ID : 0);
+        $this->app->make(Transpiler::class)->cleanupInlineStyles($prepared_post->post_content, $post_id);
 
         return $prepared_post;
     }

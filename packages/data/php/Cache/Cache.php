@@ -65,16 +65,20 @@ class Cache {
      * @return bool true on success, false on failure!
      */
     public function setCache( int $post_id, string $key, $cache): bool {
+		if (empty($key)) {
+			throw new \Exception(__('Key #2 Argument is required on setCache method of Cache class', 'blockera'));
+		}
+
+		if (empty($cache)) {
+			throw new \Exception(__('Cache #3 Argument is required on setCache method of Cache class', 'blockera'));
+		}
+
         if ($post_id) {
             return update_post_meta($post_id, $this->getCacheKey($key), $cache);
         }
 
-		if (is_array($cache)) {
-			$cache = $key . '_' . md5(json_encode($cache));
-		} elseif (is_string($cache)) {
-			$cache = $key . '_' . md5($cache);
-		} else {
-			throw new \Exception(__('Invalid cache type: expected array or string value on setCache method of Cache class as #3 Argument', 'blockera'));
+		if (! empty($cache['hash'])) {
+			$key = $key . '_' . $cache['hash'];
 		}
 
         return update_option($this->getCacheKey($key), $cache);

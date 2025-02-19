@@ -72,6 +72,8 @@ class AppServiceProvider extends ServiceProvider {
 				}
             );
 
+			$cache_instance = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+
 			$this->app->singleton(
                 Version::class,
                 function ( Application $app, array $params = []) {
@@ -83,9 +85,9 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					V2SavePost::class,
-					function ( Application $app) {
+					function ( Application $app) use ( $cache_instance) {
 
-						return new V2SavePost($app);
+						return new V2SavePost($app, $cache_instance);
 					}
 				);
 			} else {
@@ -171,17 +173,17 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					Transpiler::class,
-					static function ( Application $app) {
+					static function ( Application $app) use ( $cache_instance) {
 
-						return new Transpiler($app);
+						return new Transpiler($app, $cache_instance);
 					}
 				);
 
 				$this->app->bind(
 					V2RenderContent::class,
-					static function ( Application $app): V2RenderContent {
+					static function ( Application $app) use ( $cache_instance): V2RenderContent {
 
-						return new V2RenderContent($app, $app->make(Transpiler::class), $app->make(Cache::class, [ 'product_id' => 'blockera' ]));
+						return new V2RenderContent($app, $app->make(Transpiler::class), $cache_instance);
 					}
 				);
 

@@ -47,17 +47,18 @@ class Transpiler {
      * The Parser class constructor.
      *
      * @param Application $app The application container object.
+     * @param Cache       $cache The cache instance.
      */
-    public function __construct( Application $app) {
+    public function __construct( Application $app, Cache $cache) {
         $this->app   = $app;
-        $this->cache = $app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+        $this->cache = $cache;
     }
 
     /**
      * Clean up inline styles from parsed blocks and convert them to CSS classes.
      *
-     * @param array $parsed_blocks Array of parsed blocks from WordPress content.
-     * @param int   $post_id The post id. default is 0 to indicate that the post id is not available.
+     * @param string $content The content of the post.
+     * @param int    $post_id The post id. default is 0 to indicate that the post id is not available.
      *
      * @return array{
      *   parsed_blocks: array,
@@ -65,9 +66,12 @@ class Transpiler {
      *   serialized_blocks: string
      * } The array with parsed blocks, generated CSS styles and serialized blocks.
      */
-    public function cleanupInlineStyles( array $parsed_blocks, int $post_id = 0): array {
+    public function cleanupInlineStyles( string $content, int $post_id = 0): array {
+
+		$this->parsed_blocks = parse_blocks($content);
+
         // Early return if no blocks.
-        if (empty($parsed_blocks)) {
+        if (empty($this->parsed_blocks)) {
             return [
                 'parsed_blocks' => [],
                 'serialized_blocks' => '',
@@ -75,7 +79,6 @@ class Transpiler {
             ];
         }
 
-        $this->parsed_blocks = $parsed_blocks;
         $this->processBlocksInBatches();
 
         // Filter out empty blocks before serializing.
@@ -89,7 +92,8 @@ class Transpiler {
         $serialized_blocks = serialize_blocks($filtered_blocks);
 
 		$data = [
-            'parsed_blocks' => $this->parsed_blocks,
+			'hash' => md5($content),
+			'parsed_blocks' => $this->parsed_blocks,
             'serialized_blocks' => $serialized_blocks,
             'generated_css_styles' => array_unique($this->styles),
         ];
