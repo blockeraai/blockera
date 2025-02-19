@@ -76,11 +76,11 @@ class SavePost {
 	 *
 	 * @param \stdClass $prepared_post The instance of stdClass class.
 	 *
-	 * @return void
+	 * @return \stdClass
 	 */
-    public function insertWPTemplate( \stdClass $prepared_post) {
+    public function insertWPTemplate( \stdClass $prepared_post): \stdClass {
 		if (empty($prepared_post) || ! property_exists($prepared_post, 'post_content') || empty($prepared_post->post_content)) {
-			return;
+			return $prepared_post;
 		}
 
 		$post_id = property_exists($prepared_post, 'ID') ? $prepared_post->ID : 0;
@@ -93,7 +93,7 @@ class SavePost {
 
 		// If cache found, return.
 		if (empty($cache) || ( isset($cache['hash']) && md5($prepared_post->post_content) === $cache['hash'] )) {
-			return;
+			return $prepared_post;
 		}
 
         // Get the updated blocks after cleanup.
