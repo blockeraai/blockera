@@ -2,6 +2,7 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
+use Blockera\Utils\Utils;
 use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
 
 abstract class BaseStyleDefinition {
@@ -122,6 +123,18 @@ abstract class BaseStyleDefinition {
 	 * @var string $breakpoint the current breakpoint.
 	 */
 	protected string $breakpoint;
+
+	/**
+	 * Store the supports.
+	 *
+	 * @var array $supports the supports.
+	 */
+	protected array $support = [];
+
+	public function __construct( array $supports) {
+
+		$this->support = $supports[ Utils::kebabCase($this->getId()) ];
+	}
 
 	/**
 	 * Set the current breakpoint.
@@ -381,7 +394,7 @@ abstract class BaseStyleDefinition {
 		array_map(
 			function ( array $setting ) use ( $name ): void {
 
-				if ( ! blockera_get_block_support( $this->getId(), $name ) ) {
+				if ( ! $this->support[ $name ] ) {
 
 					return;
 				}

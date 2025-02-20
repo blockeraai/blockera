@@ -141,20 +141,21 @@ class AppServiceProvider extends ServiceProvider {
             $this->app->bind(
                 StyleEngine::class,
                 static function ( Application $app, array $params) {
-
+					$supports         = blockera_get_available_block_supports();
+					$args             = compact('supports');
                     $styleDefinitions = [
-                        $app->make(Size::class),
-                        $app->make(Mouse::class),
-                        $app->make(Layout::class),
-                        $app->make(Border::class),
-                        $app->make(Effects::class),
-                        $app->make(Outline::class),
-                        $app->make(Spacing::class),
-                        $app->make(Position::class),
-                        $app->make(BoxShadow::class),
-                        $app->make(TextShadow::class),
-                        $app->make(Background::class),
-                        $app->make(Typography::class),
+                        $app->make(Size::class, $args),
+                        $app->make(Mouse::class, $args),
+                        $app->make(Layout::class, $args),
+                        $app->make(Border::class, $args),
+                        $app->make(Effects::class, $args),
+                        $app->make(Outline::class, $args),
+                        $app->make(Spacing::class, $args),
+                        $app->make(Position::class, $args),
+                        $app->make(BoxShadow::class, $args),
+                        $app->make(TextShadow::class, $args),
+                        $app->make(Background::class, $args),
+                        $app->make(Typography::class, $args),
                     ];
 
                     return new StyleEngine($params['block'], $params['fallbackSelector'], $styleDefinitions);

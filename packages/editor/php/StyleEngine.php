@@ -132,15 +132,26 @@ final class StyleEngine {
 	 */
 	public function getStylesheet(): string {
 
-		$base_breakpoint = blockera_get_base_breakpoint();
-
 		if (! empty($this->settings['blockeraBlockStates']['value'])) {
-			$states      = $this->settings['blockeraBlockStates']['value'];
+			$states = $this->settings['blockeraBlockStates']['value'];
+
+			// Filter pseudo classes to only include states that exist in the block.
+			$this->pseudo_classes = array_filter(
+                array_keys($states),
+                function( string $state):bool{
+					return in_array($state, $this->pseudo_classes, true);
+				}
+            );
+
 			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
 
 			// Add force base breakpoint if not exists.
-			if (! in_array($base_breakpoint, $breakpoints, true)) {
-				$breakpoints[] = $base_breakpoint;
+			if (! in_array($this->breakpoint, $breakpoints, true)) {
+				$breakpoints[] = $this->breakpoint;
+			}
+			// Add normal pseudo class if not exists.
+			if (! in_array('normal', $this->pseudo_classes, true)) {
+				$this->pseudo_classes[] = 'normal';
 			}
 
 			$breakpointsCssRules = array_filter(
@@ -151,7 +162,7 @@ final class StyleEngine {
 			return implode(PHP_EOL, $breakpointsCssRules);
 		}
 
-		return $this->prepareBreakpointStyles($base_breakpoint);
+		return $this->prepareBreakpointStyles($this->breakpoint);
 	}
 
 	/**
@@ -176,7 +187,7 @@ final class StyleEngine {
 		$this->breakpoint = $breakpoint;
 
 		// Get state css rules with breakpoint type.
-		$stateCssRules = $this->getStateCssRules( $breakpoint );
+		$stateCssRules = $this->getStateCssRules();
 
 		// Exclude empty css rules.
 		if ( empty( $stateCssRules ) ) {
@@ -211,17 +222,15 @@ final class StyleEngine {
 	/**
 	 * Get state css rules with pseudo class name.
 	 *
-	 * @param string $breakpoint The breakpoint( or device type) name.
-	 *
 	 * @return array The css rules for current pseudo class.
 	 */
-	protected function getStateCssRules( string $breakpoint ): array {
+	protected function getStateCssRules(): array {
 
 		// Imagine blockera block states stack is empty.
 		if ( empty( $this->settings['blockeraBlockStates']['value'] ) ) {
 
 			// We should just prepare normal state styles because not exists any other states.
-			$css_rules = $this->prepareStateStyles( 'normal', blockera_get_base_breakpoint() );
+			$css_rules = $this->prepareStateStyles( 'normal', $this->breakpoint );
 
 			// Exclude empty $css_rules.
 			if ( empty( $css_rules ) ) {
@@ -229,15 +238,13 @@ final class StyleEngine {
 				return [];
 			}
 
-			return [ $css_rules ];
+			return compact('css_rules');
 		}
-
-		$this->breakpoint = $breakpoint;
 
 		// We should process any supported pseudo classes by blockera to prepare each state styles.
 		return array_filter(
 			array_map(
-				function ( string $state ) use ( $breakpoint ): array {
+				function ( string $state ): array {
 
 					return $this->prepareStateStyles( $state );
 				},
@@ -417,6 +424,31 @@ final class StyleEngine {
 	}
 
 	/**
+	 * Get definition settings.
+	 *
+	 * @param array $settings the settings.
+	 * @param array $supports the supports.
+	 *
+	 * @return array the definition settings.
+	 */
+	private function getDefinitionSupportsSettings( array $settings, array $supports):array {
+
+		$filtered_settings = array_filter(
+			$settings,
+			function( $key) use ( $supports) {
+				return in_array($key, $supports, true);
+			},
+			ARRAY_FILTER_USE_KEY
+		);
+
+		if (! empty($settings['blockeraInnerBlocks'])) {
+			$filtered_settings['blockeraInnerBlocks'] = $settings['blockeraInnerBlocks'];
+		}
+
+		return $filtered_settings;
+	}
+
+	/**
 	 * Get current block state in breakpoint settings.
 	 *
 	 * @return array the block settings.
@@ -432,7 +464,7 @@ final class StyleEngine {
 
 		if ( blockera_is_normal_on_base_breakpoint( $this->pseudo_state, $this->breakpoint ) ) {
 
-			return blockera_get_definition_supports_settings( $this->settings, $supports );
+			return $this->getDefinitionSupportsSettings( $this->settings, $supports );
 		}
 
 		$states = $this->settings['blockeraBlockStates']['value'] ?? [];
@@ -458,7 +490,7 @@ final class StyleEngine {
 			return [];
 		}
 
-		return blockera_get_definition_supports_settings( $breakpointSettings['attributes'] ?? [], $supports );
+		return $this->getDefinitionSupportsSettings( $breakpointSettings['attributes'] ?? [], $supports );
 	}
 
 	/**

@@ -199,7 +199,11 @@ if (! function_exists('blockera_array_flat')) {
      */
     function blockera_array_flat( array $nestedArray): array {
 
-        return array_merge(...$nestedArray);
+        if (empty($nestedArray)) {
+            return [];
+        }
+        
+        return array_merge(...array_values($nestedArray));
     }
 }
 

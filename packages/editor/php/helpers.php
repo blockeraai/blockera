@@ -778,6 +778,37 @@ if ( ! function_exists( 'blockera_is_normal_on_base_breakpoint' ) ) {
 	}
 }
 
+if (! function_exists('blockera_get_available_block_supports')) {
+
+	/**
+	 * Get all available block supports.
+	 *
+	 * @return array the block supports.
+	 */
+	function blockera_get_available_block_supports(): array {
+		$supports = [];
+		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
+
+		foreach ($files as $support_file) {
+
+			ob_start();
+
+			require $support_file;
+
+			$support = json_decode(ob_get_clean(), true);
+
+			if (empty($support['title'])) {
+
+				continue;
+			}
+
+			$supports[ $support['title'] ] = $support['supports'];
+		}
+
+		return $supports;
+	}
+}
+
 if (! function_exists('blockera_get_block_supports_by_category')) {
 
 	/**
@@ -790,42 +821,8 @@ if (! function_exists('blockera_get_block_supports_by_category')) {
 	function blockera_get_block_supports_by_category( string $category): array {
 
 		$category = \Blockera\Utils\Utils::kebabCase( $category );
-		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
 
-		foreach ($files as $category_file) {
-
-			ob_start();
-
-			require $category_file;
-
-			$category_config = json_decode(ob_get_clean(), true);
-
-			if ($category === $category_config['title'] && empty($support)) {
-
-				return $category_config['supports'];
-			}
-		}
-
-		return [];
-	}
-}
-
-if ( ! function_exists( 'blockera_get_available_block_supports' ) ) {
-
-	/**
-	 * Retrieve available block supports list.
-	 *
-	 * @see: ../js/schemas/blockera-block-supports-list.json
-	 *
-	 * @param string $support_category the support category name.
-	 *
-	 * @return array The available block supports list for support category or all categories.
-	 */
-	function blockera_get_available_block_supports( string $support_category = '' ): array {
-
-		$support_category = \Blockera\Utils\Utils::kebabCase($support_category);
-
-		return blockera_get_block_supports_by_category( $support_category );
+		return blockera_get_available_block_supports()[ $category ];
 	}
 }
 
@@ -842,7 +839,7 @@ if ( ! function_exists( 'blockera_get_block_support' ) ) {
 	 */
 	function blockera_get_block_support( string $support_category, string $name = '', string $property = '' ) {
 
-		$supports = blockera_get_available_block_supports( $support_category, $name );
+		$supports = blockera_get_block_supports_by_category( $support_category);
 
 		if ( empty( $supports ) || ! isset( $supports[ $name ] ) ) {
 
@@ -909,27 +906,5 @@ if ( ! function_exists( 'blockera_find_selector_declarations' ) ) {
 		}
 
 		return [];
-	}
-}
-
-if (! function_exists('blockera_get_definition_supports_settings')) {
-	
-	/**
-	 * Get definition settings.
-	 *
-	 * @param array $settings the settings.
-	 * @param array $supports the supports.
-	 *
-	 * @return array the definition settings.
-	 */
-	function blockera_get_definition_supports_settings( array $settings, array $supports):array {
-
-		return array_filter(
-			$settings,
-			function( $key) use ( $supports) {
-				return in_array($key, $supports, true);
-			},
-			ARRAY_FILTER_USE_KEY
-		);
 	}
 }
