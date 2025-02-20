@@ -307,7 +307,10 @@ final class StyleEngine {
 		$this->definition = new $definition($this->supports);
 
 		// get current block settings.
-		$settings = $this->getSettings();
+		$settings              = $this->getSettings();
+		$inner_blocks_settings = $settings['blockeraInnerBlocks'] ?? [];
+
+		unset($settings['blockeraInnerBlocks']);
 
 		if ( empty( $settings ) ) {
 
@@ -325,10 +328,10 @@ final class StyleEngine {
 		$cssRules = $this->definition->getCssRules();
 
 		// the "blockeraInnerBlocks.value" accessible on normal state in base breakpoint and un normal states accessible without value index!
-		$innerBlocksSettings = $settings['blockeraInnerBlocks']['value'] ?? $settings['blockeraInnerBlocks'] ?? [];
+		$settings = $inner_blocks_settings['value'] ?? $inner_blocks_settings;
 
 		// Validation: Check if sets blockera inner blocks?
-		if ( ! empty( $innerBlocksSettings ) ) {
+		if ( ! empty( $settings ) ) {
 
 			// Preparing inner blocks css ...
 			$cssRules = array_merge(
@@ -339,8 +342,8 @@ final class StyleEngine {
 							$this,
 							'generateInnerBlockCss',
 						],
-						$innerBlocksSettings,
-						array_keys( $innerBlocksSettings )
+						$settings,
+						array_keys( $settings )
 					)
 				)
 			);

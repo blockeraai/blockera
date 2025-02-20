@@ -408,7 +408,7 @@ abstract class BaseStyleDefinition {
 		array_map(
 			function ( array $setting ) use ( $name ): void {
 
-				if ( ! $this->getSupports()[ $name ] ) {
+				if ( ! $this->getSupports(false)[ $name ] ) {
 
 					return;
 				}
@@ -591,17 +591,19 @@ abstract class BaseStyleDefinition {
 	 */
 	public function getSupportCssProperty( string $support ): ?string {
 
-		return $this->getSupports()[ $support ]['css-property'] ?? null;
+		return $this->getSupports(false)[ $support ]['css-property'] ?? null;
 	}
 
 	/**
 	 * Get blockera supports.
+	 * 
+	 * @param bool $array_keys The array keys flag.
 	 *
 	 * @return array the supports stack.
 	 */
-	public function getSupports(): array {
+	public function getSupports( bool $array_keys = true): array {
 
-		return array_keys($this->support['supports']);
+		return $array_keys ? array_keys($this->support['supports']) : $this->support['supports'];
 	}
 
 	/**
@@ -631,7 +633,7 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function getFallbackSupport( string $support ) {
 
-		return $this->getSupports()[ $support ]['fallback'] ?? 'root';
+		return $this->getSupports(false)[ $support ]['fallback'] ?? 'root';
 	}
 
 	/**
@@ -643,7 +645,7 @@ abstract class BaseStyleDefinition {
 
 		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( $this->block['blockName'] );
 
-		$default_style_engine_config = $this->getSupports()[ $support ]['style-engine-config'] ?? [];
+		$default_style_engine_config = $this->getSupports(false)[ $support ]['style-engine-config'] ?? [];
 
 		if (! $block_type) {
 
