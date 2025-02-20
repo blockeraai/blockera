@@ -134,8 +134,8 @@ final class StyleEngine {
 
 		$base_breakpoint = blockera_get_base_breakpoint();
 
-		if (! empty($this->block['attrs']['blockeraBlockStates']['value'])) {
-			$states      = $this->block['attrs']['blockeraBlockStates']['value'];
+		if (! empty($this->settings['blockeraBlockStates']['value'])) {
+			$states      = $this->settings['blockeraBlockStates']['value'];
 			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
 
 			// Add force base breakpoint if not exists.
