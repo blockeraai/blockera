@@ -35,10 +35,6 @@ class SavePost {
     public function __construct( Application $app, Cache $cache) {
         $this->app   = $app;
 		$this->cache = $cache;
-
-        add_action('save_post', [ $this, 'save' ], 9e8, 2);
-
-        add_filter('rest_pre_insert_wp_template', [ $this, 'insertWPTemplate' ], 10);
     }
 
     /**

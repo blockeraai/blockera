@@ -39,16 +39,6 @@ class Render {
     }
 
     /**
-     * Fire WordPress actions or filters Hooks.
-     *
-     * @return void
-     */
-    public function applyHooks(): void {
-
-        add_filter('render_block', [ $this, 'render' ], 10, 3);
-    }
-
-    /**
      * Render block icon element.
      *
      * @param string $html   The block html output.

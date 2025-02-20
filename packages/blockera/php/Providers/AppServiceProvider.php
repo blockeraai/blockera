@@ -225,6 +225,28 @@ class AppServiceProvider extends ServiceProvider {
 
         parent::boot();
 
+		$this->initCache();
+
+        $this->app->make(EntityRegistry::class);
+
+        $this->setupRenderBlocks();
+
+		Config::setConsumerConfig( blockera_core_config( 'app' ) );
+		Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
+		Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
+		Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
+		Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
+
+        add_action('after_setup_theme', [ $this, 'afterSetupTheme' ]);
+    }
+
+	/**
+	 * Initializing cache mechanism.
+	 * 
+	 * @return void
+	 */
+	private function initCache(): void{
+
 		$cache = $this->app->make(Version::class, [ 'product_id' => 'blockera' ]);
 
 		$validate_cache = $cache->validate(BLOCKERA_SB_VERSION);
@@ -237,35 +259,12 @@ class AppServiceProvider extends ServiceProvider {
 		if ($this->app instanceof Blockera) {
 			$this->app->setIsValidateCache($validate_cache);
 		}
-
-        if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
-
-            $this->app->make(V2SavePost::class);
-
-        } else {
-
-            $this->app->make(SavePost::class);
-        }
-
-		$this->app->make(Setup::class)->apply();
-
-        $this->app->make(EntityRegistry::class);
-
-        $this->renderBlocks();
-
-		Config::setConsumerConfig( blockera_core_config( 'app' ) );
-		Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
-		Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
-		Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
-		Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
-
-        add_action('after_setup_theme', [ $this, 'after_setup_theme' ]);
-    }
+	}
 
     /**
      * The after_setup_theme action hook
      */
-    public function after_setup_theme(): void {
+    public function afterSetupTheme(): void {
 
         add_action('init', [ $this, 'loadTextDomain' ]);
 
@@ -295,11 +294,74 @@ class AppServiceProvider extends ServiceProvider {
      * @throws BindingResolutionException Exception for not found bounded module.
      * @return void
      */
-    protected function renderBlocks(): void {
+    protected function setupRenderBlocks(): void {
 
-        $render = blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ? $this->app->make(V2RenderContent::class) : $this->app->make(Render::class);
+		if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
 
-        $render->applyHooks();
+			add_action(
+                'save_post',
+                function( int $post_id, \WP_Post $post): void {
+					$this->app->make(V2SavePost::class)->save($post_id, $post);
+				},
+                9e8,
+                2
+            );
+
+        	add_filter(
+                'rest_pre_insert_wp_template',
+                function( \stdClass $prepared_post): \stdClass {
+					return $this->app->make(V2SavePost::class)->insertWPTemplate($prepared_post);
+				},
+                10
+            );
+
+			// Filtering get_posts query.
+			add_action(
+                'pre_get_posts',
+                function( \WP_Query $query): void {
+					$this->app->make(V2RenderContent::class)->getPosts($query);
+				}
+            );
+
+			// Filtering render block content if it name is exact "core/block" and has ref attribute.
+			add_filter(
+                'render_block',
+                function( string $block_content, array $block): string {
+					return $this->app->make(V2RenderContent::class)->renderBlock($block_content, $block);
+				},
+                10,
+                2
+            );
+
+        } else {
+
+			add_action(
+                'save_post',
+                function( int $post_id, \WP_Post $post): void {
+					$this->app->make(SavePost::class)->save($post_id, $post);
+				},
+                9e8,
+                2
+            );
+
+			add_filter(
+                'render_block',
+                function( string $html, array $block): string {
+					return $this->app->make( Render::class)->render( $html, $block );
+				},
+                10,
+                3
+            );
+        }
+
+		add_filter(
+            'register_block_type_args',
+            function( array $args, string $block_type): array {
+				return $this->app->make(Setup::class)->registerBlock($args, $block_type);
+			},
+            9e2,
+            2
+        );
     }
 
     /**

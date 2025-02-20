@@ -738,7 +738,8 @@ if ( ! function_exists( 'blockera_get_base_breakpoint' ) ) {
 	 */
 	function blockera_get_base_breakpoint(): string {
 
-		$base = blockera_core_config( 'breakpoints.base' );
+		$breakpoints = blockera_core_config( 'breakpoints' );
+		$base        = $breakpoints['base'];
 
 		if ( ! is_string( $base ) ) {
 
@@ -746,7 +747,7 @@ if ( ! function_exists( 'blockera_get_base_breakpoint' ) ) {
 		}
 
 		$prepared_breakpoints = array_filter(
-			blockera_core_config( 'breakpoints.list' ),
+			$breakpoints['list'],
 			function ( array $breakpoint ): bool {
 
 				return ! empty( $breakpoint['base'] ) && ! empty( $breakpoint['status'] );

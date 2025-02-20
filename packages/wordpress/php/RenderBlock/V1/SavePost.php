@@ -36,8 +36,6 @@ class SavePost {
     public function __construct( Application $app, Render $render) { 
         $this->app    = $app;
         $this->render = $render;
-
-        add_action('save_post', [ $this, 'save' ], 9e8, 2);
     }
 
     /**

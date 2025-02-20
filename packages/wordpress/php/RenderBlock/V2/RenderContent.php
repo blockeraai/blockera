@@ -46,20 +46,6 @@ class RenderContent {
         $this->transpiler = $transpiler;
     }
 
-    /**
-     * Fire WordPress actions or filters Hooks.
-     *
-     * @return void
-     */
-    public function applyHooks(): void {
-
-		// Filtering get_posts query.
-        add_action('pre_get_posts', [ $this, 'getPosts' ]);
-
-		// Filtering render block content if it name is exact "core/block" and has ref attribute.
-        add_filter('render_block', [ $this, 'renderBlock' ], 10, 2);
-    }
-
 	/**
      * Filtering get_posts query.
      *
@@ -67,7 +53,7 @@ class RenderContent {
      *
      * @return void
      */
-    public function getPosts( \WP_Query $query) {
+    public function getPosts( \WP_Query $query): void {
 		if (! $query->is_main_query() || is_admin() || wp_doing_ajax() || isset($_REQUEST['_wp-find-template'])) {
             return;
 		}
