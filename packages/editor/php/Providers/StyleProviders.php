@@ -3,7 +3,7 @@
 namespace Blockera\Editor\Providers;
 
 use Blockera\Bootstrap\Application;
-use Blockera\WordPress\RenderBlock\HTML\Icon;
+use Blockera\WordPress\RenderBlock\V2\HTML\Icon;
 use Blockera\Editor\StyleDefinitions\{
 	Size,
 	Mouse,
