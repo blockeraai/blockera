@@ -9,7 +9,7 @@ export const useDragValue = ({
 	movement = 'vertical',
 	min,
 	max,
-	threshold = 10,
+	threshold = 5,
 	onEnd: callbackOnEnd = () => {},
 }) => {
 	// We are creating a snapshot of the values when the drag starts
