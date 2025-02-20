@@ -560,11 +560,21 @@ abstract class BaseStyleDefinition {
 	 *
 	 * @param string $support the blockera block support name.
 	 *
-	 * @return string the standard css property name
+	 * @return string the standard css property name.
 	 */
 	public function getSupportCssProperty( string $support ): ?string {
 
 		return blockera_get_block_support( $this->getId(), $support, 'css-property' );
+	}
+
+	/**
+	 * Get blockera supports.
+	 *
+	 * @return array the supports stack.
+	 */
+	public function getSupports(): array {
+
+		return array_keys(blockera_get_block_supports_by_category( $this->getId() ));
 	}
 
 	/**

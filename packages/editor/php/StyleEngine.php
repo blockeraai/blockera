@@ -4,6 +4,7 @@ namespace Blockera\Editor;
 
 use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 use Blockera\Exceptions\BaseException;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class StyleEngine generating css style for any state of breakpoints with any properties.
@@ -408,9 +409,16 @@ final class StyleEngine {
 	 */
 	public function getSettings(): array {
 
+		$supports = $this->definition->getSupports();
+
+		if (empty($supports)) {
+
+			return [];
+		}
+
 		if ( blockera_is_normal_on_base_breakpoint( $this->pseudo_state, $this->breakpoint ) ) {
 
-			return $this->settings;
+			return blockera_get_definition_supports_settings( $this->settings, $supports );
 		}
 
 		$states = $this->settings['blockeraBlockStates']['value'] ?? [];
@@ -436,7 +444,7 @@ final class StyleEngine {
 			return [];
 		}
 
-		return $breakpointSettings['attributes'] ?? [];
+		return blockera_get_definition_supports_settings( $breakpointSettings['attributes'] ?? [], $supports );
 	}
 
 	/**
