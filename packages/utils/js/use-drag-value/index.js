@@ -9,6 +9,7 @@ export const useDragValue = ({
 	movement = 'vertical',
 	min,
 	max,
+	threshold = 10,
 	onEnd: callbackOnEnd = () => {},
 }) => {
 	// We are creating a snapshot of the values when the drag starts
@@ -21,6 +22,8 @@ export const useDragValue = ({
 	const [startVal, setStartVal] = useState(0);
 
 	const [dragStarted, setDragStarted] = useState('');
+
+	const [initialPos, setInitialPos] = useState(0);
 
 	const createVirtualCursorBox = (cursor) => {
 		// Create a new div element
@@ -60,14 +63,10 @@ export const useDragValue = ({
 		(event) => {
 			if (movement === 'vertical') {
 				setStartVal(event.clientY);
-
-				// add cursor
-				createVirtualCursorBox('ns-resize');
+				setInitialPos(event.clientY);
 			} else if (movement === 'horizontal') {
 				setStartVal(event.clientX);
-
-				// add cursor
-				createVirtualCursorBox('ew-resize');
+				setInitialPos(event.clientX);
 			}
 
 			setSnapshot(value);
@@ -78,14 +77,32 @@ export const useDragValue = ({
 
 	// Only change the value if the drag was actually started.
 	const onUpdate = (event) => {
-		let newValue;
+		const currentPos =
+			movement === 'vertical' ? event.clientY : event.clientX;
+		const diff = Math.abs(currentPos - initialPos);
 
+		// Check threshold only if cursor box doesn't exist yet
+		if (!document.querySelector('.blockera-virtual-cursor-box')) {
+			if (diff < threshold) {
+				return;
+			}
+
+			// Create cursor once threshold is exceeded
+			createVirtualCursorBox(
+				movement === 'vertical' ? 'ns-resize' : 'ew-resize'
+			);
+
+			setStartVal(currentPos);
+			return; // Skip the first value update to avoid jumps
+		}
+
+		let newValue;
 		if (movement === 'vertical') {
-			newValue = snapshot - event.clientY + startVal;
+			newValue = snapshot - (currentPos - startVal + threshold);
 		}
 
 		if (movement === 'horizontal') {
-			newValue = snapshot - (startVal - event.clientX);
+			newValue = snapshot - (startVal - currentPos - threshold);
 		}
 
 		// Check against min and max values
