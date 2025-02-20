@@ -98,11 +98,19 @@ export const useDragValue = ({
 
 		let newValue;
 		if (movement === 'vertical') {
-			newValue = snapshot - (currentPos - startVal + threshold);
+			if (currentPos > startVal) {
+				newValue = snapshot - (currentPos - startVal - threshold);
+			} else {
+				newValue = snapshot - (currentPos - startVal + threshold);
+			}
 		}
 
 		if (movement === 'horizontal') {
-			newValue = snapshot - (startVal - currentPos - threshold);
+			if (currentPos > startVal) {
+				newValue = snapshot + (currentPos - startVal - threshold);
+			} else {
+				newValue = snapshot + (currentPos - startVal + threshold);
+			}
 		}
 
 		// Check against min and max values
