@@ -33,6 +33,13 @@ class RenderContent {
      */
     protected Transpiler $transpiler;
 
+	/**
+	 * Store the supports.
+	 *
+	 * @var array $supports
+	 */
+	protected array $supports = [];
+
     /**
      * Render constructor.
      *
@@ -50,13 +57,16 @@ class RenderContent {
      * Filtering get_posts query.
      *
      * @param \WP_Query $query The WordPress query instance.
+	 * @param array     $supports The supports.
      *
      * @return void
      */
-    public function getPosts( \WP_Query $query): void {
+    public function getPosts( \WP_Query $query, array $supports = []): void {
 		if (! $query->is_main_query() || is_admin() || wp_doing_ajax() || isset($_REQUEST['_wp-find-template'])) {
             return;
 		}
+
+		$this->supports = $supports;
 
         add_filter('the_posts', [ $this, 'thePosts' ]);
     }
@@ -66,16 +76,19 @@ class RenderContent {
 	 *
 	 * @param string $block_content The block content.
 	 * @param array  $block         The block array.
+	 * @param array  $supports      The supports.
 	 *
 	 * @return string The block content.
 	 */
-    public function renderBlock( string $block_content, array $block): string {
+    public function renderBlock( string $block_content, array $block, array $supports = []): string {
 		// Skip processing during block editor save.
 		if (wp_doing_ajax() || is_admin() || defined('REST_REQUEST') && REST_REQUEST) {
             return $block_content;
 		}
 
 		if (isset($block['blockName']) && 'core/block' === $block['blockName']) {
+
+			$this->supports = $supports;
 
 			if (! isset($block['attrs']['ref'])) {
 				return $block_content;
@@ -157,7 +170,7 @@ class RenderContent {
 		}
 
 		// Get the updated blocks after cleanup.
-		$data = $this->transpiler->cleanupInlineStyles($post->post_content, $post->ID);
+		$data = $this->transpiler->cleanupInlineStyles($post->post_content, $post->ID, $this->supports);
 
 		// Prepare post content.
 		return $this->prepareCleanupContent(

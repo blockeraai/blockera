@@ -803,7 +803,7 @@ if (! function_exists('blockera_get_available_block_supports')) {
 				continue;
 			}
 
-			$supports[ $support['title'] ] = $support['supports'];
+			$supports[ $support['title'] ] = $support;
 		}
 
 		return $supports;
@@ -823,7 +823,7 @@ if (! function_exists('blockera_get_block_supports_by_category')) {
 
 		$category = \Blockera\Utils\Utils::kebabCase( $category );
 
-		return blockera_get_available_block_supports()[ $category ];
+		return blockera_get_available_block_supports()[ $category ]['supports'];
 	}
 }
 

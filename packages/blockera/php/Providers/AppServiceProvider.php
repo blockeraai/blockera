@@ -141,21 +141,19 @@ class AppServiceProvider extends ServiceProvider {
             $this->app->bind(
                 StyleEngine::class,
                 static function ( Application $app, array $params) {
-					$supports         = blockera_get_available_block_supports();
-					$args             = compact('supports');
                     $styleDefinitions = [
-                        $app->make(Size::class, $args),
-                        $app->make(Mouse::class, $args),
-                        $app->make(Layout::class, $args),
-                        $app->make(Border::class, $args),
-                        $app->make(Effects::class, $args),
-                        $app->make(Outline::class, $args),
-                        $app->make(Spacing::class, $args),
-                        $app->make(Position::class, $args),
-                        $app->make(BoxShadow::class, $args),
-                        $app->make(TextShadow::class, $args),
-                        $app->make(Background::class, $args),
-                        $app->make(Typography::class, $args),
+                        Size::class,
+                        Mouse::class,
+                        Layout::class,
+                        Border::class,
+                        Effects::class,
+                        Outline::class,
+                        Spacing::class,
+                        Position::class,
+                        BoxShadow::class,
+                        TextShadow::class,
+                        Background::class,
+                        Typography::class,
                     ];
 
                     return new StyleEngine($params['block'], $params['fallbackSelector'], $styleDefinitions);
@@ -296,12 +294,14 @@ class AppServiceProvider extends ServiceProvider {
      */
     protected function setupRenderBlocks(): void {
 
+		$supports = blockera_get_available_block_supports();
+
 		if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
 
 			add_action(
                 'save_post',
-                function( int $post_id, \WP_Post $post): void {
-					$this->app->make(V2SavePost::class)->save($post_id, $post);
+                function( int $post_id, \WP_Post $post) use ( $supports): void {
+					$this->app->make(V2SavePost::class)->save($post_id, $post, $supports);
 				},
                 9e8,
                 2
@@ -309,8 +309,8 @@ class AppServiceProvider extends ServiceProvider {
 
         	add_filter(
                 'rest_pre_insert_wp_template',
-                function( \stdClass $prepared_post): \stdClass {
-					return $this->app->make(V2SavePost::class)->insertWPTemplate($prepared_post);
+                function( \stdClass $prepared_post) use ( $supports): \stdClass {
+					return $this->app->make(V2SavePost::class)->insertWPTemplate($prepared_post, $supports);
 				},
                 10
             );
@@ -318,16 +318,16 @@ class AppServiceProvider extends ServiceProvider {
 			// Filtering get_posts query.
 			add_action(
                 'pre_get_posts',
-                function( \WP_Query $query): void {
-					$this->app->make(V2RenderContent::class)->getPosts($query);
+                function( \WP_Query $query) use ( $supports): void {
+					$this->app->make(V2RenderContent::class)->getPosts($query, $supports);
 				}
             );
 
 			// Filtering render block content if it name is exact "core/block" and has ref attribute.
 			add_filter(
                 'render_block',
-                function( string $block_content, array $block): string {
-					return $this->app->make(V2RenderContent::class)->renderBlock($block_content, $block);
+                function( string $block_content, array $block) use ( $supports): string {
+					return $this->app->make(V2RenderContent::class)->renderBlock($block_content, $block, $supports);
 				},
                 10,
                 2
@@ -337,8 +337,8 @@ class AppServiceProvider extends ServiceProvider {
 
 			add_action(
                 'save_post',
-                function( int $post_id, \WP_Post $post): void {
-					$this->app->make(SavePost::class)->save($post_id, $post);
+                function( int $post_id, \WP_Post $post) use ( $supports): void {
+					$this->app->make(SavePost::class)->save($post_id, $post, $supports);
 				},
                 9e8,
                 2
@@ -346,8 +346,8 @@ class AppServiceProvider extends ServiceProvider {
 
 			add_filter(
                 'render_block',
-                function( string $html, array $block): string {
-					return $this->app->make( Render::class)->render( $html, $block );
+                function( string $html, array $block) use ( $supports): string {
+					return $this->app->make( Render::class)->render( $html, $block, $supports );
 				},
                 10,
                 3

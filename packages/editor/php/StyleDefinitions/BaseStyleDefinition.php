@@ -131,7 +131,21 @@ abstract class BaseStyleDefinition {
 	 */
 	protected array $support = [];
 
+	/**
+	 * The constructor.
+	 *
+	 * @param array $supports The supports.
+	 * 
+	 * @throws \Exception If the supports are not valid.
+	 *
+	 * @return void
+	 */
 	public function __construct( array $supports) {
+
+		if (empty($supports) || ! isset($supports[ Utils::kebabCase($this->getId()) ])) {
+
+			throw new \Exception( 'The supports provided for ' . $this->getId() . ' Style is not valid.' );
+		}
 
 		$this->support = $supports[ Utils::kebabCase($this->getId()) ];
 	}
@@ -394,7 +408,7 @@ abstract class BaseStyleDefinition {
 		array_map(
 			function ( array $setting ) use ( $name ): void {
 
-				if ( ! $this->support[ $name ] ) {
+				if ( ! $this->getSupports()[ $name ] ) {
 
 					return;
 				}
@@ -577,7 +591,7 @@ abstract class BaseStyleDefinition {
 	 */
 	public function getSupportCssProperty( string $support ): ?string {
 
-		return blockera_get_block_support( $this->getId(), $support, 'css-property' );
+		return $this->getSupports()[ $support ]['css-property'] ?? null;
 	}
 
 	/**
@@ -587,7 +601,7 @@ abstract class BaseStyleDefinition {
 	 */
 	public function getSupports(): array {
 
-		return array_keys(blockera_get_block_supports_by_category( $this->getId() ));
+		return array_keys($this->support['supports']);
 	}
 
 	/**
@@ -617,7 +631,7 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function getFallbackSupport( string $support ) {
 
-		return blockera_get_block_support( $this->getId(), $support, 'fallback' ) ?? 'root';
+		return $this->getSupports()[ $support ]['fallback'] ?? 'root';
 	}
 
 	/**
@@ -629,7 +643,7 @@ abstract class BaseStyleDefinition {
 
 		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( $this->block['blockName'] );
 
-		$default_style_engine_config = blockera_get_block_support( $this->getId(), $support, 'style-engine-config' ) ?? [];
+		$default_style_engine_config = $this->getSupports()[ $support ]['style-engine-config'] ?? [];
 
 		if (! $block_type) {
 

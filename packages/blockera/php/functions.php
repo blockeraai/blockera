@@ -355,3 +355,16 @@ if ( ! function_exists( 'blockera_add_inline_css' ) ) {
 		);
 	}
 }
+
+if (! function_exists('blockera_is_skip_request')) {
+
+	/**
+	 * Check if the request is a REST request.
+	 *
+	 * @return bool
+	 */
+	function blockera_is_skip_request(): bool {
+
+		return ( defined('REST_REQUEST') && REST_REQUEST ) || ( isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'] );
+	}
+}

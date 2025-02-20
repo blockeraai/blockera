@@ -59,6 +59,7 @@ class Transpiler {
      *
      * @param string $content The content of the post.
      * @param int    $post_id The post id. default is 0 to indicate that the post id is not available.
+	 * @param array  $supports The supports.
      *
      * @return array{
      *   parsed_blocks: array,
@@ -66,7 +67,7 @@ class Transpiler {
      *   serialized_blocks: string
      * } The array with parsed blocks, generated CSS styles and serialized blocks.
      */
-    public function cleanupInlineStyles( string $content, int $post_id = 0): array {
+    public function cleanupInlineStyles( string $content, int $post_id = 0, array $supports = []): array {
 
         $this->parsed_blocks = parse_blocks($content);
 		
@@ -81,7 +82,7 @@ class Transpiler {
             return $data;
         }
 
-        $this->processBlocksInBatches();
+        $this->processBlocksInBatches($supports);
 
 		if (empty($this->styles)) {
 			return $data;
@@ -113,10 +114,12 @@ class Transpiler {
 
     /**
      * Process blocks in batches to optimize memory usage.
+	 * 
+	 * @param array $supports The supports.
      *
      * @return void
      */
-    protected function processBlocksInBatches(): void {
+    protected function processBlocksInBatches( array $supports): void {
         $batch_size   = 50; // Process 50 blocks at a time.
         $total_blocks = count($this->parsed_blocks);
 
@@ -124,7 +127,7 @@ class Transpiler {
             $batch = array_slice($this->parsed_blocks, $i, $batch_size, true);
 
             foreach ($batch as $key => $block) {
-                $this->processBlockContent($key, $block);
+                $this->processBlockContent($key, $block, compact('supports'));
             }
 
             // Clear memory after each batch.
@@ -137,10 +140,11 @@ class Transpiler {
      *
      * @param array $blocks The blocks to process.
      * @param int   $key   The block key.
+     * @param array $args  The arguments.
      *
      * @return void
      */
-    protected function processInnerBlocks( array $blocks, int $key): void {
+    protected function processInnerBlocks( array $blocks, int $key, array $args = []): void {
         // Process inner blocks content.
         if (empty($blocks)) {
             return;
@@ -159,7 +163,8 @@ class Transpiler {
 								'id' => $key,
 							],
 						]
-					),
+                    ),
+					'supports' => $args['supports'],
 				]
 			);
 		}
@@ -206,6 +211,7 @@ class Transpiler {
 					[
 						'block' => $block,
 						'block_id' => $key,
+						'supports' => $args['supports'],
 						'block_path' => $args['block_path'] ?? [],
 						'unique_class_name' => $unique_class_name,
 						'blockera_class_name' => $blockera_class_name,
@@ -215,7 +221,7 @@ class Transpiler {
 		}
 
         // Process inner blocks recursively.
-        $this->processInnerBlocks($block['innerBlocks'], $key);
+        $this->processInnerBlocks($block['innerBlocks'], $key, $args);
     }
 
     /**
@@ -283,6 +289,7 @@ class Transpiler {
                 'fallbackSelector' => $args['unique_class_name'],
             ]
         );
+		$this->style_engine->setSupports($args['supports']);
         $this->style_engine->setInlineStyles($inline_styles);
         $computed_css_rules = $this->style_engine->getStylesheet();
 

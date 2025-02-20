@@ -84,11 +84,12 @@ class Render {
      *
      * @param string $html  WordPress block rendered HTML.
      * @param array  $block WordPress block details.
+	 * @param array  $supports The supports.
      *
      * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
      * @return string block HTML.
      */
-    public function render( string $html, array $block): string {
+    public function render( string $html, array $block, array $supports): string {
 
         // Check block to is support by Blockera?
         if (! blockera_is_supported_block($block) || is_admin() || defined('REST_REQUEST') && REST_REQUEST) {
@@ -148,6 +149,7 @@ class Render {
          * @var Parser $parser the instance of Parser class.
          */
         $parser = $this->app->make(Parser::class);
+		$parser->setSupports($supports);
 
         // Computation css rules for current block by server side style engine...
         $computed_css_rules = $parser->getCss(compact('block', 'unique_class_name'));

@@ -2,9 +2,8 @@
 
 namespace Blockera\Editor;
 
-use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 use Blockera\Exceptions\BaseException;
-use Symfony\Component\VarDumper\VarDumper;
+use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 
 /**
  * Class StyleEngine generating css style for any state of breakpoints with any properties.
@@ -92,6 +91,13 @@ final class StyleEngine {
 	protected array $inline_styles = [];
 
 	/**
+	 * Store the supports.
+	 *
+	 * @var array $supports
+	 */
+	protected array $supports = [];
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array  $block            The current block.
@@ -111,6 +117,18 @@ final class StyleEngine {
 
 		// by default store base breakpoint.
 		$this->breakpoint = blockera_core_config( 'breakpoints.base' );
+	}
+
+	/**
+	 * Set supports.
+	 *
+	 * @param array $supports The supports.
+	 *
+	 * @return void
+	 */
+	public function setSupports( array $supports): void {
+
+		$this->supports = $supports;
 	}
 
 	/**
@@ -280,13 +298,14 @@ final class StyleEngine {
 	/**
 	 * Generating current block css styles.
 	 *
-	 * @param BaseStyleDefinition $definition the style definition instance.
+	 * @param string $definition The style definition class namespace.
 	 *
 	 * @return array The array of collection of selector and declaration.
 	 */
-	protected function generateBlockCss( BaseStyleDefinition $definition ): array {
+	protected function generateBlockCss( string $definition ): array {
 
-		$this->definition = $definition;
+		$this->definition = new $definition($this->supports);
+
 		// get current block settings.
 		$settings = $this->getSettings();
 
