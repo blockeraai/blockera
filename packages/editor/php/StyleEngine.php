@@ -132,37 +132,51 @@ final class StyleEngine {
 	 */
 	public function getStylesheet(): string {
 
-		$breakpointsCssRules = array_filter(
-			array_map( [ $this, 'prepareBreakpointStyles' ], blockera_core_config( 'breakpoints.list' ) ),
-			'blockera_get_filter_empty_array_item'
-		);
+		$base_breakpoint = blockera_get_base_breakpoint();
 
-		return implode( PHP_EOL, $breakpointsCssRules );
+		if (! empty($this->block['attrs']['blockeraBlockStates']['value'])) {
+			$states      = $this->block['attrs']['blockeraBlockStates']['value'];
+			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
+
+			// Add force base breakpoint if not exists.
+			if (! in_array($base_breakpoint, $breakpoints, true)) {
+				$breakpoints[] = $base_breakpoint;
+			}
+
+			$breakpointsCssRules = array_filter(
+				array_map([ $this, 'prepareBreakpointStyles' ], $breakpoints),
+				'blockera_get_filter_empty_array_item'
+			);
+
+			return implode(PHP_EOL, $breakpointsCssRules);
+		}
+
+		return $this->prepareBreakpointStyles($base_breakpoint);
 	}
 
 	/**
 	 * Preparing css of breakpoint settings.
 	 *
-	 * @param array $breakpoint The breakpoint data.
+	 * @param string $breakpoint The breakpoint type.
 	 *
 	 * @return string The generated css rule for current breakpoint.
 	 */
-	protected function prepareBreakpointStyles( array $breakpoint ): string {
+	protected function prepareBreakpointStyles( string $breakpoint ): string {
 
 		// Get css media queries.
 		$mediaQueries = blockera_get_css_media_queries();
 
 		// Validate breakpoint type.
-		if ( ! isset( $breakpoint['type'], $mediaQueries[ $breakpoint['type'] ] ) ) {
+		if ( ! isset( $breakpoint, $mediaQueries[ $breakpoint ] ) ) {
 
 			return '';
 		}
 
 		// Set current breakpoint for generating styles process.
-		$this->breakpoint = $breakpoint['type'];
+		$this->breakpoint = $breakpoint;
 
 		// Get state css rules with breakpoint type.
-		$stateCssRules = $this->getStateCssRules( $breakpoint['type'] );
+		$stateCssRules = $this->getStateCssRules( $breakpoint );
 
 		// Exclude empty css rules.
 		if ( empty( $stateCssRules ) ) {
@@ -181,7 +195,7 @@ final class StyleEngine {
 		);
 
 		// append css styles on root for base breakpoint.
-		if ( empty( $mediaQueries[ $breakpoint['type'] ] ) ) {
+		if ( empty( $mediaQueries[ $breakpoint ] ) ) {
 
 			return $styles;
 		}
@@ -189,7 +203,7 @@ final class StyleEngine {
 		// Concatenate generated css media query includes all css rules for current received breakpoint type.
 		return sprintf(
 			'%1$s{%2$s}',
-			$mediaQueries[ $breakpoint['type'] ],
+			$mediaQueries[ $breakpoint ],
 			$styles,
 		);
 	}
