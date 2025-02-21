@@ -81,19 +81,26 @@ export const useDragValue = ({
 			movement === 'vertical' ? event.clientY : event.clientX;
 		const diff = Math.abs(currentPos - initialPos);
 
-		// Check threshold only if cursor box doesn't exist yet
+		// Check threshold only if cursor box doesn't exist yet and threshold is not zero
 		if (!document.querySelector('.blockera-virtual-cursor-box')) {
-			if (diff < threshold) {
-				return;
+			if (threshold !== 0) {
+				if (diff < threshold) {
+					return;
+				}
+
+				// Create cursor once threshold is exceeded
+				createVirtualCursorBox(
+					movement === 'vertical' ? 'ns-resize' : 'ew-resize'
+				);
+
+				setStartVal(currentPos);
+				return; // Skip the first value update to avoid jumps
 			}
 
-			// Create cursor once threshold is exceeded
+			// If threshold is 0, just create the cursor box immediately
 			createVirtualCursorBox(
 				movement === 'vertical' ? 'ns-resize' : 'ew-resize'
 			);
-
-			setStartVal(currentPos);
-			return; // Skip the first value update to avoid jumps
 		}
 
 		let newValue;
