@@ -193,6 +193,7 @@ final class StyleEngine {
 	protected function prepareBreakpointStyles( string $breakpoint ): string {
 
 		// Get css media queries.
+		// FIXME: Performance bottleneck.
 		$mediaQueries = blockera_get_css_media_queries();
 
 		// Validate breakpoint type.
@@ -205,10 +206,10 @@ final class StyleEngine {
 		$this->breakpoint = $breakpoint;
 
 		// Get state css rules with breakpoint type.
-		$stateCssRules = $this->getStateCssRules();
+		$state_css_rules = $this->getStateCssRules();
 
 		// Exclude empty css rules.
-		if ( empty( $stateCssRules ) ) {
+		if ( empty( $state_css_rules ) ) {
 
 			return '';
 		}
@@ -217,7 +218,7 @@ final class StyleEngine {
 			PHP_EOL,
 			array_unique(
 				array_filter(
-					blockera_array_flat( $stateCssRules ),
+					blockera_array_flat( $state_css_rules ),
 					'blockera_get_filter_empty_array_item'
 				)
 			)
