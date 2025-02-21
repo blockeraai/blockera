@@ -307,13 +307,15 @@ class AppServiceProvider extends ServiceProvider {
                 2
             );
 
-        	add_filter(
-                'rest_pre_insert_wp_template',
-                function( \stdClass $prepared_post) use ( $supports): \stdClass {
-					return $this->app->make(V2SavePost::class)->insertWPTemplate($prepared_post, $supports);
-				},
-                10
-            );
+			// phpcs:disable
+        	// add_filter(
+            // 'rest_pre_insert_wp_template',
+            // function( \stdClass $prepared_post) use ( $supports): \stdClass {
+			// return $this->app->make(V2SavePost::class)->insertWPTemplate($prepared_post, $supports);
+			// },
+            // 10
+            // );
+			// phpcs:enable
 
 			// Filtering get_posts query.
 			add_action(

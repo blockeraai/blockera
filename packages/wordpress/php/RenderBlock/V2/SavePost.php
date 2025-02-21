@@ -47,10 +47,12 @@ class SavePost {
      * @return void
      */
     public function save( int $postId, \WP_Post $post, array $supports): void {
+		// phpcs:disable
 		// We should not cache post content for wp_template and wp_template_part post types, because we will create cache for them in the rest api.
-		if (in_array($post->post_type, [ 'wp_template', 'wp_template_part' ], true)) {
-			return;
-		}
+		// if (in_array($post->post_type, [ 'wp_template', 'wp_template_part' ], true)) {
+		// return;
+		// }
+		// phpcs:enable
 
 		if (empty($post->post_content)) {
 			return;
