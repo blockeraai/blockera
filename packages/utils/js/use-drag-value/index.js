@@ -106,6 +106,7 @@ export const useDragValue = ({
 		let newValue;
 		const stepMultiplier = event.shiftKey ? 10 : 1;
 		const pixelThreshold = event.shiftKey ? 5 : 1;
+		const stepThreshold = event.shiftKey ? 10 : 5;
 
 		if (movement === 'vertical') {
 			const pixelDiff = currentPos - startVal;
@@ -115,7 +116,7 @@ export const useDragValue = ({
 			newValue =
 				snapshot +
 				(pixelDiff > 0 ? -steps : steps) -
-				(currentPos > initialPos ? -threshold : threshold);
+				(currentPos > initialPos ? -stepThreshold : stepThreshold);
 		}
 
 		if (movement === 'horizontal') {
@@ -126,7 +127,7 @@ export const useDragValue = ({
 			newValue =
 				snapshot +
 				(pixelDiff > 0 ? steps : -steps) -
-				(currentPos > initialPos ? -threshold : threshold);
+				(currentPos > initialPos ? -stepThreshold : stepThreshold);
 		}
 
 		// Check against min and max values
