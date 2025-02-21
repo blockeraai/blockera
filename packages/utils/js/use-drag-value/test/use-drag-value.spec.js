@@ -20,6 +20,7 @@ function TestComponent({ movement = 'vertical' }) {
 		onEnd: () => {
 			setOnEndFired('fired');
 		},
+		threshold: 0,
 	});
 
 	return (
@@ -36,6 +37,7 @@ describe('testing use drag value hook', () => {
 		// Cleanup by unmounting the component after each test
 		cleanup();
 	});
+
 	it('should return a function after set states', () => {
 		const myMock = jest.fn();
 		const { result } = renderHook(() =>
@@ -124,4 +126,3 @@ describe('testing use drag value hook', () => {
 		fireEvent.mouseMove(draggableElement, { clientX: 100 });
 	});
 });
-
