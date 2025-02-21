@@ -16,6 +16,25 @@ class Setup {
      */
     public string $block_dir_path = '';
 
+	/**
+	 * Store available blocks.
+	 *
+	 * @var array $available_blocks the available blocks.
+	 */
+	protected $available_blocks = [];
+
+	/**
+	 * Set available blocks.
+	 *
+	 * @param array $blocks the available blocks.
+	 *
+	 * @return void
+	 */
+	public function setAvailableBlocks( array $blocks): void {
+
+		$this->available_blocks = $blocks;
+	}
+
     /**
      * Register block extra arguments for third party block types.
      *
@@ -26,7 +45,7 @@ class Setup {
      */
     public function registerBlock( array $args, string $block_type): array {
 
-        if (! in_array($block_type, blockera_get_available_blocks(), true)) {
+        if (! in_array($block_type, $this->available_blocks, true)) {
 
             return $args;
         }

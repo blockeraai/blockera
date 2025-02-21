@@ -360,10 +360,13 @@ class AppServiceProvider extends ServiceProvider {
             );
         }
 
+		$setup = $this->app->make(Setup::class);
+		$setup->setAvailableBlocks(blockera_get_available_blocks());
+
 		add_filter(
             'register_block_type_args',
-            function( array $args, string $block_type): array {
-				return $this->app->make(Setup::class)->registerBlock($args, $block_type);
+            function( array $args, string $block_type) use ( $setup): array {
+				return $setup->registerBlock($args, $block_type);
 			},
             9e2,
             2
