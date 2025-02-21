@@ -23,14 +23,16 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 
 	/**
 	 * Get css media queries from configured breakpoints.
+	 * 
+	 * @param array $breakpoints The breakpoints.
 	 *
 	 * @return array
 	 */
-	function blockera_get_css_media_queries(): array {
+	function blockera_get_css_media_queries( array $breakpoints): array {
 
 		$queries = [];
 
-		foreach ( blockera_core_config( 'breakpoints.list' ) as $breakpoint ) {
+		foreach ( $breakpoints as $breakpoint ) {
 
 			// skip invalid breakpoint.
 			if ( empty( $breakpoint['type'] ) ) {

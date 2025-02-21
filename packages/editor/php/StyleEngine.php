@@ -211,8 +211,7 @@ final class StyleEngine {
 	protected function prepareBreakpointStyles( string $breakpoint ): string {
 
 		// Get css media queries.
-		// FIXME: Performance bottleneck.
-		$mediaQueries = blockera_get_css_media_queries();
+		$mediaQueries = blockera_get_css_media_queries($this->breakpoints['list']);
 
 		// Validate breakpoint type.
 		if ( ! isset( $breakpoint, $mediaQueries[ $breakpoint ] ) ) {
