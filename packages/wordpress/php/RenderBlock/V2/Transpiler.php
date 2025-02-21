@@ -120,19 +120,11 @@ class Transpiler {
      * @return void
      */
     protected function processBlocksInBatches( array $supports): void {
-        $batch_size   = 50; // Process 50 blocks at a time.
-        $total_blocks = count($this->parsed_blocks);
 
-        for ($i = 0; $i < $total_blocks; $i += $batch_size) {
-            $batch = array_slice($this->parsed_blocks, $i, $batch_size, true);
+		for ($i = 0; $i < count($this->parsed_blocks); $i++) {
 
-            foreach ($batch as $key => $block) {
-                $this->processBlockContent($key, $block, compact('supports'));
-            }
-
-            // Clear memory after each batch.
-            gc_collect_cycles();
-        }
+			$this->processBlockContent($i, $this->parsed_blocks[ $i ], compact('supports'));
+		}
     }
 
     /**
