@@ -332,25 +332,11 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
-	 * Filter blockera settings.
-	 *
-	 * @param string $name the blockera attribute name.
-	 *
-	 * @return bool true on success, false on otherwise.
-	 */
-	protected function filterSettings( string $name ): bool {
-
-		return str_starts_with( $name, 'blockera' ) && ! in_array( $name, [ 'blockeraPropsId', 'blockeraCompatId' ], true );
-	}
-
-	/**
 	 * @return array
 	 */
 	public function getCssRules(): array {
 
-		$settings = array_filter( $this->settings, [ $this, 'filterSettings' ], ARRAY_FILTER_USE_KEY );
-
-		array_map( [ $this, 'generateCssRules' ], $settings, array_keys( $settings ) );
+		array_map( [ $this, 'generateCssRules' ], $this->settings, array_keys( $this->settings ) );
 
 		return array_filter( $this->css, 'blockera_get_filter_empty_array_item' );
 	}

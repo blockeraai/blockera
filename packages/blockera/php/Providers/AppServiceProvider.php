@@ -156,7 +156,11 @@ class AppServiceProvider extends ServiceProvider {
                         Typography::class,
                     ];
 
-                    return new StyleEngine($params['block'], $params['fallbackSelector'], $styleDefinitions);
+					$style_engine = new StyleEngine( $params['block'], $params['fallbackSelector'], $styleDefinitions );
+
+					$style_engine->setBreakpoints(blockera_core_config('breakpoints'));
+
+                    return $style_engine;
                 }
             );
 

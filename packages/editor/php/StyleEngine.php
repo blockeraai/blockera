@@ -98,6 +98,12 @@ final class StyleEngine {
 	protected array $supports = [];
 
 	/**
+	 * Store the breakpoints.
+	 *
+	 * @var array $breakpoints
+	 */
+	protected array $breakpoints = [];
+	/**
 	 * Constructor.
 	 *
 	 * @param array  $block            The current block.
@@ -114,9 +120,6 @@ final class StyleEngine {
 		$this->settings    = $settings;
 		$this->definitions = $styleDefinitions;
 		$this->selector    = $fallbackSelector;
-
-		// by default store base breakpoint.
-		$this->breakpoint = blockera_core_config( 'breakpoints.base' );
 	}
 
 	/**
@@ -129,6 +132,18 @@ final class StyleEngine {
 	public function setSupports( array $supports): void {
 
 		$this->supports = $supports;
+	}
+
+	/**
+	 * Set breakpoint.
+	 *
+	 * @param array $breakpoints The breakpoints.
+	 *
+	 * @return void
+	 */
+	public function setBreakpoints( array $breakpoints): void {
+
+		$this->breakpoints = $breakpoints;
 	}
 
 	/**
@@ -149,6 +164,9 @@ final class StyleEngine {
 	 * @return string
 	 */
 	public function getStylesheet(): string {
+
+		// by default store base breakpoint.
+		$this->breakpoint = $this->breakpoints['base'];
 
 		if (! empty($this->settings['blockeraBlockStates']['value'])) {
 			$states = $this->settings['blockeraBlockStates']['value'];
@@ -485,7 +503,7 @@ final class StyleEngine {
 			return [];
 		}
 
-		if ( blockera_is_normal_on_base_breakpoint( $this->pseudo_state, $this->breakpoint ) ) {
+		if ( $this->inNormalOnBaseBreakpoint( $this->pseudo_state, $this->breakpoint ) ) {
 
 			return $this->getDefinitionSupportsSettings( $this->settings, $supports );
 		}
@@ -514,6 +532,19 @@ final class StyleEngine {
 		}
 
 		return $this->getDefinitionSupportsSettings( $breakpointSettings['attributes'] ?? [], $supports );
+	}
+
+	/**
+	 * Check if current state is normal on base breakpoint.
+	 *
+	 * @param string $pseudoState the pseudo state.
+	 * @param string $breakpoint  the breakpoint.
+	 *
+	 * @return bool true if current state is normal on base breakpoint.
+	 */
+	private function inNormalOnBaseBreakpoint( string $pseudoState, string $breakpoint ): bool {
+
+		return 'normal' === $pseudoState && $breakpoint === $this->breakpoints['base'];
 	}
 
 	/**
