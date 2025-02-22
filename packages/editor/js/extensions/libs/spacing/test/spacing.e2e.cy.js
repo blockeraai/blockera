@@ -732,7 +732,7 @@ describe('Spacing Extension', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('vertical', 20);
+				cy.get('@SideShape').dragValue('vertical', 20, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -742,7 +742,7 @@ describe('Spacing Extension', () => {
 
 				// negative drag value change
 				// margin supports negative values
-				cy.get('@SideShape').dragValue('vertical', -35);
+				cy.get('@SideShape').dragValue('vertical', -35, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -763,7 +763,7 @@ describe('Spacing Extension', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('vertical', 20);
+				cy.get('@SideShape').dragValue('vertical', 20, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -773,7 +773,7 @@ describe('Spacing Extension', () => {
 
 				// negative drag value change
 				// margin supports negative values
-				cy.get('@SideShape').dragValue('vertical', -35);
+				cy.get('@SideShape').dragValue('vertical', -35, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -794,7 +794,7 @@ describe('Spacing Extension', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('vertical', 20);
+				cy.get('@SideShape').dragValue('vertical', 20, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -803,7 +803,7 @@ describe('Spacing Extension', () => {
 					});
 
 				// negative drag value change
-				cy.get('@SideShape').dragValue('vertical', -15);
+				cy.get('@SideShape').dragValue('vertical', -15, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -814,7 +814,7 @@ describe('Spacing Extension', () => {
 				// negative drag value change
 				// padding does not supports negative values
 				// min value is 0
-				cy.get('@SideShape').dragValue('vertical', -15);
+				cy.get('@SideShape').dragValue('vertical', -15, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -835,7 +835,7 @@ describe('Spacing Extension', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('vertical', 20);
+				cy.get('@SideShape').dragValue('vertical', 20, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -844,7 +844,7 @@ describe('Spacing Extension', () => {
 					});
 
 				// negative drag value change
-				cy.get('@SideShape').dragValue('vertical', -15);
+				cy.get('@SideShape').dragValue('vertical', -15, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -855,7 +855,7 @@ describe('Spacing Extension', () => {
 				// negative drag value change
 				// padding does not supports negative values
 				// min value is 0
-				cy.get('@SideShape').dragValue('vertical', -15);
+				cy.get('@SideShape').dragValue('vertical', -15, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
