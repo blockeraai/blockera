@@ -113,10 +113,17 @@ export const useDragValue = ({
 			const steps =
 				Math.floor(Math.abs(pixelDiff) / pixelThreshold) *
 				stepMultiplier;
+
+			let thresholdAdjustment = 0;
+			if (threshold !== 0) {
+				thresholdAdjustment =
+					currentPos > initialPos ? -stepThreshold : stepThreshold;
+			}
+
 			newValue =
 				snapshot +
 				(pixelDiff > 0 ? -steps : steps) -
-				(currentPos > initialPos ? -stepThreshold : stepThreshold);
+				thresholdAdjustment;
 		}
 
 		if (movement === 'horizontal') {
@@ -124,10 +131,17 @@ export const useDragValue = ({
 			const steps =
 				Math.floor(Math.abs(pixelDiff) / pixelThreshold) *
 				stepMultiplier;
+
+			let thresholdAdjustment = 0;
+			if (threshold !== 0) {
+				thresholdAdjustment =
+					currentPos > initialPos ? -stepThreshold : stepThreshold;
+			}
+
 			newValue =
 				snapshot +
 				(pixelDiff > 0 ? steps : -steps) -
-				(currentPos > initialPos ? -stepThreshold : stepThreshold);
+				thresholdAdjustment;
 		}
 
 		// Check against min and max values
