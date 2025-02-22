@@ -4,6 +4,7 @@ namespace Blockera\WordPress\RenderBlock\V2;
 
 use Blockera\Data\Cache\Cache;
 use Blockera\Bootstrap\Application;
+use Blockera\WordPress\RenderBlock\V1\Render;
 
 /**
  * Class Render filtering WordPress BlockType render process.
@@ -101,6 +102,10 @@ class RenderContent {
 			}
 
 			return $this->cleanup($post);
+
+		} elseif (blockera_block_is_dynamic($block)) {
+
+			return $this->app->make(Render::class)->render($block_content, $block, $supports); 
 		}
 
         return $block_content;

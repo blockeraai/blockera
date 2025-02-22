@@ -191,24 +191,23 @@ class AppServiceProvider extends ServiceProvider {
 					}
 				);
 
-			} else {
-
-				$this->app->singleton(
-					Parser::class,
-					static function ( Application $app) {
-
-						return new Parser($app);
-					}
-				);
-
-				$this->app->bind(
-					Render::class,
-					static function ( Application $app): Render {
-
-						return new Render($app);
-					}
-				);
 			}
+			
+			$this->app->singleton(
+				Parser::class,
+				static function ( Application $app) {
+
+					return new Parser($app);
+				}
+			);
+
+			$this->app->bind(
+				Render::class,
+				static function ( Application $app): Render {
+
+					return new Render($app);
+				}
+			);
 
             $this->app->singleton(Sender::class);
 
