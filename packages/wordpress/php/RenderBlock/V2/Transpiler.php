@@ -191,7 +191,7 @@ class Transpiler {
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
 		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block)) {
-			
+
 			foreach ($block['innerContent'] as $_key => $innerContent) {
 				if (empty($innerContent)) {
 					continue;
@@ -285,13 +285,53 @@ class Transpiler {
         $this->style_engine->setInlineStyles($inline_styles);
         $computed_css_rules = $this->style_engine->getStylesheet();
 
-        if (! in_array($computed_css_rules, $this->styles, true)) {
-            $this->styles[] = $computed_css_rules;
-        }
+        if (! empty($computed_css_rules) && ! in_array($computed_css_rules, $this->styles, true)) {
+            
+			$this->styles[] = $computed_css_rules;
+
+        } elseif (empty($computed_css_rules)) {
+
+			$this->force_add_inline_styles($inline_styles);
+		}
 
         // Update block content.
         $this->updateBlockContent($processor, $id, $args);
     }
+
+	/**
+	 * Force add inline styles.
+	 *
+	 * @param array $inline_styles The inline styles.
+	 *
+	 * @return void
+	 */
+	protected function force_add_inline_styles( array $inline_styles): void {
+		
+		foreach ($inline_styles as $root_selector => $styles) {
+			$inners = array_filter(
+				$styles,
+				function ( $style) {
+					return is_array($style);
+				}
+			);
+
+			foreach ($inners as $selector => $declarations) {
+				$inner_style = $selector . ' { ' . implode(';' . PHP_EOL, $declarations) . ' }';
+
+				if (! in_array($inner_style, $this->styles, true)) {
+					$this->styles[] = $inner_style;
+				}
+
+				unset($styles[ $selector ]);
+			}
+
+			$root_style = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
+
+			if (! in_array($root_style, $this->styles, true)) {
+				$this->styles[] = $root_style;
+			}
+		}
+	}
 
     /**
      * Update block content after processing.
