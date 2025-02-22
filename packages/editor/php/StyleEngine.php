@@ -325,6 +325,40 @@ final class StyleEngine {
 		// Prepare generated block css by supported each of style definitions.
 		$block_css = array_map( [ $this, 'generateBlockCss' ], $this->definitions );
 
+		$inner_blocks_css = array_map(
+            function( string $definition): array {
+			
+				$this->definition = $this->app->make($definition, [ 'supports' => $this->supports ]);
+
+				// the "blockeraInnerBlocks.value" accessible on normal state in base breakpoint and un normal states accessible without value index!
+				$settings = $this->getSettings(true);
+
+				if (empty($settings)) {
+
+					return [];
+				}
+
+				// Validation: Check if sets blockera inner blocks?
+				if ( ! empty( $settings ) ) {
+
+					// Preparing inner blocks css ...
+					return blockera_array_flat(
+                        array_map(
+                            [
+								$this,
+								'generateInnerBlockCss',
+                            ],
+                            $settings,
+                            array_keys( $settings )
+                        )
+					);
+				}
+			},
+            $this->definitions
+        );
+
+		$block_css = array_merge( $block_css, $inner_blocks_css );
+
 		return $this->normalizeCssRules(
 			blockera_convert_css_declarations_to_css_valid_rules(
 				blockera_combine_css(
@@ -351,10 +385,7 @@ final class StyleEngine {
         );
 
 		// get current block settings.
-		$settings              = $this->getSettings();
-		$inner_blocks_settings = $settings['blockeraInnerBlocks'] ?? [];
-
-		unset($settings['blockeraInnerBlocks']);
+		$settings = $this->getSettings();
 
 		if ( empty( $settings ) ) {
 
@@ -369,31 +400,7 @@ final class StyleEngine {
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
-		$cssRules = $this->definition->getCssRules();
-
-		// the "blockeraInnerBlocks.value" accessible on normal state in base breakpoint and un normal states accessible without value index!
-		$settings = $inner_blocks_settings['value'] ?? $inner_blocks_settings;
-
-		// Validation: Check if sets blockera inner blocks?
-		if ( ! empty( $settings ) ) {
-
-			// Preparing inner blocks css ...
-			$cssRules = array_merge(
-				$cssRules,
-				blockera_array_flat(
-					array_map(
-						[
-							$this,
-							'generateInnerBlockCss',
-						],
-						$settings,
-						array_keys( $settings )
-					)
-				)
-			);
-		}
-
-		return $cssRules;
+		return $this->definition->getCssRules();
 	}
 
 	/**
@@ -499,27 +506,23 @@ final class StyleEngine {
 	 */
 	private function getDefinitionSupportsSettings( array $settings, array $supports):array {
 
-		$filtered_settings = array_filter(
+		return array_filter(
 			$settings,
 			function( $key) use ( $supports) {
 				return in_array($key, $supports, true);
 			},
 			ARRAY_FILTER_USE_KEY
 		);
-
-		if (! empty($settings['blockeraInnerBlocks'])) {
-			$filtered_settings['blockeraInnerBlocks'] = $settings['blockeraInnerBlocks'];
-		}
-
-		return $filtered_settings;
 	}
 
 	/**
 	 * Get current block state in breakpoint settings.
+	 * 
+	 * @param bool $from_inner_blocks The flag to specific settings context. if true mean context is inner blocks.
 	 *
 	 * @return array the block settings.
 	 */
-	public function getSettings(): array {
+	public function getSettings( bool $from_inner_blocks = false): array {
 
 		$supports = $this->definition->getSupports();
 
@@ -529,6 +532,11 @@ final class StyleEngine {
 		}
 
 		if ( $this->inNormalOnBaseBreakpoint( $this->pseudo_state, $this->breakpoint ) ) {
+
+			if ($from_inner_blocks) {
+
+				return 	$this->settings['blockeraInnerBlocks']['value'] ?? [];
+			}
 
 			return $this->getDefinitionSupportsSettings( $this->settings, $supports );
 		}
@@ -548,15 +556,22 @@ final class StyleEngine {
 			return [];
 		}
 
-		$breakpointSettings = $state['breakpoints'][ $this->breakpoint ];
+		$breakpoint_settings = $state['breakpoints'][ $this->breakpoint ];
 
 		// invalid breakpoint founded.
-		if ( empty( $breakpointSettings ) ) {
+		if ( empty( $breakpoint_settings ) ) {
 
 			return [];
 		}
 
-		return $this->getDefinitionSupportsSettings( $breakpointSettings['attributes'] ?? [], $supports );
+		$prepared_settings = $breakpoint_settings['attributes'] ?? [];
+
+		if ($from_inner_blocks) {
+
+			return $prepared_settings['blockeraInnerBlocks'] ?? $prepared_settings['blockeraInnerBlocks']['value'] ?? [];
+		}
+
+		return $this->getDefinitionSupportsSettings( $prepared_settings, $supports );
 	}
 
 	/**
