@@ -125,7 +125,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -135,7 +135,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -171,7 +171,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -181,7 +181,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -328,7 +328,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -338,7 +338,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -376,7 +376,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -386,7 +386,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -531,7 +531,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -541,7 +541,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -577,7 +577,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -587,7 +587,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -746,7 +746,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -756,7 +756,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -797,7 +797,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -807,7 +807,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -955,7 +955,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -965,7 +965,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1001,7 +1001,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -1011,7 +1011,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1158,7 +1158,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -1168,7 +1168,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1206,7 +1206,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -1216,7 +1216,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1361,7 +1361,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -1371,7 +1371,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1407,7 +1407,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -1417,7 +1417,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1576,7 +1576,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -1586,7 +1586,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1627,7 +1627,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -1637,7 +1637,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1785,7 +1785,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -1795,7 +1795,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1831,7 +1831,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -1841,7 +1841,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -1984,7 +1984,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -1994,7 +1994,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -2030,7 +2030,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -2040,7 +2040,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -2187,7 +2187,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 1',
+							name: 'Color 1',
 							id: 'palette-color-1',
 							value: 'var(--theme-palette-color-1, #2872fa)',
 							reference: {
@@ -2197,7 +2197,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-1',
 						},
-						name: 'Palette Color 1',
+						name: 'Color 1',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
@@ -2235,7 +2235,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 
 					expect({
 						settings: {
-							name: 'Palette Color 2',
+							name: 'Color 2',
 							id: 'palette-color-2',
 							value: 'var(--theme-palette-color-2, #1559ed)',
 							reference: {
@@ -2245,7 +2245,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 							type: 'color',
 							var: '--wp--preset--color--palette-color-2',
 						},
-						name: 'Palette Color 2',
+						name: 'Color 2',
 						isValueAddon: true,
 						valueType: 'variable',
 					}).to.be.deep.equal(
