@@ -6,7 +6,6 @@ use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Utils\Adapters\DomParser;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class Render filtering WordPress BlockType render process.
@@ -22,6 +21,13 @@ class Render {
      */
     protected Application $app;
 
+	/**
+	 * Cache status.
+	 *
+	 * @var bool $cache_status true if cache is enabled, false otherwise.
+	 */
+	protected bool $cache_status = false;
+
     /**
      * Store all block classnames.
      *
@@ -33,10 +39,25 @@ class Render {
      * Render constructor.
      *
      * @param Application $app the app instance.
+	 * @param bool        $cache_status true if cache is enabled, false otherwise.
      */
-    public function __construct( Application $app) { 
-        $this->app = $app;
+    public function __construct( Application $app, bool $cache_status = true) { 
+        $this->app          = $app;
+		$this->cache_status = $cache_status;
     }
+
+	/**
+	 * Set cache status.
+	 *
+	 * @param bool $status true if cache is enabled, false otherwise.
+	 *
+	 * @return void
+	 */
+	public function setCacheStatus( bool $status): void {
+
+		$this->cache_status = $status;
+	}
+	
 
     /**
      * Render block icon element.
@@ -97,6 +118,12 @@ class Render {
             return $html;
         }
 
+		// Cache status value by default is true, so we need to disable cache for dynamic blocks.
+		if ($this->cache_status) {
+			// Disable cache for dynamic blocks.
+			$this->setCacheStatus(! blockera_block_is_dynamic($block));
+		}
+
         // Extract block attributes.
         $attributes = $block['attrs'];
         // Calculate block hash.
@@ -120,7 +147,7 @@ class Render {
         $cache_validate = ! empty($cache_data['css']) && ! empty($cache_data['hash']) && ! empty($cache_data['classname']);
 
         // Validate cache data.
-        if ($cache_validate && $hash === $cache_data['hash']) {
+        if ($cache_validate && $hash === $cache_data['hash'] && $this->cache_status) {
 
             // Print css into inline style on "wp_head" action occur.
             blockera_add_inline_css($cache_data['css']);
@@ -173,8 +200,11 @@ class Render {
             'classname' => $need_to_update_html ? $blockera_class_name : $attributes['className'],
         ];
 
-        // Sets cache data with merge previous data.
-        blockera_set_block_cache($cache_key, $data);
+		if ($this->cache_status) {
+
+			// Sets cache data with merge previous data.
+			blockera_set_block_cache($cache_key, $data);
+		}
 
         return $html;
     }

@@ -190,7 +190,8 @@ class Transpiler {
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
-		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block)) {
+		// Process only valid blocks and supported blocks and not dynamic blocks.
+		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block) && ! blockera_block_is_dynamic($block)) {
 
 			foreach ($block['innerContent'] as $_key => $innerContent) {
 				if (empty($innerContent)) {

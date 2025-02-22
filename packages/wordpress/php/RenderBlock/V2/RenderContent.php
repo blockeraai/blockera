@@ -105,7 +105,11 @@ class RenderContent {
 
 		} elseif (blockera_block_is_dynamic($block)) {
 
-			return $this->app->make(Render::class)->render($block_content, $block, $supports); 
+			$render = $this->app->make(Render::class);
+			// Disable cache for dynamic blocks.
+			$render->setCacheStatus(false);
+
+			return $render->render($block_content, $block, $supports);
 		}
 
         return $block_content;
