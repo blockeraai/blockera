@@ -64,7 +64,7 @@ class TestHelpers extends \WP_UnitTestCase {
 				'xl-desktop'       => '@media screen and (min-width: 1440px)',
 				'l-desktop'        => '@media screen and (min-width: 1280px)',
 			],
-			blockera_get_css_media_queries()
+			blockera_get_css_media_queries(blockera_core_config('breakpoints.list'))
 		);
 	}
 
