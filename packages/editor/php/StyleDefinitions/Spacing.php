@@ -42,10 +42,6 @@ class Spacing extends BaseStyleDefinition {
 				array_map( 'blockera_get_value_addon_real_value', $padding ),
 				[ $this, 'filteredItems' ]
 			);
-
-			foreach ($padding as $property => $item) {
-				$declaration[] = ["padding-{$property}" => blockera_get_value_addon_real_value($item)];
-			}
 		}
 
 		if ( is_array( $margin ) ) {
@@ -54,11 +50,26 @@ class Spacing extends BaseStyleDefinition {
 				array_map( 'blockera_get_value_addon_real_value', $margin ),
 				[ $this, 'filteredItems' ]
 			);
-			
-			foreach ($margin as $property => $item) {
-				$declaration[] = ["margin-{$property}" => blockera_get_value_addon_real_value($item)];
-			}
 		}
+
+		$declaration = array_merge(
+			...array_map(
+			static function ( string $item, string $property ): array {
+
+				return [ "padding-{$property}" => blockera_get_value_addon_real_value( $item ) ];
+			},
+			$padding,
+			array_keys( $padding )
+		),
+			...array_map(
+			static function ( string $item, string $property ): array {
+
+				return [ "margin-{$property}" => blockera_get_value_addon_real_value( $item ) ];
+			},
+			$margin,
+			array_keys( $margin )
+		),
+		);
 
 		$this->setCss( $declaration );
 
