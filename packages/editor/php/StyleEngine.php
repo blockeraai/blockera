@@ -2,6 +2,7 @@
 
 namespace Blockera\Editor;
 
+use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 
@@ -103,6 +104,14 @@ final class StyleEngine {
 	 * @var array $breakpoints
 	 */
 	protected array $breakpoints = [];
+
+	/**
+	 * Store the application instance.
+	 *
+	 * @var Application $app
+	 */
+	protected Application $app;
+
 	/**
 	 * Constructor.
 	 *
@@ -120,6 +129,18 @@ final class StyleEngine {
 		$this->settings    = $settings;
 		$this->definitions = $styleDefinitions;
 		$this->selector    = $fallbackSelector;
+	}
+
+	/**
+	 * Set the application instance.
+	 *
+	 * @param Application $app The application instance.
+	 *
+	 * @return void
+	 */
+	public function setApp( Application $app ): void {
+
+		$this->app = $app;
 	}
 
 	/**
@@ -322,7 +343,12 @@ final class StyleEngine {
 	 */
 	protected function generateBlockCss( string $definition ): array {
 
-		$this->definition = new $definition($this->supports);
+		$this->definition = $this->app->make(
+            $definition,
+            [
+				'supports' => $this->supports,
+			]
+        );
 
 		// get current block settings.
 		$settings              = $this->getSettings();
