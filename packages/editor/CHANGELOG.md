@@ -9,7 +9,8 @@
 - GitHub workflow to enable developers to have custom PR playground configurations.
 
 ### New Features
-- Added a new feature to cleanup inline styles from the block elements on the blockera site editor.
+- Added a new feature to cleanup inline styles from the block elements on the Blockera Site Builder.
+- Multiple UX enhancements.
 
 ## 1.1.1 (2025-02-04)
 
