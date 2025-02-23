@@ -235,7 +235,7 @@ class Transpiler {
         $counter = 0;
 
         // Process in a single pass.
-        while ($processor->next_tag()) {
+        if ($processor->next_tag()) {
             $id_attribute = $processor->get_attribute('id');
             $style        = $processor->get_attribute('style');
             $class        = $processor->get_attribute('class');
