@@ -483,7 +483,7 @@ abstract class BaseStyleDefinition {
 
 		if ($is_normal_on_base_breakpoint) {
 
-			$selector_inline_styles = blockera_find_selector_declarations($this->getSelector(), $this->inline_styles);
+			$selector_inline_styles = blockera_find_selector_declarations(preg_replace('/^\w+\./i', '.', $this->getSelector()), $this->inline_styles);
 
 			if (! empty($selector_inline_styles)) {
 

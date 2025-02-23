@@ -901,7 +901,7 @@ if ( ! function_exists( 'blockera_find_selector_declarations' ) ) {
 	function blockera_find_selector_declarations( string $selector, array $styles): array {
 
 		foreach ($styles as $_selector => $declarations) {
-			if (false !== strpos($_selector, $selector) || false !== strpos($selector, $_selector)) {
+			if (false === strpos($_selector, $selector) && false === strpos($selector, $_selector)) {
 				continue;
 			}
 
