@@ -118,11 +118,15 @@ describe('testing use drag value hook', () => {
 
 		// Simulate a mouse down event to start the horizontal drag
 		fireEvent.mouseDown(draggableElement, { clientX: 50 });
+		fireEvent.mouseMove(draggableElement, { clientX: 56 });
+
 		// Check if an element with the specified className exists in the document
 		const elementWithClassName = document.querySelector(
 			'.blockera-virtual-cursor-box'
 		);
+
 		expect(elementWithClassName).toBeInTheDocument();
+
 		fireEvent.mouseMove(draggableElement, { clientX: 100 });
 	});
 });
