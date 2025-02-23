@@ -77,9 +77,10 @@ export const registerCommands = () => {
 			!Cypress.$(`[aria-label="${selector}"]`).length
 		) {
 			const parsedSelector = selector.split(' ');
+			const parsedLabel = selector.split(':');
 
 			return cy.get(
-				`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"]`
+				`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"], [aria-label="${parsedLabel[1].trim()}"]`
 			);
 		}
 
