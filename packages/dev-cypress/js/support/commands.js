@@ -79,8 +79,14 @@ export const registerCommands = () => {
 			const parsedSelector = selector.split(' ');
 			const parsedLabel = selector.split(':');
 
+			if (parsedLabel.length) {
+				return cy.get(
+					`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"], [aria-label="${parsedLabel[1].trim()}"]`
+				);
+			}
+
 			return cy.get(
-				`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"], [aria-label="${parsedLabel[1].trim()}"]`
+				`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"]`
 			);
 		}
 
