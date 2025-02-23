@@ -101,7 +101,7 @@ class RenderContent {
 				return $block_content;
 			}
 
-			return $this->cleanup($post);
+			return $this->cleanup($post, 'block_content');
 
 		} elseif (blockera_block_is_dynamic($block)) {
 
@@ -157,13 +157,14 @@ class RenderContent {
 	 * Cleanup post content.
 	 *
 	 * @param \WP_Post $post The post instance.
+	 * @param string   $context The context. default is 'post_content'.
 	 *
 	 * @return string The post content.
 	 */
-	protected function cleanup( \WP_Post $post): string {
+	protected function cleanup( \WP_Post $post, string $context = 'post_content'): string {
 
 		// Get cache data.
-		$cache = $this->cache->getCache($post->ID, 'post_content');
+		$cache = $this->cache->getCache($post->ID, $context);
 
 		if (! empty($cache) || ( isset($cache['hash']) && md5($post->post_content) === $cache['hash'] )) {
 
@@ -172,7 +173,7 @@ class RenderContent {
                 $cache,
                 [
 					'post_id' => $post->ID,
-					'type' => 'post_content',
+					'type' => $context,
 					'origin_content' => $post->post_content,
 				]
             );
@@ -186,7 +187,7 @@ class RenderContent {
             $data,
             [
 				'post_id' => $post->ID,
-				'type' => 'post_content',
+				'type' => $context,
 				'origin_content' => $post->post_content,
 			]
         );
