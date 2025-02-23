@@ -498,5 +498,8 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
 	cy.getIframeBody().find('h1').click();
 
 	// reselect block
-	cy.getIframeBody().find(`[data-type="${blockType}"]`).first().click();
+	cy.getIframeBody()
+		.find(`[data-type="${blockType}"]`)
+		.first()
+		.click({ force: true });
 };
