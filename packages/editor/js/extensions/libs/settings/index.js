@@ -51,7 +51,11 @@ export const ExtensionSettings = ({
 	});
 
 	const hasItems = (stack: Object): boolean =>
-		0 !== Object.values(stack).length;
+		0 !== Object.keys(stack).filter((key) => key !== 'initialOpen').length;
+
+	if (!hasItems(tools)) {
+		return <></>;
+	}
 
 	return (
 		<>
@@ -85,21 +89,19 @@ export const ExtensionSettings = ({
 						</div>
 					)}
 
-					{hasItems(tools) && (
-						<div className={'settings-category'}>
-							<span className={'settings-category__title'}>
-								{hasItems(defaults)
-									? __('Additional Features', 'blockera')
-									: __('Features', 'blockera')}
-							</span>
+					<div className={'settings-category'}>
+						<span className={'settings-category__title'}>
+							{hasItems(defaults)
+								? __('Additional Features', 'blockera')
+								: __('Features', 'blockera')}
+						</span>
 
-							<Supports
-								update={update}
-								supports={tools}
-								allFeatures={features}
-							/>
-						</div>
-					)}
+						<Supports
+							update={update}
+							supports={tools}
+							allFeatures={features}
+						/>
+					</div>
 				</Popover>
 			)}
 		</>
