@@ -633,7 +633,13 @@ export const registerCommands = () => {
 	Cypress.Commands.add(
 		'dragValue',
 		{ prevSubject: 'element' },
-		(subject, type = 'vertical', movement = 10, threshold = 5) => {
+		(
+			subject,
+			type = 'vertical',
+			movement = 10,
+			threshold = 5,
+			withShift = false
+		) => {
 			// Initial mousedown
 			cy.wrap(subject[0]).trigger('mousedown', 'topLeft', {
 				which: 1,
@@ -646,8 +652,7 @@ export const registerCommands = () => {
 					which: 1,
 					clientY:
 						Math.ceil(subject[0].getBoundingClientRect().top) +
-						threshold +
-						1, // Exceed threshold
+						threshold, // Exceed threshold
 				});
 
 				// Second mousemove for actual movement
@@ -655,15 +660,18 @@ export const registerCommands = () => {
 					which: 1,
 					clientY:
 						Math.ceil(subject[0].getBoundingClientRect().top) +
-						movement * -1,
+						(withShift
+							? (movement - threshold + 1) * 5
+							: movement) *
+							-1,
+					shiftKey: withShift,
 				});
 			} else if (type === 'horizontal') {
 				cy.get('body').trigger('mousemove', {
 					which: 1,
 					clientX:
 						Math.ceil(subject[0].getBoundingClientRect().left) +
-						threshold +
-						1, // Exceed threshold
+						threshold,
 				});
 
 				// Second mousemove for actual movement
@@ -671,7 +679,8 @@ export const registerCommands = () => {
 					which: 1,
 					clientX:
 						Math.ceil(subject[0].getBoundingClientRect().left) +
-						movement,
+						(withShift ? (movement - threshold + 1) * 5 : movement),
+					shiftKey: withShift,
 				});
 			}
 
