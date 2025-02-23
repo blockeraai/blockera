@@ -1,5 +1,11 @@
 ## Unreleased
 
+### New Features
+- Add `Shift` key to increase/decrease value by 10x in `Input` and `Spacing` fields.
+
+### Improvements
+- Improve the input fields to change value by dragging the mouse after a 5 pixel threshold is reached.
+
 ## 1.0.0 (2024-12-08)
 
 ### New Features

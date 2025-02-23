@@ -109,6 +109,7 @@ export function MarginRight({
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
 		},
+		threshold: 0,
 	});
 
 	if (marginDisable === 'all' || marginDisable === 'horizontal') {

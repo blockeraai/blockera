@@ -109,6 +109,7 @@ export function MarginTop({
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
 		},
+		threshold: 0,
 	});
 
 	if (marginDisable === 'all' || marginDisable === 'vertical') {

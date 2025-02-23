@@ -110,6 +110,7 @@ export function PaddingLeft({
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
 		},
+		threshold: 0,
 	});
 
 	if (paddingDisable === 'all' || paddingDisable === 'horizontal') {

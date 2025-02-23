@@ -110,6 +110,7 @@ export function PaddingHorizontal({
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
 		},
+		threshold: 0,
 	});
 
 	let _paddingLock = paddingLock;

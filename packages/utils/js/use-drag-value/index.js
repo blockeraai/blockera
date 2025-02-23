@@ -9,6 +9,7 @@ export const useDragValue = ({
 	movement = 'vertical',
 	min,
 	max,
+	threshold = 5,
 	onEnd: callbackOnEnd = () => {},
 }) => {
 	// We are creating a snapshot of the values when the drag starts
@@ -21,6 +22,8 @@ export const useDragValue = ({
 	const [startVal, setStartVal] = useState(0);
 
 	const [dragStarted, setDragStarted] = useState('');
+
+	const [initialPos, setInitialPos] = useState(0);
 
 	const createVirtualCursorBox = (cursor) => {
 		// Create a new div element
@@ -60,14 +63,10 @@ export const useDragValue = ({
 		(event) => {
 			if (movement === 'vertical') {
 				setStartVal(event.clientY);
-
-				// add cursor
-				createVirtualCursorBox('ns-resize');
+				setInitialPos(event.clientY);
 			} else if (movement === 'horizontal') {
 				setStartVal(event.clientX);
-
-				// add cursor
-				createVirtualCursorBox('ew-resize');
+				setInitialPos(event.clientX);
 			}
 
 			setSnapshot(value);
@@ -78,14 +77,71 @@ export const useDragValue = ({
 
 	// Only change the value if the drag was actually started.
 	const onUpdate = (event) => {
+		const currentPos =
+			movement === 'vertical' ? event.clientY : event.clientX;
+		const diff = Math.abs(currentPos - initialPos);
+
+		// Check threshold only if cursor box doesn't exist yet and threshold is not zero
+		if (!document.querySelector('.blockera-virtual-cursor-box')) {
+			if (threshold !== 0) {
+				if (diff < threshold) {
+					return;
+				}
+
+				// Create cursor once threshold is exceeded
+				createVirtualCursorBox(
+					movement === 'vertical' ? 'ns-resize' : 'ew-resize'
+				);
+
+				setStartVal(currentPos);
+				return; // Skip the first value update to avoid jumps
+			}
+
+			// If threshold is 0, just create the cursor box immediately
+			createVirtualCursorBox(
+				movement === 'vertical' ? 'ns-resize' : 'ew-resize'
+			);
+		}
+
 		let newValue;
+		const stepMultiplier = event.shiftKey ? 10 : 1;
+		const pixelThreshold = event.shiftKey ? 5 : 1;
+		const stepThreshold = event.shiftKey ? 10 : 5;
 
 		if (movement === 'vertical') {
-			newValue = snapshot - event.clientY + startVal;
+			const pixelDiff = currentPos - startVal;
+			const steps =
+				Math.floor(Math.abs(pixelDiff) / pixelThreshold) *
+				stepMultiplier;
+
+			let thresholdAdjustment = 0;
+			if (threshold !== 0) {
+				thresholdAdjustment =
+					currentPos > initialPos ? -stepThreshold : stepThreshold;
+			}
+
+			newValue =
+				snapshot +
+				(pixelDiff > 0 ? -steps : steps) -
+				thresholdAdjustment;
 		}
 
 		if (movement === 'horizontal') {
-			newValue = snapshot - (startVal - event.clientX);
+			const pixelDiff = currentPos - startVal;
+			const steps =
+				Math.floor(Math.abs(pixelDiff) / pixelThreshold) *
+				stepMultiplier;
+
+			let thresholdAdjustment = 0;
+			if (threshold !== 0) {
+				thresholdAdjustment =
+					currentPos > initialPos ? -stepThreshold : stepThreshold;
+			}
+
+			newValue =
+				snapshot +
+				(pixelDiff > 0 ? steps : -steps) -
+				thresholdAdjustment;
 		}
 
 		// Check against min and max values
