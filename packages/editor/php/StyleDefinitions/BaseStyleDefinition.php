@@ -491,15 +491,37 @@ abstract class BaseStyleDefinition {
 
 				foreach ($selector_inline_styles as $selector => $inline_styles) {
 					if (is_int($selector) || ! is_array($inline_styles)) {
-						$prepared_inline_styles[] = $inline_styles;
+						$extracted = explode(':', $inline_styles);
+
+						foreach (array_chunk($extracted, 2) as $inline_style) {
+
+							$prepared_inline_styles[ $inline_style[0] ] = $inline_style[1];
+						}
 
 						continue;
 					}
 
-					$this->css[ $selector ] = array_merge($declaration, $inline_styles);
-				}
+					foreach ($inline_styles as $inline_style) {
+						$extracted = explode(':', $inline_style);
+						
+						if (isset($declaration[ $extracted[0] ])) {
+							
+							continue;
+						}
 
-				$this->css[ $this->getSelector() ] = array_merge($declaration, $prepared_inline_styles);
+						$declaration[ $extracted[0] ] = $extracted[1];
+					}
+
+					if (! isset($this->css[ $selector ]) || ! in_array($declaration, $this->css[ $selector ], true)) {
+					
+						$this->css[ $selector ] = $declaration;
+					}
+				}
+				
+				if (! isset($this->css[ $selector ]) || ! in_array($declaration, $this->css[ $selector ], true)) {
+
+					$this->css[ $this->getSelector() ] = array_merge($prepared_inline_styles, $declaration);
+				}
 
 				// Unset prepared inline styles to free memory.
 				unset($prepared_inline_styles);
