@@ -286,8 +286,14 @@ class Transpiler {
         $this->style_engine->setInlineStyles($inline_styles);
         $computed_css_rules = $this->style_engine->getStylesheet();
 
-        if (! empty($computed_css_rules) && ! in_array($computed_css_rules, $this->styles, true)) {
-            
+		$filtered_styles = array_filter(
+            $this->styles,
+            function( string $style) use ( $computed_css_rules): bool {
+				return str_contains($style, $computed_css_rules);
+			}
+        );
+
+        if (! empty($computed_css_rules) && empty($filtered_styles)) {
 			$this->styles[] = $computed_css_rules;
 
         } elseif (empty($computed_css_rules)) {
@@ -385,13 +391,9 @@ class Transpiler {
 
                 $final_classname = $classname . ' ' . $previous_class;
             }
-
-            $processor->set_attribute('class', $final_classname);
-
-        } else {
-
-            $processor->set_attribute('class', $classname);
         }
+		
+		$processor->set_attribute('class', $final_classname);
     }
 
     /**
