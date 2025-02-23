@@ -191,7 +191,7 @@ class Transpiler {
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
 		// Process only valid blocks and supported blocks and not dynamic blocks.
-		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block) && ! blockera_block_is_dynamic($block)) {
+		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block) ) {
 
 			foreach ($block['innerContent'] as $_key => $innerContent) {
 				if (empty($innerContent)) {
@@ -235,11 +235,18 @@ class Transpiler {
         $counter = 0;
 
         // Process in a single pass.
-        if ($processor->next_tag()) {
+        while ($processor->next_tag()) {
             $id_attribute = $processor->get_attribute('id');
             $style        = $processor->get_attribute('style');
             $class        = $processor->get_attribute('class');
-            $processor->remove_attribute('style');
+
+			$processor->remove_attribute('style');
+
+			// Skip if the class contains 'blockera-is-transpiled', because it shows that the block is already transpiled.
+			if (str_contains($class, 'blockera-is-transpiled')) {
+
+				return;
+			}
 
             if (! empty(trim($class ?? '')) && ( false !== strpos($class, 'wp-elements') || false !== strpos($class, 'wp-block') ) || 0 === $counter) {
                 $this->updateClassname($processor, $args['blockera_class_name']);
@@ -393,6 +400,8 @@ class Transpiler {
             }
         }
 		
+		$final_classname .= ' blockera-is-transpiled';
+
 		$processor->set_attribute('class', $final_classname);
     }
 
