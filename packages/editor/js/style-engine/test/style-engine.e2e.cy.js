@@ -10,6 +10,7 @@ import {
 	savePage,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
+import { experimental } from '@blockera/env';
 
 describe('Style Engine Testing ...', () => {
 	beforeEach(() => {
@@ -24,6 +25,10 @@ describe('Style Engine Testing ...', () => {
 		// Select target block
 		cy.getBlock('core/paragraph').click();
 	});
+
+	const enabledOptimizeStyleGeneration = experimental().get(
+		'earlyAccessLab.optimizeStyleGeneration'
+	);
 
 	function setDevice(device) {
 		if ('desktop' !== device) {
@@ -96,7 +101,9 @@ describe('Style Engine Testing ...', () => {
 						.invoke('text')
 						.should(
 							'include',
-							'transition: all 500ms ease 0ms !important'
+							!enabledOptimizeStyleGeneration
+								? 'transition: all 500ms ease 0ms !important'
+								: 'transition: all 500ms ease 0ms'
 						);
 
 					cy.get('.blockera-block').realHover();
@@ -109,7 +116,9 @@ describe('Style Engine Testing ...', () => {
 						.invoke('text')
 						.should(
 							'include',
-							'transition: all 500ms ease 0ms !important'
+							!enabledOptimizeStyleGeneration
+								? 'transition: all 500ms ease 0ms !important'
+								: 'transition: all 500ms ease 0ms'
 						);
 				});
 
@@ -126,7 +135,9 @@ describe('Style Engine Testing ...', () => {
 						.invoke('text')
 						.should(
 							'include',
-							'transition: all 500ms ease 0ms !important'
+							!enabledOptimizeStyleGeneration
+								? 'transition: all 500ms ease 0ms !important'
+								: 'transition: all 500ms ease 0ms'
 						);
 
 					cy.get('.blockera-block').realHover();
@@ -257,7 +268,9 @@ describe('Style Engine Testing ...', () => {
 						.invoke('text')
 						.should(
 							'include',
-							'transition: all 500ms ease 0ms !important;'
+							!enabledOptimizeStyleGeneration
+								? 'transition: all 500ms ease 0ms !important;'
+								: 'transition: all 500ms ease 0ms;'
 						);
 				});
 
@@ -390,7 +403,9 @@ describe('Style Engine Testing ...', () => {
 						.invoke('text')
 						.should(
 							'include',
-							'transition: all 500ms ease 0ms !important'
+							!enabledOptimizeStyleGeneration
+								? 'transition: all 500ms ease 0ms !important;'
+								: 'transition: all 500ms ease 0ms;'
 						);
 
 					cy.get('.blockera-block').realHover();
