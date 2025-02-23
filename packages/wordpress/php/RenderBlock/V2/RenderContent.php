@@ -164,7 +164,7 @@ class RenderContent {
 	protected function cleanup( \WP_Post $post, string $context = 'post_content'): string {
 
 		// Get cache data.
-		$cache = $this->cache->getCache($post->ID, $context);
+		$cache = $this->cache->getCache($post->ID, 'post_content');
 
 		if (! empty($cache) || ( isset($cache['hash']) && md5($post->post_content) === $cache['hash'] )) {
 
