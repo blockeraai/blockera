@@ -38,7 +38,7 @@
 		border: 1px solid var(--blockera-controls-border-color);
 		border-radius: 2px;
 
-		&:hover:not(:disabled):not(.no-border):not(.invalid) {
+		&:hover:not(:disabled):not(.no-border):not(.invalid):not(:focus) {
 			border-color: var(--blockera-controls-border-color-hover);
 		}
 
@@ -60,7 +60,7 @@
 
 	&:hover {
 
-		.blockera-control-input-tag:not(:disabled):not(.no-border) {
+		.blockera-control-input-tag:not(:disabled):not(.no-border):not(:focus) {
 			border-color: var(--blockera-controls-border-color-hover);
 		}
 	}
