@@ -8,6 +8,7 @@
 ### Bug Fixes
 - Fixed an issue where the select control style is not correct when the control is focused or opened.
 - Fixed an issue where the input control style is not correct when the control is focused or hovered.
+- Fixed an issue where the border line control preview is not correct.
 
 ## 1.0.2 (2025-02-03)
 

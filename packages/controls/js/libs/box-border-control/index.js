@@ -221,6 +221,97 @@ export default function BoxBorderControl({
 
 				{value.type === 'custom' && (
 					<div className={controlInnerClassNames('border-corners')}>
+						<BorderControl
+							label=""
+							columns=""
+							controlName="empty"
+							id="top"
+							className={controlInnerClassNames(
+								'border-corner-top'
+							)}
+							onChange={(newValue) => {
+								setValue({
+									...value,
+									top: newValue,
+								});
+								modifyControlValue({
+									controlId,
+									value: {
+										...value,
+										top: newValue,
+									},
+								});
+							}}
+							defaultValue={value.top}
+						/>
+						<BorderControl
+							label=""
+							columns=""
+							id="right"
+							linesDirection="vertical"
+							className={controlInnerClassNames(
+								'border-corner-right'
+							)}
+							onChange={(newValue) => {
+								setValue({
+									...value,
+									right: newValue,
+								});
+								modifyControlValue({
+									controlId,
+									value: {
+										...value,
+										right: newValue,
+									},
+								});
+							}}
+							defaultValue={value.right}
+						/>
+						<BorderControl
+							label=""
+							columns=""
+							id="bottom"
+							className={controlInnerClassNames(
+								'border-corner-bottom'
+							)}
+							onChange={(newValue) => {
+								setValue({
+									...value,
+									bottom: newValue,
+								});
+								modifyControlValue({
+									controlId,
+									value: {
+										...value,
+										bottom: newValue,
+									},
+								});
+							}}
+							defaultValue={value.bottom}
+						/>
+						<BorderControl
+							label=""
+							columns=""
+							id="left"
+							linesDirection="vertical"
+							className={controlInnerClassNames(
+								'border-corner-left'
+							)}
+							onChange={(newValue) => {
+								setValue({
+									...value,
+									left: newValue,
+								});
+								modifyControlValue({
+									controlId,
+									value: {
+										...value,
+										left: newValue,
+									},
+								});
+							}}
+							defaultValue={value.left}
+						/>
 						<div
 							className={controlInnerClassNames(
 								'border-corners-preview'
@@ -249,99 +340,7 @@ export default function BoxBorderControl({
 									? value.left.color?.settings?.value
 									: value.left.color,
 							}}
-						>
-							<BorderControl
-								label=""
-								columns=""
-								controlName="empty"
-								id="top"
-								className={controlInnerClassNames(
-									'border-corner-top'
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										top: newValue,
-									});
-									modifyControlValue({
-										controlId,
-										value: {
-											...value,
-											top: newValue,
-										},
-									});
-								}}
-								defaultValue={value.top}
-							/>
-							<BorderControl
-								label=""
-								columns=""
-								id="right"
-								linesDirection="vertical"
-								className={controlInnerClassNames(
-									'border-corner-right'
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										right: newValue,
-									});
-									modifyControlValue({
-										controlId,
-										value: {
-											...value,
-											right: newValue,
-										},
-									});
-								}}
-								defaultValue={value.right}
-							/>
-							<BorderControl
-								label=""
-								columns=""
-								id="bottom"
-								className={controlInnerClassNames(
-									'border-corner-bottom'
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										bottom: newValue,
-									});
-									modifyControlValue({
-										controlId,
-										value: {
-											...value,
-											bottom: newValue,
-										},
-									});
-								}}
-								defaultValue={value.bottom}
-							/>
-							<BorderControl
-								label=""
-								columns=""
-								id="left"
-								linesDirection="vertical"
-								className={controlInnerClassNames(
-									'border-corner-left'
-								)}
-								onChange={(newValue) => {
-									setValue({
-										...value,
-										left: newValue,
-									});
-									modifyControlValue({
-										controlId,
-										value: {
-											...value,
-											left: newValue,
-										},
-									});
-								}}
-								defaultValue={value.left}
-							/>
-						</div>
+						></div>
 					</div>
 				)}
 			</div>
