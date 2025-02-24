@@ -320,8 +320,9 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+		$optimize_style_generation = blockera_get_experimental(['earlyAccessLab', 'optimize_style_generation']);
 
-		$this->assertEquals( '.my-root.wp-block-my-block, .wp-block-my-block.my-root', $result );
+		$this->assertEquals( $optimize_style_generation ? '.my-root.wp-block-my-block' : '.my-root.wp-block-my-block, .wp-block-my-block.my-root', $result );
 	}
 
 	public function testSelectorWithBlockNameAndOtherClasses() {
@@ -331,8 +332,9 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+		$optimize_style_generation = blockera_get_experimental(['earlyAccessLab', 'optimize_style_generation']);
 
-		$this->assertEquals( '.my-root.wp-block-my-block.other-class, .wp-block-my-block.my-root.other-class', $result );
+		$this->assertEquals( $optimize_style_generation ? '.my-root.wp-block-my-block.other-class' : '.my-root.wp-block-my-block.other-class, .wp-block-my-block.my-root.other-class', $result );
 	}
 
 	public function testSelectorWithTagName() {
