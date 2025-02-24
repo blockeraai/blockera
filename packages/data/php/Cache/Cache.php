@@ -126,6 +126,14 @@ class Cache {
                 $this->getCacheKey() . '%'
             )
         );
+		
+		// Deleting all options related with the blockera style engine v1.
+		$wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+                '%wp_block_%'
+            )
+		);
 
 		// Deleting all post meta data related with the blockera product id.
         $wpdb->query(
