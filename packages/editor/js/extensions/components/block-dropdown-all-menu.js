@@ -18,7 +18,7 @@ import { classNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { useBlockSections } from './block-app';
+import { useBlockSections, useBlockAppContext } from './block-app';
 
 export const BlockDropdownAllMenu = ({
 	isActive,
@@ -27,13 +27,27 @@ export const BlockDropdownAllMenu = ({
 	isActive: boolean,
 	setActive: (isActive: boolean) => void,
 }): MixedElement => {
-	const { blockSections, updateBlockSections } = useBlockSections();
-	const { expandAll, collapseAll, focusMode } = blockSections;
+	const {
+		props: { name: blockId },
+	} = useBlockAppContext();
+
+	const {
+		blockSections: { expandAll, collapseAll, focusMode },
+		updateBlockSections,
+	} = useBlockSections();
+
 	return (
 		<>
 			{isActive && (
 				<Tooltip
-					text={__('Powered by Blockera Site Builder', 'blockera')}
+					text={
+						blockId.startsWith('blockera/')
+							? __('Powered by Blockera Site Builder', 'blockera')
+							: __(
+									'Empowered by Blockera Site Builder',
+									'blockera'
+							  )
+					}
 				>
 					<a
 						href="https://blockera.ai/products/site-builder/?utm_source=block-section-powered-by&utm_medium=referral&utm_campaign=powered-by&utm_content=cta-link"

@@ -4,12 +4,14 @@
 - Double preview button in header in translated languages. [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/missing-translation-string-for-blockera-iBEIfdKXdbBkpn1?highlight=mIwhJxxt63eUix5)]
 - Various bug fixes.
 - Fixed an issue where the style engine generated incorrect selectors on both server and client sides.
+- Block section settings are now hidden if there are no taggable features in the section.
 
 ### Development Workflow
 - GitHub workflow to enable developers to have custom PR playground configurations.
 
 ### New Features
-- Added a new feature to cleanup inline styles from the block elements on the blockera site editor.
+- Added a new feature to cleanup inline styles from the block elements on the Blockera Site Builder.
+- Multiple UX enhancements.
 
 ## 1.1.1 (2025-02-04)
 

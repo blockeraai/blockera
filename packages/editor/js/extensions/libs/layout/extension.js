@@ -152,19 +152,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									</p>
 									<h3>
 										<Icon
-											icon="display-block"
-											iconSize="18"
-										/>
-										{__('Block', 'blockera')}
-									</h3>
-									<p>
-										{__(
-											'Block take up the full width available, starting on a new line.',
-											'blockera'
-										)}
-									</p>
-									<h3>
-										<Icon
 											icon="display-flex"
 											iconSize="18"
 										/>
@@ -186,6 +173,19 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									<p>
 										{__(
 											'Creates a grid-based layout, providing precise control over rows and columns.',
+											'blockera'
+										)}
+									</p>
+									<h3>
+										<Icon
+											icon="display-block"
+											iconSize="18"
+										/>
+										{__('Block', 'blockera')}
+									</h3>
+									<p>
+										{__(
+											'Block take up the full width available, starting on a new line.',
 											'blockera'
 										)}
 									</p>
@@ -233,16 +233,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							columns="1fr 160px"
 							options={[
 								{
-									label: __('Block', 'blockera'),
-									value: 'block',
-									icon: (
-										<Icon
-											icon="display-block"
-											iconSize={18}
-										/>
-									),
-								},
-								{
 									label: __('Flex', 'blockera'),
 									value: 'flex',
 									icon: (
@@ -258,6 +248,16 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 									icon: (
 										<Icon
 											icon="display-grid"
+											iconSize={18}
+										/>
+									),
+								},
+								{
+									label: __('Block', 'blockera'),
+									value: 'block',
+									icon: (
+										<Icon
+											icon="display-block"
 											iconSize={18}
 										/>
 									),

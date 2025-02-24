@@ -20,7 +20,8 @@ return array_merge(
 				'blockeraMaxWidth'          => $sizeSelector,
 				'blockeraHeight'            => $sizeSelector,
 				'blockeraMinHeight'         => $sizeSelector,
-				'blockeraMaxHeight'         => $sizeSelector,
+				'blockeraMaxHeight'         => $sizeSelector, 
+				'blockeraRatio'             => $sizeSelector,
 				'blockera/elements/caption' => [
 					'root' => 'figcaption',
 				],
