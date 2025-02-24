@@ -403,7 +403,7 @@ final class StyleEngine {
 		$css_rules = $this->definition->getCssRules();
 
 		$is_normal_on_base_breakpoint = blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint);
-		
+
 		if ($is_normal_on_base_breakpoint && ! empty($this->inline_styles)) {
 
 			$definition_selector = $this->definition->getSelector();
@@ -475,15 +475,15 @@ final class StyleEngine {
 		$this->definition->setSettings( $settings['attributes'] );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
-		$cssRules = $this->definition->getCssRules();
+		$css_rules = $this->definition->getCssRules();
 
 		if ( ! empty( $settings['attributes']['blockeraBlockStates'] ) ) {
 
 			$engine           = $this;
 			$innerBlockStates = $settings['attributes']['blockeraBlockStates'];
 
-			$cssRules = array_merge(
-				$cssRules,
+			$css_rules = array_merge(
+				$css_rules,
 				blockera_array_flat(
 					array_map(
 						static function ( array $state, string $_pseudoState ) use ( $engine, $blockType ): array {
@@ -511,7 +511,7 @@ final class StyleEngine {
 			);
 		}
 
-		return $cssRules;
+		return $css_rules;
 	}
 
 	/**
@@ -656,8 +656,6 @@ final class StyleEngine {
 				'attributes'
 			)
 		);
-
-		$definition->setInlineStyles($this->inline_styles);
 	}
 
 }
