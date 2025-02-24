@@ -479,59 +479,7 @@ abstract class BaseStyleDefinition {
 			return;
 		}
 
-		$is_normal_on_base_breakpoint = blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint);
-
-		if ($is_normal_on_base_breakpoint) {
-
-			$selector_inline_styles = blockera_find_selector_declarations(preg_replace('/^\w+\./i', '.', $this->getSelector()), $this->inline_styles);
-
-			if (! empty($selector_inline_styles)) {
-
-				$prepared_inline_styles = [];
-
-				foreach ($selector_inline_styles as $selector => $inline_styles) {
-					if (is_int($selector) || ! is_array($inline_styles)) {
-						$extracted = explode(':', $inline_styles);
-
-						foreach (array_chunk($extracted, 2) as $inline_style) {
-
-							$prepared_inline_styles[ $inline_style[0] ] = $inline_style[1];
-						}
-
-						continue;
-					}
-
-					foreach ($inline_styles as $inline_style) {
-						$extracted = explode(':', $inline_style);
-						
-						if (isset($declaration[ $extracted[0] ])) {
-							
-							continue;
-						}
-
-						$declaration[ $extracted[0] ] = $extracted[1];
-					}
-
-					if (! isset($this->css[ $selector ]) || ! in_array($declaration, $this->css[ $selector ], true)) {
-					
-						$this->css[ $selector ] = $declaration;
-					}
-				}
-				
-				if (! isset($this->css[ $selector ]) || ! in_array($declaration, $this->css[ $selector ], true)) {
-
-					$this->css[ $this->getSelector() ] = array_merge($prepared_inline_styles, $declaration);
-				}
-
-				// Unset prepared inline styles to free memory.
-				unset($prepared_inline_styles);
-			} else {
-				$this->css[ $this->getSelector() ] = $declaration;
-			}		
-		} else {
-
-			$this->css[ $this->getSelector() ] = $declaration;
-		}
+		$this->css[ $this->getSelector() ] = $declaration;
 
 		// Reset selector.
 		$this->setSelector('');

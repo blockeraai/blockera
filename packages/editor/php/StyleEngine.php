@@ -400,7 +400,52 @@ final class StyleEngine {
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
-		return $this->definition->getCssRules();
+		$css_rules = $this->definition->getCssRules();
+
+		$is_normal_on_base_breakpoint = blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint);
+		
+		if ($is_normal_on_base_breakpoint && ! empty($this->inline_styles)) {
+
+			$definition_selector = $this->definition->getSelector();
+
+			$selector_inline_styles = blockera_find_selector_declarations(preg_replace('/^\w+\./i', '.', $definition_selector), $this->inline_styles);
+
+			if (! empty($selector_inline_styles) && ! empty($definition_selector)) {
+
+				foreach ($selector_inline_styles as $selector => $inline_styles) {
+					$prepared_inline_styles = [];
+
+					if (is_int($selector) || ! is_array($inline_styles)) {
+						$extracted = explode(':', $inline_styles);
+
+						foreach (array_chunk($extracted, 2) as $inline_style) {
+
+							$prepared_inline_styles[ $inline_style[0] ] = $inline_style[1];
+						}
+
+						continue;
+					}
+
+					foreach ($inline_styles as $inline_style) {
+						$extracted = explode(':', $inline_style);
+
+						if (isset($prepared_inline_styles[ $extracted[0] ])) {
+
+							continue;
+						}
+
+						$prepared_inline_styles[ $extracted[0] ] = $extracted[1];
+					}
+
+					if (! isset($css_rules[ $selector ]) || ! in_array($prepared_inline_styles, $css_rules[ $selector ], true)) {
+
+						$css_rules[ $selector ] = array_merge($prepared_inline_styles, $css_rules[ $selector ] ?? []);
+					}					
+				}
+			}
+		}
+
+		return $css_rules;
 	}
 
 	/**

@@ -1,7 +1,6 @@
 <?php
 
 use Blockera\Exceptions\BaseException;
-use Symfony\Component\VarDumper\VarDumper;
 
 if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	/**
@@ -484,7 +483,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 				$matches[0],
 				[
 					'prefix' => $root,
-					'suffix' => $root,
+					'suffix' => blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]) ? '' : $root,
 				]
 			);
 		}

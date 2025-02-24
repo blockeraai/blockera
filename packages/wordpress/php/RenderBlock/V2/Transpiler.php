@@ -258,7 +258,7 @@ class Transpiler {
 
             foreach ($declarations as $declaration) {
 
-                if (0 < $counter) {
+                if (1 < $counter) {
 
                     if (! empty(trim($id_attribute ?? ''))) {
 
