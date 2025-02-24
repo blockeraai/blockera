@@ -146,6 +146,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 			values?.blockeraTextShadow,
 			attributes.blockeraTextShadow.default
 		);
+		const isShowTextWrap = isShowField(
+			extensionConfig.blockeraTextWrap,
+			values?.blockeraTextWrap,
+			attributes.blockeraTextWrap.default
+		);
 
 		if (
 			!isShowFontFamily &&
@@ -164,7 +169,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 			!isShowTextColumns &&
 			!isShowWordBreak &&
 			!isShowFontColor &&
-			!isShowTextShadow
+			!isShowTextShadow &&
+			!isShowTextWrap
 		) {
 			return <></>;
 		}
@@ -180,7 +186,8 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 			isShowTextOrientation ||
 			isShowTextStroke ||
 			isShowTextColumns ||
-			isShowWordBreak;
+			isShowWordBreak ||
+			isShowTextWrap;
 
 		let isAdvancedEdited = false;
 		if (isShowAdvanced) {
@@ -208,7 +215,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 					attributes.blockeraTextStroke.default
 				) ||
 				values?.blockeraWordBreak !==
-					attributes.blockeraWordBreak.default;
+					attributes.blockeraWordBreak.default ||
+				values?.blockeraTextWrap !==
+					attributes.blockeraTextWrap.default;
 		}
 
 		return (
@@ -1107,6 +1116,116 @@ export const TypographyExtension: ComponentType<TTypographyProps> = memo(
 										attributes.blockeraTextStroke.default
 									}
 									{...extensionProps.blockeraTextStroke}
+								/>
+							</ControlContextProvider>
+						</EditorFeatureWrapper>
+
+						<EditorFeatureWrapper
+							isActive={isShowTextWrap}
+							config={extensionConfig.blockeraTextWrap}
+						>
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(
+										block,
+										'text-wrap'
+									),
+									value: values.blockeraTextWrap,
+									attribute: 'blockeraTextWrap',
+									blockName: block.blockName,
+								}}
+							>
+								<SelectControl
+									label={__('Text Wrap', 'blockera')}
+									labelPopoverTitle={__(
+										'Text Wrap',
+										'blockera'
+									)}
+									labelDescription={
+										<>
+											<p>
+												{__(
+													'It controls how text wraps within its container, enhancing both the layout and readability of your content.',
+													'blockera'
+												)}
+											</p>
+											<h3>
+												{__('Pretty Wrap', 'blockera')}
+											</h3>
+											<p>
+												{__(
+													'Optimizes line breaks for a visually pleasing and elegant flow.',
+													'blockera'
+												)}
+											</p>
+											<h3>
+												{__('Balance Wrap', 'blockera')}
+											</h3>
+											<p>
+												{__(
+													'Evenly distributes text across lines for a balanced, harmonious layout.',
+													'blockera'
+												)}
+											</p>
+											<h3>{__('No Wrap', 'blockera')}</h3>
+											<p>
+												{__(
+													'Keeps text in a single line without any breaks.',
+													'blockera'
+												)}
+											</p>
+											<h3>{__('Wrap', 'blockera')}</h3>
+											<p>
+												{__(
+													'Applies standard wrapping rules to break text at natural points.',
+													'blockera'
+												)}
+											</p>
+										</>
+									}
+									columns="columns-2"
+									options={[
+										{
+											label: __('Default', 'blockera'),
+											value: '',
+										},
+										{
+											label: __(
+												'Pretty Wrap',
+												'blockera'
+											),
+											value: 'pretty',
+										},
+										{
+											label: __(
+												'Balance Wrap',
+												'blockera'
+											),
+											value: 'balance',
+										},
+										{
+											label: __('Wrap', 'blockera'),
+											value: 'wrap',
+										},
+										{
+											label: __('No Wrap', 'blockera'),
+											value: 'nowrap',
+										},
+									]}
+									// type="custom"
+									customMenuPosition="top"
+									//
+									defaultValue={
+										attributes.blockeraTextWrap.default
+									}
+									onChange={(newValue, ref) =>
+										handleOnChangeAttributes(
+											'blockeraTextWrap',
+											newValue,
+											{ ref }
+										)
+									}
+									{...extensionProps.blockeraTextWrap}
 								/>
 							</ControlContextProvider>
 						</EditorFeatureWrapper>

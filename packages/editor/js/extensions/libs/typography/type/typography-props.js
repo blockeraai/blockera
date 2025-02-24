@@ -31,6 +31,7 @@ export type TTypographyProps = {
 		blockeraTextColumns: FeatureConfig,
 		blockeraTextStroke: FeatureConfig,
 		blockeraWordBreak: FeatureConfig,
+		blockeraTextWrap: FeatureConfig,
 	},
 	values: {
 		blockeraFontFamily: string,
@@ -62,6 +63,7 @@ export type TTypographyProps = {
 			},
 		},
 		blockeraWordBreak: string,
+		blockeraTextWrap: string,
 	},
 	display?: string,
 	backgroundClip?: string,
@@ -83,5 +85,6 @@ export type TTypographyProps = {
 		blockeraTextColumns: Object,
 		blockeraTextStroke: Object,
 		blockeraWordBreak: Object,
+		blockeraTextWrap: Object,
 	},
 };

@@ -9,6 +9,7 @@
 - GitHub workflow to enable developers to have custom PR playground configurations.
 
 ### New Features
+- `Text Wrap` feature added to enhance typography customization (Pro Feature).
 - Added a new feature to cleanup inline styles from the block elements on the blockera site editor.
 
 ## 1.1.1 (2025-02-04)

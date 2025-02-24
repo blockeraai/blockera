@@ -137,6 +137,14 @@ const blockeraWordBreak: FeatureConfig = {
 	label: __('Word Break', 'blockera'),
 };
 
+const blockeraTextWrap: FeatureConfig = {
+	show: true,
+	force: false,
+	status: true,
+	isActiveOnFree: false,
+	label: __('Text Wrap', 'blockera'),
+};
+
 export const typographyConfig = {
 	blockeraFontFamily,
 	blockeraFontAppearance,
@@ -155,4 +163,5 @@ export const typographyConfig = {
 	blockeraTextColumns,
 	blockeraTextStroke,
 	blockeraWordBreak,
+	blockeraTextWrap,
 };
