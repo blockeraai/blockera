@@ -595,6 +595,12 @@ return [
 			'value' => 'normal',
 		],
 	],
+	'blockeraTextWrap'                  => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
 ];
 
 

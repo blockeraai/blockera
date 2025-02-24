@@ -79,7 +79,6 @@
 					font-size: 12px;
 					font-weight: 400;
 					display: inline-block;
-					max-width: 30px;
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
@@ -175,7 +174,7 @@
 		}
 
 		& > .blockera-control-repeater__desc {
-			max-width: 90%;
+			max-width: 85%;
 			text-wrap: pretty;
 			font-size: 13px;
 			margin-bottom: 5px;

@@ -149,6 +149,7 @@ export function SideItem({
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
 		},
+		threshold: 0,
 	});
 
 	function getSideIcon(side: Side): MixedElement {

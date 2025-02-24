@@ -480,7 +480,7 @@ describe('Box Position → Functionality', () => {
 		});
 	});
 
-	describe('Drag Value Changes', () => {
+	describe.only('Drag Value Changes', () => {
 		it('change values with drag', () => {
 			cy.get('@container').within(() => {
 				cy.customSelect('Absolute');
@@ -498,7 +498,7 @@ describe('Box Position → Functionality', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('vertical', 20);
+				cy.get('@SideShape').dragValue('vertical', 20, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -508,7 +508,7 @@ describe('Box Position → Functionality', () => {
 
 				// negative drag value change
 				// margin supports negative values
-				cy.get('@SideShape').dragValue('vertical', -35);
+				cy.get('@SideShape').dragValue('vertical', -35, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -529,7 +529,7 @@ describe('Box Position → Functionality', () => {
 				);
 
 				// positive drag value change
-				cy.get('@SideShape').dragValue('vertical', 20);
+				cy.get('@SideShape').dragValue('vertical', 20, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')
@@ -539,7 +539,7 @@ describe('Box Position → Functionality', () => {
 
 				// negative drag value change
 				// margin supports negative values
-				cy.get('@SideShape').dragValue('vertical', -35);
+				cy.get('@SideShape').dragValue('vertical', -35, 0);
 
 				cy.get('@SideLabel')
 					.invoke('text')

@@ -109,6 +109,7 @@ export function MarginHorizontal({
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
 		},
+		threshold: 0,
 	});
 
 	let _marginLock = marginLock;

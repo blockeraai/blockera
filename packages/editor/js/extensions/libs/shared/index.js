@@ -621,6 +621,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										blockeraTextColumns: {},
 										blockeraTextStroke: {},
 										blockeraWordBreak: {},
+										blockeraTextWrap: {},
 									}}
 									values={{
 										blockeraFontFamily:
@@ -657,6 +658,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 											currentStateAttributes?.blockeraTextStroke,
 										blockeraWordBreak:
 											currentStateAttributes?.blockeraWordBreak,
+										blockeraTextWrap:
+											currentStateAttributes?.blockeraTextWrap,
 									}}
 									attributes={{
 										blockeraFontFamily:
@@ -693,6 +696,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 											attributes?.blockeraTextStroke,
 										blockeraWordBreak:
 											attributes?.blockeraWordBreak,
+										blockeraTextWrap:
+											attributes?.blockeraTextWrap,
 									}}
 									display={
 										currentStateAttributes?.blockeraDisplay

@@ -48,7 +48,7 @@
 			border-top: solid 1px var(--blockera-controls-border-color);
 		}
 
-		.blockera-component-support-item {
+		.blockera-component-button.blockera-component-support-item {
 			display: flex;
 			justify-content: space-between !important;
 			cursor: pointer;
@@ -64,6 +64,11 @@
 				fill: currentColor;
 			}
 
+			&.force-item {
+				cursor: not-allowed;
+				color: #949494;
+			}
+
 			&:hover:not(.force-item):not(:focus) {
 				border-color: var(--blockera-controls-border-color);
 			}
@@ -71,11 +76,6 @@
 			&:focus:not(.force-item) {
 				border-color: var(--blockera-controls-primary-color);
 				box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
-			}
-
-			&.force-item {
-				cursor: not-allowed;
-				color: #949494;
 			}
 		}
 	}

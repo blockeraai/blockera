@@ -980,7 +980,7 @@ describe('input control component testing', () => {
 				});
 			});
 
-			it.only('should accept 0 value', () => {
+			it('should accept 0 value', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: <InputControl unitType="line-height" />,
@@ -997,6 +997,61 @@ describe('input control component testing', () => {
 					return expect(getControlValue(name)).to.eq('0px');
 				});
 				cy.get('input').should('have.value', '0');
+			});
+
+			it('Change value by drag', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '',
+				});
+
+				cy.get('input').dragValue('vertical', 10, 5);
+
+				// threshold is 5 so it should be 5
+				cy.get('input').should('have.value', 5);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('5px');
+				});
+
+				cy.get('input').dragValue('vertical', -13, 5);
+
+				// threshold is 5 and last value is 5 so it should be -3
+				cy.get('input').should('have.value', -3);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('-3px');
+				});
+
+				cy.get('input').dragValue('vertical', 7, 5, true);
+
+				// threshold is 5 and last value is -3
+				// shift is down so 1 pixel mean 10px
+				// so it should be 17
+				cy.get('input').should('have.value', 17);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('17px');
+				});
+
+				cy.get('input').dragValue('vertical', 8, 5, true);
+
+				// threshold is 5 and last value is 17
+				// shift is down so 1 pixel mean 10px
+				// so it should be 25
+				cy.get('input').should('have.value', 47);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('47px');
+				});
+
+				cy.get('input').dragValue('vertical', 7, 5, false);
+
+				// threshold is 5 and last value is 47
+				// each step is 1 and 2 step is the movement
+				// so it should be 49
+				cy.get('input').should('have.value', 49);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('49px');
+				});
 			});
 		});
 

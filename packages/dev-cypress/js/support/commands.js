@@ -638,30 +638,58 @@ export const registerCommands = () => {
 	Cypress.Commands.add(
 		'dragValue',
 		{ prevSubject: 'element' },
-		(subject, type = 'vertical', movement = 10) => {
+		(
+			subject,
+			type = 'vertical',
+			movement = 10,
+			threshold = 5,
+			withShift = false
+		) => {
+			// Initial mousedown
 			cy.wrap(subject[0]).trigger('mousedown', 'topLeft', {
 				which: 1,
 				force: true,
 			});
 
+			// First mousemove to exceed threshold
 			if (type === 'vertical') {
-				// down movement is negative and up movement is positive
+				cy.get('body').trigger('mousemove', {
+					which: 1,
+					clientY:
+						Math.ceil(subject[0].getBoundingClientRect().top) +
+						threshold, // Exceed threshold
+				});
+
+				// Second mousemove for actual movement
 				cy.get('.blockera-virtual-cursor-box').trigger('mousemove', {
 					which: 1,
 					clientY:
 						Math.ceil(subject[0].getBoundingClientRect().top) +
-						movement * -1,
+						(withShift
+							? (movement - threshold + 1) * 5
+							: movement) *
+							-1,
+					shiftKey: withShift,
 				});
 			} else if (type === 'horizontal') {
-				// left movement is negative and right movement is positive
+				cy.get('body').trigger('mousemove', {
+					which: 1,
+					clientX:
+						Math.ceil(subject[0].getBoundingClientRect().left) +
+						threshold,
+				});
+
+				// Second mousemove for actual movement
 				cy.get('.blockera-virtual-cursor-box').trigger('mousemove', {
 					which: 1,
 					clientX:
 						Math.ceil(subject[0].getBoundingClientRect().left) +
-						movement,
+						(withShift ? (movement - threshold + 1) * 5 : movement),
+					shiftKey: withShift,
 				});
 			}
 
+			// Final mouseup
 			cy.get('.blockera-virtual-cursor-box').trigger('mouseup', {
 				which: 1,
 			});

@@ -109,6 +109,7 @@ export function PaddingAll({
 			if (!openPopover) setFocusSide('');
 			setLabelClassName('');
 		},
+		threshold: 0,
 	});
 
 	if (paddingLock !== 'all') {
