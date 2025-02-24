@@ -10,8 +10,12 @@
 - GitHub workflow to enable developers to have custom PR playground configurations.
 
 ### New Features
-- Added a new feature to cleanup inline styles from the block elements on the Blockera Site Builder.
+- `Text Wrap` feature added to enhance typography customization (Pro Feature).
+- Added a new feature to cleanup inline styles from the block elements on the blockera site editor.
 - Multiple UX enhancements.
+
+### Automated Tests
+- Added E2E tests for the `Text Wrap` feature to verify its functionality in both the editor and front end.
 
 ## 1.1.1 (2025-02-04)
 
@@ -30,7 +34,7 @@
 - Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.
 - Added a new fallback UI for the block editor to improve the user experience when an error occurs. [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/bug-detector-and-reporter-inside-wp-admin-JNHwQhKzYqrEjK6)]
 
-### Automated Tests:
+### Automated Tests
 - Added E2E tests for the Box Sizing feature to verify its functionality in both the editor and front end.
 
 ### Bug Fixes

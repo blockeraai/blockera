@@ -103,6 +103,12 @@
 			"css-property": "-webkit-text-stroke-color",
 			"fallback": ["typography"],
 			"description": "Support for \"blockeraTextStroke\" value."
+		},
+		"blockeraTextWrap": {
+			"status": true,
+			"css-property": "text-wrap",
+			"fallback": ["font-size", "typography"],
+			"description": "Support for \"blockeraTextWrap\" value."
 		}
 	}
 }

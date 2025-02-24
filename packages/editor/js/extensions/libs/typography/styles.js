@@ -53,6 +53,7 @@ export function TypographyStyles({
 		blockeraTextColumns,
 		blockeraTextStroke,
 		blockeraWordBreak,
+		blockeraTextWrap,
 	} = config.typographyConfig;
 
 	const blockProps = {
@@ -729,6 +730,40 @@ export function TypographyStyles({
 								type: 'static',
 								properties: {
 									'word-break': blockeraWordBreak,
+								},
+							},
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
+		}
+	}
+
+	if (isActiveField(blockeraTextWrap)) {
+		const blockeraTextWrap = blockProps.attributes.blockeraTextWrap;
+
+		if (blockeraTextWrap !== attributes.blockeraTextWrap.default) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraTextWrap',
+				support: 'blockeraTextWrap',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraTextWrap'
+				),
+			});
+
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraTextWrap: [
+							{
+								type: 'static',
+								properties: {
+									'text-wrap': blockeraTextWrap,
 								},
 							},
 						],
