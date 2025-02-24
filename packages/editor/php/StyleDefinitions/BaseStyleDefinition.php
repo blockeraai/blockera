@@ -111,13 +111,6 @@ abstract class BaseStyleDefinition {
 	protected string $current_feature_id;
 
 	/**
-	 * Store inline styles.
-	 *
-	 * @var array
-	 */
-	protected array $inline_styles = [];
-
-	/**
 	 * Store the current breakpoint.
 	 *
 	 * @var string $breakpoint the current breakpoint.
@@ -160,28 +153,6 @@ abstract class BaseStyleDefinition {
 	public function setBreakpoint( string $breakpoint): void {
 
 		$this->breakpoint = $breakpoint;
-	}
-
-	/**
-	 * Set inline styles.
-	 *
-	 * @param array $inline_styles The inline styles.
-	 *
-	 * @return void
-	 */
-	public function setInlineStyles( array $inline_styles): void {
-
-		$this->inline_styles = $inline_styles;
-	}
-
-	/**
-	 * Get inline styles.
-	 *
-	 * @return array
-	 */
-	public function getInlineStyles(): array {
-
-		return $this->inline_styles;
 	}
 
 	/**
@@ -480,9 +451,6 @@ abstract class BaseStyleDefinition {
 		}
 
 		$this->css[ $this->getSelector() ] = $declaration;
-
-		// Reset selector.
-		$this->setSelector('');
 	}
 
 	/**
