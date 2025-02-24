@@ -420,6 +420,11 @@ final class StyleEngine {
 
 						foreach (array_chunk($extracted, 2) as $inline_style) {
 
+							if (! isset($inline_style[0]) || ! isset($inline_style[1])) {
+
+								continue;
+							}
+
 							$prepared_inline_styles[ $inline_style[0] ] = $inline_style[1];
 						}
 
