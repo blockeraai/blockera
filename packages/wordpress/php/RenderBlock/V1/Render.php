@@ -113,7 +113,7 @@ class Render {
     public function render( string $html, array $block, array $supports): string {
 
         // Check block to is support by Blockera?
-        if (! blockera_is_supported_block($block) || is_admin() || defined('REST_REQUEST') && REST_REQUEST) {
+        if (! blockera_is_supported_block($block) || is_admin() || ( blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]) && defined('REST_REQUEST') && REST_REQUEST )) {
 
             return $html;
         }
@@ -153,12 +153,6 @@ class Render {
             }
 
             return $html;
-        }
-
-        // Delete cache data while previous cache data is existing but changed block render process data.
-        if ($cache_validate) {
-
-            blockera_delete_block_cache($cache_key);
         }
 
         // Get normalized blockera block unique css classname.
