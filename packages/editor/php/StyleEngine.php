@@ -204,11 +204,11 @@ final class StyleEngine {
 
 			// Add force base breakpoint if not exists.
 			if (! in_array($this->breakpoint, $breakpoints, true)) {
-				$breakpoints[] = $this->breakpoint;
+				array_unshift($breakpoints, $this->breakpoint);
 			}
 			// Add normal pseudo class if not exists.
 			if (! in_array('normal', $this->pseudo_classes, true)) {
-				$this->pseudo_classes[] = 'normal';
+				array_unshift($this->pseudo_classes, 'normal');
 			}
 
 			$breakpointsCssRules = array_filter(
