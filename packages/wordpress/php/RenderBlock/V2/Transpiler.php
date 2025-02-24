@@ -109,6 +109,8 @@ class Transpiler {
         // Cache the results.
         $this->cache->setCache($post_id, 'post_content', $data);
 
+		$this->reset();
+
         return $data;
     }
 
@@ -410,15 +412,10 @@ class Transpiler {
      *
      * @return void
      */
-    public function __destruct() {
+    public function reset() {
         // Clear arrays.
         $this->styles        = [];
         $this->parsed_blocks = [];
-
-        // Clear object references.
-        unset($this->app);
-        unset($this->cache);
-        unset($this->style_engine);
 
         // Force garbage collection.
         gc_collect_cycles();
