@@ -26,7 +26,7 @@ class Render {
 	 *
 	 * @var bool $cache_status true if cache is enabled, false otherwise.
 	 */
-	protected bool $cache_status = false;
+	protected bool $cache_status = true;
 
     /**
      * Store all block classnames.
@@ -117,12 +117,6 @@ class Render {
 
             return $html;
         }
-
-		// Cache status value by default is true, so we need to disable cache for dynamic blocks.
-		if ($this->cache_status) {
-			// Disable cache for dynamic blocks.
-			$this->setCacheStatus(! blockera_block_is_dynamic($block));
-		}
 
         // Extract block attributes.
         $attributes = $block['attrs'];
