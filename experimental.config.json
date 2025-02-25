@@ -16,6 +16,6 @@
 	},
 	"earlyAccessLab": {
 		"optimizeStyleGeneration": true,
-		"optimizeStyleGenerationStatus": "alpha"
+		"optimizeStyleGenerationStatus": "beta"
 	}
 }
