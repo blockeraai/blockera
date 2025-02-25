@@ -1,2 +1,6 @@
 @import "./libs/style.scss";
 @import "./value-addons/style.scss";
+
+.components-visually-hidden {
+	display: none;
+}

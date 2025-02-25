@@ -73,11 +73,7 @@ export default function EditorFeatureWrapper({
 	}
 
 	if (!feature.isActiveOnFree) {
-		return (
-			<FeatureWrapper type="free" {...props}>
-				{children}
-			</FeatureWrapper>
-		);
+		return <>{children}</>;
 	}
 
 	if (isInnerBlock(currentBlock)) {
@@ -103,11 +99,7 @@ export default function EditorFeatureWrapper({
 		}
 
 		if (!feature.isActiveOnInnerBlocksOnFree) {
-			return (
-				<FeatureWrapper type="free" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return <>{children}</>;
 		}
 	}
 
@@ -131,11 +123,7 @@ export default function EditorFeatureWrapper({
 		}
 
 		if (!feature.isActiveOnStatesOnFree) {
-			return (
-				<FeatureWrapper type="free" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return <>{children}</>;
 		}
 	}
 
@@ -170,11 +158,7 @@ export default function EditorFeatureWrapper({
 		}
 
 		if (!feature.isActiveOnBreakpointsOnFree) {
-			return (
-				<FeatureWrapper type="free" {...props}>
-					{children}
-				</FeatureWrapper>
-			);
+			return <>{children}</>;
 		}
 	}
 
