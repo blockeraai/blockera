@@ -16,15 +16,24 @@ class Setup {
      */
     public string $block_dir_path = '';
 
-    /**
-     * The apply blockera setup on WordPress hooks.
-     *
-     * @return void
-     */
-    public function apply(): void {
+	/**
+	 * Store available blocks.
+	 *
+	 * @var array $available_blocks the available blocks.
+	 */
+	protected $available_blocks = [];
 
-        add_filter('register_block_type_args', [ $this, 'register_block' ], 9e2, 2);
-    }
+	/**
+	 * Set available blocks.
+	 *
+	 * @param array $blocks the available blocks.
+	 *
+	 * @return void
+	 */
+	public function setAvailableBlocks( array $blocks): void {
+
+		$this->available_blocks = $blocks;
+	}
 
     /**
      * Register block extra arguments for third party block types.
@@ -34,9 +43,9 @@ class Setup {
      *
      * @return array the registered block arguments.
      */
-    public function register_block( array $args, string $block_type): array {
+    public function registerBlock( array $args, string $block_type): array {
 
-        if (! in_array($block_type, blockera_get_available_blocks(), true)) {
+        if (! in_array($block_type, $this->available_blocks, true)) {
 
             return $args;
         }

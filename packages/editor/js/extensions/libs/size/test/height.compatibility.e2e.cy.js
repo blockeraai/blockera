@@ -235,7 +235,7 @@ describe('Height → WP Compatibility', () => {
 			);
 
 			// Select target block
-			cy.getBlock('core/spacer').click();
+			cy.getBlock('core/spacer').click({ force: true });
 
 			// add alias to the feature container
 			cy.getParentContainer('Height').as('container');

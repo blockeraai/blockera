@@ -5,6 +5,7 @@ import {
 	redirectToFrontPage,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
+import { experimental } from '@blockera/env';
 
 describe('Transforms → Functionality', () => {
 	beforeEach(() => {
@@ -18,6 +19,10 @@ describe('Transforms → Functionality', () => {
 			'blockera-repeater-control'
 		).as('transform');
 	});
+
+	const enabledOptimizeStyleGeneration = experimental().get(
+		'earlyAccessLab.optimizeStyleGeneration'
+	);
 
 	context('Transform Feature', () => {
 		it('should update transform, when add value to move + promoter should be appear', () => {
@@ -81,7 +86,9 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform: translate3d(150px, 200px, 100px) !important;'
+					!enabledOptimizeStyleGeneration
+						? 'transform: translate3d(150px, 200px, 100px) !important'
+						: 'transform: translate3d(150px, 200px, 100px)'
 				);
 		});
 
@@ -134,7 +141,9 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform: scale3d(130%, 130%, 50%) !important;'
+					!enabledOptimizeStyleGeneration
+						? 'transform: scale3d(130%, 130%, 50%) !important'
+						: 'transform: scale3d(130%, 130%, 50%)'
 				);
 		});
 
@@ -189,7 +198,9 @@ describe('Transforms → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg) !important;'
+					!enabledOptimizeStyleGeneration
+						? 'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg) !important;'
+						: 'transform: rotateX(10deg) rotateY(20deg) rotateZ(30deg)'
 				);
 		});
 
@@ -238,7 +249,12 @@ describe('Transforms → Functionality', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
-				.should('include', 'transform: skew(10deg, 20deg) !important');
+				.should(
+					'include',
+					!enabledOptimizeStyleGeneration
+						? 'transform: skew(10deg, 20deg) !important'
+						: 'transform: skew(10deg, 20deg)'
+				);
 		});
 	});
 });

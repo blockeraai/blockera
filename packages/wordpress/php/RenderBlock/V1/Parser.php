@@ -22,6 +22,13 @@ class Parser {
      */
     protected Application $app;
 
+	/**
+	 * Store the supports.
+	 *
+	 * @var array $supports
+	 */
+	protected array $supports;
+
     /**
      * The Parser class constructor.
      *
@@ -30,6 +37,18 @@ class Parser {
     public function __construct( Application $app) { 
         $this->app = $app;
     }
+
+	/**
+	 * Set the supports.
+	 *
+	 * @param array $supports The supports.
+	 *
+	 * @return void
+	 */
+	public function setSupports( array $supports): void {
+
+		$this->supports = $supports;
+	}
 
     /**
      * Retrieve combine css of current block.
@@ -53,6 +72,7 @@ class Parser {
          * @var StyleEngine $styleEngine The style-engine object.
          */
         $styleEngine = $this->app->make(StyleEngine::class, compact('block', 'fallbackSelector'));
+		$styleEngine->setSupports($this->supports);
 
         return $styleEngine->getStylesheet();
     }

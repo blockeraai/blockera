@@ -20,7 +20,7 @@ describe('Spacer Block', () => {
 		`);
 
 		// Select target block
-		cy.getBlock('core/spacer').click();
+		cy.getBlock('core/spacer').click({ force: true });
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');

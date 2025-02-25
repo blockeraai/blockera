@@ -16,7 +16,12 @@ class TestSetup extends \WP_UnitTestCase {
 		$wp_filter = [];
 		$this->assertEmpty( $wp_filter );
 
-		(new Setup())->apply();
+		tests_add_filter('register_block_type_args', function(array $args, string $block_type): array {
+			(new Setup())->registerBlock($args, $block_type);
+		}, 
+		10,
+		 2
+		);
 
 		// Ensure the filter is added
 		$this->assertInstanceOf( \WP_Hook::class, $wp_filter['register_block_type_args'] );

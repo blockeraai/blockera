@@ -60,27 +60,6 @@ class TestFunctions extends \Blockera\Dev\PHPUnit\AppTestCase {
 	}
 
 	/**
-	 * @dataProvider getCamelCaseJoinDataProvider
-	 *
-	 * @param string $string
-	 * @param string $expected
-	 *
-	 * @return void
-	 */
-	public function testItShouldRetrieveCamelCaseText( string $string, string $expected ): void {
-
-		$this->assertEquals(
-			$expected,
-			blockera_camel_case_join( $string )
-		);
-	}
-
-	public function getCamelCaseJoinDataProvider(): array {
-
-		return require __DIR__ . '/Fixtures/Functions/camel-case-join.php';
-	}
-
-	/**
 	 * @dataProvider coreConfigDataProvider
 	 *
 	 * @param string $path

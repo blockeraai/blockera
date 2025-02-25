@@ -1,8 +1,6 @@
 <?php
 
-namespace Blockera\StyleEngine\StyleDefinitions;
-
-use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
+namespace Blockera\Editor\StyleDefinitions;
 
 /**
  * Class Divider definition to generate css rules.

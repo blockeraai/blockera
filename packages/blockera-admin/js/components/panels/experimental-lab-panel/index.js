@@ -28,7 +28,7 @@ import FeatureDesc from './components/feature-desc';
 const fallbackDefaultValue = {
 	earlyAccessLab: {
 		optimizeStyleGeneration: false,
-		optimizeStyleGenerationStatus: 'alpha',
+		optimizeStyleGenerationStatus: 'beta',
 	},
 };
 
