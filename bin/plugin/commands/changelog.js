@@ -4,6 +4,9 @@
 const { Octokit } = require('@octokit/rest');
 const { sprintf } = require('sprintf-js');
 const semver = require('semver');
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 /**
  * Internal dependencies
@@ -787,15 +790,45 @@ function getMainChangelog(changelogPath, version = '') {
 	return start + changelog + end;
 }
 
-/**
- * Formats the changelog string for a given list of packages.
- *
- * @param {string[]} changelogs List of pull requests.
- * @param {string} version The version number to update changelog.txt!
- *
- * @return {string} The formatted changelog string.
- */
-function updateChangelog(changelogs, version, publishDate) {
+async function getCommitCountSinceLastRelease() {
+	try {
+		// First, fetch all tags and history
+		await execPromise('git fetch --prune --unshallow');
+
+		// Fetch all branches
+		await execPromise('git fetch --all');
+
+		// Get all branches that match the release pattern
+		const { stdout: branches } = await execPromise(
+			'git branch -r | grep "origin/release/" | sort -V'
+		);
+
+		if (!branches) {
+			return 0;
+		}
+
+		// Get the latest release branch
+		const latestRelease = branches
+			.split('\n')
+			.filter(Boolean)
+			.pop()
+			.trim()
+			.replace('origin/', '');
+
+		// Get commit count from latest release to HEAD
+		const { stdout: commitCount } = await execPromise(
+			`git rev-list --count ${latestRelease}..HEAD`
+		);
+
+		return parseInt(commitCount.trim(), 10);
+	} catch (error) {
+		console.error('Error getting commit count:', error);
+		return 0;
+	}
+}
+
+async function updateChangelog(changelogs, version, publishDate) {
+	const commitCount = await getCommitCountSinceLastRelease();
 	const start =
 		'== Changelog ==\n\n### Version ' +
 		version.trim() +
@@ -804,7 +837,9 @@ function updateChangelog(changelogs, version, publishDate) {
 		'\n\n';
 	let changelog = '';
 	const end =
-		'\n\n### More\n\nTo read the changelog for older Blockera releases, please navigate to the [releases page](https://community.blockera.ai/changelog-9l8hbrv0).';
+		'\n\n### More\n\n' +
+		`This release includes ${commitCount} commits since the last release.\n\n` +
+		'To read the changelog for older Blockera releases, please navigate to the [releases page](https://community.blockera.ai/changelog-9l8hbrv0).';
 
 	for (const changelogPath of changelogs) {
 		// Read the changelog file
