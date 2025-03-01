@@ -53,11 +53,12 @@ export const injectHelpersToCssGenerators = (
 export const computedCssDeclarations = (
 	styleDefinitions: Object,
 	blockProps: {
+		state: string,
 		clientId: string,
 		attributes: Object,
 		blockName: string,
-		supports: Object,
-		blockeraStyleEngineConfig: Object,
+		supports?: Object,
+		blockeraStyleEngineConfig?: Object,
 	},
 	pickedSelector: string
 ): Array<string> => {
