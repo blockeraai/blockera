@@ -119,7 +119,7 @@ jobs:
                   # Wait for MySQL to be ready
                   echo "Waiting for MySQL to be ready..."
                   for i in {1..30}; do
-                    if docker exec $(docker ps -qf "name=.*-tests-mysql-1") mysqladmin ping -h localhost --silent; then
+                    if docker exec $(docker ps -qf "name=.*-tests-mysql-1") mysql -e "SELECT 1" &>/dev/null; then
                       echo "MySQL is ready!"
                       break
                     fi
