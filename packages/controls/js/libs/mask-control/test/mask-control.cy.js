@@ -140,9 +140,9 @@ describe('Mask Control component testing', () => {
 			});
 
 			cy.getParentContainer('Width').within(() => {
-				cy.get('input[type="number"]').type(100);
+				cy.get('input[type="text"]').type(100);
 				// check control
-				cy.get('input[type="number"]').should('have.value', 100);
+				cy.get('input[type="text"]').should('have.value', 100);
 			});
 
 			// check data provider
@@ -169,9 +169,9 @@ describe('Mask Control component testing', () => {
 			});
 
 			cy.getParentContainer('Height').within(() => {
-				cy.get('input[type="number"]').type(100);
+				cy.get('input[type="text"]').type(100);
 				// check control
-				cy.get('input[type="number"]').should('have.value', 100);
+				cy.get('input[type="text"]').should('have.value', 100);
 			});
 
 			// check data provider

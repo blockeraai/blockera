@@ -54,7 +54,7 @@ describe('Transform Control', () => {
 
 				cy.getByDataCy('group-control-header').click();
 
-				cy.get('input[type="number"]').each(($input, idx) => {
+				cy.get('input[type="text"]').each(($input, idx) => {
 					cy.wrap($input).clear();
 					cy.wrap($input).type('20');
 					cy.getByDataCy('repeater-item').then(($el) => {
@@ -123,8 +123,8 @@ describe('Transform Control', () => {
 				cy.get('[aria-label~="Item"]').click();
 				cy.get('[aria-label="Scale"]').click();
 
-				cy.get('input[type="number"]').clear();
-				cy.get('input[type="number"]').type('150');
+				cy.get('input[type="text"]').clear();
+				cy.get('input[type="text"]').type('150');
 
 				// visual assertion
 				cy.getByDataCy('repeater-item')
@@ -178,7 +178,7 @@ describe('Transform Control', () => {
 				cy.get('[aria-label~="Item"]').click();
 				cy.get('[aria-label="Rotate"]').click();
 
-				cy.get('input[type="number"]').each(($input, idx) => {
+				cy.get('input[type="text"]').each(($input, idx) => {
 					cy.wrap($input).clear();
 					cy.wrap($input).type('20');
 					cy.getByDataCy('repeater-item').then(($el) => {
@@ -245,7 +245,7 @@ describe('Transform Control', () => {
 				cy.get('[aria-label~="Item"]').click();
 				cy.get('[aria-label="Skew"]').click();
 
-				cy.get('input[type="number"]').each(($input, idx) => {
+				cy.get('input[type="text"]').each(($input, idx) => {
 					cy.wrap($input).clear();
 					cy.wrap($input).type('20');
 					cy.getByDataCy('repeater-item').then(($el) => {
