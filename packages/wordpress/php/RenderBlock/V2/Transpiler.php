@@ -245,7 +245,7 @@ class Transpiler {
 			$processor->remove_attribute('style');
 
 			// Skip if the class contains 'blockera-is-transpiled', because it shows that the block is already transpiled.
-			if (str_contains($class, 'blockera-is-transpiled')) {
+			if ($class && str_contains($class, 'blockera-is-transpiled')) {
 
 				return;
 			}
