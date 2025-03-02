@@ -1,4 +1,8 @@
 /**
+ * External dependencies
+ */
+import compareSnapshotCommand from 'cypress-image-diff-js/command';
+/**
  * Blockera dependencies
  */
 import { isString } from '@blockera/utils';
@@ -12,6 +16,9 @@ import {
 } from '../helpers';
 
 export const registerCommands = () => {
+	//This registers the cy.compareSnapshot() custom command provided by the plugin
+	compareSnapshotCommand();
+
 	// Custom uploadFile command
 	Cypress.Commands.add('uploadFile', (fileName, fileType, selector) => {
 		cy.get(selector).then((subject) => {
