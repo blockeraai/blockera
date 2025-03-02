@@ -111,6 +111,13 @@ jobs:
                   echo DB=wp_tests >> .env
                   cat .env
 
+            - name: Wait for MySQL
+              run: |
+                  while ! docker exec $(docker ps -q --filter "name=mysql") mysqladmin ping -h"localhost" --silent; do
+                    echo "Waiting for MySQL to be ready..."
+                    sleep 2
+                  done
+
             - name: Start WordPress Environment
               run: npm run env:start
 
