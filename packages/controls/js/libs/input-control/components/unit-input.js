@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useState, Fragment } from '@wordpress/element';
+import { useState, Fragment, useRef, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -13,20 +13,21 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { isUndefined } from '@blockera/utils';
+import { isUndefined, isEmpty, useDragValue } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { OtherInput } from './other-input';
-import { NumberInput } from './number-input';
 import NoticeControl from '../../notice-control';
 import type { InputControlProps } from '../types';
 import TextAreaControl from '../../textarea-control';
 import { ControlContextProvider } from '../../../context';
 import { Popover, Button, Tooltip, ConditionalWrapper } from '../../';
+import { RangeControl } from '../../index';
 import { isSpecialUnit, getUnitByValue, extractNumberAndUnit } from '../utils';
+import { InputArrows } from './input-arrows';
 
 export function UnitInput({
 	defaultValue,
@@ -35,11 +36,9 @@ export function UnitInput({
 	className,
 	units = [],
 	disabled,
-	validator,
 	min,
 	max,
 	drag,
-	float,
 	arrows,
 	size,
 	children,
@@ -47,6 +46,7 @@ export function UnitInput({
 	unitValue,
 	inputValue,
 	isValidValue,
+
 	...props
 }: {
 	...InputControlProps,
@@ -54,6 +54,83 @@ export function UnitInput({
 	unitValue: Object,
 }): MixedElement {
 	const [isMaximizeVisible, setIsMaximizeVisible] = useState(false);
+	const [typedValue, setTypedValue] = useState(inputValue);
+	const unitUpdateTimeout = useRef(null);
+
+	useEffect(() => {
+		setTypedValue(inputValue);
+	}, [inputValue, unitValue]);
+
+	const handleInputChange = (e: { target: { value: string } }) => {
+		const value = e.target.value;
+		setTypedValue(value); // Show exactly what user types
+
+		// Extract potential unit from input
+		const match = value.match(/^(-?\d*\.?\d*)([a-zA-Z%]+)?$/);
+		if (match) {
+			const [, numericValue = '', unit = ''] = match;
+
+			// Clear any existing timeout
+			if (unitUpdateTimeout.current) {
+				clearTimeout(unitUpdateTimeout.current);
+			}
+
+			// If there's a unit, set a timeout to update it
+			if (unit) {
+				unitUpdateTimeout.current = setTimeout(() => {
+					const newUnitValue = getUnitByValue(unit, units);
+					if (newUnitValue) {
+						// Update both unit and numeric value after timeout
+						onChangeSelect(unit);
+						setTypedValue(numericValue);
+						if (typeof onChange === 'function') {
+							onChange({
+								unitValue: newUnitValue,
+								inputValue: numericValue,
+							});
+						}
+					}
+				}, 300);
+			} else if (typeof onChange === 'function') {
+				// If no unit, just update the numeric value
+				onChange({
+					unitValue,
+					inputValue: numericValue || value,
+				});
+			}
+		}
+	};
+
+	const handlePaste = (e: {
+		clipboardData: { getData: (type: string) => string },
+		preventDefault: () => void,
+	}) => {
+		const pastedText = e.clipboardData.getData('text');
+		const match = pastedText.match(/^(-?\d*\.?\d*)([a-zA-Z%]+)?$/);
+
+		if (match) {
+			e.preventDefault();
+			const [, numericValue = '', unit = ''] = match;
+
+			// Update the input value immediately
+			setTypedValue(numericValue);
+
+			// If there's a unit, update it
+			if (unit) {
+				const newUnitValue = getUnitByValue(unit, units);
+				if (newUnitValue) {
+					onChangeSelect(unit);
+				}
+			}
+
+			if (typeof onChange === 'function') {
+				onChange({
+					unitValue: unit ? getUnitByValue(unit, units) : unitValue,
+					inputValue: numericValue,
+				});
+			}
+		}
+	};
 
 	const onChangeSelect = (newUnitValue: string) => {
 		if ('undefined' === typeof onChange) {
@@ -119,8 +196,6 @@ export function UnitInput({
 
 		onChange({
 			inputValue,
-			// old unit is special && current is not && value is empty
-			// then try to catch value from default value
 			unitValue:
 				'' === inputValue &&
 				'' !== defaultValue &&
@@ -148,6 +223,93 @@ export function UnitInput({
 			unitValue,
 			inputValue: newValue,
 		});
+	};
+
+	// Add drag value hook
+	const { onDragStart, onDragEnd } = useDragValue({
+		value: !isEmpty(inputValue) ? +inputValue : 0,
+		setValue: (newValue) => {
+			if (typeof onChange === 'function') {
+				onChange({
+					unitValue,
+					inputValue: String(newValue),
+				});
+			}
+		},
+		movement: 'vertical',
+		min,
+		max,
+	});
+
+	// Add drag event handler
+	const getDragEvent = () => {
+		return drag && !disabled
+			? {
+					onMouseDown: (event) => {
+						onDragStart(event);
+					},
+					onMouseUp: onDragEnd,
+			  }
+			: {};
+	};
+
+	// Add this function to handle arrow clicks
+	const handleArrowClick = (newValue: number) => {
+		if (typeof onChange === 'function') {
+			onChange({
+				unitValue,
+				inputValue: String(newValue),
+			});
+		}
+	};
+
+	// Add this function to handle keyboard events
+	const handleKeyDown = (event: KeyboardEvent) => {
+		// Only handle if not a special unit and input has focus
+		if (isSpecialUnit(unitValue?.value) || disabled) {
+			return;
+		}
+
+		const currentValue = !isEmpty(typedValue) ? parseFloat(typedValue) : 0;
+		const increment = event.shiftKey ? 10 : 1; // Use 10 if shift is pressed, otherwise 1
+
+		switch (event.key) {
+			case 'ArrowUp':
+				event.preventDefault();
+				let incrementedValue = currentValue + increment;
+
+				// Check max constraint
+				if (!isEmpty(max) && incrementedValue > max) {
+					incrementedValue = max;
+				}
+
+				setTypedValue(String(incrementedValue));
+				if (typeof onChange === 'function') {
+					onChange({
+						unitValue,
+						inputValue: String(incrementedValue),
+					});
+				}
+				break;
+
+			case 'ArrowDown':
+				event.preventDefault();
+				let decrementedValue = currentValue - increment;
+
+				// Check min constraint
+				if (!isEmpty(min) && decrementedValue < min) {
+					decrementedValue = min;
+				}
+
+				setTypedValue(String(decrementedValue));
+				if (typeof onChange === 'function') {
+					onChange({
+						unitValue,
+						inputValue: String(decrementedValue),
+					});
+				}
+				break;
+		}
 	};
 
 	function getInputActions() {
@@ -202,12 +364,18 @@ export function UnitInput({
 						{!['small', 'extra-small', 'input'].includes(size) && (
 							<Button
 								size="input"
-								onClick={() =>
-									setIsMaximizeVisible(!isMaximizeVisible)
+								onClick={
+									disabled
+										? undefined
+										: () =>
+												setIsMaximizeVisible(
+													!isMaximizeVisible
+												)
 								}
 								className={controlInnerClassNames(
 									'maximise-btn',
-									isMaximizeVisible && 'is-open-popover'
+									isMaximizeVisible && 'is-open-popover',
+									disabled && 'is-disabled'
 								)}
 								noBorder={true}
 								showTooltip={!disabled}
@@ -274,6 +442,7 @@ export function UnitInput({
 				'blockera-control-unit-' + unitValue.value,
 				isActiveRange && 'is-range-active',
 				isMaximizeVisible && 'is-focused',
+				disabled && 'is-disabled',
 				className
 			)}
 		>
@@ -287,11 +456,17 @@ export function UnitInput({
 									'input-tag',
 									'input-tag-placeholder',
 									noBorder && 'no-border',
+									disabled && 'is-disabled',
 									className
 								)}
 								aria-label={__('Open Editor', 'blockera')}
-								onClick={() =>
-									setIsMaximizeVisible(!isMaximizeVisible)
+								onClick={
+									disabled
+										? undefined
+										: () =>
+												setIsMaximizeVisible(
+													!isMaximizeVisible
+												)
 								}
 							>
 								{__('Edit', 'blockera')}
@@ -308,31 +483,95 @@ export function UnitInput({
 					) : (
 						<>
 							{unitValue.format === 'number' ? (
-								<NumberInput
-									value={inputValue}
-									isValidValue={isValidValue}
-									disabled={disabled}
-									className={controlInnerClassNames(
-										'single-input',
-										noBorder && 'no-border',
-										!isValidValue && 'invalid'
-									)}
-									min={min}
-									max={max}
-									setValue={onChangeValue}
-									range={isActiveRange}
-									drag={drag}
-									float={float}
-									arrows={arrows}
-									size={size}
-									actions={getInputActions()}
-									{...props}
-								/>
+								<>
+									{isActiveRange &&
+										!['small', 'extra-small'].includes(
+											size
+										) && (
+											<RangeControl
+												withInputField={false}
+												sideEffect={false}
+												onChange={
+													disabled
+														? undefined
+														: (newValue) => {
+																const numValue =
+																	typeof newValue ===
+																	'string'
+																		? parseFloat(
+																				newValue
+																		  )
+																		: newValue;
+																if (
+																	!isNaN(
+																		numValue
+																	)
+																) {
+																	setTypedValue(
+																		String(
+																			numValue
+																		)
+																	);
+																	if (
+																		typeof onChange ===
+																		'function'
+																	) {
+																		onChange(
+																			{
+																				unitValue,
+																				inputValue:
+																					String(
+																						numValue
+																					),
+																			}
+																		);
+																	}
+																}
+																return newValue;
+														  }
+												}
+												min={min}
+												max={max}
+												disabled={disabled}
+												initialPosition={
+													Number(typedValue) || 0
+												}
+											/>
+										)}
+
+									<input
+										type="text"
+										value={typedValue}
+										onChange={handleInputChange}
+										onPaste={handlePaste}
+										onKeyDown={handleKeyDown}
+										disabled={disabled}
+										className={controlInnerClassNames(
+											'input-tag',
+											'input-tag-number',
+											'single-input',
+											noBorder && 'no-border',
+											!isValidValue && 'invalid',
+											drag && 'is-drag-active',
+											disabled && 'is-disabled'
+										)}
+										min={min}
+										max={max}
+										{...(disabled ? {} : getDragEvent())}
+										{...props}
+									/>
+								</>
 							) : (
 								<OtherInput
 									value={inputValue}
 									setValue={onChangeValue}
 									isValidValue={isValidValue}
+									onChange={
+										disabled
+											? undefined
+											: (newValue) =>
+													onChangeValue(newValue)
+									}
 									disabled={disabled}
 									className={controlInnerClassNames(
 										'single-input',
@@ -340,17 +579,38 @@ export function UnitInput({
 										!isValidValue && 'invalid',
 										className
 									)}
-									actions={getInputActions()}
 									{...props}
 									type={unitValue?.format}
 								/>
 							)}
+
+							<div
+								className={controlInnerClassNames(
+									'input-actions'
+								)}
+							>
+								{getInputActions()}
+
+								{arrows &&
+									unitValue.format === 'number' &&
+									size !== 'extra-small' && (
+										<InputArrows
+											value={typedValue}
+											setValue={handleArrowClick}
+											disabled={disabled}
+											min={min}
+											max={max}
+											size={size}
+										/>
+									)}
+							</div>
 						</>
 					)}
 				</>
 			) : (
 				<>{getInputActions()}</>
 			)}
+
 			{children}
 		</div>
 	);
