@@ -729,11 +729,13 @@ describe('input control component testing', () => {
 
 				cy.get('input').focus();
 				cy.get('input').type(100);
+
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('100px');
 				});
 
 				cy.get('input').clear();
+
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('');
 				});
@@ -1737,6 +1739,290 @@ describe('input control component testing', () => {
 							},
 						},
 					});
+			});
+		});
+
+		describe('Calculations', () => {
+			describe('Valid calculations', () => {
+				it('should handle basic addition on Enter', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('5 + 3{enter}');
+					cy.get('input').should('have.value', '8');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('8px');
+					});
+				});
+
+				it('should handle multiplication on blur', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('4 * 3');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '12');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('12px');
+					});
+				});
+			});
+
+			describe('Incomplete calculations', () => {
+				it('should preserve number for incomplete addition', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('12 +');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '12');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('12px');
+					});
+				});
+
+				it('should preserve number for incomplete subtraction', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('15 -');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '15');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('15px');
+					});
+				});
+
+				it('should preserve number for incomplete multiplication', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('8 *');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '8');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('8px');
+					});
+				});
+
+				it('should preserve number for incomplete division', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('20 /');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '20');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('20px');
+					});
+				});
+
+				it('should normalize numbers in incomplete calculations', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '',
+					});
+
+					const testCases = [
+						{ input: '100 +', expected: '100' },
+						{ input: '012 +', expected: '12' },
+						{ input: '0015 -', expected: '15' },
+						{ input: '05 *', expected: '5' },
+						{ input: '-010 /', expected: '-10' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus();
+						cy.get('input').clear();
+						cy.get('input').type(input);
+						cy.wait(500);
+						cy.get('input').blur();
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+
+				it('should handle spaces in incomplete calculations', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const testCases = [
+						{ input: '12 + ', expected: '12' },
+						{ input: '15  -', expected: '15' },
+						{ input: '8*', expected: '8' },
+						{ input: '20/', expected: '20' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').blur();
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+			});
+
+			describe('Incomplete calculations cleanup', () => {
+				it('should normalize numbers in incomplete calculations on blur', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const testCases = [
+						{ input: '012 +', expected: '12' },
+						{ input: '0015 -', expected: '15' },
+						{ input: '05 *', expected: '5' },
+						{ input: '-010 /', expected: '-10' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').blur();
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+
+				it('should normalize numbers in incomplete calculations on Enter key', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const testCases = [
+						{ input: '012 +', expected: '12' },
+						{ input: '0015 -', expected: '15' },
+						{ input: '05 *', expected: '5' },
+						{ input: '-010 /', expected: '-10' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').type('{enter}');
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+
+				it('should handle various incomplete calculation patterns on Enter', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const testCases = [
+						{ input: '12 + ', expected: '12' },
+						{ input: '15  -', expected: '15' },
+						{ input: '8*', expected: '8' },
+						{ input: '20/', expected: '20' },
+						{ input: '-0010.5 +', expected: '-10.5' },
+						{ input: '00100 -', expected: '100' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').type('{enter}');
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+
+				it('should clear invalid inputs on Enter', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const invalidInputs = [
+						'abc',
+						'+ 12',
+						'* 5',
+						'/ 2',
+						'++',
+						'--',
+						'**',
+						'//',
+					];
+
+					invalidInputs.forEach((input) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').type('{enter}');
+						cy.get('input').should('have.value', '');
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq('');
+						});
+					});
+				});
 			});
 		});
 	});
