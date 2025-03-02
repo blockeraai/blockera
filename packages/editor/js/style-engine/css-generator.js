@@ -65,9 +65,7 @@ export default class CssGenerator {
 		const innerState = getActiveInnerState(clientId, currentBlock);
 		const masterState = getActiveMasterState(clientId, name);
 
-		const options = {
-			important: true,
-		};
+		const options = this.options;
 
 		if (
 			isNormalState(state) &&
