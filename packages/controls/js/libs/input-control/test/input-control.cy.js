@@ -646,7 +646,7 @@ describe('input control component testing', () => {
 		});
 
 		describe('Range', () => {
-			it('should render arrows and work', () => {
+			it('should render range and work', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: (
@@ -738,6 +738,94 @@ describe('input control component testing', () => {
 					return expect(getControlValue(name)).to.eq('');
 				});
 			});
+
+			it('should handle typing units directly', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+				cy.get('input').type('10px');
+
+				// Wait for unit update timeout
+				cy.wait(350);
+
+				cy.get('input').should('have.value', '10');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('10px');
+				});
+
+				cy.get('input').clear();
+				cy.get('input').type('20%');
+
+				// Wait for unit update timeout
+				cy.wait(350);
+
+				cy.get('input').should('have.value', '20');
+				cy.get('[aria-label="Select Unit"]').should('have.value', '%');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('20%');
+				});
+			});
+
+			it('should handle pasting units', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				// Test pasting with unit
+				cy.get('input').focus();
+				cy.get('input')
+					.invoke('val', '30rem')
+					.trigger('paste', {
+						clipboardData: {
+							getData: () => '30rem',
+						},
+					});
+
+				cy.get('input').should('have.value', '30');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'rem'
+				);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('30rem');
+				});
+			});
+
+			it('should allow typing complete units with delay', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+
+				// Type each character with a delay
+				cy.get('input').type('1');
+				cy.get('input').type('0');
+				cy.get('input').type('r');
+				cy.get('input').type('e');
+				cy.get('input').type('m');
+
+				// Wait for unit update timeout
+				cy.wait(300);
+
+				cy.get('input').should('have.value', '10');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'rem'
+				);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('10rem');
+				});
+			});
 		});
 
 		describe('Units', () => {
@@ -813,7 +901,7 @@ describe('input control component testing', () => {
 					value: '12px',
 				});
 
-				cy.get('input[type=number]').should('be.disabled');
+				cy.get('input[type=text]').should('be.disabled');
 				cy.get('select').should('be.disabled');
 			});
 
@@ -1103,62 +1191,6 @@ describe('input control component testing', () => {
 					'Invalid'
 				);
 			});
-
-			// todo this feature currently has not been implemented
-			// it('custom unit with string format', () => {
-			// 	const name = nanoid();
-			// 	cy.withDataProvider({
-			// 		component: (
-			// 			<InputControl
-			// 				type="number"
-			// 				units={[
-			// 					{
-			// 						value: 'px',
-			// 						label: 'PX',
-			// 						format: 'number',
-			// 					},
-			// 					{
-			// 						value: 'em',
-			// 						label: 'EM',
-			// 						format: 'number',
-			// 					},
-			// 					{
-			// 						value: '%',
-			// 						label: '%',
-			// 						format: 'number',
-			// 					},
-			// 					{
-			// 						value: 'XYZ',
-			// 						label: 'XYZ',
-			// 						format: 'string',
-			// 					},
-			// 				]}
-			// 			/>
-			// 		),
-			// 		name,
-			// 		value: '0px',
-			// 	});
-			//
-			// 	// set special value
-			// 	cy.get('[aria-label="Select Unit"]').select('XYZ');
-			// 	cy.get('[aria-label="Select Unit"]').should(
-			// 		'have.value',
-			// 		'XYZ'
-			// 	);
-			// 	cy.then(() => {
-			// 		return expect(getControlValue(name)).to.eq('0XYZ');
-			// 	});
-			// 	cy.get('input').should('have.value', 0);
-			//
-			// 	// change to custom unit and type string
-			// 	cy.get('input').clear();
-			// 	cy.get('input').focus();
-			// 	cy.get('input').type('text value');
-			// 	cy.get('input').should('have.value', 'text value');
-			// 	cy.then(() => {
-			// 		return expect(getControlValue(name)).to.eq('text valueXYZ');
-			// 	});
-			// });
 		});
 
 		describe('CSS Func Value', () => {
@@ -1279,7 +1311,7 @@ describe('input control component testing', () => {
 		});
 
 		describe('Range', () => {
-			it('should render arrows and work', () => {
+			it('should render range and work', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: (
@@ -1297,7 +1329,7 @@ describe('input control component testing', () => {
 
 				cy.get('input[type=range]').setSliderValue(-20);
 				cy.getByDataTest('range-control').should('have.value', '-20');
-				cy.get('input[type=number]').should('have.value', -20);
+				cy.get('input[type=text]').should('have.value', -20);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('-20px');
 				});
@@ -1305,14 +1337,14 @@ describe('input control component testing', () => {
 				// should set to -50 because -100 is smaller than min value
 				cy.get('input[type=range]').setSliderValue(-100);
 				cy.getByDataTest('range-control').should('have.value', '-50');
-				cy.get('input[type=number]').should('have.value', -50);
+				cy.get('input[type=text]').should('have.value', -50);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('-50px');
 				});
 
 				cy.get('input[type=range]').setSliderValue(20);
 				cy.getByDataTest('range-control').should('have.value', '20');
-				cy.get('input[type=number]').should('have.value', 20);
+				cy.get('input[type=text]').should('have.value', 20);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('20px');
 				});
@@ -1320,7 +1352,7 @@ describe('input control component testing', () => {
 				// should set to 50 because 100 is smaller than min value
 				cy.get('input[type=range]').setSliderValue(100);
 				cy.getByDataTest('range-control').should('have.value', '50');
-				cy.get('input[type=number]').should('have.value', 50);
+				cy.get('input[type=text]').should('have.value', 50);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('50px');
 				});
