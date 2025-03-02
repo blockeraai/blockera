@@ -54,7 +54,8 @@ export const StateStyle = (
 				...props,
 				states,
 				currentBreakpoint: type,
-			})
+			}),
+			props.inlineStyles
 		);
 
 		const stylesheet = combinedDeclarations.map(

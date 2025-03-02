@@ -15,7 +15,7 @@ export const useCleanupStyles = (
 	{ clientId }: { clientId: string },
 	dependencies: Array<any>
 ): Object => {
-	const [inlineStyles, setInlineStyles] = useState({});
+	const [inlineStyles, setInlineStyles] = useState([]);
 	const {
 		blockeraSettings: {
 			earlyAccessLab: { optimizeStyleGeneration },
@@ -43,11 +43,27 @@ export const useCleanupStyles = (
 		const elementsWithStyles = el.querySelectorAll(
 			'[style]:not([data-type]):not([data-type] *)'
 		);
-		const inlineStyles: { [key: string]: Object } = {};
+		const styles: Array<{ [key: string]: Object }> = [];
+
+		const prepareInlineStyles = (
+			inlineStyle: string,
+			elementSelector: string
+		): void => {
+			// Appending inline style.
+			styles.push({
+				selector: elementSelector,
+				declarations: inlineStyle
+					.split(';')
+					.filter((item) => item.trim())
+					.map((item) => item.trim() + ';'),
+			});
+		};
 
 		// Extract inline styles from main element if it has any.
 		if (el.hasAttribute('style')) {
-			inlineStyles[`#block-${clientId}`] = el.getAttribute('style');
+			prepareInlineStyles(el.getAttribute('style'), `#block-${clientId}`);
+
+			// Remove the inline style of parent element.
 			el.removeAttribute('style');
 		}
 
@@ -60,14 +76,19 @@ export const useCleanupStyles = (
 			elementSelector = `.${elementSelector}`;
 
 			if (elementSelector) {
-				inlineStyles[elementSelector] = element.getAttribute('style');
+				prepareInlineStyles(
+					element.getAttribute('style'),
+					elementSelector
+				);
+
+				// Remove the inline style of child element.
 				element.removeAttribute('style');
 			}
 		});
 
 		// Store extracted styles in state if not empty.
-		if (!isEmpty(inlineStyles)) {
-			setInlineStyles(inlineStyles);
+		if (!isEmpty(styles)) {
+			setInlineStyles(styles);
 		}
 
 		// eslint-disable-next-line
