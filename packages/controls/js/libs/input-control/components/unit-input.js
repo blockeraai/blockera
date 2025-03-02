@@ -56,6 +56,7 @@ export function UnitInput({
 	const [isMaximizeVisible, setIsMaximizeVisible] = useState(false);
 	const [typedValue, setTypedValue] = useState(inputValue);
 	const unitUpdateTimeout = useRef(null);
+	const inputRef = useRef(null);
 
 	useEffect(() => {
 		setTypedValue(inputValue);
@@ -312,6 +313,31 @@ export function UnitInput({
 		}
 	};
 
+	// Add this handler inside UnitInput component
+	const handleCopy = (e: ClipboardEvent) => {
+		if (
+			!isSpecialUnit(unitValue?.value) &&
+			unitValue.value !== 'func' &&
+			inputRef.current &&
+			e.clipboardData
+		) {
+			e.preventDefault();
+
+			const selection =
+				inputRef.current.ownerDocument.defaultView.getSelection();
+
+			const selectedText = selection ? selection.toString() : '';
+
+			const textToCopy = selectedText || typedValue;
+
+			//$FlowFixMe
+			e.clipboardData.setData(
+				'text/plain',
+				`${textToCopy}${unitValue.value}`
+			);
+		}
+	};
+
 	function getInputActions() {
 		return (
 			<>
@@ -540,11 +566,13 @@ export function UnitInput({
 										)}
 
 									<input
+										ref={inputRef}
 										type="text"
 										value={typedValue}
 										onChange={handleInputChange}
 										onPaste={handlePaste}
 										onKeyDown={handleKeyDown}
+										onCopy={handleCopy}
 										disabled={disabled}
 										className={controlInnerClassNames(
 											'input-tag',
