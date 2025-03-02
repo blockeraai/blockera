@@ -111,56 +111,8 @@ jobs:
                   echo DB=wp_tests >> .env
                   cat .env
 
-            # Start WordPress environment first
             - name: Start WordPress Environment
               run: npm run env:start
-
-            # Then wait for MySQL to be ready
-            - name: Wait for MySQL
-              run: |
-                  timeout=300  # 5 minutes timeout
-                  elapsed=0
-
-                  # Function to get WordPress container name
-                  get_wp_container() {
-                    docker ps --format '{{.Names}}' | grep -E 'wordpress|wp-env'
-                  }
-
-                  echo "Waiting for WordPress container to be available..."
-                  while [ -z "$(get_wp_container)" ]; do
-                    if [ $elapsed -ge $timeout ]; then
-                      echo "Error: WordPress container failed to start within $timeout seconds"
-                      echo "Current Docker containers:"
-                      docker ps
-                      exit 1
-                    fi
-                    sleep 2
-                    elapsed=$((elapsed + 2))
-                    echo "Waiting for WordPress container... ($elapsed seconds elapsed)"
-                  done
-
-                  # Get the actual container name
-                  WP_CONTAINER=$(get_wp_container)
-                  echo "Found WordPress container: $WP_CONTAINER"
-
-                  # Reset elapsed time for MySQL check
-                  elapsed=0
-
-                  # Wait for MySQL to be ready
-                  while ! docker exec $WP_CONTAINER mysqladmin ping -h"localhost" --silent; do
-                    if [ $elapsed -ge $timeout ]; then
-                      echo "Error: MySQL failed to start within $timeout seconds"
-                      echo "Current Docker containers:"
-                      docker ps
-                      docker logs $WP_CONTAINER
-                      exit 1
-                    fi
-                    echo "Waiting for MySQL to be ready... ($elapsed seconds elapsed)"
-                    sleep 2
-                    elapsed=$((elapsed + 2))
-                  done
-
-                  echo "MySQL is ready!"
 
             - name: Build wp-env app
               run: npm run build
