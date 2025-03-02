@@ -1466,205 +1466,194 @@ describe('input control component testing', () => {
 				cy.get('input').should('have.value', 9);
 				cy.get('input').should('have.class', 'invalid');
 
-				describe('Keyboard Arrows', () => {
-					it('should handle arrow up/down keys when input is focused', () => {
-						const name = nanoid();
-						cy.withDataProvider({
-							component: <InputControl unitType="general" />,
-							name,
-							value: '10px',
-						});
-
-						// Test arrow up
-						cy.get('input').focus();
-						cy.get('input').trigger('keydown', { key: 'ArrowUp' });
-						cy.get('input').should('have.value', '11');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('11px');
-						});
-
-						// Test arrow up
-						cy.get('input').focus();
-						cy.get('input').trigger('keydown', { key: 'ArrowUp' });
-						cy.get('input').should('have.value', '12');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('12px');
-						});
-
-						// Test arrow down
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-						});
-						cy.get('input').should('have.value', '11');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('11px');
-						});
-
-						// Test arrow down
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-						});
-						cy.get('input').should('have.value', '10');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('10px');
-						});
-					});
-
-					it('should respect min/max constraints with keyboard arrows', () => {
-						const name = nanoid();
-						cy.withDataProvider({
-							component: (
-								<InputControl
-									unitType="general"
-									min={0}
-									max={3}
-								/>
-							),
-							name,
-							value: '2px',
-						});
-
-						// Test max constraint
-						cy.get('input').focus();
-						cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // 3
-						cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // Should stay at 3
-						cy.get('input').should('have.value', '3');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('3px');
-						});
-
-						// Test min constraint
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-						}); // 2
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-						}); // 1
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-						}); // 0
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-						}); // Should stay at 0
-						cy.get('input').should('have.value', '0');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('0px');
-						});
-					});
-
-					it('should not respond to arrow keys when disabled', () => {
-						const name = nanoid();
-						cy.withDataProvider({
-							component: (
-								<InputControl
-									unitType="general"
-									disabled={true}
-								/>
-							),
-							name,
-							value: '10px',
-						});
-
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowUp',
-							force: true,
-						});
-						cy.get('input').should('have.value', '10');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('10px');
-						});
-					});
-
-					it('should handle shift + arrow keys for larger increments', () => {
-						const name = nanoid();
-						cy.withDataProvider({
-							component: <InputControl unitType="general" />,
-							name,
-							value: '20px',
-						});
-
-						// Test shift + arrow up
-						cy.get('input').focus();
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowUp',
-							shiftKey: true,
-						});
-						cy.get('input').should('have.value', '30');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('30px');
-						});
-
-						// Test shift + arrow down
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-							shiftKey: true,
-						});
-						cy.get('input').should('have.value', '20');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('20px');
-						});
-
-						// Test combination of regular and shift arrows
-						cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // Regular +1
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowUp',
-							shiftKey: true,
-						}); // Shift +10
-						cy.get('input').should('have.value', '31');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('31px');
-						});
-					});
-
-					it('should respect min/max constraints with shift + arrow keys', () => {
-						const name = nanoid();
-						cy.withDataProvider({
-							component: (
-								<InputControl
-									unitType="general"
-									min={0}
-									max={25}
-								/>
-							),
-							name,
-							value: '20px',
-						});
-
-						// Test max constraint with shift
-						cy.get('input').focus();
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowUp',
-							shiftKey: true,
-						}); // Would be 30, but max is 25
-						cy.get('input').should('have.value', '25');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('25px');
-						});
-
-						// Test min constraint with shift
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-							shiftKey: true,
-						}); // 15
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-							shiftKey: true,
-						}); // 5
-						cy.get('input').trigger('keydown', {
-							key: 'ArrowDown',
-							shiftKey: true,
-						}); // Would be -5, but min is 0
-						cy.get('input').should('have.value', '0');
-						cy.then(() => {
-							return expect(getControlValue(name)).to.eq('0px');
-						});
-					});
-				});
-
 				cy.get('input').clear();
 				cy.get('input').type('10');
 				cy.get('input').should('have.value', 10);
 				cy.get('input').should('have.not.class', 'invalid');
+			});
+		});
+
+		describe('Keyboard Arrows', () => {
+			it('should handle arrow up/down keys when input is focused', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '10px',
+				});
+
+				// Test arrow up
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' });
+				cy.get('input').should('have.value', '11');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('11px');
+				});
+
+				// Test arrow up
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' });
+				cy.get('input').should('have.value', '12');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12px');
+				});
+
+				// Test arrow down
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				});
+				cy.get('input').should('have.value', '11');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('11px');
+				});
+
+				// Test arrow down
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				});
+				cy.get('input').should('have.value', '10');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('10px');
+				});
+			});
+
+			it('should respect min/max constraints with keyboard arrows', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" min={0} max={3} />
+					),
+					name,
+					value: '2px',
+				});
+
+				// Test max constraint
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // 3
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // Should stay at 3
+				cy.get('input').should('have.value', '3');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('3px');
+				});
+
+				// Test min constraint
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				}); // 2
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				}); // 1
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				}); // 0
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				}); // Should stay at 0
+				cy.get('input').should('have.value', '0');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('0px');
+				});
+			});
+
+			it('should not respond to arrow keys when disabled', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" disabled={true} />
+					),
+					name,
+					value: '10px',
+				});
+
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowUp',
+					force: true,
+				});
+				cy.get('input').should('have.value', '10');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('10px');
+				});
+			});
+
+			it('should handle shift + arrow keys for larger increments', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '20px',
+				});
+
+				// Test shift + arrow up
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowUp',
+					shiftKey: true,
+				});
+				cy.get('input').should('have.value', '30');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('30px');
+				});
+
+				// Test shift + arrow down
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+					shiftKey: true,
+				});
+				cy.get('input').should('have.value', '20');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('20px');
+				});
+
+				// Test combination of regular and shift arrows
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // Regular +1
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowUp',
+					shiftKey: true,
+				}); // Shift +10
+				cy.get('input').should('have.value', '31');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('31px');
+				});
+			});
+
+			it('should respect min/max constraints with shift + arrow keys', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" min={0} max={25} />
+					),
+					name,
+					value: '20px',
+				});
+
+				// Test max constraint with shift
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowUp',
+					shiftKey: true,
+				}); // Would be 30, but max is 25
+				cy.get('input').should('have.value', '25');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('25px');
+				});
+
+				// Test min constraint with shift
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+					shiftKey: true,
+				}); // 15
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+					shiftKey: true,
+				}); // 5
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+					shiftKey: true,
+				}); // Would be -5, but min is 0
+				cy.get('input').should('have.value', '0');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('0px');
+				});
 			});
 		});
 
