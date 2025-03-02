@@ -26,8 +26,8 @@ describe('Border Radius → Functionality', () => {
 
 	it('should update correctly, when add same data to all corners', () => {
 		cy.get('@container').within(() => {
-			cy.get('input[type="number"]').clear({ force: true });
-			cy.get('input[type="number"]').type(25, { force: true });
+			cy.get('input[type="text"]').clear({ force: true });
+			cy.get('input[type="text"]').type(25, { force: true });
 		});
 
 		//Check block
@@ -54,8 +54,8 @@ describe('Border Radius → Functionality', () => {
 
 	it('should update correctly, when change all => custom', () => {
 		cy.get('@container').within(() => {
-			cy.get('input[type="number"]').clear({ force: true });
-			cy.get('input[type="number"]').type(25, { force: true });
+			cy.get('input[type="text"]').clear({ force: true });
+			cy.get('input[type="text"]').type(25, { force: true });
 
 			cy.getByAriaLabel('Custom Border Radius').click();
 		});
@@ -133,7 +133,7 @@ describe('Border Radius → Functionality', () => {
 		//
 		cy.get('@container').within(() => {
 			cy.getByAriaLabel('Custom Border Radius').click();
-			cy.get('input[type="number"]').eq(0).type(25, {
+			cy.get('input[type="text"]').eq(0).type(25, {
 				force: true,
 			});
 		});
@@ -161,8 +161,8 @@ describe('Border Radius → Functionality', () => {
 		//
 		//
 		cy.get('@container').within(() => {
-			cy.get('input[type="number"]').eq(1).clear({ force: true });
-			cy.get('input[type="number"]').eq(1).type(35, {
+			cy.get('input[type="text"]').eq(1).clear({ force: true });
+			cy.get('input[type="text"]').eq(1).type(35, {
 				force: true,
 			});
 		});
@@ -189,8 +189,8 @@ describe('Border Radius → Functionality', () => {
 		// bottomLeft
 		//
 		cy.get('@container').within(() => {
-			cy.get('input[type="number"]').eq(2).clear({ force: true });
-			cy.get('input[type="number"]').eq(2).type(45, {
+			cy.get('input[type="text"]').eq(2).clear({ force: true });
+			cy.get('input[type="text"]').eq(2).type(45, {
 				force: true,
 			});
 		});
@@ -217,8 +217,8 @@ describe('Border Radius → Functionality', () => {
 		// bottomRight
 		//
 		cy.get('@container').within(() => {
-			cy.get('input[type="number"]').eq(3).clear({ force: true });
-			cy.get('input[type="number"]').eq(3).type(55, {
+			cy.get('input[type="text"]').eq(3).clear({ force: true });
+			cy.get('input[type="text"]').eq(3).type(55, {
 				force: true,
 			});
 		});

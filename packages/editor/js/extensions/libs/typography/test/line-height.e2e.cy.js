@@ -19,8 +19,8 @@ describe('Line Height → Functionality', () => {
 		// cy.activateMoreSettingsItem('More Typography Settings', 'Line Height');
 
 		cy.getParentContainer('Line Height').within(() => {
-			cy.get('input[type="number"]').focus();
-			cy.get('input[type="number"]').type(10, {
+			cy.get('input[type="text"]').focus();
+			cy.get('input[type="text"]').type(10, {
 				force: true,
 			});
 		});
@@ -48,8 +48,8 @@ describe('Line Height → Functionality', () => {
 		// cy.activateMoreSettingsItem('More Typography Settings', 'Line Height');
 
 		cy.getParentContainer('Line Height').within(() => {
-			cy.get('input[type="number"]').focus();
-			cy.get('input[type="number"]').type(10, {
+			cy.get('input[type="text"]').focus();
+			cy.get('input[type="text"]').type(10, {
 				force: true,
 			});
 			cy.get('select').select('px');

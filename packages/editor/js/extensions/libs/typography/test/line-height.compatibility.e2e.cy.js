@@ -46,8 +46,8 @@ describe('Line Height → WP Compatibility', () => {
 			//
 
 			cy.get('@container').within(() => {
-				cy.get('input[type="number"]').focus();
-				cy.get('input[type="number"]').type(5, {
+				cy.get('input[type="text"]').focus();
+				cy.get('input[type="text"]').type(5, {
 					force: true,
 				});
 			});
@@ -69,7 +69,7 @@ describe('Line Height → WP Compatibility', () => {
 
 			// clear value
 			cy.get('@container').within(() => {
-				cy.get('input[type="number"]').clear({ force: true });
+				cy.get('input[type="text"]').clear({ force: true });
 			});
 
 			// Blockera value should be moved to WP data
