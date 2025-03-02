@@ -199,7 +199,11 @@ if (! function_exists('blockera_array_flat')) {
      */
     function blockera_array_flat( array $nestedArray): array {
 
-        return array_merge(...$nestedArray);
+        if (empty($nestedArray)) {
+            return [];
+        }
+        
+        return array_merge(...array_values($nestedArray));
     }
 }
 
@@ -229,36 +233,6 @@ if (! function_exists('blockera_get_sorted_repeater')) {
         );
 
         return $dataArray;
-    }
-}
-
-if (! function_exists('blockera_camel_case_join')) {
-
-    /**
-     * Joining text items in camelCase format.
-     *
-     * @param string $string the target string.
-     *
-     * @return string The camelCase string.
-     */
-    function blockera_camel_case_join( string $string): string {
-
-        $items = explode('-', $string);
-
-        if (1 === count($items)) {
-
-            return strtolower($items[0]);
-        }
-
-        $firstPart     = strtolower(array_shift($items));
-        $secondaryPart = '';
-
-        foreach ($items as $item) {
-
-            $secondaryPart .= ucfirst($item);
-        }
-
-        return $firstPart . $secondaryPart;
     }
 }
 
@@ -379,5 +353,18 @@ if ( ! function_exists( 'blockera_add_inline_css' ) ) {
 				return $older_css . $css;
 			}
 		);
+	}
+}
+
+if (! function_exists('blockera_is_skip_request')) {
+
+	/**
+	 * Check if the request is a REST request.
+	 *
+	 * @return bool
+	 */
+	function blockera_is_skip_request(): bool {
+
+		return ( defined('REST_REQUEST') && REST_REQUEST ) || ( isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'] );
 	}
 }

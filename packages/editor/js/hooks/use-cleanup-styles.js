@@ -40,7 +40,9 @@ export const useCleanupStyles = (
 		}
 
 		// Get all elements with inline styles.
-		const elementsWithStyles = el.querySelectorAll('[style]');
+		const elementsWithStyles = el.querySelectorAll(
+			'[style]:not([data-type]):not([data-type] *)'
+		);
 		const inlineStyles: { [key: string]: Object } = {};
 
 		// Extract inline styles from main element if it has any.

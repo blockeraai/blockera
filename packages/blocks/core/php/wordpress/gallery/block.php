@@ -31,7 +31,7 @@ return array_merge(
 					'root' => '> figcaption',
 				],
 				'blockera/elements/image-caption'   => [
-					'root' => '.wp-block-image figcaption',
+					'root' => 'figure.wp-block-image figcaption',
 				],
 			]
 		),

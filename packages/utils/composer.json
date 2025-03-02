@@ -5,7 +5,10 @@
 	"autoload": {
 		"psr-4": {
 			"Blockera\\Utils\\": "php/"
-		}
+		},
+		"files": [
+			"php/functions.php"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {

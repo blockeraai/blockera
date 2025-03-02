@@ -38,6 +38,11 @@ class AdminProvider extends ServiceProvider {
 	 */
 	public function boot(): void {
 
+		// Skip execution if saving in site editor.
+		if (blockera_is_skip_request()) {
+			return;
+		}
+
 		add_action( 'admin_menu', [ $this->app->make( Factory::class, blockera_core_config( 'menu' ) ), 'add' ] );
 	}
 

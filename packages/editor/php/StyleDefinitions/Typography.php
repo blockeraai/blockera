@@ -120,6 +120,7 @@ class Typography extends BaseStyleDefinition {
 			case '-webkit-text-stroke-width':
 			case 'text-wrap':
 			case 'font-size':
+			case 'text-align':
 				$declaration[ $cssProperty ] = $propertyValue ? blockera_get_value_addon_real_value( $propertyValue ) : '';
 				break;
 
