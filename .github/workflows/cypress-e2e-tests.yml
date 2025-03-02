@@ -112,7 +112,27 @@ jobs:
                   cat .env
 
             - name: Start WordPress Environment
-              run: npm run env:start
+              run: |
+                  # Start the environment
+                  npm run env:start || true
+
+                  # Wait for MySQL to be ready
+                  echo "Waiting for MySQL to be ready..."
+                  for i in {1..30}; do
+                    if docker exec $(docker ps -qf "name=.*-tests-mysql-1") mysqladmin ping -h localhost --silent; then
+                      echo "MySQL is ready!"
+                      break
+                    fi
+                    echo "Waiting for MySQL to be ready... ($i/30)"
+                    sleep 2
+                  done
+
+                  # Restart WordPress container to ensure proper connection
+                  docker restart $(docker ps -qf "name=.*-tests-wordpress-1")
+                  sleep 5
+
+                  # Verify WordPress is running
+                  npm run env:start
 
             - name: Build wp-env app
               run: npm run build
