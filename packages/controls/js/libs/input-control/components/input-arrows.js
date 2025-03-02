@@ -32,7 +32,7 @@ export function InputArrows({
 	size?: string,
 }): MixedElement {
 	if (['extra-small'].includes(size)) {
-		return null;
+		return <></>;
 	}
 
 	return (
