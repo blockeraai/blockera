@@ -66,40 +66,86 @@ export function UnitInput({
 		const value = e.target.value;
 		setTypedValue(value); // Show exactly what user types
 
-		// Extract potential unit from input
-		const match = value.match(/^(-?\d*\.?\d*)([a-zA-Z%]+)?$/);
-		if (match) {
-			const [, numericValue = '', unit = ''] = match;
-
+		// Check if the value contains potential unit characters or calculation operators
+		if (value.match(/[a-zA-Z%\+\-\*\/]/)) {
 			// Clear any existing timeout
 			if (unitUpdateTimeout.current) {
 				clearTimeout(unitUpdateTimeout.current);
 			}
 
-			// If there's a unit, set a timeout to update it
-			if (unit) {
-				unitUpdateTimeout.current = setTimeout(() => {
-					const newUnitValue = getUnitByValue(unit, units);
-					if (newUnitValue) {
-						// Update both unit and numeric value after timeout
-						onChangeSelect(unit);
-						setTypedValue(numericValue);
-						if (typeof onChange === 'function') {
-							onChange({
-								unitValue: newUnitValue,
-								inputValue: numericValue,
-							});
+			// Set a timeout only for unit extraction
+			unitUpdateTimeout.current = setTimeout(() => {
+				const match = value.match(/^(-?\d*\.?\d*)([a-zA-Z%]+)?$/);
+				if (match) {
+					const [, numericValue = '', unit = ''] = match;
+
+					// If there's a unit, update it
+					if (unit) {
+						const newUnitValue = getUnitByValue(unit, units);
+						if (newUnitValue) {
+							// Update both unit and numeric value
+							onChangeSelect(unit);
+							setTypedValue(numericValue);
+							if (typeof onChange === 'function') {
+								onChange({
+									unitValue: newUnitValue,
+									inputValue: numericValue,
+								});
+							}
 						}
 					}
-				}, 300);
-			} else if (typeof onChange === 'function') {
-				// If no unit, just update the numeric value
-				onChange({
-					unitValue,
-					inputValue: numericValue || value,
-				});
+				}
+			}, 300);
+		} else {
+			// No unit characters or operators found, update immediately
+			onChange?.({
+				unitValue,
+				inputValue: value,
+			});
+		}
+	};
+
+	const evaluateCalculation = (value: string) => {
+		if (!isSpecialUnit(unitValue?.value) && unitValue.value !== 'func') {
+			const calcMatch = value.match(
+				/^(-?\d*\.?\d*)\s*([\+\-\/\*])\s*(-?\d*\.?\d*)$/
+			);
+			if (calcMatch) {
+				const [, num1 = '', operator, num2 = ''] = calcMatch;
+				const n1 = parseFloat(num1);
+				const n2 = parseFloat(num2);
+
+				if (!isNaN(n1) && !isNaN(n2)) {
+					let result;
+					switch (operator) {
+						case '+':
+							result = n1 + n2;
+							break;
+						case '-':
+							result = n1 - n2;
+							break;
+						case '/':
+							result = n2 !== 0 ? n1 / n2 : n1;
+							break;
+						case '*':
+							result = n1 * n2;
+							break;
+						default:
+							result = n1;
+					}
+
+					setTypedValue(String(result));
+					if (typeof onChange === 'function') {
+						onChange({
+							unitValue,
+							inputValue: String(result),
+						});
+					}
+					return true;
+				}
 			}
 		}
+		return false;
 	};
 
 	const handlePaste = (e: {
@@ -271,6 +317,39 @@ export function UnitInput({
 			return;
 		}
 
+		// Handle calculations on Enter key
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			if (!evaluateCalculation(typedValue)) {
+				// Check for incomplete calculation pattern and normalize
+				const incompleteMatch = typedValue.match(
+					/^(-?\d*\.?\d*)\s*[\+\-\/\*]?\s*$/
+				);
+				if (incompleteMatch && incompleteMatch[1]) {
+					const normalizedValue = String(Number(incompleteMatch[1]));
+					if (!isNaN(Number(normalizedValue))) {
+						setTypedValue(normalizedValue);
+						if (typeof onChange === 'function') {
+							onChange({
+								unitValue,
+								inputValue: normalizedValue,
+							});
+						}
+						return;
+					}
+				}
+				// Clear value if no valid number found
+				setTypedValue('');
+				if (typeof onChange === 'function') {
+					onChange({
+						unitValue,
+						inputValue: '',
+					});
+				}
+			}
+			return;
+		}
+
 		const currentValue = !isEmpty(typedValue) ? parseFloat(typedValue) : 0;
 		const increment = event.shiftKey ? 10 : 1; // Use 10 if shift is pressed, otherwise 1
 
@@ -335,6 +414,41 @@ export function UnitInput({
 				'text/plain',
 				`${textToCopy}${unitValue.value}`
 			);
+		}
+	};
+
+	const handleBlur = () => {
+		// First try to evaluate any complete calculation
+		if (evaluateCalculation(typedValue)) {
+			return;
+		}
+
+		// Check for incomplete calculation pattern (number followed by operator)
+		const incompleteMatch = typedValue.match(
+			/^(-?\d*\.?\d*)\s*[\+\-\/\*]?\s*$/
+		);
+		if (incompleteMatch && incompleteMatch[1]) {
+			// Normalize the number
+			const normalizedValue = String(Number(incompleteMatch[1]));
+			if (!isNaN(Number(normalizedValue))) {
+				setTypedValue(normalizedValue);
+				if (typeof onChange === 'function') {
+					onChange({
+						unitValue,
+						inputValue: normalizedValue,
+					});
+				}
+				return;
+			}
+		}
+
+		// If no valid number found, clear the input
+		setTypedValue('');
+		if (typeof onChange === 'function') {
+			onChange({
+				unitValue,
+				inputValue: '',
+			});
 		}
 	};
 
@@ -572,6 +686,7 @@ export function UnitInput({
 										onChange={handleInputChange}
 										onPaste={handlePaste}
 										onKeyDown={handleKeyDown}
+										onBlur={handleBlur}
 										onCopy={handleCopy}
 										disabled={disabled}
 										className={controlInnerClassNames(
