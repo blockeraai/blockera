@@ -279,8 +279,8 @@ export function UnitInput({
 				let incrementedValue = currentValue + increment;
 
 				// Check max constraint
-				if (!isEmpty(max) && incrementedValue > max) {
-					incrementedValue = max;
+				if (!isEmpty(max) && incrementedValue > Number(max)) {
+					incrementedValue = Number(max);
 				}
 
 				setTypedValue(String(incrementedValue));
@@ -297,8 +297,8 @@ export function UnitInput({
 				let decrementedValue = currentValue - increment;
 
 				// Check min constraint
-				if (!isEmpty(min) && decrementedValue < min) {
-					decrementedValue = min;
+				if (!isEmpty(min) && decrementedValue < Number(min)) {
+					decrementedValue = Number(min);
 				}
 
 				setTypedValue(String(decrementedValue));
