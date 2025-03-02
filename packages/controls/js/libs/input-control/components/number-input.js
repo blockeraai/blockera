@@ -24,8 +24,7 @@ import {
  */
 import { RangeControl } from '../../index';
 import type { InnerInputControlProps } from '../types';
-import { default as ArrowUpIcon } from '../icons/arrow-up';
-import { default as ArrowDownIcon } from '../icons/arrow-down';
+import { InputArrows } from './input-arrows';
 
 export function NumberInput({
 	value,
@@ -212,76 +211,19 @@ export function NumberInput({
 				{...getDragEvent()}
 			/>
 
+			{arrows && (
+				<InputArrows
+					value={value}
+					setValue={setValue}
+					disabled={disabled}
+					min={min}
+					max={max}
+					size={size}
+				/>
+			)}
+
 			<div className={controlInnerClassNames('input-actions')}>
 				{actions}
-
-				{arrows && size !== 'extra-small' && (
-					<div
-						className={controlClassNames(
-							'input-arrows',
-							disabled && 'is-disabled'
-						)}
-						data-test="arrows-container"
-					>
-						<span
-							className={controlClassNames(
-								'input-arrow',
-								'input-arrow-up',
-								!isEmpty(maxValue?.max) &&
-									+value >= +maxValue.max
-									? 'is-disabled'
-									: ''
-							)}
-							onClick={() => {
-								let newValue = !isEmpty(value) ? +value : 0;
-
-								newValue += 1;
-
-								// don't let user set value bigger than max value
-								if (
-									!isEmpty(maxValue?.max) &&
-									newValue > +maxValue.max
-								) {
-									newValue = +maxValue.max;
-								}
-
-								setValue(newValue);
-							}}
-							data-test="arrow-up"
-						>
-							<ArrowUpIcon />
-						</span>
-
-						<span
-							className={controlClassNames(
-								'input-arrow',
-								'input-arrow-down',
-								!isEmpty(minValue?.min) &&
-									+value <= +minValue.min
-									? 'is-disabled'
-									: ''
-							)}
-							onClick={() => {
-								let newValue = !isEmpty(value) ? +value : 0;
-
-								newValue -= 1;
-
-								// don't let user set value bigger than max value
-								if (
-									!isEmpty(minValue?.min) &&
-									newValue <= +minValue?.min
-								) {
-									newValue = +minValue?.min;
-								}
-
-								setValue(newValue);
-							}}
-							data-test="arrow-down"
-						>
-							<ArrowDownIcon />
-						</span>
-					</div>
-				)}
 			</div>
 
 			{children}

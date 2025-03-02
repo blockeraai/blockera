@@ -46,7 +46,7 @@ describe('box-border-control component testing', () => {
 			name,
 		});
 
-		cy.get('input[type="number"]').should('have.value', '');
+		cy.get('input[type="text"]').should('have.value', '');
 
 		cy.getByAriaLabel('Custom Box Border')
 			.should('have.attr', 'style')
@@ -60,7 +60,7 @@ describe('box-border-control component testing', () => {
 			name,
 		});
 
-		cy.get('input[type="number"]').should('have.value', '');
+		cy.get('input[type="text"]').should('have.value', '');
 
 		cy.getByAriaLabel('Custom Box Border')
 			.should('have.attr', 'style')
@@ -84,10 +84,10 @@ describe('box-border-control component testing', () => {
 				name,
 			});
 
-			cy.get('input[type="number"]').clear();
-			cy.get('input[type="number"]').type('10');
+			cy.get('input[type="text"]').clear();
+			cy.get('input[type="text"]').type('10');
 
-			cy.get('input[type="number"]').should('have.value', '10');
+			cy.get('input[type="text"]').should('have.value', '10');
 
 			//Check data provider
 			cy.get('body').then(() => {
@@ -171,7 +171,7 @@ describe('box-border-control component testing', () => {
 
 			cy.getByAriaLabel('Custom Box Border').click();
 
-			cy.get('input[type="number"]').should('have.value', '2');
+			cy.get('input[type="text"]').should('have.value', '2');
 
 			//Check data provider
 			cy.get('body').then(() => {
@@ -207,7 +207,7 @@ describe('box-border-control component testing', () => {
 				name,
 			});
 
-			cy.get('input[type="number"]').eq(0).as('top-width-input');
+			cy.get('input[type="text"]').eq(0).as('top-width-input');
 			cy.get('@top-width-input').clear();
 			cy.get('@top-width-input').type(5);
 
@@ -284,7 +284,7 @@ describe('box-border-control component testing', () => {
 				name,
 			});
 
-			cy.get('input[type="number"]').eq(3).as('left-width-input');
+			cy.get('input[type="text"]').eq(3).as('left-width-input');
 			cy.get('@left-width-input').clear();
 			cy.get('@left-width-input').type(10);
 
@@ -314,7 +314,7 @@ describe('box-border-control component testing', () => {
 				),
 			});
 
-			cy.get('input[type="number"]').should('have.value', '2');
+			cy.get('input[type="text"]').should('have.value', '2');
 		});
 
 		it('should render value when: defaultValue OK && id OK && value is OK', () => {
@@ -344,7 +344,7 @@ describe('box-border-control component testing', () => {
 				],
 			});
 
-			cy.get('input[type="number"]').should('have.value', '5');
+			cy.get('input[type="text"]').should('have.value', '5');
 		});
 
 		it('should render default value when:defaultValue OK && id is invalid, value ok', () => {
@@ -374,7 +374,7 @@ describe('box-border-control component testing', () => {
 				],
 			});
 
-			cy.get('input[type="number"]').should('have.value', '2');
+			cy.get('input[type="text"]').should('have.value', '2');
 		});
 
 		it('should render default value when:defaultValue OK && id is valid, value is invalid', () => {
@@ -395,7 +395,7 @@ describe('box-border-control component testing', () => {
 				value: [{ data: undefined }],
 			});
 
-			cy.get('input[type="number"]').should('have.value', '2');
+			cy.get('input[type="text"]').should('have.value', '2');
 		});
 
 		it('should render value when:defaultValue !OK && id !OK && value exists on root', () => {
@@ -411,7 +411,7 @@ describe('box-border-control component testing', () => {
 				},
 			});
 
-			cy.get('input[type="number"]').should('have.value', '5');
+			cy.get('input[type="text"]').should('have.value', '5');
 		});
 	});
 
@@ -441,7 +441,7 @@ describe('box-border-control component testing', () => {
 			},
 		});
 
-		cy.get('input[type="number"]').clear();
+		cy.get('input[type="text"]').clear();
 
 		cy.get('@onChange').should('have.been.called');
 	});

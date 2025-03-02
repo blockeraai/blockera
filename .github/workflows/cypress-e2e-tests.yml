@@ -111,6 +111,20 @@ jobs:
                   echo DB=wp_tests >> .env
                   cat .env
 
+            - name: Wait for MySQL
+              run: |
+                  timeout=300  # 5 minutes timeout
+                  elapsed=0
+                  while ! docker exec $(docker ps -q --filter "name=mysql") mysqladmin ping -h"localhost" --silent; do
+                    if [ $elapsed -ge $timeout ]; then
+                      echo "Error: MySQL failed to start within $timeout seconds"
+                      exit 1
+                    fi
+                    echo "Waiting for MySQL to be ready... ($elapsed seconds elapsed)"
+                    sleep 2
+                    elapsed=$((elapsed + 2))
+                  done
+
             - name: Start WordPress Environment
               run: npm run env:start
 

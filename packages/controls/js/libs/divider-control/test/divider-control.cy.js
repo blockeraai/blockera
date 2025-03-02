@@ -334,10 +334,10 @@ describe('divider-control component testing', () => {
 			cy.getByDataCy('group-control-header').click();
 			cy.getParentContainer('Animation', 'base-control').within(() => {
 				cy.get('input[type="checkbox"]').click();
-				cy.get('input[type="number"]').type(10);
+				cy.get('input[type="text"]').type(10);
 
 				//Check control
-				cy.get('input[type="number"]').should('have.value', '10');
+				cy.get('input[type="text"]').should('have.value', '10');
 			});
 
 			//Check data provider

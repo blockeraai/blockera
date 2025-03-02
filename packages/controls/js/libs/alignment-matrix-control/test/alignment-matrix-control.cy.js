@@ -14,7 +14,7 @@ describe('alignment-matrix control', () => {
 				component: <AlignmentMatrixControl inputFields={true} />,
 			});
 
-			cy.get('input[type="number"]').should('have.length', 2);
+			cy.get('input[type="text"]').should('have.length', 2);
 			cy.get('[aria-label="Top"]');
 			cy.get('[aria-label="Left"]');
 			cy.get('[aria-label="Alignment Matrix Control"]');
@@ -26,7 +26,7 @@ describe('alignment-matrix control', () => {
 			});
 
 			cy.get('[aria-label="Alignment Matrix Control"]');
-			cy.get('input[type="number"]').should('have.length', 0);
+			cy.get('input[type="text"]').should('have.length', 0);
 			cy.get('[aria-label="top"]').should('not.exist');
 			cy.get('[aria-label="left"]').should('not.exist');
 		});
@@ -41,8 +41,8 @@ describe('alignment-matrix control', () => {
 				name,
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			specialPoints.forEach((top, rowIdx) => {
 				// select all then type instead of clear to prevent input catch value from default
@@ -103,8 +103,8 @@ describe('alignment-matrix control', () => {
 				name,
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			specialPoints.forEach((row, rowIdx) => {
 				specialPoints.forEach((col, colIdx) => {
@@ -148,8 +148,8 @@ describe('alignment-matrix control', () => {
 				value: undefined,
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			cy.get('@inputTop').should('have.value', 20);
 			cy.get('@inputLeft').should('have.value', 10);
@@ -168,8 +168,8 @@ describe('alignment-matrix control', () => {
 				value: { top: '50%', left: '50%' },
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			cy.get('@inputTop').should('have.value', 20);
 			cy.get('@inputLeft').should('have.value', 10);
@@ -198,8 +198,8 @@ describe('alignment-matrix control', () => {
 				},
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			cy.get('@inputTop').should('have.value', 20);
 			cy.get('@inputLeft').should('have.value', 10);
@@ -212,8 +212,8 @@ describe('alignment-matrix control', () => {
 				value: { top: '50%', left: '50%' },
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			cy.get('@inputTop').should('have.value', 50);
 			cy.get('@inputLeft').should('have.value', 50);
