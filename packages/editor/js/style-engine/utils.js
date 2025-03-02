@@ -251,8 +251,8 @@ export const replaceVariablesValue = (params: {
  * @return {Array<CssRule>} the combined css declarations linked with same css selector.
  */
 export const combineDeclarations = (
-	cssRules: Array<CssRule>,
-	inlineCssRules: Array<CssRule>
+	cssRules: Array<CssRule> //,
+	// inlineCssRules: Array<CssRule>
 ): Array<CssRule> => {
 	const combinedObjects: { [key: string]: CssRule } = {};
 
@@ -260,23 +260,23 @@ export const combineDeclarations = (
 		return Object.values(combinedObjects);
 	}
 
-	inlineCssRules.forEach((item) => {
-		const { selector, declarations } = item;
+	// inlineCssRules.forEach((item) => {
+	// 	const { selector, declarations } = item;
 
-		// Skip cssRule with empty selector or declarations stack.
-		if (!declarations.length || !selector) {
-			return;
-		}
+	// 	// Skip cssRule with empty selector or declarations stack.
+	// 	if (!declarations.length || !selector) {
+	// 		return;
+	// 	}
 
-		if (combinedObjects[selector]) {
-			combinedObjects[selector].declarations = [
-				...(combinedObjects[selector].declarations || []),
-				...declarations,
-			];
-		} else {
-			combinedObjects[selector] = { selector, declarations };
-		}
-	});
+	// 	if (combinedObjects[selector]) {
+	// 		combinedObjects[selector].declarations = [
+	// 			...(combinedObjects[selector].declarations || []),
+	// 			...declarations,
+	// 		];
+	// 	} else {
+	// 		combinedObjects[selector] = { selector, declarations };
+	// 	}
+	// });
 
 	cssRules.forEach((item) => {
 		const { selector, declarations } = item;
