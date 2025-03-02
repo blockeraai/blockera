@@ -8,12 +8,16 @@
 - Update border radius control to improve the user experience (UX).
 - Update border control to improve the user experience (UX).
 - Update color control to improve the user experience (UX).
+- When copying values from unit inputs (like px, em, rem), the unit is now automatically appended to the copied text.
 
 ### Bug Fixes
 - Fixed an issue where the select control style is not correct when the control is focused or opened.
 - Fixed an issue where the input control style is not correct when the control is focused or hovered.
 - Fixed an issue where the border line control preview is not correct.
 - Fixed an issue where the transform feature control shows value incorrectly.
+
+### Automated Tests
+- Added comprehensive test coverage for input controls, including number inputs, unit selection, keyboard navigation, and copy/paste functionality.
 
 ## 1.0.2 (2025-02-03)
 
