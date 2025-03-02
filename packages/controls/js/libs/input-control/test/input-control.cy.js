@@ -1665,5 +1665,79 @@ describe('input control component testing', () => {
 				cy.get('input').should('have.not.class', 'invalid');
 			});
 		});
+
+		describe('Copy functionality', () => {
+			it('should append unit when copying value', () => {
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					value: '12px',
+				});
+
+				cy.get('input')
+					.invoke('val', '12')
+					.trigger('select')
+					.trigger('copy', {
+						clipboardData: {
+							setData: (type, text) => {
+								expect(type).to.equal('text/plain');
+								expect(text).to.equal('12px');
+							},
+						},
+					});
+			});
+
+			it('should append unit when copying partial selection', () => {
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					value: '123px',
+				});
+
+				// Simulate selecting just "12" from "123"
+				cy.get('input')
+					.invoke('val', '123')
+					.then(($input) => {
+						const input = $input[0];
+						input.setSelectionRange(0, 2); // Select only "12"
+						return cy.wrap($input);
+					})
+					.trigger('copy', {
+						clipboardData: {
+							setData: (type, text) => {
+								expect(type).to.equal('text/plain');
+								expect(text).to.equal('12px');
+							},
+						},
+					});
+			});
+
+			it('should not append unit when copying from special units', () => {
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					value: 'auto',
+				});
+
+				// Special units don't have an input field, so copying shouldn't be possible
+				cy.get('input').should('not.exist');
+			});
+
+			it('should not append unit when copying from func type', () => {
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					value: 'calc(100% - 20px)func',
+				});
+
+				cy.get('input')
+					.invoke('val', 'calc(100% - 20px)')
+					.trigger('select')
+					.trigger('copy', {
+						clipboardData: {
+							setData: (type, text) => {
+								expect(type).to.equal('text/plain');
+								expect(text).to.equal('calc(100% - 20px)');
+							},
+						},
+					});
+			});
+		});
 	});
 });
