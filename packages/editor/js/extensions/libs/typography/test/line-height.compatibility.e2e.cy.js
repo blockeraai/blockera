@@ -57,6 +57,8 @@ describe('Line Height → WP Compatibility', () => {
 					});
 				});
 
+			cy.wait(500);
+
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
 				expect('1.25').to.be.equal(
