@@ -66,18 +66,28 @@ export function UnitInput({
 		const value = e.target.value;
 		setTypedValue(value); // Show exactly what user types
 
+		// First check if the value is just a minus sign then not do future action
+		if (value === '-' || value === '-0') {
+			return;
+		}
+
 		// Check if the value contains potential unit characters or calculation operators
-		if (value.match(/[a-zA-Z%\+\-\*\/]/)) {
+		// Exclude valid numbers (including negative and decimal) from triggering unit extraction
+		if (value.match(/[a-zA-Z%\+\-\*\/\.]/) && !value.match(/^-?\d*?\d*$/)) {
 			// Clear any existing timeout
 			if (unitUpdateTimeout.current) {
 				clearTimeout(unitUpdateTimeout.current);
 			}
 
-			// Set a timeout only for unit extraction
+			// Set a timeout only for unit extraction or calculation
 			unitUpdateTimeout.current = setTimeout(() => {
+				// First check for valid number with unit
 				const match = value.match(/^(-?\d*\.?\d*)([a-zA-Z%]+)?$/);
 				if (match) {
 					const [, numericValue = '', unit = ''] = match;
+
+					// Normalize decimal value
+					const normalizedValue = normalizeDecimalValue(numericValue);
 
 					// If there's a unit, update it
 					if (unit) {
@@ -85,11 +95,11 @@ export function UnitInput({
 						if (newUnitValue) {
 							// Update both unit and numeric value
 							onChangeSelect(unit);
-							setTypedValue(numericValue);
+							setTypedValue(normalizedValue);
 							if (typeof onChange === 'function') {
 								onChange({
 									unitValue: newUnitValue,
-									inputValue: numericValue,
+									inputValue: normalizedValue,
 								});
 							}
 						}
@@ -97,7 +107,12 @@ export function UnitInput({
 				}
 			}, 300);
 		} else {
-			// No unit characters or operators found, update immediately
+			// Clear any existing timeout
+			if (unitUpdateTimeout.current) {
+				clearTimeout(unitUpdateTimeout.current);
+			}
+
+			// No unit characters or operators found, or it's a valid number (including negative), update immediately
 			onChange?.({
 				unitValue,
 				inputValue: value,
@@ -105,9 +120,17 @@ export function UnitInput({
 		}
 	};
 
+	const normalizeDecimalValue = (value: string): string => {
+		if (value === '') return '';
+		if (!value.includes('.')) return value;
+		return value.replace(/\.?0+$/, '');
+	};
+
 	const evaluateCalculation = (value: string) => {
 		if (!isSpecialUnit(unitValue?.value) && unitValue.value !== 'func') {
-			const calcMatch = value.match(
+			// Ensure value is a string
+			const stringValue = String(value);
+			const calcMatch = stringValue.match(
 				/^(-?\d*\.?\d*)\s*([\+\-\/\*])\s*(-?\d*\.?\d*)$/
 			);
 			if (calcMatch) {
@@ -134,11 +157,19 @@ export function UnitInput({
 							result = n1;
 					}
 
-					setTypedValue(String(result));
+					// Round to 6 decimal places and remove trailing zeros
+					const roundedResult = Number(result.toFixed(6));
+
+					// Normalize decimal result
+					const normalizedResult = normalizeDecimalValue(
+						String(roundedResult)
+					);
+
+					setTypedValue(normalizedResult);
 					if (typeof onChange === 'function') {
 						onChange({
 							unitValue,
-							inputValue: String(result),
+							inputValue: normalizedResult,
 						});
 					}
 					return true;
@@ -159,8 +190,11 @@ export function UnitInput({
 			e.preventDefault();
 			const [, numericValue = '', unit = ''] = match;
 
+			// Normalize decimal value
+			const normalizedValue = normalizeDecimalValue(numericValue);
+
 			// Update the input value immediately
-			setTypedValue(numericValue);
+			setTypedValue(normalizedValue);
 
 			// If there's a unit, update it
 			if (unit) {
@@ -173,7 +207,7 @@ export function UnitInput({
 			if (typeof onChange === 'function') {
 				onChange({
 					unitValue: unit ? getUnitByValue(unit, units) : unitValue,
-					inputValue: numericValue,
+					inputValue: normalizedValue,
 				});
 			}
 		}
@@ -292,7 +326,7 @@ export function UnitInput({
 	const getDragEvent = () => {
 		return drag && !disabled
 			? {
-					onMouseDown: (event) => {
+					onMouseDown: (event: MouseEvent) => {
 						onDragStart(event);
 					},
 					onMouseUp: onDragEnd,
@@ -326,7 +360,9 @@ export function UnitInput({
 					/^(-?\d*\.?\d*)\s*[\+\-\/\*]?\s*$/
 				);
 				if (incompleteMatch && incompleteMatch[1]) {
-					const normalizedValue = String(Number(incompleteMatch[1]));
+					const normalizedValue = normalizeDecimalValue(
+						incompleteMatch[1]
+					);
 					if (!isNaN(Number(normalizedValue))) {
 						setTypedValue(normalizedValue);
 						if (typeof onChange === 'function') {
@@ -363,11 +399,14 @@ export function UnitInput({
 					incrementedValue = Number(max);
 				}
 
-				setTypedValue(String(incrementedValue));
+				const normalizedIncrementedValue = normalizeDecimalValue(
+					String(incrementedValue)
+				);
+				setTypedValue(normalizedIncrementedValue);
 				if (typeof onChange === 'function') {
 					onChange({
 						unitValue,
-						inputValue: String(incrementedValue),
+						inputValue: normalizedIncrementedValue,
 					});
 				}
 				break;
@@ -381,11 +420,14 @@ export function UnitInput({
 					decrementedValue = Number(min);
 				}
 
-				setTypedValue(String(decrementedValue));
+				const normalizedDecrementedValue = normalizeDecimalValue(
+					String(decrementedValue)
+				);
+				setTypedValue(normalizedDecrementedValue);
 				if (typeof onChange === 'function') {
 					onChange({
 						unitValue,
-						inputValue: String(decrementedValue),
+						inputValue: normalizedDecrementedValue,
 					});
 				}
 				break;
@@ -633,7 +675,7 @@ export function UnitInput({
 												sideEffect={false}
 												onChange={
 													disabled
-														? undefined
+														? (value) => value
 														: (newValue) => {
 																const numValue =
 																	typeof newValue ===
@@ -647,10 +689,14 @@ export function UnitInput({
 																		numValue
 																	)
 																) {
+																	const normalizedValue =
+																		normalizeDecimalValue(
+																			String(
+																				numValue
+																			)
+																		);
 																	setTypedValue(
-																		String(
-																			numValue
-																		)
+																		normalizedValue
 																	);
 																	if (
 																		typeof onChange ===
@@ -660,9 +706,7 @@ export function UnitInput({
 																			{
 																				unitValue,
 																				inputValue:
-																					String(
-																						numValue
-																					),
+																					normalizedValue,
 																			}
 																		);
 																	}
