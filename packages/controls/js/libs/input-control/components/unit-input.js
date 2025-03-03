@@ -411,11 +411,16 @@ export function UnitInput({
 		// Handle calculations on Enter key
 		if (event.key === 'Enter') {
 			event.preventDefault();
+
 			if (!evaluateCalculation(typedValue)) {
+				// Ensure typedValue is a string before using match
+				const stringValue = String(typedValue || '');
+
 				// Check for incomplete calculation pattern and normalize
-				const incompleteMatch = typedValue.match(
+				const incompleteMatch = stringValue.match(
 					/^(-?\d*\.?\d*)\s*[\+\-\/\*]?\s*$/
 				);
+
 				if (incompleteMatch && incompleteMatch[1]) {
 					const normalizedValue = normalizeDecimalValue(
 						incompleteMatch[1]
@@ -431,8 +436,10 @@ export function UnitInput({
 						return;
 					}
 				}
+
 				// Clear value if no valid number found
 				setTypedValue('');
+
 				if (typeof onChange === 'function') {
 					onChange({
 						unitValue,
@@ -522,8 +529,11 @@ export function UnitInput({
 			return;
 		}
 
+		// Ensure typedValue is a string before using match
+		const stringValue = String(typedValue || '');
+
 		// Check for incomplete calculation pattern (number followed by operator)
-		const incompleteMatch = typedValue.match(
+		const incompleteMatch = stringValue.match(
 			/^(-?\d*\.?\d*)\s*[\+\-\/\*]?\s*$/
 		);
 		if (incompleteMatch && incompleteMatch[1]) {
