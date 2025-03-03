@@ -66,13 +66,37 @@ export function UnitInput({
 		const value = e.target.value;
 		setTypedValue(value); // Show exactly what user types
 
-		// First check if the value is just a minus sign then not do future action
+		// First check if the value is just a minus sign or minus zero
 		if (value === '-' || value === '-0') {
+			// Allow typing minus sign even if min is >= 0, we'll validate on blur
 			return;
 		}
 
+		// Check if it's a valid number (including negative and decimal)
+		const numericMatch = value.match(/^-?\d*?\d*$/);
+		if (numericMatch && value !== '') {
+			const numValue = Number(value);
+			if (!isNaN(numValue)) {
+				// Apply constraints if it's a valid number
+				let constrainedValue = value;
+				if (!isEmpty(min) && numValue < Number(min)) {
+					constrainedValue = String(min);
+					setTypedValue(constrainedValue);
+				}
+				if (!isEmpty(max) && numValue > Number(max)) {
+					constrainedValue = String(max);
+					setTypedValue(constrainedValue);
+				}
+
+				onChange?.({
+					unitValue,
+					inputValue: constrainedValue,
+				});
+				return;
+			}
+		}
+
 		// Check if the value contains potential unit characters or calculation operators
-		// Exclude valid numbers (including negative and decimal) from triggering unit extraction
 		if (value.match(/[a-zA-Z%\+\-\*\/\.]/) && !value.match(/^-?\d*?\d*$/)) {
 			// Clear any existing timeout
 			if (unitUpdateTimeout.current) {
@@ -89,17 +113,29 @@ export function UnitInput({
 					// Normalize decimal value
 					const normalizedValue = normalizeDecimalValue(numericValue);
 
+					// Apply constraints
+					let constrainedValue = normalizedValue;
+					const numValue = Number(normalizedValue);
+					if (!isNaN(numValue)) {
+						if (!isEmpty(min) && numValue < Number(min)) {
+							constrainedValue = String(min);
+						}
+						if (!isEmpty(max) && numValue > Number(max)) {
+							constrainedValue = String(max);
+						}
+					}
+
 					// If there's a unit, update it
 					if (unit) {
 						const newUnitValue = getUnitByValue(unit, units);
 						if (newUnitValue) {
 							// Update both unit and numeric value
 							onChangeSelect(unit);
-							setTypedValue(normalizedValue);
+							setTypedValue(constrainedValue);
 							if (typeof onChange === 'function') {
 								onChange({
 									unitValue: newUnitValue,
-									inputValue: normalizedValue,
+									inputValue: constrainedValue,
 								});
 							}
 						}
@@ -112,7 +148,7 @@ export function UnitInput({
 				clearTimeout(unitUpdateTimeout.current);
 			}
 
-			// No unit characters or operators found, or it's a valid number (including negative), update immediately
+			// No unit characters or operators found, update immediately
 			onChange?.({
 				unitValue,
 				inputValue: value,
@@ -160,9 +196,18 @@ export function UnitInput({
 					// Round to 6 decimal places and remove trailing zeros
 					const roundedResult = Number(result.toFixed(6));
 
+					// Apply min/max constraints to the calculation result
+					let constrainedResult = roundedResult;
+					if (!isEmpty(min) && constrainedResult < Number(min)) {
+						constrainedResult = Number(min);
+					}
+					if (!isEmpty(max) && constrainedResult > Number(max)) {
+						constrainedResult = Number(max);
+					}
+
 					// Normalize decimal result
 					const normalizedResult = normalizeDecimalValue(
-						String(roundedResult)
+						String(constrainedResult)
 					);
 
 					setTypedValue(normalizedResult);
@@ -193,8 +238,20 @@ export function UnitInput({
 			// Normalize decimal value
 			const normalizedValue = normalizeDecimalValue(numericValue);
 
+			// Apply min/max constraints
+			let constrainedValue = normalizedValue;
+			const numValue = Number(normalizedValue);
+			if (!isNaN(numValue)) {
+				if (!isEmpty(min) && numValue < Number(min)) {
+					constrainedValue = String(min);
+				}
+				if (!isEmpty(max) && numValue > Number(max)) {
+					constrainedValue = String(max);
+				}
+			}
+
 			// Update the input value immediately
-			setTypedValue(normalizedValue);
+			setTypedValue(constrainedValue);
 
 			// If there's a unit, update it
 			if (unit) {
@@ -207,7 +264,7 @@ export function UnitInput({
 			if (typeof onChange === 'function') {
 				onChange({
 					unitValue: unit ? getUnitByValue(unit, units) : unitValue,
-					inputValue: normalizedValue,
+					inputValue: constrainedValue,
 				});
 			}
 		}
@@ -470,9 +527,17 @@ export function UnitInput({
 			/^(-?\d*\.?\d*)\s*[\+\-\/\*]?\s*$/
 		);
 		if (incompleteMatch && incompleteMatch[1]) {
-			// Normalize the number
-			const normalizedValue = String(Number(incompleteMatch[1]));
+			// Normalize the number and apply constraints
+			let normalizedValue = String(Number(incompleteMatch[1]));
 			if (!isNaN(Number(normalizedValue))) {
+				// Apply min/max constraints
+				if (!isEmpty(min) && Number(normalizedValue) < Number(min)) {
+					normalizedValue = String(min);
+				}
+				if (!isEmpty(max) && Number(normalizedValue) > Number(max)) {
+					normalizedValue = String(max);
+				}
+
 				setTypedValue(normalizedValue);
 				if (typeof onChange === 'function') {
 					onChange({
