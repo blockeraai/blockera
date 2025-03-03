@@ -2278,5 +2278,75 @@ describe('input control component testing', () => {
 				});
 			});
 		});
+
+		describe('Min/Max constraints', () => {
+			it('should enforce min value constraint', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" min={0} />,
+					name,
+					value: '0px',
+				});
+
+				// Test direct input
+				cy.get('input').focus().clear().type('-5');
+				cy.get('input').should('have.value', '0');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('0px');
+				});
+
+				// Test typing minus sign (should allow temporarily)
+				cy.get('input').focus().clear().type('-');
+				cy.get('input').should('have.value', '-');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '');
+
+				// Test calculations
+				cy.get('input').focus().clear().type('10 - 15{enter}');
+				cy.get('input').should('have.value', '0');
+			});
+
+			it('should enforce max value constraint', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" max={100} />,
+					name,
+					value: '0px',
+				});
+
+				// Test direct input
+				cy.get('input').focus().clear().type('150');
+				cy.get('input').should('have.value', '100');
+
+				// Test calculations
+				cy.get('input').focus().clear().type('50 * 3{enter}');
+				cy.get('input').should('have.value', '100');
+			});
+
+			it('should enforce both min and max constraints', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" min={-10} max={10} />
+					),
+					name,
+					value: '0px',
+				});
+
+				// Test min boundary
+				cy.get('input').focus().clear().type('-15');
+				cy.get('input').should('have.value', '-10');
+
+				// Test max boundary
+				cy.get('input').focus().clear().type('15');
+				cy.get('input').should('have.value', '10');
+
+				// Test calculations
+				cy.get('input').focus().clear().type('-5 * 3{enter}');
+				cy.get('input').should('have.value', '-10');
+				cy.get('input').focus().clear().type('5 * 3{enter}');
+				cy.get('input').should('have.value', '10');
+			});
+		});
 	});
 });
