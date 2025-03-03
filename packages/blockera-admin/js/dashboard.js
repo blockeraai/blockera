@@ -176,6 +176,7 @@ export const Dashboard = (): MixedElement => {
 					defaultSettings: blockeraDefaultSettings,
 				}}
 			>
+				<div style={{ background: 'red' }}>Test</div>
 				<Header
 					icon={
 						<Icon
