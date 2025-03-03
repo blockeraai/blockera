@@ -672,7 +672,7 @@ describe('Spacing Extension', () => {
 						.last()
 						.within(() => {
 							cy.get('[aria-label="Select Unit"]').select('px');
-							cy.get('input[type=number]').type('-15');
+							cy.get('input[type=text]').type('-15');
 						});
 
 					cy.get('@Position')
@@ -922,9 +922,9 @@ describe('Spacing Extension', () => {
 								{ matchCase: false }
 							);
 
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').type(
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').type(
 								side === 'left' ? '30' : '40',
 								{ delay: 0, force: true }
 							);
@@ -999,9 +999,9 @@ describe('Spacing Extension', () => {
 								{ matchCase: false }
 							);
 
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').type(
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').type(
 								side === 'top' ? '30' : '40',
 								{ delay: 0, force: true }
 							);
@@ -1084,9 +1084,9 @@ describe('Spacing Extension', () => {
 								{ matchCase: false }
 							);
 
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').type(
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').type(
 								side === 'left' ? '30' : '40',
 								{ delay: 0, force: true }
 							);
@@ -1125,9 +1125,9 @@ describe('Spacing Extension', () => {
 								{ matchCase: false }
 							);
 
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').type(
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').type(
 								side === 'top' ? '30' : '40',
 								{ delay: 0, force: true }
 							);
@@ -1202,9 +1202,9 @@ describe('Spacing Extension', () => {
 								{ matchCase: false }
 							);
 
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').type(
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').type(
 								side === 'top' ? '30' : '40',
 								{ delay: 0, force: true }
 							);
@@ -1243,9 +1243,9 @@ describe('Spacing Extension', () => {
 								{ matchCase: false }
 							);
 
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').clear({ force: true });
-							cy.get('input[type=number]').type(
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').clear({ force: true });
+							cy.get('input[type=text]').type(
 								side === 'left' ? '30' : '40',
 								{ delay: 0, force: true }
 							);
