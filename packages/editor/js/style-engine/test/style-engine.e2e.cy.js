@@ -107,11 +107,13 @@ describe('Style Engine Testing ...', () => {
 						);
 
 					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block').should(
-						'have.css',
-						'background-color',
-						'rgb(227, 23, 139)'
-					);
+					cy.get('.blockera-block')
+						.should(
+							'have.css',
+							'background-color',
+							'rgb(227, 23, 139)'
+						)
+						.realMouseMove(250, 350);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
 						.should(
@@ -409,11 +411,13 @@ describe('Style Engine Testing ...', () => {
 						);
 
 					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block').should(
-						'have.css',
-						'background-color',
-						'rgb(227, 23, 139)'
-					);
+					cy.get('.blockera-block')
+						.should(
+							'have.css',
+							'background-color',
+							'rgb(227, 23, 139)'
+						)
+						.realMouseMove(250, 350);
 				});
 
 				context('xl-desktop', () => {
