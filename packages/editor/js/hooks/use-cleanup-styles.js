@@ -8,8 +8,7 @@ import { useState, useEffect } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEmpty, getSmallHash, getIframeTag } from '@blockera/utils';
-import { classNames } from '@blockera/classnames';
+import { isEmpty, getIframeTag } from '@blockera/utils';
 
 export const useCleanupStyles = (
 	{ clientId }: { clientId: string },
@@ -73,24 +72,31 @@ export const useCleanupStyles = (
 
 			// Extract and remove inline styles from child elements.
 			elementsWithStyles.forEach((element) => {
-				let elementSelector = classNames(
-					element.getAttribute('class'),
-					{
-						'blockera-block': true,
-						[`blockera-block-${getSmallHash(clientId)}`]: true,
-					}
-				).replace(/\s+/g, '.');
-				elementSelector = `.${elementSelector}`;
-
-				if (elementSelector) {
-					prepareInlineStyles(
-						element.getAttribute('style'),
-						elementSelector
-					);
-
-					// Remove the inline style of child element.
-					element.removeAttribute('style');
+				if (!element.hasAttribute('style')) {
+					return;
 				}
+
+				let elementSelector = element.getAttribute('class');
+
+				if (!elementSelector) {
+					elementSelector = `.blockera-${Math.random()
+						.toString(36)
+						.substring(2, 8)}`;
+					element.classList.add(elementSelector);
+				} else {
+					elementSelector = `.${elementSelector.replace(
+						/\s+/g,
+						'.'
+					)}`;
+				}
+
+				prepareInlineStyles(
+					element.getAttribute('style'),
+					elementSelector
+				);
+
+				// Remove the inline style of child element.
+				element.removeAttribute('style');
 			});
 
 			// Store extracted styles in state if not empty.
