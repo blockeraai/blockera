@@ -5,7 +5,7 @@ let env = {
 	wpPassword: 'password',
 	testURL: 'http://localhost:8888',
 	e2e: {
-		specPattern: ['packages/**/*.e2e.cy.js'],
+		specPattern: ['packages/**/*.e2e.cy.js', 'packages/**/*.visual.cy.js'],
 		excludeSpecPattern: ['packages/**/*.build.e2e.js'],
 	},
 };
