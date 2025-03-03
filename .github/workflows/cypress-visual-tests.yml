@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
     detect_categories:
-        name: Detecting E2E Test Categories
+        name: Detecting Visual Test Categories
         runs-on: ubuntu-latest
         outputs:
             categories: ${{ steps.set_categories.outputs.categories }}
