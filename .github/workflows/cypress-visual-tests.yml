@@ -166,7 +166,7 @@ jobs:
             # Upload diff artifacts if tests fail
             - name: Upload diff artifacts
               if: failure()
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: visual-test-diffs
                   path: |
