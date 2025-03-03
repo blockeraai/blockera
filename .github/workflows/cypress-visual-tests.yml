@@ -66,6 +66,7 @@ jobs:
 
     visual-test:
         name: Visual Regression Testing
+        needs: detect_categories
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
         strategy:
