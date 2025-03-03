@@ -61,7 +61,7 @@ class SavePost {
 		$cache = $this->cache->getCache($postId, 'post_content');
 
 		// If cache found, return.
-		if (! empty($cache) || ( isset($cache['hash']) && md5($post->post_content) === $cache['hash'] )) {
+		if (! empty($cache) && ( isset($cache['hash']) && md5($post->post_content) === $cache['hash'] )) {
 			return;
 		}
 
@@ -91,7 +91,7 @@ class SavePost {
 		$cache = $this->cache->getCache($post_id, isset($key) ? $key : 'post_content');
 
 		// If cache found, return.
-		if (! empty($cache) || ( isset($cache['hash']) && md5($prepared_post->post_content) === $cache['hash'] )) {
+		if (! empty($cache) && ( isset($cache['hash']) && md5($prepared_post->post_content) === $cache['hash'] )) {
 			return $prepared_post;
 		}
 

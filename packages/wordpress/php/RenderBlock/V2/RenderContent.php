@@ -166,7 +166,7 @@ class RenderContent {
 		// Get cache data.
 		$cache = $this->cache->getCache($post->ID, 'post_content');
 
-		if (! empty($cache) || ( isset($cache['hash']) && md5($post->post_content) === $cache['hash'] )) {
+		if (! empty($cache) && ( isset($cache['hash']) && md5($post->post_content) === $cache['hash'] )) {
 
 			// Prepare post content.
 			return $this->prepareCleanupContent(
