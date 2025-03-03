@@ -13,6 +13,7 @@
 - Update border control to improve the user experience (UX).
 - Update color control to improve the user experience (UX).
 - When copying values from unit inputs (like px, em, rem), the unit is now automatically appended to the copied text.
+- Support for decimal values on input control.
 
 ### Bug Fixes
 - Fixed an issue where the select control style is not correct when the control is focused or opened.
