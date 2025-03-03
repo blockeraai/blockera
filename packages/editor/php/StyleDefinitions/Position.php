@@ -37,19 +37,22 @@ class Position extends BaseStyleDefinition {
 				$declaration[ $cssProperty ] = $position;
 
 				$filteredValues = array_filter( $value );
-				$declaration    = array_merge(
-					$declaration,
-					array_merge(
-						...array_map(
-							static function ( string $item, string $property ): array {
+				
+				if (! empty($filteredValues)) {		
+					$declaration = array_merge(
+						$declaration,
+						array_merge(
+							...array_map(
+								static function ( string $item, string $property): array {
 
-								return [ $property => blockera_get_value_addon_real_value( $item ) ];
-							},
-							$filteredValues,
-							array_keys( $filteredValues )
+									return [ $property => blockera_get_value_addon_real_value($item) ];
+								},
+								$filteredValues,
+								array_keys($filteredValues)
+							)
 						)
-					)
-				);
+					);
+				}
 
 				break;
 			case 'z-index':

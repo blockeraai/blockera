@@ -1,7 +1,6 @@
 <?php
 
 use Blockera\Exceptions\BaseException;
-use Symfony\Component\VarDumper\VarDumper;
 
 if ( ! function_exists( 'blockera_get_unique_classname' ) ) {
 	/**
@@ -23,14 +22,16 @@ if ( ! function_exists( 'blockera_get_css_media_queries' ) ) {
 
 	/**
 	 * Get css media queries from configured breakpoints.
+	 * 
+	 * @param array $breakpoints The breakpoints.
 	 *
 	 * @return array
 	 */
-	function blockera_get_css_media_queries(): array {
+	function blockera_get_css_media_queries( array $breakpoints): array {
 
 		$queries = [];
 
-		foreach ( blockera_core_config( 'breakpoints.list' ) as $breakpoint ) {
+		foreach ( $breakpoints as $breakpoint ) {
 
 			// skip invalid breakpoint.
 			if ( empty( $breakpoint['type'] ) ) {
@@ -482,7 +483,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 				$matches[0],
 				[
 					'prefix' => $root,
-					'suffix' => $root,
+					'suffix' => blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]) ? '' : $root,
 				]
 			);
 		}
@@ -738,7 +739,8 @@ if ( ! function_exists( 'blockera_get_base_breakpoint' ) ) {
 	 */
 	function blockera_get_base_breakpoint(): string {
 
-		$base = blockera_core_config( 'breakpoints.base' );
+		$breakpoints = blockera_core_config( 'breakpoints' );
+		$base        = $breakpoints['base'];
 
 		if ( ! is_string( $base ) ) {
 
@@ -746,7 +748,7 @@ if ( ! function_exists( 'blockera_get_base_breakpoint' ) ) {
 		}
 
 		$prepared_breakpoints = array_filter(
-			blockera_core_config( 'breakpoints.list' ),
+			$breakpoints['list'],
 			function ( array $breakpoint ): bool {
 
 				return ! empty( $breakpoint['base'] ) && ! empty( $breakpoint['status'] );
@@ -778,39 +780,51 @@ if ( ! function_exists( 'blockera_is_normal_on_base_breakpoint' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_get_available_block_supports' ) ) {
+if (! function_exists('blockera_get_available_block_supports')) {
 
 	/**
-	 * Retrieve available block supports list.
+	 * Get all available block supports.
 	 *
-	 * @see: ../js/schemas/blockera-block-supports-list.json
-	 *
-	 * @param string $support_category the support category name.
-	 * @param string $support the support name.
-	 *
-	 * @return array The available block supports list for support category or all categories.
+	 * @return array the block supports.
 	 */
-	function blockera_get_available_block_supports( string $support_category = '', string $support = '' ): array {
+	function blockera_get_available_block_supports(): array {
 		$supports = [];
 		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
 
-		foreach ( $files as $support_file ) {
+		foreach ($files as $support_file) {
 
 			ob_start();
 
 			require $support_file;
 
-			$support_config = json_decode( ob_get_clean(), true );
+			$support = json_decode(ob_get_clean(), true);
 
-			if ( empty( $support_config['supports'] ) || ( ! empty( trim( $support_category ) ) && $support_config['title'] !== $support_category ) || ! isset($support_config['supports'][ $support ]) ) {
+			if (empty($support['title'])) {
 
 				continue;
 			}
 
-			$supports[ $support ] = $support_config['supports'][ $support ];
+			$supports[ $support['title'] ] = $support;
 		}
 
 		return $supports;
+	}
+}
+
+if (! function_exists('blockera_get_block_supports_by_category')) {
+
+	/**
+	 * Get block supports by category.
+	 *
+	 * @param string $category the category name.
+	 *
+	 * @return array the block supports.
+	 */
+	function blockera_get_block_supports_by_category( string $category): array {
+
+		$category = \Blockera\Utils\Utils::kebabCase( $category );
+
+		return blockera_get_available_block_supports()[ $category ]['supports'];
 	}
 }
 
@@ -825,12 +839,11 @@ if ( ! function_exists( 'blockera_get_block_support' ) ) {
 	 *
 	 * @return mixed The available block supports list as array, or string, boolean on success, null while failure!
 	 */
-	function blockera_get_block_support( string $support_category, string $name, string $property = '' ) {
+	function blockera_get_block_support( string $support_category, string $name = '', string $property = '' ) {
 
-		$support_category = \Blockera\Utils\Utils::kebabCase( $support_category );
-		$supports         = blockera_get_available_block_supports( $support_category, $name );
+		$supports = blockera_get_block_supports_by_category( $support_category);
 
-		if ( empty( $supports ) || empty( $supports[ $name ] ) ) {
+		if ( empty( $supports ) || ! isset( $supports[ $name ] ) ) {
 
 			return null;
 		}
@@ -887,7 +900,7 @@ if ( ! function_exists( 'blockera_find_selector_declarations' ) ) {
 	function blockera_find_selector_declarations( string $selector, array $styles): array {
 
 		foreach ($styles as $_selector => $declarations) {
-			if (strpos($_selector, $selector) !== false) {
+			if (false === strpos($_selector, $selector) && false === strpos($selector, $_selector)) {
 				continue;
 			}
 

@@ -6,7 +6,6 @@ use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Utils\Adapters\DomParser;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class Render filtering WordPress BlockType render process.
@@ -22,6 +21,13 @@ class Render {
      */
     protected Application $app;
 
+	/**
+	 * Cache status.
+	 *
+	 * @var bool $cache_status true if cache is enabled, false otherwise.
+	 */
+	protected bool $cache_status = true;
+
     /**
      * Store all block classnames.
      *
@@ -33,20 +39,25 @@ class Render {
      * Render constructor.
      *
      * @param Application $app the app instance.
+	 * @param bool        $cache_status true if cache is enabled, false otherwise.
      */
-    public function __construct( Application $app) { 
-        $this->app = $app;
+    public function __construct( Application $app, bool $cache_status = true) { 
+        $this->app          = $app;
+		$this->cache_status = $cache_status;
     }
 
-    /**
-     * Fire WordPress actions or filters Hooks.
-     *
-     * @return void
-     */
-    public function applyHooks(): void {
+	/**
+	 * Set cache status.
+	 *
+	 * @param bool $status true if cache is enabled, false otherwise.
+	 *
+	 * @return void
+	 */
+	public function setCacheStatus( bool $status): void {
 
-        add_filter('render_block', [ $this, 'render' ], 10, 3);
-    }
+		$this->cache_status = $status;
+	}
+	
 
     /**
      * Render block icon element.
@@ -94,14 +105,15 @@ class Render {
      *
      * @param string $html  WordPress block rendered HTML.
      * @param array  $block WordPress block details.
+	 * @param array  $supports The supports.
      *
      * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
      * @return string block HTML.
      */
-    public function render( string $html, array $block): string {
+    public function render( string $html, array $block, array $supports): string {
 
         // Check block to is support by Blockera?
-        if (! blockera_is_supported_block($block) || is_admin() || defined('REST_REQUEST') && REST_REQUEST) {
+        if (! blockera_is_supported_block($block) || is_admin() || ( blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]) && defined('REST_REQUEST') && REST_REQUEST )) {
 
             return $html;
         }
@@ -129,7 +141,7 @@ class Render {
         $cache_validate = ! empty($cache_data['css']) && ! empty($cache_data['hash']) && ! empty($cache_data['classname']);
 
         // Validate cache data.
-        if ($cache_validate && $hash === $cache_data['hash']) {
+        if ($cache_validate && $hash === $cache_data['hash'] && $this->cache_status) {
 
             // Print css into inline style on "wp_head" action occur.
             blockera_add_inline_css($cache_data['css']);
@@ -143,12 +155,6 @@ class Render {
             return $html;
         }
 
-        // Delete cache data while previous cache data is existing but changed block render process data.
-        if ($cache_validate) {
-
-            blockera_delete_block_cache($cache_key);
-        }
-
         // Get normalized blockera block unique css classname.
         $unique_class_name = blockera_get_normalized_selector($need_to_update_html ? $blockera_class_name : $attributes['className']);
 
@@ -158,6 +164,7 @@ class Render {
          * @var Parser $parser the instance of Parser class.
          */
         $parser = $this->app->make(Parser::class);
+		$parser->setSupports($supports);
 
         // Computation css rules for current block by server side style engine...
         $computed_css_rules = $parser->getCss(compact('block', 'unique_class_name'));
@@ -181,8 +188,11 @@ class Render {
             'classname' => $need_to_update_html ? $blockera_class_name : $attributes['className'],
         ];
 
-        // Sets cache data with merge previous data.
-        blockera_set_block_cache($cache_key, $data);
+		if ($this->cache_status) {
+
+			// Sets cache data with merge previous data.
+			blockera_set_block_cache($cache_key, $data);
+		}
 
         return $html;
     }

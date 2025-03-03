@@ -64,7 +64,7 @@ class TestHelpers extends \WP_UnitTestCase {
 				'xl-desktop'       => '@media screen and (min-width: 1440px)',
 				'l-desktop'        => '@media screen and (min-width: 1280px)',
 			],
-			blockera_get_css_media_queries()
+			blockera_get_css_media_queries(blockera_core_config('breakpoints.list'))
 		);
 	}
 
@@ -320,8 +320,9 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+		$optimizeStyleGeneration = blockera_get_experimental(['earlyAccessLab', 'optimizeStyleGeneration']);
 
-		$this->assertEquals( '.my-root.wp-block-my-block, .wp-block-my-block.my-root', $result );
+		$this->assertEquals( $optimizeStyleGeneration ? '.my-root.wp-block-my-block' : '.my-root.wp-block-my-block, .wp-block-my-block.my-root', $result );
 	}
 
 	public function testSelectorWithBlockNameAndOtherClasses() {
@@ -331,8 +332,9 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args     = [ 'block-name' => 'my-block' ];
 
 		$result = blockera_append_root_block_css_selector( $selector, $root, $args );
+		$optimizeStyleGeneration = blockera_get_experimental(['earlyAccessLab', 'optimizeStyleGeneration']);
 
-		$this->assertEquals( '.my-root.wp-block-my-block.other-class, .wp-block-my-block.my-root.other-class', $result );
+		$this->assertEquals( $optimizeStyleGeneration ? '.my-root.wp-block-my-block.other-class' : '.my-root.wp-block-my-block.other-class, .wp-block-my-block.my-root.other-class', $result );
 	}
 
 	public function testSelectorWithTagName() {

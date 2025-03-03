@@ -2,8 +2,9 @@
 
 namespace Blockera\Editor;
 
-use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
+use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
+use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 
 /**
  * Class StyleEngine generating css style for any state of breakpoints with any properties.
@@ -91,6 +92,27 @@ final class StyleEngine {
 	protected array $inline_styles = [];
 
 	/**
+	 * Store the supports.
+	 *
+	 * @var array $supports
+	 */
+	protected array $supports = [];
+
+	/**
+	 * Store the breakpoints.
+	 *
+	 * @var array $breakpoints
+	 */
+	protected array $breakpoints = [];
+
+	/**
+	 * Store the application instance.
+	 *
+	 * @var Application $app
+	 */
+	protected Application $app;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array  $block            The current block.
@@ -107,9 +129,42 @@ final class StyleEngine {
 		$this->settings    = $settings;
 		$this->definitions = $styleDefinitions;
 		$this->selector    = $fallbackSelector;
+	}
 
-		// by default store base breakpoint.
-		$this->breakpoint = blockera_core_config( 'breakpoints.base' );
+	/**
+	 * Set the application instance.
+	 *
+	 * @param Application $app The application instance.
+	 *
+	 * @return void
+	 */
+	public function setApp( Application $app ): void {
+
+		$this->app = $app;
+	}
+
+	/**
+	 * Set supports.
+	 *
+	 * @param array $supports The supports.
+	 *
+	 * @return void
+	 */
+	public function setSupports( array $supports): void {
+
+		$this->supports = $supports;
+	}
+
+	/**
+	 * Set breakpoint.
+	 *
+	 * @param array $breakpoints The breakpoints.
+	 *
+	 * @return void
+	 */
+	public function setBreakpoints( array $breakpoints): void {
+
+		$this->breakpoints = $breakpoints;
 	}
 
 	/**
@@ -131,40 +186,72 @@ final class StyleEngine {
 	 */
 	public function getStylesheet(): string {
 
-		$breakpointsCssRules = array_filter(
-			array_map( [ $this, 'prepareBreakpointStyles' ], blockera_core_config( 'breakpoints.list' ) ),
-			'blockera_get_filter_empty_array_item'
-		);
+		// by default store base breakpoint.
+		$this->breakpoint = $this->breakpoints['base'];
 
-		return implode( PHP_EOL, $breakpointsCssRules );
+		if (! empty($this->settings['blockeraBlockStates']['value'])) {
+			$states = $this->settings['blockeraBlockStates']['value'];
+
+			// Filter pseudo classes to only include states that exist in the block.
+			$this->pseudo_classes = array_filter(
+                array_keys($states),
+                function( string $state):bool{
+					return in_array($state, $this->pseudo_classes, true);
+				}
+            );
+
+			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
+
+			// Add force base breakpoint if not exists.
+			if (! in_array($this->breakpoint, $breakpoints, true)) {
+				array_unshift($breakpoints, $this->breakpoint); 
+			} elseif ($this->breakpoint === $breakpoints[ array_key_last($breakpoints) ]) {
+				array_unshift($breakpoints, array_pop($breakpoints));
+			}
+			// Add normal pseudo class if not exists.
+			if (! in_array('normal', $this->pseudo_classes, true)) {
+				array_unshift($this->pseudo_classes, 'normal');
+			} elseif ('normal' !== $this->pseudo_classes[ array_key_last($this->pseudo_classes) ]) {
+				array_unshift($this->pseudo_classes, array_pop($this->pseudo_classes));
+			}
+
+			$breakpointsCssRules = array_filter(
+				array_map([ $this, 'prepareBreakpointStyles' ], $breakpoints),
+				'blockera_get_filter_empty_array_item'
+			);
+
+			return implode(PHP_EOL, $breakpointsCssRules);
+		}
+
+		return $this->prepareBreakpointStyles($this->breakpoint);
 	}
 
 	/**
 	 * Preparing css of breakpoint settings.
 	 *
-	 * @param array $breakpoint The breakpoint data.
+	 * @param string $breakpoint The breakpoint type.
 	 *
 	 * @return string The generated css rule for current breakpoint.
 	 */
-	protected function prepareBreakpointStyles( array $breakpoint ): string {
+	protected function prepareBreakpointStyles( string $breakpoint ): string {
 
 		// Get css media queries.
-		$mediaQueries = blockera_get_css_media_queries();
+		$mediaQueries = blockera_get_css_media_queries($this->breakpoints['list']);
 
 		// Validate breakpoint type.
-		if ( ! isset( $breakpoint['type'], $mediaQueries[ $breakpoint['type'] ] ) ) {
+		if ( ! isset( $breakpoint, $mediaQueries[ $breakpoint ] ) ) {
 
 			return '';
 		}
 
 		// Set current breakpoint for generating styles process.
-		$this->breakpoint = $breakpoint['type'];
+		$this->breakpoint = $breakpoint;
 
 		// Get state css rules with breakpoint type.
-		$stateCssRules = $this->getStateCssRules( $breakpoint['type'] );
+		$state_css_rules = $this->getStateCssRules();
 
 		// Exclude empty css rules.
-		if ( empty( $stateCssRules ) ) {
+		if ( empty( $state_css_rules ) ) {
 
 			return '';
 		}
@@ -173,14 +260,14 @@ final class StyleEngine {
 			PHP_EOL,
 			array_unique(
 				array_filter(
-					blockera_array_flat( $stateCssRules ),
+					blockera_array_flat( $state_css_rules ),
 					'blockera_get_filter_empty_array_item'
 				)
 			)
 		);
 
 		// append css styles on root for base breakpoint.
-		if ( empty( $mediaQueries[ $breakpoint['type'] ] ) ) {
+		if ( empty( $mediaQueries[ $breakpoint ] ) ) {
 
 			return $styles;
 		}
@@ -188,7 +275,7 @@ final class StyleEngine {
 		// Concatenate generated css media query includes all css rules for current received breakpoint type.
 		return sprintf(
 			'%1$s{%2$s}',
-			$mediaQueries[ $breakpoint['type'] ],
+			$mediaQueries[ $breakpoint ],
 			$styles,
 		);
 	}
@@ -196,17 +283,15 @@ final class StyleEngine {
 	/**
 	 * Get state css rules with pseudo class name.
 	 *
-	 * @param string $breakpoint The breakpoint( or device type) name.
-	 *
 	 * @return array The css rules for current pseudo class.
 	 */
-	protected function getStateCssRules( string $breakpoint ): array {
+	protected function getStateCssRules(): array {
 
 		// Imagine blockera block states stack is empty.
 		if ( empty( $this->settings['blockeraBlockStates']['value'] ) ) {
 
 			// We should just prepare normal state styles because not exists any other states.
-			$css_rules = $this->prepareStateStyles( 'normal', blockera_get_base_breakpoint() );
+			$css_rules = $this->prepareStateStyles( 'normal', $this->breakpoint );
 
 			// Exclude empty $css_rules.
 			if ( empty( $css_rules ) ) {
@@ -214,15 +299,13 @@ final class StyleEngine {
 				return [];
 			}
 
-			return [ $css_rules ];
+			return compact('css_rules');
 		}
-
-		$this->breakpoint = $breakpoint;
 
 		// We should process any supported pseudo classes by blockera to prepare each state styles.
 		return array_filter(
 			array_map(
-				function ( string $state ) use ( $breakpoint ): array {
+				function ( string $state ): array {
 
 					return $this->prepareStateStyles( $state );
 				},
@@ -246,6 +329,40 @@ final class StyleEngine {
 		// Prepare generated block css by supported each of style definitions.
 		$block_css = array_map( [ $this, 'generateBlockCss' ], $this->definitions );
 
+		$inner_blocks_css = array_map(
+            function( string $definition): array {
+			
+				$this->definition = $this->app->make($definition, [ 'supports' => $this->supports ]);
+
+				// the "blockeraInnerBlocks.value" accessible on normal state in base breakpoint and un normal states accessible without value index!
+				$settings = $this->getSettings(true);
+
+				if (empty($settings)) {
+
+					return [];
+				}
+
+				// Validation: Check if sets blockera inner blocks?
+				if ( ! empty( $settings ) ) {
+
+					// Preparing inner blocks css ...
+					return blockera_array_flat(
+                        array_map(
+                            [
+								$this,
+								'generateInnerBlockCss',
+                            ],
+                            $settings,
+                            array_keys( $settings )
+                        )
+					);
+				}
+			},
+            $this->definitions
+        );
+
+		$block_css = array_merge( $block_css, $inner_blocks_css );
+
 		return $this->normalizeCssRules(
 			blockera_convert_css_declarations_to_css_valid_rules(
 				blockera_combine_css(
@@ -258,13 +375,19 @@ final class StyleEngine {
 	/**
 	 * Generating current block css styles.
 	 *
-	 * @param BaseStyleDefinition $definition the style definition instance.
+	 * @param string $definition The style definition class namespace.
 	 *
 	 * @return array The array of collection of selector and declaration.
 	 */
-	protected function generateBlockCss( BaseStyleDefinition $definition ): array {
+	protected function generateBlockCss( string $definition ): array {
 
-		$this->definition = $definition;
+		$this->definition = $this->app->make(
+            $definition,
+            [
+				'supports' => $this->supports,
+			]
+        );
+
 		// get current block settings.
 		$settings = $this->getSettings();
 
@@ -281,31 +404,57 @@ final class StyleEngine {
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
-		$cssRules = $this->definition->getCssRules();
+		$css_rules = $this->definition->getCssRules();
 
-		// the "blockeraInnerBlocks.value" accessible on normal state in base breakpoint and un normal states accessible without value index!
-		$innerBlocksSettings = $settings['blockeraInnerBlocks']['value'] ?? $settings['blockeraInnerBlocks'] ?? [];
+		$is_normal_on_base_breakpoint = blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint);
 
-		// Validation: Check if sets blockera inner blocks?
-		if ( ! empty( $innerBlocksSettings ) ) {
+		if ($is_normal_on_base_breakpoint && ! empty($this->inline_styles)) {
 
-			// Preparing inner blocks css ...
-			$cssRules = array_merge(
-				$cssRules,
-				blockera_array_flat(
-					array_map(
-						[
-							$this,
-							'generateInnerBlockCss',
-						],
-						$innerBlocksSettings,
-						array_keys( $innerBlocksSettings )
-					)
-				)
-			);
+			$definition_selector = $this->definition->getSelector();
+
+			$selector_inline_styles = blockera_find_selector_declarations(preg_replace('/^\w+\./i', '.', $definition_selector), $this->inline_styles);
+
+			if (! empty($selector_inline_styles) && ! empty($definition_selector)) {
+
+				foreach ($selector_inline_styles as $selector => $inline_styles) {
+					$prepared_inline_styles = [];
+
+					if (is_int($selector) || ! is_array($inline_styles)) {
+						$extracted = explode(':', $inline_styles);
+
+						foreach (array_chunk($extracted, 2) as $inline_style) {
+
+							if (! isset($inline_style[0]) || ! isset($inline_style[1])) {
+
+								continue;
+							}
+
+							$prepared_inline_styles[ $inline_style[0] ] = $inline_style[1];
+						}
+
+						continue;
+					}
+
+					foreach ($inline_styles as $inline_style) {
+						$extracted = explode(':', $inline_style);
+
+						if (isset($prepared_inline_styles[ $extracted[0] ])) {
+
+							continue;
+						}
+
+						$prepared_inline_styles[ $extracted[0] ] = $extracted[1];
+					}
+
+					if (! isset($css_rules[ $selector ]) || ! in_array($prepared_inline_styles, $css_rules[ $selector ], true)) {
+
+						$css_rules[ $selector ] = array_merge($prepared_inline_styles, $css_rules[ $selector ] ?? []);
+					}					
+				}
+			}
 		}
 
-		return $cssRules;
+		return $css_rules;
 	}
 
 	/**
@@ -335,15 +484,15 @@ final class StyleEngine {
 		$this->definition->setSettings( $settings['attributes'] );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
-		$cssRules = $this->definition->getCssRules();
+		$css_rules = $this->definition->getCssRules();
 
 		if ( ! empty( $settings['attributes']['blockeraBlockStates'] ) ) {
 
 			$engine           = $this;
 			$innerBlockStates = $settings['attributes']['blockeraBlockStates'];
 
-			$cssRules = array_merge(
-				$cssRules,
+			$css_rules = array_merge(
+				$css_rules,
 				blockera_array_flat(
 					array_map(
 						static function ( array $state, string $_pseudoState ) use ( $engine, $blockType ): array {
@@ -371,7 +520,7 @@ final class StyleEngine {
 			);
 		}
 
-		return $cssRules;
+		return $css_rules;
 	}
 
 	/**
@@ -402,15 +551,48 @@ final class StyleEngine {
 	}
 
 	/**
+	 * Get definition settings.
+	 *
+	 * @param array $settings the settings.
+	 * @param array $supports the supports.
+	 *
+	 * @return array the definition settings.
+	 */
+	private function getDefinitionSupportsSettings( array $settings, array $supports):array {
+
+		return array_filter(
+			$settings,
+			function( $key) use ( $supports) {
+				return in_array($key, $supports, true);
+			},
+			ARRAY_FILTER_USE_KEY
+		);
+	}
+
+	/**
 	 * Get current block state in breakpoint settings.
+	 * 
+	 * @param bool $from_inner_blocks The flag to specific settings context. if true mean context is inner blocks.
 	 *
 	 * @return array the block settings.
 	 */
-	public function getSettings(): array {
+	public function getSettings( bool $from_inner_blocks = false): array {
 
-		if ( blockera_is_normal_on_base_breakpoint( $this->pseudo_state, $this->breakpoint ) ) {
+		$supports = $this->definition->getSupports();
 
-			return $this->settings;
+		if (empty($supports)) {
+
+			return [];
+		}
+
+		if ( $this->inNormalOnBaseBreakpoint( $this->pseudo_state, $this->breakpoint ) ) {
+
+			if ($from_inner_blocks) {
+
+				return 	$this->settings['blockeraInnerBlocks']['value'] ?? [];
+			}
+
+			return $this->getDefinitionSupportsSettings( $this->settings, $supports );
 		}
 
 		$states = $this->settings['blockeraBlockStates']['value'] ?? [];
@@ -428,15 +610,35 @@ final class StyleEngine {
 			return [];
 		}
 
-		$breakpointSettings = $state['breakpoints'][ $this->breakpoint ];
+		$breakpoint_settings = $state['breakpoints'][ $this->breakpoint ];
 
 		// invalid breakpoint founded.
-		if ( empty( $breakpointSettings ) ) {
+		if ( empty( $breakpoint_settings ) ) {
 
 			return [];
 		}
 
-		return $breakpointSettings['attributes'] ?? [];
+		$prepared_settings = $breakpoint_settings['attributes'] ?? [];
+
+		if ($from_inner_blocks) {
+
+			return $prepared_settings['blockeraInnerBlocks'] ?? $prepared_settings['blockeraInnerBlocks']['value'] ?? [];
+		}
+
+		return $this->getDefinitionSupportsSettings( $prepared_settings, $supports );
+	}
+
+	/**
+	 * Check if current state is normal on base breakpoint.
+	 *
+	 * @param string $pseudoState the pseudo state.
+	 * @param string $breakpoint  the breakpoint.
+	 *
+	 * @return bool true if current state is normal on base breakpoint.
+	 */
+	private function inNormalOnBaseBreakpoint( string $pseudoState, string $breakpoint ): bool {
+
+		return 'normal' === $pseudoState && $breakpoint === $this->breakpoints['base'];
 	}
 
 	/**
@@ -463,8 +665,6 @@ final class StyleEngine {
 				'attributes'
 			)
 		);
-
-		$definition->setInlineStyles($this->inline_styles);
 	}
 
 }

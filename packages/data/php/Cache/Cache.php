@@ -65,16 +65,20 @@ class Cache {
      * @return bool true on success, false on failure!
      */
     public function setCache( int $post_id, string $key, $cache): bool {
+		if (empty($key)) {
+			throw new \Exception(__('Key #2 Argument is required on setCache method of Cache class', 'blockera'));
+		}
+
+		if (empty($cache)) {
+			throw new \Exception(__('Cache #3 Argument is required on setCache method of Cache class', 'blockera'));
+		}
+
         if ($post_id) {
             return update_post_meta($post_id, $this->getCacheKey($key), $cache);
         }
 
-		if (is_array($cache)) {
-			$cache = $key . '_' . md5(json_encode($cache));
-		} elseif (is_string($cache)) {
-			$cache = $key . '_' . md5($cache);
-		} else {
-			throw new \Exception(__('Invalid cache type: expected array or string value on setCache method of Cache class as #3 Argument', 'blockera'));
+		if (! empty($cache['hash'])) {
+			$key = $key . '_' . $cache['hash'];
 		}
 
         return update_option($this->getCacheKey($key), $cache);
@@ -115,9 +119,26 @@ class Cache {
     public function clear(): void {
         global $wpdb;
 
+		// Deleting all options related with the blockera product id.
         $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+                $this->getCacheKey() . '%'
+            )
+        );
+		
+		// Deleting all options related with the blockera style engine v1.
+		$wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM $wpdb->options WHERE option_name LIKE %s",
+                '%wp_block_%'
+            )
+		);
+
+		// Deleting all post meta data related with the blockera product id.
+        $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s",
                 $this->getCacheKey() . '%'
             )
         );

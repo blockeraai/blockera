@@ -37,7 +37,7 @@ function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 
 		const marginRight = getValueAddonRealValue(spacingProps.margin.right);
 		if (marginRight !== '') {
-			properties['margin-right'] = marginRight;
+			properties['margin-right'] = marginRight + ' !important';
 		}
 
 		const marginBottom = getValueAddonRealValue(spacingProps.margin.bottom);
@@ -47,7 +47,7 @@ function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
 
 		const marginLeft = getValueAddonRealValue(spacingProps.margin.left);
 		if (marginLeft !== '') {
-			properties['margin-left'] = marginLeft;
+			properties['margin-left'] = marginLeft + ' !important';
 		}
 	}
 

@@ -72,6 +72,8 @@ class AppServiceProvider extends ServiceProvider {
 				}
             );
 
+			$cache_instance = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+
 			$this->app->singleton(
                 Version::class,
                 function ( Application $app, array $params = []) {
@@ -83,9 +85,9 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					V2SavePost::class,
-					function ( Application $app) {
+					function ( Application $app) use ( $cache_instance) {
 
-						return new V2SavePost($app);
+						return new V2SavePost($app, $cache_instance);
 					}
 				);
 			} else {
@@ -139,23 +141,27 @@ class AppServiceProvider extends ServiceProvider {
             $this->app->bind(
                 StyleEngine::class,
                 static function ( Application $app, array $params) {
-
                     $styleDefinitions = [
-                        $app->make(Size::class),
-                        $app->make(Mouse::class),
-                        $app->make(Layout::class),
-                        $app->make(Border::class),
-                        $app->make(Effects::class),
-                        $app->make(Outline::class),
-                        $app->make(Spacing::class),
-                        $app->make(Position::class),
-                        $app->make(BoxShadow::class),
-                        $app->make(TextShadow::class),
-                        $app->make(Background::class),
-                        $app->make(Typography::class),
+                        Size::class,
+                        Mouse::class,
+                        Layout::class,
+                        Border::class,
+                        Effects::class,
+                        Outline::class,
+                        Spacing::class,
+                        Position::class,
+                        BoxShadow::class,
+                        TextShadow::class,
+                        Background::class,
+                        Typography::class,
                     ];
 
-                    return new StyleEngine($params['block'], $params['fallbackSelector'], $styleDefinitions);
+					$style_engine = new StyleEngine( $params['block'], $params['fallbackSelector'], $styleDefinitions );
+
+					$style_engine->setApp($app);
+					$style_engine->setBreakpoints(blockera_core_config('breakpoints'));
+
+                    return $style_engine;
                 }
             );
 
@@ -171,38 +177,37 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					Transpiler::class,
-					static function ( Application $app) {
+					static function ( Application $app) use ( $cache_instance) {
 
-						return new Transpiler($app);
+						return new Transpiler($app, $cache_instance);
 					}
 				);
 
 				$this->app->bind(
 					V2RenderContent::class,
-					static function ( Application $app): V2RenderContent {
+					static function ( Application $app) use ( $cache_instance): V2RenderContent {
 
-						return new V2RenderContent($app);
+						return new V2RenderContent($app, $app->make(Transpiler::class), $cache_instance);
 					}
 				);
 
-			} else {
-
-				$this->app->singleton(
-					Parser::class,
-					static function ( Application $app) {
-
-						return new Parser($app);
-					}
-				);
-
-				$this->app->bind(
-					Render::class,
-					static function ( Application $app): Render {
-
-						return new Render($app);
-					}
-				);
 			}
+			
+			$this->app->singleton(
+				Parser::class,
+				static function ( Application $app) {
+
+					return new Parser($app);
+				}
+			);
+
+			$this->app->bind(
+				Render::class,
+				static function ( Application $app): Render {
+
+					return new Render($app);
+				}
+			);
 
             $this->app->singleton(Sender::class);
 
@@ -222,6 +227,28 @@ class AppServiceProvider extends ServiceProvider {
 
         parent::boot();
 
+		$this->initCache();
+
+        $this->app->make(EntityRegistry::class);
+
+        $this->setupRenderBlocks();
+
+		Config::setConsumerConfig( blockera_core_config( 'app' ) );
+		Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
+		Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
+		Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
+		Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
+
+        add_action('after_setup_theme', [ $this, 'afterSetupTheme' ]);
+    }
+
+	/**
+	 * Initializing cache mechanism.
+	 * 
+	 * @return void
+	 */
+	private function initCache(): void{
+
 		$cache = $this->app->make(Version::class, [ 'product_id' => 'blockera' ]);
 
 		$validate_cache = $cache->validate(BLOCKERA_SB_VERSION);
@@ -234,35 +261,12 @@ class AppServiceProvider extends ServiceProvider {
 		if ($this->app instanceof Blockera) {
 			$this->app->setIsValidateCache($validate_cache);
 		}
-
-        if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
-
-            $this->app->make(V2SavePost::class);
-
-        } else {
-
-            $this->app->make(SavePost::class);
-        }
-
-		$this->app->make(Setup::class)->apply();
-
-        $this->app->make(EntityRegistry::class);
-
-        $this->renderBlocks();
-
-		Config::setConsumerConfig( blockera_core_config( 'app' ) );
-		Config::setOptionKeys( blockera_core_config( 'telemetry.options' ) );
-		Config::setServerURL( blockera_core_config( 'telemetry.server_url' ) );
-		Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
-		Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
-
-        add_action('after_setup_theme', [ $this, 'after_setup_theme' ]);
-    }
+	}
 
     /**
      * The after_setup_theme action hook
      */
-    public function after_setup_theme(): void {
+    public function afterSetupTheme(): void {
 
         add_action('init', [ $this, 'loadTextDomain' ]);
 
@@ -292,11 +296,81 @@ class AppServiceProvider extends ServiceProvider {
      * @throws BindingResolutionException Exception for not found bounded module.
      * @return void
      */
-    protected function renderBlocks(): void {
+    protected function setupRenderBlocks(): void {
 
-        $render = blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ? $this->app->make(V2RenderContent::class) : $this->app->make(Render::class);
+		$supports = blockera_get_available_block_supports();
 
-        $render->applyHooks();
+		if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
+
+			add_action(
+                'save_post',
+                function( int $post_id, \WP_Post $post) use ( $supports): void {
+					$this->app->make(V2SavePost::class)->save($post_id, $post, $supports);
+				},
+                9e8,
+                2
+            );
+
+			// phpcs:disable
+        	// add_filter(
+            // 'rest_pre_insert_wp_template',
+            // function( \stdClass $prepared_post) use ( $supports): \stdClass {
+			// return $this->app->make(V2SavePost::class)->insertWPTemplate($prepared_post, $supports);
+			// },
+            // 10
+            // );
+			// phpcs:enable
+
+			// Filtering get_posts query.
+			add_action(
+                'pre_get_posts',
+                function( \WP_Query $query) use ( $supports): void {
+					$this->app->make(V2RenderContent::class)->getPosts($query, $supports);
+				}
+            );
+
+			// Filtering render block content if it name is exact "core/block" and has ref attribute.
+			add_filter(
+                'render_block',
+                function( string $block_content, array $block) use ( $supports): string {
+					return $this->app->make(V2RenderContent::class)->renderBlock($block_content, $block, $supports);
+				},
+                10,
+                2
+            );
+
+        } else {
+
+			add_action(
+                'save_post',
+                function( int $post_id, \WP_Post $post) use ( $supports): void {
+					$this->app->make(SavePost::class)->save($post_id, $post, $supports);
+				},
+                9e8,
+                2
+            );
+
+			add_filter(
+                'render_block',
+                function( string $html, array $block) use ( $supports): string {
+					return $this->app->make( Render::class)->render( $html, $block, $supports );
+				},
+                10,
+                3
+            );
+        }
+
+		$setup = $this->app->make(Setup::class);
+		$setup->setAvailableBlocks(blockera_get_available_blocks());
+
+		add_filter(
+            'register_block_type_args',
+            function( array $args, string $block_type) use ( $setup): array {
+				return $setup->registerBlock($args, $block_type);
+			},
+            9e2,
+            2
+        );
     }
 
     /**

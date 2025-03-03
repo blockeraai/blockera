@@ -3,7 +3,7 @@
 namespace Blockera\Editor\Providers;
 
 use Blockera\Bootstrap\Application;
-use Blockera\WordPress\RenderBlock\HTML\Icon;
+use Blockera\WordPress\RenderBlock\V2\HTML\Icon;
 use Blockera\Editor\StyleDefinitions\{
 	Size,
 	Mouse,
@@ -43,23 +43,101 @@ class StyleProviders extends ServiceProvider {
 			}
 		);
 
-		$this->app->singleton( Size::class );
-		$this->app->singleton( Mouse::class );
-		$this->app->singleton( Layout::class );
-		$this->app->singleton( Border::class );
-		$this->app->singleton( Effects::class );
+		$this->app->singleton(
+            Size::class,
+            function ( Application $app, array $args ) {
+
+				return new Size( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            Mouse::class,
+            function ( Application $app, array $args ) {
+
+				return new Mouse( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            Layout::class,
+            function ( Application $app, array $args ) {
+
+				return new Layout( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            Border::class,
+            function ( Application $app, array $args ) {
+
+				return new Border( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            Effects::class,
+            function ( Application $app, array $args ) {
+
+				return new Effects( $args['supports'] );
+			} 
+        );
 
 		if ( blockera_get_experimental( [ 'editor.extensions.effectsExtension.divider' ] ) ) {
-			$this->app->singleton( Divider::class );
+			$this->app->singleton(
+                Divider::class,
+                function ( Application $app, array $args ) {
+
+					return new Divider( $args['supports'] );
+				} 
+            );
 		}
 
-		$this->app->singleton( Outline::class );
-		$this->app->singleton( Spacing::class );
-		$this->app->singleton( Position::class );
-		$this->app->singleton( BoxShadow::class );
-		$this->app->singleton( TextShadow::class );
-		$this->app->singleton( Background::class );
-		$this->app->singleton( Typography::class );
+		$this->app->singleton(
+            Outline::class,
+            function ( Application $app, array $args ) {
+
+				return new Outline( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            Spacing::class,
+            function ( Application $app, array $args ) {
+
+				return new Spacing( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            Position::class,
+            function ( Application $app, array $args ) {
+
+				return new Position( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            BoxShadow::class,
+            function ( Application $app, array $args ) {
+
+				return new BoxShadow( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            TextShadow::class,
+            function ( Application $app, array $args ) {
+
+				return new TextShadow( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            Background::class,
+            function ( Application $app, array $args ) {
+
+				return new Background( $args['supports'] );
+			} 
+        );
+		$this->app->singleton(
+            Typography::class,
+            function ( Application $app, array $args ) {
+
+				return new Typography( $args['supports'] );
+			} 
+        );
 	}
 
 }

@@ -39,7 +39,12 @@ class AdminAssetsProvider extends AssetsProvider {
 	 * @return void
 	 */
 	public function boot(): void {
-		
+
+		// Skip execution if saving in site editor.
+		if (blockera_is_skip_request()) {
+			return;
+		}
+
 		global $pagenow;
 
 		$assets = $this->getAssets();

@@ -2,6 +2,7 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
+use Blockera\Utils\Utils;
 use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
 
 abstract class BaseStyleDefinition {
@@ -110,18 +111,37 @@ abstract class BaseStyleDefinition {
 	protected string $current_feature_id;
 
 	/**
-	 * Store inline styles.
-	 *
-	 * @var array
-	 */
-	protected array $inline_styles = [];
-
-	/**
 	 * Store the current breakpoint.
 	 *
 	 * @var string $breakpoint the current breakpoint.
 	 */
 	protected string $breakpoint;
+
+	/**
+	 * Store the supports.
+	 *
+	 * @var array $supports the supports.
+	 */
+	protected array $support = [];
+
+	/**
+	 * The constructor.
+	 *
+	 * @param array $supports The supports.
+	 * 
+	 * @throws \Exception If the supports are not valid.
+	 *
+	 * @return void
+	 */
+	public function __construct( array $supports) {
+
+		if (empty($supports) || ! isset($supports[ Utils::kebabCase($this->getId()) ])) {
+
+			throw new \Exception( 'The supports provided for ' . $this->getId() . ' Style is not valid.' );
+		}
+
+		$this->support = $supports[ Utils::kebabCase($this->getId()) ];
+	}
 
 	/**
 	 * Set the current breakpoint.
@@ -133,28 +153,6 @@ abstract class BaseStyleDefinition {
 	public function setBreakpoint( string $breakpoint): void {
 
 		$this->breakpoint = $breakpoint;
-	}
-
-	/**
-	 * Set inline styles.
-	 *
-	 * @param array $inline_styles The inline styles.
-	 *
-	 * @return void
-	 */
-	public function setInlineStyles( array $inline_styles): void {
-
-		$this->inline_styles = $inline_styles;
-	}
-
-	/**
-	 * Get inline styles.
-	 *
-	 * @return array
-	 */
-	public function getInlineStyles(): array {
-
-		return $this->inline_styles;
 	}
 
 	/**
@@ -305,25 +303,11 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
-	 * Filter blockera settings.
-	 *
-	 * @param string $name the blockera attribute name.
-	 *
-	 * @return bool true on success, false on otherwise.
-	 */
-	protected function filterSettings( string $name ): bool {
-
-		return str_starts_with( $name, 'blockera' ) && ! in_array( $name, [ 'blockeraPropsId', 'blockeraCompatId' ], true );
-	}
-
-	/**
 	 * @return array
 	 */
 	public function getCssRules(): array {
 
-		$settings = array_filter( $this->settings, [ $this, 'filterSettings' ], ARRAY_FILTER_USE_KEY );
-
-		array_map( [ $this, 'generateCssRules' ], $settings, array_keys( $settings ) );
+		array_map( [ $this, 'generateCssRules' ], $this->settings, array_keys( $this->settings ) );
 
 		return array_filter( $this->css, 'blockera_get_filter_empty_array_item' );
 	}
@@ -381,7 +365,7 @@ abstract class BaseStyleDefinition {
 		array_map(
 			function ( array $setting ) use ( $name ): void {
 
-				if ( ! blockera_get_block_support( $this->getId(), $name ) ) {
+				if ( ! $this->getSupports(false)[ $name ] ) {
 
 					return;
 				}
@@ -466,40 +450,7 @@ abstract class BaseStyleDefinition {
 			return;
 		}
 
-		$is_normal_on_base_breakpoint = blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint);
-
-		if ($is_normal_on_base_breakpoint) {
-
-			$selector_inline_styles = blockera_find_selector_declarations($this->getSelector(), $this->inline_styles);
-
-			if (! empty($selector_inline_styles)) {
-
-				$prepared_inline_styles = [];
-
-				foreach ($selector_inline_styles as $selector => $inline_styles) {
-					if (is_int($selector) || ! is_array($inline_styles)) {
-						$prepared_inline_styles[] = $inline_styles;
-
-						continue;
-					}
-
-					$this->css[ $selector ] = array_merge($declaration, $inline_styles);
-				}
-
-				$this->css[ $this->getSelector() ] = array_merge($declaration, $prepared_inline_styles);
-
-				// Unset prepared inline styles to free memory.
-				unset($prepared_inline_styles);
-			} else {
-				$this->css[ $this->getSelector() ] = $declaration;
-			}		
-		} else {
-
-			$this->css[ $this->getSelector() ] = $declaration;
-		}
-
-		// Reset selector.
-		$this->setSelector('');
+		$this->css[ $this->getSelector() ] = $declaration;
 	}
 
 	/**
@@ -560,11 +511,23 @@ abstract class BaseStyleDefinition {
 	 *
 	 * @param string $support the blockera block support name.
 	 *
-	 * @return string the standard css property name
+	 * @return string the standard css property name.
 	 */
 	public function getSupportCssProperty( string $support ): ?string {
 
-		return blockera_get_block_support( $this->getId(), $support, 'css-property' );
+		return $this->getSupports(false)[ $support ]['css-property'] ?? null;
+	}
+
+	/**
+	 * Get blockera supports.
+	 * 
+	 * @param bool $array_keys The array keys flag.
+	 *
+	 * @return array the supports stack.
+	 */
+	public function getSupports( bool $array_keys = true): array {
+
+		return $array_keys ? array_keys($this->support['supports']) : $this->support['supports'];
 	}
 
 	/**
@@ -594,7 +557,7 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function getFallbackSupport( string $support ) {
 
-		return blockera_get_block_support( $this->getId(), $support, 'fallback' ) ?? 'root';
+		return $this->getSupports(false)[ $support ]['fallback'] ?? 'root';
 	}
 
 	/**
@@ -606,7 +569,7 @@ abstract class BaseStyleDefinition {
 
 		$block_type = \WP_Block_Type_Registry::get_instance()->get_registered( $this->block['blockName'] );
 
-		$default_style_engine_config = blockera_get_block_support( $this->getId(), $support, 'style-engine-config' ) ?? [];
+		$default_style_engine_config = $this->getSupports(false)[ $support ]['style-engine-config'] ?? [];
 
 		if (! $block_type) {
 
