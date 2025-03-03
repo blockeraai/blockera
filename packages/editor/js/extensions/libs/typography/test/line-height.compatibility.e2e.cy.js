@@ -45,12 +45,17 @@ describe('Line Height → WP Compatibility', () => {
 			// Test 2: Blockera value to WP data
 			//
 
-			cy.get('@container').within(() => {
-				cy.get('input[type="text"]').focus();
-				cy.get('input[type="text"]').type(5, {
-					force: true,
+			cy.get('.blockera-block-card-wrapper.is-sticky-active')
+				.invoke('removeClass', 'is-sticky-active')
+				.then(() => {
+					cy.get('@container').within(() => {
+						cy.get('input[type="text"]')
+							.scrollIntoView({ offset: { top: 250, left: 0 } })
+							.focus();
+						cy.get('input[type="text"]').clear();
+						cy.get('input[type="text"]').type('1.25{enter}');
+					});
 				});
-			});
 
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
