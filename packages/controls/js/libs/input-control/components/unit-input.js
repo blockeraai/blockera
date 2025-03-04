@@ -97,7 +97,10 @@ export function UnitInput({
 		}
 
 		// Check if the value contains potential unit characters or calculation operators
-		if (value.match(/[a-zA-Z%\+\-\*\/\.]/) && !value.match(/^-?\d*?\d*$/)) {
+		if (
+			value.match(/[a-zA-Z%\+\-\*\/\.\s]/) &&
+			!value.match(/^-?\d*?\d*$/)
+		) {
 			// Clear any existing timeout
 			if (unitUpdateTimeout.current) {
 				clearTimeout(unitUpdateTimeout.current);
@@ -532,8 +535,11 @@ export function UnitInput({
 		// Ensure typedValue is a string before using match
 		const stringValue = String(typedValue || '');
 
+		// Remove any spaces from the input
+		const noSpacesValue = stringValue.replace(/\s+/g, '');
+
 		// Check for incomplete calculation pattern (number followed by operator)
-		const incompleteMatch = stringValue.match(
+		const incompleteMatch = noSpacesValue.match(
 			/^(-?\d*\.?\d*)\s*[\+\-\/\*]?\s*$/
 		);
 		if (incompleteMatch && incompleteMatch[1]) {

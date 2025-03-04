@@ -834,6 +834,89 @@ describe('input control component testing', () => {
 			});
 		});
 
+		describe('Space in input', () => {
+			it('simple space type', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				// Single space
+				cy.get('input').focus();
+				cy.get('input').type(' ');
+				cy.get('input').should('have.value', ' ');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
+
+				// Multiple spaces
+				cy.get('input').type('    ');
+				cy.get('input').should('have.value', '    ');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
+			});
+
+			it('should handle spaces in input', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+				cy.get('input').type('2 0');
+				cy.get('input').should('have.value', '2 0');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '20');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('20px');
+				});
+			});
+
+			it('should handle spaces in calculation input', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+				cy.get('input').type('20 + 10');
+				cy.get('input').should('have.value', '20 + 10');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '30');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('30px');
+				});
+			});
+
+			it('should handle spaces in calculation input with enter key', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+				cy.get('input').type('20 + 10{enter}');
+				cy.get('input').should('have.value', '30');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('30px');
+				});
+			});
+		});
+
 		describe('Units', () => {
 			it('should change and handle units dropdown ', () => {
 				const name = nanoid();
