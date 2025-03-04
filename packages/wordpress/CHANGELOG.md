@@ -3,6 +3,9 @@
 ### New Features
 - Added a new feature to cleanup inline styles from the block elements on the front end.
 
+### Bug Fixes
+- Fixed a bug in the style engine optimization affecting the Render content of post and block.
+
 ## 1.0.1 (2024-12-21)
 
 ### Bug Fixes

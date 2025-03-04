@@ -108,3 +108,18 @@ export const updateDeviceIndicator = (
 ): TBreakpoint => {
 	return canvasEditorSettings.updateDeviceIndicator(device);
 };
+
+/**
+ * Get block app settings.
+ *
+ * @param {{blockAppSettings: Object}} state the block app settings.
+ *
+ * @return {Object} the block app settings data stored in redux.
+ */
+export const getBlockAppSettings = ({
+	blockAppSettings,
+}: {
+	blockAppSettings: Object,
+}): Object => {
+	return blockAppSettings;
+};

@@ -155,6 +155,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 										}
 
 										setCurrentBlock(name);
+										onToggle(true, 'switch-to-inner', name);
 									}
 								}
 							},
