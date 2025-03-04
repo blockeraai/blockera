@@ -103,7 +103,7 @@ class RenderContent {
 
 			return $this->cleanup($post, 'block_content');
 
-		} elseif (blockera_block_is_dynamic($block)) {
+		} elseif (blockera_block_is_dynamic($block) && ! str_contains($block_content, 'blockera-is-transpiled')) {
 
 			$render = $this->app->make(Render::class);
 			// Disable cache for dynamic blocks.

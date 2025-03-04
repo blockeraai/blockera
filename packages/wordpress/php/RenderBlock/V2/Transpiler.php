@@ -230,8 +230,9 @@ class Transpiler {
     public function cleanupProcess( string $content, int $id, array $args = []): void {
         $processor = new \WP_HTML_Tag_Processor($content);
 
-        // Inline styles stack.
-        $inline_styles = [];
+        // Inline styles stacks.
+        $inline_styles       = [];
+		$inline_declarations = [];
 
         // The counter is used to determine if the current tag is the first tag in the block.
         $counter = 0;
@@ -241,6 +242,7 @@ class Transpiler {
             $id_attribute = $processor->get_attribute('id');
             $style        = $processor->get_attribute('style');
             $class        = $processor->get_attribute('class');
+			$declarations = is_string($style) ? explode(';', $style) : [];
 
 			$processor->remove_attribute('style');
 
@@ -256,32 +258,26 @@ class Transpiler {
 
             ++$counter;
 
-            $declarations = is_string($style) ? explode(';', $style) : [];
-
-            foreach ($declarations as $declaration) {
-
-                if (1 < $counter) {
-
-                    if (! empty(trim($id_attribute ?? ''))) {
-
-                        $inline_styles[ $args['unique_class_name'] ][ $args['unique_class_name'] . ' #' . $id_attribute ][] = $declaration;
-
-                        unset($id_attribute);
-
-                        continue;
-                    } elseif (! empty(trim($class ?? '')) && ( false === strpos($class, 'wp-elements') || false === strpos($class, 'wp-block') )) {
-
-                        $inline_styles[ $args['unique_class_name'] ][ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ][] = $declaration;
-
-                        unset($class);
-
-                        continue;
-                    }
-                }
-
-                $inline_styles[ $args['unique_class_name'] ][] = $declaration;
-            }
+			if ($id_attribute && 1 < $counter) {
+				$inline_declarations[ $args['unique_class_name'] . ' #' . $id_attribute ] = $declarations;
+			} elseif ($class && 1 < $counter) {
+				$inline_declarations[ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ] = $declarations;
+			} else {
+				$inline_declarations[ $args['unique_class_name'] ] = $declarations;
+			}
         }
+
+		foreach ($inline_declarations as $selector => $declarations) {
+
+			foreach ($declarations as $declaration) {
+				if ($selector === $args['unique_class_name']) {
+					$inline_styles[ $args['unique_class_name'] ][] = $declaration;
+					continue;
+				}
+
+            	$inline_styles[ $args['unique_class_name'] ][ $selector ][] = $declaration;            
+        	}
+		}
 
         // Generate styles once.
         $this->style_engine = $this->app->make(
