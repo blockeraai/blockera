@@ -155,6 +155,36 @@ export const EditorAdvancedLabelControl = ({
 					style={{
 						cursor: 'pointer',
 					}}
+					resetToDefault={
+						isChanged &&
+						isChangedOnCurrentState &&
+						isFunction(resetToDefault)
+							? () => {
+									if (
+										(isNull(path) ||
+											isEmpty(path) ||
+											isUndefined(path)) &&
+										!isRepeater
+									) {
+										return resetToDefault();
+									}
+
+									resetToDefault({
+										path,
+										onChange,
+										attribute,
+										isRepeater,
+										attributes,
+										repeaterItem,
+										valueCleanup,
+										propId: singularId,
+										action: isNormalState()
+											? 'RESET_TO_DEFAULT'
+											: 'RESET_TO_NORMAL',
+									});
+							  }
+							: null
+					}
 				/>
 			)}
 
