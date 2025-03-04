@@ -125,7 +125,7 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 
 			next.sections[sectionId] = {
 				...sections[sectionId],
-				initialOpen: true,
+				initialOpen: isOpen,
 			};
 
 			// Updating cache ...
