@@ -66,7 +66,20 @@ export const canvasEditorSettings = (
 	return state;
 };
 
+export const blockAppSettings = (
+	state: Object = {},
+	action: Object
+): Object => {
+	switch (action.type) {
+		case 'SET_BLOCK_APP_SETTINGS':
+			return action.settings;
+	}
+
+	return state;
+};
+
 export default (combineReducers({
 	breakpoints,
+	blockAppSettings,
 	canvasEditorSettings,
 }): Object);
