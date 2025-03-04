@@ -5,6 +5,7 @@
 - Various bug fixes.
 - Fixed an issue where the style engine generated incorrect selectors on both server and client sides.
 - Block section settings are now hidden if there are no taggable features in the section.
+- Fixed an issue where the toggle action in the block section was not working correctly.
 
 ### Development Workflow
 - GitHub workflow to enable developers to have custom PR playground configurations.
