@@ -1,9 +1,12 @@
 ## Unreleased
 
+### New Features
+- Added a reset (X) icon to allow users to quickly revert feature values to improve UX [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/simplifying-the-process-of-reseting-features-value-tEpNZzvvd64SAX2)]
+
 ### Improvements
-- Update border radius control to improve the user experience (UX).
-- Update border control to improve the user experience (UX).
-- Update color control to improve the user experience (UX).
+- Update border radius control to improve UX.
+- Update border control to improve UX.
+- Update color control to improve UX.
 
 ### Bug Fixes
 - Fixed an issue where the select control style is not correct when the control is focused or opened.
