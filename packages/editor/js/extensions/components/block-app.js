@@ -67,20 +67,31 @@ export const BlockAppContextProvider = ({
 		[]
 	);
 
+	const currentBlock = useSelect((select) =>
+		select('blockera/extensions').getExtensionCurrentBlock()
+	);
+
 	useEffect(() => {
 		const cacheData = getItem(cacheKey);
-		const initialState = cacheData || {
+		const initialState = {
 			...defaultValue,
-			sections: calculatedSections,
+			sections: {
+				master: calculatedSections,
+				[currentBlock]: calculatedSections,
+			},
 			focusedSection: 'spacingConfig',
 		};
 
 		if (!cacheData) {
 			setItem(cacheKey, initialState);
+			setBlockAppSettings(initialState);
+
+			return;
 		}
 
-		setBlockAppSettings(initialState);
-	}, [calculatedSections, setBlockAppSettings]);
+		setItem(cacheKey, cacheData);
+		setBlockAppSettings(cacheData);
+	}, [calculatedSections, setBlockAppSettings, currentBlock]);
 
 	return (
 		<BlockAppContext.Provider
@@ -99,9 +110,12 @@ export const useBlockAppContext = (): BlockAppContextType =>
 
 export const useBlockSection = (sectionId: string): BlockSection => {
 	const { settings } = useBlockAppContext();
+	const currentBlock = useSelect((select) =>
+		select('blockera/extensions').getExtensionCurrentBlock()
+	);
 	const { blockSections, sections, focusedSection } = settings;
 	const { collapseAll, focusMode } = blockSections;
-	const section = sections[sectionId];
+	const section = (sections[currentBlock] || sections.master)[sectionId];
 	let { initialOpen = true } = section || {};
 	const { setBlockAppSettings } = useDispatch('blockera/editor');
 
@@ -112,35 +126,64 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 	}
 
 	const onToggle = useCallback(
-		(isOpen: boolean) => {
+		(
+			isOpen: boolean,
+			action: 'switch-to-parent' | 'switch-to-inner',
+			targetBlock?: string
+		) => {
+			const inSpecificAction = [
+				'switch-to-parent',
+				'switch-to-inner',
+			].includes(action);
+
 			const next = {
 				...settings,
-				focusedSection: sectionId,
-				sections: {
-					...settings.sections,
-					[sectionId]: {
-						...settings.sections[sectionId],
-						initialOpen: isOpen,
-					},
-				},
+				focusedSection:
+					'switch-to-inner' === action
+						? settings.focusedSection
+						: sectionId,
+				sections: inSpecificAction
+					? settings.sections
+					: {
+							...settings.sections,
+							[currentBlock]: {
+								[sectionId]: {
+									...(settings.sections[currentBlock] ||
+										settings.sections.master)[sectionId],
+									initialOpen: isOpen,
+								},
+							},
+					  },
 			};
 
 			if (
 				isOpen &&
 				blockSections.focusMode &&
 				focusedSection &&
-				focusedSection !== sectionId
+				focusedSection !== sectionId &&
+				!inSpecificAction
 			) {
-				next.sections[focusedSection] = {
-					...settings.sections[focusedSection],
+				next.sections[currentBlock][focusedSection] = {
+					...next.sections[currentBlock][focusedSection],
 					initialOpen: false,
 				};
+			}
+
+			if ('switch-to-inner' === action && next.sections[targetBlock]) {
+				for (const key in next.sections[targetBlock]) {
+					if (next.sections[targetBlock][key].initialOpen) {
+						next.focusedSection = key;
+					}
+				}
+
+				console.log(next);
 			}
 
 			updateItem(cacheKey, next);
 			setBlockAppSettings(next);
 		},
 		[
+			currentBlock,
 			sectionId,
 			settings,
 			blockSections.focusMode,
@@ -159,30 +202,32 @@ export const useBlockSections = (): BlockSections => {
 	const { settings } = useBlockAppContext();
 	const { blockSections, sections, focusedSection } = settings;
 	const { setBlockAppSettings } = useDispatch('blockera/editor');
+	const currentBlock = useSelect((select) =>
+		select('blockera/extensions').getExtensionCurrentBlock()
+	);
 
 	const updateBlockSections = useCallback(
 		(newBlockSections: Object) => {
 			const { expandAll, collapseAll, focusMode, defaultMode } =
 				newBlockSections;
 
-			const updatedSections = Object.entries(sections).reduce(
-				(acc: Object, [key, section]: [string, BlockSection]) => {
-					if (expandAll) {
-						acc[key] = { ...section, initialOpen: true };
-					} else if (collapseAll) {
-						acc[key] = { ...section, initialOpen: false };
-					} else if (focusMode) {
-						acc[key] = {
-							...section,
-							initialOpen: focusedSection === key,
-						};
-					} else if (defaultMode) {
-						acc[key] = section;
-					}
-					return acc;
-				},
-				{}
-			);
+			const updatedSections = Object.entries(
+				sections[currentBlock] || sections.master
+			).reduce((acc: Object, [key, section]: [string, BlockSection]) => {
+				if (expandAll) {
+					acc[key] = { ...section, initialOpen: true };
+				} else if (collapseAll) {
+					acc[key] = { ...section, initialOpen: false };
+				} else if (focusMode) {
+					acc[key] = {
+						...section,
+						initialOpen: focusedSection === key,
+					};
+				} else if (defaultMode) {
+					acc[key] = section;
+				}
+				return acc;
+			}, {});
 
 			const next = {
 				...settings,
@@ -190,15 +235,18 @@ export const useBlockSections = (): BlockSections => {
 					...defaultValue.blockSections,
 					focusMode,
 				},
-				sections: Object.keys(updatedSections).length
-					? updatedSections
-					: sections,
+				sections: {
+					...settings.sections,
+					[currentBlock]: Object.keys(updatedSections).length
+						? updatedSections
+						: sections,
+				},
 			};
 
 			updateItem(cacheKey, next);
 			setBlockAppSettings(next);
 		},
-		[settings, sections, focusedSection, setBlockAppSettings]
+		[settings, sections, focusedSection, setBlockAppSettings, currentBlock]
 	);
 
 	return {

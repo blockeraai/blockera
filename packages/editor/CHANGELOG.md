@@ -31,6 +31,7 @@
 
 ### Improvements
 - The overall design of the block settings has been improved to boost the UX (based on user feedback and user researches).
+- Enhanced Block Sections with improved state management for seamless transitions between parent and inner blocks, maintaining section states and focus mode settings during block switching.
 
 ### New Features:
 - Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.

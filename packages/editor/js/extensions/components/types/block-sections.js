@@ -11,5 +11,9 @@ export type BlockSections = {
 
 export type BlockSection = {
 	initialOpen: boolean,
-	onToggle: (isOpen: boolean) => void,
+	onToggle: (
+		isOpen: boolean,
+		action: 'switch-to-parent' | 'switch-to-inner',
+		targetBlock?: string
+	) => void,
 };

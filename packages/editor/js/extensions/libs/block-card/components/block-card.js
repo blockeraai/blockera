@@ -173,7 +173,7 @@ export function BlockCard({
 												'current-block',
 												'master'
 											);
-											onToggle(true);
+											onToggle(true, 'switch-to-parent');
 										}
 									}}
 									aria-label={__(
