@@ -301,7 +301,10 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		[currentAttributes]
 	);
 
-	const inlineStyles = useCleanupStyles({ clientId }, [selectedBlock]);
+	const inlineStyles = useCleanupStyles({ clientId }, [
+		selectedBlock,
+		attributes,
+	]);
 
 	const originalAttributes = useMemo(() => {
 		return omitWithPattern(

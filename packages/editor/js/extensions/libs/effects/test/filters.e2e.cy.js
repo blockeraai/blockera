@@ -5,6 +5,7 @@ import {
 	redirectToFrontPage,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
+import { experimental } from '@blockera/env';
 
 describe('Filters → Functionality', () => {
 	beforeEach(() => {
@@ -15,6 +16,10 @@ describe('Filters → Functionality', () => {
 
 		cy.getParentContainer('Filters').as('filters');
 	});
+
+	const enabledOptimizeStyleGeneration = experimental().get(
+		'earlyAccessLab.optimizeStyleGeneration'
+	);
 
 	it('Should update filter correctly, when add one drop-shadow', () => {
 		cy.get('@filters').within(() => {
@@ -91,7 +96,9 @@ describe('Filters → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'filter: drop-shadow(50px 30px 40px #cccccc) !important;'
+				!enabledOptimizeStyleGeneration
+					? 'filter: drop-shadow(50px 30px 40px #cccccc) !important;'
+					: 'filter: drop-shadow(50px 30px 40px #cccccc)'
 			);
 	});
 });

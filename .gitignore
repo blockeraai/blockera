@@ -82,3 +82,7 @@ inc
 cypress.env.json
 .pr-github-playground.example.json
 .pr-cypress.env.exanple.json
+visual-screenshots/diff
+visual-screenshots/comparison
+cypress-image-diff-html-report
+html-report

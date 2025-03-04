@@ -5,7 +5,7 @@ let env = {
 	wpPassword: 'password',
 	testURL: 'http://localhost:8888',
 	e2e: {
-		specPattern: ['packages/**/*.e2e.cy.js'],
+		specPattern: ['packages/**/*.e2e.cy.js', 'packages/**/*.visual.cy.js'],
 		excludeSpecPattern: ['packages/**/*.build.e2e.js'],
 	},
 };
@@ -29,6 +29,10 @@ try {
 
 const setupNodeEvents = (on, config) => {
 	require('./packages/dev-cypress/js/plugins/index.js')(on, config);
+	//Requires and imports the main plugin function from the cypress-image-diff-js NPM package
+	const getCompareSnapshotsPlugin = require('cypress-image-diff-js/plugin');
+	//Calls the plugin's getCompareSnapshotsPlugin function, passing Cypress' on and config objects, to intialize and register the plugin with Cypress
+	getCompareSnapshotsPlugin(on, config);
 
 	return config;
 };

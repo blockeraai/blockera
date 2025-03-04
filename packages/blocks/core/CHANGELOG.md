@@ -94,6 +94,7 @@
 - `Post Comments Form` block inner blocks not working in non-block themes.
 - The `Separator` inner block of the `Post Terms` not working properly.
 - The `Aspect Ratio` feature not working properly in the `Image` block.
+- The CSS selector of the `Images Caption` inner block of the `Gallery Block` not working properly.
 
 ## 1.0.0 (2024-12-08)
 

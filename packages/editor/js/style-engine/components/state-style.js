@@ -40,6 +40,12 @@ export const StateStyle = (
 			).includes(state)
 	);
 
+	// Move "normal" state to last position to ensure other states like "hover" or "active"
+	// can properly override the base styles when those states are activated.
+	if (states.length > 1) {
+		states.push(states.splice(0, 1)[0]);
+	}
+
 	const { getBreakpoints } = select('blockera/editor');
 	const breakpoints = getBreakpoints();
 
@@ -54,7 +60,8 @@ export const StateStyle = (
 				...props,
 				states,
 				currentBreakpoint: type,
-			})
+			}),
+			props.inlineStyles
 		);
 
 		const stylesheet = combinedDeclarations.map(

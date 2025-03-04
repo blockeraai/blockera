@@ -27,6 +27,13 @@ class SavePost {
      */
     protected Application $app;
 
+	/**
+	 * Store the supports.
+	 *
+	 * @var array $supports
+	 */
+	protected array $supports;
+
     /**
      * Constructor of SavePost class.
      *
@@ -36,8 +43,6 @@ class SavePost {
     public function __construct( Application $app, Render $render) { 
         $this->app    = $app;
         $this->render = $render;
-
-        add_action('save_post', [ $this, 'save' ], 9e8, 2);
     }
 
     /**
@@ -46,10 +51,10 @@ class SavePost {
      *
      * @param int      $postId The current post Identifier.
      * @param \WP_Post $post   The instance of WP_Post class.
-     *
+     * @param array    $supports The supports.
      * @return void
      */
-    public function save( int $postId, \WP_Post $post): void {
+    public function save( int $postId, \WP_Post $post, array $supports): void {
 
         $parsed_blocks = parse_blocks($post->post_content);
 
@@ -58,6 +63,8 @@ class SavePost {
 
             return;
         }
+
+		$this->supports = $supports;
 
         array_map([ $this, 'parser' ], $parsed_blocks);
     }
@@ -79,7 +86,7 @@ class SavePost {
             return;
         }
 
-        $this->render->render($block['innerHTML'], $block);
+        $this->render->render($block['innerHTML'], $block, $this->supports);
     }
 
 }

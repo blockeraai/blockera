@@ -1,4 +1,8 @@
 /**
+ * External dependencies
+ */
+import compareSnapshotCommand from 'cypress-image-diff-js/command';
+/**
  * Blockera dependencies
  */
 import { isString } from '@blockera/utils';
@@ -12,6 +16,9 @@ import {
 } from '../helpers';
 
 export const registerCommands = () => {
+	//This registers the cy.compareSnapshot() custom command provided by the plugin
+	compareSnapshotCommand();
+
 	// Custom uploadFile command
 	Cypress.Commands.add('uploadFile', (fileName, fileType, selector) => {
 		cy.get(selector).then((subject) => {
@@ -77,6 +84,13 @@ export const registerCommands = () => {
 			!Cypress.$(`[aria-label="${selector}"]`).length
 		) {
 			const parsedSelector = selector.split(' ');
+			const parsedLabel = selector.split(':');
+
+			if (parsedLabel?.length > 1) {
+				return cy.get(
+					`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"], [aria-label="${parsedLabel[1].trim()}"]`
+				);
+			}
 
 			return cy.get(
 				`[aria-label="${parsedSelector[0].trim()} parent block: ${parsedSelector[1].trim()}"]`
@@ -127,20 +141,18 @@ export const registerCommands = () => {
 					.getIframeBody()
 					.find(`[data-type="${blockName}"]`)
 					.eq(0);
-			} else {
-				cy.getByAriaLabel('Add default block').click();
-				blockName = 'core/paragraph';
-				return cy.get(`[data-type="${blockName}"]`).eq(0);
 			}
+			cy.getByAriaLabel('Add default block').click();
+			blockName = 'core/paragraph';
+			return cy.get(`[data-type="${blockName}"]`).eq(0);
 		}
 
 		if (Cypress.$('iframe[name="editor-canvas"]').length) {
 			return cy
 				.getIframeBody()
 				.find(`${blockTag}[data-type="${blockName}"]`);
-		} else {
-			return cy.get(`${blockTag}[data-type="${blockName}"]`);
 		}
+		return cy.get(`${blockTag}[data-type="${blockName}"]`);
 	});
 
 	Cypress.Commands.add('getSelectedBlock', () => {

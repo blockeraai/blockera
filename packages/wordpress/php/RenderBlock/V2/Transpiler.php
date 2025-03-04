@@ -31,7 +31,7 @@ class Transpiler {
 
     /**
      * Cache instance.
-     * 
+     *
      * @var Cache
      */
     protected Cache $cache;
@@ -47,17 +47,19 @@ class Transpiler {
      * The Parser class constructor.
      *
      * @param Application $app The application container object.
+     * @param Cache       $cache The cache instance.
      */
-    public function __construct( Application $app) {
+    public function __construct( Application $app, Cache $cache) {
         $this->app   = $app;
-        $this->cache = $app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+        $this->cache = $cache;
     }
 
     /**
      * Clean up inline styles from parsed blocks and convert them to CSS classes.
      *
-     * @param array $parsed_blocks Array of parsed blocks from WordPress content.
-     * @param int   $post_id The post id. default is 0 to indicate that the post id is not available.
+     * @param string $content The content of the post.
+     * @param int    $post_id The post id. default is 0 to indicate that the post id is not available.
+	 * @param array  $supports The supports.
      *
      * @return array{
      *   parsed_blocks: array,
@@ -65,30 +67,40 @@ class Transpiler {
      *   serialized_blocks: string
      * } The array with parsed blocks, generated CSS styles and serialized blocks.
      */
-    public function cleanupInlineStyles( array $parsed_blocks, int $post_id = 0): array {
+    public function cleanupInlineStyles( string $content, int $post_id = 0, array $supports = []): array {
+
+        $this->parsed_blocks = parse_blocks($content);
+		
+		$data = [ 
+			'parsed_blocks'        => [],
+			'serialized_blocks'    => '',
+			'generated_css_styles' => [],
+		];
+
         // Early return if no blocks.
-        if (empty($parsed_blocks)) {
-            return [
-                'parsed_blocks' => [],
-                'serialized_blocks' => '',
-                'generated_css_styles' => [],
-            ];
+        if (empty($this->parsed_blocks)) {
+            return $data;
         }
 
-        $this->parsed_blocks = $parsed_blocks;
-        $this->processBlocksInBatches();
+        $this->processBlocksInBatches($supports);
 
+		if (empty($this->styles)) {
+			return $data;
+		}
+
+        // FIXME: we should not filter out empty blocks before serializing, because this is not the valid way to serialize blocks and maybe missed some blocks.
         // Filter out empty blocks before serializing.
         $filtered_blocks = array_filter(
             $this->parsed_blocks,
-            function( $block) {
-				return ! empty($block['blockName']);
-			}
+            function ( $block) {
+                return ! empty($block['blockName']);
+            }
         );
 
         $serialized_blocks = serialize_blocks($filtered_blocks);
 
-		$data = [
+        $data = [
+            'hash' => md5($content),
             'parsed_blocks' => $this->parsed_blocks,
             'serialized_blocks' => $serialized_blocks,
             'generated_css_styles' => array_unique($this->styles),
@@ -97,32 +109,59 @@ class Transpiler {
         // Cache the results.
         $this->cache->setCache($post_id, 'post_content', $data);
 
+		$this->reset();
+
         return $data;
     }
 
     /**
      * Process blocks in batches to optimize memory usage.
+	 * 
+	 * @param array $supports The supports.
      *
      * @return void
      */
-    protected function processBlocksInBatches(): void { 
-        $batch_size   = 50; // Process 50 blocks at a time.
-        $total_blocks = count($this->parsed_blocks);
-        
-        for ($i = 0; $i < $total_blocks; $i += $batch_size) {
-            $batch = array_slice($this->parsed_blocks, $i, $batch_size, true);
-            
-            foreach ($batch as $key => $block) {
-                if (! blockera_is_supported_block($block) || ! $this->isValidBlock($block)) {
-                	continue;
-                }
+    protected function processBlocksInBatches( array $supports): void {
 
-                $this->processBlockContent($key, $block);
-            }
+		for ($i = 0; $i < count($this->parsed_blocks); $i++) {
 
-            // Clear memory after each batch.
-            gc_collect_cycles();
+			$this->processBlockContent($i, $this->parsed_blocks[ $i ], compact('supports'));
+		}
+    }
+
+    /**
+     * Process inner blocks content.
+     *
+     * @param array $blocks The blocks to process.
+     * @param int   $key   The block key.
+     * @param array $args  The arguments.
+     *
+     * @return void
+     */
+    protected function processInnerBlocks( array $blocks, int $key, array $args = []): void {
+        // Process inner blocks content.
+        if (empty($blocks)) {
+            return;
         }
+		
+		foreach ($blocks as $inner_key => $inner_block) {
+			// Process inner block content.
+			$this->processBlockContent(
+				$inner_key,
+				$inner_block,
+				[
+					'block_path' => array_merge(
+						$args['block_path'] ?? [],
+						[
+							[
+								'id' => $key,
+							],
+						]
+                    ),
+					'supports' => $args['supports'],
+				]
+			);
+		}
     }
 
     /**
@@ -141,57 +180,43 @@ class Transpiler {
      *
      * @param int   $key   Block index.
      * @param array $block Block data.
-	 * @param array $args Additional arguments.
+     * @param array $args Additional arguments.
      *
      * @return void
      */
     protected function processBlockContent( int $key, array $block, array $args = []): void {
         $attributes = $block['attrs'] ?? [];
-        
+
         // Pre-calculate common values.
         $blockera_hash_id    = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
-        foreach ($block['innerContent'] as $_key => $innerContent) {
-            if (empty($innerContent)) {
-                continue;
-            }
+		// Process only valid blocks and supported blocks and not dynamic blocks.
+		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block) ) {
 
-			$this->cleanupProcess(
-                $innerContent,
-                $_key,
-                [
-                    'block' => $block,
-                    'block_id' => $key,
-                    'block_path' => $args['block_path'] ?? [],
-                    'unique_class_name' => $unique_class_name,
-                    'blockera_class_name' => $blockera_class_name,
-                ]
-            );
-        }
+			foreach ($block['innerContent'] as $_key => $innerContent) {
+				if (empty($innerContent)) {
+					continue;
+				}
+
+				$this->cleanupProcess(
+					$innerContent,
+					$_key,
+					[
+						'block' => $block,
+						'block_id' => $key,
+						'supports' => $args['supports'],
+						'block_path' => $args['block_path'] ?? [],
+						'unique_class_name' => $unique_class_name,
+						'blockera_class_name' => $blockera_class_name,
+					]
+				);
+			}
+		}
 
         // Process inner blocks recursively.
-        if (! empty($block['innerBlocks'])) {
-            foreach ($block['innerBlocks'] as $inner_key => $inner_block) {
-                if (blockera_is_supported_block($inner_block) && $this->isValidBlock($inner_block)) {
-                    $this->processBlockContent(
-                        $inner_key,
-                        $inner_block,
-                        [
-							'block_path' => array_merge(
-								$args['block_path'] ?? [],
-								[
-									[
-										'id' => $key,
-									],
-								]
-                            ),
-						]
-                    );
-                }
-            }
-        }
+        $this->processInnerBlocks($block['innerBlocks'], $key, $args);
     }
 
     /**
@@ -204,79 +229,133 @@ class Transpiler {
      */
     public function cleanupProcess( string $content, int $id, array $args = []): void {
         $processor = new \WP_HTML_Tag_Processor($content);
-        
-		// Inline styles stack.
-		$inline_styles = [];
 
-		// The counter is used to determine if the current tag is the first tag in the block.
-		$counter = 0;
+        // Inline styles stack.
+        $inline_styles = [];
+
+        // The counter is used to determine if the current tag is the first tag in the block.
+        $counter = 0;
 
         // Process in a single pass.
         while ($processor->next_tag()) {
-			$id_attribute = $processor->get_attribute('id');
+            $id_attribute = $processor->get_attribute('id');
             $style        = $processor->get_attribute('style');
-			$class        = $processor->get_attribute('class');
-            $processor->remove_attribute('style');
+            $class        = $processor->get_attribute('class');
 
-			if (! empty(trim($class ?? '')) && ( false !== strpos($class, 'wp-elements') || false !== strpos($class, 'wp-block') ) || 0 === $counter) {
-				$this->updateClassname($processor, $args['blockera_class_name']);
+			$processor->remove_attribute('style');
+
+			// Skip if the class contains 'blockera-is-transpiled', because it shows that the block is already transpiled.
+			if ($class && str_contains($class, 'blockera-is-transpiled')) {
+
+				return;
 			}
 
-			++$counter;
-			
-			$declarations = is_string($style) ? explode(';', $style) : [];
+            if (! empty(trim($class ?? '')) && ( false !== strpos($class, 'wp-elements') || false !== strpos($class, 'wp-block') ) || 0 === $counter) {
+                $this->updateClassname($processor, $args['blockera_class_name']);
+            }
 
-			foreach ($declarations as $declaration) {
+            ++$counter;
 
-				if (0 < $counter) {
-					
-					if (! empty(trim($id_attribute ?? ''))) {
-						
-						$inline_styles[ $args['unique_class_name'] ][ $args['unique_class_name'] . ' #' . $id_attribute ][] = $declaration;
+            $declarations = is_string($style) ? explode(';', $style) : [];
 
-						unset($id_attribute);
-						
-						continue;
-					} elseif (! empty(trim($class ?? '')) && ( false === strpos($class, 'wp-elements') || false === strpos($class, 'wp-block') )) {
-						
-						$inline_styles[ $args['unique_class_name'] ][ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ][] = $declaration;
+            foreach ($declarations as $declaration) {
 
-						unset($class);
+                if (1 < $counter) {
 
-						continue;
-					}
-				}
+                    if (! empty(trim($id_attribute ?? ''))) {
 
-				$inline_styles[ $args['unique_class_name'] ][] = $declaration;
-			}
+                        $inline_styles[ $args['unique_class_name'] ][ $args['unique_class_name'] . ' #' . $id_attribute ][] = $declaration;
+
+                        unset($id_attribute);
+
+                        continue;
+                    } elseif (! empty(trim($class ?? '')) && ( false === strpos($class, 'wp-elements') || false === strpos($class, 'wp-block') )) {
+
+                        $inline_styles[ $args['unique_class_name'] ][ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ][] = $declaration;
+
+                        unset($class);
+
+                        continue;
+                    }
+                }
+
+                $inline_styles[ $args['unique_class_name'] ][] = $declaration;
+            }
         }
 
-		// Generate styles once.
-		$this->style_engine = $this->app->make(
-			StyleEngine::class,
-			[
-				'block' => $args['block'],
-				'fallbackSelector' => $args['unique_class_name'],
-			]
-		);
-		$this->style_engine->setInlineStyles($inline_styles);
-		$computed_css_rules = $this->style_engine->getStylesheet();
+        // Generate styles once.
+        $this->style_engine = $this->app->make(
+            StyleEngine::class,
+            [
+                'block' => $args['block'],
+                'fallbackSelector' => $args['unique_class_name'],
+            ]
+        );
+		$this->style_engine->setSupports($args['supports']);
+        $this->style_engine->setInlineStyles($inline_styles);
+        $computed_css_rules = $this->style_engine->getStylesheet();
 
-		if (! in_array($computed_css_rules, $this->styles, true)) {
+		$filtered_styles = array_filter(
+            $this->styles,
+            function( string $style) use ( $computed_css_rules): bool {
+				return str_contains($style, $computed_css_rules);
+			}
+        );
+
+        if (! empty($computed_css_rules) && empty($filtered_styles)) {
 			$this->styles[] = $computed_css_rules;
+
+        } elseif (empty($computed_css_rules)) {
+
+			$this->force_add_inline_styles($inline_styles);
 		}
 
         // Update block content.
         $this->updateBlockContent($processor, $id, $args);
     }
 
+	/**
+	 * Force add inline styles.
+	 *
+	 * @param array $inline_styles The inline styles.
+	 *
+	 * @return void
+	 */
+	protected function force_add_inline_styles( array $inline_styles): void {
+		
+		foreach ($inline_styles as $root_selector => $styles) {
+			$inners = array_filter(
+				$styles,
+				function ( $style) {
+					return is_array($style);
+				}
+			);
+
+			foreach ($inners as $selector => $declarations) {
+				$inner_style = $selector . ' { ' . implode(';' . PHP_EOL, $declarations) . ' }';
+
+				if (! in_array($inner_style, $this->styles, true)) {
+					$this->styles[] = $inner_style;
+				}
+
+				unset($styles[ $selector ]);
+			}
+
+			$root_style = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
+
+			if (! in_array($root_style, $this->styles, true)) {
+				$this->styles[] = $root_style;
+			}
+		}
+	}
+
     /**
      * Update block content after processing.
      *
      * @param \WP_HTML_Tag_Processor $processor HTML processor instance.
-	 * @param int                    $id      Content index.
+     * @param int                    $id      Content index.
      * @param array                  $args    Additional arguments.
-	 * 
+     *
      * @return void
      */
     protected function updateBlockContent( \WP_HTML_Tag_Processor $processor, int $id, array $args): void {
@@ -321,13 +400,11 @@ class Transpiler {
 
                 $final_classname = $classname . ' ' . $previous_class;
             }
-
-            $processor->set_attribute('class', $final_classname);
-
-        } else {
-
-            $processor->set_attribute('class', $classname);
         }
+		
+		$final_classname .= ' blockera-is-transpiled';
+
+		$processor->set_attribute('class', $final_classname);
     }
 
     /**
@@ -335,15 +412,10 @@ class Transpiler {
      *
      * @return void
      */
-    public function __destruct() {
+    public function reset() {
         // Clear arrays.
         $this->styles        = [];
         $this->parsed_blocks = [];
-
-        // Clear object references.
-        unset($this->app);
-        unset($this->cache);
-        unset($this->style_engine);
 
         // Force garbage collection.
         gc_collect_cycles();
