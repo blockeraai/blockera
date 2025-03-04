@@ -45,27 +45,20 @@ describe('Line Height → WP Compatibility', () => {
 			// Test 2: Blockera value to WP data
 			//
 
-			cy.get('.blockera-block-card-wrapper.is-sticky-active')
-				.invoke('removeClass', 'is-sticky-active')
-				.then(() => {
-					cy.get('@container').within(() => {
-						cy.get('input[type="text"]')
-							.scrollIntoView({ offset: { top: 250, left: 0 } })
-							.focus();
-						cy.get('input[type="text"]').clear();
-						cy.get('input[type="text"]').type('1.25{enter}');
-					});
+			cy.get('@container').within(() => {
+				cy.get('input[type="text"]').clear({ force: true });
+				cy.get('input[type="text"]').type('2', {
+					force: true,
 				});
-
-			cy.wait(500);
+			});
 
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
-				expect('1.25').to.be.equal(
+				expect('2').to.be.equal(
 					getSelectedBlock(data, 'blockeraLineHeight')
 				);
 
-				expect('1.25').to.be.equal(
+				expect('2').to.be.equal(
 					getSelectedBlock(data, 'style')?.typography?.lineHeight
 				);
 			});
