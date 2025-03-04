@@ -95,7 +95,7 @@ class Typography extends BaseStyleDefinition {
 				break;
 
 			case 'font-family':
-				$declaration[ $cssProperty ] = 'var(--wp--preset--font-family--' . $propertyValue . ')';
+				$declaration[ $cssProperty ] = 'var(--wp--preset--font-family--' . $propertyValue . ') !important';
 				break;
 
 			case 'font-weight':
