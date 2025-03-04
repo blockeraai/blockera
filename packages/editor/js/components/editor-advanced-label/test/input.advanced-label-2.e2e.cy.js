@@ -422,6 +422,53 @@ describe('Input Control label testing (Width)', () => {
 	});
 
 	describe('Reset action testing...', () => {
+		it('Reset by click on the "x" icon on the label', () => {
+			// Set value in normal/desktop
+			cy.setInputFieldValue('Width', 'Size', 50);
+
+			// Set value in hover/desktop
+			addBlockState('hover');
+			cy.setInputFieldValue('Width', 'Size', 40);
+
+			setBlockState('Hover');
+
+			// reset hover value
+			cy.getByAriaLabel('Width').realHover();
+
+			cy.getParentContainer('Width').within(() => {
+				cy.get('.blockera-control-reset-icon').click({ force: true });
+			});
+
+			// Assert label
+			cy.checkLabelClassName(
+				'Size',
+				'Width',
+				'changed-in-secondary-state',
+				'not-have'
+			);
+
+			// Assert control
+			cy.getByAriaLabel('Input Width').should('have.value', '50');
+
+			// Assert state graph
+			cy.checkStateGraph('Size', 'Width', {
+				desktop: ['Normal'],
+			});
+
+			setBlockState('Normal');
+
+			cy.wait(100);
+
+			// reset normal value
+			cy.getByAriaLabel('Width').click({ shiftKey: true });
+
+			// Assert control
+			cy.getByAriaLabel('Input Width').should('have.value', '');
+
+			// Assert state graph
+			cy.checkStateGraph('Size', 'Width', {});
+		});
+
 		it('Reset by hitting shift + click on label', () => {
 			// Set value in normal/desktop
 			cy.setInputFieldValue('Width', 'Size', 50);
