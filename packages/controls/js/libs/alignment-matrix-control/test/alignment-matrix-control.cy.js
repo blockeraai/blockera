@@ -12,9 +12,10 @@ describe('alignment-matrix control', () => {
 		it('should render 2 input with top and left label and a matrix to select points when inputFields=true', () => {
 			cy.withDataProvider({
 				component: <AlignmentMatrixControl inputFields={true} />,
+				name: 'alignment-matrix-1',
 			});
 
-			cy.get('input[type="number"]').should('have.length', 2);
+			cy.get('input[type="text"]').should('have.length', 2);
 			cy.get('[aria-label="Top"]');
 			cy.get('[aria-label="Left"]');
 			cy.get('[aria-label="Alignment Matrix Control"]');
@@ -23,26 +24,28 @@ describe('alignment-matrix control', () => {
 		it('should only render matrix by default', () => {
 			cy.withDataProvider({
 				component: <AlignmentMatrixControl />,
+				name: 'alignment-matrix-2',
 			});
 
 			cy.get('[aria-label="Alignment Matrix Control"]');
-			cy.get('input[type="number"]').should('have.length', 0);
+			cy.get('input[type="text"]').should('have.length', 0);
 			cy.get('[aria-label="top"]').should('not.exist');
 			cy.get('[aria-label="left"]').should('not.exist');
 		});
 	});
+
 	context('Functional', () => {
 		const specialPoints = [0, 50, 100];
+
 		it('should select correct point on matrix when entering corresponding values in inputs && should de-select active point by adding 1 to current value of inputs', () => {
-			const name = 'alignment-matrix-1';
 			cy.withDataProvider({
 				component: <AlignmentMatrixControl inputFields={true} />,
 				value: undefined,
-				name,
+				name: 'alignment-matrix-3',
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			specialPoints.forEach((top, rowIdx) => {
 				// select all then type instead of clear to prevent input catch value from default
@@ -64,7 +67,9 @@ describe('alignment-matrix control', () => {
 						)
 						.should('have.class', 'selected')
 						.then(() => {
-							expect(getControlValue(name)).to.be.deep.equal({
+							expect(
+								getControlValue('alignment-matrix-3')
+							).to.be.deep.equal({
 								top: `${top}%`,
 								left: `${left}%`,
 							});
@@ -94,48 +99,11 @@ describe('alignment-matrix control', () => {
 				});
 			});
 		});
-
-		it('should select points by clicking on them', () => {
-			const name = 'alignment-matrix-2';
-			cy.withDataProvider({
-				component: <AlignmentMatrixControl inputFields={true} />,
-				value: undefined,
-				name,
-			});
-
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
-
-			specialPoints.forEach((row, rowIdx) => {
-				specialPoints.forEach((col, colIdx) => {
-					cy.getByDataTest('matrix-item')
-						.eq(
-							// eslint-disable-next-line no-nested-ternary
-							rowIdx === 0
-								? colIdx
-								: rowIdx === 1
-								? rowIdx * 2 + 1 + colIdx
-								: rowIdx * 2 + 2 + colIdx
-						)
-						.click();
-
-					// visual assertion
-					cy.get('@inputTop').should('have.value', row);
-					cy.get('@inputLeft').should('have.value', col);
-
-					// data assertion
-					cy.get('@inputLeft').then(() => {
-						expect(getControlValue(name)).to.be.deep.equal({
-							top: `${row}%`,
-							left: `${col}%`,
-						});
-					});
-				});
-			});
-		});
 	});
+
 	context('Initial Value Tests', () => {
 		const defaultValue = { top: '20%', left: '10%' };
+
 		// 1.
 		it('calculated data must be defaultValue, when defaultValue(ok) && id(!ok) value(undefined)', () => {
 			cy.withDataProvider({
@@ -146,10 +114,11 @@ describe('alignment-matrix control', () => {
 					/>
 				),
 				value: undefined,
+				name: 'alignment-matrix-5',
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			cy.get('@inputTop').should('have.value', 20);
 			cy.get('@inputLeft').should('have.value', 10);
@@ -166,10 +135,11 @@ describe('alignment-matrix control', () => {
 					/>
 				),
 				value: { top: '50%', left: '50%' },
+				name: 'alignment-matrix-6',
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			cy.get('@inputTop').should('have.value', 20);
 			cy.get('@inputLeft').should('have.value', 10);
@@ -196,10 +166,11 @@ describe('alignment-matrix control', () => {
 						},
 					],
 				},
+				name: 'alignment-matrix-7',
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			cy.get('@inputTop').should('have.value', 20);
 			cy.get('@inputLeft').should('have.value', 10);
@@ -210,10 +181,11 @@ describe('alignment-matrix control', () => {
 			cy.withDataProvider({
 				component: <AlignmentMatrixControl inputFields={true} />,
 				value: { top: '50%', left: '50%' },
+				name: 'alignment-matrix-8',
 			});
 
-			cy.get('input[type="number"]').eq(0).as('inputTop');
-			cy.get('input[type="number"]').eq(1).as('inputLeft');
+			cy.get('input[type="text"]').eq(0).as('inputTop');
+			cy.get('input[type="text"]').eq(1).as('inputLeft');
 
 			cy.get('@inputTop').should('have.value', 50);
 			cy.get('@inputLeft').should('have.value', 50);

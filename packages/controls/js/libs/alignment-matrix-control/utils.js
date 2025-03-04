@@ -93,9 +93,15 @@ export function convertAlignmentMatrixCoordinates(
 
 		coordinates.top = convertLocationToCoordinate(split[0]);
 		coordinates.left = convertLocationToCoordinate(split[1]);
+
 		coordinates.compact = `${coordinates.top.text} ${coordinates.left.text}`;
+
 		coordinates.calculated = true;
-	} else if (isObject(value) && value?.left && value?.top) {
+	} else if (
+		isObject(value) &&
+		value?.left !== undefined &&
+		value?.top !== undefined
+	) {
 		switch (value.top) {
 			case '0':
 			case '0%':

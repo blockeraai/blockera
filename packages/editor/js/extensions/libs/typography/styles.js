@@ -99,7 +99,7 @@ export function TypographyStyles({
 							{
 								type: 'static',
 								properties: {
-									'font-family': `var(--wp--preset--font-family--${blockeraFontFamily})`,
+									'font-family': `var(--wp--preset--font-family--${blockeraFontFamily}) !important`,
 								},
 							},
 						],
