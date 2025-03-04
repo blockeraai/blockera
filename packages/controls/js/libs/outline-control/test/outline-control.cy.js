@@ -240,8 +240,8 @@ describe('outline control component testing', () => {
 			cy.getByDataCy('group-control-header').click();
 
 			cy.getByDataTest('border-control-component').within(() => {
-				cy.get('input[type="number"]').clear();
-				cy.get('input[type="number"]').type(10);
+				cy.get('input[type="text"]').clear();
+				cy.get('input[type="text"]').type(10);
 			});
 
 			cy.getByDataTest('border-control-color').click();
@@ -260,7 +260,7 @@ describe('outline control component testing', () => {
 
 			//Check values
 			cy.getByDataTest('border-control-component').within(() => {
-				cy.get('input[type="number"]').should('have.value', '10');
+				cy.get('input[type="text"]').should('have.value', '10');
 			});
 
 			cy.getByDataTest('border-control-color')

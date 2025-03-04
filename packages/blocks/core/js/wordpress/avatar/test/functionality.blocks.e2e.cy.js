@@ -171,8 +171,8 @@ describe('Avatar Block', () => {
 		// Border Radius
 		//
 		cy.getParentContainer('Radius').within(() => {
-			cy.get('input[type="number"]').clear({ force: true });
-			cy.get('input[type="number"]').type(25, { force: true });
+			cy.get('input[type="text"]').clear({ force: true });
+			cy.get('input[type="text"]').type(25, { force: true });
 		});
 		cy.getBlock('core/avatar')
 			.first()

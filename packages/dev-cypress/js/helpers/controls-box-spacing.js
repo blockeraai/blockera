@@ -10,9 +10,9 @@ export function setBoxSpacingSide(side, value) {
 	cy.get('[data-wp-component="Popover"]')
 		.last()
 		.within(() => {
-			cy.get('input[type=number]').clear({ force: true });
-			cy.get('input[type=number]').clear({ force: true });
-			cy.get('input[type=number]').type(value, { delay: 0, force: true });
+			cy.get('input[type=text]').clear({ force: true });
+			cy.get('input[type=text]').clear({ force: true });
+			cy.get('input[type=text]').type(value, { delay: 0, force: true });
 		});
 }
 
@@ -27,8 +27,8 @@ export function clearBoxSpacingSide(side) {
 	cy.get('[data-wp-component="Popover"]')
 		.last()
 		.within(() => {
-			cy.get('input[type=number]').clear({ force: true });
-			cy.get('input[type=number]').clear({ force: true });
+			cy.get('input[type=text]').clear({ force: true });
+			cy.get('input[type=text]').clear({ force: true });
 		});
 }
 

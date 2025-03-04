@@ -16,8 +16,8 @@ describe('Font Size → Functionality', () => {
 
 	it('Simple value font size', () => {
 		cy.getParentContainer('Size').within(() => {
-			cy.get('input[type="number"]').clear();
-			cy.get('input[type="number"]').type(10, {
+			cy.get('input[type="text"]').clear();
+			cy.get('input[type="text"]').type(10, {
 				force: true,
 			});
 		});

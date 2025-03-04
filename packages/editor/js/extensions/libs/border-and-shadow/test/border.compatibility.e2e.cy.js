@@ -241,23 +241,23 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				cy.get('@container').within(() => {
-					cy.get('input[type="number"]').eq(0).clear({ force: true });
-					cy.get('input[type="number"]').eq(0).type(10, {
+					cy.get('input[type="text"]').eq(0).clear({ force: true });
+					cy.get('input[type="text"]').eq(0).type(10, {
 						force: true,
 					});
 
-					cy.get('input[type="number"]').eq(1).clear({ force: true });
-					cy.get('input[type="number"]').eq(1).type(20, {
+					cy.get('input[type="text"]').eq(1).clear({ force: true });
+					cy.get('input[type="text"]').eq(1).type(20, {
 						force: true,
 					});
 
-					cy.get('input[type="number"]').eq(2).clear({ force: true });
-					cy.get('input[type="number"]').eq(2).type(30, {
+					cy.get('input[type="text"]').eq(2).clear({ force: true });
+					cy.get('input[type="text"]').eq(2).type(30, {
 						force: true,
 					});
 
-					cy.get('input[type="number"]').eq(3).clear({ force: true });
-					cy.get('input[type="number"]').eq(3).type(40, {
+					cy.get('input[type="text"]').eq(3).clear({ force: true });
+					cy.get('input[type="text"]').eq(3).type(40, {
 						force: true,
 					});
 				});
@@ -328,13 +328,13 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				cy.get('@container').within(() => {
-					cy.get('input[type="number"]').eq(0).clear({ force: true });
+					cy.get('input[type="text"]').eq(0).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(1).clear({ force: true });
+					cy.get('input[type="text"]').eq(1).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(2).clear({ force: true });
+					cy.get('input[type="text"]').eq(2).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(3).clear({ force: true });
+					cy.get('input[type="text"]').eq(3).clear({ force: true });
 				});
 
 				[0, 1, 2, 3].forEach((i) => {
@@ -470,13 +470,13 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				cy.get('@container').within(() => {
-					cy.get('input[type="number"]').eq(0).clear({ force: true });
+					cy.get('input[type="text"]').eq(0).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(1).clear({ force: true });
+					cy.get('input[type="text"]').eq(1).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(2).clear({ force: true });
+					cy.get('input[type="text"]').eq(2).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(3).clear({ force: true });
+					cy.get('input[type="text"]').eq(3).clear({ force: true });
 				});
 
 				[0, 2].forEach((i) => {
@@ -841,23 +841,23 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				cy.get('@container').within(() => {
-					cy.get('input[type="number"]').eq(0).clear({ force: true });
-					cy.get('input[type="number"]').eq(0).type(10, {
+					cy.get('input[type="text"]').eq(0).clear({ force: true });
+					cy.get('input[type="text"]').eq(0).type(10, {
 						force: true,
 					});
 
-					cy.get('input[type="number"]').eq(1).clear({ force: true });
-					cy.get('input[type="number"]').eq(1).type(20, {
+					cy.get('input[type="text"]').eq(1).clear({ force: true });
+					cy.get('input[type="text"]').eq(1).type(20, {
 						force: true,
 					});
 
-					cy.get('input[type="number"]').eq(2).clear({ force: true });
-					cy.get('input[type="number"]').eq(2).type(30, {
+					cy.get('input[type="text"]').eq(2).clear({ force: true });
+					cy.get('input[type="text"]').eq(2).type(30, {
 						force: true,
 					});
 
-					cy.get('input[type="number"]').eq(3).clear({ force: true });
-					cy.get('input[type="number"]').eq(3).type(40, {
+					cy.get('input[type="text"]').eq(3).clear({ force: true });
+					cy.get('input[type="text"]').eq(3).type(40, {
 						force: true,
 					});
 				});
@@ -988,13 +988,13 @@ describe('Border → WP Compatibility', () => {
 				//
 
 				cy.get('@container').within(() => {
-					cy.get('input[type="number"]').eq(0).clear({ force: true });
+					cy.get('input[type="text"]').eq(0).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(1).clear({ force: true });
+					cy.get('input[type="text"]').eq(1).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(2).clear({ force: true });
+					cy.get('input[type="text"]').eq(2).clear({ force: true });
 
-					cy.get('input[type="number"]').eq(3).clear({ force: true });
+					cy.get('input[type="text"]').eq(3).clear({ force: true });
 				});
 
 				[0, 1, 2, 3].forEach((i) => {
