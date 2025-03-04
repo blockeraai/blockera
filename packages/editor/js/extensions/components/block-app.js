@@ -169,14 +169,16 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 				};
 			}
 
-			if ('switch-to-inner' === action && next.sections[targetBlock]) {
+			if (
+				'switch-to-inner' === action &&
+				targetBlock &&
+				next.sections[targetBlock]
+			) {
 				for (const key in next.sections[targetBlock]) {
 					if (next.sections[targetBlock][key].initialOpen) {
 						next.focusedSection = key;
 					}
 				}
-
-				console.log(next);
 			}
 
 			updateItem(cacheKey, next);
