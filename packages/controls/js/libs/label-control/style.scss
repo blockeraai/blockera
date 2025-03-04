@@ -14,12 +14,13 @@
 	position: relative;
 	user-select: none;
 
-	.blockera-control-help-icon {
+	.blockera-control-help-icon,
+	.blockera-control-reset-icon {
 		fill: var(--blockera-controls-primary-color);
 		position: absolute;
 		opacity: 0;
 		visibility: hidden;
-		right: -21px;
+		right: -19px;
 		top: 50%;
 		transition: all 100ms linear;
 		transform: translateY(-50%) scale(0.5);
@@ -29,9 +30,20 @@
 		}
 	}
 
-	&.show-help {
+	&.show-help,
+	&.show-reset {
 
-		.blockera-control-help-icon {
+		.blockera-control-help-icon,
+		.blockera-control-reset-icon {
+			transform: translateY(-50%) scale(1);
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	&:hover:not(.show-reset) {
+
+		.blockera-control-reset-icon {
 			transform: translateY(-50%) scale(1);
 			opacity: 1;
 			visibility: visible;
@@ -44,6 +56,13 @@
 			animation: blockera-label-control-animation-bounce 0.1s 1, blockera-label-control-animation 0.8s infinite;
 			animation-delay: 400ms, 700ms;
 			animation-fill-mode: forwards, forwards;
+		}
+	}
+
+	&:hover {
+
+		.blockera-control-reset-icon:hover {
+			transform: translateY(-50%) scale(1.25);
 		}
 	}
 
@@ -88,6 +107,7 @@
 		visibility: visible;
 	}
 }
+
 
 .blockera-control-label.changed-in-other-state,
 .blockera-control-label.changed-in-normal-state,

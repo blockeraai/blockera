@@ -263,9 +263,12 @@ export const registerCommands = () => {
 					.parent()
 					.next()
 					.within(() => {
-						if (force) cy.get('input').type(`{selectall}${value}`);
+						if (force)
+							cy.get('input').type(`{selectall}${value}`, {
+								force: true,
+							});
 						else {
-							cy.get('input').type(value);
+							cy.get('input').type(`{selectall}${value}`);
 						}
 					});
 			});

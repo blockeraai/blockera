@@ -155,6 +155,36 @@ export const EditorAdvancedLabelControl = ({
 					style={{
 						cursor: 'pointer',
 					}}
+					resetToDefault={
+						isChanged &&
+						isChangedOnCurrentState &&
+						isFunction(resetToDefault)
+							? () => {
+									if (
+										(isNull(path) ||
+											isEmpty(path) ||
+											isUndefined(path)) &&
+										!isRepeater
+									) {
+										return resetToDefault();
+									}
+
+									resetToDefault({
+										path,
+										onChange,
+										attribute,
+										isRepeater,
+										attributes,
+										repeaterItem,
+										valueCleanup,
+										propId: singularId,
+										action: isNormalState()
+											? 'RESET_TO_DEFAULT'
+											: 'RESET_TO_NORMAL',
+									});
+							  }
+							: null
+					}
 				/>
 			)}
 
@@ -310,63 +340,73 @@ export const EditorAdvancedLabelControl = ({
 											/>
 										)}
 
-									{!isNormalState() && (
-										<Button
-											variant={'primary'}
-											size="input"
-											text={
-												<>
-													{__('Reset', 'blockera')}
-													<Icon
-														icon="undo"
-														iconSize="20"
-													/>
-												</>
-											}
-											label={__(
-												'Reset To Normal Setting',
-												'blockera'
-											)}
-											onClick={() => {
-												if (
-													!resetToDefault ||
-													!isFunction(resetToDefault)
-												) {
-													return;
+									{!isNormalState() &&
+										isChangedOnCurrentState && (
+											<Button
+												variant={'primary'}
+												size="input"
+												text={
+													<>
+														{__(
+															'Reset',
+															'blockera'
+														)}
+														<Icon
+															icon="undo"
+															iconSize="20"
+														/>
+													</>
 												}
+												label={__(
+													'Reset To Normal Setting',
+													'blockera'
+												)}
+												onClick={() => {
+													if (
+														!resetToDefault ||
+														!isFunction(
+															resetToDefault
+														)
+													) {
+														return;
+													}
 
-												setOpenModal(!isOpenModal);
+													setOpenModal(!isOpenModal);
 
-												if (
-													!isFunction(resetToDefault)
-												) {
-													return;
-												}
+													if (
+														!isFunction(
+															resetToDefault
+														)
+													) {
+														return;
+													}
 
-												if (
-													(isNull(path) ||
-														isEmpty(path) ||
-														isUndefined(path)) &&
-													!isRepeater
-												) {
-													return resetToDefault();
-												}
+													if (
+														(isNull(path) ||
+															isEmpty(path) ||
+															isUndefined(
+																path
+															)) &&
+														!isRepeater
+													) {
+														return resetToDefault();
+													}
 
-												resetToDefault({
-													path,
-													onChange,
-													attribute,
-													isRepeater,
-													attributes,
-													repeaterItem,
-													valueCleanup,
-													propId: singularId,
-													action: 'RESET_TO_NORMAL',
-												});
-											}}
-											data-test="reset-button"
-										/>
-									)}
+													resetToDefault({
+														path,
+														onChange,
+														attribute,
+														isRepeater,
+														attributes,
+														repeaterItem,
+														valueCleanup,
+														propId: singularId,
+														action: 'RESET_TO_NORMAL',
+													});
+												}}
+												data-test="reset-button"
+											/>
+										)}
 								</Flex>
 							)}
 						</div>
