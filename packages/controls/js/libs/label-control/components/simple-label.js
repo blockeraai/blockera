@@ -43,6 +43,14 @@ export const SimpleLabelControl = ({
 			className={controlClassNames('label', className, labelClass)}
 			aria-label={ariaLabel || label}
 			data-cy="label-control"
+			onClick={(event) => {
+				if (resetToDefault && event.shiftKey) {
+					event.stopPropagation();
+					resetToDefault();
+				} else if (props.onClick) {
+					props.onClick(event);
+				}
+			}}
 		>
 			{label}
 
