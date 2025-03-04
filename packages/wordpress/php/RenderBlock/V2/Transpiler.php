@@ -260,7 +260,7 @@ class Transpiler {
 
 			if ($id_attribute && 1 < $counter) {
 				$inline_declarations[ $args['unique_class_name'] . ' #' . $id_attribute ] = $declarations;
-			} elseif ($class && 1 < $counter) {
+			} elseif (1 < $counter && ! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) ) {
 				$inline_declarations[ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ] = $declarations;
 			} else {
 				$inline_declarations[ $args['unique_class_name'] ] = $declarations;
