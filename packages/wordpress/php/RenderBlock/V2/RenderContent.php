@@ -127,8 +127,10 @@ class RenderContent {
 			return $posts;
 		}
 
+		$is_front_page = is_front_page();
+
         return array_map(
-            function ( \WP_Post $post): \WP_Post {
+            function ( \WP_Post $post) use ( $is_front_page): \WP_Post {
 
 				if (empty($post->post_content)) {
 					return $post;
@@ -140,7 +142,7 @@ class RenderContent {
 				}
 
 				// Skip posts while in the front page and current post type is not wp_template or wp_template_part.
-				if (is_front_page() && ! in_array($post->post_type, [ 'wp_template', 'wp_template_part' ], true)) {
+				if ($is_front_page && ! in_array($post->post_type, [ 'wp_template', 'wp_template_part' ], true)) {
 					return $post;
 				}
 
