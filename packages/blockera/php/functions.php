@@ -19,44 +19,40 @@ if (! function_exists('blockera_core_config')) {
      * @return mixed config value.
      */
     function blockera_core_config( string $key, array $args = []) { 
-        static $blockera_core_mapped_configs_cache = null;
-        static $blockera_core_loaded_configs_cache = [];
-
         if (! $key) {
+
             return false;
         }
 
-        $keyNodes  = explode('.', $key);
+        $keyNodes = explode('.', $key);
+
+        $config_dir   = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
+        $config_files = glob($config_dir . '/config/*.php');
+        $config_keys  = array_map(
+            function ( string $file): string {
+                return Utils::camelCase(str_replace('.php', '', basename($file)));
+            },
+            $config_files
+        );
+
+        $mapped_config = array_combine($config_keys, $config_files);
+
         $firstNode = array_shift($keyNodes);
 
-        // Initialize the mapping of config files if not done yet.
-        if (null === $blockera_core_mapped_configs_cache) {
-            $config_dir                         = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
-            $config_files                       = glob($config_dir . '/config/*.php');
-            $config_keys                        = array_map(
-                function ( string $file): string {
-                    return Utils::camelCase(str_replace('.php', '', basename($file)));
-                },
-                $config_files
-            );
-            $blockera_core_mapped_configs_cache = array_combine($config_keys, $config_files);
-        }
+        if (! $mapped_config[ $firstNode ]) {
 
-        if (! isset($blockera_core_mapped_configs_cache[ $firstNode ])) {
             return false;
         }
 
-        // Load and cache the config file if not already loaded.
-        if (! isset($blockera_core_loaded_configs_cache[ $firstNode ])) {
-            $blockera_core_loaded_configs_cache[ $firstNode ] = require $blockera_core_mapped_configs_cache[ $firstNode ];
-        }
-
-        $config = $blockera_core_loaded_configs_cache[ $firstNode ];
+        $config = require $mapped_config[ $firstNode ];
 
         foreach ($keyNodes as $node) {
+
             if (! isset($config[ $node ])) {
+
                 return $config;
             }
+
             $config = $config[ $node ];
         }
 
@@ -372,4 +368,3 @@ if (! function_exists('blockera_is_skip_request')) {
 		return ( defined('REST_REQUEST') && REST_REQUEST ) || ( isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'] );
 	}
 }
-
