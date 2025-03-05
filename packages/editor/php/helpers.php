@@ -661,7 +661,7 @@ if ( ! function_exists( 'blockera_convert_css_declarations_to_css_valid_rules' )
 
 			foreach ( $declaration as $property => $value ) {
 
-				if ( is_array( $value ) || empty( $value ) || is_array( $property ) || empty( $property ) ) {
+				if ( ( empty( trim($value) ) && '0' !== $value ) || is_int( $property ) || empty( trim($property) ) ) {
 
 					continue;
 				}
