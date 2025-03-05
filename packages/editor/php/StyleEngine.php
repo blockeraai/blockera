@@ -361,15 +361,9 @@ final class StyleEngine {
             $this->definitions
         );
 
-		$block_css = array_merge( $block_css, $inner_blocks_css );
-
-		return $this->normalizeCssRules(
-			blockera_convert_css_declarations_to_css_valid_rules(
-				blockera_combine_css(
-					array_values( array_filter( $block_css, 'blockera_get_filter_empty_array_item' ) )
-				)
-			)
-		);
+		$block_css = array_merge( array_filter($block_css), array_filter($inner_blocks_css) );
+		
+		return $this->normalizeCssRules(blockera_convert_css_declarations_to_css_valid_rules(blockera_combine_css($block_css)));
 	}
 
 	/**
