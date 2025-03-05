@@ -375,7 +375,8 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('20');
+				cy.get('input').type(20);
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', 20);
 				cy.then(() => {
@@ -391,7 +392,8 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('2.1');
+				cy.get('input').type(2.1);
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', '2.1');
 				cy.then(() => {
@@ -407,7 +409,8 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('2.1');
+				cy.get('input').type(2.1);
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', 21);
 				cy.then(() => {
@@ -423,7 +426,8 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('-20');
+				cy.get('input').type(-20);
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', -20);
 				cy.then(() => {
@@ -439,7 +443,8 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('-2.0');
+				cy.get('input').type('-2.0');
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', '-2.0');
 				cy.then(() => {
@@ -455,8 +460,9 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('-2.0');
-				cy.get('input').pasteText('-2');
+				cy.get('input').type('-2.0');
+				cy.get('input').type('-2');
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', '-2.02');
 				cy.then(() => {
@@ -473,7 +479,8 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('9');
+				cy.get('input').type(9);
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', 10);
 				cy.then(() => {
@@ -490,7 +497,8 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('100');
+				cy.get('input').type(100);
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', 10);
 				cy.then(() => {
@@ -507,7 +515,8 @@ describe('input control component testing', () => {
 				});
 
 				cy.get('input').focus();
-				cy.get('input').pasteText('akbar');
+				cy.get('input').type('akbar');
+				cy.get('input').blur();
 
 				cy.get('input').should('have.value', '');
 				cy.then(() => {
@@ -646,7 +655,7 @@ describe('input control component testing', () => {
 		});
 
 		describe('Range', () => {
-			it('should render arrows and work', () => {
+			it('should render range and work', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: (
@@ -729,13 +738,181 @@ describe('input control component testing', () => {
 
 				cy.get('input').focus();
 				cy.get('input').type(100);
+
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('100px');
 				});
 
 				cy.get('input').clear();
+
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('');
+				});
+			});
+
+			it('should handle typing units directly', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+				cy.get('input').type('10px');
+
+				// Wait for unit update timeout
+				cy.wait(350);
+
+				cy.get('input').should('have.value', '10');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('10px');
+				});
+
+				cy.get('input').clear();
+				cy.get('input').type('20%');
+
+				// Wait for unit update timeout
+				cy.wait(350);
+
+				cy.get('input').should('have.value', '20');
+				cy.get('[aria-label="Select Unit"]').should('have.value', '%');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('20%');
+				});
+			});
+
+			it('should handle pasting units', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				// Test pasting with unit
+				cy.get('input').focus();
+				cy.get('input').type('30rem');
+				cy.get('input').blur();
+
+				cy.get('input').should('have.value', '30');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'rem'
+				);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('30rem');
+				});
+			});
+
+			it('should allow typing complete units with delay', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+
+				// Type each character with a delay
+				cy.get('input').type('1');
+				cy.get('input').type('0');
+				cy.get('input').type('r');
+				cy.get('input').type('e');
+				cy.get('input').type('m');
+
+				// Wait for unit update timeout
+				cy.wait(300);
+
+				cy.get('input').should('have.value', '10');
+				cy.get('[aria-label="Select Unit"]').should(
+					'have.value',
+					'rem'
+				);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('10rem');
+				});
+			});
+		});
+
+		describe('Space in input', () => {
+			it('simple space type', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				// Single space
+				cy.get('input').focus();
+				cy.get('input').type(' ');
+				cy.get('input').should('have.value', ' ');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
+
+				// Multiple spaces
+				cy.get('input').type('    ');
+				cy.get('input').should('have.value', '    ');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('');
+				});
+			});
+
+			it('should handle spaces in input', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+				cy.get('input').type('2 0');
+				cy.get('input').should('have.value', '2 0');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '20');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('20px');
+				});
+			});
+
+			it('should handle spaces in calculation input', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+				cy.get('input').type('20 + 10');
+				cy.get('input').should('have.value', '20 + 10');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '30');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('30px');
+				});
+			});
+
+			it('should handle spaces in calculation input with enter key', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+				});
+
+				cy.get('input').focus();
+				cy.get('input').type('20 + 10{enter}');
+				cy.get('input').should('have.value', '30');
+				cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('30px');
 				});
 			});
 		});
@@ -813,7 +990,7 @@ describe('input control component testing', () => {
 					value: '12px',
 				});
 
-				cy.get('input[type=number]').should('be.disabled');
+				cy.get('input[type=text]').should('be.disabled');
 				cy.get('select').should('be.disabled');
 			});
 
@@ -1103,62 +1280,6 @@ describe('input control component testing', () => {
 					'Invalid'
 				);
 			});
-
-			// todo this feature currently has not been implemented
-			// it('custom unit with string format', () => {
-			// 	const name = nanoid();
-			// 	cy.withDataProvider({
-			// 		component: (
-			// 			<InputControl
-			// 				type="number"
-			// 				units={[
-			// 					{
-			// 						value: 'px',
-			// 						label: 'PX',
-			// 						format: 'number',
-			// 					},
-			// 					{
-			// 						value: 'em',
-			// 						label: 'EM',
-			// 						format: 'number',
-			// 					},
-			// 					{
-			// 						value: '%',
-			// 						label: '%',
-			// 						format: 'number',
-			// 					},
-			// 					{
-			// 						value: 'XYZ',
-			// 						label: 'XYZ',
-			// 						format: 'string',
-			// 					},
-			// 				]}
-			// 			/>
-			// 		),
-			// 		name,
-			// 		value: '0px',
-			// 	});
-			//
-			// 	// set special value
-			// 	cy.get('[aria-label="Select Unit"]').select('XYZ');
-			// 	cy.get('[aria-label="Select Unit"]').should(
-			// 		'have.value',
-			// 		'XYZ'
-			// 	);
-			// 	cy.then(() => {
-			// 		return expect(getControlValue(name)).to.eq('0XYZ');
-			// 	});
-			// 	cy.get('input').should('have.value', 0);
-			//
-			// 	// change to custom unit and type string
-			// 	cy.get('input').clear();
-			// 	cy.get('input').focus();
-			// 	cy.get('input').type('text value');
-			// 	cy.get('input').should('have.value', 'text value');
-			// 	cy.then(() => {
-			// 		return expect(getControlValue(name)).to.eq('text valueXYZ');
-			// 	});
-			// });
 		});
 
 		describe('CSS Func Value', () => {
@@ -1279,7 +1400,7 @@ describe('input control component testing', () => {
 		});
 
 		describe('Range', () => {
-			it('should render arrows and work', () => {
+			it('should render range and work', () => {
 				const name = nanoid();
 				cy.withDataProvider({
 					component: (
@@ -1297,7 +1418,7 @@ describe('input control component testing', () => {
 
 				cy.get('input[type=range]').setSliderValue(-20);
 				cy.getByDataTest('range-control').should('have.value', '-20');
-				cy.get('input[type=number]').should('have.value', -20);
+				cy.get('input[type=text]').should('have.value', -20);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('-20px');
 				});
@@ -1305,14 +1426,14 @@ describe('input control component testing', () => {
 				// should set to -50 because -100 is smaller than min value
 				cy.get('input[type=range]').setSliderValue(-100);
 				cy.getByDataTest('range-control').should('have.value', '-50');
-				cy.get('input[type=number]').should('have.value', -50);
+				cy.get('input[type=text]').should('have.value', -50);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('-50px');
 				});
 
 				cy.get('input[type=range]').setSliderValue(20);
 				cy.getByDataTest('range-control').should('have.value', '20');
-				cy.get('input[type=number]').should('have.value', 20);
+				cy.get('input[type=text]').should('have.value', 20);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('20px');
 				});
@@ -1320,7 +1441,7 @@ describe('input control component testing', () => {
 				// should set to 50 because 100 is smaller than min value
 				cy.get('input[type=range]').setSliderValue(100);
 				cy.getByDataTest('range-control').should('have.value', '50');
-				cy.get('input[type=number]').should('have.value', 50);
+				cy.get('input[type=text]').should('have.value', 50);
 				cy.then(() => {
 					return expect(getControlValue(name)).to.eq('50px');
 				});
@@ -1436,6 +1557,878 @@ describe('input control component testing', () => {
 				cy.get('input').type('10');
 				cy.get('input').should('have.value', 10);
 				cy.get('input').should('have.not.class', 'invalid');
+			});
+		});
+
+		describe('Keyboard Arrows', () => {
+			it('should handle arrow up/down keys when input is focused', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '10px',
+				});
+
+				// Test arrow up
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' });
+				cy.get('input').should('have.value', '11');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('11px');
+				});
+
+				// Test arrow up
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' });
+				cy.get('input').should('have.value', '12');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('12px');
+				});
+
+				// Test arrow down
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				});
+				cy.get('input').should('have.value', '11');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('11px');
+				});
+
+				// Test arrow down
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				});
+				cy.get('input').should('have.value', '10');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('10px');
+				});
+			});
+
+			it('should respect min/max constraints with keyboard arrows', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" min={0} max={3} />
+					),
+					name,
+					value: '2px',
+				});
+
+				// Test max constraint
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // 3
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // Should stay at 3
+				cy.get('input').should('have.value', '3');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('3px');
+				});
+
+				// Test min constraint
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				}); // 2
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				}); // 1
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				}); // 0
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+				}); // Should stay at 0
+				cy.get('input').should('have.value', '0');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('0px');
+				});
+			});
+
+			it('should not respond to arrow keys when disabled', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" disabled={true} />
+					),
+					name,
+					value: '10px',
+				});
+
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowUp',
+					force: true,
+				});
+				cy.get('input').should('have.value', '10');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('10px');
+				});
+			});
+
+			it('should handle shift + arrow keys for larger increments', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '20px',
+				});
+
+				// Test shift + arrow up
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowUp',
+					shiftKey: true,
+				});
+				cy.get('input').should('have.value', '30');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('30px');
+				});
+
+				// Test shift + arrow down
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+					shiftKey: true,
+				});
+				cy.get('input').should('have.value', '20');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('20px');
+				});
+
+				// Test combination of regular and shift arrows
+				cy.get('input').trigger('keydown', { key: 'ArrowUp' }); // Regular +1
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowUp',
+					shiftKey: true,
+				}); // Shift +10
+				cy.get('input').should('have.value', '31');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('31px');
+				});
+			});
+
+			it('should respect min/max constraints with shift + arrow keys', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" min={0} max={25} />
+					),
+					name,
+					value: '20px',
+				});
+
+				// Test max constraint with shift
+				cy.get('input').focus();
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowUp',
+					shiftKey: true,
+				}); // Would be 30, but max is 25
+				cy.get('input').should('have.value', '25');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('25px');
+				});
+
+				// Test min constraint with shift
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+					shiftKey: true,
+				}); // 15
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+					shiftKey: true,
+				}); // 5
+				cy.get('input').trigger('keydown', {
+					key: 'ArrowDown',
+					shiftKey: true,
+				}); // Would be -5, but min is 0
+				cy.get('input').should('have.value', '0');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('0px');
+				});
+			});
+		});
+
+		describe('Copy functionality', () => {
+			it('should append unit when copying value', () => {
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					value: '12px',
+				});
+
+				cy.get('input')
+					.invoke('val', '12')
+					.trigger('select')
+					.trigger('copy', {
+						clipboardData: {
+							setData: (type, text) => {
+								expect(type).to.equal('text/plain');
+								expect(text).to.equal('12px');
+							},
+						},
+					});
+			});
+
+			it('should append unit when copying partial selection', () => {
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					value: '123px',
+				});
+
+				// Simulate selecting just "12" from "123"
+				cy.get('input')
+					.invoke('val', '123')
+					.then(($input) => {
+						const input = $input[0];
+						input.setSelectionRange(0, 2); // Select only "12"
+						return cy.wrap($input);
+					})
+					.trigger('copy', {
+						clipboardData: {
+							setData: (type, text) => {
+								expect(type).to.equal('text/plain');
+								expect(text).to.equal('12px');
+							},
+						},
+					});
+			});
+
+			it('should not append unit when copying from special units', () => {
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					value: 'auto',
+				});
+
+				// Special units don't have an input field, so copying shouldn't be possible
+				cy.get('input').should('not.exist');
+			});
+
+			it('should not append unit when copying from func type', () => {
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					value: 'calc(100% - 20px)func',
+				});
+
+				cy.get('input')
+					.invoke('val', 'calc(100% - 20px)')
+					.trigger('select')
+					.trigger('copy', {
+						clipboardData: {
+							setData: (type, text) => {
+								expect(type).to.equal('text/plain');
+								expect(text).to.equal('calc(100% - 20px)');
+							},
+						},
+					});
+			});
+		});
+
+		describe('Calculations', () => {
+			describe('Valid calculations', () => {
+				it('should handle basic addition on Enter', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('5 + 3{enter}');
+					cy.get('input').should('have.value', '8');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('8px');
+					});
+				});
+
+				it('should handle multiplication on blur', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('4 * 3');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '12');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('12px');
+					});
+				});
+			});
+
+			describe('Incomplete calculations', () => {
+				it('should preserve number for incomplete addition', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('12 +');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '12');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('12px');
+					});
+				});
+
+				it('should preserve number for incomplete subtraction', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('15 -');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '15');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('15px');
+					});
+				});
+
+				it('should preserve number for incomplete multiplication', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('8 *');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '8');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('8px');
+					});
+				});
+
+				it('should preserve number for incomplete division', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					cy.get('input').focus();
+					cy.get('input').type('20 /');
+					cy.get('input').blur();
+					cy.get('input').should('have.value', '20');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('20px');
+					});
+				});
+
+				it('should normalize numbers in incomplete calculations', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '',
+					});
+
+					const testCases = [
+						{ input: '100 +', expected: '100' },
+						{ input: '012 +', expected: '12' },
+						{ input: '0015 -', expected: '15' },
+						{ input: '05 *', expected: '5' },
+						{ input: '-010 /', expected: '-10' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus();
+						cy.get('input').clear();
+						cy.get('input').type(input);
+						cy.wait(500);
+						cy.get('input').blur();
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+
+				it('should handle spaces in incomplete calculations', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const testCases = [
+						{ input: '12 + ', expected: '12' },
+						{ input: '15  -', expected: '15' },
+						{ input: '8*', expected: '8' },
+						{ input: '20/', expected: '20' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').blur();
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+			});
+
+			describe('Incomplete calculations cleanup', () => {
+				it('should normalize numbers in incomplete calculations on blur', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const testCases = [
+						{ input: '012 +', expected: '12' },
+						{ input: '0015 -', expected: '15' },
+						{ input: '05 *', expected: '5' },
+						{ input: '-010 /', expected: '-10' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').blur();
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+
+				it('should normalize numbers in incomplete calculations on Enter key', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const testCases = [
+						{ input: '012 +', expected: '12' },
+						{ input: '0015 -', expected: '15' },
+						{ input: '05 *', expected: '5' },
+						{ input: '-010 /', expected: '-10' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').type('{enter}');
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+
+				it('should handle various incomplete calculation patterns on Enter', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const testCases = [
+						{ input: '12 + ', expected: '12' },
+						{ input: '15  -', expected: '15' },
+						{ input: '8*', expected: '8' },
+						{ input: '20/', expected: '20' },
+						{ input: '00100 -', expected: '100' },
+					];
+
+					testCases.forEach(({ input, expected }) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').type('{enter}');
+						cy.get('input').should('have.value', expected);
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq(
+								`${expected}px`
+							);
+						});
+					});
+				});
+
+				it('should clear invalid inputs on Enter', () => {
+					const name = nanoid();
+					cy.withDataProvider({
+						component: <InputControl unitType="general" />,
+						name,
+						value: '0px',
+					});
+
+					const invalidInputs = [
+						'abc',
+						'+ 12',
+						'* 5',
+						'/ 2',
+						'++',
+						'--',
+						'**',
+						'//',
+					];
+
+					invalidInputs.forEach((input) => {
+						cy.get('input').focus().clear();
+						cy.get('input').type(input);
+						cy.get('input').type('{enter}');
+						cy.get('input').should('have.value', '');
+						cy.then(() => {
+							return expect(getControlValue(name)).to.eq('');
+						});
+					});
+				});
+			});
+
+			it('should handle decimal values in calculations', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '0px',
+				});
+
+				const testCases = [
+					{ input: '1.5 + 2.5', expected: '4' },
+					{ input: '10.75 - 3.25', expected: '7.5' },
+					{ input: '2.5 * 3', expected: '7.5' },
+					{ input: '10.5 / 2', expected: '5.25' },
+					{ input: '-1.5 + 3.5', expected: '2' },
+					{ input: '0.1 + 0.2', expected: '0.3' },
+					{ input: '1.000', expected: '1' },
+					{ input: '1.500', expected: '1.5' },
+					{ input: '1.5000', expected: '1.5' },
+				];
+
+				testCases.forEach(({ input, expected }) => {
+					cy.get('input').focus().clear();
+					cy.get('input').type(input);
+					cy.get('input').type('{enter}');
+					cy.get('input').should('have.value', expected);
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq(
+							`${expected}px`
+						);
+					});
+				});
+			});
+
+			it('should handle decimal values in paste operations', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '0px',
+				});
+
+				const testCases = [
+					{ input: '1.5px', expected: '1.5', unit: 'px' },
+					{ input: '-2.75em', expected: '-2.75', unit: 'em' },
+					{ input: '0.5rem', expected: '0.5', unit: 'rem' },
+					{ input: '1.000px', expected: '1', unit: 'px' },
+					{ input: '-0.750vh', expected: '-0.75', unit: 'vh' },
+				];
+
+				testCases.forEach(({ input, expected, unit }) => {
+					cy.get('input').focus().clear();
+					cy.get('input').type(input);
+					cy.get('input').blur();
+					cy.get('input').should('have.value', expected);
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq(
+							`${expected}${unit}`
+						);
+					});
+				});
+			});
+
+			it('should handle decimal values in incomplete calculations', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '0px',
+				});
+
+				const testCases = [
+					{ input: '1.5 +', expected: '1.5' },
+					{ input: '-2.75 -', expected: '-2.75' },
+					{ input: '0.5 *', expected: '0.5' },
+					{ input: '10.25 /', expected: '10.25' },
+					{ input: '1.000 +', expected: '1' },
+					{ input: '1.500 -', expected: '1.5' },
+				];
+
+				testCases.forEach(({ input, expected }) => {
+					cy.get('input').focus().clear();
+					cy.get('input').type(input);
+					cy.get('input').blur();
+					cy.get('input').should('have.value', expected);
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq(
+							`${expected}px`
+						);
+					});
+				});
+			});
+
+			it('should handle invalid decimal inputs', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '0px',
+				});
+
+				const invalidInputs = [
+					'1..5',
+					'..',
+					'1.2.3',
+					'1.a5',
+					'a.15',
+					'1.5.px',
+					'..5px',
+				];
+
+				invalidInputs.forEach((input) => {
+					cy.get('input').focus().clear();
+					cy.get('input').type(input);
+					cy.get('input').type('{enter}');
+					cy.get('input').should('have.value', '');
+					cy.then(() => {
+						return expect(getControlValue(name)).to.eq('');
+					});
+				});
+			});
+
+			it('should handle decimal values with arrow keys', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" />,
+					name,
+					value: '0px',
+				});
+
+				// Test decimal increment/decrement
+				cy.get('input').focus().clear().type('1.5');
+				cy.get('input').type('{upArrow}');
+				cy.get('input').should('have.value', '2.5');
+
+				cy.get('input').type('{upArrow}');
+				cy.get('input').should('have.value', '3.5');
+
+				cy.get('input').type('{downArrow}');
+				cy.get('input').should('have.value', '2.5');
+
+				// Test with shift key for larger increments
+				cy.get('input').focus().clear().type('1.5');
+				cy.get('input').type('{shift}{upArrow}');
+				cy.get('input').should('have.value', '11.5');
+
+				cy.get('input').type('{shift}{downArrow}');
+				cy.get('input').should('have.value', '1.5');
+			});
+		});
+
+		it('should handle decimal point typing correctly', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: <InputControl unitType="general" />,
+				name,
+				value: '0px',
+			});
+
+			// Test typing decimal numbers step by step
+			cy.get('input').focus().clear();
+			cy.get('input').type('1');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+
+			cy.get('input').type('.');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+			cy.get('input').should('have.value', '1.');
+
+			cy.get('input').type('5{enter}');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+			cy.get('input').should('have.value', '1.5');
+			cy.then(() => {
+				return expect(getControlValue(name)).to.eq('1.5px');
+			});
+
+			// Test multiple decimal points are handled correctly
+			cy.get('input').focus().clear();
+			cy.get('input').type('1..');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+			cy.get('input').blur();
+			cy.get('input').should('have.value', '');
+
+			// Test negative decimal numbers
+			cy.get('input').focus().clear();
+			cy.get('input').type('-1.');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+			cy.get('input').type('5{enter}');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+			cy.get('input').should('have.value', '-1.5');
+			cy.then(() => {
+				return expect(getControlValue(name)).to.eq('-1.5px');
+			});
+		});
+
+		it('should handle negative numbers and calculations correctly', () => {
+			const name = nanoid();
+			cy.withDataProvider({
+				component: <InputControl unitType="general" />,
+				name,
+				value: '0px',
+			});
+
+			// Test typing negative numbers step by step
+			cy.get('input').focus().clear();
+			cy.get('input').type('-');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+			cy.get('input').should('have.value', '-');
+
+			cy.get('input').type('5');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+			cy.get('input').should('have.value', '-5');
+			cy.then(() => {
+				return expect(getControlValue(name)).to.eq('-5px');
+			});
+
+			// Test negative decimal numbers
+			cy.get('input').focus().clear();
+			cy.get('input').type('-5.5{enter}');
+			cy.get('[aria-label="Select Unit"]').should('have.value', 'px');
+			cy.get('input').should('have.value', '-5.5');
+			cy.then(() => {
+				return expect(getControlValue(name)).to.eq('-5.5px');
+			});
+
+			// Test calculations with negative numbers
+			const calcTests = [
+				{ input: '-5 + 3', expected: '-2' },
+				{ input: '10 - 15', expected: '-5' },
+				{ input: '-2 * 3', expected: '-6' },
+				{ input: '-10 / 2', expected: '-5' },
+				{ input: '-5.5 + 2.5', expected: '-3' },
+				{ input: '-0.5 * 4', expected: '-2' },
+			];
+
+			calcTests.forEach(({ input, expected }) => {
+				cy.get('input').focus().clear();
+				cy.get('input').type(input);
+				cy.get('input').type('{enter}');
+				cy.get('input').should('have.value', expected);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq(`${expected}px`);
+				});
+			});
+
+			// Test incomplete calculations with negative numbers
+			const incompleteTests = [
+				{ input: '-5 +', expected: '-5' },
+				{ input: '-2.5 -', expected: '-2.5' },
+				{ input: '-10 *', expected: '-10' },
+				{ input: '-15 /', expected: '-15' },
+			];
+
+			incompleteTests.forEach(({ input, expected }) => {
+				cy.get('input').focus().clear();
+				cy.get('input').type(input);
+				cy.get('input').blur();
+				cy.get('input').should('have.value', expected);
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq(`${expected}px`);
+				});
+			});
+		});
+
+		describe('Min/Max constraints', () => {
+			it('should enforce min value constraint', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" min={0} />,
+					name,
+					value: '0px',
+				});
+
+				// Test direct input
+				cy.get('input').focus().clear().type('-5');
+				cy.get('input').should('have.value', '0');
+				cy.then(() => {
+					return expect(getControlValue(name)).to.eq('0px');
+				});
+
+				// Test typing minus sign (should allow temporarily)
+				cy.get('input').focus().clear().type('-');
+				cy.get('input').should('have.value', '-');
+				cy.get('input').blur();
+				cy.get('input').should('have.value', '');
+
+				// Test calculations
+				cy.get('input').focus().clear().type('10 - 15{enter}');
+				cy.get('input').should('have.value', '0');
+			});
+
+			it('should enforce max value constraint', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: <InputControl unitType="general" max={100} />,
+					name,
+					value: '0px',
+				});
+
+				// Test direct input
+				cy.get('input').focus().clear().type('150');
+				cy.get('input').should('have.value', '100');
+
+				// Test calculations
+				cy.get('input').focus().clear().type('50 * 3{enter}');
+				cy.get('input').should('have.value', '100');
+			});
+
+			it('should enforce both min and max constraints', () => {
+				const name = nanoid();
+				cy.withDataProvider({
+					component: (
+						<InputControl unitType="general" min={-10} max={10} />
+					),
+					name,
+					value: '0px',
+				});
+
+				// Test min boundary
+				cy.get('input').focus().clear().type('-15');
+				cy.get('input').should('have.value', '-10');
+
+				// Test max boundary
+				cy.get('input').focus().clear().type('15');
+				cy.get('input').should('have.value', '10');
+
+				// Test calculations
+				cy.get('input').focus().clear().type('-5 * 3{enter}');
+				cy.get('input').should('have.value', '-10');
+				cy.get('input').focus().clear().type('5 * 3{enter}');
+				cy.get('input').should('have.value', '10');
 			});
 		});
 	});

@@ -18,6 +18,8 @@
 
 ### Automated Tests
 - Added E2E tests for the `Text Wrap` feature to verify its functionality in both the editor and front end.
+- Added E2E tests to check Shift + Click on label to reset value.
+- Added E2E tests to check "x" icon click on label to reset value.
 
 ## 1.1.1 (2025-02-04)
 

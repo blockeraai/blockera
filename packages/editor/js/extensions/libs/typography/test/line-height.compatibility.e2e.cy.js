@@ -46,19 +46,19 @@ describe('Line Height → WP Compatibility', () => {
 			//
 
 			cy.get('@container').within(() => {
-				cy.get('input[type="number"]').focus();
-				cy.get('input[type="number"]').type(5, {
+				cy.get('input[type="text"]').clear({ force: true });
+				cy.get('input[type="text"]').type('2', {
 					force: true,
 				});
 			});
 
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
-				expect('1.25').to.be.equal(
+				expect('2').to.be.equal(
 					getSelectedBlock(data, 'blockeraLineHeight')
 				);
 
-				expect('1.25').to.be.equal(
+				expect('2').to.be.equal(
 					getSelectedBlock(data, 'style')?.typography?.lineHeight
 				);
 			});
@@ -69,7 +69,7 @@ describe('Line Height → WP Compatibility', () => {
 
 			// clear value
 			cy.get('@container').within(() => {
-				cy.get('input[type="number"]').clear({ force: true });
+				cy.get('input[type="text"]').clear({ force: true });
 			});
 
 			// Blockera value should be moved to WP data
