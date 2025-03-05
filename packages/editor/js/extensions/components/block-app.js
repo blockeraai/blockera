@@ -31,7 +31,7 @@ import type {
 	BlockAppContextType,
 } from './types';
 
-const cacheKey = 'BLOCKERA_DATA';
+const cacheKey = 'BLOCKERA_EDITOR_SETTINGS';
 
 const defaultValue = {
 	blockSections: {
