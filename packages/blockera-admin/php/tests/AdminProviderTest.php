@@ -14,6 +14,9 @@ class AdminProviderTest extends \Blockera\Dev\PHPUnit\AppTestCase
 	{
 		parent::set_up();
 
+		// Set up the WordPress admin environment
+		set_current_screen('dashboard');
+
 		// Login as admin user
 		$user_id = self::factory()->user->create(['role' => 'administrator']);
 		wp_set_current_user($user_id);
