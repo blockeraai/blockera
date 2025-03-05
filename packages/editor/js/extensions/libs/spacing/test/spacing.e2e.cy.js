@@ -52,7 +52,7 @@ describe('Spacing Extension', () => {
 
 			redirectToFrontPage();
 
-			cy.get('.blockera-block')
+			cy.get('p.blockera-block')
 				.should('have.css', 'margin-top', '10px')
 				.and('have.css', 'margin-right', '20px')
 				.and('have.css', 'margin-bottom', '10px')
