@@ -15,20 +15,21 @@ if ( ! function_exists( 'blockera_get_experimental' ) ) {
 	 * @return mixed the value of experimental support.
 	 */
 	function blockera_get_experimental( array $support_path ) {
+		static $blockera_experimental_config_cache = null;
 
-		$experimental_config_file = dirname( __DIR__, 3 ) . '/experimental.config.json';
+		if ( null === $blockera_experimental_config_cache ) {
+			$experimental_config_file = dirname( __DIR__, 3 ) . '/experimental.config.json';
 
-		if ( ! file_exists( $experimental_config_file ) ) {
+			if ( ! file_exists( $experimental_config_file ) ) {
+				$blockera_experimental_config_cache = false;
+				return false;
+			}
 
-			return false;
+			ob_start();
+			include $experimental_config_file;
+			$blockera_experimental_config_cache = json_decode( ob_get_clean(), true );
 		}
 
-		ob_start();
-
-		include $experimental_config_file;
-
-		$experimental_config = json_decode( ob_get_clean(), true );
-
-		return \Blockera\DataEditor\Utility::arrayGet( $experimental_config, $support_path, false );
+		return \Blockera\DataEditor\Utility::arrayGet( $blockera_experimental_config_cache, $support_path, false );
 	}
 }
