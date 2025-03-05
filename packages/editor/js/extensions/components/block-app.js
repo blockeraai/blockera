@@ -147,6 +147,8 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 					: {
 							...settings.sections,
 							[currentBlock]: {
+								...(settings.sections[currentBlock] ||
+									settings.sections.master),
 								[sectionId]: {
 									...(settings.sections[currentBlock] ||
 										settings.sections.master)[sectionId],
