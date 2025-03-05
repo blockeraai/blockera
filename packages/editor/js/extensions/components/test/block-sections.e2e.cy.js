@@ -21,115 +21,121 @@ describe('Block Sections Manager Testing', () => {
 		cy.getBlock('core/paragraph').click();
 	});
 
-	describe('Initial State', () => {
-		it('should load with default settings', () => {
-			// Check default block sections state
-			cy.get('button[aria-label="Block Settings"]').click();
+	it('should load with default settings', () => {
+		// Check default block sections state
+		cy.get('button[aria-label="Block Settings"]').click();
 
-			// Other modes should be inactive
-			cy.getByDataTest('Focus Mode').should(
-				'not.have.class',
-				'blockera-block-menu-item-selected'
-			);
-			cy.getByDataTest('Expand All').should(
-				'not.have.class',
-				'blockera-block-menu-item-selected'
-			);
-			cy.getByDataTest('Collapse All').should(
-				'not.have.class',
-				'blockera-block-menu-item-selected'
-			);
-		});
+		// Other modes should be inactive
+		cy.getByDataTest('Focus Mode').should(
+			'not.have.class',
+			'blockera-block-menu-item-selected'
+		);
+		cy.getByDataTest('Expand All').should(
+			'not.have.class',
+			'blockera-block-menu-item-selected'
+		);
+		cy.getByDataTest('Collapse All').should(
+			'not.have.class',
+			'blockera-block-menu-item-selected'
+		);
 
-		it('should persist settings in local storage', () => {
-			cy.get('button[aria-label="Block Settings"]').click();
+		// Close Block settings.
+		cy.get('button[aria-label="Block Settings"]').click();
 
-			// Enable focus mode
-			cy.getByDataTest('Focus Mode').click();
+		// Check for opened inner blocks section.
+		cy.getByDataTest('elements/link').should('not.exist');
 
-			// Save the page
-			savePage();
+		// Close the Spacing section.
+		cy.get('.components-panel__body').contains('Spacing').click();
 
-			// Reload the page
-			cy.reload();
-
-			cy.getIframeBody().find('p[data-type="core/paragraph"]').click();
-
-			// Check if focus mode is still enabled
-			cy.get('button[aria-label="Block Settings"]').click();
-			cy.getByDataTest('Focus Mode').should(
-				'have.class',
-				'blockera-block-menu-item-selected'
-			);
-		});
+		// Check again for opened inner blocks section.
+		cy.getByDataTest('elements/link').should('not.exist');
 	});
 
-	describe('Section State Management', () => {
-		it('should maintain individual section states', () => {
-			// Open Background panel
-			openSettingsPanel('Background');
+	it('should persist settings in local storage', () => {
+		cy.get('button[aria-label="Block Settings"]').click();
 
-			// Open Typography panel
-			openSettingsPanel('Typography');
+		// Enable focus mode
+		cy.getByDataTest('Focus Mode').click();
 
-			// Background panel should still be open
-			cy.get('.components-button.components-panel__body-toggle')
-				.contains('Background')
-				.should('have.attr', 'aria-expanded', 'true');
+		// Save the page
+		savePage();
 
-			// Typography panel should be open
-			cy.get('.components-button.components-panel__body-toggle')
-				.contains('Typography')
-				.should('have.attr', 'aria-expanded', 'true');
-		});
+		// Reload the page
+		cy.reload();
 
-		it('should handle focus mode section switching', () => {
-			cy.get('button[aria-label="Block Settings"]').click();
-			cy.getByDataTest('Focus Mode').click();
+		cy.getIframeBody().find('p[data-type="core/paragraph"]').click();
 
-			// Open Background panel
-			openSettingsPanel('Background');
-
-			// Open Typography panel
-			openSettingsPanel('Typography');
-
-			// Background panel should be closed
-			cy.get('.components-button.components-panel__body-toggle')
-				.contains('Background')
-				.should('have.attr', 'aria-expanded', 'false');
-
-			// Typography panel should be open
-			cy.get('.components-button.components-panel__body-toggle')
-				.contains('Typography')
-				.should('have.attr', 'aria-expanded', 'true');
-		});
+		// Check if focus mode is still enabled
+		cy.get('button[aria-label="Block Settings"]').click();
+		cy.getByDataTest('Focus Mode').should(
+			'have.class',
+			'blockera-block-menu-item-selected'
+		);
 	});
 
-	describe('Inner Block Integration', () => {
-		it.only('should maintain section states when switching between parent and inner blocks', () => {
-			// Enable focus mode
-			cy.get('button[aria-label="Block Settings"]').click();
-			cy.getByDataTest('Focus Mode').click();
-			// Close block settings panel
-			cy.get('button[aria-label="Block Settings"]').click();
+	it('should maintain individual section states', () => {
+		// Open Background panel
+		openSettingsPanel('Background');
 
-			// Add an inner block
-			setInnerBlock('elements/link');
+		// Open Typography panel
+		openSettingsPanel('Typography');
 
-			// Open Background panel in inner block
-			openSettingsPanel('Background');
+		// Background panel should still be open
+		cy.get('.components-button.components-panel__body-toggle')
+			.contains('Background')
+			.should('have.attr', 'aria-expanded', 'true');
 
-			// Go back to parent block
-			cy.getByDataTest('Close Inner Block').click();
+		// Typography panel should be open
+		cy.get('.components-button.components-panel__body-toggle')
+			.contains('Typography')
+			.should('have.attr', 'aria-expanded', 'true');
+	});
 
-			// Add an inner block
-			setInnerBlock('elements/link');
+	it('should handle focus mode section switching', () => {
+		cy.get('button[aria-label="Block Settings"]').click();
+		cy.getByDataTest('Focus Mode').click();
 
-			// Background panel should still be open
-			cy.get('.components-button.components-panel__body-toggle')
-				.contains('Background')
-				.should('have.attr', 'aria-expanded', 'true');
-		});
+		// Open Background panel
+		openSettingsPanel('Background');
+
+		// Open Typography panel
+		openSettingsPanel('Typography');
+
+		// Background panel should be closed
+		cy.get('.components-button.components-panel__body-toggle')
+			.contains('Background')
+			.should('have.attr', 'aria-expanded', 'false');
+
+		// Typography panel should be open
+		cy.get('.components-button.components-panel__body-toggle')
+			.contains('Typography')
+			.should('have.attr', 'aria-expanded', 'true');
+	});
+
+	it('should maintain section states when switching between parent and inner blocks', () => {
+		// Enable focus mode
+		cy.get('button[aria-label="Block Settings"]').click();
+		cy.getByDataTest('Focus Mode').click();
+		// Close block settings panel
+		cy.get('button[aria-label="Block Settings"]').click();
+
+		// Add an inner block
+		setInnerBlock('elements/link');
+
+		// Open Background panel in inner block
+		openSettingsPanel('Background');
+
+		// Go back to parent block
+		cy.getByDataTest('Close Inner Block').click();
+
+		// Add an inner block
+		setInnerBlock('elements/link');
+
+		// Background panel should still be open
+		cy.get('.components-button.components-panel__body-toggle')
+			.contains('Background')
+			.should('have.attr', 'aria-expanded', 'true');
 	});
 
 	it('should applied expand all of block sections', () => {

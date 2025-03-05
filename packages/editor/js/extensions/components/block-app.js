@@ -31,7 +31,7 @@ import type {
 	BlockAppContextType,
 } from './types';
 
-const cacheKey = 'BLOCKERA_DATA';
+const cacheKey = 'BLOCKERA_EDITOR_SETTINGS';
 
 const defaultValue = {
 	blockSections: {
@@ -147,6 +147,8 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 					: {
 							...settings.sections,
 							[currentBlock]: {
+								...(settings.sections[currentBlock] ||
+									settings.sections.master),
 								[sectionId]: {
 									...(settings.sections[currentBlock] ||
 										settings.sections.master)[sectionId],
