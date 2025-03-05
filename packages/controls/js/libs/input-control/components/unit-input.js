@@ -46,12 +46,13 @@ export function UnitInput({
 	unitValue,
 	inputValue,
 	isValidValue,
-
+	onVariableShortcut,
 	...props
 }: {
 	...InputControlProps,
 	inputValue: string,
 	unitValue: Object,
+	onVariableShortcut: () => void,
 }): MixedElement {
 	const [isMaximizeVisible, setIsMaximizeVisible] = useState(false);
 	const [typedValue, setTypedValue] = useState(inputValue);
@@ -69,6 +70,12 @@ export function UnitInput({
 		// First check if the value is just a minus sign or minus zero
 		if (value === '-' || value === '-0') {
 			// Allow typing minus sign even if min is >= 0, we'll validate on blur
+			return;
+		}
+
+		// Special case for "--" to open variable picker
+		if (onVariableShortcut && value.endsWith('--')) {
+			onVariableShortcut();
 			return;
 		}
 
