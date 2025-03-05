@@ -289,6 +289,7 @@ export default function InputControl({
 								max={max}
 								range={range}
 								drag={drag}
+								float={float}
 								arrows={arrows}
 								size={size}
 								{...props}
