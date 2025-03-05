@@ -241,10 +241,7 @@ class Transpiler {
         while ($processor->next_tag()) {
             $id_attribute = $processor->get_attribute('id');
             $style        = $processor->get_attribute('style');
-            $class        = $processor->get_attribute('class');
-			$declarations = is_string($style) ? explode(';', $style) : [];
-
-			$processor->remove_attribute('style');
+            $class        = $processor->get_attribute('class');			
 
 			// Skip if the class contains 'blockera-is-transpiled', because it shows that the block is already transpiled.
 			if ($class && str_contains($class, 'blockera-is-transpiled')) {
@@ -258,12 +255,18 @@ class Transpiler {
 
             ++$counter;
 
-			if ($id_attribute && 1 < $counter) {
-				$inline_declarations[ $args['unique_class_name'] . ' #' . $id_attribute ] = $declarations;
-			} elseif (1 < $counter && ! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) ) {
-				$inline_declarations[ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ] = $declarations;
-			} else {
-				$inline_declarations[ $args['unique_class_name'] ] = $declarations;
+			if ($style) {
+				$declarations = explode(';', $style);
+
+				if ($id_attribute && 1 < $counter) {
+					$inline_declarations[ $args['unique_class_name'] . ' #' . $id_attribute ] = $declarations;
+				} elseif (1 < $counter && ! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) ) {
+					$inline_declarations[ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ] = $declarations;
+				} else {
+					$inline_declarations[ $args['unique_class_name'] ] = $declarations;
+				}
+
+				$processor->remove_attribute('style');
 			}
         }
 
