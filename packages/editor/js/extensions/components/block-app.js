@@ -72,6 +72,11 @@ export const BlockAppContextProvider = ({
 	);
 
 	useEffect(() => {
+		// 🚨 This use effect callback performance bottleneck on site editor.
+		if (!props?.attributes?.blockeraPropsId) {
+			return;
+		}
+
 		const cacheData = getItem(cacheKey);
 		const initialState = {
 			...defaultValue,
