@@ -70,10 +70,15 @@ export const BlockAppContextProvider = ({
 	const currentBlock = useSelect((select) =>
 		select('blockera/extensions').getExtensionCurrentBlock()
 	);
+	const getSelectedBlock = useSelect((select) =>
+		select('core/block-editor').getSelectedBlock()
+	);
 
 	useEffect(() => {
 		// 🚨 This use effect callback performance bottleneck on site editor.
-		if (!props?.attributes?.blockeraPropsId) {
+		const isEditMode = getSelectedBlock?.clientId === props?.clientId;
+
+		if (!isEditMode) {
 			return;
 		}
 
@@ -96,7 +101,13 @@ export const BlockAppContextProvider = ({
 
 		setItem(cacheKey, cacheData);
 		setBlockAppSettings(cacheData);
-	}, [calculatedSections, setBlockAppSettings, currentBlock]);
+	}, [
+		calculatedSections,
+		setBlockAppSettings,
+		currentBlock,
+		props?.clientId,
+		getSelectedBlock,
+	]);
 
 	return (
 		<BlockAppContext.Provider
