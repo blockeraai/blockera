@@ -11,48 +11,57 @@ use Blockera\Utils\Utils;
 if (! function_exists('blockera_core_config')) {
 
     /**
-     * Retrieve the config with key param or return all config as array
+     * Retrieve the config with key param or return all config as array.
      *
      * @param string $key  the key of config.
      * @param array  $args the extra arguments.
      *
      * @return mixed config value.
      */
-    function blockera_core_config( string $key, array $args = []) { 
+    function blockera_core_config( string $key, array $args = []) {
         if (! $key) {
-
             return false;
+        }
+
+        // Create cache key based on input parameters.
+        $cache_key           = md5($key . serialize($args));
+        static $config_cache = [];
+
+        // Return cached result if available.
+        if (isset($config_cache[ $cache_key ])) {
+            return $config_cache[ $cache_key ];
         }
 
         $keyNodes = explode('.', $key);
 
-        $config_dir   = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
-        $config_files = glob($config_dir . '/config/*.php');
-        $config_keys  = array_map(
-            function ( string $file): string {
-                return Utils::camelCase(str_replace('.php', '', basename($file)));
-            },
-            $config_files
-        );
-
-        $mapped_config = array_combine($config_keys, $config_files);
+        // Cache config directory and files mapping.
+        static $mapped_configs = [];
+        $config_dir            = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
+        
+        if (! isset($mapped_configs[ $config_dir ])) {
+            $config_files                  = glob($config_dir . '/config/*.php');
+            $config_keys                   = array_map(
+                function ( string $file): string {
+                    return Utils::camelCase(str_replace('.php', '', basename($file)));
+                },
+                $config_files
+            );
+            $mapped_configs[ $config_dir ] = array_combine($config_keys, $config_files);
+        }
 
         $firstNode = array_shift($keyNodes);
 
-        if (! $mapped_config[ $firstNode ]) {
-
+        if (! isset($mapped_configs[ $config_dir ][ $firstNode ])) {
+            $config_cache[ $cache_key ] = false;
             return false;
         }
 
-        $config = require $mapped_config[ $firstNode ];
+        $config = require $mapped_configs[ $config_dir ][ $firstNode ];
 
         foreach ($keyNodes as $node) {
-
             if (! isset($config[ $node ])) {
-
-                return $config;
+                break;
             }
-
             $config = $config[ $node ];
         }
 
@@ -61,7 +70,12 @@ if (! function_exists('blockera_core_config')) {
          *
          * @since 1.0.0
          */
-        return apply_filters(__FUNCTION__ . '.' . $key, $config, $args);
+        $result = apply_filters(__FUNCTION__ . '.' . $key, $config, $args);
+        
+        // Cache the result.
+        $config_cache[ $cache_key ] = $result;
+
+        return $result;
     }
 }
 
