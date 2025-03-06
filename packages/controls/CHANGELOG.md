@@ -22,6 +22,7 @@
 - Fixed an issue where the input control style is not correct when the control is focused or hovered.
 - Fixed an issue where the border line control preview is not correct.
 - Fixed an issue where the transform feature control shows value incorrectly.
+- Fixed an issue where the controls are overlapping the "x" reset icon. (Thanks Hoang Hxn)
 
 ### Automated Tests
 - Added comprehensive test coverage for input controls, including number inputs, unit selection, keyboard navigation, and copy/paste functionality.
