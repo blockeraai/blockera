@@ -472,15 +472,12 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 	if (matches) {
 		// if selector has space with combinators (>, +, ~), we should append root after the selector.
 		if (/\s[>+~]/.test(selector)) {
-			return `${selector}${root}, ${root}${selector}`;
+			return `${selector}${root}`;
 		}
 		const subject = matches[0];
 		const regexp = new RegExp('^.\\b' + subject + '\\b', 'gi');
 
-		return `${selector.replace(
-			regexp,
-			`${root}.${subject}`
-		)}, ${selector.replace(regexp, `.${subject}${root}`)}`;
+		return `${selector.replace(regexp, `${root}.${subject}`)}`;
 	}
 
 	// If selector has combinators (space, >, +, ~),
