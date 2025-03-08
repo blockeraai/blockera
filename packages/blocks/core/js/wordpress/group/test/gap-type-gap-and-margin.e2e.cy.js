@@ -42,29 +42,38 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByDataTest('style-tab').click();
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 			});
 
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should('not.have.css', 'gap', '100px');
+			cy.getBlock('core/group').should('not.have.css', 'gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
 			//
 
+			// This is clear style that core block adds
 			cy.getBlock('core/paragraph')
 				.first()
 				.should('have.css', 'margin-block-start', '0px');
 
 			cy.getBlock('core/paragraph')
 				.last()
-				.should('have.css', 'margin-block-start', '100px');
+				.should('have.css', 'margin-block-start', '43px');
+
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should(
+						'include',
+						'> * + *{margin-block-start: 43px !important;'
+					);
+			});
 
 			//Check frontend
 			savePage();
-
 			redirectToFrontPage();
 
 			//
@@ -73,7 +82,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.get('.wp-block-group.blockera-block').should(
 				'not.have.css',
 				'gap',
-				'100px'
+				'43px'
 			);
 
 			//
@@ -81,7 +90,11 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '100px');
+				.should('have.css', 'margin-block-start', '43px');
+
+			cy.get('style#blockera-inline-css')
+				.invoke('text')
+				.should('include', '> * + * {\n margin-block-start: 43px');
 		});
 
 		it('Unlocked gap - the css property should be margin-block-start', () => {
