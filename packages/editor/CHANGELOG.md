@@ -8,6 +8,7 @@
 - Fixed an issue where the toggle action in the block section was not working correctly.
 - Fixed an issue where the block section focus, collapse and expand actions were not being updated correctly as a unified state around the editor for all blocks.
 - Fixed the Flex Direction not working properly sometimes.
+- Fixed the extra Flex Wrap css property for blocks.
 
 ### Development Workflow
 - GitHub workflow to enable developers to have custom PR playground configurations.
