@@ -180,11 +180,11 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				 */
 				if (
 					'gap-and-margin' === $gapType &&
-					( 'flex' === $display || 'grid' === $display )
+					( 'flex' === $display || 'grid' === $display || '' === $display )
 				) {
 
 					$this->setCss(
-						[
+						'' === $display ? $declaration: [
 							'margin-block-start' => '0',
 						],
 						'margin-block-start',
