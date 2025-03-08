@@ -7,7 +7,6 @@ use Blockera\Admin\Providers\AdminProvider;
 
 class AdminProviderTest extends \Blockera\Dev\PHPUnit\AppTestCase
 {
-
 	protected static ?AdminProvider $provider = null;
 
 	public function set_up(): void
@@ -22,7 +21,7 @@ class AdminProviderTest extends \Blockera\Dev\PHPUnit\AppTestCase
 		wp_set_current_user($user_id);
 
 		// Mock WordPress functions.
-		require_once ABSPATH . '/wp-admin/includes/plugin.php'; // Ensure you have WordPress functions available.
+		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 
 		self::$provider = new AdminProvider(new Blockera());
 	}
@@ -36,11 +35,16 @@ class AdminProviderTest extends \Blockera\Dev\PHPUnit\AppTestCase
 	public function itShouldRegisterMenuPage(): void
 	{
 		global $menu, $submenu;
+
+		// Register the Factory singleton first
+		self::$provider->register();
+		
+		// Then boot the provider
 		self::$provider->boot();
 
 		do_action('admin_menu');
 
-		$registeredMenus = array_column($menu, 2);
+		$registeredMenus = array_column($menu ?? [], 2);
 		$baseMenuSlug = blockera_core_config('menu.menu_slug');
 
 		// Check if the base menu is registered.
@@ -48,20 +52,15 @@ class AdminProviderTest extends \Blockera\Dev\PHPUnit\AppTestCase
 
 		$expectedSubmenus = array_column(blockera_core_config('menu.submenus'), 'menu_slug');
 
-		$submenu_found = false;
+		$registeredSubmenus = array_column($submenu[$baseMenuSlug] ?? [], 2);
 
-		// Assert the submenu was registered under the correct parent slug.
-		if (isset($submenu[$baseMenuSlug])) {
-			foreach ($submenu[$baseMenuSlug] as $submenu_item) {
-				foreach ($expectedSubmenus as $expected_submenu) {
-					if ($submenu_item[2] === $expected_submenu) {
-						$submenu_found = true;
-						break;
-					}
-				}
-			}
+		// Check if all expected submenus are registered
+		foreach ($expectedSubmenus as $expected_submenu) {
+			$this->assertContains(
+				$expected_submenu,
+				$registeredSubmenus,
+				sprintf('Expected submenu "%s" was not registered', $expected_submenu)
+			);
 		}
-
-		$this->assertTrue($submenu_found, 'Submenu was not registered correctly.');
 	}
 }
