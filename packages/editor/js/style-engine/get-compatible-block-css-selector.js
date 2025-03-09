@@ -470,6 +470,12 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 	// Assume received selector is another reference to root, so we should concat together.
 	const matches = /(wp-block[a-z-_A-Z]+)/g.exec(selector);
 	if (matches) {
+		// If selector contains a direct child combinator (>), append root after the selector
+		// Example: ".wp-block-foo > .child" becomes ".wp-block-foo > .child.wp-block-bar"
+		if (/\s>\s(\w|\.|#)/.test(selector)) {
+			return `${selector}${root}`;
+		}
+
 		const subject = matches[0];
 		const regexp = new RegExp('^.\\b' + subject + '\\b', 'gi');
 
