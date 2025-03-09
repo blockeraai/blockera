@@ -29,4 +29,12 @@ export const Column: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	supports: {
+		blockeraStyleEngineConfig: {
+			blockeraWidth: {
+				width: 'flex-basis',
+				for: 'master',
+			},
+		},
+	},
 };

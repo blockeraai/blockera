@@ -5,6 +5,10 @@
 		"blockeraWidth": {
 			"status": true,
 			"fallback": ["dimensions.width", "dimensions", "width"],
+			"style-engine-config": {
+				"width": "width",
+				"for": "master"
+			},
 			"css-property": "width",
 			"description": "Support for \"blockeraWidth\" size, this is mirror for WordPress block core \"width\" support."
 		},

@@ -3,6 +3,9 @@
 ### New Features
 - Added support for enabling/disabling the inline styles cleanup feature in block elements.
 
+### Improvements
+- Added compatibility with the LiteSpeed Cache plugin to prevent conflicts.
+
 ## 1.1.1 (2025-02-04)
 
 ### Improvements

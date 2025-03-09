@@ -16,6 +16,12 @@ return array_merge(
 				'blockeraStyleEngine' => [
 					'gap-type' => 'gap-and-margin',
 				],
+				'blockeraStyleEngineConfig' => [
+					'blockeraWidth' => [
+						'width' => 'flex-basis',
+						'for' => 'master',
+					],
+				],
 			]
 		),
 		'selectors' => array_merge(
