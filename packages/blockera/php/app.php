@@ -13,19 +13,24 @@ if (! defined('ABSPATH')) {
 
 global $blockera;
 
+$cache_key = 'blockera_instance' . BLOCKERA_SB_VERSION;
+
 // Initialize static cache.
-$blockera_cache = wp_cache_get('blockera_instance');
+$blockera_cache = wp_cache_get($cache_key);
 
 if ($blockera_cache !== false) {
-    $blockera = $blockera_cache;
-    return;
+	// If the cache is serialized, unserialize it. because Serialization of Closure is not supported.
+    if (is_serialized($blockera_cache)) {
+        $blockera = unserialize($blockera_cache);
+    } else {
+        $blockera = $blockera_cache;
+    }
+}else {
+	// Optimize class initialization.
+	$blockera = new \Blockera\Setup\Blockera();
+	// Cache the instance.
+	wp_cache_set($cache_key, $blockera);
 }
-
-// Optimize class initialization.
-$blockera = new \Blockera\Setup\Blockera();
-
-// Cache the instance.
-wp_cache_set('blockera_instance', $blockera);
 
 $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
@@ -41,6 +46,6 @@ blockera_load('telemetry.php.hooks', $external_dir);
 $blockera->bootstrap();
 
 // Register shutdown function for cleanup.
-register_shutdown_function(function() {
-    wp_cache_delete('blockera_instance');
+add_action('shutdown', function() use ($cache_key):void {
+    wp_cache_delete($cache_key);
 });
