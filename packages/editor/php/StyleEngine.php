@@ -426,6 +426,11 @@ final class StyleEngine {
 							$prepared_inline_styles[ $inline_style[0] ] = $inline_style[1];
 						}
 
+						if (! isset($css_rules[ $definition_selector ]) || ! in_array($prepared_inline_styles, $css_rules[ $definition_selector ], true)) {
+
+							$css_rules[ $definition_selector ] = array_merge($prepared_inline_styles, $css_rules[ $definition_selector ] ?? []);
+						}
+
 						continue;
 					}
 
