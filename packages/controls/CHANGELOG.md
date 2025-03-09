@@ -23,6 +23,7 @@
 - Fixed an issue where the input control style is not correct when the control is focused or hovered.
 - Fixed an issue where the border line control preview is not correct.
 - Fixed an issue where the transform feature control shows value incorrectly.
+- Fixed an issue where the border line control had incorrect default values, causing inconsistent initial states and UI behavior. Updated the default values to properly initialize the control and ensure consistent functionality with the value addon interface.
 
 ### Automated Tests
 - Added comprehensive test coverage for input controls, including number inputs, unit selection, keyboard navigation, and copy/paste functionality.
