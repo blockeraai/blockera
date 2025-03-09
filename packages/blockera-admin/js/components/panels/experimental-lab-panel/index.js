@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useContext } from '@wordpress/element';
+import { useContext, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -28,7 +28,7 @@ import FeatureDesc from './components/feature-desc';
 const fallbackDefaultValue = {
 	earlyAccessLab: {
 		optimizeStyleGeneration: false,
-		optimizeStyleGenerationStatus: 'beta',
+		optimizeStyleGenerationStatus: 'alpha',
 	},
 };
 
@@ -37,7 +37,9 @@ export const ExperimentalLabPanel = (): MixedElement => {
 		defaultSettings,
 		//  config
 	} = useContext(SettingsContext);
+
 	const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
+
 	const earlyAccessLabSettings =
 		settings?.earlyAccessLab ||
 		defaultSettings?.earlyAccessLab ||
@@ -46,6 +48,12 @@ export const ExperimentalLabPanel = (): MixedElement => {
 	const {
 		blockeraSettings: { earlyAccessLab: savedEarlyAccessLabSettings },
 	} = window;
+
+	const [optimizeStyleGenerationStatus] = useState(
+		earlyAccessLabSettings?.optimizeStyleGenerationStatus !== undefined
+			? earlyAccessLabSettings.optimizeStyleGenerationStatus
+			: fallbackDefaultValue.earlyAccessLab.optimizeStyleGenerationStatus
+	);
 
 	return (
 		<Flex
@@ -64,11 +72,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 					/>
 					{__('Optimized Style Generation', 'blockera')}
 
-					<FeatureLabel
-						status={
-							earlyAccessLabSettings.optimizeStyleGenerationStatus
-						}
-					/>
+					<FeatureLabel status={optimizeStyleGenerationStatus} />
 				</h3>
 
 				<p className={'blockera-settings-general section-desc'}>
@@ -108,13 +112,20 @@ export const ExperimentalLabPanel = (): MixedElement => {
 										savedEarlyAccessLabSettings.optimizeStyleGeneration
 								);
 
-								setSettings({
+								const newSettings = {
 									...settings,
 									earlyAccessLab: {
 										...earlyAccessLabSettings,
 										optimizeStyleGeneration: checked,
 									},
-								});
+								};
+
+								// The status should be removed from the settings because it is not a valid setting.
+								// it is only used to display the status of the feature.
+								delete newSettings.earlyAccessLab
+									.optimizeStyleGenerationStatus;
+
+								setSettings(newSettings);
 							}}
 							label={
 								<strong
@@ -132,11 +143,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 					</ControlContextProvider>
 				</div>
 
-				<FeatureDesc
-					status={
-						earlyAccessLabSettings.optimizeStyleGenerationStatus
-					}
-				/>
+				<FeatureDesc status={optimizeStyleGenerationStatus} />
 			</Flex>
 		</Flex>
 	);

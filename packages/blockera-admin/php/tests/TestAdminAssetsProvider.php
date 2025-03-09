@@ -30,6 +30,7 @@ class TestAdminAssetsProvider extends \Blockera\Dev\PHPUnit\AppTestCase
      */
     public function testItShouldNotEnqueueBlockeraAdminAssetsOnNewPostPage(): void
     {
+		self::$provider->register();
         self::$provider->boot();
 
         set_current_screen('post.php');
@@ -52,6 +53,7 @@ class TestAdminAssetsProvider extends \Blockera\Dev\PHPUnit\AppTestCase
         $_GET['page'] = 'blockera-settings-dashboard';
 
         // Boot provider which should enqueue assets
+		self::$provider->register();
         self::$provider->boot();
 
         // Trigger admin scripts hook

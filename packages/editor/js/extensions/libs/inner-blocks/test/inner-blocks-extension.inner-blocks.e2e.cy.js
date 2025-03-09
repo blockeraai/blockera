@@ -114,7 +114,9 @@ describe('Inner Blocks Functionality Tests ...', () => {
 								'blockera-inner-block-type'
 							).should('have.length', 1);
 
-							cy.getByAriaLabel('core/buttons').click();
+							cy.getByAriaLabel('core/buttons').click({
+								force: true,
+							});
 						});
 				}
 			);

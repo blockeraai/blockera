@@ -73,3 +73,10 @@ export const updaterDeviceIndicator = (
 		type: 'UPDATER_DEVICE_INDICATOR',
 	};
 };
+
+export const setBlockAppSettings = (settings: Object): Object => {
+	return {
+		settings,
+		type: 'SET_BLOCK_APP_SETTINGS',
+	};
+};

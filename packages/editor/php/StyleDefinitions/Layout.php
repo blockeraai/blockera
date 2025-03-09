@@ -82,6 +82,13 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				$item             = $setting['flex-direction'];
 				$changeFlexInside = false;
 
+				// Current block display (even the default).
+				$display = $this->getDisplayValue();
+
+				if ( 'flex' !== $display ) {
+					break;
+				}
+
 				if ( isset($item['alignItems']) && $item['direction'] ) {
 					$declaration['flex-direction'] = $item['direction'];
 				}
@@ -122,12 +129,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 			case 'gap':
 				// Current block display (even the default).
-				$display = '';
-				if ( ! empty( $this->settings['blockeraDisplay']['value'] ) ) {
-					$display = $this->settings['blockeraDisplay']['value'];
-				} elseif ( ! empty( $this->default_settings['blockeraDisplay']['default'] ) ) {
-					$display = $this->default_settings['blockeraDisplay']['default'];
-				}
+				$display = $this->getDisplayValue();
 
 				// Current block gap type.
 				$gapType = 'gap';
@@ -178,11 +180,11 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				 */
 				if (
 					'gap-and-margin' === $gapType &&
-					( 'flex' === $display || 'grid' === $display )
+					( 'flex' === $display || 'grid' === $display || '' === $display )
 				) {
 
 					$this->setCss(
-						[
+						'' === $display ? $declaration: [
 							'margin-block-start' => '0',
 						],
 						'margin-block-start',
@@ -264,4 +266,21 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 		$this->with_gap_margin_block_start = false;
 	}
 
+	/**
+	 * Get display value from settings or default settings
+	 *
+	 * @param string $property Property name to check in settings.
+	 * @return string Display value
+	 */
+	private function getDisplayValue( string $property = 'blockeraDisplay'): string {
+		if (! empty($this->settings[ $property ]['value'])) {
+			return $this->settings[ $property ]['value'];
+		} 
+
+		if (! empty($this->default_settings[ $property ]['default']['value'])) {
+			return $this->default_settings[ $property ]['default']['value'];
+		}
+
+		return '';
+	}
 }
