@@ -13,7 +13,7 @@ export type BlockSection = {
 	initialOpen: boolean,
 	onToggle: (
 		isOpen: boolean,
-		action: 'switch-to-parent' | 'switch-to-inner',
+		action?: 'switch-to-parent' | 'switch-to-inner',
 		targetBlock?: string
 	) => void,
 };
