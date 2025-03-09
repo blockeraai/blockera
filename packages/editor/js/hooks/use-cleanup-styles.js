@@ -24,7 +24,6 @@ export const useCleanupStyles = (
 	const optimizeStyleGenerationOnEditor = experimental().get(
 		'earlyAccessLab.optimizeStyleGenerationOnEditor'
 	);
-	console.log(optimizeStyleGenerationOnEditor);
 
 	useEffect(() => {
 		setTimeout(() => {
