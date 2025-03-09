@@ -103,8 +103,8 @@ export const FallbackUI = ({
 					},
 				});
 			}
-			// eslint-disable-next-line react-hooks/exhaustive-deps
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[isReportingErrorCompleted, error]
 	);
 
