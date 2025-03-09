@@ -120,7 +120,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByDataTest('style-tab').click();
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 
 				// unlock gap
 				cy.getByAriaLabel('Custom Row & Column Gap').click();
@@ -129,11 +129,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should(
-				'not.have.css',
-				'row-gap',
-				'100px'
-			);
+			cy.getBlock('core/group').should('not.have.css', 'row-gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -145,11 +141,19 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.getBlock('core/paragraph')
 				.last()
-				.should('have.css', 'margin-block-start', '100px');
+				.should('have.css', 'margin-block-start', '43px');
+
+			cy.getIframeBody().within(() => {
+				cy.get('#blockera-styles-wrapper')
+					.invoke('text')
+					.should(
+						'include',
+						'> * + *{margin-block-start: 43px !important;'
+					);
+			});
 
 			//Check frontend
 			savePage();
-
 			redirectToFrontPage();
 
 			//
@@ -158,7 +162,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.get('.wp-block-group.blockera-block').should(
 				'not.have.css',
 				'row-gap',
-				'100px'
+				'43px'
 			);
 
 			//
@@ -166,7 +170,11 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '100px');
+				.should('have.css', 'margin-block-start', '43px');
+
+			cy.get('style#blockera-inline-css')
+				.invoke('text')
+				.should('include', '> * + * {\n margin-block-start: 43px');
 		});
 	});
 
@@ -204,13 +212,13 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByDataTest('matrix-top-left-normal').click();
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 			});
 
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should('have.css', 'gap', '100px');
+			cy.getBlock('core/group').should('have.css', 'gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -232,7 +240,6 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			//Check frontend
 			savePage();
-
 			redirectToFrontPage();
 
 			//
@@ -241,7 +248,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.get('.wp-block-group.blockera-block').should(
 				'have.css',
 				'gap',
-				'100px'
+				'43px'
 			);
 
 			//
@@ -295,7 +302,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByDataTest('matrix-top-left-normal').click();
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 
 				// unlock gap
 				cy.getByAriaLabel('Custom Row & Column Gap').click();
@@ -304,7 +311,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should('have.css', 'row-gap', '100px');
+			cy.getBlock('core/group').should('have.css', 'row-gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -326,7 +333,6 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			//Check frontend
 			savePage();
-
 			redirectToFrontPage();
 
 			//
@@ -335,7 +341,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.get('.wp-block-group.blockera-block').should(
 				'have.css',
 				'row-gap',
-				'100px'
+				'43px'
 			);
 
 			//
@@ -404,13 +410,13 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByDataTest('matrix-top-left-normal').click();
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 			});
 
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should('have.css', 'gap', '100px');
+			cy.getBlock('core/group').should('have.css', 'gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -453,13 +459,13 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByDataTest('matrix-top-right-normal').click();
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(200);
+				cy.get('input').type(86);
 			});
 
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').eq(1).should('have.css', 'gap', '200px');
+			cy.getBlock('core/group').eq(1).should('have.css', 'gap', '86px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -481,7 +487,6 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			//Check frontend
 			savePage();
-
 			redirectToFrontPage();
 
 			//
@@ -491,10 +496,9 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			// Parent Group
 			//
-
 			cy.get('.wp-block-group.blockera-block')
 				.eq(0)
-				.should('have.css', 'gap', '100px');
+				.should('have.css', 'gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -519,7 +523,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.get('.wp-block-group.blockera-block')
 				.eq(1)
-				.should('have.css', 'gap', '200px');
+				.should('have.css', 'gap', '86px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -574,13 +578,13 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByDataTest('matrix-top-left-normal').click();
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 			});
 
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should('have.css', 'gap', '100px');
+			cy.getBlock('core/group').should('have.css', 'gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -611,7 +615,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.get('.wp-block-group.blockera-block').should(
 				'have.css',
 				'gap',
-				'100px'
+				'43px'
 			);
 
 			//
@@ -665,7 +669,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.getByDataTest('matrix-top-left-normal').click();
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 
 				// unlock gap
 				cy.getByAriaLabel('Custom Row & Column Gap').click();
@@ -674,7 +678,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should('have.css', 'row-gap', '100px');
+			cy.getBlock('core/group').should('have.css', 'row-gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -696,7 +700,6 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			//Check frontend
 			savePage();
-
 			redirectToFrontPage();
 
 			//
@@ -705,7 +708,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.get('.wp-block-group.blockera-block').should(
 				'have.css',
 				'row-gap',
-				'100px'
+				'43px'
 			);
 
 			//
@@ -755,13 +758,13 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 			});
 
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should('have.css', 'gap', '100px');
+			cy.getBlock('core/group').should('have.css', 'gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -786,7 +789,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.get('.wp-block-group.blockera-block').should(
 				'have.css',
 				'gap',
-				'100px'
+				'43px'
 			);
 
 			//
@@ -824,7 +827,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			cy.getParentContainer('Gap').within(() => {
-				cy.get('input').type(100);
+				cy.get('input').type(43);
 
 				// unlock gap
 				cy.getByAriaLabel('Custom Row & Column Gap').click();
@@ -833,7 +836,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			// Asset group block CSS
 			//
-			cy.getBlock('core/group').should('have.css', 'row-gap', '100px');
+			cy.getBlock('core/group').should('have.css', 'row-gap', '43px');
 
 			//
 			// Assert child block to have valid property for gap
@@ -858,7 +861,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			cy.get('.wp-block-group.blockera-block').should(
 				'have.css',
 				'row-gap',
-				'100px'
+				'43px'
 			);
 
 			//
