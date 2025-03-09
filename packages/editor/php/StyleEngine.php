@@ -445,7 +445,7 @@ final class StyleEngine {
 
 			// Merge with existing rules, avoiding duplicates.
 			if (! isset($css_rules[ $selector ])) {
-				if (empty($prepared_styles)) {
+				if (! empty($prepared_styles)) {
 					$css_rules[ $selector ] = $prepared_styles;
 				}
 				
@@ -453,7 +453,7 @@ final class StyleEngine {
 					$css_rules[ array_keys($filtered_child_declarations)[0] ] = $prepared_child_styles;
 				}
 			} else {
-				if (empty($prepared_styles)) {
+				if (! empty($prepared_styles)) {
 					$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
 				}
 
