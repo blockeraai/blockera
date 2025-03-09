@@ -416,7 +416,7 @@ final class StyleEngine {
 	 */
 	protected function mergeInlineStyles( array $css_rules): array {
 		$definition_selector = $this->definition->getSelector();
-		
+
 		// Early return if no definition selector.
 		if (empty($definition_selector)) {
 			return $css_rules;
@@ -443,20 +443,19 @@ final class StyleEngine {
 			$prepared_styles       = $this->prepareInlineStyles($filtered_declarations);
 			$prepared_child_styles = $this->prepareInlineStyles(blockera_array_flat($filtered_child_declarations));
 
-			// Skip if no valid styles were prepared.
-			if (empty($prepared_styles)) {
-				continue;
-			}
-
 			// Merge with existing rules, avoiding duplicates.
 			if (! isset($css_rules[ $selector ])) {
-				$css_rules[ $selector ] = $prepared_styles;
+				if (empty($prepared_styles)) {
+					$css_rules[ $selector ] = $prepared_styles;
+				}
 				
 				if (! empty($prepared_child_styles)) {
 					$css_rules[ array_keys($filtered_child_declarations)[0] ] = $prepared_child_styles;
 				}
 			} else {
-				$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
+				if (empty($prepared_styles)) {
+					$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
+				}
 
 				if (! empty($prepared_child_styles)) {
 					$css_rules[ array_keys($filtered_child_declarations)[0] ] = array_merge($css_rules[ array_keys($filtered_child_declarations)[0] ], $prepared_child_styles);
@@ -479,11 +478,11 @@ final class StyleEngine {
 
 		foreach ($this->inline_styles as $selector => $declarations) {
 			// If selector matches the base selector pattern, include it.
-			if (false !== strpos($selector, $base_selector) && false !== strpos($base_selector, $selector)) {
+			if (false !== strpos($selector, $base_selector) || false !== strpos($base_selector, $selector)) {
 				$matching_styles[ $selector ] = $declarations;
 			}
 		}
-		
+
 		return $matching_styles;
 	}
 
