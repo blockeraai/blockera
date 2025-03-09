@@ -43,18 +43,62 @@
 		}
 	}
 
+	.blockera-control-border-color-wrapper {
+		position: relative;
+		margin-right: -1px !important;
+   		margin-left: -1px !important;
+
+		.blockera-control-value-addon-pointers {
+			z-index: 5;
+		}
+
+		.blockera-control-value-addon.type-variable {
+			justify-content: center;
+			justify-items: center;
+			grid-template-columns: 20px;
+			padding: 2px 5px 2px 5px;
+
+			&.open-value-addon {
+				z-index: 4;
+				position: relative;
+			}
+
+			.blockera-control-item-name {
+				display: none;
+			}
+		}
+
+		&:hover {
+
+			& > .blockera-control.blockera-control-value-addon-pointers .blockera-control-value-addon-pointer {
+				transform: scale(1);
+
+				&:nth-child(1) {
+					transition: all 0.15s ease 0.06s; // delay
+				}
+
+				svg {
+					fill: currentColor;
+				}
+			}
+		}
+	}
+
 	.blockera-control-color.components-button {
+		width: 100%;
 		border-radius: 0 !important;
 		z-index: 1;
 		justify-content: center !important;
 		gap: 0 !important;
-		margin-right: -1px !important;
-		margin-left: -1px !important;
 		padding: 2px 5px 2px 5px !important;
 
 		&.is-focus,
 		&:hover {
 			z-index: 3;
+		}
+
+		&.blockera-value-addon-support-variable {
+			z-index: 4;
 		}
 
 		.color-label {

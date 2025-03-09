@@ -6,9 +6,10 @@
 - Added dynamic unit switching in input controls - Users can now change units by typing them directly (e.g., typing "12px" or "12%" automatically updates both value and unit) [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/support-changing-the-unit-of-input-by-typing-it-nVKjZXQKHGTN4Da)]
 - Added Shift key modifier for input controls - Hold Shift while using arrow keys to increment/decrement values by 10 instead of 1, enabling faster value adjustments.
 - Added mathematical calculation support in input controls:[[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/calculation-support-in-input-fields-vYgMNzDYuGLilZy)]
-  - Supports basic operations (+, -, *, /)
-  - Evaluates on Enter key or loosing focus.
-  - Example: Type "10 + 20" and press Enter to calculate.
+- Supports basic operations (+, -, *, /)
+- Evaluates on Enter key or loosing focus.
+- Example: Type "10 + 20" and press Enter to calculate.
+- Added color variables support to border line feature.
 
 ### Improvements
 - Update border radius control to improve UX.
@@ -23,6 +24,7 @@
 - Fixed an issue where the border line control preview is not correct.
 - Fixed an issue where the transform feature control shows value incorrectly.
 - Fixed an issue where the controls are overlapping the "x" reset icon. (Thanks Hoang Hxn)
+- Fixed an issue where the border line control had incorrect default values, causing inconsistent initial states and UI behavior. Updated the default values to properly initialize the control and ensure consistent functionality with the value addon interface.
 
 ### Automated Tests
 - Added comprehensive test coverage for input controls, including number inputs, unit selection, keyboard navigation, and copy/paste functionality.
