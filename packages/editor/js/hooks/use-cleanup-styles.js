@@ -9,6 +9,7 @@ import { useState, useEffect } from '@wordpress/element';
  * Blockera dependencies
  */
 import { isEmpty, getIframeTag } from '@blockera/utils';
+import { experimental } from '@blockera/env';
 
 export const useCleanupStyles = (
 	{ clientId }: { clientId: string },
@@ -20,10 +21,14 @@ export const useCleanupStyles = (
 			earlyAccessLab: { optimizeStyleGeneration },
 		},
 	} = window;
+	const optimizeStyleGenerationOnEditor = experimental().get(
+		'earlyAccessLab.optimizeStyleGenerationOnEditor'
+	);
+	console.log(optimizeStyleGenerationOnEditor);
 
 	useEffect(() => {
 		setTimeout(() => {
-			if (!optimizeStyleGeneration) {
+			if (!optimizeStyleGeneration || !optimizeStyleGenerationOnEditor) {
 				return;
 			}
 

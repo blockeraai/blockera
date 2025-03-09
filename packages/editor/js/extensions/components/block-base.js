@@ -47,7 +47,7 @@ import { BlockCompatibility } from './block-compatibility';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
-// import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
+import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
@@ -123,7 +123,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		currentInnerBlockState,
 	} = useExtensionsStore({ name, clientId });
 
-	const { availableAttributes } = useSelect((select) => {
+	const { availableAttributes, selectedBlock } = useSelect((select) => {
 		const { getActiveBlockVariation } = select('blockera/extensions');
 
 		const { getBlockType } = select('core/blocks');
@@ -301,12 +301,10 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		[currentAttributes]
 	);
 
-	/**
-	 * FIXME: We need to use of useCleanupStyles hook to cleanup inline styles and preparing them into a single array.
-	 *
-	 * @see blockera/.patch/use-cleanup-styles-use-cases.js
-	 */
-	const inlineStyles: Array<MixedElement> = [];
+	const inlineStyles = useCleanupStyles({ clientId }, [
+		selectedBlock,
+		attributes,
+	]);
 
 	const originalAttributes = useMemo(() => {
 		return omitWithPattern(
