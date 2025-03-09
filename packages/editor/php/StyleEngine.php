@@ -458,7 +458,7 @@ final class StyleEngine {
 				}
 
 				if (! empty($prepared_child_styles)) {
-					$css_rules[ array_keys($filtered_child_declarations)[0] ] = array_merge($css_rules[ array_keys($filtered_child_declarations)[0] ], $prepared_child_styles);
+					$css_rules[ array_keys($filtered_child_declarations)[0] ] = array_merge($css_rules[ array_keys($filtered_child_declarations)[0] ] ?? [], $prepared_child_styles);
 				}
 			}
 		}
