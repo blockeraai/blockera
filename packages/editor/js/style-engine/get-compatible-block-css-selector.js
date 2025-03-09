@@ -482,5 +482,14 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 		return `${selector.replace(regexp, `${root}.${subject}`)}`;
 	}
 
+	// If selector has combinators (space, >, +, ~) or starts with a-z html tag name,
+	// and not starts with space,
+	if (
+		!selector.startsWith(' ') &&
+		(/[\s>+~]/.test(selector) || /^[a-z]/.test(selector))
+	) {
+		return `${selector}${root}`;
+	}
+
 	return `${root}${selector}`;
 };
