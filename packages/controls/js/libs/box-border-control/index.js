@@ -165,6 +165,7 @@ export default function BoxBorderControl({
 							defaultValue={value.all}
 						/>
 					)}
+
 					<Button
 						showTooltip={true}
 						tooltipPosition="top"
