@@ -45,6 +45,7 @@ export const StateStyle = (
 		};
 
 		loadBreakpoints();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	// Filtered allowed states to generate stylesheet.
 	// in free version allowed just "normal" and "hover".
