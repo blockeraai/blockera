@@ -5,6 +5,7 @@
 - Various bug fixes.
 - Fixed an issue where the style engine generated incorrect selectors on both server and client sides.
 - Block section settings are now hidden if there are no taggable features in the section.
+- The Width feature should use `flex-basis` in the Column Block. 
 
 ### Development Workflow
 - GitHub workflow to enable developers to have custom PR playground configurations.
