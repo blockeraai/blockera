@@ -61,7 +61,7 @@ describe('Flex Layout → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should(
+		cy.get('p.blockera-block').should(
 			'have.css',
 			'flex-direction',
 			'column'
@@ -107,13 +107,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						'flex-start'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						'flex-start'
@@ -156,13 +156,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						type === 'Row' ? 'flex-start' : 'center'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						type === 'Row' ? 'center' : 'flex-start'
@@ -205,13 +205,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						type === 'Row' ? 'flex-start' : 'flex-end'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						type === 'Row' ? 'flex-end' : 'flex-start'
@@ -254,13 +254,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						type === 'Row' ? 'center' : 'flex-start'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						type === 'Row' ? 'flex-start' : 'center'
@@ -303,13 +303,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						'center'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						'center'
@@ -352,13 +352,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						type === 'Row' ? 'center' : 'flex-end'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						type === 'Row' ? 'flex-end' : 'center'
@@ -401,13 +401,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						type === 'Row' ? 'flex-end' : 'flex-start'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						type === 'Row' ? 'flex-start' : 'flex-end'
@@ -450,13 +450,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						type === 'Row' ? 'flex-end' : 'center'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						type === 'Row' ? 'center' : 'flex-end'
@@ -500,13 +500,13 @@ describe('Flex Layout → Functionality', () => {
 
 					redirectToFrontPage();
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
 						'flex-end'
 					);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
 						'flex-end'
@@ -564,13 +564,13 @@ describe('Flex Layout → Functionality', () => {
 
 						redirectToFrontPage();
 
-						cy.get('.blockera-block').should(
+						cy.get('p.blockera-block').should(
 							'have.css',
 							'align-items',
 							'flex-start'
 						);
 
-						cy.get('.blockera-block').should(
+						cy.get('p.blockera-block').should(
 							'have.css',
 							'justify-content',
 							'space-around'
@@ -623,13 +623,13 @@ describe('Flex Layout → Functionality', () => {
 
 						redirectToFrontPage();
 
-						cy.get('.blockera-block').should(
+						cy.get('p.blockera-block').should(
 							'have.css',
 							'align-items',
 							'flex-start'
 						);
 
-						cy.get('.blockera-block').should(
+						cy.get('p.blockera-block').should(
 							'have.css',
 							'justify-content',
 							'space-between'
@@ -682,13 +682,13 @@ describe('Flex Layout → Functionality', () => {
 
 						redirectToFrontPage();
 
-						cy.get('.blockera-block').should(
+						cy.get('p.blockera-block').should(
 							'have.css',
 							'align-items',
 							'stretch'
 						);
 
-						cy.get('.blockera-block').should(
+						cy.get('p.blockera-block').should(
 							'have.css',
 							'justify-content',
 							'flex-start'

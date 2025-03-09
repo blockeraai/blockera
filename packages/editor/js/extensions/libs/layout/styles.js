@@ -5,6 +5,7 @@
  */
 import { getValueAddonRealValue } from '@blockera/controls';
 import { prepare } from '@blockera/data-editor';
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -222,15 +223,15 @@ export const LayoutStyles = ({
 	if (
 		_attributes.blockeraDisplay === 'flex' &&
 		isActiveField(blockeraFlexWrap) &&
-		_attributes.blockeraFlexWrap !== attributes.blockeraFlexWrap.default
+		!isEquals(
+			_attributes.blockeraFlexWrap,
+			attributes.blockeraFlexWrap.default
+		)
 	) {
-		let value =
-			_attributes.blockeraFlexWrap?.value ??
-			_attributes.blockeraFlexWrap?.val;
+		let value = _attributes.blockeraFlexWrap?.val;
 
 		if (
-			(_attributes.blockeraFlexWrap?.value === 'wrap' ||
-				_attributes.blockeraFlexWrap?.val === 'wrap') &&
+			_attributes.blockeraFlexWrap?.val === 'wrap' &&
 			_attributes.blockeraFlexWrap?.reverse
 		) {
 			value += '-reverse';

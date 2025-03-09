@@ -51,7 +51,7 @@ describe('Background Color → Functionality', () => {
 		//assert frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.blockera-block').should(
+		cy.get('p.blockera-block').should(
 			'have.css',
 			'background-color',
 			'rgb(102, 102, 102)'

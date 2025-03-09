@@ -10,7 +10,7 @@ export function setParentBlock() {
 
 export function setInnerBlock(blockType) {
 	cy.wrap(openInnerBlocksExtension())
-		.wait(10)
+		.wait(100)
 		.get('body')
 		.then(($body) => {
 			if (
@@ -26,10 +26,12 @@ export function setInnerBlock(blockType) {
 			} else {
 				openInserterInnerBlock();
 
-				cy.get('.components-popover')
+				cy.get(
+					'.blockera-component-popover.blockera-inner-blocks-picker'
+				)
 					.last()
 					.within(() => {
-						cy.getByAriaLabel(blockType).click();
+						cy.getByAriaLabel(blockType).click({ force: true });
 					});
 			}
 		});
@@ -41,7 +43,7 @@ export function openInserterInnerBlock(disabled = '') {
 			.contains('Add Inner Block')
 			.should('have.attr', 'disabled');
 	} else {
-		cy.get('button').contains('Add Inner Block').click();
+		cy.get('button').contains('Add Inner Block').click({ force: true });
 	}
 }
 

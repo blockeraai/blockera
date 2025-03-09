@@ -25,7 +25,7 @@ import { isEquals, kebabCase, isObject } from '@blockera/utils';
 import { getItem, setItem, updateItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
 
-const cacheKey = 'BLOCKERA_SUPPORTS_CONFIG';
+const cacheKey = 'BLOCKERA_EDITOR_SUPPORTS';
 
 /**
  * Internal dependencies
