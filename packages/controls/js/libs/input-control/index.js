@@ -198,7 +198,6 @@ export default function InputControl({
 					min={min}
 					max={max}
 					drag={drag}
-					float={float}
 					arrows={arrows}
 					size={size}
 					children={children}

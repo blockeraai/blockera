@@ -6,6 +6,11 @@
 - Fixed an issue where the style engine generated incorrect selectors on both server and client sides.
 - Block section settings are now hidden if there are no taggable features in the section.
 - The Width feature should use `flex-basis` in the Column Block. 
+- Fixed an issue where the toggle action in the block section was not working correctly.
+- Fixed an issue where the block section focus, collapse and expand actions were not being updated correctly as a unified state around the editor for all blocks.
+- Fixed the Flex Direction not working properly sometimes.
+- Fixed the extra Flex Wrap css property for blocks.
+- Fixed an issue where the gap feature was not working properly.
 
 ### Development Workflow
 - GitHub workflow to enable developers to have custom PR playground configurations.
@@ -32,6 +37,7 @@
 
 ### Improvements
 - The overall design of the block settings has been improved to boost the UX (based on user feedback and user researches).
+- Enhanced Block Sections with improved state management for seamless transitions between parent and inner blocks, maintaining section states and focus mode settings during block switching.
 
 ### New Features:
 - Added Box Sizing feature to Size block section to enhance design flexibility in size-related customizations.

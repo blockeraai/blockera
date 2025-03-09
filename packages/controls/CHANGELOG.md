@@ -7,8 +7,8 @@
 - Added Shift key modifier for input controls - Hold Shift while using arrow keys to increment/decrement values by 10 instead of 1, enabling faster value adjustments.
 - Added mathematical calculation support in input controls:[[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/calculation-support-in-input-fields-vYgMNzDYuGLilZy)]
   - Supports basic operations (+, -, *, /)
-  - Evaluates on Enter key or loosing focus
-  - Example: Type "10 + 20" and press Enter to calculate
+  - Evaluates on Enter key or loosing focus.
+  - Example: Type "10 + 20" and press Enter to calculate.
 
 ### Improvements
 - Update border radius control to improve UX.
@@ -22,6 +22,7 @@
 - Fixed an issue where the input control style is not correct when the control is focused or hovered.
 - Fixed an issue where the border line control preview is not correct.
 - Fixed an issue where the transform feature control shows value incorrectly.
+- Fixed an issue where the controls are overlapping the "x" reset icon. (Thanks Hoang Hxn)
 
 ### Automated Tests
 - Added comprehensive test coverage for input controls, including number inputs, unit selection, keyboard navigation, and copy/paste functionality.

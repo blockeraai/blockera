@@ -112,7 +112,7 @@ export function InnerBlockCard({
 								iconSize="24"
 								data-test={'Close Inner Block'}
 								onClick={() => {
-									onToggle(true);
+									onToggle(true, 'switch-to-parent');
 									handleOnClick('current-block', 'master');
 								}}
 							/>
