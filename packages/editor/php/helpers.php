@@ -904,9 +904,15 @@ if ( ! function_exists( 'blockera_find_selector_declarations' ) ) {
 				continue;
 			}
 
-			return $declarations;
+			return [
+				'selector' => $_selector,
+				'declarations' => $declarations,
+			];
 		}
 
-		return [];
+		return [
+			'selector' => '',
+			'declarations' => [],
+		];
 	}
 }

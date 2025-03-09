@@ -400,60 +400,105 @@ final class StyleEngine {
 
 		$css_rules = $this->definition->getCssRules();
 
-		$is_normal_on_base_breakpoint = blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint);
+		// Only process inline styles for normal state on base breakpoint.
+		if (blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && ! empty($this->inline_styles)) {
+			$css_rules = $this->mergeInlineStyles($css_rules);
+		}
 
-		if ($is_normal_on_base_breakpoint && ! empty($this->inline_styles)) {
+		return $css_rules;
+	}
 
-			$definition_selector = $this->definition->getSelector();
+	/**
+	 * Merge inline styles with generated CSS rules, avoiding duplicates.
+	 * 
+	 * @param array $css_rules The existing CSS rules.
+	 * @return array The merged CSS rules.
+	 */
+	protected function mergeInlineStyles( array $css_rules): array {
+		$definition_selector = $this->definition->getSelector();
+		
+		// Early return if no definition selector.
+		if (empty($definition_selector)) {
+			return $css_rules;
+		}
 
-			$selector_inline_styles = blockera_find_selector_declarations(preg_replace('/^\w+\./i', '.', $definition_selector), $this->inline_styles);
+		// Get all inline styles that match the current definition's selector pattern.
+		$matching_styles = $this->getMatchingInlineStyles($definition_selector);
 
-			if (! empty($selector_inline_styles) && ! empty($definition_selector)) {
+		foreach ($matching_styles as $selector => $declarations) {
+			// Skip if declarations are empty.
+			if (empty($declarations)) {
+				continue;
+			}
 
-				foreach ($selector_inline_styles as $selector => $inline_styles) {
-					$prepared_inline_styles = [];
+			// Convert declarations to property-value pairs.
+			$prepared_styles = $this->prepareInlineStyles($declarations);
+			
+			// Skip if no valid styles were prepared.
+			if (empty($prepared_styles)) {
+				continue;
+			}
 
-					if (is_int($selector) || ! is_array($inline_styles)) {
-						$extracted = explode(':', $inline_styles);
-
-						foreach (array_chunk($extracted, 2) as $inline_style) {
-
-							if (! isset($inline_style[0]) || ! isset($inline_style[1])) {
-
-								continue;
-							}
-
-							$prepared_inline_styles[ $inline_style[0] ] = $inline_style[1];
-						}
-
-						if (! isset($css_rules[ $definition_selector ]) || ! in_array($prepared_inline_styles, $css_rules[ $definition_selector ], true)) {
-
-							$css_rules[ $definition_selector ] = array_merge($prepared_inline_styles, $css_rules[ $definition_selector ] ?? []);
-						}
-
-						continue;
-					}
-
-					foreach ($inline_styles as $inline_style) {
-						$extracted = explode(':', $inline_style);
-
-						if (isset($prepared_inline_styles[ $extracted[0] ])) {
-
-							continue;
-						}
-
-						$prepared_inline_styles[ $extracted[0] ] = $extracted[1];
-					}
-
-					if (! isset($css_rules[ $selector ]) || ! in_array($prepared_inline_styles, $css_rules[ $selector ], true)) {
-
-						$css_rules[ $selector ] = array_merge($prepared_inline_styles, $css_rules[ $selector ] ?? []);
-					}					
-				}
+			// Merge with existing rules, avoiding duplicates.
+			if (! isset($css_rules[ $selector ])) {
+				$css_rules[ $selector ] = $prepared_styles;
+			} else {
+				$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
 			}
 		}
 
 		return $css_rules;
+	}
+
+	/**
+	 * Get inline styles that match the current definition's selector.
+	 * 
+	 * @param string $definition_selector The current definition's selector.
+	 * @return array Matching inline styles.
+	 */
+	protected function getMatchingInlineStyles( string $definition_selector): array {
+		$matching_styles = [];
+		$base_selector   = preg_replace('/^\w+\./i', '.', $definition_selector);
+		
+		foreach ($this->inline_styles as $selector => $declarations) {
+			// If selector matches the base selector pattern, include it.
+			if (strpos($selector, $base_selector) !== false) {
+				$matching_styles[ $selector ] = $declarations;
+			}
+		}
+		
+		return $matching_styles;
+	}
+
+	/**
+	 * Convert inline style declarations to property-value pairs.
+	 * 
+	 * @param array|string $declarations The style declarations.
+	 * @return array The prepared styles.
+	 */
+	protected function prepareInlineStyles( $declarations): array {
+		$prepared_styles = [];
+
+		// Handle string declarations.
+		if (is_string($declarations)) {
+			$parts = explode(':', $declarations);
+			if (count($parts) === 2) {
+				$prepared_styles[ trim($parts[0]) ] = trim($parts[1]);
+			}
+			return $prepared_styles;
+		}
+
+		// Handle array declarations.
+		foreach ($declarations as $declaration) {
+			if (is_string($declaration)) {
+				$parts = explode(':', $declaration);
+				if (count($parts) === 2) {
+					$prepared_styles[ trim($parts[0]) ] = trim($parts[1]);
+				}
+			}
+		}
+
+		return $prepared_styles;
 	}
 
 	/**
