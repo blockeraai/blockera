@@ -9,6 +9,7 @@
   - Supports basic operations (+, -, *, /)
   - Evaluates on Enter key or loosing focus
   - Example: Type "10 + 20" and press Enter to calculate
+- Added color variables support to border line feature.
 
 ### Improvements
 - Update border radius control to improve UX.
