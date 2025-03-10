@@ -31,6 +31,7 @@
 - Added comprehensive test coverage for input controls, including number inputs, unit selection, keyboard navigation, and copy/paste functionality.
 - Added complete test for input control calculation feature.
 - Added test to check opening variable picker by typing "--".
+- Added test to Border Line feature for using variable colors on all and custom borders completely.
 
 ## 1.0.2 (2025-02-03)
 
