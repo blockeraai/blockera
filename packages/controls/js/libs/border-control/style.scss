@@ -79,6 +79,18 @@
 
 				svg {
 					fill: currentColor;
+					outline: 3px solid #ffffff;
+				}
+			}
+		}
+
+		& > .blockera-control.blockera-control-value-addon-pointers .blockera-control-value-addon-pointer {
+
+			&.open-value-addon,
+			&.active-value-addon {
+
+				svg {
+					outline: 2px solid #ffffff;
 				}
 			}
 		}
