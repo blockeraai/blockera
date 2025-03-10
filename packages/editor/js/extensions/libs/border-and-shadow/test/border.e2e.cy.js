@@ -61,7 +61,7 @@ describe('Border → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('.blockera-block').should(
+			cy.get('p.blockera-block').should(
 				'have.css',
 				'border',
 				'5px dashed rgb(55, 230, 212)'
@@ -107,7 +107,7 @@ describe('Border → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('.blockera-block').should(
+			cy.get('p.blockera-block').should(
 				'have.css',
 				'border',
 				'5px solid rgb(55, 230, 212)'
@@ -349,25 +349,25 @@ describe('Border → Functionality', () => {
 
 			redirectToFrontPage();
 
-			cy.get('.blockera-block').should(
+			cy.get('p.blockera-block').should(
 				'have.css',
 				'border-top',
 				'1px solid rgb(115, 221, 171)'
 			);
 
-			cy.get('.blockera-block').should(
+			cy.get('p.blockera-block').should(
 				'have.css',
 				'border-right',
 				'2px dashed rgb(153, 88, 227)'
 			);
 
-			cy.get('.blockera-block').should(
+			cy.get('p.blockera-block').should(
 				'have.css',
 				'border-bottom',
 				'3px dotted rgb(235, 164, 146)'
 			);
 
-			cy.get('.blockera-block').should(
+			cy.get('p.blockera-block').should(
 				'have.css',
 				'border-left',
 				'4px double rgb(24, 147, 218)'
