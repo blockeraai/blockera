@@ -542,7 +542,6 @@ describe('Border → WP Compatibility', () => {
 		});
 
 		describe('Variable Value', () => {
-			// todo change color variable item and improve test to do it
 			it('Compacted borders', () => {
 				appendBlocks(
 					'<!-- wp:buttons -->\n' +
@@ -606,7 +605,12 @@ describe('Border → WP Compatibility', () => {
 				cy.get('@container').within(() => {
 					cy.get('input').clear({ force: true });
 					cy.get('input').type(10, { force: true, delay: 0 });
+
+					cy.removeValueAddon();
+					cy.openValueAddon();
 				});
+
+				cy.selectValueAddonItem('contrast');
 
 				getWPDataObject().then((data) => {
 					expect({
@@ -615,17 +619,17 @@ describe('Border → WP Compatibility', () => {
 							width: '10px',
 							color: {
 								settings: {
-									name: 'Accent 3',
-									id: 'accent-3',
-									value: '#503AA8',
+									name: 'Contrast',
+									id: 'contrast',
+									value: '#111111',
 									reference: {
 										type: 'theme',
 										theme: 'Twenty Twenty-Five',
 									},
 									type: 'color',
-									var: '--wp--preset--color--accent-3',
+									var: '--wp--preset--color--contrast',
 								},
-								name: 'Accent 3',
+								name: 'Contrast',
 								isValueAddon: true,
 								valueType: 'variable',
 							},
@@ -635,7 +639,7 @@ describe('Border → WP Compatibility', () => {
 						getSelectedBlock(data, 'blockeraBorder')
 					);
 
-					expect('accent-3').to.be.equal(
+					expect('contrast').to.be.equal(
 						getSelectedBlock(data, 'borderColor')
 					);
 
@@ -660,16 +664,8 @@ describe('Border → WP Compatibility', () => {
 				cy.get('@container').within(() => {
 					cy.get('input').clear({ force: true });
 
-					cy.getByDataTest('border-control-color').click();
+					cy.removeValueAddon();
 				});
-
-				cy.get('.components-popover')
-					.last()
-					.within(() => {
-						cy.getByAriaLabel('Reset Color (Clear)').click({
-							force: true,
-						});
-					});
 
 				getWPDataObject().then((data) => {
 					expect({
@@ -701,7 +697,6 @@ describe('Border → WP Compatibility', () => {
 				});
 			});
 
-			// todo change color variable item and improve test to do it
 			it('Custom side borders', () => {
 				appendBlocks(
 					'<!-- wp:buttons -->\n' +
@@ -835,7 +830,6 @@ describe('Border → WP Compatibility', () => {
 						getSelectedBlock(data, 'style')?.border
 					);
 				});
-
 				//
 				// Test 2: Blockera value to WP data
 				//
@@ -862,6 +856,46 @@ describe('Border → WP Compatibility', () => {
 					});
 				});
 
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(0)
+						.within(() => {
+							cy.removeValueAddon();
+							cy.openValueAddon();
+						});
+				});
+				cy.selectValueAddonItem('contrast');
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(1)
+						.within(() => {
+							cy.removeValueAddon();
+							cy.openValueAddon();
+						});
+				});
+				cy.selectValueAddonItem('contrast');
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(2)
+						.within(() => {
+							cy.removeValueAddon();
+							cy.openValueAddon();
+						});
+				});
+				cy.selectValueAddonItem('contrast');
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(3)
+						.within(() => {
+							cy.removeValueAddon();
+							cy.openValueAddon();
+						});
+				});
+				cy.selectValueAddonItem('contrast');
+
 				getWPDataObject().then((data) => {
 					expect({
 						type: 'custom',
@@ -874,17 +908,17 @@ describe('Border → WP Compatibility', () => {
 							width: '10px',
 							color: {
 								settings: {
-									name: 'Accent 3',
-									id: 'accent-3',
-									value: '#503AA8',
+									name: 'Contrast',
+									id: 'contrast',
+									value: '#111111',
 									reference: {
 										type: 'theme',
 										theme: 'Twenty Twenty-Five',
 									},
 									type: 'color',
-									var: '--wp--preset--color--accent-3',
+									var: '--wp--preset--color--contrast',
 								},
-								name: 'Accent 3',
+								name: 'Contrast',
 								isValueAddon: true,
 								valueType: 'variable',
 							},
@@ -894,17 +928,17 @@ describe('Border → WP Compatibility', () => {
 							width: '20px',
 							color: {
 								settings: {
-									name: 'Accent 4',
-									id: 'accent-4',
-									value: '#686868',
+									name: 'Contrast',
+									id: 'contrast',
+									value: '#111111',
 									reference: {
 										type: 'theme',
 										theme: 'Twenty Twenty-Five',
 									},
 									type: 'color',
-									var: '--wp--preset--color--accent-4',
+									var: '--wp--preset--color--contrast',
 								},
-								name: 'Accent 4',
+								name: 'Contrast',
 								isValueAddon: true,
 								valueType: 'variable',
 							},
@@ -914,17 +948,17 @@ describe('Border → WP Compatibility', () => {
 							width: '30px',
 							color: {
 								settings: {
-									name: 'Accent 2',
-									id: 'accent-2',
-									value: '#F6CFF4',
+									name: 'Contrast',
+									id: 'contrast',
+									value: '#111111',
 									reference: {
 										type: 'theme',
 										theme: 'Twenty Twenty-Five',
 									},
 									type: 'color',
-									var: '--wp--preset--color--accent-2',
+									var: '--wp--preset--color--contrast',
 								},
-								name: 'Accent 2',
+								name: 'Contrast',
 								isValueAddon: true,
 								valueType: 'variable',
 							},
@@ -934,17 +968,17 @@ describe('Border → WP Compatibility', () => {
 							width: '40px',
 							color: {
 								settings: {
-									name: 'Accent 5',
-									id: 'accent-5',
-									value: '#FBFAF3',
+									name: 'Contrast',
+									id: 'contrast',
+									value: '#111111',
 									reference: {
 										type: 'theme',
 										theme: 'Twenty Twenty-Five',
 									},
 									type: 'color',
-									var: '--wp--preset--color--accent-5',
+									var: '--wp--preset--color--contrast',
 								},
-								name: 'Accent 5',
+								name: 'Contrast',
 								isValueAddon: true,
 								valueType: 'variable',
 							},
@@ -960,21 +994,21 @@ describe('Border → WP Compatibility', () => {
 						style: undefined,
 						top: {
 							width: '10px',
-							color: 'var:preset|color|accent-3',
+							color: 'var:preset|color|contrast',
 							style: 'solid',
 						},
 						right: {
-							color: 'var:preset|color|accent-4',
+							color: 'var:preset|color|contrast',
 							width: '20px',
 							style: 'solid',
 						},
 						bottom: {
-							color: 'var:preset|color|accent-2',
+							color: 'var:preset|color|contrast',
 							width: '30px',
 							style: 'solid',
 						},
 						left: {
-							color: 'var:preset|color|accent-5',
+							color: 'var:preset|color|contrast',
 							width: '40px',
 							style: 'solid',
 						},
@@ -997,17 +1031,35 @@ describe('Border → WP Compatibility', () => {
 					cy.get('input[type="text"]').eq(3).clear({ force: true });
 				});
 
-				[0, 1, 2, 3].forEach((i) => {
-					cy.get('@container').within(() => {
-						cy.getByDataTest('border-control-color').eq(i).click();
-					});
-
-					cy.get('.components-popover')
-						.last()
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(0)
 						.within(() => {
-							cy.getByAriaLabel('Reset Color (Clear)').click({
-								force: true,
-							});
+							cy.removeValueAddon();
+						});
+				});
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(1)
+						.within(() => {
+							cy.removeValueAddon();
+						});
+				});
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(2)
+						.within(() => {
+							cy.removeValueAddon();
+						});
+				});
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(3)
+						.within(() => {
+							cy.removeValueAddon();
 						});
 				});
 
