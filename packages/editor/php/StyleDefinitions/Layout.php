@@ -190,6 +190,11 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 						'margin-block-start',
 						' > * + *'
 					);
+
+					// Remove margin-block-start because if display is empty, the gap will be applied with margin-block-start in previous step.
+					if ('' === $display) {
+						unset($declaration['margin-block-start']);
+					}
 				}
 				break;
 
