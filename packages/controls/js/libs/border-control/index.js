@@ -108,16 +108,20 @@ export default function BorderControl({
 					placeholder="0"
 				/>
 
-				<ColorControl
-					id={getId(id, 'color')}
-					type="minimal"
-					onChange={(newValue) => {
-						setValue({ ...value, color: newValue });
-					}}
-					className={__isColorFocused && 'is-focused'}
-					data-test="border-control-color"
-					defaultValue={defaultValue && defaultValue.color}
-				/>
+				<div className={controlClassNames('border-color-wrapper')}>
+					<ColorControl
+						id={getId(id, 'color')}
+						type="minimal"
+						onChange={(newValue) => {
+							setValue({ ...value, color: newValue });
+						}}
+						className={__isColorFocused && 'is-focused'}
+						data-test="border-control-color"
+						defaultValue={defaultValue && defaultValue.color}
+						controlAddonTypes={['variable']}
+						variableTypes={['color']}
+					/>
+				</div>
 
 				<SelectControl
 					id={getId(id, 'style')}

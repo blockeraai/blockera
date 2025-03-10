@@ -1,5 +1,6 @@
 .blockera-control-color {
 	transition: all 0.1s linear 0s;
+	position: relative;
 
 	&.components-button.blockera-component-button {
 		display: grid;
