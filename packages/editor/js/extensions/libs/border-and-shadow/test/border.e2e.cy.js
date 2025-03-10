@@ -491,7 +491,7 @@ describe('Border → Functionality', () => {
 			});
 
 			cy.get('@container').within(() => {
-				cy.openValueAddon();
+				cy.removeValueAddon();
 			});
 
 			//Check store
