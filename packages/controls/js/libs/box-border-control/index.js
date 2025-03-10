@@ -243,7 +243,7 @@ export default function BoxBorderControl({
 									},
 								});
 							}}
-							defaultValue={value.top}
+							defaultValue={defaultValue.top}
 						/>
 						<BorderControl
 							label=""
@@ -266,7 +266,7 @@ export default function BoxBorderControl({
 									},
 								});
 							}}
-							defaultValue={value.right}
+							defaultValue={defaultValue.right}
 						/>
 						<BorderControl
 							label=""
@@ -288,7 +288,7 @@ export default function BoxBorderControl({
 									},
 								});
 							}}
-							defaultValue={value.bottom}
+							defaultValue={defaultValue.bottom}
 						/>
 						<BorderControl
 							label=""
@@ -311,7 +311,7 @@ export default function BoxBorderControl({
 									},
 								});
 							}}
-							defaultValue={value.left}
+							defaultValue={defaultValue.left}
 						/>
 						<div
 							className={controlInnerClassNames(
