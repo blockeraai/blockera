@@ -17,6 +17,7 @@
 - Update color control to improve UX.
 - When copying values from unit inputs (like px, em, rem), the unit is now automatically appended to the copied text.
 - Support for decimal values on input control.
+- Improvement on variables green pointer design.
 
 ### Bug Fixes
 - Fixed an issue where the select control style is not correct when the control is focused or opened.
