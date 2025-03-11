@@ -885,3 +885,18 @@ if ( ! function_exists( 'blockera_get_sanitize_block_attributes' ) ) {
 		);
 	}
 }
+
+if ( ! function_exists( 'blockera_is_wp_block_child_class' ) ) {
+
+	/**
+	 * Check if the block has a wp-block-child class.
+	 *
+	 * @param string $block_classname the block class name.
+	 *
+	 * @return bool true if the block has a wp-block-child class, false otherwise.
+	 */
+	function blockera_is_wp_block_child_class( string $block_classname ): bool {
+
+		return preg_match('/wp-block-[a-zA-Z0-9-]+__[a-zA-Z0-9-]+/i', $block_classname);
+	}
+}
