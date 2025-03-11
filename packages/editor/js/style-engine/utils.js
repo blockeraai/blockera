@@ -55,6 +55,7 @@ export const computedCssDeclarations = (
 	blockProps: {
 		state: string,
 		clientId: string,
+		currentBlock: string,
 		attributes: Object,
 		blockName: string,
 		supports?: Object,
