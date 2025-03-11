@@ -267,8 +267,7 @@ class Transpiler {
 				return;
 			}
 
-            if (! empty(trim($class ?? '')) && ( false !== strpos($class, 'wp-elements') || false !== strpos($class, 'wp-block') ) || 0 === $counter) {
-
+            if (! empty(trim($class ?? '')) && preg_match('/wp-(block|elements)/i', $class, $matches) || 0 === $counter) {
 				if ($style) {
 					foreach ($this->global_css_props_classes as $prop => $prop_class) {
 						if (str_contains($style, $prop)) {
@@ -276,8 +275,10 @@ class Transpiler {
 						}
 					}
 				}
-				
-                $this->updateClassname($processor, $args['blockera_class_name']);
+
+				if (! blockera_is_wp_block_child_class($class)) {
+					$this->updateClassname($processor, $args['blockera_class_name']);
+				}
             }
 
             ++$counter;

@@ -443,9 +443,11 @@ final class StyleEngine {
 			$prepared_styles       = $this->prepareInlineStyles($filtered_declarations);
 			$prepared_child_styles = $this->prepareInlineStyles(blockera_array_flat($filtered_child_declarations));
 
+			$is_wp_block_child_class = blockera_is_wp_block_child_class($this->definition->getSelector());
+
 			// Merge with existing rules, avoiding duplicates.
 			if (! isset($css_rules[ $selector ])) {
-				if (! empty($prepared_styles)) {
+				if (! empty($prepared_styles) && ! $is_wp_block_child_class) {
 					$css_rules[ $selector ] = $prepared_styles;
 				}
 				
@@ -453,7 +455,12 @@ final class StyleEngine {
 					$css_rules[ array_keys($filtered_child_declarations)[0] ] = $prepared_child_styles;
 				}
 			} else {
-				if (! empty($prepared_styles)) {
+				
+				if ('core/button' === $this->block['blockName']) {
+					dd($css_rules, $this->definition->getSelector());
+				}
+
+				if (! empty($prepared_styles) && ! $is_wp_block_child_class) {
 					$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
 				}
 
