@@ -17,14 +17,14 @@ import {
 	getCompatibleBlockCssSelector,
 	computedCssDeclarations,
 } from '../../../style-engine';
-import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
-
-const supports = getBlockSupportCategory('size');
+import { getBlockSupportFallback } from '../../utils';
+import { WidthGenerator } from './css-generators/width-generator';
 
 export const SizeStyles = ({
 	state,
 	config,
 	clientId,
+	supports,
 	blockName,
 	masterState,
 	currentBlock,
@@ -52,7 +52,9 @@ export const SizeStyles = ({
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,
+		supports,
 	};
+
 	const sharedParams = {
 		...props,
 		state,
@@ -74,20 +76,6 @@ export const SizeStyles = ({
 	const styleGroup: Array<CssRule> = [];
 
 	if (isActiveField(blockeraWidth) && currentBlockAttributes?.blockeraWidth) {
-		const width = getValueAddonRealValue(
-			currentBlockAttributes.blockeraWidth
-		);
-		let value = '';
-
-		if (width !== attributes.blockeraWidth.default) {
-			value = width;
-		} else if (
-			!isUndefined(currentBlockAttributes.width) &&
-			!isEmpty(currentBlockAttributes.width)
-		) {
-			value = currentBlockAttributes.width;
-		}
-
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockeraWidth',
@@ -104,10 +92,8 @@ export const SizeStyles = ({
 				{
 					blockeraWidth: [
 						{
-							...staticDefinitionParams,
-							properties: {
-								width: value,
-							},
+							type: 'function',
+							function: WidthGenerator,
 						},
 					],
 				},
