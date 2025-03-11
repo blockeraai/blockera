@@ -415,8 +415,9 @@ class Transpiler {
      * @return void
      */
     protected function updateClassname( \WP_HTML_Tag_Processor $processor, string $classname): void {
-        $previous_class = $processor->get_attribute('class');
-        $regexp         = blockera_get_unique_class_name_regex();
+        $previous_class  = $processor->get_attribute('class');
+        $regexp          = blockera_get_unique_class_name_regex();
+		$final_classname = '';
 
         if (! empty($previous_class)) {
 
