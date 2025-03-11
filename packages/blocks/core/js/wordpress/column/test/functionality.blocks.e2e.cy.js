@@ -361,4 +361,85 @@ describe('Column Block', () => {
 					);
 			});
 	});
+
+	it('Make sure that the column uses flex-basis for width', () => {
+		appendBlocks(`<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph -->
+<p>Paragraph in column 1</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph -->
+<p>Paragraph in column 2</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->`);
+
+		// Select target block
+		cy.getBlock('core/paragraph').first().click();
+
+		// Switch to parent block
+		cy.getByAriaLabel('Select Column').click();
+
+		//
+		// 1. Edit Block
+		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/column')
+			.first()
+			.should('have.css', 'flex-basis', '0px');
+
+		cy.getParentContainer('Width').within(() => {
+			cy.get('input').type('30%');
+		});
+
+		cy.getBlock('core/column')
+			.first()
+			.should('have.css', 'flex-basis', '30%')
+			.should('not.have.css', 'width', '30%');
+
+		const expectedCSS =
+			'.wp-block-columns:not(.is-not-stacked-on-mobile)>.blockera-block.wp-block-column.blockera-has-flex-basis{flex-grow:0';
+
+		//Check block
+		cy.getIframeBody().within(() => {
+			cy.get('#blockera-styles-wrapper')
+				.invoke('text')
+				.then((text) => {
+					const normalizedText = text
+						.replace(/\s+/g, '') // Remove all whitespace (spaces, tabs, newlines)
+						.replace(/;}/g, '}') // Remove optional semicolon before closing brace
+						.trim();
+
+					expect(normalizedText).to.include(expectedCSS);
+				});
+		});
+
+		//
+		// 2. Assert inner blocks selectors in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block.wp-block-column')
+			.first()
+			.should('have.css', 'flex-basis', '30%')
+			.should('not.have.css', 'width', '30%');
+
+		cy.get('style#blockera-inline-css')
+			.invoke('text')
+			.then((text) => {
+				const normalizedText = text
+					.replace(/\s+/g, '') // Remove all whitespace (spaces, tabs, newlines)
+					.replace(/;}/g, '}') // Remove optional semicolon before closing brace
+					.trim();
+
+				expect(normalizedText).to.include(expectedCSS);
+			});
+	});
 });
