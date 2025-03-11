@@ -60,6 +60,15 @@ class Size extends BaseStyleDefinition {
 				$this->setCss( $declaration );
 				break;
 
+			case 'width':
+				$width_config = $this->getStyleEngineConfig('blockeraWidth');
+
+				$declaration[ $width_config['width'] ] = blockera_get_value_addon_real_value( $setting[ $cssProperty ] );
+
+				$this->setCss( $declaration );
+
+				break;
+
 			default:
 				$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $setting[ $cssProperty ] );
 
