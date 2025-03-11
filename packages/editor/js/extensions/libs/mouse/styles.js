@@ -22,6 +22,7 @@ export const MouseStyles = ({
 	masterState,
 	currentBlock,
 	activeDeviceType,
+	supports: blockSupports,
 	selectors: blockSelectors,
 	defaultAttributes: attributes,
 	attributes: currentBlockAttributes,
@@ -45,6 +46,7 @@ export const MouseStyles = ({
 		currentBlock,
 		blockSelectors,
 		activeDeviceType,
+		supports: blockSupports,
 		className: currentBlockAttributes?.className,
 	};
 	const staticDefinitionParams = {

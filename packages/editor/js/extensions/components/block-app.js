@@ -70,13 +70,16 @@ export const BlockAppContextProvider = ({
 	const currentBlock = useSelect((select) =>
 		select('blockera/extensions').getExtensionCurrentBlock()
 	);
-	const getSelectedBlock = useSelect((select) =>
-		select('core/block-editor').getSelectedBlock()
-	);
+	const { selectedBlockClientId } = useSelect(
+		(select) => ({
+			selectedBlockClientId:
+				select('core/block-editor').getSelectedBlock()?.clientId,
+		}),
+		[]
+	); // Empty dependency array since we only need this once on mount
 
 	useEffect(() => {
-		// 🚨 This use effect callback performance bottleneck on site editor.
-		const isEditMode = getSelectedBlock?.clientId === props?.clientId;
+		const isEditMode = selectedBlockClientId === props?.clientId;
 
 		if (!isEditMode) {
 			return;
@@ -102,11 +105,11 @@ export const BlockAppContextProvider = ({
 		setItem(cacheKey, cacheData);
 		setBlockAppSettings(cacheData);
 	}, [
-		calculatedSections,
-		setBlockAppSettings,
 		currentBlock,
 		props?.clientId,
-		getSelectedBlock,
+		calculatedSections,
+		setBlockAppSettings,
+		selectedBlockClientId,
 	]);
 
 	return (

@@ -32,12 +32,7 @@ export default class CssGenerator {
 		this.function = callback;
 		this.properties = properties;
 		this.blockProps = blockProps;
-		const {
-			blockeraSettings: {
-				earlyAccessLab: { optimizeStyleGeneration },
-			},
-		} = window;
-		this.options = options || { important: !optimizeStyleGeneration };
+		this.options = options || { important: true };
 		this.pickedSelector = pickedSelector;
 	}
 
