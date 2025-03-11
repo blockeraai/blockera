@@ -400,55 +400,72 @@ final class StyleEngine {
 
 		$css_rules = $this->definition->getCssRules();
 
-		$is_normal_on_base_breakpoint = blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint);
+		// Only process inline styles for normal state on base breakpoint.
+		if (blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && ! empty($this->inline_styles)) {
+			$css_rules = $this->mergeInlineStyles($css_rules);
+		}
 
-		if ($is_normal_on_base_breakpoint && ! empty($this->inline_styles)) {
+		return $css_rules;
+	}
 
-			$definition_selector = $this->definition->getSelector();
+	/**
+	 * Merge inline styles with generated CSS rules, avoiding duplicates.
+	 * 
+	 * @param array $css_rules The existing CSS rules.
+	 * @return array The merged CSS rules.
+	 */
+	protected function mergeInlineStyles( array $css_rules): array {
+		$definition_selector = $this->definition->getSelector();
 
-			$selector_inline_styles = blockera_find_selector_declarations(preg_replace('/^\w+\./i', '.', $definition_selector), $this->inline_styles);
+		// Early return if no definition selector.
+		if (empty($definition_selector)) {
+			return $css_rules;
+		}
 
-			if (! empty($selector_inline_styles) && ! empty($definition_selector)) {
+		// Get all inline styles that match the current definition's selector pattern.
+		$matching_styles = $this->getMatchingInlineStyles($definition_selector);
 
-				foreach ($selector_inline_styles as $selector => $inline_styles) {
-					$prepared_inline_styles = [];
+		foreach ($matching_styles as $selector => $declarations) {
+			// Skip if declarations are empty.
+			if (empty($declarations)) {
+				continue;
+			}
+			
+			$filtered_declarations       = array_filter(
+                $declarations,
+                function( $declaration):bool {
+					return ! empty($declaration) && ! is_array($declaration);
+				}
+            );
+			$filtered_child_declarations = array_diff_key($declarations, $filtered_declarations);
 
-					if (is_int($selector) || ! is_array($inline_styles)) {
-						$extracted = explode(':', $inline_styles);
+			// Convert declarations to property-value pairs.
+			$prepared_styles       = $this->prepareInlineStyles($filtered_declarations);
+			$prepared_child_styles = $this->prepareInlineStyles(blockera_array_flat($filtered_child_declarations));
 
-						foreach (array_chunk($extracted, 2) as $inline_style) {
+			$is_wp_block_child_class = blockera_is_wp_block_child_class($this->definition->getSelector());
 
-							if (! isset($inline_style[0]) || ! isset($inline_style[1])) {
+			// Merge with existing rules, avoiding duplicates.
+			if (! isset($css_rules[ $selector ])) {
+				if (! empty($prepared_styles) && ! $is_wp_block_child_class) {
+					$css_rules[ $selector ] = $prepared_styles;
+				}
+				
+				if (! empty($prepared_child_styles)) {
+					$css_rules[ array_keys($filtered_child_declarations)[0] ] = $prepared_child_styles;
+				}
+			} else {
+				
+				if ('core/button' === $this->block['blockName']) {
+					dd($css_rules, $this->definition->getSelector());
+				}
 
-								continue;
-							}
+				if (! empty($prepared_styles) && ! $is_wp_block_child_class) {
+					$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
+				}
 
-							$prepared_inline_styles[ $inline_style[0] ] = $inline_style[1];
-						}
-
-						if (! isset($css_rules[ $definition_selector ]) || ! in_array($prepared_inline_styles, $css_rules[ $definition_selector ], true)) {
-
-							$css_rules[ $definition_selector ] = array_merge($prepared_inline_styles, $css_rules[ $definition_selector ] ?? []);
-						}
-
-						continue;
-					}
-
-					foreach ($inline_styles as $inline_style) {
-						$extracted = explode(':', $inline_style);
-
-						if (isset($prepared_inline_styles[ $extracted[0] ])) {
-
-							continue;
-						}
-
-						$prepared_inline_styles[ $extracted[0] ] = $extracted[1];
-					}
-
-					if (! isset($css_rules[ $selector ]) || ! in_array($prepared_inline_styles, $css_rules[ $selector ], true)) {
-
-						$css_rules[ $selector ] = array_merge($prepared_inline_styles, $css_rules[ $selector ] ?? []);
-					}					
+				if (! empty($prepared_child_styles)) {
+					$css_rules[ array_keys($filtered_child_declarations)[0] ] = array_merge($css_rules[ array_keys($filtered_child_declarations)[0] ] ?? [], $prepared_child_styles);
 				}
 			}
 		}
@@ -457,9 +474,60 @@ final class StyleEngine {
 	}
 
 	/**
-	 * Preparing css styles of inner blocks for current recieved state.
+	 * Get inline styles that match the current definition's selector.
+	 * 
+	 * @param string $definition_selector The current definition's selector.
+	 * @return array Matching inline styles.
+	 */
+	protected function getMatchingInlineStyles( string $definition_selector): array {
+		$matching_styles = [];
+		$base_selector   = preg_replace('/^\w+\./i', '.', $definition_selector);
+
+		foreach ($this->inline_styles as $selector => $declarations) {
+			// If selector matches the base selector pattern, include it.
+			if (false !== strpos($selector, $base_selector) || false !== strpos($base_selector, $selector)) {
+				$matching_styles[ $selector ] = $declarations;
+			}
+		}
+
+		return $matching_styles;
+	}
+
+	/**
+	 * Convert inline style declarations to property-value pairs.
+	 * 
+	 * @param array|string $declarations The style declarations.
+	 * @return array The prepared styles.
+	 */
+	protected function prepareInlineStyles( $declarations): array {
+		$prepared_styles = [];
+
+		// Handle string declarations.
+		if (is_string($declarations)) {
+			$parts = explode(':', $declarations);
+			if (count($parts) === 2) {
+				$prepared_styles[ trim($parts[0]) ] = trim($parts[1]);
+			}
+			return $prepared_styles;
+		}
+
+		// Handle array declarations.
+		foreach ($declarations as $declaration) {
+			if (is_string($declaration)) {
+				$parts = explode(':', $declaration);
+				if (count($parts) === 2) {
+					$prepared_styles[ trim($parts[0]) ] = trim($parts[1]);
+				}
+			}
+		}
+
+		return $prepared_styles;
+	}
+
+	/**
+	 * Preparing css styles of inner blocks for current received state.
 	 *
-	 * @param array  $settings    the inner block settings of current recieved state.
+	 * @param array  $settings    the inner block settings of current received state.
 	 * @param string $blockType   the block type of available inner block.
 	 * @param string $pseudoState the pseudo state of inner block type.
 	 *

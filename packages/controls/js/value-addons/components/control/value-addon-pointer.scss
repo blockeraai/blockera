@@ -42,12 +42,11 @@
 		box-sizing: content-box;
 		cursor: pointer;
 		transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
-		transform: scale(0.3);
+		transform: scale(0.35);
 		order: 10;
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
-		overflow: hidden;
 		pointer-events: all;
 
 		svg {
@@ -92,6 +91,7 @@
 
 			svg {
 				background-color: var(--blockera-value-addon-var-color);
+				outline: 10px solid #ffffff;
 			}
 
 			&:hover {
@@ -115,6 +115,7 @@
 
 			svg {
 				background-color: var(--blockera-value-addon-dv-color);
+				outline: 10px solid #ffffff;
 			}
 
 			&:hover {
@@ -208,6 +209,7 @@
 
 					svg {
 						fill: currentColor;
+						outline: 3px solid #ffffff;
 					}
 
 					&.var-pointer {
@@ -216,6 +218,20 @@
 
 					&:nth-child(2) {
 						transition: all 0.15s ease 0.04s; // delay
+					}
+				}
+			}
+		}
+
+		& > .blockera-field.blockera-field-control {
+
+			.blockera-control-value-addon-pointer {
+
+				&.open-value-addon,
+				&.active-value-addon {
+
+					svg {
+						outline: 2px solid #ffffff;
 					}
 				}
 			}
@@ -240,6 +256,18 @@
 
 				svg {
 					fill: currentColor;
+					outline: 3px solid #ffffff;
+				}
+			}
+		}
+
+		& > .blockera-control.blockera-control-value-addon-pointers .blockera-control-value-addon-pointer {
+
+			&.open-value-addon,
+			&.active-value-addon {
+
+				svg {
+					outline: 2px solid #ffffff;
 				}
 			}
 		}

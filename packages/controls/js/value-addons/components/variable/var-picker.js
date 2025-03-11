@@ -193,7 +193,7 @@ export default function ({
 
 	return (
 		<Popover
-			title={__('Choose Variable', 'blockera')}
+			title={__('Variable Picker', 'blockera')}
 			offset={popoverOffset}
 			placement="left-start"
 			onClose={() => {

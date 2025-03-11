@@ -886,27 +886,17 @@ if ( ! function_exists( 'blockera_get_sanitize_block_attributes' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_find_selector_declarations' ) ) {
+if ( ! function_exists( 'blockera_is_wp_block_child_class' ) ) {
 
 	/**
-	 * FIXME: refactor this helper to get better performance, readability, maintainability and working with selector hash identifier.
-	 * Get the target selector declarations.
+	 * Check if the block has a wp-block-child class.
 	 *
-	 * @param string $selector the selector.
-	 * @param array  $styles the styles.
+	 * @param string $block_classname the block class name.
 	 *
-	 * @return array the target selector declarations.
+	 * @return bool true if the block has a wp-block-child class, false otherwise.
 	 */
-	function blockera_find_selector_declarations( string $selector, array $styles): array {
+	function blockera_is_wp_block_child_class( string $block_classname ): bool {
 
-		foreach ($styles as $_selector => $declarations) {
-			if (false === strpos($_selector, $selector) && false === strpos($selector, $_selector)) {
-				continue;
-			}
-
-			return $declarations;
-		}
-
-		return [];
+		return preg_match('/wp-block-[a-zA-Z0-9-]+__[a-zA-Z0-9-]+/i', $block_classname);
 	}
 }
