@@ -276,7 +276,7 @@ class Transpiler {
 					}
 				}
 
-				if (! blockera_is_wp_block_child_class($class)) {
+				if ( null === $class || ! blockera_is_wp_block_child_class($class)) {
 					$this->updateClassname($processor, $args['blockera_class_name']);
 				}
             }
