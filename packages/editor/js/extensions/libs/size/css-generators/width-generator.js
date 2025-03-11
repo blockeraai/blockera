@@ -10,7 +10,7 @@ import { getValueAddonRealValue } from '@blockera/controls';
 import { createCssDeclarations } from '../../../../style-engine';
 import { getBlockSupportStyleEngineConfig } from '../../../utils';
 export function WidthGenerator(id, props, options) {
-	const { attributes, supports, blockeraStyleEngineConfig } = props;
+	const { attributes, supports } = props;
 
 	const width = getValueAddonRealValue(attributes.blockeraWidth);
 	let value = '';
@@ -28,9 +28,13 @@ export function WidthGenerator(id, props, options) {
 	// We should not change the original supports object.
 	const clonedSupports = cloneObject(supports);
 
-	if (blockeraStyleEngineConfig?.blockeraWidth) {
+	if (supports?.blockeraStyleEngineConfig?.blockeraWidth) {
+		if (!clonedSupports?.blockeraWidth) {
+			clonedSupports.blockeraWidth = {};
+		}
+
 		clonedSupports.blockeraWidth['style-engine-config'] =
-			blockeraStyleEngineConfig.blockeraWidth;
+			supports?.blockeraStyleEngineConfig.blockeraWidth;
 	}
 
 	const properties = {};
