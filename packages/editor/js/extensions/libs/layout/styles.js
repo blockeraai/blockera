@@ -30,6 +30,7 @@ export const LayoutStyles = ({
 	currentBlock,
 	activeDeviceType,
 	styleEngineConfig,
+	supports: blockSupports,
 	selectors: blockSelectors,
 	defaultAttributes: attributes,
 	attributes: currentBlockAttributes,
@@ -58,6 +59,7 @@ export const LayoutStyles = ({
 		currentBlock,
 		blockSelectors,
 		activeDeviceType,
+		supports: blockSupports,
 		className: currentBlockAttributes?.className,
 	};
 	const staticDefinitionParams = {
