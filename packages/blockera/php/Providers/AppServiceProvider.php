@@ -179,7 +179,11 @@ class AppServiceProvider extends ServiceProvider {
 					Transpiler::class,
 					static function ( Application $app) use ( $cache_instance) {
 
-						return new Transpiler($app, $cache_instance);
+						$transpiler_instance = new Transpiler($app, $cache_instance);
+						
+						$transpiler_instance->setGlobalCssPropsClasses(require_once(blockera_core_config('app.vendor_path') . 'blockera/wordpress/php/RenderBlock/V2/global-css-props-classes.php'));
+
+						return $transpiler_instance;
 					}
 				);
 
@@ -187,7 +191,12 @@ class AppServiceProvider extends ServiceProvider {
 					V2RenderContent::class,
 					static function ( Application $app) use ( $cache_instance): V2RenderContent {
 
-						return new V2RenderContent($app, $app->make(Transpiler::class), $cache_instance);
+						$render_content_instance = new V2RenderContent($app, $app->make(Transpiler::class), $cache_instance);
+
+						$render_content_instance->setIsMinifyInlineCss(! blockera_core_config('app.debug'));
+						$render_content_instance->setBlockStylesDirBasePath(blockera_core_config('app.dist_path'));
+
+						return $render_content_instance;
 					}
 				);
 

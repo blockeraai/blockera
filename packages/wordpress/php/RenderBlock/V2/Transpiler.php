@@ -43,6 +43,13 @@ class Transpiler {
      */
     protected StyleEngine $style_engine;
 
+	/**
+	 * Global css props classes.
+	 *
+	 * @var array
+	 */
+	protected array $global_css_props_classes = [];
+
     /**
      * The Parser class constructor.
      *
@@ -53,6 +60,17 @@ class Transpiler {
         $this->app   = $app;
         $this->cache = $cache;
     }
+
+	/**
+	 * Set the global css props classes.
+	 *
+	 * @param array $global_css_props_classes The global css props classes.
+	 *
+	 * @return void
+	 */
+	public function setGlobalCssPropsClasses( array $global_css_props_classes): void {
+		$this->global_css_props_classes = $global_css_props_classes;
+	}
 
     /**
      * Clean up inline styles from parsed blocks and convert them to CSS classes.
@@ -250,6 +268,15 @@ class Transpiler {
 			}
 
             if (! empty(trim($class ?? '')) && ( false !== strpos($class, 'wp-elements') || false !== strpos($class, 'wp-block') ) || 0 === $counter) {
+
+				if ($style) {
+					foreach ($this->global_css_props_classes as $prop => $prop_class) {
+						if (str_contains($style, $prop)) {
+							$this->updateClassname($processor, $prop_class);
+						}
+					}
+				}
+				
                 $this->updateClassname($processor, $args['blockera_class_name']);
             }
 

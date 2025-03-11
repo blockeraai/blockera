@@ -41,6 +41,20 @@ class RenderContent {
 	 */
 	protected array $supports = [];
 
+	/**
+	 * Store the block styles dir base path.
+	 *
+	 * @var string $block_styles_dir_base_path
+	 */
+	protected string $block_styles_dir_base_path;
+
+	/**
+	 * Store the is minify inline css.
+	 *
+	 * @var bool $is_minify_inline_css
+	 */
+	protected bool $is_minify_inline_css;
+
     /**
      * Render constructor.
      *
@@ -53,6 +67,24 @@ class RenderContent {
 		$this->cache      = $cache;
         $this->transpiler = $transpiler;
     }
+
+	/**
+	 * Set the block styles dir base path.
+	 */
+	public function setBlockStylesDirBasePath( string $base_path): void {
+		$this->block_styles_dir_base_path = $base_path;
+	}
+
+	/**
+	 * Set the is minify inline css.
+	 *
+	 * @param bool $is_minify_inline_css The is minify inline css.
+	 *
+	 * @return void
+	 */
+	public function setIsMinifyInlineCss( bool $is_minify_inline_css): void {
+		$this->is_minify_inline_css = $is_minify_inline_css;
+	}
 
 	/**
      * Filtering get_posts query.
@@ -86,6 +118,11 @@ class RenderContent {
 		if (wp_doing_ajax() || is_admin() || defined('REST_REQUEST') && REST_REQUEST) {
             return $block_content;
 		}
+		
+		// Check block to is support by Blockera.
+        if (blockera_is_supported_block($block)) {
+            $this->printBlockGlobalStyles($block);
+        }
 
 		if (isset($block['blockName']) && 'core/block' === $block['blockName']) {
 
@@ -114,6 +151,43 @@ class RenderContent {
 
         return $block_content;
     }
+
+	/**
+	 * Load block inline styles.
+	 *
+	 * @param array $block The block.
+	 *
+	 * @return void
+	 */
+	private function printBlockGlobalStyles( array $block): void {
+		static $loaded_styles = [];
+
+		$handle = 'block-' . str_replace([ 'core/', '/' ], [ '', '-' ], $block['blockName']) . '-styles';
+
+		// Skip if already loaded this style.
+		if (isset($loaded_styles[ $handle ])) {
+			return;
+		}
+
+		$file_path = $this->block_styles_dir_base_path . $handle . '/style' . ( $this->is_minify_inline_css ? '.min' : '' ) . '.css';
+
+		if (file_exists($file_path)) {
+			// Use file_get_contents which is faster than WP filesystem.
+			$file_contents = file_get_contents($file_path);
+
+			if ($file_contents) {
+				// Only strip comments if not minified.
+				if (! $this->is_minify_inline_css) {
+					$file_contents = preg_replace('/\/\*.*?\*\//s', '', $file_contents);
+				}
+
+				blockera_add_inline_css($file_contents);
+
+				// Mark this style as loaded.
+				$loaded_styles[ $handle ] = true;
+			}
+		}		
+	}
 
 	/**
 	 * Filtering posts.
