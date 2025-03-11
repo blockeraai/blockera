@@ -187,7 +187,7 @@ class AppServiceProvider extends ServiceProvider {
 					}
 				);
 
-				$this->app->bind(
+				$this->app->singleton(
 					V2RenderContent::class,
 					static function ( Application $app) use ( $cache_instance): V2RenderContent {
 
@@ -195,6 +195,9 @@ class AppServiceProvider extends ServiceProvider {
 
 						$render_content_instance->setIsMinifyInlineCss(! blockera_core_config('app.debug'));
 						$render_content_instance->setBlockStylesDirBasePath(blockera_core_config('app.dist_path'));
+
+						$file = blockera_core_config('app.vendor_path') . 'blockera/wordpress/php/RenderBlock/V2/block-global-styles-map.php';
+						$render_content_instance->setBlockGlobalStylesMap(require_once($file));
 
 						return $render_content_instance;
 					}

@@ -55,6 +55,13 @@ class RenderContent {
 	 */
 	protected bool $is_minify_inline_css;
 
+	/**
+	 * Store the block global styles map.
+	 *
+	 * @var array $block_global_styles_map
+	 */
+	protected array $block_global_styles_map;
+
     /**
      * Render constructor.
      *
@@ -84,6 +91,17 @@ class RenderContent {
 	 */
 	public function setIsMinifyInlineCss( bool $is_minify_inline_css): void {
 		$this->is_minify_inline_css = $is_minify_inline_css;
+	}
+
+	/**
+	 * Set the block global styles map.
+	 *
+	 * @param array $block_global_styles_map The block global styles map.
+	 *
+	 * @return void
+	 */
+	public function setBlockGlobalStylesMap( array $block_global_styles_map): void {
+		$this->block_global_styles_map = $block_global_styles_map;
 	}
 
 	/**
@@ -162,7 +180,13 @@ class RenderContent {
 	private function printBlockGlobalStyles( array $block): void {
 		static $loaded_styles = [];
 
-		$handle = 'block-' . str_replace([ 'core/', '/' ], [ '', '-' ], $block['blockName']) . '-styles';
+		$block_name = $block['blockName'];
+
+		if (isset($this->block_global_styles_map[ $block_name ])) {
+			$block_name = $this->block_global_styles_map[ $block_name ];
+		}
+
+		$handle = 'block-' . str_replace([ 'core/', '/' ], [ '', '-' ], $block_name) . '-styles';
 
 		// Skip if already loaded this style.
 		if (isset($loaded_styles[ $handle ])) {
