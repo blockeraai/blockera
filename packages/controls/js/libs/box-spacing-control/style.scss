@@ -133,11 +133,22 @@
 
 				svg {
 					fill: #ffffff;
+					outline: 2px solid #ffffff;
 				}
 
 				.blockera-control-value-addon-pointer {
 					transform: scale3d(1, 1, 1);
 					transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
+				}
+			}
+		}
+
+		.blockera-control.blockera-control-value-addon-pointers {
+
+			&.active-addon-pointers {
+
+				svg {
+					outline: 2px solid #ffffff;
 				}
 			}
 		}
