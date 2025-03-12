@@ -29,6 +29,7 @@ return [
 			'telemetry-styles',
 			'controls-styles',
 			'value-addons-styles',
+			'blocks-styles',
 		],
 		'with-deps' => [],
 	],

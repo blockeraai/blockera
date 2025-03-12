@@ -43,6 +43,13 @@ styleFiles.forEach((currentEntry) => {
 					[entryName]: currentEntry,
 				});
 
+				Object.assign(styleEntries, {
+					[`${match}-styles`]: [
+						...(styleEntries[`${match}-styles`] || []),
+						currentEntry,
+					],
+				});
+
 				return;
 			}
 
