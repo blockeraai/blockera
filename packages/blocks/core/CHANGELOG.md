@@ -89,6 +89,7 @@
 - Added E2E tests for the Blocksy `Dynamic Data → Link` inner block.
 - Added E2E tests for the Blocksy `Dynamic Data → Image` inner block.
 - Improve tests for Gap feature to check all different usages and situations. 
+- Improve tests for `Button` block. 
 
 ### Bug Fixes
 - Flex child block section not showing for child blocks of 9 blocks (e.g. `Columns`, `Buttons`, `Social Links` and etc.).
