@@ -1,0 +1,32 @@
+.blockera-block.wp-block-post-comments-form {
+
+	&.blockera-has-font-weight :where(.comment-reply-title),
+	&[style*="font-weight"] :where(.comment-reply-title) {
+		font-weight: inherit;
+	}
+
+	&.blockera-has-font-family :where(.comment-reply-title),
+	&[style*="font-family"] :where(.comment-reply-title) {
+		font-family: inherit;
+	}
+
+	&.blockera-has-font-size :where(.comment-reply-title),
+	&[style*="font-size"] :where(.comment-reply-title) {
+		font-size: inherit;
+	}
+
+	&.blockera-has-line-height :where(.comment-reply-title),
+	&[style*="line-height"] :where(.comment-reply-title) {
+		line-height: inherit;
+	}
+
+	&.blockera-has-font-style :where(.comment-reply-title),
+	&[style*="font-style"] :where(.comment-reply-title) {
+		font-style: inherit;
+	}
+
+	&.blockera-has-letter-spacing :where(.comment-reply-title),
+	&[style*="letter-spacing"] :where(.comment-reply-title) {
+		letter-spacing: inherit;
+	}
+}
