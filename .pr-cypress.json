@@ -1,0 +1,8 @@
+{
+	"e2e": {
+		"excludeSpecPattern": [],
+		"specPattern": [
+			"packages/blocks/core/js/wordpress/buttons/test/functionality.blocks.e2e.cy.js"
+		]
+	}
+}
