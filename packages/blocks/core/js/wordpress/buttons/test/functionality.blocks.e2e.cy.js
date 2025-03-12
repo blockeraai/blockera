@@ -172,7 +172,7 @@ describe('Buttons Block', () => {
 					.should('include', 'overline');
 			});
 
-		let expectedCSS = '.wp-block-button__link{text-decoration:inherit;}';
+		let expectedCSS = '.wp-block-button__link{text-decoration:inherit}';
 
 		cy.get('link#\\@blockera\\/blocks-styles-css')
 			.should('exist')
