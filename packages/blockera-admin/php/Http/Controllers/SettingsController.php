@@ -204,4 +204,54 @@ class SettingsController extends RestController {
 		);
 	}
 
+	/**
+	 * Regenerate assets.
+	 *
+	 * @param \WP_REST_Request $request the request object.
+	 *
+	 * @return \WP_REST_Response the response object.
+	 */
+	public function regenerateAssets( \WP_REST_Request $request ): \WP_REST_Response {
+
+		if ( ! wp_verify_nonce( $request->get_header( 'X-Blockera-Nonce' ), 'blockera-admin' ) || 'regenerate-assets' !== $request->get_param( 'action' ) ) {
+		
+			return new \WP_REST_Response(
+				[
+					'code'    => 403,
+					'success' => false,
+					'data'    => [
+						'message' => __( 'Forbidden', 'blockera' ),
+					],
+				],
+				403
+			);
+		}
+
+		$cleared = $this->cache->clear();
+
+		if ( ! $cleared ) {
+
+			return new \WP_REST_Response(
+				[
+					'code'    => 500,
+					'success' => false,
+					'data'    => [
+						'message' => __( 'Failed to regenerate assets, please try again.', 'blockera' ),
+					],
+				],
+				500
+			);
+		}
+
+		return new \WP_REST_Response(
+			[
+				'code'    => 200,
+				'success' => true,
+				'data'    => [
+					'message' => __( 'Regenerated assets ✅', 'blockera' ),
+				],
+			],
+			200
+		);
+	}
 }
