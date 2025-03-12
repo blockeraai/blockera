@@ -13,7 +13,7 @@ import type { InnerBlockType } from '../libs/inner-blocks/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
 
 export const propsAreEqual = (perv: Object, next: Object): boolean => {
-	const excludeKeys = ['content'];
+	const excludeKeys = ['content', 'text'];
 
 	return isEquals(
 		omit(perv?.attributes, excludeKeys),
