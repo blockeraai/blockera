@@ -30,7 +30,10 @@ styleFiles.forEach((currentEntry) => {
 				return;
 			}
 
-			if ('blocks' === match) {
+			if (
+				'blocks' === match &&
+				'./packages/blocks/core/js/style.scss' !== currentEntry
+			) {
 				const entryName =
 					'block-' +
 					currentEntry
@@ -42,15 +45,6 @@ styleFiles.forEach((currentEntry) => {
 				Object.assign(styleEntries, {
 					[entryName]: currentEntry,
 				});
-
-				Object.assign(styleEntries, {
-					[`${match}-styles`]: [
-						...(styleEntries[`${match}-styles`] || []),
-						currentEntry,
-					],
-				});
-
-				return;
 			}
 
 			Object.assign(styleEntries, {

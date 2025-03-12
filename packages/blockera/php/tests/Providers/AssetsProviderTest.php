@@ -40,11 +40,11 @@ class AssetsProviderTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 
 		if ( false !== strpos( $asset, '-styles' ) ) {
 
-			$this->assertTrue( wp_style_is( '@blockera/' . $asset ) );
+			$this->assertTrue( wp_style_is( '@blockera/' . $asset ), "'$asset' Style is not enqueued" );
 
 		} else {
 
-			$this->assertTrue( wp_script_is( '@blockera/' . $asset ) );
+			$this->assertTrue( wp_script_is( '@blockera/' . $asset ), "'$asset' Script is not enqueued" );
 		}
 	}
 
