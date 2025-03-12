@@ -41,7 +41,7 @@ jobs:
 
                   if [ "${{ env.env_file }}" == "true" ] && [ -f ".pr-cypress.env.json" ]; then
                     # Check if the file exists and has the visual.specPattern property
-                    has_spec_patterns=$(cat .pr-cypress.env.json | jq 'has("visual") and .visual | has("specPattern")')
+                    has_spec_patterns=$(cat .pr-cypress.env.json | jq 'if type == "object" then has("visual") and (.visual | type == "object") and (.visual | has("specPattern")) else false end')
                     
                     if [ "$has_spec_patterns" == "true" ]; then
                       # Load spec patterns from .pr-cypress.env.json
