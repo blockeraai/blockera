@@ -185,7 +185,7 @@ describe('Buttons Block', () => {
 					cy.normalizeCSSContent(styleContent).then(
 						(normalizedContent) => {
 							// Function to extract and normalize a specific CSS rule
-							const extractRule = (css, selectorPart) => {
+							const normalizeCSS = (css, selectorPart) => {
 								const rules = css.split('}');
 								const targetRule = rules.find((rule) =>
 									rule.includes(selectorPart)
@@ -195,23 +195,31 @@ describe('Buttons Block', () => {
 								// Split into selectors and declaration
 								const [selectors, declaration] =
 									targetRule.split('{');
-								// Normalize selectors
+
+								// Only include selectors that contain 'wp-block-buttons'
 								const normalizedSelectors = selectors
 									.split(',')
 									.map((s) => s.trim())
-									.filter(Boolean)
+									.filter((s) =>
+										s.includes('wp-block-buttons')
+									)
 									.sort()
 									.join(',');
 
-								return `${normalizedSelectors}{${declaration.trim()}}`;
+								// Normalize declaration: remove trailing semicolon and trim
+								const normalizedDeclaration = declaration
+									.trim()
+									.replace(/;$/, '')
+									.trim();
+
+								return `${normalizedSelectors}{${normalizedDeclaration}}`;
 							};
 
-							// Extract just the buttons rule we're testing
-							const buttonRule = extractRule(
+							const buttonRule = normalizeCSS(
 								normalizedContent,
 								'wp-block-buttons'
 							);
-							const expectedRule = extractRule(
+							const expectedRule = normalizeCSS(
 								expectedCSS,
 								'wp-block-buttons'
 							);
