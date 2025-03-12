@@ -37,6 +37,10 @@ describe('Button Block', () => {
 		//
 		// 1. Block Styles
 		//
+
+		//
+		// 1.1. Clipping
+		//
 		cy.getBlock('core/button').should(
 			'not.have.css',
 			'background-clip',
@@ -58,19 +62,65 @@ describe('Button Block', () => {
 			});
 
 		//
+		// 1.2. Border Line
+		//
+		cy.getParentContainer('Border Line').within(() => {
+			cy.getByDataTest('border-control-width').clear();
+			cy.getByDataTest('border-control-width').type(5, {
+				force: true,
+			});
+
+			cy.getByDataTest('border-control-color').click();
+		});
+
+		cy.getByDataTest('popover-body').within(() => {
+			cy.get('input[maxlength="9"]').clear({ force: true });
+			cy.get('input[maxlength="9"]').type('37e6d4 ');
+		});
+
+		cy.getParentContainer('Border Line').within(() => {
+			cy.get('[aria-haspopup="listbox"]').click();
+			cy.get('div[aria-selected="false"]').eq(1).click();
+		});
+
+		// Check block
+		// Border should be added to inner element and not to button root tag
+		cy.getBlock('core/button')
+			.first()
+			.should('not.have.css', 'border', '5px dashed rgb(55, 230, 212)');
+		cy.getBlock('core/button')
+			.first()
+			.within(() => {
+				cy.get('.wp-element-button').should(
+					'have.css',
+					'border',
+					'5px dashed rgb(55, 230, 212)'
+				);
+			});
+
+		//
 		// 2. Assert front end
 		//
 		savePage();
 		redirectToFrontPage();
 
+		// Border should be added to inner element and not to button root tag
+		cy.get('.blockera-block.wp-block-button').should(
+			'not.have.css',
+			'border',
+			'5px dashed rgb(55, 230, 212)'
+		);
+
 		cy.get('.blockera-block.wp-block-button')
 			.first()
 			.within(() => {
-				cy.get('.wp-element-button').should(
-					'have.css',
-					'background-clip',
-					'padding-box'
-				);
+				cy.get('.wp-element-button')
+					.should('have.css', 'background-clip', 'padding-box')
+					.should(
+						'have.css',
+						'border',
+						'5px dashed rgb(55, 230, 212)'
+					);
 			});
 	});
 });
