@@ -7,7 +7,7 @@ use Blockera\Setup\Providers\AppServiceProvider;
 use Blockera\Setup\Providers\EditorAssetsProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
-class TestAssetsProvider extends \Blockera\Dev\PHPUnit\AppTestCase {
+class AssetsProviderTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 
 	protected static ?EditorAssetsProvider $provider = null;
 

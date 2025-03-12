@@ -35,6 +35,13 @@ class RenderContent {
     protected Transpiler $transpiler;
 
 	/**
+	 * Render instance.
+	 *
+	 * @var Render
+	 */
+	protected Render $render_instance;
+
+	/**
 	 * Store the supports.
 	 *
 	 * @var array $supports
@@ -67,13 +74,25 @@ class RenderContent {
      *
      * @param Application $app the app instance.
 	 * @param Transpiler  $transpiler the transpiler instance.
-	 * @param Cache       $cache the cache instance.
+	 * @param array       $args the args. includes 'cache' instance and 'render' instance.
      */
-    public function __construct( Application $app, Transpiler $transpiler, Cache $cache) {
-        $this->app        = $app;
-		$this->cache      = $cache;
-        $this->transpiler = $transpiler;
+    public function __construct( Application $app, Transpiler $transpiler, array $args) {
+        $this->app             = $app;
+        $this->transpiler      = $transpiler;
+		$this->cache           = $args['cache'] ?? null;
+		$this->render_instance = $args['render'] ?? null;
     }
+
+	/**
+	 * Set the supports.
+	 *
+	 * @param array $supports The supports.
+	 *
+	 * @return void
+	 */
+	public function setSupports( array $supports): void {
+		$this->supports = $supports;
+	}
 
 	/**
 	 * Set the block styles dir base path.
@@ -159,12 +178,10 @@ class RenderContent {
 			return $this->cleanup($post, 'block_content');
 
 		} elseif (blockera_block_is_dynamic($block) && ! str_contains($block_content, 'blockera-is-transpiled')) {
-
-			$render = $this->app->make(Render::class);
 			// Disable cache for dynamic blocks.
-			$render->setCacheStatus(false);
+			$this->render_instance->setCacheStatus(false);
 
-			return $render->render($block_content, $block, $supports);
+			return $this->render_instance->render($block_content, $block, $supports);
 		}
 
         return $block_content;

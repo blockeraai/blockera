@@ -68,6 +68,9 @@ class AppServiceProvider extends ServiceProvider {
 			$this->app->singleton(
                 Cache::class,
                 function ( Application $app, array $params = []) {
+					if (empty($params)) {
+						return null;
+					}
 					return new Cache($app, $params);
 				}
             );
@@ -173,15 +176,16 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            if ( blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
+            if ( ( defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ) || blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
+
+				$vendor_path = blockera_core_config('app.vendor_path');
 
 				$this->app->singleton(
 					Transpiler::class,
-					static function ( Application $app) use ( $cache_instance) {
+					static function ( Application $app) use ( $cache_instance, $vendor_path) {
 
 						$transpiler_instance = new Transpiler($app, $cache_instance);
-						
-						$transpiler_instance->setGlobalCssPropsClasses(require_once(blockera_core_config('app.vendor_path') . 'blockera/wordpress/php/RenderBlock/V2/global-css-props-classes.php'));
+						$transpiler_instance->setGlobalCssPropsClasses(include($vendor_path . 'blockera/wordpress/php/RenderBlock/V2/global-css-props-classes.php'));
 
 						return $transpiler_instance;
 					}
@@ -189,20 +193,26 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					V2RenderContent::class,
-					static function ( Application $app) use ( $cache_instance): V2RenderContent {
+					static function ( Application $app) use ( $cache_instance, $vendor_path): V2RenderContent {
 
-						$render_content_instance = new V2RenderContent($app, $app->make(Transpiler::class), $cache_instance);
+						$render_content_instance = new V2RenderContent(
+							$app,
+							$app->make(Transpiler::class),
+							[
+								'cache' => $cache_instance,
+								'render' => new Render($app, false),
+							]
+						);
 
 						$render_content_instance->setIsMinifyInlineCss(! blockera_core_config('app.debug'));
 						$render_content_instance->setBlockStylesDirBasePath(blockera_core_config('app.dist_path'));
 
-						$file = blockera_core_config('app.vendor_path') . 'blockera/wordpress/php/RenderBlock/V2/block-global-styles-map.php';
-						$render_content_instance->setBlockGlobalStylesMap(require_once($file));
+						$file = $vendor_path . 'blockera/wordpress/php/RenderBlock/V2/block-global-styles-map.php';
+						$render_content_instance->setBlockGlobalStylesMap(include($file));
 
 						return $render_content_instance;
 					}
 				);
-
 			}
 			
 			$this->app->singleton(

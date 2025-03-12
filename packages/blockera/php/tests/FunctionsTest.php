@@ -2,7 +2,7 @@
 
 namespace Blockera\Setup\Tests;
 
-class TestFunctions extends \Blockera\Dev\PHPUnit\AppTestCase {
+class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 
 	public function testItShouldFilterEmptyArrayItems(): void {
 
