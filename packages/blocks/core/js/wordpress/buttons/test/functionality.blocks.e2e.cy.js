@@ -258,39 +258,21 @@ describe('Buttons Block', () => {
 			.then((styleContent) => {
 				cy.normalizeCSSContent(styleContent).then(
 					(normalizedContent) => {
-						// Function to extract and normalize a specific CSS rule
-						const extractRule = (css, selectorPart) => {
-							const rules = css.split('}');
-							const targetRule = rules.find((rule) =>
-								rule.includes(selectorPart)
-							);
-							if (!targetRule) return '';
-
-							// Split into selectors and declaration
-							const [selectors, declaration] =
-								targetRule.split('{');
-							// Normalize selectors
-							const normalizedSelectors = selectors
-								.split(',')
-								.map((s) => s.trim())
-								.filter(Boolean)
+						// Split the expected and actual CSS into individual rules and sort them
+						const normalizeRules = (css) => {
+							return css
+								.split('}')
+								.map((rule) => rule.trim())
+								.filter((rule) => rule)
 								.sort()
-								.join(',');
-
-							return `${normalizedSelectors}{${declaration.trim()}}`;
+								.join('}');
 						};
 
-						// Extract just the buttons rule we're testing
-						const buttonRule = extractRule(
-							normalizedContent,
-							'wp-block-buttons'
-						);
-						const expectedRule = extractRule(
-							expectedCSS,
-							'wp-block-buttons'
-						);
+						const normalizedExpected = normalizeRules(expectedCSS);
+						const normalizedActual =
+							normalizeRules(normalizedContent);
 
-						expect(buttonRule).to.equal(expectedRule);
+						expect(normalizedActual).to.include(normalizedExpected);
 					}
 				);
 			});
