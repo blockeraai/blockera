@@ -7,7 +7,6 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const styleEntries = {};
 const editorIframeStyles = {};
 const styleFiles = glob.sync('./packages/**/*.scss');
-console.log(styleFiles);
 
 styleFiles.forEach((currentEntry) => {
 	const regex = new RegExp('packages\\/(\\w+(?:-\\w+|))', 'g');
