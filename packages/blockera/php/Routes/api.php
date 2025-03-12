@@ -24,6 +24,7 @@ try {
 
     $routes->get('settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'index' ]);
     $routes->update('settings', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'response' ]);
+    $routes->post('regenerate-assets', [ Blockera\Admin\Http\Controllers\SettingsController::class, 'regenerateAssets' ]);
 
     $routes->post('telemetry/opt-in', [ Blockera\Telemetry\Http\Controllers\OptInController::class, 'optIn' ]);
     $routes->post('telemetry/log-error', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'log' ]);
