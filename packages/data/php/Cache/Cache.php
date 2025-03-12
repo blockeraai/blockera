@@ -114,13 +114,13 @@ class Cache {
     /**
      * Clear cache for product data.
      *
-     * @return void
+     * @return bool true on success, false on failure!
      */
-    public function clear(): void {
+    public function clear(): bool {
         global $wpdb;
 
 		// Deleting all options related with the blockera product id.
-        $wpdb->query(
+        $deleted_cache_keys = $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM $wpdb->options WHERE option_name LIKE %s",
                 $this->getCacheKey() . '%'
@@ -128,7 +128,7 @@ class Cache {
         );
 		
 		// Deleting all options related with the blockera style engine v1.
-		$wpdb->query(
+		$deleted_style_engine_v1_cache_keys = $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM $wpdb->options WHERE option_name LIKE %s",
                 '%wp_block_%'
@@ -136,11 +136,25 @@ class Cache {
 		);
 
 		// Deleting all post meta data related with the blockera product id.
-        $wpdb->query(
+        $deleted_post_meta_cache_keys = $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s",
                 $this->getCacheKey() . '%'
             )
         );
+
+		if (is_int($deleted_cache_keys)) {
+			$deleted_cache_keys = true;
+		}
+
+		if (is_int($deleted_style_engine_v1_cache_keys)) {
+			$deleted_style_engine_v1_cache_keys = true;
+		}
+
+		if (is_int($deleted_post_meta_cache_keys)) {
+			$deleted_post_meta_cache_keys = true;
+		}
+
+		return $deleted_cache_keys && $deleted_style_engine_v1_cache_keys && $deleted_post_meta_cache_keys;
     }
 }
