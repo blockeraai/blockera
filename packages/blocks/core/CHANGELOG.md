@@ -49,6 +49,7 @@
 - `Post Comments Form` block: improve support.
 - `Latest Comments` block: improve support.
 - `Button` block: improve support.
+- `Buttons` block: improve support.
 
 
 ### Automated Tests

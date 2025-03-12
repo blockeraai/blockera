@@ -1,0 +1,8 @@
+.blockera-block.wp-block-buttons {
+	&.blockera-has-text-decoration {
+		.wp-block-button,
+		.wp-block-button__link {
+			text-decoration: inherit;
+		}
+	}
+}
