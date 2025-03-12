@@ -184,12 +184,24 @@ describe('Buttons Block', () => {
 
 					cy.normalizeCSSContent(styleContent).then(
 						(normalizedContent) => {
-							// Split the expected and actual CSS into individual rules and sort them
+							// Split CSS into individual rules and normalize them
 							const normalizeRules = (css) => {
 								return css
 									.split('}')
 									.map((rule) => rule.trim())
 									.filter((rule) => rule)
+									.map((rule) => {
+										// Split into selectors and declaration
+										const [selectors, declaration] =
+											rule.split('{');
+										// Split selectors, trim, sort, and rejoin
+										const normalizedSelectors = selectors
+											.split(',')
+											.map((s) => s.trim())
+											.sort()
+											.join(',');
+										return `${normalizedSelectors}{${declaration}}`;
+									})
 									.sort()
 									.join('}');
 							};
@@ -235,12 +247,24 @@ describe('Buttons Block', () => {
 			.then((styleContent) => {
 				cy.normalizeCSSContent(styleContent).then(
 					(normalizedContent) => {
-						// Split the expected and actual CSS into individual rules and sort them
+						// Split CSS into individual rules and normalize them
 						const normalizeRules = (css) => {
 							return css
 								.split('}')
 								.map((rule) => rule.trim())
 								.filter((rule) => rule)
+								.map((rule) => {
+									// Split into selectors and declaration
+									const [selectors, declaration] =
+										rule.split('{');
+									// Split selectors, trim, sort, and rejoin
+									const normalizedSelectors = selectors
+										.split(',')
+										.map((s) => s.trim())
+										.sort()
+										.join(',');
+									return `${normalizedSelectors}{${declaration}}`;
+								})
 								.sort()
 								.join('}');
 						};
