@@ -48,6 +48,7 @@
 - `Readmore` block: improve support.
 - `Post Comments Form` block: improve support.
 - `Latest Comments` block: improve support.
+- `Button` block: improve support.
 
 
 ### Automated Tests
