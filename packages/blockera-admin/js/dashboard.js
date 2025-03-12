@@ -49,6 +49,7 @@ export const Dashboard = (): MixedElement => {
 			'general-settings',
 			'block-manager',
 			'experimental-lab',
+			'regenerate-assets',
 		])
 	);
 	const config = applyFilters(
@@ -163,6 +164,12 @@ export const Dashboard = (): MixedElement => {
 				settingSlug: 'experimentalLab',
 				className: 'experimental-lab-tab',
 				title: __('Early Access Lab', 'blockera'),
+			},
+			{
+				name: 'regenerate-assets',
+				settingSlug: 'regenerateAssets',
+				className: 'regenerate-assets-tab',
+				title: __('Regenerate Assets', 'blockera'),
 			},
 		]
 	);
