@@ -47,6 +47,7 @@
 - Core search block inner block icons improved to be more consistent and user-friendly.
 - `Readmore` block: improve support.
 - `Post Comments Form` block: improve support.
+- `Latest Comments` block: improve support.
 
 
 ### Automated Tests
