@@ -184,7 +184,24 @@ describe('Buttons Block', () => {
 
 					cy.normalizeCSSContent(styleContent).then(
 						(normalizedContent) => {
-							expect(normalizedContent).to.include(expectedCSS);
+							// Split the expected and actual CSS into individual rules and sort them
+							const normalizeRules = (css) => {
+								return css
+									.split('}')
+									.map((rule) => rule.trim())
+									.filter((rule) => rule)
+									.sort()
+									.join('}');
+							};
+
+							const normalizedExpected =
+								normalizeRules(expectedCSS);
+							const normalizedActual =
+								normalizeRules(normalizedContent);
+
+							expect(normalizedActual).to.include(
+								normalizedExpected
+							);
 						}
 					);
 				});
@@ -218,7 +235,21 @@ describe('Buttons Block', () => {
 			.then((styleContent) => {
 				cy.normalizeCSSContent(styleContent).then(
 					(normalizedContent) => {
-						expect(normalizedContent).to.include(expectedCSS);
+						// Split the expected and actual CSS into individual rules and sort them
+						const normalizeRules = (css) => {
+							return css
+								.split('}')
+								.map((rule) => rule.trim())
+								.filter((rule) => rule)
+								.sort()
+								.join('}');
+						};
+
+						const normalizedExpected = normalizeRules(expectedCSS);
+						const normalizedActual =
+							normalizeRules(normalizedContent);
+
+						expect(normalizedActual).to.include(normalizedExpected);
 					}
 				);
 			});
