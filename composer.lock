@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1149b932d799a2e5da52224ca91232e2",
+    "content-hash": "9d5e4730aeb51939b49daa5712cb0911",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -130,25 +130,6 @@
                 }
             },
             "description": "Blockera Data Editor package to access all property value with tokenized string.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "blockera/dev-phpunit",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/dev-phpunit",
-                "reference": "1c0c9df0767eb4e9a3537618a7dc7e06d8ed28d5"
-            },
-            "type": "library",
-            "autoload-dev": {
-                "psr-4": {
-                    "Blockera\\Dev\\PHPUnint\\": "php/"
-                }
-            },
-            "description": "The development phpunit package of blockera",
             "transport-options": {
                 "relative": true
             }
@@ -882,6 +863,25 @@
                 "source": "https://github.com/antecedent/patchwork/tree/2.2.1"
             },
             "time": "2024-12-11T10:19:54+00:00"
+        },
+        {
+            "name": "blockera/dev-phpunit",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/dev-phpunit",
+                "reference": "1c0c9df0767eb4e9a3537618a7dc7e06d8ed28d5"
+            },
+            "type": "library",
+            "autoload-dev": {
+                "psr-4": {
+                    "Blockera\\Dev\\PHPUnint\\": "php/"
+                }
+            },
+            "description": "The development phpunit package of blockera",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "composer/ca-bundle",
@@ -7818,12 +7818,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli-bundle.git",
-                "reference": "30118212f6f956c4b413e1c5147c48f083100c98"
+                "reference": "a9ea2159b733b8c558424984b1ebe6722f2e524a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/30118212f6f956c4b413e1c5147c48f083100c98",
-                "reference": "30118212f6f956c4b413e1c5147c48f083100c98",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/a9ea2159b733b8c558424984b1ebe6722f2e524a",
+                "reference": "a9ea2159b733b8c558424984b1ebe6722f2e524a",
                 "shasum": ""
             },
             "require": {
@@ -7884,7 +7884,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli-bundle/issues",
                 "source": "https://github.com/wp-cli/wp-cli-bundle"
             },
-            "time": "2025-03-08T17:24:00+00:00"
+            "time": "2025-03-12T07:10:31+00:00"
         },
         {
             "name": "wp-cli/wp-config-transformer",

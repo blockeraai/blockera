@@ -75,7 +75,6 @@
 		"blockera/bootstrap": "*",
 		"blockera/env": "*",
 		"blockera/editor": "*",
-		"blockera/dev-phpunit": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
 		"blockera/exceptions": "*",
@@ -86,6 +85,7 @@
 		"vlucas/phpdotenv": "^5.5@dev"
 	},
 	"require-dev": {
+		"blockera/dev-phpunit": "*",
 		"symfony/dom-crawler": "5.4.x-dev",
 		"symfony/css-selector": "5.4.x-dev",
 		"voku/simple_html_dom": "dev-master",
