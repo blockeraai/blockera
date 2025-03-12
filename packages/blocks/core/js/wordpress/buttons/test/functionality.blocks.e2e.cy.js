@@ -172,7 +172,7 @@ describe('Buttons Block', () => {
 					.should('include', 'overline');
 			});
 
-		const expectedCSS = '.wp-block-button__link{text-decoration:inherit;}';
+		let expectedCSS = '.wp-block-button__link{text-decoration:inherit;}';
 
 		cy.get('link#\\@blockera\\/blocks-styles-css')
 			.should('exist')
@@ -211,6 +211,9 @@ describe('Buttons Block', () => {
 				.should('have.css', 'text-decoration')
 				.should('include', 'overline');
 		});
+
+		// there is no ; at the end of the rule
+		expectedCSS = '.wp-block-button__link{text-decoration:inherit}';
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
