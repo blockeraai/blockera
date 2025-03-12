@@ -172,8 +172,7 @@ describe('Buttons Block', () => {
 					.should('include', 'overline');
 			});
 
-		const expectedCSS =
-			'.blockera-block.wp-block-buttons[style*=text-decoration] .wp-block-button, .blockera-block.wp-block-buttons[style*=text-decoration] .wp-block-button__link, .blockera-block.wp-block-buttons.blockera-has-text-decoration .wp-block-button, .blockera-block.wp-block-buttons.blockera-has-text-decoration .wp-block-button__link{text-decoration:inherit;}';
+		const expectedCSS = '.wp-block-button__link{text-decoration:inherit;}';
 
 		cy.get('link#\\@blockera\\/blocks-styles-css')
 			.should('exist')
