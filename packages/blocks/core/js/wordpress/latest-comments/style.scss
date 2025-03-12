@@ -1,22 +1,26 @@
 
 // Following styles leverage :where so that typography block support styles and
 // global styles apply when necessary.
+:where(.blockera-block.wp-block-latest-comments:not([style*="line-height"] .wp-block-latest-comments__comment)),
 :where(.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height) .wp-block-latest-comments__comment) {
 	line-height: 1.1;
 }
 
+:where(.blockera-block.wp-block-latest-comments:not([style*="line-height"] .wp-block-latest-comments__comment-excerpt p)),
 :where(.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height .wp-block-latest-comments__comment-excerpt p)) {
 	line-height: 1.8;
 }
 
 .has-dates,
 .has-excerpts {
+	:where(.blockera-block.wp-block-latest-comments:not([style*="line-height"])),
 	:where(.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height)) {
 		line-height: 1.5;
 	}
 }
 
 // Enforce font size when user has made selection at the individual block level.
+.blockera-block.wp-block-latest-comments[style*="font-size"],
 .blockera-block.wp-block-latest-comments.blockera-has-font-size {
 	a {
 		font-size: inherit;
