@@ -11,6 +11,7 @@ const { join, resolve } = require('path');
  * WordPress dependencies
  */
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
+const postcssPlugins = require('@wordpress/postcss-plugins-preset');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 
 /**
@@ -58,7 +59,8 @@ const scssLoaders = ({ isLazy }) => [
 		loader: 'postcss-loader',
 		options: {
 			postcssOptions: {
-				config: true,
+				ident: 'postcss',
+				plugins: postcssPlugins,
 			},
 		},
 	},
