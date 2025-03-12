@@ -183,47 +183,7 @@ describe('Buttons Block', () => {
 
 					cy.normalizeCSSContent(styleContent).then(
 						(normalizedContent) => {
-							// Function to extract and normalize a specific CSS rule
-							const normalizeCSS = (css, selectorPart) => {
-								const rules = css.split('}');
-								const targetRule = rules.find((rule) =>
-									rule.includes(selectorPart)
-								);
-								if (!targetRule) return '';
-
-								// Split into selectors and declaration
-								const [selectors, declaration] =
-									targetRule.split('{');
-
-								// Only include selectors that contain 'wp-block-buttons'
-								const normalizedSelectors = selectors
-									.split(',')
-									.map((s) => s.trim())
-									.filter((s) =>
-										s.includes('wp-block-buttons')
-									)
-									.sort()
-									.join(',');
-
-								// Normalize declaration: remove trailing semicolon and trim
-								const normalizedDeclaration = declaration
-									.trim()
-									.replace(/;$/, '')
-									.trim();
-
-								return `${normalizedSelectors}{${normalizedDeclaration}}`;
-							};
-
-							const buttonRule = normalizeCSS(
-								normalizedContent,
-								'wp-block-buttons'
-							);
-							const expectedRule = normalizeCSS(
-								expectedCSS,
-								'wp-block-buttons'
-							);
-
-							expect(buttonRule).to.equal(expectedRule);
+							expect(normalizedContent).to.include(expectedCSS);
 						}
 					);
 				});
@@ -257,21 +217,7 @@ describe('Buttons Block', () => {
 			.then((styleContent) => {
 				cy.normalizeCSSContent(styleContent).then(
 					(normalizedContent) => {
-						// Split the expected and actual CSS into individual rules and sort them
-						const normalizeRules = (css) => {
-							return css
-								.split('}')
-								.map((rule) => rule.trim())
-								.filter((rule) => rule)
-								.sort()
-								.join('}');
-						};
-
-						const normalizedExpected = normalizeRules(expectedCSS);
-						const normalizedActual =
-							normalizeRules(normalizedContent);
-
-						expect(normalizedActual).to.include(normalizedExpected);
+						expect(normalizedContent).to.include(expectedCSS);
 					}
 				);
 			});
