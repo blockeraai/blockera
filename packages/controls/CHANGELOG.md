@@ -10,6 +10,7 @@
 - Evaluates on Enter key or loosing focus.
 - Example: Type "10 + 20" and press Enter to calculate.
 - Added color variables support to border line feature.
+- Added loading component to show a loading state while content is being fetched or processed, featuring animated dots that provide visual feedback to users during wait times.
 
 ### Improvements
 - Update border radius control to improve UX.
