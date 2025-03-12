@@ -98,7 +98,8 @@
 		"wp-phpunit/wp-phpunit": "dev-master",
 		"filp/whoops": "^2.15",
 		"yoast/phpunit-polyfills": "^2.0@dev",
-		"symfony/var-dumper": "5.4.x-dev"
+		"symfony/var-dumper": "5.4.x-dev",
+		"10up/wp_mock": "^0.4"
 	},
 	"config": {
 		"process-timeout": 0,
