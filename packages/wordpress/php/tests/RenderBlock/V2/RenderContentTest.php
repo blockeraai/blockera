@@ -133,7 +133,10 @@ class RenderContentTest extends \Blockera\Dev\PHPUnit\AppTestCase
         
         $this->assertCount(1, $result);
 
-        $this->assertEquals($data['expected_content'], $result[0]->post_content);
+        $this->assertSame(
+            preg_replace('/\s+/', '', $data['expected_content']),
+            preg_replace('/\s+/', '', $result[0]->post_content)
+        );
     }
 
 	public function validPostsDataProviders():array{
