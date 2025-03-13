@@ -252,7 +252,7 @@ describe('outline control component testing', () => {
 					cy.get('input[maxlength="9"]').type('ad2dcc ');
 				});
 
-			cy.getByDataTest('border-control-color').next().next().click();
+			cy.get('.blockera-control-border-color-wrapper').next().click();
 			cy.get('ul').get('li').eq(2).click();
 
 			cy.getByDataTest('outline-offset-input').clear();
@@ -267,7 +267,7 @@ describe('outline control component testing', () => {
 				.should('have.attr', 'style')
 				.should('include', '#ad2dcc');
 
-			cy.getByDataTest('border-control-color').next().click();
+			cy.get('.blockera-control-border-color-wrapper').next().click();
 			cy.get('ul')
 				.get('li')
 				.eq(2)

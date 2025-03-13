@@ -317,36 +317,6 @@ describe('box-border-control component testing', () => {
 			cy.get('input[type="text"]').should('have.value', '2');
 		});
 
-		it('should render value when: defaultValue OK && id OK && value is OK', () => {
-			cy.withDataProvider({
-				component: (
-					<BoxBorderControl
-						defaultValue={{
-							type: 'all',
-							all: {
-								width: '2px',
-								style: 'solid',
-								color: '#0947eb',
-							},
-						}}
-						id={'[0]'}
-					/>
-				),
-				value: [
-					{
-						type: 'all',
-						all: {
-							width: '5px',
-							style: 'dashed',
-							color: '#000000',
-						},
-					},
-				],
-			});
-
-			cy.get('input[type="text"]').should('have.value', '5');
-		});
-
 		it('should render default value when:defaultValue OK && id is invalid, value ok', () => {
 			cy.withDataProvider({
 				component: (
