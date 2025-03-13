@@ -9,11 +9,16 @@ import {
 	setInnerBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
+import { experimental } from '@blockera/env';
 
 describe('Column Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
+
+	const enabledOptimizeStyleGeneration = experimental().get(
+		'earlyAccessLab.optimizeStyleGeneration'
+	);
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:columns -->
@@ -360,5 +365,89 @@ describe('Column Block', () => {
 						'rgb(238, 238, 238)'
 					);
 			});
+	});
+
+	it('Make sure that the column uses flex-basis for width', () => {
+		appendBlocks(`<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph -->
+<p>Paragraph in column 1</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph -->
+<p>Paragraph in column 2</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->`);
+
+		// Select target block
+		cy.getBlock('core/paragraph').first().click();
+
+		// Switch to parent block
+		cy.getByAriaLabel('Select Column').click();
+
+		//
+		// 1. Edit Block
+		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getBlock('core/column')
+			.first()
+			.should('have.css', 'flex-basis', '0px');
+
+		cy.getParentContainer('Width').within(() => {
+			cy.get('input').type('30%');
+		});
+
+		cy.getBlock('core/column')
+			.first()
+			.should('have.css', 'flex-basis', '30%')
+			.should('not.have.css', 'width', '30%');
+
+		const expectedCSS =
+			'.blockera-block.wp-block-column[style*=flex-basis]{flex-grow:0';
+
+		//Check block
+		cy.get('link#\\@blockera\\/blocks-styles-css')
+			.should('exist')
+			.then(($link) => {
+				// Fetch the CSS file content
+				cy.request($link.attr('href')).then((response) => {
+					const styleContent = response.body;
+
+					cy.normalizeCSSContent(styleContent).then(
+						(normalizedContent) => {
+							expect(normalizedContent).to.include(expectedCSS);
+						}
+					);
+				});
+			});
+
+		//
+		// 2. Assert inner blocks selectors in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block.wp-block-column')
+			.first()
+			.should('have.css', 'flex-basis', '30%')
+			.should('not.have.css', 'width', '30%');
+
+		if (enabledOptimizeStyleGeneration) {
+			cy.get('style#blockera-inline-css')
+				.invoke('text')
+				.then((styleContent) => {
+					cy.normalizeCSSContent(styleContent).then(
+						(normalizedContent) => {
+							expect(normalizedContent).to.include(expectedCSS);
+						}
+					);
+				});
+		}
 	});
 });

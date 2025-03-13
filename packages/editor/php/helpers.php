@@ -499,7 +499,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			}
 
 			// Return selector unchanged if no custom root.
-			return $selector;
+			return "{$root} {$selector}";
 		}
 
 		// If selector is a child of root or starts with a tag name and should not start with a space because it's a child selector and we should not add it before the root.

@@ -45,6 +45,11 @@
 
 ### Improvements
 - Core search block inner block icons improved to be more consistent and user-friendly.
+- `Readmore` block: improve support.
+- `Post Comments Form` block: improve support.
+- `Latest Comments` block: improve support.
+- `Button` block: improve support.
+- `Buttons` block: improve support.
 
 
 ### Automated Tests
@@ -89,6 +94,7 @@
 - Added E2E tests for the Blocksy `Dynamic Data → Link` inner block.
 - Added E2E tests for the Blocksy `Dynamic Data → Image` inner block.
 - Improve tests for Gap feature to check all different usages and situations. 
+- Improve tests for `Button` block. 
 
 ### Bug Fixes
 - Flex child block section not showing for child blocks of 9 blocks (e.g. `Columns`, `Buttons`, `Social Links` and etc.).

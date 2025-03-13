@@ -35,24 +35,93 @@ class RenderContent {
     protected Transpiler $transpiler;
 
 	/**
+	 * Render instance.
+	 *
+	 * @var Render
+	 */
+	protected Render $render_instance;
+
+	/**
 	 * Store the supports.
 	 *
 	 * @var array $supports
 	 */
 	protected array $supports = [];
 
+	/**
+	 * Store the block styles dir base path.
+	 *
+	 * @var string $block_styles_dir_base_path
+	 */
+	protected string $block_styles_dir_base_path;
+
+	/**
+	 * Store the is minify inline css.
+	 *
+	 * @var bool $is_minify_inline_css
+	 */
+	protected bool $is_minify_inline_css;
+
+	/**
+	 * Store the block global styles map.
+	 *
+	 * @var array $block_global_styles_map
+	 */
+	protected array $block_global_styles_map;
+
     /**
      * Render constructor.
      *
      * @param Application $app the app instance.
 	 * @param Transpiler  $transpiler the transpiler instance.
-	 * @param Cache       $cache the cache instance.
+	 * @param array       $args the args. includes 'cache' instance and 'render' instance.
      */
-    public function __construct( Application $app, Transpiler $transpiler, Cache $cache) {
-        $this->app        = $app;
-		$this->cache      = $cache;
-        $this->transpiler = $transpiler;
+    public function __construct( Application $app, Transpiler $transpiler, array $args) {
+        $this->app             = $app;
+        $this->transpiler      = $transpiler;
+		$this->cache           = $args['cache'] ?? null;
+		$this->render_instance = $args['render'] ?? null;
     }
+
+	/**
+	 * Set the supports.
+	 *
+	 * @param array $supports The supports.
+	 *
+	 * @return void
+	 */
+	public function setSupports( array $supports): void {
+		$this->supports = $supports;
+	}
+
+	/**
+	 * Set the block styles dir base path.
+	 */
+	public function setBlockStylesDirBasePath( string $base_path): void {
+		$this->block_styles_dir_base_path = $base_path;
+	}
+
+	/**
+	 * Set the is minify inline css.
+	 *
+	 * @param bool $is_minify_inline_css The is minify inline css.
+	 *
+	 * @return void
+	 */
+	public function setIsMinifyInlineCss( bool $is_minify_inline_css): void {
+		$this->is_minify_inline_css = $is_minify_inline_css;
+	}
+
+	/**
+	 * Set the block global styles map.
+	 *
+	 * @param array $block_global_styles_map The block global styles map.
+	 *
+	 * @return void
+	 */
+	public function setBlockGlobalStylesMap( array $block_global_styles_map): void {
+		$this->block_global_styles_map = $block_global_styles_map;
+	}
 
 	/**
      * Filtering get_posts query.
@@ -86,6 +155,11 @@ class RenderContent {
 		if (wp_doing_ajax() || is_admin() || defined('REST_REQUEST') && REST_REQUEST) {
             return $block_content;
 		}
+		
+		// Check block to is support by Blockera.
+        if (blockera_is_supported_block($block)) {
+            $this->printBlockGlobalStyles($block);
+        }
 
 		if (isset($block['blockName']) && 'core/block' === $block['blockName']) {
 
@@ -104,16 +178,57 @@ class RenderContent {
 			return $this->cleanup($post, 'block_content');
 
 		} elseif (blockera_block_is_dynamic($block) && ! str_contains($block_content, 'blockera-is-transpiled')) {
-
-			$render = $this->app->make(Render::class);
 			// Disable cache for dynamic blocks.
-			$render->setCacheStatus(false);
+			$this->render_instance->setCacheStatus(false);
 
-			return $render->render($block_content, $block, $supports);
+			return $this->render_instance->render($block_content, $block, $supports);
 		}
 
         return $block_content;
     }
+
+	/**
+	 * Load block inline styles.
+	 *
+	 * @param array $block The block.
+	 *
+	 * @return void
+	 */
+	private function printBlockGlobalStyles( array $block): void {
+		static $loaded_styles = [];
+
+		$block_name = $block['blockName'];
+
+		if (isset($this->block_global_styles_map[ $block_name ])) {
+			$block_name = $this->block_global_styles_map[ $block_name ];
+		}
+
+		$handle = 'block-' . str_replace([ 'core/', '/' ], [ '', '-' ], $block_name) . '-styles';
+
+		// Skip if already loaded this style.
+		if (isset($loaded_styles[ $handle ])) {
+			return;
+		}
+
+		$file_path = $this->block_styles_dir_base_path . $handle . '/style' . ( $this->is_minify_inline_css ? '.min' : '' ) . '.css';
+
+		if (file_exists($file_path)) {
+			// Use file_get_contents which is faster than WP filesystem.
+			$file_contents = file_get_contents($file_path);
+
+			if ($file_contents) {
+				// Only strip comments if not minified.
+				if (! $this->is_minify_inline_css) {
+					$file_contents = preg_replace('/\/\*.*?\*\//s', '', $file_contents);
+				}
+
+				blockera_add_inline_css($file_contents);
+
+				// Mark this style as loaded.
+				$loaded_styles[ $handle ] = true;
+			}
+		}		
+	}
 
 	/**
 	 * Filtering posts.
@@ -127,10 +242,8 @@ class RenderContent {
 			return $posts;
 		}
 
-		$is_front_page = is_front_page();
-
         return array_map(
-            function ( \WP_Post $post) use ( $is_front_page): \WP_Post {
+            function ( \WP_Post $post): \WP_Post {
 
 				if (empty($post->post_content)) {
 					return $post;
@@ -138,11 +251,6 @@ class RenderContent {
 
 				// Skip global styles post type.
 				if ('wp_global_styles' === $post->post_type) {
-					return $post;
-				}
-
-				// Skip posts while in the front page and current post type is not wp_template or wp_template_part.
-				if ($is_front_page && ! in_array($post->post_type, [ 'wp_template', 'wp_template_part' ], true)) {
 					return $post;
 				}
 
