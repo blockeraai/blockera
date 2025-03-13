@@ -729,4 +729,21 @@ export const registerCommands = () => {
 			cy.getByDataCy('group-control-header').contains(contains).click();
 		});
 	});
+
+	/**
+	 * Normalize CSS content by removing comments, extra whitespace, and standardizing formatting
+	 * @param {string} cssContent - The CSS content to normalize
+	 * @returns {string} - The normalized CSS content
+	 */
+	Cypress.Commands.add('normalizeCSSContent', (cssContent) => {
+		return cssContent
+			.replace(/\/\*[\s\S]*?\*\//g, '') // Remove CSS comments /* ... */
+			.replace(/[\t\n\r]+/g, ' ') // Replace tabs and newlines with a single space
+			.replace(/\s{2,}/g, ' ') // Replace multiple spaces with a single space
+			.replace(/\s*{\s*/g, '{') // Remove spaces around opening braces
+			.replace(/\s*}\s*/g, '}') // Remove spaces around closing braces
+			.replace(/\s*:\s*/g, ':') // Remove spaces around colons
+			.replace(/\s*;\s*/g, ';') // Remove spaces around semicolons
+			.trim(); // Remove leading/trailing whitespace
+	});
 };

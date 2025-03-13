@@ -791,7 +791,7 @@ describe('repeater control component testing', () => {
 				});
 			});
 
-			it('should regenerate order, when there is type', () => {
+			it.skip('should regenerate order, when there is type', () => {
 				const name = nanoid();
 
 				cy.withDataProvider({

@@ -91,10 +91,10 @@ describe('border-control component testing', () => {
 				name,
 			});
 
-			cy.getByDataTest('border-control-color').next().click();
+			cy.get('.blockera-control-border-color-wrapper').next().click();
 			cy.get('ul').children('li').last().click();
 
-			cy.getByDataTest('border-control-color').next().click();
+			cy.get('.blockera-control-border-color-wrapper').next().click();
 			cy.get('ul')
 				.children('li')
 				.last()
@@ -102,7 +102,7 @@ describe('border-control component testing', () => {
 				.should('include', 'true');
 
 			// Check data provider value!
-			cy.getByDataTest('border-control-color')
+			cy.get('.blockera-control-border-color-wrapper')
 				.next()
 				.then(() => {
 					expect('double').to.be.equal(getControlValue(name).style);

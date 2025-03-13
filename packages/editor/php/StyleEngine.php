@@ -455,10 +455,6 @@ final class StyleEngine {
 					$css_rules[ array_keys($filtered_child_declarations)[0] ] = $prepared_child_styles;
 				}
 			} else {
-				
-				if ('core/button' === $this->block['blockName']) {
-					dd($css_rules, $this->definition->getSelector());
-				}
 
 				if (! empty($prepared_styles) && ! $is_wp_block_child_class) {
 					$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
