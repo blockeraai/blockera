@@ -6,7 +6,8 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { applyFilters } from '@wordpress/hooks';
-import { useContext } from '@wordpress/element';
+import { useContext, useState } from '@wordpress/element';
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * Blockera dependencies
@@ -18,12 +19,14 @@ import {
 } from '@blockera/wordpress';
 import { noop } from '@blockera/utils';
 import {
+	Button,
 	Flex,
 	ToggleControl,
 	CheckboxControl,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
 	disableProHints: false,
@@ -37,6 +40,56 @@ export const GeneralPanel = (): MixedElement => {
 	const {
 		blockeraSettings: { general: savedGeneralSettings },
 	} = window;
+
+	const { blockeraAdminNonce } = window;
+	const [regenerated, setRegenerated] = useState(false);
+	const [loading, setLoading] = useState({
+		regenerated: false,
+		regenerating: false,
+		error: false,
+	});
+
+	const regenerateAssets = () => {
+		setLoading({
+			regenerated: false,
+			regenerating: true,
+			error: false,
+		});
+
+		apiFetch({
+			method: 'POST',
+			path: '/blockera/v1/regenerate-assets',
+			headers: {
+				'X-Blockera-Nonce': blockeraAdminNonce,
+			},
+			data: {
+				action: 'regenerate-assets',
+			},
+		})
+			.then((response) => {
+				if (response.success) {
+					setRegenerated(response.data);
+
+					setLoading({
+						regenerated: true,
+						regenerating: false,
+					});
+				} else {
+					setLoading({
+						regenerated: false,
+						regenerating: false,
+						error: true,
+					});
+				}
+			})
+			.catch(() => {
+				setLoading({
+					regenerated: false,
+					regenerating: false,
+					error: true,
+				});
+			});
+	};
 
 	const BlockVisibility = ({ isChecked }: Object): MixedElement => (
 		<Flex direction={'column'} className={'blockera-settings-section'}>
@@ -189,6 +242,94 @@ export const GeneralPanel = (): MixedElement => {
 			<BlockVisibility
 				isChecked={generalSettings.disableRestrictBlockVisibility}
 			/>
+
+			<Flex direction={'column'} className={'blockera-settings-section'}>
+				<h3 className={'blockera-settings-general section-title'}>
+					<Icon
+						icon={'trash'}
+						iconSize={28}
+						style={{
+							color: 'var(--blockera-controls-primary-color)',
+						}}
+					/>
+					{__('Purge Cache and Regenerate Assets', 'blockera')}
+				</h3>
+
+				<p className={'blockera-settings-general section-desc'}>
+					{__(
+						'By clicking the button below, you can regenerate the assets for the current website. This action will clear the cache and regenerate the assets. After each plugin update, the cache will be purged automatically.',
+						'blockera'
+					)}
+				</p>
+
+				<div className={'blockera-settings-general control-wrapper'}>
+					<Flex direction={'row'} gap={20} alignItems="center">
+						<Button
+							disabled={
+								regenerated ||
+								loading.regenerating ||
+								loading.error
+							}
+							onClick={regenerateAssets}
+							className={'blockera-settings-general control'}
+							variant={'primary'}
+							style={{
+								width: 'fit-content',
+							}}
+							isBusy={loading.regenerating}
+						>
+							{__('Purge Cache', 'blockera')}
+						</Button>
+
+						{loading.error && (
+							<p
+								className={
+									'blockera-settings-general section-desc'
+								}
+								style={{
+									margin: '0',
+									color: 'rgb(255 0 0)',
+								}}
+							>
+								{__(
+									'An error occurred while purging the cache.',
+									'blockera'
+								)}
+							</p>
+						)}
+
+						{loading.regenerating && (
+							<p
+								className={
+									'blockera-settings-general section-desc'
+								}
+								style={{
+									margin: '0',
+								}}
+							>
+								{__('Purging cache …', 'blockera')}
+							</p>
+						)}
+
+						{loading.regenerated && (
+							<p
+								className={
+									'blockera-settings-general section-desc'
+								}
+								style={{
+									color: 'rgb(0 140 80)',
+									margin: '0',
+								}}
+							>
+								{__(
+									'Assets cache has been purged.',
+									'blockera'
+								)}
+							</p>
+						)}
+					</Flex>
+				</div>
+			</Flex>
 
 			<Flex direction={'column'} className={'blockera-settings-section'}>
 				<h3 className={'blockera-settings-general section-title'}>

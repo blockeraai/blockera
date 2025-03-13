@@ -24,7 +24,6 @@ import {
 	DashboardPanel,
 	BlockManagerPanel,
 	ExperimentalLabPanel,
-	RegenerateAssetsPanel,
 } from './components';
 
 export const Panel = (tab: {
@@ -73,18 +72,6 @@ export const Panel = (tab: {
 				<p>
 					{__(
 						'Discover and test early features that are still in development. Help us refine and improve them before they go live for everyone.',
-						'blockera'
-					)}
-				</p>
-			);
-			break;
-
-		case 'regenerate-assets':
-			activePanel = <RegenerateAssetsPanel />;
-			description = (
-				<p>
-					{__(
-						'Facing issue with style, layout, color or another page element? Regenerate assets to fix it.',
 						'blockera'
 					)}
 				</p>
