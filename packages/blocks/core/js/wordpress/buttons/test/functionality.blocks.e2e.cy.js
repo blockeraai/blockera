@@ -9,11 +9,16 @@ import {
 	redirectToFrontPage,
 	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
+import { experimental } from '@blockera/env';
 
 describe('Buttons Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
+
+	const enabledOptimizeStyleGeneration = experimental().get(
+		'earlyAccessLab.optimizeStyleGeneration'
+	);
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:buttons -->
@@ -172,7 +177,7 @@ describe('Buttons Block', () => {
 					.should('include', 'overline');
 			});
 
-		let expectedCSS = '.wp-block-button__link{text-decoration:inherit}';
+		let expectedCSS = '.wp-block-button__link{text-decoration:inherit';
 
 		cy.get('link#\\@blockera\\/blocks-styles-css')
 			.should('exist')
@@ -213,16 +218,18 @@ describe('Buttons Block', () => {
 		});
 
 		// there is no ; at the end of the rule
-		expectedCSS = '.wp-block-button__link{text-decoration:inherit}';
+		expectedCSS = '.wp-block-button__link{text-decoration:inherit';
 
-		cy.get('style#blockera-inline-css')
-			.invoke('text')
-			.then((styleContent) => {
-				cy.normalizeCSSContent(styleContent).then(
-					(normalizedContent) => {
-						expect(normalizedContent).to.include(expectedCSS);
-					}
-				);
-			});
+		if (enabledOptimizeStyleGeneration) {
+			cy.get('style#blockera-inline-css')
+				.invoke('text')
+				.then((styleContent) => {
+					cy.normalizeCSSContent(styleContent).then(
+						(normalizedContent) => {
+							expect(normalizedContent).to.include(expectedCSS);
+						}
+					);
+				});
+		}
 	});
 });
