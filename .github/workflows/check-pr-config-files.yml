@@ -1,0 +1,25 @@
+name: Check PR Config Files
+
+on:
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    check-files:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Check for PR config files
+              run: |
+                  if find . -name ".pr-*" ! -name "*.example" | grep -q .; then
+                    echo "❌ PR config files found. Please remove all PR-related config files and wait to all tests pass before merging to master."
+                    echo "Found files:"
+                    find . -name ".pr-*" ! -name "*.example"
+                    exit 1
+                  else
+                    echo "✅ No PR config files found. You can proceed with merging."
+                  fi
