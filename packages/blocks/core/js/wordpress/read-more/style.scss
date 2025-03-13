@@ -1,0 +1,12 @@
+.blockera-block.wp-block-read-more {
+
+	&:where(:not([style*="text-decoration"])),
+	&:where(:not(.blockera-has-text-decoration)) {
+		text-decoration: none;
+
+		&:focus,
+		&:active {
+			text-decoration: none;
+		}
+	}
+}

@@ -43,6 +43,13 @@ class Transpiler {
      */
     protected StyleEngine $style_engine;
 
+	/**
+	 * Global css props classes.
+	 *
+	 * @var array
+	 */
+	protected array $global_css_props_classes = [];
+
     /**
      * The Parser class constructor.
      *
@@ -53,6 +60,17 @@ class Transpiler {
         $this->app   = $app;
         $this->cache = $cache;
     }
+
+	/**
+	 * Set the global css props classes.
+	 *
+	 * @param array $global_css_props_classes The global css props classes.
+	 *
+	 * @return void
+	 */
+	public function setGlobalCssPropsClasses( array $global_css_props_classes): void {
+		$this->global_css_props_classes = $global_css_props_classes;
+	}
 
     /**
      * Clean up inline styles from parsed blocks and convert them to CSS classes.
@@ -189,7 +207,7 @@ class Transpiler {
 
         // Pre-calculate common values.
         $blockera_hash_id    = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
-        $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
+        $blockera_class_name = defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ? 'blockera-block blockera-block-test' : sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
 		// Process only valid blocks and supported blocks and not dynamic blocks.
@@ -250,7 +268,15 @@ class Transpiler {
 			}
 
             if (! empty(trim($class ?? '')) && preg_match('/wp-(block|elements)/i', $class, $matches) || 0 === $counter) {
-				if (! blockera_is_wp_block_child_class($class)) {
+				if ($style) {
+					foreach ($this->global_css_props_classes as $prop => $prop_class) {
+						if (str_contains($style, $prop)) {
+							$this->updateClassname($processor, $prop_class);
+						}
+					}
+				}
+
+				if ( null === $class || ! blockera_is_wp_block_child_class($class)) {
 					$this->updateClassname($processor, $args['blockera_class_name']);
 				}
             }
@@ -363,9 +389,12 @@ class Transpiler {
         $updated_html = $processor->get_updated_html();
 
         if (empty($args['block_path'])) {
-            $this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
-            $this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
-            $this->parsed_blocks[ $args['block_id'] ]['innerContent'][ $id ]        = $updated_html;
+			if (! defined('BLOCKERA_PHPUNIT_RUN_TESTS') || ! BLOCKERA_PHPUNIT_RUN_TESTS) {
+				$this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
+				$this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
+			}
+
+            $this->parsed_blocks[ $args['block_id'] ]['innerContent'][ $id ] = $updated_html;
 
             return;
         }
@@ -375,9 +404,12 @@ class Transpiler {
             $current = &$current[ $path['id'] ]['innerBlocks'];
         }
 
-        $current[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
-        $current[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
-        $current[ $args['block_id'] ]['innerContent'][ $id ]        = $updated_html;
+        if (! defined('BLOCKERA_PHPUNIT_RUN_TESTS') || ! BLOCKERA_PHPUNIT_RUN_TESTS) {
+			$current[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
+			$current[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
+		}
+
+        $current[ $args['block_id'] ]['innerContent'][ $id ] = $updated_html;
     }
 
     /**
@@ -389,8 +421,9 @@ class Transpiler {
      * @return void
      */
     protected function updateClassname( \WP_HTML_Tag_Processor $processor, string $classname): void {
-        $previous_class = $processor->get_attribute('class');
-        $regexp         = blockera_get_unique_class_name_regex();
+        $previous_class  = $processor->get_attribute('class');
+        $regexp          = blockera_get_unique_class_name_regex();
+		$final_classname = '';
 
         if (! empty($previous_class)) {
 
@@ -403,7 +436,9 @@ class Transpiler {
             }
         }
 		
-		$final_classname .= ' blockera-is-transpiled';
+		if (! str_contains($final_classname, 'blockera-is-transpiled')) {
+			$final_classname .= ' blockera-is-transpiled';
+		}
 
 		$processor->set_attribute('class', $final_classname);
     }

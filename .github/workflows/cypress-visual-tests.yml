@@ -39,25 +39,36 @@ jobs:
                   # Get all spec patterns from the .pr-cypress.env.json if it exists
                   categories=$(node .github/scripts/list-visual-test-categories.js)
 
-                  if [ "${{ env.env_file }}" == "true" ]; then
-                    # Load spec patterns from .pr-cypress.env.json
-                    spec_patterns=$(cat .pr-cypress.env.json | jq -r '.visual.specPattern[]')
+                  if [ "${{ env.env_file }}" == "true" ] && [ -f ".pr-cypress.env.json" ]; then
+                    # Check if the file exists and has the visual.specPattern property
+                    has_spec_patterns=$(cat .pr-cypress.env.json | jq 'if type == "object" then has("visual") and (.visual | type == "object") and (.visual | has("specPattern")) else false end')
+                    
+                    if [ "$has_spec_patterns" == "true" ]; then
+                      # Load spec patterns from .pr-cypress.env.json
+                      spec_patterns=$(cat .pr-cypress.env.json | jq -r '.visual.specPattern[]')
 
-                    # Extract category based on the first part of the filename (before the first dot) and remove ".visual.cy.js"
-                    filtered_categories=$(echo "$spec_patterns" | \
-                      sed -E 's|.*/([^/]+)\..*|\1|' | \
-                      sed -E 's|^[^.]*\.||' | \
-                      sed -E 's|\visual\.cy$||' | \
-                      sort -u)
+                      # Extract category based on the first part of the filename (before the first dot) and remove ".visual.cy.js"
+                      filtered_categories=$(echo "$spec_patterns" | \
+                        sed -E 's|.*/([^/]+)\..*|\1|' | \
+                        sed -E 's|^[^.]*\.||' | \
+                        sed -E 's|\visual\.cy$||' | \
+                        sort -u)
 
-                    # Convert filtered categories to JSON array and output
-                    filtered_categories_json=$(echo "$filtered_categories" | tr ' ' '\n' | jq -R -n '[inputs]' | jq -c '.')
-                    echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
-                    echo "Filtered categories: $filtered_categories"
+                      # Convert filtered categories to JSON array and output
+                      filtered_categories_json=$(echo "$filtered_categories" | tr ' ' '\n' | jq -R -n '[inputs]' | jq -c '.')
+                      echo "categories=$filtered_categories_json" >> $GITHUB_OUTPUT
+                      echo "Filtered categories: $filtered_categories"
+                    else
+                      # If no visual.specPattern, use the original categories
+                      categories_json=$(echo $categories | jq -c '.')
+                      echo "categories=$categories_json" >> $GITHUB_OUTPUT
+                      echo "Using default categories (no visual.specPattern found)"
+                    fi
                   else
-                    # If no env file, use the original categories
+                    # If no env file or env_file is false, use the original categories
                     categories_json=$(echo $categories | jq -c '.')
                     echo "categories=$categories_json" >> $GITHUB_OUTPUT
+                    echo "Using default categories (no .pr-cypress.env.json file)"
                   fi
 
             - name: Print categories output

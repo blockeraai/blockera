@@ -49,10 +49,11 @@ export const SizeStyles = ({
 	} = config.sizeConfig;
 	const blockProps = {
 		state,
+		supports,
 		clientId,
 		blockName,
 		attributes: currentBlockAttributes,
-		supports,
+		currentBlock,
 	};
 
 	const sharedParams = {
