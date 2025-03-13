@@ -12,6 +12,7 @@
 - Fixed the extra Flex Wrap css property for blocks.
 - Fixed an issue where the gap feature was not working properly.
 - Fixed an issue in the Layout style definition where margin-block-start was incorrectly being generated multiple times - once for the root selector and again for all child selectors, causing duplicate CSS rules. This was happening specifically when using gap with margin type in flex/grid layouts. The fix ensures margin-block-start is only generated once for the appropriate selector.
+- Fixed flex layout not working properly on mobile devices (Thanks Hoang 🙏🏼)
 
 ### Development Workflow
 - GitHub workflow to enable developers to have custom PR playground configurations.
