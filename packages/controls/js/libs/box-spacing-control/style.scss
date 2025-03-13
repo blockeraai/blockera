@@ -321,7 +321,7 @@
 			align-items: center;
 			justify-content: center;
 			height: 24px;
-			z-index: 1;
+			z-index: 5;
 		}
 
 		&.box-mode-padding {
@@ -335,7 +335,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			z-index: 1;
+			z-index: 8;
 		}
 
 		.blockera-control-label {
@@ -385,6 +385,7 @@
 			top: 50%;
 			transform: translateY(-50%);
 			left: 162px;
+			z-index: 7;
 		}
 
 		&.margin-lock {
