@@ -15,7 +15,7 @@ jobs:
 
             - name: Check for PR config files
               run: |
-                  if find . -name ".pr-*" ! -name "*.example" | grep -q .; then
+                  if find . -name ".pr-*" ! -name "*.-example" | grep -q .; then
                     echo "❌ PR config files found. Please remove all PR-related config files and wait to all tests pass before merging to master."
                     echo "Found files:"
                     find . -name ".pr-*" ! -name "*.example"
