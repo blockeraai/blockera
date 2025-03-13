@@ -9,11 +9,16 @@ import {
 	setInnerBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
+import { experimental } from '@blockera/env';
 
 describe('Column Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
+
+	const enabledOptimizeStyleGeneration = experimental().get(
+		'earlyAccessLab.optimizeStyleGeneration'
+	);
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:columns -->
@@ -404,21 +409,23 @@ describe('Column Block', () => {
 			.should('not.have.css', 'width', '30%');
 
 		const expectedCSS =
-			'.wp-block-columns:not(.is-not-stacked-on-mobile)>.blockera-block.wp-block-column.blockera-has-flex-basis{flex-grow:0';
+			'.blockera-block.wp-block-column[style*=flex-basis]{flex-grow:0';
 
 		//Check block
-		cy.getIframeBody().within(() => {
-			cy.get('#blockera-styles-wrapper')
-				.invoke('text')
-				.then((text) => {
-					const normalizedText = text
-						.replace(/\s+/g, '') // Remove all whitespace (spaces, tabs, newlines)
-						.replace(/;}/g, '}') // Remove optional semicolon before closing brace
-						.trim();
+		cy.get('link#\\@blockera\\/blocks-styles-css')
+			.should('exist')
+			.then(($link) => {
+				// Fetch the CSS file content
+				cy.request($link.attr('href')).then((response) => {
+					const styleContent = response.body;
 
-					expect(normalizedText).to.include(expectedCSS);
+					cy.normalizeCSSContent(styleContent).then(
+						(normalizedContent) => {
+							expect(normalizedContent).to.include(expectedCSS);
+						}
+					);
 				});
-		});
+			});
 
 		//
 		// 2. Assert inner blocks selectors in front end
@@ -431,15 +438,16 @@ describe('Column Block', () => {
 			.should('have.css', 'flex-basis', '30%')
 			.should('not.have.css', 'width', '30%');
 
-		cy.get('style#blockera-inline-css')
-			.invoke('text')
-			.then((text) => {
-				const normalizedText = text
-					.replace(/\s+/g, '') // Remove all whitespace (spaces, tabs, newlines)
-					.replace(/;}/g, '}') // Remove optional semicolon before closing brace
-					.trim();
-
-				expect(normalizedText).to.include(expectedCSS);
-			});
+		if (enabledOptimizeStyleGeneration) {
+			cy.get('style#blockera-inline-css')
+				.invoke('text')
+				.then((styleContent) => {
+					cy.normalizeCSSContent(styleContent).then(
+						(normalizedContent) => {
+							expect(normalizedContent).to.include(expectedCSS);
+						}
+					);
+				});
+		}
 	});
 });
