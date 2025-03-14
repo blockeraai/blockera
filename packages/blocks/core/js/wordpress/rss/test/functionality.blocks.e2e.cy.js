@@ -18,7 +18,7 @@ describe('RSS Block', () => {
 
 	it('Functionality + inner blocks', () => {
 		appendBlocks(
-			`<!-- wp:rss {"feedURL":"http://betterstudio.com/feed/","displayExcerpt":true,"displayAuthor":true,"displayDate":true} /-->`
+			`<!-- wp:rss {"feedURL":"https://blockera.ai/feed/","displayExcerpt":true,"displayAuthor":true,"displayDate":true} /-->`
 		);
 
 		// Select target block
