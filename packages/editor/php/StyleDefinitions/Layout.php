@@ -278,9 +278,17 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 	 * @return string Display value
 	 */
 	private function getDisplayValue( string $property = 'blockeraDisplay'): string {
-		if (! empty($this->settings[ $property ]['value'])) {
-			return $this->settings[ $property ]['value'];
-		} 
+
+		if (isset($this->settings[ $property ]) ) {
+
+			if (is_string($this->settings[ $property ]) ) {
+				return $this->settings[ $property ];
+			}
+
+			if (! empty($this->settings[ $property ]['value'])) {
+				return $this->settings[ $property ]['value'];
+			} 
+		}
 
 		if (! empty($this->default_settings[ $property ]['default']['value'])) {
 			return $this->default_settings[ $property ]['default']['value'];
