@@ -792,32 +792,31 @@ function getMainChangelog(changelogPath, version = '') {
 
 async function getCommitCountSinceLastRelease() {
 	try {
-		// First, fetch all tags and history
-		await execPromise('git fetch --prune --unshallow');
+		// Ensure we have full repository history
+		const isShallow = await execPromise(
+			'git rev-parse --is-shallow-repository'
+		)
+			.then((result) => result.stdout.trim() === 'true')
+			.catch(() => false);
 
-		// Fetch all branches
-		await execPromise('git fetch --all');
+		if (isShallow) {
+			await execPromise('git fetch --prune --unshallow');
+		} else {
+			await execPromise('git fetch --prune');
+		}
 
-		// Get all branches that match the release pattern
-		const { stdout: branches } = await execPromise(
-			'git branch -r | grep "origin/release/" | sort -V'
+		// Get latest release branch
+		const { stdout: latestRelease } = await execPromise(
+			'git for-each-ref --sort=-committerdate --format="%(refname:short)" refs/remotes/origin/release/ | head -n 1'
 		);
 
-		if (!branches) {
+		if (!latestRelease) {
 			return 0;
 		}
 
-		// Get the latest release branch
-		const latestRelease = branches
-			.split('\n')
-			.filter(Boolean)
-			.pop()
-			.trim()
-			.replace('origin/', '');
-
-		// Get commit count from latest release to HEAD
+		// Count commits between latest release and HEAD
 		const { stdout: commitCount } = await execPromise(
-			`git rev-list --count ${latestRelease}..HEAD`
+			`git rev-list --count ${latestRelease.trim()}..HEAD`
 		);
 
 		return parseInt(commitCount.trim(), 10);
@@ -828,7 +827,6 @@ async function getCommitCountSinceLastRelease() {
 }
 
 async function updateChangelog(changelogs, version, publishDate) {
-	const commitCount = await getCommitCountSinceLastRelease();
 	const start =
 		'== Changelog ==\n\n### Version ' +
 		version.trim() +
@@ -838,7 +836,7 @@ async function updateChangelog(changelogs, version, publishDate) {
 	let changelog = '';
 	const end =
 		'\n\n### More\n\n' +
-		`This release includes ${commitCount} commits since the last release.\n\n` +
+		`This release includes {{COMMIT_COUNT}} commits since the last release.\n\n` +
 		'To read the changelog for older Blockera releases, please navigate to the [releases page](https://community.blockera.ai/changelog-9l8hbrv0).';
 
 	for (const changelogPath of changelogs) {
@@ -857,11 +855,12 @@ async function updateChangelog(changelogs, version, publishDate) {
 
 	// Combine same sections.
 	changelog = combineChangelogSections(changelog);
+	const commitCount = await getCommitCountSinceLastRelease();
 
 	// Update the changelog.txt file to include combined changes of all packages.
 	fs.writeFileSync(
 		path.resolve(process.cwd(), 'changelog.txt'),
-		start + changelog + end
+		start + changelog + end.replace('{{COMMIT_COUNT}}', commitCount)
 	);
 }
 
