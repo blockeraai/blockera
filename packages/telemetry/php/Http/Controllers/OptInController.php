@@ -11,7 +11,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 /**
  * Class OptInController for handling requests to related endpoints.
  *
- * @package Blockera\Telemetry\Http\Controllers\SettingsController
+ * @package Blockera\Telemetry\Http\Controllers\OptInController
  */
 class OptInController extends RestController {
 

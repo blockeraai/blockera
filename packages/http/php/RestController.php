@@ -4,6 +4,7 @@ namespace Blockera\Http;
 
 use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
+use Blockera\Data\Cache\Cache;
 
 abstract class RestController {
 
@@ -33,6 +34,11 @@ abstract class RestController {
 	protected Sender $sender;
 
 	/**
+	 * @var Cache $cache the instance of \Blockera\Data\Cache\Cache class.
+	 */
+	protected Cache $cache;
+
+	/**
 	 * Rest Controller Constructor.
 	 */
 	public function __construct( Application $app, Sender $sender, string $route = '/' ) {
@@ -40,6 +46,18 @@ abstract class RestController {
 		$this->app   = $app;
 		$this->route = $route;
 		$this->sender = $sender;
+	}
+
+	/**
+	 * Set cache instance.
+	 *
+	 * @param Cache $cache the instance of \Blockera\Data\Cache\Cache class.
+	 *
+	 * @return void
+	 */
+	public function setCacheInstance( Cache $cache ): void {
+
+		$this->cache = $cache;
 	}
 
 	/**

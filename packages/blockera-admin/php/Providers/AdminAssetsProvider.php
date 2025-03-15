@@ -181,7 +181,8 @@ class AdminAssetsProvider extends AssetsProvider {
 				window.blockeraSettings = ' . wp_json_encode( blockera_get_admin_options() ) . ';
 				window.blockeraVersion = "' . blockera_core_config( 'app.version' ) . '";
 				window.blockeraUserRoles = ' . wp_json_encode( blockera_normalized_user_roles() ) . '
-				window.blockeraUpgradeUrl = "' . blockera_core_config( 'app.upgrade_url' ) . '";
+				window.blockeraUpgradeUrl = "' . blockera_core_config( 'app.upgrade_url' ) . '"
+				window.blockeraAdminNonce = "' . wp_create_nonce( 'blockera-admin' ) . '";
 		';
 	}
 

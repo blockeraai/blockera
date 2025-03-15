@@ -2,6 +2,7 @@
 
 ### New Features
 - Added Labs & Experimental menu to the Blockera admin panel, allowing beta testers and developers to enable/disable experimental features.
+- Added a new "Regenerate Assets" feature to the Blockera admin panel, allowing users to regenerate all assets for pages and posts.
 
 ### Improvements
 - Overall design polish and enhancements.
