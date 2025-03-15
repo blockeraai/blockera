@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/data",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"description": "Core Data is a data module intended to simplify access and manipulation to core WordPress and entities.",
 	"author": "The  Contributors",
 	"license": "ISC",

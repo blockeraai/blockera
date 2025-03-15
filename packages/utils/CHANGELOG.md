@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.0 (2025-03-15)
+
 ### New Features
 - Add `Shift` key to increase/decrease value by 10x in `Input` and `Spacing` fields.
 

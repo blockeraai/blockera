@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.0 (2025-03-15)
+
 ### New Features
 - Added support for the Blocksy `Breadcrumbs` block by Blockera.
 - Added support for the Blocksy `Breadcrumbs → Text` inner element by Blockera.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.0 (2025-03-15)
+
 ### New Features
 - Added a reset (X) icon to allow users to quickly revert feature values to improve UX [[🔗 Feature Request](https://community.blockera.ai/feature-request-1rsjg2ck/post/simplifying-the-process-of-reseting-features-value-tEpNZzvvd64SAX2)]
 - Added a fast shortcut for resetting features by holing Shift key and click on the label.
