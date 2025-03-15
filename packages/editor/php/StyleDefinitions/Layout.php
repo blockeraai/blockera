@@ -122,7 +122,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 				if ( ! empty( $flexWrap['value'] ) || ! empty( $flexWrap['val'] ) ) {
 
-					$declaration['flex-wrap'] = ( $flexWrap['value'] ?? $flexWrap['val'] ) . ( $flexWrap['reverse'] && 'wrap' === ( $flexWrap['value'] ?? $flexWrap['val'] ) ? '-reverse' : '' );
+					$declaration['flex-wrap'] = ( $flexWrap['value'] ?? $flexWrap['val'] ) . ( $flexWrap['reverse'] && 'wrap' === ( $flexWrap['value'] ?? $flexWrap['val'] ) ? '-reverse' : '' ) . ' !important';
 				}
 
 				break;
