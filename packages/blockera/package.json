@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/blockera",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"description": "The bootstrapper for blockera react application for WordPress site and block editors.",
 	"author": "The Blockera Core Contributors",
 	"license": "ISC",
