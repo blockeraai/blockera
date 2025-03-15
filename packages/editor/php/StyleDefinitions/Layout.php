@@ -35,6 +35,8 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 			return $declaration;
 		}
 
+		$optimizeStyleGeneration = blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+
 		switch ( $cssProperty ) {
 			case 'flex':
 				$flexType = $setting['flex'];
@@ -79,9 +81,8 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				break;
 
 			case 'flex-direction':
-				$item                    = $setting['flex-direction'];
-				$changeFlexInside        = false;
-				$optimizeStyleGeneration = blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+				$item             = $setting['flex-direction'];
+				$changeFlexInside = false;
 
 				// Current block display (even the default).
 				$display = $this->getDisplayValue();
@@ -119,9 +120,8 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 			case 'flex-wrap':
 				// Backward compatibility for flex-wrap value, because flex-wrap changed from value to val in the new version.
-				$flexWrap                = $setting['flex-wrap'];
-				$optimizeStyleGeneration = blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
-
+				$flexWrap = $setting['flex-wrap'];
+			
 				if ( ! empty( $flexWrap['value'] ) || ! empty( $flexWrap['val'] ) ) {
 
 					$declaration['flex-wrap'] = ( $flexWrap['value'] ?? $flexWrap['val'] ) . ( $flexWrap['reverse'] && 'wrap' === ( $flexWrap['value'] ?? $flexWrap['val'] ) ? '-reverse' : '' ) . ( $optimizeStyleGeneration ? ' !important' : '' );
@@ -159,20 +159,20 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 					$cssProperty = $selectorSuffix ? 'margin-block-start' : 'gap';
 
 					if ( $gap['gap'] ) {
-						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['gap'] );
+						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['gap'] ) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' );
 					}
 				} else {
 
 					if ( $gap['rows'] ) {
 						$cssProperty = $selectorSuffix ? 'margin-block-start' : 'row-gap';
 
-						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['rows'] );
+						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['rows'] ) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' );
 					}
 
 					if ( $gap['columns'] ) {
 						$cssProperty = $selectorSuffix ? 'margin-block-start' : 'column-gap';
 
-						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['columns'] );
+						$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $gap['columns'] ) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' );
 					}
 				}
 
@@ -187,7 +187,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 					$this->setCss(
 						'' === $display ? $declaration: [
-							'margin-block-start' => '0',
+							'margin-block-start' => '0' . ( $optimizeStyleGeneration ? ' !important' : '' ),
 						],
 						'margin-block-start',
 						' > * + *'
