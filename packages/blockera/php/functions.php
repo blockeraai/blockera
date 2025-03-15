@@ -216,8 +216,15 @@ if (! function_exists('blockera_array_flat')) {
         if (empty($nestedArray)) {
             return [];
         }
+
+        $result = [];
+        foreach ($nestedArray as $array) {
+            if (is_array($array)) {
+                $result = array_merge($result, $array);
+            }
+        }
         
-        return array_merge(...array_values($nestedArray));
+        return $result;
     }
 }
 
