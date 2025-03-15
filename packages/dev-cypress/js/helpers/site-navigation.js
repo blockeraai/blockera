@@ -55,7 +55,7 @@ export function createPost({ postType = 'post', postTitle = '' } = {}) {
 		cy.wait(2000);
 
 		if (postType === 'page') {
-			cy.wait(2000);
+			cy.wait(7000);
 			cy.get('body').then(($body) => {
 				const selector = 'button[aria-label="Close"]';
 
