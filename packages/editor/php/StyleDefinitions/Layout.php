@@ -106,12 +106,12 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 				if ( isset($item['alignItems']) && $item['alignItems'] ) {
 					$prop                 = $changeFlexInside ? 'justify-content' : 'align-items';
-					$declaration[ $prop ] = $item['alignItems'];
+					$declaration[ $prop ] = $item['alignItems'] . ( 'align-items' === $prop ? ' !important' : '' );
 				}
 
 				if ( isset($item['justifyContent']) && $item['justifyContent'] ) {
 					$prop                 = $changeFlexInside ? 'align-items' : 'justify-content';
-					$declaration[ $prop ] = $item['justifyContent'];
+					$declaration[ $prop ] = $item['justifyContent'] . ( 'align-items' === $prop ? ' !important' : '' );
 				}
 
 				break;
