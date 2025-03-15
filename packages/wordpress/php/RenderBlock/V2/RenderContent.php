@@ -179,47 +179,56 @@ class RenderContent {
 
 		} elseif (blockera_block_is_dynamic($block) && ! str_contains($block_content, 'blockera-is-transpiled')) {
 
-			$hash  = md5(serialize($block));
-			$cache = $this->cache->getCache(0, $hash);
+			if (empty($block['innerBlocks']) && empty($block['innerContent']) && blockera_is_supported_block($block)) {
 
-			if ($cache) {
+				$hash  = md5(serialize($block));
+				$cache = $this->cache->getCache(0, $hash);
+
+				if ($cache) {
+
+					// Print block inline styles.
+					blockera_add_inline_css(implode(PHP_EOL, $cache['styles']));
+
+					// Return block content.
+					return $cache['block_content'];
+				}
+
+				// Pre-calculate common values.
+				$blockera_hash_id    = blockera_get_small_random_hash($block['attrs']['blockeraPropsId'] ?? '');
+				$blockera_class_name = defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ? 'blockera-block blockera-block-test' : sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
+				$unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
+
+				// Get the updated blocks after cleanup.
+				$this->transpiler->cleanupProcess(
+					$block_content,
+					0,
+					[
+						'block' => $block,
+						'block_path' => [],
+						'need_update' => false,
+						'supports' => $this->supports,
+						'unique_class_name' => $unique_class_name,
+						'blockera_class_name' => $blockera_class_name,
+					]
+				);
+
+				$styles        = $this->transpiler->getStyles();
+				$block_content = $this->transpiler->getBlockContent();
 
 				// Print block inline styles.
-				blockera_add_inline_css(implode(PHP_EOL, $cache['styles']));
+				blockera_add_inline_css(implode(PHP_EOL, $styles));
 
-				// Return block content.
-				return $cache['block_content'];
+				// Cache the block content and styles.
+				$this->cache->setCache(0, $hash, compact('block_content', 'styles', 'hash'));
+
+				return $block_content;
 			}
 
-			// Pre-calculate common values.
-			$blockera_hash_id    = blockera_get_small_random_hash($block['attrs']['blockeraPropsId'] ?? '');
-			$blockera_class_name = defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ? 'blockera-block blockera-block-test' : sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
-			$unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
+			// Disable cache for dynamic blocks.
+			$this->render_instance->setCacheStatus(false);
 
-			// Get the updated blocks after cleanup.
-			$this->transpiler->cleanupProcess(
-                $block_content,
-                0,
-                [
-					'block' => $block,
-					'block_path' => [],
-					'need_update' => false,
-					'supports' => $this->supports,
-					'unique_class_name' => $unique_class_name,
-					'blockera_class_name' => $blockera_class_name,
-				]
-            );
+			return $this->render_instance->render($block_content, $block, $supports);
 
-			$styles        = $this->transpiler->getStyles();
-			$block_content = $this->transpiler->getBlockContent();
-
-			// Print block inline styles.
-			blockera_add_inline_css(implode(PHP_EOL, $styles));
-
-			// Cache the block content and styles.
-			$this->cache->setCache(0, $hash, compact('block_content', 'styles', 'hash'));
-
-			return $block_content;
 		}
 
         return $block_content;
