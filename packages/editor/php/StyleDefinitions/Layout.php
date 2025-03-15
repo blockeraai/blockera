@@ -79,8 +79,9 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 				break;
 
 			case 'flex-direction':
-				$item             = $setting['flex-direction'];
-				$changeFlexInside = false;
+				$item                    = $setting['flex-direction'];
+				$changeFlexInside        = false;
+				$optimizeStyleGeneration = blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
 
 				// Current block display (even the default).
 				$display = $this->getDisplayValue();
@@ -106,23 +107,24 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 
 				if ( isset($item['alignItems']) && $item['alignItems'] ) {
 					$prop                 = $changeFlexInside ? 'justify-content' : 'align-items';
-					$declaration[ $prop ] = $item['alignItems'] . ( 'align-items' === $prop ? ' !important' : '' );
+					$declaration[ $prop ] = $item['alignItems'] . ( $optimizeStyleGeneration && 'align-items' === $prop ? ' !important' : '' );
 				}
 
 				if ( isset($item['justifyContent']) && $item['justifyContent'] ) {
 					$prop                 = $changeFlexInside ? 'align-items' : 'justify-content';
-					$declaration[ $prop ] = $item['justifyContent'] . ( 'align-items' === $prop ? ' !important' : '' );
+					$declaration[ $prop ] = $item['justifyContent'] . ( $optimizeStyleGeneration && 'justify-content' === $prop ? ' !important' : '' );
 				}
 
 				break;
 
 			case 'flex-wrap':
 				// Backward compatibility for flex-wrap value, because flex-wrap changed from value to val in the new version.
-				$flexWrap = $setting['flex-wrap'];
+				$flexWrap                = $setting['flex-wrap'];
+				$optimizeStyleGeneration = blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
 
 				if ( ! empty( $flexWrap['value'] ) || ! empty( $flexWrap['val'] ) ) {
 
-					$declaration['flex-wrap'] = ( $flexWrap['value'] ?? $flexWrap['val'] ) . ( $flexWrap['reverse'] && 'wrap' === ( $flexWrap['value'] ?? $flexWrap['val'] ) ? '-reverse' : '' ) . ' !important';
+					$declaration['flex-wrap'] = ( $flexWrap['value'] ?? $flexWrap['val'] ) . ( $flexWrap['reverse'] && 'wrap' === ( $flexWrap['value'] ?? $flexWrap['val'] ) ? '-reverse' : '' ) . ( $optimizeStyleGeneration ? ' !important' : '' );
 				}
 
 				break;

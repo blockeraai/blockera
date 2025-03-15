@@ -70,7 +70,9 @@ class Size extends BaseStyleDefinition {
 				break;
 
 			case 'max-width':
-				$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) . ' !important';
+				$optimizeStyleGeneration = blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+
+				$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $setting[ $cssProperty ] ) . ( $optimizeStyleGeneration ? ' !important' : '' );
 
 				$this->setCss( $declaration );
 				break;
