@@ -5,6 +5,7 @@
 
 ### Bug Fixes
 - Fixed a bug in the style engine optimization affecting the Render content of post and blocks.
+- Fixed a bug in the rendering dynamic blocks process where cached blocks were not properly handled, leading to inconsistent output. The fix ensures proper caching and retrieval of dynamic block content while maintaining style integrity.
 
 ## 1.0.1 (2024-12-21)
 

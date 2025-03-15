@@ -50,6 +50,13 @@ class Transpiler {
 	 */
 	protected array $global_css_props_classes = [];
 
+	/**
+	 * Block content.
+	 *
+	 * @var string
+	 */
+	protected string $block_content = '';
+
     /**
      * The Parser class constructor.
      *
@@ -60,6 +67,35 @@ class Transpiler {
         $this->app   = $app;
         $this->cache = $cache;
     }
+
+	/**
+	 * Set the block content.
+	 *
+	 * @param string $block_content The block content.
+	 *
+	 * @return void
+	 */
+	public function setBlockContent( string $block_content): void {
+		$this->block_content = $block_content;
+	}
+
+	/**
+	 * Get the block content.
+	 *
+	 * @return string
+	 */
+	public function getBlockContent(): string {
+		return $this->block_content;
+	}
+
+	/**
+	 * Get the styles.
+	 *
+	 * @return array
+	 */
+	public function getStyles(): array {
+		return $this->styles;
+	}
 
 	/**
 	 * Set the global css props classes.
@@ -337,8 +373,12 @@ class Transpiler {
 			$this->force_add_inline_styles($inline_styles);
 		}
 
-        // Update block content.
-        $this->updateBlockContent($processor, $id, $args);
+        if (! isset($args['need_update']) || true === $args['need_update']) {
+			// Update block content.
+			$this->updateBlockContent($processor, $id, $args);
+		} else {
+			$this->setBlockContent($processor->get_updated_html());
+		}
     }
 
 	/**
