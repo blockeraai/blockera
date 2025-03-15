@@ -35,7 +35,7 @@ class Layout extends BaseStyleDefinition implements CustomStyle {
 			return $declaration;
 		}
 
-		$optimizeStyleGeneration = blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+		$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
 
 		switch ( $cssProperty ) {
 			case 'flex':

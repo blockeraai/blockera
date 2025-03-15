@@ -63,7 +63,7 @@ class Spacing extends BaseStyleDefinition {
 			...array_map(
 				static function ( string $item, string $property ): array {
 					$value = blockera_get_value_addon_real_value( $item );
-					$optimizeStyleGeneration = blockera_get_experimental([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+					$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
 
 					// Add !important only to margin-left and margin-right
 					if ( $optimizeStyleGeneration && ( $property === 'left' || $property === 'right' ) ) {
