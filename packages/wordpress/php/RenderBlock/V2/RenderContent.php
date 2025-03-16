@@ -181,8 +181,8 @@ class RenderContent {
 
 			if (empty($block['innerBlocks']) && empty($block['innerContent']) && blockera_is_supported_block($block)) {
 
-				$hash  = md5(serialize($block));
-				$cache = $this->cache->getCache(0, $hash);
+				$cache_key = md5(serialize($block));
+				$cache     = $this->cache->getCache(0, $cache_key);
 
 				if ($cache) {
 
@@ -219,7 +219,7 @@ class RenderContent {
 				blockera_add_inline_css(implode(PHP_EOL, $styles));
 
 				// Cache the block content and styles.
-				$this->cache->setCache(0, $hash, compact('block_content', 'styles', 'hash'));
+				$this->cache->setCache(0, $cache_key, compact('block_content', 'styles'));
 
 				return $block_content;
 			}
