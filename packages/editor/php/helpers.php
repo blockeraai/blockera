@@ -897,6 +897,14 @@ if ( ! function_exists( 'blockera_is_wp_block_child_class' ) ) {
 	 */
 	function blockera_is_wp_block_child_class( string $block_classname ): bool {
 
-		return preg_match('/wp-block-[a-zA-Z0-9-]+__[a-zA-Z0-9-]+/i', $block_classname);
+		$is_match = preg_match('/wp-block-[a-zA-Z0-9-]+__[a-zA-Z0-9-]+/i', $block_classname, $matches);
+
+		if ($is_match) {
+			$search = preg_replace('/__.*/', '', $matches[0]);
+
+			return $is_match && ! preg_match('/\b' . $search . '\b/i', $block_classname);
+		}
+
+		return $is_match;
 	}
 }
