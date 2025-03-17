@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.1 (2025-03-17)
+
 ### Improvements
 - Improve variable unlink feature to try extract real value from var(...) while unlinking. [Thanks Hoang]
 
