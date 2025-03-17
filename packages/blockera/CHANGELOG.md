@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.2.1 (2025-03-17)
+
 ### Improvements
 - Blocksy Compatibility: improve Blocksy colors to include real value in settings to make it detectable while unlinking variable. [Thanks Hoang]
 - Added compatibility with the Third Party Cache plugins (Like: LiteSpeed) to prevent conflicts.

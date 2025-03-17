@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.2.1 (2025-03-17)
+
 ### Bug Fixes
 - Fixed an issue in the Layout style generator Reported  by [@hoang](https://github.com/hoang) 🙏🏼
 - Fixed an issue where the gap lock or unlock button was not working properly.
