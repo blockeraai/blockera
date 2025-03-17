@@ -65,7 +65,7 @@ describe('Compatibility with Blocksy Theme', () => {
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
-			.should('include', 'color: var(--theme-palette-color-1, #2872fa)');
+			.should('include', 'color: var(--theme-link-initial-color)');
 	});
 
 	it('Width Size variables', () => {
