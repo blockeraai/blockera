@@ -220,6 +220,7 @@ export const getComputedCssProps = ({
 							...calculatedProps,
 							attributes: {
 								...defaultAttributes,
+								...params.attributes,
 								...breakpoint?.attributes,
 							},
 							currentBlock: 'master',
