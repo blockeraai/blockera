@@ -20,7 +20,7 @@ import {
 /**
  * Internal dependencies
  */
-import { isValid } from './utils';
+import { isValid, extractCssVarValue } from './utils';
 import { canUnlinkVariable } from './helpers';
 import { ValueAddonControl, ValueAddonPointer } from './components';
 import type { UseValueAddonProps, ValueAddonProps } from './types';
@@ -129,7 +129,10 @@ export const useValueAddon = ({
 				!isUndefined(value?.settings?.value) &&
 				value?.settings?.value !== ''
 			) {
-				onChange(value?.settings?.value);
+				const processedValue = extractCssVarValue(
+					value?.settings?.value
+				);
+				onChange(processedValue || value?.settings?.value);
 			} else {
 				const variable = getVariable(
 					value.valueType,
@@ -137,7 +140,8 @@ export const useValueAddon = ({
 				);
 
 				if (!isUndefined(variable?.value) && variable?.value !== '') {
-					onChange(variable?.value);
+					const processedValue = extractCssVarValue(variable?.value);
+					onChange(processedValue || variable.value);
 				}
 			}
 

@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Improve variable unlink feature to try extract real value from var(...) while unlinking. [Thanks Hoang]
+
 ### Bug Fixes
 - Design issue in spacing feature. 
 - Fixed an issue where the input control was not accepting a value of 0 [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/other-bugs-of-blockera-v1-5-pGcrLeGU8mc0S7J)]
