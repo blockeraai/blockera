@@ -212,6 +212,8 @@ export default function ({
 								{
 									lock: !gap?.lock,
 									gap:
+										gap?.columns &&
+										gap?.rows &&
 										gap?.columns === gap?.rows
 											? gap?.columns
 											: gap?.gap,
