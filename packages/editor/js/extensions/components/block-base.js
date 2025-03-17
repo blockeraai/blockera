@@ -136,17 +136,9 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		};
 	});
 
-	const [isActive, _setActive] = useState(
-		'advanced' === attributes.blockeraMode
-	);
+	const [isActive, _setActive] = useState(true);
 	const setActive = useCallback(
-		(blockeraMode: 'advanced' | 'basic'): void => {
-			_setActive(blockeraMode);
-			setAttributes({
-				...attributes,
-				blockeraMode: blockeraMode ? 'advanced' : 'basic',
-			});
-		},
+		(_isActive: boolean): void => _setActive(_isActive),
 		// eslint-disable-next-line
 		[]
 	);
