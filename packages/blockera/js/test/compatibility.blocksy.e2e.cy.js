@@ -42,7 +42,7 @@ describe('Compatibility with Blocksy Theme', () => {
 				settings: {
 					name: 'Link',
 					id: 'link-initial-color',
-					value: 'var(--theme-palette-color-1)',
+					value: 'var(--theme-palette-color-1, #2872fa)',
 					type: 'color',
 					group: 'blocksy-colors',
 					var: '--theme-link-initial-color',
@@ -65,7 +65,7 @@ describe('Compatibility with Blocksy Theme', () => {
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
-			.should('include', 'color: var(--theme-link-initial-color)');
+			.should('include', 'color: var(--theme-palette-color-1, #2872fa)');
 	});
 
 	it('Width Size variables', () => {
