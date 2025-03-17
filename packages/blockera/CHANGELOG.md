@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Blocksy Compatibility: improve Blocksy colors to include real value in settings to make it detectable while unlinking variable. [Thanks Hoang]
+
 ## 1.2.0 (2025-03-15)
 
 ### New Features
