@@ -6,7 +6,7 @@ import {
 	getDynamicValueCategory,
 	getDynamicValueIcon,
 } from '../helpers';
-import { isValid } from '../utils';
+import { isValid, extractCssVarValue } from '../utils';
 import { generateVariableString } from '@blockera/data';
 import { __ } from '@wordpress/i18n';
 
@@ -554,6 +554,82 @@ describe('Helper Functions', () => {
 					valueType: 'variable',
 				})
 			).toBe(false);
+		});
+	});
+
+	describe('extractCssVarValue', () => {
+		describe('Invalid inputs', () => {
+			test('undefined', () => {
+				expect(extractCssVarValue(undefined)).toBeUndefined();
+			});
+
+			test('null', () => {
+				expect(extractCssVarValue(null)).toBeNull();
+			});
+
+			test('empty string', () => {
+				expect(extractCssVarValue('')).toBe('');
+			});
+
+			test('non-string value', () => {
+				expect(extractCssVarValue(123)).toBe(123);
+			});
+		});
+
+		describe('Non-var values', () => {
+			test('regular CSS value', () => {
+				expect(extractCssVarValue('#3A4F66')).toBe('#3A4F66');
+			});
+
+			test('regular CSS with units', () => {
+				expect(extractCssVarValue('16px')).toBe('16px');
+			});
+		});
+
+		describe('Simple var() values', () => {
+			test('var with fallback', () => {
+				expect(
+					extractCssVarValue('var(--theme-palette-color-3, #3A4F66)')
+				).toBe('#3A4F66');
+			});
+
+			test('var without fallback', () => {
+				expect(extractCssVarValue('var(--theme-palette-color-3)')).toBe(
+					''
+				);
+			});
+		});
+
+		describe('Nested var() values', () => {
+			test('two levels of nesting', () => {
+				expect(extractCssVarValue('var(--a, var(--b, #000))')).toBe(
+					'#000'
+				);
+			});
+
+			test('three levels of nesting', () => {
+				expect(
+					extractCssVarValue('var(--a, var(--b, var(--c, #fff)))')
+				).toBe('#fff');
+			});
+
+			test('nested without final fallback', () => {
+				expect(extractCssVarValue('var(--a, var(--b))')).toBe('');
+			});
+		});
+
+		describe('Complex cases', () => {
+			test('var with space in fallback', () => {
+				expect(
+					extractCssVarValue('var(--color, rgb(255, 255, 255))')
+				).toBe('rgb(255, 255, 255)');
+			});
+
+			test('var with calc in fallback', () => {
+				expect(
+					extractCssVarValue('var(--spacing, calc(2 * 16px))')
+				).toBe('calc(2 * 16px)');
+			});
 		});
 	});
 });
