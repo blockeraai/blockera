@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed an issue in the Layout style generator Reported  by [@hoang](https://github.com/hoang) 🙏🏼
+
 ## 1.2.0 (2025-03-15)
 
 ### Bug Fixes
