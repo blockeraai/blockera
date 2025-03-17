@@ -28,16 +28,16 @@ class Blocksy {
 		add_filter(
             'blockera/variable/groups/registry',
             [ $this, 'registerVariableGroups' ]
-        );
-
-		add_filter(
-			'blockera/variable/groups/blocksy-colors/items/registry',
-			[ $this, 'registerColorVariables' ]
 		);
 
 		add_filter(
-			'blockera/variable/groups/blocksy-width-size/items/registry',
-			[ $this, 'registerWidthSizeVariables' ]
+            'blockera/variable/groups/blocksy-colors/items/registry',
+            [ $this, 'registerColorVariables' ]
+		);
+
+		add_filter(
+            'blockera/variable/groups/blocksy-width-size/items/registry',
+            [ $this, 'registerWidthSizeVariables' ]
 		);
 	}
 
@@ -51,17 +51,17 @@ class Blocksy {
 	 */
 	public function registerVariableGroups( array $groups) {
 		return array_merge(
-			$groups,
-			[
+            $groups,
+            [
 				'blocksy-colors'   => [
 					'label' => sprintf(
 					// translators: it's the product name (a theme or plugin name).
-                        __(
-                            '%s Colors',
-                            'blockera' 
-                        ),
-                        // translators: Blocksy is a theme name.
-                        __('Blocksy', 'blockera')
+						__(
+							'%s Colors',
+							'blockera' 
+						),
+						// translators: Blocksy is a theme name.
+						__('Blocksy', 'blockera')
 					),
 					'type'  => 'color',
 				],
@@ -77,8 +77,8 @@ class Blocksy {
 					),
 					'type'  => 'width-size',
 				],
-			],
-        );
+            ],
+		);
 	}
 
 	/**
@@ -87,7 +87,7 @@ class Blocksy {
 	public function registerWidthSizeVariables( array $items ) {
 
 		return array_merge(
-			[
+            [
 				[
 					'name'      => __('Normal Container Max Width', 'blockera'),
 					'id'        => 'normal-container-max-width',
@@ -115,8 +115,8 @@ class Blocksy {
 					],
 				],
 
-			],
-			$items,
+            ],
+            $items,
 		);
 	}
 
@@ -128,10 +128,18 @@ class Blocksy {
 
 		// Set base color.
 		$baseColor = blocksy_get_theme_mod('fontColor');
+
+		$colors = blocksy_manager()->colors->get_color_palette();
+
 		if ( isset($baseColor['default']['color']) ) {
 			$baseColor = $baseColor['default']['color'];
 		} else {
-			$baseColor = 'var(--theme-palette-color-3)';
+
+			if ( isset($colors['color3']['color']) ) {
+				$baseColor = 'var(--theme-palette-color-3, ' . $colors['color3']['color'] . ')';
+			} else {
+				$baseColor = 'var(--theme-palette-color-3)';
+			}
 		}
 
 		// Set link color.
@@ -139,7 +147,11 @@ class Blocksy {
 		if ( isset($linkColor['default']['color']) ) {
 			$linkColor = $linkColor['default']['color'];
 		} else {
-			$linkColor = 'var(--theme-palette-color-1)';
+			if ( isset($colors['color1']['color']) ) {
+				$linkColor = 'var(--theme-palette-color-1, ' . $colors['color1']['color'] . ')';
+			} else {
+				$linkColor = 'var(--theme-palette-color-1)';
+			}
 		}
 
 		// Set link hover color.
@@ -147,7 +159,11 @@ class Blocksy {
 		if ( isset($linkHoverColor['hover']['color']) ) {
 			$linkHoverColor = $linkHoverColor['hover']['color'];
 		} else {
-			$linkHoverColor = 'var(--theme-palette-color-2)';
+			if ( isset($colors['color2']['color']) ) {
+				$linkHoverColor = 'var(--theme-palette-color-2, ' . $colors['color2']['color'] . ')';
+			} else {
+				$linkHoverColor = 'var(--theme-palette-color-2)';
+			}
 		}
 
 		// Set border color.
@@ -155,7 +171,11 @@ class Blocksy {
 		if ( isset($borderColor['default']['color']) ) {
 			$borderColor = $borderColor['default']['color'];
 		} else {
-			$borderColor = 'var(--theme-palette-color-5)';
+			if ( isset($colors['color5']['color']) ) {
+				$borderColor = 'var(--theme-palette-color-5, ' . $colors['color5']['color'] . ')';
+			} else {
+				$borderColor = 'var(--theme-palette-color-5)';
+			}
 		}
 
 		// Set headings color.
@@ -163,7 +183,11 @@ class Blocksy {
 		if ( isset($headingsColor['default']['color']) ) {
 			$headingsColor = $headingsColor['default']['color'];
 		} else {
-			$headingsColor = 'var(--theme-palette-color-4)';
+			if ( isset($colors['color4']['color']) ) {
+				$headingsColor = 'var(--theme-palette-color-4, ' . $colors['color4']['color'] . ')';
+			} else {
+				$headingsColor = 'var(--theme-palette-color-4)';
+			}
 		}
 
 		// Set heading 1 color.
@@ -171,7 +195,11 @@ class Blocksy {
 		if ( isset($heading1Color['default']['color']) ) {
 			$heading1Color = $heading1Color['default']['color'];
 		} else {
-			$heading1Color = 'var(--theme-palette-color-4)';
+			if ( isset($colors['color4']['color']) ) {
+				$heading1Color = 'var(--theme-palette-color-4, ' . $colors['color4']['color'] . ')';
+			} else {
+				$heading1Color = 'var(--theme-palette-color-4)';
+			}
 		}
 
 		// Set heading 2 color.
@@ -179,7 +207,11 @@ class Blocksy {
 		if ( isset($heading2Color['default']['color']) ) {
 			$heading2Color = $heading2Color['default']['color'];
 		} else {
-			$heading2Color = 'var(--theme-palette-color-4)';
+			if ( isset($colors['color4']['color']) ) {
+				$heading2Color = 'var(--theme-palette-color-4, ' . $colors['color4']['color'] . ')';
+			} else {
+				$heading2Color = 'var(--theme-palette-color-4)';
+			}
 		}
 
 		// Set heading 3 color.
@@ -187,7 +219,11 @@ class Blocksy {
 		if ( isset($heading3Color['default']['color']) ) {
 			$heading3Color = $heading3Color['default']['color'];
 		} else {
-			$heading3Color = 'var(--theme-palette-color-4)';
+			if ( isset($colors['color4']['color']) ) {
+				$heading3Color = 'var(--theme-palette-color-4, ' . $colors['color4']['color'] . ')';
+			} else {
+				$heading3Color = 'var(--theme-palette-color-4)';
+			}
 		}
 
 		// Set heading 4 color.
@@ -195,7 +231,11 @@ class Blocksy {
 		if ( isset($heading4Color['default']['color']) ) {
 			$heading4Color = $heading4Color['default']['color'];
 		} else {
-			$heading4Color = 'var(--theme-palette-color-4)';
+			if ( isset($colors['color4']['color']) ) {
+				$heading4Color = 'var(--theme-palette-color-4, ' . $colors['color4']['color'] . ')';
+			} else {
+				$heading4Color = 'var(--theme-palette-color-4)';
+			}
 		}
 
 		// Set heading 5 color.
@@ -203,7 +243,11 @@ class Blocksy {
 		if ( isset($heading5Color['default']['color']) ) {
 			$heading5Color = $heading5Color['default']['color'];
 		} else {
-			$heading5Color = 'var(--theme-palette-color-4)';
+			if ( isset($colors['color4']['color']) ) {
+				$heading5Color = 'var(--theme-palette-color-4, ' . $colors['color4']['color'] . ')';
+			} else {
+				$heading5Color = 'var(--theme-palette-color-4)';
+			}
 		}
 
 		// Set heading 6 color.
@@ -211,11 +255,15 @@ class Blocksy {
 		if ( isset($heading6Color['default']['color']) ) {
 			$heading6Color = $heading6Color['default']['color'];
 		} else {
-			$heading6Color = 'var(--theme-palette-color-4)';
+			if ( isset($colors['color4']['color']) ) {
+				$heading6Color = 'var(--theme-palette-color-4, ' . $colors['color4']['color'] . ')';
+			} else {
+				$heading6Color = 'var(--theme-palette-color-4)';
+			}
 		}
 
 		return array_merge(
-			[
+            [
 				[
 					'name'      => __('Base', 'blockera'),
 					'id'        => 'base-color',
@@ -335,8 +383,8 @@ class Blocksy {
 					'var'       => '--theme-heading-6-color',
 					'label'     => __( 'Heading 6', 'blockera' ),
 				],
-			],
-			$items,
+            ],
+            $items,
 		);
 	}
 }
