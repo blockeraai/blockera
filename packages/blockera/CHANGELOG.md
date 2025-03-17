@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Added compatibility with the Third Party Cache plugins (Like: LiteSpeed) to prevent conflicts.
+
 ## 1.2.0 (2025-03-15)
 
 ### New Features
