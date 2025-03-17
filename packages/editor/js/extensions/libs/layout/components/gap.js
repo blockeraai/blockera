@@ -211,7 +211,12 @@ export default function ({
 								attributeId,
 								{
 									lock: !gap?.lock,
-									gap: gap?.gap,
+									gap:
+										gap?.columns &&
+										gap?.rows &&
+										gap?.columns === gap?.rows
+											? gap?.columns
+											: gap?.gap,
 									columns: '',
 									rows: '',
 								},

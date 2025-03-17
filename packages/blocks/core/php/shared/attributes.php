@@ -15,10 +15,6 @@ return [
 		'type'    => 'string',
 		'default' => '',
 	],
-	'blockeraMode'                      => [
-		'type'    => 'string',
-		'default' => 'advanced',
-	],
 	// Advanced settings.
 	'blockeraAttributes'                => [
 		'type'    => 'object',

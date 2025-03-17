@@ -28,6 +28,33 @@ import { appendBlockeraPrefix } from './utils';
 import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../canvas-editor';
 
+const appendStyles = ({
+	settings,
+	disabledStyles,
+}: {
+	settings: Object,
+	disabledStyles: Array<string>,
+}): Array<CssRule> => {
+	const styleGenerators = {
+		SizeStyles,
+		MouseStyles,
+		LayoutStyles,
+		SpacingStyles,
+		EffectsStyles,
+		PositionStyles,
+		FlexChildStyles,
+		TypographyStyles,
+		BackgroundStyles,
+		BorderAndShadowStyles,
+	};
+
+	const enabledStyles = Object.entries(styleGenerators)
+		.filter(([name]) => !disabledStyles?.includes(name))
+		.map(([, generator]: [any, Function]) => generator(settings));
+
+	return enabledStyles.flat();
+};
+
 export const getComputedCssProps = ({
 	states,
 	selectors,
@@ -52,26 +79,6 @@ export const getComputedCssProps = ({
 			blockName,
 		};
 
-		const appendStyles = (settings: Object): void => {
-			const styleGenerators = {
-				SizeStyles,
-				MouseStyles,
-				LayoutStyles,
-				SpacingStyles,
-				EffectsStyles,
-				PositionStyles,
-				FlexChildStyles,
-				TypographyStyles,
-				BackgroundStyles,
-				BorderAndShadowStyles,
-			};
-
-			const enabledStyles = Object.entries(styleGenerators)
-				.filter(([name]) => !disabledStyles?.includes(name))
-				.map(([, generator]: [any, Function]) => generator(settings));
-
-			stylesStack.push(enabledStyles.flat());
-		};
 		const validateBlockStates = (state: Object): boolean => {
 			return state?.isVisible && !!state?.breakpoints;
 		};
@@ -101,19 +108,26 @@ export const getComputedCssProps = ({
 						continue;
 					}
 
-					appendStyles({
-						...calculatedProps,
-						state: stateType,
-						masterState,
-						selectors:
-							selectors[appendBlockeraPrefix(blockType)] || {},
-						attributes: {
-							...defaultAttributes,
-							...breakpointItem?.attributes,
-						},
-						currentBlock: blockType,
-						device: breakpointType,
-					});
+					stylesStack.push(
+						appendStyles({
+							settings: {
+								...calculatedProps,
+								state: stateType,
+								masterState,
+								selectors:
+									selectors[
+										appendBlockeraPrefix(blockType)
+									] || {},
+								attributes: {
+									...defaultAttributes,
+									...breakpointItem?.attributes,
+								},
+								currentBlock: blockType,
+								device: breakpointType,
+							},
+							disabledStyles,
+						})
+					);
 				}
 			}
 		};
@@ -134,18 +148,24 @@ export const getComputedCssProps = ({
 				masterState,
 			});
 
-			appendStyles({
-				...calculatedProps,
-				state: 'normal',
-				masterState,
-				selectors: selectors[appendBlockeraPrefix(blockType)] || {},
-				attributes: {
-					...defaultAttributes,
-					...attributes,
-				},
-				currentBlock: blockType,
-				device,
-			});
+			stylesStack.push(
+				appendStyles({
+					settings: {
+						...calculatedProps,
+						state: 'normal',
+						masterState,
+						selectors:
+							selectors[appendBlockeraPrefix(blockType)] || {},
+						attributes: {
+							...defaultAttributes,
+							...attributes,
+						},
+						currentBlock: blockType,
+						device,
+					},
+					disabledStyles,
+				})
+			);
 		};
 
 		// TODO: please implemented custom special pseudo-states for all blocks.
@@ -155,12 +175,17 @@ export const getComputedCssProps = ({
 
 		if (isBaseBreakpoint(currentBreakpoint) && isNormalState(state)) {
 			// 1- create css styles for master blocks with root attributes.
-			appendStyles({
-				...calculatedProps,
-				state: 'normal',
-				currentBlock: 'master',
-				device: getBaseBreakpoint(),
-			});
+			stylesStack.push(
+				appendStyles({
+					settings: {
+						...calculatedProps,
+						state: 'normal',
+						currentBlock: 'master',
+						device: getBaseBreakpoint(),
+					},
+					disabledStyles,
+				})
+			);
 
 			// 2- create css styles for inner blocks inside master normal state on base breakpoint.
 			Object.entries(params?.attributes?.blockeraInnerBlocks).forEach(
@@ -189,15 +214,21 @@ export const getComputedCssProps = ({
 					continue;
 				}
 
-				appendStyles({
-					...calculatedProps,
-					attributes: {
-						...defaultAttributes,
-						...breakpoint?.attributes,
-					},
-					currentBlock: 'master',
-					device: breakpointType,
-				});
+				stylesStack.push(
+					appendStyles({
+						settings: {
+							...calculatedProps,
+							attributes: {
+								...defaultAttributes,
+								...params.attributes,
+								...breakpoint?.attributes,
+							},
+							currentBlock: 'master',
+							device: breakpointType,
+						},
+						disabledStyles,
+					})
+				);
 
 				// creating css styles for inner blocks inside master pseudo-states ...
 				for (const innerBlockType in breakpoint?.attributes

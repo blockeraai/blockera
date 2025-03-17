@@ -535,7 +535,7 @@ export function UnitInput({
 
 	const handleBlur = () => {
 		// First try to evaluate any complete calculation
-		if (evaluateCalculation(typedValue)) {
+		if (evaluateCalculation(typedValue) || 0 === typedValue) {
 			return;
 		}
 

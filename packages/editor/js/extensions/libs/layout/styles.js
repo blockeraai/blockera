@@ -364,7 +364,8 @@ export const LayoutStyles = ({
 								},
 							],
 						},
-						blockProps
+						blockProps,
+						pickedSelector
 					),
 				});
 
