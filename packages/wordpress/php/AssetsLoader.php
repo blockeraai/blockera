@@ -267,6 +267,10 @@ class AssetsLoader {
 
 		if ( ! file_exists( $assetInfoFile ) ) {
 
+			if (isset($this->fallback_args['debug-mode'])) {
+				$this->is_development = $this->fallback_args['debug-mode'];
+			}
+
 			$assetInfoFile = sprintf(
 				'%1$sdist/%2$s/%2$s%3$s.asset.php',
 				$this->fallback_args['path'] ?? '',
