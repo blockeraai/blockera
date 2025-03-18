@@ -90,10 +90,11 @@ class AdminAssetsProvider extends AssetsProvider {
 				[
 					'assets'     => $assets,
 					'extra-args' => [
-						'fallback'             => [
+						'root'             => [
 							'url'  => $this->getURL(),
 							'path' => $this->getPATH(),
 						],
+						'debug-mode' => $this->getDebugMode(),
 						'enqueue-admin-assets' => true,
 						'id'                   => $this->getId(),
 						'packages-deps'        => blockera_core_config( 'assets.admin.with-deps' ),
@@ -229,5 +230,29 @@ class AdminAssetsProvider extends AssetsProvider {
 				window.blockeraPermissionsLink = "' . blockera_core_config( 'telemetry.permissions_link' ) . '";
 				window.blockeraOptInDescription = "' . blockera_core_config( 'telemetry.opt_in_description' ) . '";
 				blockeraTelemetry_' . $version . '?.initializeTelemetryOptInSystem();';
+	}
+
+	/**
+	 * @return string the blockera plugin root URL.
+	 */
+	protected function getURL(): string {
+
+		return blockera_core_config( 'app.root_url' );
+	}
+
+	/**
+	 * @return string the blockera plugin root PATH.
+	 */
+	protected function getPATH(): string {
+
+		return blockera_core_config( 'app.root_path' );
+	}
+
+	/**
+	 * @return bool the blockera plugin debug mode.
+	 */
+	protected function getDebugMode(): bool {
+
+		return blockera_core_config( 'app.debug' );
 	}
 }
