@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Added more compatibility with the bootstrap package of blockera, to make it easier to extend the plugin.
+
 ## 1.1.0 (2025-03-15)
 
 ### New Features

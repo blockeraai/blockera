@@ -24,10 +24,10 @@ abstract class AssetsProvider extends ServiceProvider {
 						[
 							'id'         => $this->getId(),
 							'root'       => [
-								'url'  => blockera_core_config( 'app.root_url' ),
-								'path' => blockera_core_config( 'app.root_path' ),
+								'url'  => $this->getURL(),
+								'path' => $this->getPATH(),
 							],
-							'debug-mode' => blockera_core_config( 'app.debug' ),
+							'debug-mode' => $this->getDebugMode(),
 						],
 						$args['extra-args']
 					)
@@ -61,16 +61,15 @@ abstract class AssetsProvider extends ServiceProvider {
 	/**
 	 * @return string the blockera plugin root URL.
 	 */
-	protected function getURL(): string {
-
-		return blockera_core_config( 'app.root_url' );
-	}
+	abstract protected function getURL(): string;
 
 	/**
 	 * @return string the blockera plugin root PATH.
 	 */
-	protected function getPATH(): string {
+	abstract protected function getPATH(): string;
 
-		return blockera_core_config( 'app.root_path' );
-	}
+	/**
+	 * @return bool the blockera plugin debug mode.
+	 */
+	abstract protected function getDebugMode(): bool;
 }

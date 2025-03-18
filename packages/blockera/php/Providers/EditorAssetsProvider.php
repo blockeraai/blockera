@@ -58,10 +58,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			[
 				'assets'     => $this->getAssets(),
 				'extra-args' => [
-					'fallback'             => [
-						'url'  => $this->getURL(),
-						'path' => $this->getPATH(),
-					],
+					'fallback'             => $this->getFallbackArgs(),
 					'enqueue-block-assets' => true,
 					'packages-deps'        => blockera_core_config( 'assets.editor.with-deps' ),
 				],
@@ -268,5 +265,43 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 	protected function getAssets(): array {
 
 		return blockera_core_config( 'assets.editor.list' );
+	}
+
+	/**
+	 * @return string the blockera plugin root URL.
+	 */
+	protected function getURL(): string {
+
+		return blockera_core_config( 'app.root_url' );
+	}
+
+	/**
+	 * @return string the blockera plugin root PATH.
+	 */
+	protected function getPATH(): string {
+
+		return blockera_core_config( 'app.root_path' );
+	}
+
+	/**
+	 * @return bool the blockera plugin debug mode.
+	 */
+	protected function getDebugMode(): bool {
+
+		return blockera_core_config( 'app.debug' );
+	}
+
+	/**
+	 * Get fallback arguments.
+	 *
+	 * @return array the fallback arguments.
+	 */
+	protected function getFallbackArgs(): array {
+
+		return [
+			'url'  => $this->getURL(),
+			'path' => $this->getPATH(),
+			'debug-mode' => $this->getDebugMode(),
+		];
 	}
 }
