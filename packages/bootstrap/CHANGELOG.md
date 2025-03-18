@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Refactored the assets provider to make it easier to extend the plugin.
+
 ## 1.0.0 (2024-12-08)
 
 ### Improvements
