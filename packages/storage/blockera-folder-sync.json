@@ -1,6 +1,6 @@
 {
-	"name": "blockera/dev-storybook",
-	"path": "packages/dev-storybook",
+	"name": "blockera/storage",
+	"path": "packages/storage",
 	"dependent": {
 		"repositories": [
 			"https://github.com/blockeraai/blockera.git",
