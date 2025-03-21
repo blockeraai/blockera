@@ -60,7 +60,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 				'extra-args' => [
 					'fallback'             => $this->getFallbackArgs(),
 					'enqueue-block-assets' => true,
-					'packages-deps'        => blockera_core_config( 'assets.editor.with-deps' ),
+					'packages-deps'        => $this->getDependencies(),
 				],
 			]
 		);
@@ -303,5 +303,15 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			'path' => $this->getPATH(),
 			'debug-mode' => $this->getDebugMode(),
 		];
+	}
+
+	/**
+	 * Get dependencies.
+	 *
+	 * @return array the dependencies.
+	 */
+	protected function getDependencies(): array {
+
+		return blockera_core_config( 'assets.editor.with-deps' );
 	}
 }
