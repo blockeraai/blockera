@@ -50,6 +50,7 @@ export function PaddingVertical({
 	});
 
 	const [labelClassName, setLabelClassName] = useState('');
+	const [mouseDownTime, setMouseDownTime] = useState(0);
 
 	// $FlowFixMe
 	const { isSetValueAddon, ValueAddonPointer, valueAddonControlProps } =
@@ -177,6 +178,8 @@ export function PaddingVertical({
 									return;
 								}
 
+								// Store the mouse down timestamp
+								setMouseDownTime(Date.now());
 								onDragStart(event);
 								setFocusSide(sideId);
 							},
@@ -200,13 +203,15 @@ export function PaddingVertical({
 					}
 				}}
 				onClick={(event) => {
-					// open on double click
-					// or value addon
-					// or CSS Value
+					// Calculate click duration
+					const clickDuration = Date.now() - mouseDownTime;
+
+					// If it's a quick click (less than 200ms) or it's a value addon/func
 					if (
 						_isSetValueAddon ||
 						sideSpace?.unit === 'func' ||
-						event.detail > 1
+						event.detail > 1 ||
+						clickDuration < 200
 					) {
 						setFocusSide(sideId);
 						setOpenPopover(sideId);
