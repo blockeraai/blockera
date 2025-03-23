@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- UX Improvement for spacing control to open popover for setting value by one click.
+
 ## 1.1.1 (2025-03-17)
 
 ### Improvements
