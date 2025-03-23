@@ -1314,4 +1314,167 @@ describe('Spacing Extension', () => {
 			});
 		});
 	});
+
+	it('Open popover by clicking label and shape', () => {
+		const sides = [
+			'margin-top',
+			'margin-right',
+			'margin-bottom',
+			'margin-left',
+			'padding-top',
+			'padding-right',
+			'padding-bottom',
+			'padding-left',
+		];
+
+		// Test individual sides
+		sides.forEach((side) => {
+			// Test label click
+			openBoxSpacingSide(side, 'label');
+			cy.get('.blockera-component-popover.spacing-edit-popover')
+				.last()
+				.within(() => {
+					cy.get('[data-test="popover-header"]').should('exist');
+					cy.getByAriaLabel('Close').click();
+				});
+
+			// Test shape click
+			openBoxSpacingSide(side, 'shape');
+			cy.get('.blockera-component-popover.spacing-edit-popover')
+				.last()
+				.within(() => {
+					cy.get('[data-test="popover-header"]').should('exist');
+					cy.getByAriaLabel('Close').click();
+				});
+		});
+
+		// Test horizontal locking
+		['margin', 'padding'].forEach((type) => {
+			// Set horizontal locking
+			cy.get('@spacing').within(() => {
+				if (type === 'padding') {
+					cy.get('.blockera-control-select.custom')
+						.last()
+						.within(() => {
+							cy.customSelect('Lock Horizontally');
+						});
+				} else {
+					cy.get('.blockera-control-select.custom')
+						.first()
+						.within(() => {
+							cy.customSelect('Lock Horizontally');
+						});
+				}
+			});
+
+			// Test left side label and shape
+			openBoxSpacingSide(`${type}-left`, 'label');
+			cy.get('.spacing-edit-popover')
+				.last()
+				.within(() => {
+					cy.get('[data-test="popover-header"]').contains(
+						`Left & Right ${type} Space`,
+						{ matchCase: false }
+					);
+					cy.getByAriaLabel('Close').click();
+				});
+
+			openBoxSpacingSide(`${type}-horizontal`, 'shape');
+			cy.get('.spacing-edit-popover')
+				.last()
+				.within(() => {
+					cy.get('[data-test="popover-header"]').contains(
+						`Left & Right ${type} Space`,
+						{ matchCase: false }
+					);
+					cy.getByAriaLabel('Close').click();
+				});
+		});
+
+		// Test vertical locking
+		['margin', 'padding'].forEach((type) => {
+			// Set vertical locking
+			cy.get('@spacing').within(() => {
+				if (type === 'padding') {
+					cy.get('.blockera-control-select.custom')
+						.last()
+						.within(() => {
+							cy.customSelect('Lock Vertically');
+						});
+				} else {
+					cy.get('.blockera-control-select.custom')
+						.first()
+						.within(() => {
+							cy.customSelect('Lock Vertically');
+						});
+				}
+			});
+
+			// Test top side label and shape
+			openBoxSpacingSide(`${type}-top`, 'label');
+			cy.get('.spacing-edit-popover')
+				.last()
+				.within(() => {
+					cy.get('[data-test="popover-header"]').contains(
+						`Top & Bottom ${type} Space`,
+						{ matchCase: false }
+					);
+					cy.getByAriaLabel('Close').click();
+				});
+
+			openBoxSpacingSide(`${type}-vertical`, 'shape');
+			cy.get('.spacing-edit-popover')
+				.last()
+				.within(() => {
+					cy.get('[data-test="popover-header"]').contains(
+						`Top & Bottom ${type} Space`,
+						{ matchCase: false }
+					);
+					cy.getByAriaLabel('Close').click();
+				});
+		});
+
+		// Test all sides locking
+		['margin', 'padding'].forEach((type) => {
+			// Set all sides locking
+			cy.get('@spacing').within(() => {
+				if (type === 'padding') {
+					cy.get('.blockera-control-select.custom')
+						.last()
+						.within(() => {
+							cy.customSelect('Lock All');
+						});
+				} else {
+					cy.get('.blockera-control-select.custom')
+						.first()
+						.within(() => {
+							cy.customSelect('Lock All');
+						});
+				}
+			});
+
+			// Test top side label and shape
+			openBoxSpacingSide(`${type}-top`, 'label');
+			cy.get('.spacing-edit-popover')
+				.last()
+				.within(() => {
+					cy.get('[data-test="popover-header"]').contains(
+						`All Sides ${type}`,
+						{ matchCase: false }
+					);
+					cy.getByAriaLabel('Close').click();
+				});
+
+			openBoxSpacingSide(`${type}-all`, 'shape');
+			cy.get('.spacing-edit-popover')
+				.last()
+				.within(() => {
+					cy.get('[data-test="popover-header"]').contains(
+						`All Sides ${type}`,
+						{ matchCase: false }
+					);
+					cy.getByAriaLabel('Close').click();
+				});
+		});
+	});
 });
