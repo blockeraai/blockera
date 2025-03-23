@@ -79,7 +79,7 @@ describe('box spacing control component testing', () => {
 		});
 	});
 
-	it('should when box position value is changed, then context data provider value to changed!', () => {
+	it('should when box spacing value is changed, then context data provider value to changed!', () => {
 		const onChangeMock = cy.stub().as('onChangeMock');
 		const name = nanoid();
 		cy.withDataProvider({
