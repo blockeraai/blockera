@@ -49,7 +49,6 @@ export function MarginTop({
 		setValue,
 	});
 
-	console.log('margin-top', 'openPopover', openPopover);
 	const [labelClassName, setLabelClassName] = useState('');
 
 	// $FlowFixMe
