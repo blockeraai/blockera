@@ -55,18 +55,8 @@ export function createPost({ postType = 'post', postTitle = '' } = {}) {
 		cy.wait(2000);
 
 		if (postType === 'page') {
-			cy.wait(7000);
-			cy.get('body').then(($body) => {
-				const selector = 'button[aria-label="Close"]';
-
-				const domElement = $body.find(selector);
-
-				// Check if the element exists in the DOM
-				if (domElement.length > 0) {
-					// If it exists, click on the element
-					cy.get(selector).click();
-				}
-			});
+			cy.get('h1').contains('Choose a pattern').should('be.visible');
+			cy.get('button[aria-label="Close"]').first().click();
 		}
 
 		if (['post', 'page'].includes(postType)) {
