@@ -37,7 +37,7 @@ const main = () => {
 
 	const generalFiles = getFiles('packages', /\/[\w-]+\.e2e\.cy\.js/);
 	if (generalFiles.length) {
-		categories.add('general');
+		categories.add('general-1');
 	}
 
 	// sort the categories
@@ -52,11 +52,6 @@ const main = () => {
 	const sortedGeneralCategories = generalCategories.sort();
 
 	if (sortedGeneralCategories.length > 0) {
-		// If we don't have 'general' but have other general-* categories, add 'general' first
-		if (!sortedGeneralCategories.includes('general')) {
-			sortedGeneralCategories.unshift('general');
-		}
-
 		// Remove all general categories from the original array and add the sorted ones at the beginning
 		sortedCategories = [
 			...sortedGeneralCategories,
