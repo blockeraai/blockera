@@ -43,10 +43,26 @@ const main = () => {
 	// sort the categories
 	let sortedCategories = Array.from(categories).sort();
 
-	if (sortedCategories.includes('general')) {
+	// Find all general-related categories
+	const generalCategories = sortedCategories.filter(
+		(category) => category === 'general' || category.startsWith('general-')
+	);
+
+	// Sort general categories to ensure they're in order (general, general-1, general-2, etc.)
+	const sortedGeneralCategories = generalCategories.sort();
+
+	if (sortedGeneralCategories.length > 0) {
+		// If we don't have 'general' but have other general-* categories, add 'general' first
+		if (!sortedGeneralCategories.includes('general')) {
+			sortedGeneralCategories.unshift('general');
+		}
+
+		// Remove all general categories from the original array and add the sorted ones at the beginning
 		sortedCategories = [
-			'general',
-			...sortedCategories.filter((category) => category !== 'general'),
+			...sortedGeneralCategories,
+			...sortedCategories.filter(
+				(category) => !category.startsWith('general')
+			),
 		];
 	}
 
