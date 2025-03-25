@@ -509,17 +509,13 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
  */
 export function closeWelcomeGuide() {
 	cy.get('body').then(($body) => {
-		// Check and remove modal overlay if it exists
+		// Check and remove screen overlay if it exists
 		if ($body.find('.components-modal__screen-overlay').length > 0) {
-			$body.find('.components-modal__screen-overlay').remove();
-		}
+			// Check for close button and click it if it exists
+			if ($body.find('button[aria-label="Close"]').length > 0) {
+				cy.get('button[aria-label="Close"]').click();
+			}
 
-		// Check for h1 and remove close button if it exists
-		if ($body.find('h1:contains("Choose a pattern")').length > 0) {
-			$body.find('button[aria-label="Close"]').first().remove();
-		}
-
-		if ($body.find('.edit-site-welcome-guide').length > 0) {
 			// Check for either button and click the first one found
 			if (
 				$body.find('button.components-guide__finish-button').length > 0
@@ -527,8 +523,10 @@ export function closeWelcomeGuide() {
 				cy.get('button.components-guide__finish-button').click();
 			}
 
-			if ($body.find('button[aria-label="Close"]').length > 0) {
-				cy.get('button[aria-label="Close"]').click();
+			if ($body.find('.components-modal__screen-overlay').length > 0) {
+				cy.get('.components-modal__screen-overlay').invoke('remove', {
+					force: true,
+				});
 			}
 		}
 	});
