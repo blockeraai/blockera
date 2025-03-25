@@ -513,7 +513,7 @@ export function closeWelcomeGuide() {
 		if ($body.find('.components-modal__screen-overlay').length > 0) {
 			// Check for close button and click it if it exists
 			if ($body.find('button[aria-label="Close"]').length > 0) {
-				cy.get('button[aria-label="Close"]').click();
+				cy.get('button[aria-label="Close"]').click({ multiple: true });
 			}
 
 			// Check for either button and click the first one found
@@ -524,9 +524,11 @@ export function closeWelcomeGuide() {
 			}
 
 			if ($body.find('.components-modal__screen-overlay').length > 0) {
-				cy.get('.components-modal__screen-overlay').invoke('remove', {
-					force: true,
-				});
+				$body
+					.find('.components-modal__screen-overlay')
+					.invoke('remove', {
+						force: true,
+					});
 			}
 		}
 	});
