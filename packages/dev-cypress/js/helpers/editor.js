@@ -510,7 +510,7 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
 export function closeWelcomeGuide() {
 	cy.get('body').then(($body) => {
 		if ($body.find('button[aria-label="Close"]').length > 0) {
-			cy.get('button[aria-label="Close"]').click();
+			cy.get('button[aria-label="Close"]').click({ multiple: true });
 		}
 
 		// Check for either button and click the first one found
