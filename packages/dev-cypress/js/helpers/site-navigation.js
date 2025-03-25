@@ -1,4 +1,8 @@
-import { getWPDataObject, disableGutenbergFeatures } from './editor';
+import {
+	getWPDataObject,
+	disableGutenbergFeatures,
+	closeWelcomeGuide,
+} from './editor';
 
 /**
  * Login to our test WordPress site
@@ -56,7 +60,10 @@ export function createPost({ postType = 'post', postTitle = '' } = {}) {
 
 		if (postType === 'page') {
 			cy.get('h1').contains('Choose a pattern').should('be.visible');
-			cy.get('button[aria-label="Close"]').first().click();
+			cy.get('button[aria-label="Close"]').first().click({ force: true });
+
+			// Close welcome guide if it exists
+			closeWelcomeGuide();
 		}
 
 		if (['post', 'page'].includes(postType)) {

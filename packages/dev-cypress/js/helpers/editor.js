@@ -503,3 +503,14 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
 		.first()
 		.click({ force: true });
 };
+
+/**
+ * Close welcome guide if it exists
+ */
+export function closeWelcomeGuide() {
+	cy.get('body').then(($body) => {
+		if ($body.find('.edit-site-welcome-guide').length > 0) {
+			cy.get('button.components-guide__finish-button').click();
+		}
+	});
+}
