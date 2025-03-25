@@ -509,6 +509,11 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
  */
 export function closeWelcomeGuide() {
 	cy.get('body').then(($body) => {
+		// Check and remove modal overlay if it exists
+		if ($body.find('.components-modal__screen-overlay').length > 0) {
+			$body.find('.components-modal__screen-overlay').remove();
+		}
+
 		if ($body.find('.edit-site-welcome-guide').length > 0) {
 			// Check for either button and click the first one found
 			if (
