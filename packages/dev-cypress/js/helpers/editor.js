@@ -515,7 +515,13 @@ export function closeWelcomeGuide() {
 			if ($body.find('button[aria-label="Close"]').length > 0) {
 				cy.get('button[aria-label="Close"]').click({ multiple: true });
 			}
+		}
+	});
 
+	// get again to make sure the body is updated
+	cy.get('body').then(($body) => {
+		// Check and remove screen overlay if it exists
+		if ($body.find('.components-modal__screen-overlay').length > 0) {
 			// Check for either button and click the first one found
 			if (
 				$body.find('button.components-guide__finish-button').length > 0
@@ -524,11 +530,9 @@ export function closeWelcomeGuide() {
 			}
 
 			if ($body.find('.components-modal__screen-overlay').length > 0) {
-				$body
-					.find('.components-modal__screen-overlay')
-					.invoke('remove', {
-						force: true,
-					});
+				cy.get('.components-modal__screen-overlay').invoke('remove', {
+					force: true,
+				});
 			}
 		}
 	});
