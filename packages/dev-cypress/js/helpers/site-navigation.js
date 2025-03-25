@@ -61,11 +61,6 @@ export function createPost({ postType = 'post', postTitle = '' } = {}) {
 		// Close welcome guide if it exists
 		closeWelcomeGuide();
 
-		if (postType === 'page') {
-			cy.get('h1').contains('Choose a pattern').should('be.visible');
-			cy.get('button[aria-label="Close"]').first().click({ force: true });
-		}
-
 		if (['post', 'page'].includes(postType)) {
 			disableGutenbergFeatures();
 			setAbsoluteBlockToolbar();

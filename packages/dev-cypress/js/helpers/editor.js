@@ -514,6 +514,11 @@ export function closeWelcomeGuide() {
 			$body.find('.components-modal__screen-overlay').remove();
 		}
 
+		// Check for h1 and remove close button if it exists
+		if ($body.find('h1:contains("Choose a pattern")').length > 0) {
+			$body.find('button[aria-label="Close"]').first().remove();
+		}
+
 		if ($body.find('.edit-site-welcome-guide').length > 0) {
 			// Check for either button and click the first one found
 			if (
