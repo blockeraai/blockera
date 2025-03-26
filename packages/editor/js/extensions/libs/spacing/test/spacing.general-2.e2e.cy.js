@@ -2,8 +2,8 @@
  * Blockera dependencies
  */
 import {
-	createPost,
 	savePage,
+	createPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
@@ -16,6 +16,7 @@ describe('Spacing Extension', () => {
 		createPost();
 
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+
 		cy.getByDataTest('style-tab').click();
 
 		cy.get('.blockera-control-box-spacing').as('spacing');
@@ -1331,7 +1332,6 @@ describe('Spacing Extension', () => {
 		sides.forEach((side) => {
 			// Test label click
 			openBoxSpacingSide(side, 'label');
-			cy.wait(100);
 			cy.get('.blockera-component-popover.spacing-edit-popover')
 				.last()
 				.within(() => {
@@ -1341,7 +1341,6 @@ describe('Spacing Extension', () => {
 
 			// Test shape click
 			openBoxSpacingSide(side, 'shape');
-			cy.wait(100);
 			cy.get('.blockera-component-popover.spacing-edit-popover')
 				.last()
 				.within(() => {
@@ -1371,7 +1370,6 @@ describe('Spacing Extension', () => {
 
 			// Test left side label and shape
 			openBoxSpacingSide(`${type}-left`, 'label');
-			cy.wait(100);
 			cy.get('.spacing-edit-popover')
 				.last()
 				.within(() => {
@@ -1383,7 +1381,6 @@ describe('Spacing Extension', () => {
 				});
 
 			openBoxSpacingSide(`${type}-horizontal`, 'shape');
-			cy.wait(100);
 			cy.get('.spacing-edit-popover')
 				.last()
 				.within(() => {
@@ -1416,7 +1413,6 @@ describe('Spacing Extension', () => {
 
 			// Test top side label and shape
 			openBoxSpacingSide(`${type}-top`, 'label');
-			cy.wait(100);
 			cy.get('.spacing-edit-popover')
 				.last()
 				.within(() => {
@@ -1428,7 +1424,6 @@ describe('Spacing Extension', () => {
 				});
 
 			openBoxSpacingSide(`${type}-vertical`, 'shape');
-			cy.wait(100);
 			cy.get('.spacing-edit-popover')
 				.last()
 				.within(() => {
@@ -1461,7 +1456,6 @@ describe('Spacing Extension', () => {
 
 			// Test top side label and shape
 			openBoxSpacingSide(`${type}-top`, 'label');
-			cy.wait(100);
 			cy.get('.spacing-edit-popover')
 				.last()
 				.within(() => {
@@ -1473,7 +1467,6 @@ describe('Spacing Extension', () => {
 				});
 
 			openBoxSpacingSide(`${type}-all`, 'shape');
-			cy.wait(100);
 			cy.get('.spacing-edit-popover')
 				.last()
 				.within(() => {
