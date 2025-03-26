@@ -113,10 +113,6 @@ export function getBlockClientId(data) {
  */
 export function disableGutenbergFeatures() {
 	return getWPDataObject().then((data) => {
-		if (data.select('core/edit-post').isFeatureActive('welcomeGuide')) {
-			data.dispatch('core/edit-post').toggleFeature('welcomeGuide');
-		}
-
 		data.dispatch('core/editor').disablePublishSidebar();
 	});
 }
@@ -509,15 +505,25 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
  */
 export function closeWelcomeGuide() {
 	cy.get('body').then(($body) => {
-		if ($body.find('button[aria-label="Close"]').length > 0) {
-			cy.get('button[aria-label="Close"]')
+		if (
+			$body.find(
+				'.components-modal__screen-overlay button[aria-label="Close"]'
+			).length > 0
+		) {
+			cy.get('.components-modal__screen-overlay [aria-label="Close"]')
 				.last()
-				.click({ multiple: true });
+				.click();
 		}
 
 		// Check for either button and click the first one found
-		if ($body.find('button.components-guide__finish-button').length > 0) {
-			cy.get('button.components-guide__finish-button').click();
+		if (
+			$body.find(
+				'.components-modal__screen-overlay button.components-guide__finish-button'
+			).length > 0
+		) {
+			cy.get(
+				'.components-modal__screen-overlay button.components-guide__finish-button'
+			).click();
 		}
 	});
 
