@@ -44,25 +44,22 @@ export function openBoxSpacingSide(side, element = 'label') {
 		).click();
 	} else if (element === 'shape') {
 		cy.get(`[data-cy="box-spacing-control"]`).within(() => {
-			//
-			// Following code is used to click on the shape element and make sure it works
-			//
 			cy.get(
 				`path.blockera-control-spacing-shape-side.side-${side}`
-			).trigger('mousedown', 'topLeft', {
-				force: true,
-				which: 1,
+			).then(($el) => {
+				// Get the center coordinates of the path element
+				const bbox = $el[0].getBBox();
+				const x = bbox.x + bbox.width / 2;
+				const y = bbox.y + bbox.height / 2;
+
+				// Click at the calculated coordinates
+				cy.wrap($el)
+					.trigger('mouseover', x, y, { force: true })
+					.trigger('mousedown', x, y, { force: true })
+					.wait(100)
+					.trigger('mouseup', x, y, { force: true })
+					.trigger('click', x, y, { force: true });
 			});
-			cy.wait(100);
-			cy.get(
-				`path.blockera-control-spacing-shape-side.side-${side}`
-			).trigger('mouseup', 'topLeft', {
-				force: true,
-				which: 1,
-			});
-			cy.get(
-				`path.blockera-control-spacing-shape-side.side-${side}`
-			).trigger('click', { force: true });
 		});
 	}
 }
