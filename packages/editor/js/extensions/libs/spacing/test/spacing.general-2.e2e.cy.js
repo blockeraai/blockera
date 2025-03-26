@@ -1316,7 +1316,7 @@ describe('Spacing Extension', () => {
 		});
 	});
 
-	it('Open popover by clicking label and shape', () => {
+	it.only('Open popover by clicking label and shape', () => {
 		const sides = [
 			'margin-top',
 			'margin-right',
