@@ -21,6 +21,9 @@ jobs:
               run: |
                   # Check for PHP debugging patterns, excluding lines with @debug-ignore comment
                   FOUND_ERRORS=0
+                  echo "Checking PHP files for debugging code..."
+                  echo "============================================"
+
                   while IFS= read -r file; do
                     # Skip test files
                     if [[ "$file" == *"tests/"* ]]; then
@@ -28,21 +31,18 @@ jobs:
                     fi
                     
                     # Get all lines with debugging code
-                    while IFS= read -r line; do
+                    grep -n -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file" | while IFS=: read -r line_number line; do
                       # Check if line has @debug-ignore comment
-                      if ! grep -A1 -B1 "$line" "$file" | grep -q "@debug-ignore"; then
-                        # Get line number
-                        line_number=$(grep -n "$line" "$file" | cut -d: -f1)
-                        # Get context (3 lines before and after)
-                        context=$(sed -n "$((line_number-3)),$((line_number+3))p" "$file")
-                        
-                        echo "::error file=$file,line=$line_number::Found PHP debugging code without @debug-ignore comment"
-                        echo "Context:"
-                        echo "$context"
+                      if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                        echo "⚠️ Found PHP debugging code:"
+                        echo "📁 File: $file"
+                        echo "📍 Line: $line_number"
+                        echo "📝 Code:"
+                        echo "$line"
                         echo "----------------------------------------"
                         FOUND_ERRORS=1
                       fi
-                    done < <(grep -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file" || true)
+                    done
                   done < <(find . -type f -name "*.php")
 
                   if [ $FOUND_ERRORS -eq 1 ]; then
@@ -55,6 +55,9 @@ jobs:
               run: |
                   # Check for JavaScript debugging patterns, excluding lines with @debug-ignore comment
                   FOUND_ERRORS=0
+                  echo "Checking JavaScript/TypeScript files for debugging code..."
+                  echo "============================================"
+
                   while IFS= read -r file; do
                     # Skip test files
                     if [[ "$file" == *"tests/"* ]]; then
@@ -65,13 +68,11 @@ jobs:
                     grep -n -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" | while IFS=: read -r line_number line; do
                       # Check if line has @debug-ignore comment
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
-                        # Get context (3 lines before and after)
-                        start=$((line_number > 3 ? line_number - 3 : 1))
-                        end=$((line_number + 3))
-                        
-                        echo "::error file=$file,line=$line_number::Found JavaScript debugging code without @debug-ignore comment"
-                        echo "Context:"
-                        sed -n "${start},${end}p" "$file"
+                        echo "⚠️ Found JavaScript debugging code:"
+                        echo "📁 File: $file"
+                        echo "📍 Line: $line_number"
+                        echo "📝 Code:"
+                        echo "$line"
                         echo "----------------------------------------"
                         FOUND_ERRORS=1
                       fi
@@ -88,6 +89,9 @@ jobs:
               run: |
                   # Check for .skip or .only in test files, excluding lines with @debug-ignore comment
                   FOUND_ERRORS=0
+                  echo "Checking test files for .skip/.only..."
+                  echo "============================================"
+
                   while IFS= read -r file; do
                     # Skip test files
                     if [[ "$file" == *"tests/"* ]]; then
@@ -95,21 +99,18 @@ jobs:
                     fi
                     
                     # Get all lines with skip/only
-                    while IFS= read -r line; do
+                    grep -n -E "\.(skip|only)\(" "$file" | while IFS=: read -r line_number line; do
                       # Check if line has @debug-ignore comment
-                      if ! grep -A1 -B1 "$line" "$file" | grep -q "@debug-ignore"; then
-                        # Get line number
-                        line_number=$(grep -n "$line" "$file" | cut -d: -f1)
-                        # Get context (3 lines before and after)
-                        context=$(sed -n "$((line_number-3)),$((line_number+3))p" "$file")
-                        
-                        echo "::error file=$file,line=$line_number::Found .skip or .only without @debug-ignore comment"
-                        echo "Context:"
-                        echo "$context"
+                      if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                        echo "⚠️ Found test skip/only:"
+                        echo "📁 File: $file"
+                        echo "📍 Line: $line_number"
+                        echo "📝 Code:"
+                        echo "$line"
                         echo "----------------------------------------"
                         FOUND_ERRORS=1
                       fi
-                    done < <(grep -E "\.(skip|only)\(" "$file" || true)
+                    done
                   done < <(find . -type f -name "*.test.*")
 
                   if [ $FOUND_ERRORS -eq 1 ]; then
@@ -118,4 +119,10 @@ jobs:
 
             - name: Final Status Check
               run: |
-                  exit ${{ env.FINAL_EXIT_CODE }}
+                  if [ ${{ env.FINAL_EXIT_CODE }} -eq 1 ]; then
+                    echo "❌ Found debugging code that needs to be removed or marked with @debug-ignore"
+                    exit 1
+                  else
+                    echo "✅ No unauthorized debugging code found"
+                    exit 0
+                  fi
