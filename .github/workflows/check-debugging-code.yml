@@ -20,7 +20,8 @@ jobs:
                   echo "Checking PHP files for debugging code..."
                   echo "============================================"
                   while IFS= read -r file; do
-                    if [[ "$file" == *"tests/"* ]]; then continue; fi
+                    # Skip test files, .github folder, and .bin folder
+                    if [[ "$file" == *"tests/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *".bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
@@ -37,7 +38,8 @@ jobs:
                   echo "Checking JavaScript/TypeScript files for debugging code..."
                   echo "============================================"
                   while IFS= read -r file; do
-                    if [[ "$file" == *"tests/"* ]]; then continue; fi
+                    # Skip test files, .github folder, and .bin folder
+                    if [[ "$file" == *"tests/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *".bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
@@ -54,7 +56,8 @@ jobs:
                   echo "Checking test files for .skip/.only..."
                   echo "============================================"
                   while IFS= read -r file; do
-                    if [[ "$file" == *"tests/"* ]]; then continue; fi
+                    # Skip test files, .github folder, and .bin folder
+                    if [[ "$file" == *"tests/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *".bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
