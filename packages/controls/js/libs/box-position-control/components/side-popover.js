@@ -27,6 +27,8 @@ export function SidePopover({
 	getId,
 	sideId,
 	sideLabel,
+	hasValue,
+	removeValue,
 	title = '',
 	icon = '',
 	unit,
@@ -58,6 +60,25 @@ export function SidePopover({
 					placement="left-start"
 					className="spacing-edit-popover"
 					onClose={onClose}
+					titleButtonsRight={
+						<>
+							<Button
+								tabIndex="-1"
+								size={'extra-small'}
+								onClick={() => {
+									if (hasValue) {
+										removeValue();
+										onClose();
+									}
+								}}
+								style={{ padding: '5px' }}
+								aria-label={__('Remove value', 'blockera')}
+								disabled={!hasValue}
+							>
+								<Icon icon="trash" size="20" />
+							</Button>
+						</>
+					}
 				>
 					<InputControl
 						label={sideLabel}

@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Automated Tests
+- Added E2E tests for opening popover of spacing feature by clicking on labels or side shapes.
+
 ## 1.2.1 (2025-03-17)
 
 ### Bug Fixes

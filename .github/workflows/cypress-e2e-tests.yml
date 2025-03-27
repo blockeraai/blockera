@@ -123,7 +123,7 @@ jobs:
 
             - name: Run Cypress E2E Tests
               run: |
-                  if [ "${{ matrix.category }}" != "general" ]; then
+                  if [ "${{ matrix.category }}" != "general-1" ]; then
                     spec_pattern="packages/**/*.${{ matrix.category }}.e2e.cy.js"
                   else
                     spec_pattern=$(find packages -type f -name "*.e2e.cy.js" ! -name "*.*.e2e.cy.js" | tr '\n' ',')

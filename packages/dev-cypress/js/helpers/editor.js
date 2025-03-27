@@ -113,10 +113,6 @@ export function getBlockClientId(data) {
  */
 export function disableGutenbergFeatures() {
 	return getWPDataObject().then((data) => {
-		if (data.select('core/edit-post').isFeatureActive('welcomeGuide')) {
-			data.dispatch('core/edit-post').toggleFeature('welcomeGuide');
-		}
-
 		data.dispatch('core/editor').disablePublishSidebar();
 	});
 }
@@ -503,3 +499,42 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
 		.first()
 		.click({ force: true });
 };
+
+/**
+ * Close welcome guide if it exists
+ */
+export function closeWelcomeGuide() {
+	cy.get('body').then(($body) => {
+		if (
+			$body.find(
+				'.components-modal__screen-overlay button[aria-label="Close"]'
+			).length > 0
+		) {
+			cy.get('.components-modal__screen-overlay [aria-label="Close"]')
+				.last()
+				.click();
+		}
+
+		// Check for either button and click the first one found
+		if (
+			$body.find(
+				'.components-modal__screen-overlay button.components-guide__finish-button'
+			).length > 0
+		) {
+			cy.get(
+				'.components-modal__screen-overlay button.components-guide__finish-button'
+			).click();
+		}
+	});
+
+	cy.wait(10);
+
+	cy.get('body').then(($body) => {
+		// Check and remove screen overlay if it exists
+		if ($body.find('.components-modal__screen-overlay').length > 0) {
+			cy.get('.components-modal__screen-overlay').invoke('remove', {
+				force: true,
+			});
+		}
+	});
+}

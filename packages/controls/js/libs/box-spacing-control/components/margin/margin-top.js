@@ -112,6 +112,9 @@ export function MarginTop({
 		threshold: 0,
 	});
 
+	// Add state for tracking mouse down time
+	const [mouseDownTime, setMouseDownTime] = useState(0);
+
 	if (marginDisable === 'all' || marginDisable === 'vertical') {
 		return {
 			shape: (
@@ -168,6 +171,8 @@ export function MarginTop({
 									return;
 								}
 
+								// Store the mouse down timestamp
+								setMouseDownTime(Date.now());
 								onDragStart(event);
 								setFocusSide(sideId);
 							},
@@ -191,13 +196,15 @@ export function MarginTop({
 					}
 				}}
 				onClick={(event) => {
-					// open on double click
-					// or value addon
-					// or CSS Value
+					// Calculate click duration
+					const clickDuration = Date.now() - mouseDownTime;
+
+					// If it's a quick click (less than 100ms) or it's a value addon/func
 					if (
 						_isSetValueAddon ||
 						sideSpace?.unit === 'func' ||
-						event.detail > 1
+						event.detail > 1 ||
+						clickDuration < 200
 					) {
 						setFocusSide(sideId);
 						setOpenPopover(sideId);
@@ -244,6 +251,16 @@ export function MarginTop({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.margin?.top}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									top: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						icon={<Icon icon="margin-top" iconSize="18" />}

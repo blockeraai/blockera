@@ -25,6 +25,7 @@ describe('box position control component testing', () => {
 
 			cy.getByDataCy('label-control').should('contain', 'My Label');
 		});
+
 		it('should display default value', () => {
 			const name = nanoid();
 			const defaultValue = {
@@ -324,6 +325,37 @@ describe('box position control component testing', () => {
 			// Check data provider value!
 			cy.then(() => {
 				return expect(getControlValue(name)).to.deep.eq(expectValue);
+			});
+
+			//
+			// Use delete buttons to remove values
+			//
+			['top', 'right', 'bottom', 'left'].forEach((position) => {
+				cy.get(
+					`span[aria-label="${
+						position.charAt(0).toUpperCase() + position.slice(1)
+					} Position"][data-cy="label-control"]`
+				).click();
+
+				// remove
+				cy.get('[data-wp-component="Popover"]')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel('Remove value').click();
+					});
+
+				// Check data provider value!
+				cy.then(() => {
+					return expect(
+						getControlValue(name).position[position]
+					).to.eq('');
+				});
+
+				cy.get(
+					`span[aria-label="${
+						position.charAt(0).toUpperCase() + position.slice(1)
+					} Position"][data-cy="label-control"]`
+				).contains('-');
 			});
 		});
 	});
