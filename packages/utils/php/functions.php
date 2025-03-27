@@ -9,9 +9,7 @@ if (! function_exists('bdd')) {
 	 * @return void
 	 */
 	function bdd( $data) {
-		/* @debug-ignore */
 		var_dump($data);
-		/* @debug-ignore */
 		die();
 	}
 }
