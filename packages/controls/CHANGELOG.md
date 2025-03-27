@@ -4,6 +4,7 @@
 - Clear value button added to spacing control open popovers.
 - UX Improvement for spacing control to open popover for setting value by one click.
 - Design improvement for spacing control while using units other than PX.
+- UX Improvement for color picker to have delete button and also better error for Eye Dropper browser support.
 
 ### Automated Tests
 - Improve E2E tests of spacing control to test more scenarios.
