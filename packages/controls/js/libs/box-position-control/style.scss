@@ -134,6 +134,16 @@
 			}
 		}
 
+		.blockera-control.blockera-control-value-addon-pointers {
+
+			&.active-addon-pointers {
+
+				svg {
+					outline: 2px solid #ffffff;
+				}
+			}
+		}
+
 		&.label-hover {
 
 			.blockera-control.blockera-control-value-addon-pointers {
