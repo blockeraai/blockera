@@ -307,6 +307,16 @@ export function SideItem({
 				</div>
 
 				<SidePopover
+					hasValue={value.position[side]}
+					removeValue={() => {
+						setValue({
+							...value,
+							position: {
+								...value.position,
+								[(side: string)]: '',
+							},
+						});
+					}}
 					id={id}
 					getId={getId}
 					sideId={side}
