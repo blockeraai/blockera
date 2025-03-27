@@ -4,6 +4,11 @@
 - Clear value button added to spacing control open popovers.
 - UX Improvement for spacing control to open popover for setting value by one click.
 
+### Automated Tests
+- Improve E2E tests of spacing control to test more scenarios.
+- Improve E2E test of spacing control to test "Clear value" button. 
+
+
 ## 1.1.1 (2025-03-17)
 
 ### Improvements
