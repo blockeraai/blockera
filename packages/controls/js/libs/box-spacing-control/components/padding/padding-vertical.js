@@ -310,10 +310,10 @@ export function PaddingVertical({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top & Bottom Padding Space', 'blockera')}
+						title={__('Top & Bottom Padding', 'blockera')}
 						inputLabel={__('Vertical Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
-							'Vertical Padding Space',
+							'Vertical Padding',
 							'blockera'
 						)}
 						inputLabelDescription={

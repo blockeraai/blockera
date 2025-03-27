@@ -987,7 +987,7 @@ describe('Spacing Extension', () => {
 					.last()
 					.within(() => {
 						cy.get('[data-test="popover-header"]').contains(
-							`Left & Right ${item} Space`,
+							`Left & Right ${item}`,
 							{ matchCase: false }
 						);
 
@@ -1094,7 +1094,7 @@ describe('Spacing Extension', () => {
 					.last()
 					.within(() => {
 						cy.get('[data-test="popover-header"]').contains(
-							`Top & Bottom ${item} Space`,
+							`Top & Bottom ${item}`,
 							{ matchCase: false }
 						);
 
@@ -1175,7 +1175,7 @@ describe('Spacing Extension', () => {
 					.last()
 					.within(() => {
 						cy.get('[data-test="popover-header"]').contains(
-							`Left & Right ${item} Space`,
+							`Left & Right ${item}`,
 							{ matchCase: false }
 						);
 
@@ -1216,7 +1216,7 @@ describe('Spacing Extension', () => {
 					.last()
 					.within(() => {
 						cy.get('[data-test="popover-header"]').contains(
-							`Top & Bottom ${item} Space`,
+							`Top & Bottom ${item}`,
 							{ matchCase: false }
 						);
 
@@ -1458,7 +1458,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.get('[data-test="popover-header"]').contains(
-						`Left & Right ${type} Space`,
+						`Left & Right ${type}`,
 						{ matchCase: false }
 					);
 					cy.getByAriaLabel('Close').click();
@@ -1501,7 +1501,7 @@ describe('Spacing Extension', () => {
 				.last()
 				.within(() => {
 					cy.get('[data-test="popover-header"]').contains(
-						`Top & Bottom ${type} Space`,
+						`Top & Bottom ${type}`,
 						{ matchCase: false }
 					);
 					cy.getByAriaLabel('Close').click();

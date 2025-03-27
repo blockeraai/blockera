@@ -310,10 +310,10 @@ export function PaddingHorizontal({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left & Right Padding Space', 'blockera')}
+						title={__('Left & Right Padding', 'blockera')}
 						inputLabel={__('Horizontal Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
-							'Horizontal Padding Space',
+							'Horizontal Padding',
 							'blockera'
 						)}
 						inputLabelDescription={

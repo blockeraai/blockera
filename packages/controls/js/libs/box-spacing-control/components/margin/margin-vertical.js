@@ -309,10 +309,10 @@ export function MarginVertical({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top & Bottom Margin Space', 'blockera')}
+						title={__('Top & Bottom Margin', 'blockera')}
 						inputLabel={__('Vertical Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
-							'Vertical Margin Space',
+							'Vertical Margin',
 							'blockera'
 						)}
 						inputLabelDescription={

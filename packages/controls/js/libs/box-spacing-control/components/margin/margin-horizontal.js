@@ -316,10 +316,10 @@ export function MarginHorizontal({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left & Right Margin Space', 'blockera')}
+						title={__('Left & Right Margin', 'blockera')}
 						inputLabel={__('Horizontal Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
-							'Horizontal Margin Space',
+							'Horizontal Margin',
 							'blockera'
 						)}
 						inputLabelDescription={
