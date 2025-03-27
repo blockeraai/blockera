@@ -1341,6 +1341,7 @@ describe('Spacing Extension', () => {
 
 			// Test shape click
 			openBoxSpacingSide(side, 'shape');
+			cy.wait(300);
 			cy.get('.blockera-component-popover.spacing-edit-popover')
 				.last()
 				.within(() => {
