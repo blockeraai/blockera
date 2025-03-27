@@ -34,6 +34,7 @@ const ajv = new Ajv();
 			const valid = validate(blocks);
 
 			// show log for debug
+			/* @debug-ignore */
 			if (!valid) console.log(validate.errors);
 
 			expect(true).toBe(valid);

@@ -72,6 +72,7 @@ export const computedCssDeclarations = (
 		generatorDetails?.forEach(
 			(definition: StaticStyle | DynamicStyle): void => {
 				if (!isValidStyleDefinition(definition)) {
+					/* @debug-ignore */
 					console.warn(
 						`${JSON.stringify(
 							definition
@@ -120,6 +121,7 @@ export const createCssDeclarations = (
 	declaration: CssDeclarationProps
 ): string => {
 	if (!declaration.hasOwnProperty('properties')) {
+		/* @debug-ignore */
 		console.warn(
 			`Create Css Declarations API: ${JSON.stringify(
 				declaration
@@ -159,6 +161,7 @@ export const getProperties = (props: {
 		const value = properties[property];
 
 		if (!isString(value)) {
+			/* @debug-ignore */
 			console.warn(
 				`CSS ${property} property value must be string given ${typeof value}, please double check properties.`
 			);
@@ -170,9 +173,8 @@ export const getProperties = (props: {
 		if (-1 === value.indexOf(';')) {
 			const hasImportantFlag = -1 !== value.indexOf('!important');
 
-			tempValue = `${property}: ${value}${
-				options.important && !hasImportantFlag ? ' !important' : ''
-			};\n`;
+			tempValue = `${property}: ${value}${options.important && !hasImportantFlag ? ' !important' : ''
+				};\n`;
 		} else if (options.important) {
 			tempValue = value.replace(';', ' !important;\n');
 		} else {

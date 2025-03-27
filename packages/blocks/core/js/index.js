@@ -32,6 +32,7 @@ export const registerBlockeraBlocks = (): void => {
 		const currentBlock = blocks[key];
 
 		if (!currentBlock?.name && 'Shared' !== key) {
+			/* @debug-ignore */
 			console.warn(
 				'Blockera Block validation: Block must contain name param!'
 			);

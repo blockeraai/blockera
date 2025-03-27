@@ -13,8 +13,8 @@ describe('useAttributes Hook Testing ...', () => {
 
 		appendBlocks(
 			'<!-- wp:paragraph -->\n' +
-				'<p>Test</p>\n' +
-				'<!-- /wp:paragraph -->'
+			'<p>Test</p>\n' +
+			'<!-- /wp:paragraph -->'
 		);
 	});
 
@@ -154,7 +154,6 @@ describe('useAttributes Hook Testing ...', () => {
 
 			// assertion for block attributes.
 			getWPDataObject().then((data) => {
-				console.log(getSelectedBlock(data, 'blockeraBlockStates'));
 				expect('#000000').to.be.equal(
 					getSelectedBlock(data, 'blockeraBlockStates').hover
 						.breakpoints.tablet.attributes.blockeraInnerBlocks.link

@@ -27,6 +27,7 @@ export const usePerformanceMonitor = (
 		return () => {
 			const renderDuration = performance.now() - renderStartTime.current;
 			if (renderDuration > renderThreshold) {
+				/* @debug-ignore */
 				console.warn(
 					`[Performance Warning] Component "${componentName}" took ${renderDuration.toFixed(
 						2
@@ -42,6 +43,7 @@ export const usePerformanceMonitor = (
 		return () => {
 			const updateDuration = performance.now() - updateStartTime.current;
 			if (updateDuration > updateThreshold) {
+				/* @debug-ignore */
 				console.warn(
 					`[Performance Warning] Component "${componentName}" took ${updateDuration.toFixed(
 						2
