@@ -3,6 +3,7 @@
 ### Improvements
 - Clear value button added to spacing control open popovers.
 - UX Improvement for spacing control to open popover for setting value by one click.
+- Design improvement for spacing control while using units other than PX.
 
 ### Automated Tests
 - Improve E2E tests of spacing control to test more scenarios.
