@@ -1,6 +1,7 @@
 ## Unreleased
 
 ### Improvements
+- Clear value button added to spacing control open popovers.
 - UX Improvement for spacing control to open popover for setting value by one click.
 
 ## 1.1.1 (2025-03-17)
