@@ -11,115 +11,61 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Initialize Error Collection
+            - name: Check for Debugging Code
               run: |
-                  echo "FINAL_EXIT_CODE=0" >> $GITHUB_ENV
-
-            - name: Check for PHP Debugging Code
-              id: php-check
-              continue-on-error: true
-              run: |
-                  # Check for PHP debugging patterns, excluding lines with @debug-ignore comment
+                  # Initialize error flag
                   FOUND_ERRORS=0
+
                   echo "Checking PHP files for debugging code..."
                   echo "============================================"
-
                   while IFS= read -r file; do
-                    # Skip test files
-                    if [[ "$file" == *"tests/"* ]]; then
-                      continue
-                    fi
-                    
-                    # Get all lines with debugging code
-                    grep -n -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file" | while IFS=: read -r line_number line; do
-                      # Check if line has @debug-ignore comment
+                    if [[ "$file" == *"tests/"* ]]; then continue; fi
+                    if grep -n -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file" | while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found PHP debugging code:"
                         echo "📁 File: $file"
                         echo "📍 Line: $line_number"
-                        echo "📝 Code:"
-                        echo "$line"
+                        echo "📝 Code: $line"
                         echo "----------------------------------------"
                         FOUND_ERRORS=1
                       fi
-                    done
+                    done; then :; fi
                   done < <(find . -type f -name "*.php")
 
-                  if [ $FOUND_ERRORS -eq 1 ]; then
-                    echo "FINAL_EXIT_CODE=1" >> $GITHUB_ENV
-                  fi
-
-            - name: Check for JavaScript Debugging Code
-              id: js-check
-              continue-on-error: true
-              run: |
-                  # Check for JavaScript debugging patterns, excluding lines with @debug-ignore comment
-                  FOUND_ERRORS=0
                   echo "Checking JavaScript/TypeScript files for debugging code..."
                   echo "============================================"
-
                   while IFS= read -r file; do
-                    # Skip test files
-                    if [[ "$file" == *"tests/"* ]]; then
-                      continue
-                    fi
-                    
-                    # Get all lines with debugging code
-                    grep -n -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" | while IFS=: read -r line_number line; do
-                      # Check if line has @debug-ignore comment
+                    if [[ "$file" == *"tests/"* ]]; then continue; fi
+                    if grep -n -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" | while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found JavaScript debugging code:"
                         echo "📁 File: $file"
                         echo "📍 Line: $line_number"
-                        echo "📝 Code:"
-                        echo "$line"
+                        echo "📝 Code: $line"
                         echo "----------------------------------------"
                         FOUND_ERRORS=1
                       fi
-                    done
+                    done; then :; fi
                   done < <(find . -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \))
 
-                  if [ $FOUND_ERRORS -eq 1 ]; then
-                    echo "FINAL_EXIT_CODE=1" >> $GITHUB_ENV
-                  fi
-
-            - name: Check for Skip/Only in Tests
-              id: test-check
-              continue-on-error: true
-              run: |
-                  # Check for .skip or .only in test files, excluding lines with @debug-ignore comment
-                  FOUND_ERRORS=0
                   echo "Checking test files for .skip/.only..."
                   echo "============================================"
-
                   while IFS= read -r file; do
-                    # Skip test files
-                    if [[ "$file" == *"tests/"* ]]; then
-                      continue
-                    fi
-                    
-                    # Get all lines with skip/only
-                    grep -n -E "\.(skip|only)\(" "$file" | while IFS=: read -r line_number line; do
-                      # Check if line has @debug-ignore comment
+                    if [[ "$file" == *"tests/"* ]]; then continue; fi
+                    if grep -n -E "\.(skip|only)\(" "$file" | while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found test skip/only:"
                         echo "📁 File: $file"
                         echo "📍 Line: $line_number"
-                        echo "📝 Code:"
-                        echo "$line"
+                        echo "📝 Code: $line"
                         echo "----------------------------------------"
                         FOUND_ERRORS=1
                       fi
-                    done
+                    done; then :; fi
                   done < <(find . -type f -name "*.test.*")
 
+                  # Final status check
                   if [ $FOUND_ERRORS -eq 1 ]; then
-                    echo "FINAL_EXIT_CODE=1" >> $GITHUB_ENV
-                  fi
-
-            - name: Final Status Check
-              run: |
-                  if [ ${{ env.FINAL_EXIT_CODE }} -eq 1 ]; then
                     echo "❌ Found debugging code that needs to be removed or marked with @debug-ignore"
                     exit 1
                   else
