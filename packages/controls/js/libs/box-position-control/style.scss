@@ -140,6 +140,7 @@
 
 				svg {
 					fill: #ffffff;
+					outline: 2px solid #ffffff;
 				}
 
 				.blockera-control-value-addon-pointer {
@@ -156,7 +157,7 @@
 			height: 30px;
 
 			.blockera-control-value-addon-pointers {
-				top: -10.5px;
+				top: -13.5px;
 				right: 15px;
 			}
 		}
@@ -168,7 +169,7 @@
 			width: 30px;
 
 			.blockera-control-value-addon-pointers {
-				right: -10.5px;
+				right: -13.5px;
 				top: 15px;
 			}
 		}
@@ -182,7 +183,7 @@
 			.blockera-control-value-addon-pointers {
 				right: initial;
 				top: initial;
-				bottom: -11.5px;
+				bottom: -13.5px;
 				left: 15px;
 				text-align: left;
 			}
@@ -199,7 +200,7 @@
 				top: initial;
 				right: initial;
 				bottom: 15px;
-				left: -10.5px;
+				left: -13.5px;
 			}
 		}
 
