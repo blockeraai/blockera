@@ -62,21 +62,20 @@ jobs:
                     fi
                     
                     # Get all lines with debugging code
-                    while IFS= read -r line; do
+                    grep -n -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" | while IFS=: read -r line_number line; do
                       # Check if line has @debug-ignore comment
-                      if ! grep -A1 -B1 "$line" "$file" | grep -q "@debug-ignore"; then
-                        # Get line number
-                        line_number=$(grep -n "$line" "$file" | cut -d: -f1)
+                      if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         # Get context (3 lines before and after)
-                        context=$(sed -n "$((line_number-3)),$((line_number+3))p" "$file")
+                        start=$((line_number > 3 ? line_number - 3 : 1))
+                        end=$((line_number + 3))
                         
                         echo "::error file=$file,line=$line_number::Found JavaScript debugging code without @debug-ignore comment"
                         echo "Context:"
-                        echo "$context"
+                        sed -n "${start},${end}p" "$file"
                         echo "----------------------------------------"
                         FOUND_ERRORS=1
                       fi
-                    done < <(grep -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" || true)
+                    done
                   done < <(find . -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \))
 
                   if [ $FOUND_ERRORS -eq 1 ]; then
