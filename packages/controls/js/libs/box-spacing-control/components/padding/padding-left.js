@@ -250,6 +250,16 @@ export function PaddingLeft({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.padding?.left}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									left: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.left')}
 						type="padding"

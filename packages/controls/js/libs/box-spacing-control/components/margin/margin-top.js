@@ -251,6 +251,16 @@ export function MarginTop({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.margin?.top}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									top: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						icon={<Icon icon="margin-top" iconSize="18" />}

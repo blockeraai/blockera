@@ -297,6 +297,17 @@ export function MarginHorizontal({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.margin?.left || value?.margin?.right}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									left: '',
+									right: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
 						type="margin"

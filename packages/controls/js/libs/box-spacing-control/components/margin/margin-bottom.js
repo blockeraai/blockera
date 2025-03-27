@@ -248,6 +248,16 @@ export function MarginBottom({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.margin?.bottom}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									bottom: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.bottom')}
 						icon={<Icon icon="margin-bottom" iconSize="18" />}

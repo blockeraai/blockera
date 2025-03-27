@@ -291,6 +291,17 @@ export function PaddingVertical({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.padding?.top || value?.padding?.bottom}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									top: '',
+									bottom: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
 						type="padding"

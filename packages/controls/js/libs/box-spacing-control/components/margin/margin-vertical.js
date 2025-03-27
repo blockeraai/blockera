@@ -290,6 +290,17 @@ export function MarginVertical({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.margin?.top || value?.margin?.bottom}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									top: '',
+									bottom: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						type="margin"

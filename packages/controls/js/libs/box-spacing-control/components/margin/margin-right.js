@@ -249,6 +249,16 @@ export function MarginRight({
 
 						{openPopover === sideId && (
 							<SidePopover
+								hasValue={value?.margin?.right}
+								resetToDefault={() => {
+									setValue({
+										...value,
+										margin: {
+											...value.margin,
+											right: '',
+										},
+									});
+								}}
 								defaultValue={defaultValue}
 								id={getId(id, 'margin.right')}
 								offset={255}

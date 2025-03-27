@@ -250,6 +250,16 @@ export function PaddingTop({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.padding?.top}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									top: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
 						type="padding"

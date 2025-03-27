@@ -291,6 +291,17 @@ export function PaddingHorizontal({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.padding?.left || value?.padding?.right}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									left: '',
+									right: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.left')}
 						type="padding"

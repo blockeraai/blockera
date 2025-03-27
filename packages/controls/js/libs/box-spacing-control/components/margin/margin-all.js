@@ -332,6 +332,23 @@ export function MarginAll({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={
+							value?.margin?.top ||
+							value?.margin?.right ||
+							value?.margin?.bottom ||
+							value?.margin?.left
+						}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						type="margin"

@@ -249,6 +249,16 @@ export function MarginLeft({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={value?.margin?.left}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									left: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
 						icon={<Icon icon="margin-left" iconSize="18" />}

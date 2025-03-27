@@ -333,6 +333,23 @@ export function PaddingAll({
 
 				{openPopover === sideId && (
 					<SidePopover
+						hasValue={
+							value?.padding?.top ||
+							value?.padding?.right ||
+							value?.padding?.bottom ||
+							value?.padding?.left
+						}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
 						type="padding"
