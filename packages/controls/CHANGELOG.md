@@ -10,6 +10,9 @@
 - Improve E2E tests of spacing control to test more scenarios.
 - Improve E2E test of spacing control to test "Clear value" button. 
 
+### Bug Fixes
+- Design issue in box position control about variable values. 
+
 
 ## 1.1.1 (2025-03-17)
 
