@@ -14,44 +14,95 @@ jobs:
             - name: Check for PHP Debugging Code
               run: |
                   # Check for PHP debugging patterns, excluding lines with @debug-ignore comment
-                  if find . -type f -name "*.php" -exec grep -l -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" {} \; | grep -v "tests/"; then
-                    # Check if the debugging code is on lines with @debug-ignore comment
-                    for file in $(find . -type f -name "*.php" -exec grep -l -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" {} \; | grep -v "tests/"); do
-                      if ! grep -A1 -B1 -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file" | grep -q "@debug-ignore"; then
-                        echo "::error::Found PHP debugging code in $file without @debug-ignore comment. Please either remove the debugging code or add @debug-ignore comment."
-                        echo "Debugging patterns found in:"
-                        echo "$file"
-                        exit 1
+                  FAILED=0
+                  while IFS= read -r file; do
+                    # Skip test files
+                    if [[ "$file" == *"tests/"* ]]; then
+                      continue
+                    fi
+                    
+                    # Get all lines with debugging code
+                    while IFS= read -r line; do
+                      # Check if line has @debug-ignore comment
+                      if ! grep -A1 -B1 "$line" "$file" | grep -q "@debug-ignore"; then
+                        # Get line number
+                        line_number=$(grep -n "$line" "$file" | cut -d: -f1)
+                        # Get context (3 lines before and after)
+                        context=$(sed -n "$((line_number-3)),$((line_number+3))p" "$file")
+                        
+                        echo "::error file=$file,line=$line_number::Found PHP debugging code without @debug-ignore comment"
+                        echo "Context:"
+                        echo "$context"
+                        echo "----------------------------------------"
+                        FAILED=1
                       fi
-                    done
+                    done < <(grep -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file")
+                  done < <(find . -type f -name "*.php")
+
+                  if [ $FAILED -eq 1 ]; then
+                    exit 1
                   fi
 
             - name: Check for JavaScript Debugging Code
               run: |
                   # Check for JavaScript debugging patterns, excluding lines with @debug-ignore comment
-                  if find . -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \) -exec grep -l -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" {} \; | grep -v "tests/"; then
-                    # Check if the debugging code is on lines with @debug-ignore comment
-                    for file in $(find . -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \) -exec grep -l -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" {} \; | grep -v "tests/"); do
-                      if ! grep -A1 -B1 -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" | grep -q "@debug-ignore"; then
-                        echo "::error::Found JavaScript debugging code in $file without @debug-ignore comment. Please either remove the debugging code or add @debug-ignore comment."
-                        echo "Debugging patterns found in:"
-                        echo "$file"
-                        exit 1
+                  FAILED=0
+                  while IFS= read -r file; do
+                    # Skip test files
+                    if [[ "$file" == *"tests/"* ]]; then
+                      continue
+                    fi
+                    
+                    # Get all lines with debugging code
+                    while IFS= read -r line; do
+                      # Check if line has @debug-ignore comment
+                      if ! grep -A1 -B1 "$line" "$file" | grep -q "@debug-ignore"; then
+                        # Get line number
+                        line_number=$(grep -n "$line" "$file" | cut -d: -f1)
+                        # Get context (3 lines before and after)
+                        context=$(sed -n "$((line_number-3)),$((line_number+3))p" "$file")
+                        
+                        echo "::error file=$file,line=$line_number::Found JavaScript debugging code without @debug-ignore comment"
+                        echo "Context:"
+                        echo "$context"
+                        echo "----------------------------------------"
+                        FAILED=1
                       fi
-                    done
+                    done < <(grep -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file")
+                  done < <(find . -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \))
+
+                  if [ $FAILED -eq 1 ]; then
+                    exit 1
                   fi
 
             - name: Check for Skip/Only in Tests
               run: |
                   # Check for .skip or .only in test files, excluding lines with @debug-ignore comment
-                  if find . -type f -name "*.test.*" -exec grep -l -E "\.(skip|only)\(" {} \; | grep -v "tests/"; then
-                    # Check if the skip/only is on lines with @debug-ignore comment
-                    for file in $(find . -type f -name "*.test.*" -exec grep -l -E "\.(skip|only)\(" {} \; | grep -v "tests/"); do
-                      if ! grep -A1 -B1 -E "\.(skip|only)\(" "$file" | grep -q "@debug-ignore"; then
-                        echo "::error::Found .skip or .only in $file without @debug-ignore comment. Please either remove the skip/only or add @debug-ignore comment."
-                        echo "Test files with skip/only found in:"
-                        echo "$file"
-                        exit 1
+                  FAILED=0
+                  while IFS= read -r file; do
+                    # Skip test files
+                    if [[ "$file" == *"tests/"* ]]; then
+                      continue
+                    fi
+                    
+                    # Get all lines with skip/only
+                    while IFS= read -r line; do
+                      # Check if line has @debug-ignore comment
+                      if ! grep -A1 -B1 "$line" "$file" | grep -q "@debug-ignore"; then
+                        # Get line number
+                        line_number=$(grep -n "$line" "$file" | cut -d: -f1)
+                        # Get context (3 lines before and after)
+                        context=$(sed -n "$((line_number-3)),$((line_number+3))p" "$file")
+                        
+                        echo "::error file=$file,line=$line_number::Found .skip or .only without @debug-ignore comment"
+                        echo "Context:"
+                        echo "$context"
+                        echo "----------------------------------------"
+                        FAILED=1
                       fi
-                    done
+                    done < <(grep -E "\.(skip|only)\(" "$file")
+                  done < <(find . -type f -name "*.test.*")
+
+                  if [ $FAILED -eq 1 ]; then
+                    exit 1
                   fi
