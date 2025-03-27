@@ -11,10 +11,16 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            - name: Initialize Error Collection
+              run: |
+                  echo "FINAL_EXIT_CODE=0" >> $GITHUB_ENV
+
             - name: Check for PHP Debugging Code
+              id: php-check
+              continue-on-error: true
               run: |
                   # Check for PHP debugging patterns, excluding lines with @debug-ignore comment
-                  FAILED=0
+                  FOUND_ERRORS=0
                   while IFS= read -r file; do
                     # Skip test files
                     if [[ "$file" == *"tests/"* ]]; then
@@ -34,19 +40,21 @@ jobs:
                         echo "Context:"
                         echo "$context"
                         echo "----------------------------------------"
-                        FAILED=1
+                        FOUND_ERRORS=1
                       fi
-                    done < <(grep -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file")
+                    done < <(grep -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file" || true)
                   done < <(find . -type f -name "*.php")
 
-                  if [ $FAILED -eq 1 ]; then
-                    exit 1
+                  if [ $FOUND_ERRORS -eq 1 ]; then
+                    echo "FINAL_EXIT_CODE=1" >> $GITHUB_ENV
                   fi
 
             - name: Check for JavaScript Debugging Code
+              id: js-check
+              continue-on-error: true
               run: |
                   # Check for JavaScript debugging patterns, excluding lines with @debug-ignore comment
-                  FAILED=0
+                  FOUND_ERRORS=0
                   while IFS= read -r file; do
                     # Skip test files
                     if [[ "$file" == *"tests/"* ]]; then
@@ -66,19 +74,21 @@ jobs:
                         echo "Context:"
                         echo "$context"
                         echo "----------------------------------------"
-                        FAILED=1
+                        FOUND_ERRORS=1
                       fi
-                    done < <(grep -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file")
+                    done < <(grep -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" || true)
                   done < <(find . -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \))
 
-                  if [ $FAILED -eq 1 ]; then
-                    exit 1
+                  if [ $FOUND_ERRORS -eq 1 ]; then
+                    echo "FINAL_EXIT_CODE=1" >> $GITHUB_ENV
                   fi
 
             - name: Check for Skip/Only in Tests
+              id: test-check
+              continue-on-error: true
               run: |
                   # Check for .skip or .only in test files, excluding lines with @debug-ignore comment
-                  FAILED=0
+                  FOUND_ERRORS=0
                   while IFS= read -r file; do
                     # Skip test files
                     if [[ "$file" == *"tests/"* ]]; then
@@ -98,11 +108,15 @@ jobs:
                         echo "Context:"
                         echo "$context"
                         echo "----------------------------------------"
-                        FAILED=1
+                        FOUND_ERRORS=1
                       fi
-                    done < <(grep -E "\.(skip|only)\(" "$file")
+                    done < <(grep -E "\.(skip|only)\(" "$file" || true)
                   done < <(find . -type f -name "*.test.*")
 
-                  if [ $FAILED -eq 1 ]; then
-                    exit 1
+                  if [ $FOUND_ERRORS -eq 1 ]; then
+                    echo "FINAL_EXIT_CODE=1" >> $GITHUB_ENV
                   fi
+
+            - name: Final Status Check
+              run: |
+                  exit ${{ env.FINAL_EXIT_CODE }}
