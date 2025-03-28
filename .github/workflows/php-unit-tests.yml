@@ -128,8 +128,10 @@ jobs:
                   echo "Using WordPress core version from .pr-wp-env.json: ${{ env.wp_core_version }}"
                   echo "WP_ENV_CORE=${{ env.wp_core_version }}" >> $GITHUB_ENV
 
-            - name: Stop WordPress Environment if running
-              run: npm run env:stop || true
+            - name: Stop and Destroy WordPress Environment if running
+              run: |
+                  npm run env:stop || true
+                  npx wp-env destroy || true
 
             - name: Start WordPress Environment
               run: npm run env:start
@@ -143,11 +145,12 @@ jobs:
                     EXPECTED_VERSION=$(jq -r '.core' .pr-wp-env.json | sed -n 's/.*wordpress-\(.*\)\.zip/\1/p')
                     if [ "$WP_VERSION" != "$EXPECTED_VERSION" ]; then
                       echo "Warning: WordPress version mismatch. Expected: $EXPECTED_VERSION, Got: $WP_VERSION"
-                      echo "Attempting to restart environment..."
+                      echo "Attempting to destroy and recreate environment..."
                       npm run env:stop
+                      npx wp-env destroy
                       npm run env:start
                       WP_VERSION=$(npx wp-env run cli wp core version)
-                      echo "WordPress version after restart: $WP_VERSION"
+                      echo "WordPress version after recreation: $WP_VERSION"
                     fi
                   fi
 
