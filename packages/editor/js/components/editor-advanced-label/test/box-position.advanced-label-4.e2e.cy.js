@@ -16,15 +16,17 @@ describe('Position Control label testing', () => {
 	const setPositionValue = (label, value) => {
 		cy.get(`@${label}`).click({ force: true });
 
-		cy.getByDataTest('popover-body').within(() => {
-			cy.get('input[type="text"]').clear({ force: true });
-			cy.get('input[type="text"]').type(value);
-		});
+		cy.getByDataTest('popover-body')
+			.last()
+			.within(() => {
+				cy.get('input[type="text"]').clear({ force: true });
+				cy.get('input[type="text"]').type(value);
+			});
 
 		// close popover
-		cy.getByDataTest('popover-header').within(() =>
-			cy.getByAriaLabel('Close').click()
-		);
+		cy.getByDataTest('popover-header')
+			.last()
+			.within(() => cy.getByAriaLabel('Close').click());
 	};
 
 	const checkPositionValue = (label, value) => {
