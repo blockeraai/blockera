@@ -26,8 +26,7 @@ jobs:
                     while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found PHP debugging code:"
-                        echo "📁 File: $file"
-                        echo "📍 Line: $line_number"
+                        echo "📁 File: $file:$line_number"
                         echo "📝 Code: $line"
                         echo "----------------------------------------"
                         echo "1" > /tmp/error_found
@@ -44,8 +43,7 @@ jobs:
                     while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found JavaScript debugging code:"
-                        echo "📁 File: $file"
-                        echo "📍 Line: $line_number"
+                        echo "📁 File: $file:$line_number"
                         echo "📝 Code: $line"
                         echo "----------------------------------------"
                         echo "1" > /tmp/error_found
@@ -62,8 +60,7 @@ jobs:
                     while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found test skip/only:"
-                        echo "📁 File: $file"
-                        echo "📍 Line: $line_number"
+                        echo "📁 File: $file:$line_number"
                         echo "📝 Code: $line"
                         echo "----------------------------------------"
                         echo "1" > /tmp/error_found
