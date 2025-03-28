@@ -117,7 +117,9 @@ jobs:
                       ;;
                   esac
 
-                  if [ "${{ env.wp_env_file }}" == "true" ]; then
+                  # First verify the file exists again
+                  if [ -f ".pr-wp-env.json" ] && [ "${{ env.wp_env_file }}" = "true" ]; then
+                    echo "Found .pr-wp-env.json in $(pwd)"
                     # Extract core version from .pr-wp-env.json
                     echo "Reading .pr-wp-env.json..."
                     cat .pr-wp-env.json
@@ -131,6 +133,7 @@ jobs:
                     # Ensure BLOCKERA_TELEMETRY_OPT_IN_OFF is set unless explicitly disabled
                     jq '.config.BLOCKERA_TELEMETRY_OPT_IN_OFF = true' .wp-env.json > tmp.json && mv tmp.json .wp-env.json
                   else
+                    echo "No .pr-wp-env.json found in $(pwd) or wp_env_file is not true"
                     # Add telemetry config to base configuration
                     echo "$BASE_CONFIG" | jq '.config.BLOCKERA_TELEMETRY_OPT_IN_OFF = true' > .wp-env.json
                   fi
