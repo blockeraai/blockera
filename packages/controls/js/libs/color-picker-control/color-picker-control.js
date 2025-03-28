@@ -22,7 +22,7 @@ import { Button, Popover, BaseControl, NoticeControl } from '../index';
 export default function ColorPickerControl({
 	popoverTitle = __('Color Picker', 'blockera'),
 	isOpen = false,
-	onClose = () => { },
+	onClose = () => {},
 	placement = 'left-start',
 	isPopover = true,
 	hasClearBtn = true,
@@ -124,8 +124,9 @@ export default function ColorPickerControl({
 						title={popoverTitle}
 						offset={120}
 						placement={placement}
-						className={`components-palette-edit-popover ${isPopoverHidden ? 'hidden' : ''
-							}`}
+						className={`components-palette-edit-popover ${
+							isPopoverHidden ? 'hidden' : ''
+						}`}
 						onClose={onClose}
 						titleButtonsRight={
 							<>

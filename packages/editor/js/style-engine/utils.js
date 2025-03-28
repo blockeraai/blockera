@@ -173,8 +173,9 @@ export const getProperties = (props: {
 		if (-1 === value.indexOf(';')) {
 			const hasImportantFlag = -1 !== value.indexOf('!important');
 
-			tempValue = `${property}: ${value}${options.important && !hasImportantFlag ? ' !important' : ''
-				};\n`;
+			tempValue = `${property}: ${value}${
+				options.important && !hasImportantFlag ? ' !important' : ''
+			};\n`;
 		} else if (options.important) {
 			tempValue = value.replace(';', ' !important;\n');
 		} else {
