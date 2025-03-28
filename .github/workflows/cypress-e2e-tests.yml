@@ -118,6 +118,13 @@ jobs:
                   esac
 
                   if [ "${{ env.wp_env_file }}" == "true" ]; then
+                    # Extract core version from .pr-wp-env.json
+                    echo "Reading .pr-wp-env.json..."
+                    cat .pr-wp-env.json
+                    CORE_VERSION=$(jq -r '.core' .pr-wp-env.json)
+                    echo "Extracted core version: $CORE_VERSION"
+                    echo "WP_ENV_CORE=$CORE_VERSION" >> $GITHUB_ENV
+                    echo "Environment variable set to: $CORE_VERSION"
                     # Merge PR wp-env config with base config
                     echo "$BASE_CONFIG" > base-config.json
                     jq -s '.[0] * .[1]' base-config.json .pr-wp-env.json > .wp-env.json
@@ -128,6 +135,7 @@ jobs:
                     echo "$BASE_CONFIG" | jq '.config.BLOCKERA_TELEMETRY_OPT_IN_OFF = true' > .wp-env.json
                   fi
 
+                  echo "Final .wp-env.json contents:"
                   cat .wp-env.json
                   touch .env
                   echo APP_MODE=production >> .env
@@ -145,10 +153,12 @@ jobs:
             - name: Check WordPress Version
               run: |
                   echo "Checking WordPress version..."
+                  echo "Current WP_ENV_CORE environment variable: $WP_ENV_CORE"
                   WP_VERSION=$(npx wp-env run cli wp core version)
                   echo "WordPress version: $WP_VERSION"
                   if [ "${{ env.wp_env_file }}" == "true" ]; then
                     EXPECTED_VERSION=$(jq -r '.core' .pr-wp-env.json | sed -n 's/.*wordpress-\(.*\)\.zip/\1/p')
+                    echo "Expected version from .pr-wp-env.json: $EXPECTED_VERSION"
                     if [ "$WP_VERSION" != "$EXPECTED_VERSION" ]; then
                       echo "Warning: WordPress version mismatch. Expected: $EXPECTED_VERSION, Got: $WP_VERSION"
                       echo "Attempting to destroy and recreate environment..."

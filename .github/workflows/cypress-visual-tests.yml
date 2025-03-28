@@ -137,6 +137,9 @@ jobs:
                   esac
 
                   if [ "${{ env.wp_env_file }}" == "true" ]; then
+                    # Extract core version from .pr-wp-env.json
+                    CORE_VERSION=$(jq -r '.core' .pr-wp-env.json)
+                    echo "WP_ENV_CORE=$CORE_VERSION" >> $GITHUB_ENV
                     # Merge PR wp-env config with base config
                     echo "$BASE_CONFIG" > base-config.json
                     jq -s '.[0] * .[1]' base-config.json .pr-wp-env.json > .wp-env.json

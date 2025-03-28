@@ -111,6 +111,9 @@ jobs:
             - name: Create requires environment files
               run: |
                   if [ "${{ env.wp_env_file }}" == "true" ]; then
+                    # Extract core version from .pr-wp-env.json
+                    CORE_VERSION=$(jq -r '.core' .pr-wp-env.json)
+                    echo "WP_ENV_CORE=$CORE_VERSION" >> $GITHUB_ENV
                     # Use PR wp-env config but ensure PHP version is set correctly
                     jq --arg php "${{ matrix.php }}" '.phpVersion = $php' .pr-wp-env.json > .wp-env.json
                   else
@@ -121,12 +124,6 @@ jobs:
                   echo APP_MODE=production >> .env
                   echo DB=wp_tests >> .env
                   cat .env
-
-            - name: Update WordPress core version if specified
-              if: env.wp_core_version != ''
-              run: |
-                  echo "Using WordPress core version from .pr-wp-env.json: ${{ env.wp_core_version }}"
-                  echo "WP_ENV_CORE=${{ env.wp_core_version }}" >> $GITHUB_ENV
 
             - name: Stop and Destroy WordPress Environment if running
               run: |
