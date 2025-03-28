@@ -1,0 +1,7 @@
+{
+	"core": "https://wordpress.org/wordpress-6.8-beta1.zip",
+	"plugins": ["."],
+	"config": {
+		"WP_DEBUG": true
+	}
+}
