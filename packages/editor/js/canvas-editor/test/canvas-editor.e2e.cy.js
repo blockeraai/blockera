@@ -32,6 +32,7 @@ describe('Canvas editor testing', () => {
 
 	// We should double check this test suite because this is flaky test!
 	// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-138
+	/* @debug-ignore */
 	it.skip('should rendered blockera canvas editor at the header top bar of Site Editor while switch between edit and init components', () => {
 		goTo('/wp-admin/site-editor.php').then(() => {
 			// eslint-disable-next-line

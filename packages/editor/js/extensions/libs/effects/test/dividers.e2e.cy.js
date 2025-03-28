@@ -21,7 +21,7 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 			cy.getParentContainer('Shape Dividers').as('dividers');
 		});
 
-		it.only('should add ::before to element,when add first divider', () => {
+		it('should add ::before to element,when add first divider', () => {
 			cy.get('@dividers').within(() => {
 				cy.getByAriaLabel('Add New Divider').click();
 			});

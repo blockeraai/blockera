@@ -287,6 +287,7 @@ describe('repeater control component testing', () => {
 			// TODO: temporary skip!
 			// We should double check this test suite because this is flaky test!
 			// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-140
+			/* @debug-ignore */
 			it.skip('should generate correct id, when there is type', () => {
 				const name = nanoid();
 
@@ -322,6 +323,7 @@ describe('repeater control component testing', () => {
 			// TODO: temporary skip!
 			// Bug: We should double check this test suite because this is failure!
 			// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-140
+			/* @debug-ignore */
 			it.skip('should generate correct id, when there is type(add multiple)', () => {
 				const name = nanoid();
 
@@ -791,6 +793,9 @@ describe('repeater control component testing', () => {
 				});
 			});
 
+			// TODO: The order function is not working as expected.
+			// We need to fix this.
+			/* @debug-ignore */
 			it.skip('should regenerate order, when there is type', () => {
 				const name = nanoid();
 
