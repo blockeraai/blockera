@@ -24,7 +24,7 @@ jobs:
                     if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
-                      if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found PHP debugging code:"
                         echo "📁 File: $file:$line_number"
                         echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
@@ -41,7 +41,7 @@ jobs:
                     if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
-                      if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found JavaScript debugging code:"
                         echo "📁 File: $file:$line_number"
                         echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
@@ -58,7 +58,7 @@ jobs:
                     if [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
-                      if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found test skip/only:"
                         echo "📁 File: $file:$line_number"
                         echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
