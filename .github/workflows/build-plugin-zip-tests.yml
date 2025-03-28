@@ -89,5 +89,9 @@ jobs:
                   cd ./build/blockera
                   npx cypress install
                   npm run env:start
+                  # Get and display WordPress version
+                  echo "Checking WordPress version..."
+                  WP_VERSION=$(wp-env run cli wp core version)
+                  echo "WordPress version: $WP_VERSION"
                   npm run test:e2e
                   npm run env:stop

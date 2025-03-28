@@ -131,6 +131,12 @@ jobs:
             - name: Start WordPress Environment
               run: npm run env:start
 
+            - name: Check WordPress Version
+              run: |
+                  echo "Checking WordPress version..."
+                  WP_VERSION=$(wp-env run cli wp core version)
+                  echo "WordPress version: $WP_VERSION"
+
             - name: Running single site unit tests
               if: ${{ ! matrix.multisite }}
               run: |
