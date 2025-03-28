@@ -27,7 +27,7 @@ jobs:
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found PHP debugging code:"
                         echo "📁 File: $file:$line_number"
-                        echo "📝 Code: $line"
+                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
                         echo "----------------------------------------"
                         echo "1" > /tmp/error_found
                       fi
@@ -44,7 +44,7 @@ jobs:
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found JavaScript debugging code:"
                         echo "📁 File: $file:$line_number"
-                        echo "📝 Code: $line"
+                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
                         echo "----------------------------------------"
                         echo "1" > /tmp/error_found
                       fi
@@ -61,7 +61,7 @@ jobs:
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found test skip/only:"
                         echo "📁 File: $file:$line_number"
-                        echo "📝 Code: $line"
+                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
                         echo "----------------------------------------"
                         echo "1" > /tmp/error_found
                       fi
