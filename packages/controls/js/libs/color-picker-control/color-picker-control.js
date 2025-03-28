@@ -56,6 +56,7 @@ export default function ColorPickerControl({
 				setValue(color?.sRGBHex);
 				setIsPopoverHidden(false);
 			} catch (e) {
+				/* @debug-ignore */
 				console.warn(
 					'EyeDropper was not supported with your browser. please for use of color picker switch to Google Chrome browser.'
 				);

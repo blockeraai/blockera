@@ -14,6 +14,7 @@ let env = {
 try {
 	env = require('./cypress.env.json');
 } catch (error) {
+	/* @debug-ignore */
 	console.log(error);
 }
 
@@ -24,6 +25,7 @@ try {
 		...require('./.pr-cypress.env.json'),
 	};
 } catch (error) {
+	/* @debug-ignore */
 	console.log(error);
 }
 

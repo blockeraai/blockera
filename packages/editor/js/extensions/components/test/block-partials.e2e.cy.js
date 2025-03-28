@@ -26,7 +26,7 @@ describe('Block Partials Testing ...', () => {
 		);
 	});
 
-	it.only('should be able to hide WordPress original block variation transform and display blockera block variation transform', () => {
+	it('should be able to hide WordPress original block variation transform and display blockera block variation transform', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 
 		appendBlocks(`<!-- wp:group {"blockeraCompatId":"81683555276","blockeraDisplay":"flex","blockeraFlexLayout":{"direction":"column","alignItems":"","justifyContent":""},"layout":{"type":"flex","orientation":"vertical"}} -->

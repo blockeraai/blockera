@@ -471,6 +471,8 @@ describe('testing control context provider and related hooks', () => {
 		});
 	});
 
+	// TODO: This test is failing and there is a bug should be fixed. Skipped temporarily.
+	/* @debug-ignore */
 	it.skip('should must be sort repeater items', () => {
 		const defaultRepeaterItemValue = {
 			y: 20,

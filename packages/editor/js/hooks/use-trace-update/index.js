@@ -14,6 +14,7 @@ export function useTraceUpdate(props) {
 			return ps;
 		}, {});
 		if (Object.keys(changedProps).length > 0) {
+			/* @debug-ignore */
 			console.log(
 				Object.values(changedProps).map((item) => {
 					return detailedDiff(item[0], item[1]);

@@ -74,11 +74,13 @@ export function registerBlockExtension(
 	{ type = 'block', ...settings }: Object
 ): Object | void {
 	if (!isString(name)) {
+		/* @debug-ignore */
 		console.error('Block extension names must be strings.');
 		return;
 	}
 
 	if (!/^(blockera|[A-Z][a-z0-9-]).*(?:[A-Z][a-z0-9-])*$/.test(name)) {
+		/* @debug-ignore */
 		console.error(
 			'Block extension names must contain a namespace prefix, include only lowercase alphanumeric characters or dashes, and start with a letter. Example: "blockeraMyCustomBlockExtension" or "MyCustomBlockExtension"'
 		);
@@ -89,6 +91,7 @@ export function registerBlockExtension(
 	}
 
 	if (!['block', 'extension', 'field'].includes(type)) {
+		/* @debug-ignore */
 		console.error(
 			`Block Extension type must be equals with "extension", "block" or "field" this type is ${type}, Block Extension type validation error!`
 		);
@@ -149,6 +152,7 @@ export function unregisterBlockExtension(name: string): Object | void {
 	const oldExtension = select(extensionStore).getBlockExtension(name);
 
 	if (!oldExtension) {
+		/* @debug-ignore */
 		console.error('Block extensions "' + name + '" is not registered.');
 		return;
 	}

@@ -32,6 +32,7 @@ export const useRenderMonitor = (componentName: string, props: Object) => {
 			);
 
 			if (Object.keys(changedProps).length > 0) {
+				/* @debug-ignore */
 				// eslint-disable-next-line
 				console.group(
 					`[${componentName}] Re-render caused by prop changes:`
@@ -39,8 +40,10 @@ export const useRenderMonitor = (componentName: string, props: Object) => {
 				// eslint-disable-next-line
 				Object.entries(changedProps).forEach(([prop, { from, to }]) => {
 					// eslint-disable-next-line
+					/* @debug-ignore */
 					console.log(`${prop}:`, { from, to });
 				});
+				/* @debug-ignore */
 				// eslint-disable-next-line
 				console.groupEnd();
 			}

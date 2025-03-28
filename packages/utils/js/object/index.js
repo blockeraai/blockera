@@ -67,7 +67,6 @@ export const deletePropertyByPath = (obj: Object, path: string): Object => {
 
 		if ('string' === typeof key && /\d+/.test(key)) {
 			key = Number(key);
-			// console.log(key);
 		}
 
 		if (!current[key]) {

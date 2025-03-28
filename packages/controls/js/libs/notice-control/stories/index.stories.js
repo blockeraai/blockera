@@ -175,6 +175,7 @@ export const States = {
 							children="alert on dismiss"
 							onDismiss={() => {
 								// eslint-disable-next-line no-alert
+								/* @debug-ignore */
 								alert('Dismiss notice !!');
 							}}
 							label="Action on dismiss"

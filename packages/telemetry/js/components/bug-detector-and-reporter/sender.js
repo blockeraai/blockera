@@ -15,9 +15,11 @@ export const sender = (
 ): void => {
 	const {
 		setError = (error) => {
+			/* @debug-ignore */
 			console.error(error);
 		},
 		setResponse = (response) => {
+			/* @debug-ignore */
 			console.info(response);
 		},
 	} = callbacks;
@@ -59,7 +61,10 @@ export const checkReporterStatus = (
 		.then((response) => {
 			callback(response);
 		})
-		.catch(console.error);
+		.catch((error) => {
+			/* @debug-ignore */
+			console.error(error);
+		});
 };
 
 const prepareData = (error: Object, blockCode: string): Object => {

@@ -1,0 +1,78 @@
+name: Check for Debugging Code
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+
+jobs:
+    check-debugging:
+        name: Check for Debugging Code
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Check for Debugging Code
+              shell: bash
+              run: |
+                  # Initialize error flag in a file to handle subshell issues
+                  echo "0" > /tmp/error_found
+
+                  echo "Checking PHP files for debugging code..."
+                  echo "============================================"
+                  while IFS= read -r file; do
+                    # Skip test files, .github folder, and bin folder
+                    if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
+                    
+                    while IFS=: read -r line_number line; do
+                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                        echo "⚠️ Found PHP debugging code:"
+                        echo "📁 File: $file:$line_number"
+                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+                        echo "----------------------------------------"
+                        echo "1" > /tmp/error_found
+                      fi
+                    done < <(grep -n -E "(die\(|var_dump\(|print_r\(|error_log\(|wp_die\(|exit\()" "$file" || true)
+                  done < <(find . -type f -name "*.php")
+
+                  echo "Checking JavaScript/TypeScript files for debugging code..."
+                  echo "============================================"
+                  while IFS= read -r file; do
+                    # Skip test files, .github folder, and bin folder
+                    if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
+                    
+                    while IFS=: read -r line_number line; do
+                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                        echo "⚠️ Found JavaScript debugging code:"
+                        echo "📁 File: $file:$line_number"
+                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+                        echo "----------------------------------------"
+                        echo "1" > /tmp/error_found
+                      fi
+                    done < <(grep -n -E "(console\.(log|debug|info|warn|error)|debugger|alert\()" "$file" || true)
+                  done < <(find . -type f \( -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" \))
+
+                  echo "Checking test files for .skip/.only..."
+                  echo "============================================"
+                  while IFS= read -r file; do
+                    # Skip test files, .github folder, and bin folder
+                    if [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
+                    
+                    while IFS=: read -r line_number line; do
+                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                        echo "⚠️ Found test skip/only:"
+                        echo "📁 File: $file:$line_number"
+                        echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+                        echo "----------------------------------------"
+                        echo "1" > /tmp/error_found
+                      fi
+                    done < <(grep -n -E "\.(skip|only)\(" "$file" || true)
+                  done < <(find . -type f \( -name "*.test.*" -o -name "*.spec.*" -o -name "*.cy.js" \))
+
+                  # Final status check
+                  if [ "$(cat /tmp/error_found)" -eq "1" ]; then
+                    echo "❌ Found debugging code that needs to be removed or marked with @debug-ignore"
+                    exit 1
+                  else
+                    echo "✅ No unauthorized debugging code found"
+                    exit 0
+                  fi

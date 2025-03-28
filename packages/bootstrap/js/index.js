@@ -16,6 +16,7 @@ export const initializer = (): void => {
 	const bootstrap = applyFilters('blockera.bootstrapper', noop);
 
 	if ('function' !== typeof bootstrap) {
+		/* @debug-ignore */
 		console.warn(
 			__(
 				'bootstrap constant is not function! please provide bootstrap function.',
