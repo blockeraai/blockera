@@ -159,7 +159,7 @@ jobs:
             - name: Check WordPress Version
               run: |
                   echo "Checking WordPress version..."
-                  WP_VERSION=$(wp-env run cli wp core version)
+                  WP_VERSION=$(npx wp-env run cli wp core version)
                   echo "WordPress version: $WP_VERSION"
 
             - name: Build wp-env app
