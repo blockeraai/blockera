@@ -134,6 +134,9 @@ jobs:
                   echo DB=wp_tests >> .env
                   cat .env
 
+            - name: Stop WordPress Environment if running
+              run: npm run env:stop || true
+
             - name: Start WordPress Environment
               run: npm run env:start
 
@@ -142,6 +145,17 @@ jobs:
                   echo "Checking WordPress version..."
                   WP_VERSION=$(npx wp-env run cli wp core version)
                   echo "WordPress version: $WP_VERSION"
+                  if [ "${{ env.wp_env_file }}" == "true" ]; then
+                    EXPECTED_VERSION=$(jq -r '.core' .pr-wp-env.json | sed -n 's/.*wordpress-\(.*\)\.zip/\1/p')
+                    if [ "$WP_VERSION" != "$EXPECTED_VERSION" ]; then
+                      echo "Warning: WordPress version mismatch. Expected: $EXPECTED_VERSION, Got: $WP_VERSION"
+                      echo "Attempting to restart environment..."
+                      npm run env:stop
+                      npm run env:start
+                      WP_VERSION=$(npx wp-env run cli wp core version)
+                      echo "WordPress version after restart: $WP_VERSION"
+                    fi
+                  fi
 
             - name: Build wp-env app
               run: npm run build
@@ -180,6 +194,3 @@ jobs:
                   fi
 
                   npm run test:e2e -- --spec "$spec_pattern"
-
-            - name: Stop WordPress Environment
-              run: npm run env:stop
