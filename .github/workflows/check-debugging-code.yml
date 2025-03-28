@@ -57,7 +57,7 @@ jobs:
                   echo "============================================"
                   while IFS= read -r file; do
                     # Skip test files, .github folder, and bin folder
-                    if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
+                    if [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
                       if ! grep -A1 -B1 -n "$line" "$file" | grep -q "@debug-ignore"; then
