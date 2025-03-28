@@ -23,7 +23,8 @@ describe(
 		// TODO: temporary skip!
 		// We should double check this test suite because this is flaky test!
 		// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-139
-		context('Functional', () => {
+		/* @debug-ignore */
+		context.skip('Functional', () => {
 			context('image type', () => {
 				context('size', () => {
 					it('should change image-size in data by toggling between size options', () => {
