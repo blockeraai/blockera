@@ -15,10 +15,11 @@ jobs:
 
             - name: Check for PR config files
               run: |
-                  if find . -name ".pr-*" ! -name "*.env-example*" | grep -q .; then
+                  # Find all PR config files except .pr-wp-env.json and .pr-*.env-example files
+                  if find . -name ".pr-*" ! -name ".pr-wp-env.json" ! -name "*.env-example*" | grep -q .; then
                     echo "❌ PR config files found. Please remove all PR-related config files and wait to all tests pass before merging to master."
                     echo "Found files:"
-                    find . -name ".pr-*" ! -name "*.env-example*"
+                    find . -name ".pr-*" ! -name ".pr-wp-env.json" ! -name "*.env-example*"
                     exit 1
                   else
                     echo "✅ No PR config files found. You can proceed with merging."

@@ -33,6 +33,16 @@ jobs:
                     echo "env_file=false" >> $GITHUB_ENV
                   fi
 
+            - name: Check if .pr-wp-env.json exists
+              id: check_wp_env_file
+              run: |
+                  if [ -f ".pr-wp-env.json" ]; then
+                    echo "Found .pr-wp-env.json"
+                    echo "wp_env_file=true" >> $GITHUB_ENV
+                  else
+                    echo "wp_env_file=false" >> $GITHUB_ENV
+                  fi
+
             - name: List test categories
               id: set_categories
               run: |
@@ -88,23 +98,36 @@ jobs:
 
             - name: Create required environment files
               run: |
+                  # Set up base configuration based on category
                   case "${{ matrix.category }}" in
                     "woocommerce")
-                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}}' >> .wp-env.json
+                      BASE_CONFIG='{"plugins": [".", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"]}'
                       ;;  
                     "blocksy")
-                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/blocksy-companion.latest-stable.zip"], "themes": ["https://downloads.wordpress.org/theme/blocksy.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}, "lifecycleScripts": {"afterStart": "wp-env run cli wp theme activate blocksy"}}' >> .wp-env.json
+                      BASE_CONFIG='{"plugins": [".", "https://downloads.wordpress.org/plugin/blocksy-companion.latest-stable.zip"], "themes": ["https://downloads.wordpress.org/theme/blocksy.latest-stable.zip"], "lifecycleScripts": {"afterStart": "wp-env run cli wp theme activate blocksy"}}'
                       ;;
                     "telemetry")
-                      echo '{"plugins": ["."], "config": {"BLOCKERA_TELEMETRY_NOT_STORE_DATA": true}}' >> .wp-env.json
+                      BASE_CONFIG='{"plugins": ["."], "config": {"BLOCKERA_TELEMETRY_NOT_STORE_DATA": true}}'
                       ;;
                     "plugins")
-                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}}' >> .wp-env.json
+                      BASE_CONFIG='{"plugins": [".", "https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"]}'
                       ;;
                     *)
-                      echo '{"plugins": [".", "https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}}' >> .wp-env.json
+                      BASE_CONFIG='{"plugins": [".", "https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"]}'
                       ;;
                   esac
+
+                  if [ "${{ env.wp_env_file }}" == "true" ]; then
+                    # Merge PR wp-env config with base config
+                    echo "$BASE_CONFIG" > base-config.json
+                    jq -s '.[0] * .[1]' base-config.json .pr-wp-env.json > .wp-env.json
+                    # Ensure BLOCKERA_TELEMETRY_OPT_IN_OFF is set unless explicitly disabled
+                    jq '.config.BLOCKERA_TELEMETRY_OPT_IN_OFF = true' .wp-env.json > tmp.json && mv tmp.json .wp-env.json
+                  else
+                    # Add telemetry config to base configuration
+                    echo "$BASE_CONFIG" | jq '.config.BLOCKERA_TELEMETRY_OPT_IN_OFF = true' > .wp-env.json
+                  fi
+
                   cat .wp-env.json
                   touch .env
                   echo APP_MODE=production >> .env

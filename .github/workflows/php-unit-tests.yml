@@ -94,15 +94,39 @@ jobs:
                   git --version
                   locale -a
 
+            - name: Check if .pr-wp-env.json exists
+              id: check_wp_env_file
+              run: |
+                  if [ -f ".pr-wp-env.json" ]; then
+                    echo "Found .pr-wp-env.json"
+                    echo "wp_env_file=true" >> $GITHUB_ENV
+                    # Extract core version if specified
+                    if core_version=$(jq -r '.core // empty' .pr-wp-env.json); then
+                      echo "wp_core_version=${core_version}" >> $GITHUB_ENV
+                    fi
+                  else
+                    echo "wp_env_file=false" >> $GITHUB_ENV
+                  fi
+
             - name: Create requires environment files
               run: |
-                  touch .wp-env.json
-                  echo '{"plugins": ["."],"phpVersion": "${{ matrix.php }}"}' >> .wp-env.json
+                  if [ "${{ env.wp_env_file }}" == "true" ]; then
+                    # Use PR wp-env config but ensure PHP version is set correctly
+                    jq --arg php "${{ matrix.php }}" '.phpVersion = $php' .pr-wp-env.json > .wp-env.json
+                  else
+                    echo '{"plugins": ["."],"phpVersion": "${{ matrix.php }}"}' >> .wp-env.json
+                  fi
                   cat .wp-env.json
                   touch .env
                   echo APP_MODE=production >> .env
                   echo DB=wp_tests >> .env
                   cat .env
+
+            - name: Update WordPress core version if specified
+              if: env.wp_core_version != ''
+              run: |
+                  echo "Using WordPress core version from .pr-wp-env.json: ${{ env.wp_core_version }}"
+                  echo "WP_ENV_CORE=${{ env.wp_core_version }}" >> $GITHUB_ENV
 
             - name: Start WordPress Environment
               run: npm run env:start

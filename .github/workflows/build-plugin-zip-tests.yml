@@ -45,14 +45,33 @@ jobs:
                   unzip blockera.zip -d ./build/blockera
                   rm -rf blockera.zip
 
+            - name: Check if .pr-wp-env.json exists
+              id: check_wp_env_file
+              run: |
+                  if [ -f ".pr-wp-env.json" ]; then
+                    echo "Found .pr-wp-env.json"
+                    echo "wp_env_file=true" >> $GITHUB_ENV
+                  else
+                    echo "wp_env_file=false" >> $GITHUB_ENV
+                  fi
+
             - name: Create Requirements
               run: |
                   cd ./build/blockera
                   mkdir packages
                   mkdir packages/blockera
                   mkdir packages/blockera/tests
-                  touch .wp-env.json
-                  echo '{"plugins": ["."], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}, "phpVersion": "${{ matrix.php }}"}' >> .wp-env.json
+
+                  if [ "${{ env.wp_env_file }}" == "true" ]; then
+                    # Copy and modify PR wp-env config
+                    cp ../../.pr-wp-env.json .wp-env.json
+                    # Update PHP version and ensure telemetry is configured
+                    jq --arg php "${{ matrix.php }}" '. + {"phpVersion": $php} | .config.BLOCKERA_TELEMETRY_OPT_IN_OFF = true' .wp-env.json > tmp.json && mv tmp.json .wp-env.json
+                  else
+                    # Use default configuration
+                    echo '{"plugins": ["."], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}, "phpVersion": "${{ matrix.php }}"}' >> .wp-env.json
+                  fi
+
                   cat .wp-env.json
                   touch cypress.env.json
                   echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": [],"specPattern": ["packages/**/*.build.e2e.cy.js"]}}' >> cypress.env.json
