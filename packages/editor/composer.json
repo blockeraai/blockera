@@ -1,6 +1,6 @@
 {
 	"name": "blockera/editor",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"description": "Blockera Editor php package to implements WordPress block and site editor functionalities on admin and front-end.",
 	"autoload": {
 		"psr-4": {
