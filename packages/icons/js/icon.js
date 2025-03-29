@@ -54,6 +54,7 @@ export function getIcon(
 	standardize: boolean = true
 ): null | Object {
 	if (!isValidIconLibrary(libraryName)) {
+		/* @debug-ignore */
 		console.warn(
 			`Icon library is not correct or not found. Library: '${libraryName}', Icon: '${iconName}'`
 		);
@@ -74,6 +75,7 @@ export function getIcon(
 		return { iconName, library: libraryName, icon: lib[iconName] };
 	}
 
+	/* @debug-ignore */
 	console.warn(
 		`Icon id is not correct or not found. Icon: '${iconName}', Library: '${libraryName}'`
 	);

@@ -25,6 +25,7 @@ export default function NoticeControl({
 	columns,
 	field,
 	className,
+	icon,
 	showIcon = true,
 	type = 'warning',
 	children,
@@ -72,7 +73,7 @@ export default function NoticeControl({
 							data-test="notice-control-icon"
 							className="notice-control-icon"
 						>
-							{NoticeIcon(type)}
+							{icon || NoticeIcon(type)}
 						</span>
 					)}
 

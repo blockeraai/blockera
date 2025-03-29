@@ -4,6 +4,8 @@
 import { repeaterReducer } from '../';
 import { addControl, addRepeaterItem, sortRepeaterItem } from '../../actions';
 
+// TODO: This test is failing and there is a bug should be fixed. Skipped temporarily.
+/* @debug-ignore */
 describe.skip('Sort Repeater Item', function () {
 	it('should modified control state with sort repeater items', function () {
 		let state = {};

@@ -17,7 +17,7 @@ import { Icon } from '@blockera/icons';
 import { ColorPallet } from './components';
 import { useControlContext } from '../../context';
 import type { ColorPickerControlProps } from './types';
-import { Button, Popover, BaseControl } from '../index';
+import { Button, Popover, BaseControl, NoticeControl } from '../index';
 
 export default function ColorPickerControl({
 	popoverTitle = __('Color Picker', 'blockera'),
@@ -56,6 +56,7 @@ export default function ColorPickerControl({
 				setValue(color?.sRGBHex);
 				setIsPopoverHidden(false);
 			} catch (e) {
+				/* @debug-ignore */
 				console.warn(
 					'EyeDropper was not supported with your browser. please for use of color picker switch to Google Chrome browser.'
 				);
@@ -79,18 +80,33 @@ export default function ColorPickerControl({
 
 	if (!/Chrome|Opera/gi.exec(navigator.userAgent)) {
 		colorPickerLabel = __(
-			'This feature is not supported with your browser, switch to (Chrome, or Opera) browsers.',
+			"The EyeDropper feature of the color picker isn't supported in your browser. Please switch to a compatible browser such as Chrome.",
 			'blockera'
 		);
 	} else if ('http:' === window.location.protocol) {
 		colorPickerLabel = __(
-			'This feature is available only in secure contexts (HTTPS), in some or all supporting browsers.',
+			'The EyeDropper feature is only available in secure contexts (HTTPS) and may not work in all supported browsers unless accessed over a secure connection.',
 			'blockera'
 		);
 	} else if (!eyeDropper) {
 		colorPickerLabel = __(
-			'This feature is not supported with your browser, switch to (Chrome, or Opera) browsers.',
+			"The EyeDropper feature of the color picker isn't supported in your browser. Please switch to a compatible browser such as Chrome.",
 			'blockera'
+		);
+	}
+
+	function showEyeDropperNotice() {
+		if (eyeDropper) return null;
+
+		return (
+			<div style={{ paddingBottom: '15px' }}>
+				<NoticeControl
+					type="error"
+					icon={<Icon icon="eye-dropper" size="18" />}
+				>
+					{colorPickerLabel}
+				</NoticeControl>
+			</div>
 		);
 	}
 
@@ -115,7 +131,6 @@ export default function ColorPickerControl({
 						titleButtonsRight={
 							<>
 								<Button
-									label={colorPickerLabel}
 									tabIndex="-1"
 									size={'extra-small'}
 									className="btn-pick-color"
@@ -125,33 +140,31 @@ export default function ColorPickerControl({
 									}}
 									style={{
 										padding: '5px',
-										...(!eyeDropper
-											? {
-													opacity: 0.5,
-											  }
-											: {}),
 									}}
+									disabled={eyeDropper === null}
 									aria-label={__('Pick Color', 'blockera')}
 								>
 									<Icon icon="eye-dropper" size="18" />
 								</Button>
-								{value && (
-									<Button
-										tabIndex="-1"
-										size={'extra-small'}
-										onClick={() => {
+
+								<Button
+									tabIndex="-1"
+									size={'extra-small'}
+									onClick={() => {
+										if (value) {
 											setValue('');
 											onClose();
-										}}
-										style={{ padding: '5px' }}
-										aria-label={__(
-											'Reset Color (Clear)',
-											'blockera'
-										)}
-									>
-										<Icon icon="trash" size="20" />
-									</Button>
-								)}
+										}
+									}}
+									style={{ padding: '5px' }}
+									aria-label={__(
+										'Reset Color (Clear)',
+										'blockera'
+									)}
+									disabled={!value}
+								>
+									<Icon icon="trash" size="20" />
+								</Button>
 							</>
 						}
 					>
@@ -164,6 +177,8 @@ export default function ColorPickerControl({
 						/>
 
 						{children}
+
+						{showEyeDropperNotice()}
 					</Popover>
 				)}
 			</BaseControl>
@@ -194,6 +209,8 @@ export default function ColorPickerControl({
 					{__('Clear', 'blockera')}
 				</Button>
 			)}
+
+			{showEyeDropperNotice()}
 		</BaseControl>
 	);
 }

@@ -1,18 +1,31 @@
 == Changelog ==
 
-### Version 1.5.1 - 2025-03-17
+### Version 1.6.0 - 2025-03-29
 
 ### Improvements
-- Blocksy Compatibility: improve Blocksy colors to include real value in settings to make it detectable while unlinking variable. [Thanks Hoang]
-- Added compatibility with the Third Party Cache plugins (Like: LiteSpeed) to prevent conflicts.
-- Improve variable unlink feature to try extract real value from var(...) while unlinking. [Thanks Hoang]
+- Added more compatibility with the bootstrap package of blockera, to make it easier to extend the plugin.
+- Added more compatibility with the bootstrap package of blockera, to make it easier to extend the plugin.
+- Refactored the assets provider to make it easier to extend the plugin.
+- Clear value button added to spacing control open popovers.
+- UX Improvement for spacing control to open popover for setting value by one click.
+- Design improvement for spacing control while using units other than PX.
+- UX Improvement for color picker to have delete button and also better error for Eye Dropper browser support.
+- UX Improvement for position control to open popover for setting value by one click.
+- Clear value button added to position control open popovers.
+- Improve Cypress utility functions to work faster and more reliably.
 
 ### Bug Fixes
-- Design issue in spacing feature. 
-- Fixed an issue where the input control was not accepting a value of 0 [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/other-bugs-of-blockera-v1-5-pGcrLeGU8mc0S7J)]
-- Fixed an issue in the Layout style generator Reported  by [@hoang](https://github.com/hoang) 🙏🏼
-- Fixed an issue where the gap lock or unlock button was not working properly.
-- Fixed an issue with the style engine were not being correctly generating styles for blocks in breakpoints. [@hoang](https://github.com/hoang) Thanks a lot for your help!
+- Design issue in box position control about variable values. 
+
+### Automated Tests
+- Improve E2E tests of spacing control to test more scenarios.
+- Improve E2E test of spacing control to test "Clear value" button. 
+- Improve E2E tests of position control to test more scenarios.
+- Improve E2E test of position control to test "Clear value" button. 
+- Added E2E tests for opening popover of spacing feature by clicking on labels or side shapes.
+
+### Fixed
+- E2E tests.
 
 ### More
 

@@ -1,5 +1,25 @@
 ## Unreleased
 
+## 1.1.2 (2025-03-29)
+
+### Improvements
+- Clear value button added to spacing control open popovers.
+- UX Improvement for spacing control to open popover for setting value by one click.
+- Design improvement for spacing control while using units other than PX.
+- UX Improvement for color picker to have delete button and also better error for Eye Dropper browser support.
+- UX Improvement for position control to open popover for setting value by one click.
+- Clear value button added to position control open popovers.
+
+### Automated Tests
+- Improve E2E tests of spacing control to test more scenarios.
+- Improve E2E test of spacing control to test "Clear value" button. 
+- Improve E2E tests of position control to test more scenarios.
+- Improve E2E test of position control to test "Clear value" button. 
+
+### Bug Fixes
+- Design issue in box position control about variable values. 
+
+
 ## 1.1.1 (2025-03-17)
 
 ### Improvements

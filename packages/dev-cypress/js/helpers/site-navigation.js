@@ -1,4 +1,8 @@
-import { getWPDataObject, disableGutenbergFeatures } from './editor';
+import {
+	getWPDataObject,
+	disableGutenbergFeatures,
+	closeWelcomeGuide,
+} from './editor';
 
 /**
  * Login to our test WordPress site
@@ -54,20 +58,8 @@ export function createPost({ postType = 'post', postTitle = '' } = {}) {
 		// eslint-disable-next-line
 		cy.wait(2000);
 
-		if (postType === 'page') {
-			cy.wait(7000);
-			cy.get('body').then(($body) => {
-				const selector = 'button[aria-label="Close"]';
-
-				const domElement = $body.find(selector);
-
-				// Check if the element exists in the DOM
-				if (domElement.length > 0) {
-					// If it exists, click on the element
-					cy.get(selector).click();
-				}
-			});
-		}
+		// Close welcome guide if it exists
+		closeWelcomeGuide();
 
 		if (['post', 'page'].includes(postType)) {
 			disableGutenbergFeatures();

@@ -1,6 +1,6 @@
 {
 	"name": "blockera/bootstrap",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "The initializer blockera any application on wordpress site.",
 	"autoload": {
 		"psr-4": {

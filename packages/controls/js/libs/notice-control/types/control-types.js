@@ -32,4 +32,8 @@ export type TNoticeControlProps = {
 	 * flag to render control or not
 	 */
 	isShown?: boolean,
+	/**
+	 * Custom icon
+	 */
+	icon?: any,
 };

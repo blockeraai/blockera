@@ -27,6 +27,8 @@ import {
 } from '../../index';
 
 export function SidePopover({
+	hasValue,
+	resetToDefault,
 	id,
 	title = '',
 	icon = '',
@@ -216,6 +218,25 @@ export function SidePopover({
 					placement="left-start"
 					className="spacing-edit-popover"
 					onClose={onClose}
+					titleButtonsRight={
+						<>
+							<Button
+								tabIndex="-1"
+								size={'extra-small'}
+								onClick={() => {
+									if (hasValue) {
+										resetToDefault();
+										onClose();
+									}
+								}}
+								style={{ padding: '5px' }}
+								aria-label={__('Remove value', 'blockera')}
+								disabled={!hasValue}
+							>
+								<Icon icon="trash" size="20" />
+							</Button>
+						</>
+					}
 				>
 					<InputControl
 						columns="1fr 1fr"

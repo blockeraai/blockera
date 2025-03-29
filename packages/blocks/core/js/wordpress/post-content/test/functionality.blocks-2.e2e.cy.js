@@ -7,8 +7,9 @@ import {
 	createPost,
 	appendBlocks,
 	setInnerBlock,
-	openInnerBlocksExtension,
+	closeWelcomeGuide,
 	redirectToFrontPage,
+	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 import { experimental } from '@blockera/env';
 
@@ -27,6 +28,9 @@ describe('Post Content Block', () => {
 	);
 
 	it('Functionality + Inner blocks (Post content inside a Group block)', () => {
+		// Close welcome guide if it exists
+		closeWelcomeGuide();
+
 		//
 		// 1. Edit Post Template (with no title)
 		//

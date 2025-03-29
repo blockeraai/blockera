@@ -52,6 +52,14 @@ export type BoxSpacingControlProps = {
 };
 
 export type SidePopoverProps = {
+	/**
+	 * side has value or not
+	 */
+	hasValue: any,
+	/**
+	 * Reset value of side to default value
+	 */
+	resetToDefault: () => void,
 	id: string,
 	title: string,
 	icon: MixedElement | string,

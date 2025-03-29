@@ -23,6 +23,7 @@ describe(
 		// TODO: temporary skip!
 		// We should double check this test suite because this is flaky test!
 		// After fix this, we need to update Jira ISSUE status: https://blockera.atlassian.net/browse/BPB-139
+		/* @debug-ignore */
 		context.skip('Functional', () => {
 			context('image type', () => {
 				context('size', () => {
@@ -90,7 +91,7 @@ describe(
 
 							cy.get('@widthSelect')
 								.parent()
-								.siblings('input[type="number"]')
+								.siblings('input[type="text"]')
 								.as('widthInput');
 
 							cy.get('@widthInput').clear();
@@ -107,7 +108,7 @@ describe(
 
 							cy.get('@heightSelect')
 								.parent()
-								.siblings('input[type="number"]')
+								.siblings('input[type="text"]')
 								.as('heightInput');
 
 							cy.get('@heightInput').clear();
@@ -149,7 +150,7 @@ describe(
 						}).should('be.visible');
 
 						cy.get('.blockera-component-popover').within(() => {
-							cy.get('input[type="number"]')
+							cy.get('input[type="text"]')
 								.eq(0)
 								.as('positionTopInput');
 							cy.get('@positionTopInput').clear();
@@ -472,7 +473,7 @@ describe(
 					}).should('be.visible');
 
 					cy.get('.blockera-component-popover').within(() => {
-						cy.get('input[type="number"]')
+						cy.get('input[type="text"]')
 							.eq(0)
 							.as('positionTopInput');
 						cy.get('@positionTopInput').clear();

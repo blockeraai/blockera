@@ -480,7 +480,7 @@ describe('Box Position → Functionality', () => {
 		});
 	});
 
-	describe.only('Drag Value Changes', () => {
+	describe('Drag Value Changes', () => {
 		it('change values with drag', () => {
 			cy.get('@container').within(() => {
 				cy.customSelect('Absolute');
