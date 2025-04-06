@@ -113,8 +113,8 @@
 
 		button {
 			padding: 2px 4px !important;
-			height: 30px;
-			width: 30px;
+			height: var(--blockera-controls-input-height);
+			width: var(--blockera-controls-input-height);
 			justify-content: center;
 		}
 	}

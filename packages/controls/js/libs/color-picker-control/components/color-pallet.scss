@@ -76,8 +76,8 @@
 			}
 
 			.components-button {
-				width: 30px !important;
-				height: 30px !important;
+				width: var(--blockera-controls-input-height) !important;
+				height: var(--blockera-controls-input-height) !important;
 				border: 1px solid var(--blockera-controls-border-color);
 				padding: 5px !important;
 
@@ -93,8 +93,8 @@
 			.components-input-control__container {
 
 				input {
-					height: 30px;
-					min-height: 30px;
+					height: var(--blockera-controls-input-height);
+					min-height: var(--blockera-controls-input-height);
 				}
 
 				input:not(:focus) + .components-input-control__backdrop {

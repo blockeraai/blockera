@@ -138,7 +138,7 @@
 		border-radius: 3px;
 		font-size: 12px;
 		padding: 4px 10px;
-		height: 30px;
+		height: var(--blockera-controls-input-height);
 	}
 
 	.blockera-control-icon-suggestions {
@@ -160,8 +160,8 @@
 
 .blockera-control-icon-control-icon {
 	--icon-size: 24px;
-	width: 30px;
-	height: 30px;
+	width: var(--blockera-controls-input-height);
+	height: var(--blockera-controls-input-height);
 	line-height: calc(var(--icon-size, 24px) + 8px);
 	display: flex;
 	align-items: center;

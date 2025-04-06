@@ -83,8 +83,8 @@
 			svg {
 				width: 100%;
 				height: auto;
-				max-width: 30px;
-				max-height: 30px;
+				max-width: var(--blockera-controls-input-height);
+				max-height: var(--blockera-controls-input-height);
 			}
 		}
 	}
