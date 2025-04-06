@@ -94,7 +94,8 @@ const SelectControl = ({
 					value={value}
 					onChange={setValue}
 					multiple={multiple}
-					__nextHasNoMarginBottom
+					__nextHasNoMarginBottom={true}
+					__next40pxDefaultSize={true}
 				>
 					{options?.map(renderSelectNativeOption)}
 				</WPSelectControl>
@@ -119,6 +120,7 @@ const SelectControl = ({
 						setValue(selectedItem.key);
 					}}
 					options={options}
+					__next40pxDefaultSize={true}
 				/>
 			)}
 		</BaseControl>
