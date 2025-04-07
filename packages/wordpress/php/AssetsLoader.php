@@ -288,7 +288,7 @@ class AssetsLoader {
 
 		$assetInfo = include $assetInfoFile;
 
-		$deps    = $assetInfo['dependencies'] ?? [];
+		$deps    = array_merge( $assetInfo['dependencies'] ?? [], $this->packages_deps ?? [] );
 		$version = $assetInfo['version'] ?? filemtime( $assetInfoFile );
 
 		$js_file = sprintf(

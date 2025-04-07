@@ -14,9 +14,9 @@ return [
 		'list'      => [
 			'utils',
 			'classnames',
+			'icons',
 			'data-editor',
 			'env',
-			'icons',
 			'data',
 			'storage',
 			'controls',
@@ -37,10 +37,10 @@ return [
 		'list'      => [
 			'utils',
 			'classnames',
+			'icons',
 			'data-editor',
 			'env',
 			'data',
-			'icons',
 			'controls',
 			'telemetry',
 			'bootstrap',
