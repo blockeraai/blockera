@@ -13,7 +13,6 @@ use Blockera\WordPress\RenderBlock\V1\{
     Render,
     SavePost,
 };
-use Blockera\WordPress\RenderBlock\Setup;
 use Blockera\WordPress\RenderBlock\V2\{
     Transpiler,
 	RenderContent as V2RenderContent,
@@ -103,8 +102,6 @@ class AppServiceProvider extends ServiceProvider {
 					}
 				);
 			}
-
-			$this->app->singleton(Setup::class);
 
             $this->app->singleton(
                 VariableType::class,
@@ -381,18 +378,6 @@ class AppServiceProvider extends ServiceProvider {
                 3
             );
         }
-
-		$setup = $this->app->make(Setup::class);
-		$setup->setAvailableBlocks(blockera_get_available_blocks());
-
-		add_filter(
-            'register_block_type_args',
-            function( array $args, string $block_type) use ( $setup): array {
-				return $setup->registerBlock($args, $block_type);
-			},
-            9e2,
-            2
-        );
     }
 
     /**
