@@ -17,7 +17,7 @@ class TestSetup extends \WP_UnitTestCase {
 		$this->assertEmpty( $wp_filter );
 
 		tests_add_filter('register_block_type_args', function(array $args, string $block_type): array {
-			(new Setup())->registerBlock($args, $block_type);
+			return Setup::getInstance()->registerBlock($args, $block_type);
 		}, 
 		10,
 		 2
@@ -32,7 +32,7 @@ class TestSetup extends \WP_UnitTestCase {
 	 */
 	public function testGetBlockDirectoryPath() {
 
-		$setup = new Setup();
+		$setup = Setup::getInstance();
 
 		// Test core block type
 		$setup->setBlockDirectoryPath( 'core/paragraph' );
