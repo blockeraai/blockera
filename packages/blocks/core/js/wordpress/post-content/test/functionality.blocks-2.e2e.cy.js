@@ -146,7 +146,19 @@ describe('Post Content Block', () => {
 		// Change post template
 		//
 		cy.get('[aria-label="Template options"]').click();
-		cy.get('button').contains('Swap template').click();
+
+		cy.wait(3000);
+		cy.get('body').then(($body) => {
+			// WP >= 6.8
+			if ($body.find('button:contains("Change template")').length > 0) {
+				cy.get('button').contains('Change template').click();
+			} else if (
+				$body.find('button:contains("Swap template")').length > 0
+			) {
+				cy.get('button').contains('Swap template').click();
+			}
+		});
+
 		cy.get('div#page-no-title[role="option"]').click();
 
 		//
@@ -248,7 +260,19 @@ describe('Post Content Block', () => {
 		// Change post template
 		//
 		cy.get('[aria-label="Template options"]').click();
-		cy.get('button').contains('Swap template').click();
+
+		cy.wait(3000);
+		cy.get('body').then(($body) => {
+			// WP >= 6.8
+			if ($body.find('button:contains("Change template")').length > 0) {
+				cy.get('button').contains('Change template').click();
+			} else if (
+				$body.find('button:contains("Swap template")').length > 0
+			) {
+				cy.get('button').contains('Swap template').click();
+			}
+		});
+
 		cy.get('div#page-no-title[role="option"]').click();
 
 		//
