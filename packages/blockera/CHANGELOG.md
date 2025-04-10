@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed compatibility issue with WordPress 6.8-RC1 translate system to ensure proper text domain loading and string translations.
+
 ## 1.2.2 (2025-03-29)
 
 ### Improvements

@@ -6,7 +6,7 @@
 	& > .blockera-control-header {
 		display: flex;
 		align-items: center;
-		min-height: 30px;
+		min-height: var(--blockera-controls-input-height);
 		justify-content: center;
 	}
 

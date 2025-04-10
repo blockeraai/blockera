@@ -25,14 +25,14 @@ if (! defined('ABSPATH')) {
 // loading autoloader.
 require __DIR__ . '/vendor/autoload.php';
 
-if ( file_exists( __DIR__ . '/.env' ) ) {
-	
-	// Env Loading ...
-	$dotenv = Dotenv\Dotenv::createImmutable( __DIR__ );
-	$dotenv->safeLoad();
+if (file_exists(__DIR__ . '/.env')) {
+
+    // Env Loading ...
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->safeLoad();
 }
 
-if (! defined('BLOCKERA_SB_FILE')) {	
+if (! defined('BLOCKERA_SB_FILE')) {
     define('BLOCKERA_SB_FILE', __FILE__);
 }
 
@@ -60,20 +60,10 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 }
 ### END AUTO-GENERATED DEFINES
 
-$dashboard_page = blockera_core_config('app.dashboard_page');
+// Initialize hooks on Front Controller.
+blockera_load('bootstrap.hooks', __DIR__);
 
-$jobs = new \Blockera\Telemetry\Jobs(
-    new \Blockera\WordPress\Sender(),
-    __FILE__,
-    array_merge(
-        blockera_core_config('telemetry'),
-        compact('dashboard_page')
-    )
-);
-
-add_action('admin_init', [ $jobs, 'redirectToDashboard' ]);
-
-add_action('plugins_loaded', 'blockera_init', 10);
+add_action('init', 'blockera_init', 10);
 
 function blockera_init(): void {
 
@@ -84,6 +74,11 @@ function blockera_init(): void {
      * @since 1.3.0
      */
     do_action('blockera/before/setup');
+
+    new \Blockera\Telemetry\Jobs(
+        new \Blockera\WordPress\Sender(),
+        blockera_core_config('telemetry')
+    );
 
     ### BEGIN AUTO-GENERATED FRONT CONTROLLERS
     /**

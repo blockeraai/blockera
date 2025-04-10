@@ -25,4 +25,7 @@
 		}
 	}
 
+	.components-range-control__root {
+		min-height: var(--blockera-controls-input-height);
+	}
 }

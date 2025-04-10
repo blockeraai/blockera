@@ -1,5 +1,5 @@
 .blockera-control-gradient-bar {
-	--gradient-bar-height: 30px;
+	--gradient-bar-height: var(--blockera-controls-input-height);
 
 	& > *:first-child {
 		margin-top: 0 !important;

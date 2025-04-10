@@ -19,7 +19,7 @@
 		text-transform: uppercase;
 		font-weight: 500;
 		color: #a3a3a3;
-		height: 30px;
+		height: var(--blockera-controls-input-height);
 		padding: 5px 12px 5px 16px;
 		box-sizing: border-box;
 		display: flex;

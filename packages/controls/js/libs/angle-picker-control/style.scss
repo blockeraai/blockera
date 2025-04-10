@@ -5,8 +5,8 @@
 	}
 
 	.components-angle-picker-control__angle-circle {
-		height: 30px;
-		width: 30px;
+		height: var(--blockera-controls-input-height);
+		width: var(--blockera-controls-input-height);
 		border: 1px solid var(--blockera-controls-border-color);
 	}
 
@@ -46,12 +46,12 @@
 	.blockera-component-button {
 		font-size: 13px;
 		font-weight: 400;
-		height: 30px;
-		line-height: 30px;
-		width: 30px;
+		height: var(--blockera-controls-input-height);
+		line-height: var(--blockera-controls-input-height);
+		width: var(--blockera-controls-input-height);
+		min-width: var(--blockera-controls-input-height);
 		margin: 0;
 		padding: 0 0;
 		margin-left: auto;
-		min-width: 30px;
 	}
 }

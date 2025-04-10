@@ -125,7 +125,8 @@ export default function RangeControl({
 					disabled && 'is-disabled'
 				)}
 				withInputField={withInputField}
-				__nextHasNoMarginBottom={false}
+				__nextHasNoMarginBottom={true}
+				__next40pxDefaultSize={true}
 				data-test="range-control"
 			/>
 		</BaseControl>

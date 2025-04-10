@@ -14,7 +14,7 @@
 		order: 2;
 		display: flex;
 		align-items: center;
-		height: 30px;
+		height: var(--blockera-controls-input-height);
 		position: relative;
 		z-index: 10;
 

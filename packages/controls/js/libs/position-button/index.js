@@ -88,8 +88,8 @@ export default function PositionButtonControl({
 				tooltipPosition="top"
 				style={{
 					padding: '5px',
-					width: '30px',
-					height: '30px',
+					width: 'var(--blockera-controls-input-height)',
+					height: 'var(--blockera-controls-input-height)',
 					color:
 						!value?.top ||
 						!value?.left ||

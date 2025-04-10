@@ -92,7 +92,8 @@ export default function ToggleSelectControl({
 					hideLabelFromVision={true}
 					isBlock={true}
 					isDeselectable={isDeselectable}
-					__nextHasNoMarginBottom={false}
+					__nextHasNoMarginBottom={true}
+					__next40pxDefaultSize={true}
 					{...props}
 				>
 					{options?.map((item) => {

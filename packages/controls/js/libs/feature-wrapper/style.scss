@@ -24,7 +24,7 @@
 		grid-template-columns: auto 21px;
 		gap: 0;
 		z-index: 10;
-		min-height: 30px;
+		min-height: var(--blockera-controls-input-height);
 		align-items: center;
 		padding: 0 2px 0 0;
 		top: 0;

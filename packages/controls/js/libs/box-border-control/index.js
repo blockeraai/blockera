@@ -177,8 +177,8 @@ export default function BoxBorderControl({
 									? 'var(--blockera-controls-primary-color)'
 									: 'var(--blockera-controls-color)',
 							padding: '5px',
-							width: '30px',
-							height: '30px',
+							width: 'var(--blockera-controls-input-height)',
+							height: 'var(--blockera-controls-input-height)',
 						}}
 						onClick={() => {
 							if (value.type === 'all') {

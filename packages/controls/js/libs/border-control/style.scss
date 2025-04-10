@@ -31,7 +31,7 @@
 			padding: 6px 0 !important;
 			text-align: center;
 			font-size: 12px !important;
-			height: 30px;
+			height: var(--blockera-controls-input-height);
 
 			&:focus {
 				z-index: 10;

@@ -37,7 +37,7 @@
 		border-radius: 3px;
 		font-size: 12px;
 		padding: 4px 10px;
-		height: 30px;
+		height: var(--blockera-controls-input-height);
 	}
 
 	.blockera-component-button.btn-delete {
@@ -64,7 +64,7 @@
 		bottom: 1px;
 		left: 0;
 		right: 0;
-		height: 30px;
+		height: var(--blockera-controls-input-height);
 		border-top: 1px solid var(--blockera-controls-border-color);
 		background: #ffffff;
 		display: grid;
@@ -72,7 +72,7 @@
 		visibility: hidden;
 
 		.blockera-component-button {
-			height: 30px;
+			height: var(--blockera-controls-input-height);
 			border-radius: 0;
 			background: #ffffff;
 
