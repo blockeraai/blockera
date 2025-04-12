@@ -1,31 +1,22 @@
 == Changelog ==
 
-### Version 1.6.0 - 2025-03-29
+### Version 1.7.0 - 2025-04-12
 
 ### Improvements
-- Added more compatibility with the bootstrap package of blockera, to make it easier to extend the plugin.
-- Added more compatibility with the bootstrap package of blockera, to make it easier to extend the plugin.
-- Refactored the assets provider to make it easier to extend the plugin.
-- Clear value button added to spacing control open popovers.
-- UX Improvement for spacing control to open popover for setting value by one click.
-- Design improvement for spacing control while using units other than PX.
-- UX Improvement for color picker to have delete button and also better error for Eye Dropper browser support.
-- UX Improvement for position control to open popover for setting value by one click.
-- Clear value button added to position control open popovers.
-- Improve Cypress utility functions to work faster and more reliably.
+- Add WP 6.8 compatibility.
+- Improve overall codes.
+- Improve Unit Inputs for 'No Unit' state. 
+- Border feature improved to show a warning for color if width was set and the color wasn't!
+- Added new selector for the block inserter button to ensure compatibility with the latest WordPress version.
+- UX & design improvements for block section settings.
+- Refactored the registration of the block type to be a single time to improved performance.
 
 ### Bug Fixes
-- Design issue in box position control about variable values. 
+- Fixed compatibility issue with WordPress 6.8-RC1 translate system to ensure proper text domain loading and string translations.
+- Fixed Blocksy theme compatibility bug in WP 6.8 about not showing color variables.
 
 ### Automated Tests
-- Improve E2E tests of spacing control to test more scenarios.
-- Improve E2E test of spacing control to test "Clear value" button. 
-- Improve E2E tests of position control to test more scenarios.
-- Improve E2E test of position control to test "Clear value" button. 
-- Added E2E tests for opening popover of spacing feature by clicking on labels or side shapes.
-
-### Fixed
-- E2E tests.
+- Improve `Table` block E2E tests to latest changes of WP 6.8.
 
 ### More
 

@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.1 (2025-04-12)
+
 ### Improvements
 - Refactored the registration of the block type to be a single time to improved performance.
 

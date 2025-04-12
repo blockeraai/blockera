@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.3 (2025-04-12)
+
 ### Improvements
 - Add WP 6.8 compatibility.
 - Improve overall codes.

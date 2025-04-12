@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/dev-cypress",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Blockera Cypress config and helpers",
 	"main": "js/index.js",
 	"keywords": [
