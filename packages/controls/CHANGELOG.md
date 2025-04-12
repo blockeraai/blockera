@@ -3,6 +3,7 @@
 ### Improvements
 - Add WP 6.8 compatibility.
 - Improve overall codes.
+- Improve Unit Inputs for 'No Unit' state. 
 
 
 ## 1.1.2 (2025-03-29)
