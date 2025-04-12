@@ -2,6 +2,8 @@
 
 ### Bug Fixes
 - Fixed compatibility issue with WordPress 6.8-RC1 translate system to ensure proper text domain loading and string translations.
+- Fixed Blocksy theme compatibility bug in WP 6.8 about not showing color variables.
+
 
 ## 1.2.2 (2025-03-29)
 
