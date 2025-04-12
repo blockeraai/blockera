@@ -11,9 +11,9 @@
 
 	&.size-input,
 	&.size-small {
-		height: 30px;
+		height: var(--blockera-controls-input-height);
+		line-height: var(--blockera-controls-input-height);
 		padding: 0 10px;
-		line-height: 30px;
 		font-size: 12px;
 		gap: 8px;
 	}

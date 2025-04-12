@@ -9,6 +9,34 @@ namespace Blockera\WordPress\RenderBlock;
  */
 class Setup {
 
+	/**
+	 * Store instance.
+	 *
+	 * @var self|null $instance the instance.
+	 */
+	static $instance = null;
+
+	/**
+	 * Get instance.
+	 *
+	 * @return self the instance.
+	 */
+	public static function getInstance(): self {
+
+		if (null === self::$instance) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Protected constructor.
+	 */
+	protected function __construct() {
+		
+	}
+
     /**
      * Store block directory path.
      *

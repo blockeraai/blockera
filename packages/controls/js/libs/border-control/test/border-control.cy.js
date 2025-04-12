@@ -43,6 +43,10 @@ describe('border-control component testing', () => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(5);
 			cy.getByDataTest('border-control-width').should('have.value', '5');
+			cy.getByDataTest('border-control-color').should(
+				'have.class',
+				'empty-color-error'
+			);
 
 			// Check data provider value!
 			cy.getByDataTest('border-control-width').then(() => {
@@ -276,6 +280,7 @@ describe('border-control component testing', () => {
 						.should('include', 'width: 100px');
 				});
 			});
+
 			describe('style', () => {
 				it('default width style', () => {
 					cy.withDataProvider({

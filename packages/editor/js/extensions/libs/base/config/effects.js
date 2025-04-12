@@ -26,14 +26,14 @@ const blockeraTransform: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('2D & 3D Transforms', 'blockera'),
+	label: __('Transforms', 'blockera'),
 };
 
 const blockeraTransformSelfPerspective: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Transform Self Perspective', 'blockera'),
+	label: __('Self Perspective', 'blockera'),
 	showInSettings: false,
 	isActiveOnFree: false,
 };
@@ -42,7 +42,7 @@ const blockeraBackfaceVisibility: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Transform Backface Visibility', 'blockera'),
+	label: __('Backface Visibility', 'blockera'),
 	showInSettings: false,
 	isActiveOnFree: false,
 };
@@ -51,7 +51,7 @@ const blockeraTransformChildPerspective: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	label: __('Transform Child Visibility', 'blockera'),
+	label: __('Child Visibility', 'blockera'),
 	showInSettings: false,
 	isActiveOnFree: false,
 };

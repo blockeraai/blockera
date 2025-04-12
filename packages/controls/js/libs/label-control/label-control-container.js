@@ -10,7 +10,7 @@ import type { MixedElement } from 'react';
 import { controlClassNames } from '@blockera/classnames';
 
 export default function LabelControlContainer({
-	height = '30px',
+	height = 'var(--blockera-controls-input-height)',
 	className,
 	style,
 	children,

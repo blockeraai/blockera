@@ -27,6 +27,8 @@
 	.components-select-control__input {
 		padding-left: 10px !important;
 		font-size: 12px !important;
+		height: var(--blockera-controls-input-height) !important;
+		min-height: var(--blockera-controls-input-height) !important;
 	}
 }
 
@@ -49,8 +51,8 @@
 		gap: 10px;
 		padding-left: 10px !important;
 		font-size: 12px !important;
-		height: 30px !important;
-		min-height: 30px !important;
+		height: var(--blockera-controls-input-height) !important;
+		min-height: var(--blockera-controls-input-height) !important;
 		background: transparent;
 
 		svg {
@@ -134,7 +136,7 @@
 		.components-custom-select-control__item {
 			line-height: 18px;
 			display: flex;
-			min-height: 30px;
+			min-height: var(--blockera-controls-input-height);
 			gap: 10px;
 			cursor: pointer;
 			font-size: 12px;

@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Automated Tests
+- Improve `Table` block E2E tests to latest changes of WP 6.8.
+
+
 ## 1.1.0 (2025-03-15)
 
 ### New Features

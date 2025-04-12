@@ -114,6 +114,12 @@ jobs:
             - name: Start WordPress Environment
               run: npm run env:start
 
+            - name: Check WordPress Version
+              run: |
+                  echo "Checking WordPress version..."
+                  WP_VERSION=$(npx wp-env run cli wp core version)
+                  echo "WordPress version: $WP_VERSION"
+
             - name: Build wp-env app
               run: npm run build
 

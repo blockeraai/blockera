@@ -37,7 +37,7 @@ const blockeraBorder: FeatureConfig = {
 
 const blockeraBorderRadius: FeatureConfig = {
 	show: true,
-	force: false,
+	force: true,
 	status: true,
 	cssGenerators: {},
 	label: __('Border Radius', 'blockera'),

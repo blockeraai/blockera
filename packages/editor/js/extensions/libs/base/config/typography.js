@@ -162,6 +162,6 @@ export const typographyConfig = {
 	blockeraTextOrientation,
 	blockeraTextColumns,
 	blockeraTextStroke,
-	blockeraWordBreak,
 	blockeraTextWrap,
+	blockeraWordBreak,
 };

@@ -81,11 +81,13 @@ export const ExtensionSettings = ({
 								{__('Essential Features', 'blockera')}
 							</span>
 
-							<Supports
-								update={update}
-								supports={defaults}
-								allFeatures={features}
-							/>
+							<div className={'settings-category__items'}>
+								<Supports
+									update={update}
+									supports={defaults}
+									allFeatures={features}
+								/>
+							</div>
 						</div>
 					)}
 
@@ -96,11 +98,13 @@ export const ExtensionSettings = ({
 								: __('Features', 'blockera')}
 						</span>
 
-						<Supports
-							update={update}
-							supports={tools}
-							allFeatures={features}
-						/>
+						<div className={'settings-category__items'}>
+							<Supports
+								update={update}
+								supports={tools}
+								allFeatures={features}
+							/>
+						</div>
 					</div>
 				</Popover>
 			)}
