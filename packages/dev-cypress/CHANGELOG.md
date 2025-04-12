@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.2 (2025-04-12)
+
 ### Improvements
 - Added new selector for the block inserter button to ensure compatibility with the latest WordPress version.
 
