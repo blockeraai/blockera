@@ -116,6 +116,7 @@ export default function BorderControl({
 							setValue({ ...value, color: newValue });
 						}}
 						className={controlClassNames(
+							'border-color',
 							__isColorFocused && 'is-focused',
 							value.width && !value.color && 'empty-color-error'
 						)}
