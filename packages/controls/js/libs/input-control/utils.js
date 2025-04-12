@@ -1199,7 +1199,7 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					options: [
 						{
 							value: '',
-							label: '-',
+							label: '—',
 							format: 'number',
 						},
 					],
@@ -1254,7 +1254,7 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					options: [
 						{
 							value: '',
-							label: '-',
+							label: '—',
 							format: 'number',
 						},
 					],
@@ -1279,7 +1279,7 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					options: [
 						{
 							value: '',
-							label: '-',
+							label: '—',
 							format: 'number',
 						},
 						{
