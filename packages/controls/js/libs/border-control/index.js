@@ -115,7 +115,10 @@ export default function BorderControl({
 						onChange={(newValue) => {
 							setValue({ ...value, color: newValue });
 						}}
-						className={__isColorFocused && 'is-focused'}
+						className={controlClassNames(
+							__isColorFocused && 'is-focused',
+							value.width && !value.color && 'empty-color-error'
+						)}
 						data-test="border-control-color"
 						defaultValue={defaultValue && defaultValue.color}
 						controlAddonTypes={['variable']}
