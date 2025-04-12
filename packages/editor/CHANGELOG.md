@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- UX & design improvements for block section settings.
+
+
 ## 1.2.2 (2025-03-29)
 
 ### Automated Tests
