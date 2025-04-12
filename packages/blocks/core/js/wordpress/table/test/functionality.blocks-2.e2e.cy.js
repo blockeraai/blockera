@@ -5,6 +5,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -35,6 +36,10 @@ describe('Table Block', () => {
 		//
 		// 1.1. Block styles
 		//
+
+		//
+		// 1.1.1. Background clip & root tag test
+		//
 		cy.getBlock('core/table').within(() => {
 			cy.get('table').should('have.css', 'background-clip', 'border-box');
 		});
@@ -43,12 +48,32 @@ describe('Table Block', () => {
 			cy.customSelect('Clip to Padding');
 		});
 
+		// main tag is not root
+		cy.getBlock('core/table').should(
+			'not.have.css',
+			'background-clip',
+			'padding-box'
+		);
+
 		cy.getBlock('core/table').within(() => {
+			// inner table tag is root
 			cy.get('table').should(
 				'have.css',
 				'background-clip',
 				'padding-box'
 			);
+		});
+
+		//
+		// 1.1.2. Padding
+		//
+		setBoxSpacingSide('padding-top', 50);
+
+		// main tag is not root
+		cy.getBlock('core/table').should('have.css', 'padding-top', '50px');
+
+		cy.getBlock('core/table').within(() => {
+			cy.get('table').should('not.have.css', 'padding-top', '50px');
 		});
 
 		//
@@ -61,6 +86,18 @@ describe('Table Block', () => {
 			'have.css',
 			'background-clip',
 			'padding-box'
+		);
+
+		cy.get('.blockera-block.wp-block-table').should(
+			'have.css',
+			'padding-top',
+			'50px'
+		);
+
+		cy.get('.blockera-block.wp-block-table table').should(
+			'not.have.css',
+			'padding-top',
+			'50px'
 		);
 	});
 });
