@@ -133,6 +133,10 @@
 			"root": "h6.wp-block-heading"
 		}
 	},
+	"core/table": {
+		"root": ".wp-block-table > table",
+		"spacing": ".wp-block-table"
+	},
 	"core/avatar": {
 		"border": ".wp-block-avatar img"
 	},
