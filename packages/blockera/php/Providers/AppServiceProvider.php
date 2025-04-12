@@ -258,8 +258,27 @@ class AppServiceProvider extends ServiceProvider {
 		Config::setRestParams( blockera_core_config( 'telemetry.rest_params' ) );
 		Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
 
-        add_action('after_setup_theme', [ $this, 'afterSetupTheme' ]);
-    }
+		$this->app->make(Compatibility::class);
+
+		$dynamicValueRegistry = $this->app->make(ValueAddonRegistry::class, [ DynamicValueType::class ]);
+        $variableRegistry     = $this->app->make(ValueAddonRegistry::class, [ VariableType::class ]);
+
+		if ($this->app instanceof Blockera) {
+
+			$this->app->setRegisteredValueAddons(
+				array_merge(
+                    [
+						'variable' => $variableRegistry->getRegistered(),
+                    ],
+                    blockera_get_experimental([ 'data', 'dynamicValue' ]) ? [
+						'dynamic-value' => $dynamicValueRegistry->getRegistered(),
+                    ] : [],
+				)
+			);
+		}
+
+		$this->loadTextDomain();
+	}
 
 	/**
 	 * Initializing cache mechanism.
@@ -282,32 +301,6 @@ class AppServiceProvider extends ServiceProvider {
 		}
 	}
 
-    /**
-     * The after_setup_theme action hook
-     */
-    public function afterSetupTheme(): void {
-
-        add_action('init', [ $this, 'loadTextDomain' ]);
-
-		$this->app->make(Compatibility::class);
-
-		$dynamicValueRegistry = $this->app->make(ValueAddonRegistry::class, [ DynamicValueType::class ]);
-        $variableRegistry     = $this->app->make(ValueAddonRegistry::class, [ VariableType::class ]);
-
-        if ($this->app instanceof Blockera) {
-
-            $this->app->setRegisteredValueAddons(
-                array_merge(
-                    [
-                        'variable' => $variableRegistry->getRegistered(),
-                    ],
-                    blockera_get_experimental([ 'data', 'dynamicValue' ]) ? [
-                        'dynamic-value' => $dynamicValueRegistry->getRegistered(),
-                    ] : [],
-                )
-            );
-        }
-    }
 
     /**
      * Rendering block type.
