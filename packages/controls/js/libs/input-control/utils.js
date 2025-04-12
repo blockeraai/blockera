@@ -1053,7 +1053,7 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					options: [
 						{
 							value: '',
-							label: '-',
+							label: '—',
 							format: 'number',
 						},
 						{
