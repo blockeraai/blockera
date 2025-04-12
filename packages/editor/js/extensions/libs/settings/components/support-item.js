@@ -74,7 +74,10 @@ export const SupportItem = ({
 			{...(!force ? { tabIndex: 1 } : {})}
 		>
 			{label}
-			{(force || show) && <Icon library="wp" icon="check" />}
+
+			{(force || show) && (
+				<Icon library="wp" icon="check" iconSize="22" />
+			)}
 		</Button>
 	);
 };
