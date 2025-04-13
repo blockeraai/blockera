@@ -1,5 +1,12 @@
 ## Unreleased
 
+### Automated Tests
+- Added E2E tests for the column block to verify:
+  - Proper flex-basis CSS property generation instead of width
+  - Correct style generation in both editor and frontend views
+  - Style sheet inclusion and CSS selector accuracy
+  - Compatibility with the experimental style generation optimization feature
+
 ## 1.1.1 (2025-04-12)
 
 ### Automated Tests
