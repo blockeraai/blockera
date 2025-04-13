@@ -41,7 +41,7 @@ export { default as BlockCommentsFormTextarea } from './block-comments-form-text
 export { default as BlockGalleryCaption } from './block-gallery-caption.svg';
 export { default as BlockImageCaption } from './block-image-caption.svg';
 export { default as BlockInput } from './block-input.svg';
-export { default as BlockLink } from './block-link.svg';
+export { default as BlockLink, default as Link } from './block-link.svg'; // link is alias for block-link
 export { default as BlockListItemContainer } from './block-list-item-container.svg';
 export { default as BlockListItemMarker } from './block-list-item-marker.svg';
 export { default as BlockListItem } from './block-list-item.svg';
