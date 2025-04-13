@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Automated Build
+- Fixed the build process to include the `bootstrap` folder in the plugin zip file.
+
 ## 1.2.3 (2025-04-12)
 
 ### Bug Fixes
