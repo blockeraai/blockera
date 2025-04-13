@@ -124,6 +124,7 @@ zip -r -q blockera.zip \
   inc \
 	config \
 	assets \
+	bootstrap \
 	readme.txt \
 	languages \
 	$build_files \
