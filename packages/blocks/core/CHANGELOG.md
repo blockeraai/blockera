@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.2 (2025-04-13)
+
 ### Automated Tests
 - Added E2E tests for the column block to verify:
   - Proper flex-basis CSS property generation instead of width
