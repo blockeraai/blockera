@@ -22,7 +22,8 @@
 			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
 			border-radius: 5px;
 			padding: 30px;
-			min-height: 400px;
+			box-sizing: border-box;
+			height: 100%;
 
 			.blockera-settings-panel-container {
 

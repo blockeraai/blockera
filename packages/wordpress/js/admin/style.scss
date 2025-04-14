@@ -8,6 +8,26 @@
 
 body.wp-admin[class*="blockera_page_"] {
 	background-color: #eaecee;
+
+	#wpcontent {
+		height: 100vh;
+		min-height: 800px;
+	}
+
+	&.admin-bar {
+
+		#wpcontent {
+			height: calc(100vh - 32px); // 32px is the height of admin bar
+		}
+	}
+
+	#wpbody { 
+		height: 100%;
+	}
+
+	#wpbody-content {
+		height: calc(100% - 65px); // 65px is the height of bottom padding
+	}
 }
 
 #blockera-admin-settings-container {
@@ -16,6 +36,12 @@ body.wp-admin[class*="blockera_page_"] {
     padding: 20px 20px 20px 0;
     width: calc(100% - 20px);
     max-width: 1340px;
+	height: 100%;
+}
+
+.blockera-settings-panel,
+.blockera-settings-dashboard {
+	height: 100%;
 }
 
 .blockera-settings-button {

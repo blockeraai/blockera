@@ -4,6 +4,7 @@
     grid-template-columns: 1fr 3fr;
     gap: 25px;
 	margin-top: 25px;
+	height: calc(100% - 76px - 25px); // 76px is the height of header + 25px is the gap
 
 	.blockera-component-tabs__list {
 		z-index: 1;

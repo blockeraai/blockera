@@ -221,6 +221,9 @@ export const Dashboard = (): MixedElement => {
 						<NavigableMenu
 							orientation={'vertical'}
 							className={componentClassNames('tabs__list')}
+							style={{
+								height: '100%',
+							}}
 						>
 							<div
 								className={componentInnerClassNames(
