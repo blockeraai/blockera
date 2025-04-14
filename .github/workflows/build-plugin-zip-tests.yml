@@ -52,7 +52,7 @@ jobs:
                   mkdir packages/blockera
                   mkdir packages/blockera/tests
                   touch .wp-env.json
-                  echo '{"plugins": ["."], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}, "phpVersion": "${{ matrix.php }}"}' >> .wp-env.json
+                  echo '{"core": "https://wordpress.org/wordpress-6.8-RC4.zip", "plugins": ["."], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}, "phpVersion": "${{ matrix.php }}"}' >> .wp-env.json
                   cat .wp-env.json
                   touch cypress.env.json
                   echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": [],"specPattern": ["packages/**/*.build.e2e.cy.js"]}}' >> cypress.env.json
