@@ -28,9 +28,9 @@
 			.blockera-settings-panel-container {
 
 				.blockera-settings-section {
-					border: 1px solid #dadada;
-					border-radius: 5px;
-					padding: 25px;
+					border: var(--card-border);
+					border-radius: var(--card-border-radius);
+					padding: var(--card-padding);
 
 					a {
 						color: var(--blockera-controls-primary-color);
@@ -154,9 +154,9 @@
 					.blockera-block-category-item {
 						min-width: 0;
 						padding: 0px 3px 0px 11px;
-						background-color: #ffffff;
-						border: 1px solid #dadada;
-						border-radius: 5px;
+						background-color: var(--card-bg-color);
+						border: var(--card-border);
+						border-radius: var(--card-border-radius);
 						min-height: 40px;
 						display: flex;
 						align-items: center;

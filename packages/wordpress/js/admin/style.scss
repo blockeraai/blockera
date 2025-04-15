@@ -32,8 +32,9 @@ body.wp-admin[class*="blockera_page_"] {
 
 #blockera-admin-settings-container {
 	--card-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
+	--card-border: 1px solid #dadada;
 	--card-border-radius: 5px;
-	--card-padding: 30px;
+	--card-padding: 25px;
     --card-bg-color: #ffffff;
     font-size: 16px;
     margin: 0;
