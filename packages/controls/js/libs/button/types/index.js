@@ -84,6 +84,10 @@ export type ButtonProps = {
 	 * 🔗 WP Button → If provided, displays the given text inside the button. If the button contains children elements, the text is displayed before them.
 	 */
 	text?: string,
+	/**
+	 * 🔗 WP Button → If provided, renders a link instead of button.
+	 */
+	href?: string,
 	className?: string,
 	children?: any,
 };

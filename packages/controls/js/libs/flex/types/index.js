@@ -58,5 +58,10 @@ export type FlexProps = {
 	 * If wrapping is allowed, it sets the direction that lines are stacked.
 	 */
 	flexWrap?: FlexWrapTypes,
+	/**
+	 * The flex-grow property sets the flex grow factor of a flex item.
+	 * It specifies how much of the available space in the flex container should be assigned to the item.
+	 */
+	grow?: number,
 	props?: Object,
 };
