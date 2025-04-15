@@ -4,7 +4,7 @@ export * from './avatar';
 export * from './feature-wrapper';
 export { Switch } from './switch';
 export { default as Flex } from './flex';
-export { PromotionPopover } from './promotion-popover';
+export { PromotionPopover, Promoter } from './promotion-popover';
 export { default as Tabs, TabPanel } from './tabs';
 export * from './tabs/types';
 export { default as Grid } from './grid';
