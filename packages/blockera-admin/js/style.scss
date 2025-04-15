@@ -18,10 +18,10 @@
 			width: 80%;
 			min-width: 0;
 			align-self: flex-start;
-			background: #FFFFFF;
-			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
-			border-radius: 5px;
-			padding: 30px;
+			background: var(--card-bg-color);
+			box-shadow: var(--card-box-shadow);
+			border-radius: var(--card-border-radius);
+			padding: var(--card-padding);
 			box-sizing: border-box;
 			height: 100%;
 
