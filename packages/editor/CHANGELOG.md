@@ -1,5 +1,11 @@
 ## Unreleased
 
+### Improvements
+- The block card now displays the custom block name if it has been set.
+
+### Automated Tests
+- Added E2E tests to check showing block custom name on block card.
+
 ## 1.2.3 (2025-04-12)
 
 ### Improvements

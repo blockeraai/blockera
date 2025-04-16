@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed a bug in the front end where the style engine was not being flushed and rewritten when the block content was created by blockera site builder.
+
 ### Improvements
 - Improve admin page design.
 

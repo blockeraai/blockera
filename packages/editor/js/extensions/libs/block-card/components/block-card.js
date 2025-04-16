@@ -181,7 +181,8 @@ export function BlockCard({
 										'blockera'
 									)}
 								>
-									{blockInformation.title}
+									{blockInformation.name ||
+										blockInformation.title}
 								</span>
 							</ConditionalWrapper>
 
