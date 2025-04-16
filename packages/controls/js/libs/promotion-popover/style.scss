@@ -1,6 +1,6 @@
 .blockera-component-promotion-popover {
 	--blockera-controls-primary-color: #0047eb;
-	--blockera-controls-primary-color-darker-20: #a4a4a4;
+	--blockera-controls-primary-color-darker-20: #003ecd;
 	--popover-height: 520px;
 
 	.blockera-component-popover-body {
@@ -14,38 +14,42 @@
 		}
 	}
 
-	.blockera-component-promotion-popover__image {
+	.blockera-component-promoter {
+		padding: 0 10px;
+	}
+}
+
+.blockera-component-promoter {
+	text-align: center;
+	text-wrap: pretty;
+
+	.blockera-component-promoter__image {
 		text-align: center;
 	}
 
-	.blockera-component-promotion-popover__heading {
+	.blockera-component-promoter__heading {
 		color: var(--blockera-controls-primary-color);
 		font-size: 16px;
-		font-weight: 500;
+		font-weight: 600;
 		margin: 0;
 	}
 
-	.blockera-component-promotion-popover__description {
+	.blockera-component-promoter__description {
 		color: #a4a4a4;
 		font-size: 13px;
 		font-weight: 400;
-		width: 80%;
-		margin: 0 auto;
+		margin: 0;
 
 		p {
-			margin: 0 0 10px 0;
-
-			&:last-child {
-				margin-bottom: 0;
-			}
+			margin: 0;
 		}
 	}
 
-	.blockera-component-promotion-popover__list {
+	.blockera-component-promoter__list {
 		font-size: 13px;
 		font-weight: 500;
 		list-style: none;
-		margin: 0 auto;
+		margin: 0;
 		width: auto;
 		text-align: left;
 
@@ -65,11 +69,9 @@
 		}
 	}
 
-	.blockera-component-promotion-popover__button {
-		margin: 10px auto 8px;
-		width: auto;
-		padding-left: 60px;
-		padding-right: 60px;
+	.blockera-component-promoter__button {
+		margin: 0;
 		font-weight: 400;
+		width: 100%;
 	}
 }

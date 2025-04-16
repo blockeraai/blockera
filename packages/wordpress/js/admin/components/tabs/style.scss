@@ -4,6 +4,7 @@
     grid-template-columns: 1fr 3fr;
     gap: 25px;
 	margin-top: 25px;
+	height: calc(100% - 76px - 25px); // 76px is the height of header + 25px is the gap
 
 	.blockera-component-tabs__list {
 		z-index: 1;
@@ -30,7 +31,7 @@
 			justify-content: flex-start;
 			height: 38px;
 			padding: 5px 12px 5px 16px;
-			border-radius: 5px;
+			border-radius: var(--card-border-radius);
 			transition: var(--blockera-controls-transition);
 			box-sizing: border-box;
 			position: relative;
@@ -42,13 +43,13 @@
 			}
 
 			&:hover {
-				background: #FFFFFF;
-				box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
+				background: var(--card-bg-color);
+				box-shadow: var(--card-box-shadow);
 			}
 
 			&.is-active-tab{
-				background: #FFFFFF;
-				box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
+				background: var(--card-bg-color);
+				box-shadow: var(--card-box-shadow);
 
 				&::before {
 					position: absolute;

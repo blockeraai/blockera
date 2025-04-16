@@ -21,6 +21,7 @@ export default function Flex({
 	justifyContent,
 	alignItems,
 	flexWrap,
+	grow,
 	children,
 	className,
 	style,
@@ -34,6 +35,7 @@ export default function Flex({
 				gap,
 				alignItems,
 				flexWrap,
+				flexGrow: grow,
 				...style,
 			}}
 			{...props}

@@ -18,18 +18,19 @@
 			width: 80%;
 			min-width: 0;
 			align-self: flex-start;
-			background: #FFFFFF;
-			box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 5px -1px rgba(0, 0, 0, 0.1);
-			border-radius: 5px;
-			padding: 30px;
-			min-height: 400px;
+			background: var(--card-bg-color);
+			box-shadow: var(--card-box-shadow);
+			border-radius: var(--card-border-radius);
+			padding: var(--card-padding);
+			box-sizing: border-box;
+			height: 100%;
 
 			.blockera-settings-panel-container {
 
 				.blockera-settings-section {
-					border: 1px solid #dadada;
-					border-radius: 5px;
-					padding: 25px;
+					border: var(--card-border);
+					border-radius: var(--card-border-radius);
+					padding: var(--card-padding);
 
 					a {
 						color: var(--blockera-controls-primary-color);
@@ -153,9 +154,9 @@
 					.blockera-block-category-item {
 						min-width: 0;
 						padding: 0px 3px 0px 11px;
-						background-color: #ffffff;
-						border: 1px solid #dadada;
-						border-radius: 5px;
+						background-color: var(--card-bg-color);
+						border: var(--card-border);
+						border-radius: var(--card-border-radius);
 						min-height: 40px;
 						display: flex;
 						align-items: center;
