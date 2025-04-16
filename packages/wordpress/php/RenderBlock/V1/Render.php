@@ -35,6 +35,13 @@ class Render {
      */
     protected array $classnames = [];
 
+	/**
+	 * Store the is doing transpiling flag property.
+	 *
+	 * @var bool $is_doing_transpile 
+	 */
+	protected bool $is_doing_transpile = false;
+
     /**
      * Render constructor.
      *
@@ -45,6 +52,18 @@ class Render {
         $this->app          = $app;
 		$this->cache_status = $cache_status;
     }
+
+	/**
+	 * Set is doing transpiling flag.
+	 *
+	 * @param bool $is_doing_transpile true if transpiling, false otherwise.
+	 *
+	 * @return void
+	 */
+	public function setIsDoingTranspile( bool $is_doing_transpile): void {
+
+		$this->is_doing_transpile = $is_doing_transpile;
+	}
 
 	/**
 	 * Set cache status.
@@ -269,6 +288,12 @@ class Render {
             }
 
             $processor->set_attribute('class', $final_classname ?? $classname);
+
+			// Remove style attribute if transpiling.
+			if ($this->is_doing_transpile) {
+
+				$processor->remove_attribute('style');
+			}
         }
 
         return $processor->get_updated_html();
