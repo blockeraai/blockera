@@ -1,16 +1,21 @@
 == Changelog ==
 
-### Version 1.7.1 - 2025-04-13
+### Version 1.8.0 - 2025-04-16
 
-### Automated Build
-- Fixed the build process to include the `bootstrap` folder in the plugin zip file.
+### New Features
+- Added support for the `Query Total` block.
+
+### Improvements
+- The block card now displays the custom block name if it has been set.
+- Improve admin page design.
+
+### Bug Fixes
+- Fixed a bug in the front end where the style engine was not being flushed and rewritten when the block content was created by blockera site builder.
 
 ### Automated Tests
-- Added E2E tests for the column block to verify:
-  - Proper flex-basis CSS property generation instead of width
-  - Correct style generation in both editor and frontend views
-  - Style sheet inclusion and CSS selector accuracy
-  - Compatibility with the experimental style generation optimization feature
+- Added E2E tests to check showing block custom name on block card.
+- Added E2E tests to check `Query Total` block functionality.
+- Blocks monitoring for WP core and WooCommerce blocks to detect new blocks for supporting them.
 
 ### More
 

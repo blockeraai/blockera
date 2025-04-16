@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.2.0 (2025-04-16)
+
 ### New Features
 - Added support for the `Query Total` block.
 

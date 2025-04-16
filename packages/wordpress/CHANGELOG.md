@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.2 (2025-04-16)
+
 ### Bug Fixes
 - Fixed a bug in the front end where the style engine was not being flushed and rewritten when the block content was created by blockera site builder.
 
