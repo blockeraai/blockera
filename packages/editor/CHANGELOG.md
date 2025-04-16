@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.2.4 (2025-04-16)
+
 ### Improvements
 - The block card now displays the custom block name if it has been set.
 
