@@ -5,6 +5,7 @@
 
 ### Automated Tests
 - Added E2E tests to check `Query Total` block functionality.
+- Blocks monitoring for WP core and WooCommerce blocks to detect new blocks for supporting them.
 
 ## 1.1.2 (2025-04-13)
 
