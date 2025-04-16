@@ -62,6 +62,7 @@ export * from './query-pagination-next';
 export * from './query-pagination-numbers';
 export * from './query-pagination-previous';
 export * from './query-title';
+export * from './query-total';
 export * from './quote';
 export * from './read-more';
 export * from './rss';

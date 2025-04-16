@@ -756,7 +756,15 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 			cy.get('svg').first().should('have.css', 'color', 'rgb(0, 128, 0)');
 
 			// this is link element
-			cy.get('a').first().should('have.css', 'color', 'rgb(241, 26, 26)');
+			cy.get('a')
+				.first()
+				.within(() => {
+					cy.get('span').should(
+						'have.css',
+						'color',
+						'rgb(241, 26, 26)'
+					);
+				});
 		});
 	});
 });
