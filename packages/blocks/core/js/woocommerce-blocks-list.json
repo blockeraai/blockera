@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 131,
+		"total": 137,
 		"supported": 91,
 		"soft-supported": 103,
-		"not-supported": 28,
+		"not-supported": 34,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -615,6 +615,30 @@
 		{
 			"name": "woocommerce/product-gallery-large-image",
 			"title": "Large Image"
+		},
+		{
+			"name": "woocommerce/cart-link",
+			"title": "Cart Link"
+		},
+		{
+			"name": "woocommerce/product-gallery-large-image-next-previous",
+			"title": "Next/Previous Buttons"
+		},
+		{
+			"name": "woocommerce/product-gallery-pager",
+			"title": "Pager"
+		},
+		{
+			"name": "woocommerce/product-gallery-thumbnails",
+			"title": "Thumbnails"
+		},
+		{
+			"name": "woocommerce/product-gallery",
+			"title": "Product Gallery"
+		},
+		{
+			"name": "woocommerce/order-confirmation-create-account",
+			"title": "Account Creation"
 		}
 	]
 }
