@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 93,
-		"supported": 78,
-		"soft-supported": 92,
+		"total": 94,
+		"supported": 79,
+		"soft-supported": 93,
 		"not-supported": 1,
 		"no-need-to-support": 14
 	},
@@ -218,6 +218,10 @@
 		{
 			"name": "core/query-pagination-previous",
 			"title": "Previous Page"
+		},
+		{
+			"name": "core/query-total",
+			"title": "Query Total"
 		},
 		{
 			"name": "core/read-more",
