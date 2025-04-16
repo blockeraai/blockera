@@ -1,5 +1,11 @@
 ## Unreleased
 
+### New Features
+- Added support for the `Query Total` block.
+
+### Automated Tests
+- Added E2E tests to check `Query Total` block functionality.
+
 ## 1.1.2 (2025-04-13)
 
 ### Automated Tests
