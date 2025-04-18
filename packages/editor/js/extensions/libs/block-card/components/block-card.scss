@@ -64,7 +64,58 @@
 			align-items: center;
 			min-height: 24px;
 			gap: 5px;
+			padding-right: 45px;
 			flex-wrap: wrap;
+
+			.blockera-extension-block-card__title__input {
+
+				span {
+					max-width: 160px;
+					white-space: nowrap;
+					overflow: hidden;
+					cursor: text;
+					border: none;
+					outline: none;
+					box-shadow: none;
+					background-color: transparent;
+					opacity: 1;
+					font-weight: 500;
+					color: #1e1e1e;
+					padding: 2px 3px;
+					border-radius: 2px;
+					min-width: 1px;
+					display: inline-block;
+				}
+
+				span:not(:focus) {
+					text-overflow: ellipsis;
+				}
+
+				span:hover,
+				span:focus,
+				&.is-edited span {
+					background: #f3f8fb !important;
+					box-shadow: 0 0 0 1px #c7e0ee !important;
+					color: #147eb8 !important;
+					--blockera-controls-primary-color: #147eb8;
+				}
+
+				span:focus:focus {
+					box-shadow: 0 0 0 2px var(--blockera-controls-primary-color) !important;
+				}
+
+				span::placeholder {
+					opacity: 1;
+					font-weight: 500;
+					color: #1e1e1e;
+				}
+
+				span:empty::before {
+					content: attr(placeholder);
+					font-weight: 500;
+					color: #1e1e1e;
+				}
+			}
 
 			.blockera-extension-block-card__title__separator {
 				color: #1e1e1e;
@@ -121,6 +172,7 @@
 			-webkit-box-orient: vertical;
 			-webkit-line-clamp: 2;
 			overflow: hidden;
+			cursor: default;
 		}
 
 		.block-editor-block-variation-transforms {
@@ -173,6 +225,16 @@
 		.blockera-component-block-icon {
 			color: var(--blockera-controls-primary-color);
 		}
+	}
+}
+
+.blockera-extension.blockera-extension-block-card.master-block-card {
+
+	// remove the 3 px margin left space because of the input padding
+
+	.blockera-extension-block-card__title__input {
+		margin-left: -3px;
+		margin-right: -3px;
 	}
 }
 
