@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Bug Fixes
+- Flex layout feature not working properly on breakpoints reported by Davor Jovanović 🙏🏼 [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/block-row-doesn-t-accept-justify-content-center-bZeVoRwgQ5xhnbm)]
+
+
 ## 1.2.4 (2025-04-16)
 
 ### Improvements
