@@ -64,6 +64,10 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			value: any
 		): void => {
 			if (attribute === 'name') {
+				if (value === '' || value === null) {
+					value = undefined;
+				}
+
 				updateBlockAttributes(clientId, { metadata: { name: value } });
 			} else {
 				updateBlockAttributes(clientId, { [attribute]: value });
