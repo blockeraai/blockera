@@ -54,6 +54,16 @@ export function EditableBlockName({
 		setIsFocused(true);
 	};
 
+	const handlePaste = (event: SyntheticClipboardEvent<HTMLSpanElement>) => {
+		event.preventDefault();
+		const pastedText = event.clipboardData.getData('text/plain');
+		// Remove HTML tags and newlines
+		const cleanText = pastedText
+			.replace(/<[^>]*>/g, '')
+			.replace(/[\r\n\t]+/g, ' ');
+		document.execCommand('insertText', false, cleanText);
+	};
+
 	return (
 		<span
 			ref={ref}
@@ -64,6 +74,7 @@ export function EditableBlockName({
 			onInput={emitChange}
 			onBlur={handleBlur}
 			onFocus={handleFocus}
+			onPaste={handlePaste}
 			onKeyDown={(e) => {
 				// Prevent newlines
 				if (e.key === 'Enter') {
