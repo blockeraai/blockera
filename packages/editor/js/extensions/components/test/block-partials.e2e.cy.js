@@ -18,7 +18,14 @@ describe('Block Partials Testing ...', () => {
 			'none'
 		);
 
-		cy.getByDataTest('blockera-block-card').contains('Paragraph');
+		cy.getByDataTest('blockera-block-card').within(() => {
+			cy.get('.blockera-extension-block-card__title__input span').should(
+				'have.attr',
+				'placeholder',
+				'Paragraph'
+			);
+		});
+
 		cy.getByDataTest('blockera-block-card').should(
 			'have.css',
 			'display',

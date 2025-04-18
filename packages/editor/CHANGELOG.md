@@ -1,5 +1,20 @@
 ## Unreleased
 
+### New Features
+- Inline block renaming by clicking on block card [[🔗 Feature request](https://community.blockera.ai/feature-request-1rsjg2ck/post/block-renaming-quick-block-renaming-from-the-block-card-j7XmvUiOTj36VFn)]
+
+
+### Improvements
+- Improve block card design.
+- Improve overall codes.
+
+
+### Automated Tests
+- Added E2E tests to check inline block renaming.
+- Added E2E test to check inline block renaming for blocks with variations.
+
+
+
 ## 1.2.4 (2025-04-16)
 
 ### Improvements
