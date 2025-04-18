@@ -16,6 +16,7 @@ export function EditableBlockName({
 	onChange: (content: string) => void,
 }): MixedElement {
 	const [text, setText] = useState(content);
+	const [isFocused, setIsFocused] = useState(false);
 	const ref = useRef(null);
 
 	useEffect(() => {
@@ -39,6 +40,7 @@ export function EditableBlockName({
 	};
 
 	const handleBlur = (event: SyntheticFocusEvent<HTMLSpanElement>) => {
+		setIsFocused(false);
 		// Move scroll position to the beginning of the element
 		event.currentTarget.scrollLeft = 0;
 
@@ -48,14 +50,20 @@ export function EditableBlockName({
 			?.removeAllRanges();
 	};
 
+	const handleFocus = () => {
+		setIsFocused(true);
+	};
+
 	return (
 		<span
 			ref={ref}
 			placeholder={placeholder}
 			contentEditable="true"
 			suppressContentEditableWarning={true}
+			spellCheck={isFocused}
 			onInput={emitChange}
 			onBlur={handleBlur}
+			onFocus={handleFocus}
 			onKeyDown={(e) => {
 				// Prevent newlines
 				if (e.key === 'Enter') {
