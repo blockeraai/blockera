@@ -21,7 +21,7 @@ import {
 	extensionClassNames,
 	extensionInnerClassNames,
 } from '@blockera/classnames';
-import { ConditionalWrapper, Tooltip, Button } from '@blockera/controls';
+import { Button, Flex } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -29,27 +29,32 @@ import { Icon } from '@blockera/icons';
  */
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
-import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
-import { useBlockSection } from '../../../components';
+import { EditableBlockName } from './editable-block-name';
 
 export function BlockCard({
 	notice,
 	clientId,
 	children,
 	blockName,
-	handleOnClick,
 	currentInnerBlock,
+	handleOnChangeAttributes,
 }: {
 	clientId: string,
 	blockName: string,
 	notice: MixedElement,
 	children?: MixedElement,
 	currentInnerBlock: InnerBlockModel,
-	handleOnClick: UpdateBlockEditorSettings,
+	handleOnChangeAttributes: (
+		attribute: string,
+		value: any,
+		options?: Object
+	) => void,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
 	const blockInformation = useBlockDisplayInformation(clientId);
+	const [name, setName] = useState(blockInformation.name || '');
+	const [title, setTitle] = useState(blockInformation.title);
 
 	const contentRef = useRef(null);
 	const [isHovered, setIsHovered] = useState(false);
@@ -59,10 +64,8 @@ export function BlockCard({
 	useEffect(() => {
 		if (currentInnerBlock !== null) {
 			if (isHovered) {
-				// Calculate the full height of the content
 				setHeight(`${contentRef.current.scrollHeight}px`);
 			} else {
-				// Set to the initial limited height
 				setHeight(maxHeight);
 			}
 		} else {
@@ -70,7 +73,20 @@ export function BlockCard({
 		}
 	}, [isHovered, currentInnerBlock]);
 
-	// This is only used by the Navigation block for now. It's not ideal having Navigation block specific code here.
+	useEffect(() => {
+		// Name changed from outside
+		if (blockInformation?.name && blockInformation.name.trim() !== name) {
+			setName(blockInformation?.name);
+		}
+
+		// title changed from outside. For example: changing block variation
+		if (blockInformation?.title !== title) {
+			setTitle(blockInformation?.title);
+		}
+
+		// eslint-disable-next-line
+	}, [blockInformation.name, blockInformation.title]);
+
 	const { parentNavBlockClientId } = useSelect((select) => {
 		const { getSelectedBlockClientId, getBlockParentsByBlockName } =
 			select(blockEditorStore);
@@ -85,8 +101,21 @@ export function BlockCard({
 			)[0],
 		};
 	}, []);
+
 	const { selectBlock } = useDispatch(blockEditorStore);
-	const { onToggle } = useBlockSection('innerBlocksConfig');
+
+	const handleTitleChange = (newTitle: string) => {
+		setName(newTitle);
+
+		if (newTitle.trim() === '') {
+			// If input is cleared, remove the name attribute and show block title
+			handleOnChangeAttributes('name', null, {});
+			setName(''); // clear name then placeholder shows block title
+		} else if (newTitle !== title) {
+			// Only update if the new title is different from the block title
+			handleOnChangeAttributes('name', newTitle.trim(), {});
+		}
+	};
 
 	return (
 		<>
@@ -146,45 +175,22 @@ export function BlockCard({
 								'block-card__title'
 							)}
 						>
-							<ConditionalWrapper
-								condition={currentInnerBlock !== null}
-								wrapper={(children) => (
-									<Tooltip
-										text={__(
-											'Switch to parent block',
-											'blockera'
-										)}
-									>
-										{children}
-									</Tooltip>
+							<Flex
+								justifyContent="center"
+								alignItems="center"
+								className={extensionInnerClassNames(
+									'block-card__title__input',
+									{
+										'is-edited': name && name !== title,
+									}
 								)}
 							>
-								<span
-									className={extensionInnerClassNames(
-										'block-card__title__block',
-										{
-											'title-is-clickable':
-												currentInnerBlock !== null,
-										}
-									)}
-									onClick={() => {
-										if (currentInnerBlock !== null) {
-											handleOnClick(
-												'current-block',
-												'master'
-											);
-											onToggle(true, 'switch-to-parent');
-										}
-									}}
-									aria-label={__(
-										'Selected Block',
-										'blockera'
-									)}
-								>
-									{blockInformation.name ||
-										blockInformation.title}
-								</span>
-							</ConditionalWrapper>
+								<EditableBlockName
+									placeholder={title}
+									content={name}
+									onChange={handleTitleChange}
+								/>
+							</Flex>
 
 							<Breadcrumb
 								clientId={clientId}

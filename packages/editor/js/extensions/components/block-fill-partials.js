@@ -4,7 +4,7 @@
  * External dependencies
  */
 import memoize from 'fast-memoize';
-import { select } from '@wordpress/data';
+import { select, useDispatch } from '@wordpress/data';
 import type { ComponentType, Element } from 'react';
 import { Fill } from '@wordpress/components';
 import { useEffect, memo } from '@wordpress/element';
@@ -34,6 +34,8 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		blockeraInnerBlocks,
 		updateBlockEditorSettings,
 	}): Element<any> => {
+		const { updateBlockAttributes } = useDispatch('core/block-editor');
+
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
 			const others = select('blockera/controls').getControls();
@@ -57,6 +59,17 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			);
 		}, [isActive]);
 
+		const handleOnChangeAttributes = (
+			attribute: string,
+			value: any
+		): void => {
+			if (attribute === 'name') {
+				updateBlockAttributes(clientId, { metadata: { name: value } });
+			} else {
+				updateBlockAttributes(clientId, { [attribute]: value });
+			}
+		};
+
 		return (
 			<>
 				<Fill name={`blockera-block-card-content-${clientId}`}>
@@ -66,7 +79,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						blockName={blockProps.name}
 						innerBlocks={blockeraInnerBlocks}
 						currentInnerBlock={currentInnerBlock}
-						handleOnClick={updateBlockEditorSettings}
+						handleOnChangeAttributes={handleOnChangeAttributes}
 					/>
 
 					{isInnerBlock(currentBlock) && (
