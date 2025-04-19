@@ -5,6 +5,7 @@
 
 ### New Features
 - Inline block renaming by clicking on block card [[🔗 Feature request](https://community.blockera.ai/feature-request-1rsjg2ck/post/block-renaming-quick-block-renaming-from-the-block-card-j7XmvUiOTj36VFn)]
+- Supported the `Custom CSS` feature for each all blocks.
 
 
 ### Improvements

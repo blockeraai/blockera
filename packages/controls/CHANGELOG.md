@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Implemented the `Code Control` component to allow developers to create code control for any languages.
+
 ## 1.1.3 (2025-04-12)
 
 ### Improvements

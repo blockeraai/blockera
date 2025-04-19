@@ -12,7 +12,10 @@ import type { BlockStyleProps } from './types';
 import { StateStyle } from '../';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
-export const BlockStyle = (props: BlockStyleProps): MixedElement => {
+export const BlockStyle = ({
+	customCss,
+	...props
+}: BlockStyleProps): MixedElement => {
 	const {
 		config,
 		currentBlock,
@@ -31,6 +34,7 @@ export const BlockStyle = (props: BlockStyleProps): MixedElement => {
 
 	return (
 		<style>
+			{customCss}
 			<StateStyle
 				{...{
 					...props,

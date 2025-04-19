@@ -6,7 +6,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState, useRef } from '@wordpress/element';
-// import { Editor } from '@monaco-editor/react';
+import { Editor } from '@monaco-editor/react';
 
 /**
  * Blockera dependencies
@@ -15,7 +15,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { useLateEffect } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -27,10 +26,10 @@ import type { CodeControlProps } from './types';
 
 const CodeControl = ({
 	lang = 'css',
-	// width = '',
-	// height = '',
+	width = '',
+	height = '',
 	placeholder = '',
-	// editable = true,
+	editable = true,
 	description = '',
 	//
 	id,
@@ -48,7 +47,7 @@ const CodeControl = ({
 }: CodeControlProps): MixedElement => {
 	const {
 		value,
-		//setValue,
+		setValue,
 		attribute,
 		blockName,
 		resetToDefault,
@@ -59,18 +58,9 @@ const CodeControl = ({
 		defaultValue,
 	});
 
-	// setShowPlaceholder
-	const [showPlaceholder] = useState(true);
-
+	const [showPlaceholder, setShowPlaceholder] = useState(false);
 	const editorRef = useRef(null);
-
-	// update value if changed from outside
-	// force editor to update inside state
-	useLateEffect(() => {
-		if (editorRef?.current && editorRef?.current?.getValue() !== value) {
-			editorRef.current.setValue(value);
-		}
-	}, [value]);
+	const timeoutRef = useRef(null);
 
 	const labelProps = {
 		value,
@@ -97,15 +87,13 @@ const CodeControl = ({
 								text={sprintf(
 									/* translators: $1%s is a CSS selector, $2%s is ID. */
 									__(
-										'Use %1$s or %2$s to target current block.',
+										'Use %1$s to target current block.',
 										'blockera'
 									),
-									'{.block}',
-									'{#block}'
+									'{.block}'
 								)}
 								replacements={{
 									'.block': <code>.block</code>,
-									'#block': <code>#block</code>,
 								}}
 							/>
 						</p>
@@ -131,14 +119,21 @@ const CodeControl = ({
 	return (
 		<BaseControl columns={columns} controlName={field} {...labelProps}>
 			<div className={controlClassNames('code', className)}>
-				{/* <Editor
+				<Editor
 					width={width || 250}
 					height={height || 200}
 					defaultLanguage={lang}
 					defaultValue={value}
 					onChange={(newValue) => {
 						setShowPlaceholder(newValue === '');
-						setValue(newValue);
+
+						if (timeoutRef.current) {
+							clearTimeout(timeoutRef.current);
+						}
+
+						timeoutRef.current = setTimeout(() => {
+							setValue(newValue);
+						}, 500);
 					}}
 					theme={'blockera'}
 					options={{
@@ -172,8 +167,12 @@ const CodeControl = ({
 					}}
 					onMount={(editor: any) => {
 						editorRef.current = editor;
+
+						if (value !== editor.getValue()) {
+							editor.setValue(value);
+						}
 					}}
-				/> */}
+				/>
 
 				{showPlaceholder && (
 					<div
