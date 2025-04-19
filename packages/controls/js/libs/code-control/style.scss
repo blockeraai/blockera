@@ -4,16 +4,10 @@
 	gap: 10px;
 	position: relative;
 
-	&::before {
-		content: "";
-		height: 100px;
-		display: block;
-		background: #eaeaea;
-	}
-
 	& > section {
 		background-color: #f6f6f6;
 		border-radius: 2px;
+    	padding-top: 5px;
 	}
 
 	.blockera-control-code-control__description {
@@ -39,7 +33,7 @@
 
 	.blockera-control-code-control__placeholder {
 		position: absolute;
-		top: 15px;
+		top: 5px;
 		left: 28px;
 		right: 10px;
 		color: #7d8a99;

@@ -96,15 +96,13 @@ const CodeControl = ({
 								text={sprintf(
 									/* translators: $1%s is a CSS selector, $2%s is ID. */
 									__(
-										'Use %1$s or %2$s to target current block.',
+										'Use %1$s to target current block.',
 										'blockera'
 									),
-									'{.block}',
-									'{#block}'
+									'{.block}'
 								)}
 								replacements={{
 									'.block': <code>.block</code>,
-									'#block': <code>#block</code>,
 								}}
 							/>
 						</p>
