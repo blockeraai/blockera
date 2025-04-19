@@ -15,7 +15,6 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { useLateEffect } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -60,16 +59,8 @@ const CodeControl = ({
 	});
 
 	const [showPlaceholder, setShowPlaceholder] = useState(false);
-
 	const editorRef = useRef(null);
-
-	// update value if changed from outside
-	// force editor to update inside state
-	useLateEffect(() => {
-		if (editorRef?.current && editorRef?.current?.getValue() !== value) {
-			editorRef.current.setValue(value);
-		}
-	}, [value]);
+	const timeoutRef = useRef(null);
 
 	const labelProps = {
 		value,
@@ -135,7 +126,14 @@ const CodeControl = ({
 					defaultValue={value}
 					onChange={(newValue) => {
 						setShowPlaceholder(newValue === '');
-						setValue(newValue);
+
+						if (timeoutRef.current) {
+							clearTimeout(timeoutRef.current);
+						}
+
+						timeoutRef.current = setTimeout(() => {
+							setValue(newValue);
+						}, 500);
 					}}
 					theme={'blockera'}
 					options={{
@@ -169,6 +167,10 @@ const CodeControl = ({
 					}}
 					onMount={(editor: any) => {
 						editorRef.current = editor;
+
+						if (value !== editor.getValue()) {
+							editor.setValue(value);
+						}
 					}}
 				/>
 
