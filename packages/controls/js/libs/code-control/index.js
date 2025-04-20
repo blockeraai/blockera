@@ -7,6 +7,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState, useRef } from '@wordpress/element';
 import { Editor } from '@monaco-editor/react';
+import memoize from 'fast-memoize';
 
 /**
  * Blockera dependencies
@@ -15,6 +16,15 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import {
+	getColors,
+	getFontSizes,
+	getSpacings,
+	getWidthSizes,
+	getLinearGradients,
+	getRadialGradients,
+	generateVariableString,
+} from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -23,6 +33,174 @@ import BaseControl from '../base-control';
 import { DynamicHtmlFormatter } from '../';
 import { useControlContext } from '../../context';
 import type { CodeControlProps } from './types';
+
+/**
+ * Get variable suggestions.
+ *
+ * It's memoized to improve performance.
+ *
+ * @return {Array}
+ */
+const getVariableSuggestions = memoize(() => {
+	const rawSuggestions = [];
+
+	// Add color variables
+	getColors().forEach((color) => {
+		rawSuggestions.push({
+			label: {
+				label: `--color-${color.id}`,
+				description: color.value,
+			},
+			kind: 'color',
+			insertText: `var(${generateVariableString({
+				id: color.id,
+				reference: color.reference,
+				type: 'color',
+			})}, ${color.value})`,
+			documentation: {
+				value: color.name,
+				isTrusted: true,
+				supportHtml: true,
+				colorInfo: {
+					value: color.value,
+				},
+			},
+			detail: color.value,
+			sortText: `--color-${color.id}`,
+		});
+	});
+
+	// Add font size variables
+	getFontSizes().forEach((fontSize) => {
+		rawSuggestions.push({
+			label: {
+				label: `--font-size-${fontSize.id}`,
+				description: fontSize.value,
+			},
+			kind: 'unit',
+			insertText: `var(${generateVariableString({
+				id: fontSize.id,
+				reference: fontSize.reference,
+				type: 'font-size',
+			})}, ${fontSize.value})`,
+			documentation: {
+				value: `${fontSize.name}\n\nPreview: <div style="font-size: ${fontSize.value}">Aa</div>`,
+				isTrusted: true,
+				supportHtml: true,
+				colorInfo: {
+					value: fontSize.value,
+				},
+			},
+			detail: __('Font Size Variable', 'blockera'),
+			sortText: `--font-size-${fontSize.id}`,
+		});
+	});
+
+	// Add spacing variables
+	getSpacings().forEach((spacing) => {
+		rawSuggestions.push({
+			label: {
+				label: `--spacing-${spacing.id}`,
+				description: spacing.value,
+			},
+			kind: 'unit',
+			insertText: `var(${generateVariableString({
+				id: spacing.id,
+				reference: spacing.reference,
+				type: 'spacing',
+			})}, ${spacing.value})`,
+			documentation: {
+				value: `${spacing.name}\n\nPreview: <div style="display: flex; align-items: center; gap: 8px;"><div style="width: ${spacing.value}; height: 20px; background: #e0e0e0;"></div><span>${spacing.value}</span></div>`,
+				isTrusted: true,
+				supportHtml: true,
+				colorInfo: {
+					value: spacing.value,
+				},
+			},
+			detail: __('Spacing Variable', 'blockera'),
+			sortText: `--spacing-${spacing.id}`,
+		});
+	});
+
+	// Add width size variables
+	getWidthSizes().forEach((widthSize) => {
+		rawSuggestions.push({
+			label: {
+				label: `--width-size-${widthSize.id}`,
+				description: widthSize.value,
+			},
+			kind: 'unit',
+			insertText: `var(${generateVariableString({
+				id: widthSize.id,
+				reference: widthSize.reference,
+				type: 'width-size',
+			})}, ${widthSize.value})`,
+			documentation: {
+				value: `${widthSize.name}\n\nPreview: <div style="display: flex; align-items: center; gap: 8px;"><div style="width: ${widthSize.value}; height: 20px; background: #e0e0e0;"></div><span>${widthSize.value}</span></div>`,
+				isTrusted: true,
+				supportHtml: true,
+				colorInfo: {
+					value: widthSize.value,
+				},
+			},
+			detail: __('Width Size Variable', 'blockera'),
+			sortText: `--width-size-${widthSize.id}`,
+		});
+	});
+
+	// Add gradient variables
+	getLinearGradients().forEach((gradient) => {
+		rawSuggestions.push({
+			label: {
+				label: `--linear-gradient-${gradient.id}`,
+				description: gradient.value,
+			},
+			kind: 'color',
+			insertText: `var(${generateVariableString({
+				id: gradient.id,
+				reference: gradient.reference,
+				type: 'linear-gradient',
+			})}, ${gradient.value})`,
+			documentation: {
+				value: `${gradient.name}\n\nPreview: <div style="width: 100px; height: 50px; background: ${gradient.value};"></div>`,
+				isTrusted: true,
+				supportHtml: true,
+				colorInfo: {
+					value: gradient.value,
+				},
+			},
+			detail: __('Linear Gradient Variable', 'blockera'),
+			sortText: `--linear-gradient-${gradient.id}`,
+		});
+	});
+
+	getRadialGradients().forEach((gradient) => {
+		rawSuggestions.push({
+			label: {
+				label: `--radial-gradient-${gradient.id}`,
+				description: gradient.value,
+			},
+			kind: 'color',
+			insertText: `var(${generateVariableString({
+				id: gradient.id,
+				reference: gradient.reference,
+				type: 'radial-gradient',
+			})}, ${gradient.value})`,
+			documentation: {
+				value: `${gradient.name}\n\nPreview: <div style="width: 100px; height: 50px; background: ${gradient.value};"></div>`,
+				isTrusted: true,
+				supportHtml: true,
+				colorInfo: {
+					value: gradient.value,
+				},
+			},
+			detail: __('Radial Gradient Variable', 'blockera'),
+			sortText: `--radial-gradient-${gradient.id}`,
+		});
+	});
+
+	return rawSuggestions;
+});
 
 const CodeControl = ({
 	lang = 'css',
@@ -222,6 +400,57 @@ const CodeControl = ({
 													},
 												],
 											};
+										}
+
+										// Check if user is typing a CSS variable
+										const text = model.getValueInRange({
+											startLineNumber:
+												position.lineNumber,
+											startColumn: Math.max(
+												1,
+												position.column - 10
+											),
+											endLineNumber: position.lineNumber,
+											endColumn: position.column,
+										});
+
+										// Check for -- at the end
+										const isDoubleDash =
+											text.endsWith('--');
+
+										if (isDoubleDash) {
+											const rawSuggestions =
+												getVariableSuggestions();
+											const suggestions =
+												rawSuggestions.map(
+													(suggestion) => ({
+														...suggestion,
+														kind:
+															suggestion.kind ===
+															'color'
+																? monaco
+																		.languages
+																		.CompletionItemKind
+																		.Color
+																: monaco
+																		.languages
+																		.CompletionItemKind
+																		.Unit,
+														range: {
+															startLineNumber:
+																position.lineNumber,
+															startColumn:
+																position.column -
+																2,
+															endLineNumber:
+																position.lineNumber,
+															endColumn:
+																position.column,
+														},
+													})
+												);
+
+											return { suggestions };
 										}
 
 										return { suggestions: [] };
