@@ -4,7 +4,7 @@
  * Plugin URI: https://blockera.ai/blockera-page-builder/
  * Description: The Advanced Mode for Gutenberg
  * Requires at least: 6.6
- * Tested up to: 6.6
+ * Tested up to: 6.8
  * Requires PHP: 7.4
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about-us/
