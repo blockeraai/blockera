@@ -193,7 +193,12 @@ const CodeControl = ({
 														kind: monaco.languages
 															.CompletionItemKind
 															.Class,
-														insertText: '.block',
+														insertText:
+															'.block {\n\t$0\n}',
+														insertTextRules:
+															monaco.languages
+																.CompletionItemInsertTextRule
+																.InsertAsSnippet,
 														documentation: __(
 															'Target the current block',
 															'blockera'
@@ -202,6 +207,18 @@ const CodeControl = ({
 															'Blockera Block Selector',
 															'blockera'
 														),
+														sortText: '.block',
+														range: {
+															startLineNumber:
+																position.lineNumber,
+															startColumn:
+																position.column -
+																1,
+															endLineNumber:
+																position.lineNumber,
+															endColumn:
+																position.column,
+														},
 													},
 												],
 											};
