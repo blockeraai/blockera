@@ -68,8 +68,10 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 					icon={<Icon icon="extension-custom-style" />}
 					className={extensionClassNames('custom-style')}
 					isChanged={
+						!initialOpen &&
+						values.blockeraCustomCSS !== '' &&
 						values.blockeraCustomCSS !==
-						attributes.blockeraCustomCSS.default
+							attributes.blockeraCustomCSS.default
 					}
 				>
 					<EditorFeatureWrapper
