@@ -15,6 +15,7 @@ export type MediaQueryProps = {
 };
 
 export type BlockStyleProps = {
+	customCss?: string,
 	clientId: string,
 	supports: Object,
 	blockName: string,

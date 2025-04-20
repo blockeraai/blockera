@@ -164,12 +164,22 @@ class Render {
         $cache_data = blockera_get_block_cache($cache_key);
         // Get cache validate result.
         $cache_validate = ! empty($cache_data['css']) && ! empty($cache_data['hash']) && ! empty($cache_data['classname']);
+		// Get normalized blockera block unique css classname.
+        $unique_class_name = blockera_get_normalized_selector($need_to_update_html ? $blockera_class_name : $attributes['className']);
 
         // Validate cache data.
         if ($cache_validate && $hash === $cache_data['hash'] && $this->cache_status) {
 
+			$css = $cache_data['css'];
+
+			// If custom css is set, add it to the block css.
+			if (! empty($attributes['blockeraCustomCSS'])) {
+
+				$css .= preg_replace('/(.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']);
+			}
+
             // Print css into inline style on "wp_head" action occur.
-            blockera_add_inline_css($cache_data['css']);
+            blockera_add_inline_css($css);
 
             if ($need_to_update_html) {
 
@@ -179,9 +189,6 @@ class Render {
 
             return $html;
         }
-
-        // Get normalized blockera block unique css classname.
-        $unique_class_name = blockera_get_normalized_selector($need_to_update_html ? $blockera_class_name : $attributes['className']);
 
         /**
          * Get parser object.
@@ -193,6 +200,12 @@ class Render {
 
         // Computation css rules for current block by server side style engine...
         $computed_css_rules = $parser->getCss(compact('block', 'unique_class_name'));
+
+		// If custom css is set, add it to the block css.
+		if (! empty($attributes['blockeraCustomCSS']['value'])) {
+
+			$computed_css_rules .= preg_replace('/(.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+		}
 
         // Print css into inline style on "wp_head" action occur.
         blockera_add_inline_css($computed_css_rules);

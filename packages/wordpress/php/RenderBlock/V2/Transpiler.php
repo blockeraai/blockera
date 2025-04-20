@@ -230,6 +230,11 @@ class Transpiler {
 						'blockera_class_name' => $blockera_class_name,
 					]
 				);
+
+				// If custom css is set, add it to the block css stack.
+				if (! empty($block['attrs']['blockeraCustomCSS']['value']) && ! in_array($block['attrs']['blockeraCustomCSS']['value'], $this->styles, true)) {
+					$this->styles[] = preg_replace('/(.|#)block/i', $unique_class_name, $block['attrs']['blockeraCustomCSS']['value']);
+				}
 			}
 		}
 
