@@ -340,6 +340,26 @@ const CodeControl = ({
 								},
 							});
 
+							// Configure CSS linting
+							monaco.languages.css.cssDefaults.setOptions({
+								validate: true,
+								lint: {
+									emptyRules: 'ignore',
+									unknownProperties: 'warning',
+									unknownAtRules: 'warning',
+									duplicateProperties: 'warning',
+									emptyProperties: 'warning',
+									zeroUnits: 'warning',
+									importStatements: 'warning',
+									boxModel: 'warning',
+									universalSelector: 'warning',
+									unqualifiedAttributes: 'warning',
+									important: 'warning',
+									float: 'warning',
+									idSelector: 'warning',
+								},
+							});
+
 							// Add custom completion provider for CSS
 							monaco.languages.registerCompletionItemProvider(
 								'css',
