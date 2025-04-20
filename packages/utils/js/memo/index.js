@@ -23,7 +23,6 @@ export function hasSameProps(
 		const keys = ['setSettings', 'handleOnChangeAttributes'];
 
 		// Debug code!
-		/* @debug-ignore */
 		// 	console.log(
 		// 		detailedDiff(omit(prevProps, keys), omit(nextProps, keys)),
 		// 		isEquals(omit(prevProps, keys), omit(nextProps, keys))
