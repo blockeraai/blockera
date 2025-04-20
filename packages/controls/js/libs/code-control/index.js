@@ -161,6 +161,57 @@ const CodeControl = ({
 									'editorLineNumber.foreground': '#7d7d7d75',
 								},
 							});
+
+							// Add custom completion provider for CSS
+							monaco.languages.registerCompletionItemProvider(
+								'css',
+								{
+									provideCompletionItems: (
+										model,
+										position
+									) => {
+										const textUntilPosition =
+											model.getValueInRange({
+												startLineNumber:
+													position.lineNumber,
+												startColumn: 1,
+												endLineNumber:
+													position.lineNumber,
+												endColumn: position.column,
+											});
+
+										// Check if user is typing a selector
+										if (
+											textUntilPosition
+												.trim()
+												.endsWith('.')
+										) {
+											return {
+												suggestions: [
+													{
+														label: '.block',
+														kind: monaco.languages
+															.CompletionItemKind
+															.Class,
+														insertText: '.block',
+														documentation: __(
+															'Target the current block',
+															'blockera'
+														),
+														detail: __(
+															'Blockera Block Selector',
+															'blockera'
+														),
+													},
+												],
+											};
+										}
+
+										return { suggestions: [] };
+									},
+								}
+							);
+
 							setShowPlaceholder(value === '');
 							monaco.blockeraInitialised = true;
 						}
