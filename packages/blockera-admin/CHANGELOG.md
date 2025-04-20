@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Bug Fixes
+- Fix design issue on Blockera admin pages.
+
+
 ## 1.1.1 (2025-03-29)
 
 ### Improvements
