@@ -5,7 +5,9 @@
 
 ### New Features
 - Inline block renaming by clicking on block card [[🔗 Feature request](https://community.blockera.ai/feature-request-1rsjg2ck/post/block-renaming-quick-block-renaming-from-the-block-card-j7XmvUiOTj36VFn)]
-- Supported the `Custom CSS` feature for each all blocks.
+- Custom CSS Code Feature: Allows you to add custom CSS codes per block. [Pro Feature]
+- Smart autocomplete suggestions for CSS variables in code editor by typing `--`.
+- Smart `.block` autocomplete for current block selector in code editor.
 
 
 ### Improvements
