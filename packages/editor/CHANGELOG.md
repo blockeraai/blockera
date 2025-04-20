@@ -17,6 +17,7 @@
 ### Automated Tests
 - Added E2E tests to check inline block renaming.
 - Added E2E test to check inline block renaming for blocks with variations.
+- Added E2E tests to check Custom CSS feature.
 
 
 ## 1.2.4 (2025-04-16)
