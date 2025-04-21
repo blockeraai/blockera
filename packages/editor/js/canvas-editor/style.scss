@@ -1,9 +1,7 @@
 .blockera-editor {
 
-	.editor-header__settings > div:first-child,
 	.editor-header__settings > a[target="_blank"]:first-child,
-	.editor-header__settings > a[target="_blank"]:first-child + div,
-	.editor-header__settings > button:first-child + div {
+	.editor-header__settings > .editor-preview-dropdown {
 		display: none;
 	}
 }
