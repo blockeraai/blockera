@@ -13,13 +13,16 @@
 
 
 ### Improvements
+- Aspect ratio feature improved to smartly set the width and height while switching to custom ratio.
 - Improve block card design.
 - Improve overall codes.
+
 
 ### Automated Tests
 - Added E2E tests to check inline block renaming.
 - Added E2E test to check inline block renaming for blocks with variations.
 - Added E2E tests to check Custom CSS feature.
+- Aspect ratio tests updated for latest updates.
 
 
 ## 1.2.4 (2025-04-16)
