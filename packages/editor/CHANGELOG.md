@@ -4,7 +4,8 @@
 - Flex layout feature not working properly on breakpoints reported by Davor Jovanović 🙏🏼 [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/block-row-doesn-t-accept-justify-content-center-bZeVoRwgQ5xhnbm)]
 - Duplicate preview button on non-English websites reported by Hoang 🙏🏼.
 - Fixed duplicate preview button in editor header section.
-- Strange issue that shows block `Settings` tab items in `Style` tab.
+- Strange issue that shows block `General` tab items in `Style` tab.
+- Wrong `General` tab settings for inner blocks.
 
 
 ### New Features
