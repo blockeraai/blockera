@@ -18,7 +18,7 @@
 - Improve block card design.
 - Improve overall codes.
 - Added `blockera-editor` class to the admin body class to improve canvas editor UI and styles.
-
+- Improve overall block editor design.
 
 ### Automated Tests
 - Added E2E tests to check inline block renaming.
