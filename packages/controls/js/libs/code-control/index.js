@@ -488,6 +488,17 @@ const CodeControl = ({
 						if (value !== editor.getValue()) {
 							editor.setValue(value);
 						}
+
+						// Set cursor position between curly braces for CSS
+						if (lang === 'css' && value === '.block {\n    \n}\n') {
+							const position = editor.getPosition();
+							if (position) {
+								editor.setPosition({
+									lineNumber: 2,
+									column: 4,
+								});
+							}
+						}
 					}}
 				/>
 
