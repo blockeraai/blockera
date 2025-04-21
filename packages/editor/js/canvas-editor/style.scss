@@ -1,5 +1,6 @@
 .blockera-editor {
 
+	.editor-header__settings > a[aria-label="View Page"], // WP < 6.6.2
 	.editor-header__settings > a[target="_blank"]:first-child,
 	.editor-header__settings > .editor-preview-dropdown {
 		display: none;
