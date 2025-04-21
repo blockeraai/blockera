@@ -33,13 +33,6 @@ export const bootstrapCanvasEditor = (): void | Object => {
 
 				// eslint-disable-next-line react-hooks/rules-of-hooks
 				useEffect(() => {
-					// Add class to body to indicate that the canvas editor is enabled.
-					if (document.body) {
-						document.body.classList.add(
-							'blockera-canvas-editor-enabled'
-						);
-					}
-
 					if (
 						!document.querySelector(componentSelector) &&
 						!cache.get(componentSelector)

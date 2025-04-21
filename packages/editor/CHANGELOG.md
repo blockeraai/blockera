@@ -17,6 +17,7 @@
 - Aspect ratio feature improved to smartly set the width and height while switching to custom ratio.
 - Improve block card design.
 - Improve overall codes.
+- Added `blockera-editor` class to the admin body class to improve canvas editor UI and styles.
 
 
 ### Automated Tests

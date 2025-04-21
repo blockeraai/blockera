@@ -38,6 +38,7 @@ $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
 // Conditional loading based on context.
 if (is_admin()) {
+    blockera_load('editor.php.hooks', $external_dir);
     blockera_load('blockera-admin.php.hooks', $external_dir);
     blockera_load('wordpress.php.Admin.Menu.hooks', $external_dir);
 }
