@@ -1,3 +1,12 @@
+.blockera-canvas-editor-enabled {
+
+	.editor-header__settings > a[target="_blank"]:first-child,
+	.editor-header__settings > a[target="_blank"]:first-child + div,
+	.editor-header__settings > button:first-child + div {
+		display: none;
+	}
+}
+
 #blockera-canvas-editor {
 	display: flex;
 	justify-content: space-between;
