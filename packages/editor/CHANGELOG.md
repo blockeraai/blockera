@@ -8,6 +8,7 @@
 - Custom CSS Code Feature: Allows you to add custom CSS codes per block. [Pro Feature]
 - Smart autocomplete suggestions for CSS variables in code editor by typing `--`.
 - Smart `.block` autocomplete for current block selector in code editor.
+- Smart `.block:hover` autocomplete for current block hover state in code editor.
 
 
 ### Improvements

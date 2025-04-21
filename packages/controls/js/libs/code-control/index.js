@@ -402,10 +402,43 @@ const CodeControl = ({
 															'blockera'
 														),
 														detail: __(
-															'Blockera Block Selector',
+															'Current Block',
 															'blockera'
 														),
 														sortText: '.block',
+														range: {
+															startLineNumber:
+																position.lineNumber,
+															startColumn:
+																position.column -
+																1,
+															endLineNumber:
+																position.lineNumber,
+															endColumn:
+																position.column,
+														},
+													},
+													{
+														label: '.block:hover',
+														kind: monaco.languages
+															.CompletionItemKind
+															.Class,
+														insertText:
+															'.block:hover {\n\t$0\n}',
+														insertTextRules:
+															monaco.languages
+																.CompletionItemInsertTextRule
+																.InsertAsSnippet,
+														documentation: __(
+															'Target the current block on hover',
+															'blockera'
+														),
+														detail: __(
+															'Current Block on Hover',
+															'blockera'
+														),
+														sortText:
+															'.block:hover',
 														range: {
 															startLineNumber:
 																position.lineNumber,
