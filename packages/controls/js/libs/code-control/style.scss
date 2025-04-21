@@ -7,8 +7,7 @@
 	& > section {
 		background-color: #f6f6f6;
 		border-radius: 5px;
-    	padding-top: 10px;
-	}
+   }
 
 	.blockera-control-code-control__description {
 		display: flex;
@@ -50,10 +49,15 @@
 
 	.monaco-editor {
 		border-radius: 5px;
+		padding: 0;
+		outline: 0;
+
+		&.focused {
+    		box-shadow: 0 0 0 2px var(--blockera-controls-primary-color);
+		}
 
 		.overflow-guard {
-			border-bottom-right-radius: 5px;
-			border-bottom-left-radius: 5px;
+			border-radius: 5px;
 		}
 	}
 }
