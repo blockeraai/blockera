@@ -80,15 +80,17 @@ export const useBlockSideEffects = ({ currentTab, currentState, isActive }) => {
 
 		if ('settings' === currentTab) {
 			inspectorTabs.style = {};
-
+			inspectorTabs.classList.remove('blockera-hide');
 			return;
 		}
 
 		if (!isActive) {
 			inspectorTabs.style = {};
+			inspectorTabs.classList.remove('blockera-hide');
 			return;
 		}
 
 		inspectorTabs.style.display = 'none';
+		inspectorTabs.classList.add('blockera-hide');
 	}, [currentTab, currentState, isActive]);
 };
