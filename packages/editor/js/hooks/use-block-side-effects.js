@@ -3,7 +3,12 @@
  */
 import { useEffect } from '@wordpress/element';
 
-export const useBlockSideEffects = ({ currentTab, currentState, isActive }) => {
+export const useBlockSideEffects = ({
+	currentBlock,
+	currentTab,
+	currentState,
+	isActive,
+}) => {
 	useEffect(() => {
 		// The original WordPress Block Tabs wrapper element.
 		const inspectorTabs = document.querySelector(
@@ -78,9 +83,15 @@ export const useBlockSideEffects = ({ currentTab, currentState, isActive }) => {
 
 		setClassList(inspectorTabs);
 
-		if ('settings' === currentTab) {
+		if ('settings' === currentTab && currentBlock === 'master') {
 			inspectorTabs.style = {};
 			inspectorTabs.classList.remove('blockera-hide');
+			return;
+		}
+
+		if (currentBlock !== 'master') {
+			inspectorTabs.style.display = 'none';
+			inspectorTabs.classList.add('blockera-hide');
 			return;
 		}
 
@@ -92,5 +103,5 @@ export const useBlockSideEffects = ({ currentTab, currentState, isActive }) => {
 
 		inspectorTabs.style.display = 'none';
 		inspectorTabs.classList.add('blockera-hide');
-	}, [currentTab, currentState, isActive]);
+	}, [currentBlock, currentTab, currentState, isActive]);
 };

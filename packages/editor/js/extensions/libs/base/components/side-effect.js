@@ -8,25 +8,28 @@ import { useEffect, memo } from '@wordpress/element';
  */
 import { useBlockSideEffects } from '../../../../hooks';
 
-export const SideEffect = memo(({ currentTab, currentState, isActive }) => {
-	useEffect(() => {
-		const tabs = document.querySelector(
-			'.block-editor-block-inspector .block-editor-block-inspector__tabs div:first-child'
-		);
+export const SideEffect = memo(
+	({ currentBlock, currentTab, currentState, isActive }) => {
+		useEffect(() => {
+			const tabs = document.querySelector(
+				'.block-editor-block-inspector .block-editor-block-inspector__tabs div:first-child'
+			);
 
-		if (tabs && isActive) {
-			tabs.style.display = 'none';
-		} else if (tabs) {
-			tabs.style = {};
-		}
-		// eslint-disable-next-line
-	}, [isActive]);
+			if (tabs && isActive) {
+				tabs.style.display = 'none';
+			} else if (tabs) {
+				tabs.style = {};
+			}
+			// eslint-disable-next-line
+		}, [isActive]);
 
-	useBlockSideEffects({
-		isActive,
-		currentTab,
-		currentState,
-	});
+		useBlockSideEffects({
+			currentBlock,
+			isActive,
+			currentTab,
+			currentState,
+		});
 
-	return null;
-});
+		return null;
+	}
+);
