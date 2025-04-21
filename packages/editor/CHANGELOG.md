@@ -2,6 +2,7 @@
 
 ### Bug Fixes
 - Flex layout feature not working properly on breakpoints reported by Davor Jovanović 🙏🏼 [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/block-row-doesn-t-accept-justify-content-center-bZeVoRwgQ5xhnbm)]
+- Duplicate preview button on non-English websites reported by Hoang 🙏🏼.
 
 ### New Features
 - Inline block renaming by clicking on block card [[🔗 Feature request](https://community.blockera.ai/feature-request-1rsjg2ck/post/block-renaming-quick-block-renaming-from-the-block-card-j7XmvUiOTj36VFn)]
