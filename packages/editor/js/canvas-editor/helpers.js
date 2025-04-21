@@ -28,7 +28,7 @@ export const getTargets = (version: string): GetTarget => {
 		header: '.editor-header__center',
 		previewDropdown:
 			'.editor-preview-dropdown, a.components-button[aria-label="View Post"], a.components-button[aria-label="View Page"]',
-		postPreviewElement: '.editor-header__post-preview-button + a',
+		postPreviewElement: '.editor-header__settings a[target|="wp-preview"]',
 	};
 
 	// For WordPress version equals or bigger than 6.6.1 version.
