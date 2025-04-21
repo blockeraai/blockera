@@ -6,7 +6,6 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useSelect } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -18,7 +17,6 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getTargets } from '../helpers';
 import { PostPreviewButton } from './post-preview-button';
 
 export const Preview = (): MixedElement => {
@@ -30,7 +28,6 @@ export const Preview = (): MixedElement => {
 		previewLink,
 		isSavablePost,
 		currentPostLink,
-		previewDropdown,
 	} = useSelect((select) => {
 		const {
 			getPermalink,
@@ -42,16 +39,9 @@ export const Preview = (): MixedElement => {
 			getEditedPostPreviewLink,
 		} = select('core/editor') || {};
 		const { getPostType } = select('core');
-
 		const postType = getPostType(getCurrentPostType('type'));
 
-		const { getEntity } = select('blockera/data') || {};
-		const { version } = getEntity('wp');
-
-		const { previewDropdown } = getTargets(version);
-
 		return {
-			previewDropdown,
 			permalink: getPermalink(),
 			postId: getCurrentPostId(),
 			isPublished: isCurrentPostPublished(),
@@ -68,18 +58,6 @@ export const Preview = (): MixedElement => {
 		!isPublished || !permalink
 			? previewLink || currentPostLink
 			: currentPostLink;
-
-	// To hidden WordPress original post-preview-button.
-	useEffect(() => {
-		const originPreviews = document.querySelectorAll(previewDropdown);
-
-		if (originPreviews.length) {
-			originPreviews.forEach((preview) => {
-				preview.style.display = 'none';
-			});
-		}
-		// eslint-disable-next-line
-	}, [href]);
 
 	const previewButton = (
 		<PostPreviewButton

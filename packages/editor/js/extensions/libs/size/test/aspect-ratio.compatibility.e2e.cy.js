@@ -130,10 +130,16 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				cy.get('@aspectSelect').select('custom', { force: true });
 
 				// set width
-				cy.get('input').eq(0).type('2');
+				cy.get('input')
+					.eq(0)
+					.clear({ fore: true })
+					.type('2', { force: true });
 
 				// set height
-				cy.get('input').eq(1).type('3');
+				cy.get('input')
+					.eq(1)
+					.clear({ force: true })
+					.type('3', { force: true });
 			});
 
 			getWPDataObject().then((data) => {
@@ -300,10 +306,16 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				cy.get('@aspectSelect').select('custom', { force: true });
 
 				// set width
-				cy.get('input').eq(0).type('2');
+				cy.get('input')
+					.eq(0)
+					.clear({ force: true })
+					.type('2', { force: true });
 
 				// set height
-				cy.get('input').eq(1).type('3');
+				cy.get('input')
+					.eq(1)
+					.clear({ force: true })
+					.type('3', { force: true });
 			});
 
 			getWPDataObject().then((data) => {

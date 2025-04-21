@@ -24,7 +24,7 @@ export const bootstrapCanvasEditor = (): void | Object => {
 	const observerPlugin = 'blockera-canvas-editor-observer';
 
 	const { version } = getEntity('wp');
-	const { header, previewDropdown, postPreviewElement } = getTargets(version);
+	const { header } = getTargets(version);
 
 	const registry = () => {
 		registerPlugin(observerPlugin, {
@@ -33,6 +33,13 @@ export const bootstrapCanvasEditor = (): void | Object => {
 
 				// eslint-disable-next-line react-hooks/rules-of-hooks
 				useEffect(() => {
+					// Add class to body to indicate that the canvas editor is enabled.
+					if (document.body) {
+						document.body.classList.add(
+							'blockera-canvas-editor-enabled'
+						);
+					}
+
 					if (
 						!document.querySelector(componentSelector) &&
 						!cache.get(componentSelector)
@@ -40,13 +47,9 @@ export const bootstrapCanvasEditor = (): void | Object => {
 						cache.set(componentSelector, true);
 
 						new IntersectionObserverRenderer(
-							'.editor-header__center',
+							header,
 							(): MixedElement => (
 								<CanvasEditor
-									{...{
-										previewDropdown,
-										postPreviewElement,
-									}}
 									target={document.querySelector(header)}
 								/>
 							),

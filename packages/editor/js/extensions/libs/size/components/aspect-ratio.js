@@ -157,11 +157,47 @@ export const AspectRatio: ComponentType<any> = memo(
 								}
 							);
 						} else {
+							newValue = {
+								val: newValue,
+							};
+
+							// remove the width and height
+							if (newValue.val !== 'custom') {
+								newValue = {
+									...newValue,
+									width: '',
+									height: '',
+								};
+							} else if (
+								newValue.val === 'custom' &&
+								value?.val &&
+								value.val !== ''
+							) {
+								//
+								// Smart width and height detection from old value and adding it to width and height
+								//
+								const [width, height] = value.val.split('/');
+
+								if (width && height) {
+									newValue = {
+										...newValue,
+										width: width.trim(),
+										height: height.trim(),
+									};
+								} else if (width && !height) {
+									newValue = {
+										...newValue,
+										width: width.trim(),
+										height: width.trim(),
+									};
+								}
+							}
+
 							handleOnChangeAttributes(
 								'blockeraRatio',
 								{
 									...ratio,
-									val: newValue,
+									...newValue,
 								},
 								{ ref }
 							);
