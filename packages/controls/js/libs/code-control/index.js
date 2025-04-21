@@ -392,7 +392,7 @@ const CodeControl = ({
 															.CompletionItemKind
 															.Class,
 														insertText:
-															'.block {\n\t$0\n}',
+															'.block {\n\t$0\n}\n',
 														insertTextRules:
 															monaco.languages
 																.CompletionItemInsertTextRule
@@ -424,7 +424,7 @@ const CodeControl = ({
 															.CompletionItemKind
 															.Class,
 														insertText:
-															'.block:hover {\n\t$0\n}',
+															'.block:hover {\n\t$0\n}\n',
 														insertTextRules:
 															monaco.languages
 																.CompletionItemInsertTextRule
