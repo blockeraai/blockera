@@ -3,6 +3,9 @@
 ### New Features
 - Implemented inner `Code Control` component to allow developers to create code control for any languages.
 
+### Bug Fixes
+- Design issue in popovers after setting `Hover` state for block. 
+
 
 ## 1.1.3 (2025-04-12)
 
