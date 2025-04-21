@@ -6,8 +6,8 @@
 
 	& > section {
 		background-color: #f6f6f6;
-		border-radius: 2px;
-    	padding-top: 5px;
+		border-radius: 5px;
+    	padding-top: 10px;
 	}
 
 	.blockera-control-code-control__description {
@@ -33,7 +33,7 @@
 
 	.blockera-control-code-control__placeholder {
 		position: absolute;
-		top: 5px;
+		top: 10px;
 		left: 28px;
 		right: 10px;
 		color: #7d8a99;
@@ -46,6 +46,15 @@
 		line-height: 20px;
 		letter-spacing: 0;
 		pointer-events: none;
+	}
+
+	.monaco-editor {
+		border-radius: 5px;
+
+		.overflow-guard {
+			border-bottom-right-radius: 5px;
+			border-bottom-left-radius: 5px;
+		}
 	}
 }
 
