@@ -187,15 +187,22 @@
 			}
 
 			.components-toggle-group-control {
-				min-height: 34px;
-				height: 26px;
+				min-height: 30px;
+				height: 22px;
 				background-color: transparent;
+				border-color: var(--blockera-controls-border-color);
+				gap: 4px;
+
+				&:focus-within {
+					border-color: var(--blockera-controls-primary-color);
+					box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+				}
 			}
 
 			.components-toggle-group-control-option-base {
-				min-width: 26px;
-				min-height: 26px;
-				height: 26px;
+				min-width: 22px;
+				min-height: 22px;
+				height: 22px;
 
 				.block-editor-block-icon {
 					width: 14px;
