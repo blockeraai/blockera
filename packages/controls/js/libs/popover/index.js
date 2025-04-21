@@ -87,10 +87,7 @@ export default function Popover({
 			'.components-popover__fallback-container'
 		);
 
-		if (
-			container &&
-			!container.style['--blockera-tab-panel-active-color']
-		) {
+		if (container) {
 			container.style.setProperty('color', 'inherit');
 			container.style.setProperty(
 				'--blockera-controls-primary-color',
