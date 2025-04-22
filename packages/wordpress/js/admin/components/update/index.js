@@ -6,7 +6,6 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
-import { cloud, Icon } from '@wordpress/icons';
 import { Animate, Spinner } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 import { useContext, useState } from '@wordpress/element';
@@ -15,6 +14,7 @@ import { useContext, useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Modal, Button, Flex } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
 
 /**
@@ -31,7 +31,7 @@ const statuses = {
 	},
 	saving: {
 		name: 'saving',
-		label: __('Saving', 'blockera'),
+		label: __('Saving...', 'blockera'),
 	},
 	error: {
 		name: 'error',
@@ -134,27 +134,40 @@ export const Update = ({
 	};
 
 	return (
-		<>
+		<Flex direction="row" gap={15} alignItems="center">
 			{[
 				'saving' === status.name && (
 					<Animate type="loading">
 						{({ className: animateClassName }) => (
-							<span
+							<Flex
 								className={classNames(
 									'message',
 									animateClassName
 								)}
+								direction="row"
+								gap={5}
+								alignItems="center"
+								style={{ fontSize: '14px', marginRight: '5px' }}
 							>
-								<Icon icon={cloud} />
+								<Icon icon={'cloud'} library="wp" />
+
 								{status.label}
-							</span>
+							</Flex>
 						)}
 					</Animate>
 				),
 				'error' === status.name && (
-					<span className="message update-failed">
+					<Flex
+						className="message update-failed"
+						direction="row"
+						gap={5}
+						alignItems="center"
+						style={{ fontSize: '14px' }}
+					>
+						<Icon icon={'warning'} iconsSize={18} />
+
 						{status.label}
-					</span>
+					</Flex>
 				),
 			]}
 
@@ -163,7 +176,7 @@ export const Update = ({
 					data-test={'reset-settings'}
 					className="reset-settings__save-button"
 					onClick={() => setResetModalOpen(true)}
-					variant={'tertiary-on-hover'}
+					variant={'tertiary'}
 				>
 					{__('Reset Settings', 'blockera')}
 				</Button>
@@ -256,6 +269,6 @@ export const Update = ({
 					)}
 				</Modal>
 			)}
-		</>
+		</Flex>
 	);
 };

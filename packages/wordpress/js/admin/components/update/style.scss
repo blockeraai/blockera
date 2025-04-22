@@ -16,6 +16,17 @@
 	}
 }
 
+#blockera-admin-settings-container {
+
+	.message.update-failed {
+		color: #ff0000;
+
+		svg {
+			fill: currentColor;
+		}
+	}
+}
+
 @keyframes saveButtonUpdateAnimation {
 	0% {
 		opacity:1;

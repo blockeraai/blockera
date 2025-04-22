@@ -62,12 +62,14 @@ export const Dashboard = (): MixedElement => {
 		'blockera.admin.dashboard.pro.call.to.actions',
 		() => (
 			<Button
-				variant="secondary-on-hover"
-				icon={<Icon library={'ui'} icon={'crown'} iconSize={22} />}
-				text={__('Upgrade to Pro', 'blockera')}
+				variant="secondary"
 				href={window.blockeraUpgradeUrl}
 				target="_blank"
-			/>
+			>
+				<Icon library={'ui'} icon={'crown'} iconSize={22} />
+
+				{__('Upgrade to Pro', 'blockera')}
+			</Button>
 		)
 	);
 	const promotionComponent: MixedElement = applyFilters(
@@ -205,25 +207,30 @@ export const Dashboard = (): MixedElement => {
 					version={`v${blockeraVersion}`}
 					name={__('Blockera', 'blockera')}
 				>
-					<div className={'blockera-settings-header-links'}>
+					<Flex
+						className={'blockera-settings-header-links'}
+						direction="row"
+						gap={10}
+						alignItems="center"
+					>
 						<ProCallToActions />
 
 						<Button
-							variant="tertiary-on-hover"
-							icon={
-								<Icon
-									library={'ui'}
-									icon={'changelog'}
-									iconSize={22}
-								/>
-							}
-							text={__('Changelog', 'blockera')}
+							variant="tertiary"
 							href={
 								'https://community.blockera.ai/changelog-9l8hbrv0?utm_source=blockera-admin&utm_medium=referral&utm_campaign=changelog-page&utm_content=cta-link'
 							}
 							target="_blank"
-						/>
-					</div>
+						>
+							<Icon
+								library={'ui'}
+								icon={'changelog'}
+								iconSize={22}
+							/>
+
+							{__('Changelog', 'blockera')}
+						</Button>
+					</Flex>
 				</Header>
 
 				<Tabs
