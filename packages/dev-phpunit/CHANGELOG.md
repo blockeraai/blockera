@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.1 (2025-04-22)
+
 ### Automated tests
 - Modified automated maintenance configuration for tests.
 

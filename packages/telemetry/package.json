@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/telemetry",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "The telemetry system for blockera products to connect with api.blockera.ai site with beautiful UI.",
 	"author": "The  Contributors",
 	"license": "ISC",

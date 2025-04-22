@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.2 (2025-04-22)
+
 ### Improvements
 - Blockera admin pages design improvement.
 
