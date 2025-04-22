@@ -186,4 +186,65 @@ class Utils {
 
 		return lcfirst( self::pascalCase( $string ) );
 	}
+
+	/**
+	 * Get the current page URL.
+	 *
+	 * @return string The current page URL.
+	 */
+	public static function getCurrentPageURL(): string {
+
+		return home_url($_SERVER['REQUEST_URI']);
+	}
+
+	/**
+	 * Extract the domain name from a URL.
+	 *
+	 * @param string $url The URL to extract the domain name from.
+	 * @param bool   $with_scheme Whether to include the scheme in the domain name.
+	 *
+	 * @return string The domain name.
+	 */
+	public static function extractDomainName( string $url, bool $with_scheme = true): string {
+
+		$parsed_url = parse_url(home_url($url));
+
+		if (empty($parsed_url['query'])) {
+
+			return $with_scheme && ! empty($parsed_url['scheme']) && ! empty($parsed_url['host']) ? "{$parsed_url['scheme']}://{$parsed_url['host']}" : $parsed_url['host'] ?? '';
+		}
+
+		parse_str($parsed_url['query'], $params);
+
+		$parsed_redirect_uri = parse_url($url);
+
+		if ($with_scheme) {
+
+			return "{$parsed_redirect_uri['scheme']}://{$parsed_redirect_uri['host']}";
+		}
+
+		return $parsed_redirect_uri['host'];
+	}
+
+	/**
+	 * Extract a parameter from a URL.
+	 *
+	 * @param string $url The URL to extract the parameter from.
+	 * @param string $param The parameter to extract from the URL.
+	 *
+	 * @return string The parameter value.
+	 */
+	public static function extractParamFromURL( string $url, string $param): string {
+
+		$parsed_url = parse_url($url);
+
+		if (empty($parsed_url['query'])) {
+
+			return '';
+		}
+
+		parse_str($parsed_url['query'], $params);
+
+		return $params[ $param ] ?? '';
+	}
 }
