@@ -12,6 +12,7 @@ import {
 	isStartWith,
 	isString,
 	isUndefined,
+	isLocalhost,
 } from '../index';
 
 describe('is* testing', () => {
@@ -218,6 +219,87 @@ describe('is* testing', () => {
 
 		test('string param is not string!', () => {
 			expect(isIncludes(false, 'akbar')).toBe(false);
+		});
+	});
+
+	describe('isLocalhost', () => {
+		// Valid localhost cases
+		test.each([
+			['localhost'],
+			['LOCALHOST'],
+			['127.0.0.1'],
+			['::1'],
+			['0.0.0.0'],
+			['test.localhost'],
+			['dev.localhost'],
+			['my-app.local'],
+			['127.0.0.2'],
+			['127.100.200.1'],
+			['192.168.0.1'],
+			['192.168.255.255'],
+			['10.0.0.1'],
+			['10.255.255.255'],
+			['172.16.0.1'],
+			['172.31.255.255'],
+		])('should return true for valid localhost domain: %s', (domain) => {
+			expect(isLocalhost(domain)).toBe(true);
+		});
+
+		// Full URL cases
+		test.each([
+			['http://localhost'],
+			['https://localhost'],
+			['http://localhost:3000'],
+			['https://localhost:8080'],
+			['http://test.localhost:3000'],
+			['http://127.0.0.1:8080'],
+			['https://dev.local/path'],
+			['http://192.168.1.1:3000/api'],
+		])('should return true for valid localhost URL: %s', (url) => {
+			expect(isLocalhost(url)).toBe(true);
+		});
+
+		// Invalid/Non-localhost cases
+		test.each([
+			['example.com'],
+			['test.com'],
+			['192.169.1.1'], // Invalid private IP
+			['256.256.256.256'], // Invalid IP
+			['172.32.0.1'], // Outside private IP range
+			['172.15.0.1'], // Outside private IP range
+			['11.0.0.1'], // Public IP
+			['foo.bar'],
+			['my-site.dev'],
+			['localhost.com'], // Public domain containing localhost
+			['test.localhost.com'],
+		])('should return false for non-localhost domain: %s', (domain) => {
+			expect(isLocalhost(domain)).toBe(false);
+		});
+
+		// Edge cases and invalid inputs
+		test.each([
+			[''], // Empty string
+			[' '], // Space
+			['undefined'], // String undefined
+			['null'], // String null
+			[null], // null
+			[undefined], // undefined
+			[{}], // Empty object
+			[[]], // Empty array
+			[123], // Number
+			[true], // Boolean
+		])('should return false for invalid input: %s', (input) => {
+			expect(isLocalhost(input)).toBe(false);
+		});
+
+		// Malformed URL cases
+		test.each([
+			['http:/localhost'],
+			['https://localhost:abc'],
+			['ftp:/127.0.0.1'],
+			['http:localhost'],
+		])('should handle malformed URLs gracefully: %s', (url) => {
+			expect(() => isLocalhost(url)).not.toThrow();
 		});
 	});
 });
