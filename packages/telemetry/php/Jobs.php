@@ -2,6 +2,7 @@
 
 namespace Blockera\Telemetry;
 
+use Blockera\Telemetry\DataProviders\DataProvider;
 use Blockera\WordPress\Sender;
 use Blockera\Telemetry\DataProviders\DebugDataProvider;
 
@@ -19,18 +20,44 @@ class Jobs {
 
 	/**
 	 * @param Sender $sender      the sender instance.
+	 * @param string $plugin_file the plugin main file path.
 	 * @param array  $config      the config array.
 	 */
-	public function __construct( Sender $sender, array $config ) {
+	public function __construct( Sender $sender, string $plugin_file, array $config ) {
 
 		if ( ! blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
 
 			$this->sender = $sender;
 			$this->config = $config;
 
+			add_filter( 'cron_schedules', [ $this, 'addCronInterval' ] );
 			add_action( 'blockera_each_six_days', [ $this, 'doRefreshToken' ] );
 			add_action( 'blockera_each_seven_days', [ $this, 'doUpdateRegisteredData' ] );
+
+			register_activation_hook( $plugin_file, [ $this, 'activationHook' ] );
+			register_deactivation_hook( $plugin_file, [ $this, 'deactivationHook' ] );
 		}
+	}
+
+	/**
+	 * Add the 6 days schedule on stack.
+	 *
+	 * @param array $schedules The schedules array.
+	 *
+	 * @return array the new schedules array.
+	 */
+	public function addCronInterval( array $schedules ): array {
+
+		$schedules['blockera_6_days'] = array(
+			'interval' => 60 * 60 * 24 * 6,
+			'display'  => esc_html__( 'Every 6 Days', 'blockera' ),
+		);
+		$schedules['blockera_7_days'] = array(
+			'interval' => 60 * 60 * 24 * 7,
+			'display'  => esc_html__( 'Every 7 Days', 'blockera' ),
+		);
+
+		return $schedules;
 	}
 
 	/**
@@ -136,4 +163,63 @@ class Jobs {
 			);
 		}
 	}
+
+	/**
+	 * Activation plugin hook.
+	 *
+	 * @return void
+	 */
+	public function activationHook(): void {
+
+		if ( ! wp_next_scheduled( 'blockera_each_six_days' ) ) {
+
+			wp_schedule_event( time(), 'blockera_6_days', 'blockera_each_six_days' );
+		}
+		if ( ! wp_next_scheduled( 'blockera_each_seven_days' ) ) {
+
+			wp_schedule_event( time(), 'blockera_7_days', 'blockera_each_seven_days' );
+		}
+
+		add_option( $this->config['rest_params']['slug'] . '_do_activation_redirect', true );
+	}
+
+	/**
+	 * Deactivation plugin hook.
+	 *
+	 * @return void
+	 */
+	public function deactivationHook(): void {
+
+		wp_clear_scheduled_hook( 'blockera_each_six_days' );
+		wp_clear_scheduled_hook( 'blockera_each_seven_days' );
+	}
+
+	/**
+	 * Redirecting your WordPress admin to your plugin dashboard page after activation it.
+	 *
+	 * @return void
+	 */
+	public function redirectToDashboard(): void {
+
+		if ( blockera_telemetry_opt_in_is_off( 'blockera' ) ) {
+
+			return;
+		}
+
+		$option = $this->config['rest_params']['slug'] . '_do_activation_redirect';
+
+		// Check if the redirect flag is set and the user has sufficient permissions.
+		if ( get_option( $option, false ) ) {
+
+			delete_option( $option );
+
+			if ( is_admin() && current_user_can( 'activate_plugins' ) ) {
+
+				// Redirect to plugin dashboard or settings page.
+				wp_redirect( admin_url( 'admin.php?page=' . $this->config['dashboard_page'] ) );
+				exit;
+			}
+		}
+	}
+
 }
