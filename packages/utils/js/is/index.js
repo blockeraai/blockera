@@ -213,3 +213,39 @@ export function isLoadedSiteEditor(): boolean {
 export function isLoadedPostEditor(): boolean {
 	return 'undefined' !== typeof select('core/edit-post');
 }
+
+/**
+ * Checks if the given URL or domain is a localhost address
+ *
+ * @param {string} domain - URL or domain to check
+ * @return {boolean} - true if localhost, false otherwise
+ */
+export function isLocalhost(domain: string): boolean {
+	if (!domain) return false;
+
+	// Create URL object if full URL is provided
+	try {
+		if (domain.includes('://')) {
+			domain = new URL(domain).hostname;
+		}
+	} catch (e) {
+		// Invalid URL, continue with original domain string
+	}
+
+	// Common localhost patterns
+	const localhostPatterns = [
+		/^localhost$/i, // localhost
+		/^127\.0\.0\.1$/, // IPv4 localhost
+		/^::1$/, // IPv6 localhost
+		/^0\.0\.0\.0$/, // All IPv4 addresses
+		/^.*\.localhost$/i, // *.localhost
+		/^.*\.local$/i, // *.local
+		/^.*\.test$/i, // *.test
+		/^127\.\d+\.\d+\.\d+$/, // All 127.*.*.* IPv4 addresses
+		/^192\.168\.\d+\.\d+$/, // Common local network IPv4
+		/^10\.\d+\.\d+\.\d+$/, // Private network IPv4
+		/^172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+$/, // Private network IPv4
+	];
+
+	return localhostPatterns.some((pattern) => pattern.test(domain));
+}
