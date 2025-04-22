@@ -139,7 +139,7 @@ describe('Block Manager Settings Testing ...', () => {
 
 		resetPanelSettings(false);
 
-		cy.getByDataTest('text-category=disable').click();
+		cy.getByDataTest('text-category=disable').click({ force: true });
 
 		cy.getByDataTest('update-settings').as('update');
 
@@ -193,7 +193,7 @@ describe('Block Manager Settings Testing ...', () => {
 
 		resetPanelSettings(false);
 
-		cy.getByDataTest('text-category=enable').click();
+		cy.getByDataTest('text-category=enable').click({ force: true });
 
 		cy.getByDataTest('update-settings').as('update');
 
