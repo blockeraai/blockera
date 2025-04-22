@@ -298,7 +298,7 @@ const CodeControl = ({
 		<BaseControl columns={columns} controlName={field} {...labelProps}>
 			<div className={controlClassNames('code', className)}>
 				<Editor
-					width={width || 250}
+					width={width || 248}
 					height={height || 200}
 					defaultLanguage={lang}
 					defaultValue={value}
@@ -323,6 +323,9 @@ const CodeControl = ({
 						lineNumbersMinChars: 2,
 						readOnly: !editable,
 						allowEditorOverflow: false,
+						padding: {
+							top: 10,
+						},
 					}}
 					beforeMount={(monaco: any) => {
 						if (monaco?.blockeraInitialised === undefined) {

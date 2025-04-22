@@ -4,6 +4,9 @@
 - Flex layout feature not working properly on breakpoints reported by Davor Jovanović 🙏🏼 [[🔗 Bug](https://community.blockera.ai/bugs-mdhyb8nc/post/block-row-doesn-t-accept-justify-content-center-bZeVoRwgQ5xhnbm)]
 - Duplicate preview button on non-English websites reported by Hoang 🙏🏼.
 - Fixed duplicate preview button in editor header section.
+- Strange issue that shows block `General` tab items in `Style` tab.
+- Wrong `General` tab settings for inner blocks.
+
 
 ### New Features
 - Inline block renaming by clicking on block card [[🔗 Feature request](https://community.blockera.ai/feature-request-1rsjg2ck/post/block-renaming-quick-block-renaming-from-the-block-card-j7XmvUiOTj36VFn)]
@@ -18,7 +21,7 @@
 - Improve block card design.
 - Improve overall codes.
 - Added `blockera-editor` class to the admin body class to improve canvas editor UI and styles.
-
+- Improve overall block editor design.
 
 ### Automated Tests
 - Added E2E tests to check inline block renaming.
