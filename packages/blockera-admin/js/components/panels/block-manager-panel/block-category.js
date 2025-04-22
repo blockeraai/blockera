@@ -60,7 +60,6 @@ export default function BlockCategory(props: {
 	}
 
 	const checkedBlockNames = without(blockNames, disabledBlocks);
-	const isAllChecked = checkedBlockNames.length === blockNames.length;
 
 	function getCategoryIcon(id: string): MixedElement {
 		switch (id) {
@@ -99,10 +98,9 @@ export default function BlockCategory(props: {
 	}
 
 	return (
-		<>
+		<Flex gap={15} direction={'column'}>
 			<Flex
-				key={category.slug}
-				alignItems={'flex-start'}
+				alignItems={'center'}
 				justifyContent={'space-between'}
 				className={'blockera-block-category'}
 			>
@@ -121,28 +119,28 @@ export default function BlockCategory(props: {
 				>
 					<Button
 						className={componentInnerClassNames(
-							'block-category-button',
-							{
-								'is-active': isAllChecked,
-							}
+							'block-category-button'
 						)}
 						data-test={`${category.slug}-category=disable`}
 						text={__('Disable All', 'blockera')}
 						onClick={() => onBlockCategoryChange(false)}
-						variant={'tertiary-on-hover'}
+						variant={'tertiary'}
+						size={'small'}
+						disabled={checkedBlockNames.length === 0}
 					/>
 
 					<Button
 						className={componentInnerClassNames(
-							'block-category-button',
-							{
-								'is-active': !isAllChecked,
-							}
+							'block-category-button'
 						)}
 						data-test={`${category.slug}-category=enable`}
 						text={__('Enable All', 'blockera')}
 						onClick={() => onBlockCategoryChange(true)}
-						variant={'tertiary-on-hover'}
+						variant={'tertiary'}
+						size={'small'}
+						disabled={
+							checkedBlockNames.length === blockNames.length
+						}
 					/>
 				</div>
 			</Flex>
@@ -163,6 +161,6 @@ export default function BlockCategory(props: {
 					);
 				})}
 			</Grid>
-		</>
+		</Flex>
 	);
 }

@@ -6,6 +6,7 @@
 - Fixed duplicate preview button in editor header section.
 - Strange issue that shows block `General` tab items in `Style` tab.
 - Wrong `General` tab settings for inner blocks.
+- `Custom HTML Attributes` feature should not available for inner blocks.
 
 
 ### New Features

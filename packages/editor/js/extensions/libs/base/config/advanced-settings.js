@@ -19,6 +19,7 @@ const blockeraAttributes: FeatureConfig = {
 	isActiveOnFree: false,
 	isActiveOnStates: ['normal'],
 	isActiveOnBreakpoints: [getBaseBreakpoint()],
+	isActiveOnInnerBlocks: false,
 };
 
 export const advancedSettingsConfig = {

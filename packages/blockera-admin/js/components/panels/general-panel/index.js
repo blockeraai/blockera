@@ -162,7 +162,10 @@ export const GeneralPanel = (): MixedElement => {
 						</ControlContextProvider>
 						<div
 							className={
-								'blockera-settings-block-visibility user-roles'
+								'blockera-settings-block-visibility user-roles ' +
+								(!isChecked
+									? 'blockera-control-is-not-active'
+									: '')
 							}
 						>
 							<ControlContextProvider
@@ -354,7 +357,10 @@ export const GeneralPanel = (): MixedElement => {
 
 				<div
 					className={'blockera-settings-general control-wrapper'}
-					aria-label={'Opt out of PRO hints and promotions'}
+					aria-label={__(
+						'Opt out of PRO hints and promotions',
+						'blockera'
+					)}
 				>
 					<ControlContextProvider
 						value={{

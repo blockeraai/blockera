@@ -8,6 +8,11 @@ import {
 } from '@blockera/dev-cypress/js/helpers/editor';
 import { resetPanelSettings } from '@blockera/dev-cypress/js/helpers';
 
+// Tests must run in this specific order due to dependencies:
+// 1. First test disables paragraph block
+// 2. Second test re-enables paragraph block (depends on first test)
+// 3. Third test disables text category
+// 4. Fourth test re-enables text category (depends on third test)
 describe('Block Manager Settings Testing ...', () => {
 	beforeEach(() => {
 		goTo('/wp-admin/admin.php?page=blockera-settings-dashboard').then(
@@ -203,7 +208,7 @@ describe('Block Manager Settings Testing ...', () => {
 
 		resetPanelSettings(false);
 
-		cy.getByDataTest('text-category=enable').click();
+		cy.getByDataTest('text-category=enable').click({ force: true });
 
 		cy.getByDataTest('update-settings').as('update');
 

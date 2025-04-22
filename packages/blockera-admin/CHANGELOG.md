@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- Blockera admin pages design improvement.
+
+
 ### Bug Fixes
 - Fix design issue on Blockera admin pages.
 
