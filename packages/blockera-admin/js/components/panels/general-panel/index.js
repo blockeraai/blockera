@@ -354,7 +354,10 @@ export const GeneralPanel = (): MixedElement => {
 
 				<div
 					className={'blockera-settings-general control-wrapper'}
-					aria-label={'Opt out of PRO hints and promotions'}
+					aria-label={__(
+						'Opt out of PRO hints and promotions',
+						'blockera'
+					)}
 				>
 					<ControlContextProvider
 						value={{
