@@ -37,19 +37,6 @@ export function clearBoxSpacingSide(side) {
  *
  * @param {string}  side   Name of the panel to open
  */
-export function openBoxSpacingSide(side, element = 'label') {
-	if (element === 'label') {
-		cy.get(
-			`[data-cy="box-spacing-${side}"] [data-cy="label-control"]`
-		).click();
-	} else if (element === 'shape') {
-		cy.get(`[data-cy="box-spacing-control"]`).within(() => {
-			cy.get(`path.blockera-control-spacing-shape-side.side-${side}`)
-				.trigger('mouseover', { force: true })
-				.trigger('mousedown', { force: true })
-				.wait(100)
-				.trigger('mouseup', { force: true })
-				.trigger('click', { force: true });
-		});
-	}
+export function openBoxSpacingSide(side) {
+	cy.get(`[data-cy="box-spacing-${side}"] [data-cy="label-control"]`).click();
 }
