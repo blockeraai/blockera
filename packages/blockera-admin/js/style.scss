@@ -130,18 +130,7 @@
 
 					.blockera-component-block-category-buttons {
 						display: flex;
-
-						.blockera-component-block-category-button {
-							color: rgba(0, 0, 0, 0.15);
-
-							&:hover {
-								color: rgba(0, 0, 0, 0.50);
-							}
-
-							&.is-active {
-								color: #000000;
-							}
-						}
+						gap: 15px;
 					}
 				}
 
