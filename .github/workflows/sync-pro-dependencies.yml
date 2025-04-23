@@ -63,7 +63,6 @@ jobs:
                   repository: blockeraai/blockera-pro
                   token: ${{ secrets.BLOCKERABOT_PAT }}
                   path: blockera-pro
-                  ref: fix/plugin-info
 
             - name: Update dependencies.json
               id: update_dependencies
