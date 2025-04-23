@@ -17,7 +17,6 @@ import type {
 } from '../../extensions/libs/block-states/types';
 import { mergeObject } from '@blockera/utils';
 import { getComputedCssProps } from '../get-computed-css-props';
-import { default as blockStates } from '../../extensions/libs/block-states/states';
 
 /**
  * Internal dependencies
@@ -31,7 +30,8 @@ export const StateStyle = (
 	props: StateStyleProps
 ): Array<MixedElement> | MixedElement => {
 	const [breakpoints, setBreakpoints] = useState({});
-	const { getBreakpoints } = select('blockera/editor');
+	const { getStates, getBreakpoints } = select('blockera/editor');
+	const blockStates = getStates();
 
 	useEffect(() => {
 		const loadBreakpoints = () => {

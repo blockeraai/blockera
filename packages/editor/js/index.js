@@ -8,7 +8,10 @@ import { dispatch } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import type { BreakpointTypes } from './extensions/libs/block-states/types';
+import type {
+	StateTypes,
+	BreakpointTypes,
+} from './extensions/libs/block-states/types';
 
 /**
  * Internal dependencies
@@ -26,6 +29,14 @@ export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 	}
 
 	setBreakpoints(breakpointsStack);
+}
+
+export function unstableBootstrapServerSideBlockStatesDefinitions(definitions: {
+	[key: string]: StateTypes,
+}) {
+	const { setBlockStates } = dispatch(STORE_NAME);
+
+	setBlockStates(definitions);
 }
 
 export function registerCanvasEditorSettings(settings: Object) {

@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Implemented the block states new configuration to make it easier to manage block states around the editor.
+
 ## 1.3.0 (2025-04-22)
 
 ### Bug Fixes

@@ -18,6 +18,7 @@ import {
 	store as editorStore,
 	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
+	unstableBootstrapServerSideBlockStatesDefinitions,
 } from '../';
 
 /**
@@ -47,6 +48,7 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		select: select(store?.name),
 		unstableBootstrapServerSideEntities,
 		unstableBootstrapServerSideVariableDefinitions,
+		unstableBootstrapServerSideBlockStatesDefinitions,
 		unstableBootstrapServerSideDynamicValueDefinitions,
 	};
 
@@ -55,6 +57,7 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		init: outsideDefinitions,
 		select: select(editorStore?.name),
 		unstableBootstrapServerSideBreakpointDefinitions,
+		unstableBootstrapServerSideBlockStatesDefinitions,
 	};
 
 	registerCanvasEditorSettings({

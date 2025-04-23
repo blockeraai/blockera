@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added the extendable block states configuration to make it easier to extend the plugin.
+
 ## 1.2.4 (2025-04-13)
 
 ### Automated Build

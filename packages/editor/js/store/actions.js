@@ -4,6 +4,7 @@
  * External dependencies
  */
 import type {
+	StateTypes,
 	TBreakpoint,
 	BreakpointTypes,
 } from '../extensions/libs/block-states/types';
@@ -39,6 +40,40 @@ export const updateBreakpoints = (breakpoints: TBreakpoint): Object => {
 	return {
 		breakpoints,
 		type: 'UPDATE_BREAKPOINTS',
+	};
+};
+
+export const setBlockStates = (states: {
+	[key: StateTypes]: Object,
+}): Object => {
+	return {
+		states,
+		type: 'SET_BLOCK_STATES',
+	};
+};
+
+export const editBlockState = (
+	editedState: Object,
+	stateName: StateTypes
+): Object => {
+	return {
+		stateName,
+		editedState,
+		type: 'EDIT_BLOCK_STATE',
+	};
+};
+
+export const deleteBlockState = (stateName: StateTypes): Object => {
+	return {
+		stateName,
+		type: 'DELETE_BLOCK_STATE',
+	};
+};
+
+export const updateBlockStates = (states: StateTypes): Object => {
+	return {
+		states,
+		type: 'UPDATE_BLOCK_STATES',
 	};
 };
 

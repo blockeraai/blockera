@@ -7,13 +7,12 @@ import { select, dispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import states from './states';
 import breakpoints from './default-breakpoints';
 import type {
-	StateTypes,
-	BreakpointTypes,
-	TBreakpoint,
 	TStates,
+	StateTypes,
+	TBreakpoint,
+	BreakpointTypes,
 } from './types';
 import { getBaseBreakpoint } from '../../../canvas-editor';
 import { isNormalState } from '../../components/utils';
@@ -33,7 +32,10 @@ export const isNormalStateOnBaseBreakpoint = (
 	return isNormalState(stateType) && getBaseBreakpoint() === breakpointType;
 };
 
-export const getStateInfo = (state: TStates | number): Object => {
+export const getStateInfo = (
+	state: TStates | number,
+	states: { [key: string]: StateTypes }
+): Object => {
 	return 'number' === typeof state
 		? Object.values(states)[state]
 		: states[state];
@@ -47,7 +49,8 @@ export const getBreakpointInfo = (
 
 export function onChangeBlockStates(
 	newValue: { [key: TStates]: { ...StateTypes, isSelected: boolean } },
-	params: Object
+	params: Object,
+	states: { [key: string]: StateTypes }
 ): void {
 	const onChangeValue: Object = { ...newValue };
 
@@ -127,7 +130,7 @@ export function onChangeBlockStates(
 		for (const stateType in blockStates) {
 			const stateItem = blockStates[stateType];
 			const index = Object.keys(blockStates).indexOf(stateType);
-			const info = getStateInfo(index);
+			const info = getStateInfo(index, states);
 
 			if ('normal' === stateType) {
 				info.deletable = false;

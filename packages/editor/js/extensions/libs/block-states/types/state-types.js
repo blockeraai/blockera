@@ -42,3 +42,10 @@ export type StateTypes = {
 export type BlockStates = {
 	[key: TStates | string]: { ...StateTypes, isSelected: boolean },
 };
+
+export type BlockStateType = {
+	type: string,
+	label: TStatesLabel,
+	breakpoints: Object,
+	disabled?: boolean,
+};
