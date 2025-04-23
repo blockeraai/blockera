@@ -5,6 +5,11 @@
 - Added support for external block states configuration through Blockera's block states feature, enabling developers to define custom block states and behaviors.
 - Introduced block states API documentation and examples for third-party developers.
 
+## 1.3.1 (2025-04-23)
+
+### Bug Fixes
+- Block `Style Variations` buttons hover state design issue.
+
 ## 1.3.0 (2025-04-22)
 
 ### Bug Fixes

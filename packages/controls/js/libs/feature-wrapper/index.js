@@ -32,7 +32,7 @@ export function FeatureWrapper({
 	showText?: 'on-hover' | 'always',
 	children: MixedElement,
 }): MixedElement {
-	let icon = <Icon icon="warning" iconSize="18" />;
+	let icon = <Icon icon="warning" iconSize="22" />;
 	let link = '';
 
 	if (!text) {
@@ -104,29 +104,35 @@ export function FeatureWrapper({
 			<div
 				className={componentInnerClassNames('feature-wrapper__notice')}
 			>
-				{icon}
+				<div
+					className={componentInnerClassNames(
+						'feature-wrapper__notice_inner'
+					)}
+				>
+					{icon}
 
-				{link ? (
-					<a
-						href={link}
-						target="_blank"
-						rel="noreferrer"
-						className={componentInnerClassNames(
-							'feature-wrapper__notice__text',
-							'feature-wrapper__notice__text__link'
-						)}
-					>
-						{text}
-					</a>
-				) : (
-					<div
-						className={componentInnerClassNames(
-							'feature-wrapper__notice__text'
-						)}
-					>
-						{text}
-					</div>
-				)}
+					{link ? (
+						<a
+							href={link}
+							target="_blank"
+							rel="noreferrer"
+							className={componentInnerClassNames(
+								'feature-wrapper__notice__text',
+								'feature-wrapper__notice__text__link'
+							)}
+						>
+							{text}
+						</a>
+					) : (
+						<div
+							className={componentInnerClassNames(
+								'feature-wrapper__notice__text'
+							)}
+						>
+							{text}
+						</div>
+					)}
+				</div>
 			</div>
 
 			<div
