@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.2.1 (2025-04-23)
+
 ### Improvements
 - Features upgrade to pro notice design improvement.
 

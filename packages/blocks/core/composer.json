@@ -1,6 +1,6 @@
 {
 	"name": "blockera/blocks-core",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "The WordPress core blocks package for Blockera editor.",
 	"autoload": {
 		"psr-4": {
