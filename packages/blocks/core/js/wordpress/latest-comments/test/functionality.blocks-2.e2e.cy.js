@@ -7,7 +7,6 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
-	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -62,7 +61,6 @@ describe('Latest Comments Block', () => {
 		// 1.1.1. BG color
 		//
 		cy.setColorControlValue('BG Color', 'ff0000');
-		setBoxSpacingSide('margin-bottom', 10);
 
 		cy.getBlock('core/latest-comments')
 			.first()

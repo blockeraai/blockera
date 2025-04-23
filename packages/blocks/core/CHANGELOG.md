@@ -1,5 +1,10 @@
 ## Unreleased
 
+### Automated Tests
+- Improve `RSS` block tests.
+- Improve `Latest Comments` block tests.
+
+
 ## 1.2.0 (2025-04-16)
 
 ### New Features

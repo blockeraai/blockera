@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Bug Fixes
+- Block `Style Variations` buttons hover state design issue.
+
+
 ## 1.3.0 (2025-04-22)
 
 ### Bug Fixes

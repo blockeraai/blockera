@@ -24,9 +24,9 @@
 				word-break: break-all;
 			}
 
-			&:hover {
-				box-shadow: inset 0 0 0 1px #dddddd;
-				color: var(--wp-admin-theme-color);
+			&:hover:not(.is-active) {
+				box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
+				color: var(--blockera-controls-primary-color);
 			}
 
 			&:not(.is-active):not(:hover) {
@@ -36,7 +36,7 @@
 
 			&.is-active,
 			&.is-active:hover {
-				background-color: var(--blockera-controls-primary-color);
+				background-color: var(--blockera-controls-primary-color) !important;
 				box-shadow: none;
 			}
 
