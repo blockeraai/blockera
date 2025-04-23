@@ -5,7 +5,6 @@ on:
         branches:
             - master
         paths:
-            - 'package.json'
             - 'packages/**/package.json'
 
 jobs:
@@ -20,12 +19,35 @@ jobs:
               with:
                   path: blockera
 
-            - name: Get Blockera version
-              id: blockera_version
-              working-directory: blockera
+            - name: Get Package Versions
+              id: package_versions
+              working-directory: blockera/packages
               run: |
-                  VERSION=$(jq -r '.version' package.json)
-                  echo "version=${VERSION}" >> $GITHUB_OUTPUT
+                  # Function to convert version to underscore format
+                  version_to_underscore() {
+                    echo "$1" | tr '.' '_'
+                  }
+
+                  # Initialize empty JSON object
+                  VERSIONS="{}"
+
+                  # Loop through each package directory
+                  for pkg in */; do
+                    if [ -f "${pkg}package.json" ]; then
+                      # Get package name and version
+                      PKG_NAME=$(jq -r '.name' "${pkg}package.json" | sed 's/@blockera\///')
+                      PKG_VERSION=$(jq -r '.version' "${pkg}package.json")
+                      
+                      # Convert version to underscore format
+                      UNDERSCORE_VERSION=$(version_to_underscore "$PKG_VERSION")
+                      
+                      # Add to JSON object
+                      VERSIONS=$(echo $VERSIONS | jq --arg name "$PKG_NAME" --arg version "$UNDERSCORE_VERSION" '. + {($name): $version}')
+                    fi
+                  done
+
+                  # Save versions to output
+                  echo "versions=$VERSIONS" >> $GITHUB_OUTPUT
 
             - name: Checkout Blockera Pro
               uses: actions/checkout@v4
@@ -38,14 +60,8 @@ jobs:
               id: update_dependencies
               working-directory: blockera-pro
               run: |
-                  # Read current dependencies.json
-                  CURRENT_CONTENT=$(cat dependencies.json)
-
-                  # Update blockera version
-                  NEW_CONTENT=$(echo "$CURRENT_CONTENT" | jq --arg version "${{ steps.blockera_version.outputs.version }}" '.blockera = $version')
-
-                  # Write back to file
-                  echo "$NEW_CONTENT" > dependencies.json
+                  # Convert versions JSON to proper format and write to dependencies.json
+                  echo '${{ steps.package_versions.outputs.versions }}' > dependencies.json
 
                   # Check if there are changes
                   if git diff --quiet dependencies.json; then
@@ -65,20 +81,20 @@ jobs:
                   git config user.email "blockeraai+githubbot@gmail.com"
 
                   # Create branch
-                  BRANCH_NAME="update/blockera-deps-${{ steps.blockera_version.outputs.version }}"
+                  BRANCH_NAME="update/blockera-deps-$(date +%Y%m%d-%H%M%S)"
                   git checkout -b "$BRANCH_NAME"
 
                   # Commit changes
                   git add dependencies.json
-                  git commit -m "Update Blockera dependency to v${{ steps.blockera_version.outputs.version }}"
+                  git commit -m "Update Blockera package dependencies"
 
                   # Push changes
                   git push origin "$BRANCH_NAME"
 
                   # Create PR using GitHub CLI
                   gh pr create \
-                    --title "Update Blockera dependency to v${{ steps.blockera_version.outputs.version }}" \
-                    --body "This PR updates the Blockera dependency version to v${{ steps.blockera_version.outputs.version }} to keep packages in sync." \
+                    --title "Update Blockera package dependencies" \
+                    --body "This PR updates the Blockera package dependencies to keep versions in sync with the main repository." \
                     --label "dependencies" \
                     --repo "blockeraai/blockera-pro"
               env:
