@@ -71,7 +71,7 @@
 			padding: 0 3px 0 5px;
 
 			&.feature-wrapper__notice__text__link {
-				color: var(--locked-color);
+				color: var(--locked-color) !important;
 				text-decoration: none;
 
 				&:focus {
