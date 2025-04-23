@@ -4,8 +4,8 @@ on:
     push:
         branches:
             - master
-        paths:
-            - 'packages/**/package.json'
+        # paths:
+        #     - 'packages/**/package.json'
 
 jobs:
     sync-dependencies:
