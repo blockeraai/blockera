@@ -41,13 +41,14 @@ jobs:
                       # Convert version to underscore format
                       UNDERSCORE_VERSION=$(version_to_underscore "$PKG_VERSION")
                       
-                      # Add to JSON object
-                      VERSIONS=$(echo $VERSIONS | jq --arg name "$PKG_NAME" --arg version "$UNDERSCORE_VERSION" '. + {($name): $version}')
+                      # Add to JSON object using jq to ensure proper JSON formatting
+                      VERSIONS=$(echo "$VERSIONS" | jq --arg name "$PKG_NAME" --arg version "$UNDERSCORE_VERSION" '. + {($name): $version}')
                     fi
                   done
 
-                  # Save versions to output
-                  echo "versions=$VERSIONS" >> $GITHUB_OUTPUT
+                  # Format JSON output and escape special characters
+                  ESCAPED_VERSIONS=$(echo "$VERSIONS" | jq -c . | sed 's/"/\\"/g')
+                  echo "versions=$ESCAPED_VERSIONS" >> $GITHUB_OUTPUT
 
             - name: Checkout Blockera Pro
               uses: actions/checkout@v4
@@ -60,8 +61,8 @@ jobs:
               id: update_dependencies
               working-directory: blockera-pro
               run: |
-                  # Convert versions JSON to proper format and write to dependencies.json
-                  echo '${{ steps.package_versions.outputs.versions }}' > dependencies.json
+                  # Parse and format the versions JSON before writing
+                  echo '${{ steps.package_versions.outputs.versions }}' | jq '.' > dependencies.json
 
                   # Check if there are changes
                   if git diff --quiet dependencies.json; then
