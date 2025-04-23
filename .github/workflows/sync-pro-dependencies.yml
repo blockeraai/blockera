@@ -1,0 +1,85 @@
+name: Sync Blockera Pro Dependencies
+
+on:
+    push:
+        branches:
+            - master
+            - ci/sync-pro-dependencies
+        paths:
+            - 'packages/**/package.json'
+
+jobs:
+    sync-dependencies:
+        name: Update Blockera Pro Dependencies
+        runs-on: ubuntu-latest
+        if: github.repository == 'blockeraai/blockera'
+
+        steps:
+            - name: Checkout Blockera
+              uses: actions/checkout@v4
+              with:
+                  path: blockera
+
+            - name: Get Blockera version
+              id: blockera_version
+              working-directory: blockera
+              run: |
+                  VERSION=$(jq -r '.version' package.json)
+                  echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+            - name: Checkout Blockera Pro
+              uses: actions/checkout@v4
+              with:
+                  repository: blockeraai/blockera-pro
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  path: blockera-pro
+
+            - name: Update dependencies.json
+              id: update_dependencies
+              working-directory: blockera-pro
+              run: |
+                  # Read current dependencies.json
+                  CURRENT_CONTENT=$(cat dependencies.json)
+
+                  # Update blockera version
+                  NEW_CONTENT=$(echo "$CURRENT_CONTENT" | jq --arg version "${{ steps.blockera_version.outputs.version }}" '.blockera = $version')
+
+                  # Write back to file
+                  echo "$NEW_CONTENT" > dependencies.json
+
+                  # Check if there are changes
+                  if git diff --quiet dependencies.json; then
+                    echo "No changes needed in dependencies.json"
+                    echo "has_changes=false" >> $GITHUB_OUTPUT
+                  else
+                    echo "Changes detected in dependencies.json"
+                    echo "has_changes=true" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Create Pull Request
+              if: steps.update_dependencies.outputs.has_changes == 'true'
+              working-directory: blockera-pro
+              run: |
+                  # Configure git
+                  git config user.name "blockerabot"
+                  git config user.email "blockeraai+githubbot@gmail.com"
+
+                  # Create branch
+                  BRANCH_NAME="update/blockera-deps-${{ steps.blockera_version.outputs.version }}"
+                  git checkout -b "$BRANCH_NAME"
+
+                  # Commit changes
+                  git add dependencies.json
+                  git commit -m "Update Blockera dependency to v${{ steps.blockera_version.outputs.version }}"
+
+                  # Push changes
+                  git push origin "$BRANCH_NAME"
+
+                  # Create PR using GitHub CLI
+                  gh pr create \
+                    --title "Update Blockera dependency to v${{ steps.blockera_version.outputs.version }}" \
+                    --body "This PR updates the Blockera dependency version to v${{ steps.blockera_version.outputs.version }} to keep packages in sync." \
+                    --label "dependencies" \
+                    --repo "blockeraai/blockera-pro"
+              env:
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
