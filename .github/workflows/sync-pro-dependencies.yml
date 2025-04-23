@@ -28,6 +28,11 @@ jobs:
                     echo "$1" | tr '.' '_'
                   }
 
+                  # Function to convert package name to camelCase
+                  to_camel_case() {
+                    echo "$1" | sed -E 's/-([a-z])/\U\1/g'
+                  }
+
                   # Initialize empty JSON object
                   VERSIONS="{}"
 
@@ -41,8 +46,11 @@ jobs:
                       # Convert version to underscore format
                       UNDERSCORE_VERSION=$(version_to_underscore "$PKG_VERSION")
                       
+                      # Convert package name to camelCase
+                      CAMEL_CASE_NAME=$(to_camel_case "$PKG_NAME")
+                      
                       # Add to JSON object using jq to ensure proper JSON formatting
-                      VERSIONS=$(echo "$VERSIONS" | jq --arg name "$PKG_NAME" --arg version "$UNDERSCORE_VERSION" '. + {($name): $version}')
+                      VERSIONS=$(echo "$VERSIONS" | jq --arg name "$CAMEL_CASE_NAME" --arg version "$UNDERSCORE_VERSION" '. + {($name): $version}')
                     fi
                   done
 
