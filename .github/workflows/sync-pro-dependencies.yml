@@ -4,8 +4,8 @@ on:
     push:
         branches:
             - master
-            - ci/sync-pro-dependencies
         paths:
+            - 'package.json'
             - 'packages/**/package.json'
 
 jobs:
