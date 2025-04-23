@@ -2,6 +2,8 @@
 
 ### New Features
 - Implemented the block states new configuration to make it easier to manage block states around the editor.
+- Added support for external block states configuration through Blockera's block states feature, enabling developers to define custom block states and behaviors.
+- Introduced block states API documentation and examples for third-party developers.
 
 ## 1.3.0 (2025-04-22)
 

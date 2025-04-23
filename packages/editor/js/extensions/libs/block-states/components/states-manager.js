@@ -54,8 +54,8 @@ const isMasterBlockStates = (id: string): boolean =>
 const StatesManager: ComponentType<any> = memo(
 	({
 		block,
-		attributes,
 		onChange,
+		attributes,
 		currentBlock,
 		currentState,
 		availableStates,
@@ -85,9 +85,23 @@ const StatesManager: ComponentType<any> = memo(
 			states = mergeObject(savedBlockStates, states);
 		}
 
-		const preparedStates = !availableStates
-			? defaultStates
-			: availableStates;
+		// Try to preparing available states!
+		const preparedStates = useMemo(() => {
+			if (
+				Object.keys(attributes?.blockeraUnsavedData?.states || {})
+					.length > 0
+			) {
+				return attributes?.blockeraUnsavedData?.states;
+			} else if (availableStates) {
+				return availableStates;
+			}
+
+			return defaultStates;
+		}, [
+			defaultStates,
+			availableStates,
+			attributes?.blockeraUnsavedData?.states,
+		]);
 
 		const calculatedValue = useMemo(() => {
 			const itemsCount = Object.values(states).length;
