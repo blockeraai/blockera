@@ -46,9 +46,8 @@ jobs:
                     fi
                   done
 
-                  # Format JSON output and escape special characters
-                  ESCAPED_VERSIONS=$(echo "$VERSIONS" | jq -c . | sed 's/"/\\"/g')
-                  echo "versions=$ESCAPED_VERSIONS" >> $GITHUB_OUTPUT
+                  # Output JSON directly without escaping
+                  echo "versions=$(echo "$VERSIONS" | jq -c .)" >> $GITHUB_OUTPUT
 
             - name: Checkout Blockera Pro
               uses: actions/checkout@v4
@@ -61,8 +60,8 @@ jobs:
               id: update_dependencies
               working-directory: blockera-pro
               run: |
-                  # Parse and format the versions JSON before writing
-                  echo '${{ steps.package_versions.outputs.versions }}' | jq '.' > dependencies.json
+                  # Write versions directly to dependencies.json
+                  echo '${{ steps.package_versions.outputs.versions }}' > dependencies.json
 
                   # Check if there are changes
                   if git diff --quiet dependencies.json; then
