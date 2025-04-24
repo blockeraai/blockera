@@ -14,12 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 return apply_filters( 'blockera.editor.extensions.blockStates.availableStates', [
 	'normal' => [
 		'type' => 'normal',
-		'label' => 'Normal',
+		'label' => __( 'Normal', 'blockera' ),
 		'breakpoints' => [],
 	],
 	'hover' => [
 		'type' => 'hover', 
-		'label' => 'Hover',
+		'label' => __( 'Hover', 'blockera' ),
 		'breakpoints' => [],
 	],
 	'active' => [
