@@ -36,7 +36,32 @@ export function unstableBootstrapServerSideBlockStatesDefinitions(definitions: {
 }) {
 	const { setBlockStates } = dispatch(STORE_NAME);
 
-	setBlockStates(definitions);
+	setBlockStates(
+		Object.fromEntries(
+			Object.entries(definitions).map(([name, definition]) => {
+				if (
+					!definition?.hasOwnProperty('disabled') &&
+					definition?.hasOwnProperty('native')
+				) {
+					// $FlowFixMe
+					const isNative = definition?.native;
+					// $FlowFixMe
+					delete definition?.native;
+
+					return [
+						name,
+						{
+							...definition,
+							// $FlowFixMe
+							disabled: isNative,
+						},
+					];
+				}
+
+				return [name, definition];
+			})
+		)
+	);
 }
 
 export function registerCanvasEditorSettings(settings: Object) {
