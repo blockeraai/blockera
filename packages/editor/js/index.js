@@ -8,15 +8,16 @@ import { dispatch } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import type {
-	StateTypes,
-	BreakpointTypes,
-} from './extensions/libs/block-states/types';
+import { getSortedObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from './store';
+import type {
+	StateTypes,
+	BreakpointTypes,
+} from './extensions/libs/block-states/types';
 
 export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 	[key: string]: BreakpointTypes,
@@ -35,33 +36,25 @@ export function unstableBootstrapServerSideBlockStatesDefinitions(definitions: {
 	[key: string]: StateTypes,
 }) {
 	const { setBlockStates } = dispatch(STORE_NAME);
+	const overrideDefinitions: { [key: string]: Object } = {};
 
-	setBlockStates(
-		Object.fromEntries(
-			Object.entries(definitions).map(([name, definition]) => {
-				if (
-					!definition?.hasOwnProperty('disabled') &&
-					definition?.hasOwnProperty('native')
-				) {
-					// $FlowFixMe
-					const isNative = definition?.native;
-					// $FlowFixMe
-					delete definition?.native;
+	for (const [key, definition] of Object.entries(definitions)) {
+		if (definition?.hasOwnProperty('native')) {
+			const isNative = definition?.native;
+			delete definition?.native;
 
-					return [
-						name,
-						{
-							...definition,
-							// $FlowFixMe
-							disabled: isNative,
-						},
-					];
-				}
+			overrideDefinitions[key] = {
+				...definition,
+				disabled: isNative,
+			};
 
-				return [name, definition];
-			})
-		)
-	);
+			continue;
+		}
+
+		overrideDefinitions[key] = definition;
+	}
+
+	setBlockStates(getSortedObject(overrideDefinitions));
 }
 
 export function registerCanvasEditorSettings(settings: Object) {

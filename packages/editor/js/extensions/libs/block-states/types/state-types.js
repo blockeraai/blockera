@@ -36,6 +36,8 @@ export type StateTypes = {
 		color: string,
 		cssSelector?: string,
 	},
+	priority: number,
+	native?: boolean,
 	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
 };
 

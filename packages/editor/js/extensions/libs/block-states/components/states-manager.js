@@ -12,7 +12,13 @@ import { memo, useMemo, useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEquals, isEmpty, omit, mergeObject } from '@blockera/utils';
+import {
+	omit,
+	isEmpty,
+	isEquals,
+	mergeObject,
+	getSortedObject,
+} from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	RepeaterControl,
@@ -91,12 +97,12 @@ const StatesManager: ComponentType<any> = memo(
 				Object.keys(attributes?.blockeraUnsavedData?.states || {})
 					.length > 0
 			) {
-				return attributes?.blockeraUnsavedData?.states;
+				return getSortedObject(attributes?.blockeraUnsavedData?.states);
 			} else if (availableStates) {
-				return availableStates;
+				return getSortedObject(availableStates);
 			}
 
-			return defaultStates;
+			return getSortedObject(defaultStates);
 		}, [
 			defaultStates,
 			availableStates,
