@@ -28,10 +28,6 @@ export type RepeaterControlProps = {
 	 */
 	id: string,
 	/**
-	 * Repeater children.
-	 */
-	children: MixedElement,
-	/**
 	 * Repeater value exists on root?
 	 */
 	onRoot: boolean,
@@ -57,12 +53,6 @@ export type RepeaterControlProps = {
 	 * @default true
 	 */
 	mode?: GroupControlMode,
-	/**
-	 * Specifies that add new button should be shown or not.
-	 *
-	 * @default true
-	 */
-	hasAddNewButton?: boolean,
 	/**
 	 * Flag for support selectable repeater items or not.
 	 */
