@@ -28,11 +28,16 @@ export default function Modal({
 		<WPModal
 			className={componentClassNames('modal', className)}
 			title={
-				<>
-					{headerIcon}
-					{headerTitle}
-				</>
+				headerTitle ? (
+					<>
+						{headerIcon}
+						{headerTitle}
+					</>
+				) : null
 			}
+			{...(!headerTitle && {
+				__experimentalHideHeader: true,
+			})}
 			isDismissible={isDismissible}
 			{...props}
 		>
