@@ -1,3 +1,3 @@
 // @flow
 
-export * from './components';
+export { default as sharedBlockStates } from './states';

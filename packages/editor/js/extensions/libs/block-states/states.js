@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { TStatesLabel } from '../types';
+import type { TStatesLabel } from './types';
 import { applyFilters } from '@wordpress/hooks';
 
 export type BlockStateType = {

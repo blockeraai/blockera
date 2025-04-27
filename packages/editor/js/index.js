@@ -8,16 +8,12 @@ import { dispatch } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { getSortedObject } from '@blockera/utils';
+import type { BreakpointTypes } from './extensions/libs/block-states/types';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from './store';
-import type {
-	StateTypes,
-	BreakpointTypes,
-} from './extensions/libs/block-states/types';
 
 export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 	[key: string]: BreakpointTypes,
@@ -30,31 +26,6 @@ export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 	}
 
 	setBreakpoints(breakpointsStack);
-}
-
-export function unstableBootstrapServerSideBlockStatesDefinitions(definitions: {
-	[key: string]: StateTypes,
-}) {
-	const { setBlockStates } = dispatch(STORE_NAME);
-	const overrideDefinitions: { [key: string]: Object } = {};
-
-	for (const [key, definition] of Object.entries(definitions)) {
-		if (definition?.hasOwnProperty('native')) {
-			const isNative = definition?.native;
-			delete definition?.native;
-
-			overrideDefinitions[key] = {
-				...definition,
-				disabled: isNative,
-			};
-
-			continue;
-		}
-
-		overrideDefinitions[key] = definition;
-	}
-
-	setBlockStates(getSortedObject(overrideDefinitions));
 }
 
 export function registerCanvasEditorSettings(settings: Object) {

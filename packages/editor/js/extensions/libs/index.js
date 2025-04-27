@@ -28,4 +28,6 @@ export {
 } from './base';
 export { registerInnerBlockExtensionsSupports } from './inner-blocks';
 
+export { sharedBlockStates } from './block-states';
+
 export { blockeraExtensionsBootstrap } from './bootstrap';

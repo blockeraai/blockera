@@ -2,13 +2,12 @@
  * Internal dependencies
  */
 import { getBreakpointInfo, getStateInfo } from '../helpers';
-import { default as sharedBlockStates } from './states';
 
 describe('Block States Helpers', () => {
 	it('should retrieve state with getStateInfo(stateId)', () => {
 		const pickedState = 0;
 
-		expect(getStateInfo(pickedState, sharedBlockStates)).toEqual({
+		expect(getStateInfo(pickedState)).toEqual({
 			type: 'normal',
 			label: 'Normal',
 			breakpoints: {},
@@ -16,7 +15,7 @@ describe('Block States Helpers', () => {
 	});
 
 	it('should retrieve state with getStateInfo(stateName)', () => {
-		expect(getStateInfo('hover', sharedBlockStates)).toEqual({
+		expect(getStateInfo('hover')).toEqual({
 			type: 'hover',
 			label: 'Hover',
 			breakpoints: {},

@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { type MixedElement } from 'react';
+import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -32,40 +32,14 @@ export function FeatureWrapper({
 	showText?: 'on-hover' | 'always',
 	children: MixedElement,
 }): MixedElement {
-	let icon = (
-		<Icon
-			icon="warning"
-			iconSize="22"
-			className={componentInnerClassNames(
-				'feature-wrapper__notice__icon'
-			)}
-		/>
-	);
-	let icon2 = null;
+	let icon = <Icon icon="warning" iconSize="22" />;
 	let link = '';
 
 	if (!text) {
 		switch (type) {
 			case 'free':
 				text = __('Upgrade to PRO', 'blockera');
-				icon = (
-					<Icon
-						icon="lock"
-						iconSize="22"
-						className={componentInnerClassNames(
-							'feature-wrapper__notice__icon'
-						)}
-					/>
-				);
-				icon2 = (
-					<Icon
-						icon="unlock"
-						iconSize="22"
-						className={componentInnerClassNames(
-							'feature-wrapper__notice__icon-2'
-						)}
-					/>
-				);
+				icon = <Icon icon="lock" iconSize="22" />;
 				link = upgradeLink;
 				break;
 			case 'state':
@@ -132,61 +106,41 @@ export function FeatureWrapper({
 			>
 				<div
 					className={componentInnerClassNames(
-						'feature-wrapper__notice__icons',
-						icon2 ? 'icons-2' : ''
+						'feature-wrapper__notice_inner'
 					)}
 				>
 					{icon}
-					{icon2}
-				</div>
 
-				{link ? (
-					<a
-						href={link}
-						target="_blank"
-						rel="noreferrer"
-						className={componentInnerClassNames(
-							'feature-wrapper__notice__text',
-							'feature-wrapper__notice__text__link'
-						)}
-					>
-						{text}
-					</a>
-				) : (
-					<div
-						className={componentInnerClassNames(
-							'feature-wrapper__notice__text'
-						)}
-					>
-						{text}
-					</div>
-				)}
+					{link ? (
+						<a
+							href={link}
+							target="_blank"
+							rel="noreferrer"
+							className={componentInnerClassNames(
+								'feature-wrapper__notice__text',
+								'feature-wrapper__notice__text__link'
+							)}
+						>
+							{text}
+						</a>
+					) : (
+						<div
+							className={componentInnerClassNames(
+								'feature-wrapper__notice__text'
+							)}
+						>
+							{text}
+						</div>
+					)}
+				</div>
 			</div>
 
 			<div
 				className={componentInnerClassNames(
 					'feature-wrapper__children'
 				)}
-				style={{ pointerEvents: 'none' }}
 				onClick={(e) => {
 					e.preventDefault();
-					e.stopPropagation();
-				}}
-				onMouseDown={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-				}}
-				onMouseUp={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-				}}
-				onTouchStart={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-				}}
-				onTouchEnd={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
 				}}
 			>
 				{children}

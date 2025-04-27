@@ -1,6 +1,7 @@
 /**
  * Internal dependencies
  */
+import { getBreakpointInfo, getStateInfo } from '../helpers';
 import { default as defaultBreakpoints } from '../default-breakpoints';
 
 describe('Default breakpoints settings', () => {

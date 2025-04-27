@@ -22,6 +22,7 @@ import type {
 	TStatesLabel,
 } from '../../extensions/libs/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
+import staticStates from '../../extensions/libs/block-states/states';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 
@@ -59,8 +60,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 	}
 
 	const { getExtensionCurrentBlock } = select('blockera/extensions');
-	const { getStates, getBreakpoints } = select('blockera/editor');
-	const defaultStates = getStates();
+	const { getBreakpoints } = select('blockera/editor');
 
 	const currentBlock = getExtensionCurrentBlock();
 
@@ -89,7 +89,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 			// $FlowFixMe
 			states.push({
 				type: 'normal',
-				label: defaultStates.normal.label,
+				label: staticStates.normal.label,
 				attributes: omit(blockAttributes, ['blockeraBlockStates']),
 			});
 		}
@@ -108,7 +108,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 				// $FlowFixMe
 				states.push({
 					type: 'normal',
-					label: defaultStates.normal.label,
+					label: staticStates.normal.label,
 					attributes: omit(innerBlockAttributes, [
 						'blockeraBlockStates',
 					]),
@@ -126,7 +126,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 				// $FlowFixMe
 				states.push({
 					type: stateType,
-					label: defaultStates[stateType].label,
+					label: staticStates[stateType].label,
 					attributes: state.breakpoints[breakpoint.type]?.attributes,
 				});
 			}
@@ -153,7 +153,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 				// $FlowFixMe
 				states.push({
 					type: 'normal',
-					label: defaultStates.normal.label,
+					label: staticStates.normal.label,
 					attributes: currentAttributes,
 				});
 
@@ -170,7 +170,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 					// $FlowFixMe
 					states.push({
 						type: _stateType,
-						label: defaultStates[_stateType].label,
+						label: staticStates[_stateType].label,
 						attributes:
 							_state.breakpoints[breakpoint.type]?.attributes,
 					});
@@ -179,7 +179,7 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 				// $FlowFixMe
 				states.push({
 					type: stateType,
-					label: defaultStates[stateType].label,
+					label: staticStates[stateType].label,
 					attributes: state.breakpoints[breakpoint.type]?.attributes,
 				});
 			}

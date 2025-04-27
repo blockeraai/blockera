@@ -1,9 +1,5 @@
 ## Unreleased
 
-### Improvements
-- Design and UX improvements.
-
-
 ## 1.2.1 (2025-04-23)
 
 ### Improvements

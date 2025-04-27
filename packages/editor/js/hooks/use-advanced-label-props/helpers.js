@@ -1,19 +1,17 @@
 // @flow
 
 /**
- * External dependencies
- */
-import { select } from '@wordpress/data';
-
-/**
  * Blockera dependencies
  */
 import { hasInvolvesSomeItems } from '@blockera/utils';
 
+/**
+ * Internal dependencies
+ */
+import staticStates from '../../extensions/libs/block-states/states';
+
 export const blockHasStates = (attributes: Object): boolean => {
-	const { getStates } = select('blockera/editor');
-	const statesDefinition = getStates();
-	const stateTypes = Object.keys(statesDefinition);
+	const stateTypes = Object.keys(staticStates);
 
 	return hasInvolvesSomeItems(
 		attributes?.blockeraBlockStates || {},

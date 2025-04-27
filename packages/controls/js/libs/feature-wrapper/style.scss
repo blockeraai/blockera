@@ -1,8 +1,8 @@
 .blockera-component-feature-wrapper {
 	--locked-color: #e86400;
     --locked-bg-color: color-mix(in srgb, var(--locked-color) 15%, #ffffff);
-	--locked-radius: 2px;
-	--locked-transition: 0.1s ease-in-out;
+	--locked-radius: 3px;
+
 	position: relative;
 	user-select: none;
 
@@ -25,36 +25,26 @@
 		right: -1px;
 		color: var(--locked-color);
 		display: flex;
-	    justify-content: end;
-		align-items: center;
+	    justify-content: center;
 		gap: 0;
 		z-index: 10;
 		min-height: var(--blockera-controls-input-height);
+		align-items: center;
 		padding: 0 2px 0 0;
 		top: 0;
 
-		.blockera-component-feature-wrapper__notice__icons {
-			border-radius: 100px;
-			transition: fill var(--locked-transition), background var(--locked-transition), color var(--locked-transition), border-radius var(--locked-transition);
-			background: var(--locked-bg-color);
-			color: var(--locked-color);
-			position: absolute;
-			right: 2px;
-			height: 22px;
-			width: 22px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			top: 50%;
-			transform: translateY(-50%);
-
-			svg {
-				fill: currentColor;
-			}
+		.blockera-component-feature-wrapper__notice_inner {
+			justify-content: end;
+    		display: flex;
 		}
 
-		.blockera-component-feature-wrapper__notice__icon-2 {
-			display: none;
+		svg {
+			fill: currentColor;
+			order: 10;
+			border-radius: 100px;
+			transition: all 0.1s ease;
+			background: var(--locked-bg-color);
+			color: var(--locked-color);
 		}
 
 		.blockera-component-feature-wrapper__notice__text {
@@ -62,7 +52,7 @@
 			font-weight: 500;
 			font-style: normal;
 			line-height: 1.2;
-			transition: all var(--locked-transition);
+			transition: all 0.1s ease;
 			text-align: right;
 			opacity: 0;
 			border-radius: var(--locked-radius) 0 0 var(--locked-radius);
@@ -72,15 +62,13 @@
 			text-overflow: ellipsis;
 			background: var(--locked-bg-color);
 			color: var(--locked-color);
-			transform: translateY(-50%);
 			position: absolute;
-			top: 50%;
-			right: 0;
+			right: 22px;
 			height: 22px;
 			display: flex;
 			align-items: center;
 			justify-content: flex-end;
-			padding: 0 3px 0 7px;
+			padding: 0 3px 0 5px;
 
 			&.feature-wrapper__notice__text__link {
 				color: var(--locked-color) !important;
@@ -130,28 +118,18 @@
 		}
 	}
 
+	&.show-text-always,
 	&.show-text-on-hover:hover {
 
 		.blockera-component-feature-wrapper__notice {
 
-			.blockera-component-feature-wrapper__notice__icons {
-				border-radius: 0 100px 100px 0;
-
-				&.icons-2 {
-
-					.blockera-component-feature-wrapper__notice__icon {
-						display: none;
-					}
-
-					.blockera-component-feature-wrapper__notice__icon-2 {
-						display: block;
-					}
-				}
+			svg {
+				border-radius: 0 var(--locked-radius) var(--locked-radius) 0;
 			}
 
 			.blockera-component-feature-wrapper__notice__text {
 				opacity: 1;
-				right: 22px;
+				transition: all 0.1s ease 0.065s;
 			}
 		}
 	}
@@ -160,39 +138,8 @@
 
 		.blockera-component-feature-wrapper__notice {
 
-			.blockera-component-feature-wrapper__notice__icons {
-				border-radius: 0 100px 100px 0;
-			}
-
 			.blockera-component-feature-wrapper__notice__text {
-				opacity: 1;
-				right: 22px;
-			}
-		}
-
-		&:hover {
-
-			.blockera-component-feature-wrapper__notice {
-
-				.blockera-component-feature-wrapper__notice__icons {
-					border-radius: 0 100px 100px 0;
-
-					&.icons-2 {
-
-						.blockera-component-feature-wrapper__notice__icon {
-							display: none;
-						}
-
-						.blockera-component-feature-wrapper__notice__icon-2 {
-							display: block;
-						}
-					}
-				}
-
-				.blockera-component-feature-wrapper__notice__text {
-					opacity: 1;
-					right: 22px;
-				}
+				transition: all 0.1s ease;
 			}
 		}
 	}

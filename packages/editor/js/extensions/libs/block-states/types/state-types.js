@@ -36,18 +36,9 @@ export type StateTypes = {
 		color: string,
 		cssSelector?: string,
 	},
-	priority: number,
-	native?: boolean,
 	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
 };
 
 export type BlockStates = {
 	[key: TStates | string]: { ...StateTypes, isSelected: boolean },
-};
-
-export type BlockStateType = {
-	type: string,
-	label: TStatesLabel,
-	breakpoints: Object,
-	disabled?: boolean,
 };
