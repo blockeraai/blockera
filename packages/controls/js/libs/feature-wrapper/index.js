@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
+import { type MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -167,8 +167,26 @@ export function FeatureWrapper({
 				className={componentInnerClassNames(
 					'feature-wrapper__children'
 				)}
+				style={{ pointerEvents: 'none' }}
 				onClick={(e) => {
 					e.preventDefault();
+					e.stopPropagation();
+				}}
+				onMouseDown={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+				}}
+				onMouseUp={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+				}}
+				onTouchStart={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+				}}
+				onTouchEnd={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
 				}}
 			>
 				{children}
