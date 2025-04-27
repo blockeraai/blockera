@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.2.0 (2025-04-27)
+
 ### New Features
 - Added `getSortedObject` helper to sort objects by `priority` property.
 

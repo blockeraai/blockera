@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.3.0 (2025-04-27)
+
 ### New Features
 - Added the extendable block states configuration to make it easier to extend the plugin.
 
