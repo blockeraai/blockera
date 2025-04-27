@@ -1,10 +1,15 @@
 ## Unreleased
 
+### New Features
+- Implemented the block states new configuration to make it easier to manage block states around the editor.
+- Added support for external block states configuration through Blockera's block states feature, enabling developers to define custom block states and behaviors.
+- Introduced block states API documentation and examples for third-party developers.
+- Added priority-based sorting for block states to enable ordered configuration from both internal and external sources.
+
 ## 1.3.1 (2025-04-23)
 
 ### Bug Fixes
 - Block `Style Variations` buttons hover state design issue.
-
 
 ## 1.3.0 (2025-04-22)
 

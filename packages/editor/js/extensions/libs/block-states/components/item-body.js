@@ -19,17 +19,18 @@ import {
 /**
  * Internal dependencies
  */
-import states from '../states';
-import type { TStates } from '../types';
+import type { TStates, StateTypes } from '../types';
 import { getStateInfo } from '../helpers';
 import { LabelDescription } from './label-description';
 
 const ItemBody = ({
 	item,
 	itemId,
+	states,
 }: {
 	item: Object,
 	itemId: number,
+	states: { [key: TStates]: StateTypes },
 }): null | Element<any> => {
 	if ('normal' === item.type && 0 === itemId) {
 		return null;
@@ -66,7 +67,7 @@ const ItemBody = ({
 						label: state.label,
 					}))}
 				onChange={(newValue: TStates): void => {
-					const dynamicValue = getStateInfo(newValue);
+					const dynamicValue = getStateInfo(newValue, states);
 
 					let value = {
 						...item,

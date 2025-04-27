@@ -1,8 +1,9 @@
 // @flow
 
 import type {
-	BreakpointTypes,
+	StateTypes,
 	TBreakpoint,
+	BreakpointTypes,
 } from '../extensions/libs/block-states/types';
 import { getBaseBreakpoint } from '../canvas-editor';
 
@@ -36,6 +37,38 @@ export const getBreakpoint = (
 	name: TBreakpoint
 ): BreakpointTypes | void => {
 	return breakpoints[name];
+};
+
+/**
+ * Get states.
+ *
+ * @param {{states: Object}} state the states.
+ * @return {Object} the states stored in redux.
+ */
+export const getStates = ({
+	blockStates,
+}: {
+	blockStates: { [key: StateTypes]: Object },
+}): { [key: StateTypes]: Object } => {
+	return blockStates;
+};
+
+/**
+ * Get blockStates.
+ *
+ * @param {{blockStates: Object}} state the blockStates.
+ * @param {StateTypes} name the state name.
+ * @return {Object} the state stored in redux.
+ */
+export const getState = (
+	{
+		blockStates,
+	}: {
+		blockStates: { [key: StateTypes]: Object },
+	},
+	name: StateTypes
+): Object => {
+	return blockStates[name];
 };
 
 /**

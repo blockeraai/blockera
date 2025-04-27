@@ -205,3 +205,17 @@ export function hasInvolvesSomeItems(
 export function cloneObject(obj: Object): Object {
 	return copy(obj);
 }
+
+/**
+ * Sort an object by priority.
+ *
+ * @param {Object} obj the object to sort.
+ * @return {Object} the sorted object.
+ */
+export const getSortedObject = (obj: Object): Object => {
+	return Object.fromEntries(
+		Object.entries(obj).sort(([, a], [, b]) => {
+			return (a?.priority || 0) - (b?.priority || 0);
+		})
+	);
+};

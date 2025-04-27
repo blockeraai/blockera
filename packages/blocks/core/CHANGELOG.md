@@ -1,11 +1,13 @@
 ## Unreleased
 
+### New Features
+- Added support for customizable block states across all block types.
+
 ## 1.2.1 (2025-04-23)
 
 ### Automated Tests
 - Improve `RSS` block tests.
 - Improve `Latest Comments` block tests.
-
 
 ## 1.2.0 (2025-04-16)
 

@@ -204,7 +204,7 @@
 		"update:changelogs": "node ./bin/plugin/cli.js update-packages-changelog",
 		"other:changelog": "node ./bin/plugin/cli.js changelog",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start --progress --mode development",
+		"start": "rm -rf dist && wp-scripts start --progress --mode development",
 		"start:debug": "DEBUG_MODE=on wp-scripts start --progress",
 		"clean": "rm -rf build dist/* node_modules vendor wordpress",
 		"prepare": "husky install",
