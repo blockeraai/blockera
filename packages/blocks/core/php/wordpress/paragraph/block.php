@@ -10,25 +10,6 @@
 return array_merge(
 	$args,
 	[
-		'attributes' => [
-			'blockeraUnsavedData' => [
-				'type' => 'object',
-				'default' => [
-					'states' => [
-						'normal' => [
-							'type' => 'normal',
-							'label' => 'Normal',
-							'breakpoints' => [],
-						],
-						'hover' => [
-							'type' => 'hover',
-							'label' => 'Hover',
-							'breakpoints' => [],
-						],
-					],
-				],
-			],
-		],
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
