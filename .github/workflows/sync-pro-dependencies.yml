@@ -1,0 +1,109 @@
+name: Sync Blockera Pro Dependencies
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'packages/**/package.json'
+
+jobs:
+    sync-dependencies:
+        name: Update Blockera Pro Dependencies
+        runs-on: ubuntu-latest
+        if: github.repository == 'blockeraai/blockera'
+
+        steps:
+            - name: Checkout Blockera
+              uses: actions/checkout@v4
+              with:
+                  path: blockera
+
+            - name: Get Package Versions
+              id: package_versions
+              working-directory: blockera/packages
+              run: |
+                  # Function to convert version to underscore format
+                  version_to_underscore() {
+                    echo "$1" | tr '.' '_'
+                  }
+
+                  # Function to convert package name to camelCase
+                  to_camel_case() {
+                    echo "$1" | sed -E 's/-([a-z])/\U\1/g'
+                  }
+
+                  # Initialize empty JSON object
+                  VERSIONS="{}"
+
+                  # Loop through each package directory
+                  for pkg in */; do
+                    if [ -f "${pkg}package.json" ]; then
+                      # Get package name and version
+                      PKG_NAME=$(jq -r '.name' "${pkg}package.json" | sed 's/@blockera\///')
+                      PKG_VERSION=$(jq -r '.version' "${pkg}package.json")
+                      
+                      # Convert version to underscore format
+                      UNDERSCORE_VERSION=$(version_to_underscore "$PKG_VERSION")
+                      
+                      # Convert package name to camelCase
+                      CAMEL_CASE_NAME=$(to_camel_case "$PKG_NAME")
+                      
+                      # Add to JSON object using jq to ensure proper JSON formatting
+                      VERSIONS=$(echo "$VERSIONS" | jq --arg name "$CAMEL_CASE_NAME" --arg version "$UNDERSCORE_VERSION" '. + {($name): $version}')
+                    fi
+                  done
+
+                  # Output JSON directly without escaping
+                  echo "versions=$(echo "$VERSIONS" | jq -c .)" >> $GITHUB_OUTPUT
+
+            - name: Checkout Blockera Pro
+              uses: actions/checkout@v4
+              with:
+                  repository: blockeraai/blockera-pro
+                  token: ${{ secrets.BLOCKERABOT_PAT }}
+                  path: blockera-pro
+
+            - name: Update dependencies.json
+              id: update_dependencies
+              working-directory: blockera-pro
+              run: |
+                  # Write versions directly to dependencies.json
+                  echo '${{ steps.package_versions.outputs.versions }}' > dependencies.json
+
+                  # Check if there are changes
+                  if git diff --quiet dependencies.json; then
+                    echo "No changes needed in dependencies.json"
+                    echo "has_changes=false" >> $GITHUB_OUTPUT
+                  else
+                    echo "Changes detected in dependencies.json"
+                    echo "has_changes=true" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Create Pull Request
+              if: steps.update_dependencies.outputs.has_changes == 'true'
+              working-directory: blockera-pro
+              run: |
+                  # Configure git
+                  git config user.name "blockerabot"
+                  git config user.email "blockeraai+githubbot@gmail.com"
+
+                  # Create branch
+                  BRANCH_NAME="update/blockera-deps-$(date +%Y%m%d-%H%M%S)"
+                  git checkout -b "$BRANCH_NAME"
+
+                  # Commit changes
+                  git add dependencies.json
+                  git commit -m "Update Blockera package dependencies"
+
+                  # Push changes
+                  git push origin "$BRANCH_NAME"
+
+                  # Create PR using GitHub CLI
+                  gh pr create \
+                    --title "Update Blockera package dependencies" \
+                    --body "This PR updates the Blockera package dependencies to keep versions in sync with the main repository." \
+                    --label "dependencies" \
+                    --repo "blockeraai/blockera-pro"
+              env:
+                  GITHUB_TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
