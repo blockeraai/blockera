@@ -12,7 +12,13 @@ import { memo, useMemo, useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isEquals, isEmpty, omit, mergeObject } from '@blockera/utils';
+import {
+	omit,
+	isEmpty,
+	isEquals,
+	mergeObject,
+	getSortedObject,
+} from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	RepeaterControl,
@@ -26,7 +32,6 @@ import {
  * Internal dependencies
  */
 import ItemBody from './item-body';
-import defaultStates from '../states';
 import ItemHeader from './item-header';
 import ItemOpener from './item-opener';
 import {
@@ -55,8 +60,8 @@ const isMasterBlockStates = (id: string): boolean =>
 const StatesManager: ComponentType<any> = memo(
 	({
 		block,
-		attributes,
 		onChange,
+		attributes,
 		currentBlock,
 		currentState,
 		availableStates,
@@ -71,11 +76,12 @@ const StatesManager: ComponentType<any> = memo(
 		} = dispatch('blockera/extensions') || {};
 		const { getBlockStates, getActiveMasterState, getActiveInnerState } =
 			select('blockera/extensions');
-		const { getBreakpoints } = select('blockera/editor');
+		const { getStates, getBreakpoints } = select('blockera/editor');
 		const savedBlockStates = getBlockStates(
 			block?.clientId,
 			!isMasterBlockStates(id) ? currentBlock : block?.blockName
 		);
+		const defaultStates = getStates();
 		const clonedSavedStates = { ...states };
 
 		if (isEmpty(states)) {
@@ -85,9 +91,23 @@ const StatesManager: ComponentType<any> = memo(
 			states = mergeObject(savedBlockStates, states);
 		}
 
-		const preparedStates = !availableStates
-			? defaultStates
-			: availableStates;
+		// Try to preparing available states!
+		const preparedStates = useMemo(() => {
+			if (
+				Object.keys(attributes?.blockeraUnsavedData?.states || {})
+					.length > 0
+			) {
+				return getSortedObject(attributes?.blockeraUnsavedData?.states);
+			} else if (availableStates) {
+				return getSortedObject(availableStates);
+			}
+
+			return getSortedObject(defaultStates);
+		}, [
+			defaultStates,
+			availableStates,
+			attributes?.blockeraUnsavedData?.states,
+		]);
 
 		const calculatedValue = useMemo(() => {
 			const itemsCount = Object.values(states).length;
@@ -293,7 +313,8 @@ const StatesManager: ComponentType<any> = memo(
 					...defaultRepeaterItemValue,
 					...getStateInfo(
 						// If deletedItems has items try to add first index of that else add suitable items for statesCount value.
-						deletedItems?.length ? deletedItems[0] : statesCount
+						deletedItems?.length ? deletedItems[0] : statesCount,
+						defaultStates
 					),
 					display: true,
 				};
@@ -320,17 +341,21 @@ const StatesManager: ComponentType<any> = memo(
 		);
 		const handleOnChange = useCallback(
 			(newValue: Object) =>
-				onChangeBlockStates(newValue, {
-					states,
-					onChange,
-					currentState,
-					currentBlock,
-					valueCleanup,
-					getStateInfo,
-					getBlockStates,
-					currentInnerBlockState,
-					isMasterBlockStates: isMasterBlockStates(id),
-				}),
+				onChangeBlockStates(
+					newValue,
+					{
+						states,
+						onChange,
+						currentState,
+						currentBlock,
+						valueCleanup,
+						getStateInfo,
+						getBlockStates,
+						currentInnerBlockState,
+						isMasterBlockStates: isMasterBlockStates(id),
+					},
+					defaultStates
+				),
 			// eslint-disable-next-line
 			[currentBlock, currentInnerBlockState, currentState, id, states]
 		);
@@ -384,7 +409,15 @@ const StatesManager: ComponentType<any> = memo(
 							overrideItem,
 							repeaterItemHeader: ItemHeader,
 							repeaterItemOpener: ItemOpener,
-							repeaterItemChildren: ItemBody,
+							repeaterItemChildren: (
+								props: Object
+							): MixedElement => {
+								return (
+									<ItemBody
+										{...{ ...props, states: defaultStates }}
+									/>
+								);
+							},
 						}}
 						defaultValue={states}
 						addNewButtonLabel={__('Add New State', 'blockera')}

@@ -17,10 +17,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import {
-	default as statesDefinition,
-	type BlockStateType,
-} from '../../../libs/block-states/states';
+import { type BlockStateType } from '../../../libs/block-states/types';
 import type { InnerBlockType } from '../../inner-blocks/types';
 
 export function Breadcrumb({
@@ -51,6 +48,9 @@ export function Breadcrumb({
 	if (activeBlock && activeInnerBlockState === 'normal') {
 		return <>{children}</>;
 	}
+
+	const { getStates } = select('blockera/editor');
+	const statesDefinition = getStates();
 
 	const CurrentState = ({
 		current,
