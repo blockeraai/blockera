@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.3.0 (2025-04-27)
+
 ### New Features
 - Added support for customizable block states across all block types.
 
