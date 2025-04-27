@@ -23,6 +23,7 @@ type ID = string | number;
 export type RepeaterControlProps = {
 	...Object,
 	...ControlGeneralTypes,
+	children: MixedElement,
 	/**
 	 * Repeater identifier.
 	 */

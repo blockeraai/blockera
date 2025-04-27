@@ -63,6 +63,7 @@ export default function RepeaterControl(
 		isSupportInserter = false,
 		//
 		label,
+		children,
 		onRoot = true,
 		labelPopoverTitle,
 		labelDescription,
@@ -419,6 +420,8 @@ export default function RepeaterControl(
 								)}
 
 								{injectHeaderButtonsEnd}
+
+								{children}
 							</div>
 						</div>
 					</>
@@ -487,6 +490,8 @@ export default function RepeaterControl(
 								)}
 
 								{injectHeaderButtonsEnd}
+
+								{children}
 							</div>
 						</div>
 
