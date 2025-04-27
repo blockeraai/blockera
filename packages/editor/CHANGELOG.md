@@ -6,6 +6,9 @@
 - Introduced block states API documentation and examples for third-party developers.
 - Added priority-based sorting for block states to enable ordered configuration from both internal and external sources.
 
+### Bug Fixes
+- Modals design issue.
+
 ## 1.3.1 (2025-04-23)
 
 ### Bug Fixes
