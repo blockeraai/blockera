@@ -1,5 +1,6 @@
 // @flow
 
+import type { MixedElement } from 'react';
 import type { TBreakpoint } from './breakpoint-types';
 import type { StateTypes, TStates } from './state-types';
 import type { InnerBlockType } from '../../inner-blocks/types';
@@ -46,10 +47,35 @@ export type StatesManagerProps = {
 			},
 		},
 	},
+	children: MixedElement,
 	onChange: THandleOnChangeAttributes,
 	currentBlock: 'master' | InnerBlockType,
 	currentState: TStates,
 	availableStates: { [key: TStates | string]: StateTypes },
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
+};
+
+export type StatesManagerUtils = {
+	states: { [key: TStates]: StateTypes },
+	onDelete: (itemId: TStates, items: { [key: TStates]: Object }) => Object,
+	contextValue: Object,
+	valueCleanup: (value: Object) => Object,
+	overrideItem: (item: Object) => Object,
+	defaultStates: { [key: TStates]: StateTypes },
+	preparedStates: { [key: TStates]: StateTypes },
+	calculatedValue: { [key: TStates]: StateTypes },
+	defaultRepeaterItemValue: Object,
+	getDynamicDefaultRepeaterItem: (
+		statesCount: number,
+		defaultRepeaterItemValue: Object
+	) => Object,
+	handleOnChange: (newValue: Object) => void,
+};
+
+export type CombineRepeaterProps = {
+	...StatesManagerUtils,
+	id: string,
+	children: MixedElement,
+	currentBlock: 'master' | InnerBlockType,
 };

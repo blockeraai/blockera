@@ -11,17 +11,10 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Blockera dependencies
  */
-import {
-	extensionClassNames,
-	controlInnerClassNames,
-} from '@blockera/classnames';
-import {
-	RepeaterControl,
-	PanelBodyControl,
-	ControlContextProvider,
-} from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { mergeObject } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -41,7 +34,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		onChange,
 		innerBlocks,
 	}: InnerBlocksProps): MixedElement => {
-		const { initialOpen, onToggle } = useBlockSection('innerBlocksConfig');
+		const { onToggle } = useBlockSection('innerBlocksConfig');
 
 		// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
 		const { currentBlock = 'master', getBlockInners } = useSelect(
@@ -111,122 +104,107 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 		const maxItems = innerBlocksLength;
 
 		return (
-			<PanelBodyControl
-				onToggle={onToggle}
-				title={__('Inner Blocks', 'blockera')}
-				initialOpen={initialOpen}
-				icon={<Icon icon="extension-inner-blocks" />}
-				className={extensionClassNames('inner-blocks')}
+			<ControlContextProvider
+				value={contextValue}
+				storeName={'blockera/controls/repeater'}
 			>
-				<ControlContextProvider
-					value={contextValue}
-					storeName={'blockera/controls/repeater'}
-				>
-					<RepeaterControl
-						{...{
-							maxItems,
-							selectable: true,
-							id: 'inner-blocks',
-							isSupportInserter: true,
-							onDelete: (itemId, items) => {
-								delete values[itemId];
-								delete items[itemId];
+				<RepeaterControl
+					hasAddNewButton={false}
+					{...{
+						maxItems,
+						selectable: true,
+						id: 'inner-blocks',
+						onDelete: (itemId, items) => {
+							delete values[itemId];
+							delete items[itemId];
 
-								onChange('values', values, {});
+							onChange('values', values, {});
 
-								const newValue = mergeObject(values, items);
+							const newValue = mergeObject(values, items);
 
-								setBlockClientInners({
-									clientId: block?.clientId,
-									inners: newValue,
-								});
+							setBlockClientInners({
+								clientId: block?.clientId,
+								inners: newValue,
+							});
 
-								return newValue;
-							},
-							onChange: (newValue: Object) => {
-								if (newValue?.value) {
-									const items = newValue?.value || {};
+							return newValue;
+						},
+						onChange: (newValue: Object) => {
+							if (newValue?.value) {
+								const items = newValue?.value || {};
 
-									for (const name in items) {
-										const item = items[name];
+								for (const name in items) {
+									const item = items[name];
 
-										if (!item?.isSelected) {
-											continue;
-										}
-
-										setCurrentBlock(name);
-										onToggle(true, 'switch-to-inner', name);
+									if (!item?.isSelected) {
+										continue;
 									}
+
+									setCurrentBlock(name);
+									onToggle(true, 'switch-to-inner', name);
 								}
-							},
-							InserterComponent: (props: Object) => (
-								<Inserter
-									{...{
-										...props,
-										maxItems,
-										AvailableBlocks: () => (
-											<AvailableBlocksAndElements
-												blocks={blocks}
-												elements={elements}
-												setCurrentBlock={
-													setCurrentBlock
-												}
-												setBlockClientInners={
-													setBlockClientInners
-												}
-												clientId={block?.clientId}
-												getBlockInners={getBlockInners}
-											/>
-										),
-									}}
-								/>
-							),
-							repeaterItemChildren: () => {},
-							repeaterItemHeader: ItemHeader,
-						}}
-						defaultValue={{}}
-						label={__('Inner Blocks', 'blockera')}
-						labelDescription={
-							<>
-								<p>
-									{__(
-										'By using inner blocks, you can group blocks together and customize them in a single place without the need to customize the block itself.',
-										'blockera'
-									)}
-								</p>
-								<p>
-									{__(
-										'The customization is attached to the parent block and will be applied to all nested blocks.',
-										'blockera'
-									)}
-								</p>
-								<p>
-									{__(
-										'Some blocks have the `Virtual Inner Blocks` that are not real blocks but elements that are inside the block and you can use them for more customization.',
-										'blockera'
-									)}
-								</p>
-							</>
-						}
-						addNewButtonLabel={__('Add Inner Block', 'blockera')}
-						popoverTitle={__(
-							'Inner Blocks Customization',
-							'blockera'
-						)}
-						className={controlInnerClassNames(
-							'inner-blocks-repeater'
-						)}
-						icon={<Icon icon="inner-blocks" />}
-						description={__(
-							'Customize inner elements and blocks style.',
-							'blockera'
-						)}
-						design="large"
-						actionButtonClone={false}
-						actionButtonVisibility={false}
-					/>
-				</ControlContextProvider>
-			</PanelBodyControl>
+							}
+						},
+						InserterComponent: (props: Object) => (
+							<Inserter
+								{...{
+									...props,
+									maxItems,
+									AvailableBlocks: () => (
+										<AvailableBlocksAndElements
+											blocks={blocks}
+											elements={elements}
+											setCurrentBlock={setCurrentBlock}
+											setBlockClientInners={
+												setBlockClientInners
+											}
+											clientId={block?.clientId}
+											getBlockInners={getBlockInners}
+										/>
+									),
+								}}
+							/>
+						),
+						repeaterItemChildren: () => {},
+						repeaterItemHeader: ItemHeader,
+					}}
+					defaultValue={{}}
+					label={__('Inner Blocks', 'blockera')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'By using inner blocks, you can group blocks together and customize them in a single place without the need to customize the block itself.',
+									'blockera'
+								)}
+							</p>
+							<p>
+								{__(
+									'The customization is attached to the parent block and will be applied to all nested blocks.',
+									'blockera'
+								)}
+							</p>
+							<p>
+								{__(
+									'Some blocks have the `Virtual Inner Blocks` that are not real blocks but elements that are inside the block and you can use them for more customization.',
+									'blockera'
+								)}
+							</p>
+						</>
+					}
+					addNewButtonLabel={__('Add Inner Block', 'blockera')}
+					popoverTitle={__('Inner Blocks Customization', 'blockera')}
+					className={controlInnerClassNames('inner-blocks-repeater')}
+					icon={<Icon icon="inner-blocks" />}
+					description={__(
+						'Customize inner elements and blocks style.',
+						'blockera'
+					)}
+					design="large"
+					actionButtonClone={false}
+					actionButtonVisibility={false}
+				/>
+			</ControlContextProvider>
 		);
 	}
 );

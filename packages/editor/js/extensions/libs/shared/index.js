@@ -309,6 +309,38 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
+			const innerBlocksComponent = (
+				<ErrorBoundary
+					fallbackRender={({ error }) => (
+						<ErrorBoundaryFallback
+							isReportingErrorCompleted={
+								isReportingErrorCompleted
+							}
+							clientId={props.clientId}
+							setIsReportingErrorCompleted={
+								setIsReportingErrorCompleted
+							}
+							from={'extension'}
+							error={error}
+							configId={'innerBlocksConfig'}
+							title={__('Inner Blocks', 'blockera')}
+							icon={<Icon icon="extension-inner-blocks" />}
+						/>
+					)}
+				>
+					<InnerBlocksExtension
+						values={blockAttributes.blockeraInnerBlocks}
+						innerBlocks={blockeraInnerBlocks}
+						block={{
+							clientId: props.clientId,
+							supports,
+							setAttributes,
+							blockName: props.name,
+						}}
+						onChange={handleOnChangeAttributes}
+					/>
+				</ErrorBoundary>
+			);
 			const activePanel = [
 				<Fill
 					key={`${props.clientId}-states-manager`}
@@ -330,7 +362,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							currentBreakpoint,
 							currentInnerBlockState,
 						}}
-					/>
+					>
+						{innerBlocksComponent}
+					</StatesManager>
 				</Fill>,
 				<Fill
 					key={`${props.clientId}${currentBlock}-states-manager`}
@@ -356,7 +390,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								currentBreakpoint,
 								currentInnerBlockState,
 							}}
-						/>
+						>
+							{innerBlocksComponent}
+						</StatesManager>
 					)}
 				</Fill>,
 			];
@@ -505,39 +541,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								<StyleVariationsExtension
 									block={block}
 									extensionConfig={styleVariationsConfig}
-								/>
-							</ErrorBoundary>
-
-							<ErrorBoundary
-								fallbackRender={({ error }) => (
-									<ErrorBoundaryFallback
-										isReportingErrorCompleted={
-											isReportingErrorCompleted
-										}
-										clientId={props.clientId}
-										setIsReportingErrorCompleted={
-											setIsReportingErrorCompleted
-										}
-										from={'extension'}
-										error={error}
-										configId={'innerBlocksConfig'}
-										title={__('Inner Blocks', 'blockera')}
-										icon={
-											<Icon icon="extension-inner-blocks" />
-										}
-									/>
-								)}
-							>
-								<InnerBlocksExtension
-									values={blockAttributes.blockeraInnerBlocks}
-									innerBlocks={blockeraInnerBlocks}
-									block={{
-										clientId: props.clientId,
-										supports,
-										setAttributes,
-										blockName: props.name,
-									}}
-									onChange={handleOnChangeAttributes}
 								/>
 							</ErrorBoundary>
 
