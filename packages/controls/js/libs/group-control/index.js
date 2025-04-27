@@ -166,28 +166,28 @@ const GroupControl: ComponentType<any> = memo(
 					</div>
 
 					{header}
+
+					{mode === 'popover' && isOpenPopover && (
+						<Popover
+							{...popoverProps}
+							offset={popoverOffset}
+							// placement="left-start"
+							className={controlInnerClassNames(
+								'group-popover',
+								popoverClassName
+							)}
+							title={popoverTitle || header}
+							titleButtonsRight={popoverTitleButtonsRight}
+							onClose={() => {
+								onClose();
+
+								setOpenPopover(false);
+							}}
+						>
+							{children}
+						</Popover>
+					)}
 				</div>
-
-				{mode === 'popover' && isOpenPopover && (
-					<Popover
-						{...popoverProps}
-						offset={popoverOffset}
-						placement="left-start"
-						className={controlInnerClassNames(
-							'group-popover',
-							popoverClassName
-						)}
-						title={popoverTitle || header}
-						titleButtonsRight={popoverTitleButtonsRight}
-						onClose={() => {
-							onClose();
-
-							setOpenPopover(false);
-						}}
-					>
-						{children}
-					</Popover>
-				)}
 
 				{mode === 'accordion' && isOpen && (
 					<div

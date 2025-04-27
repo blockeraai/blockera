@@ -174,6 +174,7 @@ export function useSpotlight(
 			window.removeEventListener('scroll', update, true);
 			cleanup();
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		parentSel,
 		target,

@@ -15,7 +15,7 @@ import type { Element } from 'react';
 /**
  * Blockera dependencies
  */
-import { isBoolean, isFunction } from '@blockera/utils';
+import { isBoolean, isFunction, useSpotlight } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -36,6 +36,7 @@ const RepeaterItem = ({
 	item,
 	itemId,
 }: RepeaterItemProps): null | Element<any> => {
+	const itemRef = useRef(null);
 	const [isOpen, setOpen] = useState(
 		isBoolean(item?.isOpen) ? item?.isOpen : false
 	);
@@ -55,7 +56,7 @@ const RepeaterItem = ({
 		valueCleanup,
 		repeaterId,
 		popoverTitle,
-		popoverOffset,
+		// popoverOffset,
 		PromoComponent,
 		popoverProps,
 		popoverClassName,
@@ -129,12 +130,34 @@ const RepeaterItem = ({
 		}
 	};
 
+	const popoverPropsWithAnchor = {
+		...popoverProps,
+		placement: 'bottom-middle',
+		// placement: 'overlay',
+	};
+
+	useSpotlight(
+		'.interface-navigable-region.interface-interface-skeleton__sidebar',
+		// '.block-editor-block-variation-transforms [role="radiogroup"]',
+		// '.blockera-extension-block-card__title__input',
+		itemRef,
+		{
+			active: isOpen,
+			padding: 5,
+			opacity: 0.4,
+			passThrough: false,
+			radius: 3,
+			// onClickOutside: () => setOpen(false),
+		}
+	);
+
 	if (!item?.display && item?.selectable) {
 		return null;
 	}
 
 	return (
 		<div
+			ref={itemRef}
 			className={controlInnerClassNames(
 				'repeater-item',
 				'draggable',
@@ -159,9 +182,9 @@ const RepeaterItem = ({
 				}
 				toggleOpenBorder={true}
 				design={design}
-				popoverProps={popoverProps}
+				popoverProps={popoverPropsWithAnchor}
 				popoverTitle={popoverTitle}
-				popoverOffset={popoverOffset}
+				popoverOffset={12}
 				popoverTitleButtonsRight={
 					PopoverTitleButtonsRight && (
 						<PopoverTitleButtonsRight
