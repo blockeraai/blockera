@@ -32,14 +32,40 @@ export function FeatureWrapper({
 	showText?: 'on-hover' | 'always',
 	children: MixedElement,
 }): MixedElement {
-	let icon = <Icon icon="warning" iconSize="22" />;
+	let icon = (
+		<Icon
+			icon="warning"
+			iconSize="22"
+			className={componentInnerClassNames(
+				'feature-wrapper__notice__icon'
+			)}
+		/>
+	);
+	let icon2 = null;
 	let link = '';
 
 	if (!text) {
 		switch (type) {
 			case 'free':
 				text = __('Upgrade to PRO', 'blockera');
-				icon = <Icon icon="lock" iconSize="22" />;
+				icon = (
+					<Icon
+						icon="lock"
+						iconSize="22"
+						className={componentInnerClassNames(
+							'feature-wrapper__notice__icon'
+						)}
+					/>
+				);
+				icon2 = (
+					<Icon
+						icon="unlock"
+						iconSize="22"
+						className={componentInnerClassNames(
+							'feature-wrapper__notice__icon-2'
+						)}
+					/>
+				);
 				link = upgradeLink;
 				break;
 			case 'state':
@@ -106,33 +132,35 @@ export function FeatureWrapper({
 			>
 				<div
 					className={componentInnerClassNames(
-						'feature-wrapper__notice_inner'
+						'feature-wrapper__notice__icons',
+						icon2 ? 'icons-2' : ''
 					)}
 				>
 					{icon}
-
-					{link ? (
-						<a
-							href={link}
-							target="_blank"
-							rel="noreferrer"
-							className={componentInnerClassNames(
-								'feature-wrapper__notice__text',
-								'feature-wrapper__notice__text__link'
-							)}
-						>
-							{text}
-						</a>
-					) : (
-						<div
-							className={componentInnerClassNames(
-								'feature-wrapper__notice__text'
-							)}
-						>
-							{text}
-						</div>
-					)}
+					{icon2}
 				</div>
+
+				{link ? (
+					<a
+						href={link}
+						target="_blank"
+						rel="noreferrer"
+						className={componentInnerClassNames(
+							'feature-wrapper__notice__text',
+							'feature-wrapper__notice__text__link'
+						)}
+					>
+						{text}
+					</a>
+				) : (
+					<div
+						className={componentInnerClassNames(
+							'feature-wrapper__notice__text'
+						)}
+					>
+						{text}
+					</div>
+				)}
 			</div>
 
 			<div
