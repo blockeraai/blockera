@@ -91,7 +91,7 @@ export const useAvailableItems = ({
 		};
 
 		// Appending allowed block types of WordPress selected block ...
-		appendBlocks(allowedBlockTypes);
+		appendBlocks(allowedBlockTypes || []);
 
 		// Appending forces into repeater state.
 		if (forces.length) {

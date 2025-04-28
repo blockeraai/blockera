@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import { memo } from '@wordpress/element';
 import { dispatch, useSelect } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
@@ -11,7 +10,6 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Blockera dependencies
  */
-import { Icon } from '@blockera/icons';
 import { mergeObject } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
@@ -21,11 +19,9 @@ import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
  */
 import { generateExtensionId } from '../utils';
 import type { InnerBlocksProps } from './types';
-import { Inserter } from './components/inserter';
 import ItemHeader from './components/item-header';
 import { isInnerBlock, useBlockSection } from '../../components';
 import { useAvailableItems, useMemoizedInnerBlocks } from './hooks';
-import { AvailableBlocksAndElements } from './components/available-blocks-and-elements';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	({
@@ -109,11 +105,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				storeName={'blockera/controls/repeater'}
 			>
 				<RepeaterControl
-					hasAddNewButton={false}
 					{...{
 						maxItems,
 						selectable: true,
 						id: 'inner-blocks',
+						actionButtonAdd: false,
 						onDelete: (itemId, items) => {
 							delete values[itemId];
 							delete items[itemId];
@@ -145,62 +141,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 								}
 							}
 						},
-						InserterComponent: (props: Object) => (
-							<Inserter
-								{...{
-									...props,
-									maxItems,
-									AvailableBlocks: () => (
-										<AvailableBlocksAndElements
-											blocks={blocks}
-											elements={elements}
-											setCurrentBlock={setCurrentBlock}
-											setBlockClientInners={
-												setBlockClientInners
-											}
-											clientId={block?.clientId}
-											getBlockInners={getBlockInners}
-										/>
-									),
-								}}
-							/>
-						),
 						repeaterItemChildren: () => {},
 						repeaterItemHeader: ItemHeader,
 					}}
 					defaultValue={{}}
-					label={__('Inner Blocks', 'blockera')}
-					labelDescription={
-						<>
-							<p>
-								{__(
-									'By using inner blocks, you can group blocks together and customize them in a single place without the need to customize the block itself.',
-									'blockera'
-								)}
-							</p>
-							<p>
-								{__(
-									'The customization is attached to the parent block and will be applied to all nested blocks.',
-									'blockera'
-								)}
-							</p>
-							<p>
-								{__(
-									'Some blocks have the `Virtual Inner Blocks` that are not real blocks but elements that are inside the block and you can use them for more customization.',
-									'blockera'
-								)}
-							</p>
-						</>
-					}
-					addNewButtonLabel={__('Add Inner Block', 'blockera')}
-					popoverTitle={__('Inner Blocks Customization', 'blockera')}
 					className={controlInnerClassNames('inner-blocks-repeater')}
-					icon={<Icon icon="inner-blocks" />}
-					description={__(
-						'Customize inner elements and blocks style.',
-						'blockera'
-					)}
-					design="large"
 					actionButtonClone={false}
 					actionButtonVisibility={false}
 				/>
