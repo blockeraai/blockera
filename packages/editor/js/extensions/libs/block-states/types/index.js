@@ -73,7 +73,7 @@ export type StatesManagerUtils = {
 	handleOnChange: (newValue: Object) => void,
 };
 
-export type CombineRepeaterProps = {
+export type PickerProps = {
 	...StatesManagerUtils,
 	id: string,
 	children: MixedElement,

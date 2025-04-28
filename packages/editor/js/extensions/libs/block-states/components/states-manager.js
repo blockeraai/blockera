@@ -11,44 +11,43 @@ import { memo } from '@wordpress/element';
  * Blockera dependencies
  */
 import { omit, isEquals } from '@blockera/utils';
-import { ControlContextProvider } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
-import CombineRepeater from './combine-repeater';
+import Picker from './picker';
 import { useStatesManagerUtils } from '../hooks';
 import type { StatesManagerProps } from '../types';
+import { InnerBlocksExtension } from '../../inner-blocks';
 
 const StatesManager: ComponentType<any> = memo(
 	(props: StatesManagerProps): Element<any> => {
-		const { children, currentBlock, id = 'master-block-states' } = props;
+		const { currentBlock, innerBlocksProps } = props;
 		const utils = useStatesManagerUtils(props);
 
 		return (
-			<ControlContextProvider
-				value={utils.contextValue}
-				storeName={'blockera/controls/repeater'}
+			<div
+				data-test={'blockera-block-state-container'}
+				// className={getClassNames('state-container')}
+				aria-label={__('Blockera Block State Container', 'blockera')}
 			>
-				<div
-					data-test={'blockera-block-state-container'}
-					// className={getClassNames('state-container')}
-					aria-label={__(
-						'Blockera Block State Container',
-						'blockera'
-					)}
+				<Picker
+					{...{
+						...utils,
+						currentBlock,
+						...(innerBlocksProps || {}),
+					}}
 				>
-					<CombineRepeater
-						{...{
-							...utils,
-							id,
-							currentBlock,
-						}}
-					>
-						{children}
-					</CombineRepeater>
-				</div>
-			</ControlContextProvider>
+					{innerBlocksProps && (
+						<InnerBlocksExtension
+							values={innerBlocksProps.values}
+							innerBlocks={innerBlocksProps.innerBlocks}
+							block={innerBlocksProps.block}
+							onChange={innerBlocksProps.onChange}
+						/>
+					)}
+				</Picker>
+			</div>
 		);
 	},
 	(prev, next) => {
