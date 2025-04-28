@@ -397,6 +397,8 @@ export default function RepeaterControl(
 							>
 								{injectHeaderButtonsStart}
 
+								{children}
+
 								{isSupportInserter && actionButtonAdd && (
 									<InserterComponent
 										PlusButton={LargeNativeInserter}
@@ -420,8 +422,6 @@ export default function RepeaterControl(
 								)}
 
 								{injectHeaderButtonsEnd}
-
-								{children}
 							</div>
 						</div>
 					</>
@@ -467,6 +467,8 @@ export default function RepeaterControl(
 							>
 								{injectHeaderButtonsStart}
 
+								{children}
+
 								{isSupportInserter && actionButtonAdd && (
 									<InserterComponent
 										PlusButton={SmallNativeInserter}
@@ -490,8 +492,6 @@ export default function RepeaterControl(
 								)}
 
 								{injectHeaderButtonsEnd}
-
-								{children}
 							</div>
 						</div>
 
