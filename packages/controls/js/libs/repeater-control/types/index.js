@@ -28,6 +28,10 @@ export type RepeaterControlProps = {
 	 */
 	id: string,
 	/**
+	 * Repeater children.
+	 */
+	children: MixedElement,
+	/**
 	 * Repeater value exists on root?
 	 */
 	onRoot: boolean,

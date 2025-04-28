@@ -63,6 +63,7 @@ export default function RepeaterControl(
 		isSupportInserter = false,
 		//
 		label,
+		children,
 		onRoot = true,
 		labelPopoverTitle,
 		labelDescription,
@@ -396,6 +397,8 @@ export default function RepeaterControl(
 							>
 								{injectHeaderButtonsStart}
 
+								{children}
+
 								{isSupportInserter && actionButtonAdd && (
 									<InserterComponent
 										PlusButton={LargeNativeInserter}
@@ -463,6 +466,8 @@ export default function RepeaterControl(
 								)}
 							>
 								{injectHeaderButtonsStart}
+
+								{children}
 
 								{isSupportInserter && actionButtonAdd && (
 									<InserterComponent
