@@ -13,9 +13,9 @@ import { memo, useMemo, useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import {
-	omit,
+	// omit,
 	isEmpty,
-	isEquals,
+	// isEquals,
 	mergeObject,
 	getSortedObject,
 } from '@blockera/utils';
@@ -61,6 +61,7 @@ const StatesManager: ComponentType<any> = memo(
 	({
 		block,
 		onChange,
+		children,
 		attributes,
 		currentBlock,
 		currentState,
@@ -463,14 +464,16 @@ const StatesManager: ComponentType<any> = memo(
 								/>
 							);
 						}}
-					/>
+					>
+						{children}
+					</RepeaterControl>
 				</div>
 			</ControlContextProvider>
 		);
-	},
-	(prev, next) => {
-		return isEquals(omit(prev, ['onChange']), omit(next, ['onChange']));
 	}
+	// (prev, next) => {
+	// 	return isEquals(omit(prev, ['onChange']), omit(next, ['onChange']));
+	// }
 );
 
 export default StatesManager;

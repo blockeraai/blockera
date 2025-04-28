@@ -1,5 +1,13 @@
 // @flow
 
+/**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
+ * Internal dependencies
+ */
 import type { TBreakpoint } from './breakpoint-types';
 import type { StateTypes, TStates } from './state-types';
 import type { InnerBlockType } from '../../inner-blocks/types';
@@ -29,6 +37,7 @@ export type BlockDetail = {
 
 export type StatesManagerProps = {
 	id: string,
+	children: MixedElement,
 	block: {
 		...TBlockProps,
 		attributes?: Object,
