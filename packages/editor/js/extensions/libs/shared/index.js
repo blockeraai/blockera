@@ -55,9 +55,7 @@ import {
 	// propsAreEqual
 } from '../../components/utils';
 import StateContainer from '../../components/state-container';
-import { InnerBlocksExtension } from '../inner-blocks';
 import { STORE_NAME } from '../base/store/constants';
-import StatesManager from '../block-states/components/states-manager';
 import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
@@ -65,6 +63,7 @@ import { useDisplayBlockControls } from '../../../hooks';
 import type { StateTypes, TBreakpoint, TStates } from '../block-states/types';
 import { useBlockContext } from '../../hooks';
 import bootstrapScripts from '../../scripts';
+import { Preview as BlockCompositePreview } from '../block-composite';
 
 type Props = {
 	name: string,
@@ -314,21 +313,31 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					key={`${props.clientId}-states-manager`}
 					name={'blockera-block-card-children'}
 				>
-					<StatesManager
-						attributes={blockAttributes}
-						onChange={handleOnChangeAttributes}
-						availableStates={availableBlockStates}
+					<BlockCompositePreview
 						block={{
 							clientId: props.clientId,
 							supports,
 							setAttributes,
 							blockName: props.name,
 						}}
-						{...{
-							currentBlock,
-							currentState,
-							currentBreakpoint,
-							currentInnerBlockState,
+						onChange={handleOnChangeAttributes}
+						currentBlock={currentBlock}
+						currentState={currentState}
+						currentBreakpoint={currentBreakpoint}
+						currentInnerBlockState={currentInnerBlockState}
+						blockStatesProps={{
+							attributes: blockAttributes,
+							availableStates: availableBlockStates,
+						}}
+						innerBlocksProps={{
+							values: blockAttributes.blockeraInnerBlocks,
+							innerBlocks: blockeraInnerBlocks,
+							block: {
+								clientId: props.clientId,
+								supports,
+								setAttributes,
+								blockName: props.name,
+							},
 						}}
 					/>
 				</Fill>,
@@ -339,22 +348,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					)}-inner-block-card-children`}
 				>
 					{isInnerBlock(currentBlock) && (
-						<StatesManager
-							id={`block-states-${kebabCase(currentBlock)}`}
-							onChange={handleOnChangeAttributes}
-							attributes={currentStateAttributes}
-							availableStates={availableBlockStates}
+						<BlockCompositePreview
 							block={{
 								clientId: props.clientId,
 								supports,
 								setAttributes,
 								blockName: props.name,
 							}}
-							{...{
-								currentBlock,
-								currentState,
-								currentBreakpoint,
-								currentInnerBlockState,
+							onChange={handleOnChangeAttributes}
+							currentBlock={currentBlock}
+							currentState={currentState}
+							currentBreakpoint={currentBreakpoint}
+							currentInnerBlockState={currentInnerBlockState}
+							blockStatesProps={{
+								attributes: currentStateAttributes,
+								availableStates: availableBlockStates,
+								id: `block-states-${kebabCase(currentBlock)}`,
 							}}
 						/>
 					)}
@@ -505,39 +514,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								<StyleVariationsExtension
 									block={block}
 									extensionConfig={styleVariationsConfig}
-								/>
-							</ErrorBoundary>
-
-							<ErrorBoundary
-								fallbackRender={({ error }) => (
-									<ErrorBoundaryFallback
-										isReportingErrorCompleted={
-											isReportingErrorCompleted
-										}
-										clientId={props.clientId}
-										setIsReportingErrorCompleted={
-											setIsReportingErrorCompleted
-										}
-										from={'extension'}
-										error={error}
-										configId={'innerBlocksConfig'}
-										title={__('Inner Blocks', 'blockera')}
-										icon={
-											<Icon icon="extension-inner-blocks" />
-										}
-									/>
-								)}
-							>
-								<InnerBlocksExtension
-									values={blockAttributes.blockeraInnerBlocks}
-									innerBlocks={blockeraInnerBlocks}
-									block={{
-										clientId: props.clientId,
-										supports,
-										setAttributes,
-										blockName: props.name,
-									}}
-									onChange={handleOnChangeAttributes}
 								/>
 							</ErrorBoundary>
 
