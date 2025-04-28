@@ -55,7 +55,6 @@ import {
 	// propsAreEqual
 } from '../../components/utils';
 import StateContainer from '../../components/state-container';
-import { InnerBlocksExtension } from '../inner-blocks';
 import { STORE_NAME } from '../base/store/constants';
 import StatesManager from '../block-states/components/states-manager';
 import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
@@ -309,62 +308,58 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
-			const innerBlocksComponent = (
-				<ErrorBoundary
-					fallbackRender={({ error }) => (
-						<ErrorBoundaryFallback
-							isReportingErrorCompleted={
-								isReportingErrorCompleted
-							}
-							clientId={props.clientId}
-							setIsReportingErrorCompleted={
-								setIsReportingErrorCompleted
-							}
-							from={'extension'}
-							error={error}
-							configId={'innerBlocksConfig'}
-							title={__('Inner Blocks', 'blockera')}
-							icon={<Icon icon="extension-inner-blocks" />}
-						/>
-					)}
-				>
-					<InnerBlocksExtension
-						values={blockAttributes.blockeraInnerBlocks}
-						innerBlocks={blockeraInnerBlocks}
-						block={{
-							clientId: props.clientId,
-							supports,
-							setAttributes,
-							blockName: props.name,
-						}}
-						onChange={handleOnChangeAttributes}
-					/>
-				</ErrorBoundary>
-			);
 			const activePanel = [
 				<Fill
 					key={`${props.clientId}-states-manager`}
 					name={'blockera-block-card-children'}
 				>
-					<StatesManager
-						attributes={blockAttributes}
-						onChange={handleOnChangeAttributes}
-						availableStates={availableBlockStates}
-						block={{
-							clientId: props.clientId,
-							supports,
-							setAttributes,
-							blockName: props.name,
-						}}
-						{...{
-							currentBlock,
-							currentState,
-							currentBreakpoint,
-							currentInnerBlockState,
-						}}
+					<ErrorBoundary
+						fallbackRender={({ error }) => (
+							<ErrorBoundaryFallback
+								isReportingErrorCompleted={
+									isReportingErrorCompleted
+								}
+								clientId={props.clientId}
+								setIsReportingErrorCompleted={
+									setIsReportingErrorCompleted
+								}
+								from={'extension'}
+								error={error}
+								configId={'innerBlocksConfig'}
+								title={__('Inner Blocks', 'blockera')}
+								icon={<Icon icon="extension-inner-blocks" />}
+							/>
+						)}
 					>
-						{innerBlocksComponent}
-					</StatesManager>
+						<StatesManager
+							attributes={blockAttributes}
+							onChange={handleOnChangeAttributes}
+							availableStates={availableBlockStates}
+							block={{
+								clientId: props.clientId,
+								supports,
+								setAttributes,
+								blockName: props.name,
+							}}
+							{...{
+								currentBlock,
+								currentState,
+								currentBreakpoint,
+								currentInnerBlockState,
+								innerBlocksProps: {
+									values: blockAttributes.blockeraInnerBlocks,
+									innerBlocks: blockeraInnerBlocks,
+									block: {
+										clientId: props.clientId,
+										supports,
+										setAttributes,
+										blockName: props.name,
+									},
+									onChange: handleOnChangeAttributes,
+								},
+							}}
+						/>
+					</ErrorBoundary>
 				</Fill>,
 				<Fill
 					key={`${props.clientId}${currentBlock}-states-manager`}
@@ -390,9 +385,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 								currentBreakpoint,
 								currentInnerBlockState,
 							}}
-						>
-							{innerBlocksComponent}
-						</StatesManager>
+						/>
 					)}
 				</Fill>,
 			];
