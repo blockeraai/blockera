@@ -34,7 +34,7 @@ export const isNormalStateOnBaseBreakpoint = (
 
 export const getStateInfo = (
 	state: TStates | number,
-	states: { [key: string]: StateTypes }
+	states: { [key: TStates]: StateTypes }
 ): Object => {
 	return 'number' === typeof state
 		? Object.values(states)[state]

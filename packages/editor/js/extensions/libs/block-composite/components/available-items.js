@@ -27,9 +27,9 @@ import {
 	isElement,
 	getVirtualInnerBlockDescription,
 } from '../../inner-blocks/helpers';
-import { search } from '../search-items';
-import type { InnerBlockModel, InnerBlocks } from '../../inner-blocks/types';
-import type { TStates, StateTypes } from '../types';
+import type { AvailableItemsProps } from '../types';
+import { search } from '../../block-states/search-items';
+import type { InnerBlockModel } from '../../inner-blocks/types';
 
 export const AvailableItems = ({
 	states: _states,
@@ -40,16 +40,7 @@ export const AvailableItems = ({
 	getBlockInners,
 	setCurrentBlock,
 	setBlockClientInners,
-}: {
-	states: { [key: TStates]: StateTypes },
-	clientId: string,
-	blocks: InnerBlocks,
-	elements: InnerBlocks,
-	setBlockState: (blockState: TStates) => void,
-	setBlockClientInners: (args: Object) => void,
-	setCurrentBlock: (currentBlock: string) => void,
-	getBlockInners: (clientId: string) => InnerBlocks,
-}): MixedElement => {
+}: AvailableItemsProps): MixedElement => {
 	const [blocks, setBlocks] = useState(_blocks);
 	const [elements, setElements] = useState(_elements);
 	const [states, setStates] = useState(_states);

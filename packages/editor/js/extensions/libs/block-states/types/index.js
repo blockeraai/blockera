@@ -1,7 +1,7 @@
 // @flow
 
-import type { MixedElement } from 'react';
 import type { TBreakpoint } from './breakpoint-types';
+import type { MixedElement, ComponentType } from 'react';
 import type { StateTypes, TStates } from './state-types';
 import type { InnerBlockType } from '../../inner-blocks/types';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
@@ -56,7 +56,9 @@ export type StatesManagerProps = {
 	currentInnerBlockState: TStates,
 };
 
-export type StatesManagerUtils = {
+export type StatesManager = {
+	InserterComponent: ComponentType<any>,
+	children: MixedElement,
 	states: { [key: TStates]: StateTypes },
 	onDelete: (itemId: TStates, items: { [key: TStates]: Object }) => Object,
 	contextValue: Object,
@@ -73,9 +75,19 @@ export type StatesManagerUtils = {
 	handleOnChange: (newValue: Object) => void,
 };
 
-export type PickerProps = {
-	...StatesManagerUtils,
-	id: string,
+export type UIProps = {
+	InserterComponent: MixedElement,
+	states: { [key: TStates]: StateTypes },
+	onDelete: (itemId: TStates, items: { [key: TStates]: Object }) => Object,
 	children: MixedElement,
-	currentBlock: 'master' | InnerBlockType,
+	overrideItem: (item: Object) => Object,
+	contextValue: Object,
+	defaultStates: { [key: TStates]: StateTypes },
+	handleOnChange: (newValue: Object) => void,
+	preparedStates: { [key: TStates]: StateTypes },
+	defaultRepeaterItemValue: Object,
+	getDynamicDefaultRepeaterItem: (
+		statesCount: number,
+		defaultRepeaterItemValue: Object
+	) => Object,
 };

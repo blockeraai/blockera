@@ -24,11 +24,11 @@ import {
 } from '../helpers';
 import { isNormalState } from '../../../components';
 import type {
+	TStates,
+	StateTypes,
+	StatesManager,
 	BreakpointTypes,
 	StatesManagerProps,
-	StateTypes,
-	TStates,
-	StatesManagerUtils,
 } from '../types';
 import { generateExtensionId } from '../../utils';
 import { getBaseBreakpoint } from '../../../../canvas-editor';
@@ -36,9 +36,10 @@ import { getBaseBreakpoint } from '../../../../canvas-editor';
 // the instance of in-memory cache.
 const deleteCacheData: Object = new Map();
 
-export const useStatesManagerUtils = ({
+export const useStatesManager = ({
 	block,
 	onChange,
+	children,
 	attributes,
 	currentBlock,
 	currentState,
@@ -46,7 +47,7 @@ export const useStatesManagerUtils = ({
 	currentBreakpoint,
 	currentInnerBlockState,
 	id = 'master-block-states',
-}: StatesManagerProps): StatesManagerUtils => {
+}: StatesManagerProps): StatesManager => {
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
@@ -367,6 +368,11 @@ export const useStatesManagerUtils = ({
 		preparedStates,
 		handleOnChange,
 		calculatedValue,
+		uiProps: {
+			block,
+			children,
+			currentBlock,
+		},
 		defaultRepeaterItemValue,
 		getDynamicDefaultRepeaterItem,
 	};

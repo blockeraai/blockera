@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { memo } from '@wordpress/element';
-import { dispatch, useSelect } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
@@ -17,139 +16,76 @@ import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { generateExtensionId } from '../utils';
-import type { InnerBlocksProps } from './types';
+import type { InnerBlockExtensionProps } from './types';
 import ItemHeader from './components/item-header';
-import { isInnerBlock, useBlockSection } from '../../components';
-import { useAvailableItems, useMemoizedInnerBlocks } from './hooks';
 
-export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
-	({
-		block,
-		values,
-		onChange,
-		innerBlocks,
-	}: InnerBlocksProps): MixedElement => {
-		const { onToggle } = useBlockSection('innerBlocksConfig');
-
-		// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
-		const { currentBlock = 'master', getBlockInners } = useSelect(
-			(select) => {
-				const { getBlockInners, getExtensionCurrentBlock } = select(
-					'blockera/extensions'
-				);
-
-				return {
-					getBlockInners,
-					currentBlock: getExtensionCurrentBlock(),
-				};
-			}
-		);
-
-		// Internal dispatchers. to use of "setCurrentBlock" and "setBlockClientInners" dispatchers of Blockera editor/extensions store api.
-		const {
-			changeExtensionCurrentBlock: setCurrentBlock,
-			setBlockClientInners,
-		} = dispatch('blockera/extensions') || {};
-
-		// Calculation: to prepare standard values for "blockeraInnerBlocks" block attribute with set initial value for repeater by "setBlockClientInners" dispatcher.
-		const memoizedInnerBlocks = useMemoizedInnerBlocks({
-			getBlockInners,
-			setBlockClientInners,
-			controlValue: values,
-			clientId: block?.clientId,
-			reservedInnerBlocks: innerBlocks,
-		});
-
-		// Calculation: to categorized in two category (elements and blocks) from available inner blocks on current WordPress selected block.
-		const { elements, blocks } = useAvailableItems({
-			getBlockInners,
-			memoizedInnerBlocks,
-			setBlockClientInners,
-			clientId: block?.clientId,
-			reservedInnerBlocks: innerBlocks,
-		});
-
-		// Merging all categories, as available blocks.
-		const availableBlocks = [...elements, ...blocks];
-
-		// Get repeater value from internal Blockera store api.
-		const value = getBlockInners(block.clientId);
-
-		// cache length to not calculate it multiple times
-		const innerBlocksLength = Object.keys(innerBlocks).length;
-
-		if (
-			!innerBlocksLength ||
-			(!availableBlocks.length && !Object.keys(value).length) ||
-			isInnerBlock(currentBlock)
-		) {
-			return <></>;
-		}
-
-		// Assign control context provider value.
-		const contextValue = {
+export const InnerBlocksExtension: ComponentType<InnerBlockExtensionProps> =
+	memo(
+		({
 			block,
-			value,
-			blockName: block.blockName,
-			attribute: 'blockeraInnerBlocks',
-			name: generateExtensionId(block, 'inner-blocks', false),
-		};
+			values,
+			onChange,
+			maxItems,
+			onToggle,
+			contextValue,
+			setCurrentBlock,
+			setBlockClientInners,
+		}: InnerBlockExtensionProps): MixedElement => {
+			return (
+				<ControlContextProvider
+					value={contextValue}
+					storeName={'blockera/controls/repeater'}
+				>
+					<RepeaterControl
+						{...{
+							maxItems,
+							selectable: true,
+							id: 'inner-blocks',
+							actionButtonAdd: false,
+							onDelete: (itemId, items) => {
+								delete values[itemId];
+								delete items[itemId];
 
-		// Calculation: repeater maxItems property.
-		const maxItems = innerBlocksLength;
+								onChange('values', values, {});
 
-		return (
-			<ControlContextProvider
-				value={contextValue}
-				storeName={'blockera/controls/repeater'}
-			>
-				<RepeaterControl
-					{...{
-						maxItems,
-						selectable: true,
-						id: 'inner-blocks',
-						actionButtonAdd: false,
-						onDelete: (itemId, items) => {
-							delete values[itemId];
-							delete items[itemId];
+								const newValue = mergeObject(values, items);
 
-							onChange('values', values, {});
+								setBlockClientInners({
+									clientId: block?.clientId,
+									inners: newValue,
+								});
 
-							const newValue = mergeObject(values, items);
+								return newValue;
+							},
+							onChange: (newValue: Object) => {
+								console.log(newValue);
 
-							setBlockClientInners({
-								clientId: block?.clientId,
-								inners: newValue,
-							});
+								if (newValue?.value) {
+									const items = newValue?.value || {};
 
-							return newValue;
-						},
-						onChange: (newValue: Object) => {
-							if (newValue?.value) {
-								const items = newValue?.value || {};
+									for (const name in items) {
+										const item = items[name];
 
-								for (const name in items) {
-									const item = items[name];
+										if (!item?.isSelected) {
+											continue;
+										}
 
-									if (!item?.isSelected) {
-										continue;
+										setCurrentBlock(name);
+										onToggle(true, 'switch-to-inner', name);
 									}
-
-									setCurrentBlock(name);
-									onToggle(true, 'switch-to-inner', name);
 								}
-							}
-						},
-						repeaterItemChildren: () => {},
-						repeaterItemHeader: ItemHeader,
-					}}
-					defaultValue={{}}
-					className={controlInnerClassNames('inner-blocks-repeater')}
-					actionButtonClone={false}
-					actionButtonVisibility={false}
-				/>
-			</ControlContextProvider>
-		);
-	}
-);
+							},
+							repeaterItemChildren: () => {},
+							repeaterItemHeader: ItemHeader,
+						}}
+						defaultValue={{}}
+						className={controlInnerClassNames(
+							'inner-blocks-repeater'
+						)}
+						actionButtonClone={false}
+						actionButtonVisibility={false}
+					/>
+				</ControlContextProvider>
+			);
+		}
+	);

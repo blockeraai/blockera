@@ -46,6 +46,22 @@ export type InnerBlocksProps = {
 	onChange: THandleOnChangeAttributes,
 };
 
+export type InnerBlockExtensionProps = {
+	...InnerBlocksProps,
+	maxItems: number,
+	contextValue: Object,
+	setCurrentBlock: (clientId: string) => void,
+	setBlockClientInners: ({
+		clientId: string,
+		inners: InnerBlocks,
+	}) => void,
+	onToggle: (
+		isOpen: boolean,
+		action?: 'switch-to-parent' | 'switch-to-inner',
+		targetBlock?: string
+	) => void,
+};
+
 export type MemoizedInnerBlocks = {
 	clientId: string,
 	setBlockClientInners: ({
@@ -66,4 +82,25 @@ export type AvailableItems = {
 	reservedInnerBlocks: InnerBlocks,
 	memoizedInnerBlocks: InnerBlocks,
 	getBlockInners: (clientId: string) => InnerBlocks,
+};
+
+export type InnerBlocksProvidedProps = {
+	blocks: InnerBlocks,
+	elements: InnerBlocks,
+	onToggle: (
+		isOpen: boolean,
+		action?: 'switch-to-parent' | 'switch-to-inner',
+		targetBlock?: string
+	) => void,
+	maxItems: number,
+	contextValue: Object,
+	setCurrentBlock: (block: InnerBlockType) => void,
+	availableBlocks: Array<InnerBlocks>,
+	innerBlocksLength: number,
+	setBlockClientInners: ({
+		clientId: string,
+		inners: InnerBlocks,
+	}) => void,
+	getBlockInners: (clientId: string) => InnerBlocks,
+	clientId: string,
 };
