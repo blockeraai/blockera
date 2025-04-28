@@ -1,5 +1,11 @@
 ## Unreleased
 
+### Improvements
+- Improved the block card design to make it more consistent and easier to use.
+
+### New Features
+- Added BlockComposite module to simplify creation of composite blocks by providing a reusable framework and components for developers.
+
 ## 1.4.0 (2025-04-27)
 
 ### New Features
