@@ -56,7 +56,7 @@ const RepeaterItem = ({
 		valueCleanup,
 		repeaterId,
 		popoverTitle,
-		// popoverOffset,
+		popoverOffset,
 		PromoComponent,
 		popoverProps,
 		popoverClassName,
@@ -130,17 +130,24 @@ const RepeaterItem = ({
 		}
 	};
 
-	const popoverPropsWithAnchor = {
-		...popoverProps,
-		placement: 'bottom-middle',
-		// placement: 'overlay',
-	};
+	if (!item?.display && item?.selectable) {
+		return null;
+	}
+
+	let popoverPropsWithAnchor = {};
 
 	const currentMode = isFunction(RepeaterItemChildren?.getMode)
 		? RepeaterItemChildren.getMode(item, itemId)
 		: mode;
 
 	if (currentMode === 'spotlight') {
+		popoverPropsWithAnchor = {
+			...popoverProps,
+			design: 'spotlight',
+			placement: 'bottom-middle',
+			flip: true,
+		};
+
 		Spotlighter(
 			'.interface-navigable-region.interface-interface-skeleton__sidebar',
 			itemRef,
@@ -153,10 +160,6 @@ const RepeaterItem = ({
 				onClickOutside: () => setOpen(false),
 			}
 		);
-	}
-
-	if (!item?.display && item?.selectable) {
-		return null;
 	}
 
 	return (
@@ -182,9 +185,13 @@ const RepeaterItem = ({
 				mode={currentMode}
 				toggleOpenBorder={true}
 				design={design}
-				popoverProps={popoverPropsWithAnchor}
-				popoverTitle={popoverTitle}
-				popoverOffset={12}
+				popoverProps={
+					currentMode === 'spotlight'
+						? popoverPropsWithAnchor
+						: popoverProps
+				}
+				popoverTitle={currentMode === 'spotlight' ? '' : popoverTitle}
+				popoverOffset={currentMode === 'spotlight' ? 1 : popoverOffset}
 				popoverTitleButtonsRight={
 					PopoverTitleButtonsRight && (
 						<PopoverTitleButtonsRight
