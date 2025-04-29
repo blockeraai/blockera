@@ -44,6 +44,13 @@ export type InnerBlocksProps = {
 		attributes?: Object,
 	},
 	onChange: THandleOnChangeAttributes,
+	maxItems: number,
+	contextValue: Object,
+	setCurrentBlock: (block: InnerBlockType) => void,
+	setBlockClientInners: ({
+		clientId: string,
+		inners: InnerBlocks,
+	}) => void,
 };
 
 export type MemoizedInnerBlocks = {

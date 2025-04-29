@@ -50,3 +50,4 @@ export const registerInnerBlockExtensionsSupports = (
 
 export * from './extension';
 export * from './helpers';
+export * from './hooks';
