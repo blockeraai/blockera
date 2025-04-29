@@ -27,6 +27,7 @@ import type {
 } from '../types';
 import {
 	getStateInfo,
+	isDefaultState,
 	onChangeBlockStates,
 	isMasterBlockStates,
 	blockStatesValueCleanup,
@@ -115,7 +116,7 @@ export const useBlockStates = ({
 						display: itemsCount > 1,
 						visibilitySupport: false,
 						isSelected,
-						deletable: 'normal' !== itemId,
+						deletable: !isDefaultState(itemId),
 						breakpoints: state?.breakpoints ?? {
 							// $FlowFixMe
 							[getBaseBreakpoint()]: {
@@ -151,6 +152,17 @@ export const useBlockStates = ({
 				isSelected: true,
 				visibilitySupport: false,
 				breakpoints: states.normal.breakpoints,
+			},
+			hover: {
+				...preparedStates.hover,
+				...defaultItemValue,
+				isOpen: false,
+				display: true,
+				deletable: false,
+				selectable: true,
+				isSelected: false,
+				visibilitySupport: false,
+				breakpoints: preparedStates.hover.breakpoints,
 			},
 		};
 		// eslint-disable-next-line
@@ -211,7 +223,7 @@ export const useBlockStates = ({
 						return;
 					}
 
-					if ('normal' === _itemId) {
+					if (isDefaultState(_itemId)) {
 						if (items[itemId].isSelected) {
 							// Assume deleted item was selected item
 							filteredStates[_itemId] = {
@@ -332,7 +344,7 @@ export const useBlockStates = ({
 	);
 	//Override item when occurred clone action!
 	const overrideItem = useCallback((item) => {
-		if ('normal' === item.type) {
+		if (isDefaultState(item.type)) {
 			return {
 				deletable: true,
 				visibilitySupport: true,

@@ -240,3 +240,6 @@ export const blockStatesValueCleanup = (value: {
 
 export const isMasterBlockStates = (id: string): boolean =>
 	'master-block-states' === id;
+
+export const isDefaultState = (state: TStates): boolean =>
+	['normal', 'hover'].includes(state);

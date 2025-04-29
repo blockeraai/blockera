@@ -13,6 +13,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
+import { isDefaultState } from '../helpers';
 import type { StateTypes, TStates } from '../types';
 
 const ItemOpener = ({
@@ -21,7 +22,7 @@ const ItemOpener = ({
 	item: StateTypes,
 	itemId: TStates,
 }): boolean | MixedElement => {
-	if ('normal' === itemId) {
+	if (isDefaultState(itemId)) {
 		return false;
 	}
 
@@ -29,6 +30,6 @@ const ItemOpener = ({
 };
 
 ItemOpener.hasButton = (item: StateTypes, itemId: TStates): boolean =>
-	'normal' !== itemId;
+	!isDefaultState(itemId);
 
 export default ItemOpener;
