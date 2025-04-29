@@ -188,6 +188,14 @@ export type RepeaterControlProps = {
 	 * Promotion component for repeater.
 	 */
 	PromoComponent?: MixedElement | any,
+	/**
+	 * Spotlight for repeater items.
+	 */
+	spotlight?: boolean,
+	/**
+	 * Spotlight for repeater items.
+	 */
+	spotlightParentSelector?: string,
 };
 
 export type TRepeaterDefaultStateProps = {

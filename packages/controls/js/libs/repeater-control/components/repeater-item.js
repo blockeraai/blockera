@@ -65,6 +65,8 @@ const RepeaterItem = ({
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
 		popoverTitleButtonsRight: PopoverTitleButtonsRight,
+		spotlight,
+		spotlightParentSelector,
 	} = useContext(RepeaterContext);
 
 	const repeaterItemActionsProps = {
@@ -140,7 +142,7 @@ const RepeaterItem = ({
 		? RepeaterItemChildren.getMode(item, itemId)
 		: mode;
 
-	if (currentMode === 'spotlight') {
+	if (spotlight && currentMode === 'spotlight') {
 		popoverPropsWithAnchor = {
 			...popoverProps,
 			design: 'spotlight',
@@ -148,18 +150,14 @@ const RepeaterItem = ({
 			flip: true,
 		};
 
-		Spotlighter(
-			'.interface-navigable-region.interface-interface-skeleton__sidebar',
-			itemRef,
-			{
-				active: currentMode === 'spotlight' ? isOpen : false,
-				padding: 6,
-				opacity: 0.35,
-				passThrough: false,
-				radius: 0,
-				onClickOutside: () => setOpen(false),
-			}
-		);
+		Spotlighter(spotlightParentSelector, itemRef, {
+			active: currentMode === 'spotlight' ? isOpen : false,
+			padding: 6,
+			opacity: 0.35,
+			passThrough: false,
+			radius: 0,
+			onClickOutside: () => setOpen(false),
+		});
 	}
 
 	return (
