@@ -237,7 +237,7 @@ export const Categories = ({
 					</>
 				)}
 
-			{Object.values(states)?.length && (
+			{Object.values(states)?.length > 0 && (
 				<CategorizedItems
 					items={Object.values(states)}
 					category={'pseudo-states'}
@@ -264,7 +264,7 @@ export const Categories = ({
 				/>
 			)}
 
-			{elements?.length && (
+			{elements?.length > 0 && (
 				<CategorizedItems
 					items={elements}
 					category={'elements'}
