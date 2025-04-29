@@ -16,7 +16,7 @@ export { EffectsStyles, EffectsExtension } from './effects';
 export { MouseStyles, MouseExtension } from './mouse';
 export { CustomStyleStyles, CustomStyleExtension } from './custom-style';
 export { TypographyStyles, TypographyExtension } from './typography';
-export { InnerBlocksExtension } from './inner-blocks';
+export { InnerBlocksExtension } from './block-card/inner-blocks';
 export { EntranceAnimationExtension } from './entrance-animation';
 export { IconStyles, IconExtension } from './icon';
 export { SharedBlockExtension } from './shared';
@@ -26,6 +26,6 @@ export {
 	EXTENSIONS_SUPPORT_STORE_NAME,
 	registerBlockExtensionsSupports,
 } from './base';
-export { registerInnerBlockExtensionsSupports } from './inner-blocks';
+export { registerInnerBlockExtensionsSupports } from './block-card/inner-blocks';
 
 export { blockeraExtensionsBootstrap } from './bootstrap';

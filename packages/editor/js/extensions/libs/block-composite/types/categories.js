@@ -3,8 +3,8 @@
 /**
  * Internal dependencies
  */
-import type { InnerBlocks } from '../../inner-blocks/types';
-import type { TStates, StateTypes } from '../../block-states/types';
+import type { InnerBlocks } from '../../block-card/inner-blocks/types';
+import type { TStates, StateTypes } from '../../block-card/block-states/types';
 
 type StatesObject = {
 	[key: TStates]: StateTypes,

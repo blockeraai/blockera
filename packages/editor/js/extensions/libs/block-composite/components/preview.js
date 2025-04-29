@@ -10,9 +10,12 @@ import type { MixedElement } from 'react';
  */
 import { Inserter, Categories } from './';
 import type { TPreviewProps } from '../types';
-import { useBlockStates } from '../../block-states/hooks';
-import StatesManager from '../../block-states/components/states-manager';
-import { InnerBlocksExtension, useInnerBlocks } from '../../inner-blocks';
+import { useBlockStates } from '../../block-card/block-states/hooks';
+import StatesManager from '../../block-card/block-states/components/states-manager';
+import {
+	InnerBlocksExtension,
+	useInnerBlocks,
+} from '../../block-card/inner-blocks';
 
 // the instance of in-memory cache.
 const deleteCacheData: Object = new Map();

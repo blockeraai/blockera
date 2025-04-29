@@ -25,22 +25,46 @@ import { Tooltip } from '@blockera/controls';
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import type { UpdateBlockEditorSettings } from '../../types';
-import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
+import type { InnerBlockModel, InnerBlockType } from '../inner-blocks/types';
 import StateContainer from '../../../components/state-container';
 import { useBlockSection } from '../../../components';
+import type { TBreakpoint, TStates } from '../block-states/types';
+import { Preview as BlockCompositePreview } from '../../block-composite';
 
 export function InnerBlockCard({
 	clientId,
 	children,
+	supports,
 	blockName,
 	activeBlock,
 	innerBlocks,
 	handleOnClick,
+	currentBlock,
+	currentState,
+	setAttributes,
+	currentBreakpoint,
+	availableBlockStates,
+	currentStateAttributes,
+	currentInnerBlockState,
+	handleOnChangeAttributes,
 }: {
 	clientId: string,
 	blockName: string,
+	supports: Object,
+	currentStateAttributes: Object,
+	availableBlockStates: Object,
 	children?: MixedElement,
 	activeBlock: 'master' | InnerBlockType,
+	currentBlock: 'master' | InnerBlockType | string,
+	currentState: TStates,
+	currentBreakpoint: TBreakpoint,
+	currentInnerBlockState: TStates,
+	handleOnChangeAttributes: (
+		attribute: string,
+		value: any,
+		options?: Object
+	) => void,
+	setAttributes: (attributes: Object) => void,
 	handleOnClick: UpdateBlockEditorSettings,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
@@ -140,6 +164,25 @@ export function InnerBlockCard({
 			</StateContainer>
 
 			{children}
+
+			<BlockCompositePreview
+				block={{
+					clientId,
+					supports,
+					blockName,
+					setAttributes,
+				}}
+				onChange={handleOnChangeAttributes}
+				currentBlock={currentBlock}
+				currentState={currentState}
+				currentBreakpoint={currentBreakpoint}
+				currentInnerBlockState={currentInnerBlockState}
+				blockStatesProps={{
+					attributes: currentStateAttributes,
+					availableStates: availableBlockStates,
+					id: `block-states-${kebabCase(currentBlock)}`,
+				}}
+			/>
 		</div>
 	);
 }

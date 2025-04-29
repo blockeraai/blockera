@@ -29,8 +29,8 @@ import {
 	elementNormalBackgroundFromWPCompatibility,
 	elementNormalBackgroundToWPCompatibility,
 } from './compatibility/element-bg';
-import { getBaseBreakpoint } from '../../../canvas-editor';
-import { isBlockNotOriginalState, isResetRef } from '../utils';
+import { getBaseBreakpoint } from '../../../../canvas-editor';
+import { isBlockNotOriginalState, isResetRef } from '../../utils';
 
 export const bootstrap = (): void => {
 	addFilter(

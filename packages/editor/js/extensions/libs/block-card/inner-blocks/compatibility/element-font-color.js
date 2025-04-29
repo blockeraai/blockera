@@ -10,7 +10,7 @@ import { getColorVAFromVarString } from '@blockera/data';
 /**
  * Internal dependencies
  */
-import { getBaseBreakpoint } from '../../../../canvas-editor';
+import { getBaseBreakpoint } from '../../../../../canvas-editor';
 
 export function elementNormalFontColorFromWPCompatibility({
 	innerBlock,

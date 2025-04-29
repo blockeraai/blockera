@@ -23,9 +23,9 @@ import type { CssRule } from './types';
 import type {
 	TBreakpoint,
 	TStates,
-} from '../extensions/libs/block-states/types';
+} from '../extensions/libs/block-card/block-states/types';
 import { appendBlockeraPrefix } from './utils';
-import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
+import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../canvas-editor';
 
 const appendStyles = ({

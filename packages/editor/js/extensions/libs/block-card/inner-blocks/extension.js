@@ -19,7 +19,7 @@ import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
  */
 import type { InnerBlocksProps } from './types';
 import ItemHeader from './components/item-header';
-import { useBlockSection } from '../../components';
+import { useBlockSection } from '../../../components';
 
 export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 	(props: InnerBlocksProps): MixedElement => {

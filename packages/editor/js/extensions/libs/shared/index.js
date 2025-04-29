@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Fill } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { select, useDispatch } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
@@ -20,8 +19,8 @@ import {
  */
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
+import { isEquals, isObject } from '@blockera/utils';
 import { Tabs, type TTabProps } from '@blockera/controls';
-import { isEquals, kebabCase, isObject } from '@blockera/utils';
 import { getItem, setItem, updateItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
 
@@ -63,7 +62,6 @@ import { useDisplayBlockControls } from '../../../hooks';
 import type { StateTypes, TBreakpoint, TStates } from '../block-states/types';
 import { useBlockContext } from '../../hooks';
 import bootstrapScripts from '../../scripts';
-import { Preview as BlockCompositePreview } from '../block-composite';
 
 type Props = {
 	name: string,
@@ -102,7 +100,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			currentBlock,
 			currentState,
 			currentBreakpoint,
-			blockeraInnerBlocks,
 			currentInnerBlockState,
 			handleOnChangeAttributes,
 		},
@@ -308,67 +305,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
-			const activePanel = [
-				<Fill
-					key={`${props.clientId}-states-manager`}
-					name={'blockera-block-card-children'}
-				>
-					<BlockCompositePreview
-						block={{
-							clientId: props.clientId,
-							supports,
-							setAttributes,
-							blockName: props.name,
-						}}
-						onChange={handleOnChangeAttributes}
-						currentBlock={currentBlock}
-						currentState={currentState}
-						currentBreakpoint={currentBreakpoint}
-						currentInnerBlockState={currentInnerBlockState}
-						blockStatesProps={{
-							attributes: blockAttributes,
-							availableStates: availableBlockStates,
-						}}
-						innerBlocksProps={{
-							values: blockAttributes.blockeraInnerBlocks,
-							innerBlocks: blockeraInnerBlocks,
-							block: {
-								clientId: props.clientId,
-								supports,
-								setAttributes,
-								blockName: props.name,
-							},
-						}}
-					/>
-				</Fill>,
-				<Fill
-					key={`${props.clientId}${currentBlock}-states-manager`}
-					name={`blockera-${kebabCase(
-						currentBlock
-					)}-inner-block-card-children`}
-				>
-					{isInnerBlock(currentBlock) && (
-						<BlockCompositePreview
-							block={{
-								clientId: props.clientId,
-								supports,
-								setAttributes,
-								blockName: props.name,
-							}}
-							onChange={handleOnChangeAttributes}
-							currentBlock={currentBlock}
-							currentState={currentState}
-							currentBreakpoint={currentBreakpoint}
-							currentInnerBlockState={currentInnerBlockState}
-							blockStatesProps={{
-								attributes: currentStateAttributes,
-								availableStates: availableBlockStates,
-								id: `block-states-${kebabCase(currentBlock)}`,
-							}}
-						/>
-					)}
-				</Fill>,
-			];
+			const activePanel = [];
 
 			switch (tab.name) {
 				case 'settings':

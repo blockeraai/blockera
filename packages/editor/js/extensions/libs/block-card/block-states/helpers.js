@@ -14,8 +14,8 @@ import type {
 	TBreakpoint,
 	BreakpointTypes,
 } from './types';
-import { getBaseBreakpoint } from '../../../canvas-editor';
-import { isNormalState } from '../../components/utils';
+import { getBaseBreakpoint } from '../../../../canvas-editor';
+import { isNormalState } from '../../../components/utils';
 
 /**
  * Is normal state on base breakpoint?

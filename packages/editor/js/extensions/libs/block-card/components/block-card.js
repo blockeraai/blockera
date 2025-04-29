@@ -29,27 +29,48 @@ import { Icon } from '@blockera/icons';
  */
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
-import type { InnerBlockModel, InnerBlockType } from '../../inner-blocks/types';
+import { isInnerBlock } from '../../../components/utils';
 import { EditableBlockName } from './editable-block-name';
+import type { TBreakpoint, TStates } from '../block-states/types';
+import { Preview as BlockCompositePreview } from '../../block-composite';
+import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
 
 export function BlockCard({
 	notice,
 	clientId,
+	supports,
 	children,
 	blockName,
+	currentBlock,
+	currentState,
+	setAttributes,
 	currentInnerBlock,
+	currentBreakpoint,
+	blockeraInnerBlocks,
+	availableBlockStates,
+	currentStateAttributes,
+	currentInnerBlockState,
 	handleOnChangeAttributes,
 }: {
 	clientId: string,
 	blockName: string,
+	supports: Object,
+	blockeraInnerBlocks: Object,
+	currentStateAttributes: Object,
+	availableBlockStates: Object,
 	notice: MixedElement,
 	children?: MixedElement,
 	currentInnerBlock: InnerBlockModel,
+	currentBlock: 'master' | InnerBlockType | string,
+	currentState: TStates,
+	currentBreakpoint: TBreakpoint,
+	currentInnerBlockState: TStates,
 	handleOnChangeAttributes: (
 		attribute: string,
 		value: any,
 		options?: Object
 	) => void,
+	setAttributes: (attributes: Object) => void,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
 	const blockInformation = useBlockDisplayInformation(clientId);
@@ -214,6 +235,31 @@ export function BlockCard({
 
 				<Slot name={'blockera-block-card-children'} />
 				{children}
+				<BlockCompositePreview
+					block={{
+						clientId,
+						supports,
+						blockName,
+						setAttributes,
+					}}
+					onChange={handleOnChangeAttributes}
+					currentBlock={currentBlock}
+					currentState={currentState}
+					currentBreakpoint={currentBreakpoint}
+					currentInnerBlockState={currentInnerBlockState}
+					blockStatesProps={{
+						attributes: currentStateAttributes,
+						availableStates: availableBlockStates,
+					}}
+					innerBlocksProps={
+						!isInnerBlock(currentBlock)
+							? {
+									values: currentStateAttributes.blockeraInnerBlocks,
+									innerBlocks: blockeraInnerBlocks,
+							  }
+							: undefined
+					}
+				/>
 			</div>
 		</>
 	);

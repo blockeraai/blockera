@@ -9,8 +9,8 @@ import { useSelect, dispatch } from '@wordpress/data';
  * Internal dependencies
  */
 import type { InnerBlocks } from '../types';
-import { generateExtensionId } from '../../utils';
-import { isInnerBlock } from '../../../components';
+import { generateExtensionId } from '../../../utils';
+import { isInnerBlock } from '../../../../components';
 import { useMemoizedInnerBlocks, useAvailableItems } from './';
 
 export const useInnerBlocks = ({

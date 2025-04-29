@@ -14,7 +14,7 @@ import { useState, useEffect } from '@wordpress/element';
 import type {
 	TStates,
 	TBreakpoint,
-} from '../../extensions/libs/block-states/types';
+} from '../../extensions/libs/block-card/block-states/types';
 import { mergeObject } from '@blockera/utils';
 import { getComputedCssProps } from '../get-computed-css-props';
 

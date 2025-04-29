@@ -17,8 +17,8 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { type BlockStateType } from '../../../libs/block-states/types';
-import type { InnerBlockType } from '../../inner-blocks/types';
+import { type BlockStateType } from '../block-states/types';
+import type { InnerBlockType } from '../inner-blocks/types';
 
 export function Breadcrumb({
 	children,

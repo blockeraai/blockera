@@ -11,7 +11,7 @@ import type { MixedElement, ComponentType } from 'react';
 import type { TBreakpoint } from './breakpoint-types';
 import type { StateTypes, TStates } from './state-types';
 import type { InnerBlockType } from '../../inner-blocks/types';
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { TBlockProps, THandleOnChangeAttributes } from '../../../types';
 
 export * from './prop-types';
 export * from './state-types';

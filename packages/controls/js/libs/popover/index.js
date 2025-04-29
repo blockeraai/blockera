@@ -17,7 +17,7 @@ import {
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 import { isFunction, isUndefined } from '@blockera/utils';
-import { settings } from '@blockera/editor/js/extensions/libs/block-states/config';
+import { settings } from '@blockera/editor/js/extensions/libs/block-card/block-states/config';
 import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-popover-data/context';
 
 /**

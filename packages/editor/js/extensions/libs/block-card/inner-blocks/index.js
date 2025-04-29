@@ -9,8 +9,8 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * Internal dependencies
  */
-import * as config from '../base/config';
-import { STORE_NAME } from '../base/store';
+import * as config from '../../base/config';
+import { STORE_NAME } from '../../base/store';
 import type { InnerBlocks } from './types';
 
 export const registerInnerBlockExtensionsSupports = (

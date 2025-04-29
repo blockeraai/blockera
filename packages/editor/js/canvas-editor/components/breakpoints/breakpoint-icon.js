@@ -20,7 +20,7 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import type { TBreakpoint } from '../../../extensions/libs/block-states/types';
+import type { TBreakpoint } from '../../../extensions/libs/block-card/block-states/types';
 import {
 	isBaseBreakpoint,
 	getBreakpointLongDescription,

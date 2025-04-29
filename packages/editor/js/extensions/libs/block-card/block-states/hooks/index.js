@@ -16,9 +16,9 @@ import { isEmpty, getSortedObject, mergeObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { generateExtensionId } from '../../utils';
-import { isNormalState } from '../../../components';
-import { getBaseBreakpoint } from '../../../../canvas-editor';
+import { generateExtensionId } from '../../../utils';
+import { isNormalState } from '../../../../components';
+import { getBaseBreakpoint } from '../../../../../canvas-editor';
 import type {
 	TStates,
 	StateTypes,

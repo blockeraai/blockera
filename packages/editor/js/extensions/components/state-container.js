@@ -13,7 +13,7 @@ import { adjustHexColor } from '@blockera/utils';
  * Internal dependencies
  */
 import { isInnerBlock, isNormalState } from './utils';
-import { settings } from '../libs/block-states/config';
+import { settings } from '../libs/block-card/block-states/config';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export default function StateContainer({ children }: Object): Element<any> {

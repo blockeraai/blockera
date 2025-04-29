@@ -10,7 +10,7 @@ import type { MixedElement } from 'react';
 /**
  * Internal dependencies
  */
-import { prepareBlockeraDefaultAttributesValues } from '../../components';
+import { prepareBlockeraDefaultAttributesValues } from '../../../components';
 import type { InnerBlocks, InnerBlockModel, InnerBlockType } from './types';
 
 /**

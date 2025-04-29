@@ -26,10 +26,10 @@ import { classNames } from '@blockera/classnames';
 import {
 	isElement,
 	getVirtualInnerBlockDescription,
-} from '../../inner-blocks/helpers';
+} from '../../block-card/inner-blocks/helpers';
 import { search } from '../search-items';
 import type { TCategoriesProps } from '../types/categories';
-import type { InnerBlockModel } from '../../inner-blocks/types';
+import type { InnerBlockModel } from '../../block-card/inner-blocks/types';
 
 export const Categories = ({
 	states: _states,

@@ -17,7 +17,7 @@ import { STORE_NAME } from './store';
 import type {
 	StateTypes,
 	BreakpointTypes,
-} from './extensions/libs/block-states/types';
+} from './extensions/libs/block-card/block-states/types';
 
 export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 	[key: string]: BreakpointTypes,

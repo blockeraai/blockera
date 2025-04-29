@@ -20,10 +20,10 @@ import type {
 	BreakpointTypes,
 	TStates,
 	TBreakpoint,
-} from '../../extensions/libs/block-states/types';
+} from '../../extensions/libs/block-card/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components';
-import { blockStatesValueCleanup } from '../../extensions/libs/block-states/helpers';
+import { blockStatesValueCleanup } from '../../extensions/libs/block-card/block-states/helpers';
 
 // Check required to update.
 export const isChanged = (

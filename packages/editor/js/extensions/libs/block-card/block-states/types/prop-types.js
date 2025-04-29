@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import type { THandleOnChangeAttributes } from '../../types';
+import type { THandleOnChangeAttributes } from '../../../types';
 
 export type PropTypes = {
 	supports: Object,

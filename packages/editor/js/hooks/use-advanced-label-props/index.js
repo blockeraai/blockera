@@ -25,7 +25,7 @@ import {
 	isNormalState as _isNormalState,
 } from '../../extensions/components/utils';
 import { useBlockContext } from '../../extensions/hooks/context';
-import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
+import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 import type {
 	CalculatedAdvancedLabelProps,
 	AdvancedLabelHookProps,
@@ -34,7 +34,7 @@ import { blockHasStates } from './helpers';
 import type {
 	TStates,
 	BreakpointTypes,
-} from '../../extensions/libs/block-states/types';
+} from '../../extensions/libs/block-card/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import unAvailableAttributes from './unavailable-attributes';
 import { useExtensionsStore } from '../use-extensions-store';

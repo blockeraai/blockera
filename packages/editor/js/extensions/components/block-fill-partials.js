@@ -29,6 +29,9 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		isActive,
 		blockProps,
 		currentBlock,
+		currentState,
+		currentBreakpoint,
+		currentInnerBlockState,
 		currentInnerBlock,
 		BlockEditComponent,
 		blockeraInnerBlocks,
@@ -83,6 +86,15 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						blockName={blockProps.name}
 						innerBlocks={blockeraInnerBlocks}
 						currentInnerBlock={currentInnerBlock}
+						currentBlock={currentBlock}
+						currentState={currentState}
+						currentBreakpoint={currentBreakpoint}
+						currentInnerBlockState={currentInnerBlockState}
+						currentStateAttributes={blockProps.attributes}
+						availableBlockStates={blockProps.availableBlockStates}
+						blockeraInnerBlocks={blockeraInnerBlocks}
+						supports={blockProps.supports}
+						setAttributes={blockProps.setAttributes}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 					/>
 
@@ -93,6 +105,19 @@ export const BlockFillPartials: ComponentType<any> = memo(
 							blockName={blockProps.name}
 							innerBlocks={blockeraInnerBlocks}
 							handleOnClick={updateBlockEditorSettings}
+							currentBlock={currentBlock}
+							currentState={currentState}
+							currentBreakpoint={currentBreakpoint}
+							currentInnerBlockState={currentInnerBlockState}
+							currentStateAttributes={
+								blockProps.currentStateAttributes
+							}
+							availableBlockStates={
+								blockProps.availableBlockStates
+							}
+							supports={blockProps.supports}
+							setAttributes={blockProps.setAttributes}
+							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 					)}
 				</Fill>

@@ -7,7 +7,7 @@ import type {
 	StateTypes,
 	TBreakpoint,
 	BreakpointTypes,
-} from '../extensions/libs/block-states/types';
+} from '../extensions/libs/block-card/block-states/types';
 
 export const setBreakpoints = (breakpoints: {
 	[key: number]: BreakpointTypes,
