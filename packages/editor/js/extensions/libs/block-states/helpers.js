@@ -237,3 +237,6 @@ export const blockStatesValueCleanup = (value: {
 
 	return clonedValue;
 };
+
+export const isMasterBlockStates = (id: string): boolean =>
+	'master-block-states' === id;

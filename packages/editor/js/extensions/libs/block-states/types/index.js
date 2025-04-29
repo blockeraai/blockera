@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
+import type { MixedElement, ComponentType } from 'react';
 
 /**
  * Internal dependencies
@@ -35,7 +35,7 @@ export type BlockDetail = {
 	getActiveBlockVariation: (name: string, attrs: Object) => boolean,
 };
 
-export type StatesManagerProps = {
+export type StatesManagerHookProps = {
 	id: string,
 	children: MixedElement,
 	block: {
@@ -55,10 +55,28 @@ export type StatesManagerProps = {
 			},
 		},
 	},
+	deleteCacheData: Object,
 	onChange: THandleOnChangeAttributes,
 	currentBlock: 'master' | InnerBlockType,
 	currentState: TStates,
 	availableStates: { [key: TStates | string]: StateTypes },
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
+};
+
+export type StatesManagerProps = {
+	// id: string,
+	children: any,
+	contextValue: Object,
+	deleteCacheData: Object,
+	defaultRepeaterItemValue: Object,
+	onDelete: (index: number) => void,
+	InserterComponent: ComponentType<any>,
+	overrideItem: (index: number) => void,
+	// currentBlock: 'master' | InnerBlockType,
+	states: { [key: TStates | string]: StateTypes },
+	handleOnChange: (index: number, value: Object) => void,
+	defaultStates: { [key: TStates | string]: StateTypes },
+	preparedStates: { [key: TStates | string]: StateTypes },
+	getDynamicDefaultRepeaterItem: (index: number) => Object,
 };
