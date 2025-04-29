@@ -54,3 +54,17 @@
 		}
 	}
 }
+
+.blockera-controls-background-image-size {
+	position: relative;
+
+	.blockera-control-toggle-select {
+		width: 103px;
+	}
+
+	.blockera-component-button[data-test="position-button"] {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+}

@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- Background image feature: UI/UX design to do more with less!
+
+
 ## 1.2.2 (2025-04-27)
 
 ### Improvements
