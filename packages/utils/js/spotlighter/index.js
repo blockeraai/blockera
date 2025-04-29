@@ -11,7 +11,7 @@ import type { Options, Target } from './types';
  * The container becomes non-scrollable; overlay blocks events unless
  * `passThrough`.  `onClickOutside` fires for clicks outside the child.
  */
-export function useSpotlight(
+export function Spotlighter(
 	parentSel: string,
 	target: Target,
 	{

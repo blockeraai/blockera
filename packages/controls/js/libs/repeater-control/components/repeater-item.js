@@ -15,7 +15,7 @@ import type { Element } from 'react';
 /**
  * Blockera dependencies
  */
-import { isBoolean, isFunction, useSpotlight } from '@blockera/utils';
+import { isBoolean, isFunction, Spotlighter } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -136,20 +136,24 @@ const RepeaterItem = ({
 		// placement: 'overlay',
 	};
 
-	useSpotlight(
-		'.interface-navigable-region.interface-interface-skeleton__sidebar',
-		// '.block-editor-block-variation-transforms [role="radiogroup"]',
-		// '.blockera-extension-block-card__title__input',
-		itemRef,
-		{
-			active: isOpen,
-			padding: 5,
-			opacity: 0.4,
-			passThrough: false,
-			radius: 3,
-			// onClickOutside: () => setOpen(false),
-		}
-	);
+	const currentMode = isFunction(RepeaterItemChildren?.getMode)
+		? RepeaterItemChildren.getMode(item, itemId)
+		: mode;
+
+	if (currentMode === 'spotlight') {
+		Spotlighter(
+			'.interface-navigable-region.interface-interface-skeleton__sidebar',
+			itemRef,
+			{
+				active: currentMode === 'spotlight' ? isOpen : false,
+				padding: 6,
+				opacity: 0.35,
+				passThrough: false,
+				radius: 0,
+				onClickOutside: () => setOpen(false),
+			}
+		);
+	}
 
 	if (!item?.display && item?.selectable) {
 		return null;
@@ -175,11 +179,7 @@ const RepeaterItem = ({
 			data-test={itemId}
 		>
 			<GroupControl
-				mode={
-					isFunction(RepeaterItemChildren?.getMode)
-						? RepeaterItemChildren.getMode(item, itemId)
-						: mode
-				}
+				mode={currentMode}
 				toggleOpenBorder={true}
 				design={design}
 				popoverProps={popoverPropsWithAnchor}
