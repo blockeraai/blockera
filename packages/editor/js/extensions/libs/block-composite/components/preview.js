@@ -8,9 +8,14 @@ import type { MixedElement } from 'react';
 /**
  * Internal dependencies
  */
+import { Inserter, Categories } from './';
 import type { TPreviewProps } from '../types';
-import { InnerBlocksExtension } from '../../inner-blocks';
+import { useBlockStates } from '../../block-states/hooks';
 import StatesManager from '../../block-states/components/states-manager';
+import { InnerBlocksExtension, useInnerBlocks } from '../../inner-blocks';
+
+// the instance of in-memory cache.
+const deleteCacheData: Object = new Map();
 
 export const Preview = ({
 	// General Props.
@@ -27,24 +32,88 @@ export const Preview = ({
 	// Inner Blocks props.
 	innerBlocksProps,
 }: TPreviewProps): MixedElement => {
-	const { attributes, availableStates } = blockStatesProps;
+	const {
+		blocks,
+		elements,
+		maxItems,
+		getBlockInners,
+		setCurrentBlock,
+		setBlockClientInners,
+		contextValue: innerBlocksContextValue,
+	} = useInnerBlocks({
+		block,
+		onChange,
+		values: innerBlocksProps?.values || {},
+		innerBlocks: innerBlocksProps?.innerBlocks || {},
+	});
+	const {
+		states,
+		onDelete,
+		overrideItem,
+		defaultStates,
+		handleOnChange,
+		preparedStates,
+		calculatedValue: calculatedStates,
+		contextValue: blockStatesContextValue,
+		defaultRepeaterItemValue,
+		getDynamicDefaultRepeaterItem,
+	} = useBlockStates({
+		...blockStatesProps,
+		block,
+		deleteCacheData,
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		currentInnerBlockState,
+	});
 
 	return (
 		<StatesManager
-			block={block}
-			onChange={onChange}
-			attributes={attributes}
-			availableStates={availableStates}
+			states={states}
+			onDelete={onDelete}
+			overrideItem={overrideItem}
+			defaultStates={defaultStates}
+			preparedStates={preparedStates}
+			handleOnChange={handleOnChange}
+			deleteCacheData={deleteCacheData}
+			contextValue={blockStatesContextValue}
+			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
 			{...{
-				currentBlock,
-				currentState,
-				currentBreakpoint,
-				currentInnerBlockState,
+				InserterComponent: (props: Object) => (
+					<Inserter
+						{...{
+							...props,
+							maxItems:
+								maxItems + Object.keys(preparedStates).length,
+							AvailableBlocks: () => (
+								<Categories
+									blocks={blocks}
+									elements={elements}
+									states={preparedStates}
+									clientId={block?.clientId}
+									savedStates={calculatedStates}
+									setBlockState={handleOnChange}
+									getBlockInners={getBlockInners}
+									setCurrentBlock={setCurrentBlock}
+									getBlockStates={() => calculatedStates}
+									setBlockClientInners={setBlockClientInners}
+								/>
+							),
+						}}
+					/>
+				),
 			}}
 		>
-			{innerBlocksProps && (
+			{innerBlocksContextValue && (
 				<InnerBlocksExtension
-					{...innerBlocksProps}
+					{...{
+						...innerBlocksProps,
+						maxItems,
+						setCurrentBlock,
+						setBlockClientInners,
+						contextValue: innerBlocksContextValue,
+					}}
 					block={block}
 					onChange={onChange}
 				/>
