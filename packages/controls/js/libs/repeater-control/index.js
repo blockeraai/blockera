@@ -43,7 +43,7 @@ export default function RepeaterControl(
 		icon,
 		description = '',
 		design = 'minimal',
-		mode = 'popover',
+		mode = 'spotlight',
 		popoverProps,
 		popoverTitle,
 		popoverTitleButtonsRight,

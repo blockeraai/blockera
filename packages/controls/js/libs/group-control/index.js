@@ -125,7 +125,6 @@ const GroupControl: ComponentType<any> = memo(
 					'group',
 					'design-' + design,
 					'mode-' + mode,
-
 					isOpen || (isOpenPopover && !isOpen)
 						? 'is-open'
 						: 'is-close',
@@ -166,28 +165,50 @@ const GroupControl: ComponentType<any> = memo(
 					</div>
 
 					{header}
-
-					{mode === 'popover' && isOpenPopover && (
-						<Popover
-							{...popoverProps}
-							offset={popoverOffset}
-							// placement="left-start"
-							className={controlInnerClassNames(
-								'group-popover',
-								popoverClassName
-							)}
-							title={popoverTitle || header}
-							titleButtonsRight={popoverTitleButtonsRight}
-							onClose={() => {
-								onClose();
-
-								setOpenPopover(false);
-							}}
-						>
-							{children}
-						</Popover>
-					)}
 				</div>
+
+				{mode === 'spotlight' && isOpenPopover && (
+					<Popover
+						offset={popoverOffset}
+						placement="bottom-middle"
+						{...popoverProps}
+						className={controlInnerClassNames(
+							'group-popover-spotlight',
+							popoverClassName
+						)}
+						title={popoverTitle}
+						titleButtonsRight={popoverTitleButtonsRight}
+						onClose={() => {
+							onClose();
+
+							setOpenPopover(false);
+						}}
+						animate={false}
+					>
+						{children}
+					</Popover>
+				)}
+
+				{mode === 'popover' && isOpenPopover && (
+					<Popover
+						offset={popoverOffset}
+						placement="left-start"
+						{...popoverProps}
+						className={controlInnerClassNames(
+							'group-popover',
+							popoverClassName
+						)}
+						title={popoverTitle || header}
+						titleButtonsRight={popoverTitleButtonsRight}
+						onClose={() => {
+							onClose();
+
+							setOpenPopover(false);
+						}}
+					>
+						{children}
+					</Popover>
+				)}
 
 				{mode === 'accordion' && isOpen && (
 					<div
