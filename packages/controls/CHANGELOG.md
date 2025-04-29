@@ -3,6 +3,7 @@
 ### Improvements
 - Background image feature: UI/UX design to do more with less!
 - Multiple minor design improvement on controls.
+- Features label design and usability for reset value icon.
 
 
 ## 1.2.2 (2025-04-27)
