@@ -276,9 +276,13 @@ export default function RepeaterControl(
 					gap="10px"
 				>
 					<MappedItems />
+					{children}
 				</Grid>
 			) : (
-				<MappedItems />
+				<>
+					<MappedItems />
+					{children}
+				</>
 			)}
 		</>
 	);
@@ -389,111 +393,114 @@ export default function RepeaterControl(
 							</div>
 						)}
 
-						<div className={controlInnerClassNames('header')}>
-							<div
-								className={controlInnerClassNames(
-									'repeater-header-action-buttons'
-								)}
-							>
-								{injectHeaderButtonsStart}
+						{actionButtonAdd && (
+							<div className={controlInnerClassNames('header')}>
+								<div
+									className={controlInnerClassNames(
+										'repeater-header-action-buttons'
+									)}
+								>
+									{injectHeaderButtonsStart}
 
-								{children}
+									{isSupportInserter && actionButtonAdd && (
+										<InserterComponent
+											PlusButton={LargeNativeInserter}
+											callback={addNewButtonOnClick}
+											insertArgs={{
+												onChange,
+												controlId,
+												repeaterId,
+												valueCleanup,
+												repeaterItems,
+												addRepeaterItem,
+												itemIdGenerator,
+												addNewButtonOnClick,
+												defaultRepeaterItemValue,
+											}}
+										/>
+									)}
 
-								{isSupportInserter && actionButtonAdd && (
-									<InserterComponent
-										PlusButton={LargeNativeInserter}
-										callback={addNewButtonOnClick}
-										insertArgs={{
-											onChange,
-											controlId,
-											repeaterId,
-											valueCleanup,
-											repeaterItems,
-											addRepeaterItem,
-											itemIdGenerator,
-											addNewButtonOnClick,
-											defaultRepeaterItemValue,
-										}}
-									/>
-								)}
+									{!isSupportInserter && actionButtonAdd && (
+										<LargeNativeInserter />
+									)}
 
-								{!isSupportInserter && actionButtonAdd && (
-									<LargeNativeInserter />
-								)}
-
-								{injectHeaderButtonsEnd}
+									{injectHeaderButtonsEnd}
+								</div>
 							</div>
-						</div>
+						)}
 					</>
 				)}
 
 				{design === 'minimal' && (
 					<>
-						<div className={controlInnerClassNames('header')}>
-							{label && (
-								<>
-									{!withoutAdvancedLabel ? (
-										<LabelControl
-											label={label}
-											labelPopoverTitle={
-												labelPopoverTitle
-											}
-											labelDescription={labelDescription}
-											value={repeaterItems}
-											mode={'advanced'}
-											isRepeater={true}
-											blockName={blockName}
-											attribute={attribute}
-											resetToDefault={resetToDefault}
-											defaultValue={
-												isFunction(valueCleanup)
-													? valueCleanup(defaultValue)
-													: defaultValue
-											}
-										/>
-									) : (
-										<LabelControl
-											label={label}
-											mode={'simple'}
+						{actionButtonAdd && (
+							<div className={controlInnerClassNames('header')}>
+								{label && (
+									<>
+										{!withoutAdvancedLabel ? (
+											<LabelControl
+												label={label}
+												labelPopoverTitle={
+													labelPopoverTitle
+												}
+												labelDescription={
+													labelDescription
+												}
+												value={repeaterItems}
+												mode={'advanced'}
+												isRepeater={true}
+												blockName={blockName}
+												attribute={attribute}
+												resetToDefault={resetToDefault}
+												defaultValue={
+													isFunction(valueCleanup)
+														? valueCleanup(
+																defaultValue
+														  )
+														: defaultValue
+												}
+											/>
+										) : (
+											<LabelControl
+												label={label}
+												mode={'simple'}
+											/>
+										)}
+									</>
+								)}
+								<div
+									className={controlInnerClassNames(
+										'repeater-header-action-buttons'
+									)}
+								>
+									{injectHeaderButtonsStart}
+
+									{isSupportInserter && actionButtonAdd && (
+										<InserterComponent
+											PlusButton={SmallNativeInserter}
+											callback={addNewButtonOnClick}
+											insertArgs={{
+												onChange,
+												controlId,
+												repeaterId,
+												valueCleanup,
+												repeaterItems,
+												addRepeaterItem,
+												itemIdGenerator,
+												addNewButtonOnClick,
+												defaultRepeaterItemValue,
+											}}
 										/>
 									)}
-								</>
-							)}
 
-							<div
-								className={controlInnerClassNames(
-									'repeater-header-action-buttons'
-								)}
-							>
-								{injectHeaderButtonsStart}
+									{!isSupportInserter && actionButtonAdd && (
+										<SmallNativeInserter />
+									)}
 
-								{children}
-
-								{isSupportInserter && actionButtonAdd && (
-									<InserterComponent
-										PlusButton={SmallNativeInserter}
-										callback={addNewButtonOnClick}
-										insertArgs={{
-											onChange,
-											controlId,
-											repeaterId,
-											valueCleanup,
-											repeaterItems,
-											addRepeaterItem,
-											itemIdGenerator,
-											addNewButtonOnClick,
-											defaultRepeaterItemValue,
-										}}
-									/>
-								)}
-
-								{!isSupportInserter && actionButtonAdd && (
-									<SmallNativeInserter />
-								)}
-
-								{injectHeaderButtonsEnd}
+									{injectHeaderButtonsEnd}
+								</div>
 							</div>
-						</div>
+						)}
 
 						{items}
 					</>
