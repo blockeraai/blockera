@@ -63,6 +63,7 @@ export const Preview = ({
 	} = useBlockStates({
 		...blockStatesProps,
 		block,
+		onChange,
 		deleteCacheData,
 		currentBlock,
 		currentState,
