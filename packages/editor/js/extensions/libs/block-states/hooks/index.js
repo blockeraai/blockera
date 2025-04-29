@@ -33,7 +33,7 @@ import {
 } from '../helpers';
 
 export const useBlockStates = ({
-	id,
+	id = 'master-block-states',
 	block,
 	onChange,
 	attributes,
