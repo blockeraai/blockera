@@ -27,8 +27,9 @@ import {
 	isElement,
 	getVirtualInnerBlockDescription,
 } from '../../block-card/inner-blocks/helpers';
-import { search } from '../search-items';
 import type { TCategoriesProps } from '../types/categories';
+import { search, getNormalizedCssSelector } from '../search-items';
+import type { StateTypes } from '../../block-card/block-states/types';
 import type { InnerBlockModel } from '../../block-card/inner-blocks/types';
 
 export const Categories = ({
@@ -42,6 +43,9 @@ export const Categories = ({
 	setCurrentBlock,
 	setBlockClientInners,
 }: TCategoriesProps): MixedElement => {
+	const [customSelector, setCustomSelector] = useState(
+		_states['custom-class']
+	);
 	const [states, setStates] = useState(_states);
 	const [blocks, setBlocks] = useState(_blocks);
 	const [elements, setElements] = useState(_elements);
@@ -72,36 +76,116 @@ export const Categories = ({
 		return (
 			<Flex
 				direction={'column'}
-				className={classNames('blockera-inner-blocks-inserter')}
+				className={classNames('blockera-block-inserter')}
 				gap="10px"
 			>
-				<h2 className={classNames('blockera-inner-block-category')}>
+				<h2 className={classNames('blockera-block-features-category')}>
 					{title}
 				</h2>
 
 				<Flex
-					gap={'0'}
+					gap={'5'}
 					flexWrap={'wrap'}
 					justifyContent={'flex-start'}
-					className={`blockera-inner-block-types blockera-inner-${category}-wrapper`}
+					className={`blockera-features-types blockera-feature-${category}-wrapper`}
 				>
 					{items.map(
 						(
-							innerBlock: InnerBlockModel,
+							item: StateTypes | InnerBlockModel,
 							index: number
 						): MixedElement => {
-							const { name, type, icon, label, settings } =
-								innerBlock;
+							const { name, type, icon, label, settings } = item;
 
 							let id = name || type;
+
+							const onClick = () => {
+								if (name) {
+									const inners = getBlockInners(clientId);
+
+									setBlockClientInners({
+										clientId,
+										inners: {
+											...inners,
+											// $FlowFixMe
+											[id]: item,
+										},
+									});
+
+									setCurrentBlock(id);
+								} else if (type) {
+									const newStates = {
+										...savedStates,
+										// $FlowFixMe
+										[type]: {
+											...states[type],
+											...customSelector,
+											isSelected: true,
+										},
+									};
+									setBlockState(newStates);
+								}
+							};
+
+							if (
+								'custom-class' === item?.type &&
+								1 === items.length
+							) {
+								const style = {
+									color: '#147EB8',
+									margin: '0 5px',
+								};
+
+								return (
+									<div
+										key={index}
+										className={classNames(
+											'blockera-custom-css-selector'
+										)}
+									>
+										<div
+											onClick={onClick}
+											className={classNames(
+												'blockera-custom-css-selector-wrapper',
+												{
+													'is-item': true,
+												}
+											)}
+										>
+											{__('Add', 'blockera')}
+											<strong style={style}>
+												{(item: any)['css-class']}
+											</strong>
+											{__(
+												'as a custom selector',
+												'blockera'
+											)}
+										</div>
+										<p>
+											{__('You can use', 'blockera')}
+											<strong style={style}>&</strong>
+											{__(
+												'for selecting current block.',
+												'blockera'
+											)}
+											{__('For example:', 'blockera')}
+											<strong style={style}>
+												&:hover
+											</strong>
+										</p>
+									</div>
+								);
+							}
 
 							// We skip force blocks in regenerating id process.
 							if (!settings?.force) {
 								// We do add exceptions for picked inner block identifier in here.
 								// Usually use instanceId of block settings to re-generate identifier for that. any way, we do support "level" number for heading instances.
-								if ('core/heading' === name) {
+								if (
+									'core/heading' === name &&
+									'undefined' !== typeof settings?.level
+								) {
 									id = `${name}-${settings?.level}`;
-								} else if (settings?.instanceId) {
+								} else if (name && settings?.instanceId) {
 									id = `${name}-${settings?.instanceId}`;
 								}
 							}
@@ -109,47 +193,26 @@ export const Categories = ({
 							return (
 								<div
 									key={index}
-									onClick={() => {
-										if (name) {
-											const inners =
-												getBlockInners(clientId);
-
-											setBlockClientInners({
-												clientId,
-												inners: {
-													...inners,
-													[id]: innerBlock,
-												},
-											});
-
-											setCurrentBlock(id);
-										} else if (type) {
-											const newStates = {
-												...savedStates,
-												[type]: {
-													...states[type],
-													isSelected: true,
-												},
-											};
-											setBlockState(newStates);
-										}
-									}}
 									aria-label={id}
-									data-test={'blockera-inner-block-type'}
+									onClick={onClick}
+									data-test={'blockera-feature-type'}
 									className={classNames(
-										'blockera-inner-block-type'
+										'blockera-feature-type',
+										{
+											'is-item': true,
+										}
 									)}
 								>
 									<div
 										className={classNames(
-											'blockera-inner-block-icon'
+											'blockera-feature-icon'
 										)}
 									>
 										{icon}
 									</div>
 									<div
 										className={classNames(
-											'blockera-inner-block-label'
+											'blockera-feature-label'
 										)}
 									>
 										{label}
@@ -173,19 +236,25 @@ export const Categories = ({
 			>
 				<SearchControl
 					data-id={'search bar'}
-					className={'blockera-inner-blocks-inserter-search'}
+					className={'blockera-features-inserter-search'}
 					onChange={(newValue) => {
 						setSearchTerm(newValue);
 
 						if (!newValue) {
 							setBlocks(_blocks);
+							setStates(_states);
 							setElements(_elements);
 
 							return;
 						}
 
 						const filteredItems = search(
-							[...elements, ...blocks, ...Object.values(states)],
+							[
+								...elements,
+								...blocks,
+								...Object.values(states),
+								...[customSelector],
+							],
 							getCategories(),
 							getCollections(),
 							newValue
@@ -204,6 +273,17 @@ export const Categories = ({
 								newBlocks.push(item);
 							}
 						});
+
+						if (
+							!newBlocks.length &&
+							!newElements.length &&
+							!newStates.length
+						) {
+							setCustomSelector({
+								..._states['custom-class'],
+								'css-class': getNormalizedCssSelector(newValue),
+							});
+						}
 
 						setBlocks(newBlocks);
 						setStates(newStates);
@@ -299,6 +379,32 @@ export const Categories = ({
 					/>
 				)
 			)}
+
+			{!elements?.length &&
+				!blocks?.length &&
+				!Object.values(states)?.length && (
+					<CategorizedItems
+						items={[customSelector]}
+						category={'custom-selector'}
+						title={
+							<>
+								{__('Custom Selector', 'blockera')}
+
+								<Tooltip
+									width="220px"
+									style={{ padding: '12px' }}
+									text={getVirtualInnerBlockDescription()}
+								>
+									<Icon
+										icon="information"
+										library="ui"
+										iconSize="16"
+									/>
+								</Tooltip>
+							</>
+						}
+					/>
+				)}
 		</>
 	);
 };

@@ -240,3 +240,7 @@ export function getItemSearchRank(
 
 	return rank;
 }
+
+export const getNormalizedCssSelector = (search: string): string => {
+	return `&${search}`;
+};

@@ -132,7 +132,7 @@ export function onChangeBlockStates(
 			const index = Object.keys(blockStates).indexOf(stateType);
 			const info = getStateInfo(index, states);
 
-			if ('normal' === stateType) {
+			if (stateItem?.force) {
 				info.deletable = false;
 			}
 

@@ -1,0 +1,99 @@
+.blockera-control-search.blockera-features-inserter-search {
+	margin-bottom: 15px !important;
+}
+
+.blockera-block-inserter {
+	margin-bottom: 10px;
+
+	.is-item {
+		border: 1px solid #d1d1d1;
+		border-radius: 2px;
+
+		&.blockera-custom-css-selector-wrapper {
+			padding: 3px;
+			cursor: pointer;
+		}
+	}
+
+	.blockera-block-features-category {
+		color: #757575;
+		font-size: 11px;
+		font-weight: 500;
+		margin: 0;
+		text-transform: uppercase;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		svg {
+			fill: currentColor;
+			color: var(--blockera-controls-placeholder-color);
+			cursor: pointer;
+
+			&:hover {
+				color: var(--blockera-controls-primary-color);
+			}
+		}
+	}
+
+	.blockera-features-types {
+		margin-bottom: 10px;
+
+		.blockera-feature-type {
+			width: 33.33%;
+			text-align: center;
+			align-items: center;
+			background: #00000000;
+			border-radius: 2px;
+			color: #1e1e1e;
+			cursor: pointer;
+			display: flex;
+			flex-direction: row;
+			font-size: 13px;
+			height: auto;
+			justify-content: center;
+			position: relative;
+			transition: all 0.05s ease-in-out;
+			word-break: break-word;
+
+			&:hover {
+				color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+				fill: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+			}
+
+			&:hover::after {
+				background: var(--wp-admin-theme-color);
+				border-radius: 2px;
+				bottom: 0;
+				content: "";
+				left: 0;
+				opacity: 0.04;
+				pointer-events: none;
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+
+			.blockera-feature-icon {
+				margin-bottom: 8px;
+				border-right: solid 1px #d1d1d1;
+
+				.block-editor-block-icon {
+					display: inline-block;
+				}
+
+				svg,
+				.block-editor-block-icon svg {
+					max-height: 20px;
+					max-width: 20px;
+					min-height: 20px;
+					min-width: 20px;
+				}
+			}
+
+			.blockera-feature-label {
+				font-size: 12px;
+			}
+		}
+	}
+}
