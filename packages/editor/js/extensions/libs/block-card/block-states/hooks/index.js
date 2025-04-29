@@ -27,7 +27,6 @@ import type {
 } from '../types';
 import {
 	getStateInfo,
-	isDefaultState,
 	onChangeBlockStates,
 	isMasterBlockStates,
 	blockStatesValueCleanup,
@@ -86,6 +85,32 @@ export const useBlockStates = ({
 	]);
 
 	const calculatedValue = useMemo(() => {
+		const defaultStates: { [key: TStates | string]: StateTypes } = {};
+
+		for (const key in preparedStates) {
+			if (!preparedStates.hasOwnProperty(key)) {
+				continue;
+			}
+
+			const state = preparedStates[key];
+
+			if (!state?.force) {
+				continue;
+			}
+
+			defaultStates[key] = {
+				...state,
+				...defaultItemValue,
+				isOpen: false,
+				display: true,
+				deletable: false,
+				selectable: true,
+				visibilitySupport: false,
+				breakpoints: state.breakpoints,
+				isSelected: 'normal' === state?.type,
+			};
+		}
+
 		const itemsCount = Object.values(states).length;
 		if (itemsCount >= 2) {
 			const initialValue: { [key: TStates | string]: StateTypes } = {};
@@ -116,7 +141,7 @@ export const useBlockStates = ({
 						display: itemsCount > 1,
 						visibilitySupport: false,
 						isSelected,
-						deletable: !isDefaultState(itemId),
+						deletable: !state?.force,
 						breakpoints: state?.breakpoints ?? {
 							// $FlowFixMe
 							[getBaseBreakpoint()]: {
@@ -141,30 +166,7 @@ export const useBlockStates = ({
 			setInnerBlockState('normal');
 		}
 
-		return {
-			normal: {
-				...preparedStates.normal,
-				...defaultItemValue,
-				isOpen: false,
-				display: true,
-				deletable: false,
-				selectable: true,
-				isSelected: true,
-				visibilitySupport: false,
-				breakpoints: states.normal.breakpoints,
-			},
-			hover: {
-				...preparedStates.hover,
-				...defaultItemValue,
-				isOpen: false,
-				display: true,
-				deletable: false,
-				selectable: true,
-				isSelected: false,
-				visibilitySupport: false,
-				breakpoints: preparedStates.hover.breakpoints,
-			},
-		};
+		return defaultStates;
 		// eslint-disable-next-line
 	}, [currentBlock, states, currentBreakpoint]);
 
@@ -223,7 +225,7 @@ export const useBlockStates = ({
 						return;
 					}
 
-					if (isDefaultState(_itemId)) {
+					if (_item?.force) {
 						if (items[itemId].isSelected) {
 							// Assume deleted item was selected item
 							filteredStates[_itemId] = {
@@ -344,7 +346,7 @@ export const useBlockStates = ({
 	);
 	//Override item when occurred clone action!
 	const overrideItem = useCallback((item) => {
-		if (isDefaultState(item.type)) {
+		if (item?.force) {
 			return {
 				deletable: true,
 				visibilitySupport: true,

@@ -13,23 +13,21 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isDefaultState } from '../helpers';
 import type { StateTypes, TStates } from '../types';
 
 const ItemOpener = ({
-	itemId,
+	item,
 }: {
 	item: StateTypes,
 	itemId: TStates,
 }): boolean | MixedElement => {
-	if (isDefaultState(itemId)) {
+	if (item?.force) {
 		return false;
 	}
 
 	return <Icon library={'ui'} icon={'gear'} iconSize={18} />;
 };
 
-ItemOpener.hasButton = (item: StateTypes, itemId: TStates): boolean =>
-	!isDefaultState(itemId);
+ItemOpener.hasButton = (item: StateTypes): boolean => !item?.force;
 
 export default ItemOpener;

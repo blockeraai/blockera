@@ -21,7 +21,7 @@ import {
  */
 import type { TStates, StateTypes } from '../types';
 import { LabelDescription } from './label-description';
-import { getStateInfo, isDefaultState } from '../helpers';
+import { getStateInfo } from '../helpers';
 
 const ItemBody = ({
 	item,
@@ -119,8 +119,8 @@ const ItemBody = ({
 	);
 };
 
-ItemBody.getMode = ({ type }: { type: TStates }): ?string => {
-	if (!isDefaultState(type)) {
+ItemBody.getMode = ({ force }: { force: boolean }): ?string => {
+	if (!force) {
 		return 'popover';
 	}
 
