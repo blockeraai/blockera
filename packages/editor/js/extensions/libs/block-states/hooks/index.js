@@ -145,7 +145,7 @@ export const useBlockStates = ({
 				...preparedStates.normal,
 				...defaultItemValue,
 				isOpen: false,
-				display: false,
+				display: true,
 				deletable: false,
 				selectable: true,
 				isSelected: true,
