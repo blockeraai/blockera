@@ -27,6 +27,7 @@ import { Button } from '../button';
 import type { TPopoverProps } from './types';
 
 export default function Popover({
+	design = 'highlight',
 	title = '',
 	onClose = () => {},
 	children,
@@ -107,6 +108,7 @@ export default function Popover({
 				<WPPopover
 					className={componentClassNames(
 						'popover',
+						'popover-' + design,
 						title && 'with-header',
 						className
 					)}

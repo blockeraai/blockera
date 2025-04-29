@@ -4,17 +4,23 @@ export type PopoverPlacement =
 	| 'top-start'
 	| 'top'
 	| 'top-end'
+	| 'top-middle'
 	| 'right-start'
 	| 'right'
 	| 'right-end'
 	| 'bottom-start'
 	| 'bottom'
 	| 'bottom-end'
+	| 'bottom-middle'
 	| 'left-start'
 	| 'left'
 	| 'left-end';
 
 export type TPopoverProps = {
+	/**
+	 * Design of the popover.
+	 */
+	design: 'highlight' | 'spotlight',
 	/**
 	 * Popover Title
 	 */
