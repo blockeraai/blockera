@@ -72,10 +72,12 @@ export function Spotlighter(
 		const parent = (document.querySelector(parentSel): any);
 
 		if (!parent) {
-			if (process.env.NODE_ENV !== 'production')
+			if (process.env.NODE_ENV !== 'production') {
+				/* @debug-ignore */
 				console.warn(
 					`useSpotlightMaskBySelector: "${parentSel}" not found`
 				);
+			}
 			return;
 		}
 
