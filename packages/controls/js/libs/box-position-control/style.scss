@@ -285,3 +285,8 @@
 	color: var(--blockera-controls-border-color);
 	fill: currentColor;
 }
+
+.blockera-component-popover.position-edit-popover.popover-spotlight {
+	--popover-radius: 3px;
+	--popover-width: 250px;
+}
