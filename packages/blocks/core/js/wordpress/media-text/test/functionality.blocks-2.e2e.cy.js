@@ -7,7 +7,6 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Media Text Block', () => {
@@ -29,30 +28,17 @@ describe('Media Text Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
-
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
-
 		//
 		// 1. Inner blocks existence
 		//
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		cy.getByDataTest('elements/link').should('exist');
+		cy.getByDataTest('core/paragraph').should('exist');
+		cy.getByDataTest('core/heading').should('exist');
+		cy.getByDataTest('core/image').should('exist');
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-				cy.getByDataTest('core/paragraph').should('exist');
-				cy.getByDataTest('core/heading').should('exist');
-				cy.getByDataTest('core/image').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading-1').should('not.exist');
-			}
-		);
+		// no other item
+		cy.getByDataTest('core/heading-1').should('not.exist');
 
 		//
 		// 2. Edit Block

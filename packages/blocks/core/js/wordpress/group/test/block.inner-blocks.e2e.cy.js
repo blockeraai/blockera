@@ -1,12 +1,7 @@
 /**
  * Blockera dependencies
  */
-import {
-	appendBlocks,
-	createPost,
-	openInnerBlocksExtension,
-	openMoreFeaturesControl,
-} from '@blockera/dev-cypress/js/helpers';
+import { appendBlocks, createPost } from '@blockera/dev-cypress/js/helpers';
 
 describe('Group Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -26,19 +21,12 @@ describe('Group Block → Inner Blocks', () => {
 		// Switch to parent block
 		cy.getByAriaLabel('Select Group').click();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		cy.getByDataTest('core/heading').should('exist');
+		cy.getByDataTest('core/paragraph').should('exist');
+		cy.getByDataTest('elements/link').should('exist');
+		cy.getByDataTest('core/button').should('exist');
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('core/heading').should('exist');
-				cy.getByDataTest('core/paragraph').should('exist');
-				cy.getByDataTest('elements/link').should('exist');
-				cy.getByDataTest('core/button').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading-1').should('not.exist');
-			}
-		);
+		// no other item
+		cy.getByDataTest('core/heading-1').should('not.exist');
 	});
 });
