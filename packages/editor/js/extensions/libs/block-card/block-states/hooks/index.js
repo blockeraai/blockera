@@ -85,7 +85,12 @@ export const useBlockStates = ({
 	]);
 
 	const calculatedValue = useMemo(() => {
-		const forcedStates: { [key: TStates | string]: StateTypes } = {};
+		const forcedStates: {
+			[key: TStates | string]: {
+				...StateTypes,
+				isSelected: boolean,
+			},
+		} = {};
 
 		for (const key in preparedStates) {
 			if (!preparedStates.hasOwnProperty(key)) {
@@ -134,6 +139,10 @@ export const useBlockStates = ({
 
 					// Exclude forced states from initial value.
 					if (Object.keys(forcedStates).includes(itemId)) {
+						forcedStates[itemId] = {
+							...forcedStates[itemId],
+							isSelected,
+						};
 						return;
 					}
 
@@ -142,8 +151,8 @@ export const useBlockStates = ({
 						...preparedStates[itemId],
 						...defaultItemValue,
 						isOpen: false,
+						display: true,
 						selectable: true,
-						display: itemsCount > 1,
 						visibilitySupport: false,
 						isSelected,
 						deletable: !state?.force,
