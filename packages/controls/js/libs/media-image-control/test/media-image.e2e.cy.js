@@ -41,6 +41,8 @@ describe('media-image', () => {
 				cy.get('.media-toolbar-primary > .button').click();
 			});
 
+			cy.closeSpotlightPopover();
+
 			cy.getParentContainer('Image & Gradient').within(() => {
 				cy.get(
 					'.blockera-component-color-indicator.image-custom'
@@ -57,13 +59,14 @@ describe('media-image', () => {
 				expect(uploadedImageFileName).to.be.match(/^test(-\d+)?.jpg/);
 			});
 
-			//----------------------- delete ---------------------------------
+			// Open item
+			cy.openRepeaterItem('Image & Gradient', 'Image');
+
+			// Delete
 			cy.get('.blockera-component-popover').within(() => {
-				cy.getParentContainer('Image')
-					.last()
-					.within(() => {
-						cy.getByDataCy('delete-bg-img').click({ force: true });
-					});
+				cy.get('.blockera-control-media-image').within(() => {
+					cy.getByDataCy('delete-bg-img').click({ force: true });
+				});
 			});
 
 			// data assertion
