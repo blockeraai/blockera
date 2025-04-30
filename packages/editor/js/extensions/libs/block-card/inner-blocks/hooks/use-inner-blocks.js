@@ -26,16 +26,17 @@ export const useInnerBlocks = ({
 	currentBlock: 'master' | InnerBlockType | string,
 }): Object => {
 	// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
-	const { getBlockInners } = useSelect((select) => {
-		const { getBlockInners, getExtensionCurrentBlock } = select(
-			'blockera/extensions'
-		);
+	const { currentBlock: currentBlockType = currentBlock, getBlockInners } =
+		useSelect((select) => {
+			const { getBlockInners, getExtensionCurrentBlock } = select(
+				'blockera/extensions'
+			);
 
-		return {
-			getBlockInners,
-			currentBlock: getExtensionCurrentBlock(),
-		};
-	});
+			return {
+				getBlockInners,
+				currentBlock: getExtensionCurrentBlock(),
+			};
+		});
 
 	// Internal dispatchers. to use of "setCurrentBlock" and "setBlockClientInners" dispatchers of Blockera editor/extensions store api.
 	const {
@@ -66,6 +67,14 @@ export const useInnerBlocks = ({
 
 	// Get repeater value from internal Blockera store api.
 	const value = getBlockInners(block.clientId);
+
+	for (const item in value) {
+		value[item] = {
+			...value[item],
+			isSelected: currentBlockType === item,
+			selectable: true,
+		};
+	}
 
 	// cache length to not calculate it multiple times
 	const innerBlocksLength = Object.keys(innerBlocks).length;
