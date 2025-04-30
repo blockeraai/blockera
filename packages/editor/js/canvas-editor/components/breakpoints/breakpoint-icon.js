@@ -47,7 +47,7 @@ export function BreakpointIcon({
 	return (
 		<Tooltip
 			width="250px"
-			style={{ '--tooltip-padding': '12px' }}
+			style={{ '--tooltip-padding': '16px' }}
 			text={
 				<>
 					<h5>{breakpoints[name].label}</h5>
