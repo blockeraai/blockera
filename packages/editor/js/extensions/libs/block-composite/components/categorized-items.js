@@ -44,7 +44,11 @@ export const CategorizedItems = ({
 		);
 	}
 
-	if (!items || (!Array.isArray(items) && !Object.keys(items).length)) {
+	const itemsCount = Array.isArray(items)
+		? items.length
+		: Object.keys(items).length;
+
+	if (!items || !itemsCount) {
 		return <></>;
 	}
 
