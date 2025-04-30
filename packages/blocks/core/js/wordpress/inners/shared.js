@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/inner-blocks/types';
+import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card/inner-blocks/types';
 
 const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
