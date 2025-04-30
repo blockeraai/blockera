@@ -210,6 +210,7 @@ export function PaddingTop({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Top Padding', 'blockera')}
 			/>
 		),
 		label: (

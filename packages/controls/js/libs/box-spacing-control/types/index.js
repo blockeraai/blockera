@@ -126,4 +126,5 @@ export type SideShapeProps = {
 	...Object,
 	shape?: string,
 	className?: string | Array<string>,
+	tooltipText: string,
 };

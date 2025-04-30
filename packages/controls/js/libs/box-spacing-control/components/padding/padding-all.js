@@ -193,6 +193,7 @@ export function PaddingAll({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('All Sides Padding', 'blockera')}
 			/>
 		),
 		label: (

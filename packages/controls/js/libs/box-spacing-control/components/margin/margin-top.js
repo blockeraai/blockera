@@ -211,6 +211,7 @@ export function MarginTop({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Top Margin', 'blockera')}
 			/>
 		),
 		label: (

@@ -192,6 +192,7 @@ export function MarginAll({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('All Sides Margin', 'blockera')}
 			/>
 		),
 		label: (

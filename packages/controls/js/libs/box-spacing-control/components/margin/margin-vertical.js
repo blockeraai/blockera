@@ -217,6 +217,7 @@ export function MarginVertical({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Vertical Margin', 'blockera')}
 			/>
 		),
 		label: (

@@ -222,6 +222,7 @@ export function MarginHorizontal({
 								setOpenPopover(sideId);
 							}
 						}}
+						tooltipText={__('Horizontal Margin', 'blockera')}
 					/>
 				}
 			</>

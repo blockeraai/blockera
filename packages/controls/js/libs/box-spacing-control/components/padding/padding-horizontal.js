@@ -218,6 +218,7 @@ export function PaddingHorizontal({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Horizontal Padding', 'blockera')}
 			/>
 		),
 		label: (

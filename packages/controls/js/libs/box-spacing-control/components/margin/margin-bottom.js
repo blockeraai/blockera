@@ -209,6 +209,7 @@ export function MarginBottom({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Bottom Margin', 'blockera')}
 			/>
 		),
 		label: (
