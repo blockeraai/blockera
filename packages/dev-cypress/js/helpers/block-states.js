@@ -1,4 +1,14 @@
 export function addBlockState(state) {
+	openInserter();
+
+	cy.get('.blockera-component-popover')
+		.last()
+		.within(() => {
+			cy.getByAriaLabel(state).click({ force: true });
+		});
+}
+
+export function openInserter() {
 	cy.getByAriaLabel('Blockera Block State Container').last().as('states');
 
 	cy.get('@states').within(() => {
@@ -10,16 +20,6 @@ export function addBlockState(state) {
 			cy.getByDataTest('add-new-block-state').click({ force: true });
 		}
 	});
-
-	cy.get('.blockera-component-popover')
-		.last()
-		.within(() => {
-			cy.getByAriaLabel(state).click({ force: true });
-		});
-}
-
-export function openInserter() {
-	cy.getByDataTest('add-new-block-state').click();
 }
 
 export function setBlockState(state) {
