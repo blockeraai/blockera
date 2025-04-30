@@ -147,10 +147,16 @@ export function Spotlighter(
 			const p = parent.getBoundingClientRect();
 			const t = targetEl.getBoundingClientRect();
 
-			hole.setAttribute('x', String(t.left - p.left - padding));
-			hole.setAttribute('y', String(t.top - p.top - padding));
-			hole.setAttribute('width', String(t.width + padding * 2));
-			hole.setAttribute('height', String(t.height + padding * 2));
+			// Ensure pixel-perfect calculations by rounding to nearest integer
+			const x = Math.round(t.left - p.left - padding);
+			const y = Math.round(t.top - p.top - padding);
+			const width = Math.round(t.width + padding * 2);
+			const height = Math.round(t.height + padding * 2);
+
+			hole.setAttribute('x', String(x));
+			hole.setAttribute('y', String(y));
+			hole.setAttribute('width', String(width));
+			hole.setAttribute('height', String(height));
 			hole.setAttribute('rx', String(radius));
 			hole.setAttribute('ry', String(radius));
 		};
