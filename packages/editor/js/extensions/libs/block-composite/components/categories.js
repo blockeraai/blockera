@@ -250,8 +250,8 @@ export const Categories = ({
 
 						const filteredItems = search(
 							[
-								...elements,
-								...blocks,
+								...(elements || []),
+								...(blocks || []),
 								...Object.values(states),
 								...[customSelector],
 							],
