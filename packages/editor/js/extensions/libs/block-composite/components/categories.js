@@ -73,7 +73,7 @@ export const Categories = ({
 			return <></>;
 		}
 
-		const onClick = (item: Object) => {
+		const onClick = (item: Object, id: string) => {
 			const { name, type } = item;
 
 			if (name) {
@@ -156,7 +156,7 @@ export const Categories = ({
 										)}
 									>
 										<div
-											onClick={() => onClick(item)}
+											onClick={() => onClick(item, id)}
 											className={classNames(
 												'blockera-custom-css-selector-wrapper',
 												{
@@ -207,7 +207,7 @@ export const Categories = ({
 								<div
 									key={index}
 									aria-label={id}
-									onClick={() => onClick(item)}
+									onClick={() => onClick(item, id)}
 									data-test={'blockera-feature-type'}
 									className={classNames(
 										'blockera-feature-type',
