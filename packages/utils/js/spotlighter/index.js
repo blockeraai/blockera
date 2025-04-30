@@ -93,6 +93,7 @@ export function Spotlighter(
 		/* ─── SVG overlay ─── */
 		const NS = 'http://www.w3.org/2000/svg';
 		const svg = document.createElementNS(NS, 'svg');
+		svg.setAttribute('class', 'blockera-spotlighter-svg');
 		svg.setAttribute('width', '100%');
 		svg.setAttribute('height', '100%');
 		(svg: any).style.cssText = `
