@@ -163,6 +163,21 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 							columns="columns-1"
 							controlName="transform"
 						>
+							{isTransformSettingsVisible && (
+								<TransformSettings
+									setIsTransformSettingsVisible={
+										setIsTransformSettingsVisible
+									}
+									block={block}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									values={values}
+									attributes={attributes}
+									extensionConfig={extensionConfig}
+								/>
+							)}
+
 							<TransformControl
 								onChange={(newValue, ref) =>
 									handleOnChangeAttributes(
@@ -184,9 +199,12 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 											)}
 											size="extra-small"
 											className={controlInnerClassNames(
-												'btn-add'
+												'btn-add',
+												'btn-transform-settings',
+												isTransformSettingsVisible
+													? 'is-active'
+													: ''
 											)}
-											isFocus={isTransformSettingsVisible}
 											onClick={() =>
 												setIsTransformSettingsVisible(
 													!isTransformSettingsVisible
@@ -205,21 +223,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 								}
 								{...extensionProps.blockeraTransform}
 							/>
-
-							{isTransformSettingsVisible && (
-								<TransformSettings
-									setIsTransformSettingsVisible={
-										setIsTransformSettingsVisible
-									}
-									block={block}
-									handleOnChangeAttributes={
-										handleOnChangeAttributes
-									}
-									values={values}
-									attributes={attributes}
-									extensionConfig={extensionConfig}
-								/>
-							)}
 						</BaseControl>
 					</ControlContextProvider>
 				</EditorFeatureWrapper>

@@ -91,7 +91,7 @@ export function SelfPerspective({
 							</p>
 						</>
 					}
-					columns="1fr 130px"
+					columns="1fr 100px"
 					className={`blockera-transform-self-perspective ${
 						!visibleTransformLength
 							? 'blockera-control-is-not-active'
