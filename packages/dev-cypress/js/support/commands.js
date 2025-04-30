@@ -730,6 +730,10 @@ export const registerCommands = () => {
 		});
 	});
 
+	Cypress.Commands.add('closeSpotlightPopover', () => {
+		cy.get('.blockera-spotlighter-svg').click({ force: true });
+	});
+
 	/**
 	 * Normalize CSS content by removing comments, extra whitespace, and standardizing formatting
 	 * @param {string} cssContent - The CSS content to normalize
