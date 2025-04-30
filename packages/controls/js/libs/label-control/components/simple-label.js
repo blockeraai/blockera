@@ -59,7 +59,13 @@ export const SimpleLabelControl = ({
 			{labelDescription && (
 				<>
 					{resetToDefault ? (
-						<Tooltip text={__('Reset to default', 'blockera')}>
+						<Tooltip
+							text={__('Reset to default', 'blockera')}
+							style={{
+								'--tooltip-bg': '#e20000',
+							}}
+							delay={300}
+						>
 							<ResetIcon
 								className={controlInnerClassNames('reset-icon')}
 								onClick={(event) => {
