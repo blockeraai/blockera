@@ -20,7 +20,7 @@ import type {
 	TBreakpointLabel,
 	TStates,
 	TStatesLabel,
-} from '../../extensions/libs/block-states/types';
+} from '../../extensions/libs/block-card/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';

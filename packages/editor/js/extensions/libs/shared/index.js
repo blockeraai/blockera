@@ -55,11 +55,18 @@ import {
 } from '../../components/utils';
 import StateContainer from '../../components/state-container';
 import { STORE_NAME } from '../base/store/constants';
-import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
+import type {
+	InnerBlocks,
+	InnerBlockType,
+} from '../block-card/inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
 import { useDisplayBlockControls } from '../../../hooks';
-import type { StateTypes, TBreakpoint, TStates } from '../block-states/types';
+import type {
+	StateTypes,
+	TBreakpoint,
+	TStates,
+} from '../block-card/block-states/types';
 import { useBlockContext } from '../../hooks';
 import bootstrapScripts from '../../scripts';
 

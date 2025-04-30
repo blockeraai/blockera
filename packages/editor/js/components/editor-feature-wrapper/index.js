@@ -15,7 +15,7 @@ import { isBoolean, isArray } from '@blockera/utils';
  */
 import type { EditorFeatureWrapperProps } from './types';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
-import type { TStates } from '../../extensions/libs/block-states/types';
+import type { TStates } from '../../extensions/libs/block-card/block-states/types';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 

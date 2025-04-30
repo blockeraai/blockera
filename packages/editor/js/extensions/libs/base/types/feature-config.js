@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import type { InnerBlockType } from '../../inner-blocks/types';
+import type { InnerBlockType } from '../../block-card/inner-blocks/types';
 
 export type FeatureConfig = {
 	/**
