@@ -20,7 +20,7 @@ export type TPopoverProps = {
 	/**
 	 * Design of the popover.
 	 */
-	design: 'highlight' | 'spotlight',
+	design?: 'highlight' | 'spotlight',
 	/**
 	 * Popover Title
 	 */
