@@ -44,15 +44,8 @@ export const useAvailableItems = ({
 				const innerBlock: InnerBlockModel =
 					reservedInnerBlocks[innerBlockType];
 
-				// Skip customized inner blocks.
-				if (memoizedInnerBlocks[innerBlockType]) {
-					return;
-				}
-
 				if (innerBlock?.settings?.force) {
 					forces.push(innerBlock);
-
-					return;
 				}
 
 				if (isElement(innerBlock)) {
