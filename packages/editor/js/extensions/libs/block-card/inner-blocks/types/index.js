@@ -3,7 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+import type { TBlockProps, THandleOnChangeAttributes } from '../../../types';
 
 export type InnerBlockType =
 	| 'heading'
