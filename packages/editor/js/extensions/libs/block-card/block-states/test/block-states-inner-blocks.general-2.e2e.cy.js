@@ -11,7 +11,6 @@ import {
 	getSelectedBlock,
 	appendBlocks,
 	setDeviceType,
-	addBlockState,
 	setBlockState,
 	savePage,
 	setInnerBlock,
@@ -71,24 +70,13 @@ describe('Block States on inner blocks E2E tests', () => {
 				'.blockera-state-colors-container:last-child'
 			).should('eq', '#D47C14');
 		});
-
-		it('should block state container title be correct', () => {
-			initialSetting();
-			setInnerBlock('elements/link');
-
-			cy.get(
-				'.blockera-extension-block-card.block-card--inner-block'
-			).within(() => {
-				cy.contains('Inner Block States').should('exist');
-			});
-		});
 	});
 
 	describe('current-state', () => {
 		it('Set the hidden style for WordPress block origin features when choose state (apart from normal state)', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			//In this assertion not available data attribute for this selector، Please don't be sensitive.
 			cy.get('button')
@@ -115,7 +103,7 @@ describe('Block States on inner blocks E2E tests', () => {
 				'inner-block'
 			);
 
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			checkCurrentState('hover');
 			checkBlockCard(
@@ -135,28 +123,6 @@ describe('Block States on inner blocks E2E tests', () => {
 	});
 
 	describe('add new state', () => {
-		it('should not display normal when delete hover state ', () => {
-			initialSetting();
-			setInnerBlock('elements/link');
-
-			// do not render normal when adding new state
-			cy.contains('Normal').should('not.exist');
-
-			context('add hover', () => {
-				cy.getByAriaLabel('Add New State').last().click();
-				// render normal when adding new state
-				cy.contains('Normal').should('exist');
-				cy.contains('Hover').should('exist');
-			});
-
-			context('delete hover', () => {
-				cy.getByAriaLabel('Delete hover').click({ force: true });
-				// should not render normal and hover stat items.
-				cy.contains('Normal').should('not.exist');
-				cy.contains('Hover').should('not.exist');
-			});
-		});
-
 		it('should not changed blockeraInnerBlocks attribute because add state but not changed anythings on selected state', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
