@@ -221,7 +221,7 @@ export function SidePopover({
 			{isOpen && (
 				<Popover
 					design="spotlight"
-					offset={0}
+					offset={3}
 					placement="bottom-middle"
 					animate={false}
 					flip={false}
@@ -276,7 +276,7 @@ export function SidePopover({
 						)}
 						mode={'simple'}
 						style={{
-							marginTop: '25px',
+							marginTop: '20px',
 						}}
 					>
 						<>

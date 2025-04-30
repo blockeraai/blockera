@@ -409,13 +409,14 @@
 }
 
 .blockera-control-side-popover-action-buttons {
+	--blockera-controls-input-height: 26px;
 
 	.blockera-component-button {
 		width: 100%;
 	}
 
 	.blockera-component-button.auto-btn {
-		height: 68px !important;
+		height: calc(var(--blockera-controls-input-height) * 2 + 8px) !important;
 	}
 }
 
