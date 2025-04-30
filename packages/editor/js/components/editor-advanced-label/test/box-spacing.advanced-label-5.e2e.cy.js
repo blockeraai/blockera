@@ -155,7 +155,7 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 		/**
 		 * Hover state
 		 */
-		addBlockState('Hover');
+		setBlockState('Hover');
 
 		// Assert label before set value
 		['margin', 'padding'].forEach((type) => {
@@ -334,7 +334,7 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 
 		// Assert label before set value
 		['margin', 'padding'].forEach((type) => {
@@ -573,7 +573,7 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 
 		// Assert label before set value
 		['margin', 'padding'].forEach((type) => {

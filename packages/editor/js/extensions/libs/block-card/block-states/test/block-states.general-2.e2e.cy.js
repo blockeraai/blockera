@@ -129,7 +129,7 @@ describe('Block State E2E Test', () => {
 		it('should clean the "blockeraBlockStates" attribute for master block', () => {
 			initialSetting();
 
-			addBlockState('hover');
+			setBlockState('Hover');
 
 			cy.getByAriaLabel('Input Width').type(100, { force: true });
 
@@ -158,7 +158,7 @@ describe('Block State E2E Test', () => {
 
 			setInnerBlock('elements/link');
 
-			addBlockState('hover');
+			setBlockState('Hover');
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -288,7 +288,7 @@ describe('Block State E2E Test', () => {
 		it('should correctly set attribute and generate styles when state is: Hover (on desktop)', () => {
 			initialSetting();
 
-			addBlockState('hover');
+			setBlockState('Hover');
 
 			checkBlockCard(
 				[
@@ -381,7 +381,7 @@ describe('Block State E2E Test', () => {
 		it('should correctly set attribute and generate styles when state is: Hover (on tablet)', () => {
 			initialSetting();
 
-			addBlockState('hover');
+			setBlockState('Hover');
 
 			setDeviceType('Tablet');
 
@@ -488,7 +488,7 @@ describe('Block State E2E Test', () => {
 			context(
 				'can manipulate settings on hover state with inherit other settings of normal state',
 				() => {
-					addBlockState('hover');
+					setBlockState('Hover');
 
 					cy.getByDataTest('border-control-color').click();
 					cy.getByDataTest('popover-body')
@@ -656,7 +656,7 @@ describe('Block State E2E Test', () => {
 
 			context('Hover -> set angle', () => {
 				beforeEach(() => {
-					addBlockState('hover');
+					setBlockState('Hover');
 					openBackgroundItem();
 					cy.getByDataTest('popover-body').within(() => {
 						cy.getByAriaLabel('Rotate Anti-clockwise').click();
@@ -976,7 +976,7 @@ describe('Block State E2E Test', () => {
 		context('add block + switch state to hover', () => {
 			beforeEach(() => {
 				initialSetting();
-				addBlockState('hover');
+				setBlockState('Hover');
 
 				cy.setInputFieldValue('Width', 'Size', 150);
 			});

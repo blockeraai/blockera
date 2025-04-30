@@ -64,7 +64,7 @@ describe('Block States on inner blocks E2E tests', () => {
 		it('Set the "third-party" state (Like: hover, active, etc) color on the root of the container using CSS variables.', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
-			addBlockState('hover');
+			setBlockState('Hover');
 
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
@@ -162,7 +162,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			setInnerBlock('elements/link');
 
 			// add hover.
-			addBlockState('hover');
+			setBlockState('Hover');
 
 			// Check store
 			getWPDataObject().then((data) => {
@@ -191,7 +191,7 @@ describe('Block States on inner blocks E2E tests', () => {
 
 		it('Master → Hover→ set width → Inner', () => {
 			initialSetting();
-			addBlockState('hover');
+			setBlockState('Hover');
 
 			// Set width
 			cy.setInputFieldValue('Width', 'Size', 50);
@@ -201,7 +201,7 @@ describe('Block States on inner blocks E2E tests', () => {
 
 			// Assert control
 			cy.checkInputFieldValue('Width', 'Size', '');
-			addBlockState('hover');
+			setBlockState('Hover');
 			cy.checkInputFieldValue('Width', 'Size', '');
 		});
 	});
@@ -389,7 +389,7 @@ describe('Block States on inner blocks E2E tests', () => {
 		it('should set attribute in picked inner block at the hover state base breakpoint', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
-			addBlockState('hover');
+			setBlockState('Hover');
 			//
 			checkBlockCard(
 				[
@@ -496,7 +496,7 @@ describe('Block States on inner blocks E2E tests', () => {
 		it('should set attribute in picked inner block at the hover state tablet breakpoint', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
-			addBlockState('hover');
+			setBlockState('Hover');
 			setDeviceType('Tablet');
 			//
 			checkBlockCard(
@@ -694,7 +694,7 @@ describe('Block States on inner blocks E2E tests', () => {
 		it('should not have extra breakpoints and attributes in saved data', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
-			addBlockState('hover');
+			setBlockState('Hover');
 			cy.setColorControlValue('BG Color', 'cccccc');
 
 			// Assert store
@@ -739,7 +739,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			beforeEach(() => {
 				initialSetting();
 				setInnerBlock('elements/link');
-				addBlockState('hover');
+				setBlockState('Hover');
 			});
 
 			context('switch block + select first block', () => {

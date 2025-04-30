@@ -72,7 +72,7 @@ describe('Style Engine Testing ...', () => {
 
 			context('add hover on desktop device with assertions', () => {
 				// set hover block state.
-				addBlockState('hover');
+				setBlockState('Hover');
 
 				// Set background color.
 				cy.setColorControlValue('BG Color', '#e3178b');
@@ -197,7 +197,7 @@ describe('Style Engine Testing ...', () => {
 
 			context('add hover on tablet device with assertions', () => {
 				// set hover block state.
-				addBlockState('hover');
+				setBlockState('Hover');
 
 				// Set background color.
 				cy.setColorControlValue('BG Color', '#e3178b');
@@ -334,7 +334,7 @@ describe('Style Engine Testing ...', () => {
 
 				context('add hover with assertions', () => {
 					// set hover block state.
-					addBlockState('hover');
+					setBlockState('Hover');
 
 					// Set background color.
 					cy.setColorControlValue('BG Color', '#e3178b');

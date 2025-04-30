@@ -71,7 +71,7 @@ describe('Border Control label testing (Border Line)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName(
@@ -148,7 +148,7 @@ describe('Border Control label testing (Border Line)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName(
@@ -230,7 +230,7 @@ describe('Border Control label testing (Border Line)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Border And Shadow',
@@ -293,7 +293,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').type(5);
 
 			// Set value in hover/desktop
-			addBlockState('hover');
+			setBlockState('Hover');
 			cy.get('@border-width').type('{selectall}4');
 
 			// Set value in hover/tablet
@@ -462,7 +462,7 @@ describe('Border Control label testing (Border Line)', () => {
 			cy.get('@border-width').type(5);
 
 			// Set value in hover/desktop
-			addBlockState('hover');
+			setBlockState('Hover');
 			cy.get('@border-width').type('{selectall}4');
 
 			// Set value in hover/tablet

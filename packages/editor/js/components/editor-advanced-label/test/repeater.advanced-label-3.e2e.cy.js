@@ -67,7 +67,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		/**
 		 * Pseudo State (Hover/Tablet)
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -90,7 +90,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Background',
@@ -167,7 +167,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName(
@@ -257,7 +257,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Background',
@@ -348,7 +348,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			cy.get('@type').should('have.class', 'changed-in-normal-state');
 		});
 
-		addBlockState('hover');
+		setBlockState('Hover');
 		openBackgroundItem();
 
 		// Assert Type label
@@ -430,7 +430,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			cy.getByAriaLabel('Add New Background').click();
 
 			// Set value in hover/desktop
-			addBlockState('hover');
+			setBlockState('Hover');
 			openBackgroundItem();
 			cy.getByAriaLabel('Cover').click();
 
@@ -562,7 +562,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				cy.getByAriaLabel('Horizontally').click();
 
 				// Set value in hover/desktop
-				addBlockState('hover');
+				setBlockState('Hover');
 				openBackgroundItem();
 				cy.getByAriaLabel('Cover').click();
 				cy.getByAriaLabel('Vertically').click();
@@ -1048,7 +1048,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			cy.getByAriaLabel('Add New Background').click();
 
 			// Set value in hover/desktop
-			addBlockState('hover');
+			setBlockState('Hover');
 			openBackgroundItem();
 			cy.getByAriaLabel('Cover').click();
 
@@ -1171,7 +1171,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				cy.getByAriaLabel('Horizontally').click();
 
 				// Set value in hover/desktop
-				addBlockState('hover');
+				setBlockState('Hover');
 				openBackgroundItem();
 				cy.getByAriaLabel('Cover').click();
 				cy.getByAriaLabel('Vertically').click();
