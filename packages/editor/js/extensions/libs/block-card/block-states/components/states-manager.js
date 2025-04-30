@@ -90,6 +90,7 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 						actionButtonClone={false}
 						actionButtonVisibility={false}
 						popoverTitleButtonsRight={PopoverTitleButtons}
+						addNewButtonDataTest={'add-new-block-state'}
 						PromoComponent={({
 							items,
 							onClose = () => {},
