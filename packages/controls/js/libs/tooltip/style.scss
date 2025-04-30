@@ -6,7 +6,7 @@
 	font-size: var(--tooltip-font-size);
 	text-align: left;
 	color: var(--tooltip-color);
-	padding: var(--tooltip-padding);
+	padding: calc(var(--tooltip-padding) * 0.7) var(--tooltip-padding);
 	background-color: var(--tooltip-bg);
 	width: auto;
 
