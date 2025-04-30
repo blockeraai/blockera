@@ -41,7 +41,6 @@ export function unstableBootstrapServerSideBlockStatesDefinitions(definitions: {
 	for (const [key, definition] of Object.entries(definitions)) {
 		if (definition?.hasOwnProperty('native')) {
 			const isNative = definition?.native;
-			delete definition?.native;
 
 			overrideDefinitions[key] = {
 				...definition,
