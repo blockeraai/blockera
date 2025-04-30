@@ -2,11 +2,10 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
 	setInnerBlock,
-	savePage,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -72,17 +71,10 @@ describe(
 			// 1. Inner blocks existence
 			//
 
-			// open inner block settings
-			openInnerBlocksExtension();
+			cy.getByDataTest('elements/link').should('exist');
 
-			cy.get(
-				'.blockera-extension.blockera-extension-inner-blocks'
-			).within(() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/paragraph').should('not.exist');
-			});
+			// no other item
+			cy.getByDataTest('core/paragraph').should('not.exist');
 
 			//
 			// 1. Edit Block
