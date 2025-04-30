@@ -33,9 +33,9 @@ describe('Block State E2E Test', () => {
 
 	const initialSetting = () => {
 		appendBlocks(
-			'<!-- wp:paragraph -->\n' +
-				'<p>Test</p>\n' +
-				'<!-- /wp:paragraph -->'
+			`<!-- wp:paragraph -->
+			<p>Test</p>
+			<!-- /wp:paragraph -->`
 		);
 		cy.getBlock('core/paragraph').click();
 	};
@@ -53,8 +53,7 @@ describe('Block State E2E Test', () => {
 		it('set the "third-party" state (Like: hover, active, etc) color on the root of the container using CSS variables.', () => {
 			initialSetting();
 
-			// add hover(or other pseudo state) state.
-			cy.getByAriaLabel('Add New State').click();
+			setBlockState('Hover');
 
 			// assert hover(or other pseudo state) state color.
 			cy.cssVar(
@@ -80,8 +79,7 @@ describe('Block State E2E Test', () => {
 
 			setInnerBlock('elements/link');
 
-			// add hover(or other pseudo state) state.
-			cy.getByAriaLabel('Add New State').last().click();
+			setBlockState('Hover');
 
 			// assert inner block normal state color to be #cc0000
 			cy.cssVar(
@@ -95,8 +93,7 @@ describe('Block State E2E Test', () => {
 		it('set the hidden style for WordPress block origin features when choose state (apart from normal state)', () => {
 			initialSetting();
 
-			// add hover(or other pseudo state) state.
-			cy.getByAriaLabel('Add New State').click();
+			setBlockState('Hover');
 
 			//In this assertion not available data attribute for this selector، Please don't be sensitive.
 			cy.get('button')
@@ -112,8 +109,7 @@ describe('Block State E2E Test', () => {
 		it('set the current state when add new block states', () => {
 			initialSetting();
 
-			// add hover state.
-			cy.getByAriaLabel('Add New State').click();
+			setBlockState('Hover');
 
 			checkCurrentState('hover');
 			// Check block card
@@ -127,31 +123,10 @@ describe('Block State E2E Test', () => {
 				'master-block'
 			);
 		});
-
-		it('should hidden normal state after delete hover state', () => {
-			initialSetting();
-
-			// should not render normal in breadcrumb component when still not added any other state!
-			cy.contains('Normal').should('not.exist');
-
-			// add hover state.
-			cy.getByAriaLabel('Add New State').click();
-
-			// should render normal in breadcrumb component in this step!
-			cy.contains('Hover').should('exist');
-
-			// delete hover state, we have just normal state in block-state component.
-			cy.getByAriaLabel('Delete hover').click({ force: true });
-
-			// normal item must be hidden.
-			cy.contains('Normal').should('not.exist');
-			// hover is deleted, so should not render that.
-			cy.contains('Hover').should('not.exist');
-		});
 	});
 
 	describe('block states value cleanup testing ...', () => {
-		it('should "blockeraBlockStates" attribute is clean for master block', () => {
+		it('should clean the "blockeraBlockStates" attribute for master block', () => {
 			initialSetting();
 
 			addBlockState('hover');

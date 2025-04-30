@@ -2,16 +2,24 @@ export function addBlockState(state) {
 	cy.getByAriaLabel('Blockera Block State Container').last().as('states');
 
 	cy.get('@states').within(() => {
-		cy.getByAriaLabel('Add New State').click({ force: true });
+		cy.getByDataTest('add-new-block-state').click({ force: true });
 	});
 
-	cy.get('.components-popover')
+	cy.get('body').then(($body) => {
+		if (!$body.find(`.blockera-component-popover`).length) {
+			cy.getByDataTest('add-new-block-state').click({ force: true });
+		}
+	});
+
+	cy.get('.blockera-component-popover')
 		.last()
 		.within(() => {
-			cy.getParentContainer('State').within(() => {
-				cy.get('select').select(state, { force: true });
-			});
+			cy.getByAriaLabel(state).click({ force: true });
 		});
+}
+
+export function openInserter() {
+	cy.getByDataTest('add-new-block-state').click();
 }
 
 export function setBlockState(state) {
