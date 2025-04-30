@@ -13,6 +13,7 @@ import { useState, useEffect } from '@wordpress/element';
  */
 import type {
 	TStates,
+	StateTypes,
 	TBreakpoint,
 } from '../../extensions/libs/block-card/block-states/types';
 import { mergeObject } from '@blockera/utils';
@@ -49,7 +50,9 @@ export const StateStyle = (
 	}, []);
 	// Filtered allowed states to generate stylesheet.
 	// in free version allowed just "normal" and "hover".
-	const allowedStates = ['normal', 'hover'];
+	const allowedStates = Object.values(blockStates)
+		.filter((state: StateTypes): boolean => !state?.native)
+		.map((state: StateTypes): string => state.type);
 	const states: Array<TStates | string> = Object.keys(blockStates).filter(
 		(state) =>
 			applyFilters(
