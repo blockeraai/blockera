@@ -275,6 +275,9 @@ export function SidePopover({
 							'side-popover-action-buttons'
 						)}
 						mode={'simple'}
+						style={{
+							marginTop: '25px',
+						}}
 					>
 						<>
 							{type === 'margin' && (
