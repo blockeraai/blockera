@@ -85,7 +85,7 @@ export const useBlockStates = ({
 	]);
 
 	const calculatedValue = useMemo(() => {
-		const defaultStates: { [key: TStates | string]: StateTypes } = {};
+		const forcedStates: { [key: TStates | string]: StateTypes } = {};
 
 		for (const key in preparedStates) {
 			if (!preparedStates.hasOwnProperty(key)) {
@@ -98,7 +98,7 @@ export const useBlockStates = ({
 				continue;
 			}
 
-			defaultStates[key] = {
+			forcedStates[key] = {
 				...state,
 				...defaultItemValue,
 				isOpen: false,
@@ -132,6 +132,11 @@ export const useBlockStates = ({
 						? itemId === activeInnerBlockState
 						: itemId === activeMasterBlockState;
 
+					// Exclude forced states from initial value.
+					if (Object.keys(forcedStates).includes(itemId)) {
+						return;
+					}
+
 					initialValue[itemId] = {
 						...state,
 						...preparedStates[itemId],
@@ -154,7 +159,10 @@ export const useBlockStates = ({
 
 			Object.entries(states).forEach(memoizedInitialValue);
 
-			return initialValue;
+			return {
+				...forcedStates,
+				...initialValue,
+			};
 		}
 
 		if (isMasterBlockStates(id) && !isNormalState(currentState)) {
@@ -166,7 +174,7 @@ export const useBlockStates = ({
 			setInnerBlockState('normal');
 		}
 
-		return defaultStates;
+		return forcedStates;
 		// eslint-disable-next-line
 	}, [currentBlock, states, currentBreakpoint]);
 
