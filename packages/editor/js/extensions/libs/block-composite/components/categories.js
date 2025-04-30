@@ -29,8 +29,8 @@ import {
 } from '../../block-card/inner-blocks/helpers';
 import type { TCategoriesProps } from '../types/categories';
 import { search, getNormalizedCssSelector } from '../search-items';
-import type { StateTypes } from '../../block-card/block-states/types';
 import type { InnerBlockModel } from '../../block-card/inner-blocks/types';
+import type { TStates, StateTypes } from '../../block-card/block-states/types';
 
 export const Categories = ({
 	states: _states,
@@ -73,6 +73,47 @@ export const Categories = ({
 			return <></>;
 		}
 
+		const onClick = (item: Object) => {
+			const { name, type } = item;
+
+			if (name) {
+				const inners = getBlockInners(clientId);
+
+				setBlockClientInners({
+					clientId,
+					inners: {
+						...inners,
+						// $FlowFixMe
+						[id]: item,
+					},
+				});
+
+				setCurrentBlock(id);
+			} else if (type) {
+				const newStates: {
+					[key: TStates]: StateTypes,
+				} = {
+					...savedStates,
+					[type]: {
+						...states[type],
+						...(customSelector?.type === type && customSelector),
+						isSelected: true,
+						selectable: true,
+					},
+				};
+
+				// Reset isSelected flag for all other states
+				Object.keys(newStates).forEach((stateName) => {
+					if (stateName !== type) {
+						// $FlowFixMe
+						newStates[stateName].isSelected = false;
+					}
+				});
+
+				setBlockState(newStates);
+			}
+		};
+
 		return (
 			<Flex
 				direction={'column'}
@@ -98,34 +139,6 @@ export const Categories = ({
 
 							let id = name || type;
 
-							const onClick = () => {
-								if (name) {
-									const inners = getBlockInners(clientId);
-
-									setBlockClientInners({
-										clientId,
-										inners: {
-											...inners,
-											// $FlowFixMe
-											[id]: item,
-										},
-									});
-
-									setCurrentBlock(id);
-								} else if (type) {
-									const newStates = {
-										...savedStates,
-										// $FlowFixMe
-										[type]: {
-											...states[type],
-											...customSelector,
-											isSelected: true,
-										},
-									};
-									setBlockState(newStates);
-								}
-							};
-
 							if (
 								'custom-class' === item?.type &&
 								1 === items.length
@@ -143,7 +156,7 @@ export const Categories = ({
 										)}
 									>
 										<div
-											onClick={onClick}
+											onClick={() => onClick(item)}
 											className={classNames(
 												'blockera-custom-css-selector-wrapper',
 												{
@@ -194,7 +207,7 @@ export const Categories = ({
 								<div
 									key={index}
 									aria-label={id}
-									onClick={onClick}
+									onClick={() => onClick(item)}
 									data-test={'blockera-feature-type'}
 									className={classNames(
 										'blockera-feature-type',
