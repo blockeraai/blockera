@@ -12,6 +12,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { Icon } from '@blockera/icons';
 import { prepare } from '@blockera/data-editor';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Spotlighter } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -30,12 +31,9 @@ export function SidePopover({
 	hasValue,
 	resetToDefault,
 	id,
-	title = '',
-	icon = '',
 	isOpen,
 	type = 'margin',
 	unit,
-	offset = 35,
 	onClose = () => {},
 	onChange,
 	defaultValue = '0px',
@@ -205,17 +203,28 @@ export function SidePopover({
 		);
 	}
 
+	Spotlighter(
+		'.interface-navigable-region.interface-interface-skeleton__sidebar',
+		'.blockera-control.blockera-control-box-spacing-container',
+		{
+			active: true,
+			padding: 6,
+			opacity: 0.35,
+			passThrough: false,
+			radius: 0,
+			onClickOutside: () => onClose(),
+		}
+	);
+
 	return (
 		<>
 			{isOpen && (
 				<Popover
-					title={
-						<>
-							{icon} <span>{title}</span>
-						</>
-					}
-					offset={offset}
-					placement="left-start"
+					design="spotlight"
+					offset={0}
+					placement="bottom-middle"
+					animate={false}
+					flip={false}
 					className="spacing-edit-popover"
 					onClose={onClose}
 					titleButtonsRight={

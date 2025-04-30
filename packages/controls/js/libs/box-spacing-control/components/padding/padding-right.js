@@ -10,7 +10,6 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
-import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -126,6 +125,7 @@ export function PaddingRight({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -133,6 +133,7 @@ export function PaddingRight({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -212,42 +213,43 @@ export function PaddingRight({
 			/>
 		),
 		label: (
+			<div
+				className={controlInnerClassNames(
+					'label-side',
+					'side-horizontal',
+					'side-padding-right',
+					labelClassName
+				)}
+				data-cy="box-spacing-padding-right"
+			>
+				<LabelControl
+					ariaLabel={__('Right Padding', 'blockera')}
+					label={
+						_isSetValueAddon
+							? fixLabelText(value.padding.right)
+							: fixLabelText(sideSpace)
+					}
+					onClick={() => {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
+					}}
+					{...{
+						attribute,
+						blockName,
+						resetToDefault,
+						mode: 'advanced',
+						singularId: 'padding.right',
+						value: value?.padding?.right,
+						defaultValue: defaultValue?.padding?.right,
+						path: getControlPath(attribute, 'padding.right'),
+					}}
+				/>
+
+				<ValueAddonPointer />
+			</div>
+		),
+		popover: (
 			<>
-				<div
-					className={controlInnerClassNames(
-						'label-side',
-						'side-horizontal',
-						'side-padding-right',
-						labelClassName
-					)}
-					data-cy="box-spacing-padding-right"
-				>
-					<LabelControl
-						ariaLabel={__('Right Padding', 'blockera')}
-						label={
-							_isSetValueAddon
-								? fixLabelText(value.padding.right)
-								: fixLabelText(sideSpace)
-						}
-						onClick={() => {
-							setFocusSide(sideId);
-							setOpenPopover(sideId);
-						}}
-						{...{
-							attribute,
-							blockName,
-							resetToDefault,
-							mode: 'advanced',
-							singularId: 'padding.right',
-							value: value?.padding?.right,
-							defaultValue: defaultValue?.padding?.right,
-							path: getControlPath(attribute, 'padding.right'),
-						}}
-					/>
-
-					<ValueAddonPointer />
-				</div>
-
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.right}
@@ -263,26 +265,22 @@ export function PaddingRight({
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.right')}
 						type="padding"
-						icon={<Icon icon="padding-right" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Right Padding Space', 'blockera')}
 						inputLabel={__('Right Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Right Padding Space',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a padding space that applies only to the right edge of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a padding space that applies only to the right edge of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

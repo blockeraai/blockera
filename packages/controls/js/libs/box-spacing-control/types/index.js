@@ -61,12 +61,9 @@ export type SidePopoverProps = {
 	 */
 	resetToDefault: () => void,
 	id: string,
-	title: string,
-	icon: MixedElement | string,
 	isOpen: boolean,
 	type?: 'margin' | 'padding',
 	unit?: string,
-	offset?: number,
 	onClose: () => void,
 	onChange: (data: Object) => void,
 	defaultValue: Object,
@@ -122,6 +119,7 @@ export type SideProps = {
 export type SideReturn = {
 	shape: MixedElement,
 	label: MixedElement,
+	popover: MixedElement,
 };
 
 export type SideShapeProps = {

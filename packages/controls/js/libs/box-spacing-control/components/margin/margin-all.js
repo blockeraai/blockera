@@ -10,7 +10,6 @@ import { useState } from '@wordpress/element';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -116,6 +115,7 @@ export function MarginAll({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -329,7 +329,10 @@ export function MarginAll({
 						}}
 					/>
 				</div>
-
+			</>
+		),
+		popover: (
+			<>
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={
@@ -352,12 +355,10 @@ export function MarginAll({
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						type="margin"
-						icon={<Icon icon="margin-all" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('All Sides Margin', 'blockera')}
 						isOpen={true}
 						unit={sideSpace?.unit}
 						onChange={(newValue) => {
@@ -377,14 +378,12 @@ export function MarginAll({
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a single margin space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a single margin space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 					/>
 				)}

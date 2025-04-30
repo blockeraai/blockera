@@ -10,7 +10,6 @@ import { useState } from '@wordpress/element';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -125,6 +124,7 @@ export function MarginVertical({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -140,6 +140,7 @@ export function MarginVertical({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -287,7 +288,10 @@ export function MarginVertical({
 						}}
 					/>
 				</div>
-
+			</>
+		),
+		popover: (
+			<>
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.top || value?.margin?.bottom}
@@ -304,26 +308,22 @@ export function MarginVertical({
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						type="margin"
-						icon={<Icon icon="margin-vertical" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top & Bottom Margin', 'blockera')}
 						inputLabel={__('Vertical Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Vertical Margin',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a margin space that applies to both the top and bottom edges of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies to both the top and bottom edges of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace?.unit}
