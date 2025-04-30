@@ -46,6 +46,7 @@ export const Preview = ({
 	} = useInnerBlocks({
 		block,
 		onChange,
+		currentBlock,
 		values: innerBlocksProps?.values || {},
 		innerBlocks: innerBlocksProps?.innerBlocks || {},
 	});

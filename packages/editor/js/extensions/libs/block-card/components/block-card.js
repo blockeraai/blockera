@@ -29,7 +29,6 @@ import { Icon } from '@blockera/icons';
  */
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
-import { isInnerBlock } from '../../../components/utils';
 import { EditableBlockName } from './editable-block-name';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
@@ -41,7 +40,6 @@ export function BlockCard({
 	supports,
 	children,
 	blockName,
-	currentBlock,
 	currentState,
 	setAttributes,
 	currentInnerBlock,
@@ -243,7 +241,7 @@ export function BlockCard({
 						setAttributes,
 					}}
 					onChange={handleOnChangeAttributes}
-					currentBlock={currentBlock}
+					currentBlock={'master'}
 					currentState={currentState}
 					currentBreakpoint={currentBreakpoint}
 					currentInnerBlockState={currentInnerBlockState}
@@ -251,14 +249,10 @@ export function BlockCard({
 						attributes: currentStateAttributes,
 						availableStates: availableBlockStates,
 					}}
-					innerBlocksProps={
-						!isInnerBlock(currentBlock)
-							? {
-									values: currentStateAttributes.blockeraInnerBlocks,
-									innerBlocks: blockeraInnerBlocks,
-							  }
-							: undefined
-					}
+					innerBlocksProps={{
+						values: currentStateAttributes.blockeraInnerBlocks,
+						innerBlocks: blockeraInnerBlocks,
+					}}
 				/>
 			</div>
 		</>

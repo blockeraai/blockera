@@ -8,7 +8,7 @@ import { useSelect, dispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import type { InnerBlocks } from '../types';
+import type { InnerBlocks, InnerBlockType } from '../types';
 import { generateExtensionId } from '../../../utils';
 import { isInnerBlock } from '../../../../components';
 import { useMemoizedInnerBlocks, useAvailableItems } from './';
@@ -17,14 +17,16 @@ export const useInnerBlocks = ({
 	block,
 	values,
 	innerBlocks,
+	currentBlock,
 }: {
 	block: Object,
 	values: Object,
 	onChange: Function,
 	innerBlocks: InnerBlocks,
+	currentBlock: 'master' | InnerBlockType | string,
 }): Object => {
 	// Internal selectors. to access current selected block and inner blocks stack of Blockera editor/extensions store api.
-	const { currentBlock = 'master', getBlockInners } = useSelect((select) => {
+	const { getBlockInners } = useSelect((select) => {
 		const { getBlockInners, getExtensionCurrentBlock } = select(
 			'blockera/extensions'
 		);
@@ -73,7 +75,7 @@ export const useInnerBlocks = ({
 		(!availableBlocks.length && !Object.keys(value).length) ||
 		isInnerBlock(currentBlock)
 	) {
-		return <></>;
+		return {};
 	}
 
 	// Assign control context provider value.
