@@ -46,7 +46,7 @@ export const CategorizedItems = ({
 
 	const itemsCount = Array.isArray(items)
 		? items.length
-		: Object.keys(items).length;
+		: Object.keys(items || {}).length;
 
 	if (!items || !itemsCount) {
 		return <></>;
