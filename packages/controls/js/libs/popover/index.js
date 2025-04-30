@@ -81,7 +81,7 @@ export default function Popover({
 
 	const popoverRef = useRef();
 
-	useEffect(() => popoverRef.current.focus(), []);
+	// useEffect(() => popoverRef.current.focus(), []);
 	useEffect(() => {
 		const container = document.querySelector(
 			'.components-popover__fallback-container'
