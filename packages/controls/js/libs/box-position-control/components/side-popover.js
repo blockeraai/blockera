@@ -63,7 +63,6 @@ export function SidePopover({
 			{isOpen && (
 				<Popover
 					design="spotlight"
-					flip={false}
 					animate={false}
 					offset={3}
 					placement="bottom-middle"

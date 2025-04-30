@@ -40,6 +40,7 @@
 		stroke: var(--blockera-controls-border-color-soft);
 		user-select: none;
 		stroke-linejoin: round;
+		outline: none;
 
 		&.selected-side,
 		&:hover {
