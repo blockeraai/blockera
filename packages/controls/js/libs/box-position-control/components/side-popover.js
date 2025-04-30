@@ -145,10 +145,10 @@ export function SidePopover({
 							'side-popover-action-buttons'
 						)}
 						style={{
-							marginTop: '25px',
+							marginTop: '20px',
 						}}
 					>
-						<Grid gap="10px" gridTemplateColumns="repeat(4, 1fr)">
+						<Grid gap="8px" gridTemplateColumns="repeat(4, 1fr)">
 							<Button
 								aria-label={__('Set 0px', 'blockera')}
 								size="small"
