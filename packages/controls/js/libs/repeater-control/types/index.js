@@ -82,6 +82,10 @@ export type RepeaterControlProps = {
 	 */
 	addNewButtonLabel?: string,
 	/**
+	 * Specifies the button label for adding new repeater item.
+	 */
+	addNewButtonDataTest?: string,
+	/**
 	 * Specifies custom css classes that should be added to popover
 	 *
 	 * @default true
