@@ -87,9 +87,9 @@ export const Categories = ({
 
 						const filteredItems = search(
 							[
-								...(elements || []),
-								...(blocks || []),
-								...Object.values(states),
+								...(_elements || []),
+								...(_blocks || []),
+								...Object.values(_states),
 								...[customSelector],
 							],
 							getCategories(),
