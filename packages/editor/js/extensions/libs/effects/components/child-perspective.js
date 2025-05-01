@@ -84,7 +84,7 @@ export function ChildPerspective({
 						</p>
 					</>
 				}
-				columns="1fr 100px"
+				columns="1fr 130px"
 				className={'blockera-transform-child-perspective'}
 				{...labelProps}
 			>

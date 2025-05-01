@@ -14,7 +14,6 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Spotlighter } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -67,32 +66,21 @@ export const TransformSettings = ({
 	extensionConfig: TEffectsExtensionConfig,
 	setIsTransformSettingsVisible: (arg: boolean) => any,
 }): MixedElement => {
-	Spotlighter(
-		'.interface-navigable-region.interface-interface-skeleton__sidebar',
-		'.blockera-control-transform .blockera-control-btn-add.btn-transform-settings',
-		{
-			active: true,
-			padding: 6,
-			opacity: 0.35,
-			passThrough: false,
-			radius: 0,
-			onClickOutside: () => setIsTransformSettingsVisible(false),
-		}
-	);
-
 	return (
 		<Popover
-			design="spotlight"
-			title=""
-			offset={0}
-			flip={false}
-			placement="top-middle"
+			title={
+				<>
+					<Icon icon="three-d" iconSize="20" />
+					{__('Transform Settings', 'blockera')}
+				</>
+			}
+			offset={35}
+			placement="left-start"
 			className={controlInnerClassNames('transform-settings-popover')}
 			onClose={() => {
 				setIsTransformSettingsVisible(false);
 			}}
 			focusOnMount={false}
-			animate={false}
 		>
 			<EditorFeatureWrapper
 				isActive={
@@ -153,7 +141,7 @@ export const TransformSettings = ({
 								</p>
 							</>
 						}
-						columns="1fr 100px"
+						columns="1fr 130px"
 						options={[
 							{
 								label: __('Visible', 'blockera'),

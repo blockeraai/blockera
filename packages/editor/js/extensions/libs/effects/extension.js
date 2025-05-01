@@ -189,34 +189,26 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 									)
 								}
 								injectHeaderButtonsStart={
-									<>
-										<Button
-											showTooltip={true}
-											tooltipPosition="top"
-											label={__(
-												'Transformation Settings',
-												'blockera'
-											)}
-											size="extra-small"
-											className={controlInnerClassNames(
-												'btn-add',
-												'btn-transform-settings',
-												isTransformSettingsVisible
-													? 'is-active'
-													: ''
-											)}
-											onClick={() =>
-												setIsTransformSettingsVisible(
-													!isTransformSettingsVisible
-												)
-											}
-										>
-											<Icon
-												icon="gear-small"
-												iconSize="20"
-											/>
-										</Button>
-									</>
+									<Button
+										showTooltip={true}
+										tooltipPosition="top"
+										label={__(
+											'Transformation Settings',
+											'blockera'
+										)}
+										size="extra-small"
+										className={controlInnerClassNames(
+											'btn-add'
+										)}
+										isFocus={isTransformSettingsVisible}
+										onClick={() =>
+											setIsTransformSettingsVisible(
+												!isTransformSettingsVisible
+											)
+										}
+									>
+										<Icon icon="three-d" iconSize="20" />
+									</Button>
 								}
 								defaultValue={
 									attributes.blockeraTransform.default

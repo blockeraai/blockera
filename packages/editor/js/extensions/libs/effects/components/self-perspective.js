@@ -91,7 +91,7 @@ export function SelfPerspective({
 							</p>
 						</>
 					}
-					columns="1fr 100px"
+					columns="1fr 130px"
 					className={`blockera-transform-self-perspective ${
 						!visibleTransformLength
 							? 'blockera-control-is-not-active'
@@ -151,7 +151,7 @@ export function SelfPerspective({
 				{!visibleTransformLength && (
 					<NoticeControl type="warning">
 						{__(
-							`For using Self Perspective the block should have at least one transformation.`,
+							`For using Self Perspective, the block should have at least one transformation.`,
 							'blockera'
 						)}
 					</NoticeControl>
