@@ -1,4 +1,4 @@
-.blockera-component-popover.popover-highlight {
+.blockera-component-popover {
 	position: relative;
 	--popover-overflow: visible;
 	--popover-min-height: auto;
@@ -14,11 +14,12 @@
 	--popover-header-shadow-color: #00000029;
 	--popover-header-btn-color: #1e1e1e;
 	--popover-header-btn-border-color: var(--blockera-controls-border-color-soft);
+	--popover-padding: 15px;
+	--popover-radius: 3px;
 	overflow: var(--popover-overflow) !important;
-	background-color: var(--popover-bg-color);
+	background: transparent;
 	color: var(--popover-color);
-	border-radius: 4px;
-	--popover-padding: 18px;
+	border-radius: var(--popover-radius);
 
 	.components-popover__content {
 		padding: 0;
@@ -44,9 +45,9 @@
 		padding: 0 var(--popover-padding);
 		box-shadow: 0 2px 6px 0 var(--popover-header-shadow-color);
 		position: fixed;
-		top: 2px;
-		left: 2px;
-		right: 2px;
+		top: 0;
+		left: 0;
+		right: 0;
 		background: var(--popover-header-bg-color);
 		margin: 0;
 		height: var(--popover-header-height);
@@ -57,7 +58,7 @@
 		color: var(--popover-header-color);
 		font-size: 13px;
 		z-index: 6;
-		border-radius: 4px 4px 0 0;
+		border-radius: var(--popover-radius) var(--popover-radius) 0 0;
 
 		svg {
 			fill: currentColor;
@@ -81,8 +82,16 @@
 		}
 	}
 
+	&.is-draggable {
+
+		.blockera-component-popover-header {
+			cursor: move;
+			user-select: none;
+		}
+	}
+
 	.blockera-component-popover-body {
-		padding: 25px var(--popover-padding) 0 var(--popover-padding);
+		padding: calc(var(--popover-padding) * 1.33) var(--popover-padding) 0 var(--popover-padding);
 		min-height: calc(var(--popover-min-height) - var(--popover-header-height));
 		max-height: calc(var(--popover-height) - var(--popover-header-height));
 		overflow: var(--popover-overflow) !important;
@@ -100,16 +109,7 @@
 	}
 }
 
-.blockera-component-popover.popover-spotlight {
-	position: relative;
-	--popover-overflow: visible;
-	--popover-min-height: auto;
-	--popover-max-height: auto;
-	--popover-height: auto;
-	--popover-width: 248px;
-	--popover-header-height: 38px;
-	--popover-color: #1e1e1e;
-	--popover-bg-color: #ffffff;
+.blockera-component-popover.popover-normal {
 	--popover-border-color: var(--blockera-controls-border-color-hover);
 	--popover-border-width: 1px;
 	--popover-header-color: var(--popover-color);
@@ -120,92 +120,7 @@
 	overflow: var(--popover-overflow) !important;
 	background-color: var(--popover-bg-color);
 	color: var(--popover-color);
-	border-radius: 0;
-	border: 6px solid #ffffff;
+	border: none;
 	--popover-padding: 15px;
-	--popover-radius: 2px;
-
-	.components-popover__content {
-		padding: 0;
-		border: var(--popover-border-width) solid var(--popover-border-color);
-		box-shadow: none;
-		min-width: var(--popover-width);
-		width: var(--popover-width);
-		position: relative;
-		min-height: auto;
-		height: auto;
-		overflow: auto !important;
-		background-color: var(--popover-bg-color);
-		border-radius: var(--popover-radius);
-	}
-
-	&.with-header {
-
-		.components-popover__content {
-			padding-top: var(--popover-header-height);
-		}
-
-		.blockera-component-popover-body {
-			padding-top: calc(var(--popover-padding) * 1.7);
-		}
-	}
-
-	.blockera-component-popover-header {
-		padding: 0 var(--popover-padding);
-		box-shadow: 0 1px 0 0 var(--popover-header-shadow-color);
-		position: fixed;
-		top: 1px;
-		left: 1px;
-		right: 1px;
-		background: var(--popover-header-bg-color);
-		margin: 0;
-		height: var(--popover-header-height);
-		display: flex;
-		gap: 10px;
-		align-items: center;
-		font-weight: 500;
-		color: var(--popover-header-color);
-		font-size: 13px;
-		z-index: 6;
-		border-radius: 0;
-
-		svg {
-			fill: currentColor;
-		}
-
-		.blockera-component-button {
-			padding: 0 !important;
-			min-width: 24px;
-			height: 24px;
-			--blockera-controls-border-color: var(--blockera-controls-border-color-soft);
-		}
-
-		.blockera-component-popover-title-buttons {
-			display: flex;
-			gap: 6px;
-			flex-direction: row;
-
-			&.title-right-buttons {
-				margin-left: auto;
-			}
-		}
-	}
-
-	.blockera-component-popover-body {
-		padding: var(--popover-padding) var(--popover-padding) 0 var(--popover-padding);
-		min-height: calc(var(--popover-min-height) - var(--popover-header-height));
-		max-height: calc(var(--popover-max-height) - var(--popover-header-height));
-		overflow: var(--popover-overflow) !important;
-		background-color: var(--popover-bg-color);
-		z-index: 1;
-		position: relative;
-
-		& > :last-child {
-			padding-bottom: var(--popover-padding);
-		}
-
-		.blockera-component-breakpoint-icon {
-			--icon-outline-color: var(--popover-bg-color);
-		}
-	}
+	--popover-radius: 0;
 }
