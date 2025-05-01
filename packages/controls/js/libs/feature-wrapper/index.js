@@ -24,7 +24,7 @@ export function FeatureWrapper({
 	showText = 'on-hover',
 	...props
 }: {
-	type: 'free' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
+	type: 'native' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
 	upgradeLink?: string,
 	typeName?: string,
 	text?: string | MixedElement,
@@ -46,7 +46,7 @@ export function FeatureWrapper({
 
 	if (!text) {
 		switch (type) {
-			case 'free':
+			case 'native':
 				text = __('Upgrade to PRO', 'blockera');
 				icon = (
 					<Icon

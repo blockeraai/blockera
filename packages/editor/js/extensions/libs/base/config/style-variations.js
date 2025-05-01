@@ -16,8 +16,8 @@ const blockeraStyleVariation: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Style Variation', 'blockera'),
-	isActiveOnStates: ['normal'],
-	isActiveOnBreakpoints: [getBaseBreakpoint()],
+	onStates: ['normal'],
+	onBreakpoints: [getBaseBreakpoint()],
 };
 
 export const styleVariationsConfig = {
