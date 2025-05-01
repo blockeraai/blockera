@@ -21,10 +21,10 @@ import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
 import { isEquals, isObject } from '@blockera/utils';
 import { Tabs, type TTabProps } from '@blockera/controls';
-import { getItem, setItem, updateItem } from '@blockera/storage';
+import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
 
-const cacheKey = 'BLOCKERA_EDITOR_SUPPORTS';
+const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 
 /**
  * Internal dependencies
@@ -146,8 +146,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			updateDefinitionExtensionSupport,
 		} = useDispatch(STORE_NAME);
 		const { getExtensions, getDefinition } = select(STORE_NAME);
+		const cacheKey =
+			cacheKeyPrefix +
+			'_' +
+			window.blockeraTelemetryDebugData?.product_version.replace(
+				'.',
+				'_'
+			);
+		const cacheData = useMemo(() => {
+			let cache = getItem(cacheKey);
 
-		const cacheData = useMemo(() => getItem(cacheKey), []);
+			if (!cache) {
+				cache = freshItem(cacheKey, cacheKeyPrefix);
+			}
+
+			return cache;
+		}, []);
 		const supports = useMemo(() => {
 			const extensions = getExtensions(props.name);
 
