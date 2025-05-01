@@ -161,7 +161,7 @@ describe('Block Sections Manager Testing', () => {
 		cy.get(`[aria-label="Family"]`).should('not.exist');
 	});
 
-	it.only('should applied focus mode of block sections', () => {
+	it('should applied focus mode of block sections', () => {
 		cy.get('button[aria-label="Block Settings"]').click();
 
 		cy.getByDataTest('Focus Mode').click();
