@@ -66,7 +66,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 						.within(() => {
 							cy.getByDataTest('blockera-feature-type').should(
 								'have.length',
-								73
+								72
 							);
 
 							// Searching buttons block type.
@@ -105,7 +105,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 						.within(() => {
 							cy.getByDataTest('blockera-feature-type').should(
 								'have.length',
-								72
+								71
 							);
 
 							// Searching buttons block type.
@@ -118,7 +118,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 
 			// Check real allowed blocks.
 			getAllowedBlocks().then((allowedBlocks) => {
-				expect(59).to.be.deep.equal(allowedBlocks.length);
+				expect(58).to.be.deep.equal(allowedBlocks.length);
 			});
 
 			// Check value clean up and store api.
