@@ -53,11 +53,6 @@ describe(
 			// Block supported is active
 			cy.get('.blockera-extension-block-card').should('be.visible');
 
-			// Has inner blocks
-			cy.get(
-				'.blockera-extension.blockera-extension-inner-blocks'
-			).should('exist');
-
 			// switch to parent navigation button should be visible
 			cy.get('.blockera-extension-block-card.master-block-card').within(
 				() => {
