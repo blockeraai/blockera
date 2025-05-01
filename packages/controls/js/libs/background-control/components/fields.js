@@ -252,7 +252,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									'blockera'
 								)}
 								alignmentMatrixLabel={__(
-									'Image Position',
+									'Position',
 									'blockera'
 								)}
 								size="small"
@@ -869,10 +869,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							}
 							buttonLabel={__('Gradient Position', 'blockera')}
 							popoverTitle={__('Gradient Position', 'blockera')}
-							alignmentMatrixLabel={__(
-								'Gradient Position',
-								'blockera'
-							)}
+							alignmentMatrixLabel={__('Position', 'blockera')}
 							size="small"
 							onChange={(newValue, ref) => {
 								changeRepeaterItem({
