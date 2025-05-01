@@ -73,6 +73,17 @@
 	}
 }
 
+.blockera-control-group.mode-nothing {
+
+	&.is-selected-item {
+		border-color: var(--blockera-controls-primary-color);
+
+		.blockera-control-header-label {
+			color: var(--blockera-controls-primary-color);
+		}
+	}
+}
+
 .blockera-control-group.mode-spotlight {
 
 	&.is-open,
