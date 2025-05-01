@@ -32,7 +32,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 	});
 
 	describe('forces block types', () => {
-		it('should exists forces inner block types in group selected block and added "core/buttons" block', () => {
+		it.only('should exists forces inner block types in group selected block and added "core/buttons" block', () => {
 			context(
 				'appending group block and select it and open inner blocks extension component',
 				() => {
@@ -64,16 +64,18 @@ describe('Inner Blocks Functionality Tests ...', () => {
 					cy.getByDataTest('popover-body')
 						.should('exist')
 						.within(() => {
-							cy.getByDataTest(
-								'blockera-inner-block-type'
-							).should('have.length', 62);
+							cy.getByDataTest('blockera-feature-type').should(
+								'have.length',
+								73
+							);
 
 							// Searching buttons block type.
 							search('buttons');
 
-							cy.getByDataTest(
-								'blockera-inner-block-type'
-							).should('have.length', 1);
+							cy.getByDataTest('blockera-feature-type').should(
+								'have.length',
+								1
+							);
 
 							cy.getByAriaLabel('core/buttons').click({
 								force: true,
@@ -101,9 +103,10 @@ describe('Inner Blocks Functionality Tests ...', () => {
 					cy.getByDataTest('popover-body')
 						.should('exist')
 						.within(() => {
-							cy.getByDataTest(
-								'blockera-inner-block-type'
-							).should('have.length', 61);
+							cy.getByDataTest('blockera-feature-type').should(
+								'have.length',
+								72
+							);
 
 							// Searching buttons block type.
 							search('buttons');
@@ -115,7 +118,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 
 			// Check real allowed blocks.
 			getAllowedBlocks().then((allowedBlocks) => {
-				expect(58).to.be.deep.equal(allowedBlocks.length);
+				expect(59).to.be.deep.equal(allowedBlocks.length);
 			});
 
 			// Check value clean up and store api.

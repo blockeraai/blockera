@@ -7,7 +7,6 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe(

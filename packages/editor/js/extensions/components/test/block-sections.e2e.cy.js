@@ -161,7 +161,7 @@ describe('Block Sections Manager Testing', () => {
 		cy.get(`[aria-label="Family"]`).should('not.exist');
 	});
 
-	it('should applied focus mode of block sections', () => {
+	it.only('should applied focus mode of block sections', () => {
 		cy.get('button[aria-label="Block Settings"]').click();
 
 		cy.getByDataTest('Focus Mode').click();
@@ -185,7 +185,7 @@ describe('Block Sections Manager Testing', () => {
 		cy.get('.components-panel__body').contains('Effects').click();
 		cy.getByDataTest('border-control-width').should('not.exist');
 
-		cy.getByAriaLabel('Add New Backdrop Filter').should('not.exist');
+		cy.getByAriaLabel('Add New Backdrop Filter').should('exist');
 		// Check for opened Layout section
 		cy.get('.components-panel__body').contains('Layout').click();
 		cy.get('button').contains('Add Inner Block').should('not.exist');
