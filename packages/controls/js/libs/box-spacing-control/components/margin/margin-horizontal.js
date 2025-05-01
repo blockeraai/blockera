@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -315,6 +316,8 @@ export function MarginHorizontal({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
+						icon={<Icon icon="margin-horizontal" iconSize="18" />}
+						title={__('Left & Right Margin', 'blockera')}
 						type="margin"
 						onClose={() => {
 							setFocusSide('');

@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { useDragValue } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -308,6 +309,8 @@ export function MarginVertical({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
+						icon={<Icon icon="margin-vertical" iconSize="18" />}
+						title={__('Top & Bottom Margin', 'blockera')}
 						type="margin"
 						onClose={() => {
 							setFocusSide('');

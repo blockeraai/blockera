@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -266,6 +267,8 @@ export function MarginTop({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
+						icon={<Icon icon="margin-top" iconSize="18" />}
+						title={__('Top Margin Space', 'blockera')}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');

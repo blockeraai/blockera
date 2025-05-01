@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -264,6 +265,8 @@ export function MarginLeft({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
+						icon={<Icon icon="margin-left" iconSize="18" />}
+						title={__('Left Margin Space', 'blockera')}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');

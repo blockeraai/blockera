@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -270,6 +271,10 @@ export function MarginRight({
 								}}
 								defaultValue={defaultValue}
 								id={getId(id, 'margin.right')}
+								icon={
+									<Icon icon="margin-right" iconSize="18" />
+								}
+								title={__('Right Margin Space', 'blockera')}
 								onClose={() => {
 									setFocusSide('');
 									setOpenPopover('');

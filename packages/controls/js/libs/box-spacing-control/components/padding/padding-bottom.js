@@ -10,6 +10,7 @@ import { useState } from '@wordpress/element';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -265,6 +266,8 @@ export function PaddingBottom({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.bottom')}
+						icon={<Icon icon="padding-bottom" iconSize="18" />}
+						title={__('Bottom Padding Space', 'blockera')}
 						type="padding"
 						onClose={() => {
 							setFocusSide('');

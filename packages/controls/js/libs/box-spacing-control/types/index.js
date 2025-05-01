@@ -70,6 +70,9 @@ export type SidePopoverProps = {
 	inputLabel?: string | MixedElement,
 	inputLabelDescription?: string | MixedElement,
 	inputLabelPopoverTitle?: string | MixedElement,
+	icon?: MixedElement,
+	title?: string,
+	offset?: number,
 };
 
 export type Side =
