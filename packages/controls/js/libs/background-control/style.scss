@@ -59,7 +59,7 @@
 	position: relative;
 
 	.blockera-control-toggle-select {
-		width: 103px;
+		width: calc(100% - 30px - 8px);
 	}
 
 	.blockera-component-button[data-test="position-button"] {
