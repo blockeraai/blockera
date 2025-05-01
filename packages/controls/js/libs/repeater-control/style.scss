@@ -141,12 +141,6 @@
 			width: 24px;
 			height: 24px;
 
-			&:focus:not(:disabled, .no-border, .toggle-focus, .is-busy),
-			&.is-active {
-				box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color-hover) !important;
-				outline: none !important;
-			}
-
 			&.is-deactivate {
 				opacity: 0.5;
 				user-select: none;

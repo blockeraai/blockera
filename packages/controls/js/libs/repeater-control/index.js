@@ -43,9 +43,7 @@ export default function RepeaterControl(
 		icon,
 		description = '',
 		design = 'minimal',
-		mode = 'spotlight',
-		spotlight = true,
-		spotlightParentSelector = '.interface-navigable-region.interface-interface-skeleton__sidebar',
+		mode = 'popover',
 		popoverProps,
 		popoverTitle,
 		popoverTitleButtonsRight,
@@ -173,9 +171,6 @@ export default function RepeaterControl(
 		repeaterItems, // value
 		//
 		customProps,
-		//
-		spotlight,
-		spotlightParentSelector,
 	};
 
 	const addNewButtonOnClick = () => {

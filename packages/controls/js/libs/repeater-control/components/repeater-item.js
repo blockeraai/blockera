@@ -15,7 +15,7 @@ import type { Element } from 'react';
 /**
  * Blockera dependencies
  */
-import { isBoolean, isFunction, Spotlighter } from '@blockera/utils';
+import { isBoolean, isFunction } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
@@ -65,8 +65,6 @@ const RepeaterItem = ({
 		repeaterItemHeader: RepeaterItemHeader,
 		repeaterItemChildren: RepeaterItemChildren,
 		popoverTitleButtonsRight: PopoverTitleButtonsRight,
-		spotlight,
-		spotlightParentSelector,
 	} = useContext(RepeaterContext);
 
 	const repeaterItemActionsProps = {
@@ -136,30 +134,6 @@ const RepeaterItem = ({
 		return null;
 	}
 
-	let popoverPropsWithAnchor = {};
-
-	const currentMode = isFunction(RepeaterItemChildren?.getMode)
-		? RepeaterItemChildren.getMode(item, itemId)
-		: mode;
-
-	if (spotlight && currentMode === 'spotlight') {
-		popoverPropsWithAnchor = {
-			...popoverProps,
-			design: 'spotlight',
-			placement: 'bottom-middle',
-			flip: true,
-		};
-
-		Spotlighter(spotlightParentSelector, itemRef, {
-			active: currentMode === 'spotlight' ? isOpen : false,
-			padding: 6,
-			opacity: 0.35,
-			passThrough: false,
-			radius: 0,
-			onClickOutside: () => setOpen(false),
-		});
-	}
-
 	return (
 		<div
 			ref={itemRef}
@@ -180,16 +154,16 @@ const RepeaterItem = ({
 			data-test={itemId}
 		>
 			<GroupControl
-				mode={currentMode}
+				mode={
+					isFunction(RepeaterItemChildren?.getMode)
+						? RepeaterItemChildren.getMode(item, itemId)
+						: mode
+				}
 				toggleOpenBorder={true}
 				design={design}
-				popoverProps={
-					currentMode === 'spotlight'
-						? popoverPropsWithAnchor
-						: popoverProps
-				}
-				popoverTitle={currentMode === 'spotlight' ? '' : popoverTitle}
-				popoverOffset={currentMode === 'spotlight' ? 1 : popoverOffset}
+				popoverProps={popoverProps}
+				popoverTitle={popoverTitle}
+				popoverOffset={popoverOffset}
 				popoverTitleButtonsRight={
 					PopoverTitleButtonsRight && (
 						<PopoverTitleButtonsRight

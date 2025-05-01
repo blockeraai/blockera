@@ -35,10 +35,6 @@ const RepeaterContext = createContext({
 	repeaterItems: {}, // value
 	//
 	customProps: {}, // we use this for passing props from out of RepeaterControl to RepeaterItemHeader and RepeaterItemChildren
-	//
-	spotlight: true,
-	spotlightParentSelector:
-		'.interface-navigable-region.interface-interface-skeleton__sidebar',
 });
 
 const RepeaterContextProvider = ({ children, ...props }) => {
