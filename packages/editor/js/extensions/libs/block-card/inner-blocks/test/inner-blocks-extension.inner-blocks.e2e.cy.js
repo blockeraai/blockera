@@ -32,7 +32,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 	});
 
 	describe('forces block types', () => {
-		it.only('should exists forces inner block types in group selected block and added "core/buttons" block', () => {
+		it('should exists forces inner block types in group selected block and added "core/buttons" block', () => {
 			context(
 				'appending group block and select it and open inner blocks extension component',
 				() => {
