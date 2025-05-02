@@ -9,12 +9,6 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Tooltip } from '@blockera/controls';
-
-/**
- * Internal dependencies
- */
-import { isElement, getVirtualInnerBlockDescription } from '../helpers';
 
 export default function ItemHeader({
 	item,
@@ -55,18 +49,6 @@ export default function ItemHeader({
 			>
 				{item.label}
 			</span>
-
-			{isElement(item) && (
-				<Tooltip
-					width="220px"
-					style={{ padding: '12px' }}
-					text={getVirtualInnerBlockDescription()}
-				>
-					<span className={controlInnerClassNames('header-values')}>
-						{__('Virtual', 'blockera')}
-					</span>
-				</Tooltip>
-			)}
 
 			{children}
 		</div>

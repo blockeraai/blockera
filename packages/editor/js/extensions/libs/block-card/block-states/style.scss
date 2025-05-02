@@ -1,4 +1,4 @@
-.blockera-control.blockera-control-inner-blocks-repeater {
+.blockera-control.blockera-control-block-states-repeater {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -6,25 +6,23 @@
 	--repeater-gap: 6px;
 	--repeater-item-height: 26px;
 
+	.blockera-control-header {
+		margin-left: auto;
+		width: auto;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.blockera-control-header + .blockera-control-repeater-item {
+		margin-top: 0;
+	}
+
 	.blockera-control-repeater-item {
 		width: max-content;
 
 		.blockera-control-group-header {
-			padding: 0 8px 0 4px;
-
-			.blockera-control-repeater-group-header {
-				gap: 3px;
-			}
-		}
-
-		.blockera-control-header-icon {
-
-			svg {
-				max-height: 18px;
-				max-width: 18px;
-				min-height: 18px;
-				min-width: 18px;
-			}
+			padding: 0 calc(var(--repeater-item-height) * 0.3);
 		}
 	}
 

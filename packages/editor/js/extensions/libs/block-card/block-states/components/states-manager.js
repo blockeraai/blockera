@@ -86,7 +86,6 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 						className={controlInnerClassNames(
 							'block-states-repeater'
 						)}
-						itemColumns={2}
 						actionButtonClone={false}
 						actionButtonVisibility={false}
 						popoverTitleButtonsRight={PopoverTitleButtons}
