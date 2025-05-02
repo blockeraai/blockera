@@ -26,6 +26,13 @@
 		}
 	}
 
+	& > .blockera-control-repeater-item {
+
+		&:not([data-id="normal"]) {
+			--blockera-controls-primary-color: var(--blockera-controls-states-color);
+		}
+	}
+
 	.blockera-control-group.mode-popover.is-selected-item {
 		background-color: var(--blockera-controls-primary-color);
 		border-color: var(--blockera-controls-primary-color);

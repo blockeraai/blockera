@@ -17,7 +17,7 @@
     		padding-bottom: 5px;
 
 			.blockera-control-repeater-item:not(:first-child) {
-				--blockera-controls-primary-color: #d47c14;
+				--blockera-controls-primary-color: var(--blockera-controls-states-color);
 			}
 		}
 	}
@@ -138,11 +138,11 @@
 			}
 
 			.blockera-extension-block-card__title__item.item-state:not(.item-state-normal) {
-				--blockera-controls-primary-color: #d47c14;
-			}
-
-			.blockera-extension-block-card__title__item.inner-block {
-				--blockera-controls-primary-color: #cc0000;
+				--blockera-controls-primary-color: var(--blockera-controls-states-color);
+				background: #ffffff;
+				color: var(--blockera-controls-states-color);
+				border: 1px solid var(--blockera-controls-primary-color);
+				border-color: var(--blockera-controls-primary-color);
 			}
 
 			.blockera-extension-block-card__close {
@@ -276,5 +276,4 @@
 		display: -webkit-box;
 		overflow: hidden;
 	}
-
 }

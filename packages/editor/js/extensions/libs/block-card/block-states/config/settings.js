@@ -20,7 +20,7 @@ export const settings = {
 		 */
 		min: 0,
 		cssSelector: '@SELECTOR:hover',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 	active: {
 		/**
@@ -33,7 +33,7 @@ export const settings = {
 		min: 0,
 		//delete => enable
 		cssSelector: '@SELECTOR:active',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 	focus: {
 		/**
@@ -45,7 +45,7 @@ export const settings = {
 		 */
 		min: 0,
 		cssSelector: '@SELECTOR:focus',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 	visited: {
 		/**
@@ -57,7 +57,7 @@ export const settings = {
 		 */
 		min: 0,
 		cssSelector: '@SELECTOR:visited',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 	before: {
 		/**
@@ -69,7 +69,7 @@ export const settings = {
 		 */
 		min: 0,
 		cssSelector: '@SELECTOR:before',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 	after: {
 		/**
@@ -81,7 +81,7 @@ export const settings = {
 		 */
 		min: 0,
 		cssSelector: '@SELECTOR:after',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 	'custom-class': {
 		/**
@@ -93,7 +93,7 @@ export const settings = {
 		 */
 		min: 0,
 		cssSelector: '@SELECTOR.className',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 	'parent-class': {
 		/**
@@ -105,7 +105,7 @@ export const settings = {
 		 */
 		min: 0,
 		cssSelector: '#parentClientId @SELECTOR',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 	'parent-hover': {
 		/**
@@ -117,6 +117,6 @@ export const settings = {
 		 */
 		min: 0,
 		cssSelector: '#parentClientId:hover @SELECTOR',
-		color: '#D47C14',
+		color: 'var(--blockera-controls-states-color)',
 	},
 };

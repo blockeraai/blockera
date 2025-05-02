@@ -11,10 +11,10 @@
 		--icon-size: 16px;
 
 		.blockera-control-group-header {
-			padding: 0 8px 0 4px;
+			padding: 0 6px 0 2px;
 
 			.blockera-control-repeater-group-header {
-				gap: 3px;
+				gap: 1px;
 			}
 		}
 
@@ -27,6 +27,11 @@
 				min-width: var(--icon-size);
 			}
 		}
+	}
+
+
+	& > .blockera-control-repeater-item {
+		--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
 	}
 
 	.blockera-control-group.mode-popover.is-selected-item {

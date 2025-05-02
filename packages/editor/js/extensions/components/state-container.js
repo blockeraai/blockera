@@ -5,11 +5,6 @@
 import type { Element } from 'react';
 
 /**
- * Blockera dependencies
- */
-import { adjustHexColor } from '@blockera/utils';
-
-/**
  * Internal dependencies
  */
 import { isInnerBlock, isNormalState } from './utils';
@@ -35,10 +30,6 @@ export default function StateContainer({ children }: Object): Element<any> {
 				color: 'inherit',
 				'--blockera-controls-primary-color': activeColor,
 				'--blockera-tab-panel-active-color': activeColor,
-				'--blockera-controls-primary-color-darker-20': adjustHexColor(
-					activeColor,
-					-20
-				),
 			}}
 		>
 			{children}
