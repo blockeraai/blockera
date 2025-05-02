@@ -8,6 +8,7 @@
 
 	.blockera-control-repeater-item {
 		width: max-content;
+		--icon-size: 16px;
 
 		.blockera-control-group-header {
 			padding: 0 8px 0 4px;
@@ -20,10 +21,10 @@
 		.blockera-control-header-icon {
 
 			svg {
-				max-height: 18px;
-				max-width: 18px;
-				min-height: 18px;
-				min-width: 18px;
+				max-height: var(--icon-size);
+				max-width: var(--icon-size);
+				min-height: var(--icon-size);
+				min-width: var(--icon-size);
 			}
 		}
 	}
