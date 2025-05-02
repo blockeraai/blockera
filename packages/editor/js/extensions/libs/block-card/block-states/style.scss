@@ -1,32 +1,38 @@
+.blockera-block-state-container {
+	clear: both;
+	margin-bottom: -6px;
+}
+
 .blockera-control.blockera-control-block-states-repeater {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: block;
+	font-size: 0;
     position: relative;
 	--repeater-gap: 6px;
 	--repeater-item-height: 26px;
 
 	.blockera-control-header {
-		margin-left: auto;
 		width: auto;
-		position: absolute;
-		right: 0;
-		top: 0;
+		float: right;
+		height: calc(var(--repeater-item-height) + var(--repeater-gap));
+		padding-left: var(--repeater-gap);
+		display: flex;
+		align-content: center;
+		padding-bottom: var(--repeater-gap);
 	}
 
 	.blockera-control-header + .blockera-control-repeater-item {
 		margin-top: 0;
 	}
 
-	.blockera-control-repeater-item {
+	& > .blockera-control-repeater-item {
 		width: max-content;
+		margin-right: var(--repeater-gap);
+		margin-bottom: var(--repeater-gap);
+		float: left;
 
 		.blockera-control-group-header {
 			padding: 0 6px;
 		}
-	}
-
-	& > .blockera-control-repeater-item {
 
 		&:not([data-id="normal"]) {
 			--blockera-controls-primary-color: var(--blockera-controls-states-color);
