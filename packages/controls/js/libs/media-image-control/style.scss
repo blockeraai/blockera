@@ -44,14 +44,14 @@
 		position: absolute;
 		right: 0;
 		top: 0;
-		width: 24px;
+		width: 22px;
 		padding: 0;
-		min-width: 24px;
-		height: 24px;
+		min-width: 22px;
+		height: 22px;
 		border-left: 1px solid var(--blockera-controls-border-color-hover) !important;
 		border-bottom: 1px solid var(--blockera-controls-border-color-hover) !important;
 		background: #ffffff !important;
-		border-radius: 0 0 0 2px;
+		border-radius: 0 0 0 3px;
 		display: none;
 
 		&:hover {
@@ -86,7 +86,7 @@
 		border-color: var(--blockera-controls-border-color-hover);
 
 		.blockera-component-button.btn-delete {
-			display: block;
+			display: flex;
 		}
 
 		.blockera-control-action-btns {
