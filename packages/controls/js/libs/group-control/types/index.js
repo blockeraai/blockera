@@ -9,11 +9,7 @@ import type { MixedElement } from 'react';
  */
 import type { TPopoverProps } from '../../popover/types';
 
-export type GroupControlMode =
-	| 'spotlight'
-	| 'popover'
-	| 'accordion'
-	| 'nothing';
+export type GroupControlMode = 'popover' | 'accordion' | 'nothing';
 
 export type GroupControlProps = {
 	/**

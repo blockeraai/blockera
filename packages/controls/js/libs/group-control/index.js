@@ -155,26 +155,6 @@ const GroupControl: ComponentType<any> = memo(
 					{header}
 				</div>
 
-				{mode === 'spotlight' && isOpen && (
-					<Popover
-						offset={popoverOffset}
-						placement="bottom-middle"
-						{...popoverProps}
-						className={controlInnerClassNames(
-							'group-popover-spotlight',
-							popoverClassName
-						)}
-						title={popoverTitle}
-						titleButtonsRight={popoverTitleButtonsRight}
-						onClose={() => {
-							onClose();
-						}}
-						animate={false}
-					>
-						{children}
-					</Popover>
-				)}
-
 				{mode === 'popover' && isOpen && (
 					<Popover
 						offset={popoverOffset}
