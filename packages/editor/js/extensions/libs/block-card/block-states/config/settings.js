@@ -8,7 +8,7 @@ export const settings = {
 		 * When count of "normal" state equal with one item, this state should not deletable!
 		 */
 		min: 1,
-		color: '#147EB8',
+		color: 'var(--blockera-controls-primary-color-bk)',
 	},
 	hover: {
 		/**

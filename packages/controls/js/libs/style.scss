@@ -49,7 +49,7 @@
 @import "./transform-control/style";
 
 
-:root {
+body {
 	--blockera-controls-primary-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
 	--blockera-controls-primary-color-bk: var(--wp-components-color-accent, var(--wp-admin-theme-color, #007cba));
 	--blockera-controls-primary-color-darker-20: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);

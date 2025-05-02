@@ -2,6 +2,7 @@
 
 ### New Features
 - Added `children` support to `RepeaterControl` component to allow developers to add custom content to the repeater control.
+- Blockera interface uses current user WP color for interface fore more unified design in block editor.
 
 ## 1.2.2 (2025-04-27)
 

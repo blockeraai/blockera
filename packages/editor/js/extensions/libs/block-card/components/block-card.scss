@@ -92,10 +92,9 @@
 				span:hover,
 				span:focus,
 				&.is-edited span {
-					background: #f3f8fb !important;
-					box-shadow: 0 0 0 1px #c7e0ee !important;
-					color: #147eb8 !important;
-					--blockera-controls-primary-color: #147eb8;
+					background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%) !important;
+					box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%) !important;
+					color: var(--blockera-controls-primary-color) !important;
 				}
 
 				span:focus:focus {
