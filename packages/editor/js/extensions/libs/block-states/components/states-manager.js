@@ -400,7 +400,6 @@ const StatesManager: ComponentType<any> = memo(
 						{...{
 							onDelete,
 							id: 'block-states',
-							mode: 'nothing',
 							maxItems: Object.keys(preparedStates).length,
 							valueCleanup: (value) => value,
 							selectable: true,
