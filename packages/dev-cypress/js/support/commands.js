@@ -571,9 +571,11 @@ export const registerCommands = () => {
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
-				cy.getByDataTest('popover-body').within(() => {
-					cy.getByAriaLabel(label).click({ force: true });
-				});
+				cy.getByDataTest('popover-body')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel(label).click({ force: true });
+					});
 			} else
 				cy.get('h2')
 					.contains(content)
