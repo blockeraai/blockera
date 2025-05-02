@@ -15,7 +15,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/paragraph': {
 		name: 'core/paragraph',
-		label: __('Paragraph', 'blockera'),
+		label: __('Paragraphs', 'blockera'),
 		description: __('All paragraph elements.', 'blockera'),
 		icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 		settings: {
@@ -26,7 +26,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'elements/link': {
 		name: 'elements/link',
-		label: __('Link', 'blockera'),
+		label: __('Links', 'blockera'),
 		description: __('All hyperlinks elements.', 'blockera'),
 		icon: <Icon icon="link" library="wp" iconSize="20" />,
 		settings: {
@@ -39,7 +39,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading': {
 		name: 'core/heading',
-		label: __('Heading', 'blockera'),
+		label: __('Headings', 'blockera'),
 		description: __('All heading tag elements.', 'blockera'),
 		icon: <Icon icon="heading" library="wp" iconSize="20" />,
 		settings: {
@@ -58,7 +58,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-1': {
 		name: 'core/heading',
-		label: __('Heading: H1', 'blockera'),
+		label: __('Headings: H1', 'blockera'),
 		description: __('All H1 heading tag elements.', 'blockera'),
 		icon: <Icon icon="heading-level-1" library="wp" iconSize="20" />,
 		settings: {
@@ -76,7 +76,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-2': {
 		name: 'core/heading',
-		label: __('Heading: H2', 'blockera'),
+		label: __('Headings: H2', 'blockera'),
 		description: __('All H2 heading tag elements.', 'blockera'),
 		icon: <Icon icon="heading-level-2" library="wp" iconSize="20" />,
 		settings: {
@@ -94,7 +94,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-3': {
 		name: 'core/heading',
-		label: __('Heading: H3', 'blockera'),
+		label: __('Headings: H3', 'blockera'),
 		description: __('All H3 heading tag elements.', 'blockera'),
 		icon: <Icon icon="heading-level-3" library="wp" iconSize="20" />,
 		settings: {
@@ -112,7 +112,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-4': {
 		name: 'core/heading',
-		label: __('Heading: H4', 'blockera'),
+		label: __('Headings: H4', 'blockera'),
 		description: __('All H4 heading tag elements.', 'blockera'),
 		icon: <Icon icon="heading-level-4" library="wp" iconSize="20" />,
 		settings: {
@@ -130,7 +130,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-5': {
 		name: 'core/heading',
-		label: __('Heading: H5', 'blockera'),
+		label: __('Headings: H5', 'blockera'),
 		description: __('All H5 heading tag elements.', 'blockera'),
 		icon: <Icon icon="heading-level-5" library="wp" iconSize="20" />,
 		settings: {
@@ -148,7 +148,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-6': {
 		name: 'core/heading',
-		label: __('Heading: H6', 'blockera'),
+		label: __('Headings: H6', 'blockera'),
 		description: __('All H6 heading tag elements.', 'blockera'),
 		icon: <Icon icon="heading-level-6" library="wp" iconSize="20" />,
 		settings: {
@@ -167,7 +167,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/button': {
 		name: 'core/button',
-		label: __('Button', 'blockera'),
+		label: __('Buttons', 'blockera'),
 		description: __('All button-style link elements.', 'blockera'),
 		icon: <Icon icon="button" library="wp" iconSize="20" />,
 		settings: {
@@ -183,7 +183,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../packages/gallery/test/block.inner-blocks.e2e.cy.js
 	'core/image': {
 		name: 'core/image',
-		label: __('Image', 'blockera'),
+		label: __('Images', 'blockera'),
 		description: __('All images elements.', 'blockera'),
 		icon: <Icon icon="image" library="wp" iconSize="20" />,
 		settings: {
