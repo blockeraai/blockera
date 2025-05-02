@@ -36,7 +36,6 @@ const RepeaterItem = ({
 	item,
 	itemId,
 }: RepeaterItemProps): null | Element<any> => {
-	const itemRef = useRef(null);
 	const [isOpen, setOpen] = useState(
 		isBoolean(item?.isOpen) ? item?.isOpen : false
 	);
@@ -136,7 +135,6 @@ const RepeaterItem = ({
 
 	return (
 		<div
-			ref={itemRef}
 			className={controlInnerClassNames(
 				'repeater-item',
 				'draggable',
