@@ -97,7 +97,7 @@ describe('Block States on inner blocks E2E tests', () => {
 				[
 					{
 						label: 'Selected Inner Block',
-						text: 'Link',
+						text: 'Links',
 					},
 				],
 				'inner-block'
@@ -110,7 +110,7 @@ describe('Block States on inner blocks E2E tests', () => {
 				[
 					{
 						label: 'Selected Inner Block',
-						text: 'Link',
+						text: 'Links',
 					},
 					{
 						label: 'Hover State',
@@ -181,7 +181,7 @@ describe('Block States on inner blocks E2E tests', () => {
 				[
 					{
 						label: 'Selected Inner Block',
-						text: 'Link',
+						text: 'Links',
 					},
 				],
 				'inner-block'
@@ -259,7 +259,7 @@ describe('Block States on inner blocks E2E tests', () => {
 				[
 					{
 						label: 'Selected Inner Block',
-						text: 'Link',
+						text: 'Links',
 					},
 				],
 				'inner-block'
@@ -361,7 +361,7 @@ describe('Block States on inner blocks E2E tests', () => {
 				[
 					{
 						label: 'Selected Inner Block',
-						text: 'Link',
+						text: 'Links',
 					},
 					{
 						label: 'Hover State',
@@ -469,7 +469,7 @@ describe('Block States on inner blocks E2E tests', () => {
 				[
 					{
 						label: 'Selected Inner Block',
-						text: 'Link',
+						text: 'Links',
 					},
 					{
 						label: 'Hover State',
