@@ -31,7 +31,7 @@ export default function EditorFeatureWrapper({
 		currentBreakpoint,
 		currentInnerBlockState,
 	} = useExtensionsStore();
-	const { availableStates } = useEditorStore();
+	const { availableStates, availableBreakpoints } = useEditorStore();
 
 	if (window?.blockeraFeatureManager_1_0_0?.EditorFeatureWrapper) {
 		const WrapperComponent =
@@ -53,13 +53,13 @@ export default function EditorFeatureWrapper({
 		isInnerBlock(currentBlock) ? currentInnerBlockState : currentState;
 
 	const feature = {
+		onStates: true,
 		onNative: false,
 		onBreakpoints: true,
 		onInnerBlocks: true,
-		onStates: availableStates,
 		onNativeOnInnerBlocks: true,
-		onNativeOnBreakpoints: false,
 		onNativeOnStates: availableStates,
+		onNativeOnBreakpoints: availableBreakpoints,
 		...config,
 	};
 
@@ -129,7 +129,11 @@ export default function EditorFeatureWrapper({
 			!feature.onStates.includes(getCurrentState())
 		) {
 			return (
-				<FeatureWrapper type="state" typeName={'normal'} {...props}>
+				<FeatureWrapper
+					type="state"
+					typeName={availableStates.join(', ')}
+					{...props}
+				>
 					{children}
 				</FeatureWrapper>
 			);
