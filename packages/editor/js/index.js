@@ -26,7 +26,10 @@ export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 	const breakpointsStack: { [key: string]: BreakpointTypes } = {};
 
 	for (const definitionType in definitions) {
-		breakpointsStack[definitionType] = definitions[definitionType];
+		breakpointsStack[definitionType] = {
+			...definitions[definitionType],
+			native: definitions[definitionType]?.native || false,
+		};
 	}
 
 	setBreakpoints(breakpointsStack);
