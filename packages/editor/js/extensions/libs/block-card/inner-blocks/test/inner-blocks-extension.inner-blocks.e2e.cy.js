@@ -72,9 +72,11 @@ describe('Inner Blocks Functionality Tests ...', () => {
 							// Searching buttons block type.
 							search('buttons');
 
+							// There is 2 buttons block types.
+							// First is a real blocks type and second is virtual block type.
 							cy.getByDataTest('blockera-feature-type').should(
 								'have.length',
-								1
+								2
 							);
 
 							cy.getByAriaLabel('core/buttons').click({
