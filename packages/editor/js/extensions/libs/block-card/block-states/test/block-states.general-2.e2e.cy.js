@@ -47,7 +47,7 @@ describe('Block State E2E Test', () => {
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
 				'.blockera-state-colors-container:last-child'
-			).should('eq', '#147EB8');
+			).should('eq', '#007cba');
 		});
 
 		it('set the "third-party" state (Like: hover, active, etc) color on the root of the container using CSS variables.', () => {
