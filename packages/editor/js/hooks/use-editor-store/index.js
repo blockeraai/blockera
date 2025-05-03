@@ -11,15 +11,18 @@ import { useSelect } from '@wordpress/data';
 import { STORE_NAME } from '../../store/constants';
 
 export const useEditorStore = (): Object => {
-	const { availableStates } = useSelect((select) => {
-		const { getAvailableStates } = select(STORE_NAME);
+	const { availableStates, availableBreakpoints } = useSelect((select) => {
+		const { getAvailableStates, getAvailableBreakpoints } =
+			select(STORE_NAME);
 
 		return {
 			availableStates: getAvailableStates(),
+			availableBreakpoints: getAvailableBreakpoints(),
 		};
 	});
 
 	return {
 		availableStates,
+		availableBreakpoints,
 	};
 };

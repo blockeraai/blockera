@@ -41,6 +41,33 @@ export const getBreakpoint = (
 };
 
 /**
+ * Get available breakpoints.
+ *
+ * @param {{breakpoints: Object}} state the breakpoints.
+ * @return {Array<TBreakpoint>} the available breakpoints.
+ */
+export const getAvailableBreakpoints = ({
+	breakpoints,
+}: {
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
+}): Array<TBreakpoint> => {
+	const availableBreakpoints = [];
+
+	for (const key in breakpoints) {
+		// $FlowFixMe
+		const breakpoint = breakpoints[key];
+
+		if (breakpoint?.native) {
+			continue;
+		}
+
+		availableBreakpoints.push(breakpoint?.type);
+	}
+
+	return availableBreakpoints;
+};
+
+/**
  * Get states.
  *
  * @param {{states: Object}} state the states.
