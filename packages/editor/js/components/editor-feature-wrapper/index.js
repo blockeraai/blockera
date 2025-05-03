@@ -57,8 +57,8 @@ export default function EditorFeatureWrapper({
 		onBreakpoints: true,
 		onInnerBlocks: true,
 		onStates: availableStates,
-		onNativeOnBreakpoints: true,
 		onNativeOnInnerBlocks: true,
+		onNativeOnBreakpoints: false,
 		onNativeOnStates: availableStates,
 		...config,
 	};
