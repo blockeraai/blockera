@@ -8,7 +8,7 @@
 - Image upload control design.
 
 ### Bug Fixes
-- Fixed input control to avoid unnecessary updates when leaving the field with the same value.
+- Fixed input control to avoid unnecessary updates, better handle incomplete calculations and unit conversions, and properly handle decimal values and constraints when leaving the field with the same value.
 
 ## 1.2.2 (2025-04-27)
 
