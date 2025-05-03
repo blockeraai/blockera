@@ -5,6 +5,12 @@
 
 ### New Features
 - Added BlockComposite module to simplify creation of composite blocks by providing a reusable framework and components for developers.
+- Block style variation redesigned and moved to block card (Block Card v3).
+
+
+### Automated Tests
+- Added E2E tests to check block style variation functionality.
+
 
 ## 1.4.0 (2025-04-27)
 
