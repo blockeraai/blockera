@@ -59,7 +59,7 @@ describe('Block State E2E Test', () => {
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
 				'.blockera-state-colors-container:last-child'
-			).should('eq', '#D47C14');
+			).should('eq', '#d47c14');
 		});
 
 		it('Switch to inner block and check normal state color to ba the color of inner block.', () => {
@@ -85,7 +85,7 @@ describe('Block State E2E Test', () => {
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
 				'.blockera-state-colors-container:last-child'
-			).should('eq', '#D47C14');
+			).should('eq', '#d47c14');
 		});
 	});
 
