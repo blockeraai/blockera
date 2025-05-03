@@ -33,6 +33,7 @@ import { EditableBlockName } from './editable-block-name';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
+import { BlockStyleVariations } from '../style-variations';
 
 export function BlockCard({
 	notice,
@@ -40,6 +41,7 @@ export function BlockCard({
 	supports,
 	children,
 	blockName,
+	currentBlock,
 	currentState,
 	setAttributes,
 	currentInnerBlock,
@@ -226,34 +228,51 @@ export function BlockCard({
 								{blockInformation.description}
 							</span>
 						)}
-
-						<BlockVariationTransforms blockClientId={clientId} />
 					</div>
 				</div>
 
-				<Slot name={'blockera-block-card-children'} />
-				{children}
-				<BlockCompositePreview
-					block={{
-						clientId,
-						supports,
-						blockName,
-						setAttributes,
-					}}
-					onChange={handleOnChangeAttributes}
-					currentBlock={'master'}
-					currentState={currentState}
-					currentBreakpoint={currentBreakpoint}
-					currentInnerBlockState={currentInnerBlockState}
-					blockStatesProps={{
-						attributes: currentStateAttributes,
-						availableStates: availableBlockStates,
-					}}
-					innerBlocksProps={{
-						values: currentStateAttributes.blockeraInnerBlocks,
-						innerBlocks: blockeraInnerBlocks,
-					}}
-				/>
+				<Flex gap={10} direction="column">
+					<div
+						className={extensionInnerClassNames(
+							'block-card__actions'
+						)}
+					>
+						<BlockStyleVariations
+							clientId={clientId}
+							currentBlock={currentBlock}
+							currentState={currentState}
+							currentBreakpoint={currentBreakpoint}
+						/>
+
+						<BlockVariationTransforms blockClientId={clientId} />
+					</div>
+
+					<Slot name={'blockera-block-card-children'} />
+
+					{children}
+
+					<BlockCompositePreview
+						block={{
+							clientId,
+							supports,
+							blockName,
+							setAttributes,
+						}}
+						onChange={handleOnChangeAttributes}
+						currentBlock={'master'}
+						currentState={currentState}
+						currentBreakpoint={currentBreakpoint}
+						currentInnerBlockState={currentInnerBlockState}
+						blockStatesProps={{
+							attributes: currentStateAttributes,
+							availableStates: availableBlockStates,
+						}}
+						innerBlocksProps={{
+							values: currentStateAttributes.blockeraInnerBlocks,
+							innerBlocks: blockeraInnerBlocks,
+						}}
+					/>
+				</Flex>
 			</div>
 		</>
 	);

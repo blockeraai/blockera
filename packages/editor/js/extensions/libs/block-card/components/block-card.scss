@@ -2,7 +2,7 @@
 	display: flex;
 	position: relative;
 	flex-direction: column;
-	gap: 20px;
+	gap: 15px;
 	padding: 16px;
 	border: none;
 	border-bottom: 1px solid transparent;
@@ -172,43 +172,6 @@
 			overflow: hidden;
 			cursor: default;
 		}
-
-		.block-editor-block-variation-transforms {
-			padding: 0;
-			margin: 5px 0 0;
-			display: flex;
-			flex-direction: row;
-			gap: 8px;
-
-			> .components-base-control {
-				margin: 0 !important;
-			}
-
-			.components-toggle-group-control {
-				min-height: 30px;
-				height: 22px;
-				background-color: transparent;
-				border-color: var(--blockera-controls-border-color);
-				gap: 4px;
-
-				&:focus-within {
-					border-color: var(--blockera-controls-primary-color);
-					box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
-				}
-			}
-
-			.components-toggle-group-control-option-base {
-				min-width: 22px;
-				min-height: 22px;
-				height: 22px;
-
-				.block-editor-block-icon {
-					width: 14px;
-					height: 14px;
-					margin: 0;
-				}
-			}
-		}
 	}
 
 	&.inner-block-is-selected {
@@ -230,6 +193,64 @@
 		.blockera-component-block-icon {
 			color: var(--blockera-controls-primary-color);
 		}
+	}
+
+	.blockera-extension-block-card__actions {
+		display: flex;
+		flex-direction: row;
+		gap: 6px;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.block-editor-block-variation-transforms {
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+		width: max-content;
+		margin-left: auto;
+
+		> .components-base-control {
+			margin: 0 !important;
+			display: flex;
+
+			.components-base-control__field {
+				display: flex;
+			}
+		}
+
+		.components-toggle-group-control {
+			min-height: 28px;
+			height: 28px;
+			background-color: transparent;
+			border-color: var(--blockera-controls-border-color);
+			gap: 4px;
+			padding: 2px !important;
+
+			&:focus-within {
+				border-color: var(--blockera-controls-primary-color);
+				box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+			}
+		}
+
+		.components-toggle-group-control-option-base {
+			min-width: 22px;
+			min-height: 22px;
+			height: 22px;
+
+			.block-editor-block-icon {
+				width: 14px;
+				height: 14px;
+				margin: 0;
+			}
+		}
+	}
+
+	.blockera-control-style-variations-button + .block-editor-block-variation-transforms {
+		margin-left: initial;
 	}
 }
 
