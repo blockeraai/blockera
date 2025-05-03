@@ -117,6 +117,8 @@ export default function PositionButtonControl({
 					}}
 				>
 					<AlignmentMatrixControl
+						singularId={singularId}
+						repeaterItem={repeaterItem}
 						id={id}
 						label={alignmentMatrixLabel}
 						columns={
