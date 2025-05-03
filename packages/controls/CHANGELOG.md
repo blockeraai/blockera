@@ -7,6 +7,8 @@
 - Tooltips design.
 - Image upload control design.
 
+### Bug Fixes
+- Fixed input control to avoid unnecessary updates when leaving the field with the same value.
 
 ## 1.2.2 (2025-04-27)
 
