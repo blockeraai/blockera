@@ -61,7 +61,7 @@
 			display: flex;
 			align-items: center;
 			min-height: 24px;
-			gap: 5px;
+			gap: 2px;
 			padding-right: 45px;
 			flex-wrap: wrap;
 
@@ -118,6 +118,7 @@
 				color: #1e1e1e;
 				fill: currentColor;
 				opacity: 0.3;
+				margin-right: 1px;
 			}
 
 			.blockera-extension-block-card__title__block.title-is-clickable {
@@ -238,7 +239,7 @@
 
 	.blockera-extension-block-card__title__input {
 		margin-left: -3px;
-		margin-right: -3px;
+		margin-right: -1px;
 	}
 }
 
