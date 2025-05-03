@@ -4,11 +4,24 @@
  */
 import type { Element } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { controlInnerClassNames } from '@blockera/classnames';
+import {
+	InputControl,
+	RepeaterContext,
+	useControlContext,
+	ControlContextProvider,
+} from '@blockera/controls';
+
+/**
+ * Internal dependencies
+ */
+import type { TStates } from '../types';
+import { getNormalizedCssSelector } from '../../../block-composite/search-items';
 
 export default function ItemHeader({
 	item,
@@ -19,16 +32,21 @@ export default function ItemHeader({
 	isOpenPopoverEvent,
 }: {
 	item: Object,
-	itemId: number,
+	itemId: TStates,
 	isOpen: boolean,
 	setOpen: (status: boolean) => void,
 	children?: Element<any>,
 	isOpenPopoverEvent: (event: SyntheticEvent<EventTarget>) => void,
 }): Element<any> {
-	// const {
-	// 	controlInfo: { name: controlId },
-	// 	dispatch: { changeRepeaterItem },
-	// } = useControlContext();
+	const {
+		controlInfo: { name: controlId },
+		dispatch: { changeRepeaterItem },
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+	} = useControlContext();
+
+	const { onChange, valueCleanup } =
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		useContext(RepeaterContext);
 	//
 	// const {
 	// 	__experimentalSetPreviewDeviceType: setDeviceType,
@@ -47,14 +65,14 @@ export default function ItemHeader({
 	//
 	// 		return breakpoint;
 	// 	});
-	// 	changeRepeaterItem({
-	// 		itemId,
-	// 		controlId,
-	// 		value: {
-	// 			...item,
-	// 			breakpoints: modifiedBreakpoints,
-	// 		},
-	// 	});
+	// changeRepeaterItem({
+	// 	itemId,
+	// 	controlId,
+	// 	value: {
+	// 		...item,
+	// 		breakpoints: modifiedBreakpoints,
+	// 	},
+	// });
 	// };
 
 	return (
@@ -75,9 +93,43 @@ export default function ItemHeader({
 			{/*	{icon}*/}
 			{/*</span>*/}
 
-			<span className={controlInnerClassNames('header-label')}>
-				{item.label}
-			</span>
+			{'custom-class' === item.type ? (
+				<span className={controlInnerClassNames('header-label')}>
+					<ControlContextProvider
+						value={{
+							name: controlId + '-' + item.type,
+							value: item['css-class'] || '',
+						}}
+					>
+						<InputControl
+							className={controlInnerClassNames(
+								'content-editable'
+							)}
+							aria-label={__('Custom Class', 'blockera')}
+							placeholder="&.custom-class"
+							defaultValue={item['css-class'] || ''}
+							onChange={(newValue) => {
+								changeRepeaterItem({
+									value: {
+										...item,
+										'css-class':
+											getNormalizedCssSelector(newValue),
+									},
+									itemId,
+									onChange,
+									controlId,
+									valueCleanup,
+									getId: (): TStates => itemId,
+								});
+							}}
+						/>
+					</ControlContextProvider>
+				</span>
+			) : (
+				<span className={controlInnerClassNames('header-label')}>
+					{item.label}
+				</span>
+			)}
 
 			{/*<span className={controlInnerClassNames('header-settings')}>*/}
 			{/*	<Icon*/}

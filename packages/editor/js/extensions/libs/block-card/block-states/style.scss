@@ -1,0 +1,14 @@
+.blockera-control-repeater-group-header {
+
+	.blockera-control-content-editable {
+
+		input {
+			border-left: none;
+			border-right: none;
+
+			&:focus {
+				box-shadow: none;
+			}
+		}
+	}
+}

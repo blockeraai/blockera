@@ -168,7 +168,9 @@ export const useBlockStates = ({
 
 			Object.entries(states).forEach(memoizedInitialValue);
 
+			// $FlowFixMe
 			return {
+				// $FlowFixMe
 				...forcedStates,
 				...initialValue,
 			};

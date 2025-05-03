@@ -242,5 +242,5 @@ export function getItemSearchRank(
 }
 
 export const getNormalizedCssSelector = (search: string): string => {
-	return `&${search}`;
+	return '&' === search[0] ? search : `&${search}`;
 };
