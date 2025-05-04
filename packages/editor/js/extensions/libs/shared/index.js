@@ -42,7 +42,6 @@ import { LayoutExtension } from '../layout';
 import { FlexChildExtension } from '../flex-child';
 import { CustomStyleExtension } from '../custom-style';
 import { MouseExtension } from '../mouse';
-import { StyleVariationsExtension } from '../style-variations';
 // import { EntranceAnimationExtension } from '../entrance-animation';
 // import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
@@ -298,7 +297,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			clickAnimationConfig,
 			// conditionsConfig,
 			advancedSettingsConfig,
-			styleVariationsConfig,
 		} = settings;
 
 		const block = {
@@ -432,35 +430,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'style':
 					activePanel.push(
 						<Fragment key={`${props.clientId}-style-panel`}>
-							<ErrorBoundary
-								fallbackRender={({ error }) => (
-									<ErrorBoundaryFallback
-										isReportingErrorCompleted={
-											isReportingErrorCompleted
-										}
-										clientId={props.clientId}
-										setIsReportingErrorCompleted={
-											setIsReportingErrorCompleted
-										}
-										from={'extension'}
-										error={error}
-										configId={'styleVariationsConfig'}
-										title={__(
-											'Style Variations',
-											'blockera'
-										)}
-										icon={
-											<Icon icon="extension-style-variations" />
-										}
-									/>
-								)}
-							>
-								<StyleVariationsExtension
-									block={block}
-									extensionConfig={styleVariationsConfig}
-								/>
-							</ErrorBoundary>
-
 							<ErrorBoundary
 								fallbackRender={({ error }) => (
 									<ErrorBoundaryFallback

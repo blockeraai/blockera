@@ -3,15 +3,19 @@
 export type PopoverPlacement =
 	| 'top-start'
 	| 'top'
+	| 'top-middle'
 	| 'top-end'
 	| 'right-start'
 	| 'right'
+	| 'right-middle'
 	| 'right-end'
 	| 'bottom-start'
 	| 'bottom'
+	| 'bottom-middle'
 	| 'bottom-end'
 	| 'left-start'
 	| 'left'
+	| 'left-middle'
 	| 'left-end';
 
 export type TPopoverProps = {
