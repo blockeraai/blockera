@@ -17,7 +17,6 @@ import {
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 import { isFunction, isUndefined } from '@blockera/utils';
-import { settings } from '@blockera/editor/js/extensions/libs/block-card/block-states/config';
 import { PopoverContextData } from '@blockera/dev-storybook/js/decorators/with-popover-data/context';
 
 /**
@@ -53,8 +52,9 @@ export default function Popover({
 		getActiveMasterState = () => 'normal',
 		getExtensionCurrentBlock = () => 'master',
 	} = select('blockera/extensions') || {};
+	const { getState } = select('blockera/editor');
 
-	let activeColor = settings[getActiveMasterState(clientId, name)].color;
+	let activeColor = getState(getActiveMasterState(clientId, name)).color;
 
 	if (
 		'master' !== getExtensionCurrentBlock() &&
@@ -62,9 +62,9 @@ export default function Popover({
 	) {
 		activeColor = '#cc0000';
 	} else if ('master' !== getExtensionCurrentBlock()) {
-		activeColor =
-			settings[getActiveInnerState(clientId, getExtensionCurrentBlock())]
-				.color;
+		activeColor = getState(
+			getActiveInnerState(clientId, getExtensionCurrentBlock())
+		).color;
 	}
 
 	/**
