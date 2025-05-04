@@ -124,7 +124,7 @@ export function InnerBlockCard({
 							clientId={clientId}
 							blockName={blockName}
 							activeBlock={activeBlock}
-							availableStates={additional.availableStates}
+							availableStates={additional.availableBlockStates}
 							blockeraUnsavedData={
 								currentStateAttributes?.blockeraUnsavedData
 							}
@@ -189,9 +189,6 @@ export function InnerBlockCard({
 				blockStatesProps={{
 					attributes: currentStateAttributes,
 					availableStates: additional?.availableBlockStates,
-					needsToMergeWithGeneral: additional?.needs
-						? additional.needs.includes('general-states')
-						: false,
 					id: `block-states-${kebabCase(currentBlock)}`,
 				}}
 			/>

@@ -84,7 +84,7 @@ if ( ! function_exists( 'blockera_block_state_validate' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_get_normalized_inner_block_id' ) ) {
+if ( ! function_exists( 'blockera_append_selector_prefix' ) ) {
 
 	/**
 	 * Appending "blockera/" prefix at block type name.
@@ -93,7 +93,7 @@ if ( ! function_exists( 'blockera_get_normalized_inner_block_id' ) ) {
 	 *
 	 * @return string the block type name with "blockera/" prefix.
 	 */
-	function blockera_get_normalized_inner_block_id( string $block_type ): string {
+	function blockera_append_selector_prefix( string $block_type ): string {
 
 		return "blockera/{$block_type}";
 	}
@@ -360,12 +360,29 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 			$cloned_block_type = clone $block_type;
 		}
 
-		if ( ! empty( $args['block-type'] ) && blockera_is_inner_block( $args['block-type'] ) && isset($cloned_block_type) ) {
+		if ( ! empty( $args['block-type'] ) && isset($cloned_block_type) ) {
 
-			$selector_id = blockera_get_normalized_inner_block_id( $args['block-type'] );
+			if (blockera_is_inner_block( $args['block-type'] )) {
 
-			// Rewrite block type selectors because we provide suitable selectors array of original array.
-			$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+				if (blockera_is_normal_on_base_breakpoint( $args['inner-pseudo-class'], $args['breakpoint'] )) {
+					
+					$selector_id = blockera_append_selector_prefix($args['block-type']);
+
+				} else {
+
+					$selector_id = blockera_append_selector_prefix( 'state/' . $args['inner-pseudo-class'] );
+				}
+
+				// Rewrite block type selectors because we provide suitable selectors array of original array based on inner block state.
+				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+
+			} elseif (! blockera_is_normal_on_base_breakpoint($args['pseudo-class'], $args['breakpoint'])) {
+
+				$selector_id = blockera_append_selector_prefix( 'state/' . $args['pseudo-class'] );
+
+				// Rewrite block type selectors because we provide suitable selectors array of original array for pseudo class.
+				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+			}
 		}
 
 		$has_fallback = ! empty( $args['fallback'] );

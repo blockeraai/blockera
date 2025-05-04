@@ -217,7 +217,9 @@ export function BlockCard({
 								blockeraUnsavedData={
 									currentStateAttributes?.blockeraUnsavedData
 								}
-								availableStates={additional.availableStates}
+								availableStates={
+									additional.availableBlockStates
+								}
 							/>
 						</h2>
 
@@ -251,10 +253,7 @@ export function BlockCard({
 					currentInnerBlockState={currentInnerBlockState}
 					blockStatesProps={{
 						attributes: currentStateAttributes,
-						availableStates: additional?.availableStates,
-						needsToMergeWithGeneral: additional?.needs
-							? additional.needs.includes('general-states')
-							: false,
+						availableStates: additional?.availableBlockStates,
 					}}
 					innerBlocksProps={{
 						values: currentStateAttributes.blockeraInnerBlocks,

@@ -108,16 +108,23 @@ export const getComputedCssProps = ({
 						continue;
 					}
 
+					let calculatedSelectors =
+						selectors[appendBlockeraPrefix(blockType)] || {};
+
+					if (!isNormalState(stateType)) {
+						calculatedSelectors =
+							selectors[
+								appendBlockeraPrefix(`states/${stateType}`)
+							] || calculatedSelectors;
+					}
+
 					stylesStack.push(
 						appendStyles({
 							settings: {
 								...calculatedProps,
 								state: stateType,
 								masterState,
-								selectors:
-									selectors[
-										appendBlockeraPrefix(blockType)
-									] || {},
+								selectors: calculatedSelectors,
 								attributes: {
 									...defaultAttributes,
 									...breakpointItem?.attributes,
@@ -201,6 +208,14 @@ export const getComputedCssProps = ({
 		// 3- validate saved block-states to creating css styles for all states of blocks.
 		const states = params?.attributes?.blockeraBlockStates;
 		const stateItem = states[state];
+		let calculatedSelectors = calculatedProps.selectors;
+
+		if (!isNormalState(state)) {
+			calculatedSelectors =
+				calculatedProps.selectors[
+					appendBlockeraPrefix(`state/${state}`)
+				] || calculatedSelectors;
+		}
 
 		if (validateBlockStates(stateItem)) {
 			for (const breakpointType in stateItem?.breakpoints || {}) {
@@ -218,6 +233,7 @@ export const getComputedCssProps = ({
 					appendStyles({
 						settings: {
 							...calculatedProps,
+							selectors: calculatedSelectors,
 							attributes: {
 								...defaultAttributes,
 								...params.attributes,

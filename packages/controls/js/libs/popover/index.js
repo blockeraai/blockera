@@ -54,7 +54,8 @@ export default function Popover({
 	} = select('blockera/extensions') || {};
 	const { getState } = select('blockera/editor');
 
-	let activeColor = getState(getActiveMasterState(clientId, name)).color;
+	let activeColor = getState(getActiveMasterState(clientId, name))?.settings
+		?.color;
 
 	if (
 		'master' !== getExtensionCurrentBlock() &&
@@ -64,7 +65,7 @@ export default function Popover({
 	} else if ('master' !== getExtensionCurrentBlock()) {
 		activeColor = getState(
 			getActiveInnerState(clientId, getExtensionCurrentBlock())
-		).color;
+		)?.settings?.color;
 	}
 
 	/**

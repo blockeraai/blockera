@@ -23,7 +23,9 @@ export default function StateContainer({
 		availableStates && availableStates.hasOwnProperty(currentState)
 			? availableStates[currentState]
 			: blockeraUnsavedData?.states[currentState];
-	let activeColor = state ? state?.color : fallbackState?.color;
+	let activeColor = state
+		? state?.settings?.color
+		: fallbackState?.settings?.color;
 
 	if (isInnerBlock(currentBlock) && isNormalState(currentInnerBlockState)) {
 		activeColor = '#cc0000';

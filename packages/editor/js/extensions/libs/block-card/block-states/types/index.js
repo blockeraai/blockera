@@ -56,7 +56,6 @@ export type StatesManagerHookProps = {
 		},
 	},
 	deleteCacheData: Object,
-	needsToMergeWithGeneral: boolean,
 	onChange: THandleOnChangeAttributes,
 	currentBlock: 'master' | InnerBlockType,
 	currentState: TStates,
