@@ -364,19 +364,19 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 			if (blockera_is_inner_block( $args['block-type'] )) {
 
-				if (blockera_is_normal_on_base_breakpoint( $args['inner-pseudo-class'], $args['breakpoint'] )) {
+				if (isset($args['inner-pseudo-class']) && blockera_is_normal_on_base_breakpoint( $args['inner-pseudo-class'], $args['breakpoint'] )) {
 					
 					$selector_id = blockera_append_selector_prefix($args['block-type']);
 
 				} else {
 
-					$selector_id = blockera_append_selector_prefix( 'state/' . $args['inner-pseudo-class'] );
+					$selector_id = blockera_append_selector_prefix( 'state/' . $args['inner-pseudo-class'] ?? '' );
 				}
 
 				// Rewrite block type selectors because we provide suitable selectors array of original array based on inner block state.
 				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
 
-			} elseif (! blockera_is_normal_on_base_breakpoint($args['pseudo-class'], $args['breakpoint'])) {
+			} elseif (isset($args['pseudo-class']) && ! blockera_is_normal_on_base_breakpoint($args['pseudo-class'], $args['breakpoint'])) {
 
 				$selector_id = blockera_append_selector_prefix( 'state/' . $args['pseudo-class'] );
 
