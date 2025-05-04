@@ -237,6 +237,7 @@ export function BlockCard({
 							blockName,
 							setAttributes,
 						}}
+						blockConfig={additional}
 						onChange={handleOnChangeAttributes}
 						currentBlock={'master'}
 						currentState={currentState}
@@ -244,7 +245,6 @@ export function BlockCard({
 						currentInnerBlockState={currentInnerBlockState}
 						blockStatesProps={{
 							attributes: currentStateAttributes,
-							availableStates: additional?.availableBlockStates,
 						}}
 						innerBlocksProps={{
 							values: currentStateAttributes.blockeraInnerBlocks,

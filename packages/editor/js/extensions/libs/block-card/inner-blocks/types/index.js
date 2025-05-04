@@ -67,6 +67,7 @@ export type MemoizedInnerBlocks = {
 
 export type AvailableItems = {
 	clientId: string,
+	maxItems?: number | void,
 	setBlockClientInners: ({
 		clientId: string,
 		inners: InnerBlocks,

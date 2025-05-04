@@ -24,6 +24,7 @@ import type {
 
 export const useAvailableItems = ({
 	clientId,
+	maxItems,
 	getBlockInners,
 	reservedInnerBlocks,
 	memoizedInnerBlocks,
@@ -96,24 +97,7 @@ export const useAvailableItems = ({
 
 			setBlockClientInners({
 				clientId,
-				inners: getSortedObject(
-					mergeObject(
-						forces.reduce(
-							(accumulator, innerBlock) => ({
-								...accumulator,
-								[innerBlock?.name]: {
-									...innerBlock,
-									// Item force is not deletable!
-									deletable: false,
-								},
-							}),
-							{}
-						),
-						inners
-					),
-					'settings',
-					10
-				),
+				inners: calculateInners(forces, inners, maxItems),
 			});
 		}
 
@@ -143,6 +127,7 @@ export const modifyItemsPriority = (
 			}
 		}
 	};
+
 	for (const blockType of appendedItems) {
 		forcesItemsProcessor(blockType);
 
@@ -157,4 +142,47 @@ export const modifyItemsPriority = (
 	}
 
 	return forcesItems;
+};
+
+const calculateInners = (
+	forces: Array<InnerBlockModel>,
+	inners: InnerBlocks,
+	maxItems?: number | void
+) => {
+	forces = getSortedObject(
+		mergeObject(
+			forces.reduce(
+				(accumulator, innerBlock) => ({
+					...accumulator,
+					[innerBlock?.name]: {
+						...innerBlock,
+						// Item force is not deletable!
+						deletable: false,
+					},
+				}),
+				{}
+			),
+			inners
+		),
+		'settings',
+		10
+	);
+
+	if (!maxItems) {
+		return forces;
+	}
+
+	const limitedForces: { [key: string]: InnerBlockModel } = {};
+
+	for (const key in forces) {
+		const force = forces[key];
+
+		if (Object.keys(limitedForces).length >= maxItems) {
+			break;
+		}
+
+		limitedForces[force.name] = force;
+	}
+
+	return limitedForces;
 };

@@ -13,6 +13,7 @@ import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card
 export type BlockType = {
 	name: string,
 	targetBlock: string,
+	maxInnerBlocks?: number,
 	blockeraInnerBlocks?: InnerBlocks,
 	edit: (props: Object) => MixedElement,
 	availableBlockStates?: {

@@ -21,12 +21,14 @@ import { useMemoizedInnerBlocks, useAvailableItems } from './';
 export const useInnerBlocks = ({
 	block,
 	values,
+	maxItems,
 	innerBlocks,
 	currentBlock,
 }: {
 	block: Object,
 	values: Object,
 	onChange: Function,
+	maxItems?: number | void,
 	innerBlocks: InnerBlocks,
 	currentBlock: 'master' | InnerBlockType | string,
 }): Object => {
@@ -60,6 +62,7 @@ export const useInnerBlocks = ({
 
 	// Calculation: to categorized in two category (elements and blocks) from available inner blocks on current WordPress selected block.
 	const { elements, blocks } = useAvailableItems({
+		maxItems,
 		getBlockInners,
 		memoizedInnerBlocks,
 		setBlockClientInners,
@@ -105,18 +108,15 @@ export const useInnerBlocks = ({
 		name: generateExtensionId(block, 'inner-blocks', false),
 	};
 
-	// Calculation: repeater maxItems property.
-	const maxItems = innerBlocksLength;
-
 	return {
 		blocks,
 		elements,
-		maxItems,
 		contextValue,
 		getBlockInners,
 		setCurrentBlock,
 		availableBlocks,
 		innerBlocksLength,
 		setBlockClientInners,
+		maxItems: innerBlocksLength,
 	};
 };

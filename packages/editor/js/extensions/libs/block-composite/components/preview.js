@@ -24,6 +24,7 @@ export const Preview = ({
 	// General Props.
 	block,
 	onChange,
+	blockConfig,
 	currentBlock,
 	currentState,
 	currentBreakpoint,
@@ -47,6 +48,7 @@ export const Preview = ({
 		block,
 		onChange,
 		currentBlock,
+		maxItems: blockConfig?.maxInnerBlocks,
 		values: innerBlocksProps?.values || {},
 		innerBlocks: innerBlocksProps?.innerBlocks || {},
 	});
@@ -65,11 +67,12 @@ export const Preview = ({
 		...blockStatesProps,
 		block,
 		onChange,
-		deleteCacheData,
 		currentBlock,
 		currentState,
+		deleteCacheData,
 		currentBreakpoint,
 		currentInnerBlockState,
+		availableStates: blockConfig?.availableBlockStates,
 	});
 
 	return (
