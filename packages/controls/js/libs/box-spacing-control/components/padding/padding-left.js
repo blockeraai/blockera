@@ -126,6 +126,7 @@ export function PaddingLeft({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -133,6 +134,7 @@ export function PaddingLeft({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -209,45 +211,47 @@ export function PaddingLeft({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Left Padding', 'blockera')}
 			/>
 		),
 		label: (
+			<div
+				className={controlInnerClassNames(
+					'label-side',
+					'side-horizontal',
+					'side-padding-left',
+					labelClassName
+				)}
+				data-cy="box-spacing-padding-left"
+			>
+				<LabelControl
+					ariaLabel={__('Left Padding', 'blockera')}
+					label={
+						_isSetValueAddon
+							? fixLabelText(value.padding.left)
+							: fixLabelText(sideSpace)
+					}
+					onClick={() => {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
+					}}
+					{...{
+						attribute,
+						blockName,
+						resetToDefault,
+						mode: 'advanced',
+						singularId: 'padding.left',
+						value: value?.padding?.left,
+						defaultValue: defaultValue?.padding?.left,
+						path: getControlPath(attribute, 'padding.left'),
+					}}
+				/>
+
+				<ValueAddonPointer />
+			</div>
+		),
+		popover: (
 			<>
-				<div
-					className={controlInnerClassNames(
-						'label-side',
-						'side-horizontal',
-						'side-padding-left',
-						labelClassName
-					)}
-					data-cy="box-spacing-padding-left"
-				>
-					<LabelControl
-						ariaLabel={__('Left Padding', 'blockera')}
-						label={
-							_isSetValueAddon
-								? fixLabelText(value.padding.left)
-								: fixLabelText(sideSpace)
-						}
-						onClick={() => {
-							setFocusSide(sideId);
-							setOpenPopover(sideId);
-						}}
-						{...{
-							attribute,
-							blockName,
-							resetToDefault,
-							mode: 'advanced',
-							singularId: 'padding.left',
-							value: value?.padding?.left,
-							defaultValue: defaultValue?.padding?.left,
-							path: getControlPath(attribute, 'padding.left'),
-						}}
-					/>
-
-					<ValueAddonPointer />
-				</div>
-
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.left}
@@ -262,27 +266,25 @@ export function PaddingLeft({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.left')}
-						type="padding"
 						icon={<Icon icon="padding-left" iconSize="18" />}
+						title={__('Left Padding Space', 'blockera')}
+						type="padding"
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left Padding Space', 'blockera')}
 						inputLabel={__('Left Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Left Padding Space',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a padding space that applies only to the left edge of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a padding space that applies only to the left edge of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

@@ -15,7 +15,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button } from '../../';
+import { Button, Tooltip } from '../../';
 import { RepeaterContext } from '../context';
 import { getArialLabelSuffix, isEnabledPromote } from '../utils';
 import { useControlContext } from '../../../context';
@@ -162,50 +162,58 @@ export default function RepeaterItemActions({
 			{actionButtonDelete &&
 				item?.deletable &&
 				(minItems === 0 || itemsCount > minItems) && (
-					<Button
-						className={controlInnerClassNames('btn-delete')}
-						noBorder={true}
-						icon={<Icon icon="trash" size="20" />}
-						showTooltip={true}
-						tooltipPosition="top"
-						onClick={(event) => {
-							event.stopPropagation();
+					<Tooltip
+						text={__('Delete', 'blockera')}
+						style={{
+							'--tooltip-bg': '#e20000',
+						}}
+						delay={300}
+					>
+						<Button
+							className={controlInnerClassNames('btn-delete')}
+							noBorder={true}
+							icon={<Icon icon="trash" size="20" />}
+							onClick={(event) => {
+								event.stopPropagation();
 
-							if (
-								!item.selectable ||
-								'function' !== typeof onDelete
-							) {
-								removeRepeaterItem({
-									itemId,
-									onChange,
+								if (
+									!item.selectable ||
+									'function' !== typeof onDelete
+								) {
+									removeRepeaterItem({
+										itemId,
+										onChange,
+										controlId,
+										repeaterId,
+										valueCleanup,
+										itemIdGenerator,
+									});
+
+									return;
+								}
+
+								const value = onDelete(itemId, repeaterItems);
+
+								modifyControlValue({
 									controlId,
-									repeaterId,
-									valueCleanup,
-									itemIdGenerator,
+									value,
 								});
 
-								return;
-							}
-
-							const value = onDelete(itemId, repeaterItems);
-
-							modifyControlValue({
-								controlId,
-								value,
-							});
-
-							repeaterOnChange(value, {
-								onChange,
-								valueCleanup,
-							});
-						}}
-						label={__('Delete', 'blockera')}
-						aria-label={sprintf(
-							// translators: %s is the repeater item id. It's aria label for deleting repeater item
-							__('Delete %s', 'blockera'),
-							getArialLabelSuffix(itemId)
-						)}
-					/>
+								repeaterOnChange(value, {
+									onChange,
+									valueCleanup,
+								});
+							}}
+							aria-label={sprintf(
+								// translators: %s is the repeater item id. It's aria label for deleting repeater item
+								__('Delete %s', 'blockera'),
+								getArialLabelSuffix(itemId)
+							)}
+							style={{
+								'--blockera-controls-primary-color': '#e20000',
+							}}
+						/>
+					</Tooltip>
 				)}
 		</>
 	);

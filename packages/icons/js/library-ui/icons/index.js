@@ -308,6 +308,7 @@ export { default as TextOrientationStyle4 } from './text-orientation-style-4.svg
 export { default as TextTransformCapitalize } from './text-transform-capitalize.svg';
 export { default as TextTransformLowercase } from './text-transform-lowercase.svg';
 export { default as TextTransformUppercase } from './text-transform-uppercase.svg';
+export { default as ThreeD } from './three-d.svg';
 export { default as Tools } from './tools.svg';
 export { default as TransformMove } from './transform-move.svg';
 export { default as TransformRotate } from './transform-rotate.svg';

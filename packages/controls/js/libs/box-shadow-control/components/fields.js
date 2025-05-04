@@ -88,7 +88,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'x')}
 					singularId={'x'}
-					label={<Icon icon="coordinate-x" />}
+					label={
+						<Icon
+							icon="coordinate-x"
+							style={{ fill: 'currentColor' }}
+						/>
+					}
 					labelPopoverTitle={__('Horizontal Offset', 'blockera')}
 					labelDescription={
 						<>
@@ -130,7 +135,12 @@ const Fields: TFieldItem = memo<TFieldItem>(
 					repeaterItem={itemId}
 					id={getControlId(itemId, 'y')}
 					singularId={'y'}
-					label={<Icon icon="coordinate-y" />}
+					label={
+						<Icon
+							icon="coordinate-y"
+							style={{ fill: 'currentColor' }}
+						/>
+					}
 					labelPopoverTitle={__('Vertical Offset', 'blockera')}
 					labelDescription={
 						<>

@@ -7,5 +7,6 @@ Blocksy
 clsx
 freemius
 phpcs
+Spotlighter
 sprintf
 woocommerce
