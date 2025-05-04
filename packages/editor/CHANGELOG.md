@@ -2,6 +2,7 @@
 
 ### Improvements
 - Improved the block card design to make it more consistent and easier to use.
+- Improved block card inner blocks priority system for better user experience and performance.
 
 ### New Features
 - Added BlockComposite module to simplify creation of composite blocks by providing a reusable framework and components for developers.
