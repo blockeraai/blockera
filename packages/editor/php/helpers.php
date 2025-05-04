@@ -368,9 +368,9 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 					
 					$selector_id = blockera_append_selector_prefix($args['block-type']);
 
-				} else {
+				} elseif (isset($args['inner-pseudo-class'])) {
 
-					$selector_id = blockera_append_selector_prefix( 'state/' . $args['inner-pseudo-class'] ?? '' );
+					$selector_id = blockera_append_selector_prefix( 'state/' . $args['inner-pseudo-class'] );
 				}
 
 				// Rewrite block type selectors because we provide suitable selectors array of original array based on inner block state.
