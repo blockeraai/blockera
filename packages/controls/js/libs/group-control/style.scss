@@ -66,8 +66,7 @@
 
 .blockera-control-group.mode-popover {
 
-	&.is-open,
-	&.is-selected-item {
+	&.is-open {
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 	}
@@ -81,13 +80,5 @@
 		.blockera-control-header-label {
 			color: var(--blockera-controls-primary-color);
 		}
-	}
-}
-
-.blockera-control-group.mode-spotlight {
-
-	&.is-open,
-	&.is-selected-item {
-		border-color: var(--blockera-controls-border-color-hover);
 	}
 }

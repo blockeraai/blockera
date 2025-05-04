@@ -159,7 +159,6 @@ const GroupControl: ComponentType<any> = memo(
 					<Popover
 						offset={popoverOffset}
 						placement="left-start"
-						{...popoverProps}
 						className={controlInnerClassNames(
 							'group-popover',
 							popoverClassName
@@ -169,6 +168,7 @@ const GroupControl: ComponentType<any> = memo(
 						onClose={() => {
 							onClose();
 						}}
+						{...popoverProps}
 					>
 						{children}
 					</Popover>
