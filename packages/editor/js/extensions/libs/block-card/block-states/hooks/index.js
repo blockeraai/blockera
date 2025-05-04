@@ -43,6 +43,7 @@ export const useBlockStates = ({
 	availableStates,
 	currentBreakpoint,
 	currentInnerBlockState,
+	needsToMergeWithGeneral,
 }: StatesManagerHookProps): Object => {
 	let states = { ...(attributes?.blockeraBlockStates || {}) };
 	const {
@@ -72,15 +73,27 @@ export const useBlockStates = ({
 			Object.keys(attributes?.blockeraUnsavedData?.states || {}).length >
 			0
 		) {
-			return getSortedObject(attributes?.blockeraUnsavedData?.states);
+			return getSortedObject(
+				needsToMergeWithGeneral
+					? mergeObject(
+							defaultStates,
+							attributes?.blockeraUnsavedData?.states
+					  )
+					: attributes?.blockeraUnsavedData?.states
+			);
 		} else if (availableStates) {
-			return getSortedObject(availableStates);
+			return getSortedObject(
+				needsToMergeWithGeneral
+					? mergeObject(defaultStates, availableStates)
+					: availableStates
+			);
 		}
 
 		return getSortedObject(defaultStates);
 	}, [
 		defaultStates,
 		availableStates,
+		needsToMergeWithGeneral,
 		attributes?.blockeraUnsavedData?.states,
 	]);
 

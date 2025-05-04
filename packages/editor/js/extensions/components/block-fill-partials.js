@@ -91,7 +91,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						currentBreakpoint={currentBreakpoint}
 						currentInnerBlockState={currentInnerBlockState}
 						currentStateAttributes={blockProps.attributes}
-						availableBlockStates={blockProps.availableBlockStates}
+						additional={blockProps.additional}
 						blockeraInnerBlocks={blockeraInnerBlocks}
 						supports={blockProps.supports}
 						setAttributes={blockProps.setAttributes}
@@ -112,9 +112,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 							currentStateAttributes={
 								blockProps.currentStateAttributes
 							}
-							availableBlockStates={
-								blockProps.availableBlockStates
-							}
+							additional={blockProps.additional}
 							supports={blockProps.supports}
 							setAttributes={blockProps.setAttributes}
 							handleOnChangeAttributes={handleOnChangeAttributes}

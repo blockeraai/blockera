@@ -10,12 +10,20 @@ import type { Element } from 'react';
 import { isInnerBlock, isNormalState } from './utils';
 import { useEditorStore, useExtensionsStore } from '../../hooks';
 
-export default function StateContainer({ children }: Object): Element<any> {
+export default function StateContainer({
+	children,
+	availableStates,
+	blockeraUnsavedData,
+}: Object): Element<any> {
 	const { currentBlock, currentState, currentInnerBlockState } =
 		useExtensionsStore();
 	const { getState } = useEditorStore();
-
-	let activeColor = getState(currentState)?.color;
+	const state = getState(currentState);
+	const fallbackState =
+		availableStates && availableStates.hasOwnProperty(currentState)
+			? availableStates[currentState]
+			: blockeraUnsavedData?.states[currentState];
+	let activeColor = state ? state?.color : fallbackState?.color;
 
 	if (isInnerBlock(currentBlock) && isNormalState(currentInnerBlockState)) {
 		activeColor = '#cc0000';

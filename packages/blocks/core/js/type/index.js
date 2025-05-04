@@ -12,6 +12,7 @@ import type { BlockStateType } from '@blockera/editor/js/extensions/libs/block-c
 
 export type BlockType = {
 	name: string,
+	needs?: Array<'general-states'>,
 	targetBlock: string,
 	blockeraInnerBlocks?: InnerBlocks,
 	edit: (props: Object) => MixedElement,

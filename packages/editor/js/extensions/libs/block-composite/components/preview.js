@@ -83,6 +83,7 @@ export const Preview = ({
 			deleteCacheData={deleteCacheData}
 			contextValue={blockStatesContextValue}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			maxItems={Object.keys(preparedStates).length + maxItems}
 			getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
 			{...{
 				InserterComponent: (props: Object) => (

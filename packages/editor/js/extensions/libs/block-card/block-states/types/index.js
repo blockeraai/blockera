@@ -56,6 +56,7 @@ export type StatesManagerHookProps = {
 		},
 	},
 	deleteCacheData: Object,
+	needsToMergeWithGeneral: boolean,
 	onChange: THandleOnChangeAttributes,
 	currentBlock: 'master' | InnerBlockType,
 	currentState: TStates,
@@ -67,6 +68,7 @@ export type StatesManagerHookProps = {
 export type StatesManagerProps = {
 	// id: string,
 	children: any,
+	maxItems: number,
 	contextValue: Object,
 	deleteCacheData: Object,
 	defaultRepeaterItemValue: Object,

@@ -43,7 +43,7 @@ export function InnerBlockCard({
 	currentState,
 	setAttributes,
 	currentBreakpoint,
-	availableBlockStates,
+	additional,
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
@@ -52,7 +52,7 @@ export function InnerBlockCard({
 	blockName: string,
 	supports: Object,
 	currentStateAttributes: Object,
-	availableBlockStates: Object,
+	additional: Object,
 	children?: MixedElement,
 	activeBlock: 'master' | InnerBlockType,
 	currentBlock: 'master' | InnerBlockType | string,
@@ -124,6 +124,10 @@ export function InnerBlockCard({
 							clientId={clientId}
 							blockName={blockName}
 							activeBlock={activeBlock}
+							availableStates={additional.availableStates}
+							blockeraUnsavedData={
+								currentStateAttributes?.blockeraUnsavedData
+							}
 						/>
 
 						<Tooltip text={__('Close Inner Block', 'blockera')}>
@@ -155,7 +159,12 @@ export function InnerBlockCard({
 				</div>
 			</div>
 
-			<StateContainer>
+			<StateContainer
+				availableStates={additional?.availableBlockStates}
+				blockeraUnsavedData={
+					currentStateAttributes?.blockeraUnsavedData
+				}
+			>
 				<Slot
 					name={`blockera-${kebabCase(
 						activeBlock
@@ -179,7 +188,10 @@ export function InnerBlockCard({
 				currentInnerBlockState={currentInnerBlockState}
 				blockStatesProps={{
 					attributes: currentStateAttributes,
-					availableStates: availableBlockStates,
+					availableStates: additional?.availableBlockStates,
+					needsToMergeWithGeneral: additional?.needs
+						? additional.needs.includes('general-states')
+						: false,
 					id: `block-states-${kebabCase(currentBlock)}`,
 				}}
 			/>

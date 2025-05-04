@@ -74,6 +74,7 @@ type Props = {
 	name: string,
 	clientId: string,
 	supports: Object,
+	additional: Object,
 	attributes: Object,
 	currentAttributes: Object,
 	defaultAttributes: Object,
@@ -96,6 +97,7 @@ type Props = {
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
+		additional,
 		attributes: blockAttributes,
 		defaultAttributes: attributes,
 		setAttributes,
@@ -1351,7 +1353,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		];
 
 		return (
-			<StateContainer>
+			<StateContainer
+				availableStates={additional?.availableBlockStates}
+				blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
+			>
 				{useDisplayBlockControls() && (
 					<Tabs
 						design="modern"
