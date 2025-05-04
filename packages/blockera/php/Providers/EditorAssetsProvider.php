@@ -130,8 +130,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		$dynamic_value_bootstrapper = $editor_object . '.coreData.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');';
 
 		$script = 'window.onload = () => {
-				' . $editor_object . '.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');  
-				' . $editor_object . '.editor.unstableBootstrapServerSideBlockStatesDefinitions(' . wp_json_encode( $this->app->getEntity( 'states' ) ) . ');
+				' . $editor_object . '.coreData.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
 				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->app->getEntity( 'breakpoints' ) ) . ');
 				' . $editor_object . '.coreData.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
 				' . $editor_object . '.editor.init();
