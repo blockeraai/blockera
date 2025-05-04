@@ -8,19 +8,17 @@ import type { Element } from 'react';
  * Internal dependencies
  */
 import { isInnerBlock, isNormalState } from './utils';
-import { settings } from '../libs/block-card/block-states/config';
-import { useExtensionsStore } from '../../hooks/use-extensions-store';
+import { useEditorStore, useExtensionsStore } from '../../hooks';
 
 export default function StateContainer({ children }: Object): Element<any> {
 	const { currentBlock, currentState, currentInnerBlockState } =
 		useExtensionsStore();
+	const { getState } = useEditorStore();
 
-	let activeColor = settings[currentState].color;
+	let activeColor = getState(currentState)?.color;
 
 	if (isInnerBlock(currentBlock) && isNormalState(currentInnerBlockState)) {
 		activeColor = '#cc0000';
-	} else if (isInnerBlock(currentBlock)) {
-		activeColor = settings[currentInnerBlockState].color;
 	}
 
 	return (
