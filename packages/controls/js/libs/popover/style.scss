@@ -3,24 +3,27 @@
 	--popover-overflow: visible;
 	--popover-min-height: auto;
 	--popover-height: 430px;
-	--popover-width: 290px;
+	--popover-width: 282px;
 	--popover-header-height: 42px;
 	--popover-color: #1e1e1e;
 	--popover-bg-color: #ffffff;
 	--popover-border-color: var(--blockera-controls-primary-color);
+	--popover-border-width: 2px;
 	--popover-header-color: var(--popover-color);
 	--popover-header-bg-color: #ffffff;
 	--popover-header-shadow-color: #00000029;
 	--popover-header-btn-color: #1e1e1e;
 	--popover-header-btn-border-color: var(--blockera-controls-border-color-soft);
+	--popover-padding: 15px;
+	--popover-radius: 3px;
 	overflow: var(--popover-overflow) !important;
-	background-color: var(--popover-bg-color);
+	background: transparent;
 	color: var(--popover-color);
-	border-radius: 4px;
+	border-radius: var(--popover-radius);
 
 	.components-popover__content {
 		padding: 0;
-		border: 2px solid var(--popover-border-color);
+		border: var(--popover-border-width) solid var(--popover-border-color);
 		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
 		min-width: var(--popover-width);
 		width: var(--popover-width);
@@ -34,17 +37,17 @@
 	&.with-header {
 
 		.components-popover__content {
-			padding-top: 42px;
+			padding-top: var(--popover-header-height);
 		}
 	}
 
 	.blockera-component-popover-header {
-		padding: 0 18px;
+		padding: 0 var(--popover-padding);
 		box-shadow: 0 2px 6px 0 var(--popover-header-shadow-color);
 		position: fixed;
-		top: 2px;
-		left: 2px;
-		right: 2px;
+		top: 0;
+		left: 0;
+		right: 0;
 		background: var(--popover-header-bg-color);
 		margin: 0;
 		height: var(--popover-header-height);
@@ -55,7 +58,7 @@
 		color: var(--popover-header-color);
 		font-size: 13px;
 		z-index: 6;
-		border-radius: 4px 4px 0 0;
+		border-radius: var(--popover-radius) var(--popover-radius) 0 0;
 
 		svg {
 			fill: currentColor;
@@ -79,8 +82,16 @@
 		}
 	}
 
+	&.is-draggable {
+
+		.blockera-component-popover-header {
+			cursor: move;
+			user-select: none;
+		}
+	}
+
 	.blockera-component-popover-body {
-		padding: 25px 18px 0 18px;
+		padding: calc(var(--popover-padding) * 1.33) var(--popover-padding) 0 var(--popover-padding);
 		min-height: calc(var(--popover-min-height) - var(--popover-header-height));
 		max-height: calc(var(--popover-height) - var(--popover-header-height));
 		overflow: var(--popover-overflow) !important;
@@ -89,7 +100,7 @@
 		position: relative;
 
 		& > :last-child {
-			padding-bottom: 20px;
+			padding-bottom: var(--popover-padding);
 		}
 
 		.blockera-component-breakpoint-icon {
@@ -97,3 +108,20 @@
 		}
 	}
 }
+
+.blockera-component-popover.popover-normal {
+	--popover-border-color: var(--blockera-controls-border-color-hover);
+	--popover-border-width: 1px;
+	--popover-header-color: var(--popover-color);
+	--popover-header-bg-color: #ffffff;
+	--popover-header-shadow-color: #00000029;
+	--popover-header-btn-color: #1e1e1e;
+	--popover-header-btn-border-color: var(--blockera-controls-border-color-soft);
+	overflow: var(--popover-overflow) !important;
+	background-color: var(--popover-bg-color);
+	color: var(--popover-color);
+	border: none;
+	--popover-padding: 15px;
+	--popover-radius: 0;
+}
+

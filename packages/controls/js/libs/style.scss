@@ -90,6 +90,7 @@ body {
 	opacity: 0.5;
 	pointer-events: none;
 	user-select: none;
+	transition: var(--blockera-controls-transition);
 }
 
 .blockera-hide {

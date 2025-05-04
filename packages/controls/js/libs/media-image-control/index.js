@@ -19,7 +19,7 @@ import { Icon } from '@blockera/icons';
  */
 import { useControlContext } from '../../context';
 import type { MediaImageControlProps } from './types';
-import { Button, MediaUploader, BaseControl } from '../index';
+import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
 
 export default function MediaImageControl({
 	labelChoose = __('Choose Image…', 'blockera'),
@@ -82,15 +82,25 @@ export default function MediaImageControl({
 				)}
 			>
 				{value && (
-					<Button
-						data-cy="delete-bg-img"
-						className="btn-delete"
-						noBorder={true}
-						icon={<Icon library="ui" icon="close" iconSize="16" />}
-						onClick={() => {
-							setValue('');
+					<Tooltip
+						text={__('Delete image', 'blockera')}
+						style={{
+							'--tooltip-bg': '#e20000',
 						}}
-					/>
+						delay={300}
+					>
+						<Button
+							data-cy="delete-bg-img"
+							className="btn-delete"
+							noBorder={true}
+							icon={
+								<Icon library="ui" icon="close" iconSize="16" />
+							}
+							onClick={() => {
+								setValue('');
+							}}
+						/>
+					</Tooltip>
 				)}
 
 				{value && (

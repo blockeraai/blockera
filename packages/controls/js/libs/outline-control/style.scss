@@ -1,3 +1,6 @@
 .blockera-component-popover.blockera-component-popover-outline-control {
-    --popover-min-height: 270px;
+
+	.components-popover__content {
+		overflow: visible !important;
+	}
 }

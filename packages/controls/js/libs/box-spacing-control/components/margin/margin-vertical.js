@@ -125,6 +125,7 @@ export function MarginVertical({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -140,6 +141,7 @@ export function MarginVertical({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -216,6 +218,7 @@ export function MarginVertical({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Vertical Margin', 'blockera')}
 			/>
 		),
 		label: (
@@ -287,7 +290,10 @@ export function MarginVertical({
 						}}
 					/>
 				</div>
-
+			</>
+		),
+		popover: (
+			<>
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.top || value?.margin?.bottom}
@@ -303,27 +309,25 @@ export function MarginVertical({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
-						type="margin"
 						icon={<Icon icon="margin-vertical" iconSize="18" />}
+						title={__('Top & Bottom Margin', 'blockera')}
+						type="margin"
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top & Bottom Margin', 'blockera')}
 						inputLabel={__('Vertical Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Vertical Margin',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a margin space that applies to both the top and bottom edges of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies to both the top and bottom edges of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace?.unit}

@@ -9,7 +9,6 @@ export { layoutConfig } from './layout';
 export { customStyleConfig } from './custom-style';
 export { flexChildConfig } from './flex-child';
 export { mouseConfig } from './mouse';
-export { styleVariationsConfig } from './style-variations';
 export { entranceAnimationConfig } from './entrance-animation';
 export { scrollAnimationConfig } from './scroll-animation';
 export { clickAnimationConfig } from './click-animation';

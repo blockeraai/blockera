@@ -3,13 +3,13 @@
 	.blockera-component-block-styles__variants {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 8px;
+		gap: 12px;
 		justify-content: space-between;
 
 		.blockera-component-button {
 			box-shadow: inset 0 0 0 1px #e0e0e0;
 			color: var(--blockera-controls-color, #1e1e1e);
-			width: calc(50% - 4px);
+			width: calc(50% - 6px);
 			padding: 0 5px;
 			height: 32px;
 			line-height: 32px;

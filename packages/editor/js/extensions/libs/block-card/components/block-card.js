@@ -11,7 +11,7 @@ import {
 	__experimentalBlockVariationTransforms as BlockVariationTransforms,
 } from '@wordpress/block-editor';
 import { Slot } from '@wordpress/components';
-import { useState, useRef, useEffect } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 
 /**
@@ -33,6 +33,7 @@ import { EditableBlockName } from './editable-block-name';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
+import { BlockStyleVariations } from '../style-variations';
 
 export function BlockCard({
 	notice,
@@ -41,6 +42,7 @@ export function BlockCard({
 	children,
 	blockName,
 	additional,
+	currentBlock,
 	currentState,
 	setAttributes,
 	currentInnerBlock,
@@ -74,23 +76,6 @@ export function BlockCard({
 	const blockInformation = useBlockDisplayInformation(clientId);
 	const [name, setName] = useState(blockInformation.name || '');
 	const [title, setTitle] = useState(blockInformation.title);
-
-	const contentRef = useRef(null);
-	const [isHovered, setIsHovered] = useState(false);
-	const [height, setHeight] = useState('auto');
-	const maxHeight = '55px';
-
-	useEffect(() => {
-		if (currentInnerBlock !== null) {
-			if (isHovered) {
-				setHeight(`${contentRef.current.scrollHeight}px`);
-			} else {
-				setHeight(maxHeight);
-			}
-		} else {
-			setHeight('auto');
-		}
-	}, [isHovered, currentInnerBlock]);
 
 	useEffect(() => {
 		// Name changed from outside
@@ -140,21 +125,11 @@ export function BlockCard({
 		<>
 			{notice}
 			<div
-				ref={contentRef}
 				className={extensionClassNames('block-card', {
 					'master-block-card': true,
 					'inner-block-is-selected': currentInnerBlock !== null,
 				})}
 				data-test={'blockera-block-card'}
-				onMouseEnter={() => {
-					setIsHovered(true);
-				}}
-				onMouseLeave={() => {
-					setIsHovered(false);
-				}}
-				style={{
-					height,
-				}}
 			>
 				<div className={extensionInnerClassNames('block-card__inner')}>
 					{parentNavBlockClientId && ( // This is only used by the Navigation block for now. It's not ideal having Navigation block specific code here.
@@ -232,34 +207,51 @@ export function BlockCard({
 								{blockInformation.description}
 							</span>
 						)}
-
-						<BlockVariationTransforms blockClientId={clientId} />
 					</div>
 				</div>
 
-				<Slot name={'blockera-block-card-children'} />
-				{children}
-				<BlockCompositePreview
-					block={{
-						clientId,
-						supports,
-						blockName,
-						setAttributes,
-					}}
-					onChange={handleOnChangeAttributes}
-					currentBlock={'master'}
-					currentState={currentState}
-					currentBreakpoint={currentBreakpoint}
-					currentInnerBlockState={currentInnerBlockState}
-					blockStatesProps={{
-						attributes: currentStateAttributes,
-						availableStates: additional?.availableBlockStates,
-					}}
-					innerBlocksProps={{
-						values: currentStateAttributes.blockeraInnerBlocks,
-						innerBlocks: blockeraInnerBlocks,
-					}}
-				/>
+				<Flex gap={10} direction="column">
+					<div
+						className={extensionInnerClassNames(
+							'block-card__actions'
+						)}
+					>
+						<BlockStyleVariations
+							clientId={clientId}
+							currentBlock={currentBlock}
+							currentState={currentState}
+							currentBreakpoint={currentBreakpoint}
+						/>
+
+						<BlockVariationTransforms blockClientId={clientId} />
+					</div>
+
+					<Slot name={'blockera-block-card-children'} />
+
+					{children}
+
+					<BlockCompositePreview
+						block={{
+							clientId,
+							supports,
+							blockName,
+							setAttributes,
+						}}
+						onChange={handleOnChangeAttributes}
+						currentBlock={'master'}
+						currentState={currentState}
+						currentBreakpoint={currentBreakpoint}
+						currentInnerBlockState={currentInnerBlockState}
+						blockStatesProps={{
+							attributes: currentStateAttributes,
+							availableStates: additional?.availableBlockStates,
+						}}
+						innerBlocksProps={{
+							values: currentStateAttributes.blockeraInnerBlocks,
+							innerBlocks: blockeraInnerBlocks,
+						}}
+					/>
+				</Flex>
 			</div>
 		</>
 	);

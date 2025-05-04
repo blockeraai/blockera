@@ -37,7 +37,12 @@ const Fields = ({ itemId, item }) => {
 				singularId={'x'}
 				id={getControlId(itemId, 'x')}
 				defaultValue={defaultRepeaterItemValue.x}
-				label={<Icon icon="coordinate-x" />}
+				label={
+					<Icon
+						icon="coordinate-x"
+						style={{ fill: 'currentColor' }}
+					/>
+				}
 				labelPopoverTitle={__('Horizontal Offset (X)', 'blockera')}
 				labelDescription={
 					<>
@@ -79,7 +84,12 @@ const Fields = ({ itemId, item }) => {
 				singularId={'y'}
 				id={getControlId(itemId, 'y')}
 				defaultValue={defaultRepeaterItemValue.y}
-				label={<Icon icon="coordinate-y" />}
+				label={
+					<Icon
+						icon="coordinate-y"
+						style={{ fill: 'currentColor' }}
+					/>
+				}
 				labelPopoverTitle={__('Vertical Offset (Y)', 'blockera')}
 				labelDescription={
 					<>

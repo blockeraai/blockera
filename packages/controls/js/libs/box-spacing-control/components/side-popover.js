@@ -216,6 +216,8 @@ export function SidePopover({
 					}
 					offset={offset}
 					placement="left-start"
+					animate={false}
+					flip={false}
 					className="spacing-edit-popover"
 					onClose={onClose}
 					titleButtonsRight={
@@ -266,6 +268,9 @@ export function SidePopover({
 							'side-popover-action-buttons'
 						)}
 						mode={'simple'}
+						style={{
+							marginTop: '20px',
+						}}
 					>
 						<>
 							{type === 'margin' && (

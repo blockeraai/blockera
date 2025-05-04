@@ -562,7 +562,10 @@ export function UnitInput({
 				}
 
 				setTypedValue(normalizedValue);
-				if (typeof onChange === 'function') {
+				if (
+					typeof onChange === 'function' &&
+					inputValue !== Number(normalizedValue)
+				) {
 					onChange({
 						unitValue,
 						inputValue: normalizedValue,

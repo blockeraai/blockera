@@ -25,7 +25,7 @@ import {
  * Internal dependencies
  */
 import { default as BlockStylesPreviewPanel } from './preview-panel';
-import { useBlockContext } from '../../../hooks';
+import { useBlockContext } from '../../../../hooks';
 
 /**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/index'
@@ -76,9 +76,14 @@ function BlockStyles({
 		debouncedSetHoveredStyle.cancel();
 	};
 
-	const styleItemHandler = (item: Object) => {
+	const styleItemHandler = (item: Object, type: string = '') => {
 		// It should not work for other states
 		if (!isNormalState()) {
+			return;
+		}
+
+		// do not show on focus if item is default
+		if (type === 'focus' && item.name === 'default') {
 			return;
 		}
 
@@ -110,10 +115,14 @@ function BlockStyles({
 							key={style.name}
 							variant="secondary"
 							label={buttonText}
-							onMouseEnter={() => styleItemHandler(style)}
-							onFocus={() => styleItemHandler(style)}
-							onMouseLeave={() => styleItemHandler(null)}
-							onBlur={() => styleItemHandler(null)}
+							onMouseEnter={() =>
+								styleItemHandler(style, 'mouseEnter')
+							}
+							onFocus={() => styleItemHandler(style, 'focus')}
+							onMouseLeave={() =>
+								styleItemHandler(null, 'mouseLeave')
+							}
+							onBlur={() => styleItemHandler(null, 'blur')}
 							onClick={() => onSelectStylePreview(style)}
 							aria-current={activeStyle.name === style.name}
 							size="input"

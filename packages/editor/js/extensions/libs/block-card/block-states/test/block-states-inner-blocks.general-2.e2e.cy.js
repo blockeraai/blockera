@@ -68,7 +68,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			cy.cssVar(
 				'--blockera-tab-panel-active-color',
 				'.blockera-state-colors-container:last-child'
-			).should('eq', '#D47C14');
+			).should('eq', '#d47c14');
 		});
 	});
 

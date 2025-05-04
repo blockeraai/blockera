@@ -69,15 +69,15 @@ describe('Inner Blocks Functionality Tests ...', () => {
 								72
 							);
 
-							// Searching buttons block type.
-							search('buttons');
+							// Searching verse block type.
+							search('verse');
 
 							cy.getByDataTest('blockera-feature-type').should(
 								'have.length',
 								1
 							);
 
-							cy.getByAriaLabel('core/buttons').click({
+							cy.getByAriaLabel('core/verse').click({
 								force: true,
 							});
 						});
@@ -94,7 +94,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 					cy.getByDataTest('elements/link').should('exist');
 					cy.getByDataTest('core/button').should('exist');
 					cy.getByDataTest('core/heading').should('exist');
-					cy.getByDataTest('core/buttons').should('exist');
+					cy.getByDataTest('core/verse').should('exist');
 
 					// Add Inner Block click.
 					openInserter();
@@ -108,8 +108,8 @@ describe('Inner Blocks Functionality Tests ...', () => {
 								71
 							);
 
-							// Searching buttons block type.
-							search('buttons');
+							// Searching verse block type.
+							search('verse');
 
 							cy.getByDataTest('not-found-text').should('exist');
 						});
@@ -129,7 +129,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 					'core/paragraph',
 					'elements/link',
 					'core/button',
-					'core/buttons',
+					'core/verse',
 				]).to.be.deep.equal(
 					Object.keys(getBlockTypeInnerBlocksStore(data))
 				);

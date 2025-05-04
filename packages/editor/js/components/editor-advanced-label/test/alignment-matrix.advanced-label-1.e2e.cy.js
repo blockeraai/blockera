@@ -17,11 +17,17 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		// Set display
 		cy.getByAriaLabel('Add New Background').click();
 
-		// Alias
-		cy.getByAriaLabel('Alignment Matrix Control').as('matrix-box');
-		cy.getByDataTest('popover-body').within(() => {
-			cy.getByAriaLabel('Position').as('position-label');
+		cy.get('.blockera-component-popover').within(() => {
+			cy.getByDataTest('position-button').click();
 		});
+
+		cy.get('.blockera-component-popover')
+			.last()
+			.within(() => {
+				cy.get('.blockera-control-alignment-matrix').as('matrix-box');
+
+				cy.getByAriaLabel('Position').as('position-label');
+			});
 	});
 
 	const setMatrixItem = (item) => {
@@ -39,6 +45,10 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 	const openImageItem = () => {
 		cy.getParentContainer('Image & Gradient').within(() => {
 			cy.getByDataCy('group-control-header').click();
+		});
+
+		cy.get('.blockera-component-popover').within(() => {
+			cy.getByDataTest('position-button').click();
 		});
 	};
 

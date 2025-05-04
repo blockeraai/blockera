@@ -1,5 +1,15 @@
 ## Unreleased
 
+### Improvements
+- Background image feature: UI/UX design to do more with less!
+- Multiple minor design improvement on controls.
+- Features label design and usability for reset value icon.
+- Tooltips design.
+- Image upload control design.
+
+### Bug Fixes
+- Fixed input control to avoid unnecessary updates, better handle incomplete calculations and unit conversions, and properly handle decimal values and constraints when leaving the field with the same value.
+
 ### New Features
 - Added `children` support to `RepeaterControl` component to allow developers to add custom content to the repeater control.
 - Blockera interface uses current user WP color for interface fore more unified design in block editor.
