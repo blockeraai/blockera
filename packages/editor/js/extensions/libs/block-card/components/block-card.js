@@ -11,7 +11,7 @@ import {
 	__experimentalBlockVariationTransforms as BlockVariationTransforms,
 } from '@wordpress/block-editor';
 import { Slot } from '@wordpress/components';
-import { useState, useRef, useEffect } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 
 /**
@@ -77,23 +77,6 @@ export function BlockCard({
 	const [name, setName] = useState(blockInformation.name || '');
 	const [title, setTitle] = useState(blockInformation.title);
 
-	const contentRef = useRef(null);
-	const [isHovered, setIsHovered] = useState(false);
-	const [height, setHeight] = useState('auto');
-	const maxHeight = '55px';
-
-	useEffect(() => {
-		if (currentInnerBlock !== null) {
-			if (isHovered) {
-				setHeight(`${contentRef.current.scrollHeight}px`);
-			} else {
-				setHeight(maxHeight);
-			}
-		} else {
-			setHeight('auto');
-		}
-	}, [isHovered, currentInnerBlock]);
-
 	useEffect(() => {
 		// Name changed from outside
 		if (blockInformation?.name && blockInformation.name.trim() !== name) {
@@ -142,21 +125,11 @@ export function BlockCard({
 		<>
 			{notice}
 			<div
-				ref={contentRef}
 				className={extensionClassNames('block-card', {
 					'master-block-card': true,
 					'inner-block-is-selected': currentInnerBlock !== null,
 				})}
 				data-test={'blockera-block-card'}
-				onMouseEnter={() => {
-					setIsHovered(true);
-				}}
-				onMouseLeave={() => {
-					setIsHovered(false);
-				}}
-				style={{
-					height,
-				}}
 			>
 				<div className={extensionInnerClassNames('block-card__inner')}>
 					{parentNavBlockClientId && ( // This is only used by the Navigation block for now. It's not ideal having Navigation block specific code here.

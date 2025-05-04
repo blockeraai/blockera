@@ -7,9 +7,10 @@
 	border: none;
 	border-bottom: 1px solid transparent;
 	margin-bottom: -1px;
-	min-height: 140px;
+    height: 100%;
+    max-height: 100%;
 	background-color: #ffffff;
-	transition: height 0.2s ease, box-shadow 0.075s ease;
+	transition: max-height 0.2s ease, box-shadow 0.075s ease;
 
 	.blockera-control-block-states-repeater {
 
@@ -176,10 +177,14 @@
 
 	&.inner-block-is-selected {
 		background-color: #f6f6f6;
-		height: 55px;
-		min-height: auto;
 		overflow: hidden;
-		transition: all 0.2s ease;
+		max-height: 55px;
+		transition: max-height 0.55s ease, box-shadow 0.075s ease;
+
+		&:hover {
+			max-height: 100vh;
+			transition: max-height 0.55s ease, box-shadow 0.075s ease;
+		}
 
 		& + .blockera-extension-block-card {
 			box-shadow: 0 -1px 0 #cbcbcb, 0 -11px 11px -6px rgba(0, 0, 0, 0.16);
