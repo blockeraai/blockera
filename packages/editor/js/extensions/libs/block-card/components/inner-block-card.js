@@ -186,9 +186,9 @@ export function InnerBlockCard({
 				currentState={currentState}
 				currentBreakpoint={currentBreakpoint}
 				currentInnerBlockState={currentInnerBlockState}
+				blockConfig={additional}
 				blockStatesProps={{
 					attributes: currentStateAttributes,
-					availableStates: additional?.availableBlockStates,
 					id: `block-states-${kebabCase(currentBlock)}`,
 				}}
 			/>
