@@ -6,6 +6,11 @@
 import { useSelect, dispatch } from '@wordpress/data';
 
 /**
+ * Blockera dependencies
+ */
+import { getSortedObject } from '@blockera/utils';
+
+/**
  * Internal dependencies
  */
 import type { InnerBlocks, InnerBlockType } from '../types';
@@ -66,7 +71,11 @@ export const useInnerBlocks = ({
 	const availableBlocks = [...elements, ...blocks];
 
 	// Get repeater value from internal Blockera store api.
-	const value = getBlockInners(block.clientId);
+	const value = getSortedObject(
+		getBlockInners(block.clientId),
+		'settings',
+		10
+	);
 
 	for (const item in value) {
 		value[item] = {

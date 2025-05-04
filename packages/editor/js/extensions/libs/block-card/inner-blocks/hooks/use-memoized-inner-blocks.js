@@ -16,6 +16,7 @@ import type {
 	InnerBlockModel,
 	MemoizedInnerBlocks,
 } from '../types';
+import { getSortedObject } from '@blockera/utils/js/object';
 
 export const useMemoizedInnerBlocks = ({
 	clientId,
@@ -65,7 +66,11 @@ export const useMemoizedInnerBlocks = ({
 		if (!isEquals(inners, mergedStackWithStoreInners)) {
 			setBlockClientInners({
 				clientId,
-				inners: mergedStackWithStoreInners,
+				inners: getSortedObject(
+					mergedStackWithStoreInners,
+					'settings',
+					10
+				),
 			});
 		}
 

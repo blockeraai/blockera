@@ -20,6 +20,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/link.cy.e2e.inner-blocks-compatibility.js
@@ -33,6 +34,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			force: true,
 			dataCompatibilityElement: 'link',
 			dataCompatibility: ['font-color', 'font-color-hover'],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -52,6 +54,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -70,6 +73,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -88,6 +92,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -106,6 +111,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -124,6 +130,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -142,6 +149,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -160,6 +168,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/button.cy.e2e.inner-blocks-compatibility.js
@@ -178,6 +187,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Functionality tests: ../packages/gallery/test/block.inner-blocks.e2e.cy.js
@@ -188,6 +198,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		icon: <Icon icon="image" library="wp" iconSize="20" />,
 		settings: {
 			force: true,
+			priority: 10,
 		},
 	},
 };

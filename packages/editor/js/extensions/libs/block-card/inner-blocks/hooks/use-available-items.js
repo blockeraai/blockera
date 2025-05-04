@@ -9,7 +9,7 @@ import { useMemo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isString, mergeObject } from '@blockera/utils';
+import { isString, mergeObject, getSortedObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -31,11 +31,12 @@ export const useAvailableItems = ({
 }: AvailableItems): { blocks: InnerBlocks, elements: InnerBlocks } => {
 	// External selectors. to access registered block types on WordPress blocks store api.
 	const { getBlockType } = select('core/blocks');
-	const { getAllowedBlocks } = select('core/block-editor');
+	const { getAllowedBlocks, getSelectedBlock } = select('core/block-editor');
 	const allowedBlockTypes = getAllowedBlocks(clientId);
+	const innerBlocks = getSelectedBlock().innerBlocks;
 
 	return useMemo(() => {
-		const forces: Array<InnerBlockModel> = [];
+		let forces: Array<InnerBlockModel> = [];
 		const blocks: Array<InnerBlockModel> = [];
 		const elements: Array<InnerBlockModel> = [];
 
@@ -86,6 +87,12 @@ export const useAvailableItems = ({
 		// Appending allowed block types of WordPress selected block ...
 		appendBlocks(allowedBlockTypes);
 
+		forces = getSortedObject(
+			modifyItemsPriority(innerBlocks, forces),
+			'settings',
+			10
+		);
+
 		// Appending forces into repeater state.
 		if (forces.length) {
 			// Previous inner blocks stack.
@@ -113,4 +120,41 @@ export const useAvailableItems = ({
 		return { elements, blocks };
 		// eslint-disable-next-line
 	}, [reservedInnerBlocks, memoizedInnerBlocks]);
+};
+
+export const modifyItemsPriority = (
+	appendedItems: Array<InnerBlockModel>,
+	forcesItems: Array<InnerBlockModel>
+): Array<InnerBlockModel> => {
+	const forcesItemsProcessor = (blockType: InnerBlockModel) => {
+		for (let index = 0; index < forcesItems.length; index++) {
+			const elementType = forcesItems[index];
+
+			if (elementType.name === blockType.name) {
+				const priority = elementType.settings?.priority || 10;
+
+				forcesItems[index] = {
+					...elementType,
+					settings: {
+						...elementType.settings,
+						priority: priority - 1 === -1 ? 0 : priority - 1,
+					},
+				};
+			}
+		}
+	};
+	for (const blockType of appendedItems) {
+		forcesItemsProcessor(blockType);
+
+		for (const innerBlockType of blockType.innerBlocks) {
+			if ('core/buttons' === innerBlockType.name) {
+				for (const buttonInnerBlockType of innerBlockType.innerBlocks) {
+					forcesItemsProcessor(buttonInnerBlockType);
+				}
+			}
+			forcesItemsProcessor(innerBlockType);
+		}
+	}
+
+	return forcesItems;
 };

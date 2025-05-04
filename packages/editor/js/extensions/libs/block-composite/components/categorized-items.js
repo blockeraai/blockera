@@ -11,6 +11,7 @@ import type { MixedElement } from 'react';
  */
 import { Flex } from '@blockera/controls';
 import { classNames } from '@blockera/classnames';
+import { getSortedObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -60,11 +61,15 @@ export const CategorizedItems = ({
 
 			setBlockClientInners({
 				clientId,
-				inners: {
-					...inners,
-					// $FlowFixMe
-					[id]: item,
-				},
+				inners: getSortedObject(
+					{
+						...inners,
+						// $FlowFixMe
+						[id]: item,
+					},
+					'settings',
+					10
+				),
 			});
 
 			setCurrentBlock(id);

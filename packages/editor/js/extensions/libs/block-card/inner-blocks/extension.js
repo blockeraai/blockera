@@ -10,8 +10,8 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { mergeObject } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
+import { mergeObject, getSortedObject } from '@blockera/utils';
 import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
 
 /**
@@ -55,7 +55,11 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 
 							setBlockClientInners({
 								clientId: block?.clientId,
-								inners: newValue,
+								inners: getSortedObject(
+									newValue,
+									'settings',
+									10
+								),
 							});
 
 							return newValue;

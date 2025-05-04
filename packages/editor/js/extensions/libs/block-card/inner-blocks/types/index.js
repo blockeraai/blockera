@@ -30,6 +30,7 @@ export type InnerBlockModel = {
 	attributes: Object,
 	settings: {
 		force?: boolean,
+		priority?: number,
 	},
 	...Object,
 };
