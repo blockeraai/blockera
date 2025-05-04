@@ -9,7 +9,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
+import { Flex, Grid } from '@blockera/controls';
 import { classNames } from '@blockera/classnames';
 
 /**
@@ -20,6 +20,7 @@ import type { InnerBlockModel } from '../../block-card/inner-blocks/types';
 import type { TStates, StateTypes } from '../../block-card/block-states/types';
 
 export const CategorizedItems = ({
+	itemType = 'state',
 	items,
 	title,
 	states,
@@ -103,10 +104,9 @@ export const CategorizedItems = ({
 				{title}
 			</h2>
 
-			<Flex
-				gap={'5'}
-				flexWrap={'wrap'}
-				justifyContent={'flex-start'}
+			<Grid
+				gridTemplateColumns={'repeat(2, 1fr)'}
+				gap={'5px'}
 				className={`blockera-features-types blockera-feature-${category}-wrapper`}
 			>
 				{items.map(
@@ -183,17 +183,24 @@ export const CategorizedItems = ({
 								aria-label={id}
 								onClick={() => onClick(item, id)}
 								data-test={'blockera-feature-type'}
-								className={classNames('blockera-feature-type', {
-									'is-item': true,
-								})}
+								className={classNames(
+									'blockera-feature-type',
+									'item-type-' + itemType,
+									{
+										'is-item': true,
+									}
+								)}
 							>
-								<div
-									className={classNames(
-										'blockera-feature-icon'
-									)}
-								>
-									{icon}
-								</div>
+								{icon && (
+									<div
+										className={classNames(
+											'blockera-feature-icon'
+										)}
+									>
+										{icon}
+									</div>
+								)}
+
 								<div
 									className={classNames(
 										'blockera-feature-label'
@@ -205,7 +212,7 @@ export const CategorizedItems = ({
 						);
 					}
 				)}
-			</Flex>
+			</Grid>
 		</Flex>
 	);
 };

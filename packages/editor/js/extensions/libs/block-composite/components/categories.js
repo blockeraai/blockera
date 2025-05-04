@@ -64,7 +64,7 @@ export const Categories = ({
 	};
 
 	return (
-		<>
+		<Flex direction={'column'} gap={'15px'}>
 			<ControlContextProvider
 				value={{
 					name: 'search-block-' + clientId,
@@ -185,6 +185,7 @@ export const Categories = ({
 			{elements?.length > 0 && (
 				<CategorizedItems
 					{...categorizedItemsProps}
+					itemType={'element'}
 					items={elements}
 					category={'elements'}
 					title={
@@ -211,6 +212,7 @@ export const Categories = ({
 				({ slug, title }, index) => (
 					<CategorizedItems
 						{...categorizedItemsProps}
+						itemType={'inner-block'}
 						title={title}
 						limited={true}
 						items={blocks}
@@ -246,6 +248,6 @@ export const Categories = ({
 						}
 					/>
 				)}
-		</>
+		</Flex>
 	);
 };
