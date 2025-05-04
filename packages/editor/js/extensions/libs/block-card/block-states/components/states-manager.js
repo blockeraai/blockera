@@ -48,8 +48,8 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 				storeName={'blockera/controls/repeater'}
 			>
 				<div
+					className={'blockera-block-state-container'}
 					data-test={'blockera-block-state-container'}
-					// className={getClassNames('state-container')}
 					aria-label={__(
 						'Blockera Block State Container',
 						'blockera'
@@ -86,7 +86,6 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 						className={controlInnerClassNames(
 							'block-states-repeater'
 						)}
-						itemColumns={2}
 						actionButtonClone={false}
 						actionButtonVisibility={false}
 						popoverTitleButtonsRight={PopoverTitleButtons}

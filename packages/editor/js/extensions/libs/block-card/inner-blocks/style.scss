@@ -1,33 +1,57 @@
-.blockera-component-button.blockera-control-inner-block__button {
-	--blockera-controls-primary-color: #cc0000;
-	transition: var(--blockera-controls-transition);
-	padding: 2px 8px !important;
+.blockera-control.blockera-control-inner-blocks-repeater {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+	margin-bottom: 6px;
+	--repeater-gap: 6px;
+	--repeater-item-height: 26px;
 
-	&:hover {
-		color: var(--blockera-controls-primary-color) !important;
-		--blockera-controls-border-color: var(--blockera-controls-primary-color) !important;
+	.blockera-control-repeater-item {
+		width: max-content;
+		--icon-size: 16px;
+
+		.blockera-control-group-header {
+			padding: 0 6px 0 2px;
+
+			.blockera-control-repeater-group-header {
+				gap: 1px;
+			}
+		}
+
+		.blockera-control-header-icon {
+
+			svg {
+				max-height: var(--icon-size);
+				max-width: var(--icon-size);
+				min-height: var(--icon-size);
+				min-width: var(--icon-size);
+			}
+		}
 	}
 
-	.blockera-control-inner-block__button__edit_icon {
-		margin-left: auto;
-	}
-}
 
-.blockera-inner-block-item {
-
-	.blockera-control-header-values {
-		font-size: 11px;
-		color: var(--blockera-controls-placeholder-color);
-		letter-spacing: -0.2px;
+	& > .blockera-control-repeater-item {
+		--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
 	}
 
-	.blockera-control-header-icon {
+	.blockera-control-group.mode-popover.is-selected-item {
+		background-color: var(--blockera-controls-primary-color);
+		border-color: var(--blockera-controls-primary-color);
+		color: #ffffff;
 
-		svg {
-			max-height: 18px;
-			max-width: 18px;
-			min-height: 18px;
-			min-width: 18px;
+		.blockera-control-header-label {
+			color: #ffffff;
+		}
+	}
+
+	.blockera-control-group.mode-popover:hover:not(.is-selected-item) {
+		background-color: #ffffff;
+		border-color: var(--blockera-controls-primary-color);
+		color: var(--blockera-controls-primary-color);
+
+		.blockera-control-header-label {
+			color: var(--blockera-controls-primary-color);
 		}
 	}
 }

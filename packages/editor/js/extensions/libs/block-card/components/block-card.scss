@@ -2,7 +2,7 @@
 	display: flex;
 	position: relative;
 	flex-direction: column;
-	gap: 10px;
+	gap: 20px;
 	padding: 16px;
 	border: none;
 	border-bottom: 1px solid transparent;
@@ -12,14 +12,12 @@
 	transition: height 0.2s ease, box-shadow 0.075s ease;
 
 	.blockera-control-block-states-repeater {
-    	padding: 0 2px;
-	    width: 100%;
 
 		.blockera-control-repeater-items-container {
     		padding-bottom: 5px;
 
 			.blockera-control-repeater-item:not(:first-child) {
-				--blockera-controls-primary-color: #d47c14;
+				--blockera-controls-primary-color: var(--blockera-controls-states-color);
 			}
 		}
 	}
@@ -63,7 +61,7 @@
 			display: flex;
 			align-items: center;
 			min-height: 24px;
-			gap: 5px;
+			gap: 2px;
 			padding-right: 45px;
 			flex-wrap: wrap;
 
@@ -94,10 +92,9 @@
 				span:hover,
 				span:focus,
 				&.is-edited span {
-					background: #f3f8fb !important;
-					box-shadow: 0 0 0 1px #c7e0ee !important;
-					color: #147eb8 !important;
-					--blockera-controls-primary-color: #147eb8;
+					background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%) !important;
+					box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%) !important;
+					color: var(--blockera-controls-primary-color) !important;
 				}
 
 				span:focus:focus {
@@ -121,6 +118,7 @@
 				color: #1e1e1e;
 				fill: currentColor;
 				opacity: 0.3;
+				margin-right: 1px;
 			}
 
 			.blockera-extension-block-card__title__block.title-is-clickable {
@@ -140,11 +138,11 @@
 			}
 
 			.blockera-extension-block-card__title__item.item-state:not(.item-state-normal) {
-				--blockera-controls-primary-color: #d47c14;
-			}
-
-			.blockera-extension-block-card__title__item.inner-block {
-				--blockera-controls-primary-color: #cc0000;
+				--blockera-controls-primary-color: var(--blockera-controls-states-color);
+				background: #ffffff;
+				color: var(--blockera-controls-states-color);
+				border: 1px solid var(--blockera-controls-primary-color);
+				border-color: var(--blockera-controls-primary-color);
 			}
 
 			.blockera-extension-block-card__close {
@@ -241,7 +239,7 @@
 
 	.blockera-extension-block-card__title__input {
 		margin-left: -3px;
-		margin-right: -3px;
+		margin-right: -1px;
 	}
 }
 
@@ -278,5 +276,4 @@
 		display: -webkit-box;
 		overflow: hidden;
 	}
-
 }
