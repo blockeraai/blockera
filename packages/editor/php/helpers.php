@@ -374,7 +374,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 				}
 
 				// Rewrite block type selectors because we provide suitable selectors array of original array based on inner block state.
-				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+				$cloned_block_type->selectors = $selector_id && isset($selectors[ $selector_id ]) ? $selectors[ $selector_id ] : $selectors;
 
 			} elseif (isset($args['pseudo-class']) && ! blockera_is_normal_on_base_breakpoint($args['pseudo-class'], $args['breakpoint'])) {
 
