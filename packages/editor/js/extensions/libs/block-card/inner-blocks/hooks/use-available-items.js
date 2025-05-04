@@ -87,11 +87,7 @@ export const useAvailableItems = ({
 		// Appending allowed block types of WordPress selected block ...
 		appendBlocks(allowedBlockTypes);
 
-		forces = getSortedObject(
-			modifyItemsPriority(innerBlocks, forces),
-			'settings',
-			10
-		);
+		forces = modifyItemsPriority(innerBlocks, forces);
 
 		// Appending forces into repeater state.
 		if (forces.length) {
@@ -100,19 +96,23 @@ export const useAvailableItems = ({
 
 			setBlockClientInners({
 				clientId,
-				inners: mergeObject(
-					forces.reduce(
-						(accumulator, innerBlock) => ({
-							...accumulator,
-							[innerBlock?.name]: {
-								...innerBlock,
-								// Item force is not deletable!
-								deletable: false,
-							},
-						}),
-						{}
+				inners: getSortedObject(
+					mergeObject(
+						forces.reduce(
+							(accumulator, innerBlock) => ({
+								...accumulator,
+								[innerBlock?.name]: {
+									...innerBlock,
+									// Item force is not deletable!
+									deletable: false,
+								},
+							}),
+							{}
+						),
+						inners
 					),
-					inners
+					'settings',
+					10
 				),
 			});
 		}
