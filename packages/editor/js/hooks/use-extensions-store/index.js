@@ -12,7 +12,7 @@ import { getBaseBreakpoint } from '../../canvas-editor';
 import type { ExtensionsStoreType } from './ExtensionsStoreType';
 import { isInnerBlock } from '../../extensions/components/utils';
 import { STORE_NAME } from '../../extensions/libs/base/store/constants';
-import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
+import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
 /**
  * Get extensions config order by block name and current block type.

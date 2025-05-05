@@ -14,7 +14,7 @@ import {
 	getBreakpointLongDescription,
 	getBreakpointShortDescription,
 } from '../helpers';
-import { default as defaultBreakpoints } from '../../../../extensions/libs/block-states/default-breakpoints';
+import { default as defaultBreakpoints } from '../../../../extensions/libs/block-card/block-states/default-breakpoints';
 
 describe('Helper functions test', () => {
 	describe('isBaseBreakpoint function', () => {

@@ -7,7 +7,6 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Site Title Block', () => {
@@ -24,22 +23,10 @@ describe('Site Title Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.getByDataTest('elements/link').should('exist');
 
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		// no other item
+		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit block

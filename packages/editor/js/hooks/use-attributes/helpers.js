@@ -20,10 +20,10 @@ import type {
 	BreakpointTypes,
 	TStates,
 	TBreakpoint,
-} from '../../extensions/libs/block-states/types';
+} from '../../extensions/libs/block-card/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components';
-import { blockStatesValueCleanup } from '../../extensions/libs/block-states/helpers';
+import { blockStatesValueCleanup } from '../../extensions/libs/block-card/block-states/helpers';
 
 // Check required to update.
 export const isChanged = (
@@ -196,7 +196,7 @@ export const memoizedBlockStates: (
 		}
 	): Object => {
 		const {
-			currentState: recievedState,
+			currentState: receivedState,
 			insideInnerBlock,
 			currentBlock,
 		} = args;
@@ -214,13 +214,20 @@ export const memoizedBlockStates: (
 		);
 
 		const breakpoints =
-			blockStates[recievedState || currentState]?.breakpoints;
+			blockStates[receivedState || currentState]?.breakpoints;
+
+		const moreProps =
+			(receivedState || currentState) === 'custom-class'
+				? {
+						'css-class': blockStates['custom-class']['css-class'],
+				  }
+				: {};
 
 		if (isInnerBlock(currentBlock) && !insideInnerBlock) {
 			return mergeObject(
 				currentBlockAttributes?.blockeraBlockStates || {},
 				{
-					[recievedState || currentState]: {
+					[receivedState || currentState]: {
 						breakpoints: {
 							[currentBreakpoint]: memoizedRootBreakpoints(
 								breakpoints[currentBreakpoint],
@@ -232,6 +239,7 @@ export const memoizedBlockStates: (
 						// We need to address the isVisible property in the block-states repeater item,
 						// as there is currently no UI for this property in the block-states repeater item.
 						isVisible: true,
+						...moreProps,
 					},
 				},
 				{
@@ -246,7 +254,7 @@ export const memoizedBlockStates: (
 			currentBlockAttributes?.blockeraBlockStates || {},
 			{
 				value: {
-					[recievedState || currentState]: {
+					[receivedState || currentState]: {
 						breakpoints: {
 							[currentBreakpoint]: memoizedRootBreakpoints(
 								breakpoints[currentBreakpoint],
@@ -258,6 +266,7 @@ export const memoizedBlockStates: (
 						// We need to address the isVisible property in the block-states repeater item,
 						// as there is currently no UI for this property in the block-states repeater item.
 						isVisible: true,
+						...moreProps,
 					},
 				},
 			},

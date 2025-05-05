@@ -1,10 +1,11 @@
 // @flow
 
 import type {
+	TStates,
 	StateTypes,
 	TBreakpoint,
 	BreakpointTypes,
-} from '../extensions/libs/block-states/types';
+} from '../extensions/libs/block-card/block-states/types';
 import { getBaseBreakpoint } from '../canvas-editor';
 
 /**
@@ -40,6 +41,33 @@ export const getBreakpoint = (
 };
 
 /**
+ * Get available breakpoints.
+ *
+ * @param {{breakpoints: Object}} state the breakpoints.
+ * @return {Array<TBreakpoint>} the available breakpoints.
+ */
+export const getAvailableBreakpoints = ({
+	breakpoints,
+}: {
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
+}): Array<TBreakpoint> => {
+	const availableBreakpoints = [];
+
+	for (const key in breakpoints) {
+		// $FlowFixMe
+		const breakpoint = breakpoints[key];
+
+		if (breakpoint?.native) {
+			continue;
+		}
+
+		availableBreakpoints.push(breakpoint?.type);
+	}
+
+	return availableBreakpoints;
+};
+
+/**
  * Get states.
  *
  * @param {{states: Object}} state the states.
@@ -48,8 +76,8 @@ export const getBreakpoint = (
 export const getStates = ({
 	blockStates,
 }: {
-	blockStates: { [key: StateTypes]: Object },
-}): { [key: StateTypes]: Object } => {
+	blockStates: { [key: TStates]: StateTypes },
+}): { [key: TStates]: StateTypes } => {
 	return blockStates;
 };
 
@@ -58,17 +86,44 @@ export const getStates = ({
  *
  * @param {{blockStates: Object}} state the blockStates.
  * @param {StateTypes} name the state name.
- * @return {Object} the state stored in redux.
+ * @return {StateTypes} the state stored in redux.
  */
 export const getState = (
 	{
 		blockStates,
 	}: {
-		blockStates: { [key: StateTypes]: Object },
+		blockStates: { [key: TStates]: StateTypes },
 	},
-	name: StateTypes
-): Object => {
+	name: TStates
+): StateTypes => {
 	return blockStates[name];
+};
+
+/**
+ * Get available states.
+ *
+ * @param {{blockStates: Object}} state the block states.
+ *
+ * @return {Array<TStates>} the available states.
+ */
+export const getAvailableStates = ({
+	blockStates,
+}: {
+	blockStates: { [key: TStates]: StateTypes },
+}): Array<TStates> => {
+	const availableStates = [];
+
+	for (const key in blockStates) {
+		const state = blockStates[key];
+
+		if (state?.native) {
+			continue;
+		}
+
+		availableStates.push(state?.type);
+	}
+
+	return availableStates;
 };
 
 /**

@@ -17,18 +17,26 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { type BlockStateType } from '../../../libs/block-states/types';
-import type { InnerBlockType } from '../../inner-blocks/types';
+import type {
+	TStates,
+	StateTypes,
+	BlockStateType,
+} from '../block-states/types';
+import type { InnerBlockType } from '../inner-blocks/types';
 
 export function Breadcrumb({
 	children,
 	clientId,
 	blockName,
 	activeBlock,
+	availableStates,
+	blockeraUnsavedData,
 }: {
 	clientId: string,
 	blockName: string,
 	children?: MixedElement,
+	blockeraUnsavedData: Object,
+	availableStates: { [key: TStates]: StateTypes },
 	activeBlock?: 'master' | InnerBlockType,
 }): MixedElement {
 	const { getActiveInnerState, getActiveMasterState } = select(
@@ -109,8 +117,20 @@ export function Breadcrumb({
 				}
 				definition={
 					activeBlock
-						? statesDefinition[activeInnerBlockState]
-						: statesDefinition[masterActiveState]
+						? statesDefinition[activeInnerBlockState] ||
+						  (availableStates &&
+						  availableStates.hasOwnProperty(activeInnerBlockState)
+								? availableStates[activeInnerBlockState]
+								: blockeraUnsavedData?.states[
+										activeInnerBlockState
+								  ])
+						: statesDefinition[masterActiveState] ||
+						  (availableStates &&
+						  availableStates.hasOwnProperty(masterActiveState)
+								? availableStates[masterActiveState]
+								: blockeraUnsavedData?.states[
+										masterActiveState
+								  ])
 				}
 			/>
 

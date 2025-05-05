@@ -125,6 +125,7 @@ export function MarginRight({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -132,6 +133,7 @@ export function MarginRight({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -208,6 +210,7 @@ export function MarginRight({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Right Margin', 'blockera')}
 			/>
 		),
 		label: (
@@ -246,7 +249,14 @@ export function MarginRight({
 						/>
 
 						<ValueAddonPointer />
-
+					</div>
+				)}
+			</>
+		),
+		popover: (
+			<>
+				{marginDisable !== 'horizontal' && marginDisable !== 'all' && (
+					<>
 						{openPopover === sideId && (
 							<SidePopover
 								hasValue={value?.margin?.right}
@@ -261,29 +271,26 @@ export function MarginRight({
 								}}
 								defaultValue={defaultValue}
 								id={getId(id, 'margin.right')}
-								offset={255}
 								icon={
 									<Icon icon="margin-right" iconSize="18" />
 								}
+								title={__('Right Margin Space', 'blockera')}
 								onClose={() => {
 									setFocusSide('');
 									setOpenPopover('');
 								}}
-								title={__('Right Margin Space', 'blockera')}
 								inputLabel={__('Right Margin', 'blockera')}
 								inputLabelPopoverTitle={__(
 									'Right Margin Space',
 									'blockera'
 								)}
 								inputLabelDescription={
-									<>
-										<p>
-											{__(
-												'It enables you to set a margin space that applies only to the right edge of the block.',
-												'blockera'
-											)}
-										</p>
-									</>
+									<p>
+										{__(
+											'It enables you to set a margin space that applies only to the right edge of the block.',
+											'blockera'
+										)}
+									</p>
 								}
 								isOpen={true}
 								unit={sideSpace.unit}
@@ -298,7 +305,7 @@ export function MarginRight({
 								}}
 							/>
 						)}
-					</div>
+					</>
 				)}
 			</>
 		),

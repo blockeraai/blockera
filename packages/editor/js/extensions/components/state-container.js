@@ -5,27 +5,35 @@
 import type { Element } from 'react';
 
 /**
- * Blockera dependencies
- */
-import { adjustHexColor } from '@blockera/utils';
-
-/**
  * Internal dependencies
  */
 import { isInnerBlock, isNormalState } from './utils';
-import { settings } from '../libs/block-states/config';
-import { useExtensionsStore } from '../../hooks/use-extensions-store';
+import { useEditorStore, useExtensionsStore } from '../../hooks';
 
-export default function StateContainer({ children }: Object): Element<any> {
+export default function StateContainer({
+	children,
+	availableStates,
+	blockeraUnsavedData,
+}: Object): Element<any> {
 	const { currentBlock, currentState, currentInnerBlockState } =
 		useExtensionsStore();
+	const { getState } = useEditorStore();
 
-	let activeColor = settings[currentState].color;
+	const selectedState = isInnerBlock(currentBlock)
+		? currentInnerBlockState
+		: currentState;
+
+	const state = getState(selectedState);
+	const fallbackState =
+		availableStates && availableStates.hasOwnProperty(selectedState)
+			? availableStates[selectedState]
+			: blockeraUnsavedData?.states[selectedState];
+	let activeColor = state
+		? state?.settings?.color
+		: fallbackState?.settings?.color;
 
 	if (isInnerBlock(currentBlock) && isNormalState(currentInnerBlockState)) {
 		activeColor = '#cc0000';
-	} else if (isInnerBlock(currentBlock)) {
-		activeColor = settings[currentInnerBlockState].color;
 	}
 
 	return (
@@ -35,10 +43,6 @@ export default function StateContainer({ children }: Object): Element<any> {
 				color: 'inherit',
 				'--blockera-controls-primary-color': activeColor,
 				'--blockera-tab-panel-active-color': activeColor,
-				'--blockera-controls-primary-color-darker-20': adjustHexColor(
-					activeColor,
-					-20
-				),
 			}}
 		>
 			{children}

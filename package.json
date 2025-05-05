@@ -47,7 +47,8 @@
 		"fastest-json-copy": "^1.0.1",
 		"fuse.js": "^6.6.2",
 		"react-error-boundary": "^5.0.0",
-		"rememo": "^4.0.2"
+		"rememo": "^4.0.2",
+		"use-draggable": "^2.0.0"
 	},
 	"devDependencies": {
 		"@10up/cypress-wp-utils": "^0.4.0",

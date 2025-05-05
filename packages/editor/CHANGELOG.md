@@ -1,5 +1,19 @@
 ## Unreleased
 
+### Improvements
+- Improved the block card design to make it more consistent and easier to use.
+- Improved block card inner blocks priority system for better user experience and performance.
+
+### New Features
+- Added BlockComposite module to simplify creation of composite blocks by providing a reusable framework and components for developers.
+- Block style variation redesigned and moved to block card (Block Card v3).
+- Added support for flexible CSS selectors in block and inner block states, providing more powerful styling capabilities.
+
+
+### Automated Tests
+- Added E2E tests to check block style variation functionality.
+
+
 ## 1.4.0 (2025-04-27)
 
 ### New Features

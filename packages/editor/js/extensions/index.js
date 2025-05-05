@@ -18,13 +18,16 @@ import {
 	store as editorStore,
 	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
-	unstableBootstrapServerSideBlockStatesDefinitions,
 } from '../';
 
 /**
  * Internal dependencies
  */
 import blockeraEditorPackageInfo from '../../../editor/package.json';
+import {
+	generalBlockStates,
+	unstableBootstrapServerSideBlockStatesDefinitions,
+} from './libs';
 
 // Exports
 export * from './api';
@@ -43,6 +46,8 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 	const packageName =
 		'blockeraEditor_' +
 		blockeraEditorPackageInfo.version.replace(/\./g, '_');
+
+	unstableBootstrapServerSideBlockStatesDefinitions(generalBlockStates);
 
 	window[packageName].coreData = {
 		select: select(store?.name),

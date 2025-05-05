@@ -11,6 +11,7 @@ import { useState } from '@wordpress/element';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { useDragValue } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
+
 /**
  * Internal dependencies
  */
@@ -124,6 +125,7 @@ export function MarginBottom({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -131,6 +133,7 @@ export function MarginBottom({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -207,45 +210,47 @@ export function MarginBottom({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Bottom Margin', 'blockera')}
 			/>
 		),
 		label: (
+			<div
+				className={controlInnerClassNames(
+					'label-side',
+					'side-vertical',
+					'side-margin-bottom',
+					labelClassName
+				)}
+				data-cy="box-spacing-margin-bottom"
+			>
+				<LabelControl
+					ariaLabel={__('Bottom Margin', 'blockera')}
+					label={
+						_isSetValueAddon
+							? fixLabelText(value.margin.bottom)
+							: fixLabelText(sideSpace)
+					}
+					onClick={() => {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
+					}}
+					{...{
+						attribute,
+						blockName,
+						resetToDefault,
+						mode: 'advanced',
+						singularId: 'margin.bottom',
+						value: value?.margin?.bottom,
+						defaultValue: defaultValue?.margin?.bottom,
+						path: getControlPath(attribute, 'margin.bottom'),
+					}}
+				/>
+
+				<ValueAddonPointer />
+			</div>
+		),
+		popover: (
 			<>
-				<div
-					className={controlInnerClassNames(
-						'label-side',
-						'side-vertical',
-						'side-margin-bottom',
-						labelClassName
-					)}
-					data-cy="box-spacing-margin-bottom"
-				>
-					<LabelControl
-						ariaLabel={__('Bottom Margin', 'blockera')}
-						label={
-							_isSetValueAddon
-								? fixLabelText(value.margin.bottom)
-								: fixLabelText(sideSpace)
-						}
-						onClick={() => {
-							setFocusSide(sideId);
-							setOpenPopover(sideId);
-						}}
-						{...{
-							attribute,
-							blockName,
-							resetToDefault,
-							mode: 'advanced',
-							singularId: 'margin.bottom',
-							value: value?.margin?.bottom,
-							defaultValue: defaultValue?.margin?.bottom,
-							path: getControlPath(attribute, 'margin.bottom'),
-						}}
-					/>
-
-					<ValueAddonPointer />
-				</div>
-
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.bottom}
@@ -261,25 +266,23 @@ export function MarginBottom({
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.bottom')}
 						icon={<Icon icon="margin-bottom" iconSize="18" />}
+						title={__('Bottom Margin Space', 'blockera')}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Bottom Margin Space', 'blockera')}
 						inputLabel={__('Bottom Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Bottom Margin Space',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a margin space that applies only to the bottom edge of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies only to the bottom edge of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

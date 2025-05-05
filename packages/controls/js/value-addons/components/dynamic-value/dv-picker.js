@@ -46,7 +46,7 @@ export default function ({
 					key={`type-${name}-${index}`}
 					title={item?.label}
 				>
-					<Grid gridTemplateColumns="120px 120px" gap="10px">
+					<Grid gridTemplateColumns="1fr 1fr" gap="10px">
 						{Object.values(item.items).map((_item) => {
 							const itemData = {
 								..._item,

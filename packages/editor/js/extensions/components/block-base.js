@@ -414,8 +414,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 									currentInnerBlockState,
 									handleOnChangeAttributes,
 								},
-								availableBlockStates:
-									additional.availableBlockStates,
+								additional,
 								currentStateAttributes: currentAttributes,
 								...props,
 							},

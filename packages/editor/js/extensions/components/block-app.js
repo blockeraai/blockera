@@ -17,7 +17,7 @@ import type { MixedElement, ComponentType } from 'react';
 /**
  * Blockera dependencies
  */
-import { setItem, getItem, updateItem } from '@blockera/storage';
+import { setItem, getItem, updateItem, freshItem } from '@blockera/storage';
 
 /**
  * Internal dependencies
@@ -31,7 +31,7 @@ import type {
 	BlockAppContextType,
 } from './types';
 
-const cacheKey = 'BLOCKERA_EDITOR_SETTINGS';
+const cacheKeyPrefix = 'BLOCKERA_EDITOR_SETTINGS';
 
 const defaultValue = {
 	blockSections: {
@@ -78,6 +78,11 @@ export const BlockAppContextProvider = ({
 		[]
 	); // Empty dependency array since we only need this once on mount
 
+	const cacheKey =
+		cacheKeyPrefix +
+		'_' +
+		window.blockeraTelemetryDebugData?.product_version.replace('.', '_');
+
 	useEffect(() => {
 		const isEditMode = selectedBlockClientId === props?.clientId;
 
@@ -96,6 +101,7 @@ export const BlockAppContextProvider = ({
 		};
 
 		if (!cacheData) {
+			freshItem(cacheKey, cacheKeyPrefix);
 			setItem(cacheKey, initialState);
 			setBlockAppSettings(initialState);
 
@@ -105,6 +111,7 @@ export const BlockAppContextProvider = ({
 		setItem(cacheKey, cacheData);
 		setBlockAppSettings(cacheData);
 	}, [
+		cacheKey,
 		currentBlock,
 		props?.clientId,
 		calculatedSections,
@@ -137,6 +144,10 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 	const section = (sections[currentBlock] || sections.master)[sectionId];
 	let { initialOpen = true } = section || {};
 	const { setBlockAppSettings } = useDispatch('blockera/editor');
+	const cacheKey =
+		cacheKeyPrefix +
+		'_' +
+		window.blockeraTelemetryDebugData?.product_version.replace('.', '_');
 
 	if (collapseAll) {
 		initialOpen = false;
@@ -206,12 +217,13 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 			setBlockAppSettings(next);
 		},
 		[
-			currentBlock,
-			sectionId,
+			cacheKey,
 			settings,
-			blockSections.focusMode,
+			sectionId,
+			currentBlock,
 			focusedSection,
 			setBlockAppSettings,
+			blockSections.focusMode,
 		]
 	);
 
@@ -228,6 +240,10 @@ export const useBlockSections = (): BlockSections => {
 	const currentBlock = useSelect((select) =>
 		select('blockera/extensions').getExtensionCurrentBlock()
 	);
+	const cacheKey =
+		cacheKeyPrefix +
+		'_' +
+		window.blockeraTelemetryDebugData?.product_version.replace('.', '_');
 
 	const updateBlockSections = useCallback(
 		(newBlockSections: Object) => {
@@ -269,7 +285,14 @@ export const useBlockSections = (): BlockSections => {
 			updateItem(cacheKey, next);
 			setBlockAppSettings(next);
 		},
-		[settings, sections, focusedSection, setBlockAppSettings, currentBlock]
+		[
+			cacheKey,
+			settings,
+			sections,
+			currentBlock,
+			focusedSection,
+			setBlockAppSettings,
+		]
 	);
 
 	return {

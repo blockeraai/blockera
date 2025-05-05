@@ -345,9 +345,11 @@ export const registerCommands = () => {
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
-				cy.getByDataTest('popover-body').within(() => {
-					cy.getByAriaLabel(label).click({ force: true });
-				});
+				cy.getByDataTest('popover-body')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel(label).click({ force: true });
+					});
 			} else
 				cy.get('h2')
 					.contains(content)
@@ -569,9 +571,11 @@ export const registerCommands = () => {
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
-				cy.getByDataTest('popover-body').within(() => {
-					cy.getByAriaLabel(label).click({ force: true });
-				});
+				cy.getByDataTest('popover-body')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel(label).click({ force: true });
+					});
 			} else
 				cy.get('h2')
 					.contains(content)
@@ -728,6 +732,10 @@ export const registerCommands = () => {
 		cy.getParentContainer(parentContainer).within(() => {
 			cy.getByDataCy('group-control-header').contains(contains).click();
 		});
+	});
+
+	Cypress.Commands.add('closeSpotlightPopover', () => {
+		cy.get('.blockera-spotlighter-svg').click({ force: true });
 	});
 
 	/**

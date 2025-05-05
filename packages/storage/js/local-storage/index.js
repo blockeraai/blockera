@@ -44,3 +44,23 @@ export const deleteItem = (key: string): void => {
 		console.error('Failed to delete from localStorage', error);
 	}
 };
+
+export const freshItem = (cacheKey: string, startsWith: string): void => {
+	// Get all localStorage keys.
+	const allKeys = Object.keys(localStorage);
+
+	// Find and remove any previous version cache keys.
+	allKeys.forEach((key) => {
+		if (key.startsWith(startsWith)) {
+			// Don't remove current version's cache.
+			if (key !== cacheKey) {
+				try {
+					localStorage.removeItem(key);
+				} catch (error) {
+					/* @debug-ignore */
+					console.error('Failed to delete from localStorage', error);
+				}
+			}
+		}
+	});
+};

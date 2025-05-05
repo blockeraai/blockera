@@ -9,9 +9,9 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import { isInnerBlock } from '../extensions/components/utils';
-import type { TStates } from '../extensions/libs/block-states/types';
+import type { TStates } from '../extensions/libs/block-card/block-states/types';
 import { isEmpty, isUndefined, union, isObject } from '@blockera/utils';
-import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
+import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 
 /**
  * Internal dependencies

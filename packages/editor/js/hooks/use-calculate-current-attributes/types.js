@@ -6,7 +6,7 @@
 import type {
 	InnerBlocks,
 	InnerBlockModel,
-} from '../../extensions/libs/inner-blocks/types';
+} from '../../extensions/libs/block-card/inner-blocks/types';
 
 export type CalculateCurrentAttributesProps = {
 	attributes: Object,

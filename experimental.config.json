@@ -9,6 +9,9 @@
 		},
 		"canvasEditor": {
 			"settings": false
+		},
+		"styleEngine": {
+			"enabledCustomClassBlockState": "false"
 		}
 	},
 	"data": {

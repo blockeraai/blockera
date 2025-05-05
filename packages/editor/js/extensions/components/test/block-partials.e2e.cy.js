@@ -60,7 +60,13 @@ describe('Block Partials Testing ...', () => {
 
 		cy.getBlock('core/social-links').click();
 
-		cy.getByAriaLabel('Pill Shape').contains('Pill Shape');
+		cy.getByDataTest('style-variations-button').click();
+
+		cy.get('.blockera-component-popover.variations-picker-popover')
+			.last()
+			.within(() => {
+				cy.getByAriaLabel('Pill Shape').contains('Pill Shape');
+			});
 
 		cy.getByAriaLabel('Block Settings').click();
 		cy.get('.components-popover')
