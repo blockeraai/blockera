@@ -18,11 +18,16 @@ export default function StateContainer({
 	const { currentBlock, currentState, currentInnerBlockState } =
 		useExtensionsStore();
 	const { getState } = useEditorStore();
-	const state = getState(currentState);
+
+	const selectedState = isInnerBlock(currentBlock)
+		? currentInnerBlockState
+		: currentState;
+
+	const state = getState(selectedState);
 	const fallbackState =
-		availableStates && availableStates.hasOwnProperty(currentState)
-			? availableStates[currentState]
-			: blockeraUnsavedData?.states[currentState];
+		availableStates && availableStates.hasOwnProperty(selectedState)
+			? availableStates[selectedState]
+			: blockeraUnsavedData?.states[selectedState];
 	let activeColor = state
 		? state?.settings?.color
 		: fallbackState?.settings?.color;
