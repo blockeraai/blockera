@@ -401,13 +401,23 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
+	 * Check if the style definition is external.
+	 *
+	 * @return bool true if the style definition is external, false otherwise.
+	 */
+	protected function isExternal(): bool {
+
+		return str_contains(get_class($this), 'Blockera\SiteBuilder');
+	}
+
+	/**
 	 * Get the abstraction id.
 	 *
 	 * @return string the abstract instance id.
 	 */
 	public function getId(): string {
 
-		return str_replace( [ __NAMESPACE__, '\\' ], '', get_class( $this ) );
+		return str_replace( [ $this->isExternal() ? str_replace('\\Editor\\', '\\SiteBuilder\\', __NAMESPACE__) : __NAMESPACE__, '\\' ], '', get_class( $this ) );
 	}
 
 	/**

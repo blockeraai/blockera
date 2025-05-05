@@ -17,22 +17,11 @@ final class StyleEngine {
 	 * Store pseudo-classes list are used to define a special state of an element.
 	 * For example, it can be used to:
 	 * - Style an element when a user mouses over it
-	 * - Style visited and unvisited links differently
-	 * - Style an element when it gets focus
 	 *
 	 * @var array $pseudo_classes
 	 */
 	protected array $pseudo_classes = [
 		'hover',
-		'after',
-		'focus',
-		'normal',
-		'active',
-		'before',
-		'visited',
-		'custom-class',
-		'parent-class',
-		'parent-hover',
 	];
 
 	/**
