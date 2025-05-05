@@ -82,7 +82,10 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 						}}
 						defaultValue={states}
 						popoverTitle={__('Block State', 'blockera')}
-						popoverOffset={164}
+						offset={8}
+						popoverProps={{
+							placement: 'bottom-end',
+						}}
 						className={controlInnerClassNames(
 							'block-states-repeater'
 						)}

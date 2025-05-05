@@ -21,11 +21,22 @@
 
 		.blockera-control-header-icon {
 
-			svg {
+			.block-editor-block-icon {
+				display: inline-block;
+			}
+
+			.dashicons,
+			svg,
+			.block-editor-block-icon,
+			.block-editor-block-icon svg {
 				max-height: var(--icon-size);
 				max-width: var(--icon-size);
 				min-height: var(--icon-size);
 				min-width: var(--icon-size);
+			}
+
+			.dashicons {
+				font-size: 16px !important;
 			}
 		}
 	}

@@ -1,12 +1,15 @@
-.blockera-control-search.blockera-features-inserter-search {
-	margin-bottom: 15px !important;
+.components-popover.blockera-component-popover.blockera-states-picker-popover {
+	--popover-width: 250px;
+    --blockera-controls-primary-color: var(--blockera-controls-primary-color-bk);
+    --popover-border-color: #bdbdbd;
+    --popover-border-width: 1px;
+    --popover-height: auto;
 }
 
 .blockera-block-inserter {
-	margin-bottom: 10px;
 
 	.is-item {
-		border: 1px solid #d1d1d1;
+		border: 1px solid var(--blockera-controls-border-color);
 		border-radius: 2px;
 
 		&.blockera-custom-css-selector-wrapper {
@@ -37,32 +40,35 @@
 	}
 
 	.blockera-features-types {
-		margin-bottom: 10px;
 
 		.blockera-feature-type {
-			width: 33.33%;
-			text-align: center;
+			--item-height: 26px;
+			--icon-size: 16px;
+			width: 100%;
+			justify-content: center;
 			align-items: center;
-			background: #00000000;
 			border-radius: 2px;
 			color: #1e1e1e;
 			cursor: pointer;
 			display: flex;
 			flex-direction: row;
 			font-size: 13px;
-			height: auto;
-			justify-content: center;
+			height: var(--item-height);
 			position: relative;
 			transition: all 0.05s ease-in-out;
 			word-break: break-word;
 
+			svg {
+				fill: currentColor;
+			}
+
 			&:hover {
-				color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
-				fill: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+				color: var(--blockera-controls-primary-color);
+				border-color: var(--blockera-controls-primary-color);
 			}
 
 			&:hover::after {
-				background: var(--wp-admin-theme-color);
+				background: var(--blockera-controls-border-color);
 				border-radius: 2px;
 				bottom: 0;
 				content: "";
@@ -75,24 +81,48 @@
 			}
 
 			.blockera-feature-icon {
-				margin-bottom: 8px;
-				border-right: solid 1px #d1d1d1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 
 				.block-editor-block-icon {
 					display: inline-block;
 				}
 
+				.dashicons,
 				svg,
+				.block-editor-block-icon,
 				.block-editor-block-icon svg {
-					max-height: 20px;
-					max-width: 20px;
-					min-height: 20px;
-					min-width: 20px;
+					max-height: var(--icon-size);
+					max-width: var(--icon-size);
+					min-height: var(--icon-size);
+					min-width: var(--icon-size);
+				}
+
+				.dashicons {
+					font-size: 16px !important;
 				}
 			}
 
 			.blockera-feature-label {
 				font-size: 12px;
+				letter-spacing: -0.2px;
+				max-width: 75px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+
+			&.item-type-state {
+				--blockera-controls-primary-color: var(--blockera-controls-states-color);
+			}
+
+			&.item-type-element,
+			&.item-type-inner-block {
+				--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
+				justify-content: flex-start;
+				gap: 3px;
+				padding: 0 0 0 4px;
 			}
 		}
 	}

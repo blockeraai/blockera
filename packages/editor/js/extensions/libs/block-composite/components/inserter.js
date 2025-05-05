@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
@@ -48,11 +47,11 @@ export const Inserter = ({
 
 			{isOpenPicker && (
 				<Popover
-					offset={35}
-					placement="left-start"
+					offset={8}
+					placement="bottom-end"
 					onClose={() => setOpenPicker(false)}
-					title={__('Select Item', 'blockera')}
-					className={classNames('blockera-inner-blocks-picker')}
+					title=""
+					className={classNames('blockera-states-picker-popover')}
 				>
 					<AvailableBlocks onClick={callback} />
 				</Popover>

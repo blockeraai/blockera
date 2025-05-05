@@ -28,6 +28,7 @@ export type TCategoriesProps = {
 };
 
 export type TCategorizedItemsProps = {
+	itemType?: string,
 	items: Array<any> | Object,
 	title: any,
 	clientId: string,
