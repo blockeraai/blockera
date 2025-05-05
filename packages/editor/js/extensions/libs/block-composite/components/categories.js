@@ -28,7 +28,7 @@ import {
 } from '../../block-card/inner-blocks/helpers';
 import { CategorizedItems } from './categorized-items';
 import type { TCategoriesProps } from '../types/categories';
-import { search, getNormalizedCssSelector } from '../search-items';
+import { search } from '../search-items'; // TODO: Import getNormalizedCssSelector helper from appropriate location to enable custom-class state rendering when search has no results!
 import { getTooltipStyle } from '../utils';
 
 // Define the order of categories
@@ -55,9 +55,9 @@ export const Categories = ({
 	setCurrentBlock,
 	setBlockClientInners,
 }: TCategoriesProps): MixedElement => {
-	const [customSelector, setCustomSelector] = useState(
-		_states['custom-class']
-	);
+	// const [customSelector, setCustomSelector] = useState(
+	// 	_states['custom-class']
+	// );
 	const [states, setStates] = useState(_states);
 	const [blocks, setBlocks] = useState(_blocks);
 	const [elements, setElements] = useState(_elements);
@@ -72,7 +72,7 @@ export const Categories = ({
 		getBlockType,
 		setBlockState,
 		getBlockInners,
-		customSelector,
+		// customSelector,
 		setCurrentBlock,
 		setBlockClientInners,
 	};
@@ -253,9 +253,10 @@ export const Categories = ({
 						const validStates = Object.values(_states || {}).filter(
 							(item) => item !== null && item !== undefined
 						);
-						const validCustomSelector = customSelector
-							? [customSelector]
-							: [];
+						// TODO: Implement custom-class state rendering when search has no results!
+						// const validCustomSelector = customSelector
+						// 	? [customSelector]
+						// 	: [];
 
 						try {
 							const filteredItems = search(
@@ -263,7 +264,8 @@ export const Categories = ({
 									...validElements,
 									...validBlocks,
 									...validStates,
-									...validCustomSelector,
+									// TODO: Implement custom-class state rendering when search has no results!
+									// ...validCustomSelector,
 								],
 								getCategories() || [],
 								getCollections() || [],
@@ -284,23 +286,25 @@ export const Categories = ({
 								}
 							});
 
-							if (
-								!newBlocks.length &&
-								!newElements.length &&
-								!newStates.length &&
-								_states['custom-class']
-							) {
-								setCustomSelector({
-									..._states['custom-class'],
-									'css-class':
-										getNormalizedCssSelector(newValue),
-								});
-							}
+							// TODO: Implement custom-class state rendering when search has no results!
+							// if (
+							// 	!newBlocks.length &&
+							// 	!newElements.length &&
+							// 	!newStates.length &&
+							// 	_states['custom-class']
+							// ) {
+							// 	setCustomSelector({
+							// 		..._states['custom-class'],
+							// 		'css-class':
+							// 			getNormalizedCssSelector(newValue),
+							// 	});
+							// }
 
 							setBlocks(newBlocks);
 							setStates(newStates);
 							setElements(newElements);
 						} catch (error) {
+							/* @debug-ignore */
 							console.error('Search error:', error);
 							// Fallback to empty results on error
 							setBlocks([]);
@@ -441,7 +445,8 @@ export const Categories = ({
 				)
 			)}
 
-			{!elements?.length &&
+			{/* TODO: Implement custom-class state rendering when search has no results! */}
+			{/* {!elements?.length &&
 				!blocks?.length &&
 				!Object.values(states)?.length && (
 					<CategorizedItems
@@ -466,7 +471,7 @@ export const Categories = ({
 							</>
 						}
 					/>
-				)}
+				)} */}
 		</Flex>
 	);
 };

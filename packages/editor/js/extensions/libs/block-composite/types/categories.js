@@ -36,7 +36,7 @@ export type TCategorizedItemsProps = {
 	limited?: boolean,
 	states: StatesObject,
 	savedStates: StatesObject,
-	customSelector: StateTypes,
+	customSelector?: StateTypes,
 	setBlockClientInners: (args: Object) => void,
 	setBlockState: (states: StatesObject) => void,
 	setCurrentBlock: (currentBlock: string) => void,

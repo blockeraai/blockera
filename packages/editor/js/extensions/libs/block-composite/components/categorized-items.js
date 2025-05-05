@@ -9,10 +9,10 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Flex, Grid, Tooltip } from '@blockera/controls';
-import { classNames } from '@blockera/classnames';
+import { experimental } from '@blockera/env';
 import { getSortedObject } from '@blockera/utils';
-
+import { classNames } from '@blockera/classnames';
+import { Flex, Grid, Tooltip } from '@blockera/controls';
 /**
  * Internal dependencies
  */
@@ -154,6 +154,9 @@ export const CategorizedItems = ({
 						let id = name || type;
 
 						if (
+							experimental().get(
+								'styleEngine.enabledCustomClassBlockState'
+							) &&
 							'custom-class' === item?.type &&
 							1 === validItems.length
 						) {

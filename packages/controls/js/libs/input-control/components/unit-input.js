@@ -534,52 +534,51 @@ export function UnitInput({
 	};
 
 	const handleBlur = () => {
-		// First try to evaluate any complete calculation.
-		if (evaluateCalculation(typedValue)) {
+		// First try to evaluate any complete calculation
+		if (evaluateCalculation(typedValue) || 0 === typedValue) {
 			return;
 		}
 
-		// Ensure typedValue is a string before using match.
+		// Ensure typedValue is a string before using match
 		const stringValue = String(typedValue || '');
 
-		// Remove any spaces from the input.
+		// Remove any spaces from the input
 		const noSpacesValue = stringValue.replace(/\s+/g, '');
 
-		// Check for incomplete calculation pattern (number followed by operator).
+		// Check for incomplete calculation pattern (number followed by operator)
 		const incompleteMatch = noSpacesValue.match(
 			/^(-?\d*\.?\d*)\s*[\+\-\/\*]?\s*$/
 		);
-
 		if (incompleteMatch && incompleteMatch[1]) {
-			const normalizedValue = normalizeDecimalValue(incompleteMatch[1]);
-			const numValue = Number(normalizedValue);
-
-			if (!isNaN(numValue)) {
-				// Apply min/max constraints.
-				let constrainedValue = normalizedValue;
-				if (!isEmpty(min) && numValue < Number(min)) {
-					constrainedValue = String(min);
+			// Normalize the number and apply constraints
+			let normalizedValue = String(Number(incompleteMatch[1]));
+			if (!isNaN(Number(normalizedValue))) {
+				// Apply min/max constraints
+				if (!isEmpty(min) && Number(normalizedValue) < Number(min)) {
+					normalizedValue = String(min);
 				}
-				if (!isEmpty(max) && numValue > Number(max)) {
-					constrainedValue = String(max);
+				if (!isEmpty(max) && Number(normalizedValue) > Number(max)) {
+					normalizedValue = String(max);
 				}
 
-				// Only update if value actually changed.
-				if (constrainedValue !== inputValue) {
-					setTypedValue(constrainedValue);
-					onChange?.({
+				setTypedValue(normalizedValue);
+				if (
+					typeof onChange === 'function' &&
+					inputValue !== typedValue
+				) {
+					onChange({
 						unitValue,
-						inputValue: constrainedValue,
+						inputValue: normalizedValue,
 					});
 				}
 				return;
 			}
 		}
 
-		// If no valid number found and current value differs from input, clear it.
-		if (typedValue !== inputValue) {
-			setTypedValue('');
-			onChange?.({
+		// If no valid number found, clear the input
+		setTypedValue('');
+		if (typeof onChange === 'function') {
+			onChange({
 				unitValue,
 				inputValue: '',
 			});
