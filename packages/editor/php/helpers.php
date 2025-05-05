@@ -368,7 +368,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 					$selector_id = blockera_append_selector_prefix( 'state/' . $args['inner-pseudo-class'] );
 
-					if(isset($selectors[$selector_id])) {
+					if (isset($selectors[ $selector_id ])) {
 
 						$cloned_block_type->selectors = $selectors[ $selector_id ];
 					} else {
