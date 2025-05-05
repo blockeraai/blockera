@@ -26,6 +26,7 @@ export const Group: BlockType = {
 		'core/heading-5': sharedInnerBlocks['core/heading-5'],
 		'core/heading-6': sharedInnerBlocks['core/heading-6'],
 	},
+	maxInnerBlocks: 3,
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
